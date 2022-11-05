@@ -38,5 +38,4 @@ describe("BitmapSchema", () => {
             });
         });
     });
- });
- 
+});
