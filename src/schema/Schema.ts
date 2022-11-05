@@ -4,23 +4,25 @@
  * @license Apache-2.0
  */
 
-/** Define a schema to encode / decode the javascript data of type T. */
-export interface Schema<T, E> {
-    encode: (value: T) => E,
-    decode: (encoded: E) => T,
-    validator?: (value: T) => void,
-}
+/** Define a schema to encode / decode convert type T to type E. */
+export abstract class Schema<T, E> {
+    /** Encodes the value using the schema. */
+    encode(value: T): E {
+        this.validate(value);
+        return this.encodeInternal(value);
+    }
 
-export interface NumberSchema<N extends number | bigint, E> extends Schema<N, E> {
-    min: N,
-    max: N,
-}
+    /** Decodes the encoded data using the schema. */
+    decode(encoded: E): T {
+        const result = this.decodeInternal(encoded);
+        this.validate(result);
+        return result;
+    }
 
-export const UInt8Schema = <E>({ min, max }: { min?: number, max?: number}) => {
-    if (min !== undefined && min < 0) throw new Error("UInt8 minimum should be greater or equal to 0.")
-    if (max !== undefined && max > 255) throw new Error("UInt8 maximum should be greater or equal to 255.")
+    protected abstract encodeInternal(value: T): E;
+    protected abstract decodeInternal(encoded: E): T;
 
-    return {
-        
+    /** Optional validator that can be used to enforce constraints on the data before encoding / after decoding. */
+    validate(value: T): void {
     }
 }

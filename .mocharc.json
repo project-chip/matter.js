@@ -1,7 +1,7 @@
 {
-    "diff": true,
-    "extension": ["ts"],
-    "recursive": true,
-    "require": "ts-node/register",
-    "watch-files": ["src/**/*.ts", "test/**/*.ts"]
-  }
+  "diff": true,
+  "extension": ["ts"],
+  "recursive": true,
+  "require": "ts-node/register",
+  "watch-files": ["src/**/*.ts", "test/**/*.ts"]
+}
