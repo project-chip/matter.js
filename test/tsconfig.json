@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "CommonJS",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "esModuleInterop": true,
+    "declaration": true,
+    "strict": true
+  },
+  "include": ["**/*.ts", "../src/**/*.ts"],
+}
