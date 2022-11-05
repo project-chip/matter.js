@@ -13,7 +13,7 @@ export const BitPosition = (position: number) => ({ position });
 type BitSchema = {[key: string]: BitPosition};
 type TypeFromBitSchema<T extends BitSchema> = {[K in keyof T]: boolean};
 
-/** Declares a bitmap schema byt indicating the bit position and their names. */
+/** Declares a bitmap schema by indicating the bit position and their names. */
 export interface BitmapSchema<T extends BitSchema> extends Schema<TypeFromBitSchema<T>, number> {}
 export const BitmapSchema = <T extends BitSchema>(bitSchemas: T) => ({
     encode: (value: TypeFromBitSchema<T>) => {
