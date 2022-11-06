@@ -19,6 +19,7 @@ export const BitmapSchema = (bitSchemas: BitSchema) => new class<T extends BitSc
         super();
     }
 
+    /** @override */
     encodeInternal(value: TypeFromBitSchema<T>) {
         let result = 0;
         for (const name in this.bitSchemas) {
@@ -27,6 +28,7 @@ export const BitmapSchema = (bitSchemas: BitSchema) => new class<T extends BitSc
         return result;
     }
 
+    /** @override */
     decodeInternal(bitmap: number) {
         const result = <TypeFromBitSchema<T>>{};
         for (const name in this.bitSchemas) {

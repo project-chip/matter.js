@@ -137,10 +137,12 @@ abstract class TlvSchema<T> extends Schema<T, ArrayBuffer> {
         }
     }
 
+    /** @override */
     protected decodeInternal(encoded: ArrayBuffer): T {
         return this.decodeTlv(new DataReaderLE(encoded)).value;
     }
 
+    /** @override */
     protected encodeInternal(value: T): ArrayBuffer {
         const writer = new DataWriterLE();
         this.encodeTlv(writer, value);
@@ -207,12 +209,14 @@ abstract class TlvSchema<T> extends Schema<T, ArrayBuffer> {
  * @see {@link MatterCoreSpecificationV1_0} § A.11.1
  */
 class UnsignedNumberSchema extends TlvSchema<number | bigint> {
+    /** @override */
     protected encodeTlv(writer: DataWriterLE, value: number | bigint, tag: TlvTag = {}): void {
         const size = this.getUnsignedIntSize(value);
         this.encodeControlByteAndTag(writer, ElementType.UnsignedInt | size, tag);
         this.encodeUnsignedIntBytes(writer, value, size);
     }
 
+    /** @override */
     protected decodeTlv(encoded: DataReaderLE) {
         const { tag, typeSizeByte } = this.decodeTagAndTypeSize(encoded);
         const type = typeSizeByte & 0x1C;

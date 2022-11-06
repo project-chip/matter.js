@@ -5,6 +5,7 @@
  */
 
 /** Writer that auto-increments its offset after each write. */
+// TODO: some research should be done to make sure this is most performant implementation.
 export class DataWriterLE {
     private length = 0;
     private readonly chunks = new Array<Uint8Array>();

@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 
-/** Reader thta auto-increment its offset after each read. */
+/** Reader that auto-increments its offset after each read. */
 export class DataReaderLE {
     private dataView: DataView;
     private offset = 0;
