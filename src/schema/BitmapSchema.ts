@@ -1,7 +1,7 @@
 /**
- * @file Define schema for a bitmap.
- * @copyright Project CHIP Authors 2022
- * @license Apache-2.0
+ * @license
+ * Copyright 2022 Project CHIP Authors
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import { Schema } from "./Schema";
@@ -35,8 +35,8 @@ type a = TypeFromBitSchema<typeof bitSchema>;
 
 
 /** Declares a bitmap schema by indicating the bit position and their names. */
-export const BitmapSchema = <T extends BitSchema>(bitSchemas: T) => new class<B extends BitSchema> extends Schema<TypeFromBitSchema<B>, number>{
-    constructor(readonly bitSchemas: B) {
+export const BitmapSchema = <B extends BitSchema>(bitSchemas: B) => new class<T extends BitSchema> extends Schema<TypeFromBitSchema<T>, number>{
+    constructor(readonly bitSchemas: T) {
         super();
 
         // TODO: validate that bitSchemas is coherent
@@ -70,4 +70,4 @@ export const BitmapSchema = <T extends BitSchema>(bitSchemas: T) => new class<B 
         }
         return result as TypeFromBitSchema<B>;
     }
-}<T>(bitSchemas);
+}<B>(bitSchemas);
