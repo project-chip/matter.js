@@ -67,6 +67,11 @@ const COMMON_PROFILE = 0x00000000;
 const UNSPECIFIED_PROFILE = 0xFFFFFFFF;
 const ANONYMOUS_ID = 0xFFFFFFFF;
 
+const UINT8_MAX = 0xFF;
+const UINT16_MAX = 0xFFFF;
+const UINT32_MAX = 0xFFFFFFFF;
+const UINT64_MAX = BigInt("18446744073709551615");
+
 abstract class TlvSchema<T> extends Schema<T, ArrayBuffer> {
 
     /** @see {@link MatterCoreSpecificationV1_0} § A.7 */
@@ -209,6 +214,16 @@ abstract class TlvSchema<T> extends Schema<T, ArrayBuffer> {
  * @see {@link MatterCoreSpecificationV1_0} § A.11.1
  */
 class UnsignedNumberSchema extends TlvSchema<number | bigint> {
+    constructor(
+        private readonly min: number | bigint,
+        private readonly max: number | bigint,
+    ) {
+        super();
+
+        if (this.min < 0) throw new Error("Unsigned integer minimum should be greater or equal to 0.");
+        if (this.max > UINT64_MAX) throw new Error("Unsigned integer maximum should be lower or equal to uint64 max.");
+    }
+
     /** @override */
     protected encodeTlv(writer: DataWriterLE, value: number | bigint, tag: TlvTag = {}): void {
         const size = this.getUnsignedIntSize(value);
@@ -236,7 +251,16 @@ class UnsignedNumberSchema extends TlvSchema<number | bigint> {
                 throw Error(`Unexpected element size ${size}`);
         }
     }
+
+    validate(value: number | bigint): void {
+        if (value < this.min) throw new Error(`Invalid value: ${value} is below the minimum, ${this.min}.`);
+        if (value > this.max) throw new Error(`Invalid value: ${value} is above the maximum, ${this.min}.`);
+    }
 }
 
 /** Unsigned integer TLV schema. */
-export const UnsignedNumberTlv = new UnsignedNumberSchema();
+export const UIntTlv = ({ min = 0, max = UINT64_MAX }: { min?: number | bigint, max?: number | bigint }) => new UnsignedNumberSchema(min, max);
+export const UInt8Tlv = UIntTlv({ max: UINT8_MAX });
+export const UInt16Tlv = UIntTlv({ max: UINT16_MAX });
+export const UInt32Tlv = UIntTlv({ max: UINT32_MAX });
+export const UInt64Tlv = UIntTlv({ max: UINT64_MAX });
