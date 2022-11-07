@@ -7,6 +7,7 @@
 import { MatterCoreSpecificationV1_0 } from "../Specifications";
 import { DataReaderLE } from "../util/DataReaderLE";
 import { DataWriterLE } from "../util/DataWriterLE";
+import { BitmapSchema, EnumBits } from "./BitmapSchema";
 import { Schema } from "./Schema";
 
 /**
@@ -15,13 +16,25 @@ import { Schema } from "./Schema";
  * @see {@link MatterCoreSpecificationV1_0} § A.7.1
  */
 export enum ElementType {
-    SignedInt = 0x00,
-    UnsignedInt = 0x04,
+    SignedInt_1OctetValue = 0x00,
+    SignedInt_2OctetValue = 0x01,
+    SignedInt_4OctetValue = 0x02,
+    SignedInt_8OctetValue = 0x03,
+    UnsignedInt_1OctetValue = 0x04,
+    UnsignedInt_2OctetValue = 0x05,
+    UnsignedInt_4OctetValue = 0x06,
+    UnsignedInt_8OctetValue = 0x07,
     Boolean = 0x08,
     Float = 0x0A,
     Double = 0x0B,
-    Utf8String = 0x0C,
-    OctetString = 0x10,
+    Utf8String_1OctetLength = 0x0C,
+    Utf8String_2OctetLength = 0x0D,
+    Utf8String_4OctetLength = 0x0E,
+    Utf8String_8OctetLength = 0x0F,
+    OctetString_1OctetLength = 0x10,
+    OctetString_2OctetLength = 0x11,
+    OctetString_4OctetLength = 0x12,
+    OctetString_8OctetLength = 0x13,
     Null = 0x14,
     Structure = 0x15,
     Array = 0x16,
@@ -30,31 +43,19 @@ export enum ElementType {
 }
 
 /**
- * TLV element data or length size.
- * 
- * @see {@link MatterCoreSpecificationV1_0} § A.7.1
- */
-export const enum ElementSize {
-    Byte1 = 0x00,
-    Byte2 = 0x01,
-    Byte4 = 0x02,
-    Byte8 = 0x03,
-}
-
-/**
  * TLV element tag control.
  * 
  * @see {@link MatterCoreSpecificationV1_0} § A.7.2
  */
 const enum TagControl {
-    Anonymous = 0x00,
-    ContextSpecific = 0x20,
-    CommonProfile2Bytes = 0x40,
-    CommonProfile4Bytes = 0x60,
-    ImplicitProfile2Bytes = 0x80,
-    ImplicitProfile4Bytes = 0xA0,
-    FullyQualified6Bytes = 0xC0,
-    FullyQualified8Bytes = 0xE0,
+    Anonymous = 0,
+    ContextSpecific = 1,
+    CommonProfile2Bytes = 2,
+    CommonProfile4Bytes = 3,
+    ImplicitProfile2Bytes = 4,
+    ImplicitProfile4Bytes = 5,
+    FullyQualified6Bytes = 6,
+    FullyQualified8Bytes = 7,
 }
 
 
@@ -72,40 +73,39 @@ const UINT16_MAX = 0xFFFF;
 const UINT32_MAX = 0xFFFFFFFF;
 const UINT64_MAX = BigInt("18446744073709551615");
 
+const ControlOctetSchema = BitmapSchema({
+    type: EnumBits<ElementType>(0, 5),
+    tagControl: EnumBits<TagControl>(5, 3),
+});
+
 abstract class TlvSchema<T> extends Schema<T, ArrayBuffer> {
 
     /** @see {@link MatterCoreSpecificationV1_0} § A.7 */
     protected decodeTagAndTypeSize(reader: DataReaderLE) {
-        const controlByte = reader.readUInt8();
-        const tag = this.decodeTag(reader, (controlByte & 0xE0) as TagControl);
-        return {tag, typeSizeByte: controlByte & 0x1F};
-    }
-
-    /** @see {@link MatterCoreSpecificationV1_0} § A.8 */
-    private decodeTag(reader: DataReaderLE, tagControl: TagControl): TlvTag {
+        const { tagControl, type } = ControlOctetSchema.decode(reader.readUInt8());
         switch (tagControl) {
             case TagControl.Anonymous:
-                return { };
+                return { type, tag: {} };
             case TagControl.ContextSpecific:
-                return { id: reader.readUInt8() };
+                return { type, tag: { id: reader.readUInt8() } };
             case TagControl.CommonProfile2Bytes:
-                return { profile: COMMON_PROFILE, id: reader.readUInt16() };
+                return { type, tag: { profile: COMMON_PROFILE, id: reader.readUInt16() } };
             case TagControl.CommonProfile4Bytes:
-                return { profile: COMMON_PROFILE, id: reader.readUInt32() };
+                return { type, tag: { profile: COMMON_PROFILE, id: reader.readUInt32() } };
             case TagControl.ImplicitProfile2Bytes:
             case TagControl.ImplicitProfile4Bytes:
                 throw new Error(`Unsupported implicit profile ${tagControl}`);
             case TagControl.FullyQualified6Bytes:
-                return { profile: reader.readUInt32(), id: reader.readUInt16() };
+                return { type, tag: { profile: reader.readUInt32(), id: reader.readUInt16() } };
             case TagControl.FullyQualified6Bytes:
-                return { profile: reader.readUInt32(), id: reader.readUInt32() };
+                return { type, tag: { profile: reader.readUInt32(), id: reader.readUInt32() } };
             default:
                 throw new Error(`Unexpected tagControl ${tagControl}`);
         }
     }
 
     /** @see {@link MatterCoreSpecificationV1_0} § A.7 & A.8 */
-    protected encodeControlByteAndTag(writer: DataWriterLE, valueType: ElementType, { profile = UNSPECIFIED_PROFILE, id = ANONYMOUS_ID}: TlvTag) {
+    protected encodeControlByteAndTag(writer: DataWriterLE, type: ElementType, { profile = UNSPECIFIED_PROFILE, id = ANONYMOUS_ID}: TlvTag) {
         var tagControl;
         var longTag = (id & 0xFFFF0000) !== 0;
         if (profile === UNSPECIFIED_PROFILE && id === ANONYMOUS_ID) {
@@ -117,7 +117,7 @@ abstract class TlvSchema<T> extends Schema<T, ArrayBuffer> {
         } else {
             tagControl = longTag ? TagControl.FullyQualified8Bytes : TagControl.FullyQualified6Bytes;
         }
-        writer.writeUInt8(tagControl | valueType);
+        writer.writeUInt8(ControlOctetSchema.encode({ tagControl, type }));
         switch (tagControl) {
             case TagControl.ContextSpecific:
                 writer.writeUInt8(id);
@@ -154,53 +154,6 @@ abstract class TlvSchema<T> extends Schema<T, ArrayBuffer> {
         return writer.toBuffer();
     }
 
-    /** Gets {@link ElementSize} based on the number value. */
-    protected getUnsignedIntSize(value: number | bigint) {
-        if (value < 256) {
-            return ElementSize.Byte1;
-        } else if (value < 65536) {
-            return ElementSize.Byte2;
-        } else if (value < 4294967296) {
-            return ElementSize.Byte4;
-        } else {
-            return ElementSize.Byte8;
-        }
-    }
-
-    /** Encodes an unsigned integer value. */
-    protected encodeUnsignedIntBytes(writer: DataWriterLE, value: number | bigint, size: ElementSize) {
-        if (typeof value === "number") {
-            switch (size) {
-                case ElementSize.Byte1:
-                    writer.writeUInt8(value);
-                    break;
-                case ElementSize.Byte2:
-                    writer.writeUInt16(value);
-                    break;
-                case ElementSize.Byte4:
-                    writer.writeUInt32(value);
-                    break;
-                case ElementSize.Byte8:
-                    throw new Error("64 bits number should be stored on a bigint");
-            }
-        } else {
-            switch (size) {
-                case ElementSize.Byte1:
-                    writer.writeUInt8(Number(value));
-                    break;
-                case ElementSize.Byte2:
-                    writer.writeUInt16(Number(value));
-                    break;
-                case ElementSize.Byte4:
-                    writer.writeUInt32(Number(value));
-                    break;
-                case ElementSize.Byte8:
-                    writer.writeUInt64(value);
-                    break;
-            }
-        }
-    }
-
     /** Decodes a TLV value. */
     protected abstract decodeTlv(reader: DataReaderLE): { value: T, tag: TlvTag};
 
@@ -226,29 +179,35 @@ class UnsignedNumberSchema extends TlvSchema<number | bigint> {
 
     /** @override */
     protected encodeTlv(writer: DataWriterLE, value: number | bigint, tag: TlvTag = {}): void {
-        const size = this.getUnsignedIntSize(value);
-        this.encodeControlByteAndTag(writer, ElementType.UnsignedInt | size, tag);
-        this.encodeUnsignedIntBytes(writer, value, size);
+        if (value < 256) {
+            this.encodeControlByteAndTag(writer, ElementType.UnsignedInt_1OctetValue, tag);
+            writer.writeUInt8(value);
+        } else if (value < 65536) {
+            this.encodeControlByteAndTag(writer, ElementType.UnsignedInt_2OctetValue, tag);
+            writer.writeUInt16(value);
+        } else if (value < 4294967296) {
+            this.encodeControlByteAndTag(writer, ElementType.UnsignedInt_4OctetValue, tag);
+            writer.writeUInt32(value);
+        } else {
+            this.encodeControlByteAndTag(writer, ElementType.UnsignedInt_8OctetValue, tag);
+            writer.writeUInt64(value);
+        }
     }
 
     /** @override */
     protected decodeTlv(encoded: DataReaderLE) {
-        const { tag, typeSizeByte } = this.decodeTagAndTypeSize(encoded);
-        const type = typeSizeByte & 0x1C;
-        const size = typeSizeByte & 0x03;
-        if (type !== ElementType.UnsignedInt) throw new Error(`Unexpected element type ${type}, was expecting: ${ElementType.UnsignedInt}`);
-
-        switch (size) {
-            case ElementSize.Byte1:
+        const { tag, type } = this.decodeTagAndTypeSize(encoded);
+        switch (type) {
+            case ElementType.UnsignedInt_1OctetValue:
                 return { tag, value: encoded.readUInt8() };
-            case ElementSize.Byte2:
+            case ElementType.UnsignedInt_2OctetValue:
                 return { tag, value: encoded.readUInt16() };
-            case ElementSize.Byte4:
+            case ElementType.UnsignedInt_4OctetValue:
                 return { tag, value: encoded.readUInt32() };
-            case ElementSize.Byte8:
+            case ElementType.UnsignedInt_8OctetValue:
                 return { tag, value: encoded.readUInt64() };
             default:
-                throw Error(`Unexpected element size ${size}`);
+                throw Error(`Unexpected element type ${type}`);
         }
     }
 

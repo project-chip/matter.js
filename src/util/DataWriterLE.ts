@@ -10,21 +10,21 @@ export class DataWriterLE {
     private length = 0;
     private readonly chunks = new Array<Uint8Array>();
 
-    writeUInt8(value: number) {
-        this.chunks.push(new Uint8Array([value]));
+    writeUInt8(value: number | bigint) {
+        this.chunks.push(new Uint8Array([typeof value === "bigint" ? Number(value) : value]));
         this.length += 1;
     }
     
-    writeUInt16(value: number) {
+    writeUInt16(value: number | bigint) {
         const chunk = new Uint8Array(2);
-        new DataView(chunk.buffer, 0, 2).setUint16(0, value, true);
+        new DataView(chunk.buffer, 0, 2).setUint16(0, typeof value === "bigint" ? Number(value) : value, true);
         this.chunks.push(chunk);
         this.length += 2;
     }
     
-    writeUInt32(value: number) {
+    writeUInt32(value: number | bigint) {
         const chunk = new Uint8Array(4);
-        new DataView(chunk.buffer, 0, 4).setUint32(0, value, true);
+        new DataView(chunk.buffer, 0, 4).setUint32(0, typeof value === "bigint" ? Number(value) : value, true);
         this.chunks.push(chunk);
         this.length += 4;
     }
