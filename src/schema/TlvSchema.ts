@@ -84,11 +84,11 @@ abstract class TlvSchema<T> extends Schema<T, ArrayBuffer> {
             case TagControl.ContextSpecific:
                 return { id: reader.readUInt8() };
             case TagControl.CommonProfile2Bytes:
-                return { id: reader.readUInt16() };
+                return { profile: COMMON_PROFILE, id: reader.readUInt16() };
             case TagControl.CommonProfile4Bytes:
-                return { id: reader.readUInt32() };
+                return { profile: COMMON_PROFILE, id: reader.readUInt32() };
             case TagControl.ImplicitProfile2Bytes:
-                case TagControl.ImplicitProfile4Bytes:
+            case TagControl.ImplicitProfile4Bytes:
                 throw new Error(`Unsupported implicit profile ${tagControl}`);
             case TagControl.FullyQualified6Bytes:
                 return { profile: reader.readUInt32(), id: reader.readUInt16() };
