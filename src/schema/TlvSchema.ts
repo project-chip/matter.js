@@ -211,6 +211,7 @@ class UnsignedNumberSchema extends TlvSchema<number | bigint> {
         }
     }
 
+    /** @override */
     validate(value: number | bigint): void {
         if (value < this.min) throw new Error(`Invalid value: ${value} is below the minimum, ${this.min}.`);
         if (value > this.max) throw new Error(`Invalid value: ${value} is above the maximum, ${this.min}.`);
