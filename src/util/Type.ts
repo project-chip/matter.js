@@ -1,7 +1,7 @@
 /**
- * @file Utils to manipulate types.
- * @copyright Project CHIP Authors 2022
- * @license Apache-2.0
+ * @license
+ * Copyright 2022 Project CHIP Authors
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /** Merges two types into one. */

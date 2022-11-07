@@ -1,7 +1,7 @@
 /**
- * @file Data reader to read bytes data sequentially.
- * @copyright Project CHIP Authors 2022
- * @license Apache-2.0
+ * @license
+ * Copyright 2022 Project CHIP Authors
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /** Reader that auto-increments its offset after each read. */

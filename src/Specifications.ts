@@ -1,7 +1,7 @@
 /**
- * @file Specification references to use in jsdoc.
- * @copyright Project CHIP Authors 2022
- * @license Apache-2.0
+ * @license
+ * Copyright 2022 Project CHIP Authors
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /** {@link https://csa-iot.org/developer-resource/specifications-download-request/ Matter Core Specification 1.0} */
