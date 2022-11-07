@@ -1,5 +1,5 @@
 {
-  "name": "matter.js",
+  "name": "@project-chip/matter.js",
   "version": "0.0.0",
   "description": "Matter protocol in pure js",
   "keywords": [
