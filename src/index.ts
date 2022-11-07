@@ -1,5 +1,5 @@
 /**
  * @license
- * Copyright 2000 Example, Inc
+ * Copyright 2022 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
