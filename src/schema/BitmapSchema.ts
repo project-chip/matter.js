@@ -14,7 +14,7 @@ type BitSchema = {[key: string]: BitPosition};
 type TypeFromBitSchema<T extends BitSchema> = {[K in keyof T]: boolean};
 
 /** Declares a bitmap schema by indicating the bit position and their names. */
-export const BitmapSchema = <B extends BitSchema>(bitSchemas: B) => new class<T extends BitSchema> extends Schema<TypeFromBitSchema<T>, number>{
+export const BitmapSchema = (bitSchemas: BitSchema) => new class<T extends BitSchema> extends Schema<TypeFromBitSchema<T>, number>{
     constructor(readonly bitSchemas: T) {
         super();
     }
@@ -34,4 +34,4 @@ export const BitmapSchema = <B extends BitSchema>(bitSchemas: B) => new class<T 
         }
         return result;
     }
-}<B>(bitSchemas);
+}(bitSchemas);
