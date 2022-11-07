@@ -7,6 +7,7 @@
 import { MatterCoreSpecificationV1_0 } from "../Specifications";
 import { DataReaderLE } from "../util/DataReaderLE";
 import { DataWriterLE } from "../util/DataWriterLE";
+import { BitmapSchema, EnumBits } from "./BitmapSchema";
 import { Schema } from "./Schema";
 
 /**
@@ -15,13 +16,25 @@ import { Schema } from "./Schema";
  * @see {@link MatterCoreSpecificationV1_0} § A.7.1
  */
 export enum ElementType {
-    SignedInt = 0x00,
-    UnsignedInt = 0x04,
+    SignedInt_1OctetValue = 0x00,
+    SignedInt_2OctetValue = 0x01,
+    SignedInt_4OctetValue = 0x02,
+    SignedInt_8OctetValue = 0x03,
+    UnsignedInt_1OctetValue = 0x04,
+    UnsignedInt_2OctetValue = 0x05,
+    UnsignedInt_4OctetValue = 0x06,
+    UnsignedInt_8OctetValue = 0x07,
     Boolean = 0x08,
     Float = 0x0A,
     Double = 0x0B,
-    Utf8String = 0x0C,
-    OctetString = 0x10,
+    Utf8String_1OctetLength = 0x0C,
+    Utf8String_2OctetLength = 0x0D,
+    Utf8String_4OctetLength = 0x0E,
+    Utf8String_8OctetLength = 0x0F,
+    OctetString_1OctetLength = 0x10,
+    OctetString_2OctetLength = 0x11,
+    OctetString_4OctetLength = 0x12,
+    OctetString_8OctetLength = 0x13,
     Null = 0x14,
     Structure = 0x15,
     Array = 0x16,
@@ -72,13 +85,18 @@ const UINT16_MAX = 0xFFFF;
 const UINT32_MAX = 0xFFFFFFFF;
 const UINT64_MAX = BigInt("18446744073709551615");
 
+const ControlOctetSchema = BitmapSchema({
+    type: EnumBits<ElementType>(0, 5),
+    tagControl: EnumBits<TagControl>(5, 3),
+})
+
 abstract class TlvSchema<T> extends Schema<T, ArrayBuffer> {
 
     /** @see {@link MatterCoreSpecificationV1_0} § A.7 */
     protected decodeTagAndTypeSize(reader: DataReaderLE) {
-        const controlByte = reader.readUInt8();
-        const tag = this.decodeTag(reader, (controlByte & 0xE0) as TagControl);
-        return {tag, typeSizeByte: controlByte & 0x1F};
+        const { tagControl, type } = ControlOctetSchema.decode(reader.readUInt8());
+        const tag = this.decodeTag(reader, tagControl);
+        return {tag, type};
     }
 
     /** @see {@link MatterCoreSpecificationV1_0} § A.8 */
