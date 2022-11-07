@@ -1,6 +1,6 @@
 {
-  "name": "matter.js",
-  "version": "0.0.0",
+  "name": "@project-chip/matter.js",
+  "version": "0.0.1",
   "description": "Matter protocol in pure js",
   "keywords": [
     "iot",
