@@ -1,7 +1,7 @@
 /**
- * @file Define schema primitives to encode / decode javascript data.
- * @copyright Project CHIP Authors 2022
- * @license Apache-2.0
+ * @license
+ * Copyright 2000 Example, Inc
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /** Define a schema to encode / decode convert type T to type E. */
