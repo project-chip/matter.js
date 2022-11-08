@@ -63,13 +63,11 @@ const ControlOctetSchema = BitmapSchema({
 });
 
 const COMMON_PROFILE = 0x00000000;
-const UNSPECIFIED_PROFILE = 0xFFFFFFFF;
-const ANONYMOUS_ID = 0xFFFFFFFF;
 
-export interface TlvTag {
+export type TlvTag = {
     profile?: number,
     id?: number,
-}
+};
 
 export class TlvCodec {
 
@@ -113,40 +111,33 @@ export class TlvCodec {
     }
 
     /** @see {@link MatterCoreSpecificationV1_0} § A.7 & A.8 */
-    public static writeTag(writer: DataWriterLE, type: TlvType, { profile = UNSPECIFIED_PROFILE, id = ANONYMOUS_ID}: TlvTag) {
-        var tagControl;
-        var longTag = (id & 0xFFFF0000) !== 0;
-        if (profile === UNSPECIFIED_PROFILE && id === ANONYMOUS_ID) {
-            tagControl = TagControl.Anonymous;
-        } else if (profile === UNSPECIFIED_PROFILE) {
-            tagControl = TagControl.ContextSpecific;
+    public static writeTag(writer: DataWriterLE, type: TlvType, { profile, id }: TlvTag) {
+        if (profile === undefined && id === undefined) {
+            writer.writeUInt8(ControlOctetSchema.encode({ tagControl: TagControl.Anonymous, type }));
+        } else if (profile === undefined) {
+            if (id === undefined) throw new Error("Invalid TLV tag: id should be defined for a context specific tag.");
+            writer.writeUInt8(ControlOctetSchema.encode({ tagControl: TagControl.ContextSpecific, type }));
+            writer.writeUInt8(id);
         } else if (profile === COMMON_PROFILE) {
-            tagControl = longTag ? TagControl.CommonProfile4Bytes : TagControl.CommonProfile2Bytes;
+            if (id === undefined) throw new Error("Invalid TLV tag: id should be defined for a common profile.");
+            if ((id & 0xFFFF0000) === 0) {
+                writer.writeUInt8(ControlOctetSchema.encode({ tagControl: TagControl.CommonProfile2Bytes, type }));
+                writer.writeUInt16(id);
+            } else {
+                writer.writeUInt8(ControlOctetSchema.encode({ tagControl: TagControl.CommonProfile4Bytes, type }));
+                writer.writeUInt32(id);
+            }
         } else {
-            tagControl = longTag ? TagControl.FullyQualified8Bytes : TagControl.FullyQualified6Bytes;
-        }
-        writer.writeUInt8(ControlOctetSchema.encode({ tagControl, type }));
-        switch (tagControl) {
-            case TagControl.ContextSpecific:
-                writer.writeUInt8(id);
-                break;
-            case TagControl.CommonProfile2Bytes:
-                writer.writeUInt16(id);
-                break;
-            case TagControl.CommonProfile4Bytes:
-                writer.writeUInt32(id);
-                break;
-            case TagControl.FullyQualified6Bytes:
+            if (id === undefined) throw new Error("Invalid TLV tag: id should be defined for a custom profile.");
+            if ((id & 0xFFFF0000) === 0) {
+                writer.writeUInt8(ControlOctetSchema.encode({ tagControl: TagControl.FullyQualified6Bytes, type }));
                 writer.writeUInt32(profile);
                 writer.writeUInt16(id);
-                break;
-            case TagControl.FullyQualified8Bytes:
+            } else {
+                writer.writeUInt8(ControlOctetSchema.encode({ tagControl: TagControl.FullyQualified8Bytes, type }));
                 writer.writeUInt32(profile);
                 writer.writeUInt32(id);
-                break;
-            case TagControl.Anonymous:
-                // No need to write the tag
-                break;
+            }
         }
     }
 
