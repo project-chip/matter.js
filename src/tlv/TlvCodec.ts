@@ -4,18 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterCoreSpecificationV1_0 } from "../Specifications";
 import { DataReaderLE } from "../util/DataReaderLE";
 import { DataWriterLE } from "../util/DataWriterLE";
-import { BitmapSchema, EnumBits } from "./BitmapSchema";
-import { Schema } from "./Schema";
+import { BitmapSchema, EnumBits } from "../util/schema/BitmapSchema";
+
 
 /**
  * TLV element types.
  * 
  * @see {@link MatterCoreSpecificationV1_0} § A.7.1
  */
-export enum ElementType {
+export enum TlvType {
     SignedInt_1OctetValue = 0x00,
     SignedInt_2OctetValue = 0x01,
     SignedInt_4OctetValue = 0x02,
@@ -58,30 +57,24 @@ const enum TagControl {
     FullyQualified8Bytes = 7,
 }
 
-
-interface TlvTag {
-    profile?: number,
-    id?: number,
-}
+const ControlOctetSchema = BitmapSchema({
+    type: EnumBits<TlvType>(0, 5),
+    tagControl: EnumBits<TagControl>(5, 3),
+});
 
 const COMMON_PROFILE = 0x00000000;
 const UNSPECIFIED_PROFILE = 0xFFFFFFFF;
 const ANONYMOUS_ID = 0xFFFFFFFF;
 
-const UINT8_MAX = 0xFF;
-const UINT16_MAX = 0xFFFF;
-const UINT32_MAX = 0xFFFFFFFF;
-const UINT64_MAX = BigInt("18446744073709551615");
+export interface TlvTag {
+    profile?: number,
+    id?: number,
+}
 
-const ControlOctetSchema = BitmapSchema({
-    type: EnumBits<ElementType>(0, 5),
-    tagControl: EnumBits<TagControl>(5, 3),
-});
-
-abstract class TlvSchema<T> extends Schema<T, ArrayBuffer> {
+export class TlvCodec {
 
     /** @see {@link MatterCoreSpecificationV1_0} § A.7 */
-    protected decodeTagAndTypeSize(reader: DataReaderLE) {
+    public static readTagType(reader: DataReaderLE) {
         const { tagControl, type } = ControlOctetSchema.decode(reader.readUInt8());
         switch (tagControl) {
             case TagControl.Anonymous:
@@ -104,8 +97,23 @@ abstract class TlvSchema<T> extends Schema<T, ArrayBuffer> {
         }
     }
 
+    public static readIntegerValue(reader: DataReaderLE, type: TlvType) {
+        switch (type) {
+            case TlvType.UnsignedInt_1OctetValue:
+                return reader.readUInt8();
+            case TlvType.UnsignedInt_2OctetValue:
+                return reader.readUInt16();
+            case TlvType.UnsignedInt_4OctetValue:
+                return reader.readUInt32();
+            case TlvType.UnsignedInt_8OctetValue:
+                return reader.readUInt64();
+            default:
+                throw new Error(`Unexpected TLV type ${type}`);
+        }
+    }
+
     /** @see {@link MatterCoreSpecificationV1_0} § A.7 & A.8 */
-    protected encodeControlByteAndTag(writer: DataWriterLE, type: ElementType, { profile = UNSPECIFIED_PROFILE, id = ANONYMOUS_ID}: TlvTag) {
+    public static writeTag(writer: DataWriterLE, type: TlvType, { profile = UNSPECIFIED_PROFILE, id = ANONYMOUS_ID}: TlvTag) {
         var tagControl;
         var longTag = (id & 0xFFFF0000) !== 0;
         if (profile === UNSPECIFIED_PROFILE && id === ANONYMOUS_ID) {
@@ -142,85 +150,22 @@ abstract class TlvSchema<T> extends Schema<T, ArrayBuffer> {
         }
     }
 
-    /** @override */
-    protected decodeInternal(encoded: ArrayBuffer): T {
-        return this.decodeTlv(new DataReaderLE(encoded)).value;
-    }
-
-    /** @override */
-    protected encodeInternal(value: T): ArrayBuffer {
-        const writer = new DataWriterLE();
-        this.encodeTlv(writer, value);
-        return writer.toBuffer();
-    }
-
-    /** Decodes a TLV value. */
-    protected abstract decodeTlv(reader: DataReaderLE): { value: T, tag: TlvTag};
-
-    /** Encodes a TLV value. */
-    protected abstract encodeTlv(writer: DataWriterLE, value: T, tag?: TlvTag): void;
-}
-
-/**
- * Schema to encode an unsigned integer in TLV.
- * 
- * @see {@link MatterCoreSpecificationV1_0} § A.11.1
- */
-class UnsignedNumberSchema extends TlvSchema<number | bigint> {
-    constructor(
-        private readonly min: number | bigint,
-        private readonly max: number | bigint,
-    ) {
-        super();
-
-        if (this.min < 0) throw new Error("Unsigned integer minimum should be greater or equal to 0.");
-        if (this.max > UINT64_MAX) throw new Error("Unsigned integer maximum should be lower or equal to uint64 max.");
-    }
-
-    /** @override */
-    protected encodeTlv(writer: DataWriterLE, value: number | bigint, tag: TlvTag = {}): void {
-        if (value < 256) {
-            this.encodeControlByteAndTag(writer, ElementType.UnsignedInt_1OctetValue, tag);
-            writer.writeUInt8(value);
-        } else if (value < 65536) {
-            this.encodeControlByteAndTag(writer, ElementType.UnsignedInt_2OctetValue, tag);
-            writer.writeUInt16(value);
-        } else if (value < 4294967296) {
-            this.encodeControlByteAndTag(writer, ElementType.UnsignedInt_4OctetValue, tag);
-            writer.writeUInt32(value);
-        } else {
-            this.encodeControlByteAndTag(writer, ElementType.UnsignedInt_8OctetValue, tag);
-            writer.writeUInt64(value);
-        }
-    }
-
-    /** @override */
-    protected decodeTlv(encoded: DataReaderLE) {
-        const { tag, type } = this.decodeTagAndTypeSize(encoded);
+    public static writeIntegerValue(writer: DataWriterLE, type: TlvType, value: number | bigint) {
         switch (type) {
-            case ElementType.UnsignedInt_1OctetValue:
-                return { tag, value: encoded.readUInt8() };
-            case ElementType.UnsignedInt_2OctetValue:
-                return { tag, value: encoded.readUInt16() };
-            case ElementType.UnsignedInt_4OctetValue:
-                return { tag, value: encoded.readUInt32() };
-            case ElementType.UnsignedInt_8OctetValue:
-                return { tag, value: encoded.readUInt64() };
+            case TlvType.UnsignedInt_1OctetValue:
+                writer.writeUInt8(value);
+                break;
+            case TlvType.UnsignedInt_2OctetValue:
+                writer.writeUInt16(value);
+                break;
+            case TlvType.UnsignedInt_4OctetValue:
+                writer.writeUInt32(value);
+                break;
+            case TlvType.UnsignedInt_8OctetValue:
+                writer.writeUInt64(value);
+                break;
             default:
-                throw Error(`Unexpected element type ${type}`);
+                throw new Error(`Unexpected TLV type ${type}`);
         }
     }
-
-    /** @override */
-    validate(value: number | bigint): void {
-        if (value < this.min) throw new Error(`Invalid value: ${value} is below the minimum, ${this.min}.`);
-        if (value > this.max) throw new Error(`Invalid value: ${value} is above the maximum, ${this.min}.`);
-    }
 }
-
-/** Unsigned integer TLV schema. */
-export const UIntTlv = ({ min = 0, max = UINT64_MAX }: { min?: number | bigint, max?: number | bigint }) => new UnsignedNumberSchema(min, max);
-export const UInt8Tlv = UIntTlv({ max: UINT8_MAX });
-export const UInt16Tlv = UIntTlv({ max: UINT16_MAX });
-export const UInt32Tlv = UIntTlv({ max: UINT32_MAX });
-export const UInt64Tlv = UIntTlv({ max: UINT64_MAX });

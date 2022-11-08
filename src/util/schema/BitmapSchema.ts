@@ -6,11 +6,16 @@
 
 import { Schema } from "./Schema";
 
+const enum BitRangeType {
+    Flag,
+    Enum,
+}
+
 /** Specifies the position of the bit. */
-export interface FlagBit { type: "flag", offset: number }
-export const FlagBit = (offset: number) => ({ type: "flag", offset }) as FlagBit;
-export interface EnumBits<E extends number> { type: "enum", offset: number, length: number }
-export const EnumBits = <E extends number>(offset: number, length: number) => ({ type: "enum", offset, length }) as EnumBits<E>;
+export interface FlagBit { type: BitRangeType.Flag, offset: number }
+export const FlagBit = (offset: number) => ({ type: BitRangeType.Flag, offset }) as FlagBit;
+export interface EnumBits<E extends number> { type: BitRangeType.Enum, offset: number, length: number }
+export const EnumBits = <E extends number>(offset: number, length: number) => ({ type: BitRangeType.Enum, offset, length }) as EnumBits<E>;
 
 type BitSchema = {[key: string]: FlagBit | EnumBits<any> };
 export type TypeFromBitSchema<T extends BitSchema> = {[K in keyof T]: T[K] extends EnumBits<infer E> ? E : boolean};
@@ -43,10 +48,10 @@ export const BitmapSchema = <B extends BitSchema>(bitSchemas: B) => new class<T 
     }
 
     /** @override */
-    encodeInternal(value: TypeFromBitSchema<B>) {
+    encodeInternal(value: TypeFromBitSchema<T>) {
         let result = 0;
         for (const name in this.bitSchemas) {
-            if (this.bitSchemas[name].type === "flag") {
+            if (this.bitSchemas[name].type === BitRangeType.Flag) {
                 if (value[name]) result |= 1 << this.bitSchemas[name].offset;
             } else {
                 result |= (value[name] as number) << this.bitSchemas[name].offset;
@@ -60,7 +65,7 @@ export const BitmapSchema = <B extends BitSchema>(bitSchemas: B) => new class<T 
         const result = {} as any;
         for (const name in this.bitSchemas) {
             const offset = this.bitSchemas[name].offset;
-            if (this.bitSchemas[name].type === "flag") {
+            if (this.bitSchemas[name].type === BitRangeType.Flag) {
                 result[name] = (bitmap & (1 << offset)) !== 0;
             } else {
                 const length = (this.bitSchemas[name] as EnumBits<any>).length;
@@ -68,6 +73,6 @@ export const BitmapSchema = <B extends BitSchema>(bitSchemas: B) => new class<T 
                 result[name] = (bitmap & mask) >> offset;
             }
         }
-        return result as TypeFromBitSchema<B>;
+        return result as TypeFromBitSchema<T>;
     }
 }<B>(bitSchemas);

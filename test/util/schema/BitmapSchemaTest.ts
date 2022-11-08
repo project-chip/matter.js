@@ -5,7 +5,7 @@
  */
 
 import assert from "assert";
-import { BitmapSchema, EnumBits, FlagBit } from "../../src/schema/BitmapSchema";
+import { BitmapSchema, EnumBits, FlagBit } from "../../../src/util/schema/BitmapSchema";
 
 describe("BitmapSchema", () => {
     const enum EnumTest {
