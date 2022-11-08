@@ -20,27 +20,7 @@ export const EnumBits = <E extends number>(offset: number, length: number) => ({
 type BitSchema = {[key: string]: FlagBit | EnumBits<any> };
 export type TypeFromBitSchema<T extends BitSchema> = {[K in keyof T]: T[K] extends EnumBits<infer E> ? E : boolean};
 
-const enum EnumTest {
-    VALUE_1 = 1,
-    VALUE_2 = 2,
-}
-
-const bitSchema = {
-    /** flag1 jsdoc */
-    flag1: FlagBit(2),
-
-    /** flag2 jsdoc */
-    flag2: FlagBit(4),
-
-    /** enum jsdoc */
-    enumTest: EnumBits<EnumTest>(5, 2),
-};
-
-type a = TypeFromBitSchema<typeof bitSchema>;
-
-
-/** Declares a bitmap schema by indicating the bit position and their names. */
-export const BitmapSchema = <B extends BitSchema>(bitSchemas: B) => new class<T extends BitSchema> extends Schema<TypeFromBitSchema<T>, number>{
+class BitmapSchemaInternal<T extends BitSchema> extends Schema<TypeFromBitSchema<T>, number> {
     constructor(readonly bitSchemas: T) {
         super();
 
@@ -75,4 +55,7 @@ export const BitmapSchema = <B extends BitSchema>(bitSchemas: B) => new class<T 
         }
         return result as TypeFromBitSchema<T>;
     }
-}<B>(bitSchemas);
+}
+
+/** Declares a bitmap schema by indicating the bit position and their names. */
+export const BitmapSchema = <T extends BitSchema>(bitSchemas: T) => new BitmapSchemaInternal(bitSchemas);
