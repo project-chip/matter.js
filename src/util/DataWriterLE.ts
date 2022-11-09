@@ -71,6 +71,20 @@ export class DataWriterLE {
         this.chunks.push(chunk);
         this.length += 8;
     }
+    
+    writeFloat(value: number) {
+        const chunk = new Uint8Array(4);
+        new DataView(chunk.buffer, 0, 4).setFloat32(0, value, true);
+        this.chunks.push(chunk);
+        this.length += 4;
+    }
+    
+    writeDouble(value: number) {
+        const chunk = new Uint8Array(8);
+        new DataView(chunk.buffer, 0, 8).setFloat64(0, value, true);
+        this.chunks.push(chunk);
+        this.length += 8;
+    }
 
     toBuffer() {
         if (this.chunks.length === 0) return new Uint8Array(0);

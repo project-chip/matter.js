@@ -20,7 +20,7 @@ const decodeTestVector: TestVector<string, boolean> = {
     "decodes false": { input: "08", out: false },
 };
 
-describe("TlvUInt", () => {
+describe("TlvBoolean", () => {
 
     context("encode", () => {
         for (const testName in encodeTestVector) {

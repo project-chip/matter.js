@@ -142,6 +142,10 @@ export class TlvCodec {
                 return reader.readInt32() as TlvToPrimitive[T];
             case TlvType.SignedInt_8OctetValue:
                 return reader.readInt64() as TlvToPrimitive[T];
+            case TlvType.Float:
+                return reader.readFloat() as TlvToPrimitive[T];
+            case TlvType.Double:
+                return reader.readDouble() as TlvToPrimitive[T];
             default:
                 throw new Error(`Unexpected TLV type ${type}`);
         }
@@ -178,8 +182,6 @@ export class TlvCodec {
         }
     }
 
-
-
     public static writePrimitive<T extends TlvType>(writer: DataWriterLE, type: T, value: TlvToPrimitive[T]) {
         switch (type) {
             case TlvType.UnsignedInt_1OctetValue:
@@ -205,6 +207,12 @@ export class TlvCodec {
                 break;
             case TlvType.SignedInt_8OctetValue:
                 writer.writeInt64(value as TlvToPrimitive[TlvType.SignedInt_8OctetValue]);
+                break;
+            case TlvType.Float:
+                writer.writeFloat(value as TlvToPrimitive[TlvType.Float]);
+                break;
+            case TlvType.Double:
+                writer.writeDouble(value as TlvToPrimitive[TlvType.Double]);
                 break;
             default:
                 throw new Error(`Unexpected TLV type ${type}`);

@@ -44,6 +44,14 @@ export class DataReaderLE {
     readInt64() {
         return this.dataView.getBigInt64(this.getOffsetAndAdvance(8), true);
     }
+    
+    readFloat() {
+        return this.dataView.getFloat32(this.getOffsetAndAdvance(4), true);
+    }
+    
+    readDouble() {
+        return this.dataView.getFloat64(this.getOffsetAndAdvance(8), true);
+    }
 
     private getOffsetAndAdvance(size: number) {
         const result = this.offset;
