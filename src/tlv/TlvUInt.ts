@@ -33,11 +33,11 @@ const UINT64_MAX = BigInt("18446744073709551615");
     /** @override */
     protected encodeTlv(writer: DataWriterLE, value: number | bigint, tag: TlvTag = {}): void {
         let type: TlvType;
-        if (value < UINT8_MAX) {
+        if (value <= UINT8_MAX) {
             type = TlvType.UnsignedInt_1OctetValue;
-        } else if (value < UINT16_MAX) {
+        } else if (value <= UINT16_MAX) {
             type = TlvType.UnsignedInt_2OctetValue;
-        } else if (value < UINT32_MAX) {
+        } else if (value <= UINT32_MAX) {
             type = TlvType.UnsignedInt_4OctetValue;
         } else {
             type = TlvType.UnsignedInt_8OctetValue;
