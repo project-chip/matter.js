@@ -42,26 +42,26 @@ export const enum TlvType {
 }
 
 type TlvToPrimitive = {
-    [TlvType.SignedInt_1OctetValue]: bigint | number,
-    [TlvType.SignedInt_2OctetValue]: bigint | number,
-    [TlvType.SignedInt_4OctetValue]: bigint | number,
-    [TlvType.SignedInt_8OctetValue]: bigint | number,
-    [TlvType.UnsignedInt_1OctetValue]: bigint | number,
-    [TlvType.UnsignedInt_2OctetValue]: bigint | number,
-    [TlvType.UnsignedInt_4OctetValue]: bigint | number,
-    [TlvType.UnsignedInt_8OctetValue]: bigint | number,
+    [TlvType.SignedInt8]: bigint | number,
+    [TlvType.SignedInt16]: bigint | number,
+    [TlvType.SignedInt32]: bigint | number,
+    [TlvType.SignedInt64]: bigint | number,
+    [TlvType.UnsignedInt8]: bigint | number,
+    [TlvType.UnsignedInt16]: bigint | number,
+    [TlvType.UnsignedInt32]: bigint | number,
+    [TlvType.UnsignedInt64]: bigint | number,
     [TlvType.BooleanFalse]: never,
     [TlvType.BooleanTrue]: never,
-    [TlvType.Float]: number,
-    [TlvType.Double]: number,
-    [TlvType.Utf8String_1OctetLength]: string,
-    [TlvType.Utf8String_2OctetLength]: string,
-    [TlvType.Utf8String_4OctetLength]: string,
-    [TlvType.Utf8String_8OctetLength]: string,
-    [TlvType.OctetString_1OctetLength]: ArrayBuffer,
-    [TlvType.OctetString_2OctetLength]: ArrayBuffer,
-    [TlvType.OctetString_4OctetLength]: ArrayBuffer,
-    [TlvType.OctetString_8OctetLength]: ArrayBuffer,
+    [TlvType.Float32]: number,
+    [TlvType.Float64]: number,
+    [TlvType.Utf8String8]: string,
+    [TlvType.Utf8String16]: string,
+    [TlvType.Utf8String32]: string,
+    [TlvType.Utf8String64]: string,
+    [TlvType.ByteString8]: ArrayBuffer,
+    [TlvType.ByteString16]: ArrayBuffer,
+    [TlvType.ByteString32]: ArrayBuffer,
+    [TlvType.ByteString64]: ArrayBuffer,
     [TlvType.Null]: null,
     [TlvType.Structure]: never,
     [TlvType.Array]: never,
@@ -182,28 +182,28 @@ export class TlvCodec {
     public static writePrimitive<T extends TlvType>(writer: DataWriterLE, type: T, value: TlvToPrimitive[T]) {
         switch (type) {
             case TlvType.UnsignedInt8:
-                writer.writeUInt8(value as TlvToPrimitive[TlvType.UnsignedInt_1OctetValue]);
+                writer.writeUInt8(value as TlvToPrimitive[TlvType.UnsignedInt8]);
                 break;
             case TlvType.UnsignedInt16:
-                writer.writeUInt16(value as TlvToPrimitive[TlvType.UnsignedInt_2OctetValue]);
+                writer.writeUInt16(value as TlvToPrimitive[TlvType.UnsignedInt16]);
                 break;
             case TlvType.UnsignedInt32:
-                writer.writeUInt32(value as TlvToPrimitive[TlvType.UnsignedInt_4OctetValue]);
+                writer.writeUInt32(value as TlvToPrimitive[TlvType.UnsignedInt32]);
                 break;
             case TlvType.UnsignedInt64:
-                writer.writeUInt64(value as TlvToPrimitive[TlvType.UnsignedInt_8OctetValue]);
+                writer.writeUInt64(value as TlvToPrimitive[TlvType.UnsignedInt64]);
                 break;
             case TlvType.SignedInt8:
-                writer.writeInt8(value as TlvToPrimitive[TlvType.SignedInt_1OctetValue]);
+                writer.writeInt8(value as TlvToPrimitive[TlvType.SignedInt8]);
                 break;
             case TlvType.SignedInt16:
-                writer.writeInt16(value as TlvToPrimitive[TlvType.SignedInt_2OctetValue]);
+                writer.writeInt16(value as TlvToPrimitive[TlvType.SignedInt16]);
                 break;
             case TlvType.SignedInt32:
-                writer.writeInt32(value as TlvToPrimitive[TlvType.SignedInt_4OctetValue]);
+                writer.writeInt32(value as TlvToPrimitive[TlvType.SignedInt32]);
                 break;
             case TlvType.SignedInt64:
-                writer.writeInt64(value as TlvToPrimitive[TlvType.SignedInt_8OctetValue]);
+                writer.writeInt64(value as TlvToPrimitive[TlvType.SignedInt64]);
                 break;
             default:
                 throw new Error(`Unexpected TLV type ${type}`);

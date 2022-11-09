@@ -30,7 +30,7 @@ const validateTestVector: TestVector<number | bigint, boolean> = {
     "throws an error if the value is too high": { input: 12, out: true },
 };
 
-describe("TlvUInt", () => {
+describe("TlvInt", () => {
 
     context("encode", () => {
         for (const testName in encodeTestVector) {
