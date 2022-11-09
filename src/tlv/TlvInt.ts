@@ -33,14 +33,26 @@ const INT64_RANGE = { min: BigInt("-9223372036854775808"), max: BigInt("92233720
     /** @override */
     protected encodeTlv(writer: DataWriterLE, value: number | bigint, tag: TlvTag = {}): void {
         let type: TlvType;
-        if (value < 256) {
-            type = TlvType.SignedInt_1OctetValue;
-        } else if (value < 65536) {
-            type = TlvType.SignedInt_2OctetValue;
-        } else if (value < 4294967296) {
-            type = TlvType.SignedInt_4OctetValue;
+        if (value > 0) {
+            if (value <= INT8_RANGE.max) {
+                type = TlvType.SignedInt_1OctetValue;
+            } else if (value <= INT16_RANGE.max) {
+                type = TlvType.SignedInt_2OctetValue;
+            } else if (value <= INT32_RANGE.max) {
+                type = TlvType.SignedInt_4OctetValue;
+            } else {
+                type = TlvType.SignedInt_8OctetValue;
+            }
         } else {
-            type = TlvType.SignedInt_8OctetValue;
+            if (value >= INT8_RANGE.min) {
+                type = TlvType.SignedInt_1OctetValue;
+            } else if (value >= INT16_RANGE.min) {
+                type = TlvType.SignedInt_2OctetValue;
+            } else if (value >= INT32_RANGE.min) {
+                type = TlvType.SignedInt_4OctetValue;
+            } else {
+                type = TlvType.SignedInt_8OctetValue;
+            }
         }
 
         TlvCodec.writeTag(writer, type, tag);
