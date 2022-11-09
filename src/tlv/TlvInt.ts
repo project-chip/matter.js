@@ -35,23 +35,23 @@ const INT64_RANGE = { min: BigInt("-9223372036854775808"), max: BigInt("92233720
         let type: TlvType;
         if (value > 0) {
             if (value <= INT8_RANGE.max) {
-                type = TlvType.SignedInt_1OctetValue;
+                type = TlvType.SignedInt8;
             } else if (value <= INT16_RANGE.max) {
-                type = TlvType.SignedInt_2OctetValue;
+                type = TlvType.SignedInt16;
             } else if (value <= INT32_RANGE.max) {
-                type = TlvType.SignedInt_4OctetValue;
+                type = TlvType.SignedInt32;
             } else {
-                type = TlvType.SignedInt_8OctetValue;
+                type = TlvType.SignedInt64;
             }
         } else {
             if (value >= INT8_RANGE.min) {
-                type = TlvType.SignedInt_1OctetValue;
+                type = TlvType.SignedInt8;
             } else if (value >= INT16_RANGE.min) {
-                type = TlvType.SignedInt_2OctetValue;
+                type = TlvType.SignedInt16;
             } else if (value >= INT32_RANGE.min) {
-                type = TlvType.SignedInt_4OctetValue;
+                type = TlvType.SignedInt32;
             } else {
-                type = TlvType.SignedInt_8OctetValue;
+                type = TlvType.SignedInt64;
             }
         }
 
@@ -62,10 +62,8 @@ const INT64_RANGE = { min: BigInt("-9223372036854775808"), max: BigInt("92233720
     /** @override */
     protected decodeTlv(reader: DataReaderLE) {
         const { tag, type } = TlvCodec.readTagType(reader);
-        if (type !== TlvType.SignedInt_1OctetValue
-            && type !== TlvType.SignedInt_2OctetValue
-            && type !== TlvType.SignedInt_4OctetValue
-            && type !== TlvType.SignedInt_8OctetValue) throw new Error(`Unexpected type ${type}.`);
+        if (type !== TlvType.SignedInt8 && type !== TlvType.SignedInt16 && type !== TlvType.SignedInt32 && type !== TlvType.SignedInt64)
+            throw new Error(`Unexpected type ${type}.`);
         let value = TlvCodec.readPrimitive(reader, type);
         this.validate(value);
         if (typeof value === "bigint" && this.max <= INT32_RANGE.max && this.min >= INT32_RANGE.min) {

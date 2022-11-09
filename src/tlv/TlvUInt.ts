@@ -34,13 +34,13 @@ const UINT64_MAX = BigInt("18446744073709551615");
     protected encodeTlv(writer: DataWriterLE, value: number | bigint, tag: TlvTag = {}): void {
         let type: TlvType;
         if (value <= UINT8_MAX) {
-            type = TlvType.UnsignedInt_1OctetValue;
+            type = TlvType.UnsignedInt8;
         } else if (value <= UINT16_MAX) {
-            type = TlvType.UnsignedInt_2OctetValue;
+            type = TlvType.UnsignedInt16;
         } else if (value <= UINT32_MAX) {
-            type = TlvType.UnsignedInt_4OctetValue;
+            type = TlvType.UnsignedInt32;
         } else {
-            type = TlvType.UnsignedInt_8OctetValue;
+            type = TlvType.UnsignedInt64;
         }
 
         TlvCodec.writeTag(writer, type, tag);
@@ -50,10 +50,10 @@ const UINT64_MAX = BigInt("18446744073709551615");
     /** @override */
     protected decodeTlv(reader: DataReaderLE) {
         const { tag, type } = TlvCodec.readTagType(reader);
-        if (type !== TlvType.UnsignedInt_1OctetValue
-            && type !== TlvType.UnsignedInt_2OctetValue
-            && type !== TlvType.UnsignedInt_4OctetValue
-            && type !== TlvType.UnsignedInt_8OctetValue) throw new Error(`Unexpected type ${type}.`);
+        if (type !== TlvType.UnsignedInt8
+            && type !== TlvType.UnsignedInt16
+            && type !== TlvType.UnsignedInt32
+            && type !== TlvType.UnsignedInt64) throw new Error(`Unexpected type ${type}.`);
         let value = TlvCodec.readPrimitive(reader, type);
         this.validate(value);
         if (this.max <= UINT32_MAX && typeof value === "bigint") {
