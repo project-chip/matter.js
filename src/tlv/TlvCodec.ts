@@ -141,9 +141,9 @@ export class TlvCodec {
                 return reader.readInt32() as TlvToPrimitive[T];
             case TlvType.SignedInt64:
                 return reader.readInt64() as TlvToPrimitive[T];
-            case TlvType.Float:
+            case TlvType.Float32:
                 return reader.readFloat() as TlvToPrimitive[T];
-            case TlvType.Double:
+            case TlvType.Float64:
                 return reader.readDouble() as TlvToPrimitive[T];
             default:
                 throw new Error(`Unexpected TLV type ${type}`);
@@ -207,11 +207,11 @@ export class TlvCodec {
             case TlvType.SignedInt64:
                 writer.writeInt64(value as TlvToPrimitive[TlvType.SignedInt64]);
                 break;
-            case TlvType.Float:
-                writer.writeFloat(value as TlvToPrimitive[TlvType.Float]);
+            case TlvType.Float32:
+                writer.writeFloat(value as TlvToPrimitive[TlvType.Float32]);
                 break;
-            case TlvType.Double:
-                writer.writeDouble(value as TlvToPrimitive[TlvType.Double]);
+            case TlvType.Float64:
+                writer.writeDouble(value as TlvToPrimitive[TlvType.Float64]);
                 break;
             default:
                 throw new Error(`Unexpected TLV type ${type}`);

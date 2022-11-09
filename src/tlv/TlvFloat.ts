@@ -20,7 +20,7 @@ const FLOAT_RANGE = { min: -340282346638528859811704183484516925440.0, max: 3402
     constructor(
         private readonly min?: number,
         private readonly max?: number,
-        private readonly type: TlvType.Float | TlvType.Double = TlvType.Double,
+        private readonly type: TlvType.Float32 | TlvType.Float64 = TlvType.Float64,
     ) {
         super();
     }
@@ -49,10 +49,10 @@ const FLOAT_RANGE = { min: -340282346638528859811704183484516925440.0, max: 3402
 
 
 /** Double TLV schema bounded by a min / max. */
-export const TlvBoundedDouble = ({ min, max }: { min?: number, max?: number } = {}, type?: TlvType.Float | TlvType.Double) => new FloatSchema(min, max, type);
+export const TlvBoundedDouble = ({ min, max }: { min?: number, max?: number } = {}, type?: TlvType.Float32 | TlvType.Float64) => new FloatSchema(min, max, type);
 
 /** Float TLV schema. */
-export const TlvFloat = TlvBoundedDouble(FLOAT_RANGE, TlvType.Float);
+export const TlvFloat = TlvBoundedDouble(FLOAT_RANGE, TlvType.Float32);
 
 /** Double TLV schema. */
-export const TlvDouble = TlvBoundedDouble();
+export const TlvDouble = TlvBoundedDouble(); // number type is a double internally so no need to specify a range
