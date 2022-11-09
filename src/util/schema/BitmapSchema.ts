@@ -15,7 +15,7 @@ const enum BitRangeType {
 export interface FlagBit { type: BitRangeType.Flag, offset: number }
 export const FlagBit = (offset: number) => ({ type: BitRangeType.Flag, offset }) as FlagBit;
 
-/** Defines the bit position and bit lenght of an enum flag. */
+/** Defines the bit position and bit length of an enum flag. */
 export interface EnumBits<E extends number> { type: BitRangeType.Enum, offset: number, length: number }
 export const EnumBits = <E extends number>(offset: number, length: number) => ({ type: BitRangeType.Enum, offset, length }) as EnumBits<E>;
 
