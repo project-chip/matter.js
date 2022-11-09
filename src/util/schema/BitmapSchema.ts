@@ -11,14 +11,16 @@ const enum BitRangeType {
     Enum,
 }
 
-/** Specifies the position of the bit. */
+/** Defines the bit position of a boolean flag. */
 export interface FlagBit { type: BitRangeType.Flag, offset: number }
 export const FlagBit = (offset: number) => ({ type: BitRangeType.Flag, offset }) as FlagBit;
+
+/** Defines the bit position and bit lenght of an enum flag. */
 export interface EnumBits<E extends number> { type: BitRangeType.Enum, offset: number, length: number }
 export const EnumBits = <E extends number>(offset: number, length: number) => ({ type: BitRangeType.Enum, offset, length }) as EnumBits<E>;
 
 type BitSchema = {[key: string]: FlagBit | EnumBits<any> };
-export type TypeFromBitSchema<T extends BitSchema> = {[K in keyof T]: T[K] extends EnumBits<infer E> ? E : boolean};
+type TypeFromBitSchema<T extends BitSchema> = {[K in keyof T]: T[K] extends EnumBits<infer E> ? E : boolean};
 
 class BitmapSchemaInternal<T extends BitSchema> extends Schema<TypeFromBitSchema<T>, number> {
     constructor(readonly bitSchemas: T) {
