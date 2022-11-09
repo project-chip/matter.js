@@ -12,15 +12,15 @@ const enum BitRangeType {
 }
 
 /** Defines the bit position of a boolean flag. */
-export interface FlagBit { type: BitRangeType.Flag, offset: number }
-export const FlagBit = (offset: number) => ({ type: BitRangeType.Flag, offset }) as FlagBit;
+export interface BitFlag { type: BitRangeType.Flag, offset: number }
+export const BitFlag = (offset: number) => ({ type: BitRangeType.Flag, offset }) as BitFlag;
 
 /** Defines the bit position and bit length of an enum flag. */
-export interface EnumBits<E extends number> { type: BitRangeType.Enum, offset: number, length: number }
-export const EnumBits = <E extends number>(offset: number, length: number) => ({ type: BitRangeType.Enum, offset, length }) as EnumBits<E>;
+export interface BitFieldEnum<E extends number> { type: BitRangeType.Enum, offset: number, length: number }
+export const BitFieldEnum = <E extends number>(offset: number, length: number) => ({ type: BitRangeType.Enum, offset, length }) as BitFieldEnum<E>;
 
-type BitSchema = {[key: string]: FlagBit | EnumBits<any> };
-type TypeFromBitSchema<T extends BitSchema> = {[K in keyof T]: T[K] extends EnumBits<infer E> ? E : boolean};
+type BitSchema = {[key: string]: BitFlag | BitFieldEnum<any> };
+type TypeFromBitSchema<T extends BitSchema> = {[K in keyof T]: T[K] extends BitFieldEnum<infer E> ? E : boolean};
 
 class BitmapSchemaInternal<T extends BitSchema> extends Schema<TypeFromBitSchema<T>, number> {
     constructor(readonly bitSchemas: T) {
@@ -50,7 +50,7 @@ class BitmapSchemaInternal<T extends BitSchema> extends Schema<TypeFromBitSchema
             if (this.bitSchemas[name].type === BitRangeType.Flag) {
                 result[name] = (bitmap & (1 << offset)) !== 0;
             } else {
-                const length = (this.bitSchemas[name] as EnumBits<any>).length;
+                const length = (this.bitSchemas[name] as BitFieldEnum<any>).length;
                 const mask = ((1 << length) - 1) << offset;
                 result[name] = (bitmap & mask) >> offset;
             }
