@@ -5,80 +5,71 @@
  */
 
 import assert from "assert";
-import { TlvUInt64, TlvUInt } from "../../src/tlv/TlvUInt";
+import { TlvUInt64, TlvUInt, TlvUInt32 } from "../../src/tlv/TlvUInt";
 import { arrayBufferFromHex, arrayBufferToHex } from "../../src/util/ArrayBuffer";
+
+type TestVector<I, E> = {[testName: string]: { input: I, out: E }};
+
+const encodeTestVector: TestVector<number | bigint, string> = {
+    "encodes an 1 byte unsigned int": { input: 1, out: "0401" },
+    "encodes a 2 bytes unsigned int": { input: 0x0100, out: "050001" },
+    "encodes a 4 bytes unsigned int": { input: 0x01000000, out: "0600000001" },
+    "encodes a 8 bytes unsigned int": { input: BigInt(0x01000000000000), out: "070000000000000100" },
+};
+
+const decodeTestVector: TestVector<string, number | bigint> = {
+    "decodes an 1 byte unsigned int": { input: "0401", out: 1 },
+    "decodes a 2 bytes unsigned int": { input: "050001", out: 0x0100 },
+    "decodes a 4 bytes unsigned int": { input: "0600000001", out: 0x01000000 },
+    "decodes a 8 bytes unsigned int": { input: "070000000000000100", out: BigInt(0x01000000000000) },
+};
+
+const validateTestVector: TestVector<number | bigint, boolean> = {
+    "validates a value between min and max": { input: 6, out: false },
+    "throws an error if the value is too low": { input: 1, out: true },
+    "throws an error if the value is too high": { input: 12, out: true },
+};
 
 describe("TlvUInt", () => {
 
     context("encode", () => {
-        it("encodes an 1 byte unsigned int using in TLV", () => {
-            const result = TlvUInt64.encode(1);
-
-            assert.strictEqual(arrayBufferToHex(result), "0401");
-        });
-
-        it("encodes a 2 bytes unsigned int using in TLV", () => {
-            const result = TlvUInt64.encode(0x0100);
-
-            assert.strictEqual(arrayBufferToHex(result), "050001");
-        });
-
-        it("encodes a 4 bytes unsigned int using in TLV", () => {
-            const result = TlvUInt64.encode(0x01000000);
-
-            assert.strictEqual(arrayBufferToHex(result), "0600000001");
-        });
-
-        it("encodes an 8 bytes unsigned int using in TLV", () => {
-            const result = TlvUInt64.encode(BigInt(0x01000000000000));
-
-            assert.strictEqual(arrayBufferToHex(result), "070000000000000100");
-        });
+        for (const testName in encodeTestVector) {
+            const { input, out } = encodeTestVector[testName];
+            it(testName, () => {
+                assert.strictEqual(arrayBufferToHex(TlvUInt64.encode(input)), out);
+            });
+        }
     });
 
     context("decode", () => {
-        it("decodes an 1 byte unsigned int using in TLV", () => {
-            const result = TlvUInt64.decode(arrayBufferFromHex("0401"));
+        for (const testName in decodeTestVector) {
+            const { input, out } = decodeTestVector[testName];
+            it(testName, () => {
+                assert.strictEqual(TlvUInt64.decode(arrayBufferFromHex(input)), out);
+            });
+        }
+    });
 
-            assert.strictEqual(result, 1);
-        });
-
-        it("decodes a 2 bytes unsigned int using in TLV", () => {
-            const result = TlvUInt64.decode(arrayBufferFromHex("050001"));
-
-            assert.strictEqual(result, 0x0100);
-        });
-
-        it("decodes a 4 bytes unsigned int using in TLV", () => {
-            const result = TlvUInt64.decode(arrayBufferFromHex("0600000001"));
-
-            assert.strictEqual(result, 0x01000000);
-        });
-
-        it("decodes an 8 bytes unsigned int using in TLV", () => {
-            const result = TlvUInt64.decode(arrayBufferFromHex("070000000000000100"));
-
-            assert.strictEqual(result, BigInt(0x01000000000000));
+    context("decode", () => {
+        it("decodes a 8 bytes small value as a number", () => {
+            assert.strictEqual(TlvUInt32.decode(arrayBufferFromHex("070100000000000000")), 1);
         });
     });
 
     context("validate", () => {
         const BoundedUint = TlvUInt({ min: 5, max: 10 });
 
-        it("validates a value between min and max", () => {
-            BoundedUint.validate(6);
-        });
-
-        it("throws an error if the value is too low", () => {
-            assert.throws(() => {
-                BoundedUint.validate(1);
+        for (const testName in validateTestVector) {
+            const { input, out: throwException } = validateTestVector[testName];
+            it(testName, () => {
+                if (throwException) {
+                    assert.throws(() => {
+                        BoundedUint.validate(input);
+                    });
+                } else {
+                    BoundedUint.validate(input);
+                }
             });
-        });
-
-        it("throws an error if the value is too high", () => {
-            assert.throws(() => {
-                BoundedUint.validate(12);
-            });
-        });
+        }
     });
 });
