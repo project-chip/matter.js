@@ -33,11 +33,11 @@ const UINT64_MAX = BigInt("18446744073709551615");
     /** @override */
     protected encodeTlv(writer: DataWriterLE, value: number | bigint, tag: TlvTag = {}): void {
         let type: TlvType;
-        if (value < 256) {
+        if (value < UINT8_MAX) {
             type = TlvType.UnsignedInt_1OctetValue;
-        } else if (value < 65536) {
+        } else if (value < UINT16_MAX) {
             type = TlvType.UnsignedInt_2OctetValue;
-        } else if (value < 4294967296) {
+        } else if (value < UINT32_MAX) {
             type = TlvType.UnsignedInt_4OctetValue;
         } else {
             type = TlvType.UnsignedInt_8OctetValue;
@@ -54,7 +54,12 @@ const UINT64_MAX = BigInt("18446744073709551615");
             && type !== TlvType.UnsignedInt_2OctetValue
             && type !== TlvType.UnsignedInt_4OctetValue
             && type !== TlvType.UnsignedInt_8OctetValue) throw new Error(`Unexpected type ${type}.`);
-        return { tag, value: TlvCodec.readIntegerValue(reader, type) };
+        let value = TlvCodec.readIntegerValue(reader, type);
+        if (this.max <= UINT32_MAX && typeof value === "bigint") {
+            // Convert down to a number if it can fit.
+            value = Number(value);
+        }
+        return { tag, value };
     }
 
     /** @override */
