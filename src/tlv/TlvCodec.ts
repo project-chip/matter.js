@@ -105,6 +105,14 @@ export class TlvCodec {
                 return reader.readUInt32();
             case TlvType.UnsignedInt_8OctetValue:
                 return reader.readUInt64();
+            case TlvType.SignedInt_1OctetValue:
+                return reader.readInt8();
+            case TlvType.SignedInt_2OctetValue:
+                return reader.readInt16();
+            case TlvType.SignedInt_4OctetValue:
+                return reader.readInt32();
+            case TlvType.SignedInt_8OctetValue:
+                return reader.readInt64();
             default:
                 throw new Error(`Unexpected TLV type ${type}`);
         }
@@ -154,6 +162,18 @@ export class TlvCodec {
                 break;
             case TlvType.UnsignedInt_8OctetValue:
                 writer.writeUInt64(value);
+                break;
+            case TlvType.SignedInt_1OctetValue:
+                writer.writeInt8(value);
+                break;
+            case TlvType.SignedInt_2OctetValue:
+                writer.writeInt16(value);
+                break;
+            case TlvType.SignedInt_4OctetValue:
+                writer.writeInt32(value);
+                break;
+            case TlvType.SignedInt_8OctetValue:
+                writer.writeInt64(value);
                 break;
             default:
                 throw new Error(`Unexpected TLV type ${type}`);

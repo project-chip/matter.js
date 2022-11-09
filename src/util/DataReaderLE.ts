@@ -28,6 +28,22 @@ export class DataReaderLE {
     readUInt64() {
         return this.dataView.getBigUint64(this.getOffsetAndAdvance(8), true);
     }
+    
+    readInt8() {
+        return this.dataView.getInt8(this.getOffsetAndAdvance(1));
+    }
+    
+    readInt16() {
+        return this.dataView.getInt16(this.getOffsetAndAdvance(2), true);
+    }
+    
+    readInt32() {
+        return this.dataView.getInt32(this.getOffsetAndAdvance(4), true);
+    }
+    
+    readInt64() {
+        return this.dataView.getBigInt64(this.getOffsetAndAdvance(8), true);
+    }
 
     private getOffsetAndAdvance(size: number) {
         const result = this.offset;

@@ -62,11 +62,17 @@ const INT64_RANGE = { min: BigInt("-9223372036854775808"), max: BigInt("92233720
     /** @override */
     protected decodeTlv(reader: DataReaderLE) {
         const { tag, type } = TlvCodec.readTagType(reader);
-        if (type !== TlvType.UnsignedInt_1OctetValue
-            && type !== TlvType.UnsignedInt_2OctetValue
-            && type !== TlvType.UnsignedInt_4OctetValue
-            && type !== TlvType.UnsignedInt_8OctetValue) throw new Error(`Unexpected type ${type}.`);
-        return { tag, value: TlvCodec.readIntegerValue(reader, type) };
+        if (type !== TlvType.SignedInt_1OctetValue
+            && type !== TlvType.SignedInt_2OctetValue
+            && type !== TlvType.SignedInt_4OctetValue
+            && type !== TlvType.SignedInt_8OctetValue) throw new Error(`Unexpected type ${type}.`);
+        let value = TlvCodec.readIntegerValue(reader, type);
+        this.validate(value);
+        if (typeof value === "bigint" && this.max <= INT32_RANGE.max && this.min >= INT32_RANGE.min) {
+            // Convert down to a number if it can fit and is expected.
+            value = Number(value);
+        }
+        return { tag, value };
     }
 
     /** @override */
@@ -76,9 +82,9 @@ const INT64_RANGE = { min: BigInt("-9223372036854775808"), max: BigInt("92233720
     }
 }
 
-/** Unsigned integer TLV schema. */
-export const TlvUInt = ({ min = 0, max = UINT64_MAX }: { min?: number | bigint, max?: number | bigint }) => new UIntSchema(min, max);
-export const TlvUInt8 = TlvUInt({ max: UINT8_MAX }) as TlvSchema<number>;
-export const TlvUInt16 = TlvUInt({ max: UINT16_MAX }) as TlvSchema<number>;
-export const TlvUInt32 = TlvUInt({ max: UINT32_MAX }) as TlvSchema<number>;
-export const TlvUInt64 = TlvUInt({ max: UINT64_MAX });
+/** Signed integer TLV schema. */
+export const TlvInt = ({ min = INT64_RANGE.min, max = INT64_RANGE.max }: { min?: number | bigint, max?: number | bigint }) => new IntSchema(min, max);
+export const TlvInt8 = TlvInt(INT8_RANGE) as TlvSchema<number>;
+export const TlvInt16 = TlvInt(INT16_RANGE) as TlvSchema<number>;
+export const TlvInt32 = TlvInt(INT32_RANGE) as TlvSchema<number>;
+export const TlvInt64 = TlvInt(INT64_RANGE);

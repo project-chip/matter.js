@@ -55,8 +55,9 @@ const UINT64_MAX = BigInt("18446744073709551615");
             && type !== TlvType.UnsignedInt_4OctetValue
             && type !== TlvType.UnsignedInt_8OctetValue) throw new Error(`Unexpected type ${type}.`);
         let value = TlvCodec.readIntegerValue(reader, type);
+        this.validate(value);
         if (this.max <= UINT32_MAX && typeof value === "bigint") {
-            // Convert down to a number if it can fit.
+            // Convert down to a number if it can fit and is expected.
             value = Number(value);
         }
         return { tag, value };
