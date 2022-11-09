@@ -46,7 +46,7 @@ export class DataWriterLE {
 
     writeInt8(value: number | bigint) {
         const chunk = new Uint8Array(1);
-        new DataView(chunk.buffer, 0, 2).setInt8(0, toNumber(value));
+        new DataView(chunk.buffer, 0, 1).setInt8(0, toNumber(value));
         this.chunks.push(chunk);
         this.length += 1;
     }
