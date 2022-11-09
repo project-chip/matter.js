@@ -56,7 +56,7 @@ const INT64_RANGE = { min: BigInt("-9223372036854775808"), max: BigInt("92233720
         }
 
         TlvCodec.writeTag(writer, type, tag);
-        TlvCodec.writeIntegerValue(writer, type, value);
+        TlvCodec.writePrimitive(writer, type, value);
     }
 
     /** @override */
@@ -66,7 +66,7 @@ const INT64_RANGE = { min: BigInt("-9223372036854775808"), max: BigInt("92233720
             && type !== TlvType.SignedInt_2OctetValue
             && type !== TlvType.SignedInt_4OctetValue
             && type !== TlvType.SignedInt_8OctetValue) throw new Error(`Unexpected type ${type}.`);
-        let value = TlvCodec.readIntegerValue(reader, type);
+        let value = TlvCodec.readPrimitive(reader, type);
         this.validate(value);
         if (typeof value === "bigint" && this.max <= INT32_RANGE.max && this.min >= INT32_RANGE.min) {
             // Convert down to a number if it can fit and is expected.
