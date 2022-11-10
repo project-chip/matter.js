@@ -14,6 +14,29 @@ const UINT16_MAX = 0xFFFF;
 const UINT32_MAX = 0xFFFFFFFF;
 const UINT64_MAX = BigInt("18446744073709551615");
 
+export function getUIntEncodedLength(value: number | bigint) {
+    if (value <= UINT8_MAX) {
+        return 1;
+    } else if (value <= UINT16_MAX) {
+        return 2;
+    } else if (value <= UINT32_MAX) {
+        return 4;
+    } else {
+        return 8;
+    }
+}
+
+const LengthToType = {
+    1: TlvType.UnsignedInt_1OctetValue,
+    2: TlvType.UnsignedInt_2OctetValue,
+    4: TlvType.UnsignedInt_4OctetValue,
+    8: TlvType.UnsignedInt_8OctetValue,
+};
+type a = Readonly<typeof LengthToType>;
+type Types<T> = {[K in keyof T]: T[K]}[keyof T];
+type UintTypes = Types<typeof LengthToType>;
+const UintTypes = Object.values(LengthToType) as ;
+
 /**
  * Schema to encode an unsigned integer in TLV.
  * 
@@ -32,17 +55,7 @@ const UINT64_MAX = BigInt("18446744073709551615");
 
     /** @override */
     protected encodeTlv(writer: DataWriterLE, value: number | bigint, tag: TlvTag = {}): void {
-        let type: TlvType;
-        if (value <= UINT8_MAX) {
-            type = TlvType.UnsignedInt_1OctetValue;
-        } else if (value <= UINT16_MAX) {
-            type = TlvType.UnsignedInt_2OctetValue;
-        } else if (value <= UINT32_MAX) {
-            type = TlvType.UnsignedInt_4OctetValue;
-        } else {
-            type = TlvType.UnsignedInt_8OctetValue;
-        }
-
+        const type = LengthToType[getUIntEncodedLength(value)];
         TlvCodec.writeTag(writer, type, tag);
         TlvCodec.writePrimitive(writer, type, value);
     }
@@ -50,10 +63,8 @@ const UINT64_MAX = BigInt("18446744073709551615");
     /** @override */
     protected decodeTlv(reader: DataReaderLE) {
         const { tag, type } = TlvCodec.readTagType(reader);
-        if (type !== TlvType.UnsignedInt_1OctetValue
-            && type !== TlvType.UnsignedInt_2OctetValue
-            && type !== TlvType.UnsignedInt_4OctetValue
-            && type !== TlvType.UnsignedInt_8OctetValue) throw new Error(`Unexpected type ${type}.`);
+        if (!UintTypes.includes(type)) throw new Error(`Unexpected type ${type}.`);
+
         let value = TlvCodec.readPrimitive(reader, type);
         this.validate(value);
         if (this.max <= UINT32_MAX && typeof value === "bigint") {
