@@ -14,18 +14,6 @@ const UINT16_MAX = 0xFFFF;
 const UINT32_MAX = 0xFFFFFFFF;
 const UINT64_MAX = BigInt("18446744073709551615");
 
-export function getUIntEncodedLength(value: number | bigint) {
-    if (value <= UINT8_MAX) {
-        return 1;
-    } else if (value <= UINT16_MAX) {
-        return 2;
-    } else if (value <= UINT32_MAX) {
-        return 4;
-    } else {
-        return 8;
-    }
-}
-
 const LengthToType = {
     1: TlvType.UnsignedInt8,
     2: TlvType.UnsignedInt16,

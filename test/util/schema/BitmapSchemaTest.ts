@@ -5,7 +5,7 @@
  */
 
 import assert from "assert";
-import { BitFieldEnum, BitFlag, BitmapSchema } from "../../../src/util/schema/BitmapSchema";
+import { BitField, BitFieldEnum, BitFlag, BitmapSchema } from "../../../src/util/schema/BitmapSchema";
 
 describe("BitmapSchema", () => {
     const enum EnumTest {
@@ -22,6 +22,9 @@ describe("BitmapSchema", () => {
 
         /** enum jsdoc */
         enumTest: BitFieldEnum<EnumTest>(5, 2),
+
+        /** number jsdoc */
+        numberTest: BitField(7, 2),
     });
 
     context("encode", () => {
@@ -29,21 +32,23 @@ describe("BitmapSchema", () => {
             const result = TestBitmapSchema.encode({
                 flag1: true,
                 flag2: false,
-                enumTest: EnumTest.VALUE_2
+                enumTest: EnumTest.VALUE_2,
+                numberTest: 1,
             });
 
-            assert.strictEqual(result, 0x44);
+            assert.strictEqual(result, 0xC4);
         });
     });
 
     context("decode", () => {
         it("decodes a bitmap using the schema", () => {
-            const result = TestBitmapSchema.decode(0x34);
+            const result = TestBitmapSchema.decode(0xB4);
 
             assert.deepStrictEqual(result, {
                 flag1: true,
                 flag2: true,
                 enumTest: EnumTest.VALUE_1,
+                numberTest: 1,
             });
         });
     });

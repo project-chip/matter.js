@@ -15,26 +15,16 @@ import { TlvSchema } from "./TlvSchema";
  * @see {@link MatterCoreSpecificationV1_0} § A.11.3
  */
  class BooleanSchema extends TlvSchema<boolean> {
-    constructor() {
-        super();
-    }
-
     /** @override */
     protected encodeTlv(writer: DataWriterLE, value: boolean, tag: TlvTag = {}): void {
-        TlvCodec.writeTag(writer, value ? TlvType.BooleanTrue : TlvType.BooleanFalse, tag);
+        TlvCodec.writeTag(writer, { type: TlvType.Boolean, value },  tag);
     }
 
     /** @override */
     protected decodeTlv(reader: DataReaderLE) {
-        const { tag, type } = TlvCodec.readTagType(reader);
-        switch (type) {
-            case TlvType.BooleanTrue:
-                return { tag, value: true};
-            case TlvType.BooleanFalse:
-                return { tag, value: false};
-            default:
-                throw new Error(`Unexpected type ${type}.`);
-        }
+        const { tag, typeLength } = TlvCodec.readTagType(reader);
+        if (typeLength.type !== TlvType.Boolean) throw new Error(`Unexpected type ${typeLength.type}.`)
+        return { tag, value: typeLength.value };
     }
 }
 

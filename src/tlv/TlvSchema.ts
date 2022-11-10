@@ -4,19 +4,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ByteArray } from "../util/ByteArray";
 import { DataReaderLE } from "../util/DataReaderLE";
 import { DataWriterLE } from "../util/DataWriterLE";
 import { Schema } from "../util/schema/Schema";
 import { TlvTag } from "./TlvCodec";
 
-export abstract class TlvSchema<T> extends Schema<T, Uint8Array> {
+export abstract class TlvSchema<T> extends Schema<T, ByteArray> {
     /** @override */
-    protected decodeInternal(encoded: Uint8Array): T {
+    protected decodeInternal(encoded: ByteArray): T {
         return this.decodeTlv(new DataReaderLE(encoded)).value;
     }
 
     /** @override */
-    protected encodeInternal(value: T): Uint8Array {
+    protected encodeInternal(value: T): ByteArray {
         const writer = new DataWriterLE();
         this.encodeTlv(writer, value);
         return writer.toBuffer();

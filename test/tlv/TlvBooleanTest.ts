@@ -6,7 +6,7 @@
 
 import assert from "assert";
 import { TlvBoolean } from "../../src/tlv/TlvBoolean";
-import { byteArrayFromHex, byteArrayToHex } from "../../src/util/ArrayBuffer";
+import { ByteArray } from "../../src/util/ByteArray";
 
 type TestVector<I, E> = {[testName: string]: { input: I, out: E }};
 
@@ -26,7 +26,7 @@ describe("TlvBoolean", () => {
         for (const testName in encodeTestVector) {
             const { input, out } = encodeTestVector[testName];
             it(testName, () => {
-                assert.strictEqual(byteArrayToHex(TlvBoolean.encode(input)), out);
+                assert.strictEqual(TlvBoolean.encode(input).toHex(), out);
             });
         }
     });
@@ -35,7 +35,7 @@ describe("TlvBoolean", () => {
         for (const testName in decodeTestVector) {
             const { input, out } = decodeTestVector[testName];
             it(testName, () => {
-                assert.strictEqual(TlvBoolean.decode(byteArrayFromHex(input)), out);
+                assert.strictEqual(TlvBoolean.decode(ByteArray.fromHex(input)), out);
             });
         }
     });

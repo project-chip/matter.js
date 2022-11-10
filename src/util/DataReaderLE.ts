@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ByteArray, byteArrayToHex } from "./ArrayBuffer";
+import { ByteArray } from "./ByteArray";
 
 /** Reader that auto-increments its offset after each read. */
 export class DataReaderLE {
@@ -58,13 +58,13 @@ export class DataReaderLE {
     }
 
     readUtfString(length: number) {
-        return new TextDecoder().decode(new Uint8Array(this.buffer, this.getOffsetAndAdvance(length), length));
+        const offset = this.getOffsetAndAdvance(length);
+        return new TextDecoder().decode(this.buffer.subarray(offset, offset + length));
     }
 
-    readByteString(length: number) {
+    readByteArray(length: number) {
         const offset = this.getOffsetAndAdvance(length);
         const result = this.buffer.subarray(offset, offset + length);
-        console.log(length, result.byteOffset, result.length, byteArrayToHex(result));
         return result;
     }
 

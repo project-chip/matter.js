@@ -6,7 +6,7 @@
 
 import assert from "assert";
 import { TlvFloat, TlvDouble, TlvBoundedDouble } from "../../src/tlv/TlvFloat";
-import { ByteArray, byteArrayFromHex, byteArrayToHex } from "../../src/util/ArrayBuffer";
+import { ByteArray } from "../../src/util/ByteArray";
 import { Schema } from "../../src/util/schema/Schema";
 
 type TestVector<I, E> = {[testName: string]: { input: I, out: E }};
@@ -33,7 +33,7 @@ describe("TlvFloat", () => {
         for (const testName in encodeTestVector) {
             const { input: { schema, value }, out } = encodeTestVector[testName];
             it(testName, () => {
-                assert.equal(byteArrayToHex(schema.encode(value)), out);
+                assert.equal(schema.encode(value).toHex(), out);
             });
         }
     });
@@ -42,7 +42,7 @@ describe("TlvFloat", () => {
         for (const testName in decodeTestVector) {
             const { input: { schema, value }, out } = decodeTestVector[testName];
             it(testName, () => {
-                assert.equal(schema.decode(byteArrayFromHex(value)) - out < 0.001, true);
+                assert.equal(schema.decode(ByteArray.fromHex(value)) - out < 0.001, true);
             });
         }
     });

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ByteArray } from "../util/ByteArray";
 import { DataReaderLE } from "../util/DataReaderLE";
 import { DataWriterLE } from "../util/DataWriterLE";
 import { TlvType, TlvCodec, TlvTag } from "./TlvCodec";
@@ -33,7 +34,7 @@ const UtfStringTypes = Object.values(LengthToUtfStringType);
  * 
  * @see {@link MatterCoreSpecificationV1_0} § A.11.2
  */
- class ByteStringSchema extends TlvSchema<Uint8Array> {
+ class ByteStringSchema extends TlvSchema<ByteArray> {
     constructor(
         private readonly minLength: number = 0,
         private readonly maxLength: number = 1024,
@@ -44,7 +45,7 @@ const UtfStringTypes = Object.values(LengthToUtfStringType);
     }
 
     /** @override */
-    protected encodeTlv(writer: DataWriterLE, value: Uint8Array, tag: TlvTag = {}): void {
+    protected encodeTlv(writer: DataWriterLE, value: ByteArray, tag: TlvTag = {}): void {
         const type = LengthToByteStringType[getUIntEncodedLength(value.byteLength)];
         TlvCodec.writeTag(writer, type, tag);
         TlvCodec.writePrimitive(writer, type, value);

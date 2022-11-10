@@ -6,8 +6,7 @@
 
 import assert from "assert";
 import { TlvByteString, TlvUtfString } from "../../src/tlv/TlvString";
-import { byteArrayFromHex, byteArrayToHex } from "../../src/util/ArrayBuffer";
-import { DataReaderLE } from "../../src/util/DataReaderLE";
+import { ByteArray } from "../../src/util/ByteArray";
 
 type TestVector<I, E> = {[testName: string]: { input: I, out: E }};
 
@@ -29,13 +28,13 @@ describe("TlvUtfString", () => {
         it("encodes a string", () => {
             const result = TlvUtfString().encode("test");
 
-            assert.strictEqual(byteArrayToHex(result), "0c0474657374");
+            assert.strictEqual(result.toHex(), "0c0474657374");
         });
     });
 
     context("decode", () => {
         it("decodes a string", () => {
-            const result = TlvUtfString().decode(byteArrayFromHex("0c0474657374"));
+            const result = TlvUtfString().decode(ByteArray.fromHex("0c0474657374"));
 
             assert.strictEqual(result, "test");
         });
@@ -63,17 +62,17 @@ describe("TlvByteString", () => {
 
     context("encode", () => {
         it("encodes a byte string", () => {
-            const result = TlvByteString().encode(byteArrayFromHex("0001"));
+            const result = TlvByteString().encode(ByteArray.fromHex("0001"));
 
-            assert.strictEqual(byteArrayToHex(result), "10020001");
+            assert.strictEqual(result.toHex(), "10020001");
         });
     });
 
     context("decode", () => {
         it("decodes a byte string", () => {
-            const result = TlvByteString().decode(byteArrayFromHex("10020001"));
+            const result = TlvByteString().decode(ByteArray.fromHex("10020001"));
 
-            assert.strictEqual(byteArrayToHex(result), "0001");
+            assert.strictEqual(result.toHex(), "0001");
         });
     });
 
@@ -85,10 +84,10 @@ describe("TlvByteString", () => {
             it(testName, () => {
                 if (throwException) {
                     assert.throws(() => {
-                        BoundedInt.validate(byteArrayFromHex(input));
+                        BoundedInt.validate(ByteArray.fromHex(input));
                     });
                 } else {
-                    BoundedInt.validate(byteArrayFromHex(input));
+                    BoundedInt.validate(ByteArray.fromHex(input));
                 }
             });
         }
