@@ -5,7 +5,7 @@
  */
 
 import assert from "assert";
-import { BitmapSchema, EnumBits, FlagBit } from "../../../src/util/schema/BitmapSchema";
+import { BitFieldEnum, BitFlag, BitmapSchema } from "../../../src/util/schema/BitmapSchema";
 
 describe("BitmapSchema", () => {
     const enum EnumTest {
@@ -15,13 +15,13 @@ describe("BitmapSchema", () => {
 
     const TestBitmapSchema = BitmapSchema({
         /** flag1 jsdoc */
-        flag1: FlagBit(2),
+        flag1: BitFlag(2),
 
         /** flag2 jsdoc */
-        flag2: FlagBit(4),
+        flag2: BitFlag(4),
 
         /** enum jsdoc */
-        enumTest: EnumBits<EnumTest>(5, 2),
+        enumTest: BitFieldEnum<EnumTest>(5, 2),
     });
 
     context("encode", () => {
