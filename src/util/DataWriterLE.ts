@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ByteArray } from "./ArrayBuffer";
+
 function toNumber(value: bigint | number): number {
     return typeof value === "bigint" ? Number(value) : value;
 }
@@ -16,7 +18,7 @@ function toBigInt(value: bigint | number): bigint {
 // TODO: some research should be done to make sure this is most performant implementation.
 export class DataWriterLE {
     private length = 0;
-    private readonly chunks = new Array<Uint8Array>();
+    private readonly chunks = new Array<ByteArray>();
 
     writeUInt8(value: number | bigint) {
         this.chunks.push(new Uint8Array([toNumber(value)]));
@@ -86,6 +88,17 @@ export class DataWriterLE {
         this.length += 8;
     }
 
+    writeUtfString(value: string) {
+        const bytes = new TextEncoder().encode(value);
+        this.chunks.push(bytes);
+        this.length += bytes.byteLength;
+    }
+
+    writeByteString(value: Uint8Array) {
+        this.chunks.push(value);
+        this.length += value.byteLength;
+    }
+
     toBuffer() {
         if (this.chunks.length === 0) return new Uint8Array(0);
         if (this.chunks.length === 1) return this.chunks[0];
@@ -99,6 +112,6 @@ export class DataWriterLE {
         this.chunks.length = 0;
         this.chunks.push(result);
 
-        return result.buffer;
+        return result;
     }
 }

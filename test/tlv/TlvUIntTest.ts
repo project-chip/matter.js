@@ -6,7 +6,7 @@
 
 import assert from "assert";
 import { TlvUInt64, TlvUInt, TlvUInt32 } from "../../src/tlv/TlvUInt";
-import { arrayBufferFromHex, arrayBufferToHex } from "../../src/util/ArrayBuffer";
+import { byteArrayFromHex, byteArrayToHex } from "../../src/util/ArrayBuffer";
 
 type TestVector<I, E> = {[testName: string]: { input: I, out: E }};
 
@@ -36,7 +36,7 @@ describe("TlvUInt", () => {
         for (const testName in encodeTestVector) {
             const { input, out } = encodeTestVector[testName];
             it(testName, () => {
-                assert.strictEqual(arrayBufferToHex(TlvUInt64.encode(input)), out);
+                assert.strictEqual(byteArrayToHex(TlvUInt64.encode(input)), out);
             });
         }
     });
@@ -45,14 +45,14 @@ describe("TlvUInt", () => {
         for (const testName in decodeTestVector) {
             const { input, out } = decodeTestVector[testName];
             it(testName, () => {
-                assert.strictEqual(TlvUInt64.decode(arrayBufferFromHex(input)), out);
+                assert.strictEqual(TlvUInt64.decode(byteArrayFromHex(input)), out);
             });
         }
     });
 
     context("decode", () => {
         it("decodes a 8 bytes small value as a number", () => {
-            assert.strictEqual(TlvUInt32.decode(arrayBufferFromHex("070100000000000000")), 1);
+            assert.strictEqual(TlvUInt32.decode(byteArrayFromHex("070100000000000000")), 1);
         });
     });
 

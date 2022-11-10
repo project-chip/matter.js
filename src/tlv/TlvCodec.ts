@@ -58,10 +58,10 @@ type TlvToPrimitive = {
     [TlvType.Utf8String16]: string,
     [TlvType.Utf8String32]: string,
     [TlvType.Utf8String64]: string,
-    [TlvType.ByteString8]: ArrayBuffer,
-    [TlvType.ByteString16]: ArrayBuffer,
-    [TlvType.ByteString32]: ArrayBuffer,
-    [TlvType.ByteString64]: ArrayBuffer,
+    [TlvType.ByteString8]: Uint8Array,
+    [TlvType.ByteString16]: Uint8Array,
+    [TlvType.ByteString32]: Uint8Array,
+    [TlvType.ByteString64]: Uint8Array,
     [TlvType.Null]: null,
     [TlvType.Structure]: never,
     [TlvType.Array]: never,
@@ -145,6 +145,22 @@ export class TlvCodec {
                 return reader.readFloat() as TlvToPrimitive[T];
             case TlvType.Float64:
                 return reader.readDouble() as TlvToPrimitive[T];
+            case TlvType.Utf8String8:
+                return reader.readUtfString(reader.readUInt8()) as TlvToPrimitive[T];
+            case TlvType.Utf8String16:
+                return reader.readUtfString(reader.readUInt16()) as TlvToPrimitive[T];
+            case TlvType.Utf8String32:
+                return reader.readUtfString(reader.readUInt32()) as TlvToPrimitive[T];
+            case TlvType.Utf8String64:
+                return reader.readUtfString(Number(reader.readUInt64())) as TlvToPrimitive[T];
+            case TlvType.ByteString8:
+                return reader.readByteString(reader.readUInt8()) as TlvToPrimitive[T];
+            case TlvType.ByteString16:
+                return reader.readByteString(reader.readUInt16()) as TlvToPrimitive[T];
+            case TlvType.ByteString32:
+                return reader.readByteString(reader.readUInt32()) as TlvToPrimitive[T];
+            case TlvType.ByteString64:
+                return reader.readByteString(Number(reader.readUInt64())) as TlvToPrimitive[T];
             default:
                 throw new Error(`Unexpected TLV type ${type}`);
         }
@@ -212,6 +228,38 @@ export class TlvCodec {
                 break;
             case TlvType.Float64:
                 writer.writeDouble(value as TlvToPrimitive[TlvType.Float64]);
+                break;
+            case TlvType.Utf8String8:
+                writer.writeUInt8((value as TlvToPrimitive[TlvType.Utf8String8]).length);
+                writer.writeUtfString(value as TlvToPrimitive[TlvType.Utf8String8]);
+                break;
+            case TlvType.Utf8String16:
+                writer.writeUInt16((value as TlvToPrimitive[TlvType.Utf8String16]).length);
+                writer.writeUtfString(value as TlvToPrimitive[TlvType.Utf8String16]);
+                break;
+            case TlvType.Utf8String32:
+                writer.writeUInt32((value as TlvToPrimitive[TlvType.Utf8String32]).length);
+                writer.writeUtfString(value as TlvToPrimitive[TlvType.Utf8String32]);
+                break;
+            case TlvType.Utf8String64:
+                writer.writeUInt64((value as TlvToPrimitive[TlvType.Utf8String64]).length);
+                writer.writeUtfString(value as TlvToPrimitive[TlvType.Utf8String64]);
+                break;
+            case TlvType.ByteString8:
+                writer.writeUInt8((value as TlvToPrimitive[TlvType.ByteString8]).byteLength);
+                writer.writeByteString(value as TlvToPrimitive[TlvType.ByteString8]);
+                break;
+            case TlvType.ByteString16:
+                writer.writeUInt16((value as TlvToPrimitive[TlvType.ByteString16]).byteLength);
+                writer.writeByteString(value as TlvToPrimitive[TlvType.ByteString16]);
+                break;
+            case TlvType.ByteString32:
+                writer.writeUInt32((value as TlvToPrimitive[TlvType.ByteString32]).byteLength);
+                writer.writeByteString(value as TlvToPrimitive[TlvType.ByteString32]);
+                break;
+            case TlvType.ByteString64:
+                writer.writeUInt64((value as TlvToPrimitive[TlvType.ByteString64]).byteLength);
+                writer.writeByteString(value as TlvToPrimitive[TlvType.ByteString64]);
                 break;
             default:
                 throw new Error(`Unexpected TLV type ${type}`);

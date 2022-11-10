@@ -9,14 +9,14 @@ import { DataWriterLE } from "../util/DataWriterLE";
 import { Schema } from "../util/schema/Schema";
 import { TlvTag } from "./TlvCodec";
 
-export abstract class TlvSchema<T> extends Schema<T, ArrayBuffer> {
+export abstract class TlvSchema<T> extends Schema<T, Uint8Array> {
     /** @override */
-    protected decodeInternal(encoded: ArrayBuffer): T {
+    protected decodeInternal(encoded: Uint8Array): T {
         return this.decodeTlv(new DataReaderLE(encoded)).value;
     }
 
     /** @override */
-    protected encodeInternal(value: T): ArrayBuffer {
+    protected encodeInternal(value: T): Uint8Array {
         const writer = new DataWriterLE();
         this.encodeTlv(writer, value);
         return writer.toBuffer();

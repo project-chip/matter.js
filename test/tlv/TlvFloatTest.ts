@@ -6,17 +6,17 @@
 
 import assert from "assert";
 import { TlvFloat, TlvDouble, TlvBoundedDouble } from "../../src/tlv/TlvFloat";
-import { arrayBufferFromHex, arrayBufferToHex } from "../../src/util/ArrayBuffer";
+import { ByteArray, byteArrayFromHex, byteArrayToHex } from "../../src/util/ArrayBuffer";
 import { Schema } from "../../src/util/schema/Schema";
 
 type TestVector<I, E> = {[testName: string]: { input: I, out: E }};
 
-const encodeTestVector: TestVector<{ schema: Schema<number, ArrayBuffer>, value: number}, string> = {
+const encodeTestVector: TestVector<{ schema: Schema<number, ByteArray>, value: number}, string> = {
     "encodes a float": { input: { schema: TlvFloat, value: 6546.254}, out: "0a0892cc45" },
     "encodes a double": { input: { schema: TlvDouble, value: 6546.254}, out: "0b2fdd24064192b940" },
 };
 
-const decodeTestVector: TestVector<{ schema: Schema<number, ArrayBuffer>, value: string}, number> = {
+const decodeTestVector: TestVector<{ schema: Schema<number, ByteArray>, value: string}, number> = {
     "decodes a float": { input: { schema: TlvFloat, value: "0a0892cc45"}, out: 6546.254 },
     "decodes a double": { input: { schema: TlvDouble, value: "0b2fdd24064192b940"}, out: 6546.254 },
 };
@@ -33,7 +33,7 @@ describe("TlvFloat", () => {
         for (const testName in encodeTestVector) {
             const { input: { schema, value }, out } = encodeTestVector[testName];
             it(testName, () => {
-                assert.equal(arrayBufferToHex(schema.encode(value)), out);
+                assert.equal(byteArrayToHex(schema.encode(value)), out);
             });
         }
     });
@@ -42,7 +42,7 @@ describe("TlvFloat", () => {
         for (const testName in decodeTestVector) {
             const { input: { schema, value }, out } = decodeTestVector[testName];
             it(testName, () => {
-                assert.equal(schema.decode(arrayBufferFromHex(value)) - out < 0.001, true);
+                assert.equal(schema.decode(byteArrayFromHex(value)) - out < 0.001, true);
             });
         }
     });

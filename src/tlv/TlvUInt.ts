@@ -27,15 +27,13 @@ export function getUIntEncodedLength(value: number | bigint) {
 }
 
 const LengthToType = {
-    1: TlvType.UnsignedInt_1OctetValue,
-    2: TlvType.UnsignedInt_2OctetValue,
-    4: TlvType.UnsignedInt_4OctetValue,
-    8: TlvType.UnsignedInt_8OctetValue,
+    1: TlvType.UnsignedInt8,
+    2: TlvType.UnsignedInt16,
+    4: TlvType.UnsignedInt32,
+    8: TlvType.UnsignedInt64,
 };
-type a = Readonly<typeof LengthToType>;
-type Types<T> = {[K in keyof T]: T[K]}[keyof T];
-type UintTypes = Types<typeof LengthToType>;
-const UintTypes = Object.values(LengthToType) as ;
+type UIntTypes = TlvType.UnsignedInt8 | TlvType.UnsignedInt16 | TlvType.UnsignedInt32 | TlvType.UnsignedInt64;
+const UIntTypes = Object.values(LengthToType);
 
 /**
  * Schema to encode an unsigned integer in TLV.
@@ -63,9 +61,9 @@ const UintTypes = Object.values(LengthToType) as ;
     /** @override */
     protected decodeTlv(reader: DataReaderLE) {
         const { tag, type } = TlvCodec.readTagType(reader);
-        if (!UintTypes.includes(type)) throw new Error(`Unexpected type ${type}.`);
+        if (!UIntTypes.includes(type)) throw new Error(`Unexpected type ${type}.`);
 
-        let value = TlvCodec.readPrimitive(reader, type);
+        let value = TlvCodec.readPrimitive(reader, type as UIntTypes);
         this.validate(value);
         if (this.max <= UINT32_MAX && typeof value === "bigint") {
             // Convert down to a number if it can fit and is expected.
