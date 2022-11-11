@@ -9,7 +9,8 @@ import { DataWriterLE } from "../util/DataWriterLE";
 import { TlvType, TlvCodec, TlvTag, TlvLength, TlvTypeLength } from "./TlvCodec";
 import { TlvSchema } from "./TlvSchema";
 
-const FLOAT_RANGE = { min: -340282346638528859811704183484516925440.0, max: 340282346638528859811704183484516925440.0 };
+const FLOAT32_MIN = -340282346638528859811704183484516925440.0;
+const FLOAT32_MAX = 340282346638528859811704183484516925440.0;
 
 /**
  * Schema to encode a float in TLV.
@@ -56,7 +57,7 @@ export const TlvBoundedDouble = (
 ) => new FloatSchema(min, max, precision);
 
 /** Float TLV schema. */
-export const TlvFloat = TlvBoundedDouble(FLOAT_RANGE, TlvLength.FourBytes);
+export const TlvFloat = TlvBoundedDouble({ min: FLOAT32_MIN, max: FLOAT32_MAX}, TlvLength.FourBytes);
 
 /** Double TLV schema. */
 export const TlvDouble = TlvBoundedDouble(); // number type is a double internally so no need to specify a range
