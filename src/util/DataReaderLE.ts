@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ByteArray } from "./ByteArray";
+import { ByteArray } from "./ByteArray.js";
 
 /** Reader that auto-increments its offset after each read. */
 export class DataReaderLE {

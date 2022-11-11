@@ -27,7 +27,7 @@ describe("BitmapSchema", () => {
         numberTest: BitField(7, 2),
     });
 
-    context("encode", () => {
+    describe("encode", () => {
         it("encodes a bitmap using the schema", () => {
             const result = TestBitmapSchema.encode({
                 flag1: true,
@@ -40,7 +40,7 @@ describe("BitmapSchema", () => {
         });
     });
 
-    context("decode", () => {
+    describe("decode", () => {
         it("decodes a bitmap using the schema", () => {
             const result = TestBitmapSchema.decode(0xB4);
 

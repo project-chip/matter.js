@@ -22,7 +22,7 @@ const decodeTestVector: TestVector<string, boolean> = {
 
 describe("TlvBoolean", () => {
 
-    context("encode", () => {
+    describe("encode", () => {
         for (const testName in encodeTestVector) {
             const { input, out } = encodeTestVector[testName];
             it(testName, () => {
@@ -31,7 +31,7 @@ describe("TlvBoolean", () => {
         }
     });
 
-    context("decode", () => {
+    describe("decode", () => {
         for (const testName in decodeTestVector) {
             const { input, out } = decodeTestVector[testName];
             it(testName, () => {

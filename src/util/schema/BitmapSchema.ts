@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Schema } from "./Schema";
+import { Schema } from "./Schema.js";
 
 const enum BitRangeType {
     Flag,

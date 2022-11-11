@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DataReaderLE } from "../util/DataReaderLE";
-import { DataWriterLE } from "../util/DataWriterLE";
-import { UINT16_MAX, UINT32_MAX, UINT64_MAX, UINT8_MAX } from "../util/Number";
-import { TlvType, TlvCodec, TlvTag, TlvTypeLength } from "./TlvCodec";
-import { TlvSchema } from "./TlvSchema";
+import { DataReaderLE } from "../util/DataReaderLE.js";
+import { DataWriterLE } from "../util/DataWriterLE.js";
+import { UINT16_MAX, UINT32_MAX, UINT64_MAX, UINT8_MAX } from "../util/Number.js";
+import { TlvType, TlvCodec, TlvTag, TlvTypeLength } from "./TlvCodec.js";
+import { TlvSchema } from "./TlvSchema.js";
 
 /**
  * Schema to encode an unsigned integer in TLV.

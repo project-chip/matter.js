@@ -29,7 +29,7 @@ const validateTestVector: TestVector<number, boolean> = {
 
 describe("TlvFloat", () => {
 
-    context("encode", () => {
+    describe("encode", () => {
         for (const testName in encodeTestVector) {
             const { input: { schema, value }, out } = encodeTestVector[testName];
             it(testName, () => {
@@ -38,7 +38,7 @@ describe("TlvFloat", () => {
         }
     });
 
-    context("decode", () => {
+    describe("decode", () => {
         for (const testName in decodeTestVector) {
             const { input: { schema, value }, out } = decodeTestVector[testName];
             it(testName, () => {
@@ -47,7 +47,7 @@ describe("TlvFloat", () => {
         }
     });
 
-    context("validate", () => {
+    describe("validate", () => {
         const BoundedInt = TlvBoundedDouble({ min: -5, max: 10 });
 
         for (const testName in validateTestVector) {

@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ByteArray } from "./ByteArray";
-import { toBigInt, toNumber } from "./Number";
+import { ByteArray } from "./ByteArray.js";
+import { toBigInt, toNumber } from "./Number.js";
 
 /** Writer that auto-increments its offset after each write. */
 // TODO: some research should be done to make sure this is most performant implementation.

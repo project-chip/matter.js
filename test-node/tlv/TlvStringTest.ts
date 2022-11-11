@@ -5,7 +5,7 @@
  */
 
 import assert from "assert";
-import { TlvByteString, TlvUtfString } from "../../src/tlv/TlvString";
+import { TlvByteString, TlvString } from "../../src/tlv/TlvString";
 import { ByteArray } from "../../src/util/ByteArray";
 
 type TestVector<I, E> = {[testName: string]: { input: I, out: E }};
@@ -22,26 +22,26 @@ const validateByteStringTestVector: TestVector<string, boolean> = {
     "throws an error if the string is too long": { input: "0001020304050607", out: true },
 };
 
-describe("TlvUtfString", () => {
+describe("TlvString", () => {
 
-    context("encode", () => {
+    describe("encode", () => {
         it("encodes a string", () => {
-            const result = TlvUtfString().encode("test");
+            const result = TlvString().encode("test");
 
             assert.strictEqual(result.toHex(), "0c0474657374");
         });
     });
 
-    context("decode", () => {
+    describe("decode", () => {
         it("decodes a string", () => {
-            const result = TlvUtfString().decode(ByteArray.fromHex("0c0474657374"));
+            const result = TlvString().decode(ByteArray.fromHex("0c0474657374"));
 
             assert.strictEqual(result, "test");
         });
     });
 
-    context("validate", () => {
-        const BoundedInt = TlvUtfString({ minLength: 4, maxLength: 6 });
+    describe("validate", () => {
+        const BoundedInt = TlvString({ minLength: 4, maxLength: 6 });
 
         for (const testName in validateUtfStringTestVector) {
             const { input, out: throwException } = validateUtfStringTestVector[testName];
@@ -60,7 +60,7 @@ describe("TlvUtfString", () => {
 
 describe("TlvByteString", () => {
 
-    context("encode", () => {
+    describe("encode", () => {
         it("encodes a byte string", () => {
             const result = TlvByteString().encode(ByteArray.fromHex("0001"));
 
@@ -68,7 +68,7 @@ describe("TlvByteString", () => {
         });
     });
 
-    context("decode", () => {
+    describe("decode", () => {
         it("decodes a byte string", () => {
             const result = TlvByteString().decode(ByteArray.fromHex("10020001"));
 
@@ -76,7 +76,7 @@ describe("TlvByteString", () => {
         });
     });
 
-    context("validate", () => {
+    describe("validate", () => {
         const BoundedInt = TlvByteString({ minLength: 4, maxLength: 6 });
 
         for (const testName in validateByteStringTestVector) {
