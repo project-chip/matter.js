@@ -6,22 +6,9 @@
 
 import { DataReaderLE } from "../util/DataReaderLE";
 import { DataWriterLE } from "../util/DataWriterLE";
-import { TlvType, TlvCodec, TlvTag } from "./TlvCodec";
+import { UINT16_MAX, UINT32_MAX, UINT64_MAX, UINT8_MAX } from "../util/Number";
+import { TlvType, TlvCodec, TlvTag, TlvTypeLength } from "./TlvCodec";
 import { TlvSchema } from "./TlvSchema";
-
-const UINT8_MAX = 0xFF;
-const UINT16_MAX = 0xFFFF;
-const UINT32_MAX = 0xFFFFFFFF;
-const UINT64_MAX = BigInt("18446744073709551615");
-
-const LengthToType = {
-    1: TlvType.UnsignedInt8,
-    2: TlvType.UnsignedInt16,
-    4: TlvType.UnsignedInt32,
-    8: TlvType.UnsignedInt64,
-};
-type UIntTypes = TlvType.UnsignedInt8 | TlvType.UnsignedInt16 | TlvType.UnsignedInt32 | TlvType.UnsignedInt64;
-const UIntTypes = Object.values(LengthToType);
 
 /**
  * Schema to encode an unsigned integer in TLV.
@@ -41,17 +28,17 @@ const UIntTypes = Object.values(LengthToType);
 
     /** @override */
     protected encodeTlv(writer: DataWriterLE, value: number | bigint, tag: TlvTag = {}): void {
-        const type = LengthToType[getUIntEncodedLength(value)];
-        TlvCodec.writeTag(writer, type, tag);
-        TlvCodec.writePrimitive(writer, type, value);
+        const typeLength: TlvTypeLength = { type: TlvType.UnsignedInt, length: TlvCodec.getUIntTlvLength(value) }
+        TlvCodec.writeTag(writer, typeLength, tag);
+        TlvCodec.writePrimitive(writer, typeLength, value);
     }
 
     /** @override */
     protected decodeTlv(reader: DataReaderLE) {
-        const { tag, type } = TlvCodec.readTagType(reader);
-        if (!UIntTypes.includes(type)) throw new Error(`Unexpected type ${type}.`);
+        const { tag, typeLength } = TlvCodec.readTagType(reader);
+        if (typeLength.type !== TlvType.UnsignedInt) throw new Error(`Unexpected type ${typeLength.type}.`);
 
-        let value = TlvCodec.readPrimitive(reader, type as UIntTypes);
+        let value = TlvCodec.readPrimitive(reader, typeLength);
         this.validate(value);
         if (this.max <= UINT32_MAX && typeof value === "bigint") {
             // Convert down to a number if it can fit and is expected.

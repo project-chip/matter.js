@@ -5,14 +5,7 @@
  */
 
 import { ByteArray } from "./ByteArray";
-
-function toNumber(value: bigint | number): number {
-    return typeof value === "bigint" ? Number(value) : value;
-}
-
-function toBigInt(value: bigint | number): bigint {
-    return typeof value === "number" ? BigInt(value) : value;
-}
+import { toBigInt, toNumber } from "./Number";
 
 /** Writer that auto-increments its offset after each write. */
 // TODO: some research should be done to make sure this is most performant implementation.

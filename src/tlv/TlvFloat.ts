@@ -6,11 +6,9 @@
 
 import { DataReaderLE } from "../util/DataReaderLE";
 import { DataWriterLE } from "../util/DataWriterLE";
+import { FLOAT32_MAX, FLOAT32_MIN } from "../util/Number";
 import { TlvType, TlvCodec, TlvTag, TlvLength, TlvTypeLength } from "./TlvCodec";
 import { TlvSchema } from "./TlvSchema";
-
-const FLOAT32_MIN = -340282346638528859811704183484516925440.0;
-const FLOAT32_MAX = 340282346638528859811704183484516925440.0;
 
 /**
  * Schema to encode a float in TLV.

@@ -7,6 +7,7 @@
 import { ByteArray } from "../util/ByteArray";
 import { DataReaderLE } from "../util/DataReaderLE";
 import { DataWriterLE } from "../util/DataWriterLE";
+import { INT16_MAX, INT16_MIN, INT32_MAX, INT32_MIN, INT8_MAX, INT8_MIN, UINT16_MAX, UINT32_MAX, UINT8_MAX } from "../util/Number";
 import { BitmapSchema, BitFieldEnum, BitField } from "../util/schema/BitmapSchema";
 
 /**
@@ -48,7 +49,7 @@ export type TlvTypeLength =
     | { type: TlvType.List }
     | { type: TlvType.EndOfContainer };
 
-type TlvToPrimitive = {
+export type TlvToPrimitive = {
     [TlvType.SignedInt]: bigint | number,
     [TlvType.UnsignedInt]: bigint | number,
     [TlvType.Boolean]: never,
@@ -90,23 +91,43 @@ export type TlvTag = {
     id?: number,
 };
 
-const UINT8_MAX = 0xFF;
-const UINT16_MAX = 0xFFFF;
-const UINT32_MAX = 0xFFFFFFFF;
-
-function getUIntEncodedLength(value: number | bigint) {
-    if (value <= UINT8_MAX) {
-        return TlvLength.OneByte;
-    } else if (value <= UINT16_MAX) {
-        return TlvLength.TwoBytes;
-    } else if (value <= UINT32_MAX) {
-        return TlvLength.FourBytes;
-    } else {
-        return TlvLength.EightBytes;
-    }
-}
-
 export class TlvCodec {
+
+    public static getUIntTlvLength(value: number | bigint) {
+        if (value <= UINT8_MAX) {
+            return TlvLength.OneByte;
+        } else if (value <= UINT16_MAX) {
+            return TlvLength.TwoBytes;
+        } else if (value <= UINT32_MAX) {
+            return TlvLength.FourBytes;
+        } else {
+            return TlvLength.EightBytes;
+        }
+    }
+
+    public static getIntTlvLength(value: number | bigint) {
+        if (value > 0) {
+            if (value <= INT8_MAX) {
+                return TlvLength.OneByte;
+            } else if (value <= INT16_MAX) {
+                return TlvLength.TwoBytes;
+            } else if (value <= INT32_MAX) {
+                return TlvLength.FourBytes;
+            } else {
+                return TlvLength.EightBytes;
+            }
+        } else {
+            if (value >= INT8_MIN) {
+                return TlvLength.OneByte;
+            } else if (value >= INT16_MIN) {
+                return TlvLength.TwoBytes;
+            } else if (value >= INT32_MIN) {
+                return TlvLength.FourBytes;
+            } else {
+                return TlvLength.EightBytes;
+            }
+        }
+    }
 
     /** @see {@link MatterCoreSpecificationV1_0} § A.7 */
     public static readTagType(reader: DataReaderLE): { tag: TlvTag, typeLength: TlvTypeLength } {
@@ -208,7 +229,7 @@ export class TlvCodec {
             case TlvType.SignedInt:
             case TlvType.UnsignedInt:
             case TlvType.Float:
-                typeLength = typeLengthValue.type + typeLengthValue.length;
+                typeLength = typeLengthValue.type | typeLengthValue.length;
                 break;
             case TlvType.Boolean:
                 typeLength = typeLengthValue.type + (typeLengthValue.value ? 1 : 0);
@@ -249,18 +270,13 @@ export class TlvCodec {
     public static writePrimitive<T extends TlvTypeLength>(writer: DataWriterLE, typeLength: T, value: TlvToPrimitive[T["type"]]) {
         switch (typeLength.type) {
             case TlvType.SignedInt:
-                switch (typeLength.length) {
-                    case TlvLength.OneByte: return writer.writeInt8(value as TlvToPrimitive[typeof typeLength.type]);
-                    case TlvLength.TwoBytes: return writer.writeInt8(value as TlvToPrimitive[typeof typeLength.type]);
-                    case TlvLength.FourBytes: return writer.writeInt8(value as TlvToPrimitive[typeof typeLength.type]);
-                    case TlvLength.EightBytes: return writer.writeInt8(value as TlvToPrimitive[typeof typeLength.type]);
-                }
+                return this.writeUInt(writer, typeLength.length, value as TlvToPrimitive[typeof typeLength.type]);
             case TlvType.UnsignedInt:
                 switch (typeLength.length) {
                     case TlvLength.OneByte: return writer.writeUInt8(value as TlvToPrimitive[typeof typeLength.type]);
-                    case TlvLength.TwoBytes: return writer.writeUInt8(value as TlvToPrimitive[typeof typeLength.type]);
-                    case TlvLength.FourBytes: return writer.writeUInt8(value as TlvToPrimitive[typeof typeLength.type]);
-                    case TlvLength.EightBytes: return writer.writeUInt8(value as TlvToPrimitive[typeof typeLength.type]);
+                    case TlvLength.TwoBytes: return writer.writeUInt16(value as TlvToPrimitive[typeof typeLength.type]);
+                    case TlvLength.FourBytes: return writer.writeUInt32(value as TlvToPrimitive[typeof typeLength.type]);
+                    case TlvLength.EightBytes: return writer.writeUInt64(value as TlvToPrimitive[typeof typeLength.type]);
                 }
             case TlvType.Float:
                 switch (typeLength.length) {
@@ -268,21 +284,26 @@ export class TlvCodec {
                     case TlvLength.EightBytes: return writer.writeDouble(value as TlvToPrimitive[typeof typeLength.type]);
                 }
             case TlvType.Utf8String:
-                switch (typeLength.length) {
-                    case TlvLength.OneByte: return writer.writeUtf8String(value as TlvToPrimitive[typeof typeLength.type]);
-                    case TlvLength.TwoBytes: return writer.writeUtf8String(value as TlvToPrimitive[typeof typeLength.type]);
-                    case TlvLength.FourBytes: return writer.writeUtf8String(value as TlvToPrimitive[typeof typeLength.type]);
-                    case TlvLength.EightBytes: return writer.writeUtf8String(value as TlvToPrimitive[typeof typeLength.type]);
-                }
+                const string = value as TlvToPrimitive[typeof typeLength.type];
+                this.writeUInt(writer, typeLength.length, string.length);
+                return writer.writeUtf8String(string);
             case TlvType.ByteString:
-                switch (typeLength.length) {
-                    case TlvLength.OneByte: return writer.writeByteArray(value as TlvToPrimitive[typeof typeLength.type]);
-                    case TlvLength.TwoBytes: return writer.writeByteArray(value as TlvToPrimitive[typeof typeLength.type]);
-                    case TlvLength.FourBytes: return writer.writeByteArray(value as TlvToPrimitive[typeof typeLength.type]);
-                    case TlvLength.EightBytes: return writer.writeByteArray(value as TlvToPrimitive[typeof typeLength.type]);
-                }
+                const byteArray = value as TlvToPrimitive[typeof typeLength.type];
+                this.writeUInt(writer, typeLength.length, byteArray.length);
+                return writer.writeByteArray(byteArray);
+            case TlvType.Boolean:
+                return;
             default:
                 throw new Error(`Unexpected TLV type ${typeLength.type}`);
+        }
+    }
+
+    private static writeUInt(writer: DataWriterLE, length: TlvLength, value: number | bigint) {
+        switch (length) {
+            case TlvLength.OneByte: return writer.writeInt8(value);
+            case TlvLength.TwoBytes: return writer.writeInt16(value);
+            case TlvLength.FourBytes: return writer.writeInt32(value);
+            case TlvLength.EightBytes: return writer.writeInt64(value);
         }
     }
 }
