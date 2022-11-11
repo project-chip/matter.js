@@ -29,6 +29,7 @@ export const enum TlvType {
     EndOfContainer = 0x18,
 }
 
+/** Byte length of the encoded value or length. */
 export const enum TlvLength {
     OneByte = 0,
     TwoBytes = 1,
@@ -36,6 +37,7 @@ export const enum TlvLength {
     EightBytes = 3,
 }
 
+/** Type and length or value, when applicable. */
 export type TlvTypeLength = 
     { type: TlvType.SignedInt, length: TlvLength }
     | { type: TlvType.UnsignedInt, length: TlvLength }
@@ -49,6 +51,7 @@ export type TlvTypeLength =
     | { type: TlvType.List }
     | { type: TlvType.EndOfContainer };
 
+/** Converts {@link TlvType} to the js primitive type.  */
 export type TlvToPrimitive = {
     [TlvType.SignedInt]: bigint | number,
     [TlvType.UnsignedInt]: bigint | number,
@@ -79,13 +82,20 @@ const enum TagControl {
     FullyQualified64 = 7,
 }
 
+/**
+ * Schema of the ControlByte.
+ * 
+ * @see {@link MatterCoreSpecificationV1_0} § A.7.2
+ */
 const ControlByteSchema = BitmapSchema({
     typeLength: BitField(0, 5),
     tagControl: BitFieldEnum<TagControl>(5, 3),
 });
 
-const COMMON_PROFILE = 0x00000000;
+/** {@link MatterCoreSpecificationV1_0} § 2.5.2 and § A.8.3 */
+const MATTER_COMMON_PROFILE = 0x00000000;
 
+/** {@link MatterCoreSpecificationV1_0} § A.2 */
 export type TlvTag = {
     profile?: number,
     id?: number,
@@ -142,9 +152,9 @@ export class TlvCodec {
             case TagControl.ContextSpecific:
                 return { id: reader.readUInt8() };
             case TagControl.CommonProfile16:
-                return { profile: COMMON_PROFILE, id: reader.readUInt16() };
+                return { profile: MATTER_COMMON_PROFILE, id: reader.readUInt16() };
             case TagControl.CommonProfile32:
-                return { profile: COMMON_PROFILE, id: reader.readUInt32() };
+                return { profile: MATTER_COMMON_PROFILE, id: reader.readUInt32() };
             case TagControl.ImplicitProfile16:
             case TagControl.ImplicitProfile32:
                 throw new Error(`Unsupported implicit profile ${tagControl}`);
@@ -244,7 +254,7 @@ export class TlvCodec {
             if (id === undefined) throw new Error("Invalid TLV tag: id should be defined for a context specific tag.");
             writer.writeUInt8(ControlByteSchema.encode({ tagControl: TagControl.ContextSpecific, typeLength }));
             writer.writeUInt8(id);
-        } else if (profile === COMMON_PROFILE) {
+        } else if (profile === MATTER_COMMON_PROFILE) {
             if (id === undefined) throw new Error("Invalid TLV tag: id should be defined for a common profile.");
             if ((id & 0xFFFF0000) === 0) {
                 writer.writeUInt8(ControlByteSchema.encode({ tagControl: TagControl.CommonProfile16, typeLength }));
