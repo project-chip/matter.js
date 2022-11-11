@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import assert from "assert";
 import { TlvFloat, TlvDouble, TlvBoundedDouble } from "../../src/tlv/TlvFloat";
 import { ByteArray } from "../../src/util/ByteArray";
 import { Schema } from "../../src/util/schema/Schema";
@@ -33,7 +32,8 @@ describe("TlvFloat", () => {
         for (const testName in encodeTestVector) {
             const { input: { schema, value }, out } = encodeTestVector[testName];
             it(testName, () => {
-                assert.equal(schema.encode(value).toHex(), out);
+                expect(schema.encode(value).toHex())
+                    .toBe(out);
             });
         }
     });
@@ -42,7 +42,8 @@ describe("TlvFloat", () => {
         for (const testName in decodeTestVector) {
             const { input: { schema, value }, out } = decodeTestVector[testName];
             it(testName, () => {
-                assert.equal(schema.decode(ByteArray.fromHex(value)) - out < 0.001, true);
+                expect(schema.decode(ByteArray.fromHex(value)))
+                    .toBeCloseTo(out, 3);
             });
         }
     });
@@ -53,12 +54,11 @@ describe("TlvFloat", () => {
         for (const testName in validateTestVector) {
             const { input, out: throwException } = validateTestVector[testName];
             it(testName, () => {
+                const test = () => BoundedInt.validate(input);
                 if (throwException) {
-                    assert.throws(() => {
-                        BoundedInt.validate(input);
-                    });
+                    expect(test).toThrow();
                 } else {
-                    BoundedInt.validate(input);
+                    expect(test).not.toThrow();
                 }
             });
         }

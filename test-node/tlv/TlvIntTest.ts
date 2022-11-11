@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import assert from "assert";
 import { TlvInt, TlvInt32, TlvInt64 } from "../../src/tlv/TlvInt";
 import { ByteArray } from "../../src/util/ByteArray";
 
@@ -36,7 +35,8 @@ describe("TlvInt", () => {
         for (const testName in encodeTestVector) {
             const { input, out } = encodeTestVector[testName];
             it(testName, () => {
-                assert.strictEqual(TlvInt64.encode(input).toHex(), out);
+                expect(TlvInt64.encode(input).toHex())
+                    .toBe(out);
             });
         }
     });
@@ -45,14 +45,16 @@ describe("TlvInt", () => {
         for (const testName in decodeTestVector) {
             const { input, out } = decodeTestVector[testName];
             it(testName, () => {
-                assert.strictEqual(TlvInt64.decode(ByteArray.fromHex(input)), out);
+                expect(TlvInt64.decode(ByteArray.fromHex(input)))
+                    .toBe(out);
             });
         }
     });
 
     describe("decode", () => {
         it("decodes a 8 bytes small value as a number", () => {
-            assert.strictEqual(TlvInt32.decode(ByteArray.fromHex("030100000000000000")), 1);
+            expect(TlvInt32.decode(ByteArray.fromHex("030100000000000000")))
+                .toBe(1);
         });
     });
 
@@ -62,12 +64,11 @@ describe("TlvInt", () => {
         for (const testName in validateTestVector) {
             const { input, out: throwException } = validateTestVector[testName];
             it(testName, () => {
+                const test = () => BoundedInt.validate(input);
                 if (throwException) {
-                    assert.throws(() => {
-                        BoundedInt.validate(input);
-                    });
+                    expect(test).toThrow();
                 } else {
-                    BoundedInt.validate(input);
+                    expect(test).not.toThrow();
                 }
             });
         }
