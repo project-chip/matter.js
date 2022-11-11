@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TlvUInt64, TlvUInt, TlvUInt32 } from "../../src/tlv/TlvUInt";
-import { ByteArray } from "../../src/util/ByteArray";
+import { TlvUInt64, TlvUInt, TlvUInt32 } from "../../src/tlv/TlvUInt.js";
+import { ByteArray } from "../../src/util/ByteArray.js";
 
 type TestVector<I, E> = {[testName: string]: { input: I, out: E }};
 

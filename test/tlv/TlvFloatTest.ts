@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TlvFloat, TlvDouble, TlvBoundedDouble } from "../../src/tlv/TlvFloat";
-import { ByteArray } from "../../src/util/ByteArray";
-import { Schema } from "../../src/util/schema/Schema";
+import { TlvFloat, TlvDouble, TlvBoundedDouble } from "../../src/tlv/TlvFloat.js";
+import { ByteArray } from "../../src/util/ByteArray.js";
+import { Schema } from "../../src/util/schema/Schema.js";
 
 type TestVector<I, E> = {[testName: string]: { input: I, out: E }};
 
