@@ -27,23 +27,28 @@ import { TlvSchema } from "./TlvSchema.js";
     }
 
     /** @override */
-    protected encodeTlv(writer: DataWriterLE, value: number | bigint, tag: TlvTag = {}): void {
+    encodeTlv(writer: DataWriterLE, value: number | bigint, tag: TlvTag = {}): void {
         let typeLength: TlvTypeLength = { type: TlvType.SignedInt, length: TlvCodec.getIntTlvLength(value) };
         TlvCodec.writeTag(writer, typeLength, tag);
         TlvCodec.writePrimitive(writer, typeLength, value);
     }
 
     /** @override */
-    protected decodeTlv(reader: DataReaderLE) {
+    decodeTlv(reader: DataReaderLE) {
         const { tag, typeLength } = TlvCodec.readTagType(reader);
+        return { tag, value: this.decodeTlvValue(reader, typeLength) };
+    }
+
+    /** @override */
+    decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength) {
         if (typeLength.type !== TlvType.SignedInt) throw new Error(`Unexpected type ${typeLength.type}.`);
-        let value = TlvCodec.readPrimitive(reader, typeLength);
+        const value = TlvCodec.readPrimitive(reader, typeLength);
         this.validate(value);
         if (typeof value === "bigint" && this.max <= INT32_MAX && this.min >= INT32_MIN) {
             // Convert down to a number if it can fit and is expected.
-            value = Number(value);
+            return Number(value);
         }
-        return { tag, value };
+        return value;
     }
 
     /** @override */
