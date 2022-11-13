@@ -32,12 +32,6 @@ import { TlvSchema } from "./TlvSchema.js";
     }
 
     /** @override */
-    decodeTlv(reader: DataReaderLE) {
-        const { tag, typeLength } = TlvCodec.readTagType(reader);
-        return { tag, value: this.decodeTlvValue(reader, typeLength) };
-    }
-
-    /** @override */
     decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength): T | null {
         if (typeLength.type === TlvType.Null) return null;
         return this.schema.decodeTlvValue(reader, typeLength);

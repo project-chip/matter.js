@@ -21,12 +21,6 @@ import { TlvSchema } from "./TlvSchema.js";
     }
 
     /** @override */
-    decodeTlv(reader: DataReaderLE) {
-        const { tag, typeLength } = TlvCodec.readTagType(reader);
-        return { tag, value: this.decodeTlvValue(reader, typeLength) };
-    }
-
-    /** @override */
     decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength) {
         if (typeLength.type !== TlvType.Boolean) throw new Error(`Unexpected type ${typeLength.type}.`)
         return typeLength.value;

@@ -34,20 +34,6 @@ import { TlvSchema } from "./TlvSchema.js";
     }
 
     /** @override */
-    decodeTlv(reader: DataReaderLE) {
-        const { tag, typeLength } = TlvCodec.readTagType(reader);
-        if (typeLength.type !== TlvType.UnsignedInt) throw new Error(`Unexpected type ${typeLength.type}.`);
-
-        let value = TlvCodec.readPrimitive(reader, typeLength);
-        this.validate(value);
-        if (this.max <= UINT32_MAX && typeof value === "bigint") {
-            // Convert down to a number if it can fit and is expected.
-            value = Number(value);
-        }
-        return { tag, value };
-    }
-
-    /** @override */
     decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength) {
         if (typeLength.type !== TlvType.UnsignedInt) throw new Error(`Unexpected type ${typeLength.type}.`);
 

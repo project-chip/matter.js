@@ -63,12 +63,6 @@ type TypeFromFields<F extends Fields> = Merge<{ [K in MandatoryFieldNames<F>]: T
     }
 
     /** @override */
-    decodeTlv(reader: DataReaderLE) {
-        const { tag, typeLength } = TlvCodec.readTagType(reader);
-        return { tag, value: this.decodeTlvValue(reader, typeLength) };
-    }
-
-    /** @override */
     decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength): TypeFromFields<F> {
         if (typeLength.type !== this.type) throw new Error(`Unexpected type ${typeLength.type}.`);
         const result: any = {};

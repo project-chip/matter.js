@@ -33,12 +33,6 @@ import { LengthConstraints, TlvSchema } from "./TlvSchema.js";
     }
 
     /** @override */
-    decodeTlv(reader: DataReaderLE) {
-        const { tag, typeLength } = TlvCodec.readTagType(reader);
-        return { tag, value: this.decodeTlvValue(reader, typeLength) };
-    }
-
-    /** @override */
     decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength) {
         if (typeLength.type !== this.type) throw new Error(`Unexpected type ${typeLength.type}.`);
         return TlvCodec.readPrimitive(reader, typeLength) as TlvToPrimitive[T];
