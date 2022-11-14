@@ -25,7 +25,9 @@ type Fields = { [field: string]: Field<any> };
 type MandatoryFieldNames<F extends Fields> = { [K in keyof F]: F[K] extends OptionalField<any> ? never : K }[keyof F];
 type OptionalFieldNames<F extends Fields> = { [K in keyof F]: F[K] extends OptionalField<any> ? K : never }[keyof F];
 type TypeFromField<F extends Field<any>> = F extends Field<infer T> ? T : never;
-type TypeFromFields<F extends Fields> = Merge<{ [K in MandatoryFieldNames<F>]: TypeFromField<F[K]> }, { [K in OptionalFieldNames<F>]?: TypeFromField<F[K]> }>;
+type TypeForMandatoryFields<F extends Fields, MF extends keyof F> = { [K in MF]: TypeFromField<F[K]> };
+type TypeForOptionalFields<F extends Fields, MF extends keyof F> = { [K in MF]?: TypeFromField<F[K]> };
+type TypeFromFields<F extends Fields> = Merge<TypeForMandatoryFields<F, MandatoryFieldNames<F>>, TypeForOptionalFields<F, OptionalFieldNames<F>>>;
 
 /**
  * Schema to encode an object in TLV.
