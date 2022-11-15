@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DataReaderLE } from "../util/DataReaderLE";
-import { DataWriterLE } from "../util/DataWriterLE";
-import { TlvType, TlvCodec, TlvTag, TlvTypeLength, TlvToPrimitive } from "./TlvCodec";
-import { TlvSchema } from "./TlvSchema";
+import { DataReaderLE } from "../util/DataReaderLE.js";
+import { DataWriterLE } from "../util/DataWriterLE.js";
+import { TlvType, TlvCodec, TlvTag, TlvTypeLength, TlvToPrimitive } from "./TlvCodec.js";
+import { TlvSchema } from "./TlvSchema.js";
 
 /**
  * Schema to encode an byte string or an Utf8 string in TLV.
@@ -55,5 +55,5 @@ type LengthConstraints = {
 /** ByteString TLV schema. */
 export const TlvByteString = ({minLength, maxLength, length}: LengthConstraints = {}) => new StringSchema(TlvType.ByteString, length ?? minLength, length ?? maxLength);
 
-/** UtfString TLV schema. */
-export const TlvUtfString = ({minLength, maxLength, length}: LengthConstraints = {}) => new StringSchema(TlvType.Utf8String, length ?? minLength, length ?? maxLength);
+/** String TLV schema. */
+export const TlvString = ({minLength, maxLength, length}: LengthConstraints = {}) => new StringSchema(TlvType.Utf8String, length ?? minLength, length ?? maxLength);

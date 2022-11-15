@@ -1,0 +1,10 @@
+/* Configuration for a distribution */
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "removeComments": true,
+    "moduleResolution": "node"
+  },
+  "include": ["src/**/*.ts"],
+}

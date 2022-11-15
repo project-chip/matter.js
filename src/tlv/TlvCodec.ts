@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ByteArray } from "../util/ByteArray";
-import { DataReaderLE } from "../util/DataReaderLE";
-import { DataWriterLE } from "../util/DataWriterLE";
-import { INT16_MAX, INT16_MIN, INT32_MAX, INT32_MIN, INT8_MAX, INT8_MIN, UINT16_MAX, UINT32_MAX, UINT8_MAX } from "../util/Number";
-import { BitmapSchema, BitFieldEnum, BitField } from "../util/schema/BitmapSchema";
+import { ByteArray } from "../util/ByteArray.js";
+import { DataReaderLE } from "../util/DataReaderLE.js";
+import { DataWriterLE } from "../util/DataWriterLE.js";
+import { INT16_MAX, INT16_MIN, INT32_MAX, INT32_MIN, INT8_MAX, INT8_MIN, UINT16_MAX, UINT32_MAX, UINT8_MAX } from "../util/Number.js";
+import { BitmapSchema, BitFieldEnum, BitField } from "../util/schema/BitmapSchema.js";
 
 /**
  * TLV element types.
