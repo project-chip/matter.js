@@ -13,7 +13,7 @@ import { BitmapSchema, BitFieldEnum } from "../util/schema/BitmapSchema";
  * 
  * @see {@link MatterCoreSpecificationV1_0} § A.7.1
  */
-export enum TlvType {
+export const enum TlvType {
     SignedInt8 = 0x00,
     SignedInt16 = 0x01,
     SignedInt32 = 0x02,
@@ -22,7 +22,8 @@ export enum TlvType {
     UnsignedInt16 = 0x05,
     UnsignedInt32 = 0x06,
     UnsignedInt64 = 0x07,
-    Boolean = 0x08,
+    BooleanFalse = 0x08,
+    BooleanTrue = 0x09,
     Float32 = 0x0A,
     Float64 = 0x0B,
     Utf8String8 = 0x0C,
@@ -39,6 +40,34 @@ export enum TlvType {
     List = 0x17,
     EndOfContainer = 0x18,
 }
+
+type TlvToPrimitive = {
+    [TlvType.SignedInt8]: bigint | number,
+    [TlvType.SignedInt16]: bigint | number,
+    [TlvType.SignedInt32]: bigint | number,
+    [TlvType.SignedInt64]: bigint | number,
+    [TlvType.UnsignedInt8]: bigint | number,
+    [TlvType.UnsignedInt16]: bigint | number,
+    [TlvType.UnsignedInt32]: bigint | number,
+    [TlvType.UnsignedInt64]: bigint | number,
+    [TlvType.BooleanFalse]: never,
+    [TlvType.BooleanTrue]: never,
+    [TlvType.Float32]: number,
+    [TlvType.Float64]: number,
+    [TlvType.Utf8String8]: string,
+    [TlvType.Utf8String16]: string,
+    [TlvType.Utf8String32]: string,
+    [TlvType.Utf8String64]: string,
+    [TlvType.ByteString8]: ArrayBuffer,
+    [TlvType.ByteString16]: ArrayBuffer,
+    [TlvType.ByteString32]: ArrayBuffer,
+    [TlvType.ByteString64]: ArrayBuffer,
+    [TlvType.Null]: null,
+    [TlvType.Structure]: never,
+    [TlvType.Array]: never,
+    [TlvType.List]: never,
+    [TlvType.EndOfContainer]: never,
+};
 
 /**
  * TLV element tag control.
@@ -94,16 +123,28 @@ export class TlvCodec {
         }
     }
 
-    public static readIntegerValue(reader: DataReaderLE, type: TlvType) {
+    public static readPrimitive<T extends keyof TlvToPrimitive>(reader: DataReaderLE, type: T): TlvToPrimitive[T] {
         switch (type) {
             case TlvType.UnsignedInt8:
-                return reader.readUInt8();
+                return reader.readUInt8() as TlvToPrimitive[T];
             case TlvType.UnsignedInt16:
-                return reader.readUInt16();
+                return reader.readUInt16() as TlvToPrimitive[T];
             case TlvType.UnsignedInt32:
-                return reader.readUInt32();
+                return reader.readUInt32() as TlvToPrimitive[T];
             case TlvType.UnsignedInt64:
-                return reader.readUInt64();
+                return reader.readUInt64() as TlvToPrimitive[T];
+            case TlvType.SignedInt8:
+                return reader.readInt8() as TlvToPrimitive[T];
+            case TlvType.SignedInt16:
+                return reader.readInt16() as TlvToPrimitive[T];
+            case TlvType.SignedInt32:
+                return reader.readInt32() as TlvToPrimitive[T];
+            case TlvType.SignedInt64:
+                return reader.readInt64() as TlvToPrimitive[T];
+            case TlvType.Float32:
+                return reader.readFloat() as TlvToPrimitive[T];
+            case TlvType.Float64:
+                return reader.readDouble() as TlvToPrimitive[T];
             default:
                 throw new Error(`Unexpected TLV type ${type}`);
         }
@@ -140,19 +181,37 @@ export class TlvCodec {
         }
     }
 
-    public static writeIntegerValue(writer: DataWriterLE, type: TlvType, value: number | bigint) {
+    public static writePrimitive<T extends TlvType>(writer: DataWriterLE, type: T, value: TlvToPrimitive[T]) {
         switch (type) {
             case TlvType.UnsignedInt8:
-                writer.writeUInt8(value);
+                writer.writeUInt8(value as TlvToPrimitive[TlvType.UnsignedInt8]);
                 break;
             case TlvType.UnsignedInt16:
-                writer.writeUInt16(value);
+                writer.writeUInt16(value as TlvToPrimitive[TlvType.UnsignedInt16]);
                 break;
             case TlvType.UnsignedInt32:
-                writer.writeUInt32(value);
+                writer.writeUInt32(value as TlvToPrimitive[TlvType.UnsignedInt32]);
                 break;
             case TlvType.UnsignedInt64:
-                writer.writeUInt64(value);
+                writer.writeUInt64(value as TlvToPrimitive[TlvType.UnsignedInt64]);
+                break;
+            case TlvType.SignedInt8:
+                writer.writeInt8(value as TlvToPrimitive[TlvType.SignedInt8]);
+                break;
+            case TlvType.SignedInt16:
+                writer.writeInt16(value as TlvToPrimitive[TlvType.SignedInt16]);
+                break;
+            case TlvType.SignedInt32:
+                writer.writeInt32(value as TlvToPrimitive[TlvType.SignedInt32]);
+                break;
+            case TlvType.SignedInt64:
+                writer.writeInt64(value as TlvToPrimitive[TlvType.SignedInt64]);
+                break;
+            case TlvType.Float32:
+                writer.writeFloat(value as TlvToPrimitive[TlvType.Float32]);
+                break;
+            case TlvType.Float64:
+                writer.writeDouble(value as TlvToPrimitive[TlvType.Float64]);
                 break;
             default:
                 throw new Error(`Unexpected TLV type ${type}`);

@@ -44,7 +44,7 @@ const UINT64_MAX = BigInt("18446744073709551615");
         }
 
         TlvCodec.writeTag(writer, type, tag);
-        TlvCodec.writeIntegerValue(writer, type, value);
+        TlvCodec.writePrimitive(writer, type, value);
     }
 
     /** @override */
@@ -54,9 +54,10 @@ const UINT64_MAX = BigInt("18446744073709551615");
             && type !== TlvType.UnsignedInt16
             && type !== TlvType.UnsignedInt32
             && type !== TlvType.UnsignedInt64) throw new Error(`Unexpected type ${type}.`);
-        let value = TlvCodec.readIntegerValue(reader, type);
+        let value = TlvCodec.readPrimitive(reader, type);
+        this.validate(value);
         if (this.max <= UINT32_MAX && typeof value === "bigint") {
-            // Convert down to a number if it can fit.
+            // Convert down to a number if it can fit and is expected.
             value = Number(value);
         }
         return { tag, value };
