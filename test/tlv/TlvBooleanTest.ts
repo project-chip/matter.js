@@ -7,36 +7,31 @@
 import { TlvBoolean } from "../../src/tlv/TlvBoolean.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 
-type TestVector<I, E> = {[testName: string]: { input: I, out: E }};
+type CodecVector<I, E> = {[valueDescription: string]: { encoded: I, decoded: E }};
 
-const encodeTestVector: TestVector<boolean, string> = {
-    "encodes true": { input: true, out: "09" },
-    "encodes false": { input: false, out: "08" },
-};
-
-const decodeTestVector: TestVector<string, boolean> = {
-    "decodes true": { input: "09", out: true },
-    "decodes false": { input: "08", out: false },
+const testVector: CodecVector<string, boolean> = {
+    "true": { encoded: "09", decoded: true },
+    "false": { encoded: "08", decoded: false },
 };
 
 describe("TlvBoolean", () => {
 
     describe("encode", () => {
-        for (const testName in encodeTestVector) {
-            const { input, out } = encodeTestVector[testName];
-            it(testName, () => {
-                expect(TlvBoolean.encode(input).toHex())
-                    .toBe(out);
+        for (const valueDescription in testVector) {
+            const { encoded, decoded } = testVector[valueDescription];
+            it(`encodes ${valueDescription}`, () => {
+                expect(TlvBoolean.encode(decoded).toHex())
+                    .toBe(encoded);
             });
         }
     });
 
     describe("decode", () => {
-        for (const testName in decodeTestVector) {
-            const { input, out } = decodeTestVector[testName];
-            it(testName, () => {
-                expect(TlvBoolean.decode(ByteArray.fromHex(input)))
-                    .toBe(out);
+        for (const valueDescription in testVector) {
+            const { encoded, decoded } = testVector[valueDescription];
+            it(`decodes ${valueDescription}`, () => {
+                expect(TlvBoolean.decode(ByteArray.fromHex(encoded)))
+                    .toBe(decoded);
             });
         }
     });

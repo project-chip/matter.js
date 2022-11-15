@@ -8,16 +8,12 @@ import { TlvFloat, TlvDouble, TlvBoundedDouble } from "../../src/tlv/TlvFloat.js
 import { ByteArray } from "../../src/util/ByteArray.js";
 import { Schema } from "../../src/util/schema/Schema.js";
 
+type CodecVector<I, E> = {[valueDescription: string]: { schema: Schema<number, ByteArray>, encoded: I, decoded: E }};
 type TestVector<I, E> = {[testName: string]: { input: I, out: E }};
 
-const encodeTestVector: TestVector<{ schema: Schema<number, ByteArray>, value: number}, string> = {
-    "encodes a float": { input: { schema: TlvFloat, value: 6546.254}, out: "0a0892cc45" },
-    "encodes a double": { input: { schema: TlvDouble, value: 6546.254}, out: "0b2fdd24064192b940" },
-};
-
-const decodeTestVector: TestVector<{ schema: Schema<number, ByteArray>, value: string}, number> = {
-    "decodes a float": { input: { schema: TlvFloat, value: "0a0892cc45"}, out: 6546.254 },
-    "decodes a double": { input: { schema: TlvDouble, value: "0b2fdd24064192b940"}, out: 6546.254 },
+const codecVector: CodecVector<string, number> = {
+    "float": { schema: TlvFloat, decoded: 6546.254, encoded: "0a0892cc45" },
+    "double": { schema: TlvDouble, decoded: 6546.254, encoded: "0b2fdd24064192b940" },
 };
 
 const validateTestVector: TestVector<number, boolean> = {
@@ -29,21 +25,21 @@ const validateTestVector: TestVector<number, boolean> = {
 describe("TlvFloat", () => {
 
     describe("encode", () => {
-        for (const testName in encodeTestVector) {
-            const { input: { schema, value }, out } = encodeTestVector[testName];
-            it(testName, () => {
-                expect(schema.encode(value).toHex())
-                    .toBe(out);
+        for (const valueDescription in codecVector) {
+            const { schema, encoded, decoded } = codecVector[valueDescription];
+            it(`encodes ${valueDescription}`, () => {
+                expect(schema.encode(decoded).toHex())
+                    .toBe(encoded);
             });
         }
     });
 
     describe("decode", () => {
-        for (const testName in decodeTestVector) {
-            const { input: { schema, value }, out } = decodeTestVector[testName];
-            it(testName, () => {
-                expect(schema.decode(ByteArray.fromHex(value)))
-                    .toBeCloseTo(out, 3);
+        for (const valueDescription in codecVector) {
+            const { schema, encoded, decoded } = codecVector[valueDescription];
+            it(`decodes ${valueDescription}`, () => {
+                expect(schema.decode(ByteArray.fromHex(encoded)))
+                    .toBeCloseTo(decoded, 3);
             });
         }
     });
