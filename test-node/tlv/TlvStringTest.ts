@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import assert from "assert";
 import { TlvByteString, TlvString } from "../../src/tlv/TlvString";
 import { ByteArray } from "../../src/util/ByteArray";
 
@@ -28,7 +27,7 @@ describe("TlvString", () => {
         it("encodes a string", () => {
             const result = TlvString().encode("test");
 
-            assert.strictEqual(result.toHex(), "0c0474657374");
+            expect(result.toHex()).toBe("0c0474657374");
         });
     });
 
@@ -36,7 +35,7 @@ describe("TlvString", () => {
         it("decodes a string", () => {
             const result = TlvString().decode(ByteArray.fromHex("0c0474657374"));
 
-            assert.strictEqual(result, "test");
+            expect(result).toBe("test");
         });
     });
 
@@ -46,12 +45,11 @@ describe("TlvString", () => {
         for (const testName in validateUtfStringTestVector) {
             const { input, out: throwException } = validateUtfStringTestVector[testName];
             it(testName, () => {
+                const test = () => BoundedInt.validate(input);
                 if (throwException) {
-                    assert.throws(() => {
-                        BoundedInt.validate(input);
-                    });
+                    expect(test).toThrow();
                 } else {
-                    BoundedInt.validate(input);
+                    expect(test).not.toThrow();
                 }
             });
         }
@@ -64,7 +62,7 @@ describe("TlvByteString", () => {
         it("encodes a byte string", () => {
             const result = TlvByteString().encode(ByteArray.fromHex("0001"));
 
-            assert.strictEqual(result.toHex(), "10020001");
+            expect(result.toHex()).toBe("10020001");
         });
     });
 
@@ -72,7 +70,7 @@ describe("TlvByteString", () => {
         it("decodes a byte string", () => {
             const result = TlvByteString().decode(ByteArray.fromHex("10020001"));
 
-            assert.strictEqual(result.toHex(), "0001");
+            expect(result.toHex()).toBe("0001");
         });
     });
 
@@ -82,12 +80,11 @@ describe("TlvByteString", () => {
         for (const testName in validateByteStringTestVector) {
             const { input, out: throwException } = validateByteStringTestVector[testName];
             it(testName, () => {
+                const test = () => BoundedInt.validate(ByteArray.fromHex(input));
                 if (throwException) {
-                    assert.throws(() => {
-                        BoundedInt.validate(ByteArray.fromHex(input));
-                    });
+                    expect(test).toThrow();
                 } else {
-                    BoundedInt.validate(ByteArray.fromHex(input));
+                    expect(test).not.toThrow();
                 }
             });
         }

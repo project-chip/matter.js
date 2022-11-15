@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import assert from "assert";
 import { BitField, BitFieldEnum, BitFlag, BitmapSchema } from "../../../src/util/schema/BitmapSchema";
 
 describe("BitmapSchema", () => {
@@ -36,7 +35,7 @@ describe("BitmapSchema", () => {
                 numberTest: 1,
             });
 
-            assert.strictEqual(result, 0xC4);
+            expect(result).toBe(0xC4);
         });
     });
 
@@ -44,7 +43,7 @@ describe("BitmapSchema", () => {
         it("decodes a bitmap using the schema", () => {
             const result = TestBitmapSchema.decode(0xB4);
 
-            assert.deepStrictEqual(result, {
+            expect(result).toEqual({
                 flag1: true,
                 flag2: true,
                 enumTest: EnumTest.VALUE_1,

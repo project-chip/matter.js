@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import assert from "assert";
 import { TlvBoolean } from "../../src/tlv/TlvBoolean";
 import { ByteArray } from "../../src/util/ByteArray";
 
@@ -26,7 +25,8 @@ describe("TlvBoolean", () => {
         for (const testName in encodeTestVector) {
             const { input, out } = encodeTestVector[testName];
             it(testName, () => {
-                assert.strictEqual(TlvBoolean.encode(input).toHex(), out);
+                expect(TlvBoolean.encode(input).toHex())
+                    .toBe(out);
             });
         }
     });
@@ -35,7 +35,8 @@ describe("TlvBoolean", () => {
         for (const testName in decodeTestVector) {
             const { input, out } = decodeTestVector[testName];
             it(testName, () => {
-                assert.strictEqual(TlvBoolean.decode(ByteArray.fromHex(input)), out);
+                expect(TlvBoolean.decode(ByteArray.fromHex(input)))
+                    .toBe(out);
             });
         }
     });
