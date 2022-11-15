@@ -231,7 +231,7 @@ export class TlvCodec {
     }
 
     /** @see {@link MatterCoreSpecificationV1_0} § A.7 & A.8 */
-    public static writeTag(writer: DataWriterLE, typeLengthValue: TlvTypeLength, { profile, id }: TlvTag) {
+    public static writeTag(writer: DataWriterLE, typeLengthValue: TlvTypeLength, { profile, id }: TlvTag = {}) {
         let typeLength: number;
         switch (typeLengthValue.type) {
             case TlvType.Utf8String:
