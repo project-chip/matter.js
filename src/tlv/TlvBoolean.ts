@@ -6,7 +6,7 @@
 
 import { DataReaderLE } from "../util/DataReaderLE.js";
 import { DataWriterLE } from "../util/DataWriterLE.js";
-import { TlvType, TlvCodec, TlvTag, TlvTypeLength } from "./TlvCodec.js";
+import { TlvType, TlvCodec, TlvTag } from "./TlvCodec.js";
 import { TlvSchema } from "./TlvSchema.js";
 
 /**
@@ -16,20 +16,15 @@ import { TlvSchema } from "./TlvSchema.js";
  */
  class BooleanSchema extends TlvSchema<boolean> {
     /** @override */
-    encodeTlv(writer: DataWriterLE, value: boolean, tag: TlvTag = {}): void {
+    protected encodeTlv(writer: DataWriterLE, value: boolean, tag: TlvTag = {}): void {
         TlvCodec.writeTag(writer, { type: TlvType.Boolean, value },  tag);
     }
 
     /** @override */
-    decodeTlv(reader: DataReaderLE) {
+    protected decodeTlv(reader: DataReaderLE) {
         const { tag, typeLength } = TlvCodec.readTagType(reader);
-        return { tag, value: this.decodeTlvValue(reader, typeLength) };
-    }
-
-    /** @override */
-    decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength) {
         if (typeLength.type !== TlvType.Boolean) throw new Error(`Unexpected type ${typeLength.type}.`)
-        return typeLength.value;
+        return { tag, value: typeLength.value };
     }
 }
 

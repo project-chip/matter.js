@@ -25,24 +25,19 @@ import { TlvSchema } from "./TlvSchema.js";
     }
 
     /** @override */
-    encodeTlv(writer: DataWriterLE, value: number, tag: TlvTag = {}): void {
+    protected encodeTlv(writer: DataWriterLE, value: number, tag: TlvTag = {}): void {
         const typeLength: TlvTypeLength = { type: TlvType.Float, length: this.precision };
         TlvCodec.writeTag(writer, typeLength, tag);
         TlvCodec.writePrimitive(writer, typeLength, value);
     }
 
     /** @override */
-    decodeTlv(reader: DataReaderLE) {
+    protected decodeTlv(reader: DataReaderLE) {
         const { tag, typeLength } = TlvCodec.readTagType(reader);
-        return { tag, value: this.decodeTlvValue(reader, typeLength) };
-    }
-
-    /** @override */
-    decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength) {
         if (typeLength.type !== TlvType.Float) throw new Error(`Unexpected type ${typeLength.type}.`);
         let value = TlvCodec.readPrimitive(reader, typeLength);
         this.validate(value);
-        return value;
+        return { tag, value };
     }
 
     /** @override */

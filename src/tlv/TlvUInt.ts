@@ -27,14 +27,14 @@ import { TlvSchema } from "./TlvSchema.js";
     }
 
     /** @override */
-    encodeTlv(writer: DataWriterLE, value: number | bigint, tag: TlvTag = {}): void {
+    protected encodeTlv(writer: DataWriterLE, value: number | bigint, tag: TlvTag = {}): void {
         const typeLength: TlvTypeLength = { type: TlvType.UnsignedInt, length: TlvCodec.getUIntTlvLength(value) }
         TlvCodec.writeTag(writer, typeLength, tag);
         TlvCodec.writePrimitive(writer, typeLength, value);
     }
 
     /** @override */
-    decodeTlv(reader: DataReaderLE) {
+    protected decodeTlv(reader: DataReaderLE) {
         const { tag, typeLength } = TlvCodec.readTagType(reader);
         if (typeLength.type !== TlvType.UnsignedInt) throw new Error(`Unexpected type ${typeLength.type}.`);
 
@@ -45,19 +45,6 @@ import { TlvSchema } from "./TlvSchema.js";
             value = Number(value);
         }
         return { tag, value };
-    }
-
-    /** @override */
-    decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength) {
-        if (typeLength.type !== TlvType.UnsignedInt) throw new Error(`Unexpected type ${typeLength.type}.`);
-
-        const value = TlvCodec.readPrimitive(reader, typeLength);
-        this.validate(value);
-        if (this.max <= UINT32_MAX && typeof value === "bigint") {
-            // Convert down to a number if it can fit and is expected.
-            return Number(value);
-        }
-        return value;
     }
 
     /** @override */

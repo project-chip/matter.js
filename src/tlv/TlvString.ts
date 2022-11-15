@@ -7,7 +7,7 @@
 import { DataReaderLE } from "../util/DataReaderLE.js";
 import { DataWriterLE } from "../util/DataWriterLE.js";
 import { TlvType, TlvCodec, TlvTag, TlvTypeLength, TlvToPrimitive } from "./TlvCodec.js";
-import { LengthConstraints, TlvSchema } from "./TlvSchema.js";
+import { TlvSchema } from "./TlvSchema.js";
 
 /**
  * Schema to encode an byte string or an Utf8 string in TLV.
@@ -26,22 +26,17 @@ import { LengthConstraints, TlvSchema } from "./TlvSchema.js";
     }
 
     /** @override */
-    encodeTlv(writer: DataWriterLE, value: TlvToPrimitive[T], tag: TlvTag = {}): void {
+    protected encodeTlv(writer: DataWriterLE, value: TlvToPrimitive[T], tag: TlvTag = {}): void {
         const typeLength: TlvTypeLength = { type: this.type, length: TlvCodec.getUIntTlvLength(value.length)}
         TlvCodec.writeTag(writer, typeLength, tag);
         TlvCodec.writePrimitive(writer, typeLength, value);
     }
 
     /** @override */
-    decodeTlv(reader: DataReaderLE) {
+    protected decodeTlv(reader: DataReaderLE) {
         const { tag, typeLength } = TlvCodec.readTagType(reader);
-        return { tag, value: this.decodeTlvValue(reader, typeLength) };
-    }
-
-    /** @override */
-    decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength) {
         if (typeLength.type !== this.type) throw new Error(`Unexpected type ${typeLength.type}.`);
-        return TlvCodec.readPrimitive(reader, typeLength) as TlvToPrimitive[T];
+        return { tag, value: TlvCodec.readPrimitive(reader, typeLength) as TlvToPrimitive[T] };
     }
 
     /** @override */
@@ -50,6 +45,12 @@ import { LengthConstraints, TlvSchema } from "./TlvSchema.js";
         if (length < this.minLength) throw new Error(`Array is too short: ${length}, min ${this.minLength}.`);
     }
 }
+
+type LengthConstraints = {
+    minLength?: number,
+    maxLength?: number,
+    length?: number,
+};
 
 /** ByteString TLV schema. */
 export const TlvByteString = ({minLength, maxLength, length}: LengthConstraints = {}) => new StringSchema(TlvType.ByteString, length ?? minLength, length ?? maxLength);

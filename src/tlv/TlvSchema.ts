@@ -8,7 +8,7 @@ import { ByteArray } from "../util/ByteArray.js";
 import { DataReaderLE } from "../util/DataReaderLE.js";
 import { DataWriterLE } from "../util/DataWriterLE.js";
 import { Schema } from "../util/schema/Schema.js";
-import { TlvTag, TlvTypeLength } from "./TlvCodec.js";
+import { TlvTag } from "./TlvCodec.js";
 
 export abstract class TlvSchema<T> extends Schema<T, ByteArray> {
     /** @override */
@@ -23,18 +23,9 @@ export abstract class TlvSchema<T> extends Schema<T, ByteArray> {
         return writer.toBuffer();
     }
 
-    /** Decodes a TLV tag and value. */
-    abstract decodeTlv(reader: DataReaderLE): { value: T, tag: TlvTag};
-
     /** Decodes a TLV value. */
-    abstract decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength): T;
+    protected abstract decodeTlv(reader: DataReaderLE): { value: T, tag: TlvTag};
 
-    /** Encodes a TLV tag and value. */
-    abstract encodeTlv(writer: DataWriterLE, value: T, tag?: TlvTag): void;
+    /** Encodes a TLV value. */
+    protected abstract encodeTlv(writer: DataWriterLE, value: T, tag?: TlvTag): void;
 }
-
-export type LengthConstraints = {
-    minLength?: number,
-    maxLength?: number,
-    length?: number,
-};
