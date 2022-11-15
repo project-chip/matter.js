@@ -6,11 +6,9 @@
 
 import { DataReaderLE } from "../util/DataReaderLE";
 import { DataWriterLE } from "../util/DataWriterLE";
-import { TlvType, TlvCodec, TlvTag } from "./TlvCodec";
+import { FLOAT32_MAX, FLOAT32_MIN } from "../util/Number";
+import { TlvType, TlvCodec, TlvTag, TlvLength, TlvTypeLength } from "./TlvCodec";
 import { TlvSchema } from "./TlvSchema";
-
-const FLOAT32_MIN = -340282346638528859811704183484516925440.0;
-const FLOAT32_MAX = 340282346638528859811704183484516925440.0;
 
 /**
  * Schema to encode a float in TLV.
@@ -21,22 +19,23 @@ const FLOAT32_MAX = 340282346638528859811704183484516925440.0;
     constructor(
         private readonly min?: number,
         private readonly max?: number,
-        private readonly type: TlvType.Float32 | TlvType.Float64 = TlvType.Float64,
+        private readonly precision: TlvLength.FourBytes | TlvLength.EightBytes = TlvLength.EightBytes,
     ) {
         super();
     }
 
     /** @override */
     protected encodeTlv(writer: DataWriterLE, value: number, tag: TlvTag = {}): void {
-        TlvCodec.writeTag(writer, this.type, tag);
-        TlvCodec.writePrimitive(writer, this.type, value);
+        const typeLength: TlvTypeLength = { type: TlvType.Float, length: this.precision };
+        TlvCodec.writeTag(writer, typeLength, tag);
+        TlvCodec.writePrimitive(writer, typeLength, value);
     }
 
     /** @override */
     protected decodeTlv(reader: DataReaderLE) {
-        const { tag, type } = TlvCodec.readTagType(reader);
-        if (type !== this.type) throw new Error(`Unexpected type ${type}.`);
-        let value = TlvCodec.readPrimitive(reader, type);
+        const { tag, typeLength } = TlvCodec.readTagType(reader);
+        if (typeLength.type !== TlvType.Float) throw new Error(`Unexpected type ${typeLength.type}.`);
+        let value = TlvCodec.readPrimitive(reader, typeLength);
         this.validate(value);
         return { tag, value };
     }
@@ -50,10 +49,13 @@ const FLOAT32_MAX = 340282346638528859811704183484516925440.0;
 
 
 /** Double TLV schema bounded by a min / max. */
-export const TlvBoundedDouble = ({ min, max }: { min?: number, max?: number } = {}, type?: TlvType.Float32 | TlvType.Float64) => new FloatSchema(min, max, type);
+export const TlvBoundedDouble = (
+    { min, max }: { min?: number, max?: number } = {},
+    precision?: TlvLength.FourBytes | TlvLength.EightBytes,
+) => new FloatSchema(min, max, precision);
 
 /** Float TLV schema. */
-export const TlvFloat = TlvBoundedDouble({ min: FLOAT32_MIN, max: FLOAT32_MAX}, TlvType.Float32);
+export const TlvFloat = TlvBoundedDouble({ min: FLOAT32_MIN, max: FLOAT32_MAX}, TlvLength.FourBytes);
 
 /** Double TLV schema. */
 export const TlvDouble = TlvBoundedDouble(); // number type is a double internally so no need to specify a range

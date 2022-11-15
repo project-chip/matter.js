@@ -4,13 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ByteArray } from "./ByteArray";
+
 /** Reader that auto-increments its offset after each read. */
 export class DataReaderLE {
     private dataView: DataView;
     private offset = 0;
 
-    constructor(buffer: ArrayBuffer) {
-        this.dataView = new DataView(buffer);
+    constructor(
+        private readonly buffer: ByteArray,
+    ) {
+        this.dataView = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength);
     }
     
     readUInt8() {
@@ -51,6 +55,17 @@ export class DataReaderLE {
     
     readDouble() {
         return this.dataView.getFloat64(this.getOffsetAndAdvance(8), true);
+    }
+
+    readUtfString(length: number) {
+        const offset = this.getOffsetAndAdvance(length);
+        return new TextDecoder().decode(this.buffer.subarray(offset, offset + length));
+    }
+
+    readByteArray(length: number) {
+        const offset = this.getOffsetAndAdvance(length);
+        const result = this.buffer.subarray(offset, offset + length);
+        return result;
     }
 
     private getOffsetAndAdvance(size: number) {

@@ -6,13 +6,9 @@
 
 import { DataReaderLE } from "../util/DataReaderLE";
 import { DataWriterLE } from "../util/DataWriterLE";
-import { TlvType, TlvCodec, TlvTag } from "./TlvCodec";
+import { INT16_MAX, INT16_MIN, INT32_MAX, INT32_MIN, INT64_MAX, INT64_MIN, INT8_MAX, INT8_MIN } from "../util/Number";
+import { TlvType, TlvCodec, TlvTag, TlvTypeLength } from "./TlvCodec";
 import { TlvSchema } from "./TlvSchema";
-
-const INT8_RANGE = { min: -128, max: 127};
-const INT16_RANGE = { min: -32768, max: 32767 };
-const INT32_RANGE = { min: -2147483648, max: 2147483647 };
-const INT64_RANGE = { min: BigInt("-9223372036854775808"), max: BigInt("9223372036854775807") };
 
 /**
  * Schema to encode an signed integer in TLV.
@@ -26,47 +22,24 @@ const INT64_RANGE = { min: BigInt("-9223372036854775808"), max: BigInt("92233720
     ) {
         super();
 
-        if (this.min < INT64_RANGE.min) throw new Error("Signed integer minimum should be greater or equal to int64 min.");
-        if (this.max > INT64_RANGE.max) throw new Error("Signed integer maximum should be lower or equal to int64 max.");
+        if (this.min < INT64_MIN) throw new Error("Signed integer minimum should be greater or equal to int64 min.");
+        if (this.max > INT64_MAX) throw new Error("Signed integer maximum should be lower or equal to int64 max.");
     }
 
     /** @override */
     protected encodeTlv(writer: DataWriterLE, value: number | bigint, tag: TlvTag = {}): void {
-        let type: TlvType;
-        if (value > 0) {
-            if (value <= INT8_RANGE.max) {
-                type = TlvType.SignedInt8;
-            } else if (value <= INT16_RANGE.max) {
-                type = TlvType.SignedInt16;
-            } else if (value <= INT32_RANGE.max) {
-                type = TlvType.SignedInt32;
-            } else {
-                type = TlvType.SignedInt64;
-            }
-        } else {
-            if (value >= INT8_RANGE.min) {
-                type = TlvType.SignedInt8;
-            } else if (value >= INT16_RANGE.min) {
-                type = TlvType.SignedInt16;
-            } else if (value >= INT32_RANGE.min) {
-                type = TlvType.SignedInt32;
-            } else {
-                type = TlvType.SignedInt64;
-            }
-        }
-
-        TlvCodec.writeTag(writer, type, tag);
-        TlvCodec.writePrimitive(writer, type, value);
+        let typeLength: TlvTypeLength = { type: TlvType.SignedInt, length: TlvCodec.getIntTlvLength(value) };
+        TlvCodec.writeTag(writer, typeLength, tag);
+        TlvCodec.writePrimitive(writer, typeLength, value);
     }
 
     /** @override */
     protected decodeTlv(reader: DataReaderLE) {
-        const { tag, type } = TlvCodec.readTagType(reader);
-        if (type !== TlvType.SignedInt8 && type !== TlvType.SignedInt16 && type !== TlvType.SignedInt32 && type !== TlvType.SignedInt64)
-            throw new Error(`Unexpected type ${type}.`);
-        let value = TlvCodec.readPrimitive(reader, type);
+        const { tag, typeLength } = TlvCodec.readTagType(reader);
+        if (typeLength.type !== TlvType.SignedInt) throw new Error(`Unexpected type ${typeLength.type}.`);
+        let value = TlvCodec.readPrimitive(reader, typeLength);
         this.validate(value);
-        if (typeof value === "bigint" && this.max <= INT32_RANGE.max && this.min >= INT32_RANGE.min) {
+        if (typeof value === "bigint" && this.max <= INT32_MAX && this.min >= INT32_MIN) {
             // Convert down to a number if it can fit and is expected.
             value = Number(value);
         }
@@ -81,8 +54,8 @@ const INT64_RANGE = { min: BigInt("-9223372036854775808"), max: BigInt("92233720
 }
 
 /** Signed integer TLV schema. */
-export const TlvInt = ({ min = INT64_RANGE.min, max = INT64_RANGE.max }: { min?: number | bigint, max?: number | bigint }) => new IntSchema(min, max);
-export const TlvInt8 = TlvInt(INT8_RANGE) as TlvSchema<number>;
-export const TlvInt16 = TlvInt(INT16_RANGE) as TlvSchema<number>;
-export const TlvInt32 = TlvInt(INT32_RANGE) as TlvSchema<number>;
-export const TlvInt64 = TlvInt(INT64_RANGE);
+export const TlvInt = ({ min = INT64_MIN, max = INT64_MAX }: { min?: number | bigint, max?: number | bigint }) => new IntSchema(min, max);
+export const TlvInt8 = TlvInt({ min: INT8_MIN, max: INT8_MAX }) as TlvSchema<number>;
+export const TlvInt16 = TlvInt({ min: INT16_MIN, max: INT16_MAX }) as TlvSchema<number>;
+export const TlvInt32 = TlvInt({ min: INT32_MIN, max: INT32_MAX }) as TlvSchema<number>;
+export const TlvInt64 = TlvInt({ min: INT64_MIN, max: INT64_MAX });
