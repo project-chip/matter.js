@@ -34,7 +34,7 @@ type TypeFromFields<F extends Fields> = Merge<TypeForMandatoryFields<F, Mandator
  * 
  * @see {@link MatterCoreSpecificationV1_0} § A.5.1 and § A.11.4
  */
- class ObjectSchema<F extends Fields> extends TlvSchema<TypeFromFields<F>> {
+class ObjectSchema<F extends Fields> extends TlvSchema<TypeFromFields<F>> {
     private readonly fieldById = new Array<{ name: string, field: Field<any>}>();
 
     constructor(
@@ -98,3 +98,5 @@ export const TlvField = <T>(id: number, schema: TlvSchema<T>) => ({ id, schema, 
 
 /** Object TLV optional field. */
 export const TlvOptionalField = <T>(id: number, schema: TlvSchema<T>) => ({ id, schema, optional: true }) as OptionalField<T>;
+
+/** Js type for the shema */

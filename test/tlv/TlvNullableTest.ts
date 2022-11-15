@@ -11,8 +11,8 @@ import { ByteArray } from "../../src/util/ByteArray.js";
 type CodecVector<I, E> = {[valueDescription: string]: { encoded: E, decoded: I }};
 
 const codecVector: CodecVector<string | null, string> = {
-    "an 1 byte signed int": { decoded: "a", encoded: "0c0161" },
-    "a 2 bytes signed int": { decoded: null, encoded: "14" },
+    "a non-null value": { decoded: "a", encoded: "0c0161" },
+    "a null value": { decoded: null, encoded: "14" },
 };
 
 describe("TlvNullable", () => {

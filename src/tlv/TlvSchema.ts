@@ -42,3 +42,6 @@ export type LengthConstraints = {
     maxLength?: number,
     length?: number,
 };
+
+/** Type defined by the TLV schema. */
+export type TypeFromSchema<S extends TlvSchema<any>> = S extends TlvSchema<infer T> ? T : never;
