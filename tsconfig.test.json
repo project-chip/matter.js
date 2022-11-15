@@ -1,9 +1,0 @@
-/* Configuration for mocha unit tests */
-{
-  "extends": "./tsconfig.base.json",
-  "compilerOptions": {
-    "esModuleInterop": true, // Requires to import assert
-    "allowSyntheticDefaultImports": true, // Used to import assert in unit tests
-  },
-  "include": ["src/**/*.ts", "test-node/**/*.ts"],
-}
