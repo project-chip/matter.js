@@ -9,6 +9,7 @@ import { DataWriterLE } from "../util/DataWriterLE.js";
 import { UINT16_MAX, UINT32_MAX, UINT64_MAX, UINT8_MAX } from "../util/Number.js";
 import { TlvType, TlvCodec, TlvTag, TlvTypeLength } from "./TlvCodec.js";
 import { TlvSchema } from "./TlvSchema.js";
+import { MatterCoreSpecificationV1_0 } from "../Specifications.js";
 
 /**
  * Schema to encode an unsigned integer in TLV.
@@ -17,8 +18,8 @@ import { TlvSchema } from "./TlvSchema.js";
  */
  class UIntSchema extends TlvSchema<number | bigint> {
     constructor(
-        private readonly min: number | bigint,
-        private readonly max: number | bigint,
+        readonly min: number | bigint,
+        readonly max: number | bigint,
     ) {
         super();
 
@@ -59,3 +60,4 @@ export const TlvUInt8 = TlvUInt({ max: UINT8_MAX }) as TlvSchema<number>;
 export const TlvUInt16 = TlvUInt({ max: UINT16_MAX }) as TlvSchema<number>;
 export const TlvUInt32 = TlvUInt({ max: UINT32_MAX }) as TlvSchema<number>;
 export const TlvUInt64 = TlvUInt({ max: UINT64_MAX });
+export const TlvEnum = <T>() => TlvUInt8 as TlvSchema<T>;

@@ -8,13 +8,14 @@ import { DataReaderLE } from "../util/DataReaderLE.js";
 import { DataWriterLE } from "../util/DataWriterLE.js";
 import { TlvType, TlvCodec, TlvTag, TlvTypeLength } from "./TlvCodec.js";
 import { LengthConstraints, TlvSchema } from "./TlvSchema.js";
+import { MatterCoreSpecificationV1_0 } from "../Specifications.js"; 
 
 /**
  * Schema to encode an array in TLV.
  * 
  * @see {@link MatterCoreSpecificationV1_0} § A.11.4
  */
- class ArraySchema<T> extends TlvSchema<T[]> {
+export class ArraySchema<T> extends TlvSchema<T[]> {
     constructor(
         private readonly elementSchema: TlvSchema<T>,
         private readonly minLength: number = 0,

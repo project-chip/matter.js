@@ -3,8 +3,7 @@
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "outDir": "dist",
-    "removeComments": true,
-    "moduleResolution": "node"
+    "declaration": true
   },
   "include": ["src/**/*.ts"],
 }
