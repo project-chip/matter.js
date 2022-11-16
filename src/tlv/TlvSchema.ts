@@ -8,9 +8,10 @@ import { ByteArray } from "../util/ByteArray.js";
 import { DataReaderLE } from "../util/DataReaderLE.js";
 import { DataWriterLE } from "../util/DataWriterLE.js";
 import { Schema } from "../util/schema/Schema.js";
-import { TlvTag, TlvTypeLength } from "./TlvCodec.js";
+import { TlvCodec, TlvTag, TlvTypeLength } from "./TlvCodec.js";
 
 export abstract class TlvSchema<T> extends Schema<T, ByteArray> {
+    
     /** @override */
     protected decodeInternal(encoded: ByteArray): T {
         return this.decodeTlv(new DataReaderLE(encoded)).value;
@@ -24,7 +25,10 @@ export abstract class TlvSchema<T> extends Schema<T, ByteArray> {
     }
 
     /** Decodes a TLV tag and value. */
-    abstract decodeTlv(reader: DataReaderLE): { value: T, tag: TlvTag};
+    protected decodeTlv(reader: DataReaderLE): { value: T, tag: TlvTag} {
+        const { tag, typeLength } = TlvCodec.readTagType(reader);
+        return { tag, value: this.decodeTlvValue(reader, typeLength) };
+    }
 
     /** Decodes a TLV value. */
     abstract decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength): T;
@@ -38,3 +42,6 @@ export type LengthConstraints = {
     maxLength?: number,
     length?: number,
 };
+
+/** Type defined by the TLV schema. */
+export type TypeFromSchema<S extends TlvSchema<any>> = S extends TlvSchema<infer T> ? T : never;

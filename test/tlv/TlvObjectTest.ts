@@ -5,44 +5,46 @@
  */
 
 import { TlvObject, TlvField, TlvOptionalField } from "../../src/tlv/TlvObject.js";
+import { TypeFromSchema } from "../../src/tlv/TlvSchema.js";
 import { TlvString } from "../../src/tlv/TlvString.js";
-import { TlvUInt, TlvUInt8 } from "../../src/tlv/TlvUInt.js";
+import { TlvUInt8 } from "../../src/tlv/TlvUInt.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
+import { Schema } from "../../src/util/schema/Schema.js";
+
+const schema = TlvObject({
+    /** Mandatory field jsdoc */
+    mandatoryField: TlvField(1, TlvUInt8),
+
+    /** Optional field jsdoc */
+    optionalField: TlvOptionalField(2, TlvString()),
+});
+
+type CodecVector<I, E> = {[valueDescription: string]: { encoded: E, decoded: I }};
+
+const codecVector: CodecVector<TypeFromSchema<typeof schema>, string> = {
+    "an object with all fields": { decoded: { mandatoryField: 1, optionalField: "test" }, encoded: "152401012c02047465737418" },
+    "an object without optional fields": { decoded: { mandatoryField: 1 }, encoded: "1524010118" },
+};
 
 describe("TlvObject", () => {
-    const schema = TlvObject({
-        /** Mandatory field jsdoc */
-        mandatory: TlvField(1, TlvUInt8),
-
-        /** Optional field jsdoc */
-        optional: TlvOptionalField(2, TlvString()),
-    });
 
     describe("encode", () => {
-        it("encodes an object with all fields", () => {
-            const result = schema.encode({ mandatory: 1, optional: "test" });
-
-            expect(result.toHex()).toBe("152401012c02047465737418");
-        });
-
-        it("encodes an object without optional fields", () => {
-            const result = schema.encode({ mandatory: 1 });
-
-            expect(result.toHex()).toBe("1524010118");
-        });
+        for (const valueDescription in codecVector) {
+            const { encoded, decoded } = codecVector[valueDescription];
+            it(`encodes ${valueDescription}`, () => {
+                expect(schema.encode(decoded).toHex())
+                    .toBe(encoded);
+            });
+        }
     });
 
     describe("decode", () => {
-        it("decodes an object with all fields", () => {
-            const result = schema.decode(ByteArray.fromHex("152401012c02047465737418"));
-
-            expect(result).toEqual({ mandatory: 1, optional: "test" });
-        });
-
-        it("decodes an object without optional fields", () => {
-            const result = schema.decode(ByteArray.fromHex("1524010118"));
-
-            expect(result).toEqual({ mandatory: 1 });
-        });
+        for (const valueDescription in codecVector) {
+            const { encoded, decoded } = codecVector[valueDescription];
+            it(`decodes ${valueDescription}`, () => {
+                expect(schema.decode(ByteArray.fromHex(encoded)))
+                    .toEqual(decoded);
+            });
+        }
     });
 });

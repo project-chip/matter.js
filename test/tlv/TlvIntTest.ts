@@ -7,20 +7,14 @@
 import { TlvInt, TlvInt32, TlvInt64 } from "../../src/tlv/TlvInt.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 
+type CodecVector<I, E> = {[valueDescription: string]: { encoded: E, decoded: I }};
 type TestVector<I, E> = {[testName: string]: { input: I, out: E }};
 
-const encodeTestVector: TestVector<number | bigint, string> = {
-    "encodes an 1 byte signed int": { input: -1, out: "00ff" },
-    "encodes a 2 bytes signed int": { input: 0x0100, out: "010001" },
-    "encodes a 4 bytes signed int": { input: 0x01000000, out: "0200000001" },
-    "encodes a 8 bytes signed int": { input: BigInt(0x01000000000000), out: "030000000000000100" },
-};
-
-const decodeTestVector: TestVector<string, number | bigint> = {
-    "decodes an 1 byte signed int": { input: "00ff", out: -1 },
-    "decodes a 2 bytes signed int": { input: "010001", out: 0x0100 },
-    "decodes a 4 bytes signed int": { input: "0200000001", out: 0x01000000 },
-    "decodes a 8 bytes signed int": { input: "030000000000000100", out: BigInt(0x01000000000000) },
+const codecVector: CodecVector<number | bigint, string> = {
+    "an 1 byte signed int": { decoded: -1, encoded: "00ff" },
+    "a 2 bytes signed int": { decoded: 0x0100, encoded: "010001" },
+    "a 4 bytes signed int": { decoded: 0x01000000, encoded: "0200000001" },
+    "a 8 bytes signed int": { decoded: BigInt(0x01000000000000), encoded: "030000000000000100" },
 };
 
 const validateTestVector: TestVector<number | bigint, boolean> = {
@@ -32,21 +26,21 @@ const validateTestVector: TestVector<number | bigint, boolean> = {
 describe("TlvInt", () => {
 
     describe("encode", () => {
-        for (const testName in encodeTestVector) {
-            const { input, out } = encodeTestVector[testName];
-            it(testName, () => {
-                expect(TlvInt64.encode(input).toHex())
-                    .toBe(out);
+        for (const valueDescription in codecVector) {
+            const { encoded, decoded } = codecVector[valueDescription];
+            it(`encodes ${valueDescription}`, () => {
+                expect(TlvInt64.encode(decoded).toHex())
+                    .toBe(encoded);
             });
         }
     });
 
     describe("decode", () => {
-        for (const testName in decodeTestVector) {
-            const { input, out } = decodeTestVector[testName];
-            it(testName, () => {
-                expect(TlvInt64.decode(ByteArray.fromHex(input)))
-                    .toBe(out);
+        for (const valueDescription in codecVector) {
+            const { encoded, decoded } = codecVector[valueDescription];
+            it(`decodes ${valueDescription}`, () => {
+                expect(TlvInt64.decode(ByteArray.fromHex(encoded)))
+                    .toBe(decoded);
             });
         }
     });
