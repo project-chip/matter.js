@@ -13,19 +13,19 @@ import { TlvCodec, TlvTag, TlvTypeLength } from "./TlvCodec.js";
 export abstract class TlvSchema<T> extends Schema<T, ByteArray> {
     
     /** @override */
-    protected decodeInternal(encoded: ByteArray): T {
+    decodeInternal(encoded: ByteArray): T {
         return this.decodeTlv(new DataReaderLE(encoded)).value;
     }
 
     /** @override */
-    protected encodeInternal(value: T): ByteArray {
+    encodeInternal(value: T): ByteArray {
         const writer = new DataWriterLE();
         this.encodeTlv(writer, value);
         return writer.toBuffer();
     }
 
     /** Decodes a TLV tag and value. */
-    protected decodeTlv(reader: DataReaderLE): { value: T, tag: TlvTag} {
+    decodeTlv(reader: DataReaderLE): { value: T, tag: TlvTag} {
         const { tag, typeLength } = TlvCodec.readTagType(reader);
         return { tag, value: this.decodeTlvValue(reader, typeLength) };
     }

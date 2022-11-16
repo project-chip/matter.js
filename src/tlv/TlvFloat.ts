@@ -9,6 +9,7 @@ import { DataWriterLE } from "../util/DataWriterLE.js";
 import { FLOAT32_MAX, FLOAT32_MIN } from "../util/Number.js";
 import { TlvType, TlvCodec, TlvTag, TlvLength, TlvTypeLength } from "./TlvCodec.js";
 import { TlvSchema } from "./TlvSchema.js";
+import { MatterCoreSpecificationV1_0 } from "../Specifications.js";
 
 /**
  * Schema to encode a float in TLV.

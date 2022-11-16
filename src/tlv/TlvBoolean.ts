@@ -8,13 +8,14 @@ import { DataReaderLE } from "../util/DataReaderLE.js";
 import { DataWriterLE } from "../util/DataWriterLE.js";
 import { TlvType, TlvCodec, TlvTag, TlvTypeLength } from "./TlvCodec.js";
 import { TlvSchema } from "./TlvSchema.js";
+import { MatterCoreSpecificationV1_0 } from "../Specifications.js"; 
 
 /**
  * Schema to encode a boolean in TLV.
  * 
  * @see {@link MatterCoreSpecificationV1_0} § A.11.3
  */
- class BooleanSchema extends TlvSchema<boolean> {
+export class BooleanSchema extends TlvSchema<boolean> {
     /** @override */
     encodeTlv(writer: DataWriterLE, value: boolean, tag: TlvTag = {}): void {
         TlvCodec.writeTag(writer, { type: TlvType.Boolean, value },  tag);

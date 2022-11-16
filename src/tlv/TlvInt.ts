@@ -9,6 +9,7 @@ import { DataWriterLE } from "../util/DataWriterLE.js";
 import { INT16_MAX, INT16_MIN, INT32_MAX, INT32_MIN, INT64_MAX, INT64_MIN, INT8_MAX, INT8_MIN } from "../util/Number.js";
 import { TlvType, TlvCodec, TlvTag, TlvTypeLength } from "./TlvCodec.js";
 import { TlvSchema } from "./TlvSchema.js";
+import { MatterCoreSpecificationV1_0 } from "../Specifications.js";
 
 /**
  * Schema to encode an signed integer in TLV.
@@ -17,8 +18,8 @@ import { TlvSchema } from "./TlvSchema.js";
  */
  class IntSchema extends TlvSchema<number | bigint> {
     constructor(
-        private readonly min: number | bigint,
-        private readonly max: number | bigint,
+        readonly min: number | bigint,
+        readonly max: number | bigint,
     ) {
         super();
 

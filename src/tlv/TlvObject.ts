@@ -9,6 +9,7 @@ import { DataWriterLE } from "../util/DataWriterLE.js";
 import { Merge } from "../util/Type.js";
 import { TlvType, TlvCodec, TlvTag, TlvTypeLength } from "./TlvCodec.js";
 import { TlvSchema } from "./TlvSchema.js";
+import { MatterCoreSpecificationV1_0 } from "../Specifications.js";
 
 interface Field<T> {
     id: number,
