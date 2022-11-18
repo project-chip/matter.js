@@ -6,7 +6,7 @@
 
 import { TlvUInt64, TlvUInt32, TlvFloat, TlvDouble, TlvInt64 } from "../../src/tlv/TlvNumber.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
-import { Schema } from "../../src/util/schema/Schema.js";
+import { Schema } from "../../src/schema/Schema.js";
 
 type CodecVector<I, E> = {[valueDescription: string]: { schema: Schema<number | bigint, ByteArray>, encoded: I, decoded: E }};
 type TestVector<I, E> = {[testName: string]: { input: I, out: E }};

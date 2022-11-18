@@ -6,12 +6,16 @@
 
 export { TlvArray as Array, ArraySchema } from "./TlvArray.js";
 export { TlvBoolean as Boolean, BooleanSchema } from "./TlvBoolean.js";
-export { TlvSchema as TlvSchema } from "./TlvSchema.js";
+export { TlvSchema as Schema } from "./TlvSchema.js";
 export { TlvNullable as Nullable, NullableSchema } from "./TlvNullable.js";
 export {
     TlvObject as Object,
+    Fields,
+    TypeFromFields,
     TlvField as Field,
+    FieldType,
     TlvOptionalField as OptionalField,
+    OptionalFieldType,
     ObjectSchema,
 } from "./TlvObject.js";
 export { TlvString as String, TlvByteString as ByteString, StringSchema } from "./TlvString.js";
@@ -27,5 +31,6 @@ export {
     TlvUInt32 as UInt32,
     TlvUInt64 as UInt64,
     TlvEnum as Enum,
+    TlvBitmap as Bitmap,
 } from "./TlvNumber.js";
 export { TlvWrapper as Wrapper } from "./TlvWrapper.js";

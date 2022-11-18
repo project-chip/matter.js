@@ -9,6 +9,8 @@ import { TlvSchema } from "./TlvSchema.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { DataWriterLE } from "../util/DataWriterLE.js";
 import { DataReaderLE } from "../util/DataReaderLE.js";
+import { TlvWrapper } from "./TlvWrapper.js";
+import { BitmapSchema, BitSchema, TypeFromBitSchema } from "../schema/BitmapSchema.js";
 
 /**
  * Schema to encode an unsigned integer in TLV.
@@ -100,3 +102,7 @@ export const TlvUInt16 = new TlvShortNumberSchema(TlvType.UnsignedInt, value => 
 export const TlvUInt32 = new TlvShortNumberSchema(TlvType.UnsignedInt, value => TlvCodec.getUIntTlvLength(value), 0, UINT32_MAX);
 export const TlvUInt64 = new TlvLongNumberSchema(TlvType.UnsignedInt, value => TlvCodec.getUIntTlvLength(value), 0, UINT64_MAX);
 export const TlvEnum = <T>() => TlvUInt32 as TlvSchema<number> as TlvSchema<T>;
+export const TlvBitmap = <T extends BitSchema>(underlyingSchema: TlvShortNumberSchema, bitSchema: T) => {
+    const bitmapSchema = BitmapSchema(bitSchema);
+    return new TlvWrapper(underlyingSchema, (bitmapData: TypeFromBitSchema<T>) => bitmapSchema.encode(bitmapData), value => bitmapSchema.decode(value));
+};
