@@ -6,6 +6,8 @@
     "noImplicitAny": true,
     "noImplicitOverride": true,
     "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "strictNullChecks": true,
     "strict": true
   }
 }
