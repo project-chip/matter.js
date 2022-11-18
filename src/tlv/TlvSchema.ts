@@ -7,7 +7,7 @@
 import { ByteArray } from "../util/ByteArray.js";
 import { DataReaderLE } from "../util/DataReaderLE.js";
 import { DataWriterLE } from "../util/DataWriterLE.js";
-import { Schema } from "../util/schema/Schema.js";
+import { Schema } from "../schema/Schema.js";
 import { TlvCodec, TlvTag, TlvTypeLength } from "./TlvCodec.js";
 
 export abstract class TlvSchema<T> extends Schema<T, ByteArray> implements TlvSchema<T> {

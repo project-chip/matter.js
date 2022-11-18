@@ -9,7 +9,7 @@ import { TypeFromSchema } from "../../src/tlv/TlvSchema.js";
 import { TlvString } from "../../src/tlv/TlvString.js";
 import { TlvUInt8 } from "../../src/tlv/TlvNumber.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
-import { Schema } from "../../src/util/schema/Schema.js";
+import { Schema } from "../../src/schema/Schema.js";
 
 const schema = TlvObject({
     /** Mandatory field jsdoc */
