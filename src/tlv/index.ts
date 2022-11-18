@@ -18,7 +18,14 @@ export {
     OptionalFieldType,
     ObjectSchema,
 } from "./TlvObject.js";
-export { TlvString as String, TlvByteString as ByteString, StringSchema } from "./TlvString.js";
+export {
+    TlvString as String,
+    TlvString32max as String32max,
+    TlvString64max as String64max,
+    TlvString256max as String256max,
+    TlvByteString as ByteString,
+    StringSchema 
+ } from "./TlvString.js";
 export {
     TlvFloat as Float,
     TlvDouble as Double,

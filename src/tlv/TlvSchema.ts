@@ -37,11 +37,5 @@ export abstract class TlvSchema<T> extends Schema<T, ByteArray> implements TlvSc
     abstract encodeTlv(writer: DataWriterLE, value: T, tag?: TlvTag): void;
 }
 
-export type LengthConstraints = {
-    minLength?: number,
-    maxLength?: number,
-    length?: number,
-};
-
 /** Type defined by the TLV schema. */
 export type TypeFromSchema<S extends TlvSchema<any>> = S extends TlvSchema<infer T> ? T : never;
