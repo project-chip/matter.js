@@ -36,8 +36,7 @@ class BitmapSchemaInternal<T extends BitSchema> extends Schema<TypeFromBitSchema
         // TODO: validate that bitSchemas is coherent
     }
 
-    /** @override */
-    encodeInternal(value: TypeFromBitSchema<T>) {
+    override encodeInternal(value: TypeFromBitSchema<T>) {
         let result = 0;
         for (const name in this.bitSchemas) {
             const { type, offset, mask } = this.bitSchemas[name];
@@ -53,8 +52,7 @@ class BitmapSchemaInternal<T extends BitSchema> extends Schema<TypeFromBitSchema
         return result;
     }
 
-    /** @override */
-    decodeInternal(bitmap: number) {
+    override decodeInternal(bitmap: number) {
         const result = {} as any;
         for (const name in this.bitSchemas) {
             const { type, offset, mask } = this.bitSchemas[name];
