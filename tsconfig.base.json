@@ -5,6 +5,7 @@
     "module": "ES2015",
     "noImplicitAny": true,
     "noImplicitOverride": true,
+    "noUnusedParameters": true,
     "strict": true
   }
 }

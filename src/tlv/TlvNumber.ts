@@ -86,8 +86,8 @@ export const TlvLongNumberSchema = TlvNumericSchema<number | bigint>;
 
 
 /** Unsigned integer TLV schema. */
-export const TlvFloat = new TlvShortNumberSchema(TlvType.Float, value => TlvLength.FourBytes, FLOAT32_MIN, FLOAT32_MAX);
-export const TlvDouble = new TlvShortNumberSchema(TlvType.Float, value => TlvLength.EightBytes);
+export const TlvFloat = new TlvShortNumberSchema(TlvType.Float, _value => TlvLength.FourBytes, FLOAT32_MIN, FLOAT32_MAX);
+export const TlvDouble = new TlvShortNumberSchema(TlvType.Float, _value => TlvLength.EightBytes);
 export const TlvInt8 = new TlvShortNumberSchema(TlvType.SignedInt, value => TlvCodec.getIntTlvLength(value), INT8_MIN, INT8_MAX);
 export const TlvInt16 = new TlvShortNumberSchema(TlvType.SignedInt, value => TlvCodec.getIntTlvLength(value), INT16_MIN, INT16_MAX);
 export const TlvInt32 = new TlvShortNumberSchema(TlvType.SignedInt, value => TlvCodec.getIntTlvLength(value), INT32_MIN, INT32_MAX);

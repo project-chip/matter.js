@@ -20,7 +20,7 @@ export class BooleanSchema extends TlvSchema<boolean> {
         TlvCodec.writeTag(writer, { type: TlvType.Boolean, value },  tag);
     }
 
-    override decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength) {
+    override decodeTlvValue(_reader: DataReaderLE, typeLength: TlvTypeLength) {
         if (typeLength.type !== TlvType.Boolean) throw new Error(`Unexpected type ${typeLength.type}.`)
         return typeLength.value;
     }
