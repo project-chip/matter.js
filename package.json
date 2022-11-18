@@ -25,12 +25,13 @@
   "scripts": {
     "clean": "rm -rf dist",
     "build": "npm run clean; tsc --project tsconfig.dist.json",
-    "test": "TZ=utc NODE_OPTIONS=--loader=ts-node/esm jasmine --config=jasmine.json",
-    "test-web": "karma start karma.conf.cjs"
+    "test": "TZ=utc NODE_OPTIONS=--loader=ts-node/esm NODE_NO_WARNINGS=1 jasmine --config=test/jasmine.json",
+    "test-web": "karma start test/karma.conf.cjs"
   },
   "devDependencies": {
     "@types/jasmine": "^4.3.0",
     "jasmine": "^4.5.0",
+    "jasmine-spec-reporter": "^7.0.0",
     "karma": "^6.4.1",
     "karma-chrome-launcher": "^3.1.1",
     "karma-coverage": "^2.2.0",
