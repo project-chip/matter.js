@@ -8,14 +8,14 @@ import { DataReaderLE } from "../util/DataReaderLE.js";
 import { DataWriterLE } from "../util/DataWriterLE.js";
 import { TlvType, TlvCodec, TlvTag, TlvTypeLength } from "./TlvCodec.js";
 import { TlvSchema } from "./TlvSchema.js";
-import { MatterCoreSpecificationV1_0 } from "../Specifications.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 /**
  * Schema to encode a nulable value in TLV.
  * 
  * @see {@link MatterCoreSpecificationV1_0} § A.11.6
  */
- class NullableSchema<T> extends TlvSchema<T | null> {
+export class NullableSchema<T> extends TlvSchema<T | null> {
 
     constructor(
         private readonly schema: TlvSchema<T>,

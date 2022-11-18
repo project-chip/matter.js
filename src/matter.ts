@@ -5,3 +5,5 @@
  */
 
 export * as tlv from "./tlv/index.js";
+export * as util from "./util/index.js";
+export * as spec from "./spec/Specifications.js";

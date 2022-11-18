@@ -8,14 +8,14 @@ import { DataReaderLE } from "../util/DataReaderLE.js";
 import { DataWriterLE } from "../util/DataWriterLE.js";
 import { TlvType, TlvCodec, TlvTag, TlvTypeLength, TlvToPrimitive } from "./TlvCodec.js";
 import { LengthConstraints, TlvSchema } from "./TlvSchema.js";
-import { MatterCoreSpecificationV1_0 } from "../Specifications.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 /**
  * Schema to encode an byte string or an Utf8 string in TLV.
  * 
  * @see {@link MatterCoreSpecificationV1_0} § A.11.2
  */
- class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> extends TlvSchema<TlvToPrimitive[T]> {
+export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> extends TlvSchema<TlvToPrimitive[T]> {
     constructor(
         private type: T,
         private readonly minLength: number = 0,
