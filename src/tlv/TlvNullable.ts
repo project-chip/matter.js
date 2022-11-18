@@ -23,8 +23,7 @@ export class NullableSchema<T> extends TlvSchema<T | null> {
         super();
     }
 
-    /** @override */
-    encodeTlv(writer: DataWriterLE, value: T | null, tag: TlvTag = {}): void {
+    override encodeTlv(writer: DataWriterLE, value: T | null, tag: TlvTag = {}): void {
         if (value === null) {
             TlvCodec.writeTag(writer, { type: TlvType.Null }, tag);
         } else {
@@ -32,8 +31,7 @@ export class NullableSchema<T> extends TlvSchema<T | null> {
         }
     }
 
-    /** @override */
-    decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength): T | null {
+    override decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength): T | null {
         if (typeLength.type === TlvType.Null) return null;
         return this.schema.decodeTlvValue(reader, typeLength);
     }

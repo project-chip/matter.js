@@ -18,16 +18,15 @@ export class TlvWrapper<O, T> extends TlvSchema<O> {
         super();
     }
 
-    decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength): O {
+    override decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength): O {
         return this.unwrap(this.underlyingSchema.decodeTlvValue(reader, typeLength));
     }
 
-    encodeTlv(writer: DataWriterLE, value: O, tag?: TlvTag | undefined): void {
+    override encodeTlv(writer: DataWriterLE, value: O, tag?: TlvTag | undefined): void {
         this.underlyingSchema.encodeTlv(writer, this.wrap(value), tag);
     }
 
-    /** @override */
-    validate(value: O): void {
+    override validate(value: O): void {
         this.underlyingSchema.validate(this.wrap(value));
     }
 }

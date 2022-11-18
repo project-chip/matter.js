@@ -33,21 +33,18 @@ export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> ext
         if (minLength < 0) throw new Error("Minimum length should be a positive number.");
     }
 
-    /** @override */
-    encodeTlv(writer: DataWriterLE, value: TlvToPrimitive[T], tag: TlvTag = {}): void {
+    override encodeTlv(writer: DataWriterLE, value: TlvToPrimitive[T], tag: TlvTag = {}): void {
         const typeLength: TlvTypeLength = { type: this.type, length: TlvCodec.getUIntTlvLength(value.length)}
         TlvCodec.writeTag(writer, typeLength, tag);
         TlvCodec.writePrimitive(writer, typeLength, value);
     }
 
-    /** @override */
-    decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength) {
+    override decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength) {
         if (typeLength.type !== this.type) throw new Error(`Unexpected type ${typeLength.type}.`);
         return TlvCodec.readPrimitive(reader, typeLength) as TlvToPrimitive[T];
     }
 
-    /** @override */
-    validate({ length }: TlvToPrimitive[T]): void {
+    override validate({ length }: TlvToPrimitive[T]): void {
         if (length > this.maxLength) throw new Error(`Array is too long: ${length}, max ${this.maxLength}.`);
         if (length < this.minLength) throw new Error(`Array is too short: ${length}, min ${this.minLength}.`);
     }

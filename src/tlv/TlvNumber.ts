@@ -27,23 +27,20 @@ export class TlvNumericSchema<T extends bigint | number> extends TlvSchema<T> {
         super();
     }
 
-    /** @override */
-    encodeTlv(writer: DataWriterLE, value: T, tag: TlvTag = {}): void {
+    override encodeTlv(writer: DataWriterLE, value: T, tag: TlvTag = {}): void {
         const typeLength = { type: this.type, length: this.lengthProvider(value) } as TlvTypeLength;
         TlvCodec.writeTag(writer, typeLength, tag);
         TlvCodec.writePrimitive(writer, typeLength, value);
     }
 
-    /** @override */
-    decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength) {
+    override decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength) {
         if (typeLength.type !== this.type) throw new Error(`Unexpected type ${typeLength.type}, was expecting ${this.type}.`);
         const value = TlvCodec.readPrimitive(reader, typeLength) as T;
         this.validate(value);
         return value;
     }
 
-    /** @override */
-    validate(value: T): void {
+    override validate(value: T): void {
         super.validate(value);
         if (this.min !== undefined && value < this.min) throw new Error(`Invalid value: ${value} is below the minimum, ${this.min}.`);
         if (this.max !== undefined && value > this.max) throw new Error(`Invalid value: ${value} is above the maximum, ${this.max}.`);
@@ -70,14 +67,12 @@ export class TlvShortNumberSchema extends TlvNumericSchema<number> {
         super(type, lengthProvider, min, max);
     }
 
-    /** @override */
-    decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength) {
+    override decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength) {
         const value = super.decodeTlvValue(reader, typeLength);
         return typeof value === "bigint" ? Number(value) : value;
     }
 
-    /** @override */
-    bound({ min, max }: NumericConstraints<number>): TlvNumericSchema<number> {
+    override bound({ min, max }: NumericConstraints<number>): TlvNumericSchema<number> {
         return new TlvShortNumberSchema(
             this.type,
             this.lengthProvider,

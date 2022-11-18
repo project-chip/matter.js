@@ -50,8 +50,7 @@ export class ObjectSchema<F extends Fields> extends TlvSchema<TypeFromFields<F>>
         }
     }
 
-    /** @override */
-    encodeTlv(writer: DataWriterLE, value: TypeFromFields<F>, tag: TlvTag = {}): void {
+    override encodeTlv(writer: DataWriterLE, value: TypeFromFields<F>, tag: TlvTag = {}): void {
         TlvCodec.writeTag(writer, { type: this.type }, tag);
         for (const name in this.fieldDefinitions) {
             const { id, schema, optional: isOptional } = this.fieldDefinitions[name];
@@ -65,8 +64,7 @@ export class ObjectSchema<F extends Fields> extends TlvSchema<TypeFromFields<F>>
         TlvCodec.writeTag(writer, { type: TlvType.EndOfContainer });
     }
 
-    /** @override */
-    decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength): TypeFromFields<F> {
+    override decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength): TypeFromFields<F> {
         if (typeLength.type !== this.type) throw new Error(`Unexpected type ${typeLength.type}.`);
         const result: any = {};
         while (true) {
@@ -83,8 +81,7 @@ export class ObjectSchema<F extends Fields> extends TlvSchema<TypeFromFields<F>>
         return result as TypeFromFields<F>;
     }
 
-    /** @override */
-    validate(value: TypeFromFields<F>): void {
+    override validate(value: TypeFromFields<F>): void {
         for (const name in this.fieldDefinitions) {
             if (!this.fieldDefinitions[name].optional && (value as any)[name] === undefined) throw new Error(`Missing mandatory field ${name}`);
         }
