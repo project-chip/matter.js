@@ -30,15 +30,13 @@ export class ArraySchema<T> extends TlvSchema<T[]> {
         super();
     }
 
-    /** @override */
-    encodeTlv(writer: DataWriterLE, value: T[], tag: TlvTag = {}): void {
+    override encodeTlv(writer: DataWriterLE, value: T[], tag: TlvTag = {}): void {
         TlvCodec.writeTag(writer, { type: TlvType.Array }, tag);
         value.forEach(element => this.elementSchema.encodeTlv(writer, element));
         TlvCodec.writeTag(writer, { type: TlvType.EndOfContainer });
     }
 
-    /** @override */
-    decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength): T[] {
+    override decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength): T[] {
         if (typeLength.type !== TlvType.Array) throw new Error(`Unexpected type ${typeLength.type}.`);
         const result = new Array<T>();
         while (true) {
@@ -51,8 +49,7 @@ export class ArraySchema<T> extends TlvSchema<T[]> {
         return result;
     }
 
-    /** @override */
-    validate({ length }: T[]): void {
+    override validate({ length }: T[]): void {
         if (length > this.maxLength) throw new Error(`Array is too long: ${length}, max ${this.maxLength}.`);
         if (length < this.minLength) throw new Error(`Array is too short: ${length}, min ${this.minLength}.`);
     }

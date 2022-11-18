@@ -16,13 +16,11 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
  * @see {@link MatterCoreSpecificationV1_0} § A.11.3
  */
 export class BooleanSchema extends TlvSchema<boolean> {
-    /** @override */
-    encodeTlv(writer: DataWriterLE, value: boolean, tag: TlvTag = {}): void {
+    override encodeTlv(writer: DataWriterLE, value: boolean, tag: TlvTag = {}): void {
         TlvCodec.writeTag(writer, { type: TlvType.Boolean, value },  tag);
     }
 
-    /** @override */
-    decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength) {
+    override decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength) {
         if (typeLength.type !== TlvType.Boolean) throw new Error(`Unexpected type ${typeLength.type}.`)
         return typeLength.value;
     }

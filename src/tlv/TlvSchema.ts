@@ -12,28 +12,23 @@ import { TlvCodec, TlvTag, TlvTypeLength } from "./TlvCodec.js";
 
 export abstract class TlvSchema<T> extends Schema<T, ByteArray> implements TlvSchema<T> {
     
-    /** @override */
-    decodeInternal(encoded: ByteArray): T {
+    override decodeInternal(encoded: ByteArray): T {
         return this.decodeTlv(new DataReaderLE(encoded)).value;
     }
 
-    /** @override */
-    encodeInternal(value: T): ByteArray {
+    override encodeInternal(value: T): ByteArray {
         const writer = new DataWriterLE();
         this.encodeTlv(writer, value);
         return writer.toBuffer();
     }
 
-    /** @override */
     decodeTlv(reader: DataReaderLE): { value: T, tag: TlvTag} {
         const { tag, typeLength } = TlvCodec.readTagType(reader);
         return { tag, value: this.decodeTlvValue(reader, typeLength) };
     }
 
-    /** @override */
     abstract decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength): T;
 
-    /** @override */
     abstract encodeTlv(writer: DataWriterLE, value: T, tag?: TlvTag): void;
 }
 
