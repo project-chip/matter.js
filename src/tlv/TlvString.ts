@@ -7,8 +7,15 @@
 import { DataReaderLE } from "../util/DataReaderLE.js";
 import { DataWriterLE } from "../util/DataWriterLE.js";
 import { TlvType, TlvCodec, TlvTag, TlvTypeLength, TlvToPrimitive } from "./TlvCodec.js";
-import { LengthConstraints, TlvSchema } from "./TlvSchema.js";
+import { TlvSchema } from "./TlvSchema.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { maxValue, minValue } from "../util/Number.js";
+
+type LengthConstraints = {
+    minLength?: number,
+    maxLength?: number,
+    length?: number,
+};
 
 /**
  * Schema to encode an byte string or an Utf8 string in TLV.
@@ -44,10 +51,23 @@ export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> ext
         if (length > this.maxLength) throw new Error(`Array is too long: ${length}, max ${this.maxLength}.`);
         if (length < this.minLength) throw new Error(`Array is too short: ${length}, min ${this.minLength}.`);
     }
+
+    bound({ minLength, maxLength, length }: LengthConstraints) {
+        return new StringSchema(this.type, length ?? maxValue(this.minLength, minLength), length ?? minValue(this.maxLength, maxLength));
+    }
 }
 
 /** ByteString TLV schema. */
-export const TlvByteString = ({minLength, maxLength, length}: LengthConstraints = {}) => new StringSchema(TlvType.ByteString, length ?? minLength, length ?? maxLength);
+export const TlvByteString = new StringSchema(TlvType.ByteString);
 
 /** String TLV schema. */
-export const TlvString = ({minLength, maxLength, length}: LengthConstraints = {}) => new StringSchema(TlvType.Utf8String, length ?? minLength, length ?? maxLength);
+export const TlvString = new StringSchema(TlvType.Utf8String);
+
+/** String TLV schema. */
+export const TlvString32max = TlvString.bound({ maxLength: 32 });
+
+/** String TLV schema. */
+export const TlvString64max = TlvString.bound({ maxLength: 64 });
+
+/** String TLV schema. */
+export const TlvString256max = TlvString.bound({ maxLength: 256 });

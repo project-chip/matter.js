@@ -7,13 +7,19 @@
 import { DataReaderLE } from "../util/DataReaderLE.js";
 import { DataWriterLE } from "../util/DataWriterLE.js";
 import { TlvType, TlvCodec, TlvTag, TlvTypeLength } from "./TlvCodec.js";
-import { LengthConstraints, TlvSchema } from "./TlvSchema.js";
+import { TlvSchema } from "./TlvSchema.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js"; 
 
+type LengthConstraints = {
+    minLength?: number,
+    maxLength?: number,
+    length?: number,
+};
+
 /**
- * Schema to encode an array in TLV.
+ * Schema to encode an array or string in TLV.
  * 
- * @see {@link MatterCoreSpecificationV1_0} § A.11.4
+ * @see {@link MatterCoreSpecificationV1_0} § A.11.2 and A.11.4
  */
 export class ArraySchema<T> extends TlvSchema<T[]> {
     constructor(
