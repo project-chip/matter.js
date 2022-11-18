@@ -10,7 +10,7 @@ import { DataWriterLE } from "../util/DataWriterLE.js";
 import { Schema } from "../util/schema/Schema.js";
 import { TlvCodec, TlvTag, TlvTypeLength } from "./TlvCodec.js";
 
-export abstract class TlvSchema<T> extends Schema<T, ByteArray> {
+export abstract class TlvSchema<T> extends Schema<T, ByteArray> implements TlvSchema<T> {
     
     /** @override */
     decodeInternal(encoded: ByteArray): T {
@@ -24,16 +24,16 @@ export abstract class TlvSchema<T> extends Schema<T, ByteArray> {
         return writer.toBuffer();
     }
 
-    /** Decodes a TLV tag and value. */
+    /** @override */
     decodeTlv(reader: DataReaderLE): { value: T, tag: TlvTag} {
         const { tag, typeLength } = TlvCodec.readTagType(reader);
         return { tag, value: this.decodeTlvValue(reader, typeLength) };
     }
 
-    /** Decodes a TLV value. */
+    /** @override */
     abstract decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength): T;
 
-    /** Encodes a TLV tag and value. */
+    /** @override */
     abstract encodeTlv(writer: DataWriterLE, value: T, tag?: TlvTag): void;
 }
 

@@ -9,7 +9,7 @@ import { DataWriterLE } from "../util/DataWriterLE.js";
 import { Merge } from "../util/Type.js";
 import { TlvType, TlvCodec, TlvTag, TlvTypeLength } from "./TlvCodec.js";
 import { TlvSchema } from "./TlvSchema.js";
-import { MatterCoreSpecificationV1_0 } from "../Specifications.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 interface Field<T> {
     id: number,
@@ -35,7 +35,7 @@ type TypeFromFields<F extends Fields> = Merge<TypeForMandatoryFields<F, Mandator
  * 
  * @see {@link MatterCoreSpecificationV1_0} § A.5.1 and § A.11.4
  */
-class ObjectSchema<F extends Fields> extends TlvSchema<TypeFromFields<F>> {
+export class ObjectSchema<F extends Fields> extends TlvSchema<TypeFromFields<F>> {
     private readonly fieldById = new Array<{ name: string, field: Field<any>}>();
 
     constructor(
