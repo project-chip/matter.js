@@ -5,10 +5,8 @@
  */
 import { FLOAT32_MAX, FLOAT32_MIN, INT16_MAX, INT16_MIN, INT32_MAX, INT32_MIN, INT64_MAX, INT64_MIN, INT8_MAX, INT8_MIN, maxValue, minValue, UINT16_MAX, UINT32_MAX, UINT64_MAX, UINT8_MAX } from "../util/Number.js";
 import { TlvType, TlvCodec, TlvTag, TlvTypeLength, TlvLength } from "./TlvCodec.js";
-import { TlvSchema } from "./TlvSchema.js";
+import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-import { DataWriterLE } from "../util/DataWriterLE.js";
-import { DataReaderLE } from "../util/DataReaderLE.js";
 import { TlvWrapper } from "./TlvWrapper.js";
 import { BitmapSchema, BitSchema, TypeFromBitSchema } from "../schema/BitmapSchema.js";
 
@@ -27,15 +25,15 @@ export class TlvNumericSchema<T extends bigint | number> extends TlvSchema<T> {
         super();
     }
 
-    override encodeTlv(writer: DataWriterLE, value: T, tag: TlvTag = {}): void {
+    override encodeTlv(writer: TlvWriter, value: T, tag: TlvTag = {}): void {
         const typeLength = { type: this.type, length: this.lengthProvider(value) } as TlvTypeLength;
-        TlvCodec.writeTag(writer, typeLength, tag);
-        TlvCodec.writePrimitive(writer, typeLength, value);
+        writer.writeTag(typeLength, tag);
+        writer.writePrimitive(typeLength, value);
     }
 
-    override decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength) {
+    override decodeTlvValue(reader: TlvReader, typeLength: TlvTypeLength) {
         if (typeLength.type !== this.type) throw new Error(`Unexpected type ${typeLength.type}, was expecting ${this.type}.`);
-        const value = TlvCodec.readPrimitive(reader, typeLength) as T;
+        const value = reader.readPrimitive(typeLength) as T;
         this.validate(value);
         return value;
     }
@@ -67,7 +65,7 @@ export class TlvShortNumberSchema extends TlvNumericSchema<number> {
         super(type, lengthProvider, min, max);
     }
 
-    override decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength) {
+    override decodeTlvValue(reader: TlvReader, typeLength: TlvTypeLength) {
         const value = super.decodeTlvValue(reader, typeLength);
         return typeof value === "bigint" ? Number(value) : value;
     }

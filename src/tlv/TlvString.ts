@@ -4,10 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DataReaderLE } from "../util/DataReaderLE.js";
-import { DataWriterLE } from "../util/DataWriterLE.js";
 import { TlvType, TlvCodec, TlvTag, TlvTypeLength, TlvToPrimitive } from "./TlvCodec.js";
-import { TlvSchema } from "./TlvSchema.js";
+import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { maxValue, minValue } from "../util/Number.js";
 
@@ -33,15 +31,15 @@ export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> ext
         if (minLength < 0) throw new Error("Minimum length should be a positive number.");
     }
 
-    override encodeTlv(writer: DataWriterLE, value: TlvToPrimitive[T], tag: TlvTag = {}): void {
+    override encodeTlv(writer: TlvWriter, value: TlvToPrimitive[T], tag: TlvTag = {}): void {
         const typeLength: TlvTypeLength = { type: this.type, length: TlvCodec.getUIntTlvLength(value.length)}
-        TlvCodec.writeTag(writer, typeLength, tag);
-        TlvCodec.writePrimitive(writer, typeLength, value);
+        writer.writeTag(typeLength, tag);
+        writer.writePrimitive(typeLength, value);
     }
 
-    override decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength) {
+    override decodeTlvValue(reader: TlvReader, typeLength: TlvTypeLength) {
         if (typeLength.type !== this.type) throw new Error(`Unexpected type ${typeLength.type}.`);
-        return TlvCodec.readPrimitive(reader, typeLength) as TlvToPrimitive[T];
+        return reader.readPrimitive(typeLength) as TlvToPrimitive[T];
     }
 
     override validate({ length }: TlvToPrimitive[T]): void {

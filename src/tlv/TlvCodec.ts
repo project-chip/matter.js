@@ -141,15 +141,15 @@ export class TlvCodec {
     }
 
     /** @see {@link MatterCoreSpecificationV1_0} § A.7 */
-    public static readTagType(reader: DataReaderLE): { tag: TlvTag, typeLength: TlvTypeLength } {
+    public static readTagType(reader: DataReaderLE): { tag?: TlvTag, typeLength: TlvTypeLength } {
         const { tagControl, typeLength } = ControlByteSchema.decode(reader.readUInt8());
         return { tag: this.readTag(reader, tagControl), typeLength: this.parseTypeLength(typeLength) };
     }
 
-    private static readTag(reader: DataReaderLE, tagControl: TagControl): TlvTag {
+    private static readTag(reader: DataReaderLE, tagControl: TagControl): TlvTag | undefined {
         switch (tagControl) {
             case TagControl.Anonymous:
-                return {};
+                return undefined;
             case TagControl.ContextSpecific:
                 return { id: reader.readUInt8() };
             case TagControl.CommonProfile16:
@@ -226,6 +226,8 @@ export class TlvCodec {
                 }
             case TlvType.Boolean:
                 return typeLength.value as V;
+            case TlvType.Null:
+                return null as V;
             default:
                 throw new Error(`Unexpected TLV type ${typeLength.type}`);
         }

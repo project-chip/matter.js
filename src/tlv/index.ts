@@ -6,7 +6,7 @@
 
 export { TlvArray as Array, ArraySchema } from "./TlvArray.js";
 export { TlvBoolean as Boolean, BooleanSchema } from "./TlvBoolean.js";
-export { TlvSchema as Schema } from "./TlvSchema.js";
+export { TlvSchema as Schema, TypeFromSchema } from "./TlvSchema.js";
 export { TlvNullable as Nullable, NullableSchema } from "./TlvNullable.js";
 export {
     TlvObject as Object,

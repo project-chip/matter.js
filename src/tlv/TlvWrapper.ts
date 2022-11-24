@@ -4,10 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DataReaderLE } from "../util/DataReaderLE.js";
-import { DataWriterLE } from "../util/DataWriterLE.js";
 import { TlvTag, TlvTypeLength } from "./TlvCodec.js";
-import { TlvSchema } from "./TlvSchema.js";
+import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 
 export class TlvWrapper<O, T> extends TlvSchema<O> {
     constructor(
@@ -18,11 +16,11 @@ export class TlvWrapper<O, T> extends TlvSchema<O> {
         super();
     }
 
-    override decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength): O {
+    override decodeTlvValue(reader: TlvReader, typeLength: TlvTypeLength): O {
         return this.unwrap(this.underlyingSchema.decodeTlvValue(reader, typeLength));
     }
 
-    override encodeTlv(writer: DataWriterLE, value: O, tag?: TlvTag | undefined): void {
+    override encodeTlv(writer: TlvWriter, value: O, tag?: TlvTag | undefined): void {
         this.underlyingSchema.encodeTlv(writer, this.wrap(value), tag);
     }
 

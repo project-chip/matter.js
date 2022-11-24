@@ -24,7 +24,7 @@
   },
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "npm run clean; tsc --project tsconfig.dist.json",
+    "build": "npm run clean; tsc --project tsconfig.dist.json; tsc --project tsconfig.dist-cjs.json",
     "test": "TZ=utc NODE_OPTIONS=--loader=ts-node/esm NODE_NO_WARNINGS=1 jasmine --config=test/jasmine.json",
     "test-web": "karma start test/karma.conf.cjs"
   },
@@ -43,7 +43,7 @@
   "files": [
     "dist/**/*"
   ],
-  "type": "module",
-  "main": "dist/matter.js",
+  "module": "dist/matter.js",
+  "main": "dist-cjs/matter.js",
   "types": "dist/matter.d.ts"
 }
