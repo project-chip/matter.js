@@ -4,11 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DataReaderLE } from "../util/DataReaderLE.js";
-import { DataWriterLE } from "../util/DataWriterLE.js";
 import { Merge } from "../util/Type.js";
-import { TlvType, TlvCodec, TlvTag, TlvTypeLength } from "./TlvCodec.js";
-import { TlvSchema } from "./TlvSchema.js";
+import { TlvType, TlvTag, TlvTypeLength } from "./TlvCodec.js";
+import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 export interface FieldType<T> {
@@ -50,8 +48,8 @@ export class ObjectSchema<F extends Fields> extends TlvSchema<TypeFromFields<F>>
         }
     }
 
-    override encodeTlv(writer: DataWriterLE, value: TypeFromFields<F>, tag: TlvTag = {}): void {
-        TlvCodec.writeTag(writer, { type: this.type }, tag);
+    override encodeTlv(writer: TlvWriter, value: TypeFromFields<F>, tag: TlvTag = {}): void {
+        writer.writeTag({ type: this.type }, tag);
         for (const name in this.fieldDefinitions) {
             const { id, schema, optional: isOptional } = this.fieldDefinitions[name];
             const fieldValue = (value as any)[name];
@@ -61,14 +59,14 @@ export class ObjectSchema<F extends Fields> extends TlvSchema<TypeFromFields<F>>
             }
             schema.encodeTlv(writer, fieldValue, { id });
         }
-        TlvCodec.writeTag(writer, { type: TlvType.EndOfContainer });
+        writer.writeTag({ type: TlvType.EndOfContainer });
     }
 
-    override decodeTlvValue(reader: DataReaderLE, typeLength: TlvTypeLength): TypeFromFields<F> {
+    override decodeTlvValue(reader: TlvReader, typeLength: TlvTypeLength): TypeFromFields<F> {
         if (typeLength.type !== this.type) throw new Error(`Unexpected type ${typeLength.type}.`);
         const result: any = {};
         while (true) {
-            const { tag: { profile, id }, typeLength: elementTypeLength } = TlvCodec.readTagType(reader);
+            const { tag: { profile, id } = {}, typeLength: elementTypeLength } = reader.readTagType();
             if (elementTypeLength.type === TlvType.EndOfContainer) break;
             if (profile !== undefined) throw new Error("Structure element tags should be context-specific.");
             if (id === undefined) throw new Error("Structure element tags should have an id.");
@@ -96,5 +94,3 @@ export const TlvField = <T>(id: number, schema: TlvSchema<T>) => ({ id, schema, 
 
 /** Object TLV optional field. */
 export const TlvOptionalField = <T>(id: number, schema: TlvSchema<T>) => ({ id, schema, optional: true }) as OptionalFieldType<T>;
-
-/** Js type for the shema */
