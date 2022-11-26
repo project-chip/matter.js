@@ -5,8 +5,8 @@
  */
 
 import { ByteArray } from "../util/ByteArray.js";
-import { DataReaderLE } from "../util/DataReaderLE.js";
-import { DataWriterLE } from "../util/DataWriterLE.js";
+import { DataReader } from "../util/DataReader.js";
+import { DataWriter } from "../util/DataWriter.js";
 import { INT16_MAX, INT16_MIN, INT32_MAX, INT32_MIN, INT8_MAX, INT8_MIN, UINT16_MAX, UINT32_MAX, UINT8_MAX } from "../util/Number.js";
 import { BitmapSchema, BitFieldEnum, BitField } from "../schema/BitmapSchema.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
@@ -141,12 +141,12 @@ export class TlvCodec {
     }
 
     /** @see {@link MatterCoreSpecificationV1_0} § A.7 */
-    public static readTagType(reader: DataReaderLE): { tag?: TlvTag, typeLength: TlvTypeLength } {
+    public static readTagType(reader: DataReader): { tag?: TlvTag, typeLength: TlvTypeLength } {
         const { tagControl, typeLength } = ControlByteSchema.decode(reader.readUInt8());
         return { tag: this.readTag(reader, tagControl), typeLength: this.parseTypeLength(typeLength) };
     }
 
-    private static readTag(reader: DataReaderLE, tagControl: TagControl): TlvTag | undefined {
+    private static readTag(reader: DataReader, tagControl: TagControl): TlvTag | undefined {
         switch (tagControl) {
             case TagControl.Anonymous:
                 return undefined;
@@ -189,7 +189,7 @@ export class TlvCodec {
         }
     }
 
-    public static readPrimitive<T extends TlvTypeLength, V = TlvToPrimitive[T["type"]]>(reader: DataReaderLE, typeLength: T): V {
+    public static readPrimitive<T extends TlvTypeLength, V = TlvToPrimitive[T["type"]]>(reader: DataReader, typeLength: T): V {
         switch (typeLength.type) {
             case TlvType.SignedInt:
                 switch (typeLength.length) {
@@ -212,10 +212,10 @@ export class TlvCodec {
                 }
             case TlvType.Utf8String:
                 switch (typeLength.length) {
-                    case TlvLength.OneByte: return reader.readUtfString(reader.readUInt8()) as V;
-                    case TlvLength.TwoBytes: return reader.readUtfString(reader.readUInt16()) as V;
-                    case TlvLength.FourBytes: return reader.readUtfString(reader.readUInt32()) as V;
-                    case TlvLength.EightBytes: return reader.readUtfString(Number(reader.readUInt64())) as V;
+                    case TlvLength.OneByte: return reader.readUtf8String(reader.readUInt8()) as V;
+                    case TlvLength.TwoBytes: return reader.readUtf8String(reader.readUInt16()) as V;
+                    case TlvLength.FourBytes: return reader.readUtf8String(reader.readUInt32()) as V;
+                    case TlvLength.EightBytes: return reader.readUtf8String(Number(reader.readUInt64())) as V;
                 }
             case TlvType.ByteString:
                 switch (typeLength.length) {
@@ -234,7 +234,7 @@ export class TlvCodec {
     }
 
     /** @see {@link MatterCoreSpecificationV1_0} § A.7 & A.8 */
-    public static writeTag(writer: DataWriterLE, typeLengthValue: TlvTypeLength, { profile, id }: TlvTag = {}) {
+    public static writeTag(writer: DataWriter, typeLengthValue: TlvTypeLength, { profile, id }: TlvTag = {}) {
         let typeLength: number;
         switch (typeLengthValue.type) {
             case TlvType.Utf8String:
@@ -280,7 +280,7 @@ export class TlvCodec {
         }
     }
 
-    public static writePrimitive<T extends TlvTypeLength>(writer: DataWriterLE, typeLength: T, value: TlvToPrimitive[T["type"]]) {
+    public static writePrimitive<T extends TlvTypeLength>(writer: DataWriter, typeLength: T, value: TlvToPrimitive[T["type"]]) {
         switch (typeLength.type) {
             case TlvType.SignedInt:
                 return this.writeUInt(writer, typeLength.length, value as TlvToPrimitive[typeof typeLength.type]);
@@ -311,7 +311,7 @@ export class TlvCodec {
         }
     }
 
-    private static writeUInt(writer: DataWriterLE, length: TlvLength, value: number | bigint) {
+    private static writeUInt(writer: DataWriter, length: TlvLength, value: number | bigint) {
         switch (length) {
             case TlvLength.OneByte: return writer.writeInt8(value);
             case TlvLength.TwoBytes: return writer.writeInt16(value);

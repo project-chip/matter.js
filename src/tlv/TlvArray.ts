@@ -28,20 +28,20 @@ export class ArraySchema<T> extends TlvSchema<T[]> {
         super();
     }
 
-    override encodeTlv(writer: TlvWriter, value: T[], tag: TlvTag = {}): void {
+    override encodeTlvInternal(writer: TlvWriter, value: T[], tag: TlvTag = {}): void {
         writer.writeTag({ type: TlvType.Array }, tag);
-        value.forEach(element => this.elementSchema.encodeTlv(writer, element));
+        value.forEach(element => this.elementSchema.encodeTlvInternal(writer, element));
         writer.writeTag({ type: TlvType.EndOfContainer });
     }
 
-    override decodeTlvValue(reader: TlvReader, typeLength: TlvTypeLength): T[] {
+    override decodeTlvInternalValue(reader: TlvReader, typeLength: TlvTypeLength): T[] {
         if (typeLength.type !== TlvType.Array) throw new Error(`Unexpected type ${typeLength.type}.`);
         const result = new Array<T>();
         while (true) {
             const { tag: elementTag, typeLength: elementTypeLength } = reader.readTagType();
             if (elementTag !== undefined) throw new Error("Array element tags should be anonymous.");
             if (elementTypeLength.type === TlvType.EndOfContainer) break;
-            result.push(this.elementSchema.decodeTlvValue(reader, elementTypeLength));
+            result.push(this.elementSchema.decodeTlvInternalValue(reader, elementTypeLength));
         }
         this.validate(result);
         return result;

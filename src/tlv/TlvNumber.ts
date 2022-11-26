@@ -25,13 +25,13 @@ export class TlvNumericSchema<T extends bigint | number> extends TlvSchema<T> {
         super();
     }
 
-    override encodeTlv(writer: TlvWriter, value: T, tag: TlvTag = {}): void {
+    override encodeTlvInternal(writer: TlvWriter, value: T, tag: TlvTag = {}): void {
         const typeLength = { type: this.type, length: this.lengthProvider(value) } as TlvTypeLength;
         writer.writeTag(typeLength, tag);
         writer.writePrimitive(typeLength, value);
     }
 
-    override decodeTlvValue(reader: TlvReader, typeLength: TlvTypeLength) {
+    override decodeTlvInternalValue(reader: TlvReader, typeLength: TlvTypeLength) {
         if (typeLength.type !== this.type) throw new Error(`Unexpected type ${typeLength.type}, was expecting ${this.type}.`);
         const value = reader.readPrimitive(typeLength) as T;
         this.validate(value);
@@ -65,8 +65,8 @@ export class TlvShortNumberSchema extends TlvNumericSchema<number> {
         super(type, lengthProvider, min, max);
     }
 
-    override decodeTlvValue(reader: TlvReader, typeLength: TlvTypeLength) {
-        const value = super.decodeTlvValue(reader, typeLength);
+    override decodeTlvInternalValue(reader: TlvReader, typeLength: TlvTypeLength) {
+        const value = super.decodeTlvInternalValue(reader, typeLength);
         return typeof value === "bigint" ? Number(value) : value;
     }
 

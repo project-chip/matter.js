@@ -21,17 +21,17 @@ export class NullableSchema<T> extends TlvSchema<T | null> {
         super();
     }
 
-    override encodeTlv(writer: TlvWriter, value: T | null, tag: TlvTag = {}): void {
+    override encodeTlvInternal(writer: TlvWriter, value: T | null, tag: TlvTag = {}): void {
         if (value === null) {
             writer.writeTag({ type: TlvType.Null }, tag);
         } else {
-            this.schema.encodeTlv(writer, value, tag);
+            this.schema.encodeTlvInternal(writer, value, tag);
         }
     }
 
-    override decodeTlvValue(reader: TlvReader, typeLength: TlvTypeLength): T | null {
+    override decodeTlvInternalValue(reader: TlvReader, typeLength: TlvTypeLength): T | null {
         if (typeLength.type === TlvType.Null) return null;
-        return this.schema.decodeTlvValue(reader, typeLength);
+        return this.schema.decodeTlvInternalValue(reader, typeLength);
     }
 }
 

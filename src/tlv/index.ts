@@ -4,12 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+export { TlvAny as Any } from "./TlvAny.js";
 export { TlvArray as Array, ArraySchema } from "./TlvArray.js";
 export { TlvBoolean as Boolean, BooleanSchema } from "./TlvBoolean.js";
-export { TlvSchema as Schema, TypeFromSchema } from "./TlvSchema.js";
+export { TlvSchema as Schema, TlvStream as Stream, TypeFromSchema } from "./TlvSchema.js";
 export { TlvNullable as Nullable, NullableSchema } from "./TlvNullable.js";
 export {
     TlvObject as Object,
+    TlvList as List,
     Fields,
     TypeFromFields,
     TlvField as Field,
@@ -40,4 +42,5 @@ export {
     TlvEnum as Enum,
     TlvBitmap as Bitmap,
 } from "./TlvNumber.js";
+export { TlvVoid as Void } from "./TlvVoid.js";
 export { TlvWrapper as Wrapper } from "./TlvWrapper.js";

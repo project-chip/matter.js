@@ -31,13 +31,13 @@ export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> ext
         if (minLength < 0) throw new Error("Minimum length should be a positive number.");
     }
 
-    override encodeTlv(writer: TlvWriter, value: TlvToPrimitive[T], tag: TlvTag = {}): void {
+    override encodeTlvInternal(writer: TlvWriter, value: TlvToPrimitive[T], tag: TlvTag = {}): void {
         const typeLength: TlvTypeLength = { type: this.type, length: TlvCodec.getUIntTlvLength(value.length)}
         writer.writeTag(typeLength, tag);
         writer.writePrimitive(typeLength, value);
     }
 
-    override decodeTlvValue(reader: TlvReader, typeLength: TlvTypeLength) {
+    override decodeTlvInternalValue(reader: TlvReader, typeLength: TlvTypeLength) {
         if (typeLength.type !== this.type) throw new Error(`Unexpected type ${typeLength.type}.`);
         return reader.readPrimitive(typeLength) as TlvToPrimitive[T];
     }

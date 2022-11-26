@@ -4,32 +4,83 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ByteArray } from "../util/ByteArray.js";
-import { DataReaderLE } from "../util/DataReaderLE.js";
-import { DataWriterLE } from "../util/DataWriterLE.js";
+import { ByteArray, Endian } from "../util/ByteArray.js";
+import { DataReader } from "../util/DataReader.js";
+import { DataWriter } from "../util/DataWriter.js";
 import { Schema } from "../schema/Schema.js";
 import { TlvCodec, TlvTag, TlvToPrimitive, TlvTypeLength } from "./TlvCodec.js";
 
 export abstract class TlvSchema<T> extends Schema<T, ByteArray> implements TlvSchema<T> {
     
     override decodeInternal(encoded: ByteArray): T {
-        return this.decodeTlv(new TlvByteArrayReader(encoded)).value;
+        return this.decodeTlvInternal(new TlvByteArrayReader(encoded)).value;
     }
 
     override encodeInternal(value: T): ByteArray {
         const writer = new TlvByteArrayWriter();
-        this.encodeTlv(writer, value);
+        this.encodeTlvInternal(writer, value);
         return writer.toByteArray();
     }
 
-    decodeTlv(reader: TlvReader): { value: T, tag?: TlvTag} {
-        const { tag, typeLength } = reader.readTagType();
-        return { tag, value: this.decodeTlvValue(reader, typeLength) };
+    encodeTlv(value: T): TlvStream {
+        const writer = new TlvArrayWriter();
+        this.encodeTlvInternal(writer, value);
+        return writer.toTlvArray();
     }
 
-    abstract decodeTlvValue(reader: TlvReader, typeLength: TlvTypeLength): T;
+    decodeTlv(encoded: TlvStream): T {
+        return this.decodeTlvInternal(new TlvArrayReader(encoded)).value;
+    }
 
-    abstract encodeTlv(writer: TlvWriter, value: T, tag?: TlvTag): void;
+    decodeTlvInternal(reader: TlvReader): { value: T, tag?: TlvTag} {
+        const { tag, typeLength } = reader.readTagType();
+        return { tag, value: this.decodeTlvInternalValue(reader, typeLength) };
+    }
+
+    abstract decodeTlvInternalValue(reader: TlvReader, typeLength: TlvTypeLength): T;
+
+    abstract encodeTlvInternal(writer: TlvWriter, value: T, tag?: TlvTag): void;
+}
+
+export type TlvStream = TlvElement<any>[];
+
+export type TlvElement<T extends TlvTypeLength> = {
+    tag?: TlvTag,
+    typeLength: T,
+    value?: TlvToPrimitive[T["type"]],
+};
+
+export class TlvArrayWriter implements TlvWriter {
+    private readonly tlvArray = new Array<TlvElement<any>>();
+
+    writeTag(typeLength: TlvTypeLength, tag?: TlvTag) {
+        this.tlvArray.push({ tag, typeLength });
+    }
+
+    writePrimitive<T extends TlvTypeLength>(_typeLength: T, value: TlvToPrimitive[T["type"]]) {
+        this.tlvArray[this.tlvArray.length - 1].value = value;
+    }
+
+    toTlvArray() {
+        return this.tlvArray;
+    }
+}
+
+export class TlvArrayReader implements TlvReader {
+    private index = -1;
+
+    constructor(
+        private readonly tlvElements: TlvElement<any>[],
+    ) {}
+
+    readTagType() {
+        this.index++;
+        return this.tlvElements[this.index];
+    }
+
+    readPrimitive<T extends TlvTypeLength, V = TlvToPrimitive[T["type"]]>(_typeLength: T): V {
+        return this.tlvElements[this.index].value;
+    }
 }
 
 /** Type defined by the TLV schema. */
@@ -48,7 +99,7 @@ export interface TlvWriter {
 }
 
 export class TlvByteArrayWriter implements TlvWriter {
-    private readonly writer = new DataWriterLE();
+    private readonly writer = new DataWriter(Endian.Little);
 
     writeTag(typeLength: TlvTypeLength, tag?: TlvTag) {
         TlvCodec.writeTag(this.writer, typeLength, tag);
@@ -59,15 +110,15 @@ export class TlvByteArrayWriter implements TlvWriter {
     }
 
     toByteArray() {
-        return this.writer.toBuffer();
+        return this.writer.toByteArray();
     }
 }
 
 export class TlvByteArrayReader implements TlvReader {
-    private readonly reader: DataReaderLE;
+    private readonly reader: DataReader;
 
     constructor(byteArray: ByteArray) {
-        this.reader = new DataReaderLE(byteArray);
+        this.reader = new DataReader(byteArray, Endian.Little);
     }
 
     readTagType() {

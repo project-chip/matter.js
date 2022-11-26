@@ -23,9 +23,9 @@
     "url": "https://github.com/project-chip/matter.js.git"
   },
   "scripts": {
-    "clean": "rm -rf dist",
+    "clean": "rm -rf dist; rm -rf dist-cjs",
     "build": "npm run clean; tsc --project tsconfig.dist.json; tsc --project tsconfig.dist-cjs.json",
-    "test": "TZ=utc NODE_OPTIONS=--loader=ts-node/esm jasmine --config=jasmine.json",
+    "test": "TZ=utc NODE_OPTIONS=\"--loader=ts-node/esm --input-type=module\" jasmine --config=jasmine.json",
     "test-web": "karma start karma.conf.cjs"
   },
   "devDependencies": {
@@ -36,13 +36,14 @@
     "karma-coverage": "^2.2.0",
     "karma-jasmine": "^5.1.0",
     "karma-typescript": "^5.5.3",
+    "renamer": "^4.0.0",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.3"
   },
   "files": [
     "dist/**/*"
   ],
-  "module": "dist/matter.js",
   "main": "dist-cjs/matter.js",
+  "module": "dist/matter.js",
   "types": "dist/matter.d.ts"
 }

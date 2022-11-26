@@ -25,7 +25,7 @@ describe("TlvString", () => {
 
     describe("encode", () => {
         it("encodes a string", () => {
-            const result = TlvString().encode("test");
+            const result = TlvString.encode("test");
 
             expect(result.toHex()).toBe("0c0474657374");
         });
@@ -33,14 +33,14 @@ describe("TlvString", () => {
 
     describe("decode", () => {
         it("decodes a string", () => {
-            const result = TlvString().decode(ByteArray.fromHex("0c0474657374"));
+            const result = TlvString.decode(ByteArray.fromHex("0c0474657374"));
 
             expect(result).toBe("test");
         });
     });
 
     describe("validate", () => {
-        const BoundedInt = TlvString({ minLength: 4, maxLength: 6 });
+        const BoundedInt = TlvString.bound({ minLength: 4, maxLength: 6 });
 
         for (const testName in validateUtfStringTestVector) {
             const { input, out: throwException } = validateUtfStringTestVector[testName];
@@ -60,7 +60,7 @@ describe("TlvByteString", () => {
 
     describe("encode", () => {
         it("encodes a byte string", () => {
-            const result = TlvByteString().encode(ByteArray.fromHex("0001"));
+            const result = TlvByteString.encode(ByteArray.fromHex("0001"));
 
             expect(result.toHex()).toBe("10020001");
         });
@@ -68,14 +68,14 @@ describe("TlvByteString", () => {
 
     describe("decode", () => {
         it("decodes a byte string", () => {
-            const result = TlvByteString().decode(ByteArray.fromHex("10020001"));
+            const result = TlvByteString.decode(ByteArray.fromHex("10020001"));
 
             expect(result.toHex()).toBe("0001");
         });
     });
 
     describe("validate", () => {
-        const BoundedInt = TlvByteString({ minLength: 4, maxLength: 6 });
+        const BoundedInt = TlvByteString.bound({ minLength: 4, maxLength: 6 });
 
         for (const testName in validateByteStringTestVector) {
             const { input, out: throwException } = validateByteStringTestVector[testName];
