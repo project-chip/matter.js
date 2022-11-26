@@ -17,7 +17,7 @@ const validateTestVector: TestVector<string[], boolean> = {
 };
 
 describe("TlvArray", () => {
-    const schema = TlvArray(TlvString());
+    const schema = TlvArray(TlvString);
 
     describe("encode", () => {
         it("encodes an array", () => {
@@ -36,7 +36,7 @@ describe("TlvArray", () => {
     });
 
     describe("validate", () => {
-        const schema = TlvArray(TlvString(), { minLength: 2, maxLength: 4 });
+        const schema = TlvArray(TlvString, { minLength: 2, maxLength: 4 });
 
         for (const testName in validateTestVector) {
             const { input, out: throwException } = validateTestVector[testName];

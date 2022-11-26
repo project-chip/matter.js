@@ -4,51 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TlvTag, TlvToPrimitive, TlvType, TlvTypeLength } from "./TlvCodec.js";
-import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
+import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
+import { TlvElement, TlvReader, TlvSchema, TlvStream, TlvWriter } from "./TlvSchema.js";
 
-export type TlvElement<T extends TlvTypeLength> = {
-    tag?: TlvTag,
-    typeLength: T,
-    value?: TlvToPrimitive[T["type"]],
-};
-
-export class TlvArrayWriter implements TlvWriter {
-    private readonly tlvArray = new Array<TlvElement<any>>();
-
-    writeTag(typeLength: TlvTypeLength, tag?: TlvTag) {
-        this.tlvArray.push({ tag, typeLength });
-    }
-
-    writePrimitive<T extends TlvTypeLength>(_typeLength: T, value: TlvToPrimitive[T["type"]]) {
-        this.tlvArray[this.tlvArray.length - 1].value = value;
-    }
-
-    toTlvArray() {
-        this.tlvArray;
-    }
-}
-
-export class TlvArrayReader implements TlvReader {
-    private index = -1;
-
-    constructor(
-        private readonly tlvElements: TlvElement<any>[],
-    ) {}
-
-    readTagType() {
-        this.index++;
-        return this.tlvElements[this.index];
-    }
-
-    readPrimitive<T extends TlvTypeLength, V = TlvToPrimitive[T["type"]]>(_typeLength: T): V {
-        return this.tlvElements[this.index].value;
-    }
-}
-
-export class TlvAny extends TlvSchema<TlvElement<any>[]> {
-    override encodeTlv(writer: TlvWriter, tlvArray: TlvElement<any>[], tagAssigned?: TlvTag | undefined): void {
-        tlvArray.forEach(({ tag, typeLength, value }) => {
+export class AnySchema extends TlvSchema<TlvStream> {
+    override encodeTlvInternal(writer: TlvWriter, tlvStream: TlvStream, tagAssigned?: TlvTag | undefined): void {
+        tlvStream.forEach(({ tag, typeLength, value }) => {
+            if (tagAssigned !== undefined) {
+                // Assign the tag to the 1st TLV element in the stream
+                tag = tagAssigned;
+                tagAssigned = undefined;
+            }
             switch (typeLength.type) {
                 case TlvType.Null:
                 case TlvType.Boolean:
@@ -70,11 +36,11 @@ export class TlvAny extends TlvSchema<TlvElement<any>[]> {
         });
     }
 
-    override decodeTlvValue(reader: TlvReader, typeLength: TlvTypeLength): TlvElement<any>[] {
+    override decodeTlvInternalValue(reader: TlvReader, typeLength: TlvTypeLength): TlvStream {
         return this.decodeTlvValueRec(reader, typeLength, new Array<TlvElement<any>>());
     }
 
-    decodeTlvValueRec(reader: TlvReader, typeLength: TlvTypeLength, tlvArray: TlvElement<any>[], tag?: TlvTag) {
+    decodeTlvValueRec(reader: TlvReader, typeLength: TlvTypeLength, tlvStream: TlvStream, tag?: TlvTag) {
         switch (typeLength.type) {
             case TlvType.Null:
             case TlvType.Boolean:
@@ -83,22 +49,24 @@ export class TlvAny extends TlvSchema<TlvElement<any>[]> {
             case TlvType.Float:
             case TlvType.Utf8String:
             case TlvType.ByteString:
-                tlvArray.push({ tag, typeLength, value: reader.readPrimitive(typeLength) });
+                tlvStream.push({ tag, typeLength, value: reader.readPrimitive(typeLength) });
                 break;
             case TlvType.Array:
             case TlvType.Structure:
             case TlvType.List:
-                tlvArray.push({ tag, typeLength });
+                tlvStream.push({ tag, typeLength });
                 while (true) {
                     const { tag: elementTag, typeLength: typeLengthElement } = reader.readTagType();
-                    this.decodeTlvValueRec(reader, typeLengthElement, tlvArray, elementTag);
+                    this.decodeTlvValueRec(reader, typeLengthElement, tlvStream, elementTag);
                     if (typeLengthElement.type === TlvType.EndOfContainer) break;
                 }
                 break;
             case TlvType.EndOfContainer:
-                tlvArray.push({ tag, typeLength });
+                tlvStream.push({ tag, typeLength });
                 break;
         }
-        return tlvArray;
+        return tlvStream;
     }
 }
+
+export const TlvAny = new AnySchema(); 

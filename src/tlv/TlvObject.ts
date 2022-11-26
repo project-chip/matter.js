@@ -48,7 +48,7 @@ export class ObjectSchema<F extends Fields> extends TlvSchema<TypeFromFields<F>>
         }
     }
 
-    override encodeTlv(writer: TlvWriter, value: TypeFromFields<F>, tag: TlvTag = {}): void {
+    override encodeTlvInternal(writer: TlvWriter, value: TypeFromFields<F>, tag: TlvTag = {}): void {
         writer.writeTag({ type: this.type }, tag);
         for (const name in this.fieldDefinitions) {
             const { id, schema, optional: isOptional } = this.fieldDefinitions[name];
@@ -57,12 +57,12 @@ export class ObjectSchema<F extends Fields> extends TlvSchema<TypeFromFields<F>>
                 if (!isOptional) throw new Error(`Missing mandatory field ${name}`);
                 continue;
             }
-            schema.encodeTlv(writer, fieldValue, { id });
+            schema.encodeTlvInternal(writer, fieldValue, { id });
         }
         writer.writeTag({ type: TlvType.EndOfContainer });
     }
 
-    override decodeTlvValue(reader: TlvReader, typeLength: TlvTypeLength): TypeFromFields<F> {
+    override decodeTlvInternalValue(reader: TlvReader, typeLength: TlvTypeLength): TypeFromFields<F> {
         if (typeLength.type !== this.type) throw new Error(`Unexpected type ${typeLength.type}.`);
         const result: any = {};
         while (true) {
@@ -73,7 +73,7 @@ export class ObjectSchema<F extends Fields> extends TlvSchema<TypeFromFields<F>>
             const fieldName = this.fieldById[id];
             if (fieldName === undefined) throw new Error(`Unknown field ${id}`);
             const { field, name }= fieldName;
-            result[name] = field.schema.decodeTlvValue(reader, elementTypeLength);
+            result[name] = field.schema.decodeTlvInternalValue(reader, elementTypeLength);
         }
         this.validate(result);
         return result as TypeFromFields<F>;
@@ -87,7 +87,10 @@ export class ObjectSchema<F extends Fields> extends TlvSchema<TypeFromFields<F>>
 }
 
 /** Object TLV schema. */
-export const TlvObject = <F extends Fields>(fields: F, type?: TlvType.Structure | TlvType.List) => new ObjectSchema(fields, type);
+export const TlvObject = <F extends Fields>(fields: F) => new ObjectSchema(fields, TlvType.Structure);
+
+/** List TLV schema. */
+export const TlvList = <F extends Fields>(fields: F) => new ObjectSchema(fields, TlvType.List);
 
 /** Object TLV mandatory field. */
 export const TlvField = <T>(id: number, schema: TlvSchema<T>) => ({ id, schema, optional: false }) as FieldType<T>;

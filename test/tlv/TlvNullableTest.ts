@@ -16,7 +16,7 @@ const codecVector: CodecVector<string | null, string> = {
 };
 
 describe("TlvNullable", () => {
-    const schema = TlvNullable(TlvString());
+    const schema = TlvNullable(TlvString);
 
     describe("encode", () => {
         for (const valueDescription in codecVector) {

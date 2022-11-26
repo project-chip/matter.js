@@ -5,3 +5,6 @@
  */
 
 export * as number from "./Number.js";
+export { ByteArray, Endian } from "./ByteArray.js";
+export { DataReader } from "./DataReader.js";
+export { DataWriter } from "./DataWriter.js";
