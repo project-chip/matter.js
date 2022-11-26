@@ -25,20 +25,18 @@
   "scripts": {
     "clean": "rm -rf dist; rm -rf dist-cjs",
     "build": "npm run clean; tsc --project tsconfig.dist.json; tsc --project tsconfig.dist-cjs.json",
-    "test": "TZ=utc NODE_OPTIONS=\"--loader=ts-node/esm --input-type=module\" NODE_NO_WARNINGS=1 jasmine --config=test/jasmine.json",
-    "test-web": "karma start test/karma.conf.cjs"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test-web": "karma start karma.conf.cjs"
   },
   "devDependencies": {
     "@types/jasmine": "^4.3.0",
-    "jasmine": "^4.5.0",
-    "jasmine-spec-reporter": "^7.0.0",
+    "jest": "^29.3.1",
     "karma": "^6.4.1",
     "karma-chrome-launcher": "^3.1.1",
     "karma-coverage": "^2.2.0",
     "karma-jasmine": "^5.1.0",
     "karma-typescript": "^5.5.3",
-    "renamer": "^4.0.0",
-    "ts-node": "^10.9.1",
+    "ts-jest": "^29.0.3",
     "typescript": "^4.9.3"
   },
   "files": [

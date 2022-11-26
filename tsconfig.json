@@ -1,6 +1,9 @@
 /* Dev configuration */
 {
   "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "esModuleInterop": true, // Required fto remove warnings or jest test
+  },
   /* During dev, src are included so they are also modified during refactorings. */
   "include": ["src/**/*.ts", "test/**/*.ts"],
 }
