@@ -115,7 +115,7 @@ export class TlvByteArrayWriter implements TlvWriter {
 }
 
 export class TlvByteArrayReader implements TlvReader {
-    private readonly reader: DataReader;
+    private readonly reader: DataReader<Endian.Little>;
 
     constructor(byteArray: ByteArray) {
         this.reader = new DataReader(byteArray, Endian.Little);
