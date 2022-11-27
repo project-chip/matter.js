@@ -19,21 +19,21 @@ export interface OptionalFieldType<T> extends FieldType<T> {
     optional: true,
 }
 
-export type Fields = { [field: string]: FieldType<any> };
+export type TlvFields = { [field: string]: FieldType<any> };
 
-type MandatoryFieldNames<F extends Fields> = { [K in keyof F]: F[K] extends OptionalFieldType<any> ? never : K }[keyof F];
-type OptionalFieldNames<F extends Fields> = { [K in keyof F]: F[K] extends OptionalFieldType<any> ? K : never }[keyof F];
+type MandatoryFieldNames<F extends TlvFields> = { [K in keyof F]: F[K] extends OptionalFieldType<any> ? never : K }[keyof F];
+type OptionalFieldNames<F extends TlvFields> = { [K in keyof F]: F[K] extends OptionalFieldType<any> ? K : never }[keyof F];
 type TypeFromField<F extends FieldType<any>> = F extends FieldType<infer T> ? T : never;
-type TypeForMandatoryFields<F extends Fields, MF extends keyof F> = { [K in MF]: TypeFromField<F[K]> };
-type TypeForOptionalFields<F extends Fields, MF extends keyof F> = { [K in MF]?: TypeFromField<F[K]> };
-export type TypeFromFields<F extends Fields> = Merge<TypeForMandatoryFields<F, MandatoryFieldNames<F>>, TypeForOptionalFields<F, OptionalFieldNames<F>>>;
+type TypeForMandatoryFields<F extends TlvFields, MF extends keyof F> = { [K in MF]: TypeFromField<F[K]> };
+type TypeForOptionalFields<F extends TlvFields, MF extends keyof F> = { [K in MF]?: TypeFromField<F[K]> };
+export type TypeFromFields<F extends TlvFields> = Merge<TypeForMandatoryFields<F, MandatoryFieldNames<F>>, TypeForOptionalFields<F, OptionalFieldNames<F>>>;
 
 /**
  * Schema to encode an object in TLV.
  * 
  * @see {@link MatterCoreSpecificationV1_0} § A.5.1 and § A.11.4
  */
-export class ObjectSchema<F extends Fields> extends TlvSchema<TypeFromFields<F>> {
+export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<F>> {
     private readonly fieldById = new Array<{ name: string, field: FieldType<any>}>();
 
     constructor(
@@ -87,10 +87,10 @@ export class ObjectSchema<F extends Fields> extends TlvSchema<TypeFromFields<F>>
 }
 
 /** Object TLV schema. */
-export const TlvObject = <F extends Fields>(fields: F) => new ObjectSchema(fields, TlvType.Structure);
+export const TlvObject = <F extends TlvFields>(fields: F) => new ObjectSchema(fields, TlvType.Structure);
 
 /** List TLV schema. */
-export const TlvList = <F extends Fields>(fields: F) => new ObjectSchema(fields, TlvType.List);
+export const TlvList = <F extends TlvFields>(fields: F) => new ObjectSchema(fields, TlvType.List);
 
 /** Object TLV mandatory field. */
 export const TlvField = <T>(id: number, schema: TlvSchema<T>) => ({ id, schema, optional: false }) as FieldType<T>;
