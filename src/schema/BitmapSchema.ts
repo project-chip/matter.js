@@ -26,8 +26,8 @@ export const BitField = (offset: number, length: number) => BitRange(BitRangeTyp
 export interface BitFieldEnum<E extends number> extends BitRange<E> { type: BitRangeType.Enum }
 export const BitFieldEnum = <E extends number>(offset: number, length: number) => BitRange(BitRangeType.Enum, offset, length) as BitFieldEnum<E>;
 
-type BitSchema = {[key: string]: BitFlag | BitField | BitFieldEnum<any> };
-type TypeFromBitSchema<T extends BitSchema> = {[K in keyof T]: T[K] extends BitFieldEnum<infer E> ? E : (T[K] extends BitField ? number : boolean )};
+export type BitSchema = {[key: string]: BitFlag | BitField | BitFieldEnum<any> };
+export type TypeFromBitSchema<T extends BitSchema> = {[K in keyof T]: T[K] extends BitFieldEnum<infer E> ? E : (T[K] extends BitField ? number : boolean )};
 
 class BitmapSchemaInternal<T extends BitSchema> extends Schema<TypeFromBitSchema<T>, number> {
     constructor(readonly bitSchemas: T) {
@@ -36,8 +36,7 @@ class BitmapSchemaInternal<T extends BitSchema> extends Schema<TypeFromBitSchema
         // TODO: validate that bitSchemas is coherent
     }
 
-    /** @override */
-    encodeInternal(value: TypeFromBitSchema<T>) {
+    override encodeInternal(value: TypeFromBitSchema<T>) {
         let result = 0;
         for (const name in this.bitSchemas) {
             const { type, offset, mask } = this.bitSchemas[name];
@@ -53,8 +52,7 @@ class BitmapSchemaInternal<T extends BitSchema> extends Schema<TypeFromBitSchema
         return result;
     }
 
-    /** @override */
-    decodeInternal(bitmap: number) {
+    override decodeInternal(bitmap: number) {
         const result = {} as any;
         for (const name in this.bitSchemas) {
             const { type, offset, mask } = this.bitSchemas[name];

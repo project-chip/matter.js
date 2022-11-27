@@ -7,16 +7,15 @@
 import { TlvObject, TlvField, TlvOptionalField } from "../../src/tlv/TlvObject.js";
 import { TypeFromSchema } from "../../src/tlv/TlvSchema.js";
 import { TlvString } from "../../src/tlv/TlvString.js";
-import { TlvUInt8 } from "../../src/tlv/TlvUInt.js";
+import { TlvUInt8 } from "../../src/tlv/TlvNumber.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
-import { Schema } from "../../src/util/schema/Schema.js";
 
 const schema = TlvObject({
     /** Mandatory field jsdoc */
     mandatoryField: TlvField(1, TlvUInt8),
 
     /** Optional field jsdoc */
-    optionalField: TlvOptionalField(2, TlvString()),
+    optionalField: TlvOptionalField(2, TlvString),
 });
 
 type CodecVector<I, E> = {[valueDescription: string]: { encoded: E, decoded: I }};

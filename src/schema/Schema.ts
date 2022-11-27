@@ -23,6 +23,6 @@ export abstract class Schema<T, E> {
     protected abstract decodeInternal(encoded: E): T;
 
     /** Optional validator that can be used to enforce constraints on the data before encoding / after decoding. */
-    validate(value: T): void {
+    validate(_value: T): void {
     }
 }

@@ -3,7 +3,12 @@
   "compilerOptions": {
     "target": "ES2015",
     "module": "ES2015",
+    "moduleResolution": "node",
     "noImplicitAny": true,
+    "noImplicitOverride": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "strictNullChecks": true,
     "strict": true
   }
 }
