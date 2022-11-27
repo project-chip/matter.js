@@ -55,7 +55,7 @@ export type NumericConstraints<T extends number | bigint = number | bigint> = {
     max?: T,
 };
 
-export class TlvShortNumberSchema extends TlvNumericSchema<number> {
+export class TlvNumberSchema extends TlvNumericSchema<number> {
     constructor(
         type: TlvType.UnsignedInt | TlvType.SignedInt | TlvType.Float,
         lengthProvider: (value: number) => TlvLength,
@@ -71,7 +71,7 @@ export class TlvShortNumberSchema extends TlvNumericSchema<number> {
     }
 
     override bound({ min, max }: NumericConstraints<number>): TlvNumericSchema<number> {
-        return new TlvShortNumberSchema(
+        return new TlvNumberSchema(
             this.type,
             this.lengthProvider,
             maxValue(min, this.min),
@@ -84,18 +84,18 @@ export const TlvLongNumberSchema = TlvNumericSchema<number | bigint>;
 
 
 /** Unsigned integer TLV schema. */
-export const TlvFloat = new TlvShortNumberSchema(TlvType.Float, _value => TlvLength.FourBytes, FLOAT32_MIN, FLOAT32_MAX);
-export const TlvDouble = new TlvShortNumberSchema(TlvType.Float, _value => TlvLength.EightBytes);
-export const TlvInt8 = new TlvShortNumberSchema(TlvType.SignedInt, value => TlvCodec.getIntTlvLength(value), INT8_MIN, INT8_MAX);
-export const TlvInt16 = new TlvShortNumberSchema(TlvType.SignedInt, value => TlvCodec.getIntTlvLength(value), INT16_MIN, INT16_MAX);
-export const TlvInt32 = new TlvShortNumberSchema(TlvType.SignedInt, value => TlvCodec.getIntTlvLength(value), INT32_MIN, INT32_MAX);
+export const TlvFloat = new TlvNumberSchema(TlvType.Float, _value => TlvLength.FourBytes, FLOAT32_MIN, FLOAT32_MAX);
+export const TlvDouble = new TlvNumberSchema(TlvType.Float, _value => TlvLength.EightBytes);
+export const TlvInt8 = new TlvNumberSchema(TlvType.SignedInt, value => TlvCodec.getIntTlvLength(value), INT8_MIN, INT8_MAX);
+export const TlvInt16 = new TlvNumberSchema(TlvType.SignedInt, value => TlvCodec.getIntTlvLength(value), INT16_MIN, INT16_MAX);
+export const TlvInt32 = new TlvNumberSchema(TlvType.SignedInt, value => TlvCodec.getIntTlvLength(value), INT32_MIN, INT32_MAX);
 export const TlvInt64 = new TlvLongNumberSchema(TlvType.SignedInt, value => TlvCodec.getIntTlvLength(value), INT64_MIN, INT64_MAX);
-export const TlvUInt8 = new TlvShortNumberSchema(TlvType.UnsignedInt, value => TlvCodec.getUIntTlvLength(value), 0, UINT8_MAX);
-export const TlvUInt16 = new TlvShortNumberSchema(TlvType.UnsignedInt, value => TlvCodec.getUIntTlvLength(value), 0, UINT16_MAX);
-export const TlvUInt32 = new TlvShortNumberSchema(TlvType.UnsignedInt, value => TlvCodec.getUIntTlvLength(value), 0, UINT32_MAX);
+export const TlvUInt8 = new TlvNumberSchema(TlvType.UnsignedInt, value => TlvCodec.getUIntTlvLength(value), 0, UINT8_MAX);
+export const TlvUInt16 = new TlvNumberSchema(TlvType.UnsignedInt, value => TlvCodec.getUIntTlvLength(value), 0, UINT16_MAX);
+export const TlvUInt32 = new TlvNumberSchema(TlvType.UnsignedInt, value => TlvCodec.getUIntTlvLength(value), 0, UINT32_MAX);
 export const TlvUInt64 = new TlvLongNumberSchema(TlvType.UnsignedInt, value => TlvCodec.getUIntTlvLength(value), 0, UINT64_MAX);
 export const TlvEnum = <T>() => TlvUInt32 as TlvSchema<number> as TlvSchema<T>;
-export const TlvBitmap = <T extends BitSchema>(underlyingSchema: TlvShortNumberSchema, bitSchema: T) => {
+export const TlvBitmap = <T extends BitSchema>(underlyingSchema: TlvNumberSchema, bitSchema: T) => {
     const bitmapSchema = BitmapSchema(bitSchema);
     return new TlvWrapper(underlyingSchema, (bitmapData: TypeFromBitSchema<T>) => bitmapSchema.encode(bitmapData), value => bitmapSchema.decode(value));
 };
