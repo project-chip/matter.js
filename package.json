@@ -1,6 +1,6 @@
 {
   "name": "@project-chip/matter.js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Matter protocol in pure js",
   "keywords": [
     "iot",
@@ -40,7 +40,8 @@
     "typescript": "^4.9.3"
   },
   "files": [
-    "dist/**/*"
+    "dist/**/*",
+    "dist-cjs/**/*"
   ],
   "main": "dist-cjs/matter.js",
   "module": "dist/matter.js",
