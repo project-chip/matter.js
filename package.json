@@ -1,6 +1,6 @@
 {
   "name": "@project-chip/matter.js",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Matter protocol in pure js",
   "keywords": [
     "iot",
@@ -23,8 +23,8 @@
     "url": "https://github.com/project-chip/matter.js.git"
   },
   "scripts": {
-    "clean": "rm -rf dist; rm -rf dist-cjs",
-    "build": "npm run clean; tsc --project tsconfig.dist.json; tsc --project tsconfig.dist-cjs.json",
+    "clean": "rm -rf dist",
+    "build": "npm run clean; tsc --project tsconfig.dist-es.json; tsc --project tsconfig.dist-cjs.json; tsc --project tsconfig.dist-dts.json",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test-web": "karma start karma.conf.cjs"
   },
@@ -40,10 +40,9 @@
     "typescript": "^4.9.3"
   },
   "files": [
-    "dist/**/*",
-    "dist-cjs/**/*"
+    "dist/**/*"
   ],
-  "main": "dist-cjs/matter.js",
-  "module": "dist/matter.js",
-  "types": "dist/matter.d.ts"
+  "main": "dist/cjs/matter.js",
+  "module": "dist/es/matter.js",
+  "types": "dist/dts/matter.d.ts"
 }
