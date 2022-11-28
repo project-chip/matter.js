@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { ByteArray } from "../../src/util/ByteArray.js";
 import { TlvObject, TlvField } from "../../src/tlv/TlvObject.js";
 import { TlvString } from "../../src/tlv/TlvString.js";
 import { TlvBoolean } from "../../src/tlv/TlvBoolean.js";
@@ -28,7 +29,7 @@ import { strict as assert } from 'assert'
 
 type TestEntry = {
     name: string,
-    schema: any,  // `typeof TlvObject` didn't work 
+    schema: any,
     tlv: string,
     jsObj: any
 }
@@ -97,8 +98,8 @@ function testTlvSchemaEncode(testEntry:TestEntry)
     const testName = "TlvSchema.encode " + name
 
     it(testName, () => {
-        const tlvBuffer = schema.encode(jsObj)
-        const tlvHex = Buffer.from(tlvBuffer).toString("hex")
+        const tlvByteArray = schema.encode(jsObj)
+        const tlvHex = tlvByteArray.toHex()
         assert.equal(tlvHex, tlv)
     })
 
@@ -110,7 +111,7 @@ function testTlvSchemaDecode(testEntry:TestEntry)
     const testName = "TlvSchema.decode " + name
 
     it(testName, () => {
-        const tlvBuffer = Buffer.from(tlv, "hex")
+        const tlvBuffer = ByteArray.fromHex(tlv)
         const decoded = schema.decode(tlvBuffer)
         assert.deepEqual(decoded, jsObj)
     })
