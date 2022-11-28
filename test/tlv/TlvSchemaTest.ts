@@ -16,6 +16,7 @@
 
 import { ByteArray } from "../../src/util/ByteArray.js";
 import { TlvObject, TlvField } from "../../src/tlv/TlvObject.js";
+import { TlvSchema } from "../../src/tlv/TlvSchema.js";
 import { TlvString } from "../../src/tlv/TlvString.js";
 import { TlvBoolean } from "../../src/tlv/TlvBoolean.js";
 import { TlvArray } from "../../src/tlv/TlvArray.js";
@@ -27,11 +28,11 @@ import {
 
 import { strict as assert } from 'assert'
 
-type TestEntry = {
+type TestEntry<T> = {
     name: string,
-    schema: any,
+    schema: TlvSchema<T>,
     tlv: string,
-    jsObj: any
+    jsObj: T
 }
 
 const theTestTlvVector = [
@@ -92,7 +93,7 @@ const theTestTlvVector = [
     },
 ]
 
-function testTlvSchemaEncode(testEntry:TestEntry)
+function testTlvSchemaEncode(testEntry:TestEntry<any>)
 {
     const { name, schema, tlv, jsObj } = testEntry
     const testName = "TlvSchema.encode " + name
@@ -105,7 +106,7 @@ function testTlvSchemaEncode(testEntry:TestEntry)
 
 }
 
-function testTlvSchemaDecode(testEntry:TestEntry)
+function testTlvSchemaDecode(testEntry:TestEntry<any>)
 {
     const { name, schema, tlv, jsObj } = testEntry
     const testName = "TlvSchema.decode " + name
