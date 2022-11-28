@@ -26,8 +26,6 @@ import {
     TlvFloat, TlvDouble 
 } from "../../src/tlv/TlvNumber.js";
 
-import { strict as assert } from 'assert'
-
 type TestEntry<T> = {
     name: string,
     schema: TlvSchema<T>,
@@ -101,7 +99,7 @@ function testTlvSchemaEncode(testEntry:TestEntry<any>)
     it(testName, () => {
         const tlvByteArray = schema.encode(jsObj)
         const tlvHex = tlvByteArray.toHex()
-        assert.equal(tlvHex, tlv)
+        expect(tlvHex).toBe(tlv)
     })
 
 }
@@ -114,7 +112,7 @@ function testTlvSchemaDecode(testEntry:TestEntry<any>)
     it(testName, () => {
         const tlvBuffer = ByteArray.fromHex(tlv)
         const decoded = schema.decode(tlvBuffer)
-        assert.deepEqual(decoded, jsObj)
+        expect(decoded).toEqual(jsObj)
     })
 }
 
