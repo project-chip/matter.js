@@ -89,6 +89,40 @@ const theTestTlvVector = [
             fieldUInt64: 1,
         },
     },
+    {
+        name: "TlvObject: nested struct and array of struct",
+        schema: TlvObject({
+            fieldNested1: TlvField(1, TlvObject({
+                field1: TlvField(1, TlvString),
+                field2: TlvField(2, TlvString),
+            })),
+            fieldNested2: TlvField(2, TlvObject({
+                field1: TlvField(1, TlvString),
+                field2: TlvField(2, TlvString),
+            })),
+            fieldArrayOfStructs: TlvField(3, TlvArray(
+                TlvObject({
+                    fieldString: TlvField(5, TlvString),
+                })
+            )),
+        }),
+        tlv: "1535012c010574657374312c020574657374321835022c010574657374332c02057465737434183603152c0505746573743518152c0505746573743618152c05057465737437181818",
+        jsObj:{
+            fieldNested1: {
+                field1: "test1",
+                field2: "test2",
+            },
+            fieldNested2: {
+                field1: "test3",
+                field2: "test4",
+            },
+            fieldArrayOfStructs: [
+                { fieldString: "test5" },
+                { fieldString: "test6" },
+                { fieldString: "test7" },
+            ]
+        },
+    },
 ]
 
 function testTlvSchemaEncode(testEntry:TestEntry<any>)
