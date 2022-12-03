@@ -6,11 +6,7 @@
 
 import { Attribute, Cluster, Command, TlvNoArguments, TlvNoResponse } from "./Cluster.js";
 import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
-import { TlvBitmap, TlvEnum, TlvUInt8 } from "../tlv/TlvNumber.js";
-import { TlvSchema } from "../tlv/TlvSchema.js";
-import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
-import { TlvNullable } from "../tlv/TlvNullable.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
 
 /**
@@ -59,28 +55,28 @@ export const enum DyingLightEffectVariant {
 }
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.7.4.2 */
-const TlvEffectVariant = TlvUInt8 as TlvSchema<DyingLightEffectVariant | DelayedAllOffEffectVariant>;
+// const TlvEffectVariant = TlvUInt8 as TlvSchema<DyingLightEffectVariant | DelayedAllOffEffectVariant>;
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.7.4 */
-const TlvOffWithEffectRequest = TlvObject({
+/* const TlvOffWithEffectRequest = TlvObject({
     effectIdentifier: TlvField(0, TlvEnum<OnOffEffectIdentifier>()),
     effectVariant: TlvField(1, TlvEffectVariant),
 }) as TlvSchema<
     { effectIdentifier: OnOffEffectIdentifier.DelayedAllOff, effectVariant: DelayedAllOffEffectVariant } |
     { effectIdentifier: OnOffEffectIdentifier.DyingLight, effectVariant: DyingLightEffectVariant }
-    >;
+    >; */
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.7.4.2 */
-const TlvOnOffControlBitmap = TlvBitmap(TlvUInt8, {
+/* const TlvOnOffControlBitmap = TlvBitmap(TlvUInt8, {
     acceptOnlyWhenOn: BitFlag(1),
-})
+}) */
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.7.6. */
-const TlvOnWithTimedOffRequest = TlvObject({
+/* const TlvOnWithTimedOffRequest = TlvObject({
     onOffControl: TlvField(0, TlvOnOffControlBitmap),
     onTime: TlvField(1, TlvNullable(TlvUInt8.bound({ min: 0, max: 254 }))),
     offWaitTime: TlvField(2, TlvNullable(TlvUInt8.bound({ min: 0, max: 254 }))),
-});
+}); */
 
 /**
  * Attributes and commands for switching devices between 'On' and 'Off' states.
