@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BitField, BitFieldEnum, BitFlag, BitmapSchema } from "../../src/schema/BitmapSchema.js";
+import { ByteArray } from "../../src/matter.js";
+import { BitField, BitFieldEnum, BitFlag, BitmapSchema, ByteArrayBitmapSchema } from "../../src/schema/BitmapSchema.js";
 
 describe("BitmapSchema", () => {
     const enum EnumTest {
@@ -48,6 +49,43 @@ describe("BitmapSchema", () => {
                 flag2: true,
                 enumTest: EnumTest.VALUE_1,
                 numberTest: 1,
+            });
+        });
+    });
+});
+
+describe("ByteArrayBitmapSchema", () => {
+    const TestByteArrayBitmapSchema = ByteArrayBitmapSchema({
+        /** flag1 jsdoc */
+        flag1: BitFlag(0),
+
+        /** number jsdoc */
+        number: BitField(1, 14),
+
+        /** flag2 jsdoc */
+        flag2: BitFlag(15),
+    });
+
+    describe("encode", () => {
+        it("encodes a bitmap using the schema", () => {
+            const result = TestByteArrayBitmapSchema.encode({
+                flag1: true,
+                flag2: true,
+                number: 0X2000,
+            });
+
+            expect(result.toHex()).toBe("01c0");
+        });
+    });
+
+    describe("decode", () => {
+        it("decodes a bitmap using the schema", () => {
+            const result = TestByteArrayBitmapSchema.decode(ByteArray.fromHex("01c0"));
+
+            expect(result).toEqual({
+                flag1: true,
+                flag2: true,
+                number: 0X2000,
             });
         });
     });
