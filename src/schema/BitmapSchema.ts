@@ -22,7 +22,7 @@ export const BitFlag = (offset: number) => BitRange(BitRangeType.Flag, offset, 1
 
 /** Defines the bit position and bit length of a numeric value. */
 export interface BitField extends BitRange<number> { type: BitRangeType.Number }
-export const BitField = (offset: number, length: number ) => BitRange(BitRangeType.Number, offset, length) as BitField;
+export const BitField = (offset: number, length: number) => BitRange(BitRangeType.Number, offset, length) as BitField;
 
 /** Defines the bit position and bit length of an enum flag. */
 export interface BitFieldEnum<E extends number> extends BitRange<E> { type: BitRangeType.Enum }
