@@ -17,6 +17,10 @@ const schema = TlvObject({
     /** Optional field jsdoc */
     optionalField: TlvOptionalField(2, TlvString),
 });
+const schemaUnknownField1 = TlvObject({
+    /** Optional field jsdoc */
+    optionalField: TlvOptionalField(2, TlvString),
+});
 
 type CodecVector<I, E> = {[valueDescription: string]: { encoded: E, decoded: I }};
 
@@ -45,5 +49,11 @@ describe("TlvObject", () => {
                     .toEqual(decoded);
             });
         }
+
+        it("ignores unknown fields", () => {
+            const result = schemaUnknownField1.decode(schema.encode({ mandatoryField: 1, optionalField: "test" }));
+
+            expect(result).toEqual({ optionalField: "test" });
+        });
     });
 });
