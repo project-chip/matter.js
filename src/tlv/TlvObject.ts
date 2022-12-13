@@ -8,6 +8,7 @@ import { Merge } from "../util/Type.js";
 import { TlvType, TlvTag, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvAny } from "./TlvAny.js";
 
 export interface FieldType<T> {
     id: number,
@@ -71,8 +72,12 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
             if (profile !== undefined) throw new Error("Structure element tags should be context-specific.");
             if (id === undefined) throw new Error("Structure element tags should have an id.");
             const fieldName = this.fieldById[id];
-            if (fieldName === undefined) throw new Error(`Unknown field ${id}`);
-            const { field, name }= fieldName;
+            if (fieldName === undefined) {
+                // Ignore unknown field by decoding it as raw TLV so we skip forward the proper length.
+                TlvAny.decodeTlvInternalValue(reader, elementTypeLength);
+                continue;
+            }
+            const { field, name } = fieldName;
             result[name] = field.schema.decodeTlvInternalValue(reader, elementTypeLength);
         }
         this.validate(result);
