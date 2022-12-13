@@ -73,7 +73,7 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
             if (id === undefined) throw new Error("Structure element tags should have an id.");
             const fieldName = this.fieldById[id];
             if (fieldName === undefined) {
-                // Ignore unknown field
+                // Ignore unknown field by decoding it as raw TLV so we skip forward the proper length.
                 TlvAny.decodeTlvInternalValue(reader, elementTypeLength);
                 continue;
             }
