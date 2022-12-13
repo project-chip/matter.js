@@ -24,3 +24,16 @@ export * from "./tlv/TlvString.js";
 export * from "./tlv/TlvNumber.js";
 export * from "./tlv/TlvVoid.js";
 export * from "./tlv/TlvWrapper.js";
+
+export * from "./cluster/AccessControlCluster.js";
+export * from "./cluster/BasicInformationCluster.js";
+export * from "./cluster/BindingCluster.js";
+export * from "./cluster/BridgedDeviceBasicInformationCluster.js";
+export * from "./cluster/DescriptorCluster.js";
+export * from "./cluster/GeneralCommissioningCluster.js";
+export * from "./cluster/GroupsCluster.js";
+export * from "./cluster/IdentifyCluster.js";
+export * from "./cluster/LabelCluster.js";
+export * from "./cluster/OnOffCluster.js";
+export * from "./cluster/OperationalCredentialsCluster.js";
+export * from "./cluster/ScenesCluster.js";

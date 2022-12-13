@@ -6,3 +6,4 @@
 
 /** Merges two types into one. */
 export type Merge<A, B> = A & B extends infer AB ? { [K in keyof AB]: AB[K] } : never;
+export const Merge = <A, B>(a: A, b: B) => ({ ...a, ...b } as unknown as Merge<A, B>);
