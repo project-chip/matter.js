@@ -45,24 +45,36 @@ export const enum StatusCode {
     FailsafeRequired = 0xca,
 }
 
+/**
+ * @see {@link MatterCoreSpecificationV1_0}, section 10.6.1. StatusResponseMessage
+ */
 export const TlvStatusResponse = TlvObject({
     status: TlvField(0, TlvEnum<StatusCode>()),
     interactionModelRevision: TlvField(0xFF, TlvUInt8),
 });
 
+/**
+ * @see {@link MatterCoreSpecificationV1_0}, section 10.5.2. AttributePathIB
+ */
 const TlvAttributePath = TlvList({
     endpointId: TlvOptionalField(2, TlvUInt16),
     clusterId: TlvOptionalField(3, TlvUInt32),
     id: TlvOptionalField(4, TlvUInt32),
 });
 
+/**
+ * @see {@link MatterCoreSpecificationV1_0}, section 10.6.2. ReadRequestMessage
+ */
 export const TlvReadRequest = TlvObject({
     attributes: TlvField(0, TlvArray(TlvAttributePath)),
     isFabricFiltered: TlvField(3,  TlvBoolean),
     interactionModelRevision: TlvField(0xFF, TlvUInt8),
 });
 
-export const TlvDataReport = TlvObject({
+/**
+ * @see {@link MatterCoreSpecificationV1_0}, section 10.6.3. ReportDataMessage
+ */
+export const TlvReportData = TlvObject({
     subscriptionId: TlvOptionalField(0, TlvUInt32),
     values: TlvField(1, TlvArray(TlvObject({
         value: TlvField(1, TlvObject({
@@ -79,6 +91,9 @@ export const TlvDataReport = TlvObject({
     interactionModelRevision: TlvField(0xFF, TlvUInt8),
 });
 
+/**
+ * @see {@link MatterCoreSpecificationV1_0}, section 10.6.4. SubscribeRequestMessage
+ */
 export const TlvSubscribeRequest = TlvObject({
     keepSubscriptions: TlvField(0,  TlvBoolean),
     minIntervalFloorSeconds: TlvField(1, TlvUInt16),
@@ -106,12 +121,18 @@ export const TlvSubscribeRequest = TlvObject({
     }))),
 });
 
+/**
+ * @see {@link MatterCoreSpecificationV1_0}, section 10.6.5. SubscribeResponseMessage
+ */
 export const TlvSubscribeResponse = TlvObject({
     subscriptionId: TlvField(0, TlvUInt32),
     maxIntervalCeilingSeconds: TlvField(2, TlvUInt16),
     interactionModelRevision: TlvField(0xFF, TlvUInt8),
 });
 
+/**
+ * @see {@link MatterCoreSpecificationV1_0}, section 10.6.9. InvokeRequestMessage
+ */
 export const TlvInvokeRequest = TlvObject({
     suppressResponse: TlvField(0,  TlvBoolean),
     timedRequest: TlvField(1,  TlvBoolean),
@@ -126,6 +147,9 @@ export const TlvInvokeRequest = TlvObject({
     interactionModelRevision: TlvField(0xFF, TlvUInt8),
 });
 
+/**
+ * @see {@link MatterCoreSpecificationV1_0}, section 10.6.10. InvokeResponseMessage
+ */
 export const TlvInvokeResponse = TlvObject({
     suppressResponse: TlvField(0,  TlvBoolean),
     responses: TlvField(1, TlvArray(TlvObject({
