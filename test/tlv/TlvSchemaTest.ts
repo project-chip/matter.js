@@ -19,13 +19,13 @@ import { TlvObject, TlvField } from "../../src/tlv/TlvObject.js";
 import { TlvSchema } from "../../src/tlv/TlvSchema.js";
 import { TlvString } from "../../src/tlv/TlvString.js";
 import { TlvBoolean } from "../../src/tlv/TlvBoolean.js";
+import { TlvWrapper } from "../../src/tlv/TlvWrapper.js";
 import { TlvArray } from "../../src/tlv/TlvArray.js";
 import { 
     TlvUInt8, TlvUInt16, TlvUInt32, TlvUInt64, 
     TlvInt8, TlvInt16, TlvInt32, TlvInt64,
     TlvFloat, TlvDouble 
 } from "../../src/tlv/TlvNumber.js";
-import { TlvWrapper } from "../../src/matter.js";
 
 type TestEntry<T> = {
     name: string,
