@@ -19,6 +19,7 @@ import { TlvObject, TlvField } from "../../src/tlv/TlvObject.js";
 import { TlvSchema } from "../../src/tlv/TlvSchema.js";
 import { TlvString } from "../../src/tlv/TlvString.js";
 import { TlvBoolean } from "../../src/tlv/TlvBoolean.js";
+import { TlvWrapper } from "../../src/tlv/TlvWrapper.js";
 import { TlvArray } from "../../src/tlv/TlvArray.js";
 import { 
     TlvUInt8, TlvUInt16, TlvUInt32, TlvUInt64, 
@@ -31,6 +32,12 @@ type TestEntry<T> = {
     schema: TlvSchema<T>,
     tlv: string,
     jsObj: T
+}
+
+class CustomObject {
+    constructor(
+        readonly value: number,
+    ) {}
 }
 
 const theTestTlvVector = [
@@ -107,7 +114,7 @@ const theTestTlvVector = [
             )),
         }),
         tlv: "1535012c010574657374312c020574657374321835022c010574657374332c02057465737434183603152c0505746573743518152c0505746573743618152c05057465737437181818",
-        jsObj:{
+        jsObj: {
             fieldNested1: {
                 field1: "test1",
                 field2: "test2",
@@ -122,6 +129,12 @@ const theTestTlvVector = [
                 { fieldString: "test7" },
             ]
         },
+    },
+    { 
+        name: "TlvWrapper",
+        schema: new TlvWrapper(TlvUInt16, (object: CustomObject) => object.value, value => new CustomObject(value)),
+        tlv: "040c",
+        jsObj: new CustomObject(12),
     },
 ]
 
