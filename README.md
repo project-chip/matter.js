@@ -9,8 +9,8 @@ Implementation of Matter protocol in typescript with no native dependencies (and
 This is work in progress.
 
 Completed implementations:
-* TLV codec
-* 12 cluster defintions (including TLV structures for all messages)
+- [X] TLV codec (coder/decoder) and schema mapping and validation engine
+- [X] 12 cluster definitions (including TLV structures for all messages)
 
 ## matter.js usage
 
