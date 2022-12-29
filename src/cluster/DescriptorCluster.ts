@@ -48,12 +48,12 @@ export const DescriptorCluster = Cluster({
         serverList: Attribute(1, TlvArray(TlvClusterId), { default: [] }),
 
         /** List containing each cluster ID for the client clusters present on the endpoint instance. */
-        clientList: Attribute(3, TlvArray(TlvClusterId), { default: [] }),
+        clientList: Attribute(2, TlvArray(TlvClusterId), { default: [] }),
 
         /**
          * This indicates composition of the device type instance. Device type instance composition SHALL
          * include the endpoints in this list.
          */
-        partsList: Attribute(4, TlvArray(TlvEndpointNumber), { default: [] }),
+        partsList: Attribute(3, TlvArray(TlvEndpointNumber), { default: [] }),
     },
 });
