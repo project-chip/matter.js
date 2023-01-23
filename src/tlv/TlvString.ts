@@ -39,7 +39,9 @@ export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> ext
 
     override decodeTlvInternalValue(reader: TlvReader, typeLength: TlvTypeLength) {
         if (typeLength.type !== this.type) throw new Error(`Unexpected type ${typeLength.type}.`);
-        return reader.readPrimitive(typeLength) as TlvToPrimitive[T];
+        const value = reader.readPrimitive(typeLength) as TlvToPrimitive[T];
+        this.validate(value);
+        return value;
     }
 
     override validate({ length }: TlvToPrimitive[T]): void {
