@@ -43,8 +43,8 @@ export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> ext
     }
 
     override validate({ length }: TlvToPrimitive[T]): void {
-        if (length > this.maxLength) throw new Error(`Array is too long: ${length}, max ${this.maxLength}.`);
-        if (length < this.minLength) throw new Error(`Array is too short: ${length}, min ${this.minLength}.`);
+        if (length > this.maxLength) throw new Error(`String is too long: ${length}, max ${this.maxLength}.`);
+        if (length < this.minLength) throw new Error(`String is too short: ${length}, min ${this.minLength}.`);
     }
 
     bound({ minLength, maxLength, length }: LengthConstraints) {
