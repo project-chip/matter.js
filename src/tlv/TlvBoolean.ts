@@ -22,6 +22,10 @@ export class BooleanSchema extends TlvSchema<boolean> {
         if (typeLength.type !== TlvType.Boolean) throw new Error(`Unexpected type ${typeLength.type}.`)
         return typeLength.value;
     }
+
+    override validate(value: boolean): void {
+        if (typeof value !== "boolean") throw new Error(`Expected boolean, got ${typeof value}.`);
+    }
 }
 
 /** Boolean TLV schema. */

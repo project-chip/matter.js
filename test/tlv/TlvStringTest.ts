@@ -74,7 +74,7 @@ describe("TlvByteString", () => {
         });
     });
 
-    describe("validate", () => {
+    describe("validate ByteString", () => {
         const BoundedInt = TlvByteString.bound({ minLength: 4, maxLength: 6 });
 
         for (const testName in validateByteStringTestVector) {
@@ -89,4 +89,17 @@ describe("TlvByteString", () => {
             });
         }
     });
+
+    describe("validation", () => {
+        it("throws an error if the value is not a ByteString", () => {
+            expect(() => TlvByteString.validate(5 as any))
+                .toThrowError("Expected string, got number.");
+        });
+
+        it("throws an error if the value is not a String", () => {
+            expect(() => TlvString.validate(true as any))
+                .toThrowError("Expected string, got boolean.");
+        });
+    });
+
 });

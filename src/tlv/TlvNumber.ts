@@ -38,6 +38,7 @@ export class TlvNumericSchema<T extends bigint | number> extends TlvSchema<T> {
     }
 
     override validate(value: T): void {
+        if (typeof value !== "number" && typeof value !== 'bigint') throw new Error(`Expected number, got ${typeof value}.`);
         if (this.min !== undefined && value < this.min) throw new Error(`Invalid value: ${value} is below the minimum, ${this.min}.`);
         if (this.max !== undefined && value > this.max) throw new Error(`Invalid value: ${value} is above the maximum, ${this.max}.`);
     }

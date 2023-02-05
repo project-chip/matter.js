@@ -35,4 +35,15 @@ describe("TlvBoolean", () => {
             });
         }
     });
+
+    describe("validation", () => {
+        it("throws an error if the value is not a boolean", () => {
+            expect(() => TlvBoolean.validate("a" as any))
+                .toThrowError("Expected boolean, got string.");
+        });
+
+        it("does not throw an error if the value is a boolean", () => {
+            expect(TlvBoolean.validate(true)).toBe(undefined);
+        });
+    });
 });
