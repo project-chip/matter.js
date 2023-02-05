@@ -17,7 +17,7 @@ type LengthConstraints = {
 
 /**
  * Schema to encode an byte string or an Utf8 string in TLV.
- * 
+ *
  * @see {@link MatterCoreSpecificationV1_0} § A.11.2
  */
 export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> extends TlvSchema<TlvToPrimitive[T]> {

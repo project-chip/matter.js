@@ -6,11 +6,11 @@
 
 import { TlvType, TlvTag, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js"; 
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 /**
  * Schema to encode a boolean in TLV.
- * 
+ *
  * @see {@link MatterCoreSpecificationV1_0} § A.11.3
  */
 export class BooleanSchema extends TlvSchema<boolean> {

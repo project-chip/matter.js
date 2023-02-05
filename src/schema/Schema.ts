@@ -13,9 +13,11 @@ export abstract class Schema<T, E> {
     }
 
     /** Decodes the encoded data using the schema. */
-    decode(encoded: E): T {
+    decode(encoded: E, validate = true): T {
         const result = this.decodeInternal(encoded);
-        this.validate(result);
+        if (validate) {
+            this.validate(result);
+        }
         return result;
     }
 
