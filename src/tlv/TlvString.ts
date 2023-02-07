@@ -43,7 +43,8 @@ export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> ext
     }
 
     override validate(value: TlvToPrimitive[T]): void {
-        if (typeof value !== "string" && !(value instanceof Uint8Array) && !Buffer.isBuffer(value)) throw new Error(`Expected string, got ${typeof value}.`);
+        if (this.type === TlvType.Utf8String && typeof value !== "string") throw new Error(`Expected string, got ${typeof value}.`);
+        if (this.type === TlvType.ByteString && !(value instanceof Uint8Array)) throw new Error(`Expected Uint8Array, got ${typeof value}.`);
         if (value.length > this.maxLength) throw new Error(`String is too long: ${value.length}, max ${this.maxLength}.`);
         if (value.length < this.minLength) throw new Error(`String is too short: ${value.length}, min ${this.minLength}.`);
     }

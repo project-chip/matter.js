@@ -88,7 +88,7 @@ describe("TlvNumber", () => {
 
         it("throws an error if the value is not a bigint", () => {
             expect(() => TlvUInt32.validate(BigInt(12345678790) as any))
-                .toThrowError("Invalid value: 12345678790 is above the maximum, 4294967295.");
+                .toThrowError("Expected number, got bigint.");
         });
 
         it("does not throw an error if the value is a number", () => {

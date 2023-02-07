@@ -77,6 +77,12 @@ export class TlvNumberSchema extends TlvNumericSchema<number> {
             minValue(max, this.max),
         );
     }
+
+    override validate(value: number): void {
+        if (typeof value !== "number") throw new Error(`Expected number, got ${typeof value}.`);
+        if (this.min !== undefined && value < this.min) throw new Error(`Invalid value: ${value} is below the minimum, ${this.min}.`);
+        if (this.max !== undefined && value > this.max) throw new Error(`Invalid value: ${value} is above the maximum, ${this.max}.`);
+    }
 }
 
 export const TlvLongNumberSchema = TlvNumericSchema<number | bigint>;
