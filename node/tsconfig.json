@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "CommonJS",
+    "outDir": "dist",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "esModuleInterop": true,
+    "declaration": true,
+    "strict": true
+  },
+  "include": ["src/**/*.ts", "dts/*.d.ts"],
+}

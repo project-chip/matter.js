@@ -14,5 +14,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - run: npm ci
-    - run: npm run build --if-present
+    - run: npm run build
+    - run: npm run test
+    - run: cd node
+    - run: npm ci
+    - run: npm run build
     - run: npm run test

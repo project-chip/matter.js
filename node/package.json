@@ -1,0 +1,43 @@
+{
+    "name": "matter-node.js",
+    "version": "0.0.1",
+    "description": "Matter protocol for node.js",
+    "keywords": [
+      "iot",
+      "home automation",
+      "matter",
+      "smart device"
+    ],
+    "license": "Apache-2.0",
+    "author": "Project CHIP Authors",
+    "contributors": [
+      "Martin Turon <mturon@google.com>",
+      "Marco Fucci di Napoli <mfucci@gmail.com>"
+    ],
+    "bugs": {
+      "url": "https://github.com/project-chip/matter.js/issues"
+    },
+    "homepage": "https://github.com/project-chip/matter.js",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/project-chip/matter.js.git"
+    },
+    "scripts": {
+      "clean": "rm -rf build",
+      "build": "npm run clean; tsc",
+      "test": "TZ=utc mocha"
+    },
+    "devDependencies": {
+      "ts-node": "^10.5.0",
+      "typescript": "^4.5.5"
+    },
+    "dependencies": {
+      "@project-chip/matter.js": "../"
+    },
+    "files": [
+      "build/**/*"
+    ],
+    "main": "build/HelloMatter.js",
+    "types": "build/HelloMatter.d.ts"
+}
+  
