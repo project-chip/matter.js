@@ -14,6 +14,7 @@ export interface FieldType<T> {
     id: number,
     schema: TlvSchema<T>,
     optional?: boolean,
+    fallback?: T,
 };
 
 export interface OptionalFieldType<T> extends FieldType<T> {
@@ -80,6 +81,15 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
             const { field, name } = fieldName;
             result[name] = field.schema.decodeTlvInternalValue(reader, elementTypeLength);
         }
+        // Check mandatory fields and, if missing, populate with fallback value if defined.
+        for (const name in this.fieldDefinitions) {
+            const { optional, fallback } = this.fieldDefinitions[name];
+            if (optional) continue;
+            const value = result[name];
+            if (value !== undefined) continue;
+            if (fallback === undefined) throw new Error(`Missing mandatory field ${name}`);
+            result[name] = fallback;
+        }
         this.validate(result);
         return result as TypeFromFields<F>;
     }
@@ -97,8 +107,8 @@ export const TlvObject = <F extends TlvFields>(fields: F) => new ObjectSchema(fi
 /** List TLV schema. */
 export const TlvList = <F extends TlvFields>(fields: F) => new ObjectSchema(fields, TlvType.List);
 
-/** Object TLV mandatory field. */
-export const TlvField = <T>(id: number, schema: TlvSchema<T>) => ({ id, schema, optional: false }) as FieldType<T>;
+/** Object TLV mandatory field. A fallback value can be defined for backward compatibility.  */
+export const TlvField = <T>(id: number, schema: TlvSchema<T>, fallback?: T) => ({ id, schema, fallback, optional: false }) as FieldType<T>;
 
 /** Object TLV optional field. */
 export const TlvOptionalField = <T>(id: number, schema: TlvSchema<T>) => ({ id, schema, optional: true }) as OptionalFieldType<T>;
