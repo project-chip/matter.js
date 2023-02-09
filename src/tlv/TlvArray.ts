@@ -21,7 +21,7 @@ type LengthConstraints = {
  */
 export class ArraySchema<T> extends TlvSchema<T[]> {
     constructor(
-        private readonly elementSchema: TlvSchema<T>,
+        readonly elementSchema: TlvSchema<T>,
         private readonly minLength: number = 0,
         private readonly maxLength: number = 1024,
     ) {
