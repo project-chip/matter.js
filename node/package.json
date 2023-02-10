@@ -1,5 +1,5 @@
 {
-    "name": "matter-node.js",
+    "name": "@project-chip/node-matter.js",
     "version": "0.0.1",
     "description": "Matter protocol for node.js",
     "keywords": [
