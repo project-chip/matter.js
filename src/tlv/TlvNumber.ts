@@ -39,6 +39,10 @@ export class TlvNumericSchema<T extends bigint | number> extends TlvSchema<T> {
 
     override validate(value: T): void {
         if (typeof value !== "number" && typeof value !== 'bigint') throw new Error(`Expected number, got ${typeof value}.`);
+        this.validateBoundaries(value);
+    }
+
+    validateBoundaries(value: T): void {
         if (this.min !== undefined && value < this.min) throw new Error(`Invalid value: ${value} is below the minimum, ${this.min}.`);
         if (this.max !== undefined && value > this.max) throw new Error(`Invalid value: ${value} is above the maximum, ${this.max}.`);
     }
@@ -80,8 +84,7 @@ export class TlvNumberSchema extends TlvNumericSchema<number> {
 
     override validate(value: number): void {
         if (typeof value !== "number") throw new Error(`Expected number, got ${typeof value}.`);
-        if (this.min !== undefined && value < this.min) throw new Error(`Invalid value: ${value} is below the minimum, ${this.min}.`);
-        if (this.max !== undefined && value > this.max) throw new Error(`Invalid value: ${value} is above the maximum, ${this.max}.`);
+        this.validateBoundaries(value);
     }
 }
 
