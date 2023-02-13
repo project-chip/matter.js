@@ -12,6 +12,8 @@ import { ByteArray } from "../../src/util/ByteArray.js";
 import { TlvArray } from "../../src/tlv/TlvArray";
 import { TlvBoolean } from "../../src/tlv/TlvBoolean";
 import { TlvNullable } from "../../src/tlv/TlvNullable";
+import { FabricId, TlvFabricId } from "../../src/common/FabricId";
+import { FabricIndex, TlvFabricIndex } from "../../src/common/FabricIndex";
 
 const schema = TlvObject({
     /** Mandatory field jsdoc */
@@ -32,6 +34,13 @@ const schema = TlvObject({
 
     /** Nullable field jsdoc */
     nullableBoolean: TlvField(3, TlvNullable(TlvBoolean)),
+
+    /** Optional Wrapper bigint type */
+    optionalWrapperBigInt: TlvOptionalField(4, TlvFabricId),
+
+    /** Optional Wrapper number type */
+    optionalWrapperNumber: TlvOptionalField(5, TlvFabricIndex),
+
 });
 
 type CodecVector<I, E> = {[valueDescription: string]: { encoded: E, decoded: I }};
@@ -46,8 +55,10 @@ const codecVector: CodecVector<TypeFromSchema<typeof schema>, string> = {
             ],
             optionalString: "test",
             nullableBoolean: true,
+            optionalWrapperBigInt: new FabricId(BigInt(1)),
+            optionalWrapperNumber: new FabricIndex(2),
         },
-        encoded: "15360115240101300203000000181524010230020399999918182c020474657374290318"
+        encoded: "15360115240101300203000000181524010230020399999918182c020474657374290324040124050218"
     },
     "an object with minimum fields": {
         decoded: {
@@ -57,6 +68,17 @@ const codecVector: CodecVector<TypeFromSchema<typeof schema>, string> = {
             nullableBoolean: null,
         },
         encoded: "153601152401011818340318"
+    },
+    "an object without wrapped fields": {
+        decoded: {
+            arrayField: [
+                { mandatoryNumber: 1, optionalByteString: ByteArray.fromHex("000000") },
+                { mandatoryNumber: 2, optionalByteString: ByteArray.fromHex("999999") },
+            ],
+            optionalString: "test",
+            nullableBoolean: true,
+        },
+        encoded: "15360115240101300203000000181524010230020399999918182c020474657374290318"
     },
 };
 
@@ -105,6 +127,18 @@ const codecErrorVector: CodecErrorVector<TypeFromSchema<typeof schema>> = {
         },
         expectedError: "Expected number, got object."
     },
+    "an object with invalid number wrapper value": {
+        // @ts-ignore - Disable TS Compiler checks to proper test validation logic
+        structure: {
+            arrayField: [
+                { mandatoryNumber: 1 },
+            ],
+            nullableBoolean: null,
+            optionalWrapperNumber: new FabricIndex(0x12345678),
+        },
+        expectedError: "Invalid value: 305419896 is above the maximum, 254."
+    },
+
 };
 
 describe("TlvObject", () => {
@@ -136,6 +170,16 @@ describe("TlvObject", () => {
                 try {
                     schema.validate(structure);
                 } catch (error) {
+                    expect(error instanceof Error).toBe(true);
+                    expect((error as Error).message).toBe(expectedError || '');
+                }
+            });
+
+            it(`encodes ${valueDescription}, expect error`, () => {
+                try {
+                    schema.encode(structure);
+                } catch (error) {
+                    expect(error instanceof Error).toBe(true);
                     expect((error as Error).message).toBe(expectedError || '');
                 }
             });
