@@ -107,7 +107,11 @@ export const TlvObject = <F extends TlvFields>(fields: F) => new ObjectSchema(fi
 /** List TLV schema. */
 export const TlvList = <F extends TlvFields>(fields: F) => new ObjectSchema(fields, TlvType.List);
 
-/** Object TLV mandatory field. A fallback value can be defined for backward compatibility.  */
+/** 
+ * Object TLV mandatory field. Optionally provide a fallback value to initialize the field value when devices omit
+ * providing a value against the specifications or in special usecases. Make sure to use a value that is an equivalent
+ * to the value being empty.
+ */
 export const TlvField = <T>(id: number, schema: TlvSchema<T>, fallback?: T) => ({ id, schema, fallback, optional: false }) as FieldType<T>;
 
 /** Object TLV optional field. */
