@@ -8,6 +8,7 @@ import { TlvType, TlvCodec, TlvTag, TlvTypeLength, TlvToPrimitive } from "./TlvC
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { maxValue, minValue } from "../util/Number.js";
+import { ByteArray } from "../util/ByteArray";
 
 type LengthConstraints = {
     minLength?: number,
@@ -17,7 +18,7 @@ type LengthConstraints = {
 
 /**
  * Schema to encode an byte string or an Utf8 string in TLV.
- * 
+ *
  * @see {@link MatterCoreSpecificationV1_0} § A.11.2
  */
 export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> extends TlvSchema<TlvToPrimitive[T]> {
@@ -42,9 +43,11 @@ export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> ext
         return reader.readPrimitive(typeLength) as TlvToPrimitive[T];
     }
 
-    override validate({ length }: TlvToPrimitive[T]): void {
-        if (length > this.maxLength) throw new Error(`String is too long: ${length}, max ${this.maxLength}.`);
-        if (length < this.minLength) throw new Error(`String is too short: ${length}, min ${this.minLength}.`);
+    override validate(value: TlvToPrimitive[T]): void {
+        if (this.type === TlvType.Utf8String && typeof value !== "string") throw new Error(`Expected string, got ${typeof value}.`);
+        if (this.type === TlvType.ByteString && !(value instanceof ByteArray)) throw new Error(`Expected ByteArray, got ${typeof value}.`);
+        if (value.length > this.maxLength) throw new Error(`String is too long: ${value.length}, max ${this.maxLength}.`);
+        if (value.length < this.minLength) throw new Error(`String is too short: ${value.length}, min ${this.minLength}.`);
     }
 
     bound({ minLength, maxLength, length }: LengthConstraints) {

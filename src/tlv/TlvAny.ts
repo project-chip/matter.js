@@ -24,7 +24,7 @@ export class AnySchema extends TlvSchema<TlvStream> {
                 case TlvType.EndOfContainer:
                     writer.writeTag(typeLength, tagAssigned ?? tag);
                     break;
-                case TlvType.UnsignedInt: 
+                case TlvType.UnsignedInt:
                 case TlvType.SignedInt:
                 case TlvType.Float:
                 case TlvType.Utf8String:
@@ -44,7 +44,7 @@ export class AnySchema extends TlvSchema<TlvStream> {
         switch (typeLength.type) {
             case TlvType.Null:
             case TlvType.Boolean:
-            case TlvType.UnsignedInt: 
+            case TlvType.UnsignedInt:
             case TlvType.SignedInt:
             case TlvType.Float:
             case TlvType.Utf8String:
@@ -67,6 +67,14 @@ export class AnySchema extends TlvSchema<TlvStream> {
         }
         return tlvStream;
     }
+
+    override validate(tlvStream: TlvStream): void {
+        if (!Array.isArray(tlvStream)) throw new Error(`Expected TlvStream, got ${typeof tlvStream}.`);
+        tlvStream.forEach(({ typeLength }) => {
+            if (!typeLength || typeof typeLength !== "object") throw new Error(`Expected typeLength properties in TlvStream, got ${typeof typeLength}.`);
+            if (typeof typeLength.type !== "number") throw new Error(`Expected typeLength.type as number in TlvStream, got ${typeof typeLength.type}.`);
+        });
+    }
 }
 
-export const TlvAny = new AnySchema(); 
+export const TlvAny = new AnySchema();

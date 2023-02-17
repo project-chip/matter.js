@@ -6,7 +6,7 @@
 
 import { TlvType, TlvTag, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js"; 
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 type LengthConstraints = {
     minLength?: number,
@@ -16,12 +16,12 @@ type LengthConstraints = {
 
 /**
  * Schema to encode an array or string in TLV.
- * 
+ *
  * @see {@link MatterCoreSpecificationV1_0} § A.11.2 and A.11.4
  */
 export class ArraySchema<T> extends TlvSchema<T[]> {
     constructor(
-        private readonly elementSchema: TlvSchema<T>,
+        readonly elementSchema: TlvSchema<T>,
         private readonly minLength: number = 0,
         private readonly maxLength: number = 1024,
     ) {
@@ -43,13 +43,14 @@ export class ArraySchema<T> extends TlvSchema<T[]> {
             if (elementTypeLength.type === TlvType.EndOfContainer) break;
             result.push(this.elementSchema.decodeTlvInternalValue(reader, elementTypeLength));
         }
-        this.validate(result);
         return result;
     }
 
-    override validate({ length }: T[]): void {
-        if (length > this.maxLength) throw new Error(`Array is too long: ${length}, max ${this.maxLength}.`);
-        if (length < this.minLength) throw new Error(`Array is too short: ${length}, min ${this.minLength}.`);
+    override validate(data: T[]): void {
+        if (!Array.isArray(data)) throw new Error(`Expected array, got ${typeof data}.`);
+        if (data.length > this.maxLength) throw new Error(`Array is too long: ${data.length}, max ${this.maxLength}.`);
+        if (data.length < this.minLength) throw new Error(`Array is too short: ${data.length}, min ${this.minLength}.`);
+        data.forEach(element => this.elementSchema.validate(element));
     }
 }
 

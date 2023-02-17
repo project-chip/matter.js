@@ -23,6 +23,10 @@ export class VoidSchema extends TlvSchema<void> {
     override decodeTlvInternalValue(_reader: TlvReader, _typeLength: TlvTypeLength): void {
         throw new Error("decodeTlvInternalValue should never be called");
     }
+
+    override validate(data: void): void {
+        if (data !== undefined) throw new Error(`Expected void, got ${typeof data}.`);
+    }
 }
 
 /** Void TLV schema. */
