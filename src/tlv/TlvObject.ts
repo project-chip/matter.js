@@ -32,7 +32,7 @@ export type TypeFromFields<F extends TlvFields> = Merge<TypeForMandatoryFields<F
 
 /**
  * Schema to encode an object in TLV.
- * 
+ *
  * @see {@link MatterCoreSpecificationV1_0} § A.5.1 and § A.11.4
  */
 export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<F>> {
@@ -90,13 +90,15 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
             if (fallback === undefined) throw new Error(`Missing mandatory field ${name}`);
             result[name] = fallback;
         }
-        this.validate(result);
         return result as TypeFromFields<F>;
     }
 
     override validate(value: TypeFromFields<F>): void {
         for (const name in this.fieldDefinitions) {
-            if (!this.fieldDefinitions[name].optional && (value as any)[name] === undefined) throw new Error(`Missing mandatory field ${name}`);
+            const { optional, schema } = this.fieldDefinitions[name];
+            if (optional && (value as any)[name] === undefined) continue;
+            if (!optional && (value as any)[name] === undefined) throw new Error(`Missing mandatory field ${name}`);
+            schema.validate((value as any)[name]);
         }
     }
 }

@@ -59,7 +59,7 @@ describe("TlvNumber", () => {
         });
     });
 
-    describe("validate", () => {
+    describe("validate bound ranges", () => {
         const BoundedUint = TlvUInt32.bound({ min: 5, max: 10 });
 
         for (const testName in validateTestVector) {
@@ -73,5 +73,31 @@ describe("TlvNumber", () => {
                 }
             });
         }
+    });
+
+    describe("validate", () => {
+        it("throws an error if the value is not a number", () => {
+            expect(() => TlvUInt32.validate("a" as any))
+                .toThrowError("Expected number, got string.");
+        });
+
+        it("throws an error if the value is not a bigint", () => {
+            expect(() => TlvUInt64.validate("a" as any))
+                .toThrowError("Expected number, got string.");
+        });
+
+        it("throws an error if the value is not a bigint", () => {
+            expect(() => TlvUInt32.validate(BigInt(12345678790) as any))
+                .toThrowError("Expected number, got bigint.");
+        });
+
+        it("does not throw an error if the value is a number", () => {
+            expect(TlvUInt64.validate(12345)).toBe(undefined);
+        });
+
+        it("does not throw an error if the value is a bigint", () => {
+            expect(TlvUInt64.validate(BigInt(12345678790))).toBe(undefined);
+        });
+
     });
 });
