@@ -6,7 +6,7 @@ const config: Config = {
   testEnvironment: "node",
   collectCoverage: true,
   collectCoverageFrom: ['src/**/*.ts'],
-  coverageDirectory: "out/coverage",  
+  coverageDirectory: "out/coverage",
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.[jt]s$': '$1',
   },

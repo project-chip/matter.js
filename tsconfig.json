@@ -1,9 +1,15 @@
-/* Dev configuration */
 {
-  "extends": "./tsconfig.base.json",
-  "compilerOptions": {
-    "esModuleInterop": true, // Required fto remove warnings or jest test
-  },
-  /* During dev, src are included so they are also modified during refactorings. */
-  "include": ["src/**/*.ts", "test/**/*.ts"],
+    "compilerOptions": {
+        "incremental": true,
+        "target": "es2019",
+        "module": "commonjs",
+        "declaration": true,
+        "sourceMap": true,
+        "composite": true,
+        "strict": true,
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true
+    }
 }
