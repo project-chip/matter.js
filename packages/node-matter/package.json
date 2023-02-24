@@ -34,6 +34,9 @@
     "dependencies": {
         "@project-chip/matter.js": "^0.1.0"
     },
+    "engines": {
+        "node": ">=16.0.0"
+    },
     "files": [
         "dist/**/*"
     ],

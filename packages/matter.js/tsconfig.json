@@ -2,7 +2,7 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "esModuleInterop": true, // Required fto remove warnings or jest test
+    "esModuleInterop": true, // Required to remove warnings or jest test
     "composite": true
   },
   /* During dev, src are included, so they are also modified during refactorings. */

@@ -1,6 +1,5 @@
 {
     "compilerOptions": {
-        "incremental": true,
         "target": "es2019",
         "module": "commonjs",
         "declaration": true,
@@ -10,6 +9,11 @@
         "moduleResolution": "node",
         "esModuleInterop": true,
         "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitAny": true,
+        "noImplicitOverride": true,
+        "noUnusedParameters": true,
+        "noUnusedLocals": true,
+        "strictNullChecks": true
     }
 }

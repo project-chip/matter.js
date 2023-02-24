@@ -1,16 +1,5 @@
 {
-    "compilerOptions": {
-        "target": "ES2015",
-        "module": "ES2015",
-        "composite": true,
-        "moduleResolution": "node",
-        "noImplicitAny": true,
-        "noImplicitOverride": true,
-        "noUnusedParameters": true,
-        "noUnusedLocals": true,
-        "strictNullChecks": true,
-        "strict": true
-    },
+    "extends": "./tsconfig.json",
     "references": [
         { "path": "packages/matter.js" },
         { "path": "packages/node-matter" }
