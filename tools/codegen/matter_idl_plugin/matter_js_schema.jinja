@@ -1,0 +1,79 @@
+// AUTO-GENERATED with matter_idl.
+/**
+ * @license
+ * Copyright 2022 Project CHIP Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { AccessLevel, Attribute, Cluster, Command, TlvNoArguments, WritableAttribute } from "./Cluster.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvField, TlvObject } from "../tlv/TlvObject.js";
+import { TlvEnum, TlvUInt16, TlvUInt64 } from "../tlv/TlvNumber.js";
+import { TlvString } from "../tlv/TlvString.js";
+import { TypeFromSchema } from "../tlv/TlvSchema.js";
+import { TlvBoolean } from "../tlv/TlvBoolean.js";
+
+{%- if cluster.enums %}
+
+  // Enums
+{%-   for entry in cluster.enums %}
+export const enum {{entry.name}} {
+    {%-  for field in entry.entries %}
+    {{field.name}} = {{field.code}},{%   endfor %}
+}
+{%   endfor %}{% endif -%}
+{%- if cluster.bitmaps %}
+
+  // Bitmaps
+{%-   for entry in cluster.bitmaps %}
+export const enum {{entry.name}} {
+    {%-  for field in entry.entries %}
+    {{field.name}} = {{field.code}},{%   endfor %}
+}
+{%   endfor %}{% endif -%}
+{%- if cluster.structs %}
+
+  // Structs
+{%-   for entry in cluster.structs %}{% if not entry.tag %}
+const Tlv{{entry.name}} = TlvObject({
+    {%-  for field in entry.fields %}
+    {{field.name}}:  TlvField({{field.code}}, {{field | toTlvSchemaFullType}}),{%   endfor %}
+});
+{% endif %}{%   endfor %}{% endif -%}
+{%- if cluster.commands %}
+
+  // Commands
+{%-   for cmd in cluster.commands %}
+const Tlv{{cmd.name}}Request = TlvObject({
+{% if cmd.input_param %}{%-  for field in cmd | commandArgs(cluster) %}
+    {{field.name}}:  TlvField({{field.code}}, {{field | toTlvSchemaFullType}}),{% endfor %}{% endif %}
+});{% if cmd.output_param != "DefaultSuccess" %}
+
+const Tlv{{cmd.name}}Response = TlvObject({
+{% if cmd.output_param %}{%-  for field in cmd | commandResponseArgs(cluster) %}
+    {{field.name}}:  TlvField({{field.code}}, {{field | toTlvSchemaFullType}}),{% endfor %}{% endif %}
+});{% endif %}
+{%   endfor %}{% endif %}
+
+/**
+ * The {{cluster.name}} Cluster defintion.
+ */
+export const {{cluster.name}}Cluster = Cluster({
+    id: {{cluster.code}},
+    name: "{{cluster.name}}",
+    revision: 1,
+{%- if cluster.attributes %}
+
+    attributes: {
+{%-   for attr in cluster.attributes %}
+        {{attr.definition.name}}: Attribute({{attr.definition.code}}),  {{attr.definition.data_type.name | toTlvSchemaType}} }),
+{% endfor %}
+  }{% endif %}
+{%- if cluster.commands %}
+
+    commands: {
+{%-   for cmd in cluster.commands %}
+        {{cmd.name | toLowerCamelCase}}: Command({{cmd.code}}, Tlv{{cmd.name}}Request, {{cmd.code}}, Tlv{{cmd.name}}Response),
+{% endfor %}
+  }{% endif %}
+});
