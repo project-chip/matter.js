@@ -1,7 +1,0 @@
-{
-    "extends": "./tsconfig.json",
-    "references": [
-        { "path": "packages/matter.js" },
-        { "path": "packages/node-matter" }
-    ]
-}

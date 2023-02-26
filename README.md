@@ -1,8 +1,21 @@
-# matter.js
+# JavaScript/TypeScript based Matter Implementation
 
 ![experimental](https://img.shields.io/badge/status-Experimental-red) [![license](https://img.shields.io/badge/license-Apache2-green.svg)](https://raw.githubusercontent.com/project-chip/matter.js/master/LICENSE)
 
 Implementation of Matter protocol in typescript with no native dependencies (and very limited dependencies).
+
+## Monorepo Overview
+
+This repository contains multiple packages (and because of this it is a monorepo). The packages are contained in the `packages` directory and arer all published separately to NPM.
+
+* matter.js: the core Matter implementation in typescript which is JavaScript only and has no native dependencies.
+* matter-node.js: a node.js implementation of a Matter
+
+This repository uses the workspaces feature on npm to manage the dependencies between the packages. Because of this please only use `npm install` on the root of the repository. This will install all the dependencies for all the packages and also take care to create relevant symlinks between the packages.
+
+Additionally it uses typescript project references to allow IDE support for the dependencies. These depenencies need to be added to the tsconfig.json files if needed.
+
+You can build and test the packages separately or aly by using `npm run build` or `npm run test` on root package level.
 
 ## Current status
 

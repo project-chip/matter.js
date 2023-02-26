@@ -1,5 +1,5 @@
 {
-    "name": "@project-chip/node-matter.js",
+    "name": "@project-chip/matter-node.js",
     "version": "0.0.1",
     "description": "Matter protocol for node.js",
     "keywords": [
@@ -12,7 +12,8 @@
     "author": "Project CHIP Authors",
     "contributors": [
         "Martin Turon <mturon@google.com>",
-        "Marco Fucci di Napoli <mfucci@gmail.com>"
+        "Marco Fucci di Napoli <mfucci@gmail.com>",
+        "Ingo Fischer <github@fischer-ka.de>"
     ],
     "bugs": {
         "url": "https://github.com/project-chip/matter.js/issues"

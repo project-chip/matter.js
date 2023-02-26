@@ -1,9 +1,11 @@
 {
     "name": "matter.js-monorepo",
     "private": true,
-    "workspaces": ["packages/*"],
+    "workspaces": [
+        "packages/matter.js",
+        "packages/matter-node.js"
+    ],
     "scripts": {
-        "compile": "tsc --build tsconfig.build.json",
         "prepare": "npm run build",
         "build": "npm run build --workspaces",
         "test": "npm run test --workspaces"

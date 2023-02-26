@@ -12,7 +12,8 @@
   "author": "Project CHIP Authors",
   "contributors": [
     "Martin Turon <mturon@google.com>",
-    "Marco Fucci di Napoli <mfucci@gmail.com>"
+    "Marco Fucci di Napoli <mfucci@gmail.com>",
+    "Ingo Fischer <github@fischer-ka.de>"
   ],
   "bugs": {
     "url": "https://github.com/project-chip/matter.js/issues"
