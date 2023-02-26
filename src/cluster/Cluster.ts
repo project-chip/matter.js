@@ -28,7 +28,7 @@ interface AttributeOptions<T> { default?: T, readAcl?: AccessLevel, writeAcl?: A
 export const Attribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { default: conformanceValue, readAcl = AccessLevel.View }: AttributeOptions<V> = {}): Attribute<T> => ({ id, schema, optional: false, writable: false, default: conformanceValue, readAcl });
 export const OptionalAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { default: conformanceValue, readAcl = AccessLevel.View }: AttributeOptions<V> = {}): OptionalAttribute<T> => ({ id, schema, optional: true, writable: false, default: conformanceValue, readAcl });
 export const WritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { default: conformanceValue, readAcl = AccessLevel.View, writeAcl = AccessLevel.View }: AttributeOptions<V> = {}): WritableAttribute<T> => ({ id, schema, optional: false, writable: true, default: conformanceValue, readAcl, writeAcl });
-export const OptionalWritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { default: conformanceValue, readAcl = AccessLevel.View, writeAcl = AccessLevel.View }: AttributeOptions<V> = {}): WritableAttribute<T> => ({ id, schema, optional: true, writable: true, default: conformanceValue, readAcl, writeAcl });
+export const OptionalWritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { default: conformanceValue, readAcl = AccessLevel.View, writeAcl = AccessLevel.View }: AttributeOptions<V> = {}): OptionalWritableAttribute<T> => ({ id, schema, optional: true, writable: true, default: conformanceValue, readAcl, writeAcl });
 
 /* Interfaces and helper methods to define a cluster command */
 export const TlvNoArguments = TlvObject({});

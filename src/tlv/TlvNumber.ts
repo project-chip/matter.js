@@ -12,7 +12,7 @@ import { BitmapSchema, BitSchema, TypeFromBitSchema } from "../schema/BitmapSche
 
 /**
  * Schema to encode an unsigned integer in TLV.
- * 
+ *
  * @see {@link MatterCoreSpecificationV1_0} § A.11.1
  */
 export class TlvNumericSchema<T extends bigint | number> extends TlvSchema<T> {
@@ -34,12 +34,15 @@ export class TlvNumericSchema<T extends bigint | number> extends TlvSchema<T> {
     override decodeTlvInternalValue(reader: TlvReader, typeLength: TlvTypeLength) {
         if (typeLength.type !== this.type) throw new Error(`Unexpected type ${typeLength.type}, was expecting ${this.type}.`);
         const value = reader.readPrimitive(typeLength) as T;
-        this.validate(value);
         return value;
     }
 
     override validate(value: T): void {
-        super.validate(value);
+        if (typeof value !== "number" && typeof value !== 'bigint') throw new Error(`Expected number, got ${typeof value}.`);
+        this.validateBoundaries(value);
+    }
+
+    validateBoundaries(value: T): void {
         if (this.min !== undefined && value < this.min) throw new Error(`Invalid value: ${value} is below the minimum, ${this.min}.`);
         if (this.max !== undefined && value > this.max) throw new Error(`Invalid value: ${value} is above the maximum, ${this.max}.`);
     }
@@ -77,6 +80,11 @@ export class TlvNumberSchema extends TlvNumericSchema<number> {
             maxValue(min, this.min),
             minValue(max, this.max),
         );
+    }
+
+    override validate(value: number): void {
+        if (typeof value !== "number") throw new Error(`Expected number, got ${typeof value}.`);
+        this.validateBoundaries(value);
     }
 }
 
