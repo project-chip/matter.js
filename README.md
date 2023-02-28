@@ -6,7 +6,7 @@ Implementation of Matter protocol in typescript with no native dependencies (and
 
 ## Monorepo Overview
 
-This repository contains multiple packages (and because of this it is a monorepo). The packages are contained in the `packages` directory and arer all published separately to NPM.
+This repository contains multiple packages (and because of this it is a monorepo). The packages are contained in the `packages` directory and are all published separately to NPM.
 
 * matter.js: the core Matter implementation in typescript which is JavaScript only and has no native dependencies.
 * matter-node.js: a node.js implementation of a Matter
