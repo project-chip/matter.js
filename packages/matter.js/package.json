@@ -1,0 +1,49 @@
+{
+  "name": "@project-chip/matter.js",
+  "version": "0.2.1",
+  "description": "Matter protocol in pure js",
+  "keywords": [
+    "iot",
+    "home automation",
+    "matter",
+    "smart device"
+  ],
+  "license": "Apache-2.0",
+  "author": "Project CHIP Authors",
+  "contributors": [
+    "Martin Turon <mturon@google.com>",
+    "Marco Fucci di Napoli <mfucci@gmail.com>",
+    "Ingo Fischer <github@fischer-ka.de>"
+  ],
+  "bugs": {
+    "url": "https://github.com/project-chip/matter.js/issues"
+  },
+  "homepage": "https://github.com/project-chip/matter.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/project-chip/matter.js.git"
+  },
+  "scripts": {
+    "clean": "rm -rf dist; rm -rf out",
+    "build": "npm run clean; tsc --project tsconfig.dist-es.json; tsc --project tsconfig.dist-cjs.json; tsc --project tsconfig.dist-dts.json",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test-web": "karma start test/karma.conf.cjs"
+  },
+  "devDependencies": {
+    "@types/jasmine": "^4.3.0",
+    "jest": "^29.3.1",
+    "karma": "^6.4.1",
+    "karma-chrome-launcher": "^3.1.1",
+    "karma-coverage": "^2.2.0",
+    "karma-jasmine": "^5.1.0",
+    "karma-typescript": "^5.5.3",
+    "ts-jest": "^29.0.3",
+    "typescript": "^4.9.3"
+  },
+  "files": [
+    "dist/**/*"
+  ],
+  "main": "dist/cjs/matter.js",
+  "module": "dist/es/matter.js",
+  "types": "dist/dts/matter.d.ts"
+}
