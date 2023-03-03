@@ -83,55 +83,56 @@ const codecVector: CodecVector<TypeFromSchema<typeof schema>, string> = {
 };
 
 const codecErrorVector: CodecErrorVector<TypeFromSchema<typeof schema>> = {
+    // "as any" used to bypass TS compiler checks to properly test validation logic
     "an object with no fields": {
-        // @ts-ignore - Disable TS Compiler checks to proper test validation logic
-        structure: {},
+        structure: {} as any,
         expectedError: "Missing mandatory field arrayField"
     },
     "an object with empty array": {
-        // @ts-ignore - Disable TS Compiler checks to proper test validation logic
         structure: {
             arrayField: [
             ],
-        },
+        } as any,
         expectedError: "Array is too short: 0, min 1."
     },
     "an object with missing nullable value": {
-        // @ts-ignore - Disable TS Compiler checks to proper test validation logic
         structure: {
             arrayField: [
                 { mandatoryNumber: 1 },
             ],
-        },
+        } as any,
         expectedError: "Missing mandatory field nullableBoolean"
     },
     "an object with invalid datatype in array": {
         structure: {
             arrayField: [
-                // @ts-ignore - Disable TS Compiler checks to proper test validation logic
-                { mandatoryNumber: "test" },
+                {
+                    mandatoryNumber: "test"
+                }
             ],
-        },
+        } as any,
         expectedError: "Expected number, got string."
     },
     "an object with invalid datatype in array #2": {
         structure: {
             arrayField: [
                 {
-                    // @ts-ignore - Disable TS Compiler checks to proper test validation logic
                     mandatoryNumber: [
-                        { mandatoryNumber: 1 },
+                        {
+                            mandatoryNumber: 1
+                        },
                     ]
                 },
             ],
-        },
+        } as any,
         expectedError: "Expected number, got object."
     },
     "an object with invalid number wrapper value": {
-        // @ts-ignore - Disable TS Compiler checks to proper test validation logic
         structure: {
             arrayField: [
-                { mandatoryNumber: 1 },
+                {
+                    mandatoryNumber: 1
+                },
             ],
             nullableBoolean: null,
             optionalWrapperNumber: new FabricIndex(0x12345678),

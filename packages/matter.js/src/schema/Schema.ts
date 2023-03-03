@@ -26,5 +26,6 @@ export abstract class Schema<T, E> {
 
     /** Optional validator that can be used to enforce constraints on the data before encoding / after decoding. */
     validate(_value: T): void {
+        // Do nothing by default
     }
 }

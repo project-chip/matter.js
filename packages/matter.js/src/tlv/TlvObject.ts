@@ -15,7 +15,7 @@ export interface FieldType<T> {
     schema: TlvSchema<T>,
     optional?: boolean,
     fallback?: T,
-};
+}
 
 export interface OptionalFieldType<T> extends FieldType<T> {
     optional: true,
@@ -109,7 +109,7 @@ export const TlvObject = <F extends TlvFields>(fields: F) => new ObjectSchema(fi
 /** List TLV schema. */
 export const TlvList = <F extends TlvFields>(fields: F) => new ObjectSchema(fields, TlvType.List);
 
-/** 
+/**
  * Object TLV mandatory field. Optionally provide a fallback value to initialize the field value when devices omit
  * providing a value against the specifications or in special usecases. Make sure to use a value that is an equivalent
  * to the value being empty.

@@ -38,9 +38,9 @@ export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> ext
         writer.writePrimitive(typeLength, value);
     }
 
-    override decodeTlvInternalValue(reader: TlvReader, typeLength: TlvTypeLength) {
+    override decodeTlvInternalValue(reader: TlvReader, typeLength: TlvTypeLength): TlvToPrimitive[T] {
         if (typeLength.type !== this.type) throw new Error(`Unexpected type ${typeLength.type}.`);
-        return reader.readPrimitive(typeLength) as TlvToPrimitive[T];
+        return reader.readPrimitive(typeLength);
     }
 
     override validate(value: TlvToPrimitive[T]): void {

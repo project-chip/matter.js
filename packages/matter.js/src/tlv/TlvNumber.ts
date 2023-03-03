@@ -31,10 +31,9 @@ export class TlvNumericSchema<T extends bigint | number> extends TlvSchema<T> {
         writer.writePrimitive(typeLength, value);
     }
 
-    override decodeTlvInternalValue(reader: TlvReader, typeLength: TlvTypeLength) {
+    override decodeTlvInternalValue(reader: TlvReader, typeLength: TlvTypeLength): T {
         if (typeLength.type !== this.type) throw new Error(`Unexpected type ${typeLength.type}, was expecting ${this.type}.`);
-        const value = reader.readPrimitive(typeLength) as T;
-        return value;
+        return reader.readPrimitive(typeLength);
     }
 
     override validate(value: T): void {

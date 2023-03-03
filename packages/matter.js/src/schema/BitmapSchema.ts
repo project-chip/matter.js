@@ -105,7 +105,7 @@ class ByteArrayBitmapSchemaInternal<T extends BitSchema> extends Schema<TypeFrom
     }
 
     override encodeInternal(value: TypeFromBitSchema<T>) {
-        let result = new ByteArray(this.byteArrayLength);
+        const result = new ByteArray(this.byteArrayLength);
         for (const name in this.bitSchemas) {
             const { type } = this.bitSchemas[name];
             let { mask, bitOffset, byteOffset } = this.maskOffset[name];
@@ -114,7 +114,7 @@ class ByteArrayBitmapSchemaInternal<T extends BitSchema> extends Schema<TypeFrom
                     if (value[name]) result[byteOffset] |= mask;
                     break;
                 case BitRangeType.Enum:
-                case BitRangeType.Number:
+                case BitRangeType.Number: {
                     let numValue = value[name] as number;
                     while (mask !== 0) {
                         result[byteOffset++] |= ((numValue & mask) << bitOffset) & 0xFF;
@@ -123,6 +123,7 @@ class ByteArrayBitmapSchemaInternal<T extends BitSchema> extends Schema<TypeFrom
                         numValue = numValue >> bitWritten;
                         mask = mask >> 8;
                     }
+                }
             }
         }
         return result;
