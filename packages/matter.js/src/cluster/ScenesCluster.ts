@@ -51,7 +51,7 @@ const TlvAddSceneRequest = TlvObject({
     groupId: TlvField(0, TlvGroupId),
     sceneId: TlvField(1, TlvUInt8),
     transitionTime: TlvField(2, TlvUInt16),
-    sceneName: TlvField(3, TlvString.bound( { maxLength: 16 })),
+    sceneName: TlvField(3, TlvString.bound({ maxLength: 16 })),
     extensionFieldSets: TlvField(4, TlvArray(TlvExtensionFieldSet)),
 });
 
@@ -126,7 +126,7 @@ const TlvViewSceneResponse = TlvObject({
     groupId: TlvField(1, TlvGroupId),
     sceneId: TlvField(2, TlvUInt8),
     transitionTime: TlvOptionalField(3, TlvUInt16),
-    sceneName: TlvOptionalField(4, TlvString.bound( { maxLength: 16 })),
+    sceneName: TlvOptionalField(4, TlvString.bound({ maxLength: 16 })),
     extensionFieldSets: TlvOptionalField(5, TlvArray(TlvExtensionFieldSet)),
 });
 
@@ -188,7 +188,7 @@ export const ScenesCluster = Cluster({
     revision: 4,
     features: {
         /** The ability to store a name for a scene. */
-        sceneNames: BitFlag(0), 
+        sceneNames: BitFlag(0),
     },
 
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.7 */
@@ -203,7 +203,7 @@ export const ScenesCluster = Cluster({
         currentGroup: Attribute(2, TlvUInt16.bound({ min: 0, max: 0xfff7 }), { default: 0 }), /* formally type: groupId but limited range */
 
         /** Indicates whether the state of the server corresponds to that associated with the CurrentScene and CurrentGroup attributes. */
-        sceneValid: Attribute(3,  TlvBoolean, { default: false }),
+        sceneValid: Attribute(3, TlvBoolean, { default: false }),
 
         /**
          * This attribute provides legacy, read-only access to whether the Scene

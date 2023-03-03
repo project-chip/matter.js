@@ -8,11 +8,12 @@ import { ByteArray } from "../../src/util/ByteArray.js";
 import { TlvType } from "../../src/tlv/TlvCodec";
 import { TlvAny } from "../../src/tlv/TlvAny";
 
-type CodecVector<I, E> = {[valueDescription: string]: { encoded: I, decoded: E }};
+type CodecVector<I, E> = { [valueDescription: string]: { encoded: I, decoded: E } };
 
 const testVector: CodecVector<string, any> = {
-    "null": { encoded: "14", decoded: [ { tag: undefined, typeLength: { type: TlvType.Null }, value: null} ] },
-    "array": { encoded: "1618", decoded: [
+    "null": { encoded: "14", decoded: [{ tag: undefined, typeLength: { type: TlvType.Null }, value: null }] },
+    "array": {
+        encoded: "1618", decoded: [
             {
                 tag: undefined,
                 typeLength: {
@@ -25,7 +26,8 @@ const testVector: CodecVector<string, any> = {
                     type: TlvType.EndOfContainer
                 }
             }
-        ] },
+        ]
+    },
 };
 
 describe("TlvAny", () => {
@@ -57,7 +59,7 @@ describe("TlvAny", () => {
         });
 
         it("does not throw an error if the value is a boolean", () => {
-            expect(TlvAny.validate([ { typeLength: { type: TlvType.Null }} ])).toBe(undefined);
+            expect(TlvAny.validate([{ typeLength: { type: TlvType.Null } }])).toBe(undefined);
         });
     });
 });

@@ -43,8 +43,8 @@ const schema = TlvObject({
 
 });
 
-type CodecVector<I, E> = {[valueDescription: string]: { encoded: E, decoded: I }};
-type CodecErrorVector<I> = {[valueDescription: string]: { structure: I, expectedError?: string }};
+type CodecVector<I, E> = { [valueDescription: string]: { encoded: E, decoded: I } };
+type CodecErrorVector<I> = { [valueDescription: string]: { structure: I, expectedError?: string } };
 
 const codecVector: CodecVector<TypeFromSchema<typeof schema>, string> = {
     "an object with all fields": {

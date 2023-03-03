@@ -17,10 +17,10 @@ import { TlvArray } from "../tlv/TlvArray.js";
  */
 const TlvLabel = TlvObject({
     /** Contains a string as label without a further defined semantic n this base cluster. */
-    label: TlvField(0, TlvString.bound( { length: 16 } )), /* default: "" */
+    label: TlvField(0, TlvString.bound({ length: 16 })), /* default: "" */
 
     /** Contains a string as value without a further defined semantic n this base cluster. */
-    value: TlvField(1, TlvString.bound( { length: 16 } )), /* default: "" */
+    value: TlvField(1, TlvString.bound({ length: 16 })), /* default: "" */
 });
 
 /**

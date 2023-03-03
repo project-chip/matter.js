@@ -18,7 +18,7 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 export class VendorId {
     constructor(
         readonly id: number,
-    ) {}
+    ) { }
 }
 
 /** Data model for a Vendor Identifier. */

@@ -95,7 +95,7 @@ export const OnOffCluster = Cluster({
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.6 */
     attributes: {
         /** Indicates whether the device type implemented on the endpoint is turned off (false) or turned on (true). */
-        onOff: Attribute(0,  TlvBoolean, { default: false }), /* reportable: true, scene:true */
+        onOff: Attribute(0, TlvBoolean, { default: false }), /* reportable: true, scene:true */
 
         // The following attributes are only needed for "Level Control for Lighting" support
 

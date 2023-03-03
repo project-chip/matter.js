@@ -16,7 +16,7 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 export class DeviceTypeId {
     constructor(
         readonly id: number
-    ) {}
+    ) { }
 }
 
 /** Tlv schema for a Device type ID. */

@@ -16,7 +16,7 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 export class AttributeId {
     constructor(
         readonly id: number
-    ) {}
+    ) { }
 }
 
 /** Tlv schema for an Attribute Id. */

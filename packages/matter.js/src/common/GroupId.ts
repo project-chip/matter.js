@@ -23,7 +23,7 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 export class GroupId {
     constructor(
         readonly id: number,
-    ) {}
+    ) { }
 }
 
 /** Tlv Schema for a Group Id. */

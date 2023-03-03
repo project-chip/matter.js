@@ -15,7 +15,7 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
  */
 export class BooleanSchema extends TlvSchema<boolean> {
     override encodeTlvInternal(writer: TlvWriter, value: boolean, tag: TlvTag = {}): void {
-        writer.writeTag({ type: TlvType.Boolean, value },  tag);
+        writer.writeTag({ type: TlvType.Boolean, value }, tag);
     }
 
     override decodeTlvInternalValue(_reader: TlvReader, typeLength: TlvTypeLength) {

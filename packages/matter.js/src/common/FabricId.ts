@@ -14,10 +14,10 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
  *
  * @see {@link MatterCoreSpecificationV1_0} § 2.5.1
  */
- export class FabricId {
+export class FabricId {
     constructor(
         readonly id: bigint,
-    ) {}
+    ) { }
 }
 
 /** Tlv schema for a Node Identifier. */

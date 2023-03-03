@@ -16,7 +16,7 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 export class EndpointNumber {
     constructor(
         readonly number: number
-    ) {}
+    ) { }
 }
 
 /** Tlv schema for an Endpoint number. */

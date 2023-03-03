@@ -17,7 +17,7 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 export class ClusterId {
     constructor(
         readonly id: number
-    ) {}
+    ) { }
 }
 
 /** Tlv schema for a cluster Id. */

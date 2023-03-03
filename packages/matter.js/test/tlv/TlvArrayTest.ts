@@ -8,7 +8,7 @@ import { TlvArray } from "../../src/tlv/TlvArray.js";
 import { TlvString } from "../../src/tlv/TlvString.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 
-type TestVector<I, E> = {[testName: string]: { input: I, out: E }};
+type TestVector<I, E> = { [testName: string]: { input: I, out: E } };
 
 const validateTestVector: TestVector<string[], boolean> = {
     "validates an array with an acceptable length": { input: ["a", "b"], out: false },

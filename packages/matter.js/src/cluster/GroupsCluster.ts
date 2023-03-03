@@ -36,7 +36,7 @@ const TlvViewGroupRequest = TlvObject({
 const TlvViewGroupResponse = TlvObject({
     status: TlvField(0, TlvEnum<StatusCode>()),
     groupId: TlvField(1, TlvGroupId), /* min: 1 */
-    groupName: TlvField(2, TlvString.bound( { maxLength: 16 })),
+    groupName: TlvField(2, TlvString.bound({ maxLength: 16 })),
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.7.3 */
@@ -76,7 +76,7 @@ const TlvRemoveAllGroupResponse = TlvObject({
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.7.6 */
 const TlvAddGroupIfIdentifyingRequest = TlvObject({
     groupId: TlvField(0, TlvGroupId), /* min: 1 */
-    groupName: TlvField(1, TlvString.bound( { maxLength: 16 })),
+    groupName: TlvField(1, TlvString.bound({ maxLength: 16 })),
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.6.1 */

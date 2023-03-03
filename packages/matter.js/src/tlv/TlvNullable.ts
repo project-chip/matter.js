@@ -33,7 +33,7 @@ export class NullableSchema<T> extends TlvSchema<T | null> {
         if (typeLength.type === TlvType.Null) return null;
         return this.schema.decodeTlvInternalValue(reader, typeLength);
     }
-    
+
     override validate(value: T | null): void {
         if (value !== null) this.schema.validate(value);
     }

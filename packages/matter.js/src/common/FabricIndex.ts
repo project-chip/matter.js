@@ -18,10 +18,10 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
  *
  * @see {@link MatterCoreSpecificationV1_0} § 7.5.2
  */
- export class FabricIndex {
+export class FabricIndex {
     constructor(
         readonly index: number,
-    ) {}
+    ) { }
 }
 
 /** Tlv Schema for a Fabric Index. */

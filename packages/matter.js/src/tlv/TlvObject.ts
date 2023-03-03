@@ -36,7 +36,7 @@ export type TypeFromFields<F extends TlvFields> = Merge<TypeForMandatoryFields<F
  * @see {@link MatterCoreSpecificationV1_0} § A.5.1 and § A.11.4
  */
 export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<F>> {
-    private readonly fieldById = new Array<{ name: string, field: FieldType<any>}>();
+    private readonly fieldById = new Array<{ name: string, field: FieldType<any> }>();
 
     constructor(
         private readonly fieldDefinitions: F,

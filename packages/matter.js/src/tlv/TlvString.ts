@@ -33,7 +33,7 @@ export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> ext
     }
 
     override encodeTlvInternal(writer: TlvWriter, value: TlvToPrimitive[T], tag: TlvTag = {}): void {
-        const typeLength: TlvTypeLength = { type: this.type, length: TlvCodec.getUIntTlvLength(value.length)}
+        const typeLength: TlvTypeLength = { type: this.type, length: TlvCodec.getUIntTlvLength(value.length) }
         writer.writeTag(typeLength, tag);
         writer.writePrimitive(typeLength, value);
     }

@@ -7,7 +7,7 @@
 import { TlvByteString, TlvString } from "../../src/tlv/TlvString.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 
-type TestVector<I, E> = {[testName: string]: { input: I, out: E }};
+type TestVector<I, E> = { [testName: string]: { input: I, out: E } };
 
 const validateUtfStringTestVector: TestVector<string, boolean> = {
     "validates a string with an acceptable length": { input: "abcde", out: false },

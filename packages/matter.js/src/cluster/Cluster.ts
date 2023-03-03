@@ -93,7 +93,7 @@ export const Cluster = <F extends BitSchema, A extends Attributes, C extends Com
     attributes?: A,
     commands?: C,
     events?: E,
-} ):Cluster<F, Merge<A, GlobalAttributes<F>>, C, E> => ({
+}): Cluster<F, Merge<A, GlobalAttributes<F>>, C, E> => ({
     id,
     name,
     revision,

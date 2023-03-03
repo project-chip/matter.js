@@ -7,7 +7,7 @@
 import { TlvBoolean } from "../../src/tlv/TlvBoolean.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 
-type CodecVector<I, E> = {[valueDescription: string]: { encoded: I, decoded: E }};
+type CodecVector<I, E> = { [valueDescription: string]: { encoded: I, decoded: E } };
 
 const testVector: CodecVector<string, boolean> = {
     "true": { encoded: "09", decoded: true },

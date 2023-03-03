@@ -19,7 +19,7 @@ import { DataWriter } from "../util/DataWriter.js";
 export class NodeId {
     constructor(
         readonly id: bigint,
-    ) {}
+    ) { }
 
     toString() {
         const writer = new DataWriter(Endian.Big);

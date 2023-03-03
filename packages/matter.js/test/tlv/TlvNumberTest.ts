@@ -8,8 +8,8 @@ import { TlvUInt64, TlvUInt32, TlvFloat, TlvDouble, TlvInt64 } from "../../src/t
 import { ByteArray } from "../../src/util/ByteArray.js";
 import { Schema } from "../../src/schema/Schema.js";
 
-type CodecVector<I, E> = {[valueDescription: string]: { schema: Schema<number | bigint, ByteArray>, encoded: I, decoded: E }};
-type TestVector<I, E> = {[testName: string]: { input: I, out: E }};
+type CodecVector<I, E> = { [valueDescription: string]: { schema: Schema<number | bigint, ByteArray>, encoded: I, decoded: E } };
+type TestVector<I, E> = { [testName: string]: { input: I, out: E } };
 
 const codecVector: CodecVector<string, number | bigint> = {
     "a float": { schema: TlvFloat, decoded: 6546.25390625, encoded: "0a0892cc45" },

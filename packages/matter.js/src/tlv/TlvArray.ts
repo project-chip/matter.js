@@ -55,4 +55,4 @@ export class ArraySchema<T> extends TlvSchema<T[]> {
 }
 
 /** Array TLV schema. */
-export const TlvArray = <T>(elementSchema: TlvSchema<T>, {minLength, maxLength, length}: LengthConstraints = {}) => new ArraySchema(elementSchema, length ?? minLength, length ?? maxLength);
+export const TlvArray = <T>(elementSchema: TlvSchema<T>, { minLength, maxLength, length }: LengthConstraints = {}) => new ArraySchema(elementSchema, length ?? minLength, length ?? maxLength);

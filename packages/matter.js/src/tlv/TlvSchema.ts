@@ -11,7 +11,7 @@ import { Schema } from "../schema/Schema.js";
 import { TlvCodec, TlvTag, TlvToPrimitive, TlvTypeLength } from "./TlvCodec.js";
 
 export abstract class TlvSchema<T> extends Schema<T, ByteArray> implements TlvSchema<T> {
-    
+
     override decodeInternal(encoded: ByteArray): T {
         return this.decodeTlvInternal(new TlvByteArrayReader(encoded)).value;
     }
@@ -32,7 +32,7 @@ export abstract class TlvSchema<T> extends Schema<T, ByteArray> implements TlvSc
         return this.decodeTlvInternal(new TlvArrayReader(encoded)).value;
     }
 
-    decodeTlvInternal(reader: TlvReader): { value: T, tag?: TlvTag} {
+    decodeTlvInternal(reader: TlvReader): { value: T, tag?: TlvTag } {
         const { tag, typeLength } = reader.readTagType();
         return { tag, value: this.decodeTlvInternalValue(reader, typeLength) };
     }
@@ -71,7 +71,7 @@ export class TlvArrayReader implements TlvReader {
 
     constructor(
         private readonly tlvElements: TlvElement<any>[],
-    ) {}
+    ) { }
 
     readTagType() {
         this.index++;
