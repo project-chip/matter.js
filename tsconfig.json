@@ -15,5 +15,6 @@
         "noUnusedParameters": true,
         "noUnusedLocals": true,
         "strictNullChecks": true
-    }
+    },
+    "exclude": ["**/*.d.ts"]
 }
