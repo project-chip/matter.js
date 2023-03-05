@@ -1,4 +1,4 @@
-module.exports = {
+{
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": 2018, // Allows for the parsing of modern ECMAScript features
@@ -18,7 +18,7 @@ module.exports = {
     "env": {
         "node": true
     },
-    "ignorePatterns": ["**/*.d.ts"],
+    "ignorePatterns": ["**/*.d.ts", "build/**/*"],
     "rules": {
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/ban-types": [
@@ -36,10 +36,10 @@ module.exports = {
         "@typescript-eslint/no-unused-vars": [
             "warn",
             {
-                ignoreRestSiblings: true,
-                argsIgnorePattern: "^_",
-                varsIgnorePattern: "^Matter.*SpecificationV|^[A-Z]$"
-            },
+                "ignoreRestSiblings": true,
+                "argsIgnorePattern": "^_",
+                "varsIgnorePattern": "^Matter.*SpecificationV|^[A-Z]$"
+            }
         ],
 
         // We can turn this on from time to time but in general these rules
@@ -49,6 +49,8 @@ module.exports = {
         "@typescript-eslint/no-unsafe-member-access": "off",
         "@typescript-eslint/no-unsafe-return": "off",
         "@typescript-eslint/no-unsafe-call": "off",
+
+        "@typescript-eslint/restrict-template-expressions": "off",
 
         "no-constant-condition":[
             "error",
@@ -67,8 +69,8 @@ module.exports = {
                 "alwaysTryTypes": true, // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
 
                 // Multiple tsconfigs (Useful for monorepos)
-                "project": "packages/*/tsconfig.json",
+                "project": "packages/*/tsconfig.json"
             }
         }
     }
-};
+}

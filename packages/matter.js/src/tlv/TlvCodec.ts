@@ -181,7 +181,7 @@ export class TlvCodec {
                     case TlvLength.TwoBytes: return { type, value: true };
                     case TlvLength.FourBytes: return { type: TlvType.Float, length };
                     case TlvLength.EightBytes: return { type: TlvType.Float, length };
-                    default: throw new Error(`Unexpected Boolean length`);
+                    default: throw new Error(`Unexpected Boolean length ${length}`);
                 }
             default:
                 return { type: typeLength };
@@ -190,44 +190,77 @@ export class TlvCodec {
 
     public static readPrimitive<T extends TlvTypeLength, V = TlvToPrimitive[T["type"]]>(reader: DataReader<Endian.Little>, typeLength: T): V {
         switch (typeLength.type) {
-            case TlvType.SignedInt:
-                switch (typeLength.length) {
-                    case TlvLength.OneByte: return reader.readInt8() as V;
-                    case TlvLength.TwoBytes: return reader.readInt16() as V;
-                    case TlvLength.FourBytes: return reader.readInt32() as V;
-                    case TlvLength.EightBytes: return reader.readInt64() as V;
-                    default: throw new Error(`Unexpected SignedInt length`);
+            case TlvType.SignedInt: {
+                const length = typeLength.length;
+                switch (length) {
+                    case TlvLength.OneByte:
+                        return reader.readInt8() as V;
+                    case TlvLength.TwoBytes:
+                        return reader.readInt16() as V;
+                    case TlvLength.FourBytes:
+                        return reader.readInt32() as V;
+                    case TlvLength.EightBytes:
+                        return reader.readInt64() as V;
+                    default:
+                        throw new Error(`Unexpected SignedInt length ${length}`);
                 }
-            case TlvType.UnsignedInt:
-                switch (typeLength.length) {
-                    case TlvLength.OneByte: return reader.readUInt8() as V;
-                    case TlvLength.TwoBytes: return reader.readUInt16() as V;
-                    case TlvLength.FourBytes: return reader.readUInt32() as V;
-                    case TlvLength.EightBytes: return reader.readUInt64() as V;
-                    default: throw new Error(`Unexpected UnsignedInt length`);
+            }
+            case TlvType.UnsignedInt: {
+                const length = typeLength.length;
+                switch (length) {
+                    case TlvLength.OneByte:
+                        return reader.readUInt8() as V;
+                    case TlvLength.TwoBytes:
+                        return reader.readUInt16() as V;
+                    case TlvLength.FourBytes:
+                        return reader.readUInt32() as V;
+                    case TlvLength.EightBytes:
+                        return reader.readUInt64() as V;
+                    default:
+                        throw new Error(`Unexpected UnsignedInt length ${length}`);
                 }
-            case TlvType.Float:
-                switch (typeLength.length) {
-                    case TlvLength.FourBytes: return reader.readFloat() as V;
-                    case TlvLength.EightBytes: return reader.readDouble() as V;
-                    default: throw new Error(`Unexpected Float length`);
+            }
+            case TlvType.Float: {
+                const length = typeLength.length;
+                switch (length) {
+                    case TlvLength.FourBytes:
+                        return reader.readFloat() as V;
+                    case TlvLength.EightBytes:
+                        return reader.readDouble() as V;
+                    default:
+                        throw new Error(`Unexpected Float length ${length}`);
                 }
-            case TlvType.Utf8String:
-                switch (typeLength.length) {
-                    case TlvLength.OneByte: return reader.readUtf8String(reader.readUInt8()) as V;
-                    case TlvLength.TwoBytes: return reader.readUtf8String(reader.readUInt16()) as V;
-                    case TlvLength.FourBytes: return reader.readUtf8String(reader.readUInt32()) as V;
-                    case TlvLength.EightBytes: return reader.readUtf8String(Number(reader.readUInt64())) as V;
-                    default: throw new Error(`Unexpected Utf8String length`);
+            }
+            case TlvType.Utf8String: {
+                const length = typeLength.length;
+                switch (length) {
+                    case TlvLength.OneByte:
+                        return reader.readUtf8String(reader.readUInt8()) as V;
+                    case TlvLength.TwoBytes:
+                        return reader.readUtf8String(reader.readUInt16()) as V;
+                    case TlvLength.FourBytes:
+                        return reader.readUtf8String(reader.readUInt32()) as V;
+                    case TlvLength.EightBytes:
+                        return reader.readUtf8String(Number(reader.readUInt64())) as V;
+                    default:
+                        throw new Error(`Unexpected Utf8String length ${length}`);
                 }
-            case TlvType.ByteString:
-                switch (typeLength.length) {
-                    case TlvLength.OneByte: return reader.readByteArray(reader.readUInt8()) as V;
-                    case TlvLength.TwoBytes: return reader.readByteArray(reader.readUInt16()) as V;
-                    case TlvLength.FourBytes: return reader.readByteArray(reader.readUInt32()) as V;
-                    case TlvLength.EightBytes: return reader.readByteArray(Number(reader.readUInt64())) as V;
-                    default: throw new Error(`Unexpected ByteString length`);
+            }
+            case TlvType.ByteString: {
+                const length = typeLength.length;
+                switch (length) {
+                    case TlvLength.OneByte:
+                        return reader.readByteArray(reader.readUInt8()) as V;
+                    case TlvLength.TwoBytes:
+                        return reader.readByteArray(reader.readUInt16()) as V;
+                    case TlvLength.FourBytes:
+                        return reader.readByteArray(reader.readUInt32()) as V;
+                    case TlvLength.EightBytes:
+                        return reader.readByteArray(Number(reader.readUInt64())) as V;
+                    default:
+                        throw new Error(`Unexpected ByteString length ${length}`);
                 }
+            }
             case TlvType.Boolean:
                 return typeLength.value as V;
             case TlvType.Null:
@@ -288,20 +321,32 @@ export class TlvCodec {
         switch (typeLength.type) {
             case TlvType.SignedInt:
                 return this.writeUInt(writer, typeLength.length, value as TlvToPrimitive[typeof typeLength.type]);
-            case TlvType.UnsignedInt:
-                switch (typeLength.length) {
-                    case TlvLength.OneByte: return writer.writeUInt8(value as TlvToPrimitive[typeof typeLength.type]);
-                    case TlvLength.TwoBytes: return writer.writeUInt16(value as TlvToPrimitive[typeof typeLength.type]);
-                    case TlvLength.FourBytes: return writer.writeUInt32(value as TlvToPrimitive[typeof typeLength.type]);
-                    case TlvLength.EightBytes: return writer.writeUInt64(value as TlvToPrimitive[typeof typeLength.type]);
-                    default: throw new Error(`Unexpected UnsignedInt length`);
+            case TlvType.UnsignedInt: {
+                const length = typeLength.length;
+                switch (length) {
+                    case TlvLength.OneByte:
+                        return writer.writeUInt8(value as TlvToPrimitive[typeof typeLength.type]);
+                    case TlvLength.TwoBytes:
+                        return writer.writeUInt16(value as TlvToPrimitive[typeof typeLength.type]);
+                    case TlvLength.FourBytes:
+                        return writer.writeUInt32(value as TlvToPrimitive[typeof typeLength.type]);
+                    case TlvLength.EightBytes:
+                        return writer.writeUInt64(value as TlvToPrimitive[typeof typeLength.type]);
+                    default:
+                        throw new Error(`Unexpected UnsignedInt length ${length}`);
                 }
-            case TlvType.Float:
-                switch (typeLength.length) {
-                    case TlvLength.FourBytes: return writer.writeFloat(value as TlvToPrimitive[typeof typeLength.type]);
-                    case TlvLength.EightBytes: return writer.writeDouble(value as TlvToPrimitive[typeof typeLength.type]);
-                    default: throw new Error(`Unexpected Float length`);
+            }
+            case TlvType.Float: {
+                const length = typeLength.length;
+                switch (length) {
+                    case TlvLength.FourBytes:
+                        return writer.writeFloat(value as TlvToPrimitive[typeof typeLength.type]);
+                    case TlvLength.EightBytes:
+                        return writer.writeDouble(value as TlvToPrimitive[typeof typeLength.type]);
+                    default:
+                        throw new Error(`Unexpected Float length ${length}`);
                 }
+            }
             case TlvType.Utf8String: {
                 const string = value as TlvToPrimitive[typeof typeLength.type];
                 this.writeUInt(writer, typeLength.length, string.length);
