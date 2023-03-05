@@ -38,7 +38,7 @@
             {
                 "ignoreRestSiblings": true,
                 "argsIgnorePattern": "^_",
-                "varsIgnorePattern": "^Matter.*SpecificationV|^[A-Z]$"
+                "varsIgnorePattern": "^Matter.*SpecificationV"
             }
         ],
 

@@ -72,7 +72,7 @@ export interface Cluster<F extends BitSchema, A extends Attributes, C extends Co
     id: number,
     name: string,
     revision: number,
-    features: BitSchema,
+    features: F,
     attributes: A,
     commands: C,
     events: E,
