@@ -4,16 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TlvObject, TlvField, TlvOptionalField } from "../../src/tlv/TlvObject.js";
-import { TypeFromSchema } from "../../src/tlv/TlvSchema.js";
-import { TlvByteString, TlvString } from "../../src/tlv/TlvString.js";
-import { TlvUInt8 } from "../../src/tlv/TlvNumber.js";
-import { ByteArray } from "../../src/util/ByteArray.js";
+import { FabricId, TlvFabricId } from "../../src/common/FabricId";
+import { FabricIndex, TlvFabricIndex } from "../../src/common/FabricIndex";
 import { TlvArray } from "../../src/tlv/TlvArray";
 import { TlvBoolean } from "../../src/tlv/TlvBoolean";
 import { TlvNullable } from "../../src/tlv/TlvNullable";
-import { FabricId, TlvFabricId } from "../../src/common/FabricId";
-import { FabricIndex, TlvFabricIndex } from "../../src/common/FabricIndex";
+import { TlvUInt8 } from "../../src/tlv/TlvNumber.js";
+import { TlvField, TlvObject, TlvOptionalField } from "../../src/tlv/TlvObject.js";
+import { TypeFromSchema } from "../../src/tlv/TlvSchema.js";
+import { TlvByteString, TlvString } from "../../src/tlv/TlvString.js";
+import { ByteArray } from "../../src/util/ByteArray.js";
 
 const schema = TlvObject({
     /** Mandatory field jsdoc */

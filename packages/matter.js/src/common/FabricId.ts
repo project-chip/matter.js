@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvUInt64 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 /**
  * A Fabric ID is a 64-bit number that uniquely identifies the Fabric within the scope of

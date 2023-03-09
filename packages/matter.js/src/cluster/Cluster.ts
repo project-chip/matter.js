@@ -5,12 +5,12 @@
  */
 
 import { BitSchema, TypeFromBitSchema } from "../schema/BitmapSchema.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvBitmap, TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvFields, TlvObject, TypeFromFields } from "../tlv/TlvObject.js";
 import { TlvSchema } from "../tlv/TlvSchema.js";
 import { TlvVoid } from "../tlv/TlvVoid.js";
 import { Merge } from "../util/Type.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 export const enum AccessLevel {
     View,

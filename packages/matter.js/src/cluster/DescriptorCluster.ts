@@ -4,14 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Attribute, Cluster } from "./Cluster.js";
-import { TlvDeviceTypeId } from "../common/DeviceTypeId.js";
 import { TlvClusterId } from "../common/ClusterId.js";
+import { TlvDeviceTypeId } from "../common/DeviceTypeId.js";
 import { TlvEndpointNumber } from "../common/EndpointNumber.js";
-import { TlvField, TlvObject } from "../tlv/TlvObject.js";
-import { TlvUInt16 } from "../tlv/TlvNumber.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvArray } from "../tlv/TlvArray.js";
+import { TlvUInt16 } from "../tlv/TlvNumber.js";
+import { TlvField, TlvObject } from "../tlv/TlvObject.js";
+import { Attribute, Cluster } from "./Cluster.js";
 
 /**
  * Provides information about endpoint conformance to a release of a device type definition.

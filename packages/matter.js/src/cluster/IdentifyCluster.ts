@@ -4,19 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { BitFlag } from "../schema/BitmapSchema.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvEnum, TlvUInt16 } from "../tlv/TlvNumber.js";
+import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import {
     Attribute,
-    WritableAttribute,
     Cluster,
     Command,
     OptionalCommand,
+    TlvNoArguments,
     TlvNoResponse,
-    TlvNoArguments
+    WritableAttribute
 } from "./Cluster.js";
-import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
-import { TlvField, TlvObject } from "../tlv/TlvObject.js";
-import { TlvEnum, TlvUInt16 } from "../tlv/TlvNumber.js";
-import { BitFlag } from "../schema/BitmapSchema.js";
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.2.5.2 */
 export const enum IdentifyType {

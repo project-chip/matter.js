@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Merge } from "../util/Type.js";
-import { TlvType, TlvTag, TlvTypeLength } from "./TlvCodec.js";
-import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { Merge } from "../util/Type.js";
 import { TlvAny } from "./TlvAny.js";
+import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
+import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 
 export interface FieldType<T> {
     id: number;

@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { BitField, BitFieldEnum, BitmapSchema } from "../schema/BitmapSchema.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataReader } from "../util/DataReader.js";
 import { DataWriter } from "../util/DataWriter.js";
@@ -18,8 +20,6 @@ import {
     UINT32_MAX,
     UINT8_MAX
 } from "../util/Number.js";
-import { BitmapSchema, BitFieldEnum, BitField } from "../schema/BitmapSchema.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 /**
  * TLV element types.

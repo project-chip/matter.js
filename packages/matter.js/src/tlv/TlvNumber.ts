@@ -3,6 +3,8 @@
  * Copyright 2022 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+import { BitmapSchema, BitSchema, TypeFromBitSchema } from "../schema/BitmapSchema.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import {
     FLOAT32_MAX,
     FLOAT32_MIN,
@@ -21,11 +23,9 @@ import {
     UINT64_MAX,
     UINT8_MAX
 } from "../util/Number.js";
-import { TlvType, TlvCodec, TlvTag, TlvTypeLength, TlvLength } from "./TlvCodec.js";
+import { TlvCodec, TlvLength, TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvWrapper } from "./TlvWrapper.js";
-import { BitmapSchema, BitSchema, TypeFromBitSchema } from "../schema/BitmapSchema.js";
 
 /**
  * Schema to encode an unsigned integer in TLV.

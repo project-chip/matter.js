@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TlvUInt64, TlvUInt32, TlvFloat, TlvDouble, TlvInt64 } from "../../src/tlv/TlvNumber.js";
-import { ByteArray } from "../../src/util/ByteArray.js";
 import { Schema } from "../../src/schema/Schema.js";
+import { TlvDouble, TlvFloat, TlvInt64, TlvUInt32, TlvUInt64 } from "../../src/tlv/TlvNumber.js";
+import { ByteArray } from "../../src/util/ByteArray.js";
 
 type CodecVector<I, E> = {
     [valueDescription: string]: { schema: Schema<number | bigint, ByteArray>; encoded: I; decoded: E };

@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Schema } from "../schema/Schema.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataReader } from "../util/DataReader.js";
 import { DataWriter } from "../util/DataWriter.js";
-import { Schema } from "../schema/Schema.js";
 import { TlvCodec, TlvTag, TlvToPrimitive, TlvTypeLength } from "./TlvCodec.js";
 
 export abstract class TlvSchema<T> extends Schema<T, ByteArray> implements TlvSchema<T> {

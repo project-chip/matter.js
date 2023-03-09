@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-import { ByteArray } from "../../src/util/ByteArray.js";
-import { TlvObject, TlvField } from "../../src/tlv/TlvObject.js";
-import { TlvSchema } from "../../src/tlv/TlvSchema.js";
-import { TlvString } from "../../src/tlv/TlvString.js";
-import { TlvBoolean } from "../../src/tlv/TlvBoolean.js";
-import { TlvWrapper } from "../../src/tlv/TlvWrapper.js";
 import { TlvArray } from "../../src/tlv/TlvArray.js";
+import { TlvBoolean } from "../../src/tlv/TlvBoolean.js";
 import {
-    TlvUInt8,
-    TlvUInt16,
-    TlvUInt32,
-    TlvUInt64,
-    TlvInt8,
+    TlvDouble,
+    TlvFloat,
     TlvInt16,
     TlvInt32,
     TlvInt64,
-    TlvFloat,
-    TlvDouble
+    TlvInt8,
+    TlvUInt16,
+    TlvUInt32,
+    TlvUInt64,
+    TlvUInt8
 } from "../../src/tlv/TlvNumber.js";
+import { TlvField, TlvObject } from "../../src/tlv/TlvObject.js";
+import { TlvSchema } from "../../src/tlv/TlvSchema.js";
+import { TlvString } from "../../src/tlv/TlvString.js";
+import { TlvWrapper } from "../../src/tlv/TlvWrapper.js";
+import { ByteArray } from "../../src/util/ByteArray.js";
 
 type TestEntry<T> = {
     name: string;
