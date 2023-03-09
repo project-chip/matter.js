@@ -10,7 +10,7 @@ import { BitField, BitFieldEnum, BitFlag, BitmapSchema, ByteArrayBitmapSchema } 
 describe("BitmapSchema", () => {
     const enum EnumTest {
         VALUE_1 = 1,
-        VALUE_2 = 2,
+        VALUE_2 = 2
     }
 
     const TestBitmapSchema = BitmapSchema({
@@ -24,7 +24,7 @@ describe("BitmapSchema", () => {
         enumTest: BitFieldEnum<EnumTest>(5, 2),
 
         /** number jsdoc */
-        numberTest: BitField(7, 2),
+        numberTest: BitField(7, 2)
     });
 
     describe("encode", () => {
@@ -33,22 +33,22 @@ describe("BitmapSchema", () => {
                 flag1: true,
                 flag2: false,
                 enumTest: EnumTest.VALUE_2,
-                numberTest: 1,
+                numberTest: 1
             });
 
-            expect(result).toBe(0xC4);
+            expect(result).toBe(0xc4);
         });
     });
 
     describe("decode", () => {
         it("decodes a bitmap using the schema", () => {
-            const result = TestBitmapSchema.decode(0xB4);
+            const result = TestBitmapSchema.decode(0xb4);
 
             expect(result).toEqual({
                 flag1: true,
                 flag2: true,
                 enumTest: EnumTest.VALUE_1,
-                numberTest: 1,
+                numberTest: 1
             });
         });
     });
@@ -63,7 +63,7 @@ describe("ByteArrayBitmapSchema", () => {
         number: BitField(1, 14),
 
         /** flag2 jsdoc */
-        flag2: BitFlag(15),
+        flag2: BitFlag(15)
     });
 
     describe("encode", () => {
@@ -71,7 +71,7 @@ describe("ByteArrayBitmapSchema", () => {
             const result = TestByteArrayBitmapSchema.encode({
                 flag1: true,
                 flag2: true,
-                number: 0X2000,
+                number: 0x2000
             });
 
             expect(result.toHex()).toBe("01c0");
@@ -85,7 +85,7 @@ describe("ByteArrayBitmapSchema", () => {
             expect(result).toEqual({
                 flag1: true,
                 flag2: true,
-                number: 0X2000,
+                number: 0x2000
             });
         });
     });

@@ -15,14 +15,12 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
  * @see {@link MatterCoreSpecificationV1_0} § 2.5.1
  */
 export class FabricId {
-    constructor(
-        readonly id: bigint,
-    ) { }
+    constructor(readonly id: bigint) {}
 }
 
 /** Tlv schema for a Node Identifier. */
 export const TlvFabricId = new TlvWrapper<FabricId, number | bigint>(
     TlvUInt64,
     fabricId => fabricId.id,
-    value => new FabricId(BigInt(value)),
+    value => new FabricId(BigInt(value))
 );

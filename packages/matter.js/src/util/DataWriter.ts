@@ -14,9 +14,7 @@ export class DataWriter<E extends Endian> {
     private length = 0;
     private readonly chunks = new Array<ByteArray>();
 
-    constructor(
-        endian: E,
-    ) {
+    constructor(endian: E) {
         this.littleEndian = endian === Endian.Little;
     }
 

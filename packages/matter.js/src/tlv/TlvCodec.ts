@@ -7,7 +7,17 @@
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataReader } from "../util/DataReader.js";
 import { DataWriter } from "../util/DataWriter.js";
-import { INT16_MAX, INT16_MIN, INT32_MAX, INT32_MIN, INT8_MAX, INT8_MIN, UINT16_MAX, UINT32_MAX, UINT8_MAX } from "../util/Number.js";
+import {
+    INT16_MAX,
+    INT16_MIN,
+    INT32_MAX,
+    INT32_MIN,
+    INT8_MAX,
+    INT8_MIN,
+    UINT16_MAX,
+    UINT32_MAX,
+    UINT8_MAX
+} from "../util/Number.js";
 import { BitmapSchema, BitFieldEnum, BitField } from "../schema/BitmapSchema.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
@@ -20,14 +30,14 @@ export const enum TlvType {
     SignedInt = 0x00,
     UnsignedInt = 0x04,
     Boolean = 0x08,
-    Float = 0x0A,
-    Utf8String = 0x0C,
+    Float = 0x0a,
+    Utf8String = 0x0c,
     ByteString = 0x10,
     Null = 0x14,
     Structure = 0x15,
     Array = 0x16,
     List = 0x17,
-    EndOfContainer = 0x18,
+    EndOfContainer = 0x18
 }
 
 /** Byte length of the encoded value or length. */
@@ -35,17 +45,17 @@ export const enum TlvLength {
     OneByte = 0,
     TwoBytes = 1,
     FourBytes = 2,
-    EightBytes = 3,
+    EightBytes = 3
 }
 
 /** Type and length or value, when applicable. */
 export type TlvTypeLength =
-    { type: TlvType.SignedInt, length: TlvLength }
-    | { type: TlvType.UnsignedInt, length: TlvLength }
-    | { type: TlvType.Boolean, value: boolean }
-    | { type: TlvType.Float, length: TlvLength.FourBytes | TlvLength.EightBytes }
-    | { type: TlvType.Utf8String, length: TlvLength }
-    | { type: TlvType.ByteString, length: TlvLength }
+    | { type: TlvType.SignedInt; length: TlvLength }
+    | { type: TlvType.UnsignedInt; length: TlvLength }
+    | { type: TlvType.Boolean; value: boolean }
+    | { type: TlvType.Float; length: TlvLength.FourBytes | TlvLength.EightBytes }
+    | { type: TlvType.Utf8String; length: TlvLength }
+    | { type: TlvType.ByteString; length: TlvLength }
     | { type: TlvType.Null }
     | { type: TlvType.Structure }
     | { type: TlvType.Array }
@@ -54,17 +64,17 @@ export type TlvTypeLength =
 
 /** Converts {@link TlvType} to the js primitive type.  */
 export type TlvToPrimitive = {
-    [TlvType.SignedInt]: bigint | number,
-    [TlvType.UnsignedInt]: bigint | number,
-    [TlvType.Boolean]: never,
-    [TlvType.Float]: number,
-    [TlvType.Utf8String]: string,
-    [TlvType.ByteString]: ByteArray,
-    [TlvType.Null]: null,
-    [TlvType.Structure]: never,
-    [TlvType.Array]: never,
-    [TlvType.List]: never,
-    [TlvType.EndOfContainer]: never,
+    [TlvType.SignedInt]: bigint | number;
+    [TlvType.UnsignedInt]: bigint | number;
+    [TlvType.Boolean]: never;
+    [TlvType.Float]: number;
+    [TlvType.Utf8String]: string;
+    [TlvType.ByteString]: ByteArray;
+    [TlvType.Null]: null;
+    [TlvType.Structure]: never;
+    [TlvType.Array]: never;
+    [TlvType.List]: never;
+    [TlvType.EndOfContainer]: never;
 };
 
 /**
@@ -80,7 +90,7 @@ const enum TagControl {
     ImplicitProfile16 = 4,
     ImplicitProfile32 = 5,
     FullyQualified48 = 6,
-    FullyQualified64 = 7,
+    FullyQualified64 = 7
 }
 
 /**
@@ -90,7 +100,7 @@ const enum TagControl {
  */
 const ControlByteSchema = BitmapSchema({
     typeLength: BitField(0, 5),
-    tagControl: BitFieldEnum<TagControl>(5, 3),
+    tagControl: BitFieldEnum<TagControl>(5, 3)
 });
 
 /** {@link MatterCoreSpecificationV1_0} § 2.5.2 and § A.8.3 */
@@ -98,12 +108,11 @@ const MATTER_COMMON_PROFILE = 0x00000000;
 
 /** {@link MatterCoreSpecificationV1_0} § A.2 */
 export type TlvTag = {
-    profile?: number,
-    id?: number,
+    profile?: number;
+    id?: number;
 };
 
 export class TlvCodec {
-
     public static getUIntTlvLength(value: number | bigint) {
         if (value <= UINT8_MAX) {
             return TlvLength.OneByte;
@@ -141,7 +150,7 @@ export class TlvCodec {
     }
 
     /** @see {@link MatterCoreSpecificationV1_0} § A.7 */
-    public static readTagType(reader: DataReader<Endian.Little>): { tag?: TlvTag, typeLength: TlvTypeLength } {
+    public static readTagType(reader: DataReader<Endian.Little>): { tag?: TlvTag; typeLength: TlvTypeLength } {
         const { tagControl, typeLength } = ControlByteSchema.decode(reader.readUInt8());
         return { tag: this.readTag(reader, tagControl), typeLength: this.parseTypeLength(typeLength) };
     }
@@ -168,7 +177,7 @@ export class TlvCodec {
 
     private static parseTypeLength(typeLength: number): TlvTypeLength {
         const length = (typeLength & 0x03) as TlvLength;
-        const type = typeLength & 0xFC;
+        const type = typeLength & 0xfc;
         switch (type) {
             case TlvType.Utf8String:
             case TlvType.ByteString:
@@ -177,18 +186,26 @@ export class TlvCodec {
                 return { type, length };
             case TlvType.Boolean:
                 switch (length) {
-                    case TlvLength.OneByte: return { type, value: false };
-                    case TlvLength.TwoBytes: return { type, value: true };
-                    case TlvLength.FourBytes: return { type: TlvType.Float, length };
-                    case TlvLength.EightBytes: return { type: TlvType.Float, length };
-                    default: throw new Error(`Unexpected Boolean length ${length}`);
+                    case TlvLength.OneByte:
+                        return { type, value: false };
+                    case TlvLength.TwoBytes:
+                        return { type, value: true };
+                    case TlvLength.FourBytes:
+                        return { type: TlvType.Float, length };
+                    case TlvLength.EightBytes:
+                        return { type: TlvType.Float, length };
+                    default:
+                        throw new Error(`Unexpected Boolean length ${length}`);
                 }
             default:
                 return { type: typeLength };
         }
     }
 
-    public static readPrimitive<T extends TlvTypeLength, V = TlvToPrimitive[T["type"]]>(reader: DataReader<Endian.Little>, typeLength: T): V {
+    public static readPrimitive<T extends TlvTypeLength, V = TlvToPrimitive[T["type"]]>(
+        reader: DataReader<Endian.Little>,
+        typeLength: T
+    ): V {
         switch (typeLength.type) {
             case TlvType.SignedInt: {
                 const length = typeLength.length;
@@ -271,7 +288,11 @@ export class TlvCodec {
     }
 
     /** @see {@link MatterCoreSpecificationV1_0} § A.7 & A.8 */
-    public static writeTag(writer: DataWriter<Endian.Little>, typeLengthValue: TlvTypeLength, { profile, id }: TlvTag = {}) {
+    public static writeTag(
+        writer: DataWriter<Endian.Little>,
+        typeLengthValue: TlvTypeLength,
+        { profile, id }: TlvTag = {}
+    ) {
         let typeLength: number;
         switch (typeLengthValue.type) {
             case TlvType.Utf8String:
@@ -296,7 +317,7 @@ export class TlvCodec {
             writer.writeUInt8(id);
         } else if (profile === MATTER_COMMON_PROFILE) {
             if (id === undefined) throw new Error("Invalid TLV tag: id should be defined for a common profile.");
-            if ((id & 0xFFFF0000) === 0) {
+            if ((id & 0xffff0000) === 0) {
                 writer.writeUInt8(ControlByteSchema.encode({ tagControl: TagControl.CommonProfile16, typeLength }));
                 writer.writeUInt16(id);
             } else {
@@ -305,7 +326,7 @@ export class TlvCodec {
             }
         } else {
             if (id === undefined) throw new Error("Invalid TLV tag: id should be defined for a custom profile.");
-            if ((id & 0xFFFF0000) === 0) {
+            if ((id & 0xffff0000) === 0) {
                 writer.writeUInt8(ControlByteSchema.encode({ tagControl: TagControl.FullyQualified48, typeLength }));
                 writer.writeUInt32(profile);
                 writer.writeUInt16(id);
@@ -317,7 +338,11 @@ export class TlvCodec {
         }
     }
 
-    public static writePrimitive<T extends TlvTypeLength>(writer: DataWriter<Endian.Little>, typeLength: T, value: TlvToPrimitive[T["type"]]) {
+    public static writePrimitive<T extends TlvTypeLength>(
+        writer: DataWriter<Endian.Little>,
+        typeLength: T,
+        value: TlvToPrimitive[T["type"]]
+    ) {
         switch (typeLength.type) {
             case TlvType.SignedInt:
                 return this.writeUInt(writer, typeLength.length, value as TlvToPrimitive[typeof typeLength.type]);
@@ -366,10 +391,14 @@ export class TlvCodec {
 
     private static writeUInt(writer: DataWriter<Endian.Little>, length: TlvLength, value: number | bigint) {
         switch (length) {
-            case TlvLength.OneByte: return writer.writeInt8(value);
-            case TlvLength.TwoBytes: return writer.writeInt16(value);
-            case TlvLength.FourBytes: return writer.writeInt32(value);
-            case TlvLength.EightBytes: return writer.writeInt64(value);
+            case TlvLength.OneByte:
+                return writer.writeInt8(value);
+            case TlvLength.TwoBytes:
+                return writer.writeInt16(value);
+            case TlvLength.FourBytes:
+                return writer.writeInt32(value);
+            case TlvLength.EightBytes:
+                return writer.writeInt64(value);
         }
     }
 }

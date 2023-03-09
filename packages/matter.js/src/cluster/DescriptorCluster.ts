@@ -23,7 +23,7 @@ const TlvDeviceType = TlvObject({
     type: TlvField(0, TlvDeviceTypeId),
 
     /** Indicates the implemented revision of the device type definition */
-    revision: TlvField(1, TlvUInt16.bound({ min: 1 })),
+    revision: TlvField(1, TlvUInt16.bound({ min: 1 }))
 });
 
 /**
@@ -54,6 +54,6 @@ export const DescriptorCluster = Cluster({
          * This indicates composition of the device type instance. Device type instance composition SHALL
          * include the endpoints in this list.
          */
-        partsList: Attribute(3, TlvArray(TlvEndpointNumber), { default: [] }),
-    },
+        partsList: Attribute(3, TlvArray(TlvEndpointNumber), { default: [] })
+    }
 });

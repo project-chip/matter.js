@@ -19,14 +19,12 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
  * @see {@link MatterCoreSpecificationV1_0} § 7.5.2
  */
 export class FabricIndex {
-    constructor(
-        readonly index: number,
-    ) { }
+    constructor(readonly index: number) {}
 }
 
 /** Tlv Schema for a Fabric Index. */
 export const TlvFabricIndex = new TlvWrapper<FabricIndex, number>(
     TlvUInt8.bound({ min: 1, max: 254 }),
     farbricIndex => farbricIndex.index,
-    value => new FabricIndex(value),
+    value => new FabricIndex(value)
 );

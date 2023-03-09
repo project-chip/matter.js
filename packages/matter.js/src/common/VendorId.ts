@@ -16,14 +16,12 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
  * @see {@link MatterCoreSpecificationV1_0} § 2.5.2
  */
 export class VendorId {
-    constructor(
-        readonly id: number,
-    ) { }
+    constructor(readonly id: number) {}
 }
 
 /** Data model for a Vendor Identifier. */
 export const TlvVendorId = new TlvWrapper<VendorId, number>(
     TlvUInt16,
     vendorId => vendorId.id,
-    value => new VendorId(value),
+    value => new VendorId(value)
 );

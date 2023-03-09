@@ -11,7 +11,6 @@ import { TlvReader, TlvSchema, TlvStream, TlvWriter } from "./TlvSchema.js";
  * Schema to encode void.
  */
 export class VoidSchema extends TlvSchema<void> {
-
     override encodeTlvInternal(_writer: TlvWriter, _value: void, _tag?: TlvTag): void {
         // Nothing to do
     }

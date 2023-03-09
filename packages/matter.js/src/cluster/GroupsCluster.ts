@@ -17,49 +17,49 @@ import { StatusCode } from "../protocol/InteractionProtocol.js";
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.7.1 */
 const TlvAddGroupRequest = TlvObject({
-    groupId: TlvField(0, TlvGroupId), /* min: 1 */
-    groupName: TlvField(1, TlvString.bound({ maxLength: 16 })),
+    groupId: TlvField(0, TlvGroupId) /* min: 1 */,
+    groupName: TlvField(1, TlvString.bound({ maxLength: 16 }))
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.7.7 */
 const TlvAddGroupResponse = TlvObject({
     status: TlvField(0, TlvEnum<StatusCode>()),
-    groupId: TlvField(1, TlvGroupId), /* type: min: 1 */
+    groupId: TlvField(1, TlvGroupId) /* type: min: 1 */
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.7.2 */
 const TlvViewGroupRequest = TlvObject({
-    groupId: TlvField(0, TlvGroupId), /* type: min: 1 */
+    groupId: TlvField(0, TlvGroupId) /* type: min: 1 */
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.7.8 */
 const TlvViewGroupResponse = TlvObject({
     status: TlvField(0, TlvEnum<StatusCode>()),
-    groupId: TlvField(1, TlvGroupId), /* min: 1 */
-    groupName: TlvField(2, TlvString.bound({ maxLength: 16 })),
+    groupId: TlvField(1, TlvGroupId) /* min: 1 */,
+    groupName: TlvField(2, TlvString.bound({ maxLength: 16 }))
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.7.3 */
 const TlvGetGroupMembershipRequest = TlvObject({
-    groupList: TlvField(0, TlvArray(TlvGroupId)), /* groupId min: 1 */
+    groupList: TlvField(0, TlvArray(TlvGroupId)) /* groupId min: 1 */
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.7.9 */
 const TlvGetGroupMembershipResponse = TlvObject({
     /** contain the remaining capacity of the Group Table of the node. */
     capacity: TlvField(0, TlvNullable(TlvUInt8)),
-    groupList: TlvField(1, TlvArray(TlvGroupId)), /* groupId min: 1 */
+    groupList: TlvField(1, TlvArray(TlvGroupId)) /* groupId min: 1 */
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.7.4 */
 const TlvRemoveGroupRequest = TlvObject({
-    groupId: TlvField(0, TlvGroupId), /* min: 1 */
+    groupId: TlvField(0, TlvGroupId) /* min: 1 */
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.7.10 */
 const TlvRemoveGroupResponse = TlvObject({
     status: TlvField(0, TlvEnum<StatusCode>()),
-    groupId: TlvField(1, TlvGroupId), /* min: 1 */
+    groupId: TlvField(1, TlvGroupId) /* min: 1 */
 });
 
 /**
@@ -70,18 +70,18 @@ const TlvRemoveGroupResponse = TlvObject({
  * @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.7.5.1
  */
 const TlvRemoveAllGroupResponse = TlvObject({
-    status: TlvField(0, TlvEnum<StatusCode>()),
+    status: TlvField(0, TlvEnum<StatusCode>())
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.7.6 */
 const TlvAddGroupIfIdentifyingRequest = TlvObject({
-    groupId: TlvField(0, TlvGroupId), /* min: 1 */
-    groupName: TlvField(1, TlvString.bound({ maxLength: 16 })),
+    groupId: TlvField(0, TlvGroupId) /* min: 1 */,
+    groupName: TlvField(1, TlvString.bound({ maxLength: 16 }))
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.6.1 */
 const TlvNameSupportBitmap = TlvBitmap(TlvUInt8, {
-    groupNames: BitFlag(7),
+    groupNames: BitFlag(7)
 });
 
 /**
@@ -96,7 +96,7 @@ export const GroupsCluster = Cluster({
     revision: 4,
     features: {
         /** The ability to store a name for a group. */
-        groupNames: BitFlag(0),
+        groupNames: BitFlag(0)
     },
 
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.6 */
@@ -108,7 +108,7 @@ export const GroupsCluster = Cluster({
          *
          * TODO because we (will) support group names we need to set bit 7 to 1, rest is 0
          */
-        nameSupport: Attribute(0, TlvNameSupportBitmap, { default: { groupNames: true } }),
+        nameSupport: Attribute(0, TlvNameSupportBitmap, { default: { groupNames: true } })
     },
 
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.7 */
@@ -121,7 +121,7 @@ export const GroupsCluster = Cluster({
         /**
          * The ViewGroup command allows a client to request that the server responds with a ViewGroupResponse command
          * containing the name string for a particular group.
-         * 
+         *
          */
         viewGroup: Command(1, TlvViewGroupRequest, 0, TlvViewGroupResponse),
 
@@ -145,15 +145,15 @@ export const GroupsCluster = Cluster({
          * If the RemoveAllGroups command was received as unicast and a response is not suppressed, the server
          * SHALL generate a response with the Status field set to SUCCESS.
          * Else potentially no response?
-         * 
+         *
          */
         removeAllGroups: Command(4, TlvNoArguments, 4, TlvRemoveAllGroupResponse),
 
         /**
          * The AddGroupIfIdentifying command allows a client to add group membership in a particular group for the
          * server endpoint, on condition that the endpoint is identifying itself.
-         * 
+         *
          */
-        addGroupIfIdentifying: Command(5, TlvAddGroupIfIdentifyingRequest, 5, TlvNoResponse),
+        addGroupIfIdentifying: Command(5, TlvAddGroupIfIdentifyingRequest, 5, TlvNoResponse)
     }
 });

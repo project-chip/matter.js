@@ -11,9 +11,9 @@ import { maxValue, minValue } from "../util/Number.js";
 import { ByteArray } from "../util/ByteArray";
 
 type LengthConstraints = {
-    minLength?: number,
-    maxLength?: number,
-    length?: number,
+    minLength?: number;
+    maxLength?: number;
+    length?: number;
 };
 
 /**
@@ -22,18 +22,14 @@ type LengthConstraints = {
  * @see {@link MatterCoreSpecificationV1_0} § A.11.2
  */
 export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> extends TlvSchema<TlvToPrimitive[T]> {
-    constructor(
-        private type: T,
-        private readonly minLength: number = 0,
-        private readonly maxLength: number = 1024,
-    ) {
+    constructor(private type: T, private readonly minLength: number = 0, private readonly maxLength: number = 1024) {
         super();
 
         if (minLength < 0) throw new Error("Minimum length should be a positive number.");
     }
 
     override encodeTlvInternal(writer: TlvWriter, value: TlvToPrimitive[T], tag: TlvTag = {}): void {
-        const typeLength: TlvTypeLength = { type: this.type, length: TlvCodec.getUIntTlvLength(value.length) }
+        const typeLength: TlvTypeLength = { type: this.type, length: TlvCodec.getUIntTlvLength(value.length) };
         writer.writeTag(typeLength, tag);
         writer.writePrimitive(typeLength, value);
     }
@@ -44,14 +40,22 @@ export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> ext
     }
 
     override validate(value: TlvToPrimitive[T]): void {
-        if (this.type === TlvType.Utf8String && typeof value !== "string") throw new Error(`Expected string, got ${typeof value}.`);
-        if (this.type === TlvType.ByteString && !(value instanceof ByteArray)) throw new Error(`Expected ByteArray, got ${typeof value}.`);
-        if (value.length > this.maxLength) throw new Error(`String is too long: ${value.length}, max ${this.maxLength}.`);
-        if (value.length < this.minLength) throw new Error(`String is too short: ${value.length}, min ${this.minLength}.`);
+        if (this.type === TlvType.Utf8String && typeof value !== "string")
+            throw new Error(`Expected string, got ${typeof value}.`);
+        if (this.type === TlvType.ByteString && !(value instanceof ByteArray))
+            throw new Error(`Expected ByteArray, got ${typeof value}.`);
+        if (value.length > this.maxLength)
+            throw new Error(`String is too long: ${value.length}, max ${this.maxLength}.`);
+        if (value.length < this.minLength)
+            throw new Error(`String is too short: ${value.length}, min ${this.minLength}.`);
     }
 
     bound({ minLength, maxLength, length }: LengthConstraints) {
-        return new StringSchema(this.type, length ?? maxValue(this.minLength, minLength), length ?? minValue(this.maxLength, maxLength));
+        return new StringSchema(
+            this.type,
+            length ?? maxValue(this.minLength, minLength),
+            length ?? minValue(this.maxLength, maxLength)
+        );
     }
 }
 

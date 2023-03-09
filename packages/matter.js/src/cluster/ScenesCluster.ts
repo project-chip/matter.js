@@ -31,7 +31,7 @@ const TlvAttributeValuePair = TlvObject({
     attributeId: TlvField(0, TlvAttributeId),
 
     /** This is the attribute value as part of an extension field set. */
-    attributeValue: TlvField(1, TlvArray(TlvAny)),
+    attributeValue: TlvField(1, TlvArray(TlvAny))
 });
 
 /**
@@ -43,7 +43,7 @@ const TlvAttributeValuePair = TlvObject({
  */
 export const TlvExtensionFieldSet = TlvObject({
     clusterId: TlvField(0, TlvClusterId),
-    attributeValueList: TlvField(1, TlvArray(TlvAttributeValuePair)),
+    attributeValueList: TlvField(1, TlvArray(TlvAttributeValuePair))
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.9.2 and 1.4.9.9 */
@@ -52,47 +52,47 @@ const TlvAddSceneRequest = TlvObject({
     sceneId: TlvField(1, TlvUInt8),
     transitionTime: TlvField(2, TlvUInt16),
     sceneName: TlvField(3, TlvString.bound({ maxLength: 16 })),
-    extensionFieldSets: TlvField(4, TlvArray(TlvExtensionFieldSet)),
+    extensionFieldSets: TlvField(4, TlvArray(TlvExtensionFieldSet))
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.9.3 and § 1.4.9.10 */
 const TlvViewSceneRequest = TlvObject({
     groupId: TlvField(0, TlvGroupId),
-    sceneId: TlvField(1, TlvUInt8),
+    sceneId: TlvField(1, TlvUInt8)
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.9.4 */
 const TlvRemoveSceneRequest = TlvObject({
     groupId: TlvField(0, TlvGroupId),
-    sceneId: TlvField(1, TlvUInt8),
+    sceneId: TlvField(1, TlvUInt8)
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.9.5 */
 const TlvRemoveAllScenesRequest = TlvObject({
-    groupId: TlvField(0, TlvGroupId),
+    groupId: TlvField(0, TlvGroupId)
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.9.6 */
 const TlvStoreSceneRequest = TlvObject({
     groupId: TlvField(0, TlvGroupId),
-    sceneId: TlvField(1, TlvUInt8),
+    sceneId: TlvField(1, TlvUInt8)
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.9.7 */
 const TlvRecallSceneRequest = TlvObject({
     groupId: TlvField(0, TlvGroupId),
     sceneId: TlvField(1, TlvUInt8),
-    transitionTime: TlvOptionalField(2, TlvNullable(TlvUInt16)),
+    transitionTime: TlvOptionalField(2, TlvNullable(TlvUInt16))
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.9.8 */
 const TlvGetSceneMembershipRequest = TlvObject({
-    groupId: TlvField(0, TlvGroupId),
+    groupId: TlvField(0, TlvGroupId)
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.9.11.1 */
 const TlvScenesCopyMode = TlvBitmap(TlvUInt8, {
-    copyAllScenes: BitFlag(0),
+    copyAllScenes: BitFlag(0)
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.9.11 */
@@ -110,14 +110,14 @@ const TlvCopySceneRequest = TlvObject({
     TlvGroupIdo: TlvField(3, TlvGroupId),
 
     /** Specifies the identifier of the scene to which the scene is to be copied. */
-    sceneIdTo: TlvField(4, TlvUInt8),
+    sceneIdTo: TlvField(4, TlvUInt8)
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.9.12 and § 1.4.9.18 */
 const TlvAddSceneResponse = TlvObject({
     status: TlvField(0, TlvEnum<StatusCode>()),
     groupId: TlvField(1, TlvGroupId),
-    sceneId: TlvField(2, TlvUInt8),
+    sceneId: TlvField(2, TlvUInt8)
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.9.13 and § 1.4.9.19 */
@@ -127,27 +127,27 @@ const TlvViewSceneResponse = TlvObject({
     sceneId: TlvField(2, TlvUInt8),
     transitionTime: TlvOptionalField(3, TlvUInt16),
     sceneName: TlvOptionalField(4, TlvString.bound({ maxLength: 16 })),
-    extensionFieldSets: TlvOptionalField(5, TlvArray(TlvExtensionFieldSet)),
+    extensionFieldSets: TlvOptionalField(5, TlvArray(TlvExtensionFieldSet))
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.9.14 */
 const TlvRemoveSceneResponse = TlvObject({
     status: TlvField(0, TlvEnum<StatusCode>()),
     groupId: TlvField(1, TlvGroupId),
-    sceneId: TlvField(2, TlvUInt8),
+    sceneId: TlvField(2, TlvUInt8)
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.9.15 */
 const TlvRemoveAllScenesResponse = TlvObject({
     status: TlvField(0, TlvEnum<StatusCode>()),
-    groupId: TlvField(1, TlvGroupId),
+    groupId: TlvField(1, TlvGroupId)
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.9.16 */
 const TlvStoreSceneResponse = TlvObject({
     status: TlvField(0, TlvEnum<StatusCode>()),
     groupId: TlvField(1, TlvGroupId),
-    sceneId: TlvField(2, TlvUInt8),
+    sceneId: TlvField(2, TlvUInt8)
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.9.17 */
@@ -155,7 +155,7 @@ const TlvGetSceneMembershipResponse = TlvObject({
     status: TlvField(0, TlvEnum<StatusCode>()),
     capacity: TlvField(1, TlvNullable(TlvUInt8)),
     groupId: TlvField(2, TlvGroupId),
-    sceneList: TlvOptionalField(3, TlvArray(TlvUInt8)),
+    sceneList: TlvOptionalField(3, TlvArray(TlvUInt8))
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.9.20 */
@@ -167,12 +167,12 @@ const TlvCopySceneResponse = TlvObject({
     groupIdFrom: TlvField(1, TlvGroupId),
 
     /** Specifies the identifier of the scene from which the scene was copied. */
-    sceneIdFrom: TlvField(2, TlvUInt8),
+    sceneIdFrom: TlvField(2, TlvUInt8)
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.7.5 */
 const TlvNameSupportBitmap = TlvBitmap(TlvUInt8, {
-    sceneNames: BitFlag(7),
+    sceneNames: BitFlag(7)
 });
 
 /**
@@ -188,7 +188,7 @@ export const ScenesCluster = Cluster({
     revision: 4,
     features: {
         /** The ability to store a name for a scene. */
-        sceneNames: BitFlag(0),
+        sceneNames: BitFlag(0)
     },
 
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.7 */
@@ -200,7 +200,9 @@ export const ScenesCluster = Cluster({
         currentScene: Attribute(1, TlvUInt8, { default: 0 }),
 
         /** Holds the group identifier of the scene last invoked, or 0 if the scene last invoked is not associated with a group. */
-        currentGroup: Attribute(2, TlvUInt16.bound({ min: 0, max: 0xfff7 }), { default: 0 }), /* formally type: groupId but limited range */
+        currentGroup: Attribute(2, TlvUInt16.bound({ min: 0, max: 0xfff7 }), {
+            default: 0
+        }) /* formally type: groupId but limited range */,
 
         /** Indicates whether the state of the server corresponds to that associated with the CurrentScene and CurrentGroup attributes. */
         sceneValid: Attribute(3, TlvBoolean, { default: false }),
@@ -215,7 +217,7 @@ export const ScenesCluster = Cluster({
         nameSupport: Attribute(4, TlvNameSupportBitmap, { default: { sceneNames: true } }),
 
         /** Holds the Node ID (the IEEE address in case of Zigbee) of the node that last configured the Scene Table. */
-        lastConfiguredBy: OptionalAttribute(5, TlvNullable(TlvNodeId)),
+        lastConfiguredBy: OptionalAttribute(5, TlvNullable(TlvNodeId))
     },
 
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.9 */
@@ -274,6 +276,6 @@ export const ScenesCluster = Cluster({
          * Allows a client to efficiently copy scenes from one group/scene identifier pair to another group/scene
          * identifier pair.
          */
-        copyScene: OptionalCommand(0x42, TlvCopySceneRequest, 0x42, TlvCopySceneResponse),
-    },
+        copyScene: OptionalCommand(0x42, TlvCopySceneRequest, 0x42, TlvCopySceneResponse)
+    }
 });

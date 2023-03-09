@@ -21,14 +21,12 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
  * @see {@link MatterCoreSpecificationV1_0} § 2.5.4
  */
 export class GroupId {
-    constructor(
-        readonly id: number,
-    ) { }
+    constructor(readonly id: number) {}
 }
 
 /** Tlv Schema for a Group Id. */
 export const TlvGroupId = new TlvWrapper<GroupId, number>(
     TlvUInt16,
     groupId => groupId.id,
-    value => new GroupId(value),
+    value => new GroupId(value)
 );

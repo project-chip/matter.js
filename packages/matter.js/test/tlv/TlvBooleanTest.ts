@@ -7,21 +7,19 @@
 import { TlvBoolean } from "../../src/tlv/TlvBoolean.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 
-type CodecVector<I, E> = { [valueDescription: string]: { encoded: I, decoded: E } };
+type CodecVector<I, E> = { [valueDescription: string]: { encoded: I; decoded: E } };
 
 const testVector: CodecVector<string, boolean> = {
-    "true": { encoded: "09", decoded: true },
-    "false": { encoded: "08", decoded: false },
+    true: { encoded: "09", decoded: true },
+    false: { encoded: "08", decoded: false }
 };
 
 describe("TlvBoolean", () => {
-
     describe("encode", () => {
         for (const valueDescription in testVector) {
             const { encoded, decoded } = testVector[valueDescription];
             it(`encodes ${valueDescription}`, () => {
-                expect(TlvBoolean.encode(decoded).toHex())
-                    .toBe(encoded);
+                expect(TlvBoolean.encode(decoded).toHex()).toBe(encoded);
             });
         }
     });
@@ -30,16 +28,14 @@ describe("TlvBoolean", () => {
         for (const valueDescription in testVector) {
             const { encoded, decoded } = testVector[valueDescription];
             it(`decodes ${valueDescription}`, () => {
-                expect(TlvBoolean.decode(ByteArray.fromHex(encoded)))
-                    .toBe(decoded);
+                expect(TlvBoolean.decode(ByteArray.fromHex(encoded))).toBe(decoded);
             });
         }
     });
 
     describe("validation", () => {
         it("throws an error if the value is not a boolean", () => {
-            expect(() => TlvBoolean.validate("a" as any))
-                .toThrowError("Expected boolean, got string.");
+            expect(() => TlvBoolean.validate("a" as any)).toThrowError("Expected boolean, got string.");
         });
 
         it("does not throw an error if the value is a boolean", () => {

@@ -11,7 +11,16 @@ import { TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvField } from "../tlv/TlvObject.js";
 import { TlvString, TlvString256max, TlvString32max, TlvString64max } from "../tlv/TlvString.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-import { AccessLevel, Attribute, Cluster, Event, EventPriority, OptionalAttribute, OptionalEvent, OptionalWritableAttribute } from "./Cluster.js";
+import {
+    AccessLevel,
+    Attribute,
+    Cluster,
+    Event,
+    EventPriority,
+    OptionalAttribute,
+    OptionalEvent,
+    OptionalWritableAttribute
+} from "./Cluster.js";
 
 /**
  * This Cluster serves two purposes towards a Node communicating with a Bridge:
@@ -74,7 +83,7 @@ export const BridgedDeviceBasicInformationCluster = Cluster({
         reachable: Attribute(17, TlvBoolean, { default: true }),
 
         /** Unique identifier for the device, which is constructed in a manufacturer specific manner, updated during factory reset. */
-        uniqueId: OptionalAttribute(18, TlvString32max),
+        uniqueId: OptionalAttribute(18, TlvString32max)
     },
 
     /** @see {@link MatterCoreSpecificationV1_0} § 11.1.6.5 */
@@ -89,6 +98,6 @@ export const BridgedDeviceBasicInformationCluster = Cluster({
         leave: OptionalEvent(2, EventPriority.Info, { fabricIndex: TlvField(0, TlvFabricIndex) }),
 
         /** Fired when there is a change in the {@link BasicInformationCluster.attributes.reachable reachable} attribute */
-        reachableChanged: Event(3, EventPriority.Info, { reachableNewValue: TlvField(0, TlvBoolean) }),
-    },
+        reachableChanged: Event(3, EventPriority.Info, { reachableNewValue: TlvField(0, TlvBoolean) })
+    }
 });

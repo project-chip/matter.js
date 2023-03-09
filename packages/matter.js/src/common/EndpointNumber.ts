@@ -14,14 +14,12 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
  * @see {@link MatterCoreSpecificationV1_0} § 7.18.2.11
  */
 export class EndpointNumber {
-    constructor(
-        readonly number: number
-    ) { }
+    constructor(readonly number: number) {}
 }
 
 /** Tlv schema for an Endpoint number. */
 export const TlvEndpointNumber = new TlvWrapper<EndpointNumber, number>(
     TlvUInt16,
     endpointNumber => endpointNumber.number,
-    value => new EndpointNumber(value),
+    value => new EndpointNumber(value)
 );

@@ -14,14 +14,12 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
  * @see {@link MatterCoreSpecificationV1_0} § 7.15
  */
 export class DeviceTypeId {
-    constructor(
-        readonly id: number
-    ) { }
+    constructor(readonly id: number) {}
 }
 
 /** Tlv schema for a Device type ID. */
 export const TlvDeviceTypeId = new TlvWrapper<DeviceTypeId, number>(
     TlvUInt32,
     deviceTypeId => deviceTypeId.id,
-    value => new DeviceTypeId(value),
+    value => new DeviceTypeId(value)
 );

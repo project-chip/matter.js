@@ -1,15 +1,15 @@
-import type { Config } from 'jest';
+import type { Config } from "jest";
 
 const config: Config = {
     testMatch: ["<rootDir>/test/**/*.ts"],
     preset: "ts-jest",
     testEnvironment: "node",
     collectCoverage: true,
-    collectCoverageFrom: ['src/**/*.ts'],
+    collectCoverageFrom: ["src/**/*.ts"],
     coverageDirectory: "out/coverage",
     moduleNameMapper: {
-        '^(\\.{1,2}/.*)\\.[jt]s$': '$1',
-    },
+        "^(\\.{1,2}/.*)\\.[jt]s$": "$1"
+    }
 };
 
 export default config;

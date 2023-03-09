@@ -4,7 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Attribute, WritableAttribute, Cluster, Command, OptionalCommand, TlvNoResponse, TlvNoArguments } from "./Cluster.js";
+import {
+    Attribute,
+    WritableAttribute,
+    Cluster,
+    Command,
+    OptionalCommand,
+    TlvNoResponse,
+    TlvNoArguments
+} from "./Cluster.js";
 import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvEnum, TlvUInt16 } from "../tlv/TlvNumber.js";
@@ -17,7 +25,7 @@ export const enum IdentifyType {
     VisibleLED = 2,
     AudibleBeep = 3,
     Display = 4,
-    Actuator = 5,
+    Actuator = 5
 }
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.2.6.3.1 */
@@ -27,28 +35,28 @@ export const enum IdentifyEffectIdentifier {
     Okay = 2,
     ChannelChange = 0x0b,
     FinishEffect = 0xfe,
-    StopEffect = 0xff,
+    StopEffect = 0xff
 }
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.2.6.3.2 */
 export const enum EffectVariant {
-    Default = 0,
+    Default = 0
 }
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.2.6.1 */
 const TlvIdentifyRequest = TlvObject({
-    identifyTime: TlvField(0, TlvUInt16),
+    identifyTime: TlvField(0, TlvUInt16)
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.2.6.3 */
 const TlvTriggerEffectRequest = TlvObject({
     effectIdentifier: TlvField(0, TlvEnum<IdentifyEffectIdentifier>()),
-    effectVariant: TlvField(1, TlvEnum<EffectVariant>()),
+    effectVariant: TlvField(1, TlvEnum<EffectVariant>())
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.2.6.4 */
 const TlvIdentifyQueryResponse = TlvObject({
-    timeout: TlvField(0, TlvUInt16),
+    timeout: TlvField(0, TlvUInt16)
 });
 
 /**
@@ -62,16 +70,16 @@ export const IdentifyCluster = Cluster({
     revision: 4,
     features: {
         /** Replies to multicast / groupcast queries if the identification state is active. */
-        query: BitFlag(0),
+        query: BitFlag(0)
     },
 
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.2.5 */
     attributes: {
         /** Specifies the remaining length of time, in seconds, that the endpoint will continue to identify itself. */
-        identifyTime: WritableAttribute(0, TlvUInt16, { default: 0 }), /* unit: seconds */
+        identifyTime: WritableAttribute(0, TlvUInt16, { default: 0 }) /* unit: seconds */,
 
         /** Specifies how the identification state is presented to the user. */
-        identifyType: Attribute(1, TlvEnum<IdentifyType>(), { default: 0 }),
+        identifyType: Attribute(1, TlvEnum<IdentifyType>(), { default: 0 })
     },
 
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.2.6 */
@@ -83,6 +91,6 @@ export const IdentifyCluster = Cluster({
         identifyQuery: Command(1, TlvNoArguments, 0, TlvIdentifyQueryResponse),
 
         /** Allows the support of feedback to the user, such as a certain light effect when identifying. */
-        triggerEffect: OptionalCommand(0x40, TlvTriggerEffectRequest, 0, TlvNoResponse),
-    },
+        triggerEffect: OptionalCommand(0x40, TlvTriggerEffectRequest, 0, TlvNoResponse)
+    }
 });

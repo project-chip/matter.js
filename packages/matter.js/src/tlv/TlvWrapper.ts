@@ -11,7 +11,7 @@ export class TlvWrapper<O, T> extends TlvSchema<O> {
     constructor(
         private readonly underlyingSchema: TlvSchema<T>,
         private readonly wrap: (object: O) => T,
-        private readonly unwrap: (value: T) => O,
+        private readonly unwrap: (value: T) => O
     ) {
         super();
     }
