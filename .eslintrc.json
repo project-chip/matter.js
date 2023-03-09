@@ -18,7 +18,7 @@
     "env": {
         "node": true
     },
-    "ignorePatterns": ["**/*.d.ts", "build/**/*"],
+    "ignorePatterns": ["packages/*/dist/**/*"],
     "rules": {
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/ban-types": [
@@ -60,14 +60,12 @@
         ]
     },
     "settings": {
-        "import/extensions": [".ts", ".tsx"],
+        "import/extensions": [".ts"],
         "import/parsers": {
-            "@typescript-eslint/parser": [".ts", ".tsx"]
+            "@typescript-eslint/parser": [".ts"]
         },
         "import/resolver": {
             "typescript": {
-                "alwaysTryTypes": true, // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
-
                 // Multiple tsconfigs (Useful for monorepos)
                 "project": "packages/*/tsconfig.json"
             }
