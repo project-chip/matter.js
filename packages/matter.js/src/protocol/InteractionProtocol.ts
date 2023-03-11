@@ -67,7 +67,7 @@ const TlvAttributePath = TlvList({
  */
 export const TlvReadRequest = TlvObject({
     attributes: TlvField(0, TlvArray(TlvAttributePath)),
-    isFabricFiltered: TlvField(3,  TlvBoolean),
+    isFabricFiltered: TlvField(3, TlvBoolean),
     interactionModelRevision: TlvField(0xFF, TlvUInt8),
 });
 
@@ -87,7 +87,7 @@ export const TlvReportData = TlvObject({
             value: TlvField(2, TlvAny),
         })),
     }))),
-    isFabricFiltered: TlvOptionalField(4,  TlvBoolean),
+    isFabricFiltered: TlvOptionalField(4, TlvBoolean),
     interactionModelRevision: TlvField(0xFF, TlvUInt8),
 });
 
@@ -95,7 +95,7 @@ export const TlvReportData = TlvObject({
  * @see {@link MatterCoreSpecificationV1_0}, section 10.6.4. SubscribeRequestMessage
  */
 export const TlvSubscribeRequest = TlvObject({
-    keepSubscriptions: TlvField(0,  TlvBoolean),
+    keepSubscriptions: TlvField(0, TlvBoolean),
     minIntervalFloorSeconds: TlvField(1, TlvUInt16),
     maxIntervalCeilingSeconds: TlvField(2, TlvUInt16),
     attributeRequests: TlvOptionalField(3, TlvArray(TlvAttributePath)),
@@ -104,13 +104,13 @@ export const TlvSubscribeRequest = TlvObject({
         endpoint: TlvField(1, TlvUInt16),
         cluster: TlvField(2, TlvUInt32),
         event: TlvField(3, TlvUInt32),
-        isUrgent: TlvField(4,  TlvBoolean),
+        isUrgent: TlvField(4, TlvBoolean),
     }))),
     eventFilters: TlvOptionalField(5, TlvArray(TlvList({
         node: TlvField(0, TlvNodeId),
         eventMin: TlvField(1, TlvUInt64),
     }))),
-    isFabricFiltered: TlvField(7,  TlvBoolean),
+    isFabricFiltered: TlvField(7, TlvBoolean),
     dataVersionFilters: TlvOptionalField(8, TlvArray(TlvObject({
         path: TlvField(0, TlvList({
             node: TlvField(0, TlvNodeId),
@@ -134,8 +134,8 @@ export const TlvSubscribeResponse = TlvObject({
  * @see {@link MatterCoreSpecificationV1_0}, section 10.6.9. InvokeRequestMessage
  */
 export const TlvInvokeRequest = TlvObject({
-    suppressResponse: TlvField(0,  TlvBoolean),
-    timedRequest: TlvField(1,  TlvBoolean),
+    suppressResponse: TlvField(0, TlvBoolean),
+    timedRequest: TlvField(1, TlvBoolean),
     invokes: TlvField(2, TlvArray(TlvObject({
         path: TlvField(0, TlvList({
             endpointId: TlvField(0, TlvUInt16),
@@ -151,7 +151,7 @@ export const TlvInvokeRequest = TlvObject({
  * @see {@link MatterCoreSpecificationV1_0}, section 10.6.10. InvokeResponseMessage
  */
 export const TlvInvokeResponse = TlvObject({
-    suppressResponse: TlvField(0,  TlvBoolean),
+    suppressResponse: TlvField(0, TlvBoolean),
     responses: TlvField(1, TlvArray(TlvObject({
         response: TlvOptionalField(0, TlvObject({
             path: TlvField(0, TlvList({

@@ -6,11 +6,11 @@
 
 import { TlvFabricIndex } from "../common/FabricIndex.js";
 import { TlvVendorId } from "../common/VendorId.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvString, TlvString256max, TlvString32max, TlvString64max } from "../tlv/TlvString.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { AccessLevel, Attribute, Cluster, Event, EventPriority, OptionalAttribute, OptionalEvent, OptionalWritableAttribute, WritableAttribute } from "./Cluster.js";
 
 /**
@@ -56,10 +56,10 @@ export const BasicInformationCluster = Cluster({
         productId: Attribute(4, TlvUInt16),
 
         /** User defined name for the Node. It is set during initial commissioning and may be updated by further reconfigurations. */
-        nodeLabel: WritableAttribute(5, TlvString32max, { default: "", writeAcl: AccessLevel.Manage } ),
+        nodeLabel: WritableAttribute(5, TlvString32max, { default: "", writeAcl: AccessLevel.Manage }),
 
         /** ISO 3166-1 alpha-2 code where the Node is located. Might affect some regulatory aspects. */
-        location: WritableAttribute(6, TlvString.bound({ length: 2 }), { default: "XX", writeAcl: AccessLevel.Administer } ),
+        location: WritableAttribute(6, TlvString.bound({ length: 2 }), { default: "XX", writeAcl: AccessLevel.Administer }),
 
         /** Version number of the hardware of the Node. The meaning of its value, and the versioning scheme, are vendor defined. */
         hardwareVersion: Attribute(7, TlvUInt16, { default: 0 }),
@@ -89,7 +89,7 @@ export const BasicInformationCluster = Cluster({
         serialNumber: OptionalAttribute(15, TlvString32max),
 
         /** Allows to disable the ability to configure the Node through an on-Node user interface. */
-        localConfigDisabled: OptionalWritableAttribute(16, TlvBoolean, { default: false, writeAcl: AccessLevel.Manage } ),
+        localConfigDisabled: OptionalWritableAttribute(16, TlvBoolean, { default: false, writeAcl: AccessLevel.Manage }),
 
         /** Indicates whether the Node can be reached over the non-native network for bridged devices. */
         reachable: OptionalAttribute(17, TlvBoolean, { default: true }),

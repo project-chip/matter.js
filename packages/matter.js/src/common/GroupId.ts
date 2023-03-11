@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvUInt16 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 /**
  * A Group Identifier (Group ID or GID) is a 16-bit number that identifies a set of Nodes across a
@@ -23,7 +23,7 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 export class GroupId {
     constructor(
         readonly id: number,
-    ) {}
+    ) { }
 }
 
 /** Tlv Schema for a Group Id. */

@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TlvType, TlvCodec, TlvTag, TlvTypeLength, TlvToPrimitive } from "./TlvCodec.js";
-import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-import { maxValue, minValue } from "../util/Number.js";
 import { ByteArray } from "../util/ByteArray";
+import { maxValue, minValue } from "../util/Number.js";
+import { TlvCodec, TlvTag, TlvToPrimitive, TlvType, TlvTypeLength } from "./TlvCodec.js";
+import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 
 type LengthConstraints = {
     minLength?: number,
@@ -33,14 +33,14 @@ export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> ext
     }
 
     override encodeTlvInternal(writer: TlvWriter, value: TlvToPrimitive[T], tag: TlvTag = {}): void {
-        const typeLength: TlvTypeLength = { type: this.type, length: TlvCodec.getUIntTlvLength(value.length)}
+        const typeLength: TlvTypeLength = { type: this.type, length: TlvCodec.getUIntTlvLength(value.length) }
         writer.writeTag(typeLength, tag);
         writer.writePrimitive(typeLength, value);
     }
 
-    override decodeTlvInternalValue(reader: TlvReader, typeLength: TlvTypeLength) {
+    override decodeTlvInternalValue(reader: TlvReader, typeLength: TlvTypeLength): TlvToPrimitive[T] {
         if (typeLength.type !== this.type) throw new Error(`Unexpected type ${typeLength.type}.`);
-        return reader.readPrimitive(typeLength) as TlvToPrimitive[T];
+        return reader.readPrimitive(typeLength);
     }
 
     override validate(value: TlvToPrimitive[T]): void {

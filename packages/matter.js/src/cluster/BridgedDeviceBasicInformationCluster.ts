@@ -6,11 +6,11 @@
 
 import { TlvFabricIndex } from "../common/FabricIndex.js";
 import { TlvVendorId } from "../common/VendorId.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvField } from "../tlv/TlvObject.js";
 import { TlvString, TlvString256max, TlvString32max, TlvString64max } from "../tlv/TlvString.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { AccessLevel, Attribute, Cluster, Event, EventPriority, OptionalAttribute, OptionalEvent, OptionalWritableAttribute } from "./Cluster.js";
 
 /**
@@ -41,7 +41,7 @@ export const BridgedDeviceBasicInformationCluster = Cluster({
         productName: OptionalAttribute(3, TlvString32max),
 
         /** User defined name for the Node. It is set during initial commissioning and may be updated by further reconfigurations. */
-        nodeLabel: OptionalWritableAttribute(5, TlvString32max, { default: "", writeAcl: AccessLevel.Manage } ),
+        nodeLabel: OptionalWritableAttribute(5, TlvString32max, { default: "", writeAcl: AccessLevel.Manage }),
 
         /** Version number of the hardware of the Node. The meaning of its value, and the versioning scheme, are vendor defined. */
         hardwareVersion: OptionalAttribute(7, TlvUInt16, { default: 0 }),

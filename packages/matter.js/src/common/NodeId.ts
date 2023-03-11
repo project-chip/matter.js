@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvUInt64 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { Endian } from "../util/ByteArray.js";
 import { DataWriter } from "../util/DataWriter.js";
 
@@ -19,7 +19,7 @@ import { DataWriter } from "../util/DataWriter.js";
 export class NodeId {
     constructor(
         readonly id: bigint,
-    ) {}
+    ) { }
 
     toString() {
         const writer = new DataWriter(Endian.Big);

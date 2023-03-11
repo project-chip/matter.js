@@ -17,6 +17,17 @@ Additionally it uses typescript project references to allow IDE support for the 
 
 You can build and test the packages separately or aly by using `npm run build` or `npm run test` on root package level.
 
+## Code style
+
+The project contains eslint as linter and typescript-formatter as formatter. The configuration files are located in the root directory and are valid for all packages.
+
+The following commands are available:
+
+* `npm run lint`: runs eslint on all packages and outputs the results and errors
+* `npm run lint-fix`: runs eslint on all packages and tries to fix the errors
+* `npm run format`: runs typescript-formatter on all packages and formats the code. Files will be changed in place.
+* `npm run format-check`: runs typescript-formatter on all packages and checks if the code is formatted correctly. If not it will output the files that need to be formatted.
+
 ## Current status
 
 This is work in progress.

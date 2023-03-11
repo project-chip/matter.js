@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TlvType, TlvTag, TlvTypeLength } from "./TlvCodec.js";
-import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
+import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 
 type LengthConstraints = {
     minLength?: number,
@@ -55,4 +55,4 @@ export class ArraySchema<T> extends TlvSchema<T[]> {
 }
 
 /** Array TLV schema. */
-export const TlvArray = <T>(elementSchema: TlvSchema<T>, {minLength, maxLength, length}: LengthConstraints = {}) => new ArraySchema(elementSchema, length ?? minLength, length ?? maxLength);
+export const TlvArray = <T>(elementSchema: TlvSchema<T>, { minLength, maxLength, length }: LengthConstraints = {}) => new ArraySchema(elementSchema, length ?? minLength, length ?? maxLength);

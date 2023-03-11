@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TlvType, TlvTag, TlvTypeLength } from "./TlvCodec.js";
-import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
+import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 
 /**
  * Schema to encode a nulable value in TLV.
@@ -33,7 +33,7 @@ export class NullableSchema<T> extends TlvSchema<T | null> {
         if (typeLength.type === TlvType.Null) return null;
         return this.schema.decodeTlvInternalValue(reader, typeLength);
     }
-    
+
     override validate(value: T | null): void {
         if (value !== null) this.schema.validate(value);
     }

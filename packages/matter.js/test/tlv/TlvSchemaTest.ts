@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-import { ByteArray } from "../../src/util/ByteArray.js";
-import { TlvObject, TlvField } from "../../src/tlv/TlvObject.js";
+import { TlvArray } from "../../src/tlv/TlvArray.js";
+import { TlvBoolean } from "../../src/tlv/TlvBoolean.js";
+import { TlvDouble, TlvFloat, TlvInt16, TlvInt32, TlvInt64, TlvInt8, TlvUInt16, TlvUInt32, TlvUInt64, TlvUInt8 } from "../../src/tlv/TlvNumber.js";
+import { TlvField, TlvObject } from "../../src/tlv/TlvObject.js";
 import { TlvSchema } from "../../src/tlv/TlvSchema.js";
 import { TlvString } from "../../src/tlv/TlvString.js";
-import { TlvBoolean } from "../../src/tlv/TlvBoolean.js";
 import { TlvWrapper } from "../../src/tlv/TlvWrapper.js";
-import { TlvArray } from "../../src/tlv/TlvArray.js";
-import { 
-    TlvUInt8, TlvUInt16, TlvUInt32, TlvUInt64, 
-    TlvInt8, TlvInt16, TlvInt32, TlvInt64,
-    TlvFloat, TlvDouble 
-} from "../../src/tlv/TlvNumber.js";
+import { ByteArray } from "../../src/util/ByteArray.js";
 
 type TestEntry<T> = {
     name: string,
@@ -37,7 +33,7 @@ type TestEntry<T> = {
 class CustomObject {
     constructor(
         readonly value: number,
-    ) {}
+    ) { }
 }
 
 const theTestTlvVector = [
@@ -83,7 +79,7 @@ const theTestTlvVector = [
             fieldUInt64: TlvField(10, TlvUInt64),
         }),
         tlv: "152a010892cc452b022fdd24064192b9402003ff2004ff2005ff2006ff240701240801240901240a0118",
-        jsObj: { 
+        jsObj: {
             fieldFloat: 6546.25390625,
             fieldDouble: 6546.254,
             fieldInt8: -1,
@@ -130,7 +126,7 @@ const theTestTlvVector = [
             ]
         },
     },
-    { 
+    {
         name: "TlvWrapper",
         schema: new TlvWrapper(TlvUInt16, (object: CustomObject) => object.value, value => new CustomObject(value)),
         tlv: "040c",
@@ -138,8 +134,7 @@ const theTestTlvVector = [
     },
 ]
 
-function testTlvSchemaEncode(testEntry:TestEntry<any>)
-{
+function testTlvSchemaEncode(testEntry: TestEntry<any>) {
     const { name, schema, tlv, jsObj } = testEntry
     const testName = "TlvSchema.encode " + name
 
@@ -151,8 +146,7 @@ function testTlvSchemaEncode(testEntry:TestEntry<any>)
 
 }
 
-function testTlvSchemaDecode(testEntry:TestEntry<any>)
-{
+function testTlvSchemaDecode(testEntry: TestEntry<any>) {
     const { name, schema, tlv, jsObj } = testEntry
     const testName = "TlvSchema.decode " + name
 

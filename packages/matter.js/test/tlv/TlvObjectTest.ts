@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TlvObject, TlvField, TlvOptionalField } from "../../src/tlv/TlvObject.js";
+import { TlvUInt8 } from "../../src/tlv/TlvNumber.js";
+import { TlvField, TlvObject, TlvOptionalField } from "../../src/tlv/TlvObject.js";
 import { TypeFromSchema } from "../../src/tlv/TlvSchema.js";
 import { TlvString } from "../../src/tlv/TlvString.js";
-import { TlvUInt8 } from "../../src/tlv/TlvNumber.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 
 const schema = TlvObject({
@@ -22,7 +22,7 @@ const schemaUnknownField1 = TlvObject({
     optionalField: TlvOptionalField(2, TlvString),
 });
 
-type CodecVector<I, E> = {[valueDescription: string]: { encoded: E, decoded: I }};
+type CodecVector<I, E> = { [valueDescription: string]: { encoded: E, decoded: I } };
 
 const codecVector: CodecVector<TypeFromSchema<typeof schema>, string> = {
     "an object with all fields": { decoded: { mandatoryField: 1, optionalField: "test" }, encoded: "152401012c02047465737418" },

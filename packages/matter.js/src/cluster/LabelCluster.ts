@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AccessLevel, Attribute, Cluster, WritableAttribute } from "./Cluster.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvString } from "../tlv/TlvString.js";
-import { TlvArray } from "../tlv/TlvArray.js";
+import { AccessLevel, Attribute, Cluster, WritableAttribute } from "./Cluster.js";
 
 /**
  * This is a string tuple with strings that are user defined.
@@ -17,10 +17,10 @@ import { TlvArray } from "../tlv/TlvArray.js";
  */
 const TlvLabel = TlvObject({
     /** Contains a string as label without a further defined semantic n this base cluster. */
-    label: TlvField(0, TlvString.bound( { length: 16 } )), /* default: "" */
+    label: TlvField(0, TlvString.bound({ length: 16 })), /* default: "" */
 
     /** Contains a string as value without a further defined semantic n this base cluster. */
-    value: TlvField(1, TlvString.bound( { length: 16 } )), /* default: "" */
+    value: TlvField(1, TlvString.bound({ length: 16 })), /* default: "" */
 });
 
 /**

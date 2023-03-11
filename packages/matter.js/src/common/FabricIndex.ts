@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvUInt8 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 /**
  * Each fabric supported on a node is referenced by fabric-index that is unique on the node. This
@@ -18,10 +18,10 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
  *
  * @see {@link MatterCoreSpecificationV1_0} § 7.5.2
  */
- export class FabricIndex {
+export class FabricIndex {
     constructor(
         readonly index: number,
-    ) {}
+    ) { }
 }
 
 /** Tlv Schema for a Fabric Index. */

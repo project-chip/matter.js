@@ -14,7 +14,7 @@ const enum BitRangeType {
 }
 
 type BitRange<T> = { type: BitRangeType, offset: number, length: number };
-const BitRange = <T>(type: BitRangeType, offset: number, length: number ) => ({ type, offset, length } as BitRange<T>);
+const BitRange = <T>(type: BitRangeType, offset: number, length: number) => ({ type, offset, length } as BitRange<T>);
 
 /** Defines the bit position of a boolean flag. */
 export interface BitFlag extends BitRange<boolean> { type: BitRangeType.Flag }
@@ -28,10 +28,10 @@ export const BitField = (offset: number, length: number) => BitRange(BitRangeTyp
 export interface BitFieldEnum<E extends number> extends BitRange<E> { type: BitRangeType.Enum }
 export const BitFieldEnum = <E extends number>(offset: number, length: number) => BitRange(BitRangeType.Enum, offset, length) as BitFieldEnum<E>;
 
-export type BitSchema = {[key: string]: BitFlag | BitField | BitFieldEnum<any> };
-export type TypeFromBitSchema<T extends BitSchema> = {[K in keyof T]: T[K] extends BitFieldEnum<infer E> ? E : (T[K] extends BitField ? number : boolean )};
-type MaskFromBitSchema<T extends BitSchema> = {[K in keyof T]: number };
-type MaskOffsetFromBitSchema<T extends BitSchema> = {[K in keyof T]: { mask: number, byteOffset: number, bitOffset: number }};
+export type BitSchema = { [key: string]: BitFlag | BitField | BitFieldEnum<any> };
+export type TypeFromBitSchema<T extends BitSchema> = { [K in keyof T]: T[K] extends BitFieldEnum<infer E> ? E : (T[K] extends BitField ? number : boolean) };
+type MaskFromBitSchema<T extends BitSchema> = { [K in keyof T]: number };
+type MaskOffsetFromBitSchema<T extends BitSchema> = { [K in keyof T]: { mask: number, byteOffset: number, bitOffset: number } };
 
 class BitmapSchemaInternal<T extends BitSchema> extends Schema<TypeFromBitSchema<T>, number> {
     private readonly masks: MaskFromBitSchema<T>;
@@ -105,7 +105,7 @@ class ByteArrayBitmapSchemaInternal<T extends BitSchema> extends Schema<TypeFrom
     }
 
     override encodeInternal(value: TypeFromBitSchema<T>) {
-        let result = new ByteArray(this.byteArrayLength);
+        const result = new ByteArray(this.byteArrayLength);
         for (const name in this.bitSchemas) {
             const { type } = this.bitSchemas[name];
             let { mask, bitOffset, byteOffset } = this.maskOffset[name];
@@ -114,7 +114,7 @@ class ByteArrayBitmapSchemaInternal<T extends BitSchema> extends Schema<TypeFrom
                     if (value[name]) result[byteOffset] |= mask;
                     break;
                 case BitRangeType.Enum:
-                case BitRangeType.Number:
+                case BitRangeType.Number: {
                     let numValue = value[name] as number;
                     while (mask !== 0) {
                         result[byteOffset++] |= ((numValue & mask) << bitOffset) & 0xFF;
@@ -123,6 +123,7 @@ class ByteArrayBitmapSchemaInternal<T extends BitSchema> extends Schema<TypeFrom
                         numValue = numValue >> bitWritten;
                         mask = mask >> 8;
                     }
+                }
             }
         }
         return result;
@@ -140,7 +141,7 @@ class ByteArrayBitmapSchemaInternal<T extends BitSchema> extends Schema<TypeFrom
                 let value = 0;
                 let valueBitOffset = 0;
                 while (mask !== 0) {
-                    value |= ((bitmap[byteOffset++] & mask) >> bitOffset ) << valueBitOffset;
+                    value |= ((bitmap[byteOffset++] & mask) >> bitOffset) << valueBitOffset;
                     const bitWritten = 8 - bitOffset;
                     bitOffset = 0;
                     valueBitOffset += bitWritten;

@@ -4,16 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Attribute, Cluster, Command, TlvNoArguments, TlvNoResponse } from "./Cluster.js";
 import { TlvGroupId } from "../common/GroupId.js";
+import { StatusCode } from "../protocol/InteractionProtocol.js";
+import { BitFlag } from "../schema/BitmapSchema.js";
 import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
-import { TlvField, TlvObject } from "../tlv/TlvObject.js";
-import { TlvString } from "../tlv/TlvString.js";
-import { TlvBitmap, TlvEnum, TlvUInt8 } from "../tlv/TlvNumber.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
-import { BitFlag } from "../schema/BitmapSchema.js";
-import { StatusCode } from "../protocol/InteractionProtocol.js";
+import { TlvBitmap, TlvEnum, TlvUInt8 } from "../tlv/TlvNumber.js";
+import { TlvField, TlvObject } from "../tlv/TlvObject.js";
+import { TlvString } from "../tlv/TlvString.js";
+import { Attribute, Cluster, Command, TlvNoArguments, TlvNoResponse } from "./Cluster.js";
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.7.1 */
 const TlvAddGroupRequest = TlvObject({
@@ -36,7 +36,7 @@ const TlvViewGroupRequest = TlvObject({
 const TlvViewGroupResponse = TlvObject({
     status: TlvField(0, TlvEnum<StatusCode>()),
     groupId: TlvField(1, TlvGroupId), /* min: 1 */
-    groupName: TlvField(2, TlvString.bound( { maxLength: 16 })),
+    groupName: TlvField(2, TlvString.bound({ maxLength: 16 })),
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.7.3 */
@@ -76,7 +76,7 @@ const TlvRemoveAllGroupResponse = TlvObject({
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.7.6 */
 const TlvAddGroupIfIdentifyingRequest = TlvObject({
     groupId: TlvField(0, TlvGroupId), /* min: 1 */
-    groupName: TlvField(1, TlvString.bound( { maxLength: 16 })),
+    groupName: TlvField(1, TlvString.bound({ maxLength: 16 })),
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.6.1 */

@@ -4,18 +4,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Merge } from "../util/Type.js";
-import { TlvType, TlvTag, TlvTypeLength } from "./TlvCodec.js";
-import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { Merge } from "../util/Type.js";
 import { TlvAny } from "./TlvAny.js";
+import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
+import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 
 export interface FieldType<T> {
     id: number,
     schema: TlvSchema<T>,
     optional?: boolean,
     fallback?: T,
-};
+}
 
 export interface OptionalFieldType<T> extends FieldType<T> {
     optional: true,
@@ -36,7 +36,7 @@ export type TypeFromFields<F extends TlvFields> = Merge<TypeForMandatoryFields<F
  * @see {@link MatterCoreSpecificationV1_0} § A.5.1 and § A.11.4
  */
 export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<F>> {
-    private readonly fieldById = new Array<{ name: string, field: FieldType<any>}>();
+    private readonly fieldById = new Array<{ name: string, field: FieldType<any> }>();
 
     constructor(
         private readonly fieldDefinitions: F,
@@ -109,7 +109,7 @@ export const TlvObject = <F extends TlvFields>(fields: F) => new ObjectSchema(fi
 /** List TLV schema. */
 export const TlvList = <F extends TlvFields>(fields: F) => new ObjectSchema(fields, TlvType.List);
 
-/** 
+/**
  * Object TLV mandatory field. Optionally provide a fallback value to initialize the field value when devices omit
  * providing a value against the specifications or in special usecases. Make sure to use a value that is an equivalent
  * to the value being empty.
