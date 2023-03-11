@@ -7,21 +7,22 @@
 import { TlvByteString, TlvString } from "../../src/tlv/TlvString.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 
-type TestVector<I, E> = { [testName: string]: { input: I; out: E } };
+type TestVector<I, E> = { [testName: string]: { input: I, out: E } };
 
 const validateUtfStringTestVector: TestVector<string, boolean> = {
     "validates a string with an acceptable length": { input: "abcde", out: false },
     "throws an error if the string is too short": { input: "a", out: true },
-    "throws an error if the string is too long": { input: "abcdefgh", out: true }
+    "throws an error if the string is too long": { input: "abcdefgh", out: true },
 };
 
 const validateByteStringTestVector: TestVector<string, boolean> = {
     "validates a string with an acceptable length": { input: "0001020304", out: false },
     "throws an error if the string is too short": { input: "00", out: true },
-    "throws an error if the string is too long": { input: "0001020304050607", out: true }
+    "throws an error if the string is too long": { input: "0001020304050607", out: true },
 };
 
 describe("TlvString", () => {
+
     describe("encode", () => {
         it("encodes a string", () => {
             const result = TlvString.encode("test");
@@ -56,6 +57,7 @@ describe("TlvString", () => {
 });
 
 describe("TlvByteString", () => {
+
     describe("encode", () => {
         it("encodes a byte string", () => {
             const result = TlvByteString.encode(ByteArray.fromHex("0001"));
@@ -90,11 +92,14 @@ describe("TlvByteString", () => {
 
     describe("validation", () => {
         it("throws an error if the value is not a ByteString", () => {
-            expect(() => TlvByteString.validate(5 as any)).toThrowError("Expected ByteArray, got number.");
+            expect(() => TlvByteString.validate(5 as any))
+                .toThrowError("Expected ByteArray, got number.");
         });
 
         it("throws an error if the value is not a String", () => {
-            expect(() => TlvString.validate(true as any)).toThrowError("Expected string, got boolean.");
+            expect(() => TlvString.validate(true as any))
+                .toThrowError("Expected string, got boolean.");
         });
     });
+
 });

@@ -8,13 +8,12 @@ import { TlvAny } from "../../src/tlv/TlvAny";
 import { TlvType } from "../../src/tlv/TlvCodec";
 import { ByteArray } from "../../src/util/ByteArray.js";
 
-type CodecVector<I, E> = { [valueDescription: string]: { encoded: I; decoded: E } };
+type CodecVector<I, E> = { [valueDescription: string]: { encoded: I, decoded: E } };
 
 const testVector: CodecVector<string, any> = {
-    null: { encoded: "14", decoded: [{ tag: undefined, typeLength: { type: TlvType.Null }, value: null }] },
-    array: {
-        encoded: "1618",
-        decoded: [
+    "null": { encoded: "14", decoded: [{ tag: undefined, typeLength: { type: TlvType.Null }, value: null }] },
+    "array": {
+        encoded: "1618", decoded: [
             {
                 tag: undefined,
                 typeLength: {
@@ -28,15 +27,17 @@ const testVector: CodecVector<string, any> = {
                 }
             }
         ]
-    }
+    },
 };
 
 describe("TlvAny", () => {
+
     describe("encode", () => {
         for (const valueDescription in testVector) {
             const { encoded, decoded } = testVector[valueDescription];
             it(`encodes ${valueDescription}`, () => {
-                expect(TlvAny.encode(decoded).toHex()).toBe(encoded);
+                expect(TlvAny.encode(decoded).toHex())
+                    .toBe(encoded);
             });
         }
     });
@@ -45,14 +46,16 @@ describe("TlvAny", () => {
         for (const valueDescription in testVector) {
             const { encoded, decoded } = testVector[valueDescription];
             it(`decodes ${valueDescription}`, () => {
-                expect(TlvAny.decode(ByteArray.fromHex(encoded))).toEqual(decoded);
+                expect(TlvAny.decode(ByteArray.fromHex(encoded)))
+                    .toEqual(decoded);
             });
         }
     });
 
     describe("validation", () => {
         it("throws an error if the value is not a boolean", () => {
-            expect(() => TlvAny.validate("a" as any)).toThrowError("Expected TlvStream, got string.");
+            expect(() => TlvAny.validate("a" as any))
+                .toThrowError("Expected TlvStream, got string.");
         });
 
         it("does not throw an error if the value is a boolean", () => {

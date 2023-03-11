@@ -13,11 +13,13 @@ import { DataWriter } from "../util/DataWriter.js";
 /**
  * A Node Identifier (Node ID) is a 64-bit number that uniquely identifies an individual Node or a
  * group of Nodes on a Fabric.
- *
+ * 
  * @see {@link MatterCoreSpecificationV1_0} § 2.5.5
  */
 export class NodeId {
-    constructor(readonly id: bigint) {}
+    constructor(
+        readonly id: bigint,
+    ) { }
 
     toString() {
         const writer = new DataWriter(Endian.Big);
@@ -30,5 +32,5 @@ export class NodeId {
 export const TlvNodeId = new TlvWrapper<NodeId, number | bigint>(
     TlvUInt64,
     nodeId => nodeId.id,
-    value => new NodeId(BigInt(value))
+    value => new NodeId(BigInt(value)),
 );

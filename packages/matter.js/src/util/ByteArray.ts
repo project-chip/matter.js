@@ -28,34 +28,34 @@ declare global {
     }
 }
 
-Uint8Array.prototype.toHex = function () {
+Uint8Array.prototype.toHex = function() {
     return this.reduce((result, byte) => result + byte.toString(16).padStart(2, "0"), "");
-};
+}
 
-Uint8Array.prototype.getDataView = function () {
+Uint8Array.prototype.getDataView = function() {
     return new DataView(this.buffer, this.byteOffset, this.byteLength);
-};
+}
 
-Uint8Array.prototype.equals = function (other: Uint8Array) {
+Uint8Array.prototype.equals = function(other: Uint8Array) {
     if (other.length !== this.length) return false;
     return this.every((value, index) => other[index] === value);
-};
+}
 
-Uint8Array.fromHex = function (hexString: string) {
+Uint8Array.fromHex = function(hexString: string) {
     if (hexString.length === 0) return new ByteArray(0);
     if (hexString.length % 2 !== 0) throw new Error("Hex string should have an even length.");
     const bytes = hexString.match(/.{1,2}/g)?.map(byteHex => parseInt(byteHex, 16));
     if (bytes === undefined) throw new Error("Failed to parse the hex string.");
     return ByteArray.from(bytes);
-};
+}
 
-Uint8Array.fromString = function (string: string) {
+Uint8Array.fromString = function(string: string) {
     return new TextEncoder().encode(string);
-};
+}
 
-Uint8Array.concat = function (...arrays: Uint8Array[]): Uint8Array {
+Uint8Array.concat = function(...arrays: Uint8Array[]): Uint8Array {
     let length = 0;
-    arrays.forEach(array => (length += array.length));
+    arrays.forEach(array => length += array.length);
     const result = new Uint8Array(length);
     let offset = 0;
     arrays.forEach(array => {
@@ -63,7 +63,7 @@ Uint8Array.concat = function (...arrays: Uint8Array[]): Uint8Array {
         offset += array.length;
     });
     return result;
-};
+}
 
 /** Array of bytes, alias of {@link Uint8Array}. */
 export type ByteArray = Uint8Array;
@@ -71,5 +71,5 @@ export const ByteArray = Uint8Array;
 
 export enum Endian {
     Little,
-    Big
+    Big,
 }

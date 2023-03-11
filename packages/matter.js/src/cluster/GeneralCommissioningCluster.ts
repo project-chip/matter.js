@@ -25,7 +25,7 @@ export const enum RegulatoryLocationType {
     Outdoor = 1,
 
     /** Indoor/Outdoor */
-    IndoorOutdoor = 2
+    IndoorOutdoor = 2,
 }
 
 /**
@@ -47,7 +47,7 @@ export const enum CommissioningError {
     NoFailSafe = 3,
 
     /** Attempting to arm fail-safe or execute CommissioningComplete from a fabric different than the one associated with the current fail-safe context. */
-    BusyWithOtherAdmin = 4
+    BusyWithOtherAdmin = 4,
 }
 
 /**
@@ -60,7 +60,7 @@ const TlvBasicCommissioningInfo = TlvObject({
     failSafeExpiryLengthSeconds: TlvField(0, TlvUInt16),
 
     /** Contain a conservative value in seconds denoting the maximum total duration for which a fail-safe timer can be re-armed. */
-    maxCumulativeFailsafeSeconds: TlvField(1, TlvUInt16)
+    maxCumulativeFailsafeSeconds: TlvField(1, TlvUInt16),
 });
 
 /**
@@ -74,17 +74,17 @@ const TlvCommissioningSuccessFailureResponse = TlvObject({
     errorCode: TlvField(0, TlvEnum<CommissioningError>()),
 
     /** Should help developers in troubleshooting errors. The value MAY go into logs or crash reports, not User UIs. */
-    debugText: TlvField(1, TlvString.bound({ maxLength: 128 }))
+    debugText: TlvField(1, TlvString.bound({ maxLength: 128 })),
 });
 export type CommissioningSuccessFailureResponse = TypeFromSchema<typeof TlvCommissioningSuccessFailureResponse>;
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.9.7.3. */
 const TlvArmFailSafeRequest = TlvObject({
     /** Contains timeframe for fail-safe timer actions. */
-    expiryLengthSeconds: TlvField(0, TlvUInt16) /* default: 900 */,
+    expiryLengthSeconds: TlvField(0, TlvUInt16), /* default: 900 */
 
     /** Value to atomically set the Breadcrumb attribute on success of this command. */
-    breadcrumbStep: TlvField(1, TlvUInt64)
+    breadcrumbStep: TlvField(1, TlvUInt64),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.9.7.4 */
@@ -96,7 +96,7 @@ const TlvSetRegulatoryConfigRequest = TlvObject({
     countryCode: TlvField(1, TlvString.bound({ length: 2 })),
 
     /** Value to atomically set the Breadcrumb attribute on success of this command. */
-    breadcrumbStep: TlvField(2, TlvUInt64)
+    breadcrumbStep: TlvField(2, TlvUInt64),
 });
 
 /**
@@ -120,15 +120,13 @@ export const GeneralCommissioningCluster = Cluster({
         commissioningInfo: Attribute(1, TlvBasicCommissioningInfo),
 
         /** Indicates the regulatory configuration for the product. */
-        regulatoryConfig: Attribute(2, TlvEnum<RegulatoryLocationType>()) /* default: value of locationCapability */,
+        regulatoryConfig: Attribute(2, TlvEnum<RegulatoryLocationType>()), /* default: value of locationCapability */
 
         /** Indicates if this Node needs to be told an exact RegulatoryLocation. */
-        locationCapability: Attribute(3, TlvEnum<RegulatoryLocationType>(), {
-            default: RegulatoryLocationType.IndoorOutdoor
-        }),
+        locationCapability: Attribute(3, TlvEnum<RegulatoryLocationType>(), { default: RegulatoryLocationType.IndoorOutdoor }),
 
         /** Indicates whether this device supports "concurrent connection flow" commissioning mode */
-        supportsConcurrentConnections: Attribute(4, TlvBoolean, { default: true })
+        supportsConcurrentConnections: Attribute(4, TlvBoolean, { default: true }),
     },
 
     /** @see {@link MatterCoreSpecificationV1_0} § 11.9.7 */
@@ -143,6 +141,6 @@ export const GeneralCommissioningCluster = Cluster({
          * Informs that all steps of Commissioning/Reconfiguration needed during the fail-safe period have been
          * completed.
          */
-        commissioningComplete: Command(4, TlvNoArguments, 5, TlvCommissioningSuccessFailureResponse)
-    }
+        commissioningComplete: Command(4, TlvNoArguments, 5, TlvCommissioningSuccessFailureResponse),
+    },
 });

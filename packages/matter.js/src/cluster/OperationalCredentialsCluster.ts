@@ -40,7 +40,7 @@ const TlvFabricDescriptor = TlvObject({
     nodeId: TlvField(4, TlvNodeId),
 
     /** A commissioner-set label for the fabric referenced by FabricIndex. */
-    label: TlvField(5, TlvString.bound({ maxLength: 32 })) /* default: "" */
+    label: TlvField(5, TlvString.bound({ maxLength: 32 })), /* default: "" */
 });
 
 /**
@@ -53,7 +53,7 @@ const TlvNoc = TlvObject({
     noc: TlvField(1, TlvByteString.bound({ maxLength: 400 })),
 
     /** The ICAC or the struct's associated fabric. */
-    icac: TlvField(2, TlvNullable(TlvByteString.bound({ maxLength: 400 }))) /* default(not present): null */
+    icac: TlvField(2, TlvNullable(TlvByteString.bound({ maxLength: 400 }))), /* default(not present): null */
 });
 
 /**
@@ -66,13 +66,13 @@ export const enum CertificateChainType {
     DeviceAttestation = 1,
 
     /** Requests the DER-encoded PAI certificate */
-    ProductAttestationIntermediate = 2
+    ProductAttestationIntermediate = 2,
 }
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.7.1 */
 const TlvAttestationRequest = TlvObject({
     /** The attestation nonce to be used in the computation of the Attestation Information. */
-    attestationNonce: TlvField(0, TlvByteString.bound({ length: 32 }))
+    attestationNonce: TlvField(0, TlvByteString.bound({ length: 32 })),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.7.2 */
@@ -81,7 +81,7 @@ const TlvAttestationResponse = TlvObject({
     elements: TlvField(0, TlvByteString.bound({ maxLength: RESP_MAX })),
 
     /** The octet string of the necessary attestation_signature. */
-    signature: TlvField(1, TlvByteString.bound({ length: 64 }))
+    signature: TlvField(1, TlvByteString.bound({ length: 64 })),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.7.5 */
@@ -94,7 +94,7 @@ const TlvCertSigningRequestRequest = TlvObject({
      * a subsequent UpdateNOC, otherwise the internal state of the CSR SHALL be tagged as being for a
      * subsequent AddNOC.
      * */
-    isForUpdateNOC: TlvOptionalField(1, TlvBoolean) /* default: false */
+    isForUpdateNOC: TlvOptionalField(1, TlvBoolean), /* default: false */
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.7.6 */
@@ -103,19 +103,19 @@ const TlvCertSigningRequestResponse = TlvObject({
     elements: TlvField(0, TlvByteString.bound({ maxLength: RESP_MAX })),
 
     /** The octet string of the necessary attestation_signature. */
-    signature: TlvField(1, TlvByteString.bound({ length: 64 }))
+    signature: TlvField(1, TlvByteString.bound({ length: 64 })),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.7.3 */
 const TlvCertChainRequest = TlvObject({
     /** The type of certificate to be requested. */
-    type: TlvField(0, TlvEnum<CertificateChainType>())
+    type: TlvField(0, TlvEnum<CertificateChainType>()),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.7.4 */
 const TlvCertChainResponse = TlvObject({
     /** The octet string of the requested certificate. */
-    certificate: TlvField(0, TlvByteString.bound({ maxLength: 600 }))
+    certificate: TlvField(0, TlvByteString.bound({ maxLength: 600 })),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.7.8 */
@@ -133,7 +133,7 @@ const TlvAddNocRequest = TlvObject({
     caseAdminNode: TlvField(3, TlvSubjectId),
 
     /** The Vendor ID of the entity issuing the AddNOC command. */
-    adminVendorId: TlvField(4, TlvVendorId)
+    adminVendorId: TlvField(4, TlvVendorId),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.7.9 */
@@ -142,13 +142,13 @@ const TlvUpdateNocRequest = TlvObject({
     operationalCert: TlvField(0, TlvByteString.bound({ maxLength: 400 })),
 
     /** The Intermediate CA Certificate (ICAC). */
-    intermediateCaCert: TlvOptionalField(1, TlvByteString.bound({ maxLength: 400 }))
+    intermediateCaCert: TlvOptionalField(1, TlvByteString.bound({ maxLength: 400 })),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.7.13 */
 const TlvAddTrustedRootCertificateRequest = TlvObject({
     /** The Trusted Root Certificate (TRC) to be added. */
-    certificate: TlvField(0, TlvByteString.bound({ maxLength: 400 }))
+    certificate: TlvField(0, TlvByteString.bound({ maxLength: 400 })),
 });
 
 /**
@@ -184,7 +184,7 @@ export const enum OperationalCertStatus {
     LabelConflict = 0x0a,
 
     /** FabricIndex argument is invalid. */
-    InvalidFabricIndex = 0x0b
+    InvalidFabricIndex = 0x0b,
 }
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.7.10 */
@@ -196,7 +196,7 @@ const TlvOperationalCertificateStatusResponse = TlvObject({
     fabricIndex: TlvOptionalField(1, TlvFabricIndex),
 
     /** Optional debugging textual information from the cluster implementation and should be visible in logs, not User UI */
-    debugText: TlvOptionalField(2, TlvString.bound({ maxLength: 128 }))
+    debugText: TlvOptionalField(2, TlvString.bound({ maxLength: 128 })),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.5.4 */
@@ -204,7 +204,7 @@ export const TlvAttestation = TlvObject({
     declaration: TlvField(1, TlvByteString),
     attestationNonce: TlvField(2, TlvByteString.bound({ length: 32 })),
     timestamp: TlvField(3, TlvUInt32), // TODO: check actual max length in specs
-    firmwareInfo: TlvOptionalField(4, TlvByteString)
+    firmwareInfo: TlvOptionalField(4, TlvByteString),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.5.6 */
@@ -213,19 +213,19 @@ export const TlvCertSigningRequest = TlvObject({
     certSigningRequestNonce: TlvField(2, TlvByteString.bound({ length: 32 })),
     vendorReserved1: TlvOptionalField(3, TlvByteString),
     vendorReserved2: TlvOptionalField(4, TlvByteString),
-    vendorReserved3: TlvOptionalField(5, TlvByteString)
+    vendorReserved3: TlvOptionalField(5, TlvByteString),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.7.11 */
 const TlvUpdateFabricLabelRequest = TlvObject({
     /** The label to set for the fabric associated with the current secure session. */
-    label: TlvField(0, TlvString32max)
+    label: TlvField(0, TlvString32max),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.7.12 */
 const TlvRemoveFabricRequest = TlvObject({
     /** The Fabric Index reference associated with the Fabric which is to be removed from the device. */
-    fabricIndex: TlvField(0, TlvFabricIndex)
+    fabricIndex: TlvField(0, TlvFabricIndex),
 });
 
 /**
@@ -257,7 +257,7 @@ export const OperationalCredentialsCluster = Cluster({
         trustedRootCertificates: Attribute(4, TlvArray(TlvByteString, { maxLength: 400 })),
 
         /** Accessing fabric index. */
-        currentFabricIndex: Attribute(5, TlvUInt8)
+        currentFabricIndex: Attribute(5, TlvUInt8),
     },
     /** @see {@link MatterCoreSpecificationV1_0} § 11.17.7 */
     commands: {
@@ -283,6 +283,6 @@ export const OperationalCredentialsCluster = Cluster({
         removeFabric: Command(10, TlvRemoveFabricRequest, 8, TlvOperationalCertificateStatusResponse),
 
         /** Adds a Trusted Root CA Certificate, provided as its CHIP Certificate representation. */
-        addRootCert: Command(11, TlvAddTrustedRootCertificateRequest, 11, TlvNoResponse)
-    }
+        addRootCert: Command(11, TlvAddTrustedRootCertificateRequest, 11, TlvNoResponse),
+    },
 });

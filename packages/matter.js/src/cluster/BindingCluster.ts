@@ -33,7 +33,7 @@ const TlvTarget = TlvObject({
      * client cluster SHALL also exist on this endpoint (with this Binding cluster). If this field is present, the
      * target SHALL be this cluster on the target endpoint(s).
      */
-    cluster: TlvOptionalField(4, TlvClusterId)
+    cluster: TlvOptionalField(4, TlvClusterId),
 });
 
 /**
@@ -51,6 +51,6 @@ export const BindingCluster = Cluster({
     /** @see {@link MatterCoreSpecificationV1_0} § 9.6.5 */
     attributes: {
         /** List of device types and corresponding revisions declaring endpoint conformance. */
-        binding: WritableAttribute(0, TlvArray(TlvTarget), { default: [] }) /* non-volatile */
-    }
+        binding: WritableAttribute(0, TlvArray(TlvTarget), { default: [] }), /* non-volatile */
+    },
 });

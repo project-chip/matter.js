@@ -15,29 +15,28 @@ const schema = TlvObject({
     mandatoryField: TlvField(1, TlvUInt8),
 
     /** Optional field jsdoc */
-    optionalField: TlvOptionalField(2, TlvString)
+    optionalField: TlvOptionalField(2, TlvString),
 });
 const schemaUnknownField1 = TlvObject({
     /** Optional field jsdoc */
-    optionalField: TlvOptionalField(2, TlvString)
+    optionalField: TlvOptionalField(2, TlvString),
 });
 
-type CodecVector<I, E> = { [valueDescription: string]: { encoded: E; decoded: I } };
+type CodecVector<I, E> = { [valueDescription: string]: { encoded: E, decoded: I } };
 
 const codecVector: CodecVector<TypeFromSchema<typeof schema>, string> = {
-    "an object with all fields": {
-        decoded: { mandatoryField: 1, optionalField: "test" },
-        encoded: "152401012c02047465737418"
-    },
-    "an object without optional fields": { decoded: { mandatoryField: 1 }, encoded: "1524010118" }
+    "an object with all fields": { decoded: { mandatoryField: 1, optionalField: "test" }, encoded: "152401012c02047465737418" },
+    "an object without optional fields": { decoded: { mandatoryField: 1 }, encoded: "1524010118" },
 };
 
 describe("TlvObject", () => {
+
     describe("encode", () => {
         for (const valueDescription in codecVector) {
             const { encoded, decoded } = codecVector[valueDescription];
             it(`encodes ${valueDescription}`, () => {
-                expect(schema.encode(decoded).toHex()).toBe(encoded);
+                expect(schema.encode(decoded).toHex())
+                    .toBe(encoded);
             });
         }
     });
@@ -46,7 +45,8 @@ describe("TlvObject", () => {
         for (const valueDescription in codecVector) {
             const { encoded, decoded } = codecVector[valueDescription];
             it(`decodes ${valueDescription}`, () => {
-                expect(schema.decode(ByteArray.fromHex(encoded))).toEqual(decoded);
+                expect(schema.decode(ByteArray.fromHex(encoded)))
+                    .toEqual(decoded);
             });
         }
 

@@ -19,7 +19,7 @@ export class BooleanSchema extends TlvSchema<boolean> {
     }
 
     override decodeTlvInternalValue(_reader: TlvReader, typeLength: TlvTypeLength) {
-        if (typeLength.type !== TlvType.Boolean) throw new Error(`Unexpected type ${typeLength.type}.`);
+        if (typeLength.type !== TlvType.Boolean) throw new Error(`Unexpected type ${typeLength.type}.`)
         return typeLength.value;
     }
 

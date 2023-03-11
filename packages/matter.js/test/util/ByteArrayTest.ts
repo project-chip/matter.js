@@ -7,6 +7,7 @@
 import { ByteArray } from "../../src/util/ByteArray.js";
 
 describe("ByteArray", () => {
+
     describe("fromHex", () => {
         it("decodes the hex string", () => {
             const result = ByteArray.fromHex("1234");

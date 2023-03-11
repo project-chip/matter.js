@@ -12,7 +12,10 @@ export class DataReader<E extends Endian> {
     private readonly dataView: DataView;
     private offset = 0;
 
-    constructor(private readonly buffer: ByteArray, endian: E) {
+    constructor(
+        private readonly buffer: ByteArray,
+        endian: E,
+    ) {
         this.dataView = buffer.getDataView();
         this.littleEndian = endian === Endian.Little;
     }

@@ -15,12 +15,14 @@ import { TlvWrapper } from "../tlv/TlvWrapper.js";
  * @see {@link MatterCoreSpecificationV1_0} § 7.10
  */
 export class ClusterId {
-    constructor(readonly id: number) {}
+    constructor(
+        readonly id: number
+    ) { }
 }
 
 /** Tlv schema for a cluster Id. */
 export const TlvClusterId = new TlvWrapper<ClusterId, number>(
     TlvUInt32,
     clusterId => clusterId.id,
-    value => new ClusterId(value)
+    value => new ClusterId(value),
 );

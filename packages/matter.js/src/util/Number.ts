@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export const UINT8_MAX = 0xff;
-export const UINT16_MAX = 0xffff;
-export const UINT32_MAX = 0xffffffff;
+export const UINT8_MAX = 0xFF;
+export const UINT16_MAX = 0xFFFF;
+export const UINT32_MAX = 0xFFFFFFFF;
 export const UINT64_MAX = BigInt("18446744073709551615");
 
 export const INT8_MIN = -128;

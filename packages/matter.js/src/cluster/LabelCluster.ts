@@ -17,10 +17,10 @@ import { AccessLevel, Attribute, Cluster, WritableAttribute } from "./Cluster.js
  */
 const TlvLabel = TlvObject({
     /** Contains a string as label without a further defined semantic n this base cluster. */
-    label: TlvField(0, TlvString.bound({ length: 16 })) /* default: "" */,
+    label: TlvField(0, TlvString.bound({ length: 16 })), /* default: "" */
 
     /** Contains a string as value without a further defined semantic n this base cluster. */
-    value: TlvField(1, TlvString.bound({ length: 16 })) /* default: "" */
+    value: TlvField(1, TlvString.bound({ length: 16 })), /* default: "" */
 });
 
 /**
@@ -37,11 +37,8 @@ export const UserLabelCluster = Cluster({
     /** @see {@link MatterCoreSpecificationV1_0} § 9.9.4 */
     attributes: {
         /** An implementation SHALL support at least 4 list entries per node for all User Label cluster instances on the node. */
-        labelList: WritableAttribute(0, TlvArray(TlvLabel), {
-            default: [],
-            writeAcl: AccessLevel.Manage
-        }) /* non-volatile */
-    }
+        labelList: WritableAttribute(0, TlvArray(TlvLabel), { default: [], writeAcl: AccessLevel.Manage }), /* non-volatile */
+    },
 });
 
 /**
@@ -58,6 +55,6 @@ export const FixedLabelCluster = Cluster({
     /** @see {@link MatterCoreSpecificationV1_0} § 9.8.4 */
     attributes: {
         /** List of fixed labels. */
-        labelList: Attribute(0, TlvArray(TlvLabel), { default: [] }) /* non-volatile */
-    }
+        labelList: Attribute(0, TlvArray(TlvLabel), { default: [] }), /* non-volatile */
+    },
 });

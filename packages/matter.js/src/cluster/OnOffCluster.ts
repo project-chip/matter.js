@@ -27,13 +27,13 @@ export const enum StartUpOnOff {
      * attribute to TRUE. If the previous value of the OnOff attribute is equal to TRUE,
      * set the OnOff attribute to FALSE (toggle).
      */
-    Toggle = 2
+    Toggle = 2,
 }
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.7.4.1 */
 export const enum OnOffEffectIdentifier {
     DelayedAllOff = 0,
-    DyingLight = 1
+    DyingLight = 1,
 }
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.7.4.2 */
@@ -45,13 +45,13 @@ export const enum DelayedAllOffEffectVariant {
     NoFade = 1,
 
     /** 50% dim down in 0.8 seconds then fade to off in 12 seconds. */
-    DimDownThenFade = 2
+    DimDownThenFade = 2,
 }
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.7.4.2 */
 export const enum DyingLightEffectVariant {
     /** 20% dim up in 0.5s then fade to off in 1 second. */
-    DimUpThenFade = 0
+    DimUpThenFade = 0,
 }
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.7.4.2 */
@@ -89,13 +89,13 @@ export const OnOffCluster = Cluster({
     revision: 4,
     features: {
         /** Level Control for Lighting - Behavior that supports lighting applications */
-        lightingLevelControl: BitFlag(0)
+        lightingLevelControl: BitFlag(0),
     },
 
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.6 */
     attributes: {
         /** Indicates whether the device type implemented on the endpoint is turned off (false) or turned on (true). */
-        onOff: Attribute(0, TlvBoolean, { default: false }) /* reportable: true, scene:true */
+        onOff: Attribute(0, TlvBoolean, { default: false }), /* reportable: true, scene:true */
 
         // The following attributes are only needed for "Level Control for Lighting" support
 
@@ -141,7 +141,7 @@ export const OnOffCluster = Cluster({
          * SHALL set the OffWaitTime attribute to 0. If the value of the OnOff attribute is equal to TRUE, the OnTime
          * attribute SHALL be set to 0.
          */
-        toggle: Command(2, TlvNoArguments, 2, TlvNoResponse)
+        toggle: Command(2, TlvNoArguments, 2, TlvNoResponse),
 
         // The following attributes are only needed for "Level Control for Lighting" support
         // So we declare them option for now!
@@ -163,5 +163,5 @@ export const OnOffCluster = Cluster({
          * during this time, are prevented from turning the devices back on.
          */
         //onWithTimedOff: OptionalCommand(0x42, OnWithTimedOffRequestT, 0x42, NoResponseT),
-    }
+    },
 });

@@ -9,9 +9,9 @@ import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 
 type LengthConstraints = {
-    minLength?: number;
-    maxLength?: number;
-    length?: number;
+    minLength?: number,
+    maxLength?: number,
+    length?: number,
 };
 
 /**
@@ -23,7 +23,7 @@ export class ArraySchema<T> extends TlvSchema<T[]> {
     constructor(
         readonly elementSchema: TlvSchema<T>,
         private readonly minLength: number = 0,
-        private readonly maxLength: number = 1024
+        private readonly maxLength: number = 1024,
     ) {
         super();
     }
@@ -55,5 +55,4 @@ export class ArraySchema<T> extends TlvSchema<T[]> {
 }
 
 /** Array TLV schema. */
-export const TlvArray = <T>(elementSchema: TlvSchema<T>, { minLength, maxLength, length }: LengthConstraints = {}) =>
-    new ArraySchema(elementSchema, length ?? minLength, length ?? maxLength);
+export const TlvArray = <T>(elementSchema: TlvSchema<T>, { minLength, maxLength, length }: LengthConstraints = {}) => new ArraySchema(elementSchema, length ?? minLength, length ?? maxLength);

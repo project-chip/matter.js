@@ -10,11 +10,14 @@ import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 
 /**
  * Schema to encode a nulable value in TLV.
- *
+ * 
  * @see {@link MatterCoreSpecificationV1_0} § A.11.6
  */
 export class NullableSchema<T> extends TlvSchema<T | null> {
-    constructor(private readonly schema: TlvSchema<T>) {
+
+    constructor(
+        private readonly schema: TlvSchema<T>,
+    ) {
         super();
     }
 

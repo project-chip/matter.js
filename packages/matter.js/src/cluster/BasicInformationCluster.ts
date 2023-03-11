@@ -11,17 +11,7 @@ import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvString, TlvString256max, TlvString32max, TlvString64max } from "../tlv/TlvString.js";
-import {
-    AccessLevel,
-    Attribute,
-    Cluster,
-    Event,
-    EventPriority,
-    OptionalAttribute,
-    OptionalEvent,
-    OptionalWritableAttribute,
-    WritableAttribute
-} from "./Cluster.js";
+import { AccessLevel, Attribute, Cluster, Event, EventPriority, OptionalAttribute, OptionalEvent, OptionalWritableAttribute, WritableAttribute } from "./Cluster.js";
 
 /**
  * Provides constant values related to overall global capabilities of this Node, that are not cluster-specific.
@@ -33,7 +23,7 @@ const TlvCapabilityMinima = TlvObject({
     caseSessionsPerFabric: TlvField(0, TlvUInt16.bound({ min: 3 })),
 
     /** Indicate the actual minimum number of concurrent subscriptions supported per fabric. */
-    subscriptionsPerFabric: TlvField(1, TlvUInt16.bound({ min: 3 }))
+    subscriptionsPerFabric: TlvField(1, TlvUInt16.bound({ min: 3 })),
 });
 
 /**
@@ -69,10 +59,7 @@ export const BasicInformationCluster = Cluster({
         nodeLabel: WritableAttribute(5, TlvString32max, { default: "", writeAcl: AccessLevel.Manage }),
 
         /** ISO 3166-1 alpha-2 code where the Node is located. Might affect some regulatory aspects. */
-        location: WritableAttribute(6, TlvString.bound({ length: 2 }), {
-            default: "XX",
-            writeAcl: AccessLevel.Administer
-        }),
+        location: WritableAttribute(6, TlvString.bound({ length: 2 }), { default: "XX", writeAcl: AccessLevel.Administer }),
 
         /** Version number of the hardware of the Node. The meaning of its value, and the versioning scheme, are vendor defined. */
         hardwareVersion: Attribute(7, TlvUInt16, { default: 0 }),
@@ -102,10 +89,7 @@ export const BasicInformationCluster = Cluster({
         serialNumber: OptionalAttribute(15, TlvString32max),
 
         /** Allows to disable the ability to configure the Node through an on-Node user interface. */
-        localConfigDisabled: OptionalWritableAttribute(16, TlvBoolean, {
-            default: false,
-            writeAcl: AccessLevel.Manage
-        }),
+        localConfigDisabled: OptionalWritableAttribute(16, TlvBoolean, { default: false, writeAcl: AccessLevel.Manage }),
 
         /** Indicates whether the Node can be reached over the non-native network for bridged devices. */
         reachable: OptionalAttribute(17, TlvBoolean, { default: true }),
@@ -114,9 +98,7 @@ export const BasicInformationCluster = Cluster({
         uniqueId: OptionalAttribute(18, TlvString32max),
 
         /** Minimum guaranteed value for some system-wide, not cluster-specific, resource capabilities. */
-        capabilityMinima: Attribute(19, TlvCapabilityMinima, {
-            default: { caseSessionsPerFabric: 3, subscriptionsPerFabric: 3 }
-        })
+        capabilityMinima: Attribute(19, TlvCapabilityMinima, { default: { caseSessionsPerFabric: 3, subscriptionsPerFabric: 3 } }),
     },
 
     /** @see {@link MatterCoreSpecificationV1_0} § 11.1.6.5 */
@@ -131,6 +113,6 @@ export const BasicInformationCluster = Cluster({
         leave: OptionalEvent(2, EventPriority.Info, { fabricIndex: TlvField(0, TlvFabricIndex) }),
 
         /** Fired when there is a change in the {@link BasicInformationCluster.attributes.reachable reachable} attribute. */
-        reachableChanged: OptionalEvent(3, EventPriority.Info, { reachableNewValue: TlvField(0, TlvBoolean) })
-    }
+        reachableChanged: OptionalEvent(3, EventPriority.Info, { reachableNewValue: TlvField(0, TlvBoolean) }),
+    },
 });

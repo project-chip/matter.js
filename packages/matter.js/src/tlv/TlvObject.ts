@@ -11,31 +11,24 @@ import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 
 export interface FieldType<T> {
-    id: number;
-    schema: TlvSchema<T>;
-    optional?: boolean;
-    fallback?: T;
+    id: number,
+    schema: TlvSchema<T>,
+    optional?: boolean,
+    fallback?: T,
 }
 
 export interface OptionalFieldType<T> extends FieldType<T> {
-    optional: true;
+    optional: true,
 }
 
 export type TlvFields = { [field: string]: FieldType<any> };
 
-type MandatoryFieldNames<F extends TlvFields> = {
-    [K in keyof F]: F[K] extends OptionalFieldType<any> ? never : K;
-}[keyof F];
-type OptionalFieldNames<F extends TlvFields> = {
-    [K in keyof F]: F[K] extends OptionalFieldType<any> ? K : never;
-}[keyof F];
+type MandatoryFieldNames<F extends TlvFields> = { [K in keyof F]: F[K] extends OptionalFieldType<any> ? never : K }[keyof F];
+type OptionalFieldNames<F extends TlvFields> = { [K in keyof F]: F[K] extends OptionalFieldType<any> ? K : never }[keyof F];
 type TypeFromField<F extends FieldType<any>> = F extends FieldType<infer T> ? T : never;
 type TypeForMandatoryFields<F extends TlvFields, MF extends keyof F> = { [K in MF]: TypeFromField<F[K]> };
 type TypeForOptionalFields<F extends TlvFields, MF extends keyof F> = { [K in MF]?: TypeFromField<F[K]> };
-export type TypeFromFields<F extends TlvFields> = Merge<
-    TypeForMandatoryFields<F, MandatoryFieldNames<F>>,
-    TypeForOptionalFields<F, OptionalFieldNames<F>>
->;
+export type TypeFromFields<F extends TlvFields> = Merge<TypeForMandatoryFields<F, MandatoryFieldNames<F>>, TypeForOptionalFields<F, OptionalFieldNames<F>>>;
 
 /**
  * Schema to encode an object in TLV.
@@ -43,11 +36,11 @@ export type TypeFromFields<F extends TlvFields> = Merge<
  * @see {@link MatterCoreSpecificationV1_0} § A.5.1 and § A.11.4
  */
 export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<F>> {
-    private readonly fieldById = new Array<{ name: string; field: FieldType<any> }>();
+    private readonly fieldById = new Array<{ name: string, field: FieldType<any> }>();
 
     constructor(
         private readonly fieldDefinitions: F,
-        private readonly type: TlvType.Structure | TlvType.List = TlvType.Structure
+        private readonly type: TlvType.Structure | TlvType.List = TlvType.Structure,
     ) {
         super();
 
@@ -121,9 +114,7 @@ export const TlvList = <F extends TlvFields>(fields: F) => new ObjectSchema(fiel
  * providing a value against the specifications or in special usecases. Make sure to use a value that is an equivalent
  * to the value being empty.
  */
-export const TlvField = <T>(id: number, schema: TlvSchema<T>, fallback?: T) =>
-    ({ id, schema, fallback, optional: false } as FieldType<T>);
+export const TlvField = <T>(id: number, schema: TlvSchema<T>, fallback?: T) => ({ id, schema, fallback, optional: false }) as FieldType<T>;
 
 /** Object TLV optional field. */
-export const TlvOptionalField = <T>(id: number, schema: TlvSchema<T>) =>
-    ({ id, schema, optional: true } as OptionalFieldType<T>);
+export const TlvOptionalField = <T>(id: number, schema: TlvSchema<T>) => ({ id, schema, optional: true }) as OptionalFieldType<T>;

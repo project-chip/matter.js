@@ -16,15 +16,7 @@ import { TlvEnum, TlvUInt16 } from "../tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvSchema } from "../tlv/TlvSchema.js";
 import { TlvByteString } from "../tlv/TlvString.js";
-import {
-    AccessLevel,
-    Attribute,
-    Cluster,
-    Event,
-    EventPriority,
-    OptionalWritableAttribute,
-    WritableAttribute
-} from "./Cluster.js";
+import { AccessLevel, Attribute, Cluster, Event, EventPriority, OptionalWritableAttribute, WritableAttribute } from "./Cluster.js";
 
 /**
  * List of privileges that can be granted to a subject.
@@ -45,7 +37,7 @@ export const enum Privilege {
     Manage = 4,
 
     /** Manage privileges, and can observe and modify the Access Control Cluster. */
-    Administer = 5
+    Administer = 5,
 }
 
 /**
@@ -61,7 +53,7 @@ export const enum AuthMode {
     CASE = 2,
 
     /** Group authenticated session. */
-    Group = 3
+    Group = 3,
 }
 
 /** @see {@link MatterCoreSpecificationV1_0} § 9.10.8.1 */
@@ -73,7 +65,7 @@ export const enum ChangeTypeEnum {
     Added = 1,
 
     /** Entry or extension was removed. */
-    Removed = 2
+    Removed = 2,
 }
 
 /**
@@ -93,7 +85,7 @@ const TlvTarget = TlvObject({
     endpoint: TlvField(1, TlvNullable(TlvEndpointNumber)),
 
     /** Device type to grant access on. */
-    deviceType: TlvField(1, TlvNullable(TlvDeviceTypeId))
+    deviceType: TlvField(1, TlvNullable(TlvDeviceTypeId)),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 9.10.5.3 */
@@ -105,16 +97,16 @@ const TlvAccessControlEntry = TlvObject({
     authMode: TlvField(2, TlvEnum<AuthMode>()),
 
     /** Specifies a list of Subject IDs, to which this Access Control Entry grants access. */
-    subjects: TlvField(3, TlvNullable(TlvArray(TlvSubjectId))) /* maxArrayLength: subjectsPerAccessControlEntry */,
+    subjects: TlvField(3, TlvNullable(TlvArray(TlvSubjectId))), /* maxArrayLength: subjectsPerAccessControlEntry */
 
     /** Specifies a list of TargetStruct, which define the clusters on this Node to which this Access Control Entry grants access. */
-    targets: TlvField(4, TlvNullable(TlvArray(TlvTarget))) /* maxArrayLength: targetsPerAccessControlEntry */
+    targets: TlvField(4, TlvNullable(TlvArray(TlvTarget))), /* maxArrayLength: targetsPerAccessControlEntry */
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 9.10.5.4 */
 const TlvAccessControlExtensionEntry = TlvObject({
     /** Used by manufacturers to store arbitrary TLV-encoded data related to a fabric’s Access Control Entries. */
-    data: TlvField(1, TlvByteString.bound({ maxLength: 128 }))
+    data: TlvField(1, TlvByteString.bound({ maxLength: 128 })),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 9.10.7.1 */
@@ -129,7 +121,7 @@ const AccessChangeEvent = <T>(entrySchema: TlvSchema<T>) => ({
     changeType: TlvField(3, TlvEnum<ChangeTypeEnum>()),
 
     /** The latest value of the changed entry. */
-    latestValue: TlvField(4, TlvNullable(entrySchema))
+    latestValue: TlvField(4, TlvNullable(entrySchema)),
 });
 
 /**
@@ -151,18 +143,10 @@ export const AccessControlCluster = Cluster({
     /** @see {@link MatterCoreSpecificationV1_0} § 9.10.5 */
     attributes: {
         /** Codifies a single grant of privilege on this Node. */
-        acl: WritableAttribute(0, TlvArray(TlvAccessControlEntry), {
-            default: [],
-            writeAcl: AccessLevel.Administer,
-            readAcl: AccessLevel.Administer
-        }),
+        acl: WritableAttribute(0, TlvArray(TlvAccessControlEntry), { default: [], writeAcl: AccessLevel.Administer, readAcl: AccessLevel.Administer }),
 
         /** MAY be used by Administrators to store arbitrary data related to fabric’s Access Control Entries. */
-        extension: OptionalWritableAttribute(1, TlvArray(TlvAccessControlExtensionEntry), {
-            default: [],
-            writeAcl: AccessLevel.Administer,
-            readAcl: AccessLevel.Administer
-        }),
+        extension: OptionalWritableAttribute(1, TlvArray(TlvAccessControlExtensionEntry), { default: [], writeAcl: AccessLevel.Administer, readAcl: AccessLevel.Administer }),
 
         /** Provide the minimum number of Subjects per entry that are supported by this server. */
         subjectsPerAccessControlEntry: Attribute(2, TlvUInt16.bound({ min: 4 }), { default: 4 }),
@@ -171,7 +155,7 @@ export const AccessControlCluster = Cluster({
         targetsPerAccessControlEntry: Attribute(3, TlvUInt16.bound({ min: 3 }), { default: 3 }),
 
         /** Provides the minimum number of ACL Entries per fabric that are supported by this server. */
-        accessControlEntriesPerFabric: Attribute(4, TlvUInt16.bound({ min: 3 }), { default: 3 })
+        accessControlEntriesPerFabric: Attribute(4, TlvUInt16.bound({ min: 3 }), { default: 3 }),
     },
 
     /** @see {@link MatterCoreSpecificationV1_0} § 9.10.7 */
@@ -180,20 +164,12 @@ export const AccessControlCluster = Cluster({
          * The cluster SHALL send AccessControlEntryChanged events whenever its ACL attribute data is changed by an
          * Administrator.
          */
-        accessControlEntryChanged: Event(
-            0,
-            EventPriority.Info,
-            AccessChangeEvent(TlvAccessControlEntry)
-        ) /* readAcl: AccessLevel.Administer */,
+        accessControlEntryChanged: Event(0, EventPriority.Info, AccessChangeEvent(TlvAccessControlEntry)), /* readAcl: AccessLevel.Administer */
 
         /**
          * The cluster SHALL send AccessControlExtensionChanged events whenever its extension attribute data is changed
          * by an Administrator.
          */
-        accessControlExtensionChanged: Event(
-            1,
-            EventPriority.Info,
-            AccessChangeEvent(TlvAccessControlExtensionEntry)
-        ) /* readAcl: AccessLevel.Administer */
-    }
+        accessControlExtensionChanged: Event(1, EventPriority.Info, AccessChangeEvent(TlvAccessControlExtensionEntry)), /* readAcl: AccessLevel.Administer */
+    },
 });
