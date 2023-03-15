@@ -12,7 +12,7 @@ import { isIPv4 } from "../../util/Ip";
 import { NetworkFake } from "./NetworkFake";
 
 export class UdpChannelFake implements UdpChannel {
-    static async create(network: NetworkFake, {listeningAddress, listeningPort, netInterface, type}: UdpChannelOptions) {
+    static async create(network: NetworkFake, { listeningAddress, listeningPort, netInterface, type }: UdpChannelOptions) {
         const { ips } = network.getIpMac(netInterface ?? FAKE_INTERFACE_NAME);
         const ipv4 = type === "udp4";
         const localAddress = ips.filter(ip => isIPv4(ip) || !ipv4)[0];
@@ -27,7 +27,7 @@ export class UdpChannelFake implements UdpChannel {
         private readonly localAddress: string,
         private readonly listeningAddress: string | undefined,
         private readonly listeningPort: number,
-    ) {}
+    ) { }
 
     onData(listener: (netInterface: string, peerAddress: string, peerPort: number, data: ByteArray) => void) {
         const netListener = this.simulatedNetwork.onUdpData(this.listeningAddress, this.listeningPort, listener);

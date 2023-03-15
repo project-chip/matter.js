@@ -91,7 +91,7 @@ const TlvCertSigningRequestRequest = TlvObject({
      * a subsequent UpdateNOC, otherwise the internal state of the CSR SHALL be tagged as being for a
      * subsequent AddNOC
      * */
-    isForUpdateNOC: TlvOptionalField(1,  TlvBoolean), /* default: false */
+    isForUpdateNOC: TlvOptionalField(1, TlvBoolean), /* default: false */
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.7.6 */
@@ -210,7 +210,7 @@ export const TlvAttestation = TlvObject({
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.5.6 */
 export const TlvCertSigningRequest = TlvObject({
     certSigningRequest: TlvField(1, TlvByteString),
-    certSigningRequestNonce: TlvField(2, TlvByteString.bound({ length: 32})),
+    certSigningRequestNonce: TlvField(2, TlvByteString.bound({ length: 32 })),
     vendorReserved1: TlvOptionalField(3, TlvByteString),
     vendorReserved2: TlvOptionalField(4, TlvByteString),
     vendorReserved3: TlvOptionalField(5, TlvByteString),
@@ -257,7 +257,7 @@ export const OperationalCredentialsCluster = Cluster({
         trustedRootCertificates: Attribute(4, TlvArray(TlvByteString, { maxLength: 400 }), { persistent: true, omitChanges: true }),
 
         /** Contains accessing fabric index. */
-        currentFabricIndex: Attribute(5, TlvFabricIndex, { default: new FabricIndex(0)}),
+        currentFabricIndex: Attribute(5, TlvFabricIndex, { default: new FabricIndex(0) }),
     },
 
     /** @see {@link MatterCoreSpecificationV1_0} § 11.17.7 */

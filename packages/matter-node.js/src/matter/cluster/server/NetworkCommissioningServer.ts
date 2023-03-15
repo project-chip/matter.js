@@ -8,19 +8,19 @@ import { NetworkCommissioningCluster } from "../NetworkCommissioningCluster"
 import { ClusterServerHandlers } from "./ClusterServer"
 
 export const NetworkCommissioningHandler: () => ClusterServerHandlers<typeof NetworkCommissioningCluster> = () => ({
-    scanNetworks: async function () {
+    scanNetworks: async function() {
         throw new Error("Not implemented");
     },
 
-    removeNetwork: async function () {
+    removeNetwork: async function() {
         throw new Error("Not implemented");
     },
 
-    connectNetwork: async function () {
+    connectNetwork: async function() {
         throw new Error("Not implemented");
     },
 
-    reorderNetwork: async function () {
+    reorderNetwork: async function() {
         throw new Error("Not implemented");
     },
 });

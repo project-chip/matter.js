@@ -41,7 +41,7 @@ export class Crypto {
     static encrypt(key: ByteArray, data: ByteArray, nonce: ByteArray, aad?: ByteArray) {
         const cipher = crypto.createCipheriv(ENCRYPT_ALGORITHM, key, nonce, { authTagLength: AUTH_TAG_LENGTH });
         if (aad !== undefined) {
-            cipher.setAAD(aad, { plaintextLength: data.length})
+            cipher.setAAD(aad, { plaintextLength: data.length })
         }
         const encrypted = cipher.update(data);
         cipher.final();
@@ -86,13 +86,13 @@ export class Crypto {
     static ecdhGeneratePublicKey() {
         const ecdh = crypto.createECDH(EC_CURVE);
         ecdh.generateKeys();
-        return {publicKey: ecdh.getPublicKey(), ecdh: ecdh};
+        return { publicKey: ecdh.getPublicKey(), ecdh: ecdh };
     }
 
     static ecdhGeneratePublicKeyAndSecret(peerPublicKey: ByteArray) {
         const ecdh = crypto.createECDH(EC_CURVE);
         ecdh.generateKeys();
-        return {publicKey: ecdh.getPublicKey(), sharedSecret: ecdh.computeSecret(peerPublicKey)};
+        return { publicKey: ecdh.getPublicKey(), sharedSecret: ecdh.computeSecret(peerPublicKey) };
     }
 
     static ecdhGenerateSecret(peerPublicKey: ByteArray, ecdh: crypto.ECDH) {
@@ -133,7 +133,7 @@ export class Crypto {
         return hmac.digest();
     }
 
-    static signPkcs8(privateKey: ByteArray, data: ByteArray | ByteArray[], dsaEncoding: ("ieee-p1363" | "der")  = "ieee-p1363") {
+    static signPkcs8(privateKey: ByteArray, data: ByteArray | ByteArray[], dsaEncoding: ("ieee-p1363" | "der") = "ieee-p1363") {
         const signer = crypto.createSign(HASH_ALGORITHM);
         if (Array.isArray(data)) {
             data.forEach(chunk => signer.update(chunk));
@@ -148,7 +148,7 @@ export class Crypto {
         });
     }
 
-    static signSec1(privateKey: ByteArray, data: ByteArray | ByteArray[], dsaEncoding: ("ieee-p1363" | "der")  = "ieee-p1363") {
+    static signSec1(privateKey: ByteArray, data: ByteArray | ByteArray[], dsaEncoding: ("ieee-p1363" | "der") = "ieee-p1363") {
         const signer = crypto.createSign(HASH_ALGORITHM);
         if (Array.isArray(data)) {
             data.forEach(chunk => signer.update(chunk));
@@ -163,7 +163,7 @@ export class Crypto {
         });
     }
 
-    static verifySpkiEc(publicKey: ByteArray, data: ByteArray, signature: ByteArray, dsaEncoding: ("ieee-p1363" | "der")  = "ieee-p1363") {
+    static verifySpkiEc(publicKey: ByteArray, data: ByteArray, signature: ByteArray, dsaEncoding: ("ieee-p1363" | "der") = "ieee-p1363") {
         const verifier = crypto.createVerify(HASH_ALGORITHM);
         verifier.update(data);
         const success = verifier.verify({
@@ -175,7 +175,7 @@ export class Crypto {
         if (!success) throw new Error("Signature verification failed");
     }
 
-    static verifySpki(publicKey: ByteArray, data: ByteArray, signature: ByteArray, dsaEncoding: ("ieee-p1363" | "der")  = "ieee-p1363") {
+    static verifySpki(publicKey: ByteArray, data: ByteArray, signature: ByteArray, dsaEncoding: ("ieee-p1363" | "der") = "ieee-p1363") {
         const verifier = crypto.createVerify(HASH_ALGORITHM);
         verifier.update(data);
         const success = verifier.verify({

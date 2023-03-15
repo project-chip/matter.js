@@ -62,7 +62,7 @@ const TlvOffWithEffectRequest = TlvObject({
 }) as TlvSchema<
     { effectIdentifier: EffectIdentifier.DelayedAllOff, effectVariant: DelayedAllOffEffectVariant } |
     { effectIdentifier: EffectIdentifier.DyingLight, effectVariant: DyingLightEffectVariant }
-    >;
+>;
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.7.4.2 */
 const TlvOnOffControlBitmap = TlvBitmap(TlvUInt8, {
@@ -93,7 +93,7 @@ export const OnOffCluster = Cluster({
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.6 */
     attributes: {
         /** Indicates whether the device type implemented on the endpoint is turned off (false) or turned on (true). */
-        onOff: Attribute(0,  TlvBoolean, { persistent: true, default: false }), /* reportable: true, scene:true - Specs 1.0 wrong here, using chip XMLs*/
+        onOff: Attribute(0, TlvBoolean, { persistent: true, default: false }), /* reportable: true, scene:true - Specs 1.0 wrong here, using chip XMLs*/
 
         // The following attributes are only needed for "Level Control for Lighting" support
 

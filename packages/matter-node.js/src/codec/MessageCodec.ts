@@ -73,7 +73,7 @@ export class MessageCodec {
         };
     }
 
-    static decodePayload({header, bytes}: Packet): Message {
+    static decodePayload({ header, bytes }: Packet): Message {
         const reader = new DataReader(bytes, Endian.Little);
         return {
             packetHeader: header,
@@ -82,7 +82,7 @@ export class MessageCodec {
         };
     }
 
-    static encodePayload({packetHeader, payloadHeader, payload}: Message): Packet {
+    static encodePayload({ packetHeader, payloadHeader, payload }: Message): Packet {
         return {
             header: packetHeader,
             bytes: ByteArray.concat(
@@ -92,7 +92,7 @@ export class MessageCodec {
         };
     }
 
-    static encodePacket({header, bytes}: Packet): ByteArray {
+    static encodePacket({ header, bytes }: Packet): ByteArray {
         return ByteArray.concat(
             this.encodePacketHeader(header),
             bytes,
@@ -138,10 +138,10 @@ export class MessageCodec {
         const protocolId = vendorId << 16 | reader.readUInt16();
         const ackedMessageId = isAckMessage ? reader.readUInt32() : undefined;
 
-        return {protocolId, exchangeId, messageType, isInitiatorMessage, requiresAck, ackedMessageId};
+        return { protocolId, exchangeId, messageType, isInitiatorMessage, requiresAck, ackedMessageId };
     }
 
-    static encodePacketHeader({messageId: messageCounter, sessionId, destGroupId, destNodeId, sourceNodeId, sessionType}: PacketHeader) {
+    static encodePacketHeader({ messageId: messageCounter, sessionId, destGroupId, destNodeId, sourceNodeId, sessionType }: PacketHeader) {
         const writer = new DataWriter(Endian.Little);
         const flags = (HEADER_VERSION << 4)
             | (destGroupId !== undefined ? PacketHeaderFlag.HasDestGroupId : 0)
@@ -159,11 +159,11 @@ export class MessageCodec {
         return writer.toByteArray();
     }
 
-    static messageToString({packetHeader: {messageId, sessionId}, payloadHeader: {exchangeId, messageType, protocolId, ackedMessageId, requiresAck}, payload}: Message) {
+    static messageToString({ packetHeader: { messageId, sessionId }, payloadHeader: { exchangeId, messageType, protocolId, ackedMessageId, requiresAck }, payload }: Message) {
         return `id:${sessionId}/${exchangeId}/${messageId} t:${protocolId}/${messageType}${ackedMessageId !== undefined ? ` acked:${ackedMessageId}` : ''} reqAck:${requiresAck} payload: ${payload.toHex()}`;
     }
 
-    private static encodePayloadHeader({exchangeId, isInitiatorMessage, messageType, protocolId, requiresAck, ackedMessageId: ackedMessageCounter}: PayloadHeader) {
+    private static encodePayloadHeader({ exchangeId, isInitiatorMessage, messageType, protocolId, requiresAck, ackedMessageId: ackedMessageCounter }: PayloadHeader) {
         const writer = new DataWriter(Endian.Little);
         const vendorId = (protocolId & 0xFFFF0000) >> 16;
         const flags = (isInitiatorMessage ? PayloadHeaderFlag.IsInitiatorMessage : 0)

@@ -37,7 +37,7 @@ export class Fabric {
         readonly intermediateCACert: ByteArray | undefined,
         readonly operationalCert: ByteArray,
         public label: string,
-    ) {}
+    ) { }
 
     getPublicKey() {
         return this.keyPair.publicKey;
@@ -96,7 +96,7 @@ export class FabricBuilder {
 
     constructor(
         private readonly fabricIndex: FabricIndex,
-    ) {}
+    ) { }
 
     getPublicKey() {
         return this.keyPair.publicKey;
@@ -114,7 +114,7 @@ export class FabricBuilder {
 
     setOperationalCert(operationalCert: ByteArray) {
         this.operationalCert = operationalCert;
-        const {subject: {nodeId, fabricId} } = TlvOperationalCertificate.decode(operationalCert);
+        const { subject: { nodeId, fabricId } } = TlvOperationalCertificate.decode(operationalCert);
         this.fabricId = new FabricId(toBigInt(fabricId));
         this.nodeId = nodeId;
         return this;

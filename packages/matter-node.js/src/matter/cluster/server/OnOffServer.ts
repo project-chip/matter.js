@@ -33,5 +33,6 @@ export const OnOffClusterHandler: () => ClusterServerHandlers<typeof OnOffCluste
             onOff.set(false);
         } else {
             onOff.set(true);
-        }},
+        }
+    },
 });

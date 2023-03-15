@@ -29,7 +29,7 @@ function createDgramSocket(address: string | undefined, port: number, options: d
 }
 
 export class UdpChannelNode implements UdpChannel {
-    static async create({listeningPort, type, listeningAddress, netInterface}: UdpChannelOptions) {
+    static async create({ listeningPort, type, listeningAddress, netInterface }: UdpChannelOptions) {
         const socket = await createDgramSocket(listeningAddress, listeningPort, { type, reuseAddr: true });
         if (netInterface !== undefined) socket.setMulticastInterface(NetworkNode.getMulticastInterface(netInterface, type === "udp4"));
         return new UdpChannelNode(socket);
@@ -38,7 +38,7 @@ export class UdpChannelNode implements UdpChannel {
     constructor(
         private readonly socket: dgram.Socket,
         private readonly netInterface?: string,
-    ) {}
+    ) { }
 
     onData(listener: (netInterface: string, peerAddress: string, peerPort: number, data: ByteArray) => void) {
         const messageListener = (data: ByteArray, { address, port }: { address: string, port: number }) => {

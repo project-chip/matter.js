@@ -42,11 +42,11 @@ export class UdpMulticastServer {
         private readonly broadcastPort: number,
         private readonly serverIpv4: UdpChannel,
         private readonly serverIpv6: UdpChannel,
-    ) {}
+    ) { }
 
     onMessage(listener: (message: ByteArray, peerAddress: string, netInterface: string) => void) {
-       this.serverIpv4.onData((netInterface, peerAddress, _port, message) => listener(message, peerAddress, netInterface));
-       this.serverIpv6.onData((netInterface, peerAddress, _port, message) => listener(message, peerAddress, netInterface));
+        this.serverIpv4.onData((netInterface, peerAddress, _port, message) => listener(message, peerAddress, netInterface));
+        this.serverIpv6.onData((netInterface, peerAddress, _port, message) => listener(message, peerAddress, netInterface));
     }
 
     async send(message: ByteArray, netInterface?: string) {
@@ -65,7 +65,7 @@ export class UdpMulticastServer {
     }
 
     private async createBroadcastChannel(netInterface: string, iPv4: string): Promise<UdpChannel> {
-        return await this.network.createUdpChannel({type: iPv4 ? "udp4" : "udp6", listeningPort: this.broadcastPort, netInterface});
+        return await this.network.createUdpChannel({ type: iPv4 ? "udp4" : "udp6", listeningPort: this.broadcastPort, netInterface });
     }
 
     close() {

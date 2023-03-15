@@ -78,7 +78,7 @@ export class ClusterServer<F extends BitSchema, A extends Attributes, C extends 
             const handler = (handlers as any)[name];
             if (handler === undefined) continue;
             const { requestId, requestSchema, responseId, responseSchema } = commandDefs[name];
-            this.commands.push(new CommandServer(requestId, responseId, name, requestSchema, responseSchema, (request, session, message) => handler({request, attributes: this.attributes, session, message})));
+            this.commands.push(new CommandServer(requestId, responseId, name, requestSchema, responseSchema, (request, session, message) => handler({ request, attributes: this.attributes, session, message })));
         }
     }
 }
@@ -100,11 +100,11 @@ export interface AttributeWithPath {
     attribute: AttributeServer<any>,
 }
 
-export function commandPathToId({endpointId, clusterId, commandId}: CommandPath) {
+export function commandPathToId({ endpointId, clusterId, commandId }: CommandPath) {
     return `${endpointId}/${clusterId}/${commandId}`;
 }
 
-export function attributePathToId({endpointId, clusterId, attributeId}: Partial<AttributePath>) {
+export function attributePathToId({ endpointId, clusterId, attributeId }: Partial<AttributePath>) {
     return `${endpointId}/${clusterId}/${attributeId}`;
 }
 
@@ -124,16 +124,16 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         return INTERACTION_PROTOCOL_ID;
     }
 
-    addEndpoint(endpointId: number, device: {name: string, code: number}, clusters: ClusterServer<any, any, any, any>[]) {
+    addEndpoint(endpointId: number, device: { name: string, code: number }, clusters: ClusterServer<any, any, any, any>[]) {
         // Add the descriptor cluster
         const descriptorCluster = new ClusterServer(DescriptorCluster, {}, {
-            deviceTypeList: [{revision: 1, type: new DeviceTypeId(device.code)}],
+            deviceTypeList: [{ revision: 1, type: new DeviceTypeId(device.code) }],
             serverList: [],
             clientList: [],
             partsList: [],
         }, {});
         clusters.push(descriptorCluster);
-        descriptorCluster.attributes.serverList.setLocal(clusters.map(({id}) => new ClusterId(id)));
+        descriptorCluster.attributes.serverList.setLocal(clusters.map(({ id }) => new ClusterId(id)));
 
         const clusterMap = new Map<number, ClusterServer<any, any, any, any>>();
         clusters.forEach(cluster => {
@@ -157,7 +157,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         // Add part list if the endpoint is not root
         if (endpointId !== 0) {
-            const rootPartsListAttribute: AttributeServer<EndpointNumber[]> | undefined = this.attributes.get(attributePathToId({endpointId: 0, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id}));
+            const rootPartsListAttribute: AttributeServer<EndpointNumber[]> | undefined = this.attributes.get(attributePathToId({ endpointId: 0, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id }));
             if (rootPartsListAttribute === undefined) throw new Error("The root endpoint should be added first!");
             rootPartsListAttribute.setLocal([...rootPartsListAttribute.getLocal(), new EndpointNumber(endpointId)]);
         }
@@ -177,16 +177,16 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         );
     }
 
-    handleReadRequest(exchange: MessageExchange<MatterDevice>, {attributes: attributePaths, isFabricFiltered}: ReadRequest): DataReport {
+    handleReadRequest(exchange: MessageExchange<MatterDevice>, { attributes: attributePaths, isFabricFiltered }: ReadRequest): DataReport {
         logger.debug(`Received read request from ${exchange.channel.getName()}: ${attributePaths.map(path => this.resolveAttributeName(path)).join(", ")}, isFabricFiltered=${isFabricFiltered}`);
 
         // UnsupportedNode/UnsupportedEndpoint/UnsupportedCluster/UnsupportedAttribute/UnsupportedRead
 
         const reportValues = attributePaths.flatMap((path: TypeFromSchema<typeof TlvAttributePath>): TypeFromSchema<typeof TlvAttributeReport>[] => {
-            const attributes = this.getAttributes([ path ]);
+            const attributes = this.getAttributes([path]);
             if (attributes.length === 0) {
                 logger.debug(`Read from ${exchange.channel.getName()}: ${this.resolveAttributeName(path)} unsupported path`);
-                return [{ attributeStatus: { path, status: {status: StatusCode.UnsupportedAttribute} } }]; // TODO: Find correct status code
+                return [{ attributeStatus: { path, status: { status: StatusCode.UnsupportedAttribute } } }]; // TODO: Find correct status code
             }
 
             return attributes.map(({ path, attribute }) => {
@@ -203,15 +203,15 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         };
     }
 
-    handleWriteRequest(exchange: MessageExchange<MatterDevice>, {suppressResponse, writeRequests }: WriteRequest): WriteResponse {
+    handleWriteRequest(exchange: MessageExchange<MatterDevice>, { suppressResponse, writeRequests }: WriteRequest): WriteResponse {
         logger.debug(`Received write request from ${exchange.channel.getName()}: ${writeRequests.map(req => this.resolveAttributeName(req.path)).join(", ")}, suppressResponse=${suppressResponse}`);
 
         // TODO consider TimedRequest constraints
 
-        const writeResults = writeRequests.flatMap(({ path, dataVersion, data}) : { path: TypeFromSchema<typeof TlvAttributePath>, statusCode: StatusCode}[] => {
-            const attributes = this.getAttributes([ path ], true);
+        const writeResults = writeRequests.flatMap(({ path, dataVersion, data }): { path: TypeFromSchema<typeof TlvAttributePath>, statusCode: StatusCode }[] => {
+            const attributes = this.getAttributes([path], true);
             if (attributes.length === 0) {
-                return [ { path, statusCode: StatusCode.UnsupportedWrite } ]; // TODO: Find correct status code
+                return [{ path, statusCode: StatusCode.UnsupportedWrite }]; // TODO: Find correct status code
             }
 
             return attributes.map(({ path, attribute }) => {
@@ -240,7 +240,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         return {
             interactionModelRevision: 1,
-            writeResponses: writeResults.map(({ path, statusCode }) => ( { path, status: { status: statusCode } })),
+            writeResponses: writeResults.map(({ path, statusCode }) => ({ path, status: { status: statusCode } })),
         };
     }
 
@@ -290,10 +290,10 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         }
     }
 
-    async handleInvokeRequest(exchange: MessageExchange<MatterDevice>, {invokes}: InvokeRequest, message: Message): Promise<InvokeResponse> {
-        logger.debug(`Received invoke request from ${exchange.channel.getName()}: ${invokes.map(({ path: {endpointId, clusterId, commandId }}) => `${toHex(endpointId)}/${toHex(clusterId)}/${toHex(commandId)}`).join(", ")}`);
+    async handleInvokeRequest(exchange: MessageExchange<MatterDevice>, { invokes }: InvokeRequest, message: Message): Promise<InvokeResponse> {
+        logger.debug(`Received invoke request from ${exchange.channel.getName()}: ${invokes.map(({ path: { endpointId, clusterId, commandId } }) => `${toHex(endpointId)}/${toHex(clusterId)}/${toHex(commandId)}`).join(", ")}`);
 
-        const results = new Array<{path: CommandPath, code: ResultCode, response: TlvStream, responseId: number }>();
+        const results = new Array<{ path: CommandPath, code: ResultCode, response: TlvStream, responseId: number }>();
 
         await Promise.all(invokes.map(async ({ path, args }) => {
             const command = this.commands.get(commandPathToId(path));
@@ -305,17 +305,17 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         return {
             suppressResponse: false,
             interactionModelRevision: 1,
-            responses: results.map(({path, responseId, code, response}) => {
+            responses: results.map(({ path, responseId, code, response }) => {
                 if (response.length === 0) {
-                    return { result: { path, result: { code }} };
+                    return { result: { path, result: { code } } };
                 } else {
-                    return { response: { path: { ...path, commandId: responseId }, response} };
+                    return { response: { path: { ...path, commandId: responseId }, response } };
                 }
             }),
         };
     }
 
-    handleTimedRequest(exchange: MessageExchange<MatterDevice>, {timeout}: TimedRequest) {
+    handleTimedRequest(exchange: MessageExchange<MatterDevice>, { timeout }: TimedRequest) {
         logger.debug(`Received timed request (${timeout}) from ${exchange.channel.getName()}`);
         // TODO: implement this
     }

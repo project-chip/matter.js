@@ -19,15 +19,15 @@ export const BooleanStateCluster = Cluster({
 
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.7.4 */
     attributes: {
-       /**
-        * The semantics of this boolean state are defined by the device type using this cluster.
-        * For example, in a Contact Sensor device type, FALSE=open or no contact, TRUE=closed or contact
-        */
-       stateValue: Attribute(0x00, TlvBoolean),
+        /**
+         * The semantics of this boolean state are defined by the device type using this cluster.
+         * For example, in a Contact Sensor device type, FALSE=open or no contact, TRUE=closed or contact
+         */
+        stateValue: Attribute(0x00, TlvBoolean),
     },
-        /** @see {@link MatterApplicationClusterSpecificationV1_0 1.7.5} */
+    /** @see {@link MatterApplicationClusterSpecificationV1_0 1.7.5} */
     events: {
         /** generated when the StateValue attribute changes */
-        stateChange: OptionalEvent(0, EventPriority.Info, { stateValue: TlvField(0, TlvBoolean)  }),
+        stateChange: OptionalEvent(0, EventPriority.Info, { stateValue: TlvField(0, TlvBoolean) }),
     },
 });

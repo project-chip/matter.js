@@ -24,7 +24,7 @@ export class CommandServer<RequestT, ResponseT> {
         protected readonly requestSchema: TlvSchema<RequestT>,
         protected readonly responseSchema: TlvSchema<ResponseT>,
         protected readonly handler: (request: RequestT, session: Session<MatterDevice>, message: Message) => Promise<ResponseT> | ResponseT,
-    ) {}
+    ) { }
 
     async invoke(session: Session<MatterDevice>, args: TlvStream, message: Message): Promise<{ code: ResultCode, responseId: number, response: TlvStream }> {
         const request = this.requestSchema.decodeTlv(args);

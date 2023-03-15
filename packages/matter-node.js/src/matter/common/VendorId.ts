@@ -16,7 +16,7 @@ import { MatterCoreSpecificationV1_0, TlvUInt16, TlvWrapper } from "@project-chi
 export class VendorId {
     constructor(
         readonly id: number,
-    ) {}
+    ) { }
 }
 
 /** Data model for a Vendor Identifier. */

@@ -61,7 +61,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             const resumeKey = await Crypto.hkdf(sharedSecret, resumeSalt, KDFSR2_KEY_INFO);
             const resumeMic = Crypto.encrypt(resumeKey, new ByteArray(0), RESUME2_MIC_NONCE);
             try {
-                await messenger.sendSigma2Resume({resumptionId, resumeMic, sessionId});
+                await messenger.sendSigma2Resume({ resumptionId, resumeMic, sessionId });
             } catch (error) {
                 // If we fail to send the resume, we destroy the session
                 secureSession.destroy();
@@ -87,8 +87,8 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             const sigma2Bytes = await messenger.sendSigma2({ random, sessionId, ecdhPublicKey, encrypted, mrpParams });
 
             // Read and process sigma 3
-            const { sigma3Bytes, sigma3: {encrypted: peerEncrypted} } = await messenger.readSigma3();
-            const sigma3Salt = ByteArray.concat(operationalIdentityProtectionKey, Crypto.hash([ sigma1Bytes, sigma2Bytes ]));
+            const { sigma3Bytes, sigma3: { encrypted: peerEncrypted } } = await messenger.readSigma3();
+            const sigma3Salt = ByteArray.concat(operationalIdentityProtectionKey, Crypto.hash([sigma1Bytes, sigma2Bytes]));
             const sigma3Key = await Crypto.hkdf(sharedSecret, sigma3Salt, KDFSR3_INFO);
             const peerEncryptedData = Crypto.decrypt(sigma3Key, peerEncrypted, TBE_DATA3_NONCE);
             const { nodeOpCert: peerNewOpCert, intermediateCACert: peerIntermediateCACert, signature: peerSignature } = TlvEncryptedDataSigma3.decode(peerEncryptedData);
@@ -98,7 +98,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             Crypto.verifySpki(peerPublicKey, peerSignatureData, peerSignature);
 
             // All good! Create secure session
-            const secureSessionSalt = ByteArray.concat(operationalIdentityProtectionKey, Crypto.hash([ sigma1Bytes, sigma2Bytes, sigma3Bytes ]));
+            const secureSessionSalt = ByteArray.concat(operationalIdentityProtectionKey, Crypto.hash([sigma1Bytes, sigma2Bytes, sigma3Bytes]));
             await server.createSecureSession(sessionId, fabric, peerNodeId, peerSessionId, sharedSecret, secureSessionSalt, false, false, mrpParams?.idleRetransTimeoutMs, mrpParams?.activeRetransTimeoutMs);
             logger.info(`Case server: session ${sessionId} created with ${messenger.getChannelName()}`);
             await messenger.sendSuccess();

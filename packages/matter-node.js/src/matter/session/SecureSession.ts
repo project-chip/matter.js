@@ -82,11 +82,11 @@ export class SecureSession<T> implements Session<T> {
 
     encode(message: Message): Packet {
         message.packetHeader.sessionId = this.peerSessionId;
-        const {header, bytes} = MessageCodec.encodePayload(message);
+        const { header, bytes } = MessageCodec.encodePayload(message);
         const headerBytes = MessageCodec.encodePacketHeader(message.packetHeader);
         const securityFlags = headerBytes[3];
         const nonce = this.generateNonce(securityFlags, header.messageId, this.fabric?.nodeId ?? UNDEFINED_NODE_ID);
-        return { header, bytes: Crypto.encrypt(this.encryptKey, bytes, nonce, headerBytes)};
+        return { header, bytes: Crypto.encrypt(this.encryptKey, bytes, nonce, headerBytes) };
     }
 
     getAttestationChallengeKey(): ByteArray {
@@ -102,8 +102,8 @@ export class SecureSession<T> implements Session<T> {
     }
 
     getMrpParameters() {
-        const {idleRetransmissionTimeoutMs, activeRetransmissionTimeoutMs, retransmissionRetries} = this;
-        return {idleRetransmissionTimeoutMs, activeRetransmissionTimeoutMs, retransmissionRetries};
+        const { idleRetransmissionTimeoutMs, activeRetransmissionTimeoutMs, retransmissionRetries } = this;
+        return { idleRetransmissionTimeoutMs, activeRetransmissionTimeoutMs, retransmissionRetries };
     }
 
     getContext() {

@@ -14,7 +14,7 @@ import { MatterCoreSpecificationV1_0, TlvUInt32, TlvWrapper } from "@project-chi
 export class DeviceTypeId {
     constructor(
         readonly id: number
-    ) {}
+    ) { }
 }
 
 /** Tlv schema for a Device type ID. */

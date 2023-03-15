@@ -19,7 +19,7 @@ const OPERATIONAL_NODE_MAX = BigInt('0xFFFFFFEFFFFFFFFF');
 export class NodeId {
     constructor(
         readonly id: bigint,
-    ) {}
+    ) { }
 
     toString() {
         const writer = new DataWriter(Endian.Big);

@@ -38,7 +38,7 @@ const TlvGroupKeySet = TlvObject({
 const TlvGroupInfoMap = TlvObject({
     groupId: TlvField(1, TlvGroupId), /* min: 1 */
     endPoints: TlvField(2, TlvArray(TlvEndpointNumber, { minLength: 1 })),
-    groupName: TlvOptionalField(3, TlvString.bound( { maxLength: 16 })),
+    groupName: TlvOptionalField(3, TlvString.bound({ maxLength: 16 })),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.2.6 table 88 */
@@ -48,7 +48,7 @@ export const enum GroupKeyMulticastPolicy {
 
     /** The 16-bit Group Identifier of the Multicast Address SHALL be 0xFFFF */
     AllNodes = 0x01,
-  }
+}
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.2.6.2 table 87 */
 export const enum GroupKeySecurityPolicy {
@@ -57,14 +57,14 @@ export const enum GroupKeySecurityPolicy {
 
     /** Message counter synchronization using cache-and-sync */
     CacheAndSync = 0x01,
-  }
+}
 
-  /** @see {@link MatterCoreSpecificationV1_0} § 11.2.9.1 */
+/** @see {@link MatterCoreSpecificationV1_0} § 11.2.9.1 */
 const TlvKeySetWriteRequest = TlvObject({
     groupKeySet: TlvField(0, TlvGroupKeySet)
 });
 
-  /** @see {@link MatterCoreSpecificationV1_0} § 11.2.9.2 */
+/** @see {@link MatterCoreSpecificationV1_0} § 11.2.9.2 */
 const TlvKeySetReadRequest = TlvObject({
     groupKeySetId: TlvField(0, TlvUInt16)
 });
@@ -74,7 +74,7 @@ const TlvKeySetReadResponse = TlvObject({
     groupKeySet: TlvField(0, TlvGroupKeySet),
 });
 
-  /** @see {@link MatterCoreSpecificationV1_0} § 11.2.9.4 */
+/** @see {@link MatterCoreSpecificationV1_0} § 11.2.9.4 */
 const TlvKeySetRemoveRequest = TlvObject({
     groupKeySetId: TlvField(0, TlvUInt16)
 });
@@ -110,7 +110,7 @@ export const GroupKeyManagementCluster = Cluster({
         maxGroupsPerFabric: Attribute(2, TlvUInt16, { default: 0 }),
 
         /** Maximum number of group key sets this node supports per fabric */
-        maxGroupKeysPerFabric: Attribute(3, TlvUInt16.bound({ min: 1 }),{ default: 1} ),
+        maxGroupKeysPerFabric: Attribute(3, TlvUInt16.bound({ min: 1 }), { default: 1 }),
     },
 
     /** @see {@link MatterCoreSpecificationV1_0} § 11.2.9 */
@@ -119,7 +119,7 @@ export const GroupKeyManagementCluster = Cluster({
         keySetWrite: Command(0, TlvKeySetWriteRequest, 0, TlvNoResponse), /* isFabricScoped: true */
 
         /** Read the state of a given Group Key Set */
-        keySetRead: Command(1, TlvKeySetReadRequest,2, TlvKeySetReadResponse), /* isFabricScoped: true */
+        keySetRead: Command(1, TlvKeySetReadRequest, 2, TlvKeySetReadResponse), /* isFabricScoped: true */
 
         /** Remove all state of a given Group Key Set */
         keySetRemove: Command(3, TlvKeySetRemoveRequest, 3, TlvNoResponse), /* isFabricScoped: true */

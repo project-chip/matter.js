@@ -17,7 +17,7 @@ export class SecureChannelProtocol implements ProtocolHandler<MatterDevice> {
     constructor(
         private paseCommissioner: PaseServer,
         private readonly caseCommissioner: CaseServer,
-    ) {}
+    ) { }
 
     getId(): number {
         return SECURE_CHANNEL_PROTOCOL_ID;

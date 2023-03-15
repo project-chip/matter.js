@@ -22,7 +22,7 @@ export interface PbkdfParameters {
 
 export class Spake2p {
 
-    static async computeW0W1({iterations, salt}: PbkdfParameters, pin: number) {
+    static async computeW0W1({ iterations, salt }: PbkdfParameters, pin: number) {
         const pinWriter = new DataWriter(Endian.Little);
         pinWriter.writeUInt32(pin);
         const ws = await Crypto.pbkdf2(pinWriter.toByteArray(), salt, iterations, 80);
@@ -46,7 +46,7 @@ export class Spake2p {
         private readonly context: ByteArray,
         private readonly random: BN,
         private readonly w0: BN,
-    ) {}
+    ) { }
 
     computeX(): ByteArray {
         const X = P256_CURVE.g.mul(this.random).add(M.mul(this.w0));

@@ -10,10 +10,10 @@ class TimerNode implements Timer {
     private timerId: NodeJS.Timer | undefined;
 
     constructor(
-            private readonly intervalMs: number,
-            private readonly callback: TimerCallback,
-            private readonly periodic: boolean,
-        ) {}
+        private readonly intervalMs: number,
+        private readonly callback: TimerCallback,
+        private readonly periodic: boolean,
+    ) { }
 
     start() {
         this.timerId = (this.periodic ? setInterval : setTimeout)(this.callback, this.intervalMs);

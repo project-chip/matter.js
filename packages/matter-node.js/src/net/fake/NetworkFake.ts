@@ -18,7 +18,7 @@ export class NetworkFake extends Network {
     }
 
     getNetInterfaces(): string[] {
-        return [ FAKE_INTERFACE_NAME ];
+        return [FAKE_INTERFACE_NAME];
     }
 
     getIpMac(_netInterface: string): { mac: string; ips: string[]; } {

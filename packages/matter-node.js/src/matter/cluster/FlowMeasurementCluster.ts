@@ -19,15 +19,15 @@ export const FlowMeasurementCluster = Cluster({
 
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 2.5.4 */
     attributes: {
-       /** MeasuredValue represents the flow in m3 /h as follows: MeasuredValue = 10 x Flow  */
-       measuredValue: Attribute(0, TlvNullable(TlvUInt16), { default: null }),
-       
-       /** Indicates the minimum value of MeasuredValue that can be measured.  */
-       minMeasuredValue: Attribute(1, TlvNullable(TlvUInt16.bound({ min: 0 }))),
-       
-       /** Indicates the maximum value of MeasuredValue that can be measured.  */
-       maxMeasuredValue: Attribute(2, TlvNullable(TlvUInt16.bound({ max: 65534 }))),
+        /** MeasuredValue represents the flow in m3 /h as follows: MeasuredValue = 10 x Flow  */
+        measuredValue: Attribute(0, TlvNullable(TlvUInt16), { default: null }),
 
-       tolerance: OptionalAttribute(3, TlvUInt16.bound({ min: 0, max: 2048 }), { default: 0 }),
+        /** Indicates the minimum value of MeasuredValue that can be measured.  */
+        minMeasuredValue: Attribute(1, TlvNullable(TlvUInt16.bound({ min: 0 }))),
+
+        /** Indicates the maximum value of MeasuredValue that can be measured.  */
+        maxMeasuredValue: Attribute(2, TlvNullable(TlvUInt16.bound({ max: 65534 }))),
+
+        tolerance: OptionalAttribute(3, TlvUInt16.bound({ min: 0, max: 2048 }), { default: 0 }),
     },
 });

@@ -87,7 +87,7 @@ export class MatterController {
         // Do the commissioning
         let generalCommissioningClusterClient = ClusterClient(interactionClient, 0, GeneralCommissioningCluster);
         this.ensureSuccess(await generalCommissioningClusterClient.armFailSafe({ breadcrumbStep: BigInt(1), expiryLengthSeconds: 60 }));
-        this.ensureSuccess(await generalCommissioningClusterClient.setRegulatoryConfig({ breadcrumbStep: BigInt(2), newRegulatoryConfig: RegulatoryLocationType.IndoorOutdoor, countryCode: "US"}));
+        this.ensureSuccess(await generalCommissioningClusterClient.setRegulatoryConfig({ breadcrumbStep: BigInt(2), newRegulatoryConfig: RegulatoryLocationType.IndoorOutdoor, countryCode: "US" }));
 
         const operationalCredentialsClusterClient = ClusterClient(interactionClient, 0, OperationalCredentialsCluster);
         const { certificate: deviceAttestation } = await operationalCredentialsClusterClient.requestCertChain({ type: CertificateChainType.DeviceAttestation });
@@ -148,7 +148,7 @@ export class MatterController {
         return this.sessionManager.getNextAvailableSessionId();
     }
 
-    createSecureSession(sessionId: number, fabric: Fabric | undefined,  peerNodeId: NodeId, peerSessionId: number, sharedSecret: ByteArray, salt: ByteArray, isInitiator: boolean, isResumption: boolean, idleRetransTimeoutMs?: number, activeRetransTimeoutMs?: number) {
+    createSecureSession(sessionId: number, fabric: Fabric | undefined, peerNodeId: NodeId, peerSessionId: number, sharedSecret: ByteArray, salt: ByteArray, isInitiator: boolean, isResumption: boolean, idleRetransTimeoutMs?: number, activeRetransTimeoutMs?: number) {
         return this.sessionManager.createSecureSession(sessionId, fabric, peerNodeId, peerSessionId, sharedSecret, salt, isInitiator, isResumption, idleRetransTimeoutMs, activeRetransTimeoutMs);
     }
 
@@ -185,7 +185,7 @@ class RootCertificateManager {
         const now = Time.get().now();
         const unsignedCertificate = {
             serialNumber: ByteArray.of(Number(this.rootCertId)),
-            signatureAlgorithm: 1 /* EcdsaWithSHA256 */ ,
+            signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
             publicKeyAlgorithm: 1 /* EC */,
             ellipticCurveIdentifier: 1 /* P256v1 */,
             issuer: { issuerRcacId: this.rootCertId },
@@ -209,7 +209,7 @@ class RootCertificateManager {
         const certId = this.nextCertificateId++;
         const unsignedCertificate = {
             serialNumber: ByteArray.of(certId), // TODO: figure out what should happen if certId > 255
-            signatureAlgorithm: 1 /* EcdsaWithSHA256 */ ,
+            signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
             publicKeyAlgorithm: 1 /* EC */,
             ellipticCurveIdentifier: 1 /* P256v1 */,
             issuer: { issuerRcacId: this.rootCertId },
@@ -220,7 +220,7 @@ class RootCertificateManager {
             extensions: {
                 basicConstraints: { isCa: false },
                 keyUsage: 1,
-                extendedKeyUsage: [ 2, 1 ],
+                extendedKeyUsage: [2, 1],
                 subjectKeyIdentifier: Crypto.hash(publicKey).slice(0, 20),
                 authorityKeyIdentifier: this.rootKeyIdentifier,
             },

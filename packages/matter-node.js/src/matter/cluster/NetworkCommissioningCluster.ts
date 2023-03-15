@@ -116,7 +116,7 @@ const TlvHardwareAddress = TlvByteString.bound({ minLength: 6, maxLength: 8 });
 const TlThreadInterfaceScanResult = TlvObject({
     panId: TlvField(0, TlvUInt16.bound({ min: 0, max: 65534 })),
     extendedPanId: TlvField(1, TlvUInt64),
-    networkName: TlvField(2, TlvString.bound({ minLength:1, maxLength: 16 })),
+    networkName: TlvField(2, TlvString.bound({ minLength: 1, maxLength: 16 })),
     channel: TlvField(3, TlvUInt16),
     version: TlvField(4, TlvUInt8),
 

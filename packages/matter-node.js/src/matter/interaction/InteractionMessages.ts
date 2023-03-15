@@ -63,7 +63,7 @@ export const TlvAttributePath = TlvList({ // AttributePathIB
     endpointId: TlvOptionalField(2, TlvUInt16),
     clusterId: TlvOptionalField(3, TlvUInt32),
     attributeId: TlvOptionalField(4, TlvUInt32),
-    listIndex: TlvOptionalField(5,  TlvNullable(TlvUInt16)),
+    listIndex: TlvOptionalField(5, TlvNullable(TlvUInt16)),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0}, section 10.5.8 */
@@ -72,7 +72,7 @@ export const TlvEventPath = TlvList({ // EventPathIB
     endpoint: TlvOptionalField(1, TlvUInt16),
     cluster: TlvOptionalField(2, TlvUInt32),
     event: TlvOptionalField(3, TlvUInt32),
-    isUrgent: TlvOptionalField(4,  TlvBoolean),
+    isUrgent: TlvOptionalField(4, TlvBoolean),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0}, section 10.5.9 */
@@ -192,7 +192,7 @@ export const TlvReadRequest = TlvObject({
     attributes: TlvField(0, TlvArray(TlvAttributePath)), // TODO rename to attributeRequests, formally optional
     eventRequests: TlvOptionalField(1, TlvArray(TlvEventPath)),
     eventFilters: TlvOptionalField(2, TlvArray(TlvEventFilter)),
-    isFabricFiltered: TlvField(3,  TlvBoolean),
+    isFabricFiltered: TlvField(3, TlvBoolean),
     dataVersionFilters: TlvOptionalField(4, TlvArray(TlvDataVersionFilter)),
     interactionModelRevision: TlvField(0xFF, TlvUInt8),
 });
@@ -215,7 +215,7 @@ export const TlvSubscribeRequest = TlvObject({
     attributeRequests: TlvOptionalField(3, TlvArray(TlvAttributePath)),
     eventRequests: TlvOptionalField(4, TlvArray(TlvEventPath)),
     eventFilters: TlvOptionalField(5, TlvArray(TlvEventFilter)),
-    isFabricFiltered: TlvField(7,  TlvBoolean),
+    isFabricFiltered: TlvField(7, TlvBoolean),
     dataVersionFilters: TlvOptionalField(8, TlvArray(TlvDataVersionFilter)),
 });
 
@@ -228,15 +228,15 @@ export const TlvSubscribeResponse = TlvObject({
 
 /** @see {@link MatterCoreSpecificationV1_0}, section 10.6.9 */
 export const TlvInvokeRequest = TlvObject({
-    suppressResponse: TlvField(0,  TlvBoolean),
-    timedRequest: TlvField(1,  TlvBoolean),
+    suppressResponse: TlvField(0, TlvBoolean),
+    timedRequest: TlvField(1, TlvBoolean),
     invokes: TlvField(2, TlvArray(TlvCommandData)), // TODO: rename to invokeRequests
     interactionModelRevision: TlvField(0xFF, TlvUInt8),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0}, section 10.6.10 */
 export const TlvInvokeResponse = TlvObject({
-    suppressResponse: TlvField(0,  TlvBoolean),
+    suppressResponse: TlvField(0, TlvBoolean),
     responses: TlvField(1, TlvArray(TlvInvokeResponseData)), // TODO: rename to invokeResponses
     interactionModelRevision: TlvField(0xFF, TlvUInt8),
 });

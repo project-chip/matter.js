@@ -11,7 +11,7 @@ export class PersistenceManager {
 
     constructor(
         private storage: Storage
-    ) {}
+    ) { }
 
     async initialize() {
         await this.storage.initialize();

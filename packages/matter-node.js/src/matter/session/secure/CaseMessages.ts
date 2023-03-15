@@ -42,7 +42,7 @@ export const TlvCaseSigma1 = TlvObject({
     ecdhPublicKey: TlvField(4, TlvByteString.bound({ length: CRYPTO_PUBLIC_KEY_SIZE_BYTES })),
     mrpParams: TlvOptionalField(5, TlvSedParameters),
     resumptionId: TlvOptionalField(6, TlvByteString.bound({ length: 16 })),
-    resumeMic: TlvOptionalField(7, TlvByteString.bound({ length: CRYPTO_AEAD_MIC_LENGTH_BYTES})),
+    resumeMic: TlvOptionalField(7, TlvByteString.bound({ length: CRYPTO_AEAD_MIC_LENGTH_BYTES })),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 4.13.2.3 */
@@ -78,7 +78,7 @@ export const TlvSignedData = TlvObject({
 export const TlvEncryptedDataSigma2 = TlvObject({
     nodeOpCert: TlvField(1, TlvByteString),
     intermediateCACert: TlvOptionalField(2, TlvByteString),
-    signature: TlvField(3, TlvByteString.bound({length: CASE_SIGNATURE_LENGTH })),
+    signature: TlvField(3, TlvByteString.bound({ length: CASE_SIGNATURE_LENGTH })),
     resumptionId: TlvField(4, TlvByteString.bound({ length: 16 })),
 });
 

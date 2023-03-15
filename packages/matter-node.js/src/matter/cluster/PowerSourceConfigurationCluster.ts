@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Cluster, Attribute,} from "./Cluster";
+import { Cluster, Attribute, } from "./Cluster";
 import { TlvEndpointNumber } from "../common/EndpointNumber";
 import { MatterCoreSpecificationV1_0, TlvArray } from "@project-chip/matter.js";
 

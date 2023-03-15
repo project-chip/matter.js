@@ -21,7 +21,7 @@ export class FabricIndex {
 
     constructor(
         readonly index: number,
-    ) {}
+    ) { }
 }
 
 /** Tlv Schema for a Fabric Index. */

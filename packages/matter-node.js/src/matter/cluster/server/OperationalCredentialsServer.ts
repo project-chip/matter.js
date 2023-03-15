@@ -25,34 +25,34 @@ interface OperationalCredentialsServerConf {
     certificationDeclaration: ByteArray,
 }
 
-function signWithDeviceKey(conf: OperationalCredentialsServerConf,session: SecureSession<MatterDevice>, data: ByteArray) {
+function signWithDeviceKey(conf: OperationalCredentialsServerConf, session: SecureSession<MatterDevice>, data: ByteArray) {
     return Crypto.signPkcs8(conf.devicePrivateKey, [data, session.getAttestationChallengeKey()]);
 }
 
 export const OperationalCredentialsClusterHandler: (conf: OperationalCredentialsServerConf) => ClusterServerHandlers<typeof OperationalCredentialsCluster> = (conf) => ({
-    requestAttestation: async ({ request: {attestationNonce}, session }) => {
+    requestAttestation: async ({ request: { attestationNonce }, session }) => {
         const elements = TlvAttestation.encode({ declaration: conf.certificationDeclaration, attestationNonce, timestamp: 0 });
-        return {elements: elements, signature: signWithDeviceKey(conf, session as SecureSession<MatterDevice>, elements)};
+        return { elements: elements, signature: signWithDeviceKey(conf, session as SecureSession<MatterDevice>, elements) };
     },
 
-    requestCertSigning: async ({ request: {certSigningRequestNonce}, session }) => {
+    requestCertSigning: async ({ request: { certSigningRequestNonce }, session }) => {
         const certSigningRequest = session.getContext().getFabricBuilder().createCertificateSigningRequest();
         const elements = TlvCertSigningRequest.encode({ certSigningRequest, certSigningRequestNonce });
-        return {elements, signature: signWithDeviceKey(conf, session as SecureSession<MatterDevice>, elements)};
+        return { elements, signature: signWithDeviceKey(conf, session as SecureSession<MatterDevice>, elements) };
     },
 
-    requestCertChain: async ({ request: {type} }) => {
+    requestCertChain: async ({ request: { type } }) => {
         switch (type) {
             case CertificateChainType.DeviceAttestation:
-                return {certificate: conf.deviceCertificate};
+                return { certificate: conf.deviceCertificate };
             case CertificateChainType.ProductAttestationIntermediate:
-                return {certificate: conf.deviceIntermediateCertificate};
+                return { certificate: conf.deviceIntermediateCertificate };
             default:
                 throw new Error(`Unsupported certificate type: ${type}`);
         }
     },
 
-    addOperationalCert: async ({ request: {operationalCert, intermediateCaCert, identityProtectionKey, caseAdminNode, adminVendorId}, session }) => {
+    addOperationalCert: async ({ request: { operationalCert, intermediateCaCert, identityProtectionKey, caseAdminNode, adminVendorId }, session }) => {
         if (!session.isSecure()) throw new Error("addOperationalCert should be called on a secure session.");
         const device = session.getContext();
         const fabricBuilder = device.getFabricBuilder();
@@ -93,7 +93,7 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         throw new Error("Not implemented");
     },
 
-    updateFabricLabel: async ({ request: {label}, session }) => {
+    updateFabricLabel: async ({ request: { label }, session }) => {
         if (!session.isSecure()) throw new Error("updateOperationalCert should be called on a secure session.");
         const secureSession = session as SecureSession<MatterDevice>;
         const fabric = secureSession.getFabric();
@@ -106,7 +106,7 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         return { status: OperationalCertStatus.Success };
     },
 
-    removeFabric: async ({ request: {fabricIndex}, session }) => {
+    removeFabric: async ({ request: { fabricIndex }, session }) => {
         const device = session.getContext();
 
         const fabric = device.getFabricByIndex(fabricIndex);
@@ -119,7 +119,7 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         return { status: OperationalCertStatus.Success };
     },
 
-    addRootCert: async ({ request: {certificate}, session} ) => {
+    addRootCert: async ({ request: { certificate }, session }) => {
         session.getContext().getFabricBuilder().setRootCert(certificate);
     },
 });

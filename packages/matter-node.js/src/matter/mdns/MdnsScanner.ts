@@ -38,7 +38,7 @@ export class MdnsScanner implements Scanner {
         this.periodicTimer = Time.getPeriodicTimer(60 * 1000 /* 1 mn */, () => this.expire()).start();
     }
 
-    async findDevice({operationalId}: Fabric, nodeId: NodeId): Promise<MatterServer | undefined> {
+    async findDevice({ operationalId }: Fabric, nodeId: NodeId): Promise<MatterServer | undefined> {
         const operationalIdString = operationalId.toHex().toUpperCase();
         const deviceMatterQname = getDeviceMatterQname(operationalIdString, nodeId.toString());
 
@@ -51,7 +51,7 @@ export class MdnsScanner implements Scanner {
             resolver(undefined);
         }).start();
         this.recordWaiters.set(deviceMatterQname, resolver);
-        await this.multicastServer.send(DnsCodec.encode({ queries: [{ name: deviceMatterQname, recordClass: RecordClass.IN, recordType: RecordType.SRV }]}));
+        await this.multicastServer.send(DnsCodec.encode({ queries: [{ name: deviceMatterQname, recordClass: RecordClass.IN, recordType: RecordType.SRV }] }));
         const result = await promise;
         timer.stop();
         return result;
@@ -86,7 +86,7 @@ export class MdnsScanner implements Scanner {
 
     private expire() {
         const now = Date.now();
-        [...this.matterDeviceRecords.entries()].forEach(([key, {expires}]) => {
+        [...this.matterDeviceRecords.entries()].forEach(([key, { expires }]) => {
             if (now < expires) return;
             this.matterDeviceRecords.delete(key);
         });

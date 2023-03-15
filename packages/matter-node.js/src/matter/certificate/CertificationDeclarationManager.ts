@@ -27,7 +27,7 @@ export class CertificationDeclarationManager {
         const certificationElements = TlvCertificationDeclaration.encode({
             formatVersion: 1,
             vendorId,
-            produceIdArray: [ productId ],
+            produceIdArray: [productId],
             deviceTypeId: 22,
             certificateId: "CSA00000SWC00000-00",
             securityLevel: 0,

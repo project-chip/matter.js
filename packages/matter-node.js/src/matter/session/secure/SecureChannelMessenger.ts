@@ -9,7 +9,7 @@ import { GeneralStatusCode, ProtocolStatusCode, MessageType, SECURE_CHANNEL_PROT
 import { TlvSchema } from "@project-chip/matter.js";
 import { MatterError } from "../../../error/MatterError";
 import { TlvSecureChannelStatusMessage } from "./SecureChannelStatusMessageSchema";
-import {Message} from "../../../codec/MessageCodec";
+import { Message } from "../../../codec/MessageCodec";
 
 /** Error base Class for all errors related to the status response messages. */
 export class ChannelStatusResponseError extends MatterError {
@@ -25,7 +25,7 @@ export class ChannelStatusResponseError extends MatterError {
 export class SecureChannelMessenger<ContextT> {
     constructor(
         protected readonly exchange: MessageExchange<ContextT>,
-    ) {}
+    ) { }
 
     async nextMessage(expectedMessageType?: number) {
         const message = await this.exchange.nextMessage();

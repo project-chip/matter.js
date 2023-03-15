@@ -90,52 +90,52 @@ class Device {
             .addBroadcaster(await MdnsBroadcaster.create())
             .addProtocolHandler(secureChannelProtocol)
             .addProtocolHandler(new InteractionServer()
-               .addEndpoint(0x00, DEVICE.ROOT, [
-                   new ClusterServer(BasicInformationCluster, {}, {
-                       dataModelRevision: 1,
-                       vendorName,
-                       vendorId,
-                       productName,
-                       productId,
-                       nodeLabel: "",
-                       hardwareVersion: 0,
-                       hardwareVersionString: "0",
-                       location: "US",
-                       localConfigDisabled: false,
-                       softwareVersion: 1,
-                       softwareVersionString: "v1",
-                       capabilityMinima: {
-                           caseSessionsPerFabric: 3,
-                           subscriptionsPerFabric: 3,
-                       },
-                       serialNumber: `node-matter-${Time.nowMs()}`,
-                   }, {}),
-                   new ClusterServer(GeneralCommissioningCluster, {}, {
-                       breadcrumb: BigInt(0),
-                       commissioningInfo: {
-                           failSafeExpiryLengthSeconds: 60 /* 1min */,
-                           maxCumulativeFailsafeSeconds: 900 /* Recommended according to Specs */,
-                       },
-                       regulatoryConfig: RegulatoryLocationType.Indoor,
-                       locationCapability: RegulatoryLocationType.IndoorOutdoor,
-                       supportsConcurrentConnections: true,
-                   }, GeneralCommissioningClusterHandler),
-                   new ClusterServer(OperationalCredentialsCluster, {}, {
-                           nocs: [],
-                           fabrics: [],
-                           supportedFabrics: 254,
-                           commissionedFabrics: 0,
-                           trustedRootCertificates: [],
-                           currentFabricIndex: FabricIndex.NO_FABRIC,
-                       },
-                       OperationalCredentialsClusterHandler({
-                           devicePrivateKey: dacKeyPair.privateKey,
-                           deviceCertificate: dac,
-                           deviceIntermediateCertificate: paa.getPAICert(),
-                           certificationDeclaration,
-                       }),
-                   ),
-                   new ClusterServer(NetworkCommissioningCluster,
+                .addEndpoint(0x00, DEVICE.ROOT, [
+                    new ClusterServer(BasicInformationCluster, {}, {
+                        dataModelRevision: 1,
+                        vendorName,
+                        vendorId,
+                        productName,
+                        productId,
+                        nodeLabel: "",
+                        hardwareVersion: 0,
+                        hardwareVersionString: "0",
+                        location: "US",
+                        localConfigDisabled: false,
+                        softwareVersion: 1,
+                        softwareVersionString: "v1",
+                        capabilityMinima: {
+                            caseSessionsPerFabric: 3,
+                            subscriptionsPerFabric: 3,
+                        },
+                        serialNumber: `node-matter-${Time.nowMs()}`,
+                    }, {}),
+                    new ClusterServer(GeneralCommissioningCluster, {}, {
+                        breadcrumb: BigInt(0),
+                        commissioningInfo: {
+                            failSafeExpiryLengthSeconds: 60 /* 1min */,
+                            maxCumulativeFailsafeSeconds: 900 /* Recommended according to Specs */,
+                        },
+                        regulatoryConfig: RegulatoryLocationType.Indoor,
+                        locationCapability: RegulatoryLocationType.IndoorOutdoor,
+                        supportsConcurrentConnections: true,
+                    }, GeneralCommissioningClusterHandler),
+                    new ClusterServer(OperationalCredentialsCluster, {}, {
+                        nocs: [],
+                        fabrics: [],
+                        supportedFabrics: 254,
+                        commissionedFabrics: 0,
+                        trustedRootCertificates: [],
+                        currentFabricIndex: FabricIndex.NO_FABRIC,
+                    },
+                        OperationalCredentialsClusterHandler({
+                            devicePrivateKey: dacKeyPair.privateKey,
+                            deviceCertificate: dac,
+                            deviceIntermediateCertificate: paa.getPAICert(),
+                            certificationDeclaration,
+                        }),
+                    ),
+                    new ClusterServer(NetworkCommissioningCluster,
                         {
                             wifi: false,
                             thread: false,
@@ -165,7 +165,7 @@ class Device {
                         AdminCommissioningHandler(secureChannelProtocol),
                     )
                 ])
-                .addEndpoint(0x01, DEVICE.ON_OFF_LIGHT, [ onOffClusterServer ])
+                .addEndpoint(0x01, DEVICE.ON_OFF_LIGHT, [onOffClusterServer])
             )
             .start()
 

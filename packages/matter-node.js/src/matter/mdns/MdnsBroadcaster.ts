@@ -27,9 +27,9 @@ export class MdnsBroadcaster implements Broadcaster {
 
     constructor(
         private readonly mdnsServer: MdnsServer,
-    ) {}
+    ) { }
 
-    setCommissionMode(mode: number,deviceName: string, deviceType: number, vendorId: VendorId, productId: number, discriminator: number) {
+    setCommissionMode(mode: number, deviceName: string, deviceType: number, vendorId: VendorId, productId: number, discriminator: number) {
         logger.debug(`announce commissioning mode ${mode} ${deviceName} ${deviceType} ${vendorId} ${productId} ${discriminator}`);
 
         const shortDiscriminator = (discriminator >> 8) & 0x0F;
@@ -60,7 +60,7 @@ export class MdnsBroadcaster implements Broadcaster {
                 PtrRecord(longDiscriminatorQname, deviceQname),
                 PtrRecord(commissionModeQname, deviceQname),
                 // TODO: the Matter port should not be hardcoded here
-                SrvRecord(deviceQname, {priority: 0, weight: 0, port: 5540, target: hostname }),
+                SrvRecord(deviceQname, { priority: 0, weight: 0, port: 5540, target: hostname }),
                 TxtRecord(deviceQname, [
                     `VP=${vendorId.id}+${productId}`,  /* Vendor / Product */
                     `DT=${deviceType}`,             /* Device Type */
@@ -103,7 +103,7 @@ export class MdnsBroadcaster implements Broadcaster {
                 PtrRecord(MATTER_SERVICE_QNAME, deviceMatterQname),
                 PtrRecord(fabricQname, deviceMatterQname),
                 // TODO: the Matter port should not be hardcoded here
-                SrvRecord(deviceMatterQname, {priority: 0, weight: 0, port: 5540, target: hostname }),
+                SrvRecord(deviceMatterQname, { priority: 0, weight: 0, port: 5540, target: hostname }),
                 TxtRecord(deviceMatterQname, ["SII=5000", "SAI=300", "T=1"]),
             ];
             ips.forEach(ip => {

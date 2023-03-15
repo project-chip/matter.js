@@ -63,8 +63,8 @@ export class MdnsServer {
     async announce() {
         await Promise.all(this.getMulticastInterfacesForAnnounce().map(netInterface => {
             const records = this.records.get(netInterface);
-            const answers = records.filter(({recordType}) => recordType === RecordType.PTR);
-            const additionalRecords = records.filter(({recordType}) => recordType !== RecordType.PTR);
+            const answers = records.filter(({ recordType }) => recordType === RecordType.PTR);
+            const additionalRecords = records.filter(({ recordType }) => recordType !== RecordType.PTR);
             return this.multicastServer.send(DnsCodec.encode({ answers, additionalRecords }), netInterface);
         }));
     }
@@ -83,7 +83,7 @@ export class MdnsServer {
         return this.netInterface === undefined ? this.network.getNetInterfaces() : [this.netInterface];
     }
 
-    private queryRecords({name, recordType}: {name: string, recordType: RecordType}, records: Record<any>[]) {
+    private queryRecords({ name, recordType }: { name: string, recordType: RecordType }, records: Record<any>[]) {
         if (recordType === RecordType.ANY) {
             return records.filter(record => record.name === name);
         } else {

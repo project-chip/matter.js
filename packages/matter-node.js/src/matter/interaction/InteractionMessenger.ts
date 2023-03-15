@@ -69,10 +69,10 @@ const logger = Logger.get("InteractionMessenger");
 class InteractionMessenger<ContextT> {
     constructor(
         private readonly exchangeBase: MessageExchange<ContextT>,
-    ) {}
+    ) { }
 
     sendStatus(status: StatusCode) {
-        return this.exchangeBase.send(MessageType.StatusResponse, TlvStatusResponse.encode({status, interactionModelRevision: 1}));
+        return this.exchangeBase.send(MessageType.StatusResponse, TlvStatusResponse.encode({ status, interactionModelRevision: 1 }));
     }
 
     async waitForSuccess() {
@@ -93,11 +93,11 @@ class InteractionMessenger<ContextT> {
     }
 
     protected throwIfErrorStatusMessage(message: Message) {
-        const { payloadHeader: { messageType}, payload } = message;
+        const { payloadHeader: { messageType }, payload } = message;
 
         if (messageType !== MessageType.StatusResponse) return;
         const { status } = TlvStatusResponse.decode(payload);
-        if (status !== StatusCode.Success) throw new StatusResponseError(`Received error status: ${ status }`, status);
+        if (status !== StatusCode.Success) throw new StatusResponseError(`Received error status: ${status}`, status);
     }
 }
 
@@ -265,7 +265,7 @@ export class InteractionClientMessenger extends InteractionMessenger<MatterContr
 
         while (true) {
             const dataReportMessage = await this.exchange.waitFor(MessageType.ReportData);
-            const report =  TlvDataReport.decode(dataReportMessage.payload);
+            const report = TlvDataReport.decode(dataReportMessage.payload);
             if (subscriptionId === undefined && report.subscriptionId !== undefined) {
                 subscriptionId = report.subscriptionId;
             } else {

@@ -38,7 +38,7 @@ export class MatterDevice {
         private readonly vendorId: VendorId,
         private readonly productId: number,
         private readonly discriminator: number,
-    ) {}
+    ) { }
 
     addScanner(scanner: Scanner) {
         this.scanners.push(scanner);
@@ -126,7 +126,7 @@ export class MatterDevice {
         });
     }
 
-    async findDevice(fabric: Fabric, nodeId: NodeId): Promise<undefined | {session: Session<MatterDevice>, channel: Channel<ByteArray>}> {
+    async findDevice(fabric: Fabric, nodeId: NodeId): Promise<undefined | { session: Session<MatterDevice>, channel: Channel<ByteArray> }> {
         // TODO: return the first not undefined answer or undefined
         const matterServer = await this.scanners[0].findDevice(fabric, nodeId);
         if (matterServer === undefined) return undefined;
@@ -134,7 +134,7 @@ export class MatterDevice {
         const session = this.sessionManager.getSessionForNode(fabric, nodeId);
         if (session === undefined) return undefined;
         // TODO: have the interface and scanner linked
-        return { session, channel: await this.netInterfaces[0].openChannel(ip, port)};
+        return { session, channel: await this.netInterfaces[0].openChannel(ip, port) };
     }
 
     stop() {

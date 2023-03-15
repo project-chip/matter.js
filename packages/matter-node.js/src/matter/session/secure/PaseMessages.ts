@@ -21,7 +21,7 @@ export const TlvPbkdfParamRequest = TlvObject({
     random: TlvField(1, TlvByteString.bound({ length: 32 })),
     sessionId: TlvField(2, TlvUInt16), // Specs: range: 16bits
     passcodeId: TlvField(3, TlvUInt16), // Specs: length: 16bits so min is 0x8000?
-    hasPbkdfParameters: TlvField(4,  TlvBoolean),
+    hasPbkdfParameters: TlvField(4, TlvBoolean),
     mrpParameters: TlvOptionalField(5, TlvSedParameters),
 });
 

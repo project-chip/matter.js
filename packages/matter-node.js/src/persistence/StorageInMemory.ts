@@ -23,7 +23,7 @@ export class StorageInMemory implements Storage {
         return this.store[context]?.[key];
     }
 
-    getAll(context: string): { key: string, value: any}[] {
+    getAll(context: string): { key: string, value: any }[] {
         if (!this.initialized) throw new Error("Storage not initialized yet!");
         const contextStore = this.store[context];
         if (contextStore === undefined) return [];

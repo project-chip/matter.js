@@ -13,12 +13,12 @@ import { ByteArray } from "@project-chip/matter.js";
 export class UdpInterface implements NetInterface {
 
     static async create(port: number, type: "udp4" | "udp6", address?: string) {
-        return new UdpInterface(await Network.get().createUdpChannel({listeningPort: port, type, netInterface: address, listeningAddress: address}));
+        return new UdpInterface(await Network.get().createUdpChannel({ listeningPort: port, type, netInterface: address, listeningAddress: address }));
     }
 
     constructor(
         private readonly server: UdpChannel,
-    ) {}
+    ) { }
 
     async openChannel(address: string, port: number) {
         return Promise.resolve(new UdpConnection(this.server, address, port));
@@ -34,7 +34,7 @@ class UdpConnection implements Channel<ByteArray> {
         private readonly server: UdpChannel,
         private readonly peerAddress: string,
         private readonly peerPort: number,
-    ) {}
+    ) { }
 
     send(data: ByteArray) {
         return this.server.send(this.peerAddress, this.peerPort, data);

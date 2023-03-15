@@ -5,6 +5,6 @@
  */
 
 /** Error base class for all errors thrown by this library. */
-export class MatterError extends Error {}
+export class MatterError extends Error { }
 
 

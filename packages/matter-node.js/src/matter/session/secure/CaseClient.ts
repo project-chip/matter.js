@@ -36,7 +36,7 @@ export class CaseClient {
             const resumeMic = Crypto.encrypt(resumeKey, new ByteArray(0), RESUME1_MIC_NONCE);
             sigma1Bytes = await messenger.sendSigma1({ sessionId, destinationId: fabric.getDestinationId(peerNodeId, random), ecdhPublicKey, random, resumptionId, resumeMic });
         } else {
-            sigma1Bytes = await messenger.sendSigma1({sessionId, destinationId: fabric.getDestinationId(peerNodeId, random), ecdhPublicKey, random});
+            sigma1Bytes = await messenger.sendSigma1({ sessionId, destinationId: fabric.getDestinationId(peerNodeId, random), ecdhPublicKey, random });
         }
 
         let secureSession;
@@ -71,7 +71,7 @@ export class CaseClient {
             Crypto.verifySpki(peerPublicKey, peerSignatureData, peerSignature);
 
             // Generate and send sigma3
-            const sigma3Salt = ByteArray.concat(operationalIdentityProtectionKey, Crypto.hash([ sigma1Bytes, sigma2Bytes ]));
+            const sigma3Salt = ByteArray.concat(operationalIdentityProtectionKey, Crypto.hash([sigma1Bytes, sigma2Bytes]));
             const sigma3Key = await Crypto.hkdf(sharedSecret, sigma3Salt, KDFSR3_INFO);
             const signatureData = TlvSignedData.encode({ nodeOpCert, intermediateCACert, ecdhPublicKey, peerEcdhPublicKey });
             const signature = fabric.sign(signatureData);
@@ -81,10 +81,10 @@ export class CaseClient {
             await messenger.waitForSuccess();
 
             // All good! Create secure session
-            const secureSessionSalt = ByteArray.concat(operationalIdentityProtectionKey, Crypto.hash([ sigma1Bytes, sigma2Bytes, sigma3Bytes ]));
+            const secureSessionSalt = ByteArray.concat(operationalIdentityProtectionKey, Crypto.hash([sigma1Bytes, sigma2Bytes, sigma3Bytes]));
             secureSession = await client.createSecureSession(sessionId, fabric, peerNodeId, peerSessionId, sharedSecret, secureSessionSalt, true, false);
             logger.info(`Case client: Paired succesfully with ${messenger.getChannelName()}`);
-            resumptionRecord = {fabric, peerNodeId, sharedSecret, resumptionId: peerResumptionId };
+            resumptionRecord = { fabric, peerNodeId, sharedSecret, resumptionId: peerResumptionId };
         }
 
         messenger.close();

@@ -14,11 +14,11 @@ import {
 } from "../GeneralCommissioningCluster";
 import { ClusterServerHandlers } from "./ClusterServer";
 
-const SuccessResponse = {errorCode: CommissioningError.Ok, debugText: ""};
+const SuccessResponse = { errorCode: CommissioningError.Ok, debugText: "" };
 const logger = Logger.get("GeneralCommissioningClusterHandler");
 
 export const GeneralCommissioningClusterHandler: ClusterServerHandlers<typeof GeneralCommissioningCluster> = {
-    armFailSafe: async ({ request: {breadcrumbStep}, attributes: {breadcrumb}, session }) => {
+    armFailSafe: async ({ request: { breadcrumbStep }, attributes: { breadcrumb }, session }) => {
         // TODO Add handling for ExpiryLengthSeconds field and Error handling, see 11.9.7.2
 
         session.getContext().armFailSafe();
@@ -26,7 +26,7 @@ export const GeneralCommissioningClusterHandler: ClusterServerHandlers<typeof Ge
         return SuccessResponse;
     },
 
-    setRegulatoryConfig: async ({request: {breadcrumbStep, newRegulatoryConfig }, attributes: {breadcrumb, regulatoryConfig, locationCapability} }) => {
+    setRegulatoryConfig: async ({ request: { breadcrumbStep, newRegulatoryConfig }, attributes: { breadcrumb, regulatoryConfig, locationCapability } }) => {
         const locationCapabilityValue = locationCapability.get();
 
         let validValues;
@@ -41,11 +41,11 @@ export const GeneralCommissioningClusterHandler: ClusterServerHandlers<typeof Ge
                 validValues = [RegulatoryLocationType.Indoor, RegulatoryLocationType.Outdoor];
                 break;
             default:
-                return {errorCode: CommissioningError.ValueOutsideRange, debugText: "Invalid regulatory location"};
+                return { errorCode: CommissioningError.ValueOutsideRange, debugText: "Invalid regulatory location" };
         }
 
         if (!validValues.includes(newRegulatoryConfig)) {
-            return {errorCode: CommissioningError.ValueOutsideRange, debugText: "Invalid regulatory location"};
+            return { errorCode: CommissioningError.ValueOutsideRange, debugText: "Invalid regulatory location" };
         }
 
         regulatoryConfig.set(newRegulatoryConfig);
@@ -56,7 +56,7 @@ export const GeneralCommissioningClusterHandler: ClusterServerHandlers<typeof Ge
         return SuccessResponse;
     },
 
-    commissioningComplete: async ({session, attributes: {breadcrumb}}) => {
+    commissioningComplete: async ({ session, attributes: { breadcrumb } }) => {
         // TODO Add error handling as defined in 11.9.7.6
 
         if (!session.isSecure()) throw new Error("commissioningComplete can only be called on a secure session");

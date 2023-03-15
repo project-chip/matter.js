@@ -88,7 +88,7 @@ export class ReedSolomon {
     }
 
     private generatePolynom(ecLength: number) {
-        let result = [ 1 ];
+        let result = [1];
         for (let i = 0; i < ecLength; i++) {
             result = this.galoisField.multiplyPolynom(result, [1, this.galoisField.power(2, i)]);
         }

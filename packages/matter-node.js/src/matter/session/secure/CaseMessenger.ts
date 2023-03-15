@@ -14,7 +14,7 @@ import { TypeFromSchema } from "@project-chip/matter.js";
 export class CaseServerMessenger extends SecureChannelMessenger<MatterDevice> {
     async readSigma1() {
         const { payload } = await this.nextMessage(MessageType.Sigma1);
-        return { sigma1Bytes: payload, sigma1: TlvCaseSigma1.decode(payload) } ;
+        return { sigma1Bytes: payload, sigma1: TlvCaseSigma1.decode(payload) };
     }
 
     sendSigma2(sigma2: TypeFromSchema<typeof TlvCaseSigma2>) {
@@ -37,12 +37,12 @@ export class CaseClientMessenger extends SecureChannelMessenger<MatterController
     }
 
     async readSigma2() {
-        const { payload , payloadHeader: {messageType} } = await this.nextMessage();
+        const { payload, payloadHeader: { messageType } } = await this.nextMessage();
         switch (messageType) {
             case MessageType.Sigma2:
-                return { sigma2Bytes: payload, sigma2: TlvCaseSigma2.decode(payload) } ;
+                return { sigma2Bytes: payload, sigma2: TlvCaseSigma2.decode(payload) };
             case MessageType.Sigma2Resume:
-                return { sigma2Resume: TlvCaseSigma2Resume.decode(payload) } ;
+                return { sigma2Resume: TlvCaseSigma2Resume.decode(payload) };
             default:
                 throw new Error(`Received unexpected message type: ${messageType}, expected: ${MessageType.Sigma2} or ${MessageType.Sigma2Resume}`);
         }

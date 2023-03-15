@@ -46,7 +46,7 @@ export class SimulatedNetwork {
     }
 
     sendUdp(localAddress: string, localPort: number, remoteAddress: string, remotePort: number, data: ByteArray) {
-        [`${remoteAddress}:${remotePort}` , `*:${remotePort}`].forEach(ipPort => this.listenersMap.get(ipPort)?.forEach(listener => {
+        [`${remoteAddress}:${remotePort}`, `*:${remotePort}`].forEach(ipPort => this.listenersMap.get(ipPort)?.forEach(listener => {
             try {
                 listener(FAKE_INTERFACE_NAME, localAddress, localPort, data);
             } catch (error) {

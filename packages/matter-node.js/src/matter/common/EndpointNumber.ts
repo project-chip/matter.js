@@ -14,7 +14,7 @@ import { MatterCoreSpecificationV1_0, TlvUInt16, TlvWrapper } from "@project-chi
 export class EndpointNumber {
     constructor(
         readonly number: number
-    ) {}
+    ) { }
 }
 
 /** Tlv schema for an Endpoint number. */

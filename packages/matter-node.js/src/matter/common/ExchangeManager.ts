@@ -24,7 +24,7 @@ export class MessageChannel<ContextT> implements Channel<Message> {
     constructor(
         readonly channel: Channel<ByteArray>,
         readonly session: Session<ContextT>,
-    ) {}
+    ) { }
 
     send(message: Message): Promise<void> {
         logger.debug("sending", MessageCodec.messageToString(message));
@@ -48,7 +48,7 @@ export class ExchangeManager<ContextT> {
     constructor(
         private readonly sessionManager: SessionManager<ContextT>,
         private readonly channelManager: ChannelManager,
-    ) {}
+    ) { }
 
     addNetInterface(netInterface: NetInterface) {
         this.netListeners.push(netInterface.onData((socket, data) => {

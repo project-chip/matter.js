@@ -69,7 +69,7 @@ export class Logger {
 
     constructor(
         private readonly name: string,
-    ) {}
+    ) { }
 
     debug = (...values: any[]) => this.log(Level.DEBUG, values);
     info = (...values: any[]) => this.log(Level.INFO, values);

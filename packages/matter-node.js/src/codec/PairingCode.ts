@@ -72,8 +72,8 @@ class ManualPairingCodeSchema extends Schema<ManualPairingData, string> {
     protected encodeInternal({ discriminator, passcode, vendorId, productId }: ManualPairingData): string {
         let result = "";
         const hasVendorProductIds = (vendorId !== undefined) && (productId !== undefined);
-        result += ( (discriminator >> 10) | (hasVendorProductIds ? (1 << 2) : 0) );
-        result += ( ((discriminator & 0x300) << 6) | (passcode & 0x3FFF) ).toString().padStart(5, "0");
+        result += ((discriminator >> 10) | (hasVendorProductIds ? (1 << 2) : 0));
+        result += (((discriminator & 0x300) << 6) | (passcode & 0x3FFF)).toString().padStart(5, "0");
         result += (passcode >> 14).toString().padStart(4, "0");
         if (hasVendorProductIds) {
             result += vendorId.toString().padStart(5, "0");

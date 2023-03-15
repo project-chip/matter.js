@@ -69,22 +69,22 @@ function uInt16To4Chars(value: number) {
 }
 
 /** commonName = ASN.1 OID 2.5.4.3 */
-export const CommonName_X520 = (name: string) => [ DerObject("550403", { value: name }) ];
+export const CommonName_X520 = (name: string) => [DerObject("550403", { value: name })];
 
 /** matter-node-id = ASN.1 OID 1.3.6.1.4.1.37244.1.1 */
-export const NodeId_Matter = (nodeId: NodeId) => [ DerObject("2b0601040182a27c0101", { value: intTo16Chars(nodeId.id) }) ];
+export const NodeId_Matter = (nodeId: NodeId) => [DerObject("2b0601040182a27c0101", { value: intTo16Chars(nodeId.id) })];
 
 /** matter-rcac-id = ASN.1 OID 1.3.6.1.4.1.37244.1.4 */
-export const RcacId_Matter = (id: bigint | number) => [ DerObject("2b0601040182a27c0104", { value: intTo16Chars(id) }) ];
+export const RcacId_Matter = (id: bigint | number) => [DerObject("2b0601040182a27c0104", { value: intTo16Chars(id) })];
 
 /** matter-fabric-id = ASN.1 OID 1.3.6.1.4.1.37244.1.5 */
-export const FabricId_Matter = (id: bigint | number) => [ DerObject("2b0601040182a27c0105", { value: intTo16Chars(id) }) ];
+export const FabricId_Matter = (id: bigint | number) => [DerObject("2b0601040182a27c0105", { value: intTo16Chars(id) })];
 
 /** matter-oid-vid = ASN.1 OID 1.3.6.1.4.1.37244.2.1 */
-export const VendorId_Matter = (vendorId: VendorId) => [ DerObject("2b0601040182a27c0201", { value: uInt16To4Chars(vendorId.id) }) ];
+export const VendorId_Matter = (vendorId: VendorId) => [DerObject("2b0601040182a27c0201", { value: uInt16To4Chars(vendorId.id) })];
 
 /** matter-oid-pid = ASN.1 OID 1.3.6.1.4.1.3724 4.2.2 */
-export const ProductId_Matter = (id: number) => [ DerObject("2b0601040182a27c0202", { value: uInt16To4Chars(id) }) ];
+export const ProductId_Matter = (id: number) => [DerObject("2b0601040182a27c0202", { value: uInt16To4Chars(id) })];
 
 export const TlvRootCertificate = TlvObject({
     serialNumber: TlvField(1, TlvByteString.bound({ maxLength: 20 })),
@@ -101,7 +101,7 @@ export const TlvRootCertificate = TlvObject({
     ellipticCurveIdentifier: TlvField(8, TlvUInt8),
     ellipticCurvePublicKey: TlvField(9, TlvByteString),
     extensions: TlvField(10, TlvList({
-        basicConstraints: TlvField(1,  TlvObject({
+        basicConstraints: TlvField(1, TlvObject({
             isCa: TlvField(1, TlvBoolean),
             pathLen: TlvOptionalField(2, TlvUInt8),
         })),
@@ -130,8 +130,8 @@ export const TlvOperationalCertificate = TlvObject({
     ellipticCurveIdentifier: TlvField(8, TlvUInt8),
     ellipticCurvePublicKey: TlvField(9, TlvByteString),
     extensions: TlvField(10, TlvList({
-        basicConstraints: TlvField(1,  TlvObject({
-            isCa: TlvField(1,  TlvBoolean),
+        basicConstraints: TlvField(1, TlvObject({
+            isCa: TlvField(1, TlvBoolean),
             pathLen: TlvOptionalField(2, TlvUInt8),
         })),
         keyUsage: TlvField(2, TlvUInt16),
@@ -344,7 +344,7 @@ export class CertificateManager {
     }
 
     static paiCertToAsn1({ serialNumber, notBefore, notAfter, issuer: { commonName: issuerCommonName, vendorId: issuerVendorId }, subject: { commonName, vendorId, productId }, ellipticCurvePublicKey, extensions: { subjectKeyIdentifier, authorityKeyIdentifier } }: Unsigned<ProductAttestationIntermediateCertificate>, keys: KeyPair) {
-        const certificate ={
+        const certificate = {
             version: ContextTagged(0, 2),
             serialNumber: serialNumber[0],
             signatureAlgorithm: EcdsaWithSHA256_X962,
@@ -380,7 +380,7 @@ export class CertificateManager {
     }
 
     static paaCertToAsn1({ serialNumber, notBefore, notAfter, issuer: { commonName: issuerCommonName, vendorId: issuerVendorId }, subject: { commonName, vendorId }, ellipticCurvePublicKey, extensions: { subjectKeyIdentifier, authorityKeyIdentifier } }: Unsigned<ProductAttestationAuthorityCertificate>, keys: KeyPair) {
-        const certificate ={
+        const certificate = {
             version: ContextTagged(0, 2),
             serialNumber: serialNumber[0],
             signatureAlgorithm: EcdsaWithSHA256_X962,
@@ -416,7 +416,7 @@ export class CertificateManager {
     static CertificationDeclarationToAsn1(eContent: ByteArray, subjectKeyIdentifier: ByteArray, privateKey: ByteArray) {
         const certificate = {
             version: 3,
-            digestAlgorithm: [ SHA256_CMS ],
+            digestAlgorithm: [SHA256_CMS],
             encapContentInfo: Pkcs7Data(eContent),
             signerInfo: [{
                 version: 3,
@@ -456,19 +456,19 @@ export class CertificateManager {
     static getPublicKeyFromCsr(csr: ByteArray) {
         const { [ELEMENTS_KEY]: rootElements } = DerCodec.decode(csr);
         if (rootElements?.length !== 3) throw new Error("Invalid CSR data");
-        const [ requestNode, signAlgorithmNode, signatureNode ] = rootElements;
+        const [requestNode, signAlgorithmNode, signatureNode] = rootElements;
 
         // Extract the public key
         const { [ELEMENTS_KEY]: requestElements } = requestNode;
         if (requestElements?.length !== 4) throw new Error("Invalid CSR data");
-        const [ versionNode, _subjectNode, publicKeyNode ] = requestElements;
+        const [versionNode, _subjectNode, publicKeyNode] = requestElements;
         const requestVersion = versionNode[BYTES_KEY][0];
         if (requestVersion !== 0) throw new Error(`Unsupported request version${requestVersion}`);
         // TODO: verify subject = { OrganisationName: "CSR" }
 
         const { [ELEMENTS_KEY]: publicKeyElements } = publicKeyNode;
         if (publicKeyElements?.length !== 2) throw new Error("Invalid CSR data");
-        const [ _publicKeyTypeNode, publicKeyBytesNode ] = publicKeyElements;
+        const [_publicKeyTypeNode, publicKeyBytesNode] = publicKeyElements;
         // TODO: verify publicKey algorithm
         const publicKey = publicKeyBytesNode[BYTES_KEY];
 

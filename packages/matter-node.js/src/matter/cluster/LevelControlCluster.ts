@@ -18,7 +18,7 @@ const OptionsBitmap = TlvBitmap(TlvUInt8, {
 
 /** @see {@link MatterCoreSpecificationV1_0} § 1.6.6.1 */
 const MoveToLevelCommandRequest = TlvObject({
-    level: TlvField(0, TlvUInt8.bound({ max:254 })),
+    level: TlvField(0, TlvUInt8.bound({ max: 254 })),
     transitionTime: TlvField(1, TlvNullable(TlvUInt16)),
     optionsMask: TlvField(2, OptionsBitmap),
     optionsOverride: TlvField(3, OptionsBitmap), // TODO: 0 Default
@@ -122,10 +122,10 @@ const commonCommands = {
     stop: Command(0x3, StopCommandRequest, 0x3, TlvNoResponse),
 
     /** Same as {@link commands.moveToLevel}, but change the status of OnOff device on same endpoint. */
-    moveToLevelWithOnOff: Command( 0x4, MoveToLevelCommandRequest, 0x4, TlvNoResponse),
+    moveToLevelWithOnOff: Command(0x4, MoveToLevelCommandRequest, 0x4, TlvNoResponse),
 
-     /** Same as {@link commands.move}, but change the status of OnOff device on same endpoint. */
-    moveWithOnOff: Command(0x5, MoveCommandRequest, 0x5,TlvNoResponse),
+    /** Same as {@link commands.move}, but change the status of OnOff device on same endpoint. */
+    moveWithOnOff: Command(0x5, MoveCommandRequest, 0x5, TlvNoResponse),
 
     /** Same as {@link commands.step}, but change the status of OnOff device on same endpoint. */
     stepWithOnOff: Command(0x6, StepCommandRequest, 0x6, TlvNoResponse),
@@ -145,7 +145,7 @@ export const LevelControlCluster = Cluster({
     revision: 5,
     features,
     attributes: {
-        ... commonAttributes,
+        ...commonAttributes,
 
         /** Time until the current command is complete in 1/10ths of sec. */
         remainingTime: OptionalAttribute(0x01, TlvUInt16, { default: 0 }),
@@ -154,14 +154,14 @@ export const LevelControlCluster = Cluster({
         startUpCurrentLevel: OptionalWritableAttribute(0x4000, TlvNullable(TlvUInt8)),
     },
     commands: commonCommands,
- });
+});
 
- /**
- * Attributes and commands for Pulse Width Modulation (Provisional)
- *
- * @see {@link MatterApplicationClusterSpecificationV1_0} § 1.6.3
- */
- export const PulseWidthModulationLevelControlCluster = Cluster({
+/**
+* Attributes and commands for Pulse Width Modulation (Provisional)
+*
+* @see {@link MatterApplicationClusterSpecificationV1_0} § 1.6.3
+*/
+export const PulseWidthModulationLevelControlCluster = Cluster({
     id: 0x001c,
     name: "PulseWidthModulation",
     revision: 5,
@@ -170,13 +170,13 @@ export const LevelControlCluster = Cluster({
         ...commonAttributes,
 
         /** Frequency at which the device is at CurrentLevel. */
-        currentFrequency: Attribute(0x04, TlvUInt16, {default: 0}),
+        currentFrequency: Attribute(0x04, TlvUInt16, { default: 0 }),
 
         /** Min value of CurrentFrequency capable of being assigned. */
-        minFrequency: Attribute(0x05, TlvUInt16, {default: 0}),
+        minFrequency: Attribute(0x05, TlvUInt16, { default: 0 }),
 
         /** Max value of CurrentFrequency capable of being assigned. */
-        maxFrequency: Attribute(0x06, TlvUInt16, {default: 0}),
+        maxFrequency: Attribute(0x06, TlvUInt16, { default: 0 }),
     },
     commands: {
         ...commonCommands,
@@ -184,4 +184,4 @@ export const LevelControlCluster = Cluster({
         /** Changes current frequency to the requested frequency, or to the closest frequency. */
         moveToClosestFrequency: Command(0x8, MoveToClosestFrequencyCommandRequest, 0x8, TlvNoResponse),
     },
- });
+});

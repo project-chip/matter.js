@@ -16,7 +16,7 @@ export class UnsecureSession<T> implements Session<T> {
 
     constructor(
         private readonly context: T,
-    ) {}
+    ) { }
 
     isSecure(): boolean {
         return false;

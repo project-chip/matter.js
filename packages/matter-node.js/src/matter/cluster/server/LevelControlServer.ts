@@ -11,8 +11,8 @@ import { ClusterServerHandlers } from "./ClusterServer";
 // TODO: Create temporary options based on mask and override. How to expose to user of the library?
 
 export const LevelControlClusterHandler: () => ClusterServerHandlers<typeof LevelControlCluster> = () => ({
-    moveToLevel: async ({ request:{level}, attributes: {currentLevel} }) => {
-      currentLevel.set(level);
+    moveToLevel: async ({ request: { level }, attributes: { currentLevel } }) => {
+        currentLevel.set(level);
     },
 
     // TODO: How much this capability should be in the library vs. in the caller of the library? Doing the
@@ -20,39 +20,39 @@ export const LevelControlClusterHandler: () => ClusterServerHandlers<typeof Leve
     // underlying hardware. But how to expose these paramters to the caller of the library? Callback with
     // temporary options?
     move: async () => {
-      throw new Error("Not implemented")
+        throw new Error("Not implemented")
     },
 
     step: async () => {
-      throw new Error("Not implemented")
+        throw new Error("Not implemented")
     },
 
     stop: async () => {
-      throw new Error("Not implemented")
+        throw new Error("Not implemented")
     },
 
-    moveToLevelWithOnOff: async function ({ request: {level}, attributes: {currentLevel} }) {
+    moveToLevelWithOnOff: async function({ request: { level }, attributes: { currentLevel } }) {
 
-      /* TODO: Need to be able to access or check existance of optional attributes
-      if ( level <= minLevel.get() && associated onOff device on){
-         // turn associated onOff device off
-      } else if associated onOff device off {
-         // turn associated onOff device on
-      }
-      */
+        /* TODO: Need to be able to access or check existance of optional attributes
+        if ( level <= minLevel.get() && associated onOff device on){
+           // turn associated onOff device off
+        } else if associated onOff device off {
+           // turn associated onOff device on
+        }
+        */
 
-      currentLevel.set(level);
+        currentLevel.set(level);
     },
 
     moveWithOnOff: async () => {
-      throw new Error("Not implemented")
+        throw new Error("Not implemented")
     },
 
     stepWithOnOff: async () => {
-      throw new Error("Not implemented")
+        throw new Error("Not implemented")
     },
 
     stopWithOnOff: async () => {
-      throw new Error("Not implemented")
+        throw new Error("Not implemented")
     },
 });

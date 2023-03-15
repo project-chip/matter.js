@@ -7,11 +7,11 @@
 import net from "net";
 import { ByteArray, DataReader, DataWriter, Endian } from "@project-chip/matter.js";
 
-export const PtrRecord = (name: string, ptr: string):Record<string> => ({ name, value: ptr, ttl: 120, recordType: RecordType.PTR, recordClass: RecordClass.IN });
-export const ARecord = (name: string, ip: string):Record<string> => ({ name, value: ip, ttl: 120, recordType: RecordType.A, recordClass: RecordClass.IN });
-export const AAAARecord = (name: string, ip: string):Record<string> => ({ name, value: ip, ttl: 120, recordType: RecordType.AAAA, recordClass: RecordClass.IN });
-export const TxtRecord = (name: string, entries: string[]):Record<string[]> => ({ name, value: entries, ttl: 120, recordType: RecordType.TXT, recordClass: RecordClass.IN });
-export const SrvRecord = (name: string, srv: SrvRecordValue):Record<SrvRecordValue> => ({ name, value: srv, ttl: 120, recordType: RecordType.SRV, recordClass: RecordClass.IN });
+export const PtrRecord = (name: string, ptr: string): Record<string> => ({ name, value: ptr, ttl: 120, recordType: RecordType.PTR, recordClass: RecordClass.IN });
+export const ARecord = (name: string, ip: string): Record<string> => ({ name, value: ip, ttl: 120, recordType: RecordType.A, recordClass: RecordClass.IN });
+export const AAAARecord = (name: string, ip: string): Record<string> => ({ name, value: ip, ttl: 120, recordType: RecordType.AAAA, recordClass: RecordClass.IN });
+export const TxtRecord = (name: string, entries: string[]): Record<string[]> => ({ name, value: entries, ttl: 120, recordType: RecordType.TXT, recordClass: RecordClass.IN });
+export const SrvRecord = (name: string, srv: SrvRecordValue): Record<SrvRecordValue> => ({ name, value: srv, ttl: 120, recordType: RecordType.SRV, recordClass: RecordClass.IN });
 
 export interface SrvRecordValue {
     priority: number,
@@ -173,17 +173,17 @@ export class DnsCodec {
             ipItems.push(reader.readUInt16().toString(16));
         }
         // Compress 0 sequences
-        const zeroSequences = new Array<{start: number, length: number}>();
+        const zeroSequences = new Array<{ start: number, length: number }>();
         for (let i = 0; i < 8; i++) {
             if (ipItems[i] !== "0") continue;
             const start = i;
             i++;
             while (i < 8 && ipItems[i] === "0") { i++; }
-            zeroSequences.push({start, length: i - start});
+            zeroSequences.push({ start, length: i - start });
         }
         if (zeroSequences.length > 0) {
             zeroSequences.sort((a, b) => a.length - b.length);
-            const {start, length} = zeroSequences[0];
+            const { start, length } = zeroSequences[0];
             for (let i = start; i < start + length; i++) {
                 ipItems[i] = "";
             }
@@ -200,7 +200,7 @@ export class DnsCodec {
         return ipItems.join(".");
     }
 
-    static encode({transactionId = 0, queries = [], answers = [], authorities = [], additionalRecords = []}: Partial<DnsMessage>): ByteArray {
+    static encode({ transactionId = 0, queries = [], answers = [], authorities = [], additionalRecords = [] }: Partial<DnsMessage>): ByteArray {
         const writer = new DataWriter(Endian.Big);
         writer.writeUInt16(transactionId);
         writer.writeUInt16(queries.length > 0 ? MessageType.Query : MessageType.Response);
@@ -208,12 +208,12 @@ export class DnsCodec {
         writer.writeUInt16(answers.length);
         writer.writeUInt16(0); // No authority answers
         writer.writeUInt16(additionalRecords.length);
-        queries.forEach(({name, recordClass, recordType}) => {
+        queries.forEach(({ name, recordClass, recordType }) => {
             writer.writeByteArray(this.encodeQName(name));
             writer.writeUInt16(recordType);
             writer.writeUInt16(recordClass);
         });
-        [...answers, ...authorities, ...additionalRecords].forEach(({name, recordType, recordClass, ttl, value}) => {
+        [...answers, ...authorities, ...additionalRecords].forEach(({ name, recordType, recordClass, ttl, value }) => {
             writer.writeByteArray(this.encodeQName(name));
             writer.writeUInt16(recordType);
             writer.writeUInt16(recordClass);
@@ -276,7 +276,7 @@ export class DnsCodec {
         return writer.toByteArray();
     }
 
-    private static encodeSrvRecord({priority, weight, port, target}: SrvRecordValue) {
+    private static encodeSrvRecord({ priority, weight, port, target }: SrvRecordValue) {
         const writer = new DataWriter(Endian.Big);
         writer.writeUInt16(priority);
         writer.writeUInt16(weight);

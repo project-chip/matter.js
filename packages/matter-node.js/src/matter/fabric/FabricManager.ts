@@ -10,7 +10,7 @@ import { Fabric, FabricBuilder } from "./Fabric";
 import { MatterError } from "../../error/MatterError";
 
 /** Specific Error for when a fabric is not found. */
-export class FabricNotFoundError extends MatterError {}
+export class FabricNotFoundError extends MatterError { }
 
 
 export class FabricManager {

@@ -6,7 +6,7 @@
 
 import { Message, MessageCodec, SessionType } from "../../codec/MessageCodec";
 import { Queue } from "../../util/Queue";
-import {Session, SLEEPY_ACTIVE_INTERVAL_MS, SLEEPY_IDLE_INTERVAL_MS} from "../session/Session";
+import { Session, SLEEPY_ACTIVE_INTERVAL_MS, SLEEPY_IDLE_INTERVAL_MS } from "../session/Session";
 import { MessageType, SECURE_CHANNEL_PROTOCOL_ID } from "../session/secure/SecureChannelMessages";
 import { MessageChannel, MessageCounter } from "./ExchangeManager";
 import { getPromiseResolver } from "../../util/Promises";
@@ -116,7 +116,7 @@ export class MessageExchange<ContextT> {
         private readonly protocolId: number,
         private readonly closeCallback: () => void,
     ) {
-        const { activeRetransmissionTimeoutMs, idleRetransmissionTimeoutMs , retransmissionRetries } = session.getMrpParameters();
+        const { activeRetransmissionTimeoutMs, idleRetransmissionTimeoutMs, retransmissionRetries } = session.getMrpParameters();
         this.activeRetransmissionTimeoutMs = activeRetransmissionTimeoutMs ?? SLEEPY_ACTIVE_INTERVAL_MS;
         this.idleRetransmissionTimeoutMs = idleRetransmissionTimeoutMs ?? SLEEPY_IDLE_INTERVAL_MS;
         this.retransmissionRetries = retransmissionRetries;

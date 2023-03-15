@@ -51,7 +51,7 @@ export class SubscriptionClient implements ProtocolHandler<MatterController> {
 
     constructor(
         private readonly subscriptionListeners: Map<number, (dataReport: DataReport) => void>,
-    ) {}
+    ) { }
 
     getId() {
         return INTERACTION_PROTOCOL_ID;
@@ -89,7 +89,7 @@ export class InteractionClient {
     async getAllAttributes(): Promise<{}> {
         return this.withMessenger<GetRawValueResponse[]>(async messenger => {
             const response = await messenger.sendReadRequest({
-                attributes: [ {} ],
+                attributes: [{}],
                 interactionModelRevision: 1,
                 isFabricFiltered: true,
             });
@@ -97,10 +97,10 @@ export class InteractionClient {
                 return []; // TODO handle Errors correctly
             }
 
-            return response.values.flatMap(({ value: reportValue} ) => {
+            return response.values.flatMap(({ value: reportValue }) => {
                 if (reportValue === undefined) return [];
                 const { path: { endpointId, clusterId, attributeId }, version, value } = reportValue;
-                if (endpointId === undefined || clusterId === undefined || attributeId === undefined ) throw new Error("Invalid response");
+                if (endpointId === undefined || clusterId === undefined || attributeId === undefined) throw new Error("Invalid response");
                 return { endpointId, clusterId, attributeId, version, value };
             });
         });
@@ -109,7 +109,7 @@ export class InteractionClient {
     async get<A extends Attribute<any>>(endpointId: number, clusterId: number, { id, schema, optional, default: conformanceValue }: A): Promise<AttributeJsType<A>> {
         return this.withMessenger<AttributeJsType<A>>(async messenger => {
             const response = await messenger.sendReadRequest({
-                attributes: [ {endpointId , clusterId, attributeId: id} ],
+                attributes: [{ endpointId, clusterId, attributeId: id }],
                 interactionModelRevision: 1,
                 isFabricFiltered: true,
             });
@@ -147,7 +147,7 @@ export class InteractionClient {
     ): Promise<void> {
         return this.withMessenger<void>(async messenger => {
             const { report, subscribeResponse: { subscriptionId } } = await messenger.sendSubscribeRequest({
-                attributeRequests: [ {endpointId , clusterId, attributeId: id} ],
+                attributeRequests: [{ endpointId, clusterId, attributeId: id }],
                 keepSubscriptions: true,
                 minIntervalFloorSeconds,
                 maxIntervalCeilingSeconds,

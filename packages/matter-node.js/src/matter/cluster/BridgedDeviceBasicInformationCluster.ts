@@ -37,7 +37,7 @@ export const BasicInformationCluster = Cluster({
         productName: OptionalAttribute(3, TlvString32max),
 
         /** User defined name for the Node. It is set during initial commissioning and may be updated by further reconfigurations. */
-        nodeLabel: OptionalWritableAttribute(5, TlvString32max, { persistent: true, default: "", writeAcl: AccessLevel.Manage } ),
+        nodeLabel: OptionalWritableAttribute(5, TlvString32max, { persistent: true, default: "", writeAcl: AccessLevel.Manage }),
 
         /** Version number of the hardware of the Node. The meaning of its value, and the versioning scheme, are vendor defined. */
         hardwareVersion: OptionalAttribute(7, TlvUInt16, { default: 0 }),

@@ -14,7 +14,7 @@ import { MatterCoreSpecificationV1_0, TlvUInt32, TlvWrapper } from "@project-chi
 export class EventId {
     constructor(
         readonly id: number
-    ) {}
+    ) { }
 }
 
 /** Tlv schema for an Event Id. */

@@ -23,7 +23,7 @@ type PasePake3 = TypeFromSchema<typeof TlvPasePake3>;
 export class PaseServerMessenger extends SecureChannelMessenger<MatterDevice> {
     async readPbkdfParamRequest() {
         const { payload } = await this.nextMessage(MessageType.PbkdfParamRequest);
-        return { requestPayload: payload, request: TlvPbkdfParamRequest.decode(payload) } ;
+        return { requestPayload: payload, request: TlvPbkdfParamRequest.decode(payload) };
     }
 
     async sendPbkdfParamResponse(response: PbkdfParamResponse) {
@@ -50,7 +50,7 @@ export class PaseClientMessenger extends SecureChannelMessenger<MatterController
 
     async readPbkdfParamResponse() {
         const { payload } = await this.nextMessage(MessageType.PbkdfParamResponse);
-        return { responsePayload: payload, response: TlvPbkdfParamResponse.decode(payload) } ;
+        return { responsePayload: payload, response: TlvPbkdfParamResponse.decode(payload) };
     }
 
     sendPasePake1(pasePake1: PasePake1) {

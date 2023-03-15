@@ -17,7 +17,7 @@ export class NetworkNode extends Network {
         if (ipv4) {
             const netInterfaceInfo = networkInterfaces()[netInterface];
             if (netInterfaceInfo === undefined) throw new Error(`Unknown interface: ${netInterface}`);
-            for (const {address, family} of netInterfaceInfo) {
+            for (const { address, family } of netInterfaceInfo) {
                 if (family === "IPv4") {
                     return address;
                 }
@@ -47,7 +47,7 @@ export class NetworkNode extends Network {
             const interfaces = networkInterfaces();
             for (const name in interfaces) {
                 const netInterfaces = interfaces[name] as NetworkInterfaceInfo[];
-                for (const {address, netmask} of netInterfaces) {
+                for (const { address, netmask } of netInterfaces) {
                     if (onSameNetwork(ip, address, netmask)) {
                         return name;
                     }
@@ -72,7 +72,7 @@ export class NetworkNode extends Network {
     getIpMac(netInterface: string): { mac: string; ips: string[]; } | undefined {
         const netInterfaceInfo = networkInterfaces()[netInterface];
         if (netInterfaceInfo === undefined) return undefined;
-        return { mac: netInterfaceInfo[0].mac, ips: netInterfaceInfo.map(({address}) => address) };
+        return { mac: netInterfaceInfo[0].mac, ips: netInterfaceInfo.map(({ address }) => address) };
     }
 
     override createUdpChannel(options: UdpChannelOptions): Promise<UdpChannel> {

@@ -65,7 +65,7 @@ export class SubscriptionHandler {
         });
     }
 
-    getMaxInterval():number {
+    getMaxInterval(): number {
         return Math.ceil(this.maxInterval / 1000);
     }
 
@@ -111,7 +111,7 @@ export class SubscriptionHandler {
             suppressResponse: false,
             subscriptionId: this.subscriptionId,
             interactionModelRevision: 1,
-            values: values.map(({ path, schema, value, version  }) => ({
+            values: values.map(({ path, schema, value, version }) => ({
                 value: {
                     path,
                     version,

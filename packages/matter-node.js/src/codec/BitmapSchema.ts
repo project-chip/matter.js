@@ -13,7 +13,7 @@ const enum BitRangeType {
 }
 
 type BitRange<T> = { type: BitRangeType, offset: number, length: number };
-const BitRange = <T>(type: BitRangeType, offset: number, length: number ) => ({ type, offset, length } as BitRange<T>);
+const BitRange = <T>(type: BitRangeType, offset: number, length: number) => ({ type, offset, length } as BitRange<T>);
 
 /** Defines the bit position of a boolean flag. */
 export interface BitFlag extends BitRange<boolean> { type: BitRangeType.Flag }
@@ -21,18 +21,18 @@ export const BitFlag = (offset: number) => BitRange(BitRangeType.Flag, offset, 1
 
 /** Defines the bit position and bit length of a numeric value. */
 export interface BitField extends BitRange<number> { type: BitRangeType.Number }
-export const BitField = (offset: number, length: number ) => BitRange(BitRangeType.Number, offset, length) as BitField;
+export const BitField = (offset: number, length: number) => BitRange(BitRangeType.Number, offset, length) as BitField;
 
 /** Defines the bit position and bit length of an enum flag. */
 export interface BitFieldEnum<E extends number> extends BitRange<E> { type: BitRangeType.Enum }
 export const BitFieldEnum = <E extends number>(offset: number, length: number) => BitRange(BitRangeType.Enum, offset, length) as BitFieldEnum<E>;
 
-export type BitSchema = {[key: string]: BitFlag | BitField | BitFieldEnum<any> };
-export type TypeFromBitSchema<T extends BitSchema> = {[K in keyof T]: T[K] extends BitFieldEnum<infer E> ? E : (T[K] extends BitField ? number : boolean )};
+export type BitSchema = { [key: string]: BitFlag | BitField | BitFieldEnum<any> };
+export type TypeFromBitSchema<T extends BitSchema> = { [K in keyof T]: T[K] extends BitFieldEnum<infer E> ? E : (T[K] extends BitField ? number : boolean) };
 export type TypeFromBitmapSchema<S extends Schema<any, any>> = S extends Schema<infer T, any> ? T : never;
 
-type MaskFromBitSchema<T extends BitSchema> = {[K in keyof T]: number };
-type MaskOffsetFromBitSchema<T extends BitSchema> = {[K in keyof T]: { mask: number, byteOffset: number, bitOffset: number }};
+type MaskFromBitSchema<T extends BitSchema> = { [K in keyof T]: number };
+type MaskOffsetFromBitSchema<T extends BitSchema> = { [K in keyof T]: { mask: number, byteOffset: number, bitOffset: number } };
 
 export class BitmapSchemaInternal<T extends BitSchema> extends Schema<TypeFromBitSchema<T>, number> {
     private readonly masks: MaskFromBitSchema<T>;
@@ -98,7 +98,7 @@ export class ByteArrayBitmapSchemaInternal<T extends BitSchema> extends Schema<T
             const bitOffset = offset % 8;
             const byteOffset = (offset - bitOffset) / 8;
             let mask: number;
-            if ( type === BitRangeType.Flag) {
+            if (type === BitRangeType.Flag) {
                 mask = 1 << bitOffset;
             } else {
                 // Do not shift number mask, they might go beyond 2^32
@@ -148,7 +148,7 @@ export class ByteArrayBitmapSchemaInternal<T extends BitSchema> extends Schema<T
                 let value = 0;
                 let valueBitOffset = 0;
                 while (mask !== 0) {
-                    value |= ((bitmap[byteOffset++] >> bitOffset) & mask ) << valueBitOffset;
+                    value |= ((bitmap[byteOffset++] >> bitOffset) & mask) << valueBitOffset;
                     const bitRead = 8 - bitOffset;
                     bitOffset = 0;
                     valueBitOffset += bitRead;

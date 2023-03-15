@@ -10,7 +10,7 @@ export class Persistence {
     constructor(
         private readonly storage: Storage,
         private readonly context: string
-    ) {}
+    ) { }
 
     get<T>(key: string, defaultValue?: T): T {
         const value = this.storage.get<T>(this.context, key);
@@ -25,7 +25,7 @@ export class Persistence {
         return this.storage.get(this.context, key) !== undefined;
     }
 
-    getAll(): { key: string, value: any}[] {
+    getAll(): { key: string, value: any }[] {
         return this.storage.getAll(this.context);
     }
 
