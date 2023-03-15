@@ -4,15 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "../../../log/Logger";
-import { MatterDevice } from "../../MatterDevice";
-import { SecureSession } from "../../session/SecureSession";
-import {
-    CommissioningError,
-    GeneralCommissioningCluster,
-    RegulatoryLocationType
-} from "../GeneralCommissioningCluster";
-import { ClusterServerHandlers } from "./ClusterServer";
+import {Logger} from "../../../log/Logger";
+import {MatterDevice} from "../../MatterDevice";
+import {SecureSession} from "../../session/SecureSession";
+import {CommissioningError, GeneralCommissioningCluster, RegulatoryLocationType} from "../GeneralCommissioningCluster";
+import {ClusterServerHandlers} from "./ClusterServer";
 
 const SuccessResponse = { errorCode: CommissioningError.Ok, debugText: "" };
 const logger = Logger.get("GeneralCommissioningClusterHandler");
@@ -38,7 +34,7 @@ export const GeneralCommissioningClusterHandler: ClusterServerHandlers<typeof Ge
                 validValues = [RegulatoryLocationType.Indoor];
                 break;
             case (RegulatoryLocationType.IndoorOutdoor):
-                validValues = [RegulatoryLocationType.Indoor, RegulatoryLocationType.Outdoor];
+                validValues = [RegulatoryLocationType.Indoor, RegulatoryLocationType.Outdoor, RegulatoryLocationType.IndoorOutdoor];
                 break;
             default:
                 return { errorCode: CommissioningError.ValueOutsideRange, debugText: "Invalid regulatory location" };
