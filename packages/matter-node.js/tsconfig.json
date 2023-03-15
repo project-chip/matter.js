@@ -6,7 +6,9 @@
         "noUnusedParameters": false
     },
     "include": ["src/**/*.ts", "dts/*.d.ts", "test/**/*.ts"],
+    "exclude": [],
     "references": [
         { "path": "../matter.js" }
-    ]
+    ],
+
 }
