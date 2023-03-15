@@ -8,7 +8,7 @@ import assert from "assert";
 import { DnsCodec } from "../../src/codec/DnsCodec";
 import { UdpChannelFake } from "../../src/net/fake/UdpChannelFake";
 import { UdpChannel } from "../../src/net/UdpChannel";
-import { MdnsBroadcaster} from "../../src/matter/mdns/MdnsBroadcaster";
+import { MdnsBroadcaster } from "../../src/matter/mdns/MdnsBroadcaster";
 import { getPromiseResolver } from "../../src/util/Promises";
 import { NetworkFake } from "../../src/net/fake/NetworkFake";
 import { Network } from "../../src/net/Network";
@@ -24,7 +24,7 @@ const SERVER_MAC = "00:B0:D0:63:C2:26";
 const CLIENT_IP = "192.168.200.2";
 const CLIENT_MAC = "CA:FE:00:00:BE:EF";
 
-const serverNetwork = new NetworkFake(SERVER_MAC, [ SERVER_IPv4, SERVER_IPv6 ]);
+const serverNetwork = new NetworkFake(SERVER_MAC, [SERVER_IPv4, SERVER_IPv6]);
 const clientNetwork = new NetworkFake(CLIENT_MAC, [CLIENT_IP]);
 
 const OPERATIONAL_ID = ByteArray.fromHex("0000000000000018")
@@ -38,7 +38,7 @@ describe("MDNS", () => {
     beforeEach(async () => {
         Network.get = () => clientNetwork;
         scanner = await MdnsScanner.create(FAKE_INTERFACE_NAME);
-        channel = await UdpChannelFake.create(serverNetwork, {listeningPort: 5353, listeningAddress: "224.0.0.251", type: "udp4"});
+        channel = await UdpChannelFake.create(serverNetwork, { listeningPort: 5353, listeningAddress: "224.0.0.251", type: "udp4" });
 
         Network.get = () => serverNetwork;
         broadcaster = await MdnsBroadcaster.create(FAKE_INTERFACE_NAME);
@@ -74,7 +74,7 @@ describe("MDNS", () => {
                 ],
                 authorities: [],
                 additionalRecords: [
-                    { name: '0000000000000018-0000000000000001._matter._tcp.local', recordType: 33, recordClass: 1, ttl: 120, value: {priority: 0, weight: 0, port: 5540, target: '00B0D063C2260000.local'} },
+                    { name: '0000000000000018-0000000000000001._matter._tcp.local', recordType: 33, recordClass: 1, ttl: 120, value: { priority: 0, weight: 0, port: 5540, target: '00B0D063C2260000.local' } },
                     { name: '0000000000000018-0000000000000001._matter._tcp.local', recordType: 16, recordClass: 1, ttl: 120, value: ["SII=5000", "SAI=300", "T=1"] },
                     { name: '00B0D063C2260000.local', recordType: 1, recordClass: 1, ttl: 120, value: '192.168.200.1' },
                     { name: '00B0D063C2260000.local', recordType: 28, recordClass: 1, ttl: 120, value: 'fe80::::e777:4f5e:c61e:7314' },
@@ -88,7 +88,7 @@ describe("MDNS", () => {
             broadcaster.setFabric(OPERATIONAL_ID, NODE_ID);
             broadcaster.announce();
 
-            const result = await scanner.findDevice({operationalId: OPERATIONAL_ID} as Fabric, NODE_ID);
+            const result = await scanner.findDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID);
 
             assert.deepEqual(result, { ip: SERVER_IPv4, port: 5540 });
         });
@@ -96,7 +96,7 @@ describe("MDNS", () => {
         it("the client asks for the server record if it has not been announced", async () => {
             broadcaster.setFabric(OPERATIONAL_ID, NODE_ID);
 
-            const result = await scanner.findDevice({operationalId: OPERATIONAL_ID} as Fabric, NODE_ID);
+            const result = await scanner.findDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID);
 
             assert.deepEqual(result, { ip: SERVER_IPv4, port: 5540 });
         });

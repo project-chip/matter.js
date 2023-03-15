@@ -22,7 +22,7 @@ const MESSAGE: Message = {
         sessionId: 0x351d,
         sessionType: SessionType.Unicast,
     },
-    payloadHeader:{
+    payloadHeader: {
         isInitiatorMessage: false,
         requiresAck: true,
         messageType: 0x05,

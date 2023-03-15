@@ -16,7 +16,7 @@ const defaultFormatter = Logger.logFormater;
 const defaultLevel = Logger.defaultLogLevel;
 const defaultLevels = Logger.logLevels;
 const defaultSink = Logger.log;
-const fakeLogSink = new Array<{level: Level, log: string}>();
+const fakeLogSink = new Array<{ level: Level, log: string }>();
 
 const LOGGER_NAME = "UnitTest";
 

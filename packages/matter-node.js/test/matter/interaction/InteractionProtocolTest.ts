@@ -27,8 +27,8 @@ const READ_REQUEST: ReadRequest = {
     interactionModelRevision: 1,
     isFabricFiltered: true,
     attributes: [
-        { endpointId: 0, clusterId: 0x28, attributeId: 2},
-        { endpointId: 0, clusterId: 0x28, attributeId: 4},
+        { endpointId: 0, clusterId: 0x28, attributeId: 2 },
+        { endpointId: 0, clusterId: 0x28, attributeId: 4 },
     ],
 };
 
@@ -36,24 +36,28 @@ const READ_RESPONSE: DataReport = {
     interactionModelRevision: 1,
     suppressResponse: false,
     values: [
-        { value: {
-            path: {
-                endpointId: 0,
-                clusterId: 0x28,
-                attributeId: 2,
-            },
-            value: TlvUInt8.encodeTlv(1),
-            version: 0,
-        }},
-        { value: {
-            path: {
-                endpointId: 0,
-                clusterId: 0x28,
-                attributeId: 4,
-            },
-            value: TlvUInt8.encodeTlv(2),
-            version: 0,
-        }},
+        {
+            value: {
+                path: {
+                    endpointId: 0,
+                    clusterId: 0x28,
+                    attributeId: 2,
+                },
+                value: TlvUInt8.encodeTlv(1),
+                version: 0,
+            }
+        },
+        {
+            value: {
+                path: {
+                    endpointId: 0,
+                    clusterId: 0x28,
+                    attributeId: 4,
+                },
+                value: TlvUInt8.encodeTlv(2),
+                version: 0,
+            }
+        },
     ]
 };
 
@@ -138,7 +142,7 @@ describe("InteractionProtocol", () => {
                     }, {}),
                 ]);
 
-            const result = interactionProtocol.handleReadRequest(({channel: {getName: () => "test"}}) as MessageExchange<MatterDevice>, READ_REQUEST);
+            const result = interactionProtocol.handleReadRequest(({ channel: { getName: () => "test" } }) as MessageExchange<MatterDevice>, READ_REQUEST);
 
             assert.deepEqual(result, READ_RESPONSE);
         });
@@ -166,9 +170,9 @@ describe("InteractionProtocol", () => {
                 },
             }, {});
 
-            const interactionProtocol = new InteractionServer().addEndpoint(0, DEVICE.ROOT, [ basicCluster ]);
+            const interactionProtocol = new InteractionServer().addEndpoint(0, DEVICE.ROOT, [basicCluster]);
 
-            const result = interactionProtocol.handleWriteRequest(({channel: {getName: () => "test"}}) as MessageExchange<MatterDevice>, WRITE_REQUEST);
+            const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" } }) as MessageExchange<MatterDevice>, WRITE_REQUEST);
 
             assert.deepEqual(result, WRITE_RESPONSE);
             assert.equal(basicCluster.attributes.nodeLabel.get(), "test");
@@ -195,9 +199,9 @@ describe("InteractionProtocol", () => {
                 },
             }, {});
 
-            const interactionProtocol = new InteractionServer().addEndpoint(0, DEVICE.ROOT, [ basicCluster ]);
+            const interactionProtocol = new InteractionServer().addEndpoint(0, DEVICE.ROOT, [basicCluster]);
 
-            const result = interactionProtocol.handleWriteRequest(({channel: {getName: () => "test"}}) as MessageExchange<MatterDevice>, MASS_WRITE_REQUEST);
+            const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" } }) as MessageExchange<MatterDevice>, MASS_WRITE_REQUEST);
 
             assert.deepEqual(result, MASS_WRITE_RESPONSE);
             assert.equal(basicCluster.attributes.vendorName.get(), "vendor");

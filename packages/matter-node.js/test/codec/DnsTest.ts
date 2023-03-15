@@ -22,7 +22,7 @@ const DNS_RESPONSE: DnsMessage = {
     additionalRecords: [
         ARecord("DCA632A0295F0000.local", "192.168.200.46"),
         AAAARecord("DCA632A0295F0000.local", "fe80::9580:b733:6f54:9f43"),
-        SrvRecord("D559AF361549A9A2-0000000000000009._matter._tcp.local", {priority: 0, weight: 0, port: 5540, target: "DCA632A0295F0000.local" }),
+        SrvRecord("D559AF361549A9A2-0000000000000009._matter._tcp.local", { priority: 0, weight: 0, port: 5540, target: "DCA632A0295F0000.local" }),
         TxtRecord("D559AF361549A9A2-0000000000000009._matter._tcp.local", ["SII=5000", "SAI=300", "T=1"]),
     ],
 }
@@ -35,17 +35,17 @@ const DNS_DECODED = {
     transactionId: 0,
     messageType: 0,
     queries: [
-      { name: 'lb._dns-sd._udp.local', recordType: 12, recordClass: 1 },
-      { name: '_companion-link._tcp.local', recordType: 12, recordClass: 1 },
-      { name: '_homekit._tcp.local', recordType: 12, recordClass: 1 }
+        { name: 'lb._dns-sd._udp.local', recordType: 12, recordClass: 1 },
+        { name: '_companion-link._tcp.local', recordType: 12, recordClass: 1 },
+        { name: '_homekit._tcp.local', recordType: 12, recordClass: 1 }
     ],
     answers: [
-      { name: '_companion-link._tcp.local', recordType: 12, recordClass: 1, ttl: 4500, value: 'Kitchen._companion-link._tcp.local' },
-      { name: '_homekit._tcp.local', recordType: 12, recordClass: 1, ttl: 4500, value: 'AB6EC7A1-387B-5253-A854-9DA52635567F._homekit._tcp.local' }
+        { name: '_companion-link._tcp.local', recordType: 12, recordClass: 1, ttl: 4500, value: 'Kitchen._companion-link._tcp.local' },
+        { name: '_homekit._tcp.local', recordType: 12, recordClass: 1, ttl: 4500, value: 'AB6EC7A1-387B-5253-A854-9DA52635567F._homekit._tcp.local' }
     ],
     authorities: [],
     additionalRecords: [
-      { name: '', recordType: 41, recordClass: 1440, ttl: 4500,  value: ByteArray.fromHex("0004000e0099929387b033db4275a6a31b2d") }
+        { name: '', recordType: 41, recordClass: 1440, ttl: 4500, value: ByteArray.fromHex("0004000e0099929387b033db4275a6a31b2d") }
     ]
 };
 

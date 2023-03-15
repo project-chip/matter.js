@@ -24,7 +24,7 @@ describe("CasePairing", () => {
             const peerPubKey = ByteArray.fromHex("04ae6e458cf40ad53761ee90bc458aa577e6a1acf75410524551bb0bc4c708832c6525991ee2eed47df35ce2d83dad743bff6769ebbf731395d62453cb37303e03");
             const fabricPubKey = ByteArray.fromHex("04531a14e4c1b4cc7ac69aa5e403d5ccc3c5152c29fddedc29ac98ecff6c8f8695317446029cf3eb3e295ee18f0fd0ba9f06f7fa229138db0bc8d8c6f9875c9707");
 
-            const sigma2Salt = Buffer.concat([ ipk, random, pubKey, Crypto.hash(sigma1Bytes) ]);
+            const sigma2Salt = Buffer.concat([ipk, random, pubKey, Crypto.hash(sigma1Bytes)]);
 
             assert.equal(sigma2Salt.toHex(), "0c677d9b5ac585827b577470bd9bd51675d1443943a23371699bb017958a87e9ec6bbcad5f990aa3822a45bec778648904e2690445cc017a388853eaeca3a1ffd2712f6898e0bb523b8b496590804a39bf1555300bbd2a159e927b428397fb07a41e26c8cdf858ec62a310d0480d94eb64df506d7014c72ed4a18169954cf24a5cacf44fc7c13eb39906c06a50864f8106");
 
@@ -67,7 +67,7 @@ describe("CasePairing", () => {
             const sharedSecret = ByteArray.fromHex("c1466cab85d7809732786f63cb3b014a51cd49d01f494fcd56665ba8e00e5502");
             const peerEncrypted = ByteArray.fromHex("d3e009b49a46a2492a96fc8391dd90a53ad5de4fadc911a524036bbaf439577bf4ce9bb4b5cab2942c8c6e8d5666b3ce7449e0fb290833291641f40a366a4a9fd5573b5913b932914e23f13d25353d4cad0ad6e2ecbb85163800580dfb7ea88c56bb67565e94542f49c2f0fe4a7de22ee0fecc85a28da31e32508c3ce1d30b4cfe7b7bb84d5c4425f20336ea816f4b9a04c6c0828e4f4b24eb4aacf29a4b6b419d85dcf02d222c9826691aa73864f9cd6b8ebfd94680b0db75f7356018284e2c9b3bcea807f73f5adaff5db005550e441921420ddc65500a2bd4a177875f71be4e293c35c8221867bf206c016d6d5add4ceba754fb3ad375a03061634d3a0b0ae6b0bafe272640c545f07cf7742d960f399a12c09b7bf7833678e048e039ee7b1a66e365817fff0d0d7e28edb7beae205a2974b3273ae23909e9bb482cdc5b05363265d78eb747536336b7ef");
 
-            const sigma3Salt = Buffer.concat([ identityProtectionKey, Crypto.hash([ sigma1Bytes, sigma2Bytes ]) ]);
+            const sigma3Salt = Buffer.concat([identityProtectionKey, Crypto.hash([sigma1Bytes, sigma2Bytes])]);
 
             assert.equal(sigma3Salt.toHex(), "0c677d9b5ac585827b577470bd9bd51678d8306a4055524d843215d1e697791dd53abd3db440370264bf9d191f1cb786");
 
@@ -84,7 +84,7 @@ describe("CasePairing", () => {
 
             assert.equal(peerSignatureData.toHex(), "153001f4153001010124020137032414001826048012542826058015203b3706241501261169b6010018240701240801300941041b5c00110e57c1c9bc0619ada179f31bb8c07c8b95b5b0f94ffb21acb87c4d307678026d858be56e2a2ad146b3a895480fc8a616c9199980bd620503f4a311e7370a3501280118240201360304020401183004144cf0ce8e72e489e884550045a3bc6469b135fa3c300514e766069362d7e35b79687161644d222bdde93a6818300b40fa1b589089ed43e6ea3dc500eb18b4933d735c3cf384246e641fe13701a46cfe5d5e7b8d9e6e6e7d203d24c23c7f8b56a7849b813c0bb8709a47ce089d19a71b18300341041d5a2e34457dcb4184b94bf7cb6f64689ee73d69282daa5fa5ee6fa5810f80c136ec7b8806679878cb045d9b25aa28a1a411c77677f5a1cf6f98c4acfeb9793c30044104d1dbb16fd8ffda505a00f49c9af98eb5e98573708590575991aa06f09e295463f33cccf49c8df7c5b58f6d02c4f193485d4c9ae41cf4df0b89b223822adf7db518");
 
-            const secureSessionSalt = Buffer.concat([identityProtectionKey, Crypto.hash([ sigma1Bytes, sigma2Bytes, sigma3Bytes ])]);
+            const secureSessionSalt = Buffer.concat([identityProtectionKey, Crypto.hash([sigma1Bytes, sigma2Bytes, sigma3Bytes])]);
             const decryptKey = await Crypto.hkdf(sharedSecret, secureSessionSalt, ByteArray.fromString("SessionKeys"), 16);
 
             assert.equal(decryptKey.toHex(), "e3ffee2792dc6d8dee832e248d1df718");

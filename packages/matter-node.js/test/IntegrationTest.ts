@@ -37,8 +37,8 @@ import { VendorId } from "../src/matter/common/VendorId";
 import { NodeId } from "../src/matter/common/NodeId";
 import { OnOffClusterHandler } from "../src/matter/cluster/server/OnOffServer";
 import { FabricIndex } from "../src/matter/common/FabricIndex";
-import {AttestationCertificateManager} from "../src/matter/certificate/AttestationCertificateManager";
-import {CertificationDeclarationManager} from "../src/matter/certificate/CertificationDeclarationManager";
+import { AttestationCertificateManager } from "../src/matter/certificate/AttestationCertificateManager";
+import { CertificationDeclarationManager } from "../src/matter/certificate/CertificationDeclarationManager";
 
 const SERVER_IP = "192.168.200.1";
 const SERVER_MAC = "00:B0:D0:63:C2:26";
@@ -92,9 +92,9 @@ describe("Integration", () => {
             .addNetInterface(await UdpInterface.create(matterPort, "udp6", SERVER_IP))
             .addBroadcaster(await MdnsBroadcaster.create())
             .addProtocolHandler(new SecureChannelProtocol(
-                    await PaseServer.fromPin(setupPin, { iterations: 1000, salt: Crypto.getRandomData(32) }),
-                    new CaseServer(),
-                ))
+                await PaseServer.fromPin(setupPin, { iterations: 1000, salt: Crypto.getRandomData(32) }),
+                new CaseServer(),
+            ))
             .addProtocolHandler(new InteractionServer()
                 .addEndpoint(0x00, DEVICE.ROOT, [
                     new ClusterServer(BasicInformationCluster, {}, {
@@ -124,23 +124,23 @@ describe("Integration", () => {
                         regulatoryConfig: RegulatoryLocationType.Indoor,
                         locationCapability: RegulatoryLocationType.IndoorOutdoor,
                         supportsConcurrentConnections: true,
-                     }, GeneralCommissioningClusterHandler),
-                     new ClusterServer(OperationalCredentialsCluster, {}, {
-                             nocs: [],
-                             fabrics: [],
-                             supportedFabrics: 254,
-                             commissionedFabrics: 0,
-                             trustedRootCertificates: [],
-                             currentFabricIndex: FabricIndex.NO_FABRIC,
-                         },
-                         OperationalCredentialsClusterHandler({
-                             devicePrivateKey: dacKeyPair.privateKey,
-                             deviceCertificate: dac,
-                             deviceIntermediateCertificate: paa.getPAICert(),
-                             certificationDeclaration,
-                     })),
+                    }, GeneralCommissioningClusterHandler),
+                    new ClusterServer(OperationalCredentialsCluster, {}, {
+                        nocs: [],
+                        fabrics: [],
+                        supportedFabrics: 254,
+                        commissionedFabrics: 0,
+                        trustedRootCertificates: [],
+                        currentFabricIndex: FabricIndex.NO_FABRIC,
+                    },
+                        OperationalCredentialsClusterHandler({
+                            devicePrivateKey: dacKeyPair.privateKey,
+                            deviceCertificate: dac,
+                            deviceIntermediateCertificate: paa.getPAICert(),
+                            certificationDeclaration,
+                        })),
                 ])
-                .addEndpoint(0x01, DEVICE.ON_OFF_LIGHT, [ onOffServer ])
+                .addEndpoint(0x01, DEVICE.ON_OFF_LIGHT, [onOffServer])
             );
         server.start();
 
@@ -183,27 +183,27 @@ describe("Integration", () => {
             const startTime = Time.nowMs();
 
             // Await initial Datareport
-            const { promise: firstPromise, resolver: firstResolver } = await getPromiseResolver<{value: boolean, version: number, time: number}>();
+            const { promise: firstPromise, resolver: firstResolver } = await getPromiseResolver<{ value: boolean, version: number, time: number }>();
             let callback = (value: boolean, version: number) => firstResolver({ value, version, time: Time.nowMs() });
 
             await onOffClient.subscribeOnOff((value, version) => callback(value, version), 0, 5);
 
             await fakeTime.advanceTime(0);
             const firstReport = await firstPromise;
-            assert.deepEqual(firstReport, { value: false, version: 0, time: startTime});
+            assert.deepEqual(firstReport, { value: false, version: 0, time: startTime });
 
             // Await update Report on value change
-            const { promise: updatePromise, resolver: updateResolver } = await getPromiseResolver<{value: boolean, version: number, time: number}>();
+            const { promise: updatePromise, resolver: updateResolver } = await getPromiseResolver<{ value: boolean, version: number, time: number }>();
             callback = (value: boolean, version: number) => updateResolver({ value, version, time: Time.nowMs() });
 
             await fakeTime.advanceTime(2 * 1000);
             onOffServer.attributes.onOff.set(true);
             const updateReport = await updatePromise;
 
-            assert.deepEqual(updateReport, { value: true, version: 1, time: startTime + 2 * 1000});
+            assert.deepEqual(updateReport, { value: true, version: 1, time: startTime + 2 * 1000 });
 
             // Await update Report on value change without in between update
-            const { promise: lastPromise, resolver: lastResolver } = await getPromiseResolver<{value: boolean, version: number, time: number}>();
+            const { promise: lastPromise, resolver: lastResolver } = await getPromiseResolver<{ value: boolean, version: number, time: number }>();
             callback = (value: boolean, version: number) => lastResolver({ value, version, time: Time.nowMs() });
 
             // Verify that no update comes in after max cycle time 1h
@@ -214,7 +214,7 @@ describe("Integration", () => {
             onOffServer.attributes.onOff.set(false);
             const lastReport = await lastPromise;
 
-            assert.deepEqual(lastReport, { value: false, version: 2, time: startTime + (60 * 60 + 4) * 1000});
+            assert.deepEqual(lastReport, { value: false, version: 2, time: startTime + (60 * 60 + 4) * 1000 });
         });
     });
 
