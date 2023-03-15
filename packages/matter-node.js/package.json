@@ -24,8 +24,9 @@
         "url": "https://github.com/project-chip/matter.js.git"
     },
     "scripts": {
-        "clean": "rm -rf dist && rm *.tsbuildinfo",
-        "build": "npm run clean && tsc --project tsconfig.dist.json",
+        "clean": "rm -rf dist && rm *.tsbuildinfo || true",
+        "build": "tsc --project tsconfig.dist.json",
+        "build-clean": "npm run clean && npm run build",
         "test": "TZ=utc mocha"
     },
     "devDependencies": {
