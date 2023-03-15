@@ -16,5 +16,5 @@
         "noUnusedLocals": true,
         "strictNullChecks": true
     },
-    "exclude": ["**/dist/**/*", "node-modules/**/*"]
+    "exclude": ["packages/*/dist/**/*", "node-modules/**/*"]
 }
