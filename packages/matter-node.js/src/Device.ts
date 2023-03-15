@@ -34,7 +34,6 @@ import { OnOffCluster } from "./matter/cluster/OnOffCluster";
 import { GeneralCommissioningClusterHandler } from "./matter/cluster/server/GeneralCommissioningServer";
 import { OperationalCredentialsClusterHandler } from "./matter/cluster/server/OperationalCredentialsServer";
 import { MdnsScanner } from "./matter/mdns/MdnsScanner";
-import packageJson from "../package.json";
 import { Logger } from "./log/Logger";
 import { VendorId } from "./matter/common/VendorId";
 import { OnOffClusterHandler } from "./matter/cluster/server/OnOffServer";
@@ -52,7 +51,7 @@ const logger = Logger.get("Device");
 
 class Device {
     async start() {
-        logger.info(`node-matter@${packageJson.version}`);
+        logger.info(`node-matter`);
 
         const deviceName = "Matter test device";
         const deviceType = 257 /* Dimmable bulb */;
@@ -109,7 +108,7 @@ class Device {
                            caseSessionsPerFabric: 3,
                            subscriptionsPerFabric: 3,
                        },
-                       serialNumber: `node-matter-${packageJson.version}`,
+                       serialNumber: `node-matter-${Time.nowMs()}`,
                    }, {}),
                    new ClusterServer(GeneralCommissioningCluster, {}, {
                        breadcrumb: BigInt(0),

@@ -89,11 +89,11 @@ export class AttributeGetterServer<T> extends AttributeServer<T> {
         super(id, name, schema, validator, isWritable, defaultValue);
     }
 
-    setLocal(value: T) {
+    override setLocal(_value: T) {
         throw new Error("Setter is not supported on attribute defined by a getter");
     }
 
-    get(session?: SecureSession<MatterDevice>): T {
+    override get(session?: SecureSession<MatterDevice>): T {
         // TODO: check ACL
         // TODO handle "version" for getter
         return this.getter(session);

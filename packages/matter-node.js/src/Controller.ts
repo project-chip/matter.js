@@ -22,13 +22,12 @@ import { UdpInterface } from "./net/UdpInterface";
 import { getIntParameter, getParameter } from "./util/CommandLine";
 import { MdnsScanner } from "./matter/mdns/MdnsScanner";
 import { Logger } from "./log/Logger";
-import packageJson from "../package.json";
 
 const logger = Logger.get("Controller");
 
 class Controller {
     async start() {
-        logger.info(`node-matter@${packageJson.version}`);
+        logger.info(`node-matter`);
 
         const ip = getParameter("ip");
         if (ip === undefined) throw new Error("Please specify the IP of the device to commission with -ip");

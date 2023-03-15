@@ -22,7 +22,7 @@ export class StorageNode extends StorageInMemory {
         super();
     }
 
-    async initialize() {
+    override async initialize() {
         if (this.initialized) throw new Error("Storage already initialized!");
         try {
             this.store = this.fromJson(await readFile(this.path, "utf-8"));
@@ -35,7 +35,7 @@ export class StorageNode extends StorageInMemory {
         this.initialized = true;
     }
 
-    set<T>(context: string, key: string, value: T): void {
+    override set<T>(context: string, key: string, value: T): void {
         super.set(context, key, value);
         if (!this.waitForCommit) {
             this.waitForCommit = true;
@@ -49,7 +49,7 @@ export class StorageNode extends StorageInMemory {
         await writeFile(this.path, this.toJson(this.store), "utf-8");
     }
 
-    async close() {
+    override async close() {
         this.commitTimer.stop();
         await this.commit();
         this.closed = true;

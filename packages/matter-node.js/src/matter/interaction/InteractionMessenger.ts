@@ -53,7 +53,7 @@ export type WriteResponse = TypeFromSchema<typeof TlvWriteResponse>;
 /** Error base Class for all errors related to the status response messages. */
 export class StatusResponseError extends MatterError {
     public constructor(
-        public readonly message: string,
+        message: string,
         public readonly code: StatusCode,
     ) {
         super();
