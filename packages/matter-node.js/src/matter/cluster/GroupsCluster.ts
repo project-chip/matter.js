@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022 The node-matter Authors
+ * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -115,7 +115,7 @@ export const GroupsCluster = Cluster({
         /**
          * The ViewGroup command allows a client to request that the server responds with a ViewGroupResponse command
          * containing the name string for a particular group.
-         * 
+         *
          */
         viewGroup: Command(1, TlvViewGroupRequest, 0, TlvViewGroupResponse),
 
@@ -139,14 +139,14 @@ export const GroupsCluster = Cluster({
          * If the RemoveAllGroups command was received as unicast and a response is not suppressed, the server
          * SHALL generate a response with the Status field set to SUCCESS.
          * Else potentially no response?
-         * 
+         *
          */
         removeAllGroups: Command(4, TlvNoArguments, 4, TlvRemoveAllGroupResponse),
 
         /**
          * The AddGroupIfIdentifying command allows a client to add group membership in a particular group for the
          * server endpoint, on condition that the endpoint is identifying itself.
-         * 
+         *
          */
         addGroupIfIdentifying: Command(5, TlvAddGroupIfIdentifyingRequest, 5, TlvNoResponse),
     }

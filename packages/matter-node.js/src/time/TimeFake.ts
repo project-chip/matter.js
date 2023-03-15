@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022 The node-matter Authors
+ * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -55,7 +55,7 @@ export class TimeFake extends Time {
    getTimer(durationMs: number, callback: TimerCallback): Timer {
       return new TimerFake(this, durationMs, callback);
    }
-   
+
    getPeriodicTimer(intervalMs: number, callback: TimerCallback): Timer {
       return new IntervalFake(this, intervalMs, callback);
    }

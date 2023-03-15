@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022 The node-matter Authors
+ * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -60,7 +60,7 @@ describe("MessageCodec", () => {
 
             assert.deepEqual(result, DECODED);
         });
-        
+
         it("decodes a message 2", () => {
             const result = MessageCodec.decodePayload(MessageCodec.decodePacket(ENCODED_2));
 

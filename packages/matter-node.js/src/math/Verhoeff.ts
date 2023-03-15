@@ -1,13 +1,13 @@
 /**
  * @license
- * Copyright 2022 The node-matter Authors
+ * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 
 /**
  * Verhoeff algorithm to compute a checksum.
- * 
+ *
  * @see {@link https://en.wikipedia.org/wiki/Verhoeff_algorithm}
  */
 export class Verhoeff {

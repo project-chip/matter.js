@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022 Project CHIP Authors
+ * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -10,7 +10,7 @@ import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 
 /**
  * Schema to encode a nulable value in TLV.
- * 
+ *
  * @see {@link MatterCoreSpecificationV1_0} § A.11.6
  */
 export class NullableSchema<T> extends TlvSchema<T | null> {

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022 The node-matter Authors
+ * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,7 +11,7 @@ import { TimeFake } from "../../src/time/TimeFake";
 import { ByteArray } from "@project-chip/matter.js";
 
 const fakeTime = new TimeFake(1262679233478);
-    
+
 const defaultFormatter = Logger.logFormater;
 const defaultLevel = Logger.defaultLogLevel;
 const defaultLevels = Logger.logLevels;

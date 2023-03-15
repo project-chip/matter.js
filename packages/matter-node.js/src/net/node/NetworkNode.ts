@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022 The node-matter Authors
+ * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -38,7 +38,7 @@ export class NetworkNode extends Network {
         (ip: string) => this.getNetInterfaceForIpInternal(ip),
         5 * 60 * 1000, /* 5mn */
     )
-    
+
     private static getNetInterfaceForIpInternal(ip: string) {
         if (ip.indexOf("%") !== -1) {
             // IPv6 address with scope

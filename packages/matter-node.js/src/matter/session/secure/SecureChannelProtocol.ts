@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022 The node-matter Authors
+ * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -22,7 +22,7 @@ export class SecureChannelProtocol implements ProtocolHandler<MatterDevice> {
     getId(): number {
         return SECURE_CHANNEL_PROTOCOL_ID;
     }
-    
+
     updatePaseCommissioner(paseServer: PaseServer) {
         this.paseCommissioner = paseServer;
     }

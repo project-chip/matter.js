@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022 The node-matter Authors
+ * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -41,5 +41,5 @@ export class TimeNode extends Time {
 
     getPeriodicTimer(intervalMs: number, callback: TimerCallback): Timer {
         return new TimerNode(intervalMs, callback, true);
-    }   
+    }
 }
