@@ -51,7 +51,7 @@ export class MdnsScanner implements Scanner {
             resolver(undefined);
         }).start();
         this.recordWaiters.set(deviceMatterQname, resolver);
-        this.multicastServer.send(DnsCodec.encode({ queries: [{ name: deviceMatterQname, recordClass: RecordClass.IN, recordType: RecordType.SRV }]}));
+        await this.multicastServer.send(DnsCodec.encode({ queries: [{ name: deviceMatterQname, recordClass: RecordClass.IN, recordType: RecordType.SRV }]}));
         const result = await promise;
         timer.stop();
         return result;
@@ -63,7 +63,7 @@ export class MdnsScanner implements Scanner {
         [...this.recordWaiters.values()].forEach(waiter => waiter(undefined));
     }
 
-    private handleDnsMessage(messageBytes: ByteArray, remoteIp: string) {
+    private handleDnsMessage(messageBytes: ByteArray, _remoteIp: string) {
         const message = DnsCodec.decode(messageBytes);
         if (message === undefined) return; // The message cannot be parsed
         if (message.messageType !== MessageType.Response) return;

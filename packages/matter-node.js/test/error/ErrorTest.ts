@@ -117,7 +117,8 @@ describe("Errors", () => {
         });
 
         it("tryCatch with unexpected error, throw error", async () => {
-            assert.rejects(async () => {
+            await assert.rejects(async () => {
+                // eslint--next-line @typescript-eslint/require-await
                 await tryCatchAsync(async (): Promise<string> => {
                         throw new Error("test");
                     },

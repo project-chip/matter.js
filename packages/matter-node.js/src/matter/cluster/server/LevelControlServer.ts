@@ -5,7 +5,7 @@
  */
 
 import { LevelControlCluster } from "../LevelControlCluster";
-import { ClusterServerHandlers, UseOptionalAttributes } from "./ClusterServer";
+import { ClusterServerHandlers } from "./ClusterServer";
 
 
 // TODO: Create temporary options based on mask and override. How to expose to user of the library?
@@ -19,15 +19,15 @@ export const LevelControlClusterHandler: () => ClusterServerHandlers<typeof Leve
     // move/step/stop (withOnOff) in the library would be making assumptions about the capabilities of the
     // underlying hardware. But how to expose these paramters to the caller of the library? Callback with
     // temporary options?
-    move: async ({ request:{}, attributes: {} }) => {
+    move: async () => {
       throw new Error("Not implemented")
     },
 
-    step: async ({ request:{}, attributes: {} }) => {
+    step: async () => {
       throw new Error("Not implemented")
     },
 
-    stop: async ({ request:{}, attributes: {} }) => {
+    stop: async () => {
       throw new Error("Not implemented")
     },
 
@@ -44,15 +44,15 @@ export const LevelControlClusterHandler: () => ClusterServerHandlers<typeof Leve
       currentLevel.set(level);
     },
 
-    moveWithOnOff: async ({ request:{}, attributes: { currentLevel } }) => {
+    moveWithOnOff: async () => {
       throw new Error("Not implemented")
     },
 
-    stepWithOnOff: async ({ request:{}, attributes: { currentLevel } }) => {
+    stepWithOnOff: async () => {
       throw new Error("Not implemented")
     },
 
-    stopWithOnOff: async ({ request:{}, attributes: { currentLevel } }) => {
+    stopWithOnOff: async () => {
       throw new Error("Not implemented")
     },
 });

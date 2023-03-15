@@ -26,7 +26,7 @@ export const GeneralCommissioningClusterHandler: ClusterServerHandlers<typeof Ge
         return SuccessResponse;
     },
 
-    setRegulatoryConfig: async ({request: {breadcrumbStep, newRegulatoryConfig, countryCode}, attributes: {breadcrumb, regulatoryConfig, locationCapability} }) => {
+    setRegulatoryConfig: async ({request: {breadcrumbStep, newRegulatoryConfig }, attributes: {breadcrumb, regulatoryConfig, locationCapability} }) => {
         const locationCapabilityValue = locationCapability.get();
 
         let validValues;
@@ -42,6 +42,10 @@ export const GeneralCommissioningClusterHandler: ClusterServerHandlers<typeof Ge
                 break;
             default:
                 return {errorCode: CommissioningError.ValueOutsideRange, debugText: "Invalid regulatory location"};
+        }
+
+        if (!validValues.includes(newRegulatoryConfig)) {
+            return {errorCode: CommissioningError.ValueOutsideRange, debugText: "Invalid regulatory location"};
         }
 
         regulatoryConfig.set(newRegulatoryConfig);

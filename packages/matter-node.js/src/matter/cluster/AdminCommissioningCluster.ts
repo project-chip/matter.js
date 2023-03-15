@@ -11,7 +11,6 @@ import {
     TlvField,
     TlvNullable,
     TlvObject,
-    TlvOptionalField,
     TlvUInt16,
     TlvUInt32
 } from "@project-chip/matter.js";

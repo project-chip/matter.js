@@ -63,13 +63,13 @@ export class ClusterServer<F extends BitSchema, A extends Attributes, C extends 
             featureMap: features,
         };
         for (const name in attributesInitialValues) {
-            let { id, schema, writable } = attributeDefs[name];
+            const { id, schema, writable } = attributeDefs[name];
             const validator = typeof schema.validate === 'function' ? schema.validate.bind(schema) : undefined;
             const getter = (handlers as any)[`get${capitalize(name)}`];
             if (getter === undefined) {
-                (this.attributes as any)[name] = new AttributeServer(id, name, schema, validator ?? (() => {}), writable, (attributesInitialValues as any)[name]);
+                (this.attributes as any)[name] = new AttributeServer(id, name, schema, validator ?? (() => { /* no validation */ }), writable, (attributesInitialValues as any)[name]);
             } else {
-                (this.attributes as any)[name] = new AttributeGetterServer(id, name, schema, validator ?? (() => {}), writable, (attributesInitialValues as any)[name], getter);
+                (this.attributes as any)[name] = new AttributeGetterServer(id, name, schema, validator ?? (() => { /* no validation */ }), writable, (attributesInitialValues as any)[name], getter);
             }
         }
 
@@ -119,8 +119,6 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     private readonly commands = new Map<string, CommandServer<any, any>>();
     private readonly commandPaths = new Array<CommandPath>();
     private nextSubscriptionId = Crypto.getRandomUInt32();
-
-    constructor() {}
 
     getId() {
         return INTERACTION_PROTOCOL_ID;
@@ -271,7 +269,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             if (maxIntervalCeilingSeconds < 0) throw new Error("maxIntervalCeilingSeconds should be greater or equal to 1");
             if (maxIntervalCeilingSeconds < minIntervalFloorSeconds) throw new Error("maxIntervalCeilingSeconds should be greater or equal to minIntervalFloorSeconds");
 
-            let attributes = this.getAttributes(attributeRequests);
+            const attributes = this.getAttributes(attributeRequests);
 
             // TODO: Interpret specs:
             // The publisher SHALL compute an appropriate value for the MaxInterval field in the action. This SHALL respect the following constraint: MinIntervalFloor ≤ MaxInterval ≤ MAX(SUBSCRIPTION_MAX_INTERVAL_PUBLISHER_LIMIT=60mn, MaxIntervalCeiling)
@@ -317,7 +315,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         };
     }
 
-    async handleTimedRequest(exchange: MessageExchange<MatterDevice>, {timeout}: TimedRequest) {
+    handleTimedRequest(exchange: MessageExchange<MatterDevice>, {timeout}: TimedRequest) {
         logger.debug(`Received timed request (${timeout}) from ${exchange.channel.getName()}`);
         // TODO: implement this
     }
@@ -349,7 +347,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         return `${endpointName}/${clusterName}/${attributeName}`;
     }
 
-    private getAttributes(filters: Partial<AttributePath>[], onlyWritable: boolean = false): AttributeWithPath[] {
+    private getAttributes(filters: Partial<AttributePath>[], onlyWritable = false): AttributeWithPath[] {
         const result = new Array<AttributeWithPath>();
 
         filters.forEach(({ endpointId, clusterId, attributeId }) => {

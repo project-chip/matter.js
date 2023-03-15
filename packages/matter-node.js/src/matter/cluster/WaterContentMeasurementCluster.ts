@@ -5,8 +5,8 @@
  */
 
 
-import {Attribute, OptionalAttribute, Cluster, Command, TlvNoArguments, TlvNoResponse} from "./Cluster";
-import {BitFlag, MatterApplicationClusterSpecificationV1_0, TlvBitmap, TlvInt16, TlvUInt16, TlvEnum, TlvField, TlvNullable, TlvObject, TlvSchema, TlvUInt8} from "@project-chip/matter.js";
+import { Attribute, OptionalAttribute, Cluster } from "./Cluster";
+import { MatterApplicationClusterSpecificationV1_0, TlvUInt16, TlvNullable } from "@project-chip/matter.js";
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 2.6.4 */
 const  attributes = {
@@ -19,9 +19,9 @@ const  attributes = {
     /** Indicates the maximum value of MeasuredValue that can be measured. */
     maxMeasuredValue: Attribute(2, TlvNullable(TlvUInt16.bound({max: 10000}))),
 
-    /** 
-     * The magnitude of the possible error that is associated with MeasuredValue 
-     * attribute using the same unit 
+    /**
+     * The magnitude of the possible error that is associated with MeasuredValue
+     * attribute using the same unit
      */
     tolerance: OptionalAttribute(3, TlvUInt16.bound({min: 0, max: 2048})),
 };
@@ -56,7 +56,7 @@ export const LeafWetnessMeasurementCluster = Cluster({
  * @see {@link MatterApplicationClusterSpecificationV1_0} § 2.6.3
  */
 export const SoilMoistureMeasurementCluster = Cluster({
-    id: 0x0408, 
+    id: 0x0408,
     name: "SoilMoistureMeasurement",
     revision: 3,
     attributes,

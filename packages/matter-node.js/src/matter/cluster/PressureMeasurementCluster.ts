@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Attribute, OptionalAttribute, Cluster, Command, TlvNoArguments, TlvNoResponse } from "./Cluster";
-import { BitFlag, MatterApplicationClusterSpecificationV1_0, TlvBitmap, TlvInt16, TlvUInt16, TlvEnum, TlvField, TlvNullable, TlvObject, TlvSchema, TlvUInt8 } from "@project-chip/matter.js";
+import { Attribute, OptionalAttribute, Cluster } from "./Cluster";
+import { BitFlag, MatterApplicationClusterSpecificationV1_0, TlvInt16, TlvUInt16, TlvNullable, TlvUInt8 } from "@project-chip/matter.js";
 
 /**
  * This cluster provides an interface to pressure measurement functionality.
@@ -18,17 +18,17 @@ export const PressureMeasurementCluster = Cluster({
     revision: 3,
     features: {
         /** The cluster is capable of extended range and resolution */
-        extended: BitFlag(0) 
+        extended: BitFlag(0)
     },
 
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 2.4.5 */
     attributes: {
        /** Represents the pressure in kPa as follows: MeasuredValue = 10 x Pressure [kPa] */
        measuredValue: Attribute(0x0, TlvNullable(TlvInt16)),
-       
+
        /** Indicates the minimum value of MeasuredValue that can be measured. */
        minMeasuredValue: Attribute(0x1, TlvNullable(TlvInt16.bound({ min: -32767}))),
-       
+
        /** Indicates the maximum value of MeasuredValue that can be measured. */
        maxMeasuredValue: Attribute(0x2, TlvNullable(TlvInt16)),
 

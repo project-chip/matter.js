@@ -6,7 +6,7 @@
 
 import { MessageExchange } from "../../common/MessageExchange";
 import { GeneralStatusCode, ProtocolStatusCode, MessageType, SECURE_CHANNEL_PROTOCOL_ID } from "./SecureChannelMessages";
-import { ByteArray, TlvSchema } from "@project-chip/matter.js";
+import { TlvSchema } from "@project-chip/matter.js";
 import { MatterError } from "../../../error/MatterError";
 import { TlvSecureChannelStatusMessage } from "./SecureChannelStatusMessageSchema";
 import {Message} from "../../../codec/MessageCodec";

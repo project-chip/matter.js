@@ -25,7 +25,6 @@ export class Queue<T> implements Stream<T> {
         return promise;
     }
 
-    // eslint-disable-next-line @typescript-eslint/require-await
     async write(data: T) {
         if (this.closed) throw new EndOfStreamError();
         if (this.pendingRead !== undefined) {

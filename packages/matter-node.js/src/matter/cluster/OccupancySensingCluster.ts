@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Attribute, OptionalAttribute, OptionalWritableAttribute, Cluster, Command, TlvNoArguments, TlvNoResponse } from "./Cluster";
-import { BitFlag, MatterApplicationClusterSpecificationV1_0, TlvBitmap, TlvInt16, TlvUInt16, TlvEnum, TlvField, TlvNullable, TlvObject, TlvSchema, TlvUInt8 } from "@project-chip/matter.js";
+import { Attribute, OptionalWritableAttribute, Cluster } from "./Cluster";
+import { BitFlag, MatterApplicationClusterSpecificationV1_0, TlvBitmap, TlvUInt16, TlvEnum, TlvNullable, TlvUInt8 } from "@project-chip/matter.js";
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 2.7.5.1 */
 export const OccupancyBitmap = TlvBitmap(TlvUInt8, {
@@ -60,19 +60,19 @@ export const OccupancySensingCluster = Cluster({
        // @see {@link MatterApplicationClusterSpecificationV1_0} § 2.7.7
 
        /** delay, in seconds, before the sensor changes back to unoccupied state. */
-       ultrasonicOccupiedToUnoccupiedDelay: OptionalWritableAttribute(0x0020, TlvUInt16, { default: 0 }), 
+       ultrasonicOccupiedToUnoccupiedDelay: OptionalWritableAttribute(0x0020, TlvUInt16, { default: 0 }),
        /** delay in seconds before the sensor changes to its occupied state after detection */
-       ultrasonicUnoccupiedToOccupiedDelay: OptionalWritableAttribute(0x0021, TlvUInt16, { default: 0 }), 
+       ultrasonicUnoccupiedToOccupiedDelay: OptionalWritableAttribute(0x0021, TlvUInt16, { default: 0 }),
        /** number of events in the period ultrasonicOnoccupiedToOccupiedDelay before the sensor changes to occupied */
-       ultrasonicUnoccupiedToOccupiedThreshold: OptionalWritableAttribute(0x0022, TlvUInt8.bound({ min: 1, max: 254 }), { default: 1 }), 
+       ultrasonicUnoccupiedToOccupiedThreshold: OptionalWritableAttribute(0x0022, TlvUInt8.bound({ min: 1, max: 254 }), { default: 1 }),
 
        // @see {@link MatterApplicationClusterSpecificationV1_0} § 2.7.8
 
        /** delay in seconds before the sensor changes back to unoccupied state. */
-       physicalContactOccupiedToUnoccupiedDelay: OptionalWritableAttribute(0x0030, TlvNullable(TlvUInt16), { default: 0 }), 
+       physicalContactOccupiedToUnoccupiedDelay: OptionalWritableAttribute(0x0030, TlvNullable(TlvUInt16), { default: 0 }),
        /** delay in seconds before the sensor changes to its occupied state after detection */
-       physicalContactUnoccupiedToOccupiedDelay: OptionalWritableAttribute(0x0031, TlvNullable(TlvUInt16), { default: 0 }), 
+       physicalContactUnoccupiedToOccupiedDelay: OptionalWritableAttribute(0x0031, TlvNullable(TlvUInt16), { default: 0 }),
        /** number of events in the period physicalContactToOccupiedDelay before the sensor changes to occupied */
-       physicalContactUnoccupiedToOccupiedThreshold: OptionalWritableAttribute(0x0032, TlvUInt8.bound({ min: 1, max: 254 }), { default: 1 }), 
+       physicalContactUnoccupiedToOccupiedThreshold: OptionalWritableAttribute(0x0032, TlvUInt8.bound({ min: 1, max: 254 }), { default: 1 }),
     },
 });

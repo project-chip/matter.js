@@ -72,7 +72,7 @@ export class SubscriptionHandler {
     activateSendingUpdates() {
         this.sendUpdatesActivated = true;
         if (this.outstandingAttributeUpdates.size > 0) {
-            this.sendUpdate();
+            void this.sendUpdate();
         } else {
             this.updateTimer = Time.getTimer(this.sendInterval, () => this.sendUpdate()).start();
         }
@@ -121,16 +121,19 @@ export class SubscriptionHandler {
         });
     }
 
-    async attributeChangeListener(path: AttributePath, schema: TlvSchema<any>, version: number, value: any) {
+    attributeChangeListener(path: AttributePath, schema: TlvSchema<any>, version: number, value: any) {
         this.outstandingAttributeUpdates.set(attributePathToId(path), { path, schema, version, value });
-        await this.sendUpdate();
+        void this.sendUpdate();
     }
 
     cancel() {
         this.sendUpdatesActivated = false;
         this.attributes.forEach(({ path, attribute }) => {
             const pathId = attributePathToId(path);
-            attribute.removeMatterListener(this.attributeListeners.get(pathId)!);
+            const listener = this.attributeListeners.get(pathId);
+            if (listener !== undefined) {
+                attribute.removeMatterListener(listener);
+            }
             this.attributeListeners.delete(pathId);
         });
         this.updateTimer.stop();

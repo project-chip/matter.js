@@ -59,7 +59,7 @@ export class SubscriptionClient implements ProtocolHandler<MatterController> {
 
     async onNewExchange(exchange: MessageExchange<MatterController>) {
         const messenger = new InteractionClientMessenger(exchange);
-        let dataReport = await messenger.readDataReport();
+        const dataReport = await messenger.readDataReport();
         const subscriptionId = dataReport.subscriptionId;
         if (subscriptionId === undefined) {
             await messenger.sendStatus(StatusCode.InvalidSubscription);
@@ -133,14 +133,14 @@ export class InteractionClient {
         });
     }
 
-    async set<T>(endpointId: number, clusterId: number, { id, schema, default: conformanceValue }: Attribute<T>, value: T): Promise<void> {
+    async set<T>(_endpointId: number, _clusterId: number, { id: _id, schema: _schema, default: _conformanceValue }: Attribute<T>, _value: T): Promise<void> {
         throw new Error("not implemented");
     }
 
     async subscribe<A extends Attribute<any>>(
         endpointId: number,
         clusterId: number,
-        { id, schema, default: conformanceValue }: A,
+        { id, schema, default: _conformanceValue }: A,
         listener: (value: AttributeJsType<A>, version: number) => void,
         minIntervalFloorSeconds: number,
         maxIntervalCeilingSeconds: number,

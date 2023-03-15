@@ -50,7 +50,7 @@ export function matterToJsDate(date: number) {
     return new Date((date + EPOCH_OFFSET_S) * 1000);
 }
 
-export function jsToMatterDate(date: Date, addYears: number = 0) {
+export function jsToMatterDate(date: Date, addYears = 0) {
     return Math.floor(date.getTime() / 1000) - EPOCH_OFFSET_S + addYears * YEAR_S;
 }
 
@@ -461,14 +461,14 @@ export class CertificateManager {
         // Extract the public key
         const { [ELEMENTS_KEY]: requestElements } = requestNode;
         if (requestElements?.length !== 4) throw new Error("Invalid CSR data");
-        const [ versionNode, subjectNode, publicKeyNode ] = requestElements;
+        const [ versionNode, _subjectNode, publicKeyNode ] = requestElements;
         const requestVersion = versionNode[BYTES_KEY][0];
         if (requestVersion !== 0) throw new Error(`Unsupported request version${requestVersion}`);
         // TODO: verify subject = { OrganisationName: "CSR" }
 
         const { [ELEMENTS_KEY]: publicKeyElements } = publicKeyNode;
         if (publicKeyElements?.length !== 2) throw new Error("Invalid CSR data");
-        const [ publicKeyTypeNode, publicKeyBytesNode ] = publicKeyElements;
+        const [ _publicKeyTypeNode, publicKeyBytesNode ] = publicKeyElements;
         // TODO: verify publicKey algorithm
         const publicKey = publicKeyBytesNode[BYTES_KEY];
 

@@ -62,7 +62,7 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
         const responsePayload = await messenger.sendPbkdfParamResponse({ peerRandom, random, sessionId, mrpParameters, pbkdfParameters: hasPbkdfParameters ? undefined : this.pbkdfParameters });
 
         // Process pake1 and send pake2
-        const spake2p = await Spake2p.create(Crypto.hash([ SPAKE_CONTEXT, requestPayload, responsePayload ]), this.w0);
+        const spake2p = Spake2p.create(Crypto.hash([ SPAKE_CONTEXT, requestPayload, responsePayload ]), this.w0);
         const { x: X } = await messenger.readPasePake1();
         const Y = spake2p.computeY();
         const { Ke, hAY, hBX } = await spake2p.computeSecretAndVerifiersFromX(this.L, X, Y);

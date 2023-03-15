@@ -17,11 +17,6 @@ import {
 import { ClusterServerHandlers } from "./ClusterServer";
 import { ByteArray } from "@project-chip/matter.js";
 import { FabricIndex } from "../../common/FabricIndex";
-import { tryCatch } from "../../../error/TryCatchHandler";
-import { FabricNotFoundError } from "../../fabric/FabricManager";
-import { Logger } from "../../../log/Logger";
-
-const logger = Logger.get("OperationalCredentialsServer");
 
 interface OperationalCredentialsServerConf {
     devicePrivateKey: ByteArray,
@@ -94,7 +89,7 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         return (session as SecureSession<MatterDevice>).getFabric()?.fabricIndex ?? FabricIndex.NO_FABRIC;
     },
 
-    updateOperationalCert: async ({ request: {operationalCert, intermediateCaCert, }, session}) => {
+    updateOperationalCert: async () => {
         throw new Error("Not implemented");
     },
 

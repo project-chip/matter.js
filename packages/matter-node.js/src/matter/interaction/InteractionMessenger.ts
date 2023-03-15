@@ -114,7 +114,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
         handleWriteRequest: (request: WriteRequest) => WriteResponse,
         handleSubscribeRequest: (request: SubscribeRequest, messenger: InteractionServerMessenger) => Promise<void>,
         handleInvokeRequest: (request: InvokeRequest, message: Message) => Promise<InvokeResponse>,
-        handleTimedRequest: (request: TimedRequest) => Promise<void>,
+        handleTimedRequest: (request: TimedRequest) => void,
     ) {
         let continueExchange = true;
         try {
@@ -122,31 +122,36 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                 const message = await this.exchange.nextMessage();
                 continueExchange = false;
                 switch (message.payloadHeader.messageType) {
-                    case MessageType.ReadRequest:
+                    case MessageType.ReadRequest: {
                         const readRequest = TlvReadRequest.decode(message.payload);
                         await this.sendDataReport(handleReadRequest(readRequest));
                         break;
-                    case MessageType.WriteRequest:
+                    }
+                    case MessageType.WriteRequest: {
                         const writeRequest = TlvWriteRequest.decode(message.payload);
                         const writeResponse = handleWriteRequest(writeRequest);
                         await this.exchange.send(MessageType.WriteResponse, TlvWriteResponse.encode(writeResponse));
                         break;
-                    case MessageType.SubscribeRequest:
+                    }
+                    case MessageType.SubscribeRequest: {
                         const subscribeRequest = TlvSubscribeRequest.decode(message.payload);
                         await handleSubscribeRequest(subscribeRequest, this);
                         // response is sent by handler
                         break;
-                    case MessageType.InvokeCommandRequest:
+                    }
+                    case MessageType.InvokeCommandRequest: {
                         const invokeRequest = TlvInvokeRequest.decode(message.payload);
                         const invokeResponse = await handleInvokeRequest(invokeRequest, message);
                         await this.exchange.send(MessageType.InvokeCommandResponse, TlvInvokeResponse.encode(invokeResponse));
                         break;
-                    case MessageType.TimedRequest:
+                    }
+                    case MessageType.TimedRequest: {
                         const timedRequest = TlvTimedRequest.decode(message.payload);
-                        await handleTimedRequest(timedRequest);
+                        handleTimedRequest(timedRequest);
                         await this.sendStatus(StatusCode.Success);
                         continueExchange = true;
                         break;
+                    }
                     default:
                         throw new Error(`Unsupported message type ${message.payloadHeader.messageType}`);
                 }

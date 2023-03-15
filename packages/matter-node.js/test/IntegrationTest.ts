@@ -36,9 +36,7 @@ import { getPromiseResolver } from "../src/util/Promises";
 import { VendorId } from "../src/matter/common/VendorId";
 import { NodeId } from "../src/matter/common/NodeId";
 import { OnOffClusterHandler } from "../src/matter/cluster/server/OnOffServer";
-import { ByteArray } from "@project-chip/matter.js";
 import { FabricIndex } from "../src/matter/common/FabricIndex";
-import { DescriptorCluster } from "../src/matter/cluster/DescriptorCluster";
 import {AttestationCertificateManager} from "../src/matter/certificate/AttestationCertificateManager";
 import {CertificationDeclarationManager} from "../src/matter/certificate/CertificationDeclarationManager";
 
@@ -64,9 +62,9 @@ const TIME_START = 1666663000000;
 const fakeTime = new TimeFake(TIME_START);
 
 describe("Integration", () => {
-    var server: MatterDevice;
-    var onOffServer: ClusterServer<any, any, any, any>;
-    var client: MatterController;
+    let server: MatterDevice;
+    let onOffServer: ClusterServer<any, any, any, any>;
+    let client: MatterController;
 
     before(async () => {
         Logger.defaultLogLevel = Level.DEBUG;
@@ -156,8 +154,8 @@ describe("Integration", () => {
             assert.equal(nodeId.id, BigInt(1));
         });
 
-        it("the session is resumed if it has been established previously", async () => {
-            await client.connect(new NodeId(BigInt(1)));
+        it("the session is resumed if it has been established previously", () => {
+            client.connect(new NodeId(BigInt(1)));
 
             assert.ok(true);
         });
@@ -166,13 +164,13 @@ describe("Integration", () => {
 
     context("attributes", () => {
         it("get one specific attribute including schema parsing", async () => {
-            const descriptorCluster = ClusterClient(await client.connect(new NodeId(BigInt(1))), 0, BasicInformationCluster);
+            const descriptorCluster = ClusterClient(client.connect(new NodeId(BigInt(1))), 0, BasicInformationCluster);
 
             assert.equal(await descriptorCluster.getSoftwareVersionString(), "v1");
         });
 
         it("get all attributes", async () => {
-            await (await client.connect(new NodeId(BigInt(1)))).getAllAttributes();
+            await client.connect(new NodeId(BigInt(1))).getAllAttributes();
 
             assert.ok(true);
         });
@@ -180,7 +178,7 @@ describe("Integration", () => {
 
     context("subscription", () => {
         it("subscription sends updates when the value changes", async () => {
-            const interactionClient = await client.connect(new NodeId(BigInt(1)));
+            const interactionClient = client.connect(new NodeId(BigInt(1)));
             const onOffClient = ClusterClient(interactionClient, 1, OnOffCluster);
             const startTime = Time.nowMs();
 
@@ -222,7 +220,7 @@ describe("Integration", () => {
 
     context("remove Fabric", () => {
         it("try to remove invalid fabric", async () => {
-            const operationalCredentialsCluster = ClusterClient(await client.connect(new NodeId(BigInt(1))), 0, OperationalCredentialsCluster);
+            const operationalCredentialsCluster = ClusterClient(client.connect(new NodeId(BigInt(1))), 0, OperationalCredentialsCluster);
 
             const result = await operationalCredentialsCluster.removeFabric({ fabricIndex: new FabricIndex(250) });
             assert.equal(result.status, OperationalCertStatus.InvalidFabricIndex);
@@ -231,7 +229,7 @@ describe("Integration", () => {
         });
 
         it("read and remove fabric", async () => {
-            const operationalCredentialsCluster = ClusterClient(await client.connect(new NodeId(BigInt(1))), 0, OperationalCredentialsCluster);
+            const operationalCredentialsCluster = ClusterClient(client.connect(new NodeId(BigInt(1))), 0, OperationalCredentialsCluster);
 
             const fabricIndex = await operationalCredentialsCluster.getCurrentFabricIndex();
             assert.equal(fabricIndex.index, 1);

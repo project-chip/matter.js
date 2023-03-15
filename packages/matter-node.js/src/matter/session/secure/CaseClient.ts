@@ -18,15 +18,13 @@ import { ByteArray } from "@project-chip/matter.js";
 const logger = Logger.get("CaseClient");
 
 export class CaseClient {
-    constructor() {}
-
     async pair(client: MatterController, exchange: MessageExchange<MatterController>, fabric: Fabric, peerNodeId: NodeId) {
         const messenger = new CaseClientMessenger(exchange);
 
         // Generate pairing info
         const random = Crypto.getRandom();
         const sessionId = client.getNextAvailableSessionId();
-        const { operationalIdentityProtectionKey, operationalCert: nodeOpCert, intermediateCACert, nodeId } = fabric;
+        const { operationalIdentityProtectionKey, operationalCert: nodeOpCert, intermediateCACert } = fabric;
         const { publicKey: ecdhPublicKey, ecdh } = Crypto.ecdhGeneratePublicKey();
 
         // Send sigma1

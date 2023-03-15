@@ -22,7 +22,7 @@ export class UnsecureSession<T> implements Session<T> {
         return false;
     }
 
-    notifyActivity(messageReceived: boolean) {
+    notifyActivity(_messageReceived: boolean) {
         // Do nothing
     }
 
@@ -42,7 +42,7 @@ export class UnsecureSession<T> implements Session<T> {
         throw new Error("Not supported on an unsecure session");
     }
 
-    setFabric(fabric: Fabric): void {
+    setFabric(_fabric: Fabric): void {
         throw new Error("Not supported on an unsecure session");
     }
 

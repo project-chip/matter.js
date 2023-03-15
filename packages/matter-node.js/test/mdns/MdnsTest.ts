@@ -31,9 +31,9 @@ const OPERATIONAL_ID = ByteArray.fromHex("0000000000000018")
 const NODE_ID = new NodeId(BigInt(1));
 
 describe("MDNS", () => {
-    var broadcaster: MdnsBroadcaster;
-    var scanner: MdnsScanner;
-    var channel: UdpChannel;
+    let broadcaster: MdnsBroadcaster;
+    let scanner: MdnsScanner;
+    let channel: UdpChannel;
 
     beforeEach(async () => {
         Network.get = () => clientNetwork;
@@ -86,7 +86,7 @@ describe("MDNS", () => {
     context("integration", () => {
         it("the client returns server record if it has been announced", async () => {
             broadcaster.setFabric(OPERATIONAL_ID, NODE_ID);
-            await broadcaster.announce();
+            broadcaster.announce();
 
             const result = await scanner.findDevice({operationalId: OPERATIONAL_ID} as Fabric, NODE_ID);
 

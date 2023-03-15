@@ -27,7 +27,7 @@ export class AttributeServer<T> {
         this.value = defaultValue;
     }
 
-    set(value: T, session?: Session<MatterDevice>) {
+    set(value: T, _session?: Session<MatterDevice>) {
         // TODO: check ACL
 
         this.setLocal(value);
@@ -44,7 +44,7 @@ export class AttributeServer<T> {
         this.listeners.forEach(listener => listener(value, oldValue));
     }
 
-    get(session?: Session<MatterDevice>): T {
+    get(_session?: Session<MatterDevice>): T {
         // TODO: check ACL
 
         return this.getLocal();

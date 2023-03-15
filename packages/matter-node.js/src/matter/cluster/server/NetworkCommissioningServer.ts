@@ -5,7 +5,7 @@
  */
 
 import { NetworkCommissioningCluster } from "../NetworkCommissioningCluster"
-import { AttributeServers, ClusterServerHandlers } from "./ClusterServer"
+import { ClusterServerHandlers } from "./ClusterServer"
 
 export const NetworkCommissioningHandler: () => ClusterServerHandlers<typeof NetworkCommissioningCluster> = () => ({
     scanNetworks: async function () {

@@ -33,7 +33,7 @@ export interface OptionalAttribute<T> extends Attribute<T> { optional: true }
 export interface WritableAttribute<T> extends Attribute<T> { writable: true }
 export interface OptionalWritableAttribute<T> extends OptionalAttribute<T> { writable: true }
 export type AttributeJsType<T extends Attribute<any>> = T extends Attribute<infer JsType> ? JsType : never;
-interface AttributeOptions<T> { persistent?: boolean, omitChanges?: boolean, default?: T, readAcl?: AccessLevel, writeAcl?: AccessLevel };
+interface AttributeOptions<T> { persistent?: boolean, omitChanges?: boolean, default?: T, readAcl?: AccessLevel, writeAcl?: AccessLevel }
 export const Attribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View }: AttributeOptions<V> = {}): Attribute<T> => ({ id, schema, optional: false, writable: false, persistent, omitChanges, default: conformanceValue, readAcl });
 export const OptionalAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View }: AttributeOptions<V> = {}): OptionalAttribute<T> => ({ id, schema, optional: true, writable: false, persistent, omitChanges, default: conformanceValue, readAcl });
 export const WritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View, writeAcl = AccessLevel.View }: AttributeOptions<V> = {}): WritableAttribute<T> => ({ id, schema, optional: false, writable: true, persistent, omitChanges, default: conformanceValue, readAcl, writeAcl });
@@ -42,8 +42,8 @@ export const OptionalWritableAttribute = <T, V extends T>(id: number, schema: Tl
 /* Interfaces and helper methods to define a cluster command */
 export const TlvNoArguments = TlvObject({});
 export const TlvNoResponse = TlvVoid;
-export interface Command<RequestT, ResponseT> { optional: boolean, requestId: number, requestSchema: TlvSchema<RequestT>, responseId: number, responseSchema: TlvSchema<ResponseT> };
-export interface OptionalCommand<RequestT, ResponseT> extends Command<RequestT, ResponseT> { optional: true };
+export interface Command<RequestT, ResponseT> { optional: boolean, requestId: number, requestSchema: TlvSchema<RequestT>, responseId: number, responseSchema: TlvSchema<ResponseT> }
+export interface OptionalCommand<RequestT, ResponseT> extends Command<RequestT, ResponseT> { optional: true }
 export type ResponseType<T extends Command<any, any>> = T extends OptionalCommand<any, infer ResponseT> ? ResponseT | undefined : (T extends Command<any, infer ResponseT> ? ResponseT : never);
 export type RequestType<T extends Command<any, any>> = T extends Command<infer RequestT, any> ? RequestT : never;
 export const Command = <RequestT, ResponseT>(requestId: number, requestSchema: TlvSchema<RequestT>, responseId: number, responseSchema: TlvSchema<ResponseT>): Command<RequestT, ResponseT> => ({ optional: false, requestId, requestSchema, responseId, responseSchema });
@@ -98,7 +98,7 @@ export interface Cluster<F extends BitSchema, A extends Attributes, C extends Co
     id: number,
     name: string,
     revision: number,
-    features: BitSchema,
+    features: F,
     attributes: A,
     commands: C,
     events: E,

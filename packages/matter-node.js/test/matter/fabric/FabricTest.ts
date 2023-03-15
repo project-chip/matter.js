@@ -46,7 +46,7 @@ describe("FabricBuilder", () => {
         builder.setRootCert(ROOT_CERT);
         builder.setOperationalCert(NEW_OP_CERT);
         builder.setIdentityProtectionKey(IPK_KEY);
-        
+
         it("generates the correct compressed Fabric ID", async () => {
             const result = (await builder.build()).operationalId;
 
@@ -65,7 +65,7 @@ describe("Fabric", () => {
 
     context("getDestinationId", () => {
         it("generates the correct destination ID", () => {
-            const fabric = new Fabric(TEST_FABRIC_INDEX, TEST_FABRIC_ID, TEST_NODE_ID, TEST_ROOT_NODE, Buffer.alloc(0), TEST_ROOT_PUBLIC_KEY, Crypto.createKeyPair(), new VendorId(0), Buffer.alloc(0), Buffer.alloc(0), TEST_IDENTITY_PROTECTION_KEY, undefined, Buffer.alloc(0), ''); 
+            const fabric = new Fabric(TEST_FABRIC_INDEX, TEST_FABRIC_ID, TEST_NODE_ID, TEST_ROOT_NODE, Buffer.alloc(0), TEST_ROOT_PUBLIC_KEY, Crypto.createKeyPair(), new VendorId(0), Buffer.alloc(0), Buffer.alloc(0), TEST_IDENTITY_PROTECTION_KEY, undefined, Buffer.alloc(0), '');
 
             const result = fabric.getDestinationId(TEST_NODE_ID, TEST_RANDOM);
 
@@ -86,8 +86,8 @@ describe("Fabric", () => {
             assert.equal(result.toHex(), EXPECTED_DESTINATION_ID_2.toHex());
         });
 
-        it("generates the correct destination ID 3", async () => {
-            const fabric = new Fabric(TEST_FABRIC_INDEX, TEST_FABRIC_ID_3, TEST_NODE_ID_3, TEST_ROOT_NODE, Buffer.alloc(0), TEST_ROOT_PUBLIC_KEY_3, Crypto.createKeyPair(), new VendorId(0), Buffer.alloc(0), Buffer.alloc(0), TEST_IDENTITY_PROTECTION_KEY_3, undefined, Buffer.alloc(0), ""); 
+        it("generates the correct destination ID 3", () => {
+            const fabric = new Fabric(TEST_FABRIC_INDEX, TEST_FABRIC_ID_3, TEST_NODE_ID_3, TEST_ROOT_NODE, Buffer.alloc(0), TEST_ROOT_PUBLIC_KEY_3, Crypto.createKeyPair(), new VendorId(0), Buffer.alloc(0), Buffer.alloc(0), TEST_IDENTITY_PROTECTION_KEY_3, undefined, Buffer.alloc(0), "");
 
             const result = fabric.getDestinationId(TEST_NODE_ID_3, TEST_RANDOM_3);
 

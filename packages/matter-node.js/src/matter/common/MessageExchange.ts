@@ -44,7 +44,7 @@ const MRP_BACKOFF_THRESHOLD = 1;
  * Amount of time to wait for an opportunity to piggyback an acknowledgement on an outbound message before
  * falling back to sending a standalone acknowledgement.
  */
-const MRP_STANDALONE_ACK_TIMEOUT = 200;
+const _MRP_STANDALONE_ACK_TIMEOUT = 200;
 
 /** @see {@link MatterCoreSpecificationV1_0}, section 4.11.2.1 */
 const MAXIMUM_TRANSMISSION_TIME_MS = 9495; // 413 + 825 + 1485 + 2541 + 4231 ms as per specs
@@ -176,7 +176,7 @@ export class MessageExchange<ContextT> {
         await this.messagesQueue.write(message);
     }
 
-    async send(messageType: number, payload: ByteArray, expectAckOnly: boolean = false) {
+    async send(messageType: number, payload: ByteArray, expectAckOnly = false) {
         if (this.sentMessageToAck !== undefined) throw new Error("The previous message has not been acked yet, cannot send a new message");
 
         this.session.notifyActivity(false);

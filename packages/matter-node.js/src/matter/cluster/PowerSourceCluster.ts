@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { OptionalEvent, Event, EventPriority, Cluster, Attribute, OptionalAttribute} from "./Cluster";
+import { OptionalEvent, EventPriority, Cluster, Attribute, OptionalAttribute} from "./Cluster";
 import { MatterCoreSpecificationV1_0, BitFlag, TlvBoolean, TlvString, TlvEnum, TlvField, TlvNullable, TlvUInt8, TlvUInt16, TlvUInt32, TlvArray } from "@project-chip/matter.js";
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.7.5.1 */
@@ -256,21 +256,21 @@ export const enum BatApprovedChemistryEnum {
 }
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.7.6.2 Table 99 */
-const WiredFaultChangeEvent = { 
+const WiredFaultChangeEvent = {
   /** SHALL indicate a change in the set of wired faults  */
   current: TlvField(0, TlvArray(TlvEnum<WiredFaultEnum>(), { maxLength: 8 })),
   previous: TlvField(1, TlvArray(TlvEnum<WiredFaultEnum>(), { maxLength: 8 })),
 };
 
  /** @see {@link MatterCoreSpecificationV1_0} § 11.7.6.2 Table 100 */
- const BatFaultChangeEvent = { 
+ const BatFaultChangeEvent = {
   /** SHALL indicate a change in the set of battery faults */
   current: TlvField(0, TlvArray(TlvEnum<BatFaultEnum>(), { maxLength: 8 })),
   previous: TlvField(1, TlvArray(TlvEnum<BatFaultEnum>(), { maxLength: 8 })),
 };
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.7.6.2 Table 101 */
-const BatChargeFaultChangeEvent = { 
+const BatChargeFaultChangeEvent = {
   /**  SHALL indicate a change in the set of charge faults */
   current: TlvField(0, TlvArray(TlvEnum<BatChargeFaultEnum>(), { maxLength: 16 })),
   previous: TlvField(1, TlvArray(TlvEnum<BatChargeFaultEnum>(), { maxLength: 16 })),
@@ -308,108 +308,108 @@ export const PowerSourceCluster = Cluster({
     attributes: {
       /** SHALL indicate the participation of this power source in providing power to the Node. */
       status: Attribute(0x0000, TlvEnum<PowerSourceStatusEnum>()),
-      
+
       /** SHALL indicate the relative preference with which the Node will select this source to provide power. */
       order: Attribute(0x0001, TlvUInt8),
-      
+
       /** SHALL provide a user-facing description of this source */
       description: Attribute(0x0002, TlvString.bound({ maxLength: 60 })),
-      
+
       /** SHALL indicate the assessed RMS or DC voltage currently provided by the hard-wired source, in mV (millivolts) */
       wiredAssessedInputVoltage: OptionalAttribute(0x0003, TlvNullable(TlvUInt32)),
-      
+
       /** SHALL indicate the assessed frequency of the voltage, currently provided by the hardwired source, in Hz. */
       wiredAssessedInputFrequency: OptionalAttribute(0x0004, TlvNullable(TlvUInt16)),
-      
+
       /** SHALL indicate the type of current the Node expects to be provided by the hard-wired source. */
       wiredCurrentType: OptionalAttribute(0x0005, TlvEnum<WiredCurrentTypeEnum>()),
-      
+
       /** SHALL indicate the assessed instantaneous current draw of the Node on the hard-wired source, in mA (milliamps) */
       wiredAssessedCurrent: OptionalAttribute(0x0006, TlvNullable(TlvUInt32)),
-      
+
       /** SHALL indicate the nominal voltage, printed as part of the Node’s regulatory compliance label in mV (millivolts), expected to be provided by the hard-wired source. */
       wiredNominalVoltage: OptionalAttribute(0x0007, TlvUInt32),
-      
+
       /** SHALL indicate the maximum current, printed as part of the Node’s regulatory compliance label in mA (milliamps), expected to be provided by the hard-wired source. */
       wiredMaximumCurrent: OptionalAttribute(0x0008, TlvUInt32),
-      
+
       /** SHALL indicate if  that the hard-wired power source is properly connected. */
       wiredPresent: OptionalAttribute(0x0009, TlvBoolean),
-      
+
       /** SHALL indicate the set of wired faults currently detected  */
-      activeWiredFaults: OptionalAttribute(0x000A, TlvArray(TlvEnum<WiredFaultEnum>(), { maxLength: 8 })), 
-      
+      activeWiredFaults: OptionalAttribute(0x000A, TlvArray(TlvEnum<WiredFaultEnum>(), { maxLength: 8 })),
+
       /** SHALL indicate the currently measured output voltage of the battery in mV (millivolts) */
       batVoltage: OptionalAttribute(0x000B, TlvNullable(TlvUInt32)),
-      
+
       /**  SHALL indicate the estimated percentage of battery charge remaining until the battery will no longer be able to provide power to the Node*/
       batPercentRemaining: OptionalAttribute(0x000C, TlvNullable(TlvUInt8.bound({ max: 0xc8 }))),
-      
+
       /** SHALL indicate the estimated time in seconds before the battery will no longer be able to provide power to the Node.  */
       batTimeRemaining: OptionalAttribute(0x000D, TlvNullable(TlvUInt32)),
-      
+
       /** SHALL indicate a coarse ranking of the charge level of the battery, used to indicate when intervention is required. */
       batChargeLevel: OptionalAttribute(0x000E, TlvEnum<BatChargeLevelEnum>()),
-      
+
       /** SHALL indicate if the battery needs to be replaced. Replacement MAY be simple routine maintenance */
       batReplacementNeeded: OptionalAttribute(0x000F, TlvBoolean),
-      
+
       /**  SHALL indicate the replaceability of the battery*/
       batReplaceability: OptionalAttribute(0x0010, TlvEnum<BatReplaceabilityEnum>()),
-      
+
       /** SHALL indicate whether the batteries are properly installed. */
       batPresent: OptionalAttribute(0x0011, TlvBoolean),
-      
+
       /**  SHALL indicate the set of battery faults currently detected  */
       activeBatFaults: OptionalAttribute(0x0012, TlvArray(TlvEnum<BatFaultEnum>(), { maxLength: 8 })),
-      
+
       /** SHALL provide a user-facing description of this battery, which SHOULD contain information required to identify a replacement, such as form factor, chemistry or preferred manufacturer. */
       batReplacementDescription: OptionalAttribute(0x0013, TlvString.bound({ maxLength: 60})),
-      
+
       /**  SHALL indicate the ID of the common or colloquial designation of the battery */
       batCommonDesignation: OptionalAttribute(0x0014, TlvEnum<BatCommonDesignationEnum>()),
-      
+
       /**  SHALL indicate the string representing the ANSI designation for the battery as specified in ANSI C18.*/
       batANSIDesignation: OptionalAttribute(0x0015, TlvString.bound({ maxLength: 20})),
-      
+
       /**  SHALL indicate the string representing the IEC designation for the battery as specified in IEC 60086.*/
       batIECDesignation: OptionalAttribute(0x0016, TlvString.bound({ maxLength: 20})),
-      
+
       /** SHALL indicate the ID of the preferred chemistry of the battery source */
       batApprovedChemistry: OptionalAttribute(0x0017, TlvEnum<BatApprovedChemistryEnum>()),
-      
+
       /** SHALL indicate the preferred minimum charge capacity rating in mAh */
       batCapacity: OptionalAttribute(0x0018, TlvUInt32),
-      
+
       /** SHALL indicate the quantity of individual, user- or factory-serviceable battery cells or packs in the battery source. */
       batQuantity: OptionalAttribute(0x0019, TlvUInt8),
-      
+
       /**  SHALL indicate the current state of the battery source with respect to charging.*/
       batChargeState: OptionalAttribute(0x001A, TlvEnum<BatChargeStateEnum>()),
-      
+
       /** SHALL indicate the estimated time in seconds before the battery source will be at full charge. */
       batTimeToFullCharge: OptionalAttribute(0x001B, TlvNullable(TlvUInt32)),
-      
+
       /**  SHALL indicate whether the Node can remain operational while the battery source is charging. */
       batFunctionalWhileCharging: OptionalAttribute(0x001C, TlvBoolean),
-      
+
       /**  SHALL indicate assessed current in mA (milliamps) presently supplied to charge the battery source. */
       batChargingCurrent: OptionalAttribute(0x001D, TlvNullable(TlvUInt32)),
-      
+
       /** SHALL indicate the set of charge faults currently detected by the Node on this power source */
-      activeBatChargeFaults: OptionalAttribute(0x001E, TlvArray(TlvEnum<BatChargeFaultEnum>(), { maxLength: 16 })), 
-  
+      activeBatChargeFaults: OptionalAttribute(0x001E, TlvArray(TlvEnum<BatChargeFaultEnum>(), { maxLength: 16 })),
+
     },
-  
+
     /** @see {@link MatterCoreSpecificationV1_0} § 11.7.6.2. */
     events: {
       /** SHALL indicate a change in the set of wired faults currently detected  */
-      wiredFaultChange: OptionalEvent(0x0, EventPriority.Info, WiredFaultChangeEvent), 
+      wiredFaultChange: OptionalEvent(0x0, EventPriority.Info, WiredFaultChangeEvent),
 
       /** SHALL indicate a change in the set of battery faults currently detected */
-      batFaultChange: OptionalEvent(0x1, EventPriority.Info, BatFaultChangeEvent), 
-  
+      batFaultChange: OptionalEvent(0x1, EventPriority.Info, BatFaultChangeEvent),
+
       /** SHALL indicate a change in the set of charge faults currently detected*/
-      batChargeFaultChange: OptionalEvent(0x2, EventPriority.Info, BatChargeFaultChangeEvent), 
+      batChargeFaultChange: OptionalEvent(0x2, EventPriority.Info, BatChargeFaultChangeEvent),
     },
 });

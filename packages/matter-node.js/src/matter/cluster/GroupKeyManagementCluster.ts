@@ -5,14 +5,13 @@
  */
 
 import { WritableAttribute, Attribute, Cluster, Command, TlvNoArguments, TlvNoResponse } from "./Cluster";
-import { StatusCode } from "../interaction/InteractionMessages";
 import { TlvGroupId } from "../common/GroupId";
 import { BitFlag, MatterCoreSpecificationV1_0, TlvArray, TlvEnum, TlvField, TlvNullable, TlvObject, TlvOptionalField, TlvString, TlvUInt16, TlvUInt64 } from "@project-chip/matter.js";
 import { TlvEndpointNumber } from "../common/EndpointNumber";
 
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.2.6.1 */
-const TlvGroupKeyMap = TlvObject({ 
+const TlvGroupKeyMap = TlvObject({
     groupId: TlvField(1, TlvGroupId), /* min: 1 */
     groupKeySetId: TlvField(2, TlvUInt16),
 });
@@ -27,7 +26,7 @@ const TlvGroupKeySet = TlvObject({
 
     epochKey1: TlvField(4, TlvNullable(TlvString.bound({ maxLength: 16 }))),
     epochStartTime1: TlvField(5, TlvNullable(TlvUInt64)), // epoch_us
- 
+
     epochKey2: TlvField(6, TlvNullable(TlvString.bound({ maxLength: 16 }))),
     epochStartTime2: TlvField(7, TlvNullable(TlvUInt64)), // epoch_us
 
@@ -36,7 +35,7 @@ const TlvGroupKeySet = TlvObject({
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.2.6.3 */
-const TlvGroupInfoMap = TlvObject({ 
+const TlvGroupInfoMap = TlvObject({
     groupId: TlvField(1, TlvGroupId), /* min: 1 */
     endPoints: TlvField(2, TlvArray(TlvEndpointNumber, { minLength: 1 })),
     groupName: TlvOptionalField(3, TlvString.bound( { maxLength: 16 })),
@@ -46,7 +45,7 @@ const TlvGroupInfoMap = TlvObject({
 export const enum GroupKeyMulticastPolicy {
     /** The 16-bit Group Identifier of the MulticastAddress SHALL be the Group ID of the group. */
     PerGroupID = 0x00,
-  
+
     /** The 16-bit Group Identifier of the Multicast Address SHALL be 0xFFFF */
     AllNodes = 0x01,
   }
@@ -55,7 +54,7 @@ export const enum GroupKeyMulticastPolicy {
 export const enum GroupKeySecurityPolicy {
     /** Message counter synchronization using trust-first */
     TrustFirst = 0x00,
-  
+
     /** Message counter synchronization using cache-and-sync */
     CacheAndSync = 0x01,
   }
@@ -96,36 +95,36 @@ export const GroupKeyManagementCluster = Cluster({
     revision: 1,
     features: {
         /** The ability to support CacheAndSync security policy and MCSP. */
-        cacheAndSync: BitFlag(0),  
+        cacheAndSync: BitFlag(0),
     },
 
     /** @see {@link MatterCoreSpecificationV1_0} § 11.2.7.1 */
-    attributes: { 
+    attributes: {
         /** Each entry associates a logical Group Id with a particular group key set. */
-        groupKeyMap: WritableAttribute(0, TlvArray(TlvGroupKeyMap, { maxLength: 254 }), { persistent: true }), /* fabricSensitive: true */ 
+        groupKeyMap: WritableAttribute(0, TlvArray(TlvGroupKeyMap, { maxLength: 254 }), { persistent: true }), /* fabricSensitive: true */
 
         /** Each entry provides read-only information about how a given logical Group ID maps to a particular set of endpoints */
-        groupTable: Attribute(1, TlvArray(TlvGroupInfoMap, { maxLength: 254 })), /* fabricSensitive: true */ 
+        groupTable: Attribute(1, TlvArray(TlvGroupInfoMap, { maxLength: 254 })), /* fabricSensitive: true */
 
         /**  Maximum number of groups that this node supports per fabric */
-        maxGroupsPerFabric: Attribute(2, TlvUInt16, { default: 0 }), 
+        maxGroupsPerFabric: Attribute(2, TlvUInt16, { default: 0 }),
 
         /** Maximum number of group key sets this node supports per fabric */
-        maxGroupKeysPerFabric: Attribute(3, TlvUInt16.bound({ min: 1 }),{ default: 1} ), 
+        maxGroupKeysPerFabric: Attribute(3, TlvUInt16.bound({ min: 1 }),{ default: 1} ),
     },
-    
+
     /** @see {@link MatterCoreSpecificationV1_0} § 11.2.9 */
     commands: {
         /** Set the state of a given Group Key Set,including atomically updating the state of all epoch keys */
-        keySetWrite: Command(0, TlvKeySetWriteRequest, 0, TlvNoResponse), /* isFabricScoped: true */ 
+        keySetWrite: Command(0, TlvKeySetWriteRequest, 0, TlvNoResponse), /* isFabricScoped: true */
 
         /** Read the state of a given Group Key Set */
-        keySetRead: Command(1, TlvKeySetReadRequest,2, TlvKeySetReadResponse), /* isFabricScoped: true */ 
+        keySetRead: Command(1, TlvKeySetReadRequest,2, TlvKeySetReadResponse), /* isFabricScoped: true */
 
         /** Remove all state of a given Group Key Set */
-        keySetRemove: Command(3, TlvKeySetRemoveRequest, 3, TlvNoResponse), /* isFabricScoped: true */ 
+        keySetRemove: Command(3, TlvKeySetRemoveRequest, 3, TlvNoResponse), /* isFabricScoped: true */
 
         /** Query a list of all Group Key Sets associated with the accessing fabric */
-        keySetReadAllIndices: Command(5, TlvNoArguments, 4, TlvKeySetReadAllIndicesResponse), /* isFabricScoped: true */ 
+        keySetReadAllIndices: Command(5, TlvNoArguments, 4, TlvKeySetReadAllIndicesResponse), /* isFabricScoped: true */
     }
 });
