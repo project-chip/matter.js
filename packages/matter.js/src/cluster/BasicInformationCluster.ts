@@ -35,7 +35,7 @@ const TlvCapabilityMinima = TlvObject({
  */
 export const BasicInformationCluster = Cluster({
     id: 0x28,
-    name: "Basic Information",
+    name: "BasicInformation",
     revision: 1,
 
     /** @see {@link MatterCoreSpecificationV1_0} § 11.1.6.3 */

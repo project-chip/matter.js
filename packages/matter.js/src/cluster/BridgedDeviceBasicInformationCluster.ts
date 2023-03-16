@@ -26,7 +26,7 @@ import { AccessLevel, Attribute, Cluster, Event, EventPriority, OptionalAttribut
  */
 export const BridgedDeviceBasicInformationCluster = Cluster({
     id: 0x39,
-    name: "Bridged Device Basic Information",
+    name: "BridgedDeviceBasicInformation",
     revision: 1,
 
     /** @see {@link MatterCoreSpecificationV1_0} § 9.13.6 */

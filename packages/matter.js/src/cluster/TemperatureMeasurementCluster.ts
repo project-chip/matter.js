@@ -22,14 +22,14 @@ export const TemperatureMeasurementCluster = Cluster({
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 2.3.4 */
     attributes: {
         /** MeasuredValue = 100 x temperature [°C] **/
-        measuredValue: Attribute(0, TlvNullable(TlvInt16)),
+        measuredValue: Attribute(0, TlvNullable(TlvInt16.bound({ min: -27315 }))),
 
         /** Indicates the minimum value of MeasuredValue that can be measured. */
         minMeasuredValue: Attribute(1, TlvNullable(TlvInt16.bound({ min: -27315 }))),
 
         /** Indicates the maximum value of MeasuredValue that can be measured. */
-        maxMeasuredValue: Attribute(2, TlvNullable(TlvInt16.bound({ max: 32767 }))),
+        maxMeasuredValue: Attribute(2, TlvNullable(TlvInt16)),
 
-        tolerance: OptionalAttribute(3, TlvUInt16.bound({ min: 0, max: 2048 }), { default: 0 }),
+        tolerance: OptionalAttribute(3, TlvUInt16.bound({ max: 2048 /* 0x0800 */ }), { default: 0 }),
     },
 });

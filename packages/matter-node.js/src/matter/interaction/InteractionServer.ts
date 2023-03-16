@@ -112,7 +112,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     addEndpoint(endpointId: number, device: { name: string, code: number }, clusters: ClusterServer<any, any, any, any>[]) {
         // Add the descriptor cluster
         const descriptorCluster = new ClusterServer(DescriptorCluster, {}, {
-            deviceTypeList: [{ revision: 1, type: new DeviceTypeId(device.code) }],
+            deviceTypeList: [{ revision: 1, deviceType: new DeviceTypeId(device.code) }],
             serverList: [],
             clientList: [],
             partsList: [],

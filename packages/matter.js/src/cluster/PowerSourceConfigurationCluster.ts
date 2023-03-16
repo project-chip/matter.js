@@ -22,7 +22,7 @@ import { TlvArray } from "../tlv/TlvArray";
  */
 export const PowerSourceConfigurationCluster = Cluster({
     id: 0x2e,
-    name: "Power Source Configuration",
+    name: "PowerSourceConfiguration",
     revision: 1,
 
     /** @see {@link MatterCoreSpecificationV1_0} § 11.6.5.1 */

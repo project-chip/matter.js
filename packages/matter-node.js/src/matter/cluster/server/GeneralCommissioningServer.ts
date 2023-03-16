@@ -14,7 +14,7 @@ const SuccessResponse = { errorCode: CommissioningError.Ok, debugText: "" };
 const logger = Logger.get("GeneralCommissioningClusterHandler");
 
 export const GeneralCommissioningClusterHandler: ClusterServerHandlers<typeof GeneralCommissioningCluster> = {
-    armFailSafe: async ({ request: { breadcrumbStep }, attributes: { breadcrumb }, session }) => {
+    armFailSafe: async ({ request: { breadcrumb: breadcrumbStep }, attributes: { breadcrumb }, session }) => {
         // TODO Add handling for ExpiryLengthSeconds field and Error handling, see 11.9.7.2
 
         session.getContext().armFailSafe();
@@ -22,7 +22,7 @@ export const GeneralCommissioningClusterHandler: ClusterServerHandlers<typeof Ge
         return SuccessResponse;
     },
 
-    setRegulatoryConfig: async ({ request: { breadcrumbStep, newRegulatoryConfig }, attributes: { breadcrumb, regulatoryConfig, locationCapability } }) => {
+    setRegulatoryConfig: async ({ request: { breadcrumb: breadcrumbStep, newRegulatoryConfig }, attributes: { breadcrumb, regulatoryConfig, locationCapability } }) => {
 
         /*
         TODO: test this code before activating again

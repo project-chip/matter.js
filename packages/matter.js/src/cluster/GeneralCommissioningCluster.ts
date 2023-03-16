@@ -84,7 +84,7 @@ const TlvArmFailSafeRequest = TlvObject({
     expiryLengthSeconds: TlvField(0, TlvUInt16), /* default: 900 */
 
     /** Value to atomically set the Breadcrumb attribute on success of this command. */
-    breadcrumbStep: TlvField(1, TlvUInt64),
+    breadcrumb: TlvField(1, TlvUInt64),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.9.7.4 */
@@ -96,7 +96,7 @@ const TlvSetRegulatoryConfigRequest = TlvObject({
     countryCode: TlvField(1, TlvString.bound({ length: 2 })),
 
     /** Value to atomically set the Breadcrumb attribute on success of this command. */
-    breadcrumbStep: TlvField(2, TlvUInt64),
+    breadcrumb: TlvField(2, TlvUInt64),
 });
 
 /**
@@ -106,7 +106,7 @@ const TlvSetRegulatoryConfigRequest = TlvObject({
  */
 export const GeneralCommissioningCluster = Cluster({
     id: 0x30,
-    name: "General Commissioning",
+    name: "GeneralCommissioning",
     revision: 1,
 
     /** @see {@link MatterCoreSpecificationV1_0} § 11.9.6 */
@@ -117,7 +117,7 @@ export const GeneralCommissioningCluster = Cluster({
         breadcrumb: WritableAttribute(0, TlvUInt64, { default: BigInt(0), writeAcl: AccessLevel.Administer }),
 
         /** Describe critical parameters needed at the beginning of commissioning flow. */
-        commissioningInfo: Attribute(1, TlvBasicCommissioningInfo),
+        basicCommissioningInfo: Attribute(1, TlvBasicCommissioningInfo),
 
         /** Indicates the regulatory configuration for the product. */
         regulatoryConfig: Attribute(2, TlvEnum<RegulatoryLocationType>()), /* default: value of locationCapability */

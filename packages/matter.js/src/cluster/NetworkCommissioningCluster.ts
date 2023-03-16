@@ -226,7 +226,7 @@ const TlvReorderNetworkRequest = TlvObject({
  */
 export const NetworkCommissioningCluster = Cluster({
     id: 0x31,
-    name: "Network Commissioning",
+    name: "NetworkCommissioning",
     revision: 1,
     features: {
         wifi: BitFlag(0),
@@ -251,7 +251,7 @@ export const NetworkCommissioningCluster = Cluster({
         interfaceEnabled: WritableAttribute(4, TlvBoolean, { default: true }), /* write = admin */
 
         /** Status of the last attempt either scan or connect to an operational network. */
-        lastNetworkingStatus: Attribute(5, TlvNullable(TlvEnum<NetworkCommissioningStatus>()), { persistent: true, default: null }), /* read = admin */
+        lastNetworkingStatus: Attribute(5, TlvNullable(TlvEnum<NetworkCommissioningStatus>()), { default: null }), /* read = admin */
 
         /** NetworkID used in the last attempt to connect to an operational network. */
         lastNetworkId: Attribute(6, TlvNullable(TlvByteString.bound({ minLength: 1, maxLength: 32 })), { default: null }), /* read = admin */

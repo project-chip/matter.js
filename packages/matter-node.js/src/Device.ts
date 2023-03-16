@@ -109,7 +109,7 @@ class Device {
                     }, {}),
                     new ClusterServer(GeneralCommissioningCluster, {}, {
                         breadcrumb: BigInt(0),
-                        commissioningInfo: {
+                        basicCommissioningInfo: {
                             failSafeExpiryLengthSeconds: 60 /* 1min */,
                             maxCumulativeFailsafeSeconds: 900 /* Recommended according to Specs */,
                         },

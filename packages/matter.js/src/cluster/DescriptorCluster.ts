@@ -20,7 +20,7 @@ import { Attribute, Cluster } from "./Cluster.js";
  */
 const TlvDeviceType = TlvObject({
     /** Indicates the device type definition */
-    type: TlvField(0, TlvDeviceTypeId),
+    deviceType: TlvField(0, TlvDeviceTypeId),
 
     /** Indicates the implemented revision of the device type definition */
     revision: TlvField(1, TlvUInt16.bound({ min: 1 })),

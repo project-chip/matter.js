@@ -116,26 +116,25 @@ export const GroupsCluster = Cluster({
         /**
          * The AddGroup command allows a client to add group membership in a particular group for the server endpoint.
          */
-        addGroup: Command(0, TlvAddGroupRequest, 0, TlvAddGroupResponse),
+        addGroup: Command(0, TlvAddGroupRequest, 0, TlvAddGroupResponse), /* isFabricScoped: true */
 
         /**
          * The ViewGroup command allows a client to request that the server responds with a ViewGroupResponse command
          * containing the name string for a particular group.
-         *
          */
-        viewGroup: Command(1, TlvViewGroupRequest, 0, TlvViewGroupResponse),
+        viewGroup: Command(1, TlvViewGroupRequest, 0, TlvViewGroupResponse), /* isFabricScoped: true */
 
         /**
          * The GetGroupMembership command allows a client to inquire about the group membership of the server endpoint,
          * in a number of ways.
          */
-        getGroupMembership: Command(2, TlvGetGroupMembershipRequest, 2, TlvGetGroupMembershipResponse),
+        getGroupMembership: Command(2, TlvGetGroupMembershipRequest, 2, TlvGetGroupMembershipResponse), /* isFabricScoped: true */
 
         /**
          * The RemoveGroup command allows a client to request that the server removes the membership for the server
          * endpoint, if any, in a particular group.
          */
-        removeGroup: Command(3, TlvRemoveGroupRequest, 3, TlvRemoveGroupResponse),
+        removeGroup: Command(3, TlvRemoveGroupRequest, 3, TlvRemoveGroupResponse), /* isFabricScoped: true */
 
         /**
          * The RemoveAllGroups command allows a client to direct the server to remove all group associations for the
@@ -145,14 +144,12 @@ export const GroupsCluster = Cluster({
          * If the RemoveAllGroups command was received as unicast and a response is not suppressed, the server
          * SHALL generate a response with the Status field set to SUCCESS.
          * Else potentially no response?
-         *
          */
         removeAllGroups: Command(4, TlvNoArguments, 4, TlvRemoveAllGroupResponse),
 
         /**
          * The AddGroupIfIdentifying command allows a client to add group membership in a particular group for the
          * server endpoint, on condition that the endpoint is identifying itself.
-         *
          */
         addGroupIfIdentifying: Command(5, TlvAddGroupIfIdentifyingRequest, 5, TlvNoResponse),
     }
