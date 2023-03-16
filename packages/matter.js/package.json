@@ -26,8 +26,9 @@
   "scripts": {
     "clean": "rm -rf dist; rm -rf out",
     "build": "npm run clean; tsc --project tsconfig.dist-es.json; tsc --project tsconfig.dist-cjs.json; tsc --project tsconfig.dist-dts.json",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
-    "test-web": "karma start test/karma.conf.cjs"
+    "test-node": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test-web": "karma start test/karma.conf.cjs",
+    "test": "npm run test-node; npm run test-web"
   },
   "devDependencies": {
     "@types/jasmine": "^4.3.1",
