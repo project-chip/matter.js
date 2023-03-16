@@ -62,17 +62,6 @@ const TlvRemoveGroupResponse = TlvObject({
     groupId: TlvField(1, TlvGroupId), /* min: 1 */
 });
 
-/**
- * Formally not defined in specs state:
- * If the RemoveAllGroups command was received as unicast and a response is not
- * suppressed, the server SHALL generate a response with the Status field set to SUCCESS.
- *
- * @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.7.5.1
- */
-const TlvRemoveAllGroupResponse = TlvObject({
-    status: TlvField(0, TlvEnum<StatusCode>()),
-});
-
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.7.6 */
 const TlvAddGroupIfIdentifyingRequest = TlvObject({
     groupId: TlvField(0, TlvGroupId), /* min: 1 */
@@ -139,13 +128,8 @@ export const GroupsCluster = Cluster({
         /**
          * The RemoveAllGroups command allows a client to direct the server to remove all group associations for the
          * server endpoint.
-         *
-         * TODO: According to specs the response might be suppressed:
-         * If the RemoveAllGroups command was received as unicast and a response is not suppressed, the server
-         * SHALL generate a response with the Status field set to SUCCESS.
-         * Else potentially no response?
          */
-        removeAllGroups: Command(4, TlvNoArguments, 4, TlvRemoveAllGroupResponse),
+        removeAllGroups: Command(4, TlvNoArguments, 4, TlvNoResponse),
 
         /**
          * The AddGroupIfIdentifying command allows a client to add group membership in a particular group for the
