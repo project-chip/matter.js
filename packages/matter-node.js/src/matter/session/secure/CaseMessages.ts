@@ -5,12 +5,9 @@
  */
 
 import {
-    CRYPTO_AEAD_MIC_LENGTH_BYTES,
-    CRYPTO_GROUP_SIZE_BYTES,
-    CRYPTO_HASH_LEN_BYTES,
-    CRYPTO_PUBLIC_KEY_SIZE_BYTES
-} from "../../../crypto/Crypto";
-import { ByteArray, TlvByteString, TlvField, TlvObject, TlvOptionalField, TlvUInt16, TlvUInt32 } from "@project-chip/matter.js";
+    ByteArray, TlvByteString, TlvField, TlvObject, TlvOptionalField, TlvUInt16, TlvUInt32,
+    CRYPTO_AEAD_MIC_LENGTH_BYTES, CRYPTO_GROUP_SIZE_BYTES, CRYPTO_HASH_LEN_BYTES, CRYPTO_PUBLIC_KEY_SIZE_BYTES
+} from "@project-chip/matter.js";
 
 const CASE_SIGNATURE_LENGTH = CRYPTO_GROUP_SIZE_BYTES * 2;
 

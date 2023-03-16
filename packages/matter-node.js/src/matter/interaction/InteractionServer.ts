@@ -8,36 +8,21 @@ import { MatterDevice } from "../MatterDevice";
 import { ProtocolHandler } from "../common/ProtocolHandler";
 import { MessageExchange } from "../common/MessageExchange";
 import {
-    DataReport,
-    InteractionServerMessenger,
-    InvokeRequest,
-    InvokeResponse,
-    ReadRequest,
-    SubscribeRequest,
-    TimedRequest,
-    WriteRequest,
-    WriteResponse,
-    StatusResponseError, MessageType
+    DataReport, InteractionServerMessenger, InvokeRequest, InvokeResponse, ReadRequest, SubscribeRequest, TimedRequest,
+    WriteRequest, WriteResponse, StatusResponseError, MessageType
 } from "./InteractionMessenger";
 import { CommandServer, ResultCode } from "../cluster/server/CommandServer";
-import { DescriptorCluster } from "../cluster/DescriptorCluster";
 import { AttributeGetterServer, AttributeServer } from "../cluster/server/AttributeServer";
-import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster";
+import {
+    Attributes, Cluster, Commands, Events, DeviceTypeId, ClusterId, EndpointNumber, BitSchema, TlvStream, TypeFromBitSchema,
+    TypeFromSchema, DescriptorCluster
+} from "@project-chip/matter.js";
 import { AttributeInitialValues, AttributeServers, ClusterServerHandlers } from "../cluster/server/ClusterServer";
 import { SecureSession } from "../session/SecureSession";
 import { SubscriptionHandler } from "./SubscriptionHandler";
 import { Logger } from "../../log/Logger";
-import { DeviceTypeId } from "../common/DeviceTypeId";
-import { ClusterId } from "../common/ClusterId";
-import { BitSchema, TlvStream, TypeFromBitSchema, TypeFromSchema } from "@project-chip/matter.js";
-import { EndpointNumber } from "../common/EndpointNumber";
 import { capitalize } from "../../util/String";
-import {
-    StatusCode,
-    TlvAttributePath,
-    TlvAttributeReport,
-    TlvSubscribeResponse
-} from "./InteractionMessages";
+import { StatusCode, TlvAttributePath, TlvAttributeReport, TlvSubscribeResponse } from "./InteractionMessages";
 import { Message } from "../../codec/MessageCodec";
 import { Crypto } from "../../crypto/Crypto";
 

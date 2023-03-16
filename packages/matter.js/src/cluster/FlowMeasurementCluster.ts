@@ -5,7 +5,9 @@
  */
 
 import { Attribute, OptionalAttribute, Cluster } from "./Cluster";
-import { MatterApplicationClusterSpecificationV1_0, TlvUInt16, TlvNullable, } from "@project-chip/matter.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvNullable } from "../tlv/TlvNullable";
+import { TlvUInt16 } from "../tlv/TlvNumber";
 
 /**
  * This cluster provides an interface to flow measurement functionality.

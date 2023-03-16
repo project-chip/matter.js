@@ -7,7 +7,7 @@
 import { Logger } from "../../../log/Logger";
 import { MatterDevice } from "../../MatterDevice";
 import { SecureSession } from "../../session/SecureSession";
-import { CommissioningError, GeneralCommissioningCluster, RegulatoryLocationType } from "../GeneralCommissioningCluster";
+import { CommissioningError, GeneralCommissioningCluster, RegulatoryLocationType } from "@project-chip/matter.js";
 import { ClusterServerHandlers } from "./ClusterServer";
 
 const SuccessResponse = { errorCode: CommissioningError.Ok, debugText: "" };

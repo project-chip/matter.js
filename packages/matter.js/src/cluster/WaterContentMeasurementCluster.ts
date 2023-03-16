@@ -6,7 +6,9 @@
 
 
 import { Attribute, OptionalAttribute, Cluster } from "./Cluster";
-import { MatterApplicationClusterSpecificationV1_0, TlvUInt16, TlvNullable } from "@project-chip/matter.js";
+import { TlvUInt16 } from "../tlv/TlvNumber";
+import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvNullable } from "../tlv/TlvNullable";
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 2.6.4 */
 const attributes = {

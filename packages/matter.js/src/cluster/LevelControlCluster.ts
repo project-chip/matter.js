@@ -5,7 +5,11 @@
  */
 
 import { OptionalAttribute, WritableAttribute, OptionalWritableAttribute, Attribute, Cluster, Command, TlvNoResponse } from "./Cluster";
-import { BitFlag, MatterApplicationClusterSpecificationV1_0, TlvBitmap, TlvEnum, TlvField, TlvNullable, TlvObject, TlvUInt16, TlvUInt8 } from "@project-chip/matter.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvBitmap, TlvEnum, TlvUInt16, TlvUInt8 } from "../tlv/TlvNumber";
+import { BitFlag } from "../schema/BitmapSchema";
+import { TlvField, TlvObject } from "../tlv/TlvObject";
+import { TlvNullable } from "../tlv/TlvNullable";
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.6.5.8 */
 const OptionsBitmap = TlvBitmap(TlvUInt8, {

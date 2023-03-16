@@ -7,7 +7,7 @@
 import { Merge } from "../../../util/Type";
 import { MatterDevice } from "../../MatterDevice";
 import { Session } from "../../session/Session";
-import { Cluster, Command, Commands, AttributeJsType, Attributes, Attribute, OptionalAttribute, OptionalCommand, OptionalWritableAttribute, WritableAttribute, GlobalAttributes } from "../Cluster";
+import { Cluster, Command, Commands, AttributeJsType, Attributes, Attribute, OptionalAttribute, OptionalCommand, OptionalWritableAttribute, WritableAttribute, GlobalAttributes } from "@project-chip/matter.js";
 import { AttributeServer } from "./AttributeServer";
 
 type MandatoryAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends OptionalAttribute<any> ? never : K }[keyof A];

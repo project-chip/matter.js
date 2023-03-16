@@ -141,6 +141,6 @@ export const GeneralCommissioningCluster = Cluster({
          * Informs that all steps of Commissioning/Reconfiguration needed during the fail-safe period have been
          * completed.
          */
-        commissioningComplete: Command(4, TlvNoArguments, 5, TlvCommissioningSuccessFailureResponse),
+        commissioningComplete: Command(4, TlvNoArguments, 5, TlvCommissioningSuccessFailureResponse), /* fabricScoped: true */
     },
 });

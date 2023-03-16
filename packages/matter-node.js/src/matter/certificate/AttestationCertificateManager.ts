@@ -11,9 +11,8 @@ import {
     sTestCert_PAA_NoVID_SKID
 } from "./ChipPAAuthorities";
 import { Crypto } from "../../crypto/Crypto";
-import { VendorId } from "../common/VendorId";
+import { VendorId, ByteArray } from "@project-chip/matter.js";
 import { Time } from "../../time/Time";
-import { ByteArray } from "@project-chip/matter.js";
 import { CertificateManager, jsToMatterDate } from "./CertificateManager";
 
 // DAC for Vendor ID 0xFFF1 and Product ID 0x8000 from Chip project

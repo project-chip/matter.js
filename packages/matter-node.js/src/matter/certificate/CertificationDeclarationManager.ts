@@ -3,9 +3,8 @@
  * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { VendorId } from "../common/VendorId";
+import { VendorId, ByteArray } from "@project-chip/matter.js";
 import { CertificateManager, TlvCertificationDeclaration } from "./CertificateManager";
-import { ByteArray } from "@project-chip/matter.js";
 
 // CD Signer Certificate and Key taken from Chip-Tool repository
 

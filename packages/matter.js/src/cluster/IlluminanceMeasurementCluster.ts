@@ -5,10 +5,12 @@
  */
 
 import { Attribute, OptionalAttribute, Cluster } from "./Cluster";
-import { MatterApplicationClusterSpecificationV1_0, TlvUInt16, TlvNullable, TlvUInt8 } from "@project-chip/matter.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvNullable } from "../tlv/TlvNullable";
+import { TlvUInt16, TlvUInt8 } from "../tlv/TlvNumber";
 
 /**
- * The Illuminance Measurement cluster provides an interface to illuminance measurement function­ality.
+ * The Illuminance Measurement cluster provides an interface to illuminance measurement functionality.
  *
  * @see {@link MatterApplicationClusterSpecificationV1_0} § 2.2
  */

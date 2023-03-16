@@ -4,20 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-    BitFlag,
-    TlvByteString,
-    TlvEnum,
-    TlvField,
-    TlvNullable,
-    TlvObject,
-    TlvUInt16,
-    TlvUInt32
-} from "@project-chip/matter.js";
+import { TlvField, TlvObject } from "../tlv/TlvObject";
+import { TlvEnum, TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber";
+import { TlvByteString } from "../tlv/TlvString";
+import { BitFlag } from "../schema/BitmapSchema";
+import { TlvNullable } from "../tlv/TlvNullable";
 import { TlvFabricIndex } from "../common/FabricIndex";
 import { TlvVendorId } from "../common/VendorId";
 import { Cluster, Command, TlvNoArguments, TlvNoResponse, Attribute } from "./Cluster";
-import { CRYPTO_GROUP_SIZE_BYTES, CRYPTO_PUBLIC_KEY_SIZE_BYTES } from "../../crypto/Crypto";
+import { CRYPTO_GROUP_SIZE_BYTES, CRYPTO_PUBLIC_KEY_SIZE_BYTES } from "../crypto/CryptoConstants";
 
 const PAKE_PASSCODE_VERIFIER_LENGTH = CRYPTO_GROUP_SIZE_BYTES + CRYPTO_PUBLIC_KEY_SIZE_BYTES;
 

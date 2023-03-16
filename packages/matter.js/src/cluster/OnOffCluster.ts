@@ -55,28 +55,36 @@ export const enum DyingLightEffectVariant {
 }
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.7.4.2 */
-// const TlvEffectVariant = TlvUInt8 as TlvSchema<DyingLightEffectVariant | DelayedAllOffEffectVariant>;
+/*
+const TlvEffectVariant = TlvUInt8 as TlvSchema<DyingLightEffectVariant | DelayedAllOffEffectVariant>;
+*/
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.7.4 */
-/* const TlvOffWithEffectRequest = TlvObject({
+/*
+const TlvOffWithEffectRequest = TlvObject({
     effectIdentifier: TlvField(0, TlvEnum<OnOffEffectIdentifier>()),
     effectVariant: TlvField(1, TlvEffectVariant),
 }) as TlvSchema<
     { effectIdentifier: OnOffEffectIdentifier.DelayedAllOff, effectVariant: DelayedAllOffEffectVariant } |
     { effectIdentifier: OnOffEffectIdentifier.DyingLight, effectVariant: DyingLightEffectVariant }
-    >; */
+>;
+*/
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.7.4.2 */
-/* const TlvOnOffControlBitmap = TlvBitmap(TlvUInt8, {
+/*
+const TlvOnOffControlBitmap = TlvBitmap(TlvUInt8, {
     acceptOnlyWhenOn: BitFlag(1),
-}) */
+});
+*/
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.7.6. */
-/* const TlvOnWithTimedOffRequest = TlvObject({
+/*
+const TlvOnWithTimedOffRequest = TlvObject({
     onOffControl: TlvField(0, TlvOnOffControlBitmap),
     onTime: TlvField(1, TlvNullable(TlvUInt8.bound({ min: 0, max: 254 }))),
     offWaitTime: TlvField(2, TlvNullable(TlvUInt8.bound({ min: 0, max: 254 }))),
-}); */
+});
+*/
 
 /**
  * Attributes and commands for switching devices between 'On' and 'Off' states.
@@ -95,7 +103,7 @@ export const OnOffCluster = Cluster({
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.6 */
     attributes: {
         /** Indicates whether the device type implemented on the endpoint is turned off (false) or turned on (true). */
-        onOff: Attribute(0, TlvBoolean, { default: false }), /* reportable: true, scene:true */
+        onOff: Attribute(0, TlvBoolean, { persistent: true, default: false }), /* reportable: true, scene:true - Specs 1.0 wrong here, using chip XMLs*/
 
         // The following attributes are only needed for "Level Control for Lighting" support
 
@@ -115,7 +123,7 @@ export const OnOffCluster = Cluster({
         //offWaitTime: OptionalWritableAttribute(0x4002, TlvNullable(TlvUInt16), { default: 0 }), /* unit: 1/10s */
 
         /** Defines the desired startup behavior of a device when it is supplied with power. */
-        //startUpOnOff: OptionalWritableAttribute(0x4003, TlvNullable(TlvEnum<StartUpOnOff>()), { writeAcl: AccessLevel.Manage }),
+        //startUpOnOff: OptionalWritableAttribute(0x4003, TlvNullable(TlvEnum<StartUpOnOff>()), { persistent: true, writeAcl: AccessLevel.Manage }),
     },
 
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.7 */
