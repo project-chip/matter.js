@@ -1,10 +1,14 @@
 {
-    "extends": "../../tsconfig.json",
     "compilerOptions": {
         "target": "es6",
-        "rootDir": "src",
-        "outDir": "dist",
-        "removeComments": true,
+
+        // Local dev compilation checks
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitAny": true,
+        "noImplicitOverride": true,
+        "noUnusedParameters": true,
+        "noUnusedLocals": true,
+        "strictNullChecks": true
     },
     "include": ["src/**/*.ts"],
     "references": [

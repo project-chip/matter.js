@@ -16,9 +16,9 @@ module.exports = function(config) {
             "test/**/*Test.ts": ["karma-typescript"]
         },
         reporters: ["progress", "coverage", "karma-typescript"],
-        browsers: ["Chrome"],
+        browsers: ["ChromeHeadless"],
         karmaTypescriptConfig: {
-            tsconfig: "tsconfig.json"
+            tsconfig: "tsconfig.karma.json"
         },
         singleRun: true
     });
