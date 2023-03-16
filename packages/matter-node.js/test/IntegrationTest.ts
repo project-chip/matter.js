@@ -9,10 +9,12 @@ import assert from "assert";
 import { Time } from "../src/time/Time";
 import { TimeFake } from "../src/time/TimeFake";
 import { UdpInterface } from "../src/net/UdpInterface";
+import { MatterController } from "../src/matter/MatterController";
+import { MatterDevice } from "../src/matter/MatterDevice";
 import {
-    MatterController, MatterDevice, VendorId, FabricIndex,
-    OnOffCluster, BasicInformationCluster, GeneralCommissioningCluster, RegulatoryLocationType, OperationalCertStatus, OperationalCredentialsCluster
-} from "../src/matter/MatterController";
+    OnOffCluster, BasicInformationCluster, GeneralCommissioningCluster, RegulatoryLocationType, OperationalCertStatus,
+    OperationalCredentialsCluster, VendorId, FabricIndex,
+} from "@project-chip/matter.js";
 import { Crypto } from "../src/crypto/Crypto";
 import { DEVICE } from "../src/matter/common/DeviceTypes";
 import { ClusterServer, InteractionServer } from "../src/matter/interaction/InteractionServer";
