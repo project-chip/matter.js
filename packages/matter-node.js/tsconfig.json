@@ -2,12 +2,13 @@
     "extends": "../../tsconfig.json",
     "compilerOptions": {
         "target": "es6",
-        "rootDir": "src",
-        "outDir": "dist",
-        "removeComments": true,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false
     },
-    "include": ["src/**/*.ts"],
+    "include": ["src/**/*.ts", "dts/*.d.ts", "test/**/*.ts"],
+    "exclude": [],
     "references": [
         { "path": "../matter.js" }
-    ]
+    ],
+
 }

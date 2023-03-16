@@ -38,9 +38,11 @@
             {
                 "ignoreRestSiblings": true,
                 "argsIgnorePattern": "^_",
-                "varsIgnorePattern": "^Matter.*SpecificationV"
+                "varsIgnorePattern": "^Matter.*SpecificationV|^_"
             }
         ],
+
+        "@typescript-eslint/require-await": "off",
 
         // We can turn this on from time to time but in general these rules
         // make our lives harder instead of easier
