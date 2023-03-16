@@ -23,7 +23,7 @@ describe("TlvArray", () => {
         it("encodes an array", () => {
             const result = schema.encode(["a", "b", "c"]);
 
-            expect(result.toHex()).toBe("160c01610c01620c016318");
+            expect(result.toHex()).toBe("160c01610ch01620c016318");
         });
     });
 

@@ -1,12 +1,12 @@
 module.exports = function(config) {
     config.set({
-        basePath: '../',
+        basePath: "../",
         frameworks: ["jasmine", "karma-typescript"],
         client:{
             jasmine:{
-             random:false
-           }
-         },
+                random:false
+            }
+        },
         files: [
             { pattern: "src/**/*.ts" },
             { pattern: "test/**/*.ts" }
@@ -16,6 +16,9 @@ module.exports = function(config) {
             "test/**/*.ts": ["karma-typescript"]
         },
         reporters: ["coverage", "karma-typescript"],
-        browsers: ["Chrome"]
+        browsers: ["Chrome"],
+        karmaTypescriptConfig: {
+            tsconfig: "tsconfig.json"
+        }
     });
 };

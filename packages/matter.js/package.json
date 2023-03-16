@@ -15,6 +15,7 @@
     "Marco Fucci di Napoli <mfucci@gmail.com>",
     "Ingo Fischer <github@fischer-ka.de>"
   ],
+  "type":"module",
   "bugs": {
     "url": "https://github.com/project-chip/matter.js/issues"
   },
