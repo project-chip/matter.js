@@ -7,7 +7,7 @@
 import { SECURE_CHANNEL_PROTOCOL_ID } from "./session/secure/SecureChannelMessages";
 import { ResumptionRecord, SessionManager } from "./session/SessionManager";
 import { NetInterface } from "../net/NetInterface";
-import { ExchangeManager, MessageChannel } from "./common/ExchangeManager";
+import { ExchangeManager, ExchangeProvider, MessageChannel } from "./common/ExchangeManager";
 import { PaseClient } from "./session/secure/PaseClient";
 import { ClusterClient, InteractionClient } from "./interaction/InteractionClient";
 import { BasicInformationCluster } from "./cluster/BasicInformationCluster";
@@ -19,7 +19,7 @@ import { Scanner } from "./common/Scanner";
 import { Fabric, FabricBuilder } from "./fabric/Fabric";
 import { CaseClient } from "./session/secure/CaseClient";
 import { requireMinNodeVersion } from "../util/Node";
-import { ChannelManager } from "./common/ChannelManager";
+import { ChannelManager, NoChannelError } from "./common/ChannelManager";
 import { Logger } from "../log/Logger";
 import { Time } from "../time/Time";
 import { NodeId } from "./common/NodeId";
@@ -77,7 +77,7 @@ export class MatterController {
 
         // Use the created secure session to do the commissioning
         const paseSecureMessageChannel = new MessageChannel(paseChannel, paseSecureSession);
-        let interactionClient = new InteractionClient(this.exchangeManager, paseSecureMessageChannel);
+        let interactionClient = new InteractionClient(new ExchangeProvider(this.exchangeManager, paseSecureMessageChannel));
 
         // Get and display the product name (just for debugging)
         const basicClusterClient = ClusterClient(interactionClient, 0, BasicInformationCluster);
@@ -116,27 +116,51 @@ export class MatterController {
             caseAdminNode: CONTROLLER_NODE_ID,
         });
 
-        // Look for the device broadcast over MDNS
-        const scanResult = await this.scanner.findDevice(this.fabric, peerNodeId);
+        // Look for the device broadcast over MDNS and do CASE pairing
+        interactionClient = await this.connect(peerNodeId, 5);
+
+        // Complete the commission
+        generalCommissioningClusterClient = ClusterClient(interactionClient, 0, GeneralCommissioningCluster);
+        this.ensureSuccess(await generalCommissioningClusterClient.commissioningComplete({}));
+
+        return peerNodeId;
+    }
+
+    async resume(peerNodeId: NodeId, timeoutSeconds = 60) {
+        const scanResult = await this.scanner.findDevice(this.fabric, peerNodeId, timeoutSeconds);
         if (scanResult === undefined) throw new Error("The device being commissioned cannot be found on the network");
         const { ip: operationalIp, port: operationalPort } = scanResult;
 
+        return this.pair(peerNodeId, operationalIp, operationalPort);
+    }
+
+    async pair(peerNodeId: NodeId, operationalIp: string, operationalPort: number) {
         // Do CASE pairing
         const operationalInterface = isIPv6(operationalIp) ? this.netInterfaceIpv6 : this.netInterfaceIpv4;
         const operationalChannel = await operationalInterface.openChannel(operationalIp, operationalPort);
         const operationalUnsecureMessageExchange = new MessageChannel(operationalChannel, this.sessionManager.getUnsecureSession());
         const operationalSecureSession = await this.caseClient.pair(this, this.exchangeManager.initiateExchangeWithChannel(operationalUnsecureMessageExchange, SECURE_CHANNEL_PROTOCOL_ID), this.fabric, peerNodeId);
-        this.channelManager.setChannel(this.fabric, peerNodeId, new MessageChannel(operationalChannel, operationalSecureSession));
-        interactionClient = new InteractionClient(this.exchangeManager, this.channelManager.getChannel(this.fabric, peerNodeId));
-
-        // Complete the commission
-        generalCommissioningClusterClient = ClusterClient(interactionClient, 0, GeneralCommissioningCluster);
-        this.ensureSuccess(await generalCommissioningClusterClient.commissioningComplete({}));
-        return peerNodeId;
+        const channel = new MessageChannel(operationalChannel, operationalSecureSession);
+        this.channelManager.setChannel(this.fabric, peerNodeId, channel);
+        return channel;
     }
 
-    connect(nodeId: NodeId) {
-        return new InteractionClient(this.exchangeManager, this.channelManager.getChannel(this.fabric, nodeId));
+    async connect(nodeId: NodeId, timeoutSeconds?: number) {
+        let channel: MessageChannel<any>;
+        try {
+            channel = this.channelManager.getChannel(this.fabric, nodeId);
+        } catch (error) {
+            if (error instanceof NoChannelError) {
+                channel = await this.resume(nodeId, timeoutSeconds);
+            } else {
+                throw error;
+            }
+        }
+        return new InteractionClient(new ExchangeProvider(this.exchangeManager, channel, async () => {
+            this.channelManager.removeChannel(this.fabric, nodeId);
+            await this.resume(nodeId);
+            return this.channelManager.getChannel(this.fabric, nodeId);
+        }));
     }
 
     private ensureSuccess({ errorCode, debugText }: CommissioningSuccessFailureResponse) {

@@ -154,8 +154,8 @@ describe("Integration", () => {
             assert.equal(nodeId.id, BigInt(1));
         });
 
-        it("the session is resumed if it has been established previously", () => {
-            client.connect(new NodeId(BigInt(1)));
+        it("the session is resumed if it has been established previously", async () => {
+            await client.connect(new NodeId(BigInt(1)));
 
             assert.ok(true);
         });
@@ -164,13 +164,13 @@ describe("Integration", () => {
 
     context("attributes", () => {
         it("get one specific attribute including schema parsing", async () => {
-            const descriptorCluster = ClusterClient(client.connect(new NodeId(BigInt(1))), 0, BasicInformationCluster);
+            const descriptorCluster = ClusterClient(await client.connect(new NodeId(BigInt(1))), 0, BasicInformationCluster);
 
             assert.equal(await descriptorCluster.getSoftwareVersionString(), "v1");
         });
 
         it("get all attributes", async () => {
-            await client.connect(new NodeId(BigInt(1))).getAllAttributes();
+            await (await client.connect(new NodeId(BigInt(1)))).getAllAttributes();
 
             assert.ok(true);
         });
@@ -178,7 +178,7 @@ describe("Integration", () => {
 
     context("subscription", () => {
         it("subscription sends updates when the value changes", async () => {
-            const interactionClient = client.connect(new NodeId(BigInt(1)));
+            const interactionClient = await client.connect(new NodeId(BigInt(1)));
             const onOffClient = ClusterClient(interactionClient, 1, OnOffCluster);
             const startTime = Time.nowMs();
 
@@ -220,7 +220,7 @@ describe("Integration", () => {
 
     context("remove Fabric", () => {
         it("try to remove invalid fabric", async () => {
-            const operationalCredentialsCluster = ClusterClient(client.connect(new NodeId(BigInt(1))), 0, OperationalCredentialsCluster);
+            const operationalCredentialsCluster = ClusterClient(await client.connect(new NodeId(BigInt(1))), 0, OperationalCredentialsCluster);
 
             const result = await operationalCredentialsCluster.removeFabric({ fabricIndex: new FabricIndex(250) });
             assert.equal(result.status, OperationalCertStatus.InvalidFabricIndex);
@@ -229,7 +229,7 @@ describe("Integration", () => {
         });
 
         it("read and remove fabric", async () => {
-            const operationalCredentialsCluster = ClusterClient(client.connect(new NodeId(BigInt(1))), 0, OperationalCredentialsCluster);
+            const operationalCredentialsCluster = ClusterClient(await client.connect(new NodeId(BigInt(1))), 0, OperationalCredentialsCluster);
 
             const fabricIndex = await operationalCredentialsCluster.getCurrentFabricIndex();
             assert.equal(fabricIndex.index, 1);

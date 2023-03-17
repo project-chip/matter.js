@@ -19,6 +19,8 @@ import { MatterError } from "../../error/MatterError";
 
 const logger = Logger.get("MessageExchange");
 
+export class RetransmissionLimitReachedError extends MatterError { }
+
 export class UnexpectedMessageError extends MatterError {
     public constructor(
         message: string,
@@ -251,7 +253,7 @@ export class MessageExchange<ContextT> {
         if (retransmissionCount === this.retransmissionRetries) {
             if (this.sentMessageToAck !== undefined && this.sentMessageAckFailure !== undefined) {
                 this.receivedMessageToAck = undefined;
-                this.sentMessageAckFailure(new Error("Message retransmission limit reached"));
+                this.sentMessageAckFailure(new RetransmissionLimitReachedError());
                 this.sentMessageAckFailure = undefined;
                 this.sentMessageAckSuccess = undefined;
             }

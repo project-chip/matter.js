@@ -7,11 +7,21 @@
 import { MessageExchange } from "../common/MessageExchange";
 import { MatterController } from "../MatterController";
 import { capitalize } from "../../util/String";
-import { Attribute, AttributeJsType, Attributes, Cluster, Command, Commands, TlvNoResponse, RequestType, ResponseType } from "../cluster/Cluster";
-import { DataReport, InteractionClientMessenger } from "./InteractionMessenger";
+import {
+    Attribute,
+    AttributeJsType,
+    Attributes,
+    Cluster,
+    Command,
+    Commands,
+    RequestType,
+    ResponseType,
+    TlvNoResponse
+} from "../cluster/Cluster";
+import { DataReport, IncomingInteractionClientMessenger, InteractionClientMessenger } from "./InteractionMessenger";
 import { ResultCode } from "../cluster/server/CommandServer";
 import { ClusterClient } from "../cluster/client/ClusterClient";
-import { ExchangeManager, MessageChannel } from "../common/ExchangeManager";
+import { ExchangeProvider } from "../common/ExchangeManager";
 import { INTERACTION_PROTOCOL_ID } from "./InteractionServer";
 import { ProtocolHandler } from "../common/ProtocolHandler";
 import { StatusCode } from "./InteractionMessages";
@@ -58,7 +68,7 @@ export class SubscriptionClient implements ProtocolHandler<MatterController> {
     }
 
     async onNewExchange(exchange: MessageExchange<MatterController>) {
-        const messenger = new InteractionClientMessenger(exchange);
+        const messenger = new IncomingInteractionClientMessenger(exchange);
         const dataReport = await messenger.readDataReport();
         const subscriptionId = dataReport.subscriptionId;
         if (subscriptionId === undefined) {
@@ -80,10 +90,10 @@ export class InteractionClient {
     private readonly subscriptionListeners = new Map<number, (dataReport: DataReport) => void>();
 
     constructor(
-        private readonly exchangeManager: ExchangeManager<MatterController>,
-        private readonly channel: MessageChannel<MatterController>,
+        private readonly exchangeProvider: ExchangeProvider,
     ) {
-        this.exchangeManager.addProtocolHandler(new SubscriptionClient(this.subscriptionListeners));
+        // TODO: Right now we potentially add multiple handlers for the same protocol, We need to fix this
+        this.exchangeProvider.addProtocolHandler(new SubscriptionClient(this.subscriptionListeners));
     }
 
     async getAllAttributes(): Promise<{}> {
@@ -199,7 +209,7 @@ export class InteractionClient {
     }
 
     private async withMessenger<T>(invoke: (messenger: InteractionClientMessenger) => Promise<T>): Promise<T> {
-        const messenger = new InteractionClientMessenger(this.exchangeManager.initiateExchangeWithChannel(this.channel, INTERACTION_PROTOCOL_ID));
+        const messenger = new InteractionClientMessenger(this.exchangeProvider);
         try {
             return await invoke(messenger);
         } finally {
