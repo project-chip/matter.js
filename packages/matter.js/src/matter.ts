@@ -17,6 +17,7 @@ export * from "./cluster/BridgedDeviceBasicInformationCluster";
 export * from "./cluster/DescriptorCluster";
 export * from "./cluster/FlowMeasurementCluster";
 export * from "./cluster/GeneralCommissioningCluster";
+export * from "./cluster/GeneralDiagnosticsCluster";
 export * from "./cluster/GroupKeyManagementCluster";
 export * from "./cluster/GroupsCluster";
 export * from "./cluster/IdentifyCluster";
