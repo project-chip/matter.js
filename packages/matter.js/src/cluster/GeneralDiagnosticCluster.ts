@@ -68,40 +68,40 @@ export const enum BootReason {
 }
 
 /**  
- * describes a network interface supported by the Node, as provided in the NetworkInterfaces attribute. 
+ * Describes a network interface supported by the Node, as provided in the NetworkInterfaces attribute. 
  * @see {@link MatterCoreSpecificationV1_0} § 11.11.6.5
  */
 const TlvNetworkInterface = TlvObject({
-    /** human-readable (displayable) name for the network interface */
+    /** Human-readable (displayable) name for the network interface. */
     name: TlvField(0, TlvString32max),
 
-    /** indicate if the Node is currently advertising itself operationally on this network interface */
+    /** Indicates if the Node is currently advertising itself operationally on this network interface. */
     isOperational: TlvField(1, TlvBoolean),
 
-    /** indicate whether the Node is currently able to reach off-premise services it uses by utilizing IPv4 */
+    /** Indicates whether the Node is currently able to reach off-premise services it uses by utilizing IPv4. */
     offPremiseServicesReachableIPv4: TlvField(2, TlvNullable(TlvBoolean)), /* default null */
 
-    /** indicate whether the Node is currently able to reach off-premise services it uses by utilizing IPv4 */
+    /** Indicates whether the Node is currently able to reach off-premise services it uses by utilizing IPv4. */
     offPremiseServicesReachableIPv6: TlvField(3, TlvNullable(TlvBoolean)),  /* default null */
 
     /** 
-     * SHALL contain the current link-layer address for a 802.3 or IEEE 802.11-2020 network interface and 
-     * contain the current extended MAC address for a 802.15.4 interface 
+     * Contains the current link-layer address for a 802.3 or IEEE 802.11-2020 network interface and 
+     * contains the current extended MAC address for a 802.15.4 interface.
      */
     hardwareAddress: TlvField(4, TlvString.bound({ maxLength: 8 })),
 
-    /** list of the IPv4 addresses that are currently assigned to the network interface */
+    /** List of the IPv4 addresses that are currently assigned to the network interface. */
     iPv4Addresses: TlvField(5, TlvArray(TlvString.bound({ maxLength: 4 }))),
 
-    /** list of the unicast IPv6 addresses that are currently assigned to the network interface. */
+    /** List of the unicast IPv6 addresses that are currently assigned to the network interface. */
     iPv6Addresse: TlvField(6, TlvArray(TlvString.bound({ maxLength: 8 }))),
 
-    /** indicate the type of the interface */
+    /** Indicates the type of the interface. */
     type: TlvField(7, TlvEnum<InterfaceType>()),
 });
 
 /** 
- * SHALL indicate a change in the set of hardware faults currently detected by the Node
+ * Indicates a change in the set of hardware faults currently detected by the Node.
  * @see {@link MatterCoreSpecificationV1_0} §11.11.9.1
  */
 const HardwareFaultChangeEventData = {
@@ -110,7 +110,7 @@ const HardwareFaultChangeEventData = {
 };
 
 /** 
- * SHALL indicate a change in the set of radio faults currently detectedby the Node
+ * Indicates a change in the set of radio faults currently detectedby the Node.
  * @see {@link MatterCoreSpecificationV1_0} § 11.11.9.2
  */
 const RadioFaultChangeEventData = {
@@ -119,7 +119,7 @@ const RadioFaultChangeEventData = {
 };
 
 /** 
- * SHALL indicate a change in the set of network faults currently detected by the Node
+ * Indicates a change in the set of network faults currently detected by the Node.
  * @see {@link MatterCoreSpecificationV1_0} § 11.11.9.3
  */
 const NetworkFaultChangeEventData = {
@@ -128,7 +128,7 @@ const NetworkFaultChangeEventData = {
 };
 
 /** 
- * SHALL indicate the reason that caused the device to start-up
+ * Indicates the reason that caused the device to start-up.
  * @see {@link MatterCoreSpecificationV1_0} § 11.11.7.4  
  */
 const BootReasonEvent = {
@@ -136,7 +136,7 @@ const BootReasonEvent = {
 };
 
 /** 
- * Provide a means for certification tests to trigger some test-plan-specific events 
+ * Provides a means for certification tests to trigger some test-plan-specific events.
  * @see {@link MatterCoreSpecificationV1_0} § 11.11.8.1 
  */
 const TlvTestEventTriggerRequest = TlvObject({
@@ -160,49 +160,49 @@ export const GeneralDiagnosticCluster = Cluster({
     /** @see {@link MatterCoreSpecificationV1_0} § 11.11.7 */
     attributes: {
 
-        /** list of NetworkInterface structs */
+        /** List of NetworkInterface structss */
         networkInterfaces: Attribute(0, TlvArray(TlvNetworkInterface, { maxLength: 8 })),
 
-        /** SHALL indicate a best-effort count of the number of times the Node has rebooted. */
+        /** Indicates a best-effort count of the number of times the Node has rebooted. */
         rebootCount: Attribute(1, TlvUInt16, { default: 0 }), // TODO persistent: true
 
-        /** indicate a best-effort assessment of the length of time, in seconds, since the Node’s last reboot */
+        /** Indicates a best-effort assessment of the length of time, in seconds, since the Node’s last reboot. */
         upTime: OptionalAttribute(2, TlvUInt64, { default: 0 }),
 
-        /** SHALL indicate a best-effort attempt at time in hours the Node has been operational.*/
+        /** Indicates a best-effort attempt at time in hours the Node has been operational. */
         totalOperationalHours: OptionalAttribute(3, TlvUInt32, { default: 0 }), // TODO persistent: true
 
-        /** SHALL indicate the reason for the Node’s most recent boot */
+        /** Indicates the reason for the Node’s most recent boot */
         bootReason: OptionalAttribute(4, TlvEnum<BootReason>()),
 
-        /** SHALL indicate the set of faults currently detected by the Node */
+        /** Indicates the set of faults currently detected by the Node. */
         activeHardwareFaults: OptionalAttribute(5, TlvArray(TlvEnum<HardwareFault>(), { maxLength: 11 })),
 
-        /** SHALL indicate the set of faults currently detected by the Node */
+        /** Indicates the set of faults currently detected by the Node. */
         activeRadioFaults: OptionalAttribute(6, TlvArray(TlvEnum<RadioFault>(), { maxLength: 7 })),
 
-        /** SHALL indicate the set of faults currently detected by the Node */
+        /** Indicates the set of faults currently detected by the Node. */
         activeNetworkFaults: OptionalAttribute(7, TlvArray(TlvEnum<NetworkFault>(), { maxLength: 4 })),
 
-        /** SHALL indicate whether the Node has any TestEventTrigger configured */
+        /** Indicates whether the Node has any TestEventTrigger configured. */
         testEventTriggersEnabled: Attribute(8, TlvBoolean),
     },
 
     /** @see {@link MatterCoreSpecificationV1_0} § 11.11.8 */
     commands: {
-        /** Provide a means for certification tests to trigger some test-plan-specific events */
+        /** Provide a means for certification tests to trigger some test-plan-specific events. */
         testEventTrigger: Command(0, TlvTestEventTriggerRequest, 0, TlvNoResponse),
     },
 
     /** @see {@link MatterCoreSpecificationV1_0} § 11.11.9 */
     events: {
-        /** Indicate a change in the set of hardware faults currently detected by the Node. */
+        /** Indicates a change in the set of hardware faults currently detected by the Node. */
         hardwareFaultChange: OptionalEvent(0, EventPriority.Critical, HardwareFaultChangeEventData),
 
-        /** Indicate a change in the set of radio faults currently detected by the Node. */
+        /** Indicates a change in the set of radio faults currently detected by the Node. */
         radioFaultChange: OptionalEvent(1, EventPriority.Critical, RadioFaultChangeEventData),
 
-        /** Indicate a change in the set of network faults currently detected by the Node. */
+        /** Indicates a change in the set of network faults currently detected by the Node. */
         networkFaultChange: OptionalEvent(2, EventPriority.Critical, NetworkFaultChangeEventData),
 
         /** Indicate the reason that caused the device to start-up. */
