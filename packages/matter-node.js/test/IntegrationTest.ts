@@ -156,7 +156,7 @@ describe("Integration", () => {
                 ])
                 .addEndpoint(0x01, DEVICE.ON_OFF_LIGHT, [onOffServer])
             );
-        await server.start();
+        server.start();
 
         Network.get = () => { throw new Error("Network should not be requested post creation") };
     });
@@ -287,7 +287,7 @@ describe("Integration", () => {
     });
 
     after(async () => {
-        await server.stop();
+        server.stop();
         client.close();
         await fakeControllerStorage.close();
         await fakeServerStorage.close();

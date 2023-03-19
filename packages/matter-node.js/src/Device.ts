@@ -174,7 +174,7 @@ class Device {
                 ])
                 .addEndpoint(0x01, DEVICE.ON_OFF_LIGHT, [onOffClusterServer])
             );
-        await device.start()
+        device.start()
 
         logger.info("Listening");
         if (!device.isCommissioned()) {
