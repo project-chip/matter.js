@@ -142,7 +142,7 @@ describe("Integration", () => {
                 ])
                 .addEndpoint(0x01, DEVICE.ON_OFF_LIGHT, [onOffServer])
             );
-        server.start();
+        await server.start();
 
         Network.get = () => { throw new Error("Network should not be requested post creation") };
     });
@@ -241,8 +241,8 @@ describe("Integration", () => {
         });
     });
 
-    after(() => {
-        server.stop();
+    after(async () => {
+        await server.stop();
         client.close();
     });
 });

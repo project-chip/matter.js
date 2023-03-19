@@ -86,7 +86,7 @@ class Device {
         const { keyPair: dacKeyPair, dac } = paa.getDACert(productId)
         const certificationDeclaration = CertificationDeclarationManager.generate(vendorId, productId);
 
-        (new MatterDevice(deviceName, deviceType, vendorId, productId, discriminator))
+        await (new MatterDevice(deviceName, deviceType, vendorId, productId, discriminator))
             .addNetInterface(await UdpInterface.create(port, "udp4"))
             .addNetInterface(await UdpInterface.create(port, "udp6"))
             .addScanner(await MdnsScanner.create())
