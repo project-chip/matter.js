@@ -40,6 +40,16 @@ For instance, on a Raspberry Pi, this will turn on / off the red LED:
 matter -on "echo 255 > /sys/class/leds/led1/brightness" -off "echo 0 > /sys/class/leds/led1/brightness"
 ```
 
+The following parameters are available:
+* -passcode: the passcode to use for pairing (default: 20202021)
+* -discriminator: the discriminator to use for pairing (default: 3840)
+* -vendorid: the vendor ID as number to use for pairing (default: 65521 (0xFFF1))
+* -productid: the product ID as number to use for pairing (default: 32768 (0x8000))
+* -port: the port to listen on (default: 5540)
+* -file: the file to use for storing the pairing information (default: device.json). Delete the file or provide an alternative name to reset the device
+* -on: the command to run when the device is turned on
+* -off: the command to run when the device is turned off
+
 **Experimental**
 
 ```bash
@@ -48,6 +58,12 @@ matter-controller -ip [IP address of device to commission]
 
 This will commission a Matter device (for debugging purpose only for now).
 
+The following parameters are available:
+* -ip: the IP address of the device to commission
+* -port: the port of the device to connect to commission (default: 5540)
+* -discriminator: the discriminator to use for pairing (default: 3840)
+* -pin: the pin to use for pairing (default: 20202021)
+* -file: the file to use for storing the pairing information (default: controller.json). Delete the file or provide an alternative name to reset the controller
 
 ## Modifying the server behavior
 
