@@ -39,6 +39,8 @@ import { OnOffClusterHandler } from "../src/matter/cluster/server/OnOffServer";
 import { FabricIndex } from "../src/matter/common/FabricIndex";
 import { AttestationCertificateManager } from "../src/matter/certificate/AttestationCertificateManager";
 import { CertificationDeclarationManager } from "../src/matter/certificate/CertificationDeclarationManager";
+import { StorageInMemory } from "../src/persistence/StorageInMemory";
+import { PersistenceManager } from "../src/persistence/PersistenceManager";
 
 const SERVER_IP = "192.168.200.1";
 const SERVER_MAC = "00:B0:D0:63:C2:26";
@@ -50,7 +52,7 @@ const clientNetwork = new NetworkFake(CLIENT_MAC, [CLIENT_IP]);
 
 const deviceName = "Matter end-to-end device";
 const deviceType = 257 /* Dimmable bulb */;
-const vendorName = "node-matter";
+const vendorName = "matter-node.js";
 const vendorId = new VendorId(0xFFF1);
 const productName = "Matter end-to-end device";
 const productId = 0X8001;
@@ -61,6 +63,9 @@ const matterPort = 5540;
 const TIME_START = 1666663000000;
 const fakeTime = new TimeFake(TIME_START);
 
+const fakeControllerStorage = new StorageInMemory();
+const fakeServerStorage = new StorageInMemory();
+
 describe("Integration", () => {
     let server: MatterDevice;
     let onOffServer: ClusterServer<any, any, any, any>;
@@ -70,10 +75,15 @@ describe("Integration", () => {
         Logger.defaultLogLevel = Level.DEBUG;
         Time.get = () => fakeTime;
         Network.get = () => clientNetwork;
+
+        const controllerPersistenceManager = new PersistenceManager(fakeControllerStorage);
+        await controllerPersistenceManager.initialize();
+
         client = await MatterController.create(
             await MdnsScanner.create(CLIENT_IP),
             await UdpInterface.create(5540, "udp4", CLIENT_IP),
             await UdpInterface.create(5540, "udp6", CLIENT_IP),
+            controllerPersistenceManager
         );
 
         Network.get = () => serverNetwork;
@@ -88,14 +98,18 @@ describe("Integration", () => {
             { onOff: false },
             OnOffClusterHandler()
         );
-        server = new MatterDevice(deviceName, deviceType, vendorId, productId, discriminator)
+
+        const serverPersistenceManager = new PersistenceManager(fakeServerStorage);
+        await serverPersistenceManager.initialize();
+
+        server = new MatterDevice(deviceName, deviceType, vendorId, productId, discriminator, serverPersistenceManager)
             .addNetInterface(await UdpInterface.create(matterPort, "udp6", SERVER_IP))
             .addBroadcaster(await MdnsBroadcaster.create())
             .addProtocolHandler(new SecureChannelProtocol(
                 await PaseServer.fromPin(setupPin, { iterations: 1000, salt: Crypto.getRandomData(32) }),
                 new CaseServer(),
             ))
-            .addProtocolHandler(new InteractionServer()
+            .addProtocolHandler(new InteractionServer(serverPersistenceManager)
                 .addEndpoint(0x00, DEVICE.ROOT, [
                     new ClusterServer(BasicInformationCluster, {}, {
                         dataModelRevision: 1,
@@ -142,7 +156,7 @@ describe("Integration", () => {
                 ])
                 .addEndpoint(0x01, DEVICE.ON_OFF_LIGHT, [onOffServer])
             );
-        server.start();
+        await server.start();
 
         Network.get = () => { throw new Error("Network should not be requested post creation") };
     });
@@ -218,6 +232,37 @@ describe("Integration", () => {
         });
     });
 
+    context("storage", () => {
+        it("server storage has fabric fields stored", async () => {
+            // TODO: In fact testing wrong because the persistence mixed server and client keys, will get issues for more fancy tests
+            const storedFabrics = fakeServerStorage.get<any>("FabricManager", "fabrics");
+            assert.equal(Array.isArray(storedFabrics), true);
+            assert.equal(storedFabrics.length, 1);
+            assert.equal(typeof storedFabrics[0], "object");
+            assert.equal(storedFabrics[0].fabricIndex, 1);
+            assert.equal(storedFabrics[0].fabricId, 1);
+
+            assert.equal(fakeServerStorage.get<number>("FabricManager", "nextFabricIndex"), 2);
+
+            const onoffValue = fakeServerStorage.get<any>("Cluster-1-6", "onOff");
+            assert.equal(typeof onoffValue, "object");
+            assert.equal(onoffValue.version, 2);
+            assert.equal(onoffValue.value, false);
+
+            const nodeLabelValue = fakeServerStorage.get<any>("Cluster-0-40", "nodeLabel");
+            assert.equal(typeof nodeLabelValue, "object");
+            assert.equal(nodeLabelValue.version, 3);
+            assert.equal(nodeLabelValue.value, 'testLabel3');
+
+            assert.equal(fakeServerStorage.get<any>("SessionManager", "resumptionRecords").length, 1);
+
+            assert.equal(fakeControllerStorage.get<bigint>("RootCertificateManager", "rootCertId"), BigInt(0));
+            assert.equal(fakeControllerStorage.get<boolean>("MatterController", "fabricCommissioned"), true);
+            assert.equal(fakeControllerStorage.get<any>("SessionManager", "resumptionRecords").length, 1);
+            assert.equal(typeof fakeControllerStorage.get("MatterController", "fabric"), "object");
+        });
+    });
+
     context("remove Fabric", () => {
         it("try to remove invalid fabric", async () => {
             const operationalCredentialsCluster = ClusterClient(client.connect(new NodeId(BigInt(1))), 0, OperationalCredentialsCluster);
@@ -241,8 +286,10 @@ describe("Integration", () => {
         });
     });
 
-    after(() => {
-        server.stop();
+    after(async () => {
+        await server.stop();
         client.close();
+        await fakeControllerStorage.close();
+        await fakeServerStorage.close();
     });
 });

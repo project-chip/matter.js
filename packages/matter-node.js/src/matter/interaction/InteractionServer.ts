@@ -40,6 +40,8 @@ import {
 } from "./InteractionMessages";
 import { Message } from "../../codec/MessageCodec";
 import { Crypto } from "../../crypto/Crypto";
+import { Persistence } from "../../persistence/Persistence";
+import { PersistenceManager } from "../../persistence/PersistenceManager";
 
 export const INTERACTION_PROTOCOL_ID = 0x0001;
 
@@ -50,6 +52,8 @@ export class ClusterServer<F extends BitSchema, A extends Attributes, C extends 
     readonly name: string;
     readonly attributes = <AttributeServers<A>>{};
     readonly commands = new Array<CommandServer<any, any>>();
+    private persistence: Persistence | null = null;
+    private attributeStorageListeners = new Map<number, (value: any, version: number) => void>();
 
     constructor(clusterDef: Cluster<F, A, C, E>, features: TypeFromBitSchema<F>, attributesInitialValues: AttributeInitialValues<A>, handlers: ClusterServerHandlers<Cluster<F, A, C, E>>) {
         const { id, name, attributes: attributeDefs, commands: commandDefs } = clusterDef;
@@ -63,13 +67,18 @@ export class ClusterServer<F extends BitSchema, A extends Attributes, C extends 
             featureMap: features,
         };
         for (const name in attributesInitialValues) {
-            const { id, schema, writable } = attributeDefs[name];
+            const { id, schema, writable, persistent } = attributeDefs[name];
             const validator = typeof schema.validate === 'function' ? schema.validate.bind(schema) : undefined;
             const getter = (handlers as any)[`get${capitalize(name)}`];
             if (getter === undefined) {
                 (this.attributes as any)[name] = new AttributeServer(id, name, schema, validator ?? (() => { /* no validation */ }), writable, (attributesInitialValues as any)[name]);
             } else {
                 (this.attributes as any)[name] = new AttributeGetterServer(id, name, schema, validator ?? (() => { /* no validation */ }), writable, (attributesInitialValues as any)[name], getter);
+            }
+            if (persistent) {
+                const listener = (value: any, version: number) => this.attributeStorageListener(name, version, value);
+                this.attributeStorageListeners.set(id, listener);
+                (this.attributes as any)[name].addMatterListener(listener);
             }
         }
 
@@ -80,6 +89,35 @@ export class ClusterServer<F extends BitSchema, A extends Attributes, C extends 
             const { requestId, requestSchema, responseId, responseSchema } = commandDefs[name];
             this.commands.push(new CommandServer(requestId, responseId, name, requestSchema, responseSchema, (request, session, message) => handler({ request, attributes: this.attributes, session, message })));
         }
+    }
+
+    setPersistence(persistence: Persistence) {
+        this.persistence = persistence;
+
+        const storedData = this.persistence.getAll();
+        storedData.forEach((data) => {
+            const attribute = (this.attributes as any)[data.key];
+            if (!attribute) {
+                logger.warn(`Attribute ${data.key} not found in cluster ${this.name} (${this.id})`);
+                return;
+            }
+            if (!this.attributeStorageListeners.has(attribute.id)) {
+                logger.info(`Attribute ${data.key} in cluster ${this.name} (${this.id}) is not non-volatile, ignore`);
+                return;
+            }
+            logger.debug(`Restoring attribute ${data.key} in cluster ${this.name} (${this.id})`);
+            try {
+                attribute.init(data.value.value, data.value.version);
+            } catch (error) {
+                logger.warn(`Failed to restore attribute ${data.key} in cluster ${this.name} (${this.id})`, error);
+            }
+        });
+    }
+
+    attributeStorageListener(attributeName: string, version: number, value: any) {
+        if (!this.persistence) return;
+        console.log(`Storing attribute ${attributeName} in cluster ${this.name} (${this.id})`);
+        this.persistence.set(attributeName, { version, value });
     }
 }
 
@@ -120,6 +158,10 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     private readonly commandPaths = new Array<CommandPath>();
     private nextSubscriptionId = Crypto.getRandomUInt32();
 
+    constructor(
+        private readonly persistenceManager: PersistenceManager
+    ) { }
+
     getId() {
         return INTERACTION_PROTOCOL_ID;
     }
@@ -135,9 +177,14 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         clusters.push(descriptorCluster);
         descriptorCluster.attributes.serverList.setLocal(clusters.map(({ id }) => new ClusterId(id)));
 
+        const clusterEndpointNumber = new EndpointNumber(endpointId);
+
         const clusterMap = new Map<number, ClusterServer<any, any, any, any>>();
         clusters.forEach(cluster => {
             const { id: clusterId, attributes, commands } = cluster;
+
+            cluster.setPersistence(this.persistenceManager.createPersistence(`Cluster-${clusterEndpointNumber.number}-${clusterId}`));
+
             clusterMap.set(clusterId, cluster);
             // Add attributes
             for (const name in attributes) {
@@ -159,7 +206,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         if (endpointId !== 0) {
             const rootPartsListAttribute: AttributeServer<EndpointNumber[]> | undefined = this.attributes.get(attributePathToId({ endpointId: 0, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id }));
             if (rootPartsListAttribute === undefined) throw new Error("The root endpoint should be added first!");
-            rootPartsListAttribute.setLocal([...rootPartsListAttribute.getLocal(), new EndpointNumber(endpointId)]);
+            rootPartsListAttribute.setLocal([...rootPartsListAttribute.getLocal(), clusterEndpointNumber]);
         }
 
         this.endpoints.set(endpointId, { ...device, clusters: clusterMap });

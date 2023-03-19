@@ -16,11 +16,29 @@ import { SecureSession } from "../session/SecureSession";
 const COMPRESSED_FABRIC_ID_INFO = ByteArray.fromString("CompressedFabric");
 const GROUP_SECURITY_INFO = ByteArray.fromString("GroupKey v1.0");
 
+export interface FabricJsonObject {
+    fabricIndex: number;
+    fabricId: bigint;
+    nodeId: bigint;
+    rootNodeId: bigint;
+    operationalId: ByteArray;
+    rootPublicKey: ByteArray;
+    keyPair: KeyPair;
+    rootVendorId: number;
+    rootCert: ByteArray;
+    identityProtectionKey: ByteArray;
+    operationalIdentityProtectionKey: ByteArray;
+    intermediateCACert: ByteArray | undefined;
+    operationalCert: ByteArray;
+    label: string;
+}
+
 export class Fabric {
 
     private readonly sessions = new Array<SecureSession<any>>();
 
     private removeCallback: (() => void) | undefined;
+    private persistCallback: (() => void) | undefined;
 
     constructor(
         readonly fabricIndex: FabricIndex,
@@ -38,6 +56,44 @@ export class Fabric {
         readonly operationalCert: ByteArray,
         public label: string,
     ) { }
+
+    toJson(): FabricJsonObject {
+        return {
+            fabricIndex: this.fabricIndex.index,
+            fabricId: this.fabricId.id,
+            nodeId: this.nodeId.id,
+            rootNodeId: this.rootNodeId.id,
+            operationalId: this.operationalId,
+            rootPublicKey: this.rootPublicKey,
+            keyPair: this.keyPair,
+            rootVendorId: this.rootVendorId.id,
+            rootCert: this.rootCert,
+            identityProtectionKey: this.identityProtectionKey,
+            operationalIdentityProtectionKey: this.operationalIdentityProtectionKey,
+            intermediateCACert: this.intermediateCACert,
+            operationalCert: this.operationalCert,
+            label: this.label,
+        };
+    }
+
+    static fromJson(json: FabricJsonObject): Fabric {
+        return new Fabric(
+            new FabricIndex(json.fabricIndex),
+            new FabricId(json.fabricId),
+            new NodeId(json.nodeId),
+            new NodeId(json.rootNodeId),
+            json.operationalId,
+            json.rootPublicKey,
+            json.keyPair,
+            new VendorId(json.rootVendorId),
+            json.rootCert,
+            json.identityProtectionKey,
+            json.operationalIdentityProtectionKey,
+            json.intermediateCACert,
+            json.operationalCert,
+            json.label,
+        );
+    }
 
     getPublicKey() {
         return this.keyPair.publicKey;
@@ -76,9 +132,17 @@ export class Fabric {
         this.removeCallback = callback;
     }
 
+    setPersistCallback(callback: () => void) {
+        this.persistCallback = callback;
+    }
+
     remove() {
         this.sessions.forEach(session => session.destroy());
         this.removeCallback?.();
+    }
+
+    persist() {
+        this.persistCallback?.();
     }
 }
 

@@ -75,6 +75,9 @@ export class Crypto {
     static getRandomUInt32() {
         return crypto.randomBytes(4).readUInt32LE();
     }
+    static getRandomBigUInt64() {
+        return crypto.randomBytes(8).readBigUInt64LE();
+    }
 
     static getRandomBN(size: number, maxValue: BN) {
         while (true) {

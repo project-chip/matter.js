@@ -20,6 +20,8 @@ import { VendorId } from "../../../src/matter/common/VendorId";
 import { TlvString, TlvUInt8 } from "@project-chip/matter.js";
 import { Time } from "../../../src/time/Time";
 import { TimeFake } from "../../../src/time/TimeFake";
+import { StorageInMemory } from "../../../src/persistence/StorageInMemory";
+import { PersistenceManager } from "../../../src/persistence/PersistenceManager";
 
 Time.get = () => new TimeFake(1262679233478);
 
@@ -119,8 +121,10 @@ const MASS_WRITE_RESPONSE: WriteResponse = {
 describe("InteractionProtocol", () => {
 
     context("handleReadRequest", () => {
-        it("replies with attribute values", () => {
-            const interactionProtocol = new InteractionServer()
+        it("replies with attribute values", async () => {
+            const persistenceManager = new PersistenceManager(new StorageInMemory());
+            await persistenceManager.initialize();
+            const interactionProtocol = new InteractionServer(persistenceManager)
                 .addEndpoint(0, DEVICE.ROOT, [
                     new ClusterServer(BasicInformationCluster, {}, {
                         dataModelRevision: 1,
@@ -149,7 +153,7 @@ describe("InteractionProtocol", () => {
     });
 
     context("handleWriteRequest", () => {
-        it("write values and return errors on invalid values", () => {
+        it("write values and return errors on invalid values", async () => {
 
             const basicCluster = new ClusterServer(BasicInformationCluster, {}, {
                 dataModelRevision: 1,
@@ -170,7 +174,10 @@ describe("InteractionProtocol", () => {
                 },
             }, {});
 
-            const interactionProtocol = new InteractionServer().addEndpoint(0, DEVICE.ROOT, [basicCluster]);
+            const persistenceManager = new PersistenceManager(new StorageInMemory());
+            await persistenceManager.initialize();
+            const interactionProtocol = new InteractionServer(persistenceManager)
+                .addEndpoint(0, DEVICE.ROOT, [basicCluster]);
 
             const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" } }) as MessageExchange<MatterDevice>, WRITE_REQUEST);
 
@@ -178,7 +185,7 @@ describe("InteractionProtocol", () => {
             assert.equal(basicCluster.attributes.nodeLabel.get(), "test");
         });
 
-        it("mass write values and only set the one allowed", () => {
+        it("mass write values and only set the one allowed", async () => {
 
             const basicCluster = new ClusterServer(BasicInformationCluster, {}, {
                 dataModelRevision: 1,
@@ -199,7 +206,10 @@ describe("InteractionProtocol", () => {
                 },
             }, {});
 
-            const interactionProtocol = new InteractionServer().addEndpoint(0, DEVICE.ROOT, [basicCluster]);
+            const persistenceManager = new PersistenceManager(new StorageInMemory());
+            await persistenceManager.initialize();
+            const interactionProtocol = new InteractionServer(persistenceManager)
+                .addEndpoint(0, DEVICE.ROOT, [basicCluster]);
 
             const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" } }) as MessageExchange<MatterDevice>, MASS_WRITE_REQUEST);
 
