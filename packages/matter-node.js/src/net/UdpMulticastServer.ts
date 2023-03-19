@@ -28,8 +28,9 @@ export class UdpMulticastServer {
             broadcastAddressIpv4,
             broadcastAddressIpv6,
             listeningPort,
-            await network.createUdpChannel({ type: "udp4", netInterface, listeningPort }),
-            await network.createUdpChannel({ type: "udp6", netInterface, listeningPort }),
+            await network.createUdpChannel({ type: "udp4", netInterface, listeningPort, broadcastMembershipAddress: broadcastAddressIpv4 }),
+            await network.createUdpChannel({ type: "udp6", netInterface, listeningPort, broadcastMembershipAddress: broadcastAddressIpv6 }),
+            netInterface,
         );
     }
 
@@ -42,6 +43,7 @@ export class UdpMulticastServer {
         private readonly broadcastPort: number,
         private readonly serverIpv4: UdpChannel,
         private readonly serverIpv6: UdpChannel,
+        private readonly netInterface: string | undefined,
     ) { }
 
     onMessage(listener: (message: ByteArray, peerAddress: string, netInterface: string) => void) {
@@ -50,6 +52,7 @@ export class UdpMulticastServer {
     }
 
     async send(message: ByteArray, netInterface?: string) {
+        netInterface = netInterface ?? this.netInterface;
         const netInterfaces = netInterface !== undefined ? [netInterface] : this.network.getNetInterfaces();
         await Promise.all(netInterfaces.map(async netInterface => {
             const { ips } = this.network.getIpMac(netInterface) ?? { ips: [] };
@@ -57,8 +60,8 @@ export class UdpMulticastServer {
                 const iPv4 = isIPv4(ip);
                 try {
                     await (await this.broadcastChannels.get(netInterface, iPv4)).send(iPv4 ? this.broadcastAddressIpv4 : this.broadcastAddressIpv6, this.broadcastPort, message);
-                } catch (err) {
-                    logger.info(`${netInterface}: ${(err as Error).message}`);
+                } catch (error) {
+                    logger.info(`${netInterface}: ${(error as Error).message}`);
                 }
             }));
         }));

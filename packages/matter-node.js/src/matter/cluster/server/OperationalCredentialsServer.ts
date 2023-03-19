@@ -18,7 +18,7 @@ import { ClusterServerHandlers } from "./ClusterServer";
 import { ByteArray } from "@project-chip/matter.js";
 import { FabricIndex } from "../../common/FabricIndex";
 
-interface OperationalCredentialsServerConf {
+export interface OperationalCredentialsServerConf {
     devicePrivateKey: ByteArray,
     deviceCertificate: ByteArray,
     deviceIntermediateCertificate: ByteArray,

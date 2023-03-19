@@ -4,13 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NodeId } from "./NodeId";
 import { VendorId } from "./VendorId";
-import { ByteArray } from "@project-chip/matter.js";
+import { Fabric } from "../fabric/Fabric";
 
 export interface Broadcaster {
     setCommissionMode(mode: number, deviceName: string, deviceType: number, vendorId: VendorId, productId: number, discriminator: number): void;
-    setFabric(operationalId: ByteArray, nodeId: NodeId): void;
+    setFabrics(fabrics: Fabric[]): void;
     announce(): void;
     close(): void;
 }

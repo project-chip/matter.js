@@ -12,6 +12,7 @@ export interface UdpChannelOptions {
     type: "udp4" | "udp6",
     listeningAddress?: string,
     netInterface?: string,
+    broadcastMembershipAddress?: string,
 }
 
 export interface UdpChannel {

@@ -29,7 +29,7 @@ import { GeneralCommissioningCluster, RegulatoryLocationType } from "./matter/cl
 import { OperationalCredentialsCluster } from "./matter/cluster/OperationalCredentialsCluster";
 import { DEVICE } from "./matter/common/DeviceTypes";
 import { MdnsBroadcaster } from "./matter/mdns/MdnsBroadcaster";
-import { commandExecutor } from "./util/CommandLine";
+import { commandExecutor, getIntParameter, getParameter } from "./util/CommandLine";
 import { OnOffCluster } from "./matter/cluster/OnOffCluster";
 import { GeneralCommissioningClusterHandler } from "./matter/cluster/server/GeneralCommissioningServer";
 import { OperationalCredentialsClusterHandler } from "./matter/cluster/server/OperationalCredentialsServer";
@@ -79,15 +79,18 @@ class Device {
             new CaseServer(),
         );
 
+        const netAnnounceInterface = getParameter("announceinterface");
+        const port = getIntParameter("port") ?? 5540;
+
         const paa = new AttestationCertificateManager(vendorId);
         const { keyPair: dacKeyPair, dac } = paa.getDACert(productId)
         const certificationDeclaration = CertificationDeclarationManager.generate(vendorId, productId);
 
         (new MatterDevice(deviceName, deviceType, vendorId, productId, discriminator))
-            .addNetInterface(await UdpInterface.create(5540, "udp4"))
-            .addNetInterface(await UdpInterface.create(5540, "udp6"))
+            .addNetInterface(await UdpInterface.create(port, "udp4"))
+            .addNetInterface(await UdpInterface.create(port, "udp6"))
             .addScanner(await MdnsScanner.create())
-            .addBroadcaster(await MdnsBroadcaster.create())
+            .addBroadcaster(await MdnsBroadcaster.create(port, netAnnounceInterface))
             .addProtocolHandler(secureChannelProtocol)
             .addProtocolHandler(new InteractionServer()
                 .addEndpoint(0x00, DEVICE.ROOT, [

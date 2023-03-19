@@ -34,7 +34,7 @@ class Controller {
         const port = getIntParameter("port") ?? 5540;
         const discriminator = getIntParameter("discriminator") ?? 3840;
         const setupPin = getIntParameter("pin") ?? 20202021;
-        const client = await MatterController.create(await MdnsScanner.create(), await UdpInterface.create(5540, "udp4"), await UdpInterface.create(5540, "udp6"));
+        const client = await MatterController.create(await MdnsScanner.create(), await UdpInterface.create(port, "udp4"), await UdpInterface.create(port, "udp6"));
         try {
             await client.commission(ip, port, discriminator, setupPin);
         } finally {

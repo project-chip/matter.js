@@ -41,7 +41,7 @@ describe("MDNS", () => {
         channel = await UdpChannelFake.create(serverNetwork, { listeningPort: 5353, listeningAddress: "224.0.0.251", type: "udp4" });
 
         Network.get = () => serverNetwork;
-        broadcaster = await MdnsBroadcaster.create(FAKE_INTERFACE_NAME);
+        broadcaster = await MdnsBroadcaster.create(5540, FAKE_INTERFACE_NAME);
 
         Network.get = () => { throw new Error("Network should not be requested post creation") };
     });
@@ -57,7 +57,7 @@ describe("MDNS", () => {
             const { promise, resolver } = await getPromiseResolver<ByteArray>();
             channel.onData((netInterface, peerAddress, peerPort, data) => resolver(data));
 
-            broadcaster.setFabric(OPERATIONAL_ID, NODE_ID);
+            broadcaster.setFabrics([{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
             broadcaster.announce();
 
             const result = DnsCodec.decode(await promise);
@@ -85,7 +85,7 @@ describe("MDNS", () => {
 
     context("integration", () => {
         it("the client returns server record if it has been announced", async () => {
-            broadcaster.setFabric(OPERATIONAL_ID, NODE_ID);
+            broadcaster.setFabrics([{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
             broadcaster.announce();
 
             const result = await scanner.findDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID);
@@ -94,7 +94,7 @@ describe("MDNS", () => {
         });
 
         it("the client asks for the server record if it has not been announced", async () => {
-            broadcaster.setFabric(OPERATIONAL_ID, NODE_ID);
+            broadcaster.setFabrics([{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
 
             const result = await scanner.findDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID);
 

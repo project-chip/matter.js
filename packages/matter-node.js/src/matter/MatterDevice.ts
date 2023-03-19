@@ -20,6 +20,13 @@ import { VendorId } from "./common/VendorId";
 import { NodeId } from "./common/NodeId";
 import { ByteArray } from "@project-chip/matter.js";
 import { FabricIndex } from "./common/FabricIndex";
+import { Time, Timer } from "../time/Time";
+import { Logger } from "../log/Logger";
+
+const logger = Logger.get("MatterDevice");
+
+const DEVICE_ANNOUNCEMENT_DURATION = 15 * 60 * 1000; /** 15 minutes */
+const DEVICE_ANNOUNCEMENT_INTERVAL = 60 * 1000; /** 1 minute */
 
 requireMinNodeVersion(16);
 
@@ -31,6 +38,9 @@ export class MatterDevice {
     private readonly sessionManager = new SessionManager(this);
     private readonly channelManager = new ChannelManager();
     private readonly exchangeManager = new ExchangeManager<MatterDevice>(this.sessionManager, this.channelManager);
+    private announceInterval: Timer | null = null;
+    private announcementStartedTime: number | null = null
+    private commissioningWindowOpened = false;
 
     constructor(
         private readonly deviceName: string,
@@ -46,7 +56,6 @@ export class MatterDevice {
     }
 
     addBroadcaster(broadcaster: Broadcaster) {
-        broadcaster.setCommissionMode(1, this.deviceName, this.deviceType, this.vendorId, this.productId, this.discriminator);
         this.broadcasters.push(broadcaster);
         return this;
     }
@@ -62,8 +71,61 @@ export class MatterDevice {
         return this;
     }
 
-    start() {
-        this.broadcasters.forEach(broadcaster => broadcaster.announce());
+    async start() {
+        /*for (const broadcaster of this.broadcasters) {
+            broadcaster.setCommissionMode(0, this.deviceName, this.deviceType, this.vendorId, this.productId, this.discriminator);
+            broadcaster.announce();
+        }*/
+        this.startAnnouncement();
+    }
+
+    startAnnouncement() {
+        this.announcementStartedTime = Time.nowMs();
+        this.announceInterval = Time.getPeriodicTimer(DEVICE_ANNOUNCEMENT_INTERVAL, () => this.announce()).start();
+        this.announce();
+    }
+
+    announce(announceOnce = false) {
+        if (!announceOnce) {
+            // Stop announcement if duration is reached
+            if (this.announcementStartedTime !== null && Time.nowMs() - this.announcementStartedTime > DEVICE_ANNOUNCEMENT_DURATION) {
+                this.announceInterval?.stop();
+                this.announcementStartedTime = null;
+                logger.debug("Announcement duration reached, stop announcing");
+                return;
+            }
+            if (this.commissioningWindowOpened) {
+                // Re-Announce but do not re-set Fabrics
+                for (const broadcaster of this.broadcasters) {
+                    broadcaster.announce();
+                }
+                return;
+            }
+        }
+        const fabrics = this.fabricManager.getFabrics();
+        if (fabrics.length) {
+            const fabricsToAnnounce: Fabric[] = [];
+            for (const fabric of fabrics) {
+                const session = this.sessionManager.getSessionForNode(fabric, fabric.rootNodeId);
+                if (session) {
+                    // We have a session, no need to re-announce
+                    logger.debug("Skipping announce for fabric", fabric.fabricId.id, "because we have a session", session.getId());
+                    continue;
+                }
+                logger.debug("Announcing fabric", fabric.fabricId.id);
+                fabricsToAnnounce.push(fabric);
+            }
+            for (const broadcaster of this.broadcasters) {
+                broadcaster.setFabrics(fabricsToAnnounce);
+                broadcaster.announce();
+            }
+        } else {
+            // No fabric paired yeet, so announce as "ready for commissioning"
+            for (const broadcaster of this.broadcasters) {
+                broadcaster.setCommissionMode(1, this.deviceName, this.deviceType, this.vendorId, this.productId, this.discriminator);
+                broadcaster.announce();
+            }
+        }
     }
 
     getNextAvailableSessionId() {
@@ -81,7 +143,7 @@ export class MatterDevice {
     addFabric(fabric: Fabric) {
         const fabricIndex = this.fabricManager.addFabric(fabric);
         this.broadcasters.forEach(broadcaster => {
-            broadcaster.setFabric(fabric.operationalId, fabric.nodeId);
+            broadcaster.setFabrics([fabric]);
             broadcaster.announce();
         });
         return fabricIndex;
@@ -116,19 +178,23 @@ export class MatterDevice {
     }
 
     completeCommission() {
+        this.commissioningWindowOpened = false;
         return this.fabricManager.completeCommission();
     }
 
-    openCommissioningModeWindow(mode: number, discriminator: number) {
+    openCommissioningModeWindow(mode: number, discriminator: number, timeout: number) {
+        this.commissioningWindowOpened = true;
         this.broadcasters.forEach(broadcaster => {
             broadcaster.setCommissionMode(mode, this.deviceName, this.deviceType, this.vendorId, this.productId, discriminator);
-            broadcaster.announce();
         });
+        this.startAnnouncement();
+
+        Time.getTimer(timeout * 1000, () => this.commissioningWindowOpened = false).start();
     }
 
-    async findDevice(fabric: Fabric, nodeId: NodeId): Promise<undefined | { session: Session<MatterDevice>, channel: Channel<ByteArray> }> {
+    async findDevice(fabric: Fabric, nodeId: NodeId, timeOutSeconds = 5): Promise<undefined | { session: Session<MatterDevice>, channel: Channel<ByteArray> }> {
         // TODO: return the first not undefined answer or undefined
-        const matterServer = await this.scanners[0].findDevice(fabric, nodeId);
+        const matterServer = await this.scanners[0].findDevice(fabric, nodeId, timeOutSeconds);
         if (matterServer === undefined) return undefined;
         const { ip, port } = matterServer;
         const session = this.sessionManager.getSessionForNode(fabric, nodeId);
@@ -137,8 +203,10 @@ export class MatterDevice {
         return { session, channel: await this.netInterfaces[0].openChannel(ip, port) };
     }
 
-    stop() {
+    async stop() {
         this.exchangeManager.close();
+
+        this.announceInterval?.stop();
         this.broadcasters.forEach(broadcaster => broadcaster.close());
     }
 }
