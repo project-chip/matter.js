@@ -40,6 +40,10 @@ For instance, on a Raspberry Pi, this will turn on / off the red LED:
 matter -on "echo 255 > /sys/class/leds/led1/brightness" -off "echo 0 > /sys/class/leds/led1/brightness"
 ```
 
+The following parameters are available:
+* -announceinterface: limit announcements to the provided network interface (default: all interfaces available)
+* -port: the port to listen on (default: 5540)
+
 **Experimental**
 
 ```bash
