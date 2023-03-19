@@ -95,6 +95,11 @@ export class Fabric {
         );
     }
 
+    setLabel(label: string) {
+        this.label = label;
+        this.persist();
+    }
+
     getPublicKey() {
         return this.keyPair.publicKey;
     }

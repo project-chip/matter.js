@@ -99,9 +99,7 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         const fabric = secureSession.getFabric();
         if (fabric === undefined) throw new Error("updateOperationalCert on a session linked to a fabric.");
 
-        fabric.label = label;
-
-        fabric.persist();
+        fabric.setLabel(label);
 
         return { status: OperationalCertStatus.Success };
     },
