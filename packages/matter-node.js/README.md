@@ -60,7 +60,6 @@ This will commission a Matter device (for debugging purpose only for now).
 
 The following parameters are available:
 * -ip: the IP address of the device to commission
-* -port: the port of the device to connect to commission (default: 5540)
 * -discriminator: the discriminator to use for pairing (default: 3840)
 * -pin: the pin to use for pairing (default: 20202021)
 * -file: the file to use for storing the pairing information (default: controller.json). Delete the file or provide an alternative name to reset the controller
