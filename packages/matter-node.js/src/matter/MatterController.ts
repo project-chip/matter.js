@@ -150,6 +150,10 @@ export class MatterController {
         // Complete the commission
         generalCommissioningClusterClient = ClusterClient(interactionClient, 0, GeneralCommissioningCluster);
         this.ensureSuccess(await generalCommissioningClusterClient.commissioningComplete({}));
+
+        this.controllerPersistence.set("fabric", this.fabric.toJson());
+        this.controllerPersistence.set("fabricCommissioned", true);
+
         return peerNodeId;
     }
 
