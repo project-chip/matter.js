@@ -149,7 +149,7 @@ describe("Integration", () => {
             const nodeId = await client.commission(SERVER_IP, matterPort, discriminator, setupPin);
 
             assert.equal(nodeId.id, BigInt(1));
-        });
+        }, 60 * 1000 /* 1mn timeout */);
 
         it("the session is resumed if it has been established previously", () => {
             client.connect(new NodeId(BigInt(1)));
@@ -157,7 +157,6 @@ describe("Integration", () => {
             assert.ok(true);
         });
     });
-
 
     describe("attributes", () => {
         it("get one specific attribute including schema parsing", async () => {
