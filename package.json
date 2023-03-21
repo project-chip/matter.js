@@ -6,8 +6,9 @@
         "packages/matter-node.js"
     ],
     "scripts": {
-        "prepare": "npm run build",
+        "prepare": "npm run build-clean",
         "build": "npm run build --workspaces",
+        "build-clean": "npm run build-clean --workspaces",
         "test": "npm run test --workspaces",
         "lint": "eslint **/*.ts",
         "lint-fix": "eslint --fix **/*.ts",

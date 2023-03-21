@@ -10,8 +10,10 @@
         "noUnusedLocals": true,
         "strictNullChecks": true
     },
-    "include": ["src/**/*.ts"],
+    "include": ["src/**/*.ts", "dts/*.d.ts", "test/**/*.ts"],
+    "exclude": [],
     "references": [
         { "path": "../matter.js" }
-    ]
+    ],
+
 }
