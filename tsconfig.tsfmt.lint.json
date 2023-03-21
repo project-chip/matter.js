@@ -1,4 +1,4 @@
-/* Dev configuration */
+/* Configuration for tsfmt and eslint */
 {
     "compilerOptions": {
       // Local dev compilation checks
@@ -8,7 +8,6 @@
       "noUnusedLocals": true,
       "strictNullChecks": true
     },
-    /* During dev, src are included, so they are also modified during refactorings. */
-    "include": ["packages/*/src/**/*.ts", "packages/*/test/**/*.ts"]
+    "include": ["packages/**/*.ts"]
 }
   

@@ -31,6 +31,7 @@ export class Fabric {
         readonly rootPublicKey: ByteArray,
         private readonly keyPair: KeyPair,
         readonly rootVendorId: VendorId,
+        // @ts-expect-error: unused for now
         private readonly rootCert: ByteArray,
         readonly identityProtectionKey: ByteArray,
         readonly operationalIdentityProtectionKey: ByteArray,

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import BN from "bn.js";
+import * as BN from "bn.js";
 import { ec } from "elliptic";
 import { Crypto } from "./Crypto";
 import { ByteArray, DataWriter, Endian } from "@project-chip/matter.js";

@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as assert from "assert";
 import { ByteArray } from "@project-chip/matter.js";
-import assert from "assert";
 import { BitByteArray, ContextTagged, DerCodec, EcdsaWithSHA256_X962, OrganisationName_X520, PublicKeyEcPrime256v1_X962 } from "../../src/codec/DerCodec";
 
 const DECODED = {
@@ -22,7 +22,7 @@ const DECODED = {
 const ENCODED = ByteArray.fromHex("3081cb3071020100300e310c300a060355040a0c03435352305a301306072a8648ce3d020106082a8648ce3d03010703430000044bd687abd29b59d8b12e8c6614bd1664adb2d402455b6ca3ef4e581e3be344b83212e614f27ea4eec8f31c75747438739b1d451a7eab3a30542a0a7d1882a459a000300a06082a8648ce3d040302034a0000304602210080861ad536eff01cad42816a8172f71be3e4fd7230cf73a45e34945fe89d5d7202210087fc1f47adb6d150580706865e2e21e2963c9c15006b64dab5658bfb980a2ad3");
 
 describe("DerCodec", () => {
-    context("encode", () => {
+    describe("encode", () => {
         it("encodes a message", () => {
             const result = DerCodec.encode(DECODED);
 

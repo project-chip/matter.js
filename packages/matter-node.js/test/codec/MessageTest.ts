@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import assert from "assert";
+import * as assert from "assert";
 import { MessageCodec } from "../../src/codec/MessageCodec";
 import { NodeId } from "../../src/matter/common/NodeId";
 import { ByteArray } from "@project-chip/matter.js";
@@ -54,7 +54,7 @@ const DECODED_2 = {
 };
 
 describe("MessageCodec", () => {
-    context("decode", () => {
+    describe("decode", () => {
         it("decodes a message", () => {
             const result = MessageCodec.decodePayload(MessageCodec.decodePacket(ENCODED));
 
@@ -68,7 +68,7 @@ describe("MessageCodec", () => {
         });
     });
 
-    context("encode", () => {
+    describe("encode", () => {
         it("encodes a message", () => {
             const result = MessageCodec.encodePacket(MessageCodec.encodePayload(DECODED));
 

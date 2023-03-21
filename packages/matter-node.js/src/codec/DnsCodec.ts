@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import net from "net";
+import * as net from "net";
 import { ByteArray, DataReader, DataWriter, Endian } from "@project-chip/matter.js";
 
 export const PtrRecord = (name: string, ptr: string): Record<string> => ({ name, value: ptr, ttl: 120, recordType: RecordType.PTR, recordClass: RecordClass.IN });
