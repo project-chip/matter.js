@@ -4,6 +4,7 @@
   "compilerOptions": {
     "esModuleInterop": true, // Required to remove warnings on jest test
     "composite": true,  // For linking this package from matter-node.js
+    "moduleResolution": "node", // Required to correctly resolve Babel imports
 
     // Local dev compilation checks
     "forceConsistentCasingInFileNames": true,
