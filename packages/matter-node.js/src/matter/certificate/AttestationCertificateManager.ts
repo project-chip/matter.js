@@ -58,7 +58,7 @@ export class AttestationCertificateManager {
         };
     }
 
-    // @ts-expect-error: Method unused for now because we use the official Matter Test PAA, but is functional
+    // Method unused for now because we use the official Matter Test PAA, but is functional
     private generatePAACert(vendorId?: VendorId) {
         const now = Time.get().now();
         const unsignedCertificate = {

@@ -3,7 +3,6 @@
  * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-// @ts-expect-error: Compiler issue since used below
 import { MatterDeviceLibrarySpecificationV1_0 } from "@project-chip/matter.js";
 
 export const DEVICE = {
