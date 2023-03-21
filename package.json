@@ -11,8 +11,8 @@
         "test": "npm run test --workspaces",
         "lint": "eslint **/*.ts",
         "lint-fix": "eslint --fix **/*.ts",
-        "format": "tsfmt -r",
-        "format-verify": "tsfmt --verify"
+        "format": "tsfmt -r --no-tsconfig",
+        "format-verify": "tsfmt --useTsconfig tsconfig.tsfmt.json --verify"
     },
     "devDependencies": {
         "@typescript-eslint/eslint-plugin": "^5.54.0",

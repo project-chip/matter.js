@@ -1,0 +1,14 @@
+/* Dev configuration */
+{
+    "compilerOptions": {
+      // Local dev compilation checks
+      "forceConsistentCasingInFileNames": true,
+      "noImplicitOverride": true,
+      "noUnusedParameters": true,
+      "noUnusedLocals": true,
+      "strictNullChecks": true
+    },
+    /* During dev, src are included, so they are also modified during refactorings. */
+    "include": ["packages/*/src/**/*.ts", "packages/*/test/**/*.ts"]
+}
+  
