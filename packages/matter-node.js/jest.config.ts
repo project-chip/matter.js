@@ -4,8 +4,8 @@ const config: Config = {
     testMatch: ["<rootDir>/test/**/*.ts"],
     preset: "ts-jest",
     transform: {
-        ^.+\\.ts?$: [
-            'ts-jest', 
+        "^.+\\.ts?$": [
+            'ts-jest',
             {
                 tsConfig: 'tsconfig.dist.json'
             }
@@ -22,5 +22,5 @@ const config: Config = {
 
 export default config;
 import * as console from "console"
-global.console = console
 
+global.console = console
