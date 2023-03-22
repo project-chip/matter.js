@@ -7,7 +7,7 @@ const config: Config = {
         "^.+\\.ts?$": [
             'ts-jest',
             {
-                tsConfig: 'tsconfig.dist.json'
+                tsconfig: 'tsconfig.dist.json'
             }
         ],
     },
