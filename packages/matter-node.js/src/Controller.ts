@@ -22,10 +22,8 @@ import { UdpInterface } from "./net/UdpInterface";
 import { getIntParameter, getParameter } from "./util/CommandLine";
 import { MdnsScanner } from "./matter/mdns/MdnsScanner";
 import { Logger } from "./log/Logger";
-import { NodeId } from "./matter/common/NodeId";
 import { StorageNode } from "./persistence/StorageNode";
 import { PersistenceManager } from "./persistence/PersistenceManager";
-import { Crypto } from "./crypto/Crypto";
 
 const logger = Logger.get("Controller");
 
@@ -45,9 +43,11 @@ class Controller {
         const setupPin = getIntParameter("pin") ?? 20202021;
         const client = await MatterController.create(await MdnsScanner.create(), await UdpInterface.create(5540, "udp4"), await UdpInterface.create(5540, "udp6"), persistenceManager);
         try {
-            let nodeId = new NodeId(Crypto.getRandomBigUInt64())
-            if (!client.isCommissioned()) {
-                nodeId = await client.commission(ip, port, discriminator, setupPin);
+            if (client.isCommissioned()) {
+                console.log(`Already commissioned. Resume not yet supported.`);
+            } else {
+                const nodeId = await client.commission(ip, port, discriminator, setupPin);
+                console.log(`Commissioning complete. Node ID: ${nodeId}`);
             }
         } finally {
             client.close();

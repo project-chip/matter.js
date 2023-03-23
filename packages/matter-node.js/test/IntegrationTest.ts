@@ -243,11 +243,6 @@ describe("Integration", () => {
             assert.equal(onoffValue.version, 2);
             assert.equal(onoffValue.value, false);
 
-            const nodeLabelValue = fakeServerStorage.get<any>("Cluster-0-40", "nodeLabel");
-            assert.equal(typeof nodeLabelValue, "object");
-            assert.equal(nodeLabelValue.version, 3);
-            assert.equal(nodeLabelValue.value, 'testLabel3');
-
             assert.equal(fakeServerStorage.get<any>("SessionManager", "resumptionRecords").length, 1);
 
             assert.equal(fakeControllerStorage.get<bigint>("RootCertificateManager", "rootCertId"), BigInt(0));

@@ -101,7 +101,7 @@ export class ClusterServer<F extends BitSchema, A extends Attributes, C extends 
 
     attributeStorageListener(attributeName: string, version: number, value: any) {
         if (!this.persistence) return;
-        console.log(`Storing attribute ${attributeName} in cluster ${this.name} (${this.id})`);
+        logger.debug(`Storing attribute ${attributeName} in cluster ${this.name} (${this.id})`);
         this.persistence.set(attributeName, { version, value });
     }
 }
