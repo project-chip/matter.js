@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Attribute, Attributes, Command, Commands, AttributeJsType, WritableAttribute, OptionalAttribute, OptionalWritableAttribute, RequestType, ResponseType } from "../Cluster";
+import { Attribute, Attributes, Command, Commands, AttributeJsType, WritableAttribute, OptionalAttribute, OptionalWritableAttribute, RequestType, ResponseType } from "@project-chip/matter.js";
 
 type SignatureFromCommandSpec<C extends Command<any, any>> = (request: RequestType<C>) => Promise<ResponseType<C>>;
 type GetterTypeFromSpec<A extends Attribute<any>> = A extends OptionalAttribute<infer T> ? (T | undefined) : AttributeJsType<A>;

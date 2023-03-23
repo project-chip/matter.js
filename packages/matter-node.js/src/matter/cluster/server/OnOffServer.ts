@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { OnOffCluster } from "../OnOffCluster";
+import { OnOffCluster } from "@project-chip/matter.js";
 import { ClusterServerHandlers } from "./ClusterServer";
 
 /*

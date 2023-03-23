@@ -7,17 +7,7 @@
 import { MessageExchange } from "../common/MessageExchange";
 import { MatterController } from "../MatterController";
 import { capitalize } from "../../util/String";
-import {
-    Attribute,
-    AttributeJsType,
-    Attributes,
-    Cluster,
-    Command,
-    Commands,
-    RequestType,
-    ResponseType,
-    TlvNoResponse
-} from "../cluster/Cluster";
+import { Attribute, AttributeJsType, Attributes, Cluster, Command, Commands, TlvNoResponse, RequestType, ResponseType, TlvSchema, TlvStream } from "@project-chip/matter.js";
 import { DataReport, IncomingInteractionClientMessenger, InteractionClientMessenger } from "./InteractionMessenger";
 import { ResultCode } from "../cluster/server/CommandServer";
 import { ClusterClient } from "../cluster/client/ClusterClient";
@@ -25,7 +15,6 @@ import { ExchangeProvider } from "../common/ExchangeManager";
 import { INTERACTION_PROTOCOL_ID } from "./InteractionServer";
 import { ProtocolHandler } from "../common/ProtocolHandler";
 import { StatusCode } from "./InteractionMessages";
-import { TlvSchema, TlvStream } from "@project-chip/matter.js";
 
 interface GetRawValueResponse { // TODO Remove when restructuring Responses
     endpointId: number;
@@ -182,7 +171,7 @@ export class InteractionClient {
         });
     }
 
-    async invoke<C extends Command<any, any>>(endpointId: number, clusterId: number, request: RequestType<C>, id: number, requestSchema: TlvSchema<RequestType<C>>, responseId: number, responseSchema: TlvSchema<ResponseType<C>>, optional: boolean): Promise<ResponseType<C>> {
+    async invoke<C extends Command<any, any>>(endpointId: number, clusterId: number, request: RequestType<C>, id: number, requestSchema: TlvSchema<RequestType<C>>, _responseId: number, responseSchema: TlvSchema<ResponseType<C>>, optional: boolean): Promise<ResponseType<C>> {
         return this.withMessenger<ResponseType<C>>(async messenger => {
             const { responses } = await messenger.sendInvokeCommand({
                 invokes: [

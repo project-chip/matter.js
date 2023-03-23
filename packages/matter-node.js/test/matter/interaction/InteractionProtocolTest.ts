@@ -4,20 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import assert from "assert";
+import * as assert from "assert";
 import { ClusterServer, InteractionServer } from "../../../src/matter/interaction/InteractionServer";
-import {
-    ReadRequest,
-    DataReport,
-    WriteRequest,
-    WriteResponse
-} from "../../../src/matter/interaction/InteractionMessenger";
+import { ReadRequest, DataReport, WriteRequest, WriteResponse } from "../../../src/matter/interaction/InteractionMessenger";
 import { MessageExchange } from "../../../src/matter/common/MessageExchange";
 import { DEVICE } from "../../../src/matter/common/DeviceTypes";
 import { MatterDevice } from "../../../src/matter/MatterDevice";
-import { BasicInformationCluster } from "../../../src/matter/cluster/BasicInformationCluster";
-import { VendorId } from "../../../src/matter/common/VendorId";
-import { TlvString, TlvUInt8 } from "@project-chip/matter.js";
+import { BasicInformationCluster, VendorId, TlvString, TlvUInt8 } from "@project-chip/matter.js";
 import { Time } from "../../../src/time/Time";
 import { TimeFake } from "../../../src/time/TimeFake";
 
@@ -118,7 +111,7 @@ const MASS_WRITE_RESPONSE: WriteResponse = {
 
 describe("InteractionProtocol", () => {
 
-    context("handleReadRequest", () => {
+    describe("handleReadRequest", () => {
         it("replies with attribute values", () => {
             const interactionProtocol = new InteractionServer()
                 .addEndpoint(0, DEVICE.ROOT, [
@@ -148,7 +141,7 @@ describe("InteractionProtocol", () => {
         });
     });
 
-    context("handleWriteRequest", () => {
+    describe("handleWriteRequest", () => {
         it("write values and return errors on invalid values", () => {
 
             const basicCluster = new ClusterServer(BasicInformationCluster, {}, {

@@ -6,7 +6,8 @@
 
 import { Cluster, Attribute, } from "./Cluster";
 import { TlvEndpointNumber } from "../common/EndpointNumber";
-import { MatterCoreSpecificationV1_0, TlvArray } from "@project-chip/matter.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvArray } from "../tlv/TlvArray";
 
 /**
  * The configuration and capabilities of a Device’s power system.
@@ -21,7 +22,7 @@ import { MatterCoreSpecificationV1_0, TlvArray } from "@project-chip/matter.js";
  */
 export const PowerSourceConfigurationCluster = Cluster({
     id: 0x2e,
-    name: "Power Source Configuration",
+    name: "PowerSourceConfiguration",
     revision: 1,
 
     /** @see {@link MatterCoreSpecificationV1_0} § 11.6.5.1 */

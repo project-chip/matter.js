@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import assert from "assert";
+import * as assert from "assert";
 import { Verhoeff } from "../../src/math/Verhoeff";
 
 
 describe("Verhoeff", () => {
-    context("computeChecksum", () => {
+    describe("computeChecksum", () => {
         it("encodes a string", () => {
             const result = new Verhoeff().computeChecksum("236");
 

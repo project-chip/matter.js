@@ -3,28 +3,27 @@
  * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-
-import { ByteArray } from "@project-chip/matter.js";
-import assert from "assert";
-import { Base38 } from "../../src/codec/Base38";
+import { ByteArray } from "../../src/util/ByteArray";
+import { Base38 } from "../../src/schema/Base38Schema";
 
 const ENCODED = "-MOA57ZU02IT2L2BJ00";
 const DECODED = ByteArray.fromHex("88ffa7915040004751dd02");
 
-describe("Base38", () => {
-    context("encode", () => {
+describe("Base38Schema", () => {
+
+    describe("encode", () => {
         it("encodes a string", () => {
             const result = Base38.encode(DECODED);
 
-            assert.equal(result, ENCODED);
+            expect(result).toBe(ENCODED);
         });
     });
 
-    context("decode", () => {
+    describe("decode", () => {
         it("encodes a string", () => {
             const result = Base38.decode(ENCODED);
 
-            assert.equal(result.toHex(), DECODED.toHex());
+            expect(result.toHex()).toBe(DECODED.toHex());
         });
     });
 });

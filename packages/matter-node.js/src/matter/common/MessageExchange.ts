@@ -42,12 +42,6 @@ const MRP_BACKOFF_MARGIN = 1.1;
 /** The number of retransmissions before transitioning from linear to exponential backoff. */
 const MRP_BACKOFF_THRESHOLD = 1;
 
-/**
- * Amount of time to wait for an opportunity to piggyback an acknowledgement on an outbound message before
- * falling back to sending a standalone acknowledgement.
- */
-const _MRP_STANDALONE_ACK_TIMEOUT = 200;
-
 /** @see {@link MatterCoreSpecificationV1_0}, section 4.11.2.1 */
 const MAXIMUM_TRANSMISSION_TIME_MS = 9495; // 413 + 825 + 1485 + 2541 + 4231 ms as per specs
 

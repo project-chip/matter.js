@@ -4,39 +4,34 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import assert from "assert";
+import * as assert from "assert";
 
 import { Time } from "../src/time/Time";
 import { TimeFake } from "../src/time/TimeFake";
 import { UdpInterface } from "../src/net/UdpInterface";
 import { MatterController } from "../src/matter/MatterController";
+import { MatterDevice } from "../src/matter/MatterDevice";
+import {
+    OnOffCluster, BasicInformationCluster, GeneralCommissioningCluster, RegulatoryLocationType, OperationalCertStatus,
+    OperationalCredentialsCluster, VendorId, FabricIndex,
+} from "@project-chip/matter.js";
 import { Crypto } from "../src/crypto/Crypto";
 import { DEVICE } from "../src/matter/common/DeviceTypes";
 import { ClusterServer, InteractionServer } from "../src/matter/interaction/InteractionServer";
 import { MdnsBroadcaster } from "../src/matter/mdns/MdnsBroadcaster";
-import { MatterDevice } from "../src/matter/MatterDevice";
 import { CaseServer } from "../src/matter/session/secure/CaseServer";
 import { SecureChannelProtocol as SecureChannelProtocol } from "../src/matter/session/secure/SecureChannelProtocol";
 import { PaseServer } from "../src/matter/session/secure/PaseServer";
 import { NetworkFake } from "../src/net/fake/NetworkFake";
 import { Network } from "../src/net/Network";
 import { MdnsScanner } from "../src/matter/mdns/MdnsScanner";
-import { OnOffCluster } from "../src/matter/cluster/OnOffCluster";
-import { BasicInformationCluster } from "../src/matter/cluster/BasicInformationCluster";
-import { GeneralCommissioningCluster, RegulatoryLocationType } from "../src/matter/cluster/GeneralCommissioningCluster";
-import {
-    OperationalCertStatus,
-    OperationalCredentialsCluster
-} from "../src/matter/cluster/OperationalCredentialsCluster";
 import { GeneralCommissioningClusterHandler } from "../src/matter/cluster/server/GeneralCommissioningServer";
 import { OperationalCredentialsClusterHandler } from "../src/matter/cluster/server/OperationalCredentialsServer";
 import { ClusterClient } from "../src/matter/interaction/InteractionClient";
 import { Level, Logger } from "../src/log/Logger";
 import { getPromiseResolver } from "../src/util/Promises";
-import { VendorId } from "../src/matter/common/VendorId";
 import { NodeId } from "../src/matter/common/NodeId";
 import { OnOffClusterHandler } from "../src/matter/cluster/server/OnOffServer";
-import { FabricIndex } from "../src/matter/common/FabricIndex";
 import { AttestationCertificateManager } from "../src/matter/certificate/AttestationCertificateManager";
 import { CertificationDeclarationManager } from "../src/matter/certificate/CertificationDeclarationManager";
 
@@ -66,7 +61,7 @@ describe("Integration", () => {
     let onOffServer: ClusterServer<any, any, any, any>;
     let client: MatterController;
 
-    before(async () => {
+    beforeAll(async () => {
         Logger.defaultLogLevel = Level.DEBUG;
         Time.get = () => fakeTime;
         Network.get = () => clientNetwork;
@@ -117,7 +112,7 @@ describe("Integration", () => {
                     }, {}),
                     new ClusterServer(GeneralCommissioningCluster, {}, {
                         breadcrumb: BigInt(0),
-                        commissioningInfo: {
+                        basicCommissioningInfo: {
                             failSafeExpiryLengthSeconds: 60 /* 1min */,
                             maxCumulativeFailsafeSeconds: 60 * 60 /* 1h */,
                         },
@@ -147,12 +142,12 @@ describe("Integration", () => {
         Network.get = () => { throw new Error("Network should not be requested post creation") };
     });
 
-    context("commission", () => {
+    describe("commission", () => {
         it("the client commissions a new device", async () => {
             const nodeId = await client.commission(SERVER_IP, matterPort, discriminator, setupPin);
 
             assert.equal(nodeId.id, BigInt(1));
-        });
+        }, 60 * 1000 /* 1mn timeout */);
 
         it("the session is resumed if it has been established previously", async () => {
             await client.connect(new NodeId(BigInt(1)));
@@ -161,8 +156,7 @@ describe("Integration", () => {
         });
     });
 
-
-    context("attributes", () => {
+    describe("attributes", () => {
         it("get one specific attribute including schema parsing", async () => {
             const descriptorCluster = ClusterClient(await client.connect(new NodeId(BigInt(1))), 0, BasicInformationCluster);
 
@@ -176,7 +170,7 @@ describe("Integration", () => {
         });
     });
 
-    context("subscription", () => {
+    describe("subscription", () => {
         it("subscription sends updates when the value changes", async () => {
             const interactionClient = await client.connect(new NodeId(BigInt(1)));
             const onOffClient = ClusterClient(interactionClient, 1, OnOffCluster);
@@ -218,7 +212,7 @@ describe("Integration", () => {
         });
     });
 
-    context("remove Fabric", () => {
+    describe("remove Fabric", () => {
         it("try to remove invalid fabric", async () => {
             const operationalCredentialsCluster = ClusterClient(await client.connect(new NodeId(BigInt(1))), 0, OperationalCredentialsCluster);
 
@@ -241,7 +235,7 @@ describe("Integration", () => {
         });
     });
 
-    after(() => {
+    afterAll(() => {
         server.stop();
         client.close();
     });

@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import assert from "assert";
+import * as assert from "assert";
 import { Crypto } from "../../src/crypto/Crypto";
-import crypto from "crypto";
+import * as crypto from "crypto";
 import { ByteArray } from "@project-chip/matter.js";
 
 const KEY = ByteArray.fromHex("abf227feffea8c38e688ddcbffc459f1");
@@ -29,7 +29,7 @@ const SEC1_KEY = ByteArray.fromHex("30770201010420aef3484116e9481ec57be0472df41b
 
 describe("Crypto", () => {
 
-    context("encrypt", () => {
+    describe("encrypt", () => {
         it("encrypts data", () => {
             const result = Crypto.encrypt(KEY_2, PLAIN_DATA_2, NONCE_2, ADDITIONAL_AUTH_DATA_2);
 
@@ -37,7 +37,7 @@ describe("Crypto", () => {
         });
     });
 
-    context("decrypt", () => {
+    describe("decrypt", () => {
         it("decrypts data", () => {
             const result = Crypto.decrypt(KEY, ENCRYPTED_DATA, NONCE, ADDITIONAL_AUTH_DATA);
 
@@ -45,7 +45,7 @@ describe("Crypto", () => {
         });
     });
 
-    context("signPkcs8 / verifySpki", () => {
+    describe("signPkcs8 / verifySpki", () => {
         it("signs data with known private key", () => {
             const result = Crypto.signPkcs8(PRIVATE_KEY, ENCRYPTED_DATA);
 
@@ -61,7 +61,7 @@ describe("Crypto", () => {
         });
     });
 
-    context("signSec1 / verifySpki", () => {
+    describe("signSec1 / verifySpki", () => {
         it("signs data with known sec1 key", () => {
             const result = Crypto.signSec1(SEC1_KEY, ENCRYPTED_DATA, "der");
 
@@ -76,7 +76,7 @@ describe("Crypto", () => {
         });
     });
 
-    context("createKeyPair", () => {
+    describe("createKeyPair", () => {
         it("generates a working key pair", () => {
             const { privateKey, publicKey } = Crypto.createKeyPair();
 

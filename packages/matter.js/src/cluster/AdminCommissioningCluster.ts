@@ -4,20 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-    BitFlag,
-    TlvByteString,
-    TlvEnum,
-    TlvField,
-    TlvNullable,
-    TlvObject,
-    TlvUInt16,
-    TlvUInt32
-} from "@project-chip/matter.js";
+import { TlvField, TlvObject } from "../tlv/TlvObject";
+import { TlvEnum, TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber";
+import { TlvByteString } from "../tlv/TlvString";
+import { BitFlag } from "../schema/BitmapSchema";
+import { TlvNullable } from "../tlv/TlvNullable";
 import { TlvFabricIndex } from "../common/FabricIndex";
 import { TlvVendorId } from "../common/VendorId";
-import { Cluster, Command, TlvNoArguments, TlvNoResponse, Attribute } from "./Cluster";
-import { CRYPTO_GROUP_SIZE_BYTES, CRYPTO_PUBLIC_KEY_SIZE_BYTES } from "../../crypto/Crypto";
+import { Cluster, Command, TlvNoArguments, TlvNoResponse, Attribute, OptionalCommand } from "./Cluster";
+import { CRYPTO_GROUP_SIZE_BYTES, CRYPTO_PUBLIC_KEY_SIZE_BYTES } from "../crypto/CryptoConstants";
 
 const PAKE_PASSCODE_VERIFIER_LENGTH = CRYPTO_GROUP_SIZE_BYTES + CRYPTO_PUBLIC_KEY_SIZE_BYTES;
 
@@ -96,12 +91,12 @@ export const AdminCommissioningCluster = Cluster({
     },
 
     /** @see {@link MatterCoreSpecificationV1_0} § 11.18.8 */
-    commands: {
+    commands: { // all Commands: mustUseTimedInvoke: "true"
         /** Used to instruct a Node to go into commissioning mode using enhanced commissioning method. */
         openCommissioningWindow: Command(0, TlvOpenCommissioningWindowRequest, 0, TlvNoResponse),
 
         /** Used to instruct a Node to go into commissioning mode using basic commissioning method, if the node supports it. */
-        openBasicCommissioningWindow: Command(1, TlvOpenBasicCommissioningWindowRequest, 1, TlvNoResponse),
+        openBasicCommissioningWindow: OptionalCommand(1, TlvOpenBasicCommissioningWindowRequest, 1, TlvNoResponse),
 
         /** Used to instruct a Node to revoke any active Open Commissioning Window or Open Basic Commissioning Window command. */
         revokeCommissioning: Command(2, TlvNoArguments, 2, TlvNoResponse),
