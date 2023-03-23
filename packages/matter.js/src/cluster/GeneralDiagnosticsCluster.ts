@@ -67,8 +67,8 @@ export const enum BootReason {
     SoftwareReset = 0x06,
 }
 
-/**  
- * Describes a network interface supported by the Node, as provided in the NetworkInterfaces attribute. 
+/**
+ * Describes a network interface supported by the Node, as provided in the NetworkInterfaces attribute.
  * @see {@link MatterCoreSpecificationV1_0} § 11.11.6.5
  */
 const TlvNetworkInterface = TlvObject({
@@ -84,8 +84,8 @@ const TlvNetworkInterface = TlvObject({
     /** Indicates whether the Node is currently able to reach off-premise services it uses by utilizing IPv4. */
     offPremiseServicesReachableIPv6: TlvField(3, TlvNullable(TlvBoolean)),  /* default null */
 
-    /** 
-     * Contains the current link-layer address for a 802.3 or IEEE 802.11-2020 network interface and 
+    /**
+     * Contains the current link-layer address for a 802.3 or IEEE 802.11-2020 network interface and
      * contains the current extended MAC address for a 802.15.4 interface.
      */
     hardwareAddress: TlvField(4, TlvString.bound({ maxLength: 8 })),
@@ -100,7 +100,7 @@ const TlvNetworkInterface = TlvObject({
     type: TlvField(7, TlvEnum<InterfaceType>()),
 });
 
-/** 
+/**
  * Indicates a change in the set of hardware faults currently detected by the Node.
  * @see {@link MatterCoreSpecificationV1_0} §11.11.9.1
  */
@@ -109,7 +109,7 @@ const HardwareFaultChangeEventData = {
     previous: TlvField(1, TlvArray(TlvEnum<HardwareFault>(), { maxLength: 11 })),
 };
 
-/** 
+/**
  * Indicates a change in the set of radio faults currently detectedby the Node.
  * @see {@link MatterCoreSpecificationV1_0} § 11.11.9.2
  */
@@ -118,7 +118,7 @@ const RadioFaultChangeEventData = {
     previous: TlvField(1, TlvArray(TlvEnum<HardwareFault>(), { maxLength: 7 })),
 };
 
-/** 
+/**
  * Indicates a change in the set of network faults currently detected by the Node.
  * @see {@link MatterCoreSpecificationV1_0} § 11.11.9.3
  */
@@ -127,17 +127,17 @@ const NetworkFaultChangeEventData = {
     previous: TlvField(1, TlvArray(TlvEnum<HardwareFault>(), { maxLength: 4 })),
 };
 
-/** 
+/**
  * Indicates the reason that caused the device to start-up.
- * @see {@link MatterCoreSpecificationV1_0} § 11.11.7.4  
+ * @see {@link MatterCoreSpecificationV1_0} § 11.11.7.4
  */
 const BootReasonEvent = {
     bootReason: TlvField(0, TlvEnum<BootReason>()),
 };
 
-/** 
+/**
  * Provides a means for certification tests to trigger some test-plan-specific events.
- * @see {@link MatterCoreSpecificationV1_0} § 11.11.8.1 
+ * @see {@link MatterCoreSpecificationV1_0} § 11.11.8.1
  */
 const TlvTestEventTriggerRequest = TlvObject({
     enableKey: TlvField(0, TlvString.bound({ length: 16 })),
@@ -149,12 +149,12 @@ const TlvTestEventTriggerRequest = TlvObject({
  * standardized diagnostics metrics that MAY be used by a Node to assist a user or Administrator in
  * diagnosing potential problems. The General Diagnostics Cluster attempts to centralize all metrics
  * that are broadly relevant to the majority of Nodes.
- * 
+ *
  * @see {@link MatterCoreSpecificationV1_0} § 11.11
  */
-export const GeneralDiagnosticCluster = Cluster({
+export const GeneralDiagnosticsCluster = Cluster({
     id: 0x033,
-    name: "GeneralDiagnostic",
+    name: "GeneralDiagnostics",
     revision: 1,
 
     /** @see {@link MatterCoreSpecificationV1_0} § 11.11.7 */
@@ -164,13 +164,13 @@ export const GeneralDiagnosticCluster = Cluster({
         networkInterfaces: Attribute(0, TlvArray(TlvNetworkInterface, { maxLength: 8 })),
 
         /** Indicates a best-effort count of the number of times the Node has rebooted. */
-        rebootCount: Attribute(1, TlvUInt16, { default: 0 }), // TODO persistent: true
+        rebootCount: Attribute(1, TlvUInt16, { default: 0, persistent: true }),
 
         /** Indicates a best-effort assessment of the length of time, in seconds, since the Node’s last reboot. */
         upTime: OptionalAttribute(2, TlvUInt64, { default: 0 }),
 
         /** Indicates a best-effort attempt at time in hours the Node has been operational. */
-        totalOperationalHours: OptionalAttribute(3, TlvUInt32, { default: 0 }), // TODO persistent: true
+        totalOperationalHours: OptionalAttribute(3, TlvUInt32, { default: 0, persistent: true }),
 
         /** Indicates the reason for the Node’s most recent boot */
         bootReason: OptionalAttribute(4, TlvEnum<BootReason>()),

@@ -5,8 +5,7 @@
  */
 
 import { NodeId } from "./NodeId";
-import { VendorId } from "./VendorId";
-import { ByteArray } from "@project-chip/matter.js";
+import { VendorId, ByteArray } from "@project-chip/matter.js";
 
 export interface Broadcaster {
     setCommissionMode(mode: number, deviceName: string, deviceType: number, vendorId: VendorId, productId: number, discriminator: number): void;
