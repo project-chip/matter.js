@@ -3,5 +3,6 @@
   "compilerOptions": {
     "target": "ES2015",
     "module": "ES2015",
+    "strictNullChecks": true,
   }
 }

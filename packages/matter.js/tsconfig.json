@@ -8,10 +8,11 @@
 
     // Local dev compilation checks
     "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
     "noImplicitOverride": true,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
-    "strictNullChecks": true
+    "strict": true
   },
   /* During dev, src are included, so they are also modified during refactorings. */
   "include": ["src/**/*.ts", "test/**/*.ts"],
