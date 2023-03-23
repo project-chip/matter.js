@@ -44,9 +44,9 @@ const TlvTriggerEffectRequest = TlvObject({
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.2.6.4 */
-const TlvIdentifyQueryResponse = TlvObject({
+/* const TlvIdentifyQueryResponse = TlvObject({
     timeout: TlvField(0, TlvUInt16),
-});
+}); */
 
 /**
  * Attributes and commands for putting a device into Identification mode (e.g. flashing a light).

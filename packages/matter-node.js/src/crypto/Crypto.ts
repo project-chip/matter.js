@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import BN from "bn.js";
-import crypto from "crypto";
+import * as BN from "bn.js";
+import * as crypto from "crypto";
 import { ByteArray } from "@project-chip/matter.js";
 
 const ENCRYPT_ALGORITHM = "aes-128-ccm";

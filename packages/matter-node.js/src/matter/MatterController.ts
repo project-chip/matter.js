@@ -85,7 +85,7 @@ export class MatterController {
         this.exchangeManager.addNetInterface(netInterfaceIpv6);
     }
 
-    async commission(commissionAddress: string, commissionPort: number, discriminator: number, setupPin: number) {
+    async commission(commissionAddress: string, commissionPort: number, _discriminator: number, setupPin: number) {
         const paseInterface = isIPv6(commissionAddress) ? this.netInterfaceIpv6 : this.netInterfaceIpv4;
         const paseChannel = await paseInterface.openChannel(commissionAddress, commissionPort);
 

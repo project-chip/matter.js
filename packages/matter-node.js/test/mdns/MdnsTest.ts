@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import assert from "assert";
+import * as assert from "assert";
 import { DnsCodec } from "../../src/codec/DnsCodec";
 import { UdpChannelFake } from "../../src/net/fake/UdpChannelFake";
 import { UdpChannel } from "../../src/net/UdpChannel";
@@ -17,6 +17,10 @@ import { Fabric } from "../../src/matter/fabric/Fabric";
 import { NodeId } from "../../src/matter/common/NodeId";
 import { ByteArray } from "@project-chip/matter.js";
 import { FAKE_INTERFACE_NAME } from "../../src/net/fake/SimulatedNetwork";
+import { Time } from "../../src/time/Time.js";
+import { TimeFake } from "../../src/time/TimeFake.js";
+
+Time.get = () => new TimeFake(0);
 
 const SERVER_IPv4 = "192.168.200.1";
 const SERVER_IPv6 = "fe80::e777:4f5e:c61e:7314";
@@ -52,10 +56,10 @@ describe("MDNS", () => {
         channel.close();
     });
 
-    context("broadcaster", () => {
+    describe("broadcaster", () => {
         it("it broadcasts the device fabric", async () => {
             const { promise, resolver } = await getPromiseResolver<ByteArray>();
-            channel.onData((netInterface, peerAddress, peerPort, data) => resolver(data));
+            channel.onData((_netInterface, _peerAddress, _peerPort, data) => resolver(data));
 
             broadcaster.setFabric(OPERATIONAL_ID, NODE_ID);
             broadcaster.announce();
@@ -83,7 +87,7 @@ describe("MDNS", () => {
         });
     });
 
-    context("integration", () => {
+    describe("integration", () => {
         it("the client returns server record if it has been announced", async () => {
             broadcaster.setFabric(OPERATIONAL_ID, NODE_ID);
             broadcaster.announce();

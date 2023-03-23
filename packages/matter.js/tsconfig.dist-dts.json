@@ -2,6 +2,7 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
+    "moduleResolution": "node", // Required to correctly resolve Babel imports
     "outDir": "dist/dts",
     "declaration": true,
     "emitDeclarationOnly": true

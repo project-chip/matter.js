@@ -1,9 +1,7 @@
 /* Base configuration */
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "target": "ES2015",
     "module": "ES2015",
-    "rootDir": "src",
   }
 }

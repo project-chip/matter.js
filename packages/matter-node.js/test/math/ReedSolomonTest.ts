@@ -5,12 +5,12 @@
  */
 
 import { ByteArray } from "@project-chip/matter.js";
-import assert from "assert";
+import * as assert from "assert";
 import { ReedSolomon } from "../../src/math/ReedSolomon";
 
 
 describe("ReedSolomon", () => {
-    context("computeErrorCorrection", () => {
+    describe("computeErrorCorrection", () => {
         it("computes the correct error correction bytes", () => {
             const result = new ReedSolomon().computeErrorCorrection(ByteArray.fromHex("40d2754776173206272696c6c69670ec"), 10);
 
