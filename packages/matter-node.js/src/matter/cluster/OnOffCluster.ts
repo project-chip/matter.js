@@ -5,7 +5,7 @@
  */
 
 import { Attribute, Cluster, Command, TlvNoArguments, TlvNoResponse } from "./Cluster";
-import { BitFlag, MatterApplicationClusterSpecificationV1_0, TlvBitmap, TlvBoolean, TlvEnum, TlvField, TlvNullable, TlvObject, TlvSchema, TlvUInt8 } from "@project-chip/matter.js";
+import { BitFlag, MatterApplicationClusterSpecificationV1_0, TlvBoolean } from "@project-chip/matter.js";
 
 /**
  * Defined how the devices should behave when it is powered on.
@@ -53,28 +53,28 @@ export const enum DyingLightEffectVariant {
 }
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.7.4.2 */
-const TlvEffectVariant = TlvUInt8 as TlvSchema<DyingLightEffectVariant | DelayedAllOffEffectVariant>;
+//const TlvEffectVariant = TlvUInt8 as TlvSchema<DyingLightEffectVariant | DelayedAllOffEffectVariant>;
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.7.4 */
-const TlvOffWithEffectRequest = TlvObject({
+/* const TlvOffWithEffectRequest = TlvObject({
     effectIdentifier: TlvField(0, TlvEnum<EffectIdentifier>()),
     effectVariant: TlvField(1, TlvEffectVariant),
 }) as TlvSchema<
     { effectIdentifier: EffectIdentifier.DelayedAllOff, effectVariant: DelayedAllOffEffectVariant } |
     { effectIdentifier: EffectIdentifier.DyingLight, effectVariant: DyingLightEffectVariant }
->;
+>; */
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.7.4.2 */
-const TlvOnOffControlBitmap = TlvBitmap(TlvUInt8, {
+/* const TlvOnOffControlBitmap = TlvBitmap(TlvUInt8, {
     acceptOnlyWhenOn: BitFlag(1),
-});
+}); */
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.7.6. */
-const TlvOnWithTimedOffRequest = TlvObject({
+/* const TlvOnWithTimedOffRequest = TlvObject({
     onOffControl: TlvField(0, TlvOnOffControlBitmap),
     onTime: TlvField(1, TlvNullable(TlvUInt8.bound({ min: 0, max: 254 }))),
     offWaitTime: TlvField(2, TlvNullable(TlvUInt8.bound({ min: 0, max: 254 }))),
-});
+}); */
 
 /**
  * Attributes and commands for switching devices between 'On' and 'Off' states.

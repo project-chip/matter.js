@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import assert from "assert";
+import * as assert from "assert";
 import { Level, Logger } from "../../src/log/Logger";
 import { Time } from "../../src/time/Time";
 import { TimeFake } from "../../src/time/TimeFake";
@@ -24,7 +24,7 @@ describe("Logger", () => {
 
     const logger = Logger.get(LOGGER_NAME);
 
-    before(() => {
+    beforeAll(() => {
         Time.get = () => fakeTime;
 
         Logger.defaultLogLevel = Level.DEBUG;
@@ -41,14 +41,14 @@ describe("Logger", () => {
         fakeLogSink.length = 0;
     });
 
-    after(() => {
+    afterAll(() => {
         Logger.defaultLogLevel = defaultLevel;
         Logger.log = defaultSink;
         Logger.logFormater = defaultFormatter;
         Logger.logLevels = defaultLevels;
     });
 
-    context("debug", () => {
+    describe("debug", () => {
         it("logs a message if level is debug", () => {
             logger.debug("test");
             const result = fakeLogSink.pop();
@@ -66,7 +66,7 @@ describe("Logger", () => {
         });
     });
 
-    context("info", () => {
+    describe("info", () => {
         it("logs a message if level is info", () => {
             logger.info("test");
             const result = fakeLogSink.pop();
@@ -84,7 +84,7 @@ describe("Logger", () => {
         });
     });
 
-    context("warn", () => {
+    describe("warn", () => {
         it("logs a message if level is warn", () => {
             logger.warn("test");
             const result = fakeLogSink.pop();
@@ -102,7 +102,7 @@ describe("Logger", () => {
         });
     });
 
-    context("error", () => {
+    describe("error", () => {
         it("logs a message if level is error", () => {
             logger.error("test");
             const result = fakeLogSink.pop();
@@ -120,7 +120,7 @@ describe("Logger", () => {
         });
     });
 
-    context("fatal", () => {
+    describe("fatal", () => {
         it("logs a message", () => {
             logger.fatal("test");
             const result = fakeLogSink.pop();
@@ -129,7 +129,7 @@ describe("Logger", () => {
         });
     });
 
-    context("logFormat", () => {
+    describe("logFormat", () => {
         it("formats correctly the log", () => {
             logger.debug("test");
             const result = fakeLogSink.pop();
@@ -152,7 +152,7 @@ describe("Logger", () => {
         });
 
         it("accepts custom formatters", () => {
-            Logger.logFormater = (now, level, logger, values) => values[0].toString();
+            Logger.logFormater = (_now, _level, _logger, values) => values[0].toString();
 
             logger.debug("test");
             const result = fakeLogSink.pop();

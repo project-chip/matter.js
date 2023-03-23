@@ -14,7 +14,7 @@ import { SECURE_CHANNEL_PROTOCOL_ID } from "./SecureChannelMessages";
 import { MatterDevice } from "../../MatterDevice";
 import { Logger } from "../../../log/Logger";
 import { ByteArray } from "@project-chip/matter.js";
-import BN from "bn.js";
+import * as BN from "bn.js";
 
 const logger = Logger.get("PaseServer");
 

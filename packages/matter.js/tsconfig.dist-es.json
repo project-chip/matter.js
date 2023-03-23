@@ -2,7 +2,8 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "dist/es"
+    "moduleResolution": "node", // Required to correctly resolve Babel imports
+    "outDir": "dist/es",
   },
   "include": ["src/**/*.ts"],
 }
