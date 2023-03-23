@@ -3,10 +3,13 @@ import type { Config } from 'jest';
 const config: Config = {
     testMatch: ["<rootDir>/test/**/*.ts"],
     preset: "ts-jest",
-    globals: {
-        'ts-jest': {
-            tsConfig: 'tsconfig.dist.json'
-        }
+    transform: {
+        "^.+\\.ts?$": [
+            'ts-jest',
+            {
+                tsconfig: 'tsconfig.dist.json'
+            }
+        ],
     },
     testEnvironment: "node",
     collectCoverage: true,
@@ -19,5 +22,5 @@ const config: Config = {
 
 export default config;
 import * as console from "console"
-global.console = console
 
+global.console = console
