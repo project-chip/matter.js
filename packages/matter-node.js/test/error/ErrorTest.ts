@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import assert from "assert";
+import * as assert from "assert";
 import { MatterError } from "../../src/error/MatterError";
 import { tryCatch, tryCatchAsync } from "../../src/error/TryCatchHandler";
 
@@ -14,167 +14,153 @@ class OtherMatterError extends MatterError { }
 
 describe("Errors", () => {
 
-    context("Test tryCatch method", () => {
+    describe("Test tryCatch method", () => {
         it("tryCatch without error return value", () => {
-            const error = tryCatch((): string => {
-                return "ok";
-            },
-                MatterError, "caught"
-            );
+            const result = tryCatch(
+                () => "ok",
+                MatterError, "caught");
 
-            assert.equal(error, "ok");
+            assert.equal(result, "ok");
         });
 
         it("tryCatch with expected error, uses fallback value", () => {
-            const error = tryCatch((): string => {
-                throw new SubMatterError("test");
-            },
-                SubMatterError, "caught"
-            );
+            const result = tryCatch(
+                () => { throw new SubMatterError("test") },
+                SubMatterError, "caught");
 
-            assert.equal(error, "caught");
+            assert.equal(result, "caught");
         });
 
         it("tryCatch with unexpected error, throw error", () => {
-            assert.throws(() => {
-                tryCatch((): string => {
-                    throw new Error("test");
-                },
-                    SubMatterError, "caught");
-            }, new Error("test"));
+            assert.throws(
+                () => tryCatch(
+                    () => { throw new Error("test") },
+                    SubMatterError, "caught"
+                ),
+                Error, "test"
+            );
         });
 
         it("tryCatch with inherited error returns fallbackvalue", () => {
-            const error = tryCatch((): string => {
-                throw new SubSubMatterError("test");
-            },
+            const result = tryCatch(
+                () => { throw new SubSubMatterError("test") },
                 SubSubMatterError, "caught");
 
-            assert.equal(error, "caught");
+            assert.equal(result, "caught");
         });
 
         it("tryCatch with inherited error also return fallback when checking for parent error", () => {
-            const error = tryCatch((): string => {
-                throw new SubSubMatterError("test");
-            },
-                SubMatterError, "caught"
-            );
+            const result = tryCatch(
+                () => { throw new SubSubMatterError("test") },
+                SubMatterError, "caught");
 
-            assert.equal(error, "caught");
+            assert.equal(result, "caught");
         });
 
         it("tryCatch with inherited error process error in handler function return dynamic fallback value", () => {
-            const error = tryCatch((): string => {
-                throw new SubSubMatterError("test");
-            },
-                SubMatterError, (error) => {
+            const result = tryCatch(
+                () => { throw new SubSubMatterError("test") },
+                SubMatterError, error => {
                     if (error instanceof SubSubMatterError) {
                         return "caught";
                     }
+                    throw error;
                 }
             );
 
-            assert.equal(error, "caught");
+            assert.equal(result, "caught");
         });
 
         it("tryCatch with inherited error process error in handler function that throws the error instead return valid value", () => {
             assert.throws(() => {
-                tryCatch((): string => {
-                    throw new SubSubMatterError("test");
-                },
-                    SubMatterError, (error) => {
+                tryCatch(
+                    () => { throw new SubSubMatterError("test") },
+                    SubMatterError, error => {
                         if (error instanceof OtherMatterError) {
                             return "caught";
-                        } else {
-                            throw error;
                         }
+                        throw error;
                     }
                 );
-            }, new SubSubMatterError("test"));
+            },
+                SubSubMatterError, "test"
+            );
         });
     });
 
-    context("Test tryCatchAsync method", () => {
+    describe("Test tryCatchAsync method", () => {
 
         it("tryCatch without error return value", async () => {
-            const error = await tryCatchAsync(async (): Promise<string> => {
-                return "ok";
-            },
-                MatterError, "caught"
+            const result = await tryCatchAsync(
+                async () => "ok",
+                MatterError, "caught",
             );
 
-            assert.equal(error, "ok");
+            assert.equal(result, "ok");
         });
 
         it("tryCatch with expected error, uses fallback value", async () => {
-            const error = await tryCatchAsync(async (): Promise<string> => {
-                throw new SubMatterError("test");
-            },
+            const result = await tryCatchAsync(
+                async () => { throw new SubMatterError("test") },
                 SubMatterError, "caught"
             );
 
-            assert.equal(error, "caught");
+            assert.equal(result, "caught");
         });
 
         it("tryCatch with unexpected error, throw error", async () => {
-            await assert.rejects(async () => {
-                // eslint--next-line @typescript-eslint/require-await
-                await tryCatchAsync(async (): Promise<string> => {
-                    throw new Error("test");
-                },
+            await assert.rejects(
+                async () => tryCatchAsync(
+                    async () => { throw new Error("test") },
                     SubMatterError, "caught"
-                );
-            }, new Error("test"));
+                ),
+                Error, "test"
+            );
         });
 
         it("tryCatch with inherited error returns fallback value", async () => {
-            const error = await tryCatchAsync((): Promise<string> => {
-                throw new SubSubMatterError("test");
-            },
+            const result = await tryCatchAsync(
+                () => { throw new SubSubMatterError("test") },
                 SubSubMatterError, "caught"
             );
 
-            assert.equal(error, "caught");
+            assert.equal(result, "caught");
         });
 
         it("tryCatch with inherited error also return fallback when checking for parent error", async () => {
-            const error = await tryCatchAsync(async (): Promise<string> => {
-                throw new SubSubMatterError("test");
-            },
+            const result = await tryCatchAsync(
+                async () => { throw new SubSubMatterError("test") },
                 SubMatterError, "caught"
             );
 
-            assert.equal(error, "caught");
+            assert.equal(result, "caught");
         });
 
         it("tryCatch with inherited error process error in handler function return dynamic fallback value", async () => {
-            const error = await tryCatchAsync(async (): Promise<string> => {
-                throw new SubSubMatterError("test");
-            },
-                SubMatterError, (error) => {
+            const result = await tryCatchAsync(
+                async () => { throw new SubSubMatterError("test") },
+                SubMatterError, error => {
                     if (error instanceof SubSubMatterError) {
                         return "caught";
                     }
+                    throw error;
                 }
             );
 
-            assert.equal(error, "caught");
+            assert.equal(result, "caught");
         });
 
         it("tryCatch with inherited error process error in handler function that throws the error instead return valid value", async () => {
-            await assert.rejects(async () => {
-                await tryCatchAsync((): Promise<string> => {
-                    throw new SubSubMatterError("test");
-                },
-                    SubMatterError, (error) => {
-                        if (error instanceof OtherMatterError) {
-                            return "caught";
-                        } else {
-                            throw error;
-                        }
+            await assert.rejects(async () => await tryCatchAsync(
+                () => { throw new SubSubMatterError("test") },
+                SubMatterError, error => {
+                    if (error instanceof OtherMatterError) {
+                        return "caught";
                     }
-                );
-            }, new SubSubMatterError("test"));
+                    throw error;
+                }),
+                SubSubMatterError, "test"
+            );
         });
     });
 });

@@ -8,13 +8,7 @@ import { Message, MessageCodec, Packet } from "../../codec/MessageCodec";
 import { Crypto } from "../../crypto/Crypto";
 import { Fabric } from "../fabric/Fabric";
 import { SubscriptionHandler } from "../interaction/SubscriptionHandler";
-import {
-    DEFAULT_ACTIVE_RETRANSMISSION_TIMEOUT_MS,
-    DEFAULT_IDLE_RETRANSMISSION_TIMEOUT_MS,
-    DEFAULT_RETRANSMISSION_RETRIES,
-    SLEEPY_ACTIVE_THRESHOLD_MS,
-    Session,
-} from "./Session";
+import { DEFAULT_ACTIVE_RETRANSMISSION_TIMEOUT_MS, DEFAULT_IDLE_RETRANSMISSION_TIMEOUT_MS, DEFAULT_RETRANSMISSION_RETRIES, SLEEPY_ACTIVE_THRESHOLD_MS, Session } from "./Session";
 import { UNDEFINED_NODE_ID } from "./SessionManager";
 import { NodeId } from "../common/NodeId";
 import { ByteArray, DataWriter, Endian } from "@project-chip/matter.js";
@@ -27,7 +21,6 @@ const SESSION_KEYS_INFO = ByteArray.fromString("SessionKeys");
 const SESSION_RESUMPTION_KEYS_INFO = ByteArray.fromString("SessionResumptionKeys");
 
 export class SecureSession<T> implements Session<T> {
-    private nextSubscriptionId = 0;
     private readonly subscriptions = new Array<SubscriptionHandler>();
     private timestamp = Time.nowMs();
     private activeTimestamp = this.timestamp;

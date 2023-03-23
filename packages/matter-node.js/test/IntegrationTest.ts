@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import assert from "assert";
+import * as assert from "assert";
 
 import { Time } from "../src/time/Time";
 import { TimeFake } from "../src/time/TimeFake";
@@ -61,7 +61,7 @@ describe("Integration", () => {
     let onOffServer: ClusterServer<any, any, any, any>;
     let client: MatterController;
 
-    before(async () => {
+    beforeAll(async () => {
         Logger.defaultLogLevel = Level.DEBUG;
         Time.get = () => fakeTime;
         Network.get = () => clientNetwork;
@@ -142,12 +142,12 @@ describe("Integration", () => {
         Network.get = () => { throw new Error("Network should not be requested post creation") };
     });
 
-    context("commission", () => {
+    describe("commission", () => {
         it("the client commissions a new device", async () => {
             const nodeId = await client.commission(SERVER_IP, matterPort, discriminator, setupPin);
 
             assert.equal(nodeId.id, BigInt(1));
-        });
+        }, 60 * 1000 /* 1mn timeout */);
 
         it("the session is resumed if it has been established previously", () => {
             client.connect(new NodeId(BigInt(1)));
@@ -156,8 +156,7 @@ describe("Integration", () => {
         });
     });
 
-
-    context("attributes", () => {
+    describe("attributes", () => {
         it("get one specific attribute including schema parsing", async () => {
             const descriptorCluster = ClusterClient(client.connect(new NodeId(BigInt(1))), 0, BasicInformationCluster);
 
@@ -171,7 +170,7 @@ describe("Integration", () => {
         });
     });
 
-    context("subscription", () => {
+    describe("subscription", () => {
         it("subscription sends updates when the value changes", async () => {
             const interactionClient = client.connect(new NodeId(BigInt(1)));
             const onOffClient = ClusterClient(interactionClient, 1, OnOffCluster);
@@ -213,7 +212,7 @@ describe("Integration", () => {
         });
     });
 
-    context("remove Fabric", () => {
+    describe("remove Fabric", () => {
         it("try to remove invalid fabric", async () => {
             const operationalCredentialsCluster = ClusterClient(client.connect(new NodeId(BigInt(1))), 0, OperationalCredentialsCluster);
 
@@ -236,7 +235,7 @@ describe("Integration", () => {
         });
     });
 
-    after(() => {
+    afterAll(() => {
         server.stop();
         client.close();
     });

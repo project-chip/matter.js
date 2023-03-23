@@ -1,0 +1,14 @@
+/* Configuration for tsfmt and eslint */
+{
+    "compilerOptions": {
+      // Local dev compilation checks
+      "forceConsistentCasingInFileNames": true,
+      "noImplicitOverride": true,
+      "noUnusedParameters": true,
+      "noUnusedLocals": true,
+      "strictNullChecks": true
+    },
+    "include": ["packages/**/*.ts"],
+    "exclude": ["packages/*/dist"]
+}
+  

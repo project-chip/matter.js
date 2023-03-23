@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import dgram from "dgram";
+import * as dgram from "dgram";
 import { Logger } from "../../log/Logger";
 import { UdpChannel, UdpChannelOptions } from "../UdpChannel";
 import { ByteArray } from "@project-chip/matter.js";

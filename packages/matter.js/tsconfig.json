@@ -2,8 +2,16 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "esModuleInterop": true, // Required to remove warnings or jest test
-    "composite": true
+    "esModuleInterop": true, // Required to remove warnings on jest test
+    "composite": true,  // For linking this package from matter-node.js
+    "moduleResolution": "node", // Required to correctly resolve Babel imports
+
+    // Local dev compilation checks
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitOverride": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "strictNullChecks": true
   },
   /* During dev, src are included, so they are also modified during refactorings. */
   "include": ["src/**/*.ts", "test/**/*.ts"],

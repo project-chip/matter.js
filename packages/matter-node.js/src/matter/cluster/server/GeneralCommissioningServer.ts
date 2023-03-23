@@ -7,7 +7,7 @@
 import { Logger } from "../../../log/Logger";
 import { MatterDevice } from "../../MatterDevice";
 import { SecureSession } from "../../session/SecureSession";
-import { CommissioningError, GeneralCommissioningCluster, RegulatoryLocationType } from "@project-chip/matter.js";
+import { CommissioningError, GeneralCommissioningCluster } from "@project-chip/matter.js";
 import { ClusterServerHandlers } from "./ClusterServer";
 
 const SuccessResponse = { errorCode: CommissioningError.Ok, debugText: "" };
@@ -22,7 +22,7 @@ export const GeneralCommissioningClusterHandler: ClusterServerHandlers<typeof Ge
         return SuccessResponse;
     },
 
-    setRegulatoryConfig: async ({ request: { breadcrumb: breadcrumbStep, newRegulatoryConfig }, attributes: { breadcrumb, regulatoryConfig, locationCapability } }) => {
+    setRegulatoryConfig: async ({ request: { breadcrumb: breadcrumbStep, newRegulatoryConfig }, attributes: { breadcrumb, regulatoryConfig, /* locationCapability */ } }) => {
 
         /*
         TODO: test this code before activating again

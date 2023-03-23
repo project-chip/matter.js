@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import assert from "assert";
+import * as assert from "assert";
 import { ClusterServer, InteractionServer } from "../../../src/matter/interaction/InteractionServer";
 import { ReadRequest, DataReport, WriteRequest, WriteResponse } from "../../../src/matter/interaction/InteractionMessenger";
 import { MessageExchange } from "../../../src/matter/common/MessageExchange";
@@ -111,7 +111,7 @@ const MASS_WRITE_RESPONSE: WriteResponse = {
 
 describe("InteractionProtocol", () => {
 
-    context("handleReadRequest", () => {
+    describe("handleReadRequest", () => {
         it("replies with attribute values", () => {
             const interactionProtocol = new InteractionServer()
                 .addEndpoint(0, DEVICE.ROOT, [
@@ -141,7 +141,7 @@ describe("InteractionProtocol", () => {
         });
     });
 
-    context("handleWriteRequest", () => {
+    describe("handleWriteRequest", () => {
         it("write values and return errors on invalid values", () => {
 
             const basicCluster = new ClusterServer(BasicInformationCluster, {}, {

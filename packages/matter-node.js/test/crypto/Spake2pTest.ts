@@ -4,14 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import assert from "assert";
+import * as assert from "assert";
 import { BN } from "bn.js";
 import { Crypto } from "../../src/crypto/Crypto";
 import { Spake2p } from "../../src/crypto/Spake2p";
 import { ByteArray } from "@project-chip/matter.js";
 
 describe("Spake2p", () => {
-    context("https://datatracker.ietf.org/doc/html/draft-bar-cfrg-spake2plus-01 test vectors", () => {
+    describe("https://datatracker.ietf.org/doc/html/draft-bar-cfrg-spake2plus-01 test vectors", () => {
         const context = ByteArray.fromString("SPAKE2+-P256-SHA256-HKDF draft-01");
         const w0 = new BN("e6887cf9bdfb7579c69bf47928a84514b5e355ac034863f7ffaf4390e67d798c", "hex");
         const w1 = new BN("24b5ae4abda868ec9336ffc3b78ee31c5755bef1759227ef5372ca139b94e512", "hex");
@@ -55,7 +55,7 @@ describe("Spake2p", () => {
         });
     });
 
-    context("context hash test", () => {
+    describe("context hash test", () => {
         it("generates the correct context hash", () => {
             // Test data captured from https://github.com/project-chip/connectedhomeip/
             const context = new Array<ByteArray>();

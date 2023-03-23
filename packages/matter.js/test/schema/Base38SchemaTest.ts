@@ -24,7 +24,6 @@ describe("Base38Schema", () => {
             const result = Base38.decode(ENCODED);
 
             expect(result.toHex()).toBe(DECODED.toHex());
-
         });
     });
 });
