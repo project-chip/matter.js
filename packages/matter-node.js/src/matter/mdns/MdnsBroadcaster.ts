@@ -9,7 +9,7 @@ import { Crypto } from "../../crypto/Crypto";
 import { Broadcaster } from "../common/Broadcaster";
 import { getDeviceMatterQname, getFabricQname, MATTER_COMMISSION_SERVICE_QNAME, MATTER_SERVICE_QNAME, SERVICE_DISCOVERY_QNAME } from "./MdnsConsts";
 import { MdnsServer } from "../../net/MdnsServer";
-import { VendorId } from "../common/VendorId";
+import { VendorId } from "@project-chip/matter.js";
 import { Network } from "../../net/Network";
 import { isIPv4 } from "../../util/Ip";
 import { Logger } from "../../log/Logger";

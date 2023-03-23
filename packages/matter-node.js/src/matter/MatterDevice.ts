@@ -16,10 +16,8 @@ import { ExchangeManager } from "./common/ExchangeManager";
 import { requireMinNodeVersion } from "../util/Node";
 import { Scanner } from "./common/Scanner";
 import { ChannelManager } from "./common/ChannelManager";
-import { VendorId } from "./common/VendorId";
+import { VendorId, FabricIndex, ByteArray } from "@project-chip/matter.js";
 import { NodeId } from "./common/NodeId";
-import { ByteArray } from "@project-chip/matter.js";
-import { FabricIndex } from "./common/FabricIndex";
 import { Time, Timer } from "../time/Time";
 import { Logger } from "../log/Logger";
 

@@ -19,6 +19,8 @@ import { TlvWrapper } from "../tlv/TlvWrapper.js";
  * @see {@link MatterCoreSpecificationV1_0} § 7.5.2
  */
 export class FabricIndex {
+    static NO_FABRIC = new FabricIndex(0);
+
     constructor(
         readonly index: number,
     ) { }
@@ -26,7 +28,7 @@ export class FabricIndex {
 
 /** Tlv Schema for a Fabric Index. */
 export const TlvFabricIndex = new TlvWrapper<FabricIndex, number>(
-    TlvUInt8.bound({ min: 1, max: 254 }),
+    TlvUInt8.bound({ min: 0, max: 254 }),
     farbricIndex => farbricIndex.index,
-    value => new FabricIndex(value),
+    value => value === 0 ? FabricIndex.NO_FABRIC : new FabricIndex(value),
 );

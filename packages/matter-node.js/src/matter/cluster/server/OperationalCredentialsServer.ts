@@ -8,15 +8,10 @@ import { Crypto } from "../../../crypto/Crypto";
 import { MatterDevice } from "../../MatterDevice";
 import { SecureSession } from "../../session/SecureSession";
 import {
-    TlvAttestation,
-    CertificateChainType,
-    OperationalCredentialsCluster,
-    OperationalCertStatus,
-    TlvCertSigningRequest
-} from "../OperationalCredentialsCluster";
+    TlvAttestation, CertificateChainType, OperationalCredentialsCluster, OperationalCertStatus, TlvCertSigningRequest,
+    ByteArray, FabricIndex
+} from "@project-chip/matter.js";
 import { ClusterServerHandlers } from "./ClusterServer";
-import { ByteArray } from "@project-chip/matter.js";
-import { FabricIndex } from "../../common/FabricIndex";
 
 export interface OperationalCredentialsServerConf {
     devicePrivateKey: ByteArray,

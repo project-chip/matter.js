@@ -4,32 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-    TlvArray,
-    BitFlag,
-    TlvBoolean,
-    TlvByteString,
-    TlvEnum,
-    TlvField,
-    TlvInt32,
-    TlvObject,
-    TlvUInt8,
-    TlvNullable,
-    TlvUInt16,
-    TlvInt8,
-    TlvBitmap,
-    TlvUInt64,
-    TlvOptionalField,
-    TlvString
-} from "@project-chip/matter.js";
-import {
-    Attribute,
-    Cluster,
-    Command,
-    OptionalAttribute,
-    OptionalCommand,
-    WritableAttribute
-} from "./Cluster";
+
+import { Attribute, Cluster, Command, OptionalAttribute, OptionalCommand, WritableAttribute } from "./Cluster";
+import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvBitmap, TlvEnum, TlvInt32, TlvInt8, TlvUInt16, TlvUInt64, TlvUInt8 } from "../tlv/TlvNumber";
+import { BitFlag } from "../schema/BitmapSchema";
+import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject";
+import { TlvByteString, TlvString } from "../tlv/TlvString";
+import { TlvBoolean } from "../tlv/TlvBoolean";
+import { TlvNullable } from "../tlv/TlvNullable";
+import { TlvArray } from "../tlv/TlvArray";
+
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 11.8.6.5 */
 export const enum NetworkCommissioningStatus {
@@ -241,7 +226,7 @@ const TlvReorderNetworkRequest = TlvObject({
  */
 export const NetworkCommissioningCluster = Cluster({
     id: 0x31,
-    name: "Network Commissioning",
+    name: "NetworkCommissioning",
     revision: 1,
     features: {
         wifi: BitFlag(0),
@@ -266,7 +251,7 @@ export const NetworkCommissioningCluster = Cluster({
         interfaceEnabled: WritableAttribute(4, TlvBoolean, { default: true }), /* write = admin */
 
         /** Status of the last attempt either scan or connect to an operational network. */
-        lastNetworkingStatus: Attribute(5, TlvNullable(TlvEnum<NetworkCommissioningStatus>()), { persistent: true, default: null }), /* read = admin */
+        lastNetworkingStatus: Attribute(5, TlvNullable(TlvEnum<NetworkCommissioningStatus>()), { default: null }), /* read = admin */
 
         /** NetworkID used in the last attempt to connect to an operational network. */
         lastNetworkId: Attribute(6, TlvNullable(TlvByteString.bound({ minLength: 1, maxLength: 32 })), { default: null }), /* read = admin */

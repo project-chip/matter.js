@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { VendorId } from "./VendorId";
 import { Fabric } from "../fabric/Fabric";
+import { VendorId } from "@project-chip/matter.js";
 
 export interface Broadcaster {
     setCommissionMode(mode: number, deviceName: string, deviceType: number, vendorId: VendorId, productId: number, discriminator: number): void;

@@ -35,7 +35,7 @@ const TlvCapabilityMinima = TlvObject({
  */
 export const BasicInformationCluster = Cluster({
     id: 0x28,
-    name: "Basic Information",
+    name: "BasicInformation",
     revision: 1,
 
     /** @see {@link MatterCoreSpecificationV1_0} § 11.1.6.3 */
@@ -56,10 +56,10 @@ export const BasicInformationCluster = Cluster({
         productId: Attribute(4, TlvUInt16),
 
         /** User defined name for the Node. It is set during initial commissioning and may be updated by further reconfigurations. */
-        nodeLabel: WritableAttribute(5, TlvString32max, { default: "", writeAcl: AccessLevel.Manage }),
+        nodeLabel: WritableAttribute(5, TlvString32max, { persistent: true, default: "", writeAcl: AccessLevel.Manage }),
 
         /** ISO 3166-1 alpha-2 code where the Node is located. Might affect some regulatory aspects. */
-        location: WritableAttribute(6, TlvString.bound({ length: 2 }), { default: "XX", writeAcl: AccessLevel.Administer }),
+        location: WritableAttribute(6, TlvString.bound({ length: 2 }), { persistent: true, default: "XX", writeAcl: AccessLevel.Administer }),
 
         /** Version number of the hardware of the Node. The meaning of its value, and the versioning scheme, are vendor defined. */
         hardwareVersion: Attribute(7, TlvUInt16, { default: 0 }),
@@ -89,7 +89,7 @@ export const BasicInformationCluster = Cluster({
         serialNumber: OptionalAttribute(15, TlvString32max),
 
         /** Allows to disable the ability to configure the Node through an on-Node user interface. */
-        localConfigDisabled: OptionalWritableAttribute(16, TlvBoolean, { default: false, writeAcl: AccessLevel.Manage }),
+        localConfigDisabled: OptionalWritableAttribute(16, TlvBoolean, { persistent: true, default: false, writeAcl: AccessLevel.Manage }),
 
         /** Indicates whether the Node can be reached over the non-native network for bridged devices. */
         reachable: OptionalAttribute(17, TlvBoolean, { default: true }),

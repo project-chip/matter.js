@@ -10,9 +10,11 @@ import { NetInterface } from "../net/NetInterface";
 import { ExchangeManager, MessageChannel } from "./common/ExchangeManager";
 import { PaseClient } from "./session/secure/PaseClient";
 import { ClusterClient, InteractionClient } from "./interaction/InteractionClient";
-import { BasicInformationCluster } from "./cluster/BasicInformationCluster";
-import { CommissioningError, GeneralCommissioningCluster, RegulatoryLocationType, CommissioningSuccessFailureResponse } from "./cluster/GeneralCommissioningCluster";
-import { CertificateChainType, TlvCertSigningRequest, OperationalCredentialsCluster } from "./cluster/OperationalCredentialsCluster";
+import {
+    BasicInformationCluster, CommissioningError, GeneralCommissioningCluster, RegulatoryLocationType, CommissioningSuccessFailureResponse,
+    CertificateChainType, TlvCertSigningRequest, OperationalCredentialsCluster,
+    VendorId, FabricIndex, ByteArray
+} from "@project-chip/matter.js";
 import { Crypto } from "../crypto/Crypto";
 import { CertificateManager, jsToMatterDate, TlvOperationalCertificate, TlvRootCertificate } from "./certificate/CertificateManager";
 import { Scanner } from "./common/Scanner";
@@ -23,9 +25,6 @@ import { ChannelManager } from "./common/ChannelManager";
 import { Logger } from "../log/Logger";
 import { Time } from "../time/Time";
 import { NodeId } from "./common/NodeId";
-import { VendorId } from "./common/VendorId";
-import { ByteArray } from "@project-chip/matter.js";
-import { FabricIndex } from "./common/FabricIndex";
 import { isIPv6 } from "../util/Ip";
 
 requireMinNodeVersion(16);
@@ -86,8 +85,8 @@ export class MatterController {
 
         // Do the commissioning
         let generalCommissioningClusterClient = ClusterClient(interactionClient, 0, GeneralCommissioningCluster);
-        this.ensureSuccess(await generalCommissioningClusterClient.armFailSafe({ breadcrumbStep: BigInt(1), expiryLengthSeconds: 60 }));
-        this.ensureSuccess(await generalCommissioningClusterClient.setRegulatoryConfig({ breadcrumbStep: BigInt(2), newRegulatoryConfig: RegulatoryLocationType.IndoorOutdoor, countryCode: "US" }));
+        this.ensureSuccess(await generalCommissioningClusterClient.armFailSafe({ breadcrumb: BigInt(1), expiryLengthSeconds: 60 }));
+        this.ensureSuccess(await generalCommissioningClusterClient.setRegulatoryConfig({ breadcrumb: BigInt(2), newRegulatoryConfig: RegulatoryLocationType.IndoorOutdoor, countryCode: "US" }));
 
         const operationalCredentialsClusterClient = ClusterClient(interactionClient, 0, OperationalCredentialsCluster);
         const { certificate: deviceAttestation } = await operationalCredentialsClusterClient.requestCertChain({ type: CertificateChainType.DeviceAttestation });

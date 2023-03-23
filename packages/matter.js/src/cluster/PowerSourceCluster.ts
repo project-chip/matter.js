@@ -5,7 +5,14 @@
  */
 
 import { OptionalEvent, EventPriority, Cluster, Attribute, OptionalAttribute } from "./Cluster";
-import { MatterCoreSpecificationV1_0, BitFlag, TlvBoolean, TlvString, TlvEnum, TlvField, TlvNullable, TlvUInt8, TlvUInt16, TlvUInt32, TlvArray } from "@project-chip/matter.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvField } from "../tlv/TlvObject";
+import { TlvEnum, TlvUInt16, TlvUInt32, TlvUInt8 } from "../tlv/TlvNumber";
+import { TlvArray } from "../tlv/TlvArray";
+import { BitFlag } from "../schema/BitmapSchema";
+import { TlvString } from "../tlv/TlvString";
+import { TlvNullable } from "../tlv/TlvNullable";
+import { TlvBoolean } from "../tlv/TlvBoolean";
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.7.5.1 */
 export const enum WiredFaultEnum {

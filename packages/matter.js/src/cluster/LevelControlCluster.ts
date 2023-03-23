@@ -5,7 +5,11 @@
  */
 
 import { OptionalAttribute, WritableAttribute, OptionalWritableAttribute, Attribute, Cluster, Command, TlvNoResponse } from "./Cluster";
-import { BitFlag, MatterApplicationClusterSpecificationV1_0, TlvBitmap, TlvEnum, TlvField, TlvNullable, TlvObject, TlvUInt16, TlvUInt8 } from "@project-chip/matter.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvBitmap, TlvEnum, TlvUInt16, TlvUInt8 } from "../tlv/TlvNumber";
+import { BitFlag } from "../schema/BitmapSchema";
+import { TlvField, TlvObject } from "../tlv/TlvObject";
+import { TlvNullable } from "../tlv/TlvNullable";
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.6.5.8 */
 const OptionsBitmap = TlvBitmap(TlvUInt8, {
@@ -55,23 +59,23 @@ const MoveToClosestFrequencyCommandRequest = TlvObject({
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.6.4 */
 const features = {
     /** Dependency with the On/Off cluster */
-    onOffClusterDependency: BitFlag(0), // default: true
+    onOff: BitFlag(0), // default: true
 
     /** Behavior that supports lighting applications. */
     lighting: BitFlag(1),
 
     /** Supports frequency attributes and behavior. */
-    supportFrequency: BitFlag(2)
+    frequency: BitFlag(2)
 };
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.6.6.2.1 */
-const enum MoveMode {
+export const enum MoveMode {
     Up = 0x0,
     Down = 0x1,
 }
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.6.6.3 */
-const enum StepMode {
+export const enum StepMode {
     Up = 0x0,
     Down = 0x1,
 }
@@ -103,7 +107,7 @@ const commonAttributes = {
     defaultMoveRate: OptionalWritableAttribute(0x14, TlvNullable(TlvUInt8)),
 
     /** Determines the default behavior of some cluster commands. */
-    options: Attribute(0x0f, OptionsBitmap),
+    options: WritableAttribute(0x0f, OptionsBitmap, { default: { executeIfOff: false, coupleColorTempToLevel: false } }),
 };
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.6.6 */
@@ -151,7 +155,7 @@ export const LevelControlCluster = Cluster({
         remainingTime: OptionalAttribute(0x01, TlvUInt16, { default: 0 }),
 
         /** Desired startup level for a device when it is supplied with power. */
-        startUpCurrentLevel: OptionalWritableAttribute(0x4000, TlvNullable(TlvUInt8)),
+        startUpCurrentLevel: OptionalWritableAttribute(0x4000, TlvNullable(TlvUInt8), { persistent: true }),
     },
     commands: commonCommands,
 });

@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ByteArray } from "@project-chip/matter.js";
-import { FabricIndex } from "../common/FabricIndex";
+import { ByteArray, FabricIndex } from "@project-chip/matter.js";
 import { Fabric, FabricBuilder } from "./Fabric";
 import { MatterError } from "../../error/MatterError";
 

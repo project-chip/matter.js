@@ -24,26 +24,23 @@ import { PaseServer } from "./matter/session/secure/PaseServer";
 import { Crypto } from "./crypto/Crypto";
 import { CaseServer } from "./matter/session/secure/CaseServer";
 import { ClusterServer, InteractionServer } from "./matter/interaction/InteractionServer";
-import { BasicInformationCluster } from "./matter/cluster/BasicInformationCluster";
-import { GeneralCommissioningCluster, RegulatoryLocationType } from "./matter/cluster/GeneralCommissioningCluster";
-import { OperationalCredentialsCluster } from "./matter/cluster/OperationalCredentialsCluster";
+import {
+    BasicInformationCluster, GeneralCommissioningCluster, RegulatoryLocationType, OperationalCredentialsCluster, OnOffCluster,
+    NetworkCommissioningCluster, NetworkCommissioningStatus, AdminCommissioningCluster, CommissioningWindowStatus,
+    VendorId, FabricIndex
+} from "@project-chip/matter.js";
 import { DEVICE } from "./matter/common/DeviceTypes";
 import { MdnsBroadcaster } from "./matter/mdns/MdnsBroadcaster";
 import { commandExecutor, getIntParameter, getParameter } from "./util/CommandLine";
-import { OnOffCluster } from "./matter/cluster/OnOffCluster";
 import { GeneralCommissioningClusterHandler } from "./matter/cluster/server/GeneralCommissioningServer";
 import { OperationalCredentialsClusterHandler } from "./matter/cluster/server/OperationalCredentialsServer";
 import { MdnsScanner } from "./matter/mdns/MdnsScanner";
 import { Logger } from "./log/Logger";
-import { VendorId } from "./matter/common/VendorId";
 import { OnOffClusterHandler } from "./matter/cluster/server/OnOffServer";
 import { CommissionningFlowType, DiscoveryCapabilitiesSchema, ManualPairingCodeCodec, QrPairingCodeCodec } from "./codec/PairingCode.js";
 import { QrCode } from "./codec/QrCode.js";
-import { NetworkCommissioningCluster, NetworkCommissioningStatus } from "./matter/cluster/NetworkCommissioningCluster";
-import { AdminCommissioningCluster, CommissioningWindowStatus } from "./matter/cluster/AdminCommissioningCluster";
 import { AdminCommissioningHandler } from "./matter/cluster/server/AdminCommissioningServer";
 import { NetworkCommissioningHandler } from "./matter/cluster/server/NetworkCommissioningServer";
-import { FabricIndex } from "./matter/common/FabricIndex";
 import { AttestationCertificateManager } from "./matter/certificate/AttestationCertificateManager";
 import { CertificationDeclarationManager } from "./matter/certificate/CertificationDeclarationManager";
 
@@ -115,7 +112,7 @@ class Device {
                     }, {}),
                     new ClusterServer(GeneralCommissioningCluster, {}, {
                         breadcrumb: BigInt(0),
-                        commissioningInfo: {
+                        basicCommissioningInfo: {
                             failSafeExpiryLengthSeconds: 60 /* 1min */,
                             maxCumulativeFailsafeSeconds: 900 /* Recommended according to Specs */,
                         },
