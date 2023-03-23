@@ -5,7 +5,7 @@
  */
 
 import { DataWriter, Endian, MatterCoreSpecificationV1_0, TlvUInt64, TlvWrapper } from "@project-chip/matter.js";
-import crypto from "crypto";
+import * as crypto from "crypto";
 
 const OPERATIONAL_NODE_MIN = BigInt('0x0000000000000001');
 const OPERATIONAL_NODE_MAX = BigInt('0xFFFFFFEFFFFFFFFF');

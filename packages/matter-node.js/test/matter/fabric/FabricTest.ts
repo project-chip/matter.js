@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import assert from "assert";
+import * as assert from "assert";
 import { Crypto } from "../../../src/crypto/Crypto";
 import { NodeId } from "../../../src/matter/common/NodeId";
 import { VendorId } from "../../../src/matter/common/VendorId";
@@ -39,7 +39,7 @@ const TEST_RANDOM_3 = ByteArray.fromHex("0b2a71876d3d090d37cb5286168ab9be0d2e7e0
 const EXPECTED_DESTINATION_ID_3 = ByteArray.fromHex("f7f7009606c61927af62502067581b4b0d27f2f22108e2c82c9f0ddd99ab3557");
 
 describe("FabricBuilder", () => {
-    context("build", () => {
+    describe("build", () => {
         const builder = new FabricBuilder(TEST_FABRIC_INDEX);
         builder.setRootVendorId(new VendorId(0));
         builder.setRootNodeId(TEST_ROOT_NODE);
@@ -63,7 +63,7 @@ describe("FabricBuilder", () => {
 
 describe("Fabric", () => {
 
-    context("getDestinationId", () => {
+    describe("getDestinationId", () => {
         it("generates the correct destination ID", () => {
             const fabric = new Fabric(TEST_FABRIC_INDEX, TEST_FABRIC_ID, TEST_NODE_ID, TEST_ROOT_NODE, Buffer.alloc(0), TEST_ROOT_PUBLIC_KEY, Crypto.createKeyPair(), new VendorId(0), Buffer.alloc(0), Buffer.alloc(0), TEST_IDENTITY_PROTECTION_KEY, undefined, Buffer.alloc(0), '');
 

@@ -10,7 +10,7 @@ import { AdminCommissioningCluster } from "../AdminCommissioningCluster"
 import { ClusterServerHandlers } from "./ClusterServer"
 
 export const AdminCommissioningHandler: (secureChannelProtocol: SecureChannelProtocol) => ClusterServerHandlers<typeof AdminCommissioningCluster> = (secureChannelProtocol) => ({
-    openCommissioningWindow: async function({ request: { pakePasscodeVerifier: pakeVerifier, discriminator, iterations, salt }, session, attributes: { windowStatus } }) {
+    openCommissioningWindow: async function({ request: { pakePasscodeVerifier: pakeVerifier, discriminator, iterations, salt }, session, /* attributes: { windowStatus } */ }) {
         //windowStatus.set(CommissioningWindowStatus.EnhancedWindowOpen);
         secureChannelProtocol.updatePaseCommissioner(PaseServer.fromVerificationValue(pakeVerifier, { iterations, salt }));
         session.getContext().openCommissioningModeWindow(2, discriminator);

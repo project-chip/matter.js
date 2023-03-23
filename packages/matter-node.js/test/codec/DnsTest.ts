@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import assert from "assert";
+import * as assert from "assert";
 import { ByteArray } from "@project-chip/matter.js";
 import { AAAARecord, ARecord, DnsCodec, DnsMessage, MessageType, PtrRecord, SrvRecord, TxtRecord } from "../../src/codec/DnsCodec";
 
@@ -50,7 +50,7 @@ const DNS_DECODED = {
 };
 
 describe("DnsCodec", () => {
-    context("decode", () => {
+    describe("decode", () => {
         it("decodes a message", () => {
             const result = DnsCodec.decode(ENCODED);
 
@@ -58,7 +58,7 @@ describe("DnsCodec", () => {
         });
     });
 
-    context("encode", () => {
+    describe("encode", () => {
         it("encodes a message", () => {
             const result = DnsCodec.encode(DNS_RESPONSE);
 

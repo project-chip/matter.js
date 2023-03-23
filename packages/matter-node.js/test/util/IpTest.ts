@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import assert from "assert";
+import * as assert from "assert";
 import { iPv4ToNumber, iPv6ToArray, onSameNetwork } from "../../src/util/Ip";
 
 describe("IP", () => {
-    context("iPv4ToNumber", () => {
+    describe("iPv4ToNumber", () => {
         it("converts an IPv4 address to a number", () => {
             const result = iPv4ToNumber("192.168.200.250");
 
@@ -16,7 +16,7 @@ describe("IP", () => {
         });
     });
 
-    context("iPv6ToArray", () => {
+    describe("iPv6ToArray", () => {
         it("converts an IPv6 address to an Uint16 array", () => {
             const result = iPv6ToArray("fe80::e777:4f5e:c61e:7314");
 
@@ -36,7 +36,7 @@ describe("IP", () => {
         });
     });
 
-    context("onSameNetwork", () => {
+    describe("onSameNetwork", () => {
         it("returns true if two IPv4 addresses are on the same network", () => {
             const result = onSameNetwork("192.168.200.250", "192.168.200.1", "255.255.255.0");
 

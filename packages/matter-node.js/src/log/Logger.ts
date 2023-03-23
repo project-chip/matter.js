@@ -6,6 +6,7 @@
 
 import { ByteArray } from "@project-chip/matter.js";
 import { Time } from "../time/Time";
+import * as console from "console"
 
 export enum Level {
     DEBUG = 0,

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import assert from "assert";
+import * as assert from "assert";
 import { CommissionningFlowType, DiscoveryCapabilitiesSchema, QrCodeData, QrPairingCodeCodec, ManualPairingCodeCodec, ManualPairingData } from "../../src/codec/PairingCode";
 
 const QR_CODE = "MT:YNJV7VSC00CMVH7SR00";
@@ -29,7 +29,7 @@ const MANUAL_PAIRING_CODE_DATA: ManualPairingData = {
 const MANUAL_PAIRING_CODE = "26318621095";
 
 describe("QrPairingCodeCodec", () => {
-    context("encode", () => {
+    describe("encode", () => {
         it("encodes the data", () => {
             const result = QrPairingCodeCodec.encode(QR_CODE_DATA);
 
@@ -37,7 +37,7 @@ describe("QrPairingCodeCodec", () => {
         });
     });
 
-    context("decode", () => {
+    describe("decode", () => {
         it("decodes the data", () => {
             const result = QrPairingCodeCodec.decode(QR_CODE);
 
@@ -48,7 +48,7 @@ describe("QrPairingCodeCodec", () => {
 
 
 describe("ManualPairingCodeCodec", () => {
-    context("encode", () => {
+    describe("encode", () => {
         it("encodes the data", () => {
             const result = ManualPairingCodeCodec.encode(MANUAL_PAIRING_CODE_DATA);
 
