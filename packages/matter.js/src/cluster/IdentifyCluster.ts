@@ -8,7 +8,7 @@ import { BitFlag } from "../schema/BitmapSchema.js";
 import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvEnum, TlvUInt16 } from "../tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
-import { Attribute, Cluster, Command, OptionalCommand, TlvNoArguments, TlvNoResponse, WritableAttribute } from "./Cluster.js";
+import { Attribute, Cluster, Command, OptionalCommand, TlvNoResponse, WritableAttribute } from "./Cluster.js";
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.2.5.2 */
 export const enum IdentifyType {
@@ -47,9 +47,11 @@ const TlvTriggerEffectRequest = TlvObject({
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.2.6.4 */
+/*
 const TlvIdentifyQueryResponse = TlvObject({
     timeout: TlvField(0, TlvUInt16),
 });
+*/
 
 /**
  * Attributes and commands for putting a device into Identification mode (e.g. flashing a light).
@@ -79,8 +81,12 @@ export const IdentifyCluster = Cluster({
         /** Starts or stops the receiving device identifying itself. */
         identify: Command(0, TlvIdentifyRequest, 0, TlvNoResponse),
 
-        /** Request the target or targets to respond if they are currently identifying themselves. */
-        identifyQuery: Command(1, TlvNoArguments, 0, TlvIdentifyQueryResponse),
+        /**
+         * Allows the sending device to request the target or targets to respond if they are currently identifying themselves.
+         *
+         * TODO: Add when adding support for the Query Feature
+         */
+        //identifyQuery: Command(1, NoArgumentsT, 0, TlvIdentifyQueryResponse),
 
         /** Allows the support of feedback to the user, such as a certain light effect when identifying. */
         triggerEffect: OptionalCommand(0x40, TlvTriggerEffectRequest, 0, TlvNoResponse),

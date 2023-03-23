@@ -6,9 +6,8 @@
 
 import { TestCert_PAA_NoVID_PrivateKey, TestCert_PAA_NoVID_PublicKey, TestCert_PAA_NoVID_SKID } from "./ChipPAAuthorities";
 import { Crypto } from "../../crypto/Crypto";
-import { VendorId } from "../common/VendorId";
+import { VendorId, ByteArray } from "@project-chip/matter.js";
 import { Time } from "../../time/Time";
-import { ByteArray } from "@project-chip/matter.js";
 import { CertificateManager, jsToMatterDate } from "./CertificateManager";
 
 function getPaiCommonName(vendorId: VendorId, productId?: number) {

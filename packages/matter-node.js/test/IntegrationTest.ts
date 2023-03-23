@@ -10,30 +10,28 @@ import { Time } from "../src/time/Time";
 import { TimeFake } from "../src/time/TimeFake";
 import { UdpInterface } from "../src/net/UdpInterface";
 import { MatterController } from "../src/matter/MatterController";
+import { MatterDevice } from "../src/matter/MatterDevice";
+import {
+    OnOffCluster, BasicInformationCluster, GeneralCommissioningCluster, RegulatoryLocationType, OperationalCertStatus,
+    OperationalCredentialsCluster, VendorId, FabricIndex,
+} from "@project-chip/matter.js";
 import { Crypto } from "../src/crypto/Crypto";
 import { DEVICE } from "../src/matter/common/DeviceTypes";
 import { ClusterServer, InteractionServer } from "../src/matter/interaction/InteractionServer";
 import { MdnsBroadcaster } from "../src/matter/mdns/MdnsBroadcaster";
-import { MatterDevice } from "../src/matter/MatterDevice";
 import { CaseServer } from "../src/matter/session/secure/CaseServer";
 import { SecureChannelProtocol as SecureChannelProtocol } from "../src/matter/session/secure/SecureChannelProtocol";
 import { PaseServer } from "../src/matter/session/secure/PaseServer";
 import { NetworkFake } from "../src/net/fake/NetworkFake";
 import { Network } from "../src/net/Network";
 import { MdnsScanner } from "../src/matter/mdns/MdnsScanner";
-import { OnOffCluster } from "../src/matter/cluster/OnOffCluster";
-import { BasicInformationCluster } from "../src/matter/cluster/BasicInformationCluster";
-import { GeneralCommissioningCluster, RegulatoryLocationType } from "../src/matter/cluster/GeneralCommissioningCluster";
-import { OperationalCertStatus, OperationalCredentialsCluster } from "../src/matter/cluster/OperationalCredentialsCluster";
 import { GeneralCommissioningClusterHandler } from "../src/matter/cluster/server/GeneralCommissioningServer";
 import { OperationalCredentialsClusterHandler } from "../src/matter/cluster/server/OperationalCredentialsServer";
 import { ClusterClient } from "../src/matter/interaction/InteractionClient";
 import { Level, Logger } from "../src/log/Logger";
 import { getPromiseResolver } from "../src/util/Promises";
-import { VendorId } from "../src/matter/common/VendorId";
 import { NodeId } from "../src/matter/common/NodeId";
 import { OnOffClusterHandler } from "../src/matter/cluster/server/OnOffServer";
-import { FabricIndex } from "../src/matter/common/FabricIndex";
 import { AttestationCertificateManager } from "../src/matter/certificate/AttestationCertificateManager";
 import { CertificationDeclarationManager } from "../src/matter/certificate/CertificationDeclarationManager";
 import { StorageInMemory } from "../src/persistence/StorageInMemory";
@@ -128,7 +126,7 @@ describe("Integration", () => {
                     }, {}),
                     new ClusterServer(GeneralCommissioningCluster, {}, {
                         breadcrumb: BigInt(0),
-                        commissioningInfo: {
+                        basicCommissioningInfo: {
                             failSafeExpiryLengthSeconds: 60 /* 1min */,
                             maxCumulativeFailsafeSeconds: 60 * 60 /* 1h */,
                         },

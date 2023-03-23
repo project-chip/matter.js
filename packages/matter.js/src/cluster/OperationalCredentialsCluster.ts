@@ -5,7 +5,7 @@
  */
 
 import { TlvFabricId } from "../common/FabricId.js";
-import { TlvFabricIndex } from "../common/FabricIndex.js";
+import { FabricIndex, TlvFabricIndex } from "../common/FabricIndex.js";
 import { TlvNodeId } from "../common/NodeId.js";
 import { TlvSubjectId } from "../common/SubjectId.js";
 import { TlvVendorId } from "../common/VendorId.js";
@@ -26,21 +26,24 @@ export const RESP_MAX = 900;
  *
  * @see {@link MatterCoreSpecificationV1_0} § 11.17.5.3
  */
-const TlvFabricDescriptor = TlvObject({
-    /** The public key for the trusted root that scopes the fabric referenced by FabricIndex and its associated operational credential. */
+const TlvFabricDescriptor = TlvObject({ /* fabricScoped: true */
+    /** Contains the public key for the trusted root that scopes the fabric referenced by FabricIndex and its associated operational credential. */
     rootPublicKey: TlvField(1, TlvByteString.bound({ length: 65 })),
 
-    /** The value of AdminVendorID provided in the AddNOC command that led to the creation of this FabricDescriptorStruct. */
+    /** Contains the value of AdminVendorID provided in the AddNOC command that led to the creation of this FabricDescriptorStruct. */
     vendorId: TlvField(2, TlvVendorId),
 
-    /** The FabricID allocated to the fabric referenced by FabricIndex. */
+    /** Contains the FabricID allocated to the fabric referenced by FabricIndex. */
     fabricId: TlvField(3, TlvFabricId),
 
-    /** The NodeID in use within the fabric referenced by FabricIndex. */
+    /** Contain the NodeID in use within the fabric referenced by FabricIndex. */
     nodeId: TlvField(4, TlvNodeId),
 
-    /** A commissioner-set label for the fabric referenced by FabricIndex. */
+    /** Contains a commissioner-set label for the fabric referenced by FabricIndex. */
     label: TlvField(5, TlvString.bound({ maxLength: 32 })), /* default: "" */
+
+    // TODO: this data is scoped in the fabric context and should be marked as such
+    fabricIndex: TlvField(0xfe, TlvFabricIndex),
 });
 
 /**
@@ -48,12 +51,12 @@ const TlvFabricDescriptor = TlvObject({
  *
  * @see {@link MatterCoreSpecificationV1_0} § 11.17.5.2
  */
-const TlvNoc = TlvObject({
-    /** The NOC for the struct's associated fabric. */
-    noc: TlvField(1, TlvByteString.bound({ maxLength: 400 })),
+const TlvNoc = TlvObject({ /* fabricScoped: true */
+    /** Contains the NOC for the struct’s associated fabric. */
+    noc: TlvField(1, TlvByteString.bound({ maxLength: 400 })), /* fabricSensitive: true */
 
-    /** The ICAC or the struct's associated fabric. */
-    icac: TlvField(2, TlvNullable(TlvByteString.bound({ maxLength: 400 }))), /* default(not present): null */
+    /** Contains the ICAC or the struct’s associated fabric. */
+    icac: TlvField(2, TlvNullable(TlvByteString.bound({ maxLength: 400 }))), /* default(not present): null, fabricSensitive: true */
 });
 
 /**
@@ -62,92 +65,95 @@ const TlvNoc = TlvObject({
  *
  * @see {@link MatterCoreSpecificationV1_0} § 11.17.5.8 */
 export const enum CertificateChainType {
-    /** Requests the DER-encoded DAC certificate */
+    /** Request the DER- encoded DAC certificate */
     DeviceAttestation = 1,
 
-    /** Requests the DER-encoded PAI certificate */
+    /** Request the DER- encoded PAI certificate */
     ProductAttestationIntermediate = 2,
 }
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.7.1 */
 const TlvAttestationRequest = TlvObject({
-    /** The attestation nonce to be used in the computation of the Attestation Information. */
+    /** Contains the attestation nonce to be used in the computation of the Attestation Information. */
     attestationNonce: TlvField(0, TlvByteString.bound({ length: 32 })),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.7.2 */
 const TlvAttestationResponse = TlvObject({
-    /** The octet string of the serialized attestation_elements_message. */
+    /** Contains the octet string of the serialized attestation_elements_message. */
     elements: TlvField(0, TlvByteString.bound({ maxLength: RESP_MAX })),
 
-    /** The octet string of the necessary attestation_signature. */
+    /** Contains the octet string of the necessary attestation_signature. */
     signature: TlvField(1, TlvByteString.bound({ length: 64 })),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.7.5 */
 const TlvCertSigningRequestRequest = TlvObject({
-    /** The CSRNonce to be used in the computation of the NOCSR information. */
+    /** Contains the CSRNonce to be used in the computation of the NOCSR information. */
     certSigningRequestNonce: TlvField(0, TlvByteString.bound({ length: 32 })),
 
     /**
      * If set to true, the internal state of the CSR associated keypair SHALL be tagged as being for
      * a subsequent UpdateNOC, otherwise the internal state of the CSR SHALL be tagged as being for a
-     * subsequent AddNOC.
+     * subsequent AddNOC
      * */
     isForUpdateNOC: TlvOptionalField(1, TlvBoolean), /* default: false */
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.7.6 */
 const TlvCertSigningRequestResponse = TlvObject({
-    /** The octet string of the serialized nocsr_elements_message. */
+    /** Contains the octet string of the serialized nocsr_elements_message. */
     elements: TlvField(0, TlvByteString.bound({ maxLength: RESP_MAX })),
 
-    /** The octet string of the necessary attestation_signature. */
+    /** Contains the octet string of the necessary attestation_signature. */
     signature: TlvField(1, TlvByteString.bound({ length: 64 })),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.7.3 */
 const TlvCertChainRequest = TlvObject({
-    /** The type of certificate to be requested. */
+    /** Contains the type of certificate to be requested. */
     type: TlvField(0, TlvEnum<CertificateChainType>()),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.7.4 */
 const TlvCertChainResponse = TlvObject({
-    /** The octet string of the requested certificate. */
+    /** Contains the octet string of the requested certificate. */
     certificate: TlvField(0, TlvByteString.bound({ maxLength: 600 })),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.7.8 */
 const TlvAddNocRequest = TlvObject({
-    /** The Node Operational Certificate (NOC) to be added. */
+    /** Contains the Node Operational Certificate (NOC) to be added. */
     operationalCert: TlvField(0, TlvByteString.bound({ maxLength: 400 })),
 
-    /** The Intermediate CA Certificate (ICAC). */
+    /** Contains the Intermediate CA Certificate (ICAC). */
     intermediateCaCert: TlvOptionalField(1, TlvByteString.bound({ maxLength: 400 })),
 
-    /** The value of the Epoch Key for the Identity Protection Key (IPK). */
+    /** Contains the value of the Epoch Key for the Identity Protection Key (IPK) to set for the Fabric which is to be added. */
     identityProtectionKey: TlvField(2, TlvByteString.bound({ length: 16 })),
 
-    /** That Subject will have administration access on this node. */
+    /**
+     * Used to atomically add an Access Control Entry enabling that Subject to subsequently administer
+     * the Node whose operational identity is being added by this command.
+     */
     caseAdminNode: TlvField(3, TlvSubjectId),
 
-    /** The Vendor ID of the entity issuing the AddNOC command. */
+    /** Contains the Vendor ID of the entity issuing the AddNOC command. */
     adminVendorId: TlvField(4, TlvVendorId),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.7.9 */
 const TlvUpdateNocRequest = TlvObject({
-    /** The Node Operational Certificate (NOC). */
+    /** Contains the Node Operational Certificate (NOC). */
     operationalCert: TlvField(0, TlvByteString.bound({ maxLength: 400 })),
 
-    /** The Intermediate CA Certificate (ICAC). */
+    /** Contains the Intermediate CA Certificate (ICAC). */
     intermediateCaCert: TlvOptionalField(1, TlvByteString.bound({ maxLength: 400 })),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.7.13 */
 const TlvAddTrustedRootCertificateRequest = TlvObject({
-    /** The Trusted Root Certificate (TRC) to be added. */
+    /** Contains the Trusted Root Certificate (TRC) to be added. */
     certificate: TlvField(0, TlvByteString.bound({ maxLength: 400 })),
 });
 
@@ -189,13 +195,13 @@ export const enum OperationalCertStatus {
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.7.10 */
 const TlvOperationalCertificateStatusResponse = TlvObject({
-    /** A NOCStatus value representing the status of an operation involving a NOC. */
+    /** Contains a NOCStatus value representing the status of an operation involving a NOC. */
     status: TlvField(0, TlvEnum<OperationalCertStatus>()),
 
     /** When action was successful, contains the Fabric Index of the Fabric last added, removed or updated. */
     fabricIndex: TlvOptionalField(1, TlvFabricIndex),
 
-    /** Optional debugging textual information from the cluster implementation and should be visible in logs, not User UI */
+    /** Optionally contains debugging textual information from the cluster implementation and should be visible in logs, not User UI */
     debugText: TlvOptionalField(2, TlvString.bound({ maxLength: 128 })),
 });
 
@@ -218,13 +224,13 @@ export const TlvCertSigningRequest = TlvObject({
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.7.11 */
 const TlvUpdateFabricLabelRequest = TlvObject({
-    /** The label to set for the fabric associated with the current secure session. */
+    /** Contains the label to set for the fabric associated with the current secure session. */
     label: TlvField(0, TlvString32max),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.7.12 */
 const TlvRemoveFabricRequest = TlvObject({
-    /** The Fabric Index reference associated with the Fabric which is to be removed from the device. */
+    /** Contains the Fabric Index reference associated with the Fabric which is to be removed from the device. */
     fabricIndex: TlvField(0, TlvFabricIndex),
 });
 
@@ -236,53 +242,62 @@ const TlvRemoveFabricRequest = TlvObject({
  */
 export const OperationalCredentialsCluster = Cluster({
     id: 0x3e,
-    name: "Operational Credentials",
+    name: "OperationalCredentials",
     revision: 1,
 
     /** @see {@link MatterCoreSpecificationV1_0} § 11.17.6 */
     attributes: {
-        /** All NOCs applicable to this Node. */
-        nocs: Attribute(0, TlvArray(TlvNoc), { readAcl: AccessLevel.Administer }),
+        /** Contains all NOCs applicable to this Node. */
+        nocs: Attribute(0, TlvArray(TlvNoc), { persistent: true, omitChanges: true, readAcl: AccessLevel.Administer }),
 
-        /** Lists all fabrics to which this Node is commissioned. */
-        fabrics: Attribute(1, TlvArray(TlvFabricDescriptor)),
+        /** Describes all fabrics to which this Node is commissioned. */
+        fabrics: Attribute(1, TlvArray(TlvFabricDescriptor), { persistent: true }),
 
-        /** The number of Fabrics that are supported by the device. */
+        /** Contains the number of Fabrics that are supported by the device. */
         supportedFabrics: Attribute(2, TlvUInt8.bound({ min: 5, max: 254 })),
 
-        /** The number of Fabrics to which the device is currently commissioned. */
-        commissionedFabrics: Attribute(3, TlvUInt8),
+        /** Contains the number of Fabrics to which the device is currently commissioned. */
+        commissionedFabrics: Attribute(3, TlvUInt8, { persistent: true }),
 
-        /** A read-only list of Trusted Root CA Certificates installed on the Node. */
-        trustedRootCertificates: Attribute(4, TlvArray(TlvByteString, { maxLength: 400 })),
+        /** Contains a read-only list of Trusted Root CA Certificates installed on the Node. */
+        trustedRootCertificates: Attribute(4, TlvArray(TlvByteString, { maxLength: 400 }), { persistent: true, omitChanges: true }),
 
-        /** Accessing fabric index. */
-        currentFabricIndex: Attribute(5, TlvUInt8),
+        /** Contains accessing fabric index. */
+        currentFabricIndex: Attribute(5, TlvFabricIndex, { default: new FabricIndex(0) }),
     },
+
     /** @see {@link MatterCoreSpecificationV1_0} § 11.17.7 */
     commands: {
-        /** Requests attestation information. */
+        /** Sender is requesting attestation information from the receiver. */
         requestAttestation: Command(0, TlvAttestationRequest, 1, TlvAttestationResponse),
 
-        /** Requests a device attestation certificate. */
+        /** Sender is requesting a device attestation certificate from the receiver. */
         requestCertChain: Command(2, TlvCertChainRequest, 3, TlvCertChainResponse),
 
-        /** Requests a certificate signing request (CSR). */
+        /** Sender is requesting a certificate signing request (CSR) from the receiver. */
         requestCertSigning: Command(4, TlvCertSigningRequestRequest, 5, TlvCertSigningRequestResponse),
 
-        /** Adds new node operational certificates. */
+        /** Sender is requesting to add the new node operational certificates. */
         addOperationalCert: Command(6, TlvAddNocRequest, 8, TlvOperationalCertificateStatusResponse),
 
-        /** Updates the node operational certificates. */
-        updateOperationalCert: Command(7, TlvUpdateNocRequest, 8, TlvOperationalCertificateStatusResponse),
+        /** Sender is requesting to update the node operational certificates. */
+        updateOperationalCert: Command(7, TlvUpdateNocRequest, 8, TlvOperationalCertificateStatusResponse), /* fabricScoped: true */
 
-        /** Sets the user-visible Label field for a given Fabric. */
-        updateFabricLabel: Command(9, TlvUpdateFabricLabelRequest, 8, TlvOperationalCertificateStatusResponse),
+        /**
+         * This command SHALL be used by an Administrative Node to set the user-visible Label field for a given
+         * Fabric, as reflected by entries in the Fabrics attribute.
+         */
+        updateFabricLabel: Command(9, TlvUpdateFabricLabelRequest, 8, TlvOperationalCertificateStatusResponse), /* fabricScoped: true */
 
-        /** Removes a given fabric index and delete all associated fabric-scoped data. */
+        /**
+         * This command is used by Administrative Nodes to remove a given fabric index and delete all associated
+         * fabric-scoped data.
+         */
         removeFabric: Command(10, TlvRemoveFabricRequest, 8, TlvOperationalCertificateStatusResponse),
 
-        /** Adds a Trusted Root CA Certificate, provided as its CHIP Certificate representation. */
+        /**
+         * This command SHALL add a Trusted Root CA Certificate, provided as its CHIP Certificate representation.
+         */
         addRootCert: Command(11, TlvAddTrustedRootCertificateRequest, 11, TlvNoResponse),
     },
 });

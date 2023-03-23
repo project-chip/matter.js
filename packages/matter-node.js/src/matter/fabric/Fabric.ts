@@ -7,10 +7,7 @@
 import { Crypto, KeyPair } from "../../crypto/Crypto";
 import { CertificateManager, TlvOperationalCertificate, TlvRootCertificate } from "../certificate/CertificateManager";
 import { NodeId } from "../common/NodeId";
-import { VendorId } from "../common/VendorId";
-import { ByteArray, DataWriter, Endian, toBigInt } from "@project-chip/matter.js";
-import { FabricId } from "../common/FabricId";
-import { FabricIndex } from "../common/FabricIndex";
+import { ByteArray, DataWriter, Endian, toBigInt, VendorId, FabricId, FabricIndex } from "@project-chip/matter.js";
 import { SecureSession } from "../session/SecureSession";
 
 const COMPRESSED_FABRIC_ID_INFO = ByteArray.fromString("CompressedFabric");

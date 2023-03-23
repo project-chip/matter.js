@@ -26,22 +26,10 @@ import {
 import { Crypto, KeyPair } from "../../crypto/Crypto";
 import { NodeId, TlvNodeId } from "../common/NodeId";
 import {
-    ByteArray,
-    TlvArray,
-    TlvBoolean,
-    TlvByteString,
-    TlvField,
-    TlvList,
-    TlvObject,
-    TlvOptionalField,
-    TlvString,
-    TlvUInt16,
-    TlvUInt32,
-    TlvUInt64,
-    TlvUInt8,
-    TypeFromSchema
+    ByteArray, TlvArray, TlvBoolean, TlvByteString, TlvField, TlvList, TlvObject, TlvOptionalField, TlvString,
+    TlvUInt16, TlvUInt32, TlvUInt64, TlvUInt8, TypeFromSchema,
+    TlvVendorId, VendorId
 } from "@project-chip/matter.js";
-import { TlvVendorId, VendorId } from "../common/VendorId";
 
 const YEAR_S = 365 * 24 * 60 * 60;
 const EPOCH_OFFSET_S = 10957 * 24 * 60 * 60;

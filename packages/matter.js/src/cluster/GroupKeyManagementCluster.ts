@@ -6,8 +6,14 @@
 
 import { WritableAttribute, Attribute, Cluster, Command, TlvNoArguments, TlvNoResponse } from "./Cluster";
 import { TlvGroupId } from "../common/GroupId";
-import { BitFlag, MatterCoreSpecificationV1_0, TlvArray, TlvEnum, TlvField, TlvNullable, TlvObject, TlvOptionalField, TlvString, TlvUInt16, TlvUInt64 } from "@project-chip/matter.js";
 import { TlvEndpointNumber } from "../common/EndpointNumber";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject";
+import { TlvEnum, TlvUInt16, TlvUInt64 } from "../tlv/TlvNumber";
+import { TlvNullable } from "../tlv/TlvNullable";
+import { TlvString } from "../tlv/TlvString";
+import { TlvArray } from "../tlv/TlvArray";
+import { BitFlag } from "../schema/BitmapSchema";
 
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.2.6.1 */

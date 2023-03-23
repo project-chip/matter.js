@@ -5,10 +5,12 @@
  */
 
 import { Attribute, OptionalAttribute, Cluster } from "./Cluster";
-import { MatterApplicationClusterSpecificationV1_0, TlvUInt16, TlvNullable, TlvUInt8 } from "@project-chip/matter.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvNullable } from "../tlv/TlvNullable";
+import { TlvUInt16, TlvUInt8 } from "../tlv/TlvNumber";
 
 /**
- * The Illuminance Measurement cluster provides an interface to illuminance measurement function­ality.
+ * The Illuminance Measurement cluster provides an interface to illuminance measurement functionality.
  *
  * @see {@link MatterApplicationClusterSpecificationV1_0} § 2.2
  */
@@ -27,7 +29,7 @@ export const IlluminanceMeasurementCluster = Cluster({
 
         /** Indicates the maximum value of MeasuredValue that can be measured. */
         maxMeasuredValue: Attribute(2, TlvNullable(TlvUInt16.bound({ max: 65534 }))),
-        tolerance: OptionalAttribute(3, TlvUInt16.bound({ min: 0, max: 2048 })),
+        tolerance: OptionalAttribute(3, TlvUInt16.bound({ max: 2048 /* 0x0800 */ })),
 
         /** Specifies the electronic type of the light sensor. */
         lightSensorType: OptionalAttribute(4, TlvNullable(TlvUInt8), { default: null }), // only values null, 0, 1 and 0x40 to 0xfe are allowed

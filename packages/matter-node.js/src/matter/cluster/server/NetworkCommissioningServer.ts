@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NetworkCommissioningCluster } from "../NetworkCommissioningCluster"
+import { NetworkCommissioningCluster } from "@project-chip/matter.js"
 import { ClusterServerHandlers } from "./ClusterServer"
 
 export const NetworkCommissioningHandler: () => ClusterServerHandlers<typeof NetworkCommissioningCluster> = () => ({

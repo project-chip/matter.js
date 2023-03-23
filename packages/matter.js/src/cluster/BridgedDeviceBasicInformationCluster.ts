@@ -26,7 +26,7 @@ import { AccessLevel, Attribute, Cluster, Event, EventPriority, OptionalAttribut
  */
 export const BridgedDeviceBasicInformationCluster = Cluster({
     id: 0x39,
-    name: "Bridged Device Basic Information",
+    name: "BridgedDeviceBasicInformation",
     revision: 1,
 
     /** @see {@link MatterCoreSpecificationV1_0} § 9.13.6 */
@@ -41,7 +41,7 @@ export const BridgedDeviceBasicInformationCluster = Cluster({
         productName: OptionalAttribute(3, TlvString32max),
 
         /** User defined name for the Node. It is set during initial commissioning and may be updated by further reconfigurations. */
-        nodeLabel: OptionalWritableAttribute(5, TlvString32max, { default: "", writeAcl: AccessLevel.Manage }),
+        nodeLabel: OptionalWritableAttribute(5, TlvString32max, { persistent: true, default: "", writeAcl: AccessLevel.Manage }),
 
         /** Version number of the hardware of the Node. The meaning of its value, and the versioning scheme, are vendor defined. */
         hardwareVersion: OptionalAttribute(7, TlvUInt16, { default: 0 }),
