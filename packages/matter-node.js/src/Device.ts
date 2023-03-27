@@ -31,7 +31,7 @@ import {
 } from "@project-chip/matter.js";
 import { DEVICE } from "./matter/common/DeviceTypes";
 import { MdnsBroadcaster } from "./matter/mdns/MdnsBroadcaster";
-import { commandExecutor } from "./util/CommandLine";
+import { commandExecutor, getParameter } from "./util/CommandLine";
 import { GeneralCommissioningClusterHandler } from "./matter/cluster/server/GeneralCommissioningServer";
 import { OperationalCredentialsClusterHandler } from "./matter/cluster/server/OperationalCredentialsServer";
 import { MdnsScanner } from "./matter/mdns/MdnsScanner";
@@ -44,17 +44,22 @@ import { NetworkCommissioningHandler } from "./matter/cluster/server/NetworkComm
 import { AttestationCertificateManager } from "./matter/certificate/AttestationCertificateManager";
 import { CertificationDeclarationManager } from "./matter/certificate/CertificationDeclarationManager";
 
+
 const logger = Logger.get("Device");
 
+/** create a random discriminator to eliminate waiting period when re-adding this virtual test device. */
+const randomDiscriminator = Math.floor(Math.random() * (4096 - 2048 + 1)) + 2048;
+
 class Device {
+
     async start() {
         logger.info(`node-matter`);
-
+        const multicastInterface = getParameter("multicastInterface")
         const deviceName = "Matter test device";
         const deviceType = 257 /* Dimmable bulb */;
         const vendorName = "node-matter";
         const passcode = 20202021;
-        const discriminator = 3840;
+        const discriminator = randomDiscriminator;
         // product name / id and vendor id should match what is in the device certificate
         const vendorId = new VendorId(0xFFF1);
         const productName = "Matter Test DAC 0007";
@@ -84,7 +89,7 @@ class Device {
             .addNetInterface(await UdpInterface.create(5540, "udp4"))
             .addNetInterface(await UdpInterface.create(5540, "udp6"))
             .addScanner(await MdnsScanner.create())
-            .addBroadcaster(await MdnsBroadcaster.create())
+            .addBroadcaster(await MdnsBroadcaster.create(multicastInterface))
             .addProtocolHandler(secureChannelProtocol)
             .addProtocolHandler(new InteractionServer()
                 .addEndpoint(0x00, DEVICE.ROOT, [
