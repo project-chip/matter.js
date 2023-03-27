@@ -36,11 +36,19 @@ class Controller {
         const persistenceManager = new PersistenceManager(storage);
         await persistenceManager.initialize();
 
-        const ip = getParameter("ip");
+        const controllerPersistence = persistenceManager.createPersistence("Controller");
+
+        const ip = getParameter("ip") ?? controllerPersistence.get("ip");
         if (ip === undefined) throw new Error("Please specify the IP of the device to commission with -ip");
-        const port = getIntParameter("port") ?? 5540;
-        const discriminator = getIntParameter("discriminator") ?? 3840;
-        const setupPin = getIntParameter("pin") ?? 20202021;
+        const port = getIntParameter("port") ?? controllerPersistence.get("port") ?? 5540;
+        const discriminator = getIntParameter("discriminator") ?? controllerPersistence.get("discriminator") ?? 3840;
+        const setupPin = getIntParameter("pin") ?? controllerPersistence.get("pin") ?? 20202021;
+
+        controllerPersistence.set("ip", ip);
+        controllerPersistence.set("port", port);
+        controllerPersistence.set("discriminator", discriminator);
+        controllerPersistence.set("pin", setupPin);
+
         const client = await MatterController.create(await MdnsScanner.create(), await UdpInterface.create(5540, "udp4"), await UdpInterface.create(5540, "udp6"), persistenceManager);
         try {
             if (client.isCommissioned()) {
