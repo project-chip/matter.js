@@ -29,7 +29,7 @@ export class MdnsBroadcaster implements Broadcaster {
     ) { }
 
     setCommissionMode(mode: number, deviceName: string, deviceType: number, vendorId: VendorId, productId: number, discriminator: number) {
-        logger.debug(`announce commissioning mode ${mode} ${deviceName} ${deviceType} ${vendorId} ${productId} ${discriminator}`);
+        logger.debug(`announce commissioning mode ${mode} ${deviceName} ${deviceType} ${vendorId.id} ${productId} ${discriminator}`);
 
         const shortDiscriminator = (discriminator >> 8) & 0x0F;
         const instanceId = Crypto.getRandomData(8).toHex().toUpperCase();
@@ -45,6 +45,9 @@ export class MdnsBroadcaster implements Broadcaster {
             if (ipMac === undefined) return [];
             const { mac, ips } = ipMac;
             const hostname = mac.replace(/:/g, "").toUpperCase() + "0000.local";
+            // log demonstrating that multiple devices are broadcast even though its a single device when
+            // there are multiple network interfaces with valid IPs.
+            logger.debug(`broadcast ${hostname} on ${mac} with IPs ${ips}`)
             const records = [
                 PtrRecord(SERVICE_DISCOVERY_QNAME, MATTER_COMMISSION_SERVICE_QNAME),
                 PtrRecord(SERVICE_DISCOVERY_QNAME, vendorQname),
