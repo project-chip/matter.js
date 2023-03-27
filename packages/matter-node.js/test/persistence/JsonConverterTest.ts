@@ -25,7 +25,7 @@ describe("JsonConverter", () => {
 
             const json = toJson(obj);
 
-            assert.equal(json, "{\"aNumber\":1,\"aNumberString\":\"2\",\"aString\":\"hello\",\"aBoolean\":true,\"aNull\":null,\"anObject\":{\"a\":1,\"b\":2,\"c\":3},\"anNumberArray\":[1,2,3],\"anStringArray\":[\"a\",\"b\",\"c\"],\"anObjectArray\":[{\"a\":1},{\"b\":2},{\"c\":3}]}");
+            assert.equal(json, `{"aNumber":1,"aNumberString":"2","aString":"hello","aBoolean":true,"aNull":null,"anObject":{"a":1,"b":2,"c":3},"anNumberArray":[1,2,3],"anStringArray":["a","b","c"],"anObjectArray":[{"a":1},{"b":2},{"c":3}]}`);
 
             const decodedObj = fromJson(json);
 
@@ -37,7 +37,7 @@ describe("JsonConverter", () => {
 
             const json = toJson(obj);
 
-            assert.equal(json, "\"{\\\"__object__\\\":\\\"BigInt\\\",\\\"__value__\\\":\\\"12345678901234567890\\\"}\"");
+            assert.equal(json, `"{\\"__object__\\":\\"BigInt\\",\\"__value__\\":\\"12345678901234567890\\"}"`);
 
             const decodedObj = fromJson(json);
 
@@ -50,7 +50,7 @@ describe("JsonConverter", () => {
 
             const json = toJson(obj);
 
-            assert.equal(json, "\"{\\\"__object__\\\":\\\"Buffer\\\",\\\"__value__\\\":\\\"aGVsbG8=\\\"}\"");
+            assert.equal(json, `"{\\"__object__\\":\\"Buffer\\",\\"__value__\\":\\"aGVsbG8=\\"}"`);
 
             const decodedObj = fromJson(json);
 
@@ -63,7 +63,7 @@ describe("JsonConverter", () => {
 
             const json = toJson(obj);
 
-            assert.equal(json, "\"{\\\"__object__\\\":\\\"Uint8Array\\\",\\\"__value__\\\":\\\"AQID\\\"}\"");
+            assert.equal(json, `"{\\"__object__\\":\\"Uint8Array\\",\\"__value__\\":\\"AQID\\"}"`);
 
             const decodedObj = fromJson(json);
 
@@ -76,7 +76,7 @@ describe("JsonConverter", () => {
 
             const json = toJson(obj);
 
-            assert.equal(json, "\"{\\\"__object__\\\":\\\"Map\\\",\\\"__value__\\\":\\\"[[\\\\\\\"a\\\\\\\",1],[\\\\\\\"b\\\\\\\",2],[\\\\\\\"c\\\\\\\",3]]\\\"}\"");
+            assert.equal(json, `"{\\"__object__\\":\\"Map\\",\\"__value__\\":\\"[[\\\\\\"a\\\\\\",1],[\\\\\\"b\\\\\\",2],[\\\\\\"c\\\\\\",3]]\\"}"`);
 
             const decodedObj = fromJson(json);
 
@@ -90,7 +90,7 @@ describe("JsonConverter", () => {
 
             const json = toJson(obj);
 
-            assert.equal(json, "\"{\\\"__object__\\\":\\\"Map\\\",\\\"__value__\\\":\\\"[[1,\\\\\\\"{\\\\\\\\\\\\\\\"__object__\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\"Map\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"__value__\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\"[[\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"a\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",1]]\\\\\\\\\\\\\\\"}\\\\\\\"],[2,\\\\\\\"{\\\\\\\\\\\\\\\"__object__\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\"Map\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"__value__\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\"[[\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"b\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",2]]\\\\\\\\\\\\\\\"}\\\\\\\"]]\\\"}\"");
+            assert.equal(json, `"{\\"__object__\\":\\"Map\\",\\"__value__\\":\\"[[1,\\\\\\"{\\\\\\\\\\\\\\"__object__\\\\\\\\\\\\\\":\\\\\\\\\\\\\\"Map\\\\\\\\\\\\\\",\\\\\\\\\\\\\\"__value__\\\\\\\\\\\\\\":\\\\\\\\\\\\\\"[[\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"a\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",1]]\\\\\\\\\\\\\\"}\\\\\\"],[2,\\\\\\"{\\\\\\\\\\\\\\"__object__\\\\\\\\\\\\\\":\\\\\\\\\\\\\\"Map\\\\\\\\\\\\\\",\\\\\\\\\\\\\\"__value__\\\\\\\\\\\\\\":\\\\\\\\\\\\\\"[[\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"b\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",2]]\\\\\\\\\\\\\\"}\\\\\\"]]\\"}"`);
 
             const decodedObj = fromJson(json);
 
