@@ -1,4 +1,4 @@
-# node-matter
+# matter-node.js
 
 [![license](https://img.shields.io/badge/license-Apache2-green.svg?style=flat)](https://raw.githubusercontent.com/mfucci/node-matter/master/LICENSE) 
 
@@ -9,11 +9,11 @@ Matter protocol for node.js with no native dependencies (and very limited depend
 Matter is a new secure / reliable / local / standard protocol for smart devices launched at the end of 2022.
 To know more about Matter: https://csa-iot.org/all-solutions/matter/
 
-node-matter is compatible with (or will soon be):
+matter-node.js is compatible with:
 - **iOS - Home app**: fully working, [screenshot](https://github.com/mfucci/node-matter/issues/103#issuecomment-1374301293)
 - **Android - Home app**: fully working, [thread](https://github.com/mfucci/node-matter/issues/140#issuecomment-1374417228)
 - **Alexa**: fully working, [screenshot](https://github.com/mfucci/node-matter/issues/159#issuecomment-1374323476)
-- **Home Assistant**: was working, we are on it, [thread](https://github.com/mfucci/node-matter/issues/11)
+- **Home Assistant**: fully working, [thread](https://github.com/mfucci/node-matter/issues/11)
 - **Smartthings**: pairing works, but for controlling seems like Smartthings implementation itself has issues, [thread](https://github.com/mfucci/node-matter/issues/189)
 
 Each system have their own specialities, see [Pairing and Usage Information](#Pairing-and-Usage-Information) for more details.
@@ -21,16 +21,24 @@ Each system have their own specialities, see [Pairing and Usage Information](#Pa
 ## Installation
 
 ```bash
-npm i -g node-matter
+npm i -g @project-chip/matter-node.js
 ```
 
 ## Usage
+
+To run from the build files:
 
 ```bash
 matter
 ```
 
-This starts a Matter server listening on port 5540.
+To run directly from Typescript files with on the fly compilation:
+
+```bash
+npm run matter
+```
+
+This starts a Matter (Device) server listening on port 5540.
 
 This first version only includes the OnOff cluster (on/off smart thing, like a plug or a bulb).
 You can use -on and -off parameter to run a script to control something.
@@ -40,21 +48,35 @@ For instance, on a Raspberry Pi, this will turn on / off the red LED:
 matter -on "echo 255 > /sys/class/leds/led1/brightness" -off "echo 0 > /sys/class/leds/led1/brightness"
 ```
 
+or when starting from TS files:
+
+```bash
+npm run matter -- -on "echo 255 > /sys/class/leds/led1/brightness" -off "echo 0 > /sys/class/leds/led1/brightness"
+```
+
 **Experimental**
+
+To run from the build files:
 
 ```bash
 matter-controller -ip [IP address of device to commission]
 ```
 
+To run directly from Typescript files with on the fly compilation:
+
+```bash
+npm run matter-controller
+```
+
 This will commission a Matter device (for debugging purpose only for now).
 
 
-## Modifying the server behavior
+## Modifying the server (Device) behavior
 
-Main.ts defines the server behavior. You can add / remove clusters, change default parameters, etc...
+Device.ts defines the server behavior. You can add / remove clusters, change default parameters, etc...
 
 ```typescript
-new MatterServer()
+new MatterDevice()
     .addChannel(new UdpChannel(5540))
     .addProtocolHandler(Protocol.SECURE_CHANNEL, new SecureChannelHandler(
             new PasePairing(20202021, { iteration: 1000, salt: Crypto.getRandomData(32) }),
@@ -182,6 +204,6 @@ Have a look at the implementation of the OnOff cluster: pretty simple, right?
 
 I am planning on adding more clusters, so stay tuned or pinged me to implement first the one you need.
 
-### Contact the author
+### Contact the developers
 
-For other questions, you can reach out to: mfucci@gmail.com or post a message on the github forum.
+For other questions, you can post a message on the github forum, open an issue, or join Discord https://discord.gg/ujmRNrhDuW .
