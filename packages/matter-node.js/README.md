@@ -95,6 +95,15 @@ new MatterDevice()
     .start()
 ```
 
+## Building
+
+* `npm run build`: Build all code and create CommonJS and ES6 variants in dist directory. This will built incrementally and only build the changed files.
+* `npm run build-clean`: Clean the dist directory and build all code from scratch
+
+## Testing
+
+* `npm run test`: Run all tests
+
 ## Pairing and Usage Information
 
 It should work with any Matter-compatible home automation app when Matter will be released. We tested the Library with the "big" ones and can provide additional information.

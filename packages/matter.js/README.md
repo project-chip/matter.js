@@ -11,11 +11,10 @@ The following features are abstracted away to allow to be implemented environmen
 * Date/Timer
 * Logger (Default uses "console")
 
-## matter.js usage
+## Building
 
-matter.js is used at the core of those two projects:
-* [matternode](https://github.com/project-chip/matternode): a light-weight node.js implementation of a Matter Node
-* [matter-node.js](../matter-node.js/README.md): a Matter client / server running on node.js compatible with HA (Android / iOs support in progress)
+* `npm run build`: Build all code and create CommonJS and ES6 variants in dist directory. This will built incrementally and only build the changed files.
+* `npm run build-clean`: Clean the dist directory and build all code from scratch
 
 ## Tests
 
@@ -24,3 +23,9 @@ matter.js is used at the core of those two projects:
 * `npm run test`: Run all tests
 
 test-web will create a /coverage directory containing the test code coverage
+
+## matter.js usage
+
+matter.js is used at the core of those two projects:
+* [matternode](https://github.com/project-chip/matternode): a light-weight node.js implementation of a Matter Node
+* [matter-node.js](../matter-node.js/README.md): a Matter client / server running on node.js compatible with HA (Android / iOs support in progress)

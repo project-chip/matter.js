@@ -54,6 +54,12 @@ The following commands are available:
 * `npm run format`: runs typescript-formatter on all packages and formats the code. Files will be changed in place.
 * `npm run format-check`: runs typescript-formatter on all packages and checks if the code is formatted correctly. If not it will output the files that need to be formatted.
 
+## Building
+
+You can use `npm run build` on the root level to build all packages in an incremental way. This will only build the changed files.
+
+You can use `npm run build-clean` on the root level to build all packages from scratch.
+
 ## Tests
 
 You can use `npm run test` on the root level to run all tests for all packages.
