@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-import { TlvArray } from "../tlv/TlvArray.js";
-import { TlvField, TlvObject } from "../tlv/TlvObject.js";
-import { TlvString } from "../tlv/TlvString.js";
-import { AccessLevel, Attribute, Cluster, WritableAttribute } from "./Cluster.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications";
+import { TlvArray } from "../tlv/TlvArray";
+import { TlvField, TlvObject } from "../tlv/TlvObject";
+import { TlvString } from "../tlv/TlvString";
+import { AccessLevel, Attribute, Cluster, WritableAttribute } from "./Cluster";
 
 /**
  * This is a string tuple with strings that are user defined.

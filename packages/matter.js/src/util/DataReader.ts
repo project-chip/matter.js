@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ByteArray, Endian } from "./ByteArray.js";
+import { ByteArray, Endian } from "./ByteArray";
 
 /** Reader that auto-increments its offset after each read. */
 export class DataReader<E extends Endian> {

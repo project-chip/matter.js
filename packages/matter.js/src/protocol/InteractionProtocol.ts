@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TlvNodeId } from "../common/NodeId.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-import { TlvAny } from "../tlv/TlvAny.js";
-import { TlvArray } from "../tlv/TlvArray.js";
-import { TlvBoolean } from "../tlv/TlvBoolean.js";
-import { TlvEnum, TlvUInt16, TlvUInt32, TlvUInt64, TlvUInt8 } from "../tlv/TlvNumber.js";
-import { TlvField, TlvList, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
+import { TlvNodeId } from "../common/NodeId";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications";
+import { TlvAny } from "../tlv/TlvAny";
+import { TlvArray } from "../tlv/TlvArray";
+import { TlvBoolean } from "../tlv/TlvBoolean";
+import { TlvEnum, TlvUInt16, TlvUInt32, TlvUInt64, TlvUInt8 } from "../tlv/TlvNumber";
+import { TlvField, TlvList, TlvObject, TlvOptionalField } from "../tlv/TlvObject";
 
 /**
  * @see {@link MatterCoreSpecificationV1_0}, section 8.10

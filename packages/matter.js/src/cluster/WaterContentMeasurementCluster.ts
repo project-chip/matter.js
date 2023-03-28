@@ -7,7 +7,7 @@
 
 import { Attribute, OptionalAttribute, Cluster } from "./Cluster";
 import { TlvUInt16 } from "../tlv/TlvNumber";
-import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications";
 import { TlvNullable } from "../tlv/TlvNullable";
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 2.6.4 */

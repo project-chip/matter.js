@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BitSchema, TypeFromBitSchema } from "../schema/BitmapSchema.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-import { TlvBitmap, TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
-import { TlvFields, TlvObject, TypeFromFields } from "../tlv/TlvObject.js";
-import { TlvSchema } from "../tlv/TlvSchema.js";
-import { TlvVoid } from "../tlv/TlvVoid.js";
-import { Merge } from "../util/Type.js";
+import { BitSchema, TypeFromBitSchema } from "../schema/BitmapSchema";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications";
+import { TlvBitmap, TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber";
+import { TlvFields, TlvObject, TypeFromFields } from "../tlv/TlvObject";
+import { TlvSchema } from "../tlv/TlvSchema";
+import { TlvVoid } from "../tlv/TlvVoid";
+import { Merge } from "../util/Type";
 import { EventId, TlvEventId } from "../common/EventId";
 import { AttributeId, TlvAttributeId } from "../common/AttributeId";
 import { CommandId, TlvCommandId } from "../common/CommandId";

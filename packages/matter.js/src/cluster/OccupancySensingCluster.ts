@@ -5,7 +5,7 @@
  */
 
 import { Attribute, OptionalWritableAttribute, Cluster } from "./Cluster";
-import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications";
 import { TlvBitmap, TlvEnum, TlvUInt16, TlvUInt8 } from "../tlv/TlvNumber";
 import { BitFlag } from "../schema/BitmapSchema";
 import { TlvNullable } from "../tlv/TlvNullable";

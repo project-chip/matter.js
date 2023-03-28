@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
-import { TlvElement, TlvReader, TlvSchema, TlvStream, TlvWriter } from "./TlvSchema.js";
+import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec";
+import { TlvElement, TlvReader, TlvSchema, TlvStream, TlvWriter } from "./TlvSchema";
 
 export class AnySchema extends TlvSchema<TlvStream> {
     override encodeTlvInternal(writer: TlvWriter, tlvStream: TlvStream, tagAssigned?: TlvTag | undefined): void {

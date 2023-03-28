@@ -5,7 +5,7 @@
  */
 
 import { OptionalEvent, EventPriority, Cluster, Attribute, OptionalAttribute } from "./Cluster";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications";
 import { TlvField } from "../tlv/TlvObject";
 import { TlvEnum, TlvUInt16, TlvUInt32, TlvUInt8 } from "../tlv/TlvNumber";
 import { TlvArray } from "../tlv/TlvArray";

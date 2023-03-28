@@ -4,14 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TlvFabricIndex } from "../common/FabricIndex.js";
-import { TlvVendorId } from "../common/VendorId.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-import { TlvBoolean } from "../tlv/TlvBoolean.js";
-import { TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
-import { TlvField } from "../tlv/TlvObject.js";
-import { TlvString, TlvString256max, TlvString32max, TlvString64max } from "../tlv/TlvString.js";
-import { AccessLevel, Attribute, Cluster, Event, EventPriority, OptionalAttribute, OptionalEvent, OptionalWritableAttribute } from "./Cluster.js";
+import { TlvFabricIndex } from "../common/FabricIndex";
+import { TlvVendorId } from "../common/VendorId";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications";
+import { TlvBoolean } from "../tlv/TlvBoolean";
+import { TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber";
+import { TlvField } from "../tlv/TlvObject";
+import { TlvString, TlvString256max, TlvString32max, TlvString64max } from "../tlv/TlvString";
+import { AccessLevel, Attribute, Cluster, Event, EventPriority, OptionalAttribute, OptionalEvent, OptionalWritableAttribute } from "./Cluster";
 
 /**
  * This Cluster serves two purposes towards a Node communicating with a Bridge:

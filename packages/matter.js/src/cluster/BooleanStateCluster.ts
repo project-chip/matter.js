@@ -7,7 +7,7 @@
 import { Attribute, OptionalEvent, EventPriority, Cluster } from "./Cluster";
 import { TlvBoolean } from "../tlv/TlvBoolean";
 import { TlvField } from "../tlv/TlvObject";
-import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications";
 
 /**
  * Attributes and commands for Boolean State.

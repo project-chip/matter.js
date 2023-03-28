@@ -6,7 +6,7 @@
 
 import { Cluster, Attribute, } from "./Cluster";
 import { TlvEndpointNumber } from "../common/EndpointNumber";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications";
 import { TlvArray } from "../tlv/TlvArray";
 
 /**

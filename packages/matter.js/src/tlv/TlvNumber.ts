@@ -3,12 +3,12 @@
  * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { BitmapSchema, BitSchema, TypeFromBitSchema } from "../schema/BitmapSchema.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-import { FLOAT32_MAX, FLOAT32_MIN, INT16_MAX, INT16_MIN, INT32_MAX, INT32_MIN, INT64_MAX, INT64_MIN, INT8_MAX, INT8_MIN, maxValue, minValue, UINT16_MAX, UINT32_MAX, UINT64_MAX, UINT8_MAX } from "../util/Number.js";
-import { TlvCodec, TlvLength, TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
-import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
-import { TlvWrapper } from "./TlvWrapper.js";
+import { BitmapSchema, BitSchema, TypeFromBitSchema } from "../schema/BitmapSchema";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications";
+import { FLOAT32_MAX, FLOAT32_MIN, INT16_MAX, INT16_MIN, INT32_MAX, INT32_MIN, INT64_MAX, INT64_MIN, INT8_MAX, INT8_MIN, maxValue, minValue, UINT16_MAX, UINT32_MAX, UINT64_MAX, UINT8_MAX } from "../util/Number";
+import { TlvCodec, TlvLength, TlvTag, TlvType, TlvTypeLength } from "./TlvCodec";
+import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema";
+import { TlvWrapper } from "./TlvWrapper";
 
 /**
  * Schema to encode an unsigned integer in TLV.

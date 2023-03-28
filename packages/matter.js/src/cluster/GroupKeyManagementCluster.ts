@@ -7,7 +7,7 @@
 import { WritableAttribute, Attribute, Cluster, Command, TlvNoArguments, TlvNoResponse } from "./Cluster";
 import { TlvGroupId } from "../common/GroupId";
 import { TlvEndpointNumber } from "../common/EndpointNumber";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications";
 import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject";
 import { TlvEnum, TlvUInt16, TlvUInt64 } from "../tlv/TlvNumber";
 import { TlvNullable } from "../tlv/TlvNullable";

@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-import { TlvUInt32 } from "../tlv/TlvNumber.js";
-import { TlvWrapper } from "../tlv/TlvWrapper.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications";
+import { TlvUInt32 } from "../tlv/TlvNumber";
+import { TlvWrapper } from "../tlv/TlvWrapper";
 
 /**
  * A Command ID is a 32 bit number and indicates a command defined in a cluster specification.

@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TlvTag, TlvTypeLength } from "./TlvCodec.js";
-import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
+import { TlvTag, TlvTypeLength } from "./TlvCodec";
+import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema";
 
 export class TlvWrapper<O, T> extends TlvSchema<O> {
     constructor(
