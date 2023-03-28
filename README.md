@@ -25,6 +25,18 @@ Additionally, we started a Discord server for Matter-Integrators to allow to com
 
 ## How to use it
 
+### To develop matter.js
+
+If you like to develop matter.js itself or want to contribute to it, you can use the following commands:
+
+```bash
+git clone https://github.com/project-chip/matter.js
+cd matter.js
+npm install
+```
+
+This will install all dependencies and create symlinks between the packages, so that it can be used locally. It also builds all packages.
+
 ### Matter.js
 
 Matter.js is the core implementation of the Matter protocol in typescript. It is a JavaScript only implementation and has no native dependencies. It is build as CommonJS and ES6 variants.

@@ -20,9 +20,17 @@ Each system have their own specialities, see [Pairing and Usage Information](#Pa
 
 ## Installation
 
+### From NPM
+
 ```bash
 npm i -g @project-chip/matter-node.js
 ```
+
+### Use from Cloned Matter.js Repository
+
+When you clone the matter.js repository you can also use matter-node.js. To fdo this you need to execute `npm install`in the matter.js root directory once to install all dependencies and build all packages.
+
+Then after `cd packages/matter-node.js` you can use `npm run matter` to run the matter-node.js server. Please see the next section for more details.
 
 ## Usage
 
