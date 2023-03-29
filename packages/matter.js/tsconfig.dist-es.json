@@ -2,7 +2,8 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "moduleResolution": "node", // Required to correctly resolve Babel imports
+    "moduleResolution": "node16", // Required to correctly resolve Babel imports
+    "module": "node16",
     "outDir": "dist/es",
   },
   "include": ["src/**/*.ts"],
