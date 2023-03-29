@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications";
-import { TlvUInt64 } from "../tlv/TlvNumber";
-import { TlvWrapper } from "../tlv/TlvWrapper";
-import { Endian } from "../util/ByteArray";
-import { DataWriter } from "../util/DataWriter";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvUInt64 } from "../tlv/TlvNumber.js";
+import { TlvWrapper } from "../tlv/TlvWrapper.js";
+import { Endian } from "../util/ByteArray.js";
+import { DataWriter } from "../util/DataWriter.js";
 
 /**
  * A Node Identifier (Node ID) is a 64-bit number that uniquely identifies an individual Node or a

@@ -4,19 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TlvClusterId } from "../common/ClusterId";
-import { TlvDeviceTypeId } from "../common/DeviceTypeId";
-import { TlvEndpointNumber } from "../common/EndpointNumber";
-import { TlvNodeId } from "../common/NodeId";
-import { TlvSubjectId } from "../common/SubjectId";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications";
-import { TlvArray } from "../tlv/TlvArray";
-import { TlvNullable } from "../tlv/TlvNullable";
-import { TlvEnum, TlvUInt16 } from "../tlv/TlvNumber";
-import { TlvField, TlvObject } from "../tlv/TlvObject";
-import { TlvSchema } from "../tlv/TlvSchema";
-import { TlvByteString } from "../tlv/TlvString";
-import { AccessLevel, Attribute, Cluster, Event, EventPriority, OptionalWritableAttribute, WritableAttribute } from "./Cluster";
+import { TlvClusterId } from "../common/ClusterId.js";
+import { TlvDeviceTypeId } from "../common/DeviceTypeId.js";
+import { TlvEndpointNumber } from "../common/EndpointNumber.js";
+import { TlvNodeId } from "../common/NodeId.js";
+import { TlvSubjectId } from "../common/SubjectId.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvArray } from "../tlv/TlvArray.js";
+import { TlvNullable } from "../tlv/TlvNullable.js";
+import { TlvEnum, TlvUInt16 } from "../tlv/TlvNumber.js";
+import { TlvField, TlvObject } from "../tlv/TlvObject.js";
+import { TlvSchema } from "../tlv/TlvSchema.js";
+import { TlvByteString } from "../tlv/TlvString.js";
+import { AccessLevel, Attribute, Cluster, Event, EventPriority, OptionalWritableAttribute, WritableAttribute } from "./Cluster.js";
 
 /**
  * List of privileges that can be granted to a subject.

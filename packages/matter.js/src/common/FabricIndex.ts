@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications";
-import { TlvUInt8 } from "../tlv/TlvNumber";
-import { TlvWrapper } from "../tlv/TlvWrapper";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvUInt8 } from "../tlv/TlvNumber.js";
+import { TlvWrapper } from "../tlv/TlvWrapper.js";
 
 /**
  * Each fabric supported on a node is referenced by fabric-index that is unique on the node. This

@@ -4,16 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { WritableAttribute, Attribute, Cluster, Command, TlvNoArguments, TlvNoResponse } from "./Cluster";
-import { TlvGroupId } from "../common/GroupId";
-import { TlvEndpointNumber } from "../common/EndpointNumber";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications";
-import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject";
-import { TlvEnum, TlvUInt16, TlvUInt64 } from "../tlv/TlvNumber";
-import { TlvNullable } from "../tlv/TlvNullable";
-import { TlvString } from "../tlv/TlvString";
-import { TlvArray } from "../tlv/TlvArray";
-import { BitFlag } from "../schema/BitmapSchema";
+import { WritableAttribute, Attribute, Cluster, Command, TlvNoArguments, TlvNoResponse } from "./Cluster.js";
+import { TlvGroupId } from "../common/GroupId.js";
+import { TlvEndpointNumber } from "../common/EndpointNumber.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
+import { TlvEnum, TlvUInt16, TlvUInt64 } from "../tlv/TlvNumber.js";
+import { TlvNullable } from "../tlv/TlvNullable.js";
+import { TlvString } from "../tlv/TlvString.js";
+import { TlvArray } from "../tlv/TlvArray.js";
+import { BitFlag } from "../schema/BitmapSchema.js";
 
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.2.6.1 */

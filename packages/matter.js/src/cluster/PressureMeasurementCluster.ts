@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Attribute, OptionalAttribute, Cluster } from "./Cluster";
-import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications";
-import { TlvNullable } from "../tlv/TlvNullable";
-import { TlvInt16, TlvInt8, TlvUInt16 } from "../tlv/TlvNumber";
-import { BitFlag } from "../schema/BitmapSchema";
+import { Attribute, OptionalAttribute, Cluster } from "./Cluster.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvNullable } from "../tlv/TlvNullable.js";
+import { TlvInt16, TlvInt8, TlvUInt16 } from "../tlv/TlvNumber.js";
+import { BitFlag } from "../schema/BitmapSchema.js";
 
 /**
  * This cluster provides an interface to pressure measurement functionality.

@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications";
-import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec";
-import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
+import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 
 /**
  * Schema to encode a boolean in TLV.

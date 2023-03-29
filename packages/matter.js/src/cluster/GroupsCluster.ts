@@ -4,16 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TlvGroupId } from "../common/GroupId";
-import { StatusCode } from "../protocol/InteractionProtocol";
-import { BitFlag } from "../schema/BitmapSchema";
-import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications";
-import { TlvArray } from "../tlv/TlvArray";
-import { TlvNullable } from "../tlv/TlvNullable";
-import { TlvBitmap, TlvEnum, TlvUInt8 } from "../tlv/TlvNumber";
-import { TlvField, TlvObject } from "../tlv/TlvObject";
-import { TlvString } from "../tlv/TlvString";
-import { Attribute, Cluster, Command, TlvNoArguments, TlvNoResponse } from "./Cluster";
+import { TlvGroupId } from "../common/GroupId.js";
+import { StatusCode } from "../protocol/InteractionProtocol.js";
+import { BitFlag } from "../schema/BitmapSchema.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvArray } from "../tlv/TlvArray.js";
+import { TlvNullable } from "../tlv/TlvNullable.js";
+import { TlvBitmap, TlvEnum, TlvUInt8 } from "../tlv/TlvNumber.js";
+import { TlvField, TlvObject } from "../tlv/TlvObject.js";
+import { TlvString } from "../tlv/TlvString.js";
+import { Attribute, Cluster, Command, TlvNoArguments, TlvNoResponse } from "./Cluster.js";
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.7.1 */
 const TlvAddGroupRequest = TlvObject({

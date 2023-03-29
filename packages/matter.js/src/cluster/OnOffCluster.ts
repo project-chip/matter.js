@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BitFlag } from "../schema/BitmapSchema";
-import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications";
-import { TlvBoolean } from "../tlv/TlvBoolean";
-import { Attribute, Cluster, Command, TlvNoArguments, TlvNoResponse } from "./Cluster";
+import { BitFlag } from "../schema/BitmapSchema.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvBoolean } from "../tlv/TlvBoolean.js";
+import { Attribute, Cluster, Command, TlvNoArguments, TlvNoResponse } from "./Cluster.js";
 
 /**
  * Defined how the devices should behave when it is powered on.

@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Attribute, OptionalAttribute, Cluster } from "./Cluster";
-import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications";
-import { TlvNullable } from "../tlv/TlvNullable";
-import { TlvUInt16 } from "../tlv/TlvNumber";
+import { Attribute, OptionalAttribute, Cluster } from "./Cluster.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvNullable } from "../tlv/TlvNullable.js";
+import { TlvUInt16 } from "../tlv/TlvNumber.js";
 
 /**
  * This cluster provides an interface to flow measurement functionality.

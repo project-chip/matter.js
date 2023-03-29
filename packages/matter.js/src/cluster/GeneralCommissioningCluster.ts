@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications";
-import { TlvBoolean } from "../tlv/TlvBoolean";
-import { TlvEnum, TlvUInt16, TlvUInt64 } from "../tlv/TlvNumber";
-import { TlvField, TlvObject } from "../tlv/TlvObject";
-import { TypeFromSchema } from "../tlv/TlvSchema";
-import { TlvString } from "../tlv/TlvString";
-import { AccessLevel, Attribute, Cluster, Command, TlvNoArguments, WritableAttribute } from "./Cluster";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvBoolean } from "../tlv/TlvBoolean.js";
+import { TlvEnum, TlvUInt16, TlvUInt64 } from "../tlv/TlvNumber.js";
+import { TlvField, TlvObject } from "../tlv/TlvObject.js";
+import { TypeFromSchema } from "../tlv/TlvSchema.js";
+import { TlvString } from "../tlv/TlvString.js";
+import { AccessLevel, Attribute, Cluster, Command, TlvNoArguments, WritableAttribute } from "./Cluster.js";
 
 /**
  * This enumeration is used by the RegulatoryConfig and LocationCapability attributes to indicate possible radio usage.
