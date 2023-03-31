@@ -43,12 +43,12 @@ import { AdminCommissioningHandler } from "./matter/cluster/server/AdminCommissi
 import { NetworkCommissioningHandler } from "./matter/cluster/server/NetworkCommissioningServer";
 import { AttestationCertificateManager } from "./matter/certificate/AttestationCertificateManager";
 import { CertificationDeclarationManager } from "./matter/certificate/CertificationDeclarationManager";
-import { StorageNode } from "./persistence/StorageNode";
+import { StorageNodeLocalstorage } from "./persistence/StorageNodeLocalstorage";
 import { PersistenceManager } from "./persistence/PersistenceManager";
 
 const logger = Logger.get("Device");
 
-const storage = new StorageNode(getParameter("file") || "device.json")
+const storage = new StorageNodeLocalstorage(getParameter("file") || "device.json");
 
 class Device {
     async start() {
@@ -62,17 +62,17 @@ class Device {
         const deviceName = "Matter test device";
         const deviceType = 257 /* Dimmable bulb */;
         const vendorName = "matter-node.js";
-        const passcode = getIntParameter("passcode") ?? devicePersistence.get("passcode") ?? 20202021;
-        const discriminator = getIntParameter("discriminator") ?? devicePersistence.get("discriminator") ?? 3840;
+        const passcode = getIntParameter("passcode") ?? parseInt(devicePersistence.get("passcode", "20202021"));
+        const discriminator = getIntParameter("discriminator") ?? parseInt(devicePersistence.get("discriminator", "3840"));
         // product name / id and vendor id should match what is in the device certificate
-        const vendorId = new VendorId(getIntParameter("vendorid") ?? devicePersistence.get("vendorid") ?? 0xFFF1);
+        const vendorId = new VendorId(getIntParameter("vendorid") ?? parseInt(devicePersistence.get("vendorid", 0xFFF1.toString())));
         const productName = "matter-node.js Test Product";
-        const productId = getIntParameter("productid") ?? devicePersistence.get("productid") ?? 0x8000;
+        const productId = getIntParameter("productid") ?? parseInt(devicePersistence.get("productid", 0x8000.toString()));
 
-        devicePersistence.set("passcode", passcode);
-        devicePersistence.set("discriminator", discriminator);
-        devicePersistence.set("vendorid", vendorId);
-        devicePersistence.set("productid", productId);
+        devicePersistence.set("passcode", passcode.toString());
+        devicePersistence.set("discriminator", discriminator.toString());
+        devicePersistence.set("vendorid", vendorId.id.toString());
+        devicePersistence.set("productid", productId.toString());
 
         // Barebone implementation of the On/Off cluster
         const onOffClusterServer = new ClusterServer(

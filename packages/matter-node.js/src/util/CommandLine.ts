@@ -17,7 +17,9 @@ export function getParameter(name: string) {
 export function getIntParameter(name: string) {
     const value = getParameter(name);
     if (value === undefined) return undefined;
-    return parseInt(value);
+    const intValue = parseInt(value, 10);
+    if (isNaN(intValue)) throw new Error(`Invalid value for parameter ${name}: ${value} is not a number`);
+    return intValue;
 }
 
 export function commandExecutor(scriptParamName: string) {

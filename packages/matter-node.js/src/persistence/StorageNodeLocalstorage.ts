@@ -4,12 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { LocalStorage } from "node-localstorage";
 import { Storage } from "./Storage";
 
-export class StorageInMemory implements Storage {
+export class StorageNodeLocalstorage implements Storage {
+    private readonly localStorage;
+
     constructor(
-        protected store: any = {}
-    ) { }
+        path: string,
+    ) {
+        this.localStorage = new LocalStorage(path);
+    }
 
     async initialize() {
         // nothing to do
@@ -19,18 +24,19 @@ export class StorageInMemory implements Storage {
         // nothing to do
     }
 
+    buildStorageKey(context: string, key: string): string {
+        return context + "---" + key;
+    }
+
     get(context: string, key: string): string | undefined {
         if (!context.length || !key.length) throw new Error("Context and key must not be empty strings!");
-        return this.store[context]?.[key];
+        const value = this.localStorage.getItem(this.buildStorageKey(context, key));
+        if (value === null) return undefined;
+        return value;
     }
 
     set(context: string, key: string, value: string): void {
         if (!context.length || !key.length) throw new Error("Context and key must not be empty strings!");
-        let contextStore = this.store[context];
-        if (contextStore === undefined) {
-            contextStore = {};
-            this.store[context] = contextStore;
-        }
-        contextStore[key] = value;
+        this.localStorage.setItem(this.buildStorageKey(context, key), value);
     }
 }

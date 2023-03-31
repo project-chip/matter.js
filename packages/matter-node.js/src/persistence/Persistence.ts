@@ -12,11 +12,11 @@ export class Persistence {
         private readonly context: string
     ) { }
 
-    get<T>(key: string, defaultValue?: T): T {
-        const value = this.storage.get<T>(this.context, key);
+    get(key: string, defaultValue?: string): string {
+        const value = this.storage.get(this.context, key);
         if (value !== undefined) return value;
         if (defaultValue === undefined) {
-            throw new Error(`No value found for key ${key} in context ${this.context} and not default value specified!`);
+            throw new Error(`No value found for key ${key} in context ${this.context} and no default value specified!`);
         }
         return defaultValue;
     }
@@ -25,11 +25,7 @@ export class Persistence {
         return this.storage.get(this.context, key) !== undefined;
     }
 
-    getAll(): { key: string, value: any }[] {
-        return this.storage.getAll(this.context);
-    }
-
-    set<T>(key: string, value: T): void {
+    set(key: string, value: string): void {
         this.storage.set(this.context, key, value);
     }
 }

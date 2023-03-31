@@ -79,30 +79,24 @@ export class ClusterServer<F extends BitSchema, A extends Attributes, C extends 
     setPersistence(persistence: Persistence) {
         this.persistence = persistence;
 
-        const storedData = this.persistence.getAll();
-        storedData.forEach((data) => {
-            const attribute = (this.attributes as any)[data.key];
-            if (!attribute) {
-                logger.warn(`Attribute ${data.key} not found in cluster ${this.name} (${this.id})`);
-                return;
-            }
-            if (!this.attributeStorageListeners.has(attribute.id)) {
-                logger.info(`Attribute ${data.key} in cluster ${this.name} (${this.id}) is not non-volatile, ignore`);
-                return;
-            }
-            logger.debug(`Restoring attribute ${data.key} in cluster ${this.name} (${this.id})`);
+        for (const name in this.attributes) {
+            const attribute = (this.attributes as any)[name];
+            if (!this.attributeStorageListeners.has(attribute.id)) return;
+            if (!persistence.has(attribute.name)) return;
             try {
-                attribute.init(data.value.value, data.value.version);
+                const data = JSON.parse(persistence.get(attribute.name)); // TODO adjust to other JSON methods once available
+                logger.debug(`Restoring attribute ${attribute.name} (${attribute.id}) in cluster ${this.name} (${this.id})`);
+                attribute.init(data.value, data.version);
             } catch (error) {
-                logger.warn(`Failed to restore attribute ${data.key} in cluster ${this.name} (${this.id})`, error);
+                logger.warn(`Failed to restore attribute ${attribute.name} (${attribute.id}) in cluster ${this.name} (${this.id})`, error);
             }
-        });
+        }
     }
 
     attributeStorageListener(attributeName: string, version: number, value: any) {
         if (!this.persistence) return;
         logger.debug(`Storing attribute ${attributeName} in cluster ${this.name} (${this.id})`);
-        this.persistence.set(attributeName, { version, value });
+        this.persistence.set(attributeName, JSON.stringify({ version, value })); // TODO adjust to other JSON methods once available
     }
 }
 

@@ -7,7 +7,6 @@
 export abstract class Storage {
     abstract initialize(): Promise<void>;
     abstract close(): Promise<void>;
-    abstract get<T>(context: string, key: string): T | undefined;
-    abstract getAll(context: string): { key: string, value: any }[];
-    abstract set<T>(context: string, key: string, value: T): void;
+    abstract get(context: string, key: string): string | undefined;
+    abstract set(context: string, key: string, value: string): void;
 }

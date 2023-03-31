@@ -18,7 +18,7 @@ import {
 import { Crypto } from "../crypto/Crypto";
 import { CertificateManager } from "./certificate/CertificateManager";
 import { Scanner } from "./common/Scanner";
-import { Fabric, FabricBuilder, FabricJsonObject } from "./fabric/Fabric";
+import { Fabric, FabricBuilder } from "./fabric/Fabric";
 import { CaseClient } from "./session/secure/CaseClient";
 import { requireMinNodeVersion } from "../util/Node";
 import { ChannelManager } from "./common/ChannelManager";
@@ -50,9 +50,10 @@ export class MatterController {
         fabricBuilder.setOperationalCert(certificateManager.generateNoc(fabricBuilder.getPublicKey(), FABRIC_ID, CONTROLLER_NODE_ID));
 
         // Check if we have a fabric stored in the persistence, if yes initialize this one, else build a new one
-        const controllerPersistance = persistenceManager.createPersistence("MatterController");
-        if (controllerPersistance.has("fabric")) {
-            const storedFabric = Fabric.fromJson(controllerPersistance.get<FabricJsonObject>("fabric"));
+        const controllerPersistence = persistenceManager.createPersistence("MatterController");
+        if (controllerPersistence.has("fabric")) {
+            const storedFabricData = controllerPersistence.get("fabric");
+            const storedFabric = Fabric.createFromStorageJson(storedFabricData);
             return new MatterController(scanner, netInterfaceIpv4, netInterfaceIpv6, certificateManager, storedFabric, persistenceManager);
         } else {
             return new MatterController(scanner, netInterfaceIpv4, netInterfaceIpv6, certificateManager, await fabricBuilder.build(), persistenceManager);
@@ -150,14 +151,14 @@ export class MatterController {
         generalCommissioningClusterClient = ClusterClient(interactionClient, 0, GeneralCommissioningCluster);
         this.ensureSuccess(await generalCommissioningClusterClient.commissioningComplete({}));
 
-        this.controllerPersistence.set("fabric", this.fabric.toJson());
-        this.controllerPersistence.set("fabricCommissioned", true);
+        this.controllerPersistence.set("fabric", this.fabric.toStorageJson());
+        this.controllerPersistence.set("fabricCommissioned", "1");
 
         return peerNodeId;
     }
 
     isCommissioned() {
-        return this.controllerPersistence.get<boolean>("fabricCommissioned", false) === true;
+        return !!parseInt(this.controllerPersistence.get("fabricCommissioned", "0"));
     }
 
 

@@ -22,12 +22,12 @@ import { UdpInterface } from "./net/UdpInterface";
 import { getIntParameter, getParameter } from "./util/CommandLine";
 import { MdnsScanner } from "./matter/mdns/MdnsScanner";
 import { Logger } from "./log/Logger";
-import { StorageNode } from "./persistence/StorageNode";
+import { StorageNodeLocalstorage } from "./persistence/StorageNodeLocalstorage";
 import { PersistenceManager } from "./persistence/PersistenceManager";
 
 const logger = Logger.get("Controller");
 
-const storage = new StorageNode(getParameter("file") || "controller.json");
+const storage = new StorageNodeLocalstorage(getParameter("file") || "controller.json");
 
 class Controller {
     async start() {
@@ -40,14 +40,14 @@ class Controller {
 
         const ip = getParameter("ip") ?? controllerPersistence.get("ip");
         if (ip === undefined) throw new Error("Please specify the IP of the device to commission with -ip");
-        const port = getIntParameter("port") ?? controllerPersistence.get("port") ?? 5540;
-        const discriminator = getIntParameter("discriminator") ?? controllerPersistence.get("discriminator") ?? 3840;
-        const setupPin = getIntParameter("pin") ?? controllerPersistence.get("pin") ?? 20202021;
+        const port = getIntParameter("port") ?? parseInt(controllerPersistence.get("port", "5540"));
+        const discriminator = getIntParameter("discriminator") ?? parseInt(controllerPersistence.get("discriminator", "3840"));
+        const setupPin = getIntParameter("pin") ?? parseInt(controllerPersistence.get("pin", "20202021"));
 
         controllerPersistence.set("ip", ip);
-        controllerPersistence.set("port", port);
-        controllerPersistence.set("discriminator", discriminator);
-        controllerPersistence.set("pin", setupPin);
+        controllerPersistence.set("port", port.toString());
+        controllerPersistence.set("discriminator", discriminator.toString());
+        controllerPersistence.set("pin", setupPin.toString());
 
         const client = await MatterController.create(await MdnsScanner.create(), await UdpInterface.create(5540, "udp4"), await UdpInterface.create(5540, "udp6"), persistenceManager);
         try {

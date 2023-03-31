@@ -229,26 +229,38 @@ describe("Integration", () => {
     describe("storage", () => {
         it("server storage has fabric fields stored", async () => {
             // TODO: In fact testing wrong because the persistence mixed server and client keys, will get issues for more fancy tests
-            const storedFabrics = fakeServerStorage.get<any>("FabricManager", "fabrics");
+            const storedFabricsString = fakeServerStorage.get("FabricManager", "fabrics");
+            assert.ok(typeof storedFabricsString === "string");
+            const storedFabrics = JSON.parse(storedFabricsString);
             assert.equal(Array.isArray(storedFabrics), true);
             assert.equal(storedFabrics.length, 1);
-            assert.equal(typeof storedFabrics[0], "object");
-            assert.equal(storedFabrics[0].fabricIndex, 1);
-            assert.equal(storedFabrics[0].fabricId, 1);
+            const firstFabric = JSON.parse(storedFabrics[0]);
+            assert.equal(typeof firstFabric, "object");
+            assert.equal(firstFabric.fabricIndex, 1);
+            assert.equal(firstFabric.fabricId, 1);
 
-            assert.equal(fakeServerStorage.get<number>("FabricManager", "nextFabricIndex"), 2);
+            assert.equal(fakeServerStorage.get("FabricManager", "nextFabricIndex"), "2");
 
-            const onoffValue = fakeServerStorage.get<any>("Cluster-1-6", "onOff");
+            const onoffValueString = fakeServerStorage.get("Cluster-1-6", "onOff");
+            assert.ok(typeof onoffValueString === "string");
+            const onoffValue = JSON.parse(onoffValueString);
             assert.equal(typeof onoffValue, "object");
             assert.equal(onoffValue.version, 2);
             assert.equal(onoffValue.value, false);
 
-            assert.equal(fakeServerStorage.get<any>("SessionManager", "resumptionRecords").length, 1);
+            const storedServerResumptionRecordsString = fakeServerStorage.get("SessionManager", "resumptionRecords");
+            assert.ok(typeof storedServerResumptionRecordsString === "string");
+            assert.equal(JSON.parse(storedServerResumptionRecordsString).length, 1);
 
-            assert.equal(fakeControllerStorage.get<bigint>("RootCertificateManager", "rootCertId"), BigInt(0));
-            assert.equal(fakeControllerStorage.get<boolean>("MatterController", "fabricCommissioned"), true);
-            assert.equal(fakeControllerStorage.get<any>("SessionManager", "resumptionRecords").length, 1);
-            assert.equal(typeof fakeControllerStorage.get("MatterController", "fabric"), "object");
+            assert.equal(fakeControllerStorage.get("RootCertificateManager", "rootCertId"), "0");
+            assert.equal(fakeControllerStorage.get("MatterController", "fabricCommissioned"), "1");
+            const storedControllerResumptionRecordsString = fakeServerStorage.get("SessionManager", "resumptionRecords");
+            assert.ok(typeof storedControllerResumptionRecordsString === "string");
+            assert.equal(JSON.parse(storedControllerResumptionRecordsString).length, 1);
+
+            const storedControllerFabricsString = fakeControllerStorage.get("MatterController", "fabric");
+            assert.ok(typeof storedControllerFabricsString === "string");
+            assert.equal(typeof JSON.parse(storedControllerFabricsString), "object");
         });
     });
 
