@@ -17,7 +17,7 @@ describe("StorageInMemory", () => {
         localStorage.clear();
     });
 
-    it("write and read success",  () => {
+    it("write and read success", () => {
         const storage = new StorageNodeLocalstorage(TEST_STORAGE_LOCATION);
 
         storage.set("context", "key", "value");
@@ -26,7 +26,7 @@ describe("StorageInMemory", () => {
         assert.equal(value, "value");
     });
 
-    it("Throws error when context is empty on set",  () => {
+    it("Throws error when context is empty on set", () => {
         assert.throws(() => {
             const storage = new StorageNodeLocalstorage(TEST_STORAGE_LOCATION);
             storage.set("", "key", "value");
@@ -35,7 +35,7 @@ describe("StorageInMemory", () => {
         });
     });
 
-    it("Throws error when key is empty on set",  () => {
+    it("Throws error when key is empty on set", () => {
         assert.throws(() => {
             const storage = new StorageNodeLocalstorage(TEST_STORAGE_LOCATION);
             storage.set("context", "", "value");
@@ -44,7 +44,7 @@ describe("StorageInMemory", () => {
         });
     });
 
-    it("Throws error when context is empty on get",  () => {
+    it("Throws error when context is empty on get", () => {
         assert.throws(() => {
             const storage = new StorageNodeLocalstorage(TEST_STORAGE_LOCATION);
             storage.get("", "key");
@@ -53,7 +53,7 @@ describe("StorageInMemory", () => {
         });
     });
 
-    it("Throws error when key is empty on get",  () => {
+    it("Throws error when key is empty on get", () => {
         assert.throws(() => {
             const storage = new StorageNodeLocalstorage(TEST_STORAGE_LOCATION);
             storage.get("context", "");

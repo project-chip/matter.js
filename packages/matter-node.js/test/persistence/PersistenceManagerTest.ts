@@ -10,7 +10,7 @@ import { PersistenceManager } from "../../src/persistence/PersistenceManager";
 
 describe("PersistenceManager", () => {
 
-    it("create Persistence write and read success",  async () => {
+    it("create Persistence write and read success", async () => {
         const storage = new StorageInMemory();
 
         const persistenceManager = new PersistenceManager(storage);
@@ -25,7 +25,7 @@ describe("PersistenceManager", () => {
         assert.equal(valueFromPersistence, "value");
     });
 
-    it("creating PersistenceManager without initialize throws error when creating Persistence",  async () => {
+    it("creating PersistenceManager without initialize throws error when creating Persistence", async () => {
         const storage = new StorageInMemory();
 
         const persistenceManager = new PersistenceManager(storage);
@@ -37,7 +37,7 @@ describe("PersistenceManager", () => {
         });
     });
 
-    it("getting same Persistence context access same data",  async () => {
+    it("getting same Persistence context access same data", async () => {
         const storage = new StorageInMemory();
 
         const persistenceManager = new PersistenceManager(storage);

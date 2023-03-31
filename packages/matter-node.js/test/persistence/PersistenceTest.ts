@@ -10,7 +10,7 @@ import * as assert from "assert";
 
 describe("Persistence", () => {
 
-    it("write and read success",  () => {
+    it("write and read success", () => {
         const storage = new StorageInMemory();
 
         const persistence = new Persistence(storage, "context");
@@ -24,7 +24,7 @@ describe("Persistence", () => {
         assert.equal(valueFromStorageWithContext, "value");
     });
 
-    it("read with default value",  () => {
+    it("read with default value", () => {
         const storage = new StorageInMemory();
 
         const persistence = new Persistence(storage, "context");
@@ -33,7 +33,7 @@ describe("Persistence", () => {
         assert.equal(valueFromPersistence, "defaultValue");
     });
 
-    it("Throws error when reading a not set key without default value",  () => {
+    it("Throws error when reading a not set key without default value", () => {
         const storage = new StorageInMemory();
 
         const persistence = new Persistence(storage, "context");
@@ -45,7 +45,7 @@ describe("Persistence", () => {
         });
     });
 
-    it("check if key is set",  () => {
+    it("check if key is set", () => {
         const storage = new StorageInMemory();
 
         const persistence = new Persistence(storage, "context");
@@ -55,7 +55,7 @@ describe("Persistence", () => {
         assert.equal(persistence.has("key"), true);
     });
 
-    it("check if key is not set",  () => {
+    it("check if key is not set", () => {
         const storage = new StorageInMemory();
 
         const persistence = new Persistence(storage, "context");
