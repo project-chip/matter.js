@@ -45,11 +45,11 @@
     "ts-jest": "^29.0.5",
     "typescript": "^4.9.5"
   },
-  "type": "module",
-  "module": "dist/es/matter.js",
-  "main": "dist/cjs/matter.js",
   "files": [
     "dist/**/*"
   ],
+  "type": "module",
+  "main": "dist/cjs/matter.js",
+  "module": "dist/es/matter.js",
   "types": "dist/dts/matter.d.ts"
 }
