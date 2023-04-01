@@ -39,7 +39,7 @@ class Controller {
         const controllerPersistence = persistenceManager.createPersistence("Controller");
 
         const ip = getParameter("ip") ?? controllerPersistence.get<string>("ip", "");
-        if (ip === undefined || ip === "") throw new Error("Please specify the IP of the device to commission with -ip");
+        if (ip === "") throw new Error("Please specify the IP of the device to commission with -ip");
         const port = getIntParameter("port") ?? controllerPersistence.get("port", 5540);
         const discriminator = getIntParameter("discriminator") ?? controllerPersistence.get("discriminator", 3840);
         const setupPin = getIntParameter("pin") ?? controllerPersistence.get("pin", 20202021);

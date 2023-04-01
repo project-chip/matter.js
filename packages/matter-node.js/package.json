@@ -27,7 +27,7 @@
         "clean": "rm -rf dist && rm *.tsbuildinfo || true",
         "build": "tsc --project tsconfig.dist.json",
         "build-clean": "npm run clean && npm run build",
-        "test": "TZ=utc jest --maxWorkers=4"
+        "test": "TZ=utc jest"
     },
     "devDependencies": {
         "@types/bn.js": "^5.1.1",
