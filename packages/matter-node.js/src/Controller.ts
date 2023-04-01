@@ -38,16 +38,16 @@ class Controller {
 
         const controllerPersistence = persistenceManager.createPersistence("Controller");
 
-        const ip = getParameter("ip") ?? controllerPersistence.get("ip");
-        if (ip === undefined) throw new Error("Please specify the IP of the device to commission with -ip");
-        const port = getIntParameter("port") ?? parseInt(controllerPersistence.get("port", "5540"));
-        const discriminator = getIntParameter("discriminator") ?? parseInt(controllerPersistence.get("discriminator", "3840"));
-        const setupPin = getIntParameter("pin") ?? parseInt(controllerPersistence.get("pin", "20202021"));
+        const ip = getParameter("ip") ?? controllerPersistence.get<string>("ip", "");
+        if (ip === undefined || ip === "") throw new Error("Please specify the IP of the device to commission with -ip");
+        const port = getIntParameter("port") ?? controllerPersistence.get("port", 5540);
+        const discriminator = getIntParameter("discriminator") ?? controllerPersistence.get("discriminator", 3840);
+        const setupPin = getIntParameter("pin") ?? controllerPersistence.get("pin", 20202021);
 
         controllerPersistence.set("ip", ip);
-        controllerPersistence.set("port", port.toString());
-        controllerPersistence.set("discriminator", discriminator.toString());
-        controllerPersistence.set("pin", setupPin.toString());
+        controllerPersistence.set("port", port);
+        controllerPersistence.set("discriminator", discriminator);
+        controllerPersistence.set("pin", setupPin);
 
         const client = await MatterController.create(await MdnsScanner.create(), await UdpInterface.create(5540, "udp4"), await UdpInterface.create(5540, "udp6"), persistenceManager);
         try {

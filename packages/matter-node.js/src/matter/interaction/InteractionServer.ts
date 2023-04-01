@@ -84,7 +84,7 @@ export class ClusterServer<F extends BitSchema, A extends Attributes, C extends 
             if (!this.attributeStorageListeners.has(attribute.id)) return;
             if (!persistence.has(attribute.name)) return;
             try {
-                const data = JSON.parse(persistence.get(attribute.name)); // TODO adjust to other JSON methods once available
+                const data = persistence.get<{ version: number, value: any }>(attribute.name);
                 logger.debug(`Restoring attribute ${attribute.name} (${attribute.id}) in cluster ${this.name} (${this.id})`);
                 attribute.init(data.value, data.version);
             } catch (error) {
@@ -96,7 +96,7 @@ export class ClusterServer<F extends BitSchema, A extends Attributes, C extends 
     attributeStorageListener(attributeName: string, version: number, value: any) {
         if (!this.persistence) return;
         logger.debug(`Storing attribute ${attributeName} in cluster ${this.name} (${this.id})`);
-        this.persistence.set(attributeName, JSON.stringify({ version, value })); // TODO adjust to other JSON methods once available
+        this.persistence.set(attributeName, { version, value });
     }
 }
 

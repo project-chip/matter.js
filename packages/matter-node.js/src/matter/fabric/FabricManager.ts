@@ -5,7 +5,7 @@
  */
 
 import { ByteArray, FabricIndex } from "@project-chip/matter.js";
-import { Fabric, FabricBuilder } from "./Fabric";
+import { Fabric, FabricBuilder, FabricJsonObject } from "./Fabric";
 import { MatterError } from "../../error/MatterError";
 import { Persistence } from "../../persistence/Persistence";
 import { PersistenceManager } from "../../persistence/PersistenceManager";
@@ -21,18 +21,14 @@ export class FabricManager {
 
     constructor(persistenceManager: PersistenceManager) {
         this.fabricPersistence = persistenceManager.createPersistence("FabricManager");
-        const fabrics = JSON.parse(this.fabricPersistence.get("fabrics", "[]")) as string[];
-        fabrics.forEach(fabric => this.addFabric(Fabric.createFromStorageJson(fabric)));
-        try {
-            this.nextFabricIndex = parseInt(this.fabricPersistence.get("nextFabricIndex"));
-        } catch (e) {
-            // When no value in storage then former value is ised
-        }
+        const fabrics = this.fabricPersistence.get<FabricJsonObject[]>("fabrics", []);
+        fabrics.forEach(fabric => this.addFabric(Fabric.createFromStorageObject(fabric)));
+        this.nextFabricIndex = this.fabricPersistence.get("nextFabricIndex", this.nextFabricIndex);
     }
 
     persistFabrics() {
-        this.fabricPersistence.set("fabrics", JSON.stringify(this.fabrics.map(fabric => fabric.toStorageJson())));
-        this.fabricPersistence.set("nextFabricIndex", this.nextFabricIndex.toString());
+        this.fabricPersistence.set("fabrics", this.fabrics.map(fabric => fabric.toStorageObject()));
+        this.fabricPersistence.set("nextFabricIndex", this.nextFabricIndex);
     }
 
     addFabric(fabric: Fabric) {

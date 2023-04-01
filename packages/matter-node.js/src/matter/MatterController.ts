@@ -18,7 +18,7 @@ import {
 import { Crypto } from "../crypto/Crypto";
 import { CertificateManager } from "./certificate/CertificateManager";
 import { Scanner } from "./common/Scanner";
-import { Fabric, FabricBuilder } from "./fabric/Fabric";
+import { Fabric, FabricBuilder, FabricJsonObject } from "./fabric/Fabric";
 import { CaseClient } from "./session/secure/CaseClient";
 import { requireMinNodeVersion } from "../util/Node";
 import { ChannelManager } from "./common/ChannelManager";
@@ -52,8 +52,7 @@ export class MatterController {
         // Check if we have a fabric stored in the persistence, if yes initialize this one, else build a new one
         const controllerPersistence = persistenceManager.createPersistence("MatterController");
         if (controllerPersistence.has("fabric")) {
-            const storedFabricData = controllerPersistence.get("fabric");
-            const storedFabric = Fabric.createFromStorageJson(storedFabricData);
+            const storedFabric = Fabric.createFromStorageObject(controllerPersistence.get<FabricJsonObject>("fabric"));
             return new MatterController(scanner, netInterfaceIpv4, netInterfaceIpv6, certificateManager, storedFabric, persistenceManager);
         } else {
             return new MatterController(scanner, netInterfaceIpv4, netInterfaceIpv6, certificateManager, await fabricBuilder.build(), persistenceManager);
@@ -151,14 +150,14 @@ export class MatterController {
         generalCommissioningClusterClient = ClusterClient(interactionClient, 0, GeneralCommissioningCluster);
         this.ensureSuccess(await generalCommissioningClusterClient.commissioningComplete({}));
 
-        this.controllerPersistence.set("fabric", this.fabric.toStorageJson());
-        this.controllerPersistence.set("fabricCommissioned", "1");
+        this.controllerPersistence.set("fabric", this.fabric.toStorageObject());
+        this.controllerPersistence.set("fabricCommissioned", true);
 
         return peerNodeId;
     }
 
     isCommissioned() {
-        return !!parseInt(this.controllerPersistence.get("fabricCommissioned", "0"));
+        return this.controllerPersistence.get("fabricCommissioned", false);
     }
 
 

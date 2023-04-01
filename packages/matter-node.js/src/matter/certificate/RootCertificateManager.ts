@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Crypto } from "../../crypto/Crypto";
+import { Crypto, KeyPair } from "../../crypto/Crypto";
 import { Time } from "../../time/Time";
 import { ByteArray } from "@project-chip/matter.js";
 import { CertificateManager, jsToMatterDate, TlvOperationalCertificate, TlvRootCertificate } from "./CertificateManager";
@@ -26,15 +26,11 @@ export class RootCertificateManager {
             try {
                 // Read and set the values from storage,
                 // if one fail we use the pre-generated values, else we overwrite them
-                const rootCertId = BigInt(storage.get("rootCertId"));
-                const rootKeyPairObj = JSON.parse(storage.get("rootKeyPair"));
-                const rootKeyPair = {
-                    publicKey: ByteArray.fromHex(rootKeyPairObj.publicKey),
-                    privateKey: ByteArray.fromHex(rootKeyPairObj.privateKey),
-                };
-                const rootKeyIdentifier = Buffer.from(storage.get("rootKeyIdentifier"), 'hex');
-                const rootCertBytes = ByteArray.fromHex(storage.get("rootCertBytes"));
-                const nextCertificateId = parseInt(storage.get("nextCertificateId"));
+                const rootCertId = storage.get<bigint>("rootCertId");
+                const rootKeyPair = storage.get<KeyPair>("rootKeyPair");
+                const rootKeyIdentifier = storage.get<Buffer>("rootKeyIdentifier");
+                const rootCertBytes = storage.get<ByteArray>("rootCertBytes");
+                const nextCertificateId = storage.get<number>("nextCertificateId");
                 this.rootCertId = rootCertId;
                 this.rootKeyPair = rootKeyPair;
                 this.rootKeyIdentifier = rootKeyIdentifier;
@@ -45,14 +41,11 @@ export class RootCertificateManager {
                 console.error("Failed to load root certificate from storage, generating new one", error);
             }
         }
-        storage.set("rootCertId", this.rootCertId.toString());
-        storage.set("rootKeyPair", JSON.stringify({
-            privateKey: this.rootKeyPair.privateKey.toHex(),
-            publicKey: this.rootKeyPair.publicKey.toHex(),
-        }));
-        storage.set("rootKeyIdentifier", this.rootKeyIdentifier.toString('hex'));
-        storage.set("rootCertBytes", this.rootCertBytes.toHex());
-        storage.set("nextCertificateId", this.nextCertificateId.toString());
+        storage.set("rootCertId", this.rootCertId);
+        storage.set("rootKeyPair", this.rootKeyPair);
+        storage.set("rootKeyIdentifier", this.rootKeyIdentifier);
+        storage.set("rootCertBytes", this.rootCertBytes);
+        storage.set("nextCertificateId", this.nextCertificateId);
     }
 
     getRootCert() {

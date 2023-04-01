@@ -13,23 +13,20 @@ import { SecureSession } from "../session/SecureSession";
 const COMPRESSED_FABRIC_ID_INFO = ByteArray.fromString("CompressedFabric");
 const GROUP_SECURITY_INFO = ByteArray.fromString("GroupKey v1.0");
 
-export interface FabricJsonObject {
+export type FabricJsonObject = {
     fabricIndex: number;
-    fabricId: string;
-    nodeId: string;
-    rootNodeId: string;
-    operationalId: string;
-    rootPublicKey: string;
-    keyPair: {
-        publicKey: string,
-        privateKey: string,
-    };
+    fabricId: bigint;
+    nodeId: bigint;
+    rootNodeId: bigint;
+    operationalId: ByteArray;
+    rootPublicKey: ByteArray;
+    keyPair: KeyPair;
     rootVendorId: number;
-    rootCert: string;
-    identityProtectionKey: string;
-    operationalIdentityProtectionKey: string;
-    intermediateCACert: string | undefined;
-    operationalCert: string;
+    rootCert: ByteArray;
+    identityProtectionKey: ByteArray;
+    operationalIdentityProtectionKey: ByteArray;
+    intermediateCACert: ByteArray | undefined;
+    operationalCert: ByteArray;
     label: string;
 }
 
@@ -57,47 +54,40 @@ export class Fabric {
         public label: string,
     ) { }
 
-    toStorageJson() {
-        return JSON.stringify({
+    toStorageObject(): FabricJsonObject {
+        return {
             fabricIndex: this.fabricIndex.index,
-            fabricId: this.fabricId.id.toString(),
-            nodeId: this.nodeId.id.toString(),
-            rootNodeId: this.rootNodeId.id.toString(),
-            operationalId: this.operationalId.toHex(),
-            rootPublicKey: this.rootPublicKey.toHex(),
-            keyPair: {
-                publicKey: this.keyPair.publicKey.toHex(),
-                privateKey: this.keyPair.privateKey.toHex(),
-            },
+            fabricId: this.fabricId.id,
+            nodeId: this.nodeId.id,
+            rootNodeId: this.rootNodeId.id,
+            operationalId: this.operationalId,
+            rootPublicKey: this.rootPublicKey,
+            keyPair: this.keyPair,
             rootVendorId: this.rootVendorId.id,
-            rootCert: this.rootCert.toHex(),
-            identityProtectionKey: this.identityProtectionKey.toHex(),
-            operationalIdentityProtectionKey: this.operationalIdentityProtectionKey.toHex(),
-            intermediateCACert: this.intermediateCACert ? this.intermediateCACert.toHex() : undefined,
-            operationalCert: this.operationalCert.toHex(),
+            rootCert: this.rootCert,
+            identityProtectionKey: this.identityProtectionKey,
+            operationalIdentityProtectionKey: this.operationalIdentityProtectionKey,
+            intermediateCACert: this.intermediateCACert,
+            operationalCert: this.operationalCert,
             label: this.label,
-        });
+        };
     }
 
-    static createFromStorageJson(json: string): Fabric {
-        const fabricObject: FabricJsonObject = JSON.parse(json);
+    static createFromStorageObject(fabricObject: FabricJsonObject): Fabric {
         return new Fabric(
             new FabricIndex(fabricObject.fabricIndex),
-            new FabricId(BigInt(fabricObject.fabricId)),
-            new NodeId(BigInt(fabricObject.nodeId)),
-            new NodeId(BigInt(fabricObject.rootNodeId)),
-            ByteArray.fromHex(fabricObject.operationalId),
-            ByteArray.fromHex(fabricObject.rootPublicKey),
-            {
-                publicKey: ByteArray.fromHex(fabricObject.keyPair.publicKey),
-                privateKey: ByteArray.fromHex(fabricObject.keyPair.privateKey),
-            },
+            new FabricId(fabricObject.fabricId),
+            new NodeId(fabricObject.nodeId),
+            new NodeId(fabricObject.rootNodeId),
+            fabricObject.operationalId,
+            fabricObject.rootPublicKey,
+            fabricObject.keyPair,
             new VendorId(fabricObject.rootVendorId),
-            ByteArray.fromHex(fabricObject.rootCert),
-            ByteArray.fromHex(fabricObject.identityProtectionKey),
-            ByteArray.fromHex(fabricObject.operationalIdentityProtectionKey),
-            fabricObject.intermediateCACert ? ByteArray.fromHex(fabricObject.intermediateCACert) : undefined,
-            ByteArray.fromHex(fabricObject.operationalCert),
+            fabricObject.rootCert,
+            fabricObject.identityProtectionKey,
+            fabricObject.operationalIdentityProtectionKey,
+            fabricObject.intermediateCACert,
+            fabricObject.operationalCert,
             fabricObject.label,
         );
     }

@@ -25,12 +25,12 @@ export interface ResumptionRecord {
     peerNodeId: NodeId,
 }
 
-interface ResumptionStorageRecord {
-    nodeId: string,
-    sharedSecret: string,
-    resumptionId: string,
-    fabricId: string,
-    peerNodeId: string,
+type ResumptionStorageRecord = {
+    nodeId: bigint,
+    sharedSecret: Uint8Array,
+    resumptionId: Uint8Array,
+    fabricId: bigint,
+    peerNodeId: bigint,
 }
 
 export class SessionManager<ContextT> {
@@ -105,31 +105,30 @@ export class SessionManager<ContextT> {
     }
 
     storeResumptionRecords() {
-        this.sessionPersistence.set("resumptionRecords", JSON.stringify([...this.resumptionRecords].map(([nodeId, { sharedSecret, resumptionId, peerNodeId, fabric }]) => ({
-            nodeId: nodeId.toString(),
-            sharedSecret: sharedSecret.toHex(),
-            resumptionId: resumptionId.toHex(),
-            fabricId: fabric.fabricId.id.toString(),
-            peerNodeId: peerNodeId.id.toString(),
-        }))));
+        this.sessionPersistence.set<ResumptionStorageRecord[]>("resumptionRecords", [...this.resumptionRecords].map(([nodeId, { sharedSecret, resumptionId, peerNodeId, fabric }]) => ({
+            nodeId,
+            sharedSecret,
+            resumptionId,
+            fabricId: fabric.fabricId.id,
+            peerNodeId: peerNodeId.id,
+        })));
     }
 
     initFromStorage(fabrics: Fabric[]) {
-        const storedResumptionRecords = JSON.parse(this.sessionPersistence.get("resumptionRecords", "[]"));
+        const storedResumptionRecords = this.sessionPersistence.get<ResumptionStorageRecord[]>("resumptionRecords", []);
 
-        storedResumptionRecords.forEach(({ nodeId, sharedSecret, resumptionId, fabricId, peerNodeId }: ResumptionStorageRecord) => {
+        storedResumptionRecords.forEach(({ nodeId, sharedSecret, resumptionId, fabricId, peerNodeId }) => {
             console.log("restoring resumption record for node", nodeId);
-            const decodedFabricId = BigInt(fabricId);
-            const fabric = fabrics.find(fabric => fabric.fabricId.id === decodedFabricId);
+            const fabric = fabrics.find(fabric => fabric.fabricId.id === fabricId);
             if (!fabric) {
                 console.log("fabric not found for resumption record", fabricId);
                 return;
             }
-            this.resumptionRecords.set(BigInt(nodeId), {
-                sharedSecret: ByteArray.fromHex(sharedSecret),
-                resumptionId: ByteArray.fromHex(resumptionId),
+            this.resumptionRecords.set(nodeId, {
+                sharedSecret,
+                resumptionId,
                 fabric,
-                peerNodeId: new NodeId(BigInt(peerNodeId)),
+                peerNodeId: new NodeId(peerNodeId),
             });
         });
     }
