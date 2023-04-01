@@ -36,8 +36,8 @@ import { AttestationCertificateManager } from "../src/matter/certificate/Attesta
 import { CertificationDeclarationManager } from "../src/matter/certificate/CertificationDeclarationManager";
 import { StorageInMemory } from "../src/persistence/StorageInMemory";
 import { PersistenceManager } from "../src/persistence/PersistenceManager";
-import {fromJson} from "../src/persistence/JsonConverter";
-import {FabricJsonObject} from "../src/matter/fabric/Fabric";
+import { fromJson } from "../src/persistence/JsonConverter";
+import { FabricJsonObject } from "../src/matter/fabric/Fabric";
 
 const SERVER_IP = "192.168.200.1";
 const SERVER_MAC = "00:B0:D0:63:C2:26";
