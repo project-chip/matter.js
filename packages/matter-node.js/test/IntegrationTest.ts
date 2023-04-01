@@ -36,6 +36,8 @@ import { AttestationCertificateManager } from "../src/matter/certificate/Attesta
 import { CertificationDeclarationManager } from "../src/matter/certificate/CertificationDeclarationManager";
 import { StorageInMemory } from "../src/persistence/StorageInMemory";
 import { PersistenceManager } from "../src/persistence/PersistenceManager";
+import {fromJson} from "../src/persistence/JsonConverter";
+import {FabricJsonObject} from "../src/matter/fabric/Fabric";
 
 const SERVER_IP = "192.168.200.1";
 const SERVER_MAC = "00:B0:D0:63:C2:26";
@@ -227,14 +229,14 @@ describe("Integration", () => {
     });
 
     describe("storage", () => {
-        it("server storage has fabric fields stored", async () => {
+        it("server storage has fabric fields stored correctly stringified", async () => {
             // TODO: In fact testing wrong because the persistence mixed server and client keys, will get issues for more fancy tests
             const storedFabricsString = fakeServerStorage.get("FabricManager", "fabrics");
             assert.ok(typeof storedFabricsString === "string");
-            const storedFabrics = JSON.parse(storedFabricsString);
-            assert.equal(Array.isArray(storedFabrics), true);
+            const storedFabrics = fromJson(storedFabricsString);
+            assert.ok(Array.isArray(storedFabrics));
             assert.equal(storedFabrics.length, 1);
-            const firstFabric = JSON.parse(storedFabrics[0]);
+            const firstFabric = storedFabrics[0] as FabricJsonObject;
             assert.equal(typeof firstFabric, "object");
             assert.equal(firstFabric.fabricIndex, 1);
             assert.equal(firstFabric.fabricId, 1);
@@ -243,24 +245,29 @@ describe("Integration", () => {
 
             const onoffValueString = fakeServerStorage.get("Cluster-1-6", "onOff");
             assert.ok(typeof onoffValueString === "string");
-            const onoffValue = JSON.parse(onoffValueString);
+            const onoffValue = fromJson(onoffValueString) as { version: number, value: any };
             assert.equal(typeof onoffValue, "object");
             assert.equal(onoffValue.version, 2);
             assert.equal(onoffValue.value, false);
 
             const storedServerResumptionRecordsString = fakeServerStorage.get("SessionManager", "resumptionRecords");
             assert.ok(typeof storedServerResumptionRecordsString === "string");
-            assert.equal(JSON.parse(storedServerResumptionRecordsString).length, 1);
+            const storedServerResumptionRecords = fromJson(storedServerResumptionRecordsString);
+            assert.ok(Array.isArray(storedServerResumptionRecords));
+            assert.equal(storedServerResumptionRecords.length, 1);
 
-            assert.equal(fakeControllerStorage.get("RootCertificateManager", "rootCertId"), "0");
-            assert.equal(fakeControllerStorage.get("MatterController", "fabricCommissioned"), "1");
+            assert.equal(fakeControllerStorage.get("RootCertificateManager", "rootCertId"), `"{\\"__object__\\":\\"BigInt\\",\\"__value__\\":\\"0\\"}"`);
+            assert.equal(fakeControllerStorage.get("MatterController", "fabricCommissioned"), "true");
+
             const storedControllerResumptionRecordsString = fakeServerStorage.get("SessionManager", "resumptionRecords");
             assert.ok(typeof storedControllerResumptionRecordsString === "string");
-            assert.equal(JSON.parse(storedControllerResumptionRecordsString).length, 1);
+            const storedControllerResumptionRecords = fromJson(storedControllerResumptionRecordsString);
+            assert.ok(Array.isArray(storedControllerResumptionRecords));
+            assert.equal(storedControllerResumptionRecords.length, 1);
 
             const storedControllerFabricsString = fakeControllerStorage.get("MatterController", "fabric");
             assert.ok(typeof storedControllerFabricsString === "string");
-            assert.equal(typeof JSON.parse(storedControllerFabricsString), "object");
+            assert.equal(typeof fromJson(storedControllerFabricsString), "object");
         });
     });
 

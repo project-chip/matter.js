@@ -97,10 +97,12 @@ describe("JsonConverter", () => {
             assert.deepEqual(decodedObj, obj);
 
             assert.ok(decodedObj instanceof Map);
-            assert.ok(decodedObj.get(1) instanceof Map);
-            assert.equal(decodedObj.get(1).get("a"), 1);
-            assert.ok(decodedObj.get(2) instanceof Map);
-            assert.equal(decodedObj.get(2).get("b"), 2);
+            const map1 = decodedObj.get(1);
+            const map2 = decodedObj.get(2);
+            assert.ok(map1 instanceof Map);
+            assert.equal(map1.get("a"), 1);
+            assert.ok(map2 instanceof Map);
+            assert.equal(map2.get("b"), 2);
         });
     });
 });
