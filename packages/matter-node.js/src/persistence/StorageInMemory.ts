@@ -5,6 +5,7 @@
  */
 
 import { Storage } from "./Storage";
+import { SupportedStorageTypes } from "./JsonConverter";
 
 export class StorageInMemory implements Storage {
     constructor(
@@ -19,12 +20,12 @@ export class StorageInMemory implements Storage {
         // nothing to do
     }
 
-    get(context: string, key: string): string | undefined {
+    get<T extends SupportedStorageTypes>(context: string, key: string): T | undefined {
         if (!context.length || !key.length) throw new Error("Context and key must not be empty strings!");
         return this.store[context]?.[key];
     }
 
-    set(context: string, key: string, value: string): void {
+    set<T extends SupportedStorageTypes>(context: string, key: string, value: T): void {
         if (!context.length || !key.length) throw new Error("Context and key must not be empty strings!");
         let contextStore = this.store[context];
         if (contextStore === undefined) {

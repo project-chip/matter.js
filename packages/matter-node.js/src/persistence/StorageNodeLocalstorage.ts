@@ -6,6 +6,7 @@
 
 import { LocalStorage } from "node-localstorage";
 import { Storage } from "./Storage";
+import { fromJson, SupportedStorageTypes, toJson } from "./JsonConverter";
 
 export class StorageNodeLocalstorage implements Storage {
     private readonly localStorage;
@@ -28,15 +29,15 @@ export class StorageNodeLocalstorage implements Storage {
         return context + "---" + key;
     }
 
-    get(context: string, key: string): string | undefined {
+    get<T extends SupportedStorageTypes>(context: string, key: string): T | undefined {
         if (!context.length || !key.length) throw new Error("Context and key must not be empty strings!");
         const value = this.localStorage.getItem(this.buildStorageKey(context, key));
         if (value === null) return undefined;
-        return value;
+        return fromJson(value) as T
     }
 
-    set(context: string, key: string, value: string): void {
+    set<T extends SupportedStorageTypes>(context: string, key: string, value: T): void {
         if (!context.length || !key.length) throw new Error("Context and key must not be empty strings!");
-        this.localStorage.setItem(this.buildStorageKey(context, key), value);
+        this.localStorage.setItem(this.buildStorageKey(context, key), toJson(value));
     }
 }

@@ -10,17 +10,17 @@ import * as assert from "assert";
 import { SupportedStorageTypes } from "../../src/persistence/JsonConverter";
 import { ByteArray } from "@project-chip/matter.js";
 
-type TestVector = { [testName: string]: { key: string, input: SupportedStorageTypes, stringified: string } };
+type TestVector = { [testName: string]: { key: string, input: SupportedStorageTypes } };
 
 const validateStorageTestVector: TestVector = {
-    "store and retrieve string": { key: "stringKey", input: "value", stringified: `"value"` },
-    "store and retrieve number": { key: "numberKey", input: 1234, stringified: `1234` },
-    "store and retrieve boolean": { key: "booleanKey", input: true, stringified: `true` },
-    "store and retrieve bigint": { key: "bigintKey", input: BigInt(123456789), stringified: `"{\\"__object__\\":\\"BigInt\\",\\"__value__\\":\\"123456789\\"}"` },
-    "store and retrieve Buffer": { key: "BufferKey", input: Buffer.from("value", "ascii"), stringified: `"{\\"__object__\\":\\"Buffer\\",\\"__value__\\":\\"dmFsdWU=\\"}"` },
-    "store and retrieve ByteArray": { key: "ByteArrayKey", input: ByteArray.fromHex("010203040506070809"), stringified: `"{\\"__object__\\":\\"Uint8Array\\",\\"__value__\\":\\"AQIDBAUGBwgJ\\"}"` },
-    "store and retrieve array of string": { key: "stringArrayKey", input: ["1", "2", "3"], stringified: `["1","2","3"]` },
-    "store and retrieve object": { key: "stringArrayKey", input: { key1: "value1", key2: 2 }, stringified: `{"key1":"value1","key2":2}` },
+    "store and retrieve string": { key: "stringKey", input: "value" },
+    "store and retrieve number": { key: "numberKey", input: 1234 },
+    "store and retrieve boolean": { key: "booleanKey", input: true },
+    "store and retrieve bigint": { key: "bigintKey", input: BigInt(123456789) },
+    "store and retrieve Buffer": { key: "BufferKey", input: Buffer.from("value", "ascii") },
+    "store and retrieve ByteArray": { key: "ByteArrayKey", input: ByteArray.fromHex("010203040506070809") },
+    "store and retrieve array of string": { key: "stringArrayKey", input: ["1", "2", "3"] },
+    "store and retrieve object": { key: "stringArrayKey", input: { key1: "value1", key2: 2 } },
 };
 
 
@@ -35,9 +35,6 @@ describe("Persistence", () => {
                 persistence.set(testVector.key, testVector.input);
                 const valueFromPersistence = persistence.get(testVector.key);
                 assert.deepEqual(valueFromPersistence, testVector.input);
-
-                const valueFromStorageWithContext = storage.get("context", testVector.key);
-                assert.equal(valueFromStorageWithContext, testVector.stringified);
             });
         }
     });
@@ -53,7 +50,7 @@ describe("Persistence", () => {
         assert.equal(valueFromPersistence, "value");
 
         const valueFromStorageWithContext = storage.get("context", "key");
-        assert.equal(valueFromStorageWithContext, `"value"`);
+        assert.equal(valueFromStorageWithContext, "value");
     });
 
     it("read with default value", () => {

@@ -5,7 +5,7 @@
 */
 
 import { Storage } from "./Storage";
-import { fromJson, SupportedStorageTypes, toJson } from "./JsonConverter";
+import { SupportedStorageTypes } from "./JsonConverter";
 
 export class Persistence {
     constructor(
@@ -14,8 +14,8 @@ export class Persistence {
     ) { }
 
     get<T extends SupportedStorageTypes>(key: string, defaultValue?: T): T {
-        const value = this.storage.get(this.context, key);
-        if (value !== undefined) return fromJson(value) as T;
+        const value = this.storage.get<T>(this.context, key);
+        if (value !== undefined) return value;
         if (defaultValue === undefined) {
             throw new Error(`No value found for key ${key} in context ${this.context} and no default value specified!`);
         }
@@ -27,6 +27,6 @@ export class Persistence {
     }
 
     set<T extends SupportedStorageTypes>(key: string, value: T): void {
-        this.storage.set(this.context, key, toJson(value));
+        this.storage.set<T>(this.context, key, value);
     }
 }
