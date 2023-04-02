@@ -25,7 +25,10 @@
   },
   "scripts": {
     "clean": "rm -rf dist && rm -rf out && rm *.tsbuildinfo || true",
-    "build": "tsc --project tsconfig.dist-es.json && tsc --project tsconfig.dist-cjs.json && tsc --project tsconfig.dist-dts.json",
+    "build-cjs": "tsc --project tsconfig.dist-cjs.json && cp package-cjs.json dist/cjs/package.json",
+    "build-es": "tsc --project tsconfig.dist-es.json",
+    "build-dts": "tsc --project tsconfig.dist-dts.json",
+    "build": "npm run build-cjs && npm run build-es && npm run build-dts",
     "build-clean": "npm run clean && npm run build",
     "test-node": "NODE_OPTIONS=--experimental-vm-modules jest",
     "test-web": "karma start test/karma.conf.cjs",
@@ -45,6 +48,7 @@
   "files": [
     "dist/**/*"
   ],
+  "type": "module",
   "main": "dist/cjs/matter.js",
   "module": "dist/es/matter.js",
   "types": "dist/dts/matter.d.ts"

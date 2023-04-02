@@ -144,7 +144,7 @@ export class DerCodec {
         if (tag === DerType.BitString) return { [TAG_ID_KEY]: tag, [BYTES_KEY]: bytes.slice(1), [BITS_PADDING]: bytes[0] };
         if ((tag & CONSTRUCTED) === 0) return { [TAG_ID_KEY]: tag, [BYTES_KEY]: bytes };
         const elementsReader = new DataReader(bytes, Endian.Big);
-        const elements = [];
+        const elements: DerNode[] = [];
         while (elementsReader.getRemainingBytesCount() > 0) {
             elements.push(this.decodeRec(elementsReader));
         }

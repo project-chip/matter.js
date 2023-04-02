@@ -4,14 +4,16 @@
   "compilerOptions": {
     "esModuleInterop": true, // Required to remove warnings on jest test
     "composite": true,  // For linking this package from matter-node.js
-    "moduleResolution": "node", // Required to correctly resolve Babel imports
+    "moduleResolution": "node16", // Required to correctly resolve Babel imports and to make sure all imports are js
+    "module": "node16", // Required to make sure all imports are js
 
     // Local dev compilation checks
     "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
     "noImplicitOverride": true,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
-    "strictNullChecks": true
+    "strict": true
   },
   /* During dev, src are included, so they are also modified during refactorings. */
   "include": ["src/**/*.ts", "test/**/*.ts"],

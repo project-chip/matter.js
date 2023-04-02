@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Cluster, Attribute, } from "./Cluster";
-import { TlvEndpointNumber } from "../common/EndpointNumber";
+import { Cluster, Attribute, } from "./Cluster.js";
+import { TlvEndpointNumber } from "../common/EndpointNumber.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-import { TlvArray } from "../tlv/TlvArray";
+import { TlvArray } from "../tlv/TlvArray.js";
 
 /**
  * The configuration and capabilities of a Device’s power system.

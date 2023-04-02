@@ -10,6 +10,7 @@ const config: Config = {
     moduleNameMapper: {
         '^(\\.{1,2}/.*)\\.[jt]s$': '$1',
     },
+    maxWorkers: "50%", // to make sure jest is not using all available resources
 };
 
 export default config;

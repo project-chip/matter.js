@@ -10,8 +10,8 @@ import { MatterDevice } from "../../../src/matter/MatterDevice";
 import { SecureSession } from "../../../src/matter/session/SecureSession";
 import { UNDEFINED_NODE_ID } from "../../../src/matter/session/SessionManager";
 import { ByteArray } from "@project-chip/matter.js";
-import { Time } from "../../../src/time/Time.js";
-import { TimeFake } from "../../../src/time/TimeFake.js";
+import { Time } from "../../../src/time/Time";
+import { TimeFake } from "../../../src/time/TimeFake";
 
 Time.get = () => new TimeFake(0);
 

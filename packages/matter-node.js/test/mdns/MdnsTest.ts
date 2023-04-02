@@ -17,8 +17,8 @@ import { Fabric } from "../../src/matter/fabric/Fabric";
 import { NodeId } from "../../src/matter/common/NodeId";
 import { ByteArray } from "@project-chip/matter.js";
 import { FAKE_INTERFACE_NAME } from "../../src/net/fake/SimulatedNetwork";
-import { Time } from "../../src/time/Time.js";
-import { TimeFake } from "../../src/time/TimeFake.js";
+import { Time } from "../../src/time/Time";
+import { TimeFake } from "../../src/time/TimeFake";
 
 Time.get = () => new TimeFake(0);
 
