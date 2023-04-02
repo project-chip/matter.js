@@ -7,7 +7,7 @@
         "noImplicitOverride": true,
         "noUnusedParameters": true,
         "noUnusedLocals": true,
-        "strictNullChecks": true
+        "strict": true,
     },
     "include": ["src/**/*.ts", "test/**/*.ts"],
 }

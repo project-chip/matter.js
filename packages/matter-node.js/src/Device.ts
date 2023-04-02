@@ -164,7 +164,7 @@ class Device {
                 ])
                 .addEndpoint(0x01, DEVICE.ON_OFF_LIGHT, [onOffClusterServer])
             )
-            .start()
+            .start();
 
         logger.info("Listening");
 
