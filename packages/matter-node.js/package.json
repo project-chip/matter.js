@@ -27,7 +27,9 @@
         "clean": "rm -rf dist && rm *.tsbuildinfo || true",
         "build": "tsc --project tsconfig.dist.json",
         "build-clean": "npm run clean && npm run build",
-        "test": "TZ=utc jest"
+        "test": "TZ=utc jest",
+        "matter": "ts-node --project tsconfig.dist.json src/Device.ts",
+        "matter-controller": "ts-node --project tsconfig.dist.json src/Controller.ts"
     },
     "devDependencies": {
         "@types/bn.js": "^5.1.1",

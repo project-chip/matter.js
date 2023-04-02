@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Schema } from "./Schema";
-import { ByteArray } from "../util/ByteArray";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications";
+import { Schema } from "./Schema.js";
+import { ByteArray } from "../util/ByteArray.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 const BASE38_ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-.";
 

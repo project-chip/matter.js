@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { OptionalAttribute, WritableAttribute, OptionalWritableAttribute, Attribute, Cluster, Command, TlvNoResponse } from "./Cluster";
+import { OptionalAttribute, WritableAttribute, OptionalWritableAttribute, Attribute, Cluster, Command, TlvNoResponse } from "./Cluster.js";
 import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
-import { TlvBitmap, TlvEnum, TlvUInt16, TlvUInt8 } from "../tlv/TlvNumber";
-import { BitFlag } from "../schema/BitmapSchema";
-import { TlvField, TlvObject } from "../tlv/TlvObject";
-import { TlvNullable } from "../tlv/TlvNullable";
+import { TlvBitmap, TlvEnum, TlvUInt16, TlvUInt8 } from "../tlv/TlvNumber.js";
+import { BitFlag } from "../schema/BitmapSchema.js";
+import { TlvField, TlvObject } from "../tlv/TlvObject.js";
+import { TlvNullable } from "../tlv/TlvNullable.js";
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.6.5.8 */
 const OptionsBitmap = TlvBitmap(TlvUInt8, {
