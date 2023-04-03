@@ -5,18 +5,26 @@
  */
 
 import { MatterDevice } from "../MatterDevice";
-import { InteractionServerMessenger } from "./InteractionMessenger";
+import { InteractionServerMessenger, StatusResponseError } from "./InteractionMessenger";
 import { Fabric } from "../fabric/Fabric";
 import { AttributeWithPath, AttributePath, INTERACTION_PROTOCOL_ID, attributePathToId } from "./InteractionServer";
 import { Time, Timer } from "../../time/Time";
 import { NodeId } from "../common/NodeId";
 import { TlvSchema } from "@project-chip/matter.js";
+import { tryCatchAsync } from "../../error/TryCatchHandler";
+import { StatusCode } from "./InteractionMessages";
 import { Logger } from "../../log/Logger";
 import { SecureSession } from "../session/SecureSession";
 
 const logger = Logger.get("SubscriptionHandler");
 
-const SUBSCRIPTION_MAX_INTERVAL_PUBLISHER_LIMIT_MS = 1000 * 60 * 60; /** 1 hour */
+// We use 3 minutes as global max interval because with 60mins as defined by spec the timeframe
+// until the controller establishs a new subscription after e.g a reboot can be up to 60 mins
+// and the controller would assume that the value is unchanged. this is too long.
+// chip-tool is not respecting the 60mins at all and only respects the max sent by the controller
+// which can lead to spamming the network with unneeded packages. So I decided for 3 minutes for now
+// as a compromise until we have something better.
+const SUBSCRIPTION_MAX_INTERVAL_PUBLISHER_LIMIT_MS = 3 * 60 * 1000; /** 3 mins */ // Officially: 1000 * 60 * 60; /** 1 hour */
 
 interface PathValueVersion<T> {
     path: AttributePath,
@@ -94,7 +102,13 @@ export class SubscriptionHandler {
         const updatesToSend = Array.from(this.outstandingAttributeUpdates.values());
         this.outstandingAttributeUpdates.clear();
         this.lastUpdateTimeMs = now;
-        await this.sendUpdateMessage(updatesToSend);
+        try {
+            await this.sendUpdateMessage(updatesToSend);
+        } catch (error) {
+            // TODO: Add maybe a counter and cancel subscription update sending after a certain number of errors?
+            logger.error("Error sending subscription update message", error);
+        }
+
         this.updateTimer = Time.getTimer(this.sendInterval, () => this.sendUpdate()).start();
     }
 
@@ -145,19 +159,33 @@ export class SubscriptionHandler {
         if (exchange === undefined) return;
         logger.debug(`Sending subscription changes for ID ${this.subscriptionId}: ${Logger.toJSON(values)}`);
         const messenger = new InteractionServerMessenger(exchange);
-        await messenger.sendDataReport({
-            suppressResponse: !values.length, // suppressResponse ok for empty DataReports
-            subscriptionId: this.subscriptionId,
-            interactionModelRevision: 1,
-            values: values.map(({ path, schema, value, version }) => ({
-                value: {
-                    path,
-                    version,
-                    value: schema.encodeTlv(value),
-                },
-            })),
-        });
 
-        messenger.close();
+        try {
+            await tryCatchAsync(async () => {
+                await messenger.sendDataReport({
+                    suppressResponse: !values.length, // suppressResponse ok for empty DataReports
+                    subscriptionId: this.subscriptionId,
+                    interactionModelRevision: 1,
+                    values: values.map(({ path, schema, value, version }) => ({
+                        value: {
+                            path,
+                            version,
+                            value: schema.encodeTlv(value),
+                        },
+                    })),
+                });
+            }, StatusResponseError, (error) => {
+                if (error.code === StatusCode.InvalidSubscription ||
+                    error.code === StatusCode.Failure
+                ) {
+                    logger.info(`Subscription ${this.subscriptionId} cancelled by peer.`);
+                    this.cancel();
+                } else {
+                    throw error;
+                }
+            });
+        } finally {
+            messenger.close();
+        }
     }
 }
