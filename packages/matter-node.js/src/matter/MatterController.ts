@@ -38,8 +38,8 @@ const ADMIN_VENDOR_ID = new VendorId(752);
 const logger = Logger.get("MatterController");
 
 export class MatterController {
-    public static async create(scanner: Scanner, netInterfaceIpv4: NetInterface, netInterfaceIpv6: NetInterface, persistenceManager: StorageManager) {
-        const certificateManager = new RootCertificateManager(persistenceManager);
+    public static async create(scanner: Scanner, netInterfaceIpv4: NetInterface, netInterfaceIpv6: NetInterface, storageManager: StorageManager) {
+        const certificateManager = new RootCertificateManager(storageManager);
 
         const ipkValue = Crypto.getRandomData(16);
         const fabricBuilder = new FabricBuilder(FABRIC_INDEX)
@@ -49,13 +49,13 @@ export class MatterController {
             .setRootVendorId(ADMIN_VENDOR_ID);
         fabricBuilder.setOperationalCert(certificateManager.generateNoc(fabricBuilder.getPublicKey(), FABRIC_ID, CONTROLLER_NODE_ID));
 
-        // Check if we have a fabric stored in the persistence, if yes initialize this one, else build a new one
-        const controllerPersistence = persistenceManager.createContext("MatterController");
-        if (controllerPersistence.has("fabric")) {
-            const storedFabric = Fabric.createFromStorageObject(controllerPersistence.get<FabricJsonObject>("fabric"));
-            return new MatterController(scanner, netInterfaceIpv4, netInterfaceIpv6, certificateManager, storedFabric, persistenceManager);
+        // Check if we have a fabric stored in the storage, if yes initialize this one, else build a new one
+        const controllerStorage = storageManager.createContext("MatterController");
+        if (controllerStorage.has("fabric")) {
+            const storedFabric = Fabric.createFromStorageObject(controllerStorage.get<FabricJsonObject>("fabric"));
+            return new MatterController(scanner, netInterfaceIpv4, netInterfaceIpv6, certificateManager, storedFabric, storageManager);
         } else {
-            return new MatterController(scanner, netInterfaceIpv4, netInterfaceIpv6, certificateManager, await fabricBuilder.build(), persistenceManager);
+            return new MatterController(scanner, netInterfaceIpv4, netInterfaceIpv6, certificateManager, await fabricBuilder.build(), storageManager);
         }
     }
 
@@ -64,7 +64,7 @@ export class MatterController {
     private readonly exchangeManager;
     private readonly paseClient = new PaseClient();
     private readonly caseClient = new CaseClient();
-    private readonly controllerPersistence: StorageContext;
+    private readonly controllerStorage: StorageContext;
 
     constructor(
         private readonly scanner: Scanner,
@@ -72,11 +72,11 @@ export class MatterController {
         private readonly netInterfaceIpv6: NetInterface,
         private readonly certificateManager: RootCertificateManager,
         private readonly fabric: Fabric,
-        private readonly persistenceManager: StorageManager
+        private readonly storageManager: StorageManager
     ) {
-        this.controllerPersistence = this.persistenceManager.createContext("MatterController");
+        this.controllerStorage = this.storageManager.createContext("MatterController");
 
-        this.sessionManager = new SessionManager(this, this.persistenceManager);
+        this.sessionManager = new SessionManager(this, this.storageManager);
         this.sessionManager.initFromStorage([this.fabric]);
 
         this.exchangeManager = new ExchangeManager<MatterController>(this.sessionManager, this.channelManager);
@@ -150,14 +150,14 @@ export class MatterController {
         generalCommissioningClusterClient = ClusterClient(interactionClient, 0, GeneralCommissioningCluster);
         this.ensureSuccess(await generalCommissioningClusterClient.commissioningComplete({}));
 
-        this.controllerPersistence.set("fabric", this.fabric.toStorageObject());
-        this.controllerPersistence.set("fabricCommissioned", true);
+        this.controllerStorage.set("fabric", this.fabric.toStorageObject());
+        this.controllerStorage.set("fabricCommissioned", true);
 
         return peerNodeId;
     }
 
     isCommissioned() {
-        return this.controllerPersistence.get("fabricCommissioned", false);
+        return this.controllerStorage.get("fabricCommissioned", false);
     }
 
 

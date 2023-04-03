@@ -33,23 +33,23 @@ class Controller {
     async start() {
         logger.info(`node-matter`);
 
-        const persistenceManager = new StorageManager(storage);
-        await persistenceManager.initialize();
+        const storageManager = new StorageManager(storage);
+        await storageManager.initialize();
 
-        const controllerPersistence = persistenceManager.createContext("Controller");
+        const controllerStorage = storageManager.createContext("Controller");
 
-        const ip = getParameter("ip") ?? controllerPersistence.get<string>("ip", "");
+        const ip = getParameter("ip") ?? controllerStorage.get<string>("ip", "");
         if (ip === "") throw new Error("Please specify the IP of the device to commission with -ip");
-        const port = getIntParameter("port") ?? controllerPersistence.get("port", 5540);
-        const discriminator = getIntParameter("discriminator") ?? controllerPersistence.get("discriminator", 3840);
-        const setupPin = getIntParameter("pin") ?? controllerPersistence.get("pin", 20202021);
+        const port = getIntParameter("port") ?? controllerStorage.get("port", 5540);
+        const discriminator = getIntParameter("discriminator") ?? controllerStorage.get("discriminator", 3840);
+        const setupPin = getIntParameter("pin") ?? controllerStorage.get("pin", 20202021);
 
-        controllerPersistence.set("ip", ip);
-        controllerPersistence.set("port", port);
-        controllerPersistence.set("discriminator", discriminator);
-        controllerPersistence.set("pin", setupPin);
+        controllerStorage.set("ip", ip);
+        controllerStorage.set("port", port);
+        controllerStorage.set("discriminator", discriminator);
+        controllerStorage.set("pin", setupPin);
 
-        const client = await MatterController.create(await MdnsScanner.create(), await UdpInterface.create(5540, "udp4"), await UdpInterface.create(5540, "udp6"), persistenceManager);
+        const client = await MatterController.create(await MdnsScanner.create(), await UdpInterface.create(5540, "udp4"), await UdpInterface.create(5540, "udp6"), storageManager);
         try {
             if (client.isCommissioned()) {
                 console.log(`Already commissioned. Resume not yet supported.`);

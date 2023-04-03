@@ -37,11 +37,11 @@ export class MatterDevice {
         private readonly vendorId: VendorId,
         private readonly productId: number,
         private readonly discriminator: number,
-        private readonly persistenceManager: StorageManager,
+        private readonly storageManager: StorageManager,
     ) {
-        this.fabricManager = new FabricManager(this.persistenceManager);
+        this.fabricManager = new FabricManager(this.storageManager);
 
-        this.sessionManager = new SessionManager(this, this.persistenceManager);
+        this.sessionManager = new SessionManager(this, this.storageManager);
         this.sessionManager.initFromStorage(this.fabricManager.getFabrics());
 
         this.exchangeManager = new ExchangeManager<MatterDevice>(this.sessionManager, this.channelManager);

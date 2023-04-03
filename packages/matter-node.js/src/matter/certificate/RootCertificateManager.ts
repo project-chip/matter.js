@@ -18,8 +18,8 @@ export class RootCertificateManager {
     private rootCertBytes = this.generateRootCert();
     private nextCertificateId = 1;
 
-    constructor(persistenceManager: StorageManager) {
-        const storage = persistenceManager.createContext("RootCertificateManager");
+    constructor(storageManager: StorageManager) {
+        const storage = storageManager.createContext("RootCertificateManager");
 
         // Read from storage if we have them stored, else store the just generated data
         if (storage.has("rootCertId")) {

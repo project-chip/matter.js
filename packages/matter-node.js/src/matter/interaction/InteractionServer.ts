@@ -37,7 +37,7 @@ export class ClusterServer<F extends BitSchema, A extends Attributes, C extends 
     readonly name: string;
     readonly attributes = <AttributeServers<A>>{};
     readonly commands = new Array<CommandServer<any, any>>();
-    private persistence: StorageContext | null = null;
+    private clusterStorage: StorageContext | null = null;
     private attributeStorageListeners = new Map<number, (value: any, version: number) => void>();
 
     constructor(clusterDef: Cluster<F, A, C, E>, features: TypeFromBitSchema<F>, attributesInitialValues: AttributeInitialValues<A>, handlers: ClusterServerHandlers<Cluster<F, A, C, E>>) {
@@ -76,15 +76,15 @@ export class ClusterServer<F extends BitSchema, A extends Attributes, C extends 
         }
     }
 
-    setPersistence(persistence: StorageContext) {
-        this.persistence = persistence;
+    setStorage(storageContext: StorageContext) {
+        this.clusterStorage = storageContext;
 
         for (const name in this.attributes) {
             const attribute = (this.attributes as any)[name];
             if (!this.attributeStorageListeners.has(attribute.id)) return;
-            if (!persistence.has(attribute.name)) return;
+            if (!storageContext.has(attribute.name)) return;
             try {
-                const data = persistence.get<{ version: number, value: any }>(attribute.name);
+                const data = storageContext.get<{ version: number, value: any }>(attribute.name);
                 logger.debug(`Restoring attribute ${attribute.name} (${attribute.id}) in cluster ${this.name} (${this.id})`);
                 attribute.init(data.value, data.version);
             } catch (error) {
@@ -94,9 +94,9 @@ export class ClusterServer<F extends BitSchema, A extends Attributes, C extends 
     }
 
     attributeStorageListener(attributeName: string, version: number, value: any) {
-        if (!this.persistence) return;
+        if (!this.clusterStorage) return;
         logger.debug(`Storing attribute ${attributeName} in cluster ${this.name} (${this.id})`);
-        this.persistence.set(attributeName, { version, value });
+        this.clusterStorage.set(attributeName, { version, value });
     }
 }
 
@@ -138,7 +138,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     private nextSubscriptionId = Crypto.getRandomUInt32();
 
     constructor(
-        private readonly persistenceManager: StorageManager
+        private readonly storageManager: StorageManager
     ) { }
 
     getId() {
@@ -162,7 +162,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         clusters.forEach(cluster => {
             const { id: clusterId, attributes, commands } = cluster;
 
-            cluster.setPersistence(this.persistenceManager.createContext(`Cluster-${clusterEndpointNumber.number}-${clusterId}`));
+            cluster.setStorage(this.storageManager.createContext(`Cluster-${clusterEndpointNumber.number}-${clusterId}`));
 
             clusterMap.set(clusterId, cluster);
             // Add attributes

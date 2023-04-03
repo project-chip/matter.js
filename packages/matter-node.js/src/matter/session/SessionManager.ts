@@ -38,13 +38,13 @@ export class SessionManager<ContextT> {
     private readonly sessions = new Map<number, Session<ContextT>>();
     private nextSessionId = Crypto.getRandomUInt16();
     private resumptionRecords = new Map<bigint, ResumptionRecord>();
-    private readonly sessionPersistence: StorageContext;
+    private readonly sessionStorage: StorageContext;
 
     constructor(
         private readonly context: ContextT,
-        persistenceManager: StorageManager,
+        storageManager: StorageManager,
     ) {
-        this.sessionPersistence = persistenceManager.createContext("SessionManager")
+        this.sessionStorage = storageManager.createContext("SessionManager")
         this.unsecureSession = new UnsecureSession(context);
         this.sessions.set(UNICAST_UNSECURE_SESSION_ID, this.unsecureSession);
     }
@@ -105,7 +105,7 @@ export class SessionManager<ContextT> {
     }
 
     storeResumptionRecords() {
-        this.sessionPersistence.set<ResumptionStorageRecord[]>("resumptionRecords", [...this.resumptionRecords].map(([nodeId, { sharedSecret, resumptionId, peerNodeId, fabric }]) => ({
+        this.sessionStorage.set<ResumptionStorageRecord[]>("resumptionRecords", [...this.resumptionRecords].map(([nodeId, { sharedSecret, resumptionId, peerNodeId, fabric }]) => ({
             nodeId,
             sharedSecret,
             resumptionId,
@@ -115,7 +115,7 @@ export class SessionManager<ContextT> {
     }
 
     initFromStorage(fabrics: Fabric[]) {
-        const storedResumptionRecords = this.sessionPersistence.get<ResumptionStorageRecord[]>("resumptionRecords", []);
+        const storedResumptionRecords = this.sessionStorage.get<ResumptionStorageRecord[]>("resumptionRecords", []);
 
         storedResumptionRecords.forEach(({ nodeId, sharedSecret, resumptionId, fabricId, peerNodeId }) => {
             console.log("restoring resumption record for node", nodeId);

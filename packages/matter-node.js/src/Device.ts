@@ -54,25 +54,25 @@ class Device {
     async start() {
         logger.info(`node-matter`);
 
-        const persistenceManager = new StorageManager(storage);
-        await persistenceManager.initialize();
+        const storageManager = new StorageManager(storage);
+        await storageManager.initialize();
 
-        const devicePersistence = persistenceManager.createContext("Device");
+        const deviceStorage = storageManager.createContext("Device");
 
         const deviceName = "Matter test device";
         const deviceType = 257 /* Dimmable bulb */;
         const vendorName = "matter-node.js";
-        const passcode = getIntParameter("passcode") ?? devicePersistence.get("passcode", 20202021);
-        const discriminator = getIntParameter("discriminator") ?? devicePersistence.get("discriminator", 3840);
+        const passcode = getIntParameter("passcode") ?? deviceStorage.get("passcode", 20202021);
+        const discriminator = getIntParameter("discriminator") ?? deviceStorage.get("discriminator", 3840);
         // product name / id and vendor id should match what is in the device certificate
-        const vendorId = new VendorId(getIntParameter("vendorid") ?? devicePersistence.get("vendorid", 0xFFF1));
+        const vendorId = new VendorId(getIntParameter("vendorid") ?? deviceStorage.get("vendorid", 0xFFF1));
         const productName = "matter-node.js Test Product";
-        const productId = getIntParameter("productid") ?? devicePersistence.get("productid", 0x8000);
+        const productId = getIntParameter("productid") ?? deviceStorage.get("productid", 0x8000);
 
-        devicePersistence.set("passcode", passcode);
-        devicePersistence.set("discriminator", discriminator);
-        devicePersistence.set("vendorid", vendorId.id);
-        devicePersistence.set("productid", productId);
+        deviceStorage.set("passcode", passcode);
+        deviceStorage.set("discriminator", discriminator);
+        deviceStorage.set("vendorid", vendorId.id);
+        deviceStorage.set("productid", productId);
 
         // Barebone implementation of the On/Off cluster
         const onOffClusterServer = new ClusterServer(
@@ -94,13 +94,13 @@ class Device {
         const { keyPair: dacKeyPair, dac } = paa.getDACert(productId)
         const certificationDeclaration = CertificationDeclarationManager.generate(vendorId, productId);
 
-        const device = new MatterDevice(deviceName, deviceType, vendorId, productId, discriminator, persistenceManager)
+        const device = new MatterDevice(deviceName, deviceType, vendorId, productId, discriminator, storageManager)
             .addNetInterface(await UdpInterface.create(5540, "udp4"))
             .addNetInterface(await UdpInterface.create(5540, "udp6"))
             .addScanner(await MdnsScanner.create())
             .addBroadcaster(await MdnsBroadcaster.create())
             .addProtocolHandler(secureChannelProtocol)
-            .addProtocolHandler(new InteractionServer(persistenceManager)
+            .addProtocolHandler(new InteractionServer(storageManager)
                 .addEndpoint(0x00, DEVICE.ROOT, [
                     new ClusterServer(BasicInformationCluster, {}, {
                         dataModelRevision: 1,

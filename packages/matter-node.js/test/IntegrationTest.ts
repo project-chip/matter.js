@@ -229,7 +229,7 @@ describe("Integration", () => {
 
     describe("storage", () => {
         it("server storage has fabric fields stored correctly stringified", async () => {
-            // TODO: In fact testing wrong because the persistence mixed server and client keys, will get issues for more fancy tests
+            // TODO: In fact testing wrong because the storage mixed server and client keys, will get issues for more fancy tests
             const storedFabrics = fakeServerStorage.get("FabricManager", "fabrics");
             assert.ok(Array.isArray(storedFabrics));
             assert.equal(storedFabrics.length, 1);

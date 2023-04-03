@@ -17,18 +17,18 @@ export class FabricManager {
     private nextFabricIndex = 1;
     private readonly fabrics = new Array<Fabric>();
     private fabricBuilder?: FabricBuilder;
-    private readonly fabricPersistence: StorageContext;
+    private readonly fabricStorage: StorageContext;
 
-    constructor(persistenceManager: StorageManager) {
-        this.fabricPersistence = persistenceManager.createContext("FabricManager");
-        const fabrics = this.fabricPersistence.get<FabricJsonObject[]>("fabrics", []);
+    constructor(storageManager: StorageManager) {
+        this.fabricStorage = storageManager.createContext("FabricManager");
+        const fabrics = this.fabricStorage.get<FabricJsonObject[]>("fabrics", []);
         fabrics.forEach(fabric => this.addFabric(Fabric.createFromStorageObject(fabric)));
-        this.nextFabricIndex = this.fabricPersistence.get("nextFabricIndex", this.nextFabricIndex);
+        this.nextFabricIndex = this.fabricStorage.get("nextFabricIndex", this.nextFabricIndex);
     }
 
     persistFabrics() {
-        this.fabricPersistence.set("fabrics", this.fabrics.map(fabric => fabric.toStorageObject()));
-        this.fabricPersistence.set("nextFabricIndex", this.nextFabricIndex);
+        this.fabricStorage.set("fabrics", this.fabrics.map(fabric => fabric.toStorageObject()));
+        this.fabricStorage.set("nextFabricIndex", this.nextFabricIndex);
     }
 
     addFabric(fabric: Fabric) {
