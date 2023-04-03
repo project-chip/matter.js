@@ -13,8 +13,8 @@ import { MatterDevice } from "../../../src/matter/MatterDevice";
 import { BasicInformationCluster, VendorId, TlvString, TlvUInt8 } from "@project-chip/matter.js";
 import { Time } from "../../../src/time/Time";
 import { TimeFake } from "../../../src/time/TimeFake";
-import { StorageBackendMemory } from "../../../src/persistence/StorageBackendMemory";
-import { StorageManager } from "../../../src/persistence/StorageManager";
+import { StorageBackendMemory } from "../../../src/storage/StorageBackendMemory";
+import { StorageManager } from "../../../src/storage/StorageManager";
 
 Time.get = () => new TimeFake(1262679233478);
 

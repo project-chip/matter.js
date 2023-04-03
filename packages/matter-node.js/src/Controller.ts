@@ -22,8 +22,8 @@ import { UdpInterface } from "./net/UdpInterface";
 import { getIntParameter, getParameter } from "./util/CommandLine";
 import { MdnsScanner } from "./matter/mdns/MdnsScanner";
 import { Logger } from "./log/Logger";
-import { StorageBackendDisk } from "./persistence/StorageBackendDisk";
-import { StorageManager } from "./persistence/StorageManager";
+import { StorageBackendDisk } from "./storage/StorageBackendDisk";
+import { StorageManager } from "./storage/StorageManager";
 
 const logger = Logger.get("Controller");
 

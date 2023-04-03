@@ -7,8 +7,8 @@
 import { ByteArray, FabricIndex } from "@project-chip/matter.js";
 import { Fabric, FabricBuilder, FabricJsonObject } from "./Fabric";
 import { MatterError } from "../../error/MatterError";
-import { StorageContext } from "../../persistence/StorageContext";
-import { StorageManager } from "../../persistence/StorageManager";
+import { StorageContext } from "../../storage/StorageContext";
+import { StorageManager } from "../../storage/StorageManager";
 
 /** Specific Error for when a fabric is not found. */
 export class FabricNotFoundError extends MatterError { }

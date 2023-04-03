@@ -18,7 +18,7 @@ import { Scanner } from "./common/Scanner";
 import { ChannelManager } from "./common/ChannelManager";
 import { VendorId, FabricIndex, ByteArray } from "@project-chip/matter.js";
 import { NodeId } from "./common/NodeId";
-import { StorageManager } from "../persistence/StorageManager";
+import { StorageManager } from "../storage/StorageManager";
 
 requireMinNodeVersion(16);
 

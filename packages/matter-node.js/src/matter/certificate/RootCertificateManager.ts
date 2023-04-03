@@ -9,7 +9,7 @@ import { Time } from "../../time/Time";
 import { ByteArray } from "@project-chip/matter.js";
 import { CertificateManager, jsToMatterDate, TlvOperationalCertificate, TlvRootCertificate } from "./CertificateManager";
 import { NodeId } from "../common/NodeId";
-import { StorageManager } from "../../persistence/StorageManager";
+import { StorageManager } from "../../storage/StorageManager";
 
 export class RootCertificateManager {
     private rootCertId = BigInt(0);

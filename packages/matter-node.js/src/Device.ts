@@ -43,8 +43,8 @@ import { AdminCommissioningHandler } from "./matter/cluster/server/AdminCommissi
 import { NetworkCommissioningHandler } from "./matter/cluster/server/NetworkCommissioningServer";
 import { AttestationCertificateManager } from "./matter/certificate/AttestationCertificateManager";
 import { CertificationDeclarationManager } from "./matter/certificate/CertificationDeclarationManager";
-import { StorageBackendDisk } from "./persistence/StorageBackendDisk";
-import { StorageManager } from "./persistence/StorageManager";
+import { StorageBackendDisk } from "./storage/StorageBackendDisk";
+import { StorageManager } from "./storage/StorageManager";
 
 const logger = Logger.get("Device");
 

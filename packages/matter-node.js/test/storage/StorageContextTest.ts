@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { StorageBackendMemory } from "../../src/persistence/StorageBackendMemory";
-import { StorageContext } from "../../src/persistence/StorageContext";
+import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory";
+import { StorageContext } from "../../src/storage/StorageContext";
 import * as assert from "assert";
-import { SupportedStorageTypes } from "../../src/persistence/StringifyTools";
+import { SupportedStorageTypes } from "../../src/storage/StringifyTools";
 import { ByteArray } from "@project-chip/matter.js";
 
 type TestVector = { [testName: string]: { key: string, input: SupportedStorageTypes } };

@@ -11,8 +11,8 @@ import { SecureSession } from "./SecureSession";
 import { Session } from "./Session";
 import { UnsecureSession } from "./UnsecureSession";
 import { ByteArray } from "@project-chip/matter.js";
-import { StorageManager } from "../../persistence/StorageManager";
-import { StorageContext } from "../../persistence/StorageContext";
+import { StorageManager } from "../../storage/StorageManager";
+import { StorageContext } from "../../storage/StorageContext";
 
 export const UNDEFINED_NODE_ID = new NodeId(BigInt(0));
 

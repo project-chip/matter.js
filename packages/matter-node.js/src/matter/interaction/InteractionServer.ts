@@ -25,8 +25,8 @@ import { capitalize } from "../../util/String";
 import { StatusCode, TlvAttributePath, TlvAttributeReport, TlvSubscribeResponse } from "./InteractionMessages";
 import { Message } from "../../codec/MessageCodec";
 import { Crypto } from "../../crypto/Crypto";
-import { StorageContext } from "../../persistence/StorageContext";
-import { StorageManager } from "../../persistence/StorageManager";
+import { StorageContext } from "../../storage/StorageContext";
+import { StorageManager } from "../../storage/StorageManager";
 
 export const INTERACTION_PROTOCOL_ID = 0x0001;
 

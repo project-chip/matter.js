@@ -34,8 +34,8 @@ import { NodeId } from "../src/matter/common/NodeId";
 import { OnOffClusterHandler } from "../src/matter/cluster/server/OnOffServer";
 import { AttestationCertificateManager } from "../src/matter/certificate/AttestationCertificateManager";
 import { CertificationDeclarationManager } from "../src/matter/certificate/CertificationDeclarationManager";
-import { StorageBackendMemory } from "../src/persistence/StorageBackendMemory";
-import { StorageManager } from "../src/persistence/StorageManager";
+import { StorageBackendMemory } from "../src/storage/StorageBackendMemory";
+import { StorageManager } from "../src/storage/StorageManager";
 import { FabricJsonObject } from "../src/matter/fabric/Fabric";
 
 const SERVER_IP = "192.168.200.1";

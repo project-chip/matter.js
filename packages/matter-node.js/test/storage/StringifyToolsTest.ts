@@ -5,7 +5,7 @@
  */
 
 import * as assert from "assert";
-import { fromJson, toJson } from "../../src/persistence/StringifyTools";
+import { fromJson, toJson } from "../../src/storage/StringifyTools";
 
 describe("JsonConverter", () => {
 

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { StorageBackendDisk } from "../../src/persistence/StorageBackendDisk";
+import { StorageBackendDisk } from "../../src/storage/StorageBackendDisk";
 import * as assert from "assert";
 import { LocalStorage } from "node-localstorage";
 

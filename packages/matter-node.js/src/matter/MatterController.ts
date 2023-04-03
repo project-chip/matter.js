@@ -26,8 +26,8 @@ import { Logger } from "../log/Logger";
 import { NodeId } from "./common/NodeId";
 import { isIPv6 } from "../util/Ip";
 import { RootCertificateManager } from "./certificate/RootCertificateManager";
-import { StorageContext } from "../persistence/StorageContext";
-import { StorageManager } from "../persistence/StorageManager";
+import { StorageContext } from "../storage/StorageContext";
+import { StorageManager } from "../storage/StorageManager";
 
 requireMinNodeVersion(16);
 
