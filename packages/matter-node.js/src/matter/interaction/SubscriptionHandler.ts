@@ -18,7 +18,13 @@ import { SecureSession } from "../session/SecureSession";
 
 const logger = Logger.get("SubscriptionHandler");
 
-const SUBSCRIPTION_MAX_INTERVAL_PUBLISHER_LIMIT_MS = 3 * 60 * 1000; //1000 * 60 * 60; /** 1 hour */
+// We use 3 minutes as global max interval because with 60mins as defined by spec the timeframe
+// until the controller establishs a new subscription after e.g a reboot can be up to 60 mins
+// and the controller would assume that the value is unchanged. this is too long.
+// chip-tool is not respecting the 60mins at all and only respects the max sent by the controller
+// which can lead to spamming the network with unneeded packages. So I decided for 3 minutes for now
+// as a compromise until we have something better.
+const SUBSCRIPTION_MAX_INTERVAL_PUBLISHER_LIMIT_MS = 3 * 60 * 1000; /** 3 mins */ // Officially: 1000 * 60 * 60; /** 1 hour */
 
 interface PathValueVersion<T> {
     path: AttributePath,
