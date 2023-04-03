@@ -8,30 +8,30 @@ import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory";
 import * as assert from "assert";
 import { StorageManager } from "../../src/storage/StorageManager";
 
-describe("PersistenceManager", () => {
+describe("StorageManager", () => {
 
     it("create StorageContext write and read success", async () => {
         const storage = new StorageBackendMemory();
 
-        const persistenceManager = new StorageManager(storage);
+        const storageManager = new StorageManager(storage);
 
-        await persistenceManager.initialize();
+        await storageManager.initialize();
 
-        const persistence = persistenceManager.createContext("context");
+        const storageContext = storageManager.createContext("context");
 
-        persistence.set("key", "value");
+        storageContext.set("key", "value");
 
-        const valueFromPersistence = persistence.get("key");
-        assert.equal(valueFromPersistence, "value");
+        const valueFromStorage = storageContext.get("key");
+        assert.equal(valueFromStorage, "value");
     });
 
     it("creating StorageManager without initialize throws error when creating StorageContext", async () => {
         const storage = new StorageBackendMemory();
 
-        const persistenceManager = new StorageManager(storage);
+        const storageManager = new StorageManager(storage);
 
         assert.throws(() => {
-            persistenceManager.createContext("context");
+            storageManager.createContext("context");
         }, {
             message: "The storage needs to be initialized first!"
         });
@@ -40,11 +40,11 @@ describe("PersistenceManager", () => {
     it("creating StorageContext with  dot in name fails", async () => {
         const storage = new StorageBackendMemory();
 
-        const persistenceManager = new StorageManager(storage);
-        await persistenceManager.initialize();
+        const storageManager = new StorageManager(storage);
+        await storageManager.initialize();
 
         assert.throws(() => {
-            persistenceManager.createContext("my.context");
+            storageManager.createContext("my.context");
         }, {
             message: "Context must not contain dots!"
         });
@@ -53,17 +53,17 @@ describe("PersistenceManager", () => {
     it("getting same StorageContext context access same data", async () => {
         const storage = new StorageBackendMemory();
 
-        const persistenceManager = new StorageManager(storage);
+        const storageManager = new StorageManager(storage);
 
-        await persistenceManager.initialize();
+        await storageManager.initialize();
 
-        const persistence1 = persistenceManager.createContext("context");
-        const persistence2 = persistenceManager.createContext("context");
+        const storageContext1 = storageManager.createContext("context");
+        const storageContext2 = storageManager.createContext("context");
 
-        persistence1.set("key", "value");
+        storageContext1.set("key", "value");
 
-        const valueFromPersistence2 = persistence2.get("key");
-        assert.equal(valueFromPersistence2, "value");
+        const valueFromStorage2 = storageContext2.get("key");
+        assert.equal(valueFromStorage2, "value");
     });
 
 });

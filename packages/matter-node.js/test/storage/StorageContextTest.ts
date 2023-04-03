@@ -24,17 +24,17 @@ const validateStorageTestVector: TestVector = {
 };
 
 
-describe("Persistence", () => {
+describe("StorageContext", () => {
 
     describe("Write and read type tests", () => {
         const storage = new StorageBackendMemory();
-        const persistence = new StorageContext(storage, "context");
+        const storageContext = new StorageContext(storage, "context");
 
         for (const [testName, testVector] of Object.entries(validateStorageTestVector)) {
             it(testName, () => {
-                persistence.set(testVector.key, testVector.input);
-                const valueFromPersistence = persistence.get(testVector.key);
-                assert.deepEqual(valueFromPersistence, testVector.input);
+                storageContext.set(testVector.key, testVector.input);
+                const valueFromStorage = storageContext.get(testVector.key);
+                assert.deepEqual(valueFromStorage, testVector.input);
             });
         }
     });
@@ -42,12 +42,12 @@ describe("Persistence", () => {
     it("write and read", () => {
         const storage = new StorageBackendMemory();
 
-        const persistence = new StorageContext(storage, "context");
+        const storageContext = new StorageContext(storage, "context");
 
-        persistence.set("key", "value");
+        storageContext.set("key", "value");
 
-        const valueFromPersistence = persistence.get("key");
-        assert.equal(valueFromPersistence, "value");
+        const valueFromStorage = storageContext.get("key");
+        assert.equal(valueFromStorage, "value");
 
         const valueFromStorageWithContext = storage.get("context", "key");
         assert.equal(valueFromStorageWithContext, "value");
@@ -56,19 +56,19 @@ describe("Persistence", () => {
     it("read with default value", () => {
         const storage = new StorageBackendMemory();
 
-        const persistence = new StorageContext(storage, "context");
+        const storageContext = new StorageContext(storage, "context");
 
-        const valueFromPersistence = persistence.get("key", "defaultValue");
-        assert.equal(valueFromPersistence, "defaultValue");
+        const valueFromStorage = storageContext.get("key", "defaultValue");
+        assert.equal(valueFromStorage, "defaultValue");
     });
 
     it("Throws error when reading a not set key without default value", () => {
         const storage = new StorageBackendMemory();
 
-        const persistence = new StorageContext(storage, "context");
+        const storageContext = new StorageContext(storage, "context");
 
         assert.throws(() => {
-            persistence.get("key");
+            storageContext.get("key");
         }, {
             message: "No value found for key key in context context and no default value specified!"
         });
@@ -77,20 +77,20 @@ describe("Persistence", () => {
     it("check if key is set", () => {
         const storage = new StorageBackendMemory();
 
-        const persistence = new StorageContext(storage, "context");
+        const storageContext = new StorageContext(storage, "context");
 
-        persistence.set("key", "value");
+        storageContext.set("key", "value");
 
-        assert.equal(persistence.has("key"), true);
+        assert.equal(storageContext.has("key"), true);
     });
 
     it("check if key is not set", () => {
         const storage = new StorageBackendMemory();
 
-        const persistence = new StorageContext(storage, "context");
+        const storageContext = new StorageContext(storage, "context");
 
-        persistence.set("key", "value");
+        storageContext.set("key", "value");
 
-        assert.equal(persistence.has("key2"), false);
+        assert.equal(storageContext.has("key2"), false);
     });
 });

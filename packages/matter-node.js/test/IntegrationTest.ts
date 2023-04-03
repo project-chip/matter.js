@@ -72,14 +72,14 @@ describe("Integration", () => {
         Time.get = () => fakeTime;
         Network.get = () => clientNetwork;
 
-        const controllerPersistenceManager = new StorageManager(fakeControllerStorage);
-        await controllerPersistenceManager.initialize();
+        const controllerStorageManager = new StorageManager(fakeControllerStorage);
+        await controllerStorageManager.initialize();
 
         client = await MatterController.create(
             await MdnsScanner.create(CLIENT_IP),
             await UdpInterface.create(5540, "udp4", CLIENT_IP),
             await UdpInterface.create(5540, "udp6", CLIENT_IP),
-            controllerPersistenceManager
+            controllerStorageManager
         );
 
         Network.get = () => serverNetwork;
@@ -95,17 +95,17 @@ describe("Integration", () => {
             OnOffClusterHandler()
         );
 
-        const serverPersistenceManager = new StorageManager(fakeServerStorage);
-        await serverPersistenceManager.initialize();
+        const serverStorageManager = new StorageManager(fakeServerStorage);
+        await serverStorageManager.initialize();
 
-        server = new MatterDevice(deviceName, deviceType, vendorId, productId, discriminator, serverPersistenceManager)
+        server = new MatterDevice(deviceName, deviceType, vendorId, productId, discriminator, serverStorageManager)
             .addNetInterface(await UdpInterface.create(matterPort, "udp6", SERVER_IP))
             .addBroadcaster(await MdnsBroadcaster.create())
             .addProtocolHandler(new SecureChannelProtocol(
                 await PaseServer.fromPin(setupPin, { iterations: 1000, salt: Crypto.getRandomData(32) }),
                 new CaseServer(),
             ))
-            .addProtocolHandler(new InteractionServer(serverPersistenceManager)
+            .addProtocolHandler(new InteractionServer(serverStorageManager)
                 .addEndpoint(0x00, DEVICE.ROOT, [
                     new ClusterServer(BasicInformationCluster, {}, {
                         dataModelRevision: 1,

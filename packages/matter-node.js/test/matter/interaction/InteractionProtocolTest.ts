@@ -115,9 +115,9 @@ describe("InteractionProtocol", () => {
 
     describe("handleReadRequest", () => {
         it("replies with attribute values", async () => {
-            const persistenceManager = new StorageManager(new StorageBackendMemory());
-            await persistenceManager.initialize();
-            const interactionProtocol = new InteractionServer(persistenceManager)
+            const storageManager = new StorageManager(new StorageBackendMemory());
+            await storageManager.initialize();
+            const interactionProtocol = new InteractionServer(storageManager)
                 .addEndpoint(0, DEVICE.ROOT, [
                     new ClusterServer(BasicInformationCluster, {}, {
                         dataModelRevision: 1,
@@ -166,9 +166,9 @@ describe("InteractionProtocol", () => {
                 },
             }, {});
 
-            const persistenceManager = new StorageManager(new StorageBackendMemory());
-            await persistenceManager.initialize();
-            const interactionProtocol = new InteractionServer(persistenceManager)
+            const storageManager = new StorageManager(new StorageBackendMemory());
+            await storageManager.initialize();
+            const interactionProtocol = new InteractionServer(storageManager)
                 .addEndpoint(0, DEVICE.ROOT, [basicCluster]);
 
             const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" } }) as MessageExchange<MatterDevice>, WRITE_REQUEST);
@@ -198,9 +198,9 @@ describe("InteractionProtocol", () => {
                 },
             }, {});
 
-            const persistenceManager = new StorageManager(new StorageBackendMemory());
-            await persistenceManager.initialize();
-            const interactionProtocol = new InteractionServer(persistenceManager)
+            const storageManager = new StorageManager(new StorageBackendMemory());
+            await storageManager.initialize();
+            const interactionProtocol = new InteractionServer(storageManager)
                 .addEndpoint(0, DEVICE.ROOT, [basicCluster]);
 
             const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" } }) as MessageExchange<MatterDevice>, MASS_WRITE_REQUEST);
