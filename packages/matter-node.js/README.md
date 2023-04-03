@@ -41,8 +41,8 @@ matter -on "echo 255 > /sys/class/leds/led1/brightness" -off "echo 0 > /sys/clas
 ```
 
 The following parameters are available:
-* -announceinterface: limit announcements to the provided network interface (default: all interfaces available)
-* -port: the port to listen on (default: 5540)
+* -announceinterface: limit mdns announcements to the provided network interface, e.g. "en0" (default: all interfaces available)
+* -port: the port to listen on fot the device (default: 5540)
 
 **Experimental**
 
