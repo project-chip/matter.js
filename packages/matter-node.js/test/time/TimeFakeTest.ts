@@ -42,7 +42,7 @@ describe("TimeFake", () => {
 
     describe("getPeriodicTimer", () => {
         it("returns a periodic timer that will call a callback periodically", async () => {
-            let firedTime = undefined;
+            let firedTime;
 
             const result = timeFake.getPeriodicTimer(30, () => firedTime = timeFake.nowMs());
             result.start();
@@ -59,7 +59,7 @@ describe("TimeFake", () => {
         });
 
         it("returns a periodic timer that can be stopped", async () => {
-            let firedTime = undefined;
+            let firedTime;
 
             const result = timeFake.getPeriodicTimer(30, () => firedTime = timeFake.nowMs());
             result.start();
@@ -75,7 +75,7 @@ describe("TimeFake", () => {
 
     describe("getTimer", () => {
         it("returns a timer that will call a callback in the future", async () => {
-            let firedTime = undefined;
+            let firedTime;
 
             const result = timeFake.getTimer(30, () => firedTime = timeFake.nowMs());
             result.start();
@@ -88,7 +88,7 @@ describe("TimeFake", () => {
         });
 
         it("returns a timer that can be stopped", async () => {
-            let firedTime = undefined;
+            let firedTime;
 
             const result = timeFake.getTimer(30, () => firedTime = timeFake.nowMs());
             result.start();

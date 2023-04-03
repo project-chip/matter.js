@@ -4,7 +4,7 @@ module.exports = function(config) {
         frameworks: ["jasmine", "karma-typescript"],
         client: {
             jasmine: {
-                random:false
+                random: false
             }
         },
         files: [

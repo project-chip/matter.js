@@ -4,15 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { OptionalEvent, EventPriority, Cluster, Attribute, OptionalAttribute } from "./Cluster";
+import { OptionalEvent, EventPriority, Cluster, Attribute, OptionalAttribute } from "./Cluster.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-import { TlvField } from "../tlv/TlvObject";
-import { TlvEnum, TlvUInt16, TlvUInt32, TlvUInt8 } from "../tlv/TlvNumber";
-import { TlvArray } from "../tlv/TlvArray";
-import { BitFlag } from "../schema/BitmapSchema";
-import { TlvString } from "../tlv/TlvString";
-import { TlvNullable } from "../tlv/TlvNullable";
-import { TlvBoolean } from "../tlv/TlvBoolean";
+import { TlvField } from "../tlv/TlvObject.js";
+import { TlvEnum, TlvUInt16, TlvUInt32, TlvUInt8 } from "../tlv/TlvNumber.js";
+import { TlvArray } from "../tlv/TlvArray.js";
+import { BitFlag } from "../schema/BitmapSchema.js";
+import { TlvString } from "../tlv/TlvString.js";
+import { TlvNullable } from "../tlv/TlvNullable.js";
+import { TlvBoolean } from "../tlv/TlvBoolean.js";
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.7.5.1 */
 export const enum WiredFaultEnum {

@@ -13,7 +13,7 @@ import { DataWriter } from "../util/DataWriter.js";
 /**
  * A Node Identifier (Node ID) is a 64-bit number that uniquely identifies an individual Node or a
  * group of Nodes on a Fabric.
- * 
+ *
  * @see {@link MatterCoreSpecificationV1_0} § 2.5.5
  */
 export class NodeId {

@@ -37,8 +37,8 @@ import { OperationalCredentialsClusterHandler } from "./matter/cluster/server/Op
 import { MdnsScanner } from "./matter/mdns/MdnsScanner";
 import { Logger } from "./log/Logger";
 import { OnOffClusterHandler } from "./matter/cluster/server/OnOffServer";
-import { CommissionningFlowType, DiscoveryCapabilitiesSchema, ManualPairingCodeCodec, QrPairingCodeCodec } from "./codec/PairingCode.js";
-import { QrCode } from "./codec/QrCode.js";
+import { CommissionningFlowType, DiscoveryCapabilitiesSchema, ManualPairingCodeCodec, QrPairingCodeCodec } from "./codec/PairingCode";
+import { QrCode } from "./codec/QrCode";
 import { AdminCommissioningHandler } from "./matter/cluster/server/AdminCommissioningServer";
 import { NetworkCommissioningHandler } from "./matter/cluster/server/NetworkCommissioningServer";
 import { AttestationCertificateManager } from "./matter/certificate/AttestationCertificateManager";
@@ -167,7 +167,7 @@ class Device {
                 ])
                 .addEndpoint(0x01, DEVICE.ON_OFF_LIGHT, [onOffClusterServer])
             )
-            .start()
+            .start();
 
         logger.info("Listening");
 

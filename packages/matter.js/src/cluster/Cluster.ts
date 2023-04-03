@@ -11,10 +11,10 @@ import { TlvFields, TlvObject, TypeFromFields } from "../tlv/TlvObject.js";
 import { TlvSchema } from "../tlv/TlvSchema.js";
 import { TlvVoid } from "../tlv/TlvVoid.js";
 import { Merge } from "../util/Type.js";
-import { EventId, TlvEventId } from "../common/EventId";
-import { AttributeId, TlvAttributeId } from "../common/AttributeId";
-import { CommandId, TlvCommandId } from "../common/CommandId";
-import { TlvArray } from "../tlv/TlvArray";
+import { EventId, TlvEventId } from "../common/EventId.js";
+import { AttributeId, TlvAttributeId } from "../common/AttributeId.js";
+import { CommandId, TlvCommandId } from "../common/CommandId.js";
+import { TlvArray } from "../tlv/TlvArray.js";
 
 export const enum AccessLevel {
     View,
