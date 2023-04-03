@@ -34,8 +34,8 @@ import { NodeId } from "../src/matter/common/NodeId";
 import { OnOffClusterHandler } from "../src/matter/cluster/server/OnOffServer";
 import { AttestationCertificateManager } from "../src/matter/certificate/AttestationCertificateManager";
 import { CertificationDeclarationManager } from "../src/matter/certificate/CertificationDeclarationManager";
-import { StorageInMemory } from "../src/persistence/StorageInMemory";
-import { PersistenceManager } from "../src/persistence/PersistenceManager";
+import { StorageBackendMemory } from "../src/persistence/StorageBackendMemory";
+import { StorageManager } from "../src/persistence/StorageManager";
 import { FabricJsonObject } from "../src/matter/fabric/Fabric";
 
 const SERVER_IP = "192.168.200.1";
@@ -59,8 +59,8 @@ const matterPort = 5540;
 const TIME_START = 1666663000000;
 const fakeTime = new TimeFake(TIME_START);
 
-const fakeControllerStorage = new StorageInMemory();
-const fakeServerStorage = new StorageInMemory();
+const fakeControllerStorage = new StorageBackendMemory();
+const fakeServerStorage = new StorageBackendMemory();
 
 describe("Integration", () => {
     let server: MatterDevice;
@@ -72,7 +72,7 @@ describe("Integration", () => {
         Time.get = () => fakeTime;
         Network.get = () => clientNetwork;
 
-        const controllerPersistenceManager = new PersistenceManager(fakeControllerStorage);
+        const controllerPersistenceManager = new StorageManager(fakeControllerStorage);
         await controllerPersistenceManager.initialize();
 
         client = await MatterController.create(
@@ -95,7 +95,7 @@ describe("Integration", () => {
             OnOffClusterHandler()
         );
 
-        const serverPersistenceManager = new PersistenceManager(fakeServerStorage);
+        const serverPersistenceManager = new StorageManager(fakeServerStorage);
         await serverPersistenceManager.initialize();
 
         server = new MatterDevice(deviceName, deviceType, vendorId, productId, discriminator, serverPersistenceManager)

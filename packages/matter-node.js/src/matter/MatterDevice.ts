@@ -18,7 +18,7 @@ import { Scanner } from "./common/Scanner";
 import { ChannelManager } from "./common/ChannelManager";
 import { VendorId, FabricIndex, ByteArray } from "@project-chip/matter.js";
 import { NodeId } from "./common/NodeId";
-import { PersistenceManager } from "../persistence/PersistenceManager";
+import { StorageManager } from "../persistence/StorageManager";
 
 requireMinNodeVersion(16);
 
@@ -37,7 +37,7 @@ export class MatterDevice {
         private readonly vendorId: VendorId,
         private readonly productId: number,
         private readonly discriminator: number,
-        private readonly persistenceManager: PersistenceManager,
+        private readonly persistenceManager: StorageManager,
     ) {
         this.fabricManager = new FabricManager(this.persistenceManager);
 

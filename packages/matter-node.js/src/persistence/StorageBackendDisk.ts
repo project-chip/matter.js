@@ -4,13 +4,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { LocalStorage } from "node-localstorage";
 import { Storage } from "./Storage";
-import { SupportedStorageTypes } from "./JsonConverter";
+import { fromJson, SupportedStorageTypes, toJson } from "./StringifyTools";
 
-export class StorageInMemory implements Storage {
+export class StorageBackendDisk implements Storage {
+    private readonly localStorage;
+
     constructor(
-        protected store: any = {}
-    ) { }
+        path: string,
+    ) {
+        this.localStorage = new LocalStorage(path);
+    }
 
     async initialize() {
         // nothing to do
@@ -20,18 +25,19 @@ export class StorageInMemory implements Storage {
         // nothing to do
     }
 
+    buildStorageKey(context: string, key: string): string {
+        return context + "." + key;
+    }
+
     get<T extends SupportedStorageTypes>(context: string, key: string): T | undefined {
         if (!context.length || !key.length) throw new Error("Context and key must not be empty strings!");
-        return this.store[context]?.[key];
+        const value = this.localStorage.getItem(this.buildStorageKey(context, key));
+        if (value === null) return undefined;
+        return fromJson(value) as T
     }
 
     set<T extends SupportedStorageTypes>(context: string, key: string, value: T): void {
         if (!context.length || !key.length) throw new Error("Context and key must not be empty strings!");
-        let contextStore = this.store[context];
-        if (contextStore === undefined) {
-            contextStore = {};
-            this.store[context] = contextStore;
-        }
-        contextStore[key] = value;
+        this.localStorage.setItem(this.buildStorageKey(context, key), toJson(value));
     }
 }

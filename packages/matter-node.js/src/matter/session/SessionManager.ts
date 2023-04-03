@@ -11,8 +11,8 @@ import { SecureSession } from "./SecureSession";
 import { Session } from "./Session";
 import { UnsecureSession } from "./UnsecureSession";
 import { ByteArray } from "@project-chip/matter.js";
-import { PersistenceManager } from "../../persistence/PersistenceManager";
-import { Persistence } from "../../persistence/Persistence";
+import { StorageManager } from "../../persistence/StorageManager";
+import { StorageContext } from "../../persistence/StorageContext";
 
 export const UNDEFINED_NODE_ID = new NodeId(BigInt(0));
 
@@ -38,13 +38,13 @@ export class SessionManager<ContextT> {
     private readonly sessions = new Map<number, Session<ContextT>>();
     private nextSessionId = Crypto.getRandomUInt16();
     private resumptionRecords = new Map<bigint, ResumptionRecord>();
-    private readonly sessionPersistence: Persistence;
+    private readonly sessionPersistence: StorageContext;
 
     constructor(
         private readonly context: ContextT,
-        persistenceManager: PersistenceManager,
+        persistenceManager: StorageManager,
     ) {
-        this.sessionPersistence = persistenceManager.createPersistence("SessionManager")
+        this.sessionPersistence = persistenceManager.createContext("SessionManager")
         this.unsecureSession = new UnsecureSession(context);
         this.sessions.set(UNICAST_UNSECURE_SESSION_ID, this.unsecureSession);
     }

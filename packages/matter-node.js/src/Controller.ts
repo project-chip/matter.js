@@ -22,21 +22,21 @@ import { UdpInterface } from "./net/UdpInterface";
 import { getIntParameter, getParameter } from "./util/CommandLine";
 import { MdnsScanner } from "./matter/mdns/MdnsScanner";
 import { Logger } from "./log/Logger";
-import { StorageNodeLocalstorage } from "./persistence/StorageNodeLocalstorage";
-import { PersistenceManager } from "./persistence/PersistenceManager";
+import { StorageBackendDisk } from "./persistence/StorageBackendDisk";
+import { StorageManager } from "./persistence/StorageManager";
 
 const logger = Logger.get("Controller");
 
-const storage = new StorageNodeLocalstorage(getParameter("file") || "controller.json");
+const storage = new StorageBackendDisk(getParameter("store") ?? "controller-node");
 
 class Controller {
     async start() {
         logger.info(`node-matter`);
 
-        const persistenceManager = new PersistenceManager(storage);
+        const persistenceManager = new StorageManager(storage);
         await persistenceManager.initialize();
 
-        const controllerPersistence = persistenceManager.createPersistence("Controller");
+        const controllerPersistence = persistenceManager.createContext("Controller");
 
         const ip = getParameter("ip") ?? controllerPersistence.get<string>("ip", "");
         if (ip === "") throw new Error("Please specify the IP of the device to commission with -ip");

@@ -25,8 +25,8 @@ import { capitalize } from "../../util/String";
 import { StatusCode, TlvAttributePath, TlvAttributeReport, TlvSubscribeResponse } from "./InteractionMessages";
 import { Message } from "../../codec/MessageCodec";
 import { Crypto } from "../../crypto/Crypto";
-import { Persistence } from "../../persistence/Persistence";
-import { PersistenceManager } from "../../persistence/PersistenceManager";
+import { StorageContext } from "../../persistence/StorageContext";
+import { StorageManager } from "../../persistence/StorageManager";
 
 export const INTERACTION_PROTOCOL_ID = 0x0001;
 
@@ -37,7 +37,7 @@ export class ClusterServer<F extends BitSchema, A extends Attributes, C extends 
     readonly name: string;
     readonly attributes = <AttributeServers<A>>{};
     readonly commands = new Array<CommandServer<any, any>>();
-    private persistence: Persistence | null = null;
+    private persistence: StorageContext | null = null;
     private attributeStorageListeners = new Map<number, (value: any, version: number) => void>();
 
     constructor(clusterDef: Cluster<F, A, C, E>, features: TypeFromBitSchema<F>, attributesInitialValues: AttributeInitialValues<A>, handlers: ClusterServerHandlers<Cluster<F, A, C, E>>) {
@@ -76,7 +76,7 @@ export class ClusterServer<F extends BitSchema, A extends Attributes, C extends 
         }
     }
 
-    setPersistence(persistence: Persistence) {
+    setPersistence(persistence: StorageContext) {
         this.persistence = persistence;
 
         for (const name in this.attributes) {
@@ -138,7 +138,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     private nextSubscriptionId = Crypto.getRandomUInt32();
 
     constructor(
-        private readonly persistenceManager: PersistenceManager
+        private readonly persistenceManager: StorageManager
     ) { }
 
     getId() {
@@ -162,7 +162,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         clusters.forEach(cluster => {
             const { id: clusterId, attributes, commands } = cluster;
 
-            cluster.setPersistence(this.persistenceManager.createPersistence(`Cluster-${clusterEndpointNumber.number}-${clusterId}`));
+            cluster.setPersistence(this.persistenceManager.createContext(`Cluster-${clusterEndpointNumber.number}-${clusterId}`));
 
             clusterMap.set(clusterId, cluster);
             // Add attributes

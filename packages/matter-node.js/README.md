@@ -69,9 +69,9 @@ The following parameters are available:
 * -vendorid: the vendor ID as number to use for pairing (default: 65521 (0xFFF1))
 * -productid: the product ID as number to use for pairing (default: 32768 (0x8000))
 * -port: the port to listen on (default: 5540)
-* -file: the file to use for storing the pairing information (default: device.json). Delete the file or provide an alternative name to reset the device
-* -on: the command to run when the device is turned on
-* -off: the command to run when the device is turned off
+* -store: the storage location (directory) to use for storing the pairing information (default: device-node). Delete the directory or provide an alternative name to reset the device
+* -on: the command to run when the device is turned on (see example above)
+* -off: the command to run when the device is turned off (see example above)
 
 **Experimental**
 
@@ -93,7 +93,7 @@ The following parameters are available:
 * -ip: the IP address of the device to commission
 * -discriminator: the discriminator to use for pairing (default: 3840)
 * -pin: the pin to use for pairing (default: 20202021)
-* -file: the file to use for storing the pairing information (default: controller.json). Delete the file or provide an alternative name to reset the controller
+* -store: the storage location (directory) to use for storing the pairing information (default: controller-node). Delete the directory or provide an alternative name to reset the controller
 
 ## Modifying the server (Device) behavior
 

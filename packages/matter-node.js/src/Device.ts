@@ -43,21 +43,21 @@ import { AdminCommissioningHandler } from "./matter/cluster/server/AdminCommissi
 import { NetworkCommissioningHandler } from "./matter/cluster/server/NetworkCommissioningServer";
 import { AttestationCertificateManager } from "./matter/certificate/AttestationCertificateManager";
 import { CertificationDeclarationManager } from "./matter/certificate/CertificationDeclarationManager";
-import { StorageNodeLocalstorage } from "./persistence/StorageNodeLocalstorage";
-import { PersistenceManager } from "./persistence/PersistenceManager";
+import { StorageBackendDisk } from "./persistence/StorageBackendDisk";
+import { StorageManager } from "./persistence/StorageManager";
 
 const logger = Logger.get("Device");
 
-const storage = new StorageNodeLocalstorage(getParameter("file") || "device.json");
+const storage = new StorageBackendDisk(getParameter("store") ?? "device-node");
 
 class Device {
     async start() {
         logger.info(`node-matter`);
 
-        const persistenceManager = new PersistenceManager(storage);
+        const persistenceManager = new StorageManager(storage);
         await persistenceManager.initialize();
 
-        const devicePersistence = persistenceManager.createPersistence("Device");
+        const devicePersistence = persistenceManager.createContext("Device");
 
         const deviceName = "Matter test device";
         const deviceType = 257 /* Dimmable bulb */;

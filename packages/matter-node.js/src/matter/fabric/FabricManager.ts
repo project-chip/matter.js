@@ -7,8 +7,8 @@
 import { ByteArray, FabricIndex } from "@project-chip/matter.js";
 import { Fabric, FabricBuilder, FabricJsonObject } from "./Fabric";
 import { MatterError } from "../../error/MatterError";
-import { Persistence } from "../../persistence/Persistence";
-import { PersistenceManager } from "../../persistence/PersistenceManager";
+import { StorageContext } from "../../persistence/StorageContext";
+import { StorageManager } from "../../persistence/StorageManager";
 
 /** Specific Error for when a fabric is not found. */
 export class FabricNotFoundError extends MatterError { }
@@ -17,10 +17,10 @@ export class FabricManager {
     private nextFabricIndex = 1;
     private readonly fabrics = new Array<Fabric>();
     private fabricBuilder?: FabricBuilder;
-    private readonly fabricPersistence: Persistence;
+    private readonly fabricPersistence: StorageContext;
 
-    constructor(persistenceManager: PersistenceManager) {
-        this.fabricPersistence = persistenceManager.createPersistence("FabricManager");
+    constructor(persistenceManager: StorageManager) {
+        this.fabricPersistence = persistenceManager.createContext("FabricManager");
         const fabrics = this.fabricPersistence.get<FabricJsonObject[]>("fabrics", []);
         fabrics.forEach(fabric => this.addFabric(Fabric.createFromStorageObject(fabric)));
         this.nextFabricIndex = this.fabricPersistence.get("nextFabricIndex", this.nextFabricIndex);

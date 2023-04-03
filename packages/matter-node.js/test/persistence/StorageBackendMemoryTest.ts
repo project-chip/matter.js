@@ -4,21 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { StorageNodeLocalstorage } from "../../src/persistence/StorageNodeLocalstorage";
+import { StorageBackendMemory } from "../../src/persistence/StorageBackendMemory";
 import * as assert from "assert";
-import { LocalStorage } from "node-localstorage";
-
-const TEST_STORAGE_LOCATION = "./testdata-storage";
 
 describe("StorageInMemory", () => {
 
-    beforeEach(() => {
-        const localStorage = new LocalStorage(TEST_STORAGE_LOCATION);
-        localStorage.clear();
-    });
-
     it("write and read success", () => {
-        const storage = new StorageNodeLocalstorage(TEST_STORAGE_LOCATION);
+        const storage = new StorageBackendMemory();
 
         storage.set("context", "key", "value");
 
@@ -28,7 +20,7 @@ describe("StorageInMemory", () => {
 
     it("Throws error when context is empty on set", () => {
         assert.throws(() => {
-            const storage = new StorageNodeLocalstorage(TEST_STORAGE_LOCATION);
+            const storage = new StorageBackendMemory();
             storage.set("", "key", "value");
         }, {
             message: "Context and key must not be empty strings!"
@@ -37,7 +29,7 @@ describe("StorageInMemory", () => {
 
     it("Throws error when key is empty on set", () => {
         assert.throws(() => {
-            const storage = new StorageNodeLocalstorage(TEST_STORAGE_LOCATION);
+            const storage = new StorageBackendMemory();
             storage.set("context", "", "value");
         }, {
             message: "Context and key must not be empty strings!"
@@ -46,7 +38,7 @@ describe("StorageInMemory", () => {
 
     it("Throws error when context is empty on get", () => {
         assert.throws(() => {
-            const storage = new StorageNodeLocalstorage(TEST_STORAGE_LOCATION);
+            const storage = new StorageBackendMemory();
             storage.get("", "key");
         }, {
             message: "Context and key must not be empty strings!"
@@ -55,16 +47,10 @@ describe("StorageInMemory", () => {
 
     it("Throws error when key is empty on get", () => {
         assert.throws(() => {
-            const storage = new StorageNodeLocalstorage(TEST_STORAGE_LOCATION);
+            const storage = new StorageBackendMemory();
             storage.get("context", "");
         }, {
             message: "Context and key must not be empty strings!"
         });
     });
-
-    afterAll(() => {
-        const localStorage = new LocalStorage(TEST_STORAGE_LOCATION);
-        localStorage.clear();
-    });
-
 });

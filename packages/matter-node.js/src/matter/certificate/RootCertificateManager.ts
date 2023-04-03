@@ -9,7 +9,7 @@ import { Time } from "../../time/Time";
 import { ByteArray } from "@project-chip/matter.js";
 import { CertificateManager, jsToMatterDate, TlvOperationalCertificate, TlvRootCertificate } from "./CertificateManager";
 import { NodeId } from "../common/NodeId";
-import { PersistenceManager } from "../../persistence/PersistenceManager";
+import { StorageManager } from "../../persistence/StorageManager";
 
 export class RootCertificateManager {
     private rootCertId = BigInt(0);
@@ -18,8 +18,8 @@ export class RootCertificateManager {
     private rootCertBytes = this.generateRootCert();
     private nextCertificateId = 1;
 
-    constructor(persistenceManager: PersistenceManager) {
-        const storage = persistenceManager.createPersistence("RootCertificateManager");
+    constructor(persistenceManager: StorageManager) {
+        const storage = persistenceManager.createContext("RootCertificateManager");
 
         // Read from storage if we have them stored, else store the just generated data
         if (storage.has("rootCertId")) {

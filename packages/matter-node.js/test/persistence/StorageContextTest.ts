@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { StorageInMemory } from "../../src/persistence/StorageInMemory";
-import { Persistence } from "../../src/persistence/Persistence";
+import { StorageBackendMemory } from "../../src/persistence/StorageBackendMemory";
+import { StorageContext } from "../../src/persistence/StorageContext";
 import * as assert from "assert";
-import { SupportedStorageTypes } from "../../src/persistence/JsonConverter";
+import { SupportedStorageTypes } from "../../src/persistence/StringifyTools";
 import { ByteArray } from "@project-chip/matter.js";
 
 type TestVector = { [testName: string]: { key: string, input: SupportedStorageTypes } };
@@ -27,8 +27,8 @@ const validateStorageTestVector: TestVector = {
 describe("Persistence", () => {
 
     describe("Write and read type tests", () => {
-        const storage = new StorageInMemory();
-        const persistence = new Persistence(storage, "context");
+        const storage = new StorageBackendMemory();
+        const persistence = new StorageContext(storage, "context");
 
         for (const [testName, testVector] of Object.entries(validateStorageTestVector)) {
             it(testName, () => {
@@ -40,9 +40,9 @@ describe("Persistence", () => {
     });
 
     it("write and read", () => {
-        const storage = new StorageInMemory();
+        const storage = new StorageBackendMemory();
 
-        const persistence = new Persistence(storage, "context");
+        const persistence = new StorageContext(storage, "context");
 
         persistence.set("key", "value");
 
@@ -54,18 +54,18 @@ describe("Persistence", () => {
     });
 
     it("read with default value", () => {
-        const storage = new StorageInMemory();
+        const storage = new StorageBackendMemory();
 
-        const persistence = new Persistence(storage, "context");
+        const persistence = new StorageContext(storage, "context");
 
         const valueFromPersistence = persistence.get("key", "defaultValue");
         assert.equal(valueFromPersistence, "defaultValue");
     });
 
     it("Throws error when reading a not set key without default value", () => {
-        const storage = new StorageInMemory();
+        const storage = new StorageBackendMemory();
 
-        const persistence = new Persistence(storage, "context");
+        const persistence = new StorageContext(storage, "context");
 
         assert.throws(() => {
             persistence.get("key");
@@ -75,9 +75,9 @@ describe("Persistence", () => {
     });
 
     it("check if key is set", () => {
-        const storage = new StorageInMemory();
+        const storage = new StorageBackendMemory();
 
-        const persistence = new Persistence(storage, "context");
+        const persistence = new StorageContext(storage, "context");
 
         persistence.set("key", "value");
 
@@ -85,9 +85,9 @@ describe("Persistence", () => {
     });
 
     it("check if key is not set", () => {
-        const storage = new StorageInMemory();
+        const storage = new StorageBackendMemory();
 
-        const persistence = new Persistence(storage, "context");
+        const persistence = new StorageContext(storage, "context");
 
         persistence.set("key", "value");
 

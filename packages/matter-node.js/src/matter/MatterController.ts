@@ -26,8 +26,8 @@ import { Logger } from "../log/Logger";
 import { NodeId } from "./common/NodeId";
 import { isIPv6 } from "../util/Ip";
 import { RootCertificateManager } from "./certificate/RootCertificateManager";
-import { Persistence } from "../persistence/Persistence";
-import { PersistenceManager } from "../persistence/PersistenceManager";
+import { StorageContext } from "../persistence/StorageContext";
+import { StorageManager } from "../persistence/StorageManager";
 
 requireMinNodeVersion(16);
 
@@ -38,7 +38,7 @@ const ADMIN_VENDOR_ID = new VendorId(752);
 const logger = Logger.get("MatterController");
 
 export class MatterController {
-    public static async create(scanner: Scanner, netInterfaceIpv4: NetInterface, netInterfaceIpv6: NetInterface, persistenceManager: PersistenceManager) {
+    public static async create(scanner: Scanner, netInterfaceIpv4: NetInterface, netInterfaceIpv6: NetInterface, persistenceManager: StorageManager) {
         const certificateManager = new RootCertificateManager(persistenceManager);
 
         const ipkValue = Crypto.getRandomData(16);
@@ -50,7 +50,7 @@ export class MatterController {
         fabricBuilder.setOperationalCert(certificateManager.generateNoc(fabricBuilder.getPublicKey(), FABRIC_ID, CONTROLLER_NODE_ID));
 
         // Check if we have a fabric stored in the persistence, if yes initialize this one, else build a new one
-        const controllerPersistence = persistenceManager.createPersistence("MatterController");
+        const controllerPersistence = persistenceManager.createContext("MatterController");
         if (controllerPersistence.has("fabric")) {
             const storedFabric = Fabric.createFromStorageObject(controllerPersistence.get<FabricJsonObject>("fabric"));
             return new MatterController(scanner, netInterfaceIpv4, netInterfaceIpv6, certificateManager, storedFabric, persistenceManager);
@@ -64,7 +64,7 @@ export class MatterController {
     private readonly exchangeManager;
     private readonly paseClient = new PaseClient();
     private readonly caseClient = new CaseClient();
-    private readonly controllerPersistence: Persistence;
+    private readonly controllerPersistence: StorageContext;
 
     constructor(
         private readonly scanner: Scanner,
@@ -72,9 +72,9 @@ export class MatterController {
         private readonly netInterfaceIpv6: NetInterface,
         private readonly certificateManager: RootCertificateManager,
         private readonly fabric: Fabric,
-        private readonly persistenceManager: PersistenceManager
+        private readonly persistenceManager: StorageManager
     ) {
-        this.controllerPersistence = this.persistenceManager.createPersistence("MatterController");
+        this.controllerPersistence = this.persistenceManager.createContext("MatterController");
 
         this.sessionManager = new SessionManager(this, this.persistenceManager);
         this.sessionManager.initFromStorage([this.fabric]);

@@ -5,9 +5,9 @@
 */
 
 import { Storage } from "./Storage";
-import { SupportedStorageTypes } from "./JsonConverter";
+import { SupportedStorageTypes } from "./StringifyTools";
 
-export class Persistence {
+export class StorageContext {
     constructor(
         private readonly storage: Storage,
         private readonly context: string

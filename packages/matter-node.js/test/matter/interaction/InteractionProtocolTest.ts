@@ -13,8 +13,8 @@ import { MatterDevice } from "../../../src/matter/MatterDevice";
 import { BasicInformationCluster, VendorId, TlvString, TlvUInt8 } from "@project-chip/matter.js";
 import { Time } from "../../../src/time/Time";
 import { TimeFake } from "../../../src/time/TimeFake";
-import { StorageInMemory } from "../../../src/persistence/StorageInMemory";
-import { PersistenceManager } from "../../../src/persistence/PersistenceManager";
+import { StorageBackendMemory } from "../../../src/persistence/StorageBackendMemory";
+import { StorageManager } from "../../../src/persistence/StorageManager";
 
 Time.get = () => new TimeFake(1262679233478);
 
@@ -115,7 +115,7 @@ describe("InteractionProtocol", () => {
 
     describe("handleReadRequest", () => {
         it("replies with attribute values", async () => {
-            const persistenceManager = new PersistenceManager(new StorageInMemory());
+            const persistenceManager = new StorageManager(new StorageBackendMemory());
             await persistenceManager.initialize();
             const interactionProtocol = new InteractionServer(persistenceManager)
                 .addEndpoint(0, DEVICE.ROOT, [
@@ -166,7 +166,7 @@ describe("InteractionProtocol", () => {
                 },
             }, {});
 
-            const persistenceManager = new PersistenceManager(new StorageInMemory());
+            const persistenceManager = new StorageManager(new StorageBackendMemory());
             await persistenceManager.initialize();
             const interactionProtocol = new InteractionServer(persistenceManager)
                 .addEndpoint(0, DEVICE.ROOT, [basicCluster]);
@@ -198,7 +198,7 @@ describe("InteractionProtocol", () => {
                 },
             }, {});
 
-            const persistenceManager = new PersistenceManager(new StorageInMemory());
+            const persistenceManager = new StorageManager(new StorageBackendMemory());
             await persistenceManager.initialize();
             const interactionProtocol = new InteractionServer(persistenceManager)
                 .addEndpoint(0, DEVICE.ROOT, [basicCluster]);
