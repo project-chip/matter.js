@@ -132,7 +132,7 @@ export class InteractionClient {
         });
     }
 
-    async set<T>(_endpointId: number, _clusterId: number, { id: _id, schema: _schema}: Attribute<T>, _value: T): Promise<void> {
+    async set<T>(_endpointId: number, _clusterId: number, { id: _id, schema: _schema }: Attribute<T>, _value: T): Promise<void> {
         throw new Error("not implemented");
     }
 
