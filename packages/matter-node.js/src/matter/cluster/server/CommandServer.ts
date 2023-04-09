@@ -23,11 +23,11 @@ export class CommandServer<RequestT, ResponseT> {
         readonly name: string,
         protected readonly requestSchema: TlvSchema<RequestT>,
         protected readonly responseSchema: TlvSchema<ResponseT>,
-        protected readonly handler: (request: RequestT, session: Session<MatterDevice>, message: Message) => Promise<ResponseT> | ResponseT,
+        protected readonly handler: (request: RequestT | undefined, session: Session<MatterDevice>, message: Message) => Promise<ResponseT> | ResponseT,
     ) { }
 
-    async invoke(session: Session<MatterDevice>, args: TlvStream, message: Message): Promise<{ code: ResultCode, responseId: number, response: TlvStream }> {
-        const request = this.requestSchema.decodeTlv(args);
+    async invoke(session: Session<MatterDevice>, args: TlvStream | undefined, message: Message): Promise<{ code: ResultCode, responseId: number, response: TlvStream }> {
+        const request = args !== undefined ? this.requestSchema.decodeTlv(args) : undefined;
         logger.debug(`Invoke ${this.name} with data ${Logger.toJSON(request)}`);
         const response = await this.handler(request, session, message);
         logger.debug(`Invoke ${this.name} response : ${Logger.toJSON(response)}`);

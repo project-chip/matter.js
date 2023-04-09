@@ -138,7 +138,7 @@ export class MatterController {
 
         // Complete the commission
         generalCommissioningClusterClient = ClusterClient(interactionClient, 0, GeneralCommissioningCluster);
-        this.ensureSuccess(await generalCommissioningClusterClient.commissioningComplete({}));
+        this.ensureSuccess(await generalCommissioningClusterClient.commissioningComplete());
 
         this.controllerStorage.set("fabric", this.fabric.toStorageObject());
         this.controllerStorage.set("fabricCommissioned", true);
