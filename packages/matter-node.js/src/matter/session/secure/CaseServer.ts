@@ -73,6 +73,9 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
 
             // Wait for success on the peer side
             await messenger.waitForSuccess();
+
+            messenger.close();
+            server.saveResumptionRecord(resumptionRecord);
         } else {
             // Generate sigma 2
             const fabric = server.findFabricFromDestinationId(destinationId, peerRandom);
@@ -99,14 +102,14 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
 
             // All good! Create secure session
             const secureSessionSalt = ByteArray.concat(operationalIdentityProtectionKey, Crypto.hash([sigma1Bytes, sigma2Bytes, sigma3Bytes]));
-            await server.createSecureSession(sessionId, fabric, peerNodeId, peerSessionId, sharedSecret, secureSessionSalt, false, false, mrpParams?.idleRetransTimeoutMs, mrpParams?.activeRetransTimeoutMs);
-            logger.info(`Case server: session ${sessionId} created with ${messenger.getChannelName()}`);
+            const secureSession = await server.createSecureSession(sessionId, fabric, peerNodeId, peerSessionId, sharedSecret, secureSessionSalt, false, false, mrpParams?.idleRetransTimeoutMs, mrpParams?.activeRetransTimeoutMs);
+            logger.info(`Case server: session ${secureSession.getId()} created with ${messenger.getChannelName()}`);
             await messenger.sendSuccess();
 
             resumptionRecord = { peerNodeId, fabric, sharedSecret, resumptionId };
-        }
 
-        messenger.close();
-        server.saveResumptionRecord(resumptionRecord);
+            messenger.close();
+            server.saveResumptionRecord(resumptionRecord);
+        }
     }
 }

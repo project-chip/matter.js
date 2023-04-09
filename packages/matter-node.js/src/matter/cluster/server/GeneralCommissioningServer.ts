@@ -65,7 +65,7 @@ export const GeneralCommissioningClusterHandler: ClusterServerHandlers<typeof Ge
         breadcrumb.set(BigInt(0));
         logger.info(`Commissioning completed on fabric #${fabric.fabricId.id} as node #${fabric.nodeId}.`);
 
-        // TODO persist fabrics
+        session.getContext().completeCommission();
 
         return SuccessResponse;
     },

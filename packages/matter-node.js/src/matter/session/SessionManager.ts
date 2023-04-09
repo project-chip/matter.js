@@ -11,6 +11,8 @@ import { SecureSession } from "./SecureSession";
 import { Session } from "./Session";
 import { UnsecureSession } from "./UnsecureSession";
 import { ByteArray } from "@project-chip/matter.js";
+import { StorageManager } from "../../storage/StorageManager";
+import { StorageContext } from "../../storage/StorageContext";
 
 export const UNDEFINED_NODE_ID = new NodeId(BigInt(0));
 
@@ -23,15 +25,26 @@ export interface ResumptionRecord {
     peerNodeId: NodeId,
 }
 
+type ResumptionStorageRecord = {
+    nodeId: bigint,
+    sharedSecret: Uint8Array,
+    resumptionId: Uint8Array,
+    fabricId: bigint,
+    peerNodeId: bigint,
+}
+
 export class SessionManager<ContextT> {
     private readonly unsecureSession: UnsecureSession<ContextT>;
     private readonly sessions = new Map<number, Session<ContextT>>();
     private nextSessionId = Crypto.getRandomUInt16();
-    private resumptionRecords = new Map<NodeId, ResumptionRecord>();
+    private resumptionRecords = new Map<bigint, ResumptionRecord>();
+    private readonly sessionStorage: StorageContext;
 
     constructor(
         private readonly context: ContextT,
+        storageManager: StorageManager,
     ) {
+        this.sessionStorage = storageManager.createContext("SessionManager")
         this.unsecureSession = new UnsecureSession(context);
         this.sessions.set(UNICAST_UNSECURE_SESSION_ID, this.unsecureSession);
     }
@@ -46,7 +59,8 @@ export class SessionManager<ContextT> {
 
     removeSession(sessionId: number, peerNodeId: NodeId) {
         this.sessions.delete(sessionId);
-        this.resumptionRecords.delete(peerNodeId);
+        this.resumptionRecords.delete(peerNodeId.id);
+        this.storeResumptionRecords();
     }
 
     getNextAvailableSessionId() {
@@ -82,10 +96,40 @@ export class SessionManager<ContextT> {
     }
 
     findResumptionRecordByNodeId(nodeId: NodeId) {
-        return this.resumptionRecords.get(nodeId);
+        return this.resumptionRecords.get(nodeId.id);
     }
 
     saveResumptionRecord(resumptionRecord: ResumptionRecord) {
-        this.resumptionRecords.set(resumptionRecord.peerNodeId, resumptionRecord);
+        this.resumptionRecords.set(resumptionRecord.peerNodeId.id, resumptionRecord);
+        this.storeResumptionRecords();
+    }
+
+    storeResumptionRecords() {
+        this.sessionStorage.set<ResumptionStorageRecord[]>("resumptionRecords", [...this.resumptionRecords].map(([nodeId, { sharedSecret, resumptionId, peerNodeId, fabric }]) => ({
+            nodeId,
+            sharedSecret,
+            resumptionId,
+            fabricId: fabric.fabricId.id,
+            peerNodeId: peerNodeId.id,
+        })));
+    }
+
+    initFromStorage(fabrics: Fabric[]) {
+        const storedResumptionRecords = this.sessionStorage.get<ResumptionStorageRecord[]>("resumptionRecords", []);
+
+        storedResumptionRecords.forEach(({ nodeId, sharedSecret, resumptionId, fabricId, peerNodeId }) => {
+            console.log("restoring resumption record for node", nodeId);
+            const fabric = fabrics.find(fabric => fabric.fabricId.id === fabricId);
+            if (!fabric) {
+                console.log("fabric not found for resumption record", fabricId);
+                return;
+            }
+            this.resumptionRecords.set(nodeId, {
+                sharedSecret,
+                resumptionId,
+                fabric,
+                peerNodeId: new NodeId(peerNodeId),
+            });
+        });
     }
 }

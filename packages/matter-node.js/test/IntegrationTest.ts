@@ -34,6 +34,9 @@ import { NodeId } from "../src/matter/common/NodeId";
 import { OnOffClusterHandler } from "../src/matter/cluster/server/OnOffServer";
 import { AttestationCertificateManager } from "../src/matter/certificate/AttestationCertificateManager";
 import { CertificationDeclarationManager } from "../src/matter/certificate/CertificationDeclarationManager";
+import { StorageBackendMemory } from "../src/storage/StorageBackendMemory";
+import { StorageManager } from "../src/storage/StorageManager";
+import { FabricJsonObject } from "../src/matter/fabric/Fabric";
 
 const SERVER_IP = "192.168.200.1";
 const SERVER_MAC = "00:B0:D0:63:C2:26";
@@ -45,7 +48,7 @@ const clientNetwork = new NetworkFake(CLIENT_MAC, [CLIENT_IP]);
 
 const deviceName = "Matter end-to-end device";
 const deviceType = 257 /* Dimmable bulb */;
-const vendorName = "node-matter";
+const vendorName = "matter-node.js";
 const vendorId = new VendorId(0xFFF1);
 const productName = "Matter end-to-end device";
 const productId = 0X8001;
@@ -56,6 +59,9 @@ const matterPort = 5540;
 const TIME_START = 1666663000000;
 const fakeTime = new TimeFake(TIME_START);
 
+const fakeControllerStorage = new StorageBackendMemory();
+const fakeServerStorage = new StorageBackendMemory();
+
 describe("Integration", () => {
     let server: MatterDevice;
     let onOffServer: ClusterServer<any, any, any, any>;
@@ -65,10 +71,15 @@ describe("Integration", () => {
         Logger.defaultLogLevel = Level.DEBUG;
         Time.get = () => fakeTime;
         Network.get = () => clientNetwork;
+
+        const controllerStorageManager = new StorageManager(fakeControllerStorage);
+        await controllerStorageManager.initialize();
+
         client = await MatterController.create(
             await MdnsScanner.create(CLIENT_IP),
             await UdpInterface.create(5540, "udp4", CLIENT_IP),
             await UdpInterface.create(5540, "udp6", CLIENT_IP),
+            controllerStorageManager
         );
 
         Network.get = () => serverNetwork;
@@ -83,14 +94,18 @@ describe("Integration", () => {
             { onOff: false },
             OnOffClusterHandler()
         );
-        server = new MatterDevice(deviceName, deviceType, vendorId, productId, discriminator)
+
+        const serverStorageManager = new StorageManager(fakeServerStorage);
+        await serverStorageManager.initialize();
+
+        server = new MatterDevice(deviceName, deviceType, vendorId, productId, discriminator, serverStorageManager)
             .addNetInterface(await UdpInterface.create(matterPort, "udp6", SERVER_IP))
             .addBroadcaster(await MdnsBroadcaster.create())
             .addProtocolHandler(new SecureChannelProtocol(
                 await PaseServer.fromPin(setupPin, { iterations: 1000, salt: Crypto.getRandomData(32) }),
                 new CaseServer(),
             ))
-            .addProtocolHandler(new InteractionServer()
+            .addProtocolHandler(new InteractionServer(serverStorageManager)
                 .addEndpoint(0x00, DEVICE.ROOT, [
                     new ClusterServer(BasicInformationCluster, {}, {
                         dataModelRevision: 1,
@@ -212,6 +227,40 @@ describe("Integration", () => {
         });
     });
 
+    describe("storage", () => {
+        it("server storage has fabric fields stored correctly stringified", async () => {
+            // TODO: In fact testing wrong because the storage mixed server and client keys, will get issues for more fancy tests
+            const storedFabrics = fakeServerStorage.get("FabricManager", "fabrics");
+            assert.ok(Array.isArray(storedFabrics));
+            assert.equal(storedFabrics.length, 1);
+            const firstFabric = storedFabrics[0] as FabricJsonObject;
+            assert.equal(typeof firstFabric, "object");
+            assert.equal(firstFabric.fabricIndex, 1);
+            assert.equal(firstFabric.fabricId, 1);
+
+            assert.equal(fakeServerStorage.get("FabricManager", "nextFabricIndex"), 2);
+
+            const onoffValue = fakeServerStorage.get<{ value: any, version: number }>("Cluster-1-6", "onOff");
+            assert.ok(typeof onoffValue === "object");
+            assert.equal(onoffValue.version, 2);
+            assert.equal(onoffValue.value, false);
+
+            const storedServerResumptionRecords = fakeServerStorage.get("SessionManager", "resumptionRecords");
+            assert.ok(Array.isArray(storedServerResumptionRecords));
+            assert.equal(storedServerResumptionRecords.length, 1);
+
+            assert.equal(fakeControllerStorage.get("RootCertificateManager", "rootCertId"), BigInt(0));
+            assert.equal(fakeControllerStorage.get("MatterController", "fabricCommissioned"), true);
+
+            const storedControllerResumptionRecords = fakeServerStorage.get("SessionManager", "resumptionRecords");
+            assert.ok(Array.isArray(storedControllerResumptionRecords));
+            assert.equal(storedControllerResumptionRecords.length, 1);
+
+            const storedControllerFabrics = fakeControllerStorage.get("MatterController", "fabric");
+            assert.ok(typeof storedControllerFabrics === "object");
+        });
+    });
+
     describe("remove Fabric", () => {
         it("try to remove invalid fabric", async () => {
             const operationalCredentialsCluster = ClusterClient(client.connect(new NodeId(BigInt(1))), 0, OperationalCredentialsCluster);
@@ -235,8 +284,10 @@ describe("Integration", () => {
         });
     });
 
-    afterAll(() => {
+    afterAll(async () => {
         server.stop();
         client.close();
+        await fakeControllerStorage.close();
+        await fakeServerStorage.close();
     });
 });
