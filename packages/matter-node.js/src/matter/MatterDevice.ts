@@ -36,7 +36,7 @@ export class MatterDevice {
     private readonly fabricManager;
     private readonly sessionManager;
     private readonly channelManager = new ChannelManager();
-    private readonly exchangeManager = new ExchangeManager<MatterDevice>(this.sessionManager, this.channelManager);
+    private readonly exchangeManager;
     private announceInterval: Timer | null = null;
     private announcementStartedTime: number | null = null
     private commissioningWindowOpened = false;
