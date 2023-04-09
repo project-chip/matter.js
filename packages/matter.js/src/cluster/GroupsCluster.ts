@@ -5,7 +5,7 @@
  */
 
 import { TlvGroupId } from "../common/GroupId.js";
-import { StatusCode } from "../protocol/InteractionProtocol.js";
+import { InteractionProtocolStatusCode } from "../protocol/InteractionProtocol.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
 import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvArray } from "../tlv/TlvArray.js";
@@ -23,7 +23,7 @@ const TlvAddGroupRequest = TlvObject({
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.7.7 */
 const TlvAddGroupResponse = TlvObject({
-    status: TlvField(0, TlvEnum<StatusCode>()),
+    status: TlvField(0, TlvEnum<InteractionProtocolStatusCode>()),
     groupId: TlvField(1, TlvGroupId), /* type: min: 1 */
 });
 
@@ -34,7 +34,7 @@ const TlvViewGroupRequest = TlvObject({
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.7.8 */
 const TlvViewGroupResponse = TlvObject({
-    status: TlvField(0, TlvEnum<StatusCode>()),
+    status: TlvField(0, TlvEnum<InteractionProtocolStatusCode>()),
     groupId: TlvField(1, TlvGroupId), /* min: 1 */
     groupName: TlvField(2, TlvString.bound({ maxLength: 16 })),
 });
@@ -58,7 +58,7 @@ const TlvRemoveGroupRequest = TlvObject({
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.7.10 */
 const TlvRemoveGroupResponse = TlvObject({
-    status: TlvField(0, TlvEnum<StatusCode>()),
+    status: TlvField(0, TlvEnum<InteractionProtocolStatusCode>()),
     groupId: TlvField(1, TlvGroupId), /* min: 1 */
 });
 

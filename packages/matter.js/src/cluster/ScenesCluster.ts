@@ -8,7 +8,7 @@ import { TlvAttributeId } from "../common/AttributeId.js";
 import { TlvClusterId } from "../common/ClusterId.js";
 import { TlvGroupId } from "../common/GroupId.js";
 import { TlvNodeId } from "../common/NodeId.js";
-import { StatusCode } from "../protocol/InteractionProtocol.js";
+import { InteractionProtocolStatusCode } from "../protocol/InteractionProtocol.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
 import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvAny } from "../tlv/TlvAny.js";
@@ -115,14 +115,14 @@ const TlvCopySceneRequest = TlvObject({
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.9.12 and § 1.4.9.18 */
 const TlvAddSceneResponse = TlvObject({
-    status: TlvField(0, TlvEnum<StatusCode>()),
+    status: TlvField(0, TlvEnum<InteractionProtocolStatusCode>()),
     groupId: TlvField(1, TlvGroupId),
     sceneId: TlvField(2, TlvUInt8),
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.9.13 and § 1.4.9.19 */
 const TlvViewSceneResponse = TlvObject({
-    status: TlvField(0, TlvEnum<StatusCode>()),
+    status: TlvField(0, TlvEnum<InteractionProtocolStatusCode>()),
     groupId: TlvField(1, TlvGroupId),
     sceneId: TlvField(2, TlvUInt8),
     transitionTime: TlvOptionalField(3, TlvUInt16),
@@ -132,27 +132,27 @@ const TlvViewSceneResponse = TlvObject({
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.9.14 */
 const TlvRemoveSceneResponse = TlvObject({
-    status: TlvField(0, TlvEnum<StatusCode>()),
+    status: TlvField(0, TlvEnum<InteractionProtocolStatusCode>()),
     groupId: TlvField(1, TlvGroupId),
     sceneId: TlvField(2, TlvUInt8),
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.9.15 */
 const TlvRemoveAllScenesResponse = TlvObject({
-    status: TlvField(0, TlvEnum<StatusCode>()),
+    status: TlvField(0, TlvEnum<InteractionProtocolStatusCode>()),
     groupId: TlvField(1, TlvGroupId),
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.9.16 */
 const TlvStoreSceneResponse = TlvObject({
-    status: TlvField(0, TlvEnum<StatusCode>()),
+    status: TlvField(0, TlvEnum<InteractionProtocolStatusCode>()),
     groupId: TlvField(1, TlvGroupId),
     sceneId: TlvField(2, TlvUInt8),
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.9.17 */
 const TlvGetSceneMembershipResponse = TlvObject({
-    status: TlvField(0, TlvEnum<StatusCode>()),
+    status: TlvField(0, TlvEnum<InteractionProtocolStatusCode>()),
     capacity: TlvField(1, TlvNullable(TlvUInt8)),
     groupId: TlvField(2, TlvGroupId),
     sceneList: TlvOptionalField(3, TlvArray(TlvUInt8)),
@@ -161,7 +161,7 @@ const TlvGetSceneMembershipResponse = TlvObject({
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.9.20 */
 const TlvCopySceneResponse = TlvObject({
     /** Contains the status of the copy scene attempt. */
-    status: TlvField(0, TlvEnum<StatusCode>()),
+    status: TlvField(0, TlvEnum<InteractionProtocolStatusCode>()),
 
     /** Specifies the identifier of the group from which the scene was copied. */
     groupIdFrom: TlvField(1, TlvGroupId),

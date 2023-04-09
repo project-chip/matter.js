@@ -7,14 +7,16 @@
 import { MessageExchange } from "../common/MessageExchange";
 import { MatterController } from "../MatterController";
 import { capitalize } from "../../util/String";
-import { Attribute, AttributeJsType, Attributes, Cluster, Command, Commands, TlvNoResponse, RequestType, ResponseType, TlvSchema, TlvStream } from "@project-chip/matter.js";
+import {
+    Attribute, AttributeJsType, Attributes, Cluster, Command, Commands, TlvNoResponse, RequestType, ResponseType,
+    TlvSchema, TlvStream, InteractionProtocolStatusCode
+} from "@project-chip/matter.js";
 import { DataReport, IncomingInteractionClientMessenger, InteractionClientMessenger } from "./InteractionMessenger";
 import { ResultCode } from "../cluster/server/CommandServer";
 import { ClusterClient } from "../cluster/client/ClusterClient";
 import { ExchangeProvider } from "../common/ExchangeManager";
 import { INTERACTION_PROTOCOL_ID } from "./InteractionServer";
 import { ProtocolHandler } from "../common/ProtocolHandler";
-import { StatusCode } from "./InteractionMessages";
 
 interface GetRawValueResponse { // TODO Remove when restructuring Responses
     endpointId: number;
@@ -61,15 +63,15 @@ export class SubscriptionClient implements ProtocolHandler<MatterController> {
         const dataReport = await messenger.readDataReport();
         const subscriptionId = dataReport.subscriptionId;
         if (subscriptionId === undefined) {
-            await messenger.sendStatus(StatusCode.InvalidSubscription);
+            await messenger.sendStatus(InteractionProtocolStatusCode.InvalidSubscription);
             throw new Error("Invalid Datareport without Subscription ID");
         }
         const listener = this.subscriptionListeners.get(subscriptionId);
         if (listener === undefined) {
-            await messenger.sendStatus(StatusCode.InvalidSubscription);
+            await messenger.sendStatus(InteractionProtocolStatusCode.InvalidSubscription);
             throw new Error(`Unknown subscription ID ${subscriptionId}`);
         }
-        await messenger.sendStatus(StatusCode.Success);
+        await messenger.sendStatus(InteractionProtocolStatusCode.Success);
 
         listener(dataReport);
     }

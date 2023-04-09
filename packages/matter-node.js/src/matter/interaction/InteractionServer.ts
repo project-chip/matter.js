@@ -15,14 +15,13 @@ import { CommandServer, ResultCode } from "../cluster/server/CommandServer";
 import { AttributeGetterServer, AttributeServer } from "../cluster/server/AttributeServer";
 import {
     Attributes, Cluster, Commands, Events, DeviceTypeId, ClusterId, EndpointNumber, BitSchema, TlvStream, TypeFromBitSchema,
-    TypeFromSchema, DescriptorCluster
+    TypeFromSchema, DescriptorCluster, InteractionProtocolStatusCode, TlvAttributePath, TlvAttributeReport, TlvSubscribeResponse
 } from "@project-chip/matter.js";
 import { AttributeInitialValues, AttributeServers, ClusterServerHandlers } from "../cluster/server/ClusterServer";
 import { SecureSession } from "../session/SecureSession";
 import { SubscriptionHandler } from "./SubscriptionHandler";
 import { Logger } from "../../log/Logger";
 import { capitalize } from "../../util/String";
-import { StatusCode, TlvAttributePath, TlvAttributeReport, TlvSubscribeResponse } from "./InteractionMessages";
 import { Message } from "../../codec/MessageCodec";
 import { Crypto } from "../../crypto/Crypto";
 import { StorageContext } from "../../storage/StorageContext";
@@ -212,7 +211,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             const attributes = this.getAttributes([path]);
             if (attributes.length === 0) {
                 logger.debug(`Read from ${exchange.channel.getName()}: ${this.resolveAttributeName(path)} unsupported path`);
-                return [{ attributeStatus: { path, status: { status: StatusCode.UnsupportedAttribute } } }]; // TODO: Find correct status code
+                return [{ attributeStatus: { path, status: { status: InteractionProtocolStatusCode.UnsupportedAttribute } } }]; // TODO: Find correct status code
             }
 
             return attributes.map(({ path, attribute }) => {
@@ -234,10 +233,10 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         // TODO consider TimedRequest constraints
 
-        const writeResults = writeRequests.flatMap(({ path, dataVersion, data }): { path: TypeFromSchema<typeof TlvAttributePath>, statusCode: StatusCode }[] => {
+        const writeResults = writeRequests.flatMap(({ path, dataVersion, data }): { path: TypeFromSchema<typeof TlvAttributePath>, statusCode: InteractionProtocolStatusCode }[] => {
             const attributes = this.getAttributes([path], true);
             if (attributes.length === 0) {
-                return [{ path, statusCode: StatusCode.UnsupportedWrite }]; // TODO: Find correct status code
+                return [{ path, statusCode: InteractionProtocolStatusCode.UnsupportedWrite }]; // TODO: Find correct status code
             }
 
             return attributes.map(({ path, attribute }) => {
@@ -251,13 +250,13 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                 } catch (error: any) {
                     if (attributes.length === 1) { // For Multi-Attribute-Writes we ignore errors
                         logger.error(`Error while handling write request from ${exchange.channel.getName()} to ${this.resolveAttributeName(path)}: ${error.message}`);
-                        return { path, statusCode: StatusCode.ConstraintError };
+                        return { path, statusCode: InteractionProtocolStatusCode.ConstraintError };
                     } else {
                         logger.debug(`While handling write request from ${exchange.channel.getName()} to ${this.resolveAttributeName(path)} ignored: ${error.message}`);
                     }
                 }
-                return { path, statusCode: StatusCode.Success };
-            }).filter(({ statusCode }) => statusCode !== StatusCode.Success);
+                return { path, statusCode: InteractionProtocolStatusCode.Success };
+            }).filter(({ statusCode }) => statusCode !== InteractionProtocolStatusCode.Success);
         });
 
         // TODO respect suppressResponse, potentially also needs adjustment in InteractionMessenger class!
@@ -279,7 +278,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         if (fabric === undefined) throw new Error("Subscriptions are only implemented after a fabric has been assigned");
 
         if ((!Array.isArray(attributeRequests) || attributeRequests.length === 0) && (!Array.isArray(eventRequests) || eventRequests.length === 0)) {
-            throw new StatusResponseError("No attributes or events requested", StatusCode.InvalidAction);
+            throw new StatusResponseError("No attributes or events requested", InteractionProtocolStatusCode.InvalidAction);
         }
 
         if (!keepSubscriptions) {

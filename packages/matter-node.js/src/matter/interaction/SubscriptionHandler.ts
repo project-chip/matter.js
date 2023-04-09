@@ -10,9 +10,8 @@ import { Fabric } from "../fabric/Fabric";
 import { AttributeWithPath, AttributePath, INTERACTION_PROTOCOL_ID, attributePathToId } from "./InteractionServer";
 import { Time, Timer } from "../../time/Time";
 import { NodeId } from "../common/NodeId";
-import { TlvSchema } from "@project-chip/matter.js";
+import { TlvSchema, InteractionProtocolStatusCode } from "@project-chip/matter.js";
 import { tryCatchAsync } from "../../error/TryCatchHandler";
-import { StatusCode } from "./InteractionMessages";
 import { Logger } from "../../log/Logger";
 import { SecureSession } from "../session/SecureSession";
 
@@ -175,8 +174,8 @@ export class SubscriptionHandler {
                     })),
                 });
             }, StatusResponseError, (error) => {
-                if (error.code === StatusCode.InvalidSubscription ||
-                    error.code === StatusCode.Failure
+                if (error.code === InteractionProtocolStatusCode.InvalidSubscription ||
+                    error.code === InteractionProtocolStatusCode.Failure
                 ) {
                     logger.info(`Subscription ${this.subscriptionId} cancelled by peer.`);
                     this.cancel();
