@@ -17,6 +17,11 @@ import { NetworkNode } from "./net/node/NetworkNode";
 
 Network.get = singleton(() => new NetworkNode());
 
+import { Crypto } from "./crypto/Crypto";
+import { CryptoNode } from "./crypto/CryptoNode";
+
+Crypto.get = singleton(() => new CryptoNode());
+
 import { MatterController } from "./matter/MatterController";
 import { UdpInterface } from "./net/UdpInterface";
 import { getIntParameter, getParameter } from "./util/CommandLine";

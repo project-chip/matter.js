@@ -327,7 +327,7 @@ export class CertificateManager {
         return DerCodec.encode({
             certificate,
             signAlgorithm: EcdsaWithSHA256_X962,
-            signature: BitByteArray(Crypto.signPkcs8(keys.privateKey, DerCodec.encode(certificate), "der")),
+            signature: BitByteArray(Crypto.get().signPkcs8(keys.privateKey, DerCodec.encode(certificate), "der")),
         });
     }
 
@@ -363,7 +363,7 @@ export class CertificateManager {
         return DerCodec.encode({
             certificate,
             signAlgorithm: EcdsaWithSHA256_X962,
-            signature: BitByteArray(Crypto.signPkcs8(keys.privateKey, DerCodec.encode(certificate), "der")),
+            signature: BitByteArray(Crypto.get().signPkcs8(keys.privateKey, DerCodec.encode(certificate), "der")),
         });
     }
 
@@ -397,7 +397,7 @@ export class CertificateManager {
         return DerCodec.encode({
             certificate,
             signAlgorithm: EcdsaWithSHA256_X962,
-            signature: BitByteArray(Crypto.signPkcs8(keys.privateKey, DerCodec.encode(certificate), "der")),
+            signature: BitByteArray(Crypto.get().signPkcs8(keys.privateKey, DerCodec.encode(certificate), "der")),
         });
     }
 
@@ -411,7 +411,7 @@ export class CertificateManager {
                 subjectKeyIdentifier: ContextTaggedBytes(0, subjectKeyIdentifier),
                 digestAlgorithm: SHA256_CMS,
                 signatureAlgorithm: EcdsaWithSHA256_X962,
-                signature: Crypto.signSec1(privateKey, eContent, "der")
+                signature: Crypto.get().signSec1(privateKey, eContent, "der")
             }]
         };
 
@@ -419,11 +419,11 @@ export class CertificateManager {
     }
 
     static validateRootCertificate(rootCert: RootCertificate) {
-        Crypto.verifySpki(rootCert.ellipticCurvePublicKey, this.rootCertToAsn1(rootCert), rootCert.signature);
+        Crypto.get().verifySpki(rootCert.ellipticCurvePublicKey, this.rootCertToAsn1(rootCert), rootCert.signature);
     }
 
     static validateNocCertificate(rootCert: RootCertificate, nocCert: OperationalCertificate) {
-        Crypto.verifySpki(rootCert.ellipticCurvePublicKey, this.nocCertToAsn1(nocCert), nocCert.signature);
+        Crypto.get().verifySpki(rootCert.ellipticCurvePublicKey, this.nocCertToAsn1(nocCert), nocCert.signature);
     }
 
     static createCertificateSigningRequest(keys: KeyPair) {
@@ -437,7 +437,7 @@ export class CertificateManager {
         return DerCodec.encode({
             request,
             signAlgorithm: EcdsaWithSHA256_X962,
-            signature: BitByteArray(Crypto.signPkcs8(keys.privateKey, DerCodec.encode(request), "der")),
+            signature: BitByteArray(Crypto.get().signPkcs8(keys.privateKey, DerCodec.encode(request), "der")),
         });
     }
 
@@ -462,7 +462,7 @@ export class CertificateManager {
 
         // Verify the CSR signature
         if (!EcdsaWithSHA256_X962[OBJECT_ID_KEY][BYTES_KEY].equals(signAlgorithmNode[ELEMENTS_KEY]?.[0]?.[BYTES_KEY])) throw new Error("Unsupported signature type");
-        Crypto.verifySpki(publicKey, DerCodec.encode(requestNode), signatureNode[BYTES_KEY], "der");
+        Crypto.get().verifySpki(publicKey, DerCodec.encode(requestNode), signatureNode[BYTES_KEY], "der");
 
         return publicKey;
     }

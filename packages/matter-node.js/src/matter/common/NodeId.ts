@@ -5,7 +5,7 @@
  */
 
 import { DataWriter, Endian, MatterCoreSpecificationV1_0, TlvUInt64, TlvWrapper } from "@project-chip/matter.js";
-import * as crypto from "crypto";
+import { Crypto } from "../../crypto/Crypto";
 
 const OPERATIONAL_NODE_MIN = BigInt('0x0000000000000001');
 const OPERATIONAL_NODE_MAX = BigInt('0xFFFFFFEFFFFFFFFF');
@@ -29,7 +29,7 @@ export class NodeId {
 
     static getRandomOperationalNodeId() {
         while (true) {
-            const randomBigInt = BigInt('0x' + crypto.randomBytes(8).toString('hex'));
+            const randomBigInt = BigInt('0x' + Crypto.get().getRandomData(8).toHex());
             if (randomBigInt >= OPERATIONAL_NODE_MIN && randomBigInt <= OPERATIONAL_NODE_MAX) {
                 return new NodeId(randomBigInt);
             }
