@@ -5,8 +5,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { BitFlag } from "../schema/BitmapSchema.js";
 import { AccessLevel, Attribute, Cluster, Command, TlvNoArguments, WritableAttribute } from "./Cluster.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvEnum, TlvUInt16, TlvUInt64 } from "../tlv/TlvNumber.js";
 import { TlvString } from "../tlv/TlvString.js";
@@ -19,17 +20,17 @@ import { TlvBoolean } from "../tlv/TlvBoolean.js";
 {%-   for entry in cluster.enums %}
 export const enum {{entry.name}} {
     {%-  for field in entry.entries %}
-    {{field.name}} = {{field.code}},{%   endfor %}
+    {{field.name | toConstFieldName}} = {{field.code}},{%   endfor %}
 }
 {%   endfor %}{% endif -%}
 {%- if cluster.bitmaps %}
 
   // Bitmaps
 {%-   for entry in cluster.bitmaps %}
-export const enum {{entry.name}} {
+export const Tlv{{entry.name}}Bitmap = TlvBitmap(TlvUInt8, {
     {%-  for field in entry.entries %}
-    {{field.name}} = {{field.code}},{%   endfor %}
-}
+    {{field.name | toConstFieldName}}: BitFlag({{field.code}}),{%   endfor %}
+});
 {%   endfor %}{% endif -%}
 {%- if cluster.structs %}
 
@@ -66,7 +67,7 @@ export const {{cluster.name}}Cluster = Cluster({
 
     attributes: {
 {%-   for attr in cluster.attributes %}
-        {{attr.definition.name}}: Attribute({{attr.definition.code}}),  {{attr.definition.data_type.name | toTlvSchemaType}} }),
+        {{attr.definition.name}}: Attribute({{attr.definition.code}},  {{attr.definition.data_type.name | toTlvSchemaType}} {/* annotations */}),
 {% endfor %}
   }{% endif %}
 {%- if cluster.commands %}

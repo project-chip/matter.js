@@ -110,7 +110,7 @@ def toTlvSchemaType(zap_type: str) -> str:
   if zap_type_lower in string_types:
     return "TlvString"
   if zap_type_lower in bytes_types:
-    return "TlvBbytes"
+    return "TlvByteString"
 
   # If no match, return the original type name for the Struct, Enum, or Bitmap.
   return zap_type
@@ -118,6 +118,14 @@ def toTlvSchemaType(zap_type: str) -> str:
 def toTlvSchemaFullType(field: Field) -> str:
   """Return the full protobuf type for the given field, including repeated and optional specifiers."""
   return toTlvSchemaType(field.data_type.name)
+
+def toConstFieldName(const_name: str) -> str:
+  """Return enum/bitmap entry name as camel case, without a leading 'k', and prepending 'Num' if the symbol starts with a numeral."""
+  if const_name[0] == "k":
+    const_name = const_name[1:]
+  if const_name[0].isnumeric():
+    const_name = "Num" + const_name
+  return const_name
 
 def CommandArgs(command: Command, cluster: Cluster) -> List[Field]:
   """Return the list of fields for the command request for the given command and cluster."""
@@ -157,6 +165,7 @@ class CustomGenerator(CodeGenerator):
     # String helpers
     self.jinja_env.filters["toLowerCamelCase"] = toLowerCamelCase
     self.jinja_env.filters["toUpperCamelCase"] = toUpperCamelCase
+    self.jinja_env.filters["toConstFieldName"] = toConstFieldName
 
     # Type helpers
     self.jinja_env.filters["toTlvSchemaType"] = toTlvSchemaType
