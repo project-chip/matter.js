@@ -46,7 +46,7 @@ export class MdnsScanner implements Scanner {
         if (record !== undefined) return { ip: record.ip, port: record.port };
 
         const { promise, resolver } = await getPromiseResolver<MatterServer | undefined>();
-        const timer = Time.getTimer(timeoutSeconds * 1000 /* timeOut seconds */, () => {
+        const timer = Time.getTimer(timeoutSeconds * 1000, () => {
             this.recordWaiters.delete(deviceMatterQname);
             resolver(undefined);
         }).start();
