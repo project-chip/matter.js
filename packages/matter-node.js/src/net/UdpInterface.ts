@@ -12,8 +12,8 @@ import { ByteArray } from "@project-chip/matter.js";
 
 export class UdpInterface implements NetInterface {
 
-    static async create(port: number, type: "udp4" | "udp6", address?: string) {
-        return new UdpInterface(await Network.get().createUdpChannel({ listeningPort: port, type, netInterface: address, listeningAddress: address }));
+    static async create(port: number, type: "udp4" | "udp6", address?: string, netInterface?: string) {
+        return new UdpInterface(await Network.get().createUdpChannel({ listeningPort: port, type, netInterface, listeningAddress: address }));
     }
 
     constructor(

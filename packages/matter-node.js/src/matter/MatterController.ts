@@ -212,6 +212,10 @@ export class MatterController {
         return this.sessionManager.saveResumptionRecord(resumptionRecord);
     }
 
+    announce() {
+        // nothing TODO
+    }
+
     close() {
         this.scanner.close();
         this.exchangeManager.close();

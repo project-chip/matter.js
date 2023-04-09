@@ -40,7 +40,7 @@ export class NetworkNode extends Network {
     )
 
     private static getNetInterfaceForIpInternal(ip: string) {
-        if (ip.indexOf("%") !== -1) {
+        if (ip.includes("%")) {
             // IPv6 address with scope
             return ip.split("%")[1];
         } else {

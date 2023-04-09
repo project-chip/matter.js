@@ -13,7 +13,7 @@ import {
 } from "@project-chip/matter.js";
 import { ClusterServerHandlers } from "./ClusterServer";
 
-interface OperationalCredentialsServerConf {
+export interface OperationalCredentialsServerConf {
     devicePrivateKey: ByteArray,
     deviceCertificate: ByteArray,
     deviceIntermediateCertificate: ByteArray,

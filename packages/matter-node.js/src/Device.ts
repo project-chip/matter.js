@@ -90,15 +90,18 @@ class Device {
             new CaseServer(),
         );
 
+        const netAnnounceInterface = getParameter("announceinterface");
+        const port = getIntParameter("port") ?? 5540;
+
         const paa = new AttestationCertificateManager(vendorId);
         const { keyPair: dacKeyPair, dac } = paa.getDACert(productId)
         const certificationDeclaration = CertificationDeclarationManager.generate(vendorId, productId);
 
         const device = new MatterDevice(deviceName, deviceType, vendorId, productId, discriminator, storageManager)
-            .addNetInterface(await UdpInterface.create(5540, "udp4"))
-            .addNetInterface(await UdpInterface.create(5540, "udp6"))
+            .addNetInterface(await UdpInterface.create(port, "udp4"))
+            .addNetInterface(await UdpInterface.create(port, "udp6"))
             .addScanner(await MdnsScanner.create())
-            .addBroadcaster(await MdnsBroadcaster.create())
+            .addBroadcaster(await MdnsBroadcaster.create(port, netAnnounceInterface))
             .addProtocolHandler(secureChannelProtocol)
             .addProtocolHandler(new InteractionServer(storageManager)
                 .addEndpoint(0x00, DEVICE.ROOT, [
@@ -178,7 +181,7 @@ class Device {
                 ])
                 .addEndpoint(0x01, DEVICE.ON_OFF_LIGHT, [onOffClusterServer])
             );
-        device.start()
+        await device.start()
 
         logger.info("Listening");
         if (!device.isCommissioned()) {

@@ -100,7 +100,7 @@ describe("Integration", () => {
 
         server = new MatterDevice(deviceName, deviceType, vendorId, productId, discriminator, serverStorageManager)
             .addNetInterface(await UdpInterface.create(matterPort, "udp6", SERVER_IP))
-            .addBroadcaster(await MdnsBroadcaster.create())
+            .addBroadcaster(await MdnsBroadcaster.create(matterPort))
             .addProtocolHandler(new SecureChannelProtocol(
                 await PaseServer.fromPin(setupPin, { iterations: 1000, salt: Crypto.getRandomData(32) }),
                 new CaseServer(),
@@ -152,7 +152,7 @@ describe("Integration", () => {
                 ])
                 .addEndpoint(0x01, DEVICE.ON_OFF_LIGHT, [onOffServer])
             );
-        server.start();
+        await server.start();
 
         Network.get = () => { throw new Error("Network should not be requested post creation") };
     });
@@ -285,7 +285,7 @@ describe("Integration", () => {
     });
 
     afterAll(async () => {
-        server.stop();
+        await server.stop();
         client.close();
         await fakeControllerStorage.close();
         await fakeServerStorage.close();

@@ -73,6 +73,10 @@ The following parameters are available:
 * -on: the command to run when the device is turned on (see example above)
 * -off: the command to run when the device is turned off (see example above)
 
+The following parameters are available:
+* -announceinterface: limit mdns announcements to the provided network interface, e.g. "en0" (default: all interfaces available)
+* -port: the port to listen on fot the device (default: 5540)
+
 **Experimental**
 
 To run from the build files:

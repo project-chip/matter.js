@@ -49,7 +49,7 @@ class Controller {
         controllerStorage.set("discriminator", discriminator);
         controllerStorage.set("pin", setupPin);
 
-        const client = await MatterController.create(await MdnsScanner.create(), await UdpInterface.create(5540, "udp4"), await UdpInterface.create(5540, "udp6"), storageManager);
+        const client = await MatterController.create(await MdnsScanner.create(), await UdpInterface.create(port, "udp4"), await UdpInterface.create(port, "udp6"), storageManager);
         try {
             if (client.isCommissioned()) {
                 console.log(`Already commissioned. Resume not yet supported.`);

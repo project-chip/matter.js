@@ -9,23 +9,24 @@ import { Crypto } from "../../crypto/Crypto";
 import { Broadcaster } from "../common/Broadcaster";
 import { getDeviceMatterQname, getFabricQname, MATTER_COMMISSION_SERVICE_QNAME, MATTER_SERVICE_QNAME, SERVICE_DISCOVERY_QNAME } from "./MdnsConsts";
 import { MdnsServer } from "../../net/MdnsServer";
-import { VendorId, ByteArray } from "@project-chip/matter.js";
-import { NodeId } from "../common/NodeId";
+import { VendorId } from "@project-chip/matter.js";
 import { Network } from "../../net/Network";
 import { isIPv4 } from "../../util/Ip";
 import { Logger } from "../../log/Logger";
+import { Fabric } from "../fabric/Fabric";
 
 const logger = Logger.get("MdnsBroadcaster");
 
 export class MdnsBroadcaster implements Broadcaster {
-    static async create(multicastInterface?: string) {
-        return new MdnsBroadcaster(await MdnsServer.create(multicastInterface));
+    static async create(port: number, multicastInterface?: string) {
+        return new MdnsBroadcaster(await MdnsServer.create(multicastInterface), port);
     }
 
     private readonly network = Network.get();
 
     constructor(
         private readonly mdnsServer: MdnsServer,
+        private readonly port: number,
     ) { }
 
     setCommissionMode(mode: number, deviceName: string, deviceType: number, vendorId: VendorId, productId: number, discriminator: number) {
@@ -59,7 +60,7 @@ export class MdnsBroadcaster implements Broadcaster {
                 PtrRecord(longDiscriminatorQname, deviceQname),
                 PtrRecord(commissionModeQname, deviceQname),
                 // TODO: the Matter port should not be hardcoded here
-                SrvRecord(deviceQname, { priority: 0, weight: 0, port: 5540, target: hostname }),
+                SrvRecord(deviceQname, { priority: 0, weight: 0, port: this.port, target: hostname }),
                 TxtRecord(deviceQname, [
                     `VP=${vendorId.id}+${productId}`,  /* Vendor / Product */
                     `DT=${deviceType}`,             /* Device Type */
@@ -84,33 +85,38 @@ export class MdnsBroadcaster implements Broadcaster {
         });
     }
 
-    setFabric(operationalId: ByteArray, nodeId: NodeId) {
-        const operationalIdString = operationalId.toHex().toUpperCase();
-        const fabricQname = getFabricQname(operationalIdString);
-        const deviceMatterQname = getDeviceMatterQname(operationalIdString, nodeId.toString());
-
-        logger.debug(`Set fabric ${operationalId.toHex()} ${nodeId.id}: ${deviceMatterQname} for announcement`);
-
+    setFabrics(fabrics: Fabric[]) {
         this.mdnsServer.setRecordsGenerator(netInterface => {
-            const ipMac = this.network.getIpMac(netInterface);
-            if (ipMac === undefined) return [];
-            const { mac, ips } = ipMac;
-            const hostname = mac.replace(/:/g, "").toUpperCase() + "0000.local";
-            const records = [
+            const records: any[] = [
                 PtrRecord(SERVICE_DISCOVERY_QNAME, MATTER_SERVICE_QNAME),
-                PtrRecord(SERVICE_DISCOVERY_QNAME, fabricQname),
-                PtrRecord(MATTER_SERVICE_QNAME, deviceMatterQname),
-                PtrRecord(fabricQname, deviceMatterQname),
-                // TODO: the Matter port should not be hardcoded here
-                SrvRecord(deviceMatterQname, { priority: 0, weight: 0, port: 5540, target: hostname }),
-                TxtRecord(deviceMatterQname, ["SII=5000", "SAI=300", "T=1"]),
             ];
-            ips.forEach(ip => {
-                if (isIPv4(ip)) {
-                    records.push(ARecord(hostname, ip));
-                } else {
-                    records.push(AAAARecord(hostname, ip));
-                }
+            fabrics.forEach(fabric => {
+                const { operationalId, nodeId } = fabric;
+                const operationalIdString = operationalId.toHex().toUpperCase();
+                const fabricQname = getFabricQname(operationalIdString);
+                const deviceMatterQname = getDeviceMatterQname(operationalIdString, nodeId.toString());
+
+                logger.debug(`Set fabric ${operationalId.toHex()} ${nodeId.id}: ${deviceMatterQname} for announcement on ${netInterface}`);
+                const ipMac = this.network.getIpMac(netInterface);
+                if (ipMac === undefined) return [];
+                const { mac, ips } = ipMac;
+                const hostname = mac.replace(/:/g, "").toUpperCase() + "0000.local";
+                const fabricRecords = [
+                    PtrRecord(SERVICE_DISCOVERY_QNAME, fabricQname),
+                    PtrRecord(MATTER_SERVICE_QNAME, deviceMatterQname),
+                    PtrRecord(fabricQname, deviceMatterQname),
+                    // TODO: the Matter port should not be hardcoded here
+                    SrvRecord(deviceMatterQname, { priority: 0, weight: 0, port: this.port, target: hostname }),
+                    TxtRecord(deviceMatterQname, ["SII=5000", "SAI=300", "T=1"]),
+                ];
+                ips.forEach(ip => {
+                    if (isIPv4(ip)) {
+                        fabricRecords.push(ARecord(hostname, ip));
+                    } else {
+                        fabricRecords.push(AAAARecord(hostname, ip));
+                    }
+                });
+                records.push(...fabricRecords);
             });
             return records;
         });
