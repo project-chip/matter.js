@@ -5,7 +5,7 @@
  */
 
 import { Logger } from "../../log/Logger";
-import { MessageExchange, UnexpectedMessageError } from "../common/MessageExchange";
+import { MessageExchange, RetransmissionLimitReachedError, UnexpectedMessageError } from "../common/MessageExchange";
 import { MatterController } from "../MatterController";
 import { MatterDevice } from "../MatterDevice";
 import {
@@ -25,6 +25,7 @@ import {
 import { ByteArray, TlvSchema, TypeFromSchema } from "@project-chip/matter.js";
 import { Message } from "../../codec/MessageCodec";
 import { MatterError } from "../../error/MatterError";
+import { ExchangeProvider } from "../common/ExchangeManager";
 import { tryCatchAsync } from "../../error/TryCatchHandler";
 
 export const enum MessageType {
@@ -68,11 +69,15 @@ const logger = Logger.get("InteractionMessenger");
 
 class InteractionMessenger<ContextT> {
     constructor(
-        private readonly exchangeBase: MessageExchange<ContextT>,
+        protected exchange: MessageExchange<ContextT>,
     ) { }
 
+    async send(messageType: number, payload: ByteArray) {
+        return this.exchange.send(messageType, payload);
+    }
+
     sendStatus(status: StatusCode) {
-        return this.exchangeBase.send(MessageType.StatusResponse, TlvStatusResponse.encode({ status, interactionModelRevision: 1 }));
+        return this.send(MessageType.StatusResponse, TlvStatusResponse.encode({ status, interactionModelRevision: 1 }));
     }
 
     async waitForSuccess() {
@@ -81,7 +86,7 @@ class InteractionMessenger<ContextT> {
     }
 
     async nextMessage(expectedMessageType?: number) {
-        const message = await this.exchangeBase.nextMessage();
+        const message = await this.exchange.nextMessage();
         const messageType = message.payloadHeader.messageType;
         this.throwIfErrorStatusMessage(message);
         if (expectedMessageType !== undefined && messageType !== expectedMessageType) throw new Error(`Received unexpected message type: ${messageType}, expected: ${expectedMessageType}`);
@@ -89,7 +94,7 @@ class InteractionMessenger<ContextT> {
     }
 
     close() {
-        this.exchangeBase.close();
+        this.exchange.close();
     }
 
     protected throwIfErrorStatusMessage(message: Message) {
@@ -102,13 +107,6 @@ class InteractionMessenger<ContextT> {
 }
 
 export class InteractionServerMessenger extends InteractionMessenger<MatterDevice> {
-
-    constructor(
-        private readonly exchange: MessageExchange<MatterDevice>,
-    ) {
-        super(exchange);
-    }
-
     async handleRequest(
         handleReadRequest: (request: ReadRequest) => DataReport,
         handleWriteRequest: (request: WriteRequest) => WriteResponse,
@@ -130,7 +128,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                     case MessageType.WriteRequest: {
                         const writeRequest = TlvWriteRequest.decode(message.payload);
                         const writeResponse = handleWriteRequest(writeRequest);
-                        await this.exchange.send(MessageType.WriteResponse, TlvWriteResponse.encode(writeResponse));
+                        await this.send(MessageType.WriteResponse, TlvWriteResponse.encode(writeResponse));
                         break;
                     }
                     case MessageType.SubscribeRequest: {
@@ -142,7 +140,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                     case MessageType.InvokeCommandRequest: {
                         const invokeRequest = TlvInvokeRequest.decode(message.payload);
                         const invokeResponse = await handleInvokeRequest(invokeRequest, message);
-                        await this.exchange.send(MessageType.InvokeCommandResponse, TlvInvokeResponse.encode(invokeResponse));
+                        await this.send(MessageType.InvokeCommandResponse, TlvInvokeResponse.encode(invokeResponse));
                         break;
                     }
                     case MessageType.TimedRequest: {
@@ -196,7 +194,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                         throw new Error(`Attribute report for is too long to fit in a single chunk, Array chunking not yet supported`);
                     }
                     // Report doesn't fit, sending this chunk
-                    await this.exchange.send(MessageType.ReportData, TlvDataReport.encode(dataReport));
+                    await this.send(MessageType.ReportData, TlvDataReport.encode(dataReport));
                     await this.waitForSuccess();
                     dataReport.values.length = 0;
                     messageSize = emptyDataReportBytes.length;
@@ -217,47 +215,9 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
             await this.waitForSuccess();
         }
     }
-
-    async send(messageType: number, payload: ByteArray) {
-        return this.exchange.send(messageType, payload);
-    }
 }
 
-export class InteractionClientMessenger extends InteractionMessenger<MatterController> {
-    constructor(
-        private readonly exchange: MessageExchange<MatterController>,
-    ) {
-        super(exchange);
-    }
-
-    sendReadRequest(readRequest: ReadRequest) {
-        return this.request(MessageType.ReadRequest, TlvReadRequest, MessageType.ReportData, TlvDataReport, readRequest);
-    }
-
-    async sendSubscribeRequest(subscribeRequest: SubscribeRequest) {
-        await this.exchange.send(MessageType.SubscribeRequest, TlvSubscribeRequest.encode(subscribeRequest));
-
-        const report = await this.readDataReport();
-        const { subscriptionId } = report;
-
-        await this.sendStatus(StatusCode.Success);
-
-        const subscribeResponseMessage = await this.nextMessage(MessageType.SubscribeResponse);
-        const subscribeResponse = TlvSubscribeResponse.decode(subscribeResponseMessage.payload);
-
-        if (subscribeResponse.subscriptionId !== subscriptionId) {
-            throw new Error(`Received subscription ID ${subscribeResponse.subscriptionId} instead of ${subscriptionId}`);
-        }
-
-        return {
-            subscribeResponse,
-            report,
-        };
-    }
-
-    sendInvokeCommand(invokeRequest: InvokeRequest) {
-        return this.request(MessageType.InvokeCommandRequest, TlvInvokeRequest, MessageType.InvokeCommandResponse, TlvInvokeResponse, invokeRequest);
-    }
+export class IncomingInteractionClientMessenger extends InteractionMessenger<MatterController> {
 
     async readDataReport(): Promise<DataReport> {
         let subscriptionId: number | undefined;
@@ -285,9 +245,64 @@ export class InteractionClientMessenger extends InteractionMessenger<MatterContr
             await this.sendStatus(StatusCode.Success);
         }
     }
+}
+
+export class InteractionClientMessenger extends IncomingInteractionClientMessenger {
+    constructor(
+        private readonly exchangeProvider: ExchangeProvider,
+    ) {
+        super(exchangeProvider.initiateExchange());
+    }
+
+    /** Implements a send method with an automatic reconnection mechanism */
+    override async send(messageType: number, payload: ByteArray) {
+        try {
+            return await this.exchange.send(messageType, payload);
+        } catch (error) {
+            // When retransmission failed (most likely due to a lost connection or invalid session),
+            // try to reconnect if possible and resend the message once
+            if (error instanceof RetransmissionLimitReachedError) {
+                this.exchange.close();
+                if (await this.exchangeProvider.reconnectChannel()) {
+                    this.exchange = this.exchangeProvider.initiateExchange();
+                    return await this.exchange.send(messageType, payload);
+                }
+            }
+            throw error;
+        }
+    }
+
+    sendReadRequest(readRequest: ReadRequest) {
+        return this.request(MessageType.ReadRequest, TlvReadRequest, MessageType.ReportData, TlvDataReport, readRequest);
+    }
+
+    async sendSubscribeRequest(subscribeRequest: SubscribeRequest) {
+        await this.send(MessageType.SubscribeRequest, TlvSubscribeRequest.encode(subscribeRequest));
+
+        const report = await this.readDataReport();
+        const { subscriptionId } = report;
+
+        await this.sendStatus(StatusCode.Success);
+
+        const subscribeResponseMessage = await this.nextMessage(MessageType.SubscribeResponse);
+        const subscribeResponse = TlvSubscribeResponse.decode(subscribeResponseMessage.payload);
+
+        if (subscribeResponse.subscriptionId !== subscriptionId) {
+            throw new Error(`Received subscription ID ${subscribeResponse.subscriptionId} instead of ${subscriptionId}`);
+        }
+
+        return {
+            subscribeResponse,
+            report,
+        };
+    }
+
+    sendInvokeCommand(invokeRequest: InvokeRequest) {
+        return this.request(MessageType.InvokeCommandRequest, TlvInvokeRequest, MessageType.InvokeCommandResponse, TlvInvokeResponse, invokeRequest);
+    }
 
     private async request<RequestT, ResponseT>(requestMessageType: number, requestSchema: TlvSchema<RequestT>, responseMessageType: number, responseSchema: TlvSchema<ResponseT>, request: RequestT): Promise<ResponseT> {
-        await this.exchange.send(requestMessageType, requestSchema.encode(request));
+        await this.send(requestMessageType, requestSchema.encode(request));
         const responseMessage = await this.nextMessage(responseMessageType);
         return responseSchema.decode(responseMessage.payload);
     }
