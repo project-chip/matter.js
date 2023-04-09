@@ -68,14 +68,11 @@ The following parameters are available:
 * -discriminator: the discriminator to use for pairing (default: 3840)
 * -vendorid: the vendor ID as number to use for pairing (default: 65521 (0xFFF1))
 * -productid: the product ID as number to use for pairing (default: 32768 (0x8000))
-* -port: the port to listen on (default: 5540)
+* -announceinterface: limit mdns announcements to the provided network interface, e.g. "en0" (default: all interfaces available)
+* -port: the port to listen on for the device (default: 5540)
 * -store: the storage location (directory) to use for storing the pairing information (default: device-node). Delete the directory or provide an alternative name to reset the device
 * -on: the command to run when the device is turned on (see example above)
 * -off: the command to run when the device is turned off (see example above)
-
-The following parameters are available:
-* -announceinterface: limit mdns announcements to the provided network interface, e.g. "en0" (default: all interfaces available)
-* -port: the port to listen on fot the device (default: 5540)
 
 **Experimental**
 
