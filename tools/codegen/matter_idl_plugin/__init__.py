@@ -12,6 +12,7 @@ from typing import List
 import jinja2
 from matter_idl.generators import CodeGenerator
 from matter_idl.generators import GeneratorStorage
+from matter_idl.generators.types import TypeLookupContext
 from matter_idl.matter_idl_types import Attribute
 from matter_idl.matter_idl_types import Cluster
 from matter_idl.matter_idl_types import ClusterSide
@@ -145,6 +146,20 @@ def CommandResponseArgs(command: Command, cluster: Cluster) -> List[Field]:
 
   return []
 
+def toCommandRequestName(command: Command):
+  """Return the name of the command request or TlvNoArguments if none."""
+  if command.input_param:
+    return "Tlv" + command.name + "Request"
+  else:
+    return "TlvNoArguments"
+
+def toCommandResponseName(command: Command):
+  """Return the name of the command response or TlvNoResponse if none."""
+  if command.output_param:
+    return "Tlv" + command.name + "Response"
+  else:
+    return "TlvNoResponse"
+
 class CustomGenerator(CodeGenerator):
   """Example of a custom generator.
 
@@ -174,6 +189,8 @@ class CustomGenerator(CodeGenerator):
     # Command helpers
     self.jinja_env.filters["commandArgs"] = CommandArgs
     self.jinja_env.filters["commandResponseArgs"] = CommandResponseArgs
+    self.jinja_env.filters["toCommandRequestName"] = toCommandRequestName
+    self.jinja_env.filters["toCommandResponseName"] = toCommandResponseName
 
   def internal_render_all(self):
     """Renders the given custom template to the given output filename."""

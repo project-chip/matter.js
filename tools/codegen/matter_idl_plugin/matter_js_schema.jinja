@@ -6,7 +6,7 @@
  */
 
 import { BitFlag } from "../schema/BitmapSchema.js";
-import { AccessLevel, Attribute, Cluster, Command, TlvNoArguments, WritableAttribute } from "./Cluster.js";
+import { AccessLevel, Attribute, Cluster, Command, TlvNoArguments, TlvNoResponse, WritableAttribute } from "./Cluster.js";
 import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvEnum, TlvUInt16, TlvUInt64 } from "../tlv/TlvNumber.js";
@@ -74,7 +74,7 @@ export const {{cluster.name}}Cluster = Cluster({
 
     commands: {
 {%-   for cmd in cluster.commands %}
-        {{cmd.name | toLowerCamelCase}}: Command({{cmd.code}}, Tlv{{cmd.name}}Request, {{cmd.code}}, Tlv{{cmd.name}}Response),
+        {{cmd.name | toLowerCamelCase}}: Command({{cmd.code}}, {{cmd | toCommandRequestName}}, {{cmd.code}}, {{cmd | toCommandResponseName}}),
 {% endfor %}
   }{% endif %}
 });
