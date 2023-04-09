@@ -39,7 +39,7 @@ export class SecureSession<T> implements Session<T> {
         private readonly fabric: Fabric | undefined,
         private readonly peerNodeId: NodeId,
         private readonly peerSessionId: number,
-        private readonly sharedSecret: ByteArray,
+        _sharedSecret: ByteArray,
         private readonly decryptKey: ByteArray,
         private readonly encryptKey: ByteArray,
         private readonly attestationKey: ByteArray,

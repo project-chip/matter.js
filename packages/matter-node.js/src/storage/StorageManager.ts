@@ -3,10 +3,11 @@
 * Copyright 2022-2023 Project CHIP Authors
 * SPDX-License-Identifier: Apache-2.0
 */
-import { Persistence } from "./Persistence";
+
+import { StorageContext } from "./StorageContext";
 import { Storage } from "./Storage";
 
-export class PersistenceManager {
+export class StorageManager {
     private initialized = false;
 
     constructor(
@@ -22,8 +23,9 @@ export class PersistenceManager {
         await this.storage.close();
     }
 
-    createPersistence(context: string) {
-        if (!this.initialized) throw new Error("The persistence should be initialized first!");
-        return new Persistence(this.storage, context);
+    createContext(context: string) {
+        if (!this.initialized) throw new Error("The storage needs to be initialized first!");
+        if (context.includes('.')) throw new Error("Context must not contain dots!");
+        return new StorageContext(this.storage, context);
     }
 }

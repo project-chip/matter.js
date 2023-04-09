@@ -18,6 +18,7 @@ import { Scanner } from "./common/Scanner";
 import { ChannelManager } from "./common/ChannelManager";
 import { VendorId, FabricIndex, ByteArray } from "@project-chip/matter.js";
 import { NodeId } from "./common/NodeId";
+import { StorageManager } from "../storage/StorageManager";
 import { Time, Timer } from "../time/Time";
 import { Logger } from "../log/Logger";
 
@@ -32,8 +33,8 @@ export class MatterDevice {
     private readonly scanners = new Array<Scanner>();
     private readonly broadcasters = new Array<Broadcaster>();
     private readonly netInterfaces = new Array<NetInterface>();
-    private readonly fabricManager = new FabricManager();
-    private readonly sessionManager = new SessionManager(this);
+    private readonly fabricManager;
+    private readonly sessionManager;
     private readonly channelManager = new ChannelManager();
     private readonly exchangeManager = new ExchangeManager<MatterDevice>(this.sessionManager, this.channelManager);
     private announceInterval: Timer | null = null;
@@ -46,7 +47,15 @@ export class MatterDevice {
         private readonly vendorId: VendorId,
         private readonly productId: number,
         private readonly discriminator: number,
-    ) { }
+        private readonly storageManager: StorageManager,
+    ) {
+        this.fabricManager = new FabricManager(this.storageManager);
+
+        this.sessionManager = new SessionManager(this, this.storageManager);
+        this.sessionManager.initFromStorage(this.fabricManager.getFabrics());
+
+        this.exchangeManager = new ExchangeManager<MatterDevice>(this.sessionManager, this.channelManager);
+    }
 
     addScanner(scanner: Scanner) {
         this.scanners.push(scanner);
@@ -139,12 +148,12 @@ export class MatterDevice {
     }
 
     addFabric(fabric: Fabric) {
-        const fabricIndex = this.fabricManager.addFabric(fabric);
+        this.fabricManager.addFabric(fabric);
         this.broadcasters.forEach(broadcaster => {
             broadcaster.setFabrics([fabric]);
             broadcaster.announce();
         });
-        return fabricIndex;
+        return fabric.fabricIndex;
     }
 
     getFabricByIndex(fabricIndex: FabricIndex) {
@@ -178,6 +187,10 @@ export class MatterDevice {
     completeCommission() {
         this.commissioningWindowOpened = false;
         return this.fabricManager.completeCommission();
+    }
+
+    isCommissioned() {
+        return !!this.fabricManager.getFabrics().length;
     }
 
     openCommissioningModeWindow(mode: number, discriminator: number, timeout: number) {

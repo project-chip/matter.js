@@ -38,7 +38,7 @@ export class MdnsScanner implements Scanner {
         this.periodicTimer = Time.getPeriodicTimer(60 * 1000 /* 1 mn */, () => this.expire()).start();
     }
 
-    async findDevice({ operationalId }: Fabric, nodeId: NodeId): Promise<MatterServer | undefined> {
+    async findDevice({ operationalId }: Fabric, nodeId: NodeId, timeoutSeconds = 5): Promise<MatterServer | undefined> {
         const operationalIdString = operationalId.toHex().toUpperCase();
         const deviceMatterQname = getDeviceMatterQname(operationalIdString, nodeId.toString());
 
@@ -46,7 +46,7 @@ export class MdnsScanner implements Scanner {
         if (record !== undefined) return { ip: record.ip, port: record.port };
 
         const { promise, resolver } = await getPromiseResolver<MatterServer | undefined>();
-        const timer = Time.getTimer(5 * 1000 /* 5 s*/, () => {
+        const timer = Time.getTimer(timeoutSeconds * 1000, () => {
             this.recordWaiters.delete(deviceMatterQname);
             resolver(undefined);
         }).start();
