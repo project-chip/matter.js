@@ -5,7 +5,7 @@
  */
 
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-import { ByteArray } from "../util/ByteArray";
+import { ByteArray } from "../util/ByteArray.js";
 import { maxValue, minValue } from "../util/Number.js";
 import { TlvCodec, TlvTag, TlvToPrimitive, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";

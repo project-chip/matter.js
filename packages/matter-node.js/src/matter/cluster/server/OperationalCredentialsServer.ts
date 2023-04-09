@@ -58,12 +58,12 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         fabricBuilder.setRootNodeId(caseAdminNode);
 
         const fabric = await fabricBuilder.build();
-        const fabricIndex = device.addFabric(fabric);
+        device.addFabric(fabric);
 
         // TODO: create ACL with caseAdminNode
         console.log("addOperationalCert success")
 
-        return { status: OperationalCertStatus.Success, fabricIndex };
+        return { status: OperationalCertStatus.Success, fabricIndex: fabric.fabricIndex };
     },
 
     getFabrics: (session) => {
@@ -94,9 +94,7 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         const fabric = secureSession.getFabric();
         if (fabric === undefined) throw new Error("updateOperationalCert on a session linked to a fabric.");
 
-        fabric.label = label;
-
-        // TODO persist fabrics
+        fabric.setLabel(label);
 
         return { status: OperationalCertStatus.Success };
     },

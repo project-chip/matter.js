@@ -42,28 +42,28 @@ The requirements to become a member of the
 # Bugs
 
 If you find a bug in the source code, you can help us by
-[submitting a GitHub Issue](https://github.com/project-chip/connectedhomeip/issues/new).
+[submitting a GitHub Issue](https://github.com/project-chip/matter.js/issues/new).
 The best bug reports provide a detailed description of the issue and
 step-by-step instructions for predictably reproducing the issue. Even better,
 you can
-[submit a Pull Request](https://github.com/project-chip/connectedhomeip/blob/master/CONTRIBUTING.md#submitting-a-pull-request)
+[submit a Pull Request](https://github.com/project-chip/matter.js/blob/master/CONTRIBUTING.md#submitting-a-pull-request)
 with a fix.
 
 # New Features
 
 You can request a new feature by
-[submitting a GitHub Issue](https://github.com/project-chip/connectedhomeip/issues/new).
+[submitting an Idea in Discussions](https://github.com/project-chip/matter.js/discussions/categories/ideas).
 If you would like to implement a new feature, please consider the scope of the
 new feature:
 
 -   _Large feature_: first
-    [submit a GitHub Issue](https://github.com/project-chip/connectedhomeip/issues/new)
+    [submit an Idea in Discussions](https://github.com/project-chip/matter.js/discussions/categories/ideas)
     and communicate your proposal so that the community can review and provide
     feedback. Getting early feedback will help ensure your implementation work
     is accepted by the community. This will also allow us to better coordinate
     our efforts and minimize duplicated effort.
 -   _Small feature_: can be implemented and directly
-    [submitted as a Pull Request](https://github.com/project-chip/connectedhomeip/blob/master/CONTRIBUTING.md#submitting-a-pull-request).
+    [submitted as a Pull Request](https://github.com/project-chip/matter.js/blob/master/CONTRIBUTING.md#submitting-a-pull-request).
 
 # Contributing Code
 
@@ -73,7 +73,7 @@ Matter follows the "Fork-and-Pull" model for accepting contributions.
 
 Setup your GitHub fork and continuous-integration services:
 
-1. Fork the [Matter repository](https://github.com/project-chip/connectedhomeip)
+1. Fork the [Matter.js repository](https://github.com/project-chip/matter.js)
    by clicking "Fork" on the web UI.
 
 2. All contributions must pass all checks and reviews to be accepted.
@@ -82,10 +82,10 @@ Setup your local development environment:
 
 ```bash
 # Clone your fork
-git clone git@github.com:<username>/connectedhomeip.git
+git clone git@github.com:<username>/matter.js.git
 
 # Configure upstream alias
-git remote add upstream git@github.com:project-chip/connectedhomeip.git
+git remote add upstream git@github.com:project-chip/matter.js.git
 ```
 
 ### Submitting a Pull Request
@@ -146,6 +146,21 @@ git rebase -i master
 
 This will open up a text editor where you can specify which commits to squash.
 
+#### Run local Tests, Linting and Formatting
+
+Ideally you should run the continuous-integration tests locally before pushing:
+
+```bash
+npm run test
+```
+
+Same also for the linter and formatter:
+
+```bash
+npm run lint
+npm run format
+```
+
 #### Push and Test
 
 ```bash
@@ -163,6 +178,8 @@ on occasion.
 ### Review Requirements
 
 #### Documentation Best Practices
+
+matter.js right now do not use any documentation generator. We are working on it!
 
 Matter uses Doxygen to markup (or markdown) all C, C++, Objective C, Objective
 C++, Perl, Python, and Java code. Read our
@@ -195,7 +212,7 @@ for more information on how to author and format documentation for contribution.
 
 ## Merge Processes
 
-Merges require at least 3 approvals from unique require-reviewers lists, and all
+Merges require at least 1 approvals from unique require-reviewers lists, and all
 CI tests passing.
 
 ### Shorter Reviews

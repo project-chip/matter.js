@@ -3,5 +3,6 @@
   "compilerOptions": {
     "target": "ES2015",
     "module": "ES2015",
+    "strictNullChecks": true, // Required to correctly generate Nullable types in d.ts
   }
 }

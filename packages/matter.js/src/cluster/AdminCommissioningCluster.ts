@@ -4,15 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TlvField, TlvObject } from "../tlv/TlvObject";
-import { TlvEnum, TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber";
-import { TlvByteString } from "../tlv/TlvString";
-import { BitFlag } from "../schema/BitmapSchema";
-import { TlvNullable } from "../tlv/TlvNullable";
-import { TlvFabricIndex } from "../common/FabricIndex";
-import { TlvVendorId } from "../common/VendorId";
-import { Cluster, Command, TlvNoArguments, TlvNoResponse, Attribute, OptionalCommand } from "./Cluster";
-import { CRYPTO_GROUP_SIZE_BYTES, CRYPTO_PUBLIC_KEY_SIZE_BYTES } from "../crypto/CryptoConstants";
+import { TlvField, TlvObject } from "../tlv/TlvObject.js";
+import { TlvEnum, TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
+import { TlvByteString } from "../tlv/TlvString.js";
+import { BitFlag } from "../schema/BitmapSchema.js";
+import { TlvNullable } from "../tlv/TlvNullable.js";
+import { TlvFabricIndex } from "../common/FabricIndex.js";
+import { TlvVendorId } from "../common/VendorId.js";
+import { Cluster, Command, TlvNoArguments, TlvNoResponse, Attribute, OptionalCommand } from "./Cluster.js";
+import { CRYPTO_GROUP_SIZE_BYTES, CRYPTO_PUBLIC_KEY_SIZE_BYTES } from "../crypto/CryptoConstants.js";
 
 const PAKE_PASSCODE_VERIFIER_LENGTH = CRYPTO_GROUP_SIZE_BYTES + CRYPTO_PUBLIC_KEY_SIZE_BYTES;
 

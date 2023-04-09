@@ -22,21 +22,41 @@ import { UdpInterface } from "./net/UdpInterface";
 import { getIntParameter, getParameter } from "./util/CommandLine";
 import { MdnsScanner } from "./matter/mdns/MdnsScanner";
 import { Logger } from "./log/Logger";
+import { StorageBackendDisk } from "./storage/StorageBackendDisk";
+import { StorageManager } from "./storage/StorageManager";
 
 const logger = Logger.get("Controller");
+
+const storage = new StorageBackendDisk(getParameter("store") ?? "controller-node");
 
 class Controller {
     async start() {
         logger.info(`node-matter`);
 
-        const ip = getParameter("ip");
-        if (ip === undefined) throw new Error("Please specify the IP of the device to commission with -ip");
-        const port = getIntParameter("port") ?? 5540;
-        const discriminator = getIntParameter("discriminator") ?? 3840;
-        const setupPin = getIntParameter("pin") ?? 20202021;
-        const client = await MatterController.create(await MdnsScanner.create(), await UdpInterface.create(5540, "udp4"), await UdpInterface.create(5540, "udp6"));
+        const storageManager = new StorageManager(storage);
+        await storageManager.initialize();
+
+        const controllerStorage = storageManager.createContext("Controller");
+
+        const ip = getParameter("ip") ?? controllerStorage.get<string>("ip", "");
+        if (ip === "") throw new Error("Please specify the IP of the device to commission with -ip");
+        const port = getIntParameter("port") ?? controllerStorage.get("port", 5540);
+        const discriminator = getIntParameter("discriminator") ?? controllerStorage.get("discriminator", 3840);
+        const setupPin = getIntParameter("pin") ?? controllerStorage.get("pin", 20202021);
+
+        controllerStorage.set("ip", ip);
+        controllerStorage.set("port", port);
+        controllerStorage.set("discriminator", discriminator);
+        controllerStorage.set("pin", setupPin);
+
+        const client = await MatterController.create(await MdnsScanner.create(), await UdpInterface.create(5540, "udp4"), await UdpInterface.create(5540, "udp6"), storageManager);
         try {
-            await client.commission(ip, port, discriminator, setupPin);
+            if (client.isCommissioned()) {
+                console.log(`Already commissioned. Resume not yet supported.`);
+            } else {
+                const nodeId = await client.commission(ip, port, discriminator, setupPin);
+                console.log(`Commissioning complete. Node ID: ${nodeId}`);
+            }
         } finally {
             client.close();
         }
@@ -44,3 +64,7 @@ class Controller {
 }
 
 new Controller().start().catch(error => logger.error(error));
+
+process.on("SIGINT", () => {
+    storage.close().then(() => process.exit(0)).catch(() => process.exit(1));
+});

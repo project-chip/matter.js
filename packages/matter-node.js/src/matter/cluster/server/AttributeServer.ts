@@ -44,6 +44,13 @@ export class AttributeServer<T> {
         this.listeners.forEach(listener => listener(value, oldValue));
     }
 
+    /** Initialize the value of the attribute, used when a persisted value is set initially */
+    init(value: T, version: number) {
+        this.validator(value, this.name);
+        this.version = version;
+        this.value = value;
+    }
+
     get(_session?: Session<MatterDevice>): T {
         // TODO: check ACL
 

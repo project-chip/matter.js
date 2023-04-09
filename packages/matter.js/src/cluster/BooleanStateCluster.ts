@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Attribute, OptionalEvent, EventPriority, Cluster } from "./Cluster";
-import { TlvBoolean } from "../tlv/TlvBoolean";
-import { TlvField } from "../tlv/TlvObject";
+import { Attribute, OptionalEvent, EventPriority, Cluster } from "./Cluster.js";
+import { TlvBoolean } from "../tlv/TlvBoolean.js";
+import { TlvField } from "../tlv/TlvObject.js";
 import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
 
 /**

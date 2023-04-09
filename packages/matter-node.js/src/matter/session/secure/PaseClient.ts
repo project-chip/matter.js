@@ -12,6 +12,7 @@ import { MatterController } from "../../MatterController";
 import { UNDEFINED_NODE_ID } from "../SessionManager";
 import { DEFAULT_PASSCODE_ID, PaseClientMessenger, SPAKE_CONTEXT } from "./PaseMessenger";
 import { ByteArray } from "@project-chip/matter.js";
+import { SecureSession } from "../SecureSession";
 
 const logger = Logger.get("PaseClient");
 
@@ -40,9 +41,9 @@ export class PaseClient {
 
         // All good! Creating the secure session
         await messenger.waitForSuccess();
-        const secureSession = await client.createSecureSession(sessionId, undefined, UNDEFINED_NODE_ID, peerSessionId, Ke, new ByteArray(0), true, false);
+        const secureSession = await client.createSecureSession(sessionId, undefined, UNDEFINED_NODE_ID, peerSessionId, Ke, new ByteArray(0), true, false) as SecureSession<MatterController>;
         messenger.close();
-        logger.info(`Pase client: Paired succesfully with ${messenger.getChannelName()}`);
+        logger.info(`Pase client: Paired successfully with ${messenger.getChannelName()}`);
 
         return secureSession;
     }

@@ -132,14 +132,14 @@ export class InteractionClient {
         });
     }
 
-    async set<T>(_endpointId: number, _clusterId: number, { id: _id, schema: _schema, default: _conformanceValue }: Attribute<T>, _value: T): Promise<void> {
+    async set<T>(_endpointId: number, _clusterId: number, { id: _id, schema: _schema }: Attribute<T>, _value: T): Promise<void> {
         throw new Error("not implemented");
     }
 
     async subscribe<A extends Attribute<any>>(
         endpointId: number,
         clusterId: number,
-        { id, schema, default: _conformanceValue }: A,
+        { id, schema }: A,
         listener: (value: AttributeJsType<A>, version: number) => void,
         minIntervalFloorSeconds: number,
         maxIntervalCeilingSeconds: number,

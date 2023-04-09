@@ -18,7 +18,7 @@ const SYMMETRIC_KEY_LENGTH = 16;
 const EC_PRIVATE_KEY_PKCS8_HEADER = ByteArray.fromHex("308141020100301306072a8648ce3d020106082a8648ce3d030107042730250201010420");
 const EC_PUBLIC_KEY_SPKI_HEADER = ByteArray.fromHex("3059301306072a8648ce3d020106082a8648ce3d030107034200");
 
-export interface KeyPair {
+export type KeyPair = {
     publicKey: ByteArray,
     privateKey: ByteArray,
 }
@@ -60,6 +60,9 @@ export class Crypto {
 
     static getRandomUInt32() {
         return crypto.randomBytes(4).readUInt32LE();
+    }
+    static getRandomBigUInt64() {
+        return crypto.randomBytes(8).readBigUInt64LE();
     }
 
     static getRandomBN(size: number, maxValue: BN) {
