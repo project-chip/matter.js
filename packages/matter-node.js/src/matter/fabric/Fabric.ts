@@ -28,11 +28,14 @@ export type FabricJsonObject = {
     intermediateCACert: ByteArray | undefined;
     operationalCert: ByteArray;
     label: string;
+    scopedClusterData: Map<number, any>
 }
 
 export class Fabric {
 
     private readonly sessions = new Array<SecureSession<any>>();
+
+    private readonly scopedClusterData: Map<number, any>;
 
     private removeCallback: (() => void) | undefined;
     private persistCallback: (() => void) | undefined;
@@ -52,7 +55,11 @@ export class Fabric {
         readonly intermediateCACert: ByteArray | undefined,
         readonly operationalCert: ByteArray,
         public label: string,
-    ) { }
+        scopedClusterData?: Map<number, any>
+
+    ) {
+        this.scopedClusterData = scopedClusterData ?? new Map<number, any>();
+    }
 
     toStorageObject(): FabricJsonObject {
         return {
@@ -70,6 +77,7 @@ export class Fabric {
             intermediateCACert: this.intermediateCACert,
             operationalCert: this.operationalCert,
             label: this.label,
+            scopedClusterData: this.scopedClusterData
         };
     }
 
@@ -145,6 +153,14 @@ export class Fabric {
 
     persist() {
         this.persistCallback?.();
+    }
+
+    getScopedClusterDataInstance<T>(clusterId: number): T | undefined {
+        return this.scopedClusterData.get(clusterId);
+    }
+
+    setScopedClusterDataInstance<T>(clusterId: number, instance: T) {
+        this.scopedClusterData.set(clusterId, instance);
     }
 }
 

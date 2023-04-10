@@ -13,7 +13,7 @@ import { MatterController } from "../src/matter/MatterController";
 import { MatterDevice } from "../src/matter/MatterDevice";
 import {
     OnOffCluster, BasicInformationCluster, GeneralCommissioningCluster, RegulatoryLocationType, OperationalCertStatus,
-    OperationalCredentialsCluster, VendorId, FabricIndex,
+    OperationalCredentialsCluster, VendorId, FabricIndex, GroupsCluster, GroupId,
 } from "@project-chip/matter.js";
 import { Crypto } from "../src/crypto/Crypto";
 import { DEVICE } from "../src/matter/common/DeviceTypes";
@@ -37,6 +37,7 @@ import { CertificationDeclarationManager } from "../src/matter/certificate/Certi
 import { StorageBackendMemory } from "../src/storage/StorageBackendMemory";
 import { StorageManager } from "../src/storage/StorageManager";
 import { FabricJsonObject } from "../src/matter/fabric/Fabric";
+import { GroupsClusterHandler } from "../src/matter/cluster/server/GroupsServer";
 
 const SERVER_IP = "192.168.200.1";
 const SERVER_MAC = "00:B0:D0:63:C2:26";
@@ -149,6 +150,12 @@ describe("Integration", () => {
                             deviceIntermediateCertificate: paa.getPAICert(),
                             certificationDeclaration,
                         })),
+                    new ClusterServer(GroupsCluster, {
+                        groupNames: true
+                    }, {
+                        nameSupport: { groupNames: true }
+                    },
+                        GroupsClusterHandler()),
                 ])
                 .addEndpoint(0x01, DEVICE.ON_OFF_LIGHT, [onOffServer])
             );
@@ -227,6 +234,13 @@ describe("Integration", () => {
         });
     });
 
+    describe("Groups server fabric scoped storage", () => {
+        it("set a group name", async () => {
+            const groupsCluster = ClusterClient(await client.connect(new NodeId(BigInt(1))), 0, GroupsCluster);
+            await groupsCluster.addGroup({ groupId: new GroupId(1), groupName: "Group 1" });
+        });
+    });
+
     describe("storage", () => {
         it("server storage has fabric fields stored correctly stringified", async () => {
             // TODO: In fact testing wrong because the storage mixed server and client keys, will get issues for more fancy tests
@@ -237,6 +251,12 @@ describe("Integration", () => {
             assert.equal(typeof firstFabric, "object");
             assert.equal(firstFabric.fabricIndex, 1);
             assert.equal(firstFabric.fabricId, 1);
+            assert.ok(firstFabric.scopedClusterData instanceof Map);
+            assert.equal(firstFabric.scopedClusterData.size, 1);
+            const groupsClusterData = firstFabric.scopedClusterData.get(GroupsCluster.id);
+            assert.ok(groupsClusterData instanceof Map);
+            assert.equal(groupsClusterData.size, 1);
+            assert.equal(groupsClusterData.get(1), "Group 1");
 
             assert.equal(fakeServerStorage.get("FabricManager", "nextFabricIndex"), 2);
 
