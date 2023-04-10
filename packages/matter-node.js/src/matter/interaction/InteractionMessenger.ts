@@ -228,10 +228,8 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger<Mat
             const report = TlvDataReport.decode(dataReportMessage.payload);
             if (subscriptionId === undefined && report.subscriptionId !== undefined) {
                 subscriptionId = report.subscriptionId;
-            } else {
-                if (report.subscriptionId === undefined || report.subscriptionId !== subscriptionId) {
-                    throw new Error(`Invalid subscription ID ${report.subscriptionId} received`);
-                }
+            } else if ((subscriptionId !== undefined || report.subscriptionId !== undefined) && report.subscriptionId !== subscriptionId) {
+                throw new Error(`Invalid subscription ID ${report.subscriptionId} received`);
             }
 
             if (Array.isArray(report.values) && report.values.length > 0) {
@@ -255,9 +253,9 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
     }
 
     /** Implements a send method with an automatic reconnection mechanism */
-    override async send(messageType: number, payload: ByteArray) {
+    override async send(messageType: number, payload: ByteArray, expectAckOnly = false) {
         try {
-            return await this.exchange.send(messageType, payload);
+            return await this.exchange.send(messageType, payload, expectAckOnly);
         } catch (error) {
             // When retransmission failed (most likely due to a lost connection or invalid session),
             // try to reconnect if possible and resend the message once
@@ -282,6 +280,10 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         const report = await this.readDataReport();
         const { subscriptionId } = report;
 
+        if (subscriptionId === undefined) {
+            throw new Error(`Subscription ID not provided in report`);
+        }
+
         await this.sendStatus(StatusCode.Success);
 
         const subscribeResponseMessage = await this.nextMessage(MessageType.SubscribeResponse);
@@ -297,8 +299,31 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         };
     }
 
-    sendInvokeCommand(invokeRequest: InvokeRequest) {
-        return this.request(MessageType.InvokeCommandRequest, TlvInvokeRequest, MessageType.InvokeCommandResponse, TlvInvokeResponse, invokeRequest);
+    async sendInvokeCommand(invokeRequest: InvokeRequest) {
+        if (invokeRequest.suppressResponse) {
+            await this.requestWithSuppressedResponse(MessageType.InvokeCommandRequest, TlvInvokeRequest, invokeRequest);
+        } else {
+            return await this.request(MessageType.InvokeCommandRequest, TlvInvokeRequest, MessageType.InvokeCommandResponse, TlvInvokeResponse, invokeRequest);
+        }
+    }
+
+    async sendWriteCommand(writeRequest: WriteRequest) {
+        if (writeRequest.suppressResponse) {
+            await this.requestWithSuppressedResponse(MessageType.WriteRequest, TlvWriteRequest, writeRequest);
+        } else {
+            return await this.request(MessageType.WriteRequest, TlvWriteRequest, MessageType.WriteResponse, TlvWriteResponse, writeRequest);
+        }
+    }
+
+    sendTimedRequest(timeoutSeconds: number) {
+        return this.request(MessageType.TimedRequest, TlvTimedRequest, MessageType.StatusResponse, TlvStatusResponse, {
+            timeout: timeoutSeconds,
+            interactionModelRevision: 1
+        });
+    }
+
+    private async requestWithSuppressedResponse<RequestT>(requestMessageType: number, requestSchema: TlvSchema<RequestT>, request: RequestT): Promise<void> {
+        await this.send(requestMessageType, requestSchema.encode(request), true);
     }
 
     private async request<RequestT, ResponseT>(requestMessageType: number, requestSchema: TlvSchema<RequestT>, responseMessageType: number, responseSchema: TlvSchema<ResponseT>, request: RequestT): Promise<ResponseT> {

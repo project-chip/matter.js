@@ -297,6 +297,10 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
             const attributes = this.getAttributes(attributeRequests);
 
+            if (!attributes.length) {
+                throw new StatusResponseError("Attributes not found", StatusCode.UnsupportedAttribute);
+            }
+
             // TODO: Interpret specs:
             // The publisher SHALL compute an appropriate value for the MaxInterval field in the action. This SHALL respect the following constraint: MinIntervalFloor ≤ MaxInterval ≤ MAX(SUBSCRIPTION_MAX_INTERVAL_PUBLISHER_LIMIT=60mn, MaxIntervalCeiling)
 

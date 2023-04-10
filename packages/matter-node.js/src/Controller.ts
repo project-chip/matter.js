@@ -22,6 +22,8 @@ import { UdpInterface } from "./net/UdpInterface";
 import { getIntParameter, getParameter } from "./util/CommandLine";
 import { MdnsScanner } from "./matter/mdns/MdnsScanner";
 import { Logger } from "./log/Logger";
+import { ClusterClient } from "./matter/interaction/InteractionClient";
+import { BasicInformationCluster, DescriptorCluster, OnOffCluster } from "@project-chip/matter.js";
 import { StorageBackendDisk } from "./storage/StorageBackendDisk";
 import { StorageManager } from "./storage/StorageManager";
 
@@ -49,16 +51,62 @@ class Controller {
         controllerStorage.set("discriminator", discriminator);
         controllerStorage.set("pin", setupPin);
 
-        const client = await MatterController.create(await MdnsScanner.create(), await UdpInterface.create(port, "udp4"), await UdpInterface.create(port, "udp6"), storageManager);
+
+        const client = await MatterController.create(
+            await MdnsScanner.create(),
+            await UdpInterface.create(port, "udp4"),
+            await UdpInterface.create(port, "udp6"),
+            storageManager
+        );
         try {
+            let nodeId;
             if (client.isCommissioned()) {
-                console.log(`Already commissioned. Resume not yet supported.`);
+                nodeId = client.getFabric().nodeId;
             } else {
-                const nodeId = await client.commission(ip, port, discriminator, setupPin);
-                console.log(`Commissioning complete. Node ID: ${nodeId}`);
+                nodeId = await client.commission(ip, port, discriminator, setupPin);
             }
+            const interactionClient = await client.connect(nodeId);
+
+            // Important: This is a temporary API to proof the methods working and this will change soon and is NOT stable!
+            // It is provided to proof the concept
+
+            // Example to initialize a ClusterClient and access concrete fields as API methods
+            const descriptor = ClusterClient(interactionClient, 0, DescriptorCluster);
+            console.log(await descriptor.getDeviceTypeList());
+            console.log(await descriptor.getServerList());
+
+            // Example to subscribe to a field and get the value
+            const info = ClusterClient(interactionClient, 0, BasicInformationCluster);
+            console.log(await info.getProductName()); // This call is executed remotely
+            //console.log(await info.subscribeProductName((value, version) => console.log("productName", value, version), 5, 30));
+            //console.log(await info.getProductName()); // This call is resolved locally because we have subscribed to the value!
+
+            // Example to get all Attributes of the commissioned node: */*/*
+            //const attributesAll = await interactionClient.getAllAttributes();
+            //console.log("Attributes-All:", Logger.toJSON(attributesAll));
+
+            // Example to get all Attributes of all Descriptor Clusters of the commissioned node: */DescriptorCluster/*
+            //const attributesAllDescriptor = await interactionClient.getMultipleAttributes([{ clusterId: DescriptorCluster.id} ]);
+            //console.log("Attributes-Descriptor:", JSON.stringify(attributesAllDescriptor, null, 2));
+
+            // Example to get all Attributes of the Basic Information Cluster of endpoint 0 of the commissioned node: 0/BasicInformationCluster/*
+            //const attributesBasicInformation = await interactionClient.getMultipleAttributes([{ endpointId: 0, clusterId: BasicInformationCluster.id} ]);
+            //console.log("Attributes-BasicInformation:", JSON.stringify(attributesBasicInformation, null, 2));
+
+            // Example to subscribe to all Attributes of endpoint 1 of the commissioned node: */*/*
+            await interactionClient.subscribeMultipleAttributes([{ endpointId: 1, /* subscribe anything from endpoint 1 */ }], 0, 180, data => {
+                console.log("Subscribe-All Data:", Logger.toJSON(data));
+            });
+
+            const onOff = ClusterClient(interactionClient, 1, OnOffCluster);
+            let onOffStatus = await onOff.getOnOff();
+            // read data every minute to keep up the connection to show the subscription is working
+            setInterval(() => {
+                onOff.toggle({}).then(() => onOffStatus = !onOffStatus).catch(error => logger.error(error));
+            }, 60000);
+
         } finally {
-            client.close();
+            //client.close(); // Comment in when no subscribes are used
         }
     }
 }

@@ -6,6 +6,7 @@
 
 // Export general Cluster specific types
 export * from "./cluster/Cluster.js";
+export * from "./cluster/ClusterHelper.js";
 
 //Export all clusters
 export * from "./cluster/AccessControlCluster.js";
@@ -52,7 +53,6 @@ export * from "./common/VendorId.js";
 // Export Crypto types
 export * from "./crypto/CryptoConstants.js";
 
-
 // Export Schema specific types
 export * from "./schema/Schema.js";
 export * from "./schema/BitmapSchema.js";
@@ -72,6 +72,9 @@ export * from "./tlv/TlvSchema.js";
 export * from "./tlv/TlvString.js";
 export * from "./tlv/TlvVoid.js";
 export * from "./tlv/TlvWrapper.js";
+export * from "./tlv/TlvCodec.js";
+
+// Export Util types
 export * from "./util/ByteArray.js";
 export * from "./util/DataReader.js";
 export * from "./util/DataWriter.js";

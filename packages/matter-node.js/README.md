@@ -34,6 +34,8 @@ Then after `cd packages/matter-node.js` you can use `npm run matter` to run the 
 
 ## Usage
 
+### Start a Matter Device
+
 To run from the build files:
 
 ```bash
@@ -77,7 +79,10 @@ The following parameters are available:
 * -announceinterface: limit mdns announcements to the provided network interface, e.g. "en0" (default: all interfaces available)
 * -port: the port to listen on fot the device (default: 5540)
 
+### Start a Matter Controller
 **Experimental**
+The current controller implementation is no CLI tool, but shows the pairing of devices and resuming the connection and also showcase the existing low-level controller API. It is just intended to be used for debugging, during development!
+The controller currently is not discovering the device to pair, but directly connects to the IP/port defined bin the command line parameters.
 
 To run from the build files:
 
