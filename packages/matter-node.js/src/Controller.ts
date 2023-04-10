@@ -23,6 +23,7 @@ import { getIntParameter, getParameter } from "./util/CommandLine";
 import { MdnsScanner } from "./matter/mdns/MdnsScanner";
 import { Logger } from "./log/Logger";
 import { ClusterClient } from "./matter/interaction/InteractionClient";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { BasicInformationCluster, DescriptorCluster, OnOffCluster } from "@project-chip/matter.js";
 import { StorageBackendDisk } from "./storage/StorageBackendDisk";
 import { StorageManager } from "./storage/StorageManager";
@@ -94,19 +95,19 @@ class Controller {
             //console.log("Attributes-BasicInformation:", JSON.stringify(attributesBasicInformation, null, 2));
 
             // Example to subscribe to all Attributes of endpoint 1 of the commissioned node: */*/*
-            await interactionClient.subscribeMultipleAttributes([{ endpointId: 1, /* subscribe anything from endpoint 1 */ }], 0, 180, data => {
-                console.log("Subscribe-All Data:", Logger.toJSON(data));
-            });
+            //await interactionClient.subscribeMultipleAttributes([{ endpointId: 1, /* subscribe anything from endpoint 1 */ }], 0, 180, data => {
+            //    console.log("Subscribe-All Data:", Logger.toJSON(data));
+            //});
 
-            const onOff = ClusterClient(interactionClient, 1, OnOffCluster);
+            /*const onOff = ClusterClient(interactionClient, 1, OnOffCluster);
             let onOffStatus = await onOff.getOnOff();
             // read data every minute to keep up the connection to show the subscription is working
             setInterval(() => {
                 onOff.toggle({}).then(() => onOffStatus = !onOffStatus).catch(error => logger.error(error));
-            }, 60000);
+            }, 60000);*/
 
         } finally {
-            //client.close(); // Comment in when no subscribes are used
+            client.close(); // Comment out when subscribes are used, else the connection will be closed
         }
     }
 }

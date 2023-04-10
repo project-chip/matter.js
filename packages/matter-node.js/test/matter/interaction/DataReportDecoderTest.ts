@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AttributeId, ByteArray, ClusterId, EventId, VendorId } from "@project-chip/matter.js";
-import { TlvDataReport } from "../../../src/matter/interaction/InteractionMessages";
+import { AttributeId, ByteArray, ClusterId, EventId, VendorId, TlvDataReport } from "@project-chip/matter.js";
 import { normalizeReadAttributeReport } from "../../../src/matter/interaction/DataReportDecoder";
 import * as assert from "assert";
 

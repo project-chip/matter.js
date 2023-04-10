@@ -6,8 +6,8 @@
 
 import {
     ArraySchema, Attribute, AttributeJsType, getClusterAttributeById, getClusterById, TlvType, TypeFromSchema,
+    TlvAttributeReport, TlvAttributeReportValue
 } from "@project-chip/matter.js";
-import { TlvAttributeReport, TlvAttributeReportValue } from "./InteractionMessages";
 import { NodeId } from "../common/NodeId";
 import { Logger } from "../../log/Logger";
 

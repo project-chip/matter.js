@@ -81,7 +81,9 @@ The following parameters are available:
 
 ### Start a Matter Controller
 **Experimental**
-The current controller implementation is no CLI tool, but shows the pairing of devices and resuming the connection and also showcase the existing low-level controller API. It is just intended to be used for debugging, during development!
+The current controller implementation is no CLI tool, but shows the pairing of devices and resuming the connection and also showcase the existing low-level controller API. It is just intended to be used for debugging, during development! The code contains some commented-out examples of how to use the low level controller API.
+Please **do not** use this for production, we will replace the API soon!
+
 The controller currently is not discovering the device to pair, but directly connects to the IP/port defined bin the command line parameters.
 
 To run from the build files:
