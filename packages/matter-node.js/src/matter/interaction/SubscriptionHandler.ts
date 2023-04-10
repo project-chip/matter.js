@@ -10,9 +10,8 @@ import { Fabric } from "../fabric/Fabric";
 import { AttributeWithPath, AttributePath, INTERACTION_PROTOCOL_ID, attributePathToId } from "./InteractionServer";
 import { Time, Timer } from "../../time/Time";
 import { NodeId } from "../common/NodeId";
-import { TlvSchema } from "@project-chip/matter.js";
+import { TlvSchema, InteractionProtocolStatusCode as StatusCode } from "@project-chip/matter.js";
 import { tryCatchAsync } from "../../error/TryCatchHandler";
-import { StatusCode } from "./InteractionMessages";
 import { Logger } from "../../log/Logger";
 import { SecureSession } from "../session/SecureSession";
 

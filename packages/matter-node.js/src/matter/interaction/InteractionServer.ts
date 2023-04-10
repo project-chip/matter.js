@@ -15,14 +15,13 @@ import { CommandServer, ResultCode } from "../cluster/server/CommandServer";
 import { AttributeGetterServer, AttributeServer } from "../cluster/server/AttributeServer";
 import {
     Attributes, Cluster, Commands, Events, DeviceTypeId, ClusterId, EndpointNumber, BitSchema, TlvStream, TypeFromBitSchema,
-    TypeFromSchema, DescriptorCluster
+    TypeFromSchema, DescriptorCluster, InteractionProtocolStatusCode as StatusCode, TlvAttributePath, TlvAttributeReport, TlvSubscribeResponse
 } from "@project-chip/matter.js";
 import { AttributeInitialValues, AttributeServers, ClusterServerHandlers } from "../cluster/server/ClusterServer";
 import { SecureSession } from "../session/SecureSession";
 import { SubscriptionHandler } from "./SubscriptionHandler";
 import { Logger } from "../../log/Logger";
 import { capitalize } from "../../util/String";
-import { StatusCode, TlvAttributePath, TlvAttributeReport, TlvSubscribeResponse } from "./InteractionMessages";
 import { Message } from "../../codec/MessageCodec";
 import { Crypto } from "../../crypto/Crypto";
 import { StorageContext } from "../../storage/StorageContext";

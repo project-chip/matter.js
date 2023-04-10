@@ -9,7 +9,7 @@ import { MatterController } from "../MatterController";
 import { capitalize } from "../../util/String";
 import {
     Attribute, AttributeJsType, Attributes, Cluster, Command, Commands, TlvNoResponse, RequestType, ResponseType,
-    TlvSchema, TypeFromSchema
+    TlvSchema, TypeFromSchema, InteractionProtocolStatusCode as StatusCode, TlvAttributeReport
 } from "@project-chip/matter.js";
 import {
     DataReport, IncomingInteractionClientMessenger, InteractionClientMessenger, ReadRequest, StatusResponseError
@@ -19,7 +19,6 @@ import { ClusterClient } from "../cluster/client/ClusterClient";
 import { ExchangeProvider } from "../common/ExchangeManager";
 import { attributePathToId, INTERACTION_PROTOCOL_ID } from "./InteractionServer";
 import { ProtocolHandler } from "../common/ProtocolHandler";
-import { StatusCode, TlvAttributeReport } from "./InteractionMessages";
 import { Logger } from "../../log/Logger";
 import { DecodedAttributeReportValue, normalizeReadAttributeReport } from "./DataReportDecoder";
 import { NodeId } from "../common/NodeId";
