@@ -5,7 +5,7 @@
  */
 
 import { TlvGroupId } from "../common/GroupId.js";
-import { StatusCode } from "../protocol/InteractionProtocol.js";
+import { InteractionProtocolStatusCode as StatusCode } from "../protocol/InteractionProtocol.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
 import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvArray } from "../tlv/TlvArray.js";

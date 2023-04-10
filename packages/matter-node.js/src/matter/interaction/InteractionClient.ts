@@ -7,14 +7,16 @@
 import { MessageExchange } from "../common/MessageExchange";
 import { MatterController } from "../MatterController";
 import { capitalize } from "../../util/String";
-import { Attribute, AttributeJsType, Attributes, Cluster, Command, Commands, TlvNoResponse, RequestType, ResponseType, TlvSchema, TlvStream } from "@project-chip/matter.js";
+import {
+    Attribute, AttributeJsType, Attributes, Cluster, Command, Commands, TlvNoResponse, RequestType, ResponseType,
+    TlvSchema, TlvStream, InteractionProtocolStatusCode as StatusCode
+} from "@project-chip/matter.js";
 import { DataReport, IncomingInteractionClientMessenger, InteractionClientMessenger } from "./InteractionMessenger";
 import { ResultCode } from "../cluster/server/CommandServer";
 import { ClusterClient } from "../cluster/client/ClusterClient";
 import { ExchangeProvider } from "../common/ExchangeManager";
 import { INTERACTION_PROTOCOL_ID } from "./InteractionServer";
 import { ProtocolHandler } from "../common/ProtocolHandler";
-import { StatusCode } from "./InteractionMessages";
 
 interface GetRawValueResponse { // TODO Remove when restructuring Responses
     endpointId: number;

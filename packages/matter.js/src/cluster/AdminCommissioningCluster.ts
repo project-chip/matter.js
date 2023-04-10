@@ -17,7 +17,7 @@ import { CRYPTO_GROUP_SIZE_BYTES, CRYPTO_PUBLIC_KEY_SIZE_BYTES } from "../crypto
 const PAKE_PASSCODE_VERIFIER_LENGTH = CRYPTO_GROUP_SIZE_BYTES + CRYPTO_PUBLIC_KEY_SIZE_BYTES;
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 11.18.9 */
-export const enum StatusCode {
+export const enum AdminCommissioningStatusCode {
     /** Could not be completed because another commissioning is in progress. */
     Busy = 2,
 
