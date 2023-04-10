@@ -9,7 +9,7 @@ import { MatterController } from "../MatterController";
 import { capitalize } from "../../util/String";
 import {
     Attribute, AttributeJsType, Attributes, Cluster, Command, Commands, TlvNoResponse, RequestType, ResponseType,
-    TlvSchema, TlvStream, InteractionProtocolStatusCode
+    TlvSchema, TlvStream, InteractionProtocolStatusCode as StatusCode
 } from "@project-chip/matter.js";
 import { DataReport, IncomingInteractionClientMessenger, InteractionClientMessenger } from "./InteractionMessenger";
 import { ResultCode } from "../cluster/server/CommandServer";
@@ -63,15 +63,15 @@ export class SubscriptionClient implements ProtocolHandler<MatterController> {
         const dataReport = await messenger.readDataReport();
         const subscriptionId = dataReport.subscriptionId;
         if (subscriptionId === undefined) {
-            await messenger.sendStatus(InteractionProtocolStatusCode.InvalidSubscription);
+            await messenger.sendStatus(StatusCode.InvalidSubscription);
             throw new Error("Invalid Datareport without Subscription ID");
         }
         const listener = this.subscriptionListeners.get(subscriptionId);
         if (listener === undefined) {
-            await messenger.sendStatus(InteractionProtocolStatusCode.InvalidSubscription);
+            await messenger.sendStatus(StatusCode.InvalidSubscription);
             throw new Error(`Unknown subscription ID ${subscriptionId}`);
         }
-        await messenger.sendStatus(InteractionProtocolStatusCode.Success);
+        await messenger.sendStatus(StatusCode.Success);
 
         listener(dataReport);
     }

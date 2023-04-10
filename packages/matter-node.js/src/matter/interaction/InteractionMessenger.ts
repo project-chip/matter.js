@@ -9,7 +9,7 @@ import { MessageExchange, RetransmissionLimitReachedError, UnexpectedMessageErro
 import { MatterController } from "../MatterController";
 import { MatterDevice } from "../MatterDevice";
 import {
-    ByteArray, TlvSchema, TypeFromSchema, InteractionProtocolStatusCode, TlvAttributeReport, TlvDataReport,
+    ByteArray, TlvSchema, TypeFromSchema, InteractionProtocolStatusCode as StatusCode, TlvAttributeReport, TlvDataReport,
     TlvInvokeRequest, TlvInvokeResponse, TlvReadRequest, TlvStatusResponse, TlvSubscribeRequest, TlvSubscribeResponse,
     TlvTimedRequest, TlvWriteRequest, TlvWriteResponse
 } from "@project-chip/matter.js";
@@ -45,7 +45,7 @@ export type WriteResponse = TypeFromSchema<typeof TlvWriteResponse>;
 export class StatusResponseError extends MatterError {
     public constructor(
         message: string,
-        public readonly code: InteractionProtocolStatusCode,
+        public readonly code: StatusCode,
     ) {
         super();
 
@@ -66,7 +66,7 @@ class InteractionMessenger<ContextT> {
         return this.exchange.send(messageType, payload);
     }
 
-    sendStatus(status: InteractionProtocolStatusCode) {
+    sendStatus(status: StatusCode) {
         return this.send(MessageType.StatusResponse, TlvStatusResponse.encode({ status, interactionModelRevision: 1 }));
     }
 
@@ -92,7 +92,7 @@ class InteractionMessenger<ContextT> {
 
         if (messageType !== MessageType.StatusResponse) return;
         const { status } = TlvStatusResponse.decode(payload);
-        if (status !== InteractionProtocolStatusCode.Success) throw new StatusResponseError(`Received error status: ${status}`, status);
+        if (status !== StatusCode.Success) throw new StatusResponseError(`Received error status: ${status}`, status);
     }
 }
 
@@ -136,7 +136,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                     case MessageType.TimedRequest: {
                         const timedRequest = TlvTimedRequest.decode(message.payload);
                         handleTimedRequest(timedRequest);
-                        await this.sendStatus(InteractionProtocolStatusCode.Success);
+                        await this.sendStatus(StatusCode.Success);
                         continueExchange = true;
                         break;
                     }
@@ -150,7 +150,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                 await this.sendStatus(error.code);
             } else {
                 logger.error(error);
-                await this.sendStatus(InteractionProtocolStatusCode.Failure);
+                await this.sendStatus(StatusCode.Failure);
             }
         } finally {
             this.exchange.close();
@@ -232,7 +232,7 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger<Mat
                 return report;
             }
 
-            await this.sendStatus(InteractionProtocolStatusCode.Success);
+            await this.sendStatus(StatusCode.Success);
         }
     }
 }
@@ -272,7 +272,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         const report = await this.readDataReport();
         const { subscriptionId } = report;
 
-        await this.sendStatus(InteractionProtocolStatusCode.Success);
+        await this.sendStatus(StatusCode.Success);
 
         const subscribeResponseMessage = await this.nextMessage(MessageType.SubscribeResponse);
         const subscribeResponse = TlvSubscribeResponse.decode(subscribeResponseMessage.payload);
