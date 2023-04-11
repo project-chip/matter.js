@@ -128,3 +128,41 @@ export const Cluster = <F extends BitSchema, A extends Attributes, C extends Com
     attributes: Merge(attributes, GlobalAttributes(features)),
     events,
 });
+
+type ClusterExtend<A extends Attributes, C extends Commands, E extends Events> = {
+    attributes?: A,
+    commands?: C,
+    events?: E,
+};
+export const ClusterExtend =
+    <
+        F extends BitSchema,
+        A_BASE extends Attributes,
+        C_BASE extends Commands,
+        E_BASE extends Events,
+        A_EXTEND extends Attributes,
+        C_EXTEND extends Commands,
+        E_EXTEND extends Events,
+    >(
+        { id, name, revision, features, attributes, commands, events }: Cluster<F, A_BASE, C_BASE, E_BASE>,
+        {
+            attributes: attributesExtend = <A_EXTEND>{},
+            commands: commandsExtend = <C_EXTEND>{},
+            events: eventsExtend = <E_EXTEND>{},
+        }: ClusterExtend<A_EXTEND, C_EXTEND, E_EXTEND>
+    ): Cluster<
+        F,
+        Merge<A_BASE, A_EXTEND>,
+        Merge<C_BASE, C_EXTEND>,
+        Merge<E_BASE, E_EXTEND>
+    > => (
+    {
+        id,
+        name,
+        revision,
+        features,
+        attributes: Merge(attributes, attributesExtend),
+        commands: Merge(commands, commandsExtend),
+        events: Merge(events, eventsExtend),
+    }
+);
