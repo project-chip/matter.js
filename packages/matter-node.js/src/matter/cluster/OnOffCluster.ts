@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Attribute, Cluster, Command, TlvNoArguments, TlvNoResponse } from "./Cluster";
-import { BitFlag, MatterApplicationClusterSpecificationV1_0, TlvBoolean } from "@project-chip/matter.js";
+import { AccessLevel, Attribute, Cluster, ClusterExtend, Command, TlvNoArguments, TlvNoResponse, WritableAttribute } from "./Cluster";
+import { BitFlag, MatterApplicationClusterSpecificationV1_0, TlvBitmap, TlvBoolean, TlvEnum, TlvField, TlvNullable, TlvObject, TlvSchema, TlvUInt16, TlvUInt8 } from "@project-chip/matter.js";
 
 /**
  * Defined how the devices should behave when it is powered on.
@@ -53,28 +53,28 @@ export const enum DyingLightEffectVariant {
 }
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.7.4.2 */
-//const TlvEffectVariant = TlvUInt8 as TlvSchema<DyingLightEffectVariant | DelayedAllOffEffectVariant>;
+const TlvEffectVariant = TlvUInt8 as TlvSchema<DyingLightEffectVariant | DelayedAllOffEffectVariant>;
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.7.4 */
-/* const TlvOffWithEffectRequest = TlvObject({
+const TlvOffWithEffectRequest = TlvObject({
     effectIdentifier: TlvField(0, TlvEnum<EffectIdentifier>()),
     effectVariant: TlvField(1, TlvEffectVariant),
 }) as TlvSchema<
     { effectIdentifier: EffectIdentifier.DelayedAllOff, effectVariant: DelayedAllOffEffectVariant } |
     { effectIdentifier: EffectIdentifier.DyingLight, effectVariant: DyingLightEffectVariant }
->; */
+>;
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.7.4.2 */
-/* const TlvOnOffControlBitmap = TlvBitmap(TlvUInt8, {
+const TlvOnOffControlBitmap = TlvBitmap(TlvUInt8, {
     acceptOnlyWhenOn: BitFlag(1),
-}); */
+});
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.7.6. */
-/* const TlvOnWithTimedOffRequest = TlvObject({
+const TlvOnWithTimedOffRequest = TlvObject({
     onOffControl: TlvField(0, TlvOnOffControlBitmap),
     onTime: TlvField(1, TlvNullable(TlvUInt8.bound({ min: 0, max: 254 }))),
     offWaitTime: TlvField(2, TlvNullable(TlvUInt8.bound({ min: 0, max: 254 }))),
-}); */
+});
 
 /**
  * Attributes and commands for switching devices between 'On' and 'Off' states.
@@ -94,26 +94,6 @@ export const OnOffCluster = Cluster({
     attributes: {
         /** Indicates whether the device type implemented on the endpoint is turned off (false) or turned on (true). */
         onOff: Attribute(0, TlvBoolean, { persistent: true, default: false }), /* reportable: true, scene:true - Specs 1.0 wrong here, using chip XMLs*/
-
-        // The following attributes are only needed for "Level Control for Lighting" support
-
-        /** Used to remember if a state is already storednin an old scene to not store one again when sending another Off command */
-        //globalSceneControl: OptionalAttribute(0x4000,  TlvBoolean, { default: true }),
-
-        /**
-         * Specifies the length of time (in 1/10ths second) that the ‘On’ state SHALL be maintained before
-         * automatically transitioning to the ‘Off’ state when using the OnWithTimedOff command.
-         */
-        //onTime: OptionalWritableAttribute(0x4001, TlvNullable(TlvUInt16)), { default: 0 }), /* unit: 1/10s */
-
-        /**
-         * Specifies the length of time (in 1/10ths second) that the ‘Off’ state SHALL be guarded to prevent
-         * another OnWithTimedOff command turning the server back to its ‘On’ state
-         */
-        //offWaitTime: OptionalWritableAttribute(0x4002, TlvNullable(TlvUInt16), { default: 0 }), /* unit: 1/10s */
-
-        /** Defines the desired startup behavior of a device when it is supplied with power. */
-        //startUpOnOff: OptionalWritableAttribute(0x4003, TlvNullable(TlvEnum<StartUpOnOff>()), { persistent: true, writeAcl: AccessLevel.Manage }),
     },
 
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.7 */
@@ -140,26 +120,49 @@ export const OnOffCluster = Cluster({
          * attribute SHALL be set to 0.
          */
         toggle: Command(2, TlvNoArguments, 2, TlvNoResponse),
-
-        // The following attributes are only needed for "Level Control for Lighting" support
-        // So we declare them option for now!
-        // TODO: Split these out into a separate Cluster Spec that adds "Level Control for Lighting" support
-
-        /**
-         * The OffWithEffect command allows devices to be turned off using enhanced ways of fading.
-         */
-        //offWithEffect: OptionalCommand(0x40, OffWithEffectRequestT, 0x40, NoResponseT),
-
-        /**
-         * The OnWithRecallGlobalScene command allows the recall of the settings when the device was turned off.
-         */
-        //onWithRecallGlobalScene: OptionalCommand(0x41, NoArgumentsT, 0x41, NoResponseT),
-
-        /**
-         * The OnWithTimedOff command allows devices to be turned on for a specific duration with a guarded off
-         * duration so that SHOULD the device be subsequently switched off, further OnWithTimedOff commands, received
-         * during this time, are prevented from turning the devices back on.
-         */
-        //onWithTimedOff: OptionalCommand(0x42, OnWithTimedOffRequestT, 0x42, NoResponseT),
     },
 });
+
+export const OnOffLightingCluster = ClusterExtend(
+    OnOffCluster,
+    {
+        attributes: {
+            /** Used to remember if a state is already storednin an old scene to not store one again when sending another Off command */
+            globalSceneControl: Attribute(0x4000,  TlvBoolean, { default: true }),
+
+            /**
+             * Specifies the length of time (in 1/10ths second) that the ‘On’ state SHALL be maintained before
+             * automatically transitioning to the ‘Off’ state when using the OnWithTimedOff command.
+             */
+            onTime: WritableAttribute(0x4001, TlvNullable(TlvUInt16), { default: 0 }), /* unit: 1/10s */
+
+            /**
+             * Specifies the length of time (in 1/10ths second) that the ‘Off’ state SHALL be guarded to prevent
+             * another OnWithTimedOff command turning the server back to its ‘On’ state
+             */
+            offWaitTime: WritableAttribute(0x4002, TlvNullable(TlvUInt16), { default: 0 }), /* unit: 1/10s */
+
+            /** Defines the desired startup behavior of a device when it is supplied with power. */
+            startUpOnOff: WritableAttribute(0x4003, TlvNullable(TlvEnum<StartUpOnOff>()), { persistent: true, writeAcl: AccessLevel.Manage }),
+        },
+
+        commands: {
+            /**
+             * The OffWithEffect command allows devices to be turned off using enhanced ways of fading.
+             */
+            offWithEffect: Command(0x40, TlvOffWithEffectRequest, 0x40, TlvNoResponse),
+    
+            /**
+             * The OnWithRecallGlobalScene command allows the recall of the settings when the device was turned off.
+             */
+            onWithRecallGlobalScene: Command(0x41, TlvNoResponse, 0x41, TlvNoResponse),
+    
+            /**
+             * The OnWithTimedOff command allows devices to be turned on for a specific duration with a guarded off
+             * duration so that SHOULD the device be subsequently switched off, further OnWithTimedOff commands, received
+             * during this time, are prevented from turning the devices back on.
+             */
+            onWithTimedOff: Command(0x42, TlvOnWithTimedOffRequest, 0x42, TlvNoResponse),
+        }
+    }
+);
