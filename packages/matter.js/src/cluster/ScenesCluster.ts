@@ -8,7 +8,7 @@ import { TlvAttributeId } from "../common/AttributeId.js";
 import { TlvClusterId } from "../common/ClusterId.js";
 import { TlvGroupId } from "../common/GroupId.js";
 import { TlvNodeId } from "../common/NodeId.js";
-import { StatusCode } from "../protocol/InteractionProtocol.js";
+import { InteractionProtocolStatusCode as StatusCode } from "../protocol/InteractionProtocol.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
 import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvAny } from "../tlv/TlvAny.js";

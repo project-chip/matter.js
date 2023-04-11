@@ -9,20 +9,10 @@ import { MessageExchange, RetransmissionLimitReachedError, UnexpectedMessageErro
 import { MatterController } from "../MatterController";
 import { MatterDevice } from "../MatterDevice";
 import {
-    StatusCode,
-    TlvAttributeReport,
-    TlvDataReport,
-    TlvInvokeRequest,
-    TlvInvokeResponse,
-    TlvReadRequest,
-    TlvStatusResponse,
-    TlvSubscribeRequest,
-    TlvSubscribeResponse,
-    TlvTimedRequest,
-    TlvWriteRequest,
-    TlvWriteResponse
-} from "./InteractionMessages";
-import { ByteArray, TlvSchema, TypeFromSchema } from "@project-chip/matter.js";
+    ByteArray, TlvSchema, TypeFromSchema, InteractionProtocolStatusCode as StatusCode, TlvAttributeReport, TlvDataReport,
+    TlvInvokeRequest, TlvInvokeResponse, TlvReadRequest, TlvStatusResponse, TlvSubscribeRequest, TlvSubscribeResponse,
+    TlvTimedRequest, TlvWriteRequest, TlvWriteResponse
+} from "@project-chip/matter.js";
 import { Message } from "../../codec/MessageCodec";
 import { MatterError } from "../../error/MatterError";
 import { ExchangeProvider } from "../common/ExchangeManager";

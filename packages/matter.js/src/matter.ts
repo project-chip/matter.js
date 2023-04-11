@@ -52,7 +52,6 @@ export * from "./common/VendorId.js";
 // Export Crypto types
 export * from "./crypto/CryptoConstants.js";
 
-
 // Export Schema specific types
 export * from "./schema/Schema.js";
 export * from "./schema/BitmapSchema.js";
@@ -60,6 +59,9 @@ export * from "./schema/Base38Schema.js";
 
 // Export Specs types
 export * from "./spec/Specifications.js";
+
+// Export Protocol types
+export * from "./protocol/InteractionProtocol.js";
 
 // Export Tlv types
 export * from "./tlv/TlvAny.js";
