@@ -9,7 +9,7 @@ import { MatterController } from "../MatterController";
 import { capitalize } from "../../util/String";
 import {
     Attribute, AttributeJsType, Attributes, Cluster, Command, Commands, TlvNoResponse, RequestType, ResponseType,
-    TlvSchema, TlvStream, InteractionProtocolStatusCode as StatusCode
+    TlvSchema, TlvStream, InteractionProtocolStatusCode as StatusCode, TlvObject, TlvNoArguments
 } from "@project-chip/matter.js";
 import { DataReport, IncomingInteractionClientMessenger, InteractionClientMessenger } from "./InteractionMessenger";
 import { ResultCode } from "../cluster/server/CommandServer";
@@ -175,9 +175,12 @@ export class InteractionClient {
 
     async invoke<C extends Command<any, any>>(endpointId: number, clusterId: number, request: RequestType<C>, id: number, requestSchema: TlvSchema<RequestType<C>>, _responseId: number, responseSchema: TlvSchema<ResponseType<C>>, optional: boolean): Promise<ResponseType<C>> {
         return this.withMessenger<ResponseType<C>>(async messenger => {
+            // if the invoke call do not have arguments we want to send an empty tlv object to not suppress the args field (even if MAY be allowed by specs)
+            const args = (requestSchema === TlvNoArguments && request === undefined) ? TlvObject({}).encodeTlv({}) : requestSchema.encodeTlv(request);
+
             const { responses } = await messenger.sendInvokeCommand({
                 invokes: [
-                    { path: { endpointId, clusterId, commandId: id }, args: requestSchema.encodeTlv(request) }
+                    { path: { endpointId, clusterId, commandId: id }, args }
                 ],
                 timedRequest: false,
                 suppressResponse: false,
