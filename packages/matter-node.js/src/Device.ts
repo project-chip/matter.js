@@ -25,17 +25,8 @@ import { Crypto } from "./crypto/Crypto";
 import { CaseServer } from "./matter/session/secure/CaseServer";
 import { ClusterServer, InteractionServer } from "./matter/interaction/InteractionServer";
 import {
-    BasicInformationCluster,
-    GeneralCommissioningCluster,
-    RegulatoryLocationType,
-    OperationalCredentialsCluster,
-    OnOffCluster,
-    NetworkCommissioningCluster,
-    NetworkCommissioningStatus,
-    AdminCommissioningCluster,
-    CommissioningWindowStatus,
-    VendorId,
-    FabricIndex,
+    BasicInformationCluster, GeneralCommissioningCluster, RegulatoryLocationType, OperationalCredentialsCluster, OnOffCluster,
+    NetworkCommissioningCluster, NetworkCommissioningStatus, AdminCommissioningCluster, CommissioningWindowStatus, VendorId, FabricIndex,
     AccessControlCluster
 } from "@project-chip/matter.js";
 import { DEVICE } from "./matter/common/DeviceTypes";
