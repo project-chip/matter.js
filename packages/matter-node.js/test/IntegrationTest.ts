@@ -155,7 +155,7 @@ describe("Integration", () => {
                     }, {
                         nameSupport: { groupNames: true }
                     },
-                        GroupsClusterHandler()),
+                        GroupsClusterHandler(0x00)),
                 ])
                 .addEndpoint(0x01, DEVICE.ON_OFF_LIGHT, [onOffServer])
             );
@@ -251,11 +251,13 @@ describe("Integration", () => {
             assert.equal(typeof firstFabric, "object");
             assert.equal(firstFabric.fabricIndex, 1);
             assert.equal(firstFabric.fabricId, 1);
-            assert.ok(firstFabric.scopedClusterData instanceof Map);
+            assert.ok(firstFabric.scopedClusterData);
             assert.equal(firstFabric.scopedClusterData.size, 1);
-            const groupsClusterData = firstFabric.scopedClusterData.get(GroupsCluster.id);
+            const groupsClusterEndpointMap = firstFabric.scopedClusterData.get(GroupsCluster.id);
+            assert.ok(groupsClusterEndpointMap);
+            assert.equal(groupsClusterEndpointMap.size, 1);
+            const groupsClusterData = groupsClusterEndpointMap.get("0");
             assert.ok(groupsClusterData instanceof Map);
-            assert.equal(groupsClusterData.size, 1);
             assert.equal(groupsClusterData.get(1), "Group 1");
 
             assert.equal(fakeServerStorage.get("FabricManager", "nextFabricIndex"), 2);

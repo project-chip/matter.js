@@ -26,7 +26,7 @@ const getFabricFromSession = (session: SecureSession<MatterDevice>): Fabric => {
     return fabric;
 }
 
-export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsCluster> = () => {
+export const GroupsClusterHandler: (endpointId: number) => ClusterServerHandlers<typeof GroupsCluster> = (endpointId: number) => {
     const addGroupLogic = (groupId: GroupId, groupName: string, sessionType: SessionType, fabric: Fabric) => {
         // TODO If the AddGroup command was received as a unicast, the server SHALL generate an AddGroupResponse
         //      command with the Status field set to the evaluated status. If the AddGroup command was received
@@ -41,13 +41,13 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             return { status: InteractionProtocolStatusCode.ConstraintError, groupId };
         }
 
-        let fabricGroups = fabric.getScopedClusterDataInstance<Map<number, string>>(GroupsCluster.id);
-        if (fabricGroups === undefined) {
-            fabricGroups = new Map();
-            fabric.setScopedClusterDataInstance(GroupsCluster.id, fabricGroups);
+        let endpointGroups = fabric.getScopedClusterDataValue<Map<number, string>>(GroupsCluster, endpointId.toString());
+        if (endpointGroups === undefined) {
+            endpointGroups = new Map<number, string>();
         }
+        endpointGroups.set(groupId.id, groupName || '');
 
-        fabricGroups.set(groupId.id, groupName || '');
+        fabric.setScopedClusterDataValue(GroupsCluster, endpointId.toString(), endpointGroups);
 
         return { status: InteractionProtocolStatusCode.Success, groupId };
     }
@@ -68,10 +68,13 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
                 return { status: InteractionProtocolStatusCode.ConstraintError, groupId, groupName: '' };
             }
 
-            const fabric = getFabricFromSession(session as SecureSession<MatterDevice>)
-            const fabricGroups = fabric.getScopedClusterDataInstance<Map<number, string>>(GroupsCluster.id);
-            if (fabricGroups !== undefined && fabricGroups.has(groupId.id)) {
-                return { status: InteractionProtocolStatusCode.Success, groupId, groupName: fabricGroups.get(groupId.id) || '' };
+            const fabric = getFabricFromSession(session as SecureSession<MatterDevice>);
+            const endpointGroups = fabric.getScopedClusterDataValue<Map<number, string>>(GroupsCluster, endpointId.toString());
+            if (endpointGroups !== undefined) {
+                const groupName = endpointGroups.get(groupId.id);
+                if (groupName !== undefined) {
+                    return {status: InteractionProtocolStatusCode.Success, groupId, groupName: groupName};
+                }
             }
             return { status: InteractionProtocolStatusCode.NotFound, groupId, groupName: '' };
         },
@@ -87,22 +90,18 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             }
 
             const fabric = getFabricFromSession(session as SecureSession<MatterDevice>)
-            const fabricGroups = fabric.getScopedClusterDataInstance<Map<number, string>>(GroupsCluster.id);
-            if (fabricGroups !== undefined) {
-                const allGroupsList = Array.from(fabricGroups.keys());
-                const capacity = allGroupsList.length < 0xff ? 0xff - allGroupsList.length : 0xfe;
-                if (groupList.length === 0) {
-                    return { capacity, groupList: allGroupsList.map(id => new GroupId(id)) };
-                }
-                const filteredGroupsList = groupList.filter(groupId => fabricGroups.has(groupId.id));
-                if (filteredGroupsList.length === 0) {
-                    return { capacity, groupList: [] };
-                } else {
-                    return { capacity, groupList: filteredGroupsList };
-                }
-            } else {
-                return { capacity: 0xff, groupList: [] };
+            const endpointGroups = fabric.getScopedClusterDataValue<Map<number, string>>(GroupsCluster, endpointId.toString()) ?? new Map<number, string>();
+            const fabricGroupsList = endpointGroups !== undefined ? Array.from(endpointGroups.keys()) : [];
+            const capacity = fabricGroupsList.length < 0xff ? 0xfe - fabricGroupsList.length : 0;
+            if (groupList.length === 0) {
+                return { capacity, groupList: fabricGroupsList.map(id => new GroupId(id)) };
             }
+            const filteredGroupsList = groupList.filter(groupId => endpointGroups.get(groupId.id));
+            if (filteredGroupsList.length === 0) {
+                // respond only when unicast!
+                return { capacity, groupList: [] };
+            }
+            return { capacity, groupList: filteredGroupsList };
         },
 
         removeGroup: async ({ request: { groupId }, session, message: { packetHeader: { sessionType } } }) => {
@@ -118,11 +117,13 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             }
 
             const fabric = getFabricFromSession(session as SecureSession<MatterDevice>)
-            const fabricGroups = fabric.getScopedClusterDataInstance<Map<number, string>>(GroupsCluster.id);
-
-            if (fabricGroups !== undefined && fabricGroups.has(groupId.id)) {
-                fabricGroups.delete(groupId.id);
-                return { status: InteractionProtocolStatusCode.Success, groupId };
+            const endpointGroups = fabric.getScopedClusterDataValue<Map<number, string>>(GroupsCluster, endpointId.toString());
+            if (endpointGroups !== undefined) {
+                if (endpointGroups.has(groupId.id)) {
+                    endpointGroups.delete(groupId.id);
+                    fabric.persist(); // persist scoped cluster data changes
+                    return { status: InteractionProtocolStatusCode.Success, groupId };
+                }
             }
             return { status: InteractionProtocolStatusCode.NotFound, groupId };
         },
@@ -137,10 +138,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             }
 
             const fabric = getFabricFromSession(session as SecureSession<MatterDevice>)
-            const fabricGroups = fabric.getScopedClusterDataInstance<Map<number, string>>(GroupsCluster.id);
-            if (fabricGroups !== undefined) {
-                fabricGroups.clear();
-            }
+            fabric.deleteScopedClusterDataValue(GroupsCluster, endpointId.toString());
 
             throw new StatusResponseError("Return Status", InteractionProtocolStatusCode.Success);
         },
