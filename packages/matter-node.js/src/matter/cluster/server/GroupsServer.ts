@@ -73,7 +73,7 @@ export const GroupsClusterHandler: (endpointId: number) => ClusterServerHandlers
             if (endpointGroups !== undefined) {
                 const groupName = endpointGroups.get(groupId.id);
                 if (groupName !== undefined) {
-                    return {status: InteractionProtocolStatusCode.Success, groupId, groupName: groupName};
+                    return { status: InteractionProtocolStatusCode.Success, groupId, groupName: groupName };
                 }
             }
             return { status: InteractionProtocolStatusCode.NotFound, groupId, groupName: '' };
