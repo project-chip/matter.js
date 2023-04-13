@@ -26,8 +26,8 @@ import { CaseServer } from "./matter/session/secure/CaseServer";
 import { ClusterServer, InteractionServer } from "./matter/interaction/InteractionServer";
 import {
     BasicInformationCluster, GeneralCommissioningCluster, RegulatoryLocationType, OperationalCredentialsCluster, OnOffCluster,
-    NetworkCommissioningCluster, NetworkCommissioningStatus, AdminCommissioningCluster, CommissioningWindowStatus, VendorId, FabricIndex,
-    AccessControlCluster
+    NetworkCommissioningCluster, NetworkCommissioningStatus, AdminCommissioningCluster, CommissioningWindowStatus,
+    VendorId, FabricIndex, AccessControlCluster
 } from "@project-chip/matter.js";
 import { DEVICE } from "./matter/common/DeviceTypes";
 import { MdnsBroadcaster } from "./matter/mdns/MdnsBroadcaster";
