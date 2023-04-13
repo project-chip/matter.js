@@ -62,7 +62,7 @@ export abstract class CryptoBase implements CryptoInterface {
     }
 
     getRandomBigUInt64() {
-        return Buffer.from(this.getRandomData(4)).readBigUInt64LE();
+        return Buffer.from(this.getRandomData(8)).readBigUInt64LE();
     }
 
     getRandomBN(size: number, maxValue: BN) {
