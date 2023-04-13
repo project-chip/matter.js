@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+// TODO: Rename to NodeOperationalCredentialsServer to match with specs
+
 import { Crypto } from "../../../crypto/Crypto";
 import { MatterDevice } from "../../MatterDevice";
 import { SecureSession } from "../../session/SecureSession";

@@ -96,7 +96,7 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
             //MatterClusters.LocalizationConfigurationCluster.id, // mandatory if LanguageLocale
             //MatterClusters.TimeFormatLocalizationCluster.id, // mandatory if TimeLocale
             //MatterClusters.UnitLocalizationCLuster.id, // mandatory if UnitLocale
-            //MatterClusters.DiagnosticCluster.id,
+            //MatterClusters.DiagnosticLogsCluster.id,
             //MatterClusters.SoftwareDiagnosticsCluster.id,
             //MatterClusters.EthernetNetworkDiagnosticsCluster.id, // optional if Ethernet
             //MatterClusters.WifiNetworkDiagnosticsCluster.id, // optional if WiFi
@@ -184,8 +184,8 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
      * This represents a Bridged Node to identify a bridged device without Power Source information.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 2.6
      */
-    BRIDGED_DEVICE: {
-        name: "MA-bridgeddevice",
+    BRIDGED_NODE: {
+        name: "MA-bridgednode",
         code: 0x0013,
         class: DeviceClasses.Simple,
         revision: 1,
@@ -564,7 +564,7 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
         name: "MA-genericswitch",
         code: 0x000f,
         class: DeviceClasses.Simple,
-        revision: 2,
+        revision: 1,
         requiredServerClusters: [
             MatterClusters.IdentifyCluster.id,
             //MatterClusters.SwitchCLuster.id,
@@ -585,7 +585,7 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
         name: "MA-contactsensor",
         code: 0x0015,
         class: DeviceClasses.Simple,
-        revision: 2,
+        revision: 1,
         requiredServerClusters: [
             MatterClusters.IdentifyCluster.id,
             MatterClusters.BooleanStateCluster.id,
