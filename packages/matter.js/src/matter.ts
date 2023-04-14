@@ -16,6 +16,7 @@ export * from "./cluster/LabelCluster.js";
 export * from "./cluster/OnOffCluster.js";
 export * from "./cluster/OperationalCredentialsCluster.js";
 export * from "./cluster/ScenesCluster.js";
+export * from "./cluster/SwitchCluster.js";
 export * from "./schema/BitmapSchema.js";
 export * from "./schema/Schema.js";
 export * from "./spec/Specifications.js";
