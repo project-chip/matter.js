@@ -85,28 +85,28 @@ const TlvTarget = TlvObject({
     endpoint: TlvField(1, TlvNullable(TlvEndpointNumber)),
 
     /** Device type to grant access on. */
-    deviceType: TlvField(1, TlvNullable(TlvDeviceTypeId)),
+    deviceType: TlvField(2, TlvNullable(TlvDeviceTypeId)),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 9.10.5.3 */
-const TlvAccessControlEntry = TlvObject({
+const TlvAccessControlEntry = TlvObject({ /* fabricScoped: true */
     /** Specifies the level of privilege granted by this Access Control Entry. */
-    privilege: TlvField(1, TlvEnum<Privilege>()),
+    privilege: TlvField(1, TlvEnum<Privilege>()), /* fabricSensitive: true */
 
     /** Specifies the authentication mode required by this Access Control Entry. */
-    authMode: TlvField(2, TlvEnum<AuthMode>()),
+    authMode: TlvField(2, TlvEnum<AuthMode>()), /* fabricSensitive: true */
 
     /** Specifies a list of Subject IDs, to which this Access Control Entry grants access. */
-    subjects: TlvField(3, TlvNullable(TlvArray(TlvSubjectId))), /* maxArrayLength: subjectsPerAccessControlEntry */
+    subjects: TlvField(3, TlvNullable(TlvArray(TlvSubjectId))), /* maxArrayLength: subjectsPerAccessControlEntry, fabricSensitive: true */
 
     /** Specifies a list of TargetStruct, which define the clusters on this Node to which this Access Control Entry grants access. */
-    targets: TlvField(4, TlvNullable(TlvArray(TlvTarget))), /* maxArrayLength: targetsPerAccessControlEntry */
+    targets: TlvField(4, TlvNullable(TlvArray(TlvTarget))), /* maxArrayLength: targetsPerAccessControlEntry, fabricSensitive: true */
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 9.10.5.4 */
-const TlvAccessControlExtensionEntry = TlvObject({
+const TlvAccessControlExtensionEntry = TlvObject({ /* fabricScoped: true */
     /** Used by manufacturers to store arbitrary TLV-encoded data related to a fabric’s Access Control Entries. */
-    data: TlvField(1, TlvByteString.bound({ maxLength: 128 })),
+    data: TlvField(1, TlvByteString.bound({ maxLength: 128 })),  /* fabricSensitive: true */
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 9.10.7.1 */
@@ -137,16 +137,16 @@ const AccessChangeEvent = <T>(entrySchema: TlvSchema<T>) => ({
  */
 export const AccessControlCluster = Cluster({
     id: 0x1f,
-    name: "Access Control",
+    name: "AccessControl",
     revision: 1,
 
     /** @see {@link MatterCoreSpecificationV1_0} § 9.10.5 */
     attributes: {
         /** Codifies a single grant of privilege on this Node. */
-        acl: WritableAttribute(0, TlvArray(TlvAccessControlEntry), { default: [], writeAcl: AccessLevel.Administer, readAcl: AccessLevel.Administer }),
+        acl: WritableAttribute(0, TlvArray(TlvAccessControlEntry), { default: [], writeAcl: AccessLevel.Administer, readAcl: AccessLevel.Administer }), /* fabricScoped: true */
 
         /** MAY be used by Administrators to store arbitrary data related to fabric’s Access Control Entries. */
-        extension: OptionalWritableAttribute(1, TlvArray(TlvAccessControlExtensionEntry), { default: [], writeAcl: AccessLevel.Administer, readAcl: AccessLevel.Administer }),
+        extension: OptionalWritableAttribute(1, TlvArray(TlvAccessControlExtensionEntry), { default: [], writeAcl: AccessLevel.Administer, readAcl: AccessLevel.Administer }), /* fabricScoped: true */
 
         /** Provide the minimum number of Subjects per entry that are supported by this server. */
         subjectsPerAccessControlEntry: Attribute(2, TlvUInt16.bound({ min: 4 }), { default: 4 }),
@@ -164,12 +164,12 @@ export const AccessControlCluster = Cluster({
          * The cluster SHALL send AccessControlEntryChanged events whenever its ACL attribute data is changed by an
          * Administrator.
          */
-        accessControlEntryChanged: Event(0, EventPriority.Info, AccessChangeEvent(TlvAccessControlEntry)), /* readAcl: AccessLevel.Administer */
+        accessControlEntryChanged: Event(0, EventPriority.Info, AccessChangeEvent(TlvAccessControlEntry)), /* readAcl: AccessLevel.Administer, fabricSensitive: true */
 
         /**
          * The cluster SHALL send AccessControlExtensionChanged events whenever its extension attribute data is changed
          * by an Administrator.
          */
-        accessControlExtensionChanged: Event(1, EventPriority.Info, AccessChangeEvent(TlvAccessControlExtensionEntry)), /* readAcl: AccessLevel.Administer */
+        accessControlExtensionChanged: Event(1, EventPriority.Info, AccessChangeEvent(TlvAccessControlExtensionEntry)), /* readAcl: AccessLevel.Administer, fabricSensitive: true */
     },
 });

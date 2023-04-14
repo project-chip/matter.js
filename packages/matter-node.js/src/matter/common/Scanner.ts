@@ -13,6 +13,6 @@ export type MatterServer = {
 };
 
 export interface Scanner {
-    findDevice(fabric: Fabric, nodeId: NodeId): Promise<MatterServer | undefined>;
+    findDevice(fabric: Fabric, nodeId: NodeId, timeoutSeconds?: number): Promise<MatterServer | undefined>;
     close(): void;
 }

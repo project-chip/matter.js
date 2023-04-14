@@ -8,7 +8,7 @@ import { TlvAttributeId } from "../common/AttributeId.js";
 import { TlvClusterId } from "../common/ClusterId.js";
 import { TlvGroupId } from "../common/GroupId.js";
 import { TlvNodeId } from "../common/NodeId.js";
-import { StatusCode } from "../protocol/InteractionProtocol.js";
+import { InteractionProtocolStatusCode as StatusCode } from "../protocol/InteractionProtocol.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
 import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvAny } from "../tlv/TlvAny.js";
@@ -215,7 +215,7 @@ export const ScenesCluster = Cluster({
         nameSupport: Attribute(4, TlvNameSupportBitmap, { default: { sceneNames: true } }),
 
         /** Holds the Node ID (the IEEE address in case of Zigbee) of the node that last configured the Scene Table. */
-        lastConfiguredBy: OptionalAttribute(5, TlvNullable(TlvNodeId)),
+        lastConfiguredBy: OptionalAttribute(5, TlvNullable(TlvNodeId), { default: null }),
     },
 
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.9 */
@@ -225,55 +225,55 @@ export const ScenesCluster = Cluster({
          * Extension field sets are supported, and are inputed as
          * '{"ClusterID": VALUE, "AttributeValueList":[{"AttributeId": VALUE, "AttributeValue": VALUE}]}'
          */
-        addScene: Command(0, TlvAddSceneRequest, 0, TlvAddSceneResponse),
+        addScene: Command(0, TlvAddSceneRequest, 0, TlvAddSceneResponse), /* fabricScoped: true */
 
         /**
          * Retrieves the requested scene entry from its Scene table.
          */
-        viewScene: Command(1, TlvViewSceneRequest, 1, TlvViewSceneResponse),
+        viewScene: Command(1, TlvViewSceneRequest, 1, TlvViewSceneResponse), /* fabricScoped: true */
 
         /**
          * Removes the requested scene entry, corresponding to the value of the GroupID field, from its Scene Table
          */
-        removeScene: Command(2, TlvRemoveSceneRequest, 2, TlvRemoveSceneResponse),
+        removeScene: Command(2, TlvRemoveSceneRequest, 2, TlvRemoveSceneResponse), /* fabricScoped: true */
 
         /**
          * Remove all scenes, corresponding to the value of the GroupID field, from its Scene Table
          */
-        removeAllScenes: Command(3, TlvRemoveAllScenesRequest, 3, TlvRemoveAllScenesResponse),
+        removeAllScenes: Command(3, TlvRemoveAllScenesRequest, 3, TlvRemoveAllScenesResponse), /* fabricScoped: true */
 
         /**
          * Adds the scene entry into its Scene Table along with all extension field sets corresponding to the current
          * state of other clusters on the same endpoint
          */
-        storeScenes: Command(4, TlvStoreSceneRequest, 4, TlvStoreSceneResponse),
+        storeScenes: Command(4, TlvStoreSceneRequest, 4, TlvStoreSceneResponse), /* fabricScoped: true */
 
         /**
          * Set the attributes and corresponding state for each other cluster implemented on the endpoint accordingly to
          * the requested scene entry in the Scene Table
          */
-        recallScene: Command(5, TlvRecallSceneRequest, 5, TlvNoResponse),
+        recallScene: Command(5, TlvRecallSceneRequest, 5, TlvNoResponse), /* fabricScoped: true */
 
         /**
          * Get an unused scene identifier when no commissioning tool is in the network, or for a commissioning tool to
          * get the used scene identifiers within a certain group
          */
-        getSceneMembership: Command(6, TlvGetSceneMembershipRequest, 6, TlvGetSceneMembershipResponse),
+        getSceneMembership: Command(6, TlvGetSceneMembershipRequest, 6, TlvGetSceneMembershipResponse), /* fabricScoped: true */
 
         /**
          * Allows a scene to be added using a finer scene transition time than the AddScene command.
          */
-        enhancedAddScene: OptionalCommand(0x40, TlvAddSceneRequest, 0x40, TlvAddSceneResponse),
+        enhancedAddScene: OptionalCommand(0x40, TlvAddSceneRequest, 0x40, TlvAddSceneResponse), /* fabricScoped: true */
 
         /**
          * Allows a scene to be retrieved using a finer scene transition time than the ViewScene command
          */
-        enhancedViewScene: OptionalCommand(0x41, TlvViewSceneRequest, 0x41, TlvViewSceneResponse),
+        enhancedViewScene: OptionalCommand(0x41, TlvViewSceneRequest, 0x41, TlvViewSceneResponse), /* fabricScoped: true */
 
         /**
          * Allows a client to efficiently copy scenes from one group/scene identifier pair to another group/scene
          * identifier pair.
          */
-        copyScene: OptionalCommand(0x42, TlvCopySceneRequest, 0x42, TlvCopySceneResponse),
+        copyScene: OptionalCommand(0x42, TlvCopySceneRequest, 0x42, TlvCopySceneResponse), /* fabricScoped: true */
     },
 });

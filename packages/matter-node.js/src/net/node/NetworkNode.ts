@@ -8,8 +8,8 @@ import { networkInterfaces, NetworkInterfaceInfo } from "os";
 import { UdpChannelOptions, UdpChannel } from "../UdpChannel";
 import { UdpChannelNode } from "./UdpChannelNode";
 import { Network } from "../Network";
-import { onSameNetwork } from "../../util/Ip.js";
-import { Cache } from "../../util/Cache.js";
+import { onSameNetwork } from "../../util/Ip";
+import { Cache } from "../../util/Cache";
 
 export class NetworkNode extends Network {
 
@@ -40,7 +40,7 @@ export class NetworkNode extends Network {
     )
 
     private static getNetInterfaceForIpInternal(ip: string) {
-        if (ip.indexOf("%") !== -1) {
+        if (ip.includes("%")) {
             // IPv6 address with scope
             return ip.split("%")[1];
         } else {

@@ -24,44 +24,55 @@ import { PaseServer } from "./matter/session/secure/PaseServer";
 import { Crypto } from "./crypto/Crypto";
 import { CaseServer } from "./matter/session/secure/CaseServer";
 import { ClusterServer, InteractionServer } from "./matter/interaction/InteractionServer";
-import { BasicInformationCluster } from "./matter/cluster/BasicInformationCluster";
-import { GeneralCommissioningCluster, RegulatoryLocationType } from "./matter/cluster/GeneralCommissioningCluster";
-import { OperationalCredentialsCluster } from "./matter/cluster/OperationalCredentialsCluster";
+import {
+    BasicInformationCluster, GeneralCommissioningCluster, RegulatoryLocationType, OperationalCredentialsCluster, OnOffCluster,
+    NetworkCommissioningCluster, NetworkCommissioningStatus, AdminCommissioningCluster, CommissioningWindowStatus,
+    VendorId, FabricIndex
+} from "@project-chip/matter.js";
 import { DEVICE } from "./matter/common/DeviceTypes";
 import { MdnsBroadcaster } from "./matter/mdns/MdnsBroadcaster";
-import { commandExecutor } from "./util/CommandLine";
-import { OnOffCluster } from "./matter/cluster/OnOffCluster";
+import { commandExecutor, getIntParameter, getParameter } from "./util/CommandLine";
 import { GeneralCommissioningClusterHandler } from "./matter/cluster/server/GeneralCommissioningServer";
 import { OperationalCredentialsClusterHandler } from "./matter/cluster/server/OperationalCredentialsServer";
 import { MdnsScanner } from "./matter/mdns/MdnsScanner";
 import { Logger } from "./log/Logger";
-import { VendorId } from "./matter/common/VendorId";
 import { OnOffClusterHandler } from "./matter/cluster/server/OnOffServer";
-import { CommissionningFlowType, DiscoveryCapabilitiesSchema, ManualPairingCodeCodec, QrPairingCodeCodec } from "./codec/PairingCode.js";
-import { QrCode } from "./codec/QrCode.js";
-import { NetworkCommissioningCluster, NetworkCommissioningStatus } from "./matter/cluster/NetworkCommissioningCluster";
-import { AdminCommissioningCluster, CommissioningWindowStatus } from "./matter/cluster/AdminCommissioningCluster";
+import { CommissionningFlowType, DiscoveryCapabilitiesSchema, ManualPairingCodeCodec, QrPairingCodeCodec } from "./codec/PairingCode";
+import { QrCode } from "./codec/QrCode";
 import { AdminCommissioningHandler } from "./matter/cluster/server/AdminCommissioningServer";
 import { NetworkCommissioningHandler } from "./matter/cluster/server/NetworkCommissioningServer";
-import { FabricIndex } from "./matter/common/FabricIndex";
 import { AttestationCertificateManager } from "./matter/certificate/AttestationCertificateManager";
 import { CertificationDeclarationManager } from "./matter/certificate/CertificationDeclarationManager";
+import { StorageBackendDisk } from "./storage/StorageBackendDisk";
+import { StorageManager } from "./storage/StorageManager";
 
 const logger = Logger.get("Device");
+
+const storage = new StorageBackendDisk(getParameter("store") ?? "device-node");
 
 class Device {
     async start() {
         logger.info(`node-matter`);
 
+        const storageManager = new StorageManager(storage);
+        await storageManager.initialize();
+
+        const deviceStorage = storageManager.createContext("Device");
+
         const deviceName = "Matter test device";
         const deviceType = 257 /* Dimmable bulb */;
-        const vendorName = "node-matter";
-        const passcode = 20202021;
-        const discriminator = 3840;
+        const vendorName = "matter-node.js";
+        const passcode = getIntParameter("passcode") ?? deviceStorage.get("passcode", 20202021);
+        const discriminator = getIntParameter("discriminator") ?? deviceStorage.get("discriminator", 3840);
         // product name / id and vendor id should match what is in the device certificate
-        const vendorId = new VendorId(0xFFF1);
-        const productName = "Matter Test DAC 0007";
-        const productId = 0X8000;
+        const vendorId = new VendorId(getIntParameter("vendorid") ?? deviceStorage.get("vendorid", 0xFFF1));
+        const productName = "matter-node.js Test Product";
+        const productId = getIntParameter("productid") ?? deviceStorage.get("productid", 0x8000);
+
+        deviceStorage.set("passcode", passcode);
+        deviceStorage.set("discriminator", discriminator);
+        deviceStorage.set("vendorid", vendorId.id);
+        deviceStorage.set("productid", productId);
 
         // Barebone implementation of the On/Off cluster
         const onOffClusterServer = new ClusterServer(
@@ -79,17 +90,20 @@ class Device {
             new CaseServer(),
         );
 
+        const netAnnounceInterface = getParameter("announceinterface");
+        const port = getIntParameter("port") ?? 5540;
+
         const paa = new AttestationCertificateManager(vendorId);
         const { keyPair: dacKeyPair, dac } = paa.getDACert(productId)
         const certificationDeclaration = CertificationDeclarationManager.generate(vendorId, productId);
 
-        (new MatterDevice(deviceName, deviceType, vendorId, productId, discriminator))
-            .addNetInterface(await UdpInterface.create(5540, "udp4"))
-            .addNetInterface(await UdpInterface.create(5540, "udp6"))
+        const device = new MatterDevice(deviceName, deviceType, vendorId, productId, discriminator, storageManager)
+            .addNetInterface(await UdpInterface.create(port, "udp4"))
+            .addNetInterface(await UdpInterface.create(port, "udp6"))
             .addScanner(await MdnsScanner.create())
-            .addBroadcaster(await MdnsBroadcaster.create())
+            .addBroadcaster(await MdnsBroadcaster.create(port, netAnnounceInterface))
             .addProtocolHandler(secureChannelProtocol)
-            .addProtocolHandler(new InteractionServer()
+            .addProtocolHandler(new InteractionServer(storageManager)
                 .addEndpoint(0x00, DEVICE.ROOT, [
                     new ClusterServer(BasicInformationCluster, {}, {
                         dataModelRevision: 1,
@@ -112,7 +126,7 @@ class Device {
                     }, {}),
                     new ClusterServer(GeneralCommissioningCluster, {}, {
                         breadcrumb: BigInt(0),
-                        commissioningInfo: {
+                        basicCommissioningInfo: {
                             failSafeExpiryLengthSeconds: 60 /* 1min */,
                             maxCumulativeFailsafeSeconds: 900 /* Recommended according to Specs */,
                         },
@@ -166,28 +180,35 @@ class Device {
                     )
                 ])
                 .addEndpoint(0x01, DEVICE.ON_OFF_LIGHT, [onOffClusterServer])
-            )
-            .start()
+            );
+        await device.start();
 
         logger.info("Listening");
-
-        const qrPairingCode = QrPairingCodeCodec.encode({
-            version: 0,
-            vendorId: vendorId.id,
-            productId,
-            flowType: CommissionningFlowType.Standard,
-            discriminator,
-            passcode,
-            discoveryCapabilities: DiscoveryCapabilitiesSchema.encode({
-                ble: false,
-                softAccessPoint: false,
-                onIpNetwork: true,
-            }),
-        });
-        console.log(QrCode.encode(qrPairingCode));
-        console.log(`QR Code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}`);
-        console.log(`Manual pairing code: ${ManualPairingCodeCodec.encode({ discriminator, passcode })}`);
+        if (!device.isCommissioned()) {
+            const qrPairingCode = QrPairingCodeCodec.encode({
+                version: 0,
+                vendorId: vendorId.id,
+                productId,
+                flowType: CommissionningFlowType.Standard,
+                discriminator,
+                passcode,
+                discoveryCapabilities: DiscoveryCapabilitiesSchema.encode({
+                    ble: false,
+                    softAccessPoint: false,
+                    onIpNetwork: true,
+                }),
+            });
+            console.log(QrCode.encode(qrPairingCode));
+            console.log(`QR Code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}`);
+            console.log(`Manual pairing code: ${ManualPairingCodeCodec.encode({ discriminator, passcode })}`);
+        } else {
+            console.log("Device is already commissioned. Waiting for controllers to connect ...");
+        }
     }
 }
 
 new Device().start().catch(error => logger.error(error));
+
+process.on("SIGINT", () => {
+    storage.close().then(() => process.exit(0)).catch(() => process.exit(1));
+});

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import dgram from "dgram";
+import * as dgram from "dgram";
 import { Logger } from "../../log/Logger";
 import { UdpChannel, UdpChannelOptions } from "../UdpChannel";
 import { ByteArray } from "@project-chip/matter.js";
@@ -31,8 +31,14 @@ function createDgramSocket(address: string | undefined, port: number, options: d
 export class UdpChannelNode implements UdpChannel {
     static async create({ listeningPort, type, listeningAddress, netInterface }: UdpChannelOptions) {
         const socket = await createDgramSocket(listeningAddress, listeningPort, { type, reuseAddr: true });
-        if (netInterface !== undefined) socket.setMulticastInterface(NetworkNode.getMulticastInterface(netInterface, type === "udp4"));
-        return new UdpChannelNode(socket);
+        socket.setBroadcast(true);
+        let multicastInterface: string | undefined;
+        if (netInterface !== undefined) {
+            multicastInterface = NetworkNode.getMulticastInterface(netInterface, type === "udp4");
+            logger.debug("initialize multicast interface", multicastInterface, type, listeningPort, netInterface);
+            socket.setMulticastInterface(multicastInterface);
+        }
+        return new UdpChannelNode(socket, netInterface);
     }
 
     constructor(

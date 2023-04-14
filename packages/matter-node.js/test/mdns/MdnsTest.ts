@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import assert from "assert";
+import * as assert from "assert";
 import { DnsCodec } from "../../src/codec/DnsCodec";
 import { UdpChannelFake } from "../../src/net/fake/UdpChannelFake";
 import { UdpChannel } from "../../src/net/UdpChannel";
@@ -17,6 +17,10 @@ import { Fabric } from "../../src/matter/fabric/Fabric";
 import { NodeId } from "../../src/matter/common/NodeId";
 import { ByteArray } from "@project-chip/matter.js";
 import { FAKE_INTERFACE_NAME } from "../../src/net/fake/SimulatedNetwork";
+import { Time } from "../../src/time/Time";
+import { TimeFake } from "../../src/time/TimeFake";
+
+Time.get = () => new TimeFake(0);
 
 const SERVER_IPv4 = "192.168.200.1";
 const SERVER_IPv6 = "fe80::e777:4f5e:c61e:7314";
@@ -41,7 +45,7 @@ describe("MDNS", () => {
         channel = await UdpChannelFake.create(serverNetwork, { listeningPort: 5353, listeningAddress: "224.0.0.251", type: "udp4" });
 
         Network.get = () => serverNetwork;
-        broadcaster = await MdnsBroadcaster.create(FAKE_INTERFACE_NAME);
+        broadcaster = await MdnsBroadcaster.create(5540, FAKE_INTERFACE_NAME);
 
         Network.get = () => { throw new Error("Network should not be requested post creation") };
     });
@@ -52,12 +56,12 @@ describe("MDNS", () => {
         channel.close();
     });
 
-    context("broadcaster", () => {
+    describe("broadcaster", () => {
         it("it broadcasts the device fabric", async () => {
             const { promise, resolver } = await getPromiseResolver<ByteArray>();
-            channel.onData((netInterface, peerAddress, peerPort, data) => resolver(data));
+            channel.onData((_netInterface, _peerAddress, _peerPort, data) => resolver(data));
 
-            broadcaster.setFabric(OPERATIONAL_ID, NODE_ID);
+            broadcaster.setFabrics([{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
             broadcaster.announce();
 
             const result = DnsCodec.decode(await promise);
@@ -83,9 +87,9 @@ describe("MDNS", () => {
         });
     });
 
-    context("integration", () => {
+    describe("integration", () => {
         it("the client returns server record if it has been announced", async () => {
-            broadcaster.setFabric(OPERATIONAL_ID, NODE_ID);
+            broadcaster.setFabrics([{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
             broadcaster.announce();
 
             const result = await scanner.findDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID);
@@ -94,7 +98,7 @@ describe("MDNS", () => {
         });
 
         it("the client asks for the server record if it has not been announced", async () => {
-            broadcaster.setFabric(OPERATIONAL_ID, NODE_ID);
+            broadcaster.setFabrics([{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
 
             const result = await scanner.findDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID);
 

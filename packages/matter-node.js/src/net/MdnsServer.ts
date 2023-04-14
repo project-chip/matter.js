@@ -38,7 +38,7 @@ export class MdnsServer {
         multicastServer.onMessage((message, remoteIp, netInterface) => this.handleDnsMessage(message, remoteIp, netInterface));
     }
 
-    private handleDnsMessage(messageBytes: ByteArray, remoteIp: string, netInterface: string) {
+    private handleDnsMessage(messageBytes: ByteArray, _remoteIp: string, netInterface: string) {
         // This message was on a subnet not supported by this device
         if (netInterface === undefined) return;
         const records = this.records.get(netInterface);

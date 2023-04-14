@@ -11,6 +11,10 @@ import { TlvFields, TlvObject, TypeFromFields } from "../tlv/TlvObject.js";
 import { TlvSchema } from "../tlv/TlvSchema.js";
 import { TlvVoid } from "../tlv/TlvVoid.js";
 import { Merge } from "../util/Type.js";
+import { EventId, TlvEventId } from "../common/EventId.js";
+import { AttributeId, TlvAttributeId } from "../common/AttributeId.js";
+import { CommandId, TlvCommandId } from "../common/CommandId.js";
+import { TlvArray } from "../tlv/TlvArray.js";
 
 export const enum AccessLevel {
     View,
@@ -19,16 +23,16 @@ export const enum AccessLevel {
 }
 
 /* Interfaces and helper methods to define a cluster attribute */
-export interface Attribute<T> { id: number, schema: TlvSchema<T>, optional: boolean, readAcl: AccessLevel, writable: boolean, writeAcl?: AccessLevel, default?: T }
+export interface Attribute<T> { id: number, schema: TlvSchema<T>, optional: boolean, readAcl: AccessLevel, writable: boolean, persistent: boolean, omitChanges: boolean, writeAcl?: AccessLevel, default?: T }
 export interface OptionalAttribute<T> extends Attribute<T> { optional: true }
 export interface WritableAttribute<T> extends Attribute<T> { writable: true }
 export interface OptionalWritableAttribute<T> extends OptionalAttribute<T> { writable: true }
 export type AttributeJsType<T extends Attribute<any>> = T extends Attribute<infer JsType> ? JsType : never;
-interface AttributeOptions<T> { default?: T, readAcl?: AccessLevel, writeAcl?: AccessLevel }
-export const Attribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { default: conformanceValue, readAcl = AccessLevel.View }: AttributeOptions<V> = {}): Attribute<T> => ({ id, schema, optional: false, writable: false, default: conformanceValue, readAcl });
-export const OptionalAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { default: conformanceValue, readAcl = AccessLevel.View }: AttributeOptions<V> = {}): OptionalAttribute<T> => ({ id, schema, optional: true, writable: false, default: conformanceValue, readAcl });
-export const WritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { default: conformanceValue, readAcl = AccessLevel.View, writeAcl = AccessLevel.View }: AttributeOptions<V> = {}): WritableAttribute<T> => ({ id, schema, optional: false, writable: true, default: conformanceValue, readAcl, writeAcl });
-export const OptionalWritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { default: conformanceValue, readAcl = AccessLevel.View, writeAcl = AccessLevel.View }: AttributeOptions<V> = {}): OptionalWritableAttribute<T> => ({ id, schema, optional: true, writable: true, default: conformanceValue, readAcl, writeAcl });
+interface AttributeOptions<T> { persistent?: boolean, omitChanges?: boolean, default?: T, readAcl?: AccessLevel, writeAcl?: AccessLevel }
+export const Attribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View }: AttributeOptions<V> = {}): Attribute<T> => ({ id, schema, optional: false, writable: false, persistent, omitChanges, default: conformanceValue, readAcl });
+export const OptionalAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View }: AttributeOptions<V> = {}): OptionalAttribute<T> => ({ id, schema, optional: true, writable: false, persistent, omitChanges, default: conformanceValue, readAcl });
+export const WritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View, writeAcl = AccessLevel.View }: AttributeOptions<V> = {}): WritableAttribute<T> => ({ id, schema, optional: false, writable: true, persistent, omitChanges, default: conformanceValue, readAcl, writeAcl });
+export const OptionalWritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View, writeAcl = AccessLevel.View }: AttributeOptions<V> = {}): OptionalWritableAttribute<T> => ({ id, schema, optional: true, writable: true, persistent, omitChanges, default: conformanceValue, readAcl, writeAcl });
 
 /* Interfaces and helper methods to define a cluster command */
 export const TlvNoArguments = TlvObject({});
@@ -40,7 +44,7 @@ export type RequestType<T extends Command<any, any>> = T extends Command<infer R
 export const Command = <RequestT, ResponseT>(requestId: number, requestSchema: TlvSchema<RequestT>, responseId: number, responseSchema: TlvSchema<ResponseT>): Command<RequestT, ResponseT> => ({ optional: false, requestId, requestSchema, responseId, responseSchema });
 export const OptionalCommand = <RequestT, ResponseT>(requestId: number, requestSchema: TlvSchema<RequestT>, responseId: number, responseSchema: TlvSchema<ResponseT>): OptionalCommand<RequestT, ResponseT> => ({ optional: true, requestId, requestSchema, responseId, responseSchema });
 
-/* Interfaces and helper methods to define a cluset event */
+/* Interfaces and helper methods to define a cluster event */
 export const enum EventPriority {
     Critical,
     Info,
@@ -55,17 +59,34 @@ export interface Attributes { [key: string]: Attribute<any> }
 export interface Commands { [key: string]: Command<any, any> }
 export interface Events { [key: string]: Event<any> }
 
+// TODO Adjust typing to be derived from the schema below
 /** @see {@link MatterCoreSpecificationV1_0} § 7.13 */
 export type GlobalAttributes<F extends BitSchema> = {
     /** Indicates the revision of the server cluster specification supported by the cluster instance. */
     clusterRevision: Attribute<number>,
 
-    /** Indicates whether the server supports zero or more optional clus­ter features. */
+    /** Indicates whether the server supports zero or more optional cluster features. */
     featureMap: Attribute<TypeFromBitSchema<F>>,
+
+    /** List of the attribute IDs of the attributes supported by the cluster instance. */
+    attributeList: Attribute<AttributeId[]>,
+
+    /** List of the event IDs of the events supported by the cluster instance. */
+    eventList: Attribute<EventId[]>,
+
+    /** List of client generated commands which are supported by this cluster server instance. */
+    acceptedCommandList: Attribute<CommandId[]>,
+
+    /** List of server generated commands (server to client commands). */
+    generatedCommandList: Attribute<CommandId[]>,
 }
 export const GlobalAttributes = <F extends BitSchema>(features: F) => ({
     clusterRevision: Attribute(0xFFFD, TlvUInt16),
     featureMap: Attribute(0xFFFC, TlvBitmap(TlvUInt32, features)),
+    attributeList: Attribute(0xFFFB, TlvArray(TlvAttributeId)),
+    eventList: Attribute(0xFFFA, TlvArray(TlvEventId)),
+    acceptedCommandList: Attribute(0xFFF9, TlvArray(TlvCommandId)),
+    generatedCommandList: Attribute(0xFFF8, TlvArray(TlvCommandId)),
 } as GlobalAttributes<F>);
 
 export interface Cluster<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events> {

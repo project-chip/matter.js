@@ -1,13 +1,10 @@
 /* Base configuration */
 {
-  "extends": "../../tsconfig.json",
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "target": "es6",
     "rootDir": "src",
     "outDir": "dist",
-    "noUnusedParameters": false,
-    "noUnusedLocals": false,
-    "removeComments": true
+    "declaration": true,
   },
   "include": ["src/**/*.ts"]
 }

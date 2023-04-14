@@ -4,9 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Schema } from "@project-chip/matter.js";
-import { Base38 } from "./Base38";
-import { BitField, BitFieldEnum, BitFlag, ByteArrayBitmapSchema, TypeFromBitmapSchema, BitmapSchema } from "./BitmapSchema";
+import { Schema, BitField, BitFieldEnum, BitFlag, ByteArrayBitmapSchema, TypeFromBitmapSchema, BitmapSchema, Base38 } from "@project-chip/matter.js";
 import { Verhoeff } from "../math/Verhoeff";
 
 /** See {@link MatterCoreSpecificationV1_0} § 5.1.3.1 Table 35 */

@@ -4,12 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import assert from "assert";
+import * as assert from "assert";
 import { Message, MessageCodec, SessionType } from "../../../src/codec/MessageCodec";
 import { MatterDevice } from "../../../src/matter/MatterDevice";
 import { SecureSession } from "../../../src/matter/session/SecureSession";
 import { UNDEFINED_NODE_ID } from "../../../src/matter/session/SessionManager";
 import { ByteArray } from "@project-chip/matter.js";
+import { Time } from "../../../src/time/Time";
+import { TimeFake } from "../../../src/time/TimeFake";
+
+Time.get = () => new TimeFake(0);
 
 const DECRYPT_KEY = ByteArray.fromHex("bacb178b2588443d5d5b1e4559e7accc");
 const MESSAGE_ENCRYPTED = ByteArray.fromHex("001d350022145300ec2b931025dada82ed67521c966d2454d131a271023be699e4e2796650f568e590fd9b65f456c720a60a0da127eaa53974c5d41d3d933ed7b58a9ce5b5cb96ad94a7762611c48774cf75458327e74c34668a45dc9943546f8a6aa1dcd40bd4b8014befb49954a097a60cbdff333ee3f2fd1f49");
@@ -37,7 +41,7 @@ const ENCRYPTED_BYTES = ByteArray.fromHex("1f9c4e278a2e2a755ebb4fcb9478211efb09a
 describe("SecureSession", () => {
     const secureSession = new SecureSession({} as MatterDevice, 1, undefined, UNDEFINED_NODE_ID, 0x8d4b, Buffer.alloc(0), DECRYPT_KEY, ENCRYPT_KEY, Buffer.alloc(0), () => { /* do nothing */ });
 
-    context("decrypt", () => {
+    describe("decrypt", () => {
         it("decrypts a message", () => {
             const packet = MessageCodec.decodePacket(MESSAGE_ENCRYPTED);
 
@@ -47,7 +51,7 @@ describe("SecureSession", () => {
         });
     });
 
-    context("encrypt", () => {
+    describe("encrypt", () => {
         it("encrypts a message", () => {
             const result = secureSession.encode(MESSAGE);
 

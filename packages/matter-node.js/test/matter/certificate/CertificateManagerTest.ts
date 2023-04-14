@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import assert from "assert";
+import * as assert from "assert";
 import { DerCodec, EcdsaWithSHA256_X962, ELEMENTS_KEY, DerNode, BYTES_KEY } from "../../../src/codec/DerCodec";
 import { Crypto } from "../../../src/crypto/Crypto";
 import { TlvRootCertificate, TlvOperationalCertificate, CertificateManager } from "../../../src/matter/certificate/CertificateManager";
@@ -21,7 +21,7 @@ const PUBLIC_KEY = ByteArray.fromHex("0462e2b6e1baff8d74a6fd8216c4cb67a3363a31e6
 const CSR_REQUEST_ASN1 = ByteArray.fromHex("3070020100300e310c300a060355040a0c034353523059301306072a8648ce3d020106082a8648ce3d0301070342000462e2b6e1baff8d74a6fd8216c4cb67a3363a31e691492792e61aee610261481396725ef95e142686ba98f339b0ff65bc338bec7b9e8be0bdf3b2774982476220a000");
 
 describe("CertificateManager", () => {
-    context("rootCertToAsn1", () => {
+    describe("rootCertToAsn1", () => {
         it("generates the correct ASN1 bytes", () => {
             const result = CertificateManager.rootCertToAsn1(ROOT_CERT_TLV);
 
@@ -29,7 +29,7 @@ describe("CertificateManager", () => {
         });
     });
 
-    context("nocCertToAsn1", () => {
+    describe("nocCertToAsn1", () => {
         it("generates the correct ASN1 bytes", () => {
             const result = CertificateManager.nocCertToAsn1(NOC_CERT_TLV);
 
@@ -37,19 +37,19 @@ describe("CertificateManager", () => {
         });
     });
 
-    context("validateRootCertificate", () => {
+    describe("validateRootCertificate", () => {
         it("validates a correct root cert", () => {
             CertificateManager.validateRootCertificate(ROOT_CERT_TLV);
         });
     });
 
-    context("validateNocCertificate", () => {
+    describe("validateNocCertificate", () => {
         it("validates a correct NOC cert", () => {
             CertificateManager.validateNocCertificate(ROOT_CERT_TLV, NOC_CERT_TLV);
         });
     });
 
-    context("createCertificateSigningRequest", () => {
+    describe("createCertificateSigningRequest", () => {
         it("generates a valid CSR", () => {
             const result = CertificateManager.createCertificateSigningRequest({ publicKey: PUBLIC_KEY, privateKey: PRIVATE_KEY });
 
@@ -63,7 +63,7 @@ describe("CertificateManager", () => {
         });
     });
 
-    context("getPublicKeyFromCsr", () => {
+    describe("getPublicKeyFromCsr", () => {
         it("get the public key from the CSR", () => {
             const csr = CertificateManager.createCertificateSigningRequest({ publicKey: PUBLIC_KEY, privateKey: PRIVATE_KEY });
 

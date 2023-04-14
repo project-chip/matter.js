@@ -8,17 +8,12 @@ import { Crypto } from "../../../crypto/Crypto";
 import { MatterDevice } from "../../MatterDevice";
 import { SecureSession } from "../../session/SecureSession";
 import {
-    TlvAttestation,
-    CertificateChainType,
-    OperationalCredentialsCluster,
-    OperationalCertStatus,
-    TlvCertSigningRequest
-} from "../OperationalCredentialsCluster";
+    TlvAttestation, CertificateChainType, OperationalCredentialsCluster, OperationalCertStatus, TlvCertSigningRequest,
+    ByteArray, FabricIndex
+} from "@project-chip/matter.js";
 import { ClusterServerHandlers } from "./ClusterServer";
-import { ByteArray } from "@project-chip/matter.js";
-import { FabricIndex } from "../../common/FabricIndex";
 
-interface OperationalCredentialsServerConf {
+export interface OperationalCredentialsServerConf {
     devicePrivateKey: ByteArray,
     deviceCertificate: ByteArray,
     deviceIntermediateCertificate: ByteArray,
@@ -63,12 +58,12 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         fabricBuilder.setRootNodeId(caseAdminNode);
 
         const fabric = await fabricBuilder.build();
-        const fabricIndex = device.addFabric(fabric);
+        device.addFabric(fabric);
 
         // TODO: create ACL with caseAdminNode
         console.log("addOperationalCert success")
 
-        return { status: OperationalCertStatus.Success, fabricIndex };
+        return { status: OperationalCertStatus.Success, fabricIndex: fabric.fabricIndex };
     },
 
     getFabrics: (session) => {
@@ -99,9 +94,7 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         const fabric = secureSession.getFabric();
         if (fabric === undefined) throw new Error("updateOperationalCert on a session linked to a fabric.");
 
-        fabric.label = label;
-
-        // TODO persist fabrics
+        fabric.setLabel(label);
 
         return { status: OperationalCertStatus.Success };
     },

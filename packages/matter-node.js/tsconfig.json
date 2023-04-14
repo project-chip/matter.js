@@ -1,14 +1,13 @@
 {
-    "extends": "../../tsconfig.json",
+    "extends": "./tsconfig.base.json",
     "compilerOptions": {
-        "target": "es6",
-        "noUnusedLocals": false,
-        "noUnusedParameters": false
+        // Local dev compilation checks
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitAny": true,
+        "noImplicitOverride": true,
+        "noUnusedParameters": true,
+        "noUnusedLocals": true,
+        "strict": true,
     },
-    "include": ["src/**/*.ts", "dts/*.d.ts", "test/**/*.ts"],
-    "exclude": [],
-    "references": [
-        { "path": "../matter.js" }
-    ],
-
+    "include": ["src/**/*.ts", "test/**/*.ts"],
 }

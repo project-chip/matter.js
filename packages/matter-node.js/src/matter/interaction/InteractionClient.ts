@@ -7,15 +7,16 @@
 import { MessageExchange } from "../common/MessageExchange";
 import { MatterController } from "../MatterController";
 import { capitalize } from "../../util/String";
-import { Attribute, AttributeJsType, Attributes, Cluster, Command, Commands, TlvNoResponse, RequestType, ResponseType } from "../cluster/Cluster";
-import { DataReport, InteractionClientMessenger } from "./InteractionMessenger";
+import {
+    Attribute, AttributeJsType, Attributes, Cluster, Command, Commands, TlvNoResponse, RequestType, ResponseType,
+    TlvSchema, TlvStream, InteractionProtocolStatusCode as StatusCode
+} from "@project-chip/matter.js";
+import { DataReport, IncomingInteractionClientMessenger, InteractionClientMessenger } from "./InteractionMessenger";
 import { ResultCode } from "../cluster/server/CommandServer";
 import { ClusterClient } from "../cluster/client/ClusterClient";
-import { ExchangeManager, MessageChannel } from "../common/ExchangeManager";
+import { ExchangeProvider } from "../common/ExchangeManager";
 import { INTERACTION_PROTOCOL_ID } from "./InteractionServer";
 import { ProtocolHandler } from "../common/ProtocolHandler";
-import { StatusCode } from "./InteractionMessages";
-import { TlvSchema, TlvStream } from "@project-chip/matter.js";
 
 interface GetRawValueResponse { // TODO Remove when restructuring Responses
     endpointId: number;
@@ -58,7 +59,7 @@ export class SubscriptionClient implements ProtocolHandler<MatterController> {
     }
 
     async onNewExchange(exchange: MessageExchange<MatterController>) {
-        const messenger = new InteractionClientMessenger(exchange);
+        const messenger = new IncomingInteractionClientMessenger(exchange);
         const dataReport = await messenger.readDataReport();
         const subscriptionId = dataReport.subscriptionId;
         if (subscriptionId === undefined) {
@@ -80,10 +81,10 @@ export class InteractionClient {
     private readonly subscriptionListeners = new Map<number, (dataReport: DataReport) => void>();
 
     constructor(
-        private readonly exchangeManager: ExchangeManager<MatterController>,
-        private readonly channel: MessageChannel<MatterController>,
+        private readonly exchangeProvider: ExchangeProvider,
     ) {
-        this.exchangeManager.addProtocolHandler(new SubscriptionClient(this.subscriptionListeners));
+        // TODO: Right now we potentially add multiple handlers for the same protocol, We need to fix this
+        this.exchangeProvider.addProtocolHandler(new SubscriptionClient(this.subscriptionListeners));
     }
 
     async getAllAttributes(): Promise<{}> {
@@ -133,14 +134,14 @@ export class InteractionClient {
         });
     }
 
-    async set<T>(_endpointId: number, _clusterId: number, { id: _id, schema: _schema, default: _conformanceValue }: Attribute<T>, _value: T): Promise<void> {
+    async set<T>(_endpointId: number, _clusterId: number, { id: _id, schema: _schema }: Attribute<T>, _value: T): Promise<void> {
         throw new Error("not implemented");
     }
 
     async subscribe<A extends Attribute<any>>(
         endpointId: number,
         clusterId: number,
-        { id, schema, default: _conformanceValue }: A,
+        { id, schema }: A,
         listener: (value: AttributeJsType<A>, version: number) => void,
         minIntervalFloorSeconds: number,
         maxIntervalCeilingSeconds: number,
@@ -172,7 +173,7 @@ export class InteractionClient {
         });
     }
 
-    async invoke<C extends Command<any, any>>(endpointId: number, clusterId: number, request: RequestType<C>, id: number, requestSchema: TlvSchema<RequestType<C>>, responseId: number, responseSchema: TlvSchema<ResponseType<C>>, optional: boolean): Promise<ResponseType<C>> {
+    async invoke<C extends Command<any, any>>(endpointId: number, clusterId: number, request: RequestType<C>, id: number, requestSchema: TlvSchema<RequestType<C>>, _responseId: number, responseSchema: TlvSchema<ResponseType<C>>, optional: boolean): Promise<ResponseType<C>> {
         return this.withMessenger<ResponseType<C>>(async messenger => {
             const { responses } = await messenger.sendInvokeCommand({
                 invokes: [
@@ -199,7 +200,7 @@ export class InteractionClient {
     }
 
     private async withMessenger<T>(invoke: (messenger: InteractionClientMessenger) => Promise<T>): Promise<T> {
-        const messenger = new InteractionClientMessenger(this.exchangeManager.initiateExchangeWithChannel(this.channel, INTERACTION_PROTOCOL_ID));
+        const messenger = new InteractionClientMessenger(this.exchangeProvider);
         try {
             return await invoke(messenger);
         } finally {

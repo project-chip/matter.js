@@ -7,7 +7,7 @@
 import { Merge } from "../../../util/Type";
 import { MatterDevice } from "../../MatterDevice";
 import { Session } from "../../session/Session";
-import { Cluster, Command, Commands, AttributeJsType, Attributes, Attribute, OptionalAttribute, OptionalCommand, OptionalWritableAttribute, WritableAttribute, GlobalAttributes } from "../Cluster";
+import { Cluster, Command, Commands, AttributeJsType, Attributes, Attribute, OptionalAttribute, OptionalCommand, OptionalWritableAttribute, WritableAttribute, GlobalAttributes } from "@project-chip/matter.js";
 import { AttributeServer } from "./AttributeServer";
 
 type MandatoryAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends OptionalAttribute<any> ? never : K }[keyof A];
@@ -39,4 +39,5 @@ const MakeAttributesMandatory = <T extends Attributes, C extends OptionalAttribu
 };
 type UseOptionalAttributes<C extends Cluster<any, any, any, any>, A extends OptionalAttributeConf<C["attributes"]>> = Cluster<C["features"], MakeAttributesMandatory<C["attributes"], A>, C["commands"], C["events"]>;
 /** Forces the presence of the specified optional attributes, so they can be used in the command handlers */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 export const UseOptionalAttributes = <C extends Cluster<any, any, any, any>, A extends OptionalAttributeConf<C["attributes"]>>(cluster: C, conf: A): UseOptionalAttributes<C, A> => ({ ...cluster, attributes: MakeAttributesMandatory(cluster.attributes, conf) });

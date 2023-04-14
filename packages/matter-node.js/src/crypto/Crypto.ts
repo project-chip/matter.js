@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import BN from "bn.js";
-import crypto from "crypto";
+import * as BN from "bn.js";
+import * as crypto from "crypto";
 import { ByteArray } from "@project-chip/matter.js";
 
 const ENCRYPT_ALGORITHM = "aes-128-ccm";
@@ -18,21 +18,7 @@ const SYMMETRIC_KEY_LENGTH = 16;
 const EC_PRIVATE_KEY_PKCS8_HEADER = ByteArray.fromHex("308141020100301306072a8648ce3d020106082a8648ce3d030107042730250201010420");
 const EC_PUBLIC_KEY_SPKI_HEADER = ByteArray.fromHex("3059301306072a8648ce3d020106082a8648ce3d030107034200");
 
-/** @see {@link MatterCoreSpecificationV1_0} § 3.5.1 */
-export const CRYPTO_GROUP_SIZE_BITS = 256;
-export const CRYPTO_GROUP_SIZE_BYTES = 32;
-export const CRYPTO_PUBLIC_KEY_SIZE_BYTES = (2 * CRYPTO_GROUP_SIZE_BYTES) + 1;
-/** @see {@link MatterCoreSpecificationV1_0} § 3.3 */
-export const CRYPTO_HASH_LEN_BYTES = 32;
-export const CRYPTO_HASH_BLOCK_LEN_BYTES = 64;
-/** @see {@link MatterCoreSpecificationV1_0} § 3.6 */
-export const CRYPTO_SYMMETRIC_KEY_LENGTH_BITS = 128;
-export const CRYPTO_SYMMETRIC_KEY_LENGTH_BYTES = 16;
-export const CRYPTO_AEAD_MIC_LENGTH_BITS = 128;
-export const CRYPTO_AEAD_MIC_LENGTH_BYTES = 16;
-export const CRYPTO_AEAD_NONCE_LENGTH_BYTES = 13;
-
-export interface KeyPair {
+export type KeyPair = {
     publicKey: ByteArray,
     privateKey: ByteArray,
 }
@@ -74,6 +60,9 @@ export class Crypto {
 
     static getRandomUInt32() {
         return crypto.randomBytes(4).readUInt32LE();
+    }
+    static getRandomBigUInt64() {
+        return crypto.randomBytes(8).readBigUInt64LE();
     }
 
     static getRandomBN(size: number, maxValue: BN) {

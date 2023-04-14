@@ -4,14 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import assert from "assert";
+import * as assert from "assert";
 import { Crypto } from "../../../src/crypto/Crypto";
 import { NodeId } from "../../../src/matter/common/NodeId";
-import { VendorId } from "../../../src/matter/common/VendorId";
-import { FabricId } from "../../../src/matter/common/FabricId";
+import { VendorId, FabricId, FabricIndex, ByteArray } from "@project-chip/matter.js";
 import { Fabric, FabricBuilder } from "../../../src/matter/fabric/Fabric";
-import { ByteArray } from "@project-chip/matter.js";
-import { FabricIndex } from "../../../src/matter/common/FabricIndex";
 
 const ROOT_CERT = ByteArray.fromHex("153001010024020137032414001826048012542826058015203b37062414001824070124080130094104d89eb7e3f3226d0918f4b85832457bb9981bca7aaef58c18fb5ec07525e472b2bd1617fb75ee41bd388f94ae6a6070efc896777516a5c54aff74ec0804cdde9d370a3501290118240260300414e766069362d7e35b79687161644d222bdde93a68300514e766069362d7e35b79687161644d222bdde93a6818300b404e8fb06526f0332b3e928166864a6d29cade53fb5b8918a6d134d0994bf1ae6dce6762dcba99e80e96249d2f1ccedb336b26990f935dba5a0b9e5b4c9e5d1d8f1818181824ff0118");
 const NEW_OP_CERT = ByteArray.fromHex("153001010124020137032414001826048012542826058015203b370624150124110918240701240801300941049ac1dc9995e6897f2bf1420a6efdba30781ac3dcdb7bb15e993050ff0ce92c52727b029c30f11f163b177d3bfa37f015db156994801f0e0f9b64c72bf8a15153370a35012801182402013603040204011830041402cce0d7bfa29e98e454be38e27bfe6c0f162302300514e766069362d7e35b79687161644d222bdde93a6818300b4050e8183c290f438a57516faea006282d6d2b5178d5d15dfcc3ec8a9232db942894ff2d2ce941d3b42dd8a2cd51eea4f3f50b66757959368868c3a0a1b5fe665f18");
@@ -39,7 +36,7 @@ const TEST_RANDOM_3 = ByteArray.fromHex("0b2a71876d3d090d37cb5286168ab9be0d2e7e0
 const EXPECTED_DESTINATION_ID_3 = ByteArray.fromHex("f7f7009606c61927af62502067581b4b0d27f2f22108e2c82c9f0ddd99ab3557");
 
 describe("FabricBuilder", () => {
-    context("build", () => {
+    describe("build", () => {
         const builder = new FabricBuilder(TEST_FABRIC_INDEX);
         builder.setRootVendorId(new VendorId(0));
         builder.setRootNodeId(TEST_ROOT_NODE);
@@ -63,7 +60,7 @@ describe("FabricBuilder", () => {
 
 describe("Fabric", () => {
 
-    context("getDestinationId", () => {
+    describe("getDestinationId", () => {
         it("generates the correct destination ID", () => {
             const fabric = new Fabric(TEST_FABRIC_INDEX, TEST_FABRIC_ID, TEST_NODE_ID, TEST_ROOT_NODE, Buffer.alloc(0), TEST_ROOT_PUBLIC_KEY, Crypto.createKeyPair(), new VendorId(0), Buffer.alloc(0), Buffer.alloc(0), TEST_IDENTITY_PROTECTION_KEY, undefined, Buffer.alloc(0), '');
 
