@@ -34,7 +34,8 @@ export const SwitchCluster = Cluster({
         /** Indicates a momentary switch that can distinguish and report long presses from short presses. */
         momentarySwitchLongPress: BitFlag(3),
 
-        /** Idicates a momentary switch that can distinguish and report double press 
+        /** 
+         * Idicates a momentary switch that can distinguish and report double press 
          *  and potentially multiple presses with more events, such as triple press, etc. 
          */
         momentarySwitchMultiPress: BitFlag(4),
