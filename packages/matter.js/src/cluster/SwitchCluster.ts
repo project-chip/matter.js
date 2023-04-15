@@ -71,9 +71,9 @@ export const SwitchCluster = Cluster({
         LongRelease: OptionalEvent(4, EventPriority.Info, { previousPosition: TlvField(0, TlvUInt8) }),// TODO: non-optional when momentarySwitchLongPress set
 
         /** Indicates how many times the switch has been pressed in a multi-press sequence during that sequence */
-        MultiPressOngoing: OptionalEvent(5, EventPriority.Info, { newPosition: TlvField(0, TlvUInt8), currentNumberOfPressesCounted: TlvField(1, TlvUInt8.bound({ "min": 2 })) }), // TODO: non-optional when momentarySwitchMultiPress set
+        MultiPressOngoing: OptionalEvent(5, EventPriority.Info, { newPosition: TlvField(0, TlvUInt8), currentNumberOfPressesCounted: TlvField(1, TlvUInt8.bound({ min: 2 })) }), // TODO: non-optional when momentarySwitchMultiPress set
 
         /** Indicates how many times the switch has been pressed after it has been detected that the sequence has ended. */
-        MultiPressComplete: OptionalEvent(6, EventPriority.Info, { previousPosition: TlvField(0, TlvUInt8), totalNumberOfPressesCounted: TlvField(1, TlvUInt8.bound({ "min": 1 })) }), // TODO: non-optional when momentarySwitchMultiPress set
+        MultiPressComplete: OptionalEvent(6, EventPriority.Info, { previousPosition: TlvField(0, TlvUInt8), totalNumberOfPressesCounted: TlvField(1, TlvUInt8.bound({ min: 1 })) }), // TODO: non-optional when momentarySwitchMultiPress set
     }
 });
