@@ -6,10 +6,12 @@
 
 import { Attribute, Cluster, Event, EventPriority, OptionalAttribute, OptionalCommand, TlvNoResponse } from "./Cluster.js";
 import { TlvArray } from "../tlv/TlvArray.js";
-import { TlvString } from "../tlv/TlvString.js";
+import { TlvString, TlvString32max } from "../tlv/TlvString.js";
 import { TlvEnum, TlvBitmap, TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvEndpointNumber } from "../common/EndpointNumber.js";
 
 /** 
  * Supported Commands bitmap which SHALL be used to indicate which of the cluster’s commands are
@@ -62,8 +64,10 @@ const CommandBits = TlvBitmap(TlvUInt16, {
  * @see {@link MatterCoreSpecificationV1_0} § 9.14.9.3
  */
 export const enum ActionErrorEnum {
+    /** Other reason not listed below */
     Unknown = 0,
 
+    /** The action was inter­rupted by another com­mand or interaction */
     Interrupted = 1,
 
 }
@@ -116,9 +120,9 @@ export const enum ActionTypeEnum {
 }
 
 /**
- * Provides information about endpoint conformance to a release of a device type definition.
+ * Holds the details of a single action.
  *
- * @see {@link MatterCoreSpecificationV1_0} § 9.14.6
+ * @see {@link MatterCoreSpecificationV1_0} § 9.14.9.1
  */
 const TlvAction = TlvObject({
     /** Indicates the device type definition */
@@ -127,29 +131,33 @@ const TlvAction = TlvObject({
     /** Indicates the implemented revision of the device type definition */
     name: TlvField(1, TlvString.bound({ maxLength: 32 })),
 
+    /** Indicates the type of endpoint list */
     type: TlvField(2, TlvEnum<ActionTypeEnum>()),
 
-    endpointListID: TlvField(3, TlvUInt16),
+    /** Provide a reference to the associated endpoint list, which specifies the endpoints on this Node which will be impacted by this ActionID */
+    endpointListId: TlvField(3, TlvUInt16),
 
+    /** A bitmap used to indicate which of the cluster’s commands are supported for this particular action */
     supportedCommands: TlvField(4, CommandBits),
 
+    /** Indicates the current state of this action */
     state: TlvField(5, TlvEnum<ActionStateEnum>()),
 
 });
 
 /**
- * Provides information about endpoint conformance to a release of a device type definition.
+ * Types of endpoint lists.
  *
  * @see {@link MatterCoreSpecificationV1_0} § 9.14.9.6
  */
 export const enum EndpointListType {
-    /** Another group of endpoints */
+    /** Another group of endpoints, tied specifically to this action, not independently created by the user.  */
     Other = 0,
 
     /** User-configured group of endpoints where an endpoint can be in only one room */
     Room = 1,
 
-    /** user-configured group of endpoints where an endpoint can be in any number of zones */
+    /** User-configured group of endpoints where an endpoint can be in any number of zones */
     Zone = 2,
 }
 
@@ -163,11 +171,13 @@ const TlvEndpointList = TlvObject({
     endpointListId: TlvField(0, TlvUInt16),
 
     /** Indicates the implemented revision of the device type definition */
-    name: TlvField(1, TlvString),
+    name: TlvField(1, TlvString32max),
 
+    /** Indicates the type of endpoint list. */
     type: TlvField(2, TlvEnum<EndpointListType>()),
 
-    endpoints: TlvField(3, TlvArray(TlvUInt16)),
+    /** A list of endpoint numbers */
+    endpoints: TlvField(3, TlvArray(TlvEndpointNumber, { maxLength: 256 })),
 });
 
 /** @see {@link MatterCoreClusterSpecificationV1_0} § 9.14.7.1 */
@@ -286,10 +296,10 @@ export const ActionsCluster = Cluster({
     /** @see {@link MatterCoreSpecificationV1_0} § 9.14.6 */
     attributes: {
         /** List of actions. */
-        actionList: Attribute(0, TlvArray(TlvAction), { default: [] }),
+        actionList: Attribute(0, TlvArray(TlvAction, { maxLength: 256 }), { default: [] }),
 
         /** List of endpoint lists. */
-        endpointLists: Attribute(1, TlvArray(TlvEndpointList), { default: [] }),
+        endpointLists: Attribute(1, TlvArray(TlvEndpointList, { maxLength: 256 }), { default: [] }),
 
         /**
          * When used without suffix, provides information about the various actions which
