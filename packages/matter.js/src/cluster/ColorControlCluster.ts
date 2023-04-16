@@ -10,6 +10,7 @@ import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvBitmap, TlvUInt8, TlvUInt16, TlvInt16, TlvEnum } from "../tlv/TlvNumber.js";
 import { TlvString } from "../tlv/TlvString.js";
 import { Attribute, OptionalAttribute, Cluster, TlvNoResponse, OptionalCommand } from "./Cluster.js";
+import { TlvNullable } from "../tlv/TlvNullable.js";
 
 // TODO - None of the "@see" comments are likely to be correct. ##### updated, validate
 // TODO - Need comments on everything
@@ -276,7 +277,7 @@ const StepColorTemperatureRequest = TlvObject({
 });
 
 /**
- * @see {@link MatterApplicationClusterSpecificationV1_0} § 2.3
+ * @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2
  */
 export const ColorControlCluster = Cluster({
     id: 0x0300,
@@ -296,45 +297,45 @@ export const ColorControlCluster = Cluster({
          * Color Information Attribute Set
          * @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.7 
          */
-        currentHue: Attribute(0x0, TlvUInt8.bound({ min: 0x0, max: 0xFE }), { default: 0x0 }),
-        currentSaturation: Attribute(0x0001, TlvUInt8.bound({ min: 0x0, max: 0xFE }), { default: 0x0 }),
+        currentHue: Attribute(0x0, TlvUInt8.bound({ min: 0x0, max: 0xFE }), { default: 0x0, persistent: true }),
+        currentSaturation: Attribute(0x0001, TlvUInt8.bound({ min: 0x0, max: 0xFE }), { default: 0x0, persistent: true }),
         remainingTime: Attribute(0x0002, TlvUInt16.bound({ min: 0x0, max: 0xffFE }), { default: 0x0 }),
-        currentX: Attribute(0x0003, TlvUInt16.bound({ max: 0xfeff }), { default: 0x616b }),
-        currentY: Attribute(0x0004, TlvUInt16.bound({ max: 0xfeff }), { default: 0x607d }),
+        currentX: Attribute(0x0003, TlvUInt16.bound({ max: 0xfeff }), { default: 0x616b, persistent: true }),
+        currentY: Attribute(0x0004, TlvUInt16.bound({ max: 0xfeff }), { default: 0x607d, persistent: true }),
         driftCompensation: Attribute(0x0005, TlvEnum<DriftCompensation>()),
         compensationText: Attribute(0x0006, TlvString.bound({ maxLength: 254 })),
-        colorTemperatureMireds: Attribute(0x0007, TlvUInt16.bound({ max: 0xfeff }), { default: 0x00fa }),
-        colorMode: Attribute(0x0008, TlvEnum<DriftCompensation>()),
+        colorTemperatureMireds: Attribute(0x0007, TlvUInt16.bound({ max: 0xfeff }), { default: 0x00fa, persistent: true }),
+        colorMode: Attribute(0x0008, TlvEnum<DriftCompensation>(), { persistent: true }),
         options: Attribute(0x000F, OptionsBitmap), // TODO: 0
 
         // ?? IDs 0x4000 to 0x4010 - separated as "clusterExtension" in XML, with "code" 0x300, i.e. same cluster ID 
-        enhancedCurrentHue: OptionalAttribute(0x4000, TlvUInt16, { default: 0x0 }),
-        enhancedColorMode: Attribute(0x4001, TlvEnum<EnhancedColorMode>(), { default: 1 }),
-        colorLoopActive: OptionalAttribute(0x4002, TlvUInt8, { default: 0x0 }),
-        colorLoopDirection: OptionalAttribute(0x4003, TlvUInt8, { default: 0x0 }),
-        colorLoopTime: OptionalAttribute(0x4004, TlvUInt16, { default: 0x0019 }),
+        enhancedCurrentHue: OptionalAttribute(0x4000, TlvUInt16, { default: 0x0, persistent: true }),
+        enhancedColorMode: Attribute(0x4001, TlvEnum<EnhancedColorMode>(), { default: 1, persistent: true }),
+        colorLoopActive: OptionalAttribute(0x4002, TlvUInt8, { default: 0x0, persistent: true }),
+        colorLoopDirection: OptionalAttribute(0x4003, TlvUInt8, { default: 0x0, persistent: true }),
+        colorLoopTime: OptionalAttribute(0x4004, TlvUInt16, { default: 0x0019, persistent: true }),
         colorLoopStartEnhancedHue: OptionalAttribute(0x4005, TlvUInt16, { default: 0x2300 }),
         colorLoopStoredEnhancedHue: OptionalAttribute(0x4006, TlvUInt16, { default: 0x0 }),
         colorCapabilities: Attribute(0x400A, ColorCapabilities),  // , {default: 0}
         colorTempPhysicalMinMireds: OptionalAttribute(0x400B, TlvUInt16.bound({ max: 0xfeff }), { default: 0x0 }),
         colorTempPhysicalMaxMireds: OptionalAttribute(0x400C, TlvUInt16.bound({ max: 0xfeff }), { default: 0xfeff }),
         coupleColorTempToLevelMinMireds: Attribute(0x400D, TlvUInt16, { default: 0x0 }),
-        startUpColorTemperatureMireds: Attribute(0x4010, TlvUInt16.bound({ max: 0xfeff }), { default: 0x0 }),
+        startUpColorTemperatureMireds: Attribute(0x4010, TlvNullable(TlvUInt16.bound({ max: 0xfeff })), { default: 0x0 }),
 
         /** 
          * Defined Primaries Information Attribute Set
          * @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.8 
          */
-        numberOfPrimaries: Attribute(0x0010, TlvUInt8.bound({ min: 0x0, max: 0x06 })),
+        numberOfPrimaries: Attribute(0x0010, TlvNullable(TlvUInt8.bound({ max: 0x06 }))),
         primary1X: Attribute(0x0011, TlvUInt16.bound({ max: 0xfeff })),
         primary1Y: Attribute(0x0012, TlvUInt16.bound({ max: 0xfeff })),
-        primary1Intensity: Attribute(0x0013, TlvUInt8),
+        primary1Intensity: Attribute(0x0013, TlvNullable(TlvUInt8)),
         primary2X: Attribute(0x0015, TlvUInt16.bound({ max: 0xfeff })),
         primary2Y: Attribute(0x0016, TlvUInt16.bound({ max: 0xfeff })),
-        primary2Intensity: Attribute(0x0017, TlvUInt8),
+        primary2Intensity: Attribute(0x0017, TlvNullable(TlvUInt8)),
         primary3X: Attribute(0x0019, TlvUInt16.bound({ max: 0xfeff })),
         primary3Y: Attribute(0x001A, TlvUInt16.bound({ max: 0xfeff })),
-        primary3Intensity: Attribute(0x001B, TlvUInt8),
+        primary3Intensity: Attribute(0x001B, TlvNullable(TlvUInt8)),
 
         /** 
          * Additional Defined Primaries Information Attribute Set
@@ -342,13 +343,13 @@ export const ColorControlCluster = Cluster({
          */
         primary4X: Attribute(0x0020, TlvUInt16.bound({ max: 0xfeff })),
         primary4Y: Attribute(0x0021, TlvUInt16.bound({ max: 0xfeff })),
-        primary4Intensity: Attribute(0x0022, TlvUInt8),
+        primary4Intensity: Attribute(0x0022, TlvNullable(TlvUInt8)),
         primary5X: Attribute(0x0024, TlvUInt16.bound({ max: 0xfeff })),
         primary5Y: Attribute(0x0025, TlvUInt16.bound({ max: 0xfeff })),
-        primary5Intensit: Attribute(0x0026, TlvUInt8),
+        primary5Intensity: Attribute(0x0026, TlvNullable(TlvUInt8)),
         primary6X: Attribute(0x0028, TlvUInt16.bound({ max: 0xfeff })),
         primary6Y: Attribute(0x0029, TlvUInt16.bound({ max: 0xfeff })),
-        primary6Intensity: Attribute(0x002A, TlvUInt8),
+        primary6Intensity: Attribute(0x002A, TlvNullable(TlvUInt8)),
 
         /** 
          * Defined Color Points Settings Attribute Set
@@ -358,13 +359,13 @@ export const ColorControlCluster = Cluster({
         whitePointY: Attribute(0x0031, TlvUInt16.bound({ max: 0xfeff })),
         colorPointRX: Attribute(0x0032, TlvUInt16.bound({ max: 0xfeff })),
         colorPointRY: Attribute(0x0033, TlvUInt16.bound({ max: 0xfeff })),
-        colorPointRIntensity: Attribute(0x0034, TlvUInt8),
+        colorPointRIntensity: Attribute(0x0034, TlvNullable(TlvUInt8)),
         colorPointGX: Attribute(0x0036, TlvUInt16.bound({ max: 0xfeff })),
         colorPointGY: Attribute(0x0037, TlvUInt16.bound({ max: 0xfeff })),
-        colorPointGIntensity: Attribute(0x0038, TlvUInt8),
+        colorPointGIntensity: Attribute(0x0038, TlvNullable(TlvUInt8)),
         colorPointBX: Attribute(0x003A, TlvUInt16.bound({ max: 0xfeff })),
         colorPointBY: Attribute(0x003B, TlvUInt16.bound({ max: 0xfeff })),
-        olorPointBIntensity: Attribute(0x003C, TlvUInt8),
+        colorPointBIntensity: Attribute(0x003C, TlvNullable(TlvUInt8)),
     },
 
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11 */
