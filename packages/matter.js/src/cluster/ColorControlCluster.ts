@@ -7,7 +7,7 @@
 import { BitFlag } from "../schema/BitmapSchema.js";
 import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
-import { TlvBitmap, TlvUInt8, TlvUInt16, TlvInt16, TlvEnum  } from "../tlv/TlvNumber.js";
+import { TlvBitmap, TlvUInt8, TlvUInt16, TlvInt16, TlvEnum } from "../tlv/TlvNumber.js";
 import { TlvString } from "../tlv/TlvString.js";
 import { Attribute, OptionalAttribute, Cluster, TlvNoResponse, OptionalCommand } from "./Cluster.js";
 
