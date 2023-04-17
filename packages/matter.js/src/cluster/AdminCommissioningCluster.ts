@@ -11,7 +11,7 @@ import { BitFlag } from "../schema/BitmapSchema.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { TlvFabricIndex } from "../common/FabricIndex.js";
 import { TlvVendorId } from "../common/VendorId.js";
-import { Cluster, Command, TlvNoArguments, TlvNoResponse, Attribute, OptionalCommand, ClusterExtend } from "./Cluster.js";
+import { Cluster, Command, TlvNoArguments, TlvNoResponse, Attribute, ClusterExtend } from "./Cluster.js";
 import { CRYPTO_GROUP_SIZE_BYTES, CRYPTO_PUBLIC_KEY_SIZE_BYTES } from "../crypto/CryptoConstants.js";
 
 const PAKE_PASSCODE_VERIFIER_LENGTH = CRYPTO_GROUP_SIZE_BYTES + CRYPTO_PUBLIC_KEY_SIZE_BYTES;
@@ -111,7 +111,7 @@ export const BasicAdminCommissioningCluster = ClusterExtend(
         /** @see {@link MatterCoreSpecificationV1_0} § 11.18.8 */
         commands: { // all Commands: mustUseTimedInvoke: "true"
             /** Used to instruct a Node to go into commissioning mode using basic commissioning method, if the node supports it. */
-            openBasicCommissioningWindow: OptionalCommand(1, TlvOpenBasicCommissioningWindowRequest, 1, TlvNoResponse),
+            openBasicCommissioningWindow: Command(1, TlvOpenBasicCommissioningWindowRequest, 1, TlvNoResponse),
         },
     }
 );
