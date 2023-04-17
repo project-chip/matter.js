@@ -26,7 +26,7 @@ import { CaseServer } from "./matter/session/secure/CaseServer";
 import { ClusterServer, InteractionServer } from "./matter/interaction/InteractionServer";
 import {
     BasicInformationCluster, GeneralCommissioningCluster, RegulatoryLocationType, OperationalCredentialsCluster, OnOffCluster,
-    NetworkCommissioningCluster, NetworkCommissioningStatus, AdminCommissioningCluster, CommissioningWindowStatus,
+    EthernetNetworkCommissioningCluster, NetworkCommissioningStatus, BasicAdminCommissioningCluster, CommissioningWindowStatus,
     VendorId, FabricIndex
 } from "@project-chip/matter.js";
 import { DEVICE } from "./matter/common/DeviceTypes";
@@ -77,7 +77,6 @@ class Device {
         // Barebone implementation of the On/Off cluster
         const onOffClusterServer = new ClusterServer(
             OnOffCluster,
-            { lightingLevelControl: false },
             { onOff: false }, // Off by default
             OnOffClusterHandler()
         );
@@ -105,7 +104,7 @@ class Device {
             .addProtocolHandler(secureChannelProtocol)
             .addProtocolHandler(new InteractionServer(storageManager)
                 .addEndpoint(0x00, DEVICE.ROOT, [
-                    new ClusterServer(BasicInformationCluster, {}, {
+                    new ClusterServer(BasicInformationCluster, {
                         dataModelRevision: 1,
                         vendorName,
                         vendorId,
@@ -124,7 +123,7 @@ class Device {
                         },
                         serialNumber: `node-matter-${Time.nowMs()}`,
                     }, {}),
-                    new ClusterServer(GeneralCommissioningCluster, {}, {
+                    new ClusterServer(GeneralCommissioningCluster, {
                         breadcrumb: BigInt(0),
                         basicCommissioningInfo: {
                             failSafeExpiryLengthSeconds: 60 /* 1min */,
@@ -134,7 +133,7 @@ class Device {
                         locationCapability: RegulatoryLocationType.IndoorOutdoor,
                         supportsConcurrentConnections: true,
                     }, GeneralCommissioningClusterHandler),
-                    new ClusterServer(OperationalCredentialsCluster, {}, {
+                    new ClusterServer(OperationalCredentialsCluster, {
                         nocs: [],
                         fabrics: [],
                         supportedFabrics: 254,
@@ -149,28 +148,18 @@ class Device {
                             certificationDeclaration,
                         }),
                     ),
-                    new ClusterServer(NetworkCommissioningCluster,
-                        {
-                            wifi: false,
-                            thread: false,
-                            ethernet: true,
-                        },
+                    new ClusterServer(EthernetNetworkCommissioningCluster,
                         {
                             maxNetworks: 1,
-                            connectMaxTimeSeconds: 20,
                             interfaceEnabled: true,
                             lastConnectErrorValue: 0,
                             lastNetworkId: Buffer.alloc(32),
                             lastNetworkingStatus: NetworkCommissioningStatus.Success,
                             networks: [{ networkId: Buffer.alloc(32), connected: true }],
-                            scanMaxTimeSeconds: 5,
                         },
                         NetworkCommissioningHandler(),
                     ),
-                    new ClusterServer(AdminCommissioningCluster,
-                        {
-                            basic: true,
-                        },
+                    new ClusterServer(BasicAdminCommissioningCluster,
                         {
                             windowStatus: CommissioningWindowStatus.WindowNotOpen,
                             adminFabricIndex: null,

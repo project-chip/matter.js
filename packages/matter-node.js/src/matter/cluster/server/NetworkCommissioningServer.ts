@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NetworkCommissioningCluster } from "@project-chip/matter.js"
+import { EthernetNetworkCommissioningCluster } from "@project-chip/matter.js"
 import { ClusterServerHandlers } from "./ClusterServer"
 
-export const NetworkCommissioningHandler: () => ClusterServerHandlers<typeof NetworkCommissioningCluster> = () => ({
+export const NetworkCommissioningHandler: () => ClusterServerHandlers<typeof EthernetNetworkCommissioningCluster> = () => ({
     scanNetworks: async function() {
         throw new Error("Not implemented");
     },
@@ -23,4 +23,12 @@ export const NetworkCommissioningHandler: () => ClusterServerHandlers<typeof Net
     reorderNetwork: async function() {
         throw new Error("Not implemented");
     },
+
+    addOrUpdateWiFiNetwork: async function() {
+        throw new Error("Not implemented");
+    },
+
+    addOrUpdateThreadNetwork: async function() {
+        throw new Error("Not implemented");
+    }
 });

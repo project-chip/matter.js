@@ -90,7 +90,6 @@ describe("Integration", () => {
 
         onOffServer = new ClusterServer(
             OnOffCluster,
-            { lightingLevelControl: false },
             { onOff: false },
             OnOffClusterHandler()
         );
@@ -107,7 +106,7 @@ describe("Integration", () => {
             ))
             .addProtocolHandler(new InteractionServer(serverStorageManager)
                 .addEndpoint(0x00, DEVICE.ROOT, [
-                    new ClusterServer(BasicInformationCluster, {}, {
+                    new ClusterServer(BasicInformationCluster, {
                         dataModelRevision: 1,
                         vendorName,
                         vendorId,
@@ -125,7 +124,7 @@ describe("Integration", () => {
                             subscriptionsPerFabric: 100,
                         },
                     }, {}),
-                    new ClusterServer(GeneralCommissioningCluster, {}, {
+                    new ClusterServer(GeneralCommissioningCluster, {
                         breadcrumb: BigInt(0),
                         basicCommissioningInfo: {
                             failSafeExpiryLengthSeconds: 60 /* 1min */,
@@ -135,7 +134,7 @@ describe("Integration", () => {
                         locationCapability: RegulatoryLocationType.IndoorOutdoor,
                         supportsConcurrentConnections: true,
                     }, GeneralCommissioningClusterHandler),
-                    new ClusterServer(OperationalCredentialsCluster, {}, {
+                    new ClusterServer(OperationalCredentialsCluster, {
                         nocs: [],
                         fabrics: [],
                         supportedFabrics: 254,
