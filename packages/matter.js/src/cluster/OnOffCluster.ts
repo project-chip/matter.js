@@ -9,8 +9,7 @@ import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specification
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import {
     AccessLevel,
-    Attribute,
-    Cluster,
+    Attribute, ClusterBase,
     ClusterExtend,
     Command,
     TlvNoArguments,
@@ -96,17 +95,13 @@ const TlvOnWithTimedOffRequest = TlvObject({
  *
  * @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5
  */
-export const OnOffCluster = Cluster({
+export const OnOffClusterBase = ClusterBase({
     id: 0x06,
     name: "On/Off",
     revision: 4,
     features: {
         /** Level Control for Lighting - Behavior that supports lighting applications */
         lightingLevelControl: BitFlag(0),
-    },
-    supportedFeatures: {
-        /** Level Control for Lighting - Behavior that supports lighting applications */
-        lightingLevelControl: false,
     },
 
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.6 */
@@ -141,6 +136,16 @@ export const OnOffCluster = Cluster({
         toggle: Command(2, TlvNoArguments, 2, TlvNoResponse),
     },
 });
+
+export const OnOffCluster = ClusterExtend(
+    OnOffClusterBase,
+    {
+        supportedFeatures: {
+            /** Level Control for Lighting - Behavior that supports lighting applications */
+            lightingLevelControl: false,
+        },
+    }
+);
 
 export const OnOffLightingCluster = ClusterExtend(
     OnOffCluster,
