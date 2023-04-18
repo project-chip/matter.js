@@ -73,6 +73,7 @@ export * from "./tlv/TlvObject.js";
 export * from "./tlv/TlvSchema.js";
 export * from "./tlv/TlvString.js";
 export * from "./tlv/TlvVoid.js";
+export * from "./tlv/TlvNoArguments.js"
 export * from "./tlv/TlvWrapper.js";
 export * from "./util/ByteArray.js";
 export * from "./util/DataReader.js";

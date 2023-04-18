@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Schema, BitField, BitFieldEnum, BitFlag, ByteArrayBitmapSchema, TypeFromBitmapSchema, BitmapSchema, Base38 } from "@project-chip/matter.js";
+import { Schema, BitField, BitFieldEnum, BitFlag, ByteArrayBitmapSchema, TypeFromBitmapSchema, BitmapSchema, Base38, MatterCoreSpecificationV1_0 } from "@project-chip/matter.js";
 import { Verhoeff } from "../math/Verhoeff";
 
 /** See {@link MatterCoreSpecificationV1_0} § 5.1.3.1 Table 35 */
 export enum CommissionningFlowType {
-    /** When uncom­missioned, the device always enters commissioning mode upon power-up. */
+    /** When uncommissioned, the device always enters commissioning mode upon power-up. */
     Standard = 0,
 
     /** User action required to enter commissioning mode. */

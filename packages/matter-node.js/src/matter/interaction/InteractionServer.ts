@@ -323,9 +323,12 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         await Promise.all(invokes.map(async ({ path, args }) => {
             const command = this.commands.get(commandPathToId(path));
             if (command === undefined) return;
-            if (args === undefined) { // If no arguments are provided in the invoke data, we use an empty TlvStream
-                args = TlvNoArguments.encodeTlv();
+
+            // If no arguments are provided in the invoke data (because optional field), we use our type as replacement
+            if (args === undefined) {
+                args = TlvNoArguments.encodeTlv(args);
             }
+
             const result = await command.invoke(exchange.session, args, message);
             results.push({ ...result, path });
         }));

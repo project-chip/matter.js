@@ -13,7 +13,8 @@ import { TlvNullable } from "../tlv/TlvNullable.js";
 import { TlvBitmap, TlvEnum, TlvUInt8 } from "../tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvString } from "../tlv/TlvString.js";
-import { Attribute, Cluster, Command, TlvNoArguments, TlvNoResponse } from "./Cluster.js";
+import { Attribute, Cluster, Command, TlvNoResponse } from "./Cluster.js";
+import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.7.1 */
 const TlvAddGroupRequest = TlvObject({
