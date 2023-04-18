@@ -28,7 +28,7 @@ import { Time } from "../../../src/time/Time";
 import { TimeFake } from "../../../src/time/TimeFake";
 import { StorageBackendMemory } from "../../../src/storage/StorageBackendMemory";
 import { StorageManager } from "../../../src/storage/StorageManager";
-import {Message} from "../../../src/codec/MessageCodec";
+import { Message } from "../../../src/codec/MessageCodec";
 
 Time.get = () => new TimeFake(1262679233478);
 
