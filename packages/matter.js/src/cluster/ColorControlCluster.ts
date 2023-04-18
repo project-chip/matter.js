@@ -12,23 +12,18 @@ import { TlvString } from "../tlv/TlvString.js";
 import { Attribute, OptionalAttribute, Cluster, TlvNoResponse, OptionalCommand } from "./Cluster.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 
-// TODO - None of the "@see" comments are likely to be correct. ##### updated, validate
-// TODO - Need comments on everything
-// TODO - Optional/Required likely not correct.
-// TODO = Remove min/max bounds when they are same as datatype allows #### updated, validate
-// TODO - Validate each Attribure and Command against standard.
-// TODO - Default values not correct in many cases  ### updated, validate
-// TODO - Command return values are all default - check how other clusters do it
-
-// TODO - Document interdependenices with their own TODOs
-
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.3 */
 export const OptionsBitmap = TlvBitmap(TlvUInt8, {
+    /**  
+     *   0 : Don't execute command when associated On/Off Cluster is off
+     *   1 : Execute command when associated On/Off Cluster is off
+     */
     ExecuteIfOff: BitFlag(0),
+
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.7.18 */
-export const ColorCapabilities = TlvBitmap(TlvUInt16, { // TODO: Validate to be set same as feature bits
+export const ColorCapabilities = TlvBitmap(TlvUInt16, { // TODO: Validate to be set the same as feature bits
     HueSaturationSupported: BitFlag(0),
     EnhancedHueSupported: BitFlag(1),
     ColorLoopSupported: BitFlag(2),
@@ -68,7 +63,7 @@ export const enum HueMoveMode {
 }
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.6.1 */
-export const enum StepMode {
+export const enum ColorControlStepMode {
     Up = 1,
     Down = 3,
 }
@@ -128,7 +123,7 @@ const MoveHueCommandRequest = TlvObject({
 
 /**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.6 */
 const StepHueCommandRequest = TlvObject({
-    StepMode: TlvField(0, TlvEnum<StepMode>()),
+    StepMode: TlvField(0, TlvEnum<ColorControlStepMode>()),
     StepSize: TlvField(1, TlvUInt8),
     TransitionTime: TlvField(2, TlvUInt8),
     OptionsMask: TlvField(3, OptionsBitmap),
@@ -153,7 +148,7 @@ const MoveSaturationCommandRequest = TlvObject({
 
 /**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.9 */
 const StepSaturationCommandRequest = TlvObject({
-    StepMode: TlvField(0, TlvEnum<StepMode>()),
+    StepMode: TlvField(0, TlvEnum<ColorControlStepMode>()),
     StepSize: TlvField(1, TlvUInt8),
     TransitionTime: TlvField(2, TlvUInt8),
     OptionsMask: TlvField(3, OptionsBitmap),
@@ -222,7 +217,7 @@ const EnhancedMoveHueRequest = TlvObject({
 
 /**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.17 */
 const EnhancedStepHueRequest = TlvObject({
-    StepMode: TlvField(0, TlvEnum<StepMode>()),
+    StepMode: TlvField(0, TlvEnum<ColorControlStepMode>()),
     StepSize: TlvField(1, TlvUInt16),
     TransitionTime: TlvField(2, TlvUInt16.bound({ max: 65534 })),
     OptionsMask: TlvField(3, OptionsBitmap),
@@ -267,7 +262,7 @@ const MoveColorTemperatureRequest = TlvObject({
 
 /**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.22 */
 const StepColorTemperatureRequest = TlvObject({
-    StepMode: TlvField(0, TlvEnum<StepMode>()),
+    StepMode: TlvField(0, TlvEnum<ColorControlStepMode>()),
     StepSize: TlvField(1, TlvUInt16),
     TransitionTime: TlvField(2, TlvUInt16.bound({ max: 65534 })),
     ColorTemperatureMinimumMireds: TlvField(3, TlvUInt16.bound({ max: 0xfeff })),
@@ -294,30 +289,29 @@ export const ColorControlCluster = Cluster({
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.6 */
     attributes: {
         /** 
-         * Color Information Attribute Set
+         * Color Information Attribute Set. Different attributes are utilized depending on what color 
+         * mode is used and specified in the features
          * @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.7 
          */
-        currentHue: OptionalAttribute(0x0, TlvUInt8.bound({ min: 0x0, max: 0xFE }), { default: 0x0, persistent: true }), // TODO: This and following Mandatory if HueSat flag set in features
-        currentSaturation: OptionalAttribute(0x0001, TlvUInt8.bound({ min: 0x0, max: 0xFE }), { default: 0x0, persistent: true }),
-        remainingTime: Attribute(0x0002, TlvUInt16.bound({ min: 0x0, max: 0xffFE }), { default: 0x0 }),
-        currentX: OptionalAttribute(0x0003, TlvUInt16.bound({ max: 0xfeff }), { default: 0x616b, persistent: true }), // TODO: This and following Mandatory if XY flag set in features
+        currentHue: OptionalAttribute(0x0, TlvUInt8.bound({ max: 0xfe }), { default: 0x0, persistent: true }), // TODO: This and following are Mandatory if HueSat flag set in features
+        currentSaturation: OptionalAttribute(0x0001, TlvUInt8.bound({ max: 0xfe }), { default: 0x0, persistent: true }),
+        remainingTime: OptionalAttribute(0x0002, TlvUInt16.bound({ max: 0xfffe }), { default: 0x0 }),
+        currentX: OptionalAttribute(0x0003, TlvUInt16.bound({ max: 0xfeff }), { default: 0x616b, persistent: true }), // TODO: This and following are Mandatory if XY flag set in features
         currentY: OptionalAttribute(0x0004, TlvUInt16.bound({ max: 0xfeff }), { default: 0x607d, persistent: true }),
         driftCompensation: OptionalAttribute(0x0005, TlvEnum<DriftCompensation>()),
         compensationText: OptionalAttribute(0x0006, TlvString.bound({ maxLength: 254 })),
-        colorTemperatureMireds: OptionalAttribute(0x0007, TlvUInt16.bound({ max: 0xfeff }), { default: 0x00fa, persistent: true }), // TODO: Mandatory if Color Temp flag set in features
-        colorMode: Attribute(0x0008, TlvEnum<DriftCompensation>(), { persistent: true }),
+        colorTemperatureMireds: OptionalAttribute(0x0007, TlvUInt16.bound({ max: 0xfeff }), { default: 0x00fa, persistent: true }), // TODO: Mandatory if ColorTemp flag set in features
+        colorMode: Attribute(0x0008, TlvEnum<ColorMode>(), { default: 1, persistent: true }),
         options: Attribute(0x000F, OptionsBitmap), // TODO: default 0
-
-        // ?? IDs 0x4000 to 0x4010 - separated as "clusterExtension" in XML, with "code" 0x300, i.e. same cluster ID 
         enhancedCurrentHue: OptionalAttribute(0x4000, TlvUInt16, { default: 0x0, persistent: true }), // TODO: Mandatory if Enhanced Hue flag set in features
         enhancedColorMode: Attribute(0x4001, TlvEnum<EnhancedColorMode>(), { default: 1, persistent: true }),
-        colorLoopActive: OptionalAttribute(0x4002, TlvUInt8, { default: 0x0, persistent: true }), // TODO - Color Loop Attributes are Mandatory if Color Loop flag set in features
+        colorLoopActive: OptionalAttribute(0x4002, TlvUInt8, { default: 0x0, persistent: true }), // TODO - Color Loop Attributes are Mandatory if ColorLoop flag set in features
         colorLoopDirection: OptionalAttribute(0x4003, TlvUInt8, { default: 0x0, persistent: true }),
         colorLoopTime: OptionalAttribute(0x4004, TlvUInt16, { default: 0x0019, persistent: true }),
         colorLoopStartEnhancedHue: OptionalAttribute(0x4005, TlvUInt16, { default: 0x2300 }),
         colorLoopStoredEnhancedHue: OptionalAttribute(0x4006, TlvUInt16, { default: 0x0 }),
         colorCapabilities: Attribute(0x400A, ColorCapabilities),  // , {default: 0}
-        colorTempPhysicalMinMireds: OptionalAttribute(0x400B, TlvUInt16.bound({ max: 0xfeff }), { default: 0x0 }), // TODO: This and following Mandatory if Color Temp flag set in features
+        colorTempPhysicalMinMireds: OptionalAttribute(0x400B, TlvUInt16.bound({ max: 0xfeff }), { default: 0x0 }), // TODO: This and following Mandatory if ColorTemp flag set in features
         colorTempPhysicalMaxMireds: OptionalAttribute(0x400C, TlvUInt16.bound({ max: 0xfeff }), { default: 0xfeff }),
         coupleColorTempToLevelMinMireds: OptionalAttribute(0x400D, TlvUInt16, { default: 0x0 }),
         startUpColorTemperatureMireds: OptionalAttribute(0x4010, TlvNullable(TlvUInt16.bound({ max: 0xfeff })), { default: 0x0 }),
@@ -326,7 +320,7 @@ export const ColorControlCluster = Cluster({
          * Defined Primaries Information Attribute Set
          * @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.8 
          */
-        numberOfPrimaries: Attribute(0x0010, TlvNullable(TlvUInt8.bound({ max: 0x06 }))), // TODO - The following Primary(N) Attributes beoome Optional depending on this value 
+        numberOfPrimaries: Attribute(0x0010, TlvNullable(TlvUInt8.bound({ max: 0x06 }))), // TODO - The following Primary(N) Attributes become Mandated depending on this value 
         primary1X: OptionalAttribute(0x0011, TlvUInt16.bound({ max: 0xfeff })),
         primary1Y: OptionalAttribute(0x0012, TlvUInt16.bound({ max: 0xfeff })),
         primary1Intensity: OptionalAttribute(0x0013, TlvNullable(TlvUInt8)),
@@ -371,62 +365,60 @@ export const ColorControlCluster = Cluster({
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11 */
     commands: {
         /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.4 */
-        moveToHue: OptionalCommand(0x0, MoveToHueCommandRequest, 0x0, TlvNoResponse), // TODO - This and following become Mandatory if HudSat flag set in features
+        moveToHue: OptionalCommand(0x0, MoveToHueCommandRequest, 0x0, TlvNoResponse), // TODO - This and following HueSat commands become Mandatory if HueSat flag set in features
 
         /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.5 */
-        moveHue: OptionalCommand(0x01, MoveHueCommandRequest, 0x0, TlvNoResponse),
+        moveHue: OptionalCommand(0x01, MoveHueCommandRequest, 0x01, TlvNoResponse),
 
         /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.6 */
-        stepHue: OptionalCommand(0x02, StepHueCommandRequest, 0x0, TlvNoResponse),
+        stepHue: OptionalCommand(0x02, StepHueCommandRequest, 0x02, TlvNoResponse),
 
         /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.7 */
-        moveToSaturation: OptionalCommand(0x03, MoveToSaturationCommandRequest, 0x0, TlvNoResponse),
+        moveToSaturation: OptionalCommand(0x03, MoveToSaturationCommandRequest, 0x03, TlvNoResponse),
 
         /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.8 */
-        moveSaturation: OptionalCommand(0x04, MoveSaturationCommandRequest, 0x0, TlvNoResponse),
+        moveSaturation: OptionalCommand(0x04, MoveSaturationCommandRequest, 0x04, TlvNoResponse),
 
         /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.9 */
-        stepSaturation: OptionalCommand(0x05, StepSaturationCommandRequest, 0x0, TlvNoResponse),
+        stepSaturation: OptionalCommand(0x05, StepSaturationCommandRequest, 0x05, TlvNoResponse),
 
         /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.10 */
-        moveToHueAndSaturation: OptionalCommand(0x06, MoveToHueAndSaturatioCommandRequest, 0x0, TlvNoResponse),
+        moveToHueAndSaturation: OptionalCommand(0x06, MoveToHueAndSaturatioCommandRequest, 0x06, TlvNoResponse),
 
         /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.11 */
-        moveToColor: OptionalCommand(0x07, MoveToColorCommandRequest, 0x0, TlvNoResponse), // TODO - This and 8,9 become Mandatory if XY set in feature flags
+        moveToColor: OptionalCommand(0x07, MoveToColorCommandRequest, 0x07, TlvNoResponse), // TODO - This and 8,9 become Mandatory if XY set in feature flags
 
         /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.12 */
-        moveColor: OptionalCommand(0x08, MoveColorCommandRequest, 0x0, TlvNoResponse),
+        moveColor: OptionalCommand(0x08, MoveColorCommandRequest, 0x08, TlvNoResponse),
 
         /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.13 */
-        stepColor: OptionalCommand(0x09, StepColorCommandRequest, 0x0, TlvNoResponse),
+        stepColor: OptionalCommand(0x09, StepColorCommandRequest, 0x09, TlvNoResponse),
 
         /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.14 */
-        moveToColorTemperature: OptionalCommand(0x0A, MoveToColorTemperatureCommandRequest, 0x0, TlvNoResponse), // TODO - Mandatory if ColorTemperature set in feature flags
-
-        // ?? IDs 0x40 to 0x4c - separated as "clusterExtension" in XML, with "code" 0x300, i.e. same cluster ID 
+        moveToColorTemperature: OptionalCommand(0x0a, MoveToColorTemperatureCommandRequest, 0x0a, TlvNoResponse), // TODO - Mandatory if ColorTemperature set in feature flags
 
         /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.15 */
-        enhancedMoveToHue: OptionalCommand(0x40, EnhancedMoveToHueRequest, 0x0, TlvNoResponse), // TODO - This and 41, 42, 43 Mandatory if EnhancedHue set in feature flags
+        enhancedMoveToHue: OptionalCommand(0x40, EnhancedMoveToHueRequest, 0x40, TlvNoResponse), // TODO - This and 41, 42, 43 Mandatory if EnhancedHue set in feature flags
 
         /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.16 */
-        enhancedMoveHue: OptionalCommand(0x41, EnhancedMoveHueRequest, 0x0, TlvNoResponse),
+        enhancedMoveHue: OptionalCommand(0x41, EnhancedMoveHueRequest, 0x41, TlvNoResponse),
 
         /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.17 */
-        enhancedStepHue: OptionalCommand(0x42, EnhancedStepHueRequest, 0x0, TlvNoResponse),
+        enhancedStepHue: OptionalCommand(0x42, EnhancedStepHueRequest, 0x42, TlvNoResponse),
 
         /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.18 */
-        enhancedMoveToHueAndSaturation: OptionalCommand(0x43, EnhancedMoveToHueAndSaturationRequest, 0x0, TlvNoResponse),
+        enhancedMoveToHueAndSaturation: OptionalCommand(0x43, EnhancedMoveToHueAndSaturationRequest, 0x43, TlvNoResponse),
 
         /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.19 */
-        colorLoopSet: OptionalCommand(0x44, ColorLoopSetRequest, 0x0, TlvNoResponse), // TODO - Mandatory if Color Loop flag set in features
+        colorLoopSet: OptionalCommand(0x44, ColorLoopSetRequest, 0x44, TlvNoResponse), // TODO - Mandatory if ColorLoop flag set in features
 
         /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.20 */
-        stopMoveStep: OptionalCommand(0x47, StopMoveStepRequest, 0x0, TlvNoResponse), // TODO - Mandatory if EnhancedHue, ColorTemperature or XY flags set in features
+        stopMoveStep: OptionalCommand(0x47, StopMoveStepRequest, 0x47, TlvNoResponse), // TODO - Mandatory if EnhancedHue, ColorTemperature or XY flags set in features
 
         /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.21 */
-        moveColorTemperature: OptionalCommand(0x4B, MoveColorTemperatureRequest, 0x0, TlvNoResponse), // TODO - Mandatory if Color Temperature set in feature flags
+        moveColorTemperature: OptionalCommand(0x4b, MoveColorTemperatureRequest, 0x4b, TlvNoResponse), // TODO - Mandatory if ColorTemperature set in feature flags
 
         /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.22 */
-        stepColorTemperature: OptionalCommand(0x4C, StepColorTemperatureRequest, 0x0, TlvNoResponse), // TODO - Mandatory if ColorTemperature set in feature flags
+        stepColorTemperature: OptionalCommand(0x4c, StepColorTemperatureRequest, 0x4c, TlvNoResponse), // TODO - Mandatory if ColorTemperature set in feature flags
     }
 });
