@@ -25,6 +25,7 @@ export * from "./cluster/IdentifyCluster.js";
 export * from "./cluster/IlluminanceMeasurementCluster.js";
 export * from "./cluster/LabelCluster.js";
 export * from "./cluster/LevelControlCluster.js";
+export * from "./cluster/ModeSelectCluster.js";
 export * from "./cluster/NetworkCommissioningCluster.js";
 export * from "./cluster/OccupancySensingCluster.js";
 export * from "./cluster/OnOffCluster.js";
