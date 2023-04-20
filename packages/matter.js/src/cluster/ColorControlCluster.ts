@@ -106,169 +106,169 @@ export const enum DriftCompensation {
 
 /**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.4 */
 const MoveToHueCommandRequest = TlvObject({
-    Hue: TlvField(0, TlvUInt8.bound({ max: 254 })),
-    Direction: TlvField(1, TlvEnum<HueDirection>()),
-    TransitionTime: TlvField(2, TlvUInt16.bound({ max: 65534 })),
-    OptionsMask: TlvField(3, OptionsBitmap),   // TODO: default 0 for all OptionsMask and OptionsOverride below
-    OptionsOverride: TlvField(4, OptionsBitmap), // TODO : default 0
+    hue: TlvField(0, TlvUInt8.bound({ max: 254 })),
+    direction: TlvField(1, TlvEnum<HueDirection>()),
+    transitionTime: TlvField(2, TlvUInt16.bound({ max: 65534 })),
+    optionsMask: TlvField(3, OptionsBitmap),   // TODO: default 0 for all OptionsMask and OptionsOverride below
+    optionsOverride: TlvField(4, OptionsBitmap), // TODO : default 0
 });
 
 /**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.5 */
 const MoveHueCommandRequest = TlvObject({
-    MoveMode: TlvField(0, TlvEnum<HueMoveMode>()),
-    Rate: TlvField(1, TlvUInt8),
-    OptionsMask: TlvField(2, OptionsBitmap),
-    OptionsOverride: TlvField(3, OptionsBitmap),
+    moveMode: TlvField(0, TlvEnum<HueMoveMode>()),
+    rate: TlvField(1, TlvUInt8),
+    optionsMask: TlvField(2, OptionsBitmap),
+    optionsOverride: TlvField(3, OptionsBitmap),
 });
 
 /**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.6 */
 const StepHueCommandRequest = TlvObject({
-    StepMode: TlvField(0, TlvEnum<ColorControlStepMode>()),
-    StepSize: TlvField(1, TlvUInt8),
-    TransitionTime: TlvField(2, TlvUInt8),
-    OptionsMask: TlvField(3, OptionsBitmap),
-    OptionsOverride: TlvField(4, OptionsBitmap),
+    stepMode: TlvField(0, TlvEnum<ColorControlStepMode>()),
+    stepSize: TlvField(1, TlvUInt8),
+    transitionTime: TlvField(2, TlvUInt8),
+    optionsMask: TlvField(3, OptionsBitmap),
+    optionsOverride: TlvField(4, OptionsBitmap),
 });
 
 /**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.7 */
 const MoveToSaturationCommandRequest = TlvObject({
-    Saturation: TlvField(0, TlvUInt8.bound({ max: 254 })),
-    TransitionTime: TlvField(1, TlvUInt16.bound({ max: 65534 })),
-    OptionsMask: TlvField(2, OptionsBitmap),
-    OptionsOverride: TlvField(3, OptionsBitmap),
+    saturation: TlvField(0, TlvUInt8.bound({ max: 254 })),
+    transitionTime: TlvField(1, TlvUInt16.bound({ max: 65534 })),
+    optionsMask: TlvField(2, OptionsBitmap),
+    optionsOverride: TlvField(3, OptionsBitmap),
 });
 
 /**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.8 */
 const MoveSaturationCommandRequest = TlvObject({
-    MoveMode: TlvField(0, TlvEnum<SaturationMoveMode>()),
-    Rate: TlvField(1, TlvUInt8),
-    OptionsMask: TlvField(2, OptionsBitmap),
-    OptionsOverride: TlvField(3, OptionsBitmap),
+    moveMode: TlvField(0, TlvEnum<SaturationMoveMode>()),
+    rate: TlvField(1, TlvUInt8),
+    optionsMask: TlvField(2, OptionsBitmap),
+    optionsOverride: TlvField(3, OptionsBitmap),
 });
 
 /**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.9 */
 const StepSaturationCommandRequest = TlvObject({
-    StepMode: TlvField(0, TlvEnum<ColorControlStepMode>()),
-    StepSize: TlvField(1, TlvUInt8),
-    TransitionTime: TlvField(2, TlvUInt8),
-    OptionsMask: TlvField(3, OptionsBitmap),
-    OptionsOverride: TlvField(4, OptionsBitmap),
+    stepMode: TlvField(0, TlvEnum<ColorControlStepMode>()),
+    stepSize: TlvField(1, TlvUInt8),
+    transitionTime: TlvField(2, TlvUInt8),
+    optionsMask: TlvField(3, OptionsBitmap),
+    optionsOverride: TlvField(4, OptionsBitmap),
 });
 
 /**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.10 */
 const MoveToHueAndSaturatioCommandRequest = TlvObject({
-    Hue: TlvField(0, TlvUInt8.bound({ max: 254 })),
-    Saturation: TlvField(1, TlvUInt8.bound({ max: 254 })),
-    TransitionTime: TlvField(2, TlvUInt16.bound({ max: 65534 })),
-    OptionsMask: TlvField(3, OptionsBitmap),
-    OptionsOverride: TlvField(4, OptionsBitmap),
+    hue: TlvField(0, TlvUInt8.bound({ max: 254 })),
+    saturation: TlvField(1, TlvUInt8.bound({ max: 254 })),
+    transitionTime: TlvField(2, TlvUInt16.bound({ max: 65534 })),
+    optionsMask: TlvField(3, OptionsBitmap),
+    optionsOverride: TlvField(4, OptionsBitmap),
 });
 
 /**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.11 */
 const MoveToColorCommandRequest = TlvObject({
-    ColorX: TlvField(0, TlvUInt16.bound({ max: 0xfeff })),
-    ColorY: TlvField(1, TlvUInt16.bound({ max: 0xfeff })),
-    TransitionTime: TlvField(2, TlvUInt16),
-    OptionsMask: TlvField(3, OptionsBitmap),
-    OptionsOverride: TlvField(4, OptionsBitmap),
+    colorX: TlvField(0, TlvUInt16.bound({ max: 0xfeff })),
+    colorY: TlvField(1, TlvUInt16.bound({ max: 0xfeff })),
+    transitionTime: TlvField(2, TlvUInt16),
+    optionsMask: TlvField(3, OptionsBitmap),
+    optionsOverride: TlvField(4, OptionsBitmap),
 });
 
 /**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.12 */
 const MoveColorCommandRequest = TlvObject({
-    RateX: TlvField(0, TlvInt16),
-    RateY: TlvField(1, TlvInt16),
-    OptionsMask: TlvField(2, OptionsBitmap),
-    OptionsOverride: TlvField(3, OptionsBitmap),
+    rateX: TlvField(0, TlvInt16),
+    rateY: TlvField(1, TlvInt16),
+    optionsMask: TlvField(2, OptionsBitmap),
+    optionsOverride: TlvField(3, OptionsBitmap),
 });
 
 /**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.13 */
 const StepColorCommandRequest = TlvObject({
-    StepX: TlvField(0, TlvInt16),
-    StepY: TlvField(1, TlvInt16),
-    TransitionTime: TlvField(2, TlvUInt16.bound({ max: 65534 })),
-    OptionsMask: TlvField(3, OptionsBitmap),
-    OptionsOverride: TlvField(4, OptionsBitmap),
+    stepX: TlvField(0, TlvInt16),
+    stepY: TlvField(1, TlvInt16),
+    transitionTime: TlvField(2, TlvUInt16.bound({ max: 65534 })),
+    optionsMask: TlvField(3, OptionsBitmap),
+    optionsOverride: TlvField(4, OptionsBitmap),
 });
 
 /**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.14 */
 const MoveToColorTemperatureCommandRequest = TlvObject({
-    ColorTemperatureMireds: TlvField(0, TlvUInt16.bound({ max: 0xfeff })),
-    TransitionTime: TlvField(1, TlvUInt16.bound({ max: 65534 })),
-    OptionsMask: TlvField(2, OptionsBitmap),
-    OptionsOverride: TlvField(3, OptionsBitmap),
+    colorTemperatureMireds: TlvField(0, TlvUInt16.bound({ max: 0xfeff })),
+    transitionTime: TlvField(1, TlvUInt16.bound({ max: 65534 })),
+    optionsMask: TlvField(2, OptionsBitmap),
+    optionsOverride: TlvField(3, OptionsBitmap),
 });
 
 /**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.15 */
 const EnhancedMoveToHueRequest = TlvObject({
-    EnhancedHue: TlvField(0, TlvUInt16),
-    Direction: TlvField(1, TlvEnum<HueDirection>()),
-    TransitionTime: TlvField(2, TlvUInt16.bound({ max: 65534 })),
-    OptionsMask: TlvField(3, OptionsBitmap),
-    OptionsOverride: TlvField(4, OptionsBitmap),
+    enhancedHue: TlvField(0, TlvUInt16),
+    direction: TlvField(1, TlvEnum<HueDirection>()),
+    transitionTime: TlvField(2, TlvUInt16.bound({ max: 65534 })),
+    optionsMask: TlvField(3, OptionsBitmap),
+    optionsOverride: TlvField(4, OptionsBitmap),
 });
 
 /**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.16 */
 const EnhancedMoveHueRequest = TlvObject({
-    MoveMode: TlvField(0, TlvEnum<HueMoveMode>()),
-    Rate: TlvField(1, TlvUInt16),
-    OptionsMask: TlvField(2, OptionsBitmap),
-    OptionsOverride: TlvField(3, OptionsBitmap),
+    moveMode: TlvField(0, TlvEnum<HueMoveMode>()),
+    rate: TlvField(1, TlvUInt16),
+    optionsMask: TlvField(2, OptionsBitmap),
+    optionsOverride: TlvField(3, OptionsBitmap),
 });
 
 /**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.17 */
 const EnhancedStepHueRequest = TlvObject({
-    StepMode: TlvField(0, TlvEnum<ColorControlStepMode>()),
-    StepSize: TlvField(1, TlvUInt16),
-    TransitionTime: TlvField(2, TlvUInt16.bound({ max: 65534 })),
-    OptionsMask: TlvField(3, OptionsBitmap),
-    OptionsOverride: TlvField(4, OptionsBitmap),
+    stepMode: TlvField(0, TlvEnum<ColorControlStepMode>()),
+    stepSize: TlvField(1, TlvUInt16),
+    transitionTime: TlvField(2, TlvUInt16.bound({ max: 65534 })),
+    optionsMask: TlvField(3, OptionsBitmap),
+    optionsOverride: TlvField(4, OptionsBitmap),
 });
 
 /**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.18 */
 const EnhancedMoveToHueAndSaturationRequest = TlvObject({
-    EnhancedHue: TlvField(0, TlvUInt16),
-    Saturation: TlvField(1, TlvUInt8.bound({ max: 254 })),
-    TransitionTime: TlvField(2, TlvUInt16.bound({ max: 65534 })),
-    OptionsMask: TlvField(3, OptionsBitmap),
-    OptionsOverride: TlvField(4, OptionsBitmap),
+    enhancedHue: TlvField(0, TlvUInt16),
+    saturation: TlvField(1, TlvUInt8.bound({ max: 254 })),
+    transitionTime: TlvField(2, TlvUInt16.bound({ max: 65534 })),
+    optionsMask: TlvField(3, OptionsBitmap),
+    optionsOverride: TlvField(4, OptionsBitmap),
 });
 
 /**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.19 */
 const ColorLoopSetRequest = TlvObject({
-    UpdateFlags: TlvField(0, ColorLoopUpdateFlags),
-    Action: TlvField(1, TlvEnum<ColorLoopAction>()),
-    Direction: TlvField(2, TlvEnum<ColorLoopDirection>()),
-    Time: TlvField(3, TlvUInt16),
-    StartHue: TlvField(4, TlvUInt16),
-    OptionsMask: TlvField(5, OptionsBitmap),
-    OptionsOverride: TlvField(6, OptionsBitmap),
+    updateFlags: TlvField(0, ColorLoopUpdateFlags),
+    action: TlvField(1, TlvEnum<ColorLoopAction>()),
+    direction: TlvField(2, TlvEnum<ColorLoopDirection>()),
+    time: TlvField(3, TlvUInt16),
+    startHue: TlvField(4, TlvUInt16),
+    optionsMask: TlvField(5, OptionsBitmap),
+    optionsOverride: TlvField(6, OptionsBitmap),
 });
 
 /**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.20 */
 const StopMoveStepRequest = TlvObject({
-    OptionsMask: TlvField(0, OptionsBitmap),
-    OptionsOverride: TlvField(1, OptionsBitmap),
+    optionsMask: TlvField(0, OptionsBitmap),
+    optionsOverride: TlvField(1, OptionsBitmap),
 });
 
 /**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.21 */
 const MoveColorTemperatureRequest = TlvObject({
-    MoveMode: TlvField(0, TlvEnum<HueMoveMode>()),
-    Rate: TlvField(1, TlvUInt16),
-    ColorTemperatureMinimumMireds: TlvField(2, TlvUInt16.bound({ max: 0xfeff })),
-    ColorTemperatureMaximumMireds: TlvField(3, TlvUInt16.bound({ max: 0xfeff })),
-    OptionsMask: TlvField(4, OptionsBitmap),
-    OptionsOverride: TlvField(5, OptionsBitmap),
+    moveMode: TlvField(0, TlvEnum<HueMoveMode>()),
+    rate: TlvField(1, TlvUInt16),
+    colorTemperatureMinimumMireds: TlvField(2, TlvUInt16.bound({ max: 0xfeff })),
+    colorTemperatureMaximumMireds: TlvField(3, TlvUInt16.bound({ max: 0xfeff })),
+    optionsMask: TlvField(4, OptionsBitmap),
+    optionsOverride: TlvField(5, OptionsBitmap),
 });
 
 /**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.22 */
 const StepColorTemperatureRequest = TlvObject({
-    StepMode: TlvField(0, TlvEnum<ColorControlStepMode>()),
-    StepSize: TlvField(1, TlvUInt16),
-    TransitionTime: TlvField(2, TlvUInt16.bound({ max: 65534 })),
-    ColorTemperatureMinimumMireds: TlvField(3, TlvUInt16.bound({ max: 0xfeff })),
-    ColorTemperatureMaximumMireds: TlvField(4, TlvUInt16.bound({ max: 0xfeff })),
-    OptionsMask: TlvField(5, OptionsBitmap),
-    OptionsOverride: TlvField(6, OptionsBitmap),
+    stepMode: TlvField(0, TlvEnum<ColorControlStepMode>()),
+    stepSize: TlvField(1, TlvUInt16),
+    transitionTime: TlvField(2, TlvUInt16.bound({ max: 65534 })),
+    colorTemperatureMinimumMireds: TlvField(3, TlvUInt16.bound({ max: 0xfeff })),
+    colorTemperatureMaximumMireds: TlvField(4, TlvUInt16.bound({ max: 0xfeff })),
+    optionsMask: TlvField(5, OptionsBitmap),
+    optionsOverride: TlvField(6, OptionsBitmap),
 });
 
 /**
@@ -279,11 +279,11 @@ export const ColorControlCluster = Cluster({
     name: "ColorControl",
     revision: 5,
     features: {
-        HueSaturation: BitFlag(0), // TODO: Support for EHUE SHALL require support for HS. Support for CL SHALL require support for EHUE.
-        EnhancedHue: BitFlag(1),
-        ColorLoop: BitFlag(2),
-        XY: BitFlag(3),
-        ColorTemperature: BitFlag(4),
+        hueSaturation: BitFlag(0), // TODO: Support for EHUE SHALL require support for HS. Support for CL SHALL require support for EHUE.
+        enhancedHue: BitFlag(1),
+        colorLoop: BitFlag(2),
+        xY: BitFlag(3),
+        colorTemperature: BitFlag(4),
     },
 
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.6 */
