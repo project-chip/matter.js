@@ -16,19 +16,19 @@ import { TlvArray } from "../tlv/TlvArray.js";
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.8. */
 export const SemanticTag = TlvObject({
     Value: TlvField(0x0, TlvUInt16), // enum16 in Standard, but values not defined "standard" or "Manufacturer sepcific"
-    MfgCode: TlvField(0x1, TlvNullable(TlvUInt16)), // type in standard is "vendor-id" ??
+    mfgCode: TlvField(0x1, TlvNullable(TlvUInt16)), // type in standard is "vendor-id" ??
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.8.8.1  */
 const ModeOption = TlvObject({
-    Label: TlvField(0x0, TlvString64max),
-    Mode: TlvField(0x1, TlvUInt8),
-    SemanticTags: TlvField(0x2, TlvArray(SemanticTag, { maxLength: 64 })),
+    label: TlvField(0x0, TlvString64max),
+    mode: TlvField(0x1, TlvUInt8),
+    semanticTags: TlvField(0x2, TlvArray(SemanticTag, { maxLength: 64 })),
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.8.6.1 */
 const ChangeToModedRequest = TlvObject({
-    NewMode: TlvField(0x0, TlvUInt8),
+    newMode: TlvField(0x0, TlvUInt8),
 });
 
 /**
@@ -56,13 +56,13 @@ export const ModeSelectCluster = Cluster({
           * Each standard namespace and corresponding values and value meanings SHALL be defined in another document
           * http://www.dial-multiscreen.org/dial-registry/namespace-database
           */
-        StandardNamespace: Attribute(0x1, TlvNullable(TlvInt16)),
+        standardNamespace: Attribute(0x1, TlvNullable(TlvInt16)),
 
         /** Supported modes that may be selected for the CurrentMode attribute */
-        SupportedModes: Attribute(0x2, TlvArray(ModeOption, { maxLength: 256 })),
+        supportedModes: Attribute(0x2, TlvArray(ModeOption, { maxLength: 256 })),
 
         /** Represents the current mode */
-        CurrentMode: OptionalAttribute(0x3, TlvUInt8),
+        currentMode: OptionalAttribute(0x3, TlvUInt8),
 
         /** Indicates the desired startup mode */
         StartUpMode: OptionalAttribute(0x4, TlvNullable(TlvInt16)),
@@ -71,11 +71,11 @@ export const ModeSelectCluster = Cluster({
          * Indicates the value of CurrentMode that depends on the state of the On/Off cluster on the same endpoint 
          * See @see {@link MatterApplicationClusterSpecificationV1_0} § 1.8.6
          */
-        OnMode: OptionalAttribute(0x5, TlvNullable(TlvUInt8)), // TODO - Mandatory if OnOff flag set in features
+        onMode: OptionalAttribute(0x5, TlvNullable(TlvUInt8)), // TODO - Mandatory if OnOff flag set in features
     },
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.8.5.6 */
     commands: {
         /** set the CurrentMode attribute to NewMode  */
-        ChangeToMode: Command(0x0, ChangeToModedRequest, 0x0, TlvNoResponse),
+        changeToMode: Command(0x0, ChangeToModedRequest, 0x0, TlvNoResponse),
     }
 });
