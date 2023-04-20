@@ -15,8 +15,8 @@ import { TlvArray } from "../tlv/TlvArray.js";
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.8. */
 export const SemanticTag = TlvObject({
-    Value: TlvField(0x0, TlvUInt16), // enum16
-    MfgCode: TlvField(0x1, TlvUInt16), // vendor-id
+    Value: TlvField(0x0, TlvUInt16), // enum16 in Standard, but values not defined "standard" or "Manufacturer sepcific"
+    MfgCode: TlvField(0x1, TlvNullable(TlvUInt16)), // type in standard is "vendor-id" ??
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.8.8.1  */
@@ -36,14 +36,14 @@ const ChangeToModedRequest = TlvObject({
  * of several predefined values. For example, the light pattern of a disco ball, the mode of a massage
  * chair, or the wash cycle of a laundry machine.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_0} § 2.3
+ * @see {@link MatterApplicationClusterSpecificationV1_0} § 1.8
  */
 export const ModeSelectCluster = Cluster({
     id: 0x0050,
     name: "ModeSelect",
     revision: 1,
     features: {
-        OnOff: BitFlag(0), // Dependency with the On/Off cluster
+        OnOff: BitFlag(0), // Dependency with an On/Off cluster on same endpoint
     },
 
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.8.5 */
@@ -51,8 +51,12 @@ export const ModeSelectCluster = Cluster({
         /** describes the purpose of the server, in readable text */
         description: Attribute(0x0, TlvString64max),
 
-        /** Indicates a single standard namespace for any standard semantic tag value supported */
-        StandardNamespace: Attribute(0x1, TlvNullable(TlvInt16)), // standard-nameapace enum - defined externally - http://www.dial-multiscreen.org/dial-registry/namespace-database
+        /** 
+          * Indicates a single standard namespace for any standard semantic tag value supported 
+          * Each standard namespace and corresponding values and value meanings SHALL be defined in another document
+          * http://www.dial-multiscreen.org/dial-registry/namespace-database
+          */
+        StandardNamespace: Attribute(0x1, TlvNullable(TlvInt16)),
 
         /** Supported modes that may be selected for the CurrentMode attribute */
         SupportedModes: Attribute(0x2, TlvArray(ModeOption, { maxLength: 256 })),
