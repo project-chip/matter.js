@@ -9,6 +9,7 @@ export * from "./cluster/Cluster.js";
 
 //Export all clusters
 export * from "./cluster/AccessControlCluster.js";
+export * from "./cluster/ActionsCluster.js";
 export * from "./cluster/AdminCommissioningCluster.js";
 export * from "./cluster/BasicInformationCluster.js";
 export * from "./cluster/BindingCluster.js";

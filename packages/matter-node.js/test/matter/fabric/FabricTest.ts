@@ -4,8 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as assert from "assert";
+import { Time } from "../../../src/time/Time";
+import { TimeFake } from "../../../src/time/TimeFake";
+
+Time.get = () => new TimeFake(0);
+
 import { Crypto } from "../../../src/crypto/Crypto";
+import { CryptoNode } from "../../../src/crypto/CryptoNode";
+
+Crypto.get = () => new CryptoNode();
+
+import * as assert from "assert";
 import { NodeId } from "../../../src/matter/common/NodeId";
 import { VendorId, FabricId, FabricIndex, ByteArray } from "@project-chip/matter.js";
 import { Fabric, FabricBuilder } from "../../../src/matter/fabric/Fabric";
@@ -62,7 +71,7 @@ describe("Fabric", () => {
 
     describe("getDestinationId", () => {
         it("generates the correct destination ID", () => {
-            const fabric = new Fabric(TEST_FABRIC_INDEX, TEST_FABRIC_ID, TEST_NODE_ID, TEST_ROOT_NODE, Buffer.alloc(0), TEST_ROOT_PUBLIC_KEY, Crypto.createKeyPair(), new VendorId(0), Buffer.alloc(0), Buffer.alloc(0), TEST_IDENTITY_PROTECTION_KEY, undefined, Buffer.alloc(0), '');
+            const fabric = new Fabric(TEST_FABRIC_INDEX, TEST_FABRIC_ID, TEST_NODE_ID, TEST_ROOT_NODE, Buffer.alloc(0), TEST_ROOT_PUBLIC_KEY, Crypto.get().createKeyPair(), new VendorId(0), Buffer.alloc(0), Buffer.alloc(0), TEST_IDENTITY_PROTECTION_KEY, undefined, Buffer.alloc(0), '');
 
             const result = fabric.getDestinationId(TEST_NODE_ID, TEST_RANDOM);
 
@@ -84,7 +93,7 @@ describe("Fabric", () => {
         });
 
         it("generates the correct destination ID 3", () => {
-            const fabric = new Fabric(TEST_FABRIC_INDEX, TEST_FABRIC_ID_3, TEST_NODE_ID_3, TEST_ROOT_NODE, Buffer.alloc(0), TEST_ROOT_PUBLIC_KEY_3, Crypto.createKeyPair(), new VendorId(0), Buffer.alloc(0), Buffer.alloc(0), TEST_IDENTITY_PROTECTION_KEY_3, undefined, Buffer.alloc(0), "");
+            const fabric = new Fabric(TEST_FABRIC_INDEX, TEST_FABRIC_ID_3, TEST_NODE_ID_3, TEST_ROOT_NODE, Buffer.alloc(0), TEST_ROOT_PUBLIC_KEY_3, Crypto.get().createKeyPair(), new VendorId(0), Buffer.alloc(0), Buffer.alloc(0), TEST_IDENTITY_PROTECTION_KEY_3, undefined, Buffer.alloc(0), "");
 
             const result = fabric.getDestinationId(TEST_NODE_ID_3, TEST_RANDOM_3);
 

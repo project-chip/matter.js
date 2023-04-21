@@ -3,182 +3,100 @@
  * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-
-import * as BN from "bn.js";
-import * as crypto from "crypto";
 import { ByteArray } from "@project-chip/matter.js";
+import * as BN from "bn.js";
 
-const ENCRYPT_ALGORITHM = "aes-128-ccm";
-const HASH_ALGORITHM = "sha256";
-const EC_CURVE = "prime256v1";
-const AUTH_TAG_LENGTH = 16;
-const RANDOM_LENGTH = 32;
-const SYMMETRIC_KEY_LENGTH = 16;
-
-const EC_PRIVATE_KEY_PKCS8_HEADER = ByteArray.fromHex("308141020100301306072a8648ce3d020106082a8648ce3d030107042730250201010420");
-const EC_PUBLIC_KEY_SPKI_HEADER = ByteArray.fromHex("3059301306072a8648ce3d020106082a8648ce3d030107034200");
+export const CRYPTO_RANDOM_LENGTH = 32;
+export const CRYPTO_ENCRYPT_ALGORITHM = "aes-128-ccm";
+export const CRYPTO_HASH_ALGORITHM = "sha256";
+export const CRYPTO_EC_CURVE = "prime256v1";
+export const CRYPTO_AUTH_TAG_LENGTH = 16;
+export const CRYPTO_SYMMETRIC_KEY_LENGTH = 16;
+export type CryptoDsaEncoding = "ieee-p1363" | "der";
 
 export type KeyPair = {
     publicKey: ByteArray,
     privateKey: ByteArray,
 }
 
-export class Crypto {
-    static encrypt(key: ByteArray, data: ByteArray, nonce: ByteArray, aad?: ByteArray) {
-        const cipher = crypto.createCipheriv(ENCRYPT_ALGORITHM, key, nonce, { authTagLength: AUTH_TAG_LENGTH });
-        if (aad !== undefined) {
-            cipher.setAAD(aad, { plaintextLength: data.length })
-        }
-        const encrypted = cipher.update(data);
-        cipher.final();
-        return ByteArray.concat(encrypted, cipher.getAuthTag());
+export interface CryptoInterface {
+    encrypt(key: ByteArray, data: ByteArray, nonce: ByteArray, aad?: ByteArray): ByteArray;
+    decrypt(key: ByteArray, data: ByteArray, nonce: ByteArray, aad?: ByteArray): ByteArray;
+    getRandomData(length: number): ByteArray;
+    getRandom(): ByteArray
+    getRandomUInt16(): number;
+    getRandomUInt32(): number;
+    getRandomBigUInt64(): bigint;
+    getRandomBN(size: number, maxValue: BN): BN;
+    ecdhGeneratePublicKey(): { publicKey: ByteArray, ecdh: any };
+    ecdhGeneratePublicKeyAndSecret(peerPublicKey: ByteArray): { publicKey: ByteArray, sharedSecret: ByteArray };
+    ecdhGenerateSecret(peerPublicKey: ByteArray, ecdh: any): ByteArray;
+    hash(data: ByteArray | ByteArray[]): ByteArray;
+    pbkdf2(secret: ByteArray, salt: ByteArray, iteration: number, keyLength: number): Promise<ByteArray>;
+    hkdf(secret: ByteArray, salt: ByteArray, info: ByteArray, length?: number): Promise<ByteArray>;
+    hmac(key: ByteArray, data: ByteArray): ByteArray;
+    signPkcs8(privateKey: ByteArray, data: ByteArray | ByteArray[], dsaEncoding?: CryptoDsaEncoding): ByteArray;
+    signSec1(privateKey: ByteArray, data: ByteArray | ByteArray[], dsaEncoding?: CryptoDsaEncoding): ByteArray;
+    verifySpkiEc(publicKey: ByteArray, data: ByteArray, signature: ByteArray, dsaEncoding?: CryptoDsaEncoding): void;
+    verifySpki(publicKey: ByteArray, data: ByteArray, signature: ByteArray, dsaEncoding?: CryptoDsaEncoding): void;
+    createKeyPair(): KeyPair
+}
+
+export abstract class CryptoBase implements CryptoInterface {
+    abstract encrypt(key: ByteArray, data: ByteArray, nonce: ByteArray, aad?: ByteArray): ByteArray;
+
+    abstract decrypt(key: ByteArray, data: ByteArray, nonce: ByteArray, aad?: ByteArray): ByteArray;
+
+    abstract getRandomData(length: number): ByteArray;
+
+    getRandom(): ByteArray {
+        return this.getRandomData(CRYPTO_RANDOM_LENGTH);
     }
 
-    static decrypt(key: ByteArray, data: ByteArray, nonce: ByteArray, aad?: ByteArray) {
-        const cipher = crypto.createDecipheriv(ENCRYPT_ALGORITHM, key, nonce, { authTagLength: AUTH_TAG_LENGTH });
-        const plaintextLength = data.length - AUTH_TAG_LENGTH;
-        if (aad !== undefined) {
-            cipher.setAAD(aad, { plaintextLength })
-        }
-        cipher.setAuthTag(data.slice(plaintextLength));
-        const result = cipher.update(data.slice(0, plaintextLength));
-        cipher.final();
-        return result;
+    getRandomUInt16() {
+        return Buffer.from(this.getRandomData(2)).readUInt16LE();
     }
 
-    static getRandomData(length: number): ByteArray {
-        return crypto.randomBytes(length);
+    getRandomUInt32() {
+        return Buffer.from(this.getRandomData(4)).readUInt32LE();
     }
 
-    static getRandom(): ByteArray {
-        return this.getRandomData(RANDOM_LENGTH);
+    getRandomBigUInt64() {
+        return Buffer.from(this.getRandomData(8)).readBigUInt64LE();
     }
 
-    static getRandomUInt16() {
-        return crypto.randomBytes(2).readUInt16LE();
-    }
-
-    static getRandomUInt32() {
-        return crypto.randomBytes(4).readUInt32LE();
-    }
-    static getRandomBigUInt64() {
-        return crypto.randomBytes(8).readBigUInt64LE();
-    }
-
-    static getRandomBN(size: number, maxValue: BN) {
+    getRandomBN(size: number, maxValue: BN) {
         while (true) {
-            const random = new BN(crypto.randomBytes(size));
+            const random = new BN(this.getRandomData(size));
             if (random < maxValue) return random;
         }
     }
 
-    static ecdhGeneratePublicKey() {
-        const ecdh = crypto.createECDH(EC_CURVE);
-        ecdh.generateKeys();
-        return { publicKey: ecdh.getPublicKey(), ecdh: ecdh };
-    }
+    abstract ecdhGeneratePublicKey(): { publicKey: ByteArray, ecdh: any };
 
-    static ecdhGeneratePublicKeyAndSecret(peerPublicKey: ByteArray) {
-        const ecdh = crypto.createECDH(EC_CURVE);
-        ecdh.generateKeys();
-        return { publicKey: ecdh.getPublicKey(), sharedSecret: ecdh.computeSecret(peerPublicKey) };
-    }
+    abstract ecdhGeneratePublicKeyAndSecret(peerPublicKey: ByteArray): { publicKey: ByteArray, sharedSecret: ByteArray };
 
-    static ecdhGenerateSecret(peerPublicKey: ByteArray, ecdh: crypto.ECDH) {
-        return ecdh.computeSecret(peerPublicKey);
-    }
+    abstract ecdhGenerateSecret(peerPublicKey: ByteArray, ecdh: any): ByteArray;
 
-    static hash(data: ByteArray | ByteArray[]) {
-        const hasher = crypto.createHash(HASH_ALGORITHM);
-        if (Array.isArray(data)) {
-            data.forEach(chunk => hasher.update(chunk));
-        } else {
-            hasher.update(data);
-        }
-        return hasher.digest();
-    }
+    abstract hash(data: ByteArray | ByteArray[]): ByteArray;
 
-    static pbkdf2(secret: ByteArray, salt: ByteArray, iteration: number, keyLength: number) {
-        return new Promise<ByteArray>((resolver, rejecter) => {
-            crypto.pbkdf2(secret, salt, iteration, keyLength, HASH_ALGORITHM, (error, key) => {
-                if (error !== null) rejecter(error);
-                resolver(key);
-            });
-        });
-    }
+    abstract pbkdf2(secret: ByteArray, salt: ByteArray, iteration: number, keyLength: number): Promise<ByteArray>;
 
-    static hkdf(secret: ByteArray, salt: ByteArray, info: ByteArray, length: number = SYMMETRIC_KEY_LENGTH) {
-        return new Promise<ByteArray>((resolver, rejecter) => {
-            crypto.hkdf(HASH_ALGORITHM, secret, salt, info, length, (error, key) => {
-                if (error !== null) rejecter(error);
-                resolver(new ByteArray(key));
-            });
-        });
-    }
+    abstract hkdf(secret: ByteArray, salt: ByteArray, info: ByteArray, length?: number): Promise<ByteArray>;
 
-    static hmac(key: ByteArray, data: ByteArray) {
-        const hmac = crypto.createHmac(HASH_ALGORITHM, key);
-        hmac.update(data);
-        return hmac.digest();
-    }
+    abstract hmac(key: ByteArray, data: ByteArray): ByteArray;
 
-    static signPkcs8(privateKey: ByteArray, data: ByteArray | ByteArray[], dsaEncoding: ("ieee-p1363" | "der") = "ieee-p1363") {
-        const signer = crypto.createSign(HASH_ALGORITHM);
-        if (Array.isArray(data)) {
-            data.forEach(chunk => signer.update(chunk));
-        } else {
-            signer.update(data);
-        }
-        return signer.sign({
-            key: Buffer.concat([EC_PRIVATE_KEY_PKCS8_HEADER, privateKey]), // key has to be a node.js Buffer object
-            format: "der",
-            type: "pkcs8",
-            dsaEncoding,
-        });
-    }
+    abstract signPkcs8(privateKey: ByteArray, data: ByteArray | ByteArray[], dsaEncoding?: CryptoDsaEncoding): ByteArray;
 
-    static signSec1(privateKey: ByteArray, data: ByteArray | ByteArray[], dsaEncoding: ("ieee-p1363" | "der") = "ieee-p1363") {
-        const signer = crypto.createSign(HASH_ALGORITHM);
-        if (Array.isArray(data)) {
-            data.forEach(chunk => signer.update(chunk));
-        } else {
-            signer.update(data);
-        }
-        return signer.sign({
-            key: Buffer.from(privateKey), // key has to be a node.js Buffer object
-            format: "der",
-            type: "sec1",
-            dsaEncoding,
-        });
-    }
+    abstract signSec1(privateKey: ByteArray, data: ByteArray | ByteArray[], dsaEncoding?: CryptoDsaEncoding): ByteArray;
 
-    static verifySpkiEc(publicKey: ByteArray, data: ByteArray, signature: ByteArray, dsaEncoding: ("ieee-p1363" | "der") = "ieee-p1363") {
-        const verifier = crypto.createVerify(HASH_ALGORITHM);
-        verifier.update(data);
-        const success = verifier.verify({
-            key: Buffer.from(publicKey), // key has to be a node.js Buffer object
-            format: "der",
-            type: "spki",
-            dsaEncoding,
-        }, signature);
-        if (!success) throw new Error("Signature verification failed");
-    }
+    abstract verifySpkiEc(publicKey: ByteArray, data: ByteArray, signature: ByteArray, dsaEncoding?: CryptoDsaEncoding): void;
 
-    static verifySpki(publicKey: ByteArray, data: ByteArray, signature: ByteArray, dsaEncoding: ("ieee-p1363" | "der") = "ieee-p1363") {
-        const verifier = crypto.createVerify(HASH_ALGORITHM);
-        verifier.update(data);
-        const success = verifier.verify({
-            key: Buffer.concat([EC_PUBLIC_KEY_SPKI_HEADER, publicKey]), // key has to be a node.js Buffer object
-            format: "der",
-            type: "spki",
-            dsaEncoding,
-        }, signature);
-        if (!success) throw new Error("Signature verification failed");
-    }
+    abstract verifySpki(publicKey: ByteArray, data: ByteArray, signature: ByteArray, dsaEncoding?: CryptoDsaEncoding): void;
 
-    static createKeyPair(): KeyPair {
-        const ecdh = crypto.createECDH(EC_CURVE);
-        ecdh.generateKeys();
-        return { publicKey: ecdh.getPublicKey(), privateKey: ecdh.getPrivateKey() };
-    }
+    abstract createKeyPair(): KeyPair
+}
+
+export class Crypto {
+    static get: () => CryptoInterface = () => { throw new Error("No provider configured"); };
 }

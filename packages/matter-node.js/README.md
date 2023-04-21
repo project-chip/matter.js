@@ -28,7 +28,7 @@ npm i -g @project-chip/matter-node.js
 
 ### Use from Cloned Matter.js Repository
 
-When you clone the matter.js repository you can also use matter-node.js. To fdo this you need to execute `npm install`in the matter.js root directory once to install all dependencies and build all packages.
+When you clone the matter.js repository you can also use matter-node.js. To do this you need to execute `npm install`in the matter.js root directory once to install all dependencies and build all packages.
 
 Then after `cd packages/matter-node.js` you can use `npm run matter` to run the matter-node.js server. Please see the next section for more details.
 
@@ -85,7 +85,7 @@ matter-controller -ip [IP address of device to commission]
 To run directly from Typescript files with on the fly compilation:
 
 ```bash
-npm run matter-controller
+npm run matter-controller -- -ip [IP address of device to commission]
 ```
 
 This will commission a Matter device (for debugging purpose only for now).

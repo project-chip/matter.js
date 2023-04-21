@@ -134,7 +134,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     private readonly attributePaths = new Array<AttributePath>();
     private readonly commands = new Map<string, CommandServer<any, any>>();
     private readonly commandPaths = new Array<CommandPath>();
-    private nextSubscriptionId = Crypto.getRandomUInt32();
+    private nextSubscriptionId = Crypto.get().getRandomUInt32();
 
     constructor(
         private readonly storageManager: StorageManager

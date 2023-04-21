@@ -17,7 +17,6 @@ const validateStorageTestVector: TestVector = {
     "store and retrieve number": { key: "numberKey", input: 1234 },
     "store and retrieve boolean": { key: "booleanKey", input: true },
     "store and retrieve bigint": { key: "bigintKey", input: BigInt(123456789) },
-    "store and retrieve Buffer": { key: "BufferKey", input: Buffer.from("value", "ascii") },
     "store and retrieve ByteArray": { key: "ByteArrayKey", input: ByteArray.fromHex("010203040506070809") },
     "store and retrieve array of string": { key: "stringArrayKey", input: ["1", "2", "3"] },
     "store and retrieve object": { key: "stringArrayKey", input: { key1: "value1", key2: 2 } },
