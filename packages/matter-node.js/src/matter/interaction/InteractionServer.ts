@@ -14,8 +14,8 @@ import {
 import { CommandServer, ResultCode } from "../cluster/server/CommandServer";
 import { AttributeGetterServer, AttributeServer } from "../cluster/server/AttributeServer";
 import {
-    Attributes, Cluster, Commands, Events, DeviceTypeId, ClusterId, EndpointNumber, BitSchema, TlvStream, TypeFromBitSchema,
-    TypeFromSchema, DescriptorCluster, InteractionProtocolStatusCode as StatusCode, TlvAttributePath, TlvAttributeReport, TlvSubscribeResponse
+    Attributes, Cluster, Commands, Events, DeviceTypeId, ClusterId, EndpointNumber, BitSchema, TlvStream, TypeFromBitSchema, TypeFromSchema,
+    DescriptorCluster, InteractionProtocolStatusCode as StatusCode, TlvAttributePath, TlvAttributeReport, TlvSubscribeResponse, TlvNoArguments
 } from "@project-chip/matter.js";
 import { AttributeInitialValues, AttributeServers, ClusterServerHandlers } from "../cluster/server/ClusterServer";
 import { SecureSession } from "../session/SecureSession";
@@ -323,6 +323,12 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         await Promise.all(invokes.map(async ({ path, args }) => {
             const command = this.commands.get(commandPathToId(path));
             if (command === undefined) return;
+
+            // If no arguments are provided in the invoke data (because optional field), we use our type as replacement
+            if (args === undefined) {
+                args = TlvNoArguments.encodeTlv(args);
+            }
+
             const result = await command.invoke(exchange.session, args, message);
             results.push({ ...result, path });
         }));

@@ -15,13 +15,20 @@ import { CryptoNode } from "../../../src/crypto/CryptoNode";
 Crypto.get = () => new CryptoNode();
 import * as assert from "assert";
 import { ClusterServer, InteractionServer } from "../../../src/matter/interaction/InteractionServer";
-import { ReadRequest, DataReport, WriteRequest, WriteResponse } from "../../../src/matter/interaction/InteractionMessenger";
+import {
+    ReadRequest,
+    DataReport,
+    WriteRequest,
+    WriteResponse,
+    InvokeRequest, InvokeResponse
+} from "../../../src/matter/interaction/InteractionMessenger";
 import { MessageExchange } from "../../../src/matter/common/MessageExchange";
 import { DEVICE } from "../../../src/matter/common/DeviceTypes";
 import { MatterDevice } from "../../../src/matter/MatterDevice";
-import { BasicInformationCluster, VendorId, TlvString, TlvUInt8 } from "@project-chip/matter.js";
+import { BasicInformationCluster, VendorId, TlvString, TlvUInt8, OnOffCluster, TlvNoArguments } from "@project-chip/matter.js";
 import { StorageBackendMemory } from "../../../src/storage/StorageBackendMemory";
 import { StorageManager } from "../../../src/storage/StorageManager";
+import { Message } from "../../../src/codec/MessageCodec";
 
 const READ_REQUEST: ReadRequest = {
     interactionModelRevision: 1,
@@ -115,6 +122,55 @@ const MASS_WRITE_RESPONSE: WriteResponse = {
     writeResponses: []
 };
 
+const INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS: InvokeRequest = {
+    interactionModelRevision: 1,
+    suppressResponse: false,
+    timedRequest: false,
+    invokes: [
+        {
+            path: {
+                endpointId: 0,
+                clusterId: 6,
+                commandId: 1,
+            },
+            args: TlvNoArguments.encodeTlv(undefined),
+        }
+    ]
+};
+
+const INVOKE_COMMAND_REQUEST_WITH_NO_ARGS: InvokeRequest = {
+    interactionModelRevision: 1,
+    suppressResponse: false,
+    timedRequest: false,
+    invokes: [
+        {
+            path: {
+                endpointId: 0,
+                clusterId: 6,
+                commandId: 1,
+            },
+        }
+    ]
+};
+
+const INVOKE_COMMAND_RESPONSE: InvokeResponse = {
+    interactionModelRevision: 1,
+    suppressResponse: false,
+    responses: [
+        {
+            result: {
+                path: {
+                    clusterId: 6,
+                    commandId: 1,
+                    endpointId: 0
+                },
+                result: {
+                    code: 0
+                }
+            }
+        }
+    ]
+};
 
 describe("InteractionProtocol", () => {
 
@@ -218,4 +274,64 @@ describe("InteractionProtocol", () => {
         });
     });
 
+    describe("handleInvokeRequest", () => {
+        it("invoke method with empty args", async () => {
+            let onOffState = false;
+            const onOffCluster = new ClusterServer(OnOffCluster, {
+                lightingLevelControl: false
+            }, {
+                onOff: onOffState,
+            }, {
+                on: async () => {
+                    onOffState = true;
+                },
+                off: async () => {
+                    onOffState = false;
+                },
+                toggle: async () => {
+                    onOffState = !onOffState;
+                }
+            });
+
+            const storageManager = new StorageManager(new StorageBackendMemory());
+            await storageManager.initialize();
+            const interactionProtocol = new InteractionServer(storageManager)
+                .addEndpoint(0, DEVICE.ROOT, [onOffCluster]);
+
+            const result = await interactionProtocol.handleInvokeRequest(({ channel: { getName: () => "test" } }) as MessageExchange<MatterDevice>, INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS, {} as Message);
+
+            assert.deepEqual(result, INVOKE_COMMAND_RESPONSE);
+            assert.equal(onOffState, true);
+        });
+
+        it("invoke method with no args", async () => {
+
+            let onOffState = false;
+            const onOffCluster = new ClusterServer(OnOffCluster, {
+                lightingLevelControl: false
+            }, {
+                onOff: onOffState,
+            }, {
+                on: async () => {
+                    onOffState = true;
+                },
+                off: async () => {
+                    onOffState = false;
+                },
+                toggle: async () => {
+                    onOffState = !onOffState;
+                }
+            });
+
+            const storageManager = new StorageManager(new StorageBackendMemory());
+            await storageManager.initialize();
+            const interactionProtocol = new InteractionServer(storageManager)
+                .addEndpoint(0, DEVICE.ROOT, [onOffCluster]);
+
+            const result = await interactionProtocol.handleInvokeRequest(({ channel: { getName: () => "test" } }) as MessageExchange<MatterDevice>, INVOKE_COMMAND_REQUEST_WITH_NO_ARGS, {} as Message);
+
+            assert.deepEqual(result, INVOKE_COMMAND_RESPONSE);
+            assert.equal(onOffState, true);
+        });
+    });
 });
