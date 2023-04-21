@@ -85,7 +85,7 @@ matter-controller -ip [IP address of device to commission]
 To run directly from Typescript files with on the fly compilation:
 
 ```bash
-npm run matter-controller
+npm run matter-controller -- -ip [IP address of device to commission]
 ```
 
 This will commission a Matter device (for debugging purpose only for now).
