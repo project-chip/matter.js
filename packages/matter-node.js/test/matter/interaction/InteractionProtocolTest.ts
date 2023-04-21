@@ -26,8 +26,6 @@ import { MessageExchange } from "../../../src/matter/common/MessageExchange";
 import { DEVICE } from "../../../src/matter/common/DeviceTypes";
 import { MatterDevice } from "../../../src/matter/MatterDevice";
 import { BasicInformationCluster, VendorId, TlvString, TlvUInt8, OnOffCluster, TlvNoArguments } from "@project-chip/matter.js";
-import { Time } from "../../../src/time/Time";
-import { TimeFake } from "../../../src/time/TimeFake";
 import { StorageBackendMemory } from "../../../src/storage/StorageBackendMemory";
 import { StorageManager } from "../../../src/storage/StorageManager";
 import { Message } from "../../../src/codec/MessageCodec";
