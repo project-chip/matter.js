@@ -13,8 +13,8 @@ import { StorageManager } from "../../storage/StorageManager";
 
 export class RootCertificateManager {
     private rootCertId = BigInt(0);
-    private rootKeyPair = Crypto.createKeyPair();
-    private rootKeyIdentifier = Crypto.hash(this.rootKeyPair.publicKey).slice(0, 20);
+    private rootKeyPair = Crypto.get().createKeyPair();
+    private rootKeyIdentifier = Crypto.get().hash(this.rootKeyPair.publicKey).slice(0, 20);
     private rootCertBytes = this.generateRootCert();
     private nextCertificateId = 1;
 
@@ -71,11 +71,12 @@ export class RootCertificateManager {
                 authorityKeyIdentifier: this.rootKeyIdentifier,
             },
         };
-        const signature = Crypto.signPkcs8(this.rootKeyPair.privateKey, CertificateManager.rootCertToAsn1(unsignedCertificate));
+        const signature = Crypto.get().signPkcs8(this.rootKeyPair.privateKey, CertificateManager.rootCertToAsn1(unsignedCertificate));
         return TlvRootCertificate.encode({ ...unsignedCertificate, signature });
     }
 
     generateNoc(publicKey: ByteArray, fabricId: bigint, nodeId: NodeId) {
+        const crypto = Crypto.get();
         const now = Time.get().now();
         const certId = this.nextCertificateId++;
         const unsignedCertificate = {
@@ -92,11 +93,11 @@ export class RootCertificateManager {
                 basicConstraints: { isCa: false },
                 keyUsage: 1,
                 extendedKeyUsage: [2, 1],
-                subjectKeyIdentifier: Crypto.hash(publicKey).slice(0, 20),
+                subjectKeyIdentifier: crypto.hash(publicKey).slice(0, 20),
                 authorityKeyIdentifier: this.rootKeyIdentifier,
             },
         };
-        const signature = Crypto.signPkcs8(this.rootKeyPair.privateKey, CertificateManager.nocCertToAsn1(unsignedCertificate));
+        const signature = crypto.signPkcs8(this.rootKeyPair.privateKey, CertificateManager.nocCertToAsn1(unsignedCertificate));
         return TlvOperationalCertificate.encode({ ...unsignedCertificate, signature });
     }
 }

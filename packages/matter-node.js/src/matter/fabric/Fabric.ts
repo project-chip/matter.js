@@ -102,7 +102,7 @@ export class Fabric {
     }
 
     sign(data: ByteArray) {
-        return Crypto.signPkcs8(this.keyPair.privateKey, data);
+        return Crypto.get().signPkcs8(this.keyPair.privateKey, data);
     }
 
     verifyCredentials(_operationalCert: ByteArray, _intermediateCACert: ByteArray | undefined) {
@@ -116,7 +116,7 @@ export class Fabric {
         writer.writeByteArray(this.rootPublicKey);
         writer.writeUInt64(this.fabricId.id);
         writer.writeUInt64(nodeId.id);
-        return Crypto.hmac(this.operationalIdentityProtectionKey, writer.toByteArray());
+        return Crypto.get().hmac(this.operationalIdentityProtectionKey, writer.toByteArray());
     }
 
     addSession(session: SecureSession<any>) {
@@ -149,7 +149,7 @@ export class Fabric {
 }
 
 export class FabricBuilder {
-    private keyPair = Crypto.createKeyPair();
+    private keyPair = Crypto.get().createKeyPair();
     private rootVendorId?: VendorId;
     private rootCert?: ByteArray;
     private intermediateCACert?: ByteArray;
@@ -213,9 +213,10 @@ export class FabricBuilder {
         if (this.identityProtectionKey === undefined) throw new Error("identityProtectionKey needs to be set");
         if (this.operationalCert === undefined || this.fabricId === undefined || this.nodeId === undefined) throw new Error("operationalCert needs to be set");
 
+        const crypto = Crypto.get();
         const saltWriter = new DataWriter(Endian.Big);
         saltWriter.writeUInt64(this.fabricId.id);
-        const operationalId = await Crypto.hkdf(this.rootPublicKey.slice(1), saltWriter.toByteArray(), COMPRESSED_FABRIC_ID_INFO, 8);
+        const operationalId = await crypto.hkdf(this.rootPublicKey.slice(1), saltWriter.toByteArray(), COMPRESSED_FABRIC_ID_INFO, 8);
 
         return new Fabric(
             this.fabricIndex,
@@ -228,7 +229,7 @@ export class FabricBuilder {
             this.rootVendorId,
             this.rootCert,
             this.identityProtectionKey,
-            await Crypto.hkdf(this.identityProtectionKey, operationalId, GROUP_SECURITY_INFO, 16),
+            await crypto.hkdf(this.identityProtectionKey, operationalId, GROUP_SECURITY_INFO, 16),
             this.intermediateCACert,
             this.operationalCert,
             "",

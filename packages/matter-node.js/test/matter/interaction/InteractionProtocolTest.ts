@@ -4,6 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Time } from "../../../src/time/Time";
+import { TimeFake } from "../../../src/time/TimeFake";
+
+Time.get = () => new TimeFake(1262679233478);
+
+import { Crypto } from "../../../src/crypto/Crypto";
+import { CryptoNode } from "../../../src/crypto/CryptoNode";
+
+Crypto.get = () => new CryptoNode();
 import * as assert from "assert";
 import { ClusterServer, InteractionServer } from "../../../src/matter/interaction/InteractionServer";
 import { ReadRequest, DataReport, WriteRequest, WriteResponse } from "../../../src/matter/interaction/InteractionMessenger";
@@ -11,12 +20,8 @@ import { MessageExchange } from "../../../src/matter/common/MessageExchange";
 import { DEVICE } from "../../../src/matter/common/DeviceTypes";
 import { MatterDevice } from "../../../src/matter/MatterDevice";
 import { BasicInformationCluster, VendorId, TlvString, TlvUInt8 } from "@project-chip/matter.js";
-import { Time } from "../../../src/time/Time";
-import { TimeFake } from "../../../src/time/TimeFake";
 import { StorageBackendMemory } from "../../../src/storage/StorageBackendMemory";
 import { StorageManager } from "../../../src/storage/StorageManager";
-
-Time.get = () => new TimeFake(1262679233478);
 
 const READ_REQUEST: ReadRequest = {
     interactionModelRevision: 1,

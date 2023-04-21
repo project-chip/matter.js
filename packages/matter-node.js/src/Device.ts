@@ -17,11 +17,15 @@ import { NetworkNode } from "./net/node/NetworkNode";
 
 Network.get = singleton(() => new NetworkNode());
 
+import { Crypto } from "./crypto/Crypto";
+import { CryptoNode } from "./crypto/CryptoNode";
+
+Crypto.get = singleton(() => new CryptoNode());
+
 import { MatterDevice } from "./matter/MatterDevice";
 import { UdpInterface } from "./net/UdpInterface";
 import { SecureChannelProtocol } from "./matter/session/secure/SecureChannelProtocol";
 import { PaseServer } from "./matter/session/secure/PaseServer";
-import { Crypto } from "./crypto/Crypto";
 import { CaseServer } from "./matter/session/secure/CaseServer";
 import { ClusterServer, InteractionServer } from "./matter/interaction/InteractionServer";
 import {
@@ -86,7 +90,7 @@ class Device {
         onOffClusterServer.attributes.onOff.addListener(on => commandExecutor(on ? "on" : "off")?.());
 
         const secureChannelProtocol = new SecureChannelProtocol(
-            await PaseServer.fromPin(passcode, { iterations: 1000, salt: Crypto.getRandomData(32) }),
+            await PaseServer.fromPin(passcode, { iterations: 1000, salt: Crypto.get().getRandomData(32) }),
             new CaseServer(),
         );
 
