@@ -59,7 +59,7 @@ export enum DeviceClasses {
 export interface DeviceTypeDefinition {
     name: string;
     code: number;
-    class: DeviceClasses;
+    deviceClass: DeviceClasses;
     superSet?: string;
     revision: number;
     requiredServerClusters: number[];
@@ -68,6 +68,38 @@ export interface DeviceTypeDefinition {
     optionalClientClusters: number[];
 }
 
+export const DeviceTypeDefinition = ({
+    name,
+    code,
+    deviceClass,
+    superSet,
+    revision,
+    requiredServerClusters = [],
+    optionalServerClusters = [],
+    requiredClientClusters = [],
+    optionalClientClusters = [],
+}: {
+    name: string;
+    code: number;
+    deviceClass: DeviceClasses;
+    superSet?: string;
+    revision: number;
+    requiredServerClusters?: number[];
+    optionalServerClusters?: number[];
+    requiredClientClusters?: number[];
+    optionalClientClusters?: number[];
+}): DeviceTypeDefinition => ({
+    name,
+    code,
+    deviceClass,
+    superSet,
+    revision,
+    requiredServerClusters,
+    optionalServerClusters,
+    requiredClientClusters,
+    optionalClientClusters,
+});
+
 export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
     // Utility Device Types
     // A Utility device type supports configuration and settings.
@@ -75,10 +107,10 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
      * This represents a Root Node for devices.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 2.1
      */
-    ROOT: {
+    ROOT: DeviceTypeDefinition({
         name: "MA-rootdevice",
         code: 0x0016,
-        class: DeviceClasses.Node,
+        deviceClass: DeviceClasses.Node,
         revision: 1,
         requiredServerClusters: [
             MatterClusters.BasicInformationCluster.id,
@@ -102,119 +134,101 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
             //MatterClusters.WifiNetworkDiagnosticsCluster.id, // optional if WiFi
             //MatterClusters.ThreadNetworkDiagnosticsCluster.id, // optional if Thread
         ],
-        requiredClientClusters: [],
-        optionalClientClusters: [],
-    },
+    }),
 
     /**
      * This represents a Power Source Node for devices.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 2.2
      */
-    POWER_SOURCE: {
+    POWER_SOURCE: DeviceTypeDefinition({
         name: "MA-powersource",
         code: 0x011,
-        class: DeviceClasses.Node, // ???
+        deviceClass: DeviceClasses.Node, // ???
         revision: 1,
         requiredServerClusters: [
             MatterClusters.PowerSourceCluster.id
         ],
-        optionalServerClusters: [],
-        requiredClientClusters: [],
-        optionalClientClusters: [],
-    },
+    }),
 
     /**
      * An OTA Requestor is a device that is capable of receiving an OTA software
      * update.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 2.3
      */
-    OTA_REQUESTOR: {
+    OTA_REQUESTOR: DeviceTypeDefinition({
         name: "MA-otarequestor",
         code: 0x012,
-        class: DeviceClasses.Node, // ???
+        deviceClass: DeviceClasses.Node, // ???
         revision: 1,
         requiredServerClusters: [
             //OtaSoftwareUpdateRequestorCluster.id
         ],
-        optionalServerClusters: [],
         requiredClientClusters: [
             //OtaSoftwareUpdateProviderCluster.id
         ],
-        optionalClientClusters: [],
-    },
+    }),
 
     /**
      * An OTA Provider is a node that is capable of providing an OTA software
      * update to other nodes on the same fabric.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 2.4
      */
-    OTA_PROVIDER: {
+    OTA_PROVIDER: DeviceTypeDefinition({
         name: "MA-otaprovider",
         code: 0x0014,
-        class: DeviceClasses.Node, // ???
+        deviceClass: DeviceClasses.Node, // ???
         revision: 1,
         requiredServerClusters: [
             //OtaSoftwareUpdateProviderCluster.id
         ],
-        optionalServerClusters: [],
-        requiredClientClusters: [],
         optionalClientClusters: [
             //OtaSoftwareUpdateRequestorCluster.id
         ],
-    },
+    }),
 
     /**
      * This represents a Aggregator Node.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 2.5
      */
-    AGGREGATOR: {
+    AGGREGATOR: DeviceTypeDefinition({
         name: "MA-aggregator",
         code: 0x000e,
-        class: DeviceClasses.Dynamic, // ???
+        deviceClass: DeviceClasses.Dynamic, // ???
         revision: 1,
-        requiredServerClusters: [],
         optionalServerClusters: [
             //MatterClusters.ActionsCluster.id
         ],
-        requiredClientClusters: [],
-        optionalClientClusters: [],
-    },
+    }),
 
     /**
      * This represents a Bridged Node to identify a bridged device without Power Source information.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 2.6
      */
-    BRIDGED_NODE: {
+    BRIDGED_NODE: DeviceTypeDefinition({
         name: "MA-bridgednode",
         code: 0x0013,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 1,
         requiredServerClusters: [
             MatterClusters.BridgedDeviceBasicInformationCluster.id,
         ],
-        optionalServerClusters: [],
-        requiredClientClusters: [],
-        optionalClientClusters: [],
-    },
+    }),
 
     /**
      * This represents a Bridged Node to identify a bridged device with Power Source information.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 2.6
      */
-    BRIDGED_DEVICE_WITH_POWERSOURCE_INFO: {
+    BRIDGED_DEVICE_WITH_POWERSOURCE_INFO: DeviceTypeDefinition({
         name: "MA-bridgeddevice",
         code: 0x0013,
-        class: DeviceClasses.BridgedPowerSourceInfo,
+        deviceClass: DeviceClasses.BridgedPowerSourceInfo,
         revision: 1,
         requiredServerClusters: [
             MatterClusters.BridgedDeviceBasicInformationCluster.id,
             MatterClusters.PowerSourceConfigurationCluster.id,
             MatterClusters.PowerSourceCluster.id,
         ],
-        optionalServerClusters: [],
-        requiredClientClusters: [],
-        optionalClientClusters: [],
-    },
+    }),
 
     /* Application Device Types */
     /* Application devices types are typically the most common endpoints on a node and in the network. */
@@ -226,10 +240,10 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
      * of being switched by means of a bound occupancy sensor.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 4.1
      */
-    ON_OFF_LIGHT: {
+    ON_OFF_LIGHT: DeviceTypeDefinition({
         name: "MA-onofflight",
         code: 0x0100,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 2,
         requiredServerClusters: [
             MatterClusters.IdentifyCluster.id,
@@ -240,11 +254,10 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
         optionalServerClusters: [
             MatterClusters.LevelControlCluster.id,
         ],
-        requiredClientClusters: [],
         optionalClientClusters: [
             MatterClusters.OccupancySensingCluster.id,
         ],
-    },
+    }),
 
     /**
      * A Dimmable Light is a lighting device that is capable of being switched
@@ -254,10 +267,10 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
      * by means of a bound occupancy sensor or other device(s).
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 4.2
      */
-    DIMMABLE_LIGHT: {
+    DIMMABLE_LIGHT: DeviceTypeDefinition({
         name: "MA-dimmablelight",
         code: 0x0101,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         superSet: "ON_OFF_LIGHT",
         revision: 2,
         requiredServerClusters: [
@@ -267,12 +280,10 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
             MatterClusters.OnOffCluster.id,
             MatterClusters.LevelControlCluster.id,
         ],
-        optionalServerClusters: [],
-        requiredClientClusters: [],
         optionalClientClusters: [
             MatterClusters.OccupancySensingCluster.id,
         ],
-    },
+    }),
 
     /**
      * A Color Temperature Light is a lighting device that is capable of being
@@ -281,10 +292,10 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
      * as a Color Dimmer Switch.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 4.3
      */
-    COLOR_TEMPERATURE_LIGHT: {
+    COLOR_TEMPERATURE_LIGHT: DeviceTypeDefinition({
         name: "MA-colortemperaturelight",
         code: 0x010c,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         superSet: "DIMMABLE_LIGHT",
         revision: 2,
         requiredServerClusters: [
@@ -295,10 +306,7 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
             MatterClusters.LevelControlCluster.id,
             //MatterClusters.ColorControlCluster.id,
         ],
-        optionalServerClusters: [],
-        requiredClientClusters: [],
-        optionalClientClusters: [],
-    },
+    }),
 
     /**
      * An Extended Color Light is a lighting device that is capable of being
@@ -310,10 +318,10 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
      * capable of being switched by means of a bound occupancy sensor.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 4.4
      */
-    EXTENDED_COLOR_LIGHT: {
+    EXTENDED_COLOR_LIGHT: DeviceTypeDefinition({
         name: "MA-extendedcolorlight",
         code: 0x010d,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         superSet: "COLOR_TEMPERATURE_LIGHT",
         revision: 2,
         requiredServerClusters: [
@@ -324,10 +332,7 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
             MatterClusters.LevelControlCluster.id,
             //MatterClusters.ColorControlCluster.id,
         ],
-        optionalServerClusters: [],
-        requiredClientClusters: [],
-        optionalClientClusters: [],
-    },
+    }),
 
     /* ------------ Smart Plugs/outlets and other actuators ----------------- */
     /**
@@ -338,10 +343,10 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
      * connection. Other appliances can be controlled this way as well.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 5.1
      */
-    ON_OFF_PLUGIN_UNIT: {
+    ON_OFF_PLUGIN_UNIT: DeviceTypeDefinition({
         name: "MA-onoffpluginunit",
         code: 0x010a,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 2,
         requiredServerClusters: [
             MatterClusters.IdentifyCluster.id,
@@ -352,9 +357,7 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
         optionalServerClusters: [
             MatterClusters.LevelControlCluster.id,
         ],
-        requiredClientClusters: [],
-        optionalClientClusters: [],
-    },
+    }),
 
     /**
      * A Dimmable Plug-In Unit is a device that is capable of being switched on
@@ -364,10 +367,10 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
      * through its mains connection using phase cutting.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 5.2
      */
-    DIMMABLE_PLUGIN_UNIT: {
+    DIMMABLE_PLUGIN_UNIT: DeviceTypeDefinition({
         name: "MA-dimmablepluginunit",
         code: 0x010b,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 2,
         requiredServerClusters: [
             MatterClusters.IdentifyCluster.id,
@@ -376,10 +379,7 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
             MatterClusters.OnOffCluster.id,
             MatterClusters.LevelControlCluster.id,
         ],
-        optionalServerClusters: [],
-        requiredClientClusters: [],
-        optionalClientClusters: [],
-    },
+    }),
 
     /**
      * A Pump device is a pump that may have variable speed. It may have
@@ -387,10 +387,10 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
      * used for pumping fluids like water.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 5.3
      */
-    PUMP: {
+    PUMP: DeviceTypeDefinition({
         name: "MA-pump",
         code: 0x0303,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 2,
         requiredServerClusters: [
             MatterClusters.OnOffCluster.id,
@@ -405,14 +405,13 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
             MatterClusters.PressureMeasurementCluster.id,
             MatterClusters.FlowMeasurementCluster.id,
         ],
-        requiredClientClusters: [],
         optionalClientClusters: [
             MatterClusters.TemperatureMeasurementCluster.id,
             MatterClusters.PressureMeasurementCluster.id,
             MatterClusters.FlowMeasurementCluster.id,
             MatterClusters.OccupancySensingCluster.id,
         ],
-    },
+    }),
 
     /* ---------------- Switches and Controls ----------------------- */
     /**
@@ -421,15 +420,14 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
      * switch the device on or off.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 6.1
      */
-    ON_OFF_LIGHT_SWITCH: {
+    ON_OFF_LIGHT_SWITCH: DeviceTypeDefinition({
         name: "MA-onofflightswitch",
         code: 0x0103,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 2,
         requiredServerClusters: [
             MatterClusters.IdentifyCluster.id,
         ],
-        optionalServerClusters: [],
         requiredClientClusters: [
             MatterClusters.IdentifyCluster.id,
             MatterClusters.OnOffCluster.id,
@@ -438,7 +436,7 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
             MatterClusters.GroupsCluster.id,
             MatterClusters.ScenesCluster.id,
         ],
-    },
+    }),
 
     /**
      * A Dimmer Switch is a controller device that, when bound to a lighting
@@ -446,16 +444,15 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
      * device on or off and adjust the intensity of the light being emitted.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 6.2
      */
-    DIMMER_SWITCH: {
+    DIMMER_SWITCH: DeviceTypeDefinition({
         name: "MA-dimmerswitch",
         code: 0x0104,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         superSet: "ON_OFF_LIGHT_SWITCH",
         revision: 2,
         requiredServerClusters: [
             MatterClusters.IdentifyCluster.id,
         ],
-        optionalServerClusters: [],
         requiredClientClusters: [
             MatterClusters.IdentifyCluster.id,
             MatterClusters.OnOffCluster.id,
@@ -465,7 +462,7 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
             MatterClusters.GroupsCluster.id,
             MatterClusters.ScenesCluster.id,
         ],
-    },
+    }),
 
     /**
      * A Color Dimmer Switch is a controller device that, when bound to a
@@ -473,16 +470,15 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
      * used to adjust the color of the light being emitted.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 6.3
      */
-    COLOR_DIMMER_SWITCH: {
+    COLOR_DIMMER_SWITCH: DeviceTypeDefinition({
         name: "MA-colordimmerswitch",
         code: 0x0105,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         superSet: "DIMMER_SWITCH",
         revision: 2,
         requiredServerClusters: [
             MatterClusters.IdentifyCluster.id,
         ],
-        optionalServerClusters: [],
         requiredClientClusters: [
             MatterClusters.IdentifyCluster.id,
             MatterClusters.OnOffCluster.id,
@@ -493,7 +489,7 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
             MatterClusters.GroupsCluster.id,
             MatterClusters.ScenesCluster.id,
         ],
-    },
+    }),
 
     /**
      * A Control Bridge is a controller device that, when bound to a lighting
@@ -503,15 +499,14 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
      * Control Bridge device is capable of being used for setting scenes.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 6.4
      */
-    CONTROL_BRIDGE: {
+    CONTROL_BRIDGE: DeviceTypeDefinition({
         name: "MA-controlbridge",
         code: 0x0840,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 2,
         requiredServerClusters: [
             MatterClusters.IdentifyCluster.id,
         ],
-        optionalServerClusters: [],
         requiredClientClusters: [
             MatterClusters.IdentifyCluster.id,
             MatterClusters.GroupsCluster.id,
@@ -524,22 +519,21 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
             MatterClusters.IlluminanceMeasurementCluster.id,
             MatterClusters.OccupancySensingCluster.id,
         ],
-    },
+    }),
 
     /**
      * A Pump Controller device is capable of configuring and controlling a
      * Pump device.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 6.5
      */
-    PUMP_CONTROLLER: {
+    PUMP_CONTROLLER: DeviceTypeDefinition({
         name: "MA-pumpcontroller",
         code: 0x0304,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 2,
         requiredServerClusters: [
             MatterClusters.IdentifyCluster.id,
         ],
-        optionalServerClusters: [],
         requiredClientClusters: [
             MatterClusters.BindingCluster.id,
             MatterClusters.OnOffCluster.id,
@@ -554,16 +548,16 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
             MatterClusters.PressureMeasurementCluster.id,
             MatterClusters.FlowMeasurementCluster.id,
         ],
-    },
+    }),
 
     /**
      * This defines conformance for the Generic Switch device type.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 6.6
      */
-    GENERIC_SWITCH: {
+    GENERIC_SWITCH: DeviceTypeDefinition({
         name: "MA-genericswitch",
         code: 0x000f,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 1,
         requiredServerClusters: [
             MatterClusters.IdentifyCluster.id,
@@ -572,28 +566,23 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
         optionalServerClusters: [
             MatterClusters.FixedLabelCluster.id,
         ],
-        requiredClientClusters: [],
-        optionalClientClusters: [],
-    },
+    }),
 
     /* ---------------------------- Sensors --------------------------- */
     /**
      * This defines conformance to the Contact Sensor device type.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 7.1
      */
-    CONTACT_SENSOR: {
+    CONTACT_SENSOR: DeviceTypeDefinition({
         name: "MA-contactsensor",
         code: 0x0015,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 1,
         requiredServerClusters: [
             MatterClusters.IdentifyCluster.id,
             MatterClusters.BooleanStateCluster.id,
         ],
-        optionalServerClusters: [],
-        requiredClientClusters: [],
-        optionalClientClusters: [],
-    },
+    }),
 
     /**
      * A Light Sensor device is a measurement and sensing device that is capable
@@ -601,114 +590,98 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
      * the sensor is being subjected.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 7.2
      */
-    LIGHT_SENSOR: {
+    LIGHT_SENSOR: DeviceTypeDefinition({
         name: "MA-lightsensor",
         code: 0x0106,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 2,
         requiredServerClusters: [
             MatterClusters.IdentifyCluster.id,
             MatterClusters.IlluminanceMeasurementCluster.id,
         ],
-        optionalServerClusters: [],
-        requiredClientClusters: [],
         optionalClientClusters: [
             MatterClusters.GroupsCluster.id,
         ],
-    },
+    }),
 
     /**
      * An Occupancy Sensor is a measurement and sensing device that is capable
      * of measuring and reporting the occupancy state in a designated area.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 7.3
      */
-    OCCUPANCY_SENSOR: {
+    OCCUPANCY_SENSOR: DeviceTypeDefinition({
         name: "MA-occupancysensor",
         code: 0x0107,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 2,
         requiredServerClusters: [
             MatterClusters.IdentifyCluster.id,
             MatterClusters.OccupancySensingCluster.id,
         ],
-        optionalServerClusters: [],
-        requiredClientClusters: [],
         optionalClientClusters: [
             MatterClusters.GroupsCluster.id,
         ],
-    },
+    }),
 
     /**
      * A Temperature Sensor device reports measurements of temperature.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 7.4
      */
-    TEMPERATURE_SENSOR: {
+    TEMPERATURE_SENSOR: DeviceTypeDefinition({
         name: "MA-tempsensor",
         code: 0x0302,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 2,
         requiredServerClusters: [
             MatterClusters.TemperatureMeasurementCluster.id,
             MatterClusters.IdentifyCluster.id,
         ],
-        optionalServerClusters: [],
-        requiredClientClusters: [],
-        optionalClientClusters: [],
-    },
+    }),
 
     /**
      * A Pressure Sensor device measures and reports the pressure of a fluid.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 7.5
      */
-    PRESSURE_SENSOR: {
+    PRESSURE_SENSOR: DeviceTypeDefinition({
         name: "MA-pressuresensor",
         code: 0x0305,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 2,
         requiredServerClusters: [
             MatterClusters.PressureMeasurementCluster.id,
             MatterClusters.IdentifyCluster.id,
         ],
-        optionalServerClusters: [],
-        requiredClientClusters: [],
-        optionalClientClusters: [],
-    },
+    }),
 
     /**
      * A Flow Sensor device measures and reports the flow rate of a fluid.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 7.6
      */
-    FLOW_SENSOR: {
+    FLOW_SENSOR: DeviceTypeDefinition({
         name: "MA-flowsensor",
         code: 0x0306,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 2,
         requiredServerClusters: [
             MatterClusters.FlowMeasurementCluster.id,
             MatterClusters.IdentifyCluster.id,
         ],
-        optionalServerClusters: [],
-        requiredClientClusters: [],
-        optionalClientClusters: [],
-    },
+    }),
 
     /**
      * A humidity sensor (in most cases a Relative humidity sensor) reports humidity measurements.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 7.7
      */
-    HUMIDITY_SENSOR: {
+    HUMIDITY_SENSOR: DeviceTypeDefinition({
         name: "MA-humiditysensor",
         code: 0x0307,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 2,
         requiredServerClusters: [
             MatterClusters.IdentifyCluster.id,
             MatterClusters.RelativeHumidityCluster.id,
         ],
-        optionalServerClusters: [],
-        requiredClientClusters: [],
-        optionalClientClusters: [],
-    },
+    }),
 
     /**
      * An On/Off Sensor is a measurement and sensing device that, when bound to
@@ -716,15 +689,14 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
      * switch the device on or off.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 7.8
      */
-    ON_OFF_SENSOR: {
+    ON_OFF_SENSOR: DeviceTypeDefinition({
         name: "MA-onoffsensor",
         code: 0x0850,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 2,
         requiredServerClusters: [
             MatterClusters.IdentifyCluster.id,
         ],
-        optionalServerClusters: [],
         requiredClientClusters: [
             MatterClusters.IdentifyCluster.id,
             MatterClusters.OnOffCluster.id,
@@ -735,7 +707,7 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
             MatterClusters.LevelControlCluster.id,
             //MatterClusters.ColorControlCluster.id,
         ],
-    },
+    }),
 
     /* ---------------------------- Closures --------------------------- */
     /**
@@ -743,10 +715,10 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
      * a door lock either by means of a manual or a remote method.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 8.1
      */
-    DOOR_LOCK: {
+    DOOR_LOCK: DeviceTypeDefinition({
         name: "MA-doorlock",
         code: 0x000a,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 2,
         requiredServerClusters: [
             MatterClusters.IdentifyCluster.id,
@@ -755,22 +727,20 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
         optionalServerClusters: [
             //MatterClusters.PollControlCluster.id,
         ],
-        requiredClientClusters: [],
         optionalClientClusters: [
             //MatterClusters.TimeSyncCluster.id
         ],
-    },
+    }),
 
     /**
      * A Door Lock Controller is a device capable of controlling a door lock.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 8.2
      */
-    DOOR_LOCK_CONTROLLER: {
+    DOOR_LOCK_CONTROLLER: DeviceTypeDefinition({
         name: "MA-doorlockcontroller",
         code: 0x000b,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 2,
-        requiredServerClusters: [],
         optionalServerClusters: [
             MatterClusters.IdentifyCluster.id, // Optional if EZ-Target
             //MatterClusters.TimeSyncCluster.id
@@ -783,16 +753,16 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
             MatterClusters.GroupsCluster.id, // Required if Zigbee
             MatterClusters.ScenesCluster.id, // Required if Zigbee
         ],
-    },
+    }),
 
     /**
      * This defines conformance to the Window Covering device type.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 8.3
      */
-    WINDOW_COVERING: {
+    WINDOW_COVERING: DeviceTypeDefinition({
         name: "MA-windowcovering",
         code: 0x0202,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 2,
         requiredServerClusters: [
             MatterClusters.IdentifyCluster.id,
@@ -802,22 +772,18 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
             MatterClusters.GroupsCluster.id, // Required when Awake, else optional
             MatterClusters.ScenesCluster.id, // Required when Awake, else optional
         ],
-        requiredClientClusters: [],
-        optionalClientClusters: [],
-    },
+    }),
 
     /**
      * A Window Covering Controller is a device that controls an automatic
      * window covering.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 8.4
      */
-    WINDOW_COVERING_CONTROLLER: {
+    WINDOW_COVERING_CONTROLLER: DeviceTypeDefinition({
         name: "MA-windowcoveringcontroller",
         code: 0x0203,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 2,
-        requiredServerClusters: [
-        ],
         optionalServerClusters: [
             MatterClusters.IdentifyCluster.id,
         ],
@@ -829,7 +795,7 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
             MatterClusters.GroupsCluster.id, // Required when Awake, else optional
             MatterClusters.ScenesCluster.id, // Required when Awake, else optional
         ],
-    },
+    }),
 
     /* ---------------------------- HVAC --------------------------- */
     /**
@@ -839,10 +805,10 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
      * handler.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 9.1
      */
-    HEATING_COOLING_UNIT: {
+    HEATING_COOLING_UNIT: DeviceTypeDefinition({
         name: "MA-heatcool",
         code: 0x0300,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 2,
         requiredServerClusters: [
             MatterClusters.IdentifyCluster.id,
@@ -857,8 +823,7 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
         requiredClientClusters: [
             //MatterClusters.ThermostatCluster.id,
         ],
-        optionalClientClusters: [],
-    },
+    }),
 
     /**
      * A Thermostat device is capable of having either built-in or separate
@@ -870,10 +835,10 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
      * directly.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 9.2
      */
-    THERMOSTAT: {
+    THERMOSTAT: DeviceTypeDefinition({
         name: "MA-thermostat",
         code: 0x0301,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 2,
         requiredServerClusters: [
             MatterClusters.IdentifyCluster.id,
@@ -886,8 +851,6 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
             //MatterClusters.ThermostatUserInterfaceConfigurationCluster.id,
             //MatterClusters.TimeSyncCluster.id,
         ],
-        requiredClientClusters: [
-        ],
         optionalClientClusters: [
             MatterClusters.RelativeHumidityCluster.id,
             //MatterClusters.TimeCluster.id, // Optional when Zigbee
@@ -896,26 +859,23 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
             MatterClusters.TemperatureMeasurementCluster.id,
             MatterClusters.OccupancySensingCluster.id,
         ],
-    },
+    }),
 
     /**
      * This defines conformance to the Fan device type.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 9.3
      */
-    FAN: {
+    FAN: DeviceTypeDefinition({
         name: "MA-fan",
         code: 0x002b,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 1,
         requiredServerClusters: [
             MatterClusters.IdentifyCluster.id,
             MatterClusters.GroupsCluster.id,
             //MatterClusters.FanControlCluster.id,
         ],
-        optionalServerClusters: [],
-        requiredClientClusters: [],
-        optionalClientClusters: [],
-    },
+    }),
 
     /* ---------------------------- Media --------------------------- */
     /**
@@ -928,10 +888,10 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
      * device type is used for these functions).
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 10.2
      */
-    BASIC_VIDEO_PLAYER: {
+    BASIC_VIDEO_PLAYER: DeviceTypeDefinition({
         name: "MA-basic-videoplayer",
         code: 0x0028,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 1,
         requiredServerClusters: [
             MatterClusters.OnOffCluster.id,
@@ -946,9 +906,7 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
             //MatterClusters.LowPowerCluster.id,
             //MatterClusters.AudioOutputCluster.id,
         ],
-        requiredClientClusters: [],
-        optionalClientClusters: [],
-    },
+    }),
 
     /**
      * A Casting Video Player has basic controls for playback (play, pause,
@@ -956,10 +914,10 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
      * content.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 10.3
      */
-    CASTING_VIDEO_PLAYER: {
+    CASTING_VIDEO_PLAYER: DeviceTypeDefinition({
         name: "MA-casting-videoplayer",
         code: 0x0023,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 1,
         requiredServerClusters: [
             MatterClusters.OnOffCluster.id,
@@ -977,27 +935,22 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
             //MatterClusters.ApplicationLauncherCluster.id, // Required if ContentAppPlatform
             //MatterClusters.AccountLoginCluster.id,
         ],
-        requiredClientClusters: [],
-        optionalClientClusters: [],
-    },
+    }),
 
     /**
      * This feature controls the speaker volume of the device.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 10.4
      */
-    SPEAKER: {
+    SPEAKER: DeviceTypeDefinition({
         name: "MA-speaker",
         code: 0x0022,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 1,
         requiredServerClusters: [
             MatterClusters.OnOffCluster.id,
             MatterClusters.LevelControlCluster.id,
         ],
-        optionalServerClusters: [],
-        requiredClientClusters: [],
-        optionalClientClusters: [],
-    },
+    }),
 
     /**
      * A Content App is usually an application built by a Content Provider. A
@@ -1005,10 +958,10 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
      * Content Apps and represent these apps as separate endpoints.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 10.5
      */
-    CONTENT_APP: {
+    CONTENT_APP: DeviceTypeDefinition({
         name: "MA-contentapp",
         code: 0x0024,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 1,
         requiredServerClusters: [
             //MatterClusters.KeypadInputCluster.id,
@@ -1022,9 +975,7 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
             //MatterClusters.ContentLauncherCluster.id,
             //MatterClusters.AccountLoginCluster.id,
         ],
-        requiredClientClusters: [],
-        optionalClientClusters: [],
-    },
+    }),
 
     /**
      * A Casting Video Client is a client that can launch content on a Casting
@@ -1032,13 +983,11 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
      * app.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 10.6
      */
-    CASTING_VIDEO_CLIENT: {
+    CASTING_VIDEO_CLIENT: DeviceTypeDefinition({
         name: "MA-casting-videoclient",
         code: 0x0029,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 1,
-        requiredServerClusters: [],
-        optionalServerClusters: [],
         requiredClientClusters: [
             MatterClusters.OnOffCluster.id,
             //MatterClusters.KeypadInputCluster.id,
@@ -1057,20 +1006,18 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
             //MatterClusters.ApplicationLauncherCluster.id,
             //MatterClusters.AccountLoginCluster.id,
         ],
-    },
+    }),
 
     /**
      * A Video Remote Control is a client that can control a Video Player, for
      * example, a traditional universal remote control.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 10.7
      */
-    VIDEO_REMOTE_CONTROL: {
+    VIDEO_REMOTE_CONTROL: DeviceTypeDefinition({
         name: "MA-video-remotecontrol",
         code: 0x002a,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 1,
-        requiredServerClusters: [],
-        optionalServerClusters: [],
         requiredClientClusters: [
             MatterClusters.OnOffCluster.id,
             //MatterClusters.MediaPlaybackCluster.id,
@@ -1088,23 +1035,20 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
             //MatterClusters.ApplicationLauncherCluster.id,
             //MatterClusters.AccountLoginCluster.id,
         ],
-    },
+    }),
 
     /* ---------------------------- Generic --------------------------- */
     /**
      * This defines conformance to the Mode device type.
      * @see {@link MatterDeviceLibrarySpecificationV1_0} § 11.1
      */
-    MODE_SELECT: {
+    MODE_SELECT: DeviceTypeDefinition({
         name: "MA-modeselect",
         code: 0x0027,
-        class: DeviceClasses.Simple,
+        deviceClass: DeviceClasses.Simple,
         revision: 1,
         requiredServerClusters: [
             //MatterClusters.ModeSelectCluster.id,
         ],
-        optionalServerClusters: [],
-        requiredClientClusters: [],
-        optionalClientClusters: [],
-    },
+    }),
 }
