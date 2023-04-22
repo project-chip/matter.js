@@ -4,16 +4,22 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Time } from "../../../src/time/Time";
+import { TimeFake } from "../../../src/time/TimeFake";
+
+Time.get = () => new TimeFake(0);
+
+import { Crypto } from "../../../src/crypto/Crypto";
+import { CryptoNode } from "../../../src/crypto/CryptoNode";
+
+Crypto.get = () => new CryptoNode();
+
 import * as assert from "assert";
 import { Message, MessageCodec, SessionType } from "../../../src/codec/MessageCodec";
 import { MatterDevice } from "../../../src/matter/MatterDevice";
 import { SecureSession } from "../../../src/matter/session/SecureSession";
 import { UNDEFINED_NODE_ID } from "../../../src/matter/session/SessionManager";
 import { ByteArray } from "@project-chip/matter.js";
-import { Time } from "../../../src/time/Time";
-import { TimeFake } from "../../../src/time/TimeFake";
-
-Time.get = () => new TimeFake(0);
 
 const DECRYPT_KEY = ByteArray.fromHex("bacb178b2588443d5d5b1e4559e7accc");
 const MESSAGE_ENCRYPTED = ByteArray.fromHex("001d350022145300ec2b931025dada82ed67521c966d2454d131a271023be699e4e2796650f568e590fd9b65f456c720a60a0da127eaa53974c5d41d3d933ed7b58a9ce5b5cb96ad94a7762611c48774cf75458327e74c34668a45dc9943546f8a6aa1dcd40bd4b8014befb49954a097a60cbdff333ee3f2fd1f49");

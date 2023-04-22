@@ -54,7 +54,8 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
     private async handlePairingRequest(server: MatterDevice, messenger: PaseServerMessenger) {
         logger.info(`Pase server: Received pairing request from ${messenger.getChannelName()}`);
         const sessionId = server.getNextAvailableSessionId();
-        const random = Crypto.getRandom();
+        const crypto = Crypto.get();
+        const random = crypto.getRandom();
 
         // Read pbkdRequest and send pbkdResponse
         const { requestPayload, request: { random: peerRandom, mrpParameters, passcodeId, hasPbkdfParameters, sessionId: peerSessionId } } = await messenger.readPbkdfParamRequest();
@@ -62,7 +63,7 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
         const responsePayload = await messenger.sendPbkdfParamResponse({ peerRandom, random, sessionId, mrpParameters, pbkdfParameters: hasPbkdfParameters ? undefined : this.pbkdfParameters });
 
         // Process pake1 and send pake2
-        const spake2p = Spake2p.create(Crypto.hash([SPAKE_CONTEXT, requestPayload, responsePayload]), this.w0);
+        const spake2p = Spake2p.create(crypto.hash([SPAKE_CONTEXT, requestPayload, responsePayload]), this.w0);
         const { x: X } = await messenger.readPasePake1();
         const Y = spake2p.computeY();
         const { Ke, hAY, hBX } = await spake2p.computeSecretAndVerifiersFromX(this.L, X, Y);

@@ -41,7 +41,7 @@ export class MatterController {
     public static async create(scanner: Scanner, netInterfaceIpv4: NetInterface, netInterfaceIpv6: NetInterface, storageManager: StorageManager) {
         const certificateManager = new RootCertificateManager(storageManager);
 
-        const ipkValue = Crypto.getRandomData(16);
+        const ipkValue = Crypto.get().getRandomData(16);
         const fabricBuilder = new FabricBuilder(FABRIC_INDEX)
             .setRootCert(certificateManager.getRootCert())
             .setRootNodeId(CONTROLLER_NODE_ID)
@@ -106,14 +106,16 @@ export class MatterController {
         this.ensureSuccess(await generalCommissioningClusterClient.armFailSafe({ breadcrumb: BigInt(1), expiryLengthSeconds: 60 }));
         this.ensureSuccess(await generalCommissioningClusterClient.setRegulatoryConfig({ breadcrumb: BigInt(2), newRegulatoryConfig: RegulatoryLocationType.IndoorOutdoor, countryCode: "US" }));
 
+        const crypto = Crypto.get();
+
         const operationalCredentialsClusterClient = ClusterClient(interactionClient, 0, OperationalCredentialsCluster);
         const { certificate: deviceAttestation } = await operationalCredentialsClusterClient.requestCertChain({ type: CertificateChainType.DeviceAttestation });
         // TODO: extract device public key from deviceAttestation
         const { certificate: productAttestation } = await operationalCredentialsClusterClient.requestCertChain({ type: CertificateChainType.ProductAttestationIntermediate });
         // TODO: validate deviceAttestation and productAttestation
-        const { elements: attestationElements, signature: attestationSignature } = await operationalCredentialsClusterClient.requestAttestation({ attestationNonce: Crypto.getRandomData(32) });
+        const { elements: attestationElements, signature: attestationSignature } = await operationalCredentialsClusterClient.requestAttestation({ attestationNonce: crypto.getRandomData(32) });
         // TODO: validate attestationSignature using device public key
-        const { elements: csrElements, signature: csrSignature } = await operationalCredentialsClusterClient.requestCertSigning({ certSigningRequestNonce: Crypto.getRandomData(32) });
+        const { elements: csrElements, signature: csrSignature } = await operationalCredentialsClusterClient.requestCertSigning({ certSigningRequestNonce: crypto.getRandomData(32) });
         if (deviceAttestation.length === 0 || productAttestation.length === 0 || attestationElements.length === 0 || attestationSignature.length === 0 || csrElements.length === 0 || csrSignature.length === 0) {
             // TODO: validate the data really
             throw new Error("Invalid response from device");
@@ -138,7 +140,7 @@ export class MatterController {
 
         // Complete the commission
         generalCommissioningClusterClient = ClusterClient(interactionClient, 0, GeneralCommissioningCluster);
-        this.ensureSuccess(await generalCommissioningClusterClient.commissioningComplete({}));
+        this.ensureSuccess(await generalCommissioningClusterClient.commissioningComplete());
 
         this.controllerStorage.set("fabric", this.fabric.toStorageObject());
         this.controllerStorage.set("fabricCommissioned", true);

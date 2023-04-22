@@ -149,7 +149,7 @@ export const TlvCommandPath = TlvList({ // CommandPathIB
 /** @see {@link MatterCoreSpecificationV1_0}, section 10.5.12 */
 export const TlvCommandData = TlvObject({ // CommandDataIB
     path: TlvField(0, TlvCommandPath), // TODO rename to commandPath
-    args: TlvField(1, TlvAny), // TODO rename to commandFields
+    args: TlvOptionalField(1, TlvAny), // TODO rename to commandFields
 });
 
 /** @see {@link MatterCoreSpecificationV1_0}, section 10.5.14 */

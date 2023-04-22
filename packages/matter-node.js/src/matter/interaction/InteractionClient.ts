@@ -259,9 +259,11 @@ export class InteractionClient {
 
     async invoke<C extends Command<any, any>>(endpointId: number, clusterId: number, request: RequestType<C>, id: number, requestSchema: TlvSchema<RequestType<C>>, _responseId: number, responseSchema: TlvSchema<ResponseType<C>>, optional: boolean): Promise<ResponseType<C>> {
         return this.withMessenger<ResponseType<C>>(async messenger => {
+            const args = requestSchema.encodeTlv(request);
+
             const invokeResponse = await messenger.sendInvokeCommand({
                 invokes: [
-                    { path: { endpointId, clusterId, commandId: id }, args: requestSchema.encodeTlv(request) }
+                    { path: { endpointId, clusterId, commandId: id }, args }
                 ],
                 timedRequest: false,
                 suppressResponse: false,
