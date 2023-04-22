@@ -16,8 +16,17 @@ import { UdpInterface } from "../src/net/UdpInterface";
 import { MatterController } from "../src/matter/MatterController";
 import { MatterDevice } from "../src/matter/MatterDevice";
 import {
-    OnOffCluster, BasicInformationCluster, GeneralCommissioningCluster, RegulatoryLocationType, OperationalCertStatus,
-    OperationalCredentialsCluster, VendorId, FabricIndex, DescriptorCluster, ClusterId,
+    OnOffCluster,
+    BasicInformationCluster,
+    GeneralCommissioningCluster,
+    RegulatoryLocationType,
+    OperationalCertStatus,
+    OperationalCredentialsCluster,
+    VendorId,
+    FabricIndex,
+    DescriptorCluster,
+    ClusterId,
+    AccessControlCluster,
 } from "@project-chip/matter.js";
 import { DEVICE } from "../src/matter/common/DeviceTypes";
 import { ClusterServer, InteractionServer } from "../src/matter/interaction/InteractionServer";
@@ -152,6 +161,17 @@ describe("Integration", () => {
                             deviceIntermediateCertificate: paa.getPAICert(),
                             certificationDeclaration,
                         })),
+                    new ClusterServer(AccessControlCluster,
+                        {},
+                        {
+                            acl: [],
+                            extension: [],
+                            subjectsPerAccessControlEntry: 4,
+                            targetsPerAccessControlEntry: 4,
+                            accessControlEntriesPerFabric: 3
+                        },
+                        {},
+                    )
                 ])
                 .addEndpoint(0x01, DEVICE.ON_OFF_LIGHT, [onOffServer])
             );
@@ -223,7 +243,7 @@ describe("Integration", () => {
                     clusterId: DescriptorCluster.id,
                     attributeId: DescriptorCluster.attributes.serverList.id,
                     attributeName: "serverList"
-                }, value: [new ClusterId(40), new ClusterId(48), new ClusterId(62), new ClusterId(29)], version: 1
+                }, value: [new ClusterId(40), new ClusterId(48), new ClusterId(62), new ClusterId(31), new ClusterId(29)], version: 1
             })
 
             assert.equal(response.filter(({
@@ -359,6 +379,18 @@ describe("Integration", () => {
             const lastReport = await lastPromise;
 
             assert.deepEqual(lastReport, { value: false, version: 2, time: startTime + (60 * 60 + 4) * 1000 });
+        });
+    });
+
+    describe("Access Control server fabric scoped attribute storage", () => {
+        it("set empty acl", async () => {
+            console.log("SET ACL");
+            const accessControlCluster = ClusterClient(await client.connect(client.getFabric().nodeId), 0, AccessControlCluster);
+            await accessControlCluster.setAcl([]);
+
+            const acl = await accessControlCluster.getAcl();
+            assert.ok(Array.isArray(acl));
+            assert.equal(acl.length, 0);
         });
     });
 

@@ -6,10 +6,16 @@
 
 import {
     ArraySchema, Attribute, AttributeJsType, getClusterAttributeById, getClusterById, TlvType, TypeFromSchema,
-    TlvAttributeReport, TlvAttributeReportValue
+    TlvAttributeReport, TlvAttributeData, TlvSchema
 } from "@project-chip/matter.js";
 import { NodeId } from "../common/NodeId";
 import { Logger } from "../../log/Logger";
+
+import { Time } from "../../time/Time";
+import { TimeNode } from "../../time/TimeNode";
+import { singleton } from "../../util/Singleton";
+
+Time.get = singleton(() => new TimeNode());
 
 const logger = Logger.get("DataReportDecoder");
 
@@ -25,10 +31,29 @@ export interface DecodedAttributeReportValue {
     value: any,
 }
 
-export function normalizeReadAttributeReport(data: TypeFromSchema<typeof TlvAttributeReport>[]): DecodedAttributeReportValue[] {
+export interface DecodedAttributeValue {
+    path: {
+        nodeId?: NodeId,
+        endpointId: number,
+        clusterId: number,
+        attributeId: number,
+        attributeName: string
+    },
+    version?: number,
+    value: any,
+}
+
+export function normalizeAndDecodeReadAttributeReport(data: TypeFromSchema<typeof TlvAttributeReport>[]): DecodedAttributeReportValue[] {
+    // TODO Decide how to handle the attribute report status field, right now we ignore it
+    const dataValues = data.flatMap(({ value }) => value !== undefined ? value : []);
+
+    return normalizeAndDecodeAttributeData(dataValues) as DecodedAttributeReportValue[]; // dataVersion existing in incoming data, so must also in outgoing data
+}
+
+export function normalizeAttributeData(data: TypeFromSchema<typeof TlvAttributeData>[], acceptWildcardPaths = false): TypeFromSchema<typeof TlvAttributeData>[][] {
     // Fill in missing path elements when tag compression is used
     let lastPath: { nodeId?: NodeId, endpointId: number, clusterId: number, attributeId: number } | undefined;
-    data.forEach(({ value }) => {
+    data.forEach((value) => {
         if (value === undefined) return;
         const { path } = value;
         if (path.enableTagCompression) {
@@ -39,25 +64,31 @@ export function normalizeReadAttributeReport(data: TypeFromSchema<typeof TlvAttr
             if (path.attributeId === undefined) path.attributeId = lastPath.attributeId;
         } else if (path.endpointId !== undefined && path.clusterId !== undefined && path.attributeId !== undefined) {
             lastPath = { nodeId: path.nodeId, endpointId: path.endpointId, clusterId: path.clusterId, attributeId: path.attributeId };
-        } else {
+        } else if (!acceptWildcardPaths) {
             throw new Error('Tag compression disabled, but path is incomplete: ' + Logger.toJSON(path));
         }
     });
 
     // Put all returned values into a map to group by path
-    const responseList = new Map<string, TypeFromSchema<typeof TlvAttributeReportValue>[]>();
-    data.forEach(({ value: reportValue }) => {
-        if (!reportValue) return;
-        const { path: { nodeId, endpointId, clusterId, attributeId } } = reportValue;
+    const responseList = new Map<string, TypeFromSchema<typeof TlvAttributeData>[]>(); // TODO CHECK
+    data.forEach((value) => {
+        if (!value) return;
+        const { path: { nodeId, endpointId, clusterId, attributeId } } = value;
         const mapId = `${nodeId}-${endpointId}-${clusterId}-${attributeId}`;
         const list = responseList.get(mapId) || [];
-        list.push(reportValue);
+        list.push(value);
         responseList.set(mapId, list);
     });
 
-    const result: DecodedAttributeReportValue[] = [];
+    return Array.from(responseList.values());
+}
+
+export function normalizeAndDecodeAttributeData(data: TypeFromSchema<typeof TlvAttributeData>[]): DecodedAttributeValue[] {
+
+    const responseList = normalizeAttributeData(data);
+    const result: DecodedAttributeValue[] = [];
     responseList.forEach(values => {
-        const { path: { nodeId, endpointId, clusterId, attributeId }, version } = values[0];
+        const { path: { nodeId, endpointId, clusterId, attributeId }, dataVersion } = values[0];
 
         if (endpointId === undefined || clusterId === undefined || attributeId === undefined) {
             throw new Error(`Invalid attribute path ${endpointId}/${clusterId}/${attributeId}`);
@@ -75,7 +106,7 @@ export function normalizeReadAttributeReport(data: TypeFromSchema<typeof TlvAttr
             }
             const { attribute, name } = attributeDetail;
             const value = decodeValueForAttribute(attribute, values);
-            result.push({ path: { nodeId, endpointId, clusterId, attributeId, attributeName: name }, version, value });
+            result.push({ path: { nodeId, endpointId, clusterId, attributeId, attributeName: name }, version: dataVersion, value });
         } catch (error: any) {
             logger.error(`Error decoding attribute ${endpointId}/${clusterId}/${attributeId}: ${error.message}`);
         }
@@ -83,7 +114,7 @@ export function normalizeReadAttributeReport(data: TypeFromSchema<typeof TlvAttr
     return result;
 }
 
-export function decodeValueForAttribute<A extends Attribute<any>>(attribute: A, values: TypeFromSchema<typeof TlvAttributeReportValue>[]): AttributeJsType<A> | undefined {
+export function decodeValueForAttribute<A extends Attribute<any>>(attribute: A, values: TypeFromSchema<typeof TlvAttributeData>[]): AttributeJsType<A> | undefined {
     const { schema, optional, default: conformanceValue } = attribute;
 
     // No values, so use default value if available
@@ -93,34 +124,43 @@ export function decodeValueForAttribute<A extends Attribute<any>>(attribute: A, 
         return conformanceValue;
     }
 
+    return decodeValueForSchema(schema, values);
+}
+
+export function decodeValueForSchema<T>(schema: TlvSchema<T>, values: TypeFromSchema<typeof TlvAttributeData>[], defaultValue?: T): T | undefined {
+    // No values, so use default value if available
+    if (!values.length) {
+        return defaultValue;
+    }
+
     // The value was returned as one Tlv value, so decode it normally
     if (values.length === 1 && values[0].path.listIndex === undefined) {
-        return schema.decodeTlv(values[0].value);
+        return schema.decodeTlv(values[0].data);
     }
 
     // Return contained multiple tlv values as an array
     if (!(schema instanceof ArraySchema)) {
         throw new Error(`Attribute is not an list but multiple values were returned`);
     }
-    return decodeChunkedArray(schema, values) as AttributeJsType<A>;
+    return decodeChunkedArray(schema, values) as T;
 }
 
-export function decodeChunkedArray<T>(schema: ArraySchema<T>, values: TypeFromSchema<typeof TlvAttributeReportValue>[]): T[] {
+export function decodeChunkedArray<T>(schema: ArraySchema<T>, values: TypeFromSchema<typeof TlvAttributeData>[]): T[] {
     if (!values.length) throw new Error('No values');
     if (values[0].path.listIndex !== undefined) {
         throw new Error(`List index ${values[0].path.listIndex} on first array element not supported`);
     }
     let result: T[] = [];
-    values.forEach(({ value, path: { listIndex } }) => {
+    values.forEach(({ data, path: { listIndex } }) => {
         if (listIndex === undefined) {
-            result = schema.decodeTlv(value);
+            result = schema.decodeTlv(data);
         } else if (listIndex === null) {
-            const element = schema.elementSchema.decodeTlv(value);
+            const element = schema.elementSchema.decodeTlv(data);
             result.push(element);
-        } else if (value[0].typeLength.type === TlvType.Null) {
-            delete result[listIndex];
+        } else if (data[0].typeLength.type === TlvType.Null) {
+            result.splice(listIndex, 1);
         } else {
-            result[listIndex] = schema.elementSchema.decodeTlv(value);
+            result[listIndex] = schema.elementSchema.decodeTlv(data);
         }
     });
     schema.validate(result);

@@ -20,7 +20,7 @@ import { ExchangeProvider } from "../common/ExchangeManager";
 import { attributePathToId, INTERACTION_PROTOCOL_ID } from "./InteractionServer";
 import { ProtocolHandler } from "../common/ProtocolHandler";
 import { Logger } from "../../log/Logger";
-import { DecodedAttributeReportValue, normalizeReadAttributeReport } from "./DataReportDecoder";
+import { DecodedAttributeReportValue, normalizeAndDecodeReadAttributeReport } from "./AttributeDataDecoder";
 import { NodeId } from "../common/NodeId";
 
 const logger = Logger.get("InteractionClient");
@@ -88,7 +88,7 @@ export class SubscriptionClient implements ProtocolHandler<MatterController> {
 
 export class InteractionClient {
     private readonly subscriptionListeners = new Map<number, (dataReport: DataReport) => void>();
-    private readonly subscribedLocalValues = new Map<string, { value: any, version: number }>();
+    private readonly subscribedLocalValues = new Map<string, { value: any, version?: number }>();
 
     constructor(
         private readonly exchangeProvider: ExchangeProvider,
@@ -145,7 +145,7 @@ export class InteractionClient {
         }
 
         // Normalize and decode the response
-        return normalizeReadAttributeReport(result);
+        return normalizeAndDecodeReadAttributeReport(result);
     }
 
     async set<T>(endpointId: number, clusterId: number, attribute: Attribute<T>, value: T, dataVersion?: number): Promise<void> {
@@ -207,7 +207,7 @@ export class InteractionClient {
                     return;
                 }
 
-                const data = normalizeReadAttributeReport(dataReport.values);
+                const data = normalizeAndDecodeReadAttributeReport(dataReport.values);
 
                 if (data.length === 0) {
                     throw new Error('Subscription result reporting undefined/no value not specified');
@@ -242,7 +242,7 @@ export class InteractionClient {
                     logger.debug('Subscription result empty');
                     return;
                 }
-                const values = normalizeReadAttributeReport(dataReport.values);
+                const values = normalizeAndDecodeReadAttributeReport(dataReport.values);
 
                 values.forEach(data => {
                     const { path: { endpointId, clusterId, attributeId }, value, version } = data;

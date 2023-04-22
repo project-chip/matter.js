@@ -26,6 +26,7 @@ import { Message } from "../../codec/MessageCodec";
 import { Crypto } from "../../crypto/Crypto";
 import { StorageContext } from "../../storage/StorageContext";
 import { StorageManager } from "../../storage/StorageManager";
+import { decodeValueForSchema, normalizeAttributeData } from "./AttributeDataDecoder";
 
 export const INTERACTION_PROTOCOL_ID = 0x0001;
 
@@ -112,7 +113,7 @@ export interface AttributePath {
 }
 
 export interface AttributeWithPath {
-    path: AttributePath,
+    path: TypeFromSchema<typeof TlvAttributePath>,
     attribute: AttributeServer<any>,
 }
 
@@ -120,7 +121,7 @@ export function commandPathToId({ endpointId, clusterId, commandId }: CommandPat
     return `${endpointId}/${clusterId}/${commandId}`;
 }
 
-export function attributePathToId({ endpointId, clusterId, attributeId }: Partial<AttributePath>) {
+export function attributePathToId({ endpointId, clusterId, attributeId }: TypeFromSchema<typeof TlvAttributePath>) {
     return `${endpointId}/${clusterId}/${attributeId}`;
 }
 
@@ -217,7 +218,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             return attributes.map(({ path, attribute }) => {
                 const { value, version } = attribute.getWithVersion(exchange.session); // TODO check ACL
                 logger.debug(`Read from ${exchange.channel.getName()}: ${this.resolveAttributeName(path)}=${Logger.toJSON(value)} (version=${version})`);
-                return { value: { path, value: attribute.schema.encodeTlv(value), version } };
+                return { value: { path, data: attribute.schema.encodeTlv(value), dataVersion: version } };
             });
         });
 
@@ -233,7 +234,10 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         // TODO consider TimedRequest constraints
 
-        const writeResults = writeRequests.flatMap(({ path, dataVersion, data }): { path: TypeFromSchema<typeof TlvAttributePath>, statusCode: StatusCode }[] => {
+        const writeData = normalizeAttributeData(writeRequests, true);
+
+        const writeResults = writeData.flatMap((values): { path: TypeFromSchema<typeof TlvAttributePath>, statusCode: StatusCode }[] => {
+            const { path, dataVersion } = values[0];
             const attributes = this.getAttributes([path], true);
             if (attributes.length === 0) {
                 return [{ path, statusCode: StatusCode.UnsupportedWrite }]; // TODO: Find correct status code
@@ -242,11 +246,12 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             return attributes.map(({ path, attribute }) => {
                 // TODO add checks or dataVersion
                 // TODO add ACL checks
+                const { schema, defaultValue } = attribute;
 
                 try {
-                    const decodedData = attribute.schema.decodeTlv(data);
-                    logger.debug(`Handle write request from ${exchange.channel.getName()} resolved to: ${this.resolveAttributeName(path)}=${Logger.toJSON(data)} (${dataVersion})`);
-                    attribute.set(decodedData, exchange.session);
+                    const value = decodeValueForSchema(schema, values, defaultValue);
+                    logger.debug(`Handle write request from ${exchange.channel.getName()} resolved to: ${this.resolveAttributeName(path)}=${Logger.toJSON(values)} (${dataVersion})`);
+                    attribute.set(value, exchange.session);
                 } catch (error: any) {
                     if (attributes.length === 1) { // For Multi-Attribute-Writes we ignore errors
                         logger.error(`Error while handling write request from ${exchange.channel.getName()} to ${this.resolveAttributeName(path)}: ${error.message}`);
@@ -355,7 +360,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         // TODO: implement this
     }
 
-    private resolveAttributeName({ endpointId, clusterId, attributeId }: Partial<AttributePath>) {
+    private resolveAttributeName({ endpointId, clusterId, attributeId }: TypeFromSchema<typeof TlvAttributePath>) {
         if (endpointId === undefined) {
             return `*/${toHex(clusterId)}/${toHex(attributeId)}`;
         }
@@ -382,7 +387,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         return `${endpointName}/${clusterName}/${attributeName}`;
     }
 
-    private getAttributes(filters: Partial<AttributePath>[], onlyWritable = false): AttributeWithPath[] {
+    private getAttributes(filters: TypeFromSchema<typeof TlvAttributePath>[], onlyWritable = false): AttributeWithPath[] {
         const result = new Array<AttributeWithPath>();
 
         filters.forEach(({ endpointId, clusterId, attributeId }) => {

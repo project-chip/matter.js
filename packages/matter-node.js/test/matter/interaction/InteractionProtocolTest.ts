@@ -25,7 +25,15 @@ import {
 import { MessageExchange } from "../../../src/matter/common/MessageExchange";
 import { DEVICE } from "../../../src/matter/common/DeviceTypes";
 import { MatterDevice } from "../../../src/matter/MatterDevice";
-import { BasicInformationCluster, VendorId, TlvString, TlvUInt8, OnOffCluster, TlvNoArguments } from "@project-chip/matter.js";
+import {
+    BasicInformationCluster,
+    VendorId,
+    TlvString,
+    TlvUInt8,
+    OnOffCluster,
+    TlvNoArguments,
+    TlvArray, TlvField, TlvObject, TlvNullable, AccessControlCluster
+} from "@project-chip/matter.js";
 import { StorageBackendMemory } from "../../../src/storage/StorageBackendMemory";
 import { StorageManager } from "../../../src/storage/StorageManager";
 import { Message } from "../../../src/codec/MessageCodec";
@@ -50,8 +58,8 @@ const READ_RESPONSE: DataReport = {
                     clusterId: 0x28,
                     attributeId: 2,
                 },
-                value: TlvUInt8.encodeTlv(1),
-                version: 0,
+                data: TlvUInt8.encodeTlv(1),
+                dataVersion: 0,
             }
         },
         {
@@ -61,8 +69,8 @@ const READ_RESPONSE: DataReport = {
                     clusterId: 0x28,
                     attributeId: 4,
                 },
-                value: TlvUInt8.encodeTlv(2),
-                version: 0,
+                data: TlvUInt8.encodeTlv(2),
+                dataVersion: 0,
             }
         },
     ]
@@ -118,6 +126,42 @@ const MASS_WRITE_REQUEST: WriteRequest = {
 };
 
 const MASS_WRITE_RESPONSE: WriteResponse = {
+    interactionModelRevision: 1,
+    writeResponses: []
+};
+
+const TlvAclTestSchema = TlvObject({
+    privilege: TlvField(1, TlvUInt8),
+    authMode: TlvField(2, TlvUInt8),
+    subjects: TlvField(3, TlvNullable(TlvUInt8)),
+    targets: TlvField(4, TlvNullable(TlvUInt8)),
+});
+
+const CHUNKED_ARRAY_WRITE_REQUEST: WriteRequest = {
+    interactionModelRevision: 1,
+    suppressResponse: false,
+    timedRequest: false,
+    writeRequests: [
+        {
+            path: { endpointId: 0, clusterId: 0x1f, attributeId: 0 },
+            data: TlvArray(TlvAclTestSchema).encodeTlv([]),
+            dataVersion: 0,
+        },
+        {
+            path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: null },
+            data: TlvAclTestSchema.encodeTlv({
+                privilege: 1,
+                authMode: 2,
+                subjects: null,
+                targets: null,
+            }),
+            dataVersion: 0,
+        },
+    ],
+    moreChunkedMessages: false,
+};
+
+const CHUNKED_ARRAY_WRITE_RESPONSE: WriteResponse = {
     interactionModelRevision: 1,
     writeResponses: []
 };
@@ -238,8 +282,34 @@ describe("InteractionProtocol", () => {
             assert.equal(basicCluster.attributes.nodeLabel.get(), "test");
         });
 
-        it("mass write values and only set the one allowed", async () => {
+        it("write chunked array values and return errors on invalid values", async () => {
+            const accessControlCluster = new ClusterServer(AccessControlCluster, {}, {
+                acl: [],
+                extension: [],
+                subjectsPerAccessControlEntry: 4,
+                targetsPerAccessControlEntry: 4,
+                accessControlEntriesPerFabric: 3
+            }, {});
 
+            const storageManager = new StorageManager(new StorageBackendMemory());
+            await storageManager.initialize();
+            const interactionProtocol = new InteractionServer(storageManager)
+                .addEndpoint(0, DEVICE.ROOT, [accessControlCluster]);
+
+            const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" } }) as MessageExchange<MatterDevice>, CHUNKED_ARRAY_WRITE_REQUEST);
+
+            assert.deepEqual(result, CHUNKED_ARRAY_WRITE_RESPONSE);
+            assert.deepEqual(accessControlCluster.attributes.acl.get(), [
+                {
+                    privilege: 1,
+                    authMode: 2,
+                    subjects: null,
+                    targets: null,
+                }
+            ]);
+        });
+
+        it("mass write values and only set the one allowed", async () => {
             const basicCluster = new ClusterServer(BasicInformationCluster, {}, {
                 dataModelRevision: 1,
                 vendorName: "vendor",
