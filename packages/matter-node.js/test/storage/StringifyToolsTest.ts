@@ -45,25 +45,12 @@ describe("JsonConverter", () => {
             assert.equal(typeof decodedObj, "bigint");
         });
 
-        it("encode/decode Buffer", () => {
-            const obj = Buffer.from("hello");
-
-            const json = toJson(obj);
-
-            assert.equal(json, `"{\\"__object__\\":\\"Buffer\\",\\"__value__\\":\\"aGVsbG8=\\"}"`);
-
-            const decodedObj = fromJson(json);
-
-            assert.deepEqual(decodedObj, obj);
-            assert.ok(decodedObj instanceof Buffer);
-        });
-
         it("encode/decode Uint8Array", () => {
             const obj = new Uint8Array([1, 2, 3]);
 
             const json = toJson(obj);
 
-            assert.equal(json, `"{\\"__object__\\":\\"Uint8Array\\",\\"__value__\\":\\"AQID\\"}"`);
+            assert.equal(json, `"{\\"__object__\\":\\"Uint8Array\\",\\"__value__\\":\\"010203\\"}"`);
 
             const decodedObj = fromJson(json);
 

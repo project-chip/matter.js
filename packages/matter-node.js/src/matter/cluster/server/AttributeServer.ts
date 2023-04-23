@@ -21,7 +21,7 @@ export class AttributeServer<T> {
         readonly schema: TlvSchema<T>,
         private readonly validator: (value: T, name: string) => void,
         readonly isWritable: boolean,
-        defaultValue: T,
+        readonly defaultValue: T,
     ) {
         validator(defaultValue, name);
         this.value = defaultValue;
