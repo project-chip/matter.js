@@ -29,9 +29,9 @@ import { PaseServer } from "./matter/session/secure/PaseServer";
 import { CaseServer } from "./matter/session/secure/CaseServer";
 import { ClusterServer, InteractionServer } from "./matter/interaction/InteractionServer";
 import {
-    BasicInformationCluster, GeneralCommissioningCluster, RegulatoryLocationType, OperationalCredentialsCluster, OnOffCluster,
-    NetworkCommissioningCluster, NetworkCommissioningStatus, AdminCommissioningCluster, CommissioningWindowStatus,
-    VendorId, FabricIndex
+    BasicInformationCluster, GeneralCommissioningCluster, RegulatoryLocationType, OperationalCredentialsCluster,
+    OnOffCluster, NetworkCommissioningCluster, NetworkCommissioningStatus, AdminCommissioningCluster,
+    CommissioningWindowStatus, VendorId, FabricIndex, AccessControlCluster
 } from "@project-chip/matter.js";
 import { DEVICE } from "./matter/common/DeviceTypes";
 import { MdnsBroadcaster } from "./matter/mdns/MdnsBroadcaster";
@@ -115,7 +115,7 @@ class Device {
                         vendorId,
                         productName,
                         productId,
-                        nodeLabel: "",
+                        nodeLabel: productName,
                         hardwareVersion: 0,
                         hardwareVersionString: "0",
                         location: "US",
