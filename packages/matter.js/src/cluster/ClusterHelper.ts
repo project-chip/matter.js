@@ -17,6 +17,7 @@ import { IdentifyCluster } from "./IdentifyCluster.js";
 import { IlluminanceMeasurementCluster } from "./IlluminanceMeasurementCluster.js";
 import { UserLabelCluster, FixedLabelCluster } from "./LabelCluster.js";
 import { LevelControlCluster } from "./LevelControlCluster.js";
+import { ModeSelectCluster } from "./ModeSelectCluster.js";
 import { NetworkCommissioningCluster } from "./NetworkCommissioningCluster.js";
 import { OccupancySensingCluster } from "./OccupancySensingCluster.js";
 import { OnOffCluster } from "./OnOffCluster.js";
@@ -51,6 +52,7 @@ export const AllClustersMap = {
     [UserLabelCluster.id]: UserLabelCluster,
     [FixedLabelCluster.id]: FixedLabelCluster,
     [LevelControlCluster.id]: LevelControlCluster,
+    [ModeSelectCluster.id]: ModeSelectCluster,
     [NetworkCommissioningCluster.id]: NetworkCommissioningCluster,
     [OccupancySensingCluster.id]: OccupancySensingCluster,
     [OnOffCluster.id]: OnOffCluster,
