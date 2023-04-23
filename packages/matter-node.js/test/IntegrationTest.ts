@@ -6,6 +6,9 @@
 
 import { Time } from "../src/time/Time";
 import { TimeFake } from "../src/time/TimeFake";
+
+Time.get = () => new TimeFake(0);
+
 import { Crypto } from "../src/crypto/Crypto";
 import { CryptoNode } from "../src/crypto/CryptoNode";
 

@@ -154,7 +154,7 @@ export class InteractionClient {
         // Response contains Status error if there was an error on write
         if (response.length) {
             const { path: { endpointId, clusterId, attributeId }, status } = response[0];
-            if (status !== undefined) {
+            if (status !== undefined && status !== StatusCode.Success) {
                 throw new StatusResponseError(`Error setting attribute ${endpointId}/${clusterId}/${attributeId}`, status);
             }
         }
@@ -179,7 +179,7 @@ export class InteractionClient {
             }
             return response.writeResponses.flatMap(({ status: { status, clusterStatus }, path: { nodeId, endpointId, clusterId, attributeId } }) => {
                 return { path: { nodeId, endpointId, clusterId, attributeId }, status: status ?? clusterStatus ?? StatusCode.Failure };
-            });
+            }).filter(({ status }) => status !== StatusCode.Success);
         });
     }
 

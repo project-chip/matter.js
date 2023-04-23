@@ -250,7 +250,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
                 try {
                     const value = decodeValueForSchema(schema, values, defaultValue);
-                    logger.debug(`Handle write request from ${exchange.channel.getName()} resolved to: ${this.resolveAttributeName(path)}=${Logger.toJSON(values)} (${dataVersion})`);
+                    logger.debug(`Handle write request from ${exchange.channel.getName()} resolved to: ${this.resolveAttributeName(path)}=${Logger.toJSON(value)} (Version=${dataVersion})`);
                     attribute.set(value, exchange.session);
                 } catch (error: any) {
                     if (attributes.length === 1) { // For Multi-Attribute-Writes we ignore errors
@@ -261,12 +261,13 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                     }
                 }
                 return { path, statusCode: StatusCode.Success };
-            }).filter(({ statusCode }) => statusCode !== StatusCode.Success);
+            });
+            //.filter(({ statusCode }) => statusCode !== StatusCode.Success); // see https://github.com/project-chip/connectedhomeip/issues/26198
         });
 
         // TODO respect suppressResponse, potentially also needs adjustment in InteractionMessenger class!
 
-        logger.debug(`Write request from ${exchange.channel.getName()} done with following errors: ${writeResults.map(({ path, statusCode }) => `${this.resolveAttributeName(path)}=${Logger.toJSON(statusCode)}`).join(", ")}`);
+        logger.debug(`Write request from ${exchange.channel.getName()} done ${writeResults.length ? `with following errors: ${writeResults.map(({ path, statusCode }) => `${this.resolveAttributeName(path)}=${Logger.toJSON(statusCode)}`).join(", ")}` : "without errors"}`);
 
         return {
             interactionModelRevision: 1,

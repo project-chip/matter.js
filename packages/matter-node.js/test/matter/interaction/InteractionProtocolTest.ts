@@ -53,22 +53,14 @@ const READ_RESPONSE: DataReport = {
     values: [
         {
             value: {
-                path: {
-                    endpointId: 0,
-                    clusterId: 0x28,
-                    attributeId: 2,
-                },
+                path: { endpointId: 0, clusterId: 0x28, attributeId: 2 },
                 data: TlvUInt8.encodeTlv(1),
                 dataVersion: 0,
             }
         },
         {
             value: {
-                path: {
-                    endpointId: 0,
-                    clusterId: 0x28,
-                    attributeId: 4,
-                },
+                path: { endpointId: 0, clusterId: 0x28, attributeId: 4 },
                 data: TlvUInt8.encodeTlv(2),
                 dataVersion: 0,
             }
@@ -99,14 +91,10 @@ const WRITE_RESPONSE: WriteResponse = {
     interactionModelRevision: 1,
     writeResponses: [
         {
-            path: {
-                attributeId: 100,
-                clusterId: 40,
-                endpointId: 0
-            },
-            status: {
-                status: 136
-            }
+            path: { attributeId: 100, clusterId: 40, endpointId: 0 }, status: { status: 136 }
+        },
+        {
+            path: { attributeId: 5, clusterId: 40, endpointId: 0 }, status: { status: 0 }
         }
     ]
 };
@@ -127,7 +115,17 @@ const MASS_WRITE_REQUEST: WriteRequest = {
 
 const MASS_WRITE_RESPONSE: WriteResponse = {
     interactionModelRevision: 1,
-    writeResponses: []
+    writeResponses: [
+        {
+            path: { attributeId: 5, clusterId: 40, endpointId: 0 }, status: { status: 0 }
+        },
+        {
+            path: { attributeId: 6, clusterId: 40, endpointId: 0 }, status: { status: 0 }
+        },
+        {
+            path: { attributeId: 16, clusterId: 40, endpointId: 0 }, status: { status: 0 }
+        }
+    ]
 };
 
 const TlvAclTestSchema = TlvObject({
@@ -163,7 +161,11 @@ const CHUNKED_ARRAY_WRITE_REQUEST: WriteRequest = {
 
 const CHUNKED_ARRAY_WRITE_RESPONSE: WriteResponse = {
     interactionModelRevision: 1,
-    writeResponses: []
+    writeResponses: [
+        {
+            path: { attributeId: 0, clusterId: 31, endpointId: 0 }, status: { status: 0 }
+        }
+    ]
 };
 
 const INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS: InvokeRequest = {
@@ -188,11 +190,7 @@ const INVOKE_COMMAND_REQUEST_WITH_NO_ARGS: InvokeRequest = {
     timedRequest: false,
     invokes: [
         {
-            path: {
-                endpointId: 0,
-                clusterId: 6,
-                commandId: 1,
-            },
+            path: { endpointId: 0, clusterId: 6, commandId: 1 },
         }
     ]
 };
@@ -203,14 +201,7 @@ const INVOKE_COMMAND_RESPONSE: InvokeResponse = {
     responses: [
         {
             result: {
-                path: {
-                    clusterId: 6,
-                    commandId: 1,
-                    endpointId: 0
-                },
-                result: {
-                    code: 0
-                }
+                path: { clusterId: 6, commandId: 1, endpointId: 0 }, result: { code: 0 }
             }
         }
     ]
