@@ -245,7 +245,7 @@ describe("Integration", () => {
                     clusterId: DescriptorCluster.id,
                     attributeId: DescriptorCluster.attributes.serverList.id,
                     attributeName: "serverList"
-                }, value: [new ClusterId(40), new ClusterId(48), new ClusterId(62), new ClusterId(31), new ClusterId(29)], version: 1
+                }, value: [new ClusterId(40), new ClusterId(48), new ClusterId(62), new ClusterId(31), new ClusterId(4), new ClusterId(29)], version: 1
             })
 
             assert.equal(response.filter(({
