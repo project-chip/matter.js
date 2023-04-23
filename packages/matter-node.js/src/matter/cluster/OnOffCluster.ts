@@ -5,7 +5,7 @@
  */
 
 import { AccessLevel, Attribute, Cluster, ClusterExtend, Command, TlvNoArguments, TlvNoResponse, WritableAttribute } from "./Cluster";
-import { BitFlag, MatterApplicationClusterSpecificationV1_0, TlvBitmap, TlvBoolean, TlvEnum, TlvField, TlvNullable, TlvObject, TlvSchema, TlvUInt16, TlvUInt8 } from "@project-chip/matter.js";
+import { BitFlag, MatterApplicationClusterSpecificationV1_0, TlvBitmap, TlvBoolean, TlvEnum, TlvField, TlvNullable, TlvObject, TlvSchema, TlvUInt16, TlvUInt8, TypeFromBitSchema } from "@project-chip/matter.js";
 
 /**
  * Defined how the devices should behave when it is powered on.
@@ -89,6 +89,9 @@ export const OnOffCluster = Cluster({
         /** Level Control for Lighting - Behavior that supports lighting applications */
         lightingLevelControl: BitFlag(0),
     },
+    supportedFeatures: {
+        lightingLevelControl: false,
+    },
 
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.6 */
     attributes: {
@@ -126,6 +129,9 @@ export const OnOffCluster = Cluster({
 export const OnOffLightingCluster = ClusterExtend(
     OnOffCluster,
     {
+        supportedFeatures: {
+            lightingLevelControl: true,
+        },
         attributes: {
             /** Used to remember if a state is already storednin an old scene to not store one again when sending another Off command */
             globalSceneControl: Attribute(0x4000,  TlvBoolean, { default: true }),

@@ -66,7 +66,7 @@ class Device {
         // Barebone implementation of the On/Off cluster
         const onOffClusterServer = new ClusterServer(
             OnOffCluster,
-            { lightingLevelControl: false },
+            { },
             { onOff: false }, // Off by default
             OnOffClusterHandler()
         );
