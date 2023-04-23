@@ -25,6 +25,7 @@ import { PowerSourceCluster } from "./PowerSourceCluster.js";
 import { PowerSourceConfigurationCluster } from "./PowerSourceConfigurationCluster.js";
 import { PressureMeasurementCluster } from "./PressureMeasurementCluster.js";
 import { ScenesCluster } from "./ScenesCluster.js";
+import { SwitchCluster } from "./SwitchCluster.js";
 import { TemperatureMeasurementCluster } from "./TemperatureMeasurementCluster.js";
 import { RelativeHumidityCluster, SoilMoistureMeasurementCluster, LeafWetnessMeasurementCluster } from "./WaterContentMeasurementCluster.js";
 import { Attribute, Cluster } from "./Cluster.js";
@@ -59,6 +60,7 @@ export const AllClustersMap = {
     [PowerSourceConfigurationCluster.id]: PowerSourceConfigurationCluster,
     [PressureMeasurementCluster.id]: PressureMeasurementCluster,
     [ScenesCluster.id]: ScenesCluster,
+    [SwitchCluster.id]: SwitchCluster,
     [TemperatureMeasurementCluster.id]: TemperatureMeasurementCluster,
     [RelativeHumidityCluster.id]: RelativeHumidityCluster,
     [LeafWetnessMeasurementCluster.id]: LeafWetnessMeasurementCluster,
