@@ -266,8 +266,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         });
 
         // TODO respect suppressResponse, potentially also needs adjustment in InteractionMessenger class!
-
-        logger.debug(`Write request from ${exchange.channel.getName()} done ${writeResults.length ? `with following errors: ${writeResults.map(({ path, statusCode }) => `${this.resolveAttributeName(path)}=${Logger.toJSON(statusCode)}`).join(", ")}` : "without errors"}`);
+        const errorResults = writeResults.filter(({ statusCode }) => statusCode !== StatusCode.Success);
+        logger.debug(`Write request from ${exchange.channel.getName()} done ${errorResults.length ? `with following errors: ${errorResults.map(({ path, statusCode }) => `${this.resolveAttributeName(path)}=${Logger.toJSON(statusCode)}`).join(", ")}` : "without errors"}`);
 
         return {
             interactionModelRevision: 1,
