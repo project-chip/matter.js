@@ -9,6 +9,7 @@ import { BasicInformationCluster } from "./BasicInformationCluster.js";
 import { BindingCluster } from "./BindingCluster.js";
 import { BooleanStateCluster } from "./BooleanStateCluster.js";
 import { BridgedDeviceBasicInformationCluster } from "./BridgedDeviceBasicInformationCluster.js";
+import { ColorControlCluster } from "./ColorControlCluster.js";
 import { DescriptorCluster } from "./DescriptorCluster.js";
 import { FlowMeasurementCluster } from "./FlowMeasurementCluster.js";
 import { GeneralCommissioningCluster } from "./GeneralCommissioningCluster.js";
@@ -40,6 +41,7 @@ export const AllClustersMap = {
     [BindingCluster.id]: BindingCluster,
     [BooleanStateCluster.id]: BooleanStateCluster,
     [BridgedDeviceBasicInformationCluster.id]: BridgedDeviceBasicInformationCluster,
+    [ColorControlCluster.id]: ColorControlCluster,
     [DescriptorCluster.id]: DescriptorCluster,
     [FlowMeasurementCluster.id]: FlowMeasurementCluster,
     [GeneralCommissioningCluster.id]: GeneralCommissioningCluster,
