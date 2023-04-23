@@ -6,6 +6,7 @@
 
 // Export general Cluster specific types
 export * from "./cluster/Cluster.js";
+export * from "./cluster/ClusterHelper.js";
 
 //Export all clusters
 export * from "./cluster/AccessControlCluster.js";
@@ -75,7 +76,11 @@ export * from "./tlv/TlvObject.js";
 export * from "./tlv/TlvSchema.js";
 export * from "./tlv/TlvString.js";
 export * from "./tlv/TlvVoid.js";
+export * from "./tlv/TlvNoArguments.js"
 export * from "./tlv/TlvWrapper.js";
+export * from "./tlv/TlvCodec.js";
+
+// Export Util types
 export * from "./util/ByteArray.js";
 export * from "./util/DataReader.js";
 export * from "./util/DataWriter.js";

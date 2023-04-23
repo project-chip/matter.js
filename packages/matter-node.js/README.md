@@ -34,6 +34,8 @@ Then after `cd packages/matter-node.js` you can use `npm run matter` to run the 
 
 ## Usage
 
+### Start a Matter Device
+
 To run from the build files:
 
 ```bash
@@ -74,7 +76,13 @@ The following parameters are available:
 * -on: the command to run when the device is turned on (see example above)
 * -off: the command to run when the device is turned off (see example above)
 
+### Start a Matter Controller
+
 **Experimental**
+The current controller implementation is no CLI tool, but shows the pairing of devices and resuming the connection and also showcase the existing low-level controller API. It is just intended to be used for debugging, during development! The code contains some commented-out examples of how to use the low level controller API.
+Please **do not** use this for production, we will replace the API soon!
+
+The controller currently is not discovering the device to pair, but directly connects to the IP/port defined bin the command line parameters.
 
 To run from the build files:
 
@@ -85,7 +93,7 @@ matter-controller -ip [IP address of device to commission]
 To run directly from Typescript files with on the fly compilation:
 
 ```bash
-npm run matter-controller
+npm run matter-controller -- -ip [IP address of device to commission]
 ```
 
 This will commission a Matter device (for debugging purpose only for now).
