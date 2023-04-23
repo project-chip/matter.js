@@ -9,21 +9,30 @@ import { MatterController } from "../MatterController";
 import { capitalize } from "../../util/String";
 import {
     Attribute, AttributeJsType, Attributes, Cluster, Command, Commands, TlvNoResponse, RequestType, ResponseType,
-    TlvSchema, TlvStream, InteractionProtocolStatusCode as StatusCode
+    TlvSchema, TypeFromSchema, InteractionProtocolStatusCode as StatusCode, TlvAttributeReport
 } from "@project-chip/matter.js";
-import { DataReport, IncomingInteractionClientMessenger, InteractionClientMessenger } from "./InteractionMessenger";
+import {
+    DataReport, IncomingInteractionClientMessenger, InteractionClientMessenger, ReadRequest, StatusResponseError
+} from "./InteractionMessenger";
 import { ResultCode } from "../cluster/server/CommandServer";
 import { ClusterClient } from "../cluster/client/ClusterClient";
 import { ExchangeProvider } from "../common/ExchangeManager";
-import { INTERACTION_PROTOCOL_ID } from "./InteractionServer";
+import { attributePathToId, INTERACTION_PROTOCOL_ID } from "./InteractionServer";
 import { ProtocolHandler } from "../common/ProtocolHandler";
+import { Logger } from "../../log/Logger";
+import { DecodedAttributeReportValue, normalizeAndDecodeReadAttributeReport } from "./AttributeDataDecoder";
+import { NodeId } from "../common/NodeId";
 
-interface GetRawValueResponse { // TODO Remove when restructuring Responses
-    endpointId: number;
-    clusterId: number;
-    attributeId: number;
-    version: number;
-    value: TlvStream;
+const logger = Logger.get("InteractionClient");
+
+export interface AttributeStatus {
+    path: {
+        nodeId?: NodeId,
+        endpointId?: number,
+        clusterId?: number,
+        attributeId?: number,
+    },
+    status: StatusCode,
 }
 
 export function ClusterClient<CommandT extends Commands, AttributeT extends Attributes>(interactionClient: InteractionClient, endpointId: number, clusterDef: Cluster<any, AttributeT, CommandT, any>): ClusterClient<CommandT, AttributeT> {
@@ -36,7 +45,7 @@ export function ClusterClient<CommandT extends Commands, AttributeT extends Attr
         const capitalizedAttributeName = capitalize(attributeName);
         result[`get${capitalizedAttributeName}`] = async () => interactionClient.get(endpointId, clusterId, attribute);
         result[`set${capitalizedAttributeName}`] = async <T,>(value: T) => interactionClient.set<T>(endpointId, clusterId, attribute, value);
-        result[`subscribe${capitalizedAttributeName}`] = async <T,>(listener: (value: T, version: number) => void, minIntervalS: number, maxIntervalS: number) => interactionClient.subscribe(endpointId, clusterId, attribute, listener, minIntervalS, maxIntervalS);
+        result[`subscribe${capitalizedAttributeName}`] = async <T,>(listener: (value: T, version: number) => void, minIntervalS: number, maxIntervalS: number) => interactionClient.subscribe(endpointId, clusterId, attribute, minIntervalS, maxIntervalS, listener);
     }
 
     // Add command calls
@@ -64,7 +73,7 @@ export class SubscriptionClient implements ProtocolHandler<MatterController> {
         const subscriptionId = dataReport.subscriptionId;
         if (subscriptionId === undefined) {
             await messenger.sendStatus(StatusCode.InvalidSubscription);
-            throw new Error("Invalid Datareport without Subscription ID");
+            throw new Error("Invalid Data report without Subscription ID");
         }
         const listener = this.subscriptionListeners.get(subscriptionId);
         if (listener === undefined) {
@@ -79,6 +88,7 @@ export class SubscriptionClient implements ProtocolHandler<MatterController> {
 
 export class InteractionClient {
     private readonly subscriptionListeners = new Map<number, (dataReport: DataReport) => void>();
+    private readonly subscribedLocalValues = new Map<string, { value: any, version?: number }>();
 
     constructor(
         private readonly exchangeProvider: ExchangeProvider,
@@ -87,68 +97,104 @@ export class InteractionClient {
         this.exchangeProvider.addProtocolHandler(new SubscriptionClient(this.subscriptionListeners));
     }
 
-    async getAllAttributes(): Promise<{}> {
-        return this.withMessenger<GetRawValueResponse[]>(async messenger => {
-            const response = await messenger.sendReadRequest({
-                attributes: [{}],
+    async getAllAttributes(): Promise<DecodedAttributeReportValue[]> {
+        return this.getMultipleAttributes([{ /* empty means *,*,* */ }]);
+    }
+
+    async getMultipleAttributes(attributes: { endpointId?: number, clusterId?: number, attributeId?: number }[]): Promise<DecodedAttributeReportValue[]> {
+        return this.withMessenger<DecodedAttributeReportValue[]>(async messenger => {
+            return await this.processReadRequest(messenger, {
+                attributes,
                 interactionModelRevision: 1,
                 isFabricFiltered: true,
-            });
-            if (!Array.isArray(response.values)) {
-                return []; // TODO handle Errors correctly
-            }
-
-            return response.values.flatMap(({ value: reportValue }) => {
-                if (reportValue === undefined) return [];
-                const { path: { endpointId, clusterId, attributeId }, version, value } = reportValue;
-                if (endpointId === undefined || clusterId === undefined || attributeId === undefined) throw new Error("Invalid response");
-                return { endpointId, clusterId, attributeId, version, value };
             });
         });
     }
 
-    async get<A extends Attribute<any>>(endpointId: number, clusterId: number, { id, schema, optional, default: conformanceValue }: A): Promise<AttributeJsType<A>> {
-        return this.withMessenger<AttributeJsType<A>>(async messenger => {
-            const response = await messenger.sendReadRequest({
-                attributes: [{ endpointId, clusterId, attributeId: id }],
-                interactionModelRevision: 1,
-                isFabricFiltered: true,
-            });
+    async get<A extends Attribute<any>>(endpointId: number, clusterId: number, attribute: A): Promise<AttributeJsType<A> | undefined> {
+        const { id: attributeId } = attribute;
+        const localValue = this.subscribedLocalValues.get(attributePathToId({ endpointId, clusterId, attributeId }))
+        if (localValue !== undefined) {
+            return localValue.value;
+        }
 
-            let value;
-            if (Array.isArray(response.values)) {
-                value = response.values.map(({ value }) => value).find((value) => {
-                    if (value === undefined) return false;
-                    const { path } = value;
-                    return endpointId === path.endpointId && clusterId === path.clusterId && id === path.attributeId;
-                });
-                // Todo add proper handling for returned attributeStatus information
-            }
+        const response = await this.getMultipleAttributes([{ endpointId, clusterId, attributeId }]);
 
-            if (value === undefined) {
-                if (optional) return undefined;
-                if (conformanceValue === undefined) throw new Error(`Attribute ${endpointId}/${clusterId}/${id} not found`);
-                return conformanceValue;
-            }
-            return schema.decodeTlv(value.value);
-        });
+        if (response.length === 0) {
+            return undefined;
+        }
+        if (response.length > 1) {
+            throw new Error("Unexpected response with more then one attribute");
+        }
+        return response[0].value;
     }
 
-    async set<T>(_endpointId: number, _clusterId: number, { id: _id, schema: _schema }: Attribute<T>, _value: T): Promise<void> {
-        throw new Error("not implemented");
+    private async processReadRequest(messenger: InteractionClientMessenger, request: ReadRequest): Promise<DecodedAttributeReportValue[]> {
+        // Send read request and combine all (potentially chunked) responses
+        let response = await messenger.sendReadRequest(request);
+        const result: TypeFromSchema<typeof TlvAttributeReport>[] = [];
+        while (true) {
+            if (response.values !== undefined) {
+                result.push(...response.values);
+            }
+            if (!response.suppressResponse) {
+                await messenger.sendStatus(StatusCode.Success);
+            }
+            if (!response.moreChunkedMessages) break;
+            response = await messenger.readDataReport();
+        }
+
+        // Normalize and decode the response
+        return normalizeAndDecodeReadAttributeReport(result);
+    }
+
+    async set<T>(endpointId: number, clusterId: number, attribute: Attribute<T>, value: T, dataVersion?: number): Promise<void> {
+        const response = await this.setMultipleAttributes([{ endpointId, clusterId, attribute, value, dataVersion }]);
+
+        // Response contains Status error if there was an error on write
+        if (response.length) {
+            const { path: { endpointId, clusterId, attributeId }, status } = response[0];
+            if (status !== undefined && status !== StatusCode.Success) {
+                throw new StatusResponseError(`Error setting attribute ${endpointId}/${clusterId}/${attributeId}`, status);
+            }
+        }
+    }
+
+    async setMultipleAttributes(attributes: { endpointId: number, clusterId: number, attribute: Attribute<any>, value: any, dataVersion?: number }[]): Promise<AttributeStatus[]> {
+        return this.withMessenger<AttributeStatus[]>(async messenger => {
+            const writeRequests = attributes.map((
+                { endpointId, clusterId, attribute: { id, schema }, value, dataVersion }
+            ) => ({
+                path: { endpointId, clusterId, attributeId: id }, data: schema.encodeTlv(value), dataVersion
+            }));
+            const response = await messenger.sendWriteCommand({
+                suppressResponse: false,
+                timedRequest: false,
+                writeRequests,
+                moreChunkedMessages: false,
+                interactionModelRevision: 1,
+            });
+            if (response === undefined) {
+                throw new Error(`No response received`);
+            }
+            return response.writeResponses.flatMap(({ status: { status, clusterStatus }, path: { nodeId, endpointId, clusterId, attributeId } }) => {
+                return { path: { nodeId, endpointId, clusterId, attributeId }, status: status ?? clusterStatus ?? StatusCode.Failure };
+            }).filter(({ status }) => status !== StatusCode.Success);
+        });
     }
 
     async subscribe<A extends Attribute<any>>(
         endpointId: number,
         clusterId: number,
-        { id, schema }: A,
-        listener: (value: AttributeJsType<A>, version: number) => void,
+        attribute: A,
         minIntervalFloorSeconds: number,
         maxIntervalCeilingSeconds: number,
+        listener?: (value: AttributeJsType<A>, version: number) => void,
     ): Promise<void> {
         return this.withMessenger<void>(async messenger => {
+            const { id: attributeId } = attribute;
             const { report, subscribeResponse: { subscriptionId } } = await messenger.sendSubscribeRequest({
-                attributeRequests: [{ endpointId, clusterId, attributeId: id }],
+                attributeRequests: [{ endpointId, clusterId, attributeId }],
                 keepSubscriptions: true,
                 minIntervalFloorSeconds,
                 maxIntervalCeilingSeconds,
@@ -156,16 +202,54 @@ export class InteractionClient {
             }); // TODO: also initialize all values
 
             const subscriptionListener = (dataReport: DataReport) => {
-                if (!Array.isArray(dataReport.values)) {
+                if (!Array.isArray(dataReport.values) || !dataReport.values.length) {
+                    logger.debug('Subscription result empty');
                     return;
                 }
-                const value = dataReport.values.map(({ value }) => value).find((value) => {
-                    if (value === undefined) return false;
-                    const { path } = value;
-                    return endpointId === path.endpointId && clusterId === path.clusterId && id === path.attributeId;
+
+                const data = normalizeAndDecodeReadAttributeReport(dataReport.values);
+
+                if (data.length === 0) {
+                    throw new Error('Subscription result reporting undefined/no value not specified');
+                }
+                if (data.length > 1) {
+                    throw new Error("Unexpected response with more then one attribute");
+                }
+                const { path: { endpointId, clusterId, attributeId }, value, version } = data[0];
+                if (value === undefined) throw new Error('Subscription result reporting undefined value not specified');
+
+                this.subscribedLocalValues.set(attributePathToId({ endpointId, clusterId, attributeId }), { value, version });
+                listener?.(value, version);
+            };
+            this.subscriptionListeners.set(subscriptionId, subscriptionListener);
+            subscriptionListener(report);
+            return;
+        });
+    }
+
+    async subscribeMultipleAttributes(attributeRequests: { endpointId?: number, clusterId?: number, attributeId?: number }[], minIntervalFloorSeconds: number, maxIntervalCeilingSeconds: number, listener?: (data: DecodedAttributeReportValue) => void): Promise<void> {
+        return this.withMessenger<void>(async messenger => {
+            const { report, subscribeResponse: { subscriptionId } } = await messenger.sendSubscribeRequest({
+                attributeRequests,
+                keepSubscriptions: true,
+                minIntervalFloorSeconds,
+                maxIntervalCeilingSeconds,
+                isFabricFiltered: true,
+            }); // TODO: also initialize all values
+
+            const subscriptionListener = (dataReport: DataReport) => {
+                if (!Array.isArray(dataReport.values) || !dataReport.values.length) {
+                    logger.debug('Subscription result empty');
+                    return;
+                }
+                const values = normalizeAndDecodeReadAttributeReport(dataReport.values);
+
+                values.forEach(data => {
+                    const { path: { endpointId, clusterId, attributeId }, value, version } = data;
+                    if (value === undefined) throw new Error('Subscription result reporting undefined value not specified');
+                    this.subscribedLocalValues.set(attributePathToId({ endpointId, clusterId, attributeId }), { value, version });
+                    listener?.(data);
                 });
-                if (value === undefined) return;
-                listener(schema.decodeTlv(value.value), value.version);
             };
             this.subscriptionListeners.set(subscriptionId, subscriptionListener);
             subscriptionListener(report);
@@ -175,10 +259,9 @@ export class InteractionClient {
 
     async invoke<C extends Command<any, any>>(endpointId: number, clusterId: number, request: RequestType<C>, id: number, requestSchema: TlvSchema<RequestType<C>>, _responseId: number, responseSchema: TlvSchema<ResponseType<C>>, optional: boolean): Promise<ResponseType<C>> {
         return this.withMessenger<ResponseType<C>>(async messenger => {
-            // if the invoke call do not have arguments we want to send an empty tlv object to not suppress the args field (even if MAY be allowed by specs)
             const args = requestSchema.encodeTlv(request);
 
-            const { responses } = await messenger.sendInvokeCommand({
+            const invokeResponse = await messenger.sendInvokeCommand({
                 invokes: [
                     { path: { endpointId, clusterId, commandId: id }, args }
                 ],
@@ -186,6 +269,8 @@ export class InteractionClient {
                 suppressResponse: false,
                 interactionModelRevision: 1,
             });
+            if (invokeResponse === undefined) throw new Error("No response received");
+            const { responses } = invokeResponse;
             if (responses.length === 0) throw new Error("No response received");
             const { response, result } = responses[0];
             if (result !== undefined) {

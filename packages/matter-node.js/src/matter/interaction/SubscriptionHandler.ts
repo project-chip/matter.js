@@ -7,10 +7,15 @@
 import { MatterDevice } from "../MatterDevice";
 import { InteractionServerMessenger, StatusResponseError } from "./InteractionMessenger";
 import { Fabric } from "../fabric/Fabric";
-import { AttributeWithPath, AttributePath, INTERACTION_PROTOCOL_ID, attributePathToId } from "./InteractionServer";
+import { AttributeWithPath, INTERACTION_PROTOCOL_ID, attributePathToId } from "./InteractionServer";
 import { Time, Timer } from "../../time/Time";
 import { NodeId } from "../common/NodeId";
-import { TlvSchema, InteractionProtocolStatusCode as StatusCode } from "@project-chip/matter.js";
+import {
+    TlvSchema,
+    InteractionProtocolStatusCode as StatusCode,
+    TypeFromSchema,
+    TlvAttributePath
+} from "@project-chip/matter.js";
 import { tryCatchAsync } from "../../error/TryCatchHandler";
 import { Logger } from "../../log/Logger";
 import { SecureSession } from "../session/SecureSession";
@@ -26,7 +31,7 @@ const logger = Logger.get("SubscriptionHandler");
 const SUBSCRIPTION_MAX_INTERVAL_PUBLISHER_LIMIT_MS = 3 * 60 * 1000; /** 3 mins */ // Officially: 1000 * 60 * 60; /** 1 hour */
 
 interface PathValueVersion<T> {
-    path: AttributePath,
+    path: TypeFromSchema<typeof TlvAttributePath>,
     schema: TlvSchema<T>,
     value: T,
     version: number
@@ -127,14 +132,14 @@ export class SubscriptionHandler {
             values: values.map(({ path, schema, value, version }) => ({
                 value: {
                     path,
-                    version,
-                    value: schema.encodeTlv(value),
+                    dataVersion: version,
+                    data: schema.encodeTlv(value),
                 },
             })),
         });
     }
 
-    attributeChangeListener(path: AttributePath, schema: TlvSchema<any>, version: number, value: any) {
+    attributeChangeListener(path: TypeFromSchema<typeof TlvAttributePath>, schema: TlvSchema<any>, version: number, value: any) {
         this.outstandingAttributeUpdates.set(attributePathToId(path), { path, schema, version, value });
         void this.sendUpdate();
     }
@@ -168,8 +173,8 @@ export class SubscriptionHandler {
                     values: values.map(({ path, schema, value, version }) => ({
                         value: {
                             path,
-                            version,
-                            value: schema.encodeTlv(value),
+                            dataVersion: version,
+                            data: schema.encodeTlv(value),
                         },
                     })),
                 });
