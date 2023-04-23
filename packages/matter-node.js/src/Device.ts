@@ -181,6 +181,17 @@ class Device {
                             adminVendorId: null,
                         },
                         AdminCommissioningHandler(secureChannelProtocol),
+                    ),
+                    new ClusterServer(AccessControlCluster,
+                        {},
+                        {
+                            acl: [],
+                            extension: [],
+                            subjectsPerAccessControlEntry: 4,
+                            targetsPerAccessControlEntry: 4,
+                            accessControlEntriesPerFabric: 3
+                        },
+                        {},
                     )
                 ])
                 .addEndpoint(0x01, DEVICE.ON_OFF_LIGHT, [onOffClusterServer])
