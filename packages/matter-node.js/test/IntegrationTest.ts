@@ -398,7 +398,7 @@ describe("Integration", () => {
 
     describe("Groups server fabric scoped storage", () => {
         it("set a group name", async () => {
-            const groupsCluster = ClusterClient(await client.connect(new NodeId(BigInt(1))), 0, GroupsCluster);
+            const groupsCluster = ClusterClient(await client.connect(client.getFabric().nodeId), 0, GroupsCluster);
             await groupsCluster.addGroup({ groupId: new GroupId(1), groupName: "Group 1" });
         });
     });
