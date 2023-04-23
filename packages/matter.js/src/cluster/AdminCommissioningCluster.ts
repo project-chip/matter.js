@@ -11,8 +11,9 @@ import { BitFlag } from "../schema/BitmapSchema.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { TlvFabricIndex } from "../common/FabricIndex.js";
 import { TlvVendorId } from "../common/VendorId.js";
-import { Cluster, Command, TlvNoArguments, TlvNoResponse, Attribute, OptionalCommand } from "./Cluster.js";
+import { Cluster, Command, TlvNoResponse, Attribute, OptionalCommand } from "./Cluster.js";
 import { CRYPTO_GROUP_SIZE_BYTES, CRYPTO_PUBLIC_KEY_SIZE_BYTES } from "../crypto/CryptoConstants.js";
+import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
 
 const PAKE_PASSCODE_VERIFIER_LENGTH = CRYPTO_GROUP_SIZE_BYTES + CRYPTO_PUBLIC_KEY_SIZE_BYTES;
 

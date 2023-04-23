@@ -109,22 +109,22 @@ export const TlvAttributeStatus = TlvObject({ // AttributeStatusIB
 });
 
 /** @see {@link MatterCoreSpecificationV1_0}, section 10.5.4 */
-export const TlvAttributeData = TlvObject({ // AttributeDataIB
+export const TlvAttributeData = TlvObject({ // AttributeDataIB version for Non-Reports
     dataVersion: TlvOptionalField(0, TlvUInt32),
     path: TlvField(1, TlvAttributePath),
     data: TlvField(2, TlvAny),
 });
 
-export const TlvAttributeReportValue = TlvObject({ // TODO consolidate with TlvAttributeData
-    version: TlvField(0, TlvUInt32), // Name change
+export const TlvAttributeReportData = TlvObject({ // AttributeDataIB version for Reports
+    dataVersion: TlvField(0, TlvUInt32),
     path: TlvField(1, TlvAttributePath),
-    value: TlvField(2, TlvAny), // Name change
+    data: TlvField(2, TlvAny),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0}, section 10.5.5 */
 export const TlvAttributeReport = TlvObject({ // AttributeReportIB
     attributeStatus: TlvOptionalField(0, TlvAttributeStatus),
-    value: TlvOptionalField(1, TlvAttributeReportValue), // AttributeDataIB, TODO rename to attributeData
+    value: TlvOptionalField(1, TlvAttributeReportData), // AttributeDataIB, TODO rename to attributeData
 });
 
 /** @see {@link MatterCoreSpecificationV1_0}, section 10.5.15 */
@@ -149,7 +149,7 @@ export const TlvCommandPath = TlvList({ // CommandPathIB
 /** @see {@link MatterCoreSpecificationV1_0}, section 10.5.12 */
 export const TlvCommandData = TlvObject({ // CommandDataIB
     path: TlvField(0, TlvCommandPath), // TODO rename to commandPath
-    args: TlvField(1, TlvAny), // TODO rename to commandFields
+    args: TlvOptionalField(1, TlvAny), // TODO rename to commandFields
 });
 
 /** @see {@link MatterCoreSpecificationV1_0}, section 10.5.14 */

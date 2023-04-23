@@ -21,7 +21,7 @@ export interface OperationalCredentialsServerConf {
 }
 
 function signWithDeviceKey(conf: OperationalCredentialsServerConf, session: SecureSession<MatterDevice>, data: ByteArray) {
-    return Crypto.signPkcs8(conf.devicePrivateKey, [data, session.getAttestationChallengeKey()]);
+    return Crypto.get().signPkcs8(conf.devicePrivateKey, [data, session.getAttestationChallengeKey()]);
 }
 
 export const OperationalCredentialsClusterHandler: (conf: OperationalCredentialsServerConf) => ClusterServerHandlers<typeof OperationalCredentialsCluster> = (conf) => ({
