@@ -28,9 +28,13 @@ import { ScenesCluster } from "./ScenesCluster.js";
 import { TemperatureMeasurementCluster } from "./TemperatureMeasurementCluster.js";
 import { RelativeHumidityCluster, SoilMoistureMeasurementCluster, LeafWetnessMeasurementCluster } from "./WaterContentMeasurementCluster.js";
 import { Attribute, Cluster } from "./Cluster.js";
+import { GeneralDiagnosticsCluster } from "./GeneralDiagnosticsCluster.js";
+import { GroupKeyManagementCluster } from "./GroupKeyManagementCluster.js";
+import { ActionsCluster } from "./ActionsCluster.js";
 
 export const AllClustersMap = {
     [AccessControlCluster.id]: AccessControlCluster,
+    [ActionsCluster.id]: ActionsCluster,
     [AdminCommissioningCluster.id]: AdminCommissioningCluster,
     [BasicInformationCluster.id]: BasicInformationCluster,
     [BindingCluster.id]: BindingCluster,
@@ -39,6 +43,8 @@ export const AllClustersMap = {
     [DescriptorCluster.id]: DescriptorCluster,
     [FlowMeasurementCluster.id]: FlowMeasurementCluster,
     [GeneralCommissioningCluster.id]: GeneralCommissioningCluster,
+    [GeneralDiagnosticsCluster.id]: GeneralDiagnosticsCluster,
+    [GroupKeyManagementCluster.id]: GroupKeyManagementCluster,
     [GroupsCluster.id]: GroupsCluster,
     [IdentifyCluster.id]: IdentifyCluster,
     [IlluminanceMeasurementCluster.id]: IlluminanceMeasurementCluster,
@@ -49,9 +55,9 @@ export const AllClustersMap = {
     [OccupancySensingCluster.id]: OccupancySensingCluster,
     [OnOffCluster.id]: OnOffCluster,
     [OperationalCredentialsCluster.id]: OperationalCredentialsCluster,
-    [PressureMeasurementCluster.id]: PressureMeasurementCluster,
     [PowerSourceCluster.id]: PowerSourceCluster,
     [PowerSourceConfigurationCluster.id]: PowerSourceConfigurationCluster,
+    [PressureMeasurementCluster.id]: PressureMeasurementCluster,
     [ScenesCluster.id]: ScenesCluster,
     [TemperatureMeasurementCluster.id]: TemperatureMeasurementCluster,
     [RelativeHumidityCluster.id]: RelativeHumidityCluster,
