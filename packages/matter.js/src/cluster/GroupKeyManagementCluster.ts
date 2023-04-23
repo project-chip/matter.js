@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { WritableAttribute, Attribute, Cluster, Command, TlvNoArguments, TlvNoResponse } from "./Cluster.js";
+import { WritableAttribute, Attribute, Cluster, Command, TlvNoResponse } from "./Cluster.js";
 import { TlvGroupId } from "../common/GroupId.js";
 import { TlvEndpointNumber } from "../common/EndpointNumber.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
@@ -14,6 +14,7 @@ import { TlvNullable } from "../tlv/TlvNullable.js";
 import { TlvString } from "../tlv/TlvString.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
+import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
 
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.2.6.1 */

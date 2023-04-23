@@ -10,7 +10,8 @@ import { TlvEnum, TlvUInt16, TlvUInt64 } from "../tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { TlvString } from "../tlv/TlvString.js";
-import { AccessLevel, Attribute, Cluster, Command, TlvNoArguments, WritableAttribute } from "./Cluster.js";
+import { AccessLevel, Attribute, Cluster, Command, WritableAttribute } from "./Cluster.js";
+import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
 
 /**
  * This enumeration is used by the RegulatoryConfig and LocationCapability attributes to indicate possible radio usage.

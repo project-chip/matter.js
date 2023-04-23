@@ -17,17 +17,21 @@ import { NetworkNode } from "./net/node/NetworkNode";
 
 Network.get = singleton(() => new NetworkNode());
 
+import { Crypto } from "./crypto/Crypto";
+import { CryptoNode } from "./crypto/CryptoNode";
+
+Crypto.get = singleton(() => new CryptoNode());
+
 import { MatterDevice } from "./matter/MatterDevice";
 import { UdpInterface } from "./net/UdpInterface";
 import { SecureChannelProtocol } from "./matter/session/secure/SecureChannelProtocol";
 import { PaseServer } from "./matter/session/secure/PaseServer";
-import { Crypto } from "./crypto/Crypto";
 import { CaseServer } from "./matter/session/secure/CaseServer";
 import { ClusterServer, InteractionServer } from "./matter/interaction/InteractionServer";
 import {
-    BasicInformationCluster, GeneralCommissioningCluster, RegulatoryLocationType, OperationalCredentialsCluster, OnOffCluster,
-    NetworkCommissioningCluster, NetworkCommissioningStatus, AdminCommissioningCluster, CommissioningWindowStatus,
-    VendorId, FabricIndex
+    BasicInformationCluster, GeneralCommissioningCluster, RegulatoryLocationType, OperationalCredentialsCluster,
+    OnOffCluster, NetworkCommissioningCluster, NetworkCommissioningStatus, AdminCommissioningCluster,
+    CommissioningWindowStatus, VendorId, FabricIndex, AccessControlCluster
 } from "@project-chip/matter.js";
 import { DEVICE } from "./matter/common/DeviceTypes";
 import { MdnsBroadcaster } from "./matter/mdns/MdnsBroadcaster";
@@ -86,7 +90,7 @@ class Device {
         onOffClusterServer.attributes.onOff.addListener(on => commandExecutor(on ? "on" : "off")?.());
 
         const secureChannelProtocol = new SecureChannelProtocol(
-            await PaseServer.fromPin(passcode, { iterations: 1000, salt: Crypto.getRandomData(32) }),
+            await PaseServer.fromPin(passcode, { iterations: 1000, salt: Crypto.get().getRandomData(32) }),
             new CaseServer(),
         );
 
@@ -111,7 +115,7 @@ class Device {
                         vendorId,
                         productName,
                         productId,
-                        nodeLabel: "",
+                        nodeLabel: productName,
                         hardwareVersion: 0,
                         hardwareVersionString: "0",
                         location: "US",
@@ -177,11 +181,22 @@ class Device {
                             adminVendorId: null,
                         },
                         AdminCommissioningHandler(secureChannelProtocol),
+                    ),
+                    new ClusterServer(AccessControlCluster,
+                        {},
+                        {
+                            acl: [],
+                            extension: [],
+                            subjectsPerAccessControlEntry: 4,
+                            targetsPerAccessControlEntry: 4,
+                            accessControlEntriesPerFabric: 3
+                        },
+                        {},
                     )
                 ])
                 .addEndpoint(0x01, DEVICE.ON_OFF_LIGHT, [onOffClusterServer])
             );
-        await device.start()
+        await device.start();
 
         logger.info("Listening");
         if (!device.isCommissioned()) {

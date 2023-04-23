@@ -4,19 +4,39 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Time } from "../../../src/time/Time";
+import { TimeFake } from "../../../src/time/TimeFake";
+
+Time.get = () => new TimeFake(1262679233478);
+
+import { Crypto } from "../../../src/crypto/Crypto";
+import { CryptoNode } from "../../../src/crypto/CryptoNode";
+
+Crypto.get = () => new CryptoNode();
 import * as assert from "assert";
 import { ClusterServer, InteractionServer } from "../../../src/matter/interaction/InteractionServer";
-import { ReadRequest, DataReport, WriteRequest, WriteResponse } from "../../../src/matter/interaction/InteractionMessenger";
+import {
+    ReadRequest,
+    DataReport,
+    WriteRequest,
+    WriteResponse,
+    InvokeRequest, InvokeResponse
+} from "../../../src/matter/interaction/InteractionMessenger";
 import { MessageExchange } from "../../../src/matter/common/MessageExchange";
 import { DEVICE } from "../../../src/matter/common/DeviceTypes";
 import { MatterDevice } from "../../../src/matter/MatterDevice";
-import { BasicInformationCluster, VendorId, TlvString, TlvUInt8 } from "@project-chip/matter.js";
-import { Time } from "../../../src/time/Time";
-import { TimeFake } from "../../../src/time/TimeFake";
+import {
+    BasicInformationCluster,
+    VendorId,
+    TlvString,
+    TlvUInt8,
+    OnOffCluster,
+    TlvNoArguments,
+    TlvArray, TlvField, TlvObject, TlvNullable, AccessControlCluster
+} from "@project-chip/matter.js";
 import { StorageBackendMemory } from "../../../src/storage/StorageBackendMemory";
 import { StorageManager } from "../../../src/storage/StorageManager";
-
-Time.get = () => new TimeFake(1262679233478);
+import { Message } from "../../../src/codec/MessageCodec";
 
 const READ_REQUEST: ReadRequest = {
     interactionModelRevision: 1,
@@ -33,24 +53,16 @@ const READ_RESPONSE: DataReport = {
     values: [
         {
             value: {
-                path: {
-                    endpointId: 0,
-                    clusterId: 0x28,
-                    attributeId: 2,
-                },
-                value: TlvUInt8.encodeTlv(1),
-                version: 0,
+                path: { endpointId: 0, clusterId: 0x28, attributeId: 2 },
+                data: TlvUInt8.encodeTlv(1),
+                dataVersion: 0,
             }
         },
         {
             value: {
-                path: {
-                    endpointId: 0,
-                    clusterId: 0x28,
-                    attributeId: 4,
-                },
-                value: TlvUInt8.encodeTlv(2),
-                version: 0,
+                path: { endpointId: 0, clusterId: 0x28, attributeId: 4 },
+                data: TlvUInt8.encodeTlv(2),
+                dataVersion: 0,
             }
         },
     ]
@@ -79,14 +91,10 @@ const WRITE_RESPONSE: WriteResponse = {
     interactionModelRevision: 1,
     writeResponses: [
         {
-            path: {
-                attributeId: 100,
-                clusterId: 40,
-                endpointId: 0
-            },
-            status: {
-                status: 136
-            }
+            path: { attributeId: 100, clusterId: 40, endpointId: 0 }, status: { status: 136 }
+        },
+        {
+            path: { attributeId: 5, clusterId: 40, endpointId: 0 }, status: { status: 0 }
         }
     ]
 };
@@ -107,9 +115,97 @@ const MASS_WRITE_REQUEST: WriteRequest = {
 
 const MASS_WRITE_RESPONSE: WriteResponse = {
     interactionModelRevision: 1,
-    writeResponses: []
+    writeResponses: [
+        {
+            path: { attributeId: 5, clusterId: 40, endpointId: 0 }, status: { status: 0 }
+        },
+        {
+            path: { attributeId: 6, clusterId: 40, endpointId: 0 }, status: { status: 0 }
+        },
+        {
+            path: { attributeId: 16, clusterId: 40, endpointId: 0 }, status: { status: 0 }
+        }
+    ]
 };
 
+const TlvAclTestSchema = TlvObject({
+    privilege: TlvField(1, TlvUInt8),
+    authMode: TlvField(2, TlvUInt8),
+    subjects: TlvField(3, TlvNullable(TlvUInt8)),
+    targets: TlvField(4, TlvNullable(TlvUInt8)),
+});
+
+const CHUNKED_ARRAY_WRITE_REQUEST: WriteRequest = {
+    interactionModelRevision: 1,
+    suppressResponse: false,
+    timedRequest: false,
+    writeRequests: [
+        {
+            path: { endpointId: 0, clusterId: 0x1f, attributeId: 0 },
+            data: TlvArray(TlvAclTestSchema).encodeTlv([]),
+            dataVersion: 0,
+        },
+        {
+            path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: null },
+            data: TlvAclTestSchema.encodeTlv({
+                privilege: 1,
+                authMode: 2,
+                subjects: null,
+                targets: null,
+            }),
+            dataVersion: 0,
+        },
+    ],
+    moreChunkedMessages: false,
+};
+
+const CHUNKED_ARRAY_WRITE_RESPONSE: WriteResponse = {
+    interactionModelRevision: 1,
+    writeResponses: [
+        {
+            path: { attributeId: 0, clusterId: 31, endpointId: 0 }, status: { status: 0 }
+        }
+    ]
+};
+
+const INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS: InvokeRequest = {
+    interactionModelRevision: 1,
+    suppressResponse: false,
+    timedRequest: false,
+    invokes: [
+        {
+            path: {
+                endpointId: 0,
+                clusterId: 6,
+                commandId: 1,
+            },
+            args: TlvNoArguments.encodeTlv(undefined),
+        }
+    ]
+};
+
+const INVOKE_COMMAND_REQUEST_WITH_NO_ARGS: InvokeRequest = {
+    interactionModelRevision: 1,
+    suppressResponse: false,
+    timedRequest: false,
+    invokes: [
+        {
+            path: { endpointId: 0, clusterId: 6, commandId: 1 },
+        }
+    ]
+};
+
+const INVOKE_COMMAND_RESPONSE: InvokeResponse = {
+    interactionModelRevision: 1,
+    suppressResponse: false,
+    responses: [
+        {
+            result: {
+                path: { clusterId: 6, commandId: 1, endpointId: 0 }, result: { code: 0 }
+            }
+        }
+    ]
+};
 
 describe("InteractionProtocol", () => {
 
@@ -177,8 +273,34 @@ describe("InteractionProtocol", () => {
             assert.equal(basicCluster.attributes.nodeLabel.get(), "test");
         });
 
-        it("mass write values and only set the one allowed", async () => {
+        it("write chunked array values and return errors on invalid values", async () => {
+            const accessControlCluster = new ClusterServer(AccessControlCluster, {}, {
+                acl: [],
+                extension: [],
+                subjectsPerAccessControlEntry: 4,
+                targetsPerAccessControlEntry: 4,
+                accessControlEntriesPerFabric: 3
+            }, {});
 
+            const storageManager = new StorageManager(new StorageBackendMemory());
+            await storageManager.initialize();
+            const interactionProtocol = new InteractionServer(storageManager)
+                .addEndpoint(0, DEVICE.ROOT, [accessControlCluster]);
+
+            const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" } }) as MessageExchange<MatterDevice>, CHUNKED_ARRAY_WRITE_REQUEST);
+
+            assert.deepEqual(result, CHUNKED_ARRAY_WRITE_RESPONSE);
+            assert.deepEqual(accessControlCluster.attributes.acl.get(), [
+                {
+                    privilege: 1,
+                    authMode: 2,
+                    subjects: null,
+                    targets: null,
+                }
+            ]);
+        });
+
+        it("mass write values and only set the one allowed", async () => {
             const basicCluster = new ClusterServer(BasicInformationCluster, {}, {
                 dataModelRevision: 1,
                 vendorName: "vendor",
@@ -213,4 +335,64 @@ describe("InteractionProtocol", () => {
         });
     });
 
+    describe("handleInvokeRequest", () => {
+        it("invoke method with empty args", async () => {
+            let onOffState = false;
+            const onOffCluster = new ClusterServer(OnOffCluster, {
+                lightingLevelControl: false
+            }, {
+                onOff: onOffState,
+            }, {
+                on: async () => {
+                    onOffState = true;
+                },
+                off: async () => {
+                    onOffState = false;
+                },
+                toggle: async () => {
+                    onOffState = !onOffState;
+                }
+            });
+
+            const storageManager = new StorageManager(new StorageBackendMemory());
+            await storageManager.initialize();
+            const interactionProtocol = new InteractionServer(storageManager)
+                .addEndpoint(0, DEVICE.ROOT, [onOffCluster]);
+
+            const result = await interactionProtocol.handleInvokeRequest(({ channel: { getName: () => "test" } }) as MessageExchange<MatterDevice>, INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS, {} as Message);
+
+            assert.deepEqual(result, INVOKE_COMMAND_RESPONSE);
+            assert.equal(onOffState, true);
+        });
+
+        it("invoke method with no args", async () => {
+
+            let onOffState = false;
+            const onOffCluster = new ClusterServer(OnOffCluster, {
+                lightingLevelControl: false
+            }, {
+                onOff: onOffState,
+            }, {
+                on: async () => {
+                    onOffState = true;
+                },
+                off: async () => {
+                    onOffState = false;
+                },
+                toggle: async () => {
+                    onOffState = !onOffState;
+                }
+            });
+
+            const storageManager = new StorageManager(new StorageBackendMemory());
+            await storageManager.initialize();
+            const interactionProtocol = new InteractionServer(storageManager)
+                .addEndpoint(0, DEVICE.ROOT, [onOffCluster]);
+
+            const result = await interactionProtocol.handleInvokeRequest(({ channel: { getName: () => "test" } }) as MessageExchange<MatterDevice>, INVOKE_COMMAND_REQUEST_WITH_NO_ARGS, {} as Message);
+
+            assert.deepEqual(result, INVOKE_COMMAND_RESPONSE);
+            assert.equal(onOffState, true);
+        });
+    });
 });

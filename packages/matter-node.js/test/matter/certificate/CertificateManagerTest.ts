@@ -4,9 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Crypto } from "../../../src/crypto/Crypto";
+import { CryptoNode } from "../../../src/crypto/CryptoNode";
+
+Crypto.get = () => new CryptoNode();
+
 import * as assert from "assert";
 import { DerCodec, EcdsaWithSHA256_X962, ELEMENTS_KEY, DerNode, BYTES_KEY } from "../../../src/codec/DerCodec";
-import { Crypto } from "../../../src/crypto/Crypto";
 import { TlvRootCertificate, TlvOperationalCertificate, CertificateManager } from "../../../src/matter/certificate/CertificateManager";
 import { ByteArray } from "@project-chip/matter.js";
 
@@ -59,7 +63,7 @@ describe("CertificateManager", () => {
             assert.deepEqual(DerCodec.encode(signatureAlgorithmNode), DerCodec.encode(EcdsaWithSHA256_X962));
             const requestBytes = DerCodec.encode(requestNode);
             assert.deepEqual(requestBytes, CSR_REQUEST_ASN1);
-            Crypto.verifySpki(PUBLIC_KEY, DerCodec.encode(requestNode), signatureNode[BYTES_KEY], "der");
+            Crypto.get().verifySpki(PUBLIC_KEY, DerCodec.encode(requestNode), signatureNode[BYTES_KEY], "der");
         });
     });
 
