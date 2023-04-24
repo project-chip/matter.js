@@ -18,6 +18,8 @@ import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { TlvByteString, TlvString, TlvString32max } from "../tlv/TlvString.js";
 import { AccessLevel, Attribute, Cluster, Command, TlvNoResponse } from "./Cluster.js";
 
+// TODO: Rename to NodeOperationalCredentialsCluster to match with specs
+
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.5.1 */
 export const RESP_MAX = 900;
 
