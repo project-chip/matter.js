@@ -7,8 +7,9 @@
 import { Crypto, KeyPair } from "../../crypto/Crypto";
 import { CertificateManager, TlvOperationalCertificate, TlvRootCertificate } from "../certificate/CertificateManager";
 import { NodeId } from "../common/NodeId";
-import { ByteArray, DataWriter, Endian, toBigInt, VendorId, FabricId, FabricIndex } from "@project-chip/matter.js";
+import { ByteArray, DataWriter, Endian, toBigInt, VendorId, FabricId, FabricIndex, Cluster } from "@project-chip/matter.js";
 import { SecureSession } from "../session/SecureSession";
+import { SupportedStorageTypes } from "../../storage/StringifyTools";
 
 const COMPRESSED_FABRIC_ID_INFO = ByteArray.fromString("CompressedFabric");
 const GROUP_SECURITY_INFO = ByteArray.fromString("GroupKey v1.0");
@@ -28,11 +29,14 @@ export type FabricJsonObject = {
     intermediateCACert: ByteArray | undefined;
     operationalCert: ByteArray;
     label: string;
+    scopedClusterData: Map<number, Map<string, SupportedStorageTypes>>
 }
 
 export class Fabric {
 
     private readonly sessions = new Array<SecureSession<any>>();
+
+    private readonly scopedClusterData: Map<number, any>;
 
     private removeCallback: (() => void) | undefined;
     private persistCallback: (() => void) | undefined;
@@ -52,7 +56,11 @@ export class Fabric {
         readonly intermediateCACert: ByteArray | undefined,
         readonly operationalCert: ByteArray,
         public label: string,
-    ) { }
+        scopedClusterData?: Map<number, Map<string, SupportedStorageTypes>>
+
+    ) {
+        this.scopedClusterData = scopedClusterData ?? new Map<number, Map<string, SupportedStorageTypes>>();
+    }
 
     toStorageObject(): FabricJsonObject {
         return {
@@ -70,6 +78,7 @@ export class Fabric {
             intermediateCACert: this.intermediateCACert,
             operationalCert: this.operationalCert,
             label: this.label,
+            scopedClusterData: this.scopedClusterData
         };
     }
 
@@ -145,6 +154,46 @@ export class Fabric {
 
     persist() {
         this.persistCallback?.();
+    }
+
+    getScopedClusterDataValue<T>(cluster: Cluster<any, any, any, any>, clusterDataKey: string): T | undefined {
+        const dataMap = this.scopedClusterData.get(cluster.id);
+        if (dataMap === undefined) {
+            return undefined;
+        }
+        return dataMap.get(clusterDataKey);
+    }
+
+    setScopedClusterDataValue<T>(cluster: Cluster<any, any, any, any>, clusterDataKey: string, value: T) {
+        if (!this.scopedClusterData.has(cluster.id)) {
+            this.scopedClusterData.set(cluster.id, new Map<string, SupportedStorageTypes>());
+        }
+        this.scopedClusterData.get(cluster.id).set(clusterDataKey, value);
+        this.persist();
+    }
+
+    deleteScopedClusterDataValue(cluster: Cluster<any, any, any, any>, clusterDataKey: string) {
+        if (!this.scopedClusterData.has(cluster.id)) {
+            return;
+        }
+        this.scopedClusterData.get(cluster.id).delete(clusterDataKey);
+        this.persist();
+    }
+
+    hasScopedClusterDataValue(cluster: Cluster<any, any, any, any>, clusterDataKey: string) {
+        return this.scopedClusterData.has(cluster.id) && this.scopedClusterData.get(cluster.id).has(clusterDataKey);
+    }
+
+    deleteScopedClusterData(cluster: Cluster<any, any, any, any>) {
+        this.scopedClusterData.delete(cluster.id);
+        this.persist();
+    }
+
+    getScopedClusterDataKeys(cluster: Cluster<any, any, any, any>): string[] {
+        if (!this.scopedClusterData.has(cluster.id)) {
+            return [];
+        }
+        return Array.from(this.scopedClusterData.get(cluster.id).keys());
     }
 }
 
