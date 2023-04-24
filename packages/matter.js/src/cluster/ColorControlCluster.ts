@@ -18,25 +18,25 @@ export const OptionsBitmap = TlvBitmap(TlvUInt8, {
      *   0 : Don't execute command when associated On/Off Cluster is off
      *   1 : Execute command when associated On/Off Cluster is off
      */
-    ExecuteIfOff: BitFlag(0),
+    executeIfOff: BitFlag(0),
 
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.7.18 */
 export const ColorCapabilities = TlvBitmap(TlvUInt16, { // TODO: Validate to be set the same as feature bits
-    HueSaturationSupported: BitFlag(0),
-    EnhancedHueSupported: BitFlag(1),
-    ColorLoopSupported: BitFlag(2),
-    XYAttributesSupported: BitFlag(3),
-    ColorTemperatureSupported: BitFlag(4),
+    hueSaturationSupported: BitFlag(0),
+    enhancedHueSupported: BitFlag(1),
+    colorLoopSupported: BitFlag(2),
+    xYAttributesSupported: BitFlag(3),
+    colorTemperatureSupported: BitFlag(4),
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.19.1 */
 export const ColorLoopUpdateFlags = TlvBitmap(TlvUInt8, {
-    UpdateAction: BitFlag(0),
-    UpdateDirection: BitFlag(1),
-    UpdateTime: BitFlag(2),
-    UpdateStartHue: BitFlag(3),
+    updateAction: BitFlag(0),
+    updateDirection: BitFlag(1),
+    updateTime: BitFlag(2),
+    updateStartHue: BitFlag(3),
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.7.12 */
