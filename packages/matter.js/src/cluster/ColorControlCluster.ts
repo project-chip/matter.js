@@ -44,7 +44,7 @@ export const enum EnhancedColorMode {
     CurrentHueCurrentSaturation = 0,
     CurrentXCurrentY = 1,
     ColorTemperatureMireds = 2,
-    EnhancedCurrentHueCurrentSaturation = 3
+    EnhancedCurrentHueCurrentSaturation = 3,
 }
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.4.2 */
