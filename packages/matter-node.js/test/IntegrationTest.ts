@@ -19,17 +19,9 @@ import { UdpInterface } from "../src/net/UdpInterface";
 import { MatterController } from "../src/matter/MatterController";
 import { MatterDevice } from "../src/matter/MatterDevice";
 import {
-    OnOffCluster,
-    BasicInformationCluster,
-    GeneralCommissioningCluster,
-    RegulatoryLocationType,
-    OperationalCertStatus,
-    OperationalCredentialsCluster,
-    VendorId,
-    FabricIndex,
-    DescriptorCluster,
-    ClusterId,
-    AccessControlCluster,
+    OnOffCluster, BasicInformationCluster, GeneralCommissioningCluster, RegulatoryLocationType, OperationalCertStatus,
+    OperationalCredentialsCluster, VendorId, FabricIndex, DescriptorCluster, ClusterId, AccessControlCluster,
+    GroupsCluster, GroupId,
 } from "@project-chip/matter.js";
 import { DEVICE } from "../src/matter/common/DeviceTypes";
 import { ClusterServer, InteractionServer } from "../src/matter/interaction/InteractionServer";
@@ -52,6 +44,7 @@ import { StorageBackendMemory } from "../src/storage/StorageBackendMemory";
 import { StorageManager } from "../src/storage/StorageManager";
 import { FabricJsonObject } from "../src/matter/fabric/Fabric";
 import { StatusResponseError } from "../src/matter/interaction/InteractionMessenger";
+import { GroupsClusterHandler } from "../src/matter/cluster/server/GroupsServer";
 
 const SERVER_IP = "192.168.200.1";
 const SERVER_MAC = "00:B0:D0:63:C2:26";
@@ -174,7 +167,13 @@ describe("Integration", () => {
                             accessControlEntriesPerFabric: 3
                         },
                         {},
-                    )
+                    ),
+                    new ClusterServer(GroupsCluster, {
+                        groupNames: true
+                    }, {
+                        nameSupport: { groupNames: true }
+                    },
+                        GroupsClusterHandler(0x00)),
                 ])
                 .addEndpoint(0x01, DEVICE.ON_OFF_LIGHT, [onOffServer])
             );
@@ -246,7 +245,7 @@ describe("Integration", () => {
                     clusterId: DescriptorCluster.id,
                     attributeId: DescriptorCluster.attributes.serverList.id,
                     attributeName: "serverList"
-                }, value: [new ClusterId(40), new ClusterId(48), new ClusterId(62), new ClusterId(31), new ClusterId(29)], version: 1
+                }, value: [new ClusterId(40), new ClusterId(48), new ClusterId(62), new ClusterId(31), new ClusterId(4), new ClusterId(29)], version: 1
             })
 
             assert.equal(response.filter(({
@@ -397,6 +396,13 @@ describe("Integration", () => {
         });
     });
 
+    describe("Groups server fabric scoped storage", () => {
+        it("set a group name", async () => {
+            const groupsCluster = ClusterClient(await client.connect(client.getFabric().nodeId), 0, GroupsCluster);
+            await groupsCluster.addGroup({ groupId: new GroupId(1), groupName: "Group 1" });
+        });
+    });
+
     describe("storage", () => {
         it("server storage has fabric fields stored correctly stringified", async () => {
             // TODO: In fact testing wrong because the storage mixed server and client keys, will get issues for more fancy tests
@@ -407,6 +413,14 @@ describe("Integration", () => {
             assert.equal(typeof firstFabric, "object");
             assert.equal(firstFabric.fabricIndex, 1);
             assert.equal(firstFabric.fabricId, 1);
+            assert.ok(firstFabric.scopedClusterData);
+            assert.equal(firstFabric.scopedClusterData.size, 1);
+            const groupsClusterEndpointMap = firstFabric.scopedClusterData.get(GroupsCluster.id);
+            assert.ok(groupsClusterEndpointMap);
+            assert.equal(groupsClusterEndpointMap.size, 1);
+            const groupsClusterData = groupsClusterEndpointMap.get("0");
+            assert.ok(groupsClusterData instanceof Map);
+            assert.equal(groupsClusterData.get(1), "Group 1");
 
             assert.equal(fakeServerStorage.get("FabricManager", "nextFabricIndex"), 2);
 
