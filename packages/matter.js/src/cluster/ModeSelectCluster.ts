@@ -15,7 +15,7 @@ import { TlvArray } from "../tlv/TlvArray.js";
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.8. */
 export const SemanticTag = TlvObject({
-    Value: TlvField(0x0, TlvUInt16), // enum16 in Standard, but values not defined "standard" or "Manufacturer sepcific"
+    value: TlvField(0x0, TlvUInt16), // enum16 in Standard, but values not defined "standard" or "Manufacturer sepcific"
     mfgCode: TlvField(0x1, TlvNullable(TlvUInt16)), // type in standard is "vendor-id" ??
 });
 
@@ -43,7 +43,7 @@ export const ModeSelectCluster = Cluster({
     name: "ModeSelect",
     revision: 1,
     features: {
-        OnOff: BitFlag(0), // Dependency with an On/Off cluster on same endpoint
+        onOff: BitFlag(0), // Dependency with an On/Off cluster on same endpoint
     },
 
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.8.5 */
@@ -65,7 +65,7 @@ export const ModeSelectCluster = Cluster({
         currentMode: OptionalAttribute(0x3, TlvUInt8),
 
         /** Indicates the desired startup mode */
-        StartUpMode: OptionalAttribute(0x4, TlvNullable(TlvInt16)),
+        startUpMode: OptionalAttribute(0x4, TlvNullable(TlvInt16)),
 
         /**  
          * Indicates the value of CurrentMode that depends on the state of the On/Off cluster on the same endpoint 
