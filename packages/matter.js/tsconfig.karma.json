@@ -2,7 +2,8 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "module": "commonjs" // Required for Karma web test
+    "module": "commonjs", // Required for Karma web test
+    "esModuleInterop": true
   },
   "include": ["src/**/*.ts", "test/**/*.ts"]
 }

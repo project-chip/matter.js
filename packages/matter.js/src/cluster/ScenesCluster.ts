@@ -4,21 +4,21 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TlvAttributeId } from "../common/AttributeId.js";
-import { TlvClusterId } from "../common/ClusterId.js";
-import { TlvGroupId } from "../common/GroupId.js";
-import { TlvNodeId } from "../common/NodeId.js";
-import { InteractionProtocolStatusCode as StatusCode } from "../protocol/InteractionProtocol.js";
+import { InteractionProtocolStatusCode as StatusCode } from "../protocol/interaction/InteractionProtocol.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
-import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
+import { Attribute, Cluster, Command, OptionalAttribute, OptionalCommand, TlvNoResponse } from "./Cluster.js";
+import { TlvAttributeId } from "../datatype/AttributeId.js";
+import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { TlvAny } from "../tlv/TlvAny.js";
 import { TlvArray } from "../tlv/TlvArray.js";
-import { TlvBoolean } from "../tlv/TlvBoolean.js";
-import { TlvNullable } from "../tlv/TlvNullable.js";
+import { TlvClusterId } from "../datatype/ClusterId.js";
+import { TlvGroupId } from "../datatype/GroupId.js";
 import { TlvBitmap, TlvEnum, TlvUInt16, TlvUInt8 } from "../tlv/TlvNumber.js";
-import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { TlvString } from "../tlv/TlvString.js";
-import { Attribute, Cluster, Command, OptionalAttribute, OptionalCommand, TlvNoResponse } from "./Cluster.js";
+import { TlvNullable } from "../tlv/TlvNullable.js";
+import { TlvBoolean } from "../tlv/TlvBoolean.js";
+import { TlvNodeId } from "../datatype/NodeId.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.6.1 */
 const TlvAttributeValuePair = TlvObject({

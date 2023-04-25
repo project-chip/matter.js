@@ -28,8 +28,8 @@
         "build": "tsc --project tsconfig.dist.json",
         "build-clean": "npm run clean && npm run build",
         "test": "TZ=utc jest",
-        "matter": "ts-node --project tsconfig.dist.json src/Device.ts",
-        "matter-controller": "ts-node --project tsconfig.dist.json src/Controller.ts"
+        "matter": "ts-node --project tsconfig.dist.json src/DeviceNode.ts",
+        "matter-controller": "ts-node --project tsconfig.dist.json src/ControllerNode.ts"
     },
     "devDependencies": {
         "@types/bn.js": "^5.1.1",
@@ -48,8 +48,6 @@
     },
     "dependencies": {
         "@project-chip/matter.js": "^0.2.1",
-        "bn.js": "^5.2.1",
-        "elliptic": "^6.5.4",
         "node-localstorage": "^2.2.1"
     },
     "engines": {

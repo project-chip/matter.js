@@ -5,11 +5,11 @@
  */
 
 import * as crypto from "crypto";
-import { ByteArray } from "@project-chip/matter.js";
+import { ByteArray } from "@project-chip/matter.js/util";
 import {
     CRYPTO_AUTH_TAG_LENGTH, CRYPTO_EC_CURVE, CRYPTO_ENCRYPT_ALGORITHM, CRYPTO_HASH_ALGORITHM, CRYPTO_SYMMETRIC_KEY_LENGTH,
     CryptoDsaEncoding, CryptoBase,
-} from "./Crypto";
+} from "@project-chip/matter.js/crypto";
 
 const EC_PRIVATE_KEY_PKCS8_HEADER = ByteArray.fromHex("308141020100301306072a8648ce3d020106082a8648ce3d030107042730250201010420");
 const EC_PUBLIC_KEY_SPKI_HEADER = ByteArray.fromHex("3059301306072a8648ce3d020106082a8648ce3d030107034200");

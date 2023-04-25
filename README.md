@@ -9,7 +9,7 @@ Implementation of Matter protocol in Typescript with no native dependencies (and
 This repository contains multiple packages (and because of this it is a monorepo). The packages are contained in the `packages` directory and are all published separately to NPM.
 
 * matter.js: the core Matter implementation in typescript which is JavaScript only and has no native dependencies.
-* matter-node.js: a node.js implementation of a Matter Device and Controller
+* matter-node.js: a node.js implementation of a Matter DeviceNode and ControllerNode
 
 This repository uses the workspaces feature on npm to manage the dependencies between the packages. Because of this please only use `npm install` on the root of the repository. This will install all the dependencies for all the packages and also take care to create relevant symlinks between the packages.
 
@@ -49,7 +49,7 @@ PS: The above statements are only half true right now (March 2023) because we ar
 
 ### Matter-node.js
 
-Matter-node.js uses Node.js to implement a Matter Device and Controller by using Node.js for networking and other needed more native features.
+Matter-node.js uses Node.js to implement a Matter DeviceNode and ControllerNode by using Node.js for networking and other needed more native features.
 
 You can use it right now as a command line tool.
 

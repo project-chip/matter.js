@@ -4,17 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TlvGroupId } from "../common/GroupId.js";
-import { InteractionProtocolStatusCode as StatusCode } from "../protocol/InteractionProtocol.js";
+import { TlvGroupId } from "../datatype/GroupId.js";
+import { InteractionProtocolStatusCode as StatusCode } from "../protocol/interaction/InteractionProtocol.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
-import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
-import { TlvArray } from "../tlv/TlvArray.js";
-import { TlvNullable } from "../tlv/TlvNullable.js";
-import { TlvBitmap, TlvEnum, TlvUInt8 } from "../tlv/TlvNumber.js";
+import { Attribute, Cluster, Command, TlvNoResponse } from "./Cluster.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvString } from "../tlv/TlvString.js";
-import { Attribute, Cluster, Command, TlvNoResponse } from "./Cluster.js";
+import { TlvBitmap, TlvEnum, TlvUInt8 } from "../tlv/TlvNumber.js";
+import { TlvArray } from "../tlv/TlvArray.js";
+import { TlvNullable } from "../tlv/TlvNullable.js";
 import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.7.1 */
 const TlvAddGroupRequest = TlvObject({

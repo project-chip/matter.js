@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Time, Timer, TimerCallback } from "./Time";
+import { Time, Timer, TimerCallback } from "@project-chip/matter.js/util";
 
 class TimerNode implements Timer {
     private timerId: NodeJS.Timer | undefined;

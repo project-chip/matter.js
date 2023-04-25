@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Storage, fromJson, SupportedStorageTypes, toJson } from "@project-chip/matter.js/util";
+
 import { LocalStorage } from "node-localstorage";
-import { Storage } from "./Storage";
-import { fromJson, SupportedStorageTypes, toJson } from "./StringifyTools";
 
 export class StorageBackendDisk implements Storage {
     private readonly localStorage;

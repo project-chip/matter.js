@@ -4,5 +4,4 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export { MatterDevice } from "./matter/MatterDevice";
-export { MatterController } from "./matter/MatterController";
+// TODO

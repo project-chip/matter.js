@@ -34,7 +34,7 @@ Then after `cd packages/matter-node.js` you can use `npm run matter` to run the 
 
 ## Usage
 
-### Start a Matter Device
+### Start a Matter DeviceNode
 
 To run from the build files:
 
@@ -48,7 +48,7 @@ To run directly from Typescript files with on the fly compilation:
 npm run matter
 ```
 
-This starts a Matter (Device) server listening on port 5540.
+This starts a Matter (DeviceNode) server listening on port 5540.
 
 This first version only includes the OnOff cluster (on/off smart thing, like a plug or a bulb).
 You can use -on and -off parameter to run a script to control something.
@@ -76,7 +76,7 @@ The following parameters are available:
 * -on: the command to run when the device is turned on (see example above)
 * -off: the command to run when the device is turned off (see example above)
 
-### Start a Matter Controller
+### Start a Matter ControllerNode
 
 **Experimental**
 The current controller implementation is no CLI tool, but shows the pairing of devices and resuming the connection and also showcase the existing low-level controller API. It is just intended to be used for debugging, during development! The code contains some commented-out examples of how to use the low level controller API.
@@ -104,9 +104,9 @@ The following parameters are available:
 * -pin: the pin to use for pairing (default: 20202021)
 * -store: the storage location (directory) to use for storing the pairing information (default: controller-node). Delete the directory or provide an alternative name to reset the controller
 
-## Modifying the server (Device) behavior
+## Modifying the server (DeviceNode) behavior
 
-Device.ts defines the server behavior. You can add / remove clusters, change default parameters, etc...
+DeviceNode.ts defines the server behavior. You can add / remove clusters, change default parameters, etc...
 
 ```typescript
 new MatterDevice()
@@ -115,7 +115,7 @@ new MatterDevice()
             new PasePairing(20202021, { iteration: 1000, salt: Crypto.getRandomData(32) }),
             new CasePairing(),
         ))
-    .addProtocolHandler(Protocol.INTERACTION_MODEL, new InteractionProtocol(new Device([
+    .addProtocolHandler(Protocol.INTERACTION_MODEL, new InteractionProtocol(new DeviceNode([
         new Endpoint(0x00, "MA-rootdevice", [
             new BasicInformationCluster({ vendorName: "node-matter", vendorId: 0xFFF1, productName: "Matter test device", productId: 0X8001 }),
             new GeneralCommissioningCluster(),
@@ -224,7 +224,7 @@ chip-tool storage clear-all
 You can also control it with Matter test app: https://github.com/project-chip/connectedhomeip/tree/master/src/android/CHIPTest
 You can find a compiled apk in /matter-test-apk in this repository.
 
-**Provisioning the device**: click "provision with WiFi" > "Input Device address" > type IP address of the machine running node-matter
+**Provisioning the device**: click "provision with WiFi" > "Input DeviceNode address" > type IP address of the machine running node-matter
 
 **Controlling the device**: click "Light on/of" and you can control the light
 

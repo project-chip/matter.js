@@ -3,7 +3,9 @@
  * Copyright 2022 The node-matter Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+import { Attribute, Cluster } from "./Cluster.js";
 import { AccessControlCluster } from "./AccessControlCluster.js";
+import { ActionsCluster } from "./ActionsCluster.js";
 import { AdminCommissioningCluster } from "./AdminCommissioningCluster.js";
 import { BasicInformationCluster } from "./BasicInformationCluster.js";
 import { BindingCluster } from "./BindingCluster.js";
@@ -27,10 +29,8 @@ import { PressureMeasurementCluster } from "./PressureMeasurementCluster.js";
 import { ScenesCluster } from "./ScenesCluster.js";
 import { TemperatureMeasurementCluster } from "./TemperatureMeasurementCluster.js";
 import { RelativeHumidityCluster, SoilMoistureMeasurementCluster, LeafWetnessMeasurementCluster } from "./WaterContentMeasurementCluster.js";
-import { Attribute, Cluster } from "./Cluster.js";
 import { GeneralDiagnosticsCluster } from "./GeneralDiagnosticsCluster.js";
 import { GroupKeyManagementCluster } from "./GroupKeyManagementCluster.js";
-import { ActionsCluster } from "./ActionsCluster.js";
 
 export const AllClustersMap = {
     [AccessControlCluster.id]: AccessControlCluster,

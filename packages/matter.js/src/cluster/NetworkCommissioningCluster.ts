@@ -6,14 +6,14 @@
 
 
 import { Attribute, Cluster, Command, OptionalAttribute, OptionalCommand, WritableAttribute } from "./Cluster.js";
-import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
-import { TlvBitmap, TlvEnum, TlvInt32, TlvInt8, TlvUInt16, TlvUInt64, TlvUInt8 } from "../tlv/TlvNumber.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
+import { TlvBitmap, TlvEnum, TlvInt32, TlvInt8, TlvUInt16, TlvUInt64, TlvUInt8 } from "../tlv/TlvNumber.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { TlvByteString, TlvString } from "../tlv/TlvString.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { TlvArray } from "../tlv/TlvArray.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
 
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 11.8.6.5 */

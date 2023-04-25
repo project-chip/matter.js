@@ -1,6 +1,9 @@
 {
     "extends": "./tsconfig.base.json",
     "compilerOptions": {
+        "moduleDetection": "legacy",
+        //"module": "node16",
+        "moduleResolution": "node16", // Support package.json exports definitions
         // Local dev compilation checks
         "forceConsistentCasingInFileNames": true,
         "noImplicitAny": true,

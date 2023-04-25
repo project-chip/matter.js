@@ -6,8 +6,8 @@
 
 import { Attribute, OptionalAttribute, Cluster } from "./Cluster.js";
 import { TlvInt16, TlvUInt16 } from "../tlv/TlvNumber.js";
-import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
 
 /**
  * This cluster provides an interface to temperature measurement functionality.

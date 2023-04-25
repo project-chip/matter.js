@@ -5,10 +5,10 @@
  */
 
 import { Attribute, OptionalAttribute, Cluster } from "./Cluster.js";
-import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
+import { BitFlag } from "../schema/BitmapSchema.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { TlvInt16, TlvInt8, TlvUInt16 } from "../tlv/TlvNumber.js";
-import { BitFlag } from "../schema/BitmapSchema.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
 
 /**
  * This cluster provides an interface to pressure measurement functionality.

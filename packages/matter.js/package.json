@@ -30,9 +30,13 @@
     "build-dts": "tsc --project tsconfig.dist-dts.json",
     "build": "npm run build-cjs && npm run build-es && npm run build-dts",
     "build-clean": "npm run clean && npm run build",
-    "test-node": "NODE_OPTIONS=--experimental-vm-modules jest",
-    "test-web": "karma start test/karma.conf.cjs",
+    "test-node": "TZ=utc NODE_OPTIONS=--experimental-vm-modules jest",
+    "test-web": "TZ=utc karma start test/karma.conf.cjs",
     "test": "npm run test-node && npm run test-web"
+  },
+  "dependencies": {
+    "bn.js": "^5.2.1",
+    "elliptic": "^6.5.4"
   },
   "devDependencies": {
     "@types/jasmine": "^4.3.1",
@@ -49,7 +53,100 @@
     "dist/**/*"
   ],
   "type": "module",
-  "main": "dist/cjs/matter.js",
-  "module": "dist/es/matter.js",
-  "types": "dist/dts/matter.d.ts"
+  "main": "dist/cjs/index.js",
+  "module": "dist/es/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/dts/index.d.ts",
+      "import": "./dist/es/index.js",
+      "require": "./dist/cjs/index.js"
+    },
+    "./package.json": "./package.json",
+    "./certificate": {
+      "types": "./dist/dts/certificate/index.d.ts",
+      "import": "./dist/es/certificate/index.js",
+      "require": "./dist/cjs/certificate/index.js"
+    },
+    "./cluster": {
+      "types": "./dist/dts/cluster/index.d.ts",
+      "import": "./dist/es/cluster/index.js",
+      "require": "./dist/cjs/cluster/index.js"
+    },
+    "./codec": {
+      "types": "./dist/dts/codec/index.d.ts",
+      "import": "./dist/es/codec/index.js",
+      "require": "./dist/cjs/codec/index.js"
+    },
+    "./common": {
+      "types": "./dist/dts/common/index.d.ts",
+      "import": "./dist/es/common/index.js",
+      "require": "./dist/cjs/common/index.js"
+    },
+    "./crypto": {
+      "types": "./dist/dts/crypto/index.d.ts",
+      "import": "./dist/es/crypto/index.js",
+      "require": "./dist/cjs/crypto/index.js"
+    },
+    "./datatype": {
+      "types": "./dist/dts/datatype/index.d.ts",
+      "import": "./dist/es/datatype/index.js",
+      "require": "./dist/cjs/datatype/index.js"
+    },
+    "./fabric": {
+      "types": "./dist/dts/fabric/index.d.ts",
+      "import": "./dist/es/fabric/index.js",
+      "require": "./dist/cjs/fabric/index.js"
+    },
+    "./math": {
+      "types": "./dist/dts/math/index.d.ts",
+      "import": "./dist/es/math/index.js",
+      "require": "./dist/cjs/math/index.js"
+    },
+    "./mdns": {
+      "types": "./dist/dts/mdns/index.d.ts",
+      "import": "./dist/es/mdns/index.js",
+      "require": "./dist/cjs/mdns/index.js"
+    },
+    "./net": {
+      "types": "./dist/dts/net/index.d.ts",
+      "import": "./dist/es/net/index.js",
+      "require": "./dist/cjs/net/index.js"
+    },
+    "./protocol": {
+      "types": "./dist/dts/protocol/index.d.ts",
+      "import": "./dist/es/protocol/index.js",
+      "require": "./dist/cjs/protocol/index.js"
+    },
+    "./interaction": {
+      "types": "./dist/dts/protocol/interaction/index.d.ts",
+      "import": "./dist/es/protocol/interaction/index.js",
+      "require": "./dist/cjs/protocol/interaction/index.js"
+    },
+    "./securechannel": {
+      "types": "./dist/dts/protocol/securechannel/index.d.ts",
+      "import": "./dist/es/protocol/securechannel/index.js",
+      "require": "./dist/cjs/protocol/securechannel/index.js"
+    },
+    "./schema": {
+      "types": "./dist/dts/schema/index.d.ts",
+      "import": "./dist/es/schema/index.js",
+      "require": "./dist/cjs/schema/index.js"
+    },
+    "./session": {
+      "types": "./dist/dts/session/index.d.ts",
+      "import": "./dist/es/session/index.js",
+      "require": "./dist/cjs/session/index.js"
+    },
+    "./tlv": {
+      "types": "./dist/dts/tlv/index.d.ts",
+      "import": "./dist/es/tlv/index.js",
+      "require": "./dist/cjs/tlv/index.js"
+    },
+    "./util": {
+      "types": "./dist/dts/util/index.d.ts",
+      "import": "./dist/es/util/index.js",
+      "require": "./dist/cjs/util/index.js"
+    }
+  },
+  "types": "dist/dts/index.d.ts"
 }

@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { FabricId, TlvFabricId } from "../../src/common/FabricId";
-import { FabricIndex, TlvFabricIndex } from "../../src/common/FabricIndex";
-import { TlvArray } from "../../src/tlv/TlvArray";
-import { TlvBoolean } from "../../src/tlv/TlvBoolean";
-import { TlvNullable } from "../../src/tlv/TlvNullable";
+import { FabricId, TlvFabricId } from "../../src/datatype/FabricId.js";
+import { FabricIndex, TlvFabricIndex } from "../../src/datatype/FabricIndex.js";
+import { TlvArray } from "../../src/tlv/TlvArray.js";
+import { TlvBoolean } from "../../src/tlv/TlvBoolean.js";
+import { TlvNullable } from "../../src/tlv/TlvNullable.js";
 import { TlvUInt8 } from "../../src/tlv/TlvNumber.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../../src/tlv/TlvObject.js";
 import { TypeFromSchema } from "../../src/tlv/TlvSchema.js";
