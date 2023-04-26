@@ -7,7 +7,7 @@
 import { TestCert_PAA_NoVID_PrivateKey, TestCert_PAA_NoVID_PublicKey, TestCert_PAA_NoVID_SKID } from "./ChipPAAuthorities.js";
 import { CertificateManager, jsToMatterDate } from "./CertificateManager.js";
 import { Crypto } from "../crypto/Crypto.js";
-import { Time } from "../util/time/Time.js";
+import { Time } from "../time/Time.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { VendorId } from "../datatype/VendorId.js";
 

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "../../util/log/Logger.js";
+import { Logger } from "../../log/Logger.js";
 import { MatterDevice } from "../../MatterDevice.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { CommissioningError, GeneralCommissioningCluster } from "../GeneralCommissioningCluster.js";

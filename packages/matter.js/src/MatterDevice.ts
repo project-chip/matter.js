@@ -18,10 +18,10 @@ import { Scanner } from "./common/Scanner.js";
 import { VendorId } from "./datatype/VendorId.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
 import { NodeId } from "./datatype/NodeId.js";
-import { Logger } from "./util/log/Logger.js";
-import { Time, Timer } from "./util/time/Time.js";
+import { Logger } from "./log/Logger.js";
+import { Time, Timer } from "./time/Time.js";
 import { ByteArray } from "./util/ByteArray.js";
-import { StorageManager } from "./util/storage/StorageManager.js";
+import { StorageManager } from "./storage/StorageManager.js";
 
 const logger = Logger.get("MatterDevice");
 

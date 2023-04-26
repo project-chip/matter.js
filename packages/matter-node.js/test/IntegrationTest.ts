@@ -4,47 +4,31 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Time } from "../src/time/Time";
-import { TimeFake } from "../src/time/TimeFake";
-
-Time.get = () => new TimeFake(0);
-
-import { Crypto } from "../src/crypto/Crypto";
+import { Time, TimeFake } from "@project-chip/matter.js/time";
+import { Crypto } from "@project-chip/matter.js/crypto";
 import { CryptoNode } from "../src/crypto/CryptoNode";
 
 Crypto.get = () => new CryptoNode();
 
 import * as assert from "assert";
-import { UdpInterface } from "../src/net/UdpInterface";
-import { MatterController } from "../src/matter/MatterController";
-import { MatterDevice } from "../src/matter/MatterDevice";
+import { NetworkFake, Network, UdpInterface } from "@project-chip/matter.js/net";
+import { MatterController, MatterDevice } from "@project-chip/matter.js";
 import {
     OnOffCluster, BasicInformationCluster, GeneralCommissioningCluster, RegulatoryLocationType, OperationalCertStatus,
-    OperationalCredentialsCluster, VendorId, FabricIndex, DescriptorCluster, ClusterId, AccessControlCluster,
-    GroupsCluster, GroupId,
-} from "@project-chip/matter.js";
-import { DEVICE } from "../src/matter/common/DeviceTypes";
-import { ClusterServer, InteractionServer } from "../src/matter/interaction/InteractionServer";
-import { MdnsBroadcaster } from "../src/matter/mdns/MdnsBroadcaster";
-import { CaseServer } from "../src/matter/session/secure/CaseServer";
-import { SecureChannelProtocol as SecureChannelProtocol } from "../src/matter/session/secure/SecureChannelProtocol";
-import { PaseServer } from "../src/matter/session/secure/PaseServer";
-import { NetworkFake } from "../src/net/fake/NetworkFake";
-import { Network } from "../src/net/Network";
-import { MdnsScanner } from "../src/matter/mdns/MdnsScanner";
-import { GeneralCommissioningClusterHandler } from "../src/matter/cluster/server/GeneralCommissioningServer";
-import { OperationalCredentialsClusterHandler } from "../src/matter/cluster/server/OperationalCredentialsServer";
-import { ClusterClient } from "../src/matter/interaction/InteractionClient";
-import { Level, Logger } from "../src/log/Logger";
-import { getPromiseResolver } from "../src/util/Promises";
-import { OnOffClusterHandler } from "../src/matter/cluster/server/OnOffServer";
-import { AttestationCertificateManager } from "../src/matter/certificate/AttestationCertificateManager";
-import { CertificationDeclarationManager } from "../src/matter/certificate/CertificationDeclarationManager";
-import { StorageBackendMemory } from "../src/storage/StorageBackendMemory";
-import { StorageManager } from "../src/storage/StorageManager";
-import { FabricJsonObject } from "../src/matter/fabric/Fabric";
-import { StatusResponseError } from "../src/matter/interaction/InteractionMessenger";
-import { GroupsClusterHandler } from "../src/matter/cluster/server/GroupsServer";
+    OperationalCredentialsCluster, DescriptorCluster, AccessControlCluster, GroupsCluster, GroupsClusterHandler,
+    GeneralCommissioningClusterHandler, OperationalCredentialsClusterHandler, OnOffClusterHandler
+} from "@project-chip/matter.js/cluster";
+import { VendorId, FabricIndex, ClusterId, GroupId } from "@project-chip/matter.js/datatype";
+import { DEVICE } from "@project-chip/matter.js/common";
+import { ClusterClient, ClusterServer, InteractionServer, StatusResponseError } from "@project-chip/matter.js/interaction";
+import { MdnsBroadcaster, MdnsScanner } from "@project-chip/matter.js/mdns";
+import { CaseServer, PaseServer } from "@project-chip/matter.js/session";
+import { SecureChannelProtocol as SecureChannelProtocol } from "@project-chip/matter.js/securechannel";
+import { Level, Logger } from "@project-chip/matter.js/log";
+import { getPromiseResolver } from "@project-chip/matter.js/util";
+import { AttestationCertificateManager, CertificationDeclarationManager } from "@project-chip/matter.js/certificate";
+import { StorageBackendMemory, StorageManager } from "@project-chip/matter.js/storage";
+import { FabricJsonObject } from "@project-chip/matter.js/fabric";
 
 const SERVER_IP = "192.168.200.1";
 const SERVER_MAC = "00:B0:D0:63:C2:26";

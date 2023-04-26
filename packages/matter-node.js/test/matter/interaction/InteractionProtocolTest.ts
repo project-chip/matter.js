@@ -4,39 +4,28 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Time } from "../../../src/time/Time";
-import { TimeFake } from "../../../src/time/TimeFake";
+import { StorageBackendMemory, StorageManager } from "@project-chip/matter.js/storage";
+import { Time, TimeFake } from "@project-chip/matter.js/time";
 
-Time.get = () => new TimeFake(1262679233478);
+Time.get = () => new TimeFake(0);
 
-import { Crypto } from "../../../src/crypto/Crypto";
+import { Crypto } from "@project-chip/matter.js/crypto";
 import { CryptoNode } from "../../../src/crypto/CryptoNode";
 
 Crypto.get = () => new CryptoNode();
+
 import * as assert from "assert";
-import { ClusterServer, InteractionServer } from "../../../src/matter/interaction/InteractionServer";
 import {
-    ReadRequest,
-    DataReport,
-    WriteRequest,
-    WriteResponse,
-    InvokeRequest, InvokeResponse
-} from "../../../src/matter/interaction/InteractionMessenger";
-import { MessageExchange } from "../../../src/matter/common/MessageExchange";
-import { DEVICE } from "../../../src/matter/common/DeviceTypes";
-import { MatterDevice } from "../../../src/matter/MatterDevice";
-import {
-    BasicInformationCluster,
-    VendorId,
-    TlvString,
-    TlvUInt8,
-    OnOffCluster,
-    TlvNoArguments,
-    TlvArray, TlvField, TlvObject, TlvNullable, AccessControlCluster
-} from "@project-chip/matter.js";
-import { StorageBackendMemory } from "../../../src/storage/StorageBackendMemory";
-import { StorageManager } from "../../../src/storage/StorageManager";
-import { Message } from "../../../src/codec/MessageCodec";
+    ClusterServer, InteractionServer, ReadRequest, DataReport, WriteRequest, WriteResponse, InvokeRequest,
+    InvokeResponse
+} from "@project-chip/matter.js/interaction";
+import { MessageExchange } from "@project-chip/matter.js/protocol";
+import { DEVICE } from "@project-chip/matter.js/common";
+import { MatterDevice } from "@project-chip/matter.js";
+import { VendorId } from "@project-chip/matter.js/datatype";
+import { TlvString, TlvUInt8, TlvNoArguments, TlvArray, TlvField, TlvObject, TlvNullable } from "@project-chip/matter.js/tlv";
+import { BasicInformationCluster, OnOffCluster, AccessControlCluster } from "@project-chip/matter.js/cluster";
+import { Message } from "@project-chip/matter.js/codec";
 
 const READ_REQUEST: ReadRequest = {
     interactionModelRevision: 1,

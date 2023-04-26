@@ -5,7 +5,7 @@
  */
 
 import * as assert from "assert";
-import { TimeFake } from "../../../src/util/time/TimeFake.js";
+import { TimeFake } from "../../../src/time/TimeFake.js";
 
 const FAKE_TIME = 36000000;
 

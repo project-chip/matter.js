@@ -10,9 +10,9 @@ import { SecureChannelProtocol } from "./securechannel/SecureChannelProtocol.js"
 import { MessageChannel, MessageCounter } from "./ExchangeManager.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { MatterError } from "../common/MatterError.js";
-import { Logger } from "../util/log/Logger.js";
+import { Logger } from "../log/Logger.js";
 import { Queue } from "../util/Queue.js";
-import { Time, Timer } from "../util/time/Time.js";
+import { Time, Timer } from "../time/Time.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { MessageType, SECURE_CHANNEL_PROTOCOL_ID } from "./securechannel/SecureChannelMessages.js";
 import { getPromiseResolver } from "../util/Promises.js";

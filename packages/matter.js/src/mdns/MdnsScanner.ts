@@ -10,7 +10,7 @@ import { MDNS_BROADCAST_IPV4, MDNS_BROADCAST_IPV6, MDNS_BROADCAST_PORT } from ".
 import { getDeviceMatterQname, MATTER_SERVICE_QNAME } from "./MdnsConsts.js";
 import { getPromiseResolver } from "../util/Promises.js";
 import { ByteArray } from "../util/ByteArray.js";
-import { Time, Timer } from "../util/time/Time.js";
+import { Time, Timer } from "../time/Time.js";
 import { MatterServer, Scanner } from "../common/Scanner.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { NodeId } from "../datatype/NodeId.js";

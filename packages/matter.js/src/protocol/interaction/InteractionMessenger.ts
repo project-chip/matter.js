@@ -5,7 +5,7 @@
  */
 
 import { ByteArray } from "../../util/ByteArray.js";
-import { Logger } from "../../util/log/Logger.js";
+import { Logger } from "../../log/Logger.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { MatterError } from "../../common/MatterError.js";
 import { MessageExchange, UnexpectedMessageError, RetransmissionLimitReachedError } from "../../protocol/MessageExchange.js";

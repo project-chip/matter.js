@@ -5,9 +5,9 @@
  */
 
 import * as assert from "assert";
-import { Level, Logger } from "../../../src/util/log/Logger.js";
-import { Time } from "../../../src/util/time/Time.js";
-import { TimeFake } from "../../../src/util/time/TimeFake.js";
+import { Level, Logger } from "../../../src/log/Logger.js";
+import { Time } from "../../../src/time/Time.js";
+import { TimeFake } from "../../../src/time/TimeFake.js";
 import { ByteArray } from "../../../src/util/ByteArray.js";
 
 const fakeTime = new TimeFake(1262679233478);

@@ -6,6 +6,7 @@
     "moduleResolution": "node16",
     "strictNullChecks": true, // Required to correctly generate Nullable types in d.ts
     "incremental": true, // Speed up subsequent builds
+    "esModuleInterop": true // needed for jest tests
   },
   "references": [
       { "path": "../matter.js" }

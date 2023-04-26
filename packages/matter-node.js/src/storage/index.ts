@@ -4,4 +4,5 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "@project-chip/matter.js";
+export * from "./StorageBackendDisk";
+export * from "@project-chip/matter.js/storage";

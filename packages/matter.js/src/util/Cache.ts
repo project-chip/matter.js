@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Time, Timer } from "./time/Time.js";
+import { Time, Timer } from "../time/Time.js";
 
 export class Cache<T> {
     private readonly values = new Map<string, T>();

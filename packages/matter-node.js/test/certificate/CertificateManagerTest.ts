@@ -4,15 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Crypto } from "../../../src/crypto/Crypto";
-import { CryptoNode } from "../../../src/crypto/CryptoNode";
+import { Crypto } from "@project-chip/matter.js/crypto";
+import { CryptoNode } from "../../src/crypto/CryptoNode";
 
 Crypto.get = () => new CryptoNode();
 
 import * as assert from "assert";
-import { DerCodec, EcdsaWithSHA256_X962, ELEMENTS_KEY, DerNode, BYTES_KEY } from "../../../src/codec/DerCodec";
-import { TlvRootCertificate, TlvOperationalCertificate, CertificateManager } from "../../../src/matter/certificate/CertificateManager";
-import { ByteArray } from "@project-chip/matter.js";
+import { DerCodec, EcdsaWithSHA256_X962, ELEMENTS_KEY, DerNode, BYTES_KEY } from "@project-chip/matter.js/codec";
+import { TlvRootCertificate, TlvOperationalCertificate, CertificateManager } from "@project-chip/matter.js/certificate";
+import { ByteArray } from "@project-chip/matter.js/util";
 
 const ROOT_CERT_TLV = TlvRootCertificate.decode(ByteArray.fromHex("153001010024020137032414001826048012542826058015203b37062414001824070124080130094104d89eb7e3f3226d0918f4b85832457bb9981bca7aaef58c18fb5ec07525e472b2bd1617fb75ee41bd388f94ae6a6070efc896777516a5c54aff74ec0804cdde9d370a3501290118240260300414e766069362d7e35b79687161644d222bdde93a68300514e766069362d7e35b79687161644d222bdde93a6818300b404e8fb06526f0332b3e928166864a6d29cade53fb5b8918a6d134d0994bf1ae6dce6762dcba99e80e96249d2f1ccedb336b26990f935dba5a0b9e5b4c9e5d1d8f18"));
 const ROOT_CERT_ASN1 = ByteArray.fromHex("3082013ca003020102020100300a06082a8648ce3d04030230223120301e060a2b0601040182a27c01040c1030303030303030303030303030303030301e170d3231303631303030303030305a170d3331303630383030303030305a30223120301e060a2b0601040182a27c01040c10303030303030303030303030303030303059301306072a8648ce3d020106082a8648ce3d03010703420004d89eb7e3f3226d0918f4b85832457bb9981bca7aaef58c18fb5ec07525e472b2bd1617fb75ee41bd388f94ae6a6070efc896777516a5c54aff74ec0804cdde9da3633061300f0603551d130101ff040530030101ff300e0603551d0f0101ff040403020106301d0603551d0e04160414e766069362d7e35b79687161644d222bdde93a68301f0603551d23041830168014e766069362d7e35b79687161644d222bdde93a68");

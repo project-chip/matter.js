@@ -7,7 +7,7 @@
 import { NetListener } from "../NetInterface.js";
 import { singleton } from "../../util/Singleton.js";
 import { ByteArray } from "../../util/ByteArray.js";
-import { Logger } from "../../util/log/Logger.js";
+import { Logger } from "../../log/Logger.js";
 
 export type Listener = (netInterface: string, peerAddress: string, peerPort: number, data: ByteArray) => void;
 

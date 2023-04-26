@@ -7,8 +7,8 @@
 import { Fabric, FabricBuilder, FabricJsonObject } from "./Fabric.js";
 import { MatterError } from "../common/MatterError.js";
 import { FabricIndex } from "../datatype/FabricIndex.js";
-import { StorageContext } from "../util/storage/StorageContext.js";
-import { StorageManager } from "../util/storage/StorageManager.js";
+import { StorageContext } from "../storage/StorageContext.js";
+import { StorageManager } from "../storage/StorageManager.js";
 import { ByteArray } from "../util/ByteArray.js";
 
 /** Specific Error for when a fabric is not found. */

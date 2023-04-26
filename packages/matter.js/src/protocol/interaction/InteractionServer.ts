@@ -30,9 +30,9 @@ import { AttributeInitialValues, AttributeServers, ClusterServerHandlers } from 
 import { CommandServer, ResultCode } from "../../cluster/server/CommandServer.js";
 import { AttributeGetterServer, AttributeServer } from "../../cluster/server/AttributeServer.js";
 import { DescriptorCluster } from "../../cluster/DescriptorCluster.js";
-import { Logger } from "../../util/log/Logger.js";
-import { StorageContext } from "../../util/storage/StorageContext.js";
-import { StorageManager } from "../../util/storage/StorageManager.js";
+import { Logger } from "../../log/Logger.js";
+import { StorageContext } from "../../storage/StorageContext.js";
+import { StorageManager } from "../../storage/StorageManager.js";
 import { capitalize } from "../../util/String.js";
 
 export const INTERACTION_PROTOCOL_ID = 0x0001;

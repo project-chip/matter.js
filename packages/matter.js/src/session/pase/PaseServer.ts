@@ -12,7 +12,7 @@ import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { PbkdfParameters, Spake2p } from "../../crypto/Spake2p.js";
 import { MatterDevice } from "../../MatterDevice.js";
 import { ByteArray } from "../../util/ByteArray.js";
-import { Logger } from "../../util/log/Logger.js";
+import { Logger } from "../../log/Logger.js";
 import BN from "bn.js";
 import { SECURE_CHANNEL_PROTOCOL_ID } from "../../protocol/securechannel/SecureChannelMessages.js";
 

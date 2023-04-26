@@ -10,7 +10,7 @@ import { NodeId } from "../../datatype/NodeId.js";
 import { ArraySchema } from "../../tlv/TlvArray.js";
 import { TlvType } from "../../tlv/TlvCodec.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { Logger } from "../../util/log/Logger.js";
+import { Logger } from "../../log/Logger.js";
 import { TlvAttributeData, TlvAttributeReport } from "./InteractionProtocol.js";
 
 const logger = Logger.get("DataReportDecoder");

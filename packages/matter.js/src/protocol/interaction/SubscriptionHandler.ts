@@ -8,8 +8,8 @@ import { MatterDevice } from "../../MatterDevice.js";
 import { InteractionServerMessenger, StatusResponseError } from "./InteractionMessenger.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { AttributeWithPath, INTERACTION_PROTOCOL_ID, attributePathToId } from "./InteractionServer.js";
-import { Logger } from "../../util/log/Logger.js";
-import { Time, Timer } from "../../util/time/Time.js";
+import { Logger } from "../../log/Logger.js";
+import { Time, Timer } from "../../time/Time.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import {
     InteractionProtocolStatusCode as StatusCode, TlvAttributePath,

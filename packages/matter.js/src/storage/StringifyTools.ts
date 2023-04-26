@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ByteArray } from "../ByteArray.js";
+import { ByteArray } from "../util/ByteArray.js";
 
 /** Supported base types to stringify the data for the storage that can be used as keys and also values. */
 type SupportedStorageBaseTypes =

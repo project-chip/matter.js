@@ -13,7 +13,7 @@ import { VendorId } from "../datatype/VendorId.js";
 import { Cluster } from "../cluster/Cluster.js";
 import { SecureSession } from "../session/SecureSession.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
-import { SupportedStorageTypes } from "../util/storage/StringifyTools.js";
+import { SupportedStorageTypes } from "../storage/StringifyTools.js";
 import { DataWriter } from "../util/DataWriter.js";
 import { toBigInt } from "../util/Number.js";
 

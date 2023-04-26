@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Storage, fromJson, SupportedStorageTypes, toJson } from "@project-chip/matter.js/util";
+import { Storage, fromJson, SupportedStorageTypes, toJson } from "@project-chip/matter.js/storage";
 
 import { LocalStorage } from "node-localstorage";
 

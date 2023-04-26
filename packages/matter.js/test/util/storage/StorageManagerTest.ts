@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { StorageBackendMemory } from "../../../src/util/storage/StorageBackendMemory.js";
+import { StorageBackendMemory } from "../../../src/storage/StorageBackendMemory.js";
 import * as assert from "assert";
-import { StorageManager } from "../../../src/util/storage/StorageManager.js";
+import { StorageManager } from "../../../src/storage/StorageManager.js";
 
 describe("StorageManager", () => {
 

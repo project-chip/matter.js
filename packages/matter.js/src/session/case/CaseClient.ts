@@ -15,7 +15,7 @@ import {
 } from "./CaseMessages.js";
 import { CaseClientMessenger } from "./CaseMessenger.js";
 import { ByteArray } from "../../util/ByteArray.js";
-import { Logger } from "../../util/log/Logger.js";
+import { Logger } from "../../log/Logger.js";
 import { NodeId } from "../../datatype/NodeId.js";
 
 const logger = Logger.get("CaseClient");

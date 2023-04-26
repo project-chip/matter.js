@@ -10,3 +10,7 @@ export * from "./Network.js";
 export * from "./UdpChannel.js";
 export * from "./UdpInterface.js";
 export * from "./UdpMulticastServer.js";
+
+export * from "./fake/NetworkFake.js";
+export * from "./fake/SimulatedNetwork.js";
+export * from "./fake/UdpChannelFake.js";

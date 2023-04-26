@@ -38,7 +38,8 @@
     "elliptic": "^6.5.4"
   },
   "devDependencies": {
-    "@types/jasmine": "^4.3.1",
+    "@types/bn.js": "^5.1.1",
+    "@types/elliptic": "^6.4.14",
     "jest": "^29.5.0",
     "karma": "^6.4.1",
     "karma-chrome-launcher": "^3.1.1",

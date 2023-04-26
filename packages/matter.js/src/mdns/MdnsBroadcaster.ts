@@ -12,7 +12,7 @@ import { MdnsServer } from "./MdnsServer.js";
 import { VendorId } from "../datatype/VendorId.js";
 import { Network } from "../net/Network.js";
 import { isIPv4 } from "../util/Ip.js";
-import { Logger } from "../util/log/Logger.js";
+import { Logger } from "../log/Logger.js";
 import { Fabric } from "../fabric/Fabric.js";
 
 const logger = Logger.get("MdnsBroadcaster");

@@ -8,7 +8,7 @@ import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { MatterController } from "../../MatterController.js";
 import { capitalize } from "../../util/String.js";
-import { Logger } from "../../util/log/Logger.js";
+import { Logger } from "../../log/Logger.js";
 import { InteractionProtocolStatusCode as StatusCode, TlvAttributeReport } from "./InteractionProtocol.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
 import {

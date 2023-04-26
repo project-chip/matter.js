@@ -7,7 +7,7 @@
 import { Crypto } from "../../crypto/Crypto.js";
 import { Spake2p } from "../../crypto/Spake2p.js";
 import { ByteArray } from "../../util/ByteArray.js";
-import { Logger } from "../../util/log/Logger.js";
+import { Logger } from "../../log/Logger.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { MatterController } from "../../MatterController.js";
 import { UNDEFINED_NODE_ID } from "../SessionManager.js";

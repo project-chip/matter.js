@@ -8,8 +8,8 @@ import { CertificateManager, jsToMatterDate, TlvOperationalCertificate, TlvRootC
 import { Crypto, KeyPair } from "../crypto/Crypto.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { NodeId } from "../datatype/NodeId.js";
-import { Time } from "../util/time/Time.js";
-import { StorageManager } from "../util/storage/StorageManager.js";
+import { Time } from "../time/Time.js";
+import { StorageManager } from "../storage/StorageManager.js";
 
 export class RootCertificateManager {
     private rootCertId = BigInt(0);

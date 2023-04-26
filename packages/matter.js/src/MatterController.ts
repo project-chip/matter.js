@@ -17,18 +17,17 @@ import { Crypto } from "./crypto/Crypto.js";
 import { CertificateManager } from "./certificate/CertificateManager.js";
 import { RootCertificateManager } from "./certificate/RootCertificateManager.js";
 import { Scanner } from "./common/Scanner.js";
-import { Logger } from "./util/log/Logger.js";
+import { Logger } from "./log/Logger.js";
 import { Fabric, FabricBuilder, FabricJsonObject } from "./fabric/Fabric.js";
 import { ChannelManager, NoChannelError } from "./protocol/ChannelManager.js";
-import { StorageContext } from "./util/storage/StorageContext.js";
-import { ExchangeManager, ExchangeProvider } from "./protocol/ExchangeManager.js";
+import { StorageContext } from "./storage/StorageContext.js";
+import { ExchangeManager, ExchangeProvider, MessageChannel } from "./protocol/ExchangeManager.js";
 import { isIPv6 } from "./util/Ip.js";
 import { BasicInformationCluster } from "./cluster/BasicInformationCluster.js";
 import { CommissioningError, CommissioningSuccessFailureResponse, GeneralCommissioningCluster, RegulatoryLocationType } from "./cluster/GeneralCommissioningCluster.js";
 import { CertificateChainType, OperationalCredentialsCluster, TlvCertSigningRequest } from "./cluster/OperationalCredentialsCluster.js";
 import { ByteArray } from "./util/ByteArray.js";
-import { MessageChannel } from "./protocol/ExchangeManager.js";
-import { StorageManager } from "./util/storage/StorageManager.js";
+import { StorageManager } from "./storage/StorageManager.js";
 
 
 const FABRIC_INDEX = new FabricIndex(1);

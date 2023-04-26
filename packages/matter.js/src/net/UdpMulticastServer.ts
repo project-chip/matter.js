@@ -7,7 +7,7 @@
 import { Cache } from "../util/Cache.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { isIPv4 } from "../util/Ip.js";
-import { Logger } from "../util/log/Logger.js";
+import { Logger } from "../log/Logger.js";
 import { Network } from "./Network.js";
 import { UdpChannel } from "./UdpChannel.js";
 

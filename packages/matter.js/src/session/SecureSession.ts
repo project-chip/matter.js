@@ -12,8 +12,8 @@ import { DEFAULT_ACTIVE_RETRANSMISSION_TIMEOUT_MS, DEFAULT_IDLE_RETRANSMISSION_T
 import { UNDEFINED_NODE_ID } from "./SessionManager.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
-import { Logger } from "../util/log/Logger.js";
-import { Time } from "../util/time/Time.js";
+import { Logger } from "../log/Logger.js";
+import { Time } from "../time/Time.js";
 import { DataWriter } from "../util/DataWriter.js";
 
 const logger = Logger.get("SecureSession");

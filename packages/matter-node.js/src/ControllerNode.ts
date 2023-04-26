@@ -6,12 +6,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { singleton, Time, Logger, StorageManager } from "@project-chip/matter.js/util";
+import { singleton } from "@project-chip/matter.js/util";
+import { Time } from "@project-chip/matter.js/time";
 import { TimeNode } from "./time/TimeNode";
 
 Time.get = singleton(() => new TimeNode());
 
-import { Network } from "@project-chip/matter.js/net";
+import { Network, UdpInterface } from "@project-chip/matter.js/net";
 import { NetworkNode } from "./net/NetworkNode";
 
 Network.get = singleton(() => new NetworkNode());
@@ -21,8 +22,9 @@ import { CryptoNode } from "./crypto/CryptoNode";
 
 Crypto.get = singleton(() => new CryptoNode());
 
+import { Logger } from "@project-chip/matter.js/log";
+import { StorageManager } from "@project-chip/matter.js/storage";
 import { MatterController } from "@project-chip/matter.js";
-import { UdpInterface } from "@project-chip/matter.js/net";
 import { MdnsScanner } from "@project-chip/matter.js/mdns";
 import { ClusterClient } from "@project-chip/matter.js/interaction";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

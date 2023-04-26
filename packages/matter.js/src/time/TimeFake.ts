@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { getPromiseResolver } from "../Promises.js";
+import { getPromiseResolver } from "../util/Promises.js";
 import { Time, Timer, TimerCallback } from "./Time.js";
 
 class TimerFake implements Timer {

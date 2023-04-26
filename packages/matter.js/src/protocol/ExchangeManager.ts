@@ -15,7 +15,7 @@ import { ProtocolHandler } from "./ProtocolHandler.js";
 import { ChannelManager } from "./ChannelManager.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { ByteArray } from "../util/ByteArray.js";
-import { Logger } from "../util/log/Logger.js";
+import { Logger } from "../log/Logger.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { MatterController } from "../MatterController.js";
 import { INTERACTION_PROTOCOL_ID } from "../protocol/interaction/InteractionServer.js"

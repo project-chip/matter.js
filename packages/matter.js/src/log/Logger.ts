@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ByteArray } from "../ByteArray.js";
+import { ByteArray } from "../util/ByteArray.js";
 import { Time } from "../time/Time.js";
 import * as console from "console"
 

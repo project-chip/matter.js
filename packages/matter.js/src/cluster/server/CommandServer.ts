@@ -8,7 +8,7 @@ import { MatterDevice } from "../../MatterDevice.js";
 import { Session } from "../../session/Session.js";
 import { TlvSchema, TlvStream } from "../../tlv/TlvSchema.js";
 import { Message } from "../../codec/MessageCodec.js";
-import { Logger } from "../../util/log/Logger.js";
+import { Logger } from "../../log/Logger.js";
 
 const logger = Logger.get("CommandServer");
 

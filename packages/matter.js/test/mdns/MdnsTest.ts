@@ -17,8 +17,8 @@ import { Fabric } from "../../src/fabric/Fabric.js";
 import { NodeId } from "../../src/datatype/NodeId.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 import { FAKE_INTERFACE_NAME } from "../../src/net/fake/SimulatedNetwork.js";
-import { Time } from "../../src/util/time/Time.js";
-import { TimeFake } from "../../src/util/time/TimeFake.js";
+import { Time } from "../../src/time/Time.js";
+import { TimeFake } from "../../src/time/TimeFake.js";
 
 Time.get = () => new TimeFake(0);
 
