@@ -12,7 +12,7 @@ import { TimeNode } from "./time/TimeNode";
 Time.get = singleton(() => new TimeNode());
 
 import { Network } from "@project-chip/matter.js/net";
-import { NetworkNode } from "./net/node/NetworkNode";
+import { NetworkNode } from "./net/NetworkNode";
 
 Network.get = singleton(() => new NetworkNode());
 

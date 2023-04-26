@@ -2,7 +2,8 @@
 {
   "compilerOptions": {
     "target": "ES2015",
-    "module": "CommonJS",
+    "module": "Node16",
+    "moduleResolution": "node16",
     "strictNullChecks": true, // Required to correctly generate Nullable types in d.ts
   },
   "references": [

@@ -4,7 +4,8 @@
   "compilerOptions": {
     "outDir": "dist/cjs",
     "module": "CommonJS",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "declaration": true
   },
   "include": ["src/**/*.ts"],
 }
