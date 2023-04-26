@@ -25,7 +25,7 @@
     },
     "scripts": {
         "clean": "rm -rf dist && rm *.tsbuildinfo || true",
-        "build": "tsc --project tsconfig.dist.json",
+        "build": "tsc -b tsconfig.dist.json",
         "build-clean": "npm run clean && npm run build",
         "test": "TZ=utc jest",
         "matter": "ts-node --project tsconfig.dist.json src/DeviceNode.ts",

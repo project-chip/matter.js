@@ -5,6 +5,7 @@
     "module": "Node16",
     "moduleResolution": "node16",
     "strictNullChecks": true, // Required to correctly generate Nullable types in d.ts
+    "incremental": true, // Speed up subsequent builds
   },
   "references": [
       { "path": "../matter.js" }

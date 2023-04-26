@@ -25,8 +25,8 @@
   },
   "scripts": {
     "clean": "rm -rf dist && rm -rf out && rm *.tsbuildinfo || true",
-    "build-cjs": "tsc --project tsconfig.dist-cjs.json && cp package-cjs.json dist/cjs/package.json",
-    "build-es": "tsc --project tsconfig.dist-es.json",
+    "build-cjs": "tsc -b tsconfig.dist-cjs.json && cp package-cjs.json dist/cjs/package.json",
+    "build-es": "tsc -b tsconfig.dist-es.json",
     "build": "npm run build-cjs && npm run build-es",
     "build-clean": "npm run clean && npm run build",
     "test-node": "TZ=utc NODE_OPTIONS=--experimental-vm-modules jest",
