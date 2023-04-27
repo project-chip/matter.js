@@ -18,7 +18,7 @@ This library exports the Matter protocol functionality as well as some helper fu
 |-----------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|
 | `@project-chip/matter.js`               | Exports the current (legacy!) low level API to implement a Device or a Controller. This will be replaced soon by the new High Level API! |
 | `@project-chip/matter.js/certificate`   | Exports Certificate (Root-/PAA/PAI/IAC/DA-Certificates) related functionality                                                            |
-| `@project-chip/matter.js/cluster`       | Exports Matter CLuster definitions and Default Cluster-Handlers                                                                          |
+| `@project-chip/matter.js/cluster`       | Exports Matter Cluster definitions and Default Cluster-Handlers                                                                          |
 | `@project-chip/matter.js/codec`         | Exports Codecs for e.g. Matter-Messages                                                                                                  |
 | `@project-chip/matter.js/common`        | Exports certain common functionalities                                                                                                   |
 | `@project-chip/matter.js/crypto`        | Exports Crypto related abstract functionality that needs to be implemented platform specific!                                            |
