@@ -49,8 +49,19 @@ Because of this the library can be used as only dependency which makes sure the 
 | `@project-chip/matter-node.js/session`       | Re-Exports Session and Secure-Session functionality                                                                                         |
 | `@project-chip/matter-node.js/spec`          | Re-Exports Matter Specification References                                                                                                  |
 | `@project-chip/matter-node.js/tlv`           | Re-Exports Matter TLV type definitions                                                                                                      |
-
 Both exports and the typings are exported as CommonJS only!.
+
+### Typescript note
+To have Typescript and your IDE know all the relevant exported functionality you need to use the following in your tsconfig.json:
+
+```json
+{
+    "compilerOptions": {
+        "moduleResolution": "node16", // Required to support package.json exports
+        "module": "node16" // Required to make sure all imports are js
+    }
+}
+```
 
 ## Use as CLI
 
