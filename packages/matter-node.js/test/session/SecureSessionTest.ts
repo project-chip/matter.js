@@ -10,7 +10,7 @@ import { Time, TimeFake } from "@project-chip/matter.js/time";
 Time.get = () => new TimeFake(0);
 
 import { Crypto } from "@project-chip/matter.js/crypto";
-import { CryptoNode } from "../../../src/crypto/CryptoNode";
+import { CryptoNode } from "../../src/crypto/CryptoNode";
 
 Crypto.get = () => new CryptoNode();
 
