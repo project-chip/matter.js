@@ -5,6 +5,7 @@
     "moduleResolution": "node", // Required to correctly resolve Babel imports
     "outDir": "dist/dts",
     "declaration": true,
+    "declarationMap": true, // Link from type definition (.d.ts) to source .ts for code navigation
     "emitDeclarationOnly": true
   },
   "include": ["src/**/*.ts"],
