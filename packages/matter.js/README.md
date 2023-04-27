@@ -44,7 +44,7 @@ Both exports and the typings are exported as CommonJS and ES6 modules.
 ### Typescript note
 To have Typescript and your IDE know all the relevant exported functionality you need to use the following in your tsconfig.json:
 
-```json
+```json5
 {
     "compilerOptions": {
         "moduleResolution": "node16", // Required to support package.json exports
