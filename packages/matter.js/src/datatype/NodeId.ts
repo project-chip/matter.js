@@ -33,7 +33,7 @@ export class NodeId {
 
     static getRandomOperationalNodeId() {
         while (true) {
-            const randomBigInt = BigInt('0x' + Crypto.get().getRandomData(8).toHex());
+            const randomBigInt = BigInt('0x' + Crypto.getRandomData(8).toHex());
             if (randomBigInt >= OPERATIONAL_NODE_MIN && randomBigInt <= OPERATIONAL_NODE_MAX) {
                 return new NodeId(randomBigInt);
             }

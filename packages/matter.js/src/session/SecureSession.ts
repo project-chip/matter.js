@@ -27,7 +27,7 @@ export class SecureSession<T> implements Session<T> {
     private activeTimestamp = this.timestamp;
 
     static async create<T>(context: T, id: number, fabric: Fabric | undefined, peerNodeId: NodeId, peerSessionId: number, sharedSecret: ByteArray, salt: ByteArray, isInitiator: boolean, isResumption: boolean, closeCallback: () => void, idleRetransTimeoutMs?: number, activeRetransTimeoutMs?: number) {
-        const keys = await Crypto.get().hkdf(sharedSecret, salt, isResumption ? SESSION_RESUMPTION_KEYS_INFO : SESSION_KEYS_INFO, 16 * 3);
+        const keys = await Crypto.hkdf(sharedSecret, salt, isResumption ? SESSION_RESUMPTION_KEYS_INFO : SESSION_KEYS_INFO, 16 * 3);
         const decryptKey = isInitiator ? keys.slice(16, 32) : keys.slice(0, 16);
         const encryptKey = isInitiator ? keys.slice(0, 16) : keys.slice(16, 32);
         const attestationKey = keys.slice(32, 48);
@@ -71,7 +71,7 @@ export class SecureSession<T> implements Session<T> {
         const headerBytes = MessageCodec.encodePacketHeader(header);
         const securityFlags = headerBytes[3];
         const nonce = this.generateNonce(securityFlags, header.messageId, this.peerNodeId);
-        return MessageCodec.decodePayload({ header, bytes: Crypto.get().decrypt(this.decryptKey, bytes, nonce, headerBytes) });
+        return MessageCodec.decodePayload({ header, bytes: Crypto.decrypt(this.decryptKey, bytes, nonce, headerBytes) });
     }
 
     encode(message: Message): Packet {
@@ -80,7 +80,7 @@ export class SecureSession<T> implements Session<T> {
         const headerBytes = MessageCodec.encodePacketHeader(message.packetHeader);
         const securityFlags = headerBytes[3];
         const nonce = this.generateNonce(securityFlags, header.messageId, this.fabric?.nodeId ?? UNDEFINED_NODE_ID);
-        return { header, bytes: Crypto.get().encrypt(this.encryptKey, bytes, nonce, headerBytes) };
+        return { header, bytes: Crypto.encrypt(this.encryptKey, bytes, nonce, headerBytes) };
     }
 
     getAttestationChallengeKey(): ByteArray {

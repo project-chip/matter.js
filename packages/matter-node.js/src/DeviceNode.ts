@@ -87,7 +87,7 @@ class DeviceNode {
         onOffClusterServer.attributes.onOff.addListener(on => commandExecutor(on ? "on" : "off")?.());
 
         const secureChannelProtocol = new SecureChannelProtocol(
-            await PaseServer.fromPin(passcode, { iterations: 1000, salt: Crypto.get().getRandomData(32) }),
+            await PaseServer.fromPin(passcode, { iterations: 1000, salt: Crypto.getRandomData(32) }),
             new CaseServer(),
         );
 

@@ -19,8 +19,7 @@ const logger = Logger.get("PaseClient");
 export class PaseClient {
     async pair(client: MatterController, exchange: MessageExchange<MatterController>, setupPin: number) {
         const messenger = new PaseClientMessenger(exchange);
-        const crypto = Crypto.get();
-        const random = crypto.getRandom();
+        const random = Crypto.getRandom();
         const sessionId = client.getNextAvailableSessionId();
 
         // Send pbkdRequest and Read pbkdResponse
@@ -30,7 +29,7 @@ export class PaseClient {
 
         // Compute pake1 and read pake2
         const { w0, w1 } = await Spake2p.computeW0W1(pbkdfParameters, setupPin);
-        const spake2p = Spake2p.create(crypto.hash([SPAKE_CONTEXT, requestPayload, responsePayload]), w0);
+        const spake2p = Spake2p.create(Crypto.hash([SPAKE_CONTEXT, requestPayload, responsePayload]), w0);
         const X = spake2p.computeX();
         await messenger.sendPasePake1({ x: X });
 

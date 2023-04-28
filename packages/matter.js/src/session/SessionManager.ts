@@ -36,7 +36,7 @@ type ResumptionStorageRecord = {
 export class SessionManager<ContextT> {
     private readonly unsecureSession: UnsecureSession<ContextT>;
     private readonly sessions = new Map<number, Session<ContextT>>();
-    private nextSessionId = Crypto.get().getRandomUInt16();
+    private nextSessionId = Crypto.getRandomUInt16();
     private resumptionRecords = new Map<bigint, ResumptionRecord>();
     private readonly sessionStorage: StorageContext;
 

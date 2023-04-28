@@ -26,7 +26,7 @@ export class Spake2p {
     static async computeW0W1({ iterations, salt }: PbkdfParameters, pin: number) {
         const pinWriter = new DataWriter(Endian.Little);
         pinWriter.writeUInt32(pin);
-        const ws = await Crypto.get().pbkdf2(pinWriter.toByteArray(), salt, iterations, 80);
+        const ws = await Crypto.pbkdf2(pinWriter.toByteArray(), salt, iterations, 80);
         const w0 = new BN(ws.slice(0, 40)).mod(P256_CURVE.n);
         const w1 = new BN(ws.slice(40, 80)).mod(P256_CURVE.n);
         return { w0, w1 };
@@ -39,7 +39,7 @@ export class Spake2p {
     }
 
     static create(context: ByteArray, w0: BN) {
-        const random = Crypto.get().getRandomBN(32, P256_CURVE.p);
+        const random = Crypto.getRandomBN(32, P256_CURVE.p);
         return new Spake2p(context, random, w0);
     }
 
@@ -82,13 +82,12 @@ export class Spake2p {
         const Ka = TT_HASH.slice(0, 16);
         const Ke = TT_HASH.slice(16, 32);
 
-        const crypto = Crypto.get();
-        const KcAB = await crypto.hkdf(Ka, new ByteArray(0), ByteArray.fromString("ConfirmationKeys"), 32);
+        const KcAB = await Crypto.hkdf(Ka, new ByteArray(0), ByteArray.fromString("ConfirmationKeys"), 32);
         const KcA = KcAB.slice(0, 16);
         const KcB = KcAB.slice(16, 32);
 
-        const hAY = crypto.hmac(KcA, Y);
-        const hBX = crypto.hmac(KcB, X);
+        const hAY = Crypto.hmac(KcA, Y);
+        const hBX = Crypto.hmac(KcB, X);
 
         return { Ke, hAY, hBX };
     }
@@ -105,7 +104,7 @@ export class Spake2p {
         this.addToContext(TTwriter, Z);
         this.addToContext(TTwriter, V);
         this.addToContext(TTwriter, this.w0.toBuffer());
-        return Crypto.get().hash(TTwriter.toByteArray());
+        return Crypto.hash(TTwriter.toByteArray());
     }
 
     private addToContext(TTwriter: DataWriter<Endian.Little>, data: ByteArray) {
