@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ByteArray } from "../util/ByteArray.js";
+import { ByteArray, Endian } from "../util/ByteArray.js";
+import { DataReader } from "../util/DataReader.js";
 import BN from "bn.js";
 
 export const CRYPTO_RANDOM_LENGTH = 32;
@@ -20,84 +21,66 @@ export type KeyPair = {
     privateKey: ByteArray,
 }
 
-export interface CryptoInterface {
-    encrypt(key: ByteArray, data: ByteArray, nonce: ByteArray, aad?: ByteArray): ByteArray;
-    decrypt(key: ByteArray, data: ByteArray, nonce: ByteArray, aad?: ByteArray): ByteArray;
-    getRandomData(length: number): ByteArray;
-    getRandom(): ByteArray
-    getRandomUInt16(): number;
-    getRandomUInt32(): number;
-    getRandomBigUInt64(): bigint;
-    getRandomBN(size: number, maxValue: BN): BN;
-    ecdhGeneratePublicKey(): { publicKey: ByteArray, ecdh: any };
-    ecdhGeneratePublicKeyAndSecret(peerPublicKey: ByteArray): { publicKey: ByteArray, sharedSecret: ByteArray };
-    ecdhGenerateSecret(peerPublicKey: ByteArray, ecdh: any): ByteArray;
-    hash(data: ByteArray | ByteArray[]): ByteArray;
-    pbkdf2(secret: ByteArray, salt: ByteArray, iteration: number, keyLength: number): Promise<ByteArray>;
-    hkdf(secret: ByteArray, salt: ByteArray, info: ByteArray, length?: number): Promise<ByteArray>;
-    hmac(key: ByteArray, data: ByteArray): ByteArray;
-    signPkcs8(privateKey: ByteArray, data: ByteArray | ByteArray[], dsaEncoding?: CryptoDsaEncoding): ByteArray;
-    signSec1(privateKey: ByteArray, data: ByteArray | ByteArray[], dsaEncoding?: CryptoDsaEncoding): ByteArray;
-    verifySpkiEc(publicKey: ByteArray, data: ByteArray, signature: ByteArray, dsaEncoding?: CryptoDsaEncoding): void;
-    verifySpki(publicKey: ByteArray, data: ByteArray, signature: ByteArray, dsaEncoding?: CryptoDsaEncoding): void;
-    createKeyPair(): KeyPair
-}
+export abstract class Crypto {
+    static get: () => Crypto = () => { throw new Error("No provider configured"); };
 
-export abstract class CryptoBase implements CryptoInterface {
     abstract encrypt(key: ByteArray, data: ByteArray, nonce: ByteArray, aad?: ByteArray): ByteArray;
+    static readonly encrypt = (key: ByteArray, data: ByteArray, nonce: ByteArray, aad?: ByteArray): ByteArray => Crypto.get().encrypt(key, data, nonce, aad);
 
     abstract decrypt(key: ByteArray, data: ByteArray, nonce: ByteArray, aad?: ByteArray): ByteArray;
+    static readonly decrypt = (key: ByteArray, data: ByteArray, nonce: ByteArray, aad?: ByteArray): ByteArray => Crypto.get().decrypt(key, data, nonce, aad);
 
     abstract getRandomData(length: number): ByteArray;
+    static readonly getRandomData = (length: number): ByteArray => Crypto.get().getRandomData(length);
 
-    getRandom(): ByteArray {
-        return this.getRandomData(CRYPTO_RANDOM_LENGTH);
-    }
+    static readonly getRandom = (): ByteArray => Crypto.get().getRandomData(CRYPTO_RANDOM_LENGTH);
 
-    getRandomUInt16() {
-        return Buffer.from(this.getRandomData(2)).readUInt16LE();
-    }
+    static readonly getRandomUInt16 = (): number => new DataReader(Crypto.get().getRandomData(2), Endian.Little).readUInt16();
 
-    getRandomUInt32() {
-        return Buffer.from(this.getRandomData(4)).readUInt32LE();
-    }
+    static readonly getRandomUInt32 = (): number => new DataReader(Crypto.get().getRandomData(4), Endian.Little).readUInt32();
 
-    getRandomBigUInt64() {
-        return Buffer.from(this.getRandomData(8)).readBigUInt64LE();
-    }
+    static readonly getRandomBigUInt64 = (): bigint => new DataReader(Crypto.get().getRandomData(8), Endian.Little).readUInt64();
 
-    getRandomBN(size: number, maxValue: BN) {
+    static readonly getRandomBN = (size: number, maxValue: BN): BN => {
         while (true) {
-            const random = new BN(this.getRandomData(size));
+            const random = new BN(Crypto.getRandomData(size));
             if (random < maxValue) return random;
         }
-    }
+    };
 
     abstract ecdhGeneratePublicKey(): { publicKey: ByteArray, ecdh: any };
+    static readonly ecdhGeneratePublicKey = (): { publicKey: ByteArray, ecdh: any } => Crypto.get().ecdhGeneratePublicKey();
 
     abstract ecdhGeneratePublicKeyAndSecret(peerPublicKey: ByteArray): { publicKey: ByteArray, sharedSecret: ByteArray };
+    static readonly ecdhGeneratePublicKeyAndSecret = (peerPublicKey: ByteArray): { publicKey: ByteArray, sharedSecret: ByteArray } => Crypto.get().ecdhGeneratePublicKeyAndSecret(peerPublicKey);
 
     abstract ecdhGenerateSecret(peerPublicKey: ByteArray, ecdh: any): ByteArray;
+    static readonly ecdhGenerateSecret = (peerPublicKey: ByteArray, ecdh: any): ByteArray => Crypto.get().ecdhGenerateSecret(peerPublicKey, ecdh);
 
     abstract hash(data: ByteArray | ByteArray[]): ByteArray;
+    static readonly hash = (data: ByteArray | ByteArray[]): ByteArray => Crypto.get().hash(data);
 
     abstract pbkdf2(secret: ByteArray, salt: ByteArray, iteration: number, keyLength: number): Promise<ByteArray>;
+    static readonly pbkdf2 = (secret: ByteArray, salt: ByteArray, iteration: number, keyLength: number): Promise<ByteArray> => Crypto.get().pbkdf2(secret, salt, iteration, keyLength);
 
     abstract hkdf(secret: ByteArray, salt: ByteArray, info: ByteArray, length?: number): Promise<ByteArray>;
+    static readonly hkdf = (secret: ByteArray, salt: ByteArray, info: ByteArray, length?: number): Promise<ByteArray> => Crypto.get().hkdf(secret, salt, info, length);
 
     abstract hmac(key: ByteArray, data: ByteArray): ByteArray;
+    static readonly hmac = (key: ByteArray, data: ByteArray): ByteArray => Crypto.get().hmac(key, data);
 
     abstract signPkcs8(privateKey: ByteArray, data: ByteArray | ByteArray[], dsaEncoding?: CryptoDsaEncoding): ByteArray;
+    static readonly signPkcs8 = (privateKey: ByteArray, data: ByteArray | ByteArray[], dsaEncoding?: CryptoDsaEncoding): ByteArray => Crypto.get().signPkcs8(privateKey, data, dsaEncoding);
 
     abstract signSec1(privateKey: ByteArray, data: ByteArray | ByteArray[], dsaEncoding?: CryptoDsaEncoding): ByteArray;
+    static readonly signSec1 = (privateKey: ByteArray, data: ByteArray | ByteArray[], dsaEncoding?: CryptoDsaEncoding): ByteArray => Crypto.get().signSec1(privateKey, data, dsaEncoding);
 
     abstract verifySpkiEc(publicKey: ByteArray, data: ByteArray, signature: ByteArray, dsaEncoding?: CryptoDsaEncoding): void;
+    static readonly verifySpkiEc = (publicKey: ByteArray, data: ByteArray, signature: ByteArray, dsaEncoding?: CryptoDsaEncoding): void => Crypto.get().verifySpkiEc(publicKey, data, signature, dsaEncoding);
 
     abstract verifySpki(publicKey: ByteArray, data: ByteArray, signature: ByteArray, dsaEncoding?: CryptoDsaEncoding): void;
+    static readonly verifySpki = (publicKey: ByteArray, data: ByteArray, signature: ByteArray, dsaEncoding?: CryptoDsaEncoding): void => Crypto.get().verifySpki(publicKey, data, signature, dsaEncoding);
 
     abstract createKeyPair(): KeyPair
-}
-
-export class Crypto {
-    static get: () => CryptoInterface = () => { throw new Error("No provider configured"); };
+    static readonly createKeyPair = (): KeyPair => Crypto.get().createKeyPair();
 }

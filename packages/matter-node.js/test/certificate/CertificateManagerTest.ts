@@ -63,7 +63,7 @@ describe("CertificateManager", () => {
             assert.deepEqual(DerCodec.encode(signatureAlgorithmNode), DerCodec.encode(EcdsaWithSHA256_X962));
             const requestBytes = DerCodec.encode(requestNode);
             assert.deepEqual(requestBytes, CSR_REQUEST_ASN1);
-            Crypto.get().verifySpki(PUBLIC_KEY, DerCodec.encode(requestNode), signatureNode[BYTES_KEY], "der");
+            Crypto.verifySpki(PUBLIC_KEY, DerCodec.encode(requestNode), signatureNode[BYTES_KEY], "der");
         });
     });
 

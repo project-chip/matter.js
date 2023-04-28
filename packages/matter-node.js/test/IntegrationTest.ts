@@ -94,7 +94,7 @@ describe("Integration", () => {
             .addNetInterface(await UdpInterface.create(matterPort, "udp6", SERVER_IP))
             .addBroadcaster(await MdnsBroadcaster.create(matterPort))
             .addProtocolHandler(new SecureChannelProtocol(
-                await PaseServer.fromPin(setupPin, { iterations: 1000, salt: Crypto.get().getRandomData(32) }),
+                await PaseServer.fromPin(setupPin, { iterations: 1000, salt: Crypto.getRandomData(32) }),
                 new CaseServer(),
             ))
             .addProtocolHandler(new InteractionServer(serverStorageManager)

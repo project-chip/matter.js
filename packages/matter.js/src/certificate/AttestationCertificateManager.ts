@@ -35,8 +35,8 @@ export class AttestationCertificateManager {
     };
     private readonly paaKeyIdentifier = TestCert_PAA_NoVID_SKID;
     private readonly paiCertId = BigInt(1);
-    private readonly paiKeyPair = Crypto.get().createKeyPair();
-    private readonly paiKeyIdentifier = Crypto.get().hash(this.paiKeyPair.publicKey).slice(0, 20);
+    private readonly paiKeyPair = Crypto.createKeyPair();
+    private readonly paiKeyIdentifier = Crypto.hash(this.paiKeyPair.publicKey).slice(0, 20);
     private readonly paiCertBytes;
     private nextCertificateId = 2;
 
@@ -51,7 +51,7 @@ export class AttestationCertificateManager {
     }
 
     getDACert(productId: number) {
-        const dacKeyPair = Crypto.get().createKeyPair();
+        const dacKeyPair = Crypto.createKeyPair();
         return {
             keyPair: dacKeyPair,
             dac: this.generateDaCert(dacKeyPair.publicKey, this.vendorId, productId)
@@ -148,7 +148,7 @@ export class AttestationCertificateManager {
                     isCa: false
                 },
                 keyUsage: 1,
-                subjectKeyIdentifier: Crypto.get().hash(publicKey).slice(0, 20),
+                subjectKeyIdentifier: Crypto.hash(publicKey).slice(0, 20),
                 authorityKeyIdentifier: this.paiKeyIdentifier,
             },
         };

@@ -108,7 +108,7 @@ export class ExchangeManager<ContextT> {
 }
 
 export class ExchangeCounter {
-    private exchangeCounter = Crypto.get().getRandomUInt16();
+    private exchangeCounter = Crypto.getRandomUInt16();
 
     getIncrementedCounter() {
         this.exchangeCounter++;
@@ -120,7 +120,7 @@ export class ExchangeCounter {
 }
 
 export class MessageCounter {
-    private messageCounter = Crypto.get().getRandomUInt32();
+    private messageCounter = Crypto.getRandomUInt32();
 
     getIncrementedCounter() {
         this.messageCounter++;
