@@ -8,15 +8,14 @@ Matter is a new secure / reliable / local / standard protocol for smart devices 
 To know more about Matter: https://csa-iot.org/all-solutions/matter/
 
 matter-node.js is compatible with:
-- **iOS - Home app**: fully working
-- **Android - Home app**: fully working
-- **Alexa**: fully working
-- **Home Assistant**: fully working
-- **Tuya Smartlife App**: fully working
-- **Smartthings**: pairing works, but for controlling seems like Smartthings implementation itself has issues
+- **iOS 16 (iPhone or iPad) and tvOS 16 (Apple TV) - "Home" app by Apple**: fully working
+- **Google Home Ecosystem (Android or Google Nest smart speakers/display) - "Google Home" app**: fully working
+- **Amazon Alexa (Amazon Echo smart speakers/displays)** : fully working
+- **Home Assistant - Matter integration**: fully working
+- **Tuya Smart (SmartLife) app**: fully working
+- **Samsung SmartThings (Station or Hub v2 and later)**: pairing works, but for controlling seems like Smartthings implementation itself has issues
 
 Each system have their own specialities, see [Pairing and Usage Information](#Pairing-and-Usage-Information) for more details.
-
 
 ## Monorepo Overview
 
