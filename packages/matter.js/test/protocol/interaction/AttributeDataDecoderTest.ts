@@ -3,8 +3,8 @@
  * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-
-
+import { Time } from "../../../src/time/Time.js";
+import { TimeFake } from "../../../src/time/TimeFake.js";
 import { normalizeAndDecodeReadAttributeReport, normalizeAttributeData } from "../../../src/protocol/interaction/AttributeDataDecoder.js";
 import * as assert from "assert";
 import { TlvField, TlvObject } from "../../../src/tlv/TlvObject.js";
@@ -12,7 +12,11 @@ import { TlvUInt8 } from "../../../src/tlv/TlvNumber.js";
 import { TlvNullable } from "../../../src/tlv/TlvNullable.js";
 import { TlvArray } from "../../../src/tlv/TlvArray.js";
 import { ByteArray } from "../../../src/util/ByteArray.js";
-import { TlvAttributeData, TlvDataReport } from "../../../src/protocol/interaction/InteractionProtocol.js";
+import {
+    TlvAttributeData,
+    TlvAttributeReport,
+    TlvDataReport
+} from "../../../src/protocol/interaction/InteractionProtocol.js";
 import { ClusterId } from "../../../src/datatype/ClusterId.js";
 import { VendorId } from "../../../src/datatype/VendorId.js";
 import { AttributeId } from "../../../src/datatype/AttributeId.js";
@@ -26,20 +30,26 @@ const TlvAclTestSchema = TlvObject({
     targets: TlvField(4, TlvNullable(TlvUInt8)),
 });
 
+const fakeTime = new TimeFake(0);
+
 describe("DataReportDecoder", () => {
+
+    beforeAll(() => {
+        Time.get = () => fakeTime;
+    });
 
     describe("decode chunked array using raw data from chip-tool", () => {
         it("decode chunked array with two elements", () => {
-            const data = [
+            const data: TypeFromSchema<typeof TlvAttributeReport>[] = [
                 {
-                    value: {
+                    attributeData: {
                         path: { endpointId: 0, clusterId: 0x1f, attributeId: 0 },
                         data: TlvArray(TlvAclTestSchema).encodeTlv([]),
                         dataVersion: 0,
                     }
                 },
                 {
-                    value: {
+                    attributeData: {
                         path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: null },
                         data: TlvAclTestSchema.encodeTlv({
                             privilege: 1,
@@ -51,7 +61,7 @@ describe("DataReportDecoder", () => {
                     }
                 },
                 {
-                    value: {
+                    attributeData: {
                         path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: null },
                         data: TlvAclTestSchema.encodeTlv({
                             privilege: 2,
@@ -90,16 +100,16 @@ describe("DataReportDecoder", () => {
         });
 
         it("decode chunked array with indexed adding", () => {
-            const data = [
+            const data: TypeFromSchema<typeof TlvAttributeReport>[] = [
                 {
-                    value: {
+                    attributeData: {
                         path: { endpointId: 0, clusterId: 0x1f, attributeId: 0 },
                         data: TlvArray(TlvAclTestSchema).encodeTlv([]),
                         dataVersion: 0,
                     }
                 },
                 {
-                    value: {
+                    attributeData: {
                         path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: 0 },
                         data: TlvAclTestSchema.encodeTlv({
                             privilege: 1,
@@ -111,7 +121,7 @@ describe("DataReportDecoder", () => {
                     }
                 },
                 {
-                    value: {
+                    attributeData: {
                         path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: 1 },
                         data: TlvAclTestSchema.encodeTlv({
                             privilege: 2,
@@ -150,16 +160,16 @@ describe("DataReportDecoder", () => {
         });
 
         it("decode chunked array with indexed deletion", () => {
-            const data = [
+            const data: TypeFromSchema<typeof TlvAttributeReport>[] = [
                 {
-                    value: {
+                    attributeData: {
                         path: { endpointId: 0, clusterId: 0x1f, attributeId: 0 },
                         data: TlvArray(TlvAclTestSchema).encodeTlv([]),
                         dataVersion: 0,
                     }
                 },
                 {
-                    value: {
+                    attributeData: {
                         path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: 0 },
                         data: TlvAclTestSchema.encodeTlv({
                             privilege: 1,
@@ -171,7 +181,7 @@ describe("DataReportDecoder", () => {
                     }
                 },
                 {
-                    value: {
+                    attributeData: {
                         path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: 1 },
                         data: TlvAclTestSchema.encodeTlv({
                             privilege: 2,
@@ -183,7 +193,7 @@ describe("DataReportDecoder", () => {
                     }
                 },
                 {
-                    value: {
+                    attributeData: {
                         path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: 2 },
                         data: TlvAclTestSchema.encodeTlv({
                             privilege: 3,
@@ -195,7 +205,7 @@ describe("DataReportDecoder", () => {
                     }
                 },
                 {
-                    value: {
+                    attributeData: {
                         path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: 1 },
                         data: TlvNullable(TlvAclTestSchema).encodeTlv(null),
                         dataVersion: 0,
@@ -228,16 +238,16 @@ describe("DataReportDecoder", () => {
         });
 
         it("decode chunked array with indexed modify", () => {
-            const data = [
+            const data: TypeFromSchema<typeof TlvAttributeReport>[] = [
                 {
-                    value: {
+                    attributeData: {
                         path: { endpointId: 0, clusterId: 0x1f, attributeId: 0 },
                         data: TlvArray(TlvAclTestSchema).encodeTlv([]),
                         dataVersion: 0,
                     }
                 },
                 {
-                    value: {
+                    attributeData: {
                         path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: 0 },
                         data: TlvAclTestSchema.encodeTlv({
                             privilege: 1,
@@ -249,7 +259,7 @@ describe("DataReportDecoder", () => {
                     }
                 },
                 {
-                    value: {
+                    attributeData: {
                         path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: 1 },
                         data: TlvAclTestSchema.encodeTlv({
                             privilege: 2,
@@ -261,7 +271,7 @@ describe("DataReportDecoder", () => {
                     }
                 },
                 {
-                    value: {
+                    attributeData: {
                         path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: 2 },
                         data: TlvAclTestSchema.encodeTlv({
                             privilege: 3,
@@ -273,7 +283,7 @@ describe("DataReportDecoder", () => {
                     }
                 },
                 {
-                    value: {
+                    attributeData: {
                         path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: 1 },
                         data: TlvAclTestSchema.encodeTlv({
                             privilege: 4,
@@ -326,9 +336,9 @@ describe("DataReportDecoder", () => {
             const decodedData = TlvDataReport.decode(tlvData);
 
             assert.ok(decodedData);
-            assert.ok(Array.isArray(decodedData.values));
+            assert.ok(Array.isArray(decodedData.attributeReports));
 
-            const normalizedData = normalizeAndDecodeReadAttributeReport(decodedData.values);
+            const normalizedData = normalizeAndDecodeReadAttributeReport(decodedData.attributeReports);
 
             assert.equal(normalizedData.length, 1);
             assert.deepEqual(normalizedData[0].path, {
@@ -354,9 +364,9 @@ describe("DataReportDecoder", () => {
             const decodedData = TlvDataReport.decode(tlvData);
 
             assert.ok(decodedData);
-            assert.ok(Array.isArray(decodedData.values));
+            assert.ok(Array.isArray(decodedData.attributeReports));
 
-            const normalizedData = normalizeAndDecodeReadAttributeReport(decodedData.values);
+            const normalizedData = normalizeAndDecodeReadAttributeReport(decodedData.attributeReports);
 
             assert.equal(normalizedData.length, 1);
             assert.deepEqual(normalizedData[0].path, {
@@ -376,9 +386,9 @@ describe("DataReportDecoder", () => {
             const decodedData = TlvDataReport.decode(tlvData);
 
             assert.ok(decodedData);
-            assert.ok(Array.isArray(decodedData.values));
+            assert.ok(Array.isArray(decodedData.attributeReports));
 
-            const normalizedData = normalizeAndDecodeReadAttributeReport(decodedData.values);
+            const normalizedData = normalizeAndDecodeReadAttributeReport(decodedData.attributeReports);
 
             assert.deepEqual(normalizedData, [
                 {

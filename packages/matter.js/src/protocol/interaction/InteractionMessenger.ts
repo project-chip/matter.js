@@ -13,9 +13,8 @@ import { ExchangeProvider } from "../../protocol/ExchangeManager.js";
 import { MatterController } from "../../MatterController.js";
 import { MatterDevice } from "../../MatterDevice.js";
 import {
-    InteractionProtocolStatusCode as StatusCode, TlvAttributeReport, TlvDataReport,
-    TlvInvokeRequest, TlvInvokeResponse, TlvReadRequest, TlvStatusResponse, TlvSubscribeRequest, TlvSubscribeResponse,
-    TlvTimedRequest, TlvWriteRequest, TlvWriteResponse
+    StatusCode, TlvAttributeReport, TlvDataReport, TlvInvokeRequest, TlvInvokeResponse, TlvReadRequest,
+    TlvStatusResponse, TlvSubscribeRequest, TlvSubscribeResponse, TlvTimedRequest, TlvWriteRequest, TlvWriteResponse
 } from "./InteractionProtocol.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Message } from "../../codec/MessageCodec.js";
@@ -161,13 +160,13 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
 
     async sendDataReport(dataReport: DataReport) {
         const messageBytes = TlvDataReport.encode(dataReport);
-        if (!Array.isArray(dataReport.values)) {
-            throw new Error(`DataReport.values must be an array, got: ${dataReport.values}`);
+        if (!Array.isArray(dataReport.attributeReports)) {
+            throw new Error(`DataReport.values must be an array, got: ${dataReport.attributeReports}`);
         }
         if (messageBytes.length > MAX_SPDU_LENGTH) {
             // DataReport is too long, it needs to be sent in chunks
-            const attributeReportsToSend = [...dataReport.values];
-            dataReport.values.length = 0;
+            const attributeReportsToSend = [...dataReport.attributeReports];
+            dataReport.attributeReports.length = 0;
             dataReport.moreChunkedMessages = true;
 
             const emptyDataReportBytes = TlvDataReport.encode(dataReport);
@@ -188,11 +187,11 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                     // Report doesn't fit, sending this chunk
                     await this.send(MessageType.ReportData, TlvDataReport.encode(dataReport));
                     await this.waitForSuccess();
-                    dataReport.values.length = 0;
+                    dataReport.attributeReports.length = 0;
                     messageSize = emptyDataReportBytes.length;
                 }
                 messageSize += attributeReportBytes;
-                dataReport.values.push(attributeReport);
+                dataReport.attributeReports.push(attributeReport);
             }
         }
 
@@ -224,11 +223,11 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger<Mat
                 throw new Error(`Invalid subscription ID ${report.subscriptionId} received`);
             }
 
-            if (Array.isArray(report.values) && report.values.length > 0) {
-                values.push(...report.values);
+            if (Array.isArray(report.attributeReports) && report.attributeReports.length > 0) {
+                values.push(...report.attributeReports);
             }
             if (!report.moreChunkedMessages) {
-                report.values = values;
+                report.attributeReports = values;
                 return report;
             }
 

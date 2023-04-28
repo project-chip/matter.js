@@ -41,7 +41,7 @@ export interface DecodedAttributeValue {
 
 export function normalizeAndDecodeReadAttributeReport(data: TypeFromSchema<typeof TlvAttributeReport>[]): DecodedAttributeReportValue[] {
     // TODO Decide how to handle the attribute report status field, right now we ignore it
-    const dataValues = data.flatMap(({ value }) => value !== undefined ? value : []);
+    const dataValues = data.flatMap(({ attributeData }) => attributeData !== undefined ? attributeData : []);
 
     return normalizeAndDecodeAttributeData(dataValues) as DecodedAttributeReportValue[]; // dataVersion existing in incoming data, so must also in outgoing data
 }

@@ -8,12 +8,24 @@ import { MatterDevice } from "../../MatterDevice.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import {
-    DataReport, InteractionServerMessenger, InvokeRequest, InvokeResponse, ReadRequest, SubscribeRequest, TimedRequest,
-    WriteRequest, WriteResponse, StatusResponseError, MessageType
+    DataReport,
+    InteractionServerMessenger,
+    InvokeRequest,
+    InvokeResponse,
+    MessageType,
+    ReadRequest,
+    StatusResponseError,
+    SubscribeRequest,
+    TimedRequest,
+    WriteRequest,
+    WriteResponse
 } from "./InteractionMessenger.js";
-import { Attributes, Commands, Events, Cluster } from "../../cluster/Cluster.js";
+import { Attributes, Cluster, Commands, Events } from "../../cluster/Cluster.js";
 import {
-    InteractionProtocolStatusCode as StatusCode, TlvAttributePath, TlvAttributeReport, TlvSubscribeResponse
+    StatusCode,
+    TlvAttributePath,
+    TlvAttributeReport, TlvCommandPath,
+    TlvSubscribeResponse
 } from "./InteractionProtocol.js"
 import { BitSchema, TypeFromBitSchema } from "../../schema/BitmapSchema.js";
 import { TlvStream, TypeFromSchema } from "../../tlv/TlvSchema.js";
@@ -27,13 +39,14 @@ import { Message } from "../../codec/MessageCodec.js";
 import { Crypto } from "../../crypto/Crypto.js";
 import { decodeValueForSchema, normalizeAttributeData } from "./AttributeDataDecoder.js";
 import { AttributeInitialValues, AttributeServers, ClusterServerHandlers } from "../../cluster/server/ClusterServer.js";
-import { CommandServer, ResultCode } from "../../cluster/server/CommandServer.js";
+import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { AttributeGetterServer, AttributeServer } from "../../cluster/server/AttributeServer.js";
 import { DescriptorCluster } from "../../cluster/DescriptorCluster.js";
 import { Logger } from "../../log/Logger.js";
 import { StorageContext } from "../../storage/StorageContext.js";
 import { StorageManager } from "../../storage/StorageManager.js";
 import { capitalize } from "../../util/String.js";
+import { TlvVoid } from "../../tlv/TlvVoid.js";
 
 export const INTERACTION_PROTOCOL_ID = 0x0001;
 
@@ -210,12 +223,15 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         );
     }
 
-    handleReadRequest(exchange: MessageExchange<MatterDevice>, { attributes: attributePaths, isFabricFiltered }: ReadRequest): DataReport {
+    handleReadRequest(exchange: MessageExchange<MatterDevice>, { attributeRequests: attributePaths, isFabricFiltered }: ReadRequest): DataReport {
+        if (attributePaths === undefined) {
+            throw new StatusResponseError("Only Read requests with attributeRequests are supported right now", StatusCode.UnsupportedRead);
+        }
         logger.debug(`Received read request from ${exchange.channel.getName()}: ${attributePaths.map(path => this.resolveAttributeName(path)).join(", ")}, isFabricFiltered=${isFabricFiltered}`);
 
         // UnsupportedNode/UnsupportedEndpoint/UnsupportedCluster/UnsupportedAttribute/UnsupportedRead
 
-        const reportValues = attributePaths.flatMap((path: TypeFromSchema<typeof TlvAttributePath>): TypeFromSchema<typeof TlvAttributeReport>[] => {
+        const attributeReports = attributePaths.flatMap((path: TypeFromSchema<typeof TlvAttributePath>): TypeFromSchema<typeof TlvAttributeReport>[] => {
             const attributes = this.getAttributes([path]);
             if (attributes.length === 0) {
                 logger.debug(`Read from ${exchange.channel.getName()}: ${this.resolveAttributeName(path)} unsupported path`);
@@ -225,14 +241,14 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             return attributes.map(({ path, attribute }) => {
                 const { value, version } = attribute.getWithVersion(exchange.session); // TODO check ACL
                 logger.debug(`Read from ${exchange.channel.getName()}: ${this.resolveAttributeName(path)}=${Logger.toJSON(value)} (version=${version})`);
-                return { value: { path, data: attribute.schema.encodeTlv(value), dataVersion: version } };
+                return { attributeData: { path, data: attribute.schema.encodeTlv(value), dataVersion: version } };
             });
         });
 
         return {
             interactionModelRevision: 1,
             suppressResponse: false,
-            values: reportValues,
+            attributeReports
         };
     }
 
@@ -332,32 +348,37 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         }
     }
 
-    async handleInvokeRequest(exchange: MessageExchange<MatterDevice>, { invokes }: InvokeRequest, message: Message): Promise<InvokeResponse> {
-        logger.debug(`Received invoke request from ${exchange.channel.getName()}: ${invokes.map(({ path: { endpointId, clusterId, commandId } }) => `${toHex(endpointId)}/${toHex(clusterId)}/${toHex(commandId)}`).join(", ")}`);
+    async handleInvokeRequest(exchange: MessageExchange<MatterDevice>, { invokeRequests }: InvokeRequest, message: Message): Promise<InvokeResponse> {
+        logger.debug(`Received invoke request from ${exchange.channel.getName()}: ${invokeRequests.map(({ commandPath: { endpointId, clusterId, commandId } }) => `${toHex(endpointId)}/${toHex(clusterId)}/${toHex(commandId)}`).join(", ")}`);
 
-        const results = new Array<{ path: CommandPath, code: ResultCode, response: TlvStream, responseId: number }>();
+        const results = new Array<{ commandPath: TypeFromSchema<typeof TlvCommandPath>, code: StatusCode, response: TlvStream, responseId: number }>();
 
-        await Promise.all(invokes.map(async ({ path, args }) => {
-            const command = this.commands.get(commandPathToId(path));
+        await Promise.all(invokeRequests.map(async ({ commandPath, commandFields }) => {
+            if (commandPath.endpointId === undefined) {
+                logger.error("Wildcard command invokes not yet supported!");
+                results.push({ code: StatusCode.UnsupportedCommand, commandPath, response: TlvVoid.encodeTlv(), responseId: 0 });
+                return;
+            }
+            const command = this.commands.get(commandPathToId(commandPath as CommandPath));
             if (command === undefined) return;
 
             // If no arguments are provided in the invoke data (because optional field), we use our type as replacement
-            if (args === undefined) {
-                args = TlvNoArguments.encodeTlv(args);
+            if (commandFields === undefined) {
+                commandFields = TlvNoArguments.encodeTlv(commandFields);
             }
 
-            const result = await command.invoke(exchange.session, args, message);
-            results.push({ ...result, path });
+            const result = await command.invoke(exchange.session, commandFields, message);
+            results.push({ ...result, commandPath });
         }));
 
         return {
             suppressResponse: false,
             interactionModelRevision: 1,
-            responses: results.map(({ path, responseId, code, response }) => {
+            invokeResponses: results.map(({ commandPath, responseId, code, response }) => {
                 if (response.length === 0) {
-                    return { result: { path, result: { code } } };
+                    return { status: { commandPath, status: { status: code } } };
                 } else {
-                    return { response: { path: { ...path, commandId: responseId }, response } };
+                    return { command: { commandPath: { ...commandPath, commandId: responseId }, commandFields: response } };
                 }
             }),
         };

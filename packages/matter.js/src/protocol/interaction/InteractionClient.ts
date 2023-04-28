@@ -9,7 +9,7 @@ import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { MatterController } from "../../MatterController.js";
 import { capitalize } from "../../util/String.js";
 import { Logger } from "../../log/Logger.js";
-import { InteractionProtocolStatusCode as StatusCode, TlvAttributeReport } from "./InteractionProtocol.js";
+import { StatusCode, TlvAttributeReport } from "./InteractionProtocol.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
 import {
     DataReport, IncomingInteractionClientMessenger, InteractionClientMessenger, ReadRequest, StatusResponseError
@@ -22,7 +22,6 @@ import {
 } from "../../cluster/Cluster.js";
 import { ExchangeProvider } from "../ExchangeManager.js";
 import { ClusterClient } from "../../cluster/client/ClusterClient.js";
-import { ResultCode } from "../../cluster/server/CommandServer.js";
 
 const logger = Logger.get("InteractionClient");
 
@@ -102,10 +101,10 @@ export class InteractionClient {
         return this.getMultipleAttributes([{ /* empty means *,*,* */ }]);
     }
 
-    async getMultipleAttributes(attributes: { endpointId?: number, clusterId?: number, attributeId?: number }[]): Promise<DecodedAttributeReportValue[]> {
+    async getMultipleAttributes(attributeRequests: { endpointId?: number, clusterId?: number, attributeId?: number }[]): Promise<DecodedAttributeReportValue[]> {
         return this.withMessenger<DecodedAttributeReportValue[]>(async messenger => {
             return await this.processReadRequest(messenger, {
-                attributes,
+                attributeRequests,
                 interactionModelRevision: 1,
                 isFabricFiltered: true,
             });
@@ -135,8 +134,8 @@ export class InteractionClient {
         let response = await messenger.sendReadRequest(request);
         const result: TypeFromSchema<typeof TlvAttributeReport>[] = [];
         while (true) {
-            if (response.values !== undefined) {
-                result.push(...response.values);
+            if (response.attributeReports !== undefined) {
+                result.push(...response.attributeReports);
             }
             if (!response.suppressResponse) {
                 await messenger.sendStatus(StatusCode.Success);
@@ -203,12 +202,12 @@ export class InteractionClient {
             }); // TODO: also initialize all values
 
             const subscriptionListener = (dataReport: DataReport) => {
-                if (!Array.isArray(dataReport.values) || !dataReport.values.length) {
+                if (!Array.isArray(dataReport.attributeReports) || !dataReport.attributeReports.length) {
                     logger.debug('Subscription result empty');
                     return;
                 }
 
-                const data = normalizeAndDecodeReadAttributeReport(dataReport.values);
+                const data = normalizeAndDecodeReadAttributeReport(dataReport.attributeReports);
 
                 if (data.length === 0) {
                     throw new Error('Subscription result reporting undefined/no value not specified');
@@ -239,11 +238,11 @@ export class InteractionClient {
             }); // TODO: also initialize all values
 
             const subscriptionListener = (dataReport: DataReport) => {
-                if (!Array.isArray(dataReport.values) || !dataReport.values.length) {
+                if (!Array.isArray(dataReport.attributeReports) || !dataReport.attributeReports.length) {
                     logger.debug('Subscription result empty');
                     return;
                 }
-                const values = normalizeAndDecodeReadAttributeReport(dataReport.values);
+                const values = normalizeAndDecodeReadAttributeReport(dataReport.attributeReports);
 
                 values.forEach(data => {
                     const { path: { endpointId, clusterId, attributeId }, value, version } = data;
@@ -260,27 +259,31 @@ export class InteractionClient {
 
     async invoke<C extends Command<any, any>>(endpointId: number, clusterId: number, request: RequestType<C>, id: number, requestSchema: TlvSchema<RequestType<C>>, _responseId: number, responseSchema: TlvSchema<ResponseType<C>>, optional: boolean): Promise<ResponseType<C>> {
         return this.withMessenger<ResponseType<C>>(async messenger => {
-            const args = requestSchema.encodeTlv(request);
+            const commandFields = requestSchema.encodeTlv(request);
 
             const invokeResponse = await messenger.sendInvokeCommand({
-                invokes: [
-                    { path: { endpointId, clusterId, commandId: id }, args }
+                invokeRequests: [
+                    { commandPath: { endpointId, clusterId, commandId: id }, commandFields }
                 ],
                 timedRequest: false,
                 suppressResponse: false,
                 interactionModelRevision: 1,
             });
             if (invokeResponse === undefined) throw new Error("No response received");
-            const { responses } = invokeResponse;
-            if (responses.length === 0) throw new Error("No response received");
-            const { response, result } = responses[0];
-            if (result !== undefined) {
-                const resultCode = result.result.code;
-                if (resultCode !== ResultCode.Success) throw new Error(`Received non-success result: ${resultCode}`);
+            const { invokeResponses } = invokeResponse;
+            if (invokeResponses.length === 0) throw new Error("No response received");
+            const { command, status } = invokeResponses[0];
+            if (status !== undefined) {
+                const resultCode = status.status.status;
+                if (resultCode !== StatusCode.Success) throw new Error(`Received non-success result: ${resultCode}`);
                 if ((responseSchema as any) !== TlvNoResponse) throw new Error("A response was expected for this command");
                 return undefined as unknown as ResponseType<C>; // ResponseType is void, force casting the empty result
-            } if (response !== undefined) {
-                return responseSchema.decodeTlv(response.response);
+            } if (command !== undefined) {
+                if (command.commandFields === undefined) {
+                    if ((responseSchema as any) !== TlvNoResponse) throw new Error("A response was expected for this command");
+                    return undefined as unknown as ResponseType<C>; // ResponseType is void, force casting the empty result
+                }
+                return responseSchema.decodeTlv(command.commandFields);
             } if (optional) {
                 return undefined as ResponseType<C>; // ResponseType allows undefined for optional commands
             }
