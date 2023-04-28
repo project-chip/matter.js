@@ -30,7 +30,7 @@ import { Message } from "@project-chip/matter.js/codec";
 const READ_REQUEST: ReadRequest = {
     interactionModelRevision: 1,
     isFabricFiltered: true,
-    attributes: [
+    attributeRequests: [
         { endpointId: 0, clusterId: 0x28, attributeId: 2 },
         { endpointId: 0, clusterId: 0x28, attributeId: 4 },
     ],
@@ -39,16 +39,16 @@ const READ_REQUEST: ReadRequest = {
 const READ_RESPONSE: DataReport = {
     interactionModelRevision: 1,
     suppressResponse: false,
-    values: [
+    attributeReports: [
         {
-            value: {
+            attributeData: {
                 path: { endpointId: 0, clusterId: 0x28, attributeId: 2 },
                 data: TlvUInt8.encodeTlv(1),
                 dataVersion: 0,
             }
         },
         {
-            value: {
+            attributeData: {
                 path: { endpointId: 0, clusterId: 0x28, attributeId: 4 },
                 data: TlvUInt8.encodeTlv(2),
                 dataVersion: 0,
@@ -161,14 +161,14 @@ const INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS: InvokeRequest = {
     interactionModelRevision: 1,
     suppressResponse: false,
     timedRequest: false,
-    invokes: [
+    invokeRequests: [
         {
-            path: {
+            commandPath: {
                 endpointId: 0,
                 clusterId: 6,
                 commandId: 1,
             },
-            args: TlvNoArguments.encodeTlv(undefined),
+            commandFields: TlvNoArguments.encodeTlv(undefined),
         }
     ]
 };
@@ -177,9 +177,9 @@ const INVOKE_COMMAND_REQUEST_WITH_NO_ARGS: InvokeRequest = {
     interactionModelRevision: 1,
     suppressResponse: false,
     timedRequest: false,
-    invokes: [
+    invokeRequests: [
         {
-            path: { endpointId: 0, clusterId: 6, commandId: 1 },
+            commandPath: { endpointId: 0, clusterId: 6, commandId: 1 },
         }
     ]
 };
@@ -187,10 +187,10 @@ const INVOKE_COMMAND_REQUEST_WITH_NO_ARGS: InvokeRequest = {
 const INVOKE_COMMAND_RESPONSE: InvokeResponse = {
     interactionModelRevision: 1,
     suppressResponse: false,
-    responses: [
+    invokeResponses: [
         {
-            result: {
-                path: { clusterId: 6, commandId: 1, endpointId: 0 }, result: { code: 0 }
+            status: {
+                commandPath: { clusterId: 6, commandId: 1, endpointId: 0 }, status: { status: 0 }
             }
         }
     ]

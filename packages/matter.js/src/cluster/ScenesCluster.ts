@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InteractionProtocolStatusCode as StatusCode } from "../protocol/interaction/InteractionProtocol.js";
+import { StatusCode } from "../protocol/interaction/InteractionProtocol.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
 import { Attribute, Cluster, Command, OptionalAttribute, OptionalCommand, TlvNoResponse } from "./Cluster.js";
 import { TlvAttributeId } from "../datatype/AttributeId.js";

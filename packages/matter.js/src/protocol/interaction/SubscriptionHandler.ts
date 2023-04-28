@@ -11,9 +11,7 @@ import { AttributeWithPath, INTERACTION_PROTOCOL_ID, attributePathToId } from ".
 import { Logger } from "../../log/Logger.js";
 import { Time, Timer } from "../../time/Time.js";
 import { NodeId } from "../../datatype/NodeId.js";
-import {
-    InteractionProtocolStatusCode as StatusCode, TlvAttributePath,
-} from "./InteractionProtocol.js";
+import { StatusCode, TlvAttributePath } from "./InteractionProtocol.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
@@ -127,8 +125,8 @@ export class SubscriptionHandler {
             suppressResponse: false,
             subscriptionId: this.subscriptionId,
             interactionModelRevision: 1,
-            values: values.map(({ path, schema, value, version }) => ({
-                value: {
+            attributeReports: values.map(({ path, schema, value, version }) => ({
+                attributeData: {
                     path,
                     dataVersion: version,
                     data: schema.encodeTlv(value),
@@ -168,8 +166,8 @@ export class SubscriptionHandler {
                     suppressResponse: !values.length, // suppressResponse ok for empty DataReports
                     subscriptionId: this.subscriptionId,
                     interactionModelRevision: 1,
-                    values: values.map(({ path, schema, value, version }) => ({
-                        value: {
+                    attributeReports: values.map(({ path, schema, value, version }) => ({
+                        attributeData: {
                             path,
                             dataVersion: version,
                             data: schema.encodeTlv(value),

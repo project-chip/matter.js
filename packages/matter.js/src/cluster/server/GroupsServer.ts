@@ -6,7 +6,7 @@
 
 import { GroupsCluster } from "../GroupsCluster.js";
 import { GroupId } from "../../datatype/GroupId.js";
-import { InteractionProtocolStatusCode as StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
+import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
 import { ClusterServerHandlers } from "./ClusterServer.js";
 import { MatterDevice } from "../../MatterDevice.js";
 import { SecureSession } from "../../session/SecureSession.js";
