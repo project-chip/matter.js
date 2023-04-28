@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TlvVoid } from "../../src/tlv/TlvVoid";
+import { TlvVoid } from "../../src/tlv/TlvVoid.js";
 
 describe("TlvVoid", () => {
 

@@ -4,19 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TlvFabricId } from "../common/FabricId.js";
-import { FabricIndex, TlvFabricIndex } from "../common/FabricIndex.js";
-import { TlvNodeId } from "../common/NodeId.js";
-import { TlvSubjectId } from "../common/SubjectId.js";
-import { TlvVendorId } from "../common/VendorId.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-import { TlvArray } from "../tlv/TlvArray.js";
-import { TlvBoolean } from "../tlv/TlvBoolean.js";
-import { TlvNullable } from "../tlv/TlvNullable.js";
-import { TlvEnum, TlvUInt32, TlvUInt8 } from "../tlv/TlvNumber.js";
+import { AccessLevel, Attribute, Cluster, Command, TlvNoResponse } from "./Cluster.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { TlvByteString, TlvString, TlvString32max } from "../tlv/TlvString.js";
-import { AccessLevel, Attribute, Cluster, Command, TlvNoResponse } from "./Cluster.js";
+import { TlvVendorId } from "../datatype/VendorId.js";
+import { TlvFabricId } from "../datatype/FabricId.js";
+import { TlvNodeId } from "../datatype/NodeId.js";
+import { FabricIndex, TlvFabricIndex } from "../datatype/FabricIndex.js";
+import { TlvNullable } from "../tlv/TlvNullable.js";
+import { TlvBoolean } from "../tlv/TlvBoolean.js";
+import { TlvEnum, TlvUInt32, TlvUInt8 } from "../tlv/TlvNumber.js";
+import { TlvSubjectId } from "../datatype/SubjectId.js";
+import { TlvArray } from "../tlv/TlvArray.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 // TODO: Rename to NodeOperationalCredentialsCluster to match with specs
 
@@ -160,7 +160,7 @@ const TlvAddTrustedRootCertificateRequest = TlvObject({
 });
 
 /**
- * Used by the NOCResponse common response command to convey detailed outcome of several of this cluster’s operations.
+ * Used by the NOCResponse datatype response command to convey detailed outcome of several of this cluster’s operations.
  *
  * @see {@link MatterCoreSpecificationV1_0} § 11.17.5.9 */
 export const enum OperationalCertStatus {

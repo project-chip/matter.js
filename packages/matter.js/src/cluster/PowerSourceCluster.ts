@@ -5,14 +5,14 @@
  */
 
 import { OptionalEvent, EventPriority, Cluster, Attribute, OptionalAttribute } from "./Cluster.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { BitFlag } from "../schema/BitmapSchema.js";
 import { TlvField } from "../tlv/TlvObject.js";
 import { TlvEnum, TlvUInt16, TlvUInt32, TlvUInt8 } from "../tlv/TlvNumber.js";
 import { TlvArray } from "../tlv/TlvArray.js";
-import { BitFlag } from "../schema/BitmapSchema.js";
-import { TlvString } from "../tlv/TlvString.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
+import { TlvString } from "../tlv/TlvString.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.7.5.1 */
 export const enum WiredFaultEnum {
@@ -373,7 +373,7 @@ export const PowerSourceCluster = Cluster({
         /** SHALL provide a user-facing description of this battery, which SHOULD contain information required to identify a replacement, such as form factor, chemistry or preferred manufacturer. */
         batReplacementDescription: OptionalAttribute(0x0013, TlvString.bound({ maxLength: 60 })),
 
-        /**  SHALL indicate the ID of the common or colloquial designation of the battery */
+        /**  SHALL indicate the ID of the datatype or colloquial designation of the battery */
         batCommonDesignation: OptionalAttribute(0x0014, TlvEnum<BatCommonDesignationEnum>()),
 
         /**  SHALL indicate the string representing the ANSI designation for the battery as specified in ANSI C18.*/

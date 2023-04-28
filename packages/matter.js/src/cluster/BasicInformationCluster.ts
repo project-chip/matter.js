@@ -4,14 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TlvFabricIndex } from "../common/FabricIndex.js";
-import { TlvVendorId } from "../common/VendorId.js";
+import { TlvFabricIndex } from "../datatype/FabricIndex.js";
+import { TlvVendorId } from "../datatype/VendorId.js";
+import {
+    AccessLevel, Attribute, Cluster, Event, EventPriority, OptionalAttribute, OptionalEvent, OptionalWritableAttribute,
+    WritableAttribute
+} from "./Cluster.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-import { TlvBoolean } from "../tlv/TlvBoolean.js";
-import { TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvString, TlvString256max, TlvString32max, TlvString64max } from "../tlv/TlvString.js";
-import { AccessLevel, Attribute, Cluster, Event, EventPriority, OptionalAttribute, OptionalEvent, OptionalWritableAttribute, WritableAttribute } from "./Cluster.js";
+import { TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
+import { TlvBoolean } from "../tlv/TlvBoolean.js";
 
 /**
  * Provides constant values related to overall global capabilities of this Node, that are not cluster-specific.

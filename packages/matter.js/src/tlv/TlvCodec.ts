@@ -9,7 +9,9 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataReader } from "../util/DataReader.js";
 import { DataWriter } from "../util/DataWriter.js";
-import { INT16_MAX, INT16_MIN, INT32_MAX, INT32_MIN, INT8_MAX, INT8_MIN, UINT16_MAX, UINT32_MAX, UINT8_MAX } from "../util/Number.js";
+import {
+    INT16_MAX, INT16_MIN, INT32_MAX, INT32_MIN, INT8_MAX, INT8_MIN, UINT16_MAX, UINT32_MAX, UINT8_MAX
+} from "../util/Number.js";
 
 /**
  * TLV element types.
@@ -295,7 +297,7 @@ export class TlvCodec {
             writer.writeUInt8(ControlByteSchema.encode({ tagControl: TagControl.ContextSpecific, typeLength }));
             writer.writeUInt8(id);
         } else if (profile === MATTER_COMMON_PROFILE) {
-            if (id === undefined) throw new Error("Invalid TLV tag: id should be defined for a common profile.");
+            if (id === undefined) throw new Error("Invalid TLV tag: id should be defined for a datatype profile.");
             if ((id & 0xFFFF0000) === 0) {
                 writer.writeUInt8(ControlByteSchema.encode({ tagControl: TagControl.CommonProfile16, typeLength }));
                 writer.writeUInt16(id);

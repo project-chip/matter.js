@@ -4,6 +4,9 @@
   "compilerOptions": {
     "outDir": "dist/cjs",
     "module": "CommonJS",
+    "esModuleInterop": true,
+    "declaration": true,
+    "declarationMap": true, // Link from type definition (.d.ts) to source .ts for code navigation
   },
   "include": ["src/**/*.ts"],
 }

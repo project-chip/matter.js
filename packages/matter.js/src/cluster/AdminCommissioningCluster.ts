@@ -4,15 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { BitFlag } from "../schema/BitmapSchema.js";
+import { TlvFabricIndex } from "../datatype/FabricIndex.js";
+import { TlvVendorId } from "../datatype/VendorId.js";
+import { Cluster, Command, TlvNoResponse, Attribute, OptionalCommand } from "./Cluster.js";
+import { CRYPTO_GROUP_SIZE_BYTES, CRYPTO_PUBLIC_KEY_SIZE_BYTES } from "../crypto/CryptoConstants.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvEnum, TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvByteString } from "../tlv/TlvString.js";
-import { BitFlag } from "../schema/BitmapSchema.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
-import { TlvFabricIndex } from "../common/FabricIndex.js";
-import { TlvVendorId } from "../common/VendorId.js";
-import { Cluster, Command, TlvNoResponse, Attribute, OptionalCommand } from "./Cluster.js";
-import { CRYPTO_GROUP_SIZE_BYTES, CRYPTO_PUBLIC_KEY_SIZE_BYTES } from "../crypto/CryptoConstants.js";
 import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
 
 const PAKE_PASSCODE_VERIFIER_LENGTH = CRYPTO_GROUP_SIZE_BYTES + CRYPTO_PUBLIC_KEY_SIZE_BYTES;

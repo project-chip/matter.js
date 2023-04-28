@@ -4,17 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Merge } from "../util/Type.js";
 import { BitSchema, TypeFromBitSchema } from "../schema/BitmapSchema.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-import { TlvBitmap, TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
-import { TlvFields, TlvObject, TypeFromFields } from "../tlv/TlvObject.js";
 import { TlvSchema } from "../tlv/TlvSchema.js";
 import { TlvVoid } from "../tlv/TlvVoid.js";
-import { Merge } from "../util/Type.js";
-import { EventId, TlvEventId } from "../common/EventId.js";
-import { AttributeId, TlvAttributeId } from "../common/AttributeId.js";
-import { CommandId, TlvCommandId } from "../common/CommandId.js";
+import { TlvFields, TlvObject, TypeFromFields } from "../tlv/TlvObject.js";
+import { AttributeId, TlvAttributeId } from "../datatype/AttributeId.js";
+import { EventId, TlvEventId } from "../datatype/EventId.js";
+import { CommandId, TlvCommandId } from "../datatype/CommandId.js";
+import { TlvBitmap, TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvArray } from "../tlv/TlvArray.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 export const enum AccessLevel {
     View,

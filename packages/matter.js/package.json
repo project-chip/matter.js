@@ -25,17 +25,22 @@
   },
   "scripts": {
     "clean": "rm -rf dist && rm -rf out && rm *.tsbuildinfo || true",
-    "build-cjs": "tsc --project tsconfig.dist-cjs.json && cp package-cjs.json dist/cjs/package.json",
-    "build-es": "tsc --project tsconfig.dist-es.json",
-    "build-dts": "tsc --project tsconfig.dist-dts.json",
-    "build": "npm run build-cjs && npm run build-es && npm run build-dts",
+    "build-cjs": "tsc -b tsconfig.dist-cjs.json && cp package-cjs.json dist/cjs/package.json",
+    "build-es": "tsc -b tsconfig.dist-es.json",
+    "build": "npm run build-cjs && npm run build-es",
     "build-clean": "npm run clean && npm run build",
-    "test-node": "NODE_OPTIONS=--experimental-vm-modules jest",
-    "test-web": "karma start test/karma.conf.cjs",
+    "test-node": "TZ=utc NODE_OPTIONS=--experimental-vm-modules jest",
+    "test-web": "TZ=utc karma start test/karma.conf.cjs",
     "test": "npm run test-node && npm run test-web"
   },
+  "dependencies": {
+    "bn.js": "^5.2.1",
+    "elliptic": "^6.5.4"
+  },
   "devDependencies": {
-    "@types/jasmine": "^4.3.1",
+    "@types/bn.js": "^5.1.1",
+    "@types/elliptic": "^6.4.14",
+    "@types/jest": "^29.5.1",
     "jest": "^29.5.0",
     "karma": "^6.4.1",
     "karma-chrome-launcher": "^3.1.1",
@@ -49,7 +54,50 @@
     "dist/**/*"
   ],
   "type": "module",
-  "main": "dist/cjs/matter.js",
-  "module": "dist/es/matter.js",
-  "types": "dist/dts/matter.d.ts"
+  "main": "dist/cjs/index.js",
+  "module": "dist/es/index.js",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/es/index.d.ts",
+        "default": "./dist/es/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
+    },
+    "./package.json": "./package.json",
+    "./interaction": {
+      "import": {
+        "types": "./dist/es/protocol/interaction/index.d.ts",
+        "default": "./dist/es/protocol/interaction/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/protocol/interaction/index.d.ts",
+        "default": "./dist/cjs/protocol/interaction/index.js"
+      }
+    },
+    "./securechannel": {
+      "import": {
+        "types": "./dist/es/protocol/securechannel/index.d.ts",
+        "default": "./dist/es/protocol/securechannel/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/protocol/securechannel/index.d.ts",
+        "default": "./dist/cjs/protocol/securechannel/index.js"
+      }
+    },
+    "./*": {
+      "import": {
+        "types": "./dist/es/*/index.d.ts",
+        "default": "./dist/es/*/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/*/index.d.ts",
+        "default": "./dist/cjs/*/index.js"
+      }
+    }
+  },
+  "types": "dist/es/index.d.ts"
 }

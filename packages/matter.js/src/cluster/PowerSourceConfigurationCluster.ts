@@ -5,9 +5,9 @@
  */
 
 import { Cluster, Attribute, } from "./Cluster.js";
-import { TlvEndpointNumber } from "../common/EndpointNumber.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvEndpointNumber } from "../datatype/EndpointNumber.js";
 import { TlvArray } from "../tlv/TlvArray.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 /**
  * The configuration and capabilities of a Device’s power system.
