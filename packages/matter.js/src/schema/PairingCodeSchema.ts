@@ -86,8 +86,22 @@ class ManualPairingCodeSchema extends Schema<ManualPairingData, string> {
         return result;
     }
 
-    protected decodeInternal(_encoded: string): ManualPairingData {
-        throw new Error("Not implemented");
+    protected decodeInternal(encoded: string): ManualPairingData {
+        if(encoded.length < 10) throw new Error("Invalid pairing code");
+        const verhoeff = new Verhoeff();
+        if (verhoeff.computeChecksum(encoded.slice(0, -1)) !== parseInt(encoded.slice(-1))) {
+            throw new Error("Invalid checksum");
+        }
+        const hasVendorProductIds = !!(parseInt(encoded[0]) & (1 << 2));
+        const discriminator = (parseInt(encoded[0]) & ~(1 << 2)) << 10 | (parseInt(encoded.slice(1, 6)) & 0x300) >> 6;
+        const passcode = (parseInt(encoded.slice(1, 6)) & 0x3FFF) | (parseInt(encoded.slice(6, 10)) << 14);
+        let vendorId: number | undefined;
+        let productId: number | undefined;
+        if (hasVendorProductIds) {
+            vendorId = parseInt(encoded.slice(10, 15));
+            productId = parseInt(encoded.slice(15, 20));
+        }
+        return { discriminator, passcode, vendorId, productId };
     }
 }
 

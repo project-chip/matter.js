@@ -29,6 +29,7 @@ import { MdnsScanner } from "@project-chip/matter.js/mdns";
 import { ClusterClient } from "@project-chip/matter.js/interaction";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { BasicInformationCluster, DescriptorCluster, OnOffCluster } from "@project-chip/matter.js/cluster";
+import { ManualPairingCodeCodec } from "@project-chip/matter-node.js/schema";
 
 import { getIntParameter, getParameter } from "./util/CommandLine";
 import { StorageBackendDisk } from "./storage/StorageBackendDisk";
@@ -52,8 +53,17 @@ class ControllerNode {
         const ip = getParameter("ip") ?? controllerStorage.get<string>("ip", "");
         if (ip === "") throw new Error("Please specify the IP of the device to commission with -ip");
         const port = getIntParameter("port") ?? controllerStorage.get("port", 5540);
-        const discriminator = getIntParameter("discriminator") ?? controllerStorage.get("discriminator", 3840);
-        const setupPin = getIntParameter("pin") ?? controllerStorage.get("pin", 20202021);
+
+        const code = getParameter("code");
+        let discriminator, setupPin;
+        if (code !== undefined) {
+            const pairingCode = ManualPairingCodeCodec.decode(code);
+            discriminator = pairingCode.discriminator;
+            setupPin = pairingCode.passcode;
+        } else {
+            discriminator = getIntParameter("discriminator") ?? controllerStorage.get("discriminator", 3840);
+            setupPin = getIntParameter("pin") ?? controllerStorage.get("pin", 20202021);
+        }
 
         controllerStorage.set("ip", ip);
         controllerStorage.set("port", port);
