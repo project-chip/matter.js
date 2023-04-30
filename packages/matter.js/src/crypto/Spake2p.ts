@@ -103,7 +103,7 @@ export class Spake2p {
         this.addToContext(TTwriter, Y);
         this.addToContext(TTwriter, Z);
         this.addToContext(TTwriter, V);
-        this.addToContext(TTwriter, this.w0.toBuffer());
+        this.addToContext(TTwriter, ByteArray.from(this.w0.toArray()));
         return Crypto.hash(TTwriter.toByteArray());
     }
 
