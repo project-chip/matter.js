@@ -151,6 +151,12 @@ The following parameters are available:
 * -pin: the pin to use for pairing (default: 20202021)
 * -store: the storage location (directory) to use for storing the pairing information (default: controller-node). Delete the directory or provide an alternative name to reset the controller
 
+### Clear existing pairings
+To clear existing pairings:
+```
+rm device-node/FabricManager.fabrics
+```
+
 ## Modifying the server (DeviceNode) behavior
 
 DeviceNode.ts defines the server behavior. You can add / remove clusters, change default parameters, etc...
