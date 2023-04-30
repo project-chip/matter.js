@@ -34,6 +34,9 @@ export const OptionalAttribute = <T, V extends T>(id: number, schema: TlvSchema<
 export const WritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View, writeAcl = AccessLevel.View }: AttributeOptions<V> = {}): WritableAttribute<T> => ({ id, schema, optional: false, writable: true, persistent, omitChanges, default: conformanceValue, readAcl, writeAcl });
 export const OptionalWritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View, writeAcl = AccessLevel.View }: AttributeOptions<V> = {}): OptionalWritableAttribute<T> => ({ id, schema, optional: true, writable: true, persistent, omitChanges, default: conformanceValue, readAcl, writeAcl });
 
+export type MandatoryAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends OptionalAttribute<any> ? never : K }[keyof A];
+export type OptionalAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends OptionalAttribute<any> ? K : never }[keyof A];
+
 /* Interfaces and helper methods to define a cluster command */
 export const TlvNoResponse = TlvVoid;
 export interface Command<RequestT, ResponseT> { optional: boolean, requestId: number, requestSchema: TlvSchema<RequestT>, responseId: number, responseSchema: TlvSchema<ResponseT> }

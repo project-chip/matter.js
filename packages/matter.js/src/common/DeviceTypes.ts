@@ -1056,3 +1056,12 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
         ],
     }),
 }
+
+export function getDeviceTypeDefinitionByCode(code: number): DeviceTypeDefinition | undefined {
+    for (const key in DEVICE) {
+        if (DEVICE[key].code === code) {
+            return DEVICE[key];
+        }
+    }
+    return undefined;
+}

@@ -13,6 +13,7 @@ import { SecureSession } from "../../session/SecureSession.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { SessionType } from "../../codec/MessageCodec.js";
 import { StatusResponseError } from "../../protocol/interaction/InteractionMessenger.js";
+import { ClusterServer } from "../../protocol/interaction/InteractionServer.js";
 
 /*
 TODO: If the Scenes server cluster is implemented on the same endpoint, the following extension field SHALL
@@ -28,8 +29,8 @@ const getFabricFromSession = (session: SecureSession<MatterDevice>): Fabric => {
     return fabric;
 }
 
-export const GroupsClusterHandler: (endpointId: number) => ClusterServerHandlers<typeof GroupsCluster> = (endpointId: number) => {
-    const addGroupLogic = (groupId: GroupId, groupName: string, sessionType: SessionType, fabric: Fabric) => {
+export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsCluster> = () => {
+    const addGroupLogic = (groupId: GroupId, groupName: string, sessionType: SessionType, fabric: Fabric, endpointId: number) => {
         // TODO If the AddGroup command was received as a unicast, the server SHALL generate an AddGroupResponse
         //      command with the Status field set to the evaluated status. If the AddGroup command was received
         //      as a groupcast, the server SHALL NOT generate an AddGroupResponse command.
@@ -55,11 +56,11 @@ export const GroupsClusterHandler: (endpointId: number) => ClusterServerHandlers
     }
 
     return {
-        addGroup: async ({ request: { groupId, groupName }, session, message: { packetHeader: { sessionType } } }) => {
-            return addGroupLogic(groupId, groupName, sessionType, getFabricFromSession(session as SecureSession<MatterDevice>));
+        addGroup: async ({ request: { groupId, groupName }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
+            return addGroupLogic(groupId, groupName, sessionType, getFabricFromSession(session as SecureSession<MatterDevice>), endpoint.id);
         },
 
-        viewGroup: async ({ request: { groupId }, session, message: { packetHeader: { sessionType } } }) => {
+        viewGroup: async ({ request: { groupId }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
             // TODO If the ViewGroup command was received as a unicast, the server SHALL generate an ViewGroupResponse
             //      command with the Status field set to the evaluated status. If the ViewGroup command was received
             //      as a groupcast, the server SHALL NOT generate an ViewGroupResponse command.
@@ -71,7 +72,7 @@ export const GroupsClusterHandler: (endpointId: number) => ClusterServerHandlers
             }
 
             const fabric = getFabricFromSession(session as SecureSession<MatterDevice>);
-            const endpointGroups = fabric.getScopedClusterDataValue<Map<number, string>>(GroupsCluster, endpointId.toString());
+            const endpointGroups = fabric.getScopedClusterDataValue<Map<number, string>>(GroupsCluster, endpoint.id.toString());
             if (endpointGroups !== undefined) {
                 const groupName = endpointGroups.get(groupId.id);
                 if (groupName !== undefined) {
@@ -81,7 +82,7 @@ export const GroupsClusterHandler: (endpointId: number) => ClusterServerHandlers
             return { status: StatusCode.NotFound, groupId, groupName: '' };
         },
 
-        getGroupMembership: async ({ request: { groupList }, session, message: { packetHeader: { sessionType } } }) => {
+        getGroupMembership: async ({ request: { groupList }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
             // TODO Later:
             //  Zigbee: If the total number of groups will cause the maximum payload length of a frame to be exceeded,
             //  then the GroupList field SHALL contain only as many groups as will fit.
@@ -92,7 +93,7 @@ export const GroupsClusterHandler: (endpointId: number) => ClusterServerHandlers
             }
 
             const fabric = getFabricFromSession(session as SecureSession<MatterDevice>)
-            const endpointGroups = fabric.getScopedClusterDataValue<Map<number, string>>(GroupsCluster, endpointId.toString()) ?? new Map<number, string>();
+            const endpointGroups = fabric.getScopedClusterDataValue<Map<number, string>>(GroupsCluster, endpoint.id.toString()) ?? new Map<number, string>();
             const fabricGroupsList = endpointGroups !== undefined ? Array.from(endpointGroups.keys()) : [];
             const capacity = fabricGroupsList.length < 0xff ? 0xfe - fabricGroupsList.length : 0;
             if (groupList.length === 0) {
@@ -106,7 +107,7 @@ export const GroupsClusterHandler: (endpointId: number) => ClusterServerHandlers
             return { capacity, groupList: filteredGroupsList };
         },
 
-        removeGroup: async ({ request: { groupId }, session, message: { packetHeader: { sessionType } } }) => {
+        removeGroup: async ({ request: { groupId }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
             // TODO If the RemoveGroup command was received as a unicast, the server SHALL generate a RemoveGroupResponse
             //      command with the Status field set to the evaluated status. If the RemoveGroup command was received as
             //      a groupcast, the server SHALL NOT generate a RemoveGroupResponse command.
@@ -119,7 +120,7 @@ export const GroupsClusterHandler: (endpointId: number) => ClusterServerHandlers
             }
 
             const fabric = getFabricFromSession(session as SecureSession<MatterDevice>)
-            const endpointGroups = fabric.getScopedClusterDataValue<Map<number, string>>(GroupsCluster, endpointId.toString());
+            const endpointGroups = fabric.getScopedClusterDataValue<Map<number, string>>(GroupsCluster, endpoint.id.toString());
             if (endpointGroups !== undefined) {
                 if (endpointGroups.has(groupId.id)) {
                     endpointGroups.delete(groupId.id);
@@ -130,7 +131,7 @@ export const GroupsClusterHandler: (endpointId: number) => ClusterServerHandlers
             return { status: StatusCode.NotFound, groupId };
         },
 
-        removeAllGroups: async ({ session, message: { packetHeader: { sessionType } } }) => {
+        removeAllGroups: async ({ session, message: { packetHeader: { sessionType } }, endpoint }) => {
             // TODO Additionally, if the Scenes cluster is supported on the same endpoint, all scenes, except for scenes
             //      associated with group ID 0, SHALL be removed on that endpoint.
 
@@ -140,12 +141,12 @@ export const GroupsClusterHandler: (endpointId: number) => ClusterServerHandlers
             }
 
             const fabric = getFabricFromSession(session as SecureSession<MatterDevice>)
-            fabric.deleteScopedClusterDataValue(GroupsCluster, endpointId.toString());
+            fabric.deleteScopedClusterDataValue(GroupsCluster, endpoint.id.toString());
 
             throw new StatusResponseError("Return Status", StatusCode.Success);
         },
 
-        addGroupIfIdentifying: async ({ request: { groupId, groupName }, session, message: { packetHeader: { sessionType } } }) => {
+        addGroupIfIdentifying: async ({ request: { groupId, groupName }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
             // TODO The server verifies that it is currently identifying itself. If the server it not currently identifying
             //      itself, the status SHALL be SUCCESS
             // return {status: AdminCommissioningStatusCode.Success, groupId};
@@ -154,8 +155,21 @@ export const GroupsClusterHandler: (endpointId: number) => ClusterServerHandlers
             //      if the AddGroupIfIdentifying command was received as unicast and the evaluated status is SUCCESS and a
             //      response is not suppressed, the server SHALL generate a response with the Status field set to the
             //      evaluated status.
-            const { status } = addGroupLogic(groupId, groupName, sessionType, getFabricFromSession(session as SecureSession<MatterDevice>));
+            const { status } = addGroupLogic(groupId, groupName, sessionType, getFabricFromSession(session as SecureSession<MatterDevice>), endpoint.id);
             throw new StatusResponseError("Return Status", status);
         },
     }
 };
+
+export const createDefaultGroupsClusterServer = () => new ClusterServer(
+    GroupsCluster,
+    {
+        groupNames: true,
+    },
+    {
+        nameSupport: {
+            groupNames: true,
+        },
+    },
+    GroupsClusterHandler()
+);

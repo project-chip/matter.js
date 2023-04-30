@@ -12,7 +12,7 @@ import { TimeNode } from "./time/TimeNode";
 
 Time.get = singleton(() => new TimeNode());
 
-import { Network, UdpInterface } from "@project-chip/matter.js/net";
+import { Network } from "@project-chip/matter.js/net";
 import { NetworkNode } from "./net/NetworkNode";
 
 Network.get = singleton(() => new NetworkNode());
@@ -24,12 +24,7 @@ Crypto.get = singleton(() => new CryptoNode());
 
 import { Logger } from "@project-chip/matter.js/log";
 import { StorageManager } from "@project-chip/matter.js/storage";
-import { MatterController } from "@project-chip/matter.js";
-import { MdnsScanner } from "@project-chip/matter.js/mdns";
-import { ClusterClient } from "@project-chip/matter.js/interaction";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Matter, PairableMatterNode } from "@project-chip/matter.js";
 import { BasicInformationCluster, DescriptorCluster, OnOffCluster } from "@project-chip/matter.js/cluster";
 
 import { getIntParameter, getParameter } from "./util/CommandLine";
@@ -44,7 +39,7 @@ const storage = new StorageBackendDisk(getParameter("store") ?? "controller-node
 
 class ControllerNode {
     async start() {
-        logger.info(`node-matter`);
+        logger.info(`node-matter Controller started`);
 
         const storageManager = new StorageManager(storage);
         await storageManager.initialize();
@@ -62,31 +57,33 @@ class ControllerNode {
         controllerStorage.set("discriminator", discriminator);
         controllerStorage.set("pin", setupPin);
 
-        const client = await MatterController.create(
-            await MdnsScanner.create(),
-            await UdpInterface.create(port, "udp4"),
-            await UdpInterface.create(port, "udp6"),
-            storageManager
-        );
+        const matterClient = new Matter(storageManager);
+        const pairableNode = new PairableMatterNode({
+            ip,
+            port,
+            discriminator,
+            passcode: setupPin,
+            delayedPairing: true,
+        });
+        matterClient.addPairableNode(pairableNode);
+        await matterClient.start();
+
         try {
-            let nodeId;
-            if (client.isCommissioned()) {
-                nodeId = client.getFabric().nodeId;
-            } else {
-                nodeId = await client.commission(ip, port, discriminator, setupPin);
-            }
-            const interactionClient = await client.connect(nodeId);
+            await pairableNode.connect();
+            const interactionClient = await pairableNode.createInteractionClient();
 
             // Important: This is a temporary API to proof the methods working and this will change soon and is NOT stable!
             // It is provided to proof the concept
 
             // Example to initialize a ClusterClient and access concrete fields as API methods
-            const descriptor = new ClusterClient(DescriptorCluster, 0, interactionClient);
+            const descriptor = pairableNode.getRootClusterClient(DescriptorCluster)!;
+            descriptor.bindToInteractionClient(interactionClient);
             console.log(await descriptor.attributes.deviceTypeList.get());
             console.log(await descriptor.attributes.serverList.get());
 
             // Example to subscribe to a field and get the value
-            const info = new ClusterClient(BasicInformationCluster, 0, interactionClient);
+            const info = pairableNode.getRootClusterClient(BasicInformationCluster)!;
+            info.bindToInteractionClient(interactionClient);
             console.log(await info.attributes.productName.get()); // This call is executed remotely
             //console.log(await info.attributes.productName.subscribe(5, 30));
             //info.attributes.productName.addListener((value) => console.log("productName", value));
@@ -104,20 +101,26 @@ class ControllerNode {
             //const attributesBasicInformation = await interactionClient.getMultipleAttributes([{ endpointId: 0, clusterId: BasicInformationCluster.id} ]);
             //console.log("Attributes-BasicInformation:", JSON.stringify(attributesBasicInformation, null, 2));
 
-            // Example to subscribe to all Attributes of endpoint 1 of the commissioned node: */*/*
-            //await interactionClient.subscribeMultipleAttributes([{ endpointId: 1, /* subscribe anything from endpoint 1 */ }], 0, 180, data => {
-            //    console.log("Subscribe-All Data:", Logger.toJSON(data));
-            //});
+            const devices = pairableNode.getDevices();
+            if (devices[0] && devices[0].id === 1) {
+                // Example to subscribe to all Attributes of endpoint 1 of the commissioned node: */*/*
+                //await interactionClient.subscribeMultipleAttributes([{ endpointId: 1, /* subscribe anything from endpoint 1 */ }], 0, 180, data => {
+                //    console.log("Subscribe-All Data:", Logger.toJSON(data));
+                //});
 
-            /*const onOff = new ClusterClient(OnOffCluster, 1, interactionClient);
-            let onOffStatus = await onOff.attributes.onOff.get();
-            // read data every minute to keep up the connection to show the subscription is working
-            setInterval(() => {
-                onOff.commands.toggle().then(() => onOffStatus = !onOffStatus).catch(error => logger.error(error));
-            }, 60000);*/
+                const onOff = devices[0].getClusterClient(OnOffCluster);
+                if (onOff !== undefined) {
+                    /*onOff.bindToInteractionClient(interactionClient);
+                    let onOffStatus = await onOff.attributes.onOff.get();
+                    // read data every minute to keep up the connection to show the subscription is working
+                    setInterval(() => {
+                        onOff.commands.toggle().then(() => onOffStatus = !onOffStatus).catch(error => logger.error(error));
+                    }, 60000);*/
+                }
+            }
 
         } finally {
-            client.close(); // Comment out when subscribes are used, else the connection will be closed
+            await matterClient.close(); // Comment out when subscribes are used, else the connection will be closed
         }
     }
 }

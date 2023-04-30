@@ -21,7 +21,8 @@ import {
     Attribute, AttributeJsType, Attributes, Cluster, Command, Commands, RequestType, ResponseType, TlvNoResponse
 } from "../../cluster/Cluster.js";
 import { ExchangeProvider } from "../ExchangeManager.js";
-import { ClusterClient } from "../../cluster/client/ClusterClient.js";
+import { AttributeClients, SignatureFromCommandSpec, ClusterClientInstance } from "../../cluster/client/ClusterClient.js";
+import { AttributeClient } from "../../cluster/client/AttributeClient.js";
 
 const logger = Logger.get("InteractionClient");
 
@@ -35,9 +36,78 @@ export interface AttributeStatus {
     status: StatusCode,
 }
 
-export function ClusterClient<CommandT extends Commands, AttributeT extends Attributes>(interactionClient: InteractionClient, endpointId: number, clusterDef: Cluster<any, AttributeT, CommandT, any>): ClusterClient<CommandT, AttributeT> {
+export class ClusterClient<C extends Commands, A extends Attributes> {
+    readonly id: number;
+    readonly name: string;
+    readonly attributes = <AttributeClients<A>>{};
+    private readonly attributeToId = <{ [key: number]: string }>{};
+    readonly commands = <{ [P in keyof C]: SignatureFromCommandSpec<C[P]> }>{};
+    private interactionClient: InteractionClient | undefined;
+
+    constructor(
+        clusterDef: Cluster<any, A, C, any>,
+        readonly endpointId: number,
+        interactionClient?: InteractionClient,
+    ) {
+        const { id: clusterId, name, commands, attributes } = clusterDef;
+        this.id = clusterId;
+        this.name = name;
+
+        // Add accessors
+        for (const attributeName in attributes) {
+            const attribute = attributes[attributeName];
+            (this.attributes as any)[attributeName] = new AttributeClient(attribute, attributeName, endpointId, clusterId);
+            this.attributeToId[attribute.id] = attributeName;
+        }
+
+        if (interactionClient !== undefined) {
+            this.bindToInteractionClient(interactionClient);
+        }
+
+        // Add command calls
+        for (const commandName in commands) {
+            const { requestId, requestSchema, responseId, responseSchema, optional } = commands[commandName];
+
+            (this.commands as any)[commandName] = async <RequestT, ResponseT>(request: RequestT) => {
+                if (this.interactionClient === undefined) {
+                    throw new Error("InteractionClient not set");
+                }
+                return this.interactionClient.invoke<Command<RequestT, ResponseT>>(endpointId, clusterId, request, requestId, requestSchema, responseId, responseSchema, optional);
+            };
+        }
+    }
+
+    bindToInteractionClient(interactionClient: InteractionClient) {
+        this.interactionClient = interactionClient;
+        for (const attributeName in this.attributes) {
+            (this.attributes as any)[attributeName].bindToInteractionClient(this.interactionClient);
+        }
+    }
+
+    subscribe(minIntervalFloorSeconds: number, maxIntervalCeilingSeconds: number) {
+        if (this.interactionClient === undefined) {
+            throw new Error("InteractionClient not set");
+        }
+        return this.interactionClient.subscribeMultipleAttributes([{ endpointId: this.endpointId, clusterId: this.id }], minIntervalFloorSeconds, maxIntervalCeilingSeconds, (data) => {
+            const { path, value } = data;
+            const attributeName = this.attributeToId[path.attributeId];
+            if (attributeName === undefined) {
+                logger.warn("Unknown attribute id", path.attributeId);
+                return;
+            }
+            (this.attributes as any)[attributeName].update(value);
+        });
+    }
+}
+
+export function ClusterClientInstance<CommandT extends Commands, AttributeT extends Attributes>(interactionClient: InteractionClient, endpointId: number, clusterDef: Cluster<any, AttributeT, CommandT, any>): ClusterClientInstance<CommandT, AttributeT> {
     const result: any = {};
-    const { id: clusterId, commands, attributes } = clusterDef;
+    const { id: clusterId, name, commands, attributes } = clusterDef;
+    result.id = clusterId;
+    result.name = name;
+    result.endpointId = endpointId;
+    result.attributes = attributes;
+    result.commands = commands;
 
     // Add accessors
     for (const attributeName in attributes) {
@@ -54,7 +124,7 @@ export function ClusterClient<CommandT extends Commands, AttributeT extends Attr
         result[commandName] = async <RequestT, ResponseT>(request: RequestT) => interactionClient.invoke<Command<RequestT, ResponseT>>(endpointId, clusterId, request, requestId, requestSchema, responseId, responseSchema, optional);
     }
 
-    return result as ClusterClient<CommandT, AttributeT>;
+    return result as ClusterClientInstance<CommandT, AttributeT>;
 }
 
 export class SubscriptionClient implements ProtocolHandler<MatterController> {
@@ -112,6 +182,11 @@ export class InteractionClient {
     }
 
     async get<A extends Attribute<any>>(endpointId: number, clusterId: number, attribute: A): Promise<AttributeJsType<A> | undefined> {
+        const response = await this.getWithVersion(endpointId, clusterId, attribute);
+        return response?.value;
+    }
+
+    async getWithVersion<A extends Attribute<any>>(endpointId: number, clusterId: number, attribute: A): Promise<{ value: AttributeJsType<A>, version: number } | undefined> {
         const { id: attributeId } = attribute;
         const localValue = this.subscribedLocalValues.get(attributePathToId({ endpointId, clusterId, attributeId }))
         if (localValue !== undefined) {
@@ -126,7 +201,7 @@ export class InteractionClient {
         if (response.length > 1) {
             throw new Error("Unexpected response with more then one attribute");
         }
-        return response[0].value;
+        return { value: response[0].value, version: response[0].version };
     }
 
     private async processReadRequest(messenger: InteractionClientMessenger, request: ReadRequest): Promise<DecodedAttributeReportValue[]> {

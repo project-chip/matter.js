@@ -6,6 +6,7 @@
 
 import { OnOffCluster } from "../OnOffCluster.js";
 import { ClusterServerHandlers } from "./ClusterServer.js";
+import { ClusterServer } from "../../protocol/interaction/InteractionServer.js";
 
 /*
 TODO: Global Cluster fields needs to be added also here because, as discussed, based on the implementation.
@@ -36,3 +37,14 @@ export const OnOffClusterHandler: () => ClusterServerHandlers<typeof OnOffCluste
         }
     },
 });
+
+export const createDefaultOnOffClusterServer = () => new ClusterServer(
+    OnOffCluster,
+    {
+        lightingLevelControl: false,
+    },
+    {
+        onOff: false,
+    },
+    OnOffClusterHandler()
+);

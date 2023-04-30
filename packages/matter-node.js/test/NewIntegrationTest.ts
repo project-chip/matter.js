@@ -4,31 +4,28 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as assert from "assert";
+
 import { Time, TimeFake } from "@project-chip/matter.js/time";
 import { Crypto } from "@project-chip/matter.js/crypto";
 import { CryptoNode } from "../src/crypto/CryptoNode";
 
 Crypto.get = () => new CryptoNode();
 
-import * as assert from "assert";
-import { NetworkFake, Network, UdpInterface } from "@project-chip/matter.js/net";
-import { MatterController, MatterDevice } from "@project-chip/matter.js";
 import {
-    OnOffCluster, BasicInformationCluster, GeneralCommissioningCluster, RegulatoryLocationType, OperationalCertStatus,
-    OperationalCredentialsCluster, DescriptorCluster, AccessControlCluster, GroupsCluster, GroupsClusterHandler,
-    GeneralCommissioningClusterHandler, OperationalCredentialsClusterHandler, OnOffClusterHandler
+    OnOffCluster, BasicInformationCluster, OperationalCertStatus,
+    OperationalCredentialsCluster, DescriptorCluster,
 } from "@project-chip/matter.js/cluster";
-import { VendorId, FabricIndex, ClusterId, GroupId } from "@project-chip/matter.js/datatype";
-import { DEVICE } from "@project-chip/matter.js/common";
-import { ClusterClient, ClusterServer, InteractionServer } from "@project-chip/matter.js/interaction";
+import { VendorId, FabricIndex } from "@project-chip/matter.js/datatype";
+
 import { MdnsBroadcaster, MdnsScanner } from "@project-chip/matter.js/mdns";
-import { CaseServer, PaseServer } from "@project-chip/matter.js/session";
-import { SecureChannelProtocol as SecureChannelProtocol } from "@project-chip/matter.js/securechannel";
+import { Network, NetworkFake } from "@project-chip/matter.js/net";
 import { Level, Logger } from "@project-chip/matter.js/log";
 import { getPromiseResolver } from "@project-chip/matter.js/util";
-import { AttestationCertificateManager, CertificationDeclarationManager } from "@project-chip/matter.js/certificate";
-import { StorageBackendMemory, StorageManager } from "@project-chip/matter.js/storage";
+import { StorageManager, StorageBackendMemory } from "@project-chip/matter.js/storage";
 import { FabricJsonObject } from "@project-chip/matter.js/fabric";
+import { Matter, CommissionableMatterNode, PairableMatterNode } from "@project-chip/matter.js";
+import { OnOffLightDevice } from "@project-chip/matter.js/device";
 
 const SERVER_IP = "192.168.200.1";
 const SERVER_MAC = "00:B0:D0:63:C2:26";
@@ -54,10 +51,11 @@ const fakeTime = new TimeFake(TIME_START);
 const fakeControllerStorage = new StorageBackendMemory();
 const fakeServerStorage = new StorageBackendMemory();
 
-describe("Integration", () => {
-    let server: MatterDevice;
-    let onOffServer: ClusterServer<any, any, any, any>;
-    let client: MatterController;
+describe("New Integration", () => {
+    let matterServer: Matter;
+    let matterClient: Matter;
+    let pairableNode: PairableMatterNode;
+    let onOffLightDeviceServer: OnOffLightDevice;
 
     beforeAll(async () => {
         Logger.defaultLogLevel = Level.DEBUG;
@@ -67,142 +65,110 @@ describe("Integration", () => {
         const controllerStorageManager = new StorageManager(fakeControllerStorage);
         await controllerStorageManager.initialize();
 
-        client = await MatterController.create(
-            await MdnsScanner.create(CLIENT_IP),
-            await UdpInterface.create(5540, "udp4", CLIENT_IP),
-            await UdpInterface.create(5540, "udp6", CLIENT_IP),
-            controllerStorageManager
-        );
+        matterClient = new Matter(controllerStorageManager);
+        pairableNode = new PairableMatterNode({
+            ip: SERVER_IP,
+            port: matterPort,
+            disableIpv4: false,
+            discriminator,
+            passcode: setupPin,
+            listeningAddressIpv4: "1.2.3.4",
+            listeningAddressIpv6: CLIENT_IP,
+            delayedPairing: true
+        });
+        matterClient.addPairableNode(pairableNode);
 
         Network.get = () => serverNetwork;
-
-        const paa = new AttestationCertificateManager(vendorId);
-        const { keyPair: dacKeyPair, dac } = paa.getDACert(productId)
-        const certificationDeclaration = CertificationDeclarationManager.generate(vendorId, productId);
-
-        onOffServer = new ClusterServer(
-            OnOffCluster,
-            { lightingLevelControl: false },
-            { onOff: false },
-            OnOffClusterHandler()
-        );
 
         const serverStorageManager = new StorageManager(fakeServerStorage);
         await serverStorageManager.initialize();
 
-        server = new MatterDevice(deviceName, deviceType, vendorId, productId, discriminator, serverStorageManager)
-            .addNetInterface(await UdpInterface.create(matterPort, "udp6", SERVER_IP))
-            .addBroadcaster(await MdnsBroadcaster.create(matterPort))
-            .addProtocolHandler(new SecureChannelProtocol(
-                await PaseServer.fromPin(setupPin, { iterations: 1000, salt: Crypto.getRandomData(32) }),
-                new CaseServer(),
-            ))
-            .addProtocolHandler(new InteractionServer(serverStorageManager)
-                .addEndpoint(0x00, DEVICE.ROOT, [
-                    new ClusterServer(BasicInformationCluster, {}, {
-                        dataModelRevision: 1,
-                        vendorName,
-                        vendorId,
-                        productName,
-                        productId,
-                        nodeLabel: "",
-                        hardwareVersion: 0,
-                        hardwareVersionString: "0",
-                        location: "US",
-                        localConfigDisabled: false,
-                        softwareVersion: 1,
-                        softwareVersionString: "v1",
-                        capabilityMinima: {
-                            caseSessionsPerFabric: 100,
-                            subscriptionsPerFabric: 100,
-                        },
-                    }, {}),
-                    new ClusterServer(GeneralCommissioningCluster, {}, {
-                        breadcrumb: BigInt(0),
-                        basicCommissioningInfo: {
-                            failSafeExpiryLengthSeconds: 60 /* 1min */,
-                            maxCumulativeFailsafeSeconds: 60 * 60 /* 1h */,
-                        },
-                        regulatoryConfig: RegulatoryLocationType.Indoor,
-                        locationCapability: RegulatoryLocationType.IndoorOutdoor,
-                        supportsConcurrentConnections: true,
-                    }, GeneralCommissioningClusterHandler),
-                    new ClusterServer(OperationalCredentialsCluster, {}, {
-                        nocs: [],
-                        fabrics: [],
-                        supportedFabrics: 254,
-                        commissionedFabrics: 0,
-                        trustedRootCertificates: [],
-                        currentFabricIndex: FabricIndex.NO_FABRIC,
-                    },
-                        OperationalCredentialsClusterHandler({
-                            devicePrivateKey: dacKeyPair.privateKey,
-                            deviceCertificate: dac,
-                            deviceIntermediateCertificate: paa.getPAICert(),
-                            certificationDeclaration,
-                        })),
-                    new ClusterServer(AccessControlCluster,
-                        {},
-                        {
-                            acl: [],
-                            extension: [],
-                            subjectsPerAccessControlEntry: 4,
-                            targetsPerAccessControlEntry: 4,
-                            accessControlEntriesPerFabric: 3
-                        },
-                        {},
-                    ),
-                    new ClusterServer(GroupsCluster, {
-                        groupNames: true
-                    }, {
-                        nameSupport: { groupNames: true }
-                    },
-                        GroupsClusterHandler()),
-                ])
-                .addEndpoint(0x01, DEVICE.ON_OFF_LIGHT, [onOffServer])
-            );
-        await server.start();
+        matterServer = new Matter(serverStorageManager);
 
-        Network.get = () => { throw new Error("Network should not be requested post creation") };
+        const commissionableNode = new CommissionableMatterNode({
+            port: matterPort,
+            disableIpv4: true,
+            listeningAddressIpv6: SERVER_IP,
+            deviceName,
+            deviceType,
+            passcode: setupPin,
+            discriminator,
+            basicInformation: {
+                vendorName,
+                vendorId,
+                productName,
+                productId,
+            },
+            delayedAnnouncement: true, // delay because we need to override Mdns classes
+        });
+
+        onOffLightDeviceServer = new OnOffLightDevice();
+        commissionableNode.addDevice(onOffLightDeviceServer);
+
+        matterServer.addCommissionableNode(commissionableNode);
+
+        // override the mdns scanner to avoid the client to try to resolve the server's address
+        commissionableNode.setMdnsScanner(await MdnsScanner.create(SERVER_IP));
+        commissionableNode.setMdnsBroadcaster(await MdnsBroadcaster.create(matterPort, SERVER_IP));
+        await commissionableNode.advertise();
+
+        assert.ok(onOffLightDeviceServer.getClusterServer(OnOffCluster));
     });
 
     describe("commission", () => {
         it("the client commissions a new device", async () => {
-            const nodeId = await client.commission(SERVER_IP, matterPort, discriminator, setupPin);
+            // override the mdns scanner to avoid the client to try to resolve the server's address
+            pairableNode.setMdnsScanner(await MdnsScanner.create(CLIENT_IP));
+            await pairableNode.connect();
 
-            assert.equal(nodeId.id, client.getFabric().nodeId.id);
+            Network.get = () => { throw new Error("Network should not be requested post starting") };
+
+            assert.ok(pairableNode.getFabric().nodeId.id);
         }, 60 * 1000 /* 1mn timeout */);
 
         it("the session is resumed if it has been established previously", async () => {
-            await client.connect(client.getFabric().nodeId);
-
-            assert.ok(true);
+            const client = await pairableNode.createInteractionClient();
+            assert.ok(client);
         });
     });
 
+
     describe("read attributes", () => {
         it("read one specific attribute including schema parsing", async () => {
-            const basicInfoCluster = new ClusterClient(BasicInformationCluster, 0, await client.connect(client.getFabric().nodeId));
+            const descriptorCluster = pairableNode.getRootClusterClient(BasicInformationCluster);
+            assert.ok(descriptorCluster);
+            descriptorCluster.bindToInteractionClient(await pairableNode.createInteractionClient());
 
-            assert.equal(await basicInfoCluster.attributes.softwareVersionString.get(), "v1");
+            assert.equal(await descriptorCluster.attributes.softwareVersionString.get(), "v1");
+        });
+
+        it("read one specific attribute including schema parsing", async () => {
+            const onoffEndpoint = pairableNode.getDevices().find(endpoint => endpoint.id === 1);
+            assert.ok(onoffEndpoint);
+            const onoffCluster = onoffEndpoint.getClusterClient(OnOffCluster);
+            assert.ok(onoffCluster);
+            onoffCluster.bindToInteractionClient(await pairableNode.createInteractionClient());
+
+            assert.equal(await onoffCluster.attributes.onOff.get(), false);
         });
 
         it("read all attributes", async () => {
-            const result = await (await client.connect(client.getFabric().nodeId)).getAllAttributes();
+            const client = await pairableNode.createInteractionClient();
+            const response = await client.getAllAttributes();
 
-            assert.ok(Array.isArray(result));
-            assert.ok(result.length > 0);
+            assert.ok(response);
         });
 
         it("read multiple attributes", async () => {
-            const response = await (await client.connect(client.getFabric().nodeId)).getMultipleAttributes([
-                { clusterId: DescriptorCluster.id }, // */DescriptorCluster/*
-                { endpointId: 0, clusterId: BasicInformationCluster.id }, // 0/BasicInformationCluster/*
+            const client = await pairableNode.createInteractionClient();
+            const response = await client.getMultipleAttributes([
+                { clusterId: DescriptorCluster.id }, // * /DescriptorCluster/ *
+                { endpointId: 0, clusterId: BasicInformationCluster.id }, // 0/BasicInformationCluster/ *
                 { endpointId: 1, clusterId: OnOffCluster.id, attributeId: OnOffCluster.attributes.onOff.id }, // 1/OnOffCluster/onOff
-                { endpointId: 2 }, // 2/*/* - will be discarded in results!
+                { endpointId: 2 }, // 2 / * /* - will be discarded in results!
             ]);
 
-            assert.equal(response.length, 28);
+            assert.equal(response.length, 29);
             assert.equal(response.filter(({
                 path: {
                     endpointId,
@@ -230,7 +196,7 @@ describe("Integration", () => {
                     clusterId: DescriptorCluster.id,
                     attributeId: DescriptorCluster.attributes.serverList.id,
                     attributeName: "serverList"
-                }, value: [new ClusterId(40), new ClusterId(48), new ClusterId(62), new ClusterId(31), new ClusterId(4), new ClusterId(29)], version: 1
+                }, value: [{ id: 29 }, { id: 40 }, { id: 62 }, { id: 48 }, { id: 49 }, { id: 31 }, { id: 63 }, { id: 51 }, { id: 60 }], version: 1
             })
 
             assert.equal(response.filter(({
@@ -238,7 +204,7 @@ describe("Integration", () => {
                     endpointId,
                     clusterId
                 }
-            }) => endpointId === 0 && clusterId === BasicInformationCluster.id).length, 15);
+            }) => endpointId === 0 && clusterId === BasicInformationCluster.id).length, 16);
             const softwareVersionStringData = response.find(({
                 path: {
                     endpointId,
@@ -252,7 +218,7 @@ describe("Integration", () => {
                     endpointId: 0,
                     clusterId: BasicInformationCluster.id,
                     attributeId: BasicInformationCluster.attributes.softwareVersionString.id,
-                    attributeName: "softwareVersionString",
+                    attributeName: "softwareVersionString"
                 }, value: "v1", version: 0
             });
 
@@ -269,7 +235,7 @@ describe("Integration", () => {
                     endpointId: 1,
                     clusterId: OnOffCluster.id,
                     attributeId: OnOffCluster.attributes.onOff.id,
-                    attributeName: "onOff",
+                    attributeName: "onOff"
                 }, value: false, version: 0
             });
 
@@ -280,25 +246,29 @@ describe("Integration", () => {
     describe("write attributes", () => {
 
         it("write one attribute", async () => {
-            const descriptorCluster = new ClusterClient(BasicInformationCluster, 0, await client.connect(client.getFabric().nodeId));
+            const basicInfoCluster = pairableNode.getRootClusterClient(BasicInformationCluster);
+            assert.ok(basicInfoCluster);
+            basicInfoCluster.bindToInteractionClient(await pairableNode.createInteractionClient());
 
-            await descriptorCluster.attributes.nodeLabel.set("testLabel");
+            await basicInfoCluster.attributes.nodeLabel.set("testLabel");
 
-            assert.equal(await descriptorCluster.attributes.nodeLabel.get(), "testLabel");
+            assert.equal(await basicInfoCluster.attributes.nodeLabel.get(), "testLabel");
         });
 
         it("write one attribute with error", async () => {
-            const descriptorCluster = new ClusterClient(BasicInformationCluster, 0, await client.connect(client.getFabric().nodeId));
+            const basicInfoCluster = pairableNode.getRootClusterClient(BasicInformationCluster);
+            assert.ok(basicInfoCluster);
+            basicInfoCluster.bindToInteractionClient(await pairableNode.createInteractionClient());
 
-            await assert.rejects(async () => await descriptorCluster.attributes.location.set("XXX"), {
+            await assert.rejects(async () => await basicInfoCluster.attributes.location.set("XXX"), {
                 message: "String is too long: 3, max 2."
             });
         });
 
         it("write multiple attributes", async () => {
-            const interactionClient = await client.connect(client.getFabric().nodeId);
+            const client = await pairableNode.createInteractionClient();
 
-            const response = await interactionClient.setMultipleAttributes([
+            const response = await client.setMultipleAttributes([
                 { endpointId: 0, clusterId: BasicInformationCluster.id, attribute: BasicInformationCluster.attributes.nodeLabel, value: "testLabel2" },
                 { endpointId: 0, clusterId: BasicInformationCluster.id, attribute: BasicInformationCluster.attributes.location, value: "GB" },
             ]);
@@ -306,16 +276,16 @@ describe("Integration", () => {
             assert.equal(Array.isArray(response), true);
             assert.equal(response.length, 0);
 
-            const descriptorCluster = new ClusterClient(BasicInformationCluster, 0, interactionClient);
-            assert.equal(await descriptorCluster.attributes.nodeLabel.get(), "testLabel2");
-            assert.equal(await descriptorCluster.attributes.location.get(), "GB");
+            const basicInfoCluster = pairableNode.getRootClusterClient(BasicInformationCluster);
+            assert.ok(basicInfoCluster);
+            assert.equal(await basicInfoCluster.attributes.nodeLabel.get(), "testLabel2");
+            assert.equal(await basicInfoCluster.attributes.location.get(), "GB");
         });
 
         it("write multiple attributes with partial errors", async () => {
-            const interactionClient = await client.connect(client.getFabric().nodeId);
-            const descriptorCluster = new ClusterClient(BasicInformationCluster, 0, interactionClient);
+            const client = await pairableNode.createInteractionClient();
 
-            const response = await interactionClient.setMultipleAttributes([
+            const response = await client.setMultipleAttributes([
                 { endpointId: 0, clusterId: BasicInformationCluster.id, attribute: BasicInformationCluster.attributes.nodeLabel, value: "testLabel3" },
                 { endpointId: 0, clusterId: BasicInformationCluster.id, attribute: BasicInformationCluster.attributes.location, value: "XXX" },
             ]);
@@ -323,16 +293,25 @@ describe("Integration", () => {
             assert.equal(response.length, 1);
             assert.equal(response[0].path.attributeId, BasicInformationCluster.attributes.location.id);
             assert.equal(response[0].status, 135 /* StatusCode.ConstraintError */);
-            assert.equal(await descriptorCluster.attributes.nodeLabel.get(), "testLabel3");
-            assert.equal(await descriptorCluster.attributes.location.get(), "GB");
+
+            const basicInfoCluster = pairableNode.getRootClusterClient(BasicInformationCluster);
+            assert.ok(basicInfoCluster);
+
+            assert.equal(await basicInfoCluster.attributes.nodeLabel.get(), "testLabel3");
+            assert.equal(await basicInfoCluster.attributes.location.get(), "GB");
         });
 
     });
 
     describe("subscribe attributes", () => {
         it("subscription of one attribute sends updates when the value changes", async () => {
-            const interactionClient = await client.connect(client.getFabric().nodeId);
-            const onOffClient = new ClusterClient(OnOffCluster, 1, interactionClient);
+            const onoffEndpoint = pairableNode.getDevices().find(endpoint => endpoint.id === 1);
+            assert.ok(onoffEndpoint);
+            const onOffClient = onoffEndpoint.getClusterClient(OnOffCluster);
+            assert.ok(onOffClient);
+            onOffClient.bindToInteractionClient(await pairableNode.createInteractionClient());
+
+            assert.ok(onOffLightDeviceServer);
             const startTime = Time.nowMs();
 
             // Await initial Data
@@ -351,7 +330,7 @@ describe("Integration", () => {
             callback = (value: boolean) => updateResolver({ value, time: Time.nowMs() });
 
             await fakeTime.advanceTime(2 * 1000);
-            onOffServer.attributes.onOff.set(true);
+            await onOffLightDeviceServer.onOff(true);
             const updateReport = await updatePromise;
 
             assert.deepEqual(updateReport, { value: true, time: startTime + 2 * 1000 });
@@ -365,35 +344,15 @@ describe("Integration", () => {
 
             // ... but on next change immediately then
             await fakeTime.advanceTime(2 * 1000);
-            onOffServer.attributes.onOff.set(false);
+            await onOffLightDeviceServer.onOff(false);
             const lastReport = await lastPromise;
 
             assert.deepEqual(lastReport, { value: false, time: startTime + (60 * 60 + 4) * 1000 });
         });
     });
 
-    describe("Access Control server fabric scoped attribute storage", () => {
-        it("set empty acl", async () => {
-            console.log("SET ACL");
-            const accessControlCluster = new ClusterClient(AccessControlCluster, 0, await client.connect(client.getFabric().nodeId));
-            await accessControlCluster.attributes.acl.set([]);
-
-            const acl = await accessControlCluster.attributes.acl.get();
-            assert.ok(Array.isArray(acl));
-            assert.equal(acl.length, 0);
-        });
-    });
-
-    describe("Groups server fabric scoped storage", () => {
-        it("set a group name", async () => {
-            const groupsCluster = new ClusterClient(GroupsCluster, 0, await client.connect(client.getFabric().nodeId));
-            await groupsCluster.commands.addGroup({ groupId: new GroupId(1), groupName: "Group 1" });
-        });
-    });
-
     describe("storage", () => {
         it("server storage has fabric fields stored correctly stringified", async () => {
-            // TODO: In fact testing wrong because the storage mixed server and client keys, will get issues for more fancy tests
             const storedFabrics = fakeServerStorage.get("FabricManager", "fabrics");
             assert.ok(Array.isArray(storedFabrics));
             assert.equal(storedFabrics.length, 1);
@@ -401,21 +360,13 @@ describe("Integration", () => {
             assert.equal(typeof firstFabric, "object");
             assert.equal(firstFabric.fabricIndex, 1);
             assert.equal(firstFabric.fabricId, 1);
-            assert.ok(firstFabric.scopedClusterData);
-            assert.equal(firstFabric.scopedClusterData.size, 1);
-            const groupsClusterEndpointMap = firstFabric.scopedClusterData.get(GroupsCluster.id);
-            assert.ok(groupsClusterEndpointMap);
-            assert.equal(groupsClusterEndpointMap.size, 1);
-            const groupsClusterData = groupsClusterEndpointMap.get("0");
-            assert.ok(groupsClusterData instanceof Map);
-            assert.equal(groupsClusterData.get(1), "Group 1");
 
             assert.equal(fakeServerStorage.get("FabricManager", "nextFabricIndex"), 2);
 
-            const onoffValue = fakeServerStorage.get<{ value: any, version: number }>("Cluster-1-6", "onOff");
-            assert.ok(typeof onoffValue === "object");
-            assert.equal(onoffValue.version, 2);
-            assert.equal(onoffValue.value, false);
+            const onOffValue = fakeServerStorage.get<{ value: any, version: number }>("Cluster-1-6", "onOff");
+            assert.ok(typeof onOffValue === "object");
+            assert.equal(onOffValue.version, 2);
+            assert.equal(onOffValue.value, false);
 
             const storedServerResumptionRecords = fakeServerStorage.get("SessionManager", "resumptionRecords");
             assert.ok(Array.isArray(storedServerResumptionRecords));
@@ -435,7 +386,9 @@ describe("Integration", () => {
 
     describe("remove Fabric", () => {
         it("try to remove invalid fabric", async () => {
-            const operationalCredentialsCluster = new ClusterClient(OperationalCredentialsCluster, 0, await client.connect(client.getFabric().nodeId));
+            const operationalCredentialsCluster = pairableNode.getRootClusterClient(OperationalCredentialsCluster);
+            assert.ok(operationalCredentialsCluster);
+            operationalCredentialsCluster.bindToInteractionClient(await pairableNode.createInteractionClient());
 
             const result = await operationalCredentialsCluster.commands.removeFabric({ fabricIndex: new FabricIndex(250) });
             assert.equal(result.status, OperationalCertStatus.InvalidFabricIndex);
@@ -444,7 +397,9 @@ describe("Integration", () => {
         });
 
         it("read and remove fabric", async () => {
-            const operationalCredentialsCluster = new ClusterClient(OperationalCredentialsCluster, 0, await client.connect(client.getFabric().nodeId));
+            const operationalCredentialsCluster = pairableNode.getRootClusterClient(OperationalCredentialsCluster);
+            assert.ok(operationalCredentialsCluster);
+            operationalCredentialsCluster.bindToInteractionClient(await pairableNode.createInteractionClient());
 
             const fabricIndex = await operationalCredentialsCluster.attributes.currentFabricIndex.get();
             assert.ok(fabricIndex);
@@ -458,8 +413,8 @@ describe("Integration", () => {
     });
 
     afterAll(async () => {
-        await server.stop();
-        client.close();
+        await matterServer.close();
+        await matterClient.close();
         await fakeControllerStorage.close();
         await fakeServerStorage.close();
     });

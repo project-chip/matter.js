@@ -47,8 +47,12 @@ import { StorageContext } from "../../storage/StorageContext.js";
 import { StorageManager } from "../../storage/StorageManager.js";
 import { capitalize } from "../../util/String.js";
 import { TlvVoid } from "../../tlv/TlvVoid.js";
+import { Endpoint } from "../../device/Endpoint.js";
 
 export const INTERACTION_PROTOCOL_ID = 0x0001;
+
+// TODO replace by real Endpoint object
+export type EndpointData = { id: number, name: string, code: number, clusters: Map<number, ClusterServer<any, any, any, any>> };
 
 const logger = Logger.get("InteractionProtocol");
 
@@ -92,7 +96,7 @@ export class ClusterServer<F extends BitSchema, A extends Attributes, C extends 
             const handler = (handlers as any)[name];
             if (handler === undefined) continue;
             const { requestId, requestSchema, responseId, responseSchema } = commandDefs[name];
-            this.commands.push(new CommandServer(requestId, responseId, name, requestSchema, responseSchema, (request, session, message) => handler({ request, attributes: this.attributes, session, message })));
+            this.commands.push(new CommandServer(requestId, responseId, name, requestSchema, responseSchema, (request, session, message, endpoint) => handler({ request, attributes: this.attributes, session, message, endpoint })));
         }
     }
 
@@ -150,11 +154,11 @@ function toHex(value: number | undefined) {
 }
 
 export class InteractionServer implements ProtocolHandler<MatterDevice> {
-    private readonly endpoints = new Map<number, { name: string, code: number, clusters: Map<number, ClusterServer<any, any, any, any>> }>();
-    private readonly attributes = new Map<string, AttributeServer<any>>();
-    private readonly attributePaths = new Array<AttributePath>();
-    private readonly commands = new Map<string, CommandServer<any, any>>();
-    private readonly commandPaths = new Array<CommandPath>();
+    private endpoints = new Map<number, EndpointData>();
+    private attributes = new Map<string, AttributeServer<any>>();
+    private attributePaths = new Array<AttributePath>();
+    private commands = new Map<string, CommandServer<any, any>>();
+    private commandPaths = new Array<CommandPath>();
     private nextSubscriptionId = Crypto.getRandomUInt32();
 
     constructor(
@@ -208,7 +212,27 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             rootPartsListAttribute.setLocal([...rootPartsListAttribute.getLocal(), clusterEndpointNumber]);
         }
 
-        this.endpoints.set(endpointId, { ...device, clusters: clusterMap });
+        this.endpoints.set(endpointId, { ...device, id: endpointId, clusters: clusterMap });
+
+        return this;
+    }
+
+    setRootEndpoint(endpoint: Endpoint) {
+        const { endpoints, attributes, attributePaths, commands, commandPaths } = endpoint.getStructure();
+
+        // TODO change but legacy ...
+        this.endpoints = new Map<number, EndpointData>();
+        for (const [endpointId, { deviceTypes, clusters }] of endpoints) {
+            this.endpoints.set(endpointId, { ...deviceTypes[0], id: endpointId, clusters });
+            for (const cluster of clusters.values()) {
+                cluster.setStorage(this.storageManager.createContext(`Cluster-${endpointId}-${cluster.id}`));
+            }
+        }
+
+        this.attributes = attributes;
+        this.attributePaths = attributePaths;
+        this.commands = commands;
+        this.commandPaths = commandPaths;
 
         return this;
     }
@@ -354,20 +378,30 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         const results = new Array<{ commandPath: TypeFromSchema<typeof TlvCommandPath>, code: StatusCode, response: TlvStream, responseId: number }>();
 
         await Promise.all(invokeRequests.map(async ({ commandPath, commandFields }) => {
-            if (commandPath.endpointId === undefined) {
+            const { endpointId } = commandPath;
+            if (endpointId === undefined) {
                 logger.error("Wildcard command invokes not yet supported!");
                 results.push({ code: StatusCode.UnsupportedCommand, commandPath, response: TlvVoid.encodeTlv(), responseId: 0 });
                 return;
             }
             const command = this.commands.get(commandPathToId(commandPath as CommandPath));
-            if (command === undefined) return;
+            if (command === undefined) {
+                // results.push({ code: StatusCode.UnsupportedCommand, path });// TODO!!
+                return;
+            }
+            const endpoint = this.endpoints.get(endpointId);
+            if (!endpoint) {
+                logger.error(`Endpoint ${endpointId} not found`);
+                //results.push({ code: StatusCode.UnsupportedCommand, commandPath, response: TlvVoid.encodeTlv(), responseId: 0 }); // TODO
+                return;
+            }
 
             // If no arguments are provided in the invoke data (because optional field), we use our type as replacement
             if (commandFields === undefined) {
                 commandFields = TlvNoArguments.encodeTlv(commandFields);
             }
 
-            const result = await command.invoke(exchange.session, commandFields, message);
+            const result = await command.invoke(exchange.session, commandFields, message, endpoint);
             results.push({ ...result, commandPath });
         }));
 
