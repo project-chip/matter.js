@@ -11,6 +11,10 @@ I decided to do the rebuild in several steps to make it easier to review and to 
 * The storage is not yet changed to allow Multi-Nodes. This will come (breaking) before merge!
 * The ClusterClient was changed tobe an object with the same structure as ClusterServer to internally streamline code. I need to iterate further on this to have a meaningful API
 * The new Controller (pairable node) API is still WIP. Especially the whole usage as controller and for ClusterClients.
+* The storage for the new device classes is just basic and needs to get enhanced (e.g, last generated endpoint id and such)
+* Investigate/Check specs on how to add new devices to a bridge (check Matter Core specs)
+* Check bridge and composed devices with tuya, smartthings and Alexa again; and test composed device with google
+
 
 ## New versions of Device.ts and Controller.ts
 For now the original Device.ts and Controller.ts that are offered as the default "CLI tools" are still "untouched".
