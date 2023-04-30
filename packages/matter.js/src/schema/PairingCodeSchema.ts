@@ -87,7 +87,7 @@ class ManualPairingCodeSchema extends Schema<ManualPairingData, string> {
     }
 
     protected decodeInternal(encoded: string): ManualPairingData {
-        if(encoded.length < 10) throw new Error("Invalid pairing code");
+        if (encoded.length < 10) throw new Error("Invalid pairing code");
         const verhoeff = new Verhoeff();
         if (verhoeff.computeChecksum(encoded.slice(0, -1)) !== parseInt(encoded.slice(-1))) {
             throw new Error("Invalid checksum");
