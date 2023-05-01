@@ -4,17 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { WritableAttribute, Attribute, Cluster, Command, TlvNoArguments, TlvNoResponse } from "./Cluster.js";
-import { TlvGroupId } from "../common/GroupId.js";
-import { TlvEndpointNumber } from "../common/EndpointNumber.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { WritableAttribute, Attribute, Cluster, Command, TlvNoResponse } from "./Cluster.js";
+import { BitFlag } from "../schema/BitmapSchema.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
+import { TlvGroupId } from "../datatype/GroupId.js";
 import { TlvEnum, TlvUInt16, TlvUInt64 } from "../tlv/TlvNumber.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { TlvString } from "../tlv/TlvString.js";
+import { TlvEndpointNumber } from "../datatype/EndpointNumber.js";
 import { TlvArray } from "../tlv/TlvArray.js";
-import { BitFlag } from "../schema/BitmapSchema.js";
-
+import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.2.6.1 */
 const TlvGroupKeyMap = TlvObject({

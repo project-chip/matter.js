@@ -5,18 +5,18 @@
  */
 
 import { Attribute, Cluster, Event, EventPriority, OptionalAttribute, OptionalCommand, TlvNoResponse } from "./Cluster.js";
-import { TlvArray } from "../tlv/TlvArray.js";
-import { TlvString, TlvString32max } from "../tlv/TlvString.js";
-import { TlvEnum, TlvBitmap, TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
-import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
+import { TlvEndpointNumber } from "../datatype/EndpointNumber.js";
+import { TlvBitmap, TlvEnum, TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
+import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
+import { TlvString, TlvString32max } from "../tlv/TlvString.js";
+import { TlvArray } from "../tlv/TlvArray.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-import { TlvEndpointNumber } from "../common/EndpointNumber.js";
 
-/** 
+/**
  * Supported Commands bitmap which SHALL be used to indicate which of the cluster’s commands are
  * supported for this particular action, with a bit set to 1 for each supported command.
- * 
+ *
  * @see {@link MatterCoreSpecificationV1_0} § 9.14.7
  */
 const CommandBits = TlvBitmap(TlvUInt16, {
@@ -303,8 +303,8 @@ export const ActionsCluster = Cluster({
 
         /**
          * When used without suffix, provides information about the various actions which
-         * the cluster provides. 
-         * When used with a suffix of "/?a=" and the decimal value of ActionID for one of 
+         * the cluster provides.
+         * When used with a suffix of "/?a=" and the decimal value of ActionID for one of
          * the actions, it may provide information about that particular action. */
         setupURL: OptionalAttribute(2, TlvString.bound({ maxLength: 512 }), { default: "" }),
     },

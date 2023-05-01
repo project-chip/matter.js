@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 /**
- * Schema to encode a nulable value in TLV.
+ * Schema to encode a nullable value in TLV.
  *
  * @see {@link MatterCoreSpecificationV1_0} § A.11.6
  */

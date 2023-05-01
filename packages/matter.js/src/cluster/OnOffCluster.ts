@@ -5,21 +5,10 @@
  */
 
 import { BitFlag } from "../schema/BitmapSchema.js";
-import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
-import {
-    AccessLevel,
-    Attribute, ClusterBase,
-    ClusterExtend,
-    Command,
-    TlvNoArguments,
-    TlvNoResponse,
-    WritableAttribute
-} from "./Cluster.js";
-import { TlvBitmap, TlvEnum, TlvUInt16, TlvUInt8 } from "../tlv/TlvNumber.js";
-import { TlvSchema } from "../tlv/TlvSchema.js";
-import { TlvField, TlvObject } from "../tlv/TlvObject.js";
-import { TlvNullable } from "../tlv/TlvNullable.js";
+import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
+import { Attribute, Cluster, Command, TlvNoResponse } from "./Cluster.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
 
 /**
  * Defined how the devices should behave when it is powered on.

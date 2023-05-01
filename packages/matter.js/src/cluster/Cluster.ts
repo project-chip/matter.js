@@ -4,17 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Merge } from "../util/Type.js";
 import { BitSchema, TypeFromBitSchema } from "../schema/BitmapSchema.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-import { TlvBitmap, TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
-import { TlvFields, TlvObject, TypeFromFields } from "../tlv/TlvObject.js";
 import { TlvSchema } from "../tlv/TlvSchema.js";
 import { TlvVoid } from "../tlv/TlvVoid.js";
-import { Merge } from "../util/Type.js";
-import { EventId, TlvEventId } from "../common/EventId.js";
-import { AttributeId, TlvAttributeId } from "../common/AttributeId.js";
-import { CommandId, TlvCommandId } from "../common/CommandId.js";
+import { TlvFields, TlvObject, TypeFromFields } from "../tlv/TlvObject.js";
+import { AttributeId, TlvAttributeId } from "../datatype/AttributeId.js";
+import { EventId, TlvEventId } from "../datatype/EventId.js";
+import { CommandId, TlvCommandId } from "../datatype/CommandId.js";
+import { TlvBitmap, TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvArray } from "../tlv/TlvArray.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 export const enum AccessLevel {
     View,
@@ -35,7 +35,6 @@ export const WritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<
 export const OptionalWritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View, writeAcl = AccessLevel.View }: AttributeOptions<V> = {}): OptionalWritableAttribute<T> => ({ id, schema, optional: true, writable: true, persistent, omitChanges, default: conformanceValue, readAcl, writeAcl });
 
 /* Interfaces and helper methods to define a cluster command */
-export const TlvNoArguments = TlvObject({});
 export const TlvNoResponse = TlvVoid;
 export interface Command<RequestT, ResponseT> { optional: boolean, requestId: number, requestSchema: TlvSchema<RequestT>, responseId: number, responseSchema: TlvSchema<ResponseT> }
 export interface OptionalCommand<RequestT, ResponseT> extends Command<RequestT, ResponseT> { optional: true }

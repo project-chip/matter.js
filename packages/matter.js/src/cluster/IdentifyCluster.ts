@@ -5,10 +5,10 @@
  */
 
 import { BitFlag } from "../schema/BitmapSchema.js";
-import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
-import { TlvEnum, TlvUInt16 } from "../tlv/TlvNumber.js";
-import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { Attribute, Cluster, Command, OptionalCommand, TlvNoResponse, WritableAttribute } from "./Cluster.js";
+import { TlvField, TlvObject } from "../tlv/TlvObject.js";
+import { TlvEnum, TlvUInt16 } from "../tlv/TlvNumber.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.2.5.2 */
 export const enum IdentifyType {

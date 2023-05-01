@@ -4,14 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-import { TlvBoolean } from "../tlv/TlvBoolean.js";
-import { TlvEnum, TlvUInt16, TlvUInt64, TlvUInt32 } from "../tlv/TlvNumber.js";
+
+import { Command, Attribute, Cluster, Event, EventPriority, OptionalAttribute, OptionalEvent, TlvNoResponse } from "./Cluster.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvString, TlvString32max } from "../tlv/TlvString.js";
-import { TlvArray } from "../tlv/TlvArray.js";
+import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
-import { Command, Attribute, Cluster, Event, EventPriority, OptionalAttribute, OptionalEvent, TlvNoResponse } from "./Cluster.js";
+import { TlvArray } from "../tlv/TlvArray.js";
+import { TlvEnum, TlvUInt16, TlvUInt32, TlvUInt64 } from "../tlv/TlvNumber.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.11.6.1 */
 export const enum HardwareFault {

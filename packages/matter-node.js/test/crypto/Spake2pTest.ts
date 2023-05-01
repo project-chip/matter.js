@@ -4,11 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Crypto, Spake2p } from "@project-chip/matter.js/crypto";
+import { CryptoNode } from "../../src/crypto/CryptoNode";
+
+Crypto.get = () => new CryptoNode();
+
 import * as assert from "assert";
 import { BN } from "bn.js";
-import { Crypto } from "../../src/crypto/Crypto";
-import { Spake2p } from "../../src/crypto/Spake2p";
-import { ByteArray } from "@project-chip/matter.js";
+import { ByteArray } from "@project-chip/matter.js/util";
 
 describe("Spake2p", () => {
     describe("https://datatracker.ietf.org/doc/html/draft-bar-cfrg-spake2plus-01 test vectors", () => {
