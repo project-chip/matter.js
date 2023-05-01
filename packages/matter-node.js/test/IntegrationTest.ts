@@ -56,7 +56,7 @@ const fakeServerStorage = new StorageBackendMemory();
 
 describe("Integration", () => {
     let server: MatterDevice;
-    let onOffServer: ClusterServer<any, any, any, any>;
+    let onOffServer: ClusterServer<any, any, any, any, any>;
     let client: MatterController;
 
     beforeAll(async () => {
@@ -141,7 +141,6 @@ describe("Integration", () => {
                             certificationDeclaration,
                         })),
                     new ClusterServer(AccessControlCluster,
-                        {},
                         {
                             acl: [],
                             extension: [],
@@ -152,8 +151,6 @@ describe("Integration", () => {
                         {},
                     ),
                     new ClusterServer(GroupsCluster, {
-                        groupNames: true
-                    }, {
                         nameSupport: { groupNames: true }
                     },
                         GroupsClusterHandler(0x00)),

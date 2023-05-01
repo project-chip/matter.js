@@ -7,8 +7,12 @@
 import { BitFlag } from "../schema/BitmapSchema.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
-import { Attribute, Cluster, Command, TlvNoResponse } from "./Cluster.js";
+import { AccessLevel, Attribute, Cluster, ClusterExtend, Command, TlvNoResponse, WritableAttribute } from "./Cluster.js";
 import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvSchema } from "../tlv/TlvSchema.js";
+import { TlvBitmap, TlvEnum, TlvUInt16, TlvUInt8 } from "../tlv/TlvNumber.js";
+import { TlvField, TlvObject } from "../tlv/TlvObject.js";
+import { TlvNullable } from "../tlv/TlvNullable.js";
 
 /**
  * Defined how the devices should behave when it is powered on.
@@ -84,13 +88,17 @@ const TlvOnWithTimedOffRequest = TlvObject({
  *
  * @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5
  */
-export const OnOffClusterBase = ClusterBase({
+export const OnOffCluster = Cluster({
     id: 0x06,
     name: "On/Off",
     revision: 4,
     features: {
         /** Level Control for Lighting - Behavior that supports lighting applications */
         lightingLevelControl: BitFlag(0),
+    },
+    supportedFeatures: {
+        /** Level Control for Lighting - Behavior that supports lighting applications */
+        lightingLevelControl: false,
     },
 
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.6 */
@@ -125,16 +133,6 @@ export const OnOffClusterBase = ClusterBase({
         toggle: Command(2, TlvNoArguments, 2, TlvNoResponse),
     },
 });
-
-export const OnOffCluster = ClusterExtend(
-    OnOffClusterBase,
-    {
-        supportedFeatures: {
-            /** Level Control for Lighting - Behavior that supports lighting applications */
-            lightingLevelControl: false,
-        },
-    }
-);
 
 export const OnOffLightingCluster = ClusterExtend(
     OnOffCluster,

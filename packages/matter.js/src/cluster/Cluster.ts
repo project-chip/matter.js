@@ -88,21 +88,22 @@ export const GlobalAttributes = <F extends BitSchema>(features: F) => ({
     generatedCommandList: Attribute(0xFFF8, TlvArray(TlvCommandId)),
 } as GlobalAttributes<F>);
 
-export interface ClusterBase<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events> {
+export interface Cluster<F extends BitSchema, SF extends Partial<TypeFromBitSchema<F>>, A extends Attributes, C extends Commands, E extends Events> {
     id: number,
     name: string,
     revision: number,
     features: F,
+    supportedFeatures: SF,
     attributes: A,
     commands: C,
     events: E,
 }
-
-export const ClusterBase = <F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>({
+export const Cluster = <F extends BitSchema, SF extends Partial<TypeFromBitSchema<F>>, A extends Attributes, C extends Commands, E extends Events>({
     id,
     name,
     revision,
     features = <F>{},
+    supportedFeatures = <SF>{},
     attributes = <A>{},
     commands = <C>{},
     events = <E>{},
@@ -111,54 +112,23 @@ export const ClusterBase = <F extends BitSchema, A extends Attributes, C extends
     name: string,
     revision: number,
     features?: F,
+    supportedFeatures?: SF,
     attributes?: A,
     commands?: C,
     events?: E,
-}): ClusterBase<F, Merge<A, GlobalAttributes<F>>, C, E> => ({
+}): Cluster<F, SF, Merge<A, GlobalAttributes<F>>, C, E> => ({
     id,
     name,
     revision,
     features,
+    supportedFeatures,
     commands,
     attributes: Merge(attributes, GlobalAttributes(features)),
     events,
 });
 
-export interface Cluster<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events> extends ClusterBase<F, A, C, E> {
-    supportedFeatures: TypeFromBitSchema<F>
-}
-
-export const Cluster = <F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>({
-    id,
-    name,
-    revision,
-    features = <F>{},
-    attributes = <A>{},
-    commands = <C>{},
-    events = <E>{},
-    supportedFeatures = {} as TypeFromBitSchema<F>
-}: {
-    id: number,
-    name: string,
-    revision: number,
-    features?: F,
-    attributes?: A,
-    commands?: C,
-    events?: E,
-    supportedFeatures?: TypeFromBitSchema<F>,
-}): Cluster<F, Merge<A, GlobalAttributes<F>>, C, E> => ({
-    id,
-    name,
-    revision,
-    features,
-    commands,
-    attributes: Merge(attributes, GlobalAttributes(features)),
-    events,
-    supportedFeatures
-});
-
-type ClusterExtend<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events> = {
-    supportedFeatures: TypeFromBitSchema<F>,
+type ClusterExtend<F extends BitSchema, SF extends Partial<TypeFromBitSchema<F>>, A extends Attributes, C extends Commands, E extends Events> = {
+    supportedFeatures?: SF,
     attributes?: A,
     commands?: C,
     events?: E,
@@ -167,22 +137,25 @@ type ClusterExtend<F extends BitSchema, A extends Attributes, C extends Commands
 export const ClusterExtend =
     <
         F extends BitSchema,
+        SF_BASE extends Partial<TypeFromBitSchema<F>>,
         A_BASE extends Attributes,
         C_BASE extends Commands,
         E_BASE extends Events,
+        SF_EXTEND extends Partial<TypeFromBitSchema<F>>,
         A_EXTEND extends Attributes,
         C_EXTEND extends Commands,
         E_EXTEND extends Events,
     >(
-        { id, name, revision, features, attributes, commands, events }: (Cluster<F, A_BASE, C_BASE, E_BASE> | ClusterBase<F, A_BASE, C_BASE, E_BASE>),
+        { id, name, revision, features, supportedFeatures, attributes, commands, events }: Cluster<F, SF_BASE, A_BASE, C_BASE, E_BASE>,
         {
-            supportedFeatures: featuresExtend,
+            supportedFeatures: supportedFeaturesExtend = <SF_EXTEND>{},
             attributes: attributesExtend = <A_EXTEND>{},
             commands: commandsExtend = <C_EXTEND>{},
             events: eventsExtend = <E_EXTEND>{},
-        }: ClusterExtend<F, A_EXTEND, C_EXTEND, E_EXTEND>
+        }: ClusterExtend<F, SF_EXTEND, A_EXTEND, C_EXTEND, E_EXTEND>
     ): Cluster<
         F,
+        Merge<SF_BASE, SF_EXTEND>,
         Merge<A_BASE, A_EXTEND>,
         Merge<C_BASE, C_EXTEND>,
         Merge<E_BASE, E_EXTEND>
@@ -192,9 +165,9 @@ export const ClusterExtend =
             name,
             revision,
             features,
+            supportedFeatures: Merge(supportedFeatures, supportedFeaturesExtend),
             attributes: Merge(attributes, attributesExtend),
             commands: Merge(commands, commandsExtend),
             events: Merge(events, eventsExtend),
-            supportedFeatures: featuresExtend,
         }
     );

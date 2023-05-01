@@ -30,7 +30,7 @@ import { PaseServer, CaseServer } from "@project-chip/matter.js/session";
 import { ClusterServer, InteractionServer } from "@project-chip/matter.js/interaction";
 import {
     BasicInformationCluster, GeneralCommissioningCluster, RegulatoryLocationType, OperationalCredentialsCluster,
-    OnOffCluster, NetworkCommissioningCluster, NetworkCommissioningStatus, AdminCommissioningCluster,
+    OnOffCluster, EthernetNetworkCommissioningCluster, NetworkCommissioningStatus, AdminCommissioningCluster,
     CommissioningWindowStatus, AccessControlCluster, GeneralCommissioningClusterHandler,
     OperationalCredentialsClusterHandler, OnOffClusterHandler, AdminCommissioningHandler, NetworkCommissioningHandler,
 
@@ -160,7 +160,7 @@ class DeviceNode {
                         },
                         NetworkCommissioningHandler(),
                     ),
-                    new ClusterServer(BasicAdminCommissioningCluster,
+                    new ClusterServer(AdminCommissioningCluster,
                         {
                             windowStatus: CommissioningWindowStatus.WindowNotOpen,
                             adminFabricIndex: null,
@@ -169,7 +169,6 @@ class DeviceNode {
                         AdminCommissioningHandler(secureChannelProtocol),
                     ),
                     new ClusterServer(AccessControlCluster,
-                        {},
                         {
                             acl: [],
                             extension: [],

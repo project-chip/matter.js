@@ -5,7 +5,7 @@
  */
 
 
-import { Attribute, Cluster, Command, OptionalAttribute, OptionalCommand, WritableAttribute } from "./Cluster.js";
+import { Attribute, Cluster, ClusterExtend, Command, OptionalAttribute, WritableAttribute } from "./Cluster.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
 import { TlvBitmap, TlvEnum, TlvInt32, TlvInt8, TlvUInt16, TlvUInt64, TlvUInt8 } from "../tlv/TlvNumber.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";

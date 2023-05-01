@@ -7,7 +7,7 @@
 import { BitFlag } from "../schema/BitmapSchema.js";
 import { TlvFabricIndex } from "../datatype/FabricIndex.js";
 import { TlvVendorId } from "../datatype/VendorId.js";
-import { Cluster, Command, TlvNoResponse, Attribute, OptionalCommand } from "./Cluster.js";
+import { Cluster, Command, TlvNoResponse, Attribute, ClusterExtend } from "./Cluster.js";
 import { CRYPTO_GROUP_SIZE_BYTES, CRYPTO_PUBLIC_KEY_SIZE_BYTES } from "../crypto/CryptoConstants.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvEnum, TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";

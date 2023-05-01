@@ -52,7 +52,7 @@ export const INTERACTION_PROTOCOL_ID = 0x0001;
 
 const logger = Logger.get("InteractionProtocol");
 
-export class ClusterServer<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events> {
+export class ClusterServer<F extends BitSchema, SF extends Partial<TypeFromBitSchema<F>>, A extends Attributes, C extends Commands, E extends Events> {
     readonly id: number;
     readonly name: string;
     readonly attributes = <AttributeServers<A>>{};
@@ -60,7 +60,7 @@ export class ClusterServer<F extends BitSchema, A extends Attributes, C extends 
     private clusterStorage: StorageContext | null = null;
     private attributeStorageListeners = new Map<number, (value: any, version: number) => void>();
 
-    constructor(clusterDef: Cluster<F, A, C, E>, attributesInitialValues: AttributeInitialValues<A>, handlers: ClusterServerHandlers<Cluster<F, A, C, E>>) {
+    constructor(clusterDef: Cluster<F, SF, A, C, E>, attributesInitialValues: AttributeInitialValues<A>, handlers: ClusterServerHandlers<Cluster<F, SF, A, C, E>>) {
         const { id, name, attributes: attributeDefs, commands: commandDefs, supportedFeatures } = clusterDef;
         this.id = id;
         this.name = name;
@@ -150,7 +150,7 @@ function toHex(value: number | undefined) {
 }
 
 export class InteractionServer implements ProtocolHandler<MatterDevice> {
-    private readonly endpoints = new Map<number, { name: string, code: number, clusters: Map<number, ClusterServer<any, any, any, any>> }>();
+    private readonly endpoints = new Map<number, { name: string, code: number, clusters: Map<number, ClusterServer<any, any, any, any, any>> }>();
     private readonly attributes = new Map<string, AttributeServer<any>>();
     private readonly attributePaths = new Array<AttributePath>();
     private readonly commands = new Map<string, CommandServer<any, any>>();
@@ -165,7 +165,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         return INTERACTION_PROTOCOL_ID;
     }
 
-    addEndpoint(endpointId: number, device: { name: string, code: number }, clusters: ClusterServer<any, any, any, any>[]) {
+    addEndpoint(endpointId: number, device: { name: string, code: number }, clusters: ClusterServer<any, any, any, any, any>[]) {
         // Add the descriptor cluster
         const descriptorCluster = new ClusterServer(DescriptorCluster, {
             deviceTypeList: [{ revision: 1, deviceType: new DeviceTypeId(device.code) }],
@@ -178,7 +178,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         const clusterEndpointNumber = new EndpointNumber(endpointId);
 
-        const clusterMap = new Map<number, ClusterServer<any, any, any, any>>();
+        const clusterMap = new Map<number, ClusterServer<any, any, any, any, any>>();
         clusters.forEach(cluster => {
             const { id: clusterId, attributes, commands } = cluster;
 

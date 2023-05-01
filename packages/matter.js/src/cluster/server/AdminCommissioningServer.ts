@@ -9,7 +9,7 @@ import { ClusterServerHandlers } from "./ClusterServer.js"
 import { PaseServer } from "../../session/pase/PaseServer.js";
 import { SecureChannelProtocol } from "../../protocol/securechannel/SecureChannelProtocol.js";
 
-export const AdminCommissioningHandler: (secureChannelProtocol: SecureChannelProtocol) => ClusterServerHandlers<typeof BasicAdminCommissioningCluster> = (secureChannelProtocol) => ({
+export const AdminCommissioningHandler: (secureChannelProtocol: SecureChannelProtocol) => ClusterServerHandlers<typeof AdminCommissioningCluster> = (secureChannelProtocol) => ({
     openCommissioningWindow: async function({ request: { pakePasscodeVerifier: pakeVerifier, discriminator, iterations, salt, commissioningTimeout }, session, /* attributes: { windowStatus } */ }) {
         //windowStatus.set(CommissioningWindowStatus.EnhancedWindowOpen);
         secureChannelProtocol.updatePaseCommissioner(PaseServer.fromVerificationValue(pakeVerifier, { iterations, salt }));
