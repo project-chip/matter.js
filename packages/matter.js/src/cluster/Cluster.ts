@@ -127,28 +127,30 @@ export const Cluster = <F extends BitSchema, SF extends Partial<TypeFromBitSchem
     events,
 });
 
-type ClusterExtend<F extends BitSchema, SF extends Partial<TypeFromBitSchema<F>>, A extends Attributes, C extends Commands, E extends Events> = {
-    supportedFeatures?: SF,
+type ClusterExtend<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events> = {
+    supportedFeatures: SF,
     attributes?: A,
     commands?: C,
     events?: E,
 };
 
+// TODO Find out why eslint markts that as unused
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const ClusterExtend =
     <
         F extends BitSchema,
-        SF_BASE extends Partial<TypeFromBitSchema<F>>,
+        SF_BASE extends TypeFromBitSchema<F>,
         A_BASE extends Attributes,
         C_BASE extends Commands,
         E_BASE extends Events,
-        SF_EXTEND extends Partial<TypeFromBitSchema<F>>,
+        SF_EXTEND extends TypeFromBitSchema<F>,
         A_EXTEND extends Attributes,
         C_EXTEND extends Commands,
         E_EXTEND extends Events,
     >(
         { id, name, revision, features, supportedFeatures, attributes, commands, events }: Cluster<F, SF_BASE, A_BASE, C_BASE, E_BASE>,
         {
-            supportedFeatures: supportedFeaturesExtend = <SF_EXTEND>{},
+            supportedFeatures: supportedFeaturesExtend,
             attributes: attributesExtend = <A_EXTEND>{},
             commands: commandsExtend = <C_EXTEND>{},
             events: eventsExtend = <E_EXTEND>{},
