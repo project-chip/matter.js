@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Time, TimeFake } from "@project-chip/matter.js/time";
+
+const fakeTime = new TimeFake(0);
+Time.get = () => fakeTime;
+
 import { StorageBackendJsonFile } from "../../src/storage/StorageBackendJsonFile";
 import * as assert from "assert";
 import { unlink, readFile } from "fs/promises";
@@ -22,23 +27,32 @@ describe("Storage in JSON File", () => {
 
     it("write and read success", async () => {
         const storage = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
+        await storage.initialize();
 
         storage.set("context", "key", "value");
 
         const value = storage.get("context", "key");
         assert.equal(value, "value");
 
-        await storage.close();
+        await fakeTime.advanceTime(2 * 1000);
+
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // give FS time to write
 
         const storageRead = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
         await storageRead.initialize();
 
         const valueRead = storage.get("context", "key");
         assert.equal(valueRead, "value");
-        await storage.close();
 
         const fileContent = await readFile(TEST_STORAGE_LOCATION);
-        assert.equal(fileContent.toString(), `{"context":{"key":"value"}}`);
+        assert.equal(fileContent.toString(), `{
+ "context": {
+  "key": "value"
+ }
+}`);
+
+        await storageRead.close();
+        await storage.close();
     });
 
     it("Throws error when context is empty on set", () => {
