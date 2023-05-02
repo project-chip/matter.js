@@ -67,7 +67,7 @@ export class MdnsBroadcaster implements Broadcaster {
                     `DN=${deviceName}`,             /* Device Name */
                     "SII=5000",                     /* Sleepy Idle Interval */
                     "SAI=300",                      /* Sleepy Active Interval */
-                    "T=1",                          /* TCP supported */
+                    "T=0",                          /* TCP not supported */
                     `D=${discriminator}`,           /* Discriminator */
                     `CM=${mode}`,                   /* Commission Mode */
                     "PH=33",                        /* Pairing Hint */
