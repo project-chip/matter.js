@@ -32,7 +32,7 @@ export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> ext
         if (minLength < 0) throw new Error("Minimum length should be a positive number.");
     }
 
-    override encodeTlvInternal(writer: TlvWriter, value: TlvToPrimitive[T], tag: TlvTag = {}): void {
+    override encodeTlvInternal(writer: TlvWriter, value: TlvToPrimitive[T], tag?: TlvTag): void {
         const typeLength: TlvTypeLength = { type: this.type, length: TlvCodec.getUIntTlvLength(value.length) }
         writer.writeTag(typeLength, tag);
         writer.writePrimitive(typeLength, value);
