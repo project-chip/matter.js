@@ -124,12 +124,14 @@ const defaultValueFormatter = (value: string) => value;
  * log output.  See Logger.dict() for maximal convenience.
  */
 export class DiagnosticDictionary {
+    private entries = new Map<string, any>();
+
     /**
      * Create a new dictionary with optional entry values.
      * 
      * @param entries the entries as [ "KEY", value ] tuples
      */
-    public constructor(entries: { [KEY: string]: any } = {}) {
+    constructor(entries: { [KEY: string]: any } = {}) {
         // Use getOwnPropertyNames because it follows insertion order as of
         // ES6
         for (const KEY of Object.getOwnPropertyNames(entries)) {
@@ -165,8 +167,6 @@ export class DiagnosticDictionary {
     public toString() {
         return this.serialize();
     }
-
-    private entries: Map<string, any> = new Map();
 }
 
 /**
