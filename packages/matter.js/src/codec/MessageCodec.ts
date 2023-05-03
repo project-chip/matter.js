@@ -8,6 +8,7 @@ import { NodeId } from "../datatype/NodeId.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataReader } from "../util/DataReader.js";
 import { DataWriter } from "../util/DataWriter.js";
+import { DiagnosticDictionary } from "../log/Logger.js";
 
 export interface PacketHeader {
     sessionId: number,
@@ -161,8 +162,14 @@ export class MessageCodec {
         return writer.toByteArray();
     }
 
-    static messageToString({ packetHeader: { messageId, sessionId }, payloadHeader: { exchangeId, messageType, protocolId, ackedMessageId, requiresAck }, payload }: Message) {
-        return `id:${sessionId}/${exchangeId}/${messageId} t:${protocolId}/${messageType}${ackedMessageId !== undefined ? ` acked:${ackedMessageId}` : ''} reqAck:${requiresAck} payload: ${payload.toHex()}`;
+    static messageDiagnostics({ packetHeader: { messageId, sessionId }, payloadHeader: { exchangeId, messageType, protocolId, ackedMessageId, requiresAck }, payload }: Message) {
+        return new DiagnosticDictionary({
+            id: `${sessionId}/${exchangeId}/${messageId}`,
+            type: `${protocolId}/${messageType}`,
+            acked: ackedMessageId,
+            reqAck: requiresAck,
+            payload: payload
+        });
     }
 
     private static encodePayloadHeader({ exchangeId, isInitiatorMessage, messageType, protocolId, requiresAck, ackedMessageId: ackedMessageCounter }: PayloadHeader) {

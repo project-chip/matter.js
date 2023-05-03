@@ -29,7 +29,7 @@ export class MessageChannel<ContextT> implements Channel<Message> {
     ) { }
 
     send(message: Message): Promise<void> {
-        logger.debug("sending", MessageCodec.messageToString(message));
+        logger.debug("Message »", MessageCodec.messageDiagnostics(message));
         const packet = this.session.encode(message);
         const bytes = MessageCodec.encodePacket(packet);
         return this.channel.send(bytes);
