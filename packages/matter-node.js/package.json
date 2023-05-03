@@ -140,5 +140,8 @@
     "bin": {
         "matter": "./dist/Device.js",
         "matter-controller": "./dist/Controller.js"
+    },
+    "publishConfig": {
+        "access": "public"
     }
 }

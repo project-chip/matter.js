@@ -101,5 +101,8 @@
       }
     }
   },
-  "types": "dist/es/index.d.ts"
+  "types": "dist/es/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  }
 }
