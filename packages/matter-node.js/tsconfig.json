@@ -12,6 +12,7 @@
         "noUnusedParameters": true,
         "noUnusedLocals": true,
         "strict": true,
+        "resolveJsonModule": true,
     },
     "include": ["src/**/*.ts", "test/**/*.ts"],
 }

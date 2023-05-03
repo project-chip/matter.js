@@ -4,6 +4,7 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
+    "sourceMap": true,
     "declaration": true,
     "declarationMap": true, // Link from type definition (.d.ts) to source .ts for code navigation
   },
