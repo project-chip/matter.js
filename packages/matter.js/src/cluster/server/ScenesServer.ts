@@ -127,19 +127,18 @@ export class ScenesManager {
 export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesCluster> = () => {
     const addSceneLogic = (endpointId: number, groupId: GroupId, sceneId: number, sceneTransitionTime: number, sceneName: string, extensionFieldSets: any, transitionTime100ms: number, fabric: Fabric) => {
 
-        if (groupId.id !== 0) {
-            //  the server verifies that the endpoint has an entry for that GroupID in the Group Table. If there is no such entry in the Group Table, the status SHALL be ILLEGAL_COMMAND
-            //return { status: StatusCode.InvalidCommand, scenesGroupId, sceneId };
+        if (groupId.id !== 0 && !GroupsManager.hasGroup(fabric, endpointId, groupId)) {
+            return { status: StatusCode.InvalidCommand, groupId, sceneId };
         }
 
         if (groupId.id < 1 || sceneId < 1) {
-            return { status: StatusCode.ConstraintError, groupId: groupId, sceneId };
+            return { status: StatusCode.ConstraintError, groupId, sceneId };
         }
         if (groupId.id > 0xfff7) {
-            return { status: StatusCode.ConstraintError, groupId: groupId, sceneId };
+            return { status: StatusCode.ConstraintError, groupId, sceneId };
         }
         if (sceneName.length > 16) {
-            return { status: StatusCode.ConstraintError, groupId: groupId, sceneId };
+            return { status: StatusCode.ConstraintError, groupId, sceneId };
         }
 
         ScenesManager.setScenes(fabric, endpointId, [{

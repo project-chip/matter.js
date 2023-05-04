@@ -160,9 +160,6 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
         },
 
         removeAllGroups: async ({ session, message: { packetHeader: { sessionType } }, endpoint }) => {
-            // TODO Additionally, if the Scenes cluster is supported on the same endpoint, all scenes, except for scenes
-            //      associated with group ID 0, SHALL be removed on that endpoint.
-
             if (sessionType !== SessionType.Unicast) {
                 throw new Error("Groupcast not supported");
                 // TODO: When Unicast we generate a response, else not
