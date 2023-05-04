@@ -24,7 +24,7 @@
     "url": "https://github.com/project-chip/matter.js.git"
   },
   "scripts": {
-    "clean": "rm -rf dist && rm -rf out && rm *.tsbuildinfo || true",
+    "clean": "rm -rf dist && rm -rf out && rm -f *.tsbuildinfo",
     "build-cjs": "tsc -b tsconfig.dist-cjs.json && cp package-cjs.json dist/cjs/package.json",
     "build-es": "tsc -b tsconfig.dist-es.json",
     "build": "npm run build-cjs && npm run build-es",

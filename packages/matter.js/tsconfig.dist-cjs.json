@@ -5,6 +5,7 @@
     "outDir": "dist/cjs",
     "module": "CommonJS",
     "esModuleInterop": true,
+    "sourceMap": true,
     "declaration": true,
     "declarationMap": true, // Link from type definition (.d.ts) to source .ts for code navigation
   },
