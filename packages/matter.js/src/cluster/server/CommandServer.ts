@@ -18,8 +18,8 @@ export class CommandServer<RequestT, ResponseT> {
         readonly invokeId: number,
         readonly responseId: number,
         readonly name: string,
-        protected readonly requestSchema: TlvSchema<RequestT>,
-        protected readonly responseSchema: TlvSchema<ResponseT>,
+        readonly requestSchema: TlvSchema<RequestT>,
+        readonly responseSchema: TlvSchema<ResponseT>,
         protected readonly handler: (request: RequestT, session: Session<MatterDevice>, message: Message, endpoint: EndpointData) => Promise<ResponseT> | ResponseT,
     ) { }
 

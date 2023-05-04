@@ -47,6 +47,8 @@ import { StorageContext } from "../../storage/StorageContext.js";
 import { StorageManager } from "../../storage/StorageManager.js";
 import { capitalize } from "../../util/String.js";
 import { TlvVoid } from "../../tlv/TlvVoid.js";
+import { TlvAttributeValuePair } from "../../cluster/index.js";
+import { AttributeId } from "../../datatype/AttributeId.js";
 
 export const INTERACTION_PROTOCOL_ID = 0x0001;
 
@@ -62,6 +64,7 @@ export class ClusterServer<F extends BitSchema, A extends Attributes, C extends 
     readonly commands = new Array<CommandServer<any, any>>();
     private clusterStorage: StorageContext | null = null;
     private attributeStorageListeners = new Map<number, (value: any, version: number) => void>();
+    private sceneAttributeList = new Array<string>();
 
     constructor(clusterDef: Cluster<F, A, C, E>, features: TypeFromBitSchema<F>, attributesInitialValues: AttributeInitialValues<A>, handlers: ClusterServerHandlers<Cluster<F, A, C, E>>) {
         const { id, name, attributes: attributeDefs, commands: commandDefs } = clusterDef;
@@ -75,18 +78,21 @@ export class ClusterServer<F extends BitSchema, A extends Attributes, C extends 
             featureMap: features,
         };
         for (const name in attributesInitialValues) {
-            const { id, schema, writable, persistent } = attributeDefs[name];
+            const { id, schema, writable, persistent, scene } = attributeDefs[name];
             const validator = typeof schema.validate === 'function' ? schema.validate.bind(schema) : undefined;
             const getter = (handlers as any)[`get${capitalize(name)}`];
             if (getter === undefined) {
                 (this.attributes as any)[name] = new AttributeServer(id, name, schema, validator ?? (() => { /* no validation */ }), writable, (attributesInitialValues as any)[name]);
             } else {
-                (this.attributes as any)[name] = new AttributeGetterServer(id, name, schema, validator ?? (() => { /* no validation */ }), writable, (attributesInitialValues as any)[name], getter);
+                (this.attributes as any)[name] = new AttributeGetterServer(id, name, schema, validator ?? (() => { /* no validation */ }), writable, (attributesInitialValues as any)[name], (session, endpoint) => getter({ attributes: this.attributes, endpoint, session }));
             }
             if (persistent) {
                 const listener = (value: any, version: number) => this.attributeStorageListener(name, version, value);
                 this.attributeStorageListeners.set(id, listener);
                 (this.attributes as any)[name].addMatterListener(listener);
+            }
+            if (scene) {
+                this.sceneAttributeList.push(name);
             }
         }
 
@@ -120,6 +126,41 @@ export class ClusterServer<F extends BitSchema, A extends Attributes, C extends 
         if (!this.clusterStorage) return;
         logger.debug(`Storing attribute ${attributeName} in cluster ${this.name} (${this.id})`);
         this.clusterStorage.set(attributeName, { version, value });
+    }
+
+    getSceneExtensionFieldSets() {
+        const values = new Array<TypeFromSchema<typeof TlvAttributeValuePair>>();
+        for (const name of this.sceneAttributeList) {
+            const attributeServer = (this.attributes as any)[name]
+            values.push({ attributeId: new AttributeId(attributeServer.id), attributeValue: attributeServer.schema.encodeTlv(attributeServer.get()) });
+        }
+        return values;
+    }
+
+    setSceneExtensionFieldSets(values: TypeFromSchema<typeof TlvAttributeValuePair>[], _transitionTime: number) {
+        // TODO It is recommended that, where possible (e.g., it is not possible for attributes with Boolean data type),
+        //  a gradual transition SHOULD take place from the old to the new state over this time. However, the exact
+        //  transition is manufacturer dependent.
+
+        for (const { attributeId, attributeValue } of values) {
+            const attributeName = this.sceneAttributeList.find(name => (this.attributes as any)[name].id === attributeId.id);
+            if (attributeName) {
+                const attributeServer = (this.attributes as any)[attributeName];
+                attributeServer.set(attributeServer.schema.decodeTlv(attributeValue));
+            }
+        }
+    }
+
+    verifySceneExtensionFieldSets(values: TypeFromSchema<typeof TlvAttributeValuePair>[]) {
+        for (const { attributeId, attributeValue } of values) {
+            const attributeName = this.sceneAttributeList.find(name => (this.attributes as any)[name].id === attributeId.id);
+            if (attributeName) {
+                const attributeServer = (this.attributes as any)[attributeName];
+                console.log('Check attribute', attributeName, attributeServer.get(), attributeServer.schema.decodeTlv(attributeValue), attributeServer.schema.decodeTlv(attributeValue) === attributeServer.get())
+                if (attributeServer.get() !== attributeServer.schema.decodeTlv(attributeValue)) return false;
+            }
+        }
+        return true;
     }
 }
 
@@ -242,7 +283,9 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             }
 
             return attributes.map(({ path, attribute }) => {
-                const { value, version } = attribute.getWithVersion(exchange.session); // TODO check ACL
+                const { endpointId } = path;
+                const endpoint = endpointId !== undefined ? this.endpoints.get(endpointId) : undefined;
+                const { value, version } = attribute.getWithVersion(exchange.session, endpoint); // TODO check ACL
                 logger.debug(`Read from ${exchange.channel.getName()}: ${this.resolveAttributeName(path)}=${Logger.toJSON(value)} (version=${version})`);
                 return { attributeData: { path, data: attribute.schema.encodeTlv(value), dataVersion: version } };
             });

@@ -12,7 +12,9 @@ import { MatterDevice } from "../../MatterDevice.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { SessionType } from "../../codec/MessageCodec.js";
-import { StatusResponseError } from "../../protocol/interaction/InteractionMessenger.js";
+import { ScenesManager } from "./ScenesServer.js";
+import { IdentifyCluster } from "../IdentifyCluster.js";
+import { ClusterServer } from "../../protocol/interaction/InteractionServer.js";
 
 /*
 TODO: If the Scenes server cluster is implemented on the same endpoint, the following extension field SHALL
@@ -27,6 +29,48 @@ const getFabricFromSession = (session: SecureSession<MatterDevice>): Fabric => {
     if (fabric === undefined) throw new Error("Session needs to have an associated Fabric");
     return fabric;
 }
+
+export class GroupsManager {
+    static setGroup(fabric: Fabric, endpointId: number, groupId: GroupId, groupName: string) {
+        let endpointGroups = fabric.getScopedClusterDataValue<Map<number, string>>(GroupsCluster, endpointId.toString());
+        if (endpointGroups === undefined) {
+            endpointGroups = new Map<number, string>();
+        }
+        endpointGroups.set(groupId.id, groupName || '');
+
+        fabric.setScopedClusterDataValue(GroupsCluster, endpointId.toString(), endpointGroups);
+    }
+
+    static getGroupName(fabric: Fabric, endpointId: number, groupId: GroupId): string | undefined {
+        const endpointGroups = fabric.getScopedClusterDataValue<Map<number, string>>(GroupsCluster, endpointId.toString());
+        return endpointGroups?.get(groupId.id);
+    }
+
+    static hasGroup(fabric: Fabric, endpointId: number, groupId: GroupId): boolean {
+        const endpointGroups = fabric.getScopedClusterDataValue<Map<number, string>>(GroupsCluster, endpointId.toString());
+        return endpointGroups?.has(groupId.id) ?? false;
+    }
+
+    static getGroups(fabric: Fabric, endpointId: number): Map<number, string> {
+        return fabric.getScopedClusterDataValue<Map<number, string>>(GroupsCluster, endpointId.toString()) ?? new Map<number, string>();
+    }
+
+    static removeGroup(fabric: Fabric, endpointId: number, groupId: GroupId): boolean {
+        const endpointGroups = fabric.getScopedClusterDataValue<Map<number, string>>(GroupsCluster, endpointId.toString());
+        if (endpointGroups !== undefined) {
+            if (endpointGroups.delete(groupId.id)) {
+                fabric.persist(); // persist scoped cluster data changes
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static removeAllGroups(fabric: Fabric, endpointId: number) {
+        fabric.deleteScopedClusterDataValue(GroupsCluster, endpointId.toString());
+    }
+}
+
 
 export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsCluster> = () => {
     const addGroupLogic = (groupId: GroupId, groupName: string, sessionType: SessionType, fabric: Fabric, endpointId: number) => {
@@ -43,13 +87,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             return { status: StatusCode.ConstraintError, groupId };
         }
 
-        let endpointGroups = fabric.getScopedClusterDataValue<Map<number, string>>(GroupsCluster, endpointId.toString());
-        if (endpointGroups === undefined) {
-            endpointGroups = new Map<number, string>();
-        }
-        endpointGroups.set(groupId.id, groupName || '');
-
-        fabric.setScopedClusterDataValue(GroupsCluster, endpointId.toString(), endpointGroups);
+        GroupsManager.setGroup(fabric, endpointId, groupId, groupName);
 
         return { status: StatusCode.Success, groupId };
     }
@@ -71,12 +109,9 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             }
 
             const fabric = getFabricFromSession(session as SecureSession<MatterDevice>);
-            const endpointGroups = fabric.getScopedClusterDataValue<Map<number, string>>(GroupsCluster, endpoint.id.toString());
-            if (endpointGroups !== undefined) {
-                const groupName = endpointGroups.get(groupId.id);
-                if (groupName !== undefined) {
-                    return { status: StatusCode.Success, groupId, groupName: groupName };
-                }
+            const groupName = GroupsManager.getGroupName(fabric, endpoint.id, groupId);
+            if (groupName !== undefined) {
+                return { status: StatusCode.Success, groupId, groupName: groupName };
             }
             return { status: StatusCode.NotFound, groupId, groupName: '' };
         },
@@ -91,9 +126,9 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
                 throw new Error("Groupcast not supported");
             }
 
-            const fabric = getFabricFromSession(session as SecureSession<MatterDevice>)
-            const endpointGroups = fabric.getScopedClusterDataValue<Map<number, string>>(GroupsCluster, endpoint.id.toString()) ?? new Map<number, string>();
-            const fabricGroupsList = endpointGroups !== undefined ? Array.from(endpointGroups.keys()) : [];
+            const fabric = getFabricFromSession(session as SecureSession<MatterDevice>);
+            const endpointGroups = GroupsManager.getGroups(fabric, endpoint.id);
+            const fabricGroupsList = Array.from(endpointGroups.keys());
             const capacity = fabricGroupsList.length < 0xff ? 0xfe - fabricGroupsList.length : 0;
             if (groupList.length === 0) {
                 return { capacity, groupList: fabricGroupsList.map(id => new GroupId(id)) };
@@ -107,11 +142,9 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
         },
 
         removeGroup: async ({ request: { groupId }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
-            // TODO If the RemoveGroup command was received as a unicast, the server SHALL generate a RemoveGroupResponse
-            //      command with the Status field set to the evaluated status. If the RemoveGroup command was received as
-            //      a groupcast, the server SHALL NOT generate a RemoveGroupResponse command.
             if (sessionType !== SessionType.Unicast) {
                 throw new Error("Groupcast not supported");
+                // TODO: When Unicast we generate a response, else not
             }
 
             if (groupId.id < 1) {
@@ -119,13 +152,9 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             }
 
             const fabric = getFabricFromSession(session as SecureSession<MatterDevice>)
-            const endpointGroups = fabric.getScopedClusterDataValue<Map<number, string>>(GroupsCluster, endpoint.id.toString());
-            if (endpointGroups !== undefined) {
-                if (endpointGroups.has(groupId.id)) {
-                    endpointGroups.delete(groupId.id);
-                    fabric.persist(); // persist scoped cluster data changes
-                    return { status: StatusCode.Success, groupId };
-                }
+            if (GroupsManager.removeGroup(fabric, endpoint.id, groupId)) {
+                ScenesManager.removeAllScenesForGroup(fabric, endpoint.id, groupId.id);
+                return { status: StatusCode.Success, groupId };
             }
             return { status: StatusCode.NotFound, groupId };
         },
@@ -134,28 +163,39 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             // TODO Additionally, if the Scenes cluster is supported on the same endpoint, all scenes, except for scenes
             //      associated with group ID 0, SHALL be removed on that endpoint.
 
-            // TODO If the RemoveAllGroups command was received as unicast and a response is not suppressed ... return Success
             if (sessionType !== SessionType.Unicast) {
                 throw new Error("Groupcast not supported");
+                // TODO: When Unicast we generate a response, else not
             }
 
             const fabric = getFabricFromSession(session as SecureSession<MatterDevice>)
-            fabric.deleteScopedClusterDataValue(GroupsCluster, endpoint.id.toString());
+            GroupsManager.removeAllGroups(fabric, endpoint.id);
+            ScenesManager.removeAllNonGlobalScenesForEndpoint(fabric, endpoint.id);
 
-            throw new StatusResponseError("Return Status", StatusCode.Success);
+            return;
         },
 
         addGroupIfIdentifying: async ({ request: { groupId, groupName }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
-            // TODO The server verifies that it is currently identifying itself. If the server it not currently identifying
-            //      itself, the status SHALL be SUCCESS
-            // return {status: AdminCommissioningStatusCode.Success, groupId};
+
+            if (sessionType !== SessionType.Unicast) {
+                throw new Error("Groupcast not supported");
+                // TODO: When Unicast we generate a response, else not
+            }
+
+            // TODO when endpoint gets replaced by object this wil be nicer
+            const identifyCluster = endpoint.clusters.get(IdentifyCluster.id) as ClusterServer<typeof IdentifyCluster.features, typeof IdentifyCluster.attributes, typeof IdentifyCluster.commands, typeof IdentifyCluster.events>;
+            if (!identifyCluster) {
+                throw new Error("Identify cluster not found");
+            }
+
+            if (identifyCluster.attributes.identifyTime.get() > 0) { // We identify ourself currently
+                addGroupLogic(groupId, groupName, sessionType, getFabricFromSession(session as SecureSession<MatterDevice>), endpoint.id);
+            }
 
             // TODO If the AddGroupIfIdentifying command was received as unicast and the evaluated status is not SUCCESS, or
             //      if the AddGroupIfIdentifying command was received as unicast and the evaluated status is SUCCESS and a
             //      response is not suppressed, the server SHALL generate a response with the Status field set to the
             //      evaluated status.
-            const { status } = addGroupLogic(groupId, groupName, sessionType, getFabricFromSession(session as SecureSession<MatterDevice>), endpoint.id);
-            throw new StatusResponseError("Return Status", status);
         },
     }
 };

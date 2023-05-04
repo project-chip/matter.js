@@ -4,6 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { AttributeId } from "../datatype/AttributeId.js";
+import { ClusterId } from "../datatype/ClusterId.js";
+import { CommandId } from "../datatype/CommandId.js";
+import { EndpointNumber } from "../datatype/EndpointNumber.js";
+import { EventId } from "../datatype/EventId.js";
+import { FabricId } from "../datatype/FabricId.js";
+import { FabricIndex } from "../datatype/FabricIndex.js";
+import { GroupId } from "../datatype/GroupId.js";
+import { NodeId } from "../datatype/NodeId.js";
+import { VendorId } from "../datatype/VendorId.js";
 import { ByteArray } from "../util/ByteArray.js";
 
 /** Supported base types to stringify the data for the storage that can be used as keys and also values. */
@@ -12,7 +22,17 @@ type SupportedStorageBaseTypes =
     | number
     | boolean
     | bigint
-    | ByteArray;
+    | ByteArray
+    | AttributeId
+    | ClusterId
+    | CommandId
+    | EndpointNumber
+    | EventId
+    | FabricId
+    | FabricIndex
+    | GroupId
+    | NodeId
+    | VendorId;
 
 /** Supported combined types to stringify the data for the storage that can be used as values. */
 type SupportedComplexStorageTypes =
@@ -40,13 +60,43 @@ export function toJson(object: SupportedStorageTypes): string {
         if (value instanceof Map) {
             return `{"${JSON_SPECIAL_KEY_TYPE}":"Map","${JSON_SPECIAL_KEY_VALUE}":${JSON.stringify(toJson(Array.from(value.entries())))}}`;
         }
+        if (value instanceof AttributeId) {
+            return `{"${JSON_SPECIAL_KEY_TYPE}":"AttributeId","${JSON_SPECIAL_KEY_VALUE}":${value.id}}`;
+        }
+        if (value instanceof ClusterId) {
+            return `{"${JSON_SPECIAL_KEY_TYPE}":"ClusterId","${JSON_SPECIAL_KEY_VALUE}":${value.id}}`;
+        }
+        if (value instanceof CommandId) {
+            return `{"${JSON_SPECIAL_KEY_TYPE}":"CommandId","${JSON_SPECIAL_KEY_VALUE}":${value.id}}`;
+        }
+        if (value instanceof EndpointNumber) {
+            return `{"${JSON_SPECIAL_KEY_TYPE}":"EndpointNumber","${JSON_SPECIAL_KEY_VALUE}":${value.number}}`;
+        }
+        if (value instanceof EventId) {
+            return `{"${JSON_SPECIAL_KEY_TYPE}":"EventId","${JSON_SPECIAL_KEY_VALUE}":${value.id}}`;
+        }
+        if (value instanceof FabricId) {
+            return `{"${JSON_SPECIAL_KEY_TYPE}":"FabricId","${JSON_SPECIAL_KEY_VALUE}":"${value.id.toString()}"}`;
+        }
+        if (value instanceof FabricIndex) {
+            return `{"${JSON_SPECIAL_KEY_TYPE}":"FabricIndex","${JSON_SPECIAL_KEY_VALUE}":${value.index}}`;
+        }
+        if (value instanceof GroupId) {
+            return `{"${JSON_SPECIAL_KEY_TYPE}":"GroupId","${JSON_SPECIAL_KEY_VALUE}":${value.id}}`;
+        }
+        if (value instanceof NodeId) {
+            return `{"${JSON_SPECIAL_KEY_TYPE}":"NodeId","${JSON_SPECIAL_KEY_VALUE}":"${value.id.toString()}"}`;
+        }
+        if (value instanceof VendorId) {
+            return `{"${JSON_SPECIAL_KEY_TYPE}":"VendorId","${JSON_SPECIAL_KEY_VALUE}":${value.id}}`;
+        }
         return value;
     });
 }
 
 export function fromJson(json: string): SupportedStorageTypes {
     return JSON.parse(json, (_key, value) => {
-        if (typeof value === "string" && value.startsWith(`{"${JSON_SPECIAL_KEY_TYPE}":"`) && value.endsWith('"}')) {
+        if (typeof value === "string" && value.startsWith(`{"${JSON_SPECIAL_KEY_TYPE}":"`) && value.endsWith('}')) {
             const data = JSON.parse(value);
             const object = data[JSON_SPECIAL_KEY_TYPE];
             switch (object) {
@@ -56,6 +106,27 @@ export function fromJson(json: string): SupportedStorageTypes {
                     return ByteArray.fromHex(data[JSON_SPECIAL_KEY_VALUE]);
                 case "Map":
                     return new Map(fromJson(data[JSON_SPECIAL_KEY_VALUE]) as [SupportedStorageBaseTypes, SupportedStorageBaseTypes][]);
+                case "AttributeId":
+                    return new AttributeId(data[JSON_SPECIAL_KEY_VALUE]);
+                case "ClusterId":
+                    return new ClusterId(data[JSON_SPECIAL_KEY_VALUE]);
+                case "CommandId":
+                    return new CommandId(data[JSON_SPECIAL_KEY_VALUE]);
+                case "EndpointNumber":
+                    return new EndpointNumber(data[JSON_SPECIAL_KEY_VALUE]);
+                case "EventId":
+                    return new EventId(data[JSON_SPECIAL_KEY_VALUE]);
+                case "FabricId":
+                    return new FabricId(BigInt(data[JSON_SPECIAL_KEY_VALUE]));
+                case "FabricIndex":
+                    return new FabricIndex(data[JSON_SPECIAL_KEY_VALUE]);
+                case "GroupId":
+                    return new GroupId(data[JSON_SPECIAL_KEY_VALUE]);
+                case "NodeId":
+                    return new NodeId(BigInt(data[JSON_SPECIAL_KEY_VALUE]));
+                case "VendorId":
+                    return new VendorId(data[JSON_SPECIAL_KEY_VALUE]);
+
                 default:
                     throw new Error(`Unknown object type: ${object}`);
             }

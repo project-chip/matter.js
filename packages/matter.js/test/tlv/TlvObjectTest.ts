@@ -56,4 +56,15 @@ describe("TlvObject", () => {
             expect(result).toEqual({ optionalField: "test" });
         });
     });
+
+    describe("encodeTlv with decodeTlv", () => {
+        for (const valueDescription in codecVector) {
+            const { decoded } = codecVector[valueDescription];
+            it(`encode/decodes ${valueDescription}`, () => {
+                const tlvEncoded = schema.encodeTlv(decoded);
+                const tlvDecoded = schema.decodeTlv(tlvEncoded);
+                expect(tlvDecoded).toEqual(decoded);
+            });
+        }
+    });
 });

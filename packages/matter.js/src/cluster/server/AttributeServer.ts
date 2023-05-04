@@ -8,6 +8,7 @@ import { MatterDevice } from "../../MatterDevice.js";
 import { Session } from "../../session/Session.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { TlvSchema } from "../../tlv/TlvSchema.js";
+import { EndpointData } from "../../protocol/interaction/InteractionServer.js";
 
 export class AttributeServer<T> {
     private value: T;
@@ -51,14 +52,14 @@ export class AttributeServer<T> {
         this.value = value;
     }
 
-    get(_session?: Session<MatterDevice>): T {
+    get(_session?: Session<MatterDevice>, _endpoint?: EndpointData): T {
         // TODO: check ACL
 
         return this.getLocal();
     }
 
-    getWithVersion(session?: Session<MatterDevice>) {
-        return { version: this.version, value: this.get(session) };
+    getWithVersion(session?: Session<MatterDevice>, endpoint?: EndpointData) {
+        return { version: this.version, value: this.get(session, endpoint) };
     }
 
     getLocal(): T {
@@ -91,7 +92,7 @@ export class AttributeGetterServer<T> extends AttributeServer<T> {
         validator: (value: T, name: string) => void,
         isWritable: boolean,
         defaultValue: T,
-        readonly getter: (session?: Session<MatterDevice>) => T,
+        readonly getter: (session?: Session<MatterDevice>, endpoint?: EndpointData) => T,
     ) {
         super(id, name, schema, validator, isWritable, defaultValue);
     }
@@ -100,9 +101,9 @@ export class AttributeGetterServer<T> extends AttributeServer<T> {
         throw new Error("Setter is not supported on attribute defined by a getter");
     }
 
-    override get(session?: SecureSession<MatterDevice>): T {
+    override get(session?: SecureSession<MatterDevice>, endpoint?: EndpointData): T {
         // TODO: check ACL
         // TODO handle "version" for getter
-        return this.getter(session);
+        return this.getter(session, endpoint);
     }
 }
