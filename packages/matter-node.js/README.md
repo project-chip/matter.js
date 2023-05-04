@@ -149,7 +149,7 @@ The following parameters are available:
 * -ip: the IP address of the device to commission
 * -discriminator: the discriminator to use for pairing (default: 3840)
 * -pin: the pin to use for pairing (default: 20202021)
-* -code: code to use for pairing (-discriminator and -pin will be ignored)
+* -pairingcode: code to use for pairing (-discriminator and -pin will be ignored)
 * -store: the storage location (directory) to use for storing the pairing information (default: controller-node). Delete the directory or provide an alternative name to reset the controller
 
 ## Modifying the server (DeviceNode) behavior

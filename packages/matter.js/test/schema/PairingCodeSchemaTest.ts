@@ -22,11 +22,37 @@ const QR_CODE_DATA: QrCodeData = {
     passcode: 34567890,
 };
 
-const MANUAL_PAIRING_CODE_DATA: ManualPairingData = {
-    discriminator: 2976,
-    passcode: 34567890,
-};
-const MANUAL_PAIRING_CODE = "26318621095";
+type MANUAL_PAIRING_DATA_CODE = {
+    data: ManualPairingData,
+    code: string
+}
+
+const MANUAL_PAIRING_DATA_CODES: Array<MANUAL_PAIRING_DATA_CODE> = [
+    {
+        data: {
+            discriminator: 2976,
+            shortDiscriminator: 11,
+            passcode: 34567890,
+        },
+        code: "26318621095"
+    },
+    {
+        data: {
+            discriminator: 10,
+            shortDiscriminator: 0,
+            passcode: 12345678,
+        },
+        code: "00852607537"
+    },
+    {
+        data: {
+            discriminator: 2001,
+            shortDiscriminator: 7,
+            passcode: 23456789,
+        },
+        code: "16043714310"
+    }
+];
 
 describe("QrPairingCodeCodec", () => {
     describe("encode", () => {
@@ -50,9 +76,20 @@ describe("QrPairingCodeCodec", () => {
 describe("ManualPairingCodeCodec", () => {
     describe("encode", () => {
         it("encodes the data", () => {
-            const result = ManualPairingCodeCodec.encode(MANUAL_PAIRING_CODE_DATA);
+            for (const pairingCode of MANUAL_PAIRING_DATA_CODES) {
+                const result = ManualPairingCodeCodec.encode(pairingCode.data);
 
-            assert.equal(result, MANUAL_PAIRING_CODE);
+                assert.equal(result, pairingCode.code);
+            }
+        });
+
+        it("decode the data", () => {
+            for (const dataCode of MANUAL_PAIRING_DATA_CODES) {
+                const result = ManualPairingCodeCodec.decode(dataCode.code);
+
+                assert.equal(result.shortDiscriminator, dataCode.data.shortDiscriminator);
+                assert.equal(result.passcode, dataCode.data.passcode);
+            }
         });
     });
 });

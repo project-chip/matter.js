@@ -54,14 +54,15 @@ class ControllerNode {
         if (ip === "") throw new Error("Please specify the IP of the device to commission with -ip");
         const port = getIntParameter("port") ?? controllerStorage.get("port", 5540);
 
-        const code = getParameter("code");
+        const pairingCode = getParameter("pairingcode");
         let discriminator, setupPin;
-        if (code !== undefined) {
-            const pairingCode = ManualPairingCodeCodec.decode(code);
-            discriminator = pairingCode.discriminator;
-            setupPin = pairingCode.passcode;
+        if (pairingCode !== undefined) {
+            const pairingCodeCodec = ManualPairingCodeCodec.decode(pairingCode);
+            discriminator = pairingCodeCodec.shortDiscriminator;
+            setupPin = pairingCodeCodec.passcode;
         } else {
             discriminator = getIntParameter("discriminator") ?? controllerStorage.get("discriminator", 3840);
+            if (discriminator > 4095) throw new Error("Discriminator value must be less than 4096");
             setupPin = getIntParameter("pin") ?? controllerStorage.get("pin", 20202021);
         }
 
