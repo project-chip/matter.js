@@ -28,7 +28,7 @@ export class RootCertificateManager {
                 // if one fail we use the pre-generated values, else we overwrite them
                 const rootCertId = storage.get<bigint>("rootCertId");
                 const rootKeyPair = storage.get<KeyPair>("rootKeyPair");
-                const rootKeyIdentifier = storage.get<Buffer>("rootKeyIdentifier");
+                const rootKeyIdentifier = storage.get<ByteArray>("rootKeyIdentifier");
                 const rootCertBytes = storage.get<ByteArray>("rootCertBytes");
                 const nextCertificateId = storage.get<number>("nextCertificateId");
                 this.rootCertId = rootCertId;

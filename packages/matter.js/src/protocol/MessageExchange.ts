@@ -26,7 +26,7 @@ export class UnexpectedMessageError extends MatterError {
         message: string,
         public readonly receivedMessage: Message,
     ) {
-        super(`(${MessageCodec.messageToString(receivedMessage)}) ${message}`);
+        super(`(${MessageCodec.messageDiagnostics(receivedMessage)}) ${message}`);
     }
 }
 
@@ -116,13 +116,19 @@ export class MessageExchange<ContextT> {
         this.activeRetransmissionTimeoutMs = activeRetransmissionTimeoutMs ?? SLEEPY_ACTIVE_INTERVAL_MS;
         this.idleRetransmissionTimeoutMs = idleRetransmissionTimeoutMs ?? SLEEPY_IDLE_INTERVAL_MS;
         this.retransmissionRetries = retransmissionRetries;
-        logger.debug("new MessageExchange", this.protocolId, this.exchangeId, this.activeRetransmissionTimeoutMs, this.idleRetransmissionTimeoutMs, this.retransmissionRetries);
+        logger.debug("New exchange", Logger.dict({
+            protocol: this.protocolId,
+            id: this.exchangeId,
+            "active retransmit ms": this.activeRetransmissionTimeoutMs,
+            "idle retransmit ms": this.idleRetransmissionTimeoutMs,
+            retries: this.retransmissionRetries
+        }));
     }
 
     async onMessageReceived(message: Message) {
         const { packetHeader: { messageId }, payloadHeader: { requiresAck, ackedMessageId, protocolId, messageType } } = message;
 
-        logger.debug("onMessageReceived", this.protocolId, MessageCodec.messageToString(message));
+        logger.debug("Message «", MessageCodec.messageDiagnostics(message));
         this.session.notifyActivity(true);
 
         if (messageId === this.receivedMessageToAck?.packetHeader.messageId) {

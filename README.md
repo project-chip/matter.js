@@ -8,15 +8,14 @@ Matter is a new secure / reliable / local / standard protocol for smart devices 
 To know more about Matter: https://csa-iot.org/all-solutions/matter/
 
 matter-node.js is compatible with:
-- **iOS - Home app**: fully working
-- **Android - Home app**: fully working
-- **Alexa**: fully working
-- **Home Assistant**: fully working
-- **Tuya Smartlife App**: fully working
-- **Smartthings**: pairing works, but for controlling seems like Smartthings implementation itself has issues
+- **Apple iOS (iPhone or iPad) and tvOS 16 (Apple TV) - "Home" app by Apple**: fully working
+- **Google Home Ecosystem (Android or Google Nest smart speakers/display) - "Google Home" app**: fully working
+- **Amazon Alexa (Amazon Echo smart speakers/displays)** : fully working
+- **Home Assistant - Matter integration**: fully working
+- **Tuya Smart (SmartLife) app**: fully working
+- **Samsung SmartThings (Station or Hub v2 and later)**: pairing works, but for controlling seems like Smartthings implementation itself has issues
 
 Each system have their own specialities, see [Pairing and Usage Information](#Pairing-and-Usage-Information) for more details.
-
 
 ## Monorepo Overview
 
@@ -109,8 +108,9 @@ It should work with any Matter-compatible home automation app when Matter will b
 A good guide with images on how to add devices to Alexa, Google and Apple in general is available in the [TP-Link FAQ](https://www.tp-link.com/de/support/faq/3564/).
 
 
-### iOS Home
-Minimum OS Required for iOS device: iOS16.2 or later.
+### Apple iOS and tvOS
+
+Minimum OS Required for iOS and tvOS devices: iOS 16.2 or later.
 
 Apple [support to set up HomePod, HomePod mini, Apple TV, or iPad](https://support.apple.com/en-us/HT207057) (will not be supported anymore
 with the new Home Architecture starting iOS 16.3!) as a Matter Hub. The pairing itself can also be done using an iPhone, but the later
@@ -124,11 +124,11 @@ We currently have no information which device types are supported by the Home ap
 Apple is using "two fabric IDs" on the paired devices (all others only use one). This needs to be considered when planning to pair devices with
 multiple controllers. How many fabrics are available depends on the device manufacturer (minimum are 3).
 
-### Google Home
-Minimum Version Required for Google Home App：2.62.1.15 or later.
+### Google Home Ecosystem
 
-Also for Google you need to have a Hub device out of the [list of supported devices](https://support.google.com/googlenest/answer/12391458?hl=en)
-to control your Matter devices.
+Minimum Version Required for the "Google Home" app：2.62.1.15 or later.
+
+Also for Google you need to have a Hub device (Android or Google Nest smart speakers/display) out of the [list of supported devices](https://support.google.com/googlenest/answer/12391458?hl=en) to control your Matter devices.
 
 Pairing is currently only possible using the Google Home Android App on Android 8.1 or higher. The iOS App is not supporting Matter yet.
 
@@ -141,9 +141,10 @@ If you have issues with pairing please refer to the [Troubleshootling pages](htt
 Google supports several [Matter device types](https://developers.home.google.com/matter/supported-devices?authuser=0&hl=en) already.
 
 ### Amazon Alexa
-Minimum Version Required for Alexa App：2.2.491118.0 or later.
 
-**Please note that because Alexa’s temporarily limited setting, Alexa ecosystem needs to be paired with Matter-certified device as the first ecosystem. If you are unsure, please factory default your device before setup.**
+Minimum Version Required for the "Amazon Alexa" app：2.2.491118.0 or later.
+
+**Please note that because Alexa’s temporarily limited setting, Alexa ecosystem (Amazon Echo smart speakers/displays) needs to be paired with Matter-certified device as the first ecosystem. If you are unsure, please factory default your device before setup.**
 
 For Amazon Alexa Usage you also need one [Alexa device as Matter hub](https://www.amazon.com/b?ie=UTF8&node=37490568011) in your local network.
 
@@ -154,11 +155,32 @@ For Alexa no special setup is needed to pair node-matter as development device.
 The [list of supported device types](https://developer.amazon.com/en-US/docs/alexa/smarthome/matter-support.html#device-categories-and-clusters)
 is basic currently, but will get enhanced in the future.
 
-### Smartthings
-Samsung is building its SmartThings hub software into 2022 Samsung Smart TVs, Smart Monitors, and Family Hub refrigerators, allowing them to
-control Matter smart home devices. These are needed as Hubs.
+### Home Assistant - Matter integration
 
-Rest information and not yet known.
+Home Assistant's official Matter integration is in Beta-stage however it is fully working and compatible with the Matter 1.0 standard. To connect Thread based devices you also need an Thread Border Router radio that is compatible with Home Assistant's official Thread integration, that includes their official Home Assistant Yellow hub and their Home Assistant SkyConnect Zigbee/Thread USB dongle.
+
+* https://www.home-assistant.io/integrations/matter/
+* https://www.home-assistant.io/integrations/thread/
+
+### Tuya Smart (SmartLife)
+
+Should work but no more detatailed information here as of yet.
+
+### Samsung SmartThings
+
+Samsung is building its SmartThings hub software into 2022 Samsung Smart TVs, Smart Monitors, and Family Hub refrigerators, allowing them to
+control Matter smart home devices. Currently, Samsung SmartThings Station or Samsung SmartThings Hub v2 and later are needed as a hub for Matter.
+
+* Samsung "Samsung SmartThings Station" does support Matter devices over LAN, Wi-Fi, and over Thread radio (Thread Border Router).
+* "Aeotec Smart Home Hub" (rebranded Samsung SmartThings Hub v3) will be getting an update to supports Matter over Wi-Fi.
+* "Samsung SmartThings Hub v3" (ETH-ETH-300 from 2018) has been updated to support Matter over Wi-Fi.
+* "Samsung SmartThings Hub v2" (ETH-ETH-250 from 2016) has been updated to support Matter over Wi-Fi.
+* "Samsung SmartThings Hub v2" (ETH-ETH-200 from 2015) has been updated to support Matter over Wi-Fi.
+* "SmartThings Family Hub" smart fridge might or might not get updated to support Matter at a later date.
+* "SmartThings Hub v1" (F-H-ETH-001 and STH-ETH-001) has been discontinued and will not get updated to support Matter.
+* "Samsung SmartThings Link" (USB dongle) for Nvidia Shield has been discontinued and will not get updated to support Matter.
+
+Note! Samsung has started that they do not plan on bridging Zigbee and Z-Wave devices connected to their hubs with Matter (e.i. no protocol bridge so far).
 
 ### chip-tool
 
