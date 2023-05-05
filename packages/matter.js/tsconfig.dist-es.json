@@ -5,10 +5,8 @@
     "moduleResolution": "node16", // Required to correctly resolve Babel imports and to make sure all imports are js
     "module": "node16", // Required to make sure all imports are js
     "outDir": "dist/es",
-    "sourceMap": true,
     "declaration": true,
     "declarationMap": true, // Link from type definition (.d.ts) to source .ts for code navigation
-    "sourceMap": true, // Link from compiled .js to source .ts for debugging
   },
   "include": ["src/**/*.ts"],
 }
