@@ -1,22 +1,13 @@
 /* Dev configuration */
 {
-  "extends": "./tsconfig.base.json",
+  "extends": ["./tsconfig.base.json", "../../tsconfig.dev.json"],
   "compilerOptions": {
-    "esModuleInterop": true, // Required to remove warnings on jest test
-    "composite": true,  // For linking this package from other packages
-    "incremental": true, // Speed up subsequent builds
-    "moduleResolution": "node16", // Required to correctly resolve Babel imports and to make sure all imports are js
     "module": "node16", // Required to make sure all imports are js
-
-    // Local dev compilation checks
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitAny": true,
-    "noImplicitOverride": true,
-    "noUnusedParameters": true,
-    "noUnusedLocals": true,
-    "strict": true,
+    "moduleResolution": "node16", // Required to correctly resolve Babel imports and to make sure all imports are js
+    "composite": true,  // For linking this package from other packages
+    "esModuleInterop": true, // Required to remove warnings on jest test
+    "incremental": true, // Speed up subsequent builds
   },
   /* During dev, src are included, so they are also modified during refactorings. */
   "include": ["src/**/*.ts", "test/**/*.ts"],
-  "exclude": []
 }

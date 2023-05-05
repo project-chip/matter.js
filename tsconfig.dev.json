@@ -1,0 +1,12 @@
+/* Dev configuration */
+{
+  "compilerOptions": {
+    // Local dev compilation checks
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
+    "noImplicitOverride": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "strict": true,
+  }
+}
