@@ -6,44 +6,39 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { singleton } from "@project-chip/matter.js/util";
-import { Time } from "@project-chip/matter.js/time";
+import { singleton, commandExecutor, getIntParameter, getParameter, requireMinNodeVersion } from "@project-chip/matter-node.js/util";
+import { Time } from "@project-chip/matter-node.js/time";
 import { TimeNode } from "./time/TimeNode";
 
 Time.get = singleton(() => new TimeNode());
 
-import { Network, UdpInterface } from "@project-chip/matter.js/net";
+import { Network, UdpInterface } from "@project-chip/matter-node.js/net";
 import { NetworkNode } from "./net/NetworkNode";
 
 Network.get = singleton(() => new NetworkNode());
 
-import { Crypto } from "@project-chip/matter.js/crypto";
+import { Crypto } from "@project-chip/matter-node.js/crypto";
 import { CryptoNode } from "./crypto/CryptoNode";
 
 Crypto.get = singleton(() => new CryptoNode());
 
-import { Logger } from "@project-chip/matter.js/log";
-import { StorageManager } from "@project-chip/matter.js/storage";
-import { MatterDevice } from "@project-chip/matter.js";
-import { SecureChannelProtocol } from "@project-chip/matter.js/securechannel";
-import { PaseServer, CaseServer } from "@project-chip/matter.js/session";
-import { ClusterServer, InteractionServer } from "@project-chip/matter.js/interaction";
+import { Logger } from "@project-chip/matter-node.js/log";
+import { StorageManager, StorageBackendDisk } from "@project-chip/matter-node.js/storage";
+import { MatterDevice } from "@project-chip/matter-node.js";
+import { SecureChannelProtocol } from "@project-chip/matter-node.js/securechannel";
+import { PaseServer, CaseServer } from "@project-chip/matter-node.js/session";
+import { ClusterServer, InteractionServer } from "@project-chip/matter-node.js/interaction";
 import {
     BasicInformationCluster, GeneralCommissioningCluster, RegulatoryLocationType, OperationalCredentialsCluster,
     OnOffCluster, NetworkCommissioningCluster, NetworkCommissioningStatus, AdminCommissioningCluster,
     CommissioningWindowStatus, AccessControlCluster, GeneralCommissioningClusterHandler,
     OperationalCredentialsClusterHandler, OnOffClusterHandler, AdminCommissioningHandler, NetworkCommissioningHandler,
-
-} from "@project-chip/matter.js/cluster";
-import { VendorId, FabricIndex } from "@project-chip/matter.js/datatype";
-import { DEVICE } from "@project-chip/matter.js/common";
-import { MdnsBroadcaster, MdnsScanner } from "@project-chip/matter.js/mdns";
-import { CommissionningFlowType, DiscoveryCapabilitiesSchema, ManualPairingCodeCodec, QrPairingCodeCodec, QrCode } from "@project-chip/matter.js/schema";
-import { AttestationCertificateManager, CertificationDeclarationManager } from "@project-chip/matter.js/certificate";
-
-import { commandExecutor, getIntParameter, getParameter } from "./util/CommandLine";
-import { StorageBackendDisk } from "./storage/StorageBackendDisk";
-import { requireMinNodeVersion } from "./util/Node";
+} from "@project-chip/matter-node.js/cluster";
+import { VendorId, FabricIndex } from "@project-chip/matter-node.js/datatype";
+import { DEVICE } from "@project-chip/matter-node.js/common";
+import { MdnsBroadcaster, MdnsScanner } from "@project-chip/matter-node.js/mdns";
+import { CommissionningFlowType, DiscoveryCapabilitiesSchema, ManualPairingCodeCodec, QrPairingCodeCodec, QrCode } from "@project-chip/matter-node.js/schema";
+import { AttestationCertificateManager, CertificationDeclarationManager } from "@project-chip/matter-node.js/certificate";
 
 const logger = Logger.get("Device");
 

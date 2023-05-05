@@ -6,26 +6,26 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { singleton } from "@project-chip/matter.js/util";
-import { Time } from "@project-chip/matter.js/time";
+import { singleton } from "@project-chip/matter-node.js/util";
+import { Time } from "@project-chip/matter-node.js/time";
 import { TimeNode } from "./time/TimeNode";
 
 Time.get = singleton(() => new TimeNode());
 
-import { Network } from "@project-chip/matter.js/net";
+import { Network } from "@project-chip/matter-node.js/net";
 import { NetworkNode } from "./net/NetworkNode";
 
 Network.get = singleton(() => new NetworkNode());
 
-import { Crypto } from "@project-chip/matter.js/crypto";
+import { Crypto } from "@project-chip/matter-node.js/crypto";
 import { CryptoNode } from "./crypto/CryptoNode";
 
 Crypto.get = singleton(() => new CryptoNode());
 
-import { Logger } from "@project-chip/matter.js/log";
-import { StorageManager } from "@project-chip/matter.js/storage";
-import { Matter, PairableMatterNode } from "@project-chip/matter.js";
-import { BasicInformationCluster, DescriptorCluster, OnOffCluster } from "@project-chip/matter.js/cluster";
+import { Logger } from "@project-chip/matter-node.js/log";
+import { StorageManager } from "@project-chip/matter-node.js/storage";
+import { Matter, PairableMatterNode } from "@project-chip/matter-node.js";
+import { BasicInformationCluster, DescriptorCluster, OnOffCluster } from "@project-chip/matter-node.js/cluster";
 
 import { getIntParameter, getParameter } from "./util/CommandLine";
 import { StorageBackendDisk } from "./storage/StorageBackendDisk";

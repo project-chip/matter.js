@@ -4,31 +4,30 @@
  * Copyright 2022 The node-matter Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { singleton } from "@project-chip/matter.js/util";
-import { Time } from "@project-chip/matter.js/time";
+import { singleton } from "@project-chip/matter-node.js/util";
+import { Time } from "@project-chip/matter-node.js/time";
 import { TimeNode } from "./time/TimeNode";
 
 Time.get = singleton(() => new TimeNode());
 
-import { Network } from "@project-chip/matter.js/net";
+import { Network } from "@project-chip/matter-node.js/net";
 import { NetworkNode } from "./net/NetworkNode";
 
 Network.get = singleton(() => new NetworkNode());
 
-import { Crypto } from "@project-chip/matter.js/crypto";
+import { Crypto } from "@project-chip/matter-node.js/crypto";
 import { CryptoNode } from "./crypto/CryptoNode";
 
 Crypto.get = singleton(() => new CryptoNode());
 
-import { CommissionableMatterNode, Matter } from "@project-chip/matter.js";
-import { OnOffLightDevice, OnOffPluginUnitDevice, Aggregator } from "@project-chip/matter.js/device";
-import { DEVICE } from "@project-chip/matter.js/common";
-import { VendorId } from "@project-chip/matter.js/datatype";
-import { Logger } from "@project-chip/matter.js/log";
-import { StorageManager } from "@project-chip/matter.js/storage";
+import { CommissionableMatterNode, Matter } from "@project-chip/matter-node.js";
+import { OnOffLightDevice, OnOffPluginUnitDevice, Aggregator } from "@project-chip/matter-node.js/device";
+import { DEVICE } from "@project-chip/matter-node.js/common";
+import { VendorId } from "@project-chip/matter-node.js/datatype";
+import { Logger } from "@project-chip/matter-node.js/log";
+import { StorageManager } from "@project-chip/matter-node.js/storage";
 import { StorageBackendDisk } from "./storage/StorageBackendDisk";
 import { commandExecutor, getIntParameter, getParameter } from "./util/CommandLine";
-import packageJson from "../package.json";
 
 const logger = Logger.get("Device");
 
@@ -36,7 +35,7 @@ const storage = new StorageBackendDisk(getParameter("store") ?? "device-node");
 
 class BridgedDevice {
     async start() {
-        logger.info(`node-matter@${packageJson.version}`);
+        logger.info(`node-matter`);
 
         const storageManager = new StorageManager(storage);
         await storageManager.initialize();
@@ -58,6 +57,7 @@ class BridgedDevice {
 
         const matterServer = new Matter(storageManager, netAnnounceInterface);
 
+        const uniqueId = Time.nowMs(); // TODO Store it!
         const commissionableNode = new CommissionableMatterNode({
             port,
             deviceName,
@@ -69,7 +69,7 @@ class BridgedDevice {
                 vendorId,
                 productName,
                 productId,
-                serialNumber: `node-matter-${packageJson.version}`,
+                serialNumber: `node-matter-${uniqueId}`,
             }
         });
 
@@ -80,7 +80,7 @@ class BridgedDevice {
             onOffDevice.addOnOffListener(on => commandExecutor(on ? `on${i}` : `off${i}`)?.());
             aggregator.addBridgedDevice(onOffDevice, {
                 nodeLabel: `OnOff ${onOffDevice instanceof OnOffPluginUnitDevice ? 'Socket' : 'Light'} ${i}`,
-                serialNumber: `node-matter-${packageJson.version}-${i}`,
+                serialNumber: `node-matter-${uniqueId}-${i}`,
                 reachable: true
             });
         }

@@ -6,36 +6,29 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { singleton } from "@project-chip/matter.js/util";
-import { Time } from "@project-chip/matter.js/time";
-import { TimeNode } from "./time/TimeNode";
+import { singleton, getIntParameter, getParameter, requireMinNodeVersion } from "@project-chip/matter-node.js/util";
+import { Time, TimeNode } from "@project-chip/matter-node.js/time";
 
 Time.get = singleton(() => new TimeNode());
 
-import { Network, UdpInterface } from "@project-chip/matter.js/net";
-import { NetworkNode } from "./net/NetworkNode";
+import { Network, NetworkNode, UdpInterface } from "@project-chip/matter-node.js/net";
 
 Network.get = singleton(() => new NetworkNode());
 
-import { Crypto } from "@project-chip/matter.js/crypto";
-import { CryptoNode } from "./crypto/CryptoNode";
+import { Crypto, CryptoNode } from "@project-chip/matter-node.js/crypto";
 
 Crypto.get = singleton(() => new CryptoNode());
 
-import { Logger } from "@project-chip/matter.js/log";
-import { StorageManager } from "@project-chip/matter.js/storage";
-import { MatterController } from "@project-chip/matter.js";
-import { MdnsScanner } from "@project-chip/matter.js/mdns";
-import { ClusterClient } from "@project-chip/matter.js/interaction";
+import { Logger } from "@project-chip/matter-node.js/log";
+import { StorageManager, StorageBackendDisk } from "@project-chip/matter-node.js/storage";
+import { MatterController } from "@project-chip/matter-node.js";
+import { MdnsScanner } from "@project-chip/matter-node.js/mdns";
+import { ClusterClient } from "@project-chip/matter-node.js/interaction";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { BasicInformationCluster, DescriptorCluster, OnOffCluster } from "@project-chip/matter.js/cluster";
+import { BasicInformationCluster, DescriptorCluster, OnOffCluster } from "@project-chip/matter-node.js/cluster";
 import { ManualPairingCodeCodec } from "@project-chip/matter-node.js/schema";
-
-import { getIntParameter, getParameter } from "./util/CommandLine";
-import { StorageBackendDisk } from "./storage/StorageBackendDisk";
-import { requireMinNodeVersion } from "./util/Node";
 
 const logger = Logger.get("Controller");
 
@@ -66,6 +59,9 @@ class ControllerNode {
             discriminator = getIntParameter("discriminator") ?? controllerStorage.get("discriminator", 3840);
             if (discriminator > 4095) throw new Error("Discriminator value must be less than 4096");
             setupPin = getIntParameter("pin") ?? controllerStorage.get("pin", 20202021);
+        }
+        if (discriminator === undefined) {
+            throw new Error("Please specify the discriminator of the device to commission with -discriminator or provide a valid passcode with -passcode");
         }
 
         controllerStorage.set("ip", ip);

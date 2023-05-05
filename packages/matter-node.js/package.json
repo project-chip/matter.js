@@ -76,9 +76,9 @@
             "types": "./dist/exports/certificate.d.ts",
             "default": "./dist/exports/certificate.js"
         },
-        "./cluser": {
-            "types": "./dist/exports/cluser.d.ts",
-            "default": "./dist/exports/cluser.js"
+        "./cluster": {
+            "types": "./dist/exports/cluster.d.ts",
+            "default": "./dist/exports/cluster.js"
         },
         "./codec": {
             "types": "./dist/exports/codec.d.ts",
@@ -91,6 +91,10 @@
         "./datatype": {
             "types": "./dist/exports/datatype.d.ts",
             "default": "./dist/exports/datatype.js"
+        },
+        "./device": {
+            "types": "./dist/exports/device.d.ts",
+            "default": "./dist/exports/device.js"
         },
         "./fabric": {
             "types": "./dist/exports/fabric.d.ts",

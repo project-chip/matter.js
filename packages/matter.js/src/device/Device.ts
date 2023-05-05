@@ -22,12 +22,15 @@ export class PairedDevice extends Endpoint {
 }
 
 export class RootEndpoint extends Endpoint {
+    readonly deviceType: number;
+
     constructor(
         definition: DeviceTypeDefinition,
         clusters: (ClusterServer<any, any, any, any> | ClusterClient<any, any>)[] = [],
         endpointId?: number
     ) {
         super([definition], clusters, endpointId);
+        this.deviceType = definition.code;
     }
 }
 
