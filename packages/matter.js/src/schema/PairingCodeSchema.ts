@@ -64,15 +64,18 @@ class QrPairingCodeSchema extends Schema<QrCodeData, string> {
 export const QrPairingCodeCodec = new QrPairingCodeSchema();
 
 export type ManualPairingData = {
-    discriminator: number,
+    discriminator?: number,
+    shortDiscriminator?: number,
     passcode: number,
     vendorId?: number,
     productId?: number,
 };
 
-/** See {@link MatterCoreSpecificationV1_0} § 5.1.4.1 Table 39/40 */
+/** See {@link MatterCoreSpecificationV1_0} § 5.1.4.1 Table 38/39/40 */
 class ManualPairingCodeSchema extends Schema<ManualPairingData, string> {
     protected encodeInternal({ discriminator, passcode, vendorId, productId }: ManualPairingData): string {
+        if (discriminator === undefined) throw new Error("discriminator is required");
+        if (discriminator > 4095) throw new Error("discriminator value must be less than 4096");
         let result = "";
         const hasVendorProductIds = (vendorId !== undefined) && (productId !== undefined);
         result += ((discriminator >> 10) | (hasVendorProductIds ? (1 << 2) : 0));
@@ -86,8 +89,23 @@ class ManualPairingCodeSchema extends Schema<ManualPairingData, string> {
         return result;
     }
 
-    protected decodeInternal(_encoded: string): ManualPairingData {
-        throw new Error("Not implemented");
+    protected decodeInternal(encoded: string): ManualPairingData {
+        if (encoded.length !== 11 && encoded.length != 21) {
+            throw new Error("Invalid pairing code");
+        }
+        if (new Verhoeff().computeChecksum(encoded.slice(0, -1)) !== parseInt(encoded.slice(-1))) {
+            throw new Error("Invalid checksum");
+        }
+        const hasVendorProductIds = !!(parseInt(encoded[0]) & (1 << 2));
+        const shortDiscriminator = (parseInt(encoded[0]) & 0x03) << 2 | (parseInt(encoded.slice(1, 6)) >> 14) & 0x3
+        const passcode = parseInt(encoded.slice(1, 6)) & 0x3FFF | parseInt(encoded.slice(6, 10)) << 14;
+        let vendorId: number | undefined;
+        let productId: number | undefined;
+        if (hasVendorProductIds) {
+            vendorId = parseInt(encoded.slice(10, 15));
+            productId = parseInt(encoded.slice(15, 20));
+        }
+        return { shortDiscriminator, passcode, vendorId, productId };
     }
 }
 

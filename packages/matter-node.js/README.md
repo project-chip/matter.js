@@ -114,7 +114,7 @@ npm run matter -- -on "echo 255 > /sys/class/leds/led1/brightness" -off "echo 0 
 
 The following parameters are available:
 * -passcode: the passcode to use for pairing (default: 20202021)
-* -discriminator: the discriminator to use for pairing (default: 3840)
+* -discriminator: the discriminator to use for pairing (default: 3840, value between 0 and 4095)
 * -vendorid: the vendor ID as number to use for pairing (default: 65521 (0xFFF1))
 * -productid: the product ID as number to use for pairing (default: 32768 (0x8000))
 * -announceinterface: limit mdns announcements to the provided network interface, e.g. "en0" (default: all interfaces available)
@@ -147,8 +147,9 @@ This will commission a Matter device (for debugging purpose only for now).
 
 The following parameters are available:
 * -ip: the IP address of the device to commission
-* -discriminator: the discriminator to use for pairing (default: 3840)
+* -discriminator: the discriminator to use for pairing (default: 3840, value between 0 and 4095)
 * -pin: the pin to use for pairing (default: 20202021)
+* -pairingcode: code to use for pairing (-discriminator and -pin will be ignored)
 * -store: the storage location (directory) to use for storing the pairing information (default: controller-node). Delete the directory or provide an alternative name to reset the controller
 
 ## Modifying the server (DeviceNode) behavior

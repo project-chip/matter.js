@@ -65,6 +65,7 @@ class DeviceNode {
         const vendorName = "matter-node.js";
         const passcode = getIntParameter("passcode") ?? deviceStorage.get("passcode", 20202021);
         const discriminator = getIntParameter("discriminator") ?? deviceStorage.get("discriminator", 3840);
+        if (discriminator > 4095) throw new Error("Discriminator value must be less than 4096");
         // product name / id and vendor id should match what is in the device certificate
         const vendorId = new VendorId(getIntParameter("vendorid") ?? deviceStorage.get("vendorid", 0xFFF1));
         const productName = "matter-node.js Test Product";

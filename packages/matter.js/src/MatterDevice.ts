@@ -118,7 +118,7 @@ export class MatterDevice {
                     logger.debug("Skipping announce for fabric", fabric.fabricId.id, "because we have a session", session.getId());
                     continue;
                 }
-                logger.debug("Announcing fabric", fabric.fabricId.id);
+                logger.debug("Announcing", Logger.dict({ fabric: fabric.fabricId.id }));
                 fabricsToAnnounce.push(fabric);
             }
             for (const broadcaster of this.broadcasters) {

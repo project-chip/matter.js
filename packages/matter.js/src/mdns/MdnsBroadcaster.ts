@@ -96,7 +96,11 @@ export class MdnsBroadcaster implements Broadcaster {
                 const fabricQname = getFabricQname(operationalIdString);
                 const deviceMatterQname = getDeviceMatterQname(operationalIdString, nodeId.toString());
 
-                logger.debug(`Set fabric ${operationalId.toHex()} ${nodeId.id}: ${deviceMatterQname} for announcement on ${netInterface}`);
+                logger.debug("Set fabric for announcement", Logger.dict({
+                    id: `${operationalId.toHex()}/${nodeId.id}`,
+                    qname: deviceMatterQname,
+                    interface: netInterface
+                }));
                 const ipMac = this.network.getIpMac(netInterface);
                 if (ipMac === undefined) return [];
                 const { mac, ips } = ipMac;
