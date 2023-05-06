@@ -46,7 +46,7 @@ export class MatterDevice {
         private readonly vendorId: VendorId,
         private readonly productId: number,
         private readonly discriminator: number,
-        private readonly storageManager: StorageManager,
+        private readonly storageManager = StorageManager.get(),
     ) {
         this.fabricManager = new FabricManager(this.storageManager);
 

@@ -30,7 +30,13 @@ export class MdnsBroadcaster implements Broadcaster {
     ) { }
 
     setCommissionMode(mode: number, deviceName: string, deviceType: number, vendorId: VendorId, productId: number, discriminator: number) {
-        logger.debug(`announce commissioning mode ${mode} ${deviceName} ${deviceType} ${vendorId} ${productId} ${discriminator}`);
+        logger.debug("Announce commissioning", Logger.dict({
+            mode: mode,
+            device: `${deviceName} (type ${deviceType})`,
+            vendor: vendorId.id,
+            product: productId,
+            discriminator: discriminator
+        }));
 
         const shortDiscriminator = (discriminator >> 8) & 0x0F;
         const instanceId = Crypto.getRandomData(8).toHex().toUpperCase();

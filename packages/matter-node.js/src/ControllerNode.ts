@@ -5,24 +5,8 @@
  * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-
-import { singleton } from "@project-chip/matter.js/util";
-import { Time } from "@project-chip/matter.js/time";
-import { TimeNode } from "./time/TimeNode";
-
-Time.get = singleton(() => new TimeNode());
-
-import { Network, UdpInterface } from "@project-chip/matter.js/net";
-import { NetworkNode } from "./net/NetworkNode";
-
-Network.get = singleton(() => new NetworkNode());
-
-import { Crypto } from "@project-chip/matter.js/crypto";
-import { CryptoNode } from "./crypto/CryptoNode";
-
-Crypto.get = singleton(() => new CryptoNode());
-
-import { Logger } from "@project-chip/matter.js/log";
+import { MatterEnvironment } from "./util/MatterEnvironment";
+import { UdpInterface } from "@project-chip/matter.js/net";
 import { StorageManager } from "@project-chip/matter.js/storage";
 import { MatterController } from "@project-chip/matter.js";
 import { MdnsScanner } from "@project-chip/matter.js/mdns";
@@ -32,23 +16,13 @@ import { BasicInformationCluster, DescriptorCluster, OnOffCluster } from "@proje
 import { ManualPairingCodeCodec } from "@project-chip/matter-node.js/schema";
 
 import { getIntParameter, getParameter } from "./util/CommandLine";
-import { StorageBackendDisk } from "./storage/StorageBackendDisk";
 import { requireMinNodeVersion } from "./util/Node";
-
-const logger = Logger.get("Controller");
 
 requireMinNodeVersion(16);
 
-const storage = new StorageBackendDisk(getParameter("store") ?? "controller-node");
-
 class ControllerNode {
     async start() {
-        logger.info(`node-matter`);
-
-        const storageManager = new StorageManager(storage);
-        await storageManager.initialize();
-
-        const controllerStorage = storageManager.createContext("Controller");
+        const controllerStorage = StorageManager.get().createContext("Controller");
 
         const ip = getParameter("ip") ?? controllerStorage.get<string>("ip", "");
         if (ip === "") throw new Error("Please specify the IP of the device to commission with -ip");
@@ -75,8 +49,7 @@ class ControllerNode {
         const client = await MatterController.create(
             await MdnsScanner.create(),
             await UdpInterface.create(port, "udp4"),
-            await UdpInterface.create(port, "udp6"),
-            storageManager
+            await UdpInterface.create(port, "udp6")
         );
         try {
             let nodeId;
@@ -131,8 +104,4 @@ class ControllerNode {
     }
 }
 
-new ControllerNode().start().catch(error => logger.error(error));
-
-process.on("SIGINT", () => {
-    storage.close().then(() => process.exit(0)).catch(() => process.exit(1));
-});
+MatterEnvironment.exec("controller-node", () => new ControllerNode().start());

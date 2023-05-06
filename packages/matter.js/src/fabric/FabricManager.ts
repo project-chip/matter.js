@@ -20,7 +20,7 @@ export class FabricManager {
     private fabricBuilder?: FabricBuilder;
     private readonly fabricStorage: StorageContext;
 
-    constructor(storageManager: StorageManager) {
+    constructor(storageManager = StorageManager.get()) {
         this.fabricStorage = storageManager.createContext("FabricManager");
         const fabrics = this.fabricStorage.get<FabricJsonObject[]>("fabrics", []);
         fabrics.forEach(fabric => this.addFabric(Fabric.createFromStorageObject(fabric)));

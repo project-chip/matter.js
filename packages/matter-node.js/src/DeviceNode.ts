@@ -6,22 +6,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { singleton } from "@project-chip/matter.js/util";
+import { MatterEnvironment } from "./util/MatterEnvironment";
 import { Time } from "@project-chip/matter.js/time";
-import { TimeNode } from "./time/TimeNode";
-
-Time.get = singleton(() => new TimeNode());
-
-import { Network, UdpInterface } from "@project-chip/matter.js/net";
-import { NetworkNode } from "./net/NetworkNode";
-
-Network.get = singleton(() => new NetworkNode());
-
+import { UdpInterface } from "@project-chip/matter.js/net";
 import { Crypto } from "@project-chip/matter.js/crypto";
-import { CryptoNode } from "./crypto/CryptoNode";
-
-Crypto.get = singleton(() => new CryptoNode());
-
 import { Logger } from "@project-chip/matter.js/log";
 import { StorageManager } from "@project-chip/matter.js/storage";
 import { MatterDevice } from "@project-chip/matter.js";
@@ -42,23 +30,15 @@ import { CommissionningFlowType, DiscoveryCapabilitiesSchema, ManualPairingCodeC
 import { AttestationCertificateManager, CertificationDeclarationManager } from "@project-chip/matter.js/certificate";
 
 import { commandExecutor, getIntParameter, getParameter } from "./util/CommandLine";
-import { StorageBackendDisk } from "./storage/StorageBackendDisk";
 import { requireMinNodeVersion } from "./util/Node";
 
 const logger = Logger.get("Device");
 
 requireMinNodeVersion(16);
 
-const storage = new StorageBackendDisk(getParameter("store") ?? "device-node");
-
 class DeviceNode {
     async start() {
-        logger.info(`node-matter`);
-
-        const storageManager = new StorageManager(storage);
-        await storageManager.initialize();
-
-        const deviceStorage = storageManager.createContext("Device");
+        const deviceStorage = StorageManager.get().createContext("Device");
 
         const deviceName = "Matter test device";
         const deviceType = 257 /* Dimmable bulb */;
@@ -99,13 +79,13 @@ class DeviceNode {
         const { keyPair: dacKeyPair, dac } = paa.getDACert(productId)
         const certificationDeclaration = CertificationDeclarationManager.generate(vendorId, productId);
 
-        const device = new MatterDevice(deviceName, deviceType, vendorId, productId, discriminator, storageManager)
+        const device = new MatterDevice(deviceName, deviceType, vendorId, productId, discriminator)
             .addNetInterface(await UdpInterface.create(port, "udp4"))
             .addNetInterface(await UdpInterface.create(port, "udp6"))
             .addScanner(await MdnsScanner.create())
             .addBroadcaster(await MdnsBroadcaster.create(port, netAnnounceInterface))
             .addProtocolHandler(secureChannelProtocol)
-            .addProtocolHandler(new InteractionServer(storageManager)
+            .addProtocolHandler(new InteractionServer()
                 .addEndpoint(0x00, DEVICE.ROOT, [
                     new ClusterServer(BasicInformationCluster, {}, {
                         dataModelRevision: 1,
@@ -220,8 +200,4 @@ class DeviceNode {
     }
 }
 
-new DeviceNode().start().catch(error => logger.error(error));
-
-process.on("SIGINT", () => {
-    storage.close().then(() => process.exit(0)).catch(() => process.exit(1));
-});
+MatterEnvironment.exec("device-node", () => new DeviceNode().start());

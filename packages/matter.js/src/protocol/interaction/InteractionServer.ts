@@ -158,7 +158,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     private nextSubscriptionId = Crypto.getRandomUInt32();
 
     constructor(
-        private readonly storageManager: StorageManager
+        private readonly storageManager = StorageManager.get()
     ) { }
 
     getId() {

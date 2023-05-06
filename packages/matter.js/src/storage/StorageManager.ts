@@ -8,6 +8,8 @@ import { StorageContext } from "./StorageContext.js";
 import { Storage } from "./Storage.js";
 
 export class StorageManager {
+    static get: () => StorageManager = () => { throw new Error("No provider configured"); };
+
     private initialized = false;
 
     constructor(

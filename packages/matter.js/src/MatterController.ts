@@ -37,7 +37,7 @@ const ADMIN_VENDOR_ID = new VendorId(752);
 const logger = Logger.get("MatterController");
 
 export class MatterController {
-    public static async create(scanner: Scanner, netInterfaceIpv4: NetInterface, netInterfaceIpv6: NetInterface, storageManager: StorageManager) {
+    public static async create(scanner: Scanner, netInterfaceIpv4: NetInterface, netInterfaceIpv6: NetInterface, storageManager = StorageManager.get()) {
         const certificateManager = new RootCertificateManager(storageManager);
 
         const ipkValue = Crypto.getRandomData(16);
@@ -71,7 +71,7 @@ export class MatterController {
         private readonly netInterfaceIpv6: NetInterface,
         private readonly certificateManager: RootCertificateManager,
         private readonly fabric: Fabric,
-        private readonly storageManager: StorageManager
+        private readonly storageManager = StorageManager.get()
     ) {
         this.controllerStorage = this.storageManager.createContext("MatterController");
 

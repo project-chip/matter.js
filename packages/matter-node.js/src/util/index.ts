@@ -5,5 +5,6 @@
  */
 
 export * from "./CommandLine";
-export * from "./Node"
+export * from "./Node";
+export * from "./MatterEnvironment";
 export * from "@project-chip/matter.js/util";
