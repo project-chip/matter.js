@@ -20,7 +20,7 @@ import {
     InvokeResponse
 } from "@project-chip/matter.js/interaction";
 import { MessageExchange } from "@project-chip/matter.js/protocol";
-import { DEVICE } from "@project-chip/matter.js/device";
+import { DeviceTypes } from "@project-chip/matter.js/device";
 import { MatterDevice } from "@project-chip/matter.js";
 import { VendorId } from "@project-chip/matter.js/datatype";
 import { TlvString, TlvUInt8, TlvNoArguments, TlvArray, TlvField, TlvObject, TlvNullable } from "@project-chip/matter.js/tlv";
@@ -203,7 +203,7 @@ describe("InteractionProtocol", () => {
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
             const interactionProtocol = new InteractionServer(storageManager)
-                .addEndpoint(0, DEVICE.ROOT, [
+                .addEndpoint(0, DeviceTypes.ROOT, [
                     new ClusterServer(BasicInformationCluster, {}, {
                         dataModelRevision: 1,
                         vendorName: "vendor",
@@ -254,7 +254,7 @@ describe("InteractionProtocol", () => {
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
             const interactionProtocol = new InteractionServer(storageManager)
-                .addEndpoint(0, DEVICE.ROOT, [basicCluster]);
+                .addEndpoint(0, DeviceTypes.ROOT, [basicCluster]);
 
             const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" } }) as MessageExchange<MatterDevice>, WRITE_REQUEST);
 
@@ -274,7 +274,7 @@ describe("InteractionProtocol", () => {
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
             const interactionProtocol = new InteractionServer(storageManager)
-                .addEndpoint(0, DEVICE.ROOT, [accessControlCluster]);
+                .addEndpoint(0, DeviceTypes.ROOT, [accessControlCluster]);
 
             const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" } }) as MessageExchange<MatterDevice>, CHUNKED_ARRAY_WRITE_REQUEST);
 
@@ -312,7 +312,7 @@ describe("InteractionProtocol", () => {
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
             const interactionProtocol = new InteractionServer(storageManager)
-                .addEndpoint(0, DEVICE.ROOT, [basicCluster]);
+                .addEndpoint(0, DeviceTypes.ROOT, [basicCluster]);
 
             const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" } }) as MessageExchange<MatterDevice>, MASS_WRITE_REQUEST);
 
@@ -346,7 +346,7 @@ describe("InteractionProtocol", () => {
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
             const interactionProtocol = new InteractionServer(storageManager)
-                .addEndpoint(0, DEVICE.ROOT, [onOffCluster]);
+                .addEndpoint(0, DeviceTypes.ROOT, [onOffCluster]);
 
             const result = await interactionProtocol.handleInvokeRequest(({ channel: { getName: () => "test" } }) as MessageExchange<MatterDevice>, INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS, {} as Message);
 
@@ -376,7 +376,7 @@ describe("InteractionProtocol", () => {
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
             const interactionProtocol = new InteractionServer(storageManager)
-                .addEndpoint(0, DEVICE.ROOT, [onOffCluster]);
+                .addEndpoint(0, DeviceTypes.ROOT, [onOffCluster]);
 
             const result = await interactionProtocol.handleInvokeRequest(({ channel: { getName: () => "test" } }) as MessageExchange<MatterDevice>, INVOKE_COMMAND_REQUEST_WITH_NO_ARGS, {} as Message);
 
