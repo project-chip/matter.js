@@ -182,7 +182,7 @@ describe("Integration", () => {
 
     describe("read attributes", () => {
         it("read one specific attribute including schema parsing", async () => {
-            const basicInfoCluster = ClusterClient(BasicInformationCluster, 0, await client.connect(client.getFabric().nodeId));
+            const basicInfoCluster = new ClusterClient(BasicInformationCluster, 0, await client.connect(client.getFabric().nodeId));
 
             assert.equal(await basicInfoCluster.attributes.softwareVersionString.get(), "v1");
         });
@@ -280,7 +280,7 @@ describe("Integration", () => {
     describe("write attributes", () => {
 
         it("write one attribute", async () => {
-            const descriptorCluster = ClusterClient(BasicInformationCluster, 0, await client.connect(client.getFabric().nodeId));
+            const descriptorCluster = new ClusterClient(BasicInformationCluster, 0, await client.connect(client.getFabric().nodeId));
 
             await descriptorCluster.attributes.nodeLabel.set("testLabel");
 
@@ -288,7 +288,7 @@ describe("Integration", () => {
         });
 
         it("write one attribute with error", async () => {
-            const descriptorCluster = ClusterClient(BasicInformationCluster, 0, await client.connect(client.getFabric().nodeId));
+            const descriptorCluster = new ClusterClient(BasicInformationCluster, 0, await client.connect(client.getFabric().nodeId));
 
             await assert.rejects(async () => await descriptorCluster.attributes.location.set("XXX"), {
                 message: "String is too long: 3, max 2."
@@ -306,14 +306,14 @@ describe("Integration", () => {
             assert.equal(Array.isArray(response), true);
             assert.equal(response.length, 0);
 
-            const descriptorCluster = ClusterClient(BasicInformationCluster, 0, interactionClient);
+            const descriptorCluster = new ClusterClient(BasicInformationCluster, 0, interactionClient);
             assert.equal(await descriptorCluster.attributes.nodeLabel.get(), "testLabel2");
             assert.equal(await descriptorCluster.attributes.location.get(), "GB");
         });
 
         it("write multiple attributes with partial errors", async () => {
             const interactionClient = await client.connect(client.getFabric().nodeId);
-            const descriptorCluster = ClusterClient(BasicInformationCluster, 0, interactionClient);
+            const descriptorCluster = new ClusterClient(BasicInformationCluster, 0, interactionClient);
 
             const response = await interactionClient.setMultipleAttributes([
                 { endpointId: 0, clusterId: BasicInformationCluster.id, attribute: BasicInformationCluster.attributes.nodeLabel, value: "testLabel3" },
@@ -332,7 +332,7 @@ describe("Integration", () => {
     describe("subscribe attributes", () => {
         it("subscription of one attribute sends updates when the value changes", async () => {
             const interactionClient = await client.connect(client.getFabric().nodeId);
-            const onOffClient = ClusterClient(OnOffCluster, 1, interactionClient);
+            const onOffClient = new ClusterClient(OnOffCluster, 1, interactionClient);
             const startTime = Time.nowMs();
 
             // Await initial Data
@@ -375,7 +375,7 @@ describe("Integration", () => {
     describe("Access Control server fabric scoped attribute storage", () => {
         it("set empty acl", async () => {
             console.log("SET ACL");
-            const accessControlCluster = ClusterClient(AccessControlCluster, 0, await client.connect(client.getFabric().nodeId));
+            const accessControlCluster = new ClusterClient(AccessControlCluster, 0, await client.connect(client.getFabric().nodeId));
             await accessControlCluster.attributes.acl.set([]);
 
             const acl = await accessControlCluster.attributes.acl.get();
@@ -386,7 +386,7 @@ describe("Integration", () => {
 
     describe("Groups server fabric scoped storage", () => {
         it("set a group name", async () => {
-            const groupsCluster = ClusterClient(GroupsCluster, 0, await client.connect(client.getFabric().nodeId));
+            const groupsCluster = new ClusterClient(GroupsCluster, 0, await client.connect(client.getFabric().nodeId));
             await groupsCluster.commands.addGroup({ groupId: new GroupId(1), groupName: "Group 1" });
         });
     });
@@ -435,7 +435,7 @@ describe("Integration", () => {
 
     describe("remove Fabric", () => {
         it("try to remove invalid fabric", async () => {
-            const operationalCredentialsCluster = ClusterClient(OperationalCredentialsCluster, 0, await client.connect(client.getFabric().nodeId));
+            const operationalCredentialsCluster = new ClusterClient(OperationalCredentialsCluster, 0, await client.connect(client.getFabric().nodeId));
 
             const result = await operationalCredentialsCluster.commands.removeFabric({ fabricIndex: new FabricIndex(250) });
             assert.equal(result.status, OperationalCertStatus.InvalidFabricIndex);
@@ -444,7 +444,7 @@ describe("Integration", () => {
         });
 
         it("read and remove fabric", async () => {
-            const operationalCredentialsCluster = ClusterClient(OperationalCredentialsCluster, 0, await client.connect(client.getFabric().nodeId));
+            const operationalCredentialsCluster = new ClusterClient(OperationalCredentialsCluster, 0, await client.connect(client.getFabric().nodeId));
 
             const fabricIndex = await operationalCredentialsCluster.attributes.currentFabricIndex.get();
             assert.ok(fabricIndex);
