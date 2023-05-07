@@ -13,7 +13,7 @@ import { PairableMatterNode } from "./PairableMatterNode.js";
 // TODO Move Mdns instances internally
 // TODO enhance storage manager to support multiple nodes
 
-export class Matter {
+export class MatterServer {
     private readonly nodes: MatterNode[] = [];
 
     constructor(

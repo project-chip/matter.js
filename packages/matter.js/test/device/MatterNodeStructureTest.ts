@@ -16,7 +16,7 @@ import { OnOffLightDevice } from "../../src/device/OnOffDevices.js";
 import { AttributeServer } from "../../src/cluster/server/AttributeServer.js";
 import { attributePathToId, ClusterServer } from "../../src/protocol/interaction/InteractionServer.js";
 import { Aggregator } from "../../src/device/Aggregator.js";
-import { DEVICE } from "../../src/common/DeviceTypes.js";
+import { DeviceTypes } from "../../src/device/DeviceTypes.js";
 import { AdminCommissioningHandler } from "../../src/cluster/server/AdminCommissioningServer.js";
 import { SecureChannelProtocol } from "../../src/protocol/securechannel/SecureChannelProtocol.js";
 import { PaseServer } from "../../src/session/pase/PaseServer.js";
@@ -322,7 +322,7 @@ describe("Endpoint Structures", () => {
             const node = new TestNode();
             addRequiredRootClusters(node);
 
-            const composedDevice = new ComposedDevice([DEVICE.ON_OFF_LIGHT]);
+            const composedDevice = new ComposedDevice([DeviceTypes.ON_OFF_LIGHT]);
 
             const onoffLightDevice1 = new OnOffLightDevice();
             const onoffLightDevice2 = new OnOffLightDevice();
@@ -395,7 +395,7 @@ describe("Endpoint Structures", () => {
 
             const aggregator = new Aggregator([], 1);
 
-            const onoffLightDevice = new OnOffLightDevice(11);
+            const onoffLightDevice = new OnOffLightDevice(undefined, 11);
             onoffLightDevice.addClusterServer(new ClusterServer(BridgedDeviceBasicInformationCluster, {}, {
                 nodeLabel: "Socket 1",
                 reachable: true
@@ -442,14 +442,14 @@ describe("Endpoint Structures", () => {
             assert.deepEqual(aggregatorPartsListAttribute?.getLocal(), [new EndpointNumber(11)]);
 
             const aggregatorDeviceTypeListAttribute: AttributeServer<EndpointNumber[]> | undefined = attributes.get(attributePathToId({ endpointId: 1, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.deviceTypeList.id }));
-            assert.deepEqual(aggregatorDeviceTypeListAttribute?.getLocal(), [{ deviceType: new DeviceTypeId(DEVICE.AGGREGATOR.code), revision: 1 }]);
+            assert.deepEqual(aggregatorDeviceTypeListAttribute?.getLocal(), [{ deviceType: new DeviceTypeId(DeviceTypes.AGGREGATOR.code), revision: 1 }]);
 
 
             const devicePartsListAttribute: AttributeServer<EndpointNumber[]> | undefined = attributes.get(attributePathToId({ endpointId: 11, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id }));
             assert.deepEqual(devicePartsListAttribute?.getLocal(), []);
 
             const deviceTypeListAttribute: AttributeServer<EndpointNumber[]> | undefined = attributes.get(attributePathToId({ endpointId: 11, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.deviceTypeList.id }));
-            assert.deepEqual(deviceTypeListAttribute?.getLocal(), [{ deviceType: new DeviceTypeId(DEVICE.ON_OFF_LIGHT.code), revision: 2 }, { deviceType: new DeviceTypeId(DEVICE.BRIDGED_NODE.code), revision: 1 }]);
+            assert.deepEqual(deviceTypeListAttribute?.getLocal(), [{ deviceType: new DeviceTypeId(DeviceTypes.ON_OFF_LIGHT.code), revision: 2 }, { deviceType: new DeviceTypeId(DeviceTypes.BRIDGED_NODE.code), revision: 1 }]);
 
             assert.equal(attributePaths.length, 110);
             assert.equal(commandPaths.length, 33);
@@ -461,8 +461,8 @@ describe("Endpoint Structures", () => {
 
             const aggregator = new Aggregator([], 1);
 
-            const onoffLightDevice11 = new OnOffLightDevice(11);
-            const onoffLightDevice12 = new OnOffLightDevice(12);
+            const onoffLightDevice11 = new OnOffLightDevice(undefined, 11);
+            const onoffLightDevice12 = new OnOffLightDevice(undefined, 12);
 
             aggregator.addBridgedDevice(onoffLightDevice11, {
                 nodeLabel: "Socket 1",
@@ -514,14 +514,14 @@ describe("Endpoint Structures", () => {
             assert.deepEqual(aggregatorPartsListAttribute?.getLocal(), [new EndpointNumber(11), new EndpointNumber(12)]);
 
             const aggregatorDeviceTypeListAttribute: AttributeServer<EndpointNumber[]> | undefined = attributes.get(attributePathToId({ endpointId: 1, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.deviceTypeList.id }));
-            assert.deepEqual(aggregatorDeviceTypeListAttribute?.getLocal(), [{ deviceType: new DeviceTypeId(DEVICE.AGGREGATOR.code), revision: 1 }]);
+            assert.deepEqual(aggregatorDeviceTypeListAttribute?.getLocal(), [{ deviceType: new DeviceTypeId(DeviceTypes.AGGREGATOR.code), revision: 1 }]);
 
 
             const devicePartsListAttribute: AttributeServer<EndpointNumber[]> | undefined = attributes.get(attributePathToId({ endpointId: 11, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id }));
             assert.deepEqual(devicePartsListAttribute?.getLocal(), []);
 
             const deviceTypeListAttribute: AttributeServer<EndpointNumber[]> | undefined = attributes.get(attributePathToId({ endpointId: 11, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.deviceTypeList.id }));
-            assert.deepEqual(deviceTypeListAttribute?.getLocal(), [{ deviceType: new DeviceTypeId(DEVICE.ON_OFF_LIGHT.code), revision: 2 }, { deviceType: new DeviceTypeId(DEVICE.BRIDGED_NODE.code), revision: 1 }]);
+            assert.deepEqual(deviceTypeListAttribute?.getLocal(), [{ deviceType: new DeviceTypeId(DeviceTypes.ON_OFF_LIGHT.code), revision: 2 }, { deviceType: new DeviceTypeId(DeviceTypes.BRIDGED_NODE.code), revision: 1 }]);
 
             assert.equal(attributePaths.length, 138);
             assert.equal(commandPaths.length, 43);
@@ -542,8 +542,8 @@ describe("Endpoint Structures", () => {
                 {}
             ));
 
-            const onoffLightDevice11 = new OnOffLightDevice(11);
-            const onoffLightDevice12 = new OnOffLightDevice(12);
+            const onoffLightDevice11 = new OnOffLightDevice(undefined, 11);
+            const onoffLightDevice12 = new OnOffLightDevice(undefined, 12);
 
             aggregator1.addBridgedDevice(onoffLightDevice11, {
                 nodeLabel: "Socket 1-1",
@@ -565,8 +565,8 @@ describe("Endpoint Structures", () => {
                 {}
             ));
 
-            const onoffLightDevice21 = new OnOffLightDevice(21);
-            const onoffLightDevice22 = new OnOffLightDevice(22);
+            const onoffLightDevice21 = new OnOffLightDevice(undefined, 21);
+            const onoffLightDevice22 = new OnOffLightDevice(undefined, 22);
 
             aggregator2.addBridgedDevice(onoffLightDevice21, {
                 nodeLabel: "Socket 2-1",
@@ -772,7 +772,7 @@ describe("Endpoint Structures", () => {
                 {}
             ));
 
-            const onoffLightDevice11 = new OnOffLightDevice(3);
+            const onoffLightDevice11 = new OnOffLightDevice(undefined, 3);
             const onoffLightDevice12 = new OnOffLightDevice();
 
             aggregator1.addBridgedDevice(onoffLightDevice11, {
@@ -796,7 +796,7 @@ describe("Endpoint Structures", () => {
             ));
 
             const onoffLightDevice21 = new OnOffLightDevice();
-            const onoffLightDevice22 = new OnOffLightDevice(18);
+            const onoffLightDevice22 = new OnOffLightDevice(undefined, 18);
 
             aggregator2.addBridgedDevice(onoffLightDevice21, {
                 nodeLabel: "Socket 2-1",

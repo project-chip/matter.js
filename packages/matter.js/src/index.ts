@@ -15,4 +15,4 @@ export { MatterDevice } from "./MatterDevice.js";
 export * from "./CommissionableMatterNode.js";
 export * from "./PairableMatterNode.js";
 export * from "./MatterNode.js";
-export * from "./Matter.js";
+export * from "./MatterServer.js";

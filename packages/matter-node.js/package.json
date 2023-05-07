@@ -28,8 +28,16 @@
         "build": "tsc -b tsconfig.dist.json",
         "build-clean": "npm run clean && npm run build",
         "test": "TZ=utc jest",
-        "matter": "ts-node --project tsconfig.dist.json src/DeviceNode.ts",
-        "matter-controller": "ts-node --project tsconfig.dist.json src/ControllerNode.ts"
+        "matter-device": "ts-node --project tsconfig.dist.json src/examples/NewDeviceNode.ts",
+        "matter-bridge": "ts-node --project tsconfig.dist.json src/examples/NewBridgedDevicesNode.ts",
+        "matter-composeddevice": "ts-node --project tsconfig.dist.json src/examples/NewComposedDeviceNode.ts",
+        "matter-controller": "ts-node --project tsconfig.dist.json src/examples/NewControllerNode.ts"
+    },
+    "bin": {
+        "matter-device": "./dist/examples/NewDeviceNode.js",
+        "matter-bridge": "./dist/examples/NewBridgedDevicesNode.js",
+        "matter-composeddevice": "./dist/examples/NewComposedDeviceNode.js",
+        "matter-controller": "./dist/examples/NewControllerNode.js"
     },
     "devDependencies": {
         "@types/bn.js": "^5.1.1",
@@ -140,10 +148,6 @@
             "types": "./dist/exports/tlv.d.ts",
             "default": "./dist/exports/tlv.js"
         }
-    },
-    "bin": {
-        "matter": "./dist/Device.js",
-        "matter-controller": "./dist/Controller.js"
     },
     "publishConfig": {
         "access": "public"

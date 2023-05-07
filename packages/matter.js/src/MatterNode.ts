@@ -4,16 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DEVICE } from "./common/DeviceTypes.js";
+import { DeviceTypes } from "./device/DeviceTypes.js";
 import { ClusterServer } from "./protocol/interaction/InteractionServer.js";
-import { Device, RootEndpoint } from "./device/Device.js";
+import { RootEndpoint } from "./device/Device.js";
 import { Endpoint } from "./device/Endpoint.js";
 import { ClusterClient } from "./protocol/interaction/InteractionClient.js";
 import { BitSchema } from "./schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
 
 export abstract class MatterNode {
-    protected readonly rootEndpoint: Device = new RootEndpoint(DEVICE.ROOT, [], 0x00);
+    protected readonly rootEndpoint = new RootEndpoint(DeviceTypes.ROOT, [], 0x00);
 
     constructor() {
         //TODO

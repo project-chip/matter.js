@@ -3,6 +3,7 @@
  * Copyright 2022 The matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+
 import { MatterNode } from "./MatterNode.js";
 import { CommissionningFlowType, DiscoveryCapabilitiesSchema, ManualPairingCodeCodec, QrPairingCodeCodec } from "./schema/PairingCodeSchema.js";
 import { ClusterServer, InteractionServer } from "./protocol/interaction/InteractionServer.js";
@@ -16,7 +17,7 @@ import { UdpInterface } from "./net/UdpInterface.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { StorageManager } from "./storage/StorageManager.js";
-import { AttributeInitialValues } from "./cluster/server/ClusterServer.js";
+import { AttributeInitialValues, CommandHandler } from "./cluster/server/ClusterServer.js";
 import { OperationalCredentialsClusterHandler, OperationalCredentialsServerConf } from "./cluster/server/OperationalCredentialsServer.js";
 import { AttestationCertificateManager } from "./certificate/AttestationCertificateManager.js";
 import { CertificationDeclarationManager } from "./certificate/CertificationDeclarationManager.js";
@@ -33,10 +34,11 @@ import { GeneralCommissioningCluster, RegulatoryLocationType } from "./cluster/G
 import { NetworkCommissioningCluster, NetworkCommissioningStatus } from "./cluster/NetworkCommissioningCluster.js";
 import { AdminCommissioningCluster, CommissioningWindowStatus } from "./cluster/AdminCommissioningCluster.js";
 import { GroupKeyManagementClusterHandler } from "./cluster/server/GroupKeyManagementServer.js";
-import { QrCode } from "./schema/index.js";
+import { QrCode } from "./schema/QrCodeSchema.js";
 import { ComposedDevice } from "./device/ComposedDevice.js";
 import { Device } from "./device/Device.js";
-import { ByteArray } from "./util/index.js";
+import { ByteArray } from "./util/ByteArray.js";
+import { NamedHandler } from "./util/NamedHandler.js";
 
 export interface DevicePairingInformation {
     manualPairingCode: string;
@@ -70,6 +72,10 @@ export interface CommissionableNodeOptions {
     certificates?: OperationalCredentialsServerConf;
 }
 
+type CommissionableNodeCommands = {
+    testEventTrigger: CommandHandler<typeof GeneralDiagnosticsCluster.commands.testEventTrigger, any>;
+}
+
 // TODO decline using set/getRootClusterClient
 // TODO Decline cluster access after announced/paired
 
@@ -94,6 +100,8 @@ export class CommissionableMatterNode extends MatterNode {
     private nextEndpointId: number;
 
     readonly delayedAnnouncement?: boolean;
+
+    private readonly commandHandler = new NamedHandler<CommissionableNodeCommands>();
 
     constructor(options: CommissionableNodeOptions) {
         super();
@@ -260,14 +268,10 @@ export class CommissionableMatterNode extends MatterNode {
                     testEventTriggersEnabled: false
                 },
                 {
-                    testEventTrigger: async ({ request: { enableKey, eventTrigger } }) => this.onGeneralDiagnosticClusterTestEventTriggered(enableKey, eventTrigger)
+                    testEventTrigger: async (args) => await this.commandHandler.executeHandler("testEventTrigger", args)
                 }
             )
         );
-    }
-
-    async onGeneralDiagnosticClusterTestEventTriggered(_enableKey: string, _eventTrigger: number | bigint) {
-        throw new Error("Not implemented, needs to be overridden if needed.");
     }
 
     override addRootClusterServer(cluster: ClusterServer<any, any, any, any>) {
@@ -398,5 +402,13 @@ export class CommissionableMatterNode extends MatterNode {
 
     async close() {
         await this.deviceInstance?.stop();
+    }
+
+    addCommandHandler<K extends keyof CommissionableNodeCommands>(action: K, handler: CommissionableNodeCommands[K]) {
+        this.commandHandler.addHandler(action, handler);
+    }
+
+    removeCommandHandler<K extends keyof CommissionableNodeCommands>(action: K, handler: CommissionableNodeCommands[K]) {
+        this.commandHandler.removeHandler(action, handler);
     }
 }

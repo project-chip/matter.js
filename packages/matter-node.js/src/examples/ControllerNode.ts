@@ -6,29 +6,25 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { singleton, getIntParameter, getParameter, requireMinNodeVersion } from "@project-chip/matter-node.js/util";
-import { Time, TimeNode } from "@project-chip/matter-node.js/time";
+/**
+ * Important note: This file is part of the legacy matter-node API and should not be used anymore!
+ * Please use the new API classes!
+ */
 
-Time.get = singleton(() => new TimeNode());
+// Include this first to auto-register Crypto, Network and Time Node.js implementations
+import { MatterController } from "../";  // same as @project-chip/matter-node.js
 
-import { Network, NetworkNode, UdpInterface } from "@project-chip/matter-node.js/net";
-
-Network.get = singleton(() => new NetworkNode());
-
-import { Crypto, CryptoNode } from "@project-chip/matter-node.js/crypto";
-
-Crypto.get = singleton(() => new CryptoNode());
-
-import { Logger } from "@project-chip/matter-node.js/log";
-import { StorageManager, StorageBackendDisk } from "@project-chip/matter-node.js/storage";
-import { MatterController } from "@project-chip/matter-node.js";
-import { MdnsScanner } from "@project-chip/matter-node.js/mdns";
-import { ClusterClient } from "@project-chip/matter-node.js/interaction";
+import { getIntParameter, getParameter, requireMinNodeVersion } from "../util"; // same as @project-chip/matter-node.js/util
+import { UdpInterface } from "../net"; // same as @project-chip/matter-node.js/net
+import { Logger } from "../exports/log"; // same as @project-chip/matter-node.js/log
+import { StorageManager, StorageBackendDisk } from "../storage"; // same as @project-chip/matter-node.js/storage
+import { MdnsScanner } from "../exports/mdns"; // same as @project-chip/matter-node.js/mdns
+import { ClusterClient } from "../exports/interaction"; // same as @project-chip/matter-node.js/interaction
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { BasicInformationCluster, DescriptorCluster, OnOffCluster } from "@project-chip/matter-node.js/cluster";
-import { ManualPairingCodeCodec } from "@project-chip/matter-node.js/schema";
+import { BasicInformationCluster, DescriptorCluster, OnOffCluster } from "../exports/cluster"; // same as @project-chip/matter-node.js/cluster
+import { ManualPairingCodeCodec } from "../exports/schema"; // same as @project-chip/matter-node.js/schema
 
 const logger = Logger.get("Controller");
 

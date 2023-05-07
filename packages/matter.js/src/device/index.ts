@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+export * from "./DeviceTypes.js";
+
 // export Device base classes
 export * from "./Aggregator.js";
 export * from "./ComposedDevice.js";

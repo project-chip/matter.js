@@ -19,7 +19,7 @@ import {
     GeneralCommissioningClusterHandler, OperationalCredentialsClusterHandler, OnOffClusterHandler
 } from "@project-chip/matter.js/cluster";
 import { VendorId, FabricIndex, ClusterId, GroupId } from "@project-chip/matter.js/datatype";
-import { DEVICE } from "@project-chip/matter.js/common";
+import { DEVICE } from "@project-chip/matter.js/device";
 import { ClusterClient, ClusterServer, InteractionServer } from "@project-chip/matter.js/interaction";
 import { MdnsBroadcaster, MdnsScanner } from "@project-chip/matter.js/mdns";
 import { CaseServer, PaseServer } from "@project-chip/matter.js/session";

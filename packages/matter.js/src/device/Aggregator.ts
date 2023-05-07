@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { Device } from "./Device.js";
-import { DEVICE } from "../common/DeviceTypes.js";
+import { DeviceTypes } from "./DeviceTypes.js";
 import { ComposedDevice } from "./ComposedDevice.js";
 import { AttributeInitialValues } from "../cluster/server/ClusterServer.js";
 import { BridgedDeviceBasicInformationCluster } from "../cluster/BridgedDeviceBasicInformationCluster.js";
@@ -12,8 +12,8 @@ import { ClusterServer } from "../protocol/interaction/InteractionServer.js";
 
 export class Aggregator extends ComposedDevice {
     constructor(devices: Device[] = [], endpointId?: number) {
-        // Aggregator is a Composed device with an DEVICE.AGGREGATOR device type
-        super([DEVICE.AGGREGATOR], devices, endpointId);
+        // Aggregator is a Composed device with an DeviceTypes.AGGREGATOR device type
+        super([DeviceTypes.AGGREGATOR], devices, endpointId);
     }
 
     override addDevice(): void {
@@ -21,27 +21,35 @@ export class Aggregator extends ComposedDevice {
     }
 
     addBridgedDevice(device: Device, bridgedBasicInformation?: AttributeInitialValues<typeof BridgedDeviceBasicInformationCluster.attributes>): void {
-        // Add DEVICE.BRIDGED_DEVICE device type to the device exposed via Aggregator
+        // Add DeviceTypes.BRIDGED_DEVICE device type to the device exposed via Aggregator
         const deviceTypes = device.getDeviceTypes();
-        if (!deviceTypes.includes(DEVICE.BRIDGED_NODE)) {
-            deviceTypes.push(DEVICE.BRIDGED_NODE);
+        if (!deviceTypes.includes(DeviceTypes.BRIDGED_NODE)) {
+            deviceTypes.push(DeviceTypes.BRIDGED_NODE);
             device.setDeviceTypes(deviceTypes);
         }
         if (bridgedBasicInformation !== undefined) {
             device.addClusterServer(new ClusterServer(BridgedDeviceBasicInformationCluster, {}, bridgedBasicInformation, {}));
+        } else {
+            if (device.getClusterServer(BridgedDeviceBasicInformationCluster) === undefined) {
+                throw new Error("BridgedDeviceBasicInformationCluster is required for bridged devices. Please add yourself or provide as second parameter");
+            }
         }
         super.addDevice(device);
     }
 
     addBridgedDeviceWithPowerSourceInfo(device: Device, bridgedBasicInformation?: AttributeInitialValues<typeof BridgedDeviceBasicInformationCluster.attributes>): void {
-        // Add DEVICE.BRIDGED_DEVICE device type to the device exposed via Aggregator
+        // Add DeviceTypes.BRIDGED_DEVICE device type to the device exposed via Aggregator
         const deviceTypes = device.getDeviceTypes();
-        if (!deviceTypes.includes(DEVICE.BRIDGED_DEVICE_WITH_POWER_SOURCE_INFORMATION)) {
-            deviceTypes.push(DEVICE.BRIDGED_DEVICE_WITH_POWER_SOURCE_INFORMATION);
+        if (!deviceTypes.includes(DeviceTypes.BRIDGED_DEVICE_WITH_POWER_SOURCE_INFORMATION)) {
+            deviceTypes.push(DeviceTypes.BRIDGED_DEVICE_WITH_POWER_SOURCE_INFORMATION);
             device.setDeviceTypes(deviceTypes);
         }
         if (bridgedBasicInformation !== undefined) {
             device.addClusterServer(new ClusterServer(BridgedDeviceBasicInformationCluster, {}, bridgedBasicInformation, {}));
+        } else {
+            if (device.getClusterServer(BridgedDeviceBasicInformationCluster) === undefined) {
+                throw new Error("BridgedDeviceBasicInformationCluster is required for bridged devices. Please add yourself or provide as second parameter");
+            }
         }
         super.addDevice(device);
     }

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DeviceTypeDefinition } from "../common/DeviceTypes.js";
+import { DeviceTypeDefinition } from "./DeviceTypes.js";
 import {
     AttributePath, attributePathToId, ClusterServer, CommandPath, commandPathToId
 } from "../protocol/interaction/InteractionServer.js";

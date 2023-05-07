@@ -13,7 +13,7 @@ import { NodeId } from "./datatype/NodeId.js";
 import { DecodedAttributeReportValue } from "./protocol/interaction/AttributeDataDecoder.js";
 import { Endpoint } from "./device/Endpoint.js";
 import { Logger } from "./log/Logger.js";
-import { DEVICE, DeviceTypeDefinition, getDeviceTypeDefinitionByCode } from "./common/DeviceTypes.js";
+import { DeviceTypes, DeviceTypeDefinition, getDeviceTypeDefinitionByCode } from "./device/DeviceTypes.js";
 import { AttributeServerValues } from "./cluster/server/ClusterServer.js";
 import { AtLeastOne } from "./util/Array.js";
 import { ClusterServer } from "./protocol/interaction/InteractionServer.js";
@@ -263,7 +263,7 @@ export class PairableMatterNode extends MatterNode {
                 }
             });
             return this.rootEndpoint;
-        } else if (deviceTypes.find(deviceType => deviceType.code === DEVICE.AGGREGATOR.code) !== undefined) {
+        } else if (deviceTypes.find(deviceType => deviceType.code === DeviceTypes.AGGREGATOR.code) !== undefined) {
             // When AGGREGATOR is in the device type list, this is an aggregator
             const aggregator = new Aggregator(
                 [],
@@ -278,7 +278,7 @@ export class PairableMatterNode extends MatterNode {
                 }
             });
             return aggregator;
-        } else if (deviceTypes.find(deviceType => deviceType.code === DEVICE.BRIDGED_NODE.code) !== undefined) {
+        } else if (deviceTypes.find(deviceType => deviceType.code === DeviceTypes.BRIDGED_NODE.code) !== undefined) {
             // When BRIDGED_NODE is in the device type list, this is a bridged node
             const aggregator = new Aggregator(
                 [],

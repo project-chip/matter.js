@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * Important note: This file is part of the legacy matter-node (internal) API and should not be used anymore!
+ * Please use the new API classes!
+ */
+
 import { SECURE_CHANNEL_PROTOCOL_ID } from "./protocol/securechannel/SecureChannelMessages.js";
 import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { PaseClient } from "./session/pase/PaseClient.js";

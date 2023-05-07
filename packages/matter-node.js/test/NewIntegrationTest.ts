@@ -13,10 +13,10 @@ import { CryptoNode } from "../src/crypto/CryptoNode";
 Crypto.get = () => new CryptoNode();
 
 import {
-    OnOffCluster, BasicInformationCluster, OperationalCertStatus,
-    OperationalCredentialsCluster, DescriptorCluster,
+    OnOffCluster, BasicInformationCluster, OperationalCertStatus, OperationalCredentialsCluster, DescriptorCluster,
+    IdentifyCluster, GroupsCluster, AccessControlCluster
 } from "@project-chip/matter.js/cluster";
-import { VendorId, FabricIndex } from "@project-chip/matter.js/datatype";
+import { VendorId, FabricIndex, GroupId } from "@project-chip/matter.js/datatype";
 
 import { MdnsBroadcaster, MdnsScanner } from "@project-chip/matter.js/mdns";
 import { Network, NetworkFake } from "@project-chip/matter.js/net";
@@ -24,7 +24,7 @@ import { Level, Logger } from "@project-chip/matter.js/log";
 import { getPromiseResolver } from "@project-chip/matter.js/util";
 import { StorageManager, StorageBackendMemory } from "@project-chip/matter.js/storage";
 import { FabricJsonObject } from "@project-chip/matter.js/fabric";
-import { Matter, CommissionableMatterNode, PairableMatterNode } from "@project-chip/matter.js";
+import { MatterServer, CommissionableMatterNode, PairableMatterNode } from "@project-chip/matter.js";
 import { OnOffLightDevice } from "@project-chip/matter.js/device";
 
 const SERVER_IP = "192.168.200.1";
@@ -52,8 +52,8 @@ const fakeControllerStorage = new StorageBackendMemory();
 const fakeServerStorage = new StorageBackendMemory();
 
 describe("New Integration", () => {
-    let matterServer: Matter;
-    let matterClient: Matter;
+    let matterServer: MatterServer;
+    let matterClient: MatterServer;
     let pairableNode: PairableMatterNode;
     let onOffLightDeviceServer: OnOffLightDevice;
 
@@ -65,7 +65,7 @@ describe("New Integration", () => {
         const controllerStorageManager = new StorageManager(fakeControllerStorage);
         await controllerStorageManager.initialize();
 
-        matterClient = new Matter(controllerStorageManager);
+        matterClient = new MatterServer(controllerStorageManager);
         pairableNode = new PairableMatterNode({
             ip: SERVER_IP,
             port: matterPort,
@@ -83,7 +83,7 @@ describe("New Integration", () => {
         const serverStorageManager = new StorageManager(fakeServerStorage);
         await serverStorageManager.initialize();
 
-        matterServer = new Matter(serverStorageManager);
+        matterServer = new MatterServer(serverStorageManager);
 
         const commissionableNode = new CommissionableMatterNode({
             port: matterPort,
@@ -351,6 +351,48 @@ describe("New Integration", () => {
         });
     });
 
+    describe("Access Control server fabric scoped attribute storage", () => {
+        it("set empty acl", async () => {
+            const accessControlCluster = pairableNode.getRootClusterClient(AccessControlCluster);
+            assert.ok(accessControlCluster);
+            accessControlCluster.bindToInteractionClient(await pairableNode.createInteractionClient());
+            await accessControlCluster.attributes.acl.set([]);
+
+            const acl = await accessControlCluster.attributes.acl.get();
+            assert.ok(Array.isArray(acl));
+            assert.equal(acl.length, 0);
+        });
+    });
+
+    describe("Groups server fabric scoped storage", () => {
+        it("set a group name", async () => {
+            const onoffEndpoint = pairableNode.getDevices().find(endpoint => endpoint.id === 1);
+            assert.ok(onoffEndpoint);
+            const groupsCluster = onoffEndpoint.getClusterClient(GroupsCluster);
+            assert.ok(groupsCluster);
+            groupsCluster.bindToInteractionClient(await pairableNode.createInteractionClient());
+            await groupsCluster.commands.addGroup({ groupId: new GroupId(1), groupName: "Group 1" });
+        });
+    });
+
+    describe("Command Handler test", () => {
+        it("Trigger identify command and trigger command handler", async () => {
+            const onoffEndpoint = pairableNode.getDevices().find(endpoint => endpoint.id === 1);
+            assert.ok(onoffEndpoint);
+            const identifyClient = onoffEndpoint.getClusterClient(IdentifyCluster);
+            assert.ok(identifyClient);
+            identifyClient.bindToInteractionClient(await pairableNode.createInteractionClient());
+
+            const { promise: firstPromise, resolver: firstResolver } = await getPromiseResolver<number>();
+            onOffLightDeviceServer.addCommandHandler("identify", async ({ request: { identifyTime } }) => firstResolver(identifyTime));
+
+            await identifyClient.commands.identify({ identifyTime: 5 });
+
+            const result = await firstPromise;
+            assert.equal(result, 5)
+        });
+    });
+
     describe("storage", () => {
         it("server storage has fabric fields stored correctly stringified", async () => {
             const storedFabrics = fakeServerStorage.get("FabricManager", "fabrics");
@@ -360,6 +402,13 @@ describe("New Integration", () => {
             assert.equal(typeof firstFabric, "object");
             assert.equal(firstFabric.fabricIndex, 1);
             assert.equal(firstFabric.fabricId, 1);
+
+            const groupsClusterEndpointMap = firstFabric.scopedClusterData.get(GroupsCluster.id);
+            assert.ok(groupsClusterEndpointMap);
+            assert.equal(groupsClusterEndpointMap.size, 1);
+            const groupsClusterData = groupsClusterEndpointMap.get("1");
+            assert.ok(groupsClusterData instanceof Map);
+            assert.equal(groupsClusterData.get(1), "Group 1");
 
             assert.equal(fakeServerStorage.get("FabricManager", "nextFabricIndex"), 2);
 

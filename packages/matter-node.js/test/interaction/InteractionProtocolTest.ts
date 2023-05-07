@@ -20,7 +20,7 @@ import {
     InvokeResponse
 } from "@project-chip/matter.js/interaction";
 import { MessageExchange } from "@project-chip/matter.js/protocol";
-import { DEVICE } from "@project-chip/matter.js/common";
+import { DEVICE } from "@project-chip/matter.js/device";
 import { MatterDevice } from "@project-chip/matter.js";
 import { VendorId } from "@project-chip/matter.js/datatype";
 import { TlvString, TlvUInt8, TlvNoArguments, TlvArray, TlvField, TlvObject, TlvNullable } from "@project-chip/matter.js/tlv";

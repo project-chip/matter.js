@@ -13,8 +13,10 @@ export class StorageBackendDisk implements Storage {
 
     constructor(
         path: string,
+        clear = false,
     ) {
         this.localStorage = new LocalStorage(path);
+        if (clear) this.localStorage.clear();
     }
 
     async initialize() {

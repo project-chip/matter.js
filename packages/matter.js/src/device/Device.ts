@@ -4,11 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DeviceClasses, DeviceTypeDefinition } from "../common/DeviceTypes.js";
+import { DeviceClasses, DeviceTypeDefinition } from "./DeviceTypes.js";
 import { ClusterServer } from "../protocol/interaction/InteractionServer.js";
 import { Endpoint } from "./Endpoint.js";
 import { ClusterClient } from "../protocol/interaction/InteractionClient.js";
 import { AtLeastOne } from "../util/Array.js";
+import { HandlerFunction, NamedHandler } from "../util/NamedHandler.js";
 
 // TODO: prevent adding clusters because definition is automatically generated from what the node supports
 export class PairedDevice extends Endpoint {
@@ -39,6 +40,8 @@ export class RootEndpoint extends Endpoint {
 // TODO add typing support to know which clusters are available based on required clusters from device type def to be used by getClusterServer/Client
 
 export class Device extends RootEndpoint {
+    private commandHandler = new NamedHandler<any>();
+
     constructor(
         definition: DeviceTypeDefinition,
         clusters: (ClusterServer<any, any, any, any> | ClusterClient<any, any>)[] = [],
@@ -48,5 +51,25 @@ export class Device extends RootEndpoint {
             throw new Error("MatterNode devices are not supported");
         }
         super(definition, clusters, endpointId);
+    }
+
+    // The default signature has no commands
+    addCommandHandler(command: never, handler: HandlerFunction) {
+        this.commandHandler.addHandler(command, handler);
+    }
+
+    removeCommandHandler(command: never, handler: HandlerFunction) {
+        this.commandHandler.removeHandler(command, handler);
+    }
+
+    /**
+     * Execute a command handler. Should only be used Internally
+     *
+     * @protected
+     * @param command
+     * @param args
+     */
+    async _executeHandler(command: never, ...args: any[]) {
+        return await this.commandHandler.executeHandler(command, ...args);
     }
 }

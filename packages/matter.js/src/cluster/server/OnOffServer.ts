@@ -5,7 +5,7 @@
  */
 
 import { OnOffCluster } from "../OnOffCluster.js";
-import { ClusterServerHandlers } from "./ClusterServer.js";
+import { AttributeInitialValues, ClusterServerHandlers } from "./ClusterServer.js";
 import { ClusterServer } from "../../protocol/interaction/InteractionServer.js";
 
 /*
@@ -38,12 +38,12 @@ export const OnOffClusterHandler: () => ClusterServerHandlers<typeof OnOffCluste
     },
 });
 
-export const createDefaultOnOffClusterServer = () => new ClusterServer(
+export const createDefaultOnOffClusterServer = (attributeInitialValues?: AttributeInitialValues<typeof OnOffCluster.attributes>) => new ClusterServer(
     OnOffCluster,
     {
         lightingLevelControl: false,
     },
-    {
+    attributeInitialValues ?? {
         onOff: false,
     },
     OnOffClusterHandler()

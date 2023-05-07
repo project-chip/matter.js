@@ -5,7 +5,7 @@
  */
 import { Endpoint } from "./Endpoint.js";
 import { Device } from "./Device.js";
-import { DeviceTypeDefinition } from "../common/DeviceTypes.js";
+import { DeviceTypeDefinition } from "./DeviceTypes.js";
 import { AtLeastOne } from "../util/Array.js";
 
 export class ComposedDevice extends Endpoint {

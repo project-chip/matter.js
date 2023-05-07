@@ -12,8 +12,10 @@ I decided to do the rebuild in several steps to make it easier to review and to 
 * The ClusterClient was changed tobe an object with the same structure as ClusterServer to internally streamline code. I need to iterate further on this to have a meaningful API
 * The new Controller (pairable node) API is still WIP. Especially the whole usage as controller and for ClusterClients.
 * The storage for the new device classes is just basic and needs to get enhanced (e.g, last generated endpoint id and such)
-* Investigate/Check specs on how to add new devices to a bridge (check Matter Core specs)
+* Investigate/Check specs on how to add new devices to a bridge (check Matter Core specs) to enhance bridge "on the fly"
+* Unique IDs vs endpoint id - idea: dev defined endpoint ids themselfs Or we urge him to always set unique unique serialnumbers or other unique ID
 * Check bridge and composed devices with tuya, smartthings and Alexa again; and test composed device with google
+* Return correct error in read/write when endpoint/cluster is unknown (in comparism to attributes)
 
 
 ## New versions of Device.ts and Controller.ts
@@ -62,3 +64,17 @@ The above command exposes one composed device with two sub-devices, one as light
 ### NewControllerNode.ts
 The functionality is the same as the original Controller.ts but adjusted to use the new API. But especially the whole usage of CLusterClients is still WIP ...
 
+## Changelog for this PR
+* April 30th: 
+  * initial commit and first smaller adjustments and fixes
+* May 6th: 
+  * Breaking: Rename class "Matter" -> "MatterServer"
+  * Breaking: Move DeviceTypes.ts from common to device and rename DEVICE to "DeviceTypes"
+  * Autoregister Crypto, Time and Network in their Node.js variants when including packages from @project-chip/matter-node.js root package but only if not yet registered (so can be overridden by the developer)
+  * Moved the examples/reference implementations into examples directory and add own README_EXAMPLES.md file and moved content from main readme into it
+  * Add new package.json entries and rename "matter" to "matter-device"
+  * Add hints for all imports in the examples to show what the corresponding "matter-node.js" import would be (because they can not be used directly for build reasons)
+  * Introduce NamedHandler util class for an event style typed and named handler/callback approach 
+  * Use NamedHandler as commandHandler to forward command calls like identify to the Device classes and testEvenTriggered for commissionable node class 
+  * Add constructor value to hand over initial values of the onoff Cluster when initialing the default cluster
+  * make sure BridgedBasicInformation cluster is always set when adding a bridged device and no data parameters were provided
