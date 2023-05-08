@@ -5,17 +5,17 @@
  */
 
 import { DeviceClasses, DeviceTypeDefinition } from "./DeviceTypes.js";
-import { ClusterServer } from "../protocol/interaction/InteractionServer.js";
 import { Endpoint } from "./Endpoint.js";
-import { ClusterClient } from "../protocol/interaction/InteractionClient.js";
 import { AtLeastOne } from "../util/Array.js";
 import { HandlerFunction, NamedHandler } from "../util/NamedHandler.js";
+import { ClusterClientObj } from "../cluster/client/ClusterClient.js";
+import { ClusterServerObj } from "../cluster/server/ClusterServer.js";
 
 // TODO: prevent adding clusters because definition is automatically generated from what the node supports
 export class PairedDevice extends Endpoint {
     constructor(
         definition: AtLeastOne<DeviceTypeDefinition>,
-        clusters: (ClusterServer<any, any, any, any> | ClusterClient<any, any>)[] = [],
+        clusters: (ClusterServerObj<any> | ClusterClientObj<any, any>)[] = [],
         endpointId: number
     ) {
         super(definition, clusters, endpointId);
@@ -27,7 +27,7 @@ export class RootEndpoint extends Endpoint {
 
     constructor(
         definition: DeviceTypeDefinition,
-        clusters: (ClusterServer<any, any, any, any> | ClusterClient<any, any>)[] = [],
+        clusters: (ClusterServerObj<any> | ClusterClientObj<any, any>)[] = [],
         endpointId?: number
     ) {
         super([definition], clusters, endpointId);
@@ -44,7 +44,7 @@ export class Device extends RootEndpoint {
 
     constructor(
         definition: DeviceTypeDefinition,
-        clusters: (ClusterServer<any, any, any, any> | ClusterClient<any, any>)[] = [],
+        clusters: (ClusterServerObj<any> | ClusterClientObj<any, any>)[] = [],
         endpointId?: number
     ) {
         if (definition.deviceClass === DeviceClasses.Node) {

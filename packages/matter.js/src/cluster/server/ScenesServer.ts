@@ -9,7 +9,7 @@ import { ScenesCluster } from "../ScenesCluster.js";
 
 // TODO: Implement Scenes Handler
 
-export const createDefaultScenesClusterServer = () => new ClusterServer(
+export const createDefaultScenesClusterServer = () => ClusterServer(
     ScenesCluster,
     {
         sceneNames: true,

@@ -14,7 +14,7 @@ import { DecodedAttributeReportValue } from "./protocol/interaction/AttributeDat
 import { Endpoint } from "./device/Endpoint.js";
 import { Logger } from "./log/Logger.js";
 import { DeviceTypes, DeviceTypeDefinition, getDeviceTypeDefinitionByCode } from "./device/DeviceTypes.js";
-import { AttributeServerValues } from "./cluster/server/ClusterServer.js";
+import { AttributeServerValues, ClusterServerObj, isClusterServer } from "./cluster/server/ClusterServer.js";
 import { AtLeastOne } from "./util/Array.js";
 import { ClusterServer } from "./protocol/interaction/InteractionServer.js";
 import { Aggregator } from "./device/Aggregator.js";
@@ -22,6 +22,9 @@ import { PairedDevice } from "./device/Device.js";
 import { ComposedDevice } from "./device/ComposedDevice.js";
 import { DescriptorCluster } from "./cluster/DescriptorCluster.js";
 import { AllClustersMap } from "./cluster/ClusterHelper.js";
+import { ClusterClientObj, isClusterClient } from "./cluster/client/ClusterClient.js";
+import { BitSchema } from "./schema/BitmapSchema.js";
+import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
 
 const logger = new Logger("PairableMatterNode");
 
@@ -127,6 +130,12 @@ export class PairableMatterNode extends MatterNode {
         return this.controllerInstance.connect(this.nodeId);
     }
 
+    async getRootClusterClientWithNewInteractionClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
+        cluster: Cluster<F, A, C, E>
+    ): Promise<ClusterClientObj<A, C> | undefined> {
+        return super.getRootClusterClient(cluster, await this.createInteractionClient());
+    }
+
     private async initializeEndpointStructure() {
         const interactionClient = await this.createInteractionClient();
 
@@ -141,7 +150,7 @@ export class PairableMatterNode extends MatterNode {
             partLists.set(parseInt(endpointId), descriptorData.partsList.map(({ number }) => number));
 
             console.log("Creating device", endpointId, Logger.toJSON(clusters));
-            this.endpoints.set(parseInt(endpointId), this.createDevice(parseInt(endpointId), clusters));
+            this.endpoints.set(parseInt(endpointId), this.createDevice(parseInt(endpointId), clusters, interactionClient));
         }
 
         this.structureEndpoints(partLists);
@@ -208,7 +217,7 @@ export class PairableMatterNode extends MatterNode {
         }
     }
 
-    private createDevice(endpointId: number, data: { [key: number]: { [key: string]: any } }) {
+    private createDevice(endpointId: number, data: { [key: number]: { [key: string]: any } }, interactionClient: InteractionClient) {
         const descriptorData = data[DescriptorCluster.id] as AttributeServerValues<typeof DescriptorCluster.attributes>;
 
         const deviceTypes = descriptorData.deviceTypeList.flatMap(({ deviceType, revision }) => {
@@ -228,7 +237,7 @@ export class PairableMatterNode extends MatterNode {
             throw new Error("No device type found for endpoint");
         }
 
-        const endpointClusters = Array<ClusterServer<any, any, any, any> | ClusterClient<any, any>>();
+        const endpointClusters = Array<ClusterServerObj<any> | ClusterClientObj<any, any>>();
 
         // Add ClusterClients for all server clusters of the device
         for (const clusterId of descriptorData.serverList) {
@@ -237,7 +246,7 @@ export class PairableMatterNode extends MatterNode {
                 logger.info(`Cluster with id ${clusterId} not known, ignore`);
                 continue;
             }
-            const clusterClient = new ClusterClient(cluster, endpointId);
+            const clusterClient = ClusterClient(cluster, endpointId, interactionClient);
             endpointClusters.push(clusterClient);
         }
 
@@ -249,16 +258,16 @@ export class PairableMatterNode extends MatterNode {
                 continue;
             }
             const clusterData = (data[clusterId.id] ?? {}) as any; // TODO correct typing
-            endpointClusters.push(new ClusterServer(cluster, clusterData.featureMap, clusterData, {})); // TODO Add Default handler!
+            endpointClusters.push(ClusterServer(cluster, clusterData.featureMap, clusterData, {})); // TODO Add Default handler!
         }
 
         if (endpointId === 0) {
             // Endpoint 0 is the root endpoint, so this object
             this.rootEndpoint.setDeviceTypes(deviceTypes as AtLeastOne<DeviceTypeDefinition>);
             endpointClusters.forEach(cluster => {
-                if (cluster instanceof ClusterServer) {
+                if (isClusterServer(cluster)) {
                     this.addRootClusterServer(cluster);
-                } else {
+                } else if (isClusterClient(cluster)) {
                     this.addRootClusterClient(cluster);
                 }
             });
@@ -271,9 +280,9 @@ export class PairableMatterNode extends MatterNode {
             );
             aggregator.setDeviceTypes(deviceTypes as AtLeastOne<DeviceTypeDefinition>);
             endpointClusters.forEach(cluster => { // TODO There should be none?
-                if (cluster instanceof ClusterServer) {
+                if (isClusterServer(cluster)) {
                     aggregator.addClusterServer(cluster);
-                } else {
+                } else if (isClusterClient(cluster)) {
                     aggregator.addClusterClient(cluster);
                 }
             });
@@ -286,9 +295,9 @@ export class PairableMatterNode extends MatterNode {
             );
             aggregator.setDeviceTypes(deviceTypes as AtLeastOne<DeviceTypeDefinition>);
             endpointClusters.forEach(cluster => {
-                if (cluster instanceof ClusterServer) {
+                if (isClusterServer(cluster)) {
                     aggregator.addClusterServer(cluster);
-                } else {
+                } else if (isClusterClient(cluster)) {
                     aggregator.addClusterClient(cluster);
                 }
             });
@@ -302,9 +311,9 @@ export class PairableMatterNode extends MatterNode {
                     endpointId
                 );
                 endpointClusters.forEach(cluster => {
-                    if (cluster instanceof ClusterServer) {
+                    if (isClusterServer(cluster)) {
                         composedDevice.addClusterServer(cluster);
-                    } else {
+                    } else if (isClusterClient(cluster)) {
                         composedDevice.addClusterClient(cluster);
                     }
                 });

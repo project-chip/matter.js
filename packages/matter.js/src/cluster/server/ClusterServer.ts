@@ -7,16 +7,20 @@
 import { AttributeServer } from "./AttributeServer.js";
 import {
     Cluster, Command, Commands, AttributeJsType, Attributes, Attribute, OptionalAttribute, OptionalCommand,
-    OptionalWritableAttribute, WritableAttribute, GlobalAttributes, MandatoryAttributeNames, OptionalAttributeNames
+    OptionalWritableAttribute, WritableAttribute, GlobalAttributes, MandatoryAttributeNames, OptionalAttributeNames,
 } from "../Cluster.js";
 import { Message } from "../../codec/MessageCodec.js";
 import { Merge } from "../../util/Type.js";
 import { MatterDevice } from "../../MatterDevice.js";
 import { Session } from "../../session/Session.js";
 import { EndpointData } from "../../protocol/interaction/InteractionServer.js";
+import { CommandServer } from "./CommandServer.js";
+import { StorageContext } from "../../storage/StorageContext.js";
+import { ClusterClientObj } from "../client/ClusterClient.js";
 
 /** Cluster attributes accessible on the cluster server */
-export type AttributeServers<A extends Attributes> = { [P in MandatoryAttributeNames<A>]: AttributeServer<AttributeJsType<A[P]>> };
+export type AttributeServers<A extends Attributes> = Merge<Omit<{ [P in MandatoryAttributeNames<A>]: AttributeServer<AttributeJsType<A[P]>> }, keyof GlobalAttributes<any>>, { [P in OptionalAttributeNames<A>]?: AttributeServer<AttributeJsType<A[P]>> }>;
+
 /** Initial values for the cluster attribute */
 export type AttributeInitialValues<A extends Attributes> = Merge<Omit<{ [P in MandatoryAttributeNames<A>]: AttributeJsType<A[P]> }, keyof GlobalAttributes<any>>, { [P in OptionalAttributeNames<A>]?: AttributeJsType<A[P]> }>;
 export type AttributeServerValues<A extends Attributes> = Merge<{ [P in MandatoryAttributeNames<A>]: AttributeJsType<A[P]> }, { [P in OptionalAttributeNames<A>]?: AttributeJsType<A[P]> }>;
@@ -45,3 +49,28 @@ type UseOptionalAttributes<C extends Cluster<any, any, any, any>, A extends Opti
 /** Forces the presence of the specified optional attributes, so they can be used in the command handlers */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 export const UseOptionalAttributes = <C extends Cluster<any, any, any, any>, A extends OptionalAttributeConf<C["attributes"]>>(cluster: C, conf: A): UseOptionalAttributes<C, A> => ({ ...cluster, attributes: MakeAttributesMandatory(cluster.attributes, conf) });
+
+
+type GetterTypeFromSpec<A extends Attribute<any>> = A extends OptionalAttribute<infer T> ? (T | undefined) : AttributeJsType<A>;
+type ServerAttributeGetters<A extends Attributes> = { [P in keyof A as `get${Capitalize<string & P>}Attribute`]: () => GetterTypeFromSpec<A[P]> };
+type ServerAttributeSetters<A extends Attributes> = { [P in keyof A as `set${Capitalize<string & P>}Attribute`]: (value: AttributeJsType<A[P]>) => void };
+type ServerAttributeSubscribers<A extends Attributes> = { [P in keyof A as `subscribe${Capitalize<string & P>}Attribute`]: (listener: (newValue: AttributeJsType<A[P]>, oldValue: AttributeJsType<A[P]>) => void) => void };
+
+
+/** Strongly typed interface of a cluster server */
+export type ClusterServerObj<A extends Attributes> =
+    {
+        id: number;
+        name: string;
+        _type: "ClusterServer",
+        attributes: AttributeServers<A>;
+        _commands: CommandServer<any, any>[];
+        setStorage: (storageContext: StorageContext) => void;
+    }
+    & ServerAttributeGetters<A>
+    & ServerAttributeSetters<A>
+    & ServerAttributeSubscribers<A>;
+
+export function isClusterServer(obj: ClusterClientObj<any, any> | ClusterServerObj<any>): obj is ClusterServerObj<any> {
+    return obj._type === "ClusterServer";
+}

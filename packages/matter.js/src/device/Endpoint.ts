@@ -8,7 +8,6 @@ import { DeviceTypeDefinition } from "./DeviceTypes.js";
 import {
     AttributePath, attributePathToId, ClusterServer, CommandPath, commandPathToId
 } from "../protocol/interaction/InteractionServer.js";
-import { ClusterClient } from "../protocol/interaction/InteractionClient.js";
 import { AtLeastOne } from "../util/Array.js";
 import { AttributeServer } from "../cluster/server/AttributeServer.js";
 import { CommandServer } from "../cluster/server/CommandServer.js";
@@ -19,10 +18,13 @@ import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { FixedLabelCluster } from "../cluster/LabelCluster.js";
+import { ClusterClientObj } from "../cluster/client/ClusterClient.js";
+import { ClusterServerObj, isClusterServer } from "../cluster/server/ClusterServer.js";
+import { InteractionClient } from "../protocol/interaction/InteractionClient.js";
 
 export class Endpoint {
-    private readonly clusterServers = new Map<number, ClusterServer<any, any, any, any>>();
-    private readonly clusterClients = new Map<number, ClusterClient<any, any>>();
+    private readonly clusterServers = new Map<number, ClusterServerObj<any>>();
+    private readonly clusterClients = new Map<number, ClusterClientObj<any, any>>();
     private readonly childEndpoints: Endpoint[] = [];
     id: number | undefined;
 
@@ -30,10 +32,10 @@ export class Endpoint {
 
     constructor(
         private deviceTypes: AtLeastOne<DeviceTypeDefinition>,
-        clusters: (ClusterServer<any, any, any, any> | ClusterClient<any, any>)[] = [],
+        clusters: (ClusterServerObj<any> | ClusterClientObj<any, any>)[] = [],
         endpointId?: number
     ) {
-        this.descriptorCluster = new ClusterServer(
+        this.descriptorCluster = ClusterServer(
             DescriptorCluster,
             {},
             {
@@ -52,9 +54,9 @@ export class Endpoint {
 
         // Then the other clusters - if provided already
         clusters.forEach(cluster => {
-            if (cluster instanceof ClusterServer) {
+            if (isClusterServer(cluster)) {
                 this.addClusterServer(cluster);
-            } else if (cluster instanceof ClusterClient) {
+            } else {
                 this.addClusterClient(cluster);
             }
         });
@@ -65,7 +67,7 @@ export class Endpoint {
 
     addFixedLabel(label: string, value: string) {
         if (!this.hasClusterServer(FixedLabelCluster)) {
-            this.clusterServers.set(FixedLabelCluster.id, new ClusterServer(FixedLabelCluster, {}, {
+            this.addClusterServer(ClusterServer(FixedLabelCluster, {}, {
                 labelList: []
             }, {}));
         }
@@ -75,14 +77,14 @@ export class Endpoint {
         fixedLabelCluster?.attributes.labelList.set(labelList);
     }
 
-    addClusterServer(cluster: ClusterServer<any, any, any, any>) {
+    addClusterServer<A extends Attributes>(cluster: ClusterServerObj<A>) {
         if (cluster.id === DescriptorCluster.id) {
-            this.descriptorCluster = cluster;
+            this.descriptorCluster = cluster as unknown as ClusterServerObj<typeof DescriptorCluster.attributes>;
         }
         this.clusterServers.set(cluster.id, cluster);
     }
 
-    addClusterClient(cluster: ClusterClient<any, any>) {
+    addClusterClient<A extends Attributes, C extends Commands>(cluster: ClusterClientObj<A, C>) {
         this.clusterClients.set(cluster.id, cluster);
     }
 
@@ -90,14 +92,19 @@ export class Endpoint {
     // TODO add instance if optional and not existing, maybe get rid of undefined by throwing?
     getClusterServer<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
         cluster: Cluster<F, A, C, E>
-    ): ClusterServer<F, A, C, E> | undefined {
-        return this.clusterServers.get(cluster.id);
+    ): ClusterServerObj<A> | undefined {
+        return this.clusterServers.get(cluster.id) as ClusterServerObj<A>;
     }
 
     getClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
-        cluster: Cluster<F, A, C, E>
-    ): ClusterClient<C, A> | undefined {
-        return this.clusterClients.get(cluster.id)
+        cluster: Cluster<F, A, C, E>,
+        interactionClient?: InteractionClient
+    ): ClusterClientObj<A, C> | undefined {
+        const clusterClient = this.clusterClients.get(cluster.id) as ClusterClientObj<A, C>;
+        if (clusterClient !== undefined) {
+            return clusterClient._clone(interactionClient);
+        }
+        return undefined;
     }
 
     hasClusterServer<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
@@ -188,7 +195,7 @@ export class Endpoint {
 
         this.verifyRequiredClusters();
 
-        const endpoints = new Map<number, { deviceTypes: AtLeastOne<DeviceTypeDefinition>, clusters: Map<number, ClusterServer<any, any, any, any>> }>();
+        const endpoints = new Map<number, { deviceTypes: AtLeastOne<DeviceTypeDefinition>, clusters: Map<number, ClusterServerObj<any>> }>();
         const attributes = new Map<string, AttributeServer<any>>();
         const attributePaths = new Array<AttributePath>();
         const commands = new Map<string, CommandServer<any, any>>();
@@ -201,7 +208,7 @@ export class Endpoint {
         // TODO also add commands and such
 
         for (const cluster of this.clusterServers.values()) {
-            const { id: clusterId, attributes: clusterAttributes, commands: clusterCommands } = cluster;
+            const { id: clusterId, attributes: clusterAttributes, _commands: clusterCommands } = cluster;
             // Add attributes
             for (const name in clusterAttributes) {
                 const attribute = clusterAttributes[name];

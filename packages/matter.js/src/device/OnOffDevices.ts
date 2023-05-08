@@ -44,17 +44,17 @@ abstract class OnOffBaseDevice extends extendPublicHandlerMethods<typeof Device,
     // Example of Convenient methods to control the device without need to access clusters
 
     async onOff(onOff: boolean) {
-        this.getClusterServer(OnOffCluster)?.attributes.onOff.set(onOff);
+        this.getClusterServer(OnOffCluster)?.setOnOffAttribute(onOff);
     }
 
     async toggle() {
         const cluster = this.getClusterServer(OnOffCluster);
-        cluster?.attributes.onOff.set(!cluster?.attributes.onOff.get());
+        cluster?.setOnOffAttribute(!cluster?.getOnOffAttribute());
     }
 
     // Add Listeners convenient for chosen attributes
     addOnOffListener(listener: (newValue: boolean, oldValue: boolean) => void) {
-        this.getClusterServer(OnOffCluster)?.attributes.onOff.addListener(listener);
+        this.getClusterServer(OnOffCluster)?.subscribeOnOffAttribute(listener);
     }
 }
 

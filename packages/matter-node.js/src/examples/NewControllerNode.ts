@@ -109,7 +109,6 @@ class ControllerNode {
          */
         try {
             await pairableNode.connect();
-            const interactionClient = await pairableNode.createInteractionClient();
 
             // Important: This is a temporary API to proof the methods working and this will change soon and is NOT stable!
             // It is provided to proof the concept
@@ -117,9 +116,8 @@ class ControllerNode {
             // Example to initialize a ClusterClient and access concrete fields as API methods
             const descriptor = pairableNode.getRootClusterClient(DescriptorCluster);
             if (descriptor !== undefined) {
-                descriptor.bindToInteractionClient(interactionClient);
-                console.log(await descriptor.attributes.deviceTypeList.get());
-                console.log(await descriptor.attributes.serverList.get());
+                console.log(await descriptor.attributes.deviceTypeList.get()); // you can call that way
+                console.log(await descriptor.getServerListAttribute()); // or more convenient that way
             } else {
                 console.log("No Descriptor Cluster found. This should never happen!");
             }
@@ -127,11 +125,9 @@ class ControllerNode {
             // Example to subscribe to a field and get the value
             const info = pairableNode.getRootClusterClient(BasicInformationCluster);
             if (info !== undefined) {
-                info.bindToInteractionClient(interactionClient);
-                console.log(await info.attributes.productName.get()); // This call is executed remotely
-                //console.log(await info.attributes.productName.subscribe(5, 30));
-                //info.attributes.productName.addListener((value) => console.log("productName", value));
-                //console.log(await info.attributes.productName.get()); // This call is resolved locally because we have subscribed to the value!
+                console.log(await info.getProductNameAttribute()); // This call is executed remotely
+                //console.log(await info.subscribeProductNameAttribute(value => console.log("productName", value), 5, 30));
+                //console.log(await info.getProductNameAttribute()); // This call is resolved locally because we have subscribed to the value!
             } else {
                 console.log("No BasicInformation Cluster found. This should never happen!");
             }
@@ -157,12 +153,13 @@ class ControllerNode {
 
                 const onOff = devices[0].getClusterClient(OnOffCluster);
                 if (onOff !== undefined) {
-                    /*onOff.bindToInteractionClient(interactionClient);
-                    let onOffStatus = await onOff.attributes.onOff.get();
+                    /*
+                    let onOffStatus = await onOff.getOnOffAttribute();
                     // read data every minute to keep up the connection to show the subscription is working
                     setInterval(() => {
-                        onOff.commands.toggle().then(() => onOffStatus = !onOffStatus).catch(error => logger.error(error));
-                    }, 60000);*/
+                        onOff.toggle().then(() => onOffStatus = !onOffStatus).catch(error => logger.error(error));
+                    }, 60000);
+                    */
                 }
             }
 

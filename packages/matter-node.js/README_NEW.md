@@ -16,7 +16,7 @@ I decided to do the rebuild in several steps to make it easier to review and to 
 * Unique IDs vs endpoint id - idea: dev defined endpoint ids themselfs Or we urge him to always set unique unique serialnumbers or other unique ID
 * Check bridge and composed devices with tuya, smartthings and Alexa again; and test composed device with google
 * Return correct error in read/write when endpoint/cluster is unknown (in comparism to attributes)
-
+* Monitor subscriptions and remove/resubscribe them when the device did not answered withing maxInterval
 
 ## New versions of Device.ts and Controller.ts
 For now the original Device.ts and Controller.ts that are offered as the default "CLI tools" are still "untouched".
@@ -78,3 +78,9 @@ The functionality is the same as the original Controller.ts but adjusted to use 
   * Use NamedHandler as commandHandler to forward command calls like identify to the Device classes and testEvenTriggered for commissionable node class 
   * Add constructor value to hand over initial values of the onoff Cluster when initialing the default cluster
   * make sure BridgedBasicInformation cluster is always set when adding a bridged device and no data parameters were provided
+* May 8th:
+  * Breaking (internally): Revert ClusterClient back to object style and also adjust CLusterServer to it and sync the API between them (see API Readme). This means: all new CLusterClient/Server becomes just "ClusterServer/ClusterClient" without the "new"
+  * ClusterClient interface names changed to get/set/subscribeNAMEAttribute to prevent overlappings with commands
+  * ClusterServer interface also added get/set/subscribeNAMEAttribute to be able to use the same interface, only difference is that CLusterServer interface is NOT async!
+  * Add missing global Attributes for attributeList, acceptedCommandList and generatedCommandList
+  * Added one fix to GroupsCluster with a wrong Command request ID

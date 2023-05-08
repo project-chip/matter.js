@@ -20,7 +20,7 @@ import {
     WriteRequest,
     WriteResponse
 } from "./InteractionMessenger.js";
-import { Attributes, Cluster, Commands, Events } from "../../cluster/Cluster.js";
+import { Attributes, Cluster, Commands, Events, TlvNoResponse } from "../../cluster/Cluster.js";
 import {
     StatusCode,
     TlvAttributePath,
@@ -38,7 +38,9 @@ import { SubscriptionHandler } from "./SubscriptionHandler.js";
 import { Message } from "../../codec/MessageCodec.js";
 import { Crypto } from "../../crypto/Crypto.js";
 import { decodeValueForSchema, normalizeAttributeData } from "./AttributeDataDecoder.js";
-import { AttributeInitialValues, AttributeServers, ClusterServerHandlers } from "../../cluster/server/ClusterServer.js";
+import {
+    AttributeInitialValues, AttributeServers, ClusterServerHandlers, ClusterServerObj
+} from "../../cluster/server/ClusterServer.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { AttributeGetterServer, AttributeServer } from "../../cluster/server/AttributeServer.js";
 import { DescriptorCluster } from "../../cluster/DescriptorCluster.js";
@@ -48,80 +50,122 @@ import { StorageManager } from "../../storage/StorageManager.js";
 import { capitalize } from "../../util/String.js";
 import { TlvVoid } from "../../tlv/TlvVoid.js";
 import { Endpoint } from "../../device/Endpoint.js";
+import { AttributeId } from "../../datatype/AttributeId.js";
+import { CommandId } from "../../datatype/CommandId.js";
 
 export const INTERACTION_PROTOCOL_ID = 0x0001;
 
 // TODO replace by real Endpoint object
-export type EndpointData = { id: number, name: string, code: number, clusters: Map<number, ClusterServer<any, any, any, any>> };
+export type EndpointData = { id: number, name: string, code: number, clusters: Map<number, ClusterServerObj<any>> };
 
 const logger = Logger.get("InteractionProtocol");
 
-export class ClusterServer<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events> {
-    readonly id: number;
-    readonly name: string;
-    readonly attributes = <AttributeServers<A>>{};
-    readonly commands = new Array<CommandServer<any, any>>();
-    private clusterStorage: StorageContext | null = null;
-    private attributeStorageListeners = new Map<number, (value: any, version: number) => void>();
+export function ClusterServer<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
+    clusterDef: Cluster<F, A, C, E>,
+    features: TypeFromBitSchema<F>,
+    attributesInitialValues: AttributeInitialValues<A>,
+    handlers: ClusterServerHandlers<Cluster<F, A, C, E>>
+): ClusterServerObj<A> {
+    const { id: clusterId, name, commands: commandDef, attributes: attributeDef } = clusterDef;
+    let clusterStorage: StorageContext | null = null;
+    const attributeStorageListeners = new Map<number, (value: any, version: number) => void>();
 
-    constructor(clusterDef: Cluster<F, A, C, E>, features: TypeFromBitSchema<F>, attributesInitialValues: AttributeInitialValues<A>, handlers: ClusterServerHandlers<Cluster<F, A, C, E>>) {
-        const { id, name, attributes: attributeDefs, commands: commandDefs } = clusterDef;
-        this.id = id;
-        this.name = name;
+    const result: any = {
+        id: clusterId,
+        name,
+        _type: "ClusterServer",
+        attributes: <AttributeServers<A>>{},
+        _commands: new Array<CommandServer<any, any>>(),
+        setStorage: (storageContext: StorageContext) => {
+            clusterStorage = storageContext;
 
-        // Create attributes
-        attributesInitialValues = {
-            ...attributesInitialValues,
-            clusterRevision: clusterDef.revision,
-            featureMap: features,
-        };
-        for (const name in attributesInitialValues) {
-            const { id, schema, writable, persistent } = attributeDefs[name];
+            for (const name in result.attributes) {
+                const attribute = result.attributes[name];
+                if (!attributeStorageListeners.has(attribute.id)) return;
+                if (!storageContext.has(attribute.name)) return;
+                try {
+                    const data = storageContext.get<{ version: number, value: any }>(attribute.name);
+                    logger.debug(`Restoring attribute ${attribute.name} (${attribute.id}) in cluster ${name} (${clusterId})`);
+                    attribute.init(data.value, data.version);
+                } catch (error) {
+                    logger.warn(`Failed to restore attribute ${attribute.name} (${attribute.id}) in cluster ${name} (${clusterId})`, error);
+                }
+            }
+        }
+    };
+
+    const attributeStorageListener = (attributeName: string, version: number, value: any) => {
+        if (!clusterStorage) return;
+        logger.debug(`Storing attribute ${attributeName} in cluster ${name} (${clusterId})`);
+        clusterStorage.set(attributeName, { version, value });
+    }
+
+    // Create attributes
+    attributesInitialValues = {
+        ...attributesInitialValues,
+        clusterRevision: clusterDef.revision,
+        featureMap: features,
+        attributeList: new Array<AttributeId>(),
+        acceptedCommandList: new Array<CommandId>(),
+        generatedCommandList: new Array<CommandId>(),
+    };
+    const attributeList = new Array<AttributeId>();
+    for (const attributeName in attributeDef) {
+        const capitalizedAttributeName = capitalize(attributeName);
+        if ((attributesInitialValues as any)[attributeName] !== undefined) {
+            const { id, schema, writable, persistent } = attributeDef[attributeName];
             const validator = typeof schema.validate === 'function' ? schema.validate.bind(schema) : undefined;
-            const getter = (handlers as any)[`get${capitalize(name)}`];
+            const getter = (handlers as any)[`get${capitalize(attributeName)}`];
             if (getter === undefined) {
-                (this.attributes as any)[name] = new AttributeServer(id, name, schema, validator ?? (() => { /* no validation */ }), writable, (attributesInitialValues as any)[name]);
+                result.attributes[attributeName] = new AttributeServer(id, attributeName, schema, validator ?? (() => { /* no validation */
+                }), writable, (attributesInitialValues as any)[attributeName]);
             } else {
-                (this.attributes as any)[name] = new AttributeGetterServer(id, name, schema, validator ?? (() => { /* no validation */ }), writable, (attributesInitialValues as any)[name], getter);
+                result.attributes[attributeName] = new AttributeGetterServer(id, attributeName, schema, validator ?? (() => { /* no validation */
+                }), writable, (attributesInitialValues as any)[attributeName], getter);
             }
             if (persistent) {
-                const listener = (value: any, version: number) => this.attributeStorageListener(name, version, value);
-                this.attributeStorageListeners.set(id, listener);
-                (this.attributes as any)[name].addMatterListener(listener);
+                const listener = (value: any, version: number) => attributeStorageListener(attributeName, version, value);
+                attributeStorageListeners.set(id, listener);
+                result.attributes[attributeName].addMatterListener(listener);
+            }
+            result[`get${capitalizedAttributeName}Attribute`] = () => result.attributes[attributeName].get();
+            result[`set${capitalizedAttributeName}Attribute`] = <T,>(value: T) => result.attributes[attributeName].set(value);
+            result[`subscribe${capitalizedAttributeName}Attribute`] = <T,>(listener: (newValue: T, oldValue: T) => void) => result.attributes[attributeName].addListener(listener);
+            attributeList.push(new AttributeId(id));
+        } else {
+            // TODO: Find maybe a better way to do this including strong typing according to attribute initial values set?
+            result[`get${capitalizedAttributeName}Attribute`] = () => undefined;
+            result[`set${capitalizedAttributeName}Attribute`] = () => {
+                throw new Error(`Attribute ${attributeName} is optional and not initialized. To use it please initialize it first.`);
+            };
+            result[`subscribe${capitalizedAttributeName}Attribute`] = () => {
+                throw new Error(`Attribute ${attributeName} is optional and not initialized. To use it please initialize it first.`);
+            };
+        }
+    }
+    result.attributes.attributeList.set(attributeList);
+
+    // Create commands
+    const acceptedCommandList = new Array<number>();
+    const generatedCommandList = new Array<number>();
+    for (const name in commandDef) {
+        const handler = (handlers as any)[name];
+        if (handler === undefined) continue;
+        const { requestId, requestSchema, responseId, responseSchema } = commandDef[name];
+        result._commands.push(new CommandServer(requestId, responseId, name, requestSchema, responseSchema, (request, session, message, endpoint) => handler({ request, attributes: result.attributes, session, message, endpoint })));
+        if (!acceptedCommandList.includes(requestId)) {
+            acceptedCommandList.push(requestId);
+        }
+        if (responseSchema !== TlvNoResponse) {
+            if (!generatedCommandList.includes(responseId)) {
+                generatedCommandList.push(responseId);
             }
         }
-
-        // Create commands
-        for (const name in commandDefs) {
-            const handler = (handlers as any)[name];
-            if (handler === undefined) continue;
-            const { requestId, requestSchema, responseId, responseSchema } = commandDefs[name];
-            this.commands.push(new CommandServer(requestId, responseId, name, requestSchema, responseSchema, (request, session, message, endpoint) => handler({ request, attributes: this.attributes, session, message, endpoint })));
-        }
     }
+    result.attributes.acceptedCommandList.set(acceptedCommandList.map(id => new CommandId(id)));
+    result.attributes.generatedCommandList.set(generatedCommandList.map(id => new CommandId(id)));
 
-    setStorage(storageContext: StorageContext) {
-        this.clusterStorage = storageContext;
-
-        for (const name in this.attributes) {
-            const attribute = (this.attributes as any)[name];
-            if (!this.attributeStorageListeners.has(attribute.id)) return;
-            if (!storageContext.has(attribute.name)) return;
-            try {
-                const data = storageContext.get<{ version: number, value: any }>(attribute.name);
-                logger.debug(`Restoring attribute ${attribute.name} (${attribute.id}) in cluster ${this.name} (${this.id})`);
-                attribute.init(data.value, data.version);
-            } catch (error) {
-                logger.warn(`Failed to restore attribute ${attribute.name} (${attribute.id}) in cluster ${this.name} (${this.id})`, error);
-            }
-        }
-    }
-
-    attributeStorageListener(attributeName: string, version: number, value: any) {
-        if (!this.clusterStorage) return;
-        logger.debug(`Storing attribute ${attributeName} in cluster ${this.name} (${this.id})`);
-        this.clusterStorage.set(attributeName, { version, value });
-    }
+    return result as ClusterServerObj<A>;
 }
 
 export interface CommandPath {
@@ -169,22 +213,22 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         return INTERACTION_PROTOCOL_ID;
     }
 
-    addEndpoint(endpointId: number, device: { name: string, code: number }, clusters: ClusterServer<any, any, any, any>[]) {
+    addEndpoint(endpointId: number, device: { name: string, code: number }, clusters: ClusterServerObj<any>[]) {
         // Add the descriptor cluster
-        const descriptorCluster = new ClusterServer(DescriptorCluster, {}, {
+        const descriptorCluster = ClusterServer(DescriptorCluster, {}, {
             deviceTypeList: [{ revision: 1, deviceType: new DeviceTypeId(device.code) }],
             serverList: [],
             clientList: [],
             partsList: [],
         }, {});
-        clusters.push(descriptorCluster);
+        clusters.push(descriptorCluster as ClusterServerObj<any>);
         descriptorCluster.attributes.serverList.setLocal(clusters.map(({ id }) => new ClusterId(id)));
 
         const clusterEndpointNumber = new EndpointNumber(endpointId);
 
-        const clusterMap = new Map<number, ClusterServer<any, any, any, any>>();
+        const clusterMap = new Map<number, ClusterServerObj<any>>();
         clusters.forEach(cluster => {
-            const { id: clusterId, attributes, commands } = cluster;
+            const { id: clusterId, attributes, _commands: commands } = cluster;
 
             cluster.setStorage(this.storageManager.createContext(`Cluster-${clusterEndpointNumber.number}-${clusterId}`));
 

@@ -112,7 +112,7 @@ export const GroupsCluster = Cluster({
          * The ViewGroup command allows a client to request that the server responds with a ViewGroupResponse command
          * containing the name string for a particular group.
          */
-        viewGroup: Command(1, TlvViewGroupRequest, 0, TlvViewGroupResponse), /* isFabricScoped: true */
+        viewGroup: Command(1, TlvViewGroupRequest, 1, TlvViewGroupResponse), /* isFabricScoped: true */
 
         /**
          * The GetGroupMembership command allows a client to inquire about the group membership of the server endpoint,

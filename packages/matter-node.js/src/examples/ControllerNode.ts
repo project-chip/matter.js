@@ -84,12 +84,12 @@ class ControllerNode {
             // It is provided to proof the concept
 
             // Example to initialize a ClusterClient and access concrete fields as API methods
-            const descriptor = new ClusterClient(DescriptorCluster, 0, interactionClient);
+            const descriptor = ClusterClient(DescriptorCluster, 0, interactionClient);
             console.log(await descriptor.attributes.deviceTypeList.get());
             console.log(await descriptor.attributes.serverList.get());
 
             // Example to subscribe to a field and get the value
-            const info = new ClusterClient(BasicInformationCluster, 0, interactionClient);
+            const info = ClusterClient(BasicInformationCluster, 0, interactionClient);
             console.log(await info.attributes.productName.get()); // This call is executed remotely
             //console.log(await info.attributes.productName.subscribe(5, 30));
             //info.attributes.productName.addListener((value) => console.log("productName", value));
@@ -112,7 +112,7 @@ class ControllerNode {
             //    console.log("Subscribe-All Data:", Logger.toJSON(data));
             //});
 
-            /*const onOff = new ClusterClient(OnOffCluster, 1, interactionClient);
+            /*const onOff = ClusterClient(OnOffCluster, 1, interactionClient);
             let onOffStatus = await onOff.attributes.onOff.get();
             // read data every minute to keep up the connection to show the subscription is working
             setInterval(() => {

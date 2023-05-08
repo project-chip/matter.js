@@ -161,7 +161,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
     }
 };
 
-export const createDefaultGroupsClusterServer = () => new ClusterServer(
+export const createDefaultGroupsClusterServer = () => ClusterServer(
     GroupsCluster,
     {
         groupNames: true,

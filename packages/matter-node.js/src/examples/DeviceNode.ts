@@ -69,7 +69,7 @@ class DeviceNode {
         deviceStorage.set("productid", productId);
 
         // Barebone implementation of the On/Off cluster
-        const onOffClusterServer = new ClusterServer(
+        const onOffClusterServer = ClusterServer(
             OnOffCluster,
             { lightingLevelControl: false },
             { onOff: false }, // Off by default
@@ -99,7 +99,7 @@ class DeviceNode {
             .addProtocolHandler(secureChannelProtocol)
             .addProtocolHandler(new InteractionServer(storageManager)
                 .addEndpoint(0x00, DeviceTypes.ROOT, [
-                    new ClusterServer(BasicInformationCluster, {}, {
+                    ClusterServer(BasicInformationCluster, {}, {
                         dataModelRevision: 1,
                         vendorName,
                         vendorId,
@@ -118,7 +118,7 @@ class DeviceNode {
                         },
                         serialNumber: `node-matter-${Time.nowMs()}`,
                     }, {}),
-                    new ClusterServer(GeneralCommissioningCluster, {}, {
+                    ClusterServer(GeneralCommissioningCluster, {}, {
                         breadcrumb: BigInt(0),
                         basicCommissioningInfo: {
                             failSafeExpiryLengthSeconds: 60 /* 1min */,
@@ -128,7 +128,7 @@ class DeviceNode {
                         locationCapability: RegulatoryLocationType.IndoorOutdoor,
                         supportsConcurrentConnections: true,
                     }, GeneralCommissioningClusterHandler),
-                    new ClusterServer(OperationalCredentialsCluster, {}, {
+                    ClusterServer(OperationalCredentialsCluster, {}, {
                         nocs: [],
                         fabrics: [],
                         supportedFabrics: 254,
@@ -143,7 +143,7 @@ class DeviceNode {
                             certificationDeclaration,
                         }),
                     ),
-                    new ClusterServer(NetworkCommissioningCluster,
+                    ClusterServer(NetworkCommissioningCluster,
                         {
                             wifi: false,
                             thread: false,
@@ -161,7 +161,7 @@ class DeviceNode {
                         },
                         NetworkCommissioningHandler(),
                     ),
-                    new ClusterServer(AdminCommissioningCluster,
+                    ClusterServer(AdminCommissioningCluster,
                         {
                             basic: true,
                         },
@@ -172,7 +172,7 @@ class DeviceNode {
                         },
                         AdminCommissioningHandler(secureChannelProtocol),
                     ),
-                    new ClusterServer(AccessControlCluster,
+                    ClusterServer(AccessControlCluster,
                         {},
                         {
                             acl: [],

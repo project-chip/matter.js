@@ -100,17 +100,17 @@ export class MatterController {
         let interactionClient = new InteractionClient(new ExchangeProvider(this.exchangeManager, paseSecureMessageChannel));
 
         // Get and display the product name (just for debugging)
-        const basicClusterClient = new ClusterClient(BasicInformationCluster, 0, interactionClient);
+        const basicClusterClient = ClusterClient(BasicInformationCluster, 0, interactionClient);
         const productName = await basicClusterClient.attributes.productName.get();
         logger.info("Paired with device:", productName);
 
         // Do the commissioning
-        let generalCommissioningClusterClient = new ClusterClient(GeneralCommissioningCluster, 0, interactionClient);
+        let generalCommissioningClusterClient = ClusterClient(GeneralCommissioningCluster, 0, interactionClient);
         this.ensureSuccess(await generalCommissioningClusterClient.commands.armFailSafe({ breadcrumb: BigInt(1), expiryLengthSeconds: 60 }));
         this.ensureSuccess(await generalCommissioningClusterClient.commands.setRegulatoryConfig({ breadcrumb: BigInt(2), newRegulatoryConfig: RegulatoryLocationType.IndoorOutdoor, countryCode: "US" }));
 
 
-        const operationalCredentialsClusterClient = new ClusterClient(OperationalCredentialsCluster, 0, interactionClient);
+        const operationalCredentialsClusterClient = ClusterClient(OperationalCredentialsCluster, 0, interactionClient);
         const { certificate: deviceAttestation } = await operationalCredentialsClusterClient.commands.requestCertChain({ type: CertificateChainType.DeviceAttestation });
         // TODO: extract device public key from deviceAttestation
         const { certificate: productAttestation } = await operationalCredentialsClusterClient.commands.requestCertChain({ type: CertificateChainType.ProductAttestationIntermediate });
@@ -142,7 +142,7 @@ export class MatterController {
 
         // Complete the commission
         // TODO: Why new client and not reuse above??
-        generalCommissioningClusterClient = new ClusterClient(GeneralCommissioningCluster, 0, interactionClient);
+        generalCommissioningClusterClient = ClusterClient(GeneralCommissioningCluster, 0, interactionClient);
         this.ensureSuccess(await generalCommissioningClusterClient.commands.commissioningComplete());
 
         this.controllerStorage.set("fabric", this.fabric.toStorageObject());

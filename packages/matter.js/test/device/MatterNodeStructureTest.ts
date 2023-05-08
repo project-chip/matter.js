@@ -61,35 +61,34 @@ class TestNode extends MatterNode {
 }
 
 function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningCluster = true) {
-    node.addRootClusterServer(
-        new ClusterServer(
-            BasicInformationCluster,
-            {},
-            {
-                dataModelRevision: 1,
-                vendorName: "vendor",
-                vendorId: new VendorId(1),
-                productName: "product",
-                productId: 2,
-                nodeLabel: "",
-                hardwareVersion: 0,
-                hardwareVersionString: "0",
-                location: "US",
-                localConfigDisabled: false,
-                softwareVersion: 1,
-                softwareVersionString: "v1",
-                capabilityMinima: {
-                    caseSessionsPerFabric: 3,
-                    subscriptionsPerFabric: 3
-                },
-                serialNumber: `node-matter-0000`
+    node.addRootClusterServer(ClusterServer(
+        BasicInformationCluster,
+        {},
+        {
+            dataModelRevision: 1,
+            vendorName: "vendor",
+            vendorId: new VendorId(1),
+            productName: "product",
+            productId: 2,
+            nodeLabel: "",
+            hardwareVersion: 0,
+            hardwareVersionString: "0",
+            location: "US",
+            localConfigDisabled: false,
+            softwareVersion: 1,
+            softwareVersionString: "v1",
+            capabilityMinima: {
+                caseSessionsPerFabric: 3,
+                subscriptionsPerFabric: 3
             },
-            {}
-        )
+            serialNumber: `node-matter-0000`
+        },
+        {}
+    )
     );
 
     node.addRootClusterServer(
-        new ClusterServer(
+        ClusterServer(
             OperationalCredentialsCluster,
             {},
             {
@@ -110,7 +109,7 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
     );
 
     node.addRootClusterServer(
-        new ClusterServer(
+        ClusterServer(
             GeneralCommissioningCluster,
             {},
             {
@@ -128,7 +127,7 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
     );
 
     node.addRootClusterServer(
-        new ClusterServer(
+        ClusterServer(
             NetworkCommissioningCluster,
             {
                 wifi: false,
@@ -150,7 +149,7 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
     );
 
     node.addRootClusterServer(
-        new ClusterServer(
+        ClusterServer(
             AccessControlCluster,
             {},
             {
@@ -165,7 +164,7 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
     );
 
     node.addRootClusterServer(
-        new ClusterServer(
+        ClusterServer(
             GroupKeyManagementCluster,
             {
                 cacheAndSync: false,
@@ -181,7 +180,7 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
     );
 
     node.addRootClusterServer(
-        new ClusterServer(
+        ClusterServer(
             GeneralDiagnosticsCluster,
             {},
             {
@@ -203,7 +202,7 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
 
     if (includeAdminCommissioningCluster) {
         node.addRootClusterServer(
-            new ClusterServer(
+            ClusterServer(
                 AdminCommissioningCluster,
                 {
                     basic: true
@@ -265,7 +264,7 @@ describe("Endpoint Structures", () => {
             assert.ok(endpoints.get(0)?.clusters.has(GroupKeyManagementCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(GeneralCommissioningCluster.id));
 
-            assert.equal(attributePaths.length, 76);
+            assert.equal(attributePaths.length, 103);
             assert.equal(commandPaths.length, 23);
         });
 
@@ -312,7 +311,7 @@ describe("Endpoint Structures", () => {
             }));
             assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(1)]);
 
-            assert.equal(attributePaths.length, 100);
+            assert.equal(attributePaths.length, 142);
             assert.equal(commandPaths.length, 33);
         });
     });
@@ -383,7 +382,7 @@ describe("Endpoint Structures", () => {
             }));
             assert.deepEqual(composedPartsListAttribute?.getLocal(), [new EndpointNumber(2), new EndpointNumber(3)]);
 
-            assert.equal(attributePaths.length, 130);
+            assert.equal(attributePaths.length, 190);
             assert.equal(commandPaths.length, 43);
         });
     });
@@ -396,7 +395,7 @@ describe("Endpoint Structures", () => {
             const aggregator = new Aggregator([], 1);
 
             const onoffLightDevice = new OnOffLightDevice(undefined, 11);
-            onoffLightDevice.addClusterServer(new ClusterServer(BridgedDeviceBasicInformationCluster, {}, {
+            onoffLightDevice.addClusterServer(ClusterServer(BridgedDeviceBasicInformationCluster, {}, {
                 nodeLabel: "Socket 1",
                 reachable: true
             }, {}))
@@ -451,7 +450,7 @@ describe("Endpoint Structures", () => {
             const deviceTypeListAttribute: AttributeServer<EndpointNumber[]> | undefined = attributes.get(attributePathToId({ endpointId: 11, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.deviceTypeList.id }));
             assert.deepEqual(deviceTypeListAttribute?.getLocal(), [{ deviceType: new DeviceTypeId(DeviceTypes.ON_OFF_LIGHT.code), revision: 2 }, { deviceType: new DeviceTypeId(DeviceTypes.BRIDGED_NODE.code), revision: 1 }]);
 
-            assert.equal(attributePaths.length, 110);
+            assert.equal(attributePaths.length, 158);
             assert.equal(commandPaths.length, 33);
         });
 
@@ -523,7 +522,7 @@ describe("Endpoint Structures", () => {
             const deviceTypeListAttribute: AttributeServer<EndpointNumber[]> | undefined = attributes.get(attributePathToId({ endpointId: 11, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.deviceTypeList.id }));
             assert.deepEqual(deviceTypeListAttribute?.getLocal(), [{ deviceType: new DeviceTypeId(DeviceTypes.ON_OFF_LIGHT.code), revision: 2 }, { deviceType: new DeviceTypeId(DeviceTypes.BRIDGED_NODE.code), revision: 1 }]);
 
-            assert.equal(attributePaths.length, 138);
+            assert.equal(attributePaths.length, 204);
             assert.equal(commandPaths.length, 43);
         });
 
@@ -533,7 +532,7 @@ describe("Endpoint Structures", () => {
 
 
             const aggregator1 = new Aggregator([], 1);
-            aggregator1.addClusterServer(new ClusterServer(
+            aggregator1.addClusterServer(ClusterServer(
                 FixedLabelCluster,
                 {},
                 {
@@ -556,7 +555,7 @@ describe("Endpoint Structures", () => {
             node.addEndpoint(aggregator1);
 
             const aggregator2 = new Aggregator([], 2);
-            aggregator2.addClusterServer(new ClusterServer(
+            aggregator2.addClusterServer(ClusterServer(
                 FixedLabelCluster,
                 {},
                 {
@@ -641,7 +640,7 @@ describe("Endpoint Structures", () => {
             const rootPartsListAttribute: AttributeServer<EndpointNumber[]> | undefined = attributes.get(attributePathToId({ endpointId: 0, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id }));
             assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(1), new EndpointNumber(11), new EndpointNumber(12), new EndpointNumber(2), new EndpointNumber(21), new EndpointNumber(22)]);
 
-            assert.equal(attributePaths.length, 206);
+            assert.equal(attributePaths.length, 317);
             assert.equal(commandPaths.length, 63);
         });
 
@@ -650,7 +649,7 @@ describe("Endpoint Structures", () => {
             addRequiredRootClusters(node);
 
             const aggregator1 = new Aggregator();
-            aggregator1.addClusterServer(new ClusterServer(
+            aggregator1.addClusterServer(ClusterServer(
                 FixedLabelCluster, {}, {
                 labelList: [{ label: "bridge", value: "Type A" }]
             }, {}
@@ -670,7 +669,7 @@ describe("Endpoint Structures", () => {
             node.addEndpoint(aggregator1);
 
             const aggregator2 = new Aggregator();
-            aggregator2.addClusterServer(new ClusterServer(
+            aggregator2.addClusterServer(ClusterServer(
                 FixedLabelCluster, {}, {
                 labelList: [{ label: "bridge", value: "Type B" }]
             }, {}
@@ -754,7 +753,7 @@ describe("Endpoint Structures", () => {
             const rootPartsListAttribute: AttributeServer<EndpointNumber[]> | undefined = attributes.get(attributePathToId({ endpointId: 0, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id }));
             assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(1), new EndpointNumber(2), new EndpointNumber(3), new EndpointNumber(4), new EndpointNumber(5), new EndpointNumber(6)]);
 
-            assert.equal(attributePaths.length, 206);
+            assert.equal(attributePaths.length, 317);
             assert.equal(commandPaths.length, 63);
         });
 
@@ -763,7 +762,7 @@ describe("Endpoint Structures", () => {
             addRequiredRootClusters(node);
 
             const aggregator1 = new Aggregator([], 37);
-            aggregator1.addClusterServer(new ClusterServer(
+            aggregator1.addClusterServer(ClusterServer(
                 FixedLabelCluster,
                 {},
                 {
@@ -786,7 +785,7 @@ describe("Endpoint Structures", () => {
             node.addEndpoint(aggregator1);
 
             const aggregator2 = new Aggregator();
-            aggregator2.addClusterServer(new ClusterServer(
+            aggregator2.addClusterServer(ClusterServer(
                 FixedLabelCluster,
                 {},
                 {
@@ -874,7 +873,7 @@ describe("Endpoint Structures", () => {
             const rootPartsListAttribute: AttributeServer<EndpointNumber[]> | undefined = attributes.get(attributePathToId({ endpointId: 0, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id }));
             assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(37), new EndpointNumber(3), new EndpointNumber(38), new EndpointNumber(39), new EndpointNumber(40), new EndpointNumber(18)]);
 
-            assert.equal(attributePaths.length, 206);
+            assert.equal(attributePaths.length, 317);
             assert.equal(commandPaths.length, 63);
         });
     });

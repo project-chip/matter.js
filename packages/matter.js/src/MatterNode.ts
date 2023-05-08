@@ -5,12 +5,13 @@
  */
 
 import { DeviceTypes } from "./device/DeviceTypes.js";
-import { ClusterServer } from "./protocol/interaction/InteractionServer.js";
 import { RootEndpoint } from "./device/Device.js";
 import { Endpoint } from "./device/Endpoint.js";
-import { ClusterClient } from "./protocol/interaction/InteractionClient.js";
 import { BitSchema } from "./schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
+import { ClusterClientObj } from "./cluster/client/ClusterClient.js";
+import { ClusterServerObj } from "./cluster/server/ClusterServer.js";
+import { InteractionClient } from "./protocol/interaction/InteractionClient.js";
 
 export abstract class MatterNode {
     protected readonly rootEndpoint = new RootEndpoint(DeviceTypes.ROOT, [], 0x00);
@@ -19,24 +20,25 @@ export abstract class MatterNode {
         //TODO
     }
 
-    addRootClusterServer(cluster: ClusterServer<any, any, any, any>) {
+    addRootClusterServer<A extends Attributes>(cluster: ClusterServerObj<A>) {
         this.rootEndpoint.addClusterServer(cluster);
     }
 
     getRootClusterServer<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
         cluster: Cluster<F, A, C, E>
-    ): ClusterServer<F, A, C, E> | undefined {
+    ): ClusterServerObj<A> | undefined {
         return this.rootEndpoint.getClusterServer(cluster);
     }
 
-    addRootClusterClient(cluster: ClusterClient<any, any>) {
+    addRootClusterClient<A extends Attributes, C extends Commands>(cluster: ClusterClientObj<A, C>) {
         this.rootEndpoint.addClusterClient(cluster);
     }
 
     getRootClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
-        cluster: Cluster<F, A, C, E>
-    ): ClusterClient<C, A> | undefined {
-        return this.rootEndpoint.getClusterClient(cluster);
+        cluster: Cluster<F, A, C, E>,
+        interactionClient?: InteractionClient
+    ): ClusterClientObj<A, C> | undefined {
+        return this.rootEndpoint.getClusterClient(cluster, interactionClient);
     }
 
     getRootEndpoint() {

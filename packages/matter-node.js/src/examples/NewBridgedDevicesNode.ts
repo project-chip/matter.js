@@ -25,6 +25,8 @@ import { Logger } from "../exports/log"; // same as @project-chip/matter-node.js
 import { StorageManager, StorageBackendDisk } from "../storage"; // same as @project-chip/matter-node.js/storage
 import { commandExecutor, getIntParameter, getParameter, requireMinNodeVersion } from "../util"; // same as @project-chip/matter-node.js/util
 import { Time } from "../time";
+import { BridgedDeviceBasicInformationCluster } from "../exports/cluster";
+import { ClusterServer } from "../exports/interaction";
 
 const logger = Logger.get("Device");
 
@@ -110,6 +112,12 @@ class BridgedDevice {
                 serialNumber: `node-matter-${uniqueId}`,
             }
         });
+
+        commissionableNode.addRootClusterServer(ClusterServer(BridgedDeviceBasicInformationCluster, {}, {
+            nodeLabel: `OnOff Bridge`,
+            serialNumber: `node-matter-${uniqueId}`,
+            reachable: true
+        }, {}))
 
         /**
          * Create Device instance and add needed Listener

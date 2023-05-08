@@ -82,6 +82,7 @@ export type GlobalAttributes<F extends BitSchema> = {
     /** List of server generated commands (server to client commands). */
     generatedCommandList: Attribute<CommandId[]>,
 }
+
 export const GlobalAttributes = <F extends BitSchema>(features: F) => ({
     clusterRevision: Attribute(0xFFFD, TlvUInt16),
     featureMap: Attribute(0xFFFC, TlvBitmap(TlvUInt32, features)),

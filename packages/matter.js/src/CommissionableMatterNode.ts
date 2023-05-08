@@ -17,7 +17,7 @@ import { UdpInterface } from "./net/UdpInterface.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { StorageManager } from "./storage/StorageManager.js";
-import { AttributeInitialValues, CommandHandler } from "./cluster/server/ClusterServer.js";
+import { AttributeInitialValues, ClusterServerObj, CommandHandler } from "./cluster/server/ClusterServer.js";
 import { OperationalCredentialsClusterHandler, OperationalCredentialsServerConf } from "./cluster/server/OperationalCredentialsServer.js";
 import { AttestationCertificateManager } from "./certificate/AttestationCertificateManager.js";
 import { CertificationDeclarationManager } from "./certificate/CertificationDeclarationManager.js";
@@ -39,6 +39,7 @@ import { ComposedDevice } from "./device/ComposedDevice.js";
 import { Device } from "./device/Device.js";
 import { ByteArray } from "./util/ByteArray.js";
 import { NamedHandler } from "./util/NamedHandler.js";
+import { Attributes } from "./cluster/Cluster.js";
 
 export interface DevicePairingInformation {
     manualPairingCode: string;
@@ -123,7 +124,7 @@ export class CommissionableMatterNode extends MatterNode {
 
         // Add basic Information cluster to root directly because it is not allowed to be changed afterward
         this.rootEndpoint.addClusterServer(
-            new ClusterServer(
+            ClusterServer(
                 BasicInformationCluster,
                 {},
                 // Set the required basicInformation and respect the provided values
@@ -166,7 +167,7 @@ export class CommissionableMatterNode extends MatterNode {
 
         // Add Operational credentials cluster to root directly because it is not allowed to be changed afterward
         this.rootEndpoint.addClusterServer(
-            new ClusterServer(
+            ClusterServer(
                 OperationalCredentialsCluster,
                 {},
                 {
@@ -182,7 +183,7 @@ export class CommissionableMatterNode extends MatterNode {
         );
 
         this.rootEndpoint.addClusterServer(
-            new ClusterServer(
+            ClusterServer(
                 GeneralCommissioningCluster,
                 {},
                 {
@@ -200,7 +201,7 @@ export class CommissionableMatterNode extends MatterNode {
         );
 
         this.rootEndpoint.addClusterServer(
-            new ClusterServer(
+            ClusterServer(
                 NetworkCommissioningCluster,
                 {
                     wifi: false,
@@ -222,7 +223,7 @@ export class CommissionableMatterNode extends MatterNode {
         );
 
         this.rootEndpoint.addClusterServer(
-            new ClusterServer(
+            ClusterServer(
                 AccessControlCluster,
                 {},
                 {
@@ -237,7 +238,7 @@ export class CommissionableMatterNode extends MatterNode {
         );
 
         this.rootEndpoint.addClusterServer(
-            new ClusterServer(
+            ClusterServer(
                 GroupKeyManagementCluster,
                 {
                     cacheAndSync: false,
@@ -253,7 +254,7 @@ export class CommissionableMatterNode extends MatterNode {
         );
 
         this.rootEndpoint.addClusterServer(
-            new ClusterServer(
+            ClusterServer(
                 GeneralDiagnosticsCluster,
                 {},
                 {
@@ -274,7 +275,7 @@ export class CommissionableMatterNode extends MatterNode {
         );
     }
 
-    override addRootClusterServer(cluster: ClusterServer<any, any, any, any>) {
+    override addRootClusterServer<A extends Attributes>(cluster: ClusterServerObj<A>) {
         if (cluster.id === BasicInformationCluster.id) {
             throw new Error(
                 "BasicInformationCluster can not be modified, provide all details in constructor options!"
@@ -302,7 +303,7 @@ export class CommissionableMatterNode extends MatterNode {
         );
 
         this.addRootClusterServer(
-            new ClusterServer(
+            ClusterServer(
                 AdminCommissioningCluster,
                 {
                     basic: true
