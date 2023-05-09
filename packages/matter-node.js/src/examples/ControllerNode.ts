@@ -19,7 +19,7 @@
  * @project-chip/matter-node.js as dependency in your package.json.
  */
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
-import { MatterServer, PairableMatterNode } from "../"; // same as @project-chip/matter-node.js
+import { MatterServer, CommissioningController } from "../"; // same as @project-chip/matter-node.js
 
 import { Logger } from "../exports/log"; // same as @project-chip/matter-node.js/log
 import { StorageManager, StorageBackendDisk } from "../storage"; // same as @project-chip/matter-node.js/storage
@@ -73,11 +73,11 @@ class ControllerNode {
         controllerStorage.set("pin", setupPin);
 
         /**
-         * Create Matter Server and Pairable Node
+         * Create Matter Server and Controller Node
          *
          * To allow the device to be announced, found, paired and operated we need a MatterServer instance and add a
-         * PairableNode to it and add the just created device instance to it.
-         * The pairable node defines the port where the server listens for the UDP packages of the Matter protocol
+         * CommissioningController to it and add the just created device instance to it.
+         * The Controller node defines the port where the server listens for the UDP packages of the Matter protocol
          * and initializes deice specific certificates and such.
          *
          * The below logic also adds command handlers for commands of clusters that normally are handled internally
@@ -86,20 +86,20 @@ class ControllerNode {
          */
 
         const matterClient = new MatterServer(storageManager);
-        const pairableNode = new PairableMatterNode({
+        const commissioningController = new CommissioningController({
             ip,
             port,
             discriminator,
             passcode: setupPin,
             delayedPairing: true,
         });
-        matterClient.addPairableNode(pairableNode);
+        matterClient.addCommissioningController(commissioningController);
 
         /**
          * Start the Matter Server
          *
          * After everything was plugged together we can start the server. When not delayed announcement is set for the
-         * commissionable node then this command also starts the announcement of the device into the network.
+         * CommissioningServer node then this command also starts the announcement of the device into the network.
          */
 
         await matterClient.start();
@@ -108,13 +108,13 @@ class ControllerNode {
          * TBD
          */
         try {
-            await pairableNode.connect();
+            await commissioningController.connect();
 
             // Important: This is a temporary API to proof the methods working and this will change soon and is NOT stable!
             // It is provided to proof the concept
 
             // Example to initialize a ClusterClient and access concrete fields as API methods
-            const descriptor = pairableNode.getRootClusterClient(DescriptorCluster);
+            const descriptor = commissioningController.getRootClusterClient(DescriptorCluster);
             if (descriptor !== undefined) {
                 console.log(await descriptor.attributes.deviceTypeList.get()); // you can call that way
                 console.log(await descriptor.getServerListAttribute()); // or more convenient that way
@@ -123,7 +123,7 @@ class ControllerNode {
             }
 
             // Example to subscribe to a field and get the value
-            const info = pairableNode.getRootClusterClient(BasicInformationCluster);
+            const info = commissioningController.getRootClusterClient(BasicInformationCluster);
             if (info !== undefined) {
                 console.log(await info.getProductNameAttribute()); // This call is executed remotely
                 //console.log(await info.subscribeProductNameAttribute(value => console.log("productName", value), 5, 30));
@@ -144,7 +144,7 @@ class ControllerNode {
             //const attributesBasicInformation = await interactionClient.getMultipleAttributes([{ endpointId: 0, clusterId: BasicInformationCluster.id} ]);
             //console.log("Attributes-BasicInformation:", JSON.stringify(attributesBasicInformation, null, 2));
 
-            const devices = pairableNode.getDevices();
+            const devices = commissioningController.getDevices();
             if (devices[0] && devices[0].id === 1) {
                 // Example to subscribe to all Attributes of endpoint 1 of the commissioned node: */*/*
                 //await interactionClient.subscribeMultipleAttributes([{ endpointId: 1, /* subscribe anything from endpoint 1 */ }], 0, 180, data => {

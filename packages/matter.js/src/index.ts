@@ -12,7 +12,7 @@ export { MatterController } from "./MatterController.js";
 export { MatterDevice } from "./MatterDevice.js";
 
 // Export new High Level API basic classes
-export * from "./CommissionableMatterNode.js";
-export * from "./PairableMatterNode.js";
+export * from "./CommissioningServer.js";
+export * from "./CommissioningController.js";
 export * from "./MatterNode.js";
 export * from "./MatterServer.js";

@@ -51,11 +51,11 @@ export interface DevicePairingInformation {
 }
 
 /**
- * Constructor options for a commissionable device
+ * Constructor options for a CommissioningServer device
  * Beside the general options it also contains the data for the BasicInformation cluster which is added automatically
  * and allows to override the certificates used for the OperationalCredentials cluster
  */
-export interface CommissionableNodeOptions {
+export interface CommissioningServerOptions {
     port: number;
     disableIpv4?: boolean;
     listeningAddressIpv4?: string;
@@ -82,9 +82,9 @@ export interface CommissionableNodeOptions {
 }
 
 /**
- * Commands exposed by the CommissionableNode
+ * Commands exposed by the CommissioningServer
  */
-type CommissionableNodeCommands = {
+type CommissioningServerCommands = {
     /** Provide a means for certification tests to trigger some test-plan-specific events. */
     testEventTrigger: CommandHandler<typeof GeneralDiagnosticsCluster.commands.testEventTrigger, any>;
 }
@@ -93,10 +93,10 @@ type CommissionableNodeCommands = {
 // TODO Decline cluster access after announced/paired
 
 /**
- * A commissionable node represent a matter node that can be paired with a controller and runs on a defined port on the
+ * A CommissioningServer node represent a matter node that can be paired with a controller and runs on a defined port on the
  * host
  */
-export class CommissionableMatterNode extends MatterNode {
+export class CommissioningServer extends MatterNode {
     private readonly port: number;
     private readonly disableIpv4: boolean;
     private readonly listeningAddressIpv4?: string;
@@ -118,14 +118,14 @@ export class CommissionableMatterNode extends MatterNode {
 
     readonly delayedAnnouncement?: boolean;
 
-    private readonly commandHandler = new NamedHandler<CommissionableNodeCommands>();
+    private readonly commandHandler = new NamedHandler<CommissioningServerCommands>();
 
     /**
-     * Creates a new commissionable node and add all needed Root clusters
+     * Creates a new CommissioningServer node and add all needed Root clusters
      *
-     * @param options The options for the commissionable node
+     * @param options The options for the CommissioningServer node
      */
-    constructor(options: CommissionableNodeOptions) {
+    constructor(options: CommissioningServerOptions) {
         super();
         this.port = options.port;
         this.disableIpv4 = options.disableIpv4 ?? false;
@@ -473,7 +473,7 @@ export class CommissionableMatterNode extends MatterNode {
      * @param command Command to add the handler for
      * @param handler Handler function to add
      */
-    addCommandHandler<K extends keyof CommissionableNodeCommands>(command: K, handler: CommissionableNodeCommands[K]) {
+    addCommandHandler<K extends keyof CommissioningServerCommands>(command: K, handler: CommissioningServerCommands[K]) {
         this.commandHandler.addHandler(command, handler);
     }
 
@@ -483,7 +483,7 @@ export class CommissionableMatterNode extends MatterNode {
      * @param command Command to remove the handler for
      * @param handler Handler function to remove
      */
-    removeCommandHandler<K extends keyof CommissionableNodeCommands>(command: K, handler: CommissionableNodeCommands[K]) {
+    removeCommandHandler<K extends keyof CommissioningServerCommands>(command: K, handler: CommissioningServerCommands[K]) {
         this.commandHandler.removeHandler(command, handler);
     }
 }

@@ -24,7 +24,7 @@ import { Level, Logger } from "@project-chip/matter.js/log";
 import { getPromiseResolver } from "@project-chip/matter.js/util";
 import { StorageManager, StorageBackendMemory } from "@project-chip/matter.js/storage";
 import { FabricJsonObject } from "@project-chip/matter.js/fabric";
-import { MatterServer, CommissionableMatterNode, PairableMatterNode } from "@project-chip/matter.js";
+import { MatterServer, CommissioningServer, CommissioningController } from "@project-chip/matter.js";
 import { OnOffLightDevice } from "@project-chip/matter.js/device";
 import { InteractionClient } from "@project-chip/matter.js/interaction";
 
@@ -55,8 +55,8 @@ const fakeServerStorage = new StorageBackendMemory();
 describe("New Integration", () => {
     let matterServer: MatterServer;
     let matterClient: MatterServer;
-    let pairableNode: PairableMatterNode;
-    let commissionableNode: CommissionableMatterNode;
+    let commissioningController: CommissioningController;
+    let commissioningServer: CommissioningServer;
     let onOffLightDeviceServer: OnOffLightDevice;
     let defaultInteractionClient: InteractionClient;
 
@@ -69,7 +69,7 @@ describe("New Integration", () => {
         await controllerStorageManager.initialize();
 
         matterClient = new MatterServer(controllerStorageManager);
-        pairableNode = new PairableMatterNode({
+        commissioningController = new CommissioningController({
             ip: SERVER_IP,
             port: matterPort,
             disableIpv4: false,
@@ -79,7 +79,7 @@ describe("New Integration", () => {
             listeningAddressIpv6: CLIENT_IP,
             delayedPairing: true
         });
-        matterClient.addPairableNode(pairableNode);
+        matterClient.addCommissioningController(commissioningController);
 
         Network.get = () => serverNetwork;
 
@@ -88,7 +88,7 @@ describe("New Integration", () => {
 
         matterServer = new MatterServer(serverStorageManager);
 
-        commissionableNode = new CommissionableMatterNode({
+        commissioningServer = new CommissioningServer({
             port: matterPort,
             disableIpv4: true,
             listeningAddressIpv6: SERVER_IP,
@@ -107,21 +107,21 @@ describe("New Integration", () => {
         });
 
         onOffLightDeviceServer = new OnOffLightDevice();
-        commissionableNode.addDevice(onOffLightDeviceServer);
+        commissioningServer.addDevice(onOffLightDeviceServer);
 
-        matterServer.addCommissionableNode(commissionableNode);
+        matterServer.addCommissioningServer(commissioningServer);
 
         // override the mdns scanner to avoid the client to try to resolve the server's address
-        commissionableNode.setMdnsScanner(await MdnsScanner.create(SERVER_IP));
-        commissionableNode.setMdnsBroadcaster(await MdnsBroadcaster.create(matterPort, SERVER_IP));
-        await commissionableNode.advertise();
+        commissioningServer.setMdnsScanner(await MdnsScanner.create(SERVER_IP));
+        commissioningServer.setMdnsBroadcaster(await MdnsBroadcaster.create(matterPort, SERVER_IP));
+        await commissioningServer.advertise();
 
         assert.ok(onOffLightDeviceServer.getClusterServer(OnOffCluster));
     });
 
     describe("Check Server API", () => {
         it("Access cluster servers via api", async () => {
-            const basicInfoCluster = commissionableNode.getRootClusterServer(BasicInformationCluster);
+            const basicInfoCluster = commissioningServer.getRootClusterServer(BasicInformationCluster);
             assert.ok(basicInfoCluster);
 
             // check API access for a Mandatory field with both APIs, get and set
@@ -159,16 +159,16 @@ describe("New Integration", () => {
     describe("commission", () => {
         it("the client commissions a new device", async () => {
             // override the mdns scanner to avoid the client to try to resolve the server's address
-            pairableNode.setMdnsScanner(await MdnsScanner.create(CLIENT_IP));
-            await pairableNode.connect();
+            commissioningController.setMdnsScanner(await MdnsScanner.create(CLIENT_IP));
+            await commissioningController.connect();
 
             Network.get = () => { throw new Error("Network should not be requested post starting") };
 
-            assert.ok(pairableNode.getFabric().nodeId.id);
+            assert.ok(commissioningController.getFabric().nodeId.id);
         }, 60 * 1000 /* 1mn timeout */);
 
         it("the session is resumed if it has been established previously", async () => {
-            defaultInteractionClient = await pairableNode.createInteractionClient();
+            defaultInteractionClient = await commissioningController.createInteractionClient();
             assert.ok(defaultInteractionClient);
         });
     });
@@ -176,7 +176,7 @@ describe("New Integration", () => {
 
     describe("read attributes", () => {
         it("read one specific attribute including schema parsing", async () => {
-            const basicInfoCluster = pairableNode.getRootClusterClient(BasicInformationCluster);
+            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformationCluster);
             assert.ok(basicInfoCluster);
 
             // Access a Mandatory field with both APIs
@@ -199,7 +199,7 @@ describe("New Integration", () => {
         });
 
         it("read one specific attribute including schema parsing", async () => {
-            const onoffEndpoint = pairableNode.getDevices().find(endpoint => endpoint.id === 1);
+            const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
             assert.ok(onoffEndpoint);
             const onoffCluster = onoffEndpoint.getClusterClient(OnOffCluster);
             assert.ok(onoffCluster);
@@ -299,7 +299,7 @@ describe("New Integration", () => {
     describe("write attributes", () => {
 
         it("write one attribute", async () => {
-            const basicInfoCluster = pairableNode.getRootClusterClient(BasicInformationCluster);
+            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformationCluster);
             assert.ok(basicInfoCluster);
 
             await basicInfoCluster.attributes.nodeLabel.set("testLabel");
@@ -308,7 +308,7 @@ describe("New Integration", () => {
         });
 
         it("write one attribute with error", async () => {
-            const basicInfoCluster = pairableNode.getRootClusterClient(BasicInformationCluster);
+            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformationCluster);
             assert.ok(basicInfoCluster);
 
             await assert.rejects(async () => await basicInfoCluster.attributes.location.set("XXX"), {
@@ -317,7 +317,7 @@ describe("New Integration", () => {
         });
 
         it("write multiple attributes", async () => {
-            const client = await pairableNode.createInteractionClient(); // We can also use a new Interaction clint
+            const client = await commissioningController.createInteractionClient(); // We can also use a new Interaction clint
 
             const response = await client.setMultipleAttributes([
                 { endpointId: 0, clusterId: BasicInformationCluster.id, attribute: BasicInformationCluster.attributes.nodeLabel, value: "testLabel2" },
@@ -327,7 +327,7 @@ describe("New Integration", () => {
             assert.equal(Array.isArray(response), true);
             assert.equal(response.length, 0);
 
-            const basicInfoCluster = pairableNode.getRootClusterClient(BasicInformationCluster, client);
+            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformationCluster, client);
             assert.ok(basicInfoCluster);
             assert.equal(await basicInfoCluster.attributes.nodeLabel.get(), "testLabel2");
             assert.equal(await basicInfoCluster.getLocationAttribute(), "GB");
@@ -343,7 +343,7 @@ describe("New Integration", () => {
             assert.equal(response[0].path.attributeId, BasicInformationCluster.attributes.location.id);
             assert.equal(response[0].status, 135 /* StatusCode.ConstraintError */);
 
-            const basicInfoCluster = pairableNode.getRootClusterClient(BasicInformationCluster, defaultInteractionClient);
+            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformationCluster, defaultInteractionClient);
             assert.ok(basicInfoCluster);
 
             assert.equal(await basicInfoCluster.attributes.nodeLabel.get(), "testLabel3");
@@ -354,9 +354,9 @@ describe("New Integration", () => {
 
     describe("subscribe attributes", () => {
         it("subscription of one attribute sends updates when the value changes", async () => {
-            const onoffEndpoint = pairableNode.getDevices().find(endpoint => endpoint.id === 1);
+            const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
             assert.ok(onoffEndpoint);
-            const onOffClient = onoffEndpoint.getClusterClient(OnOffCluster, await pairableNode.createInteractionClient());
+            const onOffClient = onoffEndpoint.getClusterClient(OnOffCluster, await commissioningController.createInteractionClient());
             assert.ok(onOffClient);
 
             assert.ok(onOffLightDeviceServer);
@@ -402,7 +402,7 @@ describe("New Integration", () => {
 
     describe("Access Control server fabric scoped attribute storage", () => {
         it("set empty acl", async () => {
-            const accessControlCluster = pairableNode.getRootClusterClient(AccessControlCluster, defaultInteractionClient);
+            const accessControlCluster = commissioningController.getRootClusterClient(AccessControlCluster, defaultInteractionClient);
             assert.ok(accessControlCluster);
             await accessControlCluster.attributes.acl.set([]);
 
@@ -414,7 +414,7 @@ describe("New Integration", () => {
 
     describe("Groups server fabric scoped storage", () => {
         it("set a group name", async () => {
-            const onoffEndpoint = pairableNode.getDevices().find(endpoint => endpoint.id === 1);
+            const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
             assert.ok(onoffEndpoint);
             const groupsCluster = onoffEndpoint.getClusterClient(GroupsCluster, defaultInteractionClient);
             assert.ok(groupsCluster);
@@ -424,7 +424,7 @@ describe("New Integration", () => {
 
     describe("Command Handler test", () => {
         it("Trigger identify command and trigger command handler", async () => {
-            const onoffEndpoint = pairableNode.getDevices().find(endpoint => endpoint.id === 1);
+            const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
             assert.ok(onoffEndpoint);
             const identifyClient = onoffEndpoint.getClusterClient(IdentifyCluster, defaultInteractionClient);
             assert.ok(identifyClient);
@@ -481,7 +481,7 @@ describe("New Integration", () => {
 
     describe("remove Fabric", () => {
         it("try to remove invalid fabric", async () => {
-            const operationalCredentialsCluster = pairableNode.getRootClusterClient(OperationalCredentialsCluster, defaultInteractionClient);
+            const operationalCredentialsCluster = commissioningController.getRootClusterClient(OperationalCredentialsCluster, defaultInteractionClient);
             assert.ok(operationalCredentialsCluster);
 
             const result = await operationalCredentialsCluster.commands.removeFabric({ fabricIndex: new FabricIndex(250) });
@@ -491,7 +491,7 @@ describe("New Integration", () => {
         });
 
         it("read and remove fabric", async () => {
-            const operationalCredentialsCluster = pairableNode.getRootClusterClient(OperationalCredentialsCluster, defaultInteractionClient);
+            const operationalCredentialsCluster = commissioningController.getRootClusterClient(OperationalCredentialsCluster, defaultInteractionClient);
             assert.ok(operationalCredentialsCluster);
 
             const fabricIndex = await operationalCredentialsCluster.attributes.currentFabricIndex.get();

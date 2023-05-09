@@ -26,7 +26,7 @@ import { ClusterClientObj, isClusterClient } from "./cluster/client/ClusterClien
 import { BitSchema } from "./schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
 
-const logger = new Logger("PairableMatterNode");
+const logger = new Logger("CommissioningController");
 
 // TODO subscribe all data
 // TODO how to enhance "getting devices" as API? Or is getDevices() enough?
@@ -34,9 +34,9 @@ const logger = new Logger("PairableMatterNode");
 // TODO Decline cluster access after announced/paired
 
 /**
- * Constructor options for the PairableMatterNode class
+ * Constructor options for the CommissioningController class
  */
-export interface PairableNodeOptions {
+export interface CommissioningControllerOptions {
     ip: string;
     port: number;
     disableIpv4?: boolean;
@@ -49,7 +49,7 @@ export interface PairableNodeOptions {
     discriminator: number,
 }
 
-export class PairableMatterNode extends MatterNode {
+export class CommissioningController extends MatterNode {
     private readonly ip: string;
     private readonly port: number;
     private readonly disableIpv4: boolean;
@@ -70,17 +70,17 @@ export class PairableMatterNode extends MatterNode {
     private endpoints = new Map<number, Endpoint>();
 
     /**
-     * Creates a new PairableMatterNode instance
+     * Creates a new CommissioningController instance
      *
-     * @param options The options for the PairableMatterNode
+     * @param options The options for the CommissioningController
      */
-    constructor(options: PairableNodeOptions) {
+    constructor(options: CommissioningControllerOptions) {
         super();
         this.ip = options.ip;
         this.port = options.port;
         this.disableIpv4 = options.disableIpv4 ?? false;
         if (this.disableIpv4) {
-            logger.warn("Disabling IPv4 in pairable node not yet supported!")
+            logger.warn("Disabling IPv4 in Controller node not yet supported!")
         }
         this.delayedPairing = options.delayedPairing ?? false;
 

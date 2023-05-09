@@ -17,7 +17,7 @@
  * @project-chip/matter-node.js as dependency in your package.json.
  */
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
-import { CommissionableMatterNode, MatterServer } from "../"; // same as @project-chip/matter-node.js
+import { CommissioningServer, MatterServer } from "../"; // same as @project-chip/matter-node.js
 import { commandExecutor, getIntParameter, getParameter, requireMinNodeVersion } from "../util"; // same as @project-chip/matter-node.js/util
 import { Time } from "../time"; // same as @project-chip/matter-node.js/time
 import { OnOffLightDevice, OnOffPluginUnitDevice } from "../exports/device"; // same as @project-chip/matter-node.js/device
@@ -101,11 +101,11 @@ class Device {
         onOffDevice.addCommandHandler("identify", async ({ request: { identifyTime } }) => logger.info(`Identify called for OnOffDevice: ${identifyTime}`));
 
         /**
-         * Create Matter Server and Commissionable Node
+         * Create Matter Server and CommissioningServer Node
          *
          * To allow the device to be announced, found, paired and operated we need a MatterServer instance and add a
-         * commissionableNode to it and add the just created device instance to it.
-         * The commissionable node defines the port where the server listens for the UDP packages of the Matter protocol
+         * commissioningServer to it and add the just created device instance to it.
+         * The CommissioningServer node defines the port where the server listens for the UDP packages of the Matter protocol
          * and initializes deice specific certificates and such.
          *
          * The below logic also adds command handlers for commands of clusters that normally are handled internally
@@ -115,7 +115,7 @@ class Device {
 
         const matterServer = new MatterServer(storageManager, netAnnounceInterface);
 
-        const commissionableNode = new CommissionableMatterNode({
+        const commissioningServer = new CommissioningServer({
             port,
             deviceName,
             deviceType: onOffDevice.deviceType,
@@ -131,17 +131,17 @@ class Device {
         });
 
         // optionally add a listener for the testEventTrigger command from the GeneralDiagnostics cluster
-        commissionableNode.addCommandHandler("testEventTrigger", async ({ request: { enableKey, eventTrigger } }) => logger.info(`testEventTrigger called on GeneralDiagnostic cluster: ${enableKey} ${eventTrigger}`));
+        commissioningServer.addCommandHandler("testEventTrigger", async ({ request: { enableKey, eventTrigger } }) => logger.info(`testEventTrigger called on GeneralDiagnostic cluster: ${enableKey} ${eventTrigger}`));
 
-        commissionableNode.addDevice(onOffDevice);
+        commissioningServer.addDevice(onOffDevice);
 
-        matterServer.addCommissionableNode(commissionableNode);
+        matterServer.addCommissioningServer(commissioningServer);
 
         /**
          * Start the Matter Server
          *
          * After everything was plugged together we can start the server. When not delayed announcement is set for the
-         * commissionable node then this command also starts the announcement of the device into the network.
+         * CommissioningServer node then this command also starts the announcement of the device into the network.
          */
 
         await matterServer.start();
@@ -154,8 +154,8 @@ class Device {
          */
 
         logger.info("Listening");
-        if (!commissionableNode.isCommissioned()) {
-            const pairingData = commissionableNode.getPairingCode();
+        if (!commissioningServer.isCommissioned()) {
+            const pairingData = commissioningServer.getPairingCode();
             const { qrCode, qrPairingCode, manualPairingCode } = pairingData;
 
             console.log(qrCode);

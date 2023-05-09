@@ -17,7 +17,7 @@
  * @project-chip/matter-node.js as dependency in your package.json.
  */
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
-import { CommissionableMatterNode, MatterServer } from "../"; // same as @project-chip/matter-node.js
+import { CommissioningServer, MatterServer } from "../"; // same as @project-chip/matter-node.js
 
 import { OnOffLightDevice, OnOffPluginUnitDevice, Aggregator, DeviceTypes } from "../exports/device"; // same as @project-chip/matter-node.js/device
 import { VendorId } from "../exports/datatype"; // same as @project-chip/matter-node.js/datatype
@@ -83,11 +83,11 @@ class BridgedDevice {
         deviceStorage.set("productid", productId);
 
         /**
-         * Create Matter Server and Commissionable Node
+         * Create Matter Server and CommissioningServer Node
          *
          * To allow the device to be announced, found, paired and operated we need a MatterServer instance and add a
-         * commissionableNode to it and add the just created device instance to it.
-         * The commissionable node defines the port where the server listens for the UDP packages of the Matter protocol
+         * commissioningServer to it and add the just created device instance to it.
+         * The CommissioningServer node defines the port where the server listens for the UDP packages of the Matter protocol
          * and initializes deice specific certificates and such.
          *
          * The below logic also adds command handlers for commands of clusters that normally are handled internally
@@ -98,7 +98,7 @@ class BridgedDevice {
         const matterServer = new MatterServer(storageManager, netAnnounceInterface);
 
         const uniqueId = Time.nowMs(); // TODO Store it!
-        const commissionableNode = new CommissionableMatterNode({
+        const commissioningServer = new CommissioningServer({
             port,
             deviceName,
             deviceType,
@@ -113,7 +113,7 @@ class BridgedDevice {
             }
         });
 
-        commissionableNode.addRootClusterServer(ClusterServer(BridgedDeviceBasicInformationCluster, {}, {
+        commissioningServer.addRootClusterServer(ClusterServer(BridgedDeviceBasicInformationCluster, {}, {
             nodeLabel: `OnOff Bridge`,
             serialNumber: `node-matter-${uniqueId}`,
             reachable: true
@@ -144,15 +144,15 @@ class BridgedDevice {
             });
         }
 
-        commissionableNode.addDevice(aggregator);
+        commissioningServer.addDevice(aggregator);
 
-        matterServer.addCommissionableNode(commissionableNode);
+        matterServer.addCommissioningServer(commissioningServer);
 
         /**
          * Start the Matter Server
          *
          * After everything was plugged together we can start the server. When not delayed announcement is set for the
-         * commissionable node then this command also starts the announcement of the device into the network.
+         * CommissioningServer node then this command also starts the announcement of the device into the network.
          */
 
         await matterServer.start();
@@ -165,8 +165,8 @@ class BridgedDevice {
          */
 
         logger.info("Listening");
-        if (!commissionableNode.isCommissioned()) {
-            const pairingData = commissionableNode.getPairingCode();
+        if (!commissioningServer.isCommissioned()) {
+            const pairingData = commissioningServer.getPairingCode();
             const { qrCode, qrPairingCode, manualPairingCode } = pairingData;
 
             console.log(qrCode);

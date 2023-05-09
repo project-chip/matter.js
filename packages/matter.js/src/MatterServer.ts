@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { StorageManager } from "./storage/StorageManager.js";
-import { CommissionableMatterNode } from "./CommissionableMatterNode.js";
+import { CommissioningServer } from "./CommissioningServer.js";
 import { MatterNode } from "./MatterNode.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
-import { PairableMatterNode } from "./PairableMatterNode.js";
+import { CommissioningController } from "./CommissioningController.js";
 
 // TODO Move Mdns instances internally
 // TODO enhance storage manager to support multiple nodes
@@ -33,18 +33,18 @@ export class MatterServer {
     ) { }
 
     /**
-     * Add a commissionable node to the server
+     * Add a CommissioningServer node to the server
      *
-     * @param commisionableNode Commissionable node to add
+     * @param commisioningServer CommissioningServer node to add
      */
-    addCommissionableNode(commisionableNode: CommissionableMatterNode) {
+    addCommissioningServer(commisioningServer: CommissioningServer) {
         if (this.nodes.length > 0) {
             throw new Error("Only one node is allowed for now");
         }
 
         const portCheckMap = new Map<number, boolean>();
         for (const node of this.nodes) {
-            if (node instanceof CommissionableMatterNode) {
+            if (node instanceof CommissioningServer) {
                 const nodePort = node.getPort();
                 if (portCheckMap.has(nodePort)) {
                     throw new Error(`Port ${nodePort} is already in use by other node`);
@@ -52,22 +52,22 @@ export class MatterServer {
                 portCheckMap.set(nodePort, true);
             }
         }
-        commisionableNode.setStorageManager(this.storageManager);
-        this.nodes.push(commisionableNode);
+        commisioningServer.setStorageManager(this.storageManager);
+        this.nodes.push(commisioningServer);
     }
 
     /**
-     * Add a pairable node to the server
+     * Add a Controller node to the server
      *
-     * @param pairableNode Pairable node to add
+     * @param commissioningController Controller node to add
      */
-    addPairableNode(pairableNode: PairableMatterNode) {
+    addCommissioningController(commissioningController: CommissioningController) {
         if (this.nodes.length > 0) {
             throw new Error("Only one node is allowed for now");
         }
 
-        pairableNode.setStorageManager(this.storageManager);
-        this.nodes.push(pairableNode);
+        commissioningController.setStorageManager(this.storageManager);
+        this.nodes.push(commissioningController);
     }
 
     /**
@@ -77,13 +77,13 @@ export class MatterServer {
     async start() {
         // TODO the mdns classes will later be in this class and assigned differently!!
         for (const node of this.nodes) {
-            if (node instanceof CommissionableMatterNode) {
+            if (node instanceof CommissioningServer) {
                 node.setMdnsBroadcaster(await MdnsBroadcaster.create(node.getPort(), this.mdnsAnnounceInterface));
                 node.setMdnsScanner(await MdnsScanner.create());
                 if (!node.delayedAnnouncement) {
                     await node.advertise();
                 }
-            } else if (node instanceof PairableMatterNode) {
+            } else if (node instanceof CommissioningController) {
                 node.setMdnsScanner(await MdnsScanner.create());
                 if (!node.delayedPairing) {
                     await node.connect();

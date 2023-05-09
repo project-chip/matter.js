@@ -63,7 +63,7 @@ export class RootEndpoint extends Endpoint {
     readonly deviceType: number;
 
     /**
-     * Create a new RootEndpoint instance. This is automatically instanced by the CommissionableDevice class.
+     * Create a new RootEndpoint instance. This is automatically instanced by the CommissioningServer class.
      */
     constructor(
     ) {
