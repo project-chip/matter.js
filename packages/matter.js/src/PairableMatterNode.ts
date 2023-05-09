@@ -10,7 +10,7 @@ import { StorageManager } from "./storage/StorageManager.js";
 import { MatterController } from "./MatterController.js";
 import { InteractionClient, ClusterClient } from "./protocol/interaction/InteractionClient.js";
 import { NodeId } from "./datatype/NodeId.js";
-import { DecodedAttributeReportValue } from "./protocol/interaction/AttributeDataDecoder.js";
+import { structureReadDataToClusterObject } from "./protocol/interaction/AttributeDataDecoder.js";
 import { Endpoint } from "./device/Endpoint.js";
 import { Logger } from "./log/Logger.js";
 import { DeviceTypes, DeviceTypeDefinition, getDeviceTypeDefinitionByCode } from "./device/DeviceTypes.js";
@@ -33,6 +33,9 @@ const logger = new Logger("PairableMatterNode");
 // TODO decline using setRoot*Cluster
 // TODO Decline cluster access after announced/paired
 
+/**
+ * Constructor options for the PairableMatterNode class
+ */
 export interface PairableNodeOptions {
     ip: string;
     port: number;
@@ -66,6 +69,11 @@ export class PairableMatterNode extends MatterNode {
     private nodeId?: NodeId;
     private endpoints = new Map<number, Endpoint>();
 
+    /**
+     * Creates a new PairableMatterNode instance
+     *
+     * @param options The options for the PairableMatterNode
+     */
     constructor(options: PairableNodeOptions) {
         super();
         this.ip = options.ip;
@@ -80,6 +88,10 @@ export class PairableMatterNode extends MatterNode {
         this.discriminator = options.discriminator;
     }
 
+    /**
+     * Connects to the device. This includes pairing with the device if not yet paired.
+     * After connection the endpoint data of the device is analyzed and an object structure is created.
+     */
     async connect() {
         if (this.mdnsScanner === undefined || this.storageManager === undefined) {
             throw new Error("Add the node to the Matter instance before!");
@@ -101,14 +113,26 @@ export class PairableMatterNode extends MatterNode {
         await this.initializeEndpointStructure();
     }
 
+    /**
+     * Set the MDNS Scanner instance. Should be only used internally
+     *
+     * @param mdnsScanner MdnsScanner instance
+     */
     setMdnsScanner(mdnsScanner: MdnsScanner) {
         this.mdnsScanner = mdnsScanner;
     }
 
+    /**
+     * Set the StorageManager instance. Should be only used internally
+     * @param storageManager
+     */
     setStorageManager(storageManager: StorageManager) {
         this.storageManager = storageManager;
     }
 
+    /**
+     * Returns the paired Fabric object of the node
+     */
     getFabric() {
         if (this.controllerInstance === undefined) {
             throw new Error("Controller instance not yet paired!");
@@ -116,6 +140,9 @@ export class PairableMatterNode extends MatterNode {
         return this.controllerInstance.getFabric();
     }
 
+    /**
+     * Return info if a device is successfully paired.
+     */
     isCommissioned() {
         if (this.controllerInstance === undefined) {
             throw new Error("Controller instance not yet paired!");
@@ -123,6 +150,10 @@ export class PairableMatterNode extends MatterNode {
         return this.controllerInstance.isCommissioned();
     }
 
+    /**
+     * Creates and Return a new InteractionClient to communicate with the device. This is only needed if you want to
+     * separate requests on a separate client.
+     */
     async createInteractionClient(): Promise<InteractionClient> {
         if (this.controllerInstance === undefined || this.nodeId === undefined) {
             throw new Error("Controller instance not yet paired!");
@@ -130,48 +161,51 @@ export class PairableMatterNode extends MatterNode {
         return this.controllerInstance.connect(this.nodeId);
     }
 
+    /**
+     * Returns a cluster client of a root endpoint cluster bound to a new InteractionClient.
+     *
+     * @param cluster The cluster to get the client for
+     */
     async getRootClusterClientWithNewInteractionClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
         cluster: Cluster<F, A, C, E>
     ): Promise<ClusterClientObj<A, C> | undefined> {
         return super.getRootClusterClient(cluster, await this.createInteractionClient());
     }
 
+    /**
+     * Read all data from the device and create a device object structure out of it.
+     *
+     * @private
+     */
     private async initializeEndpointStructure() {
         const interactionClient = await this.createInteractionClient();
 
         const allClusterAttributes = await interactionClient.getAllAttributes();
-        const allData = this.structureReadData(allClusterAttributes);
-        console.log("All Data", Logger.toJSON(allData));
+        const allData = structureReadDataToClusterObject(allClusterAttributes);
+        logger.debug("Device all data", Logger.toJSON(allData));
 
         const partLists = new Map<number, number[]>();
         for (const [endpointId, clusters] of Object.entries(allData)) {
+            const endpointIdNumber = parseInt(endpointId);
             const descriptorData = clusters[DescriptorCluster.id] as AttributeServerValues<typeof DescriptorCluster.attributes>;
 
-            partLists.set(parseInt(endpointId), descriptorData.partsList.map(({ number }) => number));
+            partLists.set(endpointIdNumber, descriptorData.partsList.map(({ number }) => number));
 
-            console.log("Creating device", endpointId, Logger.toJSON(clusters));
-            this.endpoints.set(parseInt(endpointId), this.createDevice(parseInt(endpointId), clusters, interactionClient));
+            logger.debug("Creating device", endpointId, Logger.toJSON(clusters));
+            this.endpoints.set(endpointIdNumber, this.createDevice(endpointIdNumber, clusters, interactionClient));
         }
 
         this.structureEndpoints(partLists);
     }
 
-    private structureReadData(data: DecodedAttributeReportValue[]) {
-        const structure: { [key: number]: { [key: number]: { [key: string]: any } } } = {};
-        for (const { path: { endpointId, clusterId, attributeName }, value } of data) {
-            if (structure[endpointId] === undefined) {
-                structure[endpointId] = {};
-            }
-            if (structure[endpointId][clusterId] === undefined) {
-                structure[endpointId][clusterId] = {};
-            }
-            structure[endpointId][clusterId][attributeName] = value;
-        }
-        return structure;
-    }
-
+    /**
+     * Bring the endpoints in a structure based on their partsList attribute.
+     *
+     * @param partLists A Map  of the partsList attributes of all endpoints to structure
+     * @private
+     */
     private structureEndpoints(partLists: Map<number, number[]>) {
-        console.log("Endpoints from Partslists", Logger.toJSON(Array.from(partLists.entries())));
+        logger.debug("Endpoints from Partslists", Logger.toJSON(Array.from(partLists.entries())));
 
         const endpointUsages: { [key: number]: number[] } = {};
         Array.from(partLists.entries()).forEach(([parent, partsList]) => partsList.forEach(endPoint => {
@@ -179,7 +213,7 @@ export class PairableMatterNode extends MatterNode {
             endpointUsages[endPoint].push(parent);
         }));
 
-        console.log("Endpoint Usages", JSON.stringify(endpointUsages));
+        logger.debug("Endpoint usages", JSON.stringify(endpointUsages));
 
         while (true) {
             // get all endpoints with only one usage
@@ -189,7 +223,7 @@ export class PairableMatterNode extends MatterNode {
                 break;
             }
 
-            console.log(`Processing ${JSON.stringify(singleUsageEndpoints)}`);
+            logger.debug(`Processing Endpoint ${JSON.stringify(singleUsageEndpoints)}`);
 
             const idsToCleanup: { [key: number]: boolean } = {}
             singleUsageEndpoints.forEach(([childId, usages]) => {
@@ -199,13 +233,13 @@ export class PairableMatterNode extends MatterNode {
                     throw new Error("Endpoint not found!"); // Should never happen!
                 }
 
-                console.log(`Child: ${childEndpoint.id} -> Parent: ${parentEndpoint.id}`);
+                logger.debug(`Endpoint structure: Child: ${childEndpoint.id} -> Parent: ${parentEndpoint.id}`);
 
                 parentEndpoint.addChildEndpoint(childEndpoint);
                 delete (endpointUsages[parseInt(childId)]);
                 idsToCleanup[usages[0]] = true;
             });
-            console.log("Cleanup", JSON.stringify(idsToCleanup));
+            logger.debug("Endpoint data Cleanup", JSON.stringify(idsToCleanup));
             Object.keys(idsToCleanup).forEach(idToCleanup => {
                 Object.keys(endpointUsages).forEach(id => {
                     endpointUsages[parseInt(id)] = endpointUsages[parseInt(id)].filter(endpointId => endpointId !== parseInt(idToCleanup));
@@ -217,6 +251,14 @@ export class PairableMatterNode extends MatterNode {
         }
     }
 
+    /**
+     * Create a device object from the data read from the device.
+     *
+     * @param endpointId Endpoint ID
+     * @param data Data of all clusters read from the device
+     * @param interactionClient InteractionClient to communicate with the device
+     * @private
+     */
     private createDevice(endpointId: number, data: { [key: number]: { [key: string]: any } }, interactionClient: InteractionClient) {
         const descriptorData = data[DescriptorCluster.id] as AttributeServerValues<typeof DescriptorCluster.attributes>;
 
@@ -250,6 +292,7 @@ export class PairableMatterNode extends MatterNode {
             endpointClusters.push(clusterClient);
         }
 
+        // TODO use the attributes attributeList, acceptedCommands, generatedCommands to crate the ClusterClient/Server objects
         // Add ClusterServers for all client clusters of the device
         for (const clusterId of descriptorData.clientList) {
             const cluster = AllClustersMap[clusterId.id];
@@ -263,7 +306,7 @@ export class PairableMatterNode extends MatterNode {
 
         if (endpointId === 0) {
             // Endpoint 0 is the root endpoint, so this object
-            this.rootEndpoint.setDeviceTypes(deviceTypes as AtLeastOne<DeviceTypeDefinition>);
+            this.rootEndpoint.setDeviceTypes(deviceTypes as AtLeastOne<DeviceTypeDefinition>); // Ideally only root one as defined
             endpointClusters.forEach(cluster => {
                 if (isClusterServer(cluster)) {
                     this.addRootClusterServer(cluster);
@@ -330,10 +373,16 @@ export class PairableMatterNode extends MatterNode {
         }
     }
 
+    /**
+     * Returns the devices known to the controller.
+     */
     getDevices(): Endpoint[] {
         return this.rootEndpoint.getChildEndpoints();
     }
 
+    /**
+     * close network connections of the device
+     */
     async close() {
         this.controllerInstance?.close();
     }

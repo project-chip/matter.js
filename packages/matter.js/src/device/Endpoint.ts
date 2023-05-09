@@ -31,7 +31,7 @@ export class Endpoint {
     private descriptorCluster;
 
     constructor(
-        private deviceTypes: AtLeastOne<DeviceTypeDefinition>,
+        protected deviceTypes: AtLeastOne<DeviceTypeDefinition>,
         clusters: (ClusterServerObj<any> | ClusterClientObj<any, any>)[] = [],
         endpointId?: number
     ) {
@@ -171,7 +171,7 @@ export class Endpoint {
         return nextEndpointId;
     }
 
-    verifyRequiredClusters(): void {
+    protected verifyRequiredClusters(): void {
         this.deviceTypes.forEach(deviceType => {
             deviceType.requiredServerClusters?.forEach(clusterId => {
                 if (!this.clusterServers.has(clusterId)) {

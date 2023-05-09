@@ -28,10 +28,10 @@
         "build": "tsc -b tsconfig.dist.json",
         "build-clean": "npm run clean && npm run build",
         "test": "TZ=utc jest",
-        "matter-device": "ts-node --project tsconfig.dist.json src/examples/NewDeviceNode.ts",
-        "matter-bridge": "ts-node --project tsconfig.dist.json src/examples/NewBridgedDevicesNode.ts",
-        "matter-composeddevice": "ts-node --project tsconfig.dist.json src/examples/NewComposedDeviceNode.ts",
-        "matter-controller": "ts-node --project tsconfig.dist.json src/examples/NewControllerNode.ts"
+        "matter-device": "ts-node --project tsconfig.dist.json src/examples/DeviceNode.ts",
+        "matter-bridge": "ts-node --project tsconfig.dist.json src/examples/BridgedDevicesNode.ts",
+        "matter-composeddevice": "ts-node --project tsconfig.dist.json src/examples/ComposedDeviceNode.ts",
+        "matter-controller": "ts-node --project tsconfig.dist.json src/examples/ControllerNode.ts"
     },
     "bin": {
         "matter-device": "./dist/examples/NewDeviceNode.js",

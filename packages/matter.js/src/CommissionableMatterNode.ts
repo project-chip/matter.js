@@ -41,12 +41,20 @@ import { ByteArray } from "./util/ByteArray.js";
 import { NamedHandler } from "./util/NamedHandler.js";
 import { Attributes } from "./cluster/Cluster.js";
 
+/**
+ * Represents device pairing information.
+ */
 export interface DevicePairingInformation {
     manualPairingCode: string;
     qrPairingCode: string;
     qrCode: string;
 }
 
+/**
+ * Constructor options for a commissionable device
+ * Beside the general options it also contains the data for the BasicInformation cluster which is added automatically
+ * and allows to override the certificates used for the OperationalCredentials cluster
+ */
 export interface CommissionableNodeOptions {
     port: number;
     disableIpv4?: boolean;
@@ -73,13 +81,21 @@ export interface CommissionableNodeOptions {
     certificates?: OperationalCredentialsServerConf;
 }
 
+/**
+ * Commands exposed by the CommissionableNode
+ */
 type CommissionableNodeCommands = {
+    /** Provide a means for certification tests to trigger some test-plan-specific events. */
     testEventTrigger: CommandHandler<typeof GeneralDiagnosticsCluster.commands.testEventTrigger, any>;
 }
 
 // TODO decline using set/getRootClusterClient
 // TODO Decline cluster access after announced/paired
 
+/**
+ * A commissionable node represent a matter node that can be paired with a controller and runs on a defined port on the
+ * host
+ */
 export class CommissionableMatterNode extends MatterNode {
     private readonly port: number;
     private readonly disableIpv4: boolean;
@@ -104,6 +120,11 @@ export class CommissionableMatterNode extends MatterNode {
 
     private readonly commandHandler = new NamedHandler<CommissionableNodeCommands>();
 
+    /**
+     * Creates a new commissionable node and add all needed Root clusters
+     *
+     * @param options The options for the commissionable node
+     */
     constructor(options: CommissionableNodeOptions) {
         super();
         this.port = options.port;
@@ -275,6 +296,13 @@ export class CommissionableMatterNode extends MatterNode {
         );
     }
 
+    /**
+     * Add a new cluster server to the root endpoint
+     * BasicInformationCluster and OperationalCredentialsCluster can not be added via this method because they are
+     * added in the constructor
+     *
+     * @param cluster
+     */
     override addRootClusterServer<A extends Attributes>(cluster: ClusterServerObj<A>) {
         if (cluster.id === BasicInformationCluster.id) {
             throw new Error(
@@ -289,6 +317,9 @@ export class CommissionableMatterNode extends MatterNode {
         super.addRootClusterServer(cluster);
     }
 
+    /**
+     * Advertise the node via mDNS and start the commissioning process
+     */
     async advertise() {
         if (this.mdnsBroadcaster === undefined || this.mdnsScanner === undefined || this.storageManager === undefined) {
             throw new Error("Add the node to the Matter instance before!");
@@ -344,10 +375,16 @@ export class CommissionableMatterNode extends MatterNode {
         await this.deviceInstance.start();
     }
 
+    /**
+     * Return info if the device is paired with at least one controller
+     */
     isCommissioned(): boolean {
         return this.deviceInstance?.isCommissioned() ?? false;
     }
 
+    /**
+     * Return the pairing information for the device
+     */
     getPairingCode(): DevicePairingInformation {
         const basicInformation = this.getRootClusterServer(BasicInformationCluster);
         if (basicInformation == undefined) {
@@ -381,35 +418,72 @@ export class CommissionableMatterNode extends MatterNode {
         };
     }
 
+    /**
+     * Set the MDNS Scanner instance. Should be only used internally
+     *
+     * @param mdnsScanner MdnsScanner instance
+     */
     setMdnsScanner(mdnsScanner: MdnsScanner) {
         this.mdnsScanner = mdnsScanner;
     }
 
+    /**
+     * Set the MDNS Broadcaster instance. Should be only used internally
+     *
+     * @param mdnsBroadcaster MdnsBroadcaster instance
+     */
     setMdnsBroadcaster(mdnsBroadcaster: MdnsBroadcaster) {
         this.mdnsBroadcaster = mdnsBroadcaster;
     }
 
+    /**
+     * Set the StorageManager instance. Should be only used internally
+     * @param storageManager
+     */
     setStorageManager(storageManager: StorageManager) {
         this.storageManager = storageManager;
     }
 
+    /**
+     * Add a new device to the node
+     *
+     * @param device Device or ComposedDevice instance to add
+     */
     addDevice(device: Device | ComposedDevice) {
         this.addEndpoint(device);
     }
 
+    /**
+     * Return the port the device is listening on
+     */
     getPort(): number {
         return this.port;
     }
 
+    /**
+     * close network connections of the device
+     */
     async close() {
         await this.deviceInstance?.stop();
     }
 
-    addCommandHandler<K extends keyof CommissionableNodeCommands>(action: K, handler: CommissionableNodeCommands[K]) {
-        this.commandHandler.addHandler(action, handler);
+    /**
+     * Add a new command handler for the given command
+     *
+     * @param command Command to add the handler for
+     * @param handler Handler function to add
+     */
+    addCommandHandler<K extends keyof CommissionableNodeCommands>(command: K, handler: CommissionableNodeCommands[K]) {
+        this.commandHandler.addHandler(command, handler);
     }
 
-    removeCommandHandler<K extends keyof CommissionableNodeCommands>(action: K, handler: CommissionableNodeCommands[K]) {
-        this.commandHandler.removeHandler(action, handler);
+    /**
+     * Remove a command handler for the given command
+     *
+     * @param command Command to remove the handler for
+     * @param handler Handler function to remove
+     */
+    removeCommandHandler<K extends keyof CommissionableNodeCommands>(command: K, handler: CommissionableNodeCommands[K]) {
+        this.commandHandler.removeHandler(command, handler);
     }
 }

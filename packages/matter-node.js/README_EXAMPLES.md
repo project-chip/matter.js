@@ -20,6 +20,9 @@ Then after `cd packages/matter-node.js` you can use `npm run matter-device` to r
 
 ### Start a simple Matter Device Node
 
+> The code for this example is in [src/examples/DeviceNode.ts](./src/examples/DeviceNode.ts).
+> The former version based on the legacy internal API in [src/examples/LegacyDeviceNode.ts](./src/examples/LegacyDeviceNode.ts) is still available but will be removed in the future.
+
 To run from the build files:
 
 ```bash
@@ -63,6 +66,8 @@ The following parameters are available:
 
 ### Start a Matter Bridge
 
+> The code for this example is in [src/examples/BridgedDeviceNode.ts](./src/examples/BridgedDeviceNode.ts).
+
 A Bridge is used to expose multiple devices at once.
 
 The usage and parameter are comparable to above. but the bridge adds support for multiple types and on/off commands:
@@ -88,6 +93,8 @@ The above command exposes two devices under the bridge, one as light, one as soc
 
 ### Start a Matter Composed Device
 
+> The code for this example is in [src/examples/ComposedDeviceNode.ts](./src/examples/ComposedDeviceNode.ts).
+
 A composed device is one device with multiple different device types combined. This is useful for devices that have multiple functions, e.g. a light bulb with a temperature sensor.
 
 The parameters are like with the bridge but with an added "-type light/socket" parameter to define the type of the composed device itself.
@@ -106,6 +113,9 @@ npm run matter-composeddevice -- -type socket -num 2 -on1 "echo 255 > /sys/class
 The above command exposes a composed device with a socket and a light device and executes the respective commands when the devices are turned on or off.
 
 ### Start a Matter Controller
+
+> The code for this example is in [src/examples/ControllerNode.ts](./src/examples/ControllerNode.ts).
+> The former version based on the legacy internal API in [src/examples/LegacyControllerNode.ts](./src/examples/LegacyControllerNode.ts) is still available but will be removed in the future.
 
 **Experimental**
 The current controller implementation is no CLI tool, but shows the pairing of devices and resuming the connection and also showcase the existing low-level controller API. It is just intended to be used for debugging, during development! The code contains some commented-out examples of how to use the low level controller API.

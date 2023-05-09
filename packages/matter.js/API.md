@@ -97,8 +97,8 @@ TODO Define and describe Device API
 ## See the API in action?
 
 For a basic overview on how to use the API you can check:
-* For creating a Matter device, check NewDeviceNode.ts in the matter-node.js package
-* For creating a Matter bridge, check NewBridgedDevicesNode.ts in the matter-node.js package
-* For creating a Matter composed device, check NewComposedDeviceNode.ts in the matter-node.js package
-* For creating a Matter controller, check NewControllerNode.ts in the matter-node.js package
+* For creating a Matter device, check DeviceNode.ts in the matter-node.js package
+* For creating a Matter bridge, check BridgedDevicesNode.ts in the matter-node.js package
+* For creating a Matter composed device, check ComposedDeviceNode.ts in the matter-node.js package
+* For creating a Matter controller, check ControllerNode.ts in the matter-node.js package
 * For examples on how to create different device structures check test/device/MatterNodeStructureTest.ts

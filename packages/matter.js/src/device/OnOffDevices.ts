@@ -20,19 +20,45 @@ type OnOffBaseDeviceCommands = {
     identify: CommandHandler<typeof IdentifyCluster.commands.identify, any>;
 }
 
+
+/**
+ * Utility function to get the initial attribute values for a cluster out of an object with initial attribute values
+ * for multiple clusters
+ *
+ * @param attributeInitialValues Object with initial attribute values for automatically added clusters
+ * @param cluster Cluster to get the initial attribute values for
+ */
 function getClusterInitialAttributeValues<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(attributeInitialValues: { [key: number]: AttributeInitialValues<any> } | undefined, cluster: Cluster<F, A, C, E>): AttributeInitialValues<A> | undefined {
     if (attributeInitialValues === undefined) return undefined;
     return attributeInitialValues[cluster.id] as AttributeInitialValues<A>;
 }
 
+/**
+ * Abstract Base class for OnOff devices
+ */
 abstract class OnOffBaseDevice extends extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands>(Device) {
 
+    /**
+     * Creates a new OnOffBaseDevice
+     *
+     * @protected
+     * @param definition Device type definition of the device to create
+     * @param attributeInitialValues Optional object with initial attribute values for automatically added clusters
+     * @param endpointId Optional endpoint ID of the device. If not set, the device will be instanced as a root device
+     */
     protected constructor(definition: DeviceTypeDefinition, attributeInitialValues?: { [key: number]: AttributeInitialValues<any> }, endpointId?: number) {
         super(definition, [], endpointId);
-        this.addMandatoryDeviceClusters(attributeInitialValues);
+        this.addDeviceClusters(attributeInitialValues);
     }
 
-    protected addMandatoryDeviceClusters(attributeInitialValues?: { [key: number]: AttributeInitialValues<any> }) {
+    /**
+     * Adds mandatory clusters to the device
+     *
+     * @protected
+     * @param attributeInitialValues Optional object with initial attribute values for automatically added clusters
+     */
+    protected addDeviceClusters(attributeInitialValues?: { [key: number]: AttributeInitialValues<any> }) {
+        // TODO: Find a way to make this automated based on the required clusters?
         this.addClusterServer(createDefaultIdentifyClusterServer({
             identify: async (data) => await this._executeHandler("identify", data)
         }));
@@ -41,29 +67,50 @@ abstract class OnOffBaseDevice extends extendPublicHandlerMethods<typeof Device,
         this.addClusterServer(createDefaultOnOffClusterServer(getClusterInitialAttributeValues(attributeInitialValues, OnOffCluster)));
     }
 
-    // Example of Convenient methods to control the device without need to access clusters
-
+    /**
+     * Turns the device on or off
+     * This is an example f a convenient device class API to control the device without need to access clusters
+     *
+     * @param onOff true to turn on, false to turn off
+     */
     async onOff(onOff: boolean) {
         this.getClusterServer(OnOffCluster)?.setOnOffAttribute(onOff);
     }
 
+    /**
+     * Toggles the device on or off
+     * This is an example f a convenient device class API to control the device without need to access clusters
+     */
     async toggle() {
         const cluster = this.getClusterServer(OnOffCluster);
         cluster?.setOnOffAttribute(!cluster?.getOnOffAttribute());
     }
 
     // Add Listeners convenient for chosen attributes
+    /**
+     * Adds a listener for the OnOff attribute
+     * This is an example of a convenient device class API to control the device without need to access clusters
+     *
+     * @param listener Listener function to be called when the attribute changes
+     */
     addOnOffListener(listener: (newValue: boolean, oldValue: boolean) => void) {
         this.getClusterServer(OnOffCluster)?.subscribeOnOffAttribute(listener);
     }
 }
 
+
+/**
+ * Device class for an OnOffPluginUnit Device
+ */
 export class OnOffPluginUnitDevice extends OnOffBaseDevice {
     constructor(onOffAttributeInitialValues?: AttributeInitialValues<typeof OnOffCluster.attributes>, endpointId?: number) {
         super(DeviceTypes.ON_OFF_PLUGIN_UNIT, onOffAttributeInitialValues, endpointId);
     }
 }
 
+/**
+ * Device class for an OnOffPluginUnit Device
+ */
 export class OnOffLightDevice extends OnOffBaseDevice {
     constructor(onOffAttributeInitialValues?: AttributeInitialValues<typeof OnOffCluster.attributes>, endpointId?: number) {
         super(DeviceTypes.ON_OFF_LIGHT, onOffAttributeInitialValues, endpointId);
