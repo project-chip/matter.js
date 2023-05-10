@@ -157,7 +157,7 @@ describe("Integration", () => {
                     }, {
                         nameSupport: { groupNames: true }
                     },
-                        GroupsClusterHandler(0x00)),
+                        GroupsClusterHandler()),
                 ])
                 .addEndpoint(0x01, DEVICE.ON_OFF_LIGHT, [onOffServer])
             );
