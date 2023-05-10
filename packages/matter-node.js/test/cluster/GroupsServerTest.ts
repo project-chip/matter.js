@@ -247,7 +247,7 @@ describe("Groups Server test", () => {
     describe("Add group while identifying without identifying test", () => {
         beforeAll(async () => {
             await initializeTestEnv();
-            const identifyCluster = endpoint?.clusters.get(IdentifyCluster.id) as ClusterServer<typeof IdentifyCluster.features, typeof IdentifyCluster.attributes, typeof IdentifyCluster.commands, typeof IdentifyCluster.events>;
+            const identifyCluster = endpoint?.clusters.get(IdentifyCluster.id) as ClusterServer<typeof IdentifyCluster.features, typeof IdentifyCluster.supportedFeatures, typeof IdentifyCluster.attributes, typeof IdentifyCluster.commands, typeof IdentifyCluster.events>;
             identifyCluster.attributes.identifyTime.set(0); // Change to not identifying
         });
 
