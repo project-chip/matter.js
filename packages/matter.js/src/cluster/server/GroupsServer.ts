@@ -178,7 +178,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             }
 
             // TODO when endpoint gets replaced by object this wil be nicer
-            const identifyCluster = endpoint.clusters.get(IdentifyCluster.id) as ClusterServer<typeof IdentifyCluster.features, typeof IdentifyCluster.attributes, typeof IdentifyCluster.commands, typeof IdentifyCluster.events>;
+            const identifyCluster = endpoint.clusters.get(IdentifyCluster.id) as ClusterServer<typeof IdentifyCluster.features, typeof IdentifyCluster.supportedFeatures, typeof IdentifyCluster.attributes, typeof IdentifyCluster.commands, typeof IdentifyCluster.events>;
             if (!identifyCluster) {
                 throw new Error("Identify cluster not found");
             }

@@ -13,7 +13,7 @@ import { FabricIndex, VendorId, FabricId, NodeId } from "@project-chip/matter.js
 import { ByteArray } from "@project-chip/matter.js/util";
 
 // TODO make that nicer
-export async function callCommandOnClusterServer(clusterServer: ClusterServer<any, any, any, any>, commandName: string, args: any, endpoint: EndpointData, session?: SecureSession<MatterDevice>, message?: Message): Promise<{ code: StatusCode, responseId: number, response: any }> {
+export async function callCommandOnClusterServer(clusterServer: ClusterServer<any, any, any, any, any>, commandName: string, args: any, endpoint: EndpointData, session?: SecureSession<MatterDevice>, message?: Message): Promise<{ code: StatusCode, responseId: number, response: any }> {
     const command = clusterServer.commands.find(command => command.name === commandName);
     if (command === undefined) throw new Error(`Command ${commandName} not found`);
     const res = await command.invoke(session ?? {} as SecureSession<MatterDevice>, command.requestSchema.encodeTlv(args), message ?? {} as Message, endpoint);
