@@ -198,6 +198,7 @@ function toHex(value: number | undefined) {
 }
 
 export class InteractionServer implements ProtocolHandler<MatterDevice> {
+
     private endpoints = new Map<number, EndpointData>();
     private attributes = new Map<string, AttributeServer<any>>();
     private attributePaths = new Array<AttributePath>();
