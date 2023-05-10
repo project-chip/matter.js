@@ -71,7 +71,6 @@ export class GroupsManager {
     }
 }
 
-
 export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsCluster> = () => {
     const addGroupLogic = (groupId: GroupId, groupName: string, sessionType: SessionType, fabric: Fabric, endpointId: number) => {
         // TODO If the AddGroup command was received as a unicast, the server SHALL generate an AddGroupResponse
@@ -173,7 +172,6 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
         },
 
         addGroupIfIdentifying: async ({ request: { groupId, groupName }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
-
             if (sessionType !== SessionType.Unicast) {
                 throw new Error("Groupcast not supported");
                 // TODO: When Unicast we generate a response, else not
