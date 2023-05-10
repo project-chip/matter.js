@@ -104,7 +104,7 @@ export const OnOffCluster = Cluster({
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.6 */
     attributes: {
         /** Indicates whether the device type implemented on the endpoint is turned off (false) or turned on (true). */
-        onOff: Attribute(0, TlvBoolean, { persistent: true, default: false }), /* reportable: true, scene:true - Specs 1.0 wrong here, using chip XMLs*/
+        onOff: Attribute(0, TlvBoolean, { scene: true, persistent: true, default: false }), /* reportable: true - Specs 1.0 wrong here, using chip XMLs*/
     },
 
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.5.7 */
