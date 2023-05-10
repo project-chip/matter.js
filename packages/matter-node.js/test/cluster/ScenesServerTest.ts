@@ -28,17 +28,17 @@ import { callCommandOnClusterServer, createTestSessionWithFabric } from "./Clust
 import { TlvBoolean } from "@project-chip/matter.js/tlv";
 
 describe("Scenes Server test", () => {
-    let groupsServer: ClusterServer<any, any, any, any> | undefined;
-    let scenesServer: ClusterServer<any, any, any, any> | undefined;
-    let onOffServer: ClusterServer<any, any, any, any> | undefined;
+    let groupsServer: ClusterServer<any, any, any, any, any> | undefined;
+    let scenesServer: ClusterServer<any, any, any, any, any> | undefined;
+    let onOffServer: ClusterServer<any, any, any, any, any> | undefined;
     let testFabric: Fabric | undefined;
     let testSession: SecureSession<MatterDevice> | undefined
     let endpoint: EndpointData | undefined;
 
     // TODO make that nicer and maybe  move to a "testing support library"
     async function initializeTestEnv() {
-        groupsServer = new ClusterServer(GroupsCluster, { groupNames: true }, { nameSupport: { groupNames: true } }, GroupsClusterHandler());
-        scenesServer = new ClusterServer(ScenesCluster, { sceneNames: true }, {
+        groupsServer = new ClusterServer(GroupsCluster, { nameSupport: { groupNames: true } }, GroupsClusterHandler());
+        scenesServer = new ClusterServer(ScenesCluster, {
             sceneCount: 0,
             currentScene: 0,
             currentGroup: new GroupId(0),
@@ -46,7 +46,7 @@ describe("Scenes Server test", () => {
             nameSupport: { sceneNames: true },
             lastConfiguredBy: null
         }, ScenesClusterHandler());
-        onOffServer = new ClusterServer(OnOffCluster, { lightingLevelControl: false }, { onOff: true }, OnOffClusterHandler());
+        onOffServer = new ClusterServer(OnOffCluster, { onOff: true }, OnOffClusterHandler());
         testSession = await createTestSessionWithFabric();
         testFabric = testSession.getFabric();
 
@@ -54,7 +54,7 @@ describe("Scenes Server test", () => {
             id: 1,
             name: '',
             code: 0,
-            clusters: new Map<number, ClusterServer<any, any, any, any>>(
+            clusters: new Map<number, ClusterServer<any, any, any, any, any>>(
                 [
                     [GroupsCluster.id, groupsServer],
                     [ScenesCluster.id, scenesServer],
