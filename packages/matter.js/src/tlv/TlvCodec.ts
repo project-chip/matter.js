@@ -274,12 +274,7 @@ export class TlvCodec {
 
     /** @see {@link MatterCoreSpecificationV1_0} § A.7 & A.8 */
     public static writeTag(writer: DataWriter<Endian.Little>, typeLengthValue: TlvTypeLength, tag?: TlvTag) {
-        let profile: number | undefined;
-        let id: number | undefined;
-        if (tag !== undefined) {
-            profile = tag.profile;
-            id = tag.id;
-        }
+        const { profile, id } = tag ?? {}
         let typeLength: number;
         switch (typeLengthValue.type) {
             case TlvType.Utf8String:

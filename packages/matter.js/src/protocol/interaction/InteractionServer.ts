@@ -53,11 +53,11 @@ import { AttributeId } from "../../datatype/AttributeId.js";
 export const INTERACTION_PROTOCOL_ID = 0x0001;
 
 // TODO replace by real Endpoint object
-export type EndpointData = { id: number, name: string, code: number, clusters: Map<number, ClusterServer<any, any, any, any>> };
+export type EndpointData = { id: number, name: string, code: number, clusters: Map<number, ClusterServer<any, any, any, any, any>> };
 
 const logger = Logger.get("InteractionProtocol");
 
-export class ClusterServer<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events> {
+export class ClusterServer<F extends BitSchema, SF extends Partial<TypeFromBitSchema<F>>, A extends Attributes, C extends Commands, E extends Events> {
     readonly id: number;
     readonly name: string;
     readonly attributes = <AttributeServers<A>>{};
@@ -66,8 +66,8 @@ export class ClusterServer<F extends BitSchema, A extends Attributes, C extends 
     private attributeStorageListeners = new Map<number, (value: any, version: number) => void>();
     private sceneAttributeList = new Array<string>();
 
-    constructor(clusterDef: Cluster<F, A, C, E>, features: TypeFromBitSchema<F>, attributesInitialValues: AttributeInitialValues<A>, handlers: ClusterServerHandlers<Cluster<F, A, C, E>>) {
-        const { id, name, attributes: attributeDefs, commands: commandDefs } = clusterDef;
+    constructor(clusterDef: Cluster<F, SF, A, C, E>, attributesInitialValues: AttributeInitialValues<A>, handlers: ClusterServerHandlers<Cluster<F, SF, A, C, E>>) {
+        const { id, name, attributes: attributeDefs, commands: commandDefs, supportedFeatures } = clusterDef;
         this.id = id;
         this.name = name;
 
@@ -75,7 +75,7 @@ export class ClusterServer<F extends BitSchema, A extends Attributes, C extends 
         attributesInitialValues = {
             ...attributesInitialValues,
             clusterRevision: clusterDef.revision,
-            featureMap: features,
+            featureMap: supportedFeatures,
         };
         for (const name in attributesInitialValues) {
             const { id, schema, writable, persistent, scene } = attributeDefs[name];
@@ -209,9 +209,9 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         return INTERACTION_PROTOCOL_ID;
     }
 
-    addEndpoint(endpointId: number, device: { name: string, code: number }, clusters: ClusterServer<any, any, any, any>[]) {
+    addEndpoint(endpointId: number, device: { name: string, code: number }, clusters: ClusterServer<any, any, any, any, any>[]) {
         // Add the descriptor cluster
-        const descriptorCluster = new ClusterServer(DescriptorCluster, {}, {
+        const descriptorCluster = new ClusterServer(DescriptorCluster, {
             deviceTypeList: [{ revision: 1, deviceType: new DeviceTypeId(device.code) }],
             serverList: [],
             clientList: [],
@@ -222,7 +222,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         const clusterEndpointNumber = new EndpointNumber(endpointId);
 
-        const clusterMap = new Map<number, ClusterServer<any, any, any, any>>();
+        const clusterMap = new Map<number, ClusterServer<any, any, any, any, any>>();
         clusters.forEach(cluster => {
             const { id: clusterId, attributes, commands } = cluster;
 
