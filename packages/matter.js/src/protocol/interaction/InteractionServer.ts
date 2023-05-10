@@ -51,7 +51,7 @@ import { TlvVoid } from "../../tlv/TlvVoid.js";
 export const INTERACTION_PROTOCOL_ID = 0x0001;
 
 // TODO replace by real Endpoint object
-export type EndpointData = { id: number, name: string, code: number, clusters: Map<number, ClusterServer<any, any, any, any>> };
+export type EndpointData = { id: number, name: string, code: number, clusters: Map<number, ClusterServer<any, any, any, any, any>> };
 
 const logger = Logger.get("InteractionProtocol");
 
