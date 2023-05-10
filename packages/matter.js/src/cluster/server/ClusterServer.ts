@@ -13,6 +13,7 @@ import { Message } from "../../codec/MessageCodec.js";
 import { Merge } from "../../util/Type.js";
 import { MatterDevice } from "../../MatterDevice.js";
 import { Session } from "../../session/Session.js";
+import { EndpointData } from "../../protocol/interaction/InteractionServer.js";
 
 type MandatoryAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends OptionalAttribute<any> ? never : K }[keyof A];
 type OptionalAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends OptionalAttribute<any> ? K : never }[keyof A];
@@ -24,7 +25,7 @@ export type AttributeInitialValues<A extends Attributes> = Merge<Omit<{ [P in Ma
 type MandatoryCommandNames<C extends Commands> = { [K in keyof C]: C[K] extends OptionalCommand<any, any> ? never : K }[keyof C];
 type OptionalCommandNames<C extends Commands> = { [K in keyof C]: C[K] extends OptionalCommand<any, any> ? K : never }[keyof C];
 type AttributeGetters<A extends Attributes> = { [P in keyof A as `get${Capitalize<string & P>}`]?: (session?: Session<MatterDevice>) => AttributeJsType<A[P]> };
-type CommandHandler<C extends Command<any, any>, A extends AttributeServers<any>> = C extends Command<infer RequestT, infer ResponseT> ? (args: { request: RequestT, attributes: A, session: Session<MatterDevice>, message: Message }) => Promise<ResponseT> : never;
+type CommandHandler<C extends Command<any, any>, A extends AttributeServers<any>> = C extends Command<infer RequestT, infer ResponseT> ? (args: { request: RequestT, attributes: A, session: Session<MatterDevice>, message: Message, endpoint: EndpointData }) => Promise<ResponseT> : never;
 type CommandHandlers<T extends Commands, A extends AttributeServers<any>> = Merge<{ [P in MandatoryCommandNames<T>]: CommandHandler<T[P], A> }, { [P in OptionalCommandNames<T>]?: CommandHandler<T[P], A> }>;
 
 /** Handlers to process cluster commands */

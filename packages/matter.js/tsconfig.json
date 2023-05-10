@@ -7,6 +7,7 @@
     "incremental": true, // Speed up subsequent builds
     "moduleResolution": "node16", // Required to correctly resolve Babel imports and to make sure all imports are js
     "module": "node16", // Required to make sure all imports are js
+    "sourceMap": true, // Enable debugging breakpoints
 
     // Local dev compilation checks
     "forceConsistentCasingInFileNames": true,

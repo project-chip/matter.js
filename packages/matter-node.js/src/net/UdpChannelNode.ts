@@ -36,7 +36,11 @@ export class UdpChannelNode implements UdpChannel {
         let multicastInterface: string | undefined;
         if (netInterface !== undefined) {
             multicastInterface = NetworkNode.getMulticastInterface(netInterface, type === "udp4");
-            logger.debug("initialize multicast interface", multicastInterface, type, listeningPort, netInterface);
+            logger.debug("Initialize multicast", Logger.dict({
+                address: `${multicastInterface}:${listeningPort}`,
+                interface: netInterface,
+                type: type
+            }));
             socket.setMulticastInterface(multicastInterface);
         }
         return new UdpChannelNode(socket, netInterface);
