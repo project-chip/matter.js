@@ -28,7 +28,7 @@ export class TlvNumericSchema<T extends bigint | number> extends TlvSchema<T> {
         super();
     }
 
-    override encodeTlvInternal(writer: TlvWriter, value: T, tag: TlvTag = {}): void {
+    override encodeTlvInternal(writer: TlvWriter, value: T, tag?: TlvTag): void {
         const typeLength = { type: this.type, length: this.lengthProvider(value) } as TlvTypeLength;
         writer.writeTag(typeLength, tag);
         writer.writePrimitive(typeLength, value);

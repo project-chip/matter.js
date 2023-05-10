@@ -164,6 +164,17 @@ describe("TlvObject", () => {
         }
     });
 
+    describe("encodeTlv with decodeTlv", () => {
+        for (const valueDescription in codecVector) {
+            const { decoded } = codecVector[valueDescription];
+            it(`encodes/decodes ${valueDescription}`, () => {
+                const tlvEncoded = schema.encodeTlv(decoded);
+                const tlvDecoded = schema.decodeTlv(tlvEncoded);
+                expect(tlvDecoded).toEqual(decoded);
+            });
+        }
+    });
+
     describe("errors", () => {
         for (const valueDescription in codecErrorVector) {
             const { structure, expectedError } = codecErrorVector[valueDescription];
