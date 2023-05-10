@@ -27,7 +27,7 @@ import { SessionType, Message } from "@project-chip/matter.js/codec";
 import { callCommandOnClusterServer, createTestSessionWithFabric } from "./ClusterServerTestingUtil";
 
 describe("Groups Server test", () => {
-    let groupsServer: ClusterServer<any, any, any, any> | undefined;
+    let groupsServer: ClusterServer<any, any, any, any, any> | undefined;
     let testFabric: Fabric | undefined;
     let testSession: SecureSession<MatterDevice> | undefined
     let endpoint: EndpointData | undefined;
@@ -35,7 +35,7 @@ describe("Groups Server test", () => {
 
     // TODO make that nicer and maybe  move to a "testing support library"
     async function initializeTestEnv() {
-        groupsServer = new ClusterServer(GroupsCluster, { groupNames: true }, { nameSupport: { groupNames: true } }, GroupsClusterHandler());
+        groupsServer = new ClusterServer(GroupsCluster, { nameSupport: { groupNames: true } }, GroupsClusterHandler());
         testSession = await createTestSessionWithFabric();
         testFabric = testSession.getFabric();
 
@@ -43,13 +43,12 @@ describe("Groups Server test", () => {
             id: 1,
             name: '',
             code: 0,
-            clusters: new Map<number, ClusterServer<any, any, any, any>>(
+            clusters: new Map<number, ClusterServer<any, any, any, any, any>>(
                 [
                     [
                         IdentifyCluster.id,
                         new ClusterServer(
                             IdentifyCluster,
-                            { query: false },
                             { identifyTime: 100, identifyType: IdentifyType.None },
                             { identify: async () => { /* */ } }
                         )
@@ -63,7 +62,7 @@ describe("Groups Server test", () => {
             id: 2,
             name: '',
             code: 0,
-            clusters: new Map<number, ClusterServer<any, any, any, any>>()
+            clusters: new Map<number, ClusterServer<any, any, any, any, any>>()
         };
     }
 
@@ -248,7 +247,7 @@ describe("Groups Server test", () => {
     describe("Add group while identifying without identifying test", () => {
         beforeAll(async () => {
             await initializeTestEnv();
-            const identifyCluster = endpoint?.clusters.get(IdentifyCluster.id) as ClusterServer<typeof IdentifyCluster.features, typeof IdentifyCluster.attributes, typeof IdentifyCluster.commands, typeof IdentifyCluster.events>;
+            const identifyCluster = endpoint?.clusters.get(IdentifyCluster.id) as ClusterServer<typeof IdentifyCluster.features, typeof IdentifyCluster.supportedFeatures, typeof IdentifyCluster.attributes, typeof IdentifyCluster.commands, typeof IdentifyCluster.events>;
             identifyCluster.attributes.identifyTime.set(0); // Change to not identifying
         });
 
