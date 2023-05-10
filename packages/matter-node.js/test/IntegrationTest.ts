@@ -56,7 +56,7 @@ const fakeServerStorage = new StorageBackendMemory();
 
 describe("Integration", () => {
     let server: MatterDevice;
-    let onOffServer: ClusterServerObj<any>;
+    let onOffServer: ClusterServerObj<any, any>;
     let client: MatterController;
 
     beforeAll(async () => {
@@ -82,7 +82,6 @@ describe("Integration", () => {
 
         onOffServer = ClusterServer(
             OnOffCluster,
-            { lightingLevelControl: false },
             { onOff: false },
             OnOffClusterHandler()
         );
@@ -99,7 +98,7 @@ describe("Integration", () => {
             ))
             .addProtocolHandler(new InteractionServer(serverStorageManager)
                 .addEndpoint(0x00, DeviceTypes.ROOT, [
-                    ClusterServer(BasicInformationCluster, {}, {
+                    ClusterServer(BasicInformationCluster, {
                         dataModelRevision: 1,
                         vendorName,
                         vendorId,
@@ -117,7 +116,7 @@ describe("Integration", () => {
                             subscriptionsPerFabric: 100,
                         },
                     }, {}),
-                    ClusterServer(GeneralCommissioningCluster, {}, {
+                    ClusterServer(GeneralCommissioningCluster, {
                         breadcrumb: BigInt(0),
                         basicCommissioningInfo: {
                             failSafeExpiryLengthSeconds: 60 /* 1min */,
@@ -127,7 +126,7 @@ describe("Integration", () => {
                         locationCapability: RegulatoryLocationType.IndoorOutdoor,
                         supportsConcurrentConnections: true,
                     }, GeneralCommissioningClusterHandler),
-                    ClusterServer(OperationalCredentialsCluster, {}, {
+                    ClusterServer(OperationalCredentialsCluster, {
                         nocs: [],
                         fabrics: [],
                         supportedFabrics: 254,
@@ -142,7 +141,6 @@ describe("Integration", () => {
                             certificationDeclaration,
                         })),
                     ClusterServer(AccessControlCluster,
-                        {},
                         {
                             acl: [],
                             extension: [],
@@ -153,8 +151,6 @@ describe("Integration", () => {
                         {},
                     ),
                     ClusterServer(GroupsCluster, {
-                        groupNames: true
-                    }, {
                         nameSupport: { groupNames: true }
                     },
                         GroupsClusterHandler()),

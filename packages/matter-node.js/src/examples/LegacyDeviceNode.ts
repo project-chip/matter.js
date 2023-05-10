@@ -23,7 +23,7 @@ import { PaseServer, CaseServer } from "../exports/session"; // same as @project
 import { ClusterServer, InteractionServer } from "../exports/interaction"; // same as @project-chip/matter-node.js/interaction
 import {
     BasicInformationCluster, GeneralCommissioningCluster, RegulatoryLocationType, OperationalCredentialsCluster,
-    OnOffCluster, NetworkCommissioningCluster, NetworkCommissioningStatus, AdminCommissioningCluster,
+    OnOffCluster, EthernetNetworkCommissioningCluster, NetworkCommissioningStatus, AdminCommissioningCluster,
     CommissioningWindowStatus, AccessControlCluster, GeneralCommissioningClusterHandler,
     OperationalCredentialsClusterHandler, OnOffClusterHandler, AdminCommissioningHandler, NetworkCommissioningHandler,
 } from "../exports/cluster"; // same as @project-chip/matter-node.js/cluster
@@ -71,7 +71,6 @@ class DeviceNode {
         // Barebone implementation of the On/Off cluster
         const onOffClusterServer = ClusterServer(
             OnOffCluster,
-            { lightingLevelControl: false },
             { onOff: false }, // Off by default
             OnOffClusterHandler()
         );
@@ -143,7 +142,7 @@ class DeviceNode {
                             certificationDeclaration,
                         }),
                     ),
-                    ClusterServer(NetworkCommissioningCluster,
+                    ClusterServer(EthernetNetworkCommissioningCluster,
                         {
                             wifi: false,
                             thread: false,
@@ -151,20 +150,15 @@ class DeviceNode {
                         },
                         {
                             maxNetworks: 1,
-                            connectMaxTimeSeconds: 20,
                             interfaceEnabled: true,
                             lastConnectErrorValue: 0,
                             lastNetworkId: Buffer.alloc(32),
                             lastNetworkingStatus: NetworkCommissioningStatus.Success,
                             networks: [{ networkId: Buffer.alloc(32), connected: true }],
-                            scanMaxTimeSeconds: 5,
                         },
                         NetworkCommissioningHandler(),
                     ),
                     ClusterServer(AdminCommissioningCluster,
-                        {
-                            basic: true,
-                        },
                         {
                             windowStatus: CommissioningWindowStatus.WindowNotOpen,
                             adminFabricIndex: null,
@@ -173,7 +167,6 @@ class DeviceNode {
                         AdminCommissioningHandler(secureChannelProtocol),
                     ),
                     ClusterServer(AccessControlCluster,
-                        {},
                         {
                             acl: [],
                             extension: [],

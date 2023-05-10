@@ -53,3 +53,4 @@ export * from "./server/LevelControlServer.js";
 export * from "./server/NetworkCommissioningServer.js";
 export * from "./server/OnOffServer.js";
 export * from "./server/OperationalCredentialsServer.js";
+export * from "./server/ScenesServer.js";

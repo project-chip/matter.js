@@ -19,7 +19,7 @@ import { IdentifyCluster } from "./IdentifyCluster.js";
 import { IlluminanceMeasurementCluster } from "./IlluminanceMeasurementCluster.js";
 import { UserLabelCluster, FixedLabelCluster } from "./LabelCluster.js";
 import { LevelControlCluster } from "./LevelControlCluster.js";
-import { NetworkCommissioningCluster } from "./NetworkCommissioningCluster.js";
+import { WifiAndEthernetAndThreadNetworkCommissioningCluster } from "./NetworkCommissioningCluster.js";
 import { OccupancySensingCluster } from "./OccupancySensingCluster.js";
 import { OnOffCluster } from "./OnOffCluster.js";
 import { OperationalCredentialsCluster } from "./OperationalCredentialsCluster.js";
@@ -51,7 +51,7 @@ export const AllClustersMap: { [key: Cluster<any, any, any, any>["id"]]: Cluster
     [UserLabelCluster.id]: UserLabelCluster,
     [FixedLabelCluster.id]: FixedLabelCluster,
     [LevelControlCluster.id]: LevelControlCluster,
-    [NetworkCommissioningCluster.id]: NetworkCommissioningCluster,
+    [WifiAndEthernetAndThreadNetworkCommissioningCluster.id]: WifiAndEthernetAndThreadNetworkCommissioningCluster,
     [OccupancySensingCluster.id]: OccupancySensingCluster,
     [OnOffCluster.id]: OnOffCluster,
     [OperationalCredentialsCluster.id]: OperationalCredentialsCluster,
@@ -71,11 +71,11 @@ interface CachedAttributeInfo {
 }
 const clusterAttributeCache = new Map<number, Map<number, CachedAttributeInfo>>();
 
-export function getClusterById(clusterId: number): Cluster<any, any, any, any> {
+export function getClusterById(clusterId: number): Cluster<any, any, any, any, any> {
     return AllClustersMap[clusterId];
 }
 
-export function getClusterAttributeById(clusterDef: Cluster<any, any, any, any>, attributeId: number): CachedAttributeInfo | undefined {
+export function getClusterAttributeById(clusterDef: Cluster<any, any, any, any, any>, attributeId: number): CachedAttributeInfo | undefined {
     if (!clusterAttributeCache.has(clusterDef.id)) {
         const attributeMap = new Map<number, CachedAttributeInfo>();
 

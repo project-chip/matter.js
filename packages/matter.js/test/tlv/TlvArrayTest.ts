@@ -35,6 +35,19 @@ describe("TlvArray", () => {
         });
     });
 
+    describe("decode an self encoded tlv object", () => {
+        it("decodes an array", () => {
+            const schema = TlvArray(TlvString);
+
+            const data = ["a", "b"];
+
+            const encoded = schema.encodeTlv(data);
+            const decoded = schema.decodeTlv(encoded);
+
+            expect(decoded).toEqual(data);
+        });
+    });
+
     describe("validate", () => {
         const schema = TlvArray(TlvString, { minLength: 2, maxLength: 4 });
 

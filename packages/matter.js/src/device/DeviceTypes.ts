@@ -128,7 +128,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         optionalServerClusters: [
             MatterClusters.PowerSourceConfigurationCluster.id,
             //MatterClusters.TimeSynchronizationCluster.id,
-            MatterClusters.NetworkCommissioningCluster.id, // mandatory if !CustomNetworkConfig
+            MatterClusters.EthernetNetworkCommissioningCluster.id, // mandatory if !CustomNetworkConfig
             //MatterClusters.LocalizationConfigurationCluster.id, // mandatory if LanguageLocale
             //MatterClusters.TimeFormatLocalizationCluster.id, // mandatory if TimeLocale
             //MatterClusters.UnitLocalizationCLuster.id, // mandatory if UnitLocale

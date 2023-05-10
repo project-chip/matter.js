@@ -21,7 +21,7 @@ export class NullableSchema<T> extends TlvSchema<T | null> {
         super();
     }
 
-    override encodeTlvInternal(writer: TlvWriter, value: T | null, tag: TlvTag = {}): void {
+    override encodeTlvInternal(writer: TlvWriter, value: T | null, tag?: TlvTag): void {
         if (value === null) {
             writer.writeTag({ type: TlvType.Null }, tag);
         } else {

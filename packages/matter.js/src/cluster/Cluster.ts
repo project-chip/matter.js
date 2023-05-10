@@ -23,16 +23,16 @@ export const enum AccessLevel {
 }
 
 /* Interfaces and helper methods to define a cluster attribute */
-export interface Attribute<T> { id: number, schema: TlvSchema<T>, optional: boolean, readAcl: AccessLevel, writable: boolean, persistent: boolean, omitChanges: boolean, writeAcl?: AccessLevel, default?: T }
+export interface Attribute<T> { id: number, schema: TlvSchema<T>, optional: boolean, readAcl: AccessLevel, writable: boolean, scene: boolean, persistent: boolean, omitChanges: boolean, writeAcl?: AccessLevel, default?: T }
 export interface OptionalAttribute<T> extends Attribute<T> { optional: true }
 export interface WritableAttribute<T> extends Attribute<T> { writable: true }
 export interface OptionalWritableAttribute<T> extends OptionalAttribute<T> { writable: true }
 export type AttributeJsType<T extends Attribute<any>> = T extends Attribute<infer JsType> ? JsType : never;
-interface AttributeOptions<T> { persistent?: boolean, omitChanges?: boolean, default?: T, readAcl?: AccessLevel, writeAcl?: AccessLevel }
-export const Attribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View }: AttributeOptions<V> = {}): Attribute<T> => ({ id, schema, optional: false, writable: false, persistent, omitChanges, default: conformanceValue, readAcl });
-export const OptionalAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View }: AttributeOptions<V> = {}): OptionalAttribute<T> => ({ id, schema, optional: true, writable: false, persistent, omitChanges, default: conformanceValue, readAcl });
-export const WritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View, writeAcl = AccessLevel.View }: AttributeOptions<V> = {}): WritableAttribute<T> => ({ id, schema, optional: false, writable: true, persistent, omitChanges, default: conformanceValue, readAcl, writeAcl });
-export const OptionalWritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View, writeAcl = AccessLevel.View }: AttributeOptions<V> = {}): OptionalWritableAttribute<T> => ({ id, schema, optional: true, writable: true, persistent, omitChanges, default: conformanceValue, readAcl, writeAcl });
+interface AttributeOptions<T> { scene?: boolean, persistent?: boolean, omitChanges?: boolean, default?: T, readAcl?: AccessLevel, writeAcl?: AccessLevel }
+export const Attribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { scene = false, persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View }: AttributeOptions<V> = {}): Attribute<T> => ({ id, schema, optional: false, writable: false, scene, persistent, omitChanges, default: conformanceValue, readAcl });
+export const OptionalAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { scene = false, persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View }: AttributeOptions<V> = {}): OptionalAttribute<T> => ({ id, schema, optional: true, writable: false, scene, persistent, omitChanges, default: conformanceValue, readAcl });
+export const WritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { scene = false, persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View, writeAcl = AccessLevel.View }: AttributeOptions<V> = {}): WritableAttribute<T> => ({ id, schema, optional: false, writable: true, scene, persistent, omitChanges, default: conformanceValue, readAcl, writeAcl });
+export const OptionalWritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { scene = false, persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View, writeAcl = AccessLevel.View }: AttributeOptions<V> = {}): OptionalWritableAttribute<T> => ({ id, schema, optional: true, writable: true, scene, persistent, omitChanges, default: conformanceValue, readAcl, writeAcl });
 
 export type MandatoryAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends OptionalAttribute<any> ? never : K }[keyof A];
 export type OptionalAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends OptionalAttribute<any> ? K : never }[keyof A];
@@ -92,20 +92,22 @@ export const GlobalAttributes = <F extends BitSchema>(features: F) => ({
     generatedCommandList: Attribute(0xFFF8, TlvArray(TlvCommandId)),
 } as GlobalAttributes<F>);
 
-export interface Cluster<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events> {
+export interface Cluster<F extends BitSchema, SF extends Partial<TypeFromBitSchema<F>>, A extends Attributes, C extends Commands, E extends Events> {
     id: number,
     name: string,
     revision: number,
     features: F,
+    supportedFeatures: SF,
     attributes: A,
     commands: C,
     events: E,
 }
-export const Cluster = <F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>({
+export const Cluster = <F extends BitSchema, SF extends Partial<TypeFromBitSchema<F>>, A extends Attributes, C extends Commands, E extends Events>({
     id,
     name,
     revision,
     features = <F>{},
+    supportedFeatures = <SF>{},
     attributes = <A>{},
     commands = <C>{},
     events = <E>{},
@@ -114,15 +116,64 @@ export const Cluster = <F extends BitSchema, A extends Attributes, C extends Com
     name: string,
     revision: number,
     features?: F,
+    supportedFeatures?: SF,
     attributes?: A,
     commands?: C,
     events?: E,
-}): Cluster<F, Merge<A, GlobalAttributes<F>>, C, E> => ({
+}): Cluster<F, SF, Merge<A, GlobalAttributes<F>>, C, E> => ({
     id,
     name,
     revision,
     features,
+    supportedFeatures,
     commands,
     attributes: Merge(attributes, GlobalAttributes(features)),
     events,
 });
+
+type ClusterExtend<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events> = {
+    supportedFeatures: SF,
+    attributes?: A,
+    commands?: C,
+    events?: E,
+};
+
+// TODO Find out why eslint markts that as unused
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const ClusterExtend =
+    <
+        F extends BitSchema,
+        SF_BASE extends TypeFromBitSchema<F>,
+        A_BASE extends Attributes,
+        C_BASE extends Commands,
+        E_BASE extends Events,
+        SF_EXTEND extends TypeFromBitSchema<F>,
+        A_EXTEND extends Attributes,
+        C_EXTEND extends Commands,
+        E_EXTEND extends Events,
+    >(
+        { id, name, revision, features, supportedFeatures, attributes, commands, events }: Cluster<F, SF_BASE, A_BASE, C_BASE, E_BASE>,
+        {
+            supportedFeatures: supportedFeaturesExtend,
+            attributes: attributesExtend = <A_EXTEND>{},
+            commands: commandsExtend = <C_EXTEND>{},
+            events: eventsExtend = <E_EXTEND>{},
+        }: ClusterExtend<F, SF_EXTEND, A_EXTEND, C_EXTEND, E_EXTEND>
+    ): Cluster<
+        F,
+        Merge<SF_BASE, SF_EXTEND>,
+        Merge<A_BASE, A_EXTEND>,
+        Merge<C_BASE, C_EXTEND>,
+        Merge<E_BASE, E_EXTEND>
+    > => (
+        {
+            id,
+            name,
+            revision,
+            features,
+            supportedFeatures: Merge(supportedFeatures, supportedFeaturesExtend),
+            attributes: Merge(attributes, attributesExtend),
+            commands: Merge(commands, commandsExtend),
+            events: Merge(events, eventsExtend),
+        }
+    );

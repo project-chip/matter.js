@@ -27,12 +27,12 @@ export type AttributeServerValues<A extends Attributes> = Merge<{ [P in Mandator
 
 type MandatoryCommandNames<C extends Commands> = { [K in keyof C]: C[K] extends OptionalCommand<any, any> ? never : K }[keyof C];
 type OptionalCommandNames<C extends Commands> = { [K in keyof C]: C[K] extends OptionalCommand<any, any> ? K : never }[keyof C];
-type AttributeGetters<A extends Attributes> = { [P in keyof A as `get${Capitalize<string & P>}`]?: (session?: Session<MatterDevice>) => AttributeJsType<A[P]> };
+type AttributeGetters<A extends Attributes> = { [P in keyof A as `get${Capitalize<string & P>}`]?: (args: { attributes: AttributeServers<A>, endpoint?: EndpointData, session?: Session<MatterDevice> }) => AttributeJsType<A[P]> };
 export type CommandHandler<C extends Command<any, any>, A extends AttributeServers<any>> = C extends Command<infer RequestT, infer ResponseT> ? (args: { request: RequestT, attributes: A, session: Session<MatterDevice>, message: Message, endpoint: EndpointData }) => Promise<ResponseT> : never;
 type CommandHandlers<T extends Commands, A extends AttributeServers<any>> = Merge<{ [P in MandatoryCommandNames<T>]: CommandHandler<T[P], A> }, { [P in OptionalCommandNames<T>]?: CommandHandler<T[P], A> }>;
 
 /** Handlers to process cluster commands */
-export type ClusterServerHandlers<C extends Cluster<any, any, any, any>> = Merge<CommandHandlers<C["commands"], AttributeServers<C["attributes"]>>, AttributeGetters<C["attributes"]>>;
+export type ClusterServerHandlers<C extends Cluster<any, any, any, any, any>> = Merge<CommandHandlers<C["commands"], AttributeServers<C["attributes"]>>, AttributeGetters<C["attributes"]>>;
 
 type OptionalAttributeConf<T extends Attributes> = { [K in OptionalAttributeNames<T>]?: true };
 type MakeAttributeMandatory<A extends Attribute<any>> = A extends OptionalWritableAttribute<infer T> ? WritableAttribute<T> : (A extends OptionalAttribute<infer T> ? Attribute<T> : A);
@@ -45,10 +45,9 @@ const MakeAttributesMandatory = <T extends Attributes, C extends OptionalAttribu
     }
     return result as MakeAttributesMandatory<T, C>;
 };
-type UseOptionalAttributes<C extends Cluster<any, any, any, any>, A extends OptionalAttributeConf<C["attributes"]>> = Cluster<C["features"], MakeAttributesMandatory<C["attributes"], A>, C["commands"], C["events"]>;
-/** Forces the presence of the specified optional attributes, so they can be used in the command handlers */
+type UseOptionalAttributes<C extends Cluster<any, any, any, any, any>, A extends OptionalAttributeConf<C["attributes"]>> = Cluster<C["features"], C["supportedFeatures"], MakeAttributesMandatory<C["attributes"], A>, C["commands"], C["events"]>;/** Forces the presence of the specified optional attributes, so they can be used in the command handlers */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-export const UseOptionalAttributes = <C extends Cluster<any, any, any, any>, A extends OptionalAttributeConf<C["attributes"]>>(cluster: C, conf: A): UseOptionalAttributes<C, A> => ({ ...cluster, attributes: MakeAttributesMandatory(cluster.attributes, conf) });
+export const UseOptionalAttributes = <C extends Cluster<any, any, any, any, any>, A extends OptionalAttributeConf<C["attributes"]>>(cluster: C, conf: A): UseOptionalAttributes<C, A> => ({ ...cluster, attributes: MakeAttributesMandatory(cluster.attributes, conf) });
 
 
 type GetterTypeFromSpec<A extends Attribute<any>> = A extends OptionalAttribute<infer T> ? (T | undefined) : AttributeJsType<A>;
