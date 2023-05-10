@@ -204,7 +204,7 @@ describe("InteractionProtocol", () => {
             await storageManager.initialize();
             const interactionProtocol = new InteractionServer(storageManager)
                 .addEndpoint(0, DEVICE.ROOT, [
-                    new ClusterServer(BasicInformationCluster, {}, {
+                    new ClusterServer(BasicInformationCluster, {
                         dataModelRevision: 1,
                         vendorName: "vendor",
                         vendorId: new VendorId(1),
@@ -232,7 +232,7 @@ describe("InteractionProtocol", () => {
 
     describe("handleWriteRequest", () => {
         it("write values and return errors on invalid values", async () => {
-            const basicCluster = new ClusterServer(BasicInformationCluster, {}, {
+            const basicCluster = new ClusterServer(BasicInformationCluster, {
                 dataModelRevision: 1,
                 vendorName: "vendor",
                 vendorId: new VendorId(1),
@@ -263,7 +263,7 @@ describe("InteractionProtocol", () => {
         });
 
         it("write chunked array values and return errors on invalid values", async () => {
-            const accessControlCluster = new ClusterServer(AccessControlCluster, {}, {
+            const accessControlCluster = new ClusterServer(AccessControlCluster, {
                 acl: [],
                 extension: [],
                 subjectsPerAccessControlEntry: 4,
@@ -290,7 +290,7 @@ describe("InteractionProtocol", () => {
         });
 
         it("mass write values and only set the one allowed", async () => {
-            const basicCluster = new ClusterServer(BasicInformationCluster, {}, {
+            const basicCluster = new ClusterServer(BasicInformationCluster, {
                 dataModelRevision: 1,
                 vendorName: "vendor",
                 vendorId: new VendorId(1),
@@ -328,8 +328,6 @@ describe("InteractionProtocol", () => {
         it("invoke method with empty args", async () => {
             let onOffState = false;
             const onOffCluster = new ClusterServer(OnOffCluster, {
-                lightingLevelControl: false
-            }, {
                 onOff: onOffState,
             }, {
                 on: async () => {
@@ -358,8 +356,6 @@ describe("InteractionProtocol", () => {
 
             let onOffState = false;
             const onOffCluster = new ClusterServer(OnOffCluster, {
-                lightingLevelControl: false
-            }, {
                 onOff: onOffState,
             }, {
                 on: async () => {

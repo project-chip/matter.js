@@ -30,7 +30,7 @@ import { PaseServer, CaseServer } from "@project-chip/matter.js/session";
 import { ClusterServer, InteractionServer } from "@project-chip/matter.js/interaction";
 import {
     BasicInformationCluster, GeneralCommissioningCluster, RegulatoryLocationType, OperationalCredentialsCluster,
-    OnOffCluster, NetworkCommissioningCluster, NetworkCommissioningStatus, AdminCommissioningCluster,
+    OnOffCluster, EthernetNetworkCommissioningCluster, NetworkCommissioningStatus, AdminCommissioningCluster,
     CommissioningWindowStatus, AccessControlCluster, GeneralCommissioningClusterHandler,
     OperationalCredentialsClusterHandler, OnOffClusterHandler, AdminCommissioningHandler, NetworkCommissioningHandler,
 
@@ -79,7 +79,6 @@ class DeviceNode {
         // Barebone implementation of the On/Off cluster
         const onOffClusterServer = new ClusterServer(
             OnOffCluster,
-            { lightingLevelControl: false },
             { onOff: false }, // Off by default
             OnOffClusterHandler()
         );
@@ -107,7 +106,7 @@ class DeviceNode {
             .addProtocolHandler(secureChannelProtocol)
             .addProtocolHandler(new InteractionServer(storageManager)
                 .addEndpoint(0x00, DEVICE.ROOT, [
-                    new ClusterServer(BasicInformationCluster, {}, {
+                    new ClusterServer(BasicInformationCluster, {
                         dataModelRevision: 1,
                         vendorName,
                         vendorId,
@@ -126,7 +125,7 @@ class DeviceNode {
                         },
                         serialNumber: `node-matter-${Time.nowMs()}`,
                     }, {}),
-                    new ClusterServer(GeneralCommissioningCluster, {}, {
+                    new ClusterServer(GeneralCommissioningCluster, {
                         breadcrumb: BigInt(0),
                         basicCommissioningInfo: {
                             failSafeExpiryLengthSeconds: 60 /* 1min */,
@@ -136,7 +135,7 @@ class DeviceNode {
                         locationCapability: RegulatoryLocationType.IndoorOutdoor,
                         supportsConcurrentConnections: true,
                     }, GeneralCommissioningClusterHandler),
-                    new ClusterServer(OperationalCredentialsCluster, {}, {
+                    new ClusterServer(OperationalCredentialsCluster, {
                         nocs: [],
                         fabrics: [],
                         supportedFabrics: 254,
@@ -151,28 +150,18 @@ class DeviceNode {
                             certificationDeclaration,
                         }),
                     ),
-                    new ClusterServer(NetworkCommissioningCluster,
-                        {
-                            wifi: false,
-                            thread: false,
-                            ethernet: true,
-                        },
+                    new ClusterServer(EthernetNetworkCommissioningCluster,
                         {
                             maxNetworks: 1,
-                            connectMaxTimeSeconds: 20,
                             interfaceEnabled: true,
                             lastConnectErrorValue: 0,
                             lastNetworkId: Buffer.alloc(32),
                             lastNetworkingStatus: NetworkCommissioningStatus.Success,
                             networks: [{ networkId: Buffer.alloc(32), connected: true }],
-                            scanMaxTimeSeconds: 5,
                         },
                         NetworkCommissioningHandler(),
                     ),
                     new ClusterServer(AdminCommissioningCluster,
-                        {
-                            basic: true,
-                        },
                         {
                             windowStatus: CommissioningWindowStatus.WindowNotOpen,
                             adminFabricIndex: null,
@@ -181,7 +170,6 @@ class DeviceNode {
                         AdminCommissioningHandler(secureChannelProtocol),
                     ),
                     new ClusterServer(AccessControlCluster,
-                        {},
                         {
                             acl: [],
                             extension: [],
