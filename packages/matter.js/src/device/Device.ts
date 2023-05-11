@@ -30,7 +30,7 @@ export class PairedDevice extends Endpoint {
      */
     constructor(
         definition: AtLeastOne<DeviceTypeDefinition>,
-        clusters: (ClusterServerObj<any, any> | ClusterClientObj<any, any>)[] = [],
+        clusters: (ClusterServerObj<Attributes, Commands> | ClusterClientObj<Attributes, Commands>)[] = [],
         endpointId: number
     ) {
         super(definition, clusters, endpointId);
@@ -94,7 +94,7 @@ export class Device extends Endpoint {
      */
     constructor(
         definition: DeviceTypeDefinition,
-        clusters: (ClusterServerObj<any, any> | ClusterClientObj<any, any>)[] = [],
+        clusters: (ClusterServerObj<Attributes, Commands> | ClusterClientObj<Attributes, Commands>)[] = [],
         endpointId?: number
     ) {
         if (definition.deviceClass === DeviceClasses.Node) {

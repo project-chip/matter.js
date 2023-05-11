@@ -42,7 +42,7 @@ export type AttributeServerValues<A extends Attributes> = Merge<{ [P in Mandator
 type MandatoryCommandNames<C extends Commands> = { [K in keyof C]: C[K] extends OptionalCommand<any, any> ? never : K }[keyof C];
 type OptionalCommandNames<C extends Commands> = { [K in keyof C]: C[K] extends OptionalCommand<any, any> ? K : never }[keyof C];
 type AttributeGetters<A extends Attributes> = { [P in keyof A as `get${Capitalize<string & P>}`]?: (args: { attributes: AttributeServers<A>, endpoint?: Endpoint, session?: Session<MatterDevice> }) => AttributeJsType<A[P]> };
-export type CommandHandler<C extends Command<any, any>, A extends AttributeServers<any>> = C extends Command<infer RequestT, infer ResponseT> ? (args: { request: RequestT, attributes: A, session: Session<MatterDevice>, message: Message, endpoint: Endpoint }) => Promise<ResponseT> : never;
+export type CommandHandler<C extends Command<any, any>, A extends AttributeServers<any>> = C extends Command<infer RequestT, infer ResponseT> ? (args: { request: RequestT, attributes: A, session: Session<MatterDevice>, message: Message, endpoint: Endpoint }) => Promise<ResponseT> | ResponseT : never;
 type CommandHandlers<T extends Commands, A extends AttributeServers<any>> = Merge<{ [P in MandatoryCommandNames<T>]: CommandHandler<T[P], A> }, { [P in OptionalCommandNames<T>]?: CommandHandler<T[P], A> }>;
 
 /** Handlers to process cluster commands */
@@ -122,6 +122,6 @@ export type ClusterServerObj<A extends Attributes, C extends Commands> =
     & ServerAttributeSetters<A>
     & ServerAttributeSubscribers<A>;
 
-export function isClusterServer(obj: ClusterClientObj<any, any> | ClusterServerObj<any, any>): obj is ClusterServerObj<any, any> {
+export function isClusterServer(obj: ClusterClientObj<Attributes, Commands> | ClusterServerObj<any, any>): obj is ClusterServerObj<Attributes, Commands> {
     return obj._type === "ClusterServer";
 }

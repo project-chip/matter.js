@@ -23,8 +23,8 @@ import { ClusterServerObj, isClusterServer } from "../cluster/server/ClusterServ
 import { InteractionClient } from "../protocol/interaction/InteractionClient.js";
 
 export class Endpoint {
-    private readonly clusterServers = new Map<number, ClusterServerObj<any, any>>();
-    private readonly clusterClients = new Map<number, ClusterClientObj<any, any>>();
+    private readonly clusterServers = new Map<number, ClusterServerObj<Attributes, Commands>>();
+    private readonly clusterClients = new Map<number, ClusterClientObj<Attributes, Commands>>();
     private readonly childEndpoints: Endpoint[] = [];
     id: number | undefined;
     name: string;
@@ -33,7 +33,7 @@ export class Endpoint {
 
     constructor(
         protected deviceTypes: AtLeastOne<DeviceTypeDefinition>,
-        clusters: (ClusterServerObj<any, any> | ClusterClientObj<any, any>)[] = [],
+        clusters: (ClusterServerObj<Attributes, Commands> | ClusterClientObj<Attributes, Commands>)[] = [],
         endpointId?: number
     ) {
         this.name = deviceTypes[0].name;
@@ -130,11 +130,11 @@ export class Endpoint {
         return undefined;
     }
 
-    getClusterServerById(clusterId: number): ClusterServerObj<any, any> | undefined {
+    getClusterServerById(clusterId: number): ClusterServerObj<Attributes, Commands> | undefined {
         return this.clusterServers.get(clusterId);
     }
 
-    getClusterClientById(clusterId: number): ClusterClientObj<any, any> | undefined {
+    getClusterClientById(clusterId: number): ClusterClientObj<Attributes, Commands> | undefined {
         return this.clusterClients.get(clusterId);
     }
 
@@ -221,11 +221,11 @@ export class Endpoint {
         });
     }
 
-    getAllClusterServers(): ClusterServerObj<any, any>[] {
+    getAllClusterServers(): ClusterServerObj<Attributes, Commands>[] {
         return Array.from(this.clusterServers.values());
     }
 
-    getAllClusterClients(): ClusterClientObj<any, any>[] {
+    getAllClusterClients(): ClusterClientObj<Attributes, Commands>[] {
         return Array.from(this.clusterClients.values());
     }
 
@@ -237,7 +237,7 @@ export class Endpoint {
         const endpoints = new Map<number, Endpoint>();
         const attributes = new Map<string, AttributeServer<any>>();
         const attributePaths = new Array<AttributePath>();
-        const commands = new Map<string, CommandServer<any, any>>();
+        const commands = new Map<string, CommandServer<Attributes, Commands>>();
         const commandPaths = new Array<CommandPath>();
 
         // Set serverList with all clusters we have assigned to this endpoint
@@ -250,7 +250,7 @@ export class Endpoint {
             const { id: clusterId, attributes: clusterAttributes, _commands: clusterCommands } = cluster;
             // Add attributes
             for (const name in clusterAttributes) {
-                const attribute = clusterAttributes[name] as AttributeServer<any>;
+                const attribute = clusterAttributes[name];
                 const path = { endpointId: this.id, clusterId, attributeId: attribute.id };
                 attributes.set(attributePathToId(path), attribute);
                 attributePaths.push(path);
@@ -258,7 +258,7 @@ export class Endpoint {
 
             // Add commands
             for (const name in clusterCommands) {
-                const command = clusterCommands[name] as CommandServer<any, any>;
+                const command = clusterCommands[name];
                 const path = { endpointId: this.id, clusterId, commandId: command.invokeId };
                 commands.set(commandPathToId(path), command);
                 commandPaths.push(path);

@@ -14,7 +14,9 @@ import { structureReadDataToClusterObject } from "./protocol/interaction/Attribu
 import { Endpoint } from "./device/Endpoint.js";
 import { Logger } from "./log/Logger.js";
 import { DeviceTypes, DeviceTypeDefinition, getDeviceTypeDefinitionByCode } from "./device/DeviceTypes.js";
-import { AttributeServerValues, ClusterServerObj, isClusterServer } from "./cluster/server/ClusterServer.js";
+import {
+    AttributeInitialValues, AttributeServerValues, ClusterServerObj, isClusterServer
+} from "./cluster/server/ClusterServer.js";
 import { AtLeastOne } from "./util/Array.js";
 import { ClusterServer } from "./protocol/interaction/InteractionServer.js";
 import { Aggregator } from "./device/Aggregator.js";
@@ -282,7 +284,7 @@ export class CommissioningController extends MatterNode {
             throw new Error("No device type found for endpoint");
         }
 
-        const endpointClusters = Array<ClusterServerObj<any, any> | ClusterClientObj<any, any>>();
+        const endpointClusters = Array<ClusterServerObj<Attributes, Commands> | ClusterClientObj<Attributes, Commands>>();
 
         // Add ClusterClients for all server clusters of the device
         for (const clusterId of descriptorData.serverList) {
@@ -303,8 +305,8 @@ export class CommissioningController extends MatterNode {
                 logger.info(`Cluster with id ${clusterId.id} not known, ignore`);
                 continue;
             }
-            const clusterData = (data[clusterId.id] ?? {}) as any; // TODO correct typing
-            endpointClusters.push(ClusterServer(cluster, /*clusterData.featureMap,*/ clusterData, {})); // TODO Add Default handler!
+            const clusterData = (data[clusterId.id] ?? {}) as AttributeInitialValues<Attributes>; // TODO correct typing
+            endpointClusters.push(ClusterServer(cluster, /*clusterData.featureMap,*/ clusterData, {}) as ClusterServerObj<Attributes, Commands>); // TODO Add Default handler!
         }
 
         if (endpointId === 0) {

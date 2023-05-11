@@ -38,6 +38,6 @@ export type ClusterClientObj<A extends Attributes, C extends Commands> =
     & ClientAttributeSubscribers<A>
     & { [P in keyof C]: SignatureFromCommandSpec<C[P]> };
 
-export function isClusterClient(obj: ClusterClientObj<any, any> | ClusterServerObj<any, any>): obj is ClusterClientObj<any, any> {
+export function isClusterClient(obj: ClusterClientObj<Attributes, Commands> | ClusterServerObj<Attributes, Commands>): obj is ClusterClientObj<Attributes, Commands> {
     return obj._type === "ClusterClient";
 }

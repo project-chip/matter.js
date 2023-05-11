@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export type HandlerFunction = (...args: any[]) => Promise<any>;
+export type HandlerFunction = (...args: any[]) => Promise<any> | any;
 
 export class NamedHandler<H extends Record<keyof H, HandlerFunction>> {
     private handler: { action: keyof H, handler: H[keyof H] }[] = [];

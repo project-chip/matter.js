@@ -39,7 +39,8 @@ describe('Typing issue Test', () => {
         // adding the cluster in the array do not work - uncomment it to see it ... seems to be something that get weird because of the optional command which is not implemented
         // a cluster without Optionalcommands works ...
         // as soon as there is an option command (irrelevant if defined or not) it has issues
-        const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], [groupsServer, /*identifyServer, identifyServer2*/], 1);
+        // EDIT works after last change!
+        const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], [groupsServer, identifyServer, identifyServer2], 1);
 
         // But it works that way ...
         // Difference: above it is an array with ClusterServerObj<any, any>

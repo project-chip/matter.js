@@ -241,7 +241,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     private endpoints = new Map<number, Endpoint>();
     private attributes = new Map<string, AttributeServer<any>>();
     private attributePaths = new Array<AttributePath>();
-    private commands = new Map<string, CommandServer<any, any>>();
+    private commands = new Map<string, CommandServer<Attributes, Commands>>();
     private commandPaths = new Array<CommandPath>();
     private nextSubscriptionId = Crypto.getRandomUInt32();
 
@@ -256,7 +256,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     /**
      * @deprecated
      */
-    addEndpoint(endpointId: number, device: { name: string, code: number }, clusters: ClusterServerObj<any, any>[]) {
+    addEndpoint(endpointId: number, device: { name: string, code: number }, clusters: ClusterServerObj<Attributes, Commands>[]) {
         // Add the descriptor cluster
         const descriptorCluster = ClusterServer(DescriptorCluster, {
             deviceTypeList: [{ revision: 1, deviceType: new DeviceTypeId(device.code) }],
@@ -264,12 +264,12 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             clientList: [],
             partsList: [],
         }, {});
-        clusters.push(descriptorCluster as ClusterServerObj<any, any>);
+        clusters.push(descriptorCluster);
         descriptorCluster.attributes.serverList.setLocal(clusters.map(({ id }) => new ClusterId(id)));
 
         const clusterEndpointNumber = new EndpointNumber(endpointId);
 
-        const clusterMap = new Map<number, ClusterServerObj<any, any>>();
+        const clusterMap = new Map<number, ClusterServerObj<Attributes, Commands>>();
         clusters.forEach(cluster => {
             const { id: clusterId, attributes, _commands: commands } = cluster;
 
@@ -278,7 +278,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             clusterMap.set(clusterId, cluster);
             // Add attributes
             for (const name in attributes) {
-                const attribute = attributes[name] as AttributeServer<any>;
+                const attribute = attributes[name];
                 const path = { endpointId, clusterId, attributeId: attribute.id };
                 this.attributes.set(attributePathToId(path), attribute);
                 this.attributePaths.push(path);
@@ -286,7 +286,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
             // Add commands
             for (const name in commands) {
-                const command = commands[name] as CommandServer<any, any>;
+                const command = commands[name];
                 const path = { endpointId, clusterId, commandId: command.invokeId };
                 this.commands.set(commandPathToId(path), command);
                 this.commandPaths.push(path);
