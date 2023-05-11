@@ -31,4 +31,10 @@ These infos will be merged into the official Readme before we merge this PR and 
   * Prepare changelog and such
   * Added the "npm run matter-*" commands also to the base package.json
 * May 9th-2:
-  * Rename PairableNode -> CommissioningCOntroller and CommissionableNode -> CommissioningServer and the relevant add-methods in MatterServer
+  * Rename PairableNode -> CommissioningController and CommissionableNode -> CommissioningServer and the relevant add-methods in MatterServer
+* May11th:
+  * Rebase to add changes from Main branch
+  * Replace EndpointData to be handed over to command handlers by Endpoint object of new API for more convenient usage
+  * Add Binding cluster for all Simple Device types
+  * Rework BitmapSchema (thanks to @AlCalzone)
+  * Remove the Partials from Cluster by optimizing Merge type

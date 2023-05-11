@@ -16,6 +16,7 @@ The following are things on my (@Apollon77) TODO list for the project right now 
 
 ### Device usage
 * Use storage to remember endpoint composition (e.g. by serialnumber/unique-id field) and correctly structure endpoints on restarts (incl. saving highes last used endpoint id to not reuse ids)
+* Experiment with Bindung cluster and add logic
 * check TODOs in the device classes and adjust accordingly
 * Investigate/Check specs on how to add new devices to a bridge (check Matter Core specs) to enhance bridge "on the fly"
 * Unique IDs vs endpoint id - idea: dev defined endpoint ids themself or we urge him to always set unique unique serialnumbers or other unique ID
@@ -43,3 +44,4 @@ The following are things on my (@Apollon77) TODO list for the project right now 
 * Return correct error in read/write when endpoint/cluster is unknown (in comparism to attributes)
 * Monitor subscriptions and remove/resubscribe them when the device did not answered withing maxInterval, how notify device?
 * DataReport chunking when sending arrays
+* Add support for group casts and groups in general

@@ -187,7 +187,7 @@ export class InteractionClient {
         if (!alwaysRequestFromRemote) {
             const localValue = this.subscribedLocalValues.get(attributePathToId({ endpointId, clusterId, attributeId }))
             if (localValue !== undefined) {
-                return localValue.value;
+                return localValue as { value: AttributeJsType<A>, version: number };
             }
         }
 
@@ -298,6 +298,10 @@ export class InteractionClient {
             subscriptionListener(report);
             return;
         });
+    }
+
+    async subscribeAllAttributes(minIntervalFloorSeconds: number, maxIntervalCeilingSeconds: number, listener?: (data: DecodedAttributeReportValue) => void): Promise<void> {
+        return this.subscribeMultipleAttributes([{}], minIntervalFloorSeconds, maxIntervalCeilingSeconds, listener);
     }
 
     async subscribeMultipleAttributes(attributeRequests: { endpointId?: number, clusterId?: number, attributeId?: number }[], minIntervalFloorSeconds: number, maxIntervalCeilingSeconds: number, listener?: (data: DecodedAttributeReportValue) => void): Promise<void> {

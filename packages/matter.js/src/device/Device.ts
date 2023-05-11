@@ -12,6 +12,8 @@ import { ClusterClientObj } from "../cluster/client/ClusterClient.js";
 import { ClusterServerObj } from "../cluster/server/ClusterServer.js";
 import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
 import { BitSchema, TypeFromBitSchema } from "../schema/BitmapSchema.js";
+import { BindingCluster } from "../cluster/BindingCluster.js";
+import { ClusterServer } from "../protocol/interaction/InteractionServer.js";
 
 /**
  * Temporary used device class for paired devices until we added a layer to choose the right specialized device class
@@ -100,6 +102,15 @@ export class Device extends Endpoint {
         }
         super([definition], clusters, endpointId);
         this.deviceType = definition.code;
+        if (definition.deviceClass === DeviceClasses.Simple || definition.deviceClass === DeviceClasses.Client) {
+            this.addClusterServer(ClusterServer(
+                BindingCluster,
+                {
+                    bindingList: []
+                },
+                {}
+            ));
+        }
     }
 
     /**

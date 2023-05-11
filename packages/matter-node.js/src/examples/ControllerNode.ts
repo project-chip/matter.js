@@ -24,7 +24,8 @@ import { MatterServer, CommissioningController } from "../"; // same as @project
 import { Logger } from "../exports/log"; // same as @project-chip/matter-node.js/log
 import { StorageManager, StorageBackendDisk } from "../storage"; // same as @project-chip/matter-node.js/storage
 import { BasicInformationCluster, DescriptorCluster, OnOffCluster } from "../exports/cluster"; // same as @project-chip/matter-node.js/cluster
-import { getIntParameter, getParameter, requireMinNodeVersion } from "../util"; // same as @project-chip/matter-node.js/util
+import { getIntParameter, getParameter, requireMinNodeVersion } from "../util";
+import { ManualPairingCodeCodec } from "../exports/schema"; // same as @project-chip/matter-node.js/util
 
 const logger = Logger.get("Controller");
 
@@ -64,8 +65,21 @@ class ControllerNode {
         const ip = getParameter("ip") ?? controllerStorage.get<string>("ip", "");
         if (ip === "") throw new Error("Please specify the IP of the device to commission with -ip");
         const port = getIntParameter("port") ?? controllerStorage.get("port", 5540);
-        const discriminator = getIntParameter("discriminator") ?? controllerStorage.get("discriminator", 3840);
-        const setupPin = getIntParameter("pin") ?? controllerStorage.get("pin", 20202021);
+
+        const pairingCode = getParameter("pairingcode");
+        let discriminator, setupPin;
+        if (pairingCode !== undefined) {
+            const pairingCodeCodec = ManualPairingCodeCodec.decode(pairingCode);
+            discriminator = pairingCodeCodec.shortDiscriminator;
+            setupPin = pairingCodeCodec.passcode;
+        } else {
+            discriminator = getIntParameter("discriminator") ?? controllerStorage.get("discriminator", 3840);
+            if (discriminator > 4095) throw new Error("Discriminator value must be less than 4096");
+            setupPin = getIntParameter("pin") ?? controllerStorage.get("pin", 20202021);
+        }
+        if (discriminator === undefined) {
+            throw new Error("Please specify the discriminator of the device to commission with -discriminator or provide a valid passcode with -passcode");
+        }
 
         controllerStorage.set("ip", ip);
         controllerStorage.set("port", port);

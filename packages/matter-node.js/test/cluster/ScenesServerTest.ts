@@ -16,7 +16,7 @@ import { Time, TimeFake } from "@project-chip/matter.js/time";
 Time.get = () => new TimeFake(0);
 
 import * as assert from "assert";
-import { ClusterServer, EndpointData, StatusCode } from "@project-chip/matter.js/interaction";
+import { ClusterServer, StatusCode } from "@project-chip/matter.js/interaction";
 import { SecureSession } from "@project-chip/matter.js/session";
 import { MatterDevice } from "@project-chip/matter.js";
 import { Fabric, FabricJsonObject } from "@project-chip/matter.js/fabric";
@@ -29,6 +29,7 @@ import { getPromiseResolver } from "@project-chip/matter.js/util";
 import { SessionType, Message } from "@project-chip/matter.js/codec";
 import { callCommandOnClusterServer, createTestSessionWithFabric } from "./ClusterServerTestingUtil";
 import { TlvBoolean } from "@project-chip/matter.js/tlv";
+import { Endpoint, DeviceTypes } from "@project-chip/matter.js/device";
 
 describe("Scenes Server test", () => {
     let groupsServer: ClusterServerObj<typeof GroupsCluster.attributes, typeof GroupsCluster.commands> | undefined;
@@ -36,7 +37,7 @@ describe("Scenes Server test", () => {
     let onOffServer: ClusterServerObj<typeof OnOffCluster.attributes, typeof OnOffCluster.commands> | undefined;
     let testFabric: Fabric | undefined;
     let testSession: SecureSession<MatterDevice> | undefined
-    let endpoint: EndpointData | undefined;
+    let endpoint: Endpoint | undefined;
 
     // TODO make that nicer and maybe  move to a "testing support library"
     async function initializeTestEnv() {
@@ -53,18 +54,8 @@ describe("Scenes Server test", () => {
         testSession = await createTestSessionWithFabric();
         testFabric = testSession.getFabric();
 
-        endpoint = {
-            id: 1,
-            name: '',
-            code: 0,
-            clusters: new Map<number, ClusterServerObj<any, any>>(
-                [
-                    [GroupsCluster.id, groupsServer],
-                    [ScenesCluster.id, scenesServer],
-                    [OnOffCluster.id, onOffServer]
-                ]
-            )
-        };
+        endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], [groupsServer, /*scenesServer,*/ onOffServer], 1);
+        endpoint.addClusterServer(scenesServer);
     }
 
     describe("Basic scenes logic", () => {

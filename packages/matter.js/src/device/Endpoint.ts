@@ -17,8 +17,8 @@ import { BitSchema, TypeFromBitSchema } from "../schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
-import { FixedLabelCluster } from "../cluster/LabelCluster.js";
-import { ClusterClientObj } from "../cluster/client/ClusterClient.js";
+import { FixedLabelCluster, UserLabelCluster } from "../cluster/LabelCluster.js";
+import { ClusterClientObj, isClusterClient } from "../cluster/client/ClusterClient.js";
 import { ClusterServerObj, isClusterServer } from "../cluster/server/ClusterServer.js";
 import { InteractionClient } from "../protocol/interaction/InteractionClient.js";
 
@@ -27,6 +27,7 @@ export class Endpoint {
     private readonly clusterClients = new Map<number, ClusterClientObj<any, any>>();
     private readonly childEndpoints: Endpoint[] = [];
     id: number | undefined;
+    name: string;
 
     private descriptorCluster;
 
@@ -35,6 +36,7 @@ export class Endpoint {
         clusters: (ClusterServerObj<any, any> | ClusterClientObj<any, any>)[] = [],
         endpointId?: number
     ) {
+        this.name = deviceTypes[0].name;
         this.descriptorCluster = ClusterServer(
             DescriptorCluster,
             {
@@ -55,13 +57,20 @@ export class Endpoint {
         clusters.forEach(cluster => {
             if (isClusterServer(cluster)) {
                 this.addClusterServer(cluster);
-            } else {
+            } else if (isClusterClient(cluster)) {
                 this.addClusterClient(cluster);
             }
         });
         if (endpointId !== undefined) {
             this.id = endpointId;
         }
+    }
+
+    getId() {
+        if (this.id === undefined) {
+            throw new Error("Endpoint has not been assigned yet");
+        }
+        return this.id;
     }
 
     addFixedLabel(label: string, value: string) {
@@ -74,6 +83,18 @@ export class Endpoint {
         const labelList = fixedLabelCluster?.attributes.labelList.getLocal() ?? [];
         labelList.push({ label, value });
         fixedLabelCluster?.attributes.labelList.setLocal(labelList);
+    }
+
+    addUserLabel(label: string, value: string) {
+        if (!this.hasClusterServer(UserLabelCluster)) {
+            this.addClusterServer(ClusterServer(UserLabelCluster, {
+                labelList: []
+            }, {}));
+        }
+        const fixedLabelCluster = this.getClusterServer(UserLabelCluster);
+        const labelList = fixedLabelCluster?.attributes.labelList.get() ?? [];
+        labelList.push({ label, value });
+        fixedLabelCluster?.attributes.labelList.set(labelList);
     }
 
     addClusterServer<A extends Attributes, C extends Commands>(cluster: ClusterServerObj<A, C>) {
@@ -107,6 +128,14 @@ export class Endpoint {
             return clusterClient._clone(interactionClient) as ClusterClientObj<A, C>;
         }
         return undefined;
+    }
+
+    getClusterServerById(clusterId: number): ClusterServerObj<any, any> | undefined {
+        return this.clusterServers.get(clusterId);
+    }
+
+    getClusterClientById(clusterId: number): ClusterClientObj<any, any> | undefined {
+        return this.clusterClients.get(clusterId);
     }
 
     hasClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
@@ -192,12 +221,20 @@ export class Endpoint {
         });
     }
 
+    getAllClusterServers(): ClusterServerObj<any, any>[] {
+        return Array.from(this.clusterServers.values());
+    }
+
+    getAllClusterClients(): ClusterClientObj<any, any>[] {
+        return Array.from(this.clusterClients.values());
+    }
+
     getStructure() {
         if (this.id === undefined) throw new Error("Endpoint ID is not set");
 
         this.verifyRequiredClusters();
 
-        const endpoints = new Map<number, { deviceTypes: AtLeastOne<DeviceTypeDefinition>, clusters: Map<number, ClusterServerObj<any, any>> }>();
+        const endpoints = new Map<number, Endpoint>();
         const attributes = new Map<string, AttributeServer<any>>();
         const attributePaths = new Array<AttributePath>();
         const commands = new Map<string, CommandServer<any, any>>();
@@ -230,7 +267,7 @@ export class Endpoint {
 
         if (endpoints.has(this.id)) throw new Error(`Endpoint ID ${this.id} already exists`);
 
-        endpoints.set(this.id, { deviceTypes: this.deviceTypes, clusters: this.clusterServers });
+        endpoints.set(this.id, this);
 
         const newPartsList = new Array<EndpointNumber>();
 

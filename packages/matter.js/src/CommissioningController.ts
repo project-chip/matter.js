@@ -93,6 +93,9 @@ export class CommissioningController extends MatterNode {
      * After connection the endpoint data of the device is analyzed and an object structure is created.
      */
     async connect() {
+        if (this.controllerInstance !== undefined) {
+            throw new Error("Controller instance already connected!");
+        }
         if (this.mdnsScanner === undefined || this.storageManager === undefined) {
             throw new Error("Add the node to the Matter instance before!");
         }

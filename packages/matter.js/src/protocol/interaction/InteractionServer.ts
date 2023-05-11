@@ -53,11 +53,9 @@ import { Endpoint } from "../../device/Endpoint.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { CommandId } from "../../datatype/CommandId.js";
 import { TlvAttributeValuePair } from "../../cluster/ScenesCluster.js";
+import { DeviceTypes } from "../../device/DeviceTypes.js";
 
 export const INTERACTION_PROTOCOL_ID = 0x0001;
-
-// TODO replace by real Endpoint object
-export type EndpointData = { id: number, name: string, code: number, clusters: Map<number, ClusterServerObj<any, any>> };
 
 const logger = Logger.get("InteractionProtocol");
 
@@ -240,7 +238,7 @@ function toHex(value: number | undefined) {
 
 export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
-    private endpoints = new Map<number, EndpointData>();
+    private endpoints = new Map<number, Endpoint>();
     private attributes = new Map<string, AttributeServer<any>>();
     private attributePaths = new Array<AttributePath>();
     private commands = new Map<string, CommandServer<any, any>>();
@@ -255,6 +253,9 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         return INTERACTION_PROTOCOL_ID;
     }
 
+    /**
+     * @deprecated
+     */
     addEndpoint(endpointId: number, device: { name: string, code: number }, clusters: ClusterServerObj<any, any>[]) {
         // Add the descriptor cluster
         const descriptorCluster = ClusterServer(DescriptorCluster, {
@@ -299,7 +300,9 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             rootPartsListAttribute.setLocal([...rootPartsListAttribute.getLocal(), clusterEndpointNumber]);
         }
 
-        this.endpoints.set(endpointId, { ...device, id: endpointId, clusters: clusterMap });
+        const deviceDefinition = Object.values(DeviceTypes).find(({ code }) => code === device.code);
+        if (deviceDefinition === undefined) throw new Error(`Unknown device code ${device.code}`);
+        this.endpoints.set(endpointId, new Endpoint([deviceDefinition], Array.from(clusterMap.values()), endpointId));
 
         return this;
     }
@@ -307,11 +310,10 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     setRootEndpoint(endpoint: Endpoint) {
         const { endpoints, attributes, attributePaths, commands, commandPaths } = endpoint.getStructure();
 
-        // TODO change but legacy ...
-        this.endpoints = new Map<number, EndpointData>();
-        for (const [endpointId, { deviceTypes, clusters }] of endpoints) {
-            this.endpoints.set(endpointId, { ...deviceTypes[0], id: endpointId, clusters });
-            for (const cluster of clusters.values()) {
+        this.endpoints = new Map<number, Endpoint>();
+        for (const [endpointId, subEndpoint] of endpoints) {
+            this.endpoints.set(endpointId, subEndpoint);
+            for (const cluster of subEndpoint.getAllClusterServers()) {
                 cluster._setStorage(this.storageManager.createContext(`Cluster-${endpointId}-${cluster.id}`));
             }
         }
@@ -525,7 +527,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         if (clusterId === undefined) {
             return `${endpointName}/*/${toHex(attributeId)}`;
         }
-        const cluster = endpoint.clusters.get(clusterId);
+        const cluster = endpoint.getClusterServerById(clusterId);
         if (cluster === undefined) {
             return `${endpointName}/unknown(${toHex(clusterId)})/${toHex(attributeId)}`;
         }

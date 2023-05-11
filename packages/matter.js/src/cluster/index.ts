@@ -48,7 +48,9 @@ export * from "./server/CommandServer.js";
 // Export all Server handler
 export * from "./server/AdminCommissioningServer.js";
 export * from "./server/GeneralCommissioningServer.js";
+export * from "./server/GroupKeyManagementServer.js";
 export * from "./server/GroupsServer.js";
+export * from "./server/IdentifyServer.js";
 export * from "./server/LevelControlServer.js";
 export * from "./server/NetworkCommissioningServer.js";
 export * from "./server/OnOffServer.js";

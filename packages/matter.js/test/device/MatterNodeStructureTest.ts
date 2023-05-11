@@ -47,7 +47,8 @@ import { BridgedDeviceBasicInformationCluster } from "../../src/cluster/BridgedD
 import { DeviceTypeId } from "../../src/datatype/DeviceTypeId.js";
 import { FixedLabelCluster } from "../../src/cluster/LabelCluster.js";
 import { GroupKeyManagementClusterHandler } from "../../src/cluster/server/GroupKeyManagementServer.js";
-import { Endpoint } from "../../src/device/index.js";
+import { Endpoint } from "../../src/device/Endpoint.js";
+import { BindingCluster } from "../../src/cluster/BindingCluster.js";
 
 /** Needed for tests because MatterNode is an abstract class */
 class TestNode extends MatterNode {
@@ -235,16 +236,16 @@ describe("Endpoint Structures", () => {
             assert.deepEqual(rootPartsListAttribute?.getLocal(), []);
 
             assert.equal(endpoints.size, 1);
-            assert.equal(endpoints.get(0)?.clusters.size, 9);
-            assert.ok(endpoints.get(0)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(BasicInformationCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(OperationalCredentialsCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(GeneralCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(EthernetNetworkCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(AccessControlCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(AdminCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(GroupKeyManagementCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(GeneralCommissioningCluster.id));
+            assert.equal(endpoints.get(0)?.getAllClusterServers().length, 9);
+            assert.ok(endpoints.get(0)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(BasicInformationCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(OperationalCredentialsCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(EthernetNetworkCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AccessControlCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AdminCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GroupKeyManagementCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
 
             assert.equal(attributePaths.length, 101);
             assert.equal(commandPaths.length, 18);
@@ -268,23 +269,24 @@ describe("Endpoint Structures", () => {
             } = node.getRootEndpoint().getStructure();
 
             assert.equal(endpoints.size, 2);
-            assert.equal(endpoints.get(0)?.clusters.size, 9);
-            assert.ok(endpoints.get(0)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(BasicInformationCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(OperationalCredentialsCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(GeneralCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(EthernetNetworkCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(AccessControlCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(AdminCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(GroupKeyManagementCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(GeneralCommissioningCluster.id));
+            assert.equal(endpoints.get(0)?.getAllClusterServers().length, 9);
+            assert.ok(endpoints.get(0)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(BasicInformationCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(OperationalCredentialsCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(EthernetNetworkCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AccessControlCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AdminCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GroupKeyManagementCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
 
-            assert.equal(endpoints.get(1)?.clusters.size, 5);
-            assert.ok(endpoints.get(1)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(1)?.clusters.has(IdentifyCluster.id));
-            assert.ok(endpoints.get(1)?.clusters.has(GroupsCluster.id));
-            assert.ok(endpoints.get(1)?.clusters.has(ScenesCluster.id));
-            assert.ok(endpoints.get(1)?.clusters.has(OnOffCluster.id));
+            assert.equal(endpoints.get(1)?.getAllClusterServers().length, 6);
+            assert.ok(endpoints.get(1)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(1)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(1)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(1)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(1)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(1)?.hasClusterServer(BindingCluster));
 
             const rootPartsListAttribute: AttributeServer<EndpointNumber[]> | undefined = attributes.get(attributePathToId({
                 endpointId: 0,
@@ -293,8 +295,8 @@ describe("Endpoint Structures", () => {
             }));
             assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(1)]);
 
-            assert.equal(attributePaths.length, 140);
-            assert.equal(commandPaths.length, 38);
+            assert.equal(attributePaths.length, 148);
+            assert.equal(commandPaths.length, 33);
         });
     });
 
@@ -322,33 +324,35 @@ describe("Endpoint Structures", () => {
             } = node.getRootEndpoint().getStructure();
 
             assert.equal(endpoints.size, 4);
-            assert.equal(endpoints.get(0)?.clusters.size, 9);
-            assert.ok(endpoints.get(0)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(BasicInformationCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(OperationalCredentialsCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(GeneralCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(EthernetNetworkCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(AccessControlCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(AdminCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(GroupKeyManagementCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(GeneralCommissioningCluster.id));
+            assert.equal(endpoints.get(0)?.getAllClusterServers().length, 9);
+            assert.ok(endpoints.get(0)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(BasicInformationCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(OperationalCredentialsCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(EthernetNetworkCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AccessControlCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AdminCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GroupKeyManagementCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
 
-            assert.equal(endpoints.get(1)?.clusters.size, 1);
-            assert.ok(endpoints.get(1)?.clusters.has(DescriptorCluster.id));
+            assert.equal(endpoints.get(1)?.getAllClusterServers().length, 1);
+            assert.ok(endpoints.get(1)?.hasClusterServer(DescriptorCluster));
 
-            assert.equal(endpoints.get(2)?.clusters.size, 5);
-            assert.ok(endpoints.get(2)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(2)?.clusters.has(IdentifyCluster.id));
-            assert.ok(endpoints.get(2)?.clusters.has(GroupsCluster.id));
-            assert.ok(endpoints.get(2)?.clusters.has(ScenesCluster.id));
-            assert.ok(endpoints.get(2)?.clusters.has(OnOffCluster.id));
+            assert.equal(endpoints.get(2)?.getAllClusterServers().length, 6);
+            assert.ok(endpoints.get(2)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(2)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(2)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(2)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(2)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(2)?.hasClusterServer(BindingCluster));
 
-            assert.equal(endpoints.get(3)?.clusters.size, 5);
-            assert.ok(endpoints.get(3)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(3)?.clusters.has(IdentifyCluster.id));
-            assert.ok(endpoints.get(3)?.clusters.has(GroupsCluster.id));
-            assert.ok(endpoints.get(3)?.clusters.has(ScenesCluster.id));
-            assert.ok(endpoints.get(3)?.clusters.has(OnOffCluster.id));
+            assert.equal(endpoints.get(3)?.getAllClusterServers().length, 6);
+            assert.ok(endpoints.get(3)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(3)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(3)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(3)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(3)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(3)?.hasClusterServer(BindingCluster));
 
             const rootPartsListAttribute: AttributeServer<EndpointNumber[]> | undefined = attributes.get(attributePathToId({
                 endpointId: 0,
@@ -364,8 +368,8 @@ describe("Endpoint Structures", () => {
             }));
             assert.deepEqual(composedPartsListAttribute?.getLocal(), [new EndpointNumber(2), new EndpointNumber(3)]);
 
-            assert.equal(attributePaths.length, 188);
-            assert.equal(commandPaths.length, 58);
+            assert.equal(attributePaths.length, 202);
+            assert.equal(commandPaths.length, 43);
         });
     });
 
@@ -393,27 +397,28 @@ describe("Endpoint Structures", () => {
             } = node.getRootEndpoint().getStructure();
 
             assert.equal(endpoints.size, 3);
-            assert.equal(endpoints.get(0)?.clusters.size, 9);
-            assert.ok(endpoints.get(0)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(BasicInformationCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(OperationalCredentialsCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(GeneralCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(EthernetNetworkCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(AccessControlCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(AdminCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(GroupKeyManagementCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(GeneralCommissioningCluster.id));
+            assert.equal(endpoints.get(0)?.getAllClusterServers().length, 9);
+            assert.ok(endpoints.get(0)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(BasicInformationCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(OperationalCredentialsCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(EthernetNetworkCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AccessControlCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AdminCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GroupKeyManagementCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
 
-            assert.equal(endpoints.get(1)?.clusters.size, 1);
-            assert.ok(endpoints.get(1)?.clusters.has(DescriptorCluster.id));
+            assert.equal(endpoints.get(1)?.getAllClusterServers().length, 1);
+            assert.ok(endpoints.get(1)?.hasClusterServer(DescriptorCluster));
 
-            assert.equal(endpoints.get(11)?.clusters.size, 6);
-            assert.ok(endpoints.get(11)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(11)?.clusters.has(IdentifyCluster.id));
-            assert.ok(endpoints.get(11)?.clusters.has(GroupsCluster.id));
-            assert.ok(endpoints.get(11)?.clusters.has(ScenesCluster.id));
-            assert.ok(endpoints.get(11)?.clusters.has(OnOffCluster.id));
-            assert.ok(endpoints.get(11)?.clusters.has(BridgedDeviceBasicInformationCluster.id));
+            assert.equal(endpoints.get(11)?.getAllClusterServers().length, 7);
+            assert.ok(endpoints.get(11)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(11)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(11)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(11)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(11)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(11)?.hasClusterServer(BridgedDeviceBasicInformationCluster));
+            assert.ok(endpoints.get(11)?.hasClusterServer(BindingCluster));
 
             const rootPartsListAttribute: AttributeServer<EndpointNumber[]> | undefined = attributes.get(attributePathToId({ endpointId: 0, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id }));
             assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(1), new EndpointNumber(11)]);
@@ -432,8 +437,8 @@ describe("Endpoint Structures", () => {
             const deviceTypeListAttribute: AttributeServer<EndpointNumber[]> | undefined = attributes.get(attributePathToId({ endpointId: 11, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.deviceTypeList.id }));
             assert.deepEqual(deviceTypeListAttribute?.getLocal(), [{ deviceType: new DeviceTypeId(DeviceTypes.ON_OFF_LIGHT.code), revision: 2 }, { deviceType: new DeviceTypeId(DeviceTypes.BRIDGED_NODE.code), revision: 1 }]);
 
-            assert.equal(attributePaths.length, 156);
-            assert.equal(commandPaths.length, 38);
+            assert.equal(attributePaths.length, 164);
+            assert.equal(commandPaths.length, 33);
         });
 
         it("Device Structure with one aggregator and two Light endpoints and defined endpoint IDs", () => {
@@ -458,35 +463,37 @@ describe("Endpoint Structures", () => {
             const { endpoints, attributes, attributePaths, commandPaths } = node.getRootEndpoint().getStructure();
 
             assert.equal(endpoints.size, 4);
-            assert.equal(endpoints.get(0)?.clusters.size, 9);
-            assert.ok(endpoints.get(0)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(BasicInformationCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(OperationalCredentialsCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(GeneralCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(EthernetNetworkCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(AccessControlCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(AdminCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(GroupKeyManagementCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(GeneralCommissioningCluster.id));
+            assert.equal(endpoints.get(0)?.getAllClusterServers().length, 9);
+            assert.ok(endpoints.get(0)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(BasicInformationCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(OperationalCredentialsCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(EthernetNetworkCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AccessControlCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AdminCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GroupKeyManagementCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
 
-            assert.equal(endpoints.get(1)?.clusters.size, 1);
-            assert.ok(endpoints.get(1)?.clusters.has(DescriptorCluster.id));
+            assert.equal(endpoints.get(1)?.getAllClusterServers().length, 1);
+            assert.ok(endpoints.get(1)?.hasClusterServer(DescriptorCluster));
 
-            assert.equal(endpoints.get(11)?.clusters.size, 6);
-            assert.ok(endpoints.get(11)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(11)?.clusters.has(IdentifyCluster.id));
-            assert.ok(endpoints.get(11)?.clusters.has(GroupsCluster.id));
-            assert.ok(endpoints.get(11)?.clusters.has(ScenesCluster.id));
-            assert.ok(endpoints.get(11)?.clusters.has(BridgedDeviceBasicInformationCluster.id));
-            assert.ok(endpoints.get(11)?.clusters.has(OnOffCluster.id));
+            assert.equal(endpoints.get(11)?.getAllClusterServers().length, 7);
+            assert.ok(endpoints.get(11)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(11)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(11)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(11)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(11)?.hasClusterServer(BridgedDeviceBasicInformationCluster));
+            assert.ok(endpoints.get(11)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(11)?.hasClusterServer(BindingCluster));
 
-            assert.equal(endpoints.get(12)?.clusters.size, 6);
-            assert.ok(endpoints.get(12)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(12)?.clusters.has(IdentifyCluster.id));
-            assert.ok(endpoints.get(12)?.clusters.has(GroupsCluster.id));
-            assert.ok(endpoints.get(12)?.clusters.has(ScenesCluster.id));
-            assert.ok(endpoints.get(12)?.clusters.has(BridgedDeviceBasicInformationCluster.id));
-            assert.ok(endpoints.get(12)?.clusters.has(OnOffCluster.id));
+            assert.equal(endpoints.get(12)?.getAllClusterServers().length, 7);
+            assert.ok(endpoints.get(12)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(12)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(12)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(12)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(12)?.hasClusterServer(BridgedDeviceBasicInformationCluster));
+            assert.ok(endpoints.get(12)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(12)?.hasClusterServer(BindingCluster));
 
             const rootPartsListAttribute: AttributeServer<EndpointNumber[]> | undefined = attributes.get(attributePathToId({ endpointId: 0, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id }));
             assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(1), new EndpointNumber(11), new EndpointNumber(12)]);
@@ -504,8 +511,8 @@ describe("Endpoint Structures", () => {
             const deviceTypeListAttribute: AttributeServer<EndpointNumber[]> | undefined = attributes.get(attributePathToId({ endpointId: 11, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.deviceTypeList.id }));
             assert.deepEqual(deviceTypeListAttribute?.getLocal(), [{ deviceType: new DeviceTypeId(DeviceTypes.ON_OFF_LIGHT.code), revision: 2 }, { deviceType: new DeviceTypeId(DeviceTypes.BRIDGED_NODE.code), revision: 1 }]);
 
-            assert.equal(attributePaths.length, 202);
-            assert.equal(commandPaths.length, 58);
+            assert.equal(attributePaths.length, 216);
+            assert.equal(commandPaths.length, 43);
         });
 
         it("Device Structure with two aggregators and two Light endpoints and defined endpoint IDs", () => {
@@ -560,56 +567,60 @@ describe("Endpoint Structures", () => {
             const { endpoints, attributes, attributePaths, commandPaths } = node.getRootEndpoint().getStructure();
 
             assert.equal(endpoints.size, 7);
-            assert.equal(endpoints.get(0)?.clusters.size, 9);
-            assert.ok(endpoints.get(0)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(BasicInformationCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(OperationalCredentialsCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(GeneralCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(EthernetNetworkCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(AccessControlCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(AdminCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(GroupKeyManagementCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(GeneralCommissioningCluster.id));
+            assert.equal(endpoints.get(0)?.getAllClusterServers().length, 9);
+            assert.ok(endpoints.get(0)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(BasicInformationCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(OperationalCredentialsCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(EthernetNetworkCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AccessControlCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AdminCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GroupKeyManagementCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
 
-            assert.equal(endpoints.get(1)?.clusters.size, 2);
-            assert.ok(endpoints.get(1)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(1)?.clusters.has(FixedLabelCluster.id));
+            assert.equal(endpoints.get(1)?.getAllClusterServers().length, 2);
+            assert.ok(endpoints.get(1)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(1)?.hasClusterServer(FixedLabelCluster));
 
-            assert.equal(endpoints.get(11)?.clusters.size, 6);
-            assert.ok(endpoints.get(11)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(11)?.clusters.has(IdentifyCluster.id));
-            assert.ok(endpoints.get(11)?.clusters.has(GroupsCluster.id));
-            assert.ok(endpoints.get(11)?.clusters.has(ScenesCluster.id));
-            assert.ok(endpoints.get(11)?.clusters.has(BridgedDeviceBasicInformationCluster.id));
-            assert.ok(endpoints.get(11)?.clusters.has(OnOffCluster.id));
+            assert.equal(endpoints.get(11)?.getAllClusterServers().length, 7);
+            assert.ok(endpoints.get(11)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(11)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(11)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(11)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(11)?.hasClusterServer(BridgedDeviceBasicInformationCluster));
+            assert.ok(endpoints.get(11)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(11)?.hasClusterServer(BindingCluster));
 
-            assert.equal(endpoints.get(12)?.clusters.size, 6);
-            assert.ok(endpoints.get(12)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(12)?.clusters.has(IdentifyCluster.id));
-            assert.ok(endpoints.get(12)?.clusters.has(GroupsCluster.id));
-            assert.ok(endpoints.get(12)?.clusters.has(ScenesCluster.id));
-            assert.ok(endpoints.get(12)?.clusters.has(BridgedDeviceBasicInformationCluster.id));
-            assert.ok(endpoints.get(12)?.clusters.has(OnOffCluster.id));
+            assert.equal(endpoints.get(12)?.getAllClusterServers().length, 7);
+            assert.ok(endpoints.get(12)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(12)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(12)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(12)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(12)?.hasClusterServer(BridgedDeviceBasicInformationCluster));
+            assert.ok(endpoints.get(12)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(12)?.hasClusterServer(BindingCluster));
 
-            assert.equal(endpoints.get(2)?.clusters.size, 2);
-            assert.ok(endpoints.get(2)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(2)?.clusters.has(FixedLabelCluster.id));
+            assert.equal(endpoints.get(2)?.getAllClusterServers().length, 2);
+            assert.ok(endpoints.get(2)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(2)?.hasClusterServer(FixedLabelCluster));
 
-            assert.equal(endpoints.get(21)?.clusters.size, 6);
-            assert.ok(endpoints.get(21)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(21)?.clusters.has(IdentifyCluster.id));
-            assert.ok(endpoints.get(21)?.clusters.has(GroupsCluster.id));
-            assert.ok(endpoints.get(21)?.clusters.has(ScenesCluster.id));
-            assert.ok(endpoints.get(21)?.clusters.has(BridgedDeviceBasicInformationCluster.id));
-            assert.ok(endpoints.get(21)?.clusters.has(OnOffCluster.id));
+            assert.equal(endpoints.get(21)?.getAllClusterServers().length, 7);
+            assert.ok(endpoints.get(21)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(21)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(21)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(21)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(21)?.hasClusterServer(BridgedDeviceBasicInformationCluster));
+            assert.ok(endpoints.get(21)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(21)?.hasClusterServer(BindingCluster));
 
-            assert.equal(endpoints.get(22)?.clusters.size, 6);
-            assert.ok(endpoints.get(22)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(22)?.clusters.has(IdentifyCluster.id));
-            assert.ok(endpoints.get(22)?.clusters.has(GroupsCluster.id));
-            assert.ok(endpoints.get(22)?.clusters.has(ScenesCluster.id));
-            assert.ok(endpoints.get(22)?.clusters.has(BridgedDeviceBasicInformationCluster.id));
-            assert.ok(endpoints.get(22)?.clusters.has(OnOffCluster.id));
+            assert.equal(endpoints.get(22)?.getAllClusterServers().length, 7);
+            assert.ok(endpoints.get(22)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(22)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(22)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(22)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(22)?.hasClusterServer(BridgedDeviceBasicInformationCluster));
+            assert.ok(endpoints.get(22)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(22)?.hasClusterServer(BindingCluster));
 
             const aggregator1PartsListAttribute: AttributeServer<EndpointNumber[]> | undefined = attributes.get(attributePathToId({ endpointId: 1, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id }));
             assert.deepEqual(aggregator1PartsListAttribute?.getLocal(), [new EndpointNumber(11), new EndpointNumber(12)]);
@@ -620,8 +631,8 @@ describe("Endpoint Structures", () => {
             const rootPartsListAttribute: AttributeServer<EndpointNumber[]> | undefined = attributes.get(attributePathToId({ endpointId: 0, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id }));
             assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(1), new EndpointNumber(11), new EndpointNumber(12), new EndpointNumber(2), new EndpointNumber(21), new EndpointNumber(22)]);
 
-            assert.equal(attributePaths.length, 315);
-            assert.equal(commandPaths.length, 98);
+            assert.equal(attributePaths.length, 341);
+            assert.equal(commandPaths.length, 63);
         });
 
         it("Device Structure with two aggregators and two Light endpoints and all auto-assigned endpoint IDs", () => {
@@ -673,56 +684,60 @@ describe("Endpoint Structures", () => {
             const { endpoints, attributes, attributePaths, commandPaths } = node.getRootEndpoint().getStructure();
 
             assert.equal(endpoints.size, 7);
-            assert.equal(endpoints.get(0)?.clusters.size, 9);
-            assert.ok(endpoints.get(0)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(BasicInformationCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(OperationalCredentialsCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(GeneralCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(EthernetNetworkCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(AccessControlCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(AdminCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(GroupKeyManagementCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(GeneralCommissioningCluster.id));
+            assert.equal(endpoints.get(0)?.getAllClusterServers().length, 9);
+            assert.ok(endpoints.get(0)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(BasicInformationCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(OperationalCredentialsCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(EthernetNetworkCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AccessControlCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AdminCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GroupKeyManagementCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
 
-            assert.equal(endpoints.get(1)?.clusters.size, 2);
-            assert.ok(endpoints.get(1)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(1)?.clusters.has(FixedLabelCluster.id));
+            assert.equal(endpoints.get(1)?.getAllClusterServers().length, 2);
+            assert.ok(endpoints.get(1)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(1)?.hasClusterServer(FixedLabelCluster));
 
-            assert.equal(endpoints.get(2)?.clusters.size, 6);
-            assert.ok(endpoints.get(2)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(2)?.clusters.has(IdentifyCluster.id));
-            assert.ok(endpoints.get(2)?.clusters.has(GroupsCluster.id));
-            assert.ok(endpoints.get(2)?.clusters.has(ScenesCluster.id));
-            assert.ok(endpoints.get(2)?.clusters.has(BridgedDeviceBasicInformationCluster.id));
-            assert.ok(endpoints.get(2)?.clusters.has(OnOffCluster.id));
+            assert.equal(endpoints.get(2)?.getAllClusterServers().length, 7);
+            assert.ok(endpoints.get(2)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(2)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(2)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(2)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(2)?.hasClusterServer(BridgedDeviceBasicInformationCluster));
+            assert.ok(endpoints.get(2)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(2)?.hasClusterServer(BindingCluster));
 
-            assert.equal(endpoints.get(3)?.clusters.size, 6);
-            assert.ok(endpoints.get(3)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(3)?.clusters.has(IdentifyCluster.id));
-            assert.ok(endpoints.get(3)?.clusters.has(GroupsCluster.id));
-            assert.ok(endpoints.get(3)?.clusters.has(ScenesCluster.id));
-            assert.ok(endpoints.get(3)?.clusters.has(BridgedDeviceBasicInformationCluster.id));
-            assert.ok(endpoints.get(3)?.clusters.has(OnOffCluster.id));
+            assert.equal(endpoints.get(3)?.getAllClusterServers().length, 7);
+            assert.ok(endpoints.get(3)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(3)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(3)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(3)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(3)?.hasClusterServer(BridgedDeviceBasicInformationCluster));
+            assert.ok(endpoints.get(3)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(3)?.hasClusterServer(BindingCluster));
 
-            assert.equal(endpoints.get(4)?.clusters.size, 2);
-            assert.ok(endpoints.get(4)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(4)?.clusters.has(FixedLabelCluster.id));
+            assert.equal(endpoints.get(4)?.getAllClusterServers().length, 2);
+            assert.ok(endpoints.get(4)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(4)?.hasClusterServer(FixedLabelCluster));
 
-            assert.equal(endpoints.get(5)?.clusters.size, 6);
-            assert.ok(endpoints.get(5)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(5)?.clusters.has(IdentifyCluster.id));
-            assert.ok(endpoints.get(5)?.clusters.has(GroupsCluster.id));
-            assert.ok(endpoints.get(5)?.clusters.has(ScenesCluster.id));
-            assert.ok(endpoints.get(5)?.clusters.has(BridgedDeviceBasicInformationCluster.id));
-            assert.ok(endpoints.get(5)?.clusters.has(OnOffCluster.id));
+            assert.equal(endpoints.get(5)?.getAllClusterServers().length, 7);
+            assert.ok(endpoints.get(5)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(5)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(5)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(5)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(5)?.hasClusterServer(BridgedDeviceBasicInformationCluster));
+            assert.ok(endpoints.get(5)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(5)?.hasClusterServer(BindingCluster));
 
-            assert.equal(endpoints.get(6)?.clusters.size, 6);
-            assert.ok(endpoints.get(6)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(6)?.clusters.has(IdentifyCluster.id));
-            assert.ok(endpoints.get(6)?.clusters.has(GroupsCluster.id));
-            assert.ok(endpoints.get(6)?.clusters.has(ScenesCluster.id));
-            assert.ok(endpoints.get(6)?.clusters.has(BridgedDeviceBasicInformationCluster.id));
-            assert.ok(endpoints.get(6)?.clusters.has(OnOffCluster.id));
+            assert.equal(endpoints.get(6)?.getAllClusterServers().length, 7);
+            assert.ok(endpoints.get(6)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(6)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(6)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(6)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(6)?.hasClusterServer(BridgedDeviceBasicInformationCluster));
+            assert.ok(endpoints.get(6)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(6)?.hasClusterServer(BindingCluster));
 
             const aggregator1PartsListAttribute: AttributeServer<EndpointNumber[]> | undefined = attributes.get(attributePathToId({ endpointId: 1, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id }));
             assert.deepEqual(aggregator1PartsListAttribute?.getLocal(), [new EndpointNumber(2), new EndpointNumber(3)]);
@@ -733,8 +748,8 @@ describe("Endpoint Structures", () => {
             const rootPartsListAttribute: AttributeServer<EndpointNumber[]> | undefined = attributes.get(attributePathToId({ endpointId: 0, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id }));
             assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(1), new EndpointNumber(2), new EndpointNumber(3), new EndpointNumber(4), new EndpointNumber(5), new EndpointNumber(6)]);
 
-            assert.equal(attributePaths.length, 315);
-            assert.equal(commandPaths.length, 98);
+            assert.equal(attributePaths.length, 341);
+            assert.equal(commandPaths.length, 63);
         });
 
         it("Device Structure with two aggregators and two Light endpoints and all partly autoassigned endpoint IDs", () => {
@@ -791,56 +806,60 @@ describe("Endpoint Structures", () => {
             const { endpoints, attributes, attributePaths, commandPaths } = node.getRootEndpoint().getStructure();
 
             assert.equal(endpoints.size, 7);
-            assert.equal(endpoints.get(0)?.clusters.size, 9);
-            assert.ok(endpoints.get(0)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(BasicInformationCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(OperationalCredentialsCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(GeneralCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(EthernetNetworkCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(AccessControlCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(AdminCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(GroupKeyManagementCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(GeneralCommissioningCluster.id));
+            assert.equal(endpoints.get(0)?.getAllClusterServers().length, 9);
+            assert.ok(endpoints.get(0)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(BasicInformationCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(OperationalCredentialsCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(EthernetNetworkCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AccessControlCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AdminCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GroupKeyManagementCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
 
-            assert.equal(endpoints.get(37)?.clusters.size, 2);
-            assert.ok(endpoints.get(37)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(37)?.clusters.has(FixedLabelCluster.id));
+            assert.equal(endpoints.get(37)?.getAllClusterServers().length, 2);
+            assert.ok(endpoints.get(37)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(37)?.hasClusterServer(FixedLabelCluster));
 
-            assert.equal(endpoints.get(3)?.clusters.size, 6);
-            assert.ok(endpoints.get(3)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(3)?.clusters.has(IdentifyCluster.id));
-            assert.ok(endpoints.get(3)?.clusters.has(GroupsCluster.id));
-            assert.ok(endpoints.get(3)?.clusters.has(ScenesCluster.id));
-            assert.ok(endpoints.get(3)?.clusters.has(BridgedDeviceBasicInformationCluster.id));
-            assert.ok(endpoints.get(3)?.clusters.has(OnOffCluster.id));
+            assert.equal(endpoints.get(3)?.getAllClusterServers().length, 7);
+            assert.ok(endpoints.get(3)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(3)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(3)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(3)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(3)?.hasClusterServer(BridgedDeviceBasicInformationCluster));
+            assert.ok(endpoints.get(3)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(3)?.hasClusterServer(BindingCluster));
 
-            assert.equal(endpoints.get(38)?.clusters.size, 6);
-            assert.ok(endpoints.get(38)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(38)?.clusters.has(IdentifyCluster.id));
-            assert.ok(endpoints.get(38)?.clusters.has(GroupsCluster.id));
-            assert.ok(endpoints.get(38)?.clusters.has(ScenesCluster.id));
-            assert.ok(endpoints.get(38)?.clusters.has(BridgedDeviceBasicInformationCluster.id));
-            assert.ok(endpoints.get(38)?.clusters.has(OnOffCluster.id));
+            assert.equal(endpoints.get(38)?.getAllClusterServers().length, 7);
+            assert.ok(endpoints.get(38)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(38)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(38)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(38)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(38)?.hasClusterServer(BridgedDeviceBasicInformationCluster));
+            assert.ok(endpoints.get(38)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(38)?.hasClusterServer(BindingCluster));
 
-            assert.equal(endpoints.get(39)?.clusters.size, 2);
-            assert.ok(endpoints.get(39)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(39)?.clusters.has(FixedLabelCluster.id));
+            assert.equal(endpoints.get(39)?.getAllClusterServers().length, 2);
+            assert.ok(endpoints.get(39)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(39)?.hasClusterServer(FixedLabelCluster));
 
-            assert.equal(endpoints.get(40)?.clusters.size, 6);
-            assert.ok(endpoints.get(40)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(40)?.clusters.has(IdentifyCluster.id));
-            assert.ok(endpoints.get(40)?.clusters.has(GroupsCluster.id));
-            assert.ok(endpoints.get(40)?.clusters.has(ScenesCluster.id));
-            assert.ok(endpoints.get(40)?.clusters.has(BridgedDeviceBasicInformationCluster.id));
-            assert.ok(endpoints.get(40)?.clusters.has(OnOffCluster.id));
+            assert.equal(endpoints.get(40)?.getAllClusterServers().length, 7);
+            assert.ok(endpoints.get(40)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(40)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(40)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(40)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(40)?.hasClusterServer(BridgedDeviceBasicInformationCluster));
+            assert.ok(endpoints.get(40)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(40)?.hasClusterServer(BindingCluster));
 
-            assert.equal(endpoints.get(18)?.clusters.size, 6);
-            assert.ok(endpoints.get(18)?.clusters.has(DescriptorCluster.id));
-            assert.ok(endpoints.get(18)?.clusters.has(IdentifyCluster.id));
-            assert.ok(endpoints.get(18)?.clusters.has(GroupsCluster.id));
-            assert.ok(endpoints.get(18)?.clusters.has(ScenesCluster.id));
-            assert.ok(endpoints.get(18)?.clusters.has(BridgedDeviceBasicInformationCluster.id));
-            assert.ok(endpoints.get(18)?.clusters.has(OnOffCluster.id));
+            assert.equal(endpoints.get(18)?.getAllClusterServers().length, 7);
+            assert.ok(endpoints.get(18)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(18)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(18)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(18)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(18)?.hasClusterServer(BridgedDeviceBasicInformationCluster));
+            assert.ok(endpoints.get(18)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(18)?.hasClusterServer(BindingCluster));
 
             const aggregator1PartsListAttribute: AttributeServer<EndpointNumber[]> | undefined = attributes.get(attributePathToId({ endpointId: 37, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id }));
             assert.deepEqual(aggregator1PartsListAttribute?.getLocal(), [new EndpointNumber(3), new EndpointNumber(38)]);
@@ -851,8 +870,9 @@ describe("Endpoint Structures", () => {
             const rootPartsListAttribute: AttributeServer<EndpointNumber[]> | undefined = attributes.get(attributePathToId({ endpointId: 0, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id }));
             assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(37), new EndpointNumber(3), new EndpointNumber(38), new EndpointNumber(39), new EndpointNumber(40), new EndpointNumber(18)]);
 
-            assert.equal(attributePaths.length, 315);
-            assert.equal(commandPaths.length, 98);
+            assert.equal(attributePaths.length, 341);
+            assert.equal(commandPaths.length, 63);
         });
+
     });
 });
