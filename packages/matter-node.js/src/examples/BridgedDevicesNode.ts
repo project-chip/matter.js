@@ -113,7 +113,7 @@ class BridgedDevice {
             }
         });
 
-        commissioningServer.addRootClusterServer(ClusterServer(BridgedDeviceBasicInformationCluster, {}, {
+        commissioningServer.addRootClusterServer(ClusterServer(BridgedDeviceBasicInformationCluster, {
             nodeLabel: `OnOff Bridge`,
             serialNumber: `node-matter-${uniqueId}`,
             reachable: true

@@ -6,7 +6,7 @@
 
 import { RootEndpoint } from "./device/Device.js";
 import { Endpoint } from "./device/Endpoint.js";
-import { BitSchema } from "./schema/BitmapSchema.js";
+import { BitSchema, TypeFromBitSchema } from "./schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
 import { ClusterClientObj } from "./cluster/client/ClusterClient.js";
 import { ClusterServerObj } from "./cluster/server/ClusterServer.js";
@@ -23,7 +23,7 @@ export abstract class MatterNode {
      *
      * @param cluster ClusterServer object to add
      */
-    addRootClusterServer<A extends Attributes>(cluster: ClusterServerObj<A>) {
+    addRootClusterServer<A extends Attributes, C extends Commands>(cluster: ClusterServerObj<A, C>) {
         this.rootEndpoint.addClusterServer(cluster);
     }
 
@@ -32,9 +32,9 @@ export abstract class MatterNode {
      *
      * @param cluster ClusterServer to get or undefined if not existing
      */
-    getRootClusterServer<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
-        cluster: Cluster<F, A, C, E>
-    ): ClusterServerObj<A> | undefined {
+    getRootClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
+        cluster: Cluster<F, SF, A, C, E>
+    ): ClusterServerObj<A, C> | undefined {
         return this.rootEndpoint.getClusterServer(cluster);
     }
 
@@ -54,8 +54,8 @@ export abstract class MatterNode {
      * @param interactionClient Optional InteractionClient to use for the cluster client. If not provided, the default
      *                          InteractionClient of the root endpoint is used.
      */
-    getRootClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
-        cluster: Cluster<F, A, C, E>,
+    getRootClusterClient<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
+        cluster: Cluster<F, SF, A, C, E>,
         interactionClient?: InteractionClient
     ): ClusterClientObj<A, C> | undefined {
         return this.rootEndpoint.getClusterClient(cluster, interactionClient);

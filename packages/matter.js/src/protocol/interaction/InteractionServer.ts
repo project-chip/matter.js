@@ -39,7 +39,7 @@ import { Message } from "../../codec/MessageCodec.js";
 import { Crypto } from "../../crypto/Crypto.js";
 import { decodeValueForSchema, normalizeAttributeData } from "./AttributeDataDecoder.js";
 import {
-    AttributeInitialValues, AttributeServers, ClusterServerHandlers, ClusterServerObj
+    AttributeInitialValues, AttributeServers, ClusterServerHandlers, ClusterServerObj, CommandServers
 } from "../../cluster/server/ClusterServer.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { AttributeGetterServer, AttributeServer } from "../../cluster/server/AttributeServer.js";
@@ -52,8 +52,7 @@ import { TlvVoid } from "../../tlv/TlvVoid.js";
 import { Endpoint } from "../../device/Endpoint.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { CommandId } from "../../datatype/CommandId.js";
-import { TlvAttributeValuePair } from "../../cluster/index.js";
-import { AttributeId } from "../../datatype/AttributeId.js";
+import { TlvAttributeValuePair } from "../../cluster/ScenesCluster.js";
 
 export const INTERACTION_PROTOCOL_ID = 0x0001;
 
@@ -62,26 +61,29 @@ export type EndpointData = { id: number, name: string, code: number, clusters: M
 
 const logger = Logger.get("InteractionProtocol");
 
-export function ClusterServer<F extends BitSchema, SF extends Partial<TypeFromBitSchema<F>>, A extends Attributes, C extends Commands, E extends Events>(
+export function ClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
     clusterDef: Cluster<F, SF, A, C, E>,
     attributesInitialValues: AttributeInitialValues<A>,
     handlers: ClusterServerHandlers<Cluster<F, SF, A, C, E>>
-): ClusterServerObj<A> {
+): ClusterServerObj<A, C> {
     const { id: clusterId, name, commands: commandDef, attributes: attributeDef, supportedFeatures } = clusterDef;
     let clusterStorage: StorageContext | null = null;
     const attributeStorageListeners = new Map<number, (value: any, version: number) => void>();
+    const sceneAttributeList = new Array<string>();
+    const attributes = <AttributeServers<A>>{};
+    const commands = <CommandServers<C>>{};
 
     const result: any = {
         id: clusterId,
         name,
         _type: "ClusterServer",
-        attributes: <AttributeServers<A>>{},
-        _commands: new Array<CommandServer<any, any>>(),
-        setStorage: (storageContext: StorageContext) => {
+        attributes,
+        _commands: commands,
+        _setStorage: (storageContext: StorageContext) => {
             clusterStorage = storageContext;
 
-            for (const name in result.attributes) {
-                const attribute = result.attributes[name];
+            for (const name in attributes) {
+                const attribute = (attributes as any)[name];
                 if (!attributeStorageListeners.has(attribute.id)) return;
                 if (!storageContext.has(attribute.name)) return;
                 try {
@@ -92,6 +94,41 @@ export function ClusterServer<F extends BitSchema, SF extends Partial<TypeFromBi
                     logger.warn(`Failed to restore attribute ${attribute.name} (${attribute.id}) in cluster ${name} (${clusterId})`, error);
                 }
             }
+        },
+
+        _getSceneExtensionFieldSets: () => {
+            const values = new Array<TypeFromSchema<typeof TlvAttributeValuePair>>();
+            for (const name of sceneAttributeList) {
+                const attributeServer = (attributes as any)[name];
+                console.log('Get attribute', name, attributeServer);
+                values.push({ attributeId: new AttributeId(attributeServer.id), attributeValue: attributeServer.schema.encodeTlv(attributeServer.get()) });
+            }
+            return values;
+        },
+
+        _setSceneExtensionFieldSets: (values: TypeFromSchema<typeof TlvAttributeValuePair>[], _transitionTime: number) => {
+            // TODO It is recommended that, where possible (e.g., it is not possible for attributes with Boolean data type),
+            //  a gradual transition SHOULD take place from the old to the new state over this time. However, the exact
+            //  transition is manufacturer dependent.
+
+            for (const { attributeId, attributeValue } of values) {
+                const attributeName = sceneAttributeList.find(name => (attributes as any)[name].id === attributeId.id);
+                if (attributeName) {
+                    const attributeServer = (attributes as any)[attributeName];
+                    attributeServer.set(attributeServer.schema.decodeTlv(attributeValue));
+                }
+            }
+        },
+
+        _verifySceneExtensionFieldSets(values: TypeFromSchema<typeof TlvAttributeValuePair>[]) {
+            for (const { attributeId, attributeValue } of values) {
+                const attributeName = sceneAttributeList.find(name => (attributes as any)[name].id === attributeId.id);
+                if (attributeName) {
+                    const attributeServer = (attributes as any)[attributeName];
+                    if (attributeServer.get() !== attributeServer.schema.decodeTlv(attributeValue)) return false;
+                }
+            }
+            return true;
         }
     };
 
@@ -100,43 +137,6 @@ export function ClusterServer<F extends BitSchema, SF extends Partial<TypeFromBi
         logger.debug(`Storing attribute ${attributeName} in cluster ${name} (${clusterId})`);
         clusterStorage.set(attributeName, { version, value });
     }
-
-    getSceneExtensionFieldSets() {
-        const values = new Array<TypeFromSchema<typeof TlvAttributeValuePair>>();
-        for (const name of this.sceneAttributeList) {
-            const attributeServer = (this.attributes as any)[name]
-            values.push({ attributeId: new AttributeId(attributeServer.id), attributeValue: attributeServer.schema.encodeTlv(attributeServer.get()) });
-        }
-        return values;
-    }
-
-    setSceneExtensionFieldSets(values: TypeFromSchema<typeof TlvAttributeValuePair>[], _transitionTime: number) {
-        // TODO It is recommended that, where possible (e.g., it is not possible for attributes with Boolean data type),
-        //  a gradual transition SHOULD take place from the old to the new state over this time. However, the exact
-        //  transition is manufacturer dependent.
-
-        for (const { attributeId, attributeValue } of values) {
-            const attributeName = this.sceneAttributeList.find(name => (this.attributes as any)[name].id === attributeId.id);
-            if (attributeName) {
-                const attributeServer = (this.attributes as any)[attributeName];
-                attributeServer.set(attributeServer.schema.decodeTlv(attributeValue));
-            }
-        }
-    }
-
-    verifySceneExtensionFieldSets(values: TypeFromSchema<typeof TlvAttributeValuePair>[]) {
-        for (const { attributeId, attributeValue } of values) {
-            const attributeName = this.sceneAttributeList.find(name => (this.attributes as any)[name].id === attributeId.id);
-            if (attributeName) {
-                const attributeServer = (this.attributes as any)[attributeName];
-                console.log('Check attribute', attributeName, attributeServer.get(), attributeServer.schema.decodeTlv(attributeValue), attributeServer.schema.decodeTlv(attributeValue) === attributeServer.get())
-                if (attributeServer.get() !== attributeServer.schema.decodeTlv(attributeValue)) return false;
-            }
-        }
-        return true;
-    }
-
-    const sceneAttributeList = new Array<string>();
 
     // Create attributes
     attributesInitialValues = {
@@ -155,23 +155,23 @@ export function ClusterServer<F extends BitSchema, SF extends Partial<TypeFromBi
             const validator = typeof schema.validate === 'function' ? schema.validate.bind(schema) : undefined;
             const getter = (handlers as any)[`get${capitalize(attributeName)}`];
             if (getter === undefined) {
-                result.attributes[attributeName] = new AttributeServer(id, attributeName, schema, validator ?? (() => { /* no validation */
+                (attributes as any)[attributeName] = new AttributeServer(id, attributeName, schema, validator ?? (() => { /* no validation */
                 }), writable, (attributesInitialValues as any)[attributeName]);
             } else {
-                result.attributes[attributeName] = new AttributeGetterServer(id, attributeName, schema, validator ?? (() => { /* no validation */
-                }), writable, (attributesInitialValues as any)[attributeName], (session, endpoint) => getter({ attributes: this.attributes, endpoint, session }));
+                (attributes as any)[attributeName] = new AttributeGetterServer(id, attributeName, schema, validator ?? (() => { /* no validation */
+                }), writable, (attributesInitialValues as any)[attributeName], (session, endpoint) => getter({ attributes, endpoint, session }));
             }
             if (persistent) {
                 const listener = (value: any, version: number) => attributeStorageListener(attributeName, version, value);
                 attributeStorageListeners.set(id, listener);
-                result.attributes[attributeName].addMatterListener(listener);
+                (attributes as any)[attributeName].addMatterListener(listener);
             }
             if (scene) {
-                this.sceneAttributeList.push(name);
+                sceneAttributeList.push(attributeName);
             }
-            result[`get${capitalizedAttributeName}Attribute`] = () => result.attributes[attributeName].get();
-            result[`set${capitalizedAttributeName}Attribute`] = <T,>(value: T) => result.attributes[attributeName].set(value);
-            result[`subscribe${capitalizedAttributeName}Attribute`] = <T,>(listener: (newValue: T, oldValue: T) => void) => result.attributes[attributeName].addListener(listener);
+            result[`get${capitalizedAttributeName}Attribute`] = () => (attributes as any)[attributeName].get();
+            result[`set${capitalizedAttributeName}Attribute`] = <T,>(value: T) => (attributes as any)[attributeName].set(value);
+            result[`subscribe${capitalizedAttributeName}Attribute`] = <T,>(listener: (newValue: T, oldValue: T) => void) => (attributes as any)[attributeName].addListener(listener);
             attributeList.push(new AttributeId(id));
         } else {
             // TODO: Find maybe a better way to do this including strong typing according to attribute initial values set?
@@ -184,7 +184,7 @@ export function ClusterServer<F extends BitSchema, SF extends Partial<TypeFromBi
             };
         }
     }
-    result.attributes.attributeList.set(attributeList);
+    (attributes as any).attributeList.set(attributeList);
 
     // Create commands
     const acceptedCommandList = new Array<number>();
@@ -193,7 +193,7 @@ export function ClusterServer<F extends BitSchema, SF extends Partial<TypeFromBi
         const handler = (handlers as any)[name];
         if (handler === undefined) continue;
         const { requestId, requestSchema, responseId, responseSchema } = commandDef[name];
-        result._commands.push(new CommandServer(requestId, responseId, name, requestSchema, responseSchema, (request, session, message, endpoint) => handler({ request, attributes: result.attributes, session, message, endpoint })));
+        (commands as any)[name] = (new CommandServer(requestId, responseId, name, requestSchema, responseSchema, (request, session, message, endpoint) => handler({ request, attributes, session, message, endpoint })));
         if (!acceptedCommandList.includes(requestId)) {
             acceptedCommandList.push(requestId);
         }
@@ -203,10 +203,10 @@ export function ClusterServer<F extends BitSchema, SF extends Partial<TypeFromBi
             }
         }
     }
-    result.attributes.acceptedCommandList.set(acceptedCommandList.map(id => new CommandId(id)));
-    result.attributes.generatedCommandList.set(generatedCommandList.map(id => new CommandId(id)));
+    (attributes as any).acceptedCommandList.set(acceptedCommandList.map(id => new CommandId(id)));
+    (attributes as any).generatedCommandList.set(generatedCommandList.map(id => new CommandId(id)));
 
-    return result as ClusterServerObj<A>;
+    return result as ClusterServerObj<A, C>;
 }
 
 export interface CommandPath {
@@ -263,7 +263,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             clientList: [],
             partsList: [],
         }, {});
-        clusters.push(descriptorCluster as ClusterServerObj<any>);
+        clusters.push(descriptorCluster as ClusterServerObj<any, any>);
         descriptorCluster.attributes.serverList.setLocal(clusters.map(({ id }) => new ClusterId(id)));
 
         const clusterEndpointNumber = new EndpointNumber(endpointId);
@@ -272,23 +272,24 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         clusters.forEach(cluster => {
             const { id: clusterId, attributes, _commands: commands } = cluster;
 
-            cluster.setStorage(this.storageManager.createContext(`Cluster-${clusterEndpointNumber.number}-${clusterId}`));
+            cluster._setStorage(this.storageManager.createContext(`Cluster-${clusterEndpointNumber.number}-${clusterId}`));
 
             clusterMap.set(clusterId, cluster);
             // Add attributes
             for (const name in attributes) {
-                const attribute = attributes[name];
+                const attribute = attributes[name] as AttributeServer<any>;
                 const path = { endpointId, clusterId, attributeId: attribute.id };
                 this.attributes.set(attributePathToId(path), attribute);
                 this.attributePaths.push(path);
             }
 
             // Add commands
-            commands.forEach(command => {
+            for (const name in commands) {
+                const command = commands[name] as CommandServer<any, any>;
                 const path = { endpointId, clusterId, commandId: command.invokeId };
                 this.commands.set(commandPathToId(path), command);
                 this.commandPaths.push(path);
-            });
+            }
         });
 
         // Add part list if the endpoint is not root
@@ -311,7 +312,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         for (const [endpointId, { deviceTypes, clusters }] of endpoints) {
             this.endpoints.set(endpointId, { ...deviceTypes[0], id: endpointId, clusters });
             for (const cluster of clusters.values()) {
-                cluster.setStorage(this.storageManager.createContext(`Cluster-${endpointId}-${cluster.id}`));
+                cluster._setStorage(this.storageManager.createContext(`Cluster-${endpointId}-${cluster.id}`));
             }
         }
 

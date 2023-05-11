@@ -13,7 +13,7 @@ import { AttributeInitialValues, CommandHandler } from "../cluster/server/Cluste
 import { IdentifyCluster, } from "../cluster/IdentifyCluster.js";
 import { OnOffCluster } from "../cluster/OnOffCluster.js";
 import { extendPublicHandlerMethods } from "../util/NamedHandler.js";
-import { BitSchema } from "../schema/index.js";
+import { BitSchema, TypeFromBitSchema } from "../schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
 
 type OnOffBaseDeviceCommands = {
@@ -28,7 +28,7 @@ type OnOffBaseDeviceCommands = {
  * @param attributeInitialValues Object with initial attribute values for automatically added clusters
  * @param cluster Cluster to get the initial attribute values for
  */
-function getClusterInitialAttributeValues<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(attributeInitialValues: { [key: number]: AttributeInitialValues<any> } | undefined, cluster: Cluster<F, A, C, E>): AttributeInitialValues<A> | undefined {
+function getClusterInitialAttributeValues<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(attributeInitialValues: { [key: number]: AttributeInitialValues<any> } | undefined, cluster: Cluster<F, SF, A, C, E>): AttributeInitialValues<A> | undefined {
     if (attributeInitialValues === undefined) return undefined;
     return attributeInitialValues[cluster.id] as AttributeInitialValues<A>;
 }

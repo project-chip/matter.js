@@ -14,7 +14,7 @@ const enum BitRangeType {
 }
 
 type BitRange<T> = { type: BitRangeType, offset: number, length: number, _type?: T };
-const BitRange = <T>(type: BitRangeType, offset: number, length: number) => ({ type, offset, length } as BitRange<T>);
+const BitRange = <T>(type: BitRangeType, offset: number, length: number): BitRange<T> => ({ type, offset, length });
 
 /** Defines the bit position of a boolean flag. */
 export interface BitFlag extends BitRange<boolean> { type: BitRangeType.Flag }

@@ -17,7 +17,12 @@ import { UdpInterface } from "./net/UdpInterface.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { StorageManager } from "./storage/StorageManager.js";
-import { AttributeInitialValues, ClusterServerObj, CommandHandler } from "./cluster/server/ClusterServer.js";
+import {
+    AttributeInitialValues,
+    ClusterServerHandlers,
+    ClusterServerObj,
+    CommandHandler
+} from "./cluster/server/ClusterServer.js";
 import { OperationalCredentialsClusterHandler, OperationalCredentialsServerConf } from "./cluster/server/OperationalCredentialsServer.js";
 import { AttestationCertificateManager } from "./certificate/AttestationCertificateManager.js";
 import { CertificationDeclarationManager } from "./certificate/CertificationDeclarationManager.js";
@@ -31,7 +36,7 @@ import { BasicInformationCluster } from "./cluster/BasicInformationCluster.js";
 import { OperationalCredentialsCluster } from "./cluster/OperationalCredentialsCluster.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
 import { GeneralCommissioningCluster, RegulatoryLocationType } from "./cluster/GeneralCommissioningCluster.js";
-import { NetworkCommissioningCluster, NetworkCommissioningStatus } from "./cluster/NetworkCommissioningCluster.js";
+import { EthernetNetworkCommissioningCluster, NetworkCommissioningStatus } from "./cluster/NetworkCommissioningCluster.js";
 import { AdminCommissioningCluster, CommissioningWindowStatus } from "./cluster/AdminCommissioningCluster.js";
 import { GroupKeyManagementClusterHandler } from "./cluster/server/GroupKeyManagementServer.js";
 import { QrCode } from "./schema/QrCodeSchema.js";
@@ -39,7 +44,7 @@ import { ComposedDevice } from "./device/ComposedDevice.js";
 import { Device } from "./device/Device.js";
 import { ByteArray } from "./util/ByteArray.js";
 import { NamedHandler } from "./util/NamedHandler.js";
-import { Attributes } from "./cluster/Cluster.js";
+import { Attributes, Commands } from "./cluster/Cluster.js";
 
 /**
  * Represents device pairing information.
@@ -147,7 +152,6 @@ export class CommissioningServer extends MatterNode {
         this.rootEndpoint.addClusterServer(
             ClusterServer(
                 BasicInformationCluster,
-                {},
                 // Set the required basicInformation and respect the provided values
                 Object.assign(
                     {
@@ -190,7 +194,6 @@ export class CommissioningServer extends MatterNode {
         this.rootEndpoint.addClusterServer(
             ClusterServer(
                 OperationalCredentialsCluster,
-                {},
                 {
                     nocs: [],
                     fabrics: [],
@@ -206,7 +209,6 @@ export class CommissioningServer extends MatterNode {
         this.rootEndpoint.addClusterServer(
             ClusterServer(
                 GeneralCommissioningCluster,
-                {},
                 {
                     breadcrumb: BigInt(0),
                     basicCommissioningInfo: {
@@ -223,21 +225,14 @@ export class CommissioningServer extends MatterNode {
 
         this.rootEndpoint.addClusterServer(
             ClusterServer(
-                NetworkCommissioningCluster,
-                {
-                    wifi: false,
-                    thread: false,
-                    ethernet: true
-                },
+                EthernetNetworkCommissioningCluster,
                 {
                     maxNetworks: 1,
-                    connectMaxTimeSeconds: 20,
                     interfaceEnabled: true,
                     lastConnectErrorValue: 0,
                     lastNetworkId: ByteArray.fromHex("0000000000000000000000000000000000000000000000000000000000000000"),
                     lastNetworkingStatus: NetworkCommissioningStatus.Success,
                     networks: [{ networkId: ByteArray.fromHex("0000000000000000000000000000000000000000000000000000000000000000"), connected: true }],
-                    scanMaxTimeSeconds: 5
                 },
                 NetworkCommissioningHandler()
             )
@@ -246,7 +241,6 @@ export class CommissioningServer extends MatterNode {
         this.rootEndpoint.addClusterServer(
             ClusterServer(
                 AccessControlCluster,
-                {},
                 {
                     acl: [],
                     extension: [],
@@ -262,9 +256,6 @@ export class CommissioningServer extends MatterNode {
             ClusterServer(
                 GroupKeyManagementCluster,
                 {
-                    cacheAndSync: false,
-                },
-                {
                     groupKeyMap: [],
                     groupTable: [],
                     maxGroupsPerFabric: 254,
@@ -277,7 +268,6 @@ export class CommissioningServer extends MatterNode {
         this.rootEndpoint.addClusterServer(
             ClusterServer(
                 GeneralDiagnosticsCluster,
-                {},
                 {
                     networkInterfaces: [],
                     rebootCount: 0,
@@ -291,7 +281,7 @@ export class CommissioningServer extends MatterNode {
                 },
                 {
                     testEventTrigger: async (args) => await this.commandHandler.executeHandler("testEventTrigger", args)
-                }
+                } as ClusterServerHandlers<typeof GeneralDiagnosticsCluster>
             )
         );
     }
@@ -303,7 +293,7 @@ export class CommissioningServer extends MatterNode {
      *
      * @param cluster
      */
-    override addRootClusterServer<A extends Attributes>(cluster: ClusterServerObj<A>) {
+    override addRootClusterServer<A extends Attributes, C extends Commands>(cluster: ClusterServerObj<A, C>) {
         if (cluster.id === BasicInformationCluster.id) {
             throw new Error(
                 "BasicInformationCluster can not be modified, provide all details in constructor options!"
@@ -337,9 +327,6 @@ export class CommissioningServer extends MatterNode {
             ClusterServer(
                 AdminCommissioningCluster,
                 {
-                    basic: true
-                },
-                {
                     windowStatus: CommissioningWindowStatus.WindowNotOpen,
                     adminFabricIndex: null,
                     adminVendorId: null
@@ -352,8 +339,8 @@ export class CommissioningServer extends MatterNode {
         if (basicInformation == undefined) {
             throw new Error("BasicInformationCluster needs to be set!");
         }
-        const vendorId = basicInformation.attributes.vendorId.get();
-        const productId = basicInformation.attributes.productId.get();
+        const vendorId = basicInformation.attributes.vendorId.getLocal();
+        const productId = basicInformation.attributes.productId.getLocal();
 
         this.interactionServer = new InteractionServer(this.storageManager);
         const nextEndpointId = Math.max(this.rootEndpoint.findHighestEndpointId() + 1, this.nextEndpointId);
@@ -391,8 +378,8 @@ export class CommissioningServer extends MatterNode {
             throw new Error("BasicInformationCluster needs to be set!");
         }
 
-        const vendorId = basicInformation.attributes.vendorId.get();
-        const productId = basicInformation.attributes.productId.get();
+        const vendorId = basicInformation.attributes.vendorId.getLocal();
+        const productId = basicInformation.attributes.productId.getLocal();
 
         const qrPairingCode = QrPairingCodeCodec.encode({
             version: 0,

@@ -56,7 +56,7 @@ const fakeServerStorage = new StorageBackendMemory();
 
 describe("Integration", () => {
     let server: MatterDevice;
-    let onOffServer: ClusterServerObj<any, any>;
+    let onOffServer: ClusterServerObj<typeof OnOffCluster.attributes, typeof OnOffCluster.commands>;
     let client: MatterController;
 
     beforeAll(async () => {

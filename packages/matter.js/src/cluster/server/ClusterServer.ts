@@ -6,8 +6,20 @@
 
 import { AttributeServer } from "./AttributeServer.js";
 import {
-    Cluster, Command, Commands, AttributeJsType, Attributes, Attribute, OptionalAttribute, OptionalCommand,
-    OptionalWritableAttribute, WritableAttribute, GlobalAttributes, MandatoryAttributeNames, OptionalAttributeNames,
+    Cluster,
+    Command,
+    Commands,
+    AttributeJsType,
+    Attributes,
+    Attribute,
+    OptionalAttribute,
+    OptionalCommand,
+    OptionalWritableAttribute,
+    WritableAttribute,
+    GlobalAttributes,
+    MandatoryAttributeNames,
+    OptionalAttributeNames,
+    RequestType, ResponseType,
 } from "../Cluster.js";
 import { Message } from "../../codec/MessageCodec.js";
 import { Merge } from "../../util/Type.js";
@@ -17,6 +29,8 @@ import { EndpointData } from "../../protocol/interaction/InteractionServer.js";
 import { CommandServer } from "./CommandServer.js";
 import { StorageContext } from "../../storage/StorageContext.js";
 import { ClusterClientObj } from "../client/ClusterClient.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { TlvAttributeValuePair } from "../ScenesCluster.js";
 
 /** Cluster attributes accessible on the cluster server */
 export type AttributeServers<A extends Attributes> = Merge<Omit<{ [P in MandatoryAttributeNames<A>]: AttributeServer<AttributeJsType<A[P]>> }, keyof GlobalAttributes<any>>, { [P in OptionalAttributeNames<A>]?: AttributeServer<AttributeJsType<A[P]>> }>;
@@ -34,6 +48,8 @@ type CommandHandlers<T extends Commands, A extends AttributeServers<any>> = Merg
 /** Handlers to process cluster commands */
 export type ClusterServerHandlers<C extends Cluster<any, any, any, any, any>> = Merge<CommandHandlers<C["commands"], AttributeServers<C["attributes"]>>, AttributeGetters<C["attributes"]>>;
 
+export type CommandServers<C extends Commands> = Merge<{ [P in MandatoryCommandNames<C>]: CommandServer<RequestType<C[P]>, ResponseType<C[P]>> }, { [P in OptionalCommandNames<C>]?: CommandServer<RequestType<C[P]>, ResponseType<C[P]>> }>;
+
 type OptionalAttributeConf<T extends Attributes> = { [K in OptionalAttributeNames<T>]?: true };
 type MakeAttributeMandatory<A extends Attribute<any>> = A extends OptionalWritableAttribute<infer T> ? WritableAttribute<T> : (A extends OptionalAttribute<infer T> ? Attribute<T> : A);
 type MakeAttributesMandatory<T extends Attributes, C extends OptionalAttributeConf<T>> = { [K in keyof T]: K extends keyof C ? MakeAttributeMandatory<T[K]> : T[K] };
@@ -49,27 +65,63 @@ type UseOptionalAttributes<C extends Cluster<any, any, any, any, any>, A extends
 /* eslint-disable @typescript-eslint/no-unused-vars */
 export const UseOptionalAttributes = <C extends Cluster<any, any, any, any, any>, A extends OptionalAttributeConf<C["attributes"]>>(cluster: C, conf: A): UseOptionalAttributes<C, A> => ({ ...cluster, attributes: MakeAttributesMandatory(cluster.attributes, conf) });
 
-
 type GetterTypeFromSpec<A extends Attribute<any>> = A extends OptionalAttribute<infer T> ? (T | undefined) : AttributeJsType<A>;
 type ServerAttributeGetters<A extends Attributes> = { [P in keyof A as `get${Capitalize<string & P>}Attribute`]: () => GetterTypeFromSpec<A[P]> };
 type ServerAttributeSetters<A extends Attributes> = { [P in keyof A as `set${Capitalize<string & P>}Attribute`]: (value: AttributeJsType<A[P]>) => void };
 type ServerAttributeSubscribers<A extends Attributes> = { [P in keyof A as `subscribe${Capitalize<string & P>}Attribute`]: (listener: (newValue: AttributeJsType<A[P]>, oldValue: AttributeJsType<A[P]>) => void) => void };
 
-
 /** Strongly typed interface of a cluster server */
-export type ClusterServerObj<A extends Attributes> =
+export type ClusterServerObj<A extends Attributes, C extends Commands> =
     {
+        /** Cluster ID */
         id: number;
+
+        /** Cluster name */
         name: string;
+
+        /**
+         * Cluster type
+         * @private
+         */
         _type: "ClusterServer",
+
+        /** Cluster attributes as named object */
         attributes: AttributeServers<A>;
-        _commands: CommandServer<any, any>[];
-        setStorage: (storageContext: StorageContext) => void;
+
+        /**
+         * Cluster commands as array
+         * @private
+         */
+        _commands: CommandServers<C>;
+
+        /**
+         * Set Storage context sed by this cluster
+         * @private
+         */
+        _setStorage: (storageContext: StorageContext) => void;
+
+        /**
+         * Get the Scene Extension Fields for this cluster. Used by the Scenes cluster.
+         * @private
+         */
+        _getSceneExtensionFieldSets: () => TypeFromSchema<typeof TlvAttributeValuePair>[];
+
+        /**
+         * Set the Scene Extension Fields for this cluster. Used by the Scenes cluster.
+         * @private
+         */
+        _setSceneExtensionFieldSets: (values: TypeFromSchema<typeof TlvAttributeValuePair>[], transitionTime: number) => void;
+
+        /**
+         * Verify if a set of Scene Extension Fields match to the current attribute state for this cluster. Used by the Scenes cluster.
+         * @private
+         */
+        _verifySceneExtensionFieldSets: (values: TypeFromSchema<typeof TlvAttributeValuePair>[]) => boolean
     }
     & ServerAttributeGetters<A>
     & ServerAttributeSetters<A>
     & ServerAttributeSubscribers<A>;
 
-export function isClusterServer(obj: ClusterClientObj<any, any> | ClusterServerObj<any>): obj is ClusterServerObj<any> {
+export function isClusterServer(obj: ClusterClientObj<any, any> | ClusterServerObj<any, any>): obj is ClusterServerObj<any, any> {
     return obj._type === "ClusterServer";
 }

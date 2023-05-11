@@ -10,9 +10,6 @@ import { ClusterServerHandlers } from "./ClusterServer.js";
 export const createDefaultIdentifyClusterServer = (handlers: ClusterServerHandlers<typeof IdentifyCluster>) => ClusterServer(
     IdentifyCluster,
     {
-        query: false,
-    },
-    {
         identifyTime: 0,
         identifyType: IdentifyType.None,
     },

@@ -40,9 +40,6 @@ export const OnOffClusterHandler: () => ClusterServerHandlers<typeof OnOffCluste
 
 export const createDefaultOnOffClusterServer = (attributeInitialValues?: AttributeInitialValues<typeof OnOffCluster.attributes>) => ClusterServer(
     OnOffCluster,
-    {
-        lightingLevelControl: false,
-    },
     attributeInitialValues ?? {
         onOff: false,
     },

@@ -16,6 +16,7 @@ import { StatusResponseError } from "../../protocol/interaction/InteractionMesse
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { GroupsManager } from "./GroupsServer.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
+import { ClusterServer } from "../../protocol/interaction/InteractionServer.js";
 
 interface scenesTableEntry {
     /** The group identifier for which this scene applies, or 0 if the scene is not associated with a group. */
@@ -234,7 +235,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
 
             const extensionFieldSets = new Array<TypeFromSchema<typeof TlvExtensionFieldSet>>();
             endpoint.clusters.forEach((cluster) => {
-                const attributeValueList = cluster.getSceneExtensionFieldSets();
+                const attributeValueList = cluster._getSceneExtensionFieldSets();
                 if (attributeValueList.length) {
                     extensionFieldSets.push({ clusterId: new ClusterId(cluster.id), attributeValueList });
                 }
@@ -281,7 +282,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                 const { clusterId, attributeValueList } = clusterData;
                 const cluster = endpoint.clusters.get(clusterId.id);
                 if (cluster !== undefined) {
-                    cluster.setSceneExtensionFieldSets(attributeValueList, usedTransitionTime);
+                    cluster._setSceneExtensionFieldSets(attributeValueList, usedTransitionTime);
                 }
             });
             currentScene.set(sceneId);
@@ -409,7 +410,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                 const { clusterId, attributeValueList } = clusterData;
                 const cluster = endpoint.clusters.get(clusterId.id);
                 if (cluster !== undefined) {
-                    if (!cluster.verifySceneExtensionFieldSets(attributeValueList)) {
+                    if (!cluster._verifySceneExtensionFieldSets(attributeValueList)) {
                         return false;
                     }
                 }
@@ -438,20 +439,14 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
 export const createDefaultScenesClusterServer = () => ClusterServer(
     ScenesCluster,
     {
-        sceneNames: true,
-    },
-    {
         sceneCount: 0,
         currentScene: 0,
-        currentGroup: 0,
+        currentGroup: new GroupId(0),
         sceneValid: false,
         nameSupport: {
             sceneNames: true,
         },
         lastConfiguredBy: null,
     },
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    // TODO implement
-    {}
+    ScenesClusterHandler()
 );

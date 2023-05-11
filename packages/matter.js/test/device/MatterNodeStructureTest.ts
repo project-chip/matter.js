@@ -34,7 +34,7 @@ import { VendorId } from "../../src/datatype/VendorId.js";
 import { FabricIndex } from "../../src/datatype/FabricIndex.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 import { GeneralCommissioningCluster, RegulatoryLocationType } from "../../src/cluster/GeneralCommissioningCluster.js";
-import { NetworkCommissioningCluster, NetworkCommissioningStatus } from "../../src/cluster/NetworkCommissioningCluster.js";
+import { EthernetNetworkCommissioningCluster, NetworkCommissioningStatus } from "../../src/cluster/NetworkCommissioningCluster.js";
 import { AdminCommissioningCluster, CommissioningWindowStatus } from "../../src/cluster/AdminCommissioningCluster.js";
 import { EndpointNumber } from "../../src/datatype/EndpointNumber.js";
 import { DescriptorCluster } from "../../src/cluster/DescriptorCluster.js";
@@ -63,7 +63,6 @@ class TestNode extends MatterNode {
 function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningCluster = true) {
     node.addRootClusterServer(ClusterServer(
         BasicInformationCluster,
-        {},
         {
             dataModelRevision: 1,
             vendorName: "vendor",
@@ -90,7 +89,6 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
     node.addRootClusterServer(
         ClusterServer(
             OperationalCredentialsCluster,
-            {},
             {
                 nocs: [],
                 fabrics: [],
@@ -111,7 +109,6 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
     node.addRootClusterServer(
         ClusterServer(
             GeneralCommissioningCluster,
-            {},
             {
                 breadcrumb: BigInt(0),
                 basicCommissioningInfo: {
@@ -128,21 +125,14 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
 
     node.addRootClusterServer(
         ClusterServer(
-            NetworkCommissioningCluster,
-            {
-                wifi: false,
-                thread: false,
-                ethernet: true
-            },
+            EthernetNetworkCommissioningCluster,
             {
                 maxNetworks: 1,
-                connectMaxTimeSeconds: 20,
                 interfaceEnabled: true,
                 lastConnectErrorValue: 0,
                 lastNetworkId: ByteArray.fromHex("0000000000000000000000000000000000000000000000000000000000000000"),
                 lastNetworkingStatus: NetworkCommissioningStatus.Success,
                 networks: [{ networkId: ByteArray.fromHex("0000000000000000000000000000000000000000000000000000000000000000"), connected: true }],
-                scanMaxTimeSeconds: 5
             },
             NetworkCommissioningHandler()
         )
@@ -151,7 +141,6 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
     node.addRootClusterServer(
         ClusterServer(
             AccessControlCluster,
-            {},
             {
                 acl: [],
                 extension: [],
@@ -167,9 +156,6 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
         ClusterServer(
             GroupKeyManagementCluster,
             {
-                cacheAndSync: false,
-            },
-            {
                 groupKeyMap: [],
                 groupTable: [],
                 maxGroupsPerFabric: 254,
@@ -182,7 +168,6 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
     node.addRootClusterServer(
         ClusterServer(
             GeneralDiagnosticsCluster,
-            {},
             {
                 networkInterfaces: [],
                 rebootCount: 0,
@@ -204,9 +189,6 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
         node.addRootClusterServer(
             ClusterServer(
                 AdminCommissioningCluster,
-                {
-                    basic: true
-                },
                 {
                     windowStatus: CommissioningWindowStatus.WindowNotOpen,
                     adminFabricIndex: null,
@@ -258,14 +240,14 @@ describe("Endpoint Structures", () => {
             assert.ok(endpoints.get(0)?.clusters.has(BasicInformationCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(OperationalCredentialsCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(GeneralCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(NetworkCommissioningCluster.id));
+            assert.ok(endpoints.get(0)?.clusters.has(EthernetNetworkCommissioningCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(AccessControlCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(AdminCommissioningCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(GroupKeyManagementCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(GeneralCommissioningCluster.id));
 
-            assert.equal(attributePaths.length, 103);
-            assert.equal(commandPaths.length, 23);
+            assert.equal(attributePaths.length, 101);
+            assert.equal(commandPaths.length, 18);
         });
 
         it("One device withs Light endpoints", () => {
@@ -291,7 +273,7 @@ describe("Endpoint Structures", () => {
             assert.ok(endpoints.get(0)?.clusters.has(BasicInformationCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(OperationalCredentialsCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(GeneralCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(NetworkCommissioningCluster.id));
+            assert.ok(endpoints.get(0)?.clusters.has(EthernetNetworkCommissioningCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(AccessControlCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(AdminCommissioningCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(GroupKeyManagementCluster.id));
@@ -311,8 +293,8 @@ describe("Endpoint Structures", () => {
             }));
             assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(1)]);
 
-            assert.equal(attributePaths.length, 142);
-            assert.equal(commandPaths.length, 33);
+            assert.equal(attributePaths.length, 140);
+            assert.equal(commandPaths.length, 38);
         });
     });
 
@@ -345,7 +327,7 @@ describe("Endpoint Structures", () => {
             assert.ok(endpoints.get(0)?.clusters.has(BasicInformationCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(OperationalCredentialsCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(GeneralCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(NetworkCommissioningCluster.id));
+            assert.ok(endpoints.get(0)?.clusters.has(EthernetNetworkCommissioningCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(AccessControlCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(AdminCommissioningCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(GroupKeyManagementCluster.id));
@@ -382,8 +364,8 @@ describe("Endpoint Structures", () => {
             }));
             assert.deepEqual(composedPartsListAttribute?.getLocal(), [new EndpointNumber(2), new EndpointNumber(3)]);
 
-            assert.equal(attributePaths.length, 190);
-            assert.equal(commandPaths.length, 43);
+            assert.equal(attributePaths.length, 188);
+            assert.equal(commandPaths.length, 58);
         });
     });
 
@@ -395,7 +377,7 @@ describe("Endpoint Structures", () => {
             const aggregator = new Aggregator([], 1);
 
             const onoffLightDevice = new OnOffLightDevice(undefined, 11);
-            onoffLightDevice.addClusterServer(ClusterServer(BridgedDeviceBasicInformationCluster, {}, {
+            onoffLightDevice.addClusterServer(ClusterServer(BridgedDeviceBasicInformationCluster, {
                 nodeLabel: "Socket 1",
                 reachable: true
             }, {}))
@@ -416,7 +398,7 @@ describe("Endpoint Structures", () => {
             assert.ok(endpoints.get(0)?.clusters.has(BasicInformationCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(OperationalCredentialsCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(GeneralCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(NetworkCommissioningCluster.id));
+            assert.ok(endpoints.get(0)?.clusters.has(EthernetNetworkCommissioningCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(AccessControlCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(AdminCommissioningCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(GroupKeyManagementCluster.id));
@@ -450,8 +432,8 @@ describe("Endpoint Structures", () => {
             const deviceTypeListAttribute: AttributeServer<EndpointNumber[]> | undefined = attributes.get(attributePathToId({ endpointId: 11, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.deviceTypeList.id }));
             assert.deepEqual(deviceTypeListAttribute?.getLocal(), [{ deviceType: new DeviceTypeId(DeviceTypes.ON_OFF_LIGHT.code), revision: 2 }, { deviceType: new DeviceTypeId(DeviceTypes.BRIDGED_NODE.code), revision: 1 }]);
 
-            assert.equal(attributePaths.length, 158);
-            assert.equal(commandPaths.length, 33);
+            assert.equal(attributePaths.length, 156);
+            assert.equal(commandPaths.length, 38);
         });
 
         it("Device Structure with one aggregator and two Light endpoints and defined endpoint IDs", () => {
@@ -481,7 +463,7 @@ describe("Endpoint Structures", () => {
             assert.ok(endpoints.get(0)?.clusters.has(BasicInformationCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(OperationalCredentialsCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(GeneralCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(NetworkCommissioningCluster.id));
+            assert.ok(endpoints.get(0)?.clusters.has(EthernetNetworkCommissioningCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(AccessControlCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(AdminCommissioningCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(GroupKeyManagementCluster.id));
@@ -522,8 +504,8 @@ describe("Endpoint Structures", () => {
             const deviceTypeListAttribute: AttributeServer<EndpointNumber[]> | undefined = attributes.get(attributePathToId({ endpointId: 11, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.deviceTypeList.id }));
             assert.deepEqual(deviceTypeListAttribute?.getLocal(), [{ deviceType: new DeviceTypeId(DeviceTypes.ON_OFF_LIGHT.code), revision: 2 }, { deviceType: new DeviceTypeId(DeviceTypes.BRIDGED_NODE.code), revision: 1 }]);
 
-            assert.equal(attributePaths.length, 204);
-            assert.equal(commandPaths.length, 43);
+            assert.equal(attributePaths.length, 202);
+            assert.equal(commandPaths.length, 58);
         });
 
         it("Device Structure with two aggregators and two Light endpoints and defined endpoint IDs", () => {
@@ -534,7 +516,6 @@ describe("Endpoint Structures", () => {
             const aggregator1 = new Aggregator([], 1);
             aggregator1.addClusterServer(ClusterServer(
                 FixedLabelCluster,
-                {},
                 {
                     labelList: [{ label: "bridge", value: "Type A" }]
                 },
@@ -557,7 +538,6 @@ describe("Endpoint Structures", () => {
             const aggregator2 = new Aggregator([], 2);
             aggregator2.addClusterServer(ClusterServer(
                 FixedLabelCluster,
-                {},
                 {
                     labelList: [{ label: "bridge", value: "Type B" }]
                 },
@@ -585,7 +565,7 @@ describe("Endpoint Structures", () => {
             assert.ok(endpoints.get(0)?.clusters.has(BasicInformationCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(OperationalCredentialsCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(GeneralCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(NetworkCommissioningCluster.id));
+            assert.ok(endpoints.get(0)?.clusters.has(EthernetNetworkCommissioningCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(AccessControlCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(AdminCommissioningCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(GroupKeyManagementCluster.id));
@@ -640,8 +620,8 @@ describe("Endpoint Structures", () => {
             const rootPartsListAttribute: AttributeServer<EndpointNumber[]> | undefined = attributes.get(attributePathToId({ endpointId: 0, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id }));
             assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(1), new EndpointNumber(11), new EndpointNumber(12), new EndpointNumber(2), new EndpointNumber(21), new EndpointNumber(22)]);
 
-            assert.equal(attributePaths.length, 317);
-            assert.equal(commandPaths.length, 63);
+            assert.equal(attributePaths.length, 315);
+            assert.equal(commandPaths.length, 98);
         });
 
         it("Device Structure with two aggregators and two Light endpoints and all auto-assigned endpoint IDs", () => {
@@ -650,7 +630,7 @@ describe("Endpoint Structures", () => {
 
             const aggregator1 = new Aggregator();
             aggregator1.addClusterServer(ClusterServer(
-                FixedLabelCluster, {}, {
+                FixedLabelCluster, {
                 labelList: [{ label: "bridge", value: "Type A" }]
             }, {}
             ));
@@ -670,7 +650,7 @@ describe("Endpoint Structures", () => {
 
             const aggregator2 = new Aggregator();
             aggregator2.addClusterServer(ClusterServer(
-                FixedLabelCluster, {}, {
+                FixedLabelCluster, {
                 labelList: [{ label: "bridge", value: "Type B" }]
             }, {}
             ));
@@ -698,7 +678,7 @@ describe("Endpoint Structures", () => {
             assert.ok(endpoints.get(0)?.clusters.has(BasicInformationCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(OperationalCredentialsCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(GeneralCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(NetworkCommissioningCluster.id));
+            assert.ok(endpoints.get(0)?.clusters.has(EthernetNetworkCommissioningCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(AccessControlCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(AdminCommissioningCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(GroupKeyManagementCluster.id));
@@ -753,8 +733,8 @@ describe("Endpoint Structures", () => {
             const rootPartsListAttribute: AttributeServer<EndpointNumber[]> | undefined = attributes.get(attributePathToId({ endpointId: 0, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id }));
             assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(1), new EndpointNumber(2), new EndpointNumber(3), new EndpointNumber(4), new EndpointNumber(5), new EndpointNumber(6)]);
 
-            assert.equal(attributePaths.length, 317);
-            assert.equal(commandPaths.length, 63);
+            assert.equal(attributePaths.length, 315);
+            assert.equal(commandPaths.length, 98);
         });
 
         it("Device Structure with two aggregators and two Light endpoints and all partly autoassigned endpoint IDs", () => {
@@ -764,7 +744,6 @@ describe("Endpoint Structures", () => {
             const aggregator1 = new Aggregator([], 37);
             aggregator1.addClusterServer(ClusterServer(
                 FixedLabelCluster,
-                {},
                 {
                     labelList: [{ label: "bridge", value: "Type A" }]
                 },
@@ -787,7 +766,6 @@ describe("Endpoint Structures", () => {
             const aggregator2 = new Aggregator();
             aggregator2.addClusterServer(ClusterServer(
                 FixedLabelCluster,
-                {},
                 {
                     labelList: [{ label: "bridge", value: "Type B" }]
                 },
@@ -818,7 +796,7 @@ describe("Endpoint Structures", () => {
             assert.ok(endpoints.get(0)?.clusters.has(BasicInformationCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(OperationalCredentialsCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(GeneralCommissioningCluster.id));
-            assert.ok(endpoints.get(0)?.clusters.has(NetworkCommissioningCluster.id));
+            assert.ok(endpoints.get(0)?.clusters.has(EthernetNetworkCommissioningCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(AccessControlCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(AdminCommissioningCluster.id));
             assert.ok(endpoints.get(0)?.clusters.has(GroupKeyManagementCluster.id));
@@ -873,8 +851,8 @@ describe("Endpoint Structures", () => {
             const rootPartsListAttribute: AttributeServer<EndpointNumber[]> | undefined = attributes.get(attributePathToId({ endpointId: 0, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id }));
             assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(37), new EndpointNumber(3), new EndpointNumber(38), new EndpointNumber(39), new EndpointNumber(40), new EndpointNumber(18)]);
 
-            assert.equal(attributePaths.length, 317);
-            assert.equal(commandPaths.length, 63);
+            assert.equal(attributePaths.length, 315);
+            assert.equal(commandPaths.length, 98);
         });
     });
 });

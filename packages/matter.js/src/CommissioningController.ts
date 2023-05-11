@@ -23,7 +23,7 @@ import { ComposedDevice } from "./device/ComposedDevice.js";
 import { DescriptorCluster } from "./cluster/DescriptorCluster.js";
 import { AllClustersMap } from "./cluster/ClusterHelper.js";
 import { ClusterClientObj, isClusterClient } from "./cluster/client/ClusterClient.js";
-import { BitSchema } from "./schema/BitmapSchema.js";
+import { BitSchema, TypeFromBitSchema } from "./schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
 
 const logger = new Logger("CommissioningController");
@@ -166,8 +166,8 @@ export class CommissioningController extends MatterNode {
      *
      * @param cluster The cluster to get the client for
      */
-    async getRootClusterClientWithNewInteractionClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
-        cluster: Cluster<F, A, C, E>
+    async getRootClusterClientWithNewInteractionClient<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
+        cluster: Cluster<F, SF, A, C, E>
     ): Promise<ClusterClientObj<A, C> | undefined> {
         return super.getRootClusterClient(cluster, await this.createInteractionClient());
     }
@@ -279,7 +279,7 @@ export class CommissioningController extends MatterNode {
             throw new Error("No device type found for endpoint");
         }
 
-        const endpointClusters = Array<ClusterServerObj<any> | ClusterClientObj<any, any>>();
+        const endpointClusters = Array<ClusterServerObj<any, any> | ClusterClientObj<any, any>>();
 
         // Add ClusterClients for all server clusters of the device
         for (const clusterId of descriptorData.serverList) {
@@ -301,7 +301,7 @@ export class CommissioningController extends MatterNode {
                 continue;
             }
             const clusterData = (data[clusterId.id] ?? {}) as any; // TODO correct typing
-            endpointClusters.push(ClusterServer(cluster, clusterData.featureMap, clusterData, {})); // TODO Add Default handler!
+            endpointClusters.push(ClusterServer(cluster, /*clusterData.featureMap,*/ clusterData, {})); // TODO Add Default handler!
         }
 
         if (endpointId === 0) {

@@ -101,23 +101,23 @@ export class MatterController {
 
         // Get and display the product name (just for debugging)
         const basicClusterClient = ClusterClient(BasicInformationCluster, 0, interactionClient);
-        const productName = await basicClusterClient.attributes.productName.get();
+        const productName = await basicClusterClient.getProductNameAttribute();
         logger.info("Paired with device:", productName);
 
         // Do the commissioning
         let generalCommissioningClusterClient = ClusterClient(GeneralCommissioningCluster, 0, interactionClient);
-        this.ensureSuccess(await generalCommissioningClusterClient.commands.armFailSafe({ breadcrumb: BigInt(1), expiryLengthSeconds: 60 }));
-        this.ensureSuccess(await generalCommissioningClusterClient.commands.setRegulatoryConfig({ breadcrumb: BigInt(2), newRegulatoryConfig: RegulatoryLocationType.IndoorOutdoor, countryCode: "US" }));
+        this.ensureSuccess(await generalCommissioningClusterClient.armFailSafe({ breadcrumb: BigInt(1), expiryLengthSeconds: 60 }));
+        this.ensureSuccess(await generalCommissioningClusterClient.setRegulatoryConfig({ breadcrumb: BigInt(2), newRegulatoryConfig: RegulatoryLocationType.IndoorOutdoor, countryCode: "US" }));
 
 
         const operationalCredentialsClusterClient = ClusterClient(OperationalCredentialsCluster, 0, interactionClient);
-        const { certificate: deviceAttestation } = await operationalCredentialsClusterClient.commands.requestCertChain({ type: CertificateChainType.DeviceAttestation });
+        const { certificate: deviceAttestation } = await operationalCredentialsClusterClient.requestCertChain({ type: CertificateChainType.DeviceAttestation });
         // TODO: extract device public key from deviceAttestation
-        const { certificate: productAttestation } = await operationalCredentialsClusterClient.commands.requestCertChain({ type: CertificateChainType.ProductAttestationIntermediate });
+        const { certificate: productAttestation } = await operationalCredentialsClusterClient.requestCertChain({ type: CertificateChainType.ProductAttestationIntermediate });
         // TODO: validate deviceAttestation and productAttestation
-        const { elements: attestationElements, signature: attestationSignature } = await operationalCredentialsClusterClient.commands.requestAttestation({ attestationNonce: Crypto.getRandomData(32) });
+        const { elements: attestationElements, signature: attestationSignature } = await operationalCredentialsClusterClient.requestAttestation({ attestationNonce: Crypto.getRandomData(32) });
         // TODO: validate attestationSignature using device public key
-        const { elements: csrElements, signature: csrSignature } = await operationalCredentialsClusterClient.commands.requestCertSigning({ certSigningRequestNonce: Crypto.getRandomData(32) });
+        const { elements: csrElements, signature: csrSignature } = await operationalCredentialsClusterClient.requestCertSigning({ certSigningRequestNonce: Crypto.getRandomData(32) });
         if (deviceAttestation.length === 0 || productAttestation.length === 0 || attestationElements.length === 0 || attestationSignature.length === 0 || csrElements.length === 0 || csrSignature.length === 0) {
             // TODO: validate the data really
             throw new Error("Invalid response from device");
@@ -126,10 +126,10 @@ export class MatterController {
         const { certSigningRequest } = TlvCertSigningRequest.decode(csrElements);
         const operationalPublicKey = CertificateManager.getPublicKeyFromCsr(certSigningRequest);
 
-        await operationalCredentialsClusterClient.commands.addRootCert({ certificate: this.certificateManager.getRootCert() });
+        await operationalCredentialsClusterClient.addRootCert({ certificate: this.certificateManager.getRootCert() });
         const peerNodeId = this.fabric.rootNodeId;
         const peerOperationalCert = this.certificateManager.generateNoc(operationalPublicKey, FABRIC_ID, peerNodeId);
-        await operationalCredentialsClusterClient.commands.addOperationalCert({
+        await operationalCredentialsClusterClient.addOperationalCert({
             operationalCert: peerOperationalCert,
             intermediateCaCert: new ByteArray(0),
             identityProtectionKey: this.fabric.identityProtectionKey,
@@ -143,7 +143,7 @@ export class MatterController {
         // Complete the commission
         // TODO: Why new client and not reuse above??
         generalCommissioningClusterClient = ClusterClient(GeneralCommissioningCluster, 0, interactionClient);
-        this.ensureSuccess(await generalCommissioningClusterClient.commands.commissioningComplete());
+        this.ensureSuccess(await generalCommissioningClusterClient.commissioningComplete());
 
         this.controllerStorage.set("fabric", this.fabric.toStorageObject());
         this.controllerStorage.set("fabricCommissioned", true);

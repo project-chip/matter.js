@@ -38,17 +38,19 @@ export interface AttributeStatus {
 }
 
 export function ClusterClient<A extends Attributes, C extends Commands>(
-    clusterDef: Cluster<any, A, C, any>,
+    clusterDef: Cluster<any, any, A, C, any>,
     endpointId: number,
     interactionClient: InteractionClient
 ): ClusterClientObj<A, C> {
     const { id: clusterId, name, commands: commandDef, attributes: attributeDef } = clusterDef;
+    const attributes = <AttributeClients<A>>{};
+
     const result: any = {
         id: clusterId,
         name,
         _type: "ClusterClient",
         endpointId,
-        attributes: <AttributeClients<A>>{},
+        attributes,
         commands: <{ [P in keyof C]: SignatureFromCommandSpec<C[P]> }>{},
         subscribeAllAttributes: async (minIntervalFloorSeconds: number, maxIntervalCeilingSeconds: number) => {
             if (interactionClient === undefined) {
@@ -61,7 +63,7 @@ export function ClusterClient<A extends Attributes, C extends Commands>(
                     logger.warn("Unknown attribute id", path.attributeId);
                     return;
                 }
-                result.attributes[attributeName].update(value);
+                (attributes as any)[attributeName].update(value);
             });
         },
         /**
@@ -73,7 +75,8 @@ export function ClusterClient<A extends Attributes, C extends Commands>(
         _clone(newInteractionClient?: InteractionClient) {
             const clonedClusterClient = ClusterClient(clusterDef, endpointId, newInteractionClient ?? interactionClient);
             if (newInteractionClient === undefined) {
-                clonedClusterClient.attributes = result.attributes;
+                // When we keep the InteractionClient we also reuse the AttributeServers bound to it
+                clonedClusterClient.attributes = attributes;
             }
             return clonedClusterClient;
         }
@@ -83,12 +86,12 @@ export function ClusterClient<A extends Attributes, C extends Commands>(
     // Add accessors
     for (const attributeName in attributeDef) {
         const attribute = attributeDef[attributeName];
-        result.attributes[attributeName] = new AttributeClient(attribute, attributeName, endpointId, clusterId, async () => interactionClient);
+        (attributes as any)[attributeName] = new AttributeClient(attribute, attributeName, endpointId, clusterId, async () => interactionClient);
         attributeToId[attribute.id] = attributeName;
         const capitalizedAttributeName = capitalize(attributeName);
         result[`get${capitalizedAttributeName}Attribute`] = async (alwaysRequestFromRemote = false) => {
             return await tryCatchAsync(async () => {
-                return await result.attributes[attributeName].get(alwaysRequestFromRemote);
+                return await (attributes as any)[attributeName].get(alwaysRequestFromRemote);
             }, StatusResponseError, (e) => {
                 const { code } = e;
                 if (code === StatusCode.UnsupportedAttribute) {
@@ -97,10 +100,10 @@ export function ClusterClient<A extends Attributes, C extends Commands>(
                 throw e;
             });
         }
-        result[`set${capitalizedAttributeName}Attribute`] = async <T,>(value: T) => result.attributes[attributeName].set(value);
+        result[`set${capitalizedAttributeName}Attribute`] = async <T,>(value: T) => (attributes as any)[attributeName].set(value);
         result[`subscribe${capitalizedAttributeName}Attribute`] = async <T,>(listener: (value: T) => void, minIntervalS: number, maxIntervalS: number) => {
-            result.attributes[attributeName].addListener(listener);
-            result.attributes[attributeName].subscribe(minIntervalS, maxIntervalS);
+            (attributes as any)[attributeName].addListener(listener);
+            (attributes as any)[attributeName].subscribe(minIntervalS, maxIntervalS);
         }
     }
 
@@ -114,6 +117,7 @@ export function ClusterClient<A extends Attributes, C extends Commands>(
             }
             return interactionClient.invoke<Command<RequestT, ResponseT>>(endpointId, clusterId, request, requestId, requestSchema, responseId, responseSchema, optional);
         };
+        result[commandName] = result.commands[commandName];
     }
 
     return result as ClusterClientObj<A, C>;

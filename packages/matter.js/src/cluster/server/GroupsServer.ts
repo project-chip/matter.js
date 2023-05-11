@@ -7,7 +7,7 @@
 import { GroupsCluster } from "../GroupsCluster.js";
 import { GroupId } from "../../datatype/GroupId.js";
 import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
-import { ClusterServerHandlers } from "./ClusterServer.js";
+import { ClusterServerHandlers, ClusterServerObj } from "./ClusterServer.js";
 import { MatterDevice } from "../../MatterDevice.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { Fabric } from "../../fabric/Fabric.js";
@@ -178,12 +178,12 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             }
 
             // TODO when endpoint gets replaced by object this wil be nicer
-            const identifyCluster = endpoint.clusters.get(IdentifyCluster.id) as ClusterServer<typeof IdentifyCluster.features, typeof IdentifyCluster.supportedFeatures, typeof IdentifyCluster.attributes, typeof IdentifyCluster.commands, typeof IdentifyCluster.events>;
+            const identifyCluster = endpoint.clusters.get(IdentifyCluster.id) as ClusterServerObj<typeof IdentifyCluster.attributes, typeof IdentifyCluster.commands>;
             if (!identifyCluster) {
                 throw new Error("Identify cluster not found");
             }
 
-            if (identifyCluster.attributes.identifyTime.get() > 0) { // We identify ourself currently
+            if (identifyCluster.attributes.identifyTime.getLocal() > 0) { // We identify ourself currently
                 addGroupLogic(groupId, groupName, sessionType, getFabricFromSession(session as SecureSession<MatterDevice>), endpoint.id);
             }
 
@@ -197,9 +197,6 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
 
 export const createDefaultGroupsClusterServer = () => ClusterServer(
     GroupsCluster,
-    {
-        groupNames: true,
-    },
     {
         nameSupport: {
             groupNames: true,

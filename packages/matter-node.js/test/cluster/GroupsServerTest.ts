@@ -20,14 +20,16 @@ import { ClusterServer, EndpointData, StatusCode } from "@project-chip/matter.js
 import { SecureSession } from "@project-chip/matter.js/session";
 import { MatterDevice } from "@project-chip/matter.js";
 import { Fabric, FabricJsonObject } from "@project-chip/matter.js/fabric";
-import { GroupsCluster, GroupsClusterHandler, IdentifyCluster, IdentifyType } from "@project-chip/matter.js/cluster";
+import {
+    ClusterServerObj, GroupsCluster, GroupsClusterHandler, IdentifyCluster, IdentifyType, ClusterServerHandlers
+} from "@project-chip/matter.js/cluster";
 import { GroupId } from "@project-chip/matter.js/datatype";
 import { getPromiseResolver } from "@project-chip/matter.js/util";
 import { SessionType, Message } from "@project-chip/matter.js/codec";
 import { callCommandOnClusterServer, createTestSessionWithFabric } from "./ClusterServerTestingUtil";
 
 describe("Groups Server test", () => {
-    let groupsServer: ClusterServer<any, any, any, any, any> | undefined;
+    let groupsServer: ClusterServerObj<typeof GroupsCluster.attributes, typeof GroupsCluster.commands> | undefined;
     let testFabric: Fabric | undefined;
     let testSession: SecureSession<MatterDevice> | undefined
     let endpoint: EndpointData | undefined;
@@ -35,7 +37,12 @@ describe("Groups Server test", () => {
 
     // TODO make that nicer and maybe  move to a "testing support library"
     async function initializeTestEnv() {
-        groupsServer = new ClusterServer(GroupsCluster, { nameSupport: { groupNames: true } }, GroupsClusterHandler());
+        groupsServer = ClusterServer(GroupsCluster, { nameSupport: { groupNames: true } }, GroupsClusterHandler());
+        const identifyServer = ClusterServer(
+            IdentifyCluster,
+            { identifyTime: 100, identifyType: IdentifyType.None },
+            { identify: async () => { /* */ } } as ClusterServerHandlers<typeof IdentifyCluster>
+        );
         testSession = await createTestSessionWithFabric();
         testFabric = testSession.getFabric();
 
@@ -43,26 +50,16 @@ describe("Groups Server test", () => {
             id: 1,
             name: '',
             code: 0,
-            clusters: new Map<number, ClusterServer<any, any, any, any, any>>(
-                [
-                    [
-                        IdentifyCluster.id,
-                        new ClusterServer(
-                            IdentifyCluster,
-                            { identifyTime: 100, identifyType: IdentifyType.None },
-                            { identify: async () => { /* */ } }
-                        )
-                    ],
-                    [GroupsCluster.id, groupsServer]
-                ]
-            )
+            clusters: new Map<number, ClusterServerObj<any, any>>()
         };
+        endpoint.clusters.set(IdentifyCluster.id, identifyServer as ClusterServerObj<any, any>); // TODO remove hack by changing to read endpoint objects
+        endpoint.clusters.set(GroupsCluster.id, groupsServer);
 
         endpoint2 = {
             id: 2,
             name: '',
             code: 0,
-            clusters: new Map<number, ClusterServer<any, any, any, any, any>>()
+            clusters: new Map<number, ClusterServerObj<any, any>>()
         };
     }
 
@@ -247,7 +244,7 @@ describe("Groups Server test", () => {
     describe("Add group while identifying without identifying test", () => {
         beforeAll(async () => {
             await initializeTestEnv();
-            const identifyCluster = endpoint?.clusters.get(IdentifyCluster.id) as ClusterServer<typeof IdentifyCluster.features, typeof IdentifyCluster.supportedFeatures, typeof IdentifyCluster.attributes, typeof IdentifyCluster.commands, typeof IdentifyCluster.events>;
+            const identifyCluster = endpoint?.clusters.get(IdentifyCluster.id) as ClusterServerObj<typeof IdentifyCluster.attributes, typeof IdentifyCluster.commands>;
             identifyCluster.attributes.identifyTime.set(0); // Change to not identifying
         });
 

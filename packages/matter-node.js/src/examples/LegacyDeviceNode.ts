@@ -98,7 +98,7 @@ class DeviceNode {
             .addProtocolHandler(secureChannelProtocol)
             .addProtocolHandler(new InteractionServer(storageManager)
                 .addEndpoint(0x00, DeviceTypes.ROOT, [
-                    ClusterServer(BasicInformationCluster, {}, {
+                    ClusterServer(BasicInformationCluster, {
                         dataModelRevision: 1,
                         vendorName,
                         vendorId,
@@ -117,7 +117,7 @@ class DeviceNode {
                         },
                         serialNumber: `node-matter-${Time.nowMs()}`,
                     }, {}),
-                    ClusterServer(GeneralCommissioningCluster, {}, {
+                    ClusterServer(GeneralCommissioningCluster, {
                         breadcrumb: BigInt(0),
                         basicCommissioningInfo: {
                             failSafeExpiryLengthSeconds: 60 /* 1min */,
@@ -127,7 +127,7 @@ class DeviceNode {
                         locationCapability: RegulatoryLocationType.IndoorOutdoor,
                         supportsConcurrentConnections: true,
                     }, GeneralCommissioningClusterHandler),
-                    ClusterServer(OperationalCredentialsCluster, {}, {
+                    ClusterServer(OperationalCredentialsCluster, {
                         nocs: [],
                         fabrics: [],
                         supportedFabrics: 254,
@@ -143,11 +143,6 @@ class DeviceNode {
                         }),
                     ),
                     ClusterServer(EthernetNetworkCommissioningCluster,
-                        {
-                            wifi: false,
-                            thread: false,
-                            ethernet: true,
-                        },
                         {
                             maxNetworks: 1,
                             interfaceEnabled: true,

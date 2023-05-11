@@ -161,7 +161,7 @@ export const GeneralDiagnosticsCluster = Cluster({
     /** @see {@link MatterCoreSpecificationV1_0} § 11.11.7 */
     attributes: {
 
-        /** List of NetworkInterface structss */
+        /** List of NetworkInterface structs */
         networkInterfaces: Attribute(0, TlvArray(TlvNetworkInterface, { maxLength: 8 })),
 
         /** Indicates a best-effort count of the number of times the Node has rebooted. */
