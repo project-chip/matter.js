@@ -122,6 +122,6 @@ export type ClusterServerObj<A extends Attributes, C extends Commands> =
     & ServerAttributeSetters<A>
     & ServerAttributeSubscribers<A>;
 
-export function isClusterServer(obj: ClusterClientObj<Attributes, Commands> | ClusterServerObj<any, any>): obj is ClusterServerObj<Attributes, Commands> {
+export function isClusterServer(obj: ClusterClientObj<Attributes, Commands> | ClusterServerObj<Attributes, Commands>): obj is ClusterServerObj<Attributes, Commands> {
     return obj._type === "ClusterServer";
 }
