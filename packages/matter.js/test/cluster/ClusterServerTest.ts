@@ -11,7 +11,7 @@ import { AttributeId } from "../../src/datatype/AttributeId.js";
 import { CommandId } from "../../src/datatype/CommandId.js";
 import { FabricIndex } from "../../src/datatype/FabricIndex.js";
 import { ClusterServer } from "../../src/protocol/interaction/InteractionServer.js";
-import {IdentifyCluster, IdentifyType} from "../../src/cluster/index.js";
+import { IdentifyCluster, IdentifyType } from "../../src/cluster/index.js";
 
 
 describe("ClusterServer structure", () => {
@@ -51,7 +51,7 @@ describe("ClusterServer structure", () => {
             );
             assert.ok(server);
             // as any is trick because these attributes are not officially exposed by typings
-            assert.deepEqual((server.attributes as any).featureMap.get(), { });
+            assert.deepEqual((server.attributes as any).featureMap.get(), {});
             assert.deepEqual((server.attributes as any).attributeList.get(), [new AttributeId(0), new AttributeId(1), new AttributeId(65533), new AttributeId(65532), new AttributeId(65531), new AttributeId(65529), new AttributeId(65528)]);
             assert.deepEqual((server.attributes as any).acceptedCommandList.get(), [new CommandId(0), new CommandId(0x40)]);
             assert.deepEqual((server.attributes as any).generatedCommandList.get(), []);
@@ -71,7 +71,7 @@ describe("ClusterServer structure", () => {
             );
             assert.ok(server);
             // as any is trick because these attributes are not officially exposed by typings
-            assert.deepEqual((server.attributes as any).featureMap.get(), { });
+            assert.deepEqual((server.attributes as any).featureMap.get(), {});
             assert.deepEqual((server.attributes as any).attributeList.get(), [new AttributeId(0), new AttributeId(1), new AttributeId(65533), new AttributeId(65532), new AttributeId(65531), new AttributeId(65529), new AttributeId(65528)]);
             assert.deepEqual((server.attributes as any).acceptedCommandList.get(), [new CommandId(0), new CommandId(0x40)]);
             assert.deepEqual((server.attributes as any).generatedCommandList.get(), []);
