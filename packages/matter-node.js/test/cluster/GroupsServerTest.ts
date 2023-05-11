@@ -21,7 +21,7 @@ import { SecureSession } from "@project-chip/matter.js/session";
 import { MatterDevice } from "@project-chip/matter.js";
 import { Fabric, FabricJsonObject } from "@project-chip/matter.js/fabric";
 import {
-    ClusterServerObj, GroupsCluster, GroupsClusterHandler, IdentifyCluster, createDefaultIdentifyClusterServer
+    ClusterServerObj, GroupsCluster, GroupsClusterHandler, IdentifyCluster, ClusterServerHandlers, IdentifyType
 } from "@project-chip/matter.js/cluster";
 import { GroupId } from "@project-chip/matter.js/datatype";
 import { getPromiseResolver } from "@project-chip/matter.js/util";
@@ -39,14 +39,21 @@ describe("Groups Server test", () => {
     // TODO make that nicer and maybe  move to a "testing support library"
     async function initializeTestEnv() {
         groupsServer = ClusterServer(GroupsCluster, { nameSupport: { groupNames: true } }, GroupsClusterHandler());
-        const identifyServer = createDefaultIdentifyClusterServer({
-            identify: async ({ request: { identifyTime } }) => { console.log(identifyTime); /* */ }
-        })
+        const identifyServer = ClusterServer(
+            IdentifyCluster,
+            {
+                identifyTime: 100,
+                identifyType: IdentifyType.None
+            },
+            {
+                identify: async ({ request: { identifyTime } }) => { console.log(identifyTime); /* */ }
+            } as ClusterServerHandlers<typeof IdentifyCluster>
+        );
 
         testSession = await createTestSessionWithFabric();
         testFabric = testSession.getFabric();
 
-        endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], [/*groupsServer, identifyServer, identifyServer2*/], 1);
+        endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], [/*groupsServer, identifyServer*/], 1);
         endpoint.addClusterServer(groupsServer);
         endpoint.addClusterServer(identifyServer);
 

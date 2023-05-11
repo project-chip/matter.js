@@ -178,12 +178,10 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             }
 
             const identifyCluster = endpoint.getClusterServer(IdentifyCluster);
-            if (!identifyCluster) {
-                throw new Error("Identify cluster not found");
-            }
-
-            if (identifyCluster.attributes.identifyTime.getLocal() > 0) { // We identify ourself currently
-                addGroupLogic(groupId, groupName, sessionType, getFabricFromSession(session as SecureSession<MatterDevice>), endpoint.getId());
+            if (identifyCluster) {
+                if (identifyCluster.attributes.identifyTime.getLocal() > 0) { // We identify ourself currently
+                    addGroupLogic(groupId, groupName, sessionType, getFabricFromSession(session as SecureSession<MatterDevice>), endpoint.getId());
+                }
             }
 
             // TODO If the AddGroupIfIdentifying command was received as unicast and the evaluated status is not SUCCESS, or
