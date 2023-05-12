@@ -162,18 +162,26 @@ export class SubscriptionHandler {
 
         try {
             await tryCatchAsync(async () => {
-                await messenger.sendDataReport({
-                    suppressResponse: !values.length, // suppressResponse ok for empty DataReports
-                    subscriptionId: this.subscriptionId,
-                    interactionModelRevision: 1,
-                    attributeReports: values.map(({ path, schema, value, version }) => ({
-                        attributeData: {
-                            path,
-                            dataVersion: version,
-                            data: schema.encodeTlv(value),
-                        },
-                    })),
-                });
+                if (values.length === 0) {
+                    await messenger.sendDataReport({
+                        suppressResponse: true, // suppressResponse ok for empty DataReports
+                        subscriptionId: this.subscriptionId,
+                        interactionModelRevision: 1,
+                    });
+                } else {
+                    await messenger.sendDataReport({
+                        suppressResponse: false,
+                        subscriptionId: this.subscriptionId,
+                        interactionModelRevision: 1,
+                        attributeReports: values.map(({ path, schema, value, version }) => ({
+                            attributeData: {
+                                path,
+                                dataVersion: version,
+                                data: schema.encodeTlv(value),
+                            },
+                        })),
+                    });
+                }
             }, StatusResponseError, (error) => {
                 if (error.code === StatusCode.InvalidSubscription ||
                     error.code === StatusCode.Failure

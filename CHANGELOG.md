@@ -10,6 +10,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Feature: Provide the Endpoint as data field for command Handlers to allow to access the endpoint data and other clusters on that endpoint if needed
   * Feature: Add Implementations of Scenes and Groups-Clusters (still to be tested with Controllers in depth!)
   * Feature: Add ClusterExtend to allow building Feature-based conditional cluster definitions (and do that for OnOff/Network-Commissioning)
+  * Adjustment: Do not send empty arrays for empty subscription messages to further shorten the payload
   * Fix: Respond with Unsupported Command when a unknown command is received and log the error
   * Fix: Increase the array maximum size according to specs
   * Fix: Fixed internal TlvTag representation to allow also decoding of the internal object format of a Tlv stream 
