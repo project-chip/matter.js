@@ -62,6 +62,7 @@ const MakeAttributesMandatory = <T extends Attributes, C extends OptionalAttribu
     return result as MakeAttributesMandatory<T, C>;
 };
 type UseOptionalAttributes<C extends Cluster<any, any, any, any, any>, A extends OptionalAttributeConf<C["attributes"]>> = Cluster<C["features"], C["supportedFeatures"], MakeAttributesMandatory<C["attributes"], A>, C["commands"], C["events"]>;/** Forces the presence of the specified optional attributes, so they can be used in the command handlers */
+/** Forces the presence of the specified optional attributes, so they can be used in the command handlers */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 export const UseOptionalAttributes = <C extends Cluster<any, any, any, any, any>, A extends OptionalAttributeConf<C["attributes"]>>(cluster: C, conf: A): UseOptionalAttributes<C, A> => ({ ...cluster, attributes: MakeAttributesMandatory(cluster.attributes, conf) });
 
@@ -122,6 +123,6 @@ export type ClusterServerObj<A extends Attributes, C extends Commands> =
     & ServerAttributeSetters<A>
     & ServerAttributeSubscribers<A>;
 
-export function isClusterServer(obj: ClusterClientObj<Attributes, Commands> | ClusterServerObj<Attributes, Commands>): obj is ClusterServerObj<Attributes, Commands> {
+export function isClusterServer<A extends Attributes, C extends Commands>(obj: ClusterClientObj<A, C> | ClusterServerObj<A, C>): obj is ClusterServerObj<A, C> {
     return obj._type === "ClusterServer";
 }
