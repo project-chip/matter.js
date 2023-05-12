@@ -184,6 +184,17 @@ const INVOKE_COMMAND_REQUEST_WITH_NO_ARGS: InvokeRequest = {
     ]
 };
 
+const INVOKE_COMMAND_REQUEST_INVALID: InvokeRequest = {
+    interactionModelRevision: 1,
+    suppressResponse: false,
+    timedRequest: false,
+    invokeRequests: [
+        {
+            commandPath: { endpointId: 0, clusterId: 6, commandId: 10 },
+        }
+    ]
+};
+
 const INVOKE_COMMAND_RESPONSE: InvokeResponse = {
     interactionModelRevision: 1,
     suppressResponse: false,
@@ -191,6 +202,18 @@ const INVOKE_COMMAND_RESPONSE: InvokeResponse = {
         {
             status: {
                 commandPath: { clusterId: 6, commandId: 1, endpointId: 0 }, status: { status: 0 }
+            }
+        }
+    ]
+};
+
+const INVOKE_COMMAND_RESPONSE_INVALID: InvokeResponse = {
+    interactionModelRevision: 1,
+    suppressResponse: false,
+    invokeResponses: [
+        {
+            status: {
+                commandPath: { clusterId: 6, commandId: 10, endpointId: 0 }, status: { status: 0x81 }
             }
         }
     ]
@@ -325,7 +348,7 @@ describe("InteractionProtocol", () => {
     });
 
     describe("handleInvokeRequest", () => {
-        it("invoke method with empty args", async () => {
+        it("invoke command with empty args", async () => {
             let onOffState = false;
             const onOffCluster = ClusterServer(OnOffCluster, {
                 onOff: onOffState,
@@ -352,7 +375,7 @@ describe("InteractionProtocol", () => {
             assert.equal(onOffState, true);
         });
 
-        it("invoke method with no args", async () => {
+        it("invoke command with no args", async () => {
 
             let onOffState = false;
             const onOffCluster = ClusterServer(OnOffCluster, {
@@ -378,6 +401,33 @@ describe("InteractionProtocol", () => {
 
             assert.deepEqual(result, INVOKE_COMMAND_RESPONSE);
             assert.equal(onOffState, true);
+        });
+
+        it("invalid invoke command", async () => {
+            let onOffState = false;
+            const onOffCluster = ClusterServer(OnOffCluster, {
+                onOff: onOffState,
+            }, {
+                on: async () => {
+                    onOffState = true;
+                },
+                off: async () => {
+                    onOffState = false;
+                },
+                toggle: async () => {
+                    onOffState = !onOffState;
+                }
+            });
+
+            const storageManager = new StorageManager(new StorageBackendMemory());
+            await storageManager.initialize();
+            const interactionProtocol = new InteractionServer(storageManager)
+                .addEndpoint(0, DeviceTypes.ROOT, [onOffCluster]);
+
+            const result = await interactionProtocol.handleInvokeRequest(({ channel: { getName: () => "test" } }) as MessageExchange<MatterDevice>, INVOKE_COMMAND_REQUEST_INVALID, {} as Message);
+
+            assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_INVALID);
+            assert.equal(onOffState, false);
         });
     });
 });

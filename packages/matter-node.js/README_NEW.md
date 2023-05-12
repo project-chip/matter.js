@@ -38,3 +38,5 @@ These infos will be merged into the official Readme before we merge this PR and 
   * Add Binding cluster for all Simple Device types
   * Rework BitmapSchema (thanks to @AlCalzone)
   * Remove the Partials from Cluster by optimizing Merge type
+* May 12th
+  * Fix: Respond with Unsupported Command when a unknown command is received and log the error

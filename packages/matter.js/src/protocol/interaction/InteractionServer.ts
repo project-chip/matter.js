@@ -8,27 +8,15 @@ import { MatterDevice } from "../../MatterDevice.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import {
-    DataReport,
-    InteractionServerMessenger,
-    InvokeRequest,
-    InvokeResponse,
-    MessageType,
-    ReadRequest,
-    StatusResponseError,
-    SubscribeRequest,
-    TimedRequest,
-    WriteRequest,
-    WriteResponse
+    DataReport, InteractionServerMessenger, InvokeRequest, InvokeResponse, MessageType, ReadRequest, StatusResponseError,
+    SubscribeRequest, TimedRequest, WriteRequest, WriteResponse
 } from "./InteractionMessenger.js";
 import { Attributes, Cluster, Commands, Events, TlvNoResponse } from "../../cluster/Cluster.js";
 import {
-    StatusCode,
-    TlvAttributePath,
-    TlvAttributeReport, TlvCommandPath,
-    TlvSubscribeResponse
+    StatusCode, TlvAttributePath, TlvAttributeReport, TlvInvokeResponseData, TlvSubscribeResponse
 } from "./InteractionProtocol.js"
 import { BitSchema, TypeFromBitSchema } from "../../schema/BitmapSchema.js";
-import { TlvStream, TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { DeviceTypeId } from "../../datatype/DeviceTypeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
@@ -48,7 +36,6 @@ import { Logger } from "../../log/Logger.js";
 import { StorageContext } from "../../storage/StorageContext.js";
 import { StorageManager } from "../../storage/StorageManager.js";
 import { capitalize } from "../../util/String.js";
-import { TlvVoid } from "../../tlv/TlvVoid.js";
 import { Endpoint } from "../../device/Endpoint.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { CommandId } from "../../datatype/CommandId.js";
@@ -466,24 +453,25 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     async handleInvokeRequest(exchange: MessageExchange<MatterDevice>, { invokeRequests }: InvokeRequest, message: Message): Promise<InvokeResponse> {
         logger.debug(`Received invoke request from ${exchange.channel.getName()}: ${invokeRequests.map(({ commandPath: { endpointId, clusterId, commandId } }) => `${toHex(endpointId)}/${toHex(clusterId)}/${toHex(commandId)}`).join(", ")}`);
 
-        const results = new Array<{ commandPath: TypeFromSchema<typeof TlvCommandPath>, code: StatusCode, response: TlvStream, responseId: number }>();
+        const invokeResponses: TypeFromSchema<typeof TlvInvokeResponseData>[] = [];
 
         await Promise.all(invokeRequests.map(async ({ commandPath, commandFields }) => {
             const { endpointId } = commandPath;
             if (endpointId === undefined) {
                 logger.error("Wildcard command invokes not yet supported!");
-                results.push({ code: StatusCode.UnsupportedCommand, commandPath, response: TlvVoid.encodeTlv(), responseId: 0 });
+                invokeResponses.push({ status: { commandPath, status: { status: StatusCode.UnsupportedCommand } } });
                 return;
             }
             const command = this.commands.get(commandPathToId(commandPath as CommandPath));
             if (command === undefined) {
-                // results.push({ code: StatusCode.UnsupportedCommand, path });// TODO!!
+                logger.error("Unknown command!!");
+                invokeResponses.push({ status: { commandPath, status: { status: StatusCode.UnsupportedCommand } } });
                 return;
             }
             const endpoint = this.endpoints.get(endpointId);
             if (!endpoint) {
                 logger.error(`Endpoint ${endpointId} not found`);
-                //results.push({ code: StatusCode.UnsupportedCommand, commandPath, response: TlvVoid.encodeTlv(), responseId: 0 }); // TODO
+                invokeResponses.push({ status: { commandPath, status: { status: StatusCode.UnsupportedCommand } } });
                 return;
             }
 
@@ -493,19 +481,23 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             }
 
             const result = await command.invoke(exchange.session, commandFields, message, endpoint);
-            results.push({ ...result, commandPath });
+            const { code, responseId, response } = result;
+            if (response.length === 0) {
+                invokeResponses.push({ status: { commandPath, status: { status: code } } });
+            } else {
+                invokeResponses.push({
+                    command: {
+                        commandPath: { ...commandPath, commandId: responseId },
+                        commandFields: response
+                    }
+                });
+            }
         }));
 
         return {
             suppressResponse: false,
             interactionModelRevision: 1,
-            invokeResponses: results.map(({ commandPath, responseId, code, response }) => {
-                if (response.length === 0) {
-                    return { status: { commandPath, status: { status: code } } };
-                } else {
-                    return { command: { commandPath: { ...commandPath, commandId: responseId }, commandFields: response } };
-                }
-            }),
+            invokeResponses,
         };
     }
 

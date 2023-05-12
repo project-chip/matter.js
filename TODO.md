@@ -41,7 +41,7 @@ The following are things on my (@Apollon77) TODO list for the project right now 
 * Add generic cluster handlers for all clusters that are not yet covered
 
 ## Core topics
-* Return correct error in read/write when endpoint/cluster is unknown (in comparism to attributes)
+* Return correct error in read/write/invoke when endpoint/cluster is unknown (in comparism to attributes)
 * Monitor subscriptions and remove/resubscribe them when the device did not answered withing maxInterval, how notify device?
 * DataReport chunking when sending arrays
 * Add support for group casts and groups in general
