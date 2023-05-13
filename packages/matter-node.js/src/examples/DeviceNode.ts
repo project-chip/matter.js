@@ -18,7 +18,7 @@
  */
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
 import { CommissioningServer, MatterServer } from "../"; // same as @project-chip/matter-node.js
-import { commandExecutor, getIntParameter, getParameter, requireMinNodeVersion } from "../util"; // same as @project-chip/matter-node.js/util
+import { commandExecutor, getIntParameter, getParameter, requireMinNodeVersion, hasParameter } from "../util"; // same as @project-chip/matter-node.js/util
 import { Time } from "../time"; // same as @project-chip/matter-node.js/time
 import { OnOffLightDevice, OnOffPluginUnitDevice } from "../exports/device"; // same as @project-chip/matter-node.js/device
 import { VendorId } from "../exports/datatype"; // same as @project-chip/matter-node.js/datatype
@@ -30,7 +30,7 @@ const logger = Logger.get("Device");
 requireMinNodeVersion(16);
 
 const storageLocation = getParameter("store") ?? "device-node";
-const storage = new StorageBackendDisk(storageLocation, getIntParameter("clearstorage") === 1);
+const storage = new StorageBackendDisk(storageLocation, hasParameter("clearstorage"));
 logger.info(`Storage location: ${storageLocation} (Directory)`);
 logger.info('Use the parameter "-store NAME" to specify a different storage location, use -clearstorage to start with an empty storage.')
 
