@@ -10,4 +10,32 @@
     "declarationMap": true, // Link from type definition (.d.ts) to source .ts for code navigation
   },
   "include": ["src/**/*.ts"],
+  "typedocOptions": {
+    "entryPoints": [
+      "src/certificate/index.ts",
+      "src/cluster/index.ts",
+      "src/codec/index.ts",
+      "src/common/index.ts",
+      "src/crypto/index.ts",
+      "src/datatype/index.ts",
+      "src/device/index.ts",
+      "src/fabric/index.ts",
+      "src/log/index.ts",
+      "src/math/index.ts",
+      "src/mdns/index.ts",
+      "src/net/index.ts",
+      "src/protocol/index.ts",
+      "src/protocol/interaction/index.ts",
+      "src/protocol/securechannel/index.ts",
+      "src/schema/index.ts",
+      "src/session/index.ts",
+      "src/spec/index.ts",
+      "src/storage/index.ts",
+      "src/time/index.ts",
+      "src/tlv/index.ts",
+      "src/util/index.ts",
+      "src/index.ts"
+    ],
+    "out": "../../docs/matter.js"
+  }
 }
