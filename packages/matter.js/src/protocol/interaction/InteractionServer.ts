@@ -8,27 +8,15 @@ import { MatterDevice } from "../../MatterDevice.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import {
-    DataReport,
-    InteractionServerMessenger,
-    InvokeRequest,
-    InvokeResponse,
-    MessageType,
-    ReadRequest,
-    StatusResponseError,
-    SubscribeRequest,
-    TimedRequest,
-    WriteRequest,
-    WriteResponse
+    DataReport, InteractionServerMessenger, InvokeRequest, InvokeResponse, MessageType, ReadRequest, StatusResponseError,
+    SubscribeRequest, TimedRequest, WriteRequest, WriteResponse
 } from "./InteractionMessenger.js";
-import { Attributes, Cluster, Commands, Events } from "../../cluster/Cluster.js";
+import { Attributes, Cluster, Commands, Events, TlvNoResponse } from "../../cluster/Cluster.js";
 import {
-    StatusCode,
-    TlvAttributePath,
-    TlvAttributeReport, TlvCommandPath,
-    TlvSubscribeResponse
+    StatusCode, TlvAttributePath, TlvAttributeReport, TlvInvokeResponseData, TlvSubscribeResponse
 } from "./InteractionProtocol.js"
 import { BitSchema, TypeFromBitSchema } from "../../schema/BitmapSchema.js";
-import { TlvStream, TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { DeviceTypeId } from "../../datatype/DeviceTypeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
@@ -38,7 +26,9 @@ import { SubscriptionHandler } from "./SubscriptionHandler.js";
 import { Message } from "../../codec/MessageCodec.js";
 import { Crypto } from "../../crypto/Crypto.js";
 import { decodeValueForSchema, normalizeAttributeData } from "./AttributeDataDecoder.js";
-import { AttributeInitialValues, AttributeServers, ClusterServerHandlers } from "../../cluster/server/ClusterServer.js";
+import {
+    AttributeInitialValues, AttributeServers, ClusterServerHandlers, ClusterServerObj, CommandServers
+} from "../../cluster/server/ClusterServer.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { AttributeGetterServer, AttributeServer } from "../../cluster/server/AttributeServer.js";
 import { DescriptorCluster } from "../../cluster/DescriptorCluster.js";
@@ -46,122 +36,162 @@ import { Logger } from "../../log/Logger.js";
 import { StorageContext } from "../../storage/StorageContext.js";
 import { StorageManager } from "../../storage/StorageManager.js";
 import { capitalize } from "../../util/String.js";
-import { TlvVoid } from "../../tlv/TlvVoid.js";
-import { TlvAttributeValuePair } from "../../cluster/index.js";
+import { Endpoint } from "../../device/Endpoint.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
+import { CommandId } from "../../datatype/CommandId.js";
+import { TlvAttributeValuePair } from "../../cluster/ScenesCluster.js";
+import { DeviceTypes } from "../../device/DeviceTypes.js";
 
 export const INTERACTION_PROTOCOL_ID = 0x0001;
 
-// TODO replace by real Endpoint object
-export type EndpointData = { id: number, name: string, code: number, clusters: Map<number, ClusterServer<any, any, any, any, any>> };
-
 const logger = Logger.get("InteractionProtocol");
 
-export class ClusterServer<F extends BitSchema, SF extends Partial<TypeFromBitSchema<F>>, A extends Attributes, C extends Commands, E extends Events> {
-    readonly id: number;
-    readonly name: string;
-    readonly attributes = <AttributeServers<A>>{};
-    readonly commands = new Array<CommandServer<any, any>>();
-    private clusterStorage: StorageContext | null = null;
-    private attributeStorageListeners = new Map<number, (value: any, version: number) => void>();
-    private sceneAttributeList = new Array<string>();
+export function ClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
+    clusterDef: Cluster<F, SF, A, C, E>,
+    attributesInitialValues: AttributeInitialValues<A>,
+    handlers: ClusterServerHandlers<Cluster<F, SF, A, C, E>>
+): ClusterServerObj<A, C> {
+    const { id: clusterId, name, commands: commandDef, attributes: attributeDef, supportedFeatures } = clusterDef;
+    let clusterStorage: StorageContext | null = null;
+    const attributeStorageListeners = new Map<number, (value: any, version: number) => void>();
+    const sceneAttributeList = new Array<string>();
+    const attributes = <AttributeServers<A>>{};
+    const commands = <CommandServers<C>>{};
 
-    constructor(clusterDef: Cluster<F, SF, A, C, E>, attributesInitialValues: AttributeInitialValues<A>, handlers: ClusterServerHandlers<Cluster<F, SF, A, C, E>>) {
-        const { id, name, attributes: attributeDefs, commands: commandDefs, supportedFeatures } = clusterDef;
-        this.id = id;
-        this.name = name;
+    const result: any = {
+        id: clusterId,
+        name,
+        _type: "ClusterServer",
+        attributes,
+        _commands: commands,
+        _setStorage: (storageContext: StorageContext) => {
+            clusterStorage = storageContext;
 
-        // Create attributes
-        attributesInitialValues = {
-            ...attributesInitialValues,
-            clusterRevision: clusterDef.revision,
-            featureMap: supportedFeatures,
-        };
-        for (const name in attributesInitialValues) {
-            const { id, schema, writable, persistent, scene } = attributeDefs[name];
+            for (const name in attributes) {
+                const attribute = (attributes as any)[name];
+                if (!attributeStorageListeners.has(attribute.id)) return;
+                if (!storageContext.has(attribute.name)) return;
+                try {
+                    const data = storageContext.get<{ version: number, value: any }>(attribute.name);
+                    logger.debug(`Restoring attribute ${attribute.name} (${attribute.id}) in cluster ${name} (${clusterId})`);
+                    attribute.init(data.value, data.version);
+                } catch (error) {
+                    logger.warn(`Failed to restore attribute ${attribute.name} (${attribute.id}) in cluster ${name} (${clusterId})`, error);
+                }
+            }
+        },
+
+        _getSceneExtensionFieldSets: () => {
+            const values = new Array<TypeFromSchema<typeof TlvAttributeValuePair>>();
+            for (const name of sceneAttributeList) {
+                const attributeServer = (attributes as any)[name];
+                console.log('Get attribute', name, attributeServer);
+                values.push({ attributeId: new AttributeId(attributeServer.id), attributeValue: attributeServer.schema.encodeTlv(attributeServer.get()) });
+            }
+            return values;
+        },
+
+        _setSceneExtensionFieldSets: (values: TypeFromSchema<typeof TlvAttributeValuePair>[], _transitionTime: number) => {
+            // TODO It is recommended that, where possible (e.g., it is not possible for attributes with Boolean data type),
+            //  a gradual transition SHOULD take place from the old to the new state over this time. However, the exact
+            //  transition is manufacturer dependent.
+
+            for (const { attributeId, attributeValue } of values) {
+                const attributeName = sceneAttributeList.find(name => (attributes as any)[name].id === attributeId.id);
+                if (attributeName) {
+                    const attributeServer = (attributes as any)[attributeName];
+                    attributeServer.set(attributeServer.schema.decodeTlv(attributeValue));
+                }
+            }
+        },
+
+        _verifySceneExtensionFieldSets(values: TypeFromSchema<typeof TlvAttributeValuePair>[]) {
+            for (const { attributeId, attributeValue } of values) {
+                const attributeName = sceneAttributeList.find(name => (attributes as any)[name].id === attributeId.id);
+                if (attributeName) {
+                    const attributeServer = (attributes as any)[attributeName];
+                    if (attributeServer.get() !== attributeServer.schema.decodeTlv(attributeValue)) return false;
+                }
+            }
+            return true;
+        }
+    };
+
+    const attributeStorageListener = (attributeName: string, version: number, value: any) => {
+        if (!clusterStorage) return;
+        logger.debug(`Storing attribute ${attributeName} in cluster ${name} (${clusterId})`);
+        clusterStorage.set(attributeName, { version, value });
+    }
+
+    // Create attributes
+    attributesInitialValues = {
+        ...attributesInitialValues,
+        clusterRevision: clusterDef.revision,
+        featureMap: supportedFeatures,
+        attributeList: new Array<AttributeId>(),
+        acceptedCommandList: new Array<CommandId>(),
+        generatedCommandList: new Array<CommandId>(),
+    };
+    const attributeList = new Array<AttributeId>();
+    for (const attributeName in attributeDef) {
+        const capitalizedAttributeName = capitalize(attributeName);
+        if ((attributesInitialValues as any)[attributeName] !== undefined) {
+            const { id, schema, writable, persistent, scene } = attributeDef[attributeName];
             const validator = typeof schema.validate === 'function' ? schema.validate.bind(schema) : undefined;
-            const getter = (handlers as any)[`get${capitalize(name)}`];
+            const getter = (handlers as any)[`get${capitalize(attributeName)}`];
             if (getter === undefined) {
-                (this.attributes as any)[name] = new AttributeServer(id, name, schema, validator ?? (() => { /* no validation */ }), writable, (attributesInitialValues as any)[name]);
+                (attributes as any)[attributeName] = new AttributeServer(id, attributeName, schema, validator ?? (() => { /* no validation */
+                }), writable, (attributesInitialValues as any)[attributeName]);
             } else {
-                (this.attributes as any)[name] = new AttributeGetterServer(id, name, schema, validator ?? (() => { /* no validation */ }), writable, (attributesInitialValues as any)[name], (session, endpoint) => getter({ attributes: this.attributes, endpoint, session }));
+                (attributes as any)[attributeName] = new AttributeGetterServer(id, attributeName, schema, validator ?? (() => { /* no validation */
+                }), writable, (attributesInitialValues as any)[attributeName], (session, endpoint) => getter({ attributes, endpoint, session }));
             }
             if (persistent) {
-                const listener = (value: any, version: number) => this.attributeStorageListener(name, version, value);
-                this.attributeStorageListeners.set(id, listener);
-                (this.attributes as any)[name].addMatterListener(listener);
+                const listener = (value: any, version: number) => attributeStorageListener(attributeName, version, value);
+                attributeStorageListeners.set(id, listener);
+                (attributes as any)[attributeName].addMatterListener(listener);
             }
             if (scene) {
-                this.sceneAttributeList.push(name);
+                sceneAttributeList.push(attributeName);
             }
-        }
-
-        // Create commands
-        for (const name in commandDefs) {
-            const handler = (handlers as any)[name];
-            if (handler === undefined) continue;
-            const { requestId, requestSchema, responseId, responseSchema } = commandDefs[name];
-            this.commands.push(new CommandServer(requestId, responseId, name, requestSchema, responseSchema, (request, session, message, endpoint) => handler({ request, attributes: this.attributes, session, message, endpoint })));
-        }
-    }
-
-    setStorage(storageContext: StorageContext) {
-        this.clusterStorage = storageContext;
-
-        for (const name in this.attributes) {
-            const attribute = (this.attributes as any)[name];
-            if (!this.attributeStorageListeners.has(attribute.id)) return;
-            if (!storageContext.has(attribute.name)) return;
-            try {
-                const data = storageContext.get<{ version: number, value: any }>(attribute.name);
-                logger.debug(`Restoring attribute ${attribute.name} (${attribute.id}) in cluster ${this.name} (${this.id})`);
-                attribute.init(data.value, data.version);
-            } catch (error) {
-                logger.warn(`Failed to restore attribute ${attribute.name} (${attribute.id}) in cluster ${this.name} (${this.id})`, error);
-            }
+            result[`get${capitalizedAttributeName}Attribute`] = () => (attributes as any)[attributeName].get();
+            result[`set${capitalizedAttributeName}Attribute`] = <T,>(value: T) => (attributes as any)[attributeName].set(value);
+            result[`subscribe${capitalizedAttributeName}Attribute`] = <T,>(listener: (newValue: T, oldValue: T) => void) => (attributes as any)[attributeName].addListener(listener);
+            attributeList.push(new AttributeId(id));
+        } else {
+            // TODO: Find maybe a better way to do this including strong typing according to attribute initial values set?
+            result[`get${capitalizedAttributeName}Attribute`] = () => undefined;
+            result[`set${capitalizedAttributeName}Attribute`] = () => {
+                throw new Error(`Attribute ${attributeName} is optional and not initialized. To use it please initialize it first.`);
+            };
+            result[`subscribe${capitalizedAttributeName}Attribute`] = () => {
+                throw new Error(`Attribute ${attributeName} is optional and not initialized. To use it please initialize it first.`);
+            };
         }
     }
+    (attributes as any).attributeList.set(attributeList);
 
-    attributeStorageListener(attributeName: string, version: number, value: any) {
-        if (!this.clusterStorage) return;
-        logger.debug(`Storing attribute ${attributeName} in cluster ${this.name} (${this.id})`);
-        this.clusterStorage.set(attributeName, { version, value });
-    }
-
-    getSceneExtensionFieldSets() {
-        const values = new Array<TypeFromSchema<typeof TlvAttributeValuePair>>();
-        for (const name of this.sceneAttributeList) {
-            const attributeServer = (this.attributes as any)[name]
-            values.push({ attributeId: new AttributeId(attributeServer.id), attributeValue: attributeServer.schema.encodeTlv(attributeServer.get()) });
+    // Create commands
+    const acceptedCommandList = new Array<number>();
+    const generatedCommandList = new Array<number>();
+    for (const name in commandDef) {
+        const handler = (handlers as any)[name];
+        if (handler === undefined) continue;
+        const { requestId, requestSchema, responseId, responseSchema } = commandDef[name];
+        (commands as any)[name] = (new CommandServer(requestId, responseId, name, requestSchema, responseSchema, (request, session, message, endpoint) => handler({ request, attributes, session, message, endpoint })));
+        if (!acceptedCommandList.includes(requestId)) {
+            acceptedCommandList.push(requestId);
         }
-        return values;
-    }
-
-    setSceneExtensionFieldSets(values: TypeFromSchema<typeof TlvAttributeValuePair>[], _transitionTime: number) {
-        // TODO It is recommended that, where possible (e.g., it is not possible for attributes with Boolean data type),
-        //  a gradual transition SHOULD take place from the old to the new state over this time. However, the exact
-        //  transition is manufacturer dependent.
-
-        for (const { attributeId, attributeValue } of values) {
-            const attributeName = this.sceneAttributeList.find(name => (this.attributes as any)[name].id === attributeId.id);
-            if (attributeName) {
-                const attributeServer = (this.attributes as any)[attributeName];
-                attributeServer.set(attributeServer.schema.decodeTlv(attributeValue));
+        if (responseSchema !== TlvNoResponse) {
+            if (!generatedCommandList.includes(responseId)) {
+                generatedCommandList.push(responseId);
             }
         }
     }
+    (attributes as any).acceptedCommandList.set(acceptedCommandList.map(id => new CommandId(id)));
+    (attributes as any).generatedCommandList.set(generatedCommandList.map(id => new CommandId(id)));
 
-    verifySceneExtensionFieldSets(values: TypeFromSchema<typeof TlvAttributeValuePair>[]) {
-        for (const { attributeId, attributeValue } of values) {
-            const attributeName = this.sceneAttributeList.find(name => (this.attributes as any)[name].id === attributeId.id);
-            if (attributeName) {
-                const attributeServer = (this.attributes as any)[attributeName];
-                console.log('Check attribute', attributeName, attributeServer.get(), attributeServer.schema.decodeTlv(attributeValue), attributeServer.schema.decodeTlv(attributeValue) === attributeServer.get())
-                if (attributeServer.get() !== attributeServer.schema.decodeTlv(attributeValue)) return false;
-            }
-        }
-        return true;
-    }
+    return result as ClusterServerObj<A, C>;
 }
 
 export interface CommandPath {
@@ -194,11 +224,12 @@ function toHex(value: number | undefined) {
 }
 
 export class InteractionServer implements ProtocolHandler<MatterDevice> {
-    private readonly endpoints = new Map<number, EndpointData>();
-    private readonly attributes = new Map<string, AttributeServer<any>>();
-    private readonly attributePaths = new Array<AttributePath>();
-    private readonly commands = new Map<string, CommandServer<any, any>>();
-    private readonly commandPaths = new Array<CommandPath>();
+
+    private endpoints = new Map<number, Endpoint>();
+    private attributes = new Map<string, AttributeServer<any>>();
+    private attributePaths = new Array<AttributePath>();
+    private commands = new Map<string, CommandServer<Attributes, Commands>>();
+    private commandPaths = new Array<CommandPath>();
     private nextSubscriptionId = Crypto.getRandomUInt32();
 
     constructor(
@@ -209,9 +240,12 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         return INTERACTION_PROTOCOL_ID;
     }
 
-    addEndpoint(endpointId: number, device: { name: string, code: number }, clusters: ClusterServer<any, any, any, any, any>[]) {
+    /**
+     * @deprecated
+     */
+    addEndpoint(endpointId: number, device: { name: string, code: number }, clusters: ClusterServerObj<Attributes, Commands>[]) {
         // Add the descriptor cluster
-        const descriptorCluster = new ClusterServer(DescriptorCluster, {
+        const descriptorCluster = ClusterServer(DescriptorCluster, {
             deviceTypeList: [{ revision: 1, deviceType: new DeviceTypeId(device.code) }],
             serverList: [],
             clientList: [],
@@ -222,11 +256,11 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         const clusterEndpointNumber = new EndpointNumber(endpointId);
 
-        const clusterMap = new Map<number, ClusterServer<any, any, any, any, any>>();
+        const clusterMap = new Map<number, ClusterServerObj<Attributes, Commands>>();
         clusters.forEach(cluster => {
-            const { id: clusterId, attributes, commands } = cluster;
+            const { id: clusterId, attributes, _commands: commands } = cluster;
 
-            cluster.setStorage(this.storageManager.createContext(`Cluster-${clusterEndpointNumber.number}-${clusterId}`));
+            cluster._setStorage(this.storageManager.createContext(`Cluster-${clusterEndpointNumber.number}-${clusterId}`));
 
             clusterMap.set(clusterId, cluster);
             // Add attributes
@@ -238,11 +272,12 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             }
 
             // Add commands
-            commands.forEach(command => {
+            for (const name in commands) {
+                const command = commands[name];
                 const path = { endpointId, clusterId, commandId: command.invokeId };
                 this.commands.set(commandPathToId(path), command);
                 this.commandPaths.push(path);
-            });
+            }
         });
 
         // Add part list if the endpoint is not root
@@ -252,7 +287,28 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             rootPartsListAttribute.setLocal([...rootPartsListAttribute.getLocal(), clusterEndpointNumber]);
         }
 
-        this.endpoints.set(endpointId, { ...device, id: endpointId, clusters: clusterMap });
+        const deviceDefinition = Object.values(DeviceTypes).find(({ code }) => code === device.code);
+        if (deviceDefinition === undefined) throw new Error(`Unknown device code ${device.code}`);
+        this.endpoints.set(endpointId, new Endpoint([deviceDefinition], Array.from(clusterMap.values()), endpointId));
+
+        return this;
+    }
+
+    setRootEndpoint(endpoint: Endpoint) {
+        const { endpoints, attributes, attributePaths, commands, commandPaths } = endpoint.getStructure();
+
+        this.endpoints = new Map<number, Endpoint>();
+        for (const [endpointId, subEndpoint] of endpoints) {
+            this.endpoints.set(endpointId, subEndpoint);
+            for (const cluster of subEndpoint.getAllClusterServers()) {
+                cluster._setStorage(this.storageManager.createContext(`Cluster-${endpointId}-${cluster.id}`));
+            }
+        }
+
+        this.attributes = attributes;
+        this.attributePaths = attributePaths;
+        this.commands = commands;
+        this.commandPaths = commandPaths;
 
         return this;
     }
@@ -397,24 +453,25 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     async handleInvokeRequest(exchange: MessageExchange<MatterDevice>, { invokeRequests }: InvokeRequest, message: Message): Promise<InvokeResponse> {
         logger.debug(`Received invoke request from ${exchange.channel.getName()}: ${invokeRequests.map(({ commandPath: { endpointId, clusterId, commandId } }) => `${toHex(endpointId)}/${toHex(clusterId)}/${toHex(commandId)}`).join(", ")}`);
 
-        const results = new Array<{ commandPath: TypeFromSchema<typeof TlvCommandPath>, code: StatusCode, response: TlvStream, responseId: number }>();
+        const invokeResponses: TypeFromSchema<typeof TlvInvokeResponseData>[] = [];
 
         await Promise.all(invokeRequests.map(async ({ commandPath, commandFields }) => {
             const { endpointId } = commandPath;
             if (endpointId === undefined) {
                 logger.error("Wildcard command invokes not yet supported!");
-                results.push({ code: StatusCode.UnsupportedCommand, commandPath, response: TlvVoid.encodeTlv(), responseId: 0 });
+                invokeResponses.push({ status: { commandPath, status: { status: StatusCode.UnsupportedCommand } } });
                 return;
             }
             const command = this.commands.get(commandPathToId(commandPath as CommandPath));
             if (command === undefined) {
-                // results.push({ code: StatusCode.UnsupportedCommand, path });// TODO!!
+                logger.error("Unknown command!!");
+                invokeResponses.push({ status: { commandPath, status: { status: StatusCode.UnsupportedCommand } } });
                 return;
             }
             const endpoint = this.endpoints.get(endpointId);
             if (!endpoint) {
                 logger.error(`Endpoint ${endpointId} not found`);
-                //results.push({ code: StatusCode.UnsupportedCommand, commandPath, response: TlvVoid.encodeTlv(), responseId: 0 }); // TODO
+                invokeResponses.push({ status: { commandPath, status: { status: StatusCode.UnsupportedCommand } } });
                 return;
             }
 
@@ -424,19 +481,23 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             }
 
             const result = await command.invoke(exchange.session, commandFields, message, endpoint);
-            results.push({ ...result, commandPath });
+            const { code, responseId, response } = result;
+            if (response.length === 0) {
+                invokeResponses.push({ status: { commandPath, status: { status: code } } });
+            } else {
+                invokeResponses.push({
+                    command: {
+                        commandPath: { ...commandPath, commandId: responseId },
+                        commandFields: response
+                    }
+                });
+            }
         }));
 
         return {
             suppressResponse: false,
             interactionModelRevision: 1,
-            invokeResponses: results.map(({ commandPath, responseId, code, response }) => {
-                if (response.length === 0) {
-                    return { status: { commandPath, status: { status: code } } };
-                } else {
-                    return { command: { commandPath: { ...commandPath, commandId: responseId }, commandFields: response } };
-                }
-            }),
+            invokeResponses,
         };
     }
 
@@ -458,7 +519,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         if (clusterId === undefined) {
             return `${endpointName}/*/${toHex(attributeId)}`;
         }
-        const cluster = endpoint.clusters.get(clusterId);
+        const cluster = endpoint.getClusterServerById(clusterId);
         if (cluster === undefined) {
             return `${endpointName}/unknown(${toHex(clusterId)})/${toHex(attributeId)}`;
         }

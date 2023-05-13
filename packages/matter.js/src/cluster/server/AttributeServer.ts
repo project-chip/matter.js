@@ -8,7 +8,7 @@ import { MatterDevice } from "../../MatterDevice.js";
 import { Session } from "../../session/Session.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { TlvSchema } from "../../tlv/TlvSchema.js";
-import { EndpointData } from "../../protocol/interaction/InteractionServer.js";
+import { Endpoint } from "../../device/Endpoint.js";
 
 export class AttributeServer<T> {
     private value: T;
@@ -52,13 +52,13 @@ export class AttributeServer<T> {
         this.value = value;
     }
 
-    get(_session?: Session<MatterDevice>, _endpoint?: EndpointData): T {
+    get(_session?: Session<MatterDevice>, _endpoint?: Endpoint): T {
         // TODO: check ACL
 
         return this.getLocal();
     }
 
-    getWithVersion(session?: Session<MatterDevice>, endpoint?: EndpointData) {
+    getWithVersion(session?: Session<MatterDevice>, endpoint?: Endpoint) {
         return { version: this.version, value: this.get(session, endpoint) };
     }
 
@@ -78,6 +78,10 @@ export class AttributeServer<T> {
         this.listeners.push(listener);
     }
 
+    subscribe(listener: (newValue: T, oldValue: T) => void) {
+        this.addListener(listener);
+    }
+
     removeListener(listener: (newValue: T, oldValue: T) => void) {
         this.listeners.splice(this.listeners.findIndex(item => item === listener), 1);
     }
@@ -92,7 +96,7 @@ export class AttributeGetterServer<T> extends AttributeServer<T> {
         validator: (value: T, name: string) => void,
         isWritable: boolean,
         defaultValue: T,
-        readonly getter: (session?: Session<MatterDevice>, endpoint?: EndpointData) => T,
+        readonly getter: (session?: Session<MatterDevice>, endpoint?: Endpoint) => T,
     ) {
         super(id, name, schema, validator, isWritable, defaultValue);
     }
@@ -101,7 +105,7 @@ export class AttributeGetterServer<T> extends AttributeServer<T> {
         throw new Error("Setter is not supported on attribute defined by a getter");
     }
 
-    override get(session?: SecureSession<MatterDevice>, endpoint?: EndpointData): T {
+    override get(session?: SecureSession<MatterDevice>, endpoint?: Endpoint): T {
         // TODO: check ACL
         // TODO handle "version" for getter
         return this.getter(session, endpoint);

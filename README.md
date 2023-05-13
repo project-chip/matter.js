@@ -59,8 +59,6 @@ Because Matter required UDP/MDNS technologies, other implementations are needed 
 
 For more Details see the [README.md](packages/matter.js/README.md) in the package.
 
-PS: The above statements are only half true right now (March 2023) because we are in the middle of the split-up to move "non-Node.js" code from matter-node.js into matter.js.
-
 ### Matter-node.js
 
 Matter-node.js uses Node.js to implement the platform specific parts using Node.js for networking and other needed native features. Additionally, it also implements a Matter DeviceNode and ControllerNode as a example implementation and allows to use this directly as CLI script.

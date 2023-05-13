@@ -162,3 +162,17 @@ export function decodeChunkedArray<T>(schema: ArraySchema<T>, values: TypeFromSc
     schema.validate(result);
     return result;
 }
+
+export function structureReadDataToClusterObject(data: DecodedAttributeReportValue[]) {
+    const structure: { [key: number]: { [key: number]: { [key: string]: any } } } = {};
+    for (const { path: { endpointId, clusterId, attributeName }, value } of data) {
+        if (structure[endpointId] === undefined) {
+            structure[endpointId] = {};
+        }
+        if (structure[endpointId][clusterId] === undefined) {
+            structure[endpointId][clusterId] = {};
+        }
+        structure[endpointId][clusterId][attributeName] = value;
+    }
+    return structure;
+}

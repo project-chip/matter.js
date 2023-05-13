@@ -5,7 +5,6 @@
  */
 
 export * from "./Broadcaster.js";
-export * from "./DeviceTypes.js";
 export * from "./MatterError.js";
 export * from "./Scanner.js";
 export * from "./TryCatchHandler.js";

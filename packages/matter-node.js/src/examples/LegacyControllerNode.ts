@@ -6,34 +6,25 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { singleton } from "@project-chip/matter.js/util";
-import { Time } from "@project-chip/matter.js/time";
-import { TimeNode } from "./time/TimeNode";
+/**
+ * Important note: This file is part of the legacy matter-node API and should not be used anymore!
+ * Please use the new API classes!
+ */
 
-Time.get = singleton(() => new TimeNode());
+// Include this first to auto-register Crypto, Network and Time Node.js implementations
+import { MatterController } from "../";  // same as @project-chip/matter-node.js
 
-import { Network, UdpInterface } from "@project-chip/matter.js/net";
-import { NetworkNode } from "./net/NetworkNode";
-
-Network.get = singleton(() => new NetworkNode());
-
-import { Crypto } from "@project-chip/matter.js/crypto";
-import { CryptoNode } from "./crypto/CryptoNode";
-
-Crypto.get = singleton(() => new CryptoNode());
-
-import { Logger } from "@project-chip/matter.js/log";
-import { StorageManager } from "@project-chip/matter.js/storage";
-import { MatterController } from "@project-chip/matter.js";
-import { MdnsScanner } from "@project-chip/matter.js/mdns";
-import { ClusterClient } from "@project-chip/matter.js/interaction";
+import { getIntParameter, getParameter, requireMinNodeVersion } from "../util"; // same as @project-chip/matter-node.js/util
+import { UdpInterface } from "../net"; // same as @project-chip/matter-node.js/net
+import { Logger } from "../exports/log"; // same as @project-chip/matter-node.js/log
+import { StorageManager, StorageBackendDisk } from "../storage"; // same as @project-chip/matter-node.js/storage
+import { MdnsScanner } from "../exports/mdns"; // same as @project-chip/matter-node.js/mdns
+import { ClusterClient } from "../exports/interaction"; // same as @project-chip/matter-node.js/interaction
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { BasicInformationCluster, DescriptorCluster, OnOffCluster } from "@project-chip/matter.js/cluster";
-import { ManualPairingCodeCodec } from "@project-chip/matter-node.js/schema";
-
-import { getIntParameter, getParameter } from "./util/CommandLine";
-import { StorageBackendDisk } from "./storage/StorageBackendDisk";
-import { requireMinNodeVersion } from "./util/Node";
+import { BasicInformationCluster, DescriptorCluster, OnOffCluster } from "../exports/cluster"; // same as @project-chip/matter-node.js/cluster
+import { ManualPairingCodeCodec } from "../exports/schema"; // same as @project-chip/matter-node.js/schema
 
 const logger = Logger.get("Controller");
 
@@ -65,12 +56,14 @@ class ControllerNode {
             if (discriminator > 4095) throw new Error("Discriminator value must be less than 4096");
             setupPin = getIntParameter("pin") ?? controllerStorage.get("pin", 20202021);
         }
+        if (discriminator === undefined) {
+            throw new Error("Please specify the discriminator of the device to commission with -discriminator or provide a valid passcode with -passcode");
+        }
 
         controllerStorage.set("ip", ip);
         controllerStorage.set("port", port);
         controllerStorage.set("discriminator", discriminator);
         controllerStorage.set("pin", setupPin);
-
 
         const client = await MatterController.create(
             await MdnsScanner.create(),
@@ -91,15 +84,16 @@ class ControllerNode {
             // It is provided to proof the concept
 
             // Example to initialize a ClusterClient and access concrete fields as API methods
-            const descriptor = ClusterClient(interactionClient, 0, DescriptorCluster);
-            console.log(await descriptor.getDeviceTypeList());
-            console.log(await descriptor.getServerList());
+            const descriptor = ClusterClient(DescriptorCluster, 0, interactionClient);
+            console.log(await descriptor.attributes.deviceTypeList.get());
+            console.log(await descriptor.attributes.serverList.get());
 
             // Example to subscribe to a field and get the value
-            const info = ClusterClient(interactionClient, 0, BasicInformationCluster);
-            console.log(await info.getProductName()); // This call is executed remotely
-            //console.log(await info.subscribeProductName((value, version) => console.log("productName", value, version), 5, 30));
-            //console.log(await info.getProductName()); // This call is resolved locally because we have subscribed to the value!
+            const info = ClusterClient(BasicInformationCluster, 0, interactionClient);
+            console.log(await info.attributes.productName.get()); // This call is executed remotely
+            //console.log(await info.attributes.productName.subscribe(5, 30));
+            //info.attributes.productName.addListener((value) => console.log("productName", value));
+            //console.log(await info.attributes.productName.get()); // This call is resolved locally because we have subscribed to the value!
 
             // Example to get all Attributes of the commissioned node: */*/*
             //const attributesAll = await interactionClient.getAllAttributes();
@@ -118,11 +112,11 @@ class ControllerNode {
             //    console.log("Subscribe-All Data:", Logger.toJSON(data));
             //});
 
-            /*const onOff = ClusterClient(interactionClient, 1, OnOffCluster);
-            let onOffStatus = await onOff.getOnOff();
+            /*const onOff = ClusterClient(OnOffCluster, 1, interactionClient);
+            let onOffStatus = await onOff.attributes.onOff.get();
             // read data every minute to keep up the connection to show the subscription is working
             setInterval(() => {
-                onOff.toggle({}).then(() => onOffStatus = !onOffStatus).catch(error => logger.error(error));
+                onOff.commands.toggle().then(() => onOffStatus = !onOffStatus).catch(error => logger.error(error));
             }, 60000);*/
 
         } finally {

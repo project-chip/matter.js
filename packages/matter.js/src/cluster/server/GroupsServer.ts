@@ -93,7 +93,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
 
     return {
         addGroup: async ({ request: { groupId, groupName }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
-            return addGroupLogic(groupId, groupName, sessionType, getFabricFromSession(session as SecureSession<MatterDevice>), endpoint.id);
+            return addGroupLogic(groupId, groupName, sessionType, getFabricFromSession(session as SecureSession<MatterDevice>), endpoint.getId());
         },
 
         viewGroup: async ({ request: { groupId }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
@@ -108,7 +108,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             }
 
             const fabric = getFabricFromSession(session as SecureSession<MatterDevice>);
-            const groupName = GroupsManager.getGroupName(fabric, endpoint.id, groupId);
+            const groupName = GroupsManager.getGroupName(fabric, endpoint.getId(), groupId);
             if (groupName !== undefined) {
                 return { status: StatusCode.Success, groupId, groupName: groupName };
             }
@@ -126,7 +126,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             }
 
             const fabric = getFabricFromSession(session as SecureSession<MatterDevice>);
-            const endpointGroups = GroupsManager.getGroups(fabric, endpoint.id);
+            const endpointGroups = GroupsManager.getGroups(fabric, endpoint.getId());
             const fabricGroupsList = Array.from(endpointGroups.keys());
             const capacity = fabricGroupsList.length < 0xff ? 0xfe - fabricGroupsList.length : 0;
             if (groupList.length === 0) {
@@ -151,8 +151,8 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             }
 
             const fabric = getFabricFromSession(session as SecureSession<MatterDevice>)
-            if (GroupsManager.removeGroup(fabric, endpoint.id, groupId)) {
-                ScenesManager.removeAllScenesForGroup(fabric, endpoint.id, groupId.id);
+            if (GroupsManager.removeGroup(fabric, endpoint.getId(), groupId)) {
+                ScenesManager.removeAllScenesForGroup(fabric, endpoint.getId(), groupId.id);
                 return { status: StatusCode.Success, groupId };
             }
             return { status: StatusCode.NotFound, groupId };
@@ -165,8 +165,8 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             }
 
             const fabric = getFabricFromSession(session as SecureSession<MatterDevice>)
-            GroupsManager.removeAllGroups(fabric, endpoint.id);
-            ScenesManager.removeAllNonGlobalScenesForEndpoint(fabric, endpoint.id);
+            GroupsManager.removeAllGroups(fabric, endpoint.getId());
+            ScenesManager.removeAllNonGlobalScenesForEndpoint(fabric, endpoint.getId());
 
             return;
         },
@@ -177,14 +177,11 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
                 // TODO: When Unicast we generate a response, else not
             }
 
-            // TODO when endpoint gets replaced by object this wil be nicer
-            const identifyCluster = endpoint.clusters.get(IdentifyCluster.id) as ClusterServer<typeof IdentifyCluster.features, typeof IdentifyCluster.supportedFeatures, typeof IdentifyCluster.attributes, typeof IdentifyCluster.commands, typeof IdentifyCluster.events>;
-            if (!identifyCluster) {
-                throw new Error("Identify cluster not found");
-            }
-
-            if (identifyCluster.attributes.identifyTime.get() > 0) { // We identify ourself currently
-                addGroupLogic(groupId, groupName, sessionType, getFabricFromSession(session as SecureSession<MatterDevice>), endpoint.id);
+            const identifyCluster = endpoint.getClusterServer(IdentifyCluster);
+            if (identifyCluster) {
+                if (identifyCluster.attributes.identifyTime.getLocal() > 0) { // We identify ourself currently
+                    addGroupLogic(groupId, groupName, sessionType, getFabricFromSession(session as SecureSession<MatterDevice>), endpoint.getId());
+                }
             }
 
             // TODO If the AddGroupIfIdentifying command was received as unicast and the evaluated status is not SUCCESS, or
@@ -194,3 +191,13 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
         },
     }
 };
+
+export const createDefaultGroupsClusterServer = () => ClusterServer(
+    GroupsCluster,
+    {
+        nameSupport: {
+            groupNames: true,
+        },
+    },
+    GroupsClusterHandler()
+);

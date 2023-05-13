@@ -4,21 +4,22 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ClusterServer, EndpointData, StatusCode } from "@project-chip/matter.js/interaction";
+import { StatusCode } from "@project-chip/matter.js/interaction";
 import { SecureSession } from "@project-chip/matter.js/session";
 import { MatterDevice } from "@project-chip/matter.js";
 import { Message } from "@project-chip/matter.js/codec";
 import { Fabric } from "@project-chip/matter.js/fabric";
 import { FabricIndex, VendorId, FabricId, NodeId } from "@project-chip/matter.js/datatype";
 import { ByteArray } from "@project-chip/matter.js/util";
+import { Attributes, ClusterServerObj, Commands } from "@project-chip/matter.js/cluster";
+import { Endpoint } from "@project-chip/matter.js/device";
 
 // TODO make that nicer
-export async function callCommandOnClusterServer(clusterServer: ClusterServer<any, any, any, any, any>, commandName: string, args: any, endpoint: EndpointData, session?: SecureSession<MatterDevice>, message?: Message): Promise<{ code: StatusCode, responseId: number, response: any }> {
-    const command = clusterServer.commands.find(command => command.name === commandName);
+export async function callCommandOnClusterServer<A extends Attributes, C extends Commands>(clusterServer: ClusterServerObj<A, C>, commandName: string, args: any, endpoint: Endpoint, session?: SecureSession<MatterDevice>, message?: Message): Promise<{ code: StatusCode, responseId: number, response: any }> {
+    const command = (clusterServer._commands as any)[commandName];
     if (command === undefined) throw new Error(`Command ${commandName} not found`);
-    const res = await command.invoke(session ?? {} as SecureSession<MatterDevice>, command.requestSchema.encodeTlv(args), message ?? {} as Message, endpoint);
-    res.response = command.responseSchema.decodeTlv(res.response);
-    return res;
+    const { code, responseId, response } = await command.invoke(session ?? {} as SecureSession<MatterDevice>, command.requestSchema.encodeTlv(args), message ?? {} as Message, endpoint);
+    return { code, responseId, response: command.responseSchema.decodeTlv(response) };
 }
 
 export async function createTestSessionWithFabric() {

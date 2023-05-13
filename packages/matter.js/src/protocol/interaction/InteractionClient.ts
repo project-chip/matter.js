@@ -21,7 +21,9 @@ import {
     Attribute, AttributeJsType, Attributes, Cluster, Command, Commands, RequestType, ResponseType, TlvNoResponse
 } from "../../cluster/Cluster.js";
 import { ExchangeProvider } from "../ExchangeManager.js";
-import { ClusterClient } from "../../cluster/client/ClusterClient.js";
+import { AttributeClients, SignatureFromCommandSpec, ClusterClientObj } from "../../cluster/client/ClusterClient.js";
+import { AttributeClient } from "../../cluster/client/AttributeClient.js";
+import { tryCatchAsync } from "../../common/TryCatchHandler.js";
 
 const logger = Logger.get("InteractionClient");
 
@@ -35,26 +37,90 @@ export interface AttributeStatus {
     status: StatusCode,
 }
 
-export function ClusterClient<CommandT extends Commands, AttributeT extends Attributes>(interactionClient: InteractionClient, endpointId: number, clusterDef: Cluster<any, any, AttributeT, CommandT, any>): ClusterClient<CommandT, AttributeT> {
-    const result: any = {};
-    const { id: clusterId, commands, attributes } = clusterDef;
+export function ClusterClient<A extends Attributes, C extends Commands>(
+    clusterDef: Cluster<any, any, A, C, any>,
+    endpointId: number,
+    interactionClient: InteractionClient
+): ClusterClientObj<A, C> {
+    const { id: clusterId, name, commands: commandDef, attributes: attributeDef } = clusterDef;
+    const attributes = <AttributeClients<A>>{};
+
+    const result: any = {
+        id: clusterId,
+        name,
+        _type: "ClusterClient",
+        endpointId,
+        attributes,
+        commands: <{ [P in keyof C]: SignatureFromCommandSpec<C[P]> }>{},
+        subscribeAllAttributes: async (minIntervalFloorSeconds: number, maxIntervalCeilingSeconds: number) => {
+            if (interactionClient === undefined) {
+                throw new Error("InteractionClient not set");
+            }
+            return await interactionClient.subscribeMultipleAttributes([{ endpointId: endpointId, clusterId: clusterId }], minIntervalFloorSeconds, maxIntervalCeilingSeconds, (data) => {
+                const { path, value } = data;
+                const attributeName = attributeToId[path.attributeId];
+                if (attributeName === undefined) {
+                    logger.warn("Unknown attribute id", path.attributeId);
+                    return;
+                }
+                (attributes as any)[attributeName].update(value);
+            });
+        },
+        /**
+         * Clones the cluster client, optionally with a new interaction client.
+         * When the clusterClient is the same then also AttributeClients will be reused.
+         *
+         * @param newInteractionClient Optionally a new interactionClient to bind to
+         */
+        _clone(newInteractionClient?: InteractionClient) {
+            const clonedClusterClient = ClusterClient(clusterDef, endpointId, newInteractionClient ?? interactionClient);
+            if (newInteractionClient === undefined) {
+                // When we keep the InteractionClient we also reuse the AttributeServers bound to it
+                clonedClusterClient.attributes = attributes;
+            }
+            return clonedClusterClient;
+        }
+    };
+    const attributeToId = <{ [key: number]: string }>{};
 
     // Add accessors
-    for (const attributeName in attributes) {
-        const attribute = attributes[attributeName];
+    for (const attributeName in attributeDef) {
+        const attribute = attributeDef[attributeName];
+        (attributes as any)[attributeName] = new AttributeClient(attribute, attributeName, endpointId, clusterId, async () => interactionClient);
+        attributeToId[attribute.id] = attributeName;
         const capitalizedAttributeName = capitalize(attributeName);
-        result[`get${capitalizedAttributeName}`] = async () => interactionClient.get(endpointId, clusterId, attribute);
-        result[`set${capitalizedAttributeName}`] = async <T,>(value: T) => interactionClient.set<T>(endpointId, clusterId, attribute, value);
-        result[`subscribe${capitalizedAttributeName}`] = async <T,>(listener: (value: T, version: number) => void, minIntervalS: number, maxIntervalS: number) => interactionClient.subscribe(endpointId, clusterId, attribute, minIntervalS, maxIntervalS, listener);
+        result[`get${capitalizedAttributeName}Attribute`] = async (alwaysRequestFromRemote = false) => {
+            return await tryCatchAsync(async () => {
+                return await (attributes as any)[attributeName].get(alwaysRequestFromRemote);
+            }, StatusResponseError, (e) => {
+                const { code } = e;
+                if (code === StatusCode.UnsupportedAttribute) {
+                    return undefined;
+                }
+                throw e;
+            });
+        }
+        result[`set${capitalizedAttributeName}Attribute`] = async <T,>(value: T) => (attributes as any)[attributeName].set(value);
+        result[`subscribe${capitalizedAttributeName}Attribute`] = async <T,>(listener: (value: T) => void, minIntervalS: number, maxIntervalS: number) => {
+            (attributes as any)[attributeName].addListener(listener);
+            (attributes as any)[attributeName].subscribe(minIntervalS, maxIntervalS);
+        }
     }
 
     // Add command calls
-    for (const commandName in commands) {
-        const { requestId, requestSchema, responseId, responseSchema, optional } = commands[commandName];
-        result[commandName] = async <RequestT, ResponseT>(request: RequestT) => interactionClient.invoke<Command<RequestT, ResponseT>>(endpointId, clusterId, request, requestId, requestSchema, responseId, responseSchema, optional);
+    for (const commandName in commandDef) {
+        const { requestId, requestSchema, responseId, responseSchema, optional } = commandDef[commandName];
+
+        result.commands[commandName] = async <RequestT, ResponseT>(request: RequestT) => {
+            if (interactionClient === undefined) {
+                throw new Error("InteractionClient not set");
+            }
+            return interactionClient.invoke<Command<RequestT, ResponseT>>(endpointId, clusterId, request, requestId, requestSchema, responseId, responseSchema, optional);
+        };
+        result[commandName] = result.commands[commandName];
     }
 
-    return result as ClusterClient<CommandT, AttributeT>;
+    return result as ClusterClientObj<A, C>;
 }
 
 export class SubscriptionClient implements ProtocolHandler<MatterController> {
@@ -111,11 +177,18 @@ export class InteractionClient {
         });
     }
 
-    async get<A extends Attribute<any>>(endpointId: number, clusterId: number, attribute: A): Promise<AttributeJsType<A> | undefined> {
+    async get<A extends Attribute<any>>(endpointId: number, clusterId: number, attribute: A, alwaysRequestFromRemote = false): Promise<AttributeJsType<A> | undefined> {
+        const response = await this.getWithVersion(endpointId, clusterId, attribute, alwaysRequestFromRemote);
+        return response?.value;
+    }
+
+    async getWithVersion<A extends Attribute<any>>(endpointId: number, clusterId: number, attribute: A, alwaysRequestFromRemote = false): Promise<{ value: AttributeJsType<A>, version: number } | undefined> {
         const { id: attributeId } = attribute;
-        const localValue = this.subscribedLocalValues.get(attributePathToId({ endpointId, clusterId, attributeId }))
-        if (localValue !== undefined) {
-            return localValue.value;
+        if (!alwaysRequestFromRemote) {
+            const localValue = this.subscribedLocalValues.get(attributePathToId({ endpointId, clusterId, attributeId }))
+            if (localValue !== undefined) {
+                return localValue as { value: AttributeJsType<A>, version: number };
+            }
         }
 
         const response = await this.getMultipleAttributes([{ endpointId, clusterId, attributeId }]);
@@ -126,7 +199,7 @@ export class InteractionClient {
         if (response.length > 1) {
             throw new Error("Unexpected response with more then one attribute");
         }
-        return response[0].value;
+        return { value: response[0].value, version: response[0].version };
     }
 
     private async processReadRequest(messenger: InteractionClientMessenger, request: ReadRequest): Promise<DecodedAttributeReportValue[]> {
@@ -199,7 +272,7 @@ export class InteractionClient {
                 minIntervalFloorSeconds,
                 maxIntervalCeilingSeconds,
                 isFabricFiltered: true,
-            }); // TODO: also initialize all values
+            });
 
             const subscriptionListener = (dataReport: DataReport) => {
                 if (!Array.isArray(dataReport.attributeReports) || !dataReport.attributeReports.length) {
@@ -225,6 +298,10 @@ export class InteractionClient {
             subscriptionListener(report);
             return;
         });
+    }
+
+    async subscribeAllAttributes(minIntervalFloorSeconds: number, maxIntervalCeilingSeconds: number, listener?: (data: DecodedAttributeReportValue) => void): Promise<void> {
+        return this.subscribeMultipleAttributes([{}], minIntervalFloorSeconds, maxIntervalCeilingSeconds, listener);
     }
 
     async subscribeMultipleAttributes(attributeRequests: { endpointId?: number, clusterId?: number, attributeId?: number }[], minIntervalFloorSeconds: number, maxIntervalCeilingSeconds: number, listener?: (data: DecodedAttributeReportValue) => void): Promise<void> {

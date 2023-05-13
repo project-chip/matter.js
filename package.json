@@ -13,7 +13,11 @@
         "lint": "eslint **/*.ts",
         "lint-fix": "eslint --fix **/*.ts",
         "format": "tsfmt --useTsconfig tsconfig.tsfmt.lint.json -r",
-        "format-verify": "tsfmt --useTsconfig tsconfig.tsfmt.lint.json --verify"
+        "format-verify": "tsfmt --useTsconfig tsconfig.tsfmt.lint.json --verify",
+        "matter-device": "ts-node --project packages/matter-node.js/tsconfig.dist.json packages/matter-node.js/src/examples/DeviceNode.ts",
+        "matter-bridge": "ts-node --project packages/matter-node.js/tsconfig.dist.json packages/matter-node.js/src/examples/BridgedDevicesNode.ts",
+        "matter-composeddevice": "ts-node --project packages/matter-node.js/tsconfig.dist.json packages/matter-node.js/src/examples/ComposedDeviceNode.ts",
+        "matter-controller": "ts-node --project packages/matter-node.js/tsconfig.dist.json packages/matter-node.js/src/examples/ControllerNode.ts"
     },
     "devDependencies": {
         "@typescript-eslint/eslint-plugin": "^5.54.0",

@@ -16,29 +16,33 @@ import { Time, TimeFake } from "@project-chip/matter.js/time";
 Time.get = () => new TimeFake(0);
 
 import * as assert from "assert";
-import { ClusterServer, EndpointData, StatusCode } from "@project-chip/matter.js/interaction";
+import { ClusterServer, StatusCode } from "@project-chip/matter.js/interaction";
 import { SecureSession } from "@project-chip/matter.js/session";
 import { MatterDevice } from "@project-chip/matter.js";
 import { Fabric, FabricJsonObject } from "@project-chip/matter.js/fabric";
-import { GroupsCluster, GroupsClusterHandler, ScenesCluster, ScenesClusterHandler, OnOffCluster, OnOffClusterHandler } from "@project-chip/matter.js/cluster";
+import {
+    GroupsCluster, GroupsClusterHandler, ScenesCluster, ScenesClusterHandler, OnOffCluster, OnOffClusterHandler,
+    ClusterServerObj
+} from "@project-chip/matter.js/cluster";
 import { GroupId, AttributeId, ClusterId } from "@project-chip/matter.js/datatype";
 import { getPromiseResolver } from "@project-chip/matter.js/util";
 import { SessionType, Message } from "@project-chip/matter.js/codec";
 import { callCommandOnClusterServer, createTestSessionWithFabric } from "./ClusterServerTestingUtil";
 import { TlvBoolean } from "@project-chip/matter.js/tlv";
+import { Endpoint, DeviceTypes } from "@project-chip/matter.js/device";
 
 describe("Scenes Server test", () => {
-    let groupsServer: ClusterServer<any, any, any, any, any> | undefined;
-    let scenesServer: ClusterServer<any, any, any, any, any> | undefined;
-    let onOffServer: ClusterServer<any, any, any, any, any> | undefined;
+    let groupsServer: ClusterServerObj<typeof GroupsCluster.attributes, typeof GroupsCluster.commands> | undefined;
+    let scenesServer: ClusterServerObj<typeof ScenesCluster.attributes, typeof ScenesCluster.commands> | undefined;
+    let onOffServer: ClusterServerObj<typeof OnOffCluster.attributes, typeof OnOffCluster.commands> | undefined;
     let testFabric: Fabric | undefined;
     let testSession: SecureSession<MatterDevice> | undefined
-    let endpoint: EndpointData | undefined;
+    let endpoint: Endpoint | undefined;
 
     // TODO make that nicer and maybe  move to a "testing support library"
     async function initializeTestEnv() {
-        groupsServer = new ClusterServer(GroupsCluster, { nameSupport: { groupNames: true } }, GroupsClusterHandler());
-        scenesServer = new ClusterServer(ScenesCluster, {
+        groupsServer = ClusterServer(GroupsCluster, { nameSupport: { groupNames: true } }, GroupsClusterHandler());
+        scenesServer = ClusterServer(ScenesCluster, {
             sceneCount: 0,
             currentScene: 0,
             currentGroup: new GroupId(0),
@@ -46,22 +50,12 @@ describe("Scenes Server test", () => {
             nameSupport: { sceneNames: true },
             lastConfiguredBy: null
         }, ScenesClusterHandler());
-        onOffServer = new ClusterServer(OnOffCluster, { onOff: true }, OnOffClusterHandler());
+        onOffServer = ClusterServer(OnOffCluster, { onOff: true }, OnOffClusterHandler());
         testSession = await createTestSessionWithFabric();
         testFabric = testSession.getFabric();
 
-        endpoint = {
-            id: 1,
-            name: '',
-            code: 0,
-            clusters: new Map<number, ClusterServer<any, any, any, any, any>>(
-                [
-                    [GroupsCluster.id, groupsServer],
-                    [ScenesCluster.id, scenesServer],
-                    [OnOffCluster.id, onOffServer]
-                ]
-            )
-        };
+        endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], [groupsServer, /*scenesServer,*/ onOffServer], 1);
+        endpoint.addClusterServer(scenesServer);
     }
 
     describe("Basic scenes logic", () => {

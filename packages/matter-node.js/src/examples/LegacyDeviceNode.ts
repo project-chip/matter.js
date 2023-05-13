@@ -6,44 +6,36 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { singleton } from "@project-chip/matter.js/util";
-import { Time } from "@project-chip/matter.js/time";
-import { TimeNode } from "./time/TimeNode";
+/**
+ * Important note: This file is part of the legacy matter-node API and should not be used anymore!
+ * Please use the new API classes!
+ */
 
-Time.get = singleton(() => new TimeNode());
+// Include this first to auto-register Crypto, Network and Time Node.js implementations
+import { MatterDevice } from "../"; // same as @project-chip/matter-node.js
 
-import { Network, UdpInterface } from "@project-chip/matter.js/net";
-import { NetworkNode } from "./net/NetworkNode";
-
-Network.get = singleton(() => new NetworkNode());
-
-import { Crypto } from "@project-chip/matter.js/crypto";
-import { CryptoNode } from "./crypto/CryptoNode";
-
-Crypto.get = singleton(() => new CryptoNode());
-
-import { Logger } from "@project-chip/matter.js/log";
-import { StorageManager } from "@project-chip/matter.js/storage";
-import { MatterDevice } from "@project-chip/matter.js";
-import { SecureChannelProtocol } from "@project-chip/matter.js/securechannel";
-import { PaseServer, CaseServer } from "@project-chip/matter.js/session";
-import { ClusterServer, InteractionServer } from "@project-chip/matter.js/interaction";
+import { commandExecutor, getIntParameter, getParameter, requireMinNodeVersion } from "../util"; // same as @project-chip/matter-node.js/util
+import { UdpInterface } from "../net"; // same as @project-chip/matter-node.js/net
+import { Logger } from "../exports/log"; // same as @project-chip/matter-node.js/log
+import { StorageManager, StorageBackendDisk } from "../storage"; // same as @project-chip/matter-node.js/storage
+import { SecureChannelProtocol } from "../exports/securechannel"; // same as @project-chip/matter-node.js/securechannel
+import { PaseServer, CaseServer } from "../exports/session"; // same as @project-chip/matter-node.js/session
+import { ClusterServer, InteractionServer } from "../exports/interaction"; // same as @project-chip/matter-node.js/interaction
 import {
     BasicInformationCluster, GeneralCommissioningCluster, RegulatoryLocationType, OperationalCredentialsCluster,
     OnOffCluster, EthernetNetworkCommissioningCluster, NetworkCommissioningStatus, AdminCommissioningCluster,
     CommissioningWindowStatus, AccessControlCluster, GeneralCommissioningClusterHandler,
     OperationalCredentialsClusterHandler, OnOffClusterHandler, AdminCommissioningHandler, NetworkCommissioningHandler,
-
-} from "@project-chip/matter.js/cluster";
-import { VendorId, FabricIndex } from "@project-chip/matter.js/datatype";
-import { DEVICE } from "@project-chip/matter.js/common";
-import { MdnsBroadcaster, MdnsScanner } from "@project-chip/matter.js/mdns";
-import { CommissionningFlowType, DiscoveryCapabilitiesSchema, ManualPairingCodeCodec, QrPairingCodeCodec, QrCode } from "@project-chip/matter.js/schema";
-import { AttestationCertificateManager, CertificationDeclarationManager } from "@project-chip/matter.js/certificate";
-
-import { commandExecutor, getIntParameter, getParameter } from "./util/CommandLine";
-import { StorageBackendDisk } from "./storage/StorageBackendDisk";
-import { requireMinNodeVersion } from "./util/Node";
+} from "../exports/cluster"; // same as @project-chip/matter-node.js/cluster
+import { VendorId, FabricIndex } from "../exports/datatype"; // same as @project-chip/matter-node.js/datatype
+import { DeviceTypes } from "../exports/device"; // same as @project-chip/matter-node.js/device
+import { MdnsBroadcaster, MdnsScanner } from "../exports/mdns"; // same as @project-chip/matter-node.js/mdns
+import {
+    CommissionningFlowType, DiscoveryCapabilitiesSchema, ManualPairingCodeCodec, QrPairingCodeCodec, QrCode
+} from "../exports/schema";  // same as @project-chip/matter-node.js/schema
+import { AttestationCertificateManager, CertificationDeclarationManager } from "../exports/certificate";  // same as @project-chip/matter-node.js/certificate
+import { Crypto } from "../crypto";  // same as @project-chip/matter-node.js/crypto
+import { Time } from "../time";  // same as @project-chip/matter-node.js/time
 
 const logger = Logger.get("Device");
 
@@ -77,7 +69,7 @@ class DeviceNode {
         deviceStorage.set("productid", productId);
 
         // Barebone implementation of the On/Off cluster
-        const onOffClusterServer = new ClusterServer(
+        const onOffClusterServer = ClusterServer(
             OnOffCluster,
             { onOff: false }, // Off by default
             OnOffClusterHandler()
@@ -105,8 +97,8 @@ class DeviceNode {
             .addBroadcaster(await MdnsBroadcaster.create(port, netAnnounceInterface))
             .addProtocolHandler(secureChannelProtocol)
             .addProtocolHandler(new InteractionServer(storageManager)
-                .addEndpoint(0x00, DEVICE.ROOT, [
-                    new ClusterServer(BasicInformationCluster, {
+                .addEndpoint(0x00, DeviceTypes.ROOT, [
+                    ClusterServer(BasicInformationCluster, {
                         dataModelRevision: 1,
                         vendorName,
                         vendorId,
@@ -125,7 +117,7 @@ class DeviceNode {
                         },
                         serialNumber: `node-matter-${Time.nowMs()}`,
                     }, {}),
-                    new ClusterServer(GeneralCommissioningCluster, {
+                    ClusterServer(GeneralCommissioningCluster, {
                         breadcrumb: BigInt(0),
                         basicCommissioningInfo: {
                             failSafeExpiryLengthSeconds: 60 /* 1min */,
@@ -135,7 +127,7 @@ class DeviceNode {
                         locationCapability: RegulatoryLocationType.IndoorOutdoor,
                         supportsConcurrentConnections: true,
                     }, GeneralCommissioningClusterHandler),
-                    new ClusterServer(OperationalCredentialsCluster, {
+                    ClusterServer(OperationalCredentialsCluster, {
                         nocs: [],
                         fabrics: [],
                         supportedFabrics: 254,
@@ -150,7 +142,7 @@ class DeviceNode {
                             certificationDeclaration,
                         }),
                     ),
-                    new ClusterServer(EthernetNetworkCommissioningCluster,
+                    ClusterServer(EthernetNetworkCommissioningCluster,
                         {
                             maxNetworks: 1,
                             interfaceEnabled: true,
@@ -161,7 +153,7 @@ class DeviceNode {
                         },
                         NetworkCommissioningHandler(),
                     ),
-                    new ClusterServer(AdminCommissioningCluster,
+                    ClusterServer(AdminCommissioningCluster,
                         {
                             windowStatus: CommissioningWindowStatus.WindowNotOpen,
                             adminFabricIndex: null,
@@ -169,7 +161,7 @@ class DeviceNode {
                         },
                         AdminCommissioningHandler(secureChannelProtocol),
                     ),
-                    new ClusterServer(AccessControlCluster,
+                    ClusterServer(AccessControlCluster,
                         {
                             acl: [],
                             extension: [],
@@ -180,7 +172,7 @@ class DeviceNode {
                         {},
                     )
                 ])
-                .addEndpoint(0x01, DEVICE.ON_OFF_LIGHT, [onOffClusterServer])
+                .addEndpoint(0x01, DeviceTypes.ON_OFF_LIGHT, [onOffClusterServer])
             );
         await device.start();
 

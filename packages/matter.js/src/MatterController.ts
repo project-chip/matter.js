@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * Important note: This file is part of the legacy matter-node (internal) API and should not be used anymore!
+ * Please use the new API classes!
+ */
+
 import { SECURE_CHANNEL_PROTOCOL_ID } from "./protocol/securechannel/SecureChannelMessages.js";
 import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { PaseClient } from "./session/pase/PaseClient.js";
@@ -29,15 +34,14 @@ import { CertificateChainType, OperationalCredentialsCluster, TlvCertSigningRequ
 import { ByteArray } from "./util/ByteArray.js";
 import { StorageManager } from "./storage/StorageManager.js";
 
-
 const FABRIC_INDEX = new FabricIndex(1);
 const FABRIC_ID = BigInt(1);
-const CONTROLLER_NODE_ID = new NodeId(BigInt(1));
 const ADMIN_VENDOR_ID = new VendorId(752);
 const logger = Logger.get("MatterController");
 
 export class MatterController {
     public static async create(scanner: Scanner, netInterfaceIpv4: NetInterface, netInterfaceIpv6: NetInterface, storageManager: StorageManager) {
+        const CONTROLLER_NODE_ID = new NodeId(Crypto.getRandomBigUInt64());
         const certificateManager = new RootCertificateManager(storageManager);
 
         const ipkValue = Crypto.getRandomData(16);
@@ -96,17 +100,17 @@ export class MatterController {
         let interactionClient = new InteractionClient(new ExchangeProvider(this.exchangeManager, paseSecureMessageChannel));
 
         // Get and display the product name (just for debugging)
-        const basicClusterClient = ClusterClient(interactionClient, 0, BasicInformationCluster);
-        const productName = await basicClusterClient.getProductName();
+        const basicClusterClient = ClusterClient(BasicInformationCluster, 0, interactionClient);
+        const productName = await basicClusterClient.getProductNameAttribute();
         logger.info("Paired with device:", productName);
 
         // Do the commissioning
-        let generalCommissioningClusterClient = ClusterClient(interactionClient, 0, GeneralCommissioningCluster);
+        let generalCommissioningClusterClient = ClusterClient(GeneralCommissioningCluster, 0, interactionClient);
         this.ensureSuccess(await generalCommissioningClusterClient.armFailSafe({ breadcrumb: BigInt(1), expiryLengthSeconds: 60 }));
         this.ensureSuccess(await generalCommissioningClusterClient.setRegulatoryConfig({ breadcrumb: BigInt(2), newRegulatoryConfig: RegulatoryLocationType.IndoorOutdoor, countryCode: "US" }));
 
 
-        const operationalCredentialsClusterClient = ClusterClient(interactionClient, 0, OperationalCredentialsCluster);
+        const operationalCredentialsClusterClient = ClusterClient(OperationalCredentialsCluster, 0, interactionClient);
         const { certificate: deviceAttestation } = await operationalCredentialsClusterClient.requestCertChain({ type: CertificateChainType.DeviceAttestation });
         // TODO: extract device public key from deviceAttestation
         const { certificate: productAttestation } = await operationalCredentialsClusterClient.requestCertChain({ type: CertificateChainType.ProductAttestationIntermediate });
@@ -123,21 +127,22 @@ export class MatterController {
         const operationalPublicKey = CertificateManager.getPublicKeyFromCsr(certSigningRequest);
 
         await operationalCredentialsClusterClient.addRootCert({ certificate: this.certificateManager.getRootCert() });
-        const peerNodeId = new NodeId(BigInt(1));
+        const peerNodeId = this.fabric.rootNodeId;
         const peerOperationalCert = this.certificateManager.generateNoc(operationalPublicKey, FABRIC_ID, peerNodeId);
         await operationalCredentialsClusterClient.addOperationalCert({
             operationalCert: peerOperationalCert,
             intermediateCaCert: new ByteArray(0),
             identityProtectionKey: this.fabric.identityProtectionKey,
             adminVendorId: ADMIN_VENDOR_ID,
-            caseAdminNode: CONTROLLER_NODE_ID,
+            caseAdminNode: peerNodeId,
         });
 
         // Look for the device broadcast over MDNS and do CASE pairing
         interactionClient = await this.connect(peerNodeId, 5);
 
         // Complete the commission
-        generalCommissioningClusterClient = ClusterClient(interactionClient, 0, GeneralCommissioningCluster);
+        // TODO: Why new client and not reuse above??
+        generalCommissioningClusterClient = ClusterClient(GeneralCommissioningCluster, 0, interactionClient);
         this.ensureSuccess(await generalCommissioningClusterClient.commissioningComplete());
 
         this.controllerStorage.set("fabric", this.fabric.toStorageObject());

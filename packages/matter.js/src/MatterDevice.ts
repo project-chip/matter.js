@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * Important note: This file is part of the legacy matter-node (internal) API and should not be used anymore!
+ * Please use the new API classes!
+ */
+
 import { Session } from "./session/Session.js";
 import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { Fabric } from "./fabric/Fabric.js";

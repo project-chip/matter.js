@@ -16,10 +16,10 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
  * @see {@link MatterCoreSpecificationV1_0} § 9.7.5.1
  */
 const TlvLabel = TlvObject({
-    /** Contains a string as label without a further defined semantic n this base cluster. */
+    /** Contains a string as label without a further defined semantic in this base cluster. */
     label: TlvField(0, TlvString.bound({ maxLength: 16 })), /* default: "" */
 
-    /** Contains a string as value without a further defined semantic n this base cluster. */
+    /** Contains a string as value without a further defined semantic in this base cluster. */
     value: TlvField(1, TlvString.bound({ maxLength: 16 })), /* default: "" */
 });
 

@@ -104,7 +104,7 @@ export const DeviceTypeDefinition = ({
     optionalClientClusters,
 });
 
-export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
+export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
     // Utility Device Types
     // A Utility device type supports configuration and settings.
     /**
@@ -1055,4 +1055,13 @@ export const DEVICE: { [key: string]: DeviceTypeDefinition } = {
             //MatterClusters.ModeSelectCluster.id,
         ],
     }),
+}
+
+export function getDeviceTypeDefinitionByCode(code: number): DeviceTypeDefinition | undefined {
+    for (const key in DeviceTypes) {
+        if (DeviceTypes[key].code === code) {
+            return DeviceTypes[key];
+        }
+    }
+    return undefined;
 }

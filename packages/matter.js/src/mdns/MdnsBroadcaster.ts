@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AAAARecord, ARecord, PtrRecord, SrvRecord, TxtRecord } from "../codec/DnsCodec.js";
+import { AAAARecord, ARecord, PtrRecord, SrvRecord, TxtRecord, Record } from "../codec/DnsCodec.js";
 import { Crypto } from "../crypto/Crypto.js";
 import { Broadcaster } from "../common/Broadcaster.js";
 import { getDeviceMatterQname, getFabricQname, MATTER_COMMISSION_SERVICE_QNAME, MATTER_SERVICE_QNAME, SERVICE_DISCOVERY_QNAME } from "./MdnsConsts.js";
@@ -30,7 +30,7 @@ export class MdnsBroadcaster implements Broadcaster {
     ) { }
 
     setCommissionMode(mode: number, deviceName: string, deviceType: number, vendorId: VendorId, productId: number, discriminator: number) {
-        logger.debug(`announce commissioning mode ${mode} ${deviceName} ${deviceType} ${vendorId} ${productId} ${discriminator}`);
+        logger.debug(`announce commissioning mode ${mode} ${deviceName} ${deviceType} ${vendorId.id} ${productId} ${discriminator}`);
 
         const shortDiscriminator = (discriminator >> 8) & 0x0F;
         const instanceId = Crypto.getRandomData(8).toHex().toUpperCase();
@@ -87,7 +87,7 @@ export class MdnsBroadcaster implements Broadcaster {
 
     setFabrics(fabrics: Fabric[]) {
         this.mdnsServer.setRecordsGenerator(netInterface => {
-            const records: any[] = [
+            const records: Record<any>[] = [
                 PtrRecord(SERVICE_DISCOVERY_QNAME, MATTER_SERVICE_QNAME),
             ];
             fabrics.forEach(fabric => {

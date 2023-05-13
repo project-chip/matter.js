@@ -16,54 +16,48 @@ import { Time, TimeFake } from "@project-chip/matter.js/time";
 Time.get = () => new TimeFake(0);
 
 import * as assert from "assert";
-import { ClusterServer, EndpointData, StatusCode } from "@project-chip/matter.js/interaction";
+import { ClusterServer, StatusCode } from "@project-chip/matter.js/interaction";
 import { SecureSession } from "@project-chip/matter.js/session";
 import { MatterDevice } from "@project-chip/matter.js";
 import { Fabric, FabricJsonObject } from "@project-chip/matter.js/fabric";
-import { GroupsCluster, GroupsClusterHandler, IdentifyCluster, IdentifyType } from "@project-chip/matter.js/cluster";
+import {
+    ClusterServerObj, GroupsCluster, GroupsClusterHandler, IdentifyCluster, ClusterServerHandlers, IdentifyType
+} from "@project-chip/matter.js/cluster";
 import { GroupId } from "@project-chip/matter.js/datatype";
 import { getPromiseResolver } from "@project-chip/matter.js/util";
 import { SessionType, Message } from "@project-chip/matter.js/codec";
 import { callCommandOnClusterServer, createTestSessionWithFabric } from "./ClusterServerTestingUtil";
+import { Endpoint, DeviceTypes } from "@project-chip/matter.js/device";
 
 describe("Groups Server test", () => {
-    let groupsServer: ClusterServer<any, any, any, any, any> | undefined;
+    let groupsServer: ClusterServerObj<typeof GroupsCluster.attributes, typeof GroupsCluster.commands> | undefined;
     let testFabric: Fabric | undefined;
     let testSession: SecureSession<MatterDevice> | undefined
-    let endpoint: EndpointData | undefined;
-    let endpoint2: EndpointData | undefined;
+    let endpoint: Endpoint | undefined;
+    let endpoint2: Endpoint | undefined;
 
     // TODO make that nicer and maybe  move to a "testing support library"
     async function initializeTestEnv() {
-        groupsServer = new ClusterServer(GroupsCluster, { nameSupport: { groupNames: true } }, GroupsClusterHandler());
+        groupsServer = ClusterServer(GroupsCluster, { nameSupport: { groupNames: true } }, GroupsClusterHandler());
+        const identifyServer = ClusterServer(
+            IdentifyCluster,
+            {
+                identifyTime: 100,
+                identifyType: IdentifyType.None
+            },
+            {
+                identify: async ({ request: { identifyTime } }) => { console.log(identifyTime); /* */ }
+            } as ClusterServerHandlers<typeof IdentifyCluster>
+        );
+
         testSession = await createTestSessionWithFabric();
         testFabric = testSession.getFabric();
 
-        endpoint = {
-            id: 1,
-            name: '',
-            code: 0,
-            clusters: new Map<number, ClusterServer<any, any, any, any, any>>(
-                [
-                    [
-                        IdentifyCluster.id,
-                        new ClusterServer(
-                            IdentifyCluster,
-                            { identifyTime: 100, identifyType: IdentifyType.None },
-                            { identify: async () => { /* */ } }
-                        )
-                    ],
-                    [GroupsCluster.id, groupsServer]
-                ]
-            )
-        };
+        endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], [/*groupsServer, identifyServer*/], 1);
+        endpoint.addClusterServer(groupsServer);
+        endpoint.addClusterServer(identifyServer);
 
-        endpoint2 = {
-            id: 2,
-            name: '',
-            code: 0,
-            clusters: new Map<number, ClusterServer<any, any, any, any, any>>()
-        };
+        endpoint2 = new Endpoint([DeviceTypes.ON_OFF_LIGHT], [], 2);
     }
 
     describe("Basic groups actions", () => {
@@ -247,7 +241,8 @@ describe("Groups Server test", () => {
     describe("Add group while identifying without identifying test", () => {
         beforeAll(async () => {
             await initializeTestEnv();
-            const identifyCluster = endpoint?.clusters.get(IdentifyCluster.id) as ClusterServer<typeof IdentifyCluster.features, typeof IdentifyCluster.supportedFeatures, typeof IdentifyCluster.attributes, typeof IdentifyCluster.commands, typeof IdentifyCluster.events>;
+            const identifyCluster = endpoint?.getClusterServer(IdentifyCluster);
+            assert.ok(identifyCluster);
             identifyCluster.attributes.identifyTime.set(0); // Change to not identifying
         });
 

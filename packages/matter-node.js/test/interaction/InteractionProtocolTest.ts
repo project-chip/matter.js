@@ -20,7 +20,7 @@ import {
     InvokeResponse
 } from "@project-chip/matter.js/interaction";
 import { MessageExchange } from "@project-chip/matter.js/protocol";
-import { DEVICE } from "@project-chip/matter.js/common";
+import { DeviceTypes } from "@project-chip/matter.js/device";
 import { MatterDevice } from "@project-chip/matter.js";
 import { VendorId } from "@project-chip/matter.js/datatype";
 import { TlvString, TlvUInt8, TlvNoArguments, TlvArray, TlvField, TlvObject, TlvNullable } from "@project-chip/matter.js/tlv";
@@ -184,6 +184,17 @@ const INVOKE_COMMAND_REQUEST_WITH_NO_ARGS: InvokeRequest = {
     ]
 };
 
+const INVOKE_COMMAND_REQUEST_INVALID: InvokeRequest = {
+    interactionModelRevision: 1,
+    suppressResponse: false,
+    timedRequest: false,
+    invokeRequests: [
+        {
+            commandPath: { endpointId: 0, clusterId: 6, commandId: 10 },
+        }
+    ]
+};
+
 const INVOKE_COMMAND_RESPONSE: InvokeResponse = {
     interactionModelRevision: 1,
     suppressResponse: false,
@@ -196,6 +207,18 @@ const INVOKE_COMMAND_RESPONSE: InvokeResponse = {
     ]
 };
 
+const INVOKE_COMMAND_RESPONSE_INVALID: InvokeResponse = {
+    interactionModelRevision: 1,
+    suppressResponse: false,
+    invokeResponses: [
+        {
+            status: {
+                commandPath: { clusterId: 6, commandId: 10, endpointId: 0 }, status: { status: 0x81 }
+            }
+        }
+    ]
+};
+
 describe("InteractionProtocol", () => {
 
     describe("handleReadRequest", () => {
@@ -203,8 +226,8 @@ describe("InteractionProtocol", () => {
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
             const interactionProtocol = new InteractionServer(storageManager)
-                .addEndpoint(0, DEVICE.ROOT, [
-                    new ClusterServer(BasicInformationCluster, {
+                .addEndpoint(0, DeviceTypes.ROOT, [
+                    ClusterServer(BasicInformationCluster, {
                         dataModelRevision: 1,
                         vendorName: "vendor",
                         vendorId: new VendorId(1),
@@ -232,7 +255,7 @@ describe("InteractionProtocol", () => {
 
     describe("handleWriteRequest", () => {
         it("write values and return errors on invalid values", async () => {
-            const basicCluster = new ClusterServer(BasicInformationCluster, {
+            const basicCluster = ClusterServer(BasicInformationCluster, {
                 dataModelRevision: 1,
                 vendorName: "vendor",
                 vendorId: new VendorId(1),
@@ -254,7 +277,7 @@ describe("InteractionProtocol", () => {
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
             const interactionProtocol = new InteractionServer(storageManager)
-                .addEndpoint(0, DEVICE.ROOT, [basicCluster]);
+                .addEndpoint(0, DeviceTypes.ROOT, [basicCluster]);
 
             const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" } }) as MessageExchange<MatterDevice>, WRITE_REQUEST);
 
@@ -263,7 +286,7 @@ describe("InteractionProtocol", () => {
         });
 
         it("write chunked array values and return errors on invalid values", async () => {
-            const accessControlCluster = new ClusterServer(AccessControlCluster, {
+            const accessControlCluster = ClusterServer(AccessControlCluster, {
                 acl: [],
                 extension: [],
                 subjectsPerAccessControlEntry: 4,
@@ -274,7 +297,7 @@ describe("InteractionProtocol", () => {
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
             const interactionProtocol = new InteractionServer(storageManager)
-                .addEndpoint(0, DEVICE.ROOT, [accessControlCluster]);
+                .addEndpoint(0, DeviceTypes.ROOT, [accessControlCluster]);
 
             const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" } }) as MessageExchange<MatterDevice>, CHUNKED_ARRAY_WRITE_REQUEST);
 
@@ -290,7 +313,7 @@ describe("InteractionProtocol", () => {
         });
 
         it("mass write values and only set the one allowed", async () => {
-            const basicCluster = new ClusterServer(BasicInformationCluster, {
+            const basicCluster = ClusterServer(BasicInformationCluster, {
                 dataModelRevision: 1,
                 vendorName: "vendor",
                 vendorId: new VendorId(1),
@@ -312,7 +335,7 @@ describe("InteractionProtocol", () => {
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
             const interactionProtocol = new InteractionServer(storageManager)
-                .addEndpoint(0, DEVICE.ROOT, [basicCluster]);
+                .addEndpoint(0, DeviceTypes.ROOT, [basicCluster]);
 
             const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" } }) as MessageExchange<MatterDevice>, MASS_WRITE_REQUEST);
 
@@ -325,9 +348,9 @@ describe("InteractionProtocol", () => {
     });
 
     describe("handleInvokeRequest", () => {
-        it("invoke method with empty args", async () => {
+        it("invoke command with empty args", async () => {
             let onOffState = false;
-            const onOffCluster = new ClusterServer(OnOffCluster, {
+            const onOffCluster = ClusterServer(OnOffCluster, {
                 onOff: onOffState,
             }, {
                 on: async () => {
@@ -344,7 +367,7 @@ describe("InteractionProtocol", () => {
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
             const interactionProtocol = new InteractionServer(storageManager)
-                .addEndpoint(0, DEVICE.ROOT, [onOffCluster]);
+                .addEndpoint(0, DeviceTypes.ROOT, [onOffCluster]);
 
             const result = await interactionProtocol.handleInvokeRequest(({ channel: { getName: () => "test" } }) as MessageExchange<MatterDevice>, INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS, {} as Message);
 
@@ -352,10 +375,10 @@ describe("InteractionProtocol", () => {
             assert.equal(onOffState, true);
         });
 
-        it("invoke method with no args", async () => {
+        it("invoke command with no args", async () => {
 
             let onOffState = false;
-            const onOffCluster = new ClusterServer(OnOffCluster, {
+            const onOffCluster = ClusterServer(OnOffCluster, {
                 onOff: onOffState,
             }, {
                 on: async () => {
@@ -372,12 +395,39 @@ describe("InteractionProtocol", () => {
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
             const interactionProtocol = new InteractionServer(storageManager)
-                .addEndpoint(0, DEVICE.ROOT, [onOffCluster]);
+                .addEndpoint(0, DeviceTypes.ROOT, [onOffCluster]);
 
             const result = await interactionProtocol.handleInvokeRequest(({ channel: { getName: () => "test" } }) as MessageExchange<MatterDevice>, INVOKE_COMMAND_REQUEST_WITH_NO_ARGS, {} as Message);
 
             assert.deepEqual(result, INVOKE_COMMAND_RESPONSE);
             assert.equal(onOffState, true);
+        });
+
+        it("invalid invoke command", async () => {
+            let onOffState = false;
+            const onOffCluster = ClusterServer(OnOffCluster, {
+                onOff: onOffState,
+            }, {
+                on: async () => {
+                    onOffState = true;
+                },
+                off: async () => {
+                    onOffState = false;
+                },
+                toggle: async () => {
+                    onOffState = !onOffState;
+                }
+            });
+
+            const storageManager = new StorageManager(new StorageBackendMemory());
+            await storageManager.initialize();
+            const interactionProtocol = new InteractionServer(storageManager)
+                .addEndpoint(0, DeviceTypes.ROOT, [onOffCluster]);
+
+            const result = await interactionProtocol.handleInvokeRequest(({ channel: { getName: () => "test" } }) as MessageExchange<MatterDevice>, INVOKE_COMMAND_REQUEST_INVALID, {} as Message);
+
+            assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_INVALID);
+            assert.equal(onOffState, false);
         });
     });
 });

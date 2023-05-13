@@ -32,7 +32,7 @@ import { RelativeHumidityCluster, SoilMoistureMeasurementCluster, LeafWetnessMea
 import { GeneralDiagnosticsCluster } from "./GeneralDiagnosticsCluster.js";
 import { GroupKeyManagementCluster } from "./GroupKeyManagementCluster.js";
 
-export const AllClustersMap = {
+export const AllClustersMap: { [key: Cluster<any, any, any, any, any>["id"]]: Cluster<any, any, any, any, any> } = {
     [AccessControlCluster.id]: AccessControlCluster,
     [ActionsCluster.id]: ActionsCluster,
     [AdminCommissioningCluster.id]: AdminCommissioningCluster,
