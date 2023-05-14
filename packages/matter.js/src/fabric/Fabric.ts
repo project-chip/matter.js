@@ -63,7 +63,6 @@ export class Fabric {
         readonly operationalCert: ByteArray,
         public label: string,
         scopedClusterData?: Map<number, Map<string, SupportedStorageTypes>>
-
     ) {
         this.scopedClusterData = scopedClusterData ?? new Map<number, Map<string, SupportedStorageTypes>>();
     }

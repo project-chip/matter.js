@@ -15,6 +15,7 @@ export class AttributeServer<T> {
     private version = 0;
     private readonly matterListeners = new Array<(value: T, version: number) => void>();
     private readonly listeners = new Array<(newValue: T, oldValue: T) => void>();
+    protected endpoint?: Endpoint;
 
     constructor(
         readonly id: number,
@@ -26,6 +27,10 @@ export class AttributeServer<T> {
     ) {
         validator(defaultValue, name);
         this.value = defaultValue;
+    }
+
+    assignToEndpoint(endpoint: Endpoint) {
+        this.endpoint = endpoint;
     }
 
     set(value: T, _session?: Session<MatterDevice>) {
@@ -52,14 +57,14 @@ export class AttributeServer<T> {
         this.value = value;
     }
 
-    get(_session?: Session<MatterDevice>, _endpoint?: Endpoint): T {
+    get(_session?: Session<MatterDevice>): T {
         // TODO: check ACL
 
         return this.getLocal();
     }
 
-    getWithVersion(session?: Session<MatterDevice>, endpoint?: Endpoint) {
-        return { version: this.version, value: this.get(session, endpoint) };
+    getWithVersion(session?: Session<MatterDevice>) {
+        return { version: this.version, value: this.get(session) };
     }
 
     getLocal(): T {
@@ -105,9 +110,9 @@ export class AttributeGetterServer<T> extends AttributeServer<T> {
         throw new Error("Setter is not supported on attribute defined by a getter");
     }
 
-    override get(session?: SecureSession<MatterDevice>, endpoint?: Endpoint): T {
+    override get(session?: SecureSession<MatterDevice>): T {
         // TODO: check ACL
         // TODO handle "version" for getter
-        return this.getter(session, endpoint);
+        return this.getter(session, this.endpoint);
     }
 }
