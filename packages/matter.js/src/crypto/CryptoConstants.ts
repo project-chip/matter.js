@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+
 /** @see {@link MatterCoreSpecificationV1_0} § 3.5.1 */
 export const CRYPTO_GROUP_SIZE_BITS = 256;
 export const CRYPTO_GROUP_SIZE_BYTES = 32;

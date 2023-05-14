@@ -14,10 +14,11 @@ import { TlvEnum, TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvByteString } from "../tlv/TlvString.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 const PAKE_PASSCODE_VERIFIER_LENGTH = CRYPTO_GROUP_SIZE_BYTES + CRYPTO_PUBLIC_KEY_SIZE_BYTES;
 
-/** @see {@link MatterApplicationClusterSpecificationV1_0} § 11.18.9 */
+/** @see {@link MatterCoreSpecificationV1_0} § 11.18.9 */
 export const enum AdminCommissioningStatusCode {
     /** Could not be completed because another commissioning is in progress. */
     Busy = 2,
@@ -29,7 +30,7 @@ export const enum AdminCommissioningStatusCode {
     WindowNotOpen = 4,
 }
 
-/** @see {@link MatterApplicationClusterSpecificationV1_0} § 11.18.6.1 */
+/** @see {@link MatterCoreSpecificationV1_0} § 11.18.6.1 */
 export const enum CommissioningWindowStatus {
     /** Commissioning window not open */
     WindowNotOpen = 0,
@@ -41,7 +42,7 @@ export const enum CommissioningWindowStatus {
     BasicWindowOpen = 2,
 }
 
-/** @see {@link MatterApplicationClusterSpecificationV1_0} § 11.18.8.1 */
+/** @see {@link MatterCoreSpecificationV1_0} § 11.18.8.1 */
 const TlvOpenCommissioningWindowRequest = TlvObject({
     /** Time in seconds during which commissioning session establishment is allowed by the Node. */
     commissioningTimeout: TlvField(0, TlvUInt16),
@@ -59,7 +60,7 @@ const TlvOpenCommissioningWindowRequest = TlvObject({
     salt: TlvField(4, TlvByteString.bound({ minLength: 16, maxLength: 32 })),
 });
 
-/** @see {@link MatterApplicationClusterSpecificationV1_0} § 11.18.8.2 */
+/** @see {@link MatterCoreSpecificationV1_0} § 11.18.8.2 */
 const TlvOpenBasicCommissioningWindowRequest = TlvObject({
     /** Time in seconds during which commissioning session establishment is allowed by the Node. */
     commissioningTimeout: TlvField(0, TlvUInt16),

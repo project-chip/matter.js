@@ -10,11 +10,11 @@ import {
     AccessLevel, Attribute, Cluster, Event, EventPriority, OptionalAttribute, OptionalEvent, OptionalWritableAttribute,
     WritableAttribute
 } from "./Cluster.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvString, TlvString256max, TlvString32max, TlvString64max } from "../tlv/TlvString.js";
 import { TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 /**
  * Provides constant values related to overall global capabilities of this Node, that are not cluster-specific.
@@ -49,7 +49,7 @@ export const BasicInformationCluster = Cluster({
         /** Human-readable (displayable) name of the vendor for the Node. */
         vendorName: Attribute(1, TlvString32max),
 
-        /** Specifies the {@link VendorId}. */
+        /** Specifies the VendorId. */
         vendorId: Attribute(2, TlvVendorId),
 
         /** Human-readable name of the model for the Node such as the model number assigned by the vendor. */

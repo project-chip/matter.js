@@ -1,13 +1,13 @@
 # JavaScript/TypeScript based Matter Implementation
 
-![experimental](https://img.shields.io/badge/status-Experimental-red) [![license](https://img.shields.io/badge/license-Apache2-green.svg)](https://raw.githubusercontent.com/project-chip/matter.js/master/LICENSE)
+[![license](https://img.shields.io/badge/license-Apache2-green.svg)](https://raw.githubusercontent.com/project-chip/matter.js/master/LICENSE)
 
 Implementation of Matter protocol in Typescript with no native dependencies (and very limited dependencies).
 
 Matter is a new secure / reliable / local / standard protocol for smart devices launched at the end of 2022.
 To know more about Matter: https://csa-iot.org/all-solutions/matter/
 
-matter-node.js is compatible with:
+matter.js/matter-node.js is compatible with:
 - **Apple iOS (iPhone or iPad) and tvOS 16 (Apple TV) - "Home" app by Apple**: fully working
 - **Google Home Ecosystem (Android or Google Nest smart speakers/display) - "Google Home" app**: fully working
 - **Amazon Alexa (Amazon Echo smart speakers/displays)** : fully working
@@ -23,6 +23,8 @@ This repository contains multiple packages (and because of this it is a monorepo
 
 * matter.js: the core Matter implementation in typescript which is JavaScript only and has no native dependencies.
 * matter-node.js: a node.js implementation of a Matter DeviceNode and ControllerNode which also re-exports all matter.js exports and so can be used as only dependency
+
+For each package the [API Documentation](./docs/README.md) is updated on each release, but can be built locally using `npm run build-doc`.
 
 This repository uses the workspaces feature on npm to manage the dependencies between the packages. Because of this please only use `npm install` on the root of the repository. This will install all the dependencies for all the packages and also take care to create relevant symlinks between the packages.
 
