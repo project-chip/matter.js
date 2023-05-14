@@ -451,12 +451,12 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     }
 
     async handleInvokeRequest(exchange: MessageExchange<MatterDevice>, { invokeRequests }: InvokeRequest, message: Message): Promise<InvokeResponse> {
-        logger.debug(`Received invoke request from ${exchange.channel.getName()}: ${invokeRequests.map(({ commandPath: { endpointId, clusterId, commandId } }) => this.resolveCommandName({ endpointId, clusterId, commandId})).join(", ")}`);
+        logger.debug(`Received invoke request from ${exchange.channel.getName()}: ${invokeRequests.map(({ commandPath: { endpointId, clusterId, commandId } }) => this.resolveCommandName({ endpointId, clusterId, commandId })).join(", ")}`);
 
         const invokeResponses: TypeFromSchema<typeof TlvInvokeResponseData>[] = [];
 
         await Promise.all(invokeRequests.map(async ({ commandPath, commandFields }) => {
-            const { endpointId} = commandPath;
+            const { endpointId } = commandPath;
             if (endpointId === undefined) {
                 logger.error("Wildcard command invokes not yet supported!");
                 invokeResponses.push({ status: { commandPath, status: { status: StatusCode.UnsupportedCommand } } });
@@ -465,14 +465,14 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             const command = this.commands.get(commandPathToId(commandPath as CommandPath));
             if (command === undefined) {
                 const { clusterId, commandId } = commandPath;
-                logger.error(`Unknown command ${this.resolveCommandName({ endpointId, clusterId, commandId})}`);
+                logger.error(`Unknown command ${this.resolveCommandName({ endpointId, clusterId, commandId })}`);
                 invokeResponses.push({ status: { commandPath, status: { status: StatusCode.UnsupportedCommand } } });
                 return;
             }
             const endpoint = this.endpoints.get(endpointId);
             if (!endpoint) {
                 const { clusterId, commandId } = commandPath;
-                logger.error(`Endpoint ${endpointId} not found for command ${this.resolveCommandName({ endpointId, clusterId, commandId})}`);
+                logger.error(`Endpoint ${endpointId} not found for command ${this.resolveCommandName({ endpointId, clusterId, commandId })}`);
                 invokeResponses.push({ status: { commandPath, status: { status: StatusCode.UnsupportedCommand } } });
                 return;
             }
