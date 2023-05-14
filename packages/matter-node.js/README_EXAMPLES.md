@@ -21,7 +21,6 @@ Then after `cd packages/matter-node.js` you can use `npm run matter-device` to r
 ### Start a simple Matter Device Node
 
 > The code for this example is in [src/examples/DeviceNode.ts](./src/examples/DeviceNode.ts).
-> The former version based on the legacy internal API in [src/examples/LegacyDeviceNode.ts](./src/examples/LegacyDeviceNode.ts) is still available but will be removed in the future.
 
 To run from the build files:
 
@@ -115,7 +114,6 @@ The above command exposes a composed device with a socket and a light device and
 ### Start a Matter Controller
 
 > The code for this example is in [src/examples/ControllerNode.ts](./src/examples/ControllerNode.ts).
-> The former version based on the legacy internal API in [src/examples/LegacyControllerNode.ts](./src/examples/LegacyControllerNode.ts) is still available but will be removed in the future.
 
 **Experimental**
 The current controller implementation is no CLI tool, but shows the pairing of devices and resuming the connection and also showcase the existing low-level controller API. It is just intended to be used for debugging, during development! The code contains some commented-out examples of how to use the low level controller API.

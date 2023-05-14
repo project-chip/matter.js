@@ -30,25 +30,25 @@ Because of this the library can be used as only dependency which makes sure the 
 
 ### Unchanged Re-Exports from Matter.js
 
-| Export                                       | Description                                                                                                                                 |
-|----------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
-| `@project-chip/matter-node.js`               | Re-Exports the current (legacy!) low level API to implement a Device or a Controller. This will be replaced soon by the new High Level API! |
-| `@project-chip/matter-node.js/certificate`   | Re-Exports Certificate (Root-/PAA/PAI/IAC/DA-Certificates) related functionality                                                            |
-| `@project-chip/matter-node.js/cluster`       | Re-Exports Matter CLuster definitions and Default Cluster-Handlers                                                                          |
-| `@project-chip/matter-node.js/codec`         | Re-Exports Codecs for e.g. Matter-Messages                                                                                                  |
-| `@project-chip/matter-node.js/common`        | Re-Exports certain common functionalities                                                                                                   |
-| `@project-chip/matter-node.js/datatype`      | Re-Exports Matter Data types                                                                                                                |
-| `@project-chip/matter-node.js/fabric`        | Re-Exports Matter-Fabric functionality                                                                                                      |
-| `@project-chip/matter-node.js/interaction`   | Re-Exports Matter Interaction protocol functionality                                                                                        |
-| `@project-chip/matter-node.js/log`           | Re-Exports Logging functionality (based on "console")                                                                                       |
-| `@project-chip/matter-node.js/math`          | Re-Exports Math functionality used by Matter                                                                                                |
-| `@project-chip/matter-node.js/mdns`          | Re-Exports Basic MDNS functionality (uses Network implementation)                                                                           |
-| `@project-chip/matter-node.js/protocol`      | Re-Exports Basic Matter protocol functionality                                                                                              |
-| `@project-chip/matter-node.js/schema`        | Re-Exports Schema definitions and functionality                                                                                             |
-| `@project-chip/matter-node.js/securechannel` | Re-Exports Secure Channel functionality                                                                                                     |
-| `@project-chip/matter-node.js/session`       | Re-Exports Session and Secure-Session functionality                                                                                         |
-| `@project-chip/matter-node.js/spec`          | Re-Exports Matter Specification References                                                                                                  |
-| `@project-chip/matter-node.js/tlv`           | Re-Exports Matter TLV type definitions                                                                                                      |
+| Export                                       | Description                                                                      |
+|----------------------------------------------|----------------------------------------------------------------------------------|
+| `@project-chip/matter-node.js`               | Re-Exports the API to implement a Device or a Controller.                        |
+| `@project-chip/matter-node.js/certificate`   | Re-Exports Certificate (Root-/PAA/PAI/IAC/DA-Certificates) related functionality |
+| `@project-chip/matter-node.js/cluster`       | Re-Exports Matter CLuster definitions and Default Cluster-Handlers               |
+| `@project-chip/matter-node.js/codec`         | Re-Exports Codecs for e.g. Matter-Messages                                       |
+| `@project-chip/matter-node.js/common`        | Re-Exports certain common functionalities                                        |
+| `@project-chip/matter-node.js/datatype`      | Re-Exports Matter Data types                                                     |
+| `@project-chip/matter-node.js/fabric`        | Re-Exports Matter-Fabric functionality                                           |
+| `@project-chip/matter-node.js/interaction`   | Re-Exports Matter Interaction protocol functionality                             |
+| `@project-chip/matter-node.js/log`           | Re-Exports Logging functionality (based on "console")                            |
+| `@project-chip/matter-node.js/math`          | Re-Exports Math functionality used by Matter                                     |
+| `@project-chip/matter-node.js/mdns`          | Re-Exports Basic MDNS functionality (uses Network implementation)                |
+| `@project-chip/matter-node.js/protocol`      | Re-Exports Basic Matter protocol functionality                                   |
+| `@project-chip/matter-node.js/schema`        | Re-Exports Schema definitions and functionality                                  |
+| `@project-chip/matter-node.js/securechannel` | Re-Exports Secure Channel functionality                                          |
+| `@project-chip/matter-node.js/session`       | Re-Exports Session and Secure-Session functionality                              |
+| `@project-chip/matter-node.js/spec`          | Re-Exports Matter Specification References                                       |
+| `@project-chip/matter-node.js/tlv`           | Re-Exports Matter TLV type definitions                                           |
 Both exports and the typings are exported as CommonJS only!.
 
 ### Typescript note
