@@ -98,7 +98,6 @@ abstract class OnOffBaseDevice extends extendPublicHandlerMethods<typeof Device,
     }
 }
 
-
 /**
  * Device class for an OnOffPluginUnit Device
  */
@@ -116,7 +115,6 @@ export class OnOffLightDevice extends OnOffBaseDevice {
         super(DeviceTypes.ON_OFF_LIGHT, onOffAttributeInitialValues, endpointId);
     }
 }
-
 
 /*
 Example to enhance the exposed commands of the device

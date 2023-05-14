@@ -9,7 +9,7 @@ import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 
 export class TlvWrapper<O, T> extends TlvSchema<O> {
     constructor(
-        private readonly underlyingSchema: TlvSchema<T>,
+        readonly underlyingSchema: TlvSchema<T>,
         private readonly wrap: (object: O) => T,
         private readonly unwrap: (value: T) => O,
     ) {

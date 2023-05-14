@@ -16,7 +16,7 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 export class NullableSchema<T> extends TlvSchema<T | null> {
 
     constructor(
-        private readonly schema: TlvSchema<T>,
+        public readonly schema: TlvSchema<T>,
     ) {
         super();
     }

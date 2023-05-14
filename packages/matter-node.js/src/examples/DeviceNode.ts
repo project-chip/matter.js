@@ -22,10 +22,11 @@ import { commandExecutor, getIntParameter, getParameter, requireMinNodeVersion }
 import { Time } from "../time"; // same as @project-chip/matter-node.js/time
 import { OnOffLightDevice, OnOffPluginUnitDevice } from "../exports/device"; // same as @project-chip/matter-node.js/device
 import { VendorId } from "../exports/datatype"; // same as @project-chip/matter-node.js/datatype
-import { Logger } from "../exports/log"; // same as @project-chip/matter-node.js/log
+import { Logger, Level } from "../exports/log"; // same as @project-chip/matter-node.js/log
 import { StorageManager, StorageBackendDisk } from "../storage"; // same as @project-chip/matter-node.js/storage
 
 const logger = Logger.get("Device");
+Logger.defaultLogLevel = Level.INFO;
 
 requireMinNodeVersion(16);
 
