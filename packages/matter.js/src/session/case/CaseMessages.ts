@@ -8,6 +8,7 @@ import { TlvUInt16, TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvByteString } from "../../tlv/TlvString.js";
 import { ByteArray } from "../../util/ByteArray.js";
+import { MatterCoreSpecificationV1_0 } from "../../spec/Specifications.js";
 
 const CASE_SIGNATURE_LENGTH = CRYPTO_GROUP_SIZE_BYTES * 2;
 

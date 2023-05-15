@@ -98,6 +98,7 @@ export class Endpoint {
     }
 
     addClusterServer<A extends Attributes, C extends Commands>(cluster: ClusterServerObj<A, C>) {
+        cluster._assignToEndpoint(this);
         if (cluster.id === DescriptorCluster.id) {
             this.descriptorCluster = cluster as unknown as ClusterServerObj<typeof DescriptorCluster.attributes, typeof DescriptorCluster.commands>;
         }
