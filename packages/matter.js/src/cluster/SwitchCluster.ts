@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Attribute, OptionalAttribute, Cluster, ClusterExtend, OptionalEvent, EventPriority } from "./Cluster.js";
+import { Attribute, Cluster, ClusterExtend, OptionalEvent, EventPriority } from "./Cluster.js";
 import { TlvUInt8 } from "../tlv/TlvNumber.js";
 import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
@@ -23,10 +23,10 @@ export const LatchingSwitchCluster = Cluster({
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.11.4 */
     features: {
         /**  Indicates a switch that maintains its position after being pressed (or turned) */
-        latchingSwitch: BitFlag(0), // TODO: Validate when set, momentarySwitch is NOT set
+        latchingSwitch: BitFlag(0), // TODO: Validate when set, momentarySwitch is NOT set.
 
         /** Indicates a switch that does not maintain its position after being pressed (or turned)  */
-        momentarySwitch: BitFlag(1), // TODO: Validate when set, latchingSwitch is NOT set
+        momentarySwitch: BitFlag(1), // TODO: Validate when set, latchingSwitch is NOT set.
 
         /** Indicates a momentary switch that can distinguish and report release events. */
         momentarySwitchRelease: BitFlag(2), // TODO: Validate when set, momentarySwitch is set.
