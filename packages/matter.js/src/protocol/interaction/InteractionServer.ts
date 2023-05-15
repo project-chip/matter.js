@@ -64,6 +64,13 @@ export function ClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<
         _type: "ClusterServer",
         attributes,
         _commands: commands,
+
+        _assignToEndpoint: (endpoint: Endpoint) => {
+            for (const name in attributes) {
+                (attributes as any)[name].assignToEndpoint(endpoint);
+            }
+        },
+
         _setStorage: (storageContext: StorageContext) => {
             clusterStorage = storageContext;
 
@@ -255,14 +262,19 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         descriptorCluster.attributes.serverList.setLocal(clusters.map(({ id }) => new ClusterId(id)));
 
         const clusterEndpointNumber = new EndpointNumber(endpointId);
+        const deviceDefinition = Object.values(DeviceTypes).find(({ code }) => code === device.code);
+        if (deviceDefinition === undefined) throw new Error(`Unknown device code ${device.code}`);
+        const endpoint = new Endpoint([deviceDefinition], [], endpointId);
 
         const clusterMap = new Map<number, ClusterServerObj<Attributes, Commands>>();
         clusters.forEach(cluster => {
             const { id: clusterId, attributes, _commands: commands } = cluster;
 
             cluster._setStorage(this.storageManager.createContext(`Cluster-${clusterEndpointNumber.number}-${clusterId}`));
+            cluster._assignToEndpoint(endpoint);
 
             clusterMap.set(clusterId, cluster);
+            endpoint.addClusterServer(cluster);
             // Add attributes
             for (const name in attributes) {
                 const attribute = attributes[name];
@@ -287,9 +299,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             rootPartsListAttribute.setLocal([...rootPartsListAttribute.getLocal(), clusterEndpointNumber]);
         }
 
-        const deviceDefinition = Object.values(DeviceTypes).find(({ code }) => code === device.code);
-        if (deviceDefinition === undefined) throw new Error(`Unknown device code ${device.code}`);
-        this.endpoints.set(endpointId, new Endpoint([deviceDefinition], Array.from(clusterMap.values()), endpointId));
+        this.endpoints.set(endpointId, endpoint);
 
         return this;
     }
@@ -339,9 +349,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             }
 
             return attributes.map(({ path, attribute }) => {
-                const { endpointId } = path;
-                const endpoint = endpointId !== undefined ? this.endpoints.get(endpointId) : undefined;
-                const { value, version } = attribute.getWithVersion(exchange.session, endpoint); // TODO check ACL
+                const { value, version } = attribute.getWithVersion(exchange.session); // TODO check ACL
                 logger.debug(`Read from ${exchange.channel.getName()}: ${this.resolveAttributeName(path)}=${Logger.toJSON(value)} (version=${version})`);
                 return { attributeData: { path, data: attribute.schema.encodeTlv(value), dataVersion: version } };
             });

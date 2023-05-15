@@ -14,7 +14,7 @@ Crypto.get = () => new CryptoNode();
 
 import {
     OnOffCluster, BasicInformationCluster, OperationalCertStatus, OperationalCredentialsCluster, DescriptorCluster,
-    IdentifyCluster, GroupsCluster, AccessControlCluster
+    IdentifyCluster, GroupsCluster, AccessControlCluster, ScenesCluster
 } from "@project-chip/matter.js/cluster";
 import { VendorId, FabricIndex, GroupId } from "@project-chip/matter.js/datatype";
 
@@ -352,6 +352,16 @@ describe("New Integration", () => {
 
     });
 
+    describe("Groups server fabric scoped storage", () => {
+        it("add a group", async () => {
+            const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
+            assert.ok(onoffEndpoint);
+            const groupsCluster = onoffEndpoint.getClusterClient(GroupsCluster, defaultInteractionClient);
+            assert.ok(groupsCluster);
+            await groupsCluster.commands.addGroup({ groupId: new GroupId(1), groupName: "Group 1" });
+        });
+    });
+
     describe("subscribe attributes", () => {
         it("subscription of one attribute sends updates when the value changes", async () => {
             const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
@@ -398,6 +408,42 @@ describe("New Integration", () => {
 
             assert.deepEqual(lastReport, { value: false, time: startTime + (60 * 60 + 4) * 1000 });
         });
+
+        it("subscribe an attribute with getter that needs endpoint", async () => {
+            const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
+            assert.ok(onoffEndpoint);
+            const scenesClient = onoffEndpoint.getClusterClient(ScenesCluster, await commissioningController.createInteractionClient());
+            assert.ok(scenesClient);
+
+            const scenesServer = onOffLightDeviceServer.getClusterServer(ScenesCluster);
+            assert.ok(scenesServer);
+
+            const startTime = Time.nowMs();
+
+            // Await initial Data
+            const { promise: firstPromise, resolver: firstResolver } = await getPromiseResolver<{ value: number, time: number }>();
+            const callback = (value: number) => firstResolver({ value, time: Time.nowMs() });
+
+            //onOffClient.attributes.onOff.addListener(value => callback(value));
+            //await onOffClient.attributes.onOff.subscribe(0, 5);
+            await scenesClient.subscribeSceneCountAttribute(value => callback(value), 0, 5);
+
+            await fakeTime.advanceTime(0);
+            const firstReport = await firstPromise;
+            assert.deepEqual(firstReport, { value: 0, time: startTime });
+
+            /* Will be added later when we clean up getter subscriptions
+            // Await update Report on value change
+            const { promise: updatePromise, resolver: updateResolver } = await getPromiseResolver<{ value: boolean, time: number }>();
+            callback = (value: boolean) => updateResolver({ value, time: Time.nowMs() });
+
+            await fakeTime.advanceTime(2 * 1000);
+            await scenesClient.addScene({groupID: new GroupId(1), sceneId: 1, transitionTime: 0, sceneName: "Test", extensionFieldSets: []});
+            const updateReport = await updatePromise;
+
+            assert.deepEqual(updateReport, { value: true, time: startTime + 2 * 1000 });
+            */
+        });
     });
 
     describe("Access Control server fabric scoped attribute storage", () => {
@@ -409,16 +455,6 @@ describe("New Integration", () => {
             const acl = await accessControlCluster.attributes.acl.get();
             assert.ok(Array.isArray(acl));
             assert.equal(acl.length, 0);
-        });
-    });
-
-    describe("Groups server fabric scoped storage", () => {
-        it("set a group name", async () => {
-            const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
-            assert.ok(onoffEndpoint);
-            const groupsCluster = onoffEndpoint.getClusterClient(GroupsCluster, defaultInteractionClient);
-            assert.ok(groupsCluster);
-            await groupsCluster.commands.addGroup({ groupId: new GroupId(1), groupName: "Group 1" });
         });
     });
 
