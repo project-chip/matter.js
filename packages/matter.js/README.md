@@ -41,6 +41,8 @@ This library exports the Matter protocol functionality as well as some helper fu
 
 Both exports and the typings are exported as CommonJS and ES6 modules.
 
+For more details please refer to the [API Documentation](../../docs/matter.js).
+
 ### Typescript note
 To have Typescript and your IDE know all the relevant exported functionality you need to use the following in your tsconfig.json:
 

@@ -27,6 +27,7 @@
         "clean": "rm -rf dist && rm -f *.tsbuildinfo",
         "build": "tsc -b tsconfig.dist.json",
         "build-clean": "npm run clean && npm run build",
+        "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --gitRemote upstream --tsconfig tsconfig.dist.json",
         "test": "TZ=utc jest",
         "matter-device": "ts-node --project tsconfig.dist.json src/examples/DeviceNode.ts",
         "matter-bridge": "ts-node --project tsconfig.dist.json src/examples/BridgedDevicesNode.ts",

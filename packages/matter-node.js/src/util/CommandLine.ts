@@ -14,6 +14,10 @@ export function getParameter(name: string) {
     return commandArguments[markerIndex + 1];
 }
 
+export function hasParameter(name: string) {
+    return commandArguments.includes(`-${name}`);
+}
+
 export function getIntParameter(name: string) {
     const value = getParameter(name);
     if (value === undefined) return undefined;

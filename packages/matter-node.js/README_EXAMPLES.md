@@ -60,12 +60,13 @@ The following parameters are available:
 * -announceinterface: limit mdns announcements to the provided network interface, e.g. "en0" (default: all interfaces available)
 * -port: the port to listen on for the device (default: 5540)
 * -store: the storage location (directory) to use for storing the pairing information (default: device-node). Delete the directory or provide an alternative name to reset the device
+* -clearstorage: the storage location will be reset on start of the process
 * -on: the command to run when the device is turned on (see example above)
 * -off: the command to run when the device is turned off (see example above)
 
 ### Start a Matter Bridge
 
-> The code for this example is in [src/examples/BridgedDeviceNode.ts](./src/examples/BridgedDeviceNode.ts).
+> The code for this example is in [src/examples/BridgedDevicesNode.ts](./src/examples/BridgedDevicesNode.ts).
 
 A Bridge is used to expose multiple devices at once.
 
@@ -141,6 +142,7 @@ The following parameters are available:
 * -pin: the pin to use for pairing (default: 20202021)
 * -pairingcode: code to use for pairing (-discriminator and -pin will be ignored)
 * -store: the storage location (directory) to use for storing the pairing information (default: controller-node). Delete the directory or provide an alternative name to reset the controller
+* -clearstorage: the storage location will be reset on start of the process
 
 ## Development on basis of the examples
 

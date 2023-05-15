@@ -18,6 +18,8 @@ For questions on how to use or pair Matter devices or controllers please refer t
 This library enhances Matter.js and implements the needed native functionality using Node.js 16+ as platform. The library exports the added Node.js specific implementations and also the core Matter protocol functionality as well as some helper functions as named exports.
 Because of this the library can be used as only dependency which makes sure the correct matter.js version is used.
 
+For more details please refer to the [API Documentation](../../docs/matter-node.js).
+
 ### Node.js native enhanced exports
 
 | Export                                 | Description                                                                                         |
