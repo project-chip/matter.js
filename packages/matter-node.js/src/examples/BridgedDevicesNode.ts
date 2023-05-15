@@ -23,7 +23,7 @@ import { OnOffLightDevice, OnOffPluginUnitDevice, Aggregator, DeviceTypes } from
 import { VendorId } from "../exports/datatype"; // same as @project-chip/matter-node.js/datatype
 import { Logger } from "../exports/log"; // same as @project-chip/matter-node.js/log
 import { StorageManager, StorageBackendDisk } from "../storage"; // same as @project-chip/matter-node.js/storage
-import { commandExecutor, getIntParameter, getParameter, requireMinNodeVersion } from "../util"; // same as @project-chip/matter-node.js/util
+import { commandExecutor, getIntParameter, getParameter, requireMinNodeVersion, hasParameter } from "../util"; // same as @project-chip/matter-node.js/util
 import { Time } from "../time";
 import { BridgedDeviceBasicInformationCluster } from "../exports/cluster";
 import { ClusterServer } from "../exports/interaction";
@@ -33,7 +33,7 @@ const logger = Logger.get("Device");
 requireMinNodeVersion(16);
 
 const storageLocation = getParameter("store") ?? "device-node";
-const storage = new StorageBackendDisk(storageLocation, getIntParameter("clearstorage") === 1);
+const storage = new StorageBackendDisk(storageLocation, hasParameter("clearstorage"));
 logger.info(`Storage location: ${storageLocation} (Directory)`);
 logger.info('Use the parameter "-store NAME" to specify a different storage location, use -clearstorage to start with an empty storage.')
 
