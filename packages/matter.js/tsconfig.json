@@ -16,8 +16,16 @@
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "strict": true,
+    "allowSyntheticDefaultImports": true,
   },
   /* During dev, src are included, so they are also modified during refactorings. */
   "include": ["src/**/*.ts", "test/**/*.ts"],
-  "exclude": []
+  "exclude": [],
+
+  "ts-node": {
+      "esm": true,
+      "compilerOptions": {
+          "module": "nodenext"
+      }
+  }
 }

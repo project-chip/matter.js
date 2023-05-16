@@ -1,105 +1,76 @@
+/**
+ * @license
+ * Copyright 2022-2023 Project CHIP Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/*** THIS FILE IS GENERATED, DO NOT EDIT ***/
+
 import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
 import { ActionsCluster } from "../index.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
-export type ActionList = {
-    actionID: number,
-    name: string,
-    type: number,
-    endpointListId: number,
-    supportedCommands: number,
-    state: number
-};
+type ActionList = TypeFromSchema<typeof ActionsCluster.attributes.actionList.schema>;
 
-export type EndpointLists = {
-    endpointListId: number,
-    name: string,
-    type: number,
-    endpoints: number[]
-};
+type EndpointLists = TypeFromSchema<typeof ActionsCluster.attributes.endpointLists.schema>;
 
-export type InstantActionRequest = {
-    actionId: number,
-    invokeId: number
-};
+type InstantActionRequest = TypeFromSchema<typeof ActionsCluster.commands.instantAction.requestSchema>;
 
-export type InstantActionWithTransitionRequest = {
-    actionId: number,
-    invokeId: number,
-    transitionTime: number
-};
+type InstantActionWithTransitionRequest = TypeFromSchema<typeof ActionsCluster.commands.instantActionWithTransition.requestSchema>;
 
-export type StartActionWithDurationRequest = {
-    actionId: number,
-    invokeId: number,
-    duration: number
-};
+type StartActionRequest = TypeFromSchema<typeof ActionsCluster.commands.startAction.requestSchema>;
 
-export type StateChangedEvent = {
-    actionId: number,
-    invokeId: number,
-    newState: number
-};
+type StartActionWithDurationRequest = TypeFromSchema<typeof ActionsCluster.commands.startActionWithDuration.requestSchema>;
 
-export type ActionFailedEvent = {
-    actionId: number,
-    invokeId: number,
-    newState: number,
-    error: number
-};
+type StopActionRequest = TypeFromSchema<typeof ActionsCluster.commands.stopAction.requestSchema>;
+
+type PauseActionRequest = TypeFromSchema<typeof ActionsCluster.commands.pauseAction.requestSchema>;
+
+type PauseActionWithDurationRequest = TypeFromSchema<typeof ActionsCluster.commands.pauseActionWithDuration.requestSchema>;
+
+type ResumeActionRequest = TypeFromSchema<typeof ActionsCluster.commands.resumeAction.requestSchema>;
+
+type EnableActionRequest = TypeFromSchema<typeof ActionsCluster.commands.enableAction.requestSchema>;
+
+type EnableActionWithDurationRequest = TypeFromSchema<typeof ActionsCluster.commands.enableActionWithDuration.requestSchema>;
+
+type DisableActionRequest = TypeFromSchema<typeof ActionsCluster.commands.disableAction.requestSchema>;
+
+type DisableActionWithDurationRequest = TypeFromSchema<typeof ActionsCluster.commands.disableActionWithDuration.requestSchema>;
+
+type StateChangedEvent = TypeFromSchema<typeof ActionsCluster.events.stateChanged.schema>;
+
+type ActionFailedEvent = TypeFromSchema<typeof ActionsCluster.events.actionFailed.schema>;
 
 export interface ActionsInterface {
     actionList: ActionList[];
     addActionListListener(listener: (newValue: ActionList[], oldValue: ActionList[]) => void): void;
     removeActionListListener(listener: (newValue: ActionList[], oldValue: ActionList[]) => void): void;
-    
+
     endpointLists: EndpointLists[];
     addEndpointListsListener(listener: (newValue: EndpointLists[], oldValue: EndpointLists[]) => void): void;
     removeEndpointListsListener(listener: (newValue: EndpointLists[], oldValue: EndpointLists[]) => void): void;
-    
+
     setupURL?: string;
-    addSetupURLListener(listener: (newValue: string, oldValue: string) => void): void;
-    removeSetupURLListener(listener: (newValue: string, oldValue: string) => void): void;
-    
-    clusterRevision: number;
-    addClusterRevisionListener(listener: (newValue: number, oldValue: number) => void): void;
-    removeClusterRevisionListener(listener: (newValue: number, oldValue: number) => void): void;
-    
-    featureMap: number;
-    addFeatureMapListener(listener: (newValue: number, oldValue: number) => void): void;
-    removeFeatureMapListener(listener: (newValue: number, oldValue: number) => void): void;
-    
-    attributeList: number[];
-    addAttributeListListener(listener: (newValue: number[], oldValue: number[]) => void): void;
-    removeAttributeListListener(listener: (newValue: number[], oldValue: number[]) => void): void;
-    
-    eventList: number[];
-    addEventListListener(listener: (newValue: number[], oldValue: number[]) => void): void;
-    removeEventListListener(listener: (newValue: number[], oldValue: number[]) => void): void;
-    
-    acceptedCommandList: number[];
-    addAcceptedCommandListListener(listener: (newValue: number[], oldValue: number[]) => void): void;
-    removeAcceptedCommandListListener(listener: (newValue: number[], oldValue: number[]) => void): void;
-    
-    generatedCommandList: number[];
-    addGeneratedCommandListListener(listener: (newValue: number[], oldValue: number[]) => void): void;
-    removeGeneratedCommandListListener(listener: (newValue: number[], oldValue: number[]) => void): void;
-    
+    addSetupUrlListener(listener: (newValue: string, oldValue: string) => void): void;
+    removeSetupUrlListener(listener: (newValue: string, oldValue: string) => void): void;
+
     sendInstantAction(request: InstantActionRequest): Promise<void>;
     sendInstantActionWithTransition(request: InstantActionWithTransitionRequest): Promise<void>;
-    sendStartAction(request: InstantActionRequest): Promise<void>;
+    sendStartAction(request: StartActionRequest): Promise<void>;
     sendStartActionWithDuration(request: StartActionWithDurationRequest): Promise<void>;
-    sendStopAction(request: InstantActionRequest): Promise<void>;
-    sendPauseAction(request: InstantActionRequest): Promise<void>;
-    sendPauseActionWithDuration(request: StartActionWithDurationRequest): Promise<void>;
-    sendResumeAction(request: InstantActionRequest): Promise<void>;
-    sendEnableAction(request: InstantActionRequest): Promise<void>;
-    sendEnableActionWithDuration(request: StartActionWithDurationRequest): Promise<void>;
-    sendDisableAction(request: InstantActionRequest): Promise<void>;
-    sendDisableActionWithDuration(request: StartActionWithDurationRequest): Promise<void>;
-    
+    sendStopAction(request: StopActionRequest): Promise<void>;
+    sendPauseAction(request: PauseActionRequest): Promise<void>;
+    sendPauseActionWithDuration(request: PauseActionWithDurationRequest): Promise<void>;
+    sendResumeAction(request: ResumeActionRequest): Promise<void>;
+    sendEnableAction(request: EnableActionRequest): Promise<void>;
+    sendEnableActionWithDuration(request: EnableActionWithDurationRequest): Promise<void>;
+    sendDisableAction(request: DisableActionRequest): Promise<void>;
+    sendDisableActionWithDuration(request: DisableActionWithDurationRequest): Promise<void>;
+
     addStateChangedListener(listener: (event: StateChangedEvent) => void): void;
     removeStateChangedListener(listener: (event: StateChangedEvent) => void): void;
-    
+
     addActionFailedListener(listener: (event: ActionFailedEvent) => void): void;
     removeActionFailedListener(listener: (event: ActionFailedEvent) => void): void;
 }

@@ -5,10 +5,16 @@
  */
 
 import BN from "bn.js";
-import { ec } from "elliptic";
 import { Crypto } from "./Crypto.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataWriter } from "../util/DataWriter.js";
+
+// Lint complains about the next line but ts-node complains about importing
+// as { ec }.  They both seem wrong as it works either way
+// eslint-disable-next-line
+import elliptic from "elliptic";
+// eslint-disable-next-line
+const { ec } = elliptic;
 
 const P256_CURVE = new ec("p256").curve;
 

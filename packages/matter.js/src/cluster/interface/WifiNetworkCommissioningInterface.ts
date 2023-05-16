@@ -1,133 +1,78 @@
+/**
+ * @license
+ * Copyright 2022-2023 Project CHIP Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/*** THIS FILE IS GENERATED, DO NOT EDIT ***/
+
 import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
 import { WifiNetworkCommissioningCluster } from "../index.js";
-
 import { ByteArray } from "../../util/index.js"
 
-export type Networks = {
-    networkId: ByteArray,
-    connected: boolean
-};
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
-export type ScanNetworksRequest = {
-    ssid: ByteArray | undefined,
-    breadcrumb: any
-};
+type Networks = TypeFromSchema<typeof WifiNetworkCommissioningCluster.attributes.networks.schema>;
 
-export type ScanNetworksResponse = {
-    networkingStatus: number,
-    debugText: string,
-    wiFiScanResults: {
-        security: number,
-        ssid: ByteArray,
-        bssid: ByteArray,
-        channel: number,
-        wiFiBand: number,
-        rssi: number
-    }[],
-    threadScanResults: {
-        panId: number,
-        extendedPanId: any,
-        networkName: string,
-        channel: number,
-        version: number,
-        extendedAddress: ByteArray,
-        rssi: number,
-        lqi: number
-    }[]
-};
+type ScanNetworksRequest = TypeFromSchema<typeof WifiNetworkCommissioningCluster.commands.scanNetworks.requestSchema>;
 
-export type RemoveNetworkRequest = {
-    networkId: ByteArray,
-    breadcrumb: any
-};
+type ScanNetworksResponse = TypeFromSchema<typeof WifiNetworkCommissioningCluster.commands.scanNetworks.responseSchema>;
 
-export type RemoveNetworkResponse = {
-    networkingStatus: number,
-    debugText: string,
-    networkIndex: number
-};
+type RemoveNetworkRequest = TypeFromSchema<typeof WifiNetworkCommissioningCluster.commands.removeNetwork.requestSchema>;
 
-export type ConnectNetworkResponse = {
-    networkingStatus: number,
-    debugText: string,
-    errorValue: number | undefined
-};
+type RemoveNetworkResponse = TypeFromSchema<typeof WifiNetworkCommissioningCluster.commands.removeNetwork.responseSchema>;
 
-export type ReorderNetworkRequest = {
-    networkId: ByteArray,
-    networkIndex: number,
-    breadcrumb: any
-};
+type ConnectNetworkRequest = TypeFromSchema<typeof WifiNetworkCommissioningCluster.commands.connectNetwork.requestSchema>;
 
-export type AddOrUpdateWiFiNetworkRequest = {
-    ssid: ByteArray,
-    credentials: ByteArray,
-    breadcrumb: any
-};
+type ConnectNetworkResponse = TypeFromSchema<typeof WifiNetworkCommissioningCluster.commands.connectNetwork.responseSchema>;
+
+type ReorderNetworkRequest = TypeFromSchema<typeof WifiNetworkCommissioningCluster.commands.reorderNetwork.requestSchema>;
+
+type ReorderNetworkResponse = TypeFromSchema<typeof WifiNetworkCommissioningCluster.commands.reorderNetwork.responseSchema>;
+
+type AddOrUpdateWiFiNetworkRequest = TypeFromSchema<typeof WifiNetworkCommissioningCluster.commands.addOrUpdateWiFiNetwork.requestSchema>;
+
+type AddOrUpdateWiFiNetworkResponse = TypeFromSchema<typeof WifiNetworkCommissioningCluster.commands.addOrUpdateWiFiNetwork.responseSchema>;
 
 export interface WifiNetworkCommissioningInterface {
     maxNetworks: number;
     addMaxNetworksListener(listener: (newValue: number, oldValue: number) => void): void;
     removeMaxNetworksListener(listener: (newValue: number, oldValue: number) => void): void;
-    
+
     networks: Networks[];
     addNetworksListener(listener: (newValue: Networks[], oldValue: Networks[]) => void): void;
     removeNetworksListener(listener: (newValue: Networks[], oldValue: Networks[]) => void): void;
-    
+
     interfaceEnabled: boolean;
     setInterfaceEnabled(value: boolean): Promise<void>;
     addInterfaceEnabledListener(listener: (newValue: boolean, oldValue: boolean) => void): void;
     removeInterfaceEnabledListener(listener: (newValue: boolean, oldValue: boolean) => void): void;
-    
+
     lastNetworkingStatus: number | undefined;
     addLastNetworkingStatusListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
     removeLastNetworkingStatusListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
-    
+
     lastNetworkId: ByteArray | undefined;
     addLastNetworkIdListener(listener: (newValue: ByteArray | undefined, oldValue: ByteArray | undefined) => void): void;
     removeLastNetworkIdListener(listener: (newValue: ByteArray | undefined, oldValue: ByteArray | undefined) => void): void;
-    
+
     lastConnectErrorValue: number | undefined;
     addLastConnectErrorValueListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
     removeLastConnectErrorValueListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
-    
-    clusterRevision: number;
-    addClusterRevisionListener(listener: (newValue: number, oldValue: number) => void): void;
-    removeClusterRevisionListener(listener: (newValue: number, oldValue: number) => void): void;
-    
-    featureMap: number;
-    addFeatureMapListener(listener: (newValue: number, oldValue: number) => void): void;
-    removeFeatureMapListener(listener: (newValue: number, oldValue: number) => void): void;
-    
-    attributeList: number[];
-    addAttributeListListener(listener: (newValue: number[], oldValue: number[]) => void): void;
-    removeAttributeListListener(listener: (newValue: number[], oldValue: number[]) => void): void;
-    
-    eventList: number[];
-    addEventListListener(listener: (newValue: number[], oldValue: number[]) => void): void;
-    removeEventListListener(listener: (newValue: number[], oldValue: number[]) => void): void;
-    
-    acceptedCommandList: number[];
-    addAcceptedCommandListListener(listener: (newValue: number[], oldValue: number[]) => void): void;
-    removeAcceptedCommandListListener(listener: (newValue: number[], oldValue: number[]) => void): void;
-    
-    generatedCommandList: number[];
-    addGeneratedCommandListListener(listener: (newValue: number[], oldValue: number[]) => void): void;
-    removeGeneratedCommandListListener(listener: (newValue: number[], oldValue: number[]) => void): void;
-    
+
     scanMaxTimeSeconds?: number;
     addScanMaxTimeSecondsListener(listener: (newValue: number, oldValue: number) => void): void;
     removeScanMaxTimeSecondsListener(listener: (newValue: number, oldValue: number) => void): void;
-    
+
     connectMaxTimeSeconds?: number;
     addConnectMaxTimeSecondsListener(listener: (newValue: number, oldValue: number) => void): void;
     removeConnectMaxTimeSecondsListener(listener: (newValue: number, oldValue: number) => void): void;
-    
+
     sendScanNetworks(request: ScanNetworksRequest): Promise<ScanNetworksResponse>;
     sendRemoveNetwork(request: RemoveNetworkRequest): Promise<RemoveNetworkResponse>;
-    sendConnectNetwork(request: RemoveNetworkRequest): Promise<ConnectNetworkResponse>;
-    sendReorderNetwork(request: ReorderNetworkRequest): Promise<RemoveNetworkResponse>;
-    sendAddOrUpdateWiFiNetwork(request: AddOrUpdateWiFiNetworkRequest): Promise<RemoveNetworkResponse>;
+    sendConnectNetwork(request: ConnectNetworkRequest): Promise<ConnectNetworkResponse>;
+    sendReorderNetwork(request: ReorderNetworkRequest): Promise<ReorderNetworkResponse>;
+    sendAddOrUpdateWiFiNetwork(request: AddOrUpdateWiFiNetworkRequest): Promise<AddOrUpdateWiFiNetworkResponse>;
 }
 
 export const WifiNetworkCommissioningClientImpl = ClientIfaceImpl<WifiNetworkCommissioningInterface>(WifiNetworkCommissioningCluster);

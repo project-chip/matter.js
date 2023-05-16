@@ -31,7 +31,8 @@
     "build-clean": "npm run clean && npm run build",
     "test-node": "TZ=utc NODE_OPTIONS=--experimental-vm-modules jest",
     "test-web": "TZ=utc karma start test/karma.conf.cjs",
-    "test": "npm run test-node && npm run test-web"
+    "test": "npm run test-node && npm run test-web",
+    "generate": "ts-node tools/generate.ts"
   },
   "dependencies": {
     "bn.js": "^5.2.1",

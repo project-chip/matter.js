@@ -1,48 +1,24 @@
 import { Cluster } from "../Cluster.js";
+import { Device } from "../../device/Device.js";
 
-// Note - these mixins are generic but implementation would target a specific
-// class such as Device.  Part of this exercise is for me to understand if
-// targeting Device would be appropriate and/or desireable.
-//
-// Usage as implemented for Device implementers would look like:
-//
-//     class OnOffBaseDevice extends IdentifyImpl(
-//                                   GroupsImpl(
-//                                   ScenesImpl(
-//                                   OnOffImpl(\
-//                                   Device)))) {
-//     }
-//
-// Mixins in TS are a bit ugly but this approach leads to a fairly ideallic outcome:
-//
-//     - OnOffBaseDevice is a proper TS class that supports all cluster functionality
-//     - The cluster interface fully types attribute, command and event arguments
-//     - ClientCluster/ServerCluster gets added automatically for each cluster
-//     - OnOffBaseDevice may contain hand-coded convenience functions
-//
-// Note also - I originally thought that Proxy or Object.defineProperty would be
-// necessary to do this but that turned out to be silly.  We can just install
-// the appropriate implementation onto TargetDevice.prototype.  The result is
-// a "real" class in both the JS and TS sense
-
-type Constructor = new (...args: any[]) => {};
+type Constructor = new (...args: any[]) => Device;
 
 function ClusterIfaceImpl<Interface>() {
-    // This type guard informs TypeScript that we implement the cluster interface
-    function addInterface(instance: Constructor): instance is Constructor & Interface {
-        return true;
-    }
+    const MixedConstructor = function <BaseT extends Constructor>(Base: BaseT): BaseT & Interface {
+        // This type guard informs TypeScript that we implement the cluster interface
+        function addInterface(instance: BaseT): instance is BaseT & Interface {
+            return true;
+        }
 
-    const MixedConstructor = function <BaseT extends new (...args: any[]) => Constructor>(Base: BaseT): Constructor & Interface {
         // Initially Typescript just thinks we have an instance of the base class
-        const instance = class ClientImpl extends Base {}
+        const instance = class ClientImpl extends Base { }
 
         // This call is a no-op that convinces TypeScript that instance also implements Interface
         if (addInterface(instance))
             // TS now knows that instance is a BaseT that implements Interface
             return instance;
 
-        // Typescript is not smart enough to realize that addInterface is always true
+        // Typescript is not smart enough to realize addInterface is always true
         throw new Error("Never happens");
     }
 

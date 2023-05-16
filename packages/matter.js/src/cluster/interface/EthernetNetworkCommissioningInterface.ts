@@ -1,62 +1,44 @@
+/**
+ * @license
+ * Copyright 2022-2023 Project CHIP Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/*** THIS FILE IS GENERATED, DO NOT EDIT ***/
+
 import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
 import { EthernetNetworkCommissioningCluster } from "../index.js";
-
 import { ByteArray } from "../../util/index.js"
 
-export type Networks = {
-    networkId: ByteArray,
-    connected: boolean
-};
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+
+type Networks = TypeFromSchema<typeof EthernetNetworkCommissioningCluster.attributes.networks.schema>;
 
 export interface EthernetNetworkCommissioningInterface {
     maxNetworks: number;
     addMaxNetworksListener(listener: (newValue: number, oldValue: number) => void): void;
     removeMaxNetworksListener(listener: (newValue: number, oldValue: number) => void): void;
-    
+
     networks: Networks[];
     addNetworksListener(listener: (newValue: Networks[], oldValue: Networks[]) => void): void;
     removeNetworksListener(listener: (newValue: Networks[], oldValue: Networks[]) => void): void;
-    
+
     interfaceEnabled: boolean;
     setInterfaceEnabled(value: boolean): Promise<void>;
     addInterfaceEnabledListener(listener: (newValue: boolean, oldValue: boolean) => void): void;
     removeInterfaceEnabledListener(listener: (newValue: boolean, oldValue: boolean) => void): void;
-    
+
     lastNetworkingStatus: number | undefined;
     addLastNetworkingStatusListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
     removeLastNetworkingStatusListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
-    
+
     lastNetworkId: ByteArray | undefined;
     addLastNetworkIdListener(listener: (newValue: ByteArray | undefined, oldValue: ByteArray | undefined) => void): void;
     removeLastNetworkIdListener(listener: (newValue: ByteArray | undefined, oldValue: ByteArray | undefined) => void): void;
-    
+
     lastConnectErrorValue: number | undefined;
     addLastConnectErrorValueListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
     removeLastConnectErrorValueListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
-    
-    clusterRevision: number;
-    addClusterRevisionListener(listener: (newValue: number, oldValue: number) => void): void;
-    removeClusterRevisionListener(listener: (newValue: number, oldValue: number) => void): void;
-    
-    featureMap: number;
-    addFeatureMapListener(listener: (newValue: number, oldValue: number) => void): void;
-    removeFeatureMapListener(listener: (newValue: number, oldValue: number) => void): void;
-    
-    attributeList: number[];
-    addAttributeListListener(listener: (newValue: number[], oldValue: number[]) => void): void;
-    removeAttributeListListener(listener: (newValue: number[], oldValue: number[]) => void): void;
-    
-    eventList: number[];
-    addEventListListener(listener: (newValue: number[], oldValue: number[]) => void): void;
-    removeEventListListener(listener: (newValue: number[], oldValue: number[]) => void): void;
-    
-    acceptedCommandList: number[];
-    addAcceptedCommandListListener(listener: (newValue: number[], oldValue: number[]) => void): void;
-    removeAcceptedCommandListListener(listener: (newValue: number[], oldValue: number[]) => void): void;
-    
-    generatedCommandList: number[];
-    addGeneratedCommandListListener(listener: (newValue: number[], oldValue: number[]) => void): void;
-    removeGeneratedCommandListListener(listener: (newValue: number[], oldValue: number[]) => void): void;
 }
 
 export const EthernetNetworkCommissioningClientImpl = ClientIfaceImpl<EthernetNetworkCommissioningInterface>(EthernetNetworkCommissioningCluster);
