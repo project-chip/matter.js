@@ -8,13 +8,12 @@
 
 import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
-import { Identify, Groups } from "../../cluster/interface/index.js";
+import { Identify } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
 export class FanDevice extends
     ServesClusters(Device,
-        Identify,
-        Groups)
+        Identify)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.FAN, [], endpointId);

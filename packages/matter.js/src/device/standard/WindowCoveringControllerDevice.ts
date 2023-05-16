@@ -15,6 +15,7 @@ export class WindowCoveringControllerDevice extends Device {
     constructor(endpointId?: number) {
         super(DeviceTypes.WINDOW_COVERING_CONTROLLER, [], endpointId);
     }
+
     static readonly options = [
         Identify
     ];
@@ -22,5 +23,4 @@ export class WindowCoveringControllerDevice extends Device {
     with(...clusters: typeof WindowCoveringControllerDevice.options[number][]) {
         return ServesClusters(WindowCoveringControllerDevice, ...clusters);
     }
-
 }

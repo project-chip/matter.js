@@ -10,6 +10,19 @@ import { fileURLToPath } from "url";
 import { Attributes, Commands, Events } from "../../src/cluster/Cluster.js";
 import * as clusterExports from "../../src/cluster/index.js";
 
+const INTERNAL_CLUSTERS = [
+    clusterExports.ScenesCluster,
+    clusterExports.GroupsCluster,
+    clusterExports.BindingCluster,
+    clusterExports.BasicInformationCluster,
+    clusterExports.AccessControlCluster,
+    clusterExports.GroupKeyManagementCluster,
+    clusterExports.GeneralCommissioningCluster,
+    clusterExports.AdminCommissioningCluster,
+    clusterExports.OperationalCredentialsCluster,
+    clusterExports.GeneralDiagnosticsCluster,
+];
+
 const HEADER =
     `/**
  * @license
@@ -115,6 +128,8 @@ export const clusters = new class extends Array<ClusterDetail> {
 
 for (const key in clusterExports) {
     if (key.match(/[a-z]Cluster$/i)) {
+        const cluster = (<any>clusterExports)[key];
+        if (INTERNAL_CLUSTERS.indexOf(cluster) !== -1) continue;
         clusters.push(new ClusterDetail(key.slice(0, key.length - 7), (<any>clusterExports)[key]));
     }
 }

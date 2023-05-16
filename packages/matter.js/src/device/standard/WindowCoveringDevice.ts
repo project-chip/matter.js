@@ -8,7 +8,7 @@
 
 import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
-import { Identify, Groups, Scenes } from "../../cluster/interface/index.js";
+import { Identify } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
 export class WindowCoveringDevice extends
@@ -18,13 +18,4 @@ export class WindowCoveringDevice extends
     constructor(endpointId?: number) {
         super(DeviceTypes.WINDOW_COVERING, [], endpointId);
     }
-    static readonly options = [
-        Groups,
-        Scenes
-    ];
-
-    with(...clusters: typeof WindowCoveringDevice.options[number][]) {
-        return ServesClusters(WindowCoveringDevice, ...clusters);
-    }
-
 }

@@ -8,14 +8,12 @@
 
 import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
-import { Identify, Groups, Scenes, OnOffLighting, LevelControl } from "../../cluster/interface/index.js";
+import { Identify, OnOffLighting, LevelControl } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
 export class DimmablePluginUnitDevice extends
     ServesClusters(Device,
         Identify,
-        Groups,
-        Scenes,
         OnOffLighting,
         LevelControl)
 {

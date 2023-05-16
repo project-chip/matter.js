@@ -9,19 +9,20 @@
 import { DeviceTypes } from "../../src/device/DeviceTypes.js";
 import { camelize, clean, writeTS, clusters } from "./util.js";
 
+const INTERNAL_DEVICE_TYPES = [
+    DeviceTypes.ROOT
+];
+
 clean("device/standard", "Device");
 
 const moduleExports = new Array<string>();
 
 const getClusterNames = (ids: number[]) =>
-    <string[]>ids.map((id) => {
-        const cluster = clusters.forID(id)
-        if (cluster) return cluster.name;
-        console.warn(`Warning: No cluster 0x${id.toString(16).padStart(2, "0")}`);
-        return undefined;
-    }).filter((name) => name);
+    <string[]>ids.map((id) => clusters.forID(id)?.name).filter((name) => name);
 
 Object.entries(DeviceTypes).forEach(([name, definition]) => {
+    if (INTERNAL_DEVICE_TYPES.indexOf(definition) !== -1) return;
+
     const className = `${camelize(name)}Device`;
 
     // Configure required interfaces
@@ -45,14 +46,14 @@ Object.entries(DeviceTypes).forEach(([name, definition]) => {
     if (optionalInterfaces.length) {
         interfaces.push(...optionalInterfaces);
         options = `
+
     static readonly options = [
         ${optionalInterfaces.join(",\n        ")}
     ];
 
     with(...clusters: typeof ${className}.options[number][]) {
         return ServesClusters(${className}, ...clusters);
-    }
-`;
+    }`;
     } else {
         options = "";
     }

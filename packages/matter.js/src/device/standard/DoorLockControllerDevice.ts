@@ -15,6 +15,7 @@ export class DoorLockControllerDevice extends Device {
     constructor(endpointId?: number) {
         super(DeviceTypes.DOOR_LOCK_CONTROLLER, [], endpointId);
     }
+
     static readonly options = [
         Identify
     ];
@@ -22,5 +23,4 @@ export class DoorLockControllerDevice extends Device {
     with(...clusters: typeof DoorLockControllerDevice.options[number][]) {
         return ServesClusters(DoorLockControllerDevice, ...clusters);
     }
-
 }

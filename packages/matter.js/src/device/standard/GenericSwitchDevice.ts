@@ -18,6 +18,7 @@ export class GenericSwitchDevice extends
     constructor(endpointId?: number) {
         super(DeviceTypes.GENERIC_SWITCH, [], endpointId);
     }
+
     static readonly options = [
         FixedLabel
     ];
@@ -25,5 +26,4 @@ export class GenericSwitchDevice extends
     with(...clusters: typeof GenericSwitchDevice.options[number][]) {
         return ServesClusters(GenericSwitchDevice, ...clusters);
     }
-
 }

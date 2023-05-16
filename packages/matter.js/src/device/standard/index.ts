@@ -6,7 +6,6 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-export * from "./RootDevice.js";
 export * from "./PowerSourceDevice.js";
 export * from "./OtaRequestorDevice.js";
 export * from "./OtaProviderDevice.js";

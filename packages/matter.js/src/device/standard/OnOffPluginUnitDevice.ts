@@ -8,19 +8,18 @@
 
 import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
-import { Identify, Groups, Scenes, OnOffLighting, LevelControl } from "../../cluster/interface/index.js";
+import { Identify, OnOffLighting, LevelControl } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
 export class OnOffPluginUnitDevice extends
     ServesClusters(Device,
         Identify,
-        Groups,
-        Scenes,
         OnOffLighting)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.ON_OFF_PLUGIN_UNIT, [], endpointId);
     }
+
     static readonly options = [
         LevelControl
     ];
@@ -28,5 +27,4 @@ export class OnOffPluginUnitDevice extends
     with(...clusters: typeof OnOffPluginUnitDevice.options[number][]) {
         return ServesClusters(OnOffPluginUnitDevice, ...clusters);
     }
-
 }

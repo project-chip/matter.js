@@ -8,7 +8,7 @@
 
 import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
-import { OnOffLighting, Identify, LevelControl, Scenes, Groups, TemperatureMeasurement, PressureMeasurement, FlowMeasurement } from "../../cluster/interface/index.js";
+import { OnOffLighting, Identify, LevelControl, TemperatureMeasurement, PressureMeasurement, FlowMeasurement } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
 export class PumpDevice extends
@@ -19,10 +19,9 @@ export class PumpDevice extends
     constructor(endpointId?: number) {
         super(DeviceTypes.PUMP, [], endpointId);
     }
+
     static readonly options = [
         LevelControl,
-        Scenes,
-        Groups,
         TemperatureMeasurement,
         PressureMeasurement,
         FlowMeasurement
@@ -31,5 +30,4 @@ export class PumpDevice extends
     with(...clusters: typeof PumpDevice.options[number][]) {
         return ServesClusters(PumpDevice, ...clusters);
     }
-
 }
