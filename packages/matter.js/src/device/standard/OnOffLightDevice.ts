@@ -25,7 +25,7 @@ export class OnOffLightDevice extends
         LevelControl
     ];
 
-    extend(...clusters: typeof OnOffLightDevice.options[number][]) {
+    with(...clusters: typeof OnOffLightDevice.options[number][]) {
         return ServesClusters(OnOffLightDevice, ...clusters);
     }
 

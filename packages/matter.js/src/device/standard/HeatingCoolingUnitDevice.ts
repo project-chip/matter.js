@@ -25,7 +25,7 @@ export class HeatingCoolingUnitDevice extends
         LevelControl
     ];
 
-    extend(...clusters: typeof HeatingCoolingUnitDevice.options[number][]) {
+    with(...clusters: typeof HeatingCoolingUnitDevice.options[number][]) {
         return ServesClusters(HeatingCoolingUnitDevice, ...clusters);
     }
 

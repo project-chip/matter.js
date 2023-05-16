@@ -23,7 +23,7 @@ export class ThermostatDevice extends
         Scenes
     ];
 
-    extend(...clusters: typeof ThermostatDevice.options[number][]) {
+    with(...clusters: typeof ThermostatDevice.options[number][]) {
         return ServesClusters(ThermostatDevice, ...clusters);
     }
 

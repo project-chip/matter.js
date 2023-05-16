@@ -19,7 +19,7 @@ export class DoorLockControllerDevice extends Device {
         Identify
     ];
 
-    extend(...clusters: typeof DoorLockControllerDevice.options[number][]) {
+    with(...clusters: typeof DoorLockControllerDevice.options[number][]) {
         return ServesClusters(DoorLockControllerDevice, ...clusters);
     }
 

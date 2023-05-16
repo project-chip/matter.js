@@ -23,7 +23,7 @@ export class WindowCoveringDevice extends
         Scenes
     ];
 
-    extend(...clusters: typeof WindowCoveringDevice.options[number][]) {
+    with(...clusters: typeof WindowCoveringDevice.options[number][]) {
         return ServesClusters(WindowCoveringDevice, ...clusters);
     }
 

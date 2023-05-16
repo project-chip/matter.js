@@ -29,7 +29,7 @@ export class RootDevice extends
         WifiNetworkCommissioning
     ];
 
-    extend(...clusters: typeof RootDevice.options[number][]) {
+    with(...clusters: typeof RootDevice.options[number][]) {
         return ServesClusters(RootDevice, ...clusters);
     }
 

@@ -25,7 +25,7 @@ export class OnOffPluginUnitDevice extends
         LevelControl
     ];
 
-    extend(...clusters: typeof OnOffPluginUnitDevice.options[number][]) {
+    with(...clusters: typeof OnOffPluginUnitDevice.options[number][]) {
         return ServesClusters(OnOffPluginUnitDevice, ...clusters);
     }
 

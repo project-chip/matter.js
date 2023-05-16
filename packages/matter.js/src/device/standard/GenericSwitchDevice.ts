@@ -22,7 +22,7 @@ export class GenericSwitchDevice extends
         FixedLabel
     ];
 
-    extend(...clusters: typeof GenericSwitchDevice.options[number][]) {
+    with(...clusters: typeof GenericSwitchDevice.options[number][]) {
         return ServesClusters(GenericSwitchDevice, ...clusters);
     }
 

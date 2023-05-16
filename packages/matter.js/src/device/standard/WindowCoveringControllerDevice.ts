@@ -19,7 +19,7 @@ export class WindowCoveringControllerDevice extends Device {
         Identify
     ];
 
-    extend(...clusters: typeof WindowCoveringControllerDevice.options[number][]) {
+    with(...clusters: typeof WindowCoveringControllerDevice.options[number][]) {
         return ServesClusters(WindowCoveringControllerDevice, ...clusters);
     }
 

@@ -49,7 +49,7 @@ Object.entries(DeviceTypes).forEach(([name, definition]) => {
         ${optionalInterfaces.join(",\n        ")}
     ];
 
-    extend(...clusters: typeof ${className}.options[number][]) {
+    with(...clusters: typeof ${className}.options[number][]) {
         return ServesClusters(${className}, ...clusters);
     }
 `;

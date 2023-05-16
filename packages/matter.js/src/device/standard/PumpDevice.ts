@@ -28,7 +28,7 @@ export class PumpDevice extends
         FlowMeasurement
     ];
 
-    extend(...clusters: typeof PumpDevice.options[number][]) {
+    with(...clusters: typeof PumpDevice.options[number][]) {
         return ServesClusters(PumpDevice, ...clusters);
     }
 
