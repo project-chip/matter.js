@@ -11,7 +11,7 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { Identify } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
-export class FanDevice extends
+export class Fan extends
     ServesClusters(Device,
         Identify)
 {

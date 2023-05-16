@@ -11,7 +11,7 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { OnOffLighting, LevelControl } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
-export class SpeakerDevice extends
+export class Speaker extends
     ServesClusters(Device,
         OnOffLighting,
         LevelControl)

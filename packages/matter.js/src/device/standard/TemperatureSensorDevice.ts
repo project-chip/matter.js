@@ -11,7 +11,7 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { TemperatureMeasurement, Identify } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
-export class TemperatureSensorDevice extends
+export class TemperatureSensor extends
     ServesClusters(Device,
         TemperatureMeasurement,
         Identify)

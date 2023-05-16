@@ -11,7 +11,7 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { Identify } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
-export class WindowCoveringControllerDevice extends Device {
+export class WindowCoveringController extends Device {
     constructor(endpointId?: number) {
         super(DeviceTypes.WINDOW_COVERING_CONTROLLER, [], endpointId);
     }
@@ -20,7 +20,7 @@ export class WindowCoveringControllerDevice extends Device {
         Identify
     ];
 
-    with(...clusters: typeof WindowCoveringControllerDevice.options[number][]) {
-        return ServesClusters(WindowCoveringControllerDevice, ...clusters);
+    with(...clusters: typeof WindowCoveringController.options[number][]) {
+        return ServesClusters(WindowCoveringController, ...clusters);
     }
 }

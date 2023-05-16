@@ -9,7 +9,7 @@
 import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js"
 
-export class VideoRemoteControlDevice extends Device {
+export class VideoRemoteControl extends Device {
     constructor(endpointId?: number) {
         super(DeviceTypes.VIDEO_REMOTE_CONTROL, [], endpointId);
     }

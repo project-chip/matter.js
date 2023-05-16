@@ -11,7 +11,7 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { PowerSource } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
-export class PowerSourceDevice extends
+export class PowerSource extends
     ServesClusters(Device,
         PowerSource)
 {

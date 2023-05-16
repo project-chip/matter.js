@@ -11,7 +11,7 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { Identify } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
-export class PumpControllerDevice extends
+export class PumpController extends
     ServesClusters(Device,
         Identify)
 {

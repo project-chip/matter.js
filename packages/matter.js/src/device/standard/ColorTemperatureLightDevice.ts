@@ -11,7 +11,7 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { Identify, OnOffLighting, LevelControl } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
-export class ColorTemperatureLightDevice extends
+export class ColorTemperatureLight extends
     ServesClusters(Device,
         Identify,
         OnOffLighting,

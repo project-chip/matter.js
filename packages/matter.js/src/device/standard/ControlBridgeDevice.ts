@@ -11,7 +11,7 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { Identify } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
-export class ControlBridgeDevice extends
+export class ControlBridge extends
     ServesClusters(Device,
         Identify)
 {

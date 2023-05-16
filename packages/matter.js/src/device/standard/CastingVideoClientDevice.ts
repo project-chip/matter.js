@@ -9,7 +9,7 @@
 import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js"
 
-export class CastingVideoClientDevice extends Device {
+export class CastingVideoClient extends Device {
     constructor(endpointId?: number) {
         super(DeviceTypes.CASTING_VIDEO_CLIENT, [], endpointId);
     }

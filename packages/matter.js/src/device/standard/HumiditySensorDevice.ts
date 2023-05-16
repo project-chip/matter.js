@@ -11,7 +11,7 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { Identify, RelativeHumidity } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
-export class HumiditySensorDevice extends
+export class HumiditySensor extends
     ServesClusters(Device,
         Identify,
         RelativeHumidity)

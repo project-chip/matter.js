@@ -11,7 +11,7 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { PressureMeasurement, Identify } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
-export class PressureSensorDevice extends
+export class PressureSensor extends
     ServesClusters(Device,
         PressureMeasurement,
         Identify)

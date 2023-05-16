@@ -9,7 +9,7 @@
 import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js"
 
-export class AggregatorDevice extends Device {
+export class Aggregator extends Device {
     constructor(endpointId?: number) {
         super(DeviceTypes.AGGREGATOR, [], endpointId);
     }

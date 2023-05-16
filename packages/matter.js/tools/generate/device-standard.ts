@@ -15,7 +15,7 @@ const moduleExports = new Array<string>();
 const clusterNames = (clusters: ClusterDetail[]) => clusters.map((cluster) => cluster.name);
 
 devices.forEach((device) => {
-    const className = `${camelize(device.name)}Device`;
+    const className = camelize(device.name);
 
     // Configure required interfaces
     const interfaces = Array<string>();
@@ -61,7 +61,7 @@ devices.forEach((device) => {
     }
 
     // Generate the file
-    writeTS(`device/standard/${className}`,
+    writeTS(`device/standard/${className}Device`,
         `${imports.join(";\n")}
 
 export class ${className} extends${baseClass}{
@@ -70,7 +70,7 @@ export class ${className} extends${baseClass}{
     }${options}
 }
 `);
-    moduleExports.push(`export * from "./${className}.js";`)
+    moduleExports.push(`export * from "./${className}Device.js";`)
 });
 
 writeTS("device/standard/index", moduleExports.join("\n"));

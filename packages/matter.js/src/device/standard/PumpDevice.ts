@@ -11,7 +11,7 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { OnOffLighting, Identify, LevelControl, TemperatureMeasurement, PressureMeasurement, FlowMeasurement } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
-export class PumpDevice extends
+export class Pump extends
     ServesClusters(Device,
         OnOffLighting,
         Identify)
@@ -27,7 +27,7 @@ export class PumpDevice extends
         FlowMeasurement
     ];
 
-    with(...clusters: typeof PumpDevice.options[number][]) {
-        return ServesClusters(PumpDevice, ...clusters);
+    with(...clusters: typeof Pump.options[number][]) {
+        return ServesClusters(Pump, ...clusters);
     }
 }

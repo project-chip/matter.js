@@ -11,7 +11,7 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { Identify, FixedLabel } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
-export class GenericSwitchDevice extends
+export class GenericSwitch extends
     ServesClusters(Device,
         Identify)
 {
@@ -23,7 +23,7 @@ export class GenericSwitchDevice extends
         FixedLabel
     ];
 
-    with(...clusters: typeof GenericSwitchDevice.options[number][]) {
-        return ServesClusters(GenericSwitchDevice, ...clusters);
+    with(...clusters: typeof GenericSwitch.options[number][]) {
+        return ServesClusters(GenericSwitch, ...clusters);
     }
 }

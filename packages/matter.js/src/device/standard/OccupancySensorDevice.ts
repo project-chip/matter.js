@@ -11,7 +11,7 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { Identify, OccupancySensing } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
-export class OccupancySensorDevice extends
+export class OccupancySensor extends
     ServesClusters(Device,
         Identify,
         OccupancySensing)

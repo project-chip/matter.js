@@ -11,7 +11,7 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { Identify } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
-export class DoorLockControllerDevice extends Device {
+export class DoorLockController extends Device {
     constructor(endpointId?: number) {
         super(DeviceTypes.DOOR_LOCK_CONTROLLER, [], endpointId);
     }
@@ -20,7 +20,7 @@ export class DoorLockControllerDevice extends Device {
         Identify
     ];
 
-    with(...clusters: typeof DoorLockControllerDevice.options[number][]) {
-        return ServesClusters(DoorLockControllerDevice, ...clusters);
+    with(...clusters: typeof DoorLockController.options[number][]) {
+        return ServesClusters(DoorLockController, ...clusters);
     }
 }

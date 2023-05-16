@@ -11,7 +11,7 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { Identify, OnOffLighting, LevelControl } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
-export class HeatingCoolingUnitDevice extends
+export class HeatingCoolingUnit extends
     ServesClusters(Device,
         Identify,
         OnOffLighting)
@@ -24,7 +24,7 @@ export class HeatingCoolingUnitDevice extends
         LevelControl
     ];
 
-    with(...clusters: typeof HeatingCoolingUnitDevice.options[number][]) {
-        return ServesClusters(HeatingCoolingUnitDevice, ...clusters);
+    with(...clusters: typeof HeatingCoolingUnit.options[number][]) {
+        return ServesClusters(HeatingCoolingUnit, ...clusters);
     }
 }

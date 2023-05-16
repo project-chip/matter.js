@@ -11,7 +11,7 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { FlowMeasurement, Identify } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
-export class FlowSensorDevice extends
+export class FlowSensor extends
     ServesClusters(Device,
         FlowMeasurement,
         Identify)

@@ -9,7 +9,7 @@
 import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js"
 
-export class ContentAppDevice extends Device {
+export class ContentApp extends Device {
     constructor(endpointId?: number) {
         super(DeviceTypes.CONTENT_APP, [], endpointId);
     }

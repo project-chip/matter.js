@@ -11,7 +11,7 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { OnOffLighting } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
-export class CastingVideoPlayerDevice extends
+export class CastingVideoPlayer extends
     ServesClusters(Device,
         OnOffLighting)
 {

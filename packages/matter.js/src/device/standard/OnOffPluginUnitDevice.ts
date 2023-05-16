@@ -11,7 +11,7 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { Identify, OnOffLighting, LevelControl } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
-export class OnOffPluginUnitDevice extends
+export class OnOffPluginUnit extends
     ServesClusters(Device,
         Identify,
         OnOffLighting)
@@ -24,7 +24,7 @@ export class OnOffPluginUnitDevice extends
         LevelControl
     ];
 
-    with(...clusters: typeof OnOffPluginUnitDevice.options[number][]) {
-        return ServesClusters(OnOffPluginUnitDevice, ...clusters);
+    with(...clusters: typeof OnOffPluginUnit.options[number][]) {
+        return ServesClusters(OnOffPluginUnit, ...clusters);
     }
 }

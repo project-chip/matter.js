@@ -11,7 +11,7 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { BridgedDeviceBasicInformation, PowerSourceConfiguration, PowerSource } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
-export class BridgedDeviceWithPowersourceInfoDevice extends
+export class BridgedDeviceWithPowersourceInfo extends
     ServesClusters(Device,
         BridgedDeviceBasicInformation,
         PowerSourceConfiguration,

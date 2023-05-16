@@ -9,7 +9,7 @@
 import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js"
 
-export class ModeSelectDevice extends Device {
+export class ModeSelect extends Device {
     constructor(endpointId?: number) {
         super(DeviceTypes.MODE_SELECT, [], endpointId);
     }

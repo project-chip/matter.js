@@ -9,7 +9,7 @@
 import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js"
 
-export class OtaRequestorDevice extends Device {
+export class OtaRequestor extends Device {
     constructor(endpointId?: number) {
         super(DeviceTypes.OTA_REQUESTOR, [], endpointId);
     }
