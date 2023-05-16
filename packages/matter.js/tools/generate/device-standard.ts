@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+// Generates standard device implementations into src/device/standard
+
 import { DeviceTypes } from "../../src/device/DeviceTypes.js";
 import { camelize, clean, writeTS, clusters } from "./util.js";
 
@@ -11,39 +13,68 @@ clean("device/standard", "Device");
 
 const moduleExports = new Array<string>();
 
+const getClusterNames = (ids: number[]) =>
+    <string[]>ids.map((id) => {
+        const cluster = clusters.forID(id)
+        if (cluster) return cluster.name;
+        console.warn(`Warning: No cluster 0x${id.toString(16).padStart(2, "0")}`);
+        return undefined;
+    }).filter((name) => name);
+
 Object.entries(DeviceTypes).forEach(([name, definition]) => {
     const className = `${camelize(name)}Device`;
 
-    const importedImpls = Array<string>();
+    // Configure required interfaces
+    const interfaces = Array<string>();
+    const requiredInterfaces = getClusterNames(definition.requiredServerClusters);
+    interfaces.push(...requiredInterfaces);
 
-    let base = "Device";
-    for (const id of definition.requiredServerClusters) {
-        const cluster = clusters.forID(id);
-        if (cluster) {
-            importedImpls.push(cluster.server);
-            base = `${cluster.server}(${base})`;
-        } else {
-            console.warn(`Warning: No cluster 0x${id.toString(16).padStart(2, "0")}`);
-        }
-    }
-
-    const implImport = importedImpls.length ? `import { ${importedImpls.join(', ')} } from "../../cluster/interface/index.js";\n` : "";
-
-    // Grr, tsfmt
-    if (base == "Device") {
-        base = ` ${base} `;
+    let baseClass;
+    if (requiredInterfaces.length) {
+        baseClass = `
+    ServesClusters(Device,
+        ${requiredInterfaces.join(",\n        ")})
+`;
     } else {
-        base = `\n    ${base}\n`
+        baseClass = " Device ";
     }
 
+    // Configure optional interfaces
+    const optionalInterfaces = getClusterNames(definition.optionalServerClusters);
+    let options;
+    if (optionalInterfaces.length) {
+        interfaces.push(...optionalInterfaces);
+        options = `
+    static readonly options = [
+        ${optionalInterfaces.join(",\n        ")}
+    ];
+
+    extend(...clusters: typeof ${className}.options[number][]) {
+        return ServesClusters(${className}, ...clusters);
+    }
+`;
+    } else {
+        options = "";
+    }
+
+    // Configure imports
+    const imports = [
+        'import { Device } from "../Device.js"',
+        'import { DeviceTypes } from "../DeviceTypes.js"',
+    ];
+    if (interfaces.length) {
+        imports.push(`import { ${interfaces.join(', ')} } from "../../cluster/interface/index.js"`);
+        imports.push('import { ServesClusters } from "../ServesClusters.js"');
+    }
+
+    // Generate the file
     writeTS(`device/standard/${className}`,
-        `import { Device } from "../Device.js";
-import { DeviceTypes } from "../DeviceTypes.js";
-${implImport}
-export class ${className} extends${base}{
+        `${imports.join(";\n")}
+
+export class ${className} extends${baseClass}{
     constructor(endpointId?: number) {
         super(DeviceTypes.${name}, [], endpointId);
-    }
+    }${options}
 }
 `);
     moduleExports.push(`export * from "./${className}.js";`)

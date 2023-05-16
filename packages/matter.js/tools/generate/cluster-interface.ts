@@ -4,9 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+// Generates TypeScript interfaces for each cluster into src/cluster/interface
+
 import * as tlv from "../../src/tlv/index.js";
 import { camelize, clean, writeTS, clusters } from "./util.js";
 import { GlobalAttributes } from "../../src/cluster/Cluster.js";
+
+clean("cluster/interface", "Interface");
 
 const GLOBAL_ATTRIBUTE_IDS = new Set(Object.values(GlobalAttributes({})).map((attribute) => attribute.id));
 
@@ -67,8 +71,6 @@ function mapType(type: tlv.TlvSchema<any>, context: TypeContext): string {
     return "any";
 }
 
-clean("cluster/interface", "Interface");
-
 const moduleExports = new Array<string>();
 
 clusters.forEach((cluster) => {
@@ -128,15 +130,17 @@ clusters.forEach((cluster) => {
     if (definitions) definitions = `${definitions}\n`;
 
     writeTS(`cluster/interface/${cluster.interface}`,
-        `import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { ${cluster.definition} } from "../index.js";
+        `import { ${cluster.definition}, ClusterInterface } from "../index.js";
 ${definitions}
 export interface ${cluster.interface} {
     ${properties.map((p) => p ? `    ${p}` : "").join("\n").trim()}
 }
 
-export const ${baseTypeName}ClientImpl = ClientIfaceImpl<${cluster.interface}>(${cluster.definition});
-export const ${baseTypeName}ServerImpl = ServerIfaceImpl<${cluster.interface}>(${cluster.definition});
+export const ${baseTypeName}:
+    ClusterInterface<${cluster.interface}> =
+{
+    definition: ${cluster.definition}
+};
 `);
 
     moduleExports.push(`export * from "./${cluster.interface}.js";`)

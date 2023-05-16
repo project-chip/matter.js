@@ -8,12 +8,28 @@
 
 import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
-import { OnOffLightingServerImpl, IdentifyServerImpl } from "../../cluster/interface/index.js";
+import { OnOffLighting, Identify, LevelControl, Scenes, Groups, TemperatureMeasurement, PressureMeasurement, FlowMeasurement } from "../../cluster/interface/index.js";
+import { ServesClusters } from "../ServesClusters.js"
 
 export class PumpDevice extends
-    IdentifyServerImpl(OnOffLightingServerImpl(Device))
+    ServesClusters(Device,
+        OnOffLighting,
+        Identify)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.PUMP, [], endpointId);
     }
+    static readonly options = [
+        LevelControl,
+        Scenes,
+        Groups,
+        TemperatureMeasurement,
+        PressureMeasurement,
+        FlowMeasurement
+    ];
+
+    extend(...clusters: typeof PumpDevice.options[number][]) {
+        return ServesClusters(PumpDevice, ...clusters);
+    }
+
 }

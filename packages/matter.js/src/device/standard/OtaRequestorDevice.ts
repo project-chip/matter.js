@@ -7,7 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { Device } from "../Device.js";
-import { DeviceTypes } from "../DeviceTypes.js";
+import { DeviceTypes } from "../DeviceTypes.js"
 
 export class OtaRequestorDevice extends Device {
     constructor(endpointId?: number) {

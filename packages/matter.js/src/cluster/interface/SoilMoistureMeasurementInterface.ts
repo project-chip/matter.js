@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { SoilMoistureMeasurementCluster } from "../index.js";
+import { SoilMoistureMeasurementCluster, ClusterInterface } from "../index.js";
 
 export interface SoilMoistureMeasurementInterface {
     measuredValue: number | undefined;
@@ -27,5 +26,8 @@ export interface SoilMoistureMeasurementInterface {
     removeToleranceListener(listener: (newValue: number, oldValue: number) => void): void;
 }
 
-export const SoilMoistureMeasurementClientImpl = ClientIfaceImpl<SoilMoistureMeasurementInterface>(SoilMoistureMeasurementCluster);
-export const SoilMoistureMeasurementServerImpl = ServerIfaceImpl<SoilMoistureMeasurementInterface>(SoilMoistureMeasurementCluster);
+export const SoilMoistureMeasurement:
+    ClusterInterface<SoilMoistureMeasurementInterface> =
+{
+    definition: SoilMoistureMeasurementCluster
+};

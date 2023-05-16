@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { FlowMeasurementCluster } from "../index.js";
+import { FlowMeasurementCluster, ClusterInterface } from "../index.js";
 
 export interface FlowMeasurementInterface {
     measuredValue: number | undefined;
@@ -27,5 +26,8 @@ export interface FlowMeasurementInterface {
     removeToleranceListener(listener: (newValue: number, oldValue: number) => void): void;
 }
 
-export const FlowMeasurementClientImpl = ClientIfaceImpl<FlowMeasurementInterface>(FlowMeasurementCluster);
-export const FlowMeasurementServerImpl = ServerIfaceImpl<FlowMeasurementInterface>(FlowMeasurementCluster);
+export const FlowMeasurement:
+    ClusterInterface<FlowMeasurementInterface> =
+{
+    definition: FlowMeasurementCluster
+};

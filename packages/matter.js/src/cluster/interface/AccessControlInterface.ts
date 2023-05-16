@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { AccessControlCluster } from "../index.js";
+import { AccessControlCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
 type Acl = TypeFromSchema<typeof AccessControlCluster.attributes.acl.schema>;
@@ -48,5 +47,8 @@ export interface AccessControlInterface {
     removeAccessControlExtensionChangedListener(listener: (event: AccessControlExtensionChangedEvent) => void): void;
 }
 
-export const AccessControlClientImpl = ClientIfaceImpl<AccessControlInterface>(AccessControlCluster);
-export const AccessControlServerImpl = ServerIfaceImpl<AccessControlInterface>(AccessControlCluster);
+export const AccessControl:
+    ClusterInterface<AccessControlInterface> =
+{
+    definition: AccessControlCluster
+};

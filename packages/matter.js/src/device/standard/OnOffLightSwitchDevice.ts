@@ -8,10 +8,12 @@
 
 import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
-import { IdentifyServerImpl } from "../../cluster/interface/index.js";
+import { Identify } from "../../cluster/interface/index.js";
+import { ServesClusters } from "../ServesClusters.js"
 
 export class OnOffLightSwitchDevice extends
-    IdentifyServerImpl(Device)
+    ServesClusters(Device,
+        Identify)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.ON_OFF_LIGHT_SWITCH, [], endpointId);

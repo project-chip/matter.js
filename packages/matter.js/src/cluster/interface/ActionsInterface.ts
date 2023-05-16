@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { ActionsCluster } from "../index.js";
+import { ActionsCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
 type ActionList = TypeFromSchema<typeof ActionsCluster.attributes.actionList.schema>;
@@ -75,5 +74,8 @@ export interface ActionsInterface {
     removeActionFailedListener(listener: (event: ActionFailedEvent) => void): void;
 }
 
-export const ActionsClientImpl = ClientIfaceImpl<ActionsInterface>(ActionsCluster);
-export const ActionsServerImpl = ServerIfaceImpl<ActionsInterface>(ActionsCluster);
+export const Actions:
+    ClusterInterface<ActionsInterface> =
+{
+    definition: ActionsCluster
+};

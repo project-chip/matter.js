@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { OnOffLightingCluster } from "../index.js";
+import { OnOffLightingCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
 type OffWithEffectRequest = TypeFromSchema<typeof OnOffLightingCluster.commands.offWithEffect.requestSchema>;
@@ -46,5 +45,8 @@ export interface OnOffLightingInterface {
     sendOnWithTimedOff(request: OnWithTimedOffRequest): Promise<void>;
 }
 
-export const OnOffLightingClientImpl = ClientIfaceImpl<OnOffLightingInterface>(OnOffLightingCluster);
-export const OnOffLightingServerImpl = ServerIfaceImpl<OnOffLightingInterface>(OnOffLightingCluster);
+export const OnOffLighting:
+    ClusterInterface<OnOffLightingInterface> =
+{
+    definition: OnOffLightingCluster
+};

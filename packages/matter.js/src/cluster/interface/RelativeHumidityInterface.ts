@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { RelativeHumidityCluster } from "../index.js";
+import { RelativeHumidityCluster, ClusterInterface } from "../index.js";
 
 export interface RelativeHumidityInterface {
     measuredValue: number | undefined;
@@ -27,5 +26,8 @@ export interface RelativeHumidityInterface {
     removeToleranceListener(listener: (newValue: number, oldValue: number) => void): void;
 }
 
-export const RelativeHumidityClientImpl = ClientIfaceImpl<RelativeHumidityInterface>(RelativeHumidityCluster);
-export const RelativeHumidityServerImpl = ServerIfaceImpl<RelativeHumidityInterface>(RelativeHumidityCluster);
+export const RelativeHumidity:
+    ClusterInterface<RelativeHumidityInterface> =
+{
+    definition: RelativeHumidityCluster
+};

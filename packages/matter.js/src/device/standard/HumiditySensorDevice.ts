@@ -8,10 +8,13 @@
 
 import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
-import { IdentifyServerImpl, RelativeHumidityServerImpl } from "../../cluster/interface/index.js";
+import { Identify, RelativeHumidity } from "../../cluster/interface/index.js";
+import { ServesClusters } from "../ServesClusters.js"
 
 export class HumiditySensorDevice extends
-    RelativeHumidityServerImpl(IdentifyServerImpl(Device))
+    ServesClusters(Device,
+        Identify,
+        RelativeHumidity)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.HUMIDITY_SENSOR, [], endpointId);

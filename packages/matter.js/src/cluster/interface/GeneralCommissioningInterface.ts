@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { GeneralCommissioningCluster } from "../index.js";
+import { GeneralCommissioningCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
 type BasicCommissioningInfo = TypeFromSchema<typeof GeneralCommissioningCluster.attributes.basicCommissioningInfo.schema>;
@@ -49,5 +48,8 @@ export interface GeneralCommissioningInterface {
     sendCommissioningComplete(request: any): Promise<CommissioningCompleteResponse>;
 }
 
-export const GeneralCommissioningClientImpl = ClientIfaceImpl<GeneralCommissioningInterface>(GeneralCommissioningCluster);
-export const GeneralCommissioningServerImpl = ServerIfaceImpl<GeneralCommissioningInterface>(GeneralCommissioningCluster);
+export const GeneralCommissioning:
+    ClusterInterface<GeneralCommissioningInterface> =
+{
+    definition: GeneralCommissioningCluster
+};

@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { LevelControlCluster } from "../index.js";
+import { LevelControlCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
 type MoveToLevelRequest = TypeFromSchema<typeof LevelControlCluster.commands.moveToLevel.requestSchema>;
@@ -88,5 +87,8 @@ export interface LevelControlInterface {
     sendStopWithOnOff(request: StopWithOnOffRequest): Promise<void>;
 }
 
-export const LevelControlClientImpl = ClientIfaceImpl<LevelControlInterface>(LevelControlCluster);
-export const LevelControlServerImpl = ServerIfaceImpl<LevelControlInterface>(LevelControlCluster);
+export const LevelControl:
+    ClusterInterface<LevelControlInterface> =
+{
+    definition: LevelControlCluster
+};

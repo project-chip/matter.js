@@ -8,10 +8,14 @@
 
 import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
-import { BridgedDeviceBasicInformationServerImpl, PowerSourceConfigurationServerImpl, PowerSourceServerImpl } from "../../cluster/interface/index.js";
+import { BridgedDeviceBasicInformation, PowerSourceConfiguration, PowerSource } from "../../cluster/interface/index.js";
+import { ServesClusters } from "../ServesClusters.js"
 
 export class BridgedDeviceWithPowersourceInfoDevice extends
-    PowerSourceServerImpl(PowerSourceConfigurationServerImpl(BridgedDeviceBasicInformationServerImpl(Device)))
+    ServesClusters(Device,
+        BridgedDeviceBasicInformation,
+        PowerSourceConfiguration,
+        PowerSource)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.BRIDGED_DEVICE_WITH_POWERSOURCE_INFO, [], endpointId);

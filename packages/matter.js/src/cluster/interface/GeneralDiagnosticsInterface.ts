@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { GeneralDiagnosticsCluster } from "../index.js";
+import { GeneralDiagnosticsCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
 type NetworkInterfaces = TypeFromSchema<typeof GeneralDiagnosticsCluster.attributes.networkInterfaces.schema>;
@@ -74,5 +73,8 @@ export interface GeneralDiagnosticsInterface {
     removeBootReasonEventListener(listener: (event: BootReasonEvent) => void): void;
 }
 
-export const GeneralDiagnosticsClientImpl = ClientIfaceImpl<GeneralDiagnosticsInterface>(GeneralDiagnosticsCluster);
-export const GeneralDiagnosticsServerImpl = ServerIfaceImpl<GeneralDiagnosticsInterface>(GeneralDiagnosticsCluster);
+export const GeneralDiagnostics:
+    ClusterInterface<GeneralDiagnosticsInterface> =
+{
+    definition: GeneralDiagnosticsCluster
+};

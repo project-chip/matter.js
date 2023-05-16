@@ -8,10 +8,13 @@
 
 import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
-import { FlowMeasurementServerImpl, IdentifyServerImpl } from "../../cluster/interface/index.js";
+import { FlowMeasurement, Identify } from "../../cluster/interface/index.js";
+import { ServesClusters } from "../ServesClusters.js"
 
 export class FlowSensorDevice extends
-    IdentifyServerImpl(FlowMeasurementServerImpl(Device))
+    ServesClusters(Device,
+        FlowMeasurement,
+        Identify)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.FLOW_SENSOR, [], endpointId);

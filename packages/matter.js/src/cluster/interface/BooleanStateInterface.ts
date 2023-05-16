@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { BooleanStateCluster } from "../index.js";
+import { BooleanStateCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
 type StateChangeEvent = TypeFromSchema<typeof BooleanStateCluster.events.stateChange.schema>;
@@ -21,5 +20,8 @@ export interface BooleanStateInterface {
     removeStateChangeListener(listener: (event: StateChangeEvent) => void): void;
 }
 
-export const BooleanStateClientImpl = ClientIfaceImpl<BooleanStateInterface>(BooleanStateCluster);
-export const BooleanStateServerImpl = ServerIfaceImpl<BooleanStateInterface>(BooleanStateCluster);
+export const BooleanState:
+    ClusterInterface<BooleanStateInterface> =
+{
+    definition: BooleanStateCluster
+};

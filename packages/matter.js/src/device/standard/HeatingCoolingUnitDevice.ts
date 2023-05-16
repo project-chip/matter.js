@@ -8,12 +8,25 @@
 
 import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
-import { IdentifyServerImpl, GroupsServerImpl, OnOffLightingServerImpl } from "../../cluster/interface/index.js";
+import { Identify, Groups, OnOffLighting, Scenes, LevelControl } from "../../cluster/interface/index.js";
+import { ServesClusters } from "../ServesClusters.js"
 
 export class HeatingCoolingUnitDevice extends
-    OnOffLightingServerImpl(GroupsServerImpl(IdentifyServerImpl(Device)))
+    ServesClusters(Device,
+        Identify,
+        Groups,
+        OnOffLighting)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.HEATING_COOLING_UNIT, [], endpointId);
     }
+    static readonly options = [
+        Scenes,
+        LevelControl
+    ];
+
+    extend(...clusters: typeof HeatingCoolingUnitDevice.options[number][]) {
+        return ServesClusters(HeatingCoolingUnitDevice, ...clusters);
+    }
+
 }

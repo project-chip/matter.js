@@ -100,14 +100,6 @@ export class ClusterDetail {
         return `${this.name}Interface`;
     }
 
-    get server() {
-        return `${this.name}ServerImpl`;
-    }
-
-    get client() {
-        return `${this.name}ClientImpl`;
-    }
-
     get definition() {
         return `${this.name}Cluster`;
     }

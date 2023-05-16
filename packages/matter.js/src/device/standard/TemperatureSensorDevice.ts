@@ -8,10 +8,13 @@
 
 import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
-import { TemperatureMeasurementServerImpl, IdentifyServerImpl } from "../../cluster/interface/index.js";
+import { TemperatureMeasurement, Identify } from "../../cluster/interface/index.js";
+import { ServesClusters } from "../ServesClusters.js"
 
 export class TemperatureSensorDevice extends
-    IdentifyServerImpl(TemperatureMeasurementServerImpl(Device))
+    ServesClusters(Device,
+        TemperatureMeasurement,
+        Identify)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.TEMPERATURE_SENSOR, [], endpointId);

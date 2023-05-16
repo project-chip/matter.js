@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { BindingCluster } from "../index.js";
+import { BindingCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
 type BindingList = TypeFromSchema<typeof BindingCluster.attributes.bindingList.schema>;
@@ -19,5 +18,8 @@ export interface BindingInterface {
     removeBindingListListener(listener: (newValue: BindingList[], oldValue: BindingList[]) => void): void;
 }
 
-export const BindingClientImpl = ClientIfaceImpl<BindingInterface>(BindingCluster);
-export const BindingServerImpl = ServerIfaceImpl<BindingInterface>(BindingCluster);
+export const Binding:
+    ClusterInterface<BindingInterface> =
+{
+    definition: BindingCluster
+};

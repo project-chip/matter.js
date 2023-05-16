@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { ThreadNetworkCommissioningCluster } from "../index.js";
+import { ThreadNetworkCommissioningCluster, ClusterInterface } from "../index.js";
 import { ByteArray } from "../../util/index.js"
 
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
@@ -75,5 +74,8 @@ export interface ThreadNetworkCommissioningInterface {
     sendAddOrUpdateThreadNetwork(request: AddOrUpdateThreadNetworkRequest): Promise<AddOrUpdateThreadNetworkResponse>;
 }
 
-export const ThreadNetworkCommissioningClientImpl = ClientIfaceImpl<ThreadNetworkCommissioningInterface>(ThreadNetworkCommissioningCluster);
-export const ThreadNetworkCommissioningServerImpl = ServerIfaceImpl<ThreadNetworkCommissioningInterface>(ThreadNetworkCommissioningCluster);
+export const ThreadNetworkCommissioning:
+    ClusterInterface<ThreadNetworkCommissioningInterface> =
+{
+    definition: ThreadNetworkCommissioningCluster
+};

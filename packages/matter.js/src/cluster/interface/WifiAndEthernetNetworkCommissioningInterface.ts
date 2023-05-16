@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { WifiAndEthernetNetworkCommissioningCluster } from "../index.js";
+import { WifiAndEthernetNetworkCommissioningCluster, ClusterInterface } from "../index.js";
 import { ByteArray } from "../../util/index.js"
 
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
@@ -75,5 +74,8 @@ export interface WifiAndEthernetNetworkCommissioningInterface {
     sendAddOrUpdateWiFiNetwork(request: AddOrUpdateWiFiNetworkRequest): Promise<AddOrUpdateWiFiNetworkResponse>;
 }
 
-export const WifiAndEthernetNetworkCommissioningClientImpl = ClientIfaceImpl<WifiAndEthernetNetworkCommissioningInterface>(WifiAndEthernetNetworkCommissioningCluster);
-export const WifiAndEthernetNetworkCommissioningServerImpl = ServerIfaceImpl<WifiAndEthernetNetworkCommissioningInterface>(WifiAndEthernetNetworkCommissioningCluster);
+export const WifiAndEthernetNetworkCommissioning:
+    ClusterInterface<WifiAndEthernetNetworkCommissioningInterface> =
+{
+    definition: WifiAndEthernetNetworkCommissioningCluster
+};

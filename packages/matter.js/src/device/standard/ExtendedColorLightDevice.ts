@@ -8,10 +8,16 @@
 
 import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
-import { IdentifyServerImpl, GroupsServerImpl, ScenesServerImpl, OnOffLightingServerImpl, LevelControlServerImpl } from "../../cluster/interface/index.js";
+import { Identify, Groups, Scenes, OnOffLighting, LevelControl } from "../../cluster/interface/index.js";
+import { ServesClusters } from "../ServesClusters.js"
 
 export class ExtendedColorLightDevice extends
-    LevelControlServerImpl(OnOffLightingServerImpl(ScenesServerImpl(GroupsServerImpl(IdentifyServerImpl(Device)))))
+    ServesClusters(Device,
+        Identify,
+        Groups,
+        Scenes,
+        OnOffLighting,
+        LevelControl)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.EXTENDED_COLOR_LIGHT, [], endpointId);

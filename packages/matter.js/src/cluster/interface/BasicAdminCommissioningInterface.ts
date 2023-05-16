@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { BasicAdminCommissioningCluster } from "../index.js";
+import { BasicAdminCommissioningCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
 type OpenCommissioningWindowRequest = TypeFromSchema<typeof BasicAdminCommissioningCluster.commands.openCommissioningWindow.requestSchema>;
@@ -32,5 +31,8 @@ export interface BasicAdminCommissioningInterface {
     sendOpenBasicCommissioningWindow(request: OpenBasicCommissioningWindowRequest): Promise<void>;
 }
 
-export const BasicAdminCommissioningClientImpl = ClientIfaceImpl<BasicAdminCommissioningInterface>(BasicAdminCommissioningCluster);
-export const BasicAdminCommissioningServerImpl = ServerIfaceImpl<BasicAdminCommissioningInterface>(BasicAdminCommissioningCluster);
+export const BasicAdminCommissioning:
+    ClusterInterface<BasicAdminCommissioningInterface> =
+{
+    definition: BasicAdminCommissioningCluster
+};

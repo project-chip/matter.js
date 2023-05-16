@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { DescriptorCluster } from "../index.js";
+import { DescriptorCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
 type DeviceTypeList = TypeFromSchema<typeof DescriptorCluster.attributes.deviceTypeList.schema>;
@@ -30,5 +29,8 @@ export interface DescriptorInterface {
     removePartsListListener(listener: (newValue: number[], oldValue: number[]) => void): void;
 }
 
-export const DescriptorClientImpl = ClientIfaceImpl<DescriptorInterface>(DescriptorCluster);
-export const DescriptorServerImpl = ServerIfaceImpl<DescriptorInterface>(DescriptorCluster);
+export const Descriptor:
+    ClusterInterface<DescriptorInterface> =
+{
+    definition: DescriptorCluster
+};

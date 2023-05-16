@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { OccupancySensingCluster } from "../index.js";
+import { OccupancySensingCluster, ClusterInterface } from "../index.js";
 
 export interface OccupancySensingInterface {
     occupancy: number;
@@ -68,5 +67,8 @@ export interface OccupancySensingInterface {
     removePhysicalContactUnoccupiedToOccupiedThresholdListener(listener: (newValue: number, oldValue: number) => void): void;
 }
 
-export const OccupancySensingClientImpl = ClientIfaceImpl<OccupancySensingInterface>(OccupancySensingCluster);
-export const OccupancySensingServerImpl = ServerIfaceImpl<OccupancySensingInterface>(OccupancySensingCluster);
+export const OccupancySensing:
+    ClusterInterface<OccupancySensingInterface> =
+{
+    definition: OccupancySensingCluster
+};

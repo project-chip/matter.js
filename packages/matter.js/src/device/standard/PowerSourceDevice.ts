@@ -8,10 +8,12 @@
 
 import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
-import { PowerSourceServerImpl } from "../../cluster/interface/index.js";
+import { PowerSource } from "../../cluster/interface/index.js";
+import { ServesClusters } from "../ServesClusters.js"
 
 export class PowerSourceDevice extends
-    PowerSourceServerImpl(Device)
+    ServesClusters(Device,
+        PowerSource)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.POWER_SOURCE, [], endpointId);

@@ -8,10 +8,13 @@
 
 import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
-import { OnOffLightingServerImpl, LevelControlServerImpl } from "../../cluster/interface/index.js";
+import { OnOffLighting, LevelControl } from "../../cluster/interface/index.js";
+import { ServesClusters } from "../ServesClusters.js"
 
 export class SpeakerDevice extends
-    LevelControlServerImpl(OnOffLightingServerImpl(Device))
+    ServesClusters(Device,
+        OnOffLighting,
+        LevelControl)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.SPEAKER, [], endpointId);

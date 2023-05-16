@@ -8,9 +8,19 @@
 
 import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
+import { Identify } from "../../cluster/interface/index.js";
+import { ServesClusters } from "../ServesClusters.js"
 
 export class DoorLockControllerDevice extends Device {
     constructor(endpointId?: number) {
         super(DeviceTypes.DOOR_LOCK_CONTROLLER, [], endpointId);
     }
+    static readonly options = [
+        Identify
+    ];
+
+    extend(...clusters: typeof DoorLockControllerDevice.options[number][]) {
+        return ServesClusters(DoorLockControllerDevice, ...clusters);
+    }
+
 }

@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { GroupKeyManagementCluster } from "../index.js";
+import { GroupKeyManagementCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
 type GroupKeyMap = TypeFromSchema<typeof GroupKeyManagementCluster.attributes.groupKeyMap.schema>;
@@ -48,5 +47,8 @@ export interface GroupKeyManagementInterface {
     sendKeySetReadAllIndices(request: any): Promise<KeySetReadAllIndicesResponse>;
 }
 
-export const GroupKeyManagementClientImpl = ClientIfaceImpl<GroupKeyManagementInterface>(GroupKeyManagementCluster);
-export const GroupKeyManagementServerImpl = ServerIfaceImpl<GroupKeyManagementInterface>(GroupKeyManagementCluster);
+export const GroupKeyManagement:
+    ClusterInterface<GroupKeyManagementInterface> =
+{
+    definition: GroupKeyManagementCluster
+};

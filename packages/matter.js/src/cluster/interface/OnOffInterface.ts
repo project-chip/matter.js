@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { OnOffCluster } from "../index.js";
+import { OnOffCluster, ClusterInterface } from "../index.js";
 
 export interface OnOffInterface {
     onOff: boolean;
@@ -19,5 +18,8 @@ export interface OnOffInterface {
     sendToggle(request: any): Promise<void>;
 }
 
-export const OnOffClientImpl = ClientIfaceImpl<OnOffInterface>(OnOffCluster);
-export const OnOffServerImpl = ServerIfaceImpl<OnOffInterface>(OnOffCluster);
+export const OnOff:
+    ClusterInterface<OnOffInterface> =
+{
+    definition: OnOffCluster
+};

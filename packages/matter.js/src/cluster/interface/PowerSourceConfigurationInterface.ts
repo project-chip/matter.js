@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { PowerSourceConfigurationCluster } from "../index.js";
+import { PowerSourceConfigurationCluster, ClusterInterface } from "../index.js";
 
 export interface PowerSourceConfigurationInterface {
     sources: number[];
@@ -15,5 +14,8 @@ export interface PowerSourceConfigurationInterface {
     removeSourcesListener(listener: (newValue: number[], oldValue: number[]) => void): void;
 }
 
-export const PowerSourceConfigurationClientImpl = ClientIfaceImpl<PowerSourceConfigurationInterface>(PowerSourceConfigurationCluster);
-export const PowerSourceConfigurationServerImpl = ServerIfaceImpl<PowerSourceConfigurationInterface>(PowerSourceConfigurationCluster);
+export const PowerSourceConfiguration:
+    ClusterInterface<PowerSourceConfigurationInterface> =
+{
+    definition: PowerSourceConfigurationCluster
+};

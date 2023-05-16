@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { TemperatureMeasurementCluster } from "../index.js";
+import { TemperatureMeasurementCluster, ClusterInterface } from "../index.js";
 
 export interface TemperatureMeasurementInterface {
     measuredValue: number | undefined;
@@ -27,5 +26,8 @@ export interface TemperatureMeasurementInterface {
     removeToleranceListener(listener: (newValue: number, oldValue: number) => void): void;
 }
 
-export const TemperatureMeasurementClientImpl = ClientIfaceImpl<TemperatureMeasurementInterface>(TemperatureMeasurementCluster);
-export const TemperatureMeasurementServerImpl = ServerIfaceImpl<TemperatureMeasurementInterface>(TemperatureMeasurementCluster);
+export const TemperatureMeasurement:
+    ClusterInterface<TemperatureMeasurementInterface> =
+{
+    definition: TemperatureMeasurementCluster
+};

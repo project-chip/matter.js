@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { PressureMeasurementCluster } from "../index.js";
+import { PressureMeasurementCluster, ClusterInterface } from "../index.js";
 
 export interface PressureMeasurementInterface {
     measuredValue: number | undefined;
@@ -47,5 +46,8 @@ export interface PressureMeasurementInterface {
     removeScaleListener(listener: (newValue: number, oldValue: number) => void): void;
 }
 
-export const PressureMeasurementClientImpl = ClientIfaceImpl<PressureMeasurementInterface>(PressureMeasurementCluster);
-export const PressureMeasurementServerImpl = ServerIfaceImpl<PressureMeasurementInterface>(PressureMeasurementCluster);
+export const PressureMeasurement:
+    ClusterInterface<PressureMeasurementInterface> =
+{
+    definition: PressureMeasurementCluster
+};

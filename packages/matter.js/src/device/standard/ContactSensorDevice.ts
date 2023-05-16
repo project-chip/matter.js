@@ -8,10 +8,13 @@
 
 import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
-import { IdentifyServerImpl, BooleanStateServerImpl } from "../../cluster/interface/index.js";
+import { Identify, BooleanState } from "../../cluster/interface/index.js";
+import { ServesClusters } from "../ServesClusters.js"
 
 export class ContactSensorDevice extends
-    BooleanStateServerImpl(IdentifyServerImpl(Device))
+    ServesClusters(Device,
+        Identify,
+        BooleanState)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.CONTACT_SENSOR, [], endpointId);

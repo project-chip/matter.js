@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { FixedLabelCluster } from "../index.js";
+import { FixedLabelCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
 type LabelList = TypeFromSchema<typeof FixedLabelCluster.attributes.labelList.schema>;
@@ -18,5 +17,8 @@ export interface FixedLabelInterface {
     removeLabelListListener(listener: (newValue: LabelList[], oldValue: LabelList[]) => void): void;
 }
 
-export const FixedLabelClientImpl = ClientIfaceImpl<FixedLabelInterface>(FixedLabelCluster);
-export const FixedLabelServerImpl = ServerIfaceImpl<FixedLabelInterface>(FixedLabelCluster);
+export const FixedLabel:
+    ClusterInterface<FixedLabelInterface> =
+{
+    definition: FixedLabelCluster
+};

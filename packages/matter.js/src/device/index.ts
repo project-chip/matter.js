@@ -15,3 +15,4 @@ export * from "./Endpoint.js";
 // export Device specific classes
 export * from "./OnOffDevices.js";
 
+export * from "./ServesClusters.js";

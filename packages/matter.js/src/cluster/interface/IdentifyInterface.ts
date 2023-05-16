@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { IdentifyCluster } from "../index.js";
+import { IdentifyCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
 type IdentifyRequest = TypeFromSchema<typeof IdentifyCluster.commands.identify.requestSchema>;
@@ -28,5 +27,8 @@ export interface IdentifyInterface {
     sendTriggerEffect(request: TriggerEffectRequest): Promise<void>;
 }
 
-export const IdentifyClientImpl = ClientIfaceImpl<IdentifyInterface>(IdentifyCluster);
-export const IdentifyServerImpl = ServerIfaceImpl<IdentifyInterface>(IdentifyCluster);
+export const Identify:
+    ClusterInterface<IdentifyInterface> =
+{
+    definition: IdentifyCluster
+};

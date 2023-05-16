@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { IlluminanceMeasurementCluster } from "../index.js";
+import { IlluminanceMeasurementCluster, ClusterInterface } from "../index.js";
 
 export interface IlluminanceMeasurementInterface {
     measuredValue: number | undefined;
@@ -31,5 +30,8 @@ export interface IlluminanceMeasurementInterface {
     removeLightSensorTypeListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
 }
 
-export const IlluminanceMeasurementClientImpl = ClientIfaceImpl<IlluminanceMeasurementInterface>(IlluminanceMeasurementCluster);
-export const IlluminanceMeasurementServerImpl = ServerIfaceImpl<IlluminanceMeasurementInterface>(IlluminanceMeasurementCluster);
+export const IlluminanceMeasurement:
+    ClusterInterface<IlluminanceMeasurementInterface> =
+{
+    definition: IlluminanceMeasurementCluster
+};

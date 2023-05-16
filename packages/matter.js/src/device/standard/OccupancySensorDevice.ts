@@ -8,10 +8,13 @@
 
 import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
-import { IdentifyServerImpl, OccupancySensingServerImpl } from "../../cluster/interface/index.js";
+import { Identify, OccupancySensing } from "../../cluster/interface/index.js";
+import { ServesClusters } from "../ServesClusters.js"
 
 export class OccupancySensorDevice extends
-    OccupancySensingServerImpl(IdentifyServerImpl(Device))
+    ServesClusters(Device,
+        Identify,
+        OccupancySensing)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.OCCUPANCY_SENSOR, [], endpointId);

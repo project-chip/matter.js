@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { OperationalCredentialsCluster } from "../index.js";
+import { OperationalCredentialsCluster, ClusterInterface } from "../index.js";
 import { ByteArray } from "../../util/index.js"
 
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
@@ -81,5 +80,8 @@ export interface OperationalCredentialsInterface {
     sendAddRootCert(request: AddRootCertRequest): Promise<void>;
 }
 
-export const OperationalCredentialsClientImpl = ClientIfaceImpl<OperationalCredentialsInterface>(OperationalCredentialsCluster);
-export const OperationalCredentialsServerImpl = ServerIfaceImpl<OperationalCredentialsInterface>(OperationalCredentialsCluster);
+export const OperationalCredentials:
+    ClusterInterface<OperationalCredentialsInterface> =
+{
+    definition: OperationalCredentialsCluster
+};

@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { EthernetNetworkCommissioningCluster } from "../index.js";
+import { EthernetNetworkCommissioningCluster, ClusterInterface } from "../index.js";
 import { ByteArray } from "../../util/index.js"
 
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
@@ -41,5 +40,8 @@ export interface EthernetNetworkCommissioningInterface {
     removeLastConnectErrorValueListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
 }
 
-export const EthernetNetworkCommissioningClientImpl = ClientIfaceImpl<EthernetNetworkCommissioningInterface>(EthernetNetworkCommissioningCluster);
-export const EthernetNetworkCommissioningServerImpl = ServerIfaceImpl<EthernetNetworkCommissioningInterface>(EthernetNetworkCommissioningCluster);
+export const EthernetNetworkCommissioning:
+    ClusterInterface<EthernetNetworkCommissioningInterface> =
+{
+    definition: EthernetNetworkCommissioningCluster
+};

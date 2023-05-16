@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { GroupsCluster } from "../index.js";
+import { GroupsCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
 type AddGroupRequest = TypeFromSchema<typeof GroupsCluster.commands.addGroup.requestSchema>;
@@ -41,5 +40,8 @@ export interface GroupsInterface {
     sendAddGroupIfIdentifying(request: AddGroupIfIdentifyingRequest): Promise<void>;
 }
 
-export const GroupsClientImpl = ClientIfaceImpl<GroupsInterface>(GroupsCluster);
-export const GroupsServerImpl = ServerIfaceImpl<GroupsInterface>(GroupsCluster);
+export const Groups:
+    ClusterInterface<GroupsInterface> =
+{
+    definition: GroupsCluster
+};

@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { LeafWetnessMeasurementCluster } from "../index.js";
+import { LeafWetnessMeasurementCluster, ClusterInterface } from "../index.js";
 
 export interface LeafWetnessMeasurementInterface {
     measuredValue: number | undefined;
@@ -27,5 +26,8 @@ export interface LeafWetnessMeasurementInterface {
     removeToleranceListener(listener: (newValue: number, oldValue: number) => void): void;
 }
 
-export const LeafWetnessMeasurementClientImpl = ClientIfaceImpl<LeafWetnessMeasurementInterface>(LeafWetnessMeasurementCluster);
-export const LeafWetnessMeasurementServerImpl = ServerIfaceImpl<LeafWetnessMeasurementInterface>(LeafWetnessMeasurementCluster);
+export const LeafWetnessMeasurement:
+    ClusterInterface<LeafWetnessMeasurementInterface> =
+{
+    definition: LeafWetnessMeasurementCluster
+};

@@ -8,12 +8,29 @@
 
 import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
-import { BasicInformationServerImpl, AccessControlServerImpl, GroupKeyManagementServerImpl, GeneralCommissioningServerImpl, BasicAdminCommissioningServerImpl, OperationalCredentialsServerImpl, GeneralDiagnosticsServerImpl } from "../../cluster/interface/index.js";
+import { BasicInformation, AccessControl, GroupKeyManagement, GeneralCommissioning, BasicAdminCommissioning, OperationalCredentials, GeneralDiagnostics, PowerSourceConfiguration, WifiNetworkCommissioning } from "../../cluster/interface/index.js";
+import { ServesClusters } from "../ServesClusters.js"
 
 export class RootDevice extends
-    GeneralDiagnosticsServerImpl(OperationalCredentialsServerImpl(BasicAdminCommissioningServerImpl(GeneralCommissioningServerImpl(GroupKeyManagementServerImpl(AccessControlServerImpl(BasicInformationServerImpl(Device)))))))
+    ServesClusters(Device,
+        BasicInformation,
+        AccessControl,
+        GroupKeyManagement,
+        GeneralCommissioning,
+        BasicAdminCommissioning,
+        OperationalCredentials,
+        GeneralDiagnostics)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.ROOT, [], endpointId);
     }
+    static readonly options = [
+        PowerSourceConfiguration,
+        WifiNetworkCommissioning
+    ];
+
+    extend(...clusters: typeof RootDevice.options[number][]) {
+        return ServesClusters(RootDevice, ...clusters);
+    }
+
 }

@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { PulseWidthModulationLevelControlCluster } from "../index.js";
+import { PulseWidthModulationLevelControlCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
 type MoveToLevelRequest = TypeFromSchema<typeof PulseWidthModulationLevelControlCluster.commands.moveToLevel.requestSchema>;
@@ -94,5 +93,8 @@ export interface PulseWidthModulationLevelControlInterface {
     sendMoveToClosestFrequency(request: MoveToClosestFrequencyRequest): Promise<void>;
 }
 
-export const PulseWidthModulationLevelControlClientImpl = ClientIfaceImpl<PulseWidthModulationLevelControlInterface>(PulseWidthModulationLevelControlCluster);
-export const PulseWidthModulationLevelControlServerImpl = ServerIfaceImpl<PulseWidthModulationLevelControlInterface>(PulseWidthModulationLevelControlCluster);
+export const PulseWidthModulationLevelControl:
+    ClusterInterface<PulseWidthModulationLevelControlInterface> =
+{
+    definition: PulseWidthModulationLevelControlCluster
+};

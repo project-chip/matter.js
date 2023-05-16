@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { BasicInformationCluster } from "../index.js";
+import { BasicInformationCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
 type CapabilityMinima = TypeFromSchema<typeof BasicInformationCluster.attributes.capabilityMinima.schema>;
@@ -117,5 +116,8 @@ export interface BasicInformationInterface {
     removeReachableChangedListener(listener: (event: ReachableChangedEvent) => void): void;
 }
 
-export const BasicInformationClientImpl = ClientIfaceImpl<BasicInformationInterface>(BasicInformationCluster);
-export const BasicInformationServerImpl = ServerIfaceImpl<BasicInformationInterface>(BasicInformationCluster);
+export const BasicInformation:
+    ClusterInterface<BasicInformationInterface> =
+{
+    definition: BasicInformationCluster
+};

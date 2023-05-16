@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { PowerSourceCluster } from "../index.js";
+import { PowerSourceCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
 type WiredFaultChangeEvent = TypeFromSchema<typeof PowerSourceCluster.events.wiredFaultChange.schema>;
@@ -151,5 +150,8 @@ export interface PowerSourceInterface {
     removeBatChargeFaultChangeListener(listener: (event: BatChargeFaultChangeEvent) => void): void;
 }
 
-export const PowerSourceClientImpl = ClientIfaceImpl<PowerSourceInterface>(PowerSourceCluster);
-export const PowerSourceServerImpl = ServerIfaceImpl<PowerSourceInterface>(PowerSourceCluster);
+export const PowerSource:
+    ClusterInterface<PowerSourceInterface> =
+{
+    definition: PowerSourceCluster
+};

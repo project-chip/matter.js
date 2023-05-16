@@ -17,5 +17,11 @@ export function Merge<
     return { ...a, ...b }
 }
 
+/** Convert a type union to an intersection */
+// See https://fettblog.eu/typescript-union-to-intersection/
+export type UnionToIntersection<T> =
+    (T extends any ? (x: T) => any : never) extends
+    (x: infer R) => any ? R : never;
+
 /** Type that represents a class constructor of a defined type or extend of it */
 export type ClassExtends<C> = { new(...args: any[]): C };

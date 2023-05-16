@@ -8,12 +8,22 @@
 
 import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
-import { IdentifyServerImpl } from "../../cluster/interface/index.js";
+import { Identify, FixedLabel } from "../../cluster/interface/index.js";
+import { ServesClusters } from "../ServesClusters.js"
 
 export class GenericSwitchDevice extends
-    IdentifyServerImpl(Device)
+    ServesClusters(Device,
+        Identify)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.GENERIC_SWITCH, [], endpointId);
     }
+    static readonly options = [
+        FixedLabel
+    ];
+
+    extend(...clusters: typeof GenericSwitchDevice.options[number][]) {
+        return ServesClusters(GenericSwitchDevice, ...clusters);
+    }
+
 }

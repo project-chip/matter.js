@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { ScenesCluster } from "../index.js";
+import { ScenesCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
 type AddSceneRequest = TypeFromSchema<typeof ScenesCluster.commands.addScene.requestSchema>;
@@ -85,5 +84,8 @@ export interface ScenesInterface {
     sendCopyScene(request: CopySceneRequest): Promise<CopySceneResponse>;
 }
 
-export const ScenesClientImpl = ClientIfaceImpl<ScenesInterface>(ScenesCluster);
-export const ScenesServerImpl = ServerIfaceImpl<ScenesInterface>(ScenesCluster);
+export const Scenes:
+    ClusterInterface<ScenesInterface> =
+{
+    definition: ScenesCluster
+};

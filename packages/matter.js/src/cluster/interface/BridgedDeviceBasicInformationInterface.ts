@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { BridgedDeviceBasicInformationCluster } from "../index.js";
+import { BridgedDeviceBasicInformationCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
 type StartUpEvent = TypeFromSchema<typeof BridgedDeviceBasicInformationCluster.events.startUp.schema>;
@@ -93,5 +92,8 @@ export interface BridgedDeviceBasicInformationInterface {
     removeReachableChangedListener(listener: (event: ReachableChangedEvent) => void): void;
 }
 
-export const BridgedDeviceBasicInformationClientImpl = ClientIfaceImpl<BridgedDeviceBasicInformationInterface>(BridgedDeviceBasicInformationCluster);
-export const BridgedDeviceBasicInformationServerImpl = ServerIfaceImpl<BridgedDeviceBasicInformationInterface>(BridgedDeviceBasicInformationCluster);
+export const BridgedDeviceBasicInformation:
+    ClusterInterface<BridgedDeviceBasicInformationInterface> =
+{
+    definition: BridgedDeviceBasicInformationCluster
+};

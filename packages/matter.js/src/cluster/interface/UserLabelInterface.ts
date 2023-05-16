@@ -6,8 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClientIfaceImpl, ServerIfaceImpl } from "./ClusterIfaceImpl.js";
-import { UserLabelCluster } from "../index.js";
+import { UserLabelCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
 type LabelList = TypeFromSchema<typeof UserLabelCluster.attributes.labelList.schema>;
@@ -19,5 +18,8 @@ export interface UserLabelInterface {
     removeLabelListListener(listener: (newValue: LabelList[], oldValue: LabelList[]) => void): void;
 }
 
-export const UserLabelClientImpl = ClientIfaceImpl<UserLabelInterface>(UserLabelCluster);
-export const UserLabelServerImpl = ServerIfaceImpl<UserLabelInterface>(UserLabelCluster);
+export const UserLabel:
+    ClusterInterface<UserLabelInterface> =
+{
+    definition: UserLabelCluster
+};

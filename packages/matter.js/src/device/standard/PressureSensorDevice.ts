@@ -8,10 +8,13 @@
 
 import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
-import { PressureMeasurementServerImpl, IdentifyServerImpl } from "../../cluster/interface/index.js";
+import { PressureMeasurement, Identify } from "../../cluster/interface/index.js";
+import { ServesClusters } from "../ServesClusters.js"
 
 export class PressureSensorDevice extends
-    IdentifyServerImpl(PressureMeasurementServerImpl(Device))
+    ServesClusters(Device,
+        PressureMeasurement,
+        Identify)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.PRESSURE_SENSOR, [], endpointId);
