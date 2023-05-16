@@ -13,9 +13,9 @@ export interface OnOffInterface {
     addOnOffListener(listener: (newValue: boolean, oldValue: boolean) => void): void;
     removeOnOffListener(listener: (newValue: boolean, oldValue: boolean) => void): void;
 
-    sendOff(request: any): Promise<void>;
-    sendOn(request: any): Promise<void>;
-    sendToggle(request: any): Promise<void>;
+    sendOff(): Promise<void>;
+    sendOn(): Promise<void>;
+    sendToggle(): Promise<void>;
 }
 
 export const OnOff:

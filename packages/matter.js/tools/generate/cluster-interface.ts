@@ -103,13 +103,15 @@ clusters.forEach((cluster) => {
 
         context.typeName = suffixed(name, "Request");
         context.typeSource = `${cluster.definition}.commands.${name}.requestSchema`;
-        const requestType = mapType(command.requestSchema, context);
+        const request = command.requestSchema instanceof tlv.TlvVoid.constructor
+            ? ""
+            : `request: ${mapType(command.requestSchema, context)}`; 
 
         context.typeName = suffixed(name, "Response");
         context.typeSource = `${cluster.definition}.commands.${name}.responseSchema`;
         const responseType = mapType(command.responseSchema, context);
 
-        properties.push(`send${camelize(name)}(request: ${requestType}): Promise<${responseType}>;`)
+        properties.push(`send${camelize(name)}(${request}): Promise<${responseType}>;`)
     });
 
     if (haveCommand) properties.push("");

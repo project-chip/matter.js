@@ -37,11 +37,11 @@ export interface OnOffLightingInterface {
     addStartUpOnOffListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
     removeStartUpOnOffListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
 
-    sendOff(request: any): Promise<void>;
-    sendOn(request: any): Promise<void>;
-    sendToggle(request: any): Promise<void>;
+    sendOff(): Promise<void>;
+    sendOn(): Promise<void>;
+    sendToggle(): Promise<void>;
     sendOffWithEffect(request: OffWithEffectRequest): Promise<void>;
-    sendOnWithRecallGlobalScene(request: void): Promise<void>;
+    sendOnWithRecallGlobalScene(): Promise<void>;
     sendOnWithTimedOff(request: OnWithTimedOffRequest): Promise<void>;
 }
 

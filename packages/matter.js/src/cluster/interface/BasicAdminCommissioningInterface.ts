@@ -27,7 +27,7 @@ export interface BasicAdminCommissioningInterface {
     removeAdminVendorIdListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
 
     sendOpenCommissioningWindow(request: OpenCommissioningWindowRequest): Promise<void>;
-    sendRevokeCommissioning(request: any): Promise<void>;
+    sendRevokeCommissioning(): Promise<void>;
     sendOpenBasicCommissioningWindow(request: OpenBasicCommissioningWindowRequest): Promise<void>;
 }
 
