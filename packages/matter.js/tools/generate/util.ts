@@ -8,6 +8,7 @@ import { readdirSync, unlinkSync, writeFileSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import { Attributes, Commands, Events } from "../../src/cluster/Cluster.js";
+import { DeviceTypeDefinition, DeviceTypes } from "../../src/device/DeviceTypes.js";
 import * as clusterExports from "../../src/cluster/index.js";
 
 const INTERNAL_CLUSTERS = [
@@ -21,6 +22,10 @@ const INTERNAL_CLUSTERS = [
     clusterExports.AdminCommissioningCluster,
     clusterExports.OperationalCredentialsCluster,
     clusterExports.GeneralDiagnosticsCluster,
+];
+
+const INTERNAL_DEVICE_TYPES = [
+    DeviceTypes.ROOT
 ];
 
 const HEADER =
@@ -105,7 +110,6 @@ export class ClusterDetail {
 
     constructor(name: string, definition: unknown) {
         Object.assign(this, definition);
-        clustersByID[this.id] = this;
         this.name = name;
     }
 
@@ -118,18 +122,40 @@ export class ClusterDetail {
     }
 }
 
-const clustersByID = new Array<ClusterDetail>;
-
-export const clusters = new class extends Array<ClusterDetail> {
-    forID(id: number) {
-        return clustersByID[id];
-    }
-};
+const availableClusters = new Map<number, ClusterDetail>();
+const referencedClusters = new Set<ClusterDetail>();
 
 for (const key in clusterExports) {
     if (key.match(/[a-z]Cluster$/i)) {
         const cluster = (<any>clusterExports)[key];
         if (INTERNAL_CLUSTERS.indexOf(cluster) !== -1) continue;
-        clusters.push(new ClusterDetail(key.slice(0, key.length - 7), (<any>clusterExports)[key]));
+        availableClusters.set(cluster.id, new ClusterDetail(key.slice(0, key.length - 7), cluster));
     }
 }
+
+export class DeviceDetail {
+    public requiredServerClusters: ClusterDetail[];
+    public optionalServerClusters: ClusterDetail[];
+
+    public constructor(public name: string, public definition: DeviceTypeDefinition) {
+        const mapClusters = (list: number[]) => <ClusterDetail[]>list.map((id) => availableClusters.get(id)).filter((cluster) => cluster);
+
+        this.requiredServerClusters = mapClusters(definition.requiredServerClusters);
+        this.optionalServerClusters = mapClusters(definition.optionalServerClusters);
+        this.requiredServerClusters.concat(this.optionalServerClusters).forEach((c) => referencedClusters.add(c));
+    }
+};
+
+export const devices = new Array<DeviceDetail>;
+
+for (const key in DeviceTypes) {
+    const dt = DeviceTypes[key];
+    if (INTERNAL_DEVICE_TYPES.indexOf(dt) == -1)
+        devices.push(new DeviceDetail(key, DeviceTypes[key]));
+}
+
+export const clusters = new class extends Array<ClusterDetail> {
+    constructor() {
+        super(...referencedClusters);
+    }
+};

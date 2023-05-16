@@ -6,28 +6,20 @@
 
 // Generates standard device implementations into src/device/standard
 
-import { DeviceTypes } from "../../src/device/DeviceTypes.js";
-import { camelize, clean, writeTS, clusters } from "./util.js";
-
-const INTERNAL_DEVICE_TYPES = [
-    DeviceTypes.ROOT
-];
+import { camelize, clean, writeTS, devices, ClusterDetail } from "./util.js";
 
 clean("device/standard", "Device");
 
 const moduleExports = new Array<string>();
 
-const getClusterNames = (ids: number[]) =>
-    <string[]>ids.map((id) => clusters.forID(id)?.name).filter((name) => name);
+const clusterNames = (clusters: ClusterDetail[]) => clusters.map((cluster) => cluster.name);
 
-Object.entries(DeviceTypes).forEach(([name, definition]) => {
-    if (INTERNAL_DEVICE_TYPES.indexOf(definition) !== -1) return;
-
-    const className = `${camelize(name)}Device`;
+devices.forEach((device) => {
+    const className = `${camelize(device.name)}Device`;
 
     // Configure required interfaces
     const interfaces = Array<string>();
-    const requiredInterfaces = getClusterNames(definition.requiredServerClusters);
+    const requiredInterfaces = clusterNames(device.requiredServerClusters);
     interfaces.push(...requiredInterfaces);
 
     let baseClass;
@@ -41,8 +33,8 @@ Object.entries(DeviceTypes).forEach(([name, definition]) => {
     }
 
     // Configure optional interfaces
-    const optionalInterfaces = getClusterNames(definition.optionalServerClusters);
-    let options;
+    const optionalInterfaces = clusterNames(device.optionalServerClusters);
+    let options: string;
     if (optionalInterfaces.length) {
         interfaces.push(...optionalInterfaces);
         options = `
@@ -74,7 +66,7 @@ Object.entries(DeviceTypes).forEach(([name, definition]) => {
 
 export class ${className} extends${baseClass}{
     constructor(endpointId?: number) {
-        super(DeviceTypes.${name}, [], endpointId);
+        super(DeviceTypes.${device.name}, [], endpointId);
     }${options}
 }
 `);
