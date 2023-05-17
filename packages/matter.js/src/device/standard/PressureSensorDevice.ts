@@ -6,13 +6,13 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
+import { ClusterInterface } from "../../cluster/Cluster.js";
 import { PressureMeasurement, Identify } from "../../cluster/interface/index.js";
-import { ServesClusters } from "../ServesClusters.js"
+import { AutoDevice } from "../AutoDevice.js"
 
 export class PressureSensor extends
-    ServesClusters(Device, PressureMeasurement, Identify)
+    AutoDevice.with(PressureMeasurement, Identify)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.PRESSURE_SENSOR, [], endpointId);

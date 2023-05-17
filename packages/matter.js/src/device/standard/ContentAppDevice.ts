@@ -6,10 +6,10 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Device } from "../Device.js";
-import { DeviceTypes } from "../DeviceTypes.js"
+import { DeviceTypes } from "../DeviceTypes.js";
+import { ClusterInterface } from "../../cluster/Cluster.js"
 
-export class ContentApp extends Device {
+export class ContentApp extends AutoDevice {
     constructor(endpointId?: number) {
         super(DeviceTypes.CONTENT_APP, [], endpointId);
     }

@@ -29,10 +29,10 @@ CodeModel.devices.forEach((device) => {
     let baseClass;
     if (Object.keys(requiredInterfaces).length) {
         baseClass = `
-    ServesClusters(Device, ${Object.keys(requiredInterfaces).join(", ")})
+    AutoDevice.with(${Object.keys(requiredInterfaces).join(", ")})
 `;
     } else {
-        baseClass = " Device ";
+        baseClass = " AutoDevice ";
     }
 
     // Configure optional interfaces
@@ -46,8 +46,8 @@ CodeModel.devices.forEach((device) => {
         ${Object.keys(optionalInterfaces).join(",\n        ")}
     };
 
-    with(...clusters: typeof ${device.name}.options[number][]) {
-        return ServesClusters(${device.name}, ...clusters);
+    static with(...clusters: ClusterInterface<any>[]) {
+        return AutoDevice.extendDevice(this, ...clusters);
     }`;
     } else {
         options = "";
@@ -55,14 +55,14 @@ CodeModel.devices.forEach((device) => {
 
     // Configure imports
     const imports = [
-        'import { Device } from "../Device.js"',
         'import { DeviceTypes } from "../DeviceTypes.js"',
+        'import { ClusterInterface } from "../../cluster/Cluster.js"'
     ];
     if (Object.keys(interfaces).length) {
         const importNames = Object.entries(interfaces).map(([k, v]) =>
             k == v ? k : `${v} as ${k}`);
         imports.push(`import { ${importNames.join(', ')} } from "../../cluster/interface/index.js"`);
-        imports.push('import { ServesClusters } from "../ServesClusters.js"');
+        imports.push('import { AutoDevice } from "../AutoDevice.js"');
     }
 
     // Generate the file

@@ -6,13 +6,13 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
+import { ClusterInterface } from "../../cluster/Cluster.js";
 import { Identify } from "../../cluster/interface/index.js";
-import { ServesClusters } from "../ServesClusters.js"
+import { AutoDevice } from "../AutoDevice.js"
 
 export class DimmerSwitch extends
-    ServesClusters(Device, Identify)
+    AutoDevice.with(Identify)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.DIMMER_SWITCH, [], endpointId);

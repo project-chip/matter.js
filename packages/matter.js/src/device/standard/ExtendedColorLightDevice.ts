@@ -6,13 +6,13 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
+import { ClusterInterface } from "../../cluster/Cluster.js";
 import { Identify, OnOffLighting, LevelControl } from "../../cluster/interface/index.js";
-import { ServesClusters } from "../ServesClusters.js"
+import { AutoDevice } from "../AutoDevice.js"
 
 export class ExtendedColorLight extends
-    ServesClusters(Device, Identify, OnOffLighting, LevelControl)
+    AutoDevice.with(Identify, OnOffLighting, LevelControl)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.EXTENDED_COLOR_LIGHT, [], endpointId);

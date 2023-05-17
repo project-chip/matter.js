@@ -6,13 +6,13 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
+import { ClusterInterface } from "../../cluster/Cluster.js";
 import { OnOffLighting, Identify, LevelControl, TemperatureMeasurement, PressureMeasurement, FlowMeasurement } from "../../cluster/interface/index.js";
-import { ServesClusters } from "../ServesClusters.js"
+import { AutoDevice } from "../AutoDevice.js"
 
 export class Pump extends
-    ServesClusters(Device, OnOffLighting, Identify)
+    AutoDevice.with(OnOffLighting, Identify)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.PUMP, [], endpointId);
@@ -25,7 +25,7 @@ export class Pump extends
         FlowMeasurement
     };
 
-    with(...clusters: typeof Pump.options[number][]) {
-        return ServesClusters(Pump, ...clusters);
+    static with(...clusters: ClusterInterface<any>[]) {
+        return AutoDevice.extendDevice(this, ...clusters);
     }
 }

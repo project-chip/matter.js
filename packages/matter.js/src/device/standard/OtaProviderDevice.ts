@@ -6,10 +6,10 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Device } from "../Device.js";
-import { DeviceTypes } from "../DeviceTypes.js"
+import { DeviceTypes } from "../DeviceTypes.js";
+import { ClusterInterface } from "../../cluster/Cluster.js"
 
-export class OtaProvider extends Device {
+export class OtaProvider extends AutoDevice {
     constructor(endpointId?: number) {
         super(DeviceTypes.OTA_PROVIDER, [], endpointId);
     }

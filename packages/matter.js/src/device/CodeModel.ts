@@ -145,6 +145,12 @@ export class CodeModel {
     static readonly devices = new Array<DeviceDetail>;
     static readonly clusters = new Array<ClusterDetail>;
 
+    static forCluster(cluster: clusterExports.ClusterInterface<any>): ClusterDetail {
+        const model = this.clusters.find((detail) => detail.definition === cluster.definition);
+        if (model) return model;
+        throw new Error("Unsupported cluster");
+    }
+
     static {
         const availableClusters = new Map<number, ClusterDetail>();
         const referencedClusters = new Set<ClusterDetail>();

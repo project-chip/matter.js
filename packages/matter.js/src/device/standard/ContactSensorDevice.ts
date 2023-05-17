@@ -6,13 +6,13 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
+import { ClusterInterface } from "../../cluster/Cluster.js";
 import { Identify, BooleanState } from "../../cluster/interface/index.js";
-import { ServesClusters } from "../ServesClusters.js"
+import { AutoDevice } from "../AutoDevice.js"
 
 export class ContactSensor extends
-    ServesClusters(Device, Identify, BooleanState)
+    AutoDevice.with(Identify, BooleanState)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.CONTACT_SENSOR, [], endpointId);

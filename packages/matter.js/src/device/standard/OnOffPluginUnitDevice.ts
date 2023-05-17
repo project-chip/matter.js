@@ -6,13 +6,13 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
+import { ClusterInterface } from "../../cluster/Cluster.js";
 import { Identify, OnOffLighting, LevelControl } from "../../cluster/interface/index.js";
-import { ServesClusters } from "../ServesClusters.js"
+import { AutoDevice } from "../AutoDevice.js"
 
 export class OnOffPluginUnit extends
-    ServesClusters(Device, Identify, OnOffLighting)
+    AutoDevice.with(Identify, OnOffLighting)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.ON_OFF_PLUGIN_UNIT, [], endpointId);
@@ -22,7 +22,7 @@ export class OnOffPluginUnit extends
         LevelControl
     };
 
-    with(...clusters: typeof OnOffPluginUnit.options[number][]) {
-        return ServesClusters(OnOffPluginUnit, ...clusters);
+    static with(...clusters: ClusterInterface<any>[]) {
+        return AutoDevice.extendDevice(this, ...clusters);
     }
 }

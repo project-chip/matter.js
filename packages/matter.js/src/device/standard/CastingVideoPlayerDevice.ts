@@ -6,13 +6,13 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
+import { ClusterInterface } from "../../cluster/Cluster.js";
 import { OnOffLighting } from "../../cluster/interface/index.js";
-import { ServesClusters } from "../ServesClusters.js"
+import { AutoDevice } from "../AutoDevice.js"
 
 export class CastingVideoPlayer extends
-    ServesClusters(Device, OnOffLighting)
+    AutoDevice.with(OnOffLighting)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.CASTING_VIDEO_PLAYER, [], endpointId);

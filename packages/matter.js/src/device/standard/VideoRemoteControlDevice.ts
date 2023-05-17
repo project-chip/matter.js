@@ -6,10 +6,10 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Device } from "../Device.js";
-import { DeviceTypes } from "../DeviceTypes.js"
+import { DeviceTypes } from "../DeviceTypes.js";
+import { ClusterInterface } from "../../cluster/Cluster.js"
 
-export class VideoRemoteControl extends Device {
+export class VideoRemoteControl extends AutoDevice {
     constructor(endpointId?: number) {
         super(DeviceTypes.VIDEO_REMOTE_CONTROL, [], endpointId);
     }

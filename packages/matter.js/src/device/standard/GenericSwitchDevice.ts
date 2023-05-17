@@ -6,13 +6,13 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
+import { ClusterInterface } from "../../cluster/Cluster.js";
 import { Identify, FixedLabel } from "../../cluster/interface/index.js";
-import { ServesClusters } from "../ServesClusters.js"
+import { AutoDevice } from "../AutoDevice.js"
 
 export class GenericSwitch extends
-    ServesClusters(Device, Identify)
+    AutoDevice.with(Identify)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.GENERIC_SWITCH, [], endpointId);
@@ -22,7 +22,7 @@ export class GenericSwitch extends
         FixedLabel
     };
 
-    with(...clusters: typeof GenericSwitch.options[number][]) {
-        return ServesClusters(GenericSwitch, ...clusters);
+    static with(...clusters: ClusterInterface<any>[]) {
+        return AutoDevice.extendDevice(this, ...clusters);
     }
 }

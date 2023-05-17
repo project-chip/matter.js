@@ -6,12 +6,12 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
+import { ClusterInterface } from "../../cluster/Cluster.js";
 import { Identify } from "../../cluster/interface/index.js";
-import { ServesClusters } from "../ServesClusters.js"
+import { AutoDevice } from "../AutoDevice.js"
 
-export class DoorLockController extends Device {
+export class DoorLockController extends AutoDevice {
     constructor(endpointId?: number) {
         super(DeviceTypes.DOOR_LOCK_CONTROLLER, [], endpointId);
     }
@@ -20,7 +20,7 @@ export class DoorLockController extends Device {
         Identify
     };
 
-    with(...clusters: typeof DoorLockController.options[number][]) {
-        return ServesClusters(DoorLockController, ...clusters);
+    static with(...clusters: ClusterInterface<any>[]) {
+        return AutoDevice.extendDevice(this, ...clusters);
     }
 }

@@ -6,13 +6,13 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Device } from "../Device.js";
 import { DeviceTypes } from "../DeviceTypes.js";
+import { ClusterInterface } from "../../cluster/Cluster.js";
 import { PowerSource as PowerSourceCluster } from "../../cluster/interface/index.js";
-import { ServesClusters } from "../ServesClusters.js"
+import { AutoDevice } from "../AutoDevice.js"
 
 export class PowerSource extends
-    ServesClusters(Device, PowerSourceCluster)
+    AutoDevice.with(PowerSourceCluster)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.POWER_SOURCE, [], endpointId);
