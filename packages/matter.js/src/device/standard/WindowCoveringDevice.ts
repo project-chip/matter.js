@@ -12,8 +12,7 @@ import { Identify } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
 export class WindowCovering extends
-    ServesClusters(Device,
-        Identify)
+    ServesClusters(Device, Identify)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.WINDOW_COVERING, [], endpointId);

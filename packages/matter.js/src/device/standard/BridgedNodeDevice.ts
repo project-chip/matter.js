@@ -12,8 +12,7 @@ import { BridgedDeviceBasicInformation } from "../../cluster/interface/index.js"
 import { ServesClusters } from "../ServesClusters.js"
 
 export class BridgedNode extends
-    ServesClusters(Device,
-        BridgedDeviceBasicInformation)
+    ServesClusters(Device, BridgedDeviceBasicInformation)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.BRIDGED_NODE, [], endpointId);

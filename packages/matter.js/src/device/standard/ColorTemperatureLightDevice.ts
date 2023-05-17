@@ -12,10 +12,7 @@ import { Identify, OnOffLighting, LevelControl } from "../../cluster/interface/i
 import { ServesClusters } from "../ServesClusters.js"
 
 export class ColorTemperatureLight extends
-    ServesClusters(Device,
-        Identify,
-        OnOffLighting,
-        LevelControl)
+    ServesClusters(Device, Identify, OnOffLighting, LevelControl)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.COLOR_TEMPERATURE_LIGHT, [], endpointId);

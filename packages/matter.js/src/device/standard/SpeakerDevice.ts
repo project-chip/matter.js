@@ -12,9 +12,7 @@ import { OnOffLighting, LevelControl } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
 export class Speaker extends
-    ServesClusters(Device,
-        OnOffLighting,
-        LevelControl)
+    ServesClusters(Device, OnOffLighting, LevelControl)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.SPEAKER, [], endpointId);

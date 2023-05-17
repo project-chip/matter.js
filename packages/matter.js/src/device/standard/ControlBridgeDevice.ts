@@ -12,8 +12,7 @@ import { Identify } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
 export class ControlBridge extends
-    ServesClusters(Device,
-        Identify)
+    ServesClusters(Device, Identify)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.CONTROL_BRIDGE, [], endpointId);

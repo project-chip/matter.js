@@ -12,9 +12,7 @@ import { Identify, OnOffLighting, LevelControl } from "../../cluster/interface/i
 import { ServesClusters } from "../ServesClusters.js"
 
 export class OnOffPluginUnit extends
-    ServesClusters(Device,
-        Identify,
-        OnOffLighting)
+    ServesClusters(Device, Identify, OnOffLighting)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.ON_OFF_PLUGIN_UNIT, [], endpointId);

@@ -12,8 +12,7 @@ import { Identify } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
 export class Thermostat extends
-    ServesClusters(Device,
-        Identify)
+    ServesClusters(Device, Identify)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.THERMOSTAT, [], endpointId);

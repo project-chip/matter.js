@@ -12,8 +12,7 @@ import { Identify } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
 export class ColorDimmerSwitch extends
-    ServesClusters(Device,
-        Identify)
+    ServesClusters(Device, Identify)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.COLOR_DIMMER_SWITCH, [], endpointId);

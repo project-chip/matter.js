@@ -12,9 +12,7 @@ import { Identify, IlluminanceMeasurement } from "../../cluster/interface/index.
 import { ServesClusters } from "../ServesClusters.js"
 
 export class LightSensor extends
-    ServesClusters(Device,
-        Identify,
-        IlluminanceMeasurement)
+    ServesClusters(Device, Identify, IlluminanceMeasurement)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.LIGHT_SENSOR, [], endpointId);

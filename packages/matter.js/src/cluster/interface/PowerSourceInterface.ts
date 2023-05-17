@@ -100,11 +100,11 @@ export interface PowerSourceInterface {
     addBatCommonDesignationListener(listener: (newValue: number, oldValue: number) => void): void;
     removeBatCommonDesignationListener(listener: (newValue: number, oldValue: number) => void): void;
 
-    batANSIDesignation?: string;
+    batAnsidesignation?: string;
     addBatAnsidesignationListener(listener: (newValue: string, oldValue: string) => void): void;
     removeBatAnsidesignationListener(listener: (newValue: string, oldValue: string) => void): void;
 
-    batIECDesignation?: string;
+    batIecdesignation?: string;
     addBatIecdesignationListener(listener: (newValue: string, oldValue: string) => void): void;
     removeBatIecdesignationListener(listener: (newValue: string, oldValue: string) => void): void;
 

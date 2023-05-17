@@ -12,9 +12,7 @@ import { Identify, BooleanState } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
 export class ContactSensor extends
-    ServesClusters(Device,
-        Identify,
-        BooleanState)
+    ServesClusters(Device, Identify, BooleanState)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.CONTACT_SENSOR, [], endpointId);

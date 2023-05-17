@@ -73,19 +73,19 @@ CodeModel.clusters.forEach((cluster) => {
     const context = new TypeContext();
     const properties = new Array<string>();
 
-    function createEventProperties(name: string, type: string) {
-        properties.push(`add${name}Listener(listener: ${type}): void;`);
-        properties.push(`remove${name}Listener(listener: ${type}): void;`);
+    function createEventProperties(typeName: string, type: string) {
+        properties.push(`add${typeName}Listener(listener: ${type}): void;`);
+        properties.push(`remove${typeName}Listener(listener: ${type}): void;`);
     }
 
-    Object.entries(cluster.attributes).forEach(([name, attr]) => {
+    cluster.attributes.forEach((attr) => {
         if (GLOBAL_ATTRIBUTE_IDS.has(attr.id)) return;
 
         context.typeName = attr.typeName;
-        context.typeSource = `${cluster.definition}.attributes.${name}.schema`;
+        context.typeSource = `${attr.source}.schema`;
 
         const type = mapType(attr.schema, context);
-        properties.push(`${name}${attr.optional ? "?" : ""}: ${type};`);
+        properties.push(`${attr.fieldName}${attr.optional ? "?" : ""}: ${type};`);
         if (attr.writable) {
             properties.push(`set${context.typeName}(value: ${type}): Promise<void>;`);
         }
@@ -98,13 +98,13 @@ CodeModel.clusters.forEach((cluster) => {
         haveCommand = true;
 
         context.typeName = `${command.typeName}Request`;
-        context.typeSource = `${cluster.name}.commands.${command.name}.requestSchema`;
+        context.typeSource = `${command.source}.requestSchema`;
         const request = command.requestSchema instanceof tlv.TlvVoid.constructor
             ? ""
             : `request: ${mapType(command.requestSchema, context)}`;
 
-        context.typeName = `${command.typeName}Respons`;
-        context.typeSource = `${cluster.name}.commands.${command.name}.responseSchema`;
+        context.typeName = `${command.typeName}Response`;
+        context.typeSource = `${command.source}.responseSchema`;
         const responseType = mapType(command.responseSchema, context);
 
         properties.push(`invoke${command.name}(${request}): Promise<${responseType}>;`)
@@ -113,30 +113,28 @@ CodeModel.clusters.forEach((cluster) => {
     if (haveCommand) properties.push("");
 
     cluster.events.map((event) => {
-        context.typeName = `${event.name}Event`;
-        context.typeSource = `${cluster.definition}.events.${name}.schema`;
+        context.typeName = `${event.typeName}Event`;
+        context.typeSource = `${event.source}.schema`;
         const type = mapType(event.schema, context);
 
-        createEventProperties(event.name, `(event: ${type}) => void`);
+        createEventProperties(event.typeName, `(event: ${type}) => void`);
         properties.push("");
     });
-
-    const baseTypeName = cluster.name.replace(/Cluster$/, "");
 
     let definitions = context.definitions.join("\n\n");
     if (definitions) definitions = `${definitions}\n`;
 
     writeTS(`cluster/interface/${cluster.interfaceName}`,
-        `import { ${cluster.definition}, ClusterInterface } from "../index.js";
+        `import { ${cluster.definitionName}, ClusterInterface } from "../index.js";
 ${definitions}
 export interface ${cluster.interfaceName} {
     ${properties.map((p) => p ? `    ${p}` : "").join("\n").trim()}
 }
 
-export const ${baseTypeName}:
+export const ${cluster.name}:
     ClusterInterface<${cluster.interfaceName}> =
 {
-    definition: ${cluster.definition}
+    definition: ${cluster.definitionName}
 };
 `);
 

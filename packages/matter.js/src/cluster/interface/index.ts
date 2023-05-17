@@ -6,9 +6,11 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+export * from "./BasicAdminCommissioningInterface.js";
+export * from "./PowerSourceConfigurationInterface.js";
+export * from "./WifiNetworkCommissioningInterface.js";
 export * from "./PowerSourceInterface.js";
 export * from "./BridgedDeviceBasicInformationInterface.js";
-export * from "./PowerSourceConfigurationInterface.js";
 export * from "./IdentifyInterface.js";
 export * from "./OnOffLightingInterface.js";
 export * from "./LevelControlInterface.js";

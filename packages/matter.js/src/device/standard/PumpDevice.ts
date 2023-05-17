@@ -12,9 +12,7 @@ import { OnOffLighting, Identify, LevelControl, TemperatureMeasurement, Pressure
 import { ServesClusters } from "../ServesClusters.js"
 
 export class Pump extends
-    ServesClusters(Device,
-        OnOffLighting,
-        Identify)
+    ServesClusters(Device, OnOffLighting, Identify)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.PUMP, [], endpointId);

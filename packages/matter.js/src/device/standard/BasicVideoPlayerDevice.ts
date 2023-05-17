@@ -12,8 +12,7 @@ import { OnOffLighting } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
 export class BasicVideoPlayer extends
-    ServesClusters(Device,
-        OnOffLighting)
+    ServesClusters(Device, OnOffLighting)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.BASIC_VIDEO_PLAYER, [], endpointId);

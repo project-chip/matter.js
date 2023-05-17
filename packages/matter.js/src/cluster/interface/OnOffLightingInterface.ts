@@ -37,12 +37,12 @@ export interface OnOffLightingInterface {
     addStartUpOnOffListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
     removeStartUpOnOffListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
 
-    sendOff(): Promise<void>;
-    sendOn(): Promise<void>;
-    sendToggle(): Promise<void>;
-    sendOffWithEffect(request: OffWithEffectRequest): Promise<void>;
-    sendOnWithRecallGlobalScene(): Promise<void>;
-    sendOnWithTimedOff(request: OnWithTimedOffRequest): Promise<void>;
+    invokeoff(): Promise<void>;
+    invokeon(): Promise<void>;
+    invoketoggle(): Promise<void>;
+    invokeoffWithEffect(request: OffWithEffectRequest): Promise<void>;
+    invokeonWithRecallGlobalScene(): Promise<void>;
+    invokeonWithTimedOff(request: OnWithTimedOffRequest): Promise<void>;
 }
 
 export const OnOffLighting:

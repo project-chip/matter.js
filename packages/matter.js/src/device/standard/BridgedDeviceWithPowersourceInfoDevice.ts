@@ -12,10 +12,7 @@ import { BridgedDeviceBasicInformation, PowerSourceConfiguration, PowerSource } 
 import { ServesClusters } from "../ServesClusters.js"
 
 export class BridgedDeviceWithPowersourceInfo extends
-    ServesClusters(Device,
-        BridgedDeviceBasicInformation,
-        PowerSourceConfiguration,
-        PowerSource)
+    ServesClusters(Device, BridgedDeviceBasicInformation, PowerSourceConfiguration, PowerSource)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.BRIDGED_DEVICE_WITH_POWERSOURCE_INFO, [], endpointId);

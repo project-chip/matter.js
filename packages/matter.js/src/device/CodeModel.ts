@@ -73,14 +73,16 @@ function camelize(name: string, upperFirst = true) {
 }
 
 class Elements<T, ST> extends Array<T> {
-    constructor(public definitions: { [key: string]: ST }, Cons: new (name: string, definition: ST) => T) {
-        super(...Object.entries(definitions).map(([k, v]) => new Cons(k, v)));
+    constructor(definitions: { [key: string]: ST }, Cons: new (name: string, definition: ST, cluster: string) => T, cluster: string) {
+        super(...Object.entries(definitions).map(([k, v]) => new Cons(k, v, `${cluster}.${Cons.name.toLowerCase()}s`)));
     }
 }
 
 class Element<T> {
-    constructor(public name: string, public definition: T) { }
+    constructor(public name: string, public definition: T, private parentSource: string) { }
     get typeName() { return camelize(this.name); }
+    get fieldName() { return camelize(this.name, false); }
+    get source() { return `${this.parentSource}.${camelize(this.fieldName, false)}` }
 }
 
 class Attribute extends Element<clusterExports.Attribute<any>> {
@@ -104,22 +106,22 @@ class Event extends Element<clusterExports.Event<any>> {
  */
 class ClusterDetail {
     constructor(
-        public name: string,
+        public definitionName: string,
         public definition: Cluster<any, any, Attributes, Commands, Events>,
-        public attributes = new Elements(definition.attributes, Attribute),
-        public commands = new Elements(definition.commands, Command),
-        public events = new Elements(definition.events, Event)) { }
+        public attributes = new Elements(definition.attributes, Attribute, definitionName),
+        public commands = new Elements(definition.commands, Command, definitionName),
+        public events = new Elements(definition.events, Event, definitionName)) { }
 
     get id() {
         return this.definition.id;
     }
 
-    get interfaceName() {
-        return `${this.name}Interface`;
+    get name() {
+        return this.definitionName.slice(0, this.definitionName.length - 7);
     }
 
-    get definitionName() {
-        return `${this.name}Cluster`;
+    get interfaceName() {
+        return `${this.name}Interface`;
     }
 }
 
@@ -151,7 +153,7 @@ export class CodeModel {
             if (key.match(/[a-z]Cluster$/i)) {
                 const cluster = (<any>clusterExports)[key];
                 if (INTERNAL_CLUSTERS.indexOf(cluster) !== -1) continue;
-                availableClusters.set(cluster.id, new ClusterDetail(key.slice(0, key.length - 7), cluster));
+                availableClusters.set(cluster.id, new ClusterDetail(key, cluster));
             }
         }
 

@@ -12,9 +12,7 @@ import { TemperatureMeasurement, Identify } from "../../cluster/interface/index.
 import { ServesClusters } from "../ServesClusters.js"
 
 export class TemperatureSensor extends
-    ServesClusters(Device,
-        TemperatureMeasurement,
-        Identify)
+    ServesClusters(Device, TemperatureMeasurement, Identify)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.TEMPERATURE_SENSOR, [], endpointId);

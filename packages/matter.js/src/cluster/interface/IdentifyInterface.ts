@@ -23,8 +23,8 @@ export interface IdentifyInterface {
     addIdentifyTypeListener(listener: (newValue: number, oldValue: number) => void): void;
     removeIdentifyTypeListener(listener: (newValue: number, oldValue: number) => void): void;
 
-    sendIdentify(request: IdentifyRequest): Promise<void>;
-    sendTriggerEffect(request: TriggerEffectRequest): Promise<void>;
+    invokeidentify(request: IdentifyRequest): Promise<void>;
+    invoketriggerEffect(request: TriggerEffectRequest): Promise<void>;
 }
 
 export const Identify:

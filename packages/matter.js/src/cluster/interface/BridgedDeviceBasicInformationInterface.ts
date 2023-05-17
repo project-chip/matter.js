@@ -59,7 +59,7 @@ export interface BridgedDeviceBasicInformationInterface {
     addPartNumberListener(listener: (newValue: string, oldValue: string) => void): void;
     removePartNumberListener(listener: (newValue: string, oldValue: string) => void): void;
 
-    productURL?: string;
+    productUrl?: string;
     addProductUrlListener(listener: (newValue: string, oldValue: string) => void): void;
     removeProductUrlListener(listener: (newValue: string, oldValue: string) => void): void;
 

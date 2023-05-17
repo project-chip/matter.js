@@ -12,9 +12,7 @@ import { Identify, OccupancySensing } from "../../cluster/interface/index.js";
 import { ServesClusters } from "../ServesClusters.js"
 
 export class OccupancySensor extends
-    ServesClusters(Device,
-        Identify,
-        OccupancySensing)
+    ServesClusters(Device, Identify, OccupancySensing)
 {
     constructor(endpointId?: number) {
         super(DeviceTypes.OCCUPANCY_SENSOR, [], endpointId);

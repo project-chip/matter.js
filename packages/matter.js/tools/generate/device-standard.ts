@@ -12,19 +12,24 @@ clean("device/standard", "Device");
 
 const moduleExports = new Array<string>();
 
-const clusterNames = (clusters: any[]) => clusters.map((cluster) => cluster.name);
-
 CodeModel.devices.forEach((device) => {
+    const clusterNames = (clusters: any[]) =>
+        <{ [name: string]: string }>Object.fromEntries(clusters.map((cluster) => [
+            cluster.name == device.name
+                ? `${cluster.name}Cluster`
+                : cluster.name,
+            cluster.name
+        ]));
+
     // Configure required interfaces
-    const interfaces = Array<string>();
     const requiredInterfaces = clusterNames(device.requiredServerClusters);
-    interfaces.push(...requiredInterfaces);
+    const interfaces = {} as typeof requiredInterfaces;
+    Object.assign(interfaces, requiredInterfaces);
 
     let baseClass;
-    if (requiredInterfaces.length) {
+    if (Object.keys(requiredInterfaces).length) {
         baseClass = `
-    ServesClusters(Device,
-        ${requiredInterfaces.join(",\n        ")})
+    ServesClusters(Device, ${Object.keys(requiredInterfaces).join(", ")})
 `;
     } else {
         baseClass = " Device ";
@@ -33,12 +38,12 @@ CodeModel.devices.forEach((device) => {
     // Configure optional interfaces
     const optionalInterfaces = clusterNames(device.optionalServerClusters);
     let options: string;
-    if (optionalInterfaces.length) {
-        interfaces.push(...optionalInterfaces);
+    if (Object.keys(optionalInterfaces).length) {
+        Object.assign(interfaces, optionalInterfaces);
         options = `
 
     static readonly options = [
-        ${optionalInterfaces.join(",\n        ")}
+        ${Object.keys(optionalInterfaces).join(",\n        ")}
     ];
 
     with(...clusters: typeof ${device.name}.options[number][]) {
@@ -53,8 +58,10 @@ CodeModel.devices.forEach((device) => {
         'import { Device } from "../Device.js"',
         'import { DeviceTypes } from "../DeviceTypes.js"',
     ];
-    if (interfaces.length) {
-        imports.push(`import { ${interfaces.join(', ')} } from "../../cluster/interface/index.js"`);
+    if (Object.keys(interfaces).length) {
+        const importNames = Object.entries(interfaces).map(([k, v]) =>
+            k == v ? k : `${v} as ${k}`);
+        imports.push(`import { ${importNames.join(', ')} } from "../../cluster/interface/index.js"`);
         imports.push('import { ServesClusters } from "../ServesClusters.js"');
     }
 
