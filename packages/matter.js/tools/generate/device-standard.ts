@@ -6,17 +6,15 @@
 
 // Generates standard device implementations into src/device/standard
 
-import { camelize, clean, writeTS, devices, ClusterDetail } from "./util.js";
+import { clean, writeTS, CodeModel } from "./util.js";
 
 clean("device/standard", "Device");
 
 const moduleExports = new Array<string>();
 
-const clusterNames = (clusters: ClusterDetail[]) => clusters.map((cluster) => cluster.name);
+const clusterNames = (clusters: any[]) => clusters.map((cluster) => cluster.name);
 
-devices.forEach((device) => {
-    const className = camelize(device.name);
-
+CodeModel.devices.forEach((device) => {
     // Configure required interfaces
     const interfaces = Array<string>();
     const requiredInterfaces = clusterNames(device.requiredServerClusters);
@@ -43,8 +41,8 @@ devices.forEach((device) => {
         ${optionalInterfaces.join(",\n        ")}
     ];
 
-    with(...clusters: typeof ${className}.options[number][]) {
-        return ServesClusters(${className}, ...clusters);
+    with(...clusters: typeof ${device.name}.options[number][]) {
+        return ServesClusters(${device.name}, ...clusters);
     }`;
     } else {
         options = "";
@@ -61,16 +59,16 @@ devices.forEach((device) => {
     }
 
     // Generate the file
-    writeTS(`device/standard/${className}Device`,
+    writeTS(`device/standard/${device.name}Device`,
         `${imports.join(";\n")}
 
-export class ${className} extends${baseClass}{
+export class ${device.name} extends${baseClass}{
     constructor(endpointId?: number) {
-        super(DeviceTypes.${device.name}, [], endpointId);
+        super(DeviceTypes.${device.key}, [], endpointId);
     }${options}
 }
 `);
-    moduleExports.push(`export * from "./${className}Device.js";`)
+    moduleExports.push(`export * from "./${device.name}Device.js";`)
 });
 
 writeTS("device/standard/index", moduleExports.join("\n"));
