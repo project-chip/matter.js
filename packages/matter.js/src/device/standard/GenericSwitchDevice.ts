@@ -18,9 +18,9 @@ export class GenericSwitch extends
         super(DeviceTypes.GENERIC_SWITCH, [], endpointId);
     }
 
-    static readonly options = [
+    static readonly options = {
         FixedLabel
-    ];
+    };
 
     with(...clusters: typeof GenericSwitch.options[number][]) {
         return ServesClusters(GenericSwitch, ...clusters);

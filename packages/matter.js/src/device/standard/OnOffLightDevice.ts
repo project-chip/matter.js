@@ -18,9 +18,9 @@ export class OnOffLight extends
         super(DeviceTypes.ON_OFF_LIGHT, [], endpointId);
     }
 
-    static readonly options = [
+    static readonly options = {
         LevelControl
-    ];
+    };
 
     with(...clusters: typeof OnOffLight.options[number][]) {
         return ServesClusters(OnOffLight, ...clusters);

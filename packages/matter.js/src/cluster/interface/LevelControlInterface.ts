@@ -77,14 +77,14 @@ export interface LevelControlInterface {
     addStartUpCurrentLevelListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
     removeStartUpCurrentLevelListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
 
-    invokemoveToLevel(request: MoveToLevelRequest): Promise<void>;
-    invokemove(request: MoveRequest): Promise<void>;
-    invokestep(request: StepRequest): Promise<void>;
-    invokestop(request: StopRequest): Promise<void>;
-    invokemoveToLevelWithOnOff(request: MoveToLevelWithOnOffRequest): Promise<void>;
-    invokemoveWithOnOff(request: MoveWithOnOffRequest): Promise<void>;
-    invokestepWithOnOff(request: StepWithOnOffRequest): Promise<void>;
-    invokestopWithOnOff(request: StopWithOnOffRequest): Promise<void>;
+    invokeMoveToLevel(request: MoveToLevelRequest): Promise<void>;
+    invokeMove(request: MoveRequest): Promise<void>;
+    invokeStep(request: StepRequest): Promise<void>;
+    invokeStop(request: StopRequest): Promise<void>;
+    invokeMoveToLevelWithOnOff(request: MoveToLevelWithOnOffRequest): Promise<void>;
+    invokeMoveWithOnOff(request: MoveWithOnOffRequest): Promise<void>;
+    invokeStepWithOnOff(request: StepWithOnOffRequest): Promise<void>;
+    invokeStopWithOnOff(request: StopWithOnOffRequest): Promise<void>;
 }
 
 export const LevelControl:

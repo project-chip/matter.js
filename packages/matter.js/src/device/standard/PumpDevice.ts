@@ -18,12 +18,12 @@ export class Pump extends
         super(DeviceTypes.PUMP, [], endpointId);
     }
 
-    static readonly options = [
+    static readonly options = {
         LevelControl,
         TemperatureMeasurement,
         PressureMeasurement,
         FlowMeasurement
-    ];
+    };
 
     with(...clusters: typeof Pump.options[number][]) {
         return ServesClusters(Pump, ...clusters);

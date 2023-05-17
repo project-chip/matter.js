@@ -18,9 +18,9 @@ export class OnOffPluginUnit extends
         super(DeviceTypes.ON_OFF_PLUGIN_UNIT, [], endpointId);
     }
 
-    static readonly options = [
+    static readonly options = {
         LevelControl
-    ];
+    };
 
     with(...clusters: typeof OnOffPluginUnit.options[number][]) {
         return ServesClusters(OnOffPluginUnit, ...clusters);

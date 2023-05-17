@@ -42,9 +42,9 @@ CodeModel.devices.forEach((device) => {
         Object.assign(interfaces, optionalInterfaces);
         options = `
 
-    static readonly options = [
+    static readonly options = {
         ${Object.keys(optionalInterfaces).join(",\n        ")}
-    ];
+    };
 
     with(...clusters: typeof ${device.name}.options[number][]) {
         return ServesClusters(${device.name}, ...clusters);

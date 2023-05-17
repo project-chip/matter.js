@@ -67,11 +67,11 @@ export interface WifiNetworkCommissioningInterface {
     addConnectMaxTimeSecondsListener(listener: (newValue: number, oldValue: number) => void): void;
     removeConnectMaxTimeSecondsListener(listener: (newValue: number, oldValue: number) => void): void;
 
-    invokescanNetworks(request: ScanNetworksRequest): Promise<ScanNetworksResponse>;
-    invokeremoveNetwork(request: RemoveNetworkRequest): Promise<RemoveNetworkResponse>;
-    invokeconnectNetwork(request: ConnectNetworkRequest): Promise<ConnectNetworkResponse>;
-    invokereorderNetwork(request: ReorderNetworkRequest): Promise<ReorderNetworkResponse>;
-    invokeaddOrUpdateWiFiNetwork(request: AddOrUpdateWiFiNetworkRequest): Promise<AddOrUpdateWiFiNetworkResponse>;
+    invokeScanNetworks(request: ScanNetworksRequest): Promise<ScanNetworksResponse>;
+    invokeRemoveNetwork(request: RemoveNetworkRequest): Promise<RemoveNetworkResponse>;
+    invokeConnectNetwork(request: ConnectNetworkRequest): Promise<ConnectNetworkResponse>;
+    invokeReorderNetwork(request: ReorderNetworkRequest): Promise<ReorderNetworkResponse>;
+    invokeAddOrUpdateWiFiNetwork(request: AddOrUpdateWiFiNetworkRequest): Promise<AddOrUpdateWiFiNetworkResponse>;
 }
 
 export const WifiNetworkCommissioning:

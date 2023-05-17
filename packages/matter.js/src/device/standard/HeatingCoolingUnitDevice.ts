@@ -18,9 +18,9 @@ export class HeatingCoolingUnit extends
         super(DeviceTypes.HEATING_COOLING_UNIT, [], endpointId);
     }
 
-    static readonly options = [
+    static readonly options = {
         LevelControl
-    ];
+    };
 
     with(...clusters: typeof HeatingCoolingUnit.options[number][]) {
         return ServesClusters(HeatingCoolingUnit, ...clusters);

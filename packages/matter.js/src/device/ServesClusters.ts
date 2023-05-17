@@ -6,16 +6,30 @@
 
 import { Device } from "./Device.js";
 import { Cluster, ClusterInterface, Attributes, Commands, Events } from "../cluster/Cluster.js";
-import { UnionToIntersection } from "../util/Type.js";
 
-type ExtractInterface<CI> = CI extends ClusterInterface<infer I> ? I : never;
-type ExtractInterfaces<CIT> = { [K in keyof CIT]: ExtractInterface<CIT[K]> };
-type MergeInterfaces<CIT extends ClusterInterface<any>[]> = UnionToIntersection<ExtractInterfaces<CIT[number]>>;
+/**
+ * Unify multiple interfaces into a single type.
+ */
+type ClusterType<T> =
+    T extends [ClusterInterface<infer C>]
+        ? C
+        : T extends [ ClusterInterface<infer C>, ...infer R ]
+            ? C & ClusterType<R>
+            : never;
 
+/**
+ * Creates a new class that extends a base device type with additional cluster
+ * implementations.
+ * 
+ * @param base the class to extend
+ * @param interfaces the set of interfaces to implement
+ * @returns the new class
+ */
 export function ServesClusters<BaseT extends new (...args: any[]) => Device,
-    Interfaces extends ClusterInterface<any>[]>(BaseClass: BaseT, ...interfaces: Interfaces):
-    BaseT & MergeInterfaces<Interfaces> {
-    class ExtendedDevice extends BaseClass {
+    Interfaces extends ClusterInterface<any>[]>(base: BaseT, ...interfaces: Interfaces):
+    new (...args: any[]) => BaseT & ClusterType<Interfaces>
+{
+    class ExtendedDevice extends base {
         constructor(...args: any[]) {
             super(...args);
 

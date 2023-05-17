@@ -26,9 +26,9 @@ export interface BasicAdminCommissioningInterface {
     addAdminVendorIdListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
     removeAdminVendorIdListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
 
-    invokeopenCommissioningWindow(request: OpenCommissioningWindowRequest): Promise<void>;
-    invokerevokeCommissioning(): Promise<void>;
-    invokeopenBasicCommissioningWindow(request: OpenBasicCommissioningWindowRequest): Promise<void>;
+    invokeOpenCommissioningWindow(request: OpenCommissioningWindowRequest): Promise<void>;
+    invokeRevokeCommissioning(): Promise<void>;
+    invokeOpenBasicCommissioningWindow(request: OpenBasicCommissioningWindowRequest): Promise<void>;
 }
 
 export const BasicAdminCommissioning:

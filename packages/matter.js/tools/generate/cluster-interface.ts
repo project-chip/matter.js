@@ -107,7 +107,7 @@ CodeModel.clusters.forEach((cluster) => {
         context.typeSource = `${command.source}.responseSchema`;
         const responseType = mapType(command.responseSchema, context);
 
-        properties.push(`invoke${command.name}(${request}): Promise<${responseType}>;`)
+        properties.push(`invoke${command.typeName}(${request}): Promise<${responseType}>;`)
     });
 
     if (haveCommand) properties.push("");
