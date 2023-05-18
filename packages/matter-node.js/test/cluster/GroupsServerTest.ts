@@ -18,7 +18,6 @@ Time.get = () => new TimeFake(0);
 import * as assert from "assert";
 import { ClusterServer, StatusCode } from "@project-chip/matter.js/interaction";
 import { SecureSession } from "@project-chip/matter.js/session";
-import { MatterDevice } from "@project-chip/matter.js";
 import { Fabric, FabricJsonObject } from "@project-chip/matter.js/fabric";
 import {
     ClusterServerObj, GroupsCluster, GroupsClusterHandler, IdentifyCluster, ClusterServerHandlers, IdentifyType
@@ -32,7 +31,7 @@ import { Endpoint, DeviceTypes } from "@project-chip/matter.js/device";
 describe("Groups Server test", () => {
     let groupsServer: ClusterServerObj<typeof GroupsCluster.attributes, typeof GroupsCluster.commands> | undefined;
     let testFabric: Fabric | undefined;
-    let testSession: SecureSession<MatterDevice> | undefined
+    let testSession: SecureSession<any> | undefined
     let endpoint: Endpoint | undefined;
     let endpoint2: Endpoint | undefined;
 

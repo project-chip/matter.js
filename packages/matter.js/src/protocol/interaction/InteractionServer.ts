@@ -18,9 +18,6 @@ import {
 import { BitSchema, TypeFromBitSchema } from "../../schema/BitmapSchema.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
-import { DeviceTypeId } from "../../datatype/DeviceTypeId.js";
-import { ClusterId } from "../../datatype/ClusterId.js";
-import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { SubscriptionHandler } from "./SubscriptionHandler.js";
 import { Message } from "../../codec/MessageCodec.js";
@@ -31,7 +28,6 @@ import {
 } from "../../cluster/server/ClusterServer.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { AttributeGetterServer, AttributeServer } from "../../cluster/server/AttributeServer.js";
-import { DescriptorCluster } from "../../cluster/DescriptorCluster.js";
 import { Logger } from "../../log/Logger.js";
 import { StorageContext } from "../../storage/StorageContext.js";
 import { StorageManager } from "../../storage/StorageManager.js";
@@ -40,7 +36,6 @@ import { Endpoint } from "../../device/Endpoint.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { CommandId } from "../../datatype/CommandId.js";
 import { TlvAttributeValuePair } from "../../cluster/ScenesCluster.js";
-import { DeviceTypes } from "../../device/DeviceTypes.js";
 
 export const INTERACTION_PROTOCOL_ID = 0x0001;
 
@@ -236,7 +231,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     private attributes = new Map<string, AttributeServer<any>>();
     private attributePaths = new Array<AttributePath>();
     private commands = new Map<string, CommandServer<Attributes, Commands>>();
-    private commandPaths = new Array<CommandPath>();
+    //private commandPaths = new Array<CommandPath>(); // TODO Re-add when supporting wildcard commands
     private nextSubscriptionId = Crypto.getRandomUInt32();
 
     constructor(
@@ -247,65 +242,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         return INTERACTION_PROTOCOL_ID;
     }
 
-    /**
-     * @deprecated
-     */
-    addEndpoint(endpointId: number, device: { name: string, code: number }, clusters: ClusterServerObj<Attributes, Commands>[]) {
-        // Add the descriptor cluster
-        const descriptorCluster = ClusterServer(DescriptorCluster, {
-            deviceTypeList: [{ revision: 1, deviceType: new DeviceTypeId(device.code) }],
-            serverList: [],
-            clientList: [],
-            partsList: [],
-        }, {});
-        clusters.push(descriptorCluster);
-        descriptorCluster.attributes.serverList.setLocal(clusters.map(({ id }) => new ClusterId(id)));
-
-        const clusterEndpointNumber = new EndpointNumber(endpointId);
-        const deviceDefinition = Object.values(DeviceTypes).find(({ code }) => code === device.code);
-        if (deviceDefinition === undefined) throw new Error(`Unknown device code ${device.code}`);
-        const endpoint = new Endpoint([deviceDefinition], [], endpointId);
-
-        const clusterMap = new Map<number, ClusterServerObj<Attributes, Commands>>();
-        clusters.forEach(cluster => {
-            const { id: clusterId, attributes, _commands: commands } = cluster;
-
-            cluster._setStorage(this.storageManager.createContext(`Cluster-${clusterEndpointNumber.number}-${clusterId}`));
-            cluster._assignToEndpoint(endpoint);
-
-            clusterMap.set(clusterId, cluster);
-            endpoint.addClusterServer(cluster);
-            // Add attributes
-            for (const name in attributes) {
-                const attribute = attributes[name];
-                const path = { endpointId, clusterId, attributeId: attribute.id };
-                this.attributes.set(attributePathToId(path), attribute);
-                this.attributePaths.push(path);
-            }
-
-            // Add commands
-            for (const name in commands) {
-                const command = commands[name];
-                const path = { endpointId, clusterId, commandId: command.invokeId };
-                this.commands.set(commandPathToId(path), command);
-                this.commandPaths.push(path);
-            }
-        });
-
-        // Add part list if the endpoint is not root
-        if (endpointId !== 0) {
-            const rootPartsListAttribute: AttributeServer<EndpointNumber[]> | undefined = this.attributes.get(attributePathToId({ endpointId: 0, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id }));
-            if (rootPartsListAttribute === undefined) throw new Error("The root endpoint should be added first!");
-            rootPartsListAttribute.setLocal([...rootPartsListAttribute.getLocal(), clusterEndpointNumber]);
-        }
-
-        this.endpoints.set(endpointId, endpoint);
-
-        return this;
-    }
-
     setRootEndpoint(endpoint: Endpoint) {
-        const { endpoints, attributes, attributePaths, commands, commandPaths } = endpoint.getStructure();
+        const { endpoints, attributes, attributePaths, commands, /* commandPaths*/ } = endpoint.getStructure();
 
         this.endpoints = new Map<number, Endpoint>();
         for (const [endpointId, subEndpoint] of endpoints) {
@@ -318,7 +256,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         this.attributes = attributes;
         this.attributePaths = attributePaths;
         this.commands = commands;
-        this.commandPaths = commandPaths;
+        //this.commandPaths = commandPaths; // // TODO Re-add when supporting wildcard commands
 
         return this;
     }
