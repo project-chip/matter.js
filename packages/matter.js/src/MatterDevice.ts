@@ -7,6 +7,7 @@
 /**
  * Important note: This file is part of the legacy matter-node (internal) API and should not be used anymore directly!
  * Please use the new API classes!
+ * @deprecated
  */
 
 import { Session } from "./session/Session.js";

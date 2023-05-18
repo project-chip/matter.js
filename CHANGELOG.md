@@ -3,14 +3,21 @@
 This page tries to get an detailed overview of the changes between versions without the need to look into code, especially to see relevant changes while interfaces and features are still in flux.
 All Changes without a GitHub Username in brackets are from the core team: @Apollon77, @mfucci and @turon
 
-## 0.4.0 (WIP)
+## 0.5.0 (WIP)
 * Matter-Core functionality:
-  * Breaking: Remove the exposed legacy API classes (MatterDevice/MatterController) and legacy examples from the exported lists
+  * Deprecation: The classes MatterDevice and MatterController are deprecated to be used externally to the library and will be removed in later versions.
+  * Deprecation: The CLI Examples LegacyDeviceNode and LegacyControllerNode will be removed in next version! Use the new variants please.
+
+## 0.4.0 (2023-05-16)
+* Matter-Core functionality:
   * Feature: Generate global Attributes attributeList, acceptedCommandList and generatedCommandList when generating cluster servers (when used with New API!)
   * Feature: (@digitaldan) Added decoding of Pairingcodes to determine discriminator and pin for Controller usage
   * Feature: Provide the Endpoint as data field for command Handlers to allow to access the endpoint data and other clusters on that endpoint if needed
   * Feature: Add Implementations of Scenes and Groups-Clusters (still to be tested with Controllers in depth!)
   * Feature: Add ClusterExtend to allow building Feature-based conditional cluster definitions (and do that for OnOff/Network-Commissioning)
+  * Feature: Refactored Endpoint/Fabric aware Attributes with Getter functions to use Endpoint instance
+  * Feature: Added automatic API documentation generation (not included in npm package but can be build locally using npm run build-doc)
+  * Feature: Improved Command Invoke Logging
   * Adjustment: Do not send empty arrays for empty subscription messages to further shorten the payload
   * Fix: Respond with Unsupported Command when a unknown command is received and log the error
   * Fix: Increase the array maximum size according to specs
@@ -34,6 +41,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
     * the "npm run matter" command got renamed to "npm run matter-device" (same for binary usage
     * Add hints for all imports in the examples to show what the corresponding "matter-node.js" import would be (because they can not be used directly for build reasons)
     * Added the "npm run matter-*" commands also to the base package.json
+    * Added parameter -clearstorage to start with an empty storage
 
 ## 0.3.0 (2023-05-03)
 * Initial release of matter.js and matter-node.js packages after the code merge
