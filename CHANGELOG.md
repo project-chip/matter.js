@@ -5,11 +5,24 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
 
 ## 0.5.0 (WIP)
 * Matter-Core functionality:
-  * Deprecation: The classes MatterDevice and MatterController are deprecated to be used externally to the library and will be removed in later versions.
-  * Deprecation: The CLI Examples LegacyDeviceNode and LegacyControllerNode will be removed in next version! Use the new variants please.
+  * Breaking: Added support to allow to clearly model some more attribute types with internally different behaviour:
+    * Added types for WritableFabricScopedAttribute and OptionalWritableFabricScopedAttribute
+    * Added types for FixedAttribute and OptionalFixedAttribute
+    * Added FixedAttributeServer which only allows to "get" the value but not to set it
+    * Added FabricScopedAttributeServer which gets and sets the value based on the provided fabric
+    * Update ClusterServerObj and ClusterClientObj typings to respect these Attribute types
+    * Updated all Cluster definitions that use such attribute types
+  * Fix Typing of Commands in ClusterClient if no commands were present
+  * Fix: Fix equality checks in Attribute servers to check deeper then just === (and introduce new util method isDeepEqual)
+
+* matter.js API:
+  * Breaking: Remove the Legacy API classes from examples and also do not export them anymore. use the new API please!
+  * Breaking: Adjusted some constructors of the new API and remove the option to pass an array of clusters to be added initially because this was no longer compatible to the strong typing in some places. Use addClusterServer and addClusterClient methods
 
 ## 0.4.0 (2023-05-16)
 * Matter-Core functionality:
+  * Deprecation: The classes MatterDevice and MatterController are deprecated to be used externally to the library and will be removed in later versions.
+  * Deprecation: The CLI Examples LegacyDeviceNode and LegacyControllerNode will be removed in next version! Use the new variants please.
   * Feature: Generate global Attributes attributeList, acceptedCommandList and generatedCommandList when generating cluster servers (when used with New API!)
   * Feature: (@digitaldan) Added decoding of Pairingcodes to determine discriminator and pin for Controller usage
   * Feature: Provide the Endpoint as data field for command Handlers to allow to access the endpoint data and other clusters on that endpoint if needed

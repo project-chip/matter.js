@@ -9,7 +9,7 @@ import {
     AttributePath, attributePathToId, ClusterServer, CommandPath, commandPathToId
 } from "../protocol/interaction/InteractionServer.js";
 import { AtLeastOne } from "../util/Array.js";
-import { AttributeServer } from "../cluster/server/AttributeServer.js";
+import { AttributeServer, FabricScopedAttributeServer } from "../cluster/server/AttributeServer.js";
 import { CommandServer } from "../cluster/server/CommandServer.js";
 import { DescriptorCluster } from "../cluster/DescriptorCluster.js";
 import { DeviceTypeId } from "../datatype/DeviceTypeId.js";
@@ -18,9 +18,10 @@ import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { FixedLabelCluster, UserLabelCluster } from "../cluster/LabelCluster.js";
-import { ClusterClientObj, isClusterClient } from "../cluster/client/ClusterClient.js";
-import { ClusterServerObj, isClusterServer } from "../cluster/server/ClusterServer.js";
+import { ClusterClientObj } from "../cluster/client/ClusterClient.js";
+import { ClusterServerObj } from "../cluster/server/ClusterServer.js";
 import { InteractionClient } from "../protocol/interaction/InteractionClient.js";
+import { AllClustersMap } from "../cluster/index.js";
 
 export class Endpoint {
     private readonly clusterServers = new Map<number, ClusterServerObj<Attributes, Commands>>();
@@ -33,7 +34,6 @@ export class Endpoint {
 
     constructor(
         protected deviceTypes: AtLeastOne<DeviceTypeDefinition>,
-        clusters: (ClusterServerObj<Attributes, Commands> | ClusterClientObj<Attributes, Commands>)[] = [],
         endpointId?: number
     ) {
         this.name = deviceTypes[0].name;
@@ -53,14 +53,6 @@ export class Endpoint {
         this.addClusterServer(this.descriptorCluster);
         this.setDeviceTypes(deviceTypes);
 
-        // Then the other clusters - if provided already
-        clusters.forEach(cluster => {
-            if (isClusterServer(cluster)) {
-                this.addClusterServer(cluster);
-            } else if (isClusterClient(cluster)) {
-                this.addClusterClient(cluster);
-            }
-        });
         if (endpointId !== undefined) {
             this.id = endpointId;
         }
@@ -207,7 +199,8 @@ export class Endpoint {
         this.deviceTypes.forEach(deviceType => {
             deviceType.requiredServerClusters?.forEach(clusterId => {
                 if (!this.clusterServers.has(clusterId)) {
-                    throw new Error(`Device type ${deviceType.name} (0x${deviceType.code.toString(16)}) requires cluster server 0x${clusterId.toString(16)} but it is not present on endpoint ${this.id}`);
+                    const clusterName = AllClustersMap[clusterId] ? AllClustersMap[clusterId].name : "unknown";
+                    throw new Error(`Device type ${deviceType.name} (0x${deviceType.code.toString(16)}) requires cluster server ${clusterName}(0x${clusterId.toString(16)}) but it is not present on endpoint ${this.id}`);
                 }
             });
 
@@ -215,8 +208,9 @@ export class Endpoint {
                 throw new Error(`Devices with client clusters are not supported yet`);
             }
             deviceType.requiredClientClusters?.forEach(clusterId => {
+                const clusterName = AllClustersMap[clusterId] ? AllClustersMap[clusterId].name : "unknown";
                 if (!this.clusterClients.has(clusterId)) {
-                    throw new Error(`Device type ${deviceType.name} (0x${deviceType.code.toString(16)}) requires cluster client 0x${clusterId.toString(16)} but it is not present on endpoint ${this.id}`);
+                    throw new Error(`Device type ${deviceType.name} (0x${deviceType.code.toString(16)}) requires cluster client ${clusterName}(0x${clusterId.toString(16)}) but it is not present on endpoint ${this.id}`);
                 }
             });
         });
@@ -236,7 +230,7 @@ export class Endpoint {
         this.verifyRequiredClusters();
 
         const endpoints = new Map<number, Endpoint>();
-        const attributes = new Map<string, AttributeServer<any>>();
+        const attributes = new Map<string, (AttributeServer<any> | FabricScopedAttributeServer<any>)>();
         const attributePaths = new Array<AttributePath>();
         const commands = new Map<string, CommandServer<Attributes, Commands>>();
         const commandPaths = new Array<CommandPath>();

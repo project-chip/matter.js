@@ -7,7 +7,7 @@
 import { TlvGroupId } from "../datatype/GroupId.js";
 import { StatusCode } from "../protocol/interaction/InteractionProtocol.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
-import { Attribute, Cluster, Command, TlvNoResponse } from "./Cluster.js";
+import { Cluster, Command, FixedAttribute, TlvNoResponse } from "./Cluster.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvString } from "../tlv/TlvString.js";
 import { TlvBitmap, TlvEnum, TlvUInt8 } from "../tlv/TlvNumber.js";
@@ -98,7 +98,7 @@ export const GroupsCluster = Cluster({
          *
          * TODO because we (will) support group names we need to set bit 7 to 1, rest is 0
          */
-        nameSupport: Attribute(0, TlvNameSupportBitmap, { default: { groupNames: true } }),
+        nameSupport: FixedAttribute(0, TlvNameSupportBitmap, { default: { groupNames: true } }),
     },
 
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.7 */

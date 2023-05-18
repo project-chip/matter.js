@@ -21,6 +21,8 @@ type WritableAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] exten
 type ClientAttributeSetters<A extends Attributes> = { [P in WritableAttributeNames<A> as `set${Capitalize<string & P>}Attribute`]: (value: AttributeJsType<A[P]>) => Promise<void> };
 type ClientAttributeSubscribers<A extends Attributes> = { [P in keyof A as `subscribe${Capitalize<string & P>}Attribute`]: (listener: (value: AttributeJsType<A[P]>) => void, minIntervalS: number, maxIntervalS: number) => Promise<void> };
 
+type CommandServers<C extends Commands> = { [P in keyof C]: SignatureFromCommandSpec<C[P]> };
+
 /** Strongly typed interface of a cluster client */
 export type ClusterClientObj<A extends Attributes, C extends Commands> =
     {
@@ -29,14 +31,14 @@ export type ClusterClientObj<A extends Attributes, C extends Commands> =
         name: string;
         endpointId: number;
         attributes: AttributeClients<A>;
-        commands: { [P in keyof C]: SignatureFromCommandSpec<C[P]> };
+        commands: CommandServers<C>;
         subscriptAllAttributes: (minIntervalFloorSeconds: number, maxIntervalCeilingSeconds: number) => Promise<void>;
         _clone: (newInteractionClient?: InteractionClient) => ClusterClientObj<A, C>;
     }
     & ClientAttributeGetters<A>
     & ClientAttributeSetters<A>
     & ClientAttributeSubscribers<A>
-    & { [P in keyof C]: SignatureFromCommandSpec<C[P]> };
+    & CommandServers<C>;
 
 export function isClusterClient<A extends Attributes, C extends Commands>(obj: ClusterClientObj<A, C> | ClusterServerObj<A, C>): obj is ClusterClientObj<A, C> {
     return obj._type === "ClusterClient";

@@ -47,7 +47,7 @@ abstract class OnOffBaseDevice extends extendPublicHandlerMethods<typeof Device,
      * @param endpointId Optional endpoint ID of the device. If not set, the device will be instanced as a root device
      */
     protected constructor(definition: DeviceTypeDefinition, attributeInitialValues?: { [key: number]: AttributeInitialValues<any> }, endpointId?: number) {
-        super(definition, [], endpointId);
+        super(definition, endpointId);
         this.addDeviceClusters(attributeInitialValues);
     }
 
