@@ -13,23 +13,17 @@
 //
 // Note 2. The concept of a "ClientDevice" wouldn't be just for controllers, it
 // would also be for client clusters of a "ServerDevice".  I think.
-export interface PumpDevice extends Device {
-    // ATTRIBUTES
-    //
-    // My thinking: This is how the server conveys property values to
-    // matter.js.  They represent "last known state".
-    //
-    // Note 3: We could instead do getOnOff() or get(Property.OnOff) etc.
-    // Implementation would be the same.
-    //
-    // Question 2: Right now OnOffLightDevices "pushes" changes into the
-    // ClusterServer.  This model would be more of a "pull" that matter.js
-    // would use whenever it needs to read current attribute state.  My
-    // thinking here is that matter.js is not actually the "source of truth".
-    // It just needs an adapter layer it can use to find current values.  We
-    // can then automate change detection and otherwise update ClusterServer
-    // in the same way we do now.  Is this approach worth pursuing or should I
-    // try to align more closely with current approach?
+
+// ATTRIBUTES VALUES
+//
+// Attribute values are stored in an immutable "State" object.  This is not
+// necessarily the "source of truth".  It's just what the implementation
+// has conveyed to matter.js as the current attribute values.
+//
+// Note 3: (no longer relevant)
+//
+// Question 2: (resolved myself)
+type State = {
     readonly currentLevel: number | undefined;
     readonly minLevel?: number;
     readonly maxLevel?: number;
@@ -41,7 +35,11 @@ export interface PumpDevice extends Device {
     readonly options: number;
     readonly remainingTime?: number;
     readonly startUpCurrentLevel?: number | undefined;
+}
 
+export interface PumpDevice extends Device {
+    // ATTRIBUTE MUTATION
+    //
     // This is how the device implementation tells matter.js that attribute
     // values are different.  Internal implementation would then read all
     // attribute values and push any changes into the appropriate
@@ -56,11 +54,17 @@ export interface PumpDevice extends Device {
     // considering for the shape of the public API for when there are hundreds
     // of endpoints and thousands of attributes on a low-power device?
     //
-    // Note 4: The alternative approach would be to make the properties above
-    // read/write.  Then this function is unnecessary.  Regardless, we still
-    // free the user from worrying about which cluster an attribute is
-    // associated with.
-    triggerChange(): void;
+    // Note 4: (no longer relevant)
+    set(changes: Partial<State>): void;
+
+    // This is a convenience form of set for updating a single attribute.
+    //
+    // Note 8: We could also generate a setter for every individual attribute.
+    // However, I worry that would encourage inefficient implementation.
+    //
+    // Note 9: Not sure how to validate value type in the interface so might
+    // need to do that programmatically.
+    set(name: keyof (State), value: any): void;
 
     // This is how matter.js conveys a request to change values from the
     // fabric.  It would be wired to AttributeServers via InteractionServer
@@ -68,9 +72,8 @@ export interface PumpDevice extends Device {
     //
     // Question 4: We discussed whether this should be asynchronous or not.
     // I'm thinking of use cases like bridges or even I/O in the case of a
-    // local device implementation.  Right now we get the attribute into
-    // internal storage and give a thumbs up.  But should this be asynchronous
-    // so an attribute write fails if the "source of truth" rejects the change?
+    // local device implementation.  But should this be asynchronous so an
+    // attribute write fails if the "source of truth" rejects the change?
     //
     // Question 5: I worry about chattiness here too.  If we don't shape the
     // API like this, are we potentially forcing API consumers to handle
@@ -78,7 +81,7 @@ export interface PumpDevice extends Device {
     // "turn this light to 70%, red, with a 5 second delay" am I correct in
     // surmising that a Hue bridge implementation would want to take receipt of
     // all three attribute changes simultaneously?
-    set(values: { [ name: string ]: any } ): Promise<void>;
+    write(changes: Partial<State>): Promise<void>;
 
     // COMMANDS
     //
