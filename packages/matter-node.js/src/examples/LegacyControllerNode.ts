@@ -8,7 +8,8 @@
 
 /**
  * Important note: This file is part of the legacy matter-node API and should not be used anymore!
- * Please use the new API classes!
+ * Please use the new API classes! This file will be removed in next version!
+ * @deprecated
  */
 
 // Include this first to auto-register Crypto, Network and Time Node.js implementations

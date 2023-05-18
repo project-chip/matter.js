@@ -89,6 +89,10 @@ You can use `npm run build-clean` on the root level to build all packages from s
 
 You can use `npm run test` on the root level to run all tests for all packages.
 
+## API documentation
+
+You can use `npm run build-doc` on the root level to generate the API documentation for all packages in directory doc.
+
 ## Current status
 
 This is work in progress.
