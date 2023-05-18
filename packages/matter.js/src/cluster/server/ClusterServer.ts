@@ -96,7 +96,15 @@ export type ClusterServerObj<A extends Attributes, C extends Commands> =
         _commands: CommandServers<C>;
 
         /**
-         * Set Storage context sed by this cluster
+         * Assign this cluster to a specific endpoint
+         * @private
+         *
+         * @param endpoint Endpoint to assign to
+         */
+        _assignToEndpoint: (endpoint: Endpoint) => void;
+
+        /**
+         * Set Storage context used by this cluster
          * @private
          */
         _setStorage: (storageContext: StorageContext) => void;

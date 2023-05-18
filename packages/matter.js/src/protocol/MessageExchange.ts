@@ -16,6 +16,7 @@ import { Time, Timer } from "../time/Time.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { MessageType, SECURE_CHANNEL_PROTOCOL_ID } from "./securechannel/SecureChannelMessages.js";
 import { getPromiseResolver } from "../util/Promises.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 const logger = Logger.get("MessageExchange");
 

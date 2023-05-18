@@ -29,6 +29,7 @@
     "build-es": "tsc -b tsconfig.dist-es.json",
     "build": "npm run build-cjs && npm run build-es",
     "build-clean": "npm run clean && npm run build",
+    "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --gitRemote upstream --tsconfig tsconfig.dist-cjs.json",
     "test-node": "TZ=utc NODE_OPTIONS=--experimental-vm-modules jest",
     "test-web": "TZ=utc karma start test/karma.conf.cjs",
     "test": "npm run test-node && npm run test-web",

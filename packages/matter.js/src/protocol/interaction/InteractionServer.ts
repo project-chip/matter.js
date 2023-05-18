@@ -13,7 +13,7 @@ import {
 } from "./InteractionMessenger.js";
 import { Attributes, Cluster, Commands, Events, TlvNoResponse } from "../../cluster/Cluster.js";
 import {
-    StatusCode, TlvAttributePath, TlvAttributeReport, TlvInvokeResponseData, TlvSubscribeResponse
+    StatusCode, TlvAttributePath, TlvAttributeReport, TlvCommandPath, TlvInvokeResponseData, TlvSubscribeResponse
 } from "./InteractionProtocol.js"
 import { BitSchema, TypeFromBitSchema } from "../../schema/BitmapSchema.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
@@ -64,6 +64,13 @@ export function ClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<
         _type: "ClusterServer",
         attributes,
         _commands: commands,
+
+        _assignToEndpoint: (endpoint: Endpoint) => {
+            for (const name in attributes) {
+                (attributes as any)[name].assignToEndpoint(endpoint);
+            }
+        },
+
         _setStorage: (storageContext: StorageContext) => {
             clusterStorage = storageContext;
 
@@ -255,14 +262,19 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         descriptorCluster.attributes.serverList.setLocal(clusters.map(({ id }) => new ClusterId(id)));
 
         const clusterEndpointNumber = new EndpointNumber(endpointId);
+        const deviceDefinition = Object.values(DeviceTypes).find(({ code }) => code === device.code);
+        if (deviceDefinition === undefined) throw new Error(`Unknown device code ${device.code}`);
+        const endpoint = new Endpoint([deviceDefinition], [], endpointId);
 
         const clusterMap = new Map<number, ClusterServerObj<Attributes, Commands>>();
         clusters.forEach(cluster => {
             const { id: clusterId, attributes, _commands: commands } = cluster;
 
             cluster._setStorage(this.storageManager.createContext(`Cluster-${clusterEndpointNumber.number}-${clusterId}`));
+            cluster._assignToEndpoint(endpoint);
 
             clusterMap.set(clusterId, cluster);
+            endpoint.addClusterServer(cluster);
             // Add attributes
             for (const name in attributes) {
                 const attribute = attributes[name];
@@ -287,9 +299,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             rootPartsListAttribute.setLocal([...rootPartsListAttribute.getLocal(), clusterEndpointNumber]);
         }
 
-        const deviceDefinition = Object.values(DeviceTypes).find(({ code }) => code === device.code);
-        if (deviceDefinition === undefined) throw new Error(`Unknown device code ${device.code}`);
-        this.endpoints.set(endpointId, new Endpoint([deviceDefinition], Array.from(clusterMap.values()), endpointId));
+        this.endpoints.set(endpointId, endpoint);
 
         return this;
     }
@@ -339,9 +349,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             }
 
             return attributes.map(({ path, attribute }) => {
-                const { endpointId } = path;
-                const endpoint = endpointId !== undefined ? this.endpoints.get(endpointId) : undefined;
-                const { value, version } = attribute.getWithVersion(exchange.session, endpoint); // TODO check ACL
+                const { value, version } = attribute.getWithVersion(exchange.session); // TODO check ACL
                 logger.debug(`Read from ${exchange.channel.getName()}: ${this.resolveAttributeName(path)}=${Logger.toJSON(value)} (version=${version})`);
                 return { attributeData: { path, data: attribute.schema.encodeTlv(value), dataVersion: version } };
             });
@@ -451,7 +459,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     }
 
     async handleInvokeRequest(exchange: MessageExchange<MatterDevice>, { invokeRequests }: InvokeRequest, message: Message): Promise<InvokeResponse> {
-        logger.debug(`Received invoke request from ${exchange.channel.getName()}: ${invokeRequests.map(({ commandPath: { endpointId, clusterId, commandId } }) => `${toHex(endpointId)}/${toHex(clusterId)}/${toHex(commandId)}`).join(", ")}`);
+        logger.debug(`Received invoke request from ${exchange.channel.getName()}: ${invokeRequests.map(({ commandPath: { endpointId, clusterId, commandId } }) => this.resolveCommandName({ endpointId, clusterId, commandId })).join(", ")}`);
 
         const invokeResponses: TypeFromSchema<typeof TlvInvokeResponseData>[] = [];
 
@@ -464,13 +472,15 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             }
             const command = this.commands.get(commandPathToId(commandPath as CommandPath));
             if (command === undefined) {
-                logger.error("Unknown command!!");
+                const { clusterId, commandId } = commandPath;
+                logger.error(`Unknown command ${this.resolveCommandName({ endpointId, clusterId, commandId })}`);
                 invokeResponses.push({ status: { commandPath, status: { status: StatusCode.UnsupportedCommand } } });
                 return;
             }
             const endpoint = this.endpoints.get(endpointId);
             if (!endpoint) {
-                logger.error(`Endpoint ${endpointId} not found`);
+                const { clusterId, commandId } = commandPath;
+                logger.error(`Endpoint ${endpointId} not found for command ${this.resolveCommandName({ endpointId, clusterId, commandId })}`);
                 invokeResponses.push({ status: { commandPath, status: { status: StatusCode.UnsupportedCommand } } });
                 return;
             }
@@ -530,6 +540,33 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         }
         const attribute = this.attributes.get(attributePathToId({ endpointId, clusterId, attributeId }));
         const attributeName = `${attribute?.name ?? "unknown"}(${toHex(attributeId)})`;
+        return `${endpointName}/${clusterName}/${attributeName}`;
+    }
+
+    private resolveCommandName({ endpointId, clusterId, commandId }: TypeFromSchema<typeof TlvCommandPath>) {
+        if (endpointId === undefined) {
+            return `*/${toHex(clusterId)}/${toHex(commandId)}`;
+        }
+        const endpoint = this.endpoints.get(endpointId);
+        if (endpoint === undefined) {
+            return `unknown(${toHex(endpointId)})/${toHex(clusterId)}/${toHex(commandId)}`;
+        }
+        const endpointName = `${endpoint.name}(${toHex(endpointId)})`;
+
+        if (clusterId === undefined) {
+            return `${endpointName}/*/${toHex(commandId)}`;
+        }
+        const cluster = endpoint.getClusterServerById(clusterId);
+        if (cluster === undefined) {
+            return `${endpointName}/unknown(${toHex(clusterId)})/${toHex(commandId)}`;
+        }
+        const clusterName = `${cluster.name}(${toHex(clusterId)})`;
+
+        if (commandId === undefined) {
+            return `${endpointName}/${clusterName}/*`;
+        }
+        const command = this.commands.get(commandPathToId({ endpointId, clusterId, commandId }));
+        const attributeName = `${command?.name ?? "unknown"}(${toHex(commandId)})`;
         return `${endpointName}/${clusterName}/${attributeName}`;
     }
 
