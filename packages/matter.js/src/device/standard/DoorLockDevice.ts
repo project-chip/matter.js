@@ -7,14 +7,8 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { DeviceTypes } from "../DeviceTypes.js";
-import { ClusterInterface } from "../../cluster/Cluster.js";
+import { AutoDevice } from "../AutoDevice.js";
 import { Identify } from "../../cluster/interface/index.js";
-import { AutoDevice } from "../AutoDevice.js"
 
-export class DoorLock extends
-    AutoDevice.with(Identify)
-{
-    constructor(endpointId?: number) {
-        super(DeviceTypes.DOOR_LOCK, [], endpointId);
-    }
+export class DoorLock extends AutoDevice.with(DeviceTypes.DOOR_LOCK, Identify) {
 }

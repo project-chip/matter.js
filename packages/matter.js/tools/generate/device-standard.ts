@@ -6,11 +6,11 @@
 
 // Generates standard device implementations into src/device/standard
 
-import { clean, writeTS, CodeModel } from "./util.js";
+import { clean, CodeModel, TsFile } from "./util.js";
 
 clean("device/standard", "Device");
 
-const moduleExports = new Array<string>();
+const index = new TsFile("device/standard/index");
 
 CodeModel.devices.forEach((device) => {
     const clusterNames = (clusters: any[]) =>
@@ -21,61 +21,35 @@ CodeModel.devices.forEach((device) => {
             cluster.name
         ]));
 
+    const file = new TsFile(`device/standard/${device.name}Device`);
+    file.addImport("../DeviceTypes", "DeviceTypes");
+
     // Configure required interfaces
     const requiredInterfaces = clusterNames(device.requiredServerClusters);
     const interfaces = {} as typeof requiredInterfaces;
     Object.assign(interfaces, requiredInterfaces);
 
-    let baseClass;
-    if (Object.keys(requiredInterfaces).length) {
-        baseClass = `
-    AutoDevice.with(${Object.keys(requiredInterfaces).join(", ")})
-`;
-    } else {
-        baseClass = " AutoDevice ";
-    }
+    const withArgs = [`DeviceTypes.${device.key}`, ...Object.keys(requiredInterfaces)];
+    const def = file.block(`export class ${device.name} extends AutoDevice.with(${withArgs.join(", ")})`);
 
     // Configure optional interfaces
     const optionalInterfaces = clusterNames(device.optionalServerClusters);
-    let options: string;
     if (Object.keys(optionalInterfaces).length) {
         Object.assign(interfaces, optionalInterfaces);
-        options = `
-
-    static readonly options = {
-        ${Object.keys(optionalInterfaces).join(",\n        ")}
-    };
-
-    static with(...clusters: ClusterInterface<any>[]) {
-        return AutoDevice.extendDevice(this, ...clusters);
-    }`;
-    } else {
-        options = "";
+        def.block("static readonly options =")
+            .add(Object.keys(optionalInterfaces).join(",\n"));
+        def.block("static with(...clusters: Array<typeof this.options[keyof typeof this.options]>)")
+            .add("return AutoDevice.extendDevice(this, ...clusters);");
     }
 
     // Configure imports
-    const imports = [
-        'import { DeviceTypes } from "../DeviceTypes.js"',
-        'import { ClusterInterface } from "../../cluster/Cluster.js"'
-    ];
-    if (Object.keys(interfaces).length) {
-        const importNames = Object.entries(interfaces).map(([k, v]) =>
-            k == v ? k : `${v} as ${k}`);
-        imports.push(`import { ${importNames.join(', ')} } from "../../cluster/interface/index.js"`);
-        imports.push('import { AutoDevice } from "../AutoDevice.js"');
-    }
+    file.addImport("../AutoDevice", "AutoDevice");
+    Object.entries(interfaces).forEach(([k, v]) =>
+        file.addImport("../../cluster/interface/index", k == v ? k : `${v} as ${k}`));
 
-    // Generate the file
-    writeTS(`device/standard/${device.name}Device`,
-        `${imports.join(";\n")}
+    file.save();
 
-export class ${device.name} extends${baseClass}{
-    constructor(endpointId?: number) {
-        super(DeviceTypes.${device.key}, [], endpointId);
-    }${options}
-}
-`);
-    moduleExports.push(`export * from "./${device.name}Device.js";`)
+    index.push(`export * from "./${device.name}Device.js";`)
 });
 
-writeTS("device/standard/index", moduleExports.join("\n"));
+index.save();

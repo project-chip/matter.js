@@ -7,14 +7,8 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { DeviceTypes } from "../DeviceTypes.js";
-import { ClusterInterface } from "../../cluster/Cluster.js";
+import { AutoDevice } from "../AutoDevice.js";
 import { Identify, OccupancySensing } from "../../cluster/interface/index.js";
-import { AutoDevice } from "../AutoDevice.js"
 
-export class OccupancySensor extends
-    AutoDevice.with(Identify, OccupancySensing)
-{
-    constructor(endpointId?: number) {
-        super(DeviceTypes.OCCUPANCY_SENSOR, [], endpointId);
-    }
+export class OccupancySensor extends AutoDevice.with(DeviceTypes.OCCUPANCY_SENSOR, Identify, OccupancySensing) {
 }

@@ -7,20 +7,15 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { DeviceTypes } from "../DeviceTypes.js";
-import { ClusterInterface } from "../../cluster/Cluster.js";
+import { AutoDevice } from "../AutoDevice.js";
 import { Identify } from "../../cluster/interface/index.js";
-import { AutoDevice } from "../AutoDevice.js"
 
-export class DoorLockController extends AutoDevice {
-    constructor(endpointId?: number) {
-        super(DeviceTypes.DOOR_LOCK_CONTROLLER, [], endpointId);
-    }
-
+export class DoorLockController extends AutoDevice.with(DeviceTypes.DOOR_LOCK_CONTROLLER) {
     static readonly options = {
         Identify
-    };
+    }
 
-    static with(...clusters: ClusterInterface<any>[]) {
+    static with(...clusters: Array<typeof this.options[keyof typeof this.options]>) {
         return AutoDevice.extendDevice(this, ...clusters);
     }
 }

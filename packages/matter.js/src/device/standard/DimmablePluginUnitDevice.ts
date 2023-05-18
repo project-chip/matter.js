@@ -7,14 +7,8 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { DeviceTypes } from "../DeviceTypes.js";
-import { ClusterInterface } from "../../cluster/Cluster.js";
+import { AutoDevice } from "../AutoDevice.js";
 import { Identify, OnOffLighting, LevelControl } from "../../cluster/interface/index.js";
-import { AutoDevice } from "../AutoDevice.js"
 
-export class DimmablePluginUnit extends
-    AutoDevice.with(Identify, OnOffLighting, LevelControl)
-{
-    constructor(endpointId?: number) {
-        super(DeviceTypes.DIMMABLE_PLUGIN_UNIT, [], endpointId);
-    }
+export class DimmablePluginUnit extends AutoDevice.with(DeviceTypes.DIMMABLE_PLUGIN_UNIT, Identify, OnOffLighting, LevelControl) {
 }

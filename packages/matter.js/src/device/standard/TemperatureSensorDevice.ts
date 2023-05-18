@@ -7,14 +7,8 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { DeviceTypes } from "../DeviceTypes.js";
-import { ClusterInterface } from "../../cluster/Cluster.js";
+import { AutoDevice } from "../AutoDevice.js";
 import { TemperatureMeasurement, Identify } from "../../cluster/interface/index.js";
-import { AutoDevice } from "../AutoDevice.js"
 
-export class TemperatureSensor extends
-    AutoDevice.with(TemperatureMeasurement, Identify)
-{
-    constructor(endpointId?: number) {
-        super(DeviceTypes.TEMPERATURE_SENSOR, [], endpointId);
-    }
+export class TemperatureSensor extends AutoDevice.with(DeviceTypes.TEMPERATURE_SENSOR, TemperatureMeasurement, Identify) {
 }

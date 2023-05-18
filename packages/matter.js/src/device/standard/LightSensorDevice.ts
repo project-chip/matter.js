@@ -7,14 +7,8 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { DeviceTypes } from "../DeviceTypes.js";
-import { ClusterInterface } from "../../cluster/Cluster.js";
+import { AutoDevice } from "../AutoDevice.js";
 import { Identify, IlluminanceMeasurement } from "../../cluster/interface/index.js";
-import { AutoDevice } from "../AutoDevice.js"
 
-export class LightSensor extends
-    AutoDevice.with(Identify, IlluminanceMeasurement)
-{
-    constructor(endpointId?: number) {
-        super(DeviceTypes.LIGHT_SENSOR, [], endpointId);
-    }
+export class LightSensor extends AutoDevice.with(DeviceTypes.LIGHT_SENSOR, Identify, IlluminanceMeasurement) {
 }

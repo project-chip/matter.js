@@ -7,14 +7,8 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { DeviceTypes } from "../DeviceTypes.js";
-import { ClusterInterface } from "../../cluster/Cluster.js";
+import { AutoDevice } from "../AutoDevice.js";
 import { Identify } from "../../cluster/interface/index.js";
-import { AutoDevice } from "../AutoDevice.js"
 
-export class OnOffSensor extends
-    AutoDevice.with(Identify)
-{
-    constructor(endpointId?: number) {
-        super(DeviceTypes.ON_OFF_SENSOR, [], endpointId);
-    }
+export class OnOffSensor extends AutoDevice.with(DeviceTypes.ON_OFF_SENSOR, Identify) {
 }

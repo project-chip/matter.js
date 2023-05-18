@@ -7,14 +7,8 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { DeviceTypes } from "../DeviceTypes.js";
-import { ClusterInterface } from "../../cluster/Cluster.js";
+import { AutoDevice } from "../AutoDevice.js";
 import { BridgedDeviceBasicInformation } from "../../cluster/interface/index.js";
-import { AutoDevice } from "../AutoDevice.js"
 
-export class BridgedNode extends
-    AutoDevice.with(BridgedDeviceBasicInformation)
-{
-    constructor(endpointId?: number) {
-        super(DeviceTypes.BRIDGED_NODE, [], endpointId);
-    }
+export class BridgedNode extends AutoDevice.with(DeviceTypes.BRIDGED_NODE, BridgedDeviceBasicInformation) {
 }

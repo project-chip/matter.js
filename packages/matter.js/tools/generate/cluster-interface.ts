@@ -7,7 +7,7 @@
 // Generates TypeScript interfaces for each cluster into src/cluster/interface
 
 import * as tlv from "../../src/tlv/index.js";
-import { clean, writeTS, CodeModel } from "./util.js";
+import { clean, TsFile, CodeModel } from "./util.js";
 import { GlobalAttributes } from "../../src/cluster/Cluster.js";
 
 clean("cluster/interface", "Interface");
@@ -15,11 +15,10 @@ clean("cluster/interface", "Interface");
 const GLOBAL_ATTRIBUTE_IDS = new Set(Object.values(GlobalAttributes({})).map((attribute) => attribute.id));
 
 class TypeContext {
+    constructor(public file: TsFile, public definitions = file.section()) { }
+
     typeName = "";
     typeSource = "";
-    hasByteArray = false;
-    hasTypeFromSchema = false;
-    definitions = new Array<string>;
 }
 
 function mapType(type: tlv.TlvSchema<any>, context: TypeContext): string {
@@ -38,10 +37,7 @@ function mapType(type: tlv.TlvSchema<any>, context: TypeContext): string {
 
         case tlv.StringSchema:
             if ((<tlv.StringSchema<any>>type).type == tlv.TlvType.ByteString) {
-                if (!context.hasByteArray) {
-                    context.hasByteArray = true;
-                    context.definitions.unshift('import { ByteArray } from "../../util/index.js"')
-                }
+                context.file.addImport("../../util/index", "ByteArray");
                 return "ByteArray";
             }
             return "string";
@@ -56,27 +52,24 @@ function mapType(type: tlv.TlvSchema<any>, context: TypeContext): string {
             return `${mapType((<tlv.ArraySchema<any>>type).elementSchema, context)}[]`;
 
         case tlv.ObjectSchema:
-            if (!context.hasTypeFromSchema) {
-                context.hasTypeFromSchema = true;
-                context.definitions.unshift('import { TypeFromSchema } from "../../tlv/TlvSchema.js";')
-            }
-            context.definitions.push(`type ${context.typeName} = TypeFromSchema<typeof ${context.typeSource}>;`);
+            context.file.addImport("../../tlv/TlvSchema", "TypeFromSchema");
+            context.definitions.add(`type ${context.typeName} = TypeFromSchema<typeof ${context.typeSource}>;`);
             return context.typeName;
     }
 
     return "any";
 }
 
-const moduleExports = new Array<string>();
+const index = new TsFile("cluster/interface/index");
 
 CodeModel.clusters.forEach((cluster) => {
-    const context = new TypeContext();
-    const properties = new Array<string>();
+    const file = new TsFile(`cluster/interface/${cluster.interfaceName}`);
+    const context = new TypeContext(file);
 
-    function createEventProperties(typeName: string, type: string) {
-        properties.push(`add${typeName}Listener(listener: ${type}): void;`);
-        properties.push(`remove${typeName}Listener(listener: ${type}): void;`);
-    }
+    file.addImport("../index", cluster.definitionName);
+    file.addImport("../index", "ClusterInterface");
+
+    const common = file.block(`export interface Common`);
 
     cluster.attributes.forEach((attr) => {
         if (GLOBAL_ATTRIBUTE_IDS.has(attr.id)) return;
@@ -85,18 +78,17 @@ CodeModel.clusters.forEach((cluster) => {
         context.typeSource = `${attr.source}.schema`;
 
         const type = mapType(attr.schema, context);
-        properties.push(`${attr.fieldName}${attr.optional ? "?" : ""}: ${type};`);
-        if (attr.writable) {
-            properties.push(`set${context.typeName}(value: ${type}): Promise<void>;`);
-        }
-        createEventProperties(context.typeName, `(newValue: ${type}, oldValue: ${type}) => void`);
-        properties.push("");
+        common.add(`readonly ${attr.fieldName}${attr.optional ? "?" : ""}: ${type};`);
     });
 
-    let haveCommand = false;
-    cluster.commands.forEach((command) => {
-        haveCommand = true;
+    if (cluster.attributes.length && cluster.commands.length) {
+        common.blank();
+    }
 
+    const client = file.block(`export interface Client extends Common`);
+    const server = file.block(`export interface Server extends Common`);
+
+    cluster.commands.forEach((command) => {
         context.typeName = `${command.typeName}Request`;
         context.typeSource = `${command.source}.requestSchema`;
         const request = command.requestSchema instanceof tlv.TlvVoid.constructor
@@ -107,38 +99,35 @@ CodeModel.clusters.forEach((cluster) => {
         context.typeSource = `${command.source}.responseSchema`;
         const responseType = mapType(command.responseSchema, context);
 
-        properties.push(`invoke${command.typeName}(${request}): Promise<${responseType}>;`)
+        common.add(`invoke${command.typeName}(${request}): Promise<${responseType}>;`)
     });
-
-    if (haveCommand) properties.push("");
 
     cluster.events.map((event) => {
         context.typeName = `${event.typeName}Event`;
         context.typeSource = `${event.source}.schema`;
-        const type = mapType(event.schema, context);
 
-        createEventProperties(event.typeName, `(event: ${type}) => void`);
-        properties.push("");
+        const listener = `Listener(listener: (event: ${mapType(event.schema, context)}) => void): void;`
+        client.add(`add${event.typeName}${listener}`);
+        client.add(`remove${event.typeName}${listener}`);
+
+        server.add(`trigger${event.typeName}(): void;`)
     });
 
-    let definitions = context.definitions.join("\n\n");
-    if (definitions) definitions = `${definitions}\n`;
+    let clientName = "Client", serverName = "Server";
+    if (!client.length) {
+        clientName = "Common";
+        client.remove();
+    }
+    if (!server.length) {
+        serverName = "Common";
+        server.remove();
+    }
 
-    writeTS(`cluster/interface/${cluster.interfaceName}`,
-        `import { ${cluster.definitionName}, ClusterInterface } from "../index.js";
-${definitions}
-export interface ${cluster.interfaceName} {
-    ${properties.map((p) => p ? `    ${p}` : "").join("\n").trim()}
-}
+    file.block(`export const ${cluster.name}: ClusterInterface<${clientName}, ${serverName}> =`)
+        .add(`definition: ${cluster.definitionName}`);
+    file.save();
 
-export const ${cluster.name}:
-    ClusterInterface<${cluster.interfaceName}> =
-{
-    definition: ${cluster.definitionName}
-};
-`);
-
-    moduleExports.push(`export * from "./${cluster.interfaceName}.js";`)
+    index.add(`export { ${cluster.name} } from "./${cluster.interfaceName}.js";`)
 });
 
-writeTS("cluster/interface/index", moduleExports.join("\n"));
+index.save();

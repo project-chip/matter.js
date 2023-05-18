@@ -10,32 +10,14 @@ import { OnOffLightingCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
 type OffWithEffectRequest = TypeFromSchema<typeof OnOffLightingCluster.commands.offWithEffect.requestSchema>;
-
 type OnWithTimedOffRequest = TypeFromSchema<typeof OnOffLightingCluster.commands.onWithTimedOff.requestSchema>;
 
-export interface OnOffLightingInterface {
-    onOff: boolean;
-    addOnOffListener(listener: (newValue: boolean, oldValue: boolean) => void): void;
-    removeOnOffListener(listener: (newValue: boolean, oldValue: boolean) => void): void;
-
-    globalSceneControl: boolean;
-    addGlobalSceneControlListener(listener: (newValue: boolean, oldValue: boolean) => void): void;
-    removeGlobalSceneControlListener(listener: (newValue: boolean, oldValue: boolean) => void): void;
-
-    onTime: number | undefined;
-    setOnTime(value: number | undefined): Promise<void>;
-    addOnTimeListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
-    removeOnTimeListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
-
-    offWaitTime: number | undefined;
-    setOffWaitTime(value: number | undefined): Promise<void>;
-    addOffWaitTimeListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
-    removeOffWaitTimeListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
-
-    startUpOnOff: number | undefined;
-    setStartUpOnOff(value: number | undefined): Promise<void>;
-    addStartUpOnOffListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
-    removeStartUpOnOffListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
+export interface Common {
+    readonly onOff: boolean;
+    readonly globalSceneControl: boolean;
+    readonly onTime: number | undefined;
+    readonly offWaitTime: number | undefined;
+    readonly startUpOnOff: number | undefined;
 
     invokeOff(): Promise<void>;
     invokeOn(): Promise<void>;
@@ -45,8 +27,6 @@ export interface OnOffLightingInterface {
     invokeOnWithTimedOff(request: OnWithTimedOffRequest): Promise<void>;
 }
 
-export const OnOffLighting:
-    ClusterInterface<OnOffLightingInterface> =
-{
+export const OnOffLighting: ClusterInterface<Common, Common> = {
     definition: OnOffLightingCluster
-};
+}

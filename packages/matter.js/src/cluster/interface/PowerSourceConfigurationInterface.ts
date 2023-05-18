@@ -8,14 +8,11 @@
 
 import { PowerSourceConfigurationCluster, ClusterInterface } from "../index.js";
 
-export interface PowerSourceConfigurationInterface {
-    sources: number[];
-    addSourcesListener(listener: (newValue: number[], oldValue: number[]) => void): void;
-    removeSourcesListener(listener: (newValue: number[], oldValue: number[]) => void): void;
+
+export interface Common {
+    readonly sources: number[];
 }
 
-export const PowerSourceConfiguration:
-    ClusterInterface<PowerSourceConfigurationInterface> =
-{
+export const PowerSourceConfiguration: ClusterInterface<Common, Common> = {
     definition: PowerSourceConfigurationCluster
-};
+}

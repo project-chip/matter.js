@@ -7,14 +7,8 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { DeviceTypes } from "../DeviceTypes.js";
-import { ClusterInterface } from "../../cluster/Cluster.js";
+import { AutoDevice } from "../AutoDevice.js";
 import { Identify, OnOffLighting, LevelControl } from "../../cluster/interface/index.js";
-import { AutoDevice } from "../AutoDevice.js"
 
-export class ColorTemperatureLight extends
-    AutoDevice.with(Identify, OnOffLighting, LevelControl)
-{
-    constructor(endpointId?: number) {
-        super(DeviceTypes.COLOR_TEMPERATURE_LIGHT, [], endpointId);
-    }
+export class ColorTemperatureLight extends AutoDevice.with(DeviceTypes.COLOR_TEMPERATURE_LIGHT, Identify, OnOffLighting, LevelControl) {
 }

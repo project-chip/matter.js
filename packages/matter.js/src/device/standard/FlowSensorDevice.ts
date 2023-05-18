@@ -7,14 +7,8 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { DeviceTypes } from "../DeviceTypes.js";
-import { ClusterInterface } from "../../cluster/Cluster.js";
+import { AutoDevice } from "../AutoDevice.js";
 import { FlowMeasurement, Identify } from "../../cluster/interface/index.js";
-import { AutoDevice } from "../AutoDevice.js"
 
-export class FlowSensor extends
-    AutoDevice.with(FlowMeasurement, Identify)
-{
-    constructor(endpointId?: number) {
-        super(DeviceTypes.FLOW_SENSOR, [], endpointId);
-    }
+export class FlowSensor extends AutoDevice.with(DeviceTypes.FLOW_SENSOR, FlowMeasurement, Identify) {
 }

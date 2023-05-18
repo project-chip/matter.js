@@ -7,14 +7,8 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { DeviceTypes } from "../DeviceTypes.js";
-import { ClusterInterface } from "../../cluster/Cluster.js";
+import { AutoDevice } from "../AutoDevice.js";
 import { Identify, BooleanState } from "../../cluster/interface/index.js";
-import { AutoDevice } from "../AutoDevice.js"
 
-export class ContactSensor extends
-    AutoDevice.with(Identify, BooleanState)
-{
-    constructor(endpointId?: number) {
-        super(DeviceTypes.CONTACT_SENSOR, [], endpointId);
-    }
+export class ContactSensor extends AutoDevice.with(DeviceTypes.CONTACT_SENSOR, Identify, BooleanState) {
 }

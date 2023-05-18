@@ -7,25 +7,18 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { DeviceTypes } from "../DeviceTypes.js";
-import { ClusterInterface } from "../../cluster/Cluster.js";
+import { AutoDevice } from "../AutoDevice.js";
 import { OnOffLighting, Identify, LevelControl, TemperatureMeasurement, PressureMeasurement, FlowMeasurement } from "../../cluster/interface/index.js";
-import { AutoDevice } from "../AutoDevice.js"
 
-export class Pump extends
-    AutoDevice.with(OnOffLighting, Identify)
-{
-    constructor(endpointId?: number) {
-        super(DeviceTypes.PUMP, [], endpointId);
-    }
-
+export class Pump extends AutoDevice.with(DeviceTypes.PUMP, OnOffLighting, Identify) {
     static readonly options = {
         LevelControl,
         TemperatureMeasurement,
         PressureMeasurement,
         FlowMeasurement
-    };
+    }
 
-    static with(...clusters: ClusterInterface<any>[]) {
+    static with(...clusters: Array<typeof this.options[keyof typeof this.options]>) {
         return AutoDevice.extendDevice(this, ...clusters);
     }
 }

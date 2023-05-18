@@ -7,10 +7,7 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { DeviceTypes } from "../DeviceTypes.js";
-import { ClusterInterface } from "../../cluster/Cluster.js"
+import { AutoDevice } from "../AutoDevice.js";
 
-export class Aggregator extends AutoDevice {
-    constructor(endpointId?: number) {
-        super(DeviceTypes.AGGREGATOR, [], endpointId);
-    }
+export class Aggregator extends AutoDevice.with(DeviceTypes.AGGREGATOR) {
 }

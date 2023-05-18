@@ -7,14 +7,8 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { DeviceTypes } from "../DeviceTypes.js";
-import { ClusterInterface } from "../../cluster/Cluster.js";
+import { AutoDevice } from "../AutoDevice.js";
 import { OnOffLighting } from "../../cluster/interface/index.js";
-import { AutoDevice } from "../AutoDevice.js"
 
-export class BasicVideoPlayer extends
-    AutoDevice.with(OnOffLighting)
-{
-    constructor(endpointId?: number) {
-        super(DeviceTypes.BASIC_VIDEO_PLAYER, [], endpointId);
-    }
+export class BasicVideoPlayer extends AutoDevice.with(DeviceTypes.BASIC_VIDEO_PLAYER, OnOffLighting) {
 }

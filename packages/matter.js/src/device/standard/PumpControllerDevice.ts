@@ -7,14 +7,8 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { DeviceTypes } from "../DeviceTypes.js";
-import { ClusterInterface } from "../../cluster/Cluster.js";
+import { AutoDevice } from "../AutoDevice.js";
 import { Identify } from "../../cluster/interface/index.js";
-import { AutoDevice } from "../AutoDevice.js"
 
-export class PumpController extends
-    AutoDevice.with(Identify)
-{
-    constructor(endpointId?: number) {
-        super(DeviceTypes.PUMP_CONTROLLER, [], endpointId);
-    }
+export class PumpController extends AutoDevice.with(DeviceTypes.PUMP_CONTROLLER, Identify) {
 }

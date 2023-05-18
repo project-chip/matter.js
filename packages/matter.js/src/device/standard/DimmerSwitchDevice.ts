@@ -7,14 +7,8 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { DeviceTypes } from "../DeviceTypes.js";
-import { ClusterInterface } from "../../cluster/Cluster.js";
+import { AutoDevice } from "../AutoDevice.js";
 import { Identify } from "../../cluster/interface/index.js";
-import { AutoDevice } from "../AutoDevice.js"
 
-export class DimmerSwitch extends
-    AutoDevice.with(Identify)
-{
-    constructor(endpointId?: number) {
-        super(DeviceTypes.DIMMER_SWITCH, [], endpointId);
-    }
+export class DimmerSwitch extends AutoDevice.with(DeviceTypes.DIMMER_SWITCH, Identify) {
 }

@@ -7,14 +7,8 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { DeviceTypes } from "../DeviceTypes.js";
-import { ClusterInterface } from "../../cluster/Cluster.js";
+import { AutoDevice } from "../AutoDevice.js";
 import { PressureMeasurement, Identify } from "../../cluster/interface/index.js";
-import { AutoDevice } from "../AutoDevice.js"
 
-export class PressureSensor extends
-    AutoDevice.with(PressureMeasurement, Identify)
-{
-    constructor(endpointId?: number) {
-        super(DeviceTypes.PRESSURE_SENSOR, [], endpointId);
-    }
+export class PressureSensor extends AutoDevice.with(DeviceTypes.PRESSURE_SENSOR, PressureMeasurement, Identify) {
 }

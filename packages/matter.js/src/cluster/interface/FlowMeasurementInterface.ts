@@ -8,26 +8,14 @@
 
 import { FlowMeasurementCluster, ClusterInterface } from "../index.js";
 
-export interface FlowMeasurementInterface {
-    measuredValue: number | undefined;
-    addMeasuredValueListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
-    removeMeasuredValueListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
 
-    minMeasuredValue: number | undefined;
-    addMinMeasuredValueListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
-    removeMinMeasuredValueListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
-
-    maxMeasuredValue: number | undefined;
-    addMaxMeasuredValueListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
-    removeMaxMeasuredValueListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
-
-    tolerance?: number;
-    addToleranceListener(listener: (newValue: number, oldValue: number) => void): void;
-    removeToleranceListener(listener: (newValue: number, oldValue: number) => void): void;
+export interface Common {
+    readonly measuredValue: number | undefined;
+    readonly minMeasuredValue: number | undefined;
+    readonly maxMeasuredValue: number | undefined;
+    readonly tolerance?: number;
 }
 
-export const FlowMeasurement:
-    ClusterInterface<FlowMeasurementInterface> =
-{
+export const FlowMeasurement: ClusterInterface<Common, Common> = {
     definition: FlowMeasurementCluster
-};
+}

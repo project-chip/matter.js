@@ -6,19 +6,20 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-export * from "./BasicAdminCommissioningInterface.js";
-export * from "./PowerSourceConfigurationInterface.js";
-export * from "./WifiNetworkCommissioningInterface.js";
-export * from "./PowerSourceInterface.js";
-export * from "./BridgedDeviceBasicInformationInterface.js";
-export * from "./IdentifyInterface.js";
-export * from "./OnOffLightingInterface.js";
-export * from "./LevelControlInterface.js";
-export * from "./TemperatureMeasurementInterface.js";
-export * from "./PressureMeasurementInterface.js";
-export * from "./FlowMeasurementInterface.js";
-export * from "./FixedLabelInterface.js";
-export * from "./BooleanStateInterface.js";
-export * from "./IlluminanceMeasurementInterface.js";
-export * from "./OccupancySensingInterface.js";
-export * from "./RelativeHumidityInterface.js";
+
+export { BasicAdminCommissioning } from "./BasicAdminCommissioningInterface.js";
+export { PowerSourceConfiguration } from "./PowerSourceConfigurationInterface.js";
+export { WifiNetworkCommissioning } from "./WifiNetworkCommissioningInterface.js";
+export { PowerSource } from "./PowerSourceInterface.js";
+export { BridgedDeviceBasicInformation } from "./BridgedDeviceBasicInformationInterface.js";
+export { Identify } from "./IdentifyInterface.js";
+export { OnOffLighting } from "./OnOffLightingInterface.js";
+export { LevelControl } from "./LevelControlInterface.js";
+export { TemperatureMeasurement } from "./TemperatureMeasurementInterface.js";
+export { PressureMeasurement } from "./PressureMeasurementInterface.js";
+export { FlowMeasurement } from "./FlowMeasurementInterface.js";
+export { FixedLabel } from "./FixedLabelInterface.js";
+export { BooleanState } from "./BooleanStateInterface.js";
+export { IlluminanceMeasurement } from "./IlluminanceMeasurementInterface.js";
+export { OccupancySensing } from "./OccupancySensingInterface.js";
+export { RelativeHumidity } from "./RelativeHumidityInterface.js";

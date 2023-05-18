@@ -10,29 +10,18 @@ import { BasicAdminCommissioningCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
 type OpenCommissioningWindowRequest = TypeFromSchema<typeof BasicAdminCommissioningCluster.commands.openCommissioningWindow.requestSchema>;
-
 type OpenBasicCommissioningWindowRequest = TypeFromSchema<typeof BasicAdminCommissioningCluster.commands.openBasicCommissioningWindow.requestSchema>;
 
-export interface BasicAdminCommissioningInterface {
-    windowStatus: number;
-    addWindowStatusListener(listener: (newValue: number, oldValue: number) => void): void;
-    removeWindowStatusListener(listener: (newValue: number, oldValue: number) => void): void;
-
-    adminFabricIndex: number | undefined;
-    addAdminFabricIndexListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
-    removeAdminFabricIndexListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
-
-    adminVendorId: number | undefined;
-    addAdminVendorIdListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
-    removeAdminVendorIdListener(listener: (newValue: number | undefined, oldValue: number | undefined) => void): void;
+export interface Common {
+    readonly windowStatus: number;
+    readonly adminFabricIndex: number | undefined;
+    readonly adminVendorId: number | undefined;
 
     invokeOpenCommissioningWindow(request: OpenCommissioningWindowRequest): Promise<void>;
     invokeRevokeCommissioning(): Promise<void>;
     invokeOpenBasicCommissioningWindow(request: OpenBasicCommissioningWindowRequest): Promise<void>;
 }
 
-export const BasicAdminCommissioning:
-    ClusterInterface<BasicAdminCommissioningInterface> =
-{
+export const BasicAdminCommissioning: ClusterInterface<Common, Common> = {
     definition: BasicAdminCommissioningCluster
-};
+}

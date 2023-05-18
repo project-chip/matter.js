@@ -7,22 +7,15 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { DeviceTypes } from "../DeviceTypes.js";
-import { ClusterInterface } from "../../cluster/Cluster.js";
+import { AutoDevice } from "../AutoDevice.js";
 import { Identify, FixedLabel } from "../../cluster/interface/index.js";
-import { AutoDevice } from "../AutoDevice.js"
 
-export class GenericSwitch extends
-    AutoDevice.with(Identify)
-{
-    constructor(endpointId?: number) {
-        super(DeviceTypes.GENERIC_SWITCH, [], endpointId);
-    }
-
+export class GenericSwitch extends AutoDevice.with(DeviceTypes.GENERIC_SWITCH, Identify) {
     static readonly options = {
         FixedLabel
-    };
+    }
 
-    static with(...clusters: ClusterInterface<any>[]) {
+    static with(...clusters: Array<typeof this.options[keyof typeof this.options]>) {
         return AutoDevice.extendDevice(this, ...clusters);
     }
 }

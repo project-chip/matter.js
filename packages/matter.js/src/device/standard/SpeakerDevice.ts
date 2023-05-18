@@ -7,14 +7,8 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { DeviceTypes } from "../DeviceTypes.js";
-import { ClusterInterface } from "../../cluster/Cluster.js";
+import { AutoDevice } from "../AutoDevice.js";
 import { OnOffLighting, LevelControl } from "../../cluster/interface/index.js";
-import { AutoDevice } from "../AutoDevice.js"
 
-export class Speaker extends
-    AutoDevice.with(OnOffLighting, LevelControl)
-{
-    constructor(endpointId?: number) {
-        super(DeviceTypes.SPEAKER, [], endpointId);
-    }
+export class Speaker extends AutoDevice.with(DeviceTypes.SPEAKER, OnOffLighting, LevelControl) {
 }
