@@ -150,7 +150,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         deviceClass: DeviceClasses.Node, // ???
         revision: 1,
         requiredServerClusters: [
-            MatterClusters.PowerSourceCluster.id
+            MatterClusters.WiredPowerSourceCluster.id // any cluster features allowed
         ],
     }),
 
@@ -230,7 +230,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         requiredServerClusters: [
             MatterClusters.BridgedDeviceBasicInformationCluster.id,
             MatterClusters.PowerSourceConfigurationCluster.id,
-            MatterClusters.PowerSourceCluster.id,
+            MatterClusters.WiredPowerSourceCluster.id, // any cluster features allowed
         ],
     }),
 

@@ -10,14 +10,16 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
     * Added types for FixedAttribute and OptionalFixedAttribute
     * Added FixedAttributeServer which only allows to "get" the value but not to set it
     * Added FabricScopedAttributeServer which gets and sets the value based on the provided fabric
-    * Update ClusterServerObj and ClusterClientObj typings to respect these Attribute types
+    * Updated ClusterServerObj and ClusterClientObj typings to respect these Attribute types
     * Updated all Cluster definitions that use such attribute types
+  * Enhance: Splitted up and corrected PowerSource Cluster based on Matter 1.1 Specs
   * Fix Typing of Commands in ClusterClient if no commands were present
   * Fix: Fix equality checks in Attribute servers to check deeper then just === (and introduce new util method isDeepEqual)
-
 * matter.js API:
   * Breaking: Remove the Legacy API classes from examples and also do not export them anymore. use the new API please!
   * Breaking: Adjusted some constructors of the new API and remove the option to pass an array of clusters to be added initially because this was no longer compatible to the strong typing in some places. Use addClusterServer and addClusterClient methods
+* Misc:
+  * Added Specification links for Matter Specifications 1.1
 
 ## 0.4.0 (2023-05-16)
 * Matter-Core functionality:

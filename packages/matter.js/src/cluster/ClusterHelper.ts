@@ -23,7 +23,7 @@ import { WifiAndEthernetAndThreadNetworkCommissioningCluster } from "./NetworkCo
 import { OccupancySensingCluster } from "./OccupancySensingCluster.js";
 import { OnOffCluster } from "./OnOffCluster.js";
 import { OperationalCredentialsCluster } from "./OperationalCredentialsCluster.js";
-import { PowerSourceCluster } from "./PowerSourceCluster.js";
+import { WiredPowerSourceCluster } from "./PowerSourceCluster.js";
 import { PowerSourceConfigurationCluster } from "./PowerSourceConfigurationCluster.js";
 import { PressureMeasurementCluster } from "./PressureMeasurementCluster.js";
 import { ScenesCluster } from "./ScenesCluster.js";
@@ -55,7 +55,7 @@ export const AllClustersMap: { [key: Cluster<any, any, any, any, any>["id"]]: Cl
     [OccupancySensingCluster.id]: OccupancySensingCluster,
     [OnOffCluster.id]: OnOffCluster,
     [OperationalCredentialsCluster.id]: OperationalCredentialsCluster,
-    [PowerSourceCluster.id]: PowerSourceCluster,
+    [WiredPowerSourceCluster.id]: WiredPowerSourceCluster,
     [PowerSourceConfigurationCluster.id]: PowerSourceConfigurationCluster,
     [PressureMeasurementCluster.id]: PressureMeasurementCluster,
     [ScenesCluster.id]: ScenesCluster,
