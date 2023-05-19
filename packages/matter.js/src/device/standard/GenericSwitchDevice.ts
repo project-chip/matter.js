@@ -10,12 +10,16 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { AutoDevice } from "../AutoDevice.js";
 import { Identify, FixedLabel } from "../../cluster/interface/index.js";
 
-export class GenericSwitch extends AutoDevice.with(DeviceTypes.GENERIC_SWITCH, Identify) {
-    static readonly options = {
-        FixedLabel
-    }
+const GenericSwitchOptions = {
+    FixedLabel
+}
 
-    static with(...clusters: Array<typeof this.options[keyof typeof this.options]>) {
-        return AutoDevice.extendDevice(this, ...clusters);
+type GenericSwitchOption = typeof GenericSwitchOptions[keyof typeof GenericSwitchOptions]
+
+export class GenericSwitch extends AutoDevice.implement(DeviceTypes.GENERIC_SWITCH, Identify) {
+    readonly options = GenericSwitchOptions;
+
+    static with<Options extends GenericSwitchOption[]>(...options: Options) {
+        return AutoDevice.extend(this, ...options);
     }
 }

@@ -8,7 +8,18 @@
 
 import { DeviceTypes } from "../DeviceTypes.js";
 import { AutoDevice } from "../AutoDevice.js";
-import { OnOffLighting } from "../../cluster/interface/index.js";
+import { OnOff, OnOffLighting } from "../../cluster/interface/index.js";
 
-export class BasicVideoPlayer extends AutoDevice.with(DeviceTypes.BASIC_VIDEO_PLAYER, OnOffLighting) {
+const BasicVideoPlayerOptions = {
+    OnOffLighting
+}
+
+type BasicVideoPlayerOption = typeof BasicVideoPlayerOptions[keyof typeof BasicVideoPlayerOptions]
+
+export class BasicVideoPlayer extends AutoDevice.implement(DeviceTypes.BASIC_VIDEO_PLAYER, OnOff) {
+    readonly options = BasicVideoPlayerOptions;
+
+    static with<Options extends BasicVideoPlayerOption[]>(...options: Options) {
+        return AutoDevice.extend(this, ...options);
+    }
 }

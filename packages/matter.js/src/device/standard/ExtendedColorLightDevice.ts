@@ -8,7 +8,18 @@
 
 import { DeviceTypes } from "../DeviceTypes.js";
 import { AutoDevice } from "../AutoDevice.js";
-import { Identify, OnOffLighting, LevelControl } from "../../cluster/interface/index.js";
+import { Identify, OnOff, LevelControl, OnOffLighting } from "../../cluster/interface/index.js";
 
-export class ExtendedColorLight extends AutoDevice.with(DeviceTypes.EXTENDED_COLOR_LIGHT, Identify, OnOffLighting, LevelControl) {
+const ExtendedColorLightOptions = {
+    OnOffLighting
+}
+
+type ExtendedColorLightOption = typeof ExtendedColorLightOptions[keyof typeof ExtendedColorLightOptions]
+
+export class ExtendedColorLight extends AutoDevice.implement(DeviceTypes.EXTENDED_COLOR_LIGHT, Identify, OnOff, LevelControl) {
+    readonly options = ExtendedColorLightOptions;
+
+    static with<Options extends ExtendedColorLightOption[]>(...options: Options) {
+        return AutoDevice.extend(this, ...options);
+    }
 }

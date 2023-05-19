@@ -10,5 +10,7 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { AutoDevice } from "../AutoDevice.js";
 import { Identify } from "../../cluster/interface/index.js";
 
-export class ControlBridge extends AutoDevice.with(DeviceTypes.CONTROL_BRIDGE, Identify) {
+export class ControlBridge extends AutoDevice.implement(DeviceTypes.CONTROL_BRIDGE, Identify) {
+    readonly options = ControlBridgeOptions;
+
 }

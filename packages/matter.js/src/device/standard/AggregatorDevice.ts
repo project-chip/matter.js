@@ -9,5 +9,7 @@
 import { DeviceTypes } from "../DeviceTypes.js";
 import { AutoDevice } from "../AutoDevice.js";
 
-export class Aggregator extends AutoDevice.with(DeviceTypes.AGGREGATOR) {
+export class Aggregator extends AutoDevice.implement(DeviceTypes.AGGREGATOR) {
+    readonly options = AggregatorOptions;
+
 }

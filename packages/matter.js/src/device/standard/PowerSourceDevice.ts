@@ -10,5 +10,7 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { AutoDevice } from "../AutoDevice.js";
 import { PowerSource as PowerSourceCluster } from "../../cluster/interface/index.js";
 
-export class PowerSource extends AutoDevice.with(DeviceTypes.POWER_SOURCE, PowerSourceCluster) {
+export class PowerSource extends AutoDevice.implement(DeviceTypes.POWER_SOURCE, PowerSourceCluster) {
+    readonly options = PowerSourceOptions;
+
 }

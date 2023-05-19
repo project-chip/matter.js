@@ -69,7 +69,8 @@ CodeModel.clusters.forEach((cluster) => {
     file.addImport("../index", cluster.definitionName);
     file.addImport("../index", "ClusterInterface");
 
-    const common = file.block(`export interface Common`);
+    const module = file.block(`export module ${cluster.name}`);
+    const state = module.block(`export type State =`);
 
     cluster.attributes.forEach((attr) => {
         if (GLOBAL_ATTRIBUTE_IDS.has(attr.id)) return;
@@ -78,15 +79,12 @@ CodeModel.clusters.forEach((cluster) => {
         context.typeSource = `${attr.source}.schema`;
 
         const type = mapType(attr.schema, context);
-        common.add(`readonly ${attr.fieldName}${attr.optional ? "?" : ""}: ${type};`);
+        state.add(`readonly ${attr.fieldName}${attr.optional ? "?" : ""}: ${type};`);
     });
 
-    if (cluster.attributes.length && cluster.commands.length) {
-        common.blank();
-    }
-
-    const client = file.block(`export interface Client extends Common`);
-    const server = file.block(`export interface Server extends Common`);
+    const common = module.block(`export interface Common`);
+    const client = module.block(`export interface Client extends Common`);
+    const server = module.block(`export interface Server extends Common`);
 
     cluster.commands.forEach((command) => {
         context.typeName = `${command.typeName}Request`;
@@ -107,10 +105,9 @@ CodeModel.clusters.forEach((cluster) => {
         context.typeSource = `${event.source}.schema`;
 
         const listener = `Listener(listener: (event: ${mapType(event.schema, context)}) => void): void;`
-        client.add(`add${event.typeName}${listener}`);
-        client.add(`remove${event.typeName}${listener}`);
-
-        server.add(`trigger${event.typeName}(): void;`)
+        client.add(`add${event.typeName}${listener}`)
+            .add(`remove${event.typeName}${listener}`)
+            .add(`trigger${event.typeName}(): void;`);
     });
 
     let clientName = "Client", serverName = "Server";
@@ -123,7 +120,7 @@ CodeModel.clusters.forEach((cluster) => {
         server.remove();
     }
 
-    file.block(`export const ${cluster.name}: ClusterInterface<${clientName}, ${serverName}> =`)
+    file.block(`export const ${cluster.name}: ClusterInterface<${cluster.name}.State, ${cluster.name}.${clientName}, ${cluster.name}.${serverName}> =`)
         .add(`definition: ${cluster.definitionName}`);
     file.save();
 

@@ -29,23 +29,33 @@ CodeModel.devices.forEach((device) => {
     const interfaces = {} as typeof requiredInterfaces;
     Object.assign(interfaces, requiredInterfaces);
 
-    const withArgs = [`DeviceTypes.${device.key}`, ...Object.keys(requiredInterfaces)];
-    const def = file.block(`export class ${device.name} extends AutoDevice.with(${withArgs.join(", ")})`);
-
     // Configure optional interfaces
     const optionalInterfaces = clusterNames(device.optionalServerClusters);
-    if (Object.keys(optionalInterfaces).length) {
+    const hasOptions = Object.keys(optionalInterfaces).length;
+    if (hasOptions) {
+        const optionalInterfaces = clusterNames(device.optionalServerClusters);
         Object.assign(interfaces, optionalInterfaces);
-        def.block("static readonly options =")
-            .add(Object.keys(optionalInterfaces).join(",\n"));
-        def.block("static with(...clusters: Array<typeof this.options[keyof typeof this.options]>)")
-            .add("return AutoDevice.extendDevice(this, ...clusters);");
+        file.block(`const ${device.name}Options =`)
+            .add(Object.keys(optionalInterfaces).join(",\n"))
+            .parent
+            .add(`type ${device.name}Option = typeof ${device.name}Options[keyof typeof ${device.name}Options]`)
+            .blank();
     }
 
-    // Configure imports
+    // Add imports
     file.addImport("../AutoDevice", "AutoDevice");
     Object.entries(interfaces).forEach(([k, v]) =>
         file.addImport("../../cluster/interface/index", k == v ? k : `${v} as ${k}`));
+
+    // Add the class
+    const withArgs = [`DeviceTypes.${device.key}`, ...Object.keys(requiredInterfaces)];
+    const klass = file.block(`export class ${device.name} extends AutoDevice.implement(${withArgs.join(", ")})`)
+        .add(`readonly options = ${device.name}Options;`)
+        .blank();
+    if (hasOptions) {
+        klass.block(`static with<Options extends ${device.name}Option[]>(...options: Options)`)
+            .add("return AutoDevice.extend(this, ...options);");
+    }
 
     file.save();
 

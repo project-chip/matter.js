@@ -8,14 +8,19 @@
 
 import { DeviceTypes } from "../DeviceTypes.js";
 import { AutoDevice } from "../AutoDevice.js";
-import { Identify, OnOffLighting, LevelControl } from "../../cluster/interface/index.js";
+import { Identify, OnOff, OnOffLighting, LevelControl } from "../../cluster/interface/index.js";
 
-export class HeatingCoolingUnit extends AutoDevice.with(DeviceTypes.HEATING_COOLING_UNIT, Identify, OnOffLighting) {
-    static readonly options = {
-        LevelControl
-    }
+const HeatingCoolingUnitOptions = {
+    OnOffLighting,
+    LevelControl
+}
 
-    static with(...clusters: Array<typeof this.options[keyof typeof this.options]>) {
-        return AutoDevice.extendDevice(this, ...clusters);
+type HeatingCoolingUnitOption = typeof HeatingCoolingUnitOptions[keyof typeof HeatingCoolingUnitOptions]
+
+export class HeatingCoolingUnit extends AutoDevice.implement(DeviceTypes.HEATING_COOLING_UNIT, Identify, OnOff) {
+    readonly options = HeatingCoolingUnitOptions;
+
+    static with<Options extends HeatingCoolingUnitOption[]>(...options: Options) {
+        return AutoDevice.extend(this, ...options);
     }
 }

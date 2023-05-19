@@ -18,31 +18,33 @@ type MoveWithOnOffRequest = TypeFromSchema<typeof LevelControlCluster.commands.m
 type StepWithOnOffRequest = TypeFromSchema<typeof LevelControlCluster.commands.stepWithOnOff.requestSchema>;
 type StopWithOnOffRequest = TypeFromSchema<typeof LevelControlCluster.commands.stopWithOnOff.requestSchema>;
 
-export type State = {
-    readonly currentLevel: number | undefined;
-    readonly minLevel?: number;
-    readonly maxLevel?: number;
-    readonly onOffTransitionTime?: number;
-    readonly onLevel: number | undefined;
-    readonly onTransitionTime?: number | undefined;
-    readonly offTransitionTime?: number | undefined;
-    readonly defaultMoveRate?: number | undefined;
-    readonly options: number;
-    readonly remainingTime?: number;
-    readonly startUpCurrentLevel?: number | undefined;
+export module LevelControl {
+    export type State = {
+        readonly currentLevel: number | undefined;
+        readonly minLevel?: number;
+        readonly maxLevel?: number;
+        readonly onOffTransitionTime?: number;
+        readonly onLevel: number | undefined;
+        readonly onTransitionTime?: number | undefined;
+        readonly offTransitionTime?: number | undefined;
+        readonly defaultMoveRate?: number | undefined;
+        readonly options: number;
+        readonly remainingTime?: number;
+        readonly startUpCurrentLevel?: number | undefined;
+    }
+
+    export interface Common {
+        invokeMoveToLevel(request: MoveToLevelRequest): Promise<void>;
+        invokeMove(request: MoveRequest): Promise<void>;
+        invokeStep(request: StepRequest): Promise<void>;
+        invokeStop(request: StopRequest): Promise<void>;
+        invokeMoveToLevelWithOnOff(request: MoveToLevelWithOnOffRequest): Promise<void>;
+        invokeMoveWithOnOff(request: MoveWithOnOffRequest): Promise<void>;
+        invokeStepWithOnOff(request: StepWithOnOffRequest): Promise<void>;
+        invokeStopWithOnOff(request: StopWithOnOffRequest): Promise<void>;
+    }
 }
 
-export interface Common {
-    invokeMoveToLevel(request: MoveToLevelRequest): Promise<void>;
-    invokeMove(request: MoveRequest): Promise<void>;
-    invokeStep(request: StepRequest): Promise<void>;
-    invokeStop(request: StopRequest): Promise<void>;
-    invokeMoveToLevelWithOnOff(request: MoveToLevelWithOnOffRequest): Promise<void>;
-    invokeMoveWithOnOff(request: MoveWithOnOffRequest): Promise<void>;
-    invokeStepWithOnOff(request: StepWithOnOffRequest): Promise<void>;
-    invokeStopWithOnOff(request: StopWithOnOffRequest): Promise<void>;
-}
-
-export const LevelControl: ClusterInterface<State, Common, Common> = {
+export const LevelControl: ClusterInterface<LevelControl.State, LevelControl.Common, LevelControl.Common> = {
     definition: LevelControlCluster
 }

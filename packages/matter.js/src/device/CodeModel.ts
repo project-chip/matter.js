@@ -4,9 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Attributes, Cluster, Commands, Events } from "../../src/cluster/Cluster.js";
+import { Attributes, Cluster, Commands, Events, ClusterInterface } from "../cluster/index.js";
 import { DeviceTypeDefinition, DeviceTypes } from "../../src/device/DeviceTypes.js";
 import * as clusterExports from "../../src/cluster/index.js";
+
+export { ClusterInterface };
 
 const INTERNAL_CLUSTERS = [
     clusterExports.ScenesCluster,
@@ -102,15 +104,17 @@ class Event extends Element<clusterExports.Event<any>> {
 }
 
 /**
- * Information about a cluster.
+ * Information about a cluster.  Extracted from the cluster definition (a
+ * Cluster instance).
  */
 class ClusterDetail {
     constructor(
-        public definitionName: string,
-        public definition: Cluster<any, any, Attributes, Commands, Events>,
-        public attributes = new Elements(definition.attributes, Attribute, definitionName),
-        public commands = new Elements(definition.commands, Command, definitionName),
-        public events = new Elements(definition.events, Event, definitionName)) { }
+        public readonly definitionName: string,
+        public readonly definition: Cluster<any, any, Attributes, Commands, Events>,
+        public readonly extensions: Array<ClusterDetail>,
+        public readonly attributes = new Elements(definition.attributes, Attribute, definitionName),
+        public readonly commands = new Elements(definition.commands, Command, definitionName),
+        public readonly events = new Elements(definition.events, Event, definitionName)) { }
 
     get id() {
         return this.definition.id;
@@ -126,15 +130,16 @@ class ClusterDetail {
 }
 
 /**
- * Information about a device.
+ * Information about a device.  Extract from the device definition (a
+ * DeviceTypeDefinition instance).
  */
 class DeviceDetail {
     public constructor(
-        public key: string,
-        public definition: DeviceTypeDefinition,
-        public requiredServerClusters: ClusterDetail[],
-        public optionalServerClusters: ClusterDetail[],
-        public name = camelize(key)) { }
+        public readonly key: string,
+        public readonly definition: DeviceTypeDefinition,
+        public readonly requiredServerClusters: ClusterDetail[],
+        public readonly optionalServerClusters: ClusterDetail[],
+        public readonly name = camelize(key)) { }
 }
 
 /**
@@ -145,7 +150,7 @@ export class CodeModel {
     static readonly devices = new Array<DeviceDetail>;
     static readonly clusters = new Array<ClusterDetail>;
 
-    static forCluster(cluster: clusterExports.ClusterInterface<any, any>): ClusterDetail {
+    static forCluster(cluster: ClusterInterface<any, any, any>): ClusterDetail {
         const model = this.clusters.find((detail) => detail.definition === cluster.definition);
         if (model) return model;
         throw new Error("Unsupported cluster");
@@ -155,20 +160,34 @@ export class CodeModel {
         const availableClusters = new Map<number, ClusterDetail>();
         const referencedClusters = new Set<ClusterDetail>();
 
+        const extensions = new Map<number, ClusterDetail[]>();
         for (const key in clusterExports) {
             if (key.match(/[a-z]Cluster$/i)) {
                 const cluster = (<any>clusterExports)[key];
                 if (INTERNAL_CLUSTERS.indexOf(cluster) !== -1) continue;
-                availableClusters.set(cluster.id, new ClusterDetail(key, cluster));
+                let clusterExtensions = extensions.get(cluster.id);
+                if (!clusterExtensions) {
+                    clusterExtensions = Array<ClusterDetail>();
+                    extensions.set(cluster.id, clusterExtensions);
+                }
+                const detail = new ClusterDetail(key, cluster, clusterExtensions);
+                if (cluster.extension) {
+                    clusterExtensions.push(detail);
+                } else {
+                    availableClusters.set(cluster.id, detail);
+                }
             }
         }
-
+        
         for (const key in DeviceTypes) {
             const dt = DeviceTypes[key];
             const mapClusters = (list: number[]) => <ClusterDetail[]>list.map((id) => availableClusters.get(id)).filter((cluster) => cluster);
 
             const requiredServerClusters = mapClusters(dt.requiredServerClusters);
-            const optionalServerClusters = mapClusters(dt.optionalServerClusters);
+            const optionalServerClusters = requiredServerClusters
+                .map((c) => c.extensions)
+                .flat()
+                .concat(mapClusters(dt.optionalServerClusters));
             requiredServerClusters.concat(optionalServerClusters).forEach((c) => referencedClusters.add(c));
             if (INTERNAL_DEVICE_TYPES.indexOf(dt) == -1)
                 this.devices.push(new DeviceDetail(key, DeviceTypes[key], requiredServerClusters, optionalServerClusters));

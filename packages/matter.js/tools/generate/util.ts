@@ -33,7 +33,7 @@ export function clean(target: string, suffix: string) {
 }
 
 class Block extends Array<any> {
-    constructor(private parent: Block | undefined, ...entries: any[]) {
+    constructor(private parentBlock: Block | undefined, ...entries: any[]) {
         super(...entries);
     }
 
@@ -54,11 +54,17 @@ class Block extends Array<any> {
         return pieces.join("\n");
     }
 
+    /** Access the (required) parent */
+    get parent() {
+        if (!this.parentBlock) throw new Error("Undefined parent access");
+        return this.parentBlock;
+    }
+
     /** Delete from parent */
     remove() {
-        if (this.parent) {
-            const index = this.parent.indexOf(this);
-            if (index != -1) this.parent.splice(index, 1);
+        if (this.parentBlock) {
+            const index = this.parentBlock.indexOf(this);
+            if (index != -1) this.parentBlock.splice(index, 1);
         }
     }
 
@@ -123,6 +129,7 @@ export class TsFile extends Block {
             this.imports.set(file, list);
         }
         if (list.indexOf(name) == -1) list.push(name);
+        return this;
     }
 
     save() {
@@ -137,5 +144,6 @@ export class TsFile extends Block {
         this.blank();
 
         writeFileSync(targetPath(`${this.name}.ts`), this.toString());
+        return this;
     }
 }

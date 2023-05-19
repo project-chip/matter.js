@@ -8,17 +8,22 @@
 
 import { DeviceTypes } from "../DeviceTypes.js";
 import { AutoDevice } from "../AutoDevice.js";
-import { OnOffLighting, Identify, LevelControl, TemperatureMeasurement, PressureMeasurement, FlowMeasurement } from "../../cluster/interface/index.js";
+import { OnOff, Identify, OnOffLighting, LevelControl, TemperatureMeasurement, PressureMeasurement, FlowMeasurement } from "../../cluster/interface/index.js";
 
-export class Pump extends AutoDevice.with(DeviceTypes.PUMP, OnOffLighting, Identify) {
-    static readonly options = {
-        LevelControl,
-        TemperatureMeasurement,
-        PressureMeasurement,
-        FlowMeasurement
-    }
+const PumpOptions = {
+    OnOffLighting,
+    LevelControl,
+    TemperatureMeasurement,
+    PressureMeasurement,
+    FlowMeasurement
+}
 
-    static with(...clusters: Array<typeof this.options[keyof typeof this.options]>) {
-        return AutoDevice.extendDevice(this, ...clusters);
+type PumpOption = typeof PumpOptions[keyof typeof PumpOptions]
+
+export class Pump extends AutoDevice.implement(DeviceTypes.PUMP, OnOff, Identify) {
+    readonly options = PumpOptions;
+
+    static with<Options extends PumpOption[]>(...options: Options) {
+        return AutoDevice.extend(this, ...options);
     }
 }

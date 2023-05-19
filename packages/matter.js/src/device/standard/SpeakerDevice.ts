@@ -8,7 +8,18 @@
 
 import { DeviceTypes } from "../DeviceTypes.js";
 import { AutoDevice } from "../AutoDevice.js";
-import { OnOffLighting, LevelControl } from "../../cluster/interface/index.js";
+import { OnOff, LevelControl, OnOffLighting } from "../../cluster/interface/index.js";
 
-export class Speaker extends AutoDevice.with(DeviceTypes.SPEAKER, OnOffLighting, LevelControl) {
+const SpeakerOptions = {
+    OnOffLighting
+}
+
+type SpeakerOption = typeof SpeakerOptions[keyof typeof SpeakerOptions]
+
+export class Speaker extends AutoDevice.implement(DeviceTypes.SPEAKER, OnOff, LevelControl) {
+    readonly options = SpeakerOptions;
+
+    static with<Options extends SpeakerOption[]>(...options: Options) {
+        return AutoDevice.extend(this, ...options);
+    }
 }

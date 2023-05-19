@@ -10,12 +10,16 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { AutoDevice } from "../AutoDevice.js";
 import { Identify } from "../../cluster/interface/index.js";
 
-export class WindowCoveringController extends AutoDevice.with(DeviceTypes.WINDOW_COVERING_CONTROLLER) {
-    static readonly options = {
-        Identify
-    }
+const WindowCoveringControllerOptions = {
+    Identify
+}
 
-    static with(...clusters: Array<typeof this.options[keyof typeof this.options]>) {
-        return AutoDevice.extendDevice(this, ...clusters);
+type WindowCoveringControllerOption = typeof WindowCoveringControllerOptions[keyof typeof WindowCoveringControllerOptions]
+
+export class WindowCoveringController extends AutoDevice.implement(DeviceTypes.WINDOW_COVERING_CONTROLLER) {
+    readonly options = WindowCoveringControllerOptions;
+
+    static with<Options extends WindowCoveringControllerOption[]>(...options: Options) {
+        return AutoDevice.extend(this, ...options);
     }
 }

@@ -10,5 +10,7 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { AutoDevice } from "../AutoDevice.js";
 import { Identify, RelativeHumidity } from "../../cluster/interface/index.js";
 
-export class HumiditySensor extends AutoDevice.with(DeviceTypes.HUMIDITY_SENSOR, Identify, RelativeHumidity) {
+export class HumiditySensor extends AutoDevice.implement(DeviceTypes.HUMIDITY_SENSOR, Identify, RelativeHumidity) {
+    readonly options = HumiditySensorOptions;
+
 }

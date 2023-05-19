@@ -10,5 +10,7 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { AutoDevice } from "../AutoDevice.js";
 import { Identify } from "../../cluster/interface/index.js";
 
-export class OnOffSensor extends AutoDevice.with(DeviceTypes.ON_OFF_SENSOR, Identify) {
+export class OnOffSensor extends AutoDevice.implement(DeviceTypes.ON_OFF_SENSOR, Identify) {
+    readonly options = OnOffSensorOptions;
+
 }

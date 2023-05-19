@@ -9,5 +9,7 @@
 import { DeviceTypes } from "../DeviceTypes.js";
 import { AutoDevice } from "../AutoDevice.js";
 
-export class CastingVideoClient extends AutoDevice.with(DeviceTypes.CASTING_VIDEO_CLIENT) {
+export class CastingVideoClient extends AutoDevice.implement(DeviceTypes.CASTING_VIDEO_CLIENT) {
+    readonly options = CastingVideoClientOptions;
+
 }

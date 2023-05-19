@@ -8,7 +8,18 @@
 
 import { DeviceTypes } from "../DeviceTypes.js";
 import { AutoDevice } from "../AutoDevice.js";
-import { Identify, OnOffLighting, LevelControl } from "../../cluster/interface/index.js";
+import { Identify, OnOff, LevelControl, OnOffLighting } from "../../cluster/interface/index.js";
 
-export class DimmableLight extends AutoDevice.with(DeviceTypes.DIMMABLE_LIGHT, Identify, OnOffLighting, LevelControl) {
+const DimmableLightOptions = {
+    OnOffLighting
+}
+
+type DimmableLightOption = typeof DimmableLightOptions[keyof typeof DimmableLightOptions]
+
+export class DimmableLight extends AutoDevice.implement(DeviceTypes.DIMMABLE_LIGHT, Identify, OnOff, LevelControl) {
+    readonly options = DimmableLightOptions;
+
+    static with<Options extends DimmableLightOption[]>(...options: Options) {
+        return AutoDevice.extend(this, ...options);
+    }
 }

@@ -10,5 +10,7 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { AutoDevice } from "../AutoDevice.js";
 import { Identify } from "../../cluster/interface/index.js";
 
-export class ColorDimmerSwitch extends AutoDevice.with(DeviceTypes.COLOR_DIMMER_SWITCH, Identify) {
+export class ColorDimmerSwitch extends AutoDevice.implement(DeviceTypes.COLOR_DIMMER_SWITCH, Identify) {
+    readonly options = ColorDimmerSwitchOptions;
+
 }

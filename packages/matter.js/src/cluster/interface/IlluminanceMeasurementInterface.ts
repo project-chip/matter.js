@@ -9,17 +9,19 @@
 import { IlluminanceMeasurementCluster, ClusterInterface } from "../index.js";
 
 
-export type State = {
-    readonly measuredValue: number | undefined;
-    readonly minMeasuredValue: number | undefined;
-    readonly maxMeasuredValue: number | undefined;
-    readonly tolerance?: number;
-    readonly lightSensorType?: number | undefined;
+export module IlluminanceMeasurement {
+    export type State = {
+        readonly measuredValue: number | undefined;
+        readonly minMeasuredValue: number | undefined;
+        readonly maxMeasuredValue: number | undefined;
+        readonly tolerance?: number;
+        readonly lightSensorType?: number | undefined;
+    }
+
+    export interface Common {
+    }
 }
 
-export interface Common {
-}
-
-export const IlluminanceMeasurement: ClusterInterface<State, Common, Common> = {
+export const IlluminanceMeasurement: ClusterInterface<IlluminanceMeasurement.State, IlluminanceMeasurement.Common, IlluminanceMeasurement.Common> = {
     definition: IlluminanceMeasurementCluster
 }

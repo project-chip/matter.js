@@ -7,12 +7,12 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 
-export { BasicAdminCommissioning } from "./BasicAdminCommissioningInterface.js";
 export { PowerSourceConfiguration } from "./PowerSourceConfigurationInterface.js";
-export { WifiNetworkCommissioning } from "./WifiNetworkCommissioningInterface.js";
+export { EthernetNetworkCommissioning } from "./EthernetNetworkCommissioningInterface.js";
 export { PowerSource } from "./PowerSourceInterface.js";
 export { BridgedDeviceBasicInformation } from "./BridgedDeviceBasicInformationInterface.js";
 export { Identify } from "./IdentifyInterface.js";
+export { OnOff } from "./OnOffInterface.js";
 export { OnOffLighting } from "./OnOffLightingInterface.js";
 export { LevelControl } from "./LevelControlInterface.js";
 export { TemperatureMeasurement } from "./TemperatureMeasurementInterface.js";

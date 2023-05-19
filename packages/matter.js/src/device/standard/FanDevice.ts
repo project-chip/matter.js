@@ -10,5 +10,7 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { AutoDevice } from "../AutoDevice.js";
 import { Identify } from "../../cluster/interface/index.js";
 
-export class Fan extends AutoDevice.with(DeviceTypes.FAN, Identify) {
+export class Fan extends AutoDevice.implement(DeviceTypes.FAN, Identify) {
+    readonly options = FanOptions;
+
 }

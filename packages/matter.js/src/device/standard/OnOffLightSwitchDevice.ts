@@ -10,5 +10,7 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { AutoDevice } from "../AutoDevice.js";
 import { Identify } from "../../cluster/interface/index.js";
 
-export class OnOffLightSwitch extends AutoDevice.with(DeviceTypes.ON_OFF_LIGHT_SWITCH, Identify) {
+export class OnOffLightSwitch extends AutoDevice.implement(DeviceTypes.ON_OFF_LIGHT_SWITCH, Identify) {
+    readonly options = OnOffLightSwitchOptions;
+
 }

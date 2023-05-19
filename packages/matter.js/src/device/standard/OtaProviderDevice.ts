@@ -9,5 +9,7 @@
 import { DeviceTypes } from "../DeviceTypes.js";
 import { AutoDevice } from "../AutoDevice.js";
 
-export class OtaProvider extends AutoDevice.with(DeviceTypes.OTA_PROVIDER) {
+export class OtaProvider extends AutoDevice.implement(DeviceTypes.OTA_PROVIDER) {
+    readonly options = OtaProviderOptions;
+
 }

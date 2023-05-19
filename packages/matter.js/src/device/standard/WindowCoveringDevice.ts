@@ -10,5 +10,7 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { AutoDevice } from "../AutoDevice.js";
 import { Identify } from "../../cluster/interface/index.js";
 
-export class WindowCovering extends AutoDevice.with(DeviceTypes.WINDOW_COVERING, Identify) {
+export class WindowCovering extends AutoDevice.implement(DeviceTypes.WINDOW_COVERING, Identify) {
+    readonly options = WindowCoveringOptions;
+
 }

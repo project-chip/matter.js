@@ -102,6 +102,7 @@ export interface Cluster<F extends BitSchema, SF extends TypeFromBitSchema<F>, A
     attributes: A,
     commands: C,
     events: E,
+    extension: boolean,
 }
 export const Cluster = <F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>({
     id,
@@ -112,6 +113,7 @@ export const Cluster = <F extends BitSchema, SF extends TypeFromBitSchema<F>, A 
     attributes = <A>{},
     commands = <C>{},
     events = <E>{},
+    extension = false,
 }: {
     id: number,
     name: string,
@@ -121,6 +123,7 @@ export const Cluster = <F extends BitSchema, SF extends TypeFromBitSchema<F>, A 
     attributes?: A,
     commands?: C,
     events?: E,
+    extension?: boolean
 }): Cluster<F, SF, Merge<A, GlobalAttributes<F>>, C, E> => ({
     id,
     name,
@@ -130,6 +133,7 @@ export const Cluster = <F extends BitSchema, SF extends TypeFromBitSchema<F>, A 
     commands,
     attributes: Merge(attributes, GlobalAttributes(features)),
     events,
+    extension,
 });
 
 type ClusterExtend<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events> = {
@@ -176,5 +180,6 @@ export const ClusterExtend =
             attributes: Merge(attributes, attributesExtend),
             commands: Merge(commands, commandsExtend),
             events: Merge(events, eventsExtend),
+            extension: true,
         }
     );

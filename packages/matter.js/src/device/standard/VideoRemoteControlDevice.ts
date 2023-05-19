@@ -9,5 +9,7 @@
 import { DeviceTypes } from "../DeviceTypes.js";
 import { AutoDevice } from "../AutoDevice.js";
 
-export class VideoRemoteControl extends AutoDevice.with(DeviceTypes.VIDEO_REMOTE_CONTROL) {
+export class VideoRemoteControl extends AutoDevice.implement(DeviceTypes.VIDEO_REMOTE_CONTROL) {
+    readonly options = VideoRemoteControlOptions;
+
 }

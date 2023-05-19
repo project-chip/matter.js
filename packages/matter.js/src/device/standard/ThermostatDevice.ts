@@ -10,5 +10,7 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { AutoDevice } from "../AutoDevice.js";
 import { Identify } from "../../cluster/interface/index.js";
 
-export class Thermostat extends AutoDevice.with(DeviceTypes.THERMOSTAT, Identify) {
+export class Thermostat extends AutoDevice.implement(DeviceTypes.THERMOSTAT, Identify) {
+    readonly options = ThermostatOptions;
+
 }

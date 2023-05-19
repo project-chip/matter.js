@@ -12,23 +12,25 @@ import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 type OffWithEffectRequest = TypeFromSchema<typeof OnOffLightingCluster.commands.offWithEffect.requestSchema>;
 type OnWithTimedOffRequest = TypeFromSchema<typeof OnOffLightingCluster.commands.onWithTimedOff.requestSchema>;
 
-export type State = {
-    readonly onOff: boolean;
-    readonly globalSceneControl: boolean;
-    readonly onTime: number | undefined;
-    readonly offWaitTime: number | undefined;
-    readonly startUpOnOff: number | undefined;
+export module OnOffLighting {
+    export type State = {
+        readonly onOff: boolean;
+        readonly globalSceneControl: boolean;
+        readonly onTime: number | undefined;
+        readonly offWaitTime: number | undefined;
+        readonly startUpOnOff: number | undefined;
+    }
+
+    export interface Common {
+        invokeOff(): Promise<void>;
+        invokeOn(): Promise<void>;
+        invokeToggle(): Promise<void>;
+        invokeOffWithEffect(request: OffWithEffectRequest): Promise<void>;
+        invokeOnWithRecallGlobalScene(): Promise<void>;
+        invokeOnWithTimedOff(request: OnWithTimedOffRequest): Promise<void>;
+    }
 }
 
-export interface Common {
-    invokeOff(): Promise<void>;
-    invokeOn(): Promise<void>;
-    invokeToggle(): Promise<void>;
-    invokeOffWithEffect(request: OffWithEffectRequest): Promise<void>;
-    invokeOnWithRecallGlobalScene(): Promise<void>;
-    invokeOnWithTimedOff(request: OnWithTimedOffRequest): Promise<void>;
-}
-
-export const OnOffLighting: ClusterInterface<State, Common, Common> = {
+export const OnOffLighting: ClusterInterface<OnOffLighting.State, OnOffLighting.Common, OnOffLighting.Common> = {
     definition: OnOffLightingCluster
 }
