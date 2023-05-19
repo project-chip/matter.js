@@ -12,7 +12,8 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
     * Added FabricScopedAttributeServer which gets and sets the value based on the provided fabric
     * Updated ClusterServerObj and ClusterClientObj typings to respect these Attribute types
     * Updated all Cluster definitions that use such attribute types
-  * Enhance: Splitted up and corrected PowerSource Cluster based on Matter 1.1 Specs
+  * Enhance: Splitted up and corrected PowerSource and PressureMeasurement Cluster based on Matter 1.1 Specs
+  * Fix: Added missing PulseWidthModulationLevelControlCluster to AllCLusters
   * Fix Typing of Commands in ClusterClient if no commands were present
   * Fix: Fix equality checks in Attribute servers to check deeper then just === (and introduce new util method isDeepEqual)
 * matter.js API:

@@ -18,7 +18,7 @@ import { GroupsCluster } from "./GroupsCluster.js";
 import { IdentifyCluster } from "./IdentifyCluster.js";
 import { IlluminanceMeasurementCluster } from "./IlluminanceMeasurementCluster.js";
 import { UserLabelCluster, FixedLabelCluster } from "./LabelCluster.js";
-import { LevelControlCluster } from "./LevelControlCluster.js";
+import { LevelControlCluster, PulseWidthModulationLevelControlCluster } from "./LevelControlCluster.js";
 import { WifiAndEthernetAndThreadNetworkCommissioningCluster } from "./NetworkCommissioningCluster.js";
 import { OccupancySensingCluster } from "./OccupancySensingCluster.js";
 import { OnOffCluster } from "./OnOffCluster.js";
@@ -55,6 +55,7 @@ export const AllClustersMap: { [key: Cluster<any, any, any, any, any>["id"]]: Cl
     [OccupancySensingCluster.id]: OccupancySensingCluster,
     [OnOffCluster.id]: OnOffCluster,
     [OperationalCredentialsCluster.id]: OperationalCredentialsCluster,
+    [PulseWidthModulationLevelControlCluster.id]: PulseWidthModulationLevelControlCluster,
     [WiredPowerSourceCluster.id]: WiredPowerSourceCluster,
     [PowerSourceConfigurationCluster.id]: PowerSourceConfigurationCluster,
     [PressureMeasurementCluster.id]: PressureMeasurementCluster,
