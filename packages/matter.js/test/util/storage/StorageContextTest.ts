@@ -149,7 +149,7 @@ describe("StorageContext", () => {
         await storageManager.initialize();
 
         const storageContext = storageManager.createContext("context");
-        const subStorageContext = storageContext.createSubContext("subcontext");
+        const subStorageContext = storageContext.createContext("subcontext");
 
         subStorageContext.set("key", "value");
 
@@ -165,7 +165,7 @@ describe("StorageContext", () => {
         await storageManager.initialize();
 
         const storageContext = storageManager.createContext("context");
-        const subStorageContext = storageContext.createSubContext("subcontext");
+        const subStorageContext = storageContext.createContext("subcontext");
 
         subStorageContext.set("key", "value1");
         storageContext.set("subcontext", "value2");

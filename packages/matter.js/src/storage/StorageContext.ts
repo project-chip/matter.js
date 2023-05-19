@@ -30,7 +30,7 @@ export class StorageContext {
         this.storage.set<T>(this.contexts, key, value);
     }
 
-    createSubContext(context: string) {
+    createContext(context: string) {
         if (context.length === 0) throw new Error("Context must not be an empty string");
         if (context.includes('.')) throw new Error("Context must not contain dots!");
         const newContext = this.contexts;

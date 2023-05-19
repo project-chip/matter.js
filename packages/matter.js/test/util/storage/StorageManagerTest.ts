@@ -74,9 +74,9 @@ describe("StorageManager", () => {
         await storageManager.initialize();
 
         const storageContext1 = storageManager.createContext("context");
-        const storageSubContext1 = storageContext1.createSubContext("subcontext");
+        const storageSubContext1 = storageContext1.createContext("subcontext");
         const storageContext2 = storageManager.createContext("context");
-        const storageSubContext2 = storageContext2.createSubContext("subcontext");
+        const storageSubContext2 = storageContext2.createContext("subcontext");
 
         storageSubContext1.set("key", "value");
 
