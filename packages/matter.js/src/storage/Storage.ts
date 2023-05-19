@@ -8,6 +8,6 @@ import { SupportedStorageTypes } from "./StringifyTools.js";
 export abstract class Storage {
     abstract initialize(): Promise<void>;
     abstract close(): Promise<void>;
-    abstract get<T extends SupportedStorageTypes>(context: string, key: string): T | undefined;
-    abstract set<T extends SupportedStorageTypes>(context: string, key: string, value: T): void;
+    abstract get<T extends SupportedStorageTypes>(contexts: string[], key: string): T | undefined;
+    abstract set<T extends SupportedStorageTypes>(contexts: string[], key: string, value: T): void;
 }

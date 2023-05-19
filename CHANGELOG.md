@@ -7,6 +7,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
 * Matter-Core functionality:
   * Deprecation: The classes MatterDevice and MatterController are deprecated to be used externally to the library and will be removed in later versions.
   * Deprecation: The CLI Examples LegacyDeviceNode and LegacyControllerNode will be removed in next version! Use the new variants please.
+  * Feature: Enhance Storage system to allow to create subcontext stores to allow better separation of data
 
 ## 0.4.0 (2023-05-16)
 * Matter-Core functionality:
