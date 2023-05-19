@@ -9,10 +9,13 @@
 import { PowerSourceConfigurationCluster, ClusterInterface } from "../index.js";
 
 
-export interface Common {
+export type State = {
     readonly sources: number[];
 }
 
-export const PowerSourceConfiguration: ClusterInterface<Common, Common> = {
+export interface Common {
+}
+
+export const PowerSourceConfiguration: ClusterInterface<State, Common, Common> = {
     definition: PowerSourceConfigurationCluster
 }

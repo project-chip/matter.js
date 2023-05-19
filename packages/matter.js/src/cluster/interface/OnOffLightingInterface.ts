@@ -12,13 +12,15 @@ import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 type OffWithEffectRequest = TypeFromSchema<typeof OnOffLightingCluster.commands.offWithEffect.requestSchema>;
 type OnWithTimedOffRequest = TypeFromSchema<typeof OnOffLightingCluster.commands.onWithTimedOff.requestSchema>;
 
-export interface Common {
+export type State = {
     readonly onOff: boolean;
     readonly globalSceneControl: boolean;
     readonly onTime: number | undefined;
     readonly offWaitTime: number | undefined;
     readonly startUpOnOff: number | undefined;
+}
 
+export interface Common {
     invokeOff(): Promise<void>;
     invokeOn(): Promise<void>;
     invokeToggle(): Promise<void>;
@@ -27,6 +29,6 @@ export interface Common {
     invokeOnWithTimedOff(request: OnWithTimedOffRequest): Promise<void>;
 }
 
-export const OnOffLighting: ClusterInterface<Common, Common> = {
+export const OnOffLighting: ClusterInterface<State, Common, Common> = {
     definition: OnOffLightingCluster
 }

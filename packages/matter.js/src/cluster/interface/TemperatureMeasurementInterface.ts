@@ -9,13 +9,16 @@
 import { TemperatureMeasurementCluster, ClusterInterface } from "../index.js";
 
 
-export interface Common {
+export type State = {
     readonly measuredValue: number | undefined;
     readonly minMeasuredValue: number | undefined;
     readonly maxMeasuredValue: number | undefined;
     readonly tolerance?: number;
 }
 
-export const TemperatureMeasurement: ClusterInterface<Common, Common> = {
+export interface Common {
+}
+
+export const TemperatureMeasurement: ClusterInterface<State, Common, Common> = {
     definition: TemperatureMeasurementCluster
 }

@@ -12,14 +12,16 @@ import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 type IdentifyRequest = TypeFromSchema<typeof IdentifyCluster.commands.identify.requestSchema>;
 type TriggerEffectRequest = TypeFromSchema<typeof IdentifyCluster.commands.triggerEffect.requestSchema>;
 
-export interface Common {
+export type State = {
     readonly identifyTime: number;
     readonly identifyType: number;
+}
 
+export interface Common {
     invokeIdentify(request: IdentifyRequest): Promise<void>;
     invokeTriggerEffect(request: TriggerEffectRequest): Promise<void>;
 }
 
-export const Identify: ClusterInterface<Common, Common> = {
+export const Identify: ClusterInterface<State, Common, Common> = {
     definition: IdentifyCluster
 }

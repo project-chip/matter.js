@@ -11,10 +11,13 @@ import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
 type LabelList = TypeFromSchema<typeof FixedLabelCluster.attributes.labelList.schema>;
 
-export interface Common {
+export type State = {
     readonly labelList: LabelList[];
 }
 
-export const FixedLabel: ClusterInterface<Common, Common> = {
+export interface Common {
+}
+
+export const FixedLabel: ClusterInterface<State, Common, Common> = {
     definition: FixedLabelCluster
 }

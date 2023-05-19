@@ -132,13 +132,6 @@ export const Cluster = <F extends BitSchema, SF extends TypeFromBitSchema<F>, A 
     events,
 });
 
-/** Binding between cluster interfaces and cluster definition */
-export type ClusterInterface<C, S> = {
-    definition: Cluster<any, any, Attributes, Commands, Events>;
-    _rtype?: C;
-    _wtype?: S;
-}
-
 type ClusterExtend<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events> = {
     supportedFeatures: SF,
     attributes?: A,

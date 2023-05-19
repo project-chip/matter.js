@@ -22,7 +22,7 @@ type ReorderNetworkResponse = TypeFromSchema<typeof WifiNetworkCommissioningClus
 type AddOrUpdateWiFiNetworkRequest = TypeFromSchema<typeof WifiNetworkCommissioningCluster.commands.addOrUpdateWiFiNetwork.requestSchema>;
 type AddOrUpdateWiFiNetworkResponse = TypeFromSchema<typeof WifiNetworkCommissioningCluster.commands.addOrUpdateWiFiNetwork.responseSchema>;
 
-export interface Common {
+export type State = {
     readonly maxNetworks: number;
     readonly networks: Networks[];
     readonly interfaceEnabled: boolean;
@@ -31,7 +31,9 @@ export interface Common {
     readonly lastConnectErrorValue: number | undefined;
     readonly scanMaxTimeSeconds?: number;
     readonly connectMaxTimeSeconds?: number;
+}
 
+export interface Common {
     invokeScanNetworks(request: ScanNetworksRequest): Promise<ScanNetworksResponse>;
     invokeRemoveNetwork(request: RemoveNetworkRequest): Promise<RemoveNetworkResponse>;
     invokeConnectNetwork(request: ConnectNetworkRequest): Promise<ConnectNetworkResponse>;
@@ -39,6 +41,6 @@ export interface Common {
     invokeAddOrUpdateWiFiNetwork(request: AddOrUpdateWiFiNetworkRequest): Promise<AddOrUpdateWiFiNetworkResponse>;
 }
 
-export const WifiNetworkCommissioning: ClusterInterface<Common, Common> = {
+export const WifiNetworkCommissioning: ClusterInterface<State, Common, Common> = {
     definition: WifiNetworkCommissioningCluster
 }

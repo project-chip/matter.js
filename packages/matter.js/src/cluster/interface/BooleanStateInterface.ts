@@ -11,8 +11,11 @@ import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
 type StateChangeEvent = TypeFromSchema<typeof BooleanStateCluster.events.stateChange.schema>;
 
-export interface Common {
+export type State = {
     readonly stateValue: boolean;
+}
+
+export interface Common {
 }
 
 export interface Client extends Common {
@@ -24,6 +27,6 @@ export interface Server extends Common {
     triggerStateChange(): void;
 }
 
-export const BooleanState: ClusterInterface<Client, Server> = {
+export const BooleanState: ClusterInterface<State, Client, Server> = {
     definition: BooleanStateCluster
 }

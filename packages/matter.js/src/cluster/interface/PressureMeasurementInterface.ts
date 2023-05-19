@@ -9,7 +9,7 @@
 import { PressureMeasurementCluster, ClusterInterface } from "../index.js";
 
 
-export interface Common {
+export type State = {
     readonly measuredValue: number | undefined;
     readonly minMeasuredValue: number | undefined;
     readonly maxMeasuredValue: number | undefined;
@@ -21,6 +21,9 @@ export interface Common {
     readonly scale?: number;
 }
 
-export const PressureMeasurement: ClusterInterface<Common, Common> = {
+export interface Common {
+}
+
+export const PressureMeasurement: ClusterInterface<State, Common, Common> = {
     definition: PressureMeasurementCluster
 }

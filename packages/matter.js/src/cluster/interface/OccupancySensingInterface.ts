@@ -9,7 +9,7 @@
 import { OccupancySensingCluster, ClusterInterface } from "../index.js";
 
 
-export interface Common {
+export type State = {
     readonly occupancy: number;
     readonly occupancySensorType: number;
     readonly occupancySensorTypeBitmap: number;
@@ -24,6 +24,9 @@ export interface Common {
     readonly physicalContactUnoccupiedToOccupiedThreshold?: number;
 }
 
-export const OccupancySensing: ClusterInterface<Common, Common> = {
+export interface Common {
+}
+
+export const OccupancySensing: ClusterInterface<State, Common, Common> = {
     definition: OccupancySensingCluster
 }

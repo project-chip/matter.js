@@ -14,7 +14,7 @@ type ShutDownEvent = TypeFromSchema<typeof BridgedDeviceBasicInformationCluster.
 type LeaveEvent = TypeFromSchema<typeof BridgedDeviceBasicInformationCluster.events.leave.schema>;
 type ReachableChangedEvent = TypeFromSchema<typeof BridgedDeviceBasicInformationCluster.events.reachableChanged.schema>;
 
-export interface Common {
+export type State = {
     readonly vendorName?: string;
     readonly vendorId?: number;
     readonly productName?: string;
@@ -30,6 +30,9 @@ export interface Common {
     readonly serialNumber?: string;
     readonly reachable: boolean;
     readonly uniqueId?: string;
+}
+
+export interface Common {
 }
 
 export interface Client extends Common {
@@ -50,6 +53,6 @@ export interface Server extends Common {
     triggerReachableChanged(): void;
 }
 
-export const BridgedDeviceBasicInformation: ClusterInterface<Client, Server> = {
+export const BridgedDeviceBasicInformation: ClusterInterface<State, Client, Server> = {
     definition: BridgedDeviceBasicInformationCluster
 }

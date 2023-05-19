@@ -18,7 +18,7 @@ type MoveWithOnOffRequest = TypeFromSchema<typeof LevelControlCluster.commands.m
 type StepWithOnOffRequest = TypeFromSchema<typeof LevelControlCluster.commands.stepWithOnOff.requestSchema>;
 type StopWithOnOffRequest = TypeFromSchema<typeof LevelControlCluster.commands.stopWithOnOff.requestSchema>;
 
-export interface Common {
+export type State = {
     readonly currentLevel: number | undefined;
     readonly minLevel?: number;
     readonly maxLevel?: number;
@@ -30,7 +30,9 @@ export interface Common {
     readonly options: number;
     readonly remainingTime?: number;
     readonly startUpCurrentLevel?: number | undefined;
+}
 
+export interface Common {
     invokeMoveToLevel(request: MoveToLevelRequest): Promise<void>;
     invokeMove(request: MoveRequest): Promise<void>;
     invokeStep(request: StepRequest): Promise<void>;
@@ -41,6 +43,6 @@ export interface Common {
     invokeStopWithOnOff(request: StopWithOnOffRequest): Promise<void>;
 }
 
-export const LevelControl: ClusterInterface<Common, Common> = {
+export const LevelControl: ClusterInterface<State, Common, Common> = {
     definition: LevelControlCluster
 }

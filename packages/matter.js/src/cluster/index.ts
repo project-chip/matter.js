@@ -7,6 +7,7 @@
 // Export general Cluster specific types
 export * from "./Cluster.js";
 export * from "./ClusterHelper.js";
+export * from "./ClusterInterface.js";
 
 // Export all Cluster definitions
 export * from "./AccessControlCluster.js";

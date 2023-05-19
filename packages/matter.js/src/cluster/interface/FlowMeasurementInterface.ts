@@ -9,13 +9,16 @@
 import { FlowMeasurementCluster, ClusterInterface } from "../index.js";
 
 
-export interface Common {
+export type State = {
     readonly measuredValue: number | undefined;
     readonly minMeasuredValue: number | undefined;
     readonly maxMeasuredValue: number | undefined;
     readonly tolerance?: number;
 }
 
-export const FlowMeasurement: ClusterInterface<Common, Common> = {
+export interface Common {
+}
+
+export const FlowMeasurement: ClusterInterface<State, Common, Common> = {
     definition: FlowMeasurementCluster
 }

@@ -13,7 +13,7 @@ type WiredFaultChangeEvent = TypeFromSchema<typeof PowerSourceCluster.events.wir
 type BatFaultChangeEvent = TypeFromSchema<typeof PowerSourceCluster.events.batFaultChange.schema>;
 type BatChargeFaultChangeEvent = TypeFromSchema<typeof PowerSourceCluster.events.batChargeFaultChange.schema>;
 
-export interface Common {
+export type State = {
     readonly status: number;
     readonly order: number;
     readonly description: string;
@@ -47,6 +47,9 @@ export interface Common {
     readonly activeBatChargeFaults?: number[];
 }
 
+export interface Common {
+}
+
 export interface Client extends Common {
     addWiredFaultChangeListener(listener: (event: WiredFaultChangeEvent) => void): void;
     removeWiredFaultChangeListener(listener: (event: WiredFaultChangeEvent) => void): void;
@@ -62,6 +65,6 @@ export interface Server extends Common {
     triggerBatChargeFaultChange(): void;
 }
 
-export const PowerSource: ClusterInterface<Client, Server> = {
+export const PowerSource: ClusterInterface<State, Client, Server> = {
     definition: PowerSourceCluster
 }

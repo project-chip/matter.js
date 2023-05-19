@@ -9,7 +9,7 @@
 import { IlluminanceMeasurementCluster, ClusterInterface } from "../index.js";
 
 
-export interface Common {
+export type State = {
     readonly measuredValue: number | undefined;
     readonly minMeasuredValue: number | undefined;
     readonly maxMeasuredValue: number | undefined;
@@ -17,6 +17,9 @@ export interface Common {
     readonly lightSensorType?: number | undefined;
 }
 
-export const IlluminanceMeasurement: ClusterInterface<Common, Common> = {
+export interface Common {
+}
+
+export const IlluminanceMeasurement: ClusterInterface<State, Common, Common> = {
     definition: IlluminanceMeasurementCluster
 }
