@@ -12,7 +12,7 @@ import { AutoDevice } from "../AutoDevice.js";
 import { Identify, FixedLabel } from "../../cluster/interface/index.js";
 
 export class GenericSwitch extends AutoDevice.implement(DeviceTypes.GENERIC_SWITCH, Identify) {
-    readonly GenericSwitchOptions = {
+    static readonly options = {
         FixedLabel,
     }
 

@@ -9,8 +9,8 @@
 import { OnOffLightingCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
-type OffWithEffectRequest = TypeFromSchema<typeof OnOffLightingCluster.commands.offWithEffect.requestSchema>;
-type OnWithTimedOffRequest = TypeFromSchema<typeof OnOffLightingCluster.commands.onWithTimedOff.requestSchema>;
+type OffWithEffectRequest = TypeFromSchema<typeof OnOffLightingCluster.commandmodels.offWithEffect.requestSchema>;
+type OnWithTimedOffRequest = TypeFromSchema<typeof OnOffLightingCluster.commandmodels.onWithTimedOff.requestSchema>;
 
 namespace OnOffLighting {
     export type State = {
@@ -28,6 +28,12 @@ namespace OnOffLighting {
         sendOffWithEffect(request: OffWithEffectRequest): Promise<void>;
         sendOnWithRecallGlobalScene(): Promise<void>;
         sendOnWithTimedOff(request: OnWithTimedOffRequest): Promise<void>;
+
+        onOnOffChange(): void;
+        onGlobalSceneControlChange(): void;
+        onOnTimeChange(): void;
+        onOffWaitTimeChange(): void;
+        onStartUpOnOffChange(): void;
     }
 
     export interface Server {
@@ -37,6 +43,12 @@ namespace OnOffLighting {
         onOffWithEffect(request: OffWithEffectRequest): Promise<void>;
         onOnWithRecallGlobalScene(): Promise<void>;
         onOnWithTimedOff(request: OnWithTimedOffRequest): Promise<void>;
+
+        onOnOffChange(): void;
+        onGlobalSceneControlChange(): void;
+        onOnTimeChange(): void;
+        onOffWaitTimeChange(): void;
+        onStartUpOnOffChange(): void;
     }
 }
 

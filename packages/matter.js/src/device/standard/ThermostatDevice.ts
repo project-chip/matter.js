@@ -12,7 +12,7 @@ import { AutoDevice } from "../AutoDevice.js";
 import { Identify, Groups, Scenes } from "../../cluster/interface/index.js";
 
 export class Thermostat extends AutoDevice.implement(DeviceTypes.THERMOSTAT, Identify) {
-    readonly ThermostatOptions = {
+    static readonly options = {
         Groups,
         Scenes,
     }

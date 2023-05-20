@@ -16,8 +16,26 @@ namespace IlluminanceMeasurement {
         tolerance?: number;
         lightSensorType?: number | undefined;
     }
+
+    export interface Client {
+
+        onMeasuredValueChange(): void;
+        onMinMeasuredValueChange(): void;
+        onMaxMeasuredValueChange(): void;
+        onToleranceChange(): void;
+        onLightSensorTypeChange(): void;
+    }
+
+    export interface Server {
+
+        onMeasuredValueChange(): void;
+        onMinMeasuredValueChange(): void;
+        onMaxMeasuredValueChange(): void;
+        onToleranceChange(): void;
+        onLightSensorTypeChange(): void;
+    }
 }
 
-export const IlluminanceMeasurement: ClusterInterface<IlluminanceMeasurement.State, {}, {}> = {
+export const IlluminanceMeasurement: ClusterInterface<IlluminanceMeasurement.State, IlluminanceMeasurement.Client, IlluminanceMeasurement.Server> = {
     definition: IlluminanceMeasurementCluster
 }

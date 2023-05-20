@@ -12,7 +12,7 @@ import { AutoDevice } from "../AutoDevice.js";
 import { Identify, Groups, OnOff, OnOffLighting, Scenes, LevelControl } from "../../cluster/interface/index.js";
 
 export class HeatingCoolingUnit extends AutoDevice.implement(DeviceTypes.HEATING_COOLING_UNIT, Identify, Groups, OnOff) {
-    readonly HeatingCoolingUnitOptions = {
+    static readonly options = {
         OnOffLighting,
         Scenes,
         LevelControl,

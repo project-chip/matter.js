@@ -71,6 +71,13 @@ CodeModel.clusters.forEach((cluster) => {
 
     const module = file.block(`namespace ${cluster.name}`);
     const state = module.block(`export type State =`);
+    const client = module.block(`export interface Client`);
+    const server = module.block(`export interface Server`);
+
+    // Create sections for commands so they appear at the top of the client
+    // and server interfaces
+    const clientCommands = client.section();
+    const serverCommands = server.section();
 
     cluster.attributes.forEach((attr) => {
         if (GLOBAL_ATTRIBUTE_IDS.has(attr.id)) return;
@@ -79,14 +86,15 @@ CodeModel.clusters.forEach((cluster) => {
         context.typeSource = `${attr.source}.schema`;
 
         const type = mapType(attr.schema, context);
+
         // TODO - need separate state objects for client/server to enforce this
         // at the type level
         //const readonly = attr.writable ? "" : "readonly ";
         state.add(`${attr.fieldName}${attr.optional ? "?" : ""}: ${type};`);
-    });
 
-    const client = module.block(`export interface Client`);
-    const server = module.block(`export interface Server`);
+        [client, server].forEach((target) =>
+            target.add(`${attr.change}(): void;`));
+    });
 
     cluster.commands.forEach((command) => {
         context.typeName = `${command.typeName}Request`;
@@ -99,8 +107,8 @@ CodeModel.clusters.forEach((cluster) => {
         context.typeSource = `${command.source}.responseSchema`;
         const responseType = mapType(command.responseSchema, context);
 
-        client.add(`${command.invokerName}(${request}): Promise<${responseType}>;`)
-        server.add(`${command.handlerName}(${request}): Promise<${responseType}>;`)
+        clientCommands.add(`${command.invokerName}(${request}): Promise<${responseType}>;`)
+        serverCommands.add(`${command.handlerName}(${request}): Promise<${responseType}>;`)
     });
 
     cluster.events.map((event) => {

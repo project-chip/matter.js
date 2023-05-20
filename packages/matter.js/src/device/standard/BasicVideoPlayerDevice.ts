@@ -12,7 +12,7 @@ import { AutoDevice } from "../AutoDevice.js";
 import { OnOff, OnOffLighting } from "../../cluster/interface/index.js";
 
 export class BasicVideoPlayer extends AutoDevice.implement(DeviceTypes.BASIC_VIDEO_PLAYER, OnOff) {
-    readonly BasicVideoPlayerOptions = {
+    static readonly options = {
         OnOffLighting,
     }
 

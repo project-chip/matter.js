@@ -72,37 +72,38 @@ function camelize(name: string, upperFirst = true) {
     }).join("");
 }
 
-class Elements<T, ST> extends Array<T> {
-    constructor(definitions: { [key: string]: ST }, Cons: new (name: string, definition: ST, cluster: string) => T, cluster: string) {
-        super(...Object.entries(definitions).map(([k, v]) => new Cons(k, v, `${cluster}.${Cons.name.toLowerCase()}s`)));
-    }
-}
-
-class Element<T> {
+class LeafModel<T> {
     constructor(public name: string, public definition: T, private parentSource: string) { }
     get typeName() { return camelize(this.name); }
     get fieldName() { return camelize(this.name, false); }
     get source() { return `${this.parentSource}.${camelize(this.fieldName, false)}` }
 }
 
-class Attribute extends Element<clusterExports.Attribute<any>> {
+class LeafModels<T, ST> extends Array<T> {
+    constructor(definitions: { [key: string]: ST }, Cons: new (name: string, definition: ST, cluster: string) => T, cluster: string) {
+        super(...Object.entries(definitions).map(([k, v]) => new Cons(k, v, `${cluster}.${Cons.name.toLowerCase()}s`)));
+    }
+}
+
+export class AttributeModel extends LeafModel<clusterExports.Attribute<any>> {
     get writable() { return this.definition.writable; }
     get id() { return this.definition.id; }
     get schema() { return this.definition.schema; }
     get optional() { return this.definition.optional; }
+    get default() { return this.definition.default }
     get getter() { return `get${this.typeName}Attribute` }
     get setter() { return `set${this.typeName}Attribute` }
-    get default() { return this.definition.default }
+    get change() { return `on${this.typeName}Change` }
 }
 
-class Command extends Element<clusterExports.Command<any, any>> {
+export class CommandModel extends LeafModel<clusterExports.Command<any, any>> {
     get requestSchema() { return this.definition.requestSchema; }
     get responseSchema() { return this.definition.responseSchema; }
     get invokerName() { return `send${this.typeName}`; }
     get handlerName() { return `on${this.typeName}`; }
 }
 
-class Event extends Element<clusterExports.Event<any>> {
+export class EventModel extends LeafModel<clusterExports.Event<any>> {
     get schema() { return this.definition.schema; }
 }
 
@@ -110,14 +111,14 @@ class Event extends Element<clusterExports.Event<any>> {
  * Information about a cluster.  Extracted from the cluster definition (a
  * Cluster instance).
  */
-class ClusterDetail {
+export class ClusterModel {
     constructor(
         public readonly definitionName: string,
         public readonly definition: Cluster<any, any, Attributes, Commands, Events>,
-        public readonly extensions: Array<ClusterDetail>,
-        public readonly attributes = new Elements(definition.attributes, Attribute, definitionName),
-        public readonly commands = new Elements(definition.commands, Command, definitionName),
-        public readonly events = new Elements(definition.events, Event, definitionName)) { }
+        public readonly extensions: Array<ClusterModel>,
+        public readonly attributes = new LeafModels(definition.attributes, AttributeModel, definitionName),
+        public readonly commands = new LeafModels(definition.commands, CommandModel, definitionName),
+        public readonly events = new LeafModels(definition.events, EventModel, definitionName)) { }
 
     get id() {
         return this.definition.id;
@@ -136,12 +137,12 @@ class ClusterDetail {
  * Information about a device.  Extract from the device definition (a
  * DeviceTypeDefinition instance).
  */
-class DeviceDetail {
+export class DeviceModel {
     public constructor(
         public readonly key: string,
         public readonly definition: DeviceTypeDefinition,
-        public readonly requiredServerClusters: ClusterDetail[],
-        public readonly optionalServerClusters: ClusterDetail[],
+        public readonly requiredServerClusters: ClusterModel[],
+        public readonly optionalServerClusters: ClusterModel[],
         public readonly name = camelize(key)) { }
 }
 
@@ -150,20 +151,20 @@ class DeviceDetail {
  * interface implementation.
  */
 export class CodeModel {
-    static readonly devices = new Array<DeviceDetail>;
-    static readonly clusters = new Array<ClusterDetail>;
+    static readonly devices = new Array<DeviceModel>;
+    static readonly clusters = new Array<ClusterModel>;
 
-    static forCluster(cluster: ClusterInterface<any, any, any>): ClusterDetail {
+    static forCluster(cluster: ClusterInterface<any, any, any>): ClusterModel {
         const model = this.clusters.find((detail) => detail.definition === cluster.definition);
         if (model) return model;
         throw new Error("Unsupported cluster");
     }
 
     static {
-        const availableClusters = new Map<number, ClusterDetail>();
-        const referencedClusters = new Set<ClusterDetail>();
+        const availableClusters = new Map<number, ClusterModel>();
+        const referencedClusters = new Set<ClusterModel>();
 
-        const extensions = new Map<number, ClusterDetail[]>();
+        const extensions = new Map<number, ClusterModel[]>();
         for (const key in clusterExports) {
             if (!key.match(/[a-z]Cluster$/i)) continue;
 
@@ -173,10 +174,10 @@ export class CodeModel {
 
             let clusterExtensions = extensions.get(cluster.id);
             if (!clusterExtensions) {
-                clusterExtensions = Array<ClusterDetail>();
+                clusterExtensions = Array<ClusterModel>();
                 extensions.set(cluster.id, clusterExtensions);
             }
-            const detail = new ClusterDetail(key, cluster, clusterExtensions);
+            const detail = new ClusterModel(key, cluster, clusterExtensions);
             if (cluster.extension) {
                 clusterExtensions.push(detail);
             } else {
@@ -186,7 +187,7 @@ export class CodeModel {
 
         for (const key in DeviceTypes) {
             const dt = DeviceTypes[key];
-            const mapClusters = (list: number[]) => <ClusterDetail[]>list.map((id) => availableClusters.get(id)).filter((cluster) => cluster);
+            const mapClusters = (list: number[]) => <ClusterModel[]>list.map((id) => availableClusters.get(id)).filter((cluster) => cluster);
 
             const requiredServerClusters = mapClusters(dt.requiredServerClusters);
             const optionalServerClusters = requiredServerClusters
@@ -195,7 +196,7 @@ export class CodeModel {
                 .concat(mapClusters(dt.optionalServerClusters));
             requiredServerClusters.concat(optionalServerClusters).forEach((c) => referencedClusters.add(c));
             if (INTERNAL_DEVICE_TYPES.indexOf(dt) == -1)
-                this.devices.push(new DeviceDetail(key, DeviceTypes[key], requiredServerClusters, optionalServerClusters));
+                this.devices.push(new DeviceModel(key, DeviceTypes[key], requiredServerClusters, optionalServerClusters));
         }
 
         this.clusters.push(...referencedClusters);

@@ -12,7 +12,7 @@ import { AutoDevice } from "../AutoDevice.js";
 import { Identify } from "../../cluster/interface/index.js";
 
 export class DoorLockController extends AutoDevice.implement(DeviceTypes.DOOR_LOCK_CONTROLLER) {
-    readonly DoorLockControllerOptions = {
+    static readonly options = {
         Identify,
     }
 

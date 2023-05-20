@@ -12,7 +12,7 @@ import { AutoDevice } from "../AutoDevice.js";
 import { Identify, Groups, Scenes } from "../../cluster/interface/index.js";
 
 export class WindowCovering extends AutoDevice.implement(DeviceTypes.WINDOW_COVERING, Identify) {
-    readonly WindowCoveringOptions = {
+    static readonly options = {
         Groups,
         Scenes,
     }

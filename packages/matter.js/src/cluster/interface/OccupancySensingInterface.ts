@@ -23,8 +23,40 @@ namespace OccupancySensing {
         physicalContactUnoccupiedToOccupiedDelay?: number | undefined;
         physicalContactUnoccupiedToOccupiedThreshold?: number;
     }
+
+    export interface Client {
+
+        onOccupancyChange(): void;
+        onOccupancySensorTypeChange(): void;
+        onOccupancySensorTypeBitmapChange(): void;
+        onPirOccupiedToUnoccupiedDelayChange(): void;
+        onPirUnoccupiedToOccupiedDelayChange(): void;
+        onPirUnoccupiedToOccupiedThresholdChange(): void;
+        onUltrasonicOccupiedToUnoccupiedDelayChange(): void;
+        onUltrasonicUnoccupiedToOccupiedDelayChange(): void;
+        onUltrasonicUnoccupiedToOccupiedThresholdChange(): void;
+        onPhysicalContactOccupiedToUnoccupiedDelayChange(): void;
+        onPhysicalContactUnoccupiedToOccupiedDelayChange(): void;
+        onPhysicalContactUnoccupiedToOccupiedThresholdChange(): void;
+    }
+
+    export interface Server {
+
+        onOccupancyChange(): void;
+        onOccupancySensorTypeChange(): void;
+        onOccupancySensorTypeBitmapChange(): void;
+        onPirOccupiedToUnoccupiedDelayChange(): void;
+        onPirUnoccupiedToOccupiedDelayChange(): void;
+        onPirUnoccupiedToOccupiedThresholdChange(): void;
+        onUltrasonicOccupiedToUnoccupiedDelayChange(): void;
+        onUltrasonicUnoccupiedToOccupiedDelayChange(): void;
+        onUltrasonicUnoccupiedToOccupiedThresholdChange(): void;
+        onPhysicalContactOccupiedToUnoccupiedDelayChange(): void;
+        onPhysicalContactUnoccupiedToOccupiedDelayChange(): void;
+        onPhysicalContactUnoccupiedToOccupiedThresholdChange(): void;
+    }
 }
 
-export const OccupancySensing: ClusterInterface<OccupancySensing.State, {}, {}> = {
+export const OccupancySensing: ClusterInterface<OccupancySensing.State, OccupancySensing.Client, OccupancySensing.Server> = {
     definition: OccupancySensingCluster
 }

@@ -38,7 +38,7 @@ CodeModel.devices.forEach((device) => {
     if (Object.keys(optionalInterfaces).length) {
         Object.assign(interfaces, optionalInterfaces);
         file.addImport("../../cluster/ClusterInterface", "ClusterInterface");
-        klass.block(`readonly ${device.name}Options =`)
+        klass.block(`static readonly options =`)
             .add(...Object.keys(optionalInterfaces).map((c) => `${c},`))
             .parent
             .block(`static with<Options extends ClusterInterface<any, any, any>[]>(...options: Options)`)

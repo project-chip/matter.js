@@ -9,25 +9,25 @@
 import { ScenesCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
-type AddSceneRequest = TypeFromSchema<typeof ScenesCluster.commands.addScene.requestSchema>;
-type AddSceneResponse = TypeFromSchema<typeof ScenesCluster.commands.addScene.responseSchema>;
-type ViewSceneRequest = TypeFromSchema<typeof ScenesCluster.commands.viewScene.requestSchema>;
-type ViewSceneResponse = TypeFromSchema<typeof ScenesCluster.commands.viewScene.responseSchema>;
-type RemoveSceneRequest = TypeFromSchema<typeof ScenesCluster.commands.removeScene.requestSchema>;
-type RemoveSceneResponse = TypeFromSchema<typeof ScenesCluster.commands.removeScene.responseSchema>;
-type RemoveAllScenesRequest = TypeFromSchema<typeof ScenesCluster.commands.removeAllScenes.requestSchema>;
-type RemoveAllScenesResponse = TypeFromSchema<typeof ScenesCluster.commands.removeAllScenes.responseSchema>;
-type StoreSceneRequest = TypeFromSchema<typeof ScenesCluster.commands.storeScene.requestSchema>;
-type StoreSceneResponse = TypeFromSchema<typeof ScenesCluster.commands.storeScene.responseSchema>;
-type RecallSceneRequest = TypeFromSchema<typeof ScenesCluster.commands.recallScene.requestSchema>;
-type GetSceneMembershipRequest = TypeFromSchema<typeof ScenesCluster.commands.getSceneMembership.requestSchema>;
-type GetSceneMembershipResponse = TypeFromSchema<typeof ScenesCluster.commands.getSceneMembership.responseSchema>;
-type EnhancedAddSceneRequest = TypeFromSchema<typeof ScenesCluster.commands.enhancedAddScene.requestSchema>;
-type EnhancedAddSceneResponse = TypeFromSchema<typeof ScenesCluster.commands.enhancedAddScene.responseSchema>;
-type EnhancedViewSceneRequest = TypeFromSchema<typeof ScenesCluster.commands.enhancedViewScene.requestSchema>;
-type EnhancedViewSceneResponse = TypeFromSchema<typeof ScenesCluster.commands.enhancedViewScene.responseSchema>;
-type CopySceneRequest = TypeFromSchema<typeof ScenesCluster.commands.copyScene.requestSchema>;
-type CopySceneResponse = TypeFromSchema<typeof ScenesCluster.commands.copyScene.responseSchema>;
+type AddSceneRequest = TypeFromSchema<typeof ScenesCluster.commandmodels.addScene.requestSchema>;
+type AddSceneResponse = TypeFromSchema<typeof ScenesCluster.commandmodels.addScene.responseSchema>;
+type ViewSceneRequest = TypeFromSchema<typeof ScenesCluster.commandmodels.viewScene.requestSchema>;
+type ViewSceneResponse = TypeFromSchema<typeof ScenesCluster.commandmodels.viewScene.responseSchema>;
+type RemoveSceneRequest = TypeFromSchema<typeof ScenesCluster.commandmodels.removeScene.requestSchema>;
+type RemoveSceneResponse = TypeFromSchema<typeof ScenesCluster.commandmodels.removeScene.responseSchema>;
+type RemoveAllScenesRequest = TypeFromSchema<typeof ScenesCluster.commandmodels.removeAllScenes.requestSchema>;
+type RemoveAllScenesResponse = TypeFromSchema<typeof ScenesCluster.commandmodels.removeAllScenes.responseSchema>;
+type StoreSceneRequest = TypeFromSchema<typeof ScenesCluster.commandmodels.storeScene.requestSchema>;
+type StoreSceneResponse = TypeFromSchema<typeof ScenesCluster.commandmodels.storeScene.responseSchema>;
+type RecallSceneRequest = TypeFromSchema<typeof ScenesCluster.commandmodels.recallScene.requestSchema>;
+type GetSceneMembershipRequest = TypeFromSchema<typeof ScenesCluster.commandmodels.getSceneMembership.requestSchema>;
+type GetSceneMembershipResponse = TypeFromSchema<typeof ScenesCluster.commandmodels.getSceneMembership.responseSchema>;
+type EnhancedAddSceneRequest = TypeFromSchema<typeof ScenesCluster.commandmodels.enhancedAddScene.requestSchema>;
+type EnhancedAddSceneResponse = TypeFromSchema<typeof ScenesCluster.commandmodels.enhancedAddScene.responseSchema>;
+type EnhancedViewSceneRequest = TypeFromSchema<typeof ScenesCluster.commandmodels.enhancedViewScene.requestSchema>;
+type EnhancedViewSceneResponse = TypeFromSchema<typeof ScenesCluster.commandmodels.enhancedViewScene.responseSchema>;
+type CopySceneRequest = TypeFromSchema<typeof ScenesCluster.commandmodels.copyScene.requestSchema>;
+type CopySceneResponse = TypeFromSchema<typeof ScenesCluster.commandmodels.copyScene.responseSchema>;
 
 namespace Scenes {
     export type State = {
@@ -50,6 +50,13 @@ namespace Scenes {
         sendEnhancedAddScene(request: EnhancedAddSceneRequest): Promise<EnhancedAddSceneResponse>;
         sendEnhancedViewScene(request: EnhancedViewSceneRequest): Promise<EnhancedViewSceneResponse>;
         sendCopyScene(request: CopySceneRequest): Promise<CopySceneResponse>;
+
+        onSceneCountChange(): void;
+        onCurrentSceneChange(): void;
+        onCurrentGroupChange(): void;
+        onSceneValidChange(): void;
+        onNameSupportChange(): void;
+        onLastConfiguredByChange(): void;
     }
 
     export interface Server {
@@ -63,6 +70,13 @@ namespace Scenes {
         onEnhancedAddScene(request: EnhancedAddSceneRequest): Promise<EnhancedAddSceneResponse>;
         onEnhancedViewScene(request: EnhancedViewSceneRequest): Promise<EnhancedViewSceneResponse>;
         onCopyScene(request: CopySceneRequest): Promise<CopySceneResponse>;
+
+        onSceneCountChange(): void;
+        onCurrentSceneChange(): void;
+        onCurrentGroupChange(): void;
+        onSceneValidChange(): void;
+        onNameSupportChange(): void;
+        onLastConfiguredByChange(): void;
     }
 }
 

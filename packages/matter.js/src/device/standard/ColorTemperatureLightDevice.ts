@@ -12,7 +12,7 @@ import { AutoDevice } from "../AutoDevice.js";
 import { Identify, Groups, Scenes, OnOff, LevelControl, OnOffLighting } from "../../cluster/interface/index.js";
 
 export class ColorTemperatureLight extends AutoDevice.implement(DeviceTypes.COLOR_TEMPERATURE_LIGHT, Identify, Groups, Scenes, OnOff, LevelControl) {
-    readonly ColorTemperatureLightOptions = {
+    static readonly options = {
         OnOffLighting,
     }
 

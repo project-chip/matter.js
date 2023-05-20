@@ -12,8 +12,18 @@ namespace PowerSourceConfiguration {
     export type State = {
         sources: number[];
     }
+
+    export interface Client {
+
+        onSourcesChange(): void;
+    }
+
+    export interface Server {
+
+        onSourcesChange(): void;
+    }
 }
 
-export const PowerSourceConfiguration: ClusterInterface<PowerSourceConfiguration.State, {}, {}> = {
+export const PowerSourceConfiguration: ClusterInterface<PowerSourceConfiguration.State, PowerSourceConfiguration.Client, PowerSourceConfiguration.Server> = {
     definition: PowerSourceConfigurationCluster
 }

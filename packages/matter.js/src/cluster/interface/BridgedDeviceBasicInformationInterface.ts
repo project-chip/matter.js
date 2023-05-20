@@ -9,10 +9,10 @@
 import { BridgedDeviceBasicInformationCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
-type StartUpEvent = TypeFromSchema<typeof BridgedDeviceBasicInformationCluster.events.startUp.schema>;
-type ShutDownEvent = TypeFromSchema<typeof BridgedDeviceBasicInformationCluster.events.shutDown.schema>;
-type LeaveEvent = TypeFromSchema<typeof BridgedDeviceBasicInformationCluster.events.leave.schema>;
-type ReachableChangedEvent = TypeFromSchema<typeof BridgedDeviceBasicInformationCluster.events.reachableChanged.schema>;
+type StartUpEvent = TypeFromSchema<typeof BridgedDeviceBasicInformationCluster.eventmodels.startUp.schema>;
+type ShutDownEvent = TypeFromSchema<typeof BridgedDeviceBasicInformationCluster.eventmodels.shutDown.schema>;
+type LeaveEvent = TypeFromSchema<typeof BridgedDeviceBasicInformationCluster.eventmodels.leave.schema>;
+type ReachableChangedEvent = TypeFromSchema<typeof BridgedDeviceBasicInformationCluster.eventmodels.reachableChanged.schema>;
 
 namespace BridgedDeviceBasicInformation {
     export type State = {
@@ -34,6 +34,22 @@ namespace BridgedDeviceBasicInformation {
     }
 
     export interface Client {
+
+        onVendorNameChange(): void;
+        onVendorIdChange(): void;
+        onProductNameChange(): void;
+        onNodeLabelChange(): void;
+        onHardwareVersionChange(): void;
+        onHardwareVersionStringChange(): void;
+        onSoftwareVersionChange(): void;
+        onSoftwareVersionStringChange(): void;
+        onManufacturingDateChange(): void;
+        onPartNumberChange(): void;
+        onProductUrlChange(): void;
+        onProductLabelChange(): void;
+        onSerialNumberChange(): void;
+        onReachableChange(): void;
+        onUniqueIdChange(): void;
         addStartUpListener(listener: (event: StartUpEvent) => void): void;
         removeStartUpListener(listener: (event: StartUpEvent) => void): void;
         triggerStartUp(): void;
@@ -47,8 +63,27 @@ namespace BridgedDeviceBasicInformation {
         removeReachableChangedListener(listener: (event: ReachableChangedEvent) => void): void;
         triggerReachableChanged(): void;
     }
+
+    export interface Server {
+
+        onVendorNameChange(): void;
+        onVendorIdChange(): void;
+        onProductNameChange(): void;
+        onNodeLabelChange(): void;
+        onHardwareVersionChange(): void;
+        onHardwareVersionStringChange(): void;
+        onSoftwareVersionChange(): void;
+        onSoftwareVersionStringChange(): void;
+        onManufacturingDateChange(): void;
+        onPartNumberChange(): void;
+        onProductUrlChange(): void;
+        onProductLabelChange(): void;
+        onSerialNumberChange(): void;
+        onReachableChange(): void;
+        onUniqueIdChange(): void;
+    }
 }
 
-export const BridgedDeviceBasicInformation: ClusterInterface<BridgedDeviceBasicInformation.State, BridgedDeviceBasicInformation.Client, {}> = {
+export const BridgedDeviceBasicInformation: ClusterInterface<BridgedDeviceBasicInformation.State, BridgedDeviceBasicInformation.Client, BridgedDeviceBasicInformation.Server> = {
     definition: BridgedDeviceBasicInformationCluster
 }

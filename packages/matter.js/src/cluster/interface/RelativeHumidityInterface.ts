@@ -15,8 +15,24 @@ namespace RelativeHumidity {
         maxMeasuredValue: number | undefined;
         tolerance?: number;
     }
+
+    export interface Client {
+
+        onMeasuredValueChange(): void;
+        onMinMeasuredValueChange(): void;
+        onMaxMeasuredValueChange(): void;
+        onToleranceChange(): void;
+    }
+
+    export interface Server {
+
+        onMeasuredValueChange(): void;
+        onMinMeasuredValueChange(): void;
+        onMaxMeasuredValueChange(): void;
+        onToleranceChange(): void;
+    }
 }
 
-export const RelativeHumidity: ClusterInterface<RelativeHumidity.State, {}, {}> = {
+export const RelativeHumidity: ClusterInterface<RelativeHumidity.State, RelativeHumidity.Client, RelativeHumidity.Server> = {
     definition: RelativeHumidityCluster
 }

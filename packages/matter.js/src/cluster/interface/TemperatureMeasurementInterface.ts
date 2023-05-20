@@ -15,8 +15,24 @@ namespace TemperatureMeasurement {
         maxMeasuredValue: number | undefined;
         tolerance?: number;
     }
+
+    export interface Client {
+
+        onMeasuredValueChange(): void;
+        onMinMeasuredValueChange(): void;
+        onMaxMeasuredValueChange(): void;
+        onToleranceChange(): void;
+    }
+
+    export interface Server {
+
+        onMeasuredValueChange(): void;
+        onMinMeasuredValueChange(): void;
+        onMaxMeasuredValueChange(): void;
+        onToleranceChange(): void;
+    }
 }
 
-export const TemperatureMeasurement: ClusterInterface<TemperatureMeasurement.State, {}, {}> = {
+export const TemperatureMeasurement: ClusterInterface<TemperatureMeasurement.State, TemperatureMeasurement.Client, TemperatureMeasurement.Server> = {
     definition: TemperatureMeasurementCluster
 }

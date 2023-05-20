@@ -12,7 +12,7 @@ import { AutoDevice } from "../AutoDevice.js";
 import { OnOff, Identify, OnOffLighting, LevelControl, Scenes, Groups, TemperatureMeasurement, PressureMeasurement, FlowMeasurement } from "../../cluster/interface/index.js";
 
 export class Pump extends AutoDevice.implement(DeviceTypes.PUMP, OnOff, Identify) {
-    readonly PumpOptions = {
+    static readonly options = {
         OnOffLighting,
         LevelControl,
         Scenes,

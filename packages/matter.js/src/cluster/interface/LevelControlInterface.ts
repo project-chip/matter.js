@@ -9,14 +9,14 @@
 import { LevelControlCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
-type MoveToLevelRequest = TypeFromSchema<typeof LevelControlCluster.commands.moveToLevel.requestSchema>;
-type MoveRequest = TypeFromSchema<typeof LevelControlCluster.commands.move.requestSchema>;
-type StepRequest = TypeFromSchema<typeof LevelControlCluster.commands.step.requestSchema>;
-type StopRequest = TypeFromSchema<typeof LevelControlCluster.commands.stop.requestSchema>;
-type MoveToLevelWithOnOffRequest = TypeFromSchema<typeof LevelControlCluster.commands.moveToLevelWithOnOff.requestSchema>;
-type MoveWithOnOffRequest = TypeFromSchema<typeof LevelControlCluster.commands.moveWithOnOff.requestSchema>;
-type StepWithOnOffRequest = TypeFromSchema<typeof LevelControlCluster.commands.stepWithOnOff.requestSchema>;
-type StopWithOnOffRequest = TypeFromSchema<typeof LevelControlCluster.commands.stopWithOnOff.requestSchema>;
+type MoveToLevelRequest = TypeFromSchema<typeof LevelControlCluster.commandmodels.moveToLevel.requestSchema>;
+type MoveRequest = TypeFromSchema<typeof LevelControlCluster.commandmodels.move.requestSchema>;
+type StepRequest = TypeFromSchema<typeof LevelControlCluster.commandmodels.step.requestSchema>;
+type StopRequest = TypeFromSchema<typeof LevelControlCluster.commandmodels.stop.requestSchema>;
+type MoveToLevelWithOnOffRequest = TypeFromSchema<typeof LevelControlCluster.commandmodels.moveToLevelWithOnOff.requestSchema>;
+type MoveWithOnOffRequest = TypeFromSchema<typeof LevelControlCluster.commandmodels.moveWithOnOff.requestSchema>;
+type StepWithOnOffRequest = TypeFromSchema<typeof LevelControlCluster.commandmodels.stepWithOnOff.requestSchema>;
+type StopWithOnOffRequest = TypeFromSchema<typeof LevelControlCluster.commandmodels.stopWithOnOff.requestSchema>;
 
 namespace LevelControl {
     export type State = {
@@ -42,6 +42,18 @@ namespace LevelControl {
         sendMoveWithOnOff(request: MoveWithOnOffRequest): Promise<void>;
         sendStepWithOnOff(request: StepWithOnOffRequest): Promise<void>;
         sendStopWithOnOff(request: StopWithOnOffRequest): Promise<void>;
+
+        onCurrentLevelChange(): void;
+        onMinLevelChange(): void;
+        onMaxLevelChange(): void;
+        onOnOffTransitionTimeChange(): void;
+        onOnLevelChange(): void;
+        onOnTransitionTimeChange(): void;
+        onOffTransitionTimeChange(): void;
+        onDefaultMoveRateChange(): void;
+        onOptionsChange(): void;
+        onRemainingTimeChange(): void;
+        onStartUpCurrentLevelChange(): void;
     }
 
     export interface Server {
@@ -53,6 +65,18 @@ namespace LevelControl {
         onMoveWithOnOff(request: MoveWithOnOffRequest): Promise<void>;
         onStepWithOnOff(request: StepWithOnOffRequest): Promise<void>;
         onStopWithOnOff(request: StopWithOnOffRequest): Promise<void>;
+
+        onCurrentLevelChange(): void;
+        onMinLevelChange(): void;
+        onMaxLevelChange(): void;
+        onOnOffTransitionTimeChange(): void;
+        onOnLevelChange(): void;
+        onOnTransitionTimeChange(): void;
+        onOffTransitionTimeChange(): void;
+        onDefaultMoveRateChange(): void;
+        onOptionsChange(): void;
+        onRemainingTimeChange(): void;
+        onStartUpCurrentLevelChange(): void;
     }
 }
 

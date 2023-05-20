@@ -17,12 +17,16 @@ namespace OnOff {
         sendOff(): Promise<void>;
         sendOn(): Promise<void>;
         sendToggle(): Promise<void>;
+
+        onOnOffChange(): void;
     }
 
     export interface Server {
         onOff(): Promise<void>;
         onOn(): Promise<void>;
         onToggle(): Promise<void>;
+
+        onOnOffChange(): void;
     }
 }
 

@@ -9,9 +9,9 @@
 import { PowerSourceCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
-type WiredFaultChangeEvent = TypeFromSchema<typeof PowerSourceCluster.events.wiredFaultChange.schema>;
-type BatFaultChangeEvent = TypeFromSchema<typeof PowerSourceCluster.events.batFaultChange.schema>;
-type BatChargeFaultChangeEvent = TypeFromSchema<typeof PowerSourceCluster.events.batChargeFaultChange.schema>;
+type WiredFaultChangeEvent = TypeFromSchema<typeof PowerSourceCluster.eventmodels.wiredFaultChange.schema>;
+type BatFaultChangeEvent = TypeFromSchema<typeof PowerSourceCluster.eventmodels.batFaultChange.schema>;
+type BatChargeFaultChangeEvent = TypeFromSchema<typeof PowerSourceCluster.eventmodels.batChargeFaultChange.schema>;
 
 namespace PowerSource {
     export type State = {
@@ -49,6 +49,38 @@ namespace PowerSource {
     }
 
     export interface Client {
+
+        onStatusChange(): void;
+        onOrderChange(): void;
+        onDescriptionChange(): void;
+        onWiredAssessedInputVoltageChange(): void;
+        onWiredAssessedInputFrequencyChange(): void;
+        onWiredCurrentTypeChange(): void;
+        onWiredAssessedCurrentChange(): void;
+        onWiredNominalVoltageChange(): void;
+        onWiredMaximumCurrentChange(): void;
+        onWiredPresentChange(): void;
+        onActiveWiredFaultsChange(): void;
+        onBatVoltageChange(): void;
+        onBatPercentRemainingChange(): void;
+        onBatTimeRemainingChange(): void;
+        onBatChargeLevelChange(): void;
+        onBatReplacementNeededChange(): void;
+        onBatReplaceabilityChange(): void;
+        onBatPresentChange(): void;
+        onActiveBatFaultsChange(): void;
+        onBatReplacementDescriptionChange(): void;
+        onBatCommonDesignationChange(): void;
+        onBatAnsidesignationChange(): void;
+        onBatIecdesignationChange(): void;
+        onBatApprovedChemistryChange(): void;
+        onBatCapacityChange(): void;
+        onBatQuantityChange(): void;
+        onBatChargeStateChange(): void;
+        onBatTimeToFullChargeChange(): void;
+        onBatFunctionalWhileChargingChange(): void;
+        onBatChargingCurrentChange(): void;
+        onActiveBatChargeFaultsChange(): void;
         addWiredFaultChangeListener(listener: (event: WiredFaultChangeEvent) => void): void;
         removeWiredFaultChangeListener(listener: (event: WiredFaultChangeEvent) => void): void;
         triggerWiredFaultChange(): void;
@@ -59,8 +91,43 @@ namespace PowerSource {
         removeBatChargeFaultChangeListener(listener: (event: BatChargeFaultChangeEvent) => void): void;
         triggerBatChargeFaultChange(): void;
     }
+
+    export interface Server {
+
+        onStatusChange(): void;
+        onOrderChange(): void;
+        onDescriptionChange(): void;
+        onWiredAssessedInputVoltageChange(): void;
+        onWiredAssessedInputFrequencyChange(): void;
+        onWiredCurrentTypeChange(): void;
+        onWiredAssessedCurrentChange(): void;
+        onWiredNominalVoltageChange(): void;
+        onWiredMaximumCurrentChange(): void;
+        onWiredPresentChange(): void;
+        onActiveWiredFaultsChange(): void;
+        onBatVoltageChange(): void;
+        onBatPercentRemainingChange(): void;
+        onBatTimeRemainingChange(): void;
+        onBatChargeLevelChange(): void;
+        onBatReplacementNeededChange(): void;
+        onBatReplaceabilityChange(): void;
+        onBatPresentChange(): void;
+        onActiveBatFaultsChange(): void;
+        onBatReplacementDescriptionChange(): void;
+        onBatCommonDesignationChange(): void;
+        onBatAnsidesignationChange(): void;
+        onBatIecdesignationChange(): void;
+        onBatApprovedChemistryChange(): void;
+        onBatCapacityChange(): void;
+        onBatQuantityChange(): void;
+        onBatChargeStateChange(): void;
+        onBatTimeToFullChargeChange(): void;
+        onBatFunctionalWhileChargingChange(): void;
+        onBatChargingCurrentChange(): void;
+        onActiveBatChargeFaultsChange(): void;
+    }
 }
 
-export const PowerSource: ClusterInterface<PowerSource.State, PowerSource.Client, {}> = {
+export const PowerSource: ClusterInterface<PowerSource.State, PowerSource.Client, PowerSource.Server> = {
     definition: PowerSourceCluster
 }

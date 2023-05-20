@@ -9,8 +9,8 @@
 import { IdentifyCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
-type IdentifyRequest = TypeFromSchema<typeof IdentifyCluster.commands.identify.requestSchema>;
-type TriggerEffectRequest = TypeFromSchema<typeof IdentifyCluster.commands.triggerEffect.requestSchema>;
+type IdentifyRequest = TypeFromSchema<typeof IdentifyCluster.commandmodels.identify.requestSchema>;
+type TriggerEffectRequest = TypeFromSchema<typeof IdentifyCluster.commandmodels.triggerEffect.requestSchema>;
 
 namespace Identify {
     export type State = {
@@ -21,11 +21,17 @@ namespace Identify {
     export interface Client {
         sendIdentify(request: IdentifyRequest): Promise<void>;
         sendTriggerEffect(request: TriggerEffectRequest): Promise<void>;
+
+        onIdentifyTimeChange(): void;
+        onIdentifyTypeChange(): void;
     }
 
     export interface Server {
         onIdentify(request: IdentifyRequest): Promise<void>;
         onTriggerEffect(request: TriggerEffectRequest): Promise<void>;
+
+        onIdentifyTimeChange(): void;
+        onIdentifyTypeChange(): void;
     }
 }
 

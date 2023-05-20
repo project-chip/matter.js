@@ -9,14 +9,24 @@
 import { FixedLabelCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
-type LabelList = TypeFromSchema<typeof FixedLabelCluster.attributes.labelList.schema>;
+type LabelList = TypeFromSchema<typeof FixedLabelCluster.attributemodels.labelList.schema>;
 
 namespace FixedLabel {
     export type State = {
         labelList: LabelList[];
     }
+
+    export interface Client {
+
+        onLabelListChange(): void;
+    }
+
+    export interface Server {
+
+        onLabelListChange(): void;
+    }
 }
 
-export const FixedLabel: ClusterInterface<FixedLabel.State, {}, {}> = {
+export const FixedLabel: ClusterInterface<FixedLabel.State, FixedLabel.Client, FixedLabel.Server> = {
     definition: FixedLabelCluster
 }

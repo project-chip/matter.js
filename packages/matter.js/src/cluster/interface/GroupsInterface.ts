@@ -9,15 +9,15 @@
 import { GroupsCluster, ClusterInterface } from "../index.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
-type AddGroupRequest = TypeFromSchema<typeof GroupsCluster.commands.addGroup.requestSchema>;
-type AddGroupResponse = TypeFromSchema<typeof GroupsCluster.commands.addGroup.responseSchema>;
-type ViewGroupRequest = TypeFromSchema<typeof GroupsCluster.commands.viewGroup.requestSchema>;
-type ViewGroupResponse = TypeFromSchema<typeof GroupsCluster.commands.viewGroup.responseSchema>;
-type GetGroupMembershipRequest = TypeFromSchema<typeof GroupsCluster.commands.getGroupMembership.requestSchema>;
-type GetGroupMembershipResponse = TypeFromSchema<typeof GroupsCluster.commands.getGroupMembership.responseSchema>;
-type RemoveGroupRequest = TypeFromSchema<typeof GroupsCluster.commands.removeGroup.requestSchema>;
-type RemoveGroupResponse = TypeFromSchema<typeof GroupsCluster.commands.removeGroup.responseSchema>;
-type AddGroupIfIdentifyingRequest = TypeFromSchema<typeof GroupsCluster.commands.addGroupIfIdentifying.requestSchema>;
+type AddGroupRequest = TypeFromSchema<typeof GroupsCluster.commandmodels.addGroup.requestSchema>;
+type AddGroupResponse = TypeFromSchema<typeof GroupsCluster.commandmodels.addGroup.responseSchema>;
+type ViewGroupRequest = TypeFromSchema<typeof GroupsCluster.commandmodels.viewGroup.requestSchema>;
+type ViewGroupResponse = TypeFromSchema<typeof GroupsCluster.commandmodels.viewGroup.responseSchema>;
+type GetGroupMembershipRequest = TypeFromSchema<typeof GroupsCluster.commandmodels.getGroupMembership.requestSchema>;
+type GetGroupMembershipResponse = TypeFromSchema<typeof GroupsCluster.commandmodels.getGroupMembership.responseSchema>;
+type RemoveGroupRequest = TypeFromSchema<typeof GroupsCluster.commandmodels.removeGroup.requestSchema>;
+type RemoveGroupResponse = TypeFromSchema<typeof GroupsCluster.commandmodels.removeGroup.responseSchema>;
+type AddGroupIfIdentifyingRequest = TypeFromSchema<typeof GroupsCluster.commandmodels.addGroupIfIdentifying.requestSchema>;
 
 namespace Groups {
     export type State = {
@@ -31,6 +31,8 @@ namespace Groups {
         sendRemoveGroup(request: RemoveGroupRequest): Promise<RemoveGroupResponse>;
         sendRemoveAllGroups(): Promise<void>;
         sendAddGroupIfIdentifying(request: AddGroupIfIdentifyingRequest): Promise<void>;
+
+        onNameSupportChange(): void;
     }
 
     export interface Server {
@@ -40,6 +42,8 @@ namespace Groups {
         onRemoveGroup(request: RemoveGroupRequest): Promise<RemoveGroupResponse>;
         onRemoveAllGroups(): Promise<void>;
         onAddGroupIfIdentifying(request: AddGroupIfIdentifyingRequest): Promise<void>;
+
+        onNameSupportChange(): void;
     }
 }
 

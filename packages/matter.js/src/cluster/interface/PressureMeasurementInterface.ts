@@ -20,8 +20,34 @@ namespace PressureMeasurement {
         scaledTolerance?: number;
         scale?: number;
     }
+
+    export interface Client {
+
+        onMeasuredValueChange(): void;
+        onMinMeasuredValueChange(): void;
+        onMaxMeasuredValueChange(): void;
+        onToleranceChange(): void;
+        onScaledValueChange(): void;
+        onMinScaledValueChange(): void;
+        onMaxScaledValueChange(): void;
+        onScaledToleranceChange(): void;
+        onScaleChange(): void;
+    }
+
+    export interface Server {
+
+        onMeasuredValueChange(): void;
+        onMinMeasuredValueChange(): void;
+        onMaxMeasuredValueChange(): void;
+        onToleranceChange(): void;
+        onScaledValueChange(): void;
+        onMinScaledValueChange(): void;
+        onMaxScaledValueChange(): void;
+        onScaledToleranceChange(): void;
+        onScaleChange(): void;
+    }
 }
 
-export const PressureMeasurement: ClusterInterface<PressureMeasurement.State, {}, {}> = {
+export const PressureMeasurement: ClusterInterface<PressureMeasurement.State, PressureMeasurement.Client, PressureMeasurement.Server> = {
     definition: PressureMeasurementCluster
 }

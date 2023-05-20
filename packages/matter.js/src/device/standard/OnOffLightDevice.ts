@@ -12,7 +12,7 @@ import { AutoDevice } from "../AutoDevice.js";
 import { Identify, Groups, Scenes, OnOff, OnOffLighting, LevelControl } from "../../cluster/interface/index.js";
 
 export class OnOffLight extends AutoDevice.implement(DeviceTypes.ON_OFF_LIGHT, Identify, Groups, Scenes, OnOff) {
-    readonly OnOffLightOptions = {
+    static readonly options = {
         OnOffLighting,
         LevelControl,
     }
