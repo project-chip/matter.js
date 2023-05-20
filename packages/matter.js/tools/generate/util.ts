@@ -40,14 +40,15 @@ class Block extends Array<any> {
     override toString(linePrefix = "") {
         const pieces = new Array<string>();
         for (let i = 0; i < this.length; i++) {
-            this[i].toString().split("\n").forEach((line: string) => {
+            const str = this[i].toString();
+            str.split("\n").forEach((line: string) => {
                 if (line) {
                     pieces.push(`${linePrefix}${line}`);
                 } else {
                     pieces.push("");
                 }
             });
-            if (i < this.length - 1 && this[i] instanceof Block && this[i + 1] != "") {
+            if (i < this.length - 1 && this[i] instanceof Block && str.length && this[i + 1] != "") {
                 pieces.push("");
             }
         }

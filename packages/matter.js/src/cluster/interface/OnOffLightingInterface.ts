@@ -14,23 +14,32 @@ type OnWithTimedOffRequest = TypeFromSchema<typeof OnOffLightingCluster.commands
 
 export module OnOffLighting {
     export type State = {
-        readonly onOff: boolean;
-        readonly globalSceneControl: boolean;
-        readonly onTime: number | undefined;
-        readonly offWaitTime: number | undefined;
-        readonly startUpOnOff: number | undefined;
+        onOff: boolean;
+        globalSceneControl: boolean;
+        onTime: number | undefined;
+        offWaitTime: number | undefined;
+        startUpOnOff: number | undefined;
     }
 
-    export interface Common {
-        invokeOff(): Promise<void>;
-        invokeOn(): Promise<void>;
-        invokeToggle(): Promise<void>;
-        invokeOffWithEffect(request: OffWithEffectRequest): Promise<void>;
-        invokeOnWithRecallGlobalScene(): Promise<void>;
-        invokeOnWithTimedOff(request: OnWithTimedOffRequest): Promise<void>;
+    export interface Client {
+        sendOff(): Promise<void>;
+        sendOn(): Promise<void>;
+        sendToggle(): Promise<void>;
+        sendOffWithEffect(request: OffWithEffectRequest): Promise<void>;
+        sendOnWithRecallGlobalScene(): Promise<void>;
+        sendOnWithTimedOff(request: OnWithTimedOffRequest): Promise<void>;
+    }
+
+    export interface Server {
+        onOff(): Promise<void>;
+        onOn(): Promise<void>;
+        onToggle(): Promise<void>;
+        onOffWithEffect(request: OffWithEffectRequest): Promise<void>;
+        onOnWithRecallGlobalScene(): Promise<void>;
+        onOnWithTimedOff(request: OnWithTimedOffRequest): Promise<void>;
     }
 }
 
-export const OnOffLighting: ClusterInterface<OnOffLighting.State, OnOffLighting.Common, OnOffLighting.Common> = {
+export const OnOffLighting: ClusterInterface<OnOffLighting.State, OnOffLighting.Client, OnOffLighting.Server> = {
     definition: OnOffLightingCluster
 }

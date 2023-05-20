@@ -16,27 +16,24 @@ type ReachableChangedEvent = TypeFromSchema<typeof BridgedDeviceBasicInformation
 
 export module BridgedDeviceBasicInformation {
     export type State = {
-        readonly vendorName?: string;
-        readonly vendorId?: number;
-        readonly productName?: string;
-        readonly nodeLabel?: string;
-        readonly hardwareVersion?: number;
-        readonly hardwareVersionString?: string;
-        readonly softwareVersion?: number;
-        readonly softwareVersionString?: string;
-        readonly manufacturingDate?: string;
-        readonly partNumber?: string;
-        readonly productUrl?: string;
-        readonly productLabel?: string;
-        readonly serialNumber?: string;
-        readonly reachable: boolean;
-        readonly uniqueId?: string;
+        vendorName?: string;
+        vendorId?: number;
+        productName?: string;
+        nodeLabel?: string;
+        hardwareVersion?: number;
+        hardwareVersionString?: string;
+        softwareVersion?: number;
+        softwareVersionString?: string;
+        manufacturingDate?: string;
+        partNumber?: string;
+        productUrl?: string;
+        productLabel?: string;
+        serialNumber?: string;
+        reachable: boolean;
+        uniqueId?: string;
     }
 
-    export interface Common {
-    }
-
-    export interface Client extends Common {
+    export interface Client {
         addStartUpListener(listener: (event: StartUpEvent) => void): void;
         removeStartUpListener(listener: (event: StartUpEvent) => void): void;
         triggerStartUp(): void;
@@ -50,8 +47,11 @@ export module BridgedDeviceBasicInformation {
         removeReachableChangedListener(listener: (event: ReachableChangedEvent) => void): void;
         triggerReachableChanged(): void;
     }
+
+    export interface Server {
+    }
 }
 
-export const BridgedDeviceBasicInformation: ClusterInterface<BridgedDeviceBasicInformation.State, BridgedDeviceBasicInformation.Client, BridgedDeviceBasicInformation.Common> = {
+export const BridgedDeviceBasicInformation: ClusterInterface<BridgedDeviceBasicInformation.State, BridgedDeviceBasicInformation.Client, BridgedDeviceBasicInformation.Server> = {
     definition: BridgedDeviceBasicInformationCluster
 }

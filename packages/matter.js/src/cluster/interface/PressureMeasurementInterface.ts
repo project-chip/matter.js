@@ -8,24 +8,26 @@
 
 import { PressureMeasurementCluster, ClusterInterface } from "../index.js";
 
-
 export module PressureMeasurement {
     export type State = {
-        readonly measuredValue: number | undefined;
-        readonly minMeasuredValue: number | undefined;
-        readonly maxMeasuredValue: number | undefined;
-        readonly tolerance?: number;
-        readonly scaledValue?: number | undefined;
-        readonly minScaledValue?: number | undefined;
-        readonly maxScaledValue?: number | undefined;
-        readonly scaledTolerance?: number;
-        readonly scale?: number;
+        measuredValue: number | undefined;
+        minMeasuredValue: number | undefined;
+        maxMeasuredValue: number | undefined;
+        tolerance?: number;
+        scaledValue?: number | undefined;
+        minScaledValue?: number | undefined;
+        maxScaledValue?: number | undefined;
+        scaledTolerance?: number;
+        scale?: number;
     }
 
-    export interface Common {
+    export interface Client {
+    }
+
+    export interface Server {
     }
 }
 
-export const PressureMeasurement: ClusterInterface<PressureMeasurement.State, PressureMeasurement.Common, PressureMeasurement.Common> = {
+export const PressureMeasurement: ClusterInterface<PressureMeasurement.State, PressureMeasurement.Client, PressureMeasurement.Server> = {
     definition: PressureMeasurementCluster
 }

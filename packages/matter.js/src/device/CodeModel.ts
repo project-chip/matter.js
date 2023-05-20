@@ -11,8 +11,6 @@ import * as clusterExports from "../../src/cluster/index.js";
 export { ClusterInterface };
 
 const INTERNAL_CLUSTERS = [
-    clusterExports.ScenesCluster,
-    clusterExports.GroupsCluster,
     clusterExports.BindingCluster,
     clusterExports.BasicInformationCluster,
     clusterExports.AccessControlCluster,
@@ -92,11 +90,16 @@ class Attribute extends Element<clusterExports.Attribute<any>> {
     get id() { return this.definition.id; }
     get schema() { return this.definition.schema; }
     get optional() { return this.definition.optional; }
+    get getter() { return `get${this.typeName}Attribute` }
+    get setter() { return `set${this.typeName}Attribute` }
+    get default() { return this.definition.default }
 }
 
 class Command extends Element<clusterExports.Command<any, any>> {
     get requestSchema() { return this.definition.requestSchema; }
     get responseSchema() { return this.definition.responseSchema; }
+    get invokerName() { return `send${this.typeName}`; }
+    get handlerName() { return `on${this.typeName}`; }
 }
 
 class Event extends Element<clusterExports.Event<any>> {
@@ -162,23 +165,25 @@ export class CodeModel {
 
         const extensions = new Map<number, ClusterDetail[]>();
         for (const key in clusterExports) {
-            if (key.match(/[a-z]Cluster$/i)) {
-                const cluster = (<any>clusterExports)[key];
-                if (INTERNAL_CLUSTERS.indexOf(cluster) !== -1) continue;
-                let clusterExtensions = extensions.get(cluster.id);
-                if (!clusterExtensions) {
-                    clusterExtensions = Array<ClusterDetail>();
-                    extensions.set(cluster.id, clusterExtensions);
-                }
-                const detail = new ClusterDetail(key, cluster, clusterExtensions);
-                if (cluster.extension) {
-                    clusterExtensions.push(detail);
-                } else {
-                    availableClusters.set(cluster.id, detail);
-                }
+            if (!key.match(/[a-z]Cluster$/i)) continue;
+
+            const cluster = (<any>clusterExports)[key];
+            if (!cluster.id || !cluster.name || !cluster.revision) continue;
+            if (INTERNAL_CLUSTERS.indexOf(cluster) !== -1) continue;
+
+            let clusterExtensions = extensions.get(cluster.id);
+            if (!clusterExtensions) {
+                clusterExtensions = Array<ClusterDetail>();
+                extensions.set(cluster.id, clusterExtensions);
+            }
+            const detail = new ClusterDetail(key, cluster, clusterExtensions);
+            if (cluster.extension) {
+                clusterExtensions.push(detail);
+            } else {
+                availableClusters.set(cluster.id, detail);
             }
         }
-        
+
         for (const key in DeviceTypes) {
             const dt = DeviceTypes[key];
             const mapClusters = (list: number[]) => <ClusterDetail[]>list.map((id) => availableClusters.get(id)).filter((cluster) => cluster);

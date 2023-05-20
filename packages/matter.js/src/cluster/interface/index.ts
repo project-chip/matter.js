@@ -12,6 +12,8 @@ export { EthernetNetworkCommissioning } from "./EthernetNetworkCommissioningInte
 export { PowerSource } from "./PowerSourceInterface.js";
 export { BridgedDeviceBasicInformation } from "./BridgedDeviceBasicInformationInterface.js";
 export { Identify } from "./IdentifyInterface.js";
+export { Groups } from "./GroupsInterface.js";
+export { Scenes } from "./ScenesInterface.js";
 export { OnOff } from "./OnOffInterface.js";
 export { OnOffLighting } from "./OnOffLightingInterface.js";
 export { LevelControl } from "./LevelControlInterface.js";

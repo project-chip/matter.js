@@ -11,6 +11,4 @@ import { AutoDevice } from "../AutoDevice.js";
 import { Identify, OccupancySensing } from "../../cluster/interface/index.js";
 
 export class OccupancySensor extends AutoDevice.implement(DeviceTypes.OCCUPANCY_SENSOR, Identify, OccupancySensing) {
-    readonly options = OccupancySensorOptions;
-
 }

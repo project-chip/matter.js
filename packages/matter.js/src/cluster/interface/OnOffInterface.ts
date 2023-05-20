@@ -8,19 +8,24 @@
 
 import { OnOffCluster, ClusterInterface } from "../index.js";
 
-
 export module OnOff {
     export type State = {
-        readonly onOff: boolean;
+        onOff: boolean;
     }
 
-    export interface Common {
-        invokeOff(): Promise<void>;
-        invokeOn(): Promise<void>;
-        invokeToggle(): Promise<void>;
+    export interface Client {
+        sendOff(): Promise<void>;
+        sendOn(): Promise<void>;
+        sendToggle(): Promise<void>;
+    }
+
+    export interface Server {
+        onOff(): Promise<void>;
+        onOn(): Promise<void>;
+        onToggle(): Promise<void>;
     }
 }
 
-export const OnOff: ClusterInterface<OnOff.State, OnOff.Common, OnOff.Common> = {
+export const OnOff: ClusterInterface<OnOff.State, OnOff.Client, OnOff.Server> = {
     definition: OnOffCluster
 }

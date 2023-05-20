@@ -11,6 +11,4 @@ import { AutoDevice } from "../AutoDevice.js";
 import { BridgedDeviceBasicInformation } from "../../cluster/interface/index.js";
 
 export class BridgedNode extends AutoDevice.implement(DeviceTypes.BRIDGED_NODE, BridgedDeviceBasicInformation) {
-    readonly options = BridgedNodeOptions;
-
 }

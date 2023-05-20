@@ -11,6 +11,4 @@ import { AutoDevice } from "../AutoDevice.js";
 import { PressureMeasurement, Identify } from "../../cluster/interface/index.js";
 
 export class PressureSensor extends AutoDevice.implement(DeviceTypes.PRESSURE_SENSOR, PressureMeasurement, Identify) {
-    readonly options = PressureSensorOptions;
-
 }

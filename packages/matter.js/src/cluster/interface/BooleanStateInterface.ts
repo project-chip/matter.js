@@ -13,19 +13,19 @@ type StateChangeEvent = TypeFromSchema<typeof BooleanStateCluster.events.stateCh
 
 export module BooleanState {
     export type State = {
-        readonly stateValue: boolean;
+        stateValue: boolean;
     }
 
-    export interface Common {
-    }
-
-    export interface Client extends Common {
+    export interface Client {
         addStateChangeListener(listener: (event: StateChangeEvent) => void): void;
         removeStateChangeListener(listener: (event: StateChangeEvent) => void): void;
         triggerStateChange(): void;
     }
+
+    export interface Server {
+    }
 }
 
-export const BooleanState: ClusterInterface<BooleanState.State, BooleanState.Client, BooleanState.Common> = {
+export const BooleanState: ClusterInterface<BooleanState.State, BooleanState.Client, BooleanState.Server> = {
     definition: BooleanStateCluster
 }

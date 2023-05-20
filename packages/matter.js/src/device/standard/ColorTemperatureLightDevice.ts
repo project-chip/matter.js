@@ -7,19 +7,16 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { DeviceTypes } from "../DeviceTypes.js";
+import { ClusterInterface } from "../../cluster/ClusterInterface.js";
 import { AutoDevice } from "../AutoDevice.js";
-import { Identify, OnOff, LevelControl, OnOffLighting } from "../../cluster/interface/index.js";
+import { Identify, Groups, Scenes, OnOff, LevelControl, OnOffLighting } from "../../cluster/interface/index.js";
 
-const ColorTemperatureLightOptions = {
-    OnOffLighting
-}
+export class ColorTemperatureLight extends AutoDevice.implement(DeviceTypes.COLOR_TEMPERATURE_LIGHT, Identify, Groups, Scenes, OnOff, LevelControl) {
+    readonly ColorTemperatureLightOptions = {
+        OnOffLighting,
+    }
 
-type ColorTemperatureLightOption = typeof ColorTemperatureLightOptions[keyof typeof ColorTemperatureLightOptions]
-
-export class ColorTemperatureLight extends AutoDevice.implement(DeviceTypes.COLOR_TEMPERATURE_LIGHT, Identify, OnOff, LevelControl) {
-    readonly options = ColorTemperatureLightOptions;
-
-    static with<Options extends ColorTemperatureLightOption[]>(...options: Options) {
+    static with<Options extends ClusterInterface<any, any, any>[]>(...options: Options) {
         return AutoDevice.extend(this, ...options);
     }
 }

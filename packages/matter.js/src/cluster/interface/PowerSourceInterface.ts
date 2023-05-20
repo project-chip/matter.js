@@ -15,43 +15,40 @@ type BatChargeFaultChangeEvent = TypeFromSchema<typeof PowerSourceCluster.events
 
 export module PowerSource {
     export type State = {
-        readonly status: number;
-        readonly order: number;
-        readonly description: string;
-        readonly wiredAssessedInputVoltage?: number | undefined;
-        readonly wiredAssessedInputFrequency?: number | undefined;
-        readonly wiredCurrentType?: number;
-        readonly wiredAssessedCurrent?: number | undefined;
-        readonly wiredNominalVoltage?: number;
-        readonly wiredMaximumCurrent?: number;
-        readonly wiredPresent?: boolean;
-        readonly activeWiredFaults?: number[];
-        readonly batVoltage?: number | undefined;
-        readonly batPercentRemaining?: number | undefined;
-        readonly batTimeRemaining?: number | undefined;
-        readonly batChargeLevel?: number;
-        readonly batReplacementNeeded?: boolean;
-        readonly batReplaceability?: number;
-        readonly batPresent?: boolean;
-        readonly activeBatFaults?: number[];
-        readonly batReplacementDescription?: string;
-        readonly batCommonDesignation?: number;
-        readonly batAnsidesignation?: string;
-        readonly batIecdesignation?: string;
-        readonly batApprovedChemistry?: number;
-        readonly batCapacity?: number;
-        readonly batQuantity?: number;
-        readonly batChargeState?: number;
-        readonly batTimeToFullCharge?: number | undefined;
-        readonly batFunctionalWhileCharging?: boolean;
-        readonly batChargingCurrent?: number | undefined;
-        readonly activeBatChargeFaults?: number[];
+        status: number;
+        order: number;
+        description: string;
+        wiredAssessedInputVoltage?: number | undefined;
+        wiredAssessedInputFrequency?: number | undefined;
+        wiredCurrentType?: number;
+        wiredAssessedCurrent?: number | undefined;
+        wiredNominalVoltage?: number;
+        wiredMaximumCurrent?: number;
+        wiredPresent?: boolean;
+        activeWiredFaults?: number[];
+        batVoltage?: number | undefined;
+        batPercentRemaining?: number | undefined;
+        batTimeRemaining?: number | undefined;
+        batChargeLevel?: number;
+        batReplacementNeeded?: boolean;
+        batReplaceability?: number;
+        batPresent?: boolean;
+        activeBatFaults?: number[];
+        batReplacementDescription?: string;
+        batCommonDesignation?: number;
+        batAnsidesignation?: string;
+        batIecdesignation?: string;
+        batApprovedChemistry?: number;
+        batCapacity?: number;
+        batQuantity?: number;
+        batChargeState?: number;
+        batTimeToFullCharge?: number | undefined;
+        batFunctionalWhileCharging?: boolean;
+        batChargingCurrent?: number | undefined;
+        activeBatChargeFaults?: number[];
     }
 
-    export interface Common {
-    }
-
-    export interface Client extends Common {
+    export interface Client {
         addWiredFaultChangeListener(listener: (event: WiredFaultChangeEvent) => void): void;
         removeWiredFaultChangeListener(listener: (event: WiredFaultChangeEvent) => void): void;
         triggerWiredFaultChange(): void;
@@ -62,8 +59,11 @@ export module PowerSource {
         removeBatChargeFaultChangeListener(listener: (event: BatChargeFaultChangeEvent) => void): void;
         triggerBatChargeFaultChange(): void;
     }
+
+    export interface Server {
+    }
 }
 
-export const PowerSource: ClusterInterface<PowerSource.State, PowerSource.Client, PowerSource.Common> = {
+export const PowerSource: ClusterInterface<PowerSource.State, PowerSource.Client, PowerSource.Server> = {
     definition: PowerSourceCluster
 }

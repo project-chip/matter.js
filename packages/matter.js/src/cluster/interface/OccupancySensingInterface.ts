@@ -8,27 +8,29 @@
 
 import { OccupancySensingCluster, ClusterInterface } from "../index.js";
 
-
 export module OccupancySensing {
     export type State = {
-        readonly occupancy: number;
-        readonly occupancySensorType: number;
-        readonly occupancySensorTypeBitmap: number;
-        readonly pirOccupiedToUnoccupiedDelay?: number;
-        readonly pirUnoccupiedToOccupiedDelay?: number;
-        readonly pirUnoccupiedToOccupiedThreshold?: number;
-        readonly ultrasonicOccupiedToUnoccupiedDelay?: number;
-        readonly ultrasonicUnoccupiedToOccupiedDelay?: number;
-        readonly ultrasonicUnoccupiedToOccupiedThreshold?: number;
-        readonly physicalContactOccupiedToUnoccupiedDelay?: number | undefined;
-        readonly physicalContactUnoccupiedToOccupiedDelay?: number | undefined;
-        readonly physicalContactUnoccupiedToOccupiedThreshold?: number;
+        occupancy: number;
+        occupancySensorType: number;
+        occupancySensorTypeBitmap: number;
+        pirOccupiedToUnoccupiedDelay?: number;
+        pirUnoccupiedToOccupiedDelay?: number;
+        pirUnoccupiedToOccupiedThreshold?: number;
+        ultrasonicOccupiedToUnoccupiedDelay?: number;
+        ultrasonicUnoccupiedToOccupiedDelay?: number;
+        ultrasonicUnoccupiedToOccupiedThreshold?: number;
+        physicalContactOccupiedToUnoccupiedDelay?: number | undefined;
+        physicalContactUnoccupiedToOccupiedDelay?: number | undefined;
+        physicalContactUnoccupiedToOccupiedThreshold?: number;
     }
 
-    export interface Common {
+    export interface Client {
+    }
+
+    export interface Server {
     }
 }
 
-export const OccupancySensing: ClusterInterface<OccupancySensing.State, OccupancySensing.Common, OccupancySensing.Common> = {
+export const OccupancySensing: ClusterInterface<OccupancySensing.State, OccupancySensing.Client, OccupancySensing.Server> = {
     definition: OccupancySensingCluster
 }

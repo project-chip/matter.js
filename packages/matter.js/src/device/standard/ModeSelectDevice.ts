@@ -10,6 +10,4 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { AutoDevice } from "../AutoDevice.js";
 
 export class ModeSelect extends AutoDevice.implement(DeviceTypes.MODE_SELECT) {
-    readonly options = ModeSelectOptions;
-
 }

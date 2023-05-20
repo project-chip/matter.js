@@ -11,6 +11,4 @@ import { AutoDevice } from "../AutoDevice.js";
 import { BridgedDeviceBasicInformation, PowerSourceConfiguration, PowerSource } from "../../cluster/interface/index.js";
 
 export class BridgedDeviceWithPowersourceInfo extends AutoDevice.implement(DeviceTypes.BRIDGED_DEVICE_WITH_POWERSOURCE_INFO, BridgedDeviceBasicInformation, PowerSourceConfiguration, PowerSource) {
-    readonly options = BridgedDeviceWithPowersourceInfoOptions;
-
 }

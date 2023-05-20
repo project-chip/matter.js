@@ -7,19 +7,16 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { DeviceTypes } from "../DeviceTypes.js";
+import { ClusterInterface } from "../../cluster/ClusterInterface.js";
 import { AutoDevice } from "../AutoDevice.js";
 import { Identify } from "../../cluster/interface/index.js";
 
-const WindowCoveringControllerOptions = {
-    Identify
-}
-
-type WindowCoveringControllerOption = typeof WindowCoveringControllerOptions[keyof typeof WindowCoveringControllerOptions]
-
 export class WindowCoveringController extends AutoDevice.implement(DeviceTypes.WINDOW_COVERING_CONTROLLER) {
-    readonly options = WindowCoveringControllerOptions;
+    readonly WindowCoveringControllerOptions = {
+        Identify,
+    }
 
-    static with<Options extends WindowCoveringControllerOption[]>(...options: Options) {
+    static with<Options extends ClusterInterface<any, any, any>[]>(...options: Options) {
         return AutoDevice.extend(this, ...options);
     }
 }

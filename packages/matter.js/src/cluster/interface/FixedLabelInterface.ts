@@ -13,13 +13,16 @@ type LabelList = TypeFromSchema<typeof FixedLabelCluster.attributes.labelList.sc
 
 export module FixedLabel {
     export type State = {
-        readonly labelList: LabelList[];
+        labelList: LabelList[];
     }
 
-    export interface Common {
+    export interface Client {
+    }
+
+    export interface Server {
     }
 }
 
-export const FixedLabel: ClusterInterface<FixedLabel.State, FixedLabel.Common, FixedLabel.Common> = {
+export const FixedLabel: ClusterInterface<FixedLabel.State, FixedLabel.Client, FixedLabel.Server> = {
     definition: FixedLabelCluster
 }

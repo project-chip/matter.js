@@ -7,10 +7,17 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { DeviceTypes } from "../DeviceTypes.js";
+import { ClusterInterface } from "../../cluster/ClusterInterface.js";
 import { AutoDevice } from "../AutoDevice.js";
-import { Identify } from "../../cluster/interface/index.js";
+import { Identify, Groups, Scenes } from "../../cluster/interface/index.js";
 
 export class Thermostat extends AutoDevice.implement(DeviceTypes.THERMOSTAT, Identify) {
-    readonly options = ThermostatOptions;
+    readonly ThermostatOptions = {
+        Groups,
+        Scenes,
+    }
 
+    static with<Options extends ClusterInterface<any, any, any>[]>(...options: Options) {
+        return AutoDevice.extend(this, ...options);
+    }
 }

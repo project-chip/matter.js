@@ -10,6 +10,4 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { AutoDevice } from "../AutoDevice.js";
 
 export class CastingVideoClient extends AutoDevice.implement(DeviceTypes.CASTING_VIDEO_CLIENT) {
-    readonly options = CastingVideoClientOptions;
-
 }

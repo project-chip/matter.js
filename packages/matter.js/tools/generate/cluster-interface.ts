@@ -79,12 +79,14 @@ CodeModel.clusters.forEach((cluster) => {
         context.typeSource = `${attr.source}.schema`;
 
         const type = mapType(attr.schema, context);
-        state.add(`readonly ${attr.fieldName}${attr.optional ? "?" : ""}: ${type};`);
+        // TODO - need separate state objects for client/server to enforce this
+        // at the type level
+        //const readonly = attr.writable ? "" : "readonly ";
+        state.add(`${attr.fieldName}${attr.optional ? "?" : ""}: ${type};`);
     });
 
-    const common = module.block(`export interface Common`);
-    const client = module.block(`export interface Client extends Common`);
-    const server = module.block(`export interface Server extends Common`);
+    const client = module.block(`export interface Client`);
+    const server = module.block(`export interface Server`);
 
     cluster.commands.forEach((command) => {
         context.typeName = `${command.typeName}Request`;
@@ -97,7 +99,8 @@ CodeModel.clusters.forEach((cluster) => {
         context.typeSource = `${command.source}.responseSchema`;
         const responseType = mapType(command.responseSchema, context);
 
-        common.add(`invoke${command.typeName}(${request}): Promise<${responseType}>;`)
+        client.add(`${command.invokerName}(${request}): Promise<${responseType}>;`)
+        server.add(`${command.handlerName}(${request}): Promise<${responseType}>;`)
     });
 
     cluster.events.map((event) => {
@@ -111,14 +114,6 @@ CodeModel.clusters.forEach((cluster) => {
     });
 
     let clientName = "Client", serverName = "Server";
-    if (!client.length) {
-        clientName = "Common";
-        client.remove();
-    }
-    if (!server.length) {
-        serverName = "Common";
-        server.remove();
-    }
 
     file.block(`export const ${cluster.name}: ClusterInterface<${cluster.name}.State, ${cluster.name}.${clientName}, ${cluster.name}.${serverName}> =`)
         .add(`definition: ${cluster.definitionName}`);

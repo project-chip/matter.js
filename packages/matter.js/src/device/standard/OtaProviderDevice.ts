@@ -10,6 +10,4 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { AutoDevice } from "../AutoDevice.js";
 
 export class OtaProvider extends AutoDevice.implement(DeviceTypes.OTA_PROVIDER) {
-    readonly options = OtaProviderOptions;
-
 }

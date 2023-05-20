@@ -14,16 +14,21 @@ type TriggerEffectRequest = TypeFromSchema<typeof IdentifyCluster.commands.trigg
 
 export module Identify {
     export type State = {
-        readonly identifyTime: number;
-        readonly identifyType: number;
+        identifyTime: number;
+        identifyType: number;
     }
 
-    export interface Common {
-        invokeIdentify(request: IdentifyRequest): Promise<void>;
-        invokeTriggerEffect(request: TriggerEffectRequest): Promise<void>;
+    export interface Client {
+        sendIdentify(request: IdentifyRequest): Promise<void>;
+        sendTriggerEffect(request: TriggerEffectRequest): Promise<void>;
+    }
+
+    export interface Server {
+        onIdentify(request: IdentifyRequest): Promise<void>;
+        onTriggerEffect(request: TriggerEffectRequest): Promise<void>;
     }
 }
 
-export const Identify: ClusterInterface<Identify.State, Identify.Common, Identify.Common> = {
+export const Identify: ClusterInterface<Identify.State, Identify.Client, Identify.Server> = {
     definition: IdentifyCluster
 }

@@ -7,19 +7,16 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { DeviceTypes } from "../DeviceTypes.js";
+import { ClusterInterface } from "../../cluster/ClusterInterface.js";
 import { AutoDevice } from "../AutoDevice.js";
 import { OnOff, OnOffLighting } from "../../cluster/interface/index.js";
 
-const CastingVideoPlayerOptions = {
-    OnOffLighting
-}
-
-type CastingVideoPlayerOption = typeof CastingVideoPlayerOptions[keyof typeof CastingVideoPlayerOptions]
-
 export class CastingVideoPlayer extends AutoDevice.implement(DeviceTypes.CASTING_VIDEO_PLAYER, OnOff) {
-    readonly options = CastingVideoPlayerOptions;
+    readonly CastingVideoPlayerOptions = {
+        OnOffLighting,
+    }
 
-    static with<Options extends CastingVideoPlayerOption[]>(...options: Options) {
+    static with<Options extends ClusterInterface<any, any, any>[]>(...options: Options) {
         return AutoDevice.extend(this, ...options);
     }
 }

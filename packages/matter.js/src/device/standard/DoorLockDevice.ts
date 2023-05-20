@@ -11,6 +11,4 @@ import { AutoDevice } from "../AutoDevice.js";
 import { Identify } from "../../cluster/interface/index.js";
 
 export class DoorLock extends AutoDevice.implement(DeviceTypes.DOOR_LOCK, Identify) {
-    readonly options = DoorLockOptions;
-
 }

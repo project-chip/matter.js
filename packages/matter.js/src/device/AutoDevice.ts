@@ -8,7 +8,15 @@ import { Device } from "./Device.js";
 import { DeviceTypeDefinition } from "./DeviceTypes.js";
 import { CodeModel, ClusterInterface } from "./CodeModel.js";
 
+// AutoDevice static private, AutoDeviceOptions private
 const DEFINITION = Symbol("definition");
+const STATE_IMPLEMENTATION = Symbol("StateImplementation");
+
+// AutoDevice private
+const STATE = Symbol("state");
+
+// AutoDeviceOptions private
+const DEVICE = Symbol("device");
 
 /**
  * Methods related to state management.
@@ -20,24 +28,11 @@ export interface StateManager<State extends {}> {
     get state(): State;
 
     /**
-     * Get default attribute values.
-     */
-    get defaults(): Partial<State>;
-
-    /**
      * Update internal state.
      * 
      * @param state an object mapping attribute names to new values
      */
     set(changes: {}): void;
-
-    /**
-     * Update internal state.
-     * 
-     * @param name the value of the attribute to modify 
-     * @param value the new value for the attribute
-     */
-    set(name: string, value: any): void;
 
     /**
      * Process a validated write request from the fabric.  The default
@@ -84,23 +79,16 @@ export type AutoDeviceOptions<State> = {
     endpointId?: number;
 }
 
-function updateState(original: { [key: string]: any }, changes: { [key: string]: any }) {
-    const result = {} as typeof original;
-    Object.assign(result, original);
-    Object.entries(changes as { [name: string]: any }).forEach(
-        ([k, v]) => { if (v !== undefined) result[k] = v; });
-    return result;
-}
-
-const STATE = Symbol("state");
-
 /**
  * An extension of Device that offers automatic cluster implementation.  This
  * class is not intended for direct consumption.
  */
 export class AutoDevice extends Device {
     constructor(options: AutoDeviceOptions<{}>) {
+        // The definition could be a class member except we need it for the
+        // constructor so can't access it yet
         const definition = (<any>options)[DEFINITION];
+        const StateClass = (<any>options)[STATE_IMPLEMENTATION] as new (state: {}) => {};
 
         // This constructor is really private but we can't tell TS that or it
         // won't allow us to pass it in AutoDevice.with()
@@ -110,35 +98,31 @@ export class AutoDevice extends Device {
 
         super(definition, [], options.endpointId);
 
-        let initialState = Object.assign({}, this.defaults) as {};
-        if (options.state)
-            initialState = updateState(this.defaults, options.state);
-        this[STATE] = initialState;
+        this[STATE] = new StateClass(options.state || {});
     }
 
     private [STATE]: {};
+
+    // This is actually private but can't make it so because TS doesn't see
+    // our read.  Use of symbol should suffice as documentation
+    [STATE_IMPLEMENTATION]: new (device: AutoDevice) => {} = class {
+        constructor(device: AutoDevice) {
+            (<any>this)[DEVICE] = device;
+        }
+    };
+
+    static [STATE_IMPLEMENTATION] = class {
+        constructor(device: any) {
+            (<any>this)[DEVICE] = device;
+        }
+    };
 
     get state(): {} {
         return this[STATE];
     }
 
-    get defaults(): {} {
-        const result = {};
-
-        // TODO - read default values from cluster definitions
-
-        return result;
-    }
-
-    set(changesOrAttr: {} | string, value?: any): void {
-        if (typeof changesOrAttr == "string") {
-            // TODO - validate value as I'm not sure there's a way to do it
-            // via typing
-            return this.set({ [changesOrAttr]: value });
-        }
-
-        // TODO - detect changes, persist and notify subscribers
-        changesOrAttr;
+    set(changes: {}): void {
+        Object.entries(changes).forEach(([k, v]) => (<any>this.state)[k] = v);
     }
 
     async write(changes: {}): Promise<void> {
@@ -180,27 +164,73 @@ export class AutoDevice extends Device {
             => InstanceType<BaseT>
             & ServerType<Interfaces>
             & StateManager<StateType<BaseT, Interfaces>> {
-        
-        class ExtendedDevice extends base {
-            constructor(...args: any[]) {
-                args[0][DEFINITION] = definition;
 
-                super(...args);
-
-                initializers.forEach((initializer) => initializer.apply(this));
-            }
-
-            override get state() {
-                return super.state as StateType<BaseT, Interfaces>;
+        // Create the new state implementation.  We only tell TS about the
+        // base class here so it gets into the prototype chain.  We wire the
+        // attributes for the added clusters below and then inform TS of the
+        // real interface via our function signature
+        const BaseStateImplementation = <new (device: AutoDevice) => any>(<any>base)[STATE_IMPLEMENTATION];
+        class StateImplementation extends BaseStateImplementation {
+            constructor(device: AutoDevice) {
+                super(device);
             }
         }
 
+        // Create the new device implementation.  Again, only tell TS about
+        // base class then handle extension wiring below.
+        class ExtendedDevice extends base {
+            constructor(...args: any[]) {
+                // args[0] is really an options argument.  But we can't define
+                // our actual arguments because TS thinks this is a Mixin
+                // because it's defined inline and insists we need to have
+                // spread arguments
+                //
+                // These could just be readonly private instance variables
+                // except definition is needed in the constructor to call
+                // super().  So we just use this hack to pass them into the
+                // instance
+                args[0][DEFINITION] = definition;
+                args[0][STATE_IMPLEMENTATION] = StateImplementation;
+
+                // It's probably completely unclear from this code but we're
+                // building a normal class hierarchy.  This invokes the base
+                // AutoDevice constructor and any code from previous extensions
+                super(...args);
+
+                // Any construction-time logic goes here
+                initializers.forEach((initializer) => initializer.apply(this));
+            }
+        }
+
+        // ExtendedDevice private 
         const initializers = new Array<(this: ExtendedDevice) => void>;
 
+        // Auto-wire state and device interfaces for a specific cluster
         function implementCluster(definition: ClusterInterface<any, any, any>) {
             const model = CodeModel.forCluster(definition);
+            const attrClusterServer = (state: any) => (<any>state)[DEVICE].getClusterServer(definition.definition);
+
+            // Wire attributes
             model.attributes.forEach((attr) => {
-                attr; // TODO
+                const getter = attr.getter;
+                const setter = attr.setter;
+                let descriptor = <PropertyDescriptor>{
+                    get() {
+                        return attrClusterServer(this)[getter]();
+                    }
+                };
+
+                if (attr.default !== undefined) descriptor.value = attr.default;
+
+                if (attr.writable)
+                    descriptor.set = function(value) {
+                        attrClusterServer(this)[setter](value);
+                        return true;
+                    }
+                else
+                    descriptor.writable = false;
+
+                Object.defineProperty(StateImplementation.prototype, attr.name, descriptor);
             });
 
             model.commands.forEach((command) => {
@@ -208,7 +238,8 @@ export class AutoDevice extends Device {
             });
 
             model.events.forEach((event) => {
-                event; // TODO
+                // TODO - wire here once implemented in InteractionServer
+                event;
             });
         }
 

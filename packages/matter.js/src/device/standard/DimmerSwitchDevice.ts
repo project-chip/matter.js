@@ -11,6 +11,4 @@ import { AutoDevice } from "../AutoDevice.js";
 import { Identify } from "../../cluster/interface/index.js";
 
 export class DimmerSwitch extends AutoDevice.implement(DeviceTypes.DIMMER_SWITCH, Identify) {
-    readonly options = DimmerSwitchOptions;
-
 }

@@ -8,19 +8,21 @@
 
 import { TemperatureMeasurementCluster, ClusterInterface } from "../index.js";
 
-
 export module TemperatureMeasurement {
     export type State = {
-        readonly measuredValue: number | undefined;
-        readonly minMeasuredValue: number | undefined;
-        readonly maxMeasuredValue: number | undefined;
-        readonly tolerance?: number;
+        measuredValue: number | undefined;
+        minMeasuredValue: number | undefined;
+        maxMeasuredValue: number | undefined;
+        tolerance?: number;
     }
 
-    export interface Common {
+    export interface Client {
+    }
+
+    export interface Server {
     }
 }
 
-export const TemperatureMeasurement: ClusterInterface<TemperatureMeasurement.State, TemperatureMeasurement.Common, TemperatureMeasurement.Common> = {
+export const TemperatureMeasurement: ClusterInterface<TemperatureMeasurement.State, TemperatureMeasurement.Client, TemperatureMeasurement.Server> = {
     definition: TemperatureMeasurementCluster
 }

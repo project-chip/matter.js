@@ -11,6 +11,4 @@ import { AutoDevice } from "../AutoDevice.js";
 import { Identify } from "../../cluster/interface/index.js";
 
 export class PumpController extends AutoDevice.implement(DeviceTypes.PUMP_CONTROLLER, Identify) {
-    readonly options = PumpControllerOptions;
-
 }

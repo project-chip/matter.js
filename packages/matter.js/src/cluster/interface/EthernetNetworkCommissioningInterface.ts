@@ -14,18 +14,21 @@ type Networks = TypeFromSchema<typeof EthernetNetworkCommissioningCluster.attrib
 
 export module EthernetNetworkCommissioning {
     export type State = {
-        readonly maxNetworks: number;
-        readonly networks: Networks[];
-        readonly interfaceEnabled: boolean;
-        readonly lastNetworkingStatus: number | undefined;
-        readonly lastNetworkId: ByteArray | undefined;
-        readonly lastConnectErrorValue: number | undefined;
+        maxNetworks: number;
+        networks: Networks[];
+        interfaceEnabled: boolean;
+        lastNetworkingStatus: number | undefined;
+        lastNetworkId: ByteArray | undefined;
+        lastConnectErrorValue: number | undefined;
     }
 
-    export interface Common {
+    export interface Client {
+    }
+
+    export interface Server {
     }
 }
 
-export const EthernetNetworkCommissioning: ClusterInterface<EthernetNetworkCommissioning.State, EthernetNetworkCommissioning.Common, EthernetNetworkCommissioning.Common> = {
+export const EthernetNetworkCommissioning: ClusterInterface<EthernetNetworkCommissioning.State, EthernetNetworkCommissioning.Client, EthernetNetworkCommissioning.Server> = {
     definition: EthernetNetworkCommissioningCluster
 }

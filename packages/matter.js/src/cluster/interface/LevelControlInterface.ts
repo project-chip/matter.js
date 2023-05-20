@@ -20,31 +20,42 @@ type StopWithOnOffRequest = TypeFromSchema<typeof LevelControlCluster.commands.s
 
 export module LevelControl {
     export type State = {
-        readonly currentLevel: number | undefined;
-        readonly minLevel?: number;
-        readonly maxLevel?: number;
-        readonly onOffTransitionTime?: number;
-        readonly onLevel: number | undefined;
-        readonly onTransitionTime?: number | undefined;
-        readonly offTransitionTime?: number | undefined;
-        readonly defaultMoveRate?: number | undefined;
-        readonly options: number;
-        readonly remainingTime?: number;
-        readonly startUpCurrentLevel?: number | undefined;
+        currentLevel: number | undefined;
+        minLevel?: number;
+        maxLevel?: number;
+        onOffTransitionTime?: number;
+        onLevel: number | undefined;
+        onTransitionTime?: number | undefined;
+        offTransitionTime?: number | undefined;
+        defaultMoveRate?: number | undefined;
+        options: number;
+        remainingTime?: number;
+        startUpCurrentLevel?: number | undefined;
     }
 
-    export interface Common {
-        invokeMoveToLevel(request: MoveToLevelRequest): Promise<void>;
-        invokeMove(request: MoveRequest): Promise<void>;
-        invokeStep(request: StepRequest): Promise<void>;
-        invokeStop(request: StopRequest): Promise<void>;
-        invokeMoveToLevelWithOnOff(request: MoveToLevelWithOnOffRequest): Promise<void>;
-        invokeMoveWithOnOff(request: MoveWithOnOffRequest): Promise<void>;
-        invokeStepWithOnOff(request: StepWithOnOffRequest): Promise<void>;
-        invokeStopWithOnOff(request: StopWithOnOffRequest): Promise<void>;
+    export interface Client {
+        sendMoveToLevel(request: MoveToLevelRequest): Promise<void>;
+        sendMove(request: MoveRequest): Promise<void>;
+        sendStep(request: StepRequest): Promise<void>;
+        sendStop(request: StopRequest): Promise<void>;
+        sendMoveToLevelWithOnOff(request: MoveToLevelWithOnOffRequest): Promise<void>;
+        sendMoveWithOnOff(request: MoveWithOnOffRequest): Promise<void>;
+        sendStepWithOnOff(request: StepWithOnOffRequest): Promise<void>;
+        sendStopWithOnOff(request: StopWithOnOffRequest): Promise<void>;
+    }
+
+    export interface Server {
+        onMoveToLevel(request: MoveToLevelRequest): Promise<void>;
+        onMove(request: MoveRequest): Promise<void>;
+        onStep(request: StepRequest): Promise<void>;
+        onStop(request: StopRequest): Promise<void>;
+        onMoveToLevelWithOnOff(request: MoveToLevelWithOnOffRequest): Promise<void>;
+        onMoveWithOnOff(request: MoveWithOnOffRequest): Promise<void>;
+        onStepWithOnOff(request: StepWithOnOffRequest): Promise<void>;
+        onStopWithOnOff(request: StopWithOnOffRequest): Promise<void>;
     }
 }
 
-export const LevelControl: ClusterInterface<LevelControl.State, LevelControl.Common, LevelControl.Common> = {
+export const LevelControl: ClusterInterface<LevelControl.State, LevelControl.Client, LevelControl.Server> = {
     definition: LevelControlCluster
 }

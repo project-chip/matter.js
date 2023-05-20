@@ -8,19 +8,21 @@
 
 import { RelativeHumidityCluster, ClusterInterface } from "../index.js";
 
-
 export module RelativeHumidity {
     export type State = {
-        readonly measuredValue: number | undefined;
-        readonly minMeasuredValue: number | undefined;
-        readonly maxMeasuredValue: number | undefined;
-        readonly tolerance?: number;
+        measuredValue: number | undefined;
+        minMeasuredValue: number | undefined;
+        maxMeasuredValue: number | undefined;
+        tolerance?: number;
     }
 
-    export interface Common {
+    export interface Client {
+    }
+
+    export interface Server {
     }
 }
 
-export const RelativeHumidity: ClusterInterface<RelativeHumidity.State, RelativeHumidity.Common, RelativeHumidity.Common> = {
+export const RelativeHumidity: ClusterInterface<RelativeHumidity.State, RelativeHumidity.Client, RelativeHumidity.Server> = {
     definition: RelativeHumidityCluster
 }

@@ -10,6 +10,4 @@ import { DeviceTypes } from "../DeviceTypes.js";
 import { AutoDevice } from "../AutoDevice.js";
 
 export class ContentApp extends AutoDevice.implement(DeviceTypes.CONTENT_APP) {
-    readonly options = ContentAppOptions;
-
 }

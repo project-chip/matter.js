@@ -29,33 +29,26 @@ CodeModel.devices.forEach((device) => {
     const interfaces = {} as typeof requiredInterfaces;
     Object.assign(interfaces, requiredInterfaces);
 
+    // Add the class
+    const withArgs = [`DeviceTypes.${device.key}`, ...Object.keys(requiredInterfaces)];
+    const klass = file.block(`export class ${device.name} extends AutoDevice.implement(${withArgs.join(", ")})`);
+
     // Configure optional interfaces
     const optionalInterfaces = clusterNames(device.optionalServerClusters);
-    const hasOptions = Object.keys(optionalInterfaces).length;
-    if (hasOptions) {
-        const optionalInterfaces = clusterNames(device.optionalServerClusters);
+    if (Object.keys(optionalInterfaces).length) {
         Object.assign(interfaces, optionalInterfaces);
-        file.block(`const ${device.name}Options =`)
-            .add(Object.keys(optionalInterfaces).join(",\n"))
+        file.addImport("../../cluster/ClusterInterface", "ClusterInterface");
+        klass.block(`readonly ${device.name}Options =`)
+            .add(...Object.keys(optionalInterfaces).map((c) => `${c},`))
             .parent
-            .add(`type ${device.name}Option = typeof ${device.name}Options[keyof typeof ${device.name}Options]`)
-            .blank();
+            .block(`static with<Options extends ClusterInterface<any, any, any>[]>(...options: Options)`)
+            .add("return AutoDevice.extend(this, ...options);");
     }
 
     // Add imports
     file.addImport("../AutoDevice", "AutoDevice");
     Object.entries(interfaces).forEach(([k, v]) =>
         file.addImport("../../cluster/interface/index", k == v ? k : `${v} as ${k}`));
-
-    // Add the class
-    const withArgs = [`DeviceTypes.${device.key}`, ...Object.keys(requiredInterfaces)];
-    const klass = file.block(`export class ${device.name} extends AutoDevice.implement(${withArgs.join(", ")})`)
-        .add(`readonly options = ${device.name}Options;`)
-        .blank();
-    if (hasOptions) {
-        klass.block(`static with<Options extends ${device.name}Option[]>(...options: Options)`)
-            .add("return AutoDevice.extend(this, ...options);");
-    }
 
     file.save();
 
