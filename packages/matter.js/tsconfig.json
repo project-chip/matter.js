@@ -19,7 +19,7 @@
     "allowSyntheticDefaultImports": true,
   },
   /* During dev, src are included, so they are also modified during refactorings. */
-  "include": ["src/**/*.ts", "test/**/*.ts"],
+  "include": ["src/**/*.ts", "test/**/*.ts", "tools/**/*.ts"],
   "exclude": [],
 
   "ts-node": {

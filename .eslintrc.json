@@ -54,6 +54,11 @@
 
         "@typescript-eslint/restrict-template-expressions": "off",
 
+        // Sometimes nesting types within files improves readability by
+        // removing long prefixes in front of every identifier.  Only options
+        // for such nesting in TS are namespace or module.
+        "@typescript-eslint/no-namespace": "off",
+
         "no-constant-condition":[
             "error",
             {

@@ -8,18 +8,12 @@
 
 import { PowerSourceConfigurationCluster, ClusterInterface } from "../index.js";
 
-export module PowerSourceConfiguration {
+namespace PowerSourceConfiguration {
     export type State = {
         sources: number[];
     }
-
-    export interface Client {
-    }
-
-    export interface Server {
-    }
 }
 
-export const PowerSourceConfiguration: ClusterInterface<PowerSourceConfiguration.State, PowerSourceConfiguration.Client, PowerSourceConfiguration.Server> = {
+export const PowerSourceConfiguration: ClusterInterface<PowerSourceConfiguration.State, {}, {}> = {
     definition: PowerSourceConfigurationCluster
 }

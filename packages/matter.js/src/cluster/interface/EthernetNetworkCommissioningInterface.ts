@@ -12,7 +12,7 @@ import { ByteArray } from "../../util/index.js";
 
 type Networks = TypeFromSchema<typeof EthernetNetworkCommissioningCluster.attributes.networks.schema>;
 
-export module EthernetNetworkCommissioning {
+namespace EthernetNetworkCommissioning {
     export type State = {
         maxNetworks: number;
         networks: Networks[];
@@ -21,14 +21,8 @@ export module EthernetNetworkCommissioning {
         lastNetworkId: ByteArray | undefined;
         lastConnectErrorValue: number | undefined;
     }
-
-    export interface Client {
-    }
-
-    export interface Server {
-    }
 }
 
-export const EthernetNetworkCommissioning: ClusterInterface<EthernetNetworkCommissioning.State, EthernetNetworkCommissioning.Client, EthernetNetworkCommissioning.Server> = {
+export const EthernetNetworkCommissioning: ClusterInterface<EthernetNetworkCommissioning.State, {}, {}> = {
     definition: EthernetNetworkCommissioningCluster
 }

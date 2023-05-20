@@ -18,7 +18,7 @@ type MoveWithOnOffRequest = TypeFromSchema<typeof LevelControlCluster.commands.m
 type StepWithOnOffRequest = TypeFromSchema<typeof LevelControlCluster.commands.stepWithOnOff.requestSchema>;
 type StopWithOnOffRequest = TypeFromSchema<typeof LevelControlCluster.commands.stopWithOnOff.requestSchema>;
 
-export module LevelControl {
+namespace LevelControl {
     export type State = {
         currentLevel: number | undefined;
         minLevel?: number;

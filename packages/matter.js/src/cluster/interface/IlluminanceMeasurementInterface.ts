@@ -8,7 +8,7 @@
 
 import { IlluminanceMeasurementCluster, ClusterInterface } from "../index.js";
 
-export module IlluminanceMeasurement {
+namespace IlluminanceMeasurement {
     export type State = {
         measuredValue: number | undefined;
         minMeasuredValue: number | undefined;
@@ -16,14 +16,8 @@ export module IlluminanceMeasurement {
         tolerance?: number;
         lightSensorType?: number | undefined;
     }
-
-    export interface Client {
-    }
-
-    export interface Server {
-    }
 }
 
-export const IlluminanceMeasurement: ClusterInterface<IlluminanceMeasurement.State, IlluminanceMeasurement.Client, IlluminanceMeasurement.Server> = {
+export const IlluminanceMeasurement: ClusterInterface<IlluminanceMeasurement.State, {}, {}> = {
     definition: IlluminanceMeasurementCluster
 }

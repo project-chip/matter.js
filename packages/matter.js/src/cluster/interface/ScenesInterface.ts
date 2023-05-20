@@ -29,7 +29,7 @@ type EnhancedViewSceneResponse = TypeFromSchema<typeof ScenesCluster.commands.en
 type CopySceneRequest = TypeFromSchema<typeof ScenesCluster.commands.copyScene.requestSchema>;
 type CopySceneResponse = TypeFromSchema<typeof ScenesCluster.commands.copyScene.responseSchema>;
 
-export module Scenes {
+namespace Scenes {
     export type State = {
         sceneCount: number;
         currentScene: number;

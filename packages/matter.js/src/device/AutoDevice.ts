@@ -208,13 +208,13 @@ export class AutoDevice extends Device {
         // Auto-wire state and device interfaces for a specific cluster
         function implementCluster(definition: ClusterInterface<any, any, any>) {
             const model = CodeModel.forCluster(definition);
-            const attrClusterServer = (state: any) => (<any>state)[DEVICE].getClusterServer(definition.definition);
+            const attrClusterServer = (state: any) => state[DEVICE].getClusterServer(definition.definition);
 
             // Wire attributes
             model.attributes.forEach((attr) => {
                 const getter = attr.getter;
                 const setter = attr.setter;
-                let descriptor = <PropertyDescriptor>{
+                const descriptor = <PropertyDescriptor>{
                     get() {
                         return attrClusterServer(this)[getter]();
                     }
@@ -233,10 +233,12 @@ export class AutoDevice extends Device {
                 Object.defineProperty(StateImplementation.prototype, attr.name, descriptor);
             });
 
+            // Wire commands
             model.commands.forEach((command) => {
                 command; // TODO
             });
 
+            // Wire events
             model.events.forEach((event) => {
                 // TODO - wire here once implemented in InteractionServer
                 event;

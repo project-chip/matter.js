@@ -8,7 +8,7 @@
 
 import { OnOffCluster, ClusterInterface } from "../index.js";
 
-export module OnOff {
+namespace OnOff {
     export type State = {
         onOff: boolean;
     }

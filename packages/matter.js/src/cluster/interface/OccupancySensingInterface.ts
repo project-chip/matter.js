@@ -8,7 +8,7 @@
 
 import { OccupancySensingCluster, ClusterInterface } from "../index.js";
 
-export module OccupancySensing {
+namespace OccupancySensing {
     export type State = {
         occupancy: number;
         occupancySensorType: number;
@@ -23,14 +23,8 @@ export module OccupancySensing {
         physicalContactUnoccupiedToOccupiedDelay?: number | undefined;
         physicalContactUnoccupiedToOccupiedThreshold?: number;
     }
-
-    export interface Client {
-    }
-
-    export interface Server {
-    }
 }
 
-export const OccupancySensing: ClusterInterface<OccupancySensing.State, OccupancySensing.Client, OccupancySensing.Server> = {
+export const OccupancySensing: ClusterInterface<OccupancySensing.State, {}, {}> = {
     definition: OccupancySensingCluster
 }

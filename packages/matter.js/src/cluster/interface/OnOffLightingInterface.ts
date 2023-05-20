@@ -12,7 +12,7 @@ import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 type OffWithEffectRequest = TypeFromSchema<typeof OnOffLightingCluster.commands.offWithEffect.requestSchema>;
 type OnWithTimedOffRequest = TypeFromSchema<typeof OnOffLightingCluster.commands.onWithTimedOff.requestSchema>;
 
-export module OnOffLighting {
+namespace OnOffLighting {
     export type State = {
         onOff: boolean;
         globalSceneControl: boolean;

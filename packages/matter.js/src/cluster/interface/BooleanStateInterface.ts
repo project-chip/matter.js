@@ -11,7 +11,7 @@ import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
 type StateChangeEvent = TypeFromSchema<typeof BooleanStateCluster.events.stateChange.schema>;
 
-export module BooleanState {
+namespace BooleanState {
     export type State = {
         stateValue: boolean;
     }
@@ -21,11 +21,8 @@ export module BooleanState {
         removeStateChangeListener(listener: (event: StateChangeEvent) => void): void;
         triggerStateChange(): void;
     }
-
-    export interface Server {
-    }
 }
 
-export const BooleanState: ClusterInterface<BooleanState.State, BooleanState.Client, BooleanState.Server> = {
+export const BooleanState: ClusterInterface<BooleanState.State, BooleanState.Client, {}> = {
     definition: BooleanStateCluster
 }

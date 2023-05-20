@@ -69,7 +69,7 @@ CodeModel.clusters.forEach((cluster) => {
     file.addImport("../index", cluster.definitionName);
     file.addImport("../index", "ClusterInterface");
 
-    const module = file.block(`export module ${cluster.name}`);
+    const module = file.block(`namespace ${cluster.name}`);
     const state = module.block(`export type State =`);
 
     cluster.attributes.forEach((attr) => {
@@ -113,9 +113,17 @@ CodeModel.clusters.forEach((cluster) => {
             .add(`trigger${event.typeName}(): void;`);
     });
 
-    let clientName = "Client", serverName = "Server";
+    let clientName = `${cluster.name}.Client`, serverName = `${cluster.name}.Server`;
+    if (!client.length) {
+        clientName = "{}";
+        client.remove();
+    }
+    if (!server.length) {
+        serverName = "{}";
+        server.remove();
+    }
 
-    file.block(`export const ${cluster.name}: ClusterInterface<${cluster.name}.State, ${cluster.name}.${clientName}, ${cluster.name}.${serverName}> =`)
+    file.block(`export const ${cluster.name}: ClusterInterface<${cluster.name}.State, ${clientName}, ${serverName}> =`)
         .add(`definition: ${cluster.definitionName}`);
     file.save();
 

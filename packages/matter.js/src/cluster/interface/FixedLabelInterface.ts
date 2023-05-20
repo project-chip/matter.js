@@ -11,18 +11,12 @@ import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 
 type LabelList = TypeFromSchema<typeof FixedLabelCluster.attributes.labelList.schema>;
 
-export module FixedLabel {
+namespace FixedLabel {
     export type State = {
         labelList: LabelList[];
     }
-
-    export interface Client {
-    }
-
-    export interface Server {
-    }
 }
 
-export const FixedLabel: ClusterInterface<FixedLabel.State, FixedLabel.Client, FixedLabel.Server> = {
+export const FixedLabel: ClusterInterface<FixedLabel.State, {}, {}> = {
     definition: FixedLabelCluster
 }

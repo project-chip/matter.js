@@ -8,21 +8,15 @@
 
 import { FlowMeasurementCluster, ClusterInterface } from "../index.js";
 
-export module FlowMeasurement {
+namespace FlowMeasurement {
     export type State = {
         measuredValue: number | undefined;
         minMeasuredValue: number | undefined;
         maxMeasuredValue: number | undefined;
         tolerance?: number;
     }
-
-    export interface Client {
-    }
-
-    export interface Server {
-    }
 }
 
-export const FlowMeasurement: ClusterInterface<FlowMeasurement.State, FlowMeasurement.Client, FlowMeasurement.Server> = {
+export const FlowMeasurement: ClusterInterface<FlowMeasurement.State, {}, {}> = {
     definition: FlowMeasurementCluster
 }

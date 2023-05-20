@@ -13,7 +13,7 @@ type WiredFaultChangeEvent = TypeFromSchema<typeof PowerSourceCluster.events.wir
 type BatFaultChangeEvent = TypeFromSchema<typeof PowerSourceCluster.events.batFaultChange.schema>;
 type BatChargeFaultChangeEvent = TypeFromSchema<typeof PowerSourceCluster.events.batChargeFaultChange.schema>;
 
-export module PowerSource {
+namespace PowerSource {
     export type State = {
         status: number;
         order: number;
@@ -59,11 +59,8 @@ export module PowerSource {
         removeBatChargeFaultChangeListener(listener: (event: BatChargeFaultChangeEvent) => void): void;
         triggerBatChargeFaultChange(): void;
     }
-
-    export interface Server {
-    }
 }
 
-export const PowerSource: ClusterInterface<PowerSource.State, PowerSource.Client, PowerSource.Server> = {
+export const PowerSource: ClusterInterface<PowerSource.State, PowerSource.Client, {}> = {
     definition: PowerSourceCluster
 }
