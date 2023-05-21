@@ -27,7 +27,7 @@ import { OperationalCredentialsClusterHandler, OperationalCredentialsServerConf 
 import { AttestationCertificateManager } from "./certificate/AttestationCertificateManager.js";
 import { CertificationDeclarationManager } from "./certificate/CertificationDeclarationManager.js";
 import { GeneralCommissioningClusterHandler } from "./cluster/server/GeneralCommissioningServer.js";
-import { NetworkCommissioningHandler } from "./cluster/server/NetworkCommissioningServer.js";
+import { NetworkCommissioningClusterHandler } from "./cluster/server/NetworkCommissioningServer.js";
 import { AccessControlCluster } from "./cluster/AccessControlCluster.js";
 import { GroupKeyManagementCluster } from "./cluster/GroupKeyManagementCluster.js";
 import { BootReason, GeneralDiagnosticsCluster } from "./cluster/GeneralDiagnosticsCluster.js";
@@ -234,7 +234,7 @@ export class CommissioningServer extends MatterNode {
                     lastNetworkingStatus: NetworkCommissioningStatus.Success,
                     networks: [{ networkId: ByteArray.fromHex("0000000000000000000000000000000000000000000000000000000000000000"), connected: true }],
                 },
-                NetworkCommissioningHandler()
+                NetworkCommissioningClusterHandler()
             )
         );
 

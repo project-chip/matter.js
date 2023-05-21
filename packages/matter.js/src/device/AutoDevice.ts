@@ -87,7 +87,10 @@ export interface StateManager<State extends BaseState> {
 }
 
 type Constructor = new (...args: any[]) => any;
-type UntypedClusterServer = <() => >;
+
+// TODO - should this be properly typed and added to the public API?  I'm
+// thinking yes but want to wait to see if shape changes significantly first
+type CallContext = { session: any, message: any, endpoint: any };
 
 /**
  * Construction options for AutoDevice.
@@ -140,12 +143,12 @@ class WiringContext {
         // Getter
         const descriptor = <PropertyDescriptor>{
             get(this: BaseState) {
-                return this[DEVICE].attributeFor(cluster, attr).get();
+                return this[DEVICE].attributeFor(cluster, attr).getLocal();
             }
         };
 
         // Setter
-        if (attr.fixed) {
+        if (!attr.fixed) {
             descriptor.set = function(this: BaseState, value) {
                 this[DEVICE].attributeFor(cluster, attr).setLocal(value);
                 return true;
@@ -158,6 +161,7 @@ class WiringContext {
         Object.defineProperty(this.stateProto, attr.name, descriptor);
 
         // If there's a default "get" handler, install it
+        // TODO - remove
         const handler = cluster.defaultServerHandlers[attr.getter];
         if (handler) this.serverHandlers[attr.getter] = handler;
     }
@@ -166,6 +170,10 @@ class WiringContext {
     private wireAttributeEvents() {
         const cluster = this.cluster;
 
+        // Add the callback function that just ignores the event
+        cluster.attributes.forEach((attr) => this.deviceProto[attr.handler] = ignore);
+
+        // Add an initializer that registers listeners
         this.initializers.push(function(this: AutoDevice) {
             cluster.attributes.forEach((attr) => {
                 const clusterAttr = this.attributeFor(cluster, attr);
@@ -177,10 +185,24 @@ class WiringContext {
 
     // Implement device commands
     private wireCommand(command: CommandModel) {
-        this.deviceProto[command.invoker] = ignore;
+        // Install the default handler
+        const defaultHandler = this.cluster.defaultServerHandlers[command.handler];
+        if (defaultHandler) {
+            // TODO - this may not work or may otherwise change pending PR
+            // conversations
+            this.deviceProto[command.invoker] = function(request: any, { session, message, endpoint }: CallContext) {
+                defaultHandler(request, session, message, endpoint);
+            }
+        } else {
+            // No default handler - just throw "not implemented"
+            this.deviceProto[command.invoker] = notImplemented;
+        }
+
+        // Add our handler that proxies to the default handler (if present)
+        // through our prototype chain
         this.serverHandlers[command.handler] =
-            async (request: any, _session, _message, endpoint: any) =>
-                await endpoint[command.handler](request);
+            async (request: any, session, message, endpoint: any) =>
+                await endpoint[command.handler](request, { session, message, endpoint });
     }
 
     // Implement device events
@@ -343,7 +365,7 @@ export class AutoDevice extends Device {
                 super(...args);
 
                 // Any construction-time wiring logic goes here
-                initializers.forEach((initializer) => initializer.apply(this));
+                initializers.forEach((initializer) => initializer.apply(<AutoDevice><unknown>this));
             }
         }
 

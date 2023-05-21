@@ -80,10 +80,10 @@ class LeafModel<T> {
 }
 
 class LeafModels<T, ST> extends Array<T> {
-    constructor(definitions: { [key: string]: ST }, Cons: new (name: string, definition: ST, cluster: string) => T, cluster: string) {
-        // Use the name of the leaf class minus "Model" as the path in the cluster
-        const type = Cons.name.slice(0, Cons.name.length - 5).toLowerCase();
-        super(...Object.entries(definitions).map(([k, v]) => new Cons(k, v, `${cluster}.${type}s`)));
+    constructor(definitions: { [key: string]: ST }, Leaf: new (name: string, definition: ST, cluster: string) => T, cluster: string) {
+        if (Leaf == undefined) throw new Error("whaaaaaaaaaaa?")
+        const type = Leaf.name.slice(0, Leaf.name.length - 5).toLowerCase();
+        super(...Object.entries(definitions).map(([k, v]) => new Leaf(k, v, `${cluster}.${type}s`)));
     }
 }
 
@@ -117,11 +117,6 @@ type UntypedHandlerFactory = () => UntypedHandlers;
 function findDefaultHandlers(cluster: ClusterModel): UntypedHandlers {
     let handlers = <UntypedHandlerFactory>(<any>clusterExports)[`${cluster.name}ClusterHandler`];
     if (handlers && typeof handlers == "function") return handlers();
-
-    // Some of the handlers don't have "Cluster" in their name
-    handlers = <UntypedHandlerFactory>(<any>clusterExports)[`${cluster.name}Handler`];
-    if (handlers && typeof handlers == "function") return handlers();
-
     return {};
 }
 

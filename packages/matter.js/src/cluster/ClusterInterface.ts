@@ -5,9 +5,9 @@ import { Cluster, Attributes, Commands, Events } from "./Cluster.js";
  * definition for a specific cluster.  They are generated in the cluster
  * interface file and consumed in standard device implementations.
  */
-export type ClusterInterface<State, Client, Server> = {
+export type ClusterInterface<ST /* state */, CL /* client */, SVR /* server */> = {
     definition: Cluster<any, any, Attributes, Commands, Events>;
 
     // Avoid unused type parameter warnings
-    _used?: never & State & Client & Server;
+    _used?: never & ST & CL & SVR;
 };

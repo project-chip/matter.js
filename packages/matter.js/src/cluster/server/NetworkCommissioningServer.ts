@@ -7,7 +7,7 @@
 import { EthernetNetworkCommissioningCluster } from "../NetworkCommissioningCluster.js"
 import { ClusterServerHandlers } from "./ClusterServer.js"
 
-export const NetworkCommissioningHandler: () => ClusterServerHandlers<typeof EthernetNetworkCommissioningCluster> = () => ({
+export const NetworkCommissioningClusterHandler: () => ClusterServerHandlers<typeof EthernetNetworkCommissioningCluster> = () => ({
     scanNetworks: async function() {
         throw new Error("Not implemented");
     },
