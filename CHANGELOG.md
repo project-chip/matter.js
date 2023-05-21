@@ -7,6 +7,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
 * Matter-Core functionality:
   * Deprecation: The classes MatterDevice and MatterController are deprecated to be used externally to the library and will be removed in later versions.
   * Deprecation: The CLI Examples LegacyDeviceNode and LegacyControllerNode will be removed in next version! Use the new variants please.
+  * Fix: Make sure an error received from sending subscription seed data reports is not bubbling up and activate subscription after successful seeding
 
 ## 0.4.0 (2023-05-16)
 * Matter-Core functionality:

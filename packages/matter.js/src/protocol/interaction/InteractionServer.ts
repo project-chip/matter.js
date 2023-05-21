@@ -383,10 +383,16 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             if (this.nextSubscriptionId === 0xFFFFFFFF) this.nextSubscriptionId = 0;
             const subscriptionId = this.nextSubscriptionId++;
             const subscriptionHandler = new SubscriptionHandler(subscriptionId, session.getContext(), fabric, session.getPeerNodeId(), attributes, minIntervalFloorSeconds, maxIntervalCeilingSeconds);
-            session.addSubscription(subscriptionHandler);
 
-            // Send initial data report to prime the subscription with initial data
-            await subscriptionHandler.sendInitialReport(messenger, session);
+            try {
+                // Send initial data report to prime the subscription with initial data
+                await subscriptionHandler.sendInitialReport(messenger, session);
+            } catch (error: any) {
+                logger.error(`Subscription subscription ${subscriptionId} for Session ${session.getId()}: Error while sending initial data reports: ${error.message}`);
+                return; // Make sure to not bubble up the exception
+            }
+
+            session.addSubscription(subscriptionHandler);
 
             const maxInterval = subscriptionHandler.getMaxInterval();
             logger.info(`Created subscription ${subscriptionId} for Session ${session.getId()} with ${attributes.length} attributes. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${maxInterval} seconds`);
