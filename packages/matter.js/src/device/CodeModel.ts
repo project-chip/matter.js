@@ -81,7 +81,9 @@ class LeafModel<T> {
 
 class LeafModels<T, ST> extends Array<T> {
     constructor(definitions: { [key: string]: ST }, Cons: new (name: string, definition: ST, cluster: string) => T, cluster: string) {
-        super(...Object.entries(definitions).map(([k, v]) => new Cons(k, v, `${cluster}.${Cons.name.toLowerCase()}s`)));
+        // Use the name of the leaf class minus "Model" as the path in the cluster
+        const type = Cons.name.slice(0, Cons.name.length - 5).toLowerCase();
+        super(...Object.entries(definitions).map(([k, v]) => new Cons(k, v, `${cluster}.${type}s`)));
     }
 }
 
@@ -91,20 +93,48 @@ export class AttributeModel extends LeafModel<clusterExports.Attribute<any>> {
     get schema() { return this.definition.schema; }
     get optional() { return this.definition.optional; }
     get default() { return this.definition.default }
-    get getter() { return `get${this.typeName}Attribute` }
-    get setter() { return `set${this.typeName}Attribute` }
-    get change() { return `on${this.typeName}Change` }
+    get handler() { return `on${this.typeName}Change` }
+    get getter() { return `get${this.typeName}` }
+    get fixed() { return false; /* TODO - update when metadata lands */ }
 }
 
 export class CommandModel extends LeafModel<clusterExports.Command<any, any>> {
     get requestSchema() { return this.definition.requestSchema; }
     get responseSchema() { return this.definition.responseSchema; }
-    get invokerName() { return `send${this.typeName}`; }
-    get handlerName() { return `on${this.typeName}`; }
+    get invoker() { return `send${this.typeName}`; }
+    get handler() { return `on${this.typeName}`; }
 }
 
 export class EventModel extends LeafModel<clusterExports.Event<any>> {
     get schema() { return this.definition.schema; }
+    get handler() { return `on${this.typeName}`; }
+    get invoker() { return `trigger${this.typeName}`; };
+}
+
+export type UntypedHandlers = { [key: string]: (...any: any[]) => any };
+type UntypedHandlerFactory = () => UntypedHandlers;
+
+function findDefaultHandlers(cluster: ClusterModel): UntypedHandlers {
+    let handlers = <UntypedHandlerFactory>(<any>clusterExports)[`${cluster.name}ClusterHandler`];
+    if (handlers && typeof handlers == "function") return handlers();
+
+    // Some of the handlers don't have "Cluster" in their name
+    handlers = <UntypedHandlerFactory>(<any>clusterExports)[`${cluster.name}Handler`];
+    if (handlers && typeof handlers == "function") return handlers();
+
+    return {};
+}
+
+function defaultState(cluster: ClusterModel) {
+    const result = <{ [key: string]: any }>{};
+
+    cluster.attributes.forEach((attr) => {
+        if (attr.default !== undefined) {
+            result[attr.name] = attr.default;
+        }
+    });
+
+    return result;
 }
 
 /**
@@ -112,24 +142,22 @@ export class EventModel extends LeafModel<clusterExports.Event<any>> {
  * Cluster instance).
  */
 export class ClusterModel {
+    get id() { return this.definition.id; }
+    get name() { return this.definitionName.slice(0, this.definitionName.length - 7); }
+    get interfaceName() { return `${this.name}Interface`; }
+    public defaultServerHandlers: UntypedHandlers;
+    public defaultState: { [key: string]: any };
+
     constructor(
         public readonly definitionName: string,
         public readonly definition: Cluster<any, any, Attributes, Commands, Events>,
         public readonly extensions: Array<ClusterModel>,
         public readonly attributes = new LeafModels(definition.attributes, AttributeModel, definitionName),
         public readonly commands = new LeafModels(definition.commands, CommandModel, definitionName),
-        public readonly events = new LeafModels(definition.events, EventModel, definitionName)) { }
-
-    get id() {
-        return this.definition.id;
-    }
-
-    get name() {
-        return this.definitionName.slice(0, this.definitionName.length - 7);
-    }
-
-    get interfaceName() {
-        return `${this.name}Interface`;
+        public readonly events = new LeafModels(definition.events, EventModel, definitionName))
+    {
+        this.defaultServerHandlers = findDefaultHandlers(this);
+        this.defaultState = defaultState(this);
     }
 }
 

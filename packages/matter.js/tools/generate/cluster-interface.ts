@@ -87,13 +87,11 @@ CodeModel.clusters.forEach((cluster) => {
 
         const type = mapType(attr.schema, context);
 
-        // TODO - need separate state objects for client/server to enforce this
-        // at the type level
-        //const readonly = attr.writable ? "" : "readonly ";
-        state.add(`${attr.fieldName}${attr.optional ? "?" : ""}: ${type};`);
+        const readonly = attr.fixed ? "readonly " : "";
+        state.add(`${readonly}${attr.fieldName}${attr.optional ? "?" : ""}: ${type};`);
 
         [client, server].forEach((target) =>
-            target.add(`${attr.change}(): void;`));
+            target.add(`${attr.handler}(value: ${type}, previous: ${type}): void;`));
     });
 
     cluster.commands.forEach((command) => {
@@ -107,18 +105,17 @@ CodeModel.clusters.forEach((cluster) => {
         context.typeSource = `${command.source}.responseSchema`;
         const responseType = mapType(command.responseSchema, context);
 
-        clientCommands.add(`${command.invokerName}(${request}): Promise<${responseType}>;`)
-        serverCommands.add(`${command.handlerName}(${request}): Promise<${responseType}>;`)
+        clientCommands.add(`${command.invoker}(${request}): Promise<${responseType}>;`)
+        serverCommands.add(`${command.handler}(${request}): Promise<${responseType}>;`)
     });
 
     cluster.events.map((event) => {
         context.typeName = `${event.typeName}Event`;
         context.typeSource = `${event.source}.schema`;
 
-        const listener = `Listener(listener: (event: ${mapType(event.schema, context)}) => void): void;`
-        client.add(`add${event.typeName}${listener}`)
-            .add(`remove${event.typeName}${listener}`)
-            .add(`trigger${event.typeName}(): void;`);
+        const type = mapType(event.schema, context);
+        client.add(`${event.handler}(event: ${type}): Promise<void>`);
+        server.add(`${event.invoker}(event: ${type}): Promise<void>;`);
     });
 
     let clientName = `${cluster.name}.Client`, serverName = `${cluster.name}.Server`;

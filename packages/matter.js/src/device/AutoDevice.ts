@@ -6,7 +6,8 @@
 
 import { Device } from "./Device.js";
 import { DeviceTypeDefinition } from "./DeviceTypes.js";
-import { CodeModel, ClusterInterface, ClusterModel, AttributeModel, CommandModel, EventModel } from "./CodeModel.js";
+import { CodeModel, ClusterInterface, ClusterModel, AttributeModel, CommandModel, EventModel, UntypedHandlers } from "./CodeModel.js";
+import { ClusterServer } from "../protocol/interaction/InteractionServer.js";
 
 // AutoDevice static private, AutoDeviceOptions private
 const DEFINITION = Symbol("definition");
@@ -23,6 +24,13 @@ const DEVICE = Symbol("device");
 type BaseState = {
     [DEVICE]: AutoDevice;
 };
+
+function notImplemented() {
+    throw new Error("Not implemented");
+}
+
+function ignore() {
+}
 
 /**
  * Unified device interface for a set of clusters.  This defines the interface
@@ -78,7 +86,8 @@ export interface StateManager<State extends BaseState> {
     write(changes: Partial<State>): Promise<void>;
 }
 
-type Constructor = new (...args: any[]) => AutoDevice & StateManager<BaseState>
+type Constructor = new (...args: any[]) => any;
+type UntypedClusterServer = <() => >;
 
 /**
  * Construction options for AutoDevice.
@@ -88,102 +97,109 @@ export type AutoDeviceOptions<State> = {
     endpointId?: number;
 }
 
-// Wiring targets, used to pass closure privates into wiring logic
+// Automatic wiring support class
 class WiringContext {
+    private serverHandlers: UntypedHandlers = {};
+
     constructor(
         // The cluster to wire
         public cluster: ClusterModel,
 
         // Hooks invoked at construction time to do perform setup
-        public constructors: Array<(this: AutoDevice) => void>,
+        public initializers: Array<(this: AutoDevice, options: AutoDeviceOptions<BaseState>) => void>,
 
         // Target prototype for device class
-        public device: any,
+        public deviceProto: any,
 
         // Target prototype for state class
-        public state: any,
-    ) {};
+        public stateProto: any,
+    ) {}
 
-    // Access the cluster server.  This is called from *inside* wiring logic
-    // at runtime to access the ClusterServer
-    server(implementation: AutoDevice | BaseState) {
-        if (implementation instanceof Device) {
-            return implementation.getClusterServer(this.cluster.definition);
-        }
-        return this.server(implementation[DEVICE]);
+    // Auto-wire state and device interfaces for a specific cluster
+    wire() {
+        this.cluster.attributes.forEach((attr) => {
+            this.wireAttributeState(attr);
+        });
+        this.wireAttributeEvents();
+
+        this.cluster.commands.forEach((command) => {
+            this.wireCommand(command);
+        });
+        
+        this.cluster.events.forEach((event) => {
+            this.wireEvent(event);
+        });
+
+        this.wireClusterServer();
     }
-}
 
-// Wire cluster server construction
-function wireClusterServer(context: WiringContext) {
-    // TODO - select or create cluster server
-    context;
+    // Implement the state interface
+    private wireAttributeState(attr: AttributeModel) {
+        const cluster = this.cluster;
 
-    context.constructors.push(function(this: AutoDevice) {
-        // TODO - instantiate cluster server
-    });
-}
+        // Getter
+        const descriptor = <PropertyDescriptor>{
+            get(this: BaseState) {
+                return this[DEVICE].attributeFor(cluster, attr).get();
+            }
+        };
 
-// Implement the state interface
-function wireAttributeState(context: WiringContext, attr: AttributeModel) {
-    const getter = attr.getter;
-    const setter = attr.setter;
-    const descriptor = <PropertyDescriptor>{
-        get() {
-            return context.server(this)[getter]();
+        // Setter
+        if (attr.fixed) {
+            descriptor.set = function(this: BaseState, value) {
+                this[DEVICE].attributeFor(cluster, attr).setLocal(value);
+                return true;
+            }
+        } else {
+            descriptor.writable = false;
         }
-    };
 
-    if (attr.default !== undefined) descriptor.value = attr.default;
+        // Add the property
+        Object.defineProperty(this.stateProto, attr.name, descriptor);
 
-    if (attr.writable)
-        descriptor.set = function(this: BaseState, value) {
-            context.server(this)[setter](value);
-            return true;
-        }
-    else
-        descriptor.writable = false;
+        // If there's a default "get" handler, install it
+        const handler = cluster.defaultServerHandlers[attr.getter];
+        if (handler) this.serverHandlers[attr.getter] = handler;
+    }
 
-    Object.defineProperty(context.state, attr.name, descriptor);
-}
+    // Implement attribute change events
+    private wireAttributeEvents() {
+        const cluster = this.cluster;
 
-// Implement device change events
-function wireAttributeEvent(context: WiringContext, attr: AttributeModel) {
-    // TODO
-    context;
-    attr;
-}
+        this.initializers.push(function(this: AutoDevice) {
+            cluster.attributes.forEach((attr) => {
+                const clusterAttr = this.attributeFor(cluster, attr);
+                clusterAttr.addListener((...args) =>
+                    (<any>this)[attr.handler](...args));
+            });
+        });
+    }
 
-// Implement device commands
-function wireCommand(context: WiringContext, command: CommandModel) {
-    // TODO    
-    context;
-    command;
-}
+    // Implement device commands
+    private wireCommand(command: CommandModel) {
+        this.deviceProto[command.invoker] = ignore;
+        this.serverHandlers[command.handler] =
+            async (request: any, _session, _message, endpoint: any) =>
+                await endpoint[command.handler](request);
+    }
 
-// Implement device events
-function wireEvent(context: WiringContext, event: EventModel) {
-    // TODO - finish once InteractionServer has event support
-    context;
-    event;
-}
+    // Implement device events
+    private wireEvent(event: EventModel) {
+        // TODO - finish once InteractionServer has event support
+        this.deviceProto[event.invoker] = notImplemented;
+    }
 
-// Auto-wire state and device interfaces for a specific cluster
-function wire(context: WiringContext) {
-    wireClusterServer(context);
-
-    context.cluster.attributes.forEach((attr) => {
-        wireAttributeState(context, attr);
-        wireAttributeEvent(context, attr);
-    });
-
-    context.cluster.commands.forEach((command) => {
-        wireCommand(context, command);
-    });
-    
-    context.cluster.events.forEach((event) => {
-        wireEvent(context, event);
-    });
+    // Wire cluster server installation
+    private wireClusterServer() {
+        const cluster = this.cluster;
+        const handlers = this.serverHandlers;
+        this.initializers.push(function(this: AutoDevice, options: AutoDeviceOptions<BaseState>) {
+            this.addClusterServer(ClusterServer(
+                cluster.definition,
+                Object.assign({}, cluster.defaultState, options.state || {}),
+                handlers));
+        });
+    }
 }
 
 /**
@@ -240,6 +256,22 @@ export class AutoDevice extends Device {
         return this.extendWithDefinition(this, definition, ...interfaces);
     }
 
+    serverFor(cluster: ClusterModel) {
+        const server = this.getClusterServer(cluster.definition);
+        if (server === undefined) {
+            throw new Error(`Internal: No server for cluster ${cluster.name}`)
+        }
+        return server;
+    }
+
+    attributeFor(cluster: ClusterModel, attribute: AttributeModel) {
+        const attr = this.serverFor(cluster).attributes[attribute.name];
+        if (!attr) {
+            throw new Error(`Internal: No attribute ${attribute.name} on cluster ${cluster.name} server`);
+        }
+        return attr;
+    }
+
     /**
      * Creates a new class that extends a base device type with additional
      * cluster implementations.
@@ -287,7 +319,7 @@ export class AutoDevice extends Device {
         }
 
         // ExtendedDevice private 
-        const constructors = new Array<(this: AutoDevice) => void>;
+        const initializers = new Array<(this: AutoDevice) => void>;
 
         // Create the new device implementation.  Again, only tell TS about
         // base class then handle extension wiring below.
@@ -311,16 +343,18 @@ export class AutoDevice extends Device {
                 super(...args);
 
                 // Any construction-time wiring logic goes here
-                constructors.forEach((initializer) => initializer.apply(this));
+                initializers.forEach((initializer) => initializer.apply(this));
             }
         }
 
-        interfaces.forEach((cluster) => wire(new WiringContext(
-            CodeModel.forCluster(cluster),
-            constructors,
-            ExtendedDevice.prototype,
-            ExtendedState.prototype
-        )));
+        interfaces.forEach((cluster) => {
+            const context = new WiringContext(
+                CodeModel.forCluster(cluster),
+                initializers,
+                ExtendedDevice.prototype,
+                ExtendedState.prototype);
+            context.wire();
+        });
 
         return <any>ExtendedDevice;
     }
