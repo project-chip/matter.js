@@ -4,13 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ClusterServerFactory } from "../ClusterServerFactory.js";
 import { LevelControlCluster } from "../LevelControlCluster.js";
 import { ClusterServerHandlers } from "./ClusterServer.js";
 
 
 // TODO: Create temporary options based on mask and override. How to expose to user of the library?
 
-export const LevelControlClusterHandler: () => ClusterServerHandlers<typeof LevelControlCluster> = () => ({
+ClusterServerFactory.register(LevelControlCluster, () => ({
     moveToLevel: async ({ request: { level }, attributes: { currentLevel } }) => {
         currentLevel.set(level);
     },
@@ -55,4 +56,4 @@ export const LevelControlClusterHandler: () => ClusterServerHandlers<typeof Leve
     stopWithOnOff: async () => {
         throw new Error("Not implemented")
     },
-});
+} as ClusterServerHandlers<typeof LevelControlCluster>));

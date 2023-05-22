@@ -5,8 +5,8 @@
  */
 
 import { OnOffCluster } from "../OnOffCluster.js";
-import { AttributeInitialValues, ClusterServerHandlers } from "./ClusterServer.js";
-import { ClusterServer } from "../../protocol/interaction/InteractionServer.js";
+import { ClusterServerHandlers } from "./ClusterServer.js";
+import { ClusterServerFactory } from "../ClusterServerFactory.js";
 
 /*
 TODO: Global Cluster fields needs to be added also here because, as discussed, based on the implementation.
@@ -22,7 +22,7 @@ TODO: Global Cluster fields needs to be added also here because, as discussed, b
 * FabricIndex: empty
  */
 
-export const OnOffClusterHandler: () => ClusterServerHandlers<typeof OnOffCluster> = () => ({
+ClusterServerFactory.register(OnOffCluster, () => ({
     on: async ({ attributes: { onOff } }) => {
         onOff.set(true);
     },
@@ -36,12 +36,4 @@ export const OnOffClusterHandler: () => ClusterServerHandlers<typeof OnOffCluste
             onOff.set(true);
         }
     },
-});
-
-export const createDefaultOnOffClusterServer = (attributeInitialValues?: AttributeInitialValues<typeof OnOffCluster.attributes>) => ClusterServer(
-    OnOffCluster,
-    attributeInitialValues ?? {
-        onOff: false,
-    },
-    OnOffClusterHandler()
-);
+} as ClusterServerHandlers<typeof OnOffCluster>));

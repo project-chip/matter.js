@@ -9,12 +9,15 @@ import { createDefaultOnOffClusterServer } from "../cluster/server/OnOffServer.j
 import { createDefaultGroupsClusterServer } from "../cluster/server/GroupsServer.js";
 import { createDefaultScenesClusterServer } from "../cluster/server/ScenesServer.js";
 import { createDefaultIdentifyClusterServer } from "../cluster/server/IdentifyServer.js";
-import { AttributeInitialValues, CommandHandler } from "../cluster/server/ClusterServer.js";
+import { AttributeInitialValues, ClusterServerHandlers, CommandHandler } from "../cluster/server/ClusterServer.js";
 import { IdentifyCluster, } from "../cluster/IdentifyCluster.js";
 import { OnOffCluster } from "../cluster/OnOffCluster.js";
 import { extendPublicHandlerMethods } from "../util/NamedHandler.js";
 import { BitSchema, TypeFromBitSchema } from "../schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
+import { ClusterServerFactory } from "../cluster/ClusterServerFactory.js";
+import { GroupsCluster } from "../cluster/GroupsCluster.js";
+import { ScenesCluster } from "../cluster/ScenesCluster.js";
 
 type OnOffBaseDeviceCommands = {
     identify: CommandHandler<typeof IdentifyCluster.commands.identify, any>;
@@ -59,12 +62,12 @@ abstract class OnOffBaseDevice extends extendPublicHandlerMethods<typeof Device,
      */
     protected addDeviceClusters(attributeInitialValues?: { [key: number]: AttributeInitialValues<any> }) {
         // TODO: Find a way to make this automated based on the required clusters?
-        this.addClusterServer(createDefaultIdentifyClusterServer({
+        this.addClusterServer(ClusterServerFactory.create(IdentifyCluster, undefined, {
             identify: async (data) => await this._executeHandler("identify", data)
-        }));
-        this.addClusterServer(createDefaultGroupsClusterServer());
-        this.addClusterServer(createDefaultScenesClusterServer());
-        this.addClusterServer(createDefaultOnOffClusterServer(getClusterInitialAttributeValues(attributeInitialValues, OnOffCluster)));
+        } as ClusterServerHandlers<typeof IdentifyCluster>));
+        this.addClusterServer(ClusterServerFactory.create(GroupsCluster));
+        this.addClusterServer(ClusterServerFactory.create(ScenesCluster));
+        this.addClusterServer(ClusterServerFactory.create(OnOffCluster, getClusterInitialAttributeValues(attributeInitialValues, OnOffCluster)));
     }
 
     /**

@@ -14,7 +14,7 @@ import { Fabric } from "../../fabric/Fabric.js";
 import { SessionType } from "../../codec/MessageCodec.js";
 import { ScenesManager } from "./ScenesServer.js";
 import { IdentifyCluster } from "../IdentifyCluster.js";
-import { ClusterServer } from "../../protocol/interaction/InteractionServer.js";
+import { ClusterServerFactory } from "../ClusterServerFactory.js";
 
 /*
 TODO: If the Scenes server cluster is implemented on the same endpoint, the following extension field SHALL
@@ -71,7 +71,7 @@ export class GroupsManager {
     }
 }
 
-export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsCluster> = () => {
+ClusterServerFactory.register(GroupsCluster, () => {
     const addGroupLogic = (groupId: GroupId, groupName: string, sessionType: SessionType, fabric: Fabric, endpointId: number) => {
         // TODO If the AddGroup command was received as a unicast, the server SHALL generate an AddGroupResponse
         //      command with the Status field set to the evaluated status. If the AddGroup command was received
@@ -189,15 +189,5 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             //      response is not suppressed, the server SHALL generate a response with the Status field set to the
             //      evaluated status.
         },
-    }
-};
-
-export const createDefaultGroupsClusterServer = () => ClusterServer(
-    GroupsCluster,
-    {
-        nameSupport: {
-            groupNames: true,
-        },
-    },
-    GroupsClusterHandler()
-);
+    } as ClusterServerHandlers<typeof GroupsCluster>
+});

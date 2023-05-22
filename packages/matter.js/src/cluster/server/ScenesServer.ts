@@ -16,7 +16,7 @@ import { StatusResponseError } from "../../protocol/interaction/InteractionMesse
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { GroupsManager } from "./GroupsServer.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
-import { ClusterServer } from "../../protocol/interaction/InteractionServer.js";
+import { ClusterServerFactory } from "../ClusterServerFactory.js";
 
 interface scenesTableEntry {
     /** The group identifier for which this scene applies, or 0 if the scene is not associated with a group. */
@@ -125,7 +125,7 @@ export class ScenesManager {
     }
 }
 
-export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesCluster> = () => {
+ClusterServerFactory.register(ScenesCluster, () => {
     const addSceneLogic = (endpointId: number, groupId: GroupId, sceneId: number, sceneTransitionTime: number, sceneName: string, extensionFieldSets: any, transitionTime100ms: number, fabric: Fabric) => {
 
         if (groupId.id !== 0 && !GroupsManager.hasGroup(fabric, endpointId, groupId)) {
@@ -433,20 +433,5 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             }
             return sceneCount;
         }
-    }
-};
-
-export const createDefaultScenesClusterServer = () => ClusterServer(
-    ScenesCluster,
-    {
-        sceneCount: 0,
-        currentScene: 0,
-        currentGroup: new GroupId(0),
-        sceneValid: false,
-        nameSupport: {
-            sceneNames: true,
-        },
-        lastConfiguredBy: null,
-    },
-    ScenesClusterHandler()
-);
+    } as ClusterServerHandlers<typeof ScenesCluster>
+});
