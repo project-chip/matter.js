@@ -1,0 +1,734 @@
+/**
+ * @license
+ * Copyright 2022-2023 Project CHIP Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { BitFlag } from "../schema/BitmapSchema.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvField, TlvObject } from "../tlv/TlvObject.js";
+import { TlvBitmap, TlvUInt8, TlvUInt16, TlvInt16, TlvEnum } from "../tlv/TlvNumber.js";
+import { TlvString } from "../tlv/TlvString.js";
+import { Attribute, OptionalAttribute, Cluster, ClusterExtend, TlvNoResponse, OptionalCommand } from "./Cluster.js";
+import { TlvNullable } from "../tlv/TlvNullable.js";
+
+/** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.3 */
+export const OptionsBitmap = TlvBitmap(TlvUInt8, {
+    /**  
+     *   0 : Don't execute command when associated On/Off Cluster is off
+     *   1 : Execute command when associated On/Off Cluster is off
+     */
+    executeIfOff: BitFlag(0),
+
+});
+
+/** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.7.18 */
+export const ColorCapabilities = TlvBitmap(TlvUInt16, { // TODO: Validate to be set the same as feature bits
+    hueSaturationSupported: BitFlag(0),
+    enhancedHueSupported: BitFlag(1),
+    colorLoopSupported: BitFlag(2),
+    xYAttributesSupported: BitFlag(3),
+    colorTemperatureSupported: BitFlag(4),
+});
+
+/** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.19.1 */
+export const ColorLoopUpdateFlags = TlvBitmap(TlvUInt8, {
+    updateAction: BitFlag(0),
+    updateDirection: BitFlag(1),
+    updateTime: BitFlag(2),
+    updateStartHue: BitFlag(3),
+});
+
+/** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.7.12 */
+export const enum EnhancedColorMode {
+    CurrentHueCurrentSaturation = 0,
+    CurrentXCurrentY = 1,
+    ColorTemperatureMireds = 2,
+    EnhancedCurrentHueCurrentSaturation = 3,
+}
+
+/** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.4.2 */
+export const enum HueDirection {
+    ShortestDistance = 0,
+    LongestDistance = 1,
+    Up = 2,
+    Down = 3,
+}
+
+/** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.5.1 */
+export const enum HueMoveMode {
+    Stop = 0,
+    Up = 1,
+    Down = 3,
+}
+
+/** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.6.1 */
+export const enum ColorControlStepMode {
+    Up = 1,
+    Down = 3,
+}
+
+/** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.8.1 */
+export const enum SaturationMoveMode {
+    Stop = 0,
+    Up = 1,
+    Down = 3,
+}
+
+/** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.7.9. */
+export const enum ColorMode {
+    CurrentHueAndCurrentSaturation = 0,
+    CurrentXAndCurrentY = 1,
+    ColorTemperature = 2,
+}
+
+/** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.19.2 */
+export const enum ColorLoopAction {
+    Deactivate = 0,
+    ActivateFromColorLoopStartEnhancedHue = 1,
+    ActivateFromEnhancedCurrentHue = 2,
+}
+
+/** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.19.3 */
+export const enum ColorLoopDirection {
+    DecrementHue = 0,
+    IncrementHue = 1,
+}
+
+/** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.7.6 */
+export const enum DriftCompensation {
+    None = 0,
+    OtherUnknown = 1,
+    TemperatureMonitoring = 2,
+    OpticalLuminance = 3,
+    Opticalcolor = 4,
+}
+
+/**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.4 */
+const MoveToHueCommandRequest = TlvObject({
+    hue: TlvField(0, TlvUInt8.bound({ max: 254 })),
+    direction: TlvField(1, TlvEnum<HueDirection>()),
+    transitionTime: TlvField(2, TlvUInt16.bound({ max: 65534 })),
+    optionsMask: TlvField(3, OptionsBitmap),   // TODO: default 0 for all OptionsMask and OptionsOverride below
+    optionsOverride: TlvField(4, OptionsBitmap), // TODO : default 0
+});
+
+/**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.5 */
+const MoveHueCommandRequest = TlvObject({
+    moveMode: TlvField(0, TlvEnum<HueMoveMode>()),
+    rate: TlvField(1, TlvUInt8),
+    optionsMask: TlvField(2, OptionsBitmap),
+    optionsOverride: TlvField(3, OptionsBitmap),
+});
+
+/**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.6 */
+const StepHueCommandRequest = TlvObject({
+    stepMode: TlvField(0, TlvEnum<ColorControlStepMode>()),
+    stepSize: TlvField(1, TlvUInt8),
+    transitionTime: TlvField(2, TlvUInt8),
+    optionsMask: TlvField(3, OptionsBitmap),
+    optionsOverride: TlvField(4, OptionsBitmap),
+});
+
+/**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.7 */
+const MoveToSaturationCommandRequest = TlvObject({
+    saturation: TlvField(0, TlvUInt8.bound({ max: 254 })),
+    transitionTime: TlvField(1, TlvUInt16.bound({ max: 65534 })),
+    optionsMask: TlvField(2, OptionsBitmap),
+    optionsOverride: TlvField(3, OptionsBitmap),
+});
+
+/**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.8 */
+const MoveSaturationCommandRequest = TlvObject({
+    moveMode: TlvField(0, TlvEnum<SaturationMoveMode>()),
+    rate: TlvField(1, TlvUInt8),
+    optionsMask: TlvField(2, OptionsBitmap),
+    optionsOverride: TlvField(3, OptionsBitmap),
+});
+
+/**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.9 */
+const StepSaturationCommandRequest = TlvObject({
+    stepMode: TlvField(0, TlvEnum<ColorControlStepMode>()),
+    stepSize: TlvField(1, TlvUInt8),
+    transitionTime: TlvField(2, TlvUInt8),
+    optionsMask: TlvField(3, OptionsBitmap),
+    optionsOverride: TlvField(4, OptionsBitmap),
+});
+
+/**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.10 */
+const MoveToHueAndSaturatioCommandRequest = TlvObject({
+    hue: TlvField(0, TlvUInt8.bound({ max: 254 })),
+    saturation: TlvField(1, TlvUInt8.bound({ max: 254 })),
+    transitionTime: TlvField(2, TlvUInt16.bound({ max: 65534 })),
+    optionsMask: TlvField(3, OptionsBitmap),
+    optionsOverride: TlvField(4, OptionsBitmap),
+});
+
+/**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.11 */
+const MoveToColorCommandRequest = TlvObject({
+    colorX: TlvField(0, TlvUInt16.bound({ max: 0xfeff })),
+    colorY: TlvField(1, TlvUInt16.bound({ max: 0xfeff })),
+    transitionTime: TlvField(2, TlvUInt16),
+    optionsMask: TlvField(3, OptionsBitmap),
+    optionsOverride: TlvField(4, OptionsBitmap),
+});
+
+/**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.12 */
+const MoveColorCommandRequest = TlvObject({
+    rateX: TlvField(0, TlvInt16),
+    rateY: TlvField(1, TlvInt16),
+    optionsMask: TlvField(2, OptionsBitmap),
+    optionsOverride: TlvField(3, OptionsBitmap),
+});
+
+/**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.13 */
+const StepColorCommandRequest = TlvObject({
+    stepX: TlvField(0, TlvInt16),
+    stepY: TlvField(1, TlvInt16),
+    transitionTime: TlvField(2, TlvUInt16.bound({ max: 65534 })),
+    optionsMask: TlvField(3, OptionsBitmap),
+    optionsOverride: TlvField(4, OptionsBitmap),
+});
+
+/**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.14 */
+const MoveToColorTemperatureCommandRequest = TlvObject({
+    colorTemperatureMireds: TlvField(0, TlvUInt16.bound({ max: 0xfeff })),
+    transitionTime: TlvField(1, TlvUInt16.bound({ max: 65534 })),
+    optionsMask: TlvField(2, OptionsBitmap),
+    optionsOverride: TlvField(3, OptionsBitmap),
+});
+
+/**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.15 */
+const EnhancedMoveToHueRequest = TlvObject({
+    enhancedHue: TlvField(0, TlvUInt16),
+    direction: TlvField(1, TlvEnum<HueDirection>()),
+    transitionTime: TlvField(2, TlvUInt16.bound({ max: 65534 })),
+    optionsMask: TlvField(3, OptionsBitmap),
+    optionsOverride: TlvField(4, OptionsBitmap),
+});
+
+/**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.16 */
+const EnhancedMoveHueRequest = TlvObject({
+    moveMode: TlvField(0, TlvEnum<HueMoveMode>()),
+    rate: TlvField(1, TlvUInt16),
+    optionsMask: TlvField(2, OptionsBitmap),
+    optionsOverride: TlvField(3, OptionsBitmap),
+});
+
+/**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.17 */
+const EnhancedStepHueRequest = TlvObject({
+    stepMode: TlvField(0, TlvEnum<ColorControlStepMode>()),
+    stepSize: TlvField(1, TlvUInt16),
+    transitionTime: TlvField(2, TlvUInt16.bound({ max: 65534 })),
+    optionsMask: TlvField(3, OptionsBitmap),
+    optionsOverride: TlvField(4, OptionsBitmap),
+});
+
+/**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.18 */
+const EnhancedMoveToHueAndSaturationRequest = TlvObject({
+    enhancedHue: TlvField(0, TlvUInt16),
+    saturation: TlvField(1, TlvUInt8.bound({ max: 254 })),
+    transitionTime: TlvField(2, TlvUInt16.bound({ max: 65534 })),
+    optionsMask: TlvField(3, OptionsBitmap),
+    optionsOverride: TlvField(4, OptionsBitmap),
+});
+
+/**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.19 */
+const ColorLoopSetRequest = TlvObject({
+    updateFlags: TlvField(0, ColorLoopUpdateFlags),
+    action: TlvField(1, TlvEnum<ColorLoopAction>()),
+    direction: TlvField(2, TlvEnum<ColorLoopDirection>()),
+    time: TlvField(3, TlvUInt16),
+    startHue: TlvField(4, TlvUInt16),
+    optionsMask: TlvField(5, OptionsBitmap),
+    optionsOverride: TlvField(6, OptionsBitmap),
+});
+
+/**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.20 */
+const StopMoveStepRequest = TlvObject({
+    optionsMask: TlvField(0, OptionsBitmap),
+    optionsOverride: TlvField(1, OptionsBitmap),
+});
+
+/**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.21 */
+const MoveColorTemperatureRequest = TlvObject({
+    moveMode: TlvField(0, TlvEnum<HueMoveMode>()),
+    rate: TlvField(1, TlvUInt16),
+    colorTemperatureMinimumMireds: TlvField(2, TlvUInt16.bound({ max: 0xfeff })),
+    colorTemperatureMaximumMireds: TlvField(3, TlvUInt16.bound({ max: 0xfeff })),
+    optionsMask: TlvField(4, OptionsBitmap),
+    optionsOverride: TlvField(5, OptionsBitmap),
+});
+
+/**  @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.22 */
+const StepColorTemperatureRequest = TlvObject({
+    stepMode: TlvField(0, TlvEnum<ColorControlStepMode>()),
+    stepSize: TlvField(1, TlvUInt16),
+    transitionTime: TlvField(2, TlvUInt16.bound({ max: 65534 })),
+    colorTemperatureMinimumMireds: TlvField(3, TlvUInt16.bound({ max: 0xfeff })),
+    colorTemperatureMaximumMireds: TlvField(4, TlvUInt16.bound({ max: 0xfeff })),
+    optionsMask: TlvField(5, OptionsBitmap),
+    optionsOverride: TlvField(6, OptionsBitmap),
+});
+
+/**
+ * @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2
+ */
+export const ColorControlCluster = Cluster({
+    id: 0x0300,
+    name: "ColorControl",
+    revision: 5,
+    features: {
+        hueSaturation: BitFlag(0),
+        enhancedHue: BitFlag(1), // Support for EHUE SHALL require support for HS.
+        colorLoop: BitFlag(2), // Support for CL SHALL require support for EHUE.
+        xY: BitFlag(3),
+        colorTemperature: BitFlag(4),
+    },
+
+    supportedFeatures: {
+        hueSaturation: false,
+        enhancedHue: false,
+        colorLoop: false,
+        xY: false,
+        colorTemperature: false,
+    },
+
+    /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.6 */
+    attributes: {
+        /** 
+         * Color Information Attribute Set. Different attributes are utilized depending on what color 
+         * mode is used and specified in the features
+         * @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.7 
+         */
+        remainingTime: OptionalAttribute(0x0002, TlvUInt16.bound({ max: 0xfffe }), { default: 0x0 }),
+        driftCompensation: OptionalAttribute(0x0005, TlvEnum<DriftCompensation>()),
+        compensationText: OptionalAttribute(0x0006, TlvString.bound({ maxLength: 254 })),
+        colorMode: Attribute(0x0008, TlvEnum<ColorMode>(), { default: 1, persistent: true }),
+        options: Attribute(0x000F, OptionsBitmap), // TODO: default 0
+        enhancedColorMode: Attribute(0x4001, TlvEnum<EnhancedColorMode>(), { default: 1, persistent: true }),
+        colorCapabilities: Attribute(0x400A, ColorCapabilities),  // , {default: 0}
+
+        /** 
+         * Defined Primaries Information Attribute Set
+         * @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.8 
+         */
+        numberOfPrimaries: Attribute(0x0010, TlvNullable(TlvUInt8.bound({ max: 0x06 }))), // TODO - The following Primary(N) Attributes become Mandated depending on this value 
+        primary1X: OptionalAttribute(0x0011, TlvUInt16.bound({ max: 0xfeff })),
+        primary1Y: OptionalAttribute(0x0012, TlvUInt16.bound({ max: 0xfeff })),
+        primary1Intensity: OptionalAttribute(0x0013, TlvNullable(TlvUInt8)),
+        primary2X: OptionalAttribute(0x0015, TlvUInt16.bound({ max: 0xfeff })),
+        primary2Y: OptionalAttribute(0x0016, TlvUInt16.bound({ max: 0xfeff })),
+        primary2Intensity: OptionalAttribute(0x0017, TlvNullable(TlvUInt8)),
+        primary3X: OptionalAttribute(0x0019, TlvUInt16.bound({ max: 0xfeff })),
+        primary3Y: OptionalAttribute(0x001A, TlvUInt16.bound({ max: 0xfeff })),
+        primary3Intensity: OptionalAttribute(0x001B, TlvNullable(TlvUInt8)),
+
+        /** 
+         * Additional Defined Primaries Information Attribute Set
+         * @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.9 
+         */
+        primary4X: OptionalAttribute(0x0020, TlvUInt16.bound({ max: 0xfeff })),
+        primary4Y: OptionalAttribute(0x0021, TlvUInt16.bound({ max: 0xfeff })),
+        primary4Intensity: OptionalAttribute(0x0022, TlvNullable(TlvUInt8)),
+        primary5X: OptionalAttribute(0x0024, TlvUInt16.bound({ max: 0xfeff })),
+        primary5Y: OptionalAttribute(0x0025, TlvUInt16.bound({ max: 0xfeff })),
+        primary5Intensity: OptionalAttribute(0x0026, TlvNullable(TlvUInt8)),
+        primary6X: OptionalAttribute(0x0028, TlvUInt16.bound({ max: 0xfeff })),
+        primary6Y: OptionalAttribute(0x0029, TlvUInt16.bound({ max: 0xfeff })),
+        primary6Intensity: OptionalAttribute(0x002A, TlvNullable(TlvUInt8)),
+
+        /** 
+         * Defined Color Points Settings Attribute Set
+         * @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.10 
+         */
+        whitePointX: OptionalAttribute(0x0030, TlvUInt16.bound({ max: 0xfeff })),
+        whitePointY: OptionalAttribute(0x0031, TlvUInt16.bound({ max: 0xfeff })),
+        colorPointRX: OptionalAttribute(0x0032, TlvUInt16.bound({ max: 0xfeff })),
+        colorPointRY: OptionalAttribute(0x0033, TlvUInt16.bound({ max: 0xfeff })),
+        colorPointRIntensity: OptionalAttribute(0x0034, TlvNullable(TlvUInt8)),
+        colorPointGX: OptionalAttribute(0x0036, TlvUInt16.bound({ max: 0xfeff })),
+        colorPointGY: OptionalAttribute(0x0037, TlvUInt16.bound({ max: 0xfeff })),
+        colorPointGIntensity: OptionalAttribute(0x0038, TlvNullable(TlvUInt8)),
+        colorPointBX: OptionalAttribute(0x003A, TlvUInt16.bound({ max: 0xfeff })),
+        colorPointBY: OptionalAttribute(0x003B, TlvUInt16.bound({ max: 0xfeff })),
+        colorPointBIntensity: OptionalAttribute(0x003C, TlvNullable(TlvUInt8)),
+    },
+});
+
+const hueSaturationAttributes = {
+    currentHue: Attribute(0x0, TlvUInt8.bound({ max: 0xfe }), { default: 0x0, persistent: true }), // This and following are Mandatory if HueSat flag set in features
+    currentSaturation: OptionalAttribute(0x0001, TlvUInt8.bound({ max: 0xfe }), { default: 0x0, persistent: true }),
+}
+
+const enhancedHueAttributes = {
+    enhancedCurrentHue: OptionalAttribute(0x4000, TlvUInt16, { default: 0x0, persistent: true }), //  Mandatory if Enhanced Hue flag set in features
+}
+
+const colorLoopAttributes = {
+    colorLoopActive: OptionalAttribute(0x4002, TlvUInt8, { default: 0x0, persistent: true }), //  Color Loop Attributes are Mandatory if ColorLoop flag set in features
+    colorLoopDirection: OptionalAttribute(0x4003, TlvUInt8, { default: 0x0, persistent: true }),
+    colorLoopTime: OptionalAttribute(0x4004, TlvUInt16, { default: 0x0019, persistent: true }),
+    colorLoopStartEnhancedHue: OptionalAttribute(0x4005, TlvUInt16, { default: 0x2300 }),
+    colorLoopStoredEnhancedHue: OptionalAttribute(0x4006, TlvUInt16, { default: 0x0 }),
+}
+
+const xYAttributes = {
+    currentX: OptionalAttribute(0x0003, TlvUInt16.bound({ max: 0xfeff }), { default: 0x616b, persistent: true }), // This and following are Mandatory if XY flag set in features
+    currentY: OptionalAttribute(0x0004, TlvUInt16.bound({ max: 0xfeff }), { default: 0x607d, persistent: true }),
+}
+
+const colorTemperatureAttributes = {
+    colorTemperatureMireds: OptionalAttribute(0x0007, TlvUInt16.bound({ max: 0xfeff }), { default: 0x00fa, persistent: true }), // Mandatory if ColorTemp flag set in features
+
+    colorTempPhysicalMinMireds: OptionalAttribute(0x400B, TlvUInt16.bound({ max: 0xfeff }), { default: 0x0 }), // This and following Mandatory if ColorTemp flag set in features
+    colorTempPhysicalMaxMireds: OptionalAttribute(0x400C, TlvUInt16.bound({ max: 0xfeff }), { default: 0xfeff }),
+    coupleColorTempToLevelMinMireds: OptionalAttribute(0x400D, TlvUInt16, { default: 0x0 }),
+    startUpColorTemperatureMireds: OptionalAttribute(0x4010, TlvNullable(TlvUInt16.bound({ max: 0xfeff })), { default: 0x0 }),
+}
+
+const stopMoveStepCommand = OptionalCommand(0x47, StopMoveStepRequest, 0x47, TlvNoResponse); // Mandatory if EnhancedHue, ColorTemperature or XY flags set in features
+
+const colorLoopCommands = {
+
+    /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.19 */
+    colorLoopSet: OptionalCommand(0x44, ColorLoopSetRequest, 0x44, TlvNoResponse), // Mandatory if ColorLoop flag set in features
+}
+
+const enhancedHueCommands = {
+
+    /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.15 */
+    enhancedMoveToHue: OptionalCommand(0x40, EnhancedMoveToHueRequest, 0x40, TlvNoResponse), // This and 41, 42, 43 Mandatory if EnhancedHue set in feature flags
+
+    /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.16 */
+    enhancedMoveHue: OptionalCommand(0x41, EnhancedMoveHueRequest, 0x41, TlvNoResponse),
+
+    /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.17 */
+    enhancedStepHue: OptionalCommand(0x42, EnhancedStepHueRequest, 0x42, TlvNoResponse),
+
+    /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.18 */
+    enhancedMoveToHueAndSaturation: OptionalCommand(0x43, EnhancedMoveToHueAndSaturationRequest, 0x43, TlvNoResponse),
+
+    stopMoveStep: stopMoveStepCommand,
+}
+
+const hueSaturationCommands = {
+    /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.4 */
+    moveToHue: OptionalCommand(0x0, MoveToHueCommandRequest, 0x0, TlvNoResponse), // This and following HueSat commands become Mandatory if HueSat flag set in features
+
+    /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.5 */
+    moveHue: OptionalCommand(0x01, MoveHueCommandRequest, 0x01, TlvNoResponse),
+
+    /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.6 */
+    stepHue: OptionalCommand(0x02, StepHueCommandRequest, 0x02, TlvNoResponse),
+
+    /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.7 */
+    moveToSaturation: OptionalCommand(0x03, MoveToSaturationCommandRequest, 0x03, TlvNoResponse),
+
+    /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.8 */
+    moveSaturation: OptionalCommand(0x04, MoveSaturationCommandRequest, 0x04, TlvNoResponse),
+
+    /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.9 */
+    stepSaturation: OptionalCommand(0x05, StepSaturationCommandRequest, 0x05, TlvNoResponse),
+
+    /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.10 */
+    moveToHueAndSaturation: OptionalCommand(0x06, MoveToHueAndSaturatioCommandRequest, 0x06, TlvNoResponse),
+}
+
+const colorTemperatureCommands = {
+    /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.14 */
+    moveToColorTemperature: OptionalCommand(0x0a, MoveToColorTemperatureCommandRequest, 0x0a, TlvNoResponse), // This and 4b, 4c Mandatory if ColorTemperature set in feature flags
+
+    /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.21 */
+    moveColorTemperature: OptionalCommand(0x4b, MoveColorTemperatureRequest, 0x4b, TlvNoResponse),
+
+    /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.22 */
+    stepColorTemperature: OptionalCommand(0x4c, StepColorTemperatureRequest, 0x4c, TlvNoResponse),
+
+    /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.20 */
+    stopMoveStep: stopMoveStepCommand,
+}
+
+const xYCommands = {
+    /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.11 */
+    moveToColor: OptionalCommand(0x07, MoveToColorCommandRequest, 0x07, TlvNoResponse), // This and 8,9 Mandatory if XY set in feature flags
+
+    /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.12 */
+    moveColor: OptionalCommand(0x08, MoveColorCommandRequest, 0x08, TlvNoResponse),
+
+    /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.13 */
+    stepColor: OptionalCommand(0x09, StepColorCommandRequest, 0x09, TlvNoResponse),
+
+    /** @see {@link MatterApplicationClusterSpecificationV1_0} § 3.2.11.20 */
+    stopMoveStep: stopMoveStepCommand,
+}
+
+export const ColorControlClusterWithHueSaturation = ClusterExtend(
+    ColorControlCluster,
+    {
+        supportedFeatures: {
+            hueSaturation: true,
+            enhancedHue: false,
+            colorLoop: false,
+            xY: false,
+            colorTemperature: false,
+        },
+
+        attributes: hueSaturationAttributes,
+        commands: hueSaturationCommands
+    });
+
+export const ColorControlClusterWithHueSaturationAndEnhancedHue = ClusterExtend(
+    ColorControlCluster,
+    {
+        supportedFeatures: {
+            hueSaturation: true,
+            enhancedHue: true,
+            colorLoop: false,
+            xY: false,
+            colorTemperature: false,
+        },
+
+        attributes: { ...hueSaturationAttributes, ...enhancedHueAttributes },
+        commands: { ...hueSaturationCommands, ...enhancedHueCommands }
+    });
+
+export const ColorControlClusterWithColorTemperature = ClusterExtend(
+    ColorControlCluster,
+    {
+        supportedFeatures: {
+            hueSaturation: false,
+            enhancedHue: false,
+            colorLoop: false,
+            xY: false,
+            colorTemperature: true,
+        },
+
+        attributes: colorTemperatureAttributes,
+        commands: colorTemperatureCommands
+    });
+
+export const ColorControlClusterWithColorLoop = ClusterExtend(
+    ColorControlCluster,
+    {
+        supportedFeatures: {
+            hueSaturation: false,
+            enhancedHue: false,
+            colorLoop: false,
+            xY: false,
+            colorTemperature: true,
+        },
+
+        attributes: colorTemperatureAttributes,
+        commands: colorTemperatureCommands
+    });
+
+export const ColorControlClusterWithEnhancedHueAndXY = ClusterExtend(
+    ColorControlCluster,
+    {
+        supportedFeatures: {
+            hueSaturation: true,
+            enhancedHue: true,
+            colorLoop: false,
+            xY: true,
+            colorTemperature: false,
+        },
+
+        attributes: { ...hueSaturationAttributes, ...enhancedHueAttributes, ...xYAttributes },
+        commands: { ...hueSaturationCommands, ...enhancedHueCommands, ...xYCommands }
+    });
+
+export const ColorControlClusterWithEnhancedHueAndColorTemperature = ClusterExtend(
+    ColorControlCluster,
+    {
+        supportedFeatures: {
+            hueSaturation: true,
+            enhancedHue: true,
+            colorLoop: false,
+            xY: false,
+            colorTemperature: true,
+        },
+
+        attributes: { ...hueSaturationAttributes, ...enhancedHueAttributes, ...colorTemperatureAttributes },
+        commands: { ...hueSaturationCommands, ...enhancedHueCommands, ...colorTemperatureCommands },
+    });
+
+export const ColorControlClusterWithEnhancedHueAndColorTemperatureAndXY = ClusterExtend(
+    ColorControlCluster,
+    {
+        supportedFeatures: {
+            hueSaturation: true,
+            enhancedHue: true,
+            colorLoop: false,
+            xY: true,
+            colorTemperature: true,
+        },
+
+        attributes: { ...hueSaturationAttributes, ...enhancedHueAttributes, ...colorTemperatureAttributes, ...xYAttributes },
+        commands: { ...hueSaturationCommands, ...enhancedHueCommands, ...colorTemperatureCommands, ...xYCommands }
+    });
+
+export const ColorControlClusterWithHueSaturationAndXy = ClusterExtend(
+    ColorControlCluster,
+    {
+        supportedFeatures: {
+            hueSaturation: true,
+            enhancedHue: false,
+            colorLoop: false,
+            xY: true,
+            colorTemperature: false,
+        },
+
+        attributes: { ...hueSaturationAttributes, ...xYAttributes },
+        commands: { ...hueSaturationCommands, ...xYCommands },
+    });
+
+export const ColorControlClusterWithHueSaturationAndColorTemperature = ClusterExtend(
+    ColorControlCluster,
+    {
+        supportedFeatures: {
+            hueSaturation: true,
+            enhancedHue: false,
+            colorLoop: false,
+            xY: false,
+            colorTemperature: true,
+        },
+
+        attributes: { ...hueSaturationAttributes, ...colorTemperatureAttributes },
+        commands: { ...hueSaturationCommands, ...colorTemperatureCommands },
+    });
+
+export const ColorControlClusterWithHueSaturationAndEnhancedHueAndColorLoop = ClusterExtend(
+    ColorControlCluster,
+    {
+        supportedFeatures: {
+            hueSaturation: true,
+            enhancedHue: true,
+            colorLoop: true,
+            xY: false,
+            colorTemperature: false,
+        },
+
+        attributes: { ...hueSaturationAttributes, ...enhancedHueAttributes, ...colorLoopAttributes },
+        commands: { ...hueSaturationCommands, ...enhancedHueCommands, ...colorLoopCommands },
+    });
+
+export const ColorControlClusterWithHueSaturationAndEnhancedHueAndXy = ClusterExtend(
+    ColorControlCluster,
+    {
+        supportedFeatures: {
+            hueSaturation: true,
+            enhancedHue: true,
+            colorLoop: false,
+            xY: true,
+            colorTemperature: false,
+        },
+
+        attributes: { ...hueSaturationAttributes, ...enhancedHueAttributes, ...xYAttributes },
+        commands: { ...hueSaturationCommands, ...enhancedHueCommands, ...xYCommands },
+    });
+
+export const ColorControlClusterWithHueSaturationAndEnhancedHueAndColorTemperature = ClusterExtend(
+    ColorControlCluster,
+    {
+        supportedFeatures: {
+            hueSaturation: true,
+            enhancedHue: true,
+            colorLoop: false,
+            xY: false,
+            colorTemperature: true,
+        },
+
+        attributes: { ...hueSaturationAttributes, ...enhancedHueAttributes, ...colorTemperatureAttributes },
+        commands: { ...hueSaturationCommands, ...enhancedHueCommands, ...colorTemperatureCommands },
+    });
+
+export const ColorControlClusterWithXy = ClusterExtend(
+    ColorControlCluster,
+    {
+        supportedFeatures: {
+            hueSaturation: false,
+            enhancedHue: false,
+            colorLoop: false,
+            xY: true,
+            colorTemperature: false,
+        },
+
+        attributes: xYAttributes,
+        commands: xYCommands
+    });
+
+export const ColorControlClusterWithXyAndColorTemperature = ClusterExtend(
+    ColorControlCluster,
+    {
+        supportedFeatures: {
+            hueSaturation: false,
+            enhancedHue: false,
+            colorLoop: false,
+            xY: true,
+            colorTemperature: true,
+        },
+
+        attributes: { ...xYAttributes, ...colorTemperatureAttributes },
+        commands: { ...xYCommands, ...colorTemperatureCommands },
+    });
+
+export const ColorControlClusterWithHueSaturationAndEnhancedHueAndXyAndColorTemperature = ClusterExtend(
+    ColorControlCluster,
+    {
+        supportedFeatures: {
+            hueSaturation: true,
+            enhancedHue: true,
+            colorLoop: false,
+            xY: true,
+            colorTemperature: true,
+        },
+
+        attributes: { ...hueSaturationAttributes, ...enhancedHueAttributes, ...xYAttributes, ...colorTemperatureAttributes },
+        commands: { ...hueSaturationCommands, ...enhancedHueCommands, ...xYCommands, ...colorTemperatureCommands },
+    });
+
+export const ColorControlClusterWithHueSaturationAndXyAndColorTemperature = ClusterExtend(
+    ColorControlCluster,
+    {
+        supportedFeatures: {
+            hueSaturation: true,
+            enhancedHue: false,
+            colorLoop: false,
+            xY: true,
+            colorTemperature: true,
+        },
+
+        attributes: { ...hueSaturationAttributes, ...xYAttributes, ...colorTemperatureAttributes },
+        commands: { ...hueSaturationCommands, ...xYCommands, ...colorTemperatureCommands },
+    });
+
+export const ColorControlClusterWithHueSaturationAndEnhancedHueAndColorLoopAndXy = ClusterExtend(
+    ColorControlCluster,
+    {
+        supportedFeatures: {
+            hueSaturation: true,
+            enhancedHue: true,
+            colorLoop: true,
+            xY: true,
+            colorTemperature: false,
+        },
+
+        attributes: { ...hueSaturationAttributes, ...enhancedHueAttributes, ...colorLoopAttributes, ...xYAttributes },
+        commands: { ...hueSaturationCommands, ...enhancedHueCommands, ...colorLoopCommands, ...xYCommands, },
+    });
+
+export const ColorControlClusterWithHueSaturationAndEnhancedHueAndColorLoopAndXyAndColorTemperature = ClusterExtend(
+    ColorControlCluster,
+    {
+        supportedFeatures: {
+            hueSaturation: true,
+            enhancedHue: true,
+            colorLoop: true,
+            xY: true,
+            colorTemperature: true,
+        },
+
+        attributes: { ...hueSaturationAttributes, ...enhancedHueAttributes, ...colorLoopAttributes, ...xYAttributes, ...colorTemperatureAttributes },
+        commands: { ...hueSaturationCommands, ...enhancedHueCommands, ...colorLoopCommands, ...xYCommands, ...colorTemperatureCommands },
+    });

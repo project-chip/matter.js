@@ -16,6 +16,7 @@ export * from "./BasicInformationCluster.js";
 export * from "./BindingCluster.js";
 export * from "./BooleanStateCluster.js";
 export * from "./BridgedDeviceBasicInformationCluster.js";
+export * from "./ColorControlCluster.js";
 export * from "./DescriptorCluster.js";
 export * from "./FlowMeasurementCluster.js";
 export * from "./GeneralCommissioningCluster.js";
