@@ -41,6 +41,7 @@ export const AllClustersMap: { [key: Cluster<any, any, any, any, any>["id"]]: Cl
     [BindingCluster.id]: BindingCluster,
     [BooleanStateCluster.id]: BooleanStateCluster,
     [BridgedDeviceBasicInformationCluster.id]: BridgedDeviceBasicInformationCluster,
+    [ColorControlCluster.id]: ColorControlCluster,
     [DescriptorCluster.id]: DescriptorCluster,
     [FlowMeasurementCluster.id]: FlowMeasurementCluster,
     [GeneralCommissioningCluster.id]: GeneralCommissioningCluster,
