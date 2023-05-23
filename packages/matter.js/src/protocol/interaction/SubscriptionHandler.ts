@@ -5,7 +5,8 @@
  */
 
 import { MatterDevice } from "../../MatterDevice.js";
-import { InteractionServerMessenger, StatusResponseError } from "./InteractionMessenger.js";
+import { InteractionServerMessenger } from "./InteractionMessenger.js";
+import { StatusResponseError } from "./StatusResponseError.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { AttributeWithPath, INTERACTION_PROTOCOL_ID, attributePathToId } from "./InteractionServer.js";
 import { Logger } from "../../log/Logger.js";

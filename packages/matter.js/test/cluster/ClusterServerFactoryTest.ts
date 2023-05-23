@@ -33,8 +33,7 @@ describe("ClusterServerFactory", () => {
                 sceneValid: false,
                 nameSupport: {
                     sceneNames: true
-                },
-                lastConfiguredBy: null
+                }
             });
 
             itHasCorrectDefaultsFor(IdentifyCluster, {

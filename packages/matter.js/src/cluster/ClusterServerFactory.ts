@@ -4,20 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterError } from "../common/MatterError.js";
 import { ClusterServer } from "../protocol/interaction/index.js";
 import { BitSchema, TypeFromBitSchema } from "../schema/BitmapSchema.js";
-import { Attributes, Cluster, Commands, Events, GlobalAttributes, MandatoryLocalAttributeNames, OptionalAttributeNames } from "./Cluster.js";
+import { Attributes, Cluster, Commands, Events, GlobalAttributes, MandatoryLocalAttributeNames } from "./Cluster.js";
 import { AttributeInitialValues, ClusterServerHandlers } from "./server/ClusterServer.js";
-import { UnsupportedCommandError } from "./server/CommandServer.js";
 
 type AnyCluster = Cluster<any, any, any, any, any>;
 const GLOBAL_ATTRIBUTES = new Set(Object.keys(GlobalAttributes({})));
-
-export function notImplemented() {
-    // Command server will fail gracefully with the appropriate status code
-    // in response to this error
-    throw new UnsupportedCommandError();
-}
 
 function mandatoryLocalAttributeNames<A extends Attributes>(attributes: A) {
     return Object.entries(attributes)
@@ -26,29 +20,13 @@ function mandatoryLocalAttributeNames<A extends Attributes>(attributes: A) {
         .map(([name]) => name as MandatoryLocalAttributeNames<A>);
 }
 
-function optionalAttributeNames<A extends Attributes>(attributes: A) {
-    return Object.entries(attributes)
-        .filter(([_name, attr]) => attr.optional)
-        .map(([name]) => name as OptionalAttributeNames<A>)
-}
-
 // Shortcut for cluster server implementers - create initial attribute map from
-// schema if not provided.  Could move into ClusterServer but then
-// attributeInitialValues argument would need to be optional.  Not sure if
-// that's desirable.  Also, this file is shorter than InteractionServer ;)
+// schema if not provided
 function createDefaultAttributeInitialValues<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(cluster: Cluster<F, SF, A, C, E>): AttributeInitialValues<A> {
     const result = {} as AttributeInitialValues<A>;
 
     mandatoryLocalAttributeNames(cluster.attributes).forEach((name) =>
         (result as any)[name] = cluster.attributes[name].default);
-
-    // TODO - caller can override but should we make the set of optional
-    // attributes configurable?
-    optionalAttributeNames(cluster.attributes).forEach((name) => {
-        if (cluster.attributes[name] !== undefined) {
-            (result as any)[name] = cluster.attributes[name].default
-        }
-    });
 
     return result;
 }
@@ -63,12 +41,16 @@ export class ClusterServerFactory {
     /**
      * Retrieve default values for attributes based on cluster schema.
      */
-    public static getDefaultAttributeInitialValues<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(cluster: Cluster<F, SF, A, C, E>) {
-        const aiv = this.defaultAttributeInitialValues.get(cluster) as AttributeInitialValues<A>;
+    static getDefaultAttributeInitialValues<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
+        cluster: Cluster<F, SF, A, C, E>
+    ) {
+        let aiv = this.defaultAttributeInitialValues.get(cluster);
         if (aiv == undefined) {
-            return createDefaultAttributeInitialValues(cluster);
+            this.defaultAttributeInitialValues.set(cluster, aiv = createDefaultAttributeInitialValues(cluster));
         }
-        return aiv;
+
+        // Do not pass by reference so the user can't overwrite
+        return Object.assign({}, aiv) as AttributeInitialValues<A>;
     }
 
     /**
@@ -78,15 +60,13 @@ export class ClusterServerFactory {
      * @param defaultHandlerProvider a function that create the cluster handlers
      * @param defaultAttributeInitialValues optional overrides for default attribute values
      */
-    public static registerClusterDefaults<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
-        cluster: Cluster<F, SF, A, C, E>, defaultHandlerProvider: () => ClusterServerHandlers<Cluster<F, SF, A, C, E>>,
+    static registerClusterDefaults<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
+        cluster: Cluster<F, SF, A, C, E>,
+        defaultHandlerProvider: () => ClusterServerHandlers<Cluster<F, SF, A, C, E>>,
         defaultAttributeInitialValues: AttributeInitialValues<A> = createDefaultAttributeInitialValues(cluster)
     ) {
         this.defaultHandlerProviders.set(cluster, defaultHandlerProvider);
         this.defaultAttributeInitialValues.set(cluster, defaultAttributeInitialValues);
-
-        const x = this.defaultAttributeInitialValues.get(cluster);
-        if (x.sceneCount) console.log(x.sceneCount);
     }
 
     /**
@@ -97,7 +77,11 @@ export class ClusterServerFactory {
      * @param handlers optional overrides for cluster handlers
      * @returns 
      */
-    public static create<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(cluster: Cluster<F, SF, A, C, E>, attributeInitialValues?: AttributeInitialValues<A>, handlers?: ClusterServerHandlers<Cluster<F, SF, A, C, E>>) {
+    static create<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
+        cluster: Cluster<F, SF, A, C, E>,
+        attributeInitialValues?: AttributeInitialValues<A>,
+        handlers?: ClusterServerHandlers<Cluster<F, SF, A, C, E>>
+    ) {
         handlers = Object.assign({}, handlers);
 
         const provider = this.defaultHandlerProviders.get(cluster);
@@ -105,18 +89,20 @@ export class ClusterServerFactory {
             Object.assign(handlers, provider());
         }
 
-        for (const command in cluster.commands) {
-            if (!(handlers as any)[command]) {
-                (handlers as any)[command] = notImplemented;
-            }
-        }
+        const aiv = Object.assign(
+            this.getDefaultAttributeInitialValues(cluster),
+            attributeInitialValues);
 
-        // TODO - should we throw an error here if mandatory attributes do not
-        // have a value yet?
+        // Sanity check - ensure all mandatory attributes are present
+        const missing = mandatoryLocalAttributeNames(cluster.attributes)
+            .filter((name) => (<any>aiv)[name] === undefined);
+        if (missing.length) {
+            throw new MatterError(`Cannot create ${cluster.name} server, missing mandatory attributes: ${missing.join(", ")}`);
+        }
 
         return ClusterServer(
             cluster,
-            Object.assign({}, this.getDefaultAttributeInitialValues(cluster), attributeInitialValues),
+            aiv,
             handlers);
     }
 }

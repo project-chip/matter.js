@@ -8,9 +8,10 @@ import { MatterDevice } from "../../MatterDevice.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import {
-    DataReport, InteractionServerMessenger, InvokeRequest, InvokeResponse, MessageType, ReadRequest, StatusResponseError,
+    DataReport, InteractionServerMessenger, InvokeRequest, InvokeResponse, MessageType, ReadRequest,
     SubscribeRequest, TimedRequest, WriteRequest, WriteResponse
 } from "./InteractionMessenger.js";
+import { StatusResponseError } from "./StatusResponseError.js";
 import { Attributes, Cluster, Commands, Events, TlvNoResponse } from "../../cluster/Cluster.js";
 import {
     StatusCode, TlvAttributePath, TlvAttributeReport, TlvCommandPath, TlvInvokeResponseData, TlvSubscribeResponse

@@ -39,9 +39,13 @@ export const OptionalAttribute = <T, V extends T>(id: number, schema: TlvSchema<
 export const WritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { scene = false, persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View, writeAcl = AccessLevel.View }: AttributeOptions<V> = {}): WritableAttribute<T> => ({ id, schema, optional: false, writable: true, scene, persistent, omitChanges, default: conformanceValue, readAcl, writeAcl });
 export const OptionalWritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { scene = false, persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View, writeAcl = AccessLevel.View }: AttributeOptions<V> = {}): OptionalWritableAttribute<T> => ({ id, schema, optional: true, writable: true, scene, persistent, omitChanges, default: conformanceValue, readAcl, writeAcl });
 
-export type MandatoryAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends OptionalAttribute<any> ? never : K }[keyof A];
-export type MandatoryLocalAttributeNames<A extends Attributes> = Exclude<MandatoryAttributeNames<A>, keyof GlobalAttributes<any>>;
-export type OptionalAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends OptionalAttribute<any> ? K : never }[keyof A];
+// We know that Attributes extensions will only have string keys but TS
+// doesn't.  Use this so attribute names are only strings
+export type AttributeNames<A extends Attributes> = Extract<keyof A, string>;
+
+export type MandatoryAttributeNames<A extends Attributes> = { [K in AttributeNames<A>]: A[K] extends OptionalAttribute<any> ? never : K }[AttributeNames<A>];
+export type OptionalAttributeNames<A extends Attributes> = { [K in AttributeNames<A>]: A[K] extends OptionalAttribute<any> ? K : never }[AttributeNames<A>];
+export type MandatoryLocalAttributeNames<A extends Attributes> = Exclude<MandatoryAttributeNames<A>, AttributeNames<GlobalAttributes<any>>>;
 
 /* Interfaces and helper methods to define a cluster command */
 export const TlvNoResponse = TlvVoid;
@@ -112,6 +116,7 @@ export const Cluster = <F extends BitSchema, SF extends TypeFromBitSchema<F>, A 
     id,
     name,
     revision,
+    register = true,
     features = <F>{},
     supportedFeatures = <SF>{},
     attributes = <A>{},
@@ -121,6 +126,7 @@ export const Cluster = <F extends BitSchema, SF extends TypeFromBitSchema<F>, A 
     id: number,
     name: string,
     revision: number,
+    register?: boolean,
     features?: F,
     supportedFeatures?: SF,
     attributes?: A,
@@ -137,7 +143,11 @@ export const Cluster = <F extends BitSchema, SF extends TypeFromBitSchema<F>, A 
         attributes: Merge(attributes, GlobalAttributes(features)),
         events,
     } as Cluster<F, SF, Merge<A, GlobalAttributes<F>>, C, E>;
-    BaseClustersMap[id] = cluster;
+
+    if (register) {
+        BaseClustersMap[id] = cluster;
+    }
+
     return cluster;
 };
 
@@ -168,7 +178,8 @@ export const ClusterExtend =
             attributes: attributesExtend = <A_EXTEND>{},
             commands: commandsExtend = <C_EXTEND>{},
             events: eventsExtend = <E_EXTEND>{},
-        }: ClusterExtend<F, SF_EXTEND, A_EXTEND, C_EXTEND, E_EXTEND>
+        }: ClusterExtend<F, SF_EXTEND, A_EXTEND, C_EXTEND, E_EXTEND>,
+        register = true
     ) => {
         const cluster = {
             id,
@@ -186,7 +197,11 @@ export const ClusterExtend =
             Merge<C_BASE, C_EXTEND>,
             Merge<E_BASE, E_EXTEND>
         >;
-        const extensionSlot = ExtensionClusterMap[id] || (ExtensionClusterMap[id] = []);
-        extensionSlot.push(cluster);
+
+        if (register) {
+            const extensionSlot = ExtensionClusterMap[id] || (ExtensionClusterMap[id] = []);
+            extensionSlot.push(cluster);
+        }
+
         return cluster;
     };

@@ -12,7 +12,7 @@ import { MatterDevice } from "../../MatterDevice.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { SessionType } from "../../codec/MessageCodec.js";
-import { StatusResponseError } from "../../protocol/interaction/InteractionMessenger.js";
+import { StatusResponseError } from "../../protocol/interaction/StatusResponseError.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { GroupsManager } from "./GroupsServer.js";
 import { ClusterId } from "../../datatype/ClusterId.js";

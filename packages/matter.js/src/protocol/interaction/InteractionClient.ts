@@ -12,8 +12,9 @@ import { Logger } from "../../log/Logger.js";
 import { StatusCode, TlvAttributeReport } from "./InteractionProtocol.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
 import {
-    DataReport, IncomingInteractionClientMessenger, InteractionClientMessenger, ReadRequest, StatusResponseError
+    DataReport, IncomingInteractionClientMessenger, InteractionClientMessenger, ReadRequest
 } from "./InteractionMessenger.js";
+import { StatusResponseError } from "./StatusResponseError.js";
 import { attributePathToId, INTERACTION_PROTOCOL_ID } from "./InteractionServer.js";
 import { DecodedAttributeReportValue, normalizeAndDecodeReadAttributeReport } from "./AttributeDataDecoder.js";
 import { NodeId } from "../../datatype/NodeId.js";

@@ -11,27 +11,16 @@ import { Message } from "../../codec/MessageCodec.js";
 import { Logger } from "../../log/Logger.js";
 import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
 import { Endpoint } from "../../device/Endpoint.js";
+import { StatusResponseError } from "../../protocol/interaction/StatusResponseError.js";
 
 const logger = Logger.get("CommandServer");
-
-/**
- * This error type allows a command handler to communicate the appropriate
- * status code to CommandServer by throwing an exception.
- */
-export class CommandError extends Error {
-    constructor(message: string, public code: StatusCode) {
-        super(message);
-    }
-}
 
 /**
  * Specialization of CommandError for handlers that are not implemented, either
  * because we haven't gotten to it yet or because the library consumer needs to
  * implement the handler.
- * 
- * TODO - maybe we should have a TodoCommandError to differentiate?
  */
-export class UnsupportedCommandError extends CommandError {
+export class UnsupportedCommandError extends StatusResponseError {
     constructor(message = "Not implemented") {
         super(message, StatusCode.UnsupportedCommand);
     }
@@ -58,9 +47,9 @@ export class CommandServer<RequestT, ResponseT> {
             logger.debug(`Invoke ${this.name} response : ${Logger.toJSON(response)}`);
             return { code: StatusCode.Success, responseId: this.responseId, response: this.responseSchema.encodeTlv(response) };
         } catch (e) {
-            if (e instanceof CommandError) {
+            if (e instanceof StatusResponseError) {
                 // Graceful command failure
-                logger.debug(`Invoke ${this.name} exception : ${e.message} (code ${e.code})`);
+                logger.debug(`Invoke ${this.name} error : ${e.message}`);
                 return { code: e.code, responseId: this.responseId, response: [] };
             } else {
                 // Internal error

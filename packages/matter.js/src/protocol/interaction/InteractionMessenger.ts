@@ -7,7 +7,6 @@
 import { ByteArray } from "../../util/ByteArray.js";
 import { Logger } from "../../log/Logger.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
-import { MatterError } from "../../common/MatterError.js";
 import { MessageExchange, UnexpectedMessageError, RetransmissionLimitReachedError } from "../../protocol/MessageExchange.js";
 import { ExchangeProvider } from "../../protocol/ExchangeManager.js";
 import { MatterController } from "../../MatterController.js";
@@ -18,6 +17,7 @@ import {
 } from "./InteractionProtocol.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Message } from "../../codec/MessageCodec.js";
+import { StatusResponseError } from "./StatusResponseError.js";
 
 export const enum MessageType {
     StatusResponse = 0x01,
@@ -41,18 +41,6 @@ export type InvokeResponse = TypeFromSchema<typeof TlvInvokeResponse>;
 export type TimedRequest = TypeFromSchema<typeof TlvTimedRequest>;
 export type WriteRequest = TypeFromSchema<typeof TlvWriteRequest>;
 export type WriteResponse = TypeFromSchema<typeof TlvWriteResponse>;
-
-/** Error base Class for all errors related to the status response messages. */
-export class StatusResponseError extends MatterError {
-    public constructor(
-        message: string,
-        public readonly code: StatusCode,
-    ) {
-        super();
-
-        this.message = `(${code}) ${message}`;
-    }
-}
 
 const MAX_SPDU_LENGTH = 1024;
 
