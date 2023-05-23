@@ -16,13 +16,10 @@ import { Time, TimeFake } from "@project-chip/matter.js/time";
 Time.get = () => new TimeFake(0);
 
 import * as assert from "assert";
-import { ClusterServer, StatusCode } from "@project-chip/matter.js/interaction";
+import { StatusCode } from "@project-chip/matter.js/interaction";
 import { SecureSession } from "@project-chip/matter.js/session";
 import { Fabric, FabricJsonObject } from "@project-chip/matter.js/fabric";
-import {
-    GroupsCluster, GroupsClusterHandler, ScenesCluster, ScenesClusterHandler, OnOffCluster, OnOffClusterHandler,
-    ClusterServerObj
-} from "@project-chip/matter.js/cluster";
+import { GroupsCluster, ScenesCluster, OnOffCluster, ClusterServerObj, ClusterServerFactory } from "@project-chip/matter.js/cluster";
 import { GroupId, AttributeId, ClusterId } from "@project-chip/matter.js/datatype";
 import { getPromiseResolver } from "@project-chip/matter.js/util";
 import { SessionType, Message } from "@project-chip/matter.js/codec";
@@ -40,16 +37,16 @@ describe("Scenes Server test", () => {
 
     // TODO make that nicer and maybe  move to a "testing support library"
     async function initializeTestEnv() {
-        groupsServer = ClusterServer(GroupsCluster, { nameSupport: { groupNames: true } }, GroupsClusterHandler());
-        scenesServer = ClusterServer(ScenesCluster, {
+        groupsServer = ClusterServerFactory.create(GroupsCluster, { nameSupport: { groupNames: true } });
+        scenesServer = ClusterServerFactory.create(ScenesCluster, {
             sceneCount: 0,
             currentScene: 0,
             currentGroup: new GroupId(0),
             sceneValid: false,
             nameSupport: { sceneNames: true },
             lastConfiguredBy: null
-        }, ScenesClusterHandler());
-        onOffServer = ClusterServer(OnOffCluster, { onOff: true }, OnOffClusterHandler());
+        });
+        onOffServer = ClusterServerFactory.create(OnOffCluster, { onOff: true });
         testSession = await createTestSessionWithFabric();
         testFabric = testSession.getFabric();
 

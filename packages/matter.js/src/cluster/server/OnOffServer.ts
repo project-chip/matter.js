@@ -22,7 +22,7 @@ TODO: Global Cluster fields needs to be added also here because, as discussed, b
 * FabricIndex: empty
  */
 
-ClusterServerFactory.register(OnOffCluster, () => ({
+ClusterServerFactory.registerClusterDefaults(OnOffCluster, () => ({
     on: async ({ attributes: { onOff } }) => {
         onOff.set(true);
     },

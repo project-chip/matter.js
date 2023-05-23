@@ -296,7 +296,7 @@ describe("Endpoint Structures", () => {
             assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(1)]);
 
             assert.equal(attributePaths.length, 146);
-            assert.equal(commandPaths.length, 38);
+            assert.equal(commandPaths.length, 39);
         });
     });
 
@@ -369,7 +369,7 @@ describe("Endpoint Structures", () => {
             assert.deepEqual(composedPartsListAttribute?.getLocal(), [new EndpointNumber(2), new EndpointNumber(3)]);
 
             assert.equal(attributePaths.length, 200);
-            assert.equal(commandPaths.length, 58);
+            assert.equal(commandPaths.length, 60);
         });
     });
 
@@ -438,7 +438,7 @@ describe("Endpoint Structures", () => {
             assert.deepEqual(deviceTypeListAttribute?.getLocal(), [{ deviceType: new DeviceTypeId(DeviceTypes.ON_OFF_LIGHT.code), revision: 2 }, { deviceType: new DeviceTypeId(DeviceTypes.BRIDGED_NODE.code), revision: 1 }]);
 
             assert.equal(attributePaths.length, 162);
-            assert.equal(commandPaths.length, 38);
+            assert.equal(commandPaths.length, 39);
         });
 
         it("Device Structure with one aggregator and two Light endpoints and defined endpoint IDs", () => {
@@ -512,7 +512,7 @@ describe("Endpoint Structures", () => {
             assert.deepEqual(deviceTypeListAttribute?.getLocal(), [{ deviceType: new DeviceTypeId(DeviceTypes.ON_OFF_LIGHT.code), revision: 2 }, { deviceType: new DeviceTypeId(DeviceTypes.BRIDGED_NODE.code), revision: 1 }]);
 
             assert.equal(attributePaths.length, 214);
-            assert.equal(commandPaths.length, 58);
+            assert.equal(commandPaths.length, 60);
         });
 
         it("Device Structure with two aggregators and two Light endpoints and defined endpoint IDs", () => {
@@ -632,7 +632,7 @@ describe("Endpoint Structures", () => {
             assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(1), new EndpointNumber(11), new EndpointNumber(12), new EndpointNumber(2), new EndpointNumber(21), new EndpointNumber(22)]);
 
             assert.equal(attributePaths.length, 339);
-            assert.equal(commandPaths.length, 98);
+            assert.equal(commandPaths.length, 102);
         });
 
         it("Device Structure with two aggregators and two Light endpoints and all auto-assigned endpoint IDs", () => {
@@ -749,7 +749,7 @@ describe("Endpoint Structures", () => {
             assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(1), new EndpointNumber(2), new EndpointNumber(3), new EndpointNumber(4), new EndpointNumber(5), new EndpointNumber(6)]);
 
             assert.equal(attributePaths.length, 339);
-            assert.equal(commandPaths.length, 98);
+            assert.equal(commandPaths.length, 102);
         });
 
         it("Device Structure with two aggregators and two Light endpoints and all partly autoassigned endpoint IDs", () => {
@@ -871,7 +871,7 @@ describe("Endpoint Structures", () => {
             assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(37), new EndpointNumber(3), new EndpointNumber(38), new EndpointNumber(39), new EndpointNumber(40), new EndpointNumber(18)]);
 
             assert.equal(attributePaths.length, 339);
-            assert.equal(commandPaths.length, 98);
+            assert.equal(commandPaths.length, 102);
         });
 
     });

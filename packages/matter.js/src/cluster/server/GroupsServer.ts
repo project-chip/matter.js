@@ -71,7 +71,7 @@ export class GroupsManager {
     }
 }
 
-ClusterServerFactory.register(GroupsCluster, () => {
+ClusterServerFactory.registerClusterDefaults(GroupsCluster, () => {
     const addGroupLogic = (groupId: GroupId, groupName: string, sessionType: SessionType, fabric: Fabric, endpointId: number) => {
         // TODO If the AddGroup command was received as a unicast, the server SHALL generate an AddGroupResponse
         //      command with the Status field set to the evaluated status. If the AddGroup command was received

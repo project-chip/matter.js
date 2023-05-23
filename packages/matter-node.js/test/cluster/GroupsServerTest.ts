@@ -20,7 +20,7 @@ import { ClusterServer, StatusCode } from "@project-chip/matter.js/interaction";
 import { SecureSession } from "@project-chip/matter.js/session";
 import { Fabric, FabricJsonObject } from "@project-chip/matter.js/fabric";
 import {
-    ClusterServerObj, GroupsCluster, GroupsClusterHandler, IdentifyCluster, ClusterServerHandlers, IdentifyType
+    ClusterServerObj, GroupsCluster, IdentifyCluster, ClusterServerHandlers, IdentifyType, ClusterServerFactory
 } from "@project-chip/matter.js/cluster";
 import { GroupId } from "@project-chip/matter.js/datatype";
 import { getPromiseResolver } from "@project-chip/matter.js/util";
@@ -37,7 +37,7 @@ describe("Groups Server test", () => {
 
     // TODO make that nicer and maybe  move to a "testing support library"
     async function initializeTestEnv() {
-        groupsServer = ClusterServer(GroupsCluster, { nameSupport: { groupNames: true } }, GroupsClusterHandler());
+        groupsServer = ClusterServerFactory.create(GroupsCluster);
         const identifyServer = ClusterServer(
             IdentifyCluster,
             {

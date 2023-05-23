@@ -15,6 +15,7 @@ import {
 } from "../OperationalCredentialsCluster.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
 import { ClusterServerHandlers } from "./ClusterServer.js";
+import { UnsupportedCommandError } from "./CommandServer.js";
 
 export interface OperationalCredentialsServerConf {
     devicePrivateKey: ByteArray,
@@ -88,7 +89,7 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
     },
 
     updateOperationalCert: async () => {
-        throw new Error("Not implemented");
+        throw new UnsupportedCommandError();
     },
 
     updateFabricLabel: async ({ request: { label }, session }) => {

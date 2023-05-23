@@ -5,10 +5,6 @@
  */
 import { DeviceTypes, DeviceTypeDefinition } from "./DeviceTypes.js";
 import { Device } from "./Device.js";
-import { createDefaultOnOffClusterServer } from "../cluster/server/OnOffServer.js";
-import { createDefaultGroupsClusterServer } from "../cluster/server/GroupsServer.js";
-import { createDefaultScenesClusterServer } from "../cluster/server/ScenesServer.js";
-import { createDefaultIdentifyClusterServer } from "../cluster/server/IdentifyServer.js";
 import { AttributeInitialValues, ClusterServerHandlers, CommandHandler } from "../cluster/server/ClusterServer.js";
 import { IdentifyCluster, } from "../cluster/IdentifyCluster.js";
 import { OnOffCluster } from "../cluster/OnOffCluster.js";

@@ -6,29 +6,30 @@
 
 import { EthernetNetworkCommissioningCluster } from "../NetworkCommissioningCluster.js"
 import { ClusterServerHandlers } from "./ClusterServer.js"
+import { UnsupportedCommandError } from "./CommandServer.js";
 
 export const NetworkCommissioningHandler: () => ClusterServerHandlers<typeof EthernetNetworkCommissioningCluster> = () => ({
     scanNetworks: async function() {
-        throw new Error("Not implemented");
+        throw new UnsupportedCommandError();
     },
 
     removeNetwork: async function() {
-        throw new Error("Not implemented");
+        throw new UnsupportedCommandError();
     },
 
     connectNetwork: async function() {
-        throw new Error("Not implemented");
+        throw new UnsupportedCommandError();
     },
 
     reorderNetwork: async function() {
-        throw new Error("Not implemented");
+        throw new UnsupportedCommandError();
     },
 
     addOrUpdateWiFiNetwork: async function() {
-        throw new Error("Not implemented");
+        throw new UnsupportedCommandError();
     },
 
     addOrUpdateThreadNetwork: async function() {
-        throw new Error("Not implemented");
+        throw new UnsupportedCommandError();
     }
 });

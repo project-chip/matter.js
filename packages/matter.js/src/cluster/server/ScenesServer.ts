@@ -125,7 +125,7 @@ export class ScenesManager {
     }
 }
 
-ClusterServerFactory.register(ScenesCluster, () => {
+ClusterServerFactory.registerClusterDefaults(ScenesCluster, () => {
     const addSceneLogic = (endpointId: number, groupId: GroupId, sceneId: number, sceneTransitionTime: number, sceneName: string, extensionFieldSets: any, transitionTime100ms: number, fabric: Fabric) => {
 
         if (groupId.id !== 0 && !GroupsManager.hasGroup(fabric, endpointId, groupId)) {

@@ -16,6 +16,11 @@ import { TlvBitmap, TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
+export const BaseClustersMap = {} as { [key: Cluster<any, any, any, any, any>["id"]]: Cluster<any, any, any, any, any> };
+
+// Extension clusters do not have a unique ID so we must track them separately
+export const ExtensionClusterMap = {} as { [key: Cluster<any, any, any, any, any>["id"]]: Cluster<any, any, any, any, any>[] }
+
 export const enum AccessLevel {
     View,
     Manage,
@@ -35,6 +40,7 @@ export const WritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<
 export const OptionalWritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { scene = false, persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View, writeAcl = AccessLevel.View }: AttributeOptions<V> = {}): OptionalWritableAttribute<T> => ({ id, schema, optional: true, writable: true, scene, persistent, omitChanges, default: conformanceValue, readAcl, writeAcl });
 
 export type MandatoryAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends OptionalAttribute<any> ? never : K }[keyof A];
+export type MandatoryLocalAttributeNames<A extends Attributes> = Exclude<MandatoryAttributeNames<A>, keyof GlobalAttributes<any>>;
 export type OptionalAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends OptionalAttribute<any> ? K : never }[keyof A];
 
 /* Interfaces and helper methods to define a cluster command */
@@ -92,7 +98,6 @@ export const GlobalAttributes = <F extends BitSchema>(features: F) => ({
     acceptedCommandList: Attribute(0xFFF9, TlvArray(TlvCommandId)),
     generatedCommandList: Attribute(0xFFF8, TlvArray(TlvCommandId)),
 } as GlobalAttributes<F>);
-
 export interface Cluster<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events> {
     id: number,
     name: string,
@@ -121,16 +126,20 @@ export const Cluster = <F extends BitSchema, SF extends TypeFromBitSchema<F>, A 
     attributes?: A,
     commands?: C,
     events?: E,
-}): Cluster<F, SF, Merge<A, GlobalAttributes<F>>, C, E> => ({
-    id,
-    name,
-    revision,
-    features,
-    supportedFeatures,
-    commands,
-    attributes: Merge(attributes, GlobalAttributes(features)),
-    events,
-});
+}) => {
+    const cluster = {
+        id,
+        name,
+        revision,
+        features,
+        supportedFeatures,
+        commands,
+        attributes: Merge(attributes, GlobalAttributes(features)),
+        events,
+    } as Cluster<F, SF, Merge<A, GlobalAttributes<F>>, C, E>;
+    BaseClustersMap[id] = cluster;
+    return cluster;
+};
 
 type ClusterExtend<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events> = {
     supportedFeatures: SF,
@@ -160,14 +169,8 @@ export const ClusterExtend =
             commands: commandsExtend = <C_EXTEND>{},
             events: eventsExtend = <E_EXTEND>{},
         }: ClusterExtend<F, SF_EXTEND, A_EXTEND, C_EXTEND, E_EXTEND>
-    ): Cluster<
-        F,
-        Merge<SF_BASE, SF_EXTEND>,
-        Merge<A_BASE, A_EXTEND>,
-        Merge<C_BASE, C_EXTEND>,
-        Merge<E_BASE, E_EXTEND>
-    > => (
-        {
+    ) => {
+        const cluster = {
             id,
             name,
             revision,
@@ -176,5 +179,14 @@ export const ClusterExtend =
             attributes: Merge(attributes, attributesExtend),
             commands: Merge(commands, commandsExtend),
             events: Merge(events, eventsExtend),
-        }
-    );
+        } as Cluster<
+            F,
+            Merge<SF_BASE, SF_EXTEND>,
+            Merge<A_BASE, A_EXTEND>,
+            Merge<C_BASE, C_EXTEND>,
+            Merge<E_BASE, E_EXTEND>
+        >;
+        const extensionSlot = ExtensionClusterMap[id] || (ExtensionClusterMap[id] = []);
+        extensionSlot.push(cluster);
+        return cluster;
+    };

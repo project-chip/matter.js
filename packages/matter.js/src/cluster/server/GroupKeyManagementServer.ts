@@ -6,20 +6,21 @@
 
 import { ClusterServerHandlers } from "./ClusterServer.js";
 import { GroupKeyManagementCluster } from "../GroupKeyManagementCluster.js";
+import { UnsupportedCommandError } from "./CommandServer.js";
 
 // TODO: Implement this
 
 export const GroupKeyManagementClusterHandler: () => ClusterServerHandlers<typeof GroupKeyManagementCluster> = () => ({
     keySetWrite: async () => {
-        throw new Error("Not implemented");
+        throw new UnsupportedCommandError();
     },
     keySetRead: async () => {
-        throw new Error("Not implemented");
+        throw new UnsupportedCommandError();
     },
     keySetRemove: async () => {
-        throw new Error("Not implemented");
+        throw new UnsupportedCommandError();
     },
     keySetReadAllIndices: async () => {
-        throw new Error("Not implemented");
+        throw new UnsupportedCommandError();
     }
 });
