@@ -68,6 +68,19 @@ describe("JsonConverter", () => {
             assert.ok(decodedObj instanceof Uint8Array);
         });
 
+        it("encode/decode Node.js Buffer", () => {
+
+            const obj = { type: 'Buffer', data: [1, 2, 3] };
+
+            const json = toJson(obj);
+
+            assert.equal(json, `"{\\"__object__\\":\\"Uint8Array\\",\\"__value__\\":\\"010203\\"}"`);
+
+            const decodedObj = fromJson(json);
+
+            assert.ok(decodedObj instanceof Uint8Array);
+        });
+
         it("encode/decode Map", () => {
             const obj = new Map([["a", 1], ["b", 2], ["c", 3]]);
 

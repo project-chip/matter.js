@@ -57,6 +57,9 @@ export function toJson(object: SupportedStorageTypes): string {
         if (value instanceof Uint8Array) {
             return `{"${JSON_SPECIAL_KEY_TYPE}":"Uint8Array","${JSON_SPECIAL_KEY_VALUE}":"${value.toHex()}"}`;
         }
+        if (value != null && typeof value === 'object' && value.type === 'Buffer' && value.data instanceof Array) {
+            return `{"${JSON_SPECIAL_KEY_TYPE}":"Uint8Array","${JSON_SPECIAL_KEY_VALUE}":"${Uint8Array.from(value.data).toHex()}"}`;
+        }
         if (value instanceof Map) {
             return `{"${JSON_SPECIAL_KEY_TYPE}":"Map","${JSON_SPECIAL_KEY_VALUE}":${JSON.stringify(toJson(Array.from(value.entries())))}}`;
         }
