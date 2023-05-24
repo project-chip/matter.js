@@ -18,6 +18,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Fix Typing of Commands in ClusterClient if no commands were present
   * Fix: Fix equality checks in Attribute servers to check deeper then just === (and introduce new util method isDeepEqual)
   * Fix: Make sure an error received from sending subscription seed data reports is not bubbling up and activate subscription after successful seeding
+  * Fix: Allows Node.js Buffer objects to be persisted to storage as a Uint8Arrays that they subclass
 * matter.js API:
   * Breaking: Adjusted some constructors of the new API and remove the option to pass an array of clusters to be added initially because this was no longer compatible to the strong typing in some places. Use addClusterServer and addClusterClient methods
   * Deprecation: The classes MatterDevice and MatterController are deprecated to be used externally to the library and will be removed in later versions.
