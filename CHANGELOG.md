@@ -16,9 +16,11 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Fix: Added missing PulseWidthModulationLevelControlCluster to AllCLusters
   * Fix Typing of Commands in ClusterClient if no commands were present
   * Fix: Fix equality checks in Attribute servers to check deeper then just === (and introduce new util method isDeepEqual)
+  * Fix: Make sure an error received from sending subscription seed data reports is not bubbling up and activate subscription after successful seeding
 * matter.js API:
-  * Breaking: Remove the Legacy API classes from examples and also do not export them anymore. use the new API please!
   * Breaking: Adjusted some constructors of the new API and remove the option to pass an array of clusters to be added initially because this was no longer compatible to the strong typing in some places. Use addClusterServer and addClusterClient methods
+  * Deprecation: The classes MatterDevice and MatterController are deprecated to be used externally to the library and will be removed in later versions.
+  * Deprecation: The CLI Examples LegacyDeviceNode and LegacyControllerNode will be removed in next version! Use the new variants please.
 * Misc:
   * Added Specification links for Matter Specifications 1.1
 
