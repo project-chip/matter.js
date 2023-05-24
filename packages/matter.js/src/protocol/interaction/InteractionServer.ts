@@ -268,7 +268,7 @@ export function ClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<
     for (const eventName in eventDef) {
         const { id, schema, priority, optional } = eventDef[eventName];
         if (!optional && (supportedEvents as any)[eventName] !== true) {
-            // throw new Error(`Event ${eventName} needs to be supported by cluster ${name} (${clusterId})`);
+            throw new Error(`Event ${eventName} needs to be supported by cluster ${name} (${clusterId})`);
         }
         if ((supportedEvents as any)[eventName] === true) {
             (events as any)[eventName] = new EventServer(id, clusterId, eventName, schema, priority);
