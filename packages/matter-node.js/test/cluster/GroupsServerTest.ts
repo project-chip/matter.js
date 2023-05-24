@@ -52,11 +52,11 @@ describe("Groups Server test", () => {
         testSession = await createTestSessionWithFabric();
         testFabric = testSession.getFabric();
 
-        endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], [/*groupsServer, identifyServer*/], 1);
+        endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], 1);
         endpoint.addClusterServer(groupsServer);
         endpoint.addClusterServer(identifyServer);
 
-        endpoint2 = new Endpoint([DeviceTypes.ON_OFF_LIGHT], [], 2);
+        endpoint2 = new Endpoint([DeviceTypes.ON_OFF_LIGHT], 2);
     }
 
     describe("Basic groups actions", () => {
@@ -242,7 +242,7 @@ describe("Groups Server test", () => {
             await initializeTestEnv();
             const identifyCluster = endpoint?.getClusterServer(IdentifyCluster);
             assert.ok(identifyCluster);
-            identifyCluster.attributes.identifyTime.set(0); // Change to not identifying
+            identifyCluster.attributes.identifyTime.setLocal(0); // Change to not identifying
         });
 
         it("nothing is added because we are not identifying", async () => {

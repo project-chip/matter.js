@@ -25,7 +25,7 @@ export class ComposedDevice extends Endpoint {
         devices: Device[] = [],
         endpointId?: number
     ) {
-        super(deviceTypes, [], endpointId);
+        super(deviceTypes, endpointId);
         devices.forEach(device => this.addDevice(device));
     }
 

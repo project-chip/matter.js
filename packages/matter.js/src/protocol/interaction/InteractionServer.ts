@@ -24,10 +24,15 @@ import { Message } from "../../codec/MessageCodec.js";
 import { Crypto } from "../../crypto/Crypto.js";
 import { decodeValueForSchema, normalizeAttributeData } from "./AttributeDataDecoder.js";
 import {
-    AttributeInitialValues, AttributeServers, ClusterServerHandlers, ClusterServerObj, CommandServers
+    AttributeInitialValues, AttributeServers, ClusterServerHandlers, ClusterServerObj, CommandServers,
 } from "../../cluster/server/ClusterServer.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
-import { AttributeGetterServer, AttributeServer } from "../../cluster/server/AttributeServer.js";
+import {
+    AttributeGetterServer,
+    AttributeServer,
+    FabricScopedAttributeServer,
+    FixedAttributeServer
+} from "../../cluster/server/AttributeServer.js";
 import { Logger } from "../../log/Logger.js";
 import { StorageContext } from "../../storage/StorageContext.js";
 import { StorageManager } from "../../storage/StorageManager.js";
@@ -36,6 +41,7 @@ import { Endpoint } from "../../device/Endpoint.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { CommandId } from "../../datatype/CommandId.js";
 import { TlvAttributeValuePair } from "../../cluster/ScenesCluster.js";
+import { Fabric } from "../../fabric/Fabric.js";
 
 export const INTERACTION_PROTOCOL_ID = 0x0001;
 
@@ -137,38 +143,57 @@ export function ClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<
     const attributeList = new Array<AttributeId>();
     for (const attributeName in attributeDef) {
         const capitalizedAttributeName = capitalize(attributeName);
+        const { id, schema, writable, persistent, fabricScoped, scene, fixed } = attributeDef[attributeName];
         if ((attributesInitialValues as any)[attributeName] !== undefined) {
-            const { id, schema, writable, persistent, scene } = attributeDef[attributeName];
             const validator = typeof schema.validate === 'function' ? schema.validate.bind(schema) : undefined;
-            const getter = (handlers as any)[`get${capitalize(attributeName)}`];
-            if (getter === undefined) {
-                (attributes as any)[attributeName] = new AttributeServer(id, attributeName, schema, validator ?? (() => { /* no validation */
+            if (fixed) {
+                (attributes as any)[attributeName] = new FixedAttributeServer(id, attributeName, schema, validator ?? (() => { /* no validation */
                 }), writable, (attributesInitialValues as any)[attributeName]);
+                result[`get${capitalizedAttributeName}Attribute`] = () => (attributes as any)[attributeName].getLocal();
+            }
+            else if (fabricScoped) {
+                (attributes as any)[attributeName] = new FabricScopedAttributeServer(id, attributeName, schema, validator ?? (() => { /* no validation */
+                }), writable, (attributesInitialValues as any)[attributeName], clusterDef);
+                result[`get${capitalizedAttributeName}Attribute`] = (fabric: Fabric) => (attributes as any)[attributeName].getLocal(fabric);
+                result[`set${capitalizedAttributeName}Attribute`] = <T,>(value: T, fabric: Fabric) => (attributes as any)[attributeName].setLocal(value, fabric);
+                result[`subscribe${capitalizedAttributeName}Attribute`] = <T,>(listener: (newValue: T, oldValue: T) => void) => (attributes as any)[attributeName].addListener(listener);
             } else {
-                (attributes as any)[attributeName] = new AttributeGetterServer(id, attributeName, schema, validator ?? (() => { /* no validation */
-                }), writable, (attributesInitialValues as any)[attributeName], (session, endpoint) => getter({ attributes, endpoint, session }));
+                const getter = (handlers as any)[`get${capitalize(attributeName)}`];
+                if (getter === undefined) {
+                    (attributes as any)[attributeName] = new AttributeServer(id, attributeName, schema, validator ?? (() => { /* no validation */
+                    }), writable, (attributesInitialValues as any)[attributeName]);
+                } else {
+                    (attributes as any)[attributeName] = new AttributeGetterServer(id, attributeName, schema, validator ?? (() => { /* no validation */
+                    }), writable, (attributesInitialValues as any)[attributeName], (session, endpoint) => getter({
+                        attributes,
+                        endpoint,
+                        session
+                    }));
+                }
+                if (persistent) {
+                    const listener = (value: any, version: number) => attributeStorageListener(attributeName, version, value);
+                    attributeStorageListeners.set(id, listener);
+                    (attributes as any)[attributeName].addMatterListener(listener);
+                }
+                if (scene) {
+                    sceneAttributeList.push(attributeName);
+                }
+                result[`get${capitalizedAttributeName}Attribute`] = () => (attributes as any)[attributeName].getLocal();
+                result[`set${capitalizedAttributeName}Attribute`] = <T,>(value: T) => (attributes as any)[attributeName].setLocal(value);
+                result[`subscribe${capitalizedAttributeName}Attribute`] = <T,>(listener: (newValue: T, oldValue: T) => void) => (attributes as any)[attributeName].addListener(listener);
             }
-            if (persistent) {
-                const listener = (value: any, version: number) => attributeStorageListener(attributeName, version, value);
-                attributeStorageListeners.set(id, listener);
-                (attributes as any)[attributeName].addMatterListener(listener);
-            }
-            if (scene) {
-                sceneAttributeList.push(attributeName);
-            }
-            result[`get${capitalizedAttributeName}Attribute`] = () => (attributes as any)[attributeName].get();
-            result[`set${capitalizedAttributeName}Attribute`] = <T,>(value: T) => (attributes as any)[attributeName].set(value);
-            result[`subscribe${capitalizedAttributeName}Attribute`] = <T,>(listener: (newValue: T, oldValue: T) => void) => (attributes as any)[attributeName].addListener(listener);
             attributeList.push(new AttributeId(id));
         } else {
             // TODO: Find maybe a better way to do this including strong typing according to attribute initial values set?
             result[`get${capitalizedAttributeName}Attribute`] = () => undefined;
-            result[`set${capitalizedAttributeName}Attribute`] = () => {
-                throw new Error(`Attribute ${attributeName} is optional and not initialized. To use it please initialize it first.`);
-            };
-            result[`subscribe${capitalizedAttributeName}Attribute`] = () => {
-                throw new Error(`Attribute ${attributeName} is optional and not initialized. To use it please initialize it first.`);
-            };
+            if (!fixed) {
+                result[`set${capitalizedAttributeName}Attribute`] = () => {
+                    throw new Error(`Attribute ${attributeName} is optional and not initialized. To use it please initialize it first.`);
+                };
+                result[`subscribe${capitalizedAttributeName}Attribute`] = () => {
+                    throw new Error(`Attribute ${attributeName} is optional and not initialized. To use it please initialize it first.`);
+                };
+            }
         }
     }
     (attributes as any).attributeList.set(attributeList);
@@ -210,7 +235,7 @@ export interface AttributePath {
 
 export interface AttributeWithPath {
     path: TypeFromSchema<typeof TlvAttributePath>,
-    attribute: AttributeServer<any>,
+    attribute: AttributeServer<any> | FabricScopedAttributeServer<any> | FixedAttributeServer<any>,
 }
 
 export function commandPathToId({ endpointId, clusterId, commandId }: CommandPath) {
@@ -228,9 +253,9 @@ function toHex(value: number | undefined) {
 export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
     private endpoints = new Map<number, Endpoint>();
-    private attributes = new Map<string, AttributeServer<any>>();
+    private attributes = new Map<string, (AttributeServer<any> | FabricScopedAttributeServer<any> | FixedAttributeServer<any>)>();
     private attributePaths = new Array<AttributePath>();
-    private commands = new Map<string, CommandServer<Attributes, Commands>>();
+    private commands = new Map<string, CommandServer<any, any>>();
     //private commandPaths = new Array<CommandPath>(); // TODO Re-add when supporting wildcard commands
     private nextSubscriptionId = Crypto.getRandomUInt32();
 
@@ -322,6 +347,9 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                 try {
                     const value = decodeValueForSchema(schema, values, defaultValue);
                     logger.debug(`Handle write request from ${exchange.channel.getName()} resolved to: ${this.resolveAttributeName(path)}=${Logger.toJSON(value)} (Version=${dataVersion})`);
+                    if (attribute instanceof FixedAttributeServer) {
+                        throw new Error("Fixed attributes cannot be written");
+                    }
                     attribute.set(value, exchange.session);
                 } catch (error: any) {
                     if (attributes.length === 1) { // For Multi-Attribute-Writes we ignore errors
@@ -524,7 +552,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                     && (clusterId === undefined || clusterId === path.clusterId)
                     && (attributeId === undefined || attributeId === path.attributeId))
                     .forEach(path => {
-                        const attribute = this.attributes.get(attributePathToId(path)) as AttributeServer<any>;
+                        const attribute = this.attributes.get(attributePathToId(path));
                         if (attribute === undefined) return;
                         if (onlyWritable && !attribute.isWritable) return;
                         result.push({ path, attribute })

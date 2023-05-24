@@ -8,8 +8,8 @@ import { DeviceClasses, DeviceTypeDefinition, DeviceTypes } from "./DeviceTypes.
 import { Endpoint } from "./Endpoint.js";
 import { AtLeastOne } from "../util/Array.js";
 import { HandlerFunction, NamedHandler } from "../util/NamedHandler.js";
-import { ClusterClientObj } from "../cluster/client/ClusterClient.js";
-import { ClusterServerObj } from "../cluster/server/ClusterServer.js";
+import { ClusterClientObj, isClusterClient } from "../cluster/client/ClusterClient.js";
+import { ClusterServerObj, isClusterServer } from "../cluster/server/ClusterServer.js";
 import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
 import { BitSchema, TypeFromBitSchema } from "../schema/BitmapSchema.js";
 import { BindingCluster } from "../cluster/BindingCluster.js";
@@ -33,7 +33,15 @@ export class PairedDevice extends Endpoint {
         clusters: (ClusterServerObj<Attributes, Commands> | ClusterClientObj<Attributes, Commands>)[] = [],
         endpointId: number
     ) {
-        super(definition, clusters, endpointId);
+        super(definition, endpointId);
+        clusters.forEach(cluster => {
+            if (isClusterServer(cluster)) {
+                this.addClusterServer(cluster);
+            } else if (isClusterClient(cluster)) {
+                this.addClusterClient(cluster);
+            }
+        });
+
         this.declineAddingMoreClusters = true;
     }
 
@@ -69,7 +77,7 @@ export class RootEndpoint extends Endpoint {
      */
     constructor(
     ) {
-        super([DeviceTypes.ROOT], [], 0);
+        super([DeviceTypes.ROOT], 0);
         this.deviceType = DeviceTypes.ROOT.code;
     }
 }
@@ -89,18 +97,16 @@ export class Device extends Endpoint {
      * Create a new Device instance.
      *
      * @param definition DeviceTypeDefinitions of the device
-     * @param clusters Optional Array of clusters to be added to the device directly
      * @param endpointId Optional endpoint ID of the device. If not set, the device will be instanced as a root device
      */
     constructor(
         definition: DeviceTypeDefinition,
-        clusters: (ClusterServerObj<Attributes, Commands> | ClusterClientObj<Attributes, Commands>)[] = [],
         endpointId?: number
     ) {
         if (definition.deviceClass === DeviceClasses.Node) {
             throw new Error("MatterNode devices are not supported");
         }
-        super([definition], clusters, endpointId);
+        super([definition], endpointId);
         this.deviceType = definition.code;
         if (definition.deviceClass === DeviceClasses.Simple || definition.deviceClass === DeviceClasses.Client) {
             this.addClusterServer(ClusterServer(
@@ -164,8 +170,9 @@ export class Device extends Endpoint {
         }
         for (const deviceType of this.deviceTypes) {
             if (deviceType.optionalServerClusters.includes(cluster.id)) {
-                const clusterServer = this.createOptionalClusterServer(cluster);
+                const clusterServer = this.createOptionalClusterServer<F, SF, A, C, E>(cluster);
                 this.addClusterServer(clusterServer);
+                return clusterServer;
             }
         }
     }

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AttributeServer } from "./AttributeServer.js";
+import { AttributeServer, FabricScopedAttributeServer, FixedAttributeServer } from "./AttributeServer.js";
 import {
     Cluster,
     Command,
@@ -19,7 +19,12 @@ import {
     GlobalAttributes,
     MandatoryAttributeNames,
     OptionalAttributeNames,
-    RequestType, ResponseType,
+    RequestType,
+    ResponseType,
+    WritableFabricScopedAttribute,
+    OptionalWritableFabricScopedAttribute,
+    FixedAttribute,
+    OptionalFixedAttribute,
 } from "../Cluster.js";
 import { Message } from "../../codec/MessageCodec.js";
 import { Merge } from "../../util/Type.js";
@@ -31,9 +36,12 @@ import { ClusterClientObj } from "../client/ClusterClient.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvAttributeValuePair } from "../ScenesCluster.js";
 import { Endpoint } from "../../device/Endpoint.js";
+import { Fabric } from "../../fabric/Fabric.js";
 
 /** Cluster attributes accessible on the cluster server */
-export type AttributeServers<A extends Attributes> = Merge<Omit<{ [P in MandatoryAttributeNames<A>]: AttributeServer<AttributeJsType<A[P]>> }, keyof GlobalAttributes<any>>, { [P in OptionalAttributeNames<A>]?: AttributeServer<AttributeJsType<A[P]>> }>;
+type MandatoryAttributeServers<A extends Attributes> = Omit<{ [P in MandatoryAttributeNames<A>]: A[P] extends WritableFabricScopedAttribute<any> ? FabricScopedAttributeServer<AttributeJsType<A[P]>> : (A[P] extends FixedAttribute<any> ? FixedAttributeServer<AttributeJsType<A[P]>> : AttributeServer<AttributeJsType<A[P]>>) }, keyof GlobalAttributes<any>>;
+type OptionalAttributeServers<A extends Attributes> = { [P in OptionalAttributeNames<A>]?: A[P] extends OptionalWritableFabricScopedAttribute<any> ? FabricScopedAttributeServer<AttributeJsType<A[P]>> : (A[P] extends OptionalFixedAttribute<any> ? FixedAttributeServer<AttributeJsType<A[P]>> : AttributeServer<AttributeJsType<A[P]>>) };
+export type AttributeServers<A extends Attributes> = Merge<MandatoryAttributeServers<A>, OptionalAttributeServers<A>>;
 
 /** Initial values for the cluster attribute */
 export type AttributeInitialValues<A extends Attributes> = Merge<Omit<{ [P in MandatoryAttributeNames<A>]: AttributeJsType<A[P]> }, keyof GlobalAttributes<any>>, { [P in OptionalAttributeNames<A>]?: AttributeJsType<A[P]> }>;
@@ -51,7 +59,7 @@ export type ClusterServerHandlers<C extends Cluster<any, any, any, any, any>> = 
 export type CommandServers<C extends Commands> = Merge<{ [P in MandatoryCommandNames<C>]: CommandServer<RequestType<C[P]>, ResponseType<C[P]>> }, { [P in OptionalCommandNames<C>]?: CommandServer<RequestType<C[P]>, ResponseType<C[P]>> }>;
 
 type OptionalAttributeConf<T extends Attributes> = { [K in OptionalAttributeNames<T>]?: true };
-type MakeAttributeMandatory<A extends Attribute<any>> = A extends OptionalWritableAttribute<infer T> ? WritableAttribute<T> : (A extends OptionalAttribute<infer T> ? Attribute<T> : A);
+type MakeAttributeMandatory<A extends Attribute<any>> = A extends OptionalWritableFabricScopedAttribute<infer T> ? WritableFabricScopedAttribute<T> : (A extends OptionalWritableAttribute<infer T> ? WritableAttribute<T> : (A extends OptionalAttribute<infer T> ? Attribute<T> : A));
 type MakeAttributesMandatory<T extends Attributes, C extends OptionalAttributeConf<T>> = { [K in keyof T]: K extends keyof C ? MakeAttributeMandatory<T[K]> : T[K] };
 
 const MakeAttributesMandatory = <T extends Attributes, C extends OptionalAttributeConf<T>>(attributes: T, conf: C): MakeAttributesMandatory<T, C> => {
@@ -66,10 +74,20 @@ type UseOptionalAttributes<C extends Cluster<any, any, any, any, any>, A extends
 /* eslint-disable @typescript-eslint/no-unused-vars */
 export const UseOptionalAttributes = <C extends Cluster<any, any, any, any, any>, A extends OptionalAttributeConf<C["attributes"]>>(cluster: C, conf: A): UseOptionalAttributes<C, A> => ({ ...cluster, attributes: MakeAttributesMandatory(cluster.attributes, conf) });
 
+export type FabricScopedAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends WritableFabricScopedAttribute<any> ? K : A[K] extends OptionalWritableFabricScopedAttribute<any> ? K : never }[keyof A];
+export type NonFixedAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends FixedAttribute<any> ? never : A[K] extends OptionalFixedAttribute<any> ? never : K }[keyof A];
+
 type GetterTypeFromSpec<A extends Attribute<any>> = A extends OptionalAttribute<infer T> ? (T | undefined) : AttributeJsType<A>;
-type ServerAttributeGetters<A extends Attributes> = { [P in keyof A as `get${Capitalize<string & P>}Attribute`]: () => GetterTypeFromSpec<A[P]> };
-type ServerAttributeSetters<A extends Attributes> = { [P in keyof A as `set${Capitalize<string & P>}Attribute`]: (value: AttributeJsType<A[P]>) => void };
-type ServerAttributeSubscribers<A extends Attributes> = { [P in keyof A as `subscribe${Capitalize<string & P>}Attribute`]: (listener: (newValue: AttributeJsType<A[P]>, oldValue: AttributeJsType<A[P]>) => void) => void };
+type ServerAttributeGetters<A extends Attributes> =
+    { [P in MandatoryAttributeNames<A> as `get${Capitalize<string & P>}Attribute`]: () => GetterTypeFromSpec<A[P]> } &
+    { [P in OptionalAttributeNames<A> as `get${Capitalize<string & P>}Attribute`]?: () => GetterTypeFromSpec<A[P]> } &
+    { [P in FabricScopedAttributeNames<A> as `get${Capitalize<string & P>}Attribute`]: (fabric: Fabric) => GetterTypeFromSpec<A[P]> };
+type ServerAttributeSetters<A extends Attributes> =
+    { [P in NonFixedAttributeNames<A> as `set${Capitalize<string & P>}Attribute`]: (value: AttributeJsType<A[P]>) => void } &
+    { [P in FabricScopedAttributeNames<A> as `set${Capitalize<string & P>}Attribute`]: (value: AttributeJsType<A[P]>, fabric: Fabric) => void };
+type ServerAttributeSubscribers<A extends Attributes> =
+    { [P in NonFixedAttributeNames<A> as `subscribe${Capitalize<string & P>}Attribute`]: (listener: (newValue: AttributeJsType<A[P]>, oldValue: AttributeJsType<A[P]>) => void) => void } &
+    { [P in FabricScopedAttributeNames<A> as `subscribe${Capitalize<string & P>}Attribute`]: (listener: (newValue: AttributeJsType<A[P]>, oldValue: AttributeJsType<A[P]>) => void, fabric: Fabric) => void };
 
 /** Strongly typed interface of a cluster server */
 export type ClusterServerObj<A extends Attributes, C extends Commands> =
