@@ -19,13 +19,13 @@ import { ClusterId } from "../datatype/ClusterId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { FixedLabelCluster, UserLabelCluster } from "../cluster/LabelCluster.js";
 import { ClusterClientObj } from "../cluster/client/ClusterClient.js";
-import { ClusterServerObj } from "../cluster/server/ClusterServer.js";
+import { ClusterServerObj, ClusterServerObjForCluster } from "../cluster/server/ClusterServer.js";
 import { InteractionClient } from "../protocol/interaction/InteractionClient.js";
 import { AllClustersMap } from "../cluster/index.js";
 
 export class Endpoint {
-    private readonly clusterServers = new Map<number, ClusterServerObj<Attributes, Commands>>();
-    private readonly clusterClients = new Map<number, ClusterClientObj<Attributes, Commands>>();
+    private readonly clusterServers = new Map<number, ClusterServerObj<Attributes, Commands, Events>>();
+    private readonly clusterClients = new Map<number, ClusterClientObj<Attributes, Commands, Events>>();
     private readonly childEndpoints: Endpoint[] = [];
     id: number | undefined;
     name: string;
@@ -89,15 +89,15 @@ export class Endpoint {
         fixedLabelCluster?.attributes.labelList.set(labelList);
     }
 
-    addClusterServer<A extends Attributes, C extends Commands>(cluster: ClusterServerObj<A, C>) {
+    addClusterServer<A extends Attributes, C extends Commands, E extends Events>(cluster: ClusterServerObj<A, C, E>) {
         cluster._assignToEndpoint(this);
         if (cluster.id === DescriptorCluster.id) {
-            this.descriptorCluster = cluster as unknown as ClusterServerObj<typeof DescriptorCluster.attributes, typeof DescriptorCluster.commands>;
+            this.descriptorCluster = cluster as unknown as ClusterServerObjForCluster<typeof DescriptorCluster>;
         }
         this.clusterServers.set(cluster.id, cluster);
     }
 
-    addClusterClient<A extends Attributes, C extends Commands>(cluster: ClusterClientObj<A, C>) {
+    addClusterClient<A extends Attributes, C extends Commands, E extends Events>(cluster: ClusterClientObj<A, C, E>) {
         this.clusterClients.set(cluster.id, cluster);
     }
 
@@ -105,29 +105,29 @@ export class Endpoint {
     // TODO add instance if optional and not existing, maybe get rid of undefined by throwing?
     getClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
         cluster: Cluster<F, SF, A, C, E>
-    ): ClusterServerObj<A, C> | undefined {
+    ): ClusterServerObj<A, C, E> | undefined {
         const clusterServer = this.clusterServers.get(cluster.id);
         if (clusterServer !== undefined) {
-            return clusterServer as ClusterServerObj<A, C>;
+            return clusterServer as ClusterServerObj<A, C, E>;
         }
     }
 
     getClusterClient<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
         cluster: Cluster<F, SF, A, C, E>,
         interactionClient?: InteractionClient
-    ): ClusterClientObj<A, C> | undefined {
+    ): ClusterClientObj<A, C, E> | undefined {
         const clusterClient = this.clusterClients.get(cluster.id);
         if (clusterClient !== undefined) {
-            return clusterClient._clone(interactionClient) as ClusterClientObj<A, C>;
+            return clusterClient._clone(interactionClient) as ClusterClientObj<A, C, E>;
         }
         return undefined;
     }
 
-    getClusterServerById(clusterId: number): ClusterServerObj<Attributes, Commands> | undefined {
+    getClusterServerById(clusterId: number): ClusterServerObj<Attributes, Commands, Events> | undefined {
         return this.clusterServers.get(clusterId);
     }
 
-    getClusterClientById(clusterId: number): ClusterClientObj<Attributes, Commands> | undefined {
+    getClusterClientById(clusterId: number): ClusterClientObj<Attributes, Commands, Events> | undefined {
         return this.clusterClients.get(clusterId);
     }
 
@@ -216,11 +216,11 @@ export class Endpoint {
         });
     }
 
-    getAllClusterServers(): ClusterServerObj<Attributes, Commands>[] {
+    getAllClusterServers(): ClusterServerObj<Attributes, Commands, Events>[] {
         return Array.from(this.clusterServers.values());
     }
 
-    getAllClusterClients(): ClusterClientObj<Attributes, Commands>[] {
+    getAllClusterClients(): ClusterClientObj<Attributes, Commands, Events>[] {
         return Array.from(this.clusterClients.values());
     }
 

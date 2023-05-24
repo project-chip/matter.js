@@ -60,11 +60,15 @@ export const OptionalCommand = <RequestT, ResponseT>(requestId: number, requestS
 export const enum EventPriority {
     Critical,
     Info,
+    Debug,
 }
 export interface Event<T> { id: number, schema: TlvSchema<T>, priority: EventPriority, optional: boolean }
 export interface OptionalEvent<T> extends Event<T> { optional: true }
 export const Event = <FT extends TlvFields>(id: number, priority: EventPriority, data: FT = <FT>{}): Event<TypeFromFields<FT>> => ({ id, schema: TlvObject(data), priority, optional: false });
-export const OptionalEvent = <FT extends TlvFields>(id: number, priority: EventPriority, data: FT = <FT>{}): Event<TypeFromFields<FT>> => ({ id, schema: TlvObject(data), priority, optional: true });
+export const OptionalEvent = <FT extends TlvFields>(id: number, priority: EventPriority, data: FT = <FT>{}): OptionalEvent<TypeFromFields<FT>> => ({ id, schema: TlvObject(data), priority, optional: true });
+export type EventType<T extends Event<any>> = T extends OptionalEvent<infer EventT> ? EventT : (T extends Event<infer EventT> ? EventT : never);
+export type MandatoryEventNames<E extends Events> = { [K in keyof E]: E[K] extends OptionalEvent<any> ? never : K }[keyof E];
+export type OptionalEventNames<E extends Events> = { [K in keyof E]: E[K] extends OptionalEvent<any> ? K : never }[keyof E];
 
 /* Interfaces and helper methods to define a cluster */
 export interface Attributes { [key: string]: Attribute<any> }

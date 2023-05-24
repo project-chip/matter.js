@@ -252,7 +252,9 @@ describe("InteractionProtocol", () => {
                     caseSessionsPerFabric: 100,
                     subscriptionsPerFabric: 100,
                 },
-            }, {}));
+            }, {}, {
+                startUp: true
+            }));
             const interactionProtocol = new InteractionServer(storageManager)
                 .setRootEndpoint(endpoint);
 
@@ -281,7 +283,9 @@ describe("InteractionProtocol", () => {
                     caseSessionsPerFabric: 100,
                     subscriptionsPerFabric: 100,
                 },
-            }, {});
+            }, {}, {
+                startUp: true
+            });
 
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
@@ -303,7 +307,10 @@ describe("InteractionProtocol", () => {
                 subjectsPerAccessControlEntry: 4,
                 targetsPerAccessControlEntry: 4,
                 accessControlEntriesPerFabric: 3
-            }, {});
+            }, {}, {
+                accessControlEntryChanged: true,
+                accessControlExtensionChanged: true,
+            });
 
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
@@ -345,7 +352,9 @@ describe("InteractionProtocol", () => {
                     caseSessionsPerFabric: 100,
                     subscriptionsPerFabric: 100,
                 },
-            }, {});
+            }, {}, {
+                startUp: true
+            });
 
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();

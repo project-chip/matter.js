@@ -18,12 +18,15 @@ import { attributePathToId, INTERACTION_PROTOCOL_ID } from "./InteractionServer.
 import { DecodedAttributeReportValue, normalizeAndDecodeReadAttributeReport } from "./AttributeDataDecoder.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import {
-    Attribute, AttributeJsType, Attributes, Cluster, Command, Commands, RequestType, ResponseType, TlvNoResponse
+    Attribute, AttributeJsType, Attributes, Cluster, Command, Commands, Events, RequestType, ResponseType, TlvNoResponse
 } from "../../cluster/Cluster.js";
 import { ExchangeProvider } from "../ExchangeManager.js";
-import { AttributeClients, SignatureFromCommandSpec, ClusterClientObj } from "../../cluster/client/ClusterClient.js";
+import {
+    AttributeClients, SignatureFromCommandSpec, ClusterClientObj, EventClients
+} from "../../cluster/client/ClusterClient.js";
 import { AttributeClient } from "../../cluster/client/AttributeClient.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
+import { EventClient } from "../../cluster/client/EventClient.js";
 
 const logger = Logger.get("InteractionClient");
 
@@ -37,13 +40,15 @@ export interface AttributeStatus {
     status: StatusCode,
 }
 
-export function ClusterClient<A extends Attributes, C extends Commands>(
-    clusterDef: Cluster<any, any, A, C, any>,
+export function ClusterClient<A extends Attributes, C extends Commands, E extends Events>(
+    clusterDef: Cluster<any, any, A, C, E>,
     endpointId: number,
     interactionClient: InteractionClient
-): ClusterClientObj<A, C> {
-    const { id: clusterId, name, commands: commandDef, attributes: attributeDef } = clusterDef;
+): ClusterClientObj<A, C, E> {
+    const { id: clusterId, name, commands: commandDef, attributes: attributeDef, events: eventDef } = clusterDef;
     const attributes = <AttributeClients<A>>{};
+    const events = <EventClients<E>>{};
+    const commands = <{ [P in keyof C]: SignatureFromCommandSpec<C[P]> }>{};
 
     const result: any = {
         id: clusterId,
@@ -51,7 +56,8 @@ export function ClusterClient<A extends Attributes, C extends Commands>(
         _type: "ClusterClient",
         endpointId,
         attributes,
-        commands: <{ [P in keyof C]: SignatureFromCommandSpec<C[P]> }>{},
+        events,
+        commands,
         subscribeAllAttributes: async (minIntervalFloorSeconds: number, maxIntervalCeilingSeconds: number) => {
             if (interactionClient === undefined) {
                 throw new Error("InteractionClient not set");
@@ -66,6 +72,7 @@ export function ClusterClient<A extends Attributes, C extends Commands>(
                 (attributes as any)[attributeName].update(value);
             });
         },
+
         /**
          * Clones the cluster client, optionally with a new interaction client.
          * When the clusterClient is the same then also AttributeClients will be reused.
@@ -81,6 +88,7 @@ export function ClusterClient<A extends Attributes, C extends Commands>(
             return clonedClusterClient;
         }
     };
+
     const attributeToId = <{ [key: number]: string }>{};
 
     // Add accessors
@@ -107,11 +115,36 @@ export function ClusterClient<A extends Attributes, C extends Commands>(
         }
     }
 
+    const eventToId = <{ [key: number]: string }>{};
+
+    // add events
+    for (const eventName in eventDef) {
+        const event = eventDef[eventName];
+        (events as any)[eventName] = new EventClient(event, eventName, endpointId, clusterId, async () => interactionClient);
+        eventToId[event.id] = eventName;
+        const capitalizedEventName = capitalize(eventName);
+        result[`get${capitalizedEventName}Event`] = async (alwaysRequestFromRemote = false) => {
+            return await tryCatchAsync(async () => {
+                return await (events as any)[eventName].get(alwaysRequestFromRemote);
+            }, StatusResponseError, (e) => {
+                const { code } = e;
+                if (code === StatusCode.UnsupportedEvent) {
+                    return undefined;
+                }
+                throw e;
+            });
+        }
+        result[`subscribe${capitalizedEventName}Event`] = async <T,>(listener: (value: T) => void, minIntervalS: number, maxIntervalS: number) => {
+            (events as any)[eventName].addListener(listener);
+            (events as any)[eventName].subscribe(minIntervalS, maxIntervalS);
+        }
+    }
+
     // Add command calls
     for (const commandName in commandDef) {
         const { requestId, requestSchema, responseId, responseSchema, optional } = commandDef[commandName];
 
-        result.commands[commandName] = async <RequestT, ResponseT>(request: RequestT) => {
+        commands[commandName] = async <RequestT, ResponseT>(request: RequestT) => {
             if (interactionClient === undefined) {
                 throw new Error("InteractionClient not set");
             }
@@ -120,7 +153,7 @@ export function ClusterClient<A extends Attributes, C extends Commands>(
         result[commandName] = result.commands[commandName];
     }
 
-    return result as ClusterClientObj<A, C>;
+    return result as ClusterClientObj<A, C, E>;
 }
 
 export class SubscriptionClient implements ProtocolHandler<MatterController> {

@@ -83,7 +83,9 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
             },
             serialNumber: `node-matter-0000`
         },
-        {}
+        {}, {
+        startUp: true
+    }
     )
     );
 
@@ -149,7 +151,10 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
                 targetsPerAccessControlEntry: 4,
                 accessControlEntriesPerFabric: 4,
             },
-            {}
+            {}, {
+            accessControlEntryChanged: true,
+            accessControlExtensionChanged: true,
+        }
         )
     );
 
@@ -182,6 +187,9 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
             },
             {
                 testEventTrigger: async () => { /* ignore */ }
+            },
+            {
+                bootReason: true,
             }
         )
     );
@@ -247,7 +255,7 @@ describe("Endpoint Structures", () => {
             assert.ok(endpoints.get(0)?.hasClusterServer(GroupKeyManagementCluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
 
-            assert.equal(attributePaths.length, 101);
+            assert.equal(attributePaths.length, 110);
             assert.equal(commandPaths.length, 18);
         });
 
@@ -295,7 +303,7 @@ describe("Endpoint Structures", () => {
             })) as AttributeServer<EndpointNumber[]>;
             assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(1)]);
 
-            assert.equal(attributePaths.length, 146);
+            assert.equal(attributePaths.length, 161);
             assert.equal(commandPaths.length, 38);
         });
     });
@@ -368,7 +376,7 @@ describe("Endpoint Structures", () => {
             })) as AttributeServer<EndpointNumber[]>;
             assert.deepEqual(composedPartsListAttribute?.getLocal(), [new EndpointNumber(2), new EndpointNumber(3)]);
 
-            assert.equal(attributePaths.length, 200);
+            assert.equal(attributePaths.length, 222);
             assert.equal(commandPaths.length, 58);
         });
     });
@@ -384,7 +392,9 @@ describe("Endpoint Structures", () => {
             onoffLightDevice.addClusterServer(ClusterServer(BridgedDeviceBasicInformationCluster, {
                 nodeLabel: "Socket 1",
                 reachable: true
-            }, {}))
+            }, {}, {
+                reachableChanged: true
+            }))
 
             aggregator.addBridgedDevice(onoffLightDevice);
             node.addEndpoint(aggregator);
@@ -437,7 +447,7 @@ describe("Endpoint Structures", () => {
             const deviceTypeListAttribute = attributes.get(attributePathToId({ endpointId: 11, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.deviceTypeList.id })) as AttributeServer<EndpointNumber[]>;
             assert.deepEqual(deviceTypeListAttribute?.getLocal(), [{ deviceType: new DeviceTypeId(DeviceTypes.ON_OFF_LIGHT.code), revision: 2 }, { deviceType: new DeviceTypeId(DeviceTypes.BRIDGED_NODE.code), revision: 1 }]);
 
-            assert.equal(attributePaths.length, 162);
+            assert.equal(attributePaths.length, 179);
             assert.equal(commandPaths.length, 38);
         });
 
@@ -511,7 +521,7 @@ describe("Endpoint Structures", () => {
             const deviceTypeListAttribute = attributes.get(attributePathToId({ endpointId: 11, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.deviceTypeList.id })) as AttributeServer<EndpointNumber[]>;
             assert.deepEqual(deviceTypeListAttribute?.getLocal(), [{ deviceType: new DeviceTypeId(DeviceTypes.ON_OFF_LIGHT.code), revision: 2 }, { deviceType: new DeviceTypeId(DeviceTypes.BRIDGED_NODE.code), revision: 1 }]);
 
-            assert.equal(attributePaths.length, 214);
+            assert.equal(attributePaths.length, 238);
             assert.equal(commandPaths.length, 58);
         });
 
@@ -631,7 +641,7 @@ describe("Endpoint Structures", () => {
             const rootPartsListAttribute = attributes.get(attributePathToId({ endpointId: 0, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id })) as AttributeServer<EndpointNumber[]>;
             assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(1), new EndpointNumber(11), new EndpointNumber(12), new EndpointNumber(2), new EndpointNumber(21), new EndpointNumber(22)]);
 
-            assert.equal(attributePaths.length, 339);
+            assert.equal(attributePaths.length, 380);
             assert.equal(commandPaths.length, 98);
         });
 
@@ -748,7 +758,7 @@ describe("Endpoint Structures", () => {
             const rootPartsListAttribute = attributes.get(attributePathToId({ endpointId: 0, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id })) as AttributeServer<EndpointNumber[]>;
             assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(1), new EndpointNumber(2), new EndpointNumber(3), new EndpointNumber(4), new EndpointNumber(5), new EndpointNumber(6)]);
 
-            assert.equal(attributePaths.length, 339);
+            assert.equal(attributePaths.length, 380);
             assert.equal(commandPaths.length, 98);
         });
 
@@ -870,7 +880,7 @@ describe("Endpoint Structures", () => {
             const rootPartsListAttribute = attributes.get(attributePathToId({ endpointId: 0, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id })) as AttributeServer<EndpointNumber[]>;
             assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(37), new EndpointNumber(3), new EndpointNumber(38), new EndpointNumber(39), new EndpointNumber(40), new EndpointNumber(18)]);
 
-            assert.equal(attributePaths.length, 339);
+            assert.equal(attributePaths.length, 380);
             assert.equal(commandPaths.length, 98);
         });
 

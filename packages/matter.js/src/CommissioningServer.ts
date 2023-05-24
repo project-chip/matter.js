@@ -17,7 +17,7 @@ import { UdpInterface } from "./net/UdpInterface.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { StorageManager } from "./storage/StorageManager.js";
-import { AttributeInitialValues, ClusterServerHandlers, ClusterServerObj, CommandHandler } from "./cluster/server/ClusterServer.js";
+import { AttributeInitialValues, ClusterServerHandlers, ClusterServerObj } from "./cluster/server/ClusterServer.js";
 import { OperationalCredentialsClusterHandler, OperationalCredentialsServerConf } from "./cluster/server/OperationalCredentialsServer.js";
 import { AttestationCertificateManager } from "./certificate/AttestationCertificateManager.js";
 import { CertificationDeclarationManager } from "./certificate/CertificationDeclarationManager.js";
@@ -39,7 +39,7 @@ import { ComposedDevice } from "./device/ComposedDevice.js";
 import { Device } from "./device/Device.js";
 import { ByteArray } from "./util/ByteArray.js";
 import { NamedHandler } from "./util/NamedHandler.js";
-import { Attributes, Commands } from "./cluster/Cluster.js";
+import { Attributes, Commands, Events } from "./cluster/Cluster.js";
 
 /**
  * Represents device pairing information.
@@ -86,7 +86,7 @@ export interface CommissioningServerOptions {
  */
 type CommissioningServerCommands = {
     /** Provide a means for certification tests to trigger some test-plan-specific events. */
-    testEventTrigger: CommandHandler<typeof GeneralDiagnosticsCluster.commands.testEventTrigger, any>;
+    testEventTrigger: ClusterServerHandlers<typeof GeneralDiagnosticsCluster>["testEventTrigger"];
 }
 
 // TODO decline using set/getRootClusterClient
@@ -166,7 +166,10 @@ export class CommissioningServer extends MatterNode {
                     },
                     options.basicInformation
                 ),
-                {}
+                {},
+                {
+                    startUp: true
+                }
             )
         );
 
@@ -243,7 +246,11 @@ export class CommissioningServer extends MatterNode {
                     targetsPerAccessControlEntry: 4,
                     accessControlEntriesPerFabric: 4,
                 },
-                {}
+                {},
+                {
+                    accessControlEntryChanged: true,
+                    accessControlExtensionChanged: true
+                }
             )
         );
 
@@ -276,7 +283,10 @@ export class CommissioningServer extends MatterNode {
                 },
                 {
                     testEventTrigger: async (args) => await this.commandHandler.executeHandler("testEventTrigger", args)
-                } as ClusterServerHandlers<typeof GeneralDiagnosticsCluster>
+                } as ClusterServerHandlers<typeof GeneralDiagnosticsCluster>,
+                {
+                    bootReason: true
+                }
             )
         );
     }
@@ -288,7 +298,7 @@ export class CommissioningServer extends MatterNode {
      *
      * @param cluster
      */
-    override addRootClusterServer<A extends Attributes, C extends Commands>(cluster: ClusterServerObj<A, C>) {
+    override addRootClusterServer<A extends Attributes, C extends Commands, E extends Events>(cluster: ClusterServerObj<A, C, E>) {
         if (cluster.id === BasicInformationCluster.id) {
             throw new Error(
                 "BasicInformationCluster can not be modified, provide all details in constructor options!"

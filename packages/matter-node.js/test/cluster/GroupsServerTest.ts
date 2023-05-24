@@ -20,7 +20,7 @@ import { ClusterServer, StatusCode } from "@project-chip/matter.js/interaction";
 import { SecureSession } from "@project-chip/matter.js/session";
 import { Fabric, FabricJsonObject } from "@project-chip/matter.js/fabric";
 import {
-    ClusterServerObj, GroupsCluster, GroupsClusterHandler, IdentifyCluster, ClusterServerHandlers, IdentifyType
+    ClusterServerObjForCluster, GroupsCluster, GroupsClusterHandler, IdentifyCluster, ClusterServerHandlers, IdentifyType
 } from "@project-chip/matter.js/cluster";
 import { GroupId } from "@project-chip/matter.js/datatype";
 import { getPromiseResolver } from "@project-chip/matter.js/util";
@@ -29,7 +29,7 @@ import { callCommandOnClusterServer, createTestSessionWithFabric } from "./Clust
 import { Endpoint, DeviceTypes } from "@project-chip/matter.js/device";
 
 describe("Groups Server test", () => {
-    let groupsServer: ClusterServerObj<typeof GroupsCluster.attributes, typeof GroupsCluster.commands> | undefined;
+    let groupsServer: ClusterServerObjForCluster<typeof GroupsCluster> | undefined;
     let testFabric: Fabric | undefined;
     let testSession: SecureSession<any> | undefined
     let endpoint: Endpoint | undefined;

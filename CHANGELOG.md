@@ -12,6 +12,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
     * Added FabricScopedAttributeServer which gets and sets the value based on the provided fabric
     * Updated ClusterServerObj and ClusterClientObj typings to respect these Attribute types
     * Updated all Cluster definitions that use such attribute types
+    * Add Interface for Events which requires to define the supported events when creating a ClusterServer (Event Logic WIP in separate PR)
   * Enhance: Splitted up and corrected PowerSource and PressureMeasurement Cluster based on Matter 1.1 Specs
   * Fix: Added missing PulseWidthModulationLevelControlCluster to AllCLusters
   * Fix Typing of Commands in ClusterClient if no commands were present

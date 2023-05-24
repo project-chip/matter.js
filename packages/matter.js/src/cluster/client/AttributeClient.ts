@@ -53,6 +53,7 @@ export class AttributeClient<T> {
         }
         return await interactionClient.getWithVersion(this.endpointId, this.clusterId, this.attribute, alwaysRequestFromRemote);
     }
+
     async subscribe(minIntervalS: number, maxIntervalS: number) {
         const interactionClient = await this.getInteractionClientCallback();
         if (interactionClient === undefined) {
