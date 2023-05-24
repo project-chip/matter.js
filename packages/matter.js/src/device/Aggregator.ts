@@ -53,7 +53,14 @@ export class Aggregator extends ComposedDevice {
             device.setDeviceTypes(deviceTypes);
         }
         if (bridgedBasicInformation !== undefined) {
-            device.addClusterServer(ClusterServer(BridgedDeviceBasicInformationCluster, bridgedBasicInformation, {}));
+            device.addClusterServer(ClusterServer(
+                BridgedDeviceBasicInformationCluster,
+                bridgedBasicInformation,
+                {},
+                {
+                    reachableChanged: true
+                }
+            ));
         } else {
             if (!device.hasClusterServer(BridgedDeviceBasicInformationCluster)) {
                 throw new Error("BridgedDeviceBasicInformationCluster is required for bridged devices. Please add yourself or provide as second parameter");

@@ -213,19 +213,19 @@ describe("Integration Test", () => {
                 { endpointId: 2 }, // 2 / * /* - will be discarded in results!
             ]);
 
-            assert.equal(response.length, 39);
+            assert.equal(response.length, 42);
             assert.equal(response.filter(({
                 path: {
                     endpointId,
                     clusterId
                 }
-            }) => endpointId === 0 && clusterId === DescriptorCluster.id).length, 9);
+            }) => endpointId === 0 && clusterId === DescriptorCluster.id).length, 10);
             assert.equal(response.filter(({
                 path: {
                     endpointId,
                     clusterId
                 }
-            }) => endpointId === 1 && clusterId === DescriptorCluster.id).length, 9);
+            }) => endpointId === 1 && clusterId === DescriptorCluster.id).length, 10);
 
             const descriptorServerListData = response.find(({
                 path: {
@@ -249,7 +249,7 @@ describe("Integration Test", () => {
                     endpointId,
                     clusterId
                 }
-            }) => endpointId === 0 && clusterId === BasicInformationCluster.id).length, 20);
+            }) => endpointId === 0 && clusterId === BasicInformationCluster.id).length, 21);
             const softwareVersionStringData = response.find(({
                 path: {
                     endpointId,

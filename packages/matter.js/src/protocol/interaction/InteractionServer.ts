@@ -24,14 +24,12 @@ import { Message } from "../../codec/MessageCodec.js";
 import { Crypto } from "../../crypto/Crypto.js";
 import { decodeValueForSchema, normalizeAttributeData } from "./AttributeDataDecoder.js";
 import {
-    AttributeInitialValues, AttributeServers, ClusterServerHandlers, ClusterServerObj, CommandServers,
+    AttributeInitialValues, AttributeServers, ClusterServerHandlers, ClusterServerObj, CommandServers, EventServers,
+    SupportedEventsList,
 } from "../../cluster/server/ClusterServer.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import {
-    AttributeGetterServer,
-    AttributeServer,
-    FabricScopedAttributeServer,
-    FixedAttributeServer
+    AttributeGetterServer, AttributeServer, FabricScopedAttributeServer, FixedAttributeServer
 } from "../../cluster/server/AttributeServer.js";
 import { Logger } from "../../log/Logger.js";
 import { StorageContext } from "../../storage/StorageContext.js";
@@ -42,6 +40,9 @@ import { AttributeId } from "../../datatype/AttributeId.js";
 import { CommandId } from "../../datatype/CommandId.js";
 import { TlvAttributeValuePair } from "../../cluster/ScenesCluster.js";
 import { Fabric } from "../../fabric/Fabric.js";
+import { EventId } from "../../datatype/index.js";
+import { EventServer } from "../../cluster/server/EventServer.js";
+import { EventData, EventHandler } from "../../protocol/interaction/EventHandler.js";
 
 export const INTERACTION_PROTOCOL_ID = 0x0001;
 
@@ -50,14 +51,23 @@ const logger = Logger.get("InteractionProtocol");
 export function ClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
     clusterDef: Cluster<F, SF, A, C, E>,
     attributesInitialValues: AttributeInitialValues<A>,
-    handlers: ClusterServerHandlers<Cluster<F, SF, A, C, E>>
-): ClusterServerObj<A, C> {
-    const { id: clusterId, name, commands: commandDef, attributes: attributeDef, supportedFeatures } = clusterDef;
+    handlers: ClusterServerHandlers<Cluster<F, SF, A, C, E>>,
+    supportedEvents: SupportedEventsList<E> = <SupportedEventsList<E>>{}
+): ClusterServerObj<A, C, E> {
+    const {
+        id: clusterId,
+        name,
+        commands: commandDef,
+        attributes: attributeDef,
+        events: eventDef,
+        supportedFeatures
+    } = clusterDef;
     let clusterStorage: StorageContext | null = null;
     const attributeStorageListeners = new Map<number, (value: any, version: number) => void>();
     const sceneAttributeList = new Array<string>();
     const attributes = <AttributeServers<A>>{};
     const commands = <CommandServers<C>>{};
+    const events = <EventServers<E>>{};
 
     const result: any = {
         id: clusterId,
@@ -65,10 +75,14 @@ export function ClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<
         _type: "ClusterServer",
         attributes,
         _commands: commands,
+        _events: events,
 
         _assignToEndpoint: (endpoint: Endpoint) => {
             for (const name in attributes) {
                 (attributes as any)[name].assignToEndpoint(endpoint);
+            }
+            for (const name in events) {
+                (events as any)[name].assignToEndpoint(endpoint);
             }
         },
 
@@ -89,11 +103,16 @@ export function ClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<
             }
         },
 
+        _registerEventHandler: (eventHandler: EventHandler) => {
+            for (const name in events) {
+                (events as any)[name].addListener((eventData: EventData<any>) => eventHandler.pushEvent(eventData));
+            }
+        },
+
         _getSceneExtensionFieldSets: () => {
             const values = new Array<TypeFromSchema<typeof TlvAttributeValuePair>>();
             for (const name of sceneAttributeList) {
                 const attributeServer = (attributes as any)[name];
-                console.log('Get attribute', name, attributeServer);
                 values.push({ attributeId: new AttributeId(attributeServer.id), attributeValue: attributeServer.schema.encodeTlv(attributeServer.get()) });
             }
             return values;
@@ -139,6 +158,7 @@ export function ClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<
         attributeList: new Array<AttributeId>(),
         acceptedCommandList: new Array<CommandId>(),
         generatedCommandList: new Array<CommandId>(),
+        eventList: new Array<EventId>(),
     };
     const attributeList = new Array<AttributeId>();
     for (const attributeName in attributeDef) {
@@ -205,7 +225,7 @@ export function ClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<
         const handler = (handlers as any)[name];
         if (handler === undefined) continue;
         const { requestId, requestSchema, responseId, responseSchema } = commandDef[name];
-        (commands as any)[name] = (new CommandServer(requestId, responseId, name, requestSchema, responseSchema, (request, session, message, endpoint) => handler({ request, attributes, session, message, endpoint })));
+        (commands as any)[name] = (new CommandServer(requestId, responseId, name, requestSchema, responseSchema, (request, session, message, endpoint) => handler({ request, attributes, events, session, message, endpoint })));
         if (!acceptedCommandList.includes(requestId)) {
             acceptedCommandList.push(requestId);
         }
@@ -218,7 +238,21 @@ export function ClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<
     (attributes as any).acceptedCommandList.set(acceptedCommandList.map(id => new CommandId(id)));
     (attributes as any).generatedCommandList.set(generatedCommandList.map(id => new CommandId(id)));
 
-    return result as ClusterServerObj<A, C>;
+    const eventList = new Array<number>();
+    for (const eventName in eventDef) {
+        const { id, schema, priority, optional } = eventDef[eventName];
+        if (!optional && (supportedEvents as any)[eventName] !== true) {
+            throw new Error(`Event ${eventName} needs to be supported by cluster ${name} (${clusterId})`);
+        }
+        if ((supportedEvents as any)[eventName] === true) {
+            (events as any)[eventName] = new EventServer(id, clusterId, eventName, schema, priority);
+            const capitalizedEventName = capitalize(eventName);
+            result[`trigger${capitalizedEventName}Event`] = <T,>(event: T) => (events as any)[eventName].triggerEvent(event);
+        }
+    }
+    (attributes as any).eventList.set(eventList.map(id => new EventId(id)));
+
+    return result as ClusterServerObj<A, C, E>;
 }
 
 export interface CommandPath {
@@ -258,6 +292,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     private commands = new Map<string, CommandServer<any, any>>();
     //private commandPaths = new Array<CommandPath>(); // TODO Re-add when supporting wildcard commands
     private nextSubscriptionId = Crypto.getRandomUInt32();
+    private eventHandler = new EventHandler(this.storageManager);
 
     constructor(
         private readonly storageManager: StorageManager
@@ -275,6 +310,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             this.endpoints.set(endpointId, subEndpoint);
             for (const cluster of subEndpoint.getAllClusterServers()) {
                 cluster._setStorage(this.storageManager.createContext(`Cluster-${endpointId}-${cluster.id}`));
+                cluster._registerEventHandler(this.eventHandler);
             }
         }
 

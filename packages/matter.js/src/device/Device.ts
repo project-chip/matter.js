@@ -30,7 +30,7 @@ export class PairedDevice extends Endpoint {
      */
     constructor(
         definition: AtLeastOne<DeviceTypeDefinition>,
-        clusters: (ClusterServerObj<Attributes, Commands> | ClusterClientObj<Attributes, Commands>)[] = [],
+        clusters: (ClusterServerObj<Attributes, Commands, Events> | ClusterClientObj<Attributes, Commands, Events>)[] = [],
         endpointId: number
     ) {
         super(definition, endpointId);
@@ -48,7 +48,7 @@ export class PairedDevice extends Endpoint {
     /**
      * @deprecated PairedDevice does not support adding additional clusters
      */
-    override addClusterServer<A extends Attributes, C extends Commands>(cluster: ClusterServerObj<A, C>) {
+    override addClusterServer<A extends Attributes, C extends Commands, E extends Events>(cluster: ClusterServerObj<A, C, E>) {
         if (this.declineAddingMoreClusters) {
             throw new Error("PairedDevice does not support adding additional clusters");
         }
@@ -58,7 +58,7 @@ export class PairedDevice extends Endpoint {
     /**
      * @deprecated PairedDevice does not support adding additional clusters
      */
-    override addClusterClient<A extends Attributes, C extends Commands>(cluster: ClusterClientObj<A, C>) {
+    override addClusterClient<A extends Attributes, C extends Commands, E extends Events>(cluster: ClusterClientObj<A, C, E>) {
         if (this.declineAddingMoreClusters) {
             throw new Error("PairedDevice does not support adding additional clusters");
         }
@@ -153,17 +153,17 @@ export class Device extends Endpoint {
         return await this.commandHandler.executeHandler(command, ...args);
     }
 
-    protected createOptionalClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(_cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, C> {
+    protected createOptionalClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(_cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, C, E> {
         // TODO: Implement this in upper classes to add optional clusters on the fly
         throw new Error("createOptionalClusterServer needs to be implemented by derived classes");
     }
 
-    protected createOptionalClusterClient<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(_cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<A, C> {
+    protected createOptionalClusterClient<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(_cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<A, C, E> {
         // TODO: Implement this in upper classes to add optional clusters on the fly
         throw new Error("createOptionalClusterClient needs to be implemented by derived classes");
     }
 
-    override getClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, C> | undefined {
+    override getClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, C, E> | undefined {
         const clusterServer = super.getClusterServer(cluster);
         if (clusterServer !== undefined) {
             return clusterServer;
@@ -177,7 +177,7 @@ export class Device extends Endpoint {
         }
     }
 
-    override getClusterClient<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<A, C> | undefined {
+    override getClusterClient<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<A, C, E> | undefined {
         const clusterClient = super.getClusterClient(cluster);
         if (clusterClient !== undefined) {
             return clusterClient;

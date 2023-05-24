@@ -43,7 +43,9 @@ describe("ClusterServer structure", () => {
                         caseSessionsPerFabric: 3,
                         subscriptionsPerFabric: 3,
                     },
-                }, {});
+                }, {}, {
+                startUp: true
+            });
 
             // TS ignore to allow a check, remove to test typing)
 
@@ -99,7 +101,9 @@ describe("ClusterServer structure", () => {
                         caseSessionsPerFabric: 3,
                         subscriptionsPerFabric: 3,
                     },
-                }, {});
+                }, {}, {
+                startUp: true
+            });
 
             assert.equal(basic.attributes.nodeLabel.getLocal(), "");
             assert.ok(basic.attributes.nodeLabel instanceof AttributeServer);
@@ -144,7 +148,9 @@ describe("ClusterServer structure", () => {
                         subscriptionsPerFabric: 3,
                     },
                     manufacturingDate: "12345678"
-                }, {});
+                }, {}, {
+                startUp: true
+            });
 
             // TS ignore to allow a check, remove to test typing)
 
@@ -205,7 +211,9 @@ describe("ClusterServer structure", () => {
                         subscriptionsPerFabric: 3,
                     },
                     reachable: true
-                }, {});
+                }, {}, {
+                startUp: true
+            });
 
             // guard needed because as per types optional are potentially undefined
             assert.equal(basic.attributes.reachable?.getLocal(), true);
@@ -251,7 +259,9 @@ describe("ClusterServer structure", () => {
                         caseSessionsPerFabric: 3,
                         subscriptionsPerFabric: 3,
                     },
-                }, {});
+                }, {}, {
+                startUp: true
+            });
 
             // guard needed because as per types optional are potentially undefined
             assert.equal(basic.attributes.serialNumber, undefined);
@@ -301,7 +311,9 @@ describe("ClusterServer structure", () => {
                         caseSessionsPerFabric: 3,
                         subscriptionsPerFabric: 3,
                     },
-                }, {});
+                }, {}, {
+                startUp: true
+            });
 
             assert.equal(basic.attributes.localConfigDisabled, undefined);
             // guard needed because as per types optional are potentially undefined
@@ -381,9 +393,10 @@ describe("ClusterServer structure", () => {
             assert.ok(server);
             // as any is trick because these attributes are not officially exposed by typings
             assert.deepEqual((server.attributes as any).featureMap.get(), { basic: false });
-            assert.deepEqual((server.attributes as any).attributeList.get(), [new AttributeId(0), new AttributeId(1), new AttributeId(2), new AttributeId(65533), new AttributeId(65532), new AttributeId(65531), new AttributeId(65529), new AttributeId(65528)]);
+            assert.deepEqual((server.attributes as any).attributeList.get(), [new AttributeId(0), new AttributeId(1), new AttributeId(2), new AttributeId(65533), new AttributeId(65532), new AttributeId(65531), new AttributeId(65530), new AttributeId(65529), new AttributeId(65528)]);
             assert.deepEqual((server.attributes as any).acceptedCommandList.get(), [new CommandId(0), new CommandId(2)]);
             assert.deepEqual((server.attributes as any).generatedCommandList.get(), []);
+            assert.deepEqual((server.attributes as any).eventList.get(), []);
         });
 
         it("IdentifyCluster including optional commands", () => {
@@ -401,9 +414,10 @@ describe("ClusterServer structure", () => {
             assert.ok(server);
             // as any is trick because these attributes are not officially exposed by typings
             assert.deepEqual((server.attributes as any).featureMap.get(), {});
-            assert.deepEqual((server.attributes as any).attributeList.get(), [new AttributeId(0), new AttributeId(1), new AttributeId(65533), new AttributeId(65532), new AttributeId(65531), new AttributeId(65529), new AttributeId(65528)]);
+            assert.deepEqual((server.attributes as any).attributeList.get(), [new AttributeId(0), new AttributeId(1), new AttributeId(65533), new AttributeId(65532), new AttributeId(65531), new AttributeId(65530), new AttributeId(65529), new AttributeId(65528)]);
             assert.deepEqual((server.attributes as any).acceptedCommandList.get(), [new CommandId(0), new CommandId(0x40)]);
             assert.deepEqual((server.attributes as any).generatedCommandList.get(), []);
+            assert.deepEqual((server.attributes as any).eventList.get(), []);
         });
 
         it("IdentifyCluster including optional commands", () => {
@@ -421,9 +435,10 @@ describe("ClusterServer structure", () => {
             assert.ok(server);
             // as any is trick because these attributes are not officially exposed by typings
             assert.deepEqual((server.attributes as any).featureMap.get(), {});
-            assert.deepEqual((server.attributes as any).attributeList.get(), [new AttributeId(0), new AttributeId(1), new AttributeId(65533), new AttributeId(65532), new AttributeId(65531), new AttributeId(65529), new AttributeId(65528)]);
+            assert.deepEqual((server.attributes as any).attributeList.get(), [new AttributeId(0), new AttributeId(1), new AttributeId(65533), new AttributeId(65532), new AttributeId(65531), new AttributeId(65530), new AttributeId(65529), new AttributeId(65528)]);
             assert.deepEqual((server.attributes as any).acceptedCommandList.get(), [new CommandId(0), new CommandId(0x40)]);
             assert.deepEqual((server.attributes as any).generatedCommandList.get(), []);
+            assert.deepEqual((server.attributes as any).eventList.get(), []);
         });
 
         it("IdentifyCluster without optional commands", () => {
@@ -440,7 +455,7 @@ describe("ClusterServer structure", () => {
             assert.ok(server);
             // as any is trick because these attributes are not officially exposed by typings
             assert.deepEqual((server.attributes as any).featureMap.get(), {});
-            assert.deepEqual((server.attributes as any).attributeList.get(), [new AttributeId(0), new AttributeId(1), new AttributeId(65533), new AttributeId(65532), new AttributeId(65531), new AttributeId(65529), new AttributeId(65528)]);
+            assert.deepEqual((server.attributes as any).attributeList.get(), [new AttributeId(0), new AttributeId(1), new AttributeId(65533), new AttributeId(65532), new AttributeId(65531), new AttributeId(65530), new AttributeId(65529), new AttributeId(65528)]);
             assert.deepEqual((server.attributes as any).acceptedCommandList.get(), [new CommandId(0)]);
             assert.deepEqual((server.attributes as any).generatedCommandList.get(), []);
         });
@@ -463,9 +478,10 @@ describe("ClusterServer structure", () => {
             assert.ok(server);
             // as any is trick because these attributes are not officially exposed by typings
             assert.deepEqual((server.attributes as any).featureMap.get(), {});
-            assert.deepEqual((server.attributes as any).attributeList.get(), [new AttributeId(0), new AttributeId(65533), new AttributeId(65532), new AttributeId(65531), new AttributeId(65529), new AttributeId(65528)]);
+            assert.deepEqual((server.attributes as any).attributeList.get(), [new AttributeId(0), new AttributeId(65533), new AttributeId(65532), new AttributeId(65531), new AttributeId(65530), new AttributeId(65529), new AttributeId(65528)]);
             assert.deepEqual((server.attributes as any).acceptedCommandList.get(), [new CommandId(0), new CommandId(1), new CommandId(2), new CommandId(3), new CommandId(4), new CommandId(5)]);
             assert.deepEqual((server.attributes as any).generatedCommandList.get(), [new CommandId(0), new CommandId(1), new CommandId(2), new CommandId(3)]);
+            assert.deepEqual((server.attributes as any).eventList.get(), []);
         });
     });
 });

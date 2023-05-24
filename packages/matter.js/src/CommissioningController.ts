@@ -173,7 +173,7 @@ export class CommissioningController extends MatterNode {
      */
     async getRootClusterClientWithNewInteractionClient<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
         cluster: Cluster<F, SF, A, C, E>
-    ): Promise<ClusterClientObj<A, C> | undefined> {
+    ): Promise<ClusterClientObj<A, C, E> | undefined> {
         return super.getRootClusterClient(cluster, await this.createInteractionClient());
     }
 
@@ -284,7 +284,7 @@ export class CommissioningController extends MatterNode {
             throw new Error("No device type found for endpoint");
         }
 
-        const endpointClusters = Array<ClusterServerObj<Attributes, Commands> | ClusterClientObj<Attributes, Commands>>();
+        const endpointClusters = Array<ClusterServerObj<Attributes, Commands, Events> | ClusterClientObj<Attributes, Commands, Events>>();
 
         // Add ClusterClients for all server clusters of the device
         for (const clusterId of descriptorData.serverList) {
@@ -306,7 +306,8 @@ export class CommissioningController extends MatterNode {
                 continue;
             }
             const clusterData = (data[clusterId.id] ?? {}) as AttributeInitialValues<Attributes>; // TODO correct typing
-            endpointClusters.push(ClusterServer(cluster, /*clusterData.featureMap,*/ clusterData, {}) as ClusterServerObj<Attributes, Commands>); // TODO Add Default handler!
+            // Todo add logic for Events
+            endpointClusters.push(ClusterServer(cluster, /*clusterData.featureMap,*/ clusterData, {}) as ClusterServerObj<Attributes, Commands, Events>); // TODO Add Default handler!
         }
 
         if (endpointId === 0) {

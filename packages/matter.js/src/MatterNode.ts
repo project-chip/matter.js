@@ -23,7 +23,7 @@ export abstract class MatterNode {
      *
      * @param cluster ClusterServer object to add
      */
-    addRootClusterServer<A extends Attributes, C extends Commands>(cluster: ClusterServerObj<A, C>) {
+    addRootClusterServer<A extends Attributes, C extends Commands, E extends Events>(cluster: ClusterServerObj<A, C, E>) {
         this.rootEndpoint.addClusterServer(cluster);
     }
 
@@ -34,7 +34,7 @@ export abstract class MatterNode {
      */
     getRootClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
         cluster: Cluster<F, SF, A, C, E>
-    ): ClusterServerObj<A, C> | undefined {
+    ): ClusterServerObj<A, C, E> | undefined {
         return this.rootEndpoint.getClusterServer(cluster);
     }
 
@@ -43,7 +43,7 @@ export abstract class MatterNode {
      *
      * @param cluster ClusterClient object to add
      */
-    addRootClusterClient<A extends Attributes, C extends Commands>(cluster: ClusterClientObj<A, C>) {
+    addRootClusterClient<A extends Attributes, C extends Commands, E extends Events>(cluster: ClusterClientObj<A, C, E>) {
         this.rootEndpoint.addClusterClient(cluster);
     }
 
@@ -57,7 +57,7 @@ export abstract class MatterNode {
     getRootClusterClient<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
         cluster: Cluster<F, SF, A, C, E>,
         interactionClient?: InteractionClient
-    ): ClusterClientObj<A, C> | undefined {
+    ): ClusterClientObj<A, C, E> | undefined {
         return this.rootEndpoint.getClusterClient(cluster, interactionClient);
     }
 
