@@ -58,7 +58,7 @@ export function toJson(object: SupportedStorageTypes): string {
             return `{"${JSON_SPECIAL_KEY_TYPE}":"Uint8Array","${JSON_SPECIAL_KEY_VALUE}":"${value.toHex()}"}`;
         }
         //Node.js can sometimes pass in a native Buffer object in place of a Uint8Array, of which it is a subclass of, the Buffer class implements its own toJSON method which breaks our serialization.
-        if (value != null && typeof value === 'object' && value.type === 'Buffer' && value.data) {
+        if (value != null && typeof value === 'object' && value.type === 'Buffer' && Array.isArray(value.data)) {
             return `{"${JSON_SPECIAL_KEY_TYPE}":"Uint8Array","${JSON_SPECIAL_KEY_VALUE}":"${Uint8Array.from(value.data).toHex()}"}`;
         }
         if (value instanceof Map) {
