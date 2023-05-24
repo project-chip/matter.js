@@ -21,10 +21,13 @@ import {
 } from "@project-chip/matter.js/interaction";
 import { MessageExchange } from "@project-chip/matter.js/protocol";
 import { Endpoint, DeviceTypeDefinition, DeviceClasses } from "@project-chip/matter.js/device";
-import { VendorId } from "@project-chip/matter.js/datatype";
+import { FabricId, FabricIndex, NodeId, VendorId } from "@project-chip/matter.js/datatype";
 import { TlvString, TlvUInt8, TlvNoArguments, TlvArray, TlvField, TlvObject, TlvNullable } from "@project-chip/matter.js/tlv";
 import { BasicInformationCluster, OnOffCluster, AccessControlCluster } from "@project-chip/matter.js/cluster";
 import { Message } from "@project-chip/matter.js/codec";
+import { Fabric } from "@project-chip/matter.js/fabric";
+import { ByteArray } from "@project-chip/matter.js/util";
+import { SecureSession } from "@project-chip/matter.js/session";
 
 const DummyTestDevice = DeviceTypeDefinition({
     code: 0,
@@ -231,26 +234,25 @@ describe("InteractionProtocol", () => {
         it("replies with attribute values", async () => {
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
-            const endpoint = new Endpoint([DummyTestDevice], [
-                ClusterServer(BasicInformationCluster, {
-                    dataModelRevision: 1,
-                    vendorName: "vendor",
-                    vendorId: new VendorId(1),
-                    productName: "product",
-                    productId: 2,
-                    nodeLabel: "",
-                    hardwareVersion: 0,
-                    hardwareVersionString: "0",
-                    location: "US",
-                    localConfigDisabled: false,
-                    softwareVersion: 1,
-                    softwareVersionString: "v1",
-                    capabilityMinima: {
-                        caseSessionsPerFabric: 100,
-                        subscriptionsPerFabric: 100,
-                    },
-                }, {}),
-            ], 0);
+            const endpoint = new Endpoint([DummyTestDevice], 0);
+            endpoint.addClusterServer(ClusterServer(BasicInformationCluster, {
+                dataModelRevision: 1,
+                vendorName: "vendor",
+                vendorId: new VendorId(1),
+                productName: "product",
+                productId: 2,
+                nodeLabel: "",
+                hardwareVersion: 0,
+                hardwareVersionString: "0",
+                location: "US",
+                localConfigDisabled: false,
+                softwareVersion: 1,
+                softwareVersionString: "v1",
+                capabilityMinima: {
+                    caseSessionsPerFabric: 100,
+                    subscriptionsPerFabric: 100,
+                },
+            }, {}));
             const interactionProtocol = new InteractionServer(storageManager)
                 .setRootEndpoint(endpoint);
 
@@ -283,7 +285,8 @@ describe("InteractionProtocol", () => {
 
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
-            const endpoint = new Endpoint([DummyTestDevice], [basicCluster], 0);
+            const endpoint = new Endpoint([DummyTestDevice], 0);
+            endpoint.addClusterServer(basicCluster);
             const interactionProtocol = new InteractionServer(storageManager)
                 .setRootEndpoint(endpoint);
 
@@ -304,14 +307,17 @@ describe("InteractionProtocol", () => {
 
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
-            const endpoint = new Endpoint([DummyTestDevice], [accessControlCluster], 0);
+            const endpoint = new Endpoint([DummyTestDevice], 0);
+            endpoint.addClusterServer(accessControlCluster);
             const interactionProtocol = new InteractionServer(storageManager)
                 .setRootEndpoint(endpoint);
 
-            const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, CHUNKED_ARRAY_WRITE_REQUEST);
+            const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ByteArray.fromHex("00"), ByteArray.fromHex("00"), { privateKey: ByteArray.fromHex("00"), publicKey: ByteArray.fromHex("00") }, new VendorId(1), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), "");
+            const testSession = await SecureSession.create({} as any, 1, testFabric, new NodeId(BigInt(1)), 1, ByteArray.fromHex("00"), ByteArray.fromHex("00"), false, false, () => {/* nothing */ }, 1000, 1000);
+            const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" }, session: testSession }) as unknown as MessageExchange<any>, CHUNKED_ARRAY_WRITE_REQUEST);
 
             assert.deepEqual(result, CHUNKED_ARRAY_WRITE_RESPONSE);
-            assert.deepEqual(accessControlCluster.attributes.acl.get(), [
+            assert.deepEqual(accessControlCluster.attributes.acl.get(testSession), [
                 {
                     privilege: 1,
                     authMode: 2,
@@ -343,7 +349,8 @@ describe("InteractionProtocol", () => {
 
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
-            const endpoint = new Endpoint([DummyTestDevice], [basicCluster], 0);
+            const endpoint = new Endpoint([DummyTestDevice], 0);
+            endpoint.addClusterServer(basicCluster);
             const interactionProtocol = new InteractionServer(storageManager)
                 .setRootEndpoint(endpoint);
 
@@ -376,7 +383,8 @@ describe("InteractionProtocol", () => {
 
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
-            const endpoint = new Endpoint([DummyTestDevice], [onOffCluster], 0);
+            const endpoint = new Endpoint([DummyTestDevice], 0);
+            endpoint.addClusterServer(onOffCluster);
             const interactionProtocol = new InteractionServer(storageManager)
                 .setRootEndpoint(endpoint);
 
@@ -405,7 +413,8 @@ describe("InteractionProtocol", () => {
 
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
-            const endpoint = new Endpoint([DummyTestDevice], [onOffCluster], 0);
+            const endpoint = new Endpoint([DummyTestDevice], 0);
+            endpoint.addClusterServer(onOffCluster);
             const interactionProtocol = new InteractionServer(storageManager)
                 .setRootEndpoint(endpoint);
 
@@ -433,7 +442,8 @@ describe("InteractionProtocol", () => {
 
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
-            const endpoint = new Endpoint([DummyTestDevice], [onOffCluster], 0);
+            const endpoint = new Endpoint([DummyTestDevice], 0);
+            endpoint.addClusterServer(onOffCluster);
             const interactionProtocol = new InteractionServer(storageManager)
                 .setRootEndpoint(endpoint);
 

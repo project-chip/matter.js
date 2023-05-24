@@ -5,7 +5,9 @@
  */
 
 
-import { Attribute, Cluster, ClusterExtend, Command, OptionalAttribute, WritableAttribute } from "./Cluster.js";
+import {
+    Attribute, Cluster, ClusterExtend, Command, FixedAttribute, OptionalFixedAttribute, WritableAttribute
+} from "./Cluster.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
 import { TlvBitmap, TlvEnum, TlvInt32, TlvInt8, TlvUInt16, TlvUInt64, TlvUInt8 } from "../tlv/TlvNumber.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
@@ -241,7 +243,7 @@ export const EthernetNetworkCommissioningCluster = Cluster({
 
     attributes: {
         /** Maximum number of network configuration entries that can be added, based on available device resources. */
-        maxNetworks: Attribute(0, TlvUInt8.bound({ min: 1 })), /* read = admin */
+        maxNetworks: FixedAttribute(0, TlvUInt8.bound({ min: 1 })), /* read = admin */
 
         /** Network configurations that are usable on the network interface. */
         networks: Attribute(1, TlvArray(TlvNetworkInfo), { default: [] }), /* read = admin */
@@ -270,10 +272,10 @@ const WifiOrThreadNetworkCommissioningClusterExtend = ClusterExtend(
         },
         attributes: {
             /** Maximum duration taken, in seconds, to provide scan results. */
-            scanMaxTimeSeconds: OptionalAttribute(2, TlvUInt8),
+            scanMaxTimeSeconds: OptionalFixedAttribute(2, TlvUInt8),
 
             /** Maximum duration taken, in seconds, to report a successful or failed network connection indication. */
-            connectMaxTimeSeconds: OptionalAttribute(3, TlvUInt8),
+            connectMaxTimeSeconds: OptionalFixedAttribute(3, TlvUInt8),
         },
         commands: {
             /** Determine the set of networks the device sees as available. */
