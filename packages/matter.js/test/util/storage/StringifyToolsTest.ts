@@ -69,8 +69,11 @@ describe("JsonConverter", () => {
         });
 
         it("encode/decode Node.js Buffer", () => {
-
-            const obj = { type: 'Buffer', data: [1, 2, 3] };
+            if (typeof Buffer === "undefined") {
+                //Buffers do not exist in the browser
+                return;
+            }
+            const obj = Buffer.from([1, 2, 3]);
 
             const json = toJson(obj);
 
