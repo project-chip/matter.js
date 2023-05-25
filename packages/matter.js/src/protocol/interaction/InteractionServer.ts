@@ -155,11 +155,11 @@ export function ClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<
         const { requiredIf, optionalIf } = attributeDef[attributeName]
         const requiredOk = validateInitialAttributesExist<F, SF, A, C, E>(requiredIf, clusterDef, attributesInitialValues, attributeName, supportedFeatures);
         if(!requiredOk){
-            logger.warn(`*** InitialAttributeValue for "${clusterDef.name}/${attributeName}" is REQUIRED by supportedFeatures:${supportedFeatures} but is not set`);
+            logger.warn(`*** InitialAttributeValue for "${clusterDef.name}/${attributeName}" is REQUIRED by supportedFeatures:${JSON.stringify(supportedFeatures)} but is not set`);
         }
         const optionalOk = validateInitialAttributesExist<F, SF, A, C, E>(optionalIf, clusterDef, attributesInitialValues, attributeName, supportedFeatures);
         if(!optionalOk){
-            logger.warn(`*** InitialAttributeValue for "${clusterDef.name}/${attributeName}" is OPTIONAL by supportedFeatures:${supportedFeatures} but is not set`);
+            logger.info(`*** InitialAttributeValue for "${clusterDef.name}/${attributeName}" is optional by supportedFeatures:${JSON.stringify(supportedFeatures)} but is not set`);
         }
 
 

@@ -166,18 +166,23 @@ export type OptionalAttributeNames<A extends Attributes> = { [K in keyof A]: A[K
 /* Interfaces and helper methods to define a cluster command */
 export const TlvNoResponse = TlvVoid;
 export interface Command<RequestT, ResponseT> { optional: boolean, requestId: number, requestSchema: TlvSchema<RequestT>, responseId: number, responseSchema: TlvSchema<ResponseT> }
-export interface OptionalCommand<RequestT, ResponseT> extends Command<RequestT, ResponseT> { optional: true, requiredIf?:number[], optionalIf?:number[] }
+export interface OptionalCommand<RequestT, ResponseT> extends Command<RequestT, ResponseT> { optional: true, requiredIf?:number[], options?:CommandOptions }
 export type ResponseType<T extends Command<any, any>> = T extends OptionalCommand<any, infer ResponseT> ? ResponseT : (T extends Command<any, infer ResponseT> ? ResponseT : never);
 export type RequestType<T extends Command<any, any>> = T extends OptionalCommand<infer RequestT, any> ? RequestT : (T extends Command<infer RequestT, any> ? RequestT : never);
 
 
+interface CommandOptions {
+    optionalIf?: Array<number>,
+    requiredIf?: Array<number>
+}
 
 export const Command =
-<RequestT, ResponseT>(requestId: number,
-    requestSchema: TlvSchema<RequestT>,
-    responseId: number,
-    responseSchema: TlvSchema<ResponseT>): Command<RequestT, ResponseT> =>
-    ({
+    <RequestT, ResponseT>(
+        requestId: number,
+        requestSchema: TlvSchema<RequestT>,
+        responseId: number,
+        responseSchema: TlvSchema<ResponseT>
+    ): Command<RequestT, ResponseT> => ({
         optional: false,
         requestId,
         requestSchema,
@@ -185,22 +190,21 @@ export const Command =
         responseSchema
     });
 
-    export const OptionalCommand = <RequestT, ResponseT>(
-    requestId: number,
-    requestSchema: TlvSchema<RequestT>,
-    responseId: number,
-    responseSchema: TlvSchema<ResponseT>,
-    optionalIf?: Array<number>,
-    requiredIf?: Array<number>,
-    ): OptionalCommand<RequestT, ResponseT> => (
-        { optional: true,
-            optionalIf,
-            requiredIf,
-            requestId,
-            requestSchema,
-            responseId,
-            responseSchema
-        });
+export const OptionalCommand =
+    <RequestT, ResponseT>(
+        requestId: number,
+        requestSchema: TlvSchema<RequestT>,
+        responseId: number,
+        responseSchema: TlvSchema<ResponseT>,
+        options?: CommandOptions
+    ): OptionalCommand<RequestT, ResponseT> => ({
+        optional: true,
+        options,
+        requestId,
+        requestSchema,
+        responseId,
+        responseSchema
+    });
 
 /* Interfaces and helper methods to define a cluster event */
 export const enum EventPriority {
