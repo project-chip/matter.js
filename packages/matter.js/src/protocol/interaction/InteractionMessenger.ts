@@ -160,11 +160,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
 
     async sendDataReport(dataReport: DataReport) {
         const messageBytes = TlvDataReport.encode(dataReport);
-<<<<<<< HEAD
-        if(dataReport.attributeReports !== undefined && messageBytes.length > MAX_SPDU_LENGTH){
-=======
         if (dataReport.attributeReports !== undefined && messageBytes.length > MAX_SPDU_LENGTH) {
->>>>>>> origin/main
             // DataReport is too long, it needs to be sent in chunks
             const attributeReportsToSend = [...dataReport.attributeReports];
             dataReport.attributeReports.length = 0;
