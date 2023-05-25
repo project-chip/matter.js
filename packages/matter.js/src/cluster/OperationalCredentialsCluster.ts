@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AccessLevel, Attribute, Cluster, Command, TlvNoResponse } from "./Cluster.js";
+import { AccessLevel, Attribute, Cluster, Command, FixedAttribute, TlvNoResponse } from "./Cluster.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { TlvByteString, TlvString, TlvString32max } from "../tlv/TlvString.js";
 import { TlvVendorId } from "../datatype/VendorId.js";
@@ -256,7 +256,7 @@ export const OperationalCredentialsCluster = Cluster({
         fabrics: Attribute(1, TlvArray(TlvFabricDescriptor), { persistent: true }),
 
         /** Contains the number of Fabrics that are supported by the device. */
-        supportedFabrics: Attribute(2, TlvUInt8.bound({ min: 5, max: 254 })),
+        supportedFabrics: FixedAttribute(2, TlvUInt8.bound({ min: 5, max: 254 })),
 
         /** Contains the number of Fabrics to which the device is currently commissioned. */
         commissionedFabrics: Attribute(3, TlvUInt8, { persistent: true }),

@@ -10,11 +10,11 @@ import { Message } from "@project-chip/matter.js/codec";
 import { Fabric } from "@project-chip/matter.js/fabric";
 import { FabricIndex, VendorId, FabricId, NodeId } from "@project-chip/matter.js/datatype";
 import { ByteArray } from "@project-chip/matter.js/util";
-import { Attributes, ClusterServerObj, Commands } from "@project-chip/matter.js/cluster";
+import { Attributes, ClusterServerObj, Commands, Events } from "@project-chip/matter.js/cluster";
 import { Endpoint } from "@project-chip/matter.js/device";
 
 // TODO make that nicer
-export async function callCommandOnClusterServer<A extends Attributes, C extends Commands>(clusterServer: ClusterServerObj<A, C>, commandName: string, args: any, endpoint: Endpoint, session?: SecureSession<any>, message?: Message): Promise<{ code: StatusCode, responseId: number, response: any }> {
+export async function callCommandOnClusterServer<A extends Attributes, C extends Commands, E extends Events>(clusterServer: ClusterServerObj<A, C, E>, commandName: string, args: any, endpoint: Endpoint, session?: SecureSession<any>, message?: Message): Promise<{ code: StatusCode, responseId: number, response: any }> {
     const command = (clusterServer._commands as any)[commandName];
     if (command === undefined) throw new Error(`Command ${commandName} not found`);
     const { code, responseId, response } = await command.invoke(session ?? {} as SecureSession<any>, command.requestSchema.encodeTlv(args), message ?? {} as Message, endpoint);

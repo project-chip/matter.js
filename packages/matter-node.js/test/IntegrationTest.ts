@@ -14,7 +14,7 @@ Crypto.get = () => new CryptoNode();
 
 import {
     OnOffCluster, BasicInformationCluster, OperationalCertStatus, OperationalCredentialsCluster, DescriptorCluster,
-    IdentifyCluster, GroupsCluster, AccessControlCluster
+    IdentifyCluster, GroupsCluster, AccessControlCluster, ScenesCluster
 } from "@project-chip/matter.js/cluster";
 import { VendorId, FabricIndex, GroupId } from "@project-chip/matter.js/datatype";
 
@@ -52,7 +52,7 @@ const fakeTime = new TimeFake(TIME_START);
 const fakeControllerStorage = new StorageBackendMemory();
 const fakeServerStorage = new StorageBackendMemory();
 
-describe("New Integration", () => {
+describe("Integration Test", () => {
     let matterServer: MatterServer;
     let matterClient: MatterServer;
     let commissioningController: CommissioningController;
@@ -102,6 +102,7 @@ describe("New Integration", () => {
                 productName,
                 productId,
                 partNumber: "123456",
+                nodeLabel: ""
             },
             delayedAnnouncement: true, // delay because we need to override Mdns classes
         });
@@ -127,31 +128,22 @@ describe("New Integration", () => {
             // check API access for a Mandatory field with both APIs, get and set
             const v1_objApi = basicInfoCluster.attributes.softwareVersionString.get();
             assert.equal(v1_objApi, "v1");
-            basicInfoCluster.attributes.softwareVersionString.set("v2");
-            const v1_accessorApi = basicInfoCluster.getSoftwareVersionStringAttribute();
-            assert.equal(v1_accessorApi, "v2");
-            basicInfoCluster.setSoftwareVersionStringAttribute("v3");
-            const v1_accessorApi2 = basicInfoCluster.getSoftwareVersionStringAttribute();
-            assert.equal(v1_accessorApi2, "v3");
 
             // check API access for an existing optional field with both APIs, get and set
-            assert.ok(basicInfoCluster.attributes.partNumber);
-            const partNumber_objApi = basicInfoCluster.attributes.partNumber.get();
-            assert.equal(partNumber_objApi, "123456");
-            basicInfoCluster.attributes.partNumber.set("234567");
-            const partNumber_accessorApi = basicInfoCluster.getPartNumberAttribute();
-            assert.equal(partNumber_accessorApi, "234567");
-            basicInfoCluster.setPartNumberAttribute("345678");
-            const partNumber_accessorApi2 = basicInfoCluster.getPartNumberAttribute();
-            assert.equal(partNumber_accessorApi2, "345678");
+            assert.ok(basicInfoCluster.attributes.nodeLabel);
+            const nodeLabel_objApi = basicInfoCluster.attributes.nodeLabel.get();
+            assert.equal(nodeLabel_objApi, "");
+            basicInfoCluster.attributes.nodeLabel.set("234567");
+            const nodeLabel_accessorApi = basicInfoCluster.getNodeLabelAttribute();
+            assert.equal(nodeLabel_accessorApi, "234567");
+            basicInfoCluster.setNodeLabelAttribute("345678");
+            const nodeLabel_accessorApi2 = basicInfoCluster.getNodeLabelAttribute();
+            assert.equal(nodeLabel_accessorApi2, "345678");
 
             // check API access for an optional field with both APIs
             assert.equal(basicInfoCluster.attributes.manufacturingDate, undefined);
-            const manufactoringDate_accessorApi = basicInfoCluster.getManufacturingDateAttribute();
+            const manufactoringDate_accessorApi = basicInfoCluster.getManufacturingDateAttribute?.();
             assert.equal(manufactoringDate_accessorApi, undefined);
-            assert.throws(() => basicInfoCluster.setManufacturingDateAttribute("112333333"), {
-                message: "Attribute manufacturingDate is optional and not initialized. To use it please initialize it first."
-            });
         });
 
     });
@@ -181,15 +173,15 @@ describe("New Integration", () => {
 
             // Access a Mandatory field with both APIs
             const v1_objApi = await basicInfoCluster.attributes.softwareVersionString.get();
-            assert.equal(v1_objApi, "v3");
+            assert.equal(v1_objApi, "v1");
             const v1_accessorApi = await basicInfoCluster.getSoftwareVersionStringAttribute();
-            assert.equal(v1_accessorApi, "v3");
+            assert.equal(v1_accessorApi, "v1");
 
             // Access an existing optional field with both APIs
             const partNumber_objApi = await basicInfoCluster.attributes.partNumber.get();
-            assert.equal(partNumber_objApi, "345678");
+            assert.equal(partNumber_objApi, "123456");
             const partNumber_accessorApi = await basicInfoCluster.getPartNumberAttribute();
-            assert.equal(partNumber_accessorApi, "345678");
+            assert.equal(partNumber_accessorApi, "123456");
 
             // Access an not existing optional field with both APIs
             const manufactoringDate_objApi = await basicInfoCluster.attributes.manufacturingDate.get();
@@ -221,19 +213,19 @@ describe("New Integration", () => {
                 { endpointId: 2 }, // 2 / * /* - will be discarded in results!
             ]);
 
-            assert.equal(response.length, 39);
+            assert.equal(response.length, 42);
             assert.equal(response.filter(({
                 path: {
                     endpointId,
                     clusterId
                 }
-            }) => endpointId === 0 && clusterId === DescriptorCluster.id).length, 9);
+            }) => endpointId === 0 && clusterId === DescriptorCluster.id).length, 10);
             assert.equal(response.filter(({
                 path: {
                     endpointId,
                     clusterId
                 }
-            }) => endpointId === 1 && clusterId === DescriptorCluster.id).length, 9);
+            }) => endpointId === 1 && clusterId === DescriptorCluster.id).length, 10);
 
             const descriptorServerListData = response.find(({
                 path: {
@@ -257,7 +249,7 @@ describe("New Integration", () => {
                     endpointId,
                     clusterId
                 }
-            }) => endpointId === 0 && clusterId === BasicInformationCluster.id).length, 20);
+            }) => endpointId === 0 && clusterId === BasicInformationCluster.id).length, 21);
             const softwareVersionStringData = response.find(({
                 path: {
                     endpointId,
@@ -272,7 +264,23 @@ describe("New Integration", () => {
                     clusterId: BasicInformationCluster.id,
                     attributeId: BasicInformationCluster.attributes.softwareVersionString.id,
                     attributeName: "softwareVersionString"
-                }, value: "v3", version: 2
+                }, value: "v1", version: 0
+            });
+            const nodeLabelData = response.find(({
+                path: {
+                    endpointId,
+                    clusterId,
+                    attributeId
+                }
+            }) => endpointId === 0 && clusterId === BasicInformationCluster.id && attributeId === BasicInformationCluster.attributes.nodeLabel.id);
+            assert.deepEqual(nodeLabelData, {
+                path: {
+                    nodeId: undefined,
+                    endpointId: 0,
+                    clusterId: BasicInformationCluster.id,
+                    attributeId: BasicInformationCluster.attributes.nodeLabel.id,
+                    attributeName: "nodeLabel"
+                }, value: "345678", version: 2
             });
 
             const onOffData = response.find(({
@@ -352,6 +360,16 @@ describe("New Integration", () => {
 
     });
 
+    describe("Groups server fabric scoped storage", () => {
+        it("add a group", async () => {
+            const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
+            assert.ok(onoffEndpoint);
+            const groupsCluster = onoffEndpoint.getClusterClient(GroupsCluster, defaultInteractionClient);
+            assert.ok(groupsCluster);
+            await groupsCluster.commands.addGroup({ groupId: new GroupId(1), groupName: "Group 1" });
+        });
+    });
+
     describe("subscribe attributes", () => {
         it("subscription of one attribute sends updates when the value changes", async () => {
             const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
@@ -398,6 +416,42 @@ describe("New Integration", () => {
 
             assert.deepEqual(lastReport, { value: false, time: startTime + (60 * 60 + 4) * 1000 });
         });
+
+        it("subscribe an attribute with getter that needs endpoint", async () => {
+            const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
+            assert.ok(onoffEndpoint);
+            const scenesClient = onoffEndpoint.getClusterClient(ScenesCluster, await commissioningController.createInteractionClient());
+            assert.ok(scenesClient);
+
+            const scenesServer = onOffLightDeviceServer.getClusterServer(ScenesCluster);
+            assert.ok(scenesServer);
+
+            const startTime = Time.nowMs();
+
+            // Await initial Data
+            const { promise: firstPromise, resolver: firstResolver } = await getPromiseResolver<{ value: number, time: number }>();
+            const callback = (value: number) => firstResolver({ value, time: Time.nowMs() });
+
+            //onOffClient.attributes.onOff.addListener(value => callback(value));
+            //await onOffClient.attributes.onOff.subscribe(0, 5);
+            await scenesClient.subscribeSceneCountAttribute(value => callback(value), 0, 5);
+
+            await fakeTime.advanceTime(0);
+            const firstReport = await firstPromise;
+            assert.deepEqual(firstReport, { value: 0, time: startTime });
+
+            /* Will be added later when we clean up getter subscriptions
+            // Await update Report on value change
+            const { promise: updatePromise, resolver: updateResolver } = await getPromiseResolver<{ value: boolean, time: number }>();
+            callback = (value: boolean) => updateResolver({ value, time: Time.nowMs() });
+
+            await fakeTime.advanceTime(2 * 1000);
+            await scenesClient.addScene({groupID: new GroupId(1), sceneId: 1, transitionTime: 0, sceneName: "Test", extensionFieldSets: []});
+            const updateReport = await updatePromise;
+
+            assert.deepEqual(updateReport, { value: true, time: startTime + 2 * 1000 });
+            */
+        });
     });
 
     describe("Access Control server fabric scoped attribute storage", () => {
@@ -405,20 +459,15 @@ describe("New Integration", () => {
             const accessControlCluster = commissioningController.getRootClusterClient(AccessControlCluster, defaultInteractionClient);
             assert.ok(accessControlCluster);
             await accessControlCluster.attributes.acl.set([]);
+            await accessControlCluster.setAclAttribute([]);
 
             const acl = await accessControlCluster.attributes.acl.get();
-            assert.ok(Array.isArray(acl));
-            assert.equal(acl.length, 0);
-        });
-    });
+            const acl2 = await accessControlCluster.getAclAttribute();
 
-    describe("Groups server fabric scoped storage", () => {
-        it("set a group name", async () => {
-            const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
-            assert.ok(onoffEndpoint);
-            const groupsCluster = onoffEndpoint.getClusterClient(GroupsCluster, defaultInteractionClient);
-            assert.ok(groupsCluster);
-            await groupsCluster.commands.addGroup({ groupId: new GroupId(1), groupName: "Group 1" });
+            assert.ok(Array.isArray(acl));
+            assert.ok(Array.isArray(acl2));
+            assert.equal(acl.length, 0);
+            assert.equal(acl2.length, 0);
         });
     });
 

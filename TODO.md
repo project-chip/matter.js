@@ -58,3 +58,6 @@ The following are things on my (@Apollon77) TODO list for the project right now 
 * Restructure MdnsScanner to be able to scan for multiple nodes and spread the traffic to the node instances
 * Restructure MdnsBroadcaster to announce multiple nodes (port must not be hard coded)
 
+## Testing
+* Find out how we can do ESM based tests in Browser (currently karma uses cjs files)
+* Add a low level Payload testing suite to simulate pairing and operation behaviour of ios, Amazon, Google and such to better make sure changes do not break anything

@@ -9,7 +9,7 @@ import { createDefaultOnOffClusterServer } from "../cluster/server/OnOffServer.j
 import { createDefaultGroupsClusterServer } from "../cluster/server/GroupsServer.js";
 import { createDefaultScenesClusterServer } from "../cluster/server/ScenesServer.js";
 import { createDefaultIdentifyClusterServer } from "../cluster/server/IdentifyServer.js";
-import { AttributeInitialValues, CommandHandler } from "../cluster/server/ClusterServer.js";
+import { AttributeInitialValues, ClusterServerHandlers } from "../cluster/server/ClusterServer.js";
 import { IdentifyCluster, } from "../cluster/IdentifyCluster.js";
 import { OnOffCluster } from "../cluster/OnOffCluster.js";
 import { extendPublicHandlerMethods } from "../util/NamedHandler.js";
@@ -17,9 +17,8 @@ import { BitSchema, TypeFromBitSchema } from "../schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
 
 type OnOffBaseDeviceCommands = {
-    identify: CommandHandler<typeof IdentifyCluster.commands.identify, any>;
+    identify: ClusterServerHandlers<typeof IdentifyCluster>["identify"];
 }
-
 
 /**
  * Utility function to get the initial attribute values for a cluster out of an object with initial attribute values
@@ -47,7 +46,7 @@ abstract class OnOffBaseDevice extends extendPublicHandlerMethods<typeof Device,
      * @param endpointId Optional endpoint ID of the device. If not set, the device will be instanced as a root device
      */
     protected constructor(definition: DeviceTypeDefinition, attributeInitialValues?: { [key: number]: AttributeInitialValues<any> }, endpointId?: number) {
-        super(definition, [], endpointId);
+        super(definition, endpointId);
         this.addDeviceClusters(attributeInitialValues);
     }
 

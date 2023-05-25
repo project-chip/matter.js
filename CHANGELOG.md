@@ -5,12 +5,32 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
 
 ## 0.5.0 (WIP)
 * Matter-Core functionality:
+  * Breaking: Added support to allow to clearly model some more attribute types with internally different behaviour:
+    * Added types for WritableFabricScopedAttribute and OptionalWritableFabricScopedAttribute
+    * Added types for FixedAttribute and OptionalFixedAttribute
+    * Added FixedAttributeServer which only allows to "get" the value but not to set it
+    * Added FabricScopedAttributeServer which gets and sets the value based on the provided fabric
+    * Updated ClusterServerObj and ClusterClientObj typings to respect these Attribute types
+    * Updated all Cluster definitions that use such attribute types
+    * Add Interface for Events which requires to define the supported events when creating a ClusterServer (Event Logic WIP in separate PR)
+  * Enhance: Splitted up and corrected PowerSource and PressureMeasurement Cluster based on Matter 1.1 Specs
+  * Fix: Added missing PulseWidthModulationLevelControlCluster to AllCLusters
+  * Fix Typing of Commands in ClusterClient if no commands were present
+  * Fix: Fix equality checks in Attribute servers to check deeper then just === (and introduce new util method isDeepEqual)
+  * Fix: Make sure an error received from sending subscription seed data reports is not bubbling up and activate subscription after successful seeding
+  * Fix: Allows Node.js Buffer objects to be persisted to storage as a Uint8Arrays that they subclass
+* matter.js API:
+  * Breaking: Adjusted some constructors of the new API and remove the option to pass an array of clusters to be added initially because this was no longer compatible to the strong typing in some places. Use addClusterServer and addClusterClient methods
   * Deprecation: The classes MatterDevice and MatterController are deprecated to be used externally to the library and will be removed in later versions.
   * Deprecation: The CLI Examples LegacyDeviceNode and LegacyControllerNode will be removed in next version! Use the new variants please.
   * Feature: Enhance Storage system to allow to create subcontext stores to allow better separation of data
+* Misc:
+  * Added Specification links for Matter Specifications 1.1
 
 ## 0.4.0 (2023-05-16)
 * Matter-Core functionality:
+  * Deprecation: The classes MatterDevice and MatterController are deprecated to be used externally to the library and will be removed in later versions.
+  * Deprecation: The CLI Examples LegacyDeviceNode and LegacyControllerNode will be removed in next version! Use the new variants please.
   * Feature: Generate global Attributes attributeList, acceptedCommandList and generatedCommandList when generating cluster servers (when used with New API!)
   * Feature: (@digitaldan) Added decoding of Pairingcodes to determine discriminator and pin for Controller usage
   * Feature: Provide the Endpoint as data field for command Handlers to allow to access the endpoint data and other clusters on that endpoint if needed

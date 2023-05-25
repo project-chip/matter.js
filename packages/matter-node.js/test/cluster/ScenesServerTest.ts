@@ -21,7 +21,7 @@ import { SecureSession } from "@project-chip/matter.js/session";
 import { Fabric, FabricJsonObject } from "@project-chip/matter.js/fabric";
 import {
     GroupsCluster, GroupsClusterHandler, ScenesCluster, ScenesClusterHandler, OnOffCluster, OnOffClusterHandler,
-    ClusterServerObj
+    ClusterServerObjForCluster
 } from "@project-chip/matter.js/cluster";
 import { GroupId, AttributeId, ClusterId } from "@project-chip/matter.js/datatype";
 import { getPromiseResolver } from "@project-chip/matter.js/util";
@@ -31,9 +31,9 @@ import { TlvBoolean } from "@project-chip/matter.js/tlv";
 import { Endpoint, DeviceTypes } from "@project-chip/matter.js/device";
 
 describe("Scenes Server test", () => {
-    let groupsServer: ClusterServerObj<typeof GroupsCluster.attributes, typeof GroupsCluster.commands> | undefined;
-    let scenesServer: ClusterServerObj<typeof ScenesCluster.attributes, typeof ScenesCluster.commands> | undefined;
-    let onOffServer: ClusterServerObj<typeof OnOffCluster.attributes, typeof OnOffCluster.commands> | undefined;
+    let groupsServer: ClusterServerObjForCluster<typeof GroupsCluster> | undefined;
+    let scenesServer: ClusterServerObjForCluster<typeof ScenesCluster> | undefined;
+    let onOffServer: ClusterServerObjForCluster<typeof OnOffCluster> | undefined;
     let testFabric: Fabric | undefined;
     let testSession: SecureSession<any> | undefined
     let endpoint: Endpoint | undefined;
@@ -53,7 +53,10 @@ describe("Scenes Server test", () => {
         testSession = await createTestSessionWithFabric();
         testFabric = testSession.getFabric();
 
-        endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], [groupsServer, scenesServer, onOffServer], 1);
+        endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], 1);
+        endpoint.addClusterServer(groupsServer);
+        endpoint.addClusterServer(scenesServer);
+        endpoint.addClusterServer(onOffServer);
     }
 
     describe("Basic scenes logic", () => {

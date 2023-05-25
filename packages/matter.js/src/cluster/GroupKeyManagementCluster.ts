@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { WritableAttribute, Attribute, Cluster, Command, TlvNoResponse } from "./Cluster.js";
+import { WritableAttribute, Attribute, Cluster, Command, TlvNoResponse, FixedAttribute } from "./Cluster.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { TlvGroupId } from "../datatype/GroupId.js";
@@ -113,10 +113,10 @@ export const GroupKeyManagementCluster = Cluster({
         groupTable: Attribute(1, TlvArray(TlvGroupInfoMap, { maxLength: 254 })), /* fabricSensitive: true */
 
         /**  Maximum number of groups that this node supports per fabric */
-        maxGroupsPerFabric: Attribute(2, TlvUInt16, { default: 0 }),
+        maxGroupsPerFabric: FixedAttribute(2, TlvUInt16, { default: 0 }),
 
         /** Maximum number of group key sets this node supports per fabric */
-        maxGroupKeysPerFabric: Attribute(3, TlvUInt16.bound({ min: 1 }), { default: 1 }),
+        maxGroupKeysPerFabric: FixedAttribute(3, TlvUInt16.bound({ min: 1 }), { default: 1 }),
     },
 
     /** @see {@link MatterCoreSpecificationV1_0} § 11.2.9 */

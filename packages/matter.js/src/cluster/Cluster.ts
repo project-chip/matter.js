@@ -23,16 +23,25 @@ export const enum AccessLevel {
 }
 
 /* Interfaces and helper methods to define a cluster attribute */
-export interface Attribute<T> { id: number, schema: TlvSchema<T>, optional: boolean, readAcl: AccessLevel, writable: boolean, scene: boolean, persistent: boolean, omitChanges: boolean, writeAcl?: AccessLevel, default?: T }
+export interface Attribute<T> { id: number, schema: TlvSchema<T>, optional: boolean, readAcl: AccessLevel, writable: boolean, scene: boolean, persistent: boolean, fixed: boolean, fabricScoped: boolean, omitChanges: boolean, writeAcl?: AccessLevel, default?: T }
 export interface OptionalAttribute<T> extends Attribute<T> { optional: true }
 export interface WritableAttribute<T> extends Attribute<T> { writable: true }
 export interface OptionalWritableAttribute<T> extends OptionalAttribute<T> { writable: true }
+export interface WritableFabricScopedAttribute<T> extends WritableAttribute<T> { fabricScoped: true }
+export interface OptionalWritableFabricScopedAttribute<T> extends OptionalWritableAttribute<T> { fabricScoped: true }
+export interface FixedAttribute<T> extends Attribute<T> { fixed: true }
+export interface OptionalFixedAttribute<T> extends OptionalAttribute<T> { fixed: true }
+
 export type AttributeJsType<T extends Attribute<any>> = T extends Attribute<infer JsType> ? JsType : never;
 interface AttributeOptions<T> { scene?: boolean, persistent?: boolean, omitChanges?: boolean, default?: T, readAcl?: AccessLevel, writeAcl?: AccessLevel }
-export const Attribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { scene = false, persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View }: AttributeOptions<V> = {}): Attribute<T> => ({ id, schema, optional: false, writable: false, scene, persistent, omitChanges, default: conformanceValue, readAcl });
-export const OptionalAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { scene = false, persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View }: AttributeOptions<V> = {}): OptionalAttribute<T> => ({ id, schema, optional: true, writable: false, scene, persistent, omitChanges, default: conformanceValue, readAcl });
-export const WritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { scene = false, persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View, writeAcl = AccessLevel.View }: AttributeOptions<V> = {}): WritableAttribute<T> => ({ id, schema, optional: false, writable: true, scene, persistent, omitChanges, default: conformanceValue, readAcl, writeAcl });
-export const OptionalWritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { scene = false, persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View, writeAcl = AccessLevel.View }: AttributeOptions<V> = {}): OptionalWritableAttribute<T> => ({ id, schema, optional: true, writable: true, scene, persistent, omitChanges, default: conformanceValue, readAcl, writeAcl });
+export const Attribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { scene = false, persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View }: AttributeOptions<V> = {}): Attribute<T> => ({ id, schema, optional: false, writable: false, fixed: false, scene, persistent, fabricScoped: false, omitChanges, default: conformanceValue, readAcl });
+export const OptionalAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { scene = false, persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View }: AttributeOptions<V> = {}): OptionalAttribute<T> => ({ id, schema, optional: true, writable: false, fixed: false, scene, persistent, fabricScoped: false, omitChanges, default: conformanceValue, readAcl });
+export const WritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { scene = false, persistent = true, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View, writeAcl = AccessLevel.View }: AttributeOptions<V> = {}): WritableAttribute<T> => ({ id, schema, optional: false, writable: true, fixed: false, scene, persistent, fabricScoped: false, omitChanges, default: conformanceValue, readAcl, writeAcl });
+export const OptionalWritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { scene = false, persistent = true, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View, writeAcl = AccessLevel.View }: AttributeOptions<V> = {}): OptionalWritableAttribute<T> => ({ id, schema, optional: true, writable: true, fixed: false, scene, persistent, fabricScoped: false, omitChanges, default: conformanceValue, readAcl, writeAcl });
+export const WritableFabricScopedAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { scene = false, persistent = true, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View, writeAcl = AccessLevel.View }: AttributeOptions<V> = {}): WritableFabricScopedAttribute<T> => ({ id, schema, optional: false, writable: true, fixed: false, scene, persistent, fabricScoped: true, omitChanges, default: conformanceValue, readAcl, writeAcl });
+export const OptionalWritableFabricScopedAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { scene = false, persistent = true, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View, writeAcl = AccessLevel.View }: AttributeOptions<V> = {}): OptionalWritableFabricScopedAttribute<T> => ({ id, schema, optional: true, writable: true, fixed: false, scene, persistent, fabricScoped: true, omitChanges, default: conformanceValue, readAcl, writeAcl });
+export const FixedAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { scene = false, persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View }: AttributeOptions<V> = {}): FixedAttribute<T> => ({ id, schema, optional: false, writable: false, fixed: true, scene, persistent, fabricScoped: false, omitChanges, default: conformanceValue, readAcl });
+export const OptionalFixedAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { scene = false, persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View }: AttributeOptions<V> = {}): OptionalFixedAttribute<T> => ({ id, schema, optional: true, writable: false, fixed: true, scene, persistent, fabricScoped: false, omitChanges, default: conformanceValue, readAcl });
 
 export type MandatoryAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends OptionalAttribute<any> ? never : K }[keyof A];
 export type OptionalAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends OptionalAttribute<any> ? K : never }[keyof A];
@@ -51,11 +60,15 @@ export const OptionalCommand = <RequestT, ResponseT>(requestId: number, requestS
 export const enum EventPriority {
     Critical,
     Info,
+    Debug,
 }
 export interface Event<T> { id: number, schema: TlvSchema<T>, priority: EventPriority, optional: boolean }
 export interface OptionalEvent<T> extends Event<T> { optional: true }
 export const Event = <FT extends TlvFields>(id: number, priority: EventPriority, data: FT = <FT>{}): Event<TypeFromFields<FT>> => ({ id, schema: TlvObject(data), priority, optional: false });
-export const OptionalEvent = <FT extends TlvFields>(id: number, priority: EventPriority, data: FT = <FT>{}): Event<TypeFromFields<FT>> => ({ id, schema: TlvObject(data), priority, optional: true });
+export const OptionalEvent = <FT extends TlvFields>(id: number, priority: EventPriority, data: FT = <FT>{}): OptionalEvent<TypeFromFields<FT>> => ({ id, schema: TlvObject(data), priority, optional: true });
+export type EventType<T extends Event<any>> = T extends OptionalEvent<infer EventT> ? EventT : (T extends Event<infer EventT> ? EventT : never);
+export type MandatoryEventNames<E extends Events> = { [K in keyof E]: E[K] extends OptionalEvent<any> ? never : K }[keyof E];
+export type OptionalEventNames<E extends Events> = { [K in keyof E]: E[K] extends OptionalEvent<any> ? K : never }[keyof E];
 
 /* Interfaces and helper methods to define a cluster */
 export interface Attributes { [key: string]: Attribute<any> }
@@ -103,7 +116,7 @@ export interface Cluster<F extends BitSchema, SF extends TypeFromBitSchema<F>, A
     commands: C,
     events: E,
 }
-export const Cluster = <F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>({
+export const Cluster = <F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes = {}, C extends Commands = {}, E extends Events = {}>({
     id,
     name,
     revision,
@@ -145,13 +158,13 @@ export const ClusterExtend =
     <
         F extends BitSchema,
         SF_BASE extends TypeFromBitSchema<F>,
-        A_BASE extends Attributes,
-        C_BASE extends Commands,
-        E_BASE extends Events,
         SF_EXTEND extends TypeFromBitSchema<F>,
-        A_EXTEND extends Attributes,
-        C_EXTEND extends Commands,
-        E_EXTEND extends Events,
+        A_BASE extends Attributes = {},
+        C_BASE extends Commands = {},
+        E_BASE extends Events = {},
+        A_EXTEND extends Attributes = {},
+        C_EXTEND extends Commands = {},
+        E_EXTEND extends Events = {},
     >(
         { id, name, revision, features, supportedFeatures, attributes, commands, events }: Cluster<F, SF_BASE, A_BASE, C_BASE, E_BASE>,
         {
