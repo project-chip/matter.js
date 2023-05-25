@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AccessLevel, Attribute, Cluster, Command, WritableAttribute } from "./Cluster.js";
+import { AccessLevel, Attribute, Cluster, Command, FixedAttribute, WritableAttribute } from "./Cluster.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvEnum, TlvUInt16, TlvUInt64 } from "../tlv/TlvNumber.js";
@@ -118,16 +118,16 @@ export const GeneralCommissioningCluster = Cluster({
         breadcrumb: WritableAttribute(0, TlvUInt64, { default: BigInt(0), writeAcl: AccessLevel.Administer }),
 
         /** Describe critical parameters needed at the beginning of commissioning flow. */
-        basicCommissioningInfo: Attribute(1, TlvBasicCommissioningInfo),
+        basicCommissioningInfo: FixedAttribute(1, TlvBasicCommissioningInfo),
 
         /** Indicates the regulatory configuration for the product. */
         regulatoryConfig: Attribute(2, TlvEnum<RegulatoryLocationType>()), /* default: value of locationCapability */
 
         /** Indicates if this Node needs to be told an exact RegulatoryLocation. */
-        locationCapability: Attribute(3, TlvEnum<RegulatoryLocationType>(), { default: RegulatoryLocationType.IndoorOutdoor }),
+        locationCapability: FixedAttribute(3, TlvEnum<RegulatoryLocationType>(), { default: RegulatoryLocationType.IndoorOutdoor }),
 
         /** Indicates whether this device supports "concurrent connection flow" commissioning mode */
-        supportsConcurrentConnections: Attribute(4, TlvBoolean, { default: true }),
+        supportsConcurrentConnections: FixedAttribute(4, TlvBoolean, { default: true }),
     },
 
     /** @see {@link MatterCoreSpecificationV1_0} § 11.9.7 */

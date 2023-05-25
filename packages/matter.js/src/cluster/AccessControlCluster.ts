@@ -4,7 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AccessLevel, Attribute, Cluster, Event, EventPriority, OptionalWritableAttribute, WritableAttribute } from "./Cluster.js";
+import {
+    AccessLevel, Attribute, Cluster, Event, EventPriority, OptionalWritableFabricScopedAttribute,
+    WritableFabricScopedAttribute
+} from "./Cluster.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
@@ -143,10 +146,10 @@ export const AccessControlCluster = Cluster({
     /** @see {@link MatterCoreSpecificationV1_0} § 9.10.5 */
     attributes: {
         /** Codifies a single grant of privilege on this Node. */
-        acl: WritableAttribute(0, TlvArray(TlvAccessControlEntry), { default: [], writeAcl: AccessLevel.Administer, readAcl: AccessLevel.Administer }), /* fabricScoped: true */
+        acl: WritableFabricScopedAttribute(0, TlvArray(TlvAccessControlEntry), { default: [], writeAcl: AccessLevel.Administer, readAcl: AccessLevel.Administer }),
 
         /** MAY be used by Administrators to store arbitrary data related to fabric’s Access Control Entries. */
-        extension: OptionalWritableAttribute(1, TlvArray(TlvAccessControlExtensionEntry), { default: [], writeAcl: AccessLevel.Administer, readAcl: AccessLevel.Administer }), /* fabricScoped: true */
+        extension: OptionalWritableFabricScopedAttribute(1, TlvArray(TlvAccessControlExtensionEntry), { default: [], writeAcl: AccessLevel.Administer, readAcl: AccessLevel.Administer }),
 
         /** Provide the minimum number of Subjects per entry that are supported by this server. */
         subjectsPerAccessControlEntry: Attribute(2, TlvUInt16.bound({ min: 4 }), { default: 4 }),

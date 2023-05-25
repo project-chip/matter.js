@@ -81,4 +81,9 @@ export class UnsecureSession<T> implements Session<T> {
     destroy() {
         throw new Error("The unsecure session should never be destroyed.");
     }
+
+    getAccessingFabric(): Fabric {
+        throw new Error("Session needs to be a secure session");
+    }
+
 }

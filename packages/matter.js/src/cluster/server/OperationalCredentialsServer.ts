@@ -71,6 +71,7 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
 
     getFabrics: ({ session }) => {
         if (session === undefined || !session.isSecure()) return []; // ???
+        // TODO add support for "fabric filtered TRUE" to only return "the" one fabric
         return session.getContext().getFabrics().map(fabric => ({
             fabricId: fabric.fabricId,
             label: fabric.label,

@@ -73,7 +73,7 @@ export const IdentifyCluster = Cluster({
         identifyTime: WritableAttribute(0, TlvUInt16, { default: 0 }), /* unit: seconds */
 
         /** Specifies how the identification state is presented to the user. */
-        identifyType: Attribute(1, TlvEnum<IdentifyType>(), { default: 0 }),
+        identifyType: Attribute(1, TlvEnum<IdentifyType>(), { default: IdentifyType.None }),
     },
 
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.2.6 */
