@@ -7,10 +7,6 @@
 // Export Specs types
 export * from "./spec/Specifications.js";
 
-// Export Legacy API
-export { MatterController } from "./MatterController.js";
-export { MatterDevice } from "./MatterDevice.js";
-
 // Export new High Level API basic classes
 export * from "./CommissioningServer.js";
 export * from "./CommissioningController.js";

@@ -21,7 +21,6 @@ Then after `cd packages/matter-node.js` you can use `npm run matter-device` to r
 ### Start a simple Matter Device Node
 
 > The code for this example is in [src/examples/DeviceNode.ts](./src/examples/DeviceNode.ts).
-> The former version based on the legacy internal API in [src/examples/LegacyDeviceNode.ts](./src/examples/LegacyDeviceNode.ts) is still available but will be removed in the future.
 
 To run from the build files:
 
@@ -61,12 +60,13 @@ The following parameters are available:
 * -announceinterface: limit mdns announcements to the provided network interface, e.g. "en0" (default: all interfaces available)
 * -port: the port to listen on for the device (default: 5540)
 * -store: the storage location (directory) to use for storing the pairing information (default: device-node). Delete the directory or provide an alternative name to reset the device
+* -clearstorage: the storage location will be reset on start of the process
 * -on: the command to run when the device is turned on (see example above)
 * -off: the command to run when the device is turned off (see example above)
 
 ### Start a Matter Bridge
 
-> The code for this example is in [src/examples/BridgedDeviceNode.ts](./src/examples/BridgedDeviceNode.ts).
+> The code for this example is in [src/examples/BridgedDevicesNode.ts](./src/examples/BridgedDevicesNode.ts).
 
 A Bridge is used to expose multiple devices at once.
 
@@ -115,7 +115,6 @@ The above command exposes a composed device with a socket and a light device and
 ### Start a Matter Controller
 
 > The code for this example is in [src/examples/ControllerNode.ts](./src/examples/ControllerNode.ts).
-> The former version based on the legacy internal API in [src/examples/LegacyControllerNode.ts](./src/examples/LegacyControllerNode.ts) is still available but will be removed in the future.
 
 **Experimental**
 The current controller implementation is no CLI tool, but shows the pairing of devices and resuming the connection and also showcase the existing low-level controller API. It is just intended to be used for debugging, during development! The code contains some commented-out examples of how to use the low level controller API.
@@ -143,6 +142,7 @@ The following parameters are available:
 * -pin: the pin to use for pairing (default: 20202021)
 * -pairingcode: code to use for pairing (-discriminator and -pin will be ignored)
 * -store: the storage location (directory) to use for storing the pairing information (default: controller-node). Delete the directory or provide an alternative name to reset the controller
+* -clearstorage: the storage location will be reset on start of the process
 
 ## Development on basis of the examples
 

@@ -24,7 +24,7 @@ import { MatterServer, CommissioningController } from "../"; // same as @project
 import { Logger } from "../exports/log"; // same as @project-chip/matter-node.js/log
 import { StorageManager, StorageBackendDisk } from "../storage"; // same as @project-chip/matter-node.js/storage
 import { BasicInformationCluster, DescriptorCluster, OnOffCluster } from "../exports/cluster"; // same as @project-chip/matter-node.js/cluster
-import { getIntParameter, getParameter, requireMinNodeVersion } from "../util";
+import { getIntParameter, getParameter, requireMinNodeVersion, hasParameter } from "../util";
 import { ManualPairingCodeCodec } from "../exports/schema"; // same as @project-chip/matter-node.js/util
 
 const logger = Logger.get("Controller");
@@ -32,7 +32,7 @@ const logger = Logger.get("Controller");
 requireMinNodeVersion(16);
 
 const storageLocation = getParameter("store") ?? "controller-node";
-const storage = new StorageBackendDisk(storageLocation, getIntParameter("clearstorage") === 1);
+const storage = new StorageBackendDisk(storageLocation, hasParameter("clearstorage"));
 logger.info(`Storage location: ${storageLocation} (Directory)`);
 logger.info('Use the parameter "-store NAME" to specify a different storage location, use -clearstorage to start with an empty storage.')
 

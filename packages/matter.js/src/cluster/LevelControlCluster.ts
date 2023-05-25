@@ -83,7 +83,7 @@ export const enum StepMode {
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.6.5 */
 const commonAttributes = {
     /** Current level of this device. */
-    currentLevel: Attribute(0x0, TlvNullable(TlvUInt8), { default: null }),
+    currentLevel: Attribute(0x0, TlvNullable(TlvUInt8), { default: null, persistent: true, scene: true }),
 
     /** Minimum value of {@link attributes.currentLevel}. */
     minLevel: OptionalAttribute(0x02, TlvUInt8),
@@ -174,7 +174,7 @@ export const PulseWidthModulationLevelControlCluster = Cluster({
         ...commonAttributes,
 
         /** Frequency at which the device is at CurrentLevel. */
-        currentFrequency: Attribute(0x04, TlvUInt16, { default: 0 }),
+        currentFrequency: Attribute(0x04, TlvUInt16, { default: 0, persistent: true, scene: true }),
 
         /** Min value of CurrentFrequency capable of being assigned. */
         minFrequency: Attribute(0x05, TlvUInt16, { default: 0 }),

@@ -18,11 +18,10 @@ Time.get = () => new TimeFake(0);
 import * as assert from "assert";
 import { ClusterServer, StatusCode } from "@project-chip/matter.js/interaction";
 import { SecureSession } from "@project-chip/matter.js/session";
-import { MatterDevice } from "@project-chip/matter.js";
 import { Fabric, FabricJsonObject } from "@project-chip/matter.js/fabric";
 import {
     GroupsCluster, GroupsClusterHandler, ScenesCluster, ScenesClusterHandler, OnOffCluster, OnOffClusterHandler,
-    ClusterServerObj
+    ClusterServerObjForCluster
 } from "@project-chip/matter.js/cluster";
 import { GroupId, AttributeId, ClusterId } from "@project-chip/matter.js/datatype";
 import { getPromiseResolver } from "@project-chip/matter.js/util";
@@ -32,11 +31,11 @@ import { TlvBoolean } from "@project-chip/matter.js/tlv";
 import { Endpoint, DeviceTypes } from "@project-chip/matter.js/device";
 
 describe("Scenes Server test", () => {
-    let groupsServer: ClusterServerObj<typeof GroupsCluster.attributes, typeof GroupsCluster.commands> | undefined;
-    let scenesServer: ClusterServerObj<typeof ScenesCluster.attributes, typeof ScenesCluster.commands> | undefined;
-    let onOffServer: ClusterServerObj<typeof OnOffCluster.attributes, typeof OnOffCluster.commands> | undefined;
+    let groupsServer: ClusterServerObjForCluster<typeof GroupsCluster> | undefined;
+    let scenesServer: ClusterServerObjForCluster<typeof ScenesCluster> | undefined;
+    let onOffServer: ClusterServerObjForCluster<typeof OnOffCluster> | undefined;
     let testFabric: Fabric | undefined;
-    let testSession: SecureSession<MatterDevice> | undefined
+    let testSession: SecureSession<any> | undefined
     let endpoint: Endpoint | undefined;
 
     // TODO make that nicer and maybe  move to a "testing support library"
@@ -54,8 +53,10 @@ describe("Scenes Server test", () => {
         testSession = await createTestSessionWithFabric();
         testFabric = testSession.getFabric();
 
-        endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], [groupsServer, /*scenesServer,*/ onOffServer], 1);
+        endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], 1);
+        endpoint.addClusterServer(groupsServer);
         endpoint.addClusterServer(scenesServer);
+        endpoint.addClusterServer(onOffServer);
     }
 
     describe("Basic scenes logic", () => {
@@ -89,7 +90,7 @@ describe("Scenes Server test", () => {
             assert.ok(scenesData);
             assert.deepEqual(scenesData, new Map([["1", new Map([[1, new Map([[1, { "extensionFieldSets": [{ "attributeValueList": [{ "attributeId": { "id": 0 }, "attributeValue": [{ "tag": undefined, "typeLength": { "type": 8, "value": true }, "value": undefined }] }], "clusterId": { "id": 6 } }], "sceneId": 1, "sceneName": "Scene 1", "sceneTransitionTime": 10, "scenesGroupId": 1, "transitionTime100ms": 0 }]])]])]]));
 
-            assert.equal(scenesServer!.attributes.sceneCount.get(testSession, endpoint), 1);
+            assert.equal(scenesServer!.attributes.sceneCount.get(testSession), 1);
         });
 
         it("add another scene on group 1 and verify storage", async () => {
@@ -114,7 +115,7 @@ describe("Scenes Server test", () => {
             const scenesData = persistedData.scopedClusterData.get(ScenesCluster.id);
             assert.ok(scenesData);
             assert.deepEqual(scenesData, new Map([["1", new Map([[1, new Map([[1, { "extensionFieldSets": [{ "attributeValueList": [{ "attributeId": { "id": 0 }, "attributeValue": [{ "tag": undefined, "typeLength": { "type": 8, "value": true }, "value": undefined }] }], "clusterId": { "id": 6 } }], "sceneId": 1, "sceneName": "Scene 1", "sceneTransitionTime": 10, "scenesGroupId": 1, "transitionTime100ms": 0 }], [2, { "extensionFieldSets": [{ "attributeValueList": [{ "attributeId": { "id": 0 }, "attributeValue": [{ "tag": undefined, "typeLength": { "type": 8, "value": false }, "value": undefined }] }], "clusterId": { "id": 6 } }], "sceneId": 2, "sceneName": "Scene 2", "sceneTransitionTime": 10, "scenesGroupId": 1, "transitionTime100ms": 0 }]])]])]]));
-            assert.equal(scenesServer!.attributes.sceneCount.get(testSession, endpoint), 2);
+            assert.equal(scenesServer!.attributes.sceneCount.get(testSession), 2);
         });
 
         it("add another new group and scene and verify storage", async () => {
@@ -142,7 +143,7 @@ describe("Scenes Server test", () => {
             const scenesData = persistedData.scopedClusterData.get(ScenesCluster.id);
             assert.ok(scenesData);
             assert.deepEqual(scenesData, new Map([["1", new Map([[1, new Map([[1, { "extensionFieldSets": [{ "attributeValueList": [{ "attributeId": { "id": 0 }, "attributeValue": [{ "tag": undefined, "typeLength": { "type": 8, "value": true }, "value": undefined }] }], "clusterId": { "id": 6 } }], "sceneId": 1, "sceneName": "Scene 1", "sceneTransitionTime": 10, "scenesGroupId": 1, "transitionTime100ms": 0 }], [2, { "extensionFieldSets": [{ "attributeValueList": [{ "attributeId": { "id": 0 }, "attributeValue": [{ "tag": undefined, "typeLength": { "type": 8, "value": false }, "value": undefined }] }], "clusterId": { "id": 6 } }], "sceneId": 2, "sceneName": "Scene 2", "sceneTransitionTime": 10, "scenesGroupId": 1, "transitionTime100ms": 0 }]])], [2, new Map([[3, { "extensionFieldSets": [{ "attributeValueList": [{ "attributeId": { "id": 0 }, "attributeValue": [{ "tag": undefined, "typeLength": { "type": 8, "value": true }, "value": undefined }] }], "clusterId": { "id": 6 } }], "sceneId": 3, "sceneName": "Scene 3", "sceneTransitionTime": 10, "scenesGroupId": 2, "transitionTime100ms": 0 }]])]])]]));
-            assert.equal(scenesServer!.attributes.sceneCount.get(testSession, endpoint), 3);
+            assert.equal(scenesServer!.attributes.sceneCount.get(testSession), 3);
         });
 
         it("get scene data", async () => {
@@ -171,7 +172,7 @@ describe("Scenes Server test", () => {
             const scenesData = persistedData.scopedClusterData.get(ScenesCluster.id);
             assert.ok(scenesData);
             assert.deepEqual(scenesData, new Map([["1", new Map([[1, new Map([[1, { "extensionFieldSets": [{ "attributeValueList": [{ "attributeId": { "id": 0 }, "attributeValue": [{ "tag": undefined, "typeLength": { "type": 8, "value": true }, "value": undefined }] }], "clusterId": { "id": 6 } }], "sceneId": 1, "sceneName": "Scene 1", "sceneTransitionTime": 10, "scenesGroupId": 1, "transitionTime100ms": 0 }]])], [2, new Map([[3, { "extensionFieldSets": [{ "attributeValueList": [{ "attributeId": { "id": 0 }, "attributeValue": [{ "tag": undefined, "typeLength": { "type": 8, "value": true }, "value": undefined }] }], "clusterId": { "id": 6 } }], "sceneId": 3, "sceneName": "Scene 3", "sceneTransitionTime": 10, "scenesGroupId": 2, "transitionTime100ms": 0 }]])]])]]));
-            assert.equal(scenesServer!.attributes.sceneCount.get(testSession, endpoint), 2);
+            assert.equal(scenesServer!.attributes.sceneCount.get(testSession), 2);
         });
 
         it("delete all scenes on one group and verify storage", async () => {
@@ -188,7 +189,7 @@ describe("Scenes Server test", () => {
             const scenesData = persistedData.scopedClusterData.get(ScenesCluster.id);
             assert.ok(scenesData);
             assert.deepEqual(scenesData, new Map([["1", new Map([[2, new Map([[3, { "extensionFieldSets": [{ "attributeValueList": [{ "attributeId": { "id": 0 }, "attributeValue": [{ "tag": undefined, "typeLength": { "type": 8, "value": true }, "value": undefined }] }], "clusterId": { "id": 6 } }], "sceneId": 3, "sceneName": "Scene 3", "sceneTransitionTime": 10, "scenesGroupId": 2, "transitionTime100ms": 0 }]])]])]]));
-            assert.equal(scenesServer!.attributes.sceneCount.get(testSession, endpoint), 1);
+            assert.equal(scenesServer!.attributes.sceneCount.get(testSession), 1);
         });
 
         it("delete one group and verify storage", async () => {
@@ -205,7 +206,7 @@ describe("Scenes Server test", () => {
             const scenesData = persistedData.scopedClusterData.get(ScenesCluster.id);
             assert.ok(scenesData);
             assert.deepEqual(scenesData, new Map([["1", new Map([])]]));
-            assert.equal(scenesServer!.attributes.sceneCount.get(testSession, endpoint), 0);
+            assert.equal(scenesServer!.attributes.sceneCount.get(testSession), 0);
         });
     });
 
@@ -315,7 +316,7 @@ describe("Scenes Server test", () => {
             assert.ok(scenesData);
             assert.deepEqual(scenesData, new Map([["1", new Map([[1, new Map([[1, { "extensionFieldSets": [{ "attributeValueList": [{ "attributeId": { "id": 0 }, "attributeValue": [{ "tag": undefined, "typeLength": { "type": 8, "value": true } }] }], "clusterId": { "id": 6 } }], "sceneId": 1, "sceneName": "", "sceneTransitionTime": 0, "scenesGroupId": 1, "transitionTime100ms": 0 }]])]])]]));
 
-            assert.equal(scenesServer?.attributes.sceneValid.get(testSession, endpoint), true);
+            assert.equal(scenesServer?.attributes.sceneValid.get(testSession), true);
             assert.equal(scenesServer?.attributes.currentScene.get(), 1);
             assert.deepEqual(scenesServer?.attributes.currentGroup.get(), new GroupId(1));
         });
@@ -413,7 +414,7 @@ describe("Scenes Server test", () => {
             assert.deepEqual(scenesServer?.attributes.currentGroup.get(), new GroupId(1));
             assert.equal(scenesServer?.attributes.currentScene.get(), 1);
 
-            assert.equal(scenesServer?.attributes.sceneValid.get(testSession, endpoint), false);
+            assert.equal(scenesServer?.attributes.sceneValid.get(testSession), false);
 
             const result = await callCommandOnClusterServer(scenesServer!, "recallScene", {
                 groupId: new GroupId(3),
@@ -424,7 +425,7 @@ describe("Scenes Server test", () => {
             assert.equal(onOffServer?.attributes.onOff.get(), true);
             assert.deepEqual(scenesServer?.attributes.currentGroup.get(), new GroupId(3));
             assert.equal(scenesServer?.attributes.currentScene.get(), 2);
-            assert.equal(scenesServer?.attributes.sceneValid.get(testSession, endpoint), true);
+            assert.equal(scenesServer?.attributes.sceneValid.get(testSession), true);
         });
 
         it("delete all groups and verify storage", async () => {
