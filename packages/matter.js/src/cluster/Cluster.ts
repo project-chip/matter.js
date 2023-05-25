@@ -23,16 +23,142 @@ export const enum AccessLevel {
 }
 
 /* Interfaces and helper methods to define a cluster attribute */
-export interface Attribute<T> { id: number, schema: TlvSchema<T>, optional: boolean, readAcl: AccessLevel, writable: boolean, scene: boolean, persistent: boolean, omitChanges: boolean, writeAcl?: AccessLevel, default?: T }
+export interface Attribute<T> {
+    id: number, schema: TlvSchema<T>,
+    optional: boolean,
+    optionalIf: number[],
+    requiredIf: number[],
+    readAcl: AccessLevel,
+    writable: boolean,
+    scene: boolean,
+    persistent: boolean,
+    omitChanges: boolean,
+    writeAcl?: AccessLevel,
+    default?: T
+}
+
 export interface OptionalAttribute<T> extends Attribute<T> { optional: true }
+
 export interface WritableAttribute<T> extends Attribute<T> { writable: true }
+
 export interface OptionalWritableAttribute<T> extends OptionalAttribute<T> { writable: true }
 export type AttributeJsType<T extends Attribute<any>> = T extends Attribute<infer JsType> ? JsType : never;
-interface AttributeOptions<T> { scene?: boolean, persistent?: boolean, omitChanges?: boolean, default?: T, readAcl?: AccessLevel, writeAcl?: AccessLevel }
-export const Attribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { scene = false, persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View }: AttributeOptions<V> = {}): Attribute<T> => ({ id, schema, optional: false, writable: false, scene, persistent, omitChanges, default: conformanceValue, readAcl });
-export const OptionalAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { scene = false, persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View }: AttributeOptions<V> = {}): OptionalAttribute<T> => ({ id, schema, optional: true, writable: false, scene, persistent, omitChanges, default: conformanceValue, readAcl });
-export const WritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { scene = false, persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View, writeAcl = AccessLevel.View }: AttributeOptions<V> = {}): WritableAttribute<T> => ({ id, schema, optional: false, writable: true, scene, persistent, omitChanges, default: conformanceValue, readAcl, writeAcl });
-export const OptionalWritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, { scene = false, persistent = false, omitChanges = false, default: conformanceValue, readAcl = AccessLevel.View, writeAcl = AccessLevel.View }: AttributeOptions<V> = {}): OptionalWritableAttribute<T> => ({ id, schema, optional: true, writable: true, scene, persistent, omitChanges, default: conformanceValue, readAcl, writeAcl });
+interface AttributeOptions<T> {
+    scene?: boolean,
+    persistent?: boolean,
+    omitChanges?: boolean,
+    default?: T,
+    readAcl?: AccessLevel,
+    writeAcl?: AccessLevel
+    optionalIf? : Array<number>,
+    requiredIf? : Array<number>
+}
+
+export const Attribute = <T, V extends T>(
+    id: number,
+    schema: TlvSchema<T>,
+    {
+        scene = false,
+        persistent = false,
+        omitChanges = false,
+        default: conformanceValue,
+        readAcl = AccessLevel.View,
+        optionalIf,
+        requiredIf
+    }: AttributeOptions<V> = {}
+): Attribute<T> => (
+    {
+        id,
+        schema,
+        optional: false,
+        optionalIf: optionalIf??[],
+        requiredIf: requiredIf??[],
+        writable: false,
+        scene,
+        persistent,
+        omitChanges,
+        default: conformanceValue,
+        readAcl
+    });
+
+export const OptionalAttribute = <T, V extends T>(
+    id: number,
+    schema: TlvSchema<T>,
+    {
+        scene = false,
+        persistent = false,
+        omitChanges = false,
+        default: conformanceValue,
+        optionalIf,
+        requiredIf,
+        readAcl = AccessLevel.View
+    }: AttributeOptions<V> = {},): OptionalAttribute<T> => (
+    {
+        id,
+        schema,
+        optional: true,
+        optionalIf: optionalIf??[],
+        requiredIf: requiredIf??[],
+        writable: false,
+        scene,
+        persistent,
+        omitChanges,
+        default:
+            conformanceValue,
+        readAcl
+    });
+
+export const WritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>,
+    {
+        scene = false,
+        persistent = false,
+        omitChanges = false,
+        default: conformanceValue,
+        readAcl = AccessLevel.View,
+        writeAcl = AccessLevel.View,
+        optionalIf,
+        requiredIf
+    } : AttributeOptions<V> = {}): WritableAttribute<T> => (
+    {
+        id,
+        schema,
+        optional: false,
+        optionalIf : optionalIf??[],
+        requiredIf : requiredIf??[],
+        writable: true,
+        scene, persistent,
+        omitChanges,
+        default: conformanceValue,
+        readAcl,
+        writeAcl
+    });
+
+export const OptionalWritableAttribute = <T, V extends T>(
+    id: number, schema: TlvSchema<T>, {
+        scene = false,
+        persistent = false,
+        omitChanges = false,
+        default: conformanceValue,
+        readAcl = AccessLevel.View,
+        writeAcl = AccessLevel.View,
+        optionalIf,
+        requiredIf
+    }
+    : AttributeOptions<V> = {}) : OptionalWritableAttribute<T> => (
+    {
+        id,
+        schema,
+        optional: true,
+        optionalIf : optionalIf??[],
+        requiredIf : requiredIf??[],
+        writable: true,
+        scene,
+        persistent,
+        omitChanges,
+        default: conformanceValue,
+        readAcl,
+        writeAcl
+    });
 
 export type MandatoryAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends OptionalAttribute<any> ? never : K }[keyof A];
 export type OptionalAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends OptionalAttribute<any> ? K : never }[keyof A];
@@ -40,12 +166,41 @@ export type OptionalAttributeNames<A extends Attributes> = { [K in keyof A]: A[K
 /* Interfaces and helper methods to define a cluster command */
 export const TlvNoResponse = TlvVoid;
 export interface Command<RequestT, ResponseT> { optional: boolean, requestId: number, requestSchema: TlvSchema<RequestT>, responseId: number, responseSchema: TlvSchema<ResponseT> }
-export interface OptionalCommand<RequestT, ResponseT> extends Command<RequestT, ResponseT> { optional: true }
+export interface OptionalCommand<RequestT, ResponseT> extends Command<RequestT, ResponseT> { optional: true, requiredIf?:number[], optionalIf?:number[] }
 export type ResponseType<T extends Command<any, any>> = T extends OptionalCommand<any, infer ResponseT> ? ResponseT : (T extends Command<any, infer ResponseT> ? ResponseT : never);
 export type RequestType<T extends Command<any, any>> = T extends OptionalCommand<infer RequestT, any> ? RequestT : (T extends Command<infer RequestT, any> ? RequestT : never);
 
-export const Command = <RequestT, ResponseT>(requestId: number, requestSchema: TlvSchema<RequestT>, responseId: number, responseSchema: TlvSchema<ResponseT>): Command<RequestT, ResponseT> => ({ optional: false, requestId, requestSchema, responseId, responseSchema });
-export const OptionalCommand = <RequestT, ResponseT>(requestId: number, requestSchema: TlvSchema<RequestT>, responseId: number, responseSchema: TlvSchema<ResponseT>): OptionalCommand<RequestT, ResponseT> => ({ optional: true, requestId, requestSchema, responseId, responseSchema });
+
+
+export const Command =
+<RequestT, ResponseT>(requestId: number,
+    requestSchema: TlvSchema<RequestT>,
+    responseId: number,
+    responseSchema: TlvSchema<ResponseT>): Command<RequestT, ResponseT> =>
+    ({
+        optional: false,
+        requestId,
+        requestSchema,
+        responseId,
+        responseSchema
+    });
+
+    export const OptionalCommand = <RequestT, ResponseT>(
+    requestId: number,
+    requestSchema: TlvSchema<RequestT>,
+    responseId: number,
+    responseSchema: TlvSchema<ResponseT>,
+    optionalIf?: Array<number>,
+    requiredIf?: Array<number>,
+    ): OptionalCommand<RequestT, ResponseT> => (
+        { optional: true,
+            optionalIf,
+            requiredIf,
+            requestId,
+            requestSchema,
+            responseId,
+            responseSchema
+        });
 
 /* Interfaces and helper methods to define a cluster event */
 export const enum EventPriority {

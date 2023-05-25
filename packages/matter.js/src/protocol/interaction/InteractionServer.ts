@@ -46,6 +46,20 @@ export const INTERACTION_PROTOCOL_ID = 0x0001;
 
 const logger = Logger.get("InteractionProtocol");
 
+function getEnabledBits(bitmask: number): number[] {
+    const enabledBits: number[] = [];
+
+    let currentBit = 0;
+    while (bitmask > 0) {
+      if (bitmask & 1) {
+        enabledBits.push(currentBit);
+      }
+      currentBit++;
+      bitmask >>= 1;
+    }
+    return enabledBits;
+  }
+
 export function ClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
     clusterDef: Cluster<F, SF, A, C, E>,
     attributesInitialValues: AttributeInitialValues<A>,
@@ -132,11 +146,26 @@ export function ClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<
         acceptedCommandList: new Array<CommandId>(),
         generatedCommandList: new Array<CommandId>(),
     };
+
     const attributeList = new Array<AttributeId>();
     for (const attributeName in attributeDef) {
         const capitalizedAttributeName = capitalize(attributeName);
+        // logger.info(`check this for REQUIRED Attributes ${JSON.stringify(attributeName)}`)
+
+        const { requiredIf, optionalIf } = attributeDef[attributeName]
+        const requiredOk = validateInitialAttributesExist<F, SF, A, C, E>(requiredIf, clusterDef, attributesInitialValues, attributeName, supportedFeatures);
+        if(!requiredOk){
+            logger.warn(`*** InitialAttributeValue for "${clusterDef.name}/${attributeName}" is REQUIRED by supportedFeatures:${supportedFeatures} but is not set`);
+        }
+        const optionalOk = validateInitialAttributesExist<F, SF, A, C, E>(optionalIf, clusterDef, attributesInitialValues, attributeName, supportedFeatures);
+        if(!optionalOk){
+            logger.warn(`*** InitialAttributeValue for "${clusterDef.name}/${attributeName}" is OPTIONAL by supportedFeatures:${supportedFeatures} but is not set`);
+        }
+
+
         if ((attributesInitialValues as any)[attributeName] !== undefined) {
             const { id, schema, writable, persistent, scene } = attributeDef[attributeName];
+
             const validator = typeof schema.validate === 'function' ? schema.validate.bind(schema) : undefined;
             const getter = (handlers as any)[`get${capitalize(attributeName)}`];
             if (getter === undefined) {
@@ -221,6 +250,29 @@ export function attributePathToId({ endpointId, clusterId, attributeId }: TypeFr
 
 function toHex(value: number | undefined) {
     return value === undefined ? "*" : `0x${value.toString(16)}`;
+}
+
+function validateInitialAttributesExist<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
+    bitmaskArray: number[],
+    clusterDef: Cluster<F, SF, A, C, E>,
+    attributesInitialValues: AttributeInitialValues<A>,
+    attributeName: Extract<keyof A, string>,
+    supportedFeatures: SF) : boolean {
+    if (bitmaskArray.length > 0) {
+        const supportedFeaturesBitMask: number[] = Object.entries(supportedFeatures)
+            .filter(([_, featureEnabled]) => featureEnabled)
+            .map(([supportedFeature, _]) => clusterDef.features[supportedFeature].offset);
+
+        for (const value of bitmaskArray) {
+            const requiredBits: number[] = getEnabledBits(value);
+            if (requiredBits.every(bit => supportedFeaturesBitMask.includes(bit))) {
+                if ((attributesInitialValues as any)[attributeName] === undefined) {
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
 }
 
 export class InteractionServer implements ProtocolHandler<MatterDevice> {
