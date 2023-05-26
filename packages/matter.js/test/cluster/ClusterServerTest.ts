@@ -22,7 +22,7 @@ import { DeviceTypes, Endpoint } from "../../src/device/index.js";
 import { Fabric } from "../../src/fabric/index.js";
 import {
     WindowCoveringClusterSchema, WindowCoveringEndProductType, WindowCoveringOperationalStatus
-} from "../../src/cluster/schema/WindowCoveringCluster.js";
+} from "../../src/cluster/schema/WindowCovering.js";
 import { WindowCoveringType } from "../../src/cluster/WindowCoveringCluster.js";
 import { Level, Logger } from "../../src/log/index.js";
 

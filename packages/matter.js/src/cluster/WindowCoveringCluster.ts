@@ -8,7 +8,7 @@ import { TlvEnum, TlvUInt16 } from "../tlv/TlvNumber.js";
 import { TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { Attribute, ClusterExtend, Command, OptionalCommand, TlvNoResponse } from "./Cluster.js";
 import { ClusterServerObjForCluster } from "./server/ClusterServer.js";
-import { WindowCoveringClusterSchema } from "./schema/WindowCoveringCluster.js";
+import { WindowCoveringClusterSchema } from "./schema/WindowCovering.js";
 import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
 
 /** alias for percentages expressed as 0 to 100.00 with 2 decimals */
