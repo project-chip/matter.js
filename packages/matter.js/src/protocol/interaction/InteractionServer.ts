@@ -11,7 +11,7 @@ import {
     DataReport, InteractionServerMessenger, InvokeRequest, InvokeResponse, MessageType, ReadRequest, StatusResponseError,
     SubscribeRequest, TimedRequest, WriteRequest, WriteResponse
 } from "./InteractionMessenger.js";
-import { Attributes, Cluster, Commands, Events, TlvNoResponse } from "../../cluster/Cluster.js";
+import { Attributes, Cluster, Commands, Events, FeatureSet, TlvNoResponse } from "../../cluster/Cluster.js";
 import {
     StatusCode, TlvAttributePath, TlvAttributeReport, TlvCommandPath, TlvInvokeResponseData, TlvSubscribeResponse
 } from "./InteractionProtocol.js"
@@ -47,20 +47,6 @@ import { EventData, EventHandler } from "../../protocol/interaction/EventHandler
 export const INTERACTION_PROTOCOL_ID = 0x0001;
 
 const logger = Logger.get("InteractionProtocol");
-
-function getEnabledBits(bitmask: number): number[] {
-    const enabledBits: number[] = [];
-
-    let currentBit = 0;
-    while (bitmask > 0) {
-      if (bitmask & 1) {
-        enabledBits.push(currentBit);
-      }
-      currentBit++;
-      bitmask >>= 1;
-    }
-    return enabledBits;
-  }
 
 export function ClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
     clusterDef: Cluster<F, SF, A, C, E>,
@@ -180,12 +166,13 @@ export function ClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<
         const capitalizedAttributeName = capitalize(attributeName);
 
         const { requiredIf, optionalIf } = attributeDef[attributeName]
-        const requiredOk = validateInitialAttributesExist<F, SF, A, C, E>(requiredIf, clusterDef, attributesInitialValues, attributeName, supportedFeatures);
+        const requiredOk = validateInitialAttributesExist(requiredIf, attributesInitialValues, attributeName, supportedFeatures);
         if (!requiredOk) {
             logger.warn(`*** InitialAttributeValue for "${clusterDef.name}/${attributeName}" is REQUIRED by supportedFeatures:${JSON.stringify(supportedFeatures)} but is not set`);
         }
-        const optionalOk = validateInitialAttributesExist<F, SF, A, C, E>(optionalIf, clusterDef, attributesInitialValues, attributeName, supportedFeatures);
+        const optionalOk = validateInitialAttributesExist(optionalIf, attributesInitialValues, attributeName, supportedFeatures);
         if (!optionalOk) {
+            // Maybe logger.debug for this one and lose the ***?
             logger.info(`*** InitialAttributeValue for "${clusterDef.name}/${attributeName}" is optional by supportedFeatures:${JSON.stringify(supportedFeatures)} but is not set`);
         }
 
@@ -310,26 +297,20 @@ function toHex(value: number | undefined) {
     return value === undefined ? "*" : `0x${value.toString(16)}`;
 }
 
-function validateInitialAttributesExist<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
-    bitmaskArray: number[],
-    clusterDef: Cluster<F, SF, A, C, E>,
+function validateInitialAttributesExist<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes>(
+    featureSets: FeatureSet[],
     attributesInitialValues: AttributeInitialValues<A>,
     attributeName: Extract<keyof A, string>,
-    supportedFeatures: SF) : boolean {
-    if (bitmaskArray.length > 0) {
-        const supportedFeaturesBitMask: number[] = Object.entries(supportedFeatures)
-            .filter(([_, featureEnabled]) => featureEnabled)
-            .map(([supportedFeature, _]) => clusterDef.features[supportedFeature].offset);
-
-        for (const value of bitmaskArray) {
-            const requiredBits: number[] = getEnabledBits(value);
-            if (requiredBits.every(bit => supportedFeaturesBitMask.includes(bit))) {
-                if ((attributesInitialValues as any)[attributeName] === undefined) {
-                    return false;
-                }
+    supportedFeatures: SF): boolean {
+    const supported = new Set(Object.keys(supportedFeatures));
+    featureSets.forEach((features: FeatureSet) => {
+        if (Object.keys(features).every(feature => supported.has(feature))) {
+            // Confirming, "null" counts as present?
+            if ((attributesInitialValues as any)[attributeName] === undefined) {
+                return false;
             }
         }
-    }
+    });
     return true;
 }
 
