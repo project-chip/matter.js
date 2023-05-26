@@ -77,10 +77,6 @@
             "default": "./dist/index.js"
         },
         "./package.json": "./package.json",
-        "./*": {
-            "types": "./dist/*/index.d.ts",
-            "default": "./dist/*/index.js"
-        },
         "./certificate": {
             "types": "./dist/exports/certificate.d.ts",
             "default": "./dist/exports/certificate.js"
@@ -148,6 +144,71 @@
         "./tlv": {
             "types": "./dist/exports/tlv.d.ts",
             "default": "./dist/exports/tlv.js"
+        },
+        "./*": {
+            "types": "./dist/*/index.d.ts",
+            "default": "./dist/*/index.js"
+        }
+    },
+    "typesVersions": {
+        "*": {
+            "certificate": [
+                "/dist/exports/certificate.d.ts"
+            ],
+            "cluster": [
+                "/dist/exports/cluster.d.ts"
+            ],
+            "codec": [
+                "/dist/exports/codec.d.ts"
+            ],
+            "common": [
+                "/dist/exports/common.d.ts"
+            ],
+            "datatype": [
+                "/dist/exports/datatype.d.ts"
+            ],
+            "device": [
+                "/dist/exports/device.d.ts"
+            ],
+            "fabric": [
+                "/dist/exports/fabric.d.ts"
+            ],
+            "interaction": [
+                "/dist/exports/interaction.d.ts"
+            ],
+            "log": [
+                "/dist/exports/log.d.ts"
+            ],
+            "math": [
+                "/dist/exports/math.d.ts"
+            ],
+            "mdns": [
+                "/dist/exports/mdns.d.ts"
+            ],
+            "protocol": [
+                "/dist/exports/protocol.d.ts"
+            ],
+            "schema": [
+                "/dist/exports/schema.d.ts"
+            ],
+            "securechannel": [
+                "/dist/exports/securechannel.d.ts"
+            ],
+            "session": [
+                "/dist/exports/session.d.ts"
+            ],
+            "spec": [
+                "/dist/exports/spec.d.ts"
+            ],
+            "tlv": [
+                "/dist/exports/tlv.d.ts"
+            ],
+            ".": [
+                "/dist/index.d.ts"
+            ],
+            "*": [
+                "/dist/*/index.d.ts"
+            ]
         }
     },
     "publishConfig": {
