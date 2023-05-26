@@ -54,7 +54,7 @@ export class BitmapSchemaInternal<T extends BitSchema> extends Schema<TypeFromBi
     }
 
     /**
-     * Allow to use a filly defined Bitmap schema as input, but also allow one where only the entries of bits set are
+     * Allow to use a fully defined Bitmap schema as input, but also allow one where only the entries of bits set are
      * provided, rest is unset.
      */
     override encode(value: TypeFromBitSchema<T> | TypeFromPartialBitSchema<T>) {
