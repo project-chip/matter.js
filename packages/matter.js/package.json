@@ -103,6 +103,22 @@
     }
   },
   "types": "dist/es/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "interaction": [
+        "/dist/cjs/protocol/interaction/index.d.ts"
+      ],
+      "securechannel": [
+        "/dist/cjs/protocol/securechannel/index.d.ts"
+      ],
+      ".": [
+        "/dist/cjs/index.d.ts"
+      ],
+      "*": [
+        "/dist/cjs/*/index.d.ts"
+      ]
+    }
+  },
   "publishConfig": {
     "access": "public"
   }
