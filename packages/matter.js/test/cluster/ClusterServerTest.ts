@@ -21,9 +21,9 @@ import { VendorId } from "../../src/datatype/index.js";
 import { DeviceTypes, Endpoint } from "../../src/device/index.js";
 import { Fabric } from "../../src/fabric/index.js";
 import {
-    WindowCoveringClusterSchema, WindowCoveringEndProductType, WindowCoveringOperationalStatus
+    WindowCoveringClusterSchema, WindowCoveringEndProductType, WindowCoveringOperationalStatusEnum,
+    WindowCoveringType
 } from "../../src/cluster/schema/WindowCovering.js";
-import { WindowCoveringType } from "../../src/cluster/WindowCoveringCluster.js";
 import { Level, Logger } from "../../src/log/index.js";
 
 describe("ClusterServer structure", () => {
@@ -506,16 +506,20 @@ describe("ClusterServer structure", () => {
                     configStatus: {
                         liftPositionAware: false,
                         operational: false,
-                        liftPositionType: false,
-                        reversed: false,
+                        liftEncoderControlled: false,
+                        liftMovementReversed: false,
                         tiltPositionAware: false,
-                        tiltPositionType: false,
+                        tiltEncoderControlled: false,
                     },
-                    operationalStatus: WindowCoveringOperationalStatus.Stopped,
+                    operationalStatus: {
+                        coveringStatus: WindowCoveringOperationalStatusEnum.Stopped,
+                        liftStatus: WindowCoveringOperationalStatusEnum.Stopped,
+                        tiltStatus: WindowCoveringOperationalStatusEnum.Stopped,
+                    },
                     endProductType: WindowCoveringEndProductType.RollerShade,
                     mode: {
-                        reversed: false,
-                        calibrateMode: false,
+                        motorDirectionReversed: false,
+                        calibrationMode: false,
                         maintenanceMode: false,
                         ledFeedback: false,
                     },
@@ -526,9 +530,9 @@ describe("ClusterServer structure", () => {
                     currentPositionTiltPercent100ths: 0, // Should not be there because not valid for feature-combination
                 },
                 {
-                    open: async () => { /* dummy */ },
-                    close: async () => { /* dummy */ },
-                    stop: async () => { /* dummy */ }
+                    upOrOpen: async () => { /* dummy */ },
+                    downOrClose: async () => { /* dummy */ },
+                    stopMotion: async () => { /* dummy */ }
                     // gotoLiftValue: async () => { /* dummy */ }, // Should be existing but not set
                 }
             );
@@ -536,12 +540,12 @@ describe("ClusterServer structure", () => {
             // TODO: Find out how to set TZ=UTC when executing single tests locally
 
             assert.deepEqual(fakeLogSink, [
-                { level: Level.DEBUG, log: '1970-01-01 00:00:00.000 DEBUG InteractionProtocol InitialAttributeValue for "Window Covering/physicalClosedLimitLift" is optional by supportedFeatures: {"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} and is not set!' },
-                { level: Level.DEBUG, log: '1970-01-01 00:00:00.000 DEBUG InteractionProtocol InitialAttributeValue for "Window Covering/currentPositionLift" is optional by supportedFeatures: {"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} and is not set!' },
-                { level: Level.DEBUG, log: '1970-01-01 00:00:00.000 DEBUG InteractionProtocol InitialAttributeValue for "Window Covering/currentPositionLiftPercent" is optional by supportedFeatures: {"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} and is not set!' },
-                { level: Level.WARN, log: '1970-01-01 00:00:00.000 WARN InteractionProtocol InitialAttributeValue for "Window Covering/currentPositionTiltPercent100ths" is provided but it\'s neither optional or mandatory for supportedFeatures: {"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} but is set!' },
-                { level: Level.WARN, log: '1970-01-01 00:00:00.000 WARN InteractionProtocol InitialAttributeValue for "Window Covering/installedClosedLimitLift" is REQUIRED by supportedFeatures: {"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} but is not set!' },
-                { level: Level.WARN, log: '1970-01-01 00:00:00.000 WARN InteractionProtocol Command "Window Covering/gotoLiftPercent" is REQUIRED by supportedFeatures:{"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} but is not set!' }
+                { level: Level.DEBUG, log: '1970-01-01 00:00:00.000 DEBUG InteractionProtocol InitialAttributeValue for "WindowCovering/physicalClosedLimitLift" is optional by supportedFeatures: {"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} and is not set!' },
+                { level: Level.DEBUG, log: '1970-01-01 00:00:00.000 DEBUG InteractionProtocol InitialAttributeValue for "WindowCovering/currentPositionLift" is optional by supportedFeatures: {"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} and is not set!' },
+                { level: Level.DEBUG, log: '1970-01-01 00:00:00.000 DEBUG InteractionProtocol InitialAttributeValue for "WindowCovering/currentPositionLiftPercentage" is optional by supportedFeatures: {"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} and is not set!' },
+                { level: Level.WARN, log: '1970-01-01 00:00:00.000 WARN InteractionProtocol InitialAttributeValue for "WindowCovering/currentPositionTiltPercent100ths" is provided but it\'s neither optional or mandatory for supportedFeatures: {"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} but is set!' },
+                { level: Level.WARN, log: '1970-01-01 00:00:00.000 WARN InteractionProtocol InitialAttributeValue for "WindowCovering/installedClosedLimitLift" is REQUIRED by supportedFeatures: {"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} but is not set!' },
+                { level: Level.WARN, log: '1970-01-01 00:00:00.000 WARN InteractionProtocol Command "WindowCovering/goToLiftPercent" is REQUIRED by supportedFeatures: {"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} but is not set!' }
             ]);
         });
     });
