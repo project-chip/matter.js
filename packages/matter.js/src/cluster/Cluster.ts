@@ -22,13 +22,21 @@ export const enum AccessLevel {
     Administer,
 }
 
+// Not sure it's feasible to carry actual SF type all the way down from
+// cluster.  This works as a standin for now.
+//
+// Might be better to define as an array, need to experiment with syntax
+export type FeatureSet = {
+    [name: string]: boolean
+}
+
 /* Interfaces and helper methods to define a cluster attribute */
 export interface Attribute<T> {
     id: number,
     schema: TlvSchema<T>,
     optional: boolean,
-    optionalIf: number[],
-    requiredIf: number[],
+    optionalIf: FeatureSet[],
+    requiredIf: FeatureSet[],
     readAcl: AccessLevel,
     writable: boolean,
     scene: boolean,
@@ -36,9 +44,9 @@ export interface Attribute<T> {
     fixed: boolean,
     fabricScoped: boolean,
     omitChanges: boolean,
-     writeAcl?: AccessLevel,
-     default?: T
-    }
+    writeAcl?: AccessLevel,
+    default?: T
+}
 
 export interface OptionalAttribute<T> extends Attribute<T> { optional: true }
 
@@ -53,242 +61,242 @@ export interface OptionalFixedAttribute<T> extends OptionalAttribute<T> { fixed:
 export type AttributeJsType<T extends Attribute<any>> = T extends Attribute<infer JsType> ? JsType : never;
 
 interface AttributeOptions<T> {
-  scene?: boolean;
-  persistent?: boolean;
-  omitChanges?: boolean;
-  default?: T;
-  readAcl?: AccessLevel;
-  writeAcl?: AccessLevel;
-  /** only valid on optional attributes */
-  optionalIf?: Array<number>;
-  /** only valid on optional attributes */
-  requiredIf?: Array<number>;
+    scene?: boolean;
+    persistent?: boolean;
+    omitChanges?: boolean;
+    default?: T;
+    readAcl?: AccessLevel;
+    writeAcl?: AccessLevel;
+    /** only valid on optional attributes */
+    optionalIf?: FeatureSet[];
+    /** only valid on optional attributes */
+    requiredIf?: FeatureSet[];
 }
 
 export const Attribute = <T, V extends T>(
-  id: number,
-  schema: TlvSchema<T>,
-  {
-    scene = false,
-    persistent = false,
-    omitChanges = false,
-    default: conformanceValue,
-    readAcl = AccessLevel.View,
-  }: AttributeOptions<V> = {}
+    id: number,
+    schema: TlvSchema<T>,
+    {
+        scene = false,
+        persistent = false,
+        omitChanges = false,
+        default: conformanceValue,
+        readAcl = AccessLevel.View,
+    }: AttributeOptions<V> = {}
 ): Attribute<T> => ({
-  id,
-  schema,
-  optional: false,
-  optionalIf: [],
-  requiredIf: [],
-  writable: false,
-  fixed: false,
-  fabricScoped: false,
-  scene,
-  persistent,
-  omitChanges,
-  default: conformanceValue,
-  readAcl,
+    id,
+    schema,
+    optional: false,
+    optionalIf: [],
+    requiredIf: [],
+    writable: false,
+    fixed: false,
+    fabricScoped: false,
+    scene,
+    persistent,
+    omitChanges,
+    default: conformanceValue,
+    readAcl,
 });
 
 export const OptionalAttribute = <T, V extends T>(
-  id: number,
-  schema: TlvSchema<T>,
-  {
-    scene = false,
-    persistent = false,
-    omitChanges = false,
-    default: conformanceValue,
-    optionalIf,
-    requiredIf,
-    readAcl = AccessLevel.View,
-  }: AttributeOptions<V> = {}
+    id: number,
+    schema: TlvSchema<T>,
+    {
+        scene = false,
+        persistent = false,
+        omitChanges = false,
+        default: conformanceValue,
+        optionalIf,
+        requiredIf,
+        readAcl = AccessLevel.View,
+    }: AttributeOptions<V> = {}
 ): OptionalAttribute<T> => ({
-  id,
-  schema,
-  optional: true,
-  writable: false,
-  fixed: false,
-  scene,
-  persistent,
-  fabricScoped: false,
-  omitChanges,
-  optionalIf: optionalIf ?? [],
-  requiredIf: requiredIf ?? [],
-  default: conformanceValue,
-  readAcl,
+    id,
+    schema,
+    optional: true,
+    writable: false,
+    fixed: false,
+    scene,
+    persistent,
+    fabricScoped: false,
+    omitChanges,
+    optionalIf: optionalIf ?? [],
+    requiredIf: requiredIf ?? [],
+    default: conformanceValue,
+    readAcl,
 });
 
 export const WritableAttribute = <T, V extends T>(
-  id: number,
-  schema: TlvSchema<T>,
-  {
-    scene = false,
-    persistent = false,
-    omitChanges = false,
-    default: conformanceValue,
-    readAcl = AccessLevel.View,
-    writeAcl = AccessLevel.View,
-    optionalIf,
-    requiredIf,
-  }: AttributeOptions<V> = {}
+    id: number,
+    schema: TlvSchema<T>,
+    {
+        scene = false,
+        persistent = false,
+        omitChanges = false,
+        default: conformanceValue,
+        readAcl = AccessLevel.View,
+        writeAcl = AccessLevel.View,
+        optionalIf,
+        requiredIf,
+    }: AttributeOptions<V> = {}
 ): WritableAttribute<T> => ({
-  id,
-  schema,
-  optional: false,
-  optionalIf: optionalIf ?? [],
-  requiredIf: requiredIf ?? [],
-  writable: true,
-  fixed: false,
-  fabricScoped: false,
-  scene,
-  persistent,
-  omitChanges,
-  default: conformanceValue,
-  readAcl,
-  writeAcl,
+    id,
+    schema,
+    optional: false,
+    optionalIf: optionalIf ?? [],
+    requiredIf: requiredIf ?? [],
+    writable: true,
+    fixed: false,
+    fabricScoped: false,
+    scene,
+    persistent,
+    omitChanges,
+    default: conformanceValue,
+    readAcl,
+    writeAcl,
 });
 
 export const OptionalWritableAttribute = <T, V extends T>(
-  id: number,
-  schema: TlvSchema<T>,
-  {
-    scene = false,
-    persistent = false,
-    omitChanges = false,
-    default: conformanceValue,
-    readAcl = AccessLevel.View,
-    writeAcl = AccessLevel.View,
-    optionalIf,
-    requiredIf,
-  }: AttributeOptions<V> = {}
+    id: number,
+    schema: TlvSchema<T>,
+    {
+        scene = false,
+        persistent = false,
+        omitChanges = false,
+        default: conformanceValue,
+        readAcl = AccessLevel.View,
+        writeAcl = AccessLevel.View,
+        optionalIf,
+        requiredIf,
+    }: AttributeOptions<V> = {}
 ): OptionalWritableAttribute<T> => ({
-  id,
-  schema,
-  optional: true,
-  optionalIf: optionalIf ?? [],
-  requiredIf: requiredIf ?? [],
-  writable: true,
-  fixed: false,
-  fabricScoped: false,
-  scene,
-  persistent,
-  omitChanges,
-  default: conformanceValue,
-  readAcl,
-  writeAcl,
+    id,
+    schema,
+    optional: true,
+    optionalIf: optionalIf ?? [],
+    requiredIf: requiredIf ?? [],
+    writable: true,
+    fixed: false,
+    fabricScoped: false,
+    scene,
+    persistent,
+    omitChanges,
+    default: conformanceValue,
+    readAcl,
+    writeAcl,
 });
 
 export const WritableFabricScopedAttribute = <T, V extends T>(
-  id: number,
-  schema: TlvSchema<T>,
-  {
-    scene = false,
-    persistent = true,
-    omitChanges = false,
-    default: conformanceValue,
-    readAcl = AccessLevel.View,
-    writeAcl = AccessLevel.View,
-  }: AttributeOptions<V> = {}
+    id: number,
+    schema: TlvSchema<T>,
+    {
+        scene = false,
+        persistent = true,
+        omitChanges = false,
+        default: conformanceValue,
+        readAcl = AccessLevel.View,
+        writeAcl = AccessLevel.View,
+    }: AttributeOptions<V> = {}
 ): WritableFabricScopedAttribute<T> => ({
-  id,
-  schema,
-  optional: false,
-  writable: true,
-  fixed: false,
-  scene,
-  persistent,
-  fabricScoped: true,
-  omitChanges,
-  default: conformanceValue,
-  readAcl,
-  writeAcl,
-  optionalIf: [],
-  requiredIf: [],
+    id,
+    schema,
+    optional: false,
+    writable: true,
+    fixed: false,
+    scene,
+    persistent,
+    fabricScoped: true,
+    omitChanges,
+    default: conformanceValue,
+    readAcl,
+    writeAcl,
+    optionalIf: [],
+    requiredIf: [],
 });
 
 export const OptionalWritableFabricScopedAttribute = <T, V extends T>(
-  id: number,
-  schema: TlvSchema<T>,
-  {
-    scene = false,
-    persistent = true,
-    omitChanges = false,
-    default: conformanceValue,
-    readAcl = AccessLevel.View,
-    writeAcl = AccessLevel.View,
-    optionalIf,
-    requiredIf,
-  }: AttributeOptions<V> = {}
+    id: number,
+    schema: TlvSchema<T>,
+    {
+        scene = false,
+        persistent = true,
+        omitChanges = false,
+        default: conformanceValue,
+        readAcl = AccessLevel.View,
+        writeAcl = AccessLevel.View,
+        optionalIf,
+        requiredIf,
+    }: AttributeOptions<V> = {}
 ): OptionalWritableFabricScopedAttribute<T> => ({
-  id,
-  schema,
-  optional: true,
-  writable: true,
-  fixed: false,
-  scene,
-  persistent,
-  fabricScoped: true,
-  omitChanges,
-  default: conformanceValue,
-  readAcl,
-  writeAcl,
-  optionalIf: optionalIf ?? [],
-  requiredIf: requiredIf ?? [],
+    id,
+    schema,
+    optional: true,
+    writable: true,
+    fixed: false,
+    scene,
+    persistent,
+    fabricScoped: true,
+    omitChanges,
+    default: conformanceValue,
+    readAcl,
+    writeAcl,
+    optionalIf: optionalIf ?? [],
+    requiredIf: requiredIf ?? [],
 });
 
 export const FixedAttribute = <T, V extends T>(
-  id: number,
-  schema: TlvSchema<T>,
-  {
-    scene = false,
-    persistent = false,
-    omitChanges = false,
-    default: conformanceValue,
-    readAcl = AccessLevel.View,
-  }: AttributeOptions<V> = {}
+    id: number,
+    schema: TlvSchema<T>,
+    {
+        scene = false,
+        persistent = false,
+        omitChanges = false,
+        default: conformanceValue,
+        readAcl = AccessLevel.View,
+    }: AttributeOptions<V> = {}
 ): FixedAttribute<T> => ({
-  id,
-  schema,
-  optional: false,
-  writable: false,
-  fixed: true,
-  scene,
-  persistent,
-  fabricScoped: false,
-  omitChanges,
-  default: conformanceValue,
-  readAcl,
-  optionalIf: [],
-  requiredIf: [],
+    id,
+    schema,
+    optional: false,
+    writable: false,
+    fixed: true,
+    scene,
+    persistent,
+    fabricScoped: false,
+    omitChanges,
+    default: conformanceValue,
+    readAcl,
+    optionalIf: [],
+    requiredIf: [],
 });
 
 export const OptionalFixedAttribute = <T, V extends T>(
-  id: number,
-  schema: TlvSchema<T>,
-  {
-    scene = false,
-    persistent = false,
-    omitChanges = false,
-    default: conformanceValue,
-    readAcl = AccessLevel.View,
-    optionalIf,
-    requiredIf,
-  }: AttributeOptions<V> = {}
+    id: number,
+    schema: TlvSchema<T>,
+    {
+        scene = false,
+        persistent = false,
+        omitChanges = false,
+        default: conformanceValue,
+        readAcl = AccessLevel.View,
+        optionalIf,
+        requiredIf,
+    }: AttributeOptions<V> = {}
 ): OptionalFixedAttribute<T> => ({
-  id,
-  schema,
-  optional: true,
-  writable: false,
-  fixed: true,
-  scene,
-  persistent,
-  fabricScoped: false,
-  omitChanges,
-  default: conformanceValue,
-  readAcl,
-  optionalIf: optionalIf ?? [],
-  requiredIf: requiredIf ?? [],
+    id,
+    schema,
+    optional: true,
+    writable: false,
+    fixed: true,
+    scene,
+    persistent,
+    fabricScoped: false,
+    omitChanges,
+    default: conformanceValue,
+    readAcl,
+    optionalIf: optionalIf ?? [],
+    requiredIf: requiredIf ?? [],
 });
 
 export type MandatoryAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends OptionalAttribute<any> ? never : K }[keyof A];
@@ -315,8 +323,8 @@ export type RequestType<T extends Command<any, any>> = T extends OptionalCommand
 
 
 interface CommandOptions {
-    optionalIf?: Array<number>,
-    requiredIf?: Array<number>
+    optionalIf?: FeatureSet[],
+    requiredIf?: FeatureSet[]
 }
 
 export const Command =
