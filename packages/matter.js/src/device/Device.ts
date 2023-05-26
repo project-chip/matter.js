@@ -11,7 +11,7 @@ import { HandlerFunction, NamedHandler } from "../util/NamedHandler.js";
 import { ClusterClientObj, isClusterClient } from "../cluster/client/ClusterClient.js";
 import { ClusterServerObj, isClusterServer } from "../cluster/server/ClusterServer.js";
 import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
-import { BitSchema, TypeFromBitSchema } from "../schema/BitmapSchema.js";
+import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { BindingCluster } from "../cluster/BindingCluster.js";
 import { ClusterServer } from "../protocol/interaction/InteractionServer.js";
 
@@ -153,17 +153,17 @@ export class Device extends Endpoint {
         return await this.commandHandler.executeHandler(command, ...args);
     }
 
-    protected createOptionalClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(_cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, C, E> {
+    protected createOptionalClusterServer<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(_cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, C, E> {
         // TODO: Implement this in upper classes to add optional clusters on the fly
         throw new Error("createOptionalClusterServer needs to be implemented by derived classes");
     }
 
-    protected createOptionalClusterClient<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(_cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<A, C, E> {
+    protected createOptionalClusterClient<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(_cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<A, C, E> {
         // TODO: Implement this in upper classes to add optional clusters on the fly
         throw new Error("createOptionalClusterClient needs to be implemented by derived classes");
     }
 
-    override getClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, C, E> | undefined {
+    override getClusterServer<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, C, E> | undefined {
         const clusterServer = super.getClusterServer(cluster);
         if (clusterServer !== undefined) {
             return clusterServer;
@@ -177,7 +177,7 @@ export class Device extends Endpoint {
         }
     }
 
-    override getClusterClient<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<A, C, E> | undefined {
+    override getClusterClient<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<A, C, E> | undefined {
         const clusterClient = super.getClusterClient(cluster);
         if (clusterClient !== undefined) {
             return clusterClient;

@@ -8,14 +8,16 @@ import { MatterDevice } from "../../MatterDevice.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import {
-    DataReport, InteractionServerMessenger, InvokeRequest, InvokeResponse, MessageType, ReadRequest, StatusResponseError,
-    SubscribeRequest, TimedRequest, WriteRequest, WriteResponse
+    DataReport, InteractionServerMessenger, InvokeRequest, InvokeResponse, MessageType, ReadRequest,
+    StatusResponseError, SubscribeRequest, TimedRequest, WriteRequest, WriteResponse
 } from "./InteractionMessenger.js";
-import { Attributes, Cluster, Commands, Events, TlvNoResponse } from "../../cluster/Cluster.js";
+import {
+    Attribute, Attributes, Cluster, Command, Commands, ConditionalFeatureList, Event, Events, TlvNoResponse
+} from "../../cluster/Cluster.js";
 import {
     StatusCode, TlvAttributePath, TlvAttributeReport, TlvCommandPath, TlvInvokeResponseData, TlvSubscribeResponse
 } from "./InteractionProtocol.js"
-import { BitSchema, TypeFromBitSchema } from "../../schema/BitmapSchema.js";
+import { BitmapSchema, BitSchema, TypeFromBitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { SecureSession } from "../../session/SecureSession.js";
@@ -48,7 +50,34 @@ export const INTERACTION_PROTOCOL_ID = 0x0001;
 
 const logger = Logger.get("InteractionProtocol");
 
-export function ClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
+function isConditionalAttribute(attribute: Attribute<any>) {
+    return (attribute as any).mandatoryIf !== undefined || (attribute as any).optionalIf !== undefined;
+}
+
+function isConditionalCommand(command: Command<any, any>) {
+    return (command as any).mandatoryIf !== undefined || (command as any).optionalIf !== undefined;
+}
+
+function isConditionalEvent(event: Event<any>) {
+    return (event as any).mandatoryIf !== undefined || (event as any).optionalIf !== undefined;
+}
+
+function validateConditionalEntity<F extends BitSchema, SF extends TypeFromBitSchema<F>>(
+    featureSets: ConditionalFeatureList<F>,
+    entityValue: any,
+    supportedFeatures: SF): boolean {
+    for (const features of featureSets) {
+        if (Object.keys(supportedFeatures).every(feature => !!features[feature] === !!supportedFeatures[feature])) {
+            console.log(`check value ${entityValue}`);
+            if (entityValue === undefined) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+export function ClusterServer<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
     clusterDef: Cluster<F, SF, A, C, E>,
     attributesInitialValues: AttributeInitialValues<A>,
     handlers: ClusterServerHandlers<Cluster<F, SF, A, C, E>>,
@@ -60,6 +89,7 @@ export function ClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<
         commands: commandDef,
         attributes: attributeDef,
         events: eventDef,
+        features,
         supportedFeatures
     } = clusterDef;
     let clusterStorage: StorageContext | null = null;
@@ -68,6 +98,9 @@ export function ClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<
     const attributes = <AttributeServers<A>>{};
     const commands = <CommandServers<C>>{};
     const events = <EventServers<E>>{};
+
+    const featureSchema = BitmapSchema(features);
+    const fullyQualifiedSupportedFeatures = featureSchema.decode(featureSchema.encode(supportedFeatures));
 
     const result: any = {
         id: clusterId,
@@ -160,9 +193,27 @@ export function ClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<
         generatedCommandList: new Array<CommandId>(),
         eventList: new Array<EventId>(),
     };
+
     const attributeList = new Array<AttributeId>();
     for (const attributeName in attributeDef) {
         const capitalizedAttributeName = capitalize(attributeName);
+
+        // logger.info(`check this for REQUIRED Attributes ${Logger.toJSON(attributeName)}`)
+        if (isConditionalAttribute(attributeDef[attributeName])) {
+            const { mandatoryIf, optionalIf } = attributeDef[attributeName] as any;
+            if (mandatoryIf !== undefined) {
+                if (!validateConditionalEntity(mandatoryIf, (attributesInitialValues as any)[attributeName], fullyQualifiedSupportedFeatures)) {
+                    logger.warn(`InitialAttributeValue for "${clusterDef.name}/${attributeName}" is REQUIRED by supportedFeatures: ${JSON.stringify(fullyQualifiedSupportedFeatures)} but is not set`);
+                }
+            }
+            // TODO Remove optional info/checks
+            if (optionalIf) {
+                if (!validateConditionalEntity(optionalIf, (attributesInitialValues as any)[attributeName], fullyQualifiedSupportedFeatures)) {
+                    logger.debug(`InitialAttributeValue for "${clusterDef.name}/${attributeName}" is optional by supportedFeatures: ${JSON.stringify(fullyQualifiedSupportedFeatures)} and is not set`);
+                }
+            }
+        }
+
         const { id, schema, writable, persistent, fabricScoped, scene, fixed } = attributeDef[attributeName];
         if ((attributesInitialValues as any)[attributeName] !== undefined) {
             const validator = typeof schema.validate === 'function' ? schema.validate.bind(schema) : undefined;
@@ -223,6 +274,23 @@ export function ClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<
     const generatedCommandList = new Array<number>();
     for (const name in commandDef) {
         const handler = (handlers as any)[name];
+
+        if (isConditionalCommand(commandDef[name])) {
+            const { mandatoryIf, optionalIf } = commandDef[name] as any;
+            if (mandatoryIf !== undefined) {
+                if (!validateConditionalEntity(mandatoryIf, handler, fullyQualifiedSupportedFeatures)) {
+                    logger.warn(`Command "${clusterDef.name}/${name}" is REQUIRED by supportedFeatures:${JSON.stringify(fullyQualifiedSupportedFeatures)} but is not set`);
+                }
+            }
+            // TODO Remove optional info/checks
+            if (optionalIf !== undefined) {
+                if (!validateConditionalEntity(optionalIf, handler, fullyQualifiedSupportedFeatures)) {
+                    // Maybe logger.debug for this one and lose the ***?
+                    logger.debug(`Command "${clusterDef.name}/${name}" is optional by supportedFeatures:${JSON.stringify(fullyQualifiedSupportedFeatures)} and is not set`);
+                }
+            }
+        }
+
         if (handler === undefined) continue;
         const { requestId, requestSchema, responseId, responseSchema } = commandDef[name];
         (commands as any)[name] = (new CommandServer(requestId, responseId, name, requestSchema, responseSchema, (request, session, message, endpoint) => handler({ request, attributes, events, session, message, endpoint })));
@@ -244,6 +312,23 @@ export function ClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<
         if (!optional && (supportedEvents as any)[eventName] !== true) {
             throw new Error(`Event ${eventName} needs to be supported by cluster ${name} (${clusterId})`);
         }
+
+        if (isConditionalEvent(eventDef[eventName])) {
+            const { mandatoryIf, optionalIf } = eventDef[eventName] as any;
+            if (mandatoryIf !== undefined) {
+                if (!validateConditionalEntity(mandatoryIf, (supportedEvents as any)[eventName], fullyQualifiedSupportedFeatures)) {
+                    logger.warn(`Event "${clusterDef.name}/${eventName}" is REQUIRED by supportedFeatures:${JSON.stringify(fullyQualifiedSupportedFeatures)} but is not set`);
+                }
+            }
+            // TODO Remove optional info/checks
+            if (optionalIf !== undefined) {
+                if (!validateConditionalEntity(optionalIf, (supportedEvents as any)[eventName], fullyQualifiedSupportedFeatures)) {
+                    // Maybe logger.debug for this one and lose the ***?
+                    logger.info(`Event "${clusterDef.name}/${eventName}" is optional by supportedFeatures:${JSON.stringify(fullyQualifiedSupportedFeatures)} and is not set`);
+                }
+            }
+        }
+
         if ((supportedEvents as any)[eventName] === true) {
             (events as any)[eventName] = new EventServer(id, clusterId, eventName, schema, priority);
             const capitalizedEventName = capitalize(eventName);

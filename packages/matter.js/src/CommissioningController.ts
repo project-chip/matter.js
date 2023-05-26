@@ -25,7 +25,7 @@ import { ComposedDevice } from "./device/ComposedDevice.js";
 import { DescriptorCluster } from "./cluster/DescriptorCluster.js";
 import { AllClustersMap } from "./cluster/ClusterHelper.js";
 import { ClusterClientObj, isClusterClient } from "./cluster/client/ClusterClient.js";
-import { BitSchema, TypeFromBitSchema } from "./schema/BitmapSchema.js";
+import { BitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
 
 const logger = new Logger("CommissioningController");
@@ -171,7 +171,7 @@ export class CommissioningController extends MatterNode {
      *
      * @param cluster The cluster to get the client for
      */
-    async getRootClusterClientWithNewInteractionClient<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
+    async getRootClusterClientWithNewInteractionClient<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
         cluster: Cluster<F, SF, A, C, E>
     ): Promise<ClusterClientObj<A, C, E> | undefined> {
         return super.getRootClusterClient(cluster, await this.createInteractionClient());

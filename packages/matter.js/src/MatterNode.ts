@@ -6,7 +6,7 @@
 
 import { RootEndpoint } from "./device/Device.js";
 import { Endpoint } from "./device/Endpoint.js";
-import { BitSchema, TypeFromBitSchema } from "./schema/BitmapSchema.js";
+import { BitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
 import { ClusterClientObj } from "./cluster/client/ClusterClient.js";
 import { ClusterServerObj } from "./cluster/server/ClusterServer.js";
@@ -32,7 +32,7 @@ export abstract class MatterNode {
      *
      * @param cluster ClusterServer to get or undefined if not existing
      */
-    getRootClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
+    getRootClusterServer<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
         cluster: Cluster<F, SF, A, C, E>
     ): ClusterServerObj<A, C, E> | undefined {
         return this.rootEndpoint.getClusterServer(cluster);
@@ -54,7 +54,7 @@ export abstract class MatterNode {
      * @param interactionClient Optional InteractionClient to use for the cluster client. If not provided, the default
      *                          InteractionClient of the root endpoint is used.
      */
-    getRootClusterClient<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
+    getRootClusterClient<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
         cluster: Cluster<F, SF, A, C, E>,
         interactionClient?: InteractionClient
     ): ClusterClientObj<A, C, E> | undefined {

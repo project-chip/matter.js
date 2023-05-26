@@ -13,7 +13,7 @@ import { AttributeServer, FabricScopedAttributeServer } from "../cluster/server/
 import { CommandServer } from "../cluster/server/CommandServer.js";
 import { DescriptorCluster } from "../cluster/DescriptorCluster.js";
 import { DeviceTypeId } from "../datatype/DeviceTypeId.js";
-import { BitSchema, TypeFromBitSchema } from "../schema/BitmapSchema.js";
+import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
@@ -103,7 +103,7 @@ export class Endpoint {
 
     // TODO cleanup with id number vs ClusterId
     // TODO add instance if optional and not existing, maybe get rid of undefined by throwing?
-    getClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
+    getClusterServer<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
         cluster: Cluster<F, SF, A, C, E>
     ): ClusterServerObj<A, C, E> | undefined {
         const clusterServer = this.clusterServers.get(cluster.id);
@@ -112,7 +112,7 @@ export class Endpoint {
         }
     }
 
-    getClusterClient<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
+    getClusterClient<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
         cluster: Cluster<F, SF, A, C, E>,
         interactionClient?: InteractionClient
     ): ClusterClientObj<A, C, E> | undefined {
@@ -131,13 +131,13 @@ export class Endpoint {
         return this.clusterClients.get(clusterId);
     }
 
-    hasClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
+    hasClusterServer<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
         cluster: Cluster<F, SF, A, C, E>
     ): boolean {
         return this.clusterServers.has(cluster.id);
     }
 
-    hasClusterClient<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
+    hasClusterClient<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
         cluster: Cluster<F, SF, A, C, E>
     ): boolean {
         return this.clusterClients.has(cluster.id);

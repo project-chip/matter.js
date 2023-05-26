@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Time } from "../../src/time/Time.js";
+import { TimeFake } from "../../src/time/TimeFake.js";
+
+Time.get = () => new TimeFake(0);
+
 import * as assert from "assert";
 import { AdminCommissioningCluster } from "../../src/cluster/AdminCommissioningCluster.js";
 import { GroupsCluster } from "../../src/cluster/GroupsCluster.js";
@@ -12,16 +17,16 @@ import { CommandId } from "../../src/datatype/CommandId.js";
 import { FabricIndex } from "../../src/datatype/FabricIndex.js";
 import { ClusterServer } from "../../src/protocol/interaction/InteractionServer.js";
 import {
-    AttributeServer,
-    BasicInformationCluster, BindingCluster, Cluster,
-    FixedAttributeServer,
-    IdentifyCluster,
-    IdentifyType
+    AttributeServer, BasicInformationCluster, BindingCluster, Cluster, ClusterExtend, FixedAttributeServer,
+    IdentifyCluster, IdentifyType
 } from "../../src/cluster/index.js";
 import { VendorId } from "../../src/datatype/index.js";
 import { DeviceTypes, Endpoint } from "../../src/device/index.js";
 import { Fabric } from "../../src/fabric/index.js";
-
+import {
+    WindowCoveringClusterSchema, WindowCoveringEndProductType, WindowCoveringOperationalStatus
+} from "../../src/cluster/schema/WindowCoveringCluster.js";
+import { WindowCoveringType } from "../../src/cluster/WindowCoveringCluster.js";
 
 describe("ClusterServer structure", () => {
     describe("correct attribute servers are used and exposed", () => {
@@ -483,5 +488,43 @@ describe("ClusterServer structure", () => {
             assert.deepEqual((server.attributes as any).generatedCommandList.get(), [new CommandId(0), new CommandId(1), new CommandId(2), new CommandId(3)]);
             assert.deepEqual((server.attributes as any).eventList.get(), []);
         });
+
+        it("Missing Conditionals Required throws error", () => {
+            const TestCluster = ClusterExtend(WindowCoveringClusterSchema, {
+                supportedFeatures: {
+                    lift: true,
+                    positionAwareLift: true,
+                }
+            });
+            ClusterServer(
+                TestCluster,
+                {
+                    type: WindowCoveringType.RollerShade,
+                    configStatus: {
+                        liftPositionAware: false,
+                        operational: false,
+                        liftPositionType: false,
+                        reversed: false,
+                        tiltPositionAware: false,
+                        tiltPositionType: false,
+                    },
+                    operationalStatus: WindowCoveringOperationalStatus.Stopped,
+                    endProductType: WindowCoveringEndProductType.RollerShade,
+                    mode: {
+                        reversed: false,
+                        calibrateMode: false,
+                        maintenanceMode: false,
+                        ledFeedback: false,
+                    }
+                },
+                {
+                    open: async () => { /* dummy */ },
+                    close: async () => { /* dummy */ },
+                    stop: async () => { /* dummy */ }
+                }
+            );
+            // TODO verify that logger logged "warn" with
+            // InitialAttributeValue for "Window Covering/targetPositionLiftPercent100ths" is REQUIRED by supportedFeatures: {"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} but is not set
+        })
     });
 });
