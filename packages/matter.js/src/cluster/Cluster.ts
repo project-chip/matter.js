@@ -15,11 +15,7 @@ import { CommandId, TlvCommandId } from "../datatype/CommandId.js";
 import { TlvBitmap, TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-
-export const BaseClustersMap = {} as { [key: Cluster<any, any, any, any, any>["id"]]: Cluster<any, any, any, any, any> };
-
-// Extension clusters do not have a unique ID so we must track them separately
-export const ExtensionClusterMap = {} as { [key: Cluster<any, any, any, any, any>["id"]]: Cluster<any, any, any, any, any>[] }
+import { ClusterIdentifier } from "./ClusterIdentifier.js";
 
 export const enum AccessLevel {
     View,
@@ -103,9 +99,10 @@ export const GlobalAttributes = <F extends BitSchema>(features: F) => ({
     generatedCommandList: Attribute(0xFFF8, TlvArray(TlvCommandId)),
 } as GlobalAttributes<F>);
 export interface Cluster<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events> {
-    id: number,
+    id: ClusterIdentifier,
     name: string,
     revision: number,
+    isPrivate: false,
     features: F,
     supportedFeatures: SF,
     attributes: A,
@@ -116,17 +113,17 @@ export const Cluster = <F extends BitSchema, SF extends TypeFromBitSchema<F>, A 
     id,
     name,
     revision,
-    register = true,
+    isPrivate = false,
     features = <F>{},
     supportedFeatures = <SF>{},
     attributes = <A>{},
     commands = <C>{},
     events = <E>{},
 }: {
-    id: number,
+    id: ClusterIdentifier,
     name: string,
     revision: number,
-    register?: boolean,
+    isPrivate?: boolean,
     features?: F,
     supportedFeatures?: SF,
     attributes?: A,
@@ -137,16 +134,16 @@ export const Cluster = <F extends BitSchema, SF extends TypeFromBitSchema<F>, A 
         id,
         name,
         revision,
+        isPrivate,
         features,
         supportedFeatures,
         commands,
         attributes: Merge(attributes, GlobalAttributes(features)),
         events,
+        private: false
     } as Cluster<F, SF, Merge<A, GlobalAttributes<F>>, C, E>;
 
-    if (register) {
-        BaseClustersMap[id] = cluster;
-    }
+    triggerClusterDefinition(cluster);
 
     return cluster;
 };
@@ -172,24 +169,25 @@ export const ClusterExtend =
         C_EXTEND extends Commands,
         E_EXTEND extends Events,
     >(
-        { id, name, revision, features, supportedFeatures, attributes, commands, events }: Cluster<F, SF_BASE, A_BASE, C_BASE, E_BASE>,
+        { id, name, revision, isPrivate, features, supportedFeatures, attributes, commands, events }: Cluster<F, SF_BASE, A_BASE, C_BASE, E_BASE>,
         {
             supportedFeatures: supportedFeaturesExtend,
             attributes: attributesExtend = <A_EXTEND>{},
             commands: commandsExtend = <C_EXTEND>{},
             events: eventsExtend = <E_EXTEND>{},
-        }: ClusterExtend<F, SF_EXTEND, A_EXTEND, C_EXTEND, E_EXTEND>,
-        register = true
+        }: ClusterExtend<F, SF_EXTEND, A_EXTEND, C_EXTEND, E_EXTEND>
     ) => {
         const cluster = {
             id,
             name,
             revision,
+            isPrivate,
             features,
             supportedFeatures: Merge(supportedFeatures, supportedFeaturesExtend),
             attributes: Merge(attributes, attributesExtend),
             commands: Merge(commands, commandsExtend),
             events: Merge(events, eventsExtend),
+            private: false,
         } as Cluster<
             F,
             Merge<SF_BASE, SF_EXTEND>,
@@ -198,10 +196,25 @@ export const ClusterExtend =
             Merge<E_BASE, E_EXTEND>
         >;
 
-        if (register) {
-            const extensionSlot = ExtensionClusterMap[id] || (ExtensionClusterMap[id] = []);
-            extensionSlot.push(cluster);
-        }
+        triggerClusterDefinition(cluster);
 
         return cluster;
     };
+
+type ClusterDefinitionListener = (cluster: Cluster<any, any, any, any, any>) => void;
+const clusterDefinitionListeners = Array<ClusterDefinitionListener>();
+
+function triggerClusterDefinition(cluster: Cluster<any, any, any, any, any>) {
+    clusterDefinitionListeners.forEach((listener) => listener(cluster));
+}
+
+/**
+ * Register a listener that is invoked when a new cluster is defined.  This is
+ * primarily intended for ClusterFactory.  Handled this way to avoid circular
+ * references and keep privates private.
+ * 
+ * @param listener invoked when a new cluster is instantiated
+ */
+export function onClusterDefinition(listener: ClusterDefinitionListener) {
+    clusterDefinitionListeners.push(listener);
+}

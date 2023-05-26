@@ -23,10 +23,10 @@ import { Aggregator } from "./device/Aggregator.js";
 import { PairedDevice } from "./device/Device.js";
 import { ComposedDevice } from "./device/ComposedDevice.js";
 import { DescriptorCluster } from "./cluster/DescriptorCluster.js";
-import { getClusterById } from "./cluster/ClusterHelper.js";
 import { ClusterClientObj, isClusterClient } from "./cluster/client/ClusterClient.js";
 import { BitSchema, TypeFromBitSchema } from "./schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
+import { ClusterFactory } from "./cluster/ClusterFactory.js";
 
 const logger = new Logger("CommissioningController");
 
@@ -288,7 +288,7 @@ export class CommissioningController extends MatterNode {
 
         // Add ClusterClients for all server clusters of the device
         for (const clusterId of descriptorData.serverList) {
-            const cluster = getClusterById(clusterId.id);
+            const cluster = ClusterFactory.get(clusterId.id);
             if (cluster === undefined) {
                 logger.info(`Cluster with id ${clusterId} not known, ignore`);
                 continue;
@@ -300,7 +300,7 @@ export class CommissioningController extends MatterNode {
         // TODO use the attributes attributeList, acceptedCommands, generatedCommands to crate the ClusterClient/Server objects
         // Add ClusterServers for all client clusters of the device
         for (const clusterId of descriptorData.clientList) {
-            const cluster = getClusterById(clusterId.id);
+            const cluster = ClusterFactory.get(clusterId.id);
             if (cluster === undefined) {
                 logger.info(`Cluster with id ${clusterId.id} not known, ignore`);
                 continue;
