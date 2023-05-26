@@ -24,7 +24,7 @@ import {
     WindowCoveringClusterSchema, WindowCoveringEndProductType, WindowCoveringOperationalStatus
 } from "../../src/cluster/schema/WindowCoveringCluster.js";
 import { WindowCoveringType } from "../../src/cluster/WindowCoveringCluster.js";
-import {Level, Logger} from "../../src/log/index.js";
+import { Level, Logger } from "../../src/log/index.js";
 
 describe("ClusterServer structure", () => {
     describe("correct attribute servers are used and exposed", () => {
