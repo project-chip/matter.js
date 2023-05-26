@@ -515,16 +515,24 @@ describe("ClusterServer structure", () => {
                         calibrateMode: false,
                         maintenanceMode: false,
                         ledFeedback: false,
-                    }
+                    },
+                    targetPositionLiftPercent100ths: 0,
+                    currentPositionLiftPercent100ths: 0,
+                    installedOpenLimitLift: 0,
+                    // installedClosedLimitLift: 0, // Should be existing but not set
+                    currentPositionTiltPercent100ths: 0, // Should not be there because not valid for feature-combination
                 },
                 {
                     open: async () => { /* dummy */ },
                     close: async () => { /* dummy */ },
                     stop: async () => { /* dummy */ }
+                    // gotoLiftValue: async () => { /* dummy */ }, // Should be existing but not set
                 }
             );
             // TODO verify that logger logged "warn" with
-            // InitialAttributeValue for "Window Covering/targetPositionLiftPercent100ths" is REQUIRED by supportedFeatures: {"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} but is not set
+            // InitialAttributeValue for "Window Covering/currentPositionTiltPercent100ths" is provided but it's neither optional or mandatory for  supportedFeatures: {"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} but is set!
+            // InitialAttributeValue for "Window Covering/installedClosedLimitLift" is REQUIRED by supportedFeatures: {"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} but is not set!
+            // InteractionProtocol Command "Window Covering/gotoLiftPercent" is REQUIRED by supportedFeatures:{"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} but is not set!
         })
     });
 });

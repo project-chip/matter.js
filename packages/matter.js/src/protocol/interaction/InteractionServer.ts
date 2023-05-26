@@ -62,19 +62,15 @@ function isConditionalEvent(event: Event<any>) {
     return (event as any).mandatoryIf !== undefined || (event as any).optionalIf !== undefined;
 }
 
-function validateConditionalEntity<F extends BitSchema, SF extends TypeFromBitSchema<F>>(
+function isConditionMatching<F extends BitSchema, SF extends TypeFromBitSchema<F>>(
     featureSets: ConditionalFeatureList<F>,
-    entityValue: any,
     supportedFeatures: SF): boolean {
     for (const features of featureSets) {
         if (Object.keys(supportedFeatures).every(feature => !!features[feature] === !!supportedFeatures[feature])) {
-            console.log(`check value ${entityValue}`);
-            if (entityValue === undefined) {
-                return false;
-            }
+            return true;
         }
     }
-    return true;
+    return false;
 }
 
 export function ClusterServer<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
@@ -201,16 +197,26 @@ export function ClusterServer<F extends BitSchema, SF extends TypeFromPartialBit
         // logger.info(`check this for REQUIRED Attributes ${Logger.toJSON(attributeName)}`)
         if (isConditionalAttribute(attributeDef[attributeName])) {
             const { mandatoryIf, optionalIf } = attributeDef[attributeName] as any;
-            if (mandatoryIf !== undefined) {
-                if (!validateConditionalEntity(mandatoryIf, (attributesInitialValues as any)[attributeName], fullyQualifiedSupportedFeatures)) {
-                    logger.warn(`InitialAttributeValue for "${clusterDef.name}/${attributeName}" is REQUIRED by supportedFeatures: ${JSON.stringify(fullyQualifiedSupportedFeatures)} but is not set`);
+            let conditionHasMatched = false;
+            if (mandatoryIf !== undefined && mandatoryIf.length > 0) {
+                // Check if mandatoryIf is relevant for current feature combination and the attribute initial value is set
+                const conditionMatched = isConditionMatching(mandatoryIf, fullyQualifiedSupportedFeatures);
+                if (conditionMatched && (attributesInitialValues as any)[attributeName] === undefined) {
+                    logger.warn(`InitialAttributeValue for "${clusterDef.name}/${attributeName}" is REQUIRED by supportedFeatures: ${JSON.stringify(fullyQualifiedSupportedFeatures)} but is not set!`);
                 }
+                conditionHasMatched = conditionHasMatched || conditionMatched;
             }
             // TODO Remove optional info/checks
-            if (optionalIf) {
-                if (!validateConditionalEntity(optionalIf, (attributesInitialValues as any)[attributeName], fullyQualifiedSupportedFeatures)) {
-                    logger.debug(`InitialAttributeValue for "${clusterDef.name}/${attributeName}" is optional by supportedFeatures: ${JSON.stringify(fullyQualifiedSupportedFeatures)} and is not set`);
+            if (optionalIf !== undefined && optionalIf.length > 0) {
+                const conditionMatched = isConditionMatching(optionalIf, fullyQualifiedSupportedFeatures);
+                if (conditionMatched && (attributesInitialValues as any)[attributeName] === undefined) {
+                    logger.debug(`InitialAttributeValue for "${clusterDef.name}/${attributeName}" is optional by supportedFeatures: ${JSON.stringify(fullyQualifiedSupportedFeatures)} and is not set!`);
                 }
+                conditionHasMatched = conditionHasMatched || conditionMatched;
+            }
+
+            if (!conditionHasMatched && (attributesInitialValues as any)[attributeName] !== undefined) {
+                logger.warn(`InitialAttributeValue for "${clusterDef.name}/${attributeName}" is provided but it's neither optional or mandatory for  supportedFeatures: ${JSON.stringify(fullyQualifiedSupportedFeatures)} but is set!`);
             }
         }
 
@@ -277,17 +283,25 @@ export function ClusterServer<F extends BitSchema, SF extends TypeFromPartialBit
 
         if (isConditionalCommand(commandDef[name])) {
             const { mandatoryIf, optionalIf } = commandDef[name] as any;
-            if (mandatoryIf !== undefined) {
-                if (!validateConditionalEntity(mandatoryIf, handler, fullyQualifiedSupportedFeatures)) {
-                    logger.warn(`Command "${clusterDef.name}/${name}" is REQUIRED by supportedFeatures:${JSON.stringify(fullyQualifiedSupportedFeatures)} but is not set`);
+            let conditionHasMatched = false;
+            if (mandatoryIf !== undefined && mandatoryIf.length > 0) {
+                const conditionMatched = isConditionMatching(mandatoryIf, fullyQualifiedSupportedFeatures);
+                if (conditionMatched && handler === undefined) {
+                    logger.warn(`Command "${clusterDef.name}/${name}" is REQUIRED by supportedFeatures:${JSON.stringify(fullyQualifiedSupportedFeatures)} but is not set!`);
                 }
+                conditionHasMatched = conditionHasMatched || conditionMatched;
             }
             // TODO Remove optional info/checks
             if (optionalIf !== undefined) {
-                if (!validateConditionalEntity(optionalIf, handler, fullyQualifiedSupportedFeatures)) {
-                    // Maybe logger.debug for this one and lose the ***?
-                    logger.debug(`Command "${clusterDef.name}/${name}" is optional by supportedFeatures:${JSON.stringify(fullyQualifiedSupportedFeatures)} and is not set`);
+                const conditionMatched = isConditionMatching(optionalIf, fullyQualifiedSupportedFeatures);
+                if (conditionMatched && handler === undefined) {
+                    logger.debug(`Command "${clusterDef.name}/${name}" is optional by supportedFeatures:${JSON.stringify(fullyQualifiedSupportedFeatures)} and is not set!`);
                 }
+                conditionHasMatched = conditionHasMatched || conditionMatched;
+            }
+
+            if (!conditionHasMatched && handler !== undefined) {
+                logger.warn(`Command "${clusterDef.name}/${name}" is provided but it's neither optional or mandatory for supportedFeatures: ${JSON.stringify(fullyQualifiedSupportedFeatures)} but is set!`);
             }
         }
 
@@ -315,17 +329,25 @@ export function ClusterServer<F extends BitSchema, SF extends TypeFromPartialBit
 
         if (isConditionalEvent(eventDef[eventName])) {
             const { mandatoryIf, optionalIf } = eventDef[eventName] as any;
+            let conditionHasMatched = false;
             if (mandatoryIf !== undefined) {
-                if (!validateConditionalEntity(mandatoryIf, (supportedEvents as any)[eventName], fullyQualifiedSupportedFeatures)) {
-                    logger.warn(`Event "${clusterDef.name}/${eventName}" is REQUIRED by supportedFeatures:${JSON.stringify(fullyQualifiedSupportedFeatures)} but is not set`);
+                const conditionMatched = isConditionMatching(mandatoryIf, fullyQualifiedSupportedFeatures);
+                if (conditionMatched && (supportedEvents as any)[eventName] === undefined) {
+                    logger.warn(`Event "${clusterDef.name}/${eventName}" is REQUIRED by supportedFeatures:${JSON.stringify(fullyQualifiedSupportedFeatures)} but is not set!`);
                 }
+                conditionHasMatched = conditionHasMatched || conditionMatched;
             }
             // TODO Remove optional info/checks
             if (optionalIf !== undefined) {
-                if (!validateConditionalEntity(optionalIf, (supportedEvents as any)[eventName], fullyQualifiedSupportedFeatures)) {
-                    // Maybe logger.debug for this one and lose the ***?
-                    logger.info(`Event "${clusterDef.name}/${eventName}" is optional by supportedFeatures:${JSON.stringify(fullyQualifiedSupportedFeatures)} and is not set`);
+                const conditionMatched = isConditionMatching(optionalIf, fullyQualifiedSupportedFeatures);
+                if (conditionMatched && (supportedEvents as any)[eventName] === undefined) {
+                    logger.debug(`Event "${clusterDef.name}/${eventName}" is optional by supportedFeatures:${JSON.stringify(fullyQualifiedSupportedFeatures)} and is not set!`);
                 }
+                conditionHasMatched = conditionHasMatched || conditionMatched;
+            }
+
+            if (!conditionHasMatched && (supportedEvents as any)[eventName] !== undefined) {
+                logger.warn(`Event "${clusterDef.name}/${eventName}" is provided but it's neither optional or mandatory for supportedFeatures:${JSON.stringify(fullyQualifiedSupportedFeatures)} but is set!`);
             }
         }
 
