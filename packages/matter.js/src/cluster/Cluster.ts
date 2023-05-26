@@ -25,7 +25,7 @@ export const enum AccessLevel {
 export type ConditionalFeatureList<F extends BitSchema> = TypeFromPartialBitSchema<F>[];
 
 /* Interfaces and helper methods to define a cluster attribute */
-export interface Attribute<T> {
+export interface Attribute<T, F extends BitSchema> {
     id: number,
     schema: TlvSchema<T>,
     optional: boolean,
@@ -37,44 +37,45 @@ export interface Attribute<T> {
     fabricScoped: boolean,
     omitChanges: boolean,
     writeAcl?: AccessLevel,
-    default?: T
+    default?: T,
+    isConditional: boolean,
+    optionalIf: ConditionalFeatureList<F>,
+    mandatoryIf: ConditionalFeatureList<F>,
 }
 
-export interface OptionalAttribute<T> extends Attribute<T> { optional: true }
+export interface OptionalAttribute<T, F extends BitSchema> extends Attribute<T, F> { optional: true }
 
-export interface ConditionalAttribute<T, F extends BitSchema> extends OptionalAttribute<T> {
-    optionalIf?: ConditionalFeatureList<F>,
-    mandatoryIf?: ConditionalFeatureList<F>,
+export interface ConditionalAttribute<T, F extends BitSchema> extends OptionalAttribute<T, F> { isConditional: true }
+
+export interface WritableAttribute<T, F extends BitSchema> extends Attribute<T, F> { writable: true }
+
+export interface OptionalWritableAttribute<T, F extends BitSchema> extends OptionalAttribute<T, F> { writable: true }
+
+export interface ConditionalWritableAttribute<T, F extends BitSchema> extends OptionalWritableAttribute<T, F> {
+    isConditional: true,
 }
 
-export interface WritableAttribute<T> extends Attribute<T> { writable: true }
-
-export interface OptionalWritableAttribute<T> extends OptionalAttribute<T> { writable: true }
-
-export interface ConditionalWritableAttribute<T, F extends BitSchema> extends OptionalWritableAttribute<T> {
-    optionalIf?: ConditionalFeatureList<F>,
-    mandatoryIf?: ConditionalFeatureList<F>,
+export interface WritableFabricScopedAttribute<T, F extends BitSchema> extends WritableAttribute<T, F> {
+    fabricScoped: true
 }
 
-export interface WritableFabricScopedAttribute<T> extends WritableAttribute<T> { fabricScoped: true }
-
-export interface OptionalWritableFabricScopedAttribute<T> extends OptionalWritableAttribute<T> { fabricScoped: true }
-
-export interface ConditionalWritableFabricScopedAttribute<T, F extends BitSchema> extends OptionalWritableFabricScopedAttribute<T> {
-    optionalIf?: ConditionalFeatureList<F>,
-    mandatoryIf?: ConditionalFeatureList<F>,
+export interface OptionalWritableFabricScopedAttribute<T, F extends BitSchema> extends OptionalWritableAttribute<T, F> {
+    fabricScoped: true
 }
 
-export interface FixedAttribute<T> extends Attribute<T> { fixed: true }
-
-export interface OptionalFixedAttribute<T> extends OptionalAttribute<T> { fixed: true }
-
-export interface ConditionalFixedAttribute<T, F extends BitSchema> extends OptionalFixedAttribute<T> {
-    optionalIf?: ConditionalFeatureList<F>,
-    mandatoryIf?: ConditionalFeatureList<F>,
+export interface ConditionalWritableFabricScopedAttribute<T, F extends BitSchema> extends OptionalWritableFabricScopedAttribute<T, F> {
+    isConditional: true,
 }
 
-export type AttributeJsType<T extends Attribute<any>> = T extends Attribute<infer JsType> ? JsType : never;
+export interface FixedAttribute<T, F extends BitSchema> extends Attribute<T, F> { fixed: true }
+
+export interface OptionalFixedAttribute<T, F extends BitSchema> extends OptionalAttribute<T, F> { fixed: true }
+
+export interface ConditionalFixedAttribute<T, F extends BitSchema> extends OptionalFixedAttribute<T, F> {
+    isConditional: true,
+}
+
+export type AttributeJsType<T extends Attribute<any, any>> = T extends Attribute<infer JsType, any> ? JsType : never;
 
 interface AttributeOptions<T> {
     scene?: boolean;
@@ -90,13 +91,13 @@ interface ConditionalAttributeOptions<T, F extends BitSchema> extends AttributeO
     mandatoryIf?: ConditionalFeatureList<F>,
 }
 
-export const Attribute = <T, V extends T>(id: number, schema: TlvSchema<T>, {
+export const Attribute = <T, V extends T, F extends BitSchema>(id: number, schema: TlvSchema<T>, {
     scene = false,
     persistent = false,
     omitChanges = false,
     default: conformanceValue,
     readAcl = AccessLevel.View,
-}: AttributeOptions<V> = {}): Attribute<T> => ({
+}: AttributeOptions<V> = {}): Attribute<T, F> => ({
     id,
     schema,
     optional: false,
@@ -107,16 +108,19 @@ export const Attribute = <T, V extends T>(id: number, schema: TlvSchema<T>, {
     fabricScoped: false,
     omitChanges,
     default: conformanceValue,
-    readAcl
+    readAcl,
+    isConditional: false,
+    optionalIf: [],
+    mandatoryIf: [],
 });
 
-export const OptionalAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, {
+export const OptionalAttribute = <T, V extends T, F extends BitSchema>(id: number, schema: TlvSchema<T>, {
     scene = false,
     persistent = false,
     omitChanges = false,
     default: conformanceValue,
     readAcl = AccessLevel.View,
-}: AttributeOptions<V> = {}): OptionalAttribute<T> => ({
+}: AttributeOptions<V> = {}): OptionalAttribute<T, F> => ({
     id,
     schema,
     optional: true,
@@ -127,7 +131,10 @@ export const OptionalAttribute = <T, V extends T>(id: number, schema: TlvSchema<
     fabricScoped: false,
     omitChanges,
     default: conformanceValue,
-    readAcl
+    readAcl,
+    isConditional: false,
+    optionalIf: [],
+    mandatoryIf: [],
 });
 
 export const ConditionalAttribute = <T, V extends T, F extends BitSchema>(id: number, schema: TlvSchema<T>, {
@@ -142,8 +149,6 @@ export const ConditionalAttribute = <T, V extends T, F extends BitSchema>(id: nu
     id,
     schema,
     optional: true,
-    optionalIf,
-    mandatoryIf,
     writable: false,
     fixed: false,
     scene,
@@ -151,17 +156,20 @@ export const ConditionalAttribute = <T, V extends T, F extends BitSchema>(id: nu
     fabricScoped: false,
     omitChanges,
     default: conformanceValue,
-    readAcl
+    readAcl,
+    isConditional: true,
+    optionalIf,
+    mandatoryIf,
 });
 
-export const WritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, {
+export const WritableAttribute = <T, V extends T, F extends BitSchema>(id: number, schema: TlvSchema<T>, {
     scene = false,
     persistent = true,
     omitChanges = false,
     default: conformanceValue,
     readAcl = AccessLevel.View,
     writeAcl = AccessLevel.View,
-}: AttributeOptions<V> = {}): WritableAttribute<T> => ({
+}: AttributeOptions<V> = {}): WritableAttribute<T, F> => ({
     id,
     schema,
     optional: false,
@@ -173,17 +181,20 @@ export const WritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<
     omitChanges,
     default: conformanceValue,
     readAcl,
-    writeAcl
+    writeAcl,
+    isConditional: false,
+    optionalIf: [],
+    mandatoryIf: [],
 });
 
-export const OptionalWritableAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, {
+export const OptionalWritableAttribute = <T, V extends T, F extends BitSchema>(id: number, schema: TlvSchema<T>, {
     scene = false,
     persistent = true,
     omitChanges = false,
     default: conformanceValue,
     readAcl = AccessLevel.View,
     writeAcl = AccessLevel.View,
-}: AttributeOptions<V> = {}): OptionalWritableAttribute<T> => ({
+}: AttributeOptions<V> = {}): OptionalWritableAttribute<T, F> => ({
     id,
     schema,
     optional: true,
@@ -195,7 +206,10 @@ export const OptionalWritableAttribute = <T, V extends T>(id: number, schema: Tl
     omitChanges,
     default: conformanceValue,
     readAcl,
-    writeAcl
+    writeAcl,
+    isConditional: false,
+    optionalIf: [],
+    mandatoryIf: [],
 });
 
 export const ConditionalWritableAttribute = <T, V extends T, F extends BitSchema>(id: number, schema: TlvSchema<T>, {
@@ -211,8 +225,6 @@ export const ConditionalWritableAttribute = <T, V extends T, F extends BitSchema
     id,
     schema,
     optional: true,
-    optionalIf,
-    mandatoryIf,
     writable: true,
     fixed: false,
     scene,
@@ -221,17 +233,20 @@ export const ConditionalWritableAttribute = <T, V extends T, F extends BitSchema
     omitChanges,
     default: conformanceValue,
     readAcl,
-    writeAcl
+    writeAcl,
+    isConditional: true,
+    optionalIf,
+    mandatoryIf,
 });
 
-export const WritableFabricScopedAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, {
+export const WritableFabricScopedAttribute = <T, V extends T, F extends BitSchema>(id: number, schema: TlvSchema<T>, {
     scene = false,
     persistent = true,
     omitChanges = false,
     default: conformanceValue,
     readAcl = AccessLevel.View,
     writeAcl = AccessLevel.View,
-}: AttributeOptions<V> = {}): WritableFabricScopedAttribute<T> => ({
+}: AttributeOptions<V> = {}): WritableFabricScopedAttribute<T, F> => ({
     id,
     schema,
     optional: false,
@@ -243,17 +258,20 @@ export const WritableFabricScopedAttribute = <T, V extends T>(id: number, schema
     omitChanges,
     default: conformanceValue,
     readAcl,
-    writeAcl
+    writeAcl,
+    isConditional: false,
+    optionalIf: [],
+    mandatoryIf: [],
 });
 
-export const OptionalWritableFabricScopedAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, {
+export const OptionalWritableFabricScopedAttribute = <T, V extends T, F extends BitSchema>(id: number, schema: TlvSchema<T>, {
     scene = false,
     persistent = true,
     omitChanges = false,
     default: conformanceValue,
     readAcl = AccessLevel.View,
     writeAcl = AccessLevel.View,
-}: AttributeOptions<V> = {}): OptionalWritableFabricScopedAttribute<T> => ({
+}: AttributeOptions<V> = {}): OptionalWritableFabricScopedAttribute<T, F> => ({
     id,
     schema,
     optional: true,
@@ -265,7 +283,10 @@ export const OptionalWritableFabricScopedAttribute = <T, V extends T>(id: number
     omitChanges,
     default: conformanceValue,
     readAcl,
-    writeAcl
+    writeAcl,
+    isConditional: false,
+    optionalIf: [],
+    mandatoryIf: [],
 });
 
 export const ConditionalWritableFabricScopedAttribute = <T, V extends T, F extends BitSchema>(id: number, schema: TlvSchema<T>, {
@@ -281,8 +302,6 @@ export const ConditionalWritableFabricScopedAttribute = <T, V extends T, F exten
     id,
     schema,
     optional: true,
-    optionalIf,
-    mandatoryIf,
     writable: true,
     fixed: false,
     scene,
@@ -291,16 +310,19 @@ export const ConditionalWritableFabricScopedAttribute = <T, V extends T, F exten
     omitChanges,
     default: conformanceValue,
     readAcl,
-    writeAcl
+    writeAcl,
+    isConditional: true,
+    optionalIf,
+    mandatoryIf,
 });
 
-export const FixedAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, {
+export const FixedAttribute = <T, V extends T, F extends BitSchema>(id: number, schema: TlvSchema<T>, {
     scene = false,
     persistent = false,
     omitChanges = false,
     default: conformanceValue,
     readAcl = AccessLevel.View,
-}: AttributeOptions<V> = {}): FixedAttribute<T> => ({
+}: AttributeOptions<V> = {}): FixedAttribute<T, F> => ({
     id,
     schema,
     optional: false,
@@ -311,16 +333,19 @@ export const FixedAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>,
     fabricScoped: false,
     omitChanges,
     default: conformanceValue,
-    readAcl
+    readAcl,
+    isConditional: false,
+    optionalIf: [],
+    mandatoryIf: [],
 });
 
-export const OptionalFixedAttribute = <T, V extends T>(id: number, schema: TlvSchema<T>, {
+export const OptionalFixedAttribute = <T, V extends T, F extends BitSchema>(id: number, schema: TlvSchema<T>, {
     scene = false,
     persistent = false,
     omitChanges = false,
     default: conformanceValue,
     readAcl = AccessLevel.View,
-}: AttributeOptions<V> = {}): OptionalFixedAttribute<T> => ({
+}: AttributeOptions<V> = {}): OptionalFixedAttribute<T, F> => ({
     id,
     schema,
     optional: true,
@@ -331,7 +356,10 @@ export const OptionalFixedAttribute = <T, V extends T>(id: number, schema: TlvSc
     fabricScoped: false,
     omitChanges,
     default: conformanceValue,
-    readAcl
+    readAcl,
+    isConditional: false,
+    optionalIf: [],
+    mandatoryIf: [],
 });
 
 export const ConditionalFixedAttribute = <T, V extends T, F extends BitSchema>(id: number, schema: TlvSchema<T>, {
@@ -346,8 +374,6 @@ export const ConditionalFixedAttribute = <T, V extends T, F extends BitSchema>(i
     id,
     schema,
     optional: true,
-    optionalIf,
-    mandatoryIf,
     writable: false,
     fixed: true,
     scene,
@@ -355,64 +381,75 @@ export const ConditionalFixedAttribute = <T, V extends T, F extends BitSchema>(i
     fabricScoped: false,
     omitChanges,
     default: conformanceValue,
-    readAcl
+    readAcl,
+    isConditional: true,
+    optionalIf,
+    mandatoryIf,
 });
 
-export type MandatoryAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends OptionalAttribute<any> ? never : K }[keyof A];
-export type OptionalAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends OptionalAttribute<any> ? K : never }[keyof A];
+export type MandatoryAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends OptionalAttribute<any, any> ? never : K }[keyof A];
+export type OptionalAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends OptionalAttribute<any, any> ? K : never }[keyof A];
 
 /* Interfaces and helper methods to define a cluster command */
 export const TlvNoResponse = TlvVoid;
 
-export interface Command<RequestT, ResponseT> {
+export interface Command<RequestT, ResponseT, F extends BitSchema> {
     optional: boolean,
     requestId: number,
     requestSchema: TlvSchema<RequestT>,
     responseId: number,
-    responseSchema: TlvSchema<ResponseT>
+    responseSchema: TlvSchema<ResponseT>,
+    isConditional: boolean,
+    mandatoryIf: ConditionalFeatureList<F>,
+    optionalIf: ConditionalFeatureList<F>
 }
 
-export interface OptionalCommand<RequestT, ResponseT> extends Command<RequestT, ResponseT> {
+export interface OptionalCommand<RequestT, ResponseT, F extends BitSchema> extends Command<RequestT, ResponseT, F> {
     optional: true,
 }
 
-export interface ConditionalCommand<RequestT, ResponseT, F extends BitSchema> extends OptionalCommand<RequestT, ResponseT> {
-    mandatoryIf?: ConditionalFeatureList<F>,
-    optionalIf?: ConditionalFeatureList<F>
+export interface ConditionalCommand<RequestT, ResponseT, F extends BitSchema> extends OptionalCommand<RequestT, ResponseT, F> {
+    isConditional: true,
 }
 
-export type ResponseType<T extends Command<any, any>> = T extends OptionalCommand<any, infer ResponseT> ? ResponseT : (T extends Command<any, infer ResponseT> ? ResponseT : never);
-export type RequestType<T extends Command<any, any>> = T extends OptionalCommand<infer RequestT, any> ? RequestT : (T extends Command<infer RequestT, any> ? RequestT : never);
+export type ResponseType<T extends Command<any, any, any>> = T extends OptionalCommand<any, infer ResponseT, any> ? ResponseT : (T extends Command<any, infer ResponseT, any> ? ResponseT : never);
+export type RequestType<T extends Command<any, any, any>> = T extends OptionalCommand<infer RequestT, any, any> ? RequestT : (T extends Command<infer RequestT, any, any> ? RequestT : never);
 
 interface ConditionalCommandOptions<F extends BitSchema> {
     optionalIf?: ConditionalFeatureList<F>,
     mandatoryIf?: ConditionalFeatureList<F>
 }
 
-export const Command = <RequestT, ResponseT>(
+export const Command = <RequestT, ResponseT, F extends BitSchema>(
     requestId: number,
     requestSchema: TlvSchema<RequestT>,
     responseId: number,
     responseSchema: TlvSchema<ResponseT>
-): Command<RequestT, ResponseT> => ({
+): Command<RequestT, ResponseT, F> => ({
     optional: false,
     requestId,
     requestSchema,
     responseId,
-    responseSchema
+    responseSchema,
+    isConditional: false,
+    optionalIf: [],
+    mandatoryIf: [],
 });
 
-export const OptionalCommand = <RequestT, ResponseT>(
+export const OptionalCommand = <RequestT, ResponseT, F extends BitSchema>(
     requestId: number,
     requestSchema: TlvSchema<RequestT>,
     responseId: number,
     responseSchema: TlvSchema<ResponseT>,
-): OptionalCommand<RequestT, ResponseT> => ({
+): OptionalCommand<RequestT, ResponseT, F> => ({
     optional: true,
     requestId,
     requestSchema,
     responseId,
-    responseSchema
+    responseSchema,
+    isConditional: false,
+    optionalIf: [],
+    mandatoryIf: [],
 });
 
 export const ConditionalCommand = <RequestT, ResponseT, F extends BitSchema>(
@@ -420,15 +457,19 @@ export const ConditionalCommand = <RequestT, ResponseT, F extends BitSchema>(
     requestSchema: TlvSchema<RequestT>,
     responseId: number,
     responseSchema: TlvSchema<ResponseT>,
-    { optionalIf, mandatoryIf }: ConditionalCommandOptions<F>
+    {
+        optionalIf = [],
+        mandatoryIf = []
+    }: ConditionalCommandOptions<F>
 ): ConditionalCommand<RequestT, ResponseT, F> => ({
     optional: true,
-    optionalIf,
-    mandatoryIf,
     requestId,
     requestSchema,
     responseId,
-    responseSchema
+    responseSchema,
+    isConditional: true,
+    optionalIf,
+    mandatoryIf,
 });
 
 /* Interfaces and helper methods to define a cluster event */
@@ -438,11 +479,14 @@ export const enum EventPriority {
     Debug,
 }
 
-export interface Event<T> {
+export interface Event<T, F extends BitSchema> {
     id: number,
     schema: TlvSchema<T>,
     priority: EventPriority,
-    optional: boolean
+    optional: boolean,
+    isConditional: boolean,
+    optionalIf: ConditionalFeatureList<F>,
+    mandatoryIf: ConditionalFeatureList<F>
 }
 
 interface ConditionalEventOptions<F extends BitSchema> {
@@ -450,80 +494,89 @@ interface ConditionalEventOptions<F extends BitSchema> {
     mandatoryIf?: ConditionalFeatureList<F>
 }
 
-export interface OptionalEvent<T> extends Event<T> {
+export interface OptionalEvent<T, F extends BitSchema> extends Event<T, F> {
     optional: true
 }
 
-export interface ConditionalEvent<T, F extends BitSchema> extends OptionalEvent<T> {
-    mandatoryIf?: ConditionalFeatureList<F>,
-    optionalIf?: ConditionalFeatureList<F>
+export interface ConditionalEvent<T, F extends BitSchema> extends OptionalEvent<T, F> {
+    isConditional: true,
 }
 
-export const Event = <FT extends TlvFields>(id: number, priority: EventPriority, data: FT = <FT>{}): Event<TypeFromFields<FT>> => ({
+export const Event = <FT extends TlvFields, F extends BitSchema>(id: number, priority: EventPriority, data: FT = <FT>{}): Event<TypeFromFields<FT>, F> => ({
     id,
     schema: TlvObject(data),
     priority,
-    optional: false
+    optional: false,
+    isConditional: false,
+    optionalIf: [],
+    mandatoryIf: [],
 });
 
-export const OptionalEvent = <FT extends TlvFields>(id: number, priority: EventPriority, data: FT = <FT>{}): OptionalEvent<TypeFromFields<FT>> => ({
+export const OptionalEvent = <FT extends TlvFields, F extends BitSchema>(id: number, priority: EventPriority, data: FT = <FT>{}): OptionalEvent<TypeFromFields<FT>, F> => ({
     id,
     schema: TlvObject(data),
     priority,
-    optional: true
+    optional: true,
+    isConditional: false,
+    optionalIf: [],
+    mandatoryIf: [],
 });
 
 export const ConditionalEvent = <FT extends TlvFields, F extends BitSchema>(
     id: number,
     priority: EventPriority,
     data: FT = <FT>{},
-    { optionalIf, mandatoryIf }: ConditionalEventOptions<F>
+    {
+        optionalIf = [],
+        mandatoryIf = []
+    }: ConditionalEventOptions<F>
 ): ConditionalEvent<TypeFromFields<FT>, F> => ({
     id,
     schema: TlvObject(data),
     priority,
     optional: true,
+    isConditional: true,
     optionalIf,
-    mandatoryIf
+    mandatoryIf,
 });
 
-export type EventType<T extends Event<any>> = T extends OptionalEvent<infer EventT> ? EventT : (T extends Event<infer EventT> ? EventT : never);
-export type MandatoryEventNames<E extends Events> = { [K in keyof E]: E[K] extends OptionalEvent<any> ? never : K }[keyof E];
-export type OptionalEventNames<E extends Events> = { [K in keyof E]: E[K] extends OptionalEvent<any> ? K : never }[keyof E];
+export type EventType<T extends Event<any, any>> = T extends OptionalEvent<infer EventT, any> ? EventT : (T extends Event<infer EventT, any> ? EventT : never);
+export type MandatoryEventNames<E extends Events> = { [K in keyof E]: E[K] extends OptionalEvent<any, any> ? never : K }[keyof E];
+export type OptionalEventNames<E extends Events> = { [K in keyof E]: E[K] extends OptionalEvent<any, any> ? K : never }[keyof E];
 
 /* Interfaces and helper methods to define a cluster */
 export interface Attributes {
-    [key: string]: Attribute<any>
+    [key: string]: Attribute<any, any>
 }
 
 export interface Commands {
-    [key: string]: Command<any, any>
+    [key: string]: Command<any, any, any>
 }
 
 export interface Events {
-    [key: string]: Event<any>
+    [key: string]: Event<any, any>
 }
 
 // TODO Adjust typing to be derived from the schema below
 /** @see {@link MatterCoreSpecificationV1_0} § 7.13 */
 export type GlobalAttributes<F extends BitSchema> = {
     /** Indicates the revision of the server cluster specification supported by the cluster instance. */
-    clusterRevision: Attribute<number>,
+    clusterRevision: Attribute<number, never>,
 
     /** Indicates whether the server supports zero or more optional cluster features. */
-    featureMap: Attribute<TypeFromPartialBitSchema<F>>,
+    featureMap: Attribute<TypeFromPartialBitSchema<F>, never>,
 
     /** List of the attribute IDs of the attributes supported by the cluster instance. */
-    attributeList: Attribute<AttributeId[]>,
+    attributeList: Attribute<AttributeId[], never>,
 
     /** List of the event IDs of the events supported by the cluster instance. */
-    eventList: Attribute<EventId[]>,
+    eventList: Attribute<EventId[], never>,
 
     /** List of client generated commands which are supported by this cluster server instance. */
-    acceptedCommandList: Attribute<CommandId[]>,
+    acceptedCommandList: Attribute<CommandId[], never>,
 
     /** List of server generated commands (server to client commands). */
-    generatedCommandList: Attribute<CommandId[]>,
+    generatedCommandList: Attribute<CommandId[], never>,
 }
 
 export const GlobalAttributes = <F extends BitSchema>(features: F) => ({

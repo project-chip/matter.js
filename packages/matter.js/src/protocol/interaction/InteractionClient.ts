@@ -148,7 +148,7 @@ export function ClusterClient<A extends Attributes, C extends Commands, E extend
             if (interactionClient === undefined) {
                 throw new Error("InteractionClient not set");
             }
-            return interactionClient.invoke<Command<RequestT, ResponseT>>(endpointId, clusterId, request, requestId, requestSchema, responseId, responseSchema, optional);
+            return interactionClient.invoke<Command<RequestT, ResponseT, any>>(endpointId, clusterId, request, requestId, requestSchema, responseId, responseSchema, optional);
         };
         result[commandName] = result.commands[commandName];
     }
@@ -210,12 +210,12 @@ export class InteractionClient {
         });
     }
 
-    async get<A extends Attribute<any>>(endpointId: number, clusterId: number, attribute: A, alwaysRequestFromRemote = false): Promise<AttributeJsType<A> | undefined> {
+    async get<A extends Attribute<any, any>>(endpointId: number, clusterId: number, attribute: A, alwaysRequestFromRemote = false): Promise<AttributeJsType<A> | undefined> {
         const response = await this.getWithVersion(endpointId, clusterId, attribute, alwaysRequestFromRemote);
         return response?.value;
     }
 
-    async getWithVersion<A extends Attribute<any>>(endpointId: number, clusterId: number, attribute: A, alwaysRequestFromRemote = false): Promise<{ value: AttributeJsType<A>, version: number } | undefined> {
+    async getWithVersion<A extends Attribute<any, any>>(endpointId: number, clusterId: number, attribute: A, alwaysRequestFromRemote = false): Promise<{ value: AttributeJsType<A>, version: number } | undefined> {
         const { id: attributeId } = attribute;
         if (!alwaysRequestFromRemote) {
             const localValue = this.subscribedLocalValues.get(attributePathToId({ endpointId, clusterId, attributeId }))
@@ -254,7 +254,7 @@ export class InteractionClient {
         return normalizeAndDecodeReadAttributeReport(result);
     }
 
-    async set<T>(endpointId: number, clusterId: number, attribute: Attribute<T>, value: T, dataVersion?: number): Promise<void> {
+    async set<T>(endpointId: number, clusterId: number, attribute: Attribute<T, any>, value: T, dataVersion?: number): Promise<void> {
         const response = await this.setMultipleAttributes([{ endpointId, clusterId, attribute, value, dataVersion }]);
 
         // Response contains Status error if there was an error on write
@@ -266,7 +266,7 @@ export class InteractionClient {
         }
     }
 
-    async setMultipleAttributes(attributes: { endpointId: number, clusterId: number, attribute: Attribute<any>, value: any, dataVersion?: number }[]): Promise<AttributeStatus[]> {
+    async setMultipleAttributes(attributes: { endpointId: number, clusterId: number, attribute: Attribute<any, any>, value: any, dataVersion?: number }[]): Promise<AttributeStatus[]> {
         return this.withMessenger<AttributeStatus[]>(async messenger => {
             const writeRequests = attributes.map((
                 { endpointId, clusterId, attribute: { id, schema }, value, dataVersion }
@@ -289,7 +289,7 @@ export class InteractionClient {
         });
     }
 
-    async subscribe<A extends Attribute<any>>(
+    async subscribe<A extends Attribute<any, any>>(
         endpointId: number,
         clusterId: number,
         attribute: A,
@@ -367,7 +367,7 @@ export class InteractionClient {
         });
     }
 
-    async invoke<C extends Command<any, any>>(endpointId: number, clusterId: number, request: RequestType<C>, id: number, requestSchema: TlvSchema<RequestType<C>>, _responseId: number, responseSchema: TlvSchema<ResponseType<C>>, optional: boolean): Promise<ResponseType<C>> {
+    async invoke<C extends Command<any, any, any>>(endpointId: number, clusterId: number, request: RequestType<C>, id: number, requestSchema: TlvSchema<RequestType<C>>, _responseId: number, responseSchema: TlvSchema<ResponseType<C>>, optional: boolean): Promise<ResponseType<C>> {
         return this.withMessenger<ResponseType<C>>(async messenger => {
             const commandFields = requestSchema.encodeTlv(request);
 
