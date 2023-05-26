@@ -6,9 +6,6 @@
 
 import { Time } from "../../src/time/Time.js";
 import { TimeFake } from "../../src/time/TimeFake.js";
-
-Time.get = () => new TimeFake(0);
-
 import * as assert from "assert";
 import { AdminCommissioningCluster } from "../../src/cluster/AdminCommissioningCluster.js";
 import { GroupsCluster } from "../../src/cluster/GroupsCluster.js";
@@ -27,6 +24,7 @@ import {
     WindowCoveringClusterSchema, WindowCoveringEndProductType, WindowCoveringOperationalStatus
 } from "../../src/cluster/schema/WindowCoveringCluster.js";
 import { WindowCoveringType } from "../../src/cluster/WindowCoveringCluster.js";
+import {Level, Logger} from "../../src/log/index.js";
 
 describe("ClusterServer structure", () => {
     describe("correct attribute servers are used and exposed", () => {
@@ -489,7 +487,12 @@ describe("ClusterServer structure", () => {
             assert.deepEqual((server.attributes as any).eventList.get(), []);
         });
 
-        it("Missing Conditionals Required throws error", () => {
+        it("Missing Conditionals Log warnings", () => {
+            const fakeTime = new TimeFake(0);
+            Time.get = () => fakeTime;
+            const fakeLogSink = new Array<{ level: Level, log: string }>();
+            Logger.log = (level, log) => fakeLogSink.push({ level, log });
+
             const TestCluster = ClusterExtend(WindowCoveringClusterSchema, {
                 supportedFeatures: {
                     lift: true,
@@ -529,10 +532,15 @@ describe("ClusterServer structure", () => {
                     // gotoLiftValue: async () => { /* dummy */ }, // Should be existing but not set
                 }
             );
-            // TODO verify that logger logged "warn" with
-            // InitialAttributeValue for "Window Covering/currentPositionTiltPercent100ths" is provided but it's neither optional or mandatory for  supportedFeatures: {"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} but is set!
-            // InitialAttributeValue for "Window Covering/installedClosedLimitLift" is REQUIRED by supportedFeatures: {"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} but is not set!
-            // InteractionProtocol Command "Window Covering/gotoLiftPercent" is REQUIRED by supportedFeatures:{"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} but is not set!
-        })
+
+            assert.deepEqual(fakeLogSink, [
+                { level: Level.DEBUG, log: '1970-01-01 01:00:00.000 DEBUG InteractionProtocol InitialAttributeValue for "Window Covering/physicalClosedLimitLift" is optional by supportedFeatures: {"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} and is not set!' },
+                { level: Level.DEBUG, log: '1970-01-01 01:00:00.000 DEBUG InteractionProtocol InitialAttributeValue for "Window Covering/currentPositionLift" is optional by supportedFeatures: {"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} and is not set!' },
+                { level: Level.DEBUG, log: '1970-01-01 01:00:00.000 DEBUG InteractionProtocol InitialAttributeValue for "Window Covering/currentPositionLiftPercent" is optional by supportedFeatures: {"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} and is not set!' },
+                { level: Level.WARN, log: '1970-01-01 01:00:00.000 WARN InteractionProtocol InitialAttributeValue for "Window Covering/currentPositionTiltPercent100ths" is provided but it\'s neither optional or mandatory for  supportedFeatures: {"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} but is set!' },
+                { level: Level.WARN, log: '1970-01-01 01:00:00.000 WARN InteractionProtocol InitialAttributeValue for "Window Covering/installedClosedLimitLift" is REQUIRED by supportedFeatures: {"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} but is not set!' },
+                { level: Level.WARN, log: '1970-01-01 01:00:00.000 WARN InteractionProtocol Command "Window Covering/gotoLiftPercent" is REQUIRED by supportedFeatures:{"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} but is not set!' }
+            ]);
+        });
     });
 });
