@@ -523,7 +523,7 @@ describe("ClusterServer structure", () => {
                         maintenanceMode: false,
                         ledFeedback: false,
                     },
-                    numOfActuationsLift: 0,
+                    numberOfActuationsLift: 0,
                     targetPositionLiftPercent100ths: 0,
                     currentPositionLiftPercent100ths: 0,
                     installedOpenLimitLift: 0,
