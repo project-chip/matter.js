@@ -27,7 +27,7 @@ describe("Storage node-localstorage", () => {
         assert.equal(value, "value");
     });
 
-    it("write and read success with multiple context levels", async() => {
+    it("write and read success with multiple context levels", async () => {
         const storage = new StorageBackendDisk(TEST_STORAGE_LOCATION);
 
         storage.set(["context", "subcontext", "subsubcontext"], "key", "value");
