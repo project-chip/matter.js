@@ -27,7 +27,7 @@ describe("Storage node-localstorage", () => {
         assert.equal(value, "value");
     });
 
-    it("write and read success with multiple context levels", () => {
+    it("write and read success with multiple context levels", async() => {
         const storage = new StorageBackendDisk(TEST_STORAGE_LOCATION);
 
         storage.set(["context", "subcontext", "subsubcontext"], "key", "value");
@@ -37,9 +37,9 @@ describe("Storage node-localstorage", () => {
 
         const dirStat = await stat(TEST_STORAGE_LOCATION);
         assert.ok(dirStat.isDirectory());
-        const KeyFileStat = await stat(TEST_STORAGE_LOCATION + "/context.key");
+        const KeyFileStat = await stat(TEST_STORAGE_LOCATION + "/context.subcontext.subsubcontext.key");
         assert.ok(KeyFileStat.isFile());
-        const keyContent = await readFile(TEST_STORAGE_LOCATION + "/context.key");
+        const keyContent = await readFile(TEST_STORAGE_LOCATION + "/context.subcontext.subsubcontext.key");
         assert.equal(keyContent.toString(), `"value"`);
     });
 
