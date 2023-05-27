@@ -191,7 +191,7 @@ export function ClusterServer<F extends BitSchema, SF extends TypeFromPartialBit
                 conditionHasMatched = conditionHasMatched || conditionMatched;
             }
             // TODO Remove optional info/checks
-            if (optionalIf !== undefined && optionalIf.length > 0) {
+            if (!conditionHasMatched && optionalIf !== undefined && optionalIf.length > 0) {
                 const conditionMatched = isConditionMatching(optionalIf, supportedFeatures);
                 if (conditionMatched && (attributesInitialValues as any)[attributeName] === undefined) {
                     logger.debug(`InitialAttributeValue for "${clusterDef.name}/${attributeName}" is optional by supportedFeatures: ${JSON.stringify(supportedFeatures)} and is not set!`);
@@ -271,15 +271,15 @@ export function ClusterServer<F extends BitSchema, SF extends TypeFromPartialBit
             if (mandatoryIf !== undefined && mandatoryIf.length > 0) {
                 const conditionMatched = isConditionMatching(mandatoryIf, supportedFeatures);
                 if (conditionMatched && handler === undefined) {
-                    logger.warn(`Command "${clusterDef.name}/${name}" is REQUIRED by supportedFeatures:${JSON.stringify(supportedFeatures)} but is not set!`);
+                    logger.warn(`Command "${clusterDef.name}/${name}" is REQUIRED by supportedFeatures: ${JSON.stringify(supportedFeatures)} but is not set!`);
                 }
                 conditionHasMatched = conditionHasMatched || conditionMatched;
             }
             // TODO Remove optional info/checks
-            if (optionalIf !== undefined) {
+            if (!conditionHasMatched && optionalIf !== undefined && optionalIf.length > 0) {
                 const conditionMatched = isConditionMatching(optionalIf, supportedFeatures);
                 if (conditionMatched && handler === undefined) {
-                    logger.debug(`Command "${clusterDef.name}/${name}" is optional by supportedFeatures:${JSON.stringify(supportedFeatures)} and is not set!`);
+                    logger.debug(`Command "${clusterDef.name}/${name}" is optional by supportedFeatures: ${JSON.stringify(supportedFeatures)} and is not set!`);
                 }
                 conditionHasMatched = conditionHasMatched || conditionMatched;
             }
@@ -317,15 +317,15 @@ export function ClusterServer<F extends BitSchema, SF extends TypeFromPartialBit
             if (mandatoryIf !== undefined) {
                 const conditionMatched = isConditionMatching(mandatoryIf, supportedFeatures);
                 if (conditionMatched && (supportedEvents as any)[eventName] === undefined) {
-                    logger.warn(`Event "${clusterDef.name}/${eventName}" is REQUIRED by supportedFeatures:${JSON.stringify(supportedFeatures)} but is not set!`);
+                    logger.warn(`Event "${clusterDef.name}/${eventName}" is REQUIRED by supportedFeatures: ${JSON.stringify(supportedFeatures)} but is not set!`);
                 }
                 conditionHasMatched = conditionHasMatched || conditionMatched;
             }
             // TODO Remove optional info/checks
-            if (optionalIf !== undefined) {
+            if (!conditionHasMatched && optionalIf !== undefined && optionalIf.length > 0) {
                 const conditionMatched = isConditionMatching(optionalIf, supportedFeatures);
                 if (conditionMatched && (supportedEvents as any)[eventName] === undefined) {
-                    logger.debug(`Event "${clusterDef.name}/${eventName}" is optional by supportedFeatures:${JSON.stringify(supportedFeatures)} and is not set!`);
+                    logger.debug(`Event "${clusterDef.name}/${eventName}" is optional by supportedFeatures: ${JSON.stringify(supportedFeatures)} and is not set!`);
                 }
                 conditionHasMatched = conditionHasMatched || conditionMatched;
             }

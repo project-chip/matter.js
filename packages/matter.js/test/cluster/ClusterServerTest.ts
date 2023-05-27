@@ -519,6 +519,7 @@ describe("ClusterServer structure", () => {
                         maintenanceMode: false,
                         ledFeedback: false,
                     },
+                    numOfActuationsLift: 0,
                     targetPositionLiftPercent100ths: 0,
                     currentPositionLiftPercent100ths: 0,
                     installedOpenLimitLift: 0,
@@ -536,12 +537,12 @@ describe("ClusterServer structure", () => {
             // TODO: Find out how to set TZ=UTC when executing single tests locally
 
             assert.deepEqual(fakeLogSink, [
-                { level: Level.DEBUG, log: '1970-01-01 00:00:00.000 DEBUG InteractionProtocol InitialAttributeValue for "Window Covering/physicalClosedLimitLift" is optional by supportedFeatures: {"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} and is not set!' },
-                { level: Level.DEBUG, log: '1970-01-01 00:00:00.000 DEBUG InteractionProtocol InitialAttributeValue for "Window Covering/currentPositionLift" is optional by supportedFeatures: {"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} and is not set!' },
-                { level: Level.DEBUG, log: '1970-01-01 00:00:00.000 DEBUG InteractionProtocol InitialAttributeValue for "Window Covering/currentPositionLiftPercent" is optional by supportedFeatures: {"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} and is not set!' },
-                { level: Level.WARN, log: '1970-01-01 00:00:00.000 WARN InteractionProtocol InitialAttributeValue for "Window Covering/currentPositionTiltPercent100ths" is provided but it\'s neither optional or mandatory for supportedFeatures: {"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} but is set!' },
-                { level: Level.WARN, log: '1970-01-01 00:00:00.000 WARN InteractionProtocol InitialAttributeValue for "Window Covering/installedClosedLimitLift" is REQUIRED by supportedFeatures: {"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} but is not set!' },
-                { level: Level.WARN, log: '1970-01-01 00:00:00.000 WARN InteractionProtocol Command "Window Covering/gotoLiftPercent" is REQUIRED by supportedFeatures:{"lift":true,"tilt":false,"positionAwareLift":true,"absolutePosition":false,"positionAwareTilt":false} but is not set!' }
+                { level: Level.DEBUG, log: '1970-01-01 00:00:00.000 DEBUG InteractionProtocol InitialAttributeValue for "Window Covering/physicalClosedLimitLift" is optional by supportedFeatures: {"lift":true,"positionAwareLift":true} and is not set!' },
+                { level: Level.DEBUG, log: '1970-01-01 00:00:00.000 DEBUG InteractionProtocol InitialAttributeValue for "Window Covering/currentPositionLift" is optional by supportedFeatures: {"lift":true,"positionAwareLift":true} and is not set!' },
+                { level: Level.DEBUG, log: '1970-01-01 00:00:00.000 DEBUG InteractionProtocol InitialAttributeValue for "Window Covering/currentPositionLiftPercent" is optional by supportedFeatures: {"lift":true,"positionAwareLift":true} and is not set!' },
+                { level: Level.WARN, log: '1970-01-01 00:00:00.000 WARN InteractionProtocol InitialAttributeValue for "Window Covering/currentPositionTiltPercent100ths" is provided but it\'s neither optional or mandatory for supportedFeatures: {"lift":true,"positionAwareLift":true} but is set!' },
+                { level: Level.WARN, log: '1970-01-01 00:00:00.000 WARN InteractionProtocol InitialAttributeValue for "Window Covering/installedClosedLimitLift" is REQUIRED by supportedFeatures: {"lift":true,"positionAwareLift":true} but is not set!' },
+                { level: Level.WARN, log: '1970-01-01 00:00:00.000 WARN InteractionProtocol Command "Window Covering/gotoLiftPercent" is REQUIRED by supportedFeatures: {"lift":true,"positionAwareLift":true} but is not set!' }
             ]);
         });
     });
