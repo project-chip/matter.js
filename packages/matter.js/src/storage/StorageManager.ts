@@ -25,7 +25,8 @@ export class StorageManager {
 
     createContext(context: string) {
         if (!this.initialized) throw new Error("The storage needs to be initialized first!");
+        if (!context.length) throw new Error("Context must not be an empty string!");
         if (context.includes('.')) throw new Error("Context must not contain dots!");
-        return new StorageContext(this.storage, context);
+        return new StorageContext(this.storage, [context]);
     }
 }

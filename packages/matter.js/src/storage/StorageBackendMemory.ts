@@ -12,6 +12,12 @@ export class StorageBackendMemory implements Storage {
         protected store: any = {}
     ) { }
 
+    private createContextKey(contexts: string[]) {
+        const key = contexts.join('.');
+        if (!key.length || key.includes("..") || key.startsWith(".") || key.endsWith(".")) throw new Error("Context must not be an empty string!");
+        return key;
+    }
+
     async initialize() {
         // nothing to do
     }
@@ -20,18 +26,17 @@ export class StorageBackendMemory implements Storage {
         // nothing to do
     }
 
-    get<T extends SupportedStorageTypes>(context: string, key: string): T | undefined {
-        if (!context.length || !key.length) throw new Error("Context and key must not be empty strings!");
-        return this.store[context]?.[key];
+    get<T extends SupportedStorageTypes>(contexts: string[], key: string): T | undefined {
+        if (!contexts.length || !key.length) throw new Error("Context and key must not be empty!");
+        return this.store[this.createContextKey(contexts)]?.[key];
     }
 
-    set<T extends SupportedStorageTypes>(context: string, key: string, value: T): void {
-        if (!context.length || !key.length) throw new Error("Context and key must not be empty strings!");
-        let contextStore = this.store[context];
-        if (contextStore === undefined) {
-            contextStore = {};
-            this.store[context] = contextStore;
+    set<T extends SupportedStorageTypes>(contexts: string[], key: string, value: T): void {
+        if (!contexts.length || !key.length) throw new Error("Context and key must not be empty!");
+        const contextKey = this.createContextKey(contexts);
+        if (this.store[contextKey] === undefined) {
+            this.store[contextKey] = {};
         }
-        contextStore[key] = value;
+        this.store[contextKey][key] = value;
     }
 }
