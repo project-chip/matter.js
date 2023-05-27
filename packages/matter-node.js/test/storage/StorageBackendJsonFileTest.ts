@@ -29,9 +29,9 @@ describe("Storage in JSON File", () => {
         const storage = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
         await storage.initialize();
 
-        storage.set("context", "key", "value");
+        storage.set(["context"], "key", "value");
 
-        const value = storage.get("context", "key");
+        const value = storage.get(["context"], "key");
         assert.equal(value, "value");
 
         await fakeTime.advanceTime(2 * 1000);
@@ -41,7 +41,7 @@ describe("Storage in JSON File", () => {
         const storageRead = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
         await storageRead.initialize();
 
-        const valueRead = storage.get("context", "key");
+        const valueRead = storage.get(["context"], "key");
         assert.equal(valueRead, "value");
 
         const fileContent = await readFile(TEST_STORAGE_LOCATION);
@@ -58,36 +58,36 @@ describe("Storage in JSON File", () => {
     it("Throws error when context is empty on set", () => {
         assert.throws(() => {
             const storage = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
-            storage.set("", "key", "value");
+            storage.set([""], "key", "value");
         }, {
-            message: "Context and key must not be empty strings!"
+            message: "Context must not be an empty string!"
         });
     });
 
     it("Throws error when key is empty on set", () => {
         assert.throws(() => {
             const storage = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
-            storage.set("context", "", "value");
+            storage.set(["context"], "", "value");
         }, {
-            message: "Context and key must not be empty strings!"
+            message: "Context and key must not be empty!"
         });
     });
 
     it("Throws error when context is empty on get", () => {
         assert.throws(() => {
             const storage = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
-            storage.get("", "key");
+            storage.get([""], "key");
         }, {
-            message: "Context and key must not be empty strings!"
+            message: "Context must not be an empty string!"
         });
     });
 
     it("Throws error when key is empty on get", () => {
         assert.throws(() => {
             const storage = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
-            storage.get("context", "");
+            storage.get(["context"], "");
         }, {
-            message: "Context and key must not be empty strings!"
+            message: "Context and key must not be empty!"
         });
     });
 
