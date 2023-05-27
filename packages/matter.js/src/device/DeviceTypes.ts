@@ -150,7 +150,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         deviceClass: DeviceClasses.Node, // ???
         revision: 1,
         requiredServerClusters: [
-            MatterClusters.WiredPowerSourceCluster.id // any cluster features allowed
+            MatterClusters.WiredPowerSourceCluster.id
         ],
     }),
 
@@ -230,7 +230,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         requiredServerClusters: [
             MatterClusters.BridgedDeviceBasicInformationCluster.id,
             MatterClusters.PowerSourceConfigurationCluster.id,
-            MatterClusters.WiredPowerSourceCluster.id, // any cluster features allowed
+            MatterClusters.WiredPowerSourceCluster.id,
         ],
     }),
 
@@ -822,7 +822,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         optionalServerClusters: [
             MatterClusters.ScenesCluster.id,
             MatterClusters.LevelControlCluster.id,
-            //MatterClusters.FanControlCluster.id,
+            MatterClusters.FanControlCluster.id,
         ],
         requiredClientClusters: [
             //MatterClusters.ThermostatCluster.id,
@@ -846,7 +846,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         revision: 2,
         requiredServerClusters: [
             MatterClusters.IdentifyCluster.id,
-            //MatterClusters.ThermostatCluster.id,
+            MatterClusters.ThermostatCluster.id,
         ],
         optionalServerClusters: [
             MatterClusters.GroupsCluster.id, // Required when Awake

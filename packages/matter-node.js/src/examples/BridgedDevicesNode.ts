@@ -19,14 +19,15 @@
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
 import { CommissioningServer, MatterServer } from "../"; // same as @project-chip/matter-node.js
 
-import { OnOffLightDevice, OnOffPluginUnitDevice, Aggregator, DeviceTypes } from "../exports/device"; // same as @project-chip/matter-node.js/device
+import { OnOffLightDevice, OnOffPluginUnitDevice, Aggregator, DeviceTypes, HVACDevice, ThermostatDevice } from "../exports/device"; // same as @project-chip/matter-node.js/device
 import { VendorId } from "../exports/datatype"; // same as @project-chip/matter-node.js/datatype
 import { Logger } from "../exports/log"; // same as @project-chip/matter-node.js/log
 import { StorageManager, StorageBackendDisk } from "../storage"; // same as @project-chip/matter-node.js/storage
 import { commandExecutor, getIntParameter, getParameter, requireMinNodeVersion, hasParameter } from "../util"; // same as @project-chip/matter-node.js/util
 import { Time } from "../time";
-import { BridgedDeviceBasicInformationCluster } from "../exports/cluster";
-import { ClusterServer } from "../exports/interaction";
+import { BridgedDeviceBasicInformationCluster, ThermostatCluster } from "../exports/cluster";
+import { ClusterClient, ClusterServer } from "../exports/interaction";
+
 
 const logger = Logger.get("Device");
 
@@ -72,7 +73,7 @@ class BridgedDevice {
         // product name / id and vendor id should match what is in the device certificate
         const vendorId = new VendorId(getIntParameter("vendorid") ?? deviceStorage.get("vendorid", 0xFFF1));
         const productName = `node-matter OnOff-Bridge`;
-        const productId = getIntParameter("productid") ?? deviceStorage.get("productid", 0x8000);
+        const productId = getIntParameter("productid") ?? deviceStorage.get("productid", 0x1000);
 
         const netAnnounceInterface = getParameter("announceinterface");
         const port = getIntParameter("port") ?? 5540;
@@ -116,8 +117,8 @@ class BridgedDevice {
         commissioningServer.addRootClusterServer(ClusterServer(BridgedDeviceBasicInformationCluster, {
             nodeLabel: `OnOff Bridge`,
             serialNumber: `node-matter-${uniqueId}`,
-            reachable: true
-        }, {}))
+            reachable: true,
+        }, { }, { reachableChanged: true }));
 
         /**
          * Create Device instance and add needed Listener
@@ -143,6 +144,27 @@ class BridgedDevice {
                 reachable: true
             });
         }
+
+        const thermostatDevice = new ThermostatDevice();
+        thermostatDevice.addOccupiedCoolingSetpointListener((v: any, o: any) => console.log("NEW: " + v + " OLD: "+ o));
+        thermostatDevice.addOccupiedHeatingSetpointListener((v: any, o: any) => console.log("NEW: " + v + " OLD: "+ o));
+        thermostatDevice.setLocalTemperature(2400);
+
+        aggregator.addBridgedDevice(thermostatDevice, {
+            nodeLabel: `thermostatDevice 1`,
+            serialNumber: `node-matter-${uniqueId}-99`,
+            reachable: true            
+        }); 
+
+        const airCon = new HVACDevice();
+        airCon.addOnOffListener((v: any) => console.log(v));
+        //airCon.addClusterClient(thermostatDevice.cli);
+
+        aggregator.addBridgedDevice(airCon, {
+            nodeLabel: `airCon 1`,
+            serialNumber: `node-matter-${uniqueId}-99`,
+            reachable: true
+        });
 
         commissioningServer.addDevice(aggregator);
 

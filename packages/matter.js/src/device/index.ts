@@ -15,3 +15,6 @@ export * from "./Endpoint.js";
 // export Device specific classes
 export * from "./OnOffDevices.js";
 
+export * from "./ThermostatDevice.js"
+
+export * from "./HVACDevice.js"

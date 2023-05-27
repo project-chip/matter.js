@@ -36,6 +36,8 @@ export * from "./PressureMeasurementCluster.js";
 export * from "./ScenesCluster.js";
 export * from "./TemperatureMeasurementCluster.js";
 export * from "./WaterContentMeasurementCluster.js";
+export * from "./ThermostatCluster.js";
+export * from "./FanControlCluster.js";
 
 // Export all Client classes
 export * from "./client/ClusterClient.js";
@@ -56,3 +58,5 @@ export * from "./server/NetworkCommissioningServer.js";
 export * from "./server/OnOffServer.js";
 export * from "./server/OperationalCredentialsServer.js";
 export * from "./server/ScenesServer.js";
+export * from "./server/ThermostatServer.js";
+export * from "./server/FanControlServer.js";
