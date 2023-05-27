@@ -7,7 +7,7 @@
 import { TlvGroupId } from "../datatype/GroupId.js";
 import { StatusCode } from "../protocol/interaction/InteractionProtocol.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
-import { Attribute, Cluster, Command, TlvNoResponse } from "./Cluster.js";
+import { Cluster, Command, FixedAttribute, TlvNoResponse } from "./Cluster.js";
 import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvString } from "../tlv/TlvString.js";
 import { TlvBitmap, TlvEnum, TlvUInt8 } from "../tlv/TlvNumber.js";
@@ -98,7 +98,7 @@ export const GroupsCluster = Cluster({
          *
          * TODO because we (will) support group names we need to set bit 7 to 1, rest is 0
          */
-        nameSupport: Attribute(0, TlvNameSupportBitmap, { default: { groupNames: true } }),
+        nameSupport: FixedAttribute(0, TlvNameSupportBitmap, { default: { groupNames: true } }),
     },
 
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.7 */
@@ -112,7 +112,7 @@ export const GroupsCluster = Cluster({
          * The ViewGroup command allows a client to request that the server responds with a ViewGroupResponse command
          * containing the name string for a particular group.
          */
-        viewGroup: Command(1, TlvViewGroupRequest, 0, TlvViewGroupResponse), /* isFabricScoped: true */
+        viewGroup: Command(1, TlvViewGroupRequest, 1, TlvViewGroupResponse), /* isFabricScoped: true */
 
         /**
          * The GetGroupMembership command allows a client to inquire about the group membership of the server endpoint,
@@ -130,12 +130,12 @@ export const GroupsCluster = Cluster({
          * The RemoveAllGroups command allows a client to direct the server to remove all group associations for the
          * server endpoint.
          */
-        removeAllGroups: Command(4, TlvNoArguments, 4, TlvNoResponse),
+        removeAllGroups: Command(4, TlvNoArguments, 4, TlvNoResponse), /* isFabricScoped: true */
 
         /**
          * The AddGroupIfIdentifying command allows a client to add group membership in a particular group for the
          * server endpoint, on condition that the endpoint is identifying itself.
          */
-        addGroupIfIdentifying: Command(5, TlvAddGroupIfIdentifyingRequest, 5, TlvNoResponse),
+        addGroupIfIdentifying: Command(5, TlvAddGroupIfIdentifyingRequest, 5, TlvNoResponse), /* isFabricScoped: true */
     }
 });

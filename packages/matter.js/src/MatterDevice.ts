@@ -4,6 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * Important note: This file is part of the legacy matter-node (internal) API and should not be used anymore directly!
+ * Please use the new API classes!
+ * @deprecated
+ */
+
 import { Session } from "./session/Session.js";
 import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { Fabric } from "./fabric/Fabric.js";
@@ -118,7 +124,7 @@ export class MatterDevice {
                     logger.debug("Skipping announce for fabric", fabric.fabricId.id, "because we have a session", session.getId());
                     continue;
                 }
-                logger.debug("Announcing fabric", fabric.fabricId.id);
+                logger.debug("Announcing", Logger.dict({ fabric: fabric.fabricId.id }));
                 fabricsToAnnounce.push(fabric);
             }
             for (const broadcaster of this.broadcasters) {

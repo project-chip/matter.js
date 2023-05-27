@@ -50,7 +50,7 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
         }
     }
 
-    override encodeTlvInternal(writer: TlvWriter, value: TypeFromFields<F>, tag: TlvTag = {}): void {
+    override encodeTlvInternal(writer: TlvWriter, value: TypeFromFields<F>, tag?: TlvTag): void {
         writer.writeTag({ type: this.type }, tag);
         for (const name in this.fieldDefinitions) {
             const { id, schema, optional: isOptional } = this.fieldDefinitions[name];

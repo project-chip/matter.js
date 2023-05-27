@@ -15,6 +15,7 @@ import { StatusCode, TlvAttributePath } from "./InteractionProtocol.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { FixedAttributeServer } from "../../cluster/index.js";
 
 const logger = Logger.get("SubscriptionHandler");
 
@@ -66,6 +67,7 @@ export class SubscriptionHandler {
         this.updateTimer = Time.getTimer(this.sendInterval, () => this.sendUpdate()); // will be started later
 
         attributes.forEach(({ path, attribute }) => {
+            if (attribute instanceof FixedAttributeServer) return; // Fixed values will never change
             // TODO: handle attributes with "getter" methods
             const listener = (value: any, version: number) => this.attributeChangeListener(path, attribute.schema, version, value);
             this.attributeListeners.set(attributePathToId(path), listener);
@@ -145,7 +147,7 @@ export class SubscriptionHandler {
         this.attributes.forEach(({ path, attribute }) => {
             const pathId = attributePathToId(path);
             const listener = this.attributeListeners.get(pathId);
-            if (listener !== undefined) {
+            if (listener !== undefined && !(attribute instanceof FixedAttributeServer)) {
                 attribute.removeMatterListener(listener);
             }
             this.attributeListeners.delete(pathId);
@@ -162,18 +164,26 @@ export class SubscriptionHandler {
 
         try {
             await tryCatchAsync(async () => {
-                await messenger.sendDataReport({
-                    suppressResponse: !values.length, // suppressResponse ok for empty DataReports
-                    subscriptionId: this.subscriptionId,
-                    interactionModelRevision: 1,
-                    attributeReports: values.map(({ path, schema, value, version }) => ({
-                        attributeData: {
-                            path,
-                            dataVersion: version,
-                            data: schema.encodeTlv(value),
-                        },
-                    })),
-                });
+                if (values.length === 0) {
+                    await messenger.sendDataReport({
+                        suppressResponse: true, // suppressResponse ok for empty DataReports
+                        subscriptionId: this.subscriptionId,
+                        interactionModelRevision: 1,
+                    });
+                } else {
+                    await messenger.sendDataReport({
+                        suppressResponse: false,
+                        subscriptionId: this.subscriptionId,
+                        interactionModelRevision: 1,
+                        attributeReports: values.map(({ path, schema, value, version }) => ({
+                            attributeData: {
+                                path,
+                                dataVersion: version,
+                                data: schema.encodeTlv(value),
+                            },
+                        })),
+                    });
+                }
             }, StatusResponseError, (error) => {
                 if (error.code === StatusCode.InvalidSubscription ||
                     error.code === StatusCode.Failure

@@ -6,6 +6,7 @@
 
 import { Message, Packet } from "../codec/MessageCodec.js";
 import { NodeId } from "../datatype/NodeId.js";
+import { Fabric } from "../fabric/Fabric.js";
 
 export const DEFAULT_IDLE_RETRANSMISSION_TIMEOUT_MS = 5000;
 export const DEFAULT_ACTIVE_RETRANSMISSION_TIMEOUT_MS = 300;
@@ -40,4 +41,5 @@ export interface Session<T> {
     destroy(): void;
     notifyActivity(messageReceived: boolean): void;
     isPeerActive(): boolean;
+    getAccessingFabric(): Fabric;
 }

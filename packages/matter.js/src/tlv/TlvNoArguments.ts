@@ -16,7 +16,7 @@ const TlvEmptyObject = TlvObject({});
  */
 export class NoArgumentsSchema extends VoidSchema {
 
-    override encodeTlvInternal(writer: TlvWriter, value: void, tag: TlvTag = {}): void {
+    override encodeTlvInternal(writer: TlvWriter, value: void, tag?: TlvTag): void {
         if (value !== undefined) throw new Error("No value should be passed");
         TlvEmptyObject.encodeTlvInternal(writer, {}, tag);
     }

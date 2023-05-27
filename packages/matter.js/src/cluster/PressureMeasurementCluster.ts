@@ -4,16 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Attribute, OptionalAttribute, Cluster } from "./Cluster.js";
+import { Attribute, OptionalAttribute, Cluster, ClusterExtend } from "./Cluster.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { TlvInt16, TlvInt8, TlvUInt16 } from "../tlv/TlvNumber.js";
-import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
+import { MatterApplicationClusterSpecificationV1_1 } from "../spec/Specifications.js";
 
 /**
  * This cluster provides an interface to pressure measurement functionality.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_0} § 2.4
+ * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.4
  */
 export const PressureMeasurementCluster = Cluster({
     // TODO create two cluster definitions ... One with set Extended Flag and one without to make
@@ -25,8 +25,11 @@ export const PressureMeasurementCluster = Cluster({
         /** The cluster is capable of extended range and resolution */
         extended: BitFlag(0)
     },
+    supportedFeatures: {
+        extended: false
+    },
 
-    /** @see {@link MatterApplicationClusterSpecificationV1_0} § 2.4.5 */
+    /** @see {@link MatterApplicationClusterSpecificationV1_1} § 2.4.5 */
     attributes: {
         /** Represents the pressure in kPa as follows: MeasuredValue = 10 x Pressure [kPa] */
         measuredValue: Attribute(0x0, TlvNullable(TlvInt16)),
@@ -39,35 +42,37 @@ export const PressureMeasurementCluster = Cluster({
 
         /** Indicates the magnitude of the possible error that is associated with ScaledValue */
         tolerance: OptionalAttribute(0x3, TlvUInt16.bound({ max: 2048 /* 0x0800 */ }), { default: 0 }),
+    },
+});
 
+export const ExtendedPressureMeasurementCluster = ClusterExtend(PressureMeasurementCluster, {
+    supportedFeatures: {
+        extended: true
+    },
+    attributes: {
         /**
-         * Mandatory Attribute when extended feature is used!
          * Represents the pressure in Pascals as follows: ScaledValue = 10Scale x Pressure [Pa]
          */
-        scaledValue: OptionalAttribute(0x10, TlvNullable(TlvInt16), { default: 0 }),
+        scaledValue: Attribute(0x10, TlvNullable(TlvInt16), { default: 0 }),
 
         /**
-         * Mandatory Attribute when extended feature is used!
          * Indicates the minimum value of ScaledValue that can be measured
          */
-        minScaledValue: OptionalAttribute(0x11, TlvNullable(TlvInt16.bound({ min: -32767 })), { default: 0 }),
+        minScaledValue: Attribute(0x11, TlvNullable(TlvInt16.bound({ min: -32767 })), { default: 0 }),
 
         /**
-         * Mandatory Attribute when extended feature is used!
          * Indicates the maximum value of ScaledValue that can be measured.
          */
-        maxScaledValue: OptionalAttribute(0x12, TlvNullable(TlvInt16), { default: 0 }),
+        maxScaledValue: Attribute(0x12, TlvNullable(TlvInt16), { default: 0 }),
 
         /**
-         * Mandatory Attribute when extended feature is used!
          * Indicates the magnitude of the possible error that is associated with ScaledValue
          */
         scaledTolerance: OptionalAttribute(0x13, TlvUInt16.bound({ max: 2048 /* 0x0800 */ }), { default: 0 }),
 
         /**
-         * Only relevant when extended feature is used!
          * Indicates the base 10 exponent used to obtain ScaledValue
          */
-        scale: OptionalAttribute(0x14, TlvInt8, { default: 0 }),
-    },
+        scale: Attribute(0x14, TlvInt8, { default: 0 }),
+    }
 });

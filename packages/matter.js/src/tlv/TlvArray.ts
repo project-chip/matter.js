@@ -23,12 +23,12 @@ export class ArraySchema<T> extends TlvSchema<T[]> {
     constructor(
         readonly elementSchema: TlvSchema<T>,
         private readonly minLength: number = 0,
-        private readonly maxLength: number = 1024,
+        private readonly maxLength: number = 65535,
     ) {
         super();
     }
 
-    override encodeTlvInternal(writer: TlvWriter, value: T[], tag: TlvTag = {}): void {
+    override encodeTlvInternal(writer: TlvWriter, value: T[], tag?: TlvTag): void {
         writer.writeTag({ type: TlvType.Array }, tag);
         value.forEach(element => this.elementSchema.encodeTlvInternal(writer, element));
         writer.writeTag({ type: TlvType.EndOfContainer });

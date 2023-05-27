@@ -9,6 +9,7 @@ import { StorageContext } from "../../../src/storage/StorageContext.js";
 import * as assert from "assert";
 import { SupportedStorageTypes } from "../../../src/storage/StringifyTools.js";
 import { ByteArray } from "../../../src/util/ByteArray.js";
+import { StorageManager } from "../../../src/storage/index.js";
 
 type TestVector = { [testName: string]: { key: string, input: SupportedStorageTypes } };
 
@@ -27,7 +28,20 @@ describe("StorageContext", () => {
 
     describe("Write and read type tests", () => {
         const storage = new StorageBackendMemory();
-        const storageContext = new StorageContext(storage, "context");
+        const storageContext = new StorageContext(storage, ["context"]);
+
+        for (const [testName, testVector] of Object.entries(validateStorageTestVector)) {
+            it(testName, () => {
+                storageContext.set(testVector.key, testVector.input);
+                const valueFromStorage = storageContext.get(testVector.key);
+                assert.deepEqual(valueFromStorage, testVector.input);
+            });
+        }
+    });
+
+    describe("Write and read type tests multiple context levels", () => {
+        const storage = new StorageBackendMemory();
+        const storageContext = new StorageContext(storage, ["context", "subcontext", "subsubcontext"]);
 
         for (const [testName, testVector] of Object.entries(validateStorageTestVector)) {
             it(testName, () => {
@@ -41,21 +55,35 @@ describe("StorageContext", () => {
     it("write and read", () => {
         const storage = new StorageBackendMemory();
 
-        const storageContext = new StorageContext(storage, "context");
+        const storageContext = new StorageContext(storage, ["context"]);
 
         storageContext.set("key", "value");
 
         const valueFromStorage = storageContext.get("key");
         assert.equal(valueFromStorage, "value");
 
-        const valueFromStorageWithContext = storage.get("context", "key");
+        const valueFromStorageWithContext = storage.get(["context"], "key");
+        assert.equal(valueFromStorageWithContext, "value");
+    });
+
+    it("write and read wib subcontexts", () => {
+        const storage = new StorageBackendMemory();
+
+        const storageContext = new StorageContext(storage, ["context", "subcontext", "subsubcontext"]);
+
+        storageContext.set("key", "value");
+
+        const valueFromStorage = storageContext.get("key");
+        assert.equal(valueFromStorage, "value");
+
+        const valueFromStorageWithContext = storage.get(["context", "subcontext", "subsubcontext"], "key");
         assert.equal(valueFromStorageWithContext, "value");
     });
 
     it("read with default value", () => {
         const storage = new StorageBackendMemory();
 
-        const storageContext = new StorageContext(storage, "context");
+        const storageContext = new StorageContext(storage, ["context"]);
 
         const valueFromStorage = storageContext.get("key", "defaultValue");
         assert.equal(valueFromStorage, "defaultValue");
@@ -64,7 +92,7 @@ describe("StorageContext", () => {
     it("Throws error when reading a not set key without default value", () => {
         const storage = new StorageBackendMemory();
 
-        const storageContext = new StorageContext(storage, "context");
+        const storageContext = new StorageContext(storage, ["context"]);
 
         assert.throws(() => {
             storageContext.get("key");
@@ -76,7 +104,7 @@ describe("StorageContext", () => {
     it("check if key is set", () => {
         const storage = new StorageBackendMemory();
 
-        const storageContext = new StorageContext(storage, "context");
+        const storageContext = new StorageContext(storage, ["context"]);
 
         storageContext.set("key", "value");
 
@@ -86,10 +114,67 @@ describe("StorageContext", () => {
     it("check if key is not set", () => {
         const storage = new StorageBackendMemory();
 
-        const storageContext = new StorageContext(storage, "context");
+        const storageContext = new StorageContext(storage, ["context"]);
 
         storageContext.set("key", "value");
 
         assert.equal(storageContext.has("key2"), false);
     });
+
+    it("check if key is set with subcontext", () => {
+        const storage = new StorageBackendMemory();
+
+        const storageContext = new StorageContext(storage, ["context", "subcontext", "subsubcontext"]);
+
+        storageContext.set("key", "value");
+
+        assert.equal(storageContext.has("key"), true);
+    });
+
+    it("check if key is not set with subcontext", () => {
+        const storage = new StorageBackendMemory();
+
+        const storageContext = new StorageContext(storage, ["context", "subcontext", "subsubcontext"]);
+
+        storageContext.set("key", "value");
+
+        assert.equal(storageContext.has("key2"), false);
+    });
+
+    it("create sub StorageContext write and read success", async () => {
+        const storage = new StorageBackendMemory();
+
+        const storageManager = new StorageManager(storage);
+
+        await storageManager.initialize();
+
+        const storageContext = storageManager.createContext("context");
+        const subStorageContext = storageContext.createContext("subcontext");
+
+        subStorageContext.set("key", "value");
+
+        const valueFromStorage = subStorageContext.get("key");
+        assert.equal(valueFromStorage, "value");
+    });
+
+    it("create sub StorageContext overlapping naming write and read success", async () => {
+        const storage = new StorageBackendMemory();
+
+        const storageManager = new StorageManager(storage);
+
+        await storageManager.initialize();
+
+        const storageContext = storageManager.createContext("context");
+        const subStorageContext = storageContext.createContext("subcontext");
+
+        subStorageContext.set("key", "value1");
+        storageContext.set("subcontext", "value2");
+
+        const valueFromStorage = subStorageContext.get("key");
+        assert.equal(valueFromStorage, "value1");
+
+        const valueFromStorage2 = storageContext.get("subcontext");
+        assert.equal(valueFromStorage2, "value2");
+    });
+
 });

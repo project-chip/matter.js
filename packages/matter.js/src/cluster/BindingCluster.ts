@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Cluster, WritableAttribute } from "./Cluster.js";
+import { Cluster, WritableFabricScopedAttribute } from "./Cluster.js";
 import { TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { TlvNodeId } from "../datatype/NodeId.js";
 import { TlvGroupId } from "../datatype/GroupId.js";
@@ -51,6 +51,6 @@ export const BindingCluster = Cluster({
     /** @see {@link MatterCoreSpecificationV1_0} § 9.6.5 */
     attributes: {
         /** List of device types and corresponding revisions declaring endpoint conformance. */
-        bindingList: WritableAttribute(0, TlvArray(TlvTarget), { persistent: true, default: [] }),
+        bindingList: WritableFabricScopedAttribute(0, TlvArray(TlvTarget), { persistent: true, default: [] }),
     },
 });

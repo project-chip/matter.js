@@ -63,7 +63,6 @@ export class Fabric {
         readonly operationalCert: ByteArray,
         public label: string,
         scopedClusterData?: Map<number, Map<string, SupportedStorageTypes>>
-
     ) {
         this.scopedClusterData = scopedClusterData ?? new Map<number, Map<string, SupportedStorageTypes>>();
     }
@@ -162,7 +161,7 @@ export class Fabric {
         this.persistCallback?.();
     }
 
-    getScopedClusterDataValue<T>(cluster: Cluster<any, any, any, any>, clusterDataKey: string): T | undefined {
+    getScopedClusterDataValue<T>(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string): T | undefined {
         const dataMap = this.scopedClusterData.get(cluster.id);
         if (dataMap === undefined) {
             return undefined;
@@ -170,7 +169,7 @@ export class Fabric {
         return dataMap.get(clusterDataKey);
     }
 
-    setScopedClusterDataValue<T>(cluster: Cluster<any, any, any, any>, clusterDataKey: string, value: T) {
+    setScopedClusterDataValue<T>(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string, value: T) {
         if (!this.scopedClusterData.has(cluster.id)) {
             this.scopedClusterData.set(cluster.id, new Map<string, SupportedStorageTypes>());
         }
@@ -178,7 +177,7 @@ export class Fabric {
         this.persist();
     }
 
-    deleteScopedClusterDataValue(cluster: Cluster<any, any, any, any>, clusterDataKey: string) {
+    deleteScopedClusterDataValue(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string) {
         if (!this.scopedClusterData.has(cluster.id)) {
             return;
         }
@@ -186,16 +185,16 @@ export class Fabric {
         this.persist();
     }
 
-    hasScopedClusterDataValue(cluster: Cluster<any, any, any, any>, clusterDataKey: string) {
+    hasScopedClusterDataValue(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string) {
         return this.scopedClusterData.has(cluster.id) && this.scopedClusterData.get(cluster.id).has(clusterDataKey);
     }
 
-    deleteScopedClusterData(cluster: Cluster<any, any, any, any>) {
+    deleteScopedClusterData(cluster: Cluster<any, any, any, any, any>) {
         this.scopedClusterData.delete(cluster.id);
         this.persist();
     }
 
-    getScopedClusterDataKeys(cluster: Cluster<any, any, any, any>): string[] {
+    getScopedClusterDataKeys(cluster: Cluster<any, any, any, any, any>): string[] {
         if (!this.scopedClusterData.has(cluster.id)) {
             return [];
         }

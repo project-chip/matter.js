@@ -13,20 +13,20 @@ const enum BitRangeType {
     Enum,
 }
 
-type BitRange<T> = { type: BitRangeType, offset: number, length: number, _type?: T };
-const BitRange = <T>(type: BitRangeType, offset: number, length: number) => ({ type, offset, length } as BitRange<T>);
+type BitRange<T, TType extends BitRangeType = BitRangeType> = { type: TType, offset: number, length: number, _type?: T };
+const BitRange = <T, TType extends BitRangeType = BitRangeType>(type: TType, offset: number, length: number): BitRange<T, TType> => ({ type, offset, length });
 
 /** Defines the bit position of a boolean flag. */
-export interface BitFlag extends BitRange<boolean> { type: BitRangeType.Flag }
-export const BitFlag = (offset: number) => BitRange(BitRangeType.Flag, offset, 1) as BitFlag;
+export type BitFlag = BitRange<boolean, BitRangeType.Flag>;
+export const BitFlag = (offset: number): BitFlag => BitRange(BitRangeType.Flag, offset, 1);
 
 /** Defines the bit position and bit length of a numeric value. */
-export interface BitField extends BitRange<number> { type: BitRangeType.Number }
-export const BitField = (offset: number, length: number) => BitRange(BitRangeType.Number, offset, length) as BitField;
+export type BitField = BitRange<number, BitRangeType.Number>;
+export const BitField = (offset: number, length: number): BitField => BitRange(BitRangeType.Number, offset, length);
 
 /** Defines the bit position and bit length of an enum flag. */
-export interface BitFieldEnum<E extends number> extends BitRange<E> { type: BitRangeType.Enum }
-export const BitFieldEnum = <E extends number>(offset: number, length: number) => BitRange(BitRangeType.Enum, offset, length) as BitFieldEnum<E>;
+export type BitFieldEnum<E extends number> = BitRange<E, BitRangeType.Enum>;
+export const BitFieldEnum = <E extends number>(offset: number, length: number): BitFieldEnum<E> => BitRange(BitRangeType.Enum, offset, length);
 
 export type BitSchema = { [key: string]: BitFlag | BitField | BitFieldEnum<any> };
 export type TypeFromBitSchema<T extends BitSchema> = { [K in keyof T]: T[K] extends BitFieldEnum<infer E> ? E : (T[K] extends BitField ? number : boolean) };

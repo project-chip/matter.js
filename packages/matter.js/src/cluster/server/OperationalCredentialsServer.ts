@@ -69,8 +69,9 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         return { status: OperationalCertStatus.Success, fabricIndex: fabric.fabricIndex };
     },
 
-    getFabrics: (session) => {
+    getFabrics: ({ session }) => {
         if (session === undefined || !session.isSecure()) return []; // ???
+        // TODO add support for "fabric filtered TRUE" to only return "the" one fabric
         return session.getContext().getFabrics().map(fabric => ({
             fabricId: fabric.fabricId,
             label: fabric.label,
@@ -82,7 +83,7 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         }));
     },
 
-    getCurrentFabricIndex: (session) => {
+    getCurrentFabricIndex: ({ session }) => {
         if (session === undefined || !session.isSecure()) return FabricIndex.NO_FABRIC;
         return (session as SecureSession<MatterDevice>).getFabric()?.fabricIndex ?? FabricIndex.NO_FABRIC;
     },

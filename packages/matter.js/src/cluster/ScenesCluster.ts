@@ -12,7 +12,7 @@ import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
 import { TlvAny } from "../tlv/TlvAny.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvClusterId } from "../datatype/ClusterId.js";
-import { TlvGroupId } from "../datatype/GroupId.js";
+import { GroupId, TlvGroupId } from "../datatype/GroupId.js";
 import { TlvBitmap, TlvEnum, TlvUInt16, TlvUInt8 } from "../tlv/TlvNumber.js";
 import { TlvString } from "../tlv/TlvString.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
@@ -21,7 +21,7 @@ import { TlvNodeId } from "../datatype/NodeId.js";
 import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.6.1 */
-const TlvAttributeValuePair = TlvObject({
+export const TlvAttributeValuePair = TlvObject({
     /**
      * This field SHALL be present or not present, for all instances in the Scenes cluster. If this field is
      * not present, then the data type of AttributeValue SHALL be determined by the order and data type defined
@@ -31,7 +31,7 @@ const TlvAttributeValuePair = TlvObject({
     attributeId: TlvField(0, TlvAttributeId),
 
     /** This is the attribute value as part of an extension field set. */
-    attributeValue: TlvField(1, TlvArray(TlvAny)),
+    attributeValue: TlvField(1, TlvAny),
 });
 
 /**
@@ -107,7 +107,7 @@ const TlvCopySceneRequest = TlvObject({
     sceneIdFrom: TlvField(2, TlvUInt8),
 
     /** Specifies the identifier of the group to which the scene is to be copied. */
-    TlvGroupIdo: TlvField(3, TlvGroupId),
+    groupIdTo: TlvField(3, TlvGroupId),
 
     /** Specifies the identifier of the scene to which the scene is to be copied. */
     sceneIdTo: TlvField(4, TlvUInt8),
@@ -200,7 +200,7 @@ export const ScenesCluster = Cluster({
         currentScene: Attribute(1, TlvUInt8, { default: 0 }),
 
         /** Holds the group identifier of the scene last invoked, or 0 if the scene last invoked is not associated with a group. */
-        currentGroup: Attribute(2, TlvUInt16.bound({ min: 0, max: 0xfff7 }), { default: 0 }), /* formally type: groupId but limited range */
+        currentGroup: Attribute(2, TlvGroupId, { default: new GroupId(0) }), /* limited range 0..0xfff7 */
 
         /** Indicates whether the state of the server corresponds to that associated with the CurrentScene and CurrentGroup attributes. */
         sceneValid: Attribute(3, TlvBoolean, { default: false }),
@@ -246,7 +246,7 @@ export const ScenesCluster = Cluster({
          * Adds the scene entry into its Scene Table along with all extension field sets corresponding to the current
          * state of other clusters on the same endpoint
          */
-        storeScenes: Command(4, TlvStoreSceneRequest, 4, TlvStoreSceneResponse), /* fabricScoped: true */
+        storeScene: Command(4, TlvStoreSceneRequest, 4, TlvStoreSceneResponse), /* fabricScoped: true */
 
         /**
          * Set the attributes and corresponding state for each other cluster implemented on the endpoint accordingly to
