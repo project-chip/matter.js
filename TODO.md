@@ -9,6 +9,7 @@ The following are things on my (@Apollon77) TODO list for the project right now 
 ## Cluster Definitions
 * Complete all missing cluster definitions
 * How to get all attributes/commands for automatic usage and generation? AllCLusterMap -> AllAttributeMap?
+* Add FabricScopedAttribute (Readonly) - or use getter? see GroupKeyCluster
 
 ## Generic Cluster Handlers
 * Add generic cluster handlers for all clusters that are not yet covered
