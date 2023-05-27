@@ -4,34 +4,24 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Attribute, Cluster } from "./Cluster.js";
-import { TlvField, TlvObject } from "../tlv/TlvObject.js";
-import { TlvDeviceTypeId } from "../datatype/DeviceTypeId.js";
-import { TlvUInt16 } from "../tlv/TlvNumber.js";
-import { TlvArray } from "../tlv/TlvArray.js";
-import { TlvClusterId } from "../datatype/ClusterId.js";
-import { TlvEndpointNumber } from "../datatype/EndpointNumber.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-
-/**
- * ====================== IMPORTANT INFORMATION ======================
- *
- * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
- * directory!! They are still used within the codebase, but will be changed soon!
- *
- * ====================== IMPORTANT INFORMATION ======================
- */
+import { Attribute, Cluster } from "../Cluster.js";
+import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
+import { TlvDeviceTypeId } from "../../datatype/DeviceTypeId.js";
+import { TlvUInt16 } from "../../tlv/TlvNumber.js";
+import { TlvArray } from "../../tlv/TlvArray.js";
+import { TlvClusterId } from "../../datatype/ClusterId.js";
+import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
+import { MatterCoreSpecificationV1_0 } from "../../spec/Specifications.js";
 
 /**
  * Provides information about endpoint conformance to a release of a device type definition.
- *
  * @see {@link MatterCoreSpecificationV1_0} § 9.5.5.1
  */
 const TlvDeviceType = TlvObject({
-    /** Indicates the device type definition */
+    /** Indicates the device type definition. */
     deviceType: TlvField(0, TlvDeviceTypeId),
 
-    /** Indicates the implemented revision of the device type definition */
+    /** Indicates the implemented revision of the device type definition. */
     revision: TlvField(1, TlvUInt16.bound({ min: 1 })),
 });
 
@@ -43,7 +33,7 @@ const TlvDeviceType = TlvObject({
  *
  * @see {@link MatterCoreSpecificationV1_0} § 9.5
  */
-export const DescriptorCluster = Cluster({
+export const DescriptorClusterSchema = Cluster({
     id: 0x1d,
     name: "Descriptor",
     revision: 1,

@@ -11,6 +11,15 @@ import { ClusterServerObjForCluster } from "./server/ClusterServer.js";
 import { WindowCoveringClusterSchema } from "./schema/WindowCovering.js";
 import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
 
+/**
+ * ====================== IMPORTANT INFORMATION ======================
+ *
+ * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
+ * directory!! They are still used within the codebase, but will be changed soon!
+ *
+ * ====================== IMPORTANT INFORMATION ======================
+ */
+
 /** alias for percentages expressed as 0 to 100.00 with 2 decimals */
 const WCPercent100ths = TlvUInt16.bound({ max: 10000 });
 

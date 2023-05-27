@@ -4,26 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Attribute, OptionalAttribute, Cluster } from "./Cluster.js";
-import { TlvNullable } from "../tlv/TlvNullable.js";
-import { TlvUInt16 } from "../tlv/TlvNumber.js";
-import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
-
-/**
- * ====================== IMPORTANT INFORMATION ======================
- *
- * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
- * directory!! They are still used within the codebase, but will be changed soon!
- *
- * ====================== IMPORTANT INFORMATION ======================
- */
+import { Attribute, OptionalAttribute, Cluster } from "../Cluster.js";
+import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { TlvUInt16 } from "../../tlv/TlvNumber.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../../spec/Specifications.js";
 
 /**
  * This cluster provides an interface to flow measurement functionality.
- *
  * @see {@link MatterApplicationClusterSpecificationV1_0} § 2.5
  */
-export const FlowMeasurementCluster = Cluster({
+export const FlowMeasurementClusterSchema = Cluster({
     id: 0x0404,
     name: "FlowMeasurement",
     revision: 3,

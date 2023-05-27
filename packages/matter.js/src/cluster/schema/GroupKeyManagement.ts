@@ -4,26 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { WritableAttribute, Attribute, Cluster, Command, TlvNoResponse, FixedAttribute } from "./Cluster.js";
-import { BitFlag } from "../schema/BitmapSchema.js";
-import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
-import { TlvGroupId } from "../datatype/GroupId.js";
-import { TlvEnum, TlvUInt16, TlvUInt64 } from "../tlv/TlvNumber.js";
-import { TlvNullable } from "../tlv/TlvNullable.js";
-import { TlvString } from "../tlv/TlvString.js";
-import { TlvEndpointNumber } from "../datatype/EndpointNumber.js";
-import { TlvArray } from "../tlv/TlvArray.js";
-import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-
-/**
- * ====================== IMPORTANT INFORMATION ======================
- *
- * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
- * directory!! They are still used within the codebase, but will be changed soon!
- *
- * ====================== IMPORTANT INFORMATION ======================
- */
+import {
+    Attribute, Cluster, Command, TlvNoResponse, FixedAttribute, WritableFabricScopedAttribute
+} from "../Cluster.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
+import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
+import { TlvGroupId } from "../../datatype/GroupId.js";
+import { TlvEnum, TlvUInt16, TlvUInt64 } from "../../tlv/TlvNumber.js";
+import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { TlvString } from "../../tlv/TlvString.js";
+import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
+import { TlvArray } from "../../tlv/TlvArray.js";
+import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
+import { MatterCoreSpecificationV1_0 } from "../../spec/Specifications.js";
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.2.6.1 */
 const TlvGroupKeyMap = TlvObject({
@@ -61,16 +54,16 @@ export const enum GroupKeyMulticastPolicy {
     /** The 16-bit Group Identifier of the MulticastAddress SHALL be the Group ID of the group. */
     PerGroupID = 0x00,
 
-    /** The 16-bit Group Identifier of the Multicast Address SHALL be 0xFFFF */
+    /** The 16-bit Group Identifier of the Multicast Address SHALL be 0xFFFF. */
     AllNodes = 0x01,
 }
 
-/** @see {@link MatterCoreSpecificationV1_0} § 11.2.6.2 table 87 */
+/** @see {@link MatterCoreSpecificationV1_0} § 11.2.6.2 table 87. */
 export const enum GroupKeySecurityPolicy {
-    /** Message counter synchronization using trust-first */
+    /** Message counter synchronization using trust-first. */
     TrustFirst = 0x00,
 
-    /** Message counter synchronization using cache-and-sync */
+    /** Message counter synchronization using cache-and-sync. Only with CacheAndSync feature. */
     CacheAndSync = 0x01,
 }
 
@@ -104,7 +97,7 @@ const TlvKeySetReadAllIndicesResponse = TlvObject({
  *
  * @see {@link MatterCoreSpecificationV1_0} § 11.2
  */
-export const GroupKeyManagementCluster = Cluster({
+export const GroupKeyManagementClusterSchema = Cluster({
     id: 0x3f,
     name: "GroupKeyManagement",
     revision: 1,
@@ -116,30 +109,30 @@ export const GroupKeyManagementCluster = Cluster({
     /** @see {@link MatterCoreSpecificationV1_0} § 11.2.7.1 */
     attributes: {
         /** Each entry associates a logical Group Id with a particular group key set. */
-        groupKeyMap: WritableAttribute(0, TlvArray(TlvGroupKeyMap, { maxLength: 254 }), { persistent: true }), /* fabricSensitive: true */
+        groupKeyMap: WritableFabricScopedAttribute(0, TlvArray(TlvGroupKeyMap, { maxLength: 254 }), { persistent: true, default: [] }),
 
-        /** Each entry provides read-only information about how a given logical Group ID maps to a particular set of endpoints */
-        groupTable: Attribute(1, TlvArray(TlvGroupInfoMap, { maxLength: 254 })), /* fabricSensitive: true */
+        /** Each entry provides read-only information about how a given logical Group ID maps to a particular set of endpoints. */
+        groupTable: Attribute(1, TlvArray(TlvGroupInfoMap, { maxLength: 254 }), { default: [] }), /* fabricSensitive: true !! TODO */
 
-        /**  Maximum number of groups that this node supports per fabric */
+        /**  Maximum number of groups that this node supports per fabric. */
         maxGroupsPerFabric: FixedAttribute(2, TlvUInt16, { default: 0 }),
 
-        /** Maximum number of group key sets this node supports per fabric */
+        /** Maximum number of group key sets this node supports per fabric. */
         maxGroupKeysPerFabric: FixedAttribute(3, TlvUInt16.bound({ min: 1 }), { default: 1 }),
     },
 
     /** @see {@link MatterCoreSpecificationV1_0} § 11.2.9 */
     commands: {
-        /** Set the state of a given Group Key Set,including atomically updating the state of all epoch keys */
+        /** Set the state of a given Group Key Set,including atomically updating the state of all epoch keys. */
         keySetWrite: Command(0, TlvKeySetWriteRequest, 0, TlvNoResponse), /* isFabricScoped: true */
 
-        /** Read the state of a given Group Key Set */
+        /** Read the state of a given Group Key Set. */
         keySetRead: Command(1, TlvKeySetReadRequest, 2, TlvKeySetReadResponse), /* isFabricScoped: true */
 
-        /** Remove all state of a given Group Key Set */
+        /** Remove all state of a given Group Key Set. */
         keySetRemove: Command(3, TlvKeySetRemoveRequest, 3, TlvNoResponse), /* isFabricScoped: true */
 
-        /** Query a list of all Group Key Sets associated with the accessing fabric */
+        /** Query a list of all Group Key Sets associated with the accessing fabric. */
         keySetReadAllIndices: Command(5, TlvNoArguments, 4, TlvKeySetReadAllIndicesResponse), /* isFabricScoped: true */
     }
 });

@@ -4,26 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BitFlag } from "../schema/BitmapSchema.js";
-import { TlvFabricIndex } from "../datatype/FabricIndex.js";
-import { TlvVendorId } from "../datatype/VendorId.js";
-import { Cluster, Command, TlvNoResponse, Attribute, ClusterExtend } from "./Cluster.js";
-import { CRYPTO_GROUP_SIZE_BYTES, CRYPTO_PUBLIC_KEY_SIZE_BYTES } from "../crypto/CryptoConstants.js";
-import { TlvField, TlvObject } from "../tlv/TlvObject.js";
-import { TlvEnum, TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
-import { TlvByteString } from "../tlv/TlvString.js";
-import { TlvNullable } from "../tlv/TlvNullable.js";
-import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-
-/**
- * ====================== IMPORTANT INFORMATION ======================
- *
- * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
- * directory!! They are still used within the codebase, but will be changed soon!
- *
- * ====================== IMPORTANT INFORMATION ======================
- */
+import { BitFlag } from "../../schema/BitmapSchema.js";
+import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
+import { TlvVendorId } from "../../datatype/VendorId.js";
+import { Cluster, Command, TlvNoResponse, Attribute, ConditionalCommand } from "../Cluster.js";
+import { CRYPTO_GROUP_SIZE_BYTES, CRYPTO_PUBLIC_KEY_SIZE_BYTES } from "../../crypto/CryptoConstants.js";
+import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
+import { TlvEnum, TlvUInt16, TlvUInt32 } from "../../tlv/TlvNumber.js";
+import { TlvByteString } from "../../tlv/TlvString.js";
+import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
+import { MatterCoreSpecificationV1_0 } from "../../spec/Specifications.js";
 
 const PAKE_PASSCODE_VERIFIER_LENGTH = CRYPTO_GROUP_SIZE_BYTES + CRYPTO_PUBLIC_KEY_SIZE_BYTES;
 
@@ -80,7 +71,7 @@ const TlvOpenBasicCommissioningWindowRequest = TlvObject({
  *
  * @see {@link MatterCoreSpecificationV1_0} § 11.18
  */
-export const AdminCommissioningCluster = Cluster({
+export const AdminCommissioningClusterSchema = Cluster({
     id: 0x3c,
     name: "AdministratorCommissioning",
     revision: 1,
@@ -88,9 +79,7 @@ export const AdminCommissioningCluster = Cluster({
         /** Node supports Basic Commissioning Method. */
         basic: BitFlag(0),
     },
-    supportedFeatures: {
-        basic: false
-    },
+
     /** @see {@link MatterCoreSpecificationV1_0} § 11.18.7 */
     attributes: {
         /** Indicates whether a new Commissioning window has been opened by an Administrator. */
@@ -108,21 +97,10 @@ export const AdminCommissioningCluster = Cluster({
         /** Used to instruct a Node to go into commissioning mode using enhanced commissioning method. */
         openCommissioningWindow: Command(0, TlvOpenCommissioningWindowRequest, 0, TlvNoResponse),
 
+        /** Used to instruct a Node to go into commissioning mode using basic commissioning method, if the node supports it. */
+        openBasicCommissioningWindow: ConditionalCommand(1, TlvOpenBasicCommissioningWindowRequest, 1, TlvNoResponse, { mandatoryIf: [{ basic: true }] }),
+
         /** Used to instruct a Node to revoke any active Open Commissioning Window or Open Basic Commissioning Window command. */
         revokeCommissioning: Command(2, TlvNoArguments, 2, TlvNoResponse),
     },
 });
-
-export const BasicAdminCommissioningCluster = ClusterExtend(
-    AdminCommissioningCluster,
-    {
-        supportedFeatures: {
-            basic: true
-        },
-        /** @see {@link MatterCoreSpecificationV1_0} § 11.18.8 */
-        commands: { // all Commands: mustUseTimedInvoke: "true"
-            /** Used to instruct a Node to go into commissioning mode using basic commissioning method, if the node supports it. */
-            openBasicCommissioningWindow: Command(1, TlvOpenBasicCommissioningWindowRequest, 1, TlvNoResponse),
-        },
-    }
-);

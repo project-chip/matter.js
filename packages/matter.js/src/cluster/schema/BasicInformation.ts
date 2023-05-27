@@ -4,30 +4,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TlvFabricIndex } from "../datatype/FabricIndex.js";
-import { TlvVendorId } from "../datatype/VendorId.js";
+import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
+import { TlvVendorId } from "../../datatype/VendorId.js";
 import {
     AccessLevel, Cluster, Event, EventPriority, FixedAttribute, OptionalAttribute, OptionalEvent,
     OptionalFixedAttribute, OptionalWritableAttribute, WritableAttribute
-} from "./Cluster.js";
-import { TlvField, TlvObject } from "../tlv/TlvObject.js";
-import { TlvString, TlvString256max, TlvString32max, TlvString64max } from "../tlv/TlvString.js";
-import { TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
-import { TlvBoolean } from "../tlv/TlvBoolean.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-
-/**
- * ====================== IMPORTANT INFORMATION ======================
- *
- * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
- * directory!! They are still used within the codebase, but will be changed soon!
- *
- * ====================== IMPORTANT INFORMATION ======================
- */
+} from "../Cluster.js";
+import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
+import { TlvString, TlvString256max, TlvString32max, TlvString64max } from "../../tlv/TlvString.js";
+import { TlvUInt16, TlvUInt32 } from "../../tlv/TlvNumber.js";
+import { TlvBoolean } from "../../tlv/TlvBoolean.js";
+import { MatterCoreSpecificationV1_0 } from "../../spec/Specifications.js";
 
 /**
  * Provides constant values related to overall global capabilities of this Node, that are not cluster-specific.
- *
  * @see {@link MatterCoreSpecificationV1_0} § 11.1.6.2
  */
 const TlvCapabilityMinima = TlvObject({
@@ -45,14 +35,14 @@ const TlvCapabilityMinima = TlvObject({
  *
  * @see {@link MatterCoreSpecificationV1_0} § 11.1
  */
-export const BasicInformationCluster = Cluster({
+export const BasicInformationClusterSchema = Cluster({
     id: 0x28,
     name: "BasicInformation",
     revision: 1,
 
     /** @see {@link MatterCoreSpecificationV1_0} § 11.1.6.3 */
     attributes: {
-        /** Revision number of the Data Model against which the Node is certified */
+        /** Revision number of the Data Model against which the Node is certified. */
         dataModelRevision: FixedAttribute(0, TlvUInt16),
 
         /** Human-readable (displayable) name of the vendor for the Node. */

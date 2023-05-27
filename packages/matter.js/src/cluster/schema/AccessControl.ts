@@ -7,32 +7,22 @@
 import {
     AccessLevel, Attribute, Cluster, Event, EventPriority, OptionalWritableFabricScopedAttribute,
     WritableFabricScopedAttribute
-} from "./Cluster.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-import { TlvField, TlvObject } from "../tlv/TlvObject.js";
-import { TlvNullable } from "../tlv/TlvNullable.js";
-import { TlvClusterId } from "../datatype/ClusterId.js";
-import { TlvEndpointNumber } from "../datatype/EndpointNumber.js";
-import { TlvDeviceTypeId } from "../datatype/DeviceTypeId.js";
-import { TlvEnum, TlvUInt16 } from "../tlv/TlvNumber.js";
-import { TlvSubjectId } from "../datatype/SubjectId.js";
-import { TlvArray } from "../tlv/TlvArray.js";
-import { TlvByteString } from "../tlv/TlvString.js";
-import { TlvSchema } from "../tlv/TlvSchema.js";
-import { TlvNodeId } from "../datatype/NodeId.js";
-
-/**
- * ====================== IMPORTANT INFORMATION ======================
- *
- * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
- * directory!! They are still used within the codebase, but will be changed soon!
- *
- * ====================== IMPORTANT INFORMATION ======================
- */
+} from "../Cluster.js";
+import { MatterCoreSpecificationV1_0 } from "../../spec/Specifications.js";
+import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
+import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { TlvClusterId } from "../../datatype/ClusterId.js";
+import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
+import { TlvDeviceTypeId } from "../../datatype/DeviceTypeId.js";
+import { TlvEnum, TlvUInt16 } from "../../tlv/TlvNumber.js";
+import { TlvSubjectId } from "../../datatype/SubjectId.js";
+import { TlvArray } from "../../tlv/TlvArray.js";
+import { TlvByteString } from "../../tlv/TlvString.js";
+import { TlvSchema } from "../../tlv/TlvSchema.js";
+import { TlvNodeId } from "../../datatype/NodeId.js";
 
 /**
  * List of privileges that can be granted to a subject.
- *
  * @see {@link MatterCoreSpecificationV1_0} § 9.10.5.3
  */
 export const enum Privilege {
@@ -54,7 +44,6 @@ export const enum Privilege {
 
 /**
  * List of Auth Modes that can be used to authenticate a subject.
- *
  * @see {@link MatterCoreSpecificationV1_0} § 9.10.5.3
  */
 export const enum AuthMode {
@@ -147,7 +136,7 @@ const AccessChangeEvent = <T>(entrySchema: TlvSchema<T>) => ({
  *
  * @see {@link MatterCoreSpecificationV1_0} § 9.10
  */
-export const AccessControlCluster = Cluster({
+export const AccessControlClusterSchema = Cluster({
     id: 0x1f,
     name: "AccessControl",
     revision: 1,

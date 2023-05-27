@@ -4,20 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BitFlag } from "../schema/BitmapSchema.js";
-import { Attribute, Cluster, Command, OptionalCommand, TlvNoResponse, WritableAttribute } from "./Cluster.js";
-import { TlvField, TlvObject } from "../tlv/TlvObject.js";
-import { TlvEnum, TlvUInt16 } from "../tlv/TlvNumber.js";
-import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
-
-/**
- * ====================== IMPORTANT INFORMATION ======================
- *
- * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
- * directory!! They are still used within the codebase, but will be changed soon!
- *
- * ====================== IMPORTANT INFORMATION ======================
- */
+import { BitFlag } from "../../schema/BitmapSchema.js";
+import {
+    Attribute, Cluster, Command, ConditionalCommand, OptionalCommand, TlvNoResponse, WritableAttribute
+} from "../Cluster.js";
+import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
+import { TlvEnum, TlvUInt16 } from "../../tlv/TlvNumber.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../../spec/Specifications.js";
+import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.2.5.2 */
 export const enum IdentifyType {
@@ -56,15 +50,12 @@ const TlvTriggerEffectRequest = TlvObject({
 });
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.2.6.4 */
-/*
 const TlvIdentifyQueryResponse = TlvObject({
     timeout: TlvField(0, TlvUInt16),
 });
-*/
 
 /**
  * Attributes and commands for putting a device into Identification mode (e.g. flashing a light).
- *
  * @see {@link MatterApplicationClusterSpecificationV1_0} § 1.2
  */
 export const IdentifyCluster = Cluster({
@@ -91,11 +82,12 @@ export const IdentifyCluster = Cluster({
         identify: Command(0, TlvIdentifyRequest, 0, TlvNoResponse),
 
         /**
-         * Allows the sending device to request the target or targets to respond if they are currently identifying themselves.
-         *
-         * TODO: Add when adding support for the Query Feature
+         * Allows the sending device to request the target or targets to respond if they are currently identifying
+         * themselves.
          */
-        //identifyQuery: Command(1, NoArgumentsT, 0, TlvIdentifyQueryResponse),
+        identifyQuery: ConditionalCommand(1, TlvNoArguments, 0, TlvIdentifyQueryResponse, {
+            mandatoryIf: [{ query: true }]
+        }),
 
         /** Allows the support of feedback to the user, such as a certain light effect when identifying. */
         triggerEffect: OptionalCommand(0x40, TlvTriggerEffectRequest, 0, TlvNoResponse),

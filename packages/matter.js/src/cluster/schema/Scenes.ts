@@ -4,30 +4,21 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { StatusCode } from "../protocol/interaction/InteractionProtocol.js";
-import { BitFlag } from "../schema/BitmapSchema.js";
-import { Attribute, Cluster, Command, OptionalAttribute, OptionalCommand, TlvNoResponse } from "./Cluster.js";
-import { TlvAttributeId } from "../datatype/AttributeId.js";
-import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
-import { TlvAny } from "../tlv/TlvAny.js";
-import { TlvArray } from "../tlv/TlvArray.js";
-import { TlvClusterId } from "../datatype/ClusterId.js";
-import { GroupId, TlvGroupId } from "../datatype/GroupId.js";
-import { TlvBitmap, TlvEnum, TlvUInt16, TlvUInt8 } from "../tlv/TlvNumber.js";
-import { TlvString } from "../tlv/TlvString.js";
-import { TlvNullable } from "../tlv/TlvNullable.js";
-import { TlvBoolean } from "../tlv/TlvBoolean.js";
-import { TlvNodeId } from "../datatype/NodeId.js";
-import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
-
-/**
- * ====================== IMPORTANT INFORMATION ======================
- *
- * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
- * directory!! They are still used within the codebase, but will be changed soon!
- *
- * ====================== IMPORTANT INFORMATION ======================
- */
+import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
+import { Attribute, Cluster, Command, OptionalAttribute, OptionalCommand, TlvNoResponse } from "../Cluster.js";
+import { TlvAttributeId } from "../../datatype/AttributeId.js";
+import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
+import { TlvAny } from "../../tlv/TlvAny.js";
+import { TlvArray } from "../../tlv/TlvArray.js";
+import { TlvClusterId } from "../../datatype/ClusterId.js";
+import { GroupId, TlvGroupId } from "../../datatype/GroupId.js";
+import { TlvBitmap, TlvEnum, TlvUInt16, TlvUInt8 } from "../../tlv/TlvNumber.js";
+import { TlvString } from "../../tlv/TlvString.js";
+import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { TlvBoolean } from "../../tlv/TlvBoolean.js";
+import { TlvNodeId } from "../../datatype/NodeId.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../../spec/Specifications.js";
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.6.1 */
 export const TlvAttributeValuePair = TlvObject({
@@ -191,13 +182,17 @@ const TlvNameSupportBitmap = TlvBitmap(TlvUInt8, {
  *
  * @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4
  */
-export const ScenesCluster = Cluster({
+export const ScenesClusterSchema = Cluster({
     id: 0x05,
     name: "Scenes",
     revision: 4,
     features: {
         /** The ability to store a name for a scene. */
         sceneNames: BitFlag(0),
+    },
+
+    supportedFeatures: {
+        sceneNames: true
     },
 
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.7 */
@@ -218,8 +213,6 @@ export const ScenesCluster = Cluster({
          * This attribute provides legacy, read-only access to whether the Scene
          * Names feature is supported. The most significant bit, bit 7, SHALL be
          * equal to bit 0 of the FeatureMap attribute. All other bits SHALL be 0.
-         *
-         * TODO because we (will) support group names we need to set bit 7 to 1, rest is 0
          */
         nameSupport: Attribute(4, TlvNameSupportBitmap, { default: { sceneNames: true } }),
 

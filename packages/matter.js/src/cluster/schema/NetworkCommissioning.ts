@@ -4,32 +4,24 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-
 import {
-    Attribute, Cluster, ClusterExtend, Command, FixedAttribute, OptionalFixedAttribute, WritableAttribute
-} from "./Cluster.js";
-import { BitFlag } from "../schema/BitmapSchema.js";
-import { TlvBitmap, TlvEnum, TlvInt32, TlvInt8, TlvUInt16, TlvUInt64, TlvUInt8 } from "../tlv/TlvNumber.js";
-import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
-import { TlvByteString, TlvString } from "../tlv/TlvString.js";
-import { TlvBoolean } from "../tlv/TlvBoolean.js";
-import { TlvNullable } from "../tlv/TlvNullable.js";
-import { TlvArray } from "../tlv/TlvArray.js";
-import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
+    Attribute, Cluster, ConditionalCommand, ConditionalFixedAttribute, FixedAttribute, WritableAttribute
+} from "../Cluster.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
+import { TlvBitmap, TlvEnum, TlvInt32, TlvInt8, TlvUInt16, TlvUInt64, TlvUInt8 } from "../../tlv/TlvNumber.js";
+import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
+import { TlvByteString, TlvHardwareAddress, TlvString } from "../../tlv/TlvString.js";
+import { TlvBoolean } from "../../tlv/TlvBoolean.js";
+import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { TlvArray } from "../../tlv/TlvArray.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../../spec/Specifications.js";
 
-/**
- * ====================== IMPORTANT INFORMATION ======================
- *
- * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
- * directory!! They are still used within the codebase, but will be changed soon!
- *
- * ====================== IMPORTANT INFORMATION ======================
- */
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 11.8.6.5 */
 export const enum NetworkCommissioningStatus {
     /** OK, no error. */
     Success = 0,
+
     /** Value Outside Range. */
     OutOfRange = 1,
 
@@ -71,12 +63,16 @@ export const enum NetworkCommissioningStatus {
 export const enum WiFiBand {
     /** 2.4GHz - 2.401GHz to 2.495GHz (802.11b/g/n/ax) */
     '2G4' = 0,
+
     /** 3.65GHz - 3.655GHz to 3.695GHz (802.11y) */
     '3G65' = 1,
+
     /** 5GHz - 5.150GHz to 5.895GHz (802.11a/n/ac/ax) */
     '5G' = 2,
+
     /** 6GHz - 5.925GHz to 7.125GHz (802.11ax / WiFi 6E) */
     '6G' = 3,
+
     /** 60GHz - 57.24GHz to 70.20GHz (802.11ad/ay) */
     '60G' = 4,
 }
@@ -104,11 +100,8 @@ const TlvWiFiInterfaceScanResult = TlvObject({
     rssi: TlvOptionalField(5, TlvInt8),
 });
 
-// TODO: Move to TlvString.ts in matter.js!
-const TlvHardwareAddress = TlvByteString.bound({ minLength: 6, maxLength: 8 });
-
 /** @see {@link MatterCoreSpecificationV1_0} § 11.8.6.4 */
-const TlThreadInterfaceScanResult = TlvObject({
+const TlvThreadInterfaceScanResult = TlvObject({
     panId: TlvField(0, TlvUInt16.bound({ min: 0, max: 65534 })),
     extendedPanId: TlvField(1, TlvUInt64),
     networkName: TlvField(2, TlvString.bound({ minLength: 1, maxLength: 16 })),
@@ -126,7 +119,7 @@ const TlvNetworkInfo = TlvObject({
     /** Unique identifier for the network. */
     networkId: TlvField(0, TlvByteString.bound({ minLength: 1, maxLength: 32 })),
 
-    /** Connected status of the asscoiated network. */
+    /** Connected status of the associated network. */
     connected: TlvField(1, TlvBoolean),
 });
 
@@ -151,7 +144,7 @@ const TlvScanNetworksResponse = TlvObject({
     wiFiScanResults: TlvOptionalField(2, TlvArray(TlvWiFiInterfaceScanResult)),
 
     /** Thread network scan results. */
-    threadScanResults: TlvOptionalField(3, TlvArray(TlThreadInterfaceScanResult)),
+    threadScanResults: TlvOptionalField(3, TlvArray(TlvThreadInterfaceScanResult)),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.8.8.4 */
@@ -231,10 +224,9 @@ const TlvReorderNetworkRequest = TlvObject({
 
 /**
  * This cluster is used to associate a Node with or manage a Node’s one or more network interfaces.
- *
  * @see {@link MatterCoreSpecificationV1_0} § 11.8
  */
-export const EthernetNetworkCommissioningCluster = Cluster({
+export const NetworkCommissioningClusterSchema = Cluster({
     id: 0x31,
     name: "NetworkCommissioning",
     revision: 1,
@@ -243,12 +235,6 @@ export const EthernetNetworkCommissioningCluster = Cluster({
         thread: BitFlag(1),
         ethernet: BitFlag(2),
     },
-    supportedFeatures: {
-        wifi: false,
-        thread: false,
-        ethernet: true,
-    },
-
     attributes: {
         /** Maximum number of network configuration entries that can be added, based on available device resources. */
         maxNetworks: FixedAttribute(0, TlvUInt8.bound({ min: 1 })), /* read = admin */
@@ -256,8 +242,18 @@ export const EthernetNetworkCommissioningCluster = Cluster({
         /** Network configurations that are usable on the network interface. */
         networks: Attribute(1, TlvArray(TlvNetworkInfo), { default: [] }), /* read = admin */
 
+        /** Maximum duration taken, in seconds, to provide scan results. */
+        scanMaxTimeSeconds: ConditionalFixedAttribute(2, TlvUInt8, {
+            mandatoryIf: [{ wifi: true }, { thread: true }]
+        }),
+
+        /** Maximum duration taken, in seconds, to report a successful or failed network connection indication. */
+        connectMaxTimeSeconds: ConditionalFixedAttribute(3, TlvUInt8, {
+            mandatoryIf: [{ wifi: true }, { thread: true }]
+        }),
+
         /** Indicates whether the associated network interface is enabled or not. */
-        interfaceEnabled: WritableAttribute(4, TlvBoolean, { default: true }), /* write = admin */
+        interfaceEnabled: WritableAttribute(4, TlvBoolean, { persistent: true, default: true }), /* write = admin */
 
         /** Status of the last attempt either scan or connect to an operational network. */
         lastNetworkingStatus: Attribute(5, TlvNullable(TlvEnum<NetworkCommissioningStatus>()), { default: null }), /* read = admin */
@@ -268,101 +264,35 @@ export const EthernetNetworkCommissioningCluster = Cluster({
         /** ErrorValue used in the last failed attempt to connect to an operational network. */
         lastConnectErrorValue: Attribute(7, TlvNullable(TlvInt32), { default: null }), /* read = admin */
     },
+    commands: {
+        /** Determine the set of networks the device sees as available. */
+        scanNetworks: ConditionalCommand(0, TlvScanNetworksRequest, 1, TlvScanNetworksResponse, {
+            mandatoryIf: [{ wifi: true }, { thread: true }]
+        }),
+
+        /** Add or update the credentials for a given Wi-Fi network. */
+        addOrUpdateWiFiNetwork: ConditionalCommand(2, TlvAddOrUpdateWiFiNetworkRequest, 5, TlvNetworkConfigResponse, {
+            mandatoryIf: [{ wifi: true }]
+        }),
+
+        /** Add or update the credentials for a given Thread network. */
+        addOrUpdateThreadNetwork: ConditionalCommand(3, TlvAddOrUpdateThreadNetworkRequest, 5, TlvNetworkConfigResponse, {
+            mandatoryIf: [{ thread: true }]
+        }),
+
+        /** Remove the definition of a given network (including its credentials). */
+        removeNetwork: ConditionalCommand(4, TlvRemoveNetworkRequest, 5, TlvNetworkConfigResponse, {
+            mandatoryIf: [{ wifi: true }, { thread: true }]
+        }),
+
+        /** Connect to the specified network, using previously-defined credentials. */
+        connectNetwork: ConditionalCommand(6, TlvConnectNetworkRequest, 7, TlvConnectNetworkResponse, {
+            mandatoryIf: [{ wifi: true }, { thread: true }]
+        }),
+
+        /** Modify the order in which networks will be presented in the Networks attribute. */
+        reorderNetwork: ConditionalCommand(8, TlvReorderNetworkRequest, 5, TlvNetworkConfigResponse, {
+            mandatoryIf: [{ wifi: true }, { thread: true }]
+        }),
+    },
 });
-
-const WifiOrThreadNetworkCommissioningClusterExtend = ClusterExtend(
-    EthernetNetworkCommissioningCluster,
-    {
-        supportedFeatures: { // Values here only intermediate because this type is never used directly
-            wifi: false,
-            thread: false,
-            ethernet: false,
-        },
-        attributes: {
-            /** Maximum duration taken, in seconds, to provide scan results. */
-            scanMaxTimeSeconds: OptionalFixedAttribute(2, TlvUInt8),
-
-            /** Maximum duration taken, in seconds, to report a successful or failed network connection indication. */
-            connectMaxTimeSeconds: OptionalFixedAttribute(3, TlvUInt8),
-        },
-        commands: {
-            /** Determine the set of networks the device sees as available. */
-            scanNetworks: Command(0, TlvScanNetworksRequest, 1, TlvScanNetworksResponse),
-
-            /** Remove the definition of a given network (including its credentials). */
-            removeNetwork: Command(4, TlvRemoveNetworkRequest, 5, TlvNetworkConfigResponse),
-
-            /** Connect to the specified network, using previously-defined credentials. */
-            connectNetwork: Command(6, TlvConnectNetworkRequest, 7, TlvConnectNetworkResponse),
-
-            /** Modify the order in which networks will be presented in the Networks attribute. */
-            reorderNetwork: Command(8, TlvReorderNetworkRequest, 5, TlvNetworkConfigResponse),
-        },
-    },
-);
-
-export const WifiNetworkCommissioningCluster = ClusterExtend(
-    WifiOrThreadNetworkCommissioningClusterExtend,
-    {
-        supportedFeatures: {
-            wifi: true,
-            thread: false,
-            ethernet: false,
-        },
-        commands: {
-            /** Add or update the credentials for a given Wi-Fi network. */
-            addOrUpdateWiFiNetwork: Command(2, TlvAddOrUpdateWiFiNetworkRequest, 5, TlvNetworkConfigResponse),
-        },
-    },
-);
-
-const ThreadNetworkCommissioningCommands = {
-    /** Add or update the credentials for a given Thread network. */
-    addOrUpdateThreadNetwork: Command(3, TlvAddOrUpdateThreadNetworkRequest, 5, TlvNetworkConfigResponse),
-};
-
-export const WifiAndEthernetNetworkCommissioningCluster = ClusterExtend(
-    WifiNetworkCommissioningCluster,
-    {
-        supportedFeatures: {
-            wifi: true,
-            thread: false,
-            ethernet: true,
-        },
-    },
-);
-
-export const ThreadNetworkCommissioningCluster = ClusterExtend(
-    WifiOrThreadNetworkCommissioningClusterExtend,
-    {
-        supportedFeatures: {
-            wifi: false,
-            thread: true,
-            ethernet: false,
-        },
-        commands: ThreadNetworkCommissioningCommands
-    },
-);
-
-export const ThreadAndEthernetNetworkCommissioningCluster = ClusterExtend(
-    ThreadNetworkCommissioningCluster,
-    {
-        supportedFeatures: {
-            wifi: false,
-            thread: true,
-            ethernet: true,
-        },
-    },
-);
-
-export const WifiAndEthernetAndThreadNetworkCommissioningCluster = ClusterExtend(
-    WifiAndEthernetNetworkCommissioningCluster,
-    {
-        supportedFeatures: {
-            wifi: true,
-            thread: true,
-            ethernet: true,
-        },
-        commands: ThreadNetworkCommissioningCommands
-    },
-);
