@@ -77,10 +77,10 @@ import {
     maxCoolSetpointLimit: OptionalAttribute(0x0006, TlvInt16.bound({ max: 3000, min: 1600 }), { default: 3000 }),
 
     /** Current temperature in Celsius. */
-    occupiedCoolingSetpoint: OptionalWritableAttribute(0x0011, TlvInt16, { default: 2000 }),
+    occupiedCoolingSetpoint: OptionalWritableAttribute(0x0011, TlvInt16, { default: 2000, persistent: true }),
   
     /** Current temperature in Celsius. */
-    occupiedHeatingSetpoint: OptionalWritableAttribute(0x0012, TlvInt16, { default: 2600 }),
+    occupiedHeatingSetpoint: OptionalWritableAttribute(0x0012, TlvInt16, { default: 2600, persistent: true }),
 
     /** minimum setpoint deadband */
     minSetpointDeadBand: OptionalAttribute(0x0019, TlvUInt8, { default: 1 }),
@@ -89,10 +89,10 @@ import {
     controlSequenceOfOperation: OptionalAttribute(0x001b, TlvEnum<ControlSequenceOfOperation>(), { default: ControlSequenceOfOperation.CoolingAndHeating4Pipes }),
 
     /** Indicates the system mode of the thermostat. */
-    systemMode: OptionalWritableAttribute(0x001c, TlvEnum<ThermostatSystemMode>(), { default: ThermostatSystemMode.Off }),    
+    systemMode: OptionalWritableAttribute(0x001c, TlvEnum<ThermostatSystemMode>(), { default: ThermostatSystemMode.Off, persistent: true }),    
 
     /** Indicates the running mode of the thermostat. */
-    runningMode: Attribute(0x001e, TlvEnum<ThermostatRunningMode>(), { default: ThermostatRunningMode.Off }),    
+    runningMode: Attribute(0x001e, TlvEnum<ThermostatRunningMode>(), { default: ThermostatRunningMode.Off, persistent: true }),    
     
   };
 
@@ -111,7 +111,7 @@ import {
   export const ThermostatCluster = Cluster({
     id: 0x0201, // thermostat cluster identifier
     name: "Thermostat",
-    revision: 4,
+    revision: 5,
     features: features,
     supportedFeatures: { heating: true, cooling: true, occupancySensing: false, schedule: false, setback: false, auto: true },
     attributes: {

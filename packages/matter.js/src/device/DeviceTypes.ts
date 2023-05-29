@@ -825,7 +825,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
             MatterClusters.FanControlCluster.id,
         ],
         requiredClientClusters: [
-            //MatterClusters.ThermostatCluster.id,
+            MatterClusters.ThermostatCluster.id,
         ],
     }),
 
@@ -877,7 +877,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         requiredServerClusters: [
             MatterClusters.IdentifyCluster.id,
             MatterClusters.GroupsCluster.id,
-            //MatterClusters.FanControlCluster.id,
+            MatterClusters.FanControlCluster.id,
         ],
     }),
 

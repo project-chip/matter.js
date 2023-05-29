@@ -31,6 +31,8 @@ import { TemperatureMeasurementCluster } from "./TemperatureMeasurementCluster.j
 import { RelativeHumidityCluster, SoilMoistureMeasurementCluster, LeafWetnessMeasurementCluster } from "./WaterContentMeasurementCluster.js";
 import { GeneralDiagnosticsCluster } from "./GeneralDiagnosticsCluster.js";
 import { GroupKeyManagementCluster } from "./GroupKeyManagementCluster.js";
+import { FanControlCluster } from "./FanControlCluster.js";
+import { ThermostatCluster } from "./ThermostatCluster.js";
 
 export const AllClustersMap: { [key: Cluster<any, any, any, any, any>["id"]]: Cluster<any, any, any, any, any> } = {
     [AccessControlCluster.id]: AccessControlCluster,
@@ -64,6 +66,8 @@ export const AllClustersMap: { [key: Cluster<any, any, any, any, any>["id"]]: Cl
     [RelativeHumidityCluster.id]: RelativeHumidityCluster,
     [LeafWetnessMeasurementCluster.id]: LeafWetnessMeasurementCluster,
     [SoilMoistureMeasurementCluster.id]: SoilMoistureMeasurementCluster,
+    [FanControlCluster.id]: FanControlCluster,
+    [ThermostatCluster.id]: ThermostatCluster,    
 };
 
 interface CachedAttributeInfo {

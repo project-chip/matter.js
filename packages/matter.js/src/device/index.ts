@@ -18,3 +18,5 @@ export * from "./OnOffDevices.js";
 export * from "./ThermostatDevice.js"
 
 export * from "./HVACDevice.js"
+
+export * from "./FanControlDevice.js"

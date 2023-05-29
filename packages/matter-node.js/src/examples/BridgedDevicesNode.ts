@@ -19,7 +19,7 @@
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
 import { CommissioningServer, MatterServer } from "../"; // same as @project-chip/matter-node.js
 
-import { OnOffLightDevice, OnOffPluginUnitDevice, Aggregator, DeviceTypes, HVACDevice, ThermostatDevice } from "../exports/device"; // same as @project-chip/matter-node.js/device
+import { OnOffLightDevice, OnOffPluginUnitDevice, Aggregator, DeviceTypes, HVACDevice, ThermostatDevice, FanControlDevice } from "../exports/device"; // same as @project-chip/matter-node.js/device
 import { VendorId } from "../exports/datatype"; // same as @project-chip/matter-node.js/datatype
 import { Logger } from "../exports/log"; // same as @project-chip/matter-node.js/log
 import { StorageManager, StorageBackendDisk } from "../storage"; // same as @project-chip/matter-node.js/storage
@@ -152,19 +152,31 @@ class BridgedDevice {
 
         aggregator.addBridgedDevice(thermostatDevice, {
             nodeLabel: `thermostatDevice 1`,
-            serialNumber: `node-matter-${uniqueId}-99`,
+            serialNumber: `node-matter-${uniqueId}-98`,
             reachable: true            
         }); 
 
-        const airCon = new HVACDevice();
-        airCon.addOnOffListener((v: any) => console.log(v));
-        //airCon.addClusterClient(thermostatDevice.cli);
+        const fanControlDevice = new FanControlDevice();
+        //console.log(fanControlDevice.getStructure());
+        // fanControlDevice.setPercentCurrent(0);
+        // fanControlDevice.setPercentSetting(100);
+        // fanControlDevice.setSpeedCurrent(0);
 
-        aggregator.addBridgedDevice(airCon, {
-            nodeLabel: `airCon 1`,
+        aggregator.addBridgedDevice(fanControlDevice, {
+            nodeLabel: `fan 1`,
             serialNumber: `node-matter-${uniqueId}-99`,
-            reachable: true
-        });
+            reachable: true            
+        });        
+
+        // const airCon = new HVACDevice();
+        // airCon.addOnOffListener((v: any) => console.log(v));
+        // //airCon.addClusterClient(thermostatDevice.cli);
+
+        // aggregator.addBridgedDevice(airCon, {
+        //     nodeLabel: `airCon 1`,
+        //     serialNumber: `node-matter-${uniqueId}-99`,
+        //     reachable: true
+        // });
 
         commissioningServer.addDevice(aggregator);
 
