@@ -10,23 +10,31 @@ import { SupportedStorageTypes } from "./StringifyTools.js";
 export class StorageContext {
     constructor(
         private readonly storage: Storage,
-        private readonly context: string
+        private readonly contexts: string[]
     ) { }
 
     get<T extends SupportedStorageTypes>(key: string, defaultValue?: T): T {
-        const value = this.storage.get<T>(this.context, key);
+        const value = this.storage.get<T>(this.contexts, key);
         if (value !== undefined) return value;
         if (defaultValue === undefined) {
-            throw new Error(`No value found for key ${key} in context ${this.context} and no default value specified!`);
+            throw new Error(`No value found for key ${key} in context ${this.contexts} and no default value specified!`);
         }
         return defaultValue;
     }
 
     has(key: string): boolean {
-        return this.storage.get(this.context, key) !== undefined;
+        return this.storage.get(this.contexts, key) !== undefined;
     }
 
     set<T extends SupportedStorageTypes>(key: string, value: T): void {
-        this.storage.set<T>(this.context, key, value);
+        this.storage.set<T>(this.contexts, key, value);
+    }
+
+    createContext(context: string) {
+        if (context.length === 0) throw new Error("Context must not be an empty string");
+        if (context.includes('.')) throw new Error("Context must not contain dots!");
+        const newContext = this.contexts;
+        newContext.push(context);
+        return new StorageContext(this.storage, newContext);
     }
 }

@@ -27,19 +27,21 @@ export class StorageBackendDisk implements Storage {
         // nothing to do
     }
 
-    buildStorageKey(context: string, key: string): string {
-        return context + "." + key;
+    buildStorageKey(contexts: string[], key: string): string {
+        const contextKey = contexts.join('.');
+        if (!key.length || !contextKey.length || contextKey.includes("..") || contextKey.startsWith(".") || contextKey.endsWith(".")) throw new Error("Context must not be an empty string!");
+        return `${contextKey}.${key}`;
     }
 
-    get<T extends SupportedStorageTypes>(context: string, key: string): T | undefined {
-        if (!context.length || !key.length) throw new Error("Context and key must not be empty strings!");
-        const value = this.localStorage.getItem(this.buildStorageKey(context, key));
+    get<T extends SupportedStorageTypes>(contexts: string[], key: string): T | undefined {
+        if (!contexts.length || !key.length) throw new Error("Context and key must not be empty strings!");
+        const value = this.localStorage.getItem(this.buildStorageKey(contexts, key));
         if (value === null) return undefined;
         return fromJson(value) as T
     }
 
-    set<T extends SupportedStorageTypes>(context: string, key: string, value: T): void {
-        if (!context.length || !key.length) throw new Error("Context and key must not be empty strings!");
-        this.localStorage.setItem(this.buildStorageKey(context, key), toJson(value));
+    set<T extends SupportedStorageTypes>(contexts: string[], key: string, value: T): void {
+        if (!contexts.length || !key.length) throw new Error("Context and key must not be empty strings!");
+        this.localStorage.setItem(this.buildStorageKey(contexts, key), toJson(value));
     }
 }

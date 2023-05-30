@@ -23,6 +23,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Breaking: Adjusted some constructors of the new API and remove the option to pass an array of clusters to be added initially because this was no longer compatible to the strong typing in some places. Use addClusterServer and addClusterClient methods
   * Deprecation: The classes MatterDevice and MatterController are deprecated to be used externally to the library and will be removed in later versions.
   * Deprecation: The CLI Examples LegacyDeviceNode and LegacyControllerNode will be removed in next version! Use the new variants please.
+  * Feature: Enhance Storage system to allow to create subcontext stores to allow better separation of data
 * Misc:
   * Added Specification links for Matter Specifications 1.1
 
