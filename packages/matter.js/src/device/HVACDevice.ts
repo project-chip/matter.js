@@ -78,8 +78,8 @@ class HeatingCoolingBaseDevice extends extendPublicHandlerMethods<typeof Device,
         this.addClusterServer(createDefaultFanControlClusterServer(getClusterInitialAttributeValues(attributeInitialValues, FanControlCluster)));
         this.addClusterServer(createDefaultThermostatClusterServer(getClusterInitialAttributeValues(attributeInitialValues, ThermostatCluster)));
 
-        
-        
+
+
     }
 
     async onOff(onOff: boolean) {

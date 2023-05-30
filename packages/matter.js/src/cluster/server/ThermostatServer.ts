@@ -1,45 +1,45 @@
-import {ThermostatCluster, SetpointMode, ControlSequenceOfOperation, ThermostatSystemMode, ThermostatRunningMode } from "../ThermostatCluster.js";
+import { ThermostatCluster, SetpointMode, ControlSequenceOfOperation, ThermostatSystemMode, ThermostatRunningMode } from "../ThermostatCluster.js";
 import { AttributeInitialValues, ClusterServerHandlers } from "./ClusterServer.js";
 import { ClusterServer } from "../../protocol/interaction/InteractionServer.js";
 
 export const ThermostatClusterHandler: () => ClusterServerHandlers<typeof ThermostatCluster> = () => ({
 
-    setpointRaiseLower: async ({ request: { mode, amount } , attributes: { localTemperature, occupiedCoolingSetpoint, occupiedHeatingSetpoint, maxCoolSetpointLimit, maxHeatSetpointLimit, minCoolSetpointLimit, minHeatSetpointLimit, runningMode } }) => {
+    setpointRaiseLower: async ({ request: { mode, amount }, attributes: { occupiedCoolingSetpoint, occupiedHeatingSetpoint, maxCoolSetpointLimit, maxHeatSetpointLimit, minCoolSetpointLimit, minHeatSetpointLimit } }) => {
 
-        let updatedHeatingSetpoint = occupiedHeatingSetpoint?.get()?? occupiedHeatingSetpoint?.defaultValue ?? 2600;
-        let updatedCoolingSetpoint = occupiedCoolingSetpoint?.get()?? occupiedCoolingSetpoint?.defaultValue ?? 2000;
+        let updatedHeatingSetpoint = occupiedHeatingSetpoint?.get() ?? occupiedHeatingSetpoint?.defaultValue ?? 2600;
+        let updatedCoolingSetpoint = occupiedCoolingSetpoint?.get() ?? occupiedCoolingSetpoint?.defaultValue ?? 2000;
 
-        console.log("\n--------\nALALAL: " + mode + " AL2: " + amount);
-      
+        //console.log("\n--------\nALALAL: " + mode + " AL2: " + amount);
+
         if (mode === SetpointMode.Heat) {
-          updatedHeatingSetpoint += amount;
+            updatedHeatingSetpoint += amount;
         } else if (mode === SetpointMode.Cool) {
-          updatedCoolingSetpoint += amount;
+            updatedCoolingSetpoint += amount;
         } else if (mode === SetpointMode.Both) {
-          updatedHeatingSetpoint += amount;
-          updatedCoolingSetpoint += amount;
+            updatedHeatingSetpoint += amount;
+            updatedCoolingSetpoint += amount;
         }
-      
+
         // Ensure the setpoints are within the allowed limits
         updatedHeatingSetpoint = Math.max(
-          Math.min(updatedHeatingSetpoint, 
-            maxHeatSetpointLimit?.get() ?? maxHeatSetpointLimit?.defaultValue ?? 3000),
-            minHeatSetpointLimit?.get() ?? minHeatSetpointLimit?.defaultValue ?? 700    
+            Math.min(updatedHeatingSetpoint,
+                maxHeatSetpointLimit?.get() ?? maxHeatSetpointLimit?.defaultValue ?? 3000),
+            minHeatSetpointLimit?.get() ?? minHeatSetpointLimit?.defaultValue ?? 700
         );
 
         updatedCoolingSetpoint = Math.max(
-          Math.min(updatedCoolingSetpoint, 
-            maxCoolSetpointLimit?.get() ?? maxCoolSetpointLimit?.defaultValue ?? 3000),
+            Math.min(updatedCoolingSetpoint,
+                maxCoolSetpointLimit?.get() ?? maxCoolSetpointLimit?.defaultValue ?? 3000),
             minCoolSetpointLimit?.get() ?? minCoolSetpointLimit?.defaultValue ?? 1600
         );
-      
+
         // Update the attribute values
         occupiedHeatingSetpoint?.set(updatedHeatingSetpoint);
-        occupiedCoolingSetpoint?.set(updatedCoolingSetpoint); 
+        occupiedCoolingSetpoint?.set(updatedCoolingSetpoint);
 
     },
 
-    
+
 });
 
 export const createDefaultThermostatClusterServer = (attributeInitialValues?: AttributeInitialValues<typeof ThermostatCluster.attributes>) => ClusterServer(

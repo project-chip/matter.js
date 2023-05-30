@@ -30,34 +30,34 @@ export const LevelControlClusterHandler: () => ClusterServerHandlers<typeof Leve
         rate = rate ?? 0;
 
         if (moveMode === 0) {
-          // Up mode
-          const newLevel = Math.min(cl + rate, 255);
-          levelAttr.set(newLevel);
+            // Up mode
+            const newLevel = Math.min(cl + rate, 255);
+            levelAttr.set(newLevel);
         } else if (moveMode === 1) {
-          // Down mode
-          const newLevel = Math.max(cl - rate, 0);
-          levelAttr.set(newLevel);
+            // Down mode
+            const newLevel = Math.max(cl - rate, 0);
+            levelAttr.set(newLevel);
         }
-      },    
+    },
 
-      step: async ({ request: { stepMode, stepSize, transitionTime }, attributes: { currentLevel: levelAttr } }) => {
+    step: async ({ request: { stepMode, stepSize }, attributes: { currentLevel: levelAttr } }) => {
         const cl = levelAttr.get() ?? 0;
         let newLevel;
-    
+
         if (stepMode === 0) {
-          // Up step mode
-          newLevel = Math.min(cl + stepSize, 255);
+            // Up step mode
+            newLevel = Math.min(cl + stepSize, 255);
         } else if (stepMode === 1) {
-          // Down step mode
-          newLevel = Math.max(cl - stepSize, 0);
+            // Down step mode
+            newLevel = Math.max(cl - stepSize, 0);
         } else {
-          // Stop step mode
-          return;
+            // Stop step mode
+            return;
         }
-    
+
         levelAttr.set(newLevel);
         // You can handle the transition time here if required
-      },
+    },
 
     stop: async () => {
         throw new Error("Not implemented")
@@ -92,11 +92,11 @@ export const LevelControlClusterHandler: () => ClusterServerHandlers<typeof Leve
 
 export const createDefaultLevelControlClusterServer = (
     attributeInitialValues?: AttributeInitialValues<typeof LevelControlCluster.attributes>
-  ) =>
+) =>
     ClusterServer(LevelControlCluster, attributeInitialValues ?? {
         currentLevel: 0,
         remainingTime: 0,
-        onLevel : 0,
+        onLevel: 0,
         onTransitionTime: 0,
         offTransitionTime: 0,
         defaultMoveRate: 0,

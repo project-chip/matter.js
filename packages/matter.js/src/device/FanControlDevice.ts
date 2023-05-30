@@ -12,8 +12,8 @@ import { IdentifyCluster, } from "../cluster/IdentifyCluster.js";
 import { extendPublicHandlerMethods } from "../util/NamedHandler.js";
 import { BitSchema, TypeFromBitSchema } from "../schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
-import { FanControlCluster, FanMode, FanModeSequence } from "../cluster/FanControlCluster.js";
-import { LevelControlCluster, OnOffCluster, ThermostatCluster, createDefaultFanControlClusterServer, createDefaultLevelControlClusterServer, createDefaultOnOffClusterServer, createDefaultScenesClusterServer, createDefaultThermostatClusterServer } from "../cluster/index.js";
+import { FanControlCluster } from "../cluster/FanControlCluster.js";
+import { createDefaultFanControlClusterServer } from "../cluster/index.js";
 
 type OnOffBaseDeviceCommands = {
     identify: ClusterServerHandlers<typeof IdentifyCluster>["identify"];
@@ -64,7 +64,7 @@ abstract class FanControlBaseDevice extends extendPublicHandlerMethods<typeof De
         //this.addClusterServer(createDefaultScenesClusterServer());
         //this.addClusterServer(createDefaultOnOffClusterServer(getClusterInitialAttributeValues(attributeInitialValues, OnOffCluster)));
         this.addClusterServer(createDefaultFanControlClusterServer(getClusterInitialAttributeValues(attributeInitialValues, FanControlCluster)));
-        
+
     }
 
     // async setFanMode(mode: FanMode) {

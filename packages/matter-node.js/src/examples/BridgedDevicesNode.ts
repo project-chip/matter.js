@@ -19,14 +19,13 @@
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
 import { CommissioningServer, MatterServer } from "../"; // same as @project-chip/matter-node.js
 
-import { OnOffLightDevice, OnOffPluginUnitDevice, Aggregator, DeviceTypes, HVACDevice, ThermostatDevice, FanControlDevice } from "../exports/device"; // same as @project-chip/matter-node.js/device
+import { OnOffLightDevice, OnOffPluginUnitDevice, Aggregator, DeviceTypes, ThermostatDevice, FanControlDevice } from "../exports/device"; // same as @project-chip/matter-node.js/device
 import { VendorId } from "../exports/datatype"; // same as @project-chip/matter-node.js/datatype
 import { Logger } from "../exports/log"; // same as @project-chip/matter-node.js/log
 import { StorageManager, StorageBackendDisk } from "../storage"; // same as @project-chip/matter-node.js/storage
 import { commandExecutor, getIntParameter, getParameter, requireMinNodeVersion, hasParameter } from "../util"; // same as @project-chip/matter-node.js/util
-import { Time } from "../time";
-import { BridgedDeviceBasicInformationCluster, ThermostatCluster } from "../exports/cluster";
-import { ClusterClient, ClusterServer } from "../exports/interaction";
+import { BridgedDeviceBasicInformationCluster } from "../exports/cluster";
+import { ClusterServer } from "../exports/interaction";
 
 
 const logger = Logger.get("Device");
@@ -98,7 +97,7 @@ class BridgedDevice {
 
         const matterServer = new MatterServer(storageManager, netAnnounceInterface);
 
-        console.log("UNID: " + getIntParameter("unid"));
+        //console.log("UNID: " + getIntParameter("unid"));
 
         const uniqueId = getIntParameter("unid"); //Time.nowMs(); // TODO Store it!
         const commissioningServer = new CommissioningServer({
@@ -121,7 +120,7 @@ class BridgedDevice {
             serialNumber: `node-matter-${uniqueId}`,
             reachable: true,
             uniqueId: `uc-matter-${uniqueId}`,
-        }, { }, { reachableChanged: true }));
+        }, {}, { reachableChanged: true }));
 
         /**
          * Create Device instance and add needed Listener
@@ -149,15 +148,15 @@ class BridgedDevice {
         }
 
         const thermostatDevice = new ThermostatDevice();
-        thermostatDevice.addOccupiedCoolingSetpointListener((v: any, o: any) => console.log("NEW: " + v + " OLD: "+ o));
-        thermostatDevice.addOccupiedHeatingSetpointListener((v: any, o: any) => console.log("NEW: " + v + " OLD: "+ o));
-        thermostatDevice.setLocalTemperature(2400);
+        //thermostatDevice.addOccupiedCoolingSetpointListener((v: any, o: any) => console.log("NEW: " + v + " OLD: "+ o));
+        //thermostatDevice.addOccupiedHeatingSetpointListener((v: any, o: any) => console.log("NEW: " + v + " OLD: "+ o));
+        await thermostatDevice.setLocalTemperature(2400);
 
         aggregator.addBridgedDevice(thermostatDevice, {
             nodeLabel: `thermostatDevice 1`,
             serialNumber: `node-matter-${uniqueId}-98`,
-            reachable: true            
-        }); 
+            reachable: true
+        });
 
         const fanControlDevice = new FanControlDevice();
         //console.log(fanControlDevice.getStructure());
@@ -168,8 +167,8 @@ class BridgedDevice {
         aggregator.addBridgedDevice(fanControlDevice, {
             nodeLabel: `fan 1`,
             serialNumber: `node-matter-${uniqueId}-99`,
-            reachable: true            
-        });        
+            reachable: true
+        });
 
         // const airCon = new HVACDevice();
         // airCon.addOnOffListener((v: any) => console.log(v));

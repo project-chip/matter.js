@@ -66,7 +66,7 @@ abstract class ThermostatBaseDevice extends extendPublicHandlerMethods<typeof De
         this.addClusterServer(createDefaultScenesClusterServer());
         this.addClusterServer(createDefaultThermostatClusterServer(getClusterInitialAttributeValues(attributeInitialValues, ThermostatCluster)));
         this.addClusterServer(createDefaultFanControlClusterServer(getClusterInitialAttributeValues(attributeInitialValues, FanControlCluster)));
-       
+
         //this.addClusterClient(this.createOptionalClusterClient(RelativeHumidityCluster));
         //this.addClusterClient(this.createOptionalClusterClient(TemperatureMeasurementCluster));
         //this.addClusterClient(this.createOptionalClusterClient(OccupancySensingCluster));
@@ -79,11 +79,11 @@ abstract class ThermostatBaseDevice extends extendPublicHandlerMethods<typeof De
     // Add Listeners convenient for chosen attributes
     addOccupiedCoolingSetpointListener(listener: (newValue: number | null, oldValue: number | null) => void) {
         this.getClusterServer(ThermostatCluster)?.subscribeOccupiedCoolingSetpointAttribute(listener);
-    }    
+    }
 
     addOccupiedHeatingSetpointListener(listener: (newValue: number | null, oldValue: number | null) => void) {
         this.getClusterServer(ThermostatCluster)?.subscribeOccupiedHeatingSetpointAttribute(listener);
-    }     
+    }
 }
 
 

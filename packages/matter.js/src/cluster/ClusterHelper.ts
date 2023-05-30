@@ -67,7 +67,7 @@ export const AllClustersMap: { [key: Cluster<any, any, any, any, any>["id"]]: Cl
     [LeafWetnessMeasurementCluster.id]: LeafWetnessMeasurementCluster,
     [SoilMoistureMeasurementCluster.id]: SoilMoistureMeasurementCluster,
     [FanControlCluster.id]: FanControlCluster,
-    [ThermostatCluster.id]: ThermostatCluster,    
+    [ThermostatCluster.id]: ThermostatCluster,
 };
 
 interface CachedAttributeInfo {
