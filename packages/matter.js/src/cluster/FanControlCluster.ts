@@ -57,28 +57,28 @@ const commonAttributes = {
   fanModeSequence: WritableAttribute(0x0001, TlvEnum<FanModeSequence>(), { default: FanModeSequence.OffLowMedHighAuto }),
 
   // Fan percent setting
-  percentSetting: WritableAttribute(0x0002, TlvUInt8, { default: 0 }),
+  percentSetting: WritableAttribute(0x0002, TlvNullable(TlvUInt8), { default: 0 }),
 
   // Fan percent current
-  percentCurrent: WritableAttribute(0x0003, TlvUInt8, { default: 0 }),
+  percentCurrent: Attribute(0x0003, TlvUInt8, { default: 0 }),
 
   // Maximum fan speed
-  speedMax: WritableAttribute(0x0004, TlvUInt8, { default: 100 }),
+  speedMax: OptionalAttribute(0x0004, TlvUInt8.bound({min: 1, max:100}), { default: 100 }),
 
   // Fan speed setting
-  speedSetting: WritableAttribute(0x0005, TlvUInt8, { default: 0 }),
+  speedSetting: OptionalWritableAttribute(0x0005, TlvNullable(TlvUInt8.bound({min: 1, max:100})), { default: 0 }),
 
   // Fan speed current
-  speedCurrent: WritableAttribute(0x0006, TlvUInt8, { default: 0 }),
+  speedCurrent: OptionalAttribute(0x0006, TlvUInt8.bound({min: 1, max:100}), { default: 0 }),
 
   // Support for rocking feature
-  rockSupport: WritableAttribute(0x0007, rockBitmap, { default: { rockLeftRight: true, rockUpDown: true, rockRound: true } }),
+  rockSupport: OptionalAttribute(0x0007, rockBitmap, { default: { rockLeftRight: true, rockUpDown: true, rockRound: true } }),
 
   // Rocking setting
   rockSetting: OptionalWritableAttribute(0x0008, rockBitmap, { default: { rockLeftRight: false, rockUpDown: false, rockRound: false } }),
 
   // Support for wind feature
-  windSupport: WritableAttribute(0x0009, windBitmap, { default: { sleepWind: true, naturalWind: true } }),
+  windSupport: OptionalAttribute(0x0009, windBitmap, { default: { sleepWind: true, naturalWind: true } }),
 
   // Wind setting
   windSetting: OptionalWritableAttribute(0x000A, windBitmap, { default: { sleepWind: false, naturalWind: false } }),

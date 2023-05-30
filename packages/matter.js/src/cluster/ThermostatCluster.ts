@@ -4,7 +4,8 @@ import {
     Attribute,
     Cluster,
     Command,
-    TlvNoResponse
+    TlvNoResponse,
+    WritableAttribute
   } from "./Cluster.js";
   import { BitFlag } from "../schema/BitmapSchema.js";
   import {
@@ -62,19 +63,25 @@ import {
 
   const commonAttributes = {
     /** Current temperature of this device. */
-    localTemperature: Attribute(0x0000, TlvInt16, { default: 2500 }),
+    localTemperature: Attribute(0x0000, TlvNullable(TlvInt16), { default: 2500 }),
+
+    /** Outdoor temperature. */
+    outdoorTemperature: OptionalAttribute(0x0001, TlvNullable(TlvInt16), { default: 2500 }),
+
+    // /** Thermostat Occupancy. */
+    // occupancy: OptionalAttribute(0x0002, TlvNullable(TlvUInt8), { default: 0 }),
   
     /** Minimum heat setpoint limit. */
-    minHeatSetpointLimit: OptionalAttribute(0x0003, TlvInt16.bound({ max: 3500, min: 700 }), { default: 700 }),
+    minHeatSetpointLimit: OptionalWritableAttribute(0x0015, TlvInt16.bound({ max: 3500, min: 700 }), { default: 700 }),
   
     /** Maximum heat setpoint limit. */
-    maxHeatSetpointLimit: OptionalAttribute(0x0004, TlvInt16.bound({ max: 3500, min: 700 }), { default: 3000 }),
+    maxHeatSetpointLimit: OptionalWritableAttribute(0x0016, TlvInt16.bound({ max: 3500, min: 700 }), { default: 3000 }),
   
     /** Minimum cool setpoint limit. */
-    minCoolSetpointLimit: OptionalAttribute(0x0005, TlvInt16.bound({ max: 3000, min: 1600 }), { default: 1600 }),
+    minCoolSetpointLimit: OptionalWritableAttribute(0x0017, TlvInt16.bound({ max: 3000, min: 1600 }), { default: 1600 }),
   
     /** Maximum cool setpoint limit. */
-    maxCoolSetpointLimit: OptionalAttribute(0x0006, TlvInt16.bound({ max: 3000, min: 1600 }), { default: 3000 }),
+    maxCoolSetpointLimit: OptionalWritableAttribute(0x0018, TlvInt16.bound({ max: 3000, min: 1600 }), { default: 3000 }),
 
     /** Current temperature in Celsius. */
     occupiedCoolingSetpoint: OptionalWritableAttribute(0x0011, TlvInt16, { default: 2000, persistent: true }),
@@ -86,13 +93,13 @@ import {
     minSetpointDeadBand: OptionalAttribute(0x0019, TlvUInt8, { default: 1 }),
 
     /** control sequence of operation */
-    controlSequenceOfOperation: OptionalAttribute(0x001b, TlvEnum<ControlSequenceOfOperation>(), { default: ControlSequenceOfOperation.CoolingAndHeating4Pipes }),
+    controlSequenceOfOperation: WritableAttribute(0x001b, TlvEnum<ControlSequenceOfOperation>(), { default: ControlSequenceOfOperation.CoolingAndHeating4Pipes }),
 
     /** Indicates the system mode of the thermostat. */
-    systemMode: OptionalWritableAttribute(0x001c, TlvEnum<ThermostatSystemMode>(), { default: ThermostatSystemMode.Off, persistent: true }),    
+    systemMode: WritableAttribute(0x001c, TlvEnum<ThermostatSystemMode>(), { default: ThermostatSystemMode.Off, persistent: true }),    
 
     /** Indicates the running mode of the thermostat. */
-    runningMode: Attribute(0x001e, TlvEnum<ThermostatRunningMode>(), { default: ThermostatRunningMode.Off, persistent: true }),    
+    runningMode: OptionalAttribute(0x001e, TlvEnum<ThermostatRunningMode>(), { default: ThermostatRunningMode.Off, persistent: true }),    
     
   };
 

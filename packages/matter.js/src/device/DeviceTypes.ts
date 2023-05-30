@@ -859,7 +859,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
             MatterClusters.RelativeHumidityCluster.id,
             //MatterClusters.TimeCluster.id, // Optional when Zigbee
             //MatterClusters.TimeSyncCluster.id,
-            //MatterClusters.FanControlCluster.id,
+            MatterClusters.FanControlCluster.id,
             MatterClusters.TemperatureMeasurementCluster.id,
             MatterClusters.OccupancySensingCluster.id,
         ],

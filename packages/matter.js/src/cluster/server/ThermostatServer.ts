@@ -4,7 +4,7 @@ import { ClusterServer } from "../../protocol/interaction/InteractionServer.js";
 
 export const ThermostatClusterHandler: () => ClusterServerHandlers<typeof ThermostatCluster> = () => ({
 
-    setpointRaiseLower: async ({ request: { mode, amount } , attributes: { localTemperature, occupiedCoolingSetpoint, occupiedHeatingSetpoint, maxCoolSetpointLimit, maxHeatSetpointLimit, minCoolSetpointLimit, minHeatSetpointLimit } }) => {
+    setpointRaiseLower: async ({ request: { mode, amount } , attributes: { localTemperature, occupiedCoolingSetpoint, occupiedHeatingSetpoint, maxCoolSetpointLimit, maxHeatSetpointLimit, minCoolSetpointLimit, minHeatSetpointLimit, runningMode } }) => {
 
         let updatedHeatingSetpoint = occupiedHeatingSetpoint?.get()?? occupiedHeatingSetpoint?.defaultValue ?? 2600;
         let updatedCoolingSetpoint = occupiedCoolingSetpoint?.get()?? occupiedCoolingSetpoint?.defaultValue ?? 2000;

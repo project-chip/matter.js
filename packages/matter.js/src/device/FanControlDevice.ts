@@ -61,7 +61,7 @@ abstract class FanControlBaseDevice extends extendPublicHandlerMethods<typeof De
             identify: async (data) => await this._executeHandler("identify", data)
         }));
         this.addClusterServer(createDefaultGroupsClusterServer());
-        this.addClusterServer(createDefaultScenesClusterServer());
+        //this.addClusterServer(createDefaultScenesClusterServer());
         //this.addClusterServer(createDefaultOnOffClusterServer(getClusterInitialAttributeValues(attributeInitialValues, OnOffCluster)));
         this.addClusterServer(createDefaultFanControlClusterServer(getClusterInitialAttributeValues(attributeInitialValues, FanControlCluster)));
         

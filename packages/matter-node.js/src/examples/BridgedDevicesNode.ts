@@ -98,7 +98,9 @@ class BridgedDevice {
 
         const matterServer = new MatterServer(storageManager, netAnnounceInterface);
 
-        const uniqueId = Time.nowMs(); // TODO Store it!
+        console.log("UNID: " + getIntParameter("unid"));
+
+        const uniqueId = getIntParameter("unid"); //Time.nowMs(); // TODO Store it!
         const commissioningServer = new CommissioningServer({
             port,
             deviceName,
@@ -118,6 +120,7 @@ class BridgedDevice {
             nodeLabel: `OnOff Bridge`,
             serialNumber: `node-matter-${uniqueId}`,
             reachable: true,
+            uniqueId: `uc-matter-${uniqueId}`,
         }, { }, { reachableChanged: true }));
 
         /**
