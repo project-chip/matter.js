@@ -19,13 +19,14 @@
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
 import { CommissioningServer, MatterServer } from "../"; // same as @project-chip/matter-node.js
 
-import { OnOffLightDevice, OnOffPluginUnitDevice, Aggregator, DeviceTypes, ThermostatDevice, FanControlDevice } from "../exports/device"; // same as @project-chip/matter-node.js/device
+import { OnOffLightDevice, OnOffPluginUnitDevice, Aggregator, DeviceTypes } from "../exports/device"; // same as @project-chip/matter-node.js/device
 import { VendorId } from "../exports/datatype"; // same as @project-chip/matter-node.js/datatype
 import { Logger } from "../exports/log"; // same as @project-chip/matter-node.js/log
 import { StorageManager, StorageBackendDisk } from "../storage"; // same as @project-chip/matter-node.js/storage
 import { commandExecutor, getIntParameter, getParameter, requireMinNodeVersion, hasParameter } from "../util"; // same as @project-chip/matter-node.js/util
 import { BridgedDeviceBasicInformationCluster } from "../exports/cluster";
 import { ClusterServer } from "../exports/interaction";
+import { Time } from "../time";
 
 
 const logger = Logger.get("Device");
@@ -72,15 +73,18 @@ class BridgedDevice {
         // product name / id and vendor id should match what is in the device certificate
         const vendorId = new VendorId(getIntParameter("vendorid") ?? deviceStorage.get("vendorid", 0xFFF1));
         const productName = `node-matter OnOff-Bridge`;
-        const productId = getIntParameter("productid") ?? deviceStorage.get("productid", 0x1000);
+        const productId = getIntParameter("productid") ?? deviceStorage.get("productid", 0x8000);
 
         const netAnnounceInterface = getParameter("announceinterface");
         const port = getIntParameter("port") ?? 5540;
+
+        const uniqueId = getIntParameter("uniqueid") ?? deviceStorage.get("uniqueid", Time.nowMs());
 
         deviceStorage.set("passcode", passcode);
         deviceStorage.set("discriminator", discriminator);
         deviceStorage.set("vendorid", vendorId.id);
         deviceStorage.set("productid", productId);
+        deviceStorage.set("uniqueid", uniqueId);
 
         /**
          * Create Matter Server and CommissioningServer Node
@@ -97,9 +101,6 @@ class BridgedDevice {
 
         const matterServer = new MatterServer(storageManager, netAnnounceInterface);
 
-        //console.log("UNID: " + getIntParameter("unid"));
-
-        const uniqueId = getIntParameter("unid"); //Time.nowMs(); // TODO Store it!
         const commissioningServer = new CommissioningServer({
             port,
             deviceName,
@@ -119,7 +120,6 @@ class BridgedDevice {
             nodeLabel: `OnOff Bridge`,
             serialNumber: `node-matter-${uniqueId}`,
             reachable: true,
-            uniqueId: `uc-matter-${uniqueId}`,
         }, {}, { reachableChanged: true }));
 
         /**
@@ -146,39 +146,6 @@ class BridgedDevice {
                 reachable: true
             });
         }
-
-        const thermostatDevice = new ThermostatDevice();
-        //thermostatDevice.addOccupiedCoolingSetpointListener((v: any, o: any) => console.log("NEW: " + v + " OLD: "+ o));
-        //thermostatDevice.addOccupiedHeatingSetpointListener((v: any, o: any) => console.log("NEW: " + v + " OLD: "+ o));
-        await thermostatDevice.setLocalTemperature(2400);
-
-        aggregator.addBridgedDevice(thermostatDevice, {
-            nodeLabel: `thermostatDevice 1`,
-            serialNumber: `node-matter-${uniqueId}-98`,
-            reachable: true
-        });
-
-        const fanControlDevice = new FanControlDevice();
-        //console.log(fanControlDevice.getStructure());
-        // fanControlDevice.setPercentCurrent(0);
-        // fanControlDevice.setPercentSetting(100);
-        // fanControlDevice.setSpeedCurrent(0);
-
-        aggregator.addBridgedDevice(fanControlDevice, {
-            nodeLabel: `fan 1`,
-            serialNumber: `node-matter-${uniqueId}-99`,
-            reachable: true
-        });
-
-        // const airCon = new HVACDevice();
-        // airCon.addOnOffListener((v: any) => console.log(v));
-        // //airCon.addClusterClient(thermostatDevice.cli);
-
-        // aggregator.addBridgedDevice(airCon, {
-        //     nodeLabel: `airCon 1`,
-        //     serialNumber: `node-matter-${uniqueId}-99`,
-        //     reachable: true
-        // });
 
         commissioningServer.addDevice(aggregator);
 

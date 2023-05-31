@@ -9,8 +9,6 @@ export const ThermostatClusterHandler: () => ClusterServerHandlers<typeof Thermo
         let updatedHeatingSetpoint = occupiedHeatingSetpoint?.get() ?? occupiedHeatingSetpoint?.defaultValue ?? 2600;
         let updatedCoolingSetpoint = occupiedCoolingSetpoint?.get() ?? occupiedCoolingSetpoint?.defaultValue ?? 2000;
 
-        //console.log("\n--------\nALALAL: " + mode + " AL2: " + amount);
-
         if (mode === SetpointMode.Heat) {
             updatedHeatingSetpoint += amount;
         } else if (mode === SetpointMode.Cool) {
@@ -39,6 +37,26 @@ export const ThermostatClusterHandler: () => ClusterServerHandlers<typeof Thermo
 
     },
 
+    getRelayStatusLog: async ({ attributes: { localTemperature, occupiedCoolingSetpoint, occupiedHeatingSetpoint, runningMode } }) => {
+
+        let setPointTemp = 0;
+        if (runningMode?.get() === ThermostatRunningMode.Cool) {
+            setPointTemp = occupiedCoolingSetpoint?.get() ?? occupiedCoolingSetpoint?.defaultValue ?? 2000;
+        } else if (runningMode?.get() === ThermostatRunningMode.Heat) {
+            setPointTemp = occupiedHeatingSetpoint?.get() ?? occupiedHeatingSetpoint?.defaultValue ?? 2600;
+        }
+
+        const currentDate = new Date();
+
+        return {
+            timeOfDay: (currentDate.getHours() * 60) + currentDate.getMinutes(),
+            humidityInPercentage: 10, //TODO
+            localTemperature: localTemperature?.get() ?? 0,
+            relayStatus: { unknown_1: true, unknown_2: false, unknown_3: false, unknown_4: false }, //??? nothing in specs
+            setpoint: setPointTemp,
+            unreadEntries: 0, //TODO if necessary
+        };
+    }
 
 });
 

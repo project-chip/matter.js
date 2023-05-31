@@ -11,7 +11,7 @@ import { createDefaultScenesClusterServer } from "../cluster/server/ScenesServer
 import { createDefaultIdentifyClusterServer } from "../cluster/server/IdentifyServer.js";
 import { AttributeInitialValues, ClusterServerHandlers } from "../cluster/server/ClusterServer.js";
 import { IdentifyCluster, } from "../cluster/IdentifyCluster.js";
-import { ThermostatCluster } from "../cluster/ThermostatCluster.js";
+import { ThermostatCluster, ThermostatRunningMode, ThermostatSystemMode } from "../cluster/ThermostatCluster.js";
 import { extendPublicHandlerMethods } from "../util/NamedHandler.js";
 import { BitSchema, TypeFromBitSchema } from "../schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
@@ -76,7 +76,51 @@ abstract class ThermostatBaseDevice extends extendPublicHandlerMethods<typeof De
         this.getClusterServer(ThermostatCluster)?.setLocalTemperatureAttribute(temperature);
     }
 
-    // Add Listeners convenient for chosen attributes
+    async setRunningMode(systemMode: ThermostatSystemMode) {
+
+        switch (systemMode) {
+            case ThermostatSystemMode.Off:
+                this.getClusterServer(ThermostatCluster)?.setRunningModeAttribute(ThermostatRunningMode.Off);
+                break;
+            case ThermostatSystemMode.Heat:
+                this.getClusterServer(ThermostatCluster)?.setRunningModeAttribute(ThermostatRunningMode.Heat);
+                break;
+            case ThermostatSystemMode.Cool:
+                this.getClusterServer(ThermostatCluster)?.setRunningModeAttribute(ThermostatRunningMode.Cool);
+                break;
+            default:
+                {
+                    const localTemperature = this.getClusterServer(ThermostatCluster)?.attributes.localTemperature.get() ?? 0;
+                    let occupiedCoolingSetpoint = this.getClusterServer(ThermostatCluster)?.attributes.occupiedCoolingSetpoint?.get() ?? 0;
+                    let occupiedHeatingSetpoint = this.getClusterServer(ThermostatCluster)?.attributes.occupiedHeatingSetpoint?.get() ?? 0;
+
+                    if (occupiedCoolingSetpoint < occupiedHeatingSetpoint) {
+                        //if mode is auto and cooling setpoint is lower than heating setpoint, it's illogical
+                        //so we set the temps +-2 degrees from the local temperature
+                        occupiedCoolingSetpoint = localTemperature + 200;
+                        occupiedHeatingSetpoint = localTemperature - 200;
+                    }
+
+                    this.getClusterServer(ThermostatCluster)?.setOccupiedCoolingSetpointAttribute(occupiedCoolingSetpoint);
+                    this.getClusterServer(ThermostatCluster)?.setOccupiedHeatingSetpointAttribute(occupiedHeatingSetpoint);
+
+                    if (localTemperature < occupiedHeatingSetpoint) {
+                        this.getClusterServer(ThermostatCluster)?.setRunningModeAttribute(ThermostatRunningMode.Heat);
+                    }
+                    else if (localTemperature > occupiedCoolingSetpoint) {
+                        this.getClusterServer(ThermostatCluster)?.setRunningModeAttribute(ThermostatRunningMode.Cool);
+                    } else {
+                        this.getClusterServer(ThermostatCluster)?.setRunningModeAttribute(ThermostatRunningMode.Off);
+                    }
+                }
+                break;
+        }
+    }
+
+    addSystemModeListener(listener: (newValue: ThermostatSystemMode | null, oldValue: ThermostatSystemMode | null) => void) {
+        this.getClusterServer(ThermostatCluster)?.subscribeSystemModeAttribute(listener);
+    }
+
     addOccupiedCoolingSetpointListener(listener: (newValue: number | null, oldValue: number | null) => void) {
         this.getClusterServer(ThermostatCluster)?.subscribeOccupiedCoolingSetpointAttribute(listener);
     }
@@ -88,11 +132,15 @@ abstract class ThermostatBaseDevice extends extendPublicHandlerMethods<typeof De
 
 
 /**
- * Device class for an ThermostatDevice Device
+ * Device class for a Thermostat Device
  */
 export class ThermostatDevice extends ThermostatBaseDevice {
     constructor(thermostatAttributeInitialValues?: AttributeInitialValues<typeof ThermostatCluster.attributes>, endpointId?: number) {
         super(DeviceTypes.THERMOSTAT, thermostatAttributeInitialValues, endpointId);
+
+        this.addSystemModeListener((newValue) => {
+            this.setRunningMode(newValue ?? ThermostatSystemMode.Off).catch(e => console.error(e));
+        });
     }
 }
 

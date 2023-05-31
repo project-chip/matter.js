@@ -33,28 +33,6 @@ function getClusterInitialAttributeValues<F extends BitSchema, SF extends TypeFr
     return attributeInitialValues[cluster.id] as AttributeInitialValues<A>;
 }
 
-
-/**
- export const createDefaultThermostatClusterServer = (attributeInitialValues?: AttributeInitialValues<typeof ThermostatCluster.attributes>) => ClusterServer(
-    ThermostatCluster,
-    attributeInitialValues ?? {
-        localTemperature: 25,
-        minHeatSetpointLimit: 7,
-        maxHeatSetpointLimit: 30,
-        minCoolSetpointLimit: 16,
-        maxCoolSetpointLimit: 30,
-        occupiedCoolingSetpoint: 20,
-        occupiedHeatingSetpoint: 26,
-        minSetpointDeadBand: 1,
-        controlSequenceOfOperation: ControlSequenceOfOperation.CoolingAndHeating4Pipes,
-        systemMode: ThermostatSystemMode.Off,
-        runningMode: ThermostatRunningMode.Off,
-    },
-    ThermostatClusterHandler()
-);
- */
-
-
 /** @internal */
 class HeatingCoolingBaseDevice extends extendPublicHandlerMethods<typeof Device, HeatingCoolingDeviceCommands>(Device) {
 

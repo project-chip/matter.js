@@ -10,13 +10,6 @@ const featureMap = {
     windEmulation: BitFlag(3), // Bit 3: Wind Emulation
 };
 
-const featureMapBitmap = TlvBitmap(TlvUInt8, {
-    multiSpeed: BitFlag(0), // Bit 0: Multi-Speed
-    autoMode: BitFlag(1), // Bit 1: Auto Mode
-    rocking: BitFlag(2), // Bit 2: Rocking
-    windEmulation: BitFlag(3), // Bit 3: Wind Emulation
-});
-
 export const enum FanMode {
     Off = 0,
     Low = 1,
@@ -36,13 +29,13 @@ export const enum FanModeSequence {
     OffOn = 5,
 }
 
-const rockBitmap = TlvBitmap(TlvUInt8, {
+const TlvRockBitmap = TlvBitmap(TlvUInt8, {
     rockLeftRight: BitFlag(0), // Bit 0: Rock Left-Right
     rockUpDown: BitFlag(1), // Bit 1: Rock Up-Down
     rockRound: BitFlag(2), // Bit 2: Rock Round
 });
 
-const windBitmap = TlvBitmap(TlvUInt8, {
+const TlvWindBitmap = TlvBitmap(TlvUInt8, {
     sleepWind: BitFlag(0), // Bit 0
     naturalWind: BitFlag(1), // Bit 1
 });
@@ -70,60 +63,18 @@ const commonAttributes = {
     speedCurrent: OptionalAttribute(0x0006, TlvUInt8.bound({ min: 1, max: 100 }), { default: 0 }),
 
     // Support for rocking feature
-    rockSupport: OptionalAttribute(0x0007, rockBitmap, { default: { rockLeftRight: true, rockUpDown: true, rockRound: true } }),
+    rockSupport: OptionalAttribute(0x0007, TlvRockBitmap, { default: { rockLeftRight: true, rockUpDown: true, rockRound: true } }),
 
     // Rocking setting
-    rockSetting: OptionalWritableAttribute(0x0008, rockBitmap, { default: { rockLeftRight: false, rockUpDown: false, rockRound: false } }),
+    rockSetting: OptionalWritableAttribute(0x0008, TlvRockBitmap, { default: { rockLeftRight: false, rockUpDown: false, rockRound: false } }),
 
     // Support for wind feature
-    windSupport: OptionalAttribute(0x0009, windBitmap, { default: { sleepWind: true, naturalWind: true } }),
+    windSupport: OptionalAttribute(0x0009, TlvWindBitmap, { default: { sleepWind: true, naturalWind: true } }),
 
     // Wind setting
-    windSetting: OptionalWritableAttribute(0x000A, windBitmap, { default: { sleepWind: false, naturalWind: false } }),
-
-    // Feature Map global attribute
-    featureMap: WritableAttribute(0xFFFC, featureMapBitmap, {
-        default: {
-            multiSpeed: true,
-            autoMode: true,
-            rocking: true,
-            windEmulation: true,
-        },
-    }),
+    windSetting: OptionalWritableAttribute(0x000A, TlvWindBitmap, { default: { sleepWind: false, naturalWind: false } }),
 
 };
-
-// const SetFanModeCommandRequest = TlvObject({
-//   fanMode: TlvField(0, TlvEnum<FanMode>()),
-// });
-
-// const SetFanModeSequenceCommandRequest = TlvObject({
-//   fanModeSequence: TlvField(0, TlvEnum<FanModeSequence>()),
-// });
-
-// const SetPercentSettingCommandRequest = TlvObject({ 
-//   percentSetting: TlvField(0, TlvUInt8),
-// });
-
-// const SetFanSpeedCommandRequest = TlvObject({
-//   speed: TlvField(0, TlvUInt8),
-// });
-
-// const SetRockSupportCommandRequest = TlvObject({
-// rockSupport: TlvField(0, rockBitmap),
-// });
-
-// const SetRockSettingCommandRequest = TlvObject({
-// rockSetting: TlvField(0, rockBitmap),
-// });
-
-// const SetWindSupportCommandRequest = TlvObject({
-// windSupport: TlvField(0, windBitmap),
-// });
-
-// const SetWindSettingCommandRequest = TlvObject({
-// windSetting: TlvField(0, windBitmap),
-// });
 
 export const FanControlCluster = Cluster({
     id: 0x0202, // Fan Control cluster identifier
@@ -139,14 +90,4 @@ export const FanControlCluster = Cluster({
     attributes: {
         ...commonAttributes,
     },
-    // commands: {
-    //   setFanMode: Command(0x00, SetFanModeCommandRequest, 0x01, TlvNoResponse),
-    //   setFanModeSequence: Command(0x01, SetFanModeSequenceCommandRequest, 0x01, TlvNoResponse),
-    //   setPercentSetting: Command(0x02, SetPercentSettingCommandRequest, 0x01, TlvNoResponse),
-    //   setFanSpeed: Command(0x03, SetFanSpeedCommandRequest, 0x01, TlvNoResponse),
-    //   setRockSupport: Command(0x04, SetRockSupportCommandRequest, 0x01, TlvNoResponse),
-    //   setRockSetting: Command(0x05, SetRockSettingCommandRequest, 0x01, TlvNoResponse),
-    //   setWindSupport: Command(0x06, SetWindSupportCommandRequest, 0x01, TlvNoResponse),
-    //   setWindSetting: Command(0x07, SetWindSettingCommandRequest, 0x01, TlvNoResponse),
-    // },  
 });

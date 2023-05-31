@@ -12,7 +12,9 @@ import {
     TlvEnum,
     TlvUInt8,
     TlvInt16,
-    TlvInt8
+    TlvInt8,
+    TlvUInt16,
+    TlvBitmap
 } from "../tlv/TlvNumber.js";
 
 import { TlvNullable } from "../tlv/TlvNullable.js";
@@ -110,8 +112,25 @@ const SetpointRaiseLowerRequest = TlvObject({
     amount: TlvField(0x01, TlvInt8),
 });
 
+const GetRelayStatusLogRequest = TlvObject({});
+
+const GetRelayStatusLogResponse = TlvObject({
+    timeOfDay: TlvField(0x00, TlvUInt16),
+    relayStatus: TlvField(0x01, TlvBitmap(TlvUInt8, {
+        unknown_1: BitFlag(0),
+        unknown_2: BitFlag(1),
+        unknown_3: BitFlag(2),
+        unknown_4: BitFlag(3),
+    })),
+    localTemperature: TlvField(0x02, TlvInt16),
+    humidityInPercentage: TlvField(0x03, TlvUInt8),
+    setpoint: TlvField(0x04, TlvInt16),
+    unreadEntries: TlvField(0x05, TlvUInt16),
+});
+
 const commands = {
     setpointRaiseLower: Command(0x00, SetpointRaiseLowerRequest, 0x00, TlvNoResponse),
+    getRelayStatusLog: Command(0x04, GetRelayStatusLogRequest, 0x01, GetRelayStatusLogResponse),
 };
 
 export const ThermostatCluster = Cluster({
