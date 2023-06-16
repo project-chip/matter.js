@@ -8,7 +8,7 @@ import { ByteArray, Endian } from "../util/ByteArray.js";
 
 export interface BTPHandshakeRequest {
     sourceBits: SourceBits,
-    managementOpcode?: string,
+    managementOpcode?: number,
     version: ByteArray,
     attMtu: ByteArray,
     clientWindowSize: number,
@@ -24,14 +24,14 @@ export interface BTPHandshakeResponse {
 }
 
 export const enum SourceBits {
-    U1 = 0, //unused bit 1
-    H = 1,
-    M = 1,
-    U2 = 0, //unused bit 2
-    A = 0,
-    E = 1,
-    U3 = 0, //unused bit 3
-    B = 1
+    UNUSED_BIT1 = 0, //unused bit 1
+    HANDSHAKE_BIT = 1,
+    MANAGEMENT_MESSAGE = 1,
+    UNUSED_BIT2 = 0, //unused bit 2
+    ACKNOWLEDGEMENT_MSG = 0,
+    ENDING_SEGMENT = 1,
+    UNUSED_BIT3 = 0, //unused bit 3
+    BEGINNING_SEGMENT = 1
 }
 
 export const enum Reserved {
