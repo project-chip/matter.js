@@ -43,7 +43,7 @@ export const enum ProtocolVersion {
 }
 
 export class BtpCodec {
-    static decodeResponse(data: ByteArray): BTPHandshakeRequest {
+    static decodeRequest(data: ByteArray): BTPHandshakeRequest {
         // const reader = new DataReader(data, Endian.Little);
         // const header = this.decodePacketHeader(reader);
 
@@ -53,7 +53,7 @@ export class BtpCodec {
         // };
     }
 
-    static encodeRequest({ response }: BTPHandshakeResponse): ByteArray {
+    static encodeResponse({ response }: BTPHandshakeResponse): ByteArray {
         // return {
         //     header: packetHeader,
         //     bytes: ByteArray.concat(
