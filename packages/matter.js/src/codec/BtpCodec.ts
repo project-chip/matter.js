@@ -16,7 +16,7 @@ export interface BTPHandshakeRequest {
 
 export interface BTPHandshakeResponse {
     sourceBits: SourceBits,
-    managementOpcode?: string,
+    managementOpcode?: number,
     reserved: Reserved,
     finalProtocolVersion: ProtocolVersion,
     attMtu: ByteArray,
