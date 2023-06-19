@@ -122,22 +122,22 @@ Table Legend:
 | Gerätetyp                         | Apple | Google        | Amazon | SmartThings | Tuya |
 |-----------------------------------|-------|---------------|--------|-------------|------|
 | **Bridge Support**                | X     | X             | -      | -           | -    |
-| **Light devices**                 |       |               |        |             |      | 
-| * On/Off Light                    | X     | X             | X      | X           | X    | 	
-| * Dimmable Light                  | X     | X             | X      | X           | X    | 		
-| * Color Temperature Light         | X     | X             | X      | X           | X    | 		
-| * Extended Color Light            | X     | X             | X      | ?           | ?    |		
-| **Smart Plugs/Outlets/Actuators** |       |               |        |             |      | 
+| **Light devices**                 |       |               |        |             |      |
+| * On/Off Light                    | X     | X             | X      | X           | X    |
+| * Dimmable Light                  | X     | X             | X      | X           | X    |
+| * Color Temperature Light         | X     | X             | X      | X           | X    |
+| * Extended Color Light            | X     | X             | X      | ?           | ?    |
+| **Smart Plugs/Outlets/Actuators** |       |               |        |             |      |
 | * On/Off Plug-in Unit             | X     | X             | X      | X           | X    |
-| * Dimmable Plug-in Unit           | ?     | ?             | 	?     | ?           | ?    |
+| * Dimmable Plug-in Unit           | ?     | ?             | ?      | ?           | ?    |
 | * Pump                            | -     | -             | -      | -           | -    |
-| **Sensors**                       |       |               | 	      |             |      |
-| * Contact Sensor                  | X     | X             | X      | ?           | ?    | 		
-| * Light Sensor                    | X     | X             | -      | ?           | ?    | 		
-| * Occupancy Sensor                | X     | X             | -      | ?           | ?    | 			
+| **Sensors**                       |       |               |        |             |      |
+| * Contact Sensor                  | X     | X             | X      | ?           | ?    |
+| * Light Sensor                    | X     | X             | -      | ?           | ?    |
+| * Occupancy Sensor                | X     | X             | -      | ?           | ?    |
 | * Temperature Sensor              | X     | X             | -      | ?           | ?    |
 | * Pressure Sensor                 |       | X             | -      | ?           | ?    |
-| * Flow Sensor                     |       | X             | -      | ?           | ?    | 			
+| * Flow Sensor                     |       | X             | -      | ?           | ?    |
 | * Humidity Sensor                 | X     | X             | -      | ?           | ?    |
 | * On/Off Sensor                   | ?     | ?             | ?      | ?           | ?    |
 | **Closure Devices**               |       |               |        |             |      |
