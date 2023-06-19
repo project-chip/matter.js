@@ -15,7 +15,7 @@ export interface HandshakeRequestPayload {
     clientWindowSize: number,
 }
 
-export interface HandshakeHeader {
+export interface Header {
     isUnused1: boolean,
     isHandshake: boolean,
     isManagement: boolean,
@@ -27,7 +27,7 @@ export interface HandshakeHeader {
 }
 
 export interface HandshakeRequest {
-    header: HandshakeHeader,
+    header: Header,
     payload: HandshakeRequestPayload
 }
 
@@ -36,12 +36,25 @@ export interface HandshakeResponsePayload {
     isReserved: boolean,
     isFinalVersion: boolean,
     attMtu: number,
-    windowSize: number,
+    windowSize: number
 }
 
 export interface HandshakeResponse {
-    header: HandshakeHeader,
+    header: Header,
     payload: HandshakeResponsePayload
+}
+
+export interface PacketPayload {
+    isManagementOpcode: boolean,
+    ackNumber?: number,
+    sequenceNumber: number,
+    msgLength?: number,
+    segmentPayload?: ByteArray
+}
+
+export interface Packet {
+    header: Header,
+    payload: PacketPayload
 }
 
 export const enum HeaderBits {
@@ -71,22 +84,47 @@ export class BtpCodec {
 
     static decodeHandshakeRequest(data: ByteArray): HandshakeRequest {
         const reader = new DataReader(data, Endian.Little);
-        const header = this.decodeHeader(reader);
-        const payload = this.decodeRequestPayload(reader);
 
         return {
-            header,
-            payload
+            header: this.decodeHeader(reader),
+            payload: this.decodeRequestPayload(reader)
+        };
+
+    }
+
+    static decodePacket(data: ByteArray): Packet {
+        const reader = new DataReader(data, Endian.Little);
+
+        return {
+            header: this.decodeHeader(reader),
+            payload: this.decodeRacketPayload(reader)
         };
 
     }
 
     static encodeHandshakeResponse({ header, payload }: HandshakeResponse): ByteArray {
+        
         return ByteArray.concat(
             this.encodeHeader(header),
             this.encodeResponsePayload(payload)
         );
     }
+
+    private static decodeRacketPayload(reader: DataReader<Endian.Little>): PacketPayload {
+
+        const opcode = reader.readUInt8();
+        const isManagementOpcode = (opcode & Opcode.MANAGEMENT_OPCODE) !== 0;
+
+        if (opcode !== Opcode.MANAGEMENT_OPCODE) throw new Error("Handshake Error - Management Opcode is incorrect");
+
+        const ackNumber = reader.readUInt8();
+        const sequenceNumber = reader.readInt8();
+        const msgLength = reader.readInt16();
+        const segmentPayload = reader.getRemainingBytes();
+
+        return { isManagementOpcode, ackNumber, sequenceNumber, msgLength, segmentPayload };
+    }
+
 
     private static decodeRequestPayload(reader: DataReader<Endian.Little>): HandshakeRequestPayload {
 
@@ -102,7 +140,7 @@ export class BtpCodec {
         return { isManagementOpcode, version, attMtu, clientWindowSize };
     }
 
-    private static decodeHeader(reader: DataReader<Endian.Little>): HandshakeHeader {
+    private static decodeHeader(reader: DataReader<Endian.Little>): Header {
 
         const headerBits = reader.readUInt8();
         const isUnused1 = (headerBits & HeaderBits.UNUSED_BIT) == 0;
@@ -130,7 +168,7 @@ export class BtpCodec {
         return writer.toByteArray();
     }
 
-    private static encodeHeader({ isUnused1, isHandshake, isManagement, isUnused2, isAckMsg, isEndingSegment, isUnused3, isBeginingSegment }: HandshakeHeader): ByteArray {
+    private static encodeHeader({ isUnused1, isHandshake, isManagement, isUnused2, isAckMsg, isEndingSegment, isUnused3, isBeginingSegment }: Header): ByteArray {
 
         const writer = new DataWriter(Endian.Little);
         const header = (isUnused1 ? HeaderBits.UNUSED_BIT : 0) | (isHandshake ? HeaderBits.HANDSHAKE_BIT : 0) | (isManagement ? HeaderBits.MANAGEMENT_MESSAGE : 0)
