@@ -7,15 +7,18 @@ Implementation of Matter protocol in Typescript with no native dependencies (and
 Matter is a new secure / reliable / local / standard protocol for smart devices launched at the end of 2022.
 To know more about Matter: https://csa-iot.org/all-solutions/matter/
 
+## Compatibility
 matter.js/matter-node.js is compatible with:
 - **Apple iOS (iPhone or iPad) and tvOS 16 (Apple TV) - "Home" app by Apple**: fully working
 - **Google Home Ecosystem (Android or Google Nest smart speakers/display) - "Google Home" app**: fully working
 - **Amazon Alexa (Amazon Echo smart speakers/displays)** : fully working
-- **Home Assistant - Matter integration**: fully working
 - **Tuya Smart (SmartLife) app**: fully working
 - **Samsung SmartThings (Station or Hub v2 and later)**: pairing works, but for controlling seems like Smartthings implementation itself has issues
+- **Home Assistant - Matter integration**: fully working
 
-Each system have their own specialities, see [Pairing and Usage Information](#Pairing-and-Usage-Information) for more details.
+We also collected a [list of known device types supported by which ecosystem](#Devicetypes-supported-by-Ecosystems).This is a compilation of published information and own community tests.
+
+Each ecosystem have their own specialities, see [Pairing and Usage Information](#Pairing-and-Usage-Information) for more details.
 
 ## Monorepo Overview
 
@@ -103,9 +106,55 @@ Completed implementations:
 
 ## matter.js usage
 
-matter.js is used at the core of those two projects:
+matter.js is used at the core of those two projects currently:
 * [matternode](https://github.com/project-chip/matternode): a light-weight node.js implementation of a Matter Node
 * [matter-node.js](packages/matter-node.js/README.md): a Matter client / server running on node.js compatible with HA (Android / iOs support in progress)
+
+## Device types supported by Ecosystems
+
+This list is a compilation of published information and own community tests. Many updates in the ecosystems happen without big announcements, so the information here can be a bit outdated and more device types are supported. If you find errors or added device types please open a PR or issue to report them. Especially for SmartThings and Tuya no information is officially published. 
+
+Table Legend:
+* "X" means supported
+* "-" means not supported from current knowledge
+* "?" means unknown
+
+| Gerätetyp                         | Apple | Google        | Amazon | SmartThings | Tuya |
+|-----------------------------------|-------|---------------|--------|-------------|------|
+| **Bridge Support**                | X     | X             | -      | -           | -    |
+| **Light devices**                 |       |               |        |             |      | 
+| * On/Off Light                    | X     | X             | X      | X           | X    | 	
+| * Dimmable Light                  | X     | X             | X      | X           | X    | 		
+| * Color Temperature Light         | X     | X             | X      | X           | X    | 		
+| * Extended Color Light            | X     | X             | X      | ?           | ?    |		
+| **Smart Plugs/Outlets/Actuators** |       |               |        |             |      | 
+| * On/Off Plug-in Unit             | X     | X             | X      | X           | X    |
+| * Dimmable Plug-in Unit           | ?     | ?             | 	?     | ?           | ?    |
+| * Pump                            | -     | -             | -      | -           | -    |
+| **Sensors**                       |       |               | 	      |             |      |
+| * Contact Sensor                  | X     | X             | X      | ?           | ?    | 		
+| * Light Sensor                    | X     | X             | -      | ?           | ?    | 		
+| * Occupancy Sensor                | X     | X             | -      | ?           | ?    | 			
+| * Temperature Sensor              | X     | X             | -      | ?           | ?    |
+| * Pressure Sensor                 |       | X             | -      | ?           | ?    |
+| * Flow Sensor                     |       | X             | -      | ?           | ?    | 			
+| * Humidity Sensor                 | X     | X             | -      | ?           | ?    |
+| * On/Off Sensor                   | ?     | ?             | ?      | ?           | ?    |
+| **Closure Devices**               |       |               |        |             |      |
+| * Door Lock                       |       | X             | X      | ?           | ?    |
+| * Window Covering                 | X     | X (Lift only) | -      | ?           | ?    |
+| **HVAC Devices**                  |       |               |        |             |      |
+| * Heating/Cooling-Unit            | -     | -             | -      | -           | ?    |
+| * Thermostat                      | X     | X             | X      | ?           | ?    |
+| * Fan                             | -     | -             | -      | -           | ?    |
+| **Media Devices**                 |       |               |        |             |      |
+| * Video Player Architecture       | -     | -             | -      | -           | -    |
+| * Basic Video Player              | -     | -             | -      | -           | -    |
+| * Casting Video Player            | -     | -             | -      | -           | -    |
+| * Speaker                         |       | X             | -      | -           | -    |
+| * Content App                     | -     | -             | -      | -           | -    |
+| **Generic Devices**               |       |               |        |             |      |
+| * Mode Select                     | -     | -             | -      | -           | -    |
 
 ## Pairing and Usage Information
 
@@ -114,7 +163,7 @@ It should work with any Matter-compatible home automation app when Matter will b
 A good guide with images on how to add devices to Alexa, Google and Apple in general is available in the [TP-Link FAQ](https://www.tp-link.com/de/support/faq/3564/).
 
 
-### Apple iOS and tvOS
+### Apple iOS and tvOS Ecosystem
 
 Minimum OS Required for iOS and tvOS devices: iOS 16.2 or later.
 
@@ -146,7 +195,7 @@ If you have issues with pairing please refer to the [Troubleshootling pages](htt
 
 Google supports several [Matter device types](https://developers.home.google.com/matter/supported-devices?authuser=0&hl=en) already.
 
-### Amazon Alexa
+### Amazon Alexa Ecosystem
 
 Minimum Version Required for the "Amazon Alexa" app：2.2.491118.0 or later.
 
@@ -161,18 +210,11 @@ For Alexa no special setup is needed to pair node-matter as development device.
 The [list of supported device types](https://developer.amazon.com/en-US/docs/alexa/smarthome/matter-support.html#device-categories-and-clusters)
 is basic currently, but will get enhanced in the future.
 
-### Home Assistant - Matter integration
-
-Home Assistant's official Matter integration is in Beta-stage however it is fully working and compatible with the Matter 1.0 standard. To connect Thread based devices you also need an Thread Border Router radio that is compatible with Home Assistant's official Thread integration, that includes their official Home Assistant Yellow hub and their Home Assistant SkyConnect Zigbee/Thread USB dongle.
-
-* https://www.home-assistant.io/integrations/matter/
-* https://www.home-assistant.io/integrations/thread/
-
-### Tuya Smart (SmartLife)
+### Tuya Smart (SmartLife) Ecosystem
 
 Should work but no more detatailed information here as of yet.
 
-### Samsung SmartThings
+### Samsung SmartThings Ecosystem
 
 Samsung is building its SmartThings hub software into 2022 Samsung Smart TVs, Smart Monitors, and Family Hub refrigerators, allowing them to
 control Matter smart home devices. Currently, Samsung SmartThings Station or Samsung SmartThings Hub v2 and later are needed as a hub for Matter.
@@ -187,6 +229,13 @@ control Matter smart home devices. Currently, Samsung SmartThings Station or Sam
 * "Samsung SmartThings Link" (USB dongle) for Nvidia Shield has been discontinued and will not get updated to support Matter.
 
 Note! Samsung has started that they do not plan on bridging Zigbee and Z-Wave devices connected to their hubs with Matter (e.i. no protocol bridge so far).
+
+### Home Assistant - Matter integration
+
+Home Assistant's official Matter integration is in Beta-stage however it is fully working and compatible with the Matter 1.0 standard. To connect Thread based devices you also need an Thread Border Router radio that is compatible with Home Assistant's official Thread integration, that includes their official Home Assistant Yellow hub and their Home Assistant SkyConnect Zigbee/Thread USB dongle.
+
+* https://www.home-assistant.io/integrations/matter/
+* https://www.home-assistant.io/integrations/thread/
 
 ### chip-tool
 
