@@ -53,6 +53,8 @@ export const enum HeaderBits {
     BEGINNING_SEGMENT = 0b10000000
 }
 
+const HEADER = 0b01100101;
+
 export const enum Opcode {
     MANAGEMENT_OPCODE = 0b01101100, // 0x6c - binary representation
 }
@@ -82,7 +84,7 @@ export class BtpCodec {
     static encodeHandshakeResponse({ header, payload }: HandshakeResponse): ByteArray {
         return ByteArray.concat(
             this.encodeHeader(header),
-            this.decodeResponsePayload(payload)
+            this.encodeResponsePayload(payload)
         );
     }
 
@@ -90,6 +92,9 @@ export class BtpCodec {
 
         const opcode = reader.readUInt8();
         const isManagementOpcode = (opcode & Opcode.MANAGEMENT_OPCODE) !== 0;
+
+        if (opcode !== Opcode.MANAGEMENT_OPCODE) throw new Error("Handshake Error - Management Opcode is incorrect");
+
         const version = reader.readUInt32();
         const attMtu = reader.readInt16();
         const clientWindowSize = reader.readInt8();
@@ -109,14 +114,15 @@ export class BtpCodec {
         const isUnused3 = (headerBits & HeaderBits.UNUSED_BIT) == 0;
         const isBeginingSegment = (headerBits & HeaderBits.BEGINNING_SEGMENT) !== 0;
 
+        if (headerBits !== HEADER) throw new Error("Error in BTP Handhshake Request Headers");
+
         return { isUnused1, isHandshake, isManagement, isUnused2, isAckMsg, isEndingSegment, isUnused3, isBeginingSegment };
     }
 
-    private static decodeResponsePayload({ isManagementOpcode, isReserved, isFinalVersion, attMtu, windowSize }: HandshakeResponsePayload): ByteArray {
+    private static encodeResponsePayload({ isManagementOpcode, isReserved, isFinalVersion, attMtu, windowSize }: HandshakeResponsePayload): ByteArray {
 
         const writer = new DataWriter(Endian.Little);
-
-        const flags = (isManagementOpcode ? Opcode.MANAGEMENT_OPCODE : 0) | (isReserved ? Reserved.RESERVE_BIT : 0) | (isFinalVersion ? ProtocolVersion.FINAL_PROTOCOL_VERSION : 0) ;
+        const flags = (isManagementOpcode ? Opcode.MANAGEMENT_OPCODE : 0) | (isReserved ? Reserved.RESERVE_BIT : 0) | (isFinalVersion ? ProtocolVersion.FINAL_PROTOCOL_VERSION : 0);
 
         writer.writeUInt8(flags);
         writer.writeUInt16(attMtu);
@@ -127,10 +133,9 @@ export class BtpCodec {
     private static encodeHeader({ isUnused1, isHandshake, isManagement, isUnused2, isAckMsg, isEndingSegment, isUnused3, isBeginingSegment }: HandshakeHeader): ByteArray {
 
         const writer = new DataWriter(Endian.Little);
-
-        const header = ( isUnused1 ? HeaderBits.UNUSED_BIT : 0) | (isHandshake ? HeaderBits.HANDSHAKE_BIT : 0) | (isManagement ? HeaderBits.MANAGEMENT_MESSAGE : 0)
-        | (isUnused2 ? HeaderBits.UNUSED_BIT : 0) | (isAckMsg ? HeaderBits.ACKNOWLEDGEMENT_MSG : 0) | (isEndingSegment ? HeaderBits.ENDING_SEGMENT : 0) 
-        | (isUnused3 ? HeaderBits.UNUSED_BIT : 0) | (isBeginingSegment ? HeaderBits.BEGINNING_SEGMENT : 0);
+        const header = (isUnused1 ? HeaderBits.UNUSED_BIT : 0) | (isHandshake ? HeaderBits.HANDSHAKE_BIT : 0) | (isManagement ? HeaderBits.MANAGEMENT_MESSAGE : 0)
+            | (isUnused2 ? HeaderBits.UNUSED_BIT : 0) | (isAckMsg ? HeaderBits.ACKNOWLEDGEMENT_MSG : 0) | (isEndingSegment ? HeaderBits.ENDING_SEGMENT : 0)
+            | (isUnused3 ? HeaderBits.UNUSED_BIT : 0) | (isBeginingSegment ? HeaderBits.BEGINNING_SEGMENT : 0);
 
         writer.writeUInt8(header);
         return writer.toByteArray();
