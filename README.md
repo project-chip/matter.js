@@ -136,12 +136,12 @@ Table Legend:
 | * Light Sensor                    | X     | X             | -      | ?           | ?    |
 | * Occupancy Sensor                | X     | X             | -      | ?           | ?    |
 | * Temperature Sensor              | X     | X             | -      | ?           | ?    |
-| * Pressure Sensor                 |       | X             | -      | ?           | ?    |
-| * Flow Sensor                     |       | X             | -      | ?           | ?    |
+| * Pressure Sensor                 | -     | X             | -      | ?           | ?    |
+| * Flow Sensor                     | -     | X             | -      | ?           | ?    |
 | * Humidity Sensor                 | X     | X             | -      | ?           | ?    |
 | * On/Off Sensor                   | ?     | ?             | ?      | ?           | ?    |
 | **Closure Devices**               |       |               |        |             |      |
-| * Door Lock                       |       | X             | X      | ?           | ?    |
+| * Door Lock                       | -     | X             | X      | ?           | ?    |
 | * Window Covering                 | X     | X (Lift only) | -      | ?           | ?    |
 | **HVAC Devices**                  |       |               |        |             |      |
 | * Heating/Cooling-Unit            | -     | -             | -      | -           | ?    |
