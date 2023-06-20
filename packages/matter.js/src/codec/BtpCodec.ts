@@ -8,8 +8,8 @@ import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataReader } from "../util/DataReader.js";
 import { DataWriter } from "../util/DataWriter.js";
 
-export interface HandshakeRequest {
-    versions: ByteArray,
+export interface BtpHandshakeRequest {
+    version: ByteArray,
     attMtu: number,
     clientWindowSize: number,
 }
@@ -22,21 +22,22 @@ export interface Header {
     beginSegmentBit: number
 }
 
-export interface HandshakeResponse {
+export interface BtpHandshakeResponse {
+    version: ByteArray,
     attMtu: number,
     windowSize: number
 }
 
-export interface PacketPayload {
+export interface BtpPacketPayload {
     ackNumber?: number,
     sequenceNumber: number,
     msgLength?: number,
     segmentPayload?: ByteArray
 }
 
-export interface Packet {
+export interface BtpPacket {
     header: Header,
-    payload: PacketPayload
+    payload: BtpPacketPayload
 }
 
 export const enum HeaderBits {
@@ -52,35 +53,35 @@ export const enum Opcode {
 }
 
 const HANDSHAKE_HEADER = 0b01100101;
-const RESERVED = 0;
-const FINAL_VERSION = 4;
+
+var ver: Uint8Array = new Uint8Array();
 
 export class BtpCodec {
 
-    static decodeHandshakeRequest(data: ByteArray): HandshakeRequest {
+    static decodeBtpHandshakeRequest(data: ByteArray): BtpHandshakeRequest {
         const reader = new DataReader(data, Endian.Little);
         return this.decodeRequestPayload(reader);
     }
 
-    static decodePacket(data: ByteArray): Packet {
+    static decodeBtpPacket(data: ByteArray): BtpPacket {
         const reader = new DataReader(data, Endian.Little);
 
         return {
             header: this.decodeHeader(reader),
-            payload: this.decodePacketPayload(reader)
+            payload: this.decodeBtpPacketPayload(reader)
         };
 
     }
 
-    static encodeHandshakeResponse({ attMtu, windowSize }: HandshakeResponse): ByteArray {
+    static encodeBtpHandshakeResponse({ version, attMtu, windowSize }: BtpHandshakeResponse): ByteArray {
 
         return ByteArray.concat(
             new Uint8Array(HANDSHAKE_HEADER),
-            this.encodeResponsePayload({ attMtu, windowSize })
+            this.encodeHandshakeResponsePayload({ version, attMtu, windowSize })
         );
     }
 
-    private static decodePacketPayload(reader: DataReader<Endian.Little>): PacketPayload {
+    private static decodeBtpPacketPayload(reader: DataReader<Endian.Little>): BtpPacketPayload {
 
         const ackNumber = reader.readUInt8();
         const sequenceNumber = reader.readUInt8();
@@ -91,24 +92,37 @@ export class BtpCodec {
     }
 
 
-    private static decodeRequestPayload(reader: DataReader<Endian.Little>): HandshakeRequest {
+    private static decodeRequestPayload(reader: DataReader<Endian.Little>): BtpHandshakeRequest {
 
         const header = reader.readUInt8();
-        if (header !== HANDSHAKE_HEADER) throw new Error("Error in BTP Handhshake Request Headers");
+        if (header !== HANDSHAKE_HEADER) throw new Error("Handshake Error - Incorrect BTP Handhshake Request Headers");
 
         const opcode = reader.readUInt8();
-        const isManagementOpcode = (opcode & Opcode.HandshakeManagementOpcode) !== 0;
+        if (opcode !== Opcode.HandshakeManagementOpcode) throw new Error("Handshake Error - Management Opcode is incorrect");
 
-        if (isManagementOpcode) throw new Error("Handshake Error - Management Opcode is incorrect");
+        var versions = reader.readInt8();
+        ver[0] = versions & 0xF0;
+        ver[1] = versions & 0x0F;
 
-        const version = reader.readUInt32();
-        if (version == 0) throw new Error("BTP Handshake Error - Version is 0");
+        versions = reader.readInt8();
+        ver[2] = versions & 0xF0;
+        ver[3] = versions & 0x0F;
 
-        const versions = reader.readByteArray(version);
+        versions = reader.readInt8();
+        ver[4] = versions & 0xF0;
+        ver[5] = versions & 0x0F;
+
+        versions = reader.readInt8();
+        ver[6] = versions & 0xF0;
+        ver[7] = versions & 0x0F;
+
+        const version = ver.filter(v => v !== 0)
+        if(version.length == 0) throw new Error("Handshake Error - Version is incorrect");
+
         const attMtu = reader.readUInt16();
         const clientWindowSize = reader.readUInt8();
 
-        return { versions, attMtu, clientWindowSize };
+        return { version, attMtu, clientWindowSize };
     }
 
     private static decodeHeader(reader: DataReader<Endian.Little>): Header {
@@ -123,14 +137,13 @@ export class BtpCodec {
         return { handshakeBit, managementBit, ackMsgBit, endSegmentBit, beginSegmentBit };
     }
 
-    private static encodeResponsePayload({ attMtu, windowSize }: HandshakeResponse): ByteArray {
+    private static encodeHandshakeResponsePayload({ version, attMtu, windowSize }: BtpHandshakeResponse): ByteArray {
 
         const writer = new DataWriter(Endian.Little);
 
         writer.writeUInt8(Opcode.HandshakeManagementOpcode);
-        // how to add finalversion (4 bits) and reserved (4 bits) bits here? - writeUInt8 writes 8 bits not 4
-        writer.writeUInt8(RESERVED);
-        writer.writeUInt8(FINAL_VERSION);
+        const maxVersion = Math.max(...version); // finding out the highest version
+        writer.writeUInt8(maxVersion & 0x0f); //reserved bit and final version
         writer.writeUInt16(attMtu);
         writer.writeInt8(windowSize);
         return writer.toByteArray();
