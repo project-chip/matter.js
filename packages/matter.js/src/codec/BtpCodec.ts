@@ -23,7 +23,6 @@ export interface Header {
 }
 
 export interface HandshakeResponse {
-    finalVersion: number,
     attMtu: number,
     windowSize: number
 }
@@ -53,6 +52,8 @@ export const enum Opcode {
 }
 
 const HANDSHAKE_HEADER = 0b01100101;
+const RESERVED = 0;
+const FINAL_VERSION = 4;
 
 export class BtpCodec {
 
@@ -71,11 +72,11 @@ export class BtpCodec {
 
     }
 
-    static encodeHandshakeResponse({ finalVersion, attMtu, windowSize }: HandshakeResponse): ByteArray {
+    static encodeHandshakeResponse({ attMtu, windowSize }: HandshakeResponse): ByteArray {
 
         return ByteArray.concat(
             new Uint8Array(HANDSHAKE_HEADER),
-            this.encodeResponsePayload({ finalVersion, attMtu, windowSize })
+            this.encodeResponsePayload({ attMtu, windowSize })
         );
     }
 
@@ -122,11 +123,14 @@ export class BtpCodec {
         return { handshakeBit, managementBit, ackMsgBit, endSegmentBit, beginSegmentBit };
     }
 
-    private static encodeResponsePayload({ finalVersion, attMtu, windowSize }: HandshakeResponse): ByteArray {
+    private static encodeResponsePayload({ attMtu, windowSize }: HandshakeResponse): ByteArray {
 
         const writer = new DataWriter(Endian.Little);
 
-        // how to add header, finalversion (4 bits) and reserved (4 bits) bits here?
+        writer.writeUInt8(Opcode.HandshakeManagementOpcode);
+        // how to add finalversion (4 bits) and reserved (4 bits) bits here? - writeUInt8 writes 8 bits not 4
+        writer.writeUInt8(RESERVED);
+        writer.writeUInt8(FINAL_VERSION);
         writer.writeUInt16(attMtu);
         writer.writeInt8(windowSize);
         return writer.toByteArray();
