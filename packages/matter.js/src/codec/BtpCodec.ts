@@ -14,14 +14,6 @@ export interface BtpHandshakeRequest {
     clientWindowSize: number,
 }
 
-export interface BtpHeader {
-    handshakeBit: number,
-    managementBit: number,
-    ackMsgBit: number,
-    endSegmentBit: number,
-    beginSegmentBit: number
-}
-
 export interface BtpHandshakeResponse {
     version: number,
     attMtu: number,
@@ -35,17 +27,25 @@ export interface BtpPacketPayload {
     segmentPayload?: ByteArray
 }
 
+export interface BtpHeader {
+    handshakeBit: number,
+    managementBit: number,
+    ackMsgBit: number,
+    endSegmentBit: number,
+    beginSegmentBit: number
+}
+
 export interface BtpPacket {
     header: BtpHeader,
     payload: BtpPacketPayload
 }
 
 export const enum BtpHeaderBits {
-    HandshakeBit = 0b00000010,
-    ManagementMsg = 0b00000100,
-    AckMsg = 0b00010000,
-    EndSegment = 0b00100000,
-    BeginSegment = 0b10000000
+    HandshakeBit = 0b01000000,
+    ManagementMsg = 0b00100000,
+    AckMsg = 0b00001000,
+    EndSegment = 0b00000100,
+    BeginSegment = 0b00000001
 }
 
 export const enum BtpOpcode {
@@ -127,11 +127,14 @@ export class BtpCodec {
     private static decodeHeader(reader: DataReader<Endian.Little>): BtpHeader {
 
         const headerBits = reader.readUInt8();
-        const handshakeBit = (headerBits & BtpHeaderBits.HandshakeBit);
-        const managementBit = (headerBits & BtpHeaderBits.ManagementMsg);
-        const ackMsgBit = (headerBits & BtpHeaderBits.AckMsg);
-        const endSegmentBit = (headerBits & BtpHeaderBits.EndSegment);
+        const handshakeBit = (headerBits & BtpHeaderBits.HandshakeBit) >> 6;
+        const managementBit = (headerBits & BtpHeaderBits.ManagementMsg) >> 5;
+        const ackMsgBit = (headerBits & BtpHeaderBits.AckMsg) >> 3;
+        const endSegmentBit = (headerBits & BtpHeaderBits.EndSegment) >> 2;
         const beginSegmentBit = (headerBits & BtpHeaderBits.BeginSegment);
+
+        const managementOpcode = reader.readInt8();
+        if (!managementBit && managementOpcode !== 0) throw new Error("Btp PDU Error - Opcode is incorrect");
 
         return { handshakeBit, managementBit, ackMsgBit, endSegmentBit, beginSegmentBit };
     }
