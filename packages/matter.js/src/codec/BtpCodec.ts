@@ -9,12 +9,12 @@ import { DataReader } from "../util/DataReader.js";
 import { DataWriter } from "../util/DataWriter.js";
 
 export interface BtpHandshakeRequest {
-    version: ByteArray,
+    versions: number[],
     attMtu: number,
     clientWindowSize: number,
 }
 
-export interface Header {
+export interface BtpHeader {
     handshakeBit: number,
     managementBit: number,
     ackMsgBit: number,
@@ -23,7 +23,7 @@ export interface Header {
 }
 
 export interface BtpHandshakeResponse {
-    version: ByteArray,
+    version: number,
     attMtu: number,
     windowSize: number
 }
@@ -36,11 +36,11 @@ export interface BtpPacketPayload {
 }
 
 export interface BtpPacket {
-    header: Header,
+    header: BtpHeader,
     payload: BtpPacketPayload
 }
 
-export const enum HeaderBits {
+export const enum BtpHeaderBits {
     HandshakeBit = 0b00000010,
     ManagementMsg = 0b00000100,
     AckMsg = 0b00010000,
@@ -48,13 +48,11 @@ export const enum HeaderBits {
     BeginSegment = 0b10000000
 }
 
-export const enum Opcode {
+export const enum BtpOpcode {
     HandshakeManagementOpcode = 0x6c,
 }
 
 const HANDSHAKE_HEADER = 0b01100101;
-
-var ver: Uint8Array = new Uint8Array();
 
 export class BtpCodec {
 
@@ -76,7 +74,7 @@ export class BtpCodec {
     static encodeBtpHandshakeResponse({ version, attMtu, windowSize }: BtpHandshakeResponse): ByteArray {
 
         return ByteArray.concat(
-            new Uint8Array(HANDSHAKE_HEADER),
+            new ByteArray(HANDSHAKE_HEADER),
             this.encodeHandshakeResponsePayload({ version, attMtu, windowSize })
         );
     }
@@ -98,41 +96,42 @@ export class BtpCodec {
         if (header !== HANDSHAKE_HEADER) throw new Error("Handshake Error - Incorrect BTP Handhshake Request Headers");
 
         const opcode = reader.readUInt8();
-        if (opcode !== Opcode.HandshakeManagementOpcode) throw new Error("Handshake Error - Management Opcode is incorrect");
+        if (opcode !== BtpOpcode.HandshakeManagementOpcode) throw new Error("Handshake Error - Management Opcode is incorrect");
 
-        var versions = reader.readInt8();
-        ver[0] = versions & 0xF0;
-        ver[1] = versions & 0x0F;
+        const ver: number[] = [];
+        let version = reader.readInt8();
+        ver[0] = version & 0xF0;
+        ver[1] = version & 0x0F;
 
-        versions = reader.readInt8();
-        ver[2] = versions & 0xF0;
-        ver[3] = versions & 0x0F;
+        version = reader.readInt8();
+        ver[2] = version & 0xF0;
+        ver[3] = version & 0x0F;
 
-        versions = reader.readInt8();
-        ver[4] = versions & 0xF0;
-        ver[5] = versions & 0x0F;
+        version = reader.readInt8();
+        ver[4] = version & 0xF0;
+        ver[5] = version & 0x0F;
 
-        versions = reader.readInt8();
-        ver[6] = versions & 0xF0;
-        ver[7] = versions & 0x0F;
+        version = reader.readInt8();
+        ver[6] = version & 0xF0;
+        ver[7] = version & 0x0F;
 
-        const version = ver.filter(v => v !== 0)
-        if(version.length == 0) throw new Error("Handshake Error - Version is incorrect");
+        const versions = ver.filter(v => v !== 0)
+        if (versions.length == 0) throw new Error("Handshake Error - Version is incorrect");
 
         const attMtu = reader.readUInt16();
         const clientWindowSize = reader.readUInt8();
 
-        return { version, attMtu, clientWindowSize };
+        return { versions, attMtu, clientWindowSize };
     }
 
-    private static decodeHeader(reader: DataReader<Endian.Little>): Header {
+    private static decodeHeader(reader: DataReader<Endian.Little>): BtpHeader {
 
         const headerBits = reader.readUInt8();
-        const handshakeBit = (headerBits & HeaderBits.HandshakeBit);
-        const managementBit = (headerBits & HeaderBits.ManagementMsg);
-        const ackMsgBit = (headerBits & HeaderBits.AckMsg);
-        const endSegmentBit = (headerBits & HeaderBits.EndSegment);
-        const beginSegmentBit = (headerBits & HeaderBits.BeginSegment);
+        const handshakeBit = (headerBits & BtpHeaderBits.HandshakeBit);
+        const managementBit = (headerBits & BtpHeaderBits.ManagementMsg);
+        const ackMsgBit = (headerBits & BtpHeaderBits.AckMsg);
+        const endSegmentBit = (headerBits & BtpHeaderBits.EndSegment);
+        const beginSegmentBit = (headerBits & BtpHeaderBits.BeginSegment);
 
         return { handshakeBit, managementBit, ackMsgBit, endSegmentBit, beginSegmentBit };
     }
@@ -141,9 +140,8 @@ export class BtpCodec {
 
         const writer = new DataWriter(Endian.Little);
 
-        writer.writeUInt8(Opcode.HandshakeManagementOpcode);
-        const maxVersion = Math.max(...version); // finding out the highest version
-        writer.writeUInt8(maxVersion & 0x0f); //reserved bit and final version
+        writer.writeUInt8(BtpOpcode.HandshakeManagementOpcode);
+        writer.writeUInt8(version & 0x0f); //reserved bit and final version
         writer.writeUInt16(attMtu);
         writer.writeInt8(windowSize);
         return writer.toByteArray();
