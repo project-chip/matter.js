@@ -72,11 +72,7 @@ export class BtpCodec {
     }
 
     static encodeBtpHandshakeResponse({ version, attMtu, windowSize }: BtpHandshakeResponse): ByteArray {
-
-        return ByteArray.concat(
-            new ByteArray(HANDSHAKE_HEADER),
-            this.encodeHandshakeResponsePayload({ version, attMtu, windowSize })
-        );
+        return this.encodeHandshakeResponsePayload({ version, attMtu, windowSize });
     }
 
     private static decodeBtpPacketPayload(reader: DataReader<Endian.Little>): BtpPacketPayload {
@@ -142,7 +138,7 @@ export class BtpCodec {
     private static encodeHandshakeResponsePayload({ version, attMtu, windowSize }: BtpHandshakeResponse): ByteArray {
 
         const writer = new DataWriter(Endian.Little);
-
+        writer.writeInt8(HANDSHAKE_HEADER),
         writer.writeUInt8(BtpOpcode.HandshakeManagementOpcode);
         writer.writeUInt8(version & 0x0f); //reserved bit and final version
         writer.writeUInt16(attMtu);

@@ -55,11 +55,11 @@ describe("MessageCodec", () => {
         });
     });
 
-    // describe("encode", () => {
-    //     it("encodes a message", () => {
-    //         const result = BtpCodec.encodeBtpHandshakeResponse(DECODED_HANDSHAKE_RESPONSE);
-    //
-    //         assert.deepEqual(result, ENCODED_HANDSHAKE_RESPONSE);
-    //     });
-    // });
+    describe("encode", () => {
+        it("encodes a message", () => {
+            const result = BtpCodec.encodeBtpHandshakeResponse(DECODED_HANDSHAKE_RESPONSE);
+
+            assert.deepEqual(result, ENCODED_HANDSHAKE_RESPONSE);
+        });
+    });
 });
