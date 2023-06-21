@@ -28,11 +28,11 @@ const DECODED_HANDSHAKE_RESPONSE = {
 
 const DECODED_PAYLOAD = {
     header: {
-        handshakeBit: 0,
-        managementBit: 0,
-        ackMsgBit: 1,
-        endSegmentBit: 1,
-        beginSegmentBit: 1
+        isHandshakeRequest: false,
+        hasManagementOpcode: false,
+        hasAckNumber: true,
+        isEndingSegment: true,
+        isBeginningSegment: true
     },
     payload: {
         ackNumber: 0,
