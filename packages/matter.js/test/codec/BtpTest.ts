@@ -58,4 +58,31 @@ describe("BtpCodec", () => {
             assert.deepEqual(result, ByteArray.fromHex("656c04000106"));
         });
     });
+
+    describe("Errors", () => {
+        it("Incorrect headers in handshake request", () => {
+            expect(() => BtpCodec.decodeBtpHandshakeRequest(ByteArray.fromHex("0d6c04000000b90006")))
+                .toThrow("BTPHandshake Request Headers is incorrect");
+        });
+
+        it("incorrect management opcode in handshake request", () => {
+            expect(() => BtpCodec.decodeBtpHandshakeRequest(ByteArray.fromHex("656d04000000b90006")))
+                .toThrow("Management Opcode for BTPHandshake Request is incorrect");
+        });
+
+        it("no valid version provided in request handshake", () => {
+            expect(() => BtpCodec.decodeBtpHandshakeRequest(ByteArray.fromHex("656c00000000b90006")))
+                .toThrow("No valid version provided");
+        });
+
+        it("opcode expected but not provided error in decoding the header", () => {
+            expect(() => BtpCodec.decodeBtpPacket(ByteArray.fromHex("65000044000400000049b6a902a9a5773dbb8cafd90120a7c7000015300120cb0c120a3499327ddaec4ebe60889df0f1bf80d8a4dea1dd6ffef16ef58ecafe25028e17240300280418")))
+                .toThrow("Opcode expected but not provided");
+        });
+
+        it("opcode not expected but provided error in decoding the header", () => {
+            expect(() => BtpCodec.decodeBtpPacket(ByteArray.fromHex("0d6c0044000400000049b6a902a9a5773dbb8cafd90120a7c7000015300120cb0c120a3499327ddaec4ebe60889df0f1bf80d8a4dea1dd6ffef16ef58ecafe25028e17240300280418")))
+                .toThrow("Opcode not expected but provided");
+        });
+    });
 });

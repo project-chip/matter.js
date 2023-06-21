@@ -136,10 +136,9 @@ export class BtpCodec {
         const beginSegmentBit = (headerBits & BtpHeaderBits.BeginSegment) !== 0;
 
         const managementOpcode = reader.readUInt8();
-        if (!managementBit && managementOpcode !== 0) throw new Error("Opcode expected but not provided");
+        if (managementBit && managementOpcode == 0) throw new Error("Opcode expected but not provided");
+        if (!managementBit && managementOpcode !== 0) throw new Error("Opcode not expected but provided");
 
         return { handshakeBit, managementBit, ackMsgBit, endSegmentBit, beginSegmentBit };
     }
-
-
 }
