@@ -85,7 +85,6 @@ export class BtpCodec {
         return { ackNumber, sequenceNumber, msgLength, segmentPayload };
     }
 
-
     private static decodeRequestPayload(reader: DataReader<Endian.Little>): BtpHandshakeRequest {
 
         const header = reader.readUInt8();
@@ -138,7 +137,7 @@ export class BtpCodec {
     private static encodeHandshakeResponsePayload({ version, attMtu, windowSize }: BtpHandshakeResponse): ByteArray {
 
         const writer = new DataWriter(Endian.Little);
-        writer.writeInt8(HANDSHAKE_HEADER),
+        writer.writeInt8(HANDSHAKE_HEADER);
         writer.writeUInt8(BtpOpcode.HandshakeManagementOpcode);
         writer.writeUInt8(version & 0x0f); //reserved bit and final version
         writer.writeUInt16(attMtu);
