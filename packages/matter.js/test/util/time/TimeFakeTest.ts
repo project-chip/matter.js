@@ -45,8 +45,11 @@ describe("TimeFake", () => {
             let firedTime;
 
             const result = timeFake.getPeriodicTimer(30, () => firedTime = timeFake.nowMs());
+            assert.equal(result.isRunning, false);
+
             result.start();
 
+            assert.equal(result.isRunning, true);
             assert.equal(firedTime, undefined);
 
             await timeFake.advanceTime(45);
@@ -56,6 +59,11 @@ describe("TimeFake", () => {
             await timeFake.advanceTime(20);
 
             assert.equal(firedTime, FAKE_TIME + 60);
+
+            assert.equal(result.isRunning, true);
+
+            result.stop();
+            assert.equal(result.isRunning, false);
         });
 
         it("returns a periodic timer that can be stopped", async () => {
@@ -70,6 +78,7 @@ describe("TimeFake", () => {
             await timeFake.advanceTime(45);
 
             assert.equal(firedTime, undefined);
+            assert.equal(result.isRunning, false);
         });
     });
 
@@ -78,27 +87,34 @@ describe("TimeFake", () => {
             let firedTime;
 
             const result = timeFake.getTimer(30, () => firedTime = timeFake.nowMs());
+            assert.equal(result.isRunning, false);
             result.start();
+            assert.equal(result.isRunning, true);
 
             assert.equal(firedTime, undefined);
 
             await timeFake.advanceTime(45);
 
             assert.equal(firedTime, FAKE_TIME + 30);
+            assert.equal(result.isRunning, false);
         });
 
         it("returns a timer that can be stopped", async () => {
             let firedTime;
 
             const result = timeFake.getTimer(30, () => firedTime = timeFake.nowMs());
+            assert.equal(result.isRunning, false);
             result.start();
+            assert.equal(result.isRunning, true);
             result.stop();
+            assert.equal(result.isRunning, false);
 
             assert.equal(firedTime, undefined);
 
             await timeFake.advanceTime(45);
 
             assert.equal(firedTime, undefined);
+            assert.equal(result.isRunning, false);
         });
     });
 });

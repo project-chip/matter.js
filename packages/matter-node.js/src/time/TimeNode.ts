@@ -8,6 +8,7 @@ import { Time, Timer, TimerCallback } from "@project-chip/matter.js/time";
 
 class TimerNode implements Timer {
     private timerId: NodeJS.Timer | undefined;
+    isRunning = false;
 
     constructor(
         private readonly intervalMs: number,
@@ -16,12 +17,18 @@ class TimerNode implements Timer {
     ) { }
 
     start() {
-        this.timerId = (this.periodic ? setInterval : setTimeout)(this.callback, this.intervalMs);
+        this.timerId = (this.periodic ? setInterval : setTimeout)(() => {
+            if (!this.periodic) {
+                this.isRunning = false;
+            }
+            this.callback();
+        }, this.intervalMs);
         return this;
     }
 
     stop() {
         (this.periodic ? clearInterval : clearTimeout)(this.timerId);
+        this.isRunning = false;
         return this;
     }
 }

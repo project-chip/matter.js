@@ -398,9 +398,10 @@ describe("Integration Test", () => {
 
             await fakeTime.advanceTime(2 * 1000);
             await onOffLightDeviceServer.onOff(true);
+            await fakeTime.advanceTime(100);
             const updateReport = await updatePromise;
 
-            assert.deepEqual(updateReport, { value: true, time: startTime + 2 * 1000 });
+            assert.deepEqual(updateReport, { value: true, time: startTime + 2 * 1000 + 100 });
 
             // Await update Report on value change without in between update
             const { promise: lastPromise, resolver: lastResolver } = await getPromiseResolver<{ value: boolean, time: number }>();
@@ -409,12 +410,13 @@ describe("Integration Test", () => {
             // Verify that no update comes in after max cycle time 1h
             await fakeTime.advanceTime(60 * 60 * 1000);
 
-            // ... but on next change immediately then
+            // ... but on next change immediately (means immediately + 50ms, so wait 100ms) then
             await fakeTime.advanceTime(2 * 1000);
             await onOffLightDeviceServer.onOff(false);
+            await fakeTime.advanceTime(100);
             const lastReport = await lastPromise;
 
-            assert.deepEqual(lastReport, { value: false, time: startTime + (60 * 60 + 4) * 1000 });
+            assert.deepEqual(lastReport, { value: false, time: startTime + (60 * 60 + 4) * 1000 + 200 });
         });
 
         it("subscribe an attribute with getter that needs endpoint", async () => {
