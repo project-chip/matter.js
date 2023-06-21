@@ -14,6 +14,12 @@ const DECODED_HANDSHAKE_REQUEST = {
     clientWindowSize: 6,
 }
 
+const DECODED_HANDSHAKE_REQUEST_WITH_MULTIPLE_VERSIONS = {
+    versions: [4, 5, 6],
+    attMtu: 185,
+    clientWindowSize: 6,
+}
+
 const DECODED_HANDSHAKE_RESPONSE = {
     version: 4,
     attMtu: 256,
@@ -44,6 +50,12 @@ describe("BtpCodec", () => {
             assert.deepEqual(result, DECODED_HANDSHAKE_REQUEST);
         });
 
+        it("decodes a valid request handshake message with multiple versions", () => {
+            const result = BtpCodec.decodeBtpHandshakeRequest(ByteArray.fromHex("656c04560000b90006"));
+
+            assert.deepEqual(result, DECODED_HANDSHAKE_REQUEST_WITH_MULTIPLE_VERSIONS);
+        });
+
         it("decodes a valid btp packet PDU", () => {
             const result = BtpCodec.decodeBtpPacket(ByteArray.fromHex("0d000044000400000049b6a902a9a5773dbb8cafd90120a7c7000015300120cb0c120a3499327ddaec4ebe60889df0f1bf80d8a4dea1dd6ffef16ef58ecafe25028e17240300280418"));
 
@@ -60,7 +72,7 @@ describe("BtpCodec", () => {
     });
 
     describe("Errors", () => {
-        it("Incorrect headers in handshake request", () => {
+        it("incorrect headers in handshake request", () => {
             expect(() => BtpCodec.decodeBtpHandshakeRequest(ByteArray.fromHex("0d6c04000000b90006")))
                 .toThrow("BTPHandshake Request Headers is incorrect");
         });

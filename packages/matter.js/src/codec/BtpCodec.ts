@@ -28,11 +28,11 @@ export interface BtpPacketPayload {
 }
 
 export interface BtpHeader {
-    handshakeBit: boolean,
-    managementBit: boolean,
-    ackMsgBit: boolean,
-    endSegmentBit: boolean,
-    beginSegmentBit: boolean
+    isHandshakeRequest: boolean,
+    hasManagementOpcode: boolean,
+    hasAckNumber: boolean,
+    isEndingSegment: boolean,
+    isBeginningSegment: boolean
 }
 
 export interface BtpPacket {
@@ -68,7 +68,6 @@ export class BtpCodec {
             header: this.decodeHeader(reader),
             payload: this.decodeBtpPacketPayload(reader)
         };
-
     }
 
     static encodeBtpHandshakeResponse({ version, attMtu, windowSize }: BtpHandshakeResponse): ByteArray {
@@ -94,7 +93,6 @@ export class BtpCodec {
 
     private static decodeRequestPayload(reader: DataReader<Endian.Little>): BtpHandshakeRequest {
 
-        const ver = [];
         const header = reader.readUInt8();
         const opcode = reader.readUInt8();
         let version = reader.readUInt8();
@@ -102,19 +100,20 @@ export class BtpCodec {
         if (header !== HANDSHAKE_HEADER) throw new Error("BTPHandshake Request Headers is incorrect");
         if (opcode !== BtpOpcode.HandshakeManagementOpcode) throw new Error("Management Opcode for BTPHandshake Request is incorrect");
 
-        ver[0] = version & 0xF0;
+        const ver: number[] = [];
+        ver[0] = (version & 0xF0) >> 4;
         ver[1] = version & 0x0F;
 
         version = reader.readUInt8();
-        ver[2] = version & 0xF0;
+        ver[2] = (version & 0xF0) >> 4;
         ver[3] = version & 0x0F;
 
         version = reader.readUInt8();
-        ver[4] = version & 0xF0;
+        ver[4] = (version & 0xF0) >> 4;
         ver[5] = version & 0x0F;
 
         version = reader.readUInt8();
-        ver[6] = version & 0xF0;
+        ver[6] = (version & 0xF0) >> 4;
         ver[7] = version & 0x0F;
 
         const versions = ver.filter(v => v !== 0)
@@ -129,16 +128,16 @@ export class BtpCodec {
     private static decodeHeader(reader: DataReader<Endian.Little>): BtpHeader {
 
         const headerBits = reader.readUInt8();
-        const handshakeBit = (headerBits & BtpHeaderBits.HandshakeBit) !== 0;
-        const managementBit = (headerBits & BtpHeaderBits.ManagementMsg) !== 0;
-        const ackMsgBit = (headerBits & BtpHeaderBits.AckMsg) !== 0;
-        const endSegmentBit = (headerBits & BtpHeaderBits.EndSegment) !== 0;
-        const beginSegmentBit = (headerBits & BtpHeaderBits.BeginSegment) !== 0;
+        const isHandshakeRequest = (headerBits & BtpHeaderBits.HandshakeBit) !== 0;
+        const hasManagementOpcode = (headerBits & BtpHeaderBits.ManagementMsg) !== 0;
+        const hasAckNumber = (headerBits & BtpHeaderBits.AckMsg) !== 0;
+        const isEndingSegment = (headerBits & BtpHeaderBits.EndSegment) !== 0;
+        const isBeginningSegment = (headerBits & BtpHeaderBits.BeginSegment) !== 0;
 
         const managementOpcode = reader.readUInt8();
-        if (managementBit && managementOpcode == 0) throw new Error("Opcode expected but not provided");
-        if (!managementBit && managementOpcode !== 0) throw new Error("Opcode not expected but provided");
+        if (hasManagementOpcode && managementOpcode == 0) throw new Error("Opcode expected but not provided");
+        if (!hasManagementOpcode && managementOpcode !== 0) throw new Error("Opcode not expected but provided");
 
-        return { handshakeBit, managementBit, ackMsgBit, endSegmentBit, beginSegmentBit };
+        return { isHandshakeRequest, hasManagementOpcode, hasAckNumber, isEndingSegment, isBeginningSegment };
     }
 }
