@@ -119,7 +119,7 @@ Table Legend:
 * "-" means not supported from current knowledge
 * "?" means unknown
 
-| Gerätetyp                         | Apple | Google        | Amazon | SmartThings | Tuya |
+| Device type                       | Apple | Google        | Amazon | SmartThings | Tuya |
 |-----------------------------------|-------|---------------|--------|-------------|------|
 | **Bridge Support**                | X     | X             | -      | -           | -    |
 | **Light devices**                 |       |               |        |             |      |
@@ -132,13 +132,13 @@ Table Legend:
 | * Dimmable Plug-in Unit           | ?     | ?             | ?      | ?           | ?    |
 | * Pump                            | -     | -             | -      | -           | -    |
 | **Sensors**                       |       |               |        |             |      |
-| * Contact Sensor                  | X     | X             | X      | ?           | ?    |
-| * Light Sensor                    | X     | X             | -      | ?           | ?    |
+| * Contact Sensor                  | X     | X             | X      | X           | ?    |
+| * Light Sensor                    | X     | X             | -      | X           | ?    |
 | * Occupancy Sensor                | X     | X             | -      | ?           | ?    |
-| * Temperature Sensor              | X     | X             | -      | ?           | ?    |
+| * Temperature Sensor              | X     | X             | -      | X           | ?    |
 | * Pressure Sensor                 | -     | X             | -      | ?           | ?    |
-| * Flow Sensor                     | -     | X             | -      | ?           | ?    |
-| * Humidity Sensor                 | X     | X             | -      | ?           | ?    |
+| * Flow Sensor                     | -     | X             | -      | X           | ?    |
+| * Humidity Sensor                 | X     | X             | -      | X           | ?    |
 | * On/Off Sensor                   | ?     | ?             | ?      | ?           | ?    |
 | **Closure Devices**               |       |               |        |             |      |
 | * Door Lock                       | -     | X             | X      | ?           | ?    |
