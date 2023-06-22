@@ -15,6 +15,7 @@ import { OnOffCluster } from "../cluster/OnOffCluster.js";
 import { extendPublicHandlerMethods } from "../util/NamedHandler.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
+import { EndpointOptions } from "./Endpoint.js";
 
 type OnOffBaseDeviceCommands = {
     identify: ClusterServerHandlers<typeof IdentifyCluster>["identify"];
@@ -43,10 +44,10 @@ abstract class OnOffBaseDevice extends extendPublicHandlerMethods<typeof Device,
      * @protected
      * @param definition Device type definition of the device to create
      * @param attributeInitialValues Optional object with initial attribute values for automatically added clusters
-     * @param endpointId Optional endpoint ID of the device. If not set, the device will be instanced as a root device
+     * @param options Optional endpoint options
      */
-    protected constructor(definition: DeviceTypeDefinition, attributeInitialValues?: { [key: number]: AttributeInitialValues<any> }, endpointId?: number) {
-        super(definition, endpointId);
+    protected constructor(definition: DeviceTypeDefinition, attributeInitialValues?: { [key: number]: AttributeInitialValues<any> }, options: EndpointOptions = {}) {
+        super(definition, options);
         this.addDeviceClusters(attributeInitialValues);
     }
 
@@ -102,8 +103,8 @@ abstract class OnOffBaseDevice extends extendPublicHandlerMethods<typeof Device,
  * Device class for an OnOffPluginUnit Device
  */
 export class OnOffPluginUnitDevice extends OnOffBaseDevice {
-    constructor(onOffAttributeInitialValues?: AttributeInitialValues<typeof OnOffCluster.attributes>, endpointId?: number) {
-        super(DeviceTypes.ON_OFF_PLUGIN_UNIT, onOffAttributeInitialValues, endpointId);
+    constructor(onOffAttributeInitialValues?: AttributeInitialValues<typeof OnOffCluster.attributes>, options: EndpointOptions = {}) {
+        super(DeviceTypes.ON_OFF_PLUGIN_UNIT, onOffAttributeInitialValues, options);
     }
 }
 
@@ -111,8 +112,8 @@ export class OnOffPluginUnitDevice extends OnOffBaseDevice {
  * Device class for an OnOffPluginUnit Device
  */
 export class OnOffLightDevice extends OnOffBaseDevice {
-    constructor(onOffAttributeInitialValues?: AttributeInitialValues<typeof OnOffCluster.attributes>, endpointId?: number) {
-        super(DeviceTypes.ON_OFF_LIGHT, onOffAttributeInitialValues, endpointId);
+    constructor(onOffAttributeInitialValues?: AttributeInitialValues<typeof OnOffCluster.attributes>, options: EndpointOptions = {}) {
+        super(DeviceTypes.ON_OFF_LIGHT, onOffAttributeInitialValues, options);
     }
 }
 

@@ -325,7 +325,7 @@ export class CommissioningController extends MatterNode {
             // When AGGREGATOR is in the device type list, this is an aggregator
             const aggregator = new Aggregator(
                 [],
-                endpointId
+                { endpointId }
             );
             aggregator.setDeviceTypes(deviceTypes as AtLeastOne<DeviceTypeDefinition>);
             endpointClusters.forEach(cluster => { // TODO There should be none?
@@ -340,7 +340,7 @@ export class CommissioningController extends MatterNode {
             // When BRIDGED_NODE is in the device type list, this is a bridged node
             const aggregator = new Aggregator(
                 [],
-                endpointId
+                { endpointId }
             );
             aggregator.setDeviceTypes(deviceTypes as AtLeastOne<DeviceTypeDefinition>);
             endpointClusters.forEach(cluster => {
@@ -355,10 +355,11 @@ export class CommissioningController extends MatterNode {
             // It seems to be  device but has a partsList, so it is a composed device
             if (descriptorData.partsList.length > 0) {
                 const composedDevice = new ComposedDevice(
-                    deviceTypes as AtLeastOne<DeviceTypeDefinition>,
+                    deviceTypes[0],
                     [],
-                    endpointId
+                    { endpointId }
                 );
+                composedDevice.setDeviceTypes(deviceTypes as AtLeastOne<DeviceTypeDefinition>);
                 endpointClusters.forEach(cluster => {
                     if (isClusterServer(cluster)) {
                         composedDevice.addClusterServer(cluster);

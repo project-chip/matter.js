@@ -52,11 +52,11 @@ describe("Groups Server test", () => {
         testSession = await createTestSessionWithFabric();
         testFabric = testSession.getFabric();
 
-        endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], 1);
+        endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: 1 });
         endpoint.addClusterServer(groupsServer);
         endpoint.addClusterServer(identifyServer);
 
-        endpoint2 = new Endpoint([DeviceTypes.ON_OFF_LIGHT], 2);
+        endpoint2 = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: 2 });
     }
 
     describe("Basic groups actions", () => {

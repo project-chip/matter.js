@@ -9,6 +9,7 @@ import { ComposedDevice } from "./ComposedDevice.js";
 import { AttributeInitialValues } from "../cluster/server/ClusterServer.js";
 import { BridgedDeviceBasicInformationCluster } from "../cluster/BridgedDeviceBasicInformationCluster.js";
 import { ClusterServer } from "../protocol/interaction/InteractionServer.js";
+import { Endpoint, EndpointOptions } from "./Endpoint.js";
 
 /**
  * An Aggregator is a special endpoint that exposes multiple devices as a "bridge" into the matter ecosystem.
@@ -17,24 +18,17 @@ import { ClusterServer } from "../protocol/interaction/InteractionServer.js";
  * If Power source information should be provided you need to also add the needed clusters (PowerSourceConfigurationCluster
  * and PowerSourceCluster) to the device!
  */
-export class Aggregator extends ComposedDevice {
+export class Aggregator extends Endpoint {
     /**
      * Create a new Aggregator instance and optionally directly add devices to it. If this is used the devices must
      * already have the BridgedDeviceBasicInformationCluster added!
      * @param devices Array of devices to add
-     * @param endpointId Optional endpoint ID to use. If not provided will automatically be assigned
+     * @param options Optional Endpoint options
      */
-    constructor(devices: Device[] = [], endpointId?: number) {
+    constructor(devices: Device[] = [], options: EndpointOptions = {}) {
         // Aggregator is a Composed device with an DeviceTypes.AGGREGATOR device type
-        super([DeviceTypes.AGGREGATOR], [], endpointId);
+        super([DeviceTypes.AGGREGATOR], options);
         devices.forEach(device => this.addBridgedDevice(device));
-    }
-
-    /**
-     * @deprecated Use addBridgedDevice or addBridgedDeviceWithPowerSourceInfo instead
-     */
-    override addDevice(): void {
-        throw new Error("Aggregator does not support addDevice. Use addBridgedDevice instead.");
     }
 
     /**
@@ -45,7 +39,7 @@ export class Aggregator extends ComposedDevice {
      * @param device Device instance to add
      * @param bridgedBasicInformation Optional BridgedDeviceBasicInformationCluster attribute values to
      */
-    addBridgedDevice(device: Device, bridgedBasicInformation?: AttributeInitialValues<typeof BridgedDeviceBasicInformationCluster.attributes>): void {
+    addBridgedDevice(device: Device | ComposedDevice, bridgedBasicInformation?: AttributeInitialValues<typeof BridgedDeviceBasicInformationCluster.attributes>): void {
         // Add DeviceTypes.BRIDGED_DEVICE device type to the device exposed via Aggregator
         const deviceTypes = device.getDeviceTypes();
         if (!deviceTypes.includes(DeviceTypes.BRIDGED_NODE)) {
@@ -66,7 +60,7 @@ export class Aggregator extends ComposedDevice {
                 throw new Error("BridgedDeviceBasicInformationCluster is required for bridged devices. Please add yourself or provide as second parameter");
             }
         }
-        super.addDevice(device);
+        this.addChildEndpoint(device);
     }
 
     /**
@@ -78,7 +72,7 @@ export class Aggregator extends ComposedDevice {
      * @param device Device instance to add
      * @param bridgedBasicInformation Optional BridgedDeviceBasicInformationCluster attribute values to
      */
-    addBridgedDeviceWithPowerSourceInfo(device: Device, bridgedBasicInformation?: AttributeInitialValues<typeof BridgedDeviceBasicInformationCluster.attributes>): void {
+    addBridgedDeviceWithPowerSourceInfo(device: Device | ComposedDevice, bridgedBasicInformation?: AttributeInitialValues<typeof BridgedDeviceBasicInformationCluster.attributes>): void {
         // Add DeviceTypes.BRIDGED_DEVICE_WITH_POWER_SOURCE_INFORMATION device type to the device exposed via Aggregator
         const deviceTypes = device.getDeviceTypes();
         if (!deviceTypes.includes(DeviceTypes.BRIDGED_DEVICE_WITH_POWER_SOURCE_INFORMATION)) {
@@ -92,7 +86,7 @@ export class Aggregator extends ComposedDevice {
                 throw new Error("BridgedDeviceBasicInformationCluster is required for bridged devices. Please add yourself or provide as second parameter");
             }
         }
-        super.addDevice(device);
+        this.addChildEndpoint(device);
     }
 
     /**
@@ -101,6 +95,10 @@ export class Aggregator extends ComposedDevice {
      * @returns Array of bridged devices
      */
     getBridgedDevices() {
-        return super.getDevices();
+        return this.getChildEndpoints();
+    }
+
+    removeBridgedDevice(device: Device | ComposedDevice) {
+        this.removeChildEndpoint(device);
     }
 }

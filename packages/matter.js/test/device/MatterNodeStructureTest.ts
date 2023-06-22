@@ -11,10 +11,17 @@ import { TimeFake } from "../../src/time/TimeFake.js";
 
 Time.get = () => new TimeFake(0);
 
+import { Crypto } from "../../src/crypto/Crypto.js";
+Crypto.get = () => ({
+    getRandomData: (length: number) => {
+        return new Uint8Array(length);
+    }
+} as Crypto);
+
 import { MatterNode } from "../../src/MatterNode.js";
-import { OnOffLightDevice } from "../../src/device/OnOffDevices.js";
+import { OnOffLightDevice, OnOffPluginUnitDevice } from "../../src/device/OnOffDevices.js";
 import { AttributeServer } from "../../src/cluster/server/AttributeServer.js";
-import { attributePathToId, ClusterServer } from "../../src/protocol/interaction/InteractionServer.js";
+import { attributePathToId, ClusterServer, EndpointStructure } from "../../src/protocol/interaction/InteractionServer.js";
 import { Aggregator } from "../../src/device/Aggregator.js";
 import { DeviceTypes } from "../../src/device/DeviceTypes.js";
 import { AdminCommissioningHandler } from "../../src/cluster/server/AdminCommissioningServer.js";
@@ -23,7 +30,6 @@ import { PaseServer } from "../../src/session/pase/PaseServer.js";
 import { CaseServer } from "../../src/session/case/CaseServer.js";
 import { BN } from "bn.js";
 import { ComposedDevice } from "../../src/device/ComposedDevice.js";
-import { OperationalCredentialsClusterHandler } from "../../src/cluster/server/OperationalCredentialsServer.js";
 import { GeneralCommissioningClusterHandler } from "../../src/cluster/server/GeneralCommissioningServer.js";
 import { NetworkCommissioningHandler } from "../../src/cluster/server/NetworkCommissioningServer.js";
 import { AccessControlCluster } from "../../src/cluster/AccessControlCluster.js";
@@ -31,7 +37,6 @@ import { GroupKeyManagementCluster } from "../../src/cluster/GroupKeyManagementC
 import { BootReason, GeneralDiagnosticsCluster } from "../../src/cluster/GeneralDiagnosticsCluster.js";
 import { BasicInformationCluster } from "../../src/cluster/BasicInformationCluster.js";
 import { VendorId } from "../../src/datatype/VendorId.js";
-import { FabricIndex } from "../../src/datatype/FabricIndex.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 import { GeneralCommissioningCluster, RegulatoryLocationType } from "../../src/cluster/GeneralCommissioningCluster.js";
 import { EthernetNetworkCommissioningCluster, NetworkCommissioningStatus } from "../../src/cluster/NetworkCommissioningCluster.js";
@@ -49,65 +54,74 @@ import { FixedLabelCluster } from "../../src/cluster/LabelCluster.js";
 import { GroupKeyManagementClusterHandler } from "../../src/cluster/server/GroupKeyManagementServer.js";
 import { Endpoint } from "../../src/device/Endpoint.js";
 import { BindingCluster } from "../../src/cluster/BindingCluster.js";
+import { StorageBackendMemory, StorageManager } from "../../src/storage/index.js";
+import { CommissioningServer } from "../../src/index.js";
+import { FabricIndex } from "../../src/datatype/FabricIndex.js";
+import { OperationalCredentialsClusterHandler } from "../../src/cluster/server/OperationalCredentialsServer.js";
 
 /** Needed for tests because MatterNode is an abstract class */
 class TestNode extends MatterNode {
+
     public override addEndpoint(endpoint: Endpoint) {
         super.addEndpoint(endpoint);
     }
 
-    async close() {
+    override async close() {
         // Do nothing
     }
 }
 
 function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningCluster = true) {
-    node.addRootClusterServer(ClusterServer(
-        BasicInformationCluster,
-        {
-            dataModelRevision: 1,
-            vendorName: "vendor",
-            vendorId: new VendorId(1),
-            productName: "product",
-            productId: 2,
-            nodeLabel: "",
-            hardwareVersion: 0,
-            hardwareVersionString: "0",
-            location: "US",
-            localConfigDisabled: false,
-            softwareVersion: 1,
-            softwareVersionString: "v1",
-            capabilityMinima: {
-                caseSessionsPerFabric: 3,
-                subscriptionsPerFabric: 3
-            },
-            serialNumber: `node-matter-0000`
-        },
-        {}, {
-        startUp: true
-    }
-    )
-    );
+    if (node instanceof TestNode) {
+        node.addRootClusterServer(
+            ClusterServer(
+                BasicInformationCluster,
+                {
+                    dataModelRevision: 1,
+                    vendorName: "vendor",
+                    vendorId: new VendorId(1),
+                    productName: "product",
+                    productId: 2,
+                    nodeLabel: "",
+                    hardwareVersion: 0,
+                    hardwareVersionString: "0",
+                    location: "US",
+                    localConfigDisabled: false,
+                    softwareVersion: 1,
+                    softwareVersionString: "v1",
+                    capabilityMinima: {
+                        caseSessionsPerFabric: 3,
+                        subscriptionsPerFabric: 3
+                    },
+                    serialNumber: `node-matter-0000`
+                },
+                {},
+                {
+                    startUp: true
+                }
+            )
+        );
 
-    node.addRootClusterServer(
-        ClusterServer(
-            OperationalCredentialsCluster,
-            {
-                nocs: [],
-                fabrics: [],
-                supportedFabrics: 254,
-                commissionedFabrics: 0,
-                trustedRootCertificates: [],
-                currentFabricIndex: FabricIndex.NO_FABRIC
-            },
-            OperationalCredentialsClusterHandler({
-                devicePrivateKey: ByteArray.fromHex("00"),
-                deviceCertificate: ByteArray.fromHex("00"),
-                deviceIntermediateCertificate: ByteArray.fromHex("00"),
-                certificationDeclaration: ByteArray.fromHex("00"),
-            })
-        )
-    );
+        node.addRootClusterServer(
+            ClusterServer(
+                OperationalCredentialsCluster,
+                {
+                    nocs: [],
+                    fabrics: [],
+                    supportedFabrics: 254,
+                    commissionedFabrics: 0,
+                    trustedRootCertificates: [],
+                    currentFabricIndex: FabricIndex.NO_FABRIC
+                },
+                OperationalCredentialsClusterHandler({
+                    devicePrivateKey: ByteArray.fromHex("00"),
+                    deviceCertificate: ByteArray.fromHex("00"),
+                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
+                    certificationDeclaration: ByteArray.fromHex("00"),
+                })
+            )
+        );
+    }
 
     node.addRootClusterServer(
         ClusterServer(
@@ -219,22 +233,58 @@ describe("Endpoint Structures", () => {
             const node = new TestNode();
             addRequiredRootClusters(node, false);
 
-            assert.throws(() => node.getRootEndpoint().getStructure(), {
+            assert.throws(() => node.getRootEndpoint().verifyRequiredClusters(), {
                 message: "Device type MA-rootdevice (0x16) requires cluster server AdministratorCommissioning(0x3c) but it is not present on endpoint 0"
             });
 
         });
 
         it("Just root Endpoint", () => {
-            const node = new TestNode();
+            const node = new CommissioningServer({
+                port: 5540,
+                deviceName: "Test Device",
+                deviceType: 0x16,
+                passcode: 123,
+                discriminator: 1234,
+                basicInformation: {
+                    dataModelRevision: 1,
+                    vendorName: "vendor",
+                    vendorId: new VendorId(1),
+                    productName: "product",
+                    productId: 2,
+                    nodeLabel: "",
+                    hardwareVersion: 0,
+                    hardwareVersionString: "0",
+                    location: "US",
+                    localConfigDisabled: false,
+                    softwareVersion: 1,
+                    softwareVersionString: "v1",
+                    capabilityMinima: {
+                        caseSessionsPerFabric: 3,
+                        subscriptionsPerFabric: 3
+                    },
+                    serialNumber: `node-matter-0000`
+                },
+                certificates: {
+                    devicePrivateKey: ByteArray.fromHex("00"),
+                    deviceCertificate: ByteArray.fromHex("00"),
+                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
+                    certificationDeclaration: ByteArray.fromHex("00"),
+                }
+            });
             addRequiredRootClusters(node);
 
+            const rootEndpoint = node.getRootEndpoint();
+            rootEndpoint.updatePartsList();
+            const endpointStructure = new EndpointStructure();
+            endpointStructure.initializeFromEndpoint(rootEndpoint);
             const {
                 endpoints,
                 attributes,
                 attributePaths,
-                commandPaths
-            } = node.getRootEndpoint().getStructure();
+                commandPaths,
+                eventPaths,
+            } = endpointStructure;
 
             const rootPartsListAttribute = attributes.get(attributePathToId({
                 endpointId: 0,
@@ -242,6 +292,14 @@ describe("Endpoint Structures", () => {
                 attributeId: DescriptorCluster.attributes.partsList.id
             })) as AttributeServer<EndpointNumber[]>;
             assert.deepEqual(rootPartsListAttribute?.getLocal(), []);
+
+            const rootPartsListAttribute2 = endpointStructure.getAttributes([{
+                endpointId: 0,
+                clusterId: DescriptorCluster.id,
+                attributeId: DescriptorCluster.attributes.partsList.id
+            }]);
+            assert.equal(rootPartsListAttribute2.length, 1);
+            assert.equal(rootPartsListAttribute, rootPartsListAttribute2[0].attribute);
 
             assert.equal(endpoints.size, 1);
             assert.equal(endpoints.get(0)?.getAllClusterServers().length, 9);
@@ -257,24 +315,70 @@ describe("Endpoint Structures", () => {
 
             assert.equal(attributePaths.length, 110);
             assert.equal(commandPaths.length, 18);
+            assert.equal(eventPaths.length, 4);
         });
 
-        it("One device withs Light endpoints", () => {
-            const node = new TestNode();
+        it("One device with one Light endpoints - no unique id, use index", async () => {
+            const testStorage = new StorageBackendMemory();
+            const testStorageManager = new StorageManager(testStorage);
+            await testStorageManager.initialize();
+            const endpointStorage = testStorageManager.createContext("EndpointStructure");
+
+            const node = new CommissioningServer({
+                port: 5540,
+                deviceName: "Test Device",
+                deviceType: 0x16,
+                passcode: 123,
+                discriminator: 1234,
+                basicInformation: {
+                    dataModelRevision: 1,
+                    vendorName: "vendor",
+                    vendorId: new VendorId(1),
+                    productName: "product",
+                    productId: 2,
+                    nodeLabel: "",
+                    hardwareVersion: 0,
+                    hardwareVersionString: "0",
+                    location: "US",
+                    localConfigDisabled: false,
+                    softwareVersion: 1,
+                    softwareVersionString: "v1",
+                    capabilityMinima: {
+                        caseSessionsPerFabric: 3,
+                        subscriptionsPerFabric: 3
+                    },
+                    serialNumber: `node-matter-0000`
+                },
+                certificates: {
+                    devicePrivateKey: ByteArray.fromHex("00"),
+                    deviceCertificate: ByteArray.fromHex("00"),
+                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
+                    certificationDeclaration: ByteArray.fromHex("00"),
+                }
+            });
+            node.setStorageManager(testStorageManager);
             addRequiredRootClusters(node);
 
             const onoffLightDevice = new OnOffLightDevice();
 
-            node.addEndpoint(onoffLightDevice);
+            node.addDevice(onoffLightDevice);
 
-            assert.equal(node.getRootEndpoint().ensureEndpointIds(1), 2);
+            node.ensureEndpointIds();
+            assert.equal(node.getNextEndpointId(false), 2);
 
+            const rootEndpoint = node.getRootEndpoint();
+            rootEndpoint.updatePartsList();
+            const endpointStructure = new EndpointStructure();
+            endpointStructure.initializeFromEndpoint(rootEndpoint);
             const {
                 endpoints,
                 attributes,
                 attributePaths,
-                commandPaths
-            } = node.getRootEndpoint().getStructure();
+                commandPaths,
+                eventPaths,
+            } = endpointStructure;
+
+            assert.equal(endpointStorage.get("basicInfoSerialNumber_node-matter-0000-index_0"), 1);
 
             assert.equal(endpoints.size, 2);
             assert.equal(endpoints.get(0)?.getAllClusterServers().length, 9);
@@ -305,33 +409,72 @@ describe("Endpoint Structures", () => {
 
             assert.equal(attributePaths.length, 161);
             assert.equal(commandPaths.length, 38);
+            assert.equal(eventPaths.length, 4);
         });
-    });
 
-    describe("Composed Devices Endpoint structure", () => {
-        it("One composed device withs two Light endpoints", () => {
-            const node = new TestNode();
+        it("One device with one Light endpoints - with uniqueid", async () => {
+            const testStorage = new StorageBackendMemory();
+            const testStorageManager = new StorageManager(testStorage);
+            await testStorageManager.initialize();
+            const endpointStorage = testStorageManager.createContext("EndpointStructure");
+
+            const node = new CommissioningServer({
+                port: 5540,
+                deviceName: "Test Device",
+                deviceType: 0x16,
+                passcode: 123,
+                discriminator: 1234,
+                basicInformation: {
+                    dataModelRevision: 1,
+                    vendorName: "vendor",
+                    vendorId: new VendorId(1),
+                    productName: "product",
+                    productId: 2,
+                    nodeLabel: "",
+                    hardwareVersion: 0,
+                    hardwareVersionString: "0",
+                    location: "US",
+                    localConfigDisabled: false,
+                    softwareVersion: 1,
+                    softwareVersionString: "v1",
+                    capabilityMinima: {
+                        caseSessionsPerFabric: 3,
+                        subscriptionsPerFabric: 3
+                    },
+                    serialNumber: `node-matter-0000`
+                },
+                certificates: {
+                    devicePrivateKey: ByteArray.fromHex("00"),
+                    deviceCertificate: ByteArray.fromHex("00"),
+                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
+                    certificationDeclaration: ByteArray.fromHex("00"),
+                }
+            });
+            node.setStorageManager(testStorageManager);
             addRequiredRootClusters(node);
 
-            const composedDevice = new ComposedDevice([DeviceTypes.ON_OFF_LIGHT]);
+            const onoffLightDevice = new OnOffLightDevice(undefined, { uniqueId: "test-unique-id" });
 
-            const onoffLightDevice1 = new OnOffLightDevice();
-            const onoffLightDevice2 = new OnOffLightDevice();
-            composedDevice.addDevice(onoffLightDevice1);
-            composedDevice.addDevice(onoffLightDevice2);
+            node.addDevice(onoffLightDevice);
 
-            node.addEndpoint(composedDevice);
+            node.ensureEndpointIds();
+            assert.equal(node.getNextEndpointId(false), 2);
 
-            assert.equal(node.getRootEndpoint().ensureEndpointIds(1), 4);
-
+            const rootEndpoint = node.getRootEndpoint();
+            rootEndpoint.updatePartsList();
+            const endpointStructure = new EndpointStructure();
+            endpointStructure.initializeFromEndpoint(rootEndpoint);
             const {
                 endpoints,
                 attributes,
                 attributePaths,
-                commandPaths
-            } = node.getRootEndpoint().getStructure();
+                commandPaths,
+                eventPaths,
+            } = endpointStructure;
 
-            assert.equal(endpoints.size, 4);
+            assert.equal(endpointStorage.get("basicInfoSerialNumber_node-matter-0000-customUniqueId_test-unique-id"), 1);
+
+            assert.equal(endpoints.size, 2);
             assert.equal(endpoints.get(0)?.getAllClusterServers().length, 9);
             assert.ok(endpoints.get(0)?.hasClusterServer(DescriptorCluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(BasicInformationCluster));
@@ -343,41 +486,214 @@ describe("Endpoint Structures", () => {
             assert.ok(endpoints.get(0)?.hasClusterServer(GroupKeyManagementCluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
 
-            assert.equal(endpoints.get(1)?.getAllClusterServers().length, 1);
+            assert.equal(endpoints.get(1)?.getAllClusterServers().length, 6);
             assert.ok(endpoints.get(1)?.hasClusterServer(DescriptorCluster));
-
-            assert.equal(endpoints.get(2)?.getAllClusterServers().length, 6);
-            assert.ok(endpoints.get(2)?.hasClusterServer(DescriptorCluster));
-            assert.ok(endpoints.get(2)?.hasClusterServer(IdentifyCluster));
-            assert.ok(endpoints.get(2)?.hasClusterServer(GroupsCluster));
-            assert.ok(endpoints.get(2)?.hasClusterServer(ScenesCluster));
-            assert.ok(endpoints.get(2)?.hasClusterServer(OnOffCluster));
-            assert.ok(endpoints.get(2)?.hasClusterServer(BindingCluster));
-
-            assert.equal(endpoints.get(3)?.getAllClusterServers().length, 6);
-            assert.ok(endpoints.get(3)?.hasClusterServer(DescriptorCluster));
-            assert.ok(endpoints.get(3)?.hasClusterServer(IdentifyCluster));
-            assert.ok(endpoints.get(3)?.hasClusterServer(GroupsCluster));
-            assert.ok(endpoints.get(3)?.hasClusterServer(ScenesCluster));
-            assert.ok(endpoints.get(3)?.hasClusterServer(OnOffCluster));
-            assert.ok(endpoints.get(3)?.hasClusterServer(BindingCluster));
+            assert.ok(endpoints.get(1)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(1)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(1)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(1)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(1)?.hasClusterServer(BindingCluster));
 
             const rootPartsListAttribute = attributes.get(attributePathToId({
                 endpointId: 0,
                 clusterId: DescriptorCluster.id,
                 attributeId: DescriptorCluster.attributes.partsList.id
             })) as AttributeServer<EndpointNumber[]>;
-            assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(1), new EndpointNumber(2), new EndpointNumber(3)]);
+            assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(1)]);
 
-            const composedPartsListAttribute = attributes.get(attributePathToId({
-                endpointId: 1,
+            assert.equal(attributePaths.length, 161);
+            assert.equal(commandPaths.length, 38);
+            assert.equal(eventPaths.length, 4);
+        });
+
+        it("One device with one Light endpoints - no uniqueid, use index, from storage", async () => {
+            const testStorage = new StorageBackendMemory();
+            const testStorageManager = new StorageManager(testStorage);
+            await testStorageManager.initialize();
+            const endpointStorage = testStorageManager.createContext("EndpointStructure");
+            endpointStorage.set("basicInfoSerialNumber_node-matter-0000-index_0", 10)
+
+            const node = new CommissioningServer({
+                port: 5540,
+                deviceName: "Test Device",
+                deviceType: 0x16,
+                passcode: 123,
+                discriminator: 1234,
+                basicInformation: {
+                    dataModelRevision: 1,
+                    vendorName: "vendor",
+                    vendorId: new VendorId(1),
+                    productName: "product",
+                    productId: 2,
+                    nodeLabel: "",
+                    hardwareVersion: 0,
+                    hardwareVersionString: "0",
+                    location: "US",
+                    localConfigDisabled: false,
+                    softwareVersion: 1,
+                    softwareVersionString: "v1",
+                    capabilityMinima: {
+                        caseSessionsPerFabric: 3,
+                        subscriptionsPerFabric: 3
+                    },
+                    serialNumber: `node-matter-0000`
+                },
+                certificates: {
+                    devicePrivateKey: ByteArray.fromHex("00"),
+                    deviceCertificate: ByteArray.fromHex("00"),
+                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
+                    certificationDeclaration: ByteArray.fromHex("00"),
+                }
+            });
+            node.setStorageManager(testStorageManager);
+            addRequiredRootClusters(node);
+
+            const onoffLightDevice = new OnOffLightDevice();
+
+            node.addDevice(onoffLightDevice);
+
+            node.ensureEndpointIds();
+            assert.equal(node.getNextEndpointId(false), 11);
+
+            const rootEndpoint = node.getRootEndpoint();
+            rootEndpoint.updatePartsList();
+            const endpointStructure = new EndpointStructure();
+            endpointStructure.initializeFromEndpoint(rootEndpoint);
+            const {
+                endpoints,
+                attributes,
+                attributePaths,
+                commandPaths,
+                eventPaths,
+            } = endpointStructure;
+
+            assert.equal(endpointStorage.get("basicInfoSerialNumber_node-matter-0000-index_0"), 10);
+
+            assert.equal(endpoints.size, 2);
+            assert.equal(endpoints.get(0)?.getAllClusterServers().length, 9);
+            assert.ok(endpoints.get(0)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(BasicInformationCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(OperationalCredentialsCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(EthernetNetworkCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AccessControlCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AdminCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GroupKeyManagementCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
+
+            assert.equal(endpoints.get(10)?.getAllClusterServers().length, 6);
+            assert.ok(endpoints.get(10)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(10)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(10)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(10)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(10)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(10)?.hasClusterServer(BindingCluster));
+
+            const rootPartsListAttribute = attributes.get(attributePathToId({
+                endpointId: 0,
                 clusterId: DescriptorCluster.id,
                 attributeId: DescriptorCluster.attributes.partsList.id
             })) as AttributeServer<EndpointNumber[]>;
-            assert.deepEqual(composedPartsListAttribute?.getLocal(), [new EndpointNumber(2), new EndpointNumber(3)]);
+            assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(10)]);
 
-            assert.equal(attributePaths.length, 222);
-            assert.equal(commandPaths.length, 58);
+            assert.equal(attributePaths.length, 161);
+            assert.equal(commandPaths.length, 38);
+            assert.equal(eventPaths.length, 4);
+        });
+
+        it("One device with one Light endpoints - with uniqueid, from storage", async () => {
+            const testStorage = new StorageBackendMemory();
+            const testStorageManager = new StorageManager(testStorage);
+            await testStorageManager.initialize();
+            const endpointStorage = testStorageManager.createContext("EndpointStructure");
+            endpointStorage.set("basicInfoSerialNumber_node-matter-0000-customUniqueId_test-unique-id", 10)
+
+            const node = new CommissioningServer({
+                port: 5540,
+                deviceName: "Test Device",
+                deviceType: 0x16,
+                passcode: 123,
+                discriminator: 1234,
+                basicInformation: {
+                    dataModelRevision: 1,
+                    vendorName: "vendor",
+                    vendorId: new VendorId(1),
+                    productName: "product",
+                    productId: 2,
+                    nodeLabel: "",
+                    hardwareVersion: 0,
+                    hardwareVersionString: "0",
+                    location: "US",
+                    localConfigDisabled: false,
+                    softwareVersion: 1,
+                    softwareVersionString: "v1",
+                    capabilityMinima: {
+                        caseSessionsPerFabric: 3,
+                        subscriptionsPerFabric: 3
+                    },
+                    serialNumber: `node-matter-0000`
+                },
+                certificates: {
+                    devicePrivateKey: ByteArray.fromHex("00"),
+                    deviceCertificate: ByteArray.fromHex("00"),
+                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
+                    certificationDeclaration: ByteArray.fromHex("00"),
+                }
+            });
+            node.setStorageManager(testStorageManager);
+            addRequiredRootClusters(node);
+
+            const onoffLightDevice = new OnOffLightDevice(undefined, { uniqueId: "test-unique-id" });
+
+            node.addDevice(onoffLightDevice);
+
+            node.ensureEndpointIds();
+            assert.equal(node.getNextEndpointId(false), 11);
+
+            const rootEndpoint = node.getRootEndpoint();
+            rootEndpoint.updatePartsList();
+            const endpointStructure = new EndpointStructure();
+            endpointStructure.initializeFromEndpoint(rootEndpoint);
+            const {
+                endpoints,
+                attributes,
+                attributePaths,
+                commandPaths,
+                eventPaths,
+            } = endpointStructure;
+
+            assert.equal(endpointStorage.get("basicInfoSerialNumber_node-matter-0000-customUniqueId_test-unique-id"), 10);
+
+            assert.equal(endpoints.size, 2);
+            assert.equal(endpoints.get(0)?.getAllClusterServers().length, 9);
+            assert.ok(endpoints.get(0)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(BasicInformationCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(OperationalCredentialsCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(EthernetNetworkCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AccessControlCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AdminCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GroupKeyManagementCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
+
+            assert.equal(endpoints.get(10)?.getAllClusterServers().length, 6);
+            assert.ok(endpoints.get(10)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(10)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(10)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(10)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(10)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(10)?.hasClusterServer(BindingCluster));
+
+            const rootPartsListAttribute = attributes.get(attributePathToId({
+                endpointId: 0,
+                clusterId: DescriptorCluster.id,
+                attributeId: DescriptorCluster.attributes.partsList.id
+            })) as AttributeServer<EndpointNumber[]>;
+            assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(10)]);
+
+            assert.equal(attributePaths.length, 161);
+            assert.equal(commandPaths.length, 38);
+            assert.equal(eventPaths.length, 4);
         });
     });
 
@@ -386,9 +702,9 @@ describe("Endpoint Structures", () => {
             const node = new TestNode();
             addRequiredRootClusters(node);
 
-            const aggregator = new Aggregator([], 1);
+            const aggregator = new Aggregator([], { endpointId: 1 });
 
-            const onoffLightDevice = new OnOffLightDevice(undefined, 11);
+            const onoffLightDevice = new OnOffLightDevice(undefined, { endpointId: 11 });
             onoffLightDevice.addClusterServer(ClusterServer(BridgedDeviceBasicInformationCluster, {
                 nodeLabel: "Socket 1",
                 reachable: true
@@ -399,12 +715,17 @@ describe("Endpoint Structures", () => {
             aggregator.addBridgedDevice(onoffLightDevice);
             node.addEndpoint(aggregator);
 
+            const rootEndpoint = node.getRootEndpoint();
+            rootEndpoint.updatePartsList();
+            const endpointStructure = new EndpointStructure();
+            endpointStructure.initializeFromEndpoint(rootEndpoint);
             const {
                 endpoints,
                 attributes,
                 attributePaths,
-                commandPaths
-            } = node.getRootEndpoint().getStructure();
+                commandPaths,
+                eventPaths,
+            } = endpointStructure;
 
             assert.equal(endpoints.size, 3);
             assert.equal(endpoints.get(0)?.getAllClusterServers().length, 9);
@@ -449,16 +770,17 @@ describe("Endpoint Structures", () => {
 
             assert.equal(attributePaths.length, 179);
             assert.equal(commandPaths.length, 38);
+            assert.equal(eventPaths.length, 5);
         });
 
         it("Device Structure with one aggregator and two Light endpoints and defined endpoint IDs", () => {
             const node = new TestNode();
             addRequiredRootClusters(node);
 
-            const aggregator = new Aggregator([], 1);
+            const aggregator = new Aggregator([], { endpointId: 1 });
 
-            const onoffLightDevice11 = new OnOffLightDevice(undefined, 11);
-            const onoffLightDevice12 = new OnOffLightDevice(undefined, 12);
+            const onoffLightDevice11 = new OnOffLightDevice(undefined, { endpointId: 11 });
+            const onoffLightDevice12 = new OnOffLightDevice(undefined, { endpointId: 12 });
 
             aggregator.addBridgedDevice(onoffLightDevice11, {
                 nodeLabel: "Socket 1",
@@ -470,7 +792,17 @@ describe("Endpoint Structures", () => {
             });
             node.addEndpoint(aggregator);
 
-            const { endpoints, attributes, attributePaths, commandPaths } = node.getRootEndpoint().getStructure();
+            const rootEndpoint = node.getRootEndpoint();
+            rootEndpoint.updatePartsList();
+            const endpointStructure = new EndpointStructure();
+            endpointStructure.initializeFromEndpoint(rootEndpoint);
+            const {
+                endpoints,
+                attributes,
+                attributePaths,
+                commandPaths,
+                eventPaths,
+            } = endpointStructure;
 
             assert.equal(endpoints.size, 4);
             assert.equal(endpoints.get(0)?.getAllClusterServers().length, 9);
@@ -523,14 +855,14 @@ describe("Endpoint Structures", () => {
 
             assert.equal(attributePaths.length, 238);
             assert.equal(commandPaths.length, 58);
+            assert.equal(eventPaths.length, 6);
         });
 
         it("Device Structure with two aggregators and two Light endpoints and defined endpoint IDs", () => {
             const node = new TestNode();
             addRequiredRootClusters(node);
 
-
-            const aggregator1 = new Aggregator([], 1);
+            const aggregator1 = new Aggregator([], { endpointId: 1 });
             aggregator1.addClusterServer(ClusterServer(
                 FixedLabelCluster,
                 {
@@ -539,8 +871,8 @@ describe("Endpoint Structures", () => {
                 {}
             ));
 
-            const onoffLightDevice11 = new OnOffLightDevice(undefined, 11);
-            const onoffLightDevice12 = new OnOffLightDevice(undefined, 12);
+            const onoffLightDevice11 = new OnOffLightDevice(undefined, { endpointId: 11 });
+            const onoffLightDevice12 = new OnOffLightDevice(undefined, { endpointId: 12 });
 
             aggregator1.addBridgedDevice(onoffLightDevice11, {
                 nodeLabel: "Socket 1-1",
@@ -552,7 +884,7 @@ describe("Endpoint Structures", () => {
             });
             node.addEndpoint(aggregator1);
 
-            const aggregator2 = new Aggregator([], 2);
+            const aggregator2 = new Aggregator([], { endpointId: 2 });
             aggregator2.addClusterServer(ClusterServer(
                 FixedLabelCluster,
                 {
@@ -561,8 +893,8 @@ describe("Endpoint Structures", () => {
                 {}
             ));
 
-            const onoffLightDevice21 = new OnOffLightDevice(undefined, 21);
-            const onoffLightDevice22 = new OnOffLightDevice(undefined, 22);
+            const onoffLightDevice21 = new OnOffLightDevice(undefined, { endpointId: 21 });
+            const onoffLightDevice22 = new OnOffLightDevice(undefined, { endpointId: 22 });
 
             aggregator2.addBridgedDevice(onoffLightDevice21, {
                 nodeLabel: "Socket 2-1",
@@ -574,7 +906,17 @@ describe("Endpoint Structures", () => {
             });
             node.addEndpoint(aggregator2);
 
-            const { endpoints, attributes, attributePaths, commandPaths } = node.getRootEndpoint().getStructure();
+            const rootEndpoint = node.getRootEndpoint();
+            rootEndpoint.updatePartsList();
+            const endpointStructure = new EndpointStructure();
+            endpointStructure.initializeFromEndpoint(rootEndpoint);
+            const {
+                endpoints,
+                attributes,
+                attributePaths,
+                commandPaths,
+                eventPaths,
+            } = endpointStructure;
 
             assert.equal(endpoints.size, 7);
             assert.equal(endpoints.get(0)?.getAllClusterServers().length, 9);
@@ -643,10 +985,47 @@ describe("Endpoint Structures", () => {
 
             assert.equal(attributePaths.length, 380);
             assert.equal(commandPaths.length, 98);
+            assert.equal(eventPaths.length, 8);
         });
 
-        it("Device Structure with two aggregators and two Light endpoints and all auto-assigned endpoint IDs", () => {
-            const node = new TestNode();
+        it("Device Structure with two aggregators and two Light endpoints and all auto-assigned endpoint IDs", async () => {
+            const testStorage = new StorageBackendMemory();
+            const testStorageManager = new StorageManager(testStorage);
+            await testStorageManager.initialize();
+
+            const node = new CommissioningServer({
+                port: 5540,
+                deviceName: "Test Device",
+                deviceType: 0x16,
+                passcode: 123,
+                discriminator: 1234,
+                basicInformation: {
+                    dataModelRevision: 1,
+                    vendorName: "vendor",
+                    vendorId: new VendorId(1),
+                    productName: "product",
+                    productId: 2,
+                    nodeLabel: "",
+                    hardwareVersion: 0,
+                    hardwareVersionString: "0",
+                    location: "US",
+                    localConfigDisabled: false,
+                    softwareVersion: 1,
+                    softwareVersionString: "v1",
+                    capabilityMinima: {
+                        caseSessionsPerFabric: 3,
+                        subscriptionsPerFabric: 3
+                    },
+                    serialNumber: `node-matter-0000`
+                },
+                certificates: {
+                    devicePrivateKey: ByteArray.fromHex("00"),
+                    deviceCertificate: ByteArray.fromHex("00"),
+                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
+                    certificationDeclaration: ByteArray.fromHex("00"),
+                }
+            });
+            node.setStorageManager(testStorageManager);
             addRequiredRootClusters(node);
 
             const aggregator1 = new Aggregator();
@@ -667,7 +1046,7 @@ describe("Endpoint Structures", () => {
                 nodeLabel: "Socket 1-2",
                 reachable: true
             });
-            node.addEndpoint(aggregator1);
+            node.addDevice(aggregator1);
 
             const aggregator2 = new Aggregator();
             aggregator2.addClusterServer(ClusterServer(
@@ -687,11 +1066,22 @@ describe("Endpoint Structures", () => {
                 nodeLabel: "Socket 2-2",
                 reachable: true
             });
-            node.addEndpoint(aggregator2);
+            node.addDevice(aggregator2);
 
-            assert.equal(node.getRootEndpoint().ensureEndpointIds(1), 7);
+            node.ensureEndpointIds();
+            assert.equal(node.getNextEndpointId(false), 7);
 
-            const { endpoints, attributes, attributePaths, commandPaths } = node.getRootEndpoint().getStructure();
+            const rootEndpoint = node.getRootEndpoint();
+            rootEndpoint.updatePartsList();
+            const endpointStructure = new EndpointStructure();
+            endpointStructure.initializeFromEndpoint(rootEndpoint);
+            const {
+                endpoints,
+                attributes,
+                attributePaths,
+                commandPaths,
+                eventPaths,
+            } = endpointStructure;
 
             assert.equal(endpoints.size, 7);
             assert.equal(endpoints.get(0)?.getAllClusterServers().length, 9);
@@ -760,13 +1150,51 @@ describe("Endpoint Structures", () => {
 
             assert.equal(attributePaths.length, 380);
             assert.equal(commandPaths.length, 98);
+            assert.equal(eventPaths.length, 8);
         });
 
-        it("Device Structure with two aggregators and two Light endpoints and all partly autoassigned endpoint IDs", () => {
-            const node = new TestNode();
+        it("Device Structure with two aggregators and three Light/Composed endpoints and all partly auto-assigned endpoint IDs", async () => {
+            const testStorage = new StorageBackendMemory();
+            const testStorageManager = new StorageManager(testStorage);
+            await testStorageManager.initialize();
+            const endpointStorage = testStorageManager.createContext("EndpointStructure");
+
+            const node = new CommissioningServer({
+                port: 5540,
+                deviceName: "Test Device",
+                deviceType: 0x16,
+                passcode: 123,
+                discriminator: 1234,
+                basicInformation: {
+                    dataModelRevision: 1,
+                    vendorName: "vendor",
+                    vendorId: new VendorId(1),
+                    productName: "product",
+                    productId: 2,
+                    nodeLabel: "",
+                    hardwareVersion: 0,
+                    hardwareVersionString: "0",
+                    location: "US",
+                    localConfigDisabled: false,
+                    softwareVersion: 1,
+                    softwareVersionString: "v1",
+                    capabilityMinima: {
+                        caseSessionsPerFabric: 3,
+                        subscriptionsPerFabric: 3
+                    },
+                    serialNumber: `node-matter-0000`
+                },
+                certificates: {
+                    devicePrivateKey: ByteArray.fromHex("00"),
+                    deviceCertificate: ByteArray.fromHex("00"),
+                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
+                    certificationDeclaration: ByteArray.fromHex("00"),
+                }
+            });
+            node.setStorageManager(testStorageManager);
             addRequiredRootClusters(node);
 
-            const aggregator1 = new Aggregator([], 37);
+            const aggregator1 = new Aggregator([], { endpointId: 37 });
             aggregator1.addClusterServer(ClusterServer(
                 FixedLabelCluster,
                 {
@@ -775,7 +1203,7 @@ describe("Endpoint Structures", () => {
                 {}
             ));
 
-            const onoffLightDevice11 = new OnOffLightDevice(undefined, 3);
+            const onoffLightDevice11 = new OnOffLightDevice(undefined, { endpointId: 3 });
             const onoffLightDevice12 = new OnOffLightDevice();
 
             aggregator1.addBridgedDevice(onoffLightDevice11, {
@@ -786,7 +1214,7 @@ describe("Endpoint Structures", () => {
                 nodeLabel: "Socket 1-2",
                 reachable: true
             });
-            node.addEndpoint(aggregator1);
+            node.addDevice(aggregator1);
 
             const aggregator2 = new Aggregator();
             aggregator2.addClusterServer(ClusterServer(
@@ -798,24 +1226,46 @@ describe("Endpoint Structures", () => {
             ));
 
             const onoffLightDevice21 = new OnOffLightDevice();
-            const onoffLightDevice22 = new OnOffLightDevice(undefined, 18);
+            const onoffLightDevice22 = new OnOffLightDevice(undefined, { endpointId: 18 });
 
             aggregator2.addBridgedDevice(onoffLightDevice21, {
                 nodeLabel: "Socket 2-1",
+                serialNumber: "12345678",
                 reachable: true
             });
             aggregator2.addBridgedDevice(onoffLightDevice22, {
                 nodeLabel: "Socket 2-2",
                 reachable: true
             });
-            node.addEndpoint(aggregator2);
 
-            assert.equal(node.getRootEndpoint().findHighestEndpointId(), 37);
-            assert.equal(node.getRootEndpoint().ensureEndpointIds(38), 41);
+            const composedDevice = new ComposedDevice(DeviceTypes.ON_OFF_LIGHT, [
+                new OnOffLightDevice(undefined, { uniqueId: "COMPOSED.SUB1" }),
+                new OnOffPluginUnitDevice()
+            ]);
+            aggregator2.addBridgedDevice(composedDevice, {
+                nodeLabel: "Composed 2-3",
+                uniqueId: "COMPOSED2",
+                reachable: true
+            });
 
-            const { endpoints, attributes, attributePaths, commandPaths } = node.getRootEndpoint().getStructure();
+            node.addDevice(aggregator2);
 
-            assert.equal(endpoints.size, 7);
+            node.ensureEndpointIds();
+            assert.equal(node.getNextEndpointId(false), 44);
+
+            const rootEndpoint = node.getRootEndpoint();
+            rootEndpoint.updatePartsList();
+            const endpointStructure = new EndpointStructure();
+            endpointStructure.initializeFromEndpoint(rootEndpoint);
+            const {
+                endpoints,
+                attributes,
+                attributePaths,
+                commandPaths,
+                eventPaths,
+            } = endpointStructure;
+
+            assert.equal(endpoints.size, 10);
             assert.equal(endpoints.get(0)?.getAllClusterServers().length, 9);
             assert.ok(endpoints.get(0)?.hasClusterServer(DescriptorCluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(BasicInformationCluster));
@@ -871,18 +1321,315 @@ describe("Endpoint Structures", () => {
             assert.ok(endpoints.get(18)?.hasClusterServer(OnOffCluster));
             assert.ok(endpoints.get(18)?.hasClusterServer(BindingCluster));
 
+            assert.equal(endpoints.get(41)?.getAllClusterServers().length, 2);
+            assert.ok(endpoints.get(41)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(41)?.hasClusterServer(BridgedDeviceBasicInformationCluster));
+
+            assert.equal(endpoints.get(42)?.getAllClusterServers().length, 6);
+            assert.ok(endpoints.get(42)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(42)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(42)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(42)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(42)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(42)?.hasClusterServer(BindingCluster));
+
+            assert.equal(endpoints.get(43)?.getAllClusterServers().length, 6);
+            assert.ok(endpoints.get(43)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(43)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(43)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(43)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(43)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(43)?.hasClusterServer(BindingCluster));
+
             const aggregator1PartsListAttribute = attributes.get(attributePathToId({ endpointId: 37, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id })) as AttributeServer<EndpointNumber[]>;
             assert.deepEqual(aggregator1PartsListAttribute?.getLocal(), [new EndpointNumber(3), new EndpointNumber(38)]);
 
             const aggregator2PartsListAttribute = attributes.get(attributePathToId({ endpointId: 39, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id })) as AttributeServer<EndpointNumber[]>;
-            assert.deepEqual(aggregator2PartsListAttribute?.getLocal(), [new EndpointNumber(40), new EndpointNumber(18)]);
+            assert.deepEqual(aggregator2PartsListAttribute?.getLocal(), [new EndpointNumber(40), new EndpointNumber(18), new EndpointNumber(41), new EndpointNumber(42), new EndpointNumber(43)]);
+
+            const aggregator2PartsListAttribute2 = attributes.get(attributePathToId({ endpointId: 41, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id })) as AttributeServer<EndpointNumber[]>;
+            assert.deepEqual(aggregator2PartsListAttribute2?.getLocal(), [new EndpointNumber(42), new EndpointNumber(43),]);
 
             const rootPartsListAttribute = attributes.get(attributePathToId({ endpointId: 0, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id })) as AttributeServer<EndpointNumber[]>;
-            assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(37), new EndpointNumber(3), new EndpointNumber(38), new EndpointNumber(39), new EndpointNumber(40), new EndpointNumber(18)]);
+            assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(37), new EndpointNumber(3), new EndpointNumber(38), new EndpointNumber(39), new EndpointNumber(40), new EndpointNumber(18), new EndpointNumber(41), new EndpointNumber(42), new EndpointNumber(43)]);
 
-            assert.equal(attributePaths.length, 380);
-            assert.equal(commandPaths.length, 98);
+            assert.equal(endpointStorage.get("basicInfoSerialNumber_node-matter-0000-index_0-index_1"), 38);
+            assert.equal(endpointStorage.get("basicInfoSerialNumber_node-matter-0000-index_1-basicInfoUniqueId_COMPOSED2-customUniqueId_COMPOSED.SUB1"), 42);
+            assert.equal(endpointStorage.get("basicInfoSerialNumber_node-matter-0000-index_1-basicInfoUniqueId_COMPOSED2-index_1"), 43);
+
+            assert.equal(attributePaths.length, 502);
+            assert.equal(commandPaths.length, 138);
+            assert.equal(eventPaths.length, 9);
         });
 
+        it("Device Structure with two aggregators and three Light/Composed endpoints and all partly auto-assigned endpoint IDs and removing adding devices", async () => {
+            const testStorage = new StorageBackendMemory();
+            const testStorageManager = new StorageManager(testStorage);
+            await testStorageManager.initialize();
+            const endpointStorage = testStorageManager.createContext("EndpointStructure");
+            endpointStorage.set("basicInfoSerialNumber_node-matter-0000-index_0-customUniqueId_3333", 3);
+
+            const node = new CommissioningServer({
+                port: 5540,
+                deviceName: "Test Device",
+                deviceType: 0x16,
+                passcode: 123,
+                discriminator: 1234,
+                basicInformation: {
+                    dataModelRevision: 1,
+                    vendorName: "vendor",
+                    vendorId: new VendorId(1),
+                    productName: "product",
+                    productId: 2,
+                    nodeLabel: "",
+                    hardwareVersion: 0,
+                    hardwareVersionString: "0",
+                    location: "US",
+                    localConfigDisabled: false,
+                    softwareVersion: 1,
+                    softwareVersionString: "v1",
+                    capabilityMinima: {
+                        caseSessionsPerFabric: 3,
+                        subscriptionsPerFabric: 3
+                    },
+                    serialNumber: `node-matter-0000`
+                },
+                certificates: {
+                    devicePrivateKey: ByteArray.fromHex("00"),
+                    deviceCertificate: ByteArray.fromHex("00"),
+                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
+                    certificationDeclaration: ByteArray.fromHex("00"),
+                }
+            });
+            node.setStorageManager(testStorageManager);
+            addRequiredRootClusters(node);
+
+            const aggregator1 = new Aggregator([], { endpointId: 37 });
+            aggregator1.addClusterServer(ClusterServer(
+                FixedLabelCluster,
+                {
+                    labelList: [{ label: "bridge", value: "Type A" }]
+                },
+                {}
+            ));
+
+            const onoffLightDevice11 = new OnOffLightDevice(undefined, { uniqueId: "3333" });
+            const onoffLightDevice12 = new OnOffLightDevice();
+
+            aggregator1.addBridgedDevice(onoffLightDevice11, {
+                nodeLabel: "Socket 1-1",
+                reachable: true
+            });
+            aggregator1.addBridgedDevice(onoffLightDevice12, {
+                nodeLabel: "Socket 1-2",
+                reachable: true
+            });
+            node.addDevice(aggregator1);
+
+            const aggregator2 = new Aggregator();
+            aggregator2.addClusterServer(ClusterServer(
+                FixedLabelCluster,
+                {
+                    labelList: [{ label: "bridge", value: "Type B" }]
+                },
+                {}
+            ));
+
+            const onoffLightDevice21 = new OnOffLightDevice();
+            const onoffLightDevice22 = new OnOffLightDevice(undefined, { endpointId: 18 });
+
+            aggregator2.addBridgedDevice(onoffLightDevice21, {
+                nodeLabel: "Socket 2-1",
+                serialNumber: "12345678",
+                reachable: true
+            });
+            aggregator2.addBridgedDevice(onoffLightDevice22, {
+                nodeLabel: "Socket 2-2",
+                reachable: true
+            });
+
+            const composedDevice = new ComposedDevice(DeviceTypes.ON_OFF_LIGHT, [
+                new OnOffLightDevice(undefined, { uniqueId: "COMPOSED.SUB1" }),
+                new OnOffPluginUnitDevice()
+            ]);
+            aggregator2.addBridgedDevice(composedDevice, {
+                nodeLabel: "Composed 2-3",
+                uniqueId: "COMPOSED2",
+                reachable: true
+            });
+
+            node.addDevice(aggregator2);
+
+            node.ensureEndpointIds();
+            assert.equal(node.getNextEndpointId(false), 44);
+
+            const rootEndpoint = node.getRootEndpoint();
+            rootEndpoint.updatePartsList();
+            const endpointStructure = new EndpointStructure();
+            endpointStructure.initializeFromEndpoint(rootEndpoint);
+            const {
+                endpoints,
+                attributes,
+                attributePaths,
+                commandPaths,
+                eventPaths,
+            } = endpointStructure;
+
+            assert.equal(endpoints.size, 10);
+            assert.equal(endpoints.get(0)?.getAllClusterServers().length, 9);
+            assert.ok(endpoints.get(0)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(BasicInformationCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(OperationalCredentialsCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(EthernetNetworkCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AccessControlCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AdminCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GroupKeyManagementCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
+
+            assert.equal(endpoints.get(37)?.getAllClusterServers().length, 2);
+            assert.ok(endpoints.get(37)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(37)?.hasClusterServer(FixedLabelCluster));
+
+            assert.equal(endpoints.get(3)?.getAllClusterServers().length, 7);
+            assert.ok(endpoints.get(3)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(3)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(3)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(3)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(3)?.hasClusterServer(BridgedDeviceBasicInformationCluster));
+            assert.ok(endpoints.get(3)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(3)?.hasClusterServer(BindingCluster));
+
+            assert.equal(endpoints.get(38)?.getAllClusterServers().length, 7);
+            assert.ok(endpoints.get(38)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(38)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(38)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(38)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(38)?.hasClusterServer(BridgedDeviceBasicInformationCluster));
+            assert.ok(endpoints.get(38)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(38)?.hasClusterServer(BindingCluster));
+
+            assert.equal(endpoints.get(39)?.getAllClusterServers().length, 2);
+            assert.ok(endpoints.get(39)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(39)?.hasClusterServer(FixedLabelCluster));
+
+            assert.equal(endpoints.get(40)?.getAllClusterServers().length, 7);
+            assert.ok(endpoints.get(40)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(40)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(40)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(40)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(40)?.hasClusterServer(BridgedDeviceBasicInformationCluster));
+            assert.ok(endpoints.get(40)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(40)?.hasClusterServer(BindingCluster));
+
+            assert.equal(endpoints.get(18)?.getAllClusterServers().length, 7);
+            assert.ok(endpoints.get(18)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(18)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(18)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(18)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(18)?.hasClusterServer(BridgedDeviceBasicInformationCluster));
+            assert.ok(endpoints.get(18)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(18)?.hasClusterServer(BindingCluster));
+
+            assert.equal(endpoints.get(41)?.getAllClusterServers().length, 2);
+            assert.ok(endpoints.get(41)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(41)?.hasClusterServer(BridgedDeviceBasicInformationCluster));
+
+            assert.equal(endpoints.get(42)?.getAllClusterServers().length, 6);
+            assert.ok(endpoints.get(42)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(42)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(42)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(42)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(42)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(42)?.hasClusterServer(BindingCluster));
+
+            assert.equal(endpoints.get(43)?.getAllClusterServers().length, 6);
+            assert.ok(endpoints.get(43)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints.get(43)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints.get(43)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints.get(43)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints.get(43)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints.get(43)?.hasClusterServer(BindingCluster));
+
+            const aggregator1PartsListAttribute = attributes.get(attributePathToId({ endpointId: 37, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id })) as AttributeServer<EndpointNumber[]>;
+            assert.deepEqual(aggregator1PartsListAttribute?.getLocal(), [new EndpointNumber(3), new EndpointNumber(38)]);
+
+            const aggregator2PartsListAttribute = attributes.get(attributePathToId({ endpointId: 39, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id })) as AttributeServer<EndpointNumber[]>;
+            assert.deepEqual(aggregator2PartsListAttribute?.getLocal(), [new EndpointNumber(40), new EndpointNumber(18), new EndpointNumber(41), new EndpointNumber(42), new EndpointNumber(43)]);
+
+            const aggregator2PartsListAttribute2 = attributes.get(attributePathToId({ endpointId: 41, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id })) as AttributeServer<EndpointNumber[]>;
+            assert.deepEqual(aggregator2PartsListAttribute2?.getLocal(), [new EndpointNumber(42), new EndpointNumber(43),]);
+
+            const rootPartsListAttribute = attributes.get(attributePathToId({ endpointId: 0, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id })) as AttributeServer<EndpointNumber[]>;
+            assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(37), new EndpointNumber(3), new EndpointNumber(38), new EndpointNumber(39), new EndpointNumber(40), new EndpointNumber(18), new EndpointNumber(41), new EndpointNumber(42), new EndpointNumber(43)]);
+
+            assert.equal(endpointStorage.get("basicInfoSerialNumber_node-matter-0000-index_0-index_1"), 38);
+            assert.equal(endpointStorage.get("basicInfoSerialNumber_node-matter-0000-index_1-basicInfoUniqueId_COMPOSED2-customUniqueId_COMPOSED.SUB1"), 42);
+            assert.equal(endpointStorage.get("basicInfoSerialNumber_node-matter-0000-index_1-basicInfoUniqueId_COMPOSED2-index_1"), 43);
+
+            assert.equal(attributePaths.length, 502);
+            assert.equal(commandPaths.length, 138);
+            assert.equal(eventPaths.length, 9);
+
+            let structureChangeCounter = 0;
+            rootEndpoint.setStructureChangedCallback(() => {
+                structureChangeCounter++;
+
+                node.ensureEndpointIds();
+                rootEndpoint.updatePartsList();
+            });
+
+            // Add another device
+            const onoffLightDevice13 = new OnOffLightDevice();
+            aggregator1.addBridgedDevice(onoffLightDevice13, {
+                nodeLabel: "Socket 1-1",
+                reachable: true
+            });
+            assert.equal(structureChangeCounter, 1);
+            assert.equal(endpointStorage.get("basicInfoSerialNumber_node-matter-0000-index_0-index_2"), 44);
+
+            // And remove one
+            aggregator1.removeBridgedDevice(onoffLightDevice11);
+
+            assert.equal(node.getNextEndpointId(false), 45);
+            assert.equal(structureChangeCounter, 2);
+
+            const endpointStructure2 = new EndpointStructure();
+            endpointStructure2.initializeFromEndpoint(rootEndpoint);
+            const {
+                endpoints: endpoints2,
+            } = endpointStructure2;
+
+            assert.equal(endpoints2.size, 10);
+            assert.equal(endpoints2.has(3), false);
+
+            assert.equal(endpoints2.get(44)?.getAllClusterServers().length, 7);
+            assert.ok(endpoints2.get(44)?.hasClusterServer(DescriptorCluster));
+            assert.ok(endpoints2.get(44)?.hasClusterServer(IdentifyCluster));
+            assert.ok(endpoints2.get(44)?.hasClusterServer(GroupsCluster));
+            assert.ok(endpoints2.get(44)?.hasClusterServer(ScenesCluster));
+            assert.ok(endpoints2.get(44)?.hasClusterServer(OnOffCluster));
+            assert.ok(endpoints2.get(44)?.hasClusterServer(BindingCluster));
+            assert.ok(endpoints2.get(44)?.hasClusterServer(BridgedDeviceBasicInformationCluster));
+
+            // Add the removed back and verify it gets same endpointID as before
+            const onoffLightDevice11New = new OnOffLightDevice(undefined, { uniqueId: "3333" });
+            aggregator1.addBridgedDevice(onoffLightDevice11New, {
+                nodeLabel: "Socket 1-1 NEW",
+                reachable: true
+            });
+
+            assert.equal(node.getNextEndpointId(false), 45);
+            assert.equal(structureChangeCounter, 3);
+
+            const endpointStructure3 = new EndpointStructure();
+            endpointStructure3.initializeFromEndpoint(rootEndpoint);
+            const {
+                endpoints: endpoints3,
+            } = endpointStructure3;
+
+            assert.equal(endpoints3.size, 11);
+            assert.equal(endpoints3.get(3)?.getAllClusterServers().length, 7);
+        });
     });
 });

@@ -38,11 +38,17 @@ import { EthernetNetworkCommissioningCluster, NetworkCommissioningStatus } from 
 import { AdminCommissioningCluster, CommissioningWindowStatus } from "./cluster/AdminCommissioningCluster.js";
 import { GroupKeyManagementClusterHandler } from "./cluster/server/GroupKeyManagementServer.js";
 import { QrCode } from "./schema/QrCodeSchema.js";
-import { ComposedDevice } from "./device/ComposedDevice.js";
 import { Device } from "./device/Device.js";
 import { ByteArray } from "./util/ByteArray.js";
 import { NamedHandler } from "./util/NamedHandler.js";
 import { Attributes, Commands, Events } from "./cluster/Cluster.js";
+import { Logger } from "./log/Logger.js";
+import { Aggregator } from "./device/Aggregator.js";
+import { TypeFromBitSchema } from "./schema/BitmapSchema.js";
+import { Endpoint } from "./device/Endpoint.js";
+import { StorageContext } from "./storage/StorageContext.js";
+
+const logger = Logger.get("CommissioningServer");
 
 /**
  * Represents device pairing information.
@@ -111,6 +117,7 @@ export class CommissioningServer extends MatterNode {
     private readonly flowType: CommissionningFlowType;
 
     private storageManager?: StorageManager;
+    private endpointStructureStorage?: StorageContext;
     private mdnsScanner?: MdnsScanner;
     private mdnsBroadcaster?: MdnsBroadcaster;
 
@@ -319,7 +326,12 @@ export class CommissioningServer extends MatterNode {
      * Advertise the node via mDNS and start the commissioning process
      */
     async advertise() {
-        if (this.mdnsBroadcaster === undefined || this.mdnsScanner === undefined || this.storageManager === undefined) {
+        if (
+            this.mdnsBroadcaster === undefined ||
+            this.mdnsScanner === undefined ||
+            this.storageManager === undefined ||
+            this.endpointStructureStorage === undefined
+        ) {
             throw new Error("Add the node to the Matter instance before!");
         }
 
@@ -351,10 +363,13 @@ export class CommissioningServer extends MatterNode {
         const productId = basicInformation.attributes.productId.getLocal();
 
         this.interactionServer = new InteractionServer(this.storageManager);
-        const nextEndpointId = Math.max(this.rootEndpoint.findHighestEndpointId() + 1, this.nextEndpointId);
-        const lastEndpointId = this.rootEndpoint.ensureEndpointIds(nextEndpointId);
-        console.log(`Last endpoint id: ${lastEndpointId}`);
-        this.interactionServer.setRootEndpoint(this.rootEndpoint);
+
+        this.nextEndpointId = this.endpointStructureStorage.get("nextEndpointId", this.nextEndpointId);
+
+        this.ensureEndpointIds(); // Make sure to have unique endpoint ids
+        this.rootEndpoint.updatePartsList(); // initialize parts list of all Endpoint objects with final IDs
+        this.rootEndpoint.setStructureChangedCallback(() => this.updateStructure()); // Make sure we get structure changes
+        this.interactionServer.setRootEndpoint(this.rootEndpoint); // Initialize the interaction server with the root endpoint
 
         // TODO adjust later and refactor MatterDevice
         this.deviceInstance = new MatterDevice(this.deviceName, this.deviceType, vendorId, productId, this.discriminator, this.storageManager)
@@ -368,6 +383,81 @@ export class CommissioningServer extends MatterNode {
         }
 
         await this.deviceInstance.start();
+    }
+
+    updateStructure() {
+        logger.debug("Endpoint structure got updated ...");
+        this.ensureEndpointIds(); // Make sure to have unique endpoint ids
+        this.interactionServer?.setRootEndpoint(this.rootEndpoint); // Reinitilize the interaction server structure
+    }
+
+    getNextEndpointId(increase = true) {
+        if (increase) {
+            this.nextEndpointId++;
+        }
+        return this.nextEndpointId;
+    }
+
+    ensureEndpointIds() {
+        const rootUniqueIdPrefix = this.rootEndpoint.determineUniqueID();
+        this.initializeEndpointIdsFromStorage(this.rootEndpoint, rootUniqueIdPrefix);
+        this.fillAndStoreEndpointIds(this.rootEndpoint, rootUniqueIdPrefix);
+        this.endpointStructureStorage?.set("nextEndpointId", this.nextEndpointId);
+    }
+
+    private initializeEndpointIdsFromStorage(endpoint: Endpoint, parentUniquePrefix = "") {
+        if (this.endpointStructureStorage === undefined) {
+            throw new Error("endpointStructureStorage not set!");
+        }
+        const endpoints = endpoint.getChildEndpoints();
+        for (let endpointIndex = 0; endpointIndex < endpoints.length; endpointIndex++) {
+            let endpointUniquePrefix = parentUniquePrefix;
+            const endpoint = endpoints[endpointIndex];
+            const thisUniqueId = endpoint.determineUniqueID();
+            if (thisUniqueId === "") {
+                if (endpoint.id === undefined) {
+                    logger.debug(`No unique id found for endpoint on index ${endpointIndex} / device ${endpoint.name} - using index as unique identifier!`);
+                }
+                endpointUniquePrefix += `${endpointUniquePrefix === "" ? "" : "-"}index_${endpointIndex}`;
+            } else {
+                endpointUniquePrefix += `${endpointUniquePrefix === "" ? "" : "-"}${thisUniqueId}`;
+            }
+
+            if (endpoint.id === undefined) {
+                if (this.endpointStructureStorage.has(endpointUniquePrefix)) {
+                    endpoint.id = this.endpointStructureStorage.get<number>(endpointUniquePrefix);
+                    logger.debug(`Restored endpoint id ${endpoint.id} for endpoint with ${endpointUniquePrefix} / device ${endpoint.name} from storage`);
+                }
+            }
+            if (endpoint.id !== undefined && endpoint.id > this.nextEndpointId) {
+                this.nextEndpointId = endpoint.id + 1;
+            }
+            this.initializeEndpointIdsFromStorage(endpoint, endpointUniquePrefix);
+        }
+    }
+
+    private fillAndStoreEndpointIds(endpoint: Endpoint, parentUniquePrefix = "") {
+        if (this.endpointStructureStorage === undefined) {
+            throw new Error("endpointStructureStorage not set!");
+        }
+        const endpoints = endpoint.getChildEndpoints();
+        for (let endpointIndex = 0; endpointIndex < endpoints.length; endpointIndex++) {
+            let endpointUniquePrefix = parentUniquePrefix;
+            endpoint = endpoints[endpointIndex];
+            const thisUniqueId = endpoint.determineUniqueID();
+            if (thisUniqueId === "") {
+                endpointUniquePrefix += `${endpointUniquePrefix === "" ? "" : "-"}index_${endpointIndex}`;
+            } else {
+                endpointUniquePrefix += `${endpointUniquePrefix === "" ? "" : "-"}${thisUniqueId}`;
+            }
+
+            if (endpoint.id === undefined) {
+                endpoint.id = this.nextEndpointId++;
+                this.endpointStructureStorage.set(endpointUniquePrefix, endpoint.id);
+                logger.debug(`Assigned endpoint id ${endpoint.id} for endpoint with ${endpointUniquePrefix} / device ${endpoint.name} and stored it`);
+            }
+            this.fillAndStoreEndpointIds(endpoint, endpointUniquePrefix);
+        }
     }
 
     /**
@@ -437,14 +527,15 @@ export class CommissioningServer extends MatterNode {
      */
     setStorageManager(storageManager: StorageManager) {
         this.storageManager = storageManager;
+        this.endpointStructureStorage = this.storageManager.createContext("EndpointStructure")
     }
 
     /**
      * Add a new device to the node
      *
-     * @param device Device or ComposedDevice instance to add
+     * @param device Device or Aggregator instance to add
      */
-    addDevice(device: Device | ComposedDevice) {
+    addDevice(device: Device | Aggregator) {
         this.addEndpoint(device);
     }
 
