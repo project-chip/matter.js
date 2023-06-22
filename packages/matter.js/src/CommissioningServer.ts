@@ -5,7 +5,10 @@
  */
 
 import { MatterNode } from "./MatterNode.js";
-import { CommissionningFlowType, DiscoveryCapabilitiesSchema, ManualPairingCodeCodec, QrPairingCodeCodec } from "./schema/PairingCodeSchema.js";
+import {
+    CommissionningFlowType, DiscoveryCapabilitiesBitmap, DiscoveryCapabilitiesSchema, ManualPairingCodeCodec,
+    QrPairingCodeCodec
+} from "./schema/PairingCodeSchema.js";
 import { ClusterServer, InteractionServer } from "./protocol/interaction/InteractionServer.js";
 import { AdminCommissioningHandler } from "./cluster/server/AdminCommissioningServer.js";
 import { SecureChannelProtocol } from "./protocol/securechannel/SecureChannelProtocol.js";
@@ -377,7 +380,7 @@ export class CommissioningServer extends MatterNode {
     /**
      * Return the pairing information for the device
      */
-    getPairingCode(): DevicePairingInformation {
+    getPairingCode(discoveryCapabilities?: TypeFromBitSchema<typeof DiscoveryCapabilitiesBitmap>): DevicePairingInformation {
         const basicInformation = this.getRootClusterServer(BasicInformationCluster);
         if (basicInformation == undefined) {
             throw new Error("BasicInformationCluster needs to be set!");
@@ -393,7 +396,7 @@ export class CommissioningServer extends MatterNode {
             flowType: this.flowType,
             discriminator: this.discriminator,
             passcode: this.passcode,
-            discoveryCapabilities: DiscoveryCapabilitiesSchema.encode({
+            discoveryCapabilities: DiscoveryCapabilitiesSchema.encode(discoveryCapabilities ?? {
                 ble: false,
                 softAccessPoint: false,
                 onIpNetwork: true
