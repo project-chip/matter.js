@@ -20,6 +20,15 @@ import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { TlvNodeId } from "../datatype/NodeId.js";
 import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
 
+/**
+ * ====================== IMPORTANT INFORMATION ======================
+ *
+ * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
+ * directory!! They are still used within the codebase, but will be changed soon!
+ *
+ * ====================== IMPORTANT INFORMATION ======================
+ */
+
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.4.6.1 */
 export const TlvAttributeValuePair = TlvObject({
     /**

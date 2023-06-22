@@ -11,7 +11,7 @@ export class EventClient<T> {
     private readonly listeners = new Array<(event: T/*, oldValue: T*/) => void>();
 
     constructor(
-        readonly event: Event<T>,
+        readonly event: Event<T, any>,
         readonly name: string,
         readonly endpointId: number,
         readonly clusterId: number,

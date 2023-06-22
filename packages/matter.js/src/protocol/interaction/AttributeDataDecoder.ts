@@ -110,7 +110,7 @@ export function normalizeAndDecodeAttributeData(data: TypeFromSchema<typeof TlvA
     return result;
 }
 
-export function decodeValueForAttribute<A extends Attribute<any>>(attribute: A, values: TypeFromSchema<typeof TlvAttributeData>[]): AttributeJsType<A> | undefined {
+export function decodeValueForAttribute<A extends Attribute<any, any>>(attribute: A, values: TypeFromSchema<typeof TlvAttributeData>[]): AttributeJsType<A> | undefined {
     const { schema, optional, default: conformanceValue } = attribute;
 
     // No values, so use default value if available

@@ -17,6 +17,15 @@ import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 /**
+ * ====================== IMPORTANT INFORMATION ======================
+ *
+ * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
+ * directory!! They are still used within the codebase, but will be changed soon!
+ *
+ * ====================== IMPORTANT INFORMATION ======================
+ */
+
+/**
  * Provides constant values related to overall global capabilities of this Node, that are not cluster-specific.
  *
  * @see {@link MatterCoreSpecificationV1_0} § 11.1.6.2

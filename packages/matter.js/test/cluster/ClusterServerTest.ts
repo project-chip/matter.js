@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Time } from "../../src/time/Time.js";
+import { TimeFake } from "../../src/time/TimeFake.js";
 import * as assert from "assert";
 import { AdminCommissioningCluster } from "../../src/cluster/AdminCommissioningCluster.js";
 import { GroupsCluster } from "../../src/cluster/GroupsCluster.js";
@@ -12,16 +14,17 @@ import { CommandId } from "../../src/datatype/CommandId.js";
 import { FabricIndex } from "../../src/datatype/FabricIndex.js";
 import { ClusterServer } from "../../src/protocol/interaction/InteractionServer.js";
 import {
-    AttributeServer,
-    BasicInformationCluster, BindingCluster, Cluster,
-    FixedAttributeServer,
-    IdentifyCluster,
-    IdentifyType
+    AttributeServer, BasicInformationCluster, BindingCluster, Cluster, ClusterExtend, FixedAttributeServer,
+    IdentifyCluster, IdentifyType
 } from "../../src/cluster/index.js";
 import { VendorId } from "../../src/datatype/index.js";
 import { DeviceTypes, Endpoint } from "../../src/device/index.js";
 import { Fabric } from "../../src/fabric/index.js";
-
+import {
+    WindowCoveringClusterSchema, WindowCoveringEndProductType, WindowCoveringOperationalStatusEnum,
+    WindowCoveringType
+} from "../../src/cluster/schema/WindowCovering.js";
+import { Level, Logger } from "../../src/log/index.js";
 
 describe("ClusterServer structure", () => {
     describe("correct attribute servers are used and exposed", () => {
@@ -482,6 +485,69 @@ describe("ClusterServer structure", () => {
             assert.deepEqual((server.attributes as any).acceptedCommandList.get(), [new CommandId(0), new CommandId(1), new CommandId(2), new CommandId(3), new CommandId(4), new CommandId(5)]);
             assert.deepEqual((server.attributes as any).generatedCommandList.get(), [new CommandId(0), new CommandId(1), new CommandId(2), new CommandId(3)]);
             assert.deepEqual((server.attributes as any).eventList.get(), []);
+        });
+
+        it("Missing Conditionals Log warnings", () => {
+            const fakeTime = new TimeFake(0);
+            Time.get = () => fakeTime;
+            const fakeLogSink = new Array<{ level: Level, log: string }>();
+            Logger.log = (level, log) => fakeLogSink.push({ level, log });
+
+            const TestCluster = ClusterExtend(WindowCoveringClusterSchema, {
+                supportedFeatures: {
+                    lift: true,
+                    positionAwareLift: true,
+                }
+            });
+            ClusterServer(
+                TestCluster,
+                {
+                    type: WindowCoveringType.RollerShade,
+                    configStatus: {
+                        liftPositionAware: false,
+                        operational: false,
+                        liftEncoderControlled: false,
+                        liftMovementReversed: false,
+                        tiltPositionAware: false,
+                        tiltEncoderControlled: false,
+                    },
+                    operationalStatus: {
+                        coveringStatus: WindowCoveringOperationalStatusEnum.Stopped,
+                        liftStatus: WindowCoveringOperationalStatusEnum.Stopped,
+                        tiltStatus: WindowCoveringOperationalStatusEnum.Stopped,
+                    },
+                    endProductType: WindowCoveringEndProductType.RollerShade,
+                    mode: {
+                        motorDirectionReversed: false,
+                        calibrationMode: false,
+                        maintenanceMode: false,
+                        ledFeedback: false,
+                    },
+                    numberOfActuationsLift: 0,
+                    targetPositionLiftPercent100ths: 0,
+                    currentPositionLiftPercent100ths: 0,
+                    installedOpenLimitLift: 0,
+                    // installedClosedLimitLift: 0, // Should be existing but not set
+                    currentPositionTiltPercent100ths: 0, // Should not be there because not valid for feature-combination
+                },
+                {
+                    upOrOpen: async () => { /* dummy */ },
+                    downOrClose: async () => { /* dummy */ },
+                    stopMotion: async () => { /* dummy */ }
+                    // gotoLiftValue: async () => { /* dummy */ }, // Should be existing but not set
+                }
+            );
+
+            // TODO: Find out how to set TZ=UTC when executing single tests locally
+
+            assert.deepEqual(fakeLogSink, [
+                { level: Level.DEBUG, log: '1970-01-01 00:00:00.000 DEBUG InteractionProtocol InitialAttributeValue for "WindowCovering/physicalClosedLimitLift" is optional by supportedFeatures: {"lift":true,"positionAwareLift":true} and is not set!' },
+                { level: Level.DEBUG, log: '1970-01-01 00:00:00.000 DEBUG InteractionProtocol InitialAttributeValue for "WindowCovering/currentPositionLift" is optional by supportedFeatures: {"lift":true,"positionAwareLift":true} and is not set!' },
+                { level: Level.DEBUG, log: '1970-01-01 00:00:00.000 DEBUG InteractionProtocol InitialAttributeValue for "WindowCovering/currentPositionLiftPercentage" is optional by supportedFeatures: {"lift":true,"positionAwareLift":true} and is not set!' },
+                { level: Level.WARN, log: '1970-01-01 00:00:00.000 WARN InteractionProtocol InitialAttributeValue for "WindowCovering/currentPositionTiltPercent100ths" is provided but it\'s neither optional or mandatory for supportedFeatures: {"lift":true,"positionAwareLift":true} but is set!' },
+                { level: Level.WARN, log: '1970-01-01 00:00:00.000 WARN InteractionProtocol InitialAttributeValue for "WindowCovering/installedClosedLimitLift" is REQUIRED by supportedFeatures: {"lift":true,"positionAwareLift":true} but is not set!' },
+                { level: Level.WARN, log: '1970-01-01 00:00:00.000 WARN InteractionProtocol Command "WindowCovering/goToLiftPercent" is REQUIRED by supportedFeatures: {"lift":true,"positionAwareLift":true} but is not set!' }
+            ]);
         });
     });
 });

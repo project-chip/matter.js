@@ -67,7 +67,7 @@ export const AllClustersMap: { [key: Cluster<any, any, any, any, any>["id"]]: Cl
 };
 
 interface CachedAttributeInfo {
-    attribute: Attribute<any>;
+    attribute: Attribute<any, any>;
     name: string;
 }
 const clusterAttributeCache = new Map<number, Map<number, CachedAttributeInfo>>();

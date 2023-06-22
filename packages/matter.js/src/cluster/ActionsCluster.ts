@@ -14,6 +14,15 @@ import { TlvArray } from "../tlv/TlvArray.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 /**
+ * ====================== IMPORTANT INFORMATION ======================
+ *
+ * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
+ * directory!! They are still used within the codebase, but will be changed soon!
+ *
+ * ====================== IMPORTANT INFORMATION ======================
+ */
+
+/**
  * Supported Commands bitmap which SHALL be used to indicate which of the cluster’s commands are
  * supported for this particular action, with a bit set to 1 for each supported command.
  *

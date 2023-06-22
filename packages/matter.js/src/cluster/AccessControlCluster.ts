@@ -22,6 +22,15 @@ import { TlvSchema } from "../tlv/TlvSchema.js";
 import { TlvNodeId } from "../datatype/NodeId.js";
 
 /**
+ * ====================== IMPORTANT INFORMATION ======================
+ *
+ * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
+ * directory!! They are still used within the codebase, but will be changed soon!
+ *
+ * ====================== IMPORTANT INFORMATION ======================
+ */
+
+/**
  * List of privileges that can be granted to a subject.
  *
  * @see {@link MatterCoreSpecificationV1_0} § 9.10.5.3

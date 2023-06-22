@@ -26,18 +26,18 @@ import { EventServer } from "./EventServer.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 
 /** Cluster attributes accessible on the cluster server */
-type MandatoryAttributeServers<A extends Attributes> = Omit<{ [P in MandatoryAttributeNames<A>]: A[P] extends WritableFabricScopedAttribute<any> ? FabricScopedAttributeServer<AttributeJsType<A[P]>> : (A[P] extends FixedAttribute<any> ? FixedAttributeServer<AttributeJsType<A[P]>> : AttributeServer<AttributeJsType<A[P]>>) }, keyof GlobalAttributes<any>>;
-type OptionalAttributeServers<A extends Attributes> = { [P in OptionalAttributeNames<A>]?: A[P] extends OptionalWritableFabricScopedAttribute<any> ? FabricScopedAttributeServer<AttributeJsType<A[P]>> : (A[P] extends OptionalFixedAttribute<any> ? FixedAttributeServer<AttributeJsType<A[P]>> : AttributeServer<AttributeJsType<A[P]>>) };
+type MandatoryAttributeServers<A extends Attributes> = Omit<{ [P in MandatoryAttributeNames<A>]: A[P] extends WritableFabricScopedAttribute<any, any> ? FabricScopedAttributeServer<AttributeJsType<A[P]>> : (A[P] extends FixedAttribute<any, any> ? FixedAttributeServer<AttributeJsType<A[P]>> : AttributeServer<AttributeJsType<A[P]>>) }, keyof GlobalAttributes<any>>;
+type OptionalAttributeServers<A extends Attributes> = { [P in OptionalAttributeNames<A>]?: A[P] extends OptionalWritableFabricScopedAttribute<any, any> ? FabricScopedAttributeServer<AttributeJsType<A[P]>> : (A[P] extends OptionalFixedAttribute<any, any> ? FixedAttributeServer<AttributeJsType<A[P]>> : AttributeServer<AttributeJsType<A[P]>>) };
 export type AttributeServers<A extends Attributes> = Merge<MandatoryAttributeServers<A>, OptionalAttributeServers<A>>;
 
 /** Initial values for the cluster attribute */
 export type AttributeInitialValues<A extends Attributes> = Merge<Omit<{ [P in MandatoryAttributeNames<A>]: AttributeJsType<A[P]> }, keyof GlobalAttributes<any>>, { [P in OptionalAttributeNames<A>]?: AttributeJsType<A[P]> }>;
 export type AttributeServerValues<A extends Attributes> = Merge<{ [P in MandatoryAttributeNames<A>]: AttributeJsType<A[P]> }, { [P in OptionalAttributeNames<A>]?: AttributeJsType<A[P]> }>;
 
-type MandatoryCommandNames<C extends Commands> = { [K in keyof C]: C[K] extends OptionalCommand<any, any> ? never : K }[keyof C];
-type OptionalCommandNames<C extends Commands> = { [K in keyof C]: C[K] extends OptionalCommand<any, any> ? K : never }[keyof C];
+type MandatoryCommandNames<C extends Commands> = { [K in keyof C]: C[K] extends OptionalCommand<any, any, any> ? never : K }[keyof C];
+type OptionalCommandNames<C extends Commands> = { [K in keyof C]: C[K] extends OptionalCommand<any, any, any> ? K : never }[keyof C];
 type AttributeGetters<A extends Attributes> = { [P in keyof A as `get${Capitalize<string & P>}`]?: (args: { attributes: AttributeServers<A>, endpoint?: Endpoint, session?: Session<MatterDevice> }) => AttributeJsType<A[P]> };
-export type CommandHandler<C extends Command<any, any>, AS extends AttributeServers<any>, ES extends EventServers<any>> = C extends Command<infer RequestT, infer ResponseT> ? (args: { request: RequestT, attributes: AS, events: ES, session: Session<MatterDevice>, message: Message, endpoint: Endpoint }) => Promise<ResponseT> | ResponseT : never;
+export type CommandHandler<C extends Command<any, any, any>, AS extends AttributeServers<any>, ES extends EventServers<any>> = C extends Command<infer RequestT, infer ResponseT, any> ? (args: { request: RequestT, attributes: AS, events: ES, session: Session<MatterDevice>, message: Message, endpoint: Endpoint }) => Promise<ResponseT> | ResponseT : never;
 type CommandHandlers<T extends Commands, AS extends AttributeServers<any>, ES extends EventServers<any>> = Merge<{ [P in MandatoryCommandNames<T>]: CommandHandler<T[P], AS, ES> }, { [P in OptionalCommandNames<T>]?: CommandHandler<T[P], AS, ES> }>;
 
 /** Handlers to process cluster commands */
@@ -46,7 +46,7 @@ export type ClusterServerHandlers<C extends Cluster<any, any, any, any, any>> = 
 export type CommandServers<C extends Commands> = Merge<{ [P in MandatoryCommandNames<C>]: CommandServer<RequestType<C[P]>, ResponseType<C[P]>> }, { [P in OptionalCommandNames<C>]?: CommandServer<RequestType<C[P]>, ResponseType<C[P]>> }>;
 
 type OptionalAttributeConf<T extends Attributes> = { [K in OptionalAttributeNames<T>]?: true };
-type MakeAttributeMandatory<A extends Attribute<any>> = A extends OptionalWritableFabricScopedAttribute<infer T> ? WritableFabricScopedAttribute<T> : (A extends OptionalWritableAttribute<infer T> ? WritableAttribute<T> : (A extends OptionalAttribute<infer T> ? Attribute<T> : A));
+type MakeAttributeMandatory<A extends Attribute<any, any>> = A extends OptionalWritableFabricScopedAttribute<infer T, any> ? WritableFabricScopedAttribute<T, any> : (A extends OptionalWritableAttribute<infer T, any> ? WritableAttribute<T, any> : (A extends OptionalAttribute<infer T, any> ? Attribute<T, any> : A));
 type MakeAttributesMandatory<T extends Attributes, C extends OptionalAttributeConf<T>> = { [K in keyof T]: K extends keyof C ? MakeAttributeMandatory<T[K]> : T[K] };
 
 const MakeAttributesMandatory = <T extends Attributes, C extends OptionalAttributeConf<T>>(attributes: T, conf: C): MakeAttributesMandatory<T, C> => {
@@ -61,10 +61,10 @@ type UseOptionalAttributes<C extends Cluster<any, any, any, any, any>, A extends
 /* eslint-disable @typescript-eslint/no-unused-vars */
 export const UseOptionalAttributes = <C extends Cluster<any, any, any, any, any>, A extends OptionalAttributeConf<C["attributes"]>>(cluster: C, conf: A): UseOptionalAttributes<C, A> => ({ ...cluster, attributes: MakeAttributesMandatory(cluster.attributes, conf) });
 
-export type FabricScopedAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends WritableFabricScopedAttribute<any> ? K : A[K] extends OptionalWritableFabricScopedAttribute<any> ? K : never }[keyof A];
-export type NonFixedAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends FixedAttribute<any> ? never : A[K] extends OptionalFixedAttribute<any> ? never : K }[keyof A];
+export type FabricScopedAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends WritableFabricScopedAttribute<any, any> ? K : A[K] extends OptionalWritableFabricScopedAttribute<any, any> ? K : never }[keyof A];
+export type NonFixedAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends FixedAttribute<any, any> ? never : A[K] extends OptionalFixedAttribute<any, any> ? never : K }[keyof A];
 
-type GetterTypeFromSpec<A extends Attribute<any>> = A extends OptionalAttribute<infer T> ? (T | undefined) : AttributeJsType<A>;
+type GetterTypeFromSpec<A extends Attribute<any, any>> = A extends OptionalAttribute<infer T, any> ? (T | undefined) : AttributeJsType<A>;
 type ServerAttributeGetters<A extends Attributes> =
     { [P in MandatoryAttributeNames<A> as `get${Capitalize<string & P>}Attribute`]: () => GetterTypeFromSpec<A[P]> } &
     { [P in OptionalAttributeNames<A> as `get${Capitalize<string & P>}Attribute`]?: () => GetterTypeFromSpec<A[P]> } &

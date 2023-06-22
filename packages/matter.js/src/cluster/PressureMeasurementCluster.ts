@@ -11,6 +11,15 @@ import { TlvInt16, TlvInt8, TlvUInt16 } from "../tlv/TlvNumber.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../spec/Specifications.js";
 
 /**
+ * ====================== IMPORTANT INFORMATION ======================
+ *
+ * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
+ * directory!! They are still used within the codebase, but will be changed soon!
+ *
+ * ====================== IMPORTANT INFORMATION ======================
+ */
+
+/**
  * This cluster provides an interface to pressure measurement functionality.
  *
  * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.4
