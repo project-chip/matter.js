@@ -58,10 +58,10 @@ export const TlvAttributePath = TlvList({ // AttributePathIB
 
 /** @see {@link MatterCoreSpecificationV1_0}, section 10.5.8 */
 export const TlvEventPath = TlvList({ // EventPathIB
-    node: TlvOptionalField(0, TlvNodeId),
-    endpoint: TlvOptionalField(1, TlvUInt16),
-    cluster: TlvOptionalField(2, TlvUInt32),
-    event: TlvOptionalField(3, TlvUInt32),
+    nodeId: TlvOptionalField(0, TlvNodeId),
+    endpointId: TlvOptionalField(1, TlvUInt16),
+    clusterId: TlvOptionalField(2, TlvUInt32),
+    eventId: TlvOptionalField(3, TlvUInt32),
     isUrgent: TlvOptionalField(4, TlvBoolean),
 });
 
@@ -79,15 +79,15 @@ export const TlvEventData = TlvObject({ // EventDataIB
 
 /** @see {@link MatterCoreSpecificationV1_0}, section 10.5.6 */
 export const TlvEventFilter = TlvList({ // EventFilterIB
-    node: TlvOptionalField(0, TlvNodeId),
+    nodeId: TlvOptionalField(0, TlvNodeId),
     eventMin: TlvField(1, TlvUInt64),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0}, section 10.5.7 */
 export const TlvClusterPath = TlvList({ // ClusterPathIB
-    node: TlvOptionalField(0, TlvNodeId),
-    endpoint: TlvField(1, TlvUInt16),
-    cluster: TlvField(2, TlvUInt32),
+    nodeId: TlvOptionalField(0, TlvNodeId),
+    endpointId: TlvField(1, TlvUInt16),
+    clusterId: TlvField(2, TlvUInt32),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0}, section 10.5.3 */
