@@ -26,6 +26,9 @@ export abstract class Time {
 
 export interface Timer {
 
+    /** Is true if this timer is running. */
+    isRunning: boolean;
+
     /** Starts this timer, chainable. */
     start(): Timer;
 

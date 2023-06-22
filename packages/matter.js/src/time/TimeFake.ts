@@ -8,19 +8,33 @@ import { getPromiseResolver } from "../util/Promises.js";
 import { Time, Timer, TimerCallback } from "./Time.js";
 
 class TimerFake implements Timer {
+    isRunning = false;
+    private readonly callback: TimerCallback
+
     constructor(
         private readonly timeFake: TimeFake,
         private readonly durationMs: number,
-        private readonly callback: TimerCallback,
-    ) { }
+        callback: TimerCallback,
+    ) {
+        if (this instanceof IntervalFake) {
+            this.callback = callback;
+        } else {
+            this.callback = () => {
+                this.isRunning = false;
+                callback();
+            }
+        }
+    }
 
     start() {
         this.timeFake.callbackAtTime(this.timeFake.nowMs() + this.durationMs, this.callback);
+        this.isRunning = true;
         return this;
     }
 
     stop() {
         this.timeFake.removeCallback(this.callback);
+        this.isRunning = false;
         return this;
     }
 }

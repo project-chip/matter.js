@@ -37,6 +37,7 @@ interface PathValueVersion<T> {
 export class SubscriptionHandler {
     private lastUpdateTimeMs = 0;
     private updateTimer: Timer;
+    private sendDelayTimer: Timer
     private outstandingAttributeUpdates = new Map<string, PathValueVersion<any>>();
     private attributeListeners = new Map<string, (value: any, version: number) => void>();
     private sendUpdatesActivated = false;
@@ -64,7 +65,8 @@ export class SubscriptionHandler {
         const halfMaxIntervalCeilingMs = (Math.max(SUBSCRIPTION_MAX_INTERVAL_PUBLISHER_LIMIT_MS, this.maxIntervalCeilingMs) - this.minIntervalFloorMs) / 2;
         this.maxInterval = Math.floor(this.minIntervalFloorMs + halfMaxIntervalCeilingMs + halfMaxIntervalCeilingMs * Math.random());
         this.sendInterval = Math.floor(this.maxInterval / 2);
-        this.updateTimer = Time.getTimer(this.sendInterval, () => this.sendUpdate()); // will be started later
+        this.updateTimer = Time.getTimer(this.sendInterval, () => this.prepareDataUpdate()); // will be started later
+        this.sendDelayTimer = Time.getTimer(50, () => this.sendUpdate()); // will be started later
 
         attributes.forEach(({ path, attribute }) => {
             if (attribute instanceof FixedAttributeServer) return; // Fixed values will never change
@@ -83,17 +85,16 @@ export class SubscriptionHandler {
         this.sendUpdatesActivated = true;
         if (this.outstandingAttributeUpdates.size > 0) {
             void this.sendUpdate();
-        } else {
-            this.updateTimer = Time.getTimer(this.sendInterval, () => this.sendUpdate()).start();
         }
+        this.updateTimer = Time.getTimer(this.sendInterval, () => this.prepareDataUpdate()).start();
     }
 
-    async sendUpdate() {
-        this.updateTimer.stop();
-        const now = Time.nowMs();
-        const timeSinceLastUpdateMs = now - this.lastUpdateTimeMs;
-        if (timeSinceLastUpdateMs < this.minIntervalFloorMs) {
-            this.updateTimer = Time.getTimer(this.minIntervalFloorMs - timeSinceLastUpdateMs, () => this.sendUpdate()).start();
+    /**
+     * Check if data should be sent straight away or delayed because the minimum interval is not reached. Delay real
+     * sending by 50ms in any case to mke sure to catch all updates.
+     */
+    prepareDataUpdate() {
+        if (this.sendDelayTimer.isRunning) { // sending data is already scheduled, data updates go in there
             return;
         }
 
@@ -101,17 +102,33 @@ export class SubscriptionHandler {
             return;
         }
 
+        this.updateTimer.stop();
+        const now = Time.nowMs();
+        const timeSinceLastUpdateMs = now - this.lastUpdateTimeMs;
+        if (timeSinceLastUpdateMs < this.minIntervalFloorMs) {
+            // Respect minimum delay time between updates
+            this.updateTimer = Time.getTimer(this.minIntervalFloorMs - timeSinceLastUpdateMs, () => this.prepareDataUpdate()).start();
+            return;
+        }
+
+        this.sendDelayTimer.start();
+        this.updateTimer = Time.getTimer(this.sendInterval, () => this.prepareDataUpdate()).start();
+    }
+
+    /**
+     * Determine all attributes that have changed since the last update and send them tout to the subscriber.
+     */
+    async sendUpdate() {
         const updatesToSend = Array.from(this.outstandingAttributeUpdates.values());
         this.outstandingAttributeUpdates.clear();
-        this.lastUpdateTimeMs = now;
+        this.lastUpdateTimeMs = Time.nowMs();
+
         try {
             await this.sendUpdateMessage(updatesToSend);
         } catch (error) {
             // TODO: Add maybe a counter and cancel subscription update sending after a certain number of errors?
             logger.error("Error sending subscription update message", error);
         }
-
-        this.updateTimer = Time.getTimer(this.sendInterval, () => this.sendUpdate()).start();
     }
 
     async sendInitialReport(messenger: InteractionServerMessenger, session: SecureSession<MatterDevice>) {
@@ -139,7 +156,7 @@ export class SubscriptionHandler {
 
     attributeChangeListener(path: TypeFromSchema<typeof TlvAttributePath>, schema: TlvSchema<any>, version: number, value: any) {
         this.outstandingAttributeUpdates.set(attributePathToId(path), { path, schema, version, value });
-        void this.sendUpdate();
+        void this.prepareDataUpdate();
     }
 
     cancel() {
