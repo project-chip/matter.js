@@ -6,7 +6,9 @@
  */
 
 /**
- * This example shows how to create a new device node that is composed of multiple devices, a so called ComposedDevice.
+ * This example shows how to create a new device node that is composed of multiple devices.
+ * It creates multiple endpoints on the server. When you want to add a composed devices to a Aggregator you need to
+ * add all endpoints of the composed device to an "ComposedDevice" instance! (not shown in this example).
  * It can be used as CLI script and starting point for your own device node implementation.
  */
 
@@ -21,7 +23,7 @@ import { CommissioningServer, MatterServer } from "../"; // same as @project-chi
 
 import { commandExecutor, getIntParameter, getParameter, requireMinNodeVersion, hasParameter } from "../util"; // same as @project-chip/matter-node.js/util
 import { Time } from "../time"; // same as @project-chip/matter-node.js/time
-import { OnOffLightDevice, OnOffPluginUnitDevice, ComposedDevice, DeviceTypes } from "../exports/device"; // same as @project-chip/matter-node.js/device
+import { OnOffLightDevice, OnOffPluginUnitDevice, DeviceTypes } from "../exports/device"; // same as @project-chip/matter-node.js/device
 import { VendorId } from "../exports/datatype"; // same as @project-chip/matter-node.js/datatype
 import { Logger } from "../exports/log"; // same as @project-chip/matter-node.js/log
 import { StorageManager, StorageBackendDisk } from "../storage"; // same as @project-chip/matter-node.js/storage
@@ -79,11 +81,14 @@ class BridgedDevice {
         const netAnnounceInterface = getParameter("announceinterface");
         const port = getIntParameter("port") ?? 5540;
 
+        const uniqueId = getIntParameter("uniqueid") ?? deviceStorage.get("uniqueid", Time.nowMs());
+
         deviceStorage.set("passcode", passcode);
         deviceStorage.set("discriminator", discriminator);
         deviceStorage.set("vendorid", vendorId.id);
         deviceStorage.set("productid", productId);
         deviceStorage.set("isSocket", isSocket);
+        deviceStorage.set("uniqueid", uniqueId);
 
         /**
          * Create Matter Server and CommissioningServer Node
@@ -109,9 +114,11 @@ class BridgedDevice {
             basicInformation: {
                 vendorName,
                 vendorId,
+                nodeLabel: productName,
                 productName,
+                productLabel: productName,
                 productId,
-                serialNumber: `node-matter-${Time.nowMs()}`,
+                serialNumber: `node-matter-${uniqueId}`,
             }
         });
 
@@ -127,19 +134,13 @@ class BridgedDevice {
          * like identify that can be implemented with the logic when these commands are called.
          */
 
-        const composedDevice = new ComposedDevice(
-            getParameter("type") === "socket" ? [DeviceTypes.ON_OFF_PLUGIN_UNIT] : [DeviceTypes.ON_OFF_LIGHT]
-        );
-
         const numDevices = getIntParameter("num") || 2;
         for (let i = 1; i <= numDevices; i++) {
             const onOffDevice = getParameter(`type${i}`) === "socket" ? new OnOffPluginUnitDevice() : new OnOffLightDevice();
             onOffDevice.addFixedLabel("orientation", getParameter(`orientation${i}`) ?? `orientation ${i}`);
             onOffDevice.addOnOffListener(on => commandExecutor(on ? `on${i}` : `off${i}`)?.());
-            composedDevice.addDevice(onOffDevice,);
+            commissioningServer.addDevice(onOffDevice);
         }
-
-        commissioningServer.addDevice(composedDevice);
 
         matterServer.addCommissioningServer(commissioningServer);
 

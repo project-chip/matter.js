@@ -25,8 +25,6 @@ import { Logger } from "../exports/log"; // same as @project-chip/matter-node.js
 import { StorageManager, StorageBackendDisk } from "../storage"; // same as @project-chip/matter-node.js/storage
 import { commandExecutor, getIntParameter, getParameter, requireMinNodeVersion, hasParameter } from "../util"; // same as @project-chip/matter-node.js/util
 import { Time } from "../time";
-import { BridgedDeviceBasicInformationCluster } from "../exports/cluster";
-import { ClusterServer } from "../exports/interaction";
 
 const logger = Logger.get("Device");
 
@@ -77,10 +75,13 @@ class BridgedDevice {
         const netAnnounceInterface = getParameter("announceinterface");
         const port = getIntParameter("port") ?? 5540;
 
+        const uniqueId = getIntParameter("uniqueid") ?? deviceStorage.get("uniqueid", Time.nowMs());
+
         deviceStorage.set("passcode", passcode);
         deviceStorage.set("discriminator", discriminator);
         deviceStorage.set("vendorid", vendorId.id);
         deviceStorage.set("productid", productId);
+        deviceStorage.set("uniqueid", uniqueId);
 
         /**
          * Create Matter Server and CommissioningServer Node
@@ -97,7 +98,6 @@ class BridgedDevice {
 
         const matterServer = new MatterServer(storageManager, netAnnounceInterface);
 
-        const uniqueId = Time.nowMs(); // TODO Store it!
         const commissioningServer = new CommissioningServer({
             port,
             deviceName,
@@ -107,17 +107,13 @@ class BridgedDevice {
             basicInformation: {
                 vendorName,
                 vendorId,
+                nodeLabel: productName,
                 productName,
+                productLabel: productName,
                 productId,
                 serialNumber: `node-matter-${uniqueId}`,
             }
         });
-
-        commissioningServer.addRootClusterServer(ClusterServer(BridgedDeviceBasicInformationCluster, {
-            nodeLabel: `OnOff Bridge`,
-            serialNumber: `node-matter-${uniqueId}`,
-            reachable: true
-        }, {}))
 
         /**
          * Create Device instance and add needed Listener
