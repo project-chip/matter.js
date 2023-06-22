@@ -16,6 +16,15 @@ import { TlvNullable } from "../tlv/TlvNullable.js";
 import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
+/**
+ * ====================== IMPORTANT INFORMATION ======================
+ *
+ * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
+ * directory!! They are still used within the codebase, but will be changed soon!
+ *
+ * ====================== IMPORTANT INFORMATION ======================
+ */
+
 const PAKE_PASSCODE_VERIFIER_LENGTH = CRYPTO_GROUP_SIZE_BYTES + CRYPTO_PUBLIC_KEY_SIZE_BYTES;
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.18.9 */

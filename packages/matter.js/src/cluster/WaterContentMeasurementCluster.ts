@@ -10,6 +10,15 @@ import { TlvUInt16 } from "../tlv/TlvNumber.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
 
+/**
+ * ====================== IMPORTANT INFORMATION ======================
+ *
+ * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
+ * directory!! They are still used within the codebase, but will be changed soon!
+ *
+ * ====================== IMPORTANT INFORMATION ======================
+ */
+
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 2.6.4 */
 const attributes = {
     /** Represents the water content in % as follows: MeasuredValue = 100 x water content */

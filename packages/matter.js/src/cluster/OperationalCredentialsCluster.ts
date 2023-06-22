@@ -18,6 +18,15 @@ import { TlvSubjectId } from "../datatype/SubjectId.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
+/**
+ * ====================== IMPORTANT INFORMATION ======================
+ *
+ * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
+ * directory!! They are still used within the codebase, but will be changed soon!
+ *
+ * ====================== IMPORTANT INFORMATION ======================
+ */
+
 // TODO: Rename to NodeOperationalCredentialsCluster to match with specs
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.17.5.1 */

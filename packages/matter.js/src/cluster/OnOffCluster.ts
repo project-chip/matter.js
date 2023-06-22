@@ -15,6 +15,15 @@ import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 
 /**
+ * ====================== IMPORTANT INFORMATION ======================
+ *
+ * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
+ * directory!! They are still used within the codebase, but will be changed soon!
+ *
+ * ====================== IMPORTANT INFORMATION ======================
+ */
+
+/**
  * Defined how the devices should behave when it is powered on.
  * If the value is null, the OnOff attribute is set to its previous value when the device starts up.
  *

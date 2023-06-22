@@ -8,14 +8,16 @@ import { MatterDevice } from "../../MatterDevice.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import {
-    DataReport, InteractionServerMessenger, InvokeRequest, InvokeResponse, MessageType, ReadRequest, StatusResponseError,
-    SubscribeRequest, TimedRequest, WriteRequest, WriteResponse
+    DataReport, InteractionServerMessenger, InvokeRequest, InvokeResponse, MessageType, ReadRequest,
+    StatusResponseError, SubscribeRequest, TimedRequest, WriteRequest, WriteResponse
 } from "./InteractionMessenger.js";
-import { Attributes, Cluster, Commands, Events, TlvNoResponse } from "../../cluster/Cluster.js";
+import {
+    Attributes, Cluster, Commands, ConditionalFeatureList, Events, TlvNoResponse
+} from "../../cluster/Cluster.js";
 import {
     StatusCode, TlvAttributePath, TlvAttributeReport, TlvCommandPath, TlvInvokeResponseData, TlvSubscribeResponse
 } from "./InteractionProtocol.js"
-import { BitSchema, TypeFromBitSchema } from "../../schema/BitmapSchema.js";
+import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { SecureSession } from "../../session/SecureSession.js";
@@ -48,7 +50,18 @@ export const INTERACTION_PROTOCOL_ID = 0x0001;
 
 const logger = Logger.get("InteractionProtocol");
 
-export function ClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
+function isConditionMatching<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>>(
+    featureSets: ConditionalFeatureList<F>,
+    supportedFeatures: SF): boolean {
+    for (const features of featureSets) {
+        if (Object.keys(features).every(feature => !!features[feature] === !!supportedFeatures[feature])) {
+            return true;
+        }
+    }
+    return false;
+}
+
+export function ClusterServer<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
     clusterDef: Cluster<F, SF, A, C, E>,
     attributesInitialValues: AttributeInitialValues<A>,
     handlers: ClusterServerHandlers<Cluster<F, SF, A, C, E>>,
@@ -160,9 +173,37 @@ export function ClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<
         generatedCommandList: new Array<CommandId>(),
         eventList: new Array<EventId>(),
     };
+
     const attributeList = new Array<AttributeId>();
     for (const attributeName in attributeDef) {
         const capitalizedAttributeName = capitalize(attributeName);
+
+        // logger.info(`check this for REQUIRED Attributes ${Logger.toJSON(attributeName)}`)
+        if (attributeDef[attributeName].isConditional) {
+            const { mandatoryIf, optionalIf } = attributeDef[attributeName];
+            let conditionHasMatched = false;
+            if (mandatoryIf !== undefined && mandatoryIf.length > 0) {
+                // Check if mandatoryIf is relevant for current feature combination and the attribute initial value is set
+                const conditionMatched = isConditionMatching(mandatoryIf, supportedFeatures);
+                if (conditionMatched && (attributesInitialValues as any)[attributeName] === undefined) {
+                    logger.warn(`InitialAttributeValue for "${clusterDef.name}/${attributeName}" is REQUIRED by supportedFeatures: ${JSON.stringify(supportedFeatures)} but is not set!`);
+                }
+                conditionHasMatched = conditionHasMatched || conditionMatched;
+            }
+            // TODO Remove optional info/checks
+            if (!conditionHasMatched && optionalIf !== undefined && optionalIf.length > 0) {
+                const conditionMatched = isConditionMatching(optionalIf, supportedFeatures);
+                if (conditionMatched && (attributesInitialValues as any)[attributeName] === undefined) {
+                    logger.debug(`InitialAttributeValue for "${clusterDef.name}/${attributeName}" is optional by supportedFeatures: ${JSON.stringify(supportedFeatures)} and is not set!`);
+                }
+                conditionHasMatched = conditionHasMatched || conditionMatched;
+            }
+
+            if (!conditionHasMatched && (attributesInitialValues as any)[attributeName] !== undefined) {
+                logger.warn(`InitialAttributeValue for "${clusterDef.name}/${attributeName}" is provided but it's neither optional or mandatory for supportedFeatures: ${JSON.stringify(supportedFeatures)} but is set!`);
+            }
+        }
+
         const { id, schema, writable, persistent, fabricScoped, scene, fixed } = attributeDef[attributeName];
         if ((attributesInitialValues as any)[attributeName] !== undefined) {
             const validator = typeof schema.validate === 'function' ? schema.validate.bind(schema) : undefined;
@@ -223,6 +264,31 @@ export function ClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<
     const generatedCommandList = new Array<number>();
     for (const name in commandDef) {
         const handler = (handlers as any)[name];
+
+        if (commandDef[name].isConditional) {
+            const { mandatoryIf, optionalIf } = commandDef[name];
+            let conditionHasMatched = false;
+            if (mandatoryIf !== undefined && mandatoryIf.length > 0) {
+                const conditionMatched = isConditionMatching(mandatoryIf, supportedFeatures);
+                if (conditionMatched && handler === undefined) {
+                    logger.warn(`Command "${clusterDef.name}/${name}" is REQUIRED by supportedFeatures: ${JSON.stringify(supportedFeatures)} but is not set!`);
+                }
+                conditionHasMatched = conditionHasMatched || conditionMatched;
+            }
+            // TODO Remove optional info/checks
+            if (!conditionHasMatched && optionalIf !== undefined && optionalIf.length > 0) {
+                const conditionMatched = isConditionMatching(optionalIf, supportedFeatures);
+                if (conditionMatched && handler === undefined) {
+                    logger.debug(`Command "${clusterDef.name}/${name}" is optional by supportedFeatures: ${JSON.stringify(supportedFeatures)} and is not set!`);
+                }
+                conditionHasMatched = conditionHasMatched || conditionMatched;
+            }
+
+            if (!conditionHasMatched && handler !== undefined) {
+                logger.warn(`Command "${clusterDef.name}/${name}" is provided but it's neither optional or mandatory for supportedFeatures: ${JSON.stringify(supportedFeatures)} but is set!`);
+            }
+        }
+
         if (handler === undefined) continue;
         const { requestId, requestSchema, responseId, responseSchema } = commandDef[name];
         (commands as any)[name] = (new CommandServer(requestId, responseId, name, requestSchema, responseSchema, (request, session, message, endpoint) => handler({ request, attributes, events, session, message, endpoint })));
@@ -244,6 +310,31 @@ export function ClusterServer<F extends BitSchema, SF extends TypeFromBitSchema<
         if (!optional && (supportedEvents as any)[eventName] !== true) {
             throw new Error(`Event ${eventName} needs to be supported by cluster ${name} (${clusterId})`);
         }
+
+        if (eventDef[eventName].isConditional) {
+            const { mandatoryIf, optionalIf } = eventDef[eventName];
+            let conditionHasMatched = false;
+            if (mandatoryIf !== undefined) {
+                const conditionMatched = isConditionMatching(mandatoryIf, supportedFeatures);
+                if (conditionMatched && (supportedEvents as any)[eventName] === undefined) {
+                    logger.warn(`Event "${clusterDef.name}/${eventName}" is REQUIRED by supportedFeatures: ${JSON.stringify(supportedFeatures)} but is not set!`);
+                }
+                conditionHasMatched = conditionHasMatched || conditionMatched;
+            }
+            // TODO Remove optional info/checks
+            if (!conditionHasMatched && optionalIf !== undefined && optionalIf.length > 0) {
+                const conditionMatched = isConditionMatching(optionalIf, supportedFeatures);
+                if (conditionMatched && (supportedEvents as any)[eventName] === undefined) {
+                    logger.debug(`Event "${clusterDef.name}/${eventName}" is optional by supportedFeatures: ${JSON.stringify(supportedFeatures)} and is not set!`);
+                }
+                conditionHasMatched = conditionHasMatched || conditionMatched;
+            }
+
+            if (!conditionHasMatched && (supportedEvents as any)[eventName] !== undefined) {
+                logger.warn(`Event "${clusterDef.name}/${eventName}" is provided but it's neither optional or mandatory for supportedFeatures: ${JSON.stringify(supportedFeatures)} but is set!`);
+            }
+        }
+
         if ((supportedEvents as any)[eventName] === true) {
             (events as any)[eventName] = new EventServer(id, clusterId, eventName, schema, priority);
             const capitalizedEventName = capitalize(eventName);

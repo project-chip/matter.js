@@ -38,10 +38,34 @@ describe("BitmapSchema", () => {
 
             expect(result).toBe(0xC4);
         });
+
+        it("encodes a bitmap using the schema with not provided unset bits", () => {
+            const result = TestBitmapSchema.encode({
+                flag1: true,
+                enumTest: EnumTest.VALUE_2,
+                numberTest: 1,
+            });
+
+            expect(result).toBe(0xC4);
+        });
+
+        it("encodes a bitmap using the schema with not provided unset bits #2", () => {
+            const result = TestBitmapSchema.encode({
+                flag1: true,
+            });
+
+            expect(result).toBe(0x4);
+        });
+
+        it("encodes a bitmap using the schema with all unset bits", () => {
+            const result = TestBitmapSchema.encode({});
+
+            expect(result).toBe(0);
+        });
     });
 
     describe("decode", () => {
-        it("decodes a bitmap using the schema", () => {
+        it("decodes a bitmap using the schema with all bit set", () => {
             const result = TestBitmapSchema.decode(0xB4);
 
             expect(result).toEqual({
@@ -49,6 +73,28 @@ describe("BitmapSchema", () => {
                 flag2: true,
                 enumTest: EnumTest.VALUE_1,
                 numberTest: 1,
+            });
+        });
+
+        it("decodes a bitmap using the schema with some set", () => {
+            const result = TestBitmapSchema.decode(0xC4);
+
+            expect(result).toEqual({
+                flag1: true,
+                flag2: false,
+                enumTest: EnumTest.VALUE_2,
+                numberTest: 1,
+            });
+        });
+
+        it("decodes a bitmap using the schema with none set", () => {
+            const result = TestBitmapSchema.decode(0x0);
+
+            expect(result).toEqual({
+                flag1: false,
+                flag2: false,
+                enumTest: 0,
+                numberTest: 0,
             });
         });
     });

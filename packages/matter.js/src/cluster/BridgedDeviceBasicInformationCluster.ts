@@ -17,6 +17,15 @@ import { TlvFabricIndex } from "../datatype/FabricIndex.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 /**
+ * ====================== IMPORTANT INFORMATION ======================
+ *
+ * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
+ * directory!! They are still used within the codebase, but will be changed soon!
+ *
+ * ====================== IMPORTANT INFORMATION ======================
+ */
+
+/**
  * This Cluster serves two purposes towards a Node communicating with a Bridge:
  * * indicate that the functionality on the Endpoint where it is placed (and its Parts) is bridged from a
  *   non-Matter technology, and

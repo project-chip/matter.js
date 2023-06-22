@@ -16,6 +16,15 @@ import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
+/**
+ * ====================== IMPORTANT INFORMATION ======================
+ *
+ * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
+ * directory!! They are still used within the codebase, but will be changed soon!
+ *
+ * ====================== IMPORTANT INFORMATION ======================
+ */
+
 /** @see {@link MatterCoreSpecificationV1_0} § 11.2.6.1 */
 const TlvGroupKeyMap = TlvObject({
     groupId: TlvField(1, TlvGroupId), /* min: 1 */

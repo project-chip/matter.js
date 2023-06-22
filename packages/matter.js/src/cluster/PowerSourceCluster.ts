@@ -17,6 +17,15 @@ import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { TlvString } from "../tlv/TlvString.js";
 import { MatterCoreSpecificationV1_1 } from "../spec/Specifications.js";
 
+/**
+ * ====================== IMPORTANT INFORMATION ======================
+ *
+ * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
+ * directory!! They are still used within the codebase, but will be changed soon!
+ *
+ * ====================== IMPORTANT INFORMATION ======================
+ */
+
 /** @see {@link MatterCoreSpecificationV1_1} § 11.7.5.1 */
 export const enum WiredFaultEnum {
     /** Unspecified fault on this wired power source. */

@@ -10,6 +10,15 @@ import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specification
 import { TlvBitmap, TlvEnum, TlvUInt16, TlvUInt8 } from "../tlv/TlvNumber.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
 
+/**
+ * ====================== IMPORTANT INFORMATION ======================
+ *
+ * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
+ * directory!! They are still used within the codebase, but will be changed soon!
+ *
+ * ====================== IMPORTANT INFORMATION ======================
+ */
+
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 2.7.5.1 */
 export const OccupancyBitmap = TlvBitmap(TlvUInt8, {
     occupied: BitFlag(0),

@@ -13,10 +13,14 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
     * Updated ClusterServerObj and ClusterClientObj typings to respect these Attribute types
     * Updated all Cluster definitions that use such attribute types
     * Add Interface for Events which requires to define the supported events when creating a ClusterServer (Event Logic WIP in separate PR)
-  * Enhance: Splitted up and corrected PowerSource and PressureMeasurement Cluster based on Matter 1.1 Specs
+  * Enhance: Added possibility to define conditional cluster attribute/Command/event definitions and introduce runtime checking for these. Part of Cluster Structure rework still WIP
+  * Enhance: (@vves) Add Window Covering Cluster definition  
+  * Feature: (@mahimamandhanaa) Add BTP (Bluetooth Transport Protocol) codec class for encoding and decoding of BTP messages
+  * Feature: Enhanced BitMap typing and Schemas to allow "Partially" provided Bitmaps by suppressing the "unset" bits
+  * Enhance: Split up and corrected PowerSource and PressureMeasurement Cluster based on Matter 1.1 Specs
   * Fix: Added missing PulseWidthModulationLevelControlCluster to AllCLusters
   * Fix Typing of Commands in ClusterClient if no commands were present
-  * Fix: Fix equality checks in Attribute servers to check deeper then just === (and introduce new util method isDeepEqual)
+  * Fix: Fix equality checks in Attribute servers to check deeper than just === (and introduce new util method isDeepEqual)
   * Fix: Make sure an error received from sending subscription seed data reports is not bubbling up and activate subscription after successful seeding
   * Fix: Allows Node.js Buffer objects to be persisted to storage as a Uint8Arrays that they subclass
 * matter.js API:
@@ -26,6 +30,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Feature: Enhance Storage system to allow to create subcontext stores to allow better separation of data
 * Misc:
   * Added Specification links for Matter Specifications 1.1
+  * Optimize typing exports for node10 TS settings
 
 ## 0.4.0 (2023-05-16)
 * Matter-Core functionality:
@@ -42,7 +47,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Adjustment: Do not send empty arrays for empty subscription messages to further shorten the payload
   * Fix: Respond with Unsupported Command when a unknown command is received and log the error
   * Fix: Increase the array maximum size according to specs
-  * Fix: Fixed internal TlvTag representation to allow also decoding of the internal object format of a Tlv stream 
+  * Fix: Fixed internal TlvTag representation to allow also decoding of the internal object format of a Tlv stream
   * Fix: Adjust internal tag encoding to not use {} when empty
 * matter.js API:
   * Feature: Introduce new High level API, see [API.md](./packages/matter.js/API.md) for details!

@@ -13,7 +13,7 @@ export class AttributeClient<T> {
     private readonly listeners = new Array<(newValue: T/*, oldValue: T*/) => void>();
 
     constructor(
-        readonly attribute: Attribute<T>,
+        readonly attribute: Attribute<T, any>,
         readonly name: string,
         readonly endpointId: number,
         readonly clusterId: number,

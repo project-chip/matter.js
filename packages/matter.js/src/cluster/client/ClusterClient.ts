@@ -18,10 +18,10 @@ export type AttributeClients<A extends Attributes> = Merge<{ [P in MandatoryAttr
 
 export type EventClients<E extends Events> = Merge<{ [P in MandatoryEventNames<E>]: EventClient<EventType<E[P]>> }, { [P in OptionalEventNames<E>]: EventClient<EventType<E[P]> | undefined> }>;
 
-export type SignatureFromCommandSpec<C extends Command<any, any>> = (request: RequestType<C>) => Promise<ResponseType<C>>;
-type GetterTypeFromSpec<A extends Attribute<any>> = A extends OptionalAttribute<infer T> ? (T | undefined) : AttributeJsType<A>;
+export type SignatureFromCommandSpec<C extends Command<any, any, any>> = (request: RequestType<C>) => Promise<ResponseType<C>>;
+type GetterTypeFromSpec<A extends Attribute<any, any>> = A extends OptionalAttribute<infer T, any> ? (T | undefined) : AttributeJsType<A>;
 type ClientAttributeGetters<A extends Attributes> = { [P in keyof A as `get${Capitalize<string & P>}Attribute`]: () => Promise<GetterTypeFromSpec<A[P]>> };
-type WritableAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends WritableAttribute<any> ? K : never }[keyof A] | { [K in keyof A]: A[K] extends OptionalWritableAttribute<any> ? K : never }[keyof A];
+type WritableAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends WritableAttribute<any, any> ? K : never }[keyof A] | { [K in keyof A]: A[K] extends OptionalWritableAttribute<any, any> ? K : never }[keyof A];
 type ClientAttributeSetters<A extends Attributes> = { [P in WritableAttributeNames<A> as `set${Capitalize<string & P>}Attribute`]: (value: AttributeJsType<A[P]>) => Promise<void> };
 type ClientAttributeSubscribers<A extends Attributes> = { [P in keyof A as `subscribe${Capitalize<string & P>}Attribute`]: (listener: (value: AttributeJsType<A[P]>) => void, minIntervalS: number, maxIntervalS: number) => Promise<void> };
 

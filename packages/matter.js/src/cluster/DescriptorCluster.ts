@@ -14,6 +14,15 @@ import { TlvEndpointNumber } from "../datatype/EndpointNumber.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 /**
+ * ====================== IMPORTANT INFORMATION ======================
+ *
+ * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
+ * directory!! They are still used within the codebase, but will be changed soon!
+ *
+ * ====================== IMPORTANT INFORMATION ======================
+ */
+
+/**
  * Provides information about endpoint conformance to a release of a device type definition.
  *
  * @see {@link MatterCoreSpecificationV1_0} § 9.5.5.1

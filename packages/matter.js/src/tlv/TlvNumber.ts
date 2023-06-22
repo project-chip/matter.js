@@ -3,7 +3,7 @@
  * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { BitmapSchema, BitSchema, TypeFromBitSchema } from "../schema/BitmapSchema.js";
+import { BitmapSchema, BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import {
     FLOAT32_MAX, FLOAT32_MIN, INT16_MAX, INT16_MIN, INT32_MAX, INT32_MIN, INT64_MAX, INT64_MIN, INT8_MAX, INT8_MIN,
     maxValue, minValue, UINT16_MAX, UINT32_MAX, UINT64_MAX, UINT8_MAX
@@ -107,5 +107,18 @@ export const TlvUInt64 = new TlvLongNumberSchema(TlvType.UnsignedInt, value => T
 export const TlvEnum = <T>() => TlvUInt32 as TlvSchema<number> as TlvSchema<T>;
 export const TlvBitmap = <T extends BitSchema>(underlyingSchema: TlvNumberSchema, bitSchema: T) => {
     const bitmapSchema = BitmapSchema(bitSchema);
-    return new TlvWrapper(underlyingSchema, (bitmapData: TypeFromBitSchema<T>) => bitmapSchema.encode(bitmapData), value => bitmapSchema.decode(value));
+    return new TlvWrapper(underlyingSchema, (bitmapData: TypeFromPartialBitSchema<T>) => bitmapSchema.encode(bitmapData), value => bitmapSchema.decode(value));
 };
+
+// Relative Number types
+export const TlvPercent = TlvUInt8.bound({ max: 100 });
+export const TlvPercent100ths = TlvUInt16.bound({ max: 10000 });
+
+// Time Number types
+export const TlvEpochUs = TlvUInt64;
+export const TlvEpochS = TlvUInt32;
+export const TlvPosixMs = TlvUInt64;
+export const TlvSysTimeUs = TlvUInt64;
+export const TlvSysTimeMS = TlvUInt64;
+
+
