@@ -69,3 +69,5 @@ export const TlvString64max = TlvString.bound({ maxLength: 64 });
 
 /** String TLV schema. */
 export const TlvString256max = TlvString.bound({ maxLength: 256 });
+
+export const TlvHardwareAddress = TlvByteString.bound({ minLength: 6, maxLength: 8 });

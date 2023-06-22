@@ -4,26 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Attribute, OptionalAttribute, Cluster } from "./Cluster.js";
-import { TlvInt16, TlvUInt16 } from "../tlv/TlvNumber.js";
-import { TlvNullable } from "../tlv/TlvNullable.js";
-import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
-
-/**
- * ====================== IMPORTANT INFORMATION ======================
- *
- * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
- * directory!! They are still used within the codebase, but will be changed soon!
- *
- * ====================== IMPORTANT INFORMATION ======================
- */
+import { Attribute, OptionalAttribute, Cluster } from "../Cluster.js";
+import { TlvInt16, TlvUInt16 } from "../../tlv/TlvNumber.js";
+import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../../spec/Specifications.js";
 
 /**
  * This cluster provides an interface to temperature measurement functionality.
  *
  * @see {@link MatterApplicationClusterSpecificationV1_0} § 2.3
  */
-export const TemperatureMeasurementCluster = Cluster({
+export const TemperatureMeasurementClusterSchema = Cluster({
     id: 0x0402,
     name: "TemperatureMeasurement",
     revision: 4,

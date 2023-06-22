@@ -4,23 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Attribute, Cluster, Event, EventPriority, OptionalAttribute, OptionalCommand, TlvNoResponse } from "./Cluster.js";
-import { BitFlag } from "../schema/BitmapSchema.js";
-import { TlvEndpointNumber } from "../datatype/EndpointNumber.js";
-import { TlvBitmap, TlvEnum, TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
-import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
-import { TlvString, TlvString32max } from "../tlv/TlvString.js";
-import { TlvArray } from "../tlv/TlvArray.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-
-/**
- * ====================== IMPORTANT INFORMATION ======================
- *
- * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
- * directory!! They are still used within the codebase, but will be changed soon!
- *
- * ====================== IMPORTANT INFORMATION ======================
- */
+import { Attribute, Cluster, Event, EventPriority, OptionalAttribute, OptionalCommand, TlvNoResponse } from "../Cluster.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
+import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
+import { TlvBitmap, TlvEnum, TlvUInt16, TlvUInt32 } from "../../tlv/TlvNumber.js";
+import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
+import { TlvString, TlvString32max } from "../../tlv/TlvString.js";
+import { TlvArray } from "../../tlv/TlvArray.js";
+import { MatterCoreSpecificationV1_0 } from "../../spec/Specifications.js";
 
 /**
  * Supported Commands bitmap which SHALL be used to indicate which of the cluster’s commands are
@@ -28,11 +19,14 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
  *
  * @see {@link MatterCoreSpecificationV1_0} § 9.14.7
  */
-const CommandBits = TlvBitmap(TlvUInt16, {
+const TlvCommandBits = TlvBitmap(TlvUInt16, {
     /** This command triggers an action (state change) on the involved endpoints. */
     instantAction: BitFlag(0),
 
-    /** This command triggers an action (state change) on the involved endpoints, with a specified time to transition from the current state to the new state. */
+    /**
+     * This command triggers an action (state change) on the involved endpoints, with a specified time to transition
+     * from the current state to the new state.
+     */
     instantActionWithTransition: BitFlag(1),
 
     /** This command triggers the commencement of an action on the involved endpoints. */
@@ -64,128 +58,122 @@ const CommandBits = TlvBitmap(TlvUInt16, {
 
     /** This command disables a certain action or automation with a duration. */
     disableActionWithDuration: BitFlag(11),
-
 });
 
 /**
  * Action error.
- *
  * @see {@link MatterCoreSpecificationV1_0} § 9.14.9.3
  */
 export const enum ActionErrorEnum {
-    /** Other reason not listed below */
+    /** Other reason not listed below. */
     Unknown = 0,
 
-    /** The action was inter­rupted by another com­mand or interaction */
+    /** The action was interrupted by another command or interaction. */
     Interrupted = 1,
-
 }
 
 /**
  * Action state.
- *
  * @see {@link MatterCoreSpecificationV1_0} § 9.14.9.3
  */
 export const enum ActionStateEnum {
-    /** The action is not active */
+    /** The action is not active. */
     Inactive = 0,
 
-    /** The action is active */
+    /** The action is active. */
     Active = 1,
 
-    /** The action has been paused */
+    /** The action has been paused. */
     Paused = 2,
 
-    /** The action has been disabled */
+    /** The action has been disabled. */
     Disabled = 3,
 }
 
 /**
  * Types of actions.
- *
  * @see {@link MatterCoreSpecificationV1_0} § 9.14.9.2
  */
 export const enum ActionTypeEnum {
-    /** Use this only when none of the other values applies */
+    /** Use this only when none of the other values applies. */
     Other = 0,
 
-    /** Bring the endpoints into a certain state */
+    /** Bring the endpoints into a certain state. */
     Scene = 1,
 
-    /** A sequence of states with a certain time pattern */
+    /** A sequence of states with a certain time pattern. */
     Sequence = 2,
 
-    /** Control an automation (e.g. motion sensor controlling lights) */
+    /** Control an automation (e.g. motion sensor controlling lights). */
     Automation = 3,
 
-    /** Sequence that will run when something doesn’t happen*/
+    /** Sequence that will run when something doesn't happen. */
     Exception = 4,
 
-    /** Use the endpoints to send a message to user*/
+    /** Use the endpoints to send a message to user. */
     Notification = 5,
 
-    /** Higher priority notification */
+    /** Higher priority notification. */
     Alarm = 6,
 }
 
 /**
  * Holds the details of a single action.
- *
  * @see {@link MatterCoreSpecificationV1_0} § 9.14.9.1
  */
 const TlvAction = TlvObject({
-    /** Indicates the device type definition */
+    /** Indicates the device type definition. */
     actionID: TlvField(0, TlvUInt16),
 
-    /** Indicates the implemented revision of the device type definition */
+    /** Indicates the implemented revision of the device type definition. */
     name: TlvField(1, TlvString.bound({ maxLength: 32 })),
 
-    /** Indicates the type of endpoint list */
+    /** Indicates the type of endpoint list. */
     type: TlvField(2, TlvEnum<ActionTypeEnum>()),
 
-    /** Provide a reference to the associated endpoint list, which specifies the endpoints on this Node which will be impacted by this ActionID */
+    /**
+     * Provide a reference to the associated endpoint list, which specifies the endpoints on this Node which will be
+     * impacted by this ActionID.
+     */
     endpointListId: TlvField(3, TlvUInt16),
 
-    /** A bitmap used to indicate which of the cluster’s commands are supported for this particular action */
-    supportedCommands: TlvField(4, CommandBits),
+    /** A bitmap used to indicate which of the cluster’s commands are supported for this particular action. */
+    supportedCommands: TlvField(4, TlvCommandBits),
 
-    /** Indicates the current state of this action */
+    /** Indicates the current state of this action. */
     state: TlvField(5, TlvEnum<ActionStateEnum>()),
-
 });
 
 /**
  * Types of endpoint lists.
- *
  * @see {@link MatterCoreSpecificationV1_0} § 9.14.9.6
  */
 export const enum EndpointListType {
-    /** Another group of endpoints, tied specifically to this action, not independently created by the user.  */
+    /** Another group of endpoints, tied specifically to this action, not independently created by the user. */
     Other = 0,
 
-    /** User-configured group of endpoints where an endpoint can be in only one room */
+    /** User-configured group of endpoints where an endpoint can be in only one room. */
     Room = 1,
 
-    /** User-configured group of endpoints where an endpoint can be in any number of zones */
+    /** User-configured group of endpoints where an endpoint can be in any number of zones. */
     Zone = 2,
 }
 
 /**
  * Provides information about endpoint conformance to a release of a device type definition.
- *
  * @see {@link MatterCoreSpecificationV1_0} § 9.14.9.5
  */
 const TlvEndpointList = TlvObject({
-    /** Indicates the device type definition */
+    /** Indicates the device type definition. */
     endpointListId: TlvField(0, TlvUInt16),
 
-    /** Indicates the implemented revision of the device type definition */
+    /** Indicates the implemented revision of the device type definition. */
     name: TlvField(1, TlvString32max),
 
     /** Indicates the type of endpoint list. */
     type: TlvField(2, TlvEnum<EndpointListType>()),
 
-    /** A list of endpoint numbers */
+    /** A list of endpoint numbers. */
     endpoints: TlvField(3, TlvArray(TlvEndpointNumber, { maxLength: 256 })),
 });
 
@@ -270,7 +258,7 @@ const TlvDisableActionWithDurationRequest = TlvObject({
  * Provides feedback to the client about the progress of the action.
  * @see {@link MatterCoreSpecificationV1_0} § 9.14.8.1
  */
-const StateChangedEvent = {
+const TlvStateChangedEvent = {
     actionId: TlvField(0, TlvUInt16),
     invokeId: TlvField(1, TlvUInt32),
     newState: TlvField(2, TlvEnum<ActionStateEnum>()),
@@ -280,7 +268,7 @@ const StateChangedEvent = {
  * Provides feedback to the client about the non-successful progress of the action.
  * @see {@link MatterCoreSpecificationV1_0} § 9.14.8.2
  */
-const ActionFailedEvent = {
+const TlvActionFailedEvent = {
     actionId: TlvField(0, TlvUInt16),
     invokeId: TlvField(1, TlvUInt32),
     newState: TlvField(2, TlvEnum<ActionStateEnum>()),
@@ -297,7 +285,7 @@ const ActionFailedEvent = {
  *
  * @see {@link MatterCoreSpecificationV1_0} § 9.14
  */
-export const ActionsCluster = Cluster({
+export const ActionsClusterSchema = Cluster({
     id: 0x25,
     name: "Actions",
     revision: 1,
@@ -356,9 +344,9 @@ export const ActionsCluster = Cluster({
     },
     events: {
         /** This event shall be generated when there is a change in the Status of an ActionID. */
-        stateChanged: Event(0, EventPriority.Info, StateChangedEvent),
+        stateChanged: Event(0, EventPriority.Info, TlvStateChangedEvent),
 
         /** This event shall be generated when there is some error which prevents the action from its normal planned execution. */
-        actionFailed: Event(1, EventPriority.Info, ActionFailedEvent),
+        actionFailed: Event(1, EventPriority.Info, TlvActionFailedEvent),
     },
 });

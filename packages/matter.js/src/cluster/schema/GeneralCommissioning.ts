@@ -4,27 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AccessLevel, Attribute, Cluster, Command, FixedAttribute, WritableAttribute } from "./Cluster.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-import { TlvField, TlvObject } from "../tlv/TlvObject.js";
-import { TlvEnum, TlvUInt16, TlvUInt64 } from "../tlv/TlvNumber.js";
-import { TlvString } from "../tlv/TlvString.js";
-import { TypeFromSchema } from "../tlv/TlvSchema.js";
-import { TlvBoolean } from "../tlv/TlvBoolean.js";
-import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
-
-/**
- * ====================== IMPORTANT INFORMATION ======================
- *
- * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
- * directory!! They are still used within the codebase, but will be changed soon!
- *
- * ====================== IMPORTANT INFORMATION ======================
- */
+import { AccessLevel, Attribute, Cluster, Command, FixedAttribute, WritableAttribute } from "../Cluster.js";
+import { MatterCoreSpecificationV1_0 } from "../../spec/Specifications.js";
+import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
+import { TlvEnum, TlvUInt16, TlvUInt64 } from "../../tlv/TlvNumber.js";
+import { TlvString } from "../../tlv/TlvString.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { TlvBoolean } from "../../tlv/TlvBoolean.js";
+import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 
 /**
  * This enumeration is used by the RegulatoryConfig and LocationCapability attributes to indicate possible radio usage.
- *
  * @see {@link MatterCoreSpecificationV1_0} § 11.9.5.3
  */
 export const enum RegulatoryLocationType {
@@ -40,14 +30,16 @@ export const enum RegulatoryLocationType {
 
 /**
  * This enumeration is used by several response commands in this cluster to indicate particular errors.
- *
  * @see {@link MatterCoreSpecificationV1_0} § 11.9.5.1
  */
 export const enum CommissioningError {
     /** No error. */
     Ok = 0,
 
-    /** Attempting to set regulatory configuration to a region or indoor/outdoor mode for which the server does not have proper configuration. */
+    /**
+     * Attempting to set regulatory configuration to a region or indoor/outdoor mode for which the server does not have
+     * proper configuration.
+     */
     ValueOutsideRange = 1,
 
     /** Executed CommissioningComplete outside CASE session. */
@@ -56,20 +48,28 @@ export const enum CommissioningError {
     /** Executed CommissioningComplete when there was no active Fail-Safe context. */
     NoFailSafe = 3,
 
-    /** Attempting to arm fail-safe or execute CommissioningComplete from a fabric different than the one associated with the current fail-safe context. */
+    /**
+     * Attempting to arm fail-safe or execute CommissioningComplete from a fabric different than the one associated
+     * with the current fail-safe context.
+     */
     BusyWithOtherAdmin = 4,
 }
 
 /**
  * This structure provides some constant values that MAY be of use to all commissioners.
- *
  * @see {@link MatterCoreSpecificationV1_0} § 11.9.5.2
  */
 const TlvBasicCommissioningInfo = TlvObject({
-    /** Contains a conservative initial duration (in seconds) to set in the FailSafe for the commissioning flow to complete successfully. */
+    /**
+     * Contains a conservative initial duration (in seconds) to set in the FailSafe for the commissioning flow to
+     * complete successfully.
+     */
     failSafeExpiryLengthSeconds: TlvField(0, TlvUInt16),
 
-    /** Contain a conservative value in seconds denoting the maximum total duration for which a fail-safe timer can be re-armed. */
+    /**
+     * Contain a conservative value in seconds denoting the maximum total duration for which a fail-safe timer can be
+     * re-armed.
+     */
     maxCumulativeFailsafeSeconds: TlvField(1, TlvUInt16),
 });
 
@@ -102,7 +102,7 @@ const TlvSetRegulatoryConfigRequest = TlvObject({
     /** Contains the new regulatory location to be set. */
     newRegulatoryConfig: TlvField(0, TlvEnum<RegulatoryLocationType>()),
 
-    /** Contains a ISO 3166-1 alpha-2 country code*/
+    /** Contains a ISO 3166-1 alpha-2 country code. */
     countryCode: TlvField(1, TlvString.bound({ length: 2 })),
 
     /** Value to atomically set the Breadcrumb attribute on success of this command. */
@@ -111,17 +111,17 @@ const TlvSetRegulatoryConfigRequest = TlvObject({
 
 /**
  * This cluster is used to manage global aspects of the Commissioning flow.
- *
  * @see {@link MatterCoreSpecificationV1_0} § 11.9
  */
-export const GeneralCommissioningCluster = Cluster({
+export const GeneralCommissioningClusterSchema = Cluster({
     id: 0x30,
     name: "GeneralCommissioning",
     revision: 1,
 
     /** @see {@link MatterCoreSpecificationV1_0} § 11.9.6 */
     attributes: {
-        /** Allows for the storage of a client-provided small payload which Administrators and Commissioners MAY write
+        /**
+         * Allows for the storage of a client-provided small payload which Administrators and Commissioners MAY write
          * and then subsequently read, to keep track of their own progress.
          */
         breadcrumb: WritableAttribute(0, TlvUInt64, { default: BigInt(0), writeAcl: AccessLevel.Administer }),

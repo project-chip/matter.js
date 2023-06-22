@@ -4,37 +4,33 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Cluster, WritableFabricScopedAttribute } from "./Cluster.js";
-import { TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
-import { TlvNodeId } from "../datatype/NodeId.js";
-import { TlvGroupId } from "../datatype/GroupId.js";
-import { TlvEndpointNumber } from "../datatype/EndpointNumber.js";
-import { TlvClusterId } from "../datatype/ClusterId.js";
-import { TlvArray } from "../tlv/TlvArray.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-
-/**
- * ====================== IMPORTANT INFORMATION ======================
- *
- * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
- * directory!! They are still used within the codebase, but will be changed soon!
- *
- * ====================== IMPORTANT INFORMATION ======================
- */
+import { Cluster, WritableFabricScopedAttribute } from "../Cluster.js";
+import { TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
+import { TlvNodeId } from "../../datatype/NodeId.js";
+import { TlvGroupId } from "../../datatype/GroupId.js";
+import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
+import { TlvClusterId } from "../../datatype/ClusterId.js";
+import { TlvArray } from "../../tlv/TlvArray.js";
+import { MatterCoreSpecificationV1_0 } from "../../spec/Specifications.js";
 
 /**
  * Provides information about endpoint conformance to a release of a device type definition.
- *
  * @see {@link MatterCoreSpecificationV1_0} § 9.5.5.1
  */
 const TlvTarget = TlvObject({ /* fabricScoped: true */
     /**  Contains the remote target node ID. If the Endpoint field is present, this field SHALL be present. */
     node: TlvOptionalField(1, TlvNodeId),
 
-    /** Contains the target group ID that represents remote endpoints. If the Endpoint field is present, this field SHALL NOT be present. */
+    /**
+     * Contains the target group ID that represents remote endpoints. If the Endpoint field is present, this field S
+     * HALL NOT be present.
+     */
     group: TlvOptionalField(2, TlvGroupId),
 
-    /** Contains the remote endpoint that the local endpoint is bound to. If the Group field is present, this field SHALL NOT be present. */
+    /**
+     * Contains the remote endpoint that the local endpoint is bound to. If the Group field is present, this field
+     * SHALL NOT be present.
+     */
     endpoint: TlvOptionalField(3, TlvEndpointNumber),
 
     /**
@@ -52,7 +48,7 @@ const TlvTarget = TlvObject({ /* fabricScoped: true */
  *
  * @see {@link MatterCoreSpecificationV1_0} § 9.6
  */
-export const BindingCluster = Cluster({
+export const BindingClusterSchema = Cluster({
     id: 0x1e,
     name: "Binding",
     revision: 1,

@@ -11,6 +11,8 @@ import {
     TlvGoToLiftPercentRequest, TlvGoToLiftValueRequest, TlvGoToTiltPercentRequest, WindowCoveringClusterSchema,
     WindowCoveringType
 } from "./schema/WindowCovering.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
+
 
 // For now use the Schema cluster as basis for the cluster object temporary
 export const WindowCoveringCluster = WindowCoveringClusterSchema;
