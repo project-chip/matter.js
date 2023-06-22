@@ -4,24 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AccessLevel, Attribute, Cluster, WritableAttribute } from "./Cluster.js";
-import { TlvField, TlvObject } from "../tlv/TlvObject.js";
-import { TlvString } from "../tlv/TlvString.js";
-import { TlvArray } from "../tlv/TlvArray.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-
-/**
- * ====================== IMPORTANT INFORMATION ======================
- *
- * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
- * directory!! They are still used within the codebase, but will be changed soon!
- *
- * ====================== IMPORTANT INFORMATION ======================
- */
+import { AccessLevel, Attribute, Cluster, WritableAttribute } from "../Cluster.js";
+import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
+import { TlvString } from "../../tlv/TlvString.js";
+import { TlvArray } from "../../tlv/TlvArray.js";
+import { MatterCoreSpecificationV1_0 } from "../../spec/Specifications.js";
 
 /**
  * This is a string tuple with strings that are user defined.
- *
  * @see {@link MatterCoreSpecificationV1_0} § 9.7.5.1
  */
 const TlvLabel = TlvObject({
@@ -38,14 +28,17 @@ const TlvLabel = TlvObject({
  *
  * @see {@link MatterCoreSpecificationV1_0} § 9.9
  */
-export const UserLabelCluster = Cluster({
+export const UserLabelClusterSchema = Cluster({
     id: 0x41,
-    name: "User Label",
+    name: "UserLabel",
     revision: 1,
 
     /** @see {@link MatterCoreSpecificationV1_0} § 9.9.4 */
     attributes: {
-        /** An implementation SHALL support at least 4 list entries per node for all User Label cluster instances on the node. */
+        /**
+         * An implementation SHALL support at least 4 list entries per node for all User Label cluster instances on the
+         * node.
+         */
         labelList: WritableAttribute(0, TlvArray(TlvLabel), { persistent: true, default: [], writeAcl: AccessLevel.Manage }),
     },
 });
@@ -56,9 +49,9 @@ export const UserLabelCluster = Cluster({
  *
  * @see {@link MatterCoreSpecificationV1_0} § 9.8
  */
-export const FixedLabelCluster = Cluster({
+export const FixedLabelClusterSchema = Cluster({
     id: 0x40,
-    name: "Fixed Label",
+    name: "FixedLabel",
     revision: 1,
 
     /** @see {@link MatterCoreSpecificationV1_0} § 9.8.4 */

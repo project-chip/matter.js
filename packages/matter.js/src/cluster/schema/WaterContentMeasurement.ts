@@ -5,19 +5,10 @@
  */
 
 
-import { Attribute, OptionalAttribute, Cluster } from "./Cluster.js";
-import { TlvUInt16 } from "../tlv/TlvNumber.js";
-import { TlvNullable } from "../tlv/TlvNullable.js";
-import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
-
-/**
- * ====================== IMPORTANT INFORMATION ======================
- *
- * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
- * directory!! They are still used within the codebase, but will be changed soon!
- *
- * ====================== IMPORTANT INFORMATION ======================
- */
+import { Attribute, OptionalAttribute, Cluster } from "../Cluster.js";
+import { TlvUInt16 } from "../../tlv/TlvNumber.js";
+import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../../spec/Specifications.js";
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 2.6.4 */
 const attributes = {
@@ -32,7 +23,7 @@ const attributes = {
 
     /**
      * The magnitude of the possible error that is associated with MeasuredValue
-     * attribute using the same unit
+     * attribute using the same unit.
      */
     tolerance: OptionalAttribute(3, TlvUInt16.bound({ max: 2048 /* 0x0800 */ })),
 };
@@ -42,7 +33,7 @@ const attributes = {
  *
  * @see {@link MatterApplicationClusterSpecificationV1_0} § 2.6.3
  */
-export const RelativeHumidityCluster = Cluster({
+export const RelativeHumidityClusterSchema = Cluster({
     id: 0x0405,
     name: "RelativeHumidityMeasurement",
     revision: 3,
@@ -54,7 +45,7 @@ export const RelativeHumidityCluster = Cluster({
  *
  * @see {@link MatterApplicationClusterSpecificationV1_0} § 2.6.3
  */
-export const LeafWetnessMeasurementCluster = Cluster({
+export const LeafWetnessMeasurementClusterSchema = Cluster({
     id: 0x0407,
     name: "LeafWetnessMeasurement",
     revision: 3,
@@ -66,7 +57,7 @@ export const LeafWetnessMeasurementCluster = Cluster({
  *
  * @see {@link MatterApplicationClusterSpecificationV1_0} § 2.6.3
  */
-export const SoilMoistureMeasurementCluster = Cluster({
+export const SoilMoistureMeasurementClusterSchema = Cluster({
     id: 0x0408,
     name: "SoilMoistureMeasurement",
     revision: 3,

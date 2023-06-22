@@ -4,28 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AccessLevel, Attribute, Cluster, Command, FixedAttribute, TlvNoResponse } from "./Cluster.js";
-import { TlvField, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
-import { TlvByteString, TlvString, TlvString32max } from "../tlv/TlvString.js";
-import { TlvVendorId } from "../datatype/VendorId.js";
-import { TlvFabricId } from "../datatype/FabricId.js";
-import { TlvNodeId } from "../datatype/NodeId.js";
-import { FabricIndex, TlvFabricIndex } from "../datatype/FabricIndex.js";
-import { TlvNullable } from "../tlv/TlvNullable.js";
-import { TlvBoolean } from "../tlv/TlvBoolean.js";
-import { TlvEnum, TlvUInt32, TlvUInt8 } from "../tlv/TlvNumber.js";
-import { TlvSubjectId } from "../datatype/SubjectId.js";
-import { TlvArray } from "../tlv/TlvArray.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-
-/**
- * ====================== IMPORTANT INFORMATION ======================
- *
- * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
- * directory!! They are still used within the codebase, but will be changed soon!
- *
- * ====================== IMPORTANT INFORMATION ======================
- */
+import { AccessLevel, Attribute, Cluster, Command, FixedAttribute, TlvNoResponse } from "../Cluster.js";
+import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
+import { TlvByteString, TlvString, TlvString32max } from "../../tlv/TlvString.js";
+import { TlvVendorId } from "../../datatype/VendorId.js";
+import { TlvFabricId } from "../../datatype/FabricId.js";
+import { TlvNodeId } from "../../datatype/NodeId.js";
+import { FabricIndex, TlvFabricIndex } from "../../datatype/FabricIndex.js";
+import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { TlvBoolean } from "../../tlv/TlvBoolean.js";
+import { TlvEnum, TlvUInt32, TlvUInt8 } from "../../tlv/TlvNumber.js";
+import { TlvSubjectId } from "../../datatype/SubjectId.js";
+import { TlvArray } from "../../tlv/TlvArray.js";
+import { MatterCoreSpecificationV1_0 } from "../../spec/Specifications.js";
 
 // TODO: Rename to NodeOperationalCredentialsCluster to match with specs
 
@@ -38,10 +29,16 @@ export const RESP_MAX = 900;
  * @see {@link MatterCoreSpecificationV1_0} § 11.17.5.3
  */
 const TlvFabricDescriptor = TlvObject({ /* fabricScoped: true */
-    /** Contains the public key for the trusted root that scopes the fabric referenced by FabricIndex and its associated operational credential. */
+    /**
+     * Contains the public key for the trusted root that scopes the fabric referenced by FabricIndex and its associated
+     * operational credentials.
+     */
     rootPublicKey: TlvField(1, TlvByteString.bound({ length: 65 })),
 
-    /** Contains the value of AdminVendorID provided in the AddNOC command that led to the creation of this FabricDescriptorStruct. */
+    /**
+     * Contains the value of AdminVendorID provided in the AddNOC command that led to the creation of this
+     * FabricDescriptorStruct.
+     */
     vendorId: TlvField(2, TlvVendorId),
 
     /** Contains the FabricID allocated to the fabric referenced by FabricIndex. */
@@ -53,7 +50,6 @@ const TlvFabricDescriptor = TlvObject({ /* fabricScoped: true */
     /** Contains a commissioner-set label for the fabric referenced by FabricIndex. */
     label: TlvField(5, TlvString.bound({ maxLength: 32 })), /* default: "" */
 
-    // TODO: this data is scoped in the fabric context and should be marked as such
     fabricIndex: TlvField(0xfe, TlvFabricIndex),
 });
 
@@ -76,10 +72,10 @@ const TlvNoc = TlvObject({ /* fabricScoped: true */
  *
  * @see {@link MatterCoreSpecificationV1_0} § 11.17.5.8 */
 export const enum CertificateChainType {
-    /** Request the DER- encoded DAC certificate */
+    /** Request the DER- encoded DAC certificate. */
     DeviceAttestation = 1,
 
-    /** Request the DER- encoded PAI certificate */
+    /** Request the DER- encoded PAI certificate. */
     ProductAttestationIntermediate = 2,
 }
 
@@ -170,7 +166,6 @@ const TlvAddTrustedRootCertificateRequest = TlvObject({
 
 /**
  * Used by the NOCResponse datatype response command to convey detailed outcome of several of this cluster’s operations.
- *
  * @see {@link MatterCoreSpecificationV1_0} § 11.17.5.9 */
 export const enum OperationalCertStatus {
     /** OK, no error. */
@@ -212,7 +207,10 @@ const TlvOperationalCertificateStatusResponse = TlvObject({
     /** When action was successful, contains the Fabric Index of the Fabric last added, removed or updated. */
     fabricIndex: TlvOptionalField(1, TlvFabricIndex),
 
-    /** Optionally contains debugging textual information from the cluster implementation and should be visible in logs, not User UI */
+    /**
+     * Optionally contains debugging textual information from the cluster implementation and should be visible in logs,
+     * not User UI.
+     */
     debugText: TlvOptionalField(2, TlvString.bound({ maxLength: 128 })),
 });
 
@@ -251,7 +249,7 @@ const TlvRemoveFabricRequest = TlvObject({
  *
  * @see {@link MatterCoreSpecificationV1_0} § 11.17
  */
-export const OperationalCredentialsCluster = Cluster({
+export const OperationalCredentialsClusterSchema = Cluster({
     id: 0x3e,
     name: "OperationalCredentials",
     revision: 1,

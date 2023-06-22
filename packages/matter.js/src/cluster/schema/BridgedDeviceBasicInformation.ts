@@ -7,23 +7,14 @@
 import {
     AccessLevel, Attribute, Cluster, Event, EventPriority, OptionalEvent, OptionalFixedAttribute,
     OptionalWritableAttribute
-} from "./Cluster.js";
-import { TlvString, TlvString256max, TlvString32max, TlvString64max } from "../tlv/TlvString.js";
-import { TlvVendorId } from "../datatype/VendorId.js";
-import { TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
-import { TlvBoolean } from "../tlv/TlvBoolean.js";
-import { TlvField } from "../tlv/TlvObject.js";
-import { TlvFabricIndex } from "../datatype/FabricIndex.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-
-/**
- * ====================== IMPORTANT INFORMATION ======================
- *
- * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
- * directory!! They are still used within the codebase, but will be changed soon!
- *
- * ====================== IMPORTANT INFORMATION ======================
- */
+} from "../Cluster.js";
+import { TlvString, TlvString256max, TlvString32max, TlvString64max } from "../../tlv/TlvString.js";
+import { TlvVendorId } from "../../datatype/VendorId.js";
+import { TlvUInt16, TlvUInt32 } from "../../tlv/TlvNumber.js";
+import { TlvBoolean } from "../../tlv/TlvBoolean.js";
+import { TlvField } from "../../tlv/TlvObject.js";
+import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
+import { MatterCoreSpecificationV1_0 } from "../../spec/Specifications.js";
 
 /**
  * This Cluster serves two purposes towards a Node communicating with a Bridge:
@@ -32,11 +23,11 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
  * * provide a centralized collection of attributes that the Node MAY collect to aid in conveying information
  *   regarding the Bridged Device to a user, such as the vendor name, the model name, or user-assigned name.
  *
- * This cluster is Derived from Basic Information Cluster.
+ * This cluster is derived from Basic Information Cluster.
  *
  * @see {@link MatterCoreSpecificationV1_0} § 9.13
  */
-export const BridgedDeviceBasicInformationCluster = Cluster({
+export const BridgedDeviceBasicInformationClusterSchema = Cluster({
     id: 0x39,
     name: "BridgedDeviceBasicInformation",
     revision: 1,
@@ -100,7 +91,7 @@ export const BridgedDeviceBasicInformationCluster = Cluster({
         /** Fired prior to permanently leaving a given Fabric. */
         leave: OptionalEvent(2, EventPriority.Info, { fabricIndex: TlvField(0, TlvFabricIndex) }),
 
-        /** Fired when there is a change in the {@link BasicInformationCluster.attributes.reachable reachable} attribute */
+        /** Fired when there is a change in the {@link BasicInformationCluster.attributes.reachable reachable} attribute. */
         reachableChanged: Event(3, EventPriority.Info, { reachableNewValue: TlvField(0, TlvBoolean) }),
     },
 });

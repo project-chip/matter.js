@@ -4,26 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Attribute, OptionalAttribute, Cluster } from "./Cluster.js";
-import { TlvNullable } from "../tlv/TlvNullable.js";
-import { TlvUInt16, TlvUInt8 } from "../tlv/TlvNumber.js";
-import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
-
-/**
- * ====================== IMPORTANT INFORMATION ======================
- *
- * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
- * directory!! They are still used within the codebase, but will be changed soon!
- *
- * ====================== IMPORTANT INFORMATION ======================
- */
+import { Attribute, OptionalAttribute, Cluster } from "../Cluster.js";
+import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { TlvUInt16, TlvUInt8 } from "../../tlv/TlvNumber.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../../spec/Specifications.js";
 
 /**
  * The Illuminance Measurement cluster provides an interface to illuminance measurement functionality.
  *
  * @see {@link MatterApplicationClusterSpecificationV1_0} § 2.2
  */
-export const IlluminanceMeasurementCluster = Cluster({
+export const IlluminanceMeasurementClusterSchema = Cluster({
     id: 0x0400,
     name: "IlluminanceMeasurement",
     revision: 3,
@@ -38,6 +29,7 @@ export const IlluminanceMeasurementCluster = Cluster({
 
         /** Indicates the maximum value of MeasuredValue that can be measured. */
         maxMeasuredValue: Attribute(2, TlvNullable(TlvUInt16.bound({ max: 65534 }))),
+
         tolerance: OptionalAttribute(3, TlvUInt16.bound({ max: 2048 /* 0x0800 */ })),
 
         /** Specifies the electronic type of the light sensor. */

@@ -5,23 +5,14 @@
  */
 
 
-import { Command, Attribute, Cluster, Event, EventPriority, OptionalAttribute, OptionalEvent, TlvNoResponse } from "./Cluster.js";
-import { TlvField, TlvObject } from "../tlv/TlvObject.js";
-import { TlvString, TlvString32max } from "../tlv/TlvString.js";
-import { TlvBoolean } from "../tlv/TlvBoolean.js";
-import { TlvNullable } from "../tlv/TlvNullable.js";
-import { TlvArray } from "../tlv/TlvArray.js";
-import { TlvEnum, TlvUInt16, TlvUInt32, TlvUInt64 } from "../tlv/TlvNumber.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-
-/**
- * ====================== IMPORTANT INFORMATION ======================
- *
- * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
- * directory!! They are still used within the codebase, but will be changed soon!
- *
- * ====================== IMPORTANT INFORMATION ======================
- */
+import { Command, Attribute, Cluster, Event, EventPriority, OptionalAttribute, OptionalEvent, TlvNoResponse } from "../Cluster.js";
+import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
+import { TlvString, TlvString32max } from "../../tlv/TlvString.js";
+import { TlvBoolean } from "../../tlv/TlvBoolean.js";
+import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { TlvArray } from "../../tlv/TlvArray.js";
+import { TlvEnum, TlvUInt16, TlvUInt32, TlvUInt64 } from "../../tlv/TlvNumber.js";
+import { MatterCoreSpecificationV1_0 } from "../../spec/Specifications.js";
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.11.6.1 */
 export const enum HardwareFault {
@@ -54,7 +45,7 @@ export const enum NetworkFault {
     Unspecified = 0x00,
     HardwareFailure = 0x01,
     NetworkJammed = 0x02,
-    ConnectionFaile = 0x03,
+    ConnectionFailed = 0x03,
 }
 
 /** @see {@link MatterCoreSpecificationV1_0} § 11.11.6.4 */
@@ -62,7 +53,7 @@ export const enum InterfaceType {
     Unspecified = 0x00,
     WiFi = 0x01,
     Ethernet = 0x02,
-    Celluar = 0x03,
+    Cellular = 0x03,
     Thread = 0x04,
 }
 
@@ -114,16 +105,16 @@ const TlvNetworkInterface = TlvObject({
  * Indicates a change in the set of hardware faults currently detected by the Node.
  * @see {@link MatterCoreSpecificationV1_0} §11.11.9.1
  */
-const HardwareFaultChangeEventData = {
+const TlvHardwareFaultChangeEventData = {
     current: TlvField(0, TlvArray(TlvEnum<HardwareFault>(), { maxLength: 11 })),
     previous: TlvField(1, TlvArray(TlvEnum<HardwareFault>(), { maxLength: 11 })),
 };
 
 /**
- * Indicates a change in the set of radio faults currently detectedby the Node.
+ * Indicates a change in the set of radio faults currently detected by the Node.
  * @see {@link MatterCoreSpecificationV1_0} § 11.11.9.2
  */
-const RadioFaultChangeEventData = {
+const TlvRadioFaultChangeEventData = {
     current: TlvField(0, TlvArray(TlvEnum<HardwareFault>(), { maxLength: 7 })),
     previous: TlvField(1, TlvArray(TlvEnum<HardwareFault>(), { maxLength: 7 })),
 };
@@ -132,7 +123,7 @@ const RadioFaultChangeEventData = {
  * Indicates a change in the set of network faults currently detected by the Node.
  * @see {@link MatterCoreSpecificationV1_0} § 11.11.9.3
  */
-const NetworkFaultChangeEventData = {
+const TlvNetworkFaultChangeEventData = {
     current: TlvField(0, TlvArray(TlvEnum<HardwareFault>(), { maxLength: 4 })),
     previous: TlvField(1, TlvArray(TlvEnum<HardwareFault>(), { maxLength: 4 })),
 };
@@ -141,7 +132,7 @@ const NetworkFaultChangeEventData = {
  * Indicates the reason that caused the device to start-up.
  * @see {@link MatterCoreSpecificationV1_0} § 11.11.7.4
  */
-const BootReasonEvent = {
+const TlvBootReasonEvent = {
     bootReason: TlvField(0, TlvEnum<BootReason>()),
 };
 
@@ -159,10 +150,9 @@ const TlvTestEventTriggerRequest = TlvObject({
  * standardized diagnostics metrics that MAY be used by a Node to assist a user or Administrator in
  * diagnosing potential problems. The General Diagnostics Cluster attempts to centralize all metrics
  * that are broadly relevant to the majority of Nodes.
- *
  * @see {@link MatterCoreSpecificationV1_0} § 11.11
  */
-export const GeneralDiagnosticsCluster = Cluster({
+export const GeneralDiagnosticsClusterSchema = Cluster({
     id: 0x033,
     name: "GeneralDiagnostics",
     revision: 1,
@@ -170,7 +160,7 @@ export const GeneralDiagnosticsCluster = Cluster({
     /** @see {@link MatterCoreSpecificationV1_0} § 11.11.7 */
     attributes: {
 
-        /** List of NetworkInterface structs */
+        /** List of NetworkInterface structs. */
         networkInterfaces: Attribute(0, TlvArray(TlvNetworkInterface, { maxLength: 8 })),
 
         /** Indicates a best-effort count of the number of times the Node has rebooted. */
@@ -182,7 +172,7 @@ export const GeneralDiagnosticsCluster = Cluster({
         /** Indicates a best-effort attempt at time in hours the Node has been operational. */
         totalOperationalHours: OptionalAttribute(3, TlvUInt32, { default: 0, persistent: true }),
 
-        /** Indicates the reason for the Node’s most recent boot */
+        /** Indicates the reason for the Node’s most recent boot. */
         bootReason: OptionalAttribute(4, TlvEnum<BootReason>()),
 
         /** Indicates the set of faults currently detected by the Node. */
@@ -207,15 +197,15 @@ export const GeneralDiagnosticsCluster = Cluster({
     /** @see {@link MatterCoreSpecificationV1_0} § 11.11.9 */
     events: {
         /** Indicates a change in the set of hardware faults currently detected by the Node. */
-        hardwareFaultChange: OptionalEvent(0, EventPriority.Critical, HardwareFaultChangeEventData),
+        hardwareFaultChange: OptionalEvent(0, EventPriority.Critical, TlvHardwareFaultChangeEventData),
 
         /** Indicates a change in the set of radio faults currently detected by the Node. */
-        radioFaultChange: OptionalEvent(1, EventPriority.Critical, RadioFaultChangeEventData),
+        radioFaultChange: OptionalEvent(1, EventPriority.Critical, TlvRadioFaultChangeEventData),
 
         /** Indicates a change in the set of network faults currently detected by the Node. */
-        networkFaultChange: OptionalEvent(2, EventPriority.Critical, NetworkFaultChangeEventData),
+        networkFaultChange: OptionalEvent(2, EventPriority.Critical, TlvNetworkFaultChangeEventData),
 
         /** Indicate the reason that caused the device to start-up. */
-        bootReason: Event(3, EventPriority.Critical, BootReasonEvent),
+        bootReason: Event(3, EventPriority.Critical, TlvBootReasonEvent),
     }
 });

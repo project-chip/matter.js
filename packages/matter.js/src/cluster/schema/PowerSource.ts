@@ -5,26 +5,16 @@
  */
 
 import {
-    OptionalEvent, EventPriority, Cluster, Attribute, OptionalAttribute, FixedAttribute, OptionalFixedAttribute,
-    ClusterExtend
-} from "./Cluster.js";
-import { BitFlag } from "../schema/BitmapSchema.js";
-import { TlvField } from "../tlv/TlvObject.js";
-import { TlvEnum, TlvUInt16, TlvUInt32, TlvUInt8 } from "../tlv/TlvNumber.js";
-import { TlvArray } from "../tlv/TlvArray.js";
-import { TlvNullable } from "../tlv/TlvNullable.js";
-import { TlvBoolean } from "../tlv/TlvBoolean.js";
-import { TlvString } from "../tlv/TlvString.js";
-import { MatterCoreSpecificationV1_1 } from "../spec/Specifications.js";
-
-/**
- * ====================== IMPORTANT INFORMATION ======================
- *
- * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
- * directory!! They are still used within the codebase, but will be changed soon!
- *
- * ====================== IMPORTANT INFORMATION ======================
- */
+    EventPriority, Cluster, Attribute, FixedAttribute, ConditionalFixedAttribute, ConditionalAttribute, ConditionalEvent
+} from "../Cluster.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
+import { TlvField } from "../../tlv/TlvObject.js";
+import { TlvEnum, TlvUInt16, TlvUInt32, TlvUInt8 } from "../../tlv/TlvNumber.js";
+import { TlvArray } from "../../tlv/TlvArray.js";
+import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { TlvBoolean } from "../../tlv/TlvBoolean.js";
+import { TlvString } from "../../tlv/TlvString.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 
 /** @see {@link MatterCoreSpecificationV1_1} § 11.7.5.1 */
 export const enum WiredFaultEnum {
@@ -55,13 +45,13 @@ export const enum BatChargeFaultEnum {
     /** Unspecified fault on this battery source.*/
     Unspecified = 0x00,
 
-    /** Ambient temperature is above the nominal range  */
+    /** Ambient temperature is above the nominal range. */
     AmbientTooHot = 0x01,
 
-    /** Ambient temperature is below the nominal range . */
+    /** Ambient temperature is below the nominal range. */
     AmbientTooCold = 0x02,
 
-    /** Temperature of this battery source is above the nominal range.*/
+    /** Temperature of this battery source is above the nominal range. */
     BatteryTooHot = 0x03,
 
     /** Temperature of this battery source is below the nominal range. */
@@ -88,37 +78,37 @@ export const enum BatChargeFaultEnum {
 
 /** @see {@link MatterCoreSpecificationV1_1} § 11.7.6.1. Table 92 */
 export const enum PowerSourceStatusEnum {
-    /** SHALL indicate the source status is not specified */
+    /** SHALL indicate the source status is not specified. */
     Unspecified = 0x00,
 
-    /** SHALL indicate the source is available and currently supplying power */
+    /** SHALL indicate the source is available and currently supplying power. */
     Active = 0x01,
 
-    /** SHALL indicate the source is available, but is not currently supplying power */
+    /** SHALL indicate the source is available, but is not currently supplying power. */
     Standby = 0x02,
 
-    /** SHALL indicate the source is not currently available to supply power */
+    /** SHALL indicate the source is not currently available to supply power. */
     Unavailable = 0x03,
 }
 
 /** @see {@link MatterCoreSpecificationV1_1} § 11.7.6.1. Table 93 */
 export const enum WiredCurrentTypeEnum {
-    /** SHALL indicate AC current */
+    /** SHALL indicate AC current. */
     AC = 0x00,
 
-    /** SHALL indicate DC current */
+    /** SHALL indicate DC current. */
     DC = 0x01,
 }
 
 /** @see {@link MatterCoreSpecificationV1_1} § 11.7.6.1. Table 94 */
 export const enum BatChargeLevelEnum {
-    /** Charge level is nominal */
+    /** Charge level is nominal. */
     OK = 0x00,
 
     /** Charge level is low, intervention may soon be required. */
     Warning = 0x01,
 
-    /** Charge level is critical, immediate intervention is required */
+    /** Charge level is critical, immediate intervention is required. */
     Critical = 0x02,
 }
 
@@ -133,22 +123,22 @@ export const enum BatReplaceabilityEnum {
     /** The battery is replaceable by the user or customer. */
     UserReplaceable = 0x02,
 
-    /** The battery is replaceable by an authorized factory technician */
+    /** The battery is replaceable by an authorized factory technician. */
     FactoryReplaceable = 0x03,
 }
 
 /** @see {@link MatterCoreSpecificationV1_1} § 11.7.6.1. Table 98 */
 export const enum BatChargeStateEnum {
-    /** Unable to determine the charging state */
+    /** Unable to determine the charging state. */
     Unknown = 0x00,
 
-    /** The battery is charging */
+    /** The battery is charging. */
     IsCharging = 0x01,
 
-    /** The battery is at full charge */
+    /** The battery is at full charge. */
     IsAtFullCharge = 0x02,
 
-    /** The battery is not charging */
+    /** The battery is not charging. */
     IsNotCharging = 0x03,
 }
 
@@ -275,71 +265,25 @@ export const enum BatApprovedChemistryEnum {
 }
 
 /** @see {@link MatterCoreSpecificationV1_1} § 11.7.6.2 Table 99 */
-const WiredFaultChangeEvent = {
+const TlvWiredFaultChangeEvent = {
     /** SHALL indicate a change in the set of wired faults  */
     current: TlvField(0, TlvArray(TlvEnum<WiredFaultEnum>(), { maxLength: 8 })),
     previous: TlvField(1, TlvArray(TlvEnum<WiredFaultEnum>(), { maxLength: 8 })),
 };
 
 /** @see {@link MatterCoreSpecificationV1_1} § 11.7.6.2 Table 100 */
-const BatFaultChangeEvent = {
+const TlvBatFaultChangeEvent = {
     /** SHALL indicate a change in the set of battery faults */
     current: TlvField(0, TlvArray(TlvEnum<BatFaultEnum>(), { maxLength: 8 })),
     previous: TlvField(1, TlvArray(TlvEnum<BatFaultEnum>(), { maxLength: 8 })),
 };
 
 /** @see {@link MatterCoreSpecificationV1_1} § 11.7.6.2 Table 101 */
-const BatChargeFaultChangeEvent = {
+const TlvBatChargeFaultChangeEvent = {
     /**  SHALL indicate a change in the set of charge faults */
     current: TlvField(0, TlvArray(TlvEnum<BatChargeFaultEnum>(), { maxLength: 16 })),
     previous: TlvField(1, TlvArray(TlvEnum<BatChargeFaultEnum>(), { maxLength: 16 })),
 };
-
-
-const ReplaceableAttributes = {
-    /** SHALL provide a user-facing description of this battery, which SHOULD contain information required to identify a replacement, such as form factor, chemistry or preferred manufacturer. */
-    batReplacementDescription: FixedAttribute(0x0013, TlvString.bound({ maxLength: 60 })),
-
-    /**  SHALL indicate the ID of the datatype or colloquial designation of the battery */
-    batCommonDesignation: OptionalFixedAttribute(0x0014, TlvEnum<BatCommonDesignationEnum>()),
-
-    /**  SHALL indicate the string representing the ANSI designation for the battery as specified in ANSI C18.*/
-    batANSIDesignation: OptionalFixedAttribute(0x0015, TlvString.bound({ maxLength: 20 })),
-
-    /**  SHALL indicate the string representing the IEC designation for the battery as specified in IEC 60086.*/
-    batIECDesignation: OptionalFixedAttribute(0x0016, TlvString.bound({ maxLength: 20 })),
-
-    /** SHALL indicate the ID of the preferred chemistry of the battery source */
-    batApprovedChemistry: OptionalFixedAttribute(0x0017, TlvEnum<BatApprovedChemistryEnum>()),
-
-    /** SHALL indicate the preferred minimum charge capacity rating in mAh */
-    batCapacity: OptionalFixedAttribute(0x0018, TlvUInt32),
-
-    /** SHALL indicate the quantity of individual, user- or factory-serviceable battery cells or packs in the battery source. */
-    batQuantity: FixedAttribute(0x0019, TlvUInt8),
-};
-
-const RechargeableAttributes = {
-    /**  SHALL indicate the current state of the battery source with respect to charging.*/
-    batChargeState: Attribute(0x001A, TlvEnum<BatChargeStateEnum>()),
-
-    /** SHALL indicate the estimated time in seconds before the battery source will be at full charge. */
-    batTimeToFullCharge: OptionalAttribute(0x001B, TlvNullable(TlvUInt32)),
-
-    /**  SHALL indicate whether the Node can remain operational while the battery source is charging. */
-    batFunctionalWhileCharging: Attribute(0x001C, TlvBoolean),
-
-    /**  SHALL indicate assessed current in mA (milliamps) presently supplied to charge the battery source. */
-    batChargingCurrent: OptionalAttribute(0x001D, TlvNullable(TlvUInt32)),
-
-    /** SHALL indicate the set of charge faults currently detected by the Node on this power source */
-    activeBatChargeFaults: OptionalAttribute(0x001E, TlvArray(TlvEnum<BatChargeFaultEnum>(), { maxLength: 16 })),
-};
-
-const RechargeableEvents = {
-    /** SHALL indicate a change in the set of charge faults currently detected*/
-    batChargeFaultChange: OptionalEvent(0x2, EventPriority.Info, BatChargeFaultChangeEvent),
-}
 
 /**
  * This cluster is used to describe the configuration and capabilities of a physical power source that
@@ -349,23 +293,23 @@ const RechargeableEvents = {
  *
  * @see {@link MatterCoreSpecificationV1_1} § 11.7
 */
-const PowerSourceBaseCluster = Cluster({
+export const PowerSourceClusterSchema = Cluster({
     id: 0x2f,
     name: "PowerSource",
     revision: 1,
 
     /** @see {@link MatterCoreSpecificationV1_1} § 11.7.4 */
     features: {
-        /**  Wired power source */
+        /**  Wired power source. */
         wired: BitFlag(0),
 
-        /** Battery power source */
+        /** Battery power source. */
         battery: BitFlag(1),
 
-        /** Rechargeable battery power source (requires Battery feature) */
+        /** Rechargeable battery power source (requires Battery feature). */
         rechargeable: BitFlag(2),
 
-        /** Replaceable battery power source (requires Battery feature) */
+        /** Replaceable battery power source (requires Battery feature). */
         replaceable: BitFlag(3),
     },
 
@@ -379,118 +323,173 @@ const PowerSourceBaseCluster = Cluster({
 
         /** SHALL provide a user-facing description of this source */
         description: FixedAttribute(0x0002, TlvString.bound({ maxLength: 60 })),
-    }
-});
 
-export const WiredPowerSourceCluster = ClusterExtend(PowerSourceBaseCluster, {
-    supportedFeatures: {
-        wired: true,
-        battery: false,
-        rechargeable: false,
-        replaceable: false,
-    },
-    attributes: {
-        /** SHALL indicate the assessed RMS or DC voltage currently provided by the hard-wired source, in mV (millivolts) */
-        wiredAssessedInputVoltage: OptionalAttribute(0x0003, TlvNullable(TlvUInt32)),
+        /**
+         * SHALL indicate the assessed RMS or DC voltage currently provided by the hard-wired source, in mV (millivolts).
+         */
+        wiredAssessedInputVoltage: ConditionalAttribute(0x0003, TlvNullable(TlvUInt32), {
+            optionalIf: [{ wired: true }]
+        }),
 
         /** SHALL indicate the assessed frequency of the voltage, currently provided by the hardwired source, in Hz. */
-        wiredAssessedInputFrequency: OptionalAttribute(0x0004, TlvNullable(TlvUInt16)),
+        wiredAssessedInputFrequency: ConditionalAttribute(0x0004, TlvNullable(TlvUInt16), {
+            optionalIf: [{ wired: true }]
+        }),
 
         /** SHALL indicate the type of current the Node expects to be provided by the hard-wired source. */
-        wiredCurrentType: FixedAttribute(0x0005, TlvEnum<WiredCurrentTypeEnum>()),
+        wiredCurrentType: ConditionalFixedAttribute(0x0005, TlvEnum<WiredCurrentTypeEnum>(), {
+            mandatoryIf: [{ wired: true }]
+        }),
 
-        /** SHALL indicate the assessed instantaneous current draw of the Node on the hard-wired source, in mA (milliamps) */
-        wiredAssessedCurrent: OptionalAttribute(0x0006, TlvNullable(TlvUInt32)),
+        /**
+         * SHALL indicate the assessed instantaneous current draw of the Node on the hard-wired source, in mA (milliamps).
+         */
+        wiredAssessedCurrent: ConditionalAttribute(0x0006, TlvNullable(TlvUInt32), {
+            optionalIf: [{ wired: true }]
+        }),
 
-        /** SHALL indicate the nominal voltage, printed as part of the Node’s regulatory compliance label in mV (millivolts), expected to be provided by the hard-wired source. */
-        wiredNominalVoltage: OptionalFixedAttribute(0x0007, TlvUInt32),
+        /**
+         * SHALL indicate the nominal voltage, printed as part of the Node’s regulatory compliance label in mV
+         * (millivolts), expected to be provided by the hard-wired source.
+         */
+        wiredNominalVoltage: ConditionalFixedAttribute(0x0007, TlvUInt32, {
+            optionalIf: [{ wired: true }]
+        }),
 
-        /** SHALL indicate the maximum current, printed as part of the Node’s regulatory compliance label in mA (milliamps), expected to be provided by the hard-wired source. */
-        wiredMaximumCurrent: OptionalFixedAttribute(0x0008, TlvUInt32),
+        /**
+         * SHALL indicate the maximum current, printed as part of the Node’s regulatory compliance label in mA
+         * (milliamps), expected to be provided by the hard-wired source.
+         */
+        wiredMaximumCurrent: ConditionalFixedAttribute(0x0008, TlvUInt32, {
+            optionalIf: [{ wired: true }]
+        }),
 
         /** SHALL indicate if  that the hard-wired power source is properly connected. */
-        wiredPresent: OptionalAttribute(0x0009, TlvBoolean),
+        wiredPresent: ConditionalAttribute(0x0009, TlvBoolean, {
+            optionalIf: [{ wired: true }]
+        }),
 
-        /** SHALL indicate the set of wired faults currently detected  */
-        activeWiredFaults: OptionalAttribute(0x000A, TlvArray(TlvEnum<WiredFaultEnum>(), { maxLength: 8 })),
-    },
+        /** SHALL indicate the set of wired faults currently detected. */
+        activeWiredFaults: ConditionalAttribute(0x000A, TlvArray(TlvEnum<WiredFaultEnum>(), { maxLength: 8 }), {
+            optionalIf: [{ wired: true }]
+        }),
 
-    /** @see {@link MatterCoreSpecificationV1_1} § 11.7.6.2. */
-    events: {
-        /** SHALL indicate a change in the set of wired faults currently detected  */
-        wiredFaultChange: OptionalEvent(0x0, EventPriority.Info, WiredFaultChangeEvent),
-    },
-
-});
-
-export const BatteryPowerSourceCluster = ClusterExtend(PowerSourceBaseCluster, {
-    supportedFeatures: {
-        wired: false,
-        battery: true,
-        rechargeable: false,
-        replaceable: false,
-    },
-    attributes: {
         /** SHALL indicate the currently measured output voltage of the battery in mV (millivolts) */
-        batVoltage: OptionalAttribute(0x000B, TlvNullable(TlvUInt32)),
+        batVoltage: ConditionalAttribute(0x000B, TlvNullable(TlvUInt32), {
+            optionalIf: [{ battery: true }]
+        }),
 
         /**  SHALL indicate the estimated percentage of battery charge remaining until the battery will no longer be able to provide power to the Node*/
-        batPercentRemaining: OptionalAttribute(0x000C, TlvNullable(TlvUInt8.bound({ max: 0xc8 }))),
+        batPercentRemaining: ConditionalAttribute(0x000C, TlvNullable(TlvUInt8.bound({ max: 0xc8 })), {
+            optionalIf: [{ battery: true }]
+        }),
 
         /** SHALL indicate the estimated time in seconds before the battery will no longer be able to provide power to the Node.  */
-        batTimeRemaining: OptionalAttribute(0x000D, TlvNullable(TlvUInt32)),
+        batTimeRemaining: ConditionalAttribute(0x000D, TlvNullable(TlvUInt32), {
+            optionalIf: [{ battery: true }]
+        }),
 
         /** SHALL indicate a coarse ranking of the charge level of the battery, used to indicate when intervention is required. */
-        batChargeLevel: Attribute(0x000E, TlvEnum<BatChargeLevelEnum>()),
+        batChargeLevel: ConditionalAttribute(0x000E, TlvEnum<BatChargeLevelEnum>(), {
+            mandatoryIf: [{ battery: true }]
+        }),
 
         /** SHALL indicate if the battery needs to be replaced. Replacement MAY be simple routine maintenance */
-        batReplacementNeeded: Attribute(0x000F, TlvBoolean),
+        batReplacementNeeded: ConditionalAttribute(0x000F, TlvBoolean, {
+            mandatoryIf: [{ battery: true }]
+        }),
 
         /**  SHALL indicate the replaceability of the battery*/
-        batReplaceability: FixedAttribute(0x0010, TlvEnum<BatReplaceabilityEnum>()),
+        batReplaceability: ConditionalFixedAttribute(0x0010, TlvEnum<BatReplaceabilityEnum>(), {
+            mandatoryIf: [{ battery: true }]
+        }),
 
         /** SHALL indicate whether the batteries are properly installed. */
-        batPresent: OptionalAttribute(0x0011, TlvBoolean),
+        batPresent: ConditionalAttribute(0x0011, TlvBoolean, {
+            optionalIf: [{ battery: true }]
+        }),
 
         /**  SHALL indicate the set of battery faults currently detected  */
-        activeBatFaults: OptionalAttribute(0x0012, TlvArray(TlvEnum<BatFaultEnum>(), { maxLength: 8 })),
+        activeBatFaults: ConditionalAttribute(0x0012, TlvArray(TlvEnum<BatFaultEnum>(), { maxLength: 8 }), {
+            optionalIf: [{ battery: true }]
+        }),
+
+        /** SHALL provide a user-facing description of this battery, which SHOULD contain information required to identify a replacement, such as form factor, chemistry or preferred manufacturer. */
+        batReplacementDescription: ConditionalFixedAttribute(0x0013, TlvString.bound({ maxLength: 60 }), {
+            mandatoryIf: [{ replaceable: true }]
+        }),
+
+        /**  SHALL indicate the ID of the datatype or colloquial designation of the battery */
+        batCommonDesignation: ConditionalFixedAttribute(0x0014, TlvEnum<BatCommonDesignationEnum>(), {
+            optionalIf: [{ replaceable: true }]
+        }),
+
+        /**  SHALL indicate the string representing the ANSI designation for the battery as specified in ANSI C18.*/
+        batANSIDesignation: ConditionalFixedAttribute(0x0015, TlvString.bound({ maxLength: 20 }), {
+            optionalIf: [{ replaceable: true }]
+        }),
+
+        /**  SHALL indicate the string representing the IEC designation for the battery as specified in IEC 60086.*/
+        batIECDesignation: ConditionalFixedAttribute(0x0016, TlvString.bound({ maxLength: 20 }), {
+            optionalIf: [{ replaceable: true }]
+        }),
+
+        /** SHALL indicate the ID of the preferred chemistry of the battery source */
+        batApprovedChemistry: ConditionalFixedAttribute(0x0017, TlvEnum<BatApprovedChemistryEnum>(), {
+            optionalIf: [{ replaceable: true }]
+        }),
+
+        /** SHALL indicate the preferred minimum charge capacity rating in mAh */
+        batCapacity: ConditionalFixedAttribute(0x0018, TlvUInt32, {
+            optionalIf: [{ replaceable: true }]
+        }),
+
+        /** SHALL indicate the quantity of individual, user- or factory-serviceable battery cells or packs in the battery source. */
+        batQuantity: ConditionalFixedAttribute(0x0019, TlvUInt8, {
+            mandatoryIf: [{ replaceable: true }]
+        }),
+
+        /**  SHALL indicate the current state of the battery source with respect to charging.*/
+        batChargeState: ConditionalAttribute(0x001A, TlvEnum<BatChargeStateEnum>(), {
+            mandatoryIf: [{ rechargeable: true }]
+        }),
+
+        /** SHALL indicate the estimated time in seconds before the battery source will be at full charge. */
+        batTimeToFullCharge: ConditionalAttribute(0x001B, TlvNullable(TlvUInt32), {
+            optionalIf: [{ rechargeable: true }]
+        }),
+
+        /**  SHALL indicate whether the Node can remain operational while the battery source is charging. */
+        batFunctionalWhileCharging: ConditionalAttribute(0x001C, TlvBoolean, {
+            mandatoryIf: [{ rechargeable: true }]
+        }),
+
+        /**  SHALL indicate assessed current in mA (milliamps) presently supplied to charge the battery source. */
+        batChargingCurrent: ConditionalAttribute(0x001D, TlvNullable(TlvUInt32), {
+            optionalIf: [{ rechargeable: true }]
+        }),
+
+        /** SHALL indicate the set of charge faults currently detected by the Node on this power source */
+        activeBatChargeFaults: ConditionalAttribute(0x001E, TlvArray(TlvEnum<BatChargeFaultEnum>(), { maxLength: 16 }), {
+            optionalIf: [{ rechargeable: true }]
+        }),
     },
 
     /** @see {@link MatterCoreSpecificationV1_1} § 11.7.6.2. */
     events: {
+        /** SHALL indicate a change in the set of wired faults currently detected.  */
+        wiredFaultChange: ConditionalEvent(0x0, EventPriority.Info, TlvWiredFaultChangeEvent, {
+            optionalIf: [{ wired: true }]
+        }),
+
         /** SHALL indicate a change in the set of battery faults currently detected */
-        batFaultChange: OptionalEvent(0x1, EventPriority.Info, BatFaultChangeEvent),
-    },
-});
+        batFaultChange: ConditionalEvent(0x1, EventPriority.Info, TlvBatFaultChangeEvent, {
+            optionalIf: [{ battery: true }]
+        }),
 
-export const ReplaceableBatteryPowerSourceCluster = ClusterExtend(BatteryPowerSourceCluster, {
-    supportedFeatures: {
-        wired: false,
-        battery: true,
-        rechargeable: false,
-        replaceable: true,
+        /** SHALL indicate a change in the set of charge faults currently detected*/
+        batChargeFaultChange: ConditionalEvent(0x2, EventPriority.Info, TlvBatChargeFaultChangeEvent, {
+            optionalIf: [{ rechargeable: true }]
+        }),
     },
-    attributes: ReplaceableAttributes,
-});
-
-export const RechargeableBatteryPowerSourceCluster = ClusterExtend(BatteryPowerSourceCluster, {
-    supportedFeatures: {
-        wired: false,
-        battery: true,
-        rechargeable: true,
-        replaceable: false,
-    },
-    attributes: RechargeableAttributes,
-    events: RechargeableEvents,
-});
-
-export const RechargeableAndReplaceableBatteryPowerSourceCluster = ClusterExtend(ReplaceableBatteryPowerSourceCluster, {
-    supportedFeatures: {
-        wired: false,
-        battery: true,
-        rechargeable: true,
-        replaceable: true,
-    },
-    attributes: RechargeableAttributes,
-    events: RechargeableEvents,
 });

@@ -4,24 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { OptionalAttribute, WritableAttribute, OptionalWritableAttribute, Attribute, Cluster, Command, TlvNoResponse } from "./Cluster.js";
-import { BitFlag } from "../schema/BitmapSchema.js";
-import { TlvBitmap, TlvEnum, TlvUInt16, TlvUInt8 } from "../tlv/TlvNumber.js";
-import { TlvField, TlvObject } from "../tlv/TlvObject.js";
-import { TlvNullable } from "../tlv/TlvNullable.js";
-import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
-
-/**
- * ====================== IMPORTANT INFORMATION ======================
- *
- * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
- * directory!! They are still used within the codebase, but will be changed soon!
- *
- * ====================== IMPORTANT INFORMATION ======================
- */
+import {
+    OptionalAttribute, WritableAttribute, OptionalWritableAttribute, Attribute, Cluster, Command, TlvNoResponse
+} from "../Cluster.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
+import { TlvBitmap, TlvEnum, TlvUInt16, TlvUInt8 } from "../../tlv/TlvNumber.js";
+import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
+import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../../spec/Specifications.js";
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.6.5.8 */
-const OptionsBitmap = TlvBitmap(TlvUInt8, {
+const TlvOptionsBitmap = TlvBitmap(TlvUInt8, {
     /** Dependency on On/Off cluster. */
     executeIfOff: BitFlag(0), // default: true
 
@@ -29,40 +22,40 @@ const OptionsBitmap = TlvBitmap(TlvUInt8, {
     coupleColorTempToLevel: BitFlag(1),
 });
 
-/** @see {@link MatterCoreSpecificationV1_0} § 1.6.6.1 */
-const MoveToLevelCommandRequest = TlvObject({
+/** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.6.6.1 */
+const TlvMoveToLevelCommandRequest = TlvObject({
     level: TlvField(0, TlvUInt8.bound({ max: 254 })),
     transitionTime: TlvField(1, TlvNullable(TlvUInt16)),
-    optionsMask: TlvField(2, OptionsBitmap),
-    optionsOverride: TlvField(3, OptionsBitmap), // TODO: 0 Default
+    optionsMask: TlvField(2, TlvOptionsBitmap),
+    optionsOverride: TlvField(3, TlvOptionsBitmap),
 });
 
-/** @see {@link MatterCoreSpecificationV1_0} § 1.6.6.2 */
-const MoveCommandRequest = TlvObject({
+/** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.6.6.2 */
+const TlvMoveCommandRequest = TlvObject({
     moveMode: TlvField(0, TlvEnum<MoveMode>()),
     rate: TlvField(1, TlvNullable(TlvUInt8)),
-    optionsMask: TlvField(2, OptionsBitmap),
-    optionsOverride: TlvField(3, OptionsBitmap), // TODO: 0 Default
+    optionsMask: TlvField(2, TlvOptionsBitmap),
+    optionsOverride: TlvField(3, TlvOptionsBitmap),
 });
 
-/** @see {@link MatterCoreSpecificationV1_0} § 1.6.6.3 */
-const StepCommandRequest = TlvObject({
+/** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.6.6.3 */
+const TlvStepCommandRequest = TlvObject({
     stepMode: TlvField(0, TlvEnum<StepMode>()),
     stepSize: TlvField(1, TlvUInt8),
     transitionTime: TlvField(2, TlvNullable(TlvUInt16)),
-    optionsMask: TlvField(3, OptionsBitmap),
-    optionsOverride: TlvField(4, OptionsBitmap), // TODO: 0 Default
+    optionsMask: TlvField(3, TlvOptionsBitmap),
+    optionsOverride: TlvField(4, TlvOptionsBitmap),
 });
 
-/** @see {@link MatterCoreSpecificationV1_0} § 1.6.6.4 */
-const StopCommandRequest = TlvObject({
-    optionsMask: TlvField(0, OptionsBitmap),
-    optionsOverride: TlvField(1, OptionsBitmap), // TODO: 0 Default
+/** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.6.6.4 */
+const TlvStopCommandRequest = TlvObject({
+    optionsMask: TlvField(0, TlvOptionsBitmap),
+    optionsOverride: TlvField(1, TlvOptionsBitmap),
 });
 
-/** @see {@link MatterCoreSpecificationV1_0} § 1.6.6.5  */
-const MoveToClosestFrequencyCommandRequest = TlvObject({
-    frequency: TlvField(0, TlvUInt16), // TODO: Default 0
+/** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.6.6.5  */
+const TlvMoveToClosestFrequencyCommandRequest = TlvObject({
+    frequency: TlvField(0, TlvUInt16),
 })
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.6.4 */
@@ -116,43 +109,41 @@ const commonAttributes = {
     defaultMoveRate: OptionalWritableAttribute(0x14, TlvNullable(TlvUInt8)),
 
     /** Determines the default behavior of some cluster commands. */
-    options: WritableAttribute(0x0f, OptionsBitmap, { default: { executeIfOff: false, coupleColorTempToLevel: false } }),
+    options: WritableAttribute(0x0f, TlvOptionsBitmap, { default: { executeIfOff: false, coupleColorTempToLevel: false } }),
 };
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.6.6 */
 const commonCommands = {
-
     /** Moves from the current level to the specified level.*/
-    moveToLevel: Command(0x0, MoveToLevelCommandRequest, 0x0, TlvNoResponse),
+    moveToLevel: Command(0x0, TlvMoveToLevelCommandRequest, 0x0, TlvNoResponse),
 
     /** Moves from the current level up or down in a continuous fashion. */
-    move: Command(0x1, MoveCommandRequest, 0x1, TlvNoResponse),
+    move: Command(0x1, TlvMoveCommandRequest, 0x1, TlvNoResponse),
 
     /** Moves from the current level up or down in a stepwise fashion. */
-    step: Command(0x2, StepCommandRequest, 0x2, TlvNoResponse),
+    step: Command(0x2, TlvStepCommandRequest, 0x2, TlvNoResponse),
 
     /** Stops moving the current level. */
-    stop: Command(0x3, StopCommandRequest, 0x3, TlvNoResponse),
+    stop: Command(0x3, TlvStopCommandRequest, 0x3, TlvNoResponse),
 
     /** Same as {@link commands.moveToLevel}, but change the status of OnOff device on same endpoint. */
-    moveToLevelWithOnOff: Command(0x4, MoveToLevelCommandRequest, 0x4, TlvNoResponse),
+    moveToLevelWithOnOff: Command(0x4, TlvMoveToLevelCommandRequest, 0x4, TlvNoResponse),
 
     /** Same as {@link commands.move}, but change the status of OnOff device on same endpoint. */
-    moveWithOnOff: Command(0x5, MoveCommandRequest, 0x5, TlvNoResponse),
+    moveWithOnOff: Command(0x5, TlvMoveCommandRequest, 0x5, TlvNoResponse),
 
     /** Same as {@link commands.step}, but change the status of OnOff device on same endpoint. */
-    stepWithOnOff: Command(0x6, StepCommandRequest, 0x6, TlvNoResponse),
+    stepWithOnOff: Command(0x6, TlvStepCommandRequest, 0x6, TlvNoResponse),
 
     /** Same as {@link commands.stop}, but change the status of OnOff device on same endpoint. */
-    stopWithOnOff: Command(0x7, StopCommandRequest, 0x7, TlvNoResponse),
+    stopWithOnOff: Command(0x7, TlvStopCommandRequest, 0x7, TlvNoResponse),
 };
 
 /**
  * Attributes and commands for changing the level of devices, e.g. light intensity
- *
  * @see {@link MatterApplicationClusterSpecificationV1_0} § 1.6
  */
-export const LevelControlCluster = Cluster({
+export const LevelControlClusterSchema = Cluster({
     id: 0x08,
     name: "LevelControl",
     revision: 5,
@@ -170,11 +161,10 @@ export const LevelControlCluster = Cluster({
 });
 
 /**
-* Attributes and commands for Pulse Width Modulation (Provisional)
-*
-* @see {@link MatterApplicationClusterSpecificationV1_0} § 1.6.3
-*/
-export const PulseWidthModulationLevelControlCluster = Cluster({
+ * Attributes and commands for Pulse Width Modulation (Provisional)
+ * @see {@link MatterApplicationClusterSpecificationV1_0} § 1.6.3
+ */
+export const PulseWidthModulationLevelControlClusterSchema = Cluster({
     id: 0x001c,
     name: "PulseWidthModulation",
     revision: 5,
@@ -195,6 +185,6 @@ export const PulseWidthModulationLevelControlCluster = Cluster({
         ...commonCommands,
 
         /** Changes current frequency to the requested frequency, or to the closest frequency. */
-        moveToClosestFrequency: Command(0x8, MoveToClosestFrequencyCommandRequest, 0x8, TlvNoResponse),
+        moveToClosestFrequency: Command(0x8, TlvMoveToClosestFrequencyCommandRequest, 0x8, TlvNoResponse),
     },
 });

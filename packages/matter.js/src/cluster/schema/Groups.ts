@@ -4,26 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TlvGroupId } from "../datatype/GroupId.js";
-import { StatusCode } from "../protocol/interaction/InteractionProtocol.js";
-import { BitFlag } from "../schema/BitmapSchema.js";
-import { Cluster, Command, FixedAttribute, TlvNoResponse } from "./Cluster.js";
-import { TlvField, TlvObject } from "../tlv/TlvObject.js";
-import { TlvString } from "../tlv/TlvString.js";
-import { TlvBitmap, TlvEnum, TlvUInt8 } from "../tlv/TlvNumber.js";
-import { TlvArray } from "../tlv/TlvArray.js";
-import { TlvNullable } from "../tlv/TlvNullable.js";
-import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
-import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
-
-/**
- * ====================== IMPORTANT INFORMATION ======================
- *
- * This file outdated and will soon be auto generated based on the Cluster Schemas in schema
- * directory!! They are still used within the codebase, but will be changed soon!
- *
- * ====================== IMPORTANT INFORMATION ======================
- */
+import { TlvGroupId } from "../../datatype/GroupId.js";
+import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
+import { Cluster, Command, FixedAttribute, TlvNoResponse } from "../Cluster.js";
+import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
+import { TlvString } from "../../tlv/TlvString.js";
+import { TlvBitmap, TlvEnum, TlvUInt8 } from "../../tlv/TlvNumber.js";
+import { TlvArray } from "../../tlv/TlvArray.js";
+import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
+import { MatterApplicationClusterSpecificationV1_0 } from "../../spec/Specifications.js";
 
 /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.7.1 */
 const TlvAddGroupRequest = TlvObject({
@@ -89,13 +80,17 @@ const TlvNameSupportBitmap = TlvBitmap(TlvUInt8, {
  *
  * @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3
  */
-export const GroupsCluster = Cluster({
+export const GroupsClusterSchema = Cluster({
     id: 0x04,
     name: "Groups",
     revision: 4,
     features: {
         /** The ability to store a name for a group. */
         groupNames: BitFlag(0),
+    },
+
+    supportedFeatures: {
+        groupNames: true,
     },
 
     /** @see {@link MatterApplicationClusterSpecificationV1_0} § 1.3.6 */
