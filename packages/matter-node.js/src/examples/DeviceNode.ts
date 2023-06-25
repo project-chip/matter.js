@@ -77,11 +77,14 @@ class Device {
         const netAnnounceInterface = getParameter("announceinterface");
         const port = getIntParameter("port") ?? 5540;
 
+        const uniqueId = getIntParameter("uniqueid") ?? deviceStorage.get("uniqueid", Time.nowMs());
+
         deviceStorage.set("passcode", passcode);
         deviceStorage.set("discriminator", discriminator);
         deviceStorage.set("vendorid", vendorId.id);
         deviceStorage.set("productid", productId);
         deviceStorage.set("isSocket", isSocket);
+        deviceStorage.set("uniqueid", uniqueId);
 
         /**
          * Create Device instance and add needed Listener
@@ -124,9 +127,11 @@ class Device {
             basicInformation: {
                 vendorName,
                 vendorId,
+                nodeLabel: productName,
                 productName,
+                productLabel: productName,
                 productId,
-                serialNumber: `node-matter-${Time.nowMs()}`,
+                serialNumber: `node-matter-${uniqueId}`,
             }
         });
 

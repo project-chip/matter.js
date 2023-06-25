@@ -56,6 +56,7 @@ The following parameters are available:
 * -discriminator: the discriminator to use for pairing (default: 3840, value between 0 and 4095)
 * -vendorid: the vendor ID as number to use for pairing (default: 65521 (0xFFF1))
 * -productid: the product ID as number to use for pairing (default: 32768 (0x8000))
+* -uniqueid: a unique ID for this device to be used in naming and to store structure information (default: ms time now)
 * -type: the device type to use for pairing (default: light, alternative value is "socket")
 * -announceinterface: limit mdns announcements to the provided network interface, e.g. "en0" (default: all interfaces available)
 * -port: the port to listen on for the device (default: 5540)

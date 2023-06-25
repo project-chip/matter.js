@@ -25,7 +25,7 @@ export enum CommissionningFlowType {
 }
 
 /** See {@link MatterCoreSpecificationV1_0} § 5.1.3.1 Table 36 */
-export const DiscoveryCapabilitiesSchema = BitmapSchema({
+export const DiscoveryCapabilitiesBitmap = {
     /** Device supports hosting a Soft-AP when not commissioned. */
     softAccessPoint: BitFlag(0),
 
@@ -34,7 +34,8 @@ export const DiscoveryCapabilitiesSchema = BitmapSchema({
 
     /** Device is already on the IP network. */
     onIpNetwork: BitFlag(2),
-});
+};
+export const DiscoveryCapabilitiesSchema = BitmapSchema(DiscoveryCapabilitiesBitmap);
 
 /** See {@link MatterCoreSpecificationV1_0} § 5.1.3.1 Table 35 */
 const QrCodeDataSchema = ByteArrayBitmapSchema({

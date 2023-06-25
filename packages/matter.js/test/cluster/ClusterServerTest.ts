@@ -66,7 +66,7 @@ describe("ClusterServer structure", () => {
             assert.equal(basic.subscribeSoftwareVersionAttribute, undefined)
 
             // Now we set this Cluster into Endpoint and retrieve it again and verify it is the same
-            const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], 1);
+            const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: 1 });
             endpoint.addClusterServer(basic);
 
             const basic2 = endpoint.getClusterServer(BasicInformationCluster);
@@ -117,7 +117,7 @@ describe("ClusterServer structure", () => {
             assert.equal(basic.getNodeLabelAttribute(), "new 2");
 
             // Now we set this Cluster into Endpoint and retrieve it again and verify it is the same
-            const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], 1);
+            const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: 1 });
             endpoint.addClusterServer(basic);
 
             const basic2 = endpoint.getClusterServer(BasicInformationCluster);
@@ -173,7 +173,7 @@ describe("ClusterServer structure", () => {
             assert.equal(basic.subscribeManufacturingDateAttribute, undefined)
 
             // Now we set this Cluster into Endpoint and retrieve it again and verify it is the same
-            const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], 1);
+            const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: 1 });
             endpoint.addClusterServer(basic);
 
             const basic2 = endpoint.getClusterServer(BasicInformationCluster);
@@ -228,7 +228,7 @@ describe("ClusterServer structure", () => {
             basic.setReachableAttribute(true);
 
             // Now we set this Cluster into Endpoint and retrieve it again and verify it is the same
-            const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], 1);
+            const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: 1 });
             endpoint.addClusterServer(basic);
 
             const basic2 = endpoint.getClusterServer(BasicInformationCluster);
@@ -278,7 +278,7 @@ describe("ClusterServer structure", () => {
             assert.equal(basic.subscribeSerialNumberAttribute, undefined);
 
             // Now we set this Cluster into Endpoint and retrieve it again and verify it is the same
-            const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], 1);
+            const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: 1 });
             endpoint.addClusterServer(basic);
 
             const basic2 = endpoint.getClusterServer(BasicInformationCluster);
@@ -329,7 +329,7 @@ describe("ClusterServer structure", () => {
             });
 
             // Now we set this Cluster into Endpoint and retrieve it again and verify it is the same
-            const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], 1);
+            const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: 1 });
             endpoint.addClusterServer(basic);
 
             const basic2 = endpoint.getClusterServer(BasicInformationCluster);

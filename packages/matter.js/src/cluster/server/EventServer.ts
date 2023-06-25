@@ -16,7 +16,7 @@ export class EventServer<T> {
     protected endpoint?: Endpoint;
 
     constructor(
-        readonly eventId: number,
+        readonly id: number,
         readonly clusterId: number,
         readonly name: string,
         readonly schema: TlvSchema<T>,
@@ -32,7 +32,7 @@ export class EventServer<T> {
             throw new Error("Endpoint not assigned");
         }
         const event: EventData<T> = {
-            eventId: this.eventId,
+            eventId: this.id,
             clusterId: this.clusterId,
             endpointId: this.endpoint.id,
             timestamp: Time.nowMs(),

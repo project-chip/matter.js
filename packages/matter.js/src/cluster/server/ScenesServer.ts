@@ -387,14 +387,12 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
 
         getSceneValid: ({ session, attributes: { currentScene, currentGroup }, endpoint }) => {
             if (session === undefined || endpoint === undefined) {
-                console.log("getSceneValid: session or endpoint undefined");
                 return false;
             }
             const fabric = (session as SecureSession<MatterDevice>).getAccessingFabric();
 
             const existingSceneEntry = ScenesManager.getSceneEntry(fabric, endpoint.getId(), currentGroup.get(), currentScene.get());
             if (existingSceneEntry === undefined) {
-                console.log(`getSceneValid: existingSceneEntry undefined for ${endpoint.id}/${currentGroup.get().id}/${currentScene.get()}`);
                 return false;
             }
 
@@ -412,7 +410,6 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
 
         getSceneCount: ({ session, endpoint }) => {
             if (session === undefined || endpoint === undefined) {
-                console.log("getSceneCount: session or endpoint undefined");
                 throw new Error("getSceneCount: session or endpoint undefined");
             }
 

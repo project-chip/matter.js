@@ -16,7 +16,7 @@ import {
     OnOffCluster, BasicInformationCluster, OperationalCertStatus, OperationalCredentialsCluster, DescriptorCluster,
     IdentifyCluster, GroupsCluster, AccessControlCluster, ScenesCluster
 } from "@project-chip/matter.js/cluster";
-import { VendorId, FabricIndex, GroupId } from "@project-chip/matter.js/datatype";
+import { VendorId, FabricIndex, GroupId, ClusterId } from "@project-chip/matter.js/datatype";
 
 import { MdnsBroadcaster, MdnsScanner } from "@project-chip/matter.js/mdns";
 import { Network, NetworkFake } from "@project-chip/matter.js/net";
@@ -241,7 +241,7 @@ describe("Integration Test", () => {
                     clusterId: DescriptorCluster.id,
                     attributeId: DescriptorCluster.attributes.serverList.id,
                     attributeName: "serverList"
-                }, value: [{ id: 29 }, { id: 40 }, { id: 62 }, { id: 48 }, { id: 49 }, { id: 31 }, { id: 63 }, { id: 51 }, { id: 60 }], version: 1
+                }, value: [new ClusterId(29), new ClusterId(40), new ClusterId(62), new ClusterId(48), new ClusterId(49), new ClusterId(31), new ClusterId(63), new ClusterId(51), new ClusterId(60)], version: 9
             })
 
             assert.equal(response.filter(({

@@ -5,12 +5,8 @@
  */
 
 import { DeviceTypeDefinition } from "./DeviceTypes.js";
-import {
-    AttributePath, attributePathToId, ClusterServer, CommandPath, commandPathToId
-} from "../protocol/interaction/InteractionServer.js";
+import { ClusterServer } from "../protocol/interaction/InteractionServer.js";
 import { AtLeastOne } from "../util/Array.js";
-import { AttributeServer, FabricScopedAttributeServer } from "../cluster/server/AttributeServer.js";
-import { CommandServer } from "../cluster/server/CommandServer.js";
 import { DescriptorCluster } from "../cluster/DescriptorCluster.js";
 import { DeviceTypeId } from "../datatype/DeviceTypeId.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
@@ -21,28 +17,41 @@ import { FixedLabelCluster, UserLabelCluster } from "../cluster/LabelCluster.js"
 import { ClusterClientObj } from "../cluster/client/ClusterClient.js";
 import { ClusterServerObj, ClusterServerObjForCluster } from "../cluster/server/ClusterServer.js";
 import { InteractionClient } from "../protocol/interaction/InteractionClient.js";
-import { AllClustersMap } from "../cluster/index.js";
+import { AllClustersMap, BridgedDeviceBasicInformationCluster } from "../cluster/index.js";
+import { BasicInformationCluster } from "../cluster/BasicInformationCluster.js";
+
+export interface EndpointOptions {
+    endpointId?: number;
+    uniqueStorageKey?: string;
+}
 
 export class Endpoint {
     private readonly clusterServers = new Map<number, ClusterServerObj<Attributes, Commands, Events>>();
     private readonly clusterClients = new Map<number, ClusterClientObj<Attributes, Commands, Events>>();
     private readonly childEndpoints: Endpoint[] = [];
     id: number | undefined;
-    name: string;
+    uniqueStorageKey: string | undefined;
+    name = "";
+    private structureChangedCallback: () => void = () => {/** noop until officially set **/ };
 
-    private descriptorCluster;
+    private descriptorCluster: ClusterServerObjForCluster<typeof DescriptorCluster>;
 
+    /**
+     * Create a new Endpoint instance.
+     *
+     * @param deviceTypes One or multiple DeviceTypeDefinitions of the endpoint
+     * @param options Options for the endpoint
+     */
     constructor(
         protected deviceTypes: AtLeastOne<DeviceTypeDefinition>,
-        endpointId?: number
+        options: EndpointOptions = {}
     ) {
-        this.name = deviceTypes[0].name;
         this.descriptorCluster = ClusterServer(
             DescriptorCluster,
             {
                 deviceTypeList: deviceTypes.map(deviceType => ({
                     deviceType: new DeviceTypeId(deviceType.code),
-                    revision: deviceType.revision ?? 1
+                    revision: deviceType.revision
                 })),
                 serverList: [],
                 clientList: [],
@@ -53,9 +62,22 @@ export class Endpoint {
         this.addClusterServer(this.descriptorCluster);
         this.setDeviceTypes(deviceTypes);
 
-        if (endpointId !== undefined) {
-            this.id = endpointId;
+        if (options.endpointId !== undefined) {
+            this.id = options.endpointId;
         }
+        if (options.uniqueStorageKey !== undefined) {
+            this.uniqueStorageKey = options.uniqueStorageKey;
+        }
+    }
+
+    setStructureChangedCallback(callback: () => void) {
+        this.structureChangedCallback = callback;
+        this.childEndpoints.forEach(endpoint => endpoint.setStructureChangedCallback(callback));
+    }
+
+    clearStructureChangedCallback() {
+        this.structureChangedCallback = () => {/** noop **/ };
+        this.childEndpoints.forEach(endpoint => endpoint.clearStructureChangedCallback());
     }
 
     getId() {
@@ -95,10 +117,14 @@ export class Endpoint {
             this.descriptorCluster = cluster as unknown as ClusterServerObjForCluster<typeof DescriptorCluster>;
         }
         this.clusterServers.set(cluster.id, cluster);
+        this.descriptorCluster.attributes.serverList.setLocal(Array.from(this.clusterServers.keys()).map((id) => new ClusterId(id)));
+        this.structureChangedCallback(); // Inform parent about structure change
     }
 
     addClusterClient<A extends Attributes, C extends Commands, E extends Events>(cluster: ClusterClientObj<A, C, E>) {
         this.clusterClients.set(cluster.id, cluster);
+        this.descriptorCluster.attributes.clientList.setLocal(Array.from(this.clusterClients.keys()).map((id) => new ClusterId(id)));
+        this.structureChangedCallback(); // Inform parent about structure change
     }
 
     // TODO cleanup with id number vs ClusterId
@@ -148,17 +174,25 @@ export class Endpoint {
     }
 
     setDeviceTypes(deviceTypes: AtLeastOne<DeviceTypeDefinition>): void {
+        // Remove duplicates, for now we ignore that there could be different revisions
+        const deviceTypeList = new Map<number, DeviceTypeDefinition>();
+        deviceTypes.forEach(deviceType => deviceTypeList.set(deviceType.code, deviceType));
+        this.deviceTypes = Array.from(deviceTypeList.values()) as AtLeastOne<DeviceTypeDefinition>;
+        this.name = deviceTypes[0].name;
+
+        // Update descriptor cluster
         this.descriptorCluster.attributes.deviceTypeList.setLocal(
             this.deviceTypes.map(deviceType => ({
                 deviceType: new DeviceTypeId(deviceType.code),
                 revision: deviceType.revision
             }))
         );
-        this.deviceTypes = deviceTypes;
     }
 
     addChildEndpoint(endpoint: Endpoint): void {
         this.childEndpoints.push(endpoint);
+        endpoint.setStructureChangedCallback(this.structureChangedCallback);
+        this.structureChangedCallback(); // Inform parent about structure change
     }
 
     getChildEndpoint(id: number): Endpoint | undefined {
@@ -169,33 +203,37 @@ export class Endpoint {
         return this.childEndpoints;
     }
 
-    findHighestEndpointId(): number {
-        let highestEndpointId = 0;
-        this.childEndpoints.forEach(endpoint => {
-            const endpointId = endpoint.findHighestEndpointId();
-            if (endpointId > highestEndpointId) {
-                highestEndpointId = endpointId;
+    protected removeChildEndpoint(endpoint: Endpoint): void {
+        const index = this.childEndpoints.indexOf(endpoint);
+        if (index === -1) {
+            throw new Error(`Provided endpoint for deletion does not exist as child endpoint.`);
+        }
+        this.childEndpoints.splice(index, 1);
+        endpoint.clearStructureChangedCallback(); // remove
+        this.structureChangedCallback(); // Inform parent about structure change
+    }
+
+    determineUniqueID(): string | undefined {
+        // if the options in constructor contained a custom uniqueStorageKey, use this
+        if (this.uniqueStorageKey !== undefined) {
+            return `custom_${this.uniqueStorageKey}`;
+        }
+        // Else we check if we have a basic information cluster or bridged device basic information cluster and
+        // use the uniqueId or serial number, if provided
+        const basicInformationCluster = this.getClusterServer(BasicInformationCluster) ?? this.getClusterServer(BridgedDeviceBasicInformationCluster);
+        if (basicInformationCluster !== undefined) {
+            const uniqueId = basicInformationCluster.getUniqueIdAttribute?.();
+            if (uniqueId !== undefined) {
+                return `unique_${uniqueId}`;
             }
-        });
-        if (this.id !== undefined && this.id > highestEndpointId) {
-            highestEndpointId = this.id;
+            const serialNumber = basicInformationCluster.getSerialNumberAttribute?.();
+            if (serialNumber !== undefined) {
+                return `serial_${serialNumber}`;
+            }
         }
-        return highestEndpointId;
     }
 
-    ensureEndpointIds(nextEndpointId: number): number {
-        if (this.id === undefined) {
-            this.id = nextEndpointId++;
-        }
-        if (this.childEndpoints.length) {
-            this.childEndpoints.forEach(endpoint => {
-                nextEndpointId = endpoint.ensureEndpointIds(nextEndpointId);
-            });
-        }
-        return nextEndpointId;
-    }
-
-    protected verifyRequiredClusters(): void {
+    public verifyRequiredClusters(): void {
         this.deviceTypes.forEach(deviceType => {
             deviceType.requiredServerClusters?.forEach(clusterId => {
                 if (!this.clusterServers.has(clusterId)) {
@@ -224,77 +262,23 @@ export class Endpoint {
         return Array.from(this.clusterClients.values());
     }
 
-    getStructure() {
-        if (this.id === undefined) throw new Error("Endpoint ID is not set");
-
-        this.verifyRequiredClusters();
-
-        const endpoints = new Map<number, Endpoint>();
-        const attributes = new Map<string, (AttributeServer<any> | FabricScopedAttributeServer<any>)>();
-        const attributePaths = new Array<AttributePath>();
-        const commands = new Map<string, CommandServer<Attributes, Commands>>();
-        const commandPaths = new Array<CommandPath>();
-
-        // Set serverList with all clusters we have assigned to this endpoint
-        this.descriptorCluster.attributes.serverList.setLocal(Array.from(this.clusterServers.keys()).map((id) => new ClusterId(id)));
-        // Set clientList with all clusters we have assigned to this endpoint
-        this.descriptorCluster.attributes.clientList.setLocal(Array.from(this.clusterClients.keys()).map((id) => new ClusterId(id)));
-        // TODO also add commands and such
-
-        for (const cluster of this.clusterServers.values()) {
-            const { id: clusterId, attributes: clusterAttributes, _commands: clusterCommands } = cluster;
-            // Add attributes
-            for (const name in clusterAttributes) {
-                const attribute = clusterAttributes[name];
-                const path = { endpointId: this.id, clusterId, attributeId: attribute.id };
-                attributes.set(attributePathToId(path), attribute);
-                attributePaths.push(path);
-            }
-
-            // Add commands
-            for (const name in clusterCommands) {
-                const command = clusterCommands[name];
-                const path = { endpointId: this.id, clusterId, commandId: command.invokeId };
-                commands.set(commandPathToId(path), command);
-                commandPaths.push(path);
-            }
-        }
-
-        if (endpoints.has(this.id)) throw new Error(`Endpoint ID ${this.id} already exists`);
-
-        endpoints.set(this.id, this);
-
+    updatePartsList() {
         const newPartsList = new Array<EndpointNumber>();
 
-        // Add all data from the child endpoints
-        if (this.childEndpoints.length) {
-            for (const child of this.childEndpoints) {
-                const { endpoints: childEndpoints, attributes: childAttributes, attributePaths: childAttributePaths, commands: childCommands, commandPaths: childCommandPaths, partsList: childPartsList } = child.getStructure();
-                childEndpoints.forEach((endpointDetails, endpoint) => {
-                    if (endpoints.has(endpoint)) throw new Error(`Endpoint ID ${endpoint} already exists`);
-                    endpoints.set(endpoint, endpointDetails);
-                });
+        for (const child of this.childEndpoints) {
+            const childPartsList = child.updatePartsList();
 
-                childAttributes.forEach((attributeDetails, attribute) => {
-                    attributes.set(attribute, attributeDetails);
-                });
-                attributePaths.push(...childAttributePaths);
-
-                childCommands.forEach((commandDetails, command) => {
-                    commands.set(command, commandDetails);
-                });
-                commandPaths.push(...childCommandPaths);
-
-                if (child.id !== undefined) {
-                    newPartsList.push(new EndpointNumber(child.id));
-                }
-                newPartsList.push(...childPartsList);
+            if (child.id === undefined) {
+                throw new Error(`Child endpoint has no id, can not add to parts list`);
             }
+
+            newPartsList.push(new EndpointNumber(child.id));
+            newPartsList.push(...childPartsList);
         }
 
         this.descriptorCluster.attributes.partsList.setLocal(newPartsList);
 
-        return { endpoints, attributes, attributePaths, commands, commandPaths, partsList: this.descriptorCluster.attributes.partsList.getLocal() };
+        return newPartsList;
     }
 
 }

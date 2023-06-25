@@ -5,7 +5,7 @@
  */
 
 import { DeviceClasses, DeviceTypeDefinition, DeviceTypes } from "./DeviceTypes.js";
-import { Endpoint } from "./Endpoint.js";
+import { Endpoint, EndpointOptions } from "./Endpoint.js";
 import { AtLeastOne } from "../util/Array.js";
 import { HandlerFunction, NamedHandler } from "../util/NamedHandler.js";
 import { ClusterClientObj, isClusterClient } from "../cluster/client/ClusterClient.js";
@@ -33,7 +33,7 @@ export class PairedDevice extends Endpoint {
         clusters: (ClusterServerObj<Attributes, Commands, Events> | ClusterClientObj<Attributes, Commands, Events>)[] = [],
         endpointId: number
     ) {
-        super(definition, endpointId);
+        super(definition, { endpointId });
         clusters.forEach(cluster => {
             if (isClusterServer(cluster)) {
                 this.addClusterServer(cluster);
@@ -77,7 +77,7 @@ export class RootEndpoint extends Endpoint {
      */
     constructor(
     ) {
-        super([DeviceTypes.ROOT], 0);
+        super([DeviceTypes.ROOT], { endpointId: 0 });
         this.deviceType = DeviceTypes.ROOT.code;
     }
 }
@@ -97,16 +97,16 @@ export class Device extends Endpoint {
      * Create a new Device instance.
      *
      * @param definition DeviceTypeDefinitions of the device
-     * @param endpointId Optional endpoint ID of the device. If not set, the device will be instanced as a root device
+     * @param options Optional endpoint options
      */
     constructor(
         definition: DeviceTypeDefinition,
-        endpointId?: number
+        options: EndpointOptions = {}
     ) {
         if (definition.deviceClass === DeviceClasses.Node) {
             throw new Error("MatterNode devices are not supported");
         }
-        super([definition], endpointId);
+        super([definition], options);
         this.deviceType = definition.code;
         if (definition.deviceClass === DeviceClasses.Simple || definition.deviceClass === DeviceClasses.Client) {
             this.addClusterServer(ClusterServer(

@@ -3,10 +3,9 @@
  * Copyright 2022 The matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Endpoint } from "./Endpoint.js";
+import { Endpoint, EndpointOptions } from "./Endpoint.js";
 import { Device } from "./Device.js";
 import { DeviceTypeDefinition } from "./DeviceTypes.js";
-import { AtLeastOne } from "../util/Array.js";
 
 /**
  * A ComposedDevice is a special endpoint that allows to combine multiple sub devices and expose this as one device
@@ -16,16 +15,16 @@ export class ComposedDevice extends Endpoint {
     /**
      * Creates a new ComposedDevice.
      *
-     * @param deviceTypes Array with Device types how this device should be presented to the Matter ecosystem.
+     * @param definition DeviceTypeDefinitions of the composed device
      * @param devices Array with devices that should be combined into one device that are directly added.
-     * @param endpointId Optional endpoint ID to use. If not provided will automatically be assigned
+     * @param options Optional Endpoint options
      */
     constructor(
-        deviceTypes: AtLeastOne<DeviceTypeDefinition>,
+        definition: DeviceTypeDefinition,
         devices: Device[] = [],
-        endpointId?: number
+        options: EndpointOptions = {}
     ) {
-        super(deviceTypes, endpointId);
+        super([definition], options);
         devices.forEach(device => this.addDevice(device));
     }
 
@@ -49,7 +48,7 @@ export class ComposedDevice extends Endpoint {
     /**
      * Verify that the required clusters exists on the device.
      */
-    protected override verifyRequiredClusters() {
+    override verifyRequiredClusters() {
         // TODO find out what to really check here and how ... most likely we need to verify that the added sub devices
         //      somehow match with the device types of the composed device?!
         //      For now we do not check this

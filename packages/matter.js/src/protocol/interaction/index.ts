@@ -12,4 +12,5 @@ export * from "./AttributeDataDecoder.js";
 export * from "./InteractionClient.js";
 export * from "./InteractionMessenger.js";
 export * from "./InteractionServer.js";
+export * from "./InteractionEndpointStructure.js";
 export * from "./SubscriptionHandler.js";

@@ -15,7 +15,8 @@ import {
     Attributes, Cluster, Commands, ConditionalFeatureList, Events, TlvNoResponse
 } from "../../cluster/Cluster.js";
 import {
-    StatusCode, TlvAttributePath, TlvAttributeReport, TlvCommandPath, TlvInvokeResponseData, TlvSubscribeResponse
+    StatusCode, TlvAttributePath, TlvAttributeReport, TlvCommandPath, TlvEventPath, TlvInvokeResponseData,
+    TlvSubscribeResponse
 } from "./InteractionProtocol.js"
 import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
@@ -45,6 +46,7 @@ import { Fabric } from "../../fabric/Fabric.js";
 import { EventId } from "../../datatype/index.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
 import { EventData, EventHandler } from "../../protocol/interaction/EventHandler.js";
+import { InteractionEndpointStructure } from "./InteractionEndpointStructure.js";
 
 export const INTERACTION_PROTOCOL_ID = 0x0001;
 
@@ -358,30 +360,45 @@ export interface AttributePath {
     attributeId: number,
 }
 
+export interface EventPath {
+    endpointId: number,
+    clusterId: number,
+    eventId: number,
+}
+
 export interface AttributeWithPath {
     path: TypeFromSchema<typeof TlvAttributePath>,
     attribute: AttributeServer<any> | FabricScopedAttributeServer<any> | FixedAttributeServer<any>,
 }
 
+export interface EventWithPath {
+    path: TypeFromSchema<typeof TlvEventPath>,
+    event: EventServer<any>,
+}
+
+export interface CommandWithPath {
+    path: TypeFromSchema<typeof TlvCommandPath>,
+    command: CommandServer<any, any>,
+}
+
+export function genericElementPathToId(endpointId: number | undefined, clusterId: number | undefined, elementId: number | undefined) {
+    return `${endpointId}/${clusterId}/${elementId}`;
+}
+
 export function commandPathToId({ endpointId, clusterId, commandId }: CommandPath) {
-    return `${endpointId}/${clusterId}/${commandId}`;
+    return genericElementPathToId(endpointId, clusterId, commandId);
 }
 
 export function attributePathToId({ endpointId, clusterId, attributeId }: TypeFromSchema<typeof TlvAttributePath>) {
-    return `${endpointId}/${clusterId}/${attributeId}`;
+    return genericElementPathToId(endpointId, clusterId, attributeId);
 }
 
-function toHex(value: number | undefined) {
-    return value === undefined ? "*" : `0x${value.toString(16)}`;
+export function eventPathToId({ endpointId, clusterId, eventId }: TypeFromSchema<typeof TlvEventPath>) {
+    return genericElementPathToId(endpointId, clusterId, eventId);
 }
 
 export class InteractionServer implements ProtocolHandler<MatterDevice> {
-
-    private endpoints = new Map<number, Endpoint>();
-    private attributes = new Map<string, (AttributeServer<any> | FabricScopedAttributeServer<any> | FixedAttributeServer<any>)>();
-    private attributePaths = new Array<AttributePath>();
-    private commands = new Map<string, CommandServer<any, any>>();
-    //private commandPaths = new Array<CommandPath>(); // TODO Re-add when supporting wildcard commands
+    private endpointStructure = new InteractionEndpointStructure();
     private nextSubscriptionId = Crypto.getRandomUInt32();
     private eventHandler = new EventHandler(this.storageManager);
 
@@ -394,23 +411,17 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     }
 
     setRootEndpoint(endpoint: Endpoint) {
-        const { endpoints, attributes, attributePaths, commands, /* commandPaths*/ } = endpoint.getStructure();
+        // Reset all data
+        this.endpointStructure.initializeFromEndpoint(endpoint);
 
-        this.endpoints = new Map<number, Endpoint>();
-        for (const [endpointId, subEndpoint] of endpoints) {
-            this.endpoints.set(endpointId, subEndpoint);
-            for (const cluster of subEndpoint.getAllClusterServers()) {
-                cluster._setStorage(this.storageManager.createContext(`Cluster-${endpointId}-${cluster.id}`));
+        for (const endpoint of this.endpointStructure.endpoints.values()) {
+            for (const cluster of endpoint.getAllClusterServers()) {
+                cluster._setStorage(this.storageManager.createContext(`Cluster-${endpoint.id}-${cluster.id}`));
                 cluster._registerEventHandler(this.eventHandler);
             }
         }
 
-        this.attributes = attributes;
-        this.attributePaths = attributePaths;
-        this.commands = commands;
-        //this.commandPaths = commandPaths; // // TODO Re-add when supporting wildcard commands
-
-        return this;
+        return;
     }
 
     async onNewExchange(exchange: MessageExchange<MatterDevice>) {
@@ -427,20 +438,20 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         if (attributePaths === undefined) {
             throw new StatusResponseError("Only Read requests with attributeRequests are supported right now", StatusCode.UnsupportedRead);
         }
-        logger.debug(`Received read request from ${exchange.channel.getName()}: ${attributePaths.map(path => this.resolveAttributeName(path)).join(", ")}, isFabricFiltered=${isFabricFiltered}`);
+        logger.debug(`Received read request from ${exchange.channel.getName()}: ${attributePaths.map(path => this.endpointStructure.resolveAttributeName(path)).join(", ")}, isFabricFiltered=${isFabricFiltered}`);
 
         // UnsupportedNode/UnsupportedEndpoint/UnsupportedCluster/UnsupportedAttribute/UnsupportedRead
 
         const attributeReports = attributePaths.flatMap((path: TypeFromSchema<typeof TlvAttributePath>): TypeFromSchema<typeof TlvAttributeReport>[] => {
-            const attributes = this.getAttributes([path]);
+            const attributes = this.endpointStructure.getAttributes([path]);
             if (attributes.length === 0) {
-                logger.debug(`Read from ${exchange.channel.getName()}: ${this.resolveAttributeName(path)} unsupported path`);
+                logger.debug(`Read from ${exchange.channel.getName()}: ${this.endpointStructure.resolveAttributeName(path)} unsupported path`);
                 return [{ attributeStatus: { path, status: { status: StatusCode.UnsupportedAttribute } } }]; // TODO: Find correct status code
             }
 
             return attributes.map(({ path, attribute }) => {
                 const { value, version } = attribute.getWithVersion(exchange.session); // TODO check ACL
-                logger.debug(`Read from ${exchange.channel.getName()}: ${this.resolveAttributeName(path)}=${Logger.toJSON(value)} (version=${version})`);
+                logger.debug(`Read from ${exchange.channel.getName()}: ${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(value)} (version=${version})`);
                 return { attributeData: { path, data: attribute.schema.encodeTlv(value), dataVersion: version } };
             });
         });
@@ -453,7 +464,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     }
 
     handleWriteRequest(exchange: MessageExchange<MatterDevice>, { suppressResponse, writeRequests }: WriteRequest): WriteResponse {
-        logger.debug(`Received write request from ${exchange.channel.getName()}: ${writeRequests.map(req => this.resolveAttributeName(req.path)).join(", ")}, suppressResponse=${suppressResponse}`);
+        logger.debug(`Received write request from ${exchange.channel.getName()}: ${writeRequests.map(req => this.endpointStructure.resolveAttributeName(req.path)).join(", ")}, suppressResponse=${suppressResponse}`);
 
         // TODO consider TimedRequest constraints
 
@@ -461,7 +472,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         const writeResults = writeData.flatMap((values): { path: TypeFromSchema<typeof TlvAttributePath>, statusCode: StatusCode }[] => {
             const { path, dataVersion } = values[0];
-            const attributes = this.getAttributes([path], true);
+            const attributes = this.endpointStructure.getAttributes([path], true);
             if (attributes.length === 0) {
                 return [{ path, statusCode: StatusCode.UnsupportedWrite }]; // TODO: Find correct status code
             }
@@ -473,17 +484,17 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
                 try {
                     const value = decodeValueForSchema(schema, values, defaultValue);
-                    logger.debug(`Handle write request from ${exchange.channel.getName()} resolved to: ${this.resolveAttributeName(path)}=${Logger.toJSON(value)} (Version=${dataVersion})`);
+                    logger.debug(`Handle write request from ${exchange.channel.getName()} resolved to: ${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(value)} (Version=${dataVersion})`);
                     if (attribute instanceof FixedAttributeServer) {
                         throw new Error("Fixed attributes cannot be written");
                     }
                     attribute.set(value, exchange.session);
                 } catch (error: any) {
                     if (attributes.length === 1) { // For Multi-Attribute-Writes we ignore errors
-                        logger.error(`Error while handling write request from ${exchange.channel.getName()} to ${this.resolveAttributeName(path)}: ${error.message}`);
+                        logger.error(`Error while handling write request from ${exchange.channel.getName()} to ${this.endpointStructure.resolveAttributeName(path)}: ${error.message}`);
                         return { path, statusCode: StatusCode.ConstraintError };
                     } else {
-                        logger.debug(`While handling write request from ${exchange.channel.getName()} to ${this.resolveAttributeName(path)} ignored: ${error.message}`);
+                        logger.debug(`While handling write request from ${exchange.channel.getName()} to ${this.endpointStructure.resolveAttributeName(path)} ignored: ${error.message}`);
                     }
                 }
                 return { path, statusCode: StatusCode.Success };
@@ -493,7 +504,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         // TODO respect suppressResponse, potentially also needs adjustment in InteractionMessenger class!
         const errorResults = writeResults.filter(({ statusCode }) => statusCode !== StatusCode.Success);
-        logger.debug(`Write request from ${exchange.channel.getName()} done ${errorResults.length ? `with following errors: ${errorResults.map(({ path, statusCode }) => `${this.resolveAttributeName(path)}=${Logger.toJSON(statusCode)}`).join(", ")}` : "without errors"}`);
+        logger.debug(`Write request from ${exchange.channel.getName()} done ${errorResults.length ? `with following errors: ${errorResults.map(({ path, statusCode }) => `${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(statusCode)}`).join(", ")}` : "without errors"}`);
 
         return {
             interactionModelRevision: 1,
@@ -519,14 +530,14 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         // TODO add eventsRequest and other missing supports
         if (attributeRequests !== undefined) {
-            logger.debug(`Subscribe to ${attributeRequests.map(path => this.resolveAttributeName(path)).join(", ")}`);
+            logger.debug(`Subscribe to ${attributeRequests.map(path => this.endpointStructure.resolveAttributeName(path)).join(", ")}`);
 
             if (attributeRequests.length === 0) throw new Error("Unsupported subscription request with empty attribute list");
             if (minIntervalFloorSeconds < 0) throw new Error("minIntervalFloorSeconds should be greater or equal to 0");
             if (maxIntervalCeilingSeconds < 0) throw new Error("maxIntervalCeilingSeconds should be greater or equal to 1");
             if (maxIntervalCeilingSeconds < minIntervalFloorSeconds) throw new Error("maxIntervalCeilingSeconds should be greater or equal to minIntervalFloorSeconds");
 
-            const attributes = this.getAttributes(attributeRequests);
+            const attributes = this.endpointStructure.getAttributes(attributeRequests);
 
             if (!attributes.length) {
                 throw new StatusResponseError("Attributes not found", StatusCode.UnsupportedAttribute);
@@ -558,7 +569,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     }
 
     async handleInvokeRequest(exchange: MessageExchange<MatterDevice>, { invokeRequests }: InvokeRequest, message: Message): Promise<InvokeResponse> {
-        logger.debug(`Received invoke request from ${exchange.channel.getName()}: ${invokeRequests.map(({ commandPath: { endpointId, clusterId, commandId } }) => this.resolveCommandName({ endpointId, clusterId, commandId })).join(", ")}`);
+        logger.debug(`Received invoke request from ${exchange.channel.getName()}: ${invokeRequests.map(({ commandPath: { endpointId, clusterId, commandId } }) => this.endpointStructure.resolveCommandName({ endpointId, clusterId, commandId })).join(", ")}`);
 
         const invokeResponses: TypeFromSchema<typeof TlvInvokeResponseData>[] = [];
 
@@ -569,17 +580,17 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                 invokeResponses.push({ status: { commandPath, status: { status: StatusCode.UnsupportedCommand } } });
                 return;
             }
-            const command = this.commands.get(commandPathToId(commandPath as CommandPath));
+            const command = this.endpointStructure.commands.get(commandPathToId(commandPath as CommandPath));
             if (command === undefined) {
                 const { clusterId, commandId } = commandPath;
-                logger.error(`Unknown command ${this.resolveCommandName({ endpointId, clusterId, commandId })}`);
+                logger.error(`Unknown command ${this.endpointStructure.resolveCommandName({ endpointId, clusterId, commandId })}`);
                 invokeResponses.push({ status: { commandPath, status: { status: StatusCode.UnsupportedCommand } } });
                 return;
             }
-            const endpoint = this.endpoints.get(endpointId);
+            const endpoint = this.endpointStructure.endpoints.get(endpointId);
             if (!endpoint) {
                 const { clusterId, commandId } = commandPath;
-                logger.error(`Endpoint ${endpointId} not found for command ${this.resolveCommandName({ endpointId, clusterId, commandId })}`);
+                logger.error(`Endpoint ${endpointId} not found for command ${this.endpointStructure.resolveCommandName({ endpointId, clusterId, commandId })}`);
                 invokeResponses.push({ status: { commandPath, status: { status: StatusCode.UnsupportedCommand } } });
                 return;
             }
@@ -615,84 +626,5 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         // TODO: implement this
     }
 
-    private resolveAttributeName({ endpointId, clusterId, attributeId }: TypeFromSchema<typeof TlvAttributePath>) {
-        if (endpointId === undefined) {
-            return `*/${toHex(clusterId)}/${toHex(attributeId)}`;
-        }
-        const endpoint = this.endpoints.get(endpointId);
-        if (endpoint === undefined) {
-            return `unknown(${toHex(endpointId)})/${toHex(clusterId)}/${toHex(attributeId)}`;
-        }
-        const endpointName = `${endpoint.name}(${toHex(endpointId)})`;
 
-        if (clusterId === undefined) {
-            return `${endpointName}/*/${toHex(attributeId)}`;
-        }
-        const cluster = endpoint.getClusterServerById(clusterId);
-        if (cluster === undefined) {
-            return `${endpointName}/unknown(${toHex(clusterId)})/${toHex(attributeId)}`;
-        }
-        const clusterName = `${cluster.name}(${toHex(clusterId)})`;
-
-        if (attributeId === undefined) {
-            return `${endpointName}/${clusterName}/*`;
-        }
-        const attribute = this.attributes.get(attributePathToId({ endpointId, clusterId, attributeId }));
-        const attributeName = `${attribute?.name ?? "unknown"}(${toHex(attributeId)})`;
-        return `${endpointName}/${clusterName}/${attributeName}`;
-    }
-
-    private resolveCommandName({ endpointId, clusterId, commandId }: TypeFromSchema<typeof TlvCommandPath>) {
-        if (endpointId === undefined) {
-            return `*/${toHex(clusterId)}/${toHex(commandId)}`;
-        }
-        const endpoint = this.endpoints.get(endpointId);
-        if (endpoint === undefined) {
-            return `unknown(${toHex(endpointId)})/${toHex(clusterId)}/${toHex(commandId)}`;
-        }
-        const endpointName = `${endpoint.name}(${toHex(endpointId)})`;
-
-        if (clusterId === undefined) {
-            return `${endpointName}/*/${toHex(commandId)}`;
-        }
-        const cluster = endpoint.getClusterServerById(clusterId);
-        if (cluster === undefined) {
-            return `${endpointName}/unknown(${toHex(clusterId)})/${toHex(commandId)}`;
-        }
-        const clusterName = `${cluster.name}(${toHex(clusterId)})`;
-
-        if (commandId === undefined) {
-            return `${endpointName}/${clusterName}/*`;
-        }
-        const command = this.commands.get(commandPathToId({ endpointId, clusterId, commandId }));
-        const attributeName = `${command?.name ?? "unknown"}(${toHex(commandId)})`;
-        return `${endpointName}/${clusterName}/${attributeName}`;
-    }
-
-    private getAttributes(filters: TypeFromSchema<typeof TlvAttributePath>[], onlyWritable = false): AttributeWithPath[] {
-        const result = new Array<AttributeWithPath>();
-
-        filters.forEach(({ endpointId, clusterId, attributeId }) => {
-            if (endpointId !== undefined && clusterId !== undefined && attributeId !== undefined) {
-                const path = { endpointId, clusterId, attributeId };
-                const attribute = this.attributes.get(attributePathToId(path));
-                if (attribute === undefined) return;
-                if (onlyWritable && !attribute.isWritable) return;
-                result.push({ path, attribute });
-            } else {
-                this.attributePaths.filter(path =>
-                    (endpointId === undefined || endpointId === path.endpointId)
-                    && (clusterId === undefined || clusterId === path.clusterId)
-                    && (attributeId === undefined || attributeId === path.attributeId))
-                    .forEach(path => {
-                        const attribute = this.attributes.get(attributePathToId(path));
-                        if (attribute === undefined) return;
-                        if (onlyWritable && !attribute.isWritable) return;
-                        result.push({ path, attribute })
-                    });
-            }
-        });
-
-        return result;
-    }
 }
