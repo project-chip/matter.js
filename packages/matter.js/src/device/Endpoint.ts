@@ -22,7 +22,7 @@ import { BasicInformationCluster } from "../cluster/BasicInformationCluster.js";
 
 export interface EndpointOptions {
     endpointId?: number;
-    uniqueId?: string;
+    uniqueStorageKey?: string;
 }
 
 export class Endpoint {
@@ -30,7 +30,7 @@ export class Endpoint {
     private readonly clusterClients = new Map<number, ClusterClientObj<Attributes, Commands, Events>>();
     private readonly childEndpoints: Endpoint[] = [];
     id: number | undefined;
-    uniqueId: string | undefined;
+    uniqueStorageKey: string | undefined;
     name = "";
     private structureChangedCallback: () => void = () => {/** noop until officially set **/ };
 
@@ -65,8 +65,8 @@ export class Endpoint {
         if (options.endpointId !== undefined) {
             this.id = options.endpointId;
         }
-        if (options.uniqueId !== undefined) {
-            this.uniqueId = options.uniqueId;
+        if (options.uniqueStorageKey !== undefined) {
+            this.uniqueStorageKey = options.uniqueStorageKey;
         }
     }
 
@@ -213,10 +213,10 @@ export class Endpoint {
         this.structureChangedCallback(); // Inform parent about structure change
     }
 
-    determineUniqueID(): string {
-        // if the options in constructor contained a custom uniqueId, use this
-        if (this.uniqueId !== undefined) {
-            return `customUniqueId_${this.uniqueId}`;
+    determineUniqueID(): string | undefined {
+        // if the options in constructor contained a custom uniqueStorageKey, use this
+        if (this.uniqueStorageKey !== undefined) {
+            return `custom_${this.uniqueStorageKey}`;
         }
         // Else we check if we have a basic information cluster or bridged device basic information cluster and
         // use the uniqueId or serial number, if provided
@@ -224,15 +224,13 @@ export class Endpoint {
         if (basicInformationCluster !== undefined) {
             const uniqueId = basicInformationCluster.getUniqueIdAttribute?.();
             if (uniqueId !== undefined) {
-                return `basicInfoUniqueId_${uniqueId}`;
+                return `unique_${uniqueId}`;
             }
             const serialNumber = basicInformationCluster.getSerialNumberAttribute?.();
             if (serialNumber !== undefined) {
-                return `basicInfoSerialNumber_${serialNumber}`;
+                return `serial_${serialNumber}`;
             }
         }
-        // Else we have no unique id
-        return "";
     }
 
     public verifyRequiredClusters(): void {

@@ -366,7 +366,7 @@ export class CommissioningServer extends MatterNode {
 
         this.nextEndpointId = this.endpointStructureStorage.get("nextEndpointId", this.nextEndpointId);
 
-        this.ensureEndpointIds(); // Make sure to have unique endpoint ids
+        this.assignEndpointIds(); // Make sure to have unique endpoint ids
         this.rootEndpoint.updatePartsList(); // initialize parts list of all Endpoint objects with final IDs
         this.rootEndpoint.setStructureChangedCallback(() => this.updateStructure()); // Make sure we get structure changes
         this.interactionServer.setRootEndpoint(this.rootEndpoint); // Initialize the interaction server with the root endpoint
@@ -387,7 +387,7 @@ export class CommissioningServer extends MatterNode {
 
     updateStructure() {
         logger.debug("Endpoint structure got updated ...");
-        this.ensureEndpointIds(); // Make sure to have unique endpoint ids
+        this.assignEndpointIds(); // Make sure to have unique endpoint ids
         this.interactionServer?.setRootEndpoint(this.rootEndpoint); // Reinitilize the interaction server structure
     }
 
@@ -398,7 +398,7 @@ export class CommissioningServer extends MatterNode {
         return this.nextEndpointId;
     }
 
-    ensureEndpointIds() {
+    assignEndpointIds() {
         const rootUniqueIdPrefix = this.rootEndpoint.determineUniqueID();
         this.initializeEndpointIdsFromStorage(this.rootEndpoint, rootUniqueIdPrefix);
         this.fillAndStoreEndpointIds(this.rootEndpoint, rootUniqueIdPrefix);
@@ -407,14 +407,14 @@ export class CommissioningServer extends MatterNode {
 
     private initializeEndpointIdsFromStorage(endpoint: Endpoint, parentUniquePrefix = "") {
         if (this.endpointStructureStorage === undefined) {
-            throw new Error("endpointStructureStorage not set!");
+            throw new Error("Storage manager must be initialized to enable initialization from storage.");
         }
         const endpoints = endpoint.getChildEndpoints();
         for (let endpointIndex = 0; endpointIndex < endpoints.length; endpointIndex++) {
             let endpointUniquePrefix = parentUniquePrefix;
             const endpoint = endpoints[endpointIndex];
             const thisUniqueId = endpoint.determineUniqueID();
-            if (thisUniqueId === "") {
+            if (thisUniqueId === undefined) {
                 if (endpoint.id === undefined) {
                     logger.debug(`No unique id found for endpoint on index ${endpointIndex} / device ${endpoint.name} - using index as unique identifier!`);
                 }
@@ -445,7 +445,7 @@ export class CommissioningServer extends MatterNode {
             let endpointUniquePrefix = parentUniquePrefix;
             endpoint = endpoints[endpointIndex];
             const thisUniqueId = endpoint.determineUniqueID();
-            if (thisUniqueId === "") {
+            if (thisUniqueId === undefined) {
                 endpointUniquePrefix += `${endpointUniquePrefix === "" ? "" : "-"}index_${endpointIndex}`;
             } else {
                 endpointUniquePrefix += `${endpointUniquePrefix === "" ? "" : "-"}${thisUniqueId}`;

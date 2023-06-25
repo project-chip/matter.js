@@ -21,7 +21,8 @@ Crypto.get = () => ({
 import { MatterNode } from "../../src/MatterNode.js";
 import { OnOffLightDevice, OnOffPluginUnitDevice } from "../../src/device/OnOffDevices.js";
 import { AttributeServer } from "../../src/cluster/server/AttributeServer.js";
-import { attributePathToId, ClusterServer, EndpointStructure } from "../../src/protocol/interaction/InteractionServer.js";
+import { attributePathToId, ClusterServer } from "../../src/protocol/interaction/InteractionServer.js";
+import { InteractionEndpointStructure } from "../../src/protocol/interaction/InteractionEndpointStructure.js";
 import { Aggregator } from "../../src/device/Aggregator.js";
 import { DeviceTypes } from "../../src/device/DeviceTypes.js";
 import { AdminCommissioningHandler } from "../../src/cluster/server/AdminCommissioningServer.js";
@@ -276,7 +277,7 @@ describe("Endpoint Structures", () => {
 
             const rootEndpoint = node.getRootEndpoint();
             rootEndpoint.updatePartsList();
-            const endpointStructure = new EndpointStructure();
+            const endpointStructure = new InteractionEndpointStructure();
             endpointStructure.initializeFromEndpoint(rootEndpoint);
             const {
                 endpoints,
@@ -363,12 +364,12 @@ describe("Endpoint Structures", () => {
 
             node.addDevice(onoffLightDevice);
 
-            node.ensureEndpointIds();
+            node.assignEndpointIds();
             assert.equal(node.getNextEndpointId(false), 2);
 
             const rootEndpoint = node.getRootEndpoint();
             rootEndpoint.updatePartsList();
-            const endpointStructure = new EndpointStructure();
+            const endpointStructure = new InteractionEndpointStructure();
             endpointStructure.initializeFromEndpoint(rootEndpoint);
             const {
                 endpoints,
@@ -378,7 +379,7 @@ describe("Endpoint Structures", () => {
                 eventPaths,
             } = endpointStructure;
 
-            assert.equal(endpointStorage.get("basicInfoSerialNumber_node-matter-0000-index_0"), 1);
+            assert.equal(endpointStorage.get("serial_node-matter-0000-index_0"), 1);
 
             assert.equal(endpoints.size, 2);
             assert.equal(endpoints.get(0)?.getAllClusterServers().length, 9);
@@ -453,16 +454,16 @@ describe("Endpoint Structures", () => {
             node.setStorageManager(testStorageManager);
             addRequiredRootClusters(node);
 
-            const onoffLightDevice = new OnOffLightDevice(undefined, { uniqueId: "test-unique-id" });
+            const onoffLightDevice = new OnOffLightDevice(undefined, { uniqueStorageKey: "test-unique-id" });
 
             node.addDevice(onoffLightDevice);
 
-            node.ensureEndpointIds();
+            node.assignEndpointIds();
             assert.equal(node.getNextEndpointId(false), 2);
 
             const rootEndpoint = node.getRootEndpoint();
             rootEndpoint.updatePartsList();
-            const endpointStructure = new EndpointStructure();
+            const endpointStructure = new InteractionEndpointStructure();
             endpointStructure.initializeFromEndpoint(rootEndpoint);
             const {
                 endpoints,
@@ -472,7 +473,7 @@ describe("Endpoint Structures", () => {
                 eventPaths,
             } = endpointStructure;
 
-            assert.equal(endpointStorage.get("basicInfoSerialNumber_node-matter-0000-customUniqueId_test-unique-id"), 1);
+            assert.equal(endpointStorage.get("serial_node-matter-0000-custom_test-unique-id"), 1);
 
             assert.equal(endpoints.size, 2);
             assert.equal(endpoints.get(0)?.getAllClusterServers().length, 9);
@@ -511,7 +512,7 @@ describe("Endpoint Structures", () => {
             const testStorageManager = new StorageManager(testStorage);
             await testStorageManager.initialize();
             const endpointStorage = testStorageManager.createContext("EndpointStructure");
-            endpointStorage.set("basicInfoSerialNumber_node-matter-0000-index_0", 10)
+            endpointStorage.set("serial_node-matter-0000-index_0", 10)
 
             const node = new CommissioningServer({
                 port: 5540,
@@ -552,12 +553,12 @@ describe("Endpoint Structures", () => {
 
             node.addDevice(onoffLightDevice);
 
-            node.ensureEndpointIds();
+            node.assignEndpointIds();
             assert.equal(node.getNextEndpointId(false), 11);
 
             const rootEndpoint = node.getRootEndpoint();
             rootEndpoint.updatePartsList();
-            const endpointStructure = new EndpointStructure();
+            const endpointStructure = new InteractionEndpointStructure();
             endpointStructure.initializeFromEndpoint(rootEndpoint);
             const {
                 endpoints,
@@ -567,7 +568,7 @@ describe("Endpoint Structures", () => {
                 eventPaths,
             } = endpointStructure;
 
-            assert.equal(endpointStorage.get("basicInfoSerialNumber_node-matter-0000-index_0"), 10);
+            assert.equal(endpointStorage.get("serial_node-matter-0000-index_0"), 10);
 
             assert.equal(endpoints.size, 2);
             assert.equal(endpoints.get(0)?.getAllClusterServers().length, 9);
@@ -606,7 +607,7 @@ describe("Endpoint Structures", () => {
             const testStorageManager = new StorageManager(testStorage);
             await testStorageManager.initialize();
             const endpointStorage = testStorageManager.createContext("EndpointStructure");
-            endpointStorage.set("basicInfoSerialNumber_node-matter-0000-customUniqueId_test-unique-id", 10)
+            endpointStorage.set("serial_node-matter-0000-custom_test-unique-id", 10)
 
             const node = new CommissioningServer({
                 port: 5540,
@@ -643,16 +644,16 @@ describe("Endpoint Structures", () => {
             node.setStorageManager(testStorageManager);
             addRequiredRootClusters(node);
 
-            const onoffLightDevice = new OnOffLightDevice(undefined, { uniqueId: "test-unique-id" });
+            const onoffLightDevice = new OnOffLightDevice(undefined, { uniqueStorageKey: "test-unique-id" });
 
             node.addDevice(onoffLightDevice);
 
-            node.ensureEndpointIds();
+            node.assignEndpointIds();
             assert.equal(node.getNextEndpointId(false), 11);
 
             const rootEndpoint = node.getRootEndpoint();
             rootEndpoint.updatePartsList();
-            const endpointStructure = new EndpointStructure();
+            const endpointStructure = new InteractionEndpointStructure();
             endpointStructure.initializeFromEndpoint(rootEndpoint);
             const {
                 endpoints,
@@ -662,7 +663,7 @@ describe("Endpoint Structures", () => {
                 eventPaths,
             } = endpointStructure;
 
-            assert.equal(endpointStorage.get("basicInfoSerialNumber_node-matter-0000-customUniqueId_test-unique-id"), 10);
+            assert.equal(endpointStorage.get("serial_node-matter-0000-custom_test-unique-id"), 10);
 
             assert.equal(endpoints.size, 2);
             assert.equal(endpoints.get(0)?.getAllClusterServers().length, 9);
@@ -717,7 +718,7 @@ describe("Endpoint Structures", () => {
 
             const rootEndpoint = node.getRootEndpoint();
             rootEndpoint.updatePartsList();
-            const endpointStructure = new EndpointStructure();
+            const endpointStructure = new InteractionEndpointStructure();
             endpointStructure.initializeFromEndpoint(rootEndpoint);
             const {
                 endpoints,
@@ -794,7 +795,7 @@ describe("Endpoint Structures", () => {
 
             const rootEndpoint = node.getRootEndpoint();
             rootEndpoint.updatePartsList();
-            const endpointStructure = new EndpointStructure();
+            const endpointStructure = new InteractionEndpointStructure();
             endpointStructure.initializeFromEndpoint(rootEndpoint);
             const {
                 endpoints,
@@ -908,7 +909,7 @@ describe("Endpoint Structures", () => {
 
             const rootEndpoint = node.getRootEndpoint();
             rootEndpoint.updatePartsList();
-            const endpointStructure = new EndpointStructure();
+            const endpointStructure = new InteractionEndpointStructure();
             endpointStructure.initializeFromEndpoint(rootEndpoint);
             const {
                 endpoints,
@@ -1068,12 +1069,12 @@ describe("Endpoint Structures", () => {
             });
             node.addDevice(aggregator2);
 
-            node.ensureEndpointIds();
+            node.assignEndpointIds();
             assert.equal(node.getNextEndpointId(false), 7);
 
             const rootEndpoint = node.getRootEndpoint();
             rootEndpoint.updatePartsList();
-            const endpointStructure = new EndpointStructure();
+            const endpointStructure = new InteractionEndpointStructure();
             endpointStructure.initializeFromEndpoint(rootEndpoint);
             const {
                 endpoints,
@@ -1239,7 +1240,7 @@ describe("Endpoint Structures", () => {
             });
 
             const composedDevice = new ComposedDevice(DeviceTypes.ON_OFF_LIGHT, [
-                new OnOffLightDevice(undefined, { uniqueId: "COMPOSED.SUB1" }),
+                new OnOffLightDevice(undefined, { uniqueStorageKey: "COMPOSED.SUB1" }),
                 new OnOffPluginUnitDevice()
             ]);
             aggregator2.addBridgedDevice(composedDevice, {
@@ -1250,12 +1251,12 @@ describe("Endpoint Structures", () => {
 
             node.addDevice(aggregator2);
 
-            node.ensureEndpointIds();
+            node.assignEndpointIds();
             assert.equal(node.getNextEndpointId(false), 44);
 
             const rootEndpoint = node.getRootEndpoint();
             rootEndpoint.updatePartsList();
-            const endpointStructure = new EndpointStructure();
+            const endpointStructure = new InteractionEndpointStructure();
             endpointStructure.initializeFromEndpoint(rootEndpoint);
             const {
                 endpoints,
@@ -1353,9 +1354,9 @@ describe("Endpoint Structures", () => {
             const rootPartsListAttribute = attributes.get(attributePathToId({ endpointId: 0, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id })) as AttributeServer<EndpointNumber[]>;
             assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(37), new EndpointNumber(3), new EndpointNumber(38), new EndpointNumber(39), new EndpointNumber(40), new EndpointNumber(18), new EndpointNumber(41), new EndpointNumber(42), new EndpointNumber(43)]);
 
-            assert.equal(endpointStorage.get("basicInfoSerialNumber_node-matter-0000-index_0-index_1"), 38);
-            assert.equal(endpointStorage.get("basicInfoSerialNumber_node-matter-0000-index_1-basicInfoUniqueId_COMPOSED2-customUniqueId_COMPOSED.SUB1"), 42);
-            assert.equal(endpointStorage.get("basicInfoSerialNumber_node-matter-0000-index_1-basicInfoUniqueId_COMPOSED2-index_1"), 43);
+            assert.equal(endpointStorage.get("serial_node-matter-0000-index_0-index_1"), 38);
+            assert.equal(endpointStorage.get("serial_node-matter-0000-index_1-unique_COMPOSED2-custom_COMPOSED.SUB1"), 42);
+            assert.equal(endpointStorage.get("serial_node-matter-0000-index_1-unique_COMPOSED2-index_1"), 43);
 
             assert.equal(attributePaths.length, 502);
             assert.equal(commandPaths.length, 138);
@@ -1367,7 +1368,7 @@ describe("Endpoint Structures", () => {
             const testStorageManager = new StorageManager(testStorage);
             await testStorageManager.initialize();
             const endpointStorage = testStorageManager.createContext("EndpointStructure");
-            endpointStorage.set("basicInfoSerialNumber_node-matter-0000-index_0-customUniqueId_3333", 3);
+            endpointStorage.set("serial_node-matter-0000-index_0-custom_3333", 3);
 
             const node = new CommissioningServer({
                 port: 5540,
@@ -1413,7 +1414,7 @@ describe("Endpoint Structures", () => {
                 {}
             ));
 
-            const onoffLightDevice11 = new OnOffLightDevice(undefined, { uniqueId: "3333" });
+            const onoffLightDevice11 = new OnOffLightDevice(undefined, { uniqueStorageKey: "3333" });
             const onoffLightDevice12 = new OnOffLightDevice();
 
             aggregator1.addBridgedDevice(onoffLightDevice11, {
@@ -1449,7 +1450,7 @@ describe("Endpoint Structures", () => {
             });
 
             const composedDevice = new ComposedDevice(DeviceTypes.ON_OFF_LIGHT, [
-                new OnOffLightDevice(undefined, { uniqueId: "COMPOSED.SUB1" }),
+                new OnOffLightDevice(undefined, { uniqueStorageKey: "COMPOSED.SUB1" }),
                 new OnOffPluginUnitDevice()
             ]);
             aggregator2.addBridgedDevice(composedDevice, {
@@ -1460,12 +1461,12 @@ describe("Endpoint Structures", () => {
 
             node.addDevice(aggregator2);
 
-            node.ensureEndpointIds();
+            node.assignEndpointIds();
             assert.equal(node.getNextEndpointId(false), 44);
 
             const rootEndpoint = node.getRootEndpoint();
             rootEndpoint.updatePartsList();
-            const endpointStructure = new EndpointStructure();
+            const endpointStructure = new InteractionEndpointStructure();
             endpointStructure.initializeFromEndpoint(rootEndpoint);
             const {
                 endpoints,
@@ -1563,9 +1564,9 @@ describe("Endpoint Structures", () => {
             const rootPartsListAttribute = attributes.get(attributePathToId({ endpointId: 0, clusterId: DescriptorCluster.id, attributeId: DescriptorCluster.attributes.partsList.id })) as AttributeServer<EndpointNumber[]>;
             assert.deepEqual(rootPartsListAttribute?.getLocal(), [new EndpointNumber(37), new EndpointNumber(3), new EndpointNumber(38), new EndpointNumber(39), new EndpointNumber(40), new EndpointNumber(18), new EndpointNumber(41), new EndpointNumber(42), new EndpointNumber(43)]);
 
-            assert.equal(endpointStorage.get("basicInfoSerialNumber_node-matter-0000-index_0-index_1"), 38);
-            assert.equal(endpointStorage.get("basicInfoSerialNumber_node-matter-0000-index_1-basicInfoUniqueId_COMPOSED2-customUniqueId_COMPOSED.SUB1"), 42);
-            assert.equal(endpointStorage.get("basicInfoSerialNumber_node-matter-0000-index_1-basicInfoUniqueId_COMPOSED2-index_1"), 43);
+            assert.equal(endpointStorage.get("serial_node-matter-0000-index_0-index_1"), 38);
+            assert.equal(endpointStorage.get("serial_node-matter-0000-index_1-unique_COMPOSED2-custom_COMPOSED.SUB1"), 42);
+            assert.equal(endpointStorage.get("serial_node-matter-0000-index_1-unique_COMPOSED2-index_1"), 43);
 
             assert.equal(attributePaths.length, 502);
             assert.equal(commandPaths.length, 138);
@@ -1575,7 +1576,7 @@ describe("Endpoint Structures", () => {
             rootEndpoint.setStructureChangedCallback(() => {
                 structureChangeCounter++;
 
-                node.ensureEndpointIds();
+                node.assignEndpointIds();
                 rootEndpoint.updatePartsList();
             });
 
@@ -1586,7 +1587,7 @@ describe("Endpoint Structures", () => {
                 reachable: true
             });
             assert.equal(structureChangeCounter, 1);
-            assert.equal(endpointStorage.get("basicInfoSerialNumber_node-matter-0000-index_0-index_2"), 44);
+            assert.equal(endpointStorage.get("serial_node-matter-0000-index_0-index_2"), 44);
 
             // And remove one
             aggregator1.removeBridgedDevice(onoffLightDevice11);
@@ -1594,7 +1595,7 @@ describe("Endpoint Structures", () => {
             assert.equal(node.getNextEndpointId(false), 45);
             assert.equal(structureChangeCounter, 2);
 
-            const endpointStructure2 = new EndpointStructure();
+            const endpointStructure2 = new InteractionEndpointStructure();
             endpointStructure2.initializeFromEndpoint(rootEndpoint);
             const {
                 endpoints: endpoints2,
@@ -1613,7 +1614,7 @@ describe("Endpoint Structures", () => {
             assert.ok(endpoints2.get(44)?.hasClusterServer(BridgedDeviceBasicInformationCluster));
 
             // Add the removed back and verify it gets same endpointID as before
-            const onoffLightDevice11New = new OnOffLightDevice(undefined, { uniqueId: "3333" });
+            const onoffLightDevice11New = new OnOffLightDevice(undefined, { uniqueStorageKey: "3333" });
             aggregator1.addBridgedDevice(onoffLightDevice11New, {
                 nodeLabel: "Socket 1-1 NEW",
                 reachable: true
@@ -1622,7 +1623,7 @@ describe("Endpoint Structures", () => {
             assert.equal(node.getNextEndpointId(false), 45);
             assert.equal(structureChangeCounter, 3);
 
-            const endpointStructure3 = new EndpointStructure();
+            const endpointStructure3 = new InteractionEndpointStructure();
             endpointStructure3.initializeFromEndpoint(rootEndpoint);
             const {
                 endpoints: endpoints3,
