@@ -27,7 +27,6 @@
         "clean": "rm -rf dist && rm -f *.tsbuildinfo",
         "build": "tsc -b tsconfig.dist.json",
         "build-clean": "npm run clean && npm run build",
-        "build-doc": "true",
         "matter-device": "ts-node --project tsconfig.dist.json src/examples/DeviceNode.ts",
         "matter-bridge": "ts-node --project tsconfig.dist.json src/examples/BridgedDevicesNode.ts",
         "matter-composeddevice": "ts-node --project tsconfig.dist.json src/examples/ComposedDeviceNode.ts",
