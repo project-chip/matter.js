@@ -49,7 +49,7 @@ const JSON_SPECIAL_KEY_TYPE = "__object__";
 /** Special Magic key to identify the value of the custom encoded objects in JSON. */
 const JSON_SPECIAL_KEY_VALUE = "__value__";
 
-export function toJson(object: SupportedStorageTypes): string {
+export function toJson(object: SupportedStorageTypes, spaces?: number): string {
     return JSON.stringify(object, (_key, value) => {
         if (typeof value === 'bigint') {
             return `{"${JSON_SPECIAL_KEY_TYPE}":"BigInt","${JSON_SPECIAL_KEY_VALUE}":"${value.toString()}"}`;
@@ -95,7 +95,7 @@ export function toJson(object: SupportedStorageTypes): string {
             return `{"${JSON_SPECIAL_KEY_TYPE}":"VendorId","${JSON_SPECIAL_KEY_VALUE}":${value.id}}`;
         }
         return value;
-    });
+    }, spaces);
 }
 
 export function fromJson(json: string): SupportedStorageTypes {
