@@ -14,19 +14,16 @@
 
 /**
  * Import needed modules from @project-chip/matter-node.js
- *
- * When you use this as example please adjust the imports as stated in the "same as ..." comments and simply use
- * @project-chip/matter-node.js as dependency in your package.json.
  */
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
-import { CommissioningServer, MatterServer } from "../"; // same as @project-chip/matter-node.js
+import { CommissioningServer, MatterServer } from "@project-chip/matter-node.js";
 
-import { commandExecutor, getIntParameter, getParameter, requireMinNodeVersion, hasParameter } from "../util"; // same as @project-chip/matter-node.js/util
-import { Time } from "../time"; // same as @project-chip/matter-node.js/time
-import { OnOffLightDevice, OnOffPluginUnitDevice, DeviceTypes } from "../exports/device"; // same as @project-chip/matter-node.js/device
-import { VendorId } from "../exports/datatype"; // same as @project-chip/matter-node.js/datatype
-import { Logger } from "../exports/log"; // same as @project-chip/matter-node.js/log
-import { StorageManager, StorageBackendDisk } from "../storage"; // same as @project-chip/matter-node.js/storage
+import { commandExecutor, getIntParameter, getParameter, requireMinNodeVersion, hasParameter } from "@project-chip/matter-node.js/util";
+import { Time } from "@project-chip/matter-node.js/time";
+import { OnOffLightDevice, OnOffPluginUnitDevice, DeviceTypes } from "@project-chip/matter-node.js/device";
+import { VendorId } from "@project-chip/matter-node.js/datatype";
+import { Logger } from "@project-chip/matter-node.js/log";
+import { StorageManager, StorageBackendDisk } from "@project-chip/matter-node.js/storage";
 
 const logger = Logger.get("Device");
 

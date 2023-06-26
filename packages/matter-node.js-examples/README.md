@@ -1,3 +1,11 @@
+# matter-node.js-examples
+
+[![license](https://img.shields.io/badge/license-Apache2-green.svg?style=flat)](https://raw.githubusercontent.com/mfucci/node-matter/master/LICENSE)
+
+This project provides a set of reference implementations to offer several types of Matter device nodes or also a controller.
+
+> This package requires Node 16+ for the required Crypto primitives
+
 # matter-node.js Usage examples / Reference implementations
 
 To better show how to use the library we provide some reference implementations in the examples directory. They are usable as CLI scripts without changes in the first place but are very simple. They are meant to be used as a starting point for your own implementation, or to experiment with Matter at all in a first place.
@@ -152,3 +160,8 @@ The code of the examples is written so that you can use them as basis for your o
 ### Development Device/Composed-device/Bridge
 
 The code is structured by comment blocks to better see what belongs to what. It always has code which is just collecting relevant information and data, then the code which is setting up the device and then the code which is starting the device.
+
+## Building
+
+* `npm run build`: Build all code and create CommonJS and ES6 variants in dist directory. This will built incrementally and only build the changed files.
+* `npm run build-clean`: Clean the dist directory and build all code from scratch

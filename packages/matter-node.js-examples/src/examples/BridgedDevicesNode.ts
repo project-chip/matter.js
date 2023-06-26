@@ -6,24 +6,22 @@
  */
 
 /**
- * This example shows how to create a simple on-off Matter device.
+ * This example shows how to create a device bridge that exposed multiple devices.
  * It can be used as CLI script and starting point for your own device node implementation.
  */
 
 /**
  * Import needed modules from @project-chip/matter-node.js
- *
- * When you use this as example please adjust the imports as stated in the "same as ..." comments and simply use
- * @project-chip/matter-node.js as dependency in your package.json.
  */
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
-import { CommissioningServer, MatterServer } from "../"; // same as @project-chip/matter-node.js
-import { commandExecutor, getIntParameter, getParameter, requireMinNodeVersion, hasParameter } from "../util"; // same as @project-chip/matter-node.js/util
-import { Time } from "../time"; // same as @project-chip/matter-node.js/time
-import { OnOffLightDevice, OnOffPluginUnitDevice } from "../exports/device"; // same as @project-chip/matter-node.js/device
-import { VendorId } from "../exports/datatype"; // same as @project-chip/matter-node.js/datatype
-import { Logger } from "../exports/log"; // same as @project-chip/matter-node.js/log
-import { StorageManager, StorageBackendDisk } from "../storage"; // same as @project-chip/matter-node.js/storage
+import { CommissioningServer, MatterServer } from "@project-chip/matter-node.js";
+
+import { OnOffLightDevice, OnOffPluginUnitDevice, Aggregator, DeviceTypes } from "@project-chip/matter-node.js/device";
+import { VendorId } from "@project-chip/matter-node.js/datatype";
+import { Logger } from "@project-chip/matter-node.js/log";
+import { StorageManager, StorageBackendDisk } from "@project-chip/matter-node.js/storage";
+import { commandExecutor, getIntParameter, getParameter, requireMinNodeVersion, hasParameter } from "@project-chip/matter-node.js/util";
+import { Time } from "@project-chip/matter-node.js/time";
 
 const logger = Logger.get("Device");
 
@@ -34,7 +32,7 @@ const storage = new StorageBackendDisk(storageLocation, hasParameter("clearstora
 logger.info(`Storage location: ${storageLocation} (Directory)`);
 logger.info('Use the parameter "-store NAME" to specify a different storage location, use -clearstorage to start with an empty storage.')
 
-class Device {
+class BridgedDevice {
     async start() {
         logger.info(`node-matter`);
 
@@ -61,17 +59,14 @@ class Device {
 
         const deviceStorage = storageManager.createContext("Device");
 
-        if (deviceStorage.has("isSocket")) {
-            logger.info("Device type found in storage. -type parameter is ignored.");
-        }
-        const isSocket = deviceStorage.get("isSocket", getParameter("type") === "socket");
-        const deviceName = "Matter test device";
+        const deviceName = "Matter Bridge device";
+        const deviceType = DeviceTypes.AGGREGATOR.code;
         const vendorName = "matter-node.js";
         const passcode = getIntParameter("passcode") ?? deviceStorage.get("passcode", 20202021);
         const discriminator = getIntParameter("discriminator") ?? deviceStorage.get("discriminator", 3840);
         // product name / id and vendor id should match what is in the device certificate
         const vendorId = new VendorId(getIntParameter("vendorid") ?? deviceStorage.get("vendorid", 0xFFF1));
-        const productName = `node-matter OnOff ${isSocket ? "Socket" : "Light"}`;
+        const productName = `node-matter OnOff-Bridge`;
         const productId = getIntParameter("productid") ?? deviceStorage.get("productid", 0x8000);
 
         const netAnnounceInterface = getParameter("announceinterface");
@@ -83,25 +78,7 @@ class Device {
         deviceStorage.set("discriminator", discriminator);
         deviceStorage.set("vendorid", vendorId.id);
         deviceStorage.set("productid", productId);
-        deviceStorage.set("isSocket", isSocket);
         deviceStorage.set("uniqueid", uniqueId);
-
-        /**
-         * Create Device instance and add needed Listener
-         *
-         * Create an instance of the matter device class you want to use.
-         * This example uses the OnOffLightDevice or OnOffPluginUnitDevice depending on the value of the type  parameter.
-         * To execute the on/off scripts defined as parameters a listener for the onOff attribute is registered via the
-         * device specific API.
-         *
-         * The below logic also adds command handlers for commands of clusters that normally are handled device internally
-         * like identify that can be implemented with the logic when these commands are called.
-         */
-
-        const onOffDevice = isSocket ? new OnOffPluginUnitDevice() : new OnOffLightDevice();
-        onOffDevice.addOnOffListener(on => commandExecutor(on ? "on" : "off")?.());
-
-        onOffDevice.addCommandHandler("identify", async ({ request: { identifyTime } }) => logger.info(`Identify called for OnOffDevice: ${identifyTime}`));
 
         /**
          * Create Matter Server and CommissioningServer Node
@@ -121,7 +98,7 @@ class Device {
         const commissioningServer = new CommissioningServer({
             port,
             deviceName,
-            deviceType: onOffDevice.deviceType,
+            deviceType,
             passcode,
             discriminator,
             basicInformation: {
@@ -135,10 +112,32 @@ class Device {
             }
         });
 
-        // optionally add a listener for the testEventTrigger command from the GeneralDiagnostics cluster
-        commissioningServer.addCommandHandler("testEventTrigger", async ({ request: { enableKey, eventTrigger } }) => logger.info(`testEventTrigger called on GeneralDiagnostic cluster: ${enableKey} ${eventTrigger}`));
+        /**
+         * Create Device instance and add needed Listener
+         *
+         * Create an instance of the matter device class you want to use.
+         * This example uses the OnOffLightDevice or OnOffPluginUnitDevice depending on the value of the type  parameter.
+         * To execute the on/off scripts defined as parameters a listener for the onOff attribute is registered via the
+         * device specific API.
+         *
+         * The below logic also adds command handlers for commands of clusters that normally are handled device internally
+         * like identify that can be implemented with the logic when these commands are called.
+         */
 
-        commissioningServer.addDevice(onOffDevice);
+        const aggregator = new Aggregator();
+
+        const numDevices = getIntParameter("num") || 2;
+        for (let i = 1; i <= numDevices; i++) {
+            const onOffDevice = getParameter(`type${i}`) === "socket" ? new OnOffPluginUnitDevice() : new OnOffLightDevice();
+            onOffDevice.addOnOffListener(on => commandExecutor(on ? `on${i}` : `off${i}`)?.());
+            aggregator.addBridgedDevice(onOffDevice, {
+                nodeLabel: `OnOff ${onOffDevice instanceof OnOffPluginUnitDevice ? 'Socket' : 'Light'} ${i}`,
+                serialNumber: `node-matter-${uniqueId}-${i}`,
+                reachable: true
+            });
+        }
+
+        commissioningServer.addDevice(aggregator);
 
         matterServer.addCommissioningServer(commissioningServer);
 
@@ -164,15 +163,15 @@ class Device {
             const { qrCode, qrPairingCode, manualPairingCode } = pairingData;
 
             console.log(qrCode);
-            logger.info(`QR Code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}`);
-            logger.info(`Manual pairing code: ${manualPairingCode}`);
+            console.log(`QR Code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}`);
+            console.log(`Manual pairing code: ${manualPairingCode}`);
         } else {
-            logger.info("Device is already commissioned. Waiting for controllers to connect ...");
+            console.log("Device is already commissioned. Waiting for controllers to connect ...");
         }
     }
 }
 
-new Device().start().then(() => { /* done */ }).catch(err => console.error(err));
+new BridgedDevice().start().then(() => { /* done */ }).catch(err => console.error(err));
 
 process.on("SIGINT", () => {
     // Pragmatic way to make sure the storage is correctly closed before the process ends.

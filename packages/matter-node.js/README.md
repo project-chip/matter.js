@@ -6,13 +6,11 @@ Matter protocol for node.js with no native dependencies (and very limited depend
 
 > This package requires Node 16+ for the required Crypto primitives
 
-This package can be used in two ways:
-* As library as basis for Node.js based implementation of Matter Device and controller functionality
-* As a basic CLI reference implementation of a Matter Device and Controller (might be split in own package soon)
+This package is meant to be used as library as basis for Node.js based implementation of Matter Device and controller functionality
+ 
+A basic CLI reference implementation of a Matter Device and Controller (might be split in own package soon) is available in the [matter-node.js-examples](../matter-node.js-examples/README.md) package.
 
 For questions on how to use or pair Matter devices or controllers please refer to the [base package Readme](../../README.md#pairing-and-usage-information)! Especially for Google special steps are needed and mostly Hub devices are needed.
-
-## Using as Library
 
 ## Exported functionality
 This library enhances Matter.js and implements the needed native functionality using Node.js 16+ as platform. The library exports the added Node.js specific implementations and also the core Matter protocol functionality as well as some helper functions as named exports.
@@ -64,11 +62,6 @@ To have Typescript and your IDE know all the relevant exported functionality you
     }
 }
 ```
-
-## Use as CLI
-
-This project also provides a set of reference implementations to offer several types of Matter device nodes or also a controller.
-Please see the [Examples readme](./README_EXAMPLES.md) for more information, installation and usage instructions.
 
 ## Building
 
