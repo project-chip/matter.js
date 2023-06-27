@@ -33,10 +33,12 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
     * Endpoint ID parameter got replaced by an EndpointOptions structure that also allows to define a custom unique ID for endpoint structuring
     * Composed devices objects should only be used on an Aggregator
   * Deprecation: The classes MatterDevice and MatterController are deprecated to be used externally to the library and will be removed in later versions.
-  * Deprecation: The CLI Examples LegacyDeviceNode and LegacyControllerNode will be removed in next version! Use the new variants please.
   * Feature: Enhance Storage system to allow to create subcontext stores to allow better separation of data
   * Feature: Allow to also remove devices from Aggregators
   * Feature: Optionally allow to define discovery capabilities when generating Pairing codee 
+* * Reference implementation/Examples:
+  * Deprecation: The CLI Examples LegacyDeviceNode and LegacyControllerNode is removed in this version! Use the new variants please.
+  * Example script are moved to package matter-node.js-examples
 * Misc:
   * Added Specification links for Matter Specifications 1.1
   * Optimize typing exports for node10 TS settings
@@ -73,7 +75,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Breaking: Remove the exposed legacy API classes (MatterDevice/MatterController) and legacy examples from the exported lists
   * Feature: Autoregister Crypto, Time and Network in their Node.js variants when including packages from @project-chip/matter-node.js root package but only if not yet registered (so can be overridden by the developer)
   * Examples/Reference implementations:
-    * The reference implementations are moved to example directory and details moved into own [README_EXAMPLES.md](./packages/matter-node.js/README_EXAMPLES.md) file
+    * The reference implementations are moved to example directory and details moved into own [README.md](./packages/matter-node.js-examples/README.md) file
     * the "npm run matter" command got renamed to "npm run matter-device" (same for binary usage
     * Add hints for all imports in the examples to show what the corresponding "matter-node.js" import would be (because they can not be used directly for build reasons)
     * Added the "npm run matter-*" commands also to the base package.json

@@ -28,17 +28,7 @@
         "build": "tsc -b tsconfig.dist.json",
         "build-clean": "npm run clean && npm run build",
         "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --gitRemote upstream --tsconfig tsconfig.dist.json",
-        "test": "TZ=utc jest",
-        "matter-device": "ts-node --project tsconfig.dist.json src/examples/DeviceNode.ts",
-        "matter-bridge": "ts-node --project tsconfig.dist.json src/examples/BridgedDevicesNode.ts",
-        "matter-composeddevice": "ts-node --project tsconfig.dist.json src/examples/ComposedDeviceNode.ts",
-        "matter-controller": "ts-node --project tsconfig.dist.json src/examples/ControllerNode.ts"
-    },
-    "bin": {
-        "matter-device": "./dist/examples/NewDeviceNode.js",
-        "matter-bridge": "./dist/examples/NewBridgedDevicesNode.js",
-        "matter-composeddevice": "./dist/examples/NewComposedDeviceNode.js",
-        "matter-controller": "./dist/examples/NewControllerNode.js"
+        "test": "TZ=utc jest"
     },
     "devDependencies": {
         "@types/bn.js": "^5.1.1",

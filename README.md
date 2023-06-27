@@ -16,7 +16,7 @@ matter.js/matter-node.js is compatible with:
 - **Samsung SmartThings (Station or Hub v2 and later)**: pairing works, but for controlling seems like Smartthings implementation itself has issues
 - **Home Assistant - Matter integration**: fully working
 
-We also collected a [list of known device types supported by which ecosystem](#Devicetypes-supported-by-Ecosystems).This is a compilation of published information and own community tests.
+We also collected a [list of known device types supported by which ecosystem](#Device-types-supported-by-Ecosystems).This is a compilation of published information and own community tests.
 
 Each ecosystem have their own specialities, see [Pairing and Usage Information](#Pairing-and-Usage-Information) for more details.
 
@@ -26,6 +26,7 @@ This repository contains multiple packages (and because of this it is a monorepo
 
 * matter.js: the core Matter implementation in typescript which is JavaScript only and has no native dependencies.
 * matter-node.js: a node.js implementation of a Matter DeviceNode and ControllerNode which also re-exports all matter.js exports and so can be used as only dependency
+* matter-node.js-examples: Reference implementations of Matter devices and controller as CLI scripts using matter-node.js
 
 For each package the [API Documentation](./docs/README.md) is updated on each release, but can be built locally using `npm run build-doc`.
 

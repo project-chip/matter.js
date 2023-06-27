@@ -14,18 +14,14 @@
 
 /**
  * Import needed modules from @project-chip/matter-node.js
- *
- * When you use this as example please adjust the imports as stated in the "same as ..." comments and simply use
- * @project-chip/matter-node.js as dependency in your package.json.
  */
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
-import { MatterServer, CommissioningController } from "../"; // same as @project-chip/matter-node.js
-
-import { Logger } from "../exports/log"; // same as @project-chip/matter-node.js/log
-import { StorageManager, StorageBackendDisk } from "../storage"; // same as @project-chip/matter-node.js/storage
-import { BasicInformationCluster, DescriptorCluster, OnOffCluster } from "../exports/cluster"; // same as @project-chip/matter-node.js/cluster
-import { getIntParameter, getParameter, requireMinNodeVersion, hasParameter } from "../util";
-import { ManualPairingCodeCodec } from "../exports/schema"; // same as @project-chip/matter-node.js/util
+import { MatterServer, CommissioningController } from "@project-chip/matter-node.js";
+import { Logger } from "@project-chip/matter-node.js/log";
+import { StorageManager, StorageBackendDisk } from "@project-chip/matter-node.js/storage";
+import { BasicInformationCluster, DescriptorCluster, OnOffCluster } from "@project-chip/matter-node.js/cluster";
+import { getIntParameter, getParameter, requireMinNodeVersion, hasParameter } from "@project-chip/matter-node.js/util";
+import { ManualPairingCodeCodec } from "@project-chip/matter-node.js/schema";
 
 const logger = Logger.get("Controller");
 
