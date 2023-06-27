@@ -72,6 +72,13 @@ export class BtpCodec {
         };
     }
 
+    static encodeBtpPacket({ header, payload }: BtpPacket): ByteArray {
+        return ByteArray.concat(
+            this.encodeBtpPacketHeader(header),
+            this.encodeBtpPacketPayload(header, payload)
+        )
+    }
+
     static encodeBtpHandshakeResponse({ version, attMtu, windowSize }: BtpHandshakeResponse): ByteArray {
         const writer = new DataWriter(Endian.Little);
         writer.writeUInt8(HANDSHAKE_HEADER);
@@ -90,6 +97,18 @@ export class BtpCodec {
         const segmentPayload = reader.getRemainingBytes();
 
         return { ackNumber, sequenceNumber, messageLength, segmentPayload };
+    }
+
+    private static encodeBtpPacketPayload({ hasManagementOpcode }: BtpHeader, { ackNumber, sequenceNumber, messageLength, segmentPayload }: BtpPacketPayload): ByteArray {
+        const writer = new DataWriter(Endian.Little);
+        if (hasManagementOpcode) writer.writeUInt8(BtpOpcode.HandshakeManagementOpcode);
+        if (ackNumber !== undefined) writer.writeUInt8(ackNumber);
+        writer.writeUInt8(sequenceNumber);
+        if (messageLength !== undefined) writer.writeUInt16(messageLength);
+        if (segmentPayload !== undefined) {
+            writer.writeByteArray(segmentPayload)
+        }
+        return writer.toByteArray();
     }
 
     private static decodeHandshakeRequestPayload(reader: DataReader<Endian.Little>): BtpHandshakeRequest {
@@ -138,5 +157,18 @@ export class BtpCodec {
         }
 
         return { isHandshakeRequest, hasManagementOpcode, hasAckNumber, isEndingSegment, isBeginningSegment };
+    }
+
+    private static encodeBtpPacketHeader({ isHandshakeRequest, hasManagementOpcode, hasAckNumber, isEndingSegment, isBeginningSegment }: BtpHeader): ByteArray {
+        const writer = new DataWriter(Endian.Little);
+
+        const header = (isHandshakeRequest ? BtpHeaderBits.HandshakeBit : 0)
+            | (hasManagementOpcode ? BtpHeaderBits.ManagementMsg : 0)
+            | (hasAckNumber ? BtpHeaderBits.AckMsg : 0)
+            | (isEndingSegment ? BtpHeaderBits.EndSegment : 0)
+            | (isBeginningSegment ? BtpHeaderBits.BeginSegment : 0)
+
+        writer.writeUInt8(header);
+        return writer.toByteArray();
     }
 }

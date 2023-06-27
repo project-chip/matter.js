@@ -26,7 +26,39 @@ const DECODED_HANDSHAKE_RESPONSE = {
     windowSize: 6,
 }
 
-const DECODED_PAYLOAD = {
+const DECODED_PACKET = {
+    header: {
+        isHandshakeRequest: false,
+        hasManagementOpcode: false,
+        hasAckNumber: false,
+        isEndingSegment: true,
+        isBeginningSegment: false
+    },
+    payload: {
+        ackNumber: undefined,
+        sequenceNumber: 0,
+        messageLength: undefined,
+        segmentPayload: ByteArray.fromHex("0400000049b6a902a9a5773dbb8cafd90120a7c7000015300120cb0c120a3499327ddaec4ebe60889df0f1bf80d8a4dea1dd6ffef16ef58ecafe25028e17240300280418"),
+    }
+}
+
+const DECODED_PACKET_1 = {
+    header: {
+        isHandshakeRequest: false,
+        hasManagementOpcode: false,
+        hasAckNumber: false,
+        isEndingSegment: true,
+        isBeginningSegment: true
+    },
+    payload: {
+        ackNumber: undefined,
+        sequenceNumber: 0,
+        messageLength: 0x44,
+        segmentPayload: ByteArray.fromHex("0400000049b6a902a9a5773dbb8cafd90120a7c7000015300120cb0c120a3499327ddaec4ebe60889df0f1bf80d8a4dea1dd6ffef16ef58ecafe25028e17240300280418"),
+    }
+}
+
+const DECODED_PACKET_2 = {
     header: {
         isHandshakeRequest: false,
         hasManagementOpcode: false,
@@ -38,6 +70,22 @@ const DECODED_PAYLOAD = {
         ackNumber: 0,
         sequenceNumber: 0,
         messageLength: 0x44,
+        segmentPayload: ByteArray.fromHex("0400000049b6a902a9a5773dbb8cafd90120a7c7000015300120cb0c120a3499327ddaec4ebe60889df0f1bf80d8a4dea1dd6ffef16ef58ecafe25028e17240300280418"),
+    }
+}
+
+const DECODED_PACKET_3 = {
+    header: {
+        isHandshakeRequest: false,
+        hasManagementOpcode: false,
+        hasAckNumber: true,
+        isEndingSegment: true,
+        isBeginningSegment: false
+    },
+    payload: {
+        ackNumber: 0,
+        sequenceNumber: 0,
+        messageLength: undefined,
         segmentPayload: ByteArray.fromHex("0400000049b6a902a9a5773dbb8cafd90120a7c7000015300120cb0c120a3499327ddaec4ebe60889df0f1bf80d8a4dea1dd6ffef16ef58ecafe25028e17240300280418"),
     }
 }
@@ -56,10 +104,10 @@ describe("BtpCodec", () => {
             assert.deepEqual(result, DECODED_HANDSHAKE_REQUEST_WITH_MULTIPLE_VERSIONS);
         });
 
-        it("decodes a valid btp packet PDU", () => {
+        it("decodes a valid btp packet", () => {
             const result = BtpCodec.decodeBtpPacket(ByteArray.fromHex("0d000044000400000049b6a902a9a5773dbb8cafd90120a7c7000015300120cb0c120a3499327ddaec4ebe60889df0f1bf80d8a4dea1dd6ffef16ef58ecafe25028e17240300280418"));
 
-            assert.deepEqual(result, DECODED_PAYLOAD);
+            assert.deepEqual(result, DECODED_PACKET_2);
         });
     });
 
@@ -68,6 +116,24 @@ describe("BtpCodec", () => {
             const result = BtpCodec.encodeBtpHandshakeResponse(DECODED_HANDSHAKE_RESPONSE);
 
             assert.deepEqual(result, ByteArray.fromHex("656c04000106"));
+        });
+
+        it("encodes a valid btp packet where both ackNumber and messageLength are undefined", () => {
+            const result = BtpCodec.encodeBtpPacket(DECODED_PACKET);
+
+            assert.deepEqual(result, ByteArray.fromHex("04000400000049b6a902a9a5773dbb8cafd90120a7c7000015300120cb0c120a3499327ddaec4ebe60889df0f1bf80d8a4dea1dd6ffef16ef58ecafe25028e17240300280418"));
+        });
+
+        it("encodes a valid btp packet where ackNumber is undefined", () => {
+            const result = BtpCodec.encodeBtpPacket(DECODED_PACKET_1);
+
+            assert.deepEqual(result, ByteArray.fromHex("050044000400000049b6a902a9a5773dbb8cafd90120a7c7000015300120cb0c120a3499327ddaec4ebe60889df0f1bf80d8a4dea1dd6ffef16ef58ecafe25028e17240300280418"));
+        });
+
+        it("encodes a valid btp packet where messageLength is undefined", () => {
+            const result = BtpCodec.encodeBtpPacket(DECODED_PACKET_3);
+
+            assert.deepEqual(result, ByteArray.fromHex("0c00000400000049b6a902a9a5773dbb8cafd90120a7c7000015300120cb0c120a3499327ddaec4ebe60889df0f1bf80d8a4dea1dd6ffef16ef58ecafe25028e17240300280418"));
         });
     });
 
