@@ -37,7 +37,7 @@ const DECODED_PAYLOAD = {
     payload: {
         ackNumber: 0,
         sequenceNumber: 68, // 4f
-        msgLength: 1024, // 0400
+        messageLength: 1024, // 0400
         segmentPayload: ByteArray.fromHex("00000049b6a902a9a5773dbb8cafd90120a7c7000015300120cb0c120a3499327ddaec4ebe60889df0f1bf80d8a4dea1dd6ffef16ef58ecafe25028e17240300280418"),
     }
 }

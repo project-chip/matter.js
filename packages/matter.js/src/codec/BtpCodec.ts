@@ -23,7 +23,7 @@ export interface BtpHandshakeResponse {
 export interface BtpPacketPayload {
     ackNumber?: number,
     sequenceNumber: number,
-    msgLength?: number,
+    messageLength?: number,
     segmentPayload?: ByteArray
 }
 
@@ -64,14 +64,15 @@ export class BtpCodec {
     static decodeBtpPacket(data: ByteArray): BtpPacket {
         const reader = new DataReader(data, Endian.Little);
 
+        const header = this.decodeHeader(reader);
+
         return {
-            header: this.decodeHeader(reader),
-            payload: this.decodeBtpPacketPayload(reader)
+            header,
+            payload: this.decodeBtpPacketPayload(reader, header)
         };
     }
 
     static encodeBtpHandshakeResponse({ version, attMtu, windowSize }: BtpHandshakeResponse): ByteArray {
-
         const writer = new DataWriter(Endian.Little);
         writer.writeUInt8(HANDSHAKE_HEADER);
         writer.writeUInt8(BtpOpcode.HandshakeManagementOpcode);
@@ -81,18 +82,17 @@ export class BtpCodec {
         return writer.toByteArray();
     }
 
-    private static decodeBtpPacketPayload(reader: DataReader<Endian.Little>): BtpPacketPayload {
-
-        const ackNumber = reader.readUInt8();
+    private static decodeBtpPacketPayload(reader: DataReader<Endian.Little>, header: BtpHeader): BtpPacketPayload {
+        const { hasAckNumber, isBeginningSegment } = header;
+        const ackNumber = hasAckNumber ? reader.readUInt8() : undefined;
         const sequenceNumber = reader.readUInt8();
-        const msgLength = reader.readUInt16();
+        const messageLength = isBeginningSegment ? reader.readUInt16() : undefined;
         const segmentPayload = reader.getRemainingBytes();
 
-        return { ackNumber, sequenceNumber, msgLength, segmentPayload };
+        return { ackNumber, sequenceNumber, messageLength, segmentPayload };
     }
 
     private static decodeRequestPayload(reader: DataReader<Endian.Little>): BtpHandshakeRequest {
-
         const header = reader.readUInt8();
         const opcode = reader.readUInt8();
         let version = reader.readUInt8();
@@ -126,7 +126,6 @@ export class BtpCodec {
     }
 
     private static decodeHeader(reader: DataReader<Endian.Little>): BtpHeader {
-
         const headerBits = reader.readUInt8();
         const isHandshakeRequest = (headerBits & BtpHeaderBits.HandshakeBit) !== 0;
         const hasManagementOpcode = (headerBits & BtpHeaderBits.ManagementMsg) !== 0;
@@ -134,9 +133,10 @@ export class BtpCodec {
         const isEndingSegment = (headerBits & BtpHeaderBits.EndSegment) !== 0;
         const isBeginningSegment = (headerBits & BtpHeaderBits.BeginSegment) !== 0;
 
-        const managementOpcode = reader.readUInt8();
-        if (hasManagementOpcode && managementOpcode == 0) throw new Error("Opcode expected but not provided");
-        if (!hasManagementOpcode && managementOpcode !== 0) throw new Error("Opcode not expected but provided");
+        const managementOpcode = hasManagementOpcode ? reader.readUInt8() : undefined;
+        if (hasManagementOpcode && managementOpcode === undefined) throw new Error("Opcode expected but not provided");
+        if (!hasManagementOpcode && managementOpcode !== undefined) throw new Error("Opcode not expected but provided");
+        if (isHandshakeRequest && !hasManagementOpcode) throw new Error("Handshake request must have management opcode set but missing");
 
         return { isHandshakeRequest, hasManagementOpcode, hasAckNumber, isEndingSegment, isBeginningSegment };
     }
