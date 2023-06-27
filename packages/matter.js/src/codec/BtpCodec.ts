@@ -99,15 +99,17 @@ export class BtpCodec {
         return { ackNumber, sequenceNumber, messageLength, segmentPayload };
     }
 
-    private static encodeBtpPacketPayload({ hasManagementOpcode }: BtpHeader, { ackNumber, sequenceNumber, messageLength, segmentPayload }: BtpPacketPayload): ByteArray {
+    private static encodeBtpPacketPayload({ hasAckNumber, isBeginningSegment }: BtpHeader, { ackNumber, sequenceNumber, messageLength, segmentPayload }: BtpPacketPayload): ByteArray {
         const writer = new DataWriter(Endian.Little);
-        if (hasManagementOpcode) writer.writeUInt8(BtpOpcode.HandshakeManagementOpcode);
-        if (ackNumber !== undefined) writer.writeUInt8(ackNumber);
+
+        if (!hasAckNumber && ackNumber) throw new Error("Ack number shouldn't be present");
+        if (hasAckNumber && ackNumber == undefined) throw new Error("Ack number shouldn't be absent")
+        if (hasAckNumber && ackNumber !== undefined) writer.writeUInt8(ackNumber);
         writer.writeUInt8(sequenceNumber);
-        if (messageLength !== undefined) writer.writeUInt16(messageLength);
-        if (segmentPayload !== undefined) {
-            writer.writeByteArray(segmentPayload)
-        }
+        if (!isBeginningSegment && messageLength) throw new Error("Message Length shouldn't be present");
+        if (isBeginningSegment && messageLength == undefined) throw new Error("Message Length shouldn't be absent")
+        if (isBeginningSegment && messageLength !== undefined) writer.writeUInt16(messageLength);
+        if (segmentPayload !== undefined) writer.writeByteArray(segmentPayload)
         return writer.toByteArray();
     }
 
