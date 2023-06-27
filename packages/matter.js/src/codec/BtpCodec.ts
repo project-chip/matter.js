@@ -58,13 +58,13 @@ export class BtpCodec {
 
     static decodeBtpHandshakeRequest(data: ByteArray): BtpHandshakeRequest {
         const reader = new DataReader(data, Endian.Little);
-        return this.decodeRequestPayload(reader);
+        return this.decodeHandshakeRequestPayload(reader);
     }
 
     static decodeBtpPacket(data: ByteArray): BtpPacket {
         const reader = new DataReader(data, Endian.Little);
 
-        const header = this.decodeHeader(reader);
+        const header = this.decodeBtpPacketHeader(reader);
 
         return {
             header,
@@ -92,7 +92,7 @@ export class BtpCodec {
         return { ackNumber, sequenceNumber, messageLength, segmentPayload };
     }
 
-    private static decodeRequestPayload(reader: DataReader<Endian.Little>): BtpHandshakeRequest {
+    private static decodeHandshakeRequestPayload(reader: DataReader<Endian.Little>): BtpHandshakeRequest {
         const header = reader.readUInt8();
         const opcode = reader.readUInt8();
         let version = reader.readUInt8();
@@ -125,7 +125,7 @@ export class BtpCodec {
         return { versions, attMtu, clientWindowSize };
     }
 
-    private static decodeHeader(reader: DataReader<Endian.Little>): BtpHeader {
+    private static decodeBtpPacketHeader(reader: DataReader<Endian.Little>): BtpHeader {
         const headerBits = reader.readUInt8();
         const isHandshakeRequest = (headerBits & BtpHeaderBits.HandshakeBit) !== 0;
         const hasManagementOpcode = (headerBits & BtpHeaderBits.ManagementMsg) !== 0;
@@ -133,10 +133,9 @@ export class BtpCodec {
         const isEndingSegment = (headerBits & BtpHeaderBits.EndSegment) !== 0;
         const isBeginningSegment = (headerBits & BtpHeaderBits.BeginSegment) !== 0;
 
-        const managementOpcode = hasManagementOpcode ? reader.readUInt8() : undefined;
-        if (hasManagementOpcode && managementOpcode === undefined) throw new Error("Opcode expected but not provided");
-        if (!hasManagementOpcode && managementOpcode !== undefined) throw new Error("Opcode not expected but provided");
-        if (isHandshakeRequest && !hasManagementOpcode) throw new Error("Handshake request must have management opcode set but missing");
+        if (hasManagementOpcode) {
+            throw new Error("Management Opcode for BTPHandshake Request is not expected");
+        }
 
         return { isHandshakeRequest, hasManagementOpcode, hasAckNumber, isEndingSegment, isBeginningSegment };
     }
