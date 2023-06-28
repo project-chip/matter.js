@@ -14,7 +14,7 @@ import { SECURE_CHANNEL_PROTOCOL_ID } from "./protocol/securechannel/SecureChann
 import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { PaseClient } from "./session/pase/PaseClient.js";
 import { CaseClient } from "./session/case/CaseClient.js";
-import { NetInterface } from "./net/NetInterface.js";
+import { NetInterface } from "./net/NetInterface.js"; // TODO clean up
 import { ClusterClient, InteractionClient } from "./protocol/interaction/InteractionClient.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
 import { NodeId } from "./datatype/NodeId.js";
@@ -84,8 +84,8 @@ export class MatterController {
         this.sessionManager.initFromStorage([this.fabric]);
 
         this.exchangeManager = new ExchangeManager<MatterController>(this.sessionManager, this.channelManager);
-        this.exchangeManager.addNetInterface(netInterfaceIpv4);
-        this.exchangeManager.addNetInterface(netInterfaceIpv6);
+        this.exchangeManager.addTransportInterface(netInterfaceIpv4);
+        this.exchangeManager.addTransportInterface(netInterfaceIpv6);
     }
 
     async commission(commissionAddress: string, commissionPort: number, _discriminator: number, setupPin: number) {

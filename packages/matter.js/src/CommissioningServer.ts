@@ -47,6 +47,7 @@ import { Aggregator } from "./device/Aggregator.js";
 import { TypeFromBitSchema } from "./schema/BitmapSchema.js";
 import { Endpoint } from "./device/Endpoint.js";
 import { StorageContext } from "./storage/StorageContext.js";
+import { Bluetooth} from "./ble/Bluetooth.js";
 
 const logger = Logger.get("CommissioningServer");
 
@@ -76,6 +77,7 @@ export interface CommissioningServerOptions {
     passcode: number,
     discriminator: number,
     flowType?: CommissionningFlowType,
+    additionalBluetoothAdvertisementData?: ByteArray,
 
     delayedAnnouncement?: boolean;
 
@@ -115,6 +117,7 @@ export class CommissioningServer extends MatterNode {
     private readonly passcode: number;
     private readonly discriminator: number;
     private readonly flowType: CommissionningFlowType;
+    private readonly additionalBluetoothAdvertisementData?: ByteArray;
 
     private storageManager?: StorageManager;
     private endpointStructureStorage?: StorageContext;
@@ -148,6 +151,7 @@ export class CommissioningServer extends MatterNode {
         this.flowType = options.flowType ?? CommissionningFlowType.Standard;
         this.nextEndpointId = options.nextEndpointId ?? 1;
         this.delayedAnnouncement = options.delayedAnnouncement ?? false;
+        this.additionalBluetoothAdvertisementData = options.additionalBluetoothAdvertisementData;
 
         const {
             basicInformation: { vendorId, productId }
@@ -373,13 +377,21 @@ export class CommissioningServer extends MatterNode {
 
         // TODO adjust later and refactor MatterDevice
         this.deviceInstance = new MatterDevice(this.deviceName, this.deviceType, vendorId, productId, this.discriminator, this.storageManager)
-            .addNetInterface(await UdpInterface.create(this.port, "udp6", this.listeningAddressIpv6))
+            .addTransportInterface(await UdpInterface.create(this.port, "udp6", this.listeningAddressIpv6))
             .addScanner(this.mdnsScanner)
             .addBroadcaster(this.mdnsBroadcaster)
             .addProtocolHandler(secureChannelProtocol)
             .addProtocolHandler(this.interactionServer);
         if (!this.disableIpv4) {
-            this.deviceInstance.addNetInterface(await UdpInterface.create(this.port, "udp4", this.listeningAddressIpv4))
+            this.deviceInstance.addTransportInterface(await UdpInterface.create(this.port, "udp4", this.listeningAddressIpv4))
+        }
+
+        try {
+            const bluetooth = Bluetooth.get();
+            this.deviceInstance.addTransportInterface(bluetooth.getBlePeripheralNetworkInterface());
+            this.deviceInstance.addBroadcaster(bluetooth.getBleBroadcaster(this.additionalBluetoothAdvertisementData));
+        } catch (e) {
+            logger.warn("Bluetooth not enabled");
         }
 
         await this.deviceInstance.start();

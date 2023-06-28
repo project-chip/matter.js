@@ -8,3 +8,5 @@ export * from "./Broadcaster.js";
 export * from "./MatterError.js";
 export * from "./Scanner.js";
 export * from "./TryCatchHandler.js";
+export * from "./TransportInterface.js";
+export * from "./Channel.js";

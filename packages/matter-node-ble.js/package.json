@@ -1,18 +1,17 @@
 {
-    "name": "@project-chip/matter-node.js-examples",
+    "name": "@project-chip/matter-node-ble.js",
     "version": "0.4.0",
-    "description": "CLI/Reference implementation scripts for Matter protocol for node.js",
+    "description": "Matter BLE support for node.js",
     "keywords": [
         "iot",
         "home automation",
         "matter",
-        "smart device"
+        "smart device",
+        "ble"
     ],
     "license": "Apache-2.0",
     "author": "Project CHIP Authors",
     "contributors": [
-        "Martin Turon <mturon@google.com>",
-        "Marco Fucci di Napoli <mfucci@gmail.com>",
         "Ingo Fischer <github@fischer-ka.de>"
     ],
     "bugs": {
@@ -27,32 +26,25 @@
         "clean": "rm -rf dist && rm -f *.tsbuildinfo",
         "build": "tsc -b tsconfig.dist.json",
         "build-clean": "npm run clean && npm run build",
-        "matter-device": "ts-node --project tsconfig.dist.json src/examples/DeviceNode.ts",
-        "matter-bridge": "ts-node --project tsconfig.dist.json src/examples/BridgedDevicesNode.ts",
-        "matter-composeddevice": "ts-node --project tsconfig.dist.json src/examples/ComposedDeviceNode.ts",
-        "matter-controller": "ts-node --project tsconfig.dist.json src/examples/ControllerNode.ts"
-    },
-    "bin": {
-        "matter-device": "./dist/examples/DeviceNode.js",
-        "matter-bridge": "./dist/examples/BridgedDevicesNode.js",
-        "matter-composeddevice": "./dist/examples/ComposedDeviceNode.js",
-        "matter-controller": "./dist/examples/ControllerNode.js"
+        "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --gitRemote upstream --tsconfig tsconfig.dist.json",
+        "test": "TZ=utc jest"
     },
     "devDependencies": {
         "@typescript-eslint/eslint-plugin": "^5.59.6",
         "@typescript-eslint/parser": "^5.59.6",
+        "jest": "^29.5.0",
         "eslint": "^8.40.0",
         "eslint-import-resolver-typescript": "^3.5.5",
         "eslint-plugin-import": "^2.27.5",
+        "ts-jest": "^29.1.0",
         "ts-node": "^10.9.1",
         "typescript": "^4.9.5"
     },
     "dependencies": {
-        "@project-chip/matter-node.js": "^0.4.0",
-        "@project-chip/matter-node-ble.js": "^0.4.0"
+        "@project-chip/matter.js": "^0.4.0",
+        "@abandonware/bleno": "Apollon77/bleno"
     },
     "engines": {
-        "_comment": "For Crypto.hkdf support",
         "node": ">=16.0.0"
     },
     "files": [
@@ -60,6 +52,20 @@
         "LICENSE",
         "README.md"
     ],
+    "exports": {
+        "./package.json": "./package.json",
+        "./*": {
+            "types": "./dist/*/index.d.ts",
+            "default": "./dist/*/index.js"
+        }
+    },
+    "typesVersions": {
+        "*": {
+            "*": [
+                "/dist/*/index.d.ts"
+            ]
+        }
+    },
     "publishConfig": {
         "access": "public"
     }

@@ -21,6 +21,14 @@ import { OnOffLightDevice, OnOffPluginUnitDevice } from "@project-chip/matter-no
 import { VendorId } from "@project-chip/matter-node.js/datatype";
 import { Logger } from "@project-chip/matter-node.js/log";
 import { StorageManager, StorageBackendDisk } from "@project-chip/matter-node.js/storage";
+import {Bluetooth} from "@project-chip/matter.js/ble";
+import {BluetoothNode} from "@project-chip/matter-node-ble.js/ble";
+import {singleton} from "@project-chip/matter.js/util";
+
+if (hasParameter("bluetooth")) {
+    // Initialize Bluetooth
+    Bluetooth.get = singleton(() => new BluetoothNode());
+}
 
 const logger = Logger.get("Device");
 
@@ -157,7 +165,12 @@ class Device {
 
         logger.info("Listening");
         if (!commissioningServer.isCommissioned()) {
-            const pairingData = commissioningServer.getPairingCode();
+            const pairingData = commissioningServer.getPairingCode({
+                ble: hasParameter("bluetooth"),
+                softAccessPoint: false,
+                onIpNetwork: true
+            });
+
             const { qrCode, qrPairingCode, manualPairingCode } = pairingData;
 
             console.log(qrCode);

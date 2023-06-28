@@ -5,7 +5,7 @@
  */
 
 import { UdpChannel, UdpChannelOptions } from "../UdpChannel.js";
-import { NetListener } from "../NetInterface.js";
+import { Listener } from "../../common/TransportInterface.js";
 import { FAKE_INTERFACE_NAME, SimulatedNetwork } from "./SimulatedNetwork.js";
 import { isIPv4 } from "../../util/Ip.js";
 import { ByteArray } from "../../util/ByteArray.js";
@@ -20,7 +20,7 @@ export class UdpChannelFake implements UdpChannel {
         return new UdpChannelFake(localAddress, listeningAddress, listeningPort);
     }
 
-    private readonly netListeners = new Array<NetListener>();
+    private readonly netListeners = new Array<Listener>();
     private readonly simulatedNetwork = SimulatedNetwork.get();
 
     constructor(

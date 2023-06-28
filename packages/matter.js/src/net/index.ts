@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "./Channel.js";
 export * from "./NetInterface.js";
 export * from "./Network.js";
 export * from "./UdpChannel.js";

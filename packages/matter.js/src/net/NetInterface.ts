@@ -4,14 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Channel } from "./Channel.js";
+import { Channel } from "../common/Channel.js";
 import { ByteArray } from "../util/ByteArray.js";
+import {TransportInterface} from "../common/TransportInterface.js";
 
-export interface NetListener {
-    close(): void;
+export interface NetInterface extends TransportInterface {
+    openChannel(address: string, port: number): Promise<Channel<ByteArray>>;
 }
 
-export interface NetInterface {
-    openChannel(address: string, port: number): Promise<Channel<ByteArray>>;
-    onData(listener: (socket: Channel<ByteArray>, data: ByteArray) => void): NetListener;
+export function isNetworkInterface(obj: TransportInterface | NetInterface): obj is NetInterface {
+    return "openChannel" in obj;
 }

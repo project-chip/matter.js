@@ -128,7 +128,7 @@ export class DiagnosticDictionary {
 
     /**
      * Create a new dictionary with optional entry values.
-     * 
+     *
      * @param entries the entries as [ "KEY", value ] tuples
      */
     constructor(entries: { [KEY: string]: any } = {}) {
@@ -143,7 +143,7 @@ export class DiagnosticDictionary {
 
     /**
      * Add a value to the dictionary.
-     * 
+     *
      * @param KEY the value's KEY
      * @param value the value to add
      */
@@ -153,7 +153,7 @@ export class DiagnosticDictionary {
 
     /**
      * Format the dictionary for human consumption.
-     * 
+     *
      * @param keyFormatter formats keys
      * @param valueFormatter formats values
      * @returns the formatted value
@@ -189,7 +189,7 @@ export class Logger {
 
     /**
      * Set logFormatter using configuration-style format name.
-     * 
+     *
      * @param format the name of the formatter (see Format enum)
      */
     public static set format(format: string) {
@@ -203,7 +203,7 @@ export class Logger {
 
     /**
      * Create a new facility.
-     * 
+     *
      * @param name the name of the facility
      * @returns a new facility
      */
@@ -213,17 +213,25 @@ export class Logger {
 
     /**
      * Stringify a value (BigInt aware) as JSON.
-     * 
+     *
      * @param: data the value to stringify
      * @returns the stringified value
      */
     static toJSON(data: any) {
-        return JSON.stringify(data, (_, v) => typeof v === 'bigint' ? v.toString() : v);
+        return JSON.stringify(data, (_, value) => {
+            if (typeof value === 'bigint'){
+                return value.toString();
+            }
+            if (value instanceof ByteArray) {
+                return value.toHex();
+            }
+            return value;
+        });
     }
 
     /**
      * Shortcut for new DiagnosticDictionary().
-     * 
+     *
      * @param entries initial dictionary entries
      */
     static dict(entries: { [KEY: string]: any }) {

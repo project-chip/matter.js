@@ -14,8 +14,8 @@ import { Session } from "./session/Session.js";
 import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { Fabric } from "./fabric/Fabric.js";
 import { FabricManager } from "./fabric/FabricManager.js";
-import { Channel } from "./net/Channel.js";
-import { NetInterface } from "./net/NetInterface.js";
+import { Channel } from "./common/Channel.js";
+import { TransportInterface } from "./common/TransportInterface.js";
 import { ChannelManager } from "./protocol/ChannelManager.js";
 import { ExchangeManager } from "./protocol/ExchangeManager.js";
 import { ProtocolHandler } from "./protocol/ProtocolHandler.js";
@@ -28,6 +28,7 @@ import { Logger } from "./log/Logger.js";
 import { Time, Timer } from "./time/Time.js";
 import { ByteArray } from "./util/ByteArray.js";
 import { StorageManager } from "./storage/StorageManager.js";
+import {isNetworkInterface, NetInterface} from "./net/NetInterface.js";
 
 const logger = Logger.get("MatterDevice");
 
@@ -37,7 +38,7 @@ const DEVICE_ANNOUNCEMENT_INTERVAL = 60 * 1000; /** 1 minute */
 export class MatterDevice {
     private readonly scanners = new Array<Scanner>();
     private readonly broadcasters = new Array<Broadcaster>();
-    private readonly netInterfaces = new Array<NetInterface>();
+    private readonly transportInterfaces = new Array<TransportInterface | NetInterface>();
     private readonly fabricManager;
     private readonly sessionManager;
     private readonly channelManager = new ChannelManager();
@@ -72,9 +73,9 @@ export class MatterDevice {
         return this;
     }
 
-    addNetInterface(netInterface: NetInterface) {
-        this.exchangeManager.addNetInterface(netInterface);
-        this.netInterfaces.push(netInterface);
+    addTransportInterface(netInterface: TransportInterface) {
+        this.exchangeManager.addTransportInterface(netInterface);
+        this.transportInterfaces.push(netInterface);
         return this;
     }
 
@@ -216,7 +217,11 @@ export class MatterDevice {
         const session = this.sessionManager.getSessionForNode(fabric, nodeId);
         if (session === undefined) return undefined;
         // TODO: have the interface and scanner linked
-        return { session, channel: await this.netInterfaces[0].openChannel(ip, port) };
+        const networkInterface = this.transportInterfaces.find(netInterface => isNetworkInterface(netInterface));
+        if (networkInterface === undefined || !isNetworkInterface(networkInterface)) {
+            throw new Error("No network interface found");
+        } // TODO meeehhh
+        return { session, channel: await networkInterface.openChannel(ip, port) };
     }
 
     async stop() {

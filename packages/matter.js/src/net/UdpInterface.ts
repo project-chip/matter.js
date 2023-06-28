@@ -5,8 +5,9 @@
  */
 
 import { UdpChannel } from './UdpChannel.js';
-import { Channel } from "./Channel.js";
-import { NetInterface, NetListener } from "./NetInterface.js";
+import { Channel } from "../common/Channel.js";
+import { NetInterface } from "./NetInterface.js";
+import { Listener } from "../common/TransportInterface.js";
 import { Network } from './Network.js';
 import { ByteArray } from "../util/ByteArray.js";
 
@@ -24,7 +25,7 @@ export class UdpInterface implements NetInterface {
         return Promise.resolve(new UdpConnection(this.server, address, port));
     }
 
-    onData(listener: (channel: Channel<ByteArray>, messageBytes: ByteArray) => void): NetListener {
+    onData(listener: (channel: Channel<ByteArray>, messageBytes: ByteArray) => void): Listener {
         return this.server.onData((_netInterface, peerAddress, peerPort, data) => listener(new UdpConnection(this.server, peerAddress, peerPort), data));
     }
 }

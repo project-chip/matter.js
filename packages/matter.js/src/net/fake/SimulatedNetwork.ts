@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NetListener } from "../NetInterface.js";
+import { Listener } from "../../common/TransportInterface.js";
 import { singleton } from "../../util/Singleton.js";
 import { ByteArray } from "../../util/ByteArray.js";
 import { Logger } from "../../log/Logger.js";
 
-export type Listener = (netInterface: string, peerAddress: string, peerPort: number, data: ByteArray) => void;
+export type ListenerFunc = (netInterface: string, peerAddress: string, peerPort: number, data: ByteArray) => void;
 
 const logger = Logger.get("SimulatedNetwork");
 
@@ -18,13 +18,13 @@ export const FAKE_INTERFACE_NAME = "fakeInterface";
 export class SimulatedNetwork {
     static get = singleton(() => new SimulatedNetwork());
 
-    private readonly listenersMap = new Map<string, Array<Listener>>();
+    private readonly listenersMap = new Map<string, Array<ListenerFunc>>();
 
-    onUdpData(address: string | undefined, port: number, listener: Listener): NetListener {
+    onUdpData(address: string | undefined, port: number, listener: ListenerFunc): Listener {
         const ipPort = `${address ?? "*"}:${port}`;
         let listeners = this.listenersMap.get(ipPort);
         if (listeners === undefined) {
-            listeners = new Array<Listener>();
+            listeners = new Array<ListenerFunc>();
             this.listenersMap.set(ipPort, listeners);
         }
         listeners.push(listener);
@@ -33,7 +33,7 @@ export class SimulatedNetwork {
         }
     }
 
-    private offUdpData(address: string | undefined, port: number, listenerToRemove: Listener) {
+    private offUdpData(address: string | undefined, port: number, listenerToRemove: ListenerFunc) {
         const ipPort = `${address ?? "*"}:${port}`;
         const listeners = this.listenersMap.get(ipPort);
         if (listeners === undefined) return;
