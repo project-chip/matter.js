@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {Broadcaster} from "../common/Broadcaster.js";
+import { Broadcaster } from "../common/Broadcaster.js";
 import { ByteArray } from "../util/ByteArray.js";
-import {TransportInterface} from "../common/TransportInterface.js";
+import { TransportInterface } from "../common/TransportInterface.js";
 
 export abstract class Bluetooth {
     static get: () => Bluetooth = () => { throw new Error("No provider configured"); };

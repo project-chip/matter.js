@@ -47,7 +47,7 @@ import { Aggregator } from "./device/Aggregator.js";
 import { TypeFromBitSchema } from "./schema/BitmapSchema.js";
 import { Endpoint } from "./device/Endpoint.js";
 import { StorageContext } from "./storage/StorageContext.js";
-import { Bluetooth} from "./ble/Bluetooth.js";
+import { Bluetooth } from "./ble/Bluetooth.js";
 
 const logger = Logger.get("CommissioningServer");
 

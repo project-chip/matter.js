@@ -98,7 +98,7 @@ class BTPSessionHandler {
     handleIncomingBleData(data: ByteArray) {
         const btpPacket = BtpCodec.decodeBtpPacket(data);
         logger.debug(`Received BTP packet: ${Logger.toJSON(btpPacket)}`);
-        const { header: { isHandshakeRequest, hasManagementOpcode, isEndingSegment, isBeginningSegment}, payload: { sequenceNumber, messageLength, segmentPayload}} = btpPacket;
+        const { header: { isHandshakeRequest, hasManagementOpcode, isEndingSegment, isBeginningSegment }, payload: { sequenceNumber, messageLength, segmentPayload } } = btpPacket;
 
         if (isHandshakeRequest || hasManagementOpcode) {
             this.disconnectBleCallback(); // Just here as example ... when specs say "close connection" use this callback

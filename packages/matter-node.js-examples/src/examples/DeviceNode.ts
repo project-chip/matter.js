@@ -21,9 +21,9 @@ import { OnOffLightDevice, OnOffPluginUnitDevice } from "@project-chip/matter-no
 import { VendorId } from "@project-chip/matter-node.js/datatype";
 import { Logger } from "@project-chip/matter-node.js/log";
 import { StorageManager, StorageBackendDisk } from "@project-chip/matter-node.js/storage";
-import {Bluetooth} from "@project-chip/matter.js/ble";
-import {BluetoothNode} from "@project-chip/matter-node-ble.js/ble";
-import {singleton} from "@project-chip/matter.js/util";
+import { Bluetooth } from "@project-chip/matter.js/ble";
+import { BluetoothNode } from "@project-chip/matter-node-ble.js/ble";
+import { singleton } from "@project-chip/matter.js/util";
 
 if (hasParameter("bluetooth")) {
     // Initialize Bluetooth

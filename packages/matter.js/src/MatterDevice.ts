@@ -28,7 +28,7 @@ import { Logger } from "./log/Logger.js";
 import { Time, Timer } from "./time/Time.js";
 import { ByteArray } from "./util/ByteArray.js";
 import { StorageManager } from "./storage/StorageManager.js";
-import {isNetworkInterface, NetInterface} from "./net/NetInterface.js";
+import { isNetworkInterface, NetInterface } from "./net/NetInterface.js";
 
 const logger = Logger.get("MatterDevice");
 

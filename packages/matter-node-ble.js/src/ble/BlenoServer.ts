@@ -9,7 +9,7 @@ import { Logger } from "@project-chip/matter.js/log";
 import { ByteArray, getPromiseResolver } from "@project-chip/matter.js/util";
 import { MatterCoreSpecificationV1_1 } from "@project-chip/matter.js/spec";
 import { BTPSessionHandler } from "@project-chip/matter.js/ble";
-import {Channel} from "@project-chip/matter.js/common";
+import { Channel } from "@project-chip/matter.js/common";
 
 const logger = Logger.get("BlenoServer");
 
@@ -170,7 +170,7 @@ export class BlenoServer implements Channel<ByteArray> {
             logger.debug(`advertisingStart: ${error ? `error ${error}` : 'success'}`);
 
             if (!error) {
-                Bleno.setServices([ this.matterBleService ]);
+                Bleno.setServices([this.matterBleService]);
             }
             // TODO handle transport error
         });
@@ -320,7 +320,7 @@ export class BlenoServer implements Channel<ByteArray> {
      *
      * @param data
      */
-    async send(data: ByteArray){
+    async send(data: ByteArray) {
         if (this.btpSession === undefined) {
             throw new Error(`Can not send data, no BTP session initialized`);
         }

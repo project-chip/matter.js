@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {BlenoServer} from "./BlenoServer";
-import {VendorId} from "@project-chip/matter.js/datatype";
-import {Broadcaster} from "@project-chip/matter.js/common";
-import {Logger} from "@project-chip/matter.js/log";
-import {ByteArray, DataWriter, Endian} from "@project-chip/matter.js/util";
+import { BlenoServer } from "./BlenoServer";
+import { VendorId } from "@project-chip/matter.js/datatype";
+import { Broadcaster } from "@project-chip/matter.js/common";
+import { Logger } from "@project-chip/matter.js/log";
+import { ByteArray, DataWriter, Endian } from "@project-chip/matter.js/util";
 
 const logger = Logger.get('BleBroadcaster');
 
@@ -22,7 +22,7 @@ export class BleBroadcaster implements Broadcaster {
     constructor(
         private readonly blenoServer: BlenoServer,
         private readonly additionalAdvertisementData?: ByteArray
-    ) {}
+    ) { }
 
     setCommissionMode(mode: number, deviceName: string, deviceType: number, vendorId: VendorId, productId: number, discriminator: number) {
         if (mode !== 1) {

@@ -7,7 +7,7 @@
 import { Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
 import { Crypto } from "../crypto/Crypto.js";
 import { Channel } from "../common/Channel.js";
-import {Listener, TransportInterface} from "../common/TransportInterface.js";
+import { Listener, TransportInterface } from "../common/TransportInterface.js";
 import { SessionManager } from "../session/SessionManager.js";
 import { Session } from "../session/Session.js";
 import { MessageExchange } from "./MessageExchange.js";

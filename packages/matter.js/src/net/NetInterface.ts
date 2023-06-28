@@ -6,7 +6,7 @@
 
 import { Channel } from "../common/Channel.js";
 import { ByteArray } from "../util/ByteArray.js";
-import {TransportInterface} from "../common/TransportInterface.js";
+import { TransportInterface } from "../common/TransportInterface.js";
 
 export interface NetInterface extends TransportInterface {
     openChannel(address: string, port: number): Promise<Channel<ByteArray>>;

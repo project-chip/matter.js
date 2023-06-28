@@ -219,7 +219,7 @@ export class Logger {
      */
     static toJSON(data: any) {
         return JSON.stringify(data, (_, value) => {
-            if (typeof value === 'bigint'){
+            if (typeof value === 'bigint') {
                 return value.toString();
             }
             if (value instanceof ByteArray) {
