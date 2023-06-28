@@ -102,14 +102,31 @@ export class BtpCodec {
     private static encodeBtpPacketPayload({ hasAckNumber, isBeginningSegment }: BtpHeader, { ackNumber, sequenceNumber, messageLength, segmentPayload }: BtpPacketPayload): ByteArray {
         const writer = new DataWriter(Endian.Little);
 
-        if (!hasAckNumber && ackNumber) throw new Error("Ack number shouldn't be present");
-        if (hasAckNumber && ackNumber == undefined) throw new Error("Ack number shouldn't be absent")
-        if (hasAckNumber && ackNumber !== undefined) writer.writeUInt8(ackNumber);
+        if (!hasAckNumber && ackNumber !== undefined) {
+            throw new Error("Ack number shouldn't be set because header flag is not set");
+        }
+        if (hasAckNumber && ackNumber === undefined) {
+            throw new Error("Ack number needs to be set because header flag is set");
+        }
+        if (ackNumber !== undefined) {
+            writer.writeUInt8(ackNumber);
+        }
+        
         writer.writeUInt8(sequenceNumber);
-        if (!isBeginningSegment && messageLength) throw new Error("Message Length shouldn't be present");
-        if (isBeginningSegment && messageLength == undefined) throw new Error("Message Length shouldn't be absent")
-        if (isBeginningSegment && messageLength !== undefined) writer.writeUInt16(messageLength);
-        if (segmentPayload !== undefined) writer.writeByteArray(segmentPayload)
+        
+        if (!isBeginningSegment && messageLength !== undefined) {
+            throw new Error("Message Length shouldn't be set because the package is not a beginning segment");
+        }
+        if (isBeginningSegment && messageLength == undefined) {
+            throw new Error("Message Length needs to be set because paket is a beginning segment");
+        }
+        if (messageLength !== undefined) {
+            writer.writeUInt16(messageLength);
+        }
+        
+        if (segmentPayload !== undefined) {
+            writer.writeByteArray(segmentPayload);
+        }
         return writer.toByteArray();
     }
 
@@ -118,8 +135,12 @@ export class BtpCodec {
         const opcode = reader.readUInt8();
         let version = reader.readUInt8();
 
-        if (header !== HANDSHAKE_HEADER) throw new Error("BTPHandshake Request Headers is incorrect");
-        if (opcode !== BtpOpcode.HandshakeManagementOpcode) throw new Error("Management Opcode for BTPHandshake Request is incorrect");
+        if (header !== HANDSHAKE_HEADER) {
+            throw new Error("BTPHandshake Request Headers is incorrect");
+        }
+        if (opcode !== undefined) {
+            throw new Error("Management Opcode for BTPHandshake Request is incorrect");
+        }
 
         const ver: number[] = [];
         ver[0] = (version & 0xF0) >> 4;
@@ -138,7 +159,9 @@ export class BtpCodec {
         ver[7] = version & 0x0F;
 
         const versions = ver.filter(v => v !== 0)
-        if (versions.length == 0) throw new Error("No valid version provided");
+        if (versions.length == 0) {
+            throw new Error("No valid version provided");
+        }
 
         const attMtu = reader.readUInt16();
         const clientWindowSize = reader.readUInt8();
@@ -163,6 +186,10 @@ export class BtpCodec {
 
     private static encodeBtpPacketHeader({ isHandshakeRequest, hasManagementOpcode, hasAckNumber, isEndingSegment, isBeginningSegment }: BtpHeader): ByteArray {
         const writer = new DataWriter(Endian.Little);
+
+        if (isHandshakeRequest || hasManagementOpcode) {
+            throw new Error("Please use the specific methods to encode a Handshake packet");
+        }
 
         const header = (isHandshakeRequest ? BtpHeaderBits.HandshakeBit : 0)
             | (hasManagementOpcode ? BtpHeaderBits.ManagementMsg : 0)
