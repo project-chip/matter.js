@@ -224,22 +224,22 @@ describe("BtpCodec", () => {
 
         it("ack number shouldn't be present if hasAckNumber is false", () => {
             expect(() => BtpCodec.encodeBtpPacket(DECODED_PACKET_4))
-                .toThrowError("Ack number shouldn't be present");
+                .toThrowError("Ack number shouldn't be set because header flag is not set");
         });
 
         it("ack number should be present if hasAckNumber is true", () => {
             expect(() => BtpCodec.encodeBtpPacket(DECODED_PACKET_5))
-                .toThrowError("Ack number shouldn't be absent");
+                .toThrowError("Ack number needs to be set because header flag is set");
         });
 
         it("message length shouldn't be present if beginning segment is false", () => {
             expect(() => BtpCodec.encodeBtpPacket(DECODED_PACKET_6))
-                .toThrowError("Message Length shouldn't be present");
+                .toThrowError(""Message Length shouldn't be set because the package is not a beginning segment");
         });
 
         it("message length should be present if beginning segment is true", () => {
             expect(() => BtpCodec.encodeBtpPacket(DECODED_PACKET_7))
-                .toThrowError("Message Length shouldn't be absent");
+                .toThrowError("Message Length needs to be set because paket is a beginning segment");
         });
     });
 });
