@@ -8,13 +8,13 @@ import { ByteArray } from "../util/ByteArray.js";
 import { BtpCodec } from "../codec/BtpCodec.js";
 import { Logger } from "../log/Logger.js";
 
-const logger = Logger.get("BTPSessionHandler");
+const logger = Logger.get("BtpSessionHandler");
 
 const SUPPORTED_BTP_VERSIONS = [4];
 const DEFAULT_FRAGMENT_SIZE = 20; // 23-byte minimum ATT_MTU - 3 bytes for ATT operation header
 const MAXIMUM_FRAGMENT_SIZE = 244; // Maximum size of BTP segment
 
-class BTPSessionHandler {
+class BtpSessionHandler {
     private readonly btpVersion: number;
     private readonly attMtu: number;
     private readonly clientWindowSize: number;
@@ -96,33 +96,41 @@ class BTPSessionHandler {
      * @param data ByteArray containing the data
      */
     handleIncomingBleData(data: ByteArray) {
-        const btpPacket = BtpCodec.decodeBtpPacket(data);
-        logger.debug(`Received BTP packet: ${Logger.toJSON(btpPacket)}`);
-        const { header: { isHandshakeRequest, hasManagementOpcode, isEndingSegment, isBeginningSegment }, payload: { sequenceNumber, messageLength, segmentPayload } } = btpPacket;
+        try {
+            const btpPacket = BtpCodec.decodeBtpPacket(data);
+            logger.debug(`Received BTP packet: ${Logger.toJSON(btpPacket)}`);
+            const {
+                header: { isHandshakeRequest, hasManagementOpcode, isEndingSegment, isBeginningSegment },
+                payload: { sequenceNumber, messageLength, segmentPayload }
+            } = btpPacket;
 
-        if (isHandshakeRequest || hasManagementOpcode) {
-            this.disconnectBleCallback(); // Just here as example ... when specs say "close connection" use this callback
-            throw new Error("BTP packet must not be a handshake request or have a management opcode");
-        }
-        if (!isEndingSegment || !isBeginningSegment) {
-            // TODO message de-assembly needs to be implemented
-            throw new Error("BTP packet must be a single segment");
-        }
-        // TODO ack handling needs to be implemented
+            if (isHandshakeRequest || hasManagementOpcode) {
+                this.disconnectBleCallback(); // Just here as example ... when specs say "close connection" use this callback
+                throw new Error("BTP packet must not be a handshake request or have a management opcode");
+            }
+            if (!isEndingSegment || !isBeginningSegment) {
+                // TODO message de-assembly needs to be implemented
+                throw new Error("BTP packet must be a single segment");
+            }
+            // TODO ack handling needs to be implemented
 
-        // TODO handle sequenceNumber and ackNumber
-        this.lastIncomingSequenceNumber = sequenceNumber;
+            // TODO handle sequenceNumber and ackNumber
+            this.lastIncomingSequenceNumber = sequenceNumber;
 
-        // potentially check length fields
-        if (segmentPayload === undefined) {
-            throw new Error("BTP packet must have a payload");
-        }
-        if (segmentPayload.length !== messageLength) {
-            throw new Error(`BTP packet payload length does not match message length: ${segmentPayload.length} !== ${messageLength}`);
-        }
+            // potentially check length fields
+            if (segmentPayload === undefined) {
+                throw new Error("BTP packet must have a payload");
+            }
+            if (segmentPayload.length !== messageLength) {
+                throw new Error(`BTP packet payload length does not match message length: ${segmentPayload.length} !== ${messageLength}`);
+            }
 
-        // Hand over the resulting Matter message to ExchangeManager via the callback
-        this.handleMatterMessagePayload(segmentPayload);
+            // Hand over the resulting Matter message to ExchangeManager via the callback
+            this.handleMatterMessagePayload(segmentPayload);
+        } catch (error) {
+            logger.error(`Error while handling incoming BTP data: ${error}`);
+            this.disconnectBleCallback();
+        }
     }
 
     /**
@@ -183,4 +191,4 @@ class BTPSessionHandler {
     }
 }
 
-export { BTPSessionHandler };
+export { BtpSessionHandler };

@@ -47,7 +47,7 @@ import { Aggregator } from "./device/Aggregator.js";
 import { TypeFromBitSchema } from "./schema/BitmapSchema.js";
 import { Endpoint } from "./device/Endpoint.js";
 import { StorageContext } from "./storage/StorageContext.js";
-import { Bluetooth } from "./ble/Bluetooth.js";
+import { Ble } from "./ble/Ble.js";
 
 const logger = Logger.get("CommissioningServer");
 
@@ -77,7 +77,7 @@ export interface CommissioningServerOptions {
     passcode: number,
     discriminator: number,
     flowType?: CommissionningFlowType,
-    additionalBluetoothAdvertisementData?: ByteArray,
+    additionalBleAdvertisementData?: ByteArray,
 
     delayedAnnouncement?: boolean;
 
@@ -117,7 +117,7 @@ export class CommissioningServer extends MatterNode {
     private readonly passcode: number;
     private readonly discriminator: number;
     private readonly flowType: CommissionningFlowType;
-    private readonly additionalBluetoothAdvertisementData?: ByteArray;
+    private readonly additionalBleAdvertisementData?: ByteArray;
 
     private storageManager?: StorageManager;
     private endpointStructureStorage?: StorageContext;
@@ -151,7 +151,7 @@ export class CommissioningServer extends MatterNode {
         this.flowType = options.flowType ?? CommissionningFlowType.Standard;
         this.nextEndpointId = options.nextEndpointId ?? 1;
         this.delayedAnnouncement = options.delayedAnnouncement ?? false;
-        this.additionalBluetoothAdvertisementData = options.additionalBluetoothAdvertisementData;
+        this.additionalBleAdvertisementData = options.additionalBleAdvertisementData;
 
         const {
             basicInformation: { vendorId, productId }
@@ -387,11 +387,11 @@ export class CommissioningServer extends MatterNode {
         }
 
         try {
-            const bluetooth = Bluetooth.get();
-            this.deviceInstance.addTransportInterface(bluetooth.getBlePeripheralNetworkInterface());
-            this.deviceInstance.addBroadcaster(bluetooth.getBleBroadcaster(this.additionalBluetoothAdvertisementData));
+            const ble = Ble.get();
+            this.deviceInstance.addTransportInterface(ble.getBlePeripheralNetworkInterface());
+            this.deviceInstance.addBroadcaster(ble.getBleBroadcaster(this.additionalBleAdvertisementData));
         } catch (e) {
-            logger.warn("Bluetooth not enabled");
+            logger.warn("Ble not enabled");
         }
 
         await this.deviceInstance.start();
@@ -491,6 +491,13 @@ export class CommissioningServer extends MatterNode {
         const vendorId = basicInformation.attributes.vendorId.getLocal();
         const productId = basicInformation.attributes.productId.getLocal();
 
+        let bleEnabled = false;
+        try {
+            bleEnabled = !!Ble.get();
+        } catch {
+            // ignore
+        }
+
         const qrPairingCode = QrPairingCodeCodec.encode({
             version: 0,
             vendorId: vendorId.id,
@@ -499,7 +506,7 @@ export class CommissioningServer extends MatterNode {
             discriminator: this.discriminator,
             passcode: this.passcode,
             discoveryCapabilities: DiscoveryCapabilitiesSchema.encode(discoveryCapabilities ?? {
-                ble: false,
+                ble: bleEnabled,
                 softAccessPoint: false,
                 onIpNetwork: true
             }),

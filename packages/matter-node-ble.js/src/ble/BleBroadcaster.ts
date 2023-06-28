@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BlenoServer } from "./BlenoServer";
+import { BlenoBleServer } from "./BlenoBleServer";
 import { VendorId } from "@project-chip/matter.js/datatype";
 import { Broadcaster } from "@project-chip/matter.js/common";
 import { Logger } from "@project-chip/matter.js/log";
@@ -20,7 +20,7 @@ export class BleBroadcaster implements Broadcaster {
     private discriminator: number | undefined;
 
     constructor(
-        private readonly blenoServer: BlenoServer,
+        private readonly blenoServer: BlenoBleServer,
         private readonly additionalAdvertisementData?: ByteArray
     ) { }
 

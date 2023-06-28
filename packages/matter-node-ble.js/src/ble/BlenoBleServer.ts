@@ -8,10 +8,10 @@ import Bleno from "@abandonware/bleno";
 import { Logger } from "@project-chip/matter.js/log";
 import { ByteArray, getPromiseResolver } from "@project-chip/matter.js/util";
 import { MatterCoreSpecificationV1_1 } from "@project-chip/matter.js/spec";
-import { BTPSessionHandler } from "@project-chip/matter.js/ble";
+import { BtpSessionHandler } from "@project-chip/matter.js/ble";
 import { Channel } from "@project-chip/matter.js/common";
 
-const logger = Logger.get("BlenoServer");
+const logger = Logger.get("BlenoBleServer");
 
 /** @see {@link MatterCoreSpecificationV1_1} § 4.17.3.2 */
 const MATTER_SERVICE_UUID = "fff6";
@@ -19,9 +19,9 @@ const MATTER_C1_CHARACTERISTIC_UUID = "18EE2EF5-263D-4559-959F-4F9C429F9D11";
 const MATTER_C2_CHARACTERISTIC_UUID = "18EE2EF5-263D-4559-959F-4F9C429F9D12";
 const MATTER_C3_CHARACTERISTIC_UUID = "64630238-8772-45F2-B87D-748A83218F04";
 
-class MatterWriteCharacteristicC1 extends Bleno.Characteristic {
+class BtpWriteCharacteristicC1 extends Bleno.Characteristic {
     constructor(
-        private readonly blenoServer: BlenoServer
+        private readonly bleServer: BlenoBleServer
     ) {
         super({
             uuid: MATTER_C1_CHARACTERISTIC_UUID,
@@ -33,7 +33,7 @@ class MatterWriteCharacteristicC1 extends Bleno.Characteristic {
         logger.debug(`C1 write request: ${data.toString('hex')} ${offset} ${withoutResponse}`);
 
         try {
-            this.blenoServer.handleC1WriteRequest(data, offset, withoutResponse);
+            this.bleServer.handleC1WriteRequest(data, offset, withoutResponse);
             callback(this.RESULT_SUCCESS);
         } catch (e) {
             logger.error(`C1 write request failed: ${e}`);
@@ -42,9 +42,9 @@ class MatterWriteCharacteristicC1 extends Bleno.Characteristic {
     }
 }
 
-class MatterIndicateCharacteristicC2 extends Bleno.Characteristic {
+class BtpIndicateCharacteristicC2 extends Bleno.Characteristic {
     constructor(
-        private readonly blenoServer: BlenoServer
+        private readonly bleServer: BlenoBleServer
     ) {
         super({
             uuid: MATTER_C2_CHARACTERISTIC_UUID,
@@ -55,7 +55,7 @@ class MatterIndicateCharacteristicC2 extends Bleno.Characteristic {
     override onSubscribe(maxValueSize: number, updateValueCallback: (data: Buffer) => void) {
         logger.debug(`C2 subscribe ${maxValueSize}`);
 
-        this.blenoServer.handleC2SubscribeRequest(maxValueSize, updateValueCallback);
+        this.bleServer.handleC2SubscribeRequest(maxValueSize, updateValueCallback);
     }
 
     override onUnsubscribe() {
@@ -64,13 +64,13 @@ class MatterIndicateCharacteristicC2 extends Bleno.Characteristic {
 
     override onIndicate() {
         logger.debug('C2 indicate');
-        this.blenoServer.handleC2Indicate();
+        this.bleServer.handleC2Indicate();
     }
 }
 
-class MatterReadCharacteristicC3 extends Bleno.Characteristic {
+class BtpReadCharacteristicC3 extends Bleno.Characteristic {
     constructor(
-        private readonly blenoServer: BlenoServer
+        private readonly bleServer: BlenoBleServer
     ) {
         super({
             uuid: MATTER_C3_CHARACTERISTIC_UUID,
@@ -80,7 +80,7 @@ class MatterReadCharacteristicC3 extends Bleno.Characteristic {
 
     override onReadRequest(offset: number, callback: (result: number, data?: Buffer) => void) {
         try {
-            const data = this.blenoServer.handleC3ReadRequest(offset);
+            const data = this.bleServer.handleC3ReadRequest(offset);
             logger.debug(`C3 read request: ${data.toString('hex')} ${offset}`);
             callback(this.RESULT_SUCCESS, data);
         } catch (e) {
@@ -90,16 +90,16 @@ class MatterReadCharacteristicC3 extends Bleno.Characteristic {
     }
 }
 
-class MatterBleService extends Bleno.PrimaryService {
+class BtpService extends Bleno.PrimaryService {
     constructor(
-        blenoServer: BlenoServer
+        bleServer: BlenoBleServer
     ) {
         super({
             uuid: MATTER_SERVICE_UUID,
             characteristics: [
-                new MatterWriteCharacteristicC1(blenoServer),
-                new MatterIndicateCharacteristicC2(blenoServer),
-                new MatterReadCharacteristicC3(blenoServer),
+                new BtpWriteCharacteristicC1(bleServer),
+                new BtpIndicateCharacteristicC2(bleServer),
+                new BtpReadCharacteristicC3(bleServer),
             ]
         });
     }
@@ -111,21 +111,21 @@ class MatterBleService extends Bleno.PrimaryService {
  * Note: Bleno is only supporting a single connection at a time right now - mainly because it also only can announce
  * one BLE device at a time!
  */
-export class BlenoServer implements Channel<ByteArray> {
+export class BlenoBleServer implements Channel<ByteArray> {
     private state = "unknown";
     isAdvertising = false;
     private additionalAdvertisingData: Buffer = Buffer.alloc(0);
     private advertisingData: Buffer | undefined;
 
     private latestHandshakePayload: Buffer | undefined;
-    private btpSession: BTPSessionHandler | undefined;
+    private btpSession: BtpSessionHandler | undefined;
 
     private onMatterMessageListener: ((socket: Channel<ByteArray>, data: ByteArray) => void) | undefined;
     private writeConformationResolver: ((value: void) => void) | undefined;
 
     private clientAddress: string | undefined;
 
-    private readonly matterBleService = new MatterBleService(this);
+    private readonly matterBleService = new BtpService(this);
 
     constructor() {
         // Bleno gets automatically initialized on import already!
@@ -216,7 +216,7 @@ export class BlenoServer implements Channel<ByteArray> {
      * Process a Subscribe request on characteristic C2 from the Matter service.
      * This is expected directly after a handshake request and initializes the BTP session handler with the stored
      * handshake payload.
-     * The BTPSessionHandler instance is wired with the bleno instance for sending data and disconnecting.
+     * The BtpSessionHandler instance is wired with the bleno instance for sending data and disconnecting.
      *
      * @param maxValueSize
      * @param updateValueCallback
@@ -226,7 +226,7 @@ export class BlenoServer implements Channel<ByteArray> {
             throw new Error(`Subscription request received before handshake Request`);
         }
 
-        this.btpSession = new BTPSessionHandler(
+        this.btpSession = new BtpSessionHandler(
             Math.min(Bleno.mtu - 3, maxValueSize),
             this.latestHandshakePayload,
 

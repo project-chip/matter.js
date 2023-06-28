@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BlenoServer } from "./BlenoServer";
+import { BlenoBleServer } from "./BlenoBleServer";
 import { Channel, Listener, TransportInterface } from "@project-chip/matter.js/common";
 import { ByteArray } from "@project-chip/matter.js/util";
 
 export class BleNetworkInterface implements TransportInterface {
     constructor(
-        private readonly blenoServer: BlenoServer
+        private readonly blenoServer: BlenoBleServer
     ) { }
 
     // TransportInterface

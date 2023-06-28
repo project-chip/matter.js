@@ -6,7 +6,7 @@ Matter BLE support using bleno for Peripheral/Device side and noble (not impleme
 
 > This package requires Node 16+
 
-This package implements all needed Interfaces and classes to enable BLE Support for matter.js. It implements a class BluetoothNode which can be used as singleton Bluetooth instance.
+This package implements all needed Interfaces and classes to enable BLE Support for matter.js. It implements a class BluetoothNode which can be used as singleton Ble instance.
 
 ## Prerquisites and Limitations
 

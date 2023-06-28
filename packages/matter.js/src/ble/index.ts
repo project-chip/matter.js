@@ -4,5 +4,5 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "./Bluetooth.js";
-export * from "./BTPSessionHandler.js";
+export * from "./Ble.js";
+export * from "./BtpSessionHandler.js";

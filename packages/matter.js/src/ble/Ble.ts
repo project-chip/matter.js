@@ -8,8 +8,8 @@ import { Broadcaster } from "../common/Broadcaster.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { TransportInterface } from "../common/TransportInterface.js";
 
-export abstract class Bluetooth {
-    static get: () => Bluetooth = () => { throw new Error("No provider configured"); };
+export abstract class Ble {
+    static get: () => Ble = () => { throw new Error("No provider configured"); };
 
     abstract getBlePeripheralNetworkInterface(): TransportInterface;
     abstract getBleBroadcaster(additionalAdvertisementData?: ByteArray): Broadcaster;
