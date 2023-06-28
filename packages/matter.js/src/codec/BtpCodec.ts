@@ -111,9 +111,9 @@ export class BtpCodec {
         if (ackNumber !== undefined) {
             writer.writeUInt8(ackNumber);
         }
-        
+
         writer.writeUInt8(sequenceNumber);
-        
+
         if (!isBeginningSegment && messageLength !== undefined) {
             throw new Error("Message Length shouldn't be set because the package is not a beginning segment");
         }
@@ -123,7 +123,7 @@ export class BtpCodec {
         if (messageLength !== undefined) {
             writer.writeUInt16(messageLength);
         }
-        
+
         if (segmentPayload !== undefined) {
             writer.writeByteArray(segmentPayload);
         }
