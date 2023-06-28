@@ -6,7 +6,7 @@
 import { TransportInterface } from "@project-chip/matter.js/common";
 import { Ble } from "@project-chip/matter.js/ble";
 import { BlenoBleServer } from "./BlenoBleServer";
-import { BleNetworkInterface } from "./BleNetworkInterface";
+import { BleInterface } from "./BleInterface";
 import { BleBroadcaster } from "./BleBroadcaster";
 import { ByteArray } from "@project-chip/matter.js/util";
 
@@ -21,7 +21,7 @@ export class BleNode extends Ble {
         if (this.blePeripheral === undefined) {
             this.blePeripheral = new BlenoBleServer();
         }
-        return new BleNetworkInterface(this.blePeripheral);
+        return new BleInterface(this.blePeripheral);
     }
 
     getBleBroadcaster(additionalAdvertisementData?: ByteArray) {

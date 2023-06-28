@@ -8,7 +8,7 @@ import { BlenoBleServer } from "./BlenoBleServer";
 import { Channel, Listener, TransportInterface } from "@project-chip/matter.js/common";
 import { ByteArray } from "@project-chip/matter.js/util";
 
-export class BleNetworkInterface implements TransportInterface {
+export class BleInterface implements TransportInterface {
     constructor(
         private readonly blenoServer: BlenoBleServer
     ) { }

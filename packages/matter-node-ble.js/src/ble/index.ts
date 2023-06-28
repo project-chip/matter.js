@@ -6,4 +6,4 @@
 
 export * from "./BleNode";
 export * from "./BleBroadcaster.js";
-export * from "./BleNetworkInterface.js";
+export * from "./BleInterface";
