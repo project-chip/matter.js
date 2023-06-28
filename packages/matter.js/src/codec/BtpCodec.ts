@@ -138,7 +138,7 @@ export class BtpCodec {
         if (header !== HANDSHAKE_HEADER) {
             throw new Error("BTPHandshake Request Headers is incorrect");
         }
-        if (opcode !== undefined) {
+        if (opcode !== BtpOpcode.HandshakeManagementOpcode) {
             throw new Error("Management Opcode for BTPHandshake Request is incorrect");
         }
 
