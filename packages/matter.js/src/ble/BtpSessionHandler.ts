@@ -4,8 +4,8 @@
 * SPDX-License-Identifier: Apache-2.0
 */
 
-import { ByteArray, Endian } from "../util/ByteArray.js";
-import { BtpCodec, BtpPacket } from "../codec/BtpCodec.js";
+import { ByteArray } from "../util/ByteArray.js";
+import { BtpCodec } from "../codec/BtpCodec.js";
 import { Logger } from "../log/Logger.js";
 
 const logger = Logger.get("BtpSessionHandler");
@@ -113,26 +113,41 @@ class BtpSessionHandler {
 
             if (isBeginningSegment) {
                 this.msgLength = messageLength;
+                this.payload = new ByteArray();
             }
 
             if (segmentPayload == undefined) {
                 throw new Error("BTP packet must have a payload");
+            } else if (segmentPayload.length > MAXIMUM_FRAGMENT_SIZE) {
+                this.disconnectBleCallback();
+                throw new Error("BTP packet's payload exceeds the maximum size");
             }
             this.payload = ByteArray.concat(this.payload, segmentPayload);
 
             if (isEndingSegment) {
+                if (this.msgLength !== undefined) {
+                    this.disconnectBleCallback();
+                    throw new Error("BTP packet must have a message length");
+                }
                 if (this.payload.length !== this.msgLength) {
                     throw new Error(`BTP packet payload length does not match message length: ${this.payload.length} !== ${this.msgLength}`);
                 }
+
+
+                // TODO ack handling needs to be implemented
+
+                // TODO handle sequenceNumber and ackNumber
+                if (this.lastIncomingSequenceNumber !== sequenceNumber) {
+                    this.disconnectBleCallback();
+                    throw new Error("BTP packet sequence numbers are incorrect");
+                }
+
+                this.lastIncomingSequenceNumber = sequenceNumber - 1;
+
+                // Hand over the resulting Matter message to ExchangeManager via the callback
+                this.handleMatterMessagePayload(this.payload);
             }
 
-            // TODO ack handling needs to be implemented
-
-            // TODO handle sequenceNumber and ackNumber
-            this.lastIncomingSequenceNumber = sequenceNumber;
-
-            // Hand over the resulting Matter message to ExchangeManager via the callback
-            this.handleMatterMessagePayload(this.payload);
         } catch (error) {
             logger.error(`Error while handling incoming BTP data: ${error}`);
             this.disconnectBleCallback();
