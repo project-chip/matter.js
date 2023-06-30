@@ -125,7 +125,7 @@ class BtpSessionHandler {
             this.payload = ByteArray.concat(this.payload, segmentPayload);
 
             if (isEndingSegment) {
-                if (this.msgLength !== undefined) {
+                if (this.msgLength == undefined) {
                     this.disconnectBleCallback();
                     throw new Error("BTP packet must have a message length");
                 }
@@ -137,12 +137,12 @@ class BtpSessionHandler {
                 // TODO ack handling needs to be implemented
 
                 // TODO handle sequenceNumber and ackNumber
-                if (this.lastIncomingSequenceNumber !== sequenceNumber) {
+                if (this.lastIncomingSequenceNumber !== (sequenceNumber - 1)) {
                     this.disconnectBleCallback();
                     throw new Error("BTP packet sequence numbers are incorrect");
                 }
 
-                this.lastIncomingSequenceNumber = sequenceNumber - 1;
+                this.lastIncomingSequenceNumber = sequenceNumber;
 
                 // Hand over the resulting Matter message to ExchangeManager via the callback
                 this.handleMatterMessagePayload(this.payload);
