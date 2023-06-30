@@ -4,8 +4,8 @@
 * SPDX-License-Identifier: Apache-2.0
 */
 
-import { ByteArray } from "../util/ByteArray.js";
-import { BtpCodec } from "../codec/BtpCodec.js";
+import { ByteArray, Endian } from "../util/ByteArray.js";
+import { BtpCodec, BtpPacket } from "../codec/BtpCodec.js";
 import { Logger } from "../log/Logger.js";
 
 const logger = Logger.get("BtpSessionHandler");
@@ -20,7 +20,8 @@ class BtpSessionHandler {
     private readonly clientWindowSize: number;
 
     private sequenceNumber = 0; // Sequence number is set to 0 already for the handshake, next sequence number will be 1
-
+    private msgLength: number | undefined = 0;
+    private payload: ByteArray = new ByteArray();
     private lastIncomingSequenceNumber = 0; // a new handshake is always received with sequence number 0
 
     /**
@@ -79,6 +80,7 @@ class BtpSessionHandler {
         void this.writeBleCallback(handshakeResponse);
 
         // TODO initialize BTP Session timers, keepalives and such
+        // BTP_CONN_RSP_TIMEOUT - 5sec
     }
 
     getNextSequenceNumber() {
@@ -108,25 +110,29 @@ class BtpSessionHandler {
                 this.disconnectBleCallback(); // Just here as example ... when specs say "close connection" use this callback
                 throw new Error("BTP packet must not be a handshake request or have a management opcode");
             }
-            if (!isEndingSegment || !isBeginningSegment) {
-                // TODO message de-assembly needs to be implemented
-                throw new Error("BTP packet must be a single segment");
+
+            if (isBeginningSegment) {
+                this.msgLength = messageLength;
             }
+
+            if (segmentPayload == undefined) {
+                throw new Error("BTP packet must have a payload");
+            }
+            this.payload = ByteArray.concat(this.payload, segmentPayload);
+
+            if (isEndingSegment) {
+                if (this.payload.length !== this.msgLength) {
+                    throw new Error(`BTP packet payload length does not match message length: ${this.payload.length} !== ${this.msgLength}`);
+                }
+            }
+
             // TODO ack handling needs to be implemented
 
             // TODO handle sequenceNumber and ackNumber
             this.lastIncomingSequenceNumber = sequenceNumber;
 
-            // potentially check length fields
-            if (segmentPayload === undefined) {
-                throw new Error("BTP packet must have a payload");
-            }
-            if (segmentPayload.length !== messageLength) {
-                throw new Error(`BTP packet payload length does not match message length: ${segmentPayload.length} !== ${messageLength}`);
-            }
-
             // Hand over the resulting Matter message to ExchangeManager via the callback
-            this.handleMatterMessagePayload(segmentPayload);
+            this.handleMatterMessagePayload(this.payload);
         } catch (error) {
             logger.error(`Error while handling incoming BTP data: ${error}`);
             this.disconnectBleCallback();
