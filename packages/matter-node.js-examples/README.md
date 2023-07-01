@@ -15,14 +15,14 @@ To better show how to use the library we provide some reference implementations 
 ### From NPM
 
 ```bash
-npm i -g @project-chip/matter-node.js
+npm i -g @project-chip/matter-node.js-examples
 ```
 
 ### Use from Cloned MatterServer.js Repository
 
-When you clone the matter.js repository you can also use matter-node.js. To do this you need to execute `npm install`in the matter.js root directory once to install all dependencies and build all packages.
+When you clone the matter.js repository you can also use matter-node.js. To do this you need to execute `npm install` in the matter.js root directory once to install all dependencies and build all packages.
 
-Then after `cd packages/matter-node.js` you can use `npm run matter-device` to run the matter-node.js server. Please see the next section for more details.
+Then after `cd packages/matter-node.js-examples` you can use `npm run matter-device` to run the matter-node.js server. Please see the next section for more details.
 
 ## CLI usage
 
