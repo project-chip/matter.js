@@ -20,9 +20,9 @@ class BtpSessionHandler {
     private readonly clientWindowSize: number;
 
     private sequenceNumber = 0; // Sequence number is set to 0 already for the handshake, next sequence number will be 1
-    private msgLength: number | undefined = 0;
-    private payload: ByteArray = new ByteArray();
-    private lastIncomingSequenceNumber = 0; // a new handshake is always received with sequence number 0
+    private currentSegmentedMsgLength: number | undefined = undefined;
+    private currentSegmentedPayload: ByteArray = new ByteArray();
+    private lastIncomingSequenceNumber = 255; // a new handshake is always received with sequence number 0, 
 
     /**
      * Creates a new BTP session handler
@@ -80,7 +80,6 @@ class BtpSessionHandler {
         void this.writeBleCallback(handshakeResponse);
 
         // TODO initialize BTP Session timers, keepalives and such
-        // BTP_CONN_RSP_TIMEOUT - 5sec
     }
 
     getNextSequenceNumber() {
@@ -112,40 +111,43 @@ class BtpSessionHandler {
             }
 
             if (isBeginningSegment) {
-                this.msgLength = messageLength;
-                this.payload = new ByteArray();
+                this.currentSegmentedMsgLength = messageLength;
+                this.currentSegmentedMsgLength = 0;
+                this.currentSegmentedPayload = new ByteArray();
             }
 
-            if (segmentPayload == undefined) {
-                throw new Error("BTP packet must have a payload");
+            if (segmentPayload === undefined) {
+                throw new Error("BTP packet must have a segment payload");
             } else if (segmentPayload.length > MAXIMUM_FRAGMENT_SIZE) {
                 this.disconnectBleCallback();
-                throw new Error("BTP packet's payload exceeds the maximum size");
+                throw new Error("BTP packet payload exceeds the maximum packet size");
             }
-            this.payload = ByteArray.concat(this.payload, segmentPayload);
+            this.currentSegmentedPayload = ByteArray.concat(this.currentSegmentedPayload, segmentPayload);
 
             if (isEndingSegment) {
-                if (this.msgLength == undefined) {
+                if (this.currentSegmentedMsgLength === undefined) {
                     this.disconnectBleCallback();
                     throw new Error("BTP packet must have a message length");
                 }
-                if (this.payload.length !== this.msgLength) {
-                    throw new Error(`BTP packet payload length does not match message length: ${this.payload.length} !== ${this.msgLength}`);
+                if (this.currentSegmentedPayload.length !== this.currentSegmentedMsgLength) {
+                    this.disconnectBleCallback();
+                    throw new Error(`BTP packet payload length does not match message length: ${this.currentSegmentedPayload.length} !== ${this.currentSegmentedMsgLength}`);
                 }
 
+                this.currentSegmentedMsgLength = undefined
 
                 // TODO ack handling needs to be implemented
 
                 // TODO handle ackNumber
                 if (((this.lastIncomingSequenceNumber + 1) % 256) !== sequenceNumber) {
                     this.disconnectBleCallback();
-                    throw new Error("BTP packet sequence numbers are incorrect");
+                    throw new Error("Expected and actual BTP packets sequence number does not match");
                 }
 
                 this.lastIncomingSequenceNumber = sequenceNumber;
 
                 // Hand over the resulting Matter message to ExchangeManager via the callback
-                this.handleMatterMessagePayload(this.payload);
+                this.handleMatterMessagePayload(this.currentSegmentedPayload);
             }
 
         } catch (error) {
@@ -186,7 +188,7 @@ class BtpSessionHandler {
         const expectedBtpHeaderLength = 3 + (this.lastIncomingSequenceNumber !== undefined ? 1 : 0) + (header.isBeginningSegment !== undefined ? 2 : 0);
 
         if (data.length > this.attMtu - expectedBtpHeaderLength) {
-            throw new Error(`BTP packets with data length > attMtu not supported yet. This requires message assembly: ${data.length} > ${this.attMtu}`);
+            throw new Error(`BTP packets with data length > attMtu not supported yet. This requires message segmentation: ${data.length} > ${this.attMtu}`);
         }
 
         const btpPayload = BtpCodec.encodeBtpPacket({
