@@ -136,8 +136,8 @@ class BtpSessionHandler {
 
                 // TODO ack handling needs to be implemented
 
-                // TODO handle sequenceNumber and ackNumber
-                if (this.lastIncomingSequenceNumber !== (sequenceNumber - 1)) {
+                // TODO handle ackNumber
+                if (((this.lastIncomingSequenceNumber + 1) % 256) !== sequenceNumber) {
                     this.disconnectBleCallback();
                     throw new Error("BTP packet sequence numbers are incorrect");
                 }
