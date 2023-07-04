@@ -20,7 +20,7 @@ class BtpSessionHandler {
     private readonly clientWindowSize: number;
 
     private sequenceNumber = 0; // Sequence number is set to 0 already for the handshake, next sequence number will be 1
-    private currentSegmentedMsgLength: number | undefined = undefined;
+    private currentSegmentedMsgLength: number | undefined;
     private currentSegmentedPayload: ByteArray = new ByteArray();
     private lastIncomingSequenceNumber = 255; // a new handshake is always received with sequence number 0, 
 
@@ -112,8 +112,9 @@ class BtpSessionHandler {
 
             if (isBeginningSegment) {
                 this.currentSegmentedMsgLength = messageLength;
-                this.currentSegmentedMsgLength = 0;
-                this.currentSegmentedPayload = new ByteArray();
+                if (this.currentSegmentedPayload.length !== 0) {
+                    console.warn("Inflight data is discarded");
+                }
             }
 
             if (segmentPayload === undefined) {
@@ -148,6 +149,10 @@ class BtpSessionHandler {
 
                 // Hand over the resulting Matter message to ExchangeManager via the callback
                 this.handleMatterMessagePayload(this.currentSegmentedPayload);
+
+                this.currentSegmentedMsgLength = 0; // resetting current segment msg length to 0
+                this.currentSegmentedPayload = new ByteArray(); // resetting current segment Payload to empty byte array
+
             }
 
         } catch (error) {
