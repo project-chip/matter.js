@@ -5,7 +5,7 @@
 */
 
 import { ByteArray } from "../util/ByteArray.js";
-import { BtpCodec } from "../codec/BtpCodec.js";
+import { BtpCodec, BtpHeader, BtpPacket } from "../codec/BtpCodec.js";
 import { Logger } from "../log/Logger.js";
 
 const logger = Logger.get("BtpSessionHandler");
@@ -22,8 +22,7 @@ class BtpSessionHandler {
     private sequenceNumber = 0; // Sequence number is set to 0 already for the handshake, next sequence number will be 1
     private currentSegmentedMsgLength: number | undefined;
     private currentSegmentedPayload: ByteArray = new ByteArray();
-    private segmentPayloads = new Array<ByteArray>();
-    private btpPackets: Array<ByteArray> = new Array<ByteArray>();
+    private btpPackets: Array<BtpPacket> = new Array<BtpPacket>();
     private lastIncomingSequenceNumber = 255; // a new handshake is always received with sequence number 0, 
 
     /**
@@ -177,76 +176,115 @@ class BtpSessionHandler {
             throw new Error("BTP packet must not be empty");
         }
 
-        let btpPayload = new ByteArray();
-        const header = {
+        let btpPayload: BtpPacket;
+        let segmentPayloads = new Array<ByteArray>();
+
+        let header = {
             isHandshakeRequest: false,
             hasManagementOpcode: false,
             hasAckNumber: this.lastIncomingSequenceNumber !== undefined,
-            isBeginningSegment: false,
+            isBeginningSegment: true,
             isEndingSegment: false,
         };
 
         // BTP Header is always 2 bytes - flags, sequence number
         // 3 when ackNumber is present
         // 5 when ackNumber and messageLength (aka isBeginningSegment) are present
-        const expectedBtpHeaderLength = 2 + (this.lastIncomingSequenceNumber !== undefined ? 1 : 0) + (header.isBeginningSegment !== undefined ? 2 : 0);
+        let expectedBtpHeaderLength = 2 + (this.lastIncomingSequenceNumber !== undefined ? 1 : 0) + (header.isBeginningSegment !== undefined ? 2 : 0);
 
-        if (data.length < this.attMtu - expectedBtpHeaderLength) {
+        if (data.length <= this.attMtu - expectedBtpHeaderLength) {
 
-            header.isBeginningSegment = true;
             header.isEndingSegment = true;
-            btpPayload = BtpCodec.encodeBtpPacket({
+            btpPayload = {
                 header,
                 payload: {
                     sequenceNumber: this.getNextSequenceNumber(),
-                    ackNumber: this.lastIncomingSequenceNumber,
-                    messageLength: header.isBeginningSegment ? data.length : undefined,
+                    messageLength: data.length,
                     segmentPayload: data
                 }
-            });
+            };
         } else {
 
-            console.log("message segmentation: ${data.length} > ${this.attMtu}");
+            console.log("Message segmentation: ${data.length} > ${this.attMtu}");
             let startIndex = 0;
 
             //splitting the segment payload
-            while (startIndex < data.length) {
+            while (true) {
+                let packetHeader = {
+                    isHandshakeRequest: false,
+                    hasManagementOpcode: false,
+                    hasAckNumber: this.lastIncomingSequenceNumber !== undefined,
+                    isBeginningSegment: true,
+                    isEndingSegment: false,
+                };
                 const segment = data.slice(startIndex, Math.min(startIndex + this.attMtu - expectedBtpHeaderLength, data.length));
-                this.segmentPayloads.push(segment);
+                segmentPayloads.push(segment);
                 startIndex += this.attMtu - expectedBtpHeaderLength;
-            }
 
-            this.segmentPayloads.forEach((_value, index, array) => {
-                if (index === 0) {
-                    header.isBeginningSegment = true;
+                expectedBtpHeaderLength = 2 + (this.lastIncomingSequenceNumber !== undefined ? 1 : 0);
 
-                } else if (index === array.length - 1) {
-                    header.isBeginningSegment = false;
-                    header.isEndingSegment = true;
-                } else {
-                    header.isBeginningSegment = false;
-                    header.isEndingSegment = false;
+                if (startIndex !== 0 && startIndex < data.length) { // middle packets
+                    packetHeader = {
+                        isHandshakeRequest: false,
+                        hasManagementOpcode: false,
+                        hasAckNumber: this.lastIncomingSequenceNumber !== undefined,
+                        isBeginningSegment: false,
+                        isEndingSegment: false,
+                    };
+                } else if (startIndex > data.length) { // last packet
+                    packetHeader = {
+                        isHandshakeRequest: false,
+                        hasManagementOpcode: false,
+                        hasAckNumber: this.lastIncomingSequenceNumber !== undefined,
+                        isBeginningSegment: false,
+                        isEndingSegment: true,
+                    };
+
+                    btpPayload = {
+                        header: packetHeader,
+                        payload: {
+                            sequenceNumber: this.getNextSequenceNumber(),
+                            messageLength: undefined,
+                            segmentPayload: segment
+                        }
+                    };
+
+                    this.btpPackets.push(btpPayload);
+
+                    if (this.btpPackets.length === 1) {
+                        this.sendQueuesBtpFrames(this.btpPackets);
+                    }
+
+                    break;
                 }
 
-                btpPayload = BtpCodec.encodeBtpPacket({
-                    header,
+                btpPayload = {
+                    header: packetHeader,
                     payload: {
                         sequenceNumber: this.getNextSequenceNumber(),
-                        ackNumber: this.lastIncomingSequenceNumber,
-                        messageLength: header.isBeginningSegment ? data.length : undefined,
-                        segmentPayload: data
+                        messageLength: packetHeader.isBeginningSegment ? data.length : undefined,
+                        segmentPayload: segment
                     }
-                });
+                };
+
                 this.btpPackets.push(btpPayload);
-            });
+
+                if (this.btpPackets.length === 1) {
+                    this.sendQueuesBtpFrames(this.btpPackets);
+                }
+            }
         }
 
         // TODO Implement client window handling
 
-        this.btpPackets.forEach(async (btpPayload) => {
-            logger.debug(`Sending BTP packet: ${btpPayload.toHex()}`);
-            await this.writeBleCallback(btpPayload);
-        });
+        // for (const btpPayload1 of this.btpPackets) {
+        //     logger.debug(`Sending BTP packet: ${btpPayload1.toHex()}`);
+        //     await this.writeBleCallback(btpPayload1);
+        // }
+    }
+
+    async sendQueuesBtpFrames(packets: Array<BtpPacket>) {
+
     }
 
     /**
