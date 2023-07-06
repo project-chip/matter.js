@@ -97,7 +97,7 @@ describe("BtpSessionHandler", () => {
                 disconnectBleResolver();
             }
 
-            btpSessionHandler?.handleIncomingBleData(matterMessage);
+            void btpSessionHandler?.handleIncomingBleData(matterMessage);
 
             await disconnectBlePromise;
         });
@@ -132,7 +132,7 @@ describe("BtpSessionHandler", () => {
                 writeBleResolver(dataToWrite);
             }
 
-            btpSessionHandler?.handleIncomingBleData(matterMessage);
+            void btpSessionHandler?.handleIncomingBleData(matterMessage);
 
             const matterHandlerResult = await handleMatterMessagePromise;
             assert.deepEqual(matterHandlerResult, segmentPayload);

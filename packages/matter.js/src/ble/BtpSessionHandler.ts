@@ -13,6 +13,7 @@ const logger = Logger.get("BtpSessionHandler");
 const SUPPORTED_BTP_VERSIONS = [4];
 const DEFAULT_FRAGMENT_SIZE = 20; // 23-byte minimum ATT_MTU - 3 bytes for ATT operation header
 const MAXIMUM_FRAGMENT_SIZE = 244; // Maximum size of BTP segment
+const BTP_ACK_TIMEOUT = 15000; // timer in ms before ack should be sent for a segment
 
 class BtpSessionHandler {
     private readonly btpVersion: number;
@@ -26,6 +27,7 @@ class BtpSessionHandler {
     private sendInProgress = false;
     private lastIncomingSequenceNumber = 255; // a new handshake is always received with sequence number 0, 
     private lastAckedSequenceNumber = 0;
+    private ackPromise: Promise<boolean> | undefined;
 
     /**
      * Creates a new BTP session handler
@@ -99,7 +101,7 @@ class BtpSessionHandler {
      *
      * @param data ByteArray containing the data
      */
-    handleIncomingBleData(data: ByteArray) {
+    async handleIncomingBleData(data: ByteArray) {
         try {
             const btpPacket = BtpCodec.decodeBtpPacket(data);
             logger.debug(`Received BTP packet: ${Logger.toJSON(btpPacket)}`);
@@ -128,16 +130,25 @@ class BtpSessionHandler {
             }
             this.currentSegmentedPayload = ByteArray.concat(this.currentSegmentedPayload, segmentPayload);
 
-            //adding sequence number received because it needs to be acked
-            // this.serverWindow.push(sequenceNumber);
-
             if (((this.lastIncomingSequenceNumber + 1) % 256) !== sequenceNumber) {
                 this.disconnectBleCallback();
                 throw new Error("Expected and actual BTP packets sequence number does not match");
             }
 
             if (hasAckNumber && ackNumber !== undefined) {
-                this.lastAckedSequenceNumber = ackNumber;
+                if (ackNumber <= sequenceNumber) {
+                    this.lastAckedSequenceNumber = ackNumber;
+                    const ackReceived = await this.ackPromise;
+
+                    if (!ackReceived) {
+                        this.disconnectBleCallback();
+                        throw new Error("Ack timer expired");
+                    }
+
+                } else {
+                    this.disconnectBleCallback();
+                    throw new Error("Invalid Ack Number: greater than the Sequence Number");
+                }
             }
 
             this.lastIncomingSequenceNumber = sequenceNumber;
@@ -282,7 +293,21 @@ class BtpSessionHandler {
             const packet = BtpCodec.encodeBtpPacket(btpPacket);
             logger.debug(`Sending Matter Message response: ${packet.toHex()}`);
 
-            await this.writeBleCallback(packet);
+            this.ackPromise = new Promise((resolve) => {
+                const timeout = setTimeout(() => {
+                    resolve(false); // Resolves with false when the timeout expires
+                }, BTP_ACK_TIMEOUT); // 15 seconds timeout
+
+                this.writeBleCallback(packet)
+                    .then(() => {
+                        clearTimeout(timeout); // Clear the timeout if the acknowledgment is received
+                        resolve(true); // Resolves with true when the acknowledgment is received
+                    })
+                    .catch(() => {
+                        clearTimeout(timeout); // Clear the timeout if an error occurs during the writeBleCallback
+                        resolve(false); // Resolves with false when an error occurs
+                    });
+            });
 
             packets.shift();
             if (this.sequenceNumber - this.lastAckedSequenceNumber > this.clientWindowSize) {
