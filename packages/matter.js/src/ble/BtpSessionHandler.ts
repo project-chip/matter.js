@@ -7,20 +7,21 @@
 import { ByteArray } from "../util/ByteArray.js";
 import { BtpCodec, BtpPacket } from "../codec/BtpCodec.js";
 import { Logger } from "../log/Logger.js";
+import { Time, Timer } from "../time/Time.js";
 
 const logger = Logger.get("BtpSessionHandler");
 
 const SUPPORTED_BTP_VERSIONS = [4];
 const DEFAULT_FRAGMENT_SIZE = 20; // 23-byte minimum ATT_MTU - 3 bytes for ATT operation header
 const MAXIMUM_FRAGMENT_SIZE = 244; // Maximum size of BTP segment
-// const BTP_ACK_TIMEOUT = 15000; // timer in ms before ack should be sent for a segment
+const BTP_ACK_TIMEOUT = 15000; // timer in ms before ack should be sent for a segment
+const BTP_SEND_ACK_TIMEOUT = 5000; // timer starts when we receive a packet and stops when we sends its ack
 
 class BtpSessionHandler {
     private readonly btpVersion: number;
     private readonly attMtu: number;
     private readonly clientWindowSize: number;
-
-
+    
     private sequenceNumber = 0; // Sequence number is set to 0 already for the handshake, next sequence number will be 1
     private currentSegmentedMsgLength: number | undefined;
     private currentSegmentedPayload: ByteArray = new ByteArray();
@@ -29,7 +30,8 @@ class BtpSessionHandler {
     private clientSequenceNumber = 255;
     private lastClientAckedSequenceNumber = 0;
     private serverAckedSequenceNumber = 0;
-    // private ackPromise: Promise<boolean> | undefined;
+    private btpAckTimer: Timer;
+    private btpSendAckTimer: Timer;
 
     /**
      * Creates a new BTP session handler
@@ -45,7 +47,7 @@ class BtpSessionHandler {
         handshakeRequestPayload: ByteArray,
         private readonly writeBleCallback: (data: ByteArray) => Promise<void>,
         private readonly disconnectBleCallback: () => void,
-        private readonly handleMatterMessagePayload: (data: ByteArray) => void
+        private readonly handleMatterMessagePayload: (data: ByteArray) => void,
     ) {
         // Decode handshake request
         const handshakeRequest = BtpCodec.decodeBtpHandshakeRequest(handshakeRequestPayload);
@@ -60,6 +62,7 @@ class BtpSessionHandler {
             }
         }
         if (maximumSupportedVersion === 0) {
+            disconnectBleCallback(); // closes the connection if they do not share the same btp version
             throw new Error(`No supported BTP version found in ${versions}`);
         }
         this.btpVersion = maximumSupportedVersion;
@@ -87,6 +90,8 @@ class BtpSessionHandler {
         void this.writeBleCallback(handshakeResponse);
 
         // TODO initialize BTP Session timers, keepalives and such
+        this.btpAckTimer = Time.getTimer(BTP_ACK_TIMEOUT, () => this.startBtpAckTimer(this.sequenceNumber));
+        this.btpSendAckTimer = Time.getTimer(BTP_SEND_ACK_TIMEOUT, () => this.startBtpSendAckTimer());
     }
 
     getNextSequenceNumber() {
@@ -282,7 +287,9 @@ class BtpSessionHandler {
             const packet = BtpCodec.encodeBtpPacket(btpPacket);
             logger.debug(`Sending Matter Message response: ${packet.toHex()}`);
 
-            await this.writeBleCallback(packet)
+            await this.writeBleCallback(packet);
+
+            this.btpAckTimer = Time.getTimer(BTP_ACK_TIMEOUT, () => this.startBtpAckTimer(btpPacket.payload.sequenceNumber)).start(); // starts the ack timer
 
             this.btpPackets.shift();
             if (this.sequenceNumber - this.serverAckedSequenceNumber > this.clientWindowSize) {
@@ -290,6 +297,27 @@ class BtpSessionHandler {
             }
         }
         this.sendInProgress = false;
+    }
+
+    startBtpAckTimer(sentSequenceNumber: number) {
+
+        if(sentSequenceNumber <= this.serverAckedSequenceNumber) {
+            this.btpAckTimer.stop();
+        }
+
+        if (this.btpAckTimer.isRunning) {
+            return;
+        } else {
+            this.disconnectBleCallback();
+            throw new Error("BTP Ack Timeout");
+        }
+    }
+
+    startBtpSendAckTimer() {
+        // i think this should be in BlenoBleServer
+        if(this.btpSendAckTimer.isRunning) {
+            return;
+        }
     }
 
     /**
