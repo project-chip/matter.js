@@ -18,7 +18,10 @@ const DECODED = {
         sourceNodeId: new NodeId(BigInt("5936706156730294398")),
         messageId: 401755914,
         destGroupId: undefined,
-        destNodeId: undefined
+        destNodeId: undefined,
+        hasPrivacyEnhancements: false,
+        isControlMessage: false,
+        hasMessageExtensions: false,
     },
     payloadHeader: {
         protocolId: 0,
@@ -41,6 +44,9 @@ const DECODED_2 = {
         messageId: 2031257377,
         destGroupId: undefined,
         destNodeId: new NodeId(BigInt("5936706156730294398")),
+        hasPrivacyEnhancements: false,
+        isControlMessage: false,
+        hasMessageExtensions: false,
     },
     payloadHeader: {
         protocolId: 0,
