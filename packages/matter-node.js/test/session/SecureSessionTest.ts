@@ -28,6 +28,9 @@ const MESSAGE: Message = {
         messageId: 12519906,
         sessionId: 0x351d,
         sessionType: SessionType.Unicast,
+        hasPrivacyEnhancements: false,
+        isControlMessage: false,
+        hasMessageExtensions: false,
     },
     payloadHeader: {
         isInitiatorMessage: false,
