@@ -13,6 +13,9 @@ import { DiagnosticDictionary } from "../log/Logger.js";
 export interface PacketHeader {
     sessionId: number,
     sessionType: SessionType,
+    hasPrivacyEnhancements: boolean,
+    isControlMessage: boolean,
+    hasMessageExtensions: boolean,
     messageId: number,
     sourceNodeId?: NodeId,
     destNodeId?: NodeId,
@@ -62,6 +65,12 @@ const enum PayloadHeaderFlag {
     RequiresAck = 0b00000100,
     HasSecureExtension = 0b00001000,
     HasVendorId = 0b00010000,
+}
+
+const enum SecurityFlag {
+    HasPrivacyEnhancements = 0b10000000,
+    IsControlMessage = 0b01000000,
+    HasMessageExtension = 0b00100000,
 }
 
 export class MessageCodec {
@@ -122,8 +131,14 @@ export class MessageCodec {
 
         const sessionType = securityFlags & 0b00000011;
         if (sessionType !== SessionType.Group && sessionType !== SessionType.Unicast) throw new Error(`Unsupported session type ${sessionType}`);
+        const hasPrivacyEnhancements = (securityFlags & SecurityFlag.HasPrivacyEnhancements ) !== 0;
+        if (hasPrivacyEnhancements) throw new Error(`Privacy enhancements not supported`);
+        const isControlMessage = (securityFlags & SecurityFlag.IsControlMessage) !== 0;
+        if (isControlMessage) throw new Error(`Control Messages not supported`);
+        const hasMessageExtensions = (securityFlags & SecurityFlag.HasMessageExtension) !== 0;
+        if (hasMessageExtensions) throw new Error(`Message extensions not supported`);
 
-        return { sessionId, sourceNodeId, messageId, destGroupId, destNodeId, sessionType };
+        return { sessionId, sourceNodeId, messageId, destGroupId, destNodeId, sessionType, hasPrivacyEnhancements, isControlMessage, hasMessageExtensions };
     }
 
     private static decodePayloadHeader(reader: DataReader<Endian.Little>): PayloadHeader {
