@@ -14,7 +14,7 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 /** See {@link MatterCoreSpecificationV1_0} § 5.1.3.1 Table 35 */
 export enum CommissionningFlowType {
-    /** When uncommissioned, the device always enters commissioning mode upon power-up. */
+    /** When not commissioned, the device always enters commissioning mode upon power-up. */
     Standard = 0,
 
     /** User action required to enter commissioning mode. */
