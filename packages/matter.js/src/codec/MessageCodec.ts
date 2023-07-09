@@ -131,7 +131,7 @@ export class MessageCodec {
 
         const sessionType = securityFlags & 0b00000011;
         if (sessionType !== SessionType.Group && sessionType !== SessionType.Unicast) throw new Error(`Unsupported session type ${sessionType}`);
-        const hasPrivacyEnhancements = (securityFlags & SecurityFlag.HasPrivacyEnhancements ) !== 0;
+        const hasPrivacyEnhancements = (securityFlags & SecurityFlag.HasPrivacyEnhancements) !== 0;
         if (hasPrivacyEnhancements) throw new Error(`Privacy enhancements not supported`);
         const isControlMessage = (securityFlags & SecurityFlag.IsControlMessage) !== 0;
         if (isControlMessage) throw new Error(`Control Messages not supported`);
