@@ -53,6 +53,7 @@ export class MatterDevice {
         private readonly productId: number,
         private readonly discriminator: number,
         private readonly storageManager: StorageManager,
+        private readonly udpPort: number,
     ) {
         this.fabricManager = new FabricManager(this.storageManager);
 
@@ -128,13 +129,13 @@ export class MatterDevice {
                 fabricsToAnnounce.push(fabric);
             }
             for (const broadcaster of this.broadcasters) {
-                broadcaster.setFabrics(fabricsToAnnounce);
+                broadcaster.setFabrics(fabricsToAnnounce, this.udpPort);
                 broadcaster.announce();
             }
         } else {
             // No fabric paired yeet, so announce as "ready for commissioning"
             for (const broadcaster of this.broadcasters) {
-                broadcaster.setCommissionMode(1, this.deviceName, this.deviceType, this.vendorId, this.productId, this.discriminator);
+                broadcaster.setCommissionMode(1, this.deviceName, this.deviceType, this.vendorId, this.productId, this.discriminator, this.udpPort);
                 broadcaster.announce();
             }
         }
@@ -155,7 +156,7 @@ export class MatterDevice {
     addFabric(fabric: Fabric) {
         this.fabricManager.addFabric(fabric);
         this.broadcasters.forEach(broadcaster => {
-            broadcaster.setFabrics([fabric]);
+            broadcaster.setFabrics([fabric], this.udpPort);
             broadcaster.announce();
         });
         return fabric.fabricIndex;
@@ -201,7 +202,7 @@ export class MatterDevice {
     openCommissioningModeWindow(mode: number, discriminator: number, timeout: number) {
         this.commissioningWindowOpened = true;
         this.broadcasters.forEach(broadcaster => {
-            broadcaster.setCommissionMode(mode, this.deviceName, this.deviceType, this.vendorId, this.productId, discriminator);
+            broadcaster.setCommissionMode(mode, this.deviceName, this.deviceType, this.vendorId, this.productId, discriminator, this.udpPort);
         });
         this.startAnnouncement();
 

@@ -6,6 +6,7 @@
 
 export const SERVICE_DISCOVERY_QNAME = "_services._dns-sd._udp.local";
 export const MATTER_COMMISSION_SERVICE_QNAME = "_matterc._udp.local";
+export const MATTER_COMMISSIONER_SERVICE_QNAME = "_matterd._udp.local";
 export const MATTER_SERVICE_QNAME = "_matter._tcp.local";
 
 export const getFabricQname = (operationalIdString: string) => `_I${operationalIdString}._sub.${MATTER_SERVICE_QNAME}`;
