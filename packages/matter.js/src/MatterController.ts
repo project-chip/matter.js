@@ -35,13 +35,18 @@ import { CertificateChainType, OperationalCredentialsCluster, TlvCertSigningRequ
 import { ByteArray } from "./util/ByteArray.js";
 import { StorageManager } from "./storage/StorageManager.js";
 
+export type CommissioningData = {
+    regulatoryLocation: RegulatoryLocationType;
+    regulatoryCountryCode: string;
+}
+
 const FABRIC_INDEX = new FabricIndex(1);
 const FABRIC_ID = BigInt(1);
 const ADMIN_VENDOR_ID = new VendorId(752);
 const logger = Logger.get("MatterController");
 
 export class MatterController {
-    public static async create(scanner: Scanner, netInterfaceIpv4: NetInterface, netInterfaceIpv6: NetInterface, storageManager: StorageManager) {
+    public static async create(scanner: Scanner, netInterfaceIpv4: NetInterface, netInterfaceIpv6: NetInterface, storageManager: StorageManager, commissioningOptions?: CommissioningData): Promise<MatterController> {
         const CONTROLLER_NODE_ID = new NodeId(Crypto.getRandomBigUInt64());
         const certificateManager = new RootCertificateManager(storageManager);
 
@@ -57,9 +62,9 @@ export class MatterController {
         const controllerStorage = storageManager.createContext("MatterController");
         if (controllerStorage.has("fabric")) {
             const storedFabric = Fabric.createFromStorageObject(controllerStorage.get<FabricJsonObject>("fabric"));
-            return new MatterController(scanner, netInterfaceIpv4, netInterfaceIpv6, certificateManager, storedFabric, storageManager);
+            return new MatterController(scanner, netInterfaceIpv4, netInterfaceIpv6, certificateManager, storedFabric, storageManager, commissioningOptions);
         } else {
-            return new MatterController(scanner, netInterfaceIpv4, netInterfaceIpv6, certificateManager, await fabricBuilder.build(), storageManager);
+            return new MatterController(scanner, netInterfaceIpv4, netInterfaceIpv6, certificateManager, await fabricBuilder.build(), storageManager, commissioningOptions);
         }
     }
 
@@ -69,6 +74,7 @@ export class MatterController {
     private readonly paseClient = new PaseClient();
     private readonly caseClient = new CaseClient();
     private readonly controllerStorage: StorageContext;
+    private readonly commissioningOptions: CommissioningData;
 
     constructor(
         private readonly scanner: Scanner,
@@ -76,7 +82,8 @@ export class MatterController {
         private readonly netInterfaceIpv6: NetInterface,
         private readonly certificateManager: RootCertificateManager,
         private readonly fabric: Fabric,
-        private readonly storageManager: StorageManager
+        private readonly storageManager: StorageManager,
+        commissioningOptions?: CommissioningData
     ) {
         this.controllerStorage = this.storageManager.createContext("MatterController");
 
@@ -86,6 +93,11 @@ export class MatterController {
         this.exchangeManager = new ExchangeManager<MatterController>(this.sessionManager, this.channelManager);
         this.exchangeManager.addNetInterface(netInterfaceIpv4);
         this.exchangeManager.addNetInterface(netInterfaceIpv6);
+
+        this.commissioningOptions = commissioningOptions ?? {
+            regulatoryLocation: RegulatoryLocationType.Outdoor, // Set to the most restrictive if relevant
+            regulatoryCountryCode: "XX"
+        };
     }
 
     async commission(commissionAddress: string, commissionPort: number, _discriminator: number, setupPin: number) {
@@ -107,9 +119,23 @@ export class MatterController {
 
         // Do the commissioning
         let generalCommissioningClusterClient = ClusterClient(GeneralCommissioningCluster, 0, interactionClient);
-        this.ensureSuccess(await generalCommissioningClusterClient.armFailSafe({ breadcrumb: BigInt(1), expiryLengthSeconds: 60 }));
-        this.ensureSuccess(await generalCommissioningClusterClient.setRegulatoryConfig({ breadcrumb: BigInt(2), newRegulatoryConfig: RegulatoryLocationType.IndoorOutdoor, countryCode: "US" }));
+        this.ensureSuccess("armFailSafe", await generalCommissioningClusterClient.armFailSafe({ breadcrumb: BigInt(1), expiryLengthSeconds: 60 }));
 
+        let locationCapability = await generalCommissioningClusterClient.getLocationCapabilityAttribute();
+        if (locationCapability === RegulatoryLocationType.IndoorOutdoor) {
+            locationCapability = this.commissioningOptions.regulatoryLocation;
+        } else {
+            logger.debug(`Device does not support a configurable regulatory location type. Location is set to "${locationCapability === RegulatoryLocationType.Indoor ? "Indoor" : "Outdoor"}"`);
+        }
+        let countryCode = this.commissioningOptions.regulatoryCountryCode;
+        const regulatoryResult = await generalCommissioningClusterClient.setRegulatoryConfig({ breadcrumb: BigInt(2), newRegulatoryConfig: locationCapability, countryCode });
+        if (regulatoryResult.errorCode === CommissioningError.ValueOutsideRange && countryCode !== "XX") {
+            logger.debug(`Device does not support a configurable country code. Use "XX" instead of "${countryCode}"`);
+            countryCode = "XX";
+            this.ensureSuccess("setRegulatoryConfig", await generalCommissioningClusterClient.setRegulatoryConfig({ breadcrumb: BigInt(2), newRegulatoryConfig: locationCapability, countryCode }));
+        } else {
+            this.ensureSuccess("setRegulatoryConfig", regulatoryResult);
+        }
 
         const operationalCredentialsClusterClient = ClusterClient(OperationalCredentialsCluster, 0, interactionClient);
         const { certificate: deviceAttestation } = await operationalCredentialsClusterClient.requestCertChain({ type: CertificateChainType.DeviceAttestation });
@@ -123,7 +149,7 @@ export class MatterController {
             // TODO: validate the data really
             throw new Error("Invalid response from device");
         }
-        // TOTO: validate csrSignature using device public key
+        // TODO: validate csrSignature using device public key
         const { certSigningRequest } = TlvCertSigningRequest.decode(csrElements);
         const operationalPublicKey = CertificateManager.getPublicKeyFromCsr(certSigningRequest);
 
@@ -142,9 +168,8 @@ export class MatterController {
         interactionClient = await this.connect(peerNodeId, 5);
 
         // Complete the commission
-        // TODO: Why new client and not reuse above??
         generalCommissioningClusterClient = ClusterClient(GeneralCommissioningCluster, 0, interactionClient);
-        this.ensureSuccess(await generalCommissioningClusterClient.commissioningComplete());
+        this.ensureSuccess("commissioningComplete", await generalCommissioningClusterClient.commissioningComplete());
 
         this.controllerStorage.set("fabric", this.fabric.toStorageObject());
         this.controllerStorage.set("fabricCommissioned", true);
@@ -193,9 +218,9 @@ export class MatterController {
         }));
     }
 
-    private ensureSuccess({ errorCode, debugText }: CommissioningSuccessFailureResponse) {
+    private ensureSuccess(context: string, { errorCode, debugText }: CommissioningSuccessFailureResponse) {
         if (errorCode === CommissioningError.Ok) return;
-        throw new Error(`Commission error: ${errorCode}, ${debugText}`);
+        throw new Error(`Commission error for "${context}": ${errorCode}, ${debugText}`);
     }
 
     getNextAvailableSessionId() {

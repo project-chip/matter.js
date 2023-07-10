@@ -7,7 +7,7 @@ import { MatterNode } from "./MatterNode.js";
 import { UdpInterface } from "./net/UdpInterface.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { StorageManager } from "./storage/StorageManager.js";
-import { MatterController } from "./MatterController.js";
+import { CommissioningData, MatterController } from "./MatterController.js";
 import { InteractionClient, ClusterClient } from "./protocol/interaction/InteractionClient.js";
 import { NodeId } from "./datatype/NodeId.js";
 import { structureReadDataToClusterObject } from "./protocol/interaction/AttributeDataDecoder.js";
@@ -47,8 +47,10 @@ export interface CommissioningControllerOptions {
 
     delayedPairing?: boolean;
 
-    passcode: number,
-    discriminator: number,
+    passcode: number, // TODO: Move into commissioningOptions
+    discriminator: number, // TODO: Move into commissioningOptions
+
+    commissioningOptions?: CommissioningData
 }
 
 export class CommissioningController extends MatterNode {
@@ -60,6 +62,7 @@ export class CommissioningController extends MatterNode {
 
     private readonly passcode: number;
     private readonly discriminator: number;
+    private readonly commissioningOptions?: CommissioningData;
 
     readonly delayedPairing: boolean;
 
@@ -88,6 +91,7 @@ export class CommissioningController extends MatterNode {
 
         this.passcode = options.passcode;
         this.discriminator = options.discriminator;
+        this.commissioningOptions = options.commissioningOptions;
     }
 
     /**
@@ -106,7 +110,8 @@ export class CommissioningController extends MatterNode {
             this.mdnsScanner,
             await UdpInterface.create(this.port, "udp4", this.listeningAddressIpv4),
             await UdpInterface.create(this.port, "udp6", this.listeningAddressIpv6),
-            this.storageManager
+            this.storageManager,
+            this.commissioningOptions
         );
 
         if (this.controllerInstance.isCommissioned()) {
