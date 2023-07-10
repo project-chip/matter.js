@@ -27,6 +27,7 @@ const SERVER_IPv6 = "fe80::e777:4f5e:c61e:7314";
 const SERVER_MAC = "00:B0:D0:63:C2:26";
 const CLIENT_IP = "192.168.200.2";
 const CLIENT_MAC = "CA:FE:00:00:BE:EF";
+const PORT = 5540;
 
 const serverNetwork = new NetworkFake(SERVER_MAC, [SERVER_IPv4, SERVER_IPv6]);
 const clientNetwork = new NetworkFake(CLIENT_MAC, [CLIENT_IP]);
@@ -45,7 +46,7 @@ describe("MDNS", () => {
         channel = await UdpChannelFake.create(serverNetwork, { listeningPort: 5353, listeningAddress: "224.0.0.251", type: "udp4" });
 
         Network.get = () => serverNetwork;
-        broadcaster = await MdnsBroadcaster.create(5540, FAKE_INTERFACE_NAME);
+        broadcaster = await MdnsBroadcaster.create(FAKE_INTERFACE_NAME);
 
         Network.get = () => { throw new Error("Network should not be requested post creation") };
     });
@@ -61,7 +62,7 @@ describe("MDNS", () => {
             const { promise, resolver } = await getPromiseResolver<ByteArray>();
             channel.onData((_netInterface, _peerAddress, _peerPort, data) => resolver(data));
 
-            broadcaster.setFabrics([{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
+            broadcaster.setFabrics([{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric], PORT);
             broadcaster.announce();
 
             const result = DnsCodec.decode(await promise);
@@ -89,7 +90,7 @@ describe("MDNS", () => {
 
     describe("integration", () => {
         it("the client returns server record if it has been announced", async () => {
-            broadcaster.setFabrics([{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
+            broadcaster.setFabrics([{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric], PORT);
             broadcaster.announce();
 
             const result = await scanner.findDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID);
@@ -98,7 +99,7 @@ describe("MDNS", () => {
         });
 
         it("the client asks for the server record if it has not been announced", async () => {
-            broadcaster.setFabrics([{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
+            broadcaster.setFabrics([{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric], PORT);
 
             const result = await scanner.findDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID);
 

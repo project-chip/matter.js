@@ -114,7 +114,7 @@ describe("Integration Test", () => {
 
         // override the mdns scanner to avoid the client to try to resolve the server's address
         commissioningServer.setMdnsScanner(await MdnsScanner.create(SERVER_IP));
-        commissioningServer.setMdnsBroadcaster(await MdnsBroadcaster.create(matterPort, SERVER_IP));
+        commissioningServer.setMdnsBroadcaster(await MdnsBroadcaster.create(SERVER_IP));
         await commissioningServer.advertise();
 
         assert.ok(onOffLightDeviceServer.getClusterServer(OnOffCluster));

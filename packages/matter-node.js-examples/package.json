@@ -30,7 +30,8 @@
         "matter-device": "ts-node --project tsconfig.dist.json src/examples/DeviceNode.ts",
         "matter-bridge": "ts-node --project tsconfig.dist.json src/examples/BridgedDevicesNode.ts",
         "matter-composeddevice": "ts-node --project tsconfig.dist.json src/examples/ComposedDeviceNode.ts",
-        "matter-controller": "ts-node --project tsconfig.dist.json src/examples/ControllerNode.ts"
+        "matter-controller": "ts-node --project tsconfig.dist.json src/examples/ControllerNode.ts",
+        "test": "true"
     },
     "bin": {
         "matter-device": "./dist/examples/DeviceNode.js",
