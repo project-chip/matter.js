@@ -14,6 +14,7 @@ const logger = Logger.get("BtpSessionHandler");
 const SUPPORTED_BTP_VERSIONS = [4];
 const DEFAULT_FRAGMENT_SIZE = 20; // 23-byte minimum ATT_MTU - 3 bytes for ATT operation header
 const MAXIMUM_FRAGMENT_SIZE = 244; // Maximum size of BTP segment
+const MAXIMUM_WINDOW_SIZE = 255; // Server maximum window size
 const BTP_ACK_TIMEOUT_MS = 15000; // timer in ms before ack should be sent for a segment
 const BTP_SEND_ACK_TIMEOUT_MS = 5000; // BTP_ACK_TIMEOUT_MS / 3: timer starts when we receive a packet and stops when we sends its ack
 
@@ -30,8 +31,8 @@ class BtpSessionHandler {
     private prevClientSequenceNumber = 255; // Client's Sequence Number received
     private prevClientAckedSequenceNumber = 0; // Client's Acked Sequence Number
     private serverAckedSequenceNumber = 0; // Server's sequence number ack sent by client
-    private expectedClientAckTimer: Timer;
-    private expectedServerAckTimer: Timer;
+    private ackReceiveTimer: Timer;
+    private sendAckTimer: Timer;
 
     /**
      * Creates a new BTP session handler
@@ -49,8 +50,12 @@ class BtpSessionHandler {
         private readonly disconnectBleCallback: () => void,
         private readonly handleMatterMessagePayload: (data: ByteArray) => void,
     ) {
+        this.ackReceiveTimer = Time.getTimer(BTP_ACK_TIMEOUT_MS, () => this.btpAckTimeoutTriggered());
+        this.sendAckTimer = Time.getTimer(BTP_SEND_ACK_TIMEOUT_MS, () => this.btpSendAckTimeoutTriggered());
+
         // Decode handshake request
         const handshakeRequest = BtpCodec.decodeBtpHandshakeRequest(handshakeRequestPayload);
+
 
         const { versions, attMtu, clientWindowSize } = handshakeRequest;
 
@@ -76,7 +81,7 @@ class BtpSessionHandler {
             this.attMtu = DEFAULT_FRAGMENT_SIZE;
         }
 
-        this.clientWindowSize = clientWindowSize;
+        this.clientWindowSize = Math.min(MAXIMUM_WINDOW_SIZE, clientWindowSize);
 
         // Generate and send out handshake response
         const handshakeResponse = BtpCodec.encodeBtpHandshakeResponse({
@@ -88,8 +93,7 @@ class BtpSessionHandler {
         logger.debug(`Sending BTP handshake response: ${handshakeResponse.toHex()}`);
         void this.writeBleCallback(handshakeResponse);
 
-        this.expectedClientAckTimer = Time.getTimer(BTP_ACK_TIMEOUT_MS, () => this.btpAckTimeoutTriggered());
-        this.expectedServerAckTimer = Time.getTimer(BTP_SEND_ACK_TIMEOUT_MS, () => this.btpSendAckTimeoutTriggered());
+        this.ackReceiveTimer.start();
     }
 
     /**
@@ -131,25 +135,27 @@ class BtpSessionHandler {
                 this.disconnectAndThrow("Expected and actual BTP packets sequence number does not match");
             }
 
-            if (!this.expectedServerAckTimer.isRunning) {
-                this.expectedServerAckTimer.start();
+            this.prevClientSequenceNumber = sequenceNumber;
+
+            if (!this.sendAckTimer.isRunning) {
+                this.sendAckTimer.start();
             }
 
             if (hasAckNumber && ackNumber !== undefined) {
-                if (ackNumber <= sequenceNumber) {
-                    if (ackNumber > this.serverAckedSequenceNumber) {
-                        this.expectedClientAckTimer.stop();
-                        this.serverAckedSequenceNumber = ackNumber;
+                if (ackNumber > this.serverAckedSequenceNumber) {
+                    if (ackNumber === this.sequenceNumber) { // stops timer when ackNumber = current sent sequenceNumber
+                        this.ackReceiveTimer.stop();
+                    } else if (ackNumber > this.sequenceNumber) { //restart timer when ackNumber > current sent sequenceNumber
+                        this.ackReceiveTimer.stop();
+                        this.ackReceiveTimer.start();
+                    } else {
+                        this.disconnectAndThrow("Invalid Ack Number: greater than sent sequence number");
                     }
-                    else {
-                        this.disconnectAndThrow("Matter message ack already received");
-                    }
+                    this.serverAckedSequenceNumber = ackNumber;
                 } else {
-                    this.disconnectAndThrow("Invalid Ack Number: greater than the Sequence Number");
+                    this.disconnectAndThrow("Matter message ack already received");
                 }
             }
-
-            this.prevClientSequenceNumber = sequenceNumber;
 
             if (isEndingSegment) {
                 if (this.currentSegmentedMsgLength === undefined) {
@@ -272,15 +278,15 @@ class BtpSessionHandler {
                 btpPacket.header.hasAckNumber = true;
                 btpPacket.payload.ackNumber = this.prevClientSequenceNumber;
                 this.prevClientAckedSequenceNumber = this.prevClientSequenceNumber;
-                this.expectedServerAckTimer.stop();
+                this.sendAckTimer.stop();
             }
             const packet = BtpCodec.encodeBtpPacket(btpPacket);
             logger.debug(`Sending Matter Message response: ${packet.toHex()}`);
 
             await this.writeBleCallback(packet);
 
-            if (!this.expectedClientAckTimer.isRunning) {
-                this.expectedClientAckTimer.start(); // starts the timer
+            if (!this.ackReceiveTimer.isRunning) {
+                this.ackReceiveTimer.start(); // starts the timer
             }
 
             this.btpPackets.shift();
@@ -295,8 +301,8 @@ class BtpSessionHandler {
      * Close the BTP session. This method is called when the BLE transport is disconnected and so the BTP session gets closed.
      */
     public close() {
-        this.expectedClientAckTimer.stop();
-        this.expectedServerAckTimer.stop();
+        this.ackReceiveTimer.stop();
+        this.sendAckTimer.stop();
         this.disconnectBleCallback();
     }
 
@@ -323,8 +329,8 @@ class BtpSessionHandler {
             };
             const packet = BtpCodec.encodeBtpPacket(btpPacket);
             await this.writeBleCallback(packet);
-            if (!this.expectedClientAckTimer.isRunning) {
-                this.expectedClientAckTimer.start(); // starts the timer
+            if (!this.ackReceiveTimer.isRunning) {
+                this.ackReceiveTimer.start(); // starts the timer
             }
         }
     }

@@ -204,7 +204,9 @@ export class BlenoBleServer implements Channel<ByteArray> {
         }
 
         if (data[0] === 0x65 && data[1] === 0x6c && data.length === 9) { // Check if the first two bytes and length match the Matter handshake
+
             this.btpHandshakeTimeout.start(); // starts timer
+
             logger.info(`Received Matter handshake request: ${data.toString('hex')}, store until subscribe request comes in.`);
             this.latestHandshakePayload = data;
             // TODO Handle edge case where handshake comes with an already open BTP session (should never happen?)
@@ -316,14 +318,15 @@ export class BlenoBleServer implements Channel<ByteArray> {
     }
 
     btpHandshakeTimeoutTriggered() {
-        // if (!this.btpHandshakeTimeout.isRunning) {
-        //     disconnect();
-        //     throw new Error("Timeout for handshake subscribe request on C2");
-        // }
+        if (!this.btpHandshakeTimeout.isRunning) {
+            Bleno.disconnect();
+            throw new Error("Timeout for handshake subscribe request on C2");
+        }
     }
 
     close() {
         this.btpHandshakeTimeout.stop();
+        //TODO unsubscribe from C2 ???
         Bleno.disconnect();
         this.btpSession?.close();
         this.btpSession = undefined;
