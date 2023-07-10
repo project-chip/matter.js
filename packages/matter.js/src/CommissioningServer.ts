@@ -388,6 +388,7 @@ export class CommissioningServer extends MatterNode {
     updateStructure() {
         logger.debug("Endpoint structure got updated ...");
         this.assignEndpointIds(); // Make sure to have unique endpoint ids
+        this.rootEndpoint.updatePartsList(); // update parts list of all Endpoint objects with final IDs
         this.interactionServer?.setRootEndpoint(this.rootEndpoint); // Reinitilize the interaction server structure
     }
 
