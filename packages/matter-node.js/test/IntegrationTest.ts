@@ -14,7 +14,8 @@ Crypto.get = () => new CryptoNode();
 
 import {
     OnOffCluster, BasicInformationCluster, OperationalCertStatus, OperationalCredentialsCluster, DescriptorCluster,
-    IdentifyCluster, GroupsCluster, AccessControlCluster, ScenesCluster
+    IdentifyCluster, GroupsCluster, AccessControlCluster, ScenesCluster, GeneralCommissioningCluster,
+    RegulatoryLocationType
 } from "@project-chip/matter.js/cluster";
 import { VendorId, FabricIndex, GroupId, ClusterId } from "@project-chip/matter.js/datatype";
 
@@ -77,7 +78,11 @@ describe("Integration Test", () => {
             passcode: setupPin,
             listeningAddressIpv4: "1.2.3.4",
             listeningAddressIpv6: CLIENT_IP,
-            delayedPairing: true
+            delayedPairing: true,
+            commissioningOptions: {
+                regulatoryLocation: RegulatoryLocationType.Indoor,
+                regulatoryCountryCode: "DE"
+            }
         });
         matterClient.addCommissioningController(commissioningController);
 
@@ -102,7 +107,8 @@ describe("Integration Test", () => {
                 productName,
                 productId,
                 partNumber: "123456",
-                nodeLabel: ""
+                nodeLabel: "",
+                location: "US",
             },
             delayedAnnouncement: true, // delay because we need to override Mdns classes
         });
@@ -163,6 +169,15 @@ describe("Integration Test", () => {
             defaultInteractionClient = await commissioningController.createInteractionClient();
             assert.ok(defaultInteractionClient);
         });
+
+        it("Verify that commissioning changed the Regulatory Config/Location values", async () => {
+            const generalCommissioningCluster = commissioningController.getRootClusterClient(GeneralCommissioningCluster);
+            assert.equal(await generalCommissioningCluster?.getRegulatoryConfigAttribute(), RegulatoryLocationType.Indoor);
+
+            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformationCluster);
+            assert.equal(await basicInfoCluster?.getLocationAttribute(), "DE");
+        });
+
     });
 
 
