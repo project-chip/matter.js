@@ -78,7 +78,7 @@ export class MatterServer {
         // TODO the mdns classes will later be in this class and assigned differently!!
         for (const node of this.nodes) {
             if (node instanceof CommissioningServer) {
-                node.setMdnsBroadcaster(await MdnsBroadcaster.create(node.getPort(), this.mdnsAnnounceInterface));
+                node.setMdnsBroadcaster(await MdnsBroadcaster.create(this.mdnsAnnounceInterface));
                 node.setMdnsScanner(await MdnsScanner.create());
                 if (!node.delayedAnnouncement) {
                     await node.advertise();

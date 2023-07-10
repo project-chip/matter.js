@@ -381,7 +381,7 @@ export class CommissioningServer extends MatterNode {
         this.interactionServer.setRootEndpoint(this.rootEndpoint); // Initialize the interaction server with the root endpoint
 
         // TODO adjust later and refactor MatterDevice
-        this.deviceInstance = new MatterDevice(this.deviceName, this.deviceType, vendorId, productId, this.discriminator, this.storageManager)
+        this.deviceInstance = new MatterDevice(this.deviceName, this.deviceType, vendorId, productId, this.discriminator, this.storageManager, this.port)
             .addNetInterface(await UdpInterface.create(this.port, "udp6", this.listeningAddressIpv6))
             .addScanner(this.mdnsScanner)
             .addBroadcaster(this.mdnsBroadcaster)

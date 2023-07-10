@@ -626,5 +626,4 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         // TODO: implement this
     }
 
-
 }
