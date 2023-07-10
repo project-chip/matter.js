@@ -31,17 +31,7 @@ export class MdnsBroadcaster implements Broadcaster {
         private readonly mdnsServer: MdnsServer,
     ) { }
 
-    /**
-     * Set the Broadcaster data to announce a device ready for commissioning in a special mode
-     *
-     * @param mode
-     * @param deviceName
-     * @param deviceType
-     * @param vendorId
-     * @param productId
-     * @param discriminator
-     * @param announcedNetPort
-     */
+    /** Set the Broadcaster data to announce a device ready for commissioning in a special mode */
     setCommissionMode(mode: number, deviceName: string, deviceType: number, vendorId: VendorId, productId: number, discriminator: number, announcedNetPort: number) {
         logger.debug(`announce commissioning mode ${mode} ${deviceName} ${deviceType} ${vendorId.id} ${productId} ${discriminator}`);
 
@@ -97,12 +87,7 @@ export class MdnsBroadcaster implements Broadcaster {
         });
     }
 
-    /**
-     * Set the Broadcaster Data to announce an device for operative discovery (aka "already paired")
-     *
-     * @param fabrics
-     * @param announcedNetPort
-     */
+    /** Set the Broadcaster Data to announce an device for operative discovery (aka "already paired") */
     setFabrics(fabrics: Fabric[], announcedNetPort: number) {
         this.mdnsServer.setRecordsGenerator(netInterface => {
             const records: Record<any>[] = [
@@ -144,15 +129,7 @@ export class MdnsBroadcaster implements Broadcaster {
         });
     }
 
-    /**
-     * Set the Broadcaster data to announce a Commissioner (aka Commissioner discovery)
-     *
-     * @param deviceName
-     * @param vendorId
-     * @param productId
-     * @param announcedNetPort
-     * @param deviceType
-     */
+    /** Set the Broadcaster data to announce a Commissioner (aka Commissioner discovery) */
     setCommissionerInfo(deviceName: string, vendorId: VendorId, productId: number, announcedNetPort: number, deviceType?: number) {
         logger.debug(`announce commissioner ${announcedNetPort} ${deviceType}`);
 
