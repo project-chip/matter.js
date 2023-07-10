@@ -27,10 +27,10 @@ class BtpSessionHandler {
     private currentSegmentedPayload: ByteArray = new ByteArray();
     private btpPackets: Array<BtpPacket> = new Array<BtpPacket>();
     private sendInProgress = false;
-    private lastClientSequenceNumber = 255;
-    private lastClientAckedSequenceNumber = 0;
-    private serverAckedSequenceNumber = 0;
-    private btpAckTimer: Timer;
+    private lastClientSequenceNumber = 255; // Client's Sequence Number received
+    private lastClientAckedSequenceNumber = 0; // Client's Acked Sequence Number
+    private serverAckedSequenceNumber = 0; // Server's sequence number ack sent by client
+    private btpAckTimer: Timer; //
     private btpSendAckTimer: Timer;
 
     /**
@@ -89,7 +89,6 @@ class BtpSessionHandler {
         logger.debug(`Sending BTP handshake response: ${handshakeResponse.toHex()}`);
         void this.writeBleCallback(handshakeResponse);
 
-        // TODO initialize BTP Session timers, keepalives and such
         this.btpAckTimer = Time.getTimer(BTP_ACK_TIMEOUT, () => this.btpAckTimoutTriggered());
         this.btpSendAckTimer = Time.getTimer(BTP_SEND_ACK_TIMEOUT, () => this.btpSendAckTimoutTriggered());
     }
@@ -116,6 +115,10 @@ class BtpSessionHandler {
                 header: { hasAckNumber, isHandshakeRequest, hasManagementOpcode, isEndingSegment, isBeginningSegment },
                 payload: { ackNumber, sequenceNumber, messageLength, segmentPayload }
             } = btpPacket;
+
+            if (!this.btpSendAckTimer.isRunning) {
+                this.btpSendAckTimer.start();
+            }
 
             if (isHandshakeRequest || hasManagementOpcode) {
                 this.disconnectBleCallback(); // Just here as example ... when specs say "close connection" use this callback
@@ -147,21 +150,16 @@ class BtpSessionHandler {
                 if (ackNumber <= sequenceNumber) {
                     if (ackNumber > this.serverAckedSequenceNumber) {
                         this.btpAckTimer.stop();
-                        if (!this.btpSendAckTimer.isRunning) {
-                            this.btpSendAckTimer.start();
-                        }
                         this.serverAckedSequenceNumber = ackNumber;
-                    } else {
+                    }
+                    else {
+                        this.disconnectBleCallback();
                         throw new Error("Matter message ack already received");
                     }
                 } else {
                     this.disconnectBleCallback();
                     throw new Error("Invalid Ack Number: greater than the Sequence Number");
                 }
-            }
-
-            if (sequenceNumber <= this.serverAckedSequenceNumber) {
-                this.btpAckTimer.stop();
             }
 
             this.lastClientSequenceNumber = sequenceNumber;
@@ -281,7 +279,7 @@ class BtpSessionHandler {
         if (this.btpPackets.length === 0 || this.sendInProgress) {
             return;
         }
-        if (this.sequenceNumber - this.serverAckedSequenceNumber > this.clientWindowSize) {
+        if (this.sequenceNumber - this.serverAckedSequenceNumber > (this.clientWindowSize - 1)) {
             return;
         }
 
@@ -302,7 +300,6 @@ class BtpSessionHandler {
 
             await this.writeBleCallback(packet);
 
-
             if (!this.btpAckTimer.isRunning) {
                 this.btpAckTimer.start(); // starts the timer
             }
@@ -317,23 +314,15 @@ class BtpSessionHandler {
 
     btpAckTimoutTriggered() {
 
-        if (!this.btpAckTimer.isRunning) {
+        if (this.serverAckedSequenceNumber !== this.sequenceNumber) {
             this.disconnectBleCallback();
-            throw new Error("Btp ack timeout");
+            throw new Error("Acknowledgement for the sent sequence number was not received");
         }
-
-        if (this.serverAckedSequenceNumber < this.sequenceNumber) {
-            this.btpAckTimer.stop();
-            return;
-        }
+        return;
     }
 
     async btpSendAckTimoutTriggered() {
 
-        if (!this.btpSendAckTimer.isRunning) {
-            this.disconnectBleCallback();
-            throw new Error("Btp send ack timeout")
-        }
         if (this.lastClientSequenceNumber > this.lastClientAckedSequenceNumber) {
             const btpPacket = {
                 header: {
@@ -350,7 +339,9 @@ class BtpSessionHandler {
             };
             const packet = BtpCodec.encodeBtpPacket(btpPacket);
             await this.writeBleCallback(packet);
-            this.btpSendAckTimer.stop();
+            if (!this.btpAckTimer.isRunning) {
+                this.btpAckTimer.start(); // starts the timer
+            }
         }
     }
 
