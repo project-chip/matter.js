@@ -17,6 +17,8 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Feature: (@mahimamandhanaa) Add BTP (Bluetooth Transport Protocol) codec class for encoding and decoding of BTP messages
   * Feature: Enhanced BitMap typing and Schemas to allow "Partially" provided Bitmaps by suppressing the "unset" bits
   * Feature: Allow to define discoveryCapabilities structure when getting pairing code in CommissioningServer
+  * Enhance: Device port in MDNSBroadcaster is now dynamically set and add UDC (User directed Commissioning) Announcements
+  * Enhance: Enhanced MessageCodec and check some more fields
   * Enhance: Added possibility to define conditional cluster attribute/Command/event definitions and introduce runtime checking for these. Part of Cluster Structure rework still WIP
   * Enhance: (@vves) Add Window Covering Cluster definition  
   * Enhance: Split up and corrected PowerSource and PressureMeasurement Cluster based on Matter 1.1 Specs
