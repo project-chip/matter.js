@@ -318,15 +318,12 @@ export class BlenoBleServer implements Channel<ByteArray> {
     }
 
     btpHandshakeTimeoutTriggered() {
-        if (!this.btpHandshakeTimeout.isRunning) {
             Bleno.disconnect();
             throw new Error("Timeout for handshake subscribe request on C2");
-        }
     }
 
     close() {
         this.btpHandshakeTimeout.stop();
-        //TODO unsubscribe from C2 ???
         Bleno.disconnect();
         this.btpSession?.close();
         this.btpSession = undefined;
