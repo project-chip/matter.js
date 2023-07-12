@@ -1,13 +1,14 @@
 /**
-* @license
-* Copyright 2022-2023 Project CHIP Authors
-* SPDX-License-Identifier: Apache-2.0
-*/
+ * @license
+ * Copyright 2022-2023 Project CHIP Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
-import { ByteArray } from "../util/ByteArray.js";
+import { ByteArray, Endian } from "../util/ByteArray.js";
 import { BtpCodec, BtpPacket } from "../codec/BtpCodec.js";
 import { Logger } from "../log/Logger.js";
 import { Time, Timer } from "../time/Time.js";
+import { DataReader } from "../util/DataReader.js";
 
 const logger = Logger.get("BtpSessionHandler");
 
@@ -30,9 +31,11 @@ class BtpSessionHandler {
     private sendInProgress = false;
     private prevClientSequenceNumber = 255; // Client's Sequence Number received
     private prevClientAckedSequenceNumber = 0; // Client's Acked Sequence Number
-    private serverAckedSequenceNumber = -1; // Server's sequence number ack sent by client
+    private serverAckedSequenceNumber = -1; // initializing server's sequence number ack sent by client with -1
     private ackReceiveTimer: Timer;
     private sendAckTimer: Timer;
+    private isActive: boolean = true;
+    private dataReader: DataReader<Endian.Little> | undefined;
 
     /**
      * Creates a new BTP session handler
@@ -72,8 +75,8 @@ class BtpSessionHandler {
         this.btpVersion = maximumSupportedVersion;
 
         // TODO check if we need to do more on attMtu or clientWindowSize, for now just accept what client sends
-        if (maxDataSize !== undefined) {
-            this.attMtu = Math.min(attMtu, maxDataSize, MAXIMUM_FRAGMENT_SIZE);
+        if (attMtu === 0 && maxDataSize !== undefined) {
+            this.attMtu = Math.min(maxDataSize, MAXIMUM_FRAGMENT_SIZE);
         } else if (attMtu > 0) {
             this.attMtu = Math.min(attMtu, MAXIMUM_FRAGMENT_SIZE);
             // TODO or do we need to fall back to DEFAULT_FRAGMENT_SIZE ?
@@ -143,18 +146,19 @@ class BtpSessionHandler {
             }
 
             if (hasAckNumber && ackNumber !== undefined) {
-                if (ackNumber > this.serverAckedSequenceNumber) {
-                    if (ackNumber === this.sequenceNumber) { // stops timer when ackNumber = current sent sequenceNumber
-                        this.ackReceiveTimer.stop();
-                    } else if (ackNumber < this.sequenceNumber) { //restart timer when ackNumber > current sent sequenceNumber
-                        this.ackReceiveTimer.stop();
-                        this.ackReceiveTimer.start();
-                    } else {
-                        this.disconnectAndThrow("Invalid Ack Number: greater than sent sequence number");
-                    }
-                    this.serverAckedSequenceNumber = ackNumber;
-                } else {
-                    this.disconnectAndThrow("Matter message ack already received");
+
+                // check that ack number is valid
+                if (ackNumber <= this.serverAckedSequenceNumber || ackNumber > this.sequenceNumber) {
+                    this.disconnectAndThrow(`Invalid Ack Number, Ack Number: ${ackNumber}, Sequence Number: ${this.sequenceNumber}, Server Acked Sequence Number ${this.serverAckedSequenceNumber}`);
+                }
+
+                // for valid acks, stop timer and update serverAckedSequenceNumber
+                this.ackReceiveTimer.stop();
+                this.serverAckedSequenceNumber = ackNumber;
+
+                // if still waiting for ack for sequence number restart timer
+                if (ackNumber < this.sequenceNumber) {
+                    this.ackReceiveTimer.start();
                 }
             }
 
@@ -195,6 +199,11 @@ class BtpSessionHandler {
             throw new Error("BTP packet must not be empty");
         }
 
+        await this.sendQueuedBtpFrames(data);
+    }
+
+    private async sendQueuedBtpFrames(outgoingSegmentPayload: ByteArray) {
+
         const header = {
             isHandshakeRequest: false,
             hasManagementOpcode: false,
@@ -203,64 +212,83 @@ class BtpSessionHandler {
             isEndingSegment: true,
         };
 
-        // BTP Header is always 2 bytes - flags, sequence number
-        // 3 when ackNumber is present - assuming ack is present
-        // 5 when ackNumber and messageLength (aka isBeginningSegment) are present
         let expectedBtpHeaderLength = 3 + (header.isBeginningSegment ? 2 : 0);
 
-        if (data.length <= this.attMtu - expectedBtpHeaderLength) {
-
+        if (outgoingSegmentPayload.length <= this.attMtu - expectedBtpHeaderLength) {
             const btpPayload = {
                 header,
                 payload: {
-                    ackNumber: undefined,
+                    ackNumber: (this.prevClientSequenceNumber !== undefined) && (this.prevClientSequenceNumber > this.prevClientAckedSequenceNumber)
+                        ? this.prevClientSequenceNumber : undefined,
                     sequenceNumber: this.getNextSequenceNumber(),
-                    messageLength: data.length,
-                    segmentPayload: data
+                    messageLength: outgoingSegmentPayload.length,
+                    segmentPayload: outgoingSegmentPayload
                 }
             };
+            if (btpPayload.payload.ackNumber !== undefined) {
+                btpPayload.header.hasAckNumber = true;
+                this.prevClientAckedSequenceNumber = this.prevClientSequenceNumber;
+                this.sendAckTimer.stop();
+            }
             this.btpPackets.push(btpPayload);
+
         } else {
+            //split data
+            this.dataReader = new DataReader(outgoingSegmentPayload, Endian.Little);
+            let remainingLengthInBytes = this.dataReader?.getRemainingBytesCount();
 
-            console.log(`Message segmentation: ${data.length} > ${this.attMtu}`);
-            let startIndex = 0;
-            const packetHeader = {
-                isHandshakeRequest: false,
-                hasManagementOpcode: false,
-                hasAckNumber: false,
-                isBeginningSegment: true,
-                isEndingSegment: false,
-            };
+            while (true) {
 
-            //splitting the segment payload
-            do {
-                const segment = data.slice(startIndex, Math.min(startIndex + this.attMtu - expectedBtpHeaderLength, data.length));
-                startIndex += this.attMtu - expectedBtpHeaderLength;
+                const packetHeader = {
+                    isHandshakeRequest: false,
+                    hasManagementOpcode: false,
+                    hasAckNumber: false,
+                    isBeginningSegment: remainingLengthInBytes === outgoingSegmentPayload.length,
+                    isEndingSegment: false,
+                };
+
+                if ((this.prevClientSequenceNumber !== undefined) && (this.prevClientSequenceNumber > this.prevClientAckedSequenceNumber)) {
+                    packetHeader.hasAckNumber = true;
+                } else {
+                    expectedBtpHeaderLength -= 1;
+                }
+
+                console.log(`Message segmentation: ${remainingLengthInBytes} > ${this.attMtu - expectedBtpHeaderLength}`);
+
+                //splitting the segment payload
+                const segment = this.dataReader?.readByteArray(Math.min(this.attMtu - expectedBtpHeaderLength, remainingLengthInBytes ? remainingLengthInBytes : 0));
+                remainingLengthInBytes = this.dataReader?.getRemainingBytesCount();
+
+                console.log(`segment: ${segment?.toHex()}`);
                 expectedBtpHeaderLength = 3;
 
-                if (startIndex !== 0 && startIndex < data.length) { // middle packets
-                    packetHeader.isBeginningSegment = false;
-                } else if (startIndex > data.length) { // last packet
-                    packetHeader.isBeginningSegment = false;
+                if (remainingLengthInBytes === undefined || remainingLengthInBytes === 0) {
                     packetHeader.isEndingSegment = true;
                 }
 
                 const btpPayload = {
                     header: packetHeader,
                     payload: {
-                        ackNumber: undefined,
+                        ackNumber: (this.prevClientSequenceNumber !== undefined) && (this.prevClientSequenceNumber > this.prevClientAckedSequenceNumber)
+                            ? this.prevClientSequenceNumber : undefined,
                         sequenceNumber: this.getNextSequenceNumber(),
-                        messageLength: packetHeader.isBeginningSegment ? data.length : undefined,
-                        segmentPayload: segment
+                        messageLength: packetHeader.isBeginningSegment ? outgoingSegmentPayload.length : undefined,
+                        segmentPayload: segment?.length !== 0 ? segment : undefined,
                     }
                 };
-                this.btpPackets.push(btpPayload);
-            } while (!packetHeader.isEndingSegment);
-        }
-        await this.sendQueuedBtpFrames();
-    }
 
-    private async sendQueuedBtpFrames() {
+                if (btpPayload.payload.ackNumber !== undefined) {
+                    this.prevClientAckedSequenceNumber = this.prevClientSequenceNumber;
+                    this.sendAckTimer.stop();
+                }
+
+                this.btpPackets.push(btpPayload);
+
+                if (packetHeader.isEndingSegment) {
+                    break;
+                }
+            }
+        }
 
         if (this.btpPackets.length === 0 || this.sendInProgress) {
             return;
@@ -272,13 +300,6 @@ class BtpSessionHandler {
         while (this.btpPackets.length > 0) {
             const btpPacket = this.btpPackets[0];
 
-            //checks if last ack number sent < ack number to be sent
-            if ((this.prevClientSequenceNumber !== undefined) && (this.prevClientSequenceNumber > this.prevClientAckedSequenceNumber)) {
-                btpPacket.header.hasAckNumber = true;
-                btpPacket.payload.ackNumber = this.prevClientSequenceNumber;
-                this.prevClientAckedSequenceNumber = this.prevClientSequenceNumber;
-                this.sendAckTimer.stop();
-            }
             logger.debug(`Sending BTP packet: ${Logger.toJSON(btpPacket)}`);
             const packet = BtpCodec.encodeBtpPacket(btpPacket);
             logger.debug(`Sending Matter Message response: ${packet.toHex()}`);
@@ -303,7 +324,10 @@ class BtpSessionHandler {
     public close() {
         this.ackReceiveTimer.stop();
         this.sendAckTimer.stop();
-        this.disconnectBleCallback();
+        if (this.isActive) {
+            this.isActive = false;
+            this.disconnectBleCallback();
+        }
     }
 
     private disconnectAndThrow(message: string) {
