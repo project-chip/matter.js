@@ -139,7 +139,7 @@ describe("Errors", () => {
         it("tryCatch with inherited error process error in handler function return dynamic fallback value", async () => {
             const result = await tryCatchAsync(
                 async () => { throw new SubSubMatterError("test") },
-                SubMatterError, error => {
+                SubMatterError, async error => {
                     if (error instanceof SubSubMatterError) {
                         return "caught";
                     }
