@@ -201,7 +201,7 @@ export class SubscriptionHandler {
                         })),
                     });
                 }
-            }, StatusResponseError, (error) => {
+            }, StatusResponseError, async error => {
                 if (error.code === StatusCode.InvalidSubscription ||
                     error.code === StatusCode.Failure
                 ) {
