@@ -389,6 +389,7 @@ export const ConditionalFixedAttribute = <T, V extends T, F extends BitSchema>(i
 
 export type MandatoryAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends OptionalAttribute<any, any> ? never : K }[keyof A];
 export type OptionalAttributeNames<A extends Attributes> = { [K in keyof A]: A[K] extends OptionalAttribute<any, any> ? K : never }[keyof A];
+export type GlobalAttributeNames<F extends BitSchema> = keyof GlobalAttributes<F>;
 
 /* Interfaces and helper methods to define a cluster command */
 export const TlvNoResponse = TlvVoid;

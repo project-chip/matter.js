@@ -27,7 +27,7 @@ export interface EndpointOptions {
 
 export class Endpoint {
     private readonly clusterServers = new Map<number, ClusterServerObj<Attributes, Commands, Events>>();
-    private readonly clusterClients = new Map<number, ClusterClientObj<Attributes, Commands, Events>>();
+    private readonly clusterClients = new Map<number, ClusterClientObj<any, Attributes, Commands, Events>>();
     private readonly childEndpoints: Endpoint[] = [];
     id: number | undefined;
     uniqueStorageKey: string | undefined;
@@ -121,7 +121,7 @@ export class Endpoint {
         this.structureChangedCallback(); // Inform parent about structure change
     }
 
-    addClusterClient<A extends Attributes, C extends Commands, E extends Events>(cluster: ClusterClientObj<A, C, E>) {
+    addClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(cluster: ClusterClientObj<F, A, C, E>) {
         this.clusterClients.set(cluster.id, cluster);
         this.descriptorCluster.attributes.clientList.setLocal(Array.from(this.clusterClients.keys()).map((id) => new ClusterId(id)));
         this.structureChangedCallback(); // Inform parent about structure change
@@ -141,10 +141,10 @@ export class Endpoint {
     getClusterClient<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
         cluster: Cluster<F, SF, A, C, E>,
         interactionClient?: InteractionClient
-    ): ClusterClientObj<A, C, E> | undefined {
+    ): ClusterClientObj<F, A, C, E> | undefined {
         const clusterClient = this.clusterClients.get(cluster.id);
         if (clusterClient !== undefined) {
-            return clusterClient._clone(interactionClient) as ClusterClientObj<A, C, E>;
+            return clusterClient._clone(interactionClient) as ClusterClientObj<F, A, C, E>;
         }
         return undefined;
     }
@@ -153,7 +153,7 @@ export class Endpoint {
         return this.clusterServers.get(clusterId);
     }
 
-    getClusterClientById(clusterId: number): ClusterClientObj<Attributes, Commands, Events> | undefined {
+    getClusterClientById(clusterId: number): ClusterClientObj<any, Attributes, Commands, Events> | undefined {
         return this.clusterClients.get(clusterId);
     }
 
@@ -258,7 +258,7 @@ export class Endpoint {
         return Array.from(this.clusterServers.values());
     }
 
-    getAllClusterClients(): ClusterClientObj<Attributes, Commands, Events>[] {
+    getAllClusterClients(): ClusterClientObj<any, Attributes, Commands, Events>[] {
         return Array.from(this.clusterClients.values());
     }
 
