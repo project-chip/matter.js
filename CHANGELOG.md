@@ -38,7 +38,9 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Feature: Enhance Storage system to allow to create subcontext stores to allow better separation of data
   * Feature: Allow to also remove devices from Aggregators
   * Feature: Optionally allow to define discovery capabilities when generating Pairing codee 
-* * Reference implementation/Examples:
+* Reference implementation/Examples:
+  * Breaking: The storage key structure got changed to allow multi node operations within one process. This requires to change the storage key structure and to migrate or reset the storage.
+    * Migration: prepend any storage key except Device.* and Controller.* with "0." in the filename
   * Deprecation: The CLI Examples LegacyDeviceNode and LegacyControllerNode is removed in this version! Use the new variants please.
   * Example script are moved to package matter-node.js-examples
 * Misc:

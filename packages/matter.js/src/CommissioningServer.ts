@@ -19,7 +19,6 @@ import { MatterDevice } from "./MatterDevice.js";
 import { UdpInterface } from "./net/UdpInterface.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
-import { StorageManager } from "./storage/StorageManager.js";
 import { AttributeInitialValues, ClusterServerHandlers, ClusterServerObj } from "./cluster/server/ClusterServer.js";
 import { OperationalCredentialsClusterHandler, OperationalCredentialsServerConf } from "./cluster/server/OperationalCredentialsServer.js";
 import { AttestationCertificateManager } from "./certificate/AttestationCertificateManager.js";
@@ -116,7 +115,7 @@ export class CommissioningServer extends MatterNode {
     private readonly discriminator: number;
     private readonly flowType: CommissionningFlowType;
 
-    private storageManager?: StorageManager;
+    private storage?: StorageContext;
     private endpointStructureStorage?: StorageContext;
     private mdnsScanner?: MdnsScanner;
     private mdnsBroadcaster?: MdnsBroadcaster;
@@ -329,7 +328,7 @@ export class CommissioningServer extends MatterNode {
         if (
             this.mdnsBroadcaster === undefined ||
             this.mdnsScanner === undefined ||
-            this.storageManager === undefined ||
+            this.storage === undefined ||
             this.endpointStructureStorage === undefined
         ) {
             throw new Error("Add the node to the Matter instance before!");
@@ -362,7 +361,7 @@ export class CommissioningServer extends MatterNode {
         const vendorId = basicInformation.attributes.vendorId.getLocal();
         const productId = basicInformation.attributes.productId.getLocal();
 
-        this.interactionServer = new InteractionServer(this.storageManager);
+        this.interactionServer = new InteractionServer(this.storage);
 
         this.nextEndpointId = this.endpointStructureStorage.get("nextEndpointId", this.nextEndpointId);
 
@@ -372,7 +371,7 @@ export class CommissioningServer extends MatterNode {
         this.interactionServer.setRootEndpoint(this.rootEndpoint); // Initialize the interaction server with the root endpoint
 
         // TODO adjust later and refactor MatterDevice
-        this.deviceInstance = new MatterDevice(this.deviceName, this.deviceType, vendorId, productId, this.discriminator, this.storageManager, this.port)
+        this.deviceInstance = new MatterDevice(this.deviceName, this.deviceType, vendorId, productId, this.discriminator, this.storage, this.port)
             .addNetInterface(await UdpInterface.create(this.port, "udp6", this.listeningAddressIpv6))
             .addScanner(this.mdnsScanner)
             .addBroadcaster(this.mdnsBroadcaster)
@@ -523,11 +522,11 @@ export class CommissioningServer extends MatterNode {
 
     /**
      * Set the StorageManager instance. Should be only used internally
-     * @param storageManager
+     * @param storage
      */
-    setStorageManager(storageManager: StorageManager) {
-        this.storageManager = storageManager;
-        this.endpointStructureStorage = this.storageManager.createContext("EndpointStructure")
+    setStorage(storage: StorageContext) {
+        this.storage = storage;
+        this.endpointStructureStorage = this.storage.createContext("EndpointStructure")
     }
 
     /**

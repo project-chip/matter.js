@@ -36,7 +36,6 @@ import {
 } from "../../cluster/server/AttributeServer.js";
 import { Logger } from "../../log/Logger.js";
 import { StorageContext } from "../../storage/StorageContext.js";
-import { StorageManager } from "../../storage/StorageManager.js";
 import { capitalize } from "../../util/String.js";
 import { Endpoint } from "../../device/Endpoint.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
@@ -400,10 +399,10 @@ export function eventPathToId({ endpointId, clusterId, eventId }: TypeFromSchema
 export class InteractionServer implements ProtocolHandler<MatterDevice> {
     private endpointStructure = new InteractionEndpointStructure();
     private nextSubscriptionId = Crypto.getRandomUInt32();
-    private eventHandler = new EventHandler(this.storageManager);
+    private eventHandler = new EventHandler(this.storage);
 
     constructor(
-        private readonly storageManager: StorageManager
+        private readonly storage: StorageContext
     ) { }
 
     getId() {
@@ -416,7 +415,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         for (const endpoint of this.endpointStructure.endpoints.values()) {
             for (const cluster of endpoint.getAllClusterServers()) {
-                cluster._setStorage(this.storageManager.createContext(`Cluster-${endpoint.id}-${cluster.id}`));
+                cluster._setStorage(this.storage.createContext(`Cluster-${endpoint.id}-${cluster.id}`));
                 cluster._registerEventHandler(this.eventHandler);
             }
         }

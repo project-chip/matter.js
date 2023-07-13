@@ -27,7 +27,7 @@ import { NodeId } from "./datatype/NodeId.js";
 import { Logger } from "./log/Logger.js";
 import { Time, Timer } from "./time/Time.js";
 import { ByteArray } from "./util/ByteArray.js";
-import { StorageManager } from "./storage/StorageManager.js";
+import { StorageContext } from "./storage/StorageContext.js";
 
 const logger = Logger.get("MatterDevice");
 
@@ -52,12 +52,12 @@ export class MatterDevice {
         private readonly vendorId: VendorId,
         private readonly productId: number,
         private readonly discriminator: number,
-        private readonly storageManager: StorageManager,
+        private readonly storage: StorageContext,
         private readonly udpPort: number,
     ) {
-        this.fabricManager = new FabricManager(this.storageManager);
+        this.fabricManager = new FabricManager(this.storage);
 
-        this.sessionManager = new SessionManager(this, this.storageManager);
+        this.sessionManager = new SessionManager(this, this.storage);
         this.sessionManager.initFromStorage(this.fabricManager.getFabrics());
 
         this.exchangeManager = new ExchangeManager<MatterDevice>(this.sessionManager, this.channelManager);

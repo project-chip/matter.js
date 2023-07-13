@@ -13,6 +13,11 @@ import { CommissioningController } from "./CommissioningController.js";
 // TODO Move Mdns instances internally
 // TODO enhance storage manager to support multiple nodes
 
+export type NodeOptions = {
+    /** Unique node id to use for the storage context of this node. If not provided the order of node addition is used. */
+    uniqueNodeId?: string;
+}
+
 /**
  * Main Matter server class that represents the process on the host allowing to commission and pair multiple devices
  * by reusing MDNS scanner and Broadcaster
@@ -35,9 +40,10 @@ export class MatterServer {
     /**
      * Add a CommissioningServer node to the server
      *
-     * @param commisioningServer CommissioningServer node to add
+     * @param commissioningServer CommissioningServer node to add
+     * @param nodeOptions Optional options for the node (e.g. unique node id)
      */
-    addCommissioningServer(commisioningServer: CommissioningServer) {
+    addCommissioningServer(commissioningServer: CommissioningServer, nodeOptions?: NodeOptions) {
         if (this.nodes.length > 0) {
             throw new Error("Only one node is allowed for now");
         }
@@ -52,21 +58,22 @@ export class MatterServer {
                 portCheckMap.set(nodePort, true);
             }
         }
-        commisioningServer.setStorageManager(this.storageManager);
-        this.nodes.push(commisioningServer);
+        commissioningServer.setStorage(this.storageManager.createContext(nodeOptions?.uniqueNodeId ?? this.nodes.length.toString()));
+        this.nodes.push(commissioningServer);
     }
 
     /**
      * Add a Controller node to the server
      *
      * @param commissioningController Controller node to add
+     * @param nodeOptions Optional options for the node (e.g. unique node id)
      */
-    addCommissioningController(commissioningController: CommissioningController) {
+    addCommissioningController(commissioningController: CommissioningController, nodeOptions?: NodeOptions) {
         if (this.nodes.length > 0) {
             throw new Error("Only one node is allowed for now");
         }
 
-        commissioningController.setStorageManager(this.storageManager);
+        commissioningController.setStorage(this.storageManager.createContext(nodeOptions?.uniqueNodeId ?? this.nodes.length.toString()));
         this.nodes.push(commissioningController);
     }
 
