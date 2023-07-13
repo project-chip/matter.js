@@ -35,6 +35,7 @@ class BtpSessionHandler {
     private ackReceiveTimer: Timer;
     private sendAckTimer: Timer;
     private isActive = true;
+    private fragmentSize = 0;
 
     /**
      * Creates a new BTP session handler
@@ -58,7 +59,6 @@ class BtpSessionHandler {
         // Decode handshake request
         const handshakeRequest = BtpCodec.decodeBtpHandshakeRequest(handshakeRequestPayload);
 
-
         const { versions, attMtu, clientWindowSize } = handshakeRequest;
 
         // Verify handshake request and choose the highest supported version for both parties
@@ -73,18 +73,15 @@ class BtpSessionHandler {
         }
         this.btpVersion = maximumSupportedVersion;
 
-        // TODO check if we need to do more on attMtu or clientWindowSize, for now just accept what client sends
         if (attMtu === 0 && maxDataSize !== undefined) {
             this.attMtu = Math.min(maxDataSize, MAXIMUM_FRAGMENT_SIZE);
         } else if (maxDataSize !== undefined && attMtu > 0) {
             this.attMtu = Math.min(attMtu, maxDataSize, MAXIMUM_FRAGMENT_SIZE);
-            // TODO or do we need to fall back to DEFAULT_FRAGMENT_SIZE ?
         } else {
             this.attMtu = DEFAULT_FRAGMENT_SIZE;
         }
 
-        this.attMtu += 3;
-
+        this.fragmentSize = this.attMtu - 3; // Each GATT PDU used by the BTP protocol introduces 3 byte header overhead.
         this.clientWindowSize = Math.min(MAXIMUM_WINDOW_SIZE, clientWindowSize);
 
         // Generate and send out handshake response
@@ -208,14 +205,14 @@ class BtpSessionHandler {
         const dataReader = new DataReader(data, Endian.Little);
 
         this.queuesMatterMessages.push(dataReader);
-        await this.sendQueuedBtpFrames(data.length);
+        await this.sendQueuedBtpFrames();
     }
 
-    private async sendQueuedBtpFrames(dataLength: number) {
+    private async sendQueuedBtpFrames() {
 
         let remainingLengthInBytes = this.queuesMatterMessages[0].getRemainingBytesCount();
         let packetSendAck = false;
-        console.log(`dataLength: ${dataLength}`);
+        console.log(`dataLength: ${this.queuesMatterMessages[0].getLength()}`);
         console.log(`Remaining: ${remainingLengthInBytes}`);
 
         if (remainingLengthInBytes === 0 && this.sendInProgress) {
@@ -233,7 +230,7 @@ class BtpSessionHandler {
                 isHandshakeRequest: false,
                 hasManagementOpcode: false,
                 hasAckNumber: false,
-                isBeginningSegment: dataLength === remainingLengthInBytes,
+                isBeginningSegment: this.queuesMatterMessages[0].getLength() === remainingLengthInBytes,
                 isEndingSegment: false,
             };
 
@@ -249,9 +246,9 @@ class BtpSessionHandler {
                 this.sendAckTimer.stop();
             }
 
-            console.log(`Message segmentation: Data Length - ${remainingLengthInBytes} , Allowed -  ${this.attMtu - expectedBtpHeaderLength}`);
+            console.log(`Message segmentation: Data Length - ${remainingLengthInBytes} , Allowed -  ${this.fragmentSize - expectedBtpHeaderLength}`);
 
-            const segment = this.queuesMatterMessages[0].readByteArray(Math.min(this.attMtu - expectedBtpHeaderLength, remainingLengthInBytes));
+            const segment = this.queuesMatterMessages[0].readByteArray(Math.min(this.fragmentSize - expectedBtpHeaderLength, remainingLengthInBytes));
             remainingLengthInBytes = this.queuesMatterMessages[0].getRemainingBytesCount();
 
             if (remainingLengthInBytes === undefined || remainingLengthInBytes === 0) {
@@ -263,7 +260,7 @@ class BtpSessionHandler {
                 payload: {
                     ackNumber: packetSendAck ? this.prevClientSequenceNumber : undefined,
                     sequenceNumber: this.getNextSequenceNumber(),
-                    messageLength: packetHeader.isBeginningSegment ? dataLength : undefined,
+                    messageLength: packetHeader.isBeginningSegment ? this.queuesMatterMessages[0].getLength() : undefined,
                     segmentPayload: segment?.length !== 0 ? segment : undefined,
                 }
             };
@@ -285,7 +282,9 @@ class BtpSessionHandler {
                 break;
             }
         }
-        this.queuesMatterMessages.shift();
+        if (remainingLengthInBytes === 0) {
+            this.queuesMatterMessages.shift();
+        }
         this.sendInProgress = false;
     }
 

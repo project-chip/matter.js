@@ -79,6 +79,10 @@ export class DataReader<E extends Endian> {
         return this.buffer.subarray(this.offset);
     }
 
+    getLength() {
+        return this.dataView.byteLength;
+    }
+
     private getOffsetAndAdvance(size: number) {
         const result = this.offset;
         this.offset += size;
