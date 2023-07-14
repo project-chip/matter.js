@@ -24,6 +24,7 @@ import { Endpoint } from "../../device/Endpoint.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { EventServer } from "./EventServer.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
+import { BitSchema } from "../../schema/BitmapSchema.js";
 
 /** Cluster attributes accessible on the cluster server */
 type MandatoryAttributeServers<A extends Attributes> = Omit<{ [P in MandatoryAttributeNames<A>]: A[P] extends WritableFabricScopedAttribute<any, any> ? FabricScopedAttributeServer<AttributeJsType<A[P]>> : (A[P] extends FixedAttribute<any, any> ? FixedAttributeServer<AttributeJsType<A[P]>> : AttributeServer<AttributeJsType<A[P]>>) }, keyof GlobalAttributes<any>>;
@@ -159,6 +160,6 @@ export type ClusterServerObj<A extends Attributes, C extends Commands, E extends
     & ServerAttributeSubscribers<A>
     & ServerEventTriggers<E>;
 
-export function isClusterServer<A extends Attributes, C extends Commands, E extends Events>(obj: ClusterClientObj<A, C, E> | ClusterServerObj<A, C, E>): obj is ClusterServerObj<A, C, E> {
+export function isClusterServer<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(obj: ClusterClientObj<F, A, C, E> | ClusterServerObj<A, C, E>): obj is ClusterServerObj<A, C, E> {
     return obj._type === "ClusterServer";
 }

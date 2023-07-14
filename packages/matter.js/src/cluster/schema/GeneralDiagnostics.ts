@@ -82,7 +82,7 @@ const TlvNetworkInterface = TlvObject({
     /** Indicates whether the Node is currently able to reach off-premise services it uses by utilizing IPv4. */
     offPremiseServicesReachableIPv4: TlvField(2, TlvNullable(TlvBoolean)), /* default null */
 
-    /** Indicates whether the Node is currently able to reach off-premise services it uses by utilizing IPv4. */
+    /** Indicates whether the Node is currently able to reach off-premise services it uses by utilizing IPv6. */
     offPremiseServicesReachableIPv6: TlvField(3, TlvNullable(TlvBoolean)),  /* default null */
 
     /**
@@ -95,7 +95,7 @@ const TlvNetworkInterface = TlvObject({
     iPv4Addresses: TlvField(5, TlvArray(TlvString.bound({ maxLength: 4 }))),
 
     /** List of the unicast IPv6 addresses that are currently assigned to the network interface. */
-    iPv6Addresse: TlvField(6, TlvArray(TlvString.bound({ maxLength: 8 }))),
+    iPv6Addresses: TlvField(6, TlvArray(TlvString.bound({ maxLength: 8 }))),
 
     /** Indicates the type of the interface. */
     type: TlvField(7, TlvEnum<InterfaceType>()),

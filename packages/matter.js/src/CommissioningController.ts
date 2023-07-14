@@ -178,7 +178,7 @@ export class CommissioningController extends MatterNode {
      */
     async getRootClusterClientWithNewInteractionClient<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
         cluster: Cluster<F, SF, A, C, E>
-    ): Promise<ClusterClientObj<A, C, E> | undefined> {
+    ): Promise<ClusterClientObj<F, A, C, E> | undefined> {
         return super.getRootClusterClient(cluster, await this.createInteractionClient());
     }
 
@@ -289,7 +289,7 @@ export class CommissioningController extends MatterNode {
             throw new Error("No device type found for endpoint");
         }
 
-        const endpointClusters = Array<ClusterServerObj<Attributes, Commands, Events> | ClusterClientObj<Attributes, Commands, Events>>();
+        const endpointClusters = Array<ClusterServerObj<Attributes, Commands, Events> | ClusterClientObj<any, Attributes, Commands, Events>>();
 
         // Add ClusterClients for all server clusters of the device
         for (const clusterId of descriptorData.serverList) {
