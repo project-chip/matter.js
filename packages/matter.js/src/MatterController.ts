@@ -116,24 +116,47 @@ export class MatterController {
         const productName = await basicClusterClient.getProductNameAttribute();
         logger.info("Paired with device:", productName);
 
+        // Get Features from all NetworkCommissioningClusters in the device
+        const networkFeatureAttributes = await interactionClient.getMultipleAttributes(
+            [
+                {
+                    clusterId: NetworkCommissioningClusterSchema.id,
+                    attributeId: NetworkCommissioningClusterSchema.attributes.featureMap.id
+                }
+            ]
+        );
+        const hasRadioNetwork = !!networkFeatureAttributes.find(
+            ({ value: { wifi, thread } }: { value: TypeFromPartialBitSchema<typeof NetworkCommissioningClusterSchema.features> }) => thread || wifi
+        );
+
         // Do the commissioning
         let generalCommissioningClusterClient = ClusterClient(GeneralCommissioningCluster, 0, interactionClient);
         this.ensureSuccess("armFailSafe", await generalCommissioningClusterClient.armFailSafe({ breadcrumb: BigInt(1), expiryLengthSeconds: 60 }));
 
-        let locationCapability = await generalCommissioningClusterClient.getLocationCapabilityAttribute();
-        if (locationCapability === RegulatoryLocationType.IndoorOutdoor) {
-            locationCapability = this.commissioningOptions.regulatoryLocation;
-        } else {
-            logger.debug(`Device does not support a configurable regulatory location type. Location is set to "${locationCapability === RegulatoryLocationType.Indoor ? "Indoor" : "Outdoor"}"`);
-        }
-        let countryCode = this.commissioningOptions.regulatoryCountryCode;
-        const regulatoryResult = await generalCommissioningClusterClient.setRegulatoryConfig({ breadcrumb: BigInt(2), newRegulatoryConfig: locationCapability, countryCode });
-        if (regulatoryResult.errorCode === CommissioningError.ValueOutsideRange && countryCode !== "XX") {
-            logger.debug(`Device does not support a configurable country code. Use "XX" instead of "${countryCode}"`);
-            countryCode = "XX";
-            this.ensureSuccess("setRegulatoryConfig", await generalCommissioningClusterClient.setRegulatoryConfig({ breadcrumb: BigInt(2), newRegulatoryConfig: locationCapability, countryCode }));
-        } else {
-            this.ensureSuccess("setRegulatoryConfig", regulatoryResult);
+        if (hasRadioNetwork) {
+            let locationCapability = await generalCommissioningClusterClient.getLocationCapabilityAttribute();
+            if (locationCapability === RegulatoryLocationType.IndoorOutdoor) {
+                locationCapability = this.commissioningOptions.regulatoryLocation;
+            } else {
+                logger.debug(`Device does not support a configurable regulatory location type. Location is set to "${locationCapability === RegulatoryLocationType.Indoor ? "Indoor" : "Outdoor"}"`);
+            }
+            let countryCode = this.commissioningOptions.regulatoryCountryCode;
+            const regulatoryResult = await generalCommissioningClusterClient.setRegulatoryConfig({
+                breadcrumb: BigInt(2),
+                newRegulatoryConfig: locationCapability,
+                countryCode
+            });
+            if (regulatoryResult.errorCode === CommissioningError.ValueOutsideRange && countryCode !== "XX") {
+                logger.debug(`Device does not support a configurable country code. Use "XX" instead of "${countryCode}"`);
+                countryCode = "XX";
+                this.ensureSuccess("setRegulatoryConfig", await generalCommissioningClusterClient.setRegulatoryConfig({
+                    breadcrumb: BigInt(2),
+                    newRegulatoryConfig: locationCapability,
+                    countryCode
+                }));
+            } else {
+                this.ensureSuccess("setRegulatoryConfig", regulatoryResult);
+            }
         }
 
         const operationalCredentialsClusterClient = ClusterClient(OperationalCredentialsCluster, 0, interactionClient);
