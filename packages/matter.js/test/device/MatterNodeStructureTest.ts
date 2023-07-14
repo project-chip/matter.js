@@ -137,7 +137,7 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
                 locationCapability: RegulatoryLocationType.IndoorOutdoor,
                 supportsConcurrentConnections: true
             },
-            GeneralCommissioningClusterHandler
+            GeneralCommissioningClusterHandler()
         )
     );
 

@@ -87,7 +87,13 @@ export interface CommissioningServerOptions {
         productName: string;
     }
     | AttributeInitialValues<typeof BasicInformationCluster.attributes>;
+
     certificates?: OperationalCredentialsServerConf;
+
+    generalCommissioning?: Partial<AttributeInitialValues<typeof GeneralCommissioningCluster.attributes>> & {
+        allowCountryCodeChange?: boolean; // Default true if not set
+        countryCodeWhitelist?: string[];
+    };
 }
 
 /**
@@ -164,7 +170,7 @@ export class CommissioningServer extends MatterNode {
                         nodeLabel: "",
                         hardwareVersion: 0,
                         hardwareVersionString: "0",
-                        location: "US",
+                        location: "XX",
                         localConfigDisabled: false,
                         softwareVersion: 1,
                         softwareVersionString: "v1",
@@ -218,16 +224,19 @@ export class CommissioningServer extends MatterNode {
             ClusterServer(
                 GeneralCommissioningCluster,
                 {
-                    breadcrumb: BigInt(0),
-                    basicCommissioningInfo: {
+                    breadcrumb: options.generalCommissioning?.breadcrumb ?? BigInt(0),
+                    basicCommissioningInfo: options.generalCommissioning?.basicCommissioningInfo ?? {
                         failSafeExpiryLengthSeconds: 60 /* 1min */,
                         maxCumulativeFailsafeSeconds: 900 /* Recommended according to Specs */
                     },
-                    regulatoryConfig: RegulatoryLocationType.Indoor,
-                    locationCapability: RegulatoryLocationType.IndoorOutdoor,
-                    supportsConcurrentConnections: true
+                    regulatoryConfig: options.generalCommissioning?.regulatoryConfig ?? RegulatoryLocationType.Outdoor, // Default is the most restrictive one
+                    locationCapability: options.generalCommissioning?.locationCapability ?? RegulatoryLocationType.IndoorOutdoor,
+                    supportsConcurrentConnections: options.generalCommissioning?.supportsConcurrentConnections ?? true
                 },
-                GeneralCommissioningClusterHandler
+                GeneralCommissioningClusterHandler({
+                    allowCountryCodeChange: options.generalCommissioning?.allowCountryCodeChange ?? true,
+                    countryCodeWhitelist: options.generalCommissioning?.countryCodeWhitelist ?? undefined
+                })
             )
         );
 
