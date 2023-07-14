@@ -22,6 +22,11 @@ function createDgramSocket(address: string | undefined, port: number | undefined
         };
         socket.on("error", handleBindError);
         socket.bind(port, address, () => {
+            const { address: localAddress, port: localPort } = socket.address();
+            logger.debug("Socket created and bound ", Logger.dict({
+                remoteAddress: `${address}:${port}`,
+                localAddress: `${localAddress}:${localPort}`
+            }));
             socket.removeListener("error", handleBindError);
             socket.on("error", error => logger.error(error));
             resolve(socket);
@@ -31,11 +36,14 @@ function createDgramSocket(address: string | undefined, port: number | undefined
 
 export class UdpChannelNode implements UdpChannel {
     static async create({ listeningPort, type, listeningAddress, netInterface }: UdpChannelOptions) {
-        const socket = await createDgramSocket(listeningAddress, listeningPort, { type, reuseAddr: true });
+        const socketOptions: dgram.SocketOptions = { type, reuseAddr: true };
+        if (type === "udp6") {
+            socketOptions.ipv6Only = true;
+        }
+        const socket = await createDgramSocket(listeningAddress, listeningPort, socketOptions);
         socket.setBroadcast(true);
-        let multicastInterface: string | undefined;
         if (netInterface !== undefined) {
-            multicastInterface = NetworkNode.getMulticastInterface(netInterface, type === "udp4");
+            const multicastInterface = NetworkNode.getMulticastInterface(netInterface, type === "udp4");
             logger.debug("Initialize multicast", Logger.dict({
                 address: `${multicastInterface}:${listeningPort}`,
                 interface: netInterface,
