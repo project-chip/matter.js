@@ -81,6 +81,7 @@ export class MatterController {
         private readonly netInterfaceIpv6: NetInterface,
         private readonly certificateManager: RootCertificateManager,
         private readonly fabric: Fabric,
+        private readonly storage: StorageContext,
         commissioningOptions?: CommissioningData
     ) {
         this.controllerStorage = this.storage.createContext("MatterController");
