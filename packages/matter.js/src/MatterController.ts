@@ -28,6 +28,8 @@ import { Fabric, FabricBuilder, FabricJsonObject } from "./fabric/Fabric.js";
 import { ChannelManager, NoChannelError } from "./protocol/ChannelManager.js";
 import { StorageContext } from "./storage/StorageContext.js";
 import { ExchangeManager, ExchangeProvider, MessageChannel } from "./protocol/ExchangeManager.js";
+import { NetworkCommissioningClusterSchema } from "./cluster/schema/NetworkCommissioning.js";
+import { TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import { isIPv6 } from "./util/Ip.js";
 import { BasicInformationCluster } from "./cluster/BasicInformationCluster.js";
 import { CommissioningError, CommissioningSuccessFailureResponse, GeneralCommissioningCluster, RegulatoryLocationType } from "./cluster/GeneralCommissioningCluster.js";
