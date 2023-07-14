@@ -253,6 +253,7 @@ export class DnsCodec {
             case DnsRecordType.A:
                 return this.encodeARecord(value as string);
             default:
+                if (value instanceof ByteArray) return value;
                 throw new Error(`Unsupported record type ${recordType}`);
         }
     }
