@@ -105,9 +105,9 @@ export class DataWriter<E extends Endian> {
 
         const result = new ByteArray(this.length);
         let offset = 0;
-        this.chunks.forEach(chunck => {
-            result.set(chunck, offset);
-            offset += chunck.byteLength;
+        this.chunks.forEach(chunk => {
+            result.set(chunk, offset);
+            offset += chunk.byteLength;
         });
         this.chunks.length = 0;
         this.chunks.push(result);

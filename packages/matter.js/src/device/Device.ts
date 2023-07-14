@@ -30,7 +30,7 @@ export class PairedDevice extends Endpoint {
      */
     constructor(
         definition: AtLeastOne<DeviceTypeDefinition>,
-        clusters: (ClusterServerObj<Attributes, Commands, Events> | ClusterClientObj<Attributes, Commands, Events>)[] = [],
+        clusters: (ClusterServerObj<Attributes, Commands, Events> | ClusterClientObj<any, Attributes, Commands, Events>)[] = [],
         endpointId: number
     ) {
         super(definition, { endpointId });
@@ -58,7 +58,7 @@ export class PairedDevice extends Endpoint {
     /**
      * @deprecated PairedDevice does not support adding additional clusters
      */
-    override addClusterClient<A extends Attributes, C extends Commands, E extends Events>(cluster: ClusterClientObj<A, C, E>) {
+    override addClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(cluster: ClusterClientObj<F, A, C, E>) {
         if (this.declineAddingMoreClusters) {
             throw new Error("PairedDevice does not support adding additional clusters");
         }
@@ -158,7 +158,7 @@ export class Device extends Endpoint {
         throw new Error("createOptionalClusterServer needs to be implemented by derived classes");
     }
 
-    protected createOptionalClusterClient<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(_cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<A, C, E> {
+    protected createOptionalClusterClient<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(_cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<F, A, C, E> {
         // TODO: Implement this in upper classes to add optional clusters on the fly
         throw new Error("createOptionalClusterClient needs to be implemented by derived classes");
     }
@@ -177,7 +177,7 @@ export class Device extends Endpoint {
         }
     }
 
-    override getClusterClient<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<A, C, E> | undefined {
+    override getClusterClient<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<F, A, C, E> | undefined {
         const clusterClient = super.getClusterClient(cluster);
         if (clusterClient !== undefined) {
             return clusterClient;

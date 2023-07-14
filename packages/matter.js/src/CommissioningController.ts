@@ -7,7 +7,7 @@ import { MatterNode } from "./MatterNode.js";
 import { UdpInterface } from "./net/UdpInterface.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { StorageContext } from "./storage/StorageContext.js";
-import { MatterController } from "./MatterController.js";
+import { CommissioningData, MatterController } from "./MatterController.js";
 import { InteractionClient, ClusterClient } from "./protocol/interaction/InteractionClient.js";
 import { NodeId } from "./datatype/NodeId.js";
 import { structureReadDataToClusterObject } from "./protocol/interaction/AttributeDataDecoder.js";
@@ -47,8 +47,10 @@ export interface CommissioningControllerOptions {
 
     delayedPairing?: boolean;
 
-    passcode: number,
-    discriminator: number,
+    passcode: number, // TODO: Move into commissioningOptions
+    discriminator: number, // TODO: Move into commissioningOptions
+
+    commissioningOptions?: CommissioningData
 }
 
 export class CommissioningController extends MatterNode {
@@ -60,6 +62,7 @@ export class CommissioningController extends MatterNode {
 
     private readonly passcode: number;
     private readonly discriminator: number;
+    private readonly commissioningOptions?: CommissioningData;
 
     readonly delayedPairing: boolean;
 
@@ -88,6 +91,7 @@ export class CommissioningController extends MatterNode {
 
         this.passcode = options.passcode;
         this.discriminator = options.discriminator;
+        this.commissioningOptions = options.commissioningOptions;
     }
 
     /**
@@ -107,6 +111,7 @@ export class CommissioningController extends MatterNode {
             await UdpInterface.create(this.port, "udp4", this.listeningAddressIpv4),
             await UdpInterface.create(this.port, "udp6", this.listeningAddressIpv6),
             this.storage
+            this.commissioningOptions
         );
 
         if (this.controllerInstance.isCommissioned()) {
@@ -173,7 +178,7 @@ export class CommissioningController extends MatterNode {
      */
     async getRootClusterClientWithNewInteractionClient<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
         cluster: Cluster<F, SF, A, C, E>
-    ): Promise<ClusterClientObj<A, C, E> | undefined> {
+    ): Promise<ClusterClientObj<F, A, C, E> | undefined> {
         return super.getRootClusterClient(cluster, await this.createInteractionClient());
     }
 
@@ -284,7 +289,7 @@ export class CommissioningController extends MatterNode {
             throw new Error("No device type found for endpoint");
         }
 
-        const endpointClusters = Array<ClusterServerObj<Attributes, Commands, Events> | ClusterClientObj<Attributes, Commands, Events>>();
+        const endpointClusters = Array<ClusterServerObj<Attributes, Commands, Events> | ClusterClientObj<any, Attributes, Commands, Events>>();
 
         // Add ClusterClients for all server clusters of the device
         for (const clusterId of descriptorData.serverList) {
