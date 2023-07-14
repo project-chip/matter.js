@@ -296,10 +296,12 @@ export class DnsCodec {
 
     private static encodeQName(qname: string) {
         const writer = new DataWriter(Endian.Big);
-        qname.split(".").forEach(label => {
-            writer.writeUInt8(label.length);
-            writer.writeUtf8String(label);
-        });
+        if (qname.length > 0) {
+            qname.split(".").forEach(label => {
+                writer.writeUInt8(label.length);
+                writer.writeUtf8String(label);
+            });
+        }
         writer.writeUInt8(0);
         return writer.toByteArray();
     }
