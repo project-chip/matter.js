@@ -6,21 +6,24 @@
 
 import { AAAARecord, ARecord, PtrRecord, SrvRecord, TxtRecord, DnsRecord } from "../codec/DnsCodec.js";
 import { Crypto } from "../crypto/Crypto.js";
-import { Broadcaster } from "../common/Broadcaster.js";
 import {
-    getDeviceMatterQname, getFabricQname, MATTER_COMMISSION_SERVICE_QNAME, MATTER_COMMISSIONER_SERVICE_QNAME,
-    MATTER_SERVICE_QNAME, SERVICE_DISCOVERY_QNAME
+    getCommissioningModeQname, getDeviceInstanceQname, getDeviceMatterQname, getDeviceTypeQname, getFabricQname,
+    getLongDiscriminatorQname, getShortDiscriminatorQname, getVendorQname, MATTER_COMMISSION_SERVICE_QNAME,
+    MATTER_COMMISSIONER_SERVICE_QNAME, MATTER_SERVICE_QNAME, SERVICE_DISCOVERY_QNAME
 } from "./MdnsConsts.js";
 import { MdnsServer } from "./MdnsServer.js";
-import { VendorId } from "../datatype/VendorId.js";
 import { Network } from "../net/Network.js";
 import { isIPv4 } from "../util/Ip.js";
 import { Logger } from "../log/Logger.js";
 import { Fabric } from "../fabric/Fabric.js";
+import { CommissionerInstanceData, CommissioningModeInstanceData } from "../common/InstanceBroadcaster.js";
 
 const logger = Logger.get("MdnsBroadcaster");
 
-export class MdnsBroadcaster implements Broadcaster {
+/**
+ * This class is handing MDNS Announcements for multiple instances/devices
+ */
+export class MdnsBroadcaster {
     static async create(multicastInterface?: string) {
         return new MdnsBroadcaster(await MdnsServer.create(multicastInterface));
     }
@@ -32,23 +35,42 @@ export class MdnsBroadcaster implements Broadcaster {
     ) { }
 
     /** Set the Broadcaster data to announce a device ready for commissioning in a special mode */
-    setCommissionMode(mode: number, deviceName: string, deviceType: number, vendorId: VendorId, productId: number, discriminator: number, announcedNetPort: number) {
+    setCommissionMode(announcedNetPort: number, mode: number, deviceData: CommissioningModeInstanceData) {
+        const {
+            deviceName,
+            deviceType,
+            vendorId,
+            productId,
+            discriminator,
+            sleepIdleInterval,
+            sleepActiveInterval,
+            pairingHint,
+            pairingInstructions
+        } = deviceData;
         logger.debug(`announce commissioning mode ${mode} ${deviceName} ${deviceType} ${vendorId.id} ${productId} ${discriminator}`);
 
         const shortDiscriminator = (discriminator >> 8) & 0x0F;
         const instanceId = Crypto.getRandomData(8).toHex().toUpperCase();
-        const vendorQname = `_V${vendorId.id}._sub.${MATTER_COMMISSION_SERVICE_QNAME}`;
-        const deviceTypeQname = `_T${deviceType}._sub.${MATTER_COMMISSION_SERVICE_QNAME}`;
-        const shortDiscriminatorQname = `_S${shortDiscriminator}._sub.${MATTER_COMMISSION_SERVICE_QNAME}`;
-        const longDiscriminatorQname = `_L${discriminator}._sub.${MATTER_COMMISSION_SERVICE_QNAME}`;
-        const commissionModeQname = `_CM._sub.${MATTER_COMMISSION_SERVICE_QNAME}`;
-        const deviceQname = `${instanceId}.${MATTER_COMMISSION_SERVICE_QNAME}`;
+        const vendorQname = getVendorQname(vendorId);
+        const deviceTypeQname = getDeviceTypeQname(deviceType);
+        const shortDiscriminatorQname = getShortDiscriminatorQname(shortDiscriminator);
+        const longDiscriminatorQname = getLongDiscriminatorQname(discriminator);
+        const commissionModeQname = getCommissioningModeQname();
+        const deviceQname = getDeviceInstanceQname(instanceId);
 
-        this.mdnsServer.setRecordsGenerator(netInterface => {
+        this.mdnsServer.setRecordsGenerator(announcedNetPort, netInterface => {
             const ipMac = this.network.getIpMac(netInterface);
             if (ipMac === undefined) return [];
             const { mac, ips } = ipMac;
             const hostname = mac.replace(/:/g, "").toUpperCase() + "0000.local";
+
+            logger.debug("Announcement: Commission mode ", Logger.dict({
+                mode,
+                qname: deviceQname,
+                port: announcedNetPort,
+                interface: netInterface
+            }));
+
             const records = [
                 PtrRecord(SERVICE_DISCOVERY_QNAME, MATTER_COMMISSION_SERVICE_QNAME),
                 PtrRecord(SERVICE_DISCOVERY_QNAME, vendorQname),
@@ -64,16 +86,16 @@ export class MdnsBroadcaster implements Broadcaster {
                 PtrRecord(commissionModeQname, deviceQname),
                 SrvRecord(deviceQname, { priority: 0, weight: 0, port: announcedNetPort, target: hostname }),
                 TxtRecord(deviceQname, [
-                    `VP=${vendorId.id}+${productId}`,  /* Vendor / Product */
-                    `DT=${deviceType}`,             /* Device Type */
-                    `DN=${deviceName}`,             /* Device Name */
-                    "SII=5000",                     /* Sleepy Idle Interval */
-                    "SAI=300",                      /* Sleepy Active Interval */
-                    "T=0",                          /* TCP not supported */
-                    `D=${discriminator}`,           /* Discriminator */
-                    `CM=${mode}`,                   /* Commission Mode */
-                    "PH=33",                        /* Pairing Hint */
-                    "PI=",                          /* Pairing Instruction */
+                    `VP=${vendorId.id}+${productId}`,    /* Vendor / Product */
+                    `DT=${deviceType}`,                  /* Device Type */
+                    `DN=${deviceName}`,                  /* Device Name */
+                    `SII=${sleepIdleInterval ?? 5000}`,  /* Sleepy Idle Interval */
+                    `SAI=${sleepActiveInterval ?? 300}`, /* Sleepy Active Interval */
+                    "T=0",                               /* TCP not supported */
+                    `D=${discriminator}`,                /* Discriminator */
+                    `CM=${mode}`,                        /* Commission Mode */
+                    `PH=${pairingHint ?? 33}`,           /* Pairing Hint */
+                    `PI=${pairingInstructions ?? ""}`,   /* Pairing Instruction */
                 ]),
             ];
             ips.forEach(ip => {
@@ -87,10 +109,15 @@ export class MdnsBroadcaster implements Broadcaster {
         });
     }
 
-    /** Set the Broadcaster Data to announce an device for operative discovery (aka "already paired") */
-    setFabrics(fabrics: Fabric[], announcedNetPort: number) {
-        this.mdnsServer.setRecordsGenerator(netInterface => {
-            const records: Record<any>[] = [
+    /** Set the Broadcaster Data to announce a device for operative discovery (aka "already paired") */
+    setFabrics(announcedNetPort: number, fabrics: Fabric[]) {
+        this.mdnsServer.setRecordsGenerator(announcedNetPort, netInterface => {
+            const ipMac = this.network.getIpMac(netInterface);
+            if (ipMac === undefined) return [];
+            const { mac, ips } = ipMac;
+            const hostname = mac.replace(/:/g, "").toUpperCase() + "0000.local";
+
+            const records: DnsRecord<any>[] = [
                 PtrRecord(SERVICE_DISCOVERY_QNAME, MATTER_SERVICE_QNAME),
             ];
             fabrics.forEach(fabric => {
@@ -99,46 +126,53 @@ export class MdnsBroadcaster implements Broadcaster {
                 const fabricQname = getFabricQname(operationalIdString);
                 const deviceMatterQname = getDeviceMatterQname(operationalIdString, nodeId.toString());
 
-                logger.debug("Set fabric for announcement", Logger.dict({
+                logger.debug("Announcement: Fabric", Logger.dict({
                     id: `${operationalId.toHex()}/${nodeId.id}`,
                     qname: deviceMatterQname,
+                    port: announcedNetPort,
                     interface: netInterface
                 }));
-                const ipMac = this.network.getIpMac(netInterface);
-                if (ipMac === undefined) return [];
-                const { mac, ips } = ipMac;
-                const hostname = mac.replace(/:/g, "").toUpperCase() + "0000.local";
                 const fabricRecords = [
                     PtrRecord(SERVICE_DISCOVERY_QNAME, fabricQname),
                     PtrRecord(MATTER_SERVICE_QNAME, deviceMatterQname),
                     PtrRecord(fabricQname, deviceMatterQname),
-                    // TODO: the Matter port should not be hardcoded here
                     SrvRecord(deviceMatterQname, { priority: 0, weight: 0, port: announcedNetPort, target: hostname }),
                     TxtRecord(deviceMatterQname, ["SII=5000", "SAI=300", "T=1"]),
                 ];
-                ips.forEach(ip => {
-                    if (isIPv4(ip)) {
-                        fabricRecords.push(ARecord(hostname, ip));
-                    } else {
-                        fabricRecords.push(AAAARecord(hostname, ip));
-                    }
-                });
                 records.push(...fabricRecords);
+            });
+            ips.forEach(ip => {
+                if (isIPv4(ip)) {
+                    records.push(ARecord(hostname, ip));
+                } else {
+                    records.push(AAAARecord(hostname, ip));
+                }
             });
             return records;
         });
     }
 
     /** Set the Broadcaster data to announce a Commissioner (aka Commissioner discovery) */
-    setCommissionerInfo(deviceName: string, vendorId: VendorId, productId: number, announcedNetPort: number, deviceType?: number) {
-        logger.debug(`announce commissioner ${announcedNetPort} ${deviceType}`);
+    setCommissionerInfo(announcedNetPort: number, commissionerData: CommissionerInstanceData) {
+        const {
+            deviceName,
+            deviceType,
+            vendorId,
+            productId,
+            sleepIdleInterval,
+            sleepActiveInterval,
+        } = commissionerData;
+        logger.debug("Announcement: Commissioner", Logger.dict({
+            port: announcedNetPort,
+            deviceType,
+        }));
 
         const instanceId = Crypto.getRandomData(8).toHex().toUpperCase();
         const deviceTypeQname = `_T${deviceType}._sub.${MATTER_COMMISSIONER_SERVICE_QNAME}`;
         const vendorQname = `_V${vendorId.id}._sub.${MATTER_COMMISSION_SERVICE_QNAME}`;
         const deviceQname = `${instanceId}.${MATTER_COMMISSION_SERVICE_QNAME}`;
 
-        this.mdnsServer.setRecordsGenerator(netInterface => {
+        this.mdnsServer.setRecordsGenerator(announcedNetPort, netInterface => {
             const ipMac = this.network.getIpMac(netInterface);
             if (ipMac === undefined) return [];
             const { mac, ips } = ipMac;
@@ -149,12 +183,12 @@ export class MdnsBroadcaster implements Broadcaster {
                 PtrRecord(vendorQname, deviceQname),
                 SrvRecord(deviceQname, { priority: 0, weight: 0, port: announcedNetPort, target: hostname }),
                 TxtRecord(deviceQname, [
-                    `VP=${vendorId.id}+${productId}`,  /* Vendor / Product */
-                    `DT=${deviceType}`,             /* Device Type */
-                    `DN=${deviceName}`,             /* Device Name */
-                    "SII=5000",                     /* Sleepy Idle Interval */
-                    "SAI=300",                      /* Sleepy Active Interval */
-                    "T=0",                          /* TCP not supported */
+                    `VP=${vendorId.id}+${productId}`,    /* Vendor / Product */
+                    `DT=${deviceType}`,                  /* Device Type */
+                    `DN=${deviceName}`,                  /* Device Name */
+                    `SII=${sleepIdleInterval ?? 5000}`,  /* Sleepy Idle Interval */
+                    `SAI=${sleepActiveInterval ?? 300}`, /* Sleepy Active Interval */
+                    "T=0",                               /* TCP not supported */
                 ]),
             ];
             if (deviceType !== undefined) {
@@ -173,8 +207,8 @@ export class MdnsBroadcaster implements Broadcaster {
         });
     }
 
-    announce() {
-        this.mdnsServer.announce()
+    announce(announcementPort: number) {
+        this.mdnsServer.announce(announcementPort)
             .catch(error => logger.error(error));
     }
 
