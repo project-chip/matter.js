@@ -40,13 +40,13 @@ export function tryCatch<T, E extends Error>(codeBlock: () => T, errorType: Clas
  * @param errorType Errortype to catch and handle
  * @param fallbackValueOrFunction Fallback value or function to compute the fallback value
  */
-export async function tryCatchAsync<T, E extends Error>(codeBlock: () => Promise<T>, errorType: ClassExtends<E>, fallbackValueOrFunction: ErrorHandler<T, E> | T): Promise<T> {
+export async function tryCatchAsync<T, E extends Error>(codeBlock: () => Promise<T>, errorType: ClassExtends<E>, fallbackValueOrFunction: ErrorHandler<Promise<T>, E> | T): Promise<T> {
     try {
         return await codeBlock();
     } catch (error) {
         if (error instanceof errorType) {
             if (typeof fallbackValueOrFunction === "function") {
-                return (fallbackValueOrFunction as ErrorHandler<T, E>)(error);
+                return await (fallbackValueOrFunction as ErrorHandler<Promise<T>, E>)(error);
             } else {
                 return fallbackValueOrFunction;
             }
