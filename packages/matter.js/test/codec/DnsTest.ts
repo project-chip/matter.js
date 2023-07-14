@@ -54,15 +54,31 @@ describe("DnsCodec", () => {
         it("decodes a message", () => {
             const result = DnsCodec.decode(ENCODED);
 
+            assert.ok(result);
             assert.deepEqual(result, DNS_DECODED);
+
+            // Checking the encoding of this decoded message will not work because message uses compressed QNames
+            // that we do not support right now on encoding side
         });
     });
 
     describe("encode", () => {
-        it("encodes a message", () => {
+        it("encodes a message and verify with decoding again", () => {
             const result = DnsCodec.encode(DNS_RESPONSE);
 
             assert.equal(result.toHex(), RESULT.toHex());
+
+            const decoded = DnsCodec.decode(result);
+
+            assert.deepEqual(decoded, DNS_RESPONSE);
+        });
+
+        it("encodes second message and verify with decoding again", () => {
+            const result = DnsCodec.encode(DNS_DECODED);
+
+            const decoded = DnsCodec.decode(result);
+
+            assert.deepEqual(decoded, DNS_DECODED);
         });
     });
 });
