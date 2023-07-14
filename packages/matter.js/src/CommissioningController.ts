@@ -110,7 +110,7 @@ export class CommissioningController extends MatterNode {
             this.mdnsScanner,
             await UdpInterface.create(this.port, "udp4", this.listeningAddressIpv4),
             await UdpInterface.create(this.port, "udp6", this.listeningAddressIpv6),
-            this.storage
+            this.storage,
             this.commissioningOptions
         );
 
