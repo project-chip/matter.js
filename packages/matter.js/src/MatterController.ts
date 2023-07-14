@@ -45,7 +45,7 @@ const ADMIN_VENDOR_ID = new VendorId(752);
 const logger = Logger.get("MatterController");
 
 export class MatterController {
-    public static async create(scanner: Scanner, netInterfaceIpv4: NetInterface, netInterfaceIpv6: NetInterface, storage: StorageContext, commissioningOptions?: CommissioningData): Promise<MatterController> {
+    public static async create(scanner: Scanner, netInterfaceIpv4: NetInterface | undefined, netInterfaceIpv6: NetInterface, storage: StorageContext, operationalServerAddress?: ServerAddress, commissioningOptions?: CommissioningData): Promise<MatterController> {
         const CONTROLLER_NODE_ID = new NodeId(Crypto.getRandomBigUInt64());
         const certificateManager = new RootCertificateManager(storage);
 
@@ -61,9 +61,9 @@ export class MatterController {
         const controllerStorage = storage.createContext("MatterController");
         if (controllerStorage.has("fabric")) {
             const storedFabric = Fabric.createFromStorageObject(controllerStorage.get<FabricJsonObject>("fabric"));
-            return new MatterController(scanner, netInterfaceIpv4, netInterfaceIpv6, certificateManager, storedFabric, storage, commissioningOptions);
+            return new MatterController(scanner, netInterfaceIpv4, netInterfaceIpv6, certificateManager, storedFabric, storage, operationalServerAddress, commissioningOptions);
         } else {
-            return new MatterController(scanner, netInterfaceIpv4, netInterfaceIpv6, certificateManager, await fabricBuilder.build(), storage, commissioningOptions);
+            return new MatterController(scanner, netInterfaceIpv4, netInterfaceIpv6, certificateManager, await fabricBuilder.build(), storage, operationalServerAddress, commissioningOptions);
         }
     }
 
@@ -77,20 +77,28 @@ export class MatterController {
 
     constructor(
         private readonly scanner: Scanner,
-        private readonly netInterfaceIpv4: NetInterface,
+        private readonly netInterfaceIpv4: NetInterface | undefined,
         private readonly netInterfaceIpv6: NetInterface,
         private readonly certificateManager: RootCertificateManager,
         private readonly fabric: Fabric,
         private readonly storage: StorageContext,
+        public operationalServerAddress?: ServerAddress,
         commissioningOptions?: CommissioningData
     ) {
         this.controllerStorage = this.storage.createContext("MatterController");
+
+        // If controller has a stored operational server address, use it, irrelevant what was passed in the constructor
+        if (this.controllerStorage.has("operationalServerAddress")) {
+            this.operationalServerAddress = this.controllerStorage.get<ServerAddress>("operationalServerAddress");
+        }
 
         this.sessionManager = new SessionManager(this, this.storage);
         this.sessionManager.initFromStorage([this.fabric]);
 
         this.exchangeManager = new ExchangeManager<MatterController>(this.sessionManager, this.channelManager);
-        this.exchangeManager.addNetInterface(netInterfaceIpv4);
+        if (netInterfaceIpv4 !== undefined) {
+            this.exchangeManager.addNetInterface(netInterfaceIpv4);
+        }
         this.exchangeManager.addNetInterface(netInterfaceIpv6);
 
         this.commissioningOptions = commissioningOptions ?? {
@@ -105,7 +113,11 @@ export class MatterController {
 
         // Do PASE paring
         const paseUnsecureMessageChannel = new MessageChannel(paseChannel, this.sessionManager.getUnsecureSession());
-        const paseSecureSession = await this.paseClient.pair(this, this.exchangeManager.initiateExchangeWithChannel(paseUnsecureMessageChannel, SECURE_CHANNEL_PROTOCOL_ID), setupPin);
+        const paseExchange = this.exchangeManager.initiateExchangeWithChannel(paseUnsecureMessageChannel, SECURE_CHANNEL_PROTOCOL_ID);
+        const paseSecureSession = await this.paseClient.pair(this, paseExchange, setupPin)
+
+        this.operationalServerAddress = address;
+        this.controllerStorage.set("operationalServerAddress", address);
 
         // Use the created secure session to do the commissioning
         const paseSecureMessageChannel = new MessageChannel(paseChannel, paseSecureSession);
@@ -184,19 +196,34 @@ export class MatterController {
         return this.pair(peerNodeId, operationalIp, operationalPort);
     }
 
-    async pair(peerNodeId: NodeId, operationalIp: string, operationalPort: number) {
+    async pair(peerNodeId: NodeId, operationalServerAddress: ServerAddress) {
+        const { ip: operationalIp, port: operationalPort } = operationalServerAddress;
         // Do CASE pairing
-        const operationalInterface = isIPv6(operationalIp) ? this.netInterfaceIpv6 : this.netInterfaceIpv4;
+        const isIpv6Address = isIPv6(operationalIp);
+        const operationalInterface = isIpv6Address ? this.netInterfaceIpv6 : this.netInterfaceIpv4;
+
+        if (operationalInterface === undefined) {
+            throw new PairRetransmissionLimitReachedError(`IPv${isIpv6Address ? "6" : "4"} interface not initialized for port ${operationalPort}. Can not use this address for pairing.`);
+        }
+
         const operationalChannel = await operationalInterface.openChannel(operationalIp, operationalPort);
         const operationalUnsecureMessageExchange = new MessageChannel(operationalChannel, this.sessionManager.getUnsecureSession());
         const operationalSecureSession = await this.caseClient.pair(this, this.exchangeManager.initiateExchangeWithChannel(operationalUnsecureMessageExchange, SECURE_CHANNEL_PROTOCOL_ID), this.fabric, peerNodeId);
         const channel = new MessageChannel(operationalChannel, operationalSecureSession);
         this.channelManager.setChannel(this.fabric, peerNodeId, channel);
+
+        this.operationalServerAddress = operationalServerAddress;
+        this.controllerStorage.set("operationalServerAddress", operationalServerAddress);
+
         return channel;
     }
 
     isCommissioned() {
         return this.controllerStorage.get("fabricCommissioned", false);
+    }
+
+    getOperationalServerAddress() {
+        return this.operationalServerAddress;
     }
 
     async connect(nodeId: NodeId, timeoutSeconds?: number) {
@@ -253,5 +280,7 @@ export class MatterController {
     close() {
         this.scanner.close();
         this.exchangeManager.close();
+        this.netInterfaceIpv4?.close();
+        this.netInterfaceIpv6.close();
     }
 }
