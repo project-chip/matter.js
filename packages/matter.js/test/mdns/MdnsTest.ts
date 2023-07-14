@@ -62,8 +62,8 @@ describe("MDNS", () => {
             const { promise, resolver } = await getPromiseResolver<ByteArray>();
             channel.onData((_netInterface, _peerAddress, _peerPort, data) => resolver(data));
 
-            broadcaster.setFabrics([{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric], PORT);
-            broadcaster.announce();
+            broadcaster.setFabrics(PORT, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
+            broadcaster.announce(PORT);
 
             const result = DnsCodec.decode(await promise);
 
@@ -90,20 +90,20 @@ describe("MDNS", () => {
 
     describe("integration", () => {
         it("the client returns server record if it has been announced", async () => {
-            broadcaster.setFabrics([{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric], PORT);
-            broadcaster.announce();
+            broadcaster.setFabrics(PORT, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
+            broadcaster.announce(PORT);
 
-            const result = await scanner.findDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID);
+            const result = await scanner.findOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID);
 
-            assert.deepEqual(result, { ip: SERVER_IPv4, port: 5540 });
+            assert.deepEqual(result, [{ ip: SERVER_IPv4, port: 5540 }]);
         });
 
         it("the client asks for the server record if it has not been announced", async () => {
-            broadcaster.setFabrics([{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric], PORT);
+            broadcaster.setFabrics(PORT, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
 
-            const result = await scanner.findDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID);
+            const result = await scanner.findOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID);
 
-            assert.deepEqual(result, { ip: SERVER_IPv4, port: 5540 });
+            assert.deepEqual(result, [{ ip: SERVER_IPv4, port: 5540 }]);
         });
     });
 });
