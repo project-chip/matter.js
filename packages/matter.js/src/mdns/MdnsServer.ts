@@ -7,6 +7,7 @@
 import { DnsCodec, DnsMessageType, DnsRecord, DnsRecordType } from "../codec/DnsCodec.js";
 import { Network } from "../net/Network.js";
 import { UdpMulticastServer } from "../net/UdpMulticastServer.js";
+import { Time } from "../time/Time.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { Cache } from "../util/Cache.js";
 
@@ -28,50 +29,79 @@ export class MdnsServer {
     }
 
     private readonly network = Network.get();
-    private recordsGenerator: (netInterface: string) => Record<any>[] = () => [];
-    private readonly records = new Cache<Record<any>[]>((multicastInterface) => this.recordsGenerator(multicastInterface), 5 * 60 * 1000 /* 5mn */);
+    private recordsGenerator = new Map<number, (netInterface: string) => DnsRecord<any>[]>();
+    private readonly records = new Cache<Map<number, DnsRecord<any>[]>>(
+        (multicastInterface: string) => {
+            const portMap = new Map<number, DnsRecord<any>[]>();
+            for (const [hostPort, generator] of this.recordsGenerator) {
+                portMap.set(hostPort, generator(multicastInterface));
+            }
+            return portMap;
+        },
+        15 * 60 * 1000 /* 15mn */
+    );
 
     constructor(
         private readonly multicastServer: UdpMulticastServer,
         private readonly netInterface: string | undefined,
     ) {
-        multicastServer.onMessage((message, remoteIp, netInterface) => this.handleDnsMessage(message, remoteIp, netInterface));
+        multicastServer.onMessage((message, remoteIp, netInterface) => void this.handleDnsMessage(message, remoteIp, netInterface));
     }
 
-    private handleDnsMessage(messageBytes: ByteArray, _remoteIp: string, netInterface: string) {
+    private async handleDnsMessage(messageBytes: ByteArray, _remoteIp: string, netInterface: string) {
         // This message was on a subnet not supported by this device
         if (netInterface === undefined) return;
         const records = this.records.get(netInterface);
 
         // No need to process the DNS message if there are no records to serve
-        if (records.length === 0) return;
+        if (records.size === 0) return;
 
         const message = DnsCodec.decode(messageBytes);
         if (message === undefined) return; // The message cannot be parsed
         const { transactionId, messageType, queries } = message;
-        if (messageType !== MessageType.Query) return;
+        if (messageType !== DnsMessageType.Query && messageType !== DnsMessageType.TruncatedQuery) return;
 
-        const answers = queries.flatMap(query => this.queryRecords(query, records));
-        if (answers.length === 0) return;
+        for (const portRecords of records.values()) {
+            const answers = queries.flatMap(query => this.queryRecords(query, portRecords));
+            if (answers.length === 0) continue;
 
-        const additionalRecords = records.filter(record => !answers.includes(record));
-        this.multicastServer.send(DnsCodec.encode({ transactionId, answers, additionalRecords }), netInterface).catch(() => {
-            // ignore because already catched in UdpMulticastServer
-        });
+            const additionalRecords = portRecords.filter(record => !answers.includes(record));
+
+            // TODO: try to combine the messages to avoid sending multiple messages but keep under 1500 bytes per message
+            this.multicastServer.send(DnsCodec.encode({
+                messageType: DnsMessageType.Response,
+                transactionId,
+                answers,
+                additionalRecords
+            }), netInterface).catch(() => {
+                // ignore because already caught in UdpMulticastServer
+            });
+            await Time.sleep(20 + Math.floor(Math.random() * 100)); // as per DNS-SD spec wait 20-120ms before sending more packets
+        }
     }
 
-    async announce() {
-        await Promise.all(this.getMulticastInterfacesForAnnounce().map(netInterface => {
+    async announce(announcedNetPort?: number) {
+        await Promise.all(this.getMulticastInterfacesForAnnounce().map(async netInterface => {
             const records = this.records.get(netInterface);
-            const answers = records.filter(({ recordType }) => recordType === RecordType.PTR);
-            const additionalRecords = records.filter(({ recordType }) => recordType !== RecordType.PTR);
-            return this.multicastServer.send(DnsCodec.encode({ answers, additionalRecords }), netInterface);
+            for (const [port, portRecords] of records) {
+                if (announcedNetPort !== undefined && announcedNetPort !== port) continue;
+                const answers = portRecords.filter(({ recordType }) => recordType === DnsRecordType.PTR);
+                const additionalRecords = portRecords.filter(({ recordType }) => recordType !== DnsRecordType.PTR);
+
+                // TODO: try to combine the messages to avoid sending multiple messages but keep under 1500 bytes per message
+                await this.multicastServer.send(DnsCodec.encode({
+                    messageType: DnsMessageType.Response,
+                    answers,
+                    additionalRecords
+                }), netInterface);
+                await Time.sleep(20 + Math.floor(Math.random() * 100)); // as per DNS-SD spec wait 20-120ms before sending more packets
+            }
         }));
     }
 
-    setRecordsGenerator(generator: (netInterface: string) => Record<any>[]) {
+    setRecordsGenerator(hostPort: number, generator: (netInterface: string) => DnsRecord<any>[]) {
         this.records.clear();
-        this.recordsGenerator = generator;
+        this.recordsGenerator.set(hostPort, generator);
     }
 
     close() {
