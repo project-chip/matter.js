@@ -71,7 +71,4 @@ export interface InstanceBroadcaster {
 
     /** Send out announcements for this instance. */
     announce(): void;
-
-    /** Close this instance. */
-    close(): void;
 }
