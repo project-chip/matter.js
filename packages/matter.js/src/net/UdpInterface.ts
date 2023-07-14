@@ -27,6 +27,9 @@ export class UdpInterface implements NetInterface {
     onData(listener: (channel: Channel<ByteArray>, messageBytes: ByteArray) => void): NetListener {
         return this.server.onData((_netInterface, peerAddress, peerPort, data) => listener(new UdpConnection(this.server, peerAddress, peerPort), data));
     }
+    close() {
+        this.server.close();
+    }
 }
 
 class UdpConnection implements Channel<ByteArray> {

@@ -14,4 +14,5 @@ export interface NetListener {
 export interface NetInterface {
     openChannel(address: string, port: number): Promise<Channel<ByteArray>>;
     onData(listener: (socket: Channel<ByteArray>, data: ByteArray) => void): NetListener;
+    close(): void;
 }
