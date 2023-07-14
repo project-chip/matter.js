@@ -6,11 +6,11 @@
 
 import * as assert from "assert";
 import { ByteArray } from "../../src/util/ByteArray.js";
-import { AAAARecord, ARecord, DnsCodec, DnsMessage, MessageType, PtrRecord, SrvRecord, TxtRecord } from "../../src/codec/DnsCodec.js";
+import { AAAARecord, ARecord, DnsCodec, DnsMessage, DnsMessageType, PtrRecord, SrvRecord, TxtRecord } from "../../src/codec/DnsCodec.js";
 
 const DNS_RESPONSE: DnsMessage = {
     transactionId: 0,
-    messageType: MessageType.Response,
+    messageType: DnsMessageType.Response,
     queries: [],
     answers: [
         PtrRecord("_services._dns-sd._udp.local", "_matter._tcp.local"),

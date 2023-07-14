@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DnsCodec, MessageType, Record, RecordType } from "../codec/DnsCodec.js";
+import { DnsCodec, DnsMessageType, DnsRecord, DnsRecordType } from "../codec/DnsCodec.js";
 import { Network } from "../net/Network.js";
 import { UdpMulticastServer } from "../net/UdpMulticastServer.js";
 import { ByteArray } from "../util/ByteArray.js";
@@ -83,8 +83,8 @@ export class MdnsServer {
         return this.netInterface === undefined ? this.network.getNetInterfaces() : [this.netInterface];
     }
 
-    private queryRecords({ name, recordType }: { name: string, recordType: RecordType }, records: Record<any>[]) {
-        if (recordType === RecordType.ANY) {
+    private queryRecords({ name, recordType }: { name: string, recordType: DnsRecordType }, records: DnsRecord<any>[]) {
+        if (recordType === DnsRecordType.ANY) {
             return records.filter(record => record.name === name);
         } else {
             return records.filter(record => record.name === name && record.recordType === recordType);

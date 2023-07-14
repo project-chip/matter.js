@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DnsCodec, MessageType, Record, RecordClass, RecordType, SrvRecordValue } from "../codec/DnsCodec.js";
+import { DnsCodec, DnsMessageType, DnsQuery, DnsRecord, DnsRecordClass, DnsRecordType, SrvRecordValue } from "../codec/DnsCodec.js";
 import { UdpMulticastServer } from "../net/UdpMulticastServer.js";
 import { MDNS_BROADCAST_IPV4, MDNS_BROADCAST_IPV6, MDNS_BROADCAST_PORT } from "./MdnsServer.js";
 import { getDeviceMatterQname, MATTER_SERVICE_QNAME } from "./MdnsConsts.js";

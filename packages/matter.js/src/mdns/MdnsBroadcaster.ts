@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AAAARecord, ARecord, PtrRecord, SrvRecord, TxtRecord, Record } from "../codec/DnsCodec.js";
+import { AAAARecord, ARecord, PtrRecord, SrvRecord, TxtRecord, DnsRecord } from "../codec/DnsCodec.js";
 import { Crypto } from "../crypto/Crypto.js";
 import { Broadcaster } from "../common/Broadcaster.js";
 import {

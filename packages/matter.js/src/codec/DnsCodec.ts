@@ -9,11 +9,11 @@ import { DataReader } from "../util/DataReader.js";
 import { DataWriter } from "../util/DataWriter.js";
 import { isIPv4, isIPv6 } from "../util/Ip.js";
 
-export const PtrRecord = (name: string, ptr: string): Record<string> => ({ name, value: ptr, ttl: 120, recordType: RecordType.PTR, recordClass: RecordClass.IN });
-export const ARecord = (name: string, ip: string): Record<string> => ({ name, value: ip, ttl: 120, recordType: RecordType.A, recordClass: RecordClass.IN });
-export const AAAARecord = (name: string, ip: string): Record<string> => ({ name, value: ip, ttl: 120, recordType: RecordType.AAAA, recordClass: RecordClass.IN });
-export const TxtRecord = (name: string, entries: string[]): Record<string[]> => ({ name, value: entries, ttl: 120, recordType: RecordType.TXT, recordClass: RecordClass.IN });
-export const SrvRecord = (name: string, srv: SrvRecordValue): Record<SrvRecordValue> => ({ name, value: srv, ttl: 120, recordType: RecordType.SRV, recordClass: RecordClass.IN });
+export const PtrRecord = (name: string, ptr: string): DnsRecord<string> => ({ name, value: ptr, ttl: 120, recordType: DnsRecordType.PTR, recordClass: DnsRecordClass.IN });
+export const ARecord = (name: string, ip: string): DnsRecord<string> => ({ name, value: ip, ttl: 120, recordType: DnsRecordType.A, recordClass: DnsRecordClass.IN });
+export const AAAARecord = (name: string, ip: string): DnsRecord<string> => ({ name, value: ip, ttl: 120, recordType: DnsRecordType.AAAA, recordClass: DnsRecordClass.IN });
+export const TxtRecord = (name: string, entries: string[]): DnsRecord<string[]> => ({ name, value: entries, ttl: 120, recordType: DnsRecordType.TXT, recordClass: DnsRecordClass.IN });
+export const SrvRecord = (name: string, srv: SrvRecordValue): DnsRecord<SrvRecordValue> => ({ name, value: srv, ttl: 120, recordType: DnsRecordType.SRV, recordClass: DnsRecordClass.IN });
 
 export interface SrvRecordValue {
     priority: number,
@@ -22,35 +22,35 @@ export interface SrvRecordValue {
     target: string,
 }
 
-export interface Query {
+export interface DnsQuery {
     name: string,
-    recordType: RecordType,
-    recordClass: RecordClass,
+    recordType: DnsRecordType,
+    recordClass: DnsRecordClass,
 }
 
-export interface Record<T> {
+export interface DnsRecord<T> {
     name: string,
-    recordType: RecordType,
-    recordClass: RecordClass,
+    recordType: DnsRecordType,
+    recordClass: DnsRecordClass,
     ttl: number,
     value: T,
 }
 
 export interface DnsMessage {
     transactionId: number,
-    messageType: MessageType,
-    queries: Query[],
-    answers: Record<any>[],
-    authorities: Record<any>[],
-    additionalRecords: Record<any>[],
+    messageType: DnsMessageType,
+    queries: DnsQuery[],
+    answers: DnsRecord<any>[],
+    authorities: DnsRecord<any>[],
+    additionalRecords: DnsRecord<any>[],
 }
 
-export const enum MessageType {
+export const enum DnsMessageType {
     Query = 0x0000,
     Response = 0x8400,
 }
 
-export const enum RecordType {
+export const enum DnsRecordType {
     A = 0x01,
     PTR = 0x0C,
     TXT = 0x10,
@@ -59,7 +59,7 @@ export const enum RecordType {
     ANY = 0xFF,
 }
 
-export const enum RecordClass {
+export const enum DnsRecordClass {
     IN = 0x01,
 }
 
@@ -73,19 +73,19 @@ export class DnsCodec {
             const answersCount = reader.readUInt16();
             const authoritiesCount = reader.readUInt16();
             const additionalRecordsCount = reader.readUInt16();
-            const queries = new Array<Query>();
+            const queries = new Array<DnsQuery>();
             for (let i = 0; i < queriesCount; i++) {
                 queries.push(this.decodeQuery(reader, message));
             }
-            const answers = new Array<Record<any>>();
+            const answers = new Array<DnsRecord<any>>();
             for (let i = 0; i < answersCount; i++) {
                 answers.push(this.decodeRecord(reader, message));
             }
-            const authorities = new Array<Record<any>>();
+            const authorities = new Array<DnsRecord<any>>();
             for (let i = 0; i < authoritiesCount; i++) {
                 authorities.push(this.decodeRecord(reader, message));
             }
-            const additionalRecords = new Array<Record<any>>();
+            const additionalRecords = new Array<DnsRecord<any>>();
             for (let i = 0; i < additionalRecordsCount; i++) {
                 additionalRecords.push(this.decodeRecord(reader, message));
             }
@@ -129,17 +129,17 @@ export class DnsCodec {
         return qNameItems.join(".");
     }
 
-    private static decodeRecordValue(valueBytes: ByteArray, recordType: RecordType, message: ByteArray) {
+    private static decodeRecordValue(valueBytes: ByteArray, recordType: DnsRecordType, message: ByteArray) {
         switch (recordType) {
-            case RecordType.PTR:
+            case DnsRecordType.PTR:
                 return this.decodeQName(new DataReader(valueBytes, Endian.Big), message);
-            case RecordType.SRV:
+            case DnsRecordType.SRV:
                 return this.decodeSrvRecord(valueBytes, message);
-            case RecordType.TXT:
+            case DnsRecordType.TXT:
                 return this.decodeTxtRecord(valueBytes);
-            case RecordType.AAAA:
+            case DnsRecordType.AAAA:
                 return this.decodeAaaaRecord(valueBytes);
-            case RecordType.A:
+            case DnsRecordType.A:
                 return this.decodeARecord(valueBytes);
             default:
                 // Unknown type, don't decode
@@ -227,17 +227,17 @@ export class DnsCodec {
         return writer.toByteArray();
     }
 
-    private static encodeRecordValue(value: any, recordType: RecordType): ByteArray {
+    private static encodeRecordValue(value: any, recordType: DnsRecordType): ByteArray {
         switch (recordType) {
-            case RecordType.PTR:
+            case DnsRecordType.PTR:
                 return this.encodeQName(value as string);
-            case RecordType.SRV:
+            case DnsRecordType.SRV:
                 return this.encodeSrvRecord(value as SrvRecordValue);
-            case RecordType.TXT:
+            case DnsRecordType.TXT:
                 return this.encodeTxtRecord(value as string[]);
-            case RecordType.AAAA:
+            case DnsRecordType.AAAA:
                 return this.encodeAaaaRecord(value as string);
-            case RecordType.A:
+            case DnsRecordType.A:
                 return this.encodeARecord(value as string);
             default:
                 throw new Error(`Unsupported record type ${recordType}`);
