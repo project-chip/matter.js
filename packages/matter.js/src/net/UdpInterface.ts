@@ -12,7 +12,7 @@ import { ByteArray } from "../util/ByteArray.js";
 
 export class UdpInterface implements NetInterface {
 
-    static async create(port: number, type: "udp4" | "udp6", address?: string, netInterface?: string) {
+    static async create(type: "udp4" | "udp6", port?: number, address?: string, netInterface?: string) {
         return new UdpInterface(await Network.get().createUdpChannel({ listeningPort: port, type, netInterface, listeningAddress: address }));
     }
 

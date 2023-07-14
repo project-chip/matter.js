@@ -8,7 +8,7 @@ import { NetListener } from "./NetInterface.js";
 import { ByteArray } from "../util/ByteArray.js";
 
 export interface UdpChannelOptions {
-    listeningPort: number,
+    listeningPort?: number,
     type: "udp4" | "udp6",
     listeningAddress?: string,
     netInterface?: string,

@@ -13,7 +13,7 @@ import { NetworkNode } from "./NetworkNode";
 
 const logger = Logger.get("UdpChannelNode");
 
-function createDgramSocket(address: string | undefined, port: number, options: dgram.SocketOptions) {
+function createDgramSocket(address: string | undefined, port: number | undefined, options: dgram.SocketOptions) {
     const socket = dgram.createSocket(options);
     return new Promise<dgram.Socket>((resolve, reject) => {
         const handleBindError = (error: Error) => {

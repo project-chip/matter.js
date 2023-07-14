@@ -22,12 +22,15 @@ export class UdpChannelFake implements UdpChannel {
 
     private readonly netListeners = new Array<NetListener>();
     private readonly simulatedNetwork = SimulatedNetwork.get();
+    private readonly listeningPort: number;
 
     constructor(
         private readonly localAddress: string,
         private readonly listeningAddress: string | undefined,
-        private readonly listeningPort: number,
-    ) { }
+        listeningPort?: number,
+    ) {
+        this.listeningPort = listeningPort ?? 1024 + Math.random() * 64511; // Random port 1024-65535
+    }
 
     onData(listener: (netInterface: string, peerAddress: string, peerPort: number, data: ByteArray) => void) {
         const netListener = this.simulatedNetwork.onUdpData(this.listeningAddress, this.listeningPort, listener);
