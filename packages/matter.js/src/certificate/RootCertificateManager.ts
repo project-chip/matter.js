@@ -9,7 +9,7 @@ import { Crypto, KeyPair } from "../crypto/Crypto.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Time } from "../time/Time.js";
-import { StorageManager } from "../storage/StorageManager.js";
+import { StorageContext } from "../storage/StorageContext.js";
 
 export class RootCertificateManager {
     private rootCertId = BigInt(0);
@@ -18,8 +18,8 @@ export class RootCertificateManager {
     private rootCertBytes = this.generateRootCert();
     private nextCertificateId = 1;
 
-    constructor(storageManager: StorageManager) {
-        const storage = storageManager.createContext("RootCertificateManager");
+    constructor(storageContext: StorageContext) {
+        const storage = storageContext.createContext("RootCertificateManager");
 
         // Read from storage if we have them stored, else store the just generated data
         if (storage.has("rootCertId")) {

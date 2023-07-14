@@ -234,6 +234,7 @@ describe("InteractionProtocol", () => {
         it("replies with attribute values", async () => {
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
+            const storageContext = storageManager.createContext("test");
             const endpoint = new Endpoint([DummyTestDevice], { endpointId: 0 });
             endpoint.addClusterServer(ClusterServer(BasicInformationCluster, {
                 dataModelRevision: 1,
@@ -255,7 +256,7 @@ describe("InteractionProtocol", () => {
             }, {}, {
                 startUp: true
             }));
-            const interactionProtocol = new InteractionServer(storageManager);
+            const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
             const result = interactionProtocol.handleReadRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, READ_REQUEST);
@@ -289,9 +290,10 @@ describe("InteractionProtocol", () => {
 
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
+            const storageContext = storageManager.createContext("test");
             const endpoint = new Endpoint([DummyTestDevice], { endpointId: 0 });
             endpoint.addClusterServer(basicCluster);
-            const interactionProtocol = new InteractionServer(storageManager);
+            const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
             const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, WRITE_REQUEST);
@@ -314,9 +316,10 @@ describe("InteractionProtocol", () => {
 
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
+            const storageContext = storageManager.createContext("test");
             const endpoint = new Endpoint([DummyTestDevice], { endpointId: 0 });
             endpoint.addClusterServer(accessControlCluster);
-            const interactionProtocol = new InteractionServer(storageManager);
+            const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
             const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ByteArray.fromHex("00"), ByteArray.fromHex("00"), { privateKey: ByteArray.fromHex("00"), publicKey: ByteArray.fromHex("00") }, new VendorId(1), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), "");
@@ -358,9 +361,10 @@ describe("InteractionProtocol", () => {
 
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
+            const storageContext = storageManager.createContext("test");
             const endpoint = new Endpoint([DummyTestDevice], { endpointId: 0 });
             endpoint.addClusterServer(basicCluster);
-            const interactionProtocol = new InteractionServer(storageManager);
+            const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
             const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, MASS_WRITE_REQUEST);
@@ -392,9 +396,10 @@ describe("InteractionProtocol", () => {
 
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
+            const storageContext = storageManager.createContext("test");
             const endpoint = new Endpoint([DummyTestDevice], { endpointId: 0 });
             endpoint.addClusterServer(onOffCluster);
-            const interactionProtocol = new InteractionServer(storageManager);
+            const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
             const result = await interactionProtocol.handleInvokeRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS, {} as Message);
@@ -422,9 +427,10 @@ describe("InteractionProtocol", () => {
 
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
+            const storageContext = storageManager.createContext("test");
             const endpoint = new Endpoint([DummyTestDevice], { endpointId: 0 });
             endpoint.addClusterServer(onOffCluster);
-            const interactionProtocol = new InteractionServer(storageManager);
+            const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
             const result = await interactionProtocol.handleInvokeRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_WITH_NO_ARGS, {} as Message);
@@ -451,9 +457,10 @@ describe("InteractionProtocol", () => {
 
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
+            const storageContext = storageManager.createContext("test");
             const endpoint = new Endpoint([DummyTestDevice], { endpointId: 0 });
             endpoint.addClusterServer(onOffCluster);
-            const interactionProtocol = new InteractionServer(storageManager);
+            const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
             const result = await interactionProtocol.handleInvokeRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_INVALID, {} as Message);

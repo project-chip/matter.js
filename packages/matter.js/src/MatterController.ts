@@ -33,7 +33,6 @@ import { BasicInformationCluster } from "./cluster/BasicInformationCluster.js";
 import { CommissioningError, CommissioningSuccessFailureResponse, GeneralCommissioningCluster, RegulatoryLocationType } from "./cluster/GeneralCommissioningCluster.js";
 import { CertificateChainType, OperationalCredentialsCluster, TlvCertSigningRequest } from "./cluster/OperationalCredentialsCluster.js";
 import { ByteArray } from "./util/ByteArray.js";
-import { StorageManager } from "./storage/StorageManager.js";
 
 export type CommissioningData = {
     regulatoryLocation: RegulatoryLocationType;
@@ -46,9 +45,9 @@ const ADMIN_VENDOR_ID = new VendorId(752);
 const logger = Logger.get("MatterController");
 
 export class MatterController {
-    public static async create(scanner: Scanner, netInterfaceIpv4: NetInterface, netInterfaceIpv6: NetInterface, storageManager: StorageManager, commissioningOptions?: CommissioningData): Promise<MatterController> {
+    public static async create(scanner: Scanner, netInterfaceIpv4: NetInterface, netInterfaceIpv6: NetInterface, storage: StorageContext, commissioningOptions?: CommissioningData): Promise<MatterController> {
         const CONTROLLER_NODE_ID = new NodeId(Crypto.getRandomBigUInt64());
-        const certificateManager = new RootCertificateManager(storageManager);
+        const certificateManager = new RootCertificateManager(storage);
 
         const ipkValue = Crypto.getRandomData(16);
         const fabricBuilder = new FabricBuilder(FABRIC_INDEX)
@@ -59,12 +58,12 @@ export class MatterController {
         fabricBuilder.setOperationalCert(certificateManager.generateNoc(fabricBuilder.getPublicKey(), FABRIC_ID, CONTROLLER_NODE_ID));
 
         // Check if we have a fabric stored in the storage, if yes initialize this one, else build a new one
-        const controllerStorage = storageManager.createContext("MatterController");
+        const controllerStorage = storage.createContext("MatterController");
         if (controllerStorage.has("fabric")) {
             const storedFabric = Fabric.createFromStorageObject(controllerStorage.get<FabricJsonObject>("fabric"));
-            return new MatterController(scanner, netInterfaceIpv4, netInterfaceIpv6, certificateManager, storedFabric, storageManager, commissioningOptions);
+            return new MatterController(scanner, netInterfaceIpv4, netInterfaceIpv6, certificateManager, storedFabric, storage, commissioningOptions);
         } else {
-            return new MatterController(scanner, netInterfaceIpv4, netInterfaceIpv6, certificateManager, await fabricBuilder.build(), storageManager, commissioningOptions);
+            return new MatterController(scanner, netInterfaceIpv4, netInterfaceIpv6, certificateManager, await fabricBuilder.build(), storage, commissioningOptions);
         }
     }
 
@@ -82,12 +81,12 @@ export class MatterController {
         private readonly netInterfaceIpv6: NetInterface,
         private readonly certificateManager: RootCertificateManager,
         private readonly fabric: Fabric,
-        private readonly storageManager: StorageManager,
+        private readonly storage: StorageContext,
         commissioningOptions?: CommissioningData
     ) {
-        this.controllerStorage = this.storageManager.createContext("MatterController");
+        this.controllerStorage = this.storage.createContext("MatterController");
 
-        this.sessionManager = new SessionManager(this, this.storageManager);
+        this.sessionManager = new SessionManager(this, this.storage);
         this.sessionManager.initFromStorage([this.fabric]);
 
         this.exchangeManager = new ExchangeManager<MatterController>(this.sessionManager, this.channelManager);

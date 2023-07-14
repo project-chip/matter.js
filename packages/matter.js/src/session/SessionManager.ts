@@ -9,7 +9,6 @@ import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { StorageContext } from "../storage/StorageContext.js";
-import { StorageManager } from "../storage/StorageManager.js";
 import { SecureSession } from "./SecureSession.js";
 import { Session } from "./Session.js";
 import { UnsecureSession } from "./UnsecureSession.js";
@@ -42,9 +41,9 @@ export class SessionManager<ContextT> {
 
     constructor(
         private readonly context: ContextT,
-        storageManager: StorageManager,
+        storage: StorageContext,
     ) {
-        this.sessionStorage = storageManager.createContext("SessionManager")
+        this.sessionStorage = storage.createContext("SessionManager")
         this.unsecureSession = new UnsecureSession(context);
         this.sessions.set(UNICAST_UNSECURE_SESSION_ID, this.unsecureSession);
     }

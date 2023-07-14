@@ -6,7 +6,7 @@
 import { MatterNode } from "./MatterNode.js";
 import { UdpInterface } from "./net/UdpInterface.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
-import { StorageManager } from "./storage/StorageManager.js";
+import { StorageContext } from "./storage/StorageContext.js";
 import { CommissioningData, MatterController } from "./MatterController.js";
 import { InteractionClient, ClusterClient } from "./protocol/interaction/InteractionClient.js";
 import { NodeId } from "./datatype/NodeId.js";
@@ -66,7 +66,7 @@ export class CommissioningController extends MatterNode {
 
     readonly delayedPairing: boolean;
 
-    private storageManager?: StorageManager;
+    private storage?: StorageContext;
     private mdnsScanner?: MdnsScanner;
 
     private controllerInstance?: MatterController;
@@ -102,7 +102,7 @@ export class CommissioningController extends MatterNode {
         if (this.controllerInstance !== undefined) {
             throw new Error("Controller instance already connected!");
         }
-        if (this.mdnsScanner === undefined || this.storageManager === undefined) {
+        if (this.mdnsScanner === undefined || this.storage === undefined) {
             throw new Error("Add the node to the Matter instance before!");
         }
 
@@ -110,7 +110,7 @@ export class CommissioningController extends MatterNode {
             this.mdnsScanner,
             await UdpInterface.create(this.port, "udp4", this.listeningAddressIpv4),
             await UdpInterface.create(this.port, "udp6", this.listeningAddressIpv6),
-            this.storageManager,
+            this.storage,
             this.commissioningOptions
         );
 
@@ -133,11 +133,11 @@ export class CommissioningController extends MatterNode {
     }
 
     /**
-     * Set the StorageManager instance. Should be only used internally
-     * @param storageManager
+     * Set the Storage instance. Should be only used internally
+     * @param storage storage context to use
      */
-    setStorageManager(storageManager: StorageManager) {
-        this.storageManager = storageManager;
+    setStorage(storage: StorageContext) {
+        this.storage = storage;
     }
 
     /**
