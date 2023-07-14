@@ -22,6 +22,8 @@ export abstract class Time {
     /** Returns a timer that will periodically call callback at intervalMs intervals. */
     abstract getPeriodicTimer(intervalMs: number, callback: TimerCallback): Timer;
     static readonly getPeriodicTimer = (intervalMs: number, callback: TimerCallback): Timer => Time.get().getPeriodicTimer(intervalMs, callback);
+
+    static readonly sleep = async (durationMs: number): Promise<void> => new Promise(resolve => Time.get().getTimer(durationMs, resolve).start());
 }
 
 export interface Timer {
