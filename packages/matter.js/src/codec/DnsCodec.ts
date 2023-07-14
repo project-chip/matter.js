@@ -190,9 +190,8 @@ export class DnsCodec {
         if (zeroSequences.length > 0) {
             zeroSequences.sort((a, b) => a.length - b.length);
             const { start, length } = zeroSequences[0];
-            for (let i = start; i < start + length; i++) {
-                ipItems[i] = "";
-            }
+            ipItems[start] = "";
+            ipItems.splice(start + 1, length - 1);
         }
         return ipItems.join(":");
     }
