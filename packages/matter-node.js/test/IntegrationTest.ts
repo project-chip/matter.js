@@ -15,19 +15,20 @@ Crypto.get = () => new CryptoNode();
 import {
     OnOffCluster, BasicInformationCluster, OperationalCertStatus, OperationalCredentialsCluster, DescriptorCluster,
     IdentifyCluster, GroupsCluster, AccessControlCluster, ScenesCluster, GeneralCommissioningCluster,
-    RegulatoryLocationType
+    RegulatoryLocationType, NetworkCommissioningHandler, NetworkCommissioningStatus,
+    WifiAndEthernetAndThreadNetworkCommissioningCluster
 } from "@project-chip/matter.js/cluster";
 import { VendorId, FabricIndex, GroupId, ClusterId } from "@project-chip/matter.js/datatype";
 
 import { MdnsBroadcaster, MdnsScanner } from "@project-chip/matter.js/mdns";
 import { Network, NetworkFake } from "@project-chip/matter.js/net";
 import { Level, Logger } from "@project-chip/matter.js/log";
-import { getPromiseResolver } from "@project-chip/matter.js/util";
+import { getPromiseResolver, ByteArray } from "@project-chip/matter.js/util";
 import { StorageManager, StorageBackendMemory } from "@project-chip/matter.js/storage";
 import { FabricJsonObject } from "@project-chip/matter.js/fabric";
 import { MatterServer, CommissioningServer, CommissioningController } from "@project-chip/matter.js";
 import { OnOffLightDevice } from "@project-chip/matter.js/device";
-import { InteractionClient } from "@project-chip/matter.js/interaction";
+import { InteractionClient, ClusterServer } from "@project-chip/matter.js/interaction";
 
 const SERVER_IP = "192.168.200.1";
 const SERVER_MAC = "00:B0:D0:63:C2:26";
@@ -115,6 +116,23 @@ describe("Integration Test", () => {
 
         onOffLightDeviceServer = new OnOffLightDevice();
         commissioningServer.addDevice(onOffLightDeviceServer);
+
+        // Override NetworkCommissioning Cluster for now unless configurable
+        commissioningServer.addRootClusterServer(
+            ClusterServer(
+                WifiAndEthernetAndThreadNetworkCommissioningCluster,
+                {
+                    maxNetworks: 1,
+                    interfaceEnabled: true,
+                    lastConnectErrorValue: 0,
+                    lastNetworkId: ByteArray.fromHex("0000000000000000000000000000000000000000000000000000000000000000"),
+                    lastNetworkingStatus: NetworkCommissioningStatus.Success,
+                    networks: [{ networkId: ByteArray.fromHex("0000000000000000000000000000000000000000000000000000000000000000"), connected: true }],
+                },
+                NetworkCommissioningHandler()
+            )
+        );
+
 
         matterServer.addCommissioningServer(commissioningServer);
 
