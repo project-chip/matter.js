@@ -222,15 +222,21 @@ export class DnsCodec {
             writer.writeUInt16(recordType);
             writer.writeUInt16(recordClass);
         });
-        [...answers, ...authorities, ...additionalRecords].forEach(({ name, recordType, recordClass, ttl, value }) => {
-            writer.writeByteArray(this.encodeQName(name));
-            writer.writeUInt16(recordType);
-            writer.writeUInt16(recordClass);
-            writer.writeUInt32(ttl);
-            const encodedValue = this.encodeRecordValue(value, recordType);
-            writer.writeUInt16(encodedValue.length);
-            writer.writeByteArray(encodedValue);
-        });
+        [...answers, ...authorities, ...additionalRecords].forEach(record => writer.writeByteArray(this.encodeRecord(record)));
+        return writer.toByteArray();
+    }
+
+    static encodeRecord(record: DnsRecord<any>): ByteArray {
+        const { name, recordType, recordClass, ttl, value } = record;
+
+        const writer = new DataWriter(Endian.Big);
+        writer.writeByteArray(this.encodeQName(name));
+        writer.writeUInt16(recordType);
+        writer.writeUInt16(recordClass);
+        writer.writeUInt32(ttl);
+        const encodedValue = this.encodeRecordValue(value, recordType);
+        writer.writeUInt16(encodedValue.length);
+        writer.writeByteArray(encodedValue);
         return writer.toByteArray();
     }
 
