@@ -47,7 +47,9 @@ export interface DnsMessage {
 
 export const enum DnsMessageType {
     Query = 0x0000,
-    Response = 0x8400,
+    TruncatedQuery = 0x0200,
+    Response = 0x8400, // Authoritative Answer
+    TruncatedResponse = 0x8600
 }
 
 export const enum DnsRecordType {
@@ -56,11 +58,13 @@ export const enum DnsRecordType {
     TXT = 0x10,
     AAAA = 0x1C,
     SRV = 0x21,
+    NSEC = 0x2F,
     ANY = 0xFF,
 }
 
 export const enum DnsRecordClass {
     IN = 0x01,
+    ANY = 0xFF,
 }
 
 export class DnsCodec {
@@ -202,13 +206,17 @@ export class DnsCodec {
         return ipItems.join(".");
     }
 
-    static encode({ transactionId = 0, queries = [], answers = [], authorities = [], additionalRecords = [] }: Partial<DnsMessage>): ByteArray {
+    static encode({ messageType, transactionId = 0, queries = [], answers = [], authorities = [], additionalRecords = [] }: Partial<DnsMessage>): ByteArray {
+        if (messageType === undefined) throw new Error("Message type must be specified!");
+        if (queries.length > 0 && messageType !== DnsMessageType.Query) throw new Error("Queries can only be included in query messages!");
+        if (authorities.length > 0) throw new Error("Authority answers are not supported yet!");
+
         const writer = new DataWriter(Endian.Big);
         writer.writeUInt16(transactionId);
-        writer.writeUInt16(queries.length > 0 ? MessageType.Query : MessageType.Response);
+        writer.writeUInt16(messageType);
         writer.writeUInt16(queries.length);
         writer.writeUInt16(answers.length);
-        writer.writeUInt16(0); // No authority answers
+        writer.writeUInt16(authorities.length);
         writer.writeUInt16(additionalRecords.length);
         queries.forEach(({ name, recordClass, recordType }) => {
             writer.writeByteArray(this.encodeQName(name));
