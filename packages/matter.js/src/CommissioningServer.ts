@@ -46,6 +46,7 @@ import { Aggregator } from "./device/Aggregator.js";
 import { TypeFromBitSchema } from "./schema/BitmapSchema.js";
 import { Endpoint } from "./device/Endpoint.js";
 import { StorageContext } from "./storage/StorageContext.js";
+import { MdnsInstanceBroadcaster } from "./mdns/MdnsInstanceBroadcaster.js";
 
 const logger = Logger.get("CommissioningServer");
 
@@ -124,7 +125,7 @@ export class CommissioningServer extends MatterNode {
     private storage?: StorageContext;
     private endpointStructureStorage?: StorageContext;
     private mdnsScanner?: MdnsScanner;
-    private mdnsBroadcaster?: MdnsBroadcaster;
+    private mdnsInstanceBroadcaster?: MdnsInstanceBroadcaster;
 
     private deviceInstance?: MatterDevice;
     private interactionServer?: InteractionServer;
@@ -335,7 +336,7 @@ export class CommissioningServer extends MatterNode {
      */
     async advertise() {
         if (
-            this.mdnsBroadcaster === undefined ||
+            this.mdnsInstanceBroadcaster === undefined ||
             this.mdnsScanner === undefined ||
             this.storage === undefined ||
             this.endpointStructureStorage === undefined
@@ -380,14 +381,14 @@ export class CommissioningServer extends MatterNode {
         this.interactionServer.setRootEndpoint(this.rootEndpoint); // Initialize the interaction server with the root endpoint
 
         // TODO adjust later and refactor MatterDevice
-        this.deviceInstance = new MatterDevice(this.deviceName, this.deviceType, vendorId, productId, this.discriminator, this.storage, this.port)
-            .addNetInterface(await UdpInterface.create(this.port, "udp6", this.listeningAddressIpv6))
+        this.deviceInstance = new MatterDevice(this.deviceName, this.deviceType, vendorId, productId, this.discriminator, this.storage)
+            .addNetInterface(await UdpInterface.create("udp6", this.port, this.listeningAddressIpv6))
             .addScanner(this.mdnsScanner)
-            .addBroadcaster(this.mdnsBroadcaster)
+            .addBroadcaster(this.mdnsInstanceBroadcaster)
             .addProtocolHandler(secureChannelProtocol)
             .addProtocolHandler(this.interactionServer);
         if (!this.disableIpv4) {
-            this.deviceInstance.addNetInterface(await UdpInterface.create(this.port, "udp4", this.listeningAddressIpv4))
+            this.deviceInstance.addNetInterface(await UdpInterface.create("udp4", this.port, this.listeningAddressIpv4))
         }
 
         await this.deviceInstance.start();
@@ -527,7 +528,7 @@ export class CommissioningServer extends MatterNode {
      * @param mdnsBroadcaster MdnsBroadcaster instance
      */
     setMdnsBroadcaster(mdnsBroadcaster: MdnsBroadcaster) {
-        this.mdnsBroadcaster = mdnsBroadcaster;
+        this.mdnsInstanceBroadcaster = new MdnsInstanceBroadcaster(this.port, mdnsBroadcaster);
     }
 
     /**
