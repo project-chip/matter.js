@@ -87,6 +87,8 @@ The usage is as above but with modified parameters:
 * -onX "script": script to run when the device number X is turned on
 * -offX "script": script to run when the device number X is turned off
 
+**Please especially use the -uniqueidX parameters to assign unique own IDs to the single deices in order to remember their structure in the bridge. Such an ID should never be reused if you ever remove or add new devices! If you do not use -uniqueidX then the order you added them here is not allowed to ever change.**
+
 ```bash
 matter-bridge -num 2 -on1 "echo 255 > /sys/class/leds/led1/brightness" -off1 "echo 0 > /sys/class/leds/led1/brightness" -type2 socket -on2 "echo 255 > /sys/class/leds/led2/brightness" -off2 "echo 0 > /sys/class/leds/led2/brightness"
 ```
@@ -120,6 +122,27 @@ npm run matter-composeddevice -- -type socket -num 2 -on1 "echo 255 > /sys/class
 (Please note the "--" to separate commandline parameters between the npm run and the executed script.
 
 The above command exposes a composed device with a socket and a light device and executes the respective commands when the devices are turned on or off.
+
+### Start multiple Matter Devices in one process
+
+> The code for this example is in [src/examples/MultiDeviceNode.ts](./src/examples/MultiDeviceNode.ts).
+
+matter.js also allows it to start multiple devices in one process. With this especially the MDNS functionalities are shared between these processes and it should use less resources. How many devices you acn add in one process depends on the load they produce and how many devices run in the single Node.js thread.
+
+The parameters are like with the composed device or bridge.
+
+```bash
+matter-multidevice -type socket -num 2 -on1 "echo 255 > /sys/class/leds/led1/brightness" -off1 "echo 0 > /sys/class/leds/led1/brightness" -type2 socket -on2 "echo 255 > /sys/class/leds/led2/brightness" -off2 "echo 0 > /sys/class/leds/led2/brightness"
+```
+
+or when starting from TS files:
+
+```bash
+npm run matter-multidevice -- -type socket -num 2 -on1 "echo 255 > /sys/class/leds/led1/brightness" -off1 "echo 0 > /sys/class/leds/led1/brightness" -type2 socket -on2 "echo 255 > /sys/class/leds/led2/brightness" -off2 "echo 0 > /sys/class/leds/led2/brightness"
+```
+(Please note the "--" to separate commandline parameters between the npm run and the executed script.
+
+The above command exposes two single light devices (one socket and on light) and executes the respective commands when the devices are turned on or off.
 
 ### Start a Matter Controller
 
