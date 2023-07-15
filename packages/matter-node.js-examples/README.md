@@ -157,22 +157,23 @@ The controller currently is not discovering the device to pair, but directly con
 To run from the build files:
 
 ```bash
-matter-controller -ip [IP address of device to commission]
+matter-controller -pairingcode 12345678901
 ```
 
 To run directly from Typescript files with on the fly compilation:
 
 ```bash
-npm run matter-controller -- -ip [IP address of device to commission]
+npm run matter-controller -- -pairingcode 12345678901
 ```
 
-This will commission a MatterServer device (for debugging purpose only for now).
+This will commission a MatterServer device (for debugging/capability showing purpose only for now).
 
 The following parameters are available:
-* -ip: the IP address of the device to commission
-* -discriminator: the discriminator to use for pairing (default: 3840, value between 0 and 4095)
+* -ip: the IP address of the device to commission (can be used but discovery via pairingcode or discriminator or also just pin (passode) is most likely better)
+* -port the port of the device to commission (default: 5540)
+* -longDiscriminator: the discriminator to use for pairing (default: 3840, value between 0 and 4095)
 * -pin: the pin to use for pairing (default: 20202021)
-* -pairingcode: code to use for pairing (-discriminator and -pin will be ignored)
+* -pairingcode: code to use for pairing (-longDiscriminator and -pin will be ignored)
 * -store: the storage location (directory) to use for storing the pairing information (default: controller-node). Delete the directory or provide an alternative name to reset the controller
 * -clearstorage: the storage location will be reset on start of the process
 
