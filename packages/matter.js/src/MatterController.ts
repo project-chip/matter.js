@@ -185,7 +185,7 @@ export class MatterController {
      * If this not successful and throws an RetransmissionLimitReachedError the address is invalid or the passcode
      * is wrong.
      */
-    private async initializePaseSecureChannel(address: ServerAddress, passCode: number) : Promise<MessageChannel<MatterController>> {
+    private async initializePaseSecureChannel(address: ServerAddress, passCode: number): Promise<MessageChannel<MatterController>> {
         const { ip, port } = address;
 
         const isIpv6Address = isIPv6(ip);
