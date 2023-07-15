@@ -43,7 +43,7 @@ const vendorName = "matter-node.js";
 const vendorId = new VendorId(0xFFF1);
 const productName = "Matter end-to-end device";
 const productId = 0X8001;
-const discriminator = 3840;
+const longDiscriminator = 3840;
 const setupPin = 20202021;
 const matterPort = 5540;
 
@@ -71,10 +71,9 @@ describe("Integration Test", () => {
 
         matterClient = new MatterServer(controllerStorageManager);
         commissioningController = new CommissioningController({
-            ip: SERVER_IP,
-            port: matterPort,
+            serverAddress: { ip: SERVER_IP, port: matterPort },
             disableIpv4: false,
-            discriminator,
+            longDiscriminator,
             passcode: setupPin,
             listeningAddressIpv4: "1.2.3.4",
             listeningAddressIpv6: CLIENT_IP,
@@ -100,7 +99,7 @@ describe("Integration Test", () => {
             deviceName,
             deviceType,
             passcode: setupPin,
-            discriminator,
+            discriminator: longDiscriminator,
             basicInformation: {
                 vendorName,
                 vendorId,
