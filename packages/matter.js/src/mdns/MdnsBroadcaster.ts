@@ -176,8 +176,8 @@ export class MdnsBroadcaster {
 
         const instanceId = Crypto.getRandomData(8).toHex().toUpperCase();
         const deviceTypeQname = `_T${deviceType}._sub.${MATTER_COMMISSIONER_SERVICE_QNAME}`;
-        const vendorQname = `_V${vendorId.id}._sub.${MATTER_COMMISSION_SERVICE_QNAME}`;
-        const deviceQname = `${instanceId}.${MATTER_COMMISSION_SERVICE_QNAME}`;
+        const vendorQname = `_V${vendorId.id}._sub.${MATTER_COMMISSIONER_SERVICE_QNAME}`;
+        const deviceQname = `${instanceId}.${MATTER_COMMISSIONER_SERVICE_QNAME}`;
 
         this.mdnsServer.setRecordsGenerator(announcedNetPort, netInterface => {
             const ipMac = this.network.getIpMac(netInterface);
