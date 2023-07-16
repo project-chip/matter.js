@@ -15,7 +15,7 @@ The following are things on my (@Apollon77) TODO list for the project right now 
 * Add generic cluster handlers for all clusters that are not yet covered
 
 ## Core topics
-* (!) Return correct error in read/write/invoke when endpoint/cluster is unknown (in comparism to attributes)
+* (!) Return correct error in write/invoke/subscribe when endpoint/cluster is unknown (in comparism to attributes)
 * (!) Make sure to always return correct responses for requests and not have "dead return" states
 * (!) Refactor throw in command handler to be catched per command and converted correctly to response
 * Monitor subscriptions and remove/resubscribe them when the device did not answered withing maxInterval, how notify device?
