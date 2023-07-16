@@ -186,7 +186,6 @@ describe("MDNS Scanner and Broadcaster", () => {
             const dataArr: ByteArray[] = [];
             scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => {
                 dataArr.push(data);
-                console.log(JSON.stringify(dataArr.length));
                 if (dataArr.length === 3) resolver();
             });
 
