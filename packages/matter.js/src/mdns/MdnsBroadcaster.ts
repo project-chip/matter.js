@@ -16,7 +16,9 @@ import { Network } from "../net/Network.js";
 import { isIPv4 } from "../util/Ip.js";
 import { Logger } from "../log/Logger.js";
 import { Fabric } from "../fabric/Fabric.js";
-import { CommissionerInstanceData, CommissioningModeInstanceData } from "../common/InstanceBroadcaster.js";
+import {
+    CommissionerInstanceData, CommissioningModeInstanceData, OperationalInstanceData
+} from "../common/InstanceBroadcaster.js";
 
 const logger = Logger.get("MdnsBroadcaster");
 
@@ -110,7 +112,8 @@ export class MdnsBroadcaster {
     }
 
     /** Set the Broadcaster Data to announce a device for operative discovery (aka "already paired") */
-    setFabrics(announcedNetPort: number, fabrics: Fabric[]) {
+    setFabrics(announcedNetPort: number, fabrics: Fabric[], operationalInstanceData: OperationalInstanceData = {}) {
+        const { sleepIdleInterval, sleepActiveInterval } = operationalInstanceData;
         this.mdnsServer.setRecordsGenerator(announcedNetPort, netInterface => {
             const ipMac = this.network.getIpMac(netInterface);
             if (ipMac === undefined) return [];
@@ -137,7 +140,11 @@ export class MdnsBroadcaster {
                     PtrRecord(MATTER_SERVICE_QNAME, deviceMatterQname),
                     PtrRecord(fabricQname, deviceMatterQname),
                     SrvRecord(deviceMatterQname, { priority: 0, weight: 0, port: announcedNetPort, target: hostname }),
-                    TxtRecord(deviceMatterQname, ["SII=5000", "SAI=300", "T=1"]),
+                    TxtRecord(deviceMatterQname, [
+                        `SII=${sleepIdleInterval ?? 5000}`,  /* Sleepy Idle Interval */
+                        `SAI=${sleepActiveInterval ?? 300}`, /* Sleepy Active Interval */
+                        "T=0",                               /* TCP not supported */
+                    ]),
                 ];
                 records.push(...fabricRecords);
             });

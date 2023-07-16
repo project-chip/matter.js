@@ -57,6 +57,14 @@ export type CommissionerInstanceData = {
     sleepActiveInterval?: number,
 };
 
+export type OperationalInstanceData = {
+    /** Sleep Idle Interval of the device for operational announcements. */
+    sleepIdleInterval?: number,
+
+    /** Sleep Active Interval of the device for operational announcements. */
+    sleepActiveInterval?: number,
+};
+
 /** Interface for classes that allow to announce one Matter instance. */
 export interface InstanceBroadcaster {
 
