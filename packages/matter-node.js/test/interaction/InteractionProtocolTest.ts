@@ -42,6 +42,11 @@ const READ_REQUEST: ReadRequest = {
     attributeRequests: [
         { endpointId: 0, clusterId: 0x28, attributeId: 2 },
         { endpointId: 0, clusterId: 0x28, attributeId: 4 },
+        { endpointId: 0, clusterId: 0x28, attributeId: 400 }, // unsupported attribute
+        { endpointId: 0, clusterId: 0x99, attributeId: 4 }, // unsupported cluster
+        { endpointId: 1, clusterId: 0x28, attributeId: 1 }, // unsupported endpoint
+        { endpointId: undefined, clusterId: 0x28, attributeId: 3 },
+        { endpointId: undefined, clusterId: 0x99, attributeId: 3 }, // ignore
     ],
 };
 
@@ -60,6 +65,31 @@ const READ_RESPONSE: DataReport = {
             attributeData: {
                 path: { endpointId: 0, clusterId: 0x28, attributeId: 4 },
                 data: TlvUInt8.encodeTlv(2),
+                dataVersion: 0,
+            }
+        },
+        {
+            attributeStatus: {
+                path: { endpointId: 0, clusterId: 0x28, attributeId: 400 },
+                status: { status: 134 },
+            }
+        },
+        {
+            attributeStatus: {
+                path: { endpointId: 0, clusterId: 0x99, attributeId: 4 },
+                status: { status: 195 },
+            }
+        },
+        {
+            attributeStatus: {
+                path: { endpointId: 1, clusterId: 0x28, attributeId: 1 },
+                status: { status: 127 },
+            }
+        },
+        {
+            attributeData: {
+                path: { endpointId: 0, clusterId: 0x28, attributeId: 3 },
+                data: TlvString.encodeTlv("product"),
                 dataVersion: 0,
             }
         },
