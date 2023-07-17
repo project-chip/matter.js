@@ -484,7 +484,22 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             const { path, dataVersion } = values[0];
             const attributes = this.endpointStructure.getAttributes([path], true);
             if (attributes.length === 0) {
-                return [{ path, statusCode: StatusCode.UnsupportedWrite }]; // TODO: Find correct status code
+                // TODO: Also check nodeId
+                const { endpointId, clusterId, attributeId } = path;
+                if (endpointId === undefined || clusterId === undefined || attributeId === undefined) { // Wildcard path: Just ignore
+                    logger.debug(`Write from ${exchange.channel.getName()}: ${this.endpointStructure.resolveAttributeName(path)} ignore non-existing attribute`);
+                } else { // Else return correct status
+                    let statusCode = StatusCode.UnsupportedAttribute;
+                    if (this.endpointStructure.hasAttribute(endpointId, clusterId, attributeId)) { // If attribute exists but was not returned above, it is not writeable
+                        statusCode = StatusCode.UnsupportedWrite;
+                    } else if (!this.endpointStructure.hasEndpoint(endpointId)) {
+                        statusCode = StatusCode.UnsupportedEndpoint;
+                    } else if (!this.endpointStructure.hasClusterServer(endpointId, clusterId)) {
+                        statusCode = StatusCode.UnsupportedCluster;
+                    }
+                    logger.debug(`Write from ${exchange.channel.getName()}: ${this.endpointStructure.resolveAttributeName(path)} unsupported path: Status=${statusCode}`);
+                    return [{ path, statusCode }];
+                }
             }
 
             return attributes.map(({ path, attribute }) => {
