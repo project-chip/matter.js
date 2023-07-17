@@ -109,11 +109,11 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         const fabric = device.getFabricByIndex(fabricIndex);
 
         if (fabric === undefined) {
-            return { status: OperationalCertStatus.InvalidFabricIndex };
+            return { status: OperationalCertStatus.InvalidFabricIndex, debugText: `Fabric ${fabricIndex.index} not found` };
         }
 
         fabric.remove();
-        return { status: OperationalCertStatus.Success };
+        return { status: OperationalCertStatus.Success, fabricIndex, debugText: "Fabric removed" };
     },
 
     addRootCert: async ({ request: { certificate }, session }) => {

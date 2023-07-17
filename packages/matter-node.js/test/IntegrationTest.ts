@@ -571,7 +571,7 @@ describe("Integration Test", () => {
             const result = await operationalCredentialsCluster.commands.removeFabric({ fabricIndex: new FabricIndex(250) });
             assert.equal(result.status, OperationalCertStatus.InvalidFabricIndex);
             assert.equal(result.fabricIndex, undefined);
-            assert.equal(result.debugText, undefined);
+            assert.equal(result.debugText, "Fabric 250 not found");
         });
 
         it("read and remove fabric", async () => {
@@ -584,8 +584,8 @@ describe("Integration Test", () => {
 
             const result = await operationalCredentialsCluster.commands.removeFabric({ fabricIndex });
             assert.equal(result.status, OperationalCertStatus.Success);
-            assert.equal(result.fabricIndex, undefined);
-            assert.equal(result.debugText, undefined);
+            assert.deepEqual(result.fabricIndex, fabricIndex);
+            assert.equal(result.debugText, "Fabric removed");
         });
     });
 
