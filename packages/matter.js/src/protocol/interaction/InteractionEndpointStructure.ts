@@ -141,19 +141,11 @@ export class InteractionEndpointStructure {
     }
 
     getClusterServer(endpointId: number, clusterId: number): ClusterServerObj<any, any, any> | undefined {
-        const endpoint = this.endpoints.get(endpointId);
-        if (endpoint === undefined) {
-            return undefined;
-        }
-        return endpoint.getClusterServerById(clusterId);
+        return this.endpoints.get(endpointId)?.getClusterServerById(clusterId);
     }
 
     hasClusterServer(endpointId: number, clusterId: number): boolean {
-        const endpoint = this.endpoints.get(endpointId);
-        if (endpoint === undefined) {
-            return false;
-        }
-        return !!endpoint.getClusterServerById(clusterId);
+        return !!this.getClusterServer(endpointId, clusterId);
     }
 
     getAttributes(filters: TypeFromSchema<typeof TlvAttributePath>[], onlyWritable = false): AttributeWithPath[] {
