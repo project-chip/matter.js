@@ -35,7 +35,7 @@ class BtpSessionHandler {
     private ackReceiveTimer: Timer;
     private sendAckTimer: Timer;
     private isActive = true;
-    private fragmentSize = 0;
+    private fragmentSize: number;
 
     /**
      * Creates a new BTP session handler
@@ -82,6 +82,7 @@ class BtpSessionHandler {
         }
 
         this.fragmentSize = this.attMtu - 3; // Each GATT PDU used by the BTP protocol introduces 3 byte header overhead.
+
         this.clientWindowSize = Math.min(MAXIMUM_WINDOW_SIZE, clientWindowSize);
 
         // Generate and send out handshake response
@@ -201,9 +202,7 @@ class BtpSessionHandler {
         if (data.length === 0) { // Just dummy for now that the data parameter is used and not marked unused
             throw new Error("BTP packet must not be empty");
         }
-
         const dataReader = new DataReader(data, Endian.Little);
-
         this.queuesMatterMessages.push(dataReader);
         await this.sendQueuedBtpFrames();
     }
@@ -215,7 +214,7 @@ class BtpSessionHandler {
         console.log(`dataLength: ${this.queuesMatterMessages[0].getLength()}`);
         console.log(`Remaining: ${remainingLengthInBytes}`);
 
-        if (remainingLengthInBytes === 0 && this.sendInProgress) {
+        if (this.sendInProgress) {
             return;
         }
 
@@ -251,7 +250,7 @@ class BtpSessionHandler {
             const segment = this.queuesMatterMessages[0].readByteArray(Math.min(this.fragmentSize - expectedBtpHeaderLength, remainingLengthInBytes));
             remainingLengthInBytes = this.queuesMatterMessages[0].getRemainingBytesCount();
 
-            if (remainingLengthInBytes === undefined || remainingLengthInBytes === 0) {
+            if (remainingLengthInBytes === 0) {
                 packetHeader.isEndingSegment = true;
             }
 
@@ -270,6 +269,7 @@ class BtpSessionHandler {
             logger.debug(`Sending Matter Message response: ${packet.toHex()}`);
 
             await this.writeBleCallback(packet);
+            await new Promise(resolve => setTimeout(resolve, 100));
 
             packetHeader.isBeginningSegment = false;
             packetSendAck = false;
@@ -278,12 +278,18 @@ class BtpSessionHandler {
                 this.ackReceiveTimer.start(); // starts the timer
             }
 
+            if (packetHeader.isEndingSegment) {
+                this.queuesMatterMessages.shift();
+                if (this.queuesMatterMessages.length === 0) {
+                    break;
+                } else {
+                    remainingLengthInBytes = this.queuesMatterMessages[0].getRemainingBytesCount();
+                }
+            }
+
             if (this.sequenceNumber - this.serverAckedSequenceNumber > (this.clientWindowSize - 1)) {
                 break;
             }
-        }
-        if (remainingLengthInBytes === 0) {
-            this.queuesMatterMessages.shift();
         }
         this.sendInProgress = false;
     }
