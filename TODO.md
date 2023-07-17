@@ -4,7 +4,7 @@ The matter.js package is still in huge development phase and a lot of details ar
 It basically can already be used, but there will be (also potentially breaking) changes in the near future until anything 
 stabilizes.
 
-The following are things on my (@Apollon77) TODO list for the project right now (and not complete). If someone wuld like to take over such a topic just open an issue and describe what you plan and I'm happy to support!
+The following are things on my (@Apollon77) TODO list for the project right now (and not complete). If someone would like to take over such a topic just open an issue and describe what you plan and I'm happy to support!
 
 ## Cluster Definitions
 * Complete all missing cluster definitions

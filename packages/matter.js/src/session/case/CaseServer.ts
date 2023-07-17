@@ -68,7 +68,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
                 throw error;
             }
 
-            logger.info(`session ${secureSession.getId()} resumed with ${messenger.getChannelName()}`);
+            logger.info(`session ${secureSession.getId()} resumed with ${messenger.getChannelName()} for Fabric ${fabric.nodeId.id.toString(16)}(index ${fabric.fabricIndex.index}) and PeerNode ${peerNodeId.id.toString(16)}`);
             resumptionRecord.resumptionId = resumptionId; /* Update the ID */
 
             // Wait for success on the peer side
@@ -103,7 +103,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             // All good! Create secure session
             const secureSessionSalt = ByteArray.concat(operationalIdentityProtectionKey, Crypto.hash([sigma1Bytes, sigma2Bytes, sigma3Bytes]));
             const secureSession = await server.createSecureSession(sessionId, fabric, peerNodeId, peerSessionId, sharedSecret, secureSessionSalt, false, false, mrpParams?.idleRetransTimeoutMs, mrpParams?.activeRetransTimeoutMs);
-            logger.info(`session ${secureSession.getId()} created with ${messenger.getChannelName()}`);
+            logger.info(`session ${secureSession.getId()} created with ${messenger.getChannelName()} for Fabric ${fabric.nodeId.id.toString(16)}(index ${fabric.fabricIndex.index}) and PeerNode ${peerNodeId.id.toString(16)}`);
             await messenger.sendSuccess();
 
             resumptionRecord = { peerNodeId, fabric, sharedSecret, resumptionId };
