@@ -444,8 +444,19 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         const attributeReports = attributePaths.flatMap((path: TypeFromSchema<typeof TlvAttributePath>): TypeFromSchema<typeof TlvAttributeReport>[] => {
             const attributes = this.endpointStructure.getAttributes([path]);
             if (attributes.length === 0) {
-                logger.debug(`Read from ${exchange.channel.getName()}: ${this.endpointStructure.resolveAttributeName(path)} unsupported path`);
-                return [{ attributeStatus: { path, status: { status: StatusCode.UnsupportedAttribute } } }]; // TODO: Find correct status code
+                const { endpointId, clusterId, attributeId } = path;
+                if (endpointId === undefined || clusterId === undefined || attributeId === undefined) { // Wildcard path: Just leave out values
+                    logger.debug(`Read from ${exchange.channel.getName()}: ${this.endpointStructure.resolveAttributeName(path)} ignore non-existing attribute`);
+                } else { // Else return correct status
+                    let status = StatusCode.UnsupportedAttribute;
+                    if (!this.endpointStructure.hasEndpoint(endpointId)) {
+                        status = StatusCode.UnsupportedEndpoint;
+                    } else if (!this.endpointStructure.hasClusterServer(endpointId, clusterId)) {
+                        status = StatusCode.UnsupportedCluster;
+                    }
+                    logger.debug(`Read from ${exchange.channel.getName()}: ${this.endpointStructure.resolveAttributeName(path)} unsupported path: Status=${status}`);
+                    return [{ attributeStatus: { path, status: { status } } }];
+                }
             }
 
             return attributes.map(({ path, attribute }) => {

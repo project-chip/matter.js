@@ -6,7 +6,7 @@
 
 import { Endpoint } from "../../device/index.js";
 import {
-    AttributeServer, CommandServer, FabricScopedAttributeServer, FixedAttributeServer
+    AttributeServer, ClusterServerObj, CommandServer, FabricScopedAttributeServer, FixedAttributeServer
 } from "../../cluster/index.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
 import { TypeFromSchema } from "../../tlv/index.js";
@@ -130,6 +130,22 @@ export class InteractionEndpointStructure {
 
     resolveCommandName({ endpointId, clusterId, commandId }: TypeFromSchema<typeof TlvCommandPath>) {
         return this.resolveGenericElementName(endpointId, clusterId, commandId, this.commands);
+    }
+
+    getEndpoint(endpointId: number): Endpoint | undefined {
+        return this.endpoints.get(endpointId);
+    }
+
+    hasEndpoint(endpointId: number): boolean {
+        return this.endpoints.has(endpointId);
+    }
+
+    getClusterServer(endpointId: number, clusterId: number): ClusterServerObj<any, any, any> | undefined {
+        return this.endpoints.get(endpointId)?.getClusterServerById(clusterId);
+    }
+
+    hasClusterServer(endpointId: number, clusterId: number): boolean {
+        return !!this.getClusterServer(endpointId, clusterId);
     }
 
     getAttributes(filters: TypeFromSchema<typeof TlvAttributePath>[], onlyWritable = false): AttributeWithPath[] {

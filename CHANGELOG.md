@@ -32,6 +32,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Fix: Make sure an error received from sending subscription seed data reports is not bubbling up and activate subscription after successful seeding
   * Fix: Allows Node.js Buffer objects to be persisted to storage as a Uint8Arrays that they subclass
   * Fix: Fix a Subscription timer duplication issue and collect attribute changes within a 50ms window to reduce the number of subscription messages
+  * Fix: Return correct Error-Status for Read-Requests
   * Refactor: Refactor Endpoint structuring and determination to allow dynamic and updating structures
 * matter.js API:
   * Breaking: 

@@ -15,7 +15,7 @@ The following are things on my (@Apollon77) TODO list for the project right now 
 * Add generic cluster handlers for all clusters that are not yet covered
 
 ## Core topics
-* (!) Return correct error in read/write/invoke when endpoint/cluster is unknown (in comparism to attributes)
+* (!) Return correct error in write/invoke/subscribe when endpoint/cluster is unknown (in comparism to attributes)
 * (!) Make sure to always return correct responses for requests and not have "dead return" states
 * (!) Refactor throw in command handler to be catched per command and converted correctly to response
 * Monitor subscriptions and remove/resubscribe them when the device did not answered withing maxInterval, how notify device?
@@ -25,7 +25,10 @@ The following are things on my (@Apollon77) TODO list for the project right now 
   * Think about logging of "new" relevant matter data (just these)
   * _matterc support - right now mdnsscanner only checks matter
 * Adjust Fabric storage with sub contexts
-* 
+* Rename index.ts to exports.ts to exclude from being used internally
+* All errors MatterError!
+* Update subscribes when structure gets updated (e.g. new endpoint added)
+* Move announcements and durations into Broadcaster class
 
 ## New API
 
@@ -45,6 +48,7 @@ The following are things on my (@Apollon77) TODO list for the project right now 
 * Investigate/Check specs on how to add new devices to a bridge (check Matter Core specs) to enhance bridge "on the fly"
 * Unique IDs vs endpoint id - idea: dev defined endpoint ids themself or we urge him to always set unique unique serialnumbers or other unique ID
 * Check bridge and composed devices with tuya, smartthings and Alexa again; and test composed device with google
+* Allow to fill Action cluster for rooms/zones and such
 
 ### Controller usage
 * The new Controller (pairable node) API is still WIP in some places to optimize again
