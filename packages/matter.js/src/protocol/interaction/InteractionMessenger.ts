@@ -163,6 +163,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
         if (dataReport.attributeReports !== undefined && messageBytes.length > MAX_SPDU_LENGTH) {
             // DataReport is too long, it needs to be sent in chunks
             const attributeReportsToSend = [...dataReport.attributeReports];
+            logger.debug(`Sending DataReport in chunks, ${attributeReportsToSend.length} attribute reports`);
             dataReport.attributeReports.length = 0;
             dataReport.moreChunkedMessages = true;
 
@@ -181,6 +182,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                     if (messageSize === emptyDataReportBytes.length) {
                         throw new Error(`Attribute report for is too long to fit in a single chunk, Array chunking not yet supported`);
                     }
+                    logger.debug(`Sending DataReport chunk, ${dataReport.attributeReports.length} attribute reports: ${Logger.toJSON(dataReport)}`);
                     // Report doesn't fit, sending this chunk
                     await this.send(MessageType.ReportData, TlvDataReport.encode(dataReport));
                     await this.waitForSuccess();
@@ -192,6 +194,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
             }
         }
 
+        logger.debug(`Sending LAST DataReport chunk: ${Logger.toJSON(dataReport)}`);
         if (dataReport.suppressResponse) {
             // We do not expect a response other than a Standalone Ack, so if we receive anything else, we throw an error
             await tryCatchAsync(async () => await this.exchange.send(MessageType.ReportData, TlvDataReport.encode(dataReport), true), UnexpectedMessageError, async error => {
