@@ -150,7 +150,7 @@ The following parameters are available:
 * -discriminator: the discriminator to use for pairing (default: 3840, value between 0 and 4095)
 * -pin: the pin to use for pairing (default: 20202021)
 * -pairingcode: code to use for pairing (-discriminator and -pin will be ignored)
-* -store: the storage location (directory) to use for storing the pairing information (default: .controller-node). Ideally use names with "." at the beginning.Delete the directory or provide an alternative name to reset the controller
+* -store: the storage location (directory) to use for storing the pairing information (default: .controller-node). Ideally use names with "." at the beginning. Delete the directory or provide an alternative name to reset the controller
 * -clearstorage: the storage location will be reset on start of the process
 
 ## Development on basis of the examples
