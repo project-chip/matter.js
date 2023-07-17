@@ -211,8 +211,6 @@ class BtpSessionHandler {
 
         let remainingLengthInBytes = this.queuesMatterMessages[0].getRemainingBytesCount();
         let packetSendAck = false;
-        console.log(`dataLength: ${this.queuesMatterMessages[0].getLength()}`);
-        console.log(`Remaining: ${remainingLengthInBytes}`);
 
         if (this.sendInProgress) {
             return;
@@ -224,6 +222,8 @@ class BtpSessionHandler {
 
         this.sendInProgress = true;
         while (remainingLengthInBytes !== 0) {
+            console.log(`dataLength: ${this.queuesMatterMessages[0].getLength()}`);
+            console.log(`Remaining: ${remainingLengthInBytes}`);
 
             const packetHeader = {
                 isHandshakeRequest: false,
