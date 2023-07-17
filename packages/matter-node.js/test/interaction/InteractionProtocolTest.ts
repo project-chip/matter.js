@@ -107,6 +107,16 @@ const WRITE_REQUEST: WriteRequest = {
             dataVersion: 0,
         },
         {
+            path: { endpointId: 0, clusterId: 0x99, attributeId: 4 },
+            data: TlvUInt8.encodeTlv(3),
+            dataVersion: 0,
+        },
+        {
+            path: { endpointId: 1, clusterId: 0x28, attributeId: 4 },
+            data: TlvUInt8.encodeTlv(3),
+            dataVersion: 0,
+        },
+        {
             path: { endpointId: 0, clusterId: 0x28, attributeId: 5 },
             data: TlvString.encodeTlv("test"),
             dataVersion: 0,
@@ -119,7 +129,13 @@ const WRITE_RESPONSE: WriteResponse = {
     interactionModelRevision: 1,
     writeResponses: [
         {
-            path: { attributeId: 100, clusterId: 40, endpointId: 0 }, status: { status: 136 }
+            path: { attributeId: 100, clusterId: 40, endpointId: 0 }, status: { status: 134 }
+        },
+        {
+            path: { attributeId: 4, clusterId: 0x99, endpointId: 0 }, status: { status: 195 }
+        },
+        {
+            path: { attributeId: 4, clusterId: 40, endpointId: 1 }, status: { status: 127 }
         },
         {
             path: { attributeId: 5, clusterId: 40, endpointId: 0 }, status: { status: 0 }
@@ -137,6 +153,16 @@ const MASS_WRITE_REQUEST: WriteRequest = {
             data: TlvString.encodeTlv("test"),
             dataVersion: 0,
         },
+        {
+            path: { endpointId: 0, clusterId: 0x99 },
+            data: TlvString.encodeTlv("test"),
+            dataVersion: 0,
+        },
+        {
+            path: { endpointId: 1, clusterId: 0x28 },
+            data: TlvString.encodeTlv("test"),
+            dataVersion: 0,
+        }
     ],
     moreChunkedMessages: false,
 };
