@@ -249,6 +249,32 @@ const INVOKE_COMMAND_REQUEST_WITH_NO_ARGS: InvokeRequest = {
     ]
 };
 
+const INVOKE_COMMAND_REQUEST_MULTI: InvokeRequest = {
+    interactionModelRevision: 1,
+    suppressResponse: false,
+    timedRequest: false,
+    invokeRequests: [
+        {
+            commandPath: { endpointId: 0, clusterId: 6, commandId: 1 },
+        },
+        {
+            commandPath: { endpointId: undefined, clusterId: 6, commandId: 0 },
+        },
+        {
+            commandPath: { endpointId: undefined, clusterId: 6, commandId: 99 },
+        },
+        {
+            commandPath: { endpointId: 0, clusterId: 6, commandId: 100 },
+        },
+        {
+            commandPath: { endpointId: 0, clusterId: 90, commandId: 1 },
+        },
+        {
+            commandPath: { endpointId: 99, clusterId: 6, commandId: 1 },
+        }
+    ]
+};
+
 const INVOKE_COMMAND_REQUEST_INVALID: InvokeRequest = {
     interactionModelRevision: 1,
     suppressResponse: false,
@@ -281,6 +307,38 @@ const INVOKE_COMMAND_RESPONSE_INVALID: InvokeResponse = {
                 commandPath: { clusterId: 6, commandId: 10, endpointId: 0 }, status: { status: 0x81 }
             }
         }
+    ]
+};
+
+const INVOKE_COMMAND_RESPONSE_MULTI: InvokeResponse = {
+    interactionModelRevision: 1,
+    suppressResponse: false,
+    invokeResponses: [
+        {
+            status: {
+                commandPath: { clusterId: 6, commandId: 100, endpointId: 0 }, status: { status: 129 }
+            }
+        },
+        {
+            status: {
+                commandPath: { clusterId: 90, commandId: 1, endpointId: 0 }, status: { status: 195 }
+            }
+        },
+        {
+            status: {
+                commandPath: { clusterId: 6, commandId: 1, endpointId: 99 }, status: { status: 127 }
+            }
+        },
+        {
+            status: {
+                commandPath: { clusterId: 6, commandId: 1, endpointId: 0 }, status: { status: 0 }
+            }
+        },
+        {
+            status: {
+                commandPath: { clusterId: 6, commandId: 0, endpointId: 0 }, status: { status: 0 }
+            }
+        },
     ]
 };
 
@@ -522,6 +580,42 @@ describe("InteractionProtocol", () => {
             const result = await interactionProtocol.handleInvokeRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_INVALID, {} as Message);
 
             assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_INVALID);
+            assert.equal(onOffState, false);
+        });
+
+        it("multi invoke commands", async () => {
+            let onOffState = false;
+            let triggeredOn = false;
+            let triggeredOff = false;
+            const onOffCluster = ClusterServer(OnOffCluster, {
+                onOff: onOffState,
+            }, {
+                on: async () => {
+                    onOffState = true;
+                    triggeredOn = true;
+                },
+                off: async () => {
+                    onOffState = false;
+                    triggeredOff = true;
+                },
+                toggle: async () => {
+                    onOffState = !onOffState;
+                }
+            });
+
+            const storageManager = new StorageManager(new StorageBackendMemory());
+            await storageManager.initialize();
+            const storageContext = storageManager.createContext("test");
+            const endpoint = new Endpoint([DummyTestDevice], { endpointId: 0 });
+            endpoint.addClusterServer(onOffCluster);
+            const interactionProtocol = new InteractionServer(storageContext);
+            interactionProtocol.setRootEndpoint(endpoint);
+
+            const result = await interactionProtocol.handleInvokeRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_MULTI, {} as Message);
+
+            assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_MULTI);
+            assert.equal(triggeredOn, true);
+            assert.equal(triggeredOff, true);
             assert.equal(onOffState, false);
         });
     });

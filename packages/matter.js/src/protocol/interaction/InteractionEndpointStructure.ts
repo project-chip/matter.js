@@ -160,6 +160,22 @@ export class InteractionEndpointStructure {
         return !!this.getAttribute(endpointId, clusterId, attributeId);
     }
 
+    getEvent(endpointId: number, clusterId: number, eventId: number): EventServer<any> | undefined {
+        return this.events.get(eventPathToId({ endpointId, clusterId, eventId }));
+    }
+
+    hasEvent(endpointId: number, clusterId: number, eventId: number): boolean {
+        return !!this.getEvent(endpointId, clusterId, eventId);
+    }
+
+    getCommand(endpointId: number, clusterId: number, commandId: number): CommandServer<any, any> | undefined {
+        return this.commands.get(commandPathToId({ endpointId, clusterId, commandId }));
+    }
+
+    hasCommand(endpointId: number, clusterId: number, commandId: number): boolean {
+        return !!this.getCommand(endpointId, clusterId, commandId);
+    }
+
     getAttributes(filters: TypeFromSchema<typeof TlvAttributePath>[], onlyWritable = false): AttributeWithPath[] {
         const result = new Array<AttributeWithPath>();
 
