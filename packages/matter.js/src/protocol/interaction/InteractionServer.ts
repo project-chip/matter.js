@@ -633,7 +633,11 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                     invokeResponses.push({ status: { commandPath: path, status: { status: StatusCode.UnsupportedEndpoint } } });
                     continue;
                 }
-                const result = await tryCatchAsync(async () => await command.invoke(exchange.session, commandFields ?? TlvNoArguments.encodeTlv(commandFields), message, endpoint), StatusResponseError, async error => ({ code: error.code, responseId: command.responseId, response: TlvNoResponse.encodeTlv() }))
+                const result = await tryCatchAsync(
+                    async () => await command.invoke(exchange.session, commandFields ?? TlvNoArguments.encodeTlv(commandFields), message, endpoint),
+                    StatusResponseError,
+                    async error => ({ code: error.code, responseId: command.responseId, response: TlvNoResponse.encodeTlv() })
+                );
                 const { code, responseId, response } = result;
                 if (response.length === 0) {
                     invokeResponses.push({ status: { commandPath: path, status: { status: code } } });
