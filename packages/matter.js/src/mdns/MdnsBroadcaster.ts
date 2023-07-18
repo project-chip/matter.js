@@ -17,8 +17,10 @@ import { isIPv4 } from "../util/Ip.js";
 import { Logger } from "../log/Logger.js";
 import { Fabric } from "../fabric/Fabric.js";
 import {
-    CommissionerInstanceData, CommissioningModeInstanceData, OperationalInstanceData
+    CommissionerInstanceData, CommissioningModeInstanceData, OperationalInstanceData, PairingHintBitmap,
+    PairingHintBitmapSchema
 } from "../common/InstanceBroadcaster.js";
+import { TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 
 const logger = Logger.get("MdnsBroadcaster");
 
@@ -44,6 +46,21 @@ export class MdnsBroadcaster {
         private readonly mdnsServer: MdnsServer,
     ) { }
 
+    validatePairingInstructions(pairingHint: TypeFromPartialBitSchema<typeof PairingHintBitmap>, pairingInstructions: string) {
+        const needsInstructions = [
+            "customInstruction", "pressRestButtonForNumberOfSeconds", "pressResetButtonUntilLightBlinks",
+            "pressResetButtonForNumberOfSecondsWithApplicationOfPower",
+            "pressResetButtonUntilLightBlinksWithApplicationOfPower", "pressResetButtonNumberOfTimes",
+            "pressSetupButtonForNumberOfSeconds", "pressSetupButtonUntilLightBlinks",
+            "pressSetupButtonForNumberOfSecondsWithApplicationOfPower",
+            "pressSetupButtonUntilLightBlinksWithApplicationOfPower",
+            "pressSetupButtonNumberOfTimes"
+        ].find(hint => (pairingHint as any)[hint] === true);
+        if (needsInstructions && pairingInstructions.length === 0) {
+            throw new Error(`Pairing instructions required for Pairing Hint of type "${needsInstructions}"`);
+        }
+    }
+
     /** Set the Broadcaster data to announce a device ready for commissioning in a special mode */
     setCommissionMode(
         announcedNetPort: number,
@@ -64,6 +81,8 @@ export class MdnsBroadcaster {
         const longDiscriminatorQname = getLongDiscriminatorQname(discriminator);
         const commissionModeQname = getCommissioningModeQname();
         const deviceQname = getDeviceInstanceQname(instanceId);
+
+        this.validatePairingInstructions(pairingHint, pairingInstructions); // Throws error if invalid!
 
         this.mdnsServer.setRecordsGenerator(announcedNetPort, netInterface => {
             const ipMac = this.network.getIpMac(netInterface);
