@@ -29,8 +29,8 @@ class BtpSessionHandler {
     private currentSegmentedPayload: ByteArray = new ByteArray();
     private queuesMatterMessages: Array<DataReader<Endian.Little>> = [];
     private sendInProgress = false;
-    private prevClientSequenceNumber = 255; // Client's Sequence Number received
-    private prevClientAckedSequenceNumber = 0; // Client's Acked Sequence Number
+    private prevClientSequenceNumber = 0; // Client's Sequence Number received
+    private prevClientAckedSequenceNumber = -1; // Client's Acked Sequence Number
     private serverAckedSequenceNumber = -1; // Server's sequence number ack sent by client
     private ackReceiveTimer: Timer;
     private sendAckTimer: Timer;
@@ -233,7 +233,7 @@ class BtpSessionHandler {
                 isEndingSegment: false,
             };
 
-            let expectedBtpHeaderLength = 2 + (packetHeader.isBeginningSegment ? 2 : 0); // 2(flags, sequenceNumber) + 2(begining)
+            let expectedBtpHeaderLength = 2 + (packetHeader.isBeginningSegment ? 2 : 0); // 2(flags, sequenceNumber) + 2(beginning)
 
             //checks if last ack number sent < ack number to be sent
             if ((this.prevClientSequenceNumber !== undefined) && (this.prevClientSequenceNumber > this.prevClientAckedSequenceNumber)) {
@@ -269,7 +269,6 @@ class BtpSessionHandler {
             logger.debug(`Sending Matter Message response: ${packet.toHex()}`);
 
             await this.writeBleCallback(packet);
-            await new Promise(resolve => setTimeout(resolve, 100));
 
             packetHeader.isBeginningSegment = false;
             packetSendAck = false;
