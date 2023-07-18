@@ -40,7 +40,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
 * Reference implementation/Examples:
   * Deprecation: The CLI Examples LegacyDeviceNode and LegacyControllerNode is removed in this version! Use the new variants please.
   * Example script are moved to package matter-node.js-examples
-  * The Device example script got a new parameter -bluetooth to also initialize the Bluetooth transport layer
+  * The Device example script got a new parameter -ble to also initialize the Bluetooth transport layer
 * Misc:
   * Added Specification links for Matter Specifications 1.1
   * Optimize typing exports for node10 TS settings
