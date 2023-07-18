@@ -129,7 +129,11 @@ class BridgedDevice {
         const numDevices = getIntParameter("num") || 2;
         for (let i = 1; i <= numDevices; i++) {
             const onOffDevice = getParameter(`type${i}`) === "socket" ? new OnOffPluginUnitDevice() : new OnOffLightDevice();
+
             onOffDevice.addOnOffListener(on => commandExecutor(on ? `on${i}` : `off${i}`)?.());
+            onOffDevice.addCommandHandler("identify", async ({ request: { identifyTime } }) =>
+                console.log(`Identify called for OnOffDevice ${onOffDevice.name} with id: ${i} and identifyTime: ${identifyTime}`));
+
             aggregator.addBridgedDevice(onOffDevice, {
                 nodeLabel: `OnOff ${onOffDevice instanceof OnOffPluginUnitDevice ? 'Socket' : 'Light'} ${i}`,
                 serialNumber: `node-matter-${uniqueId}-${i}`,
