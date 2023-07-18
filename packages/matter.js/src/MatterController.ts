@@ -356,7 +356,6 @@ export class MatterController {
      * It returns the operational MessageChannel on success.
      */
     async resume(peerNodeId: NodeId, timeoutSeconds = 60) {
-        let formerOperationalServer: ServerAddress | undefined;
         if (this.operationalServerAddress !== undefined) {
             const { ip, port } = this.operationalServerAddress;
             try {
@@ -380,8 +379,7 @@ export class MatterController {
             scanResult,
             PairRetransmissionLimitReachedError,
             async () => this.scanner.getDiscoveredOperationalDevices(this.fabric, peerNodeId),
-            async address => await this.pair(peerNodeId, address),
-            formerOperationalServer
+            async address => await this.pair(peerNodeId, address)
         );
 
         this.setOperationalServerAddress(resultAddress);
