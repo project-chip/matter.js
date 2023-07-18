@@ -28,6 +28,7 @@ The following are things on my (@Apollon77) TODO list for the project right now 
 * All errors MatterError!
 * Update subscribes when structure gets updated (e.g. new endpoint added)
 * Move announcements and durations into Broadcaster class
+* Enhance high level API to use the broadcaster data and also show them in controller
 
 ## New API
 

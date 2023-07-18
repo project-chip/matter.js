@@ -53,13 +53,12 @@ export class MatterServer {
         // TODO move port handling completely to MatterServer
         const portCheckMap = new Map<number, boolean>();
         for (const node of this.nodes) {
-            if (node instanceof CommissioningServer) {
-                const nodePort = node.getPort();
-                if (portCheckMap.has(nodePort)) {
-                    throw new Error(`Port ${nodePort} is already in use by other node`);
-                }
-                portCheckMap.set(nodePort, true);
+            const nodePort = node.getPort();
+            if (nodePort === undefined) continue;
+            if (portCheckMap.has(nodePort)) {
+                throw new Error(`Port ${nodePort} is already in use by other node`);
             }
+            portCheckMap.set(nodePort, true);
         }
         commissioningServer.setStorage(this.storageManager.createContext(nodeOptions?.uniqueNodeId ?? this.nodes.length.toString()));
         this.prepareNode(commissioningServer);
@@ -92,12 +91,7 @@ export class MatterServer {
         // TODO the mdns classes will later be in this class and assigned differently!!
         for (const node of this.nodes) {
             this.prepareNode(node);
-
-            if (node instanceof CommissioningServer && !node.delayedAnnouncement) {
-                await node.advertise();
-            } else if (node instanceof CommissioningController && !node.delayedPairing) {
-                await node.connect();
-            }
+            await node.start();
         }
     }
 
@@ -106,12 +100,8 @@ export class MatterServer {
             logger.debug("Mdns instances not yet created, delaying node preparation");
             return;
         }
-        if (node instanceof CommissioningServer) {
-            node.setMdnsBroadcaster(this.mdnsBroadcaster);
-            node.setMdnsScanner(this.mdnsScanner);
-        } else if (node instanceof CommissioningController) {
-            node.setMdnsScanner(this.mdnsScanner);
-        }
+        node.setMdnsBroadcaster(this.mdnsBroadcaster);
+        node.setMdnsScanner(this.mdnsScanner);
     }
 
     /**

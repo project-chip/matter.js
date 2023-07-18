@@ -582,4 +582,10 @@ export class CommissioningServer extends MatterNode {
     removeCommandHandler<K extends keyof CommissioningServerCommands>(command: K, handler: CommissioningServerCommands[K]) {
         this.commandHandler.removeHandler(command, handler);
     }
+
+    async start() {
+        if (!this.delayedAnnouncement) {
+            return this.advertise();
+        }
+    }
 }

@@ -22,6 +22,14 @@ import {
 
 const logger = Logger.get("MdnsBroadcaster");
 
+const DEFAULT_SLEEP_IDLE_INTERVAL = 5000;
+const DEFAULT_SLEEP_ACTIVE_INTERVAL = 300;
+const TCP_SUPPORTED = 0;
+const DEFAULT_PAIRING_HINT = {
+    powerCycle: true,
+    deviceManual: true,
+};
+
 /**
  * This class is handing MDNS Announcements for multiple instances/devices
  */
@@ -37,18 +45,15 @@ export class MdnsBroadcaster {
     ) { }
 
     /** Set the Broadcaster data to announce a device ready for commissioning in a special mode */
-    setCommissionMode(announcedNetPort: number, mode: number, deviceData: CommissioningModeInstanceData) {
-        const {
-            deviceName,
-            deviceType,
-            vendorId,
-            productId,
-            discriminator,
-            sleepIdleInterval,
-            sleepActiveInterval,
-            pairingHint,
-            pairingInstructions
-        } = deviceData;
+    setCommissionMode(
+        announcedNetPort: number,
+        mode: number,
+        {
+            deviceName, deviceType, vendorId, productId, discriminator, sleepIdleInterval = DEFAULT_SLEEP_IDLE_INTERVAL,
+            sleepActiveInterval = DEFAULT_SLEEP_ACTIVE_INTERVAL, pairingHint = DEFAULT_PAIRING_HINT,
+            pairingInstructions = ""
+        }: CommissioningModeInstanceData
+    ) {
         logger.debug(`announce commissioning mode ${mode} ${deviceName} ${deviceType} ${vendorId.id} ${productId} ${discriminator}`);
 
         const shortDiscriminator = (discriminator >> 8) & 0x0F;
@@ -88,16 +93,16 @@ export class MdnsBroadcaster {
                 PtrRecord(commissionModeQname, deviceQname),
                 SrvRecord(deviceQname, { priority: 0, weight: 0, port: announcedNetPort, target: hostname }),
                 TxtRecord(deviceQname, [
-                    `VP=${vendorId.id}+${productId}`,    /* Vendor / Product */
-                    `DT=${deviceType}`,                  /* Device Type */
-                    `DN=${deviceName}`,                  /* Device Name */
-                    `SII=${sleepIdleInterval ?? 5000}`,  /* Sleepy Idle Interval */
-                    `SAI=${sleepActiveInterval ?? 300}`, /* Sleepy Active Interval */
-                    "T=0",                               /* TCP not supported */
-                    `D=${discriminator}`,                /* Discriminator */
-                    `CM=${mode}`,                        /* Commission Mode */
-                    `PH=${pairingHint ?? 33}`,           /* Pairing Hint */
-                    `PI=${pairingInstructions ?? ""}`,   /* Pairing Instruction */
+                    `VP=${vendorId.id}+${productId}`,                    /* Vendor / Product */
+                    `DT=${deviceType}`,                                  /* Device Type */
+                    `DN=${deviceName}`,                                  /* Device Name */
+                    `SII=${sleepIdleInterval}`,                          /* Sleepy Idle Interval */
+                    `SAI=${sleepActiveInterval}`,                        /* Sleepy Active Interval */
+                    `T=${TCP_SUPPORTED}`,                                /* TCP not supported */
+                    `D=${discriminator}`,                                /* Discriminator */
+                    `CM=${mode}`,                                        /* Commission Mode */
+                    `PH=${PairingHintBitmapSchema.encode(pairingHint)}`, /* Pairing Hint */
+                    `PI=${pairingInstructions}`,                         /* Pairing Instruction */
                 ]),
             ];
             ips.forEach(ip => {
@@ -112,8 +117,13 @@ export class MdnsBroadcaster {
     }
 
     /** Set the Broadcaster Data to announce a device for operative discovery (aka "already paired") */
-    setFabrics(announcedNetPort: number, fabrics: Fabric[], operationalInstanceData: OperationalInstanceData = {}) {
-        const { sleepIdleInterval, sleepActiveInterval } = operationalInstanceData;
+    setFabrics(
+        announcedNetPort: number,
+        fabrics: Fabric[],
+        {
+            sleepIdleInterval = DEFAULT_SLEEP_IDLE_INTERVAL, sleepActiveInterval = DEFAULT_SLEEP_ACTIVE_INTERVAL
+        }: OperationalInstanceData = {}
+    ) {
         this.mdnsServer.setRecordsGenerator(announcedNetPort, netInterface => {
             const ipMac = this.network.getIpMac(netInterface);
             if (ipMac === undefined) return [];
@@ -141,9 +151,9 @@ export class MdnsBroadcaster {
                     PtrRecord(fabricQname, deviceMatterQname),
                     SrvRecord(deviceMatterQname, { priority: 0, weight: 0, port: announcedNetPort, target: hostname }),
                     TxtRecord(deviceMatterQname, [
-                        `SII=${sleepIdleInterval ?? 5000}`,  /* Sleepy Idle Interval */
-                        `SAI=${sleepActiveInterval ?? 300}`, /* Sleepy Active Interval */
-                        "T=0",                               /* TCP not supported */
+                        `SII=${sleepIdleInterval}`,   /* Sleepy Idle Interval */
+                        `SAI=${sleepActiveInterval}`, /* Sleepy Active Interval */
+                        `T=${TCP_SUPPORTED}`,         /* TCP not supported */
                     ]),
                 ];
                 records.push(...fabricRecords);
@@ -160,15 +170,13 @@ export class MdnsBroadcaster {
     }
 
     /** Set the Broadcaster data to announce a Commissioner (aka Commissioner discovery) */
-    setCommissionerInfo(announcedNetPort: number, commissionerData: CommissionerInstanceData) {
-        const {
-            deviceName,
-            deviceType,
-            vendorId,
-            productId,
-            sleepIdleInterval,
-            sleepActiveInterval,
-        } = commissionerData;
+    setCommissionerInfo(
+        announcedNetPort: number,
+        {
+            deviceName, deviceType, vendorId, productId, sleepIdleInterval = DEFAULT_SLEEP_IDLE_INTERVAL,
+            sleepActiveInterval = DEFAULT_SLEEP_ACTIVE_INTERVAL
+        }: CommissionerInstanceData
+    ) {
         logger.debug("Announcement: Commissioner", Logger.dict({
             port: announcedNetPort,
             deviceType,
@@ -190,12 +198,12 @@ export class MdnsBroadcaster {
                 PtrRecord(vendorQname, deviceQname),
                 SrvRecord(deviceQname, { priority: 0, weight: 0, port: announcedNetPort, target: hostname }),
                 TxtRecord(deviceQname, [
-                    `VP=${vendorId.id}+${productId}`,    /* Vendor / Product */
-                    `DT=${deviceType}`,                  /* Device Type */
-                    `DN=${deviceName}`,                  /* Device Name */
-                    `SII=${sleepIdleInterval ?? 5000}`,  /* Sleepy Idle Interval */
-                    `SAI=${sleepActiveInterval ?? 300}`, /* Sleepy Active Interval */
-                    "T=0",                               /* TCP not supported */
+                    `VP=${vendorId.id}+${productId}`, /* Vendor / Product */
+                    `DT=${deviceType}`,               /* Device Type */
+                    `DN=${deviceName}`,               /* Device Name */
+                    `SII=${sleepIdleInterval}`,       /* Sleepy Idle Interval */
+                    `SAI=${sleepActiveInterval}`,     /* Sleepy Active Interval */
+                    `T=${TCP_SUPPORTED}`,             /* TCP not supported */
                 ]),
             ];
             if (deviceType !== undefined) {

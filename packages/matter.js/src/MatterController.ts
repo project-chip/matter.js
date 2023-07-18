@@ -134,12 +134,12 @@ export class MatterController {
 
         const foundDevices = await this.scanner.findCommissionableDevices(identifier, timeoutSeconds);
         if (foundDevices.length === 0) {
-            throw new Error("No device discovered! Please check that the device is online.");
+            throw new Error(`No device discovered using identifier ${Logger.toJSON(identifier)}! Please check that the relevant device is online.`);
         }
 
         const addresses = foundDevices.flatMap((device) => device.addresses);
         if (addresses.length === 0) {
-            throw new Error("Device discovered but no Network addresses discovered.");
+            throw new Error(`Device discovered using identifier ${Logger.toJSON(identifier)}, but no Network addresses discovered.`);
         }
 
         return addresses;
@@ -168,8 +168,7 @@ export class MatterController {
             // Pairing was successful, so store the address and assign the established secure channel
             paseSecureChannel = result;
 
-            this.operationalServerAddress = resultAddress;
-            this.controllerStorage.set("operationalServerAddress", resultAddress);
+            this.setOperationalServerAddress(resultAddress);
         } catch (e) {
             if (e instanceof PairRetransmissionLimitReachedError && knownAddress !== undefined) { // Know address was failure, so discover the device now
                 return await this.commission(identifierData, passCode, timeoutSeconds);
@@ -193,7 +192,7 @@ export class MatterController {
         const isIpv6Address = isIPv6(ip);
         const paseInterface = isIpv6Address ? this.netInterfaceIpv6 : this.netInterfaceIpv4;
         if (paseInterface === undefined) { // mainly IPv4 address when IPv4 is disabled
-            throw new PairRetransmissionLimitReachedError(`IPv${isIpv6Address ? "6" : "4"} interface not initialized. Can not use this address for commissioning.`);
+            throw new PairRetransmissionLimitReachedError(`IPv${isIpv6Address ? "6" : "4"} interface not initialized. Cannot use ${ip} for commissioning.`);
         }
         const paseChannel = await paseInterface.openChannel(ip, port);
 
@@ -385,8 +384,7 @@ export class MatterController {
             formerOperationalServer
         );
 
-        this.operationalServerAddress = resultAddress;
-        this.controllerStorage.set("operationalServerAddress", resultAddress);
+        this.setOperationalServerAddress(resultAddress);
 
         return result;
     }
@@ -399,7 +397,7 @@ export class MatterController {
         const operationalInterface = isIpv6Address ? this.netInterfaceIpv6 : this.netInterfaceIpv4;
 
         if (operationalInterface === undefined) {
-            throw new PairRetransmissionLimitReachedError(`IPv${isIpv6Address ? "6" : "4"} interface not initialized for port ${operationalPort}. Can not use this address for pairing.`);
+            throw new PairRetransmissionLimitReachedError(`IPv${isIpv6Address ? "6" : "4"} interface not initialized for port ${operationalPort}. Cannot use ${operationalIp} for pairing.`);
         }
 
         const operationalChannel = await operationalInterface.openChannel(operationalIp, operationalPort);
@@ -423,6 +421,11 @@ export class MatterController {
 
     isCommissioned() {
         return this.controllerStorage.get("fabricCommissioned", false);
+    }
+
+    setOperationalServerAddress(address: ServerAddress) {
+        this.operationalServerAddress = address;
+        this.controllerStorage.set("operationalServerAddress", address);
     }
 
     getOperationalServerAddress() {

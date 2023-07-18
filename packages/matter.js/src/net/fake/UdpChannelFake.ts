@@ -38,8 +38,8 @@ export class UdpChannelFake implements UdpChannel {
         return netListener;
     }
 
-    async send(address: string, port: number, data: ByteArray) {
-        this.simulatedNetwork.sendUdp(this.localAddress, this.listeningPort, address, port, data);
+    async send(host: string, port: number, data: ByteArray) {
+        this.simulatedNetwork.sendUdp(this.localAddress, this.listeningPort, host, port, data);
     }
 
     close() {

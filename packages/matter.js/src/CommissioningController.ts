@@ -28,6 +28,7 @@ import { ClusterClientObj, isClusterClient } from "./cluster/client/ClusterClien
 import { BitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
 import { ServerAddress } from "./common/ServerAddress.js";
+import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 
 const logger = new Logger("CommissioningController");
 
@@ -126,7 +127,7 @@ export class CommissioningController extends MatterNode {
                 identifierData = { shortDiscriminator: this.shortDiscriminator };
             } else {
                 if (this.passcode === undefined) {
-                    throw new Error("Passcode not set!");
+                    throw new Error("To commission a new device a passcode needs to be specified i the constructor data!");
                 }
                 identifierData = {};
             }
@@ -146,6 +147,16 @@ export class CommissioningController extends MatterNode {
     setMdnsScanner(mdnsScanner: MdnsScanner) {
         this.mdnsScanner = mdnsScanner;
     }
+
+    /**
+     * Set the MDNS Broadcaster instance. Should be only used internally
+     *
+     * @param _mdnsBroadcaster MdnsBroadcaster instance
+     */
+    setMdnsBroadcaster(_mdnsBroadcaster: MdnsBroadcaster) {
+        // not needed
+    }
+
 
     /**
      * Set the Storage instance. Should be only used internally
@@ -412,5 +423,15 @@ export class CommissioningController extends MatterNode {
      */
     async close() {
         this.controllerInstance?.close();
+    }
+
+    getPort() {
+        return undefined; //Add later if UDC is used
+    }
+
+    async start() {
+        if (!this.delayedPairing) {
+            return this.connect();
+        }
     }
 }

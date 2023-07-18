@@ -20,7 +20,7 @@ import { Fabric } from "../fabric/Fabric.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { isIPv6 } from "../util/Ip.js";
 import { Logger } from "../log/Logger.js";
-import { VendorId } from "../datatype/index.js";
+import { VendorId } from "../datatype/VendorId.js";
 import { ServerAddress } from "../common/ServerAddress.js";
 
 const logger = Logger.get("MdnsScanner");
@@ -38,10 +38,19 @@ type CommissionableDeviceRecordWithExpire = Omit<CommissionableDevice, "addresse
     P?: number, // Additional Field for Product ID
 };
 
+/** The initial number of seconds between two announcements. MDNS specs require 1-2 seconds, so lets use the middle. */
 const START_ANNOUNCE_INTERVAL_SECONDS = 1.5;
 
+/**
+ * The maximum MDNS message size to usually fit into one UDP network MTU packet. Data are split into multiple messages
+ * when needed.
+ */
 const MAX_MDNS_MESSAGE_SIZE = 1500;
 
+/**
+ * This class implements the Scanner interface for a MDNS scanner via UDP messages in a IP based network.
+ * It sends out queries to discover various types of Matter device types and listens for announcements.
+ */
 export class MdnsScanner implements Scanner {
     static async create(netInterface?: string) {
         return new MdnsScanner(await UdpMulticastServer.create({
@@ -70,7 +79,9 @@ export class MdnsScanner implements Scanner {
 
     /**
      * Sends out one DNS-SD query for all collected announce records and start a timer for the next query with doubled
-     * interval, maximum 60min.
+     * interval, maximum 60min, as per MDNS specs. The already known answers are tried to be sent in the query as long
+     * as they fit into a maximum 1500 byte long packet (as defined in MDNS specs), else they are split into more
+     * packets and the query is sent as Truncated query.
      * @private
      */
     private async sendQueries() {
@@ -125,10 +136,11 @@ export class MdnsScanner implements Scanner {
                     // Reset the message, length counter and included answers to count for next message
                     queries.length = 0;
                     includedAnswers.length = 0;
-                    queryMessageSize = DnsCodec.encode({
+                    const encodedMessage = DnsCodec.encode({
                         messageType: DnsMessageType.TruncatedQuery,
                         answers: [],
-                    }).length + nextAnswerLength;
+                    });
+                    queryMessageSize = encodedMessage.length + nextAnswerLength;
                 }
                 includedAnswers.push(nextAnswer)
             }
@@ -138,13 +150,8 @@ export class MdnsScanner implements Scanner {
     }
 
     /**
-     * Set new DnsQuery records to the list of active queries and start sending them out. When entry already exists the
-     * query is overwritten and answers are always added.
-     *
-     * @param queryId
-     * @param queries
-     * @param answers
-     * @private
+     * Set new DnsQuery records to the list of active queries to discover devices in the network and start sending them
+     * out. When entry already exists the query is overwritten and answers are always added.
      */
     private setQueryRecords(queryId: string, queries: DnsQuery[], answers: DnsRecord<any>[] = []) {
         const activeExistingQuery = this.activeAnnounceQueries.get(queryId);
@@ -163,11 +170,8 @@ export class MdnsScanner implements Scanner {
     }
 
     /**
-     * Remove a query from the list of active queries and stop sending it out. If it was the last query announcing
-     * will stop completely.
-     *
-     * @param queryId
-     * @private
+     * Remove a query from the list of active queries because discovery has finished or timed out and stop sending it
+     * out. If it was the last query announcing will stop completely.
      */
     private removeQuery(queryId: string) {
         this.activeAnnounceQueries.delete(queryId);
@@ -183,9 +187,6 @@ export class MdnsScanner implements Scanner {
 
     /**
      * Returns the list of all targets (IP/port) discovered for a queried operational device record.
-     *
-     * @param deviceMatterQname
-     * @private
      */
     private getOperationalDeviceRecords(deviceMatterQname: string) {
         const recordMap = this.operationalDeviceRecords.get(deviceMatterQname);
@@ -197,7 +198,7 @@ export class MdnsScanner implements Scanner {
 
 
     /**
-     * Sort teh list of found IP/ports and make sure link-local IPv6 addresses come first, IPv6 next and IPv4 last.
+     * Sort the list of found IP/ports and make sure link-local IPv6 addresses come first, IPv6 next and IPv4 last.
      *
      * @param entries
      */
@@ -228,10 +229,6 @@ export class MdnsScanner implements Scanner {
     /**
      * Registers a deferred promise for a specific queryId together with a timeout and return the promise.
      * The promise will be resolved when the timer runs out latest.
-     *
-     * @param queryId
-     * @param timeoutSeconds
-     * @private
      */
     private async registerWaiterPromise(queryId: string, timeoutSeconds: number) {
         const { promise, resolver } = await getPromiseResolver<void>();
@@ -242,11 +239,8 @@ export class MdnsScanner implements Scanner {
     }
 
     /**
-     * Remove a waiter promise for a specific queryId and stop the connected timer. If required also resolve the promise.
-     *
-     * @param queryId
-     * @param resolvePromise
-     * @private
+     * Remove a waiter promise for a specific queryId and stop the connected timer. If required also resolve the
+     * promise.
      */
     private finishWaiter(queryId: string, resolvePromise = false) {
         const waiter = this.recordWaiters.get(queryId);
@@ -268,10 +262,6 @@ export class MdnsScanner implements Scanner {
     /**
      * Method to find an operational device (already commissioned) and return a promise with the list of discovered
      * IP/ports or an empty array if not found.
-     *
-     * @param operationalId
-     * @param nodeId
-     * @param timeoutSeconds
      */
     async findOperationalDevice({ operationalId }: Fabric, nodeId: NodeId, timeoutSeconds = 5): Promise<ServerAddress[]> {
         const deviceMatterQname = this.createOperationalMatterQName(operationalId, nodeId);
@@ -300,9 +290,6 @@ export class MdnsScanner implements Scanner {
     /**
      * Returns the metadata and list of all target addresses (IP/port) discovered for a queried commissionable device
      * record.
-     *
-     * @param identifier
-     * @private
      */
     private getCommissionableDeviceRecords(identifier: CommissionableDeviceIdentifiers) {
         const storedRecords = Array.from(this.commissionableDeviceRecords.values());
@@ -342,8 +329,6 @@ export class MdnsScanner implements Scanner {
     /**
      * Builds an identifier string for commissionable queries based on the given identifier object.
      * Some identifiers are identical to the official DNS-SD identifiers, others are custom.
-     * @param identifier
-     * @private
      */
     private buildCommissionableQueryIdentifier(identifier: CommissionableDeviceIdentifiers) {
         if ("instanceId" in identifier) {
@@ -380,10 +365,6 @@ export class MdnsScanner implements Scanner {
 
     /**
      * Check all options for a query identifier and return the most relevant one with an active query
-     *
-     * @param instanceName
-     * @param record
-     * @private
      */
     private findCommissionableQueryIdentifier(instanceName: string, record: CommissionableDeviceRecordWithExpire) {
         const instanceQueryId = this.buildCommissionableQueryIdentifier({ instanceId: this.extractInstanceId(instanceName) });
@@ -430,6 +411,14 @@ export class MdnsScanner implements Scanner {
         return undefined;
     }
 
+    /**
+     * Discovers commissionalble devices based on a defined identifier. If an already discovered device matched the
+     * query it is returned directly and no query is triggered. This works because the commissionable device records
+     * that are announced into the network are always stored already. If no record can be found a query is registered
+     * and sent out and  the promise gets fulfilled as soon as one device is found. More might be added later and can
+     * be requested ny the getCommissionableDevices method. If no device is discovered the promise is fulfilled after
+     * the timeout period.
+     */
     async findCommissionableDevices(identifier: CommissionableDeviceIdentifiers, timeoutSeconds = 5): Promise<CommissionableDevice[]> {
         let storedRecords = this.getCommissionableDeviceRecords(identifier);
         if (storedRecords.length === 0) {
@@ -486,11 +475,6 @@ export class MdnsScanner implements Scanner {
     /**
      * Main method to handle all incoming DNS messages.
      * It will parse the message and check if it contains relevant discovery records.
-     *
-     * @param messageBytes
-     * @param _remoteIp
-     * @param netInterface
-     * @private
      */
     private handleDnsMessage(messageBytes: ByteArray, _remoteIp: string, netInterface: string) {
         const message = DnsCodec.decode(messageBytes);
