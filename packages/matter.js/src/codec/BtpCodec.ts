@@ -32,6 +32,7 @@ export interface BtpHeader {
     hasManagementOpcode: boolean,
     hasAckNumber: boolean,
     isEndingSegment: boolean,
+    isContinuingSegment: boolean,
     isBeginningSegment: boolean
 }
 
@@ -45,6 +46,7 @@ export const enum BtpHeaderBits {
     ManagementMsg = 0b00100000,
     AckMsg = 0b00001000,
     EndSegment = 0b00000100,
+    ContinuingSegment = 0b00000010,
     BeginSegment = 0b00000001
 }
 
@@ -175,16 +177,17 @@ export class BtpCodec {
         const hasManagementOpcode = (headerBits & BtpHeaderBits.ManagementMsg) !== 0;
         const hasAckNumber = (headerBits & BtpHeaderBits.AckMsg) !== 0;
         const isEndingSegment = (headerBits & BtpHeaderBits.EndSegment) !== 0;
+        const isContinuingSegment = (headerBits & BtpHeaderBits.ContinuingSegment) !== 0;
         const isBeginningSegment = (headerBits & BtpHeaderBits.BeginSegment) !== 0;
 
         if (hasManagementOpcode) {
             throw new Error("Management Opcode for BTPHandshake Request is not expected");
         }
 
-        return { isHandshakeRequest, hasManagementOpcode, hasAckNumber, isEndingSegment, isBeginningSegment };
+        return { isHandshakeRequest, hasManagementOpcode, hasAckNumber, isEndingSegment, isContinuingSegment, isBeginningSegment };
     }
 
-    private static encodeBtpPacketHeader({ isHandshakeRequest, hasManagementOpcode, hasAckNumber, isEndingSegment, isBeginningSegment }: BtpHeader): ByteArray {
+    private static encodeBtpPacketHeader({ isHandshakeRequest, hasManagementOpcode, hasAckNumber, isEndingSegment, isContinuingSegment, isBeginningSegment }: BtpHeader): ByteArray {
         const writer = new DataWriter(Endian.Little);
 
         if (isHandshakeRequest || hasManagementOpcode) {
@@ -195,6 +198,7 @@ export class BtpCodec {
             | (hasManagementOpcode ? BtpHeaderBits.ManagementMsg : 0)
             | (hasAckNumber ? BtpHeaderBits.AckMsg : 0)
             | (isEndingSegment ? BtpHeaderBits.EndSegment : 0)
+            | (isContinuingSegment ? BtpHeaderBits.ContinuingSegment : 0)
             | (isBeginningSegment ? BtpHeaderBits.BeginSegment : 0)
 
         writer.writeUInt8(header);

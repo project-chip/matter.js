@@ -29,7 +29,7 @@ class BtpSessionHandler {
     private currentSegmentedPayload: ByteArray = new ByteArray();
     private queuesMatterMessages: Array<DataReader<Endian.Little>> = [];
     private sendInProgress = false;
-    private prevClientSequenceNumber = 0; // Client's Sequence Number received
+    private prevClientSequenceNumber = 255; // Client's Sequence Number received
     private prevClientAckedSequenceNumber = -1; // Client's Acked Sequence Number
     private serverAckedSequenceNumber = -1; // Server's sequence number ack sent by client
     private ackReceiveTimer: Timer;
@@ -140,6 +140,7 @@ class BtpSessionHandler {
             }
 
             if (((this.prevClientSequenceNumber + 1) % 256) !== sequenceNumber) {
+                logger.debug(`sequenceNumber : ${sequenceNumber}, previousClintSeqNumber : ${this.prevClientSequenceNumber}`);
                 this.disconnectAndThrow("Expected and actual BTP packets sequence number does not match");
             }
 
@@ -230,6 +231,7 @@ class BtpSessionHandler {
                 hasManagementOpcode: false,
                 hasAckNumber: false,
                 isBeginningSegment: this.queuesMatterMessages[0].getLength() === remainingLengthInBytes,
+                isContinuingSegment: false,
                 isEndingSegment: false,
             };
 
@@ -271,6 +273,7 @@ class BtpSessionHandler {
             await this.writeBleCallback(packet);
 
             packetHeader.isBeginningSegment = false;
+            packetHeader.isContinuingSegment = true;
             packetSendAck = false;
 
             if (!this.ackReceiveTimer.isRunning) {
@@ -320,6 +323,7 @@ class BtpSessionHandler {
                     hasManagementOpcode: false,
                     hasAckNumber: true,
                     isBeginningSegment: false,
+                    isContinuingSegment: false,
                     isEndingSegment: false,
                 },
                 payload: {
