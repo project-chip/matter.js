@@ -272,8 +272,9 @@ export class DnsCodec {
     private static encodeTxtRecord(entries: string[]) {
         const writer = new DataWriter(Endian.Big);
         entries.forEach(entry => {
-            writer.writeUInt8(entry.length);
-            writer.writeUtf8String(entry);
+            const entryData = ByteArray.fromString(entry);
+            writer.writeUInt8(entryData.length);
+            writer.writeByteArray(entryData);
         });
         return writer.toByteArray();
     }
@@ -290,8 +291,9 @@ export class DnsCodec {
     private static encodeQName(qname: string) {
         const writer = new DataWriter(Endian.Big);
         qname.split(".").forEach(label => {
-            writer.writeUInt8(label.length);
-            writer.writeUtf8String(label);
+            const labelData = ByteArray.fromString(label);
+            writer.writeUInt8(labelData.length);
+            writer.writeByteArray(labelData);
         });
         writer.writeUInt8(0);
         return writer.toByteArray();
