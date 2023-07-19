@@ -6,8 +6,8 @@
 import { MatterNode } from "./MatterNode.js";
 import { UdpInterface } from "./net/UdpInterface.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
-import { StorageManager } from "./storage/StorageManager.js";
-import { MatterController } from "./MatterController.js";
+import { StorageContext } from "./storage/StorageContext.js";
+import { CommissioningData, MatterController } from "./MatterController.js";
 import { InteractionClient, ClusterClient } from "./protocol/interaction/InteractionClient.js";
 import { NodeId } from "./datatype/NodeId.js";
 import { structureReadDataToClusterObject } from "./protocol/interaction/AttributeDataDecoder.js";
@@ -27,6 +27,8 @@ import { AllClustersMap } from "./cluster/ClusterHelper.js";
 import { ClusterClientObj, isClusterClient } from "./cluster/client/ClusterClient.js";
 import { BitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
+import { ServerAddress } from "./common/ServerAddress.js";
+import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 
 const logger = new Logger("CommissioningController");
 
@@ -39,31 +41,36 @@ const logger = new Logger("CommissioningController");
  * Constructor options for the CommissioningController class
  */
 export interface CommissioningControllerOptions {
-    ip: string;
-    port: number;
+    serverAddress?: ServerAddress;
+    localPort?: number;
     disableIpv4?: boolean;
     listeningAddressIpv4?: string;
     listeningAddressIpv6?: string;
 
     delayedPairing?: boolean;
 
-    passcode: number,
-    discriminator: number,
+    passcode: number, // TODO: Move into commissioningOptions
+    longDiscriminator?: number,
+    shortDiscriminator?: number, // TODO: Move into commissioningOptions
+
+    commissioningOptions?: CommissioningData
 }
 
 export class CommissioningController extends MatterNode {
-    private readonly ip: string;
-    private readonly port: number;
+    serverAddress?: ServerAddress;
     private readonly disableIpv4: boolean;
+    private readonly localPort?: number;
     private readonly listeningAddressIpv4?: string;
     private readonly listeningAddressIpv6?: string;
 
     private readonly passcode: number;
-    private readonly discriminator: number;
+    private longDiscriminator?: number;
+    private shortDiscriminator?: number;
+    private readonly commissioningOptions?: CommissioningData;
 
     readonly delayedPairing: boolean;
 
-    private storageManager?: StorageManager;
+    private storage?: StorageContext;
     private mdnsScanner?: MdnsScanner;
 
     private controllerInstance?: MatterController;
@@ -78,16 +85,15 @@ export class CommissioningController extends MatterNode {
      */
     constructor(options: CommissioningControllerOptions) {
         super();
-        this.ip = options.ip;
-        this.port = options.port;
+        this.serverAddress = options.serverAddress;
         this.disableIpv4 = options.disableIpv4 ?? false;
-        if (this.disableIpv4) {
-            logger.warn("Disabling IPv4 in Controller node not yet supported!")
-        }
+        this.localPort = options.localPort;
         this.delayedPairing = options.delayedPairing ?? false;
 
         this.passcode = options.passcode;
-        this.discriminator = options.discriminator;
+        this.longDiscriminator = options.longDiscriminator;
+        this.shortDiscriminator = options.shortDiscriminator;
+        this.commissioningOptions = options.commissioningOptions;
     }
 
     /**
@@ -98,22 +104,37 @@ export class CommissioningController extends MatterNode {
         if (this.controllerInstance !== undefined) {
             throw new Error("Controller instance already connected!");
         }
-        if (this.mdnsScanner === undefined || this.storageManager === undefined) {
+        if (this.mdnsScanner === undefined || this.storage === undefined) {
             throw new Error("Add the node to the Matter instance before!");
         }
 
         this.controllerInstance = await MatterController.create(
             this.mdnsScanner,
-            await UdpInterface.create(this.port, "udp4", this.listeningAddressIpv4),
-            await UdpInterface.create(this.port, "udp6", this.listeningAddressIpv6),
-            this.storageManager
+            this.disableIpv4 ? undefined : await UdpInterface.create("udp4", this.localPort, this.listeningAddressIpv4),
+            await UdpInterface.create("udp6", this.localPort, this.listeningAddressIpv6),
+            this.storage,
+            this.serverAddress,
+            this.commissioningOptions
         );
 
         if (this.controllerInstance.isCommissioned()) {
             this.nodeId = this.controllerInstance.getFabric().nodeId;
         } else {
-            this.nodeId = await this.controllerInstance.commission(this.ip, this.port, this.discriminator, this.passcode);
+            let identifierData;
+            if (this.longDiscriminator !== undefined) {
+                identifierData = { longDiscriminator: this.longDiscriminator };
+            } else if (this.shortDiscriminator !== undefined) {
+                identifierData = { shortDiscriminator: this.shortDiscriminator };
+            } else {
+                if (this.passcode === undefined) {
+                    throw new Error("To commission a new device a passcode needs to be specified in the constructor data!");
+                }
+                identifierData = {};
+            }
+
+            this.nodeId = await this.controllerInstance.commission(identifierData, this.passcode, 120, this.serverAddress);
         }
+        this.serverAddress = this.controllerInstance.getOperationalServerAddress();
 
         await this.initializeEndpointStructure();
     }
@@ -128,11 +149,21 @@ export class CommissioningController extends MatterNode {
     }
 
     /**
-     * Set the StorageManager instance. Should be only used internally
-     * @param storageManager
+     * Set the MDNS Broadcaster instance. Should be only used internally
+     *
+     * @param _mdnsBroadcaster MdnsBroadcaster instance
      */
-    setStorageManager(storageManager: StorageManager) {
-        this.storageManager = storageManager;
+    setMdnsBroadcaster(_mdnsBroadcaster: MdnsBroadcaster) {
+        // not needed
+    }
+
+
+    /**
+     * Set the Storage instance. Should be only used internally
+     * @param storage storage context to use
+     */
+    setStorage(storage: StorageContext) {
+        this.storage = storage;
     }
 
     /**
@@ -173,7 +204,7 @@ export class CommissioningController extends MatterNode {
      */
     async getRootClusterClientWithNewInteractionClient<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
         cluster: Cluster<F, SF, A, C, E>
-    ): Promise<ClusterClientObj<A, C, E> | undefined> {
+    ): Promise<ClusterClientObj<F, A, C, E> | undefined> {
         return super.getRootClusterClient(cluster, await this.createInteractionClient());
     }
 
@@ -284,7 +315,7 @@ export class CommissioningController extends MatterNode {
             throw new Error("No device type found for endpoint");
         }
 
-        const endpointClusters = Array<ClusterServerObj<Attributes, Commands, Events> | ClusterClientObj<Attributes, Commands, Events>>();
+        const endpointClusters = Array<ClusterServerObj<Attributes, Commands, Events> | ClusterClientObj<any, Attributes, Commands, Events>>();
 
         // Add ClusterClients for all server clusters of the device
         for (const clusterId of descriptorData.serverList) {
@@ -392,5 +423,15 @@ export class CommissioningController extends MatterNode {
      */
     async close() {
         this.controllerInstance?.close();
+    }
+
+    getPort() {
+        return undefined; //Add later if UDC is used
+    }
+
+    async start() {
+        if (!this.delayedPairing) {
+            return this.connect();
+        }
     }
 }

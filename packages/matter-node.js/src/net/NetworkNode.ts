@@ -5,7 +5,7 @@
  */
 
 import { UdpChannelOptions, UdpChannel, Network } from "@project-chip/matter.js/net";
-import { onSameNetwork, Cache } from "@project-chip/matter.js/util";
+import { onSameNetwork, Cache, isIPv6 } from "@project-chip/matter.js/util";
 
 import { UdpChannelNode } from "./UdpChannelNode";
 import { networkInterfaces, NetworkInterfaceInfo } from "os";
@@ -50,6 +50,11 @@ export class NetworkNode extends Network {
                     if (onSameNetwork(ip, address, netmask)) {
                         return name;
                     }
+                }
+            }
+            if (isIPv6(ip)) {
+                if (ip.startsWith("fd")) { // IPv6 address is an ULA
+                    return ""; // consider it as being ok and using the "Default interface"
                 }
             }
             return undefined;

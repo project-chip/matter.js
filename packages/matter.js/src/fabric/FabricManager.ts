@@ -8,7 +8,6 @@ import { Fabric, FabricBuilder, FabricJsonObject } from "./Fabric.js";
 import { MatterError } from "../common/MatterError.js";
 import { FabricIndex } from "../datatype/FabricIndex.js";
 import { StorageContext } from "../storage/StorageContext.js";
-import { StorageManager } from "../storage/StorageManager.js";
 import { ByteArray } from "../util/ByteArray.js";
 
 /** Specific Error for when a fabric is not found. */
@@ -20,8 +19,8 @@ export class FabricManager {
     private fabricBuilder?: FabricBuilder;
     private readonly fabricStorage: StorageContext;
 
-    constructor(storageManager: StorageManager) {
-        this.fabricStorage = storageManager.createContext("FabricManager");
+    constructor(storage: StorageContext) {
+        this.fabricStorage = storage.createContext("FabricManager");
         const fabrics = this.fabricStorage.get<FabricJsonObject[]>("fabrics", []);
         fabrics.forEach(fabric => this.addFabric(Fabric.createFromStorageObject(fabric)));
         this.nextFabricIndex = this.fabricStorage.get("nextFabricIndex", this.nextFabricIndex);

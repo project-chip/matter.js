@@ -133,6 +133,6 @@ export const GroupKeyManagementClusterSchema = Cluster({
         keySetRemove: Command(3, TlvKeySetRemoveRequest, 3, TlvNoResponse), /* isFabricScoped: true */
 
         /** Query a list of all Group Key Sets associated with the accessing fabric. */
-        keySetReadAllIndices: Command(5, TlvNoArguments, 4, TlvKeySetReadAllIndicesResponse), /* isFabricScoped: true */
+        keySetReadAllIndices: Command(4, TlvNoArguments, 5, TlvKeySetReadAllIndicesResponse), /* isFabricScoped: true */
     }
 });

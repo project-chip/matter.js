@@ -352,8 +352,9 @@ export class TlvCodec {
             }
             case TlvType.Utf8String: {
                 const string = value as TlvToPrimitive[typeof typeLength.type];
-                this.writeUInt(writer, typeLength.length, string.length);
-                return writer.writeUtf8String(string);
+                const stringData = ByteArray.fromString(string);
+                this.writeUInt(writer, typeLength.length, stringData.length);
+                return writer.writeByteArray(stringData);
             }
             case TlvType.ByteString: {
                 const byteArray = value as TlvToPrimitive[typeof typeLength.type];

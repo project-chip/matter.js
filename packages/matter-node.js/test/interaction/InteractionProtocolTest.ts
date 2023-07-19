@@ -42,6 +42,11 @@ const READ_REQUEST: ReadRequest = {
     attributeRequests: [
         { endpointId: 0, clusterId: 0x28, attributeId: 2 },
         { endpointId: 0, clusterId: 0x28, attributeId: 4 },
+        { endpointId: 0, clusterId: 0x28, attributeId: 400 }, // unsupported attribute
+        { endpointId: 0, clusterId: 0x99, attributeId: 4 }, // unsupported cluster
+        { endpointId: 1, clusterId: 0x28, attributeId: 1 }, // unsupported endpoint
+        { endpointId: undefined, clusterId: 0x28, attributeId: 3 },
+        { endpointId: undefined, clusterId: 0x99, attributeId: 3 }, // ignore
     ],
 };
 
@@ -63,6 +68,31 @@ const READ_RESPONSE: DataReport = {
                 dataVersion: 0,
             }
         },
+        {
+            attributeStatus: {
+                path: { endpointId: 0, clusterId: 0x28, attributeId: 400 },
+                status: { status: 134 },
+            }
+        },
+        {
+            attributeStatus: {
+                path: { endpointId: 0, clusterId: 0x99, attributeId: 4 },
+                status: { status: 195 },
+            }
+        },
+        {
+            attributeStatus: {
+                path: { endpointId: 1, clusterId: 0x28, attributeId: 1 },
+                status: { status: 127 },
+            }
+        },
+        {
+            attributeData: {
+                path: { endpointId: 0, clusterId: 0x28, attributeId: 3 },
+                data: TlvString.encodeTlv("product"),
+                dataVersion: 0,
+            }
+        },
     ]
 };
 
@@ -73,6 +103,16 @@ const WRITE_REQUEST: WriteRequest = {
     writeRequests: [
         {
             path: { endpointId: 0, clusterId: 0x28, attributeId: 100 },
+            data: TlvUInt8.encodeTlv(3),
+            dataVersion: 0,
+        },
+        {
+            path: { endpointId: 0, clusterId: 0x99, attributeId: 4 },
+            data: TlvUInt8.encodeTlv(3),
+            dataVersion: 0,
+        },
+        {
+            path: { endpointId: 1, clusterId: 0x28, attributeId: 4 },
             data: TlvUInt8.encodeTlv(3),
             dataVersion: 0,
         },
@@ -89,7 +129,13 @@ const WRITE_RESPONSE: WriteResponse = {
     interactionModelRevision: 1,
     writeResponses: [
         {
-            path: { attributeId: 100, clusterId: 40, endpointId: 0 }, status: { status: 136 }
+            path: { attributeId: 100, clusterId: 40, endpointId: 0 }, status: { status: 134 }
+        },
+        {
+            path: { attributeId: 4, clusterId: 0x99, endpointId: 0 }, status: { status: 195 }
+        },
+        {
+            path: { attributeId: 4, clusterId: 40, endpointId: 1 }, status: { status: 127 }
         },
         {
             path: { attributeId: 5, clusterId: 40, endpointId: 0 }, status: { status: 0 }
@@ -107,6 +153,16 @@ const MASS_WRITE_REQUEST: WriteRequest = {
             data: TlvString.encodeTlv("test"),
             dataVersion: 0,
         },
+        {
+            path: { endpointId: 0, clusterId: 0x99 },
+            data: TlvString.encodeTlv("test"),
+            dataVersion: 0,
+        },
+        {
+            path: { endpointId: 1, clusterId: 0x28 },
+            data: TlvString.encodeTlv("test"),
+            dataVersion: 0,
+        }
     ],
     moreChunkedMessages: false,
 };
@@ -193,6 +249,32 @@ const INVOKE_COMMAND_REQUEST_WITH_NO_ARGS: InvokeRequest = {
     ]
 };
 
+const INVOKE_COMMAND_REQUEST_MULTI: InvokeRequest = {
+    interactionModelRevision: 1,
+    suppressResponse: false,
+    timedRequest: false,
+    invokeRequests: [
+        {
+            commandPath: { endpointId: 0, clusterId: 6, commandId: 1 },
+        },
+        {
+            commandPath: { endpointId: undefined, clusterId: 6, commandId: 0 },
+        },
+        {
+            commandPath: { endpointId: undefined, clusterId: 6, commandId: 99 },
+        },
+        {
+            commandPath: { endpointId: 0, clusterId: 6, commandId: 100 },
+        },
+        {
+            commandPath: { endpointId: 0, clusterId: 90, commandId: 1 },
+        },
+        {
+            commandPath: { endpointId: 99, clusterId: 6, commandId: 1 },
+        }
+    ]
+};
+
 const INVOKE_COMMAND_REQUEST_INVALID: InvokeRequest = {
     interactionModelRevision: 1,
     suppressResponse: false,
@@ -228,12 +310,45 @@ const INVOKE_COMMAND_RESPONSE_INVALID: InvokeResponse = {
     ]
 };
 
+const INVOKE_COMMAND_RESPONSE_MULTI: InvokeResponse = {
+    interactionModelRevision: 1,
+    suppressResponse: false,
+    invokeResponses: [
+        {
+            status: {
+                commandPath: { clusterId: 6, commandId: 100, endpointId: 0 }, status: { status: 129 }
+            }
+        },
+        {
+            status: {
+                commandPath: { clusterId: 90, commandId: 1, endpointId: 0 }, status: { status: 195 }
+            }
+        },
+        {
+            status: {
+                commandPath: { clusterId: 6, commandId: 1, endpointId: 99 }, status: { status: 127 }
+            }
+        },
+        {
+            status: {
+                commandPath: { clusterId: 6, commandId: 1, endpointId: 0 }, status: { status: 0 }
+            }
+        },
+        {
+            status: {
+                commandPath: { clusterId: 6, commandId: 0, endpointId: 0 }, status: { status: 0 }
+            }
+        },
+    ]
+};
+
 describe("InteractionProtocol", () => {
 
     describe("handleReadRequest", () => {
         it("replies with attribute values", async () => {
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
+            const storageContext = storageManager.createContext("test");
             const endpoint = new Endpoint([DummyTestDevice], { endpointId: 0 });
             endpoint.addClusterServer(ClusterServer(BasicInformationCluster, {
                 dataModelRevision: 1,
@@ -255,7 +370,7 @@ describe("InteractionProtocol", () => {
             }, {}, {
                 startUp: true
             }));
-            const interactionProtocol = new InteractionServer(storageManager);
+            const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
             const result = interactionProtocol.handleReadRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, READ_REQUEST);
@@ -289,9 +404,10 @@ describe("InteractionProtocol", () => {
 
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
+            const storageContext = storageManager.createContext("test");
             const endpoint = new Endpoint([DummyTestDevice], { endpointId: 0 });
             endpoint.addClusterServer(basicCluster);
-            const interactionProtocol = new InteractionServer(storageManager);
+            const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
             const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, WRITE_REQUEST);
@@ -314,9 +430,10 @@ describe("InteractionProtocol", () => {
 
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
+            const storageContext = storageManager.createContext("test");
             const endpoint = new Endpoint([DummyTestDevice], { endpointId: 0 });
             endpoint.addClusterServer(accessControlCluster);
-            const interactionProtocol = new InteractionServer(storageManager);
+            const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
             const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ByteArray.fromHex("00"), ByteArray.fromHex("00"), { privateKey: ByteArray.fromHex("00"), publicKey: ByteArray.fromHex("00") }, new VendorId(1), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), "");
@@ -358,9 +475,10 @@ describe("InteractionProtocol", () => {
 
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
+            const storageContext = storageManager.createContext("test");
             const endpoint = new Endpoint([DummyTestDevice], { endpointId: 0 });
             endpoint.addClusterServer(basicCluster);
-            const interactionProtocol = new InteractionServer(storageManager);
+            const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
             const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, MASS_WRITE_REQUEST);
@@ -392,9 +510,10 @@ describe("InteractionProtocol", () => {
 
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
+            const storageContext = storageManager.createContext("test");
             const endpoint = new Endpoint([DummyTestDevice], { endpointId: 0 });
             endpoint.addClusterServer(onOffCluster);
-            const interactionProtocol = new InteractionServer(storageManager);
+            const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
             const result = await interactionProtocol.handleInvokeRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS, {} as Message);
@@ -422,9 +541,10 @@ describe("InteractionProtocol", () => {
 
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
+            const storageContext = storageManager.createContext("test");
             const endpoint = new Endpoint([DummyTestDevice], { endpointId: 0 });
             endpoint.addClusterServer(onOffCluster);
-            const interactionProtocol = new InteractionServer(storageManager);
+            const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
             const result = await interactionProtocol.handleInvokeRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_WITH_NO_ARGS, {} as Message);
@@ -451,14 +571,51 @@ describe("InteractionProtocol", () => {
 
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
+            const storageContext = storageManager.createContext("test");
             const endpoint = new Endpoint([DummyTestDevice], { endpointId: 0 });
             endpoint.addClusterServer(onOffCluster);
-            const interactionProtocol = new InteractionServer(storageManager);
+            const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
             const result = await interactionProtocol.handleInvokeRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_INVALID, {} as Message);
 
             assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_INVALID);
+            assert.equal(onOffState, false);
+        });
+
+        it("multi invoke commands", async () => {
+            let onOffState = false;
+            let triggeredOn = false;
+            let triggeredOff = false;
+            const onOffCluster = ClusterServer(OnOffCluster, {
+                onOff: onOffState,
+            }, {
+                on: async () => {
+                    onOffState = true;
+                    triggeredOn = true;
+                },
+                off: async () => {
+                    onOffState = false;
+                    triggeredOff = true;
+                },
+                toggle: async () => {
+                    onOffState = !onOffState;
+                }
+            });
+
+            const storageManager = new StorageManager(new StorageBackendMemory());
+            await storageManager.initialize();
+            const storageContext = storageManager.createContext("test");
+            const endpoint = new Endpoint([DummyTestDevice], { endpointId: 0 });
+            endpoint.addClusterServer(onOffCluster);
+            const interactionProtocol = new InteractionServer(storageContext);
+            interactionProtocol.setRootEndpoint(endpoint);
+
+            const result = await interactionProtocol.handleInvokeRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_MULTI, {} as Message);
+
+            assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_MULTI);
+            assert.equal(triggeredOn, true);
+            assert.equal(triggeredOff, true);
             assert.equal(onOffState, false);
         });
     });

@@ -19,7 +19,6 @@ import { MatterDevice } from "./MatterDevice.js";
 import { UdpInterface } from "./net/UdpInterface.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
-import { StorageManager } from "./storage/StorageManager.js";
 import { AttributeInitialValues, ClusterServerHandlers, ClusterServerObj } from "./cluster/server/ClusterServer.js";
 import { OperationalCredentialsClusterHandler, OperationalCredentialsServerConf } from "./cluster/server/OperationalCredentialsServer.js";
 import { AttestationCertificateManager } from "./certificate/AttestationCertificateManager.js";
@@ -47,6 +46,7 @@ import { Aggregator } from "./device/Aggregator.js";
 import { TypeFromBitSchema } from "./schema/BitmapSchema.js";
 import { Endpoint } from "./device/Endpoint.js";
 import { StorageContext } from "./storage/StorageContext.js";
+import { MdnsInstanceBroadcaster } from "./mdns/MdnsInstanceBroadcaster.js";
 import { Ble } from "./ble/Ble.js";
 
 const logger = Logger.get("CommissioningServer");
@@ -89,7 +89,13 @@ export interface CommissioningServerOptions {
         productName: string;
     }
     | AttributeInitialValues<typeof BasicInformationCluster.attributes>;
+
     certificates?: OperationalCredentialsServerConf;
+
+    generalCommissioning?: Partial<AttributeInitialValues<typeof GeneralCommissioningCluster.attributes>> & {
+        allowCountryCodeChange?: boolean; // Default true if not set
+        countryCodeWhitelist?: string[];
+    };
 }
 
 /**
@@ -119,10 +125,10 @@ export class CommissioningServer extends MatterNode {
     private readonly flowType: CommissionningFlowType;
     private readonly additionalBleAdvertisementData?: ByteArray;
 
-    private storageManager?: StorageManager;
+    private storage?: StorageContext;
     private endpointStructureStorage?: StorageContext;
     private mdnsScanner?: MdnsScanner;
-    private mdnsBroadcaster?: MdnsBroadcaster;
+    private mdnsInstanceBroadcaster?: MdnsInstanceBroadcaster;
 
     private deviceInstance?: MatterDevice;
     private interactionServer?: InteractionServer;
@@ -168,7 +174,7 @@ export class CommissioningServer extends MatterNode {
                         nodeLabel: "",
                         hardwareVersion: 0,
                         hardwareVersionString: "0",
-                        location: "US",
+                        location: "XX",
                         localConfigDisabled: false,
                         softwareVersion: 1,
                         softwareVersionString: "v1",
@@ -222,16 +228,19 @@ export class CommissioningServer extends MatterNode {
             ClusterServer(
                 GeneralCommissioningCluster,
                 {
-                    breadcrumb: BigInt(0),
-                    basicCommissioningInfo: {
+                    breadcrumb: options.generalCommissioning?.breadcrumb ?? BigInt(0),
+                    basicCommissioningInfo: options.generalCommissioning?.basicCommissioningInfo ?? {
                         failSafeExpiryLengthSeconds: 60 /* 1min */,
                         maxCumulativeFailsafeSeconds: 900 /* Recommended according to Specs */
                     },
-                    regulatoryConfig: RegulatoryLocationType.Indoor,
-                    locationCapability: RegulatoryLocationType.IndoorOutdoor,
-                    supportsConcurrentConnections: true
+                    regulatoryConfig: options.generalCommissioning?.regulatoryConfig ?? RegulatoryLocationType.Outdoor, // Default is the most restrictive one
+                    locationCapability: options.generalCommissioning?.locationCapability ?? RegulatoryLocationType.IndoorOutdoor,
+                    supportsConcurrentConnections: options.generalCommissioning?.supportsConcurrentConnections ?? true
                 },
-                GeneralCommissioningClusterHandler
+                GeneralCommissioningClusterHandler({
+                    allowCountryCodeChange: options.generalCommissioning?.allowCountryCodeChange ?? true,
+                    countryCodeWhitelist: options.generalCommissioning?.countryCodeWhitelist ?? undefined
+                })
             )
         );
 
@@ -331,9 +340,9 @@ export class CommissioningServer extends MatterNode {
      */
     async advertise() {
         if (
-            this.mdnsBroadcaster === undefined ||
+            this.mdnsInstanceBroadcaster === undefined ||
             this.mdnsScanner === undefined ||
-            this.storageManager === undefined ||
+            this.storage === undefined ||
             this.endpointStructureStorage === undefined
         ) {
             throw new Error("Add the node to the Matter instance before!");
@@ -366,7 +375,7 @@ export class CommissioningServer extends MatterNode {
         const vendorId = basicInformation.attributes.vendorId.getLocal();
         const productId = basicInformation.attributes.productId.getLocal();
 
-        this.interactionServer = new InteractionServer(this.storageManager);
+        this.interactionServer = new InteractionServer(this.storage);
 
         this.nextEndpointId = this.endpointStructureStorage.get("nextEndpointId", this.nextEndpointId);
 
@@ -376,14 +385,14 @@ export class CommissioningServer extends MatterNode {
         this.interactionServer.setRootEndpoint(this.rootEndpoint); // Initialize the interaction server with the root endpoint
 
         // TODO adjust later and refactor MatterDevice
-        this.deviceInstance = new MatterDevice(this.deviceName, this.deviceType, vendorId, productId, this.discriminator, this.storageManager)
-            .addTransportInterface(await UdpInterface.create(this.port, "udp6", this.listeningAddressIpv6))
+        this.deviceInstance = new MatterDevice(this.deviceName, this.deviceType, vendorId, productId, this.discriminator, this.storage)
+            .addTransportInterface(await UdpInterface.create("udp6", this.port, this.listeningAddressIpv6))
             .addScanner(this.mdnsScanner)
-            .addBroadcaster(this.mdnsBroadcaster)
+            .addBroadcaster(this.mdnsInstanceBroadcaster)
             .addProtocolHandler(secureChannelProtocol)
             .addProtocolHandler(this.interactionServer);
         if (!this.disableIpv4) {
-            this.deviceInstance.addTransportInterface(await UdpInterface.create(this.port, "udp4", this.listeningAddressIpv4))
+            this.deviceInstance.addTransportInterface(await UdpInterface.create("udp4", this.port, this.listeningAddressIpv4))
         }
 
         try {
@@ -400,6 +409,7 @@ export class CommissioningServer extends MatterNode {
     updateStructure() {
         logger.debug("Endpoint structure got updated ...");
         this.assignEndpointIds(); // Make sure to have unique endpoint ids
+        this.rootEndpoint.updatePartsList(); // update parts list of all Endpoint objects with final IDs
         this.interactionServer?.setRootEndpoint(this.rootEndpoint); // Reinitilize the interaction server structure
     }
 
@@ -537,16 +547,16 @@ export class CommissioningServer extends MatterNode {
      * @param mdnsBroadcaster MdnsBroadcaster instance
      */
     setMdnsBroadcaster(mdnsBroadcaster: MdnsBroadcaster) {
-        this.mdnsBroadcaster = mdnsBroadcaster;
+        this.mdnsInstanceBroadcaster = new MdnsInstanceBroadcaster(this.port, mdnsBroadcaster);
     }
 
     /**
      * Set the StorageManager instance. Should be only used internally
-     * @param storageManager
+     * @param storage
      */
-    setStorageManager(storageManager: StorageManager) {
-        this.storageManager = storageManager;
-        this.endpointStructureStorage = this.storageManager.createContext("EndpointStructure")
+    setStorage(storage: StorageContext) {
+        this.storage = storage;
+        this.endpointStructureStorage = this.storage.createContext("EndpointStructure")
     }
 
     /**
@@ -590,5 +600,11 @@ export class CommissioningServer extends MatterNode {
      */
     removeCommandHandler<K extends keyof CommissioningServerCommands>(command: K, handler: CommissioningServerCommands[K]) {
         this.commandHandler.removeHandler(command, handler);
+    }
+
+    async start() {
+        if (!this.delayedAnnouncement) {
+            return this.advertise();
+        }
     }
 }

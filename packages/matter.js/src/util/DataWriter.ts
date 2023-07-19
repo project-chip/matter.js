@@ -88,12 +88,6 @@ export class DataWriter<E extends Endian> {
         this.length += 8;
     }
 
-    writeUtf8String(value: string) {
-        const bytes = ByteArray.fromString(value);
-        this.chunks.push(bytes);
-        this.length += bytes.byteLength;
-    }
-
     writeByteArray(value: ByteArray) {
         this.chunks.push(value);
         this.length += value.byteLength;
@@ -105,9 +99,9 @@ export class DataWriter<E extends Endian> {
 
         const result = new ByteArray(this.length);
         let offset = 0;
-        this.chunks.forEach(chunck => {
-            result.set(chunck, offset);
-            offset += chunck.byteLength;
+        this.chunks.forEach(chunk => {
+            result.set(chunk, offset);
+            offset += chunk.byteLength;
         });
         this.chunks.length = 0;
         this.chunks.push(result);

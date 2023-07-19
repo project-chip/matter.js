@@ -9,7 +9,7 @@ import { ByteArray } from "../util/ByteArray.js";
 import { TransportInterface } from "../common/TransportInterface.js";
 
 export interface NetInterface extends TransportInterface {
-    openChannel(address: string, port: number): Promise<Channel<ByteArray>>;
+    openChannel(host: string, port: number): Promise<Channel<ByteArray>>;
 }
 
 export function isNetworkInterface(obj: TransportInterface | NetInterface): obj is NetInterface {

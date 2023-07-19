@@ -5,8 +5,7 @@
  */
 
 import { StorageContext } from "../../storage/StorageContext.js";
-import { StorageManager } from "../../storage/StorageManager.js";
-import { EventPriority } from "../../cluster/index.js";
+import { EventPriority } from "../../cluster/Cluster.js";
 
 const MAX_EVENTS = 10_000;
 
@@ -43,8 +42,8 @@ export class EventHandler {
         [EventPriority.Debug]: new Array<EventStorageData<any>>(),
     }
 
-    constructor(storageManager: StorageManager) {
-        this.eventStorage = storageManager.createContext("EventHandler");
+    constructor(storage: StorageContext) {
+        this.eventStorage = storage.createContext("EventHandler");
         this.eventNumber = this.eventStorage.get("lastEventNumber", this.eventNumber);
     }
 

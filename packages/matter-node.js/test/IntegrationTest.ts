@@ -14,27 +14,31 @@ Crypto.get = () => new CryptoNode();
 
 import {
     OnOffCluster, BasicInformationCluster, OperationalCertStatus, OperationalCredentialsCluster, DescriptorCluster,
-    IdentifyCluster, GroupsCluster, AccessControlCluster, ScenesCluster
+    IdentifyCluster, GroupsCluster, AccessControlCluster, ScenesCluster, GeneralCommissioningCluster,
+    RegulatoryLocationType, NetworkCommissioningHandler, NetworkCommissioningStatus,
+    WifiAndEthernetAndThreadNetworkCommissioningCluster
 } from "@project-chip/matter.js/cluster";
 import { VendorId, FabricIndex, GroupId, ClusterId } from "@project-chip/matter.js/datatype";
 
 import { MdnsBroadcaster, MdnsScanner } from "@project-chip/matter.js/mdns";
 import { Network, NetworkFake } from "@project-chip/matter.js/net";
 import { Level, Logger } from "@project-chip/matter.js/log";
-import { getPromiseResolver } from "@project-chip/matter.js/util";
+import { getPromiseResolver, ByteArray } from "@project-chip/matter.js/util";
 import { StorageManager, StorageBackendMemory } from "@project-chip/matter.js/storage";
 import { FabricJsonObject } from "@project-chip/matter.js/fabric";
 import { MatterServer, CommissioningServer, CommissioningController } from "@project-chip/matter.js";
 import { OnOffLightDevice } from "@project-chip/matter.js/device";
-import { InteractionClient } from "@project-chip/matter.js/interaction";
+import { InteractionClient, ClusterServer } from "@project-chip/matter.js/interaction";
 
-const SERVER_IP = "192.168.200.1";
+const SERVER_IPv6 = "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:cafe";
+const SERVER_IPv4 = "192.168.200.1";
 const SERVER_MAC = "00:B0:D0:63:C2:26";
-const CLIENT_IP = "192.168.200.2";
+const CLIENT_IPv6 = "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:beef";
+const CLIENT_IPv4 = "192.168.200.2";
 const CLIENT_MAC = "CA:FE:00:00:BE:EF";
 
-const serverNetwork = new NetworkFake(SERVER_MAC, [SERVER_IP]);
-const clientNetwork = new NetworkFake(CLIENT_MAC, [CLIENT_IP]);
+const serverNetwork = new NetworkFake(SERVER_MAC, [SERVER_IPv6, SERVER_IPv4]);
+const clientNetwork = new NetworkFake(CLIENT_MAC, [CLIENT_IPv6, CLIENT_IPv4]);
 
 const deviceName = "Matter end-to-end device";
 const deviceType = 257 /* Dimmable bulb */;
@@ -42,7 +46,7 @@ const vendorName = "matter-node.js";
 const vendorId = new VendorId(0xFFF1);
 const productName = "Matter end-to-end device";
 const productId = 0X8001;
-const discriminator = 3840;
+const longDiscriminator = 3840;
 const setupPin = 20202021;
 const matterPort = 5540;
 
@@ -70,14 +74,17 @@ describe("Integration Test", () => {
 
         matterClient = new MatterServer(controllerStorageManager);
         commissioningController = new CommissioningController({
-            ip: SERVER_IP,
-            port: matterPort,
-            disableIpv4: false,
-            discriminator,
+            serverAddress: { ip: SERVER_IPv6, port: matterPort },
+            disableIpv4: true,
+            longDiscriminator,
             passcode: setupPin,
             listeningAddressIpv4: "1.2.3.4",
-            listeningAddressIpv6: CLIENT_IP,
-            delayedPairing: true
+            listeningAddressIpv6: CLIENT_IPv6,
+            delayedPairing: true,
+            commissioningOptions: {
+                regulatoryLocation: RegulatoryLocationType.Indoor,
+                regulatoryCountryCode: "DE"
+            }
         });
         matterClient.addCommissioningController(commissioningController);
 
@@ -91,18 +98,20 @@ describe("Integration Test", () => {
         commissioningServer = new CommissioningServer({
             port: matterPort,
             disableIpv4: true,
-            listeningAddressIpv6: SERVER_IP,
+            listeningAddressIpv6: SERVER_IPv6,
+            listeningAddressIpv4: SERVER_IPv4,
             deviceName,
             deviceType,
             passcode: setupPin,
-            discriminator,
+            discriminator: longDiscriminator,
             basicInformation: {
                 vendorName,
                 vendorId,
                 productName,
                 productId,
                 partNumber: "123456",
-                nodeLabel: ""
+                nodeLabel: "",
+                location: "US",
             },
             delayedAnnouncement: true, // delay because we need to override Mdns classes
         });
@@ -110,11 +119,28 @@ describe("Integration Test", () => {
         onOffLightDeviceServer = new OnOffLightDevice();
         commissioningServer.addDevice(onOffLightDeviceServer);
 
+        // Override NetworkCommissioning Cluster for now unless configurable
+        commissioningServer.addRootClusterServer(
+            ClusterServer(
+                WifiAndEthernetAndThreadNetworkCommissioningCluster,
+                {
+                    maxNetworks: 1,
+                    interfaceEnabled: true,
+                    lastConnectErrorValue: 0,
+                    lastNetworkId: ByteArray.fromHex("0000000000000000000000000000000000000000000000000000000000000000"),
+                    lastNetworkingStatus: NetworkCommissioningStatus.Success,
+                    networks: [{ networkId: ByteArray.fromHex("0000000000000000000000000000000000000000000000000000000000000000"), connected: true }],
+                },
+                NetworkCommissioningHandler()
+            )
+        );
+
+
         matterServer.addCommissioningServer(commissioningServer);
 
         // override the mdns scanner to avoid the client to try to resolve the server's address
-        commissioningServer.setMdnsScanner(await MdnsScanner.create(SERVER_IP));
-        commissioningServer.setMdnsBroadcaster(await MdnsBroadcaster.create(matterPort, SERVER_IP));
+        commissioningServer.setMdnsScanner(await MdnsScanner.create(SERVER_IPv6));
+        commissioningServer.setMdnsBroadcaster(await MdnsBroadcaster.create(SERVER_IPv6));
         await commissioningServer.advertise();
 
         assert.ok(onOffLightDeviceServer.getClusterServer(OnOffCluster));
@@ -151,7 +177,7 @@ describe("Integration Test", () => {
     describe("commission", () => {
         it("the client commissions a new device", async () => {
             // override the mdns scanner to avoid the client to try to resolve the server's address
-            commissioningController.setMdnsScanner(await MdnsScanner.create(CLIENT_IP));
+            commissioningController.setMdnsScanner(await MdnsScanner.create(CLIENT_IPv6));
             await commissioningController.connect();
 
             Network.get = () => { throw new Error("Network should not be requested post starting") };
@@ -163,6 +189,15 @@ describe("Integration Test", () => {
             defaultInteractionClient = await commissioningController.createInteractionClient();
             assert.ok(defaultInteractionClient);
         });
+
+        it("Verify that commissioning changed the Regulatory Config/Location values", async () => {
+            const generalCommissioningCluster = commissioningController.getRootClusterClient(GeneralCommissioningCluster);
+            assert.equal(await generalCommissioningCluster?.getRegulatoryConfigAttribute(), RegulatoryLocationType.Indoor);
+
+            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformationCluster);
+            assert.equal(await basicInfoCluster?.getLocationAttribute(), "DE");
+        });
+
     });
 
 
@@ -492,7 +527,7 @@ describe("Integration Test", () => {
 
     describe("storage", () => {
         it("server storage has fabric fields stored correctly stringified", async () => {
-            const storedFabrics = fakeServerStorage.get(["FabricManager"], "fabrics");
+            const storedFabrics = fakeServerStorage.get(["0", "FabricManager"], "fabrics");
             assert.ok(Array.isArray(storedFabrics));
             assert.equal(storedFabrics.length, 1);
             const firstFabric = storedFabrics[0] as FabricJsonObject;
@@ -507,25 +542,25 @@ describe("Integration Test", () => {
             assert.ok(groupsClusterData instanceof Map);
             assert.equal(groupsClusterData.get(1), "Group 1");
 
-            assert.equal(fakeServerStorage.get(["FabricManager"], "nextFabricIndex"), 2);
+            assert.equal(fakeServerStorage.get(["0", "FabricManager"], "nextFabricIndex"), 2);
 
-            const onOffValue = fakeServerStorage.get<{ value: any, version: number }>(["Cluster-1-6"], "onOff");
+            const onOffValue = fakeServerStorage.get<{ value: any, version: number }>(["0", "Cluster-1-6"], "onOff");
             assert.ok(typeof onOffValue === "object");
             assert.equal(onOffValue.version, 2);
             assert.equal(onOffValue.value, false);
 
-            const storedServerResumptionRecords = fakeServerStorage.get(["SessionManager"], "resumptionRecords");
+            const storedServerResumptionRecords = fakeServerStorage.get(["0", "SessionManager"], "resumptionRecords");
             assert.ok(Array.isArray(storedServerResumptionRecords));
             assert.equal(storedServerResumptionRecords.length, 1);
 
-            assert.equal(fakeControllerStorage.get(["RootCertificateManager"], "rootCertId"), BigInt(0));
-            assert.equal(fakeControllerStorage.get(["MatterController"], "fabricCommissioned"), true);
+            assert.equal(fakeControllerStorage.get(["0", "RootCertificateManager"], "rootCertId"), BigInt(0));
+            assert.equal(fakeControllerStorage.get(["0", "MatterController"], "fabricCommissioned"), true);
 
-            const storedControllerResumptionRecords = fakeServerStorage.get(["SessionManager"], "resumptionRecords");
+            const storedControllerResumptionRecords = fakeServerStorage.get(["0", "SessionManager"], "resumptionRecords");
             assert.ok(Array.isArray(storedControllerResumptionRecords));
             assert.equal(storedControllerResumptionRecords.length, 1);
 
-            const storedControllerFabrics = fakeControllerStorage.get(["MatterController"], "fabric");
+            const storedControllerFabrics = fakeControllerStorage.get(["0", "MatterController"], "fabric");
             assert.ok(typeof storedControllerFabrics === "object");
         });
     });
@@ -538,7 +573,7 @@ describe("Integration Test", () => {
             const result = await operationalCredentialsCluster.commands.removeFabric({ fabricIndex: new FabricIndex(250) });
             assert.equal(result.status, OperationalCertStatus.InvalidFabricIndex);
             assert.equal(result.fabricIndex, undefined);
-            assert.equal(result.debugText, undefined);
+            assert.equal(result.debugText, "Fabric 250 not found");
         });
 
         it("read and remove fabric", async () => {
@@ -551,8 +586,8 @@ describe("Integration Test", () => {
 
             const result = await operationalCredentialsCluster.commands.removeFabric({ fabricIndex });
             assert.equal(result.status, OperationalCertStatus.Success);
-            assert.equal(result.fabricIndex, undefined);
-            assert.equal(result.debugText, undefined);
+            assert.deepEqual(result.fabricIndex, fabricIndex);
+            assert.equal(result.debugText, "Fabric removed");
         });
     });
 

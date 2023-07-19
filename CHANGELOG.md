@@ -12,21 +12,29 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
     * Added FabricScopedAttributeServer which gets and sets the value based on the provided fabric
     * Updated ClusterServerObj and ClusterClientObj typings to respect these Attribute types
     * Updated all Cluster definitions that use such attribute types
-    * Add Interface for Events which requires to define the supported events when creating a ClusterServer (Event Logic WIP in separate PR)
+  * Breaking: Add Interface for Events which requires to define the supported events when creating a ClusterServer (Event Logic WIP in separate PR)
+  * Breaking: GeneralCommissioningServerHandler is now a function that takes configuration for setRegulatoryConfig handling
+  * Feature: Enhance CommissioningServer options to also specify GeneralCommissioningServer details and settings
+  * Feature: Adjust RegulatoryConfig Handling in Device and Controller to match with specifications
   * Feature: Endpoint Structures use custom-unique-id (from EndpointOptions)/uniqueStorageKey (from BasicInformationCluster)/serialNumber (from BasicInformationCluster)/ Index (in this order) to store and restore the endpoint ID in structures
   * Feature: (@mahimamandhanaa) Add BTP (Bluetooth Transport Protocol) codec class for encoding and decoding of BTP messages
   * Feature: Enhanced BitMap typing and Schemas to allow "Partially" provided Bitmaps by suppressing the "unset" bits
   * Feature: Allow to define discoveryCapabilities structure when getting pairing code in CommissioningServer
   * Feature: Added Bluetooth package (matter-node-ble.js) to allow to use Bluetooth as transport layer for initial commissioning. Implemented device side for now
+  * Feature: Global Attributes are also accessible in ClusterClient instances (e.g. to get the list of features of the cluster)
+  * Enhance: Device port in MDNSBroadcaster is now dynamically set and add UDC (User directed Commissioning) Announcements
+  * Enhance: Enhanced MessageCodec and check some more fields
   * Enhance: Added possibility to define conditional cluster attribute/Command/event definitions and introduce runtime checking for these. Part of Cluster Structure rework still WIP
   * Enhance: (@vves) Add Window Covering Cluster definition  
   * Enhance: Split up and corrected PowerSource and PressureMeasurement Cluster based on Matter 1.1 Specs
   * Fix: Added missing PulseWidthModulationLevelControlCluster to AllCLusters
   * Fix Typing of Commands in ClusterClient if no commands were present
-  * Fix: Fix equality checks in Attribute servers to check deeper than just === (and introduce new util method isDeepEqual)
-  * Fix: Make sure an error received from sending subscription seed data reports is not bubbling up and activate subscription after successful seeding
+  * Fix: Fixes equality checks in Attribute servers to check deeper than just === (and introduce new util method isDeepEqual)
+  * Fix: Makes sure an error received from sending subscription seed data reports is not bubbling up and activate subscription after successful seeding
   * Fix: Allows Node.js Buffer objects to be persisted to storage as a Uint8Arrays that they subclass
-  * Fix: Fix a Subscription timer duplication issue and collect attribute changes within a 50ms window to reduce the number of subscription messages
+  * Fix: Fixes a Subscription timer duplication issue and collect attribute changes within a 50ms window to reduce the number of subscription messages
+  * Fix: Returns correct Error-Status for Read-/Write-Requests
+  * Fix: Fixes TLV Encoding for strings with UTF8 relevant characters
   * Refactor: Refactor Endpoint structuring and determination to allow dynamic and updating structures
 * matter.js API:
   * Breaking: 
@@ -38,6 +46,8 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Feature: Allow to also remove devices from Aggregators
   * Feature: Optionally allow to define discovery capabilities when generating Pairing codee 
 * Reference implementation/Examples:
+  * Breaking: The storage key structure got changed to allow multi node operations within one process. This requires to change the storage key structure and to migrate or reset the storage.
+    * Migration: prepend any storage key except Device.* and Controller.* with "0." in the filename
   * Deprecation: The CLI Examples LegacyDeviceNode and LegacyControllerNode is removed in this version! Use the new variants please.
   * Example script are moved to package matter-node.js-examples
   * The Device example script got a new parameter -ble to also initialize the Bluetooth transport layer

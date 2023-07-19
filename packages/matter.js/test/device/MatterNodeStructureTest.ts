@@ -70,6 +70,22 @@ class TestNode extends MatterNode {
     override async close() {
         // Do nothing
     }
+
+    getPort() {
+        return undefined;
+    }
+
+    setMdnsBroadcaster() {
+        // Do nothing
+    }
+
+    setMdnsScanner() {
+        // Do nothing
+    }
+
+    async start() {
+        return;
+    }
 }
 
 function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningCluster = true) {
@@ -137,7 +153,7 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
                 locationCapability: RegulatoryLocationType.IndoorOutdoor,
                 supportsConcurrentConnections: true
             },
-            GeneralCommissioningClusterHandler
+            GeneralCommissioningClusterHandler()
         )
     );
 
@@ -323,7 +339,8 @@ describe("Endpoint Structures", () => {
             const testStorage = new StorageBackendMemory();
             const testStorageManager = new StorageManager(testStorage);
             await testStorageManager.initialize();
-            const endpointStorage = testStorageManager.createContext("EndpointStructure");
+            const testStorageContext = testStorageManager.createContext("TestContext");
+            const endpointStorage = testStorageContext.createContext("EndpointStructure");
 
             const node = new CommissioningServer({
                 port: 5540,
@@ -357,7 +374,7 @@ describe("Endpoint Structures", () => {
                     certificationDeclaration: ByteArray.fromHex("00"),
                 }
             });
-            node.setStorageManager(testStorageManager);
+            node.setStorage(testStorageContext);
             addRequiredRootClusters(node);
 
             const onoffLightDevice = new OnOffLightDevice();
@@ -417,7 +434,8 @@ describe("Endpoint Structures", () => {
             const testStorage = new StorageBackendMemory();
             const testStorageManager = new StorageManager(testStorage);
             await testStorageManager.initialize();
-            const endpointStorage = testStorageManager.createContext("EndpointStructure");
+            const testStorageContext = testStorageManager.createContext("TestContext");
+            const endpointStorage = testStorageContext.createContext("EndpointStructure");
 
             const node = new CommissioningServer({
                 port: 5540,
@@ -451,7 +469,7 @@ describe("Endpoint Structures", () => {
                     certificationDeclaration: ByteArray.fromHex("00"),
                 }
             });
-            node.setStorageManager(testStorageManager);
+            node.setStorage(testStorageContext);
             addRequiredRootClusters(node);
 
             const onoffLightDevice = new OnOffLightDevice(undefined, { uniqueStorageKey: "test-unique-id" });
@@ -511,7 +529,8 @@ describe("Endpoint Structures", () => {
             const testStorage = new StorageBackendMemory();
             const testStorageManager = new StorageManager(testStorage);
             await testStorageManager.initialize();
-            const endpointStorage = testStorageManager.createContext("EndpointStructure");
+            const testStorageContext = testStorageManager.createContext("TestContext");
+            const endpointStorage = testStorageContext.createContext("EndpointStructure");
             endpointStorage.set("serial_node-matter-0000-index_0", 10)
 
             const node = new CommissioningServer({
@@ -546,7 +565,7 @@ describe("Endpoint Structures", () => {
                     certificationDeclaration: ByteArray.fromHex("00"),
                 }
             });
-            node.setStorageManager(testStorageManager);
+            node.setStorage(testStorageContext);
             addRequiredRootClusters(node);
 
             const onoffLightDevice = new OnOffLightDevice();
@@ -606,7 +625,8 @@ describe("Endpoint Structures", () => {
             const testStorage = new StorageBackendMemory();
             const testStorageManager = new StorageManager(testStorage);
             await testStorageManager.initialize();
-            const endpointStorage = testStorageManager.createContext("EndpointStructure");
+            const testStorageContext = testStorageManager.createContext("TestContext");
+            const endpointStorage = testStorageContext.createContext("EndpointStructure");
             endpointStorage.set("serial_node-matter-0000-custom_test-unique-id", 10)
 
             const node = new CommissioningServer({
@@ -641,7 +661,7 @@ describe("Endpoint Structures", () => {
                     certificationDeclaration: ByteArray.fromHex("00"),
                 }
             });
-            node.setStorageManager(testStorageManager);
+            node.setStorage(testStorageContext);
             addRequiredRootClusters(node);
 
             const onoffLightDevice = new OnOffLightDevice(undefined, { uniqueStorageKey: "test-unique-id" });
@@ -993,6 +1013,7 @@ describe("Endpoint Structures", () => {
             const testStorage = new StorageBackendMemory();
             const testStorageManager = new StorageManager(testStorage);
             await testStorageManager.initialize();
+            const testStorageContext = testStorageManager.createContext("TestContext");
 
             const node = new CommissioningServer({
                 port: 5540,
@@ -1026,7 +1047,7 @@ describe("Endpoint Structures", () => {
                     certificationDeclaration: ByteArray.fromHex("00"),
                 }
             });
-            node.setStorageManager(testStorageManager);
+            node.setStorage(testStorageContext);
             addRequiredRootClusters(node);
 
             const aggregator1 = new Aggregator();
@@ -1158,7 +1179,8 @@ describe("Endpoint Structures", () => {
             const testStorage = new StorageBackendMemory();
             const testStorageManager = new StorageManager(testStorage);
             await testStorageManager.initialize();
-            const endpointStorage = testStorageManager.createContext("EndpointStructure");
+            const testStorageContext = testStorageManager.createContext("TestContext");
+            const endpointStorage = testStorageContext.createContext("EndpointStructure");
 
             const node = new CommissioningServer({
                 port: 5540,
@@ -1192,7 +1214,7 @@ describe("Endpoint Structures", () => {
                     certificationDeclaration: ByteArray.fromHex("00"),
                 }
             });
-            node.setStorageManager(testStorageManager);
+            node.setStorage(testStorageContext);
             addRequiredRootClusters(node);
 
             const aggregator1 = new Aggregator([], { endpointId: 37 });
@@ -1367,7 +1389,8 @@ describe("Endpoint Structures", () => {
             const testStorage = new StorageBackendMemory();
             const testStorageManager = new StorageManager(testStorage);
             await testStorageManager.initialize();
-            const endpointStorage = testStorageManager.createContext("EndpointStructure");
+            const testStorageContext = testStorageManager.createContext("TestContext");
+            const endpointStorage = testStorageContext.createContext("EndpointStructure");
             endpointStorage.set("serial_node-matter-0000-index_0-custom_3333", 3);
 
             const node = new CommissioningServer({
@@ -1402,7 +1425,7 @@ describe("Endpoint Structures", () => {
                     certificationDeclaration: ByteArray.fromHex("00"),
                 }
             });
-            node.setStorageManager(testStorageManager);
+            node.setStorage(testStorageContext);
             addRequiredRootClusters(node);
 
             const aggregator1 = new Aggregator([], { endpointId: 37 });

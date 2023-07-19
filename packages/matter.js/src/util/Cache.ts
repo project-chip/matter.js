@@ -27,7 +27,7 @@ export class Cache<T> {
             value = this.generator(...params);
             this.values.set(key, value);
         }
-        this.timestamps.set(key, Date.now());
+        this.timestamps.set(key, Time.nowMs());
         return value;
     }
 
@@ -42,7 +42,7 @@ export class Cache<T> {
     }
 
     private expire() {
-        const now = Date.now();
+        const now = Time.nowMs();
         [...this.timestamps.entries()].forEach(([key, timestamp]) => {
             if (now - timestamp < this.expirationMs) return;
             this.values.delete(key);

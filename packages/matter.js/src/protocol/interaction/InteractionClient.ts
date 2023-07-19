@@ -18,7 +18,8 @@ import { attributePathToId, INTERACTION_PROTOCOL_ID } from "./InteractionServer.
 import { DecodedAttributeReportValue, normalizeAndDecodeReadAttributeReport } from "./AttributeDataDecoder.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import {
-    Attribute, AttributeJsType, Attributes, Cluster, Command, Commands, Events, RequestType, ResponseType, TlvNoResponse
+    Attribute, AttributeJsType, Attributes, Cluster, Command, Commands, Events, GlobalAttributes, RequestType,
+    ResponseType, TlvNoResponse
 } from "../../cluster/Cluster.js";
 import { ExchangeProvider } from "../ExchangeManager.js";
 import {
@@ -27,6 +28,8 @@ import {
 import { AttributeClient } from "../../cluster/client/AttributeClient.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { EventClient } from "../../cluster/client/EventClient.js";
+import { BitSchema } from "../../schema/BitmapSchema.js";
+import { Merge } from "../../util/Type.js";
 
 const logger = Logger.get("InteractionClient");
 
@@ -40,13 +43,13 @@ export interface AttributeStatus {
     status: StatusCode,
 }
 
-export function ClusterClient<A extends Attributes, C extends Commands, E extends Events>(
-    clusterDef: Cluster<any, any, A, C, E>,
+export function ClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
+    clusterDef: Cluster<F, any, A, C, E>,
     endpointId: number,
     interactionClient: InteractionClient
-): ClusterClientObj<A, C, E> {
-    const { id: clusterId, name, commands: commandDef, attributes: attributeDef, events: eventDef } = clusterDef;
-    const attributes = <AttributeClients<A>>{};
+): ClusterClientObj<F, A, C, E> {
+    const { id: clusterId, name, commands: commandDef, attributes: attributeDef, events: eventDef, features } = clusterDef;
+    const attributes = <AttributeClients<F, A>>{};
     const events = <EventClients<E>>{};
     const commands = <{ [P in keyof C]: SignatureFromCommandSpec<C[P]> }>{};
 
@@ -91,9 +94,10 @@ export function ClusterClient<A extends Attributes, C extends Commands, E extend
 
     const attributeToId = <{ [key: number]: string }>{};
 
+    const allAttributeDefs = Merge<A, GlobalAttributes<F>>(attributeDef, GlobalAttributes(features));
     // Add accessors
-    for (const attributeName in attributeDef) {
-        const attribute = attributeDef[attributeName];
+    for (const attributeName in allAttributeDefs) {
+        const attribute = allAttributeDefs[attributeName];
         (attributes as any)[attributeName] = new AttributeClient(attribute, attributeName, endpointId, clusterId, async () => interactionClient);
         attributeToId[attribute.id] = attributeName;
         const capitalizedAttributeName = capitalize(attributeName);
@@ -153,7 +157,7 @@ export function ClusterClient<A extends Attributes, C extends Commands, E extend
         result[commandName] = result.commands[commandName];
     }
 
-    return result as ClusterClientObj<A, C, E>;
+    return result as ClusterClientObj<F, A, C, E>;
 }
 
 export class SubscriptionClient implements ProtocolHandler<MatterController> {

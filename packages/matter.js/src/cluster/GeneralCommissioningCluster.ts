@@ -130,7 +130,7 @@ export const GeneralCommissioningCluster = Cluster({
         basicCommissioningInfo: FixedAttribute(1, TlvBasicCommissioningInfo),
 
         /** Indicates the regulatory configuration for the product. */
-        regulatoryConfig: Attribute(2, TlvEnum<RegulatoryLocationType>()), /* default: value of locationCapability */
+        regulatoryConfig: Attribute(2, TlvEnum<RegulatoryLocationType>(), { persistent: true }), /* default: value of locationCapability */
 
         /** Indicates if this Node needs to be told an exact RegulatoryLocation. */
         locationCapability: FixedAttribute(3, TlvEnum<RegulatoryLocationType>(), { default: RegulatoryLocationType.IndoorOutdoor }),

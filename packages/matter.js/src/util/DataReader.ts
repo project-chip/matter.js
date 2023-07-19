@@ -67,8 +67,7 @@ export class DataReader<E extends Endian> {
 
     readByteArray(length: number) {
         const offset = this.getOffsetAndAdvance(length);
-        const result = this.buffer.subarray(offset, offset + length);
-        return result;
+        return this.buffer.subarray(offset, offset + length);
     }
 
     getRemainingBytesCount() {
@@ -86,6 +85,9 @@ export class DataReader<E extends Endian> {
     private getOffsetAndAdvance(size: number) {
         const result = this.offset;
         this.offset += size;
+        if (this.offset > this.dataView.byteLength) {
+            this.offset = this.dataView.byteLength;
+        }
         return result;
     }
 }

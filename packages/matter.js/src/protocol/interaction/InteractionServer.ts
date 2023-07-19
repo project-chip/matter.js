@@ -11,9 +11,7 @@ import {
     DataReport, InteractionServerMessenger, InvokeRequest, InvokeResponse, MessageType, ReadRequest,
     StatusResponseError, SubscribeRequest, TimedRequest, WriteRequest, WriteResponse
 } from "./InteractionMessenger.js";
-import {
-    Attributes, Cluster, Commands, ConditionalFeatureList, Events, TlvNoResponse
-} from "../../cluster/Cluster.js";
+import { Attributes, Cluster, Commands, ConditionalFeatureList, Events, TlvNoResponse } from "../../cluster/Cluster.js";
 import {
     StatusCode, TlvAttributePath, TlvAttributeReport, TlvCommandPath, TlvEventPath, TlvInvokeResponseData,
     TlvSubscribeResponse
@@ -36,17 +34,17 @@ import {
 } from "../../cluster/server/AttributeServer.js";
 import { Logger } from "../../log/Logger.js";
 import { StorageContext } from "../../storage/StorageContext.js";
-import { StorageManager } from "../../storage/StorageManager.js";
 import { capitalize } from "../../util/String.js";
 import { Endpoint } from "../../device/Endpoint.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { CommandId } from "../../datatype/CommandId.js";
 import { TlvAttributeValuePair } from "../../cluster/ScenesCluster.js";
 import { Fabric } from "../../fabric/Fabric.js";
-import { EventId } from "../../datatype/index.js";
+import { EventId } from "../../datatype/EventId.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
 import { EventData, EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { InteractionEndpointStructure } from "./InteractionEndpointStructure.js";
+import { tryCatchAsync } from "../../common/TryCatchHandler.js";
 
 export const INTERACTION_PROTOCOL_ID = 0x0001;
 
@@ -400,10 +398,10 @@ export function eventPathToId({ endpointId, clusterId, eventId }: TypeFromSchema
 export class InteractionServer implements ProtocolHandler<MatterDevice> {
     private endpointStructure = new InteractionEndpointStructure();
     private nextSubscriptionId = Crypto.getRandomUInt32();
-    private eventHandler = new EventHandler(this.storageManager);
+    private eventHandler = new EventHandler(this.storage);
 
     constructor(
-        private readonly storageManager: StorageManager
+        private readonly storage: StorageContext
     ) { }
 
     getId() {
@@ -416,7 +414,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         for (const endpoint of this.endpointStructure.endpoints.values()) {
             for (const cluster of endpoint.getAllClusterServers()) {
-                cluster._setStorage(this.storageManager.createContext(`Cluster-${endpoint.id}-${cluster.id}`));
+                cluster._setStorage(this.storage.createContext(`Cluster-${endpoint.id}-${cluster.id}`));
                 cluster._registerEventHandler(this.eventHandler);
             }
         }
@@ -445,8 +443,19 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         const attributeReports = attributePaths.flatMap((path: TypeFromSchema<typeof TlvAttributePath>): TypeFromSchema<typeof TlvAttributeReport>[] => {
             const attributes = this.endpointStructure.getAttributes([path]);
             if (attributes.length === 0) {
-                logger.debug(`Read from ${exchange.channel.getName()}: ${this.endpointStructure.resolveAttributeName(path)} unsupported path`);
-                return [{ attributeStatus: { path, status: { status: StatusCode.UnsupportedAttribute } } }]; // TODO: Find correct status code
+                const { endpointId, clusterId, attributeId } = path;
+                if (endpointId === undefined || clusterId === undefined || attributeId === undefined) { // Wildcard path: Just leave out values
+                    logger.debug(`Read from ${exchange.channel.getName()}: ${this.endpointStructure.resolveAttributeName(path)} ignore non-existing attribute`);
+                } else { // Else return correct status
+                    let status = StatusCode.UnsupportedAttribute;
+                    if (!this.endpointStructure.hasEndpoint(endpointId)) {
+                        status = StatusCode.UnsupportedEndpoint;
+                    } else if (!this.endpointStructure.hasClusterServer(endpointId, clusterId)) {
+                        status = StatusCode.UnsupportedCluster;
+                    }
+                    logger.debug(`Read from ${exchange.channel.getName()}: ${this.endpointStructure.resolveAttributeName(path)} unsupported path: Status=${status}`);
+                    return [{ attributeStatus: { path, status: { status } } }];
+                }
             }
 
             return attributes.map(({ path, attribute }) => {
@@ -474,7 +483,22 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             const { path, dataVersion } = values[0];
             const attributes = this.endpointStructure.getAttributes([path], true);
             if (attributes.length === 0) {
-                return [{ path, statusCode: StatusCode.UnsupportedWrite }]; // TODO: Find correct status code
+                // TODO: Also check nodeId
+                const { endpointId, clusterId, attributeId } = path;
+                if (endpointId === undefined || clusterId === undefined || attributeId === undefined) { // Wildcard path: Just ignore
+                    logger.debug(`Write from ${exchange.channel.getName()}: ${this.endpointStructure.resolveAttributeName(path)} ignore non-existing attribute`);
+                } else { // Else return correct status
+                    let statusCode = StatusCode.UnsupportedAttribute;
+                    if (this.endpointStructure.hasAttribute(endpointId, clusterId, attributeId)) { // If attribute exists but was not returned above, it is not writeable
+                        statusCode = StatusCode.UnsupportedWrite;
+                    } else if (!this.endpointStructure.hasEndpoint(endpointId)) {
+                        statusCode = StatusCode.UnsupportedEndpoint;
+                    } else if (!this.endpointStructure.hasClusterServer(endpointId, clusterId)) {
+                        statusCode = StatusCode.UnsupportedCluster;
+                    }
+                    logger.debug(`Write from ${exchange.channel.getName()}: ${this.endpointStructure.resolveAttributeName(path)} unsupported path: Status=${statusCode}`);
+                    return [{ path, statusCode }];
+                }
             }
 
             return attributes.map(({ path, attribute }) => {
@@ -573,44 +597,58 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         const invokeResponses: TypeFromSchema<typeof TlvInvokeResponseData>[] = [];
 
-        await Promise.all(invokeRequests.map(async ({ commandPath, commandFields }) => {
-            const { endpointId } = commandPath;
-            if (endpointId === undefined) {
-                logger.error("Wildcard command invokes not yet supported!");
-                invokeResponses.push({ status: { commandPath, status: { status: StatusCode.UnsupportedCommand } } });
-                return;
-            }
-            const command = this.endpointStructure.commands.get(commandPathToId(commandPath as CommandPath));
-            if (command === undefined) {
-                const { clusterId, commandId } = commandPath;
-                logger.error(`Unknown command ${this.endpointStructure.resolveCommandName({ endpointId, clusterId, commandId })}`);
-                invokeResponses.push({ status: { commandPath, status: { status: StatusCode.UnsupportedCommand } } });
-                return;
-            }
-            const endpoint = this.endpointStructure.endpoints.get(endpointId);
-            if (!endpoint) {
-                const { clusterId, commandId } = commandPath;
-                logger.error(`Endpoint ${endpointId} not found for command ${this.endpointStructure.resolveCommandName({ endpointId, clusterId, commandId })}`);
-                invokeResponses.push({ status: { commandPath, status: { status: StatusCode.UnsupportedCommand } } });
-                return;
-            }
+        await Promise.all(invokeRequests.flatMap(async ({ commandPath, commandFields }) => {
+            const commands = this.endpointStructure.getCommands([commandPath]);
 
-            // If no arguments are provided in the invoke data (because optional field), we use our type as replacement
-            if (commandFields === undefined) {
-                commandFields = TlvNoArguments.encodeTlv(commandFields);
-            }
+            // TODO also check ACL and Timed, Fabric scoping constrains
 
-            const result = await command.invoke(exchange.session, commandFields, message, endpoint);
-            const { code, responseId, response } = result;
-            if (response.length === 0) {
-                invokeResponses.push({ status: { commandPath, status: { status: code } } });
-            } else {
-                invokeResponses.push({
-                    command: {
-                        commandPath: { ...commandPath, commandId: responseId },
-                        commandFields: response
+            if (commands.length === 0) {
+                // TODO Also check nodeId
+                const { endpointId, clusterId, commandId } = commandPath;
+                if (endpointId === undefined || clusterId === undefined || commandId === undefined) { // Wildcard path: Just ignore
+                    logger.debug(`Invoke from ${exchange.channel.getName()}: ${this.endpointStructure.resolveCommandName(commandPath)} ignore non-existing attribute`);
+                } else { // Else return correct status
+                    let status = StatusCode.UnsupportedCommand;
+                    if (!this.endpointStructure.hasEndpoint(endpointId)) {
+                        status = StatusCode.UnsupportedEndpoint;
+                    } else if (!this.endpointStructure.hasClusterServer(endpointId, clusterId)) {
+                        status = StatusCode.UnsupportedCluster;
                     }
-                });
+                    logger.debug(`Invoke from ${exchange.channel.getName()}: ${this.endpointStructure.resolveCommandName(commandPath)} unsupported path: Status=${status}`);
+                    invokeResponses.push({ status: { commandPath, status: { status } } });
+                    return;
+                }
+            }
+
+            for (const { command, path } of commands) {
+                const { endpointId } = path;
+                if (endpointId === undefined) { // Should never happen
+                    logger.error(`Invoke from ${exchange.channel.getName()}: ${this.endpointStructure.resolveCommandName(path)} invalid path because empty endpoint!`);
+                    invokeResponses.push({ status: { commandPath: path, status: { status: StatusCode.UnsupportedEndpoint } } });
+                    continue;
+                }
+                const endpoint = this.endpointStructure.getEndpoint(endpointId);
+                if (endpoint === undefined) { // Should never happen
+                    logger.error(`Invoke from ${exchange.channel.getName()}: ${this.endpointStructure.resolveCommandName(path)} invalid path because endpoint not found!`);
+                    invokeResponses.push({ status: { commandPath: path, status: { status: StatusCode.UnsupportedEndpoint } } });
+                    continue;
+                }
+                const result = await tryCatchAsync(
+                    async () => await command.invoke(exchange.session, commandFields ?? TlvNoArguments.encodeTlv(commandFields), message, endpoint),
+                    StatusResponseError,
+                    async error => ({ code: error.code, responseId: command.responseId, response: TlvNoResponse.encodeTlv() })
+                );
+                const { code, responseId, response } = result;
+                if (response.length === 0) {
+                    invokeResponses.push({ status: { commandPath: path, status: { status: code } } });
+                } else {
+                    invokeResponses.push({
+                        command: {
+                            commandPath: { ...path, commandId: responseId },
+                            commandFields: response
+                        }
+                    });
+                }
             }
         }));
 
@@ -625,6 +663,5 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         logger.debug(`Received timed request (${timeout}) from ${exchange.channel.getName()}`);
         // TODO: implement this
     }
-
 
 }

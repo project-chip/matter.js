@@ -4,12 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Endpoint } from "../../device/index.js";
 import {
-    AttributeServer, CommandServer, FabricScopedAttributeServer, FixedAttributeServer
-} from "../../cluster/index.js";
+    AttributeServer, FabricScopedAttributeServer, FixedAttributeServer
+} from "../../cluster/server/AttributeServer.js";
+import { ClusterServerObj } from "../../cluster/server/ClusterServer.js";
+import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
-import { TypeFromSchema } from "../../tlv/index.js";
+import { NodeId } from "../../datatype/NodeId.js";
+import { Endpoint } from "../../device/Endpoint.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvAttributePath, TlvCommandPath, TlvEventPath } from "./InteractionProtocol.js";
 import {
     AttributePath, attributePathToId, AttributeWithPath, CommandPath, commandPathToId, CommandWithPath, EventPath,
@@ -89,47 +92,88 @@ export class InteractionEndpointStructure {
         this.endpoints.set(endpoint.id, endpoint);
     }
 
-    toHex(value: number | undefined) {
+    toHex(value: number | bigint | undefined) {
         return value === undefined ? "*" : `0x${value.toString(16)}`;
     }
 
-    resolveGenericElementName(endpointId: number | undefined, clusterId: number | undefined, elementId: number | undefined, elementMap: Map<string, any>) {
+    resolveGenericElementName(nodeId: NodeId | undefined, endpointId: number | undefined, clusterId: number | undefined, elementId: number | undefined, elementMap: Map<string, any>) {
+        const nodeIdPrefix = nodeId === undefined ? "" : `${this.toHex(nodeId.id)}/`;
         if (endpointId === undefined) {
-            return `*/${this.toHex(clusterId)}/${this.toHex(elementId)}`;
+            return `${nodeIdPrefix}*/${this.toHex(clusterId)}/${this.toHex(elementId)}`;
         }
         const endpoint = this.endpoints.get(endpointId);
         if (endpoint === undefined) {
-            return `unknown(${this.toHex(endpointId)})/${this.toHex(clusterId)}/${this.toHex(elementId)}`;
+            return `${nodeIdPrefix}unknown(${this.toHex(endpointId)})/${this.toHex(clusterId)}/${this.toHex(elementId)}`;
         }
         const endpointName = `${endpoint.name}(${this.toHex(endpointId)})`;
 
         if (clusterId === undefined) {
-            return `${endpointName}/*/${this.toHex(elementId)}`;
+            return `${nodeIdPrefix}${endpointName}/*/${this.toHex(elementId)}`;
         }
         const cluster = endpoint.getClusterServerById(clusterId);
         if (cluster === undefined) {
-            return `${endpointName}/unknown(${this.toHex(clusterId)})/${this.toHex(elementId)}`;
+            return `${nodeIdPrefix}${endpointName}/unknown(${this.toHex(clusterId)})/${this.toHex(elementId)}`;
         }
         const clusterName = `${cluster.name}(${this.toHex(clusterId)})`;
 
         if (elementId === undefined) {
-            return `${endpointName}/${clusterName}/*`;
+            return `${nodeIdPrefix}${endpointName}/${clusterName}/*`;
         }
         const element = elementMap.get(genericElementPathToId(endpointId, clusterId, elementId));
         const elementName = `${element?.name ?? "unknown"}(${this.toHex(elementId)})`;
-        return `${endpointName}/${clusterName}/${elementName}`;
+        return `${nodeIdPrefix}${endpointName}/${clusterName}/${elementName}`;
     }
 
-    resolveAttributeName({ endpointId, clusterId, attributeId }: TypeFromSchema<typeof TlvAttributePath>) {
-        return this.resolveGenericElementName(endpointId, clusterId, attributeId, this.attributes);
+    resolveAttributeName({ nodeId, endpointId, clusterId, attributeId }: TypeFromSchema<typeof TlvAttributePath>) {
+        return this.resolveGenericElementName(nodeId, endpointId, clusterId, attributeId, this.attributes);
     }
 
-    resolveEventName({ endpointId, clusterId, eventId }: TypeFromSchema<typeof TlvEventPath>) {
-        return this.resolveGenericElementName(endpointId, clusterId, eventId, this.events);
+    resolveEventName({ nodeId, endpointId, clusterId, eventId }: TypeFromSchema<typeof TlvEventPath>) {
+        return this.resolveGenericElementName(nodeId, endpointId, clusterId, eventId, this.events);
     }
 
     resolveCommandName({ endpointId, clusterId, commandId }: TypeFromSchema<typeof TlvCommandPath>) {
-        return this.resolveGenericElementName(endpointId, clusterId, commandId, this.commands);
+        return this.resolveGenericElementName(undefined, endpointId, clusterId, commandId, this.commands);
+    }
+
+    getEndpoint(endpointId: number): Endpoint | undefined {
+        return this.endpoints.get(endpointId);
+    }
+
+    hasEndpoint(endpointId: number): boolean {
+        return this.endpoints.has(endpointId);
+    }
+
+    getClusterServer(endpointId: number, clusterId: number): ClusterServerObj<any, any, any> | undefined {
+        return this.endpoints.get(endpointId)?.getClusterServerById(clusterId);
+    }
+
+    hasClusterServer(endpointId: number, clusterId: number): boolean {
+        return !!this.getClusterServer(endpointId, clusterId);
+    }
+
+    getAttribute(endpointId: number, clusterId: number, attributeId: number): AttributeServer<any> | FabricScopedAttributeServer<any> | FixedAttributeServer<any> | undefined {
+        return this.attributes.get(attributePathToId({ endpointId, clusterId, attributeId }));
+    }
+
+    hasAttribute(endpointId: number, clusterId: number, attributeId: number): boolean {
+        return !!this.getAttribute(endpointId, clusterId, attributeId);
+    }
+
+    getEvent(endpointId: number, clusterId: number, eventId: number): EventServer<any> | undefined {
+        return this.events.get(eventPathToId({ endpointId, clusterId, eventId }));
+    }
+
+    hasEvent(endpointId: number, clusterId: number, eventId: number): boolean {
+        return !!this.getEvent(endpointId, clusterId, eventId);
+    }
+
+    getCommand(endpointId: number, clusterId: number, commandId: number): CommandServer<any, any> | undefined {
+        return this.commands.get(commandPathToId({ endpointId, clusterId, commandId }));
+    }
+
+    hasCommand(endpointId: number, clusterId: number, commandId: number): boolean {
+        return !!this.getCommand(endpointId, clusterId, commandId);
     }
 
     getAttributes(filters: TypeFromSchema<typeof TlvAttributePath>[], onlyWritable = false): AttributeWithPath[] {

@@ -19,7 +19,7 @@ import { TransportInterface } from "./common/TransportInterface.js";
 import { ChannelManager } from "./protocol/ChannelManager.js";
 import { ExchangeManager } from "./protocol/ExchangeManager.js";
 import { ProtocolHandler } from "./protocol/ProtocolHandler.js";
-import { Broadcaster } from "./common/Broadcaster.js";
+import { InstanceBroadcaster } from "./common/InstanceBroadcaster.js";
 import { Scanner } from "./common/Scanner.js";
 import { VendorId } from "./datatype/VendorId.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
@@ -27,7 +27,7 @@ import { NodeId } from "./datatype/NodeId.js";
 import { Logger } from "./log/Logger.js";
 import { Time, Timer } from "./time/Time.js";
 import { ByteArray } from "./util/ByteArray.js";
-import { StorageManager } from "./storage/StorageManager.js";
+import { StorageContext } from "./storage/StorageContext.js";
 import { isNetworkInterface, NetInterface } from "./net/NetInterface.js";
 
 const logger = Logger.get("MatterDevice");
@@ -37,7 +37,7 @@ const DEVICE_ANNOUNCEMENT_INTERVAL = 60 * 1000; /** 1 minute */
 
 export class MatterDevice {
     private readonly scanners = new Array<Scanner>();
-    private readonly broadcasters = new Array<Broadcaster>();
+    private readonly broadcasters = new Array<InstanceBroadcaster>();
     private readonly transportInterfaces = new Array<TransportInterface | NetInterface>();
     private readonly fabricManager;
     private readonly sessionManager;
@@ -53,11 +53,11 @@ export class MatterDevice {
         private readonly vendorId: VendorId,
         private readonly productId: number,
         private readonly discriminator: number,
-        private readonly storageManager: StorageManager,
+        private readonly storage: StorageContext,
     ) {
-        this.fabricManager = new FabricManager(this.storageManager);
+        this.fabricManager = new FabricManager(this.storage);
 
-        this.sessionManager = new SessionManager(this, this.storageManager);
+        this.sessionManager = new SessionManager(this, this.storage);
         this.sessionManager.initFromStorage(this.fabricManager.getFabrics());
 
         this.exchangeManager = new ExchangeManager<MatterDevice>(this.sessionManager, this.channelManager);
@@ -68,7 +68,7 @@ export class MatterDevice {
         return this;
     }
 
-    addBroadcaster(broadcaster: Broadcaster) {
+    addBroadcaster(broadcaster: InstanceBroadcaster) {
         this.broadcasters.push(broadcaster);
         return this;
     }
@@ -135,7 +135,13 @@ export class MatterDevice {
         } else {
             // No fabric paired yeet, so announce as "ready for commissioning"
             for (const broadcaster of this.broadcasters) {
-                broadcaster.setCommissionMode(1, this.deviceName, this.deviceType, this.vendorId, this.productId, this.discriminator);
+                broadcaster.setCommissionMode(1, {
+                    deviceName: this.deviceName,
+                    deviceType: this.deviceType,
+                    vendorId: this.vendorId,
+                    productId: this.productId,
+                    discriminator: this.discriminator,
+                });
                 broadcaster.announce();
             }
         }
@@ -202,7 +208,13 @@ export class MatterDevice {
     openCommissioningModeWindow(mode: number, discriminator: number, timeout: number) {
         this.commissioningWindowOpened = true;
         this.broadcasters.forEach(broadcaster => {
-            broadcaster.setCommissionMode(mode, this.deviceName, this.deviceType, this.vendorId, this.productId, discriminator);
+            broadcaster.setCommissionMode(mode, {
+                deviceName: this.deviceName,
+                deviceType: this.deviceType,
+                vendorId: this.vendorId,
+                productId: this.productId,
+                discriminator,
+            });
         });
         this.startAnnouncement();
 
@@ -211,9 +223,9 @@ export class MatterDevice {
 
     async findDevice(fabric: Fabric, nodeId: NodeId, timeOutSeconds = 5): Promise<undefined | { session: Session<MatterDevice>, channel: Channel<ByteArray> }> {
         // TODO: return the first not undefined answer or undefined
-        const matterServer = await this.scanners[0].findDevice(fabric, nodeId, timeOutSeconds);
-        if (matterServer === undefined) return undefined;
-        const { ip, port } = matterServer;
+        const matterServer = await this.scanners[0].findOperationalDevice(fabric, nodeId, timeOutSeconds);
+        if (matterServer.length === 0) return undefined;
+        const { ip, port } = matterServer[0]; // TODO
         const session = this.sessionManager.getSessionForNode(fabric, nodeId);
         if (session === undefined) return undefined;
         // TODO: have the interface and scanner linked
@@ -226,8 +238,6 @@ export class MatterDevice {
 
     async stop() {
         this.exchangeManager.close();
-
         this.announceInterval?.stop();
-        this.broadcasters.forEach(broadcaster => broadcaster.close());
     }
 }

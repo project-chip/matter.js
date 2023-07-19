@@ -29,6 +29,12 @@ describe("TlvString", () => {
 
             expect(result.toHex()).toBe("0c0474657374");
         });
+
+        it("encodes a string that gets utf8 encoded", () => {
+            const result = TlvString.encode("testè");
+
+            expect(result.toHex()).toBe("0c0674657374c3a8");
+        });
     });
 
     describe("decode", () => {
@@ -36,6 +42,12 @@ describe("TlvString", () => {
             const result = TlvString.decode(ByteArray.fromHex("0c0474657374"));
 
             expect(result).toBe("test");
+        });
+
+        it("decodes a string that was utf8", () => {
+            const result = TlvString.decode(ByteArray.fromHex("0c0674657374c3a8"));
+
+            expect(result).toBe("testè");
         });
     });
 

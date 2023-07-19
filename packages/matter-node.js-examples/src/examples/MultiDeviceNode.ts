@@ -25,11 +25,11 @@ import { VendorId } from "@project-chip/matter-node.js/datatype";
 import { Logger } from "@project-chip/matter-node.js/log";
 import { StorageManager, StorageBackendDisk } from "@project-chip/matter-node.js/storage";
 
-const logger = Logger.get("Device");
+const logger = Logger.get("MultiDevice");
 
 requireMinNodeVersion(16);
 
-const storageLocation = getParameter("store") ?? "device-node";
+const storageLocation = getParameter("store") ?? ".device-node";
 const storage = new StorageBackendDisk(storageLocation, hasParameter("clearstorage"));
 logger.info(`Storage location: ${storageLocation} (Directory)`);
 logger.info('Use the parameter "-store NAME" to specify a different storage location, use -clearstorage to start with an empty storage.')
@@ -58,34 +58,9 @@ class BridgedDevice {
          * and easy reuse. When you also do that be careful to not overlap with Matter-Server own contexts
          * (so maybe better not ;-)).
          */
+        const netAnnounceInterface = getParameter("announceinterface");
 
         const deviceStorage = storageManager.createContext("Device");
-
-        if (deviceStorage.has("isSocket")) {
-            logger.info("Device type found in storage. -type parameter is ignored.");
-        }
-        const isSocket = deviceStorage.get("isSocket", getParameter("type") === "socket");
-        const deviceName = "Matter composed device";
-        const deviceType = getParameter("type") === "socket" ? DeviceTypes.ON_OFF_PLUGIN_UNIT.code : DeviceTypes.ON_OFF_LIGHT.code;
-        const vendorName = "matter-node.js";
-        const passcode = getIntParameter("passcode") ?? deviceStorage.get("passcode", 20202021);
-        const discriminator = getIntParameter("discriminator") ?? deviceStorage.get("discriminator", 3840);
-        // product name / id and vendor id should match what is in the device certificate
-        const vendorId = new VendorId(getIntParameter("vendorid") ?? deviceStorage.get("vendorid", 0xFFF1));
-        const productName = `node-matter OnOff-Bridge`;
-        const productId = getIntParameter("productid") ?? deviceStorage.get("productid", 0x8000);
-
-        const netAnnounceInterface = getParameter("announceinterface");
-        const port = getIntParameter("port") ?? 5540;
-
-        const uniqueId = getIntParameter("uniqueid") ?? deviceStorage.get("uniqueid", Time.nowMs());
-
-        deviceStorage.set("passcode", passcode);
-        deviceStorage.set("discriminator", discriminator);
-        deviceStorage.set("vendorid", vendorId.id);
-        deviceStorage.set("productid", productId);
-        deviceStorage.set("isSocket", isSocket);
-        deviceStorage.set("uniqueid", uniqueId);
 
         /**
          * Create Matter Server and CommissioningServer Node
@@ -102,23 +77,6 @@ class BridgedDevice {
 
         const matterServer = new MatterServer(storageManager, netAnnounceInterface);
 
-        const commissioningServer = new CommissioningServer({
-            port,
-            deviceName,
-            deviceType,
-            passcode,
-            discriminator,
-            basicInformation: {
-                vendorName,
-                vendorId,
-                nodeLabel: productName,
-                productName,
-                productLabel: productName,
-                productId,
-                serialNumber: `node-matter-${uniqueId}`,
-            }
-        });
-
         /**
          * Create Device instance and add needed Listener
          *
@@ -131,19 +89,68 @@ class BridgedDevice {
          * like identify that can be implemented with the logic when these commands are called.
          */
 
+        const commissioningServers = new Array<CommissioningServer>();
+
+        let defaultPasscode = 20202021;
+        let defaultDiscriminator = 3840;
+        let defaultPort = 5550;
+
         const numDevices = getIntParameter("num") || 2;
         for (let i = 1; i <= numDevices; i++) {
+
+            if (deviceStorage.has(`isSocket${i}`)) {
+                logger.info("Device type found in storage. -type parameter is ignored.");
+            }
+            const isSocket = deviceStorage.get(`isSocket${i}`, getParameter(`type${i}`) === "socket");
+            const deviceName = `Matter ${getParameter(`type${i}`) ?? "light"} device ${i}`;
+            const deviceType = getParameter(`type${i}`) === "socket" ? DeviceTypes.ON_OFF_PLUGIN_UNIT.code : DeviceTypes.ON_OFF_LIGHT.code;
+            const vendorName = "matter-node.js";
+            const passcode = getIntParameter(`passcode${i}`) ?? deviceStorage.get(`passcode${i}`, defaultPasscode++);
+            const discriminator = getIntParameter(`discriminator${i}`) ?? deviceStorage.get(`discriminator${i}`, defaultDiscriminator++);
+            // product name / id and vendor id should match what is in the device certificate
+            const vendorId = new VendorId(getIntParameter(`vendorid${i}`) ?? deviceStorage.get(`vendorid${i}`, 0xFFF1));
+            const productName = `node-matter OnOff-Device ${i}`;
+            const productId = getIntParameter(`productid${i}`) ?? deviceStorage.get(`productid${i}`, 0x8000);
+
+            const port = getIntParameter(`port${i}`) ?? defaultPort++;
+
+            const uniqueId = getIntParameter(`uniqueid${i}`) ?? deviceStorage.get(`uniqueid${i}`, `${i}-${Time.nowMs()}`);
+
+            deviceStorage.set(`passcode${i}`, passcode);
+            deviceStorage.set(`discriminator${i}`, discriminator);
+            deviceStorage.set(`vendorid${i}`, vendorId.id);
+            deviceStorage.set(`productid${i}`, productId);
+            deviceStorage.set(`isSocket${i}`, isSocket);
+            deviceStorage.set(`uniqueid${i}`, uniqueId);
+
+            const commissioningServer = new CommissioningServer({
+                port,
+                deviceName,
+                deviceType,
+                passcode,
+                discriminator,
+                basicInformation: {
+                    vendorName,
+                    vendorId,
+                    nodeLabel: productName,
+                    productName,
+                    productLabel: productName,
+                    productId,
+                    serialNumber: `node-matter-${uniqueId}`,
+                }
+            });
+
+            console.log(`Added device ${i} on port ${port} and unique id ${uniqueId}: Passcode: ${passcode}, Discriminator: ${discriminator}`);
+
             const onOffDevice = getParameter(`type${i}`) === "socket" ? new OnOffPluginUnitDevice() : new OnOffLightDevice();
             onOffDevice.addFixedLabel("orientation", getParameter(`orientation${i}`) ?? `orientation ${i}`);
-
             onOffDevice.addOnOffListener(on => commandExecutor(on ? `on${i}` : `off${i}`)?.());
-            onOffDevice.addCommandHandler("identify", async ({ request: { identifyTime } }) =>
-                console.log(`Identify called for OnOffDevice ${onOffDevice.name} with id: ${i} and identifyTime: ${identifyTime}`));
-
             commissioningServer.addDevice(onOffDevice);
-        }
 
-        matterServer.addCommissioningServer(commissioningServer);
+            matterServer.addCommissioningServer(commissioningServer);
+
+            commissioningServers.push(commissioningServer);
+        }
 
         /**
          * Start the Matter Server
@@ -162,16 +169,22 @@ class BridgedDevice {
          */
 
         logger.info("Listening");
-        if (!commissioningServer.isCommissioned()) {
-            const pairingData = commissioningServer.getPairingCode();
-            const { qrCode, qrPairingCode, manualPairingCode } = pairingData;
+        console.log();
+        commissioningServers.forEach((commissioningServer, index) => {
+            console.log('----------------------------');
+            console.log(`Device ${index + 1}:`)
+            if (!commissioningServer.isCommissioned()) {
+                const pairingData = commissioningServer.getPairingCode();
+                const { qrCode, qrPairingCode, manualPairingCode } = pairingData;
 
-            console.log(qrCode);
-            console.log(`QR Code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}`);
-            console.log(`Manual pairing code: ${manualPairingCode}`);
-        } else {
-            console.log("Device is already commissioned. Waiting for controllers to connect ...");
-        }
+                console.log(qrCode);
+                console.log(`QR Code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}`);
+                console.log(`Manual pairing code: ${manualPairingCode}`);
+            } else {
+                console.log("Device is already commissioned. Waiting for controllers to connect ...");
+            }
+            console.log();
+        });
     }
 }
 

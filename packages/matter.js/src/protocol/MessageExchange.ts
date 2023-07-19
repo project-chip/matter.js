@@ -54,7 +54,7 @@ export class MessageExchange<ContextT> {
         closeCallback: () => void,
     ) {
         const { session } = channel;
-        const exchange = new MessageExchange<ContextT>(
+        return new MessageExchange<ContextT>(
             session,
             channel,
             messageCounter,
@@ -65,8 +65,7 @@ export class MessageExchange<ContextT> {
             initialMessage.payloadHeader.exchangeId,
             initialMessage.payloadHeader.protocolId,
             closeCallback,
-        )
-        return exchange;
+        );
     }
 
     static initiate<ContextT>(
@@ -191,6 +190,9 @@ export class MessageExchange<ContextT> {
                 messageId: this.messageCounter.getIncrementedCounter(),
                 destNodeId: this.peerNodeId,
                 sourceNodeId: this.nodeId,
+                hasPrivacyEnhancements: false,
+                isControlMessage: false,
+                hasMessageExtensions: false,
             },
             payloadHeader: {
                 exchangeId: this.exchangeId,

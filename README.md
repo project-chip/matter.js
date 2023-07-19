@@ -20,6 +20,8 @@ We also collected a [list of known device types supported by which ecosystem](#D
 
 Each ecosystem have their own specialities, see [Pairing and Usage Information](#Pairing-and-Usage-Information) for more details.
 
+A list ok known issues with some ecosystems can be found in [KNOWN_ISSUES.md](KNOWN_ISSUES.md).
+
 ## Monorepo Overview
 
 This repository contains multiple packages (and because of this it is a monorepo). The packages are contained in the `packages` directory and are all published separately to NPM.

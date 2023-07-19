@@ -13,7 +13,7 @@ import { NetworkNode } from "./NetworkNode";
 
 const logger = Logger.get("UdpChannelNode");
 
-function createDgramSocket(address: string | undefined, port: number, options: dgram.SocketOptions) {
+function createDgramSocket(host: string | undefined, port: number | undefined, options: dgram.SocketOptions) {
     const socket = dgram.createSocket(options);
     return new Promise<dgram.Socket>((resolve, reject) => {
         const handleBindError = (error: Error) => {
@@ -21,7 +21,12 @@ function createDgramSocket(address: string | undefined, port: number, options: d
             reject(error);
         };
         socket.on("error", handleBindError);
-        socket.bind(port, address, () => {
+        socket.bind(port, host, () => {
+            const { address: localHost, port: localPort } = socket.address();
+            logger.debug("Socket created and bound ", Logger.dict({
+                remoteAddress: `${host}:${port}`,
+                localAddress: `${localHost}:${localPort}`
+            }));
             socket.removeListener("error", handleBindError);
             socket.on("error", error => logger.error(error));
             resolve(socket);
@@ -31,11 +36,14 @@ function createDgramSocket(address: string | undefined, port: number, options: d
 
 export class UdpChannelNode implements UdpChannel {
     static async create({ listeningPort, type, listeningAddress, netInterface }: UdpChannelOptions) {
-        const socket = await createDgramSocket(listeningAddress, listeningPort, { type, reuseAddr: true });
+        const socketOptions: dgram.SocketOptions = { type, reuseAddr: true };
+        if (type === "udp6") {
+            socketOptions.ipv6Only = true;
+        }
+        const socket = await createDgramSocket(listeningAddress, listeningPort, socketOptions);
         socket.setBroadcast(true);
-        let multicastInterface: string | undefined;
         if (netInterface !== undefined) {
-            multicastInterface = NetworkNode.getMulticastInterface(netInterface, type === "udp4");
+            const multicastInterface = NetworkNode.getMulticastInterface(netInterface, type === "udp4");
             logger.debug("Initialize multicast", Logger.dict({
                 address: `${multicastInterface}:${listeningPort}`,
                 interface: netInterface,
@@ -52,10 +60,10 @@ export class UdpChannelNode implements UdpChannel {
     ) { }
 
     onData(listener: (netInterface: string, peerAddress: string, peerPort: number, data: ByteArray) => void) {
-        const messageListener = (data: ByteArray, { address, port }: { address: string, port: number }) => {
-            const netInterface = this.netInterface ?? NetworkNode.getNetInterfaceForIp(address);
+        const messageListener = (data: ByteArray, { host, port }: { host: string, port: number }) => {
+            const netInterface = this.netInterface ?? NetworkNode.getNetInterfaceForIp(host);
             if (netInterface === undefined) return;
-            listener(netInterface, address, port, data);
+            listener(netInterface, host, port, data);
         };
 
         this.socket.on("message", messageListener);
@@ -66,9 +74,9 @@ export class UdpChannelNode implements UdpChannel {
         };
     }
 
-    async send(address: string, port: number, data: ByteArray) {
+    async send(host: string, port: number, data: ByteArray) {
         return new Promise<void>((resolve, reject) => {
-            this.socket.send(data, port, address, error => {
+            this.socket.send(data, port, host, error => {
                 if (error !== null) {
                     reject(error);
                     return;
