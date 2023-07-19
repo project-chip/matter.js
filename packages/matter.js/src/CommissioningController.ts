@@ -127,7 +127,7 @@ export class CommissioningController extends MatterNode {
                 identifierData = { shortDiscriminator: this.shortDiscriminator };
             } else {
                 if (this.passcode === undefined) {
-                    throw new Error("To commission a new device a passcode needs to be specified i the constructor data!");
+                    throw new Error("To commission a new device a passcode needs to be specified in the constructor data!");
                 }
                 identifierData = {};
             }
