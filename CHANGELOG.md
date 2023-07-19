@@ -28,11 +28,12 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Enhance: Split up and corrected PowerSource and PressureMeasurement Cluster based on Matter 1.1 Specs
   * Fix: Added missing PulseWidthModulationLevelControlCluster to AllCLusters
   * Fix Typing of Commands in ClusterClient if no commands were present
-  * Fix: Fix equality checks in Attribute servers to check deeper than just === (and introduce new util method isDeepEqual)
-  * Fix: Make sure an error received from sending subscription seed data reports is not bubbling up and activate subscription after successful seeding
+  * Fix: Fixes equality checks in Attribute servers to check deeper than just === (and introduce new util method isDeepEqual)
+  * Fix: Makes sure an error received from sending subscription seed data reports is not bubbling up and activate subscription after successful seeding
   * Fix: Allows Node.js Buffer objects to be persisted to storage as a Uint8Arrays that they subclass
-  * Fix: Fix a Subscription timer duplication issue and collect attribute changes within a 50ms window to reduce the number of subscription messages
-  * Fix: Return correct Error-Status for Read-/Write-Requests
+  * Fix: Fixes a Subscription timer duplication issue and collect attribute changes within a 50ms window to reduce the number of subscription messages
+  * Fix: Returns correct Error-Status for Read-/Write-Requests
+  * Fix: Fixes TLV Encoding for strings with UTF8 relevant characters
   * Refactor: Refactor Endpoint structuring and determination to allow dynamic and updating structures
 * matter.js API:
   * Breaking: 

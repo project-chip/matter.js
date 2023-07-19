@@ -19,7 +19,7 @@ import { NetInterface } from "./net/NetInterface.js";
 import { ChannelManager } from "./protocol/ChannelManager.js";
 import { ExchangeManager } from "./protocol/ExchangeManager.js";
 import { ProtocolHandler } from "./protocol/ProtocolHandler.js";
-import { Broadcaster } from "./common/Broadcaster.js";
+import { InstanceBroadcaster } from "./common/InstanceBroadcaster.js";
 import { Scanner } from "./common/Scanner.js";
 import { VendorId } from "./datatype/VendorId.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
@@ -36,7 +36,7 @@ const DEVICE_ANNOUNCEMENT_INTERVAL = 60 * 1000; /** 1 minute */
 
 export class MatterDevice {
     private readonly scanners = new Array<Scanner>();
-    private readonly broadcasters = new Array<Broadcaster>();
+    private readonly broadcasters = new Array<InstanceBroadcaster>();
     private readonly netInterfaces = new Array<NetInterface>();
     private readonly fabricManager;
     private readonly sessionManager;
@@ -53,7 +53,6 @@ export class MatterDevice {
         private readonly productId: number,
         private readonly discriminator: number,
         private readonly storage: StorageContext,
-        private readonly udpPort: number,
     ) {
         this.fabricManager = new FabricManager(this.storage);
 
@@ -68,7 +67,7 @@ export class MatterDevice {
         return this;
     }
 
-    addBroadcaster(broadcaster: Broadcaster) {
+    addBroadcaster(broadcaster: InstanceBroadcaster) {
         this.broadcasters.push(broadcaster);
         return this;
     }
@@ -129,13 +128,19 @@ export class MatterDevice {
                 fabricsToAnnounce.push(fabric);
             }
             for (const broadcaster of this.broadcasters) {
-                broadcaster.setFabrics(fabricsToAnnounce, this.udpPort);
+                broadcaster.setFabrics(fabricsToAnnounce);
                 broadcaster.announce();
             }
         } else {
             // No fabric paired yeet, so announce as "ready for commissioning"
             for (const broadcaster of this.broadcasters) {
-                broadcaster.setCommissionMode(1, this.deviceName, this.deviceType, this.vendorId, this.productId, this.discriminator, this.udpPort);
+                broadcaster.setCommissionMode(1, {
+                    deviceName: this.deviceName,
+                    deviceType: this.deviceType,
+                    vendorId: this.vendorId,
+                    productId: this.productId,
+                    discriminator: this.discriminator,
+                });
                 broadcaster.announce();
             }
         }
@@ -156,7 +161,7 @@ export class MatterDevice {
     addFabric(fabric: Fabric) {
         this.fabricManager.addFabric(fabric);
         this.broadcasters.forEach(broadcaster => {
-            broadcaster.setFabrics([fabric], this.udpPort);
+            broadcaster.setFabrics([fabric]);
             broadcaster.announce();
         });
         return fabric.fabricIndex;
@@ -202,7 +207,13 @@ export class MatterDevice {
     openCommissioningModeWindow(mode: number, discriminator: number, timeout: number) {
         this.commissioningWindowOpened = true;
         this.broadcasters.forEach(broadcaster => {
-            broadcaster.setCommissionMode(mode, this.deviceName, this.deviceType, this.vendorId, this.productId, discriminator, this.udpPort);
+            broadcaster.setCommissionMode(mode, {
+                deviceName: this.deviceName,
+                deviceType: this.deviceType,
+                vendorId: this.vendorId,
+                productId: this.productId,
+                discriminator,
+            });
         });
         this.startAnnouncement();
 
@@ -211,9 +222,9 @@ export class MatterDevice {
 
     async findDevice(fabric: Fabric, nodeId: NodeId, timeOutSeconds = 5): Promise<undefined | { session: Session<MatterDevice>, channel: Channel<ByteArray> }> {
         // TODO: return the first not undefined answer or undefined
-        const matterServer = await this.scanners[0].findDevice(fabric, nodeId, timeOutSeconds);
-        if (matterServer === undefined) return undefined;
-        const { ip, port } = matterServer;
+        const matterServer = await this.scanners[0].findOperationalDevice(fabric, nodeId, timeOutSeconds);
+        if (matterServer.length === 0) return undefined;
+        const { ip, port } = matterServer[0]; // TODO
         const session = this.sessionManager.getSessionForNode(fabric, nodeId);
         if (session === undefined) return undefined;
         // TODO: have the interface and scanner linked
@@ -222,8 +233,6 @@ export class MatterDevice {
 
     async stop() {
         this.exchangeManager.close();
-
         this.announceInterval?.stop();
-        this.broadcasters.forEach(broadcaster => broadcaster.close());
     }
 }

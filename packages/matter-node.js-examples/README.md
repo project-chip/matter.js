@@ -87,6 +87,8 @@ The usage is as above but with modified parameters:
 * -onX "script": script to run when the device number X is turned on
 * -offX "script": script to run when the device number X is turned off
 
+**Please especially use the -uniqueidX parameters to assign unique own IDs to the single deices in order to remember their structure in the bridge. Such an ID should never be reused if you ever remove or add new devices! If you do not use -uniqueidX then the order you added them here is not allowed to ever change.**
+
 ```bash
 matter-bridge -num 2 -on1 "echo 255 > /sys/class/leds/led1/brightness" -off1 "echo 0 > /sys/class/leds/led1/brightness" -type2 socket -on2 "echo 255 > /sys/class/leds/led2/brightness" -off2 "echo 0 > /sys/class/leds/led2/brightness"
 ```
@@ -121,6 +123,27 @@ npm run matter-composeddevice -- -type socket -num 2 -on1 "echo 255 > /sys/class
 
 The above command exposes a composed device with a socket and a light device and executes the respective commands when the devices are turned on or off.
 
+### Start multiple Matter Devices in one process
+
+> The code for this example is in [src/examples/MultiDeviceNode.ts](./src/examples/MultiDeviceNode.ts).
+
+matter.js also allows it to start multiple devices in one process. With this especially the MDNS functionalities are shared between these processes and it should use less resources. How many devices you acn add in one process depends on the load they produce and how many devices run in the single Node.js thread.
+
+The parameters are like with the composed device or bridge.
+
+```bash
+matter-multidevice -type socket -num 2 -on1 "echo 255 > /sys/class/leds/led1/brightness" -off1 "echo 0 > /sys/class/leds/led1/brightness" -type2 socket -on2 "echo 255 > /sys/class/leds/led2/brightness" -off2 "echo 0 > /sys/class/leds/led2/brightness"
+```
+
+or when starting from TS files:
+
+```bash
+npm run matter-multidevice -- -type socket -num 2 -on1 "echo 255 > /sys/class/leds/led1/brightness" -off1 "echo 0 > /sys/class/leds/led1/brightness" -type2 socket -on2 "echo 255 > /sys/class/leds/led2/brightness" -off2 "echo 0 > /sys/class/leds/led2/brightness"
+```
+(Please note the "--" to separate commandline parameters between the npm run and the executed script.
+
+The above command exposes two single light devices (one socket and on light) and executes the respective commands when the devices are turned on or off.
+
 ### Start a Matter Controller
 
 > The code for this example is in [src/examples/ControllerNode.ts](./src/examples/ControllerNode.ts).
@@ -134,22 +157,23 @@ The controller currently is not discovering the device to pair, but directly con
 To run from the build files:
 
 ```bash
-matter-controller -ip [IP address of device to commission]
+matter-controller -pairingcode 12345678901
 ```
 
 To run directly from Typescript files with on the fly compilation:
 
 ```bash
-npm run matter-controller -- -ip [IP address of device to commission]
+npm run matter-controller -- -pairingcode 12345678901
 ```
 
-This will commission a MatterServer device (for debugging purpose only for now).
+This will commission a MatterServer device (for debugging/capability showing purpose only for now).
 
 The following parameters are available:
-* -ip: the IP address of the device to commission
-* -discriminator: the discriminator to use for pairing (default: 3840, value between 0 and 4095)
+* -ip: the IP address of the device to commission (can be used but discovery via pairingcode or discriminator or also just pin (passode) is most likely better)
+* -port the port of the device to commission (default: 5540)
+* -longDiscriminator: the discriminator to use for pairing (default: 3840, value between 0 and 4095)
 * -pin: the pin to use for pairing (default: 20202021)
-* -pairingcode: code to use for pairing (-discriminator and -pin will be ignored)
+* -pairingcode: code to use for pairing (-longDiscriminator and -pin will be ignored)
 * -store: the storage location (directory) to use for storing the pairing information (default: controller-node). Delete the directory or provide an alternative name to reset the controller
 * -clearstorage: the storage location will be reset on start of the process
 

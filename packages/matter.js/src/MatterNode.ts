@@ -11,6 +11,8 @@ import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
 import { ClusterClientObj } from "./cluster/client/ClusterClient.js";
 import { ClusterServerObj } from "./cluster/server/ClusterServer.js";
 import { InteractionClient } from "./protocol/interaction/InteractionClient.js";
+import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
+import { MdnsScanner } from "./mdns/MdnsScanner.js"
 
 /**
  * Abstract base class that represents a node in the matter ecosystem.
@@ -89,4 +91,12 @@ export abstract class MatterNode {
     }
 
     abstract close(): Promise<void>;
+
+    abstract getPort(): number | undefined;
+
+    abstract start(): Promise<void>;
+
+    abstract setMdnsBroadcaster(mdnsBroadcaster: MdnsBroadcaster): void;
+
+    abstract setMdnsScanner(mdnsScanner: MdnsScanner): void;
 }

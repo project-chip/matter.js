@@ -12,20 +12,23 @@ import { ByteArray } from "../util/ByteArray.js";
 
 export class UdpInterface implements NetInterface {
 
-    static async create(port: number, type: "udp4" | "udp6", address?: string, netInterface?: string) {
-        return new UdpInterface(await Network.get().createUdpChannel({ listeningPort: port, type, netInterface, listeningAddress: address }));
+    static async create(type: "udp4" | "udp6", port?: number, host?: string, netInterface?: string) {
+        return new UdpInterface(await Network.get().createUdpChannel({ listeningPort: port, type, netInterface, listeningAddress: host }));
     }
 
     constructor(
         private readonly server: UdpChannel,
     ) { }
 
-    async openChannel(address: string, port: number) {
-        return Promise.resolve(new UdpConnection(this.server, address, port));
+    async openChannel(host: string, port: number) {
+        return Promise.resolve(new UdpConnection(this.server, host, port));
     }
 
     onData(listener: (channel: Channel<ByteArray>, messageBytes: ByteArray) => void): NetListener {
         return this.server.onData((_netInterface, peerAddress, peerPort, data) => listener(new UdpConnection(this.server, peerAddress, peerPort), data));
+    }
+    close() {
+        this.server.close();
     }
 }
 

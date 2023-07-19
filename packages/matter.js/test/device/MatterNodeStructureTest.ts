@@ -70,6 +70,22 @@ class TestNode extends MatterNode {
     override async close() {
         // Do nothing
     }
+
+    getPort() {
+        return undefined;
+    }
+
+    setMdnsBroadcaster() {
+        // Do nothing
+    }
+
+    setMdnsScanner() {
+        // Do nothing
+    }
+
+    async start() {
+        return;
+    }
 }
 
 function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningCluster = true) {
