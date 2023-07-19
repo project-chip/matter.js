@@ -32,7 +32,7 @@ const DECODED_PACKET = {
         hasManagementOpcode: false,
         hasAckNumber: false,
         isEndingSegment: true,
-        isContinuingSegment: false,
+        isContinuingSegment: true,
         isBeginningSegment: false
     },
     payload: {
@@ -83,7 +83,7 @@ const DECODED_PACKET_3 = {
         hasManagementOpcode: false,
         hasAckNumber: true,
         isEndingSegment: true,
-        isContinuingSegment: false,
+        isContinuingSegment: true,
         isBeginningSegment: false
     },
     payload: {
@@ -134,7 +134,7 @@ const DECODED_PACKET_6 = {
         hasManagementOpcode: false,
         hasAckNumber: false,
         isEndingSegment: true,
-        isContinuingSegment: false,
+        isContinuingSegment: true,
         isBeginningSegment: false
     },
     payload: {
@@ -193,7 +193,7 @@ describe("BtpCodec", () => {
         it("encodes a valid btp packet where both ackNumber and messageLength are undefined", () => {
             const result = BtpCodec.encodeBtpPacket(DECODED_PACKET);
 
-            assert.deepEqual(result, ByteArray.fromHex("04000400000049b6a902a9a5773dbb8cafd90120a7c7000015300120cb0c120a3499327ddaec4ebe60889df0f1bf80d8a4dea1dd6ffef16ef58ecafe25028e17240300280418"));
+            assert.deepEqual(result, ByteArray.fromHex("06000400000049b6a902a9a5773dbb8cafd90120a7c7000015300120cb0c120a3499327ddaec4ebe60889df0f1bf80d8a4dea1dd6ffef16ef58ecafe25028e17240300280418"));
         });
 
         it("encodes a valid btp packet where ackNumber is undefined", () => {
@@ -205,24 +205,24 @@ describe("BtpCodec", () => {
         it("encodes a valid btp packet where messageLength is undefined", () => {
             const result = BtpCodec.encodeBtpPacket(DECODED_PACKET_3);
 
-            assert.deepEqual(result, ByteArray.fromHex("0c00000400000049b6a902a9a5773dbb8cafd90120a7c7000015300120cb0c120a3499327ddaec4ebe60889df0f1bf80d8a4dea1dd6ffef16ef58ecafe25028e17240300280418"));
+            assert.deepEqual(result, ByteArray.fromHex("0e00000400000049b6a902a9a5773dbb8cafd90120a7c7000015300120cb0c120a3499327ddaec4ebe60889df0f1bf80d8a4dea1dd6ffef16ef58ecafe25028e17240300280418"));
         });
     });
 
     describe("Errors", () => {
         it("incorrect headers in handshake request", () => {
             expect(() => BtpCodec.decodeBtpHandshakeRequest(ByteArray.fromHex("0d6c04000000b90006")))
-                .toThrowError("BTPHandshake Request Headers is incorrect");
+                .toThrowError("Header for expected BTP Handshake Request is incorrect.");
         });
 
         it("incorrect management opcode in handshake request", () => {
             expect(() => BtpCodec.decodeBtpHandshakeRequest(ByteArray.fromHex("656d04000000b90006")))
-                .toThrowError("Management Opcode for BTPHandshake Request is incorrect");
+                .toThrowError("Management Opcode for BTP Handshake Request is incorrect.");
         });
 
         it("no valid version provided in request handshake", () => {
             expect(() => BtpCodec.decodeBtpHandshakeRequest(ByteArray.fromHex("656c00000000b90006")))
-                .toThrowError("No valid version provided");
+                .toThrowError("No valid version provided.");
         });
 
         it("opcode expected but not provided error in decoding the header", () => {
@@ -232,22 +232,22 @@ describe("BtpCodec", () => {
 
         it("ack number shouldn't be present if hasAckNumber is false", () => {
             expect(() => BtpCodec.encodeBtpPacket(DECODED_PACKET_4))
-                .toThrowError("Ack number shouldn't be set because header flag is not set");
+                .toThrowError("Ack number shouldn't be set because header flag is not set.");
         });
 
         it("ack number should be present if hasAckNumber is true", () => {
             expect(() => BtpCodec.encodeBtpPacket(DECODED_PACKET_5))
-                .toThrowError("Ack number needs to be set because header flag is set");
+                .toThrowError("Ack number needs to be set because header flag is set.");
         });
 
         it("message length shouldn't be present if beginning segment is false", () => {
             expect(() => BtpCodec.encodeBtpPacket(DECODED_PACKET_6))
-                .toThrowError("Message Length shouldn't be set because the package is not a beginning segment");
+                .toThrowError("Message length shouldn't be set because the package is not a beginning segment.");
         });
 
         it("message length should be present if beginning segment is true", () => {
             expect(() => BtpCodec.encodeBtpPacket(DECODED_PACKET_7))
-                .toThrowError("Message Length needs to be set because paket is a beginning segment");
+                .toThrowError("Message length needs to be set because paket is a beginning segment.");
         });
     });
 });

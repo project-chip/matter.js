@@ -37,7 +37,7 @@ describe("BtpSessionHandler", () => {
 
             const result = await writeBlePromise;
 
-            assert.deepEqual(result, ByteArray.fromHex("656c04640006"));
+            assert.deepEqual(result, ByteArray.fromHex("656c04670006"));
         });
 
         it("handles a zero attMtu in Handshake", async () => {
@@ -60,7 +60,7 @@ describe("BtpSessionHandler", () => {
 
             const result = await writeBlePromise;
 
-            assert.deepEqual(result, ByteArray.fromHex("656c04640006"));
+            assert.deepEqual(result, ByteArray.fromHex("656c04670006"));
         });
 
         it("handles a undefined maxDataSize in Handshake", async () => {

@@ -183,7 +183,7 @@ export class BtpCodec {
 
         const versions = ver.filter(v => v !== 0)
         if (versions.length === 0) {
-            throw new BtpProtocolError("No valid version provided");
+            throw new BtpProtocolError("No valid version provided.");
         }
 
         const attMtu = reader.readUInt16();
