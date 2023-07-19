@@ -32,6 +32,7 @@ const DECODED_PACKET = {
         hasManagementOpcode: false,
         hasAckNumber: false,
         isEndingSegment: true,
+        isContinuingSegment: false,
         isBeginningSegment: false
     },
     payload: {
@@ -48,6 +49,7 @@ const DECODED_PACKET_1 = {
         hasManagementOpcode: false,
         hasAckNumber: false,
         isEndingSegment: true,
+        isContinuingSegment: false,
         isBeginningSegment: true
     },
     payload: {
@@ -64,6 +66,7 @@ const DECODED_PACKET_2 = {
         hasManagementOpcode: false,
         hasAckNumber: true,
         isEndingSegment: true,
+        isContinuingSegment: false,
         isBeginningSegment: true
     },
     payload: {
@@ -80,6 +83,7 @@ const DECODED_PACKET_3 = {
         hasManagementOpcode: false,
         hasAckNumber: true,
         isEndingSegment: true,
+        isContinuingSegment: false,
         isBeginningSegment: false
     },
     payload: {
@@ -96,6 +100,7 @@ const DECODED_PACKET_4 = {
         hasManagementOpcode: false,
         hasAckNumber: false,
         isEndingSegment: true,
+        isContinuingSegment: false,
         isBeginningSegment: true
     },
     payload: {
@@ -112,6 +117,7 @@ const DECODED_PACKET_5 = {
         hasManagementOpcode: false,
         hasAckNumber: true,
         isEndingSegment: true,
+        isContinuingSegment: false,
         isBeginningSegment: true
     },
     payload: {
@@ -128,6 +134,7 @@ const DECODED_PACKET_6 = {
         hasManagementOpcode: false,
         hasAckNumber: false,
         isEndingSegment: true,
+        isContinuingSegment: false,
         isBeginningSegment: false
     },
     payload: {
@@ -144,6 +151,7 @@ const DECODED_PACKET_7 = {
         hasManagementOpcode: false,
         hasAckNumber: false,
         isEndingSegment: true,
+        isContinuingSegment: false,
         isBeginningSegment: true
     },
     payload: {

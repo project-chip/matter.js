@@ -10,6 +10,7 @@ import { ByteArray, getPromiseResolver } from "@project-chip/matter.js/util";
 import { MatterCoreSpecificationV1_1 } from "@project-chip/matter.js/spec";
 import { BtpSessionHandler } from "@project-chip/matter.js/ble";
 import { Channel } from "@project-chip/matter.js/common";
+import { Time, Timer } from "@project-chip/matter.js/time";
 
 const logger = Logger.get("BlenoBleServer");
 
@@ -18,6 +19,8 @@ const MATTER_SERVICE_UUID = "fff6";
 const MATTER_C1_CHARACTERISTIC_UUID = "18EE2EF5-263D-4559-959F-4F9C429F9D11";
 const MATTER_C2_CHARACTERISTIC_UUID = "18EE2EF5-263D-4559-959F-4F9C429F9D12";
 const MATTER_C3_CHARACTERISTIC_UUID = "64630238-8772-45F2-B87D-748A83218F04";
+
+const BTP_CONN_RSP_TIMEOUT_MS = 5000; // timer starts when receives handshake request & waits for a subscription request on c2
 
 class BtpWriteCharacteristicC1 extends Bleno.Characteristic {
     constructor(
@@ -124,6 +127,7 @@ export class BlenoBleServer implements Channel<ByteArray> {
     private writeConformationResolver: ((value: void) => void) | undefined;
 
     private clientAddress: string | undefined;
+    private btpHandshakeTimeout: Timer;
 
     private readonly matterBleService = new BtpService(this);
 
@@ -182,6 +186,7 @@ export class BlenoBleServer implements Channel<ByteArray> {
         Bleno.on('servicesSet', (error) => {
             logger.debug(`servicesSet: ${error ? `error ${error}` : 'success'}`);
         });
+        this.btpHandshakeTimeout = Time.getTimer(BTP_CONN_RSP_TIMEOUT_MS, () => this.btpHandshakeTimeoutTriggered());
     }
 
     /**
@@ -199,6 +204,9 @@ export class BlenoBleServer implements Channel<ByteArray> {
         }
 
         if (data[0] === 0x65 && data[1] === 0x6c && data.length === 9) { // Check if the first two bytes and length match the Matter handshake
+
+            this.btpHandshakeTimeout.start(); // starts timer
+
             logger.info(`Received Matter handshake request: ${data.toString('hex')}, store until subscribe request comes in.`);
             this.latestHandshakePayload = data;
             // TODO Handle edge case where handshake comes with an already open BTP session (should never happen?)
@@ -225,6 +233,7 @@ export class BlenoBleServer implements Channel<ByteArray> {
         if (this.latestHandshakePayload === undefined) {
             throw new Error(`Subscription request received before handshake Request`);
         }
+        this.btpHandshakeTimeout.stop();
 
         this.btpSession = new BtpSessionHandler(
             Math.min(Bleno.mtu - 3, maxValueSize),
@@ -242,7 +251,7 @@ export class BlenoBleServer implements Channel<ByteArray> {
             // callback to disconnect the BLE connection
             () => this.close(),
 
-            // callback to forward decoded an de-assembled Matter messages to ExchangeManager
+            // callback to forward decoded and de-assembled Matter messages to ExchangeManager
             (data: ByteArray) => {
                 if (this.onMatterMessageListener === undefined) {
                     throw new Error(`No listener registered for Matter messages`);
@@ -308,7 +317,13 @@ export class BlenoBleServer implements Channel<ByteArray> {
         this.onMatterMessageListener = listener;
     }
 
+    btpHandshakeTimeoutTriggered() {
+            Bleno.disconnect();
+            throw new Error("Timeout for handshake subscribe request on C2");
+    }
+
     close() {
+        this.btpHandshakeTimeout.stop();
         Bleno.disconnect();
         this.btpSession?.close();
         this.btpSession = undefined;
