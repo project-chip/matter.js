@@ -107,7 +107,7 @@ export class BtpSessionHandler {
             version, attMtu, windowSize
         })}`);
 
-        const btpSession =  new BtpSessionHandler(
+        const btpSession = new BtpSessionHandler(
             version, fragmentSize, windowSize, writeBleCallback, disconnectBleCallback, handleMatterMessagePayload
         );
 

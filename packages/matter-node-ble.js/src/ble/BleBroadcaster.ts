@@ -26,7 +26,7 @@ export class BleBroadcaster implements InstanceBroadcaster {
         private readonly additionalAdvertisementData?: ByteArray
     ) { }
 
-    setCommissionMode(mode: number, { deviceName, deviceType, vendorId, productId, discriminator } : CommissioningModeInstanceData) {
+    setCommissionMode(mode: number, { deviceName, deviceType, vendorId, productId, discriminator }: CommissioningModeInstanceData) {
         if (mode !== 1) {
             logger.info(`skip BLE announce because of commissioning mode ${mode} ${deviceName} ${deviceType} ${vendorId.id} ${productId} ${discriminator}`);
             this.blenoServer.stopAdvertising();
