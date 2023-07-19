@@ -8,7 +8,6 @@ import { Merge } from "../util/Type.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { TlvSchema } from "../tlv/TlvSchema.js";
 import { TlvVoid } from "../tlv/TlvVoid.js";
-import { TlvFields, TlvObject, TypeFromFields } from "../tlv/TlvObject.js";
 import { AttributeId, TlvAttributeId } from "../datatype/AttributeId.js";
 import { EventId, TlvEventId } from "../datatype/EventId.js";
 import { CommandId, TlvCommandId } from "../datatype/CommandId.js";
@@ -18,6 +17,7 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 export const enum AccessLevel {
     View,
+    Operate,
     Manage,
     Administer,
 }
@@ -55,6 +55,10 @@ export interface ConditionalWritableAttribute<T, F extends BitSchema> extends Op
     isConditional: true,
 }
 
+export interface FabricScopedAttribute<T, F extends BitSchema> extends Attribute<T, F> {
+    fabricScoped: true
+}
+
 export interface WritableFabricScopedAttribute<T, F extends BitSchema> extends WritableAttribute<T, F> {
     fabricScoped: true
 }
@@ -68,6 +72,8 @@ export interface ConditionalWritableFabricScopedAttribute<T, F extends BitSchema
 }
 
 export interface FixedAttribute<T, F extends BitSchema> extends Attribute<T, F> { fixed: true }
+
+export interface WritableFixedAttribute<T, F extends BitSchema> extends WritableAttribute<T, F> { fixed: true }
 
 export interface OptionalFixedAttribute<T, F extends BitSchema> extends OptionalAttribute<T, F> { fixed: true }
 
@@ -239,6 +245,29 @@ export const ConditionalWritableAttribute = <T, V extends T, F extends BitSchema
     mandatoryIf,
 });
 
+export const FabricScopedAttribute = <T, V extends T, F extends BitSchema>(id: number, schema: TlvSchema<T>, {
+    scene = false,
+    persistent = true,
+    omitChanges = false,
+    default: conformanceValue,
+    readAcl = AccessLevel.View
+}: AttributeOptions<V> = {}): FabricScopedAttribute<T, F> => ({
+    id,
+    schema,
+    optional: false,
+    writable: false,
+    fixed: false,
+    scene,
+    persistent,
+    fabricScoped: true,
+    omitChanges,
+    default: conformanceValue,
+    readAcl,
+    isConditional: false,
+    optionalIf: [],
+    mandatoryIf: [],
+});
+
 export const WritableFabricScopedAttribute = <T, V extends T, F extends BitSchema>(id: number, schema: TlvSchema<T>, {
     scene = false,
     persistent = true,
@@ -327,6 +356,29 @@ export const FixedAttribute = <T, V extends T, F extends BitSchema>(id: number, 
     schema,
     optional: false,
     writable: false,
+    fixed: true,
+    scene,
+    persistent,
+    fabricScoped: false,
+    omitChanges,
+    default: conformanceValue,
+    readAcl,
+    isConditional: false,
+    optionalIf: [],
+    mandatoryIf: [],
+});
+
+export const WritableFixedAttribute = <T, V extends T, F extends BitSchema>(id: number, schema: TlvSchema<T>, {
+    scene = false,
+    persistent = false,
+    omitChanges = false,
+    default: conformanceValue,
+    readAcl = AccessLevel.View,
+}: AttributeOptions<V> = {}): FixedAttribute<T, F> => ({
+    id,
+    schema,
+    optional: false,
+    writable: true,
     fixed: true,
     scene,
     persistent,
@@ -503,9 +555,9 @@ export interface ConditionalEvent<T, F extends BitSchema> extends OptionalEvent<
     isConditional: true,
 }
 
-export const Event = <FT extends TlvFields, F extends BitSchema>(id: number, priority: EventPriority, data: FT = <FT>{}): Event<TypeFromFields<FT>, F> => ({
+export const Event = <T, F extends BitSchema>(id: number, priority: EventPriority, schema: TlvSchema<T>): Event<T, F> => ({
     id,
-    schema: TlvObject(data),
+    schema,
     priority,
     optional: false,
     isConditional: false,
@@ -513,9 +565,9 @@ export const Event = <FT extends TlvFields, F extends BitSchema>(id: number, pri
     mandatoryIf: [],
 });
 
-export const OptionalEvent = <FT extends TlvFields, F extends BitSchema>(id: number, priority: EventPriority, data: FT = <FT>{}): OptionalEvent<TypeFromFields<FT>, F> => ({
+export const OptionalEvent = <T, F extends BitSchema>(id: number, priority: EventPriority, schema: TlvSchema<T>): OptionalEvent<T, F> => ({
     id,
-    schema: TlvObject(data),
+    schema,
     priority,
     optional: true,
     isConditional: false,
@@ -523,17 +575,17 @@ export const OptionalEvent = <FT extends TlvFields, F extends BitSchema>(id: num
     mandatoryIf: [],
 });
 
-export const ConditionalEvent = <FT extends TlvFields, F extends BitSchema>(
+export const ConditionalEvent = <T, F extends BitSchema>(
     id: number,
     priority: EventPriority,
-    data: FT = <FT>{},
+    schema: TlvSchema<T>,
     {
         optionalIf = [],
         mandatoryIf = []
     }: ConditionalEventOptions<F>
-): ConditionalEvent<TypeFromFields<FT>, F> => ({
+): ConditionalEvent<T, F> => ({
     id,
-    schema: TlvObject(data),
+    schema,
     priority,
     optional: true,
     isConditional: true,

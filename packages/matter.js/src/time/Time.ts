@@ -4,10 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { InternalError } from "../common/InternalError.js";
+
 export type TimerCallback = () => Promise<any> | any;
 
 export abstract class Time {
-    static get: () => Time = () => { throw new Error("No provider configured"); };
+    static get: () => Time = () => DefaultTime
 
     abstract now(): Date;
     static readonly now = (): Date => Time.get().now();
@@ -24,6 +26,24 @@ export abstract class Time {
     static readonly getPeriodicTimer = (intervalMs: number, callback: TimerCallback): Timer => Time.get().getPeriodicTimer(intervalMs, callback);
 
     static readonly sleep = async (durationMs: number): Promise<void> => new Promise(resolve => Time.get().getTimer(durationMs, resolve).start());
+}
+
+const DefaultTime = new class extends Time {
+    now() {
+        return new Date();
+    }
+
+    nowMs() {
+        return this.now().getTime();
+    }
+
+    getTimer(): Timer {
+        throw new InternalError("Default time provider does not implement timers")
+    }
+
+    getPeriodicTimer() {
+        return this.getTimer();
+    }
 }
 
 export interface Timer {

@@ -114,36 +114,36 @@ const TlvNetworkInterface = TlvObject({
  * Indicates a change in the set of hardware faults currently detected by the Node.
  * @see {@link MatterCoreSpecificationV1_0} §11.11.9.1
  */
-const HardwareFaultChangeEventData = {
+const HardwareFaultChangeEventData = TlvObject({
     current: TlvField(0, TlvArray(TlvEnum<HardwareFault>(), { maxLength: 11 })),
     previous: TlvField(1, TlvArray(TlvEnum<HardwareFault>(), { maxLength: 11 })),
-};
+});
 
 /**
  * Indicates a change in the set of radio faults currently detectedby the Node.
  * @see {@link MatterCoreSpecificationV1_0} § 11.11.9.2
  */
-const RadioFaultChangeEventData = {
+const RadioFaultChangeEventData = TlvObject({
     current: TlvField(0, TlvArray(TlvEnum<HardwareFault>(), { maxLength: 7 })),
     previous: TlvField(1, TlvArray(TlvEnum<HardwareFault>(), { maxLength: 7 })),
-};
+});
 
 /**
  * Indicates a change in the set of network faults currently detected by the Node.
  * @see {@link MatterCoreSpecificationV1_0} § 11.11.9.3
  */
-const NetworkFaultChangeEventData = {
+const NetworkFaultChangeEventData = TlvObject({
     current: TlvField(0, TlvArray(TlvEnum<HardwareFault>(), { maxLength: 4 })),
     previous: TlvField(1, TlvArray(TlvEnum<HardwareFault>(), { maxLength: 4 })),
-};
+});
 
 /**
  * Indicates the reason that caused the device to start-up.
  * @see {@link MatterCoreSpecificationV1_0} § 11.11.7.4
  */
-const BootReasonEvent = {
+const BootReasonEvent = TlvObject({
     bootReason: TlvField(0, TlvEnum<BootReason>()),
-};
+});
 
 /**
  * Provides a means for certification tests to trigger some test-plan-specific events.

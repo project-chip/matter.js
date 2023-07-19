@@ -165,12 +165,12 @@ export const AccessControlClusterSchema = Cluster({
          * The cluster SHALL send AccessControlEntryChanged events whenever its ACL attribute data is changed by an
          * Administrator.
          */
-        accessControlEntryChanged: Event(0, EventPriority.Info, AccessChangeEvent(TlvAccessControlEntry)), /* readAcl: AccessLevel.Administer, fabricSensitive: true */
+        accessControlEntryChanged: Event(0, EventPriority.Info, TlvObject(AccessChangeEvent(TlvAccessControlEntry))), /* readAcl: AccessLevel.Administer, fabricSensitive: true */
 
         /**
          * The cluster SHALL send AccessControlExtensionChanged events whenever its extension attribute data is changed
          * by an Administrator.
          */
-        accessControlExtensionChanged: Event(1, EventPriority.Info, AccessChangeEvent(TlvAccessControlExtensionEntry)), /* readAcl: AccessLevel.Administer, fabricSensitive: true */
+        accessControlExtensionChanged: Event(1, EventPriority.Info, TlvObject(AccessChangeEvent(TlvAccessControlExtensionEntry))), /* readAcl: AccessLevel.Administer, fabricSensitive: true */
     },
 });

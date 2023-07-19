@@ -11,6 +11,15 @@
       "noUnusedLocals": true,
       "strictNullChecks": true
     },
-    "include": ["packages/**/*.ts"],
-    "exclude": ["packages/*/dist"]
+    "include": [
+        "packages/**/*.ts",
+        "tools/**/*.ts",
+        "models/**/*.ts"
+    ],
+    "exclude": [
+        "packages/*/dist",
+
+        // This is formatted like a table and should remain that way
+        "packages/matter.js/src/model/elements/Globals.ts"
+    ]
 }

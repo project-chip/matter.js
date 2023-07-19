@@ -141,6 +141,34 @@ describe("Logger", () => {
         });
     });
 
+    describe("nesting", () => {
+        it("nests once", () => {
+            Logger.nest(() => {
+                const line = logTestLine();
+                assert.ok(line);
+                assert.ok(line.log.match(/⎸ test/));
+            });
+        });
+
+        it("nests twice", () => {
+            Logger.nest(() => {
+                Logger.nest(() => {
+                    const line = logTestLine();
+                    assert.ok(line);
+                    assert.ok(line.log.match(/⎸ {3}test/));
+                });
+            });
+        });
+
+        it("unnests", () => {
+            // "true" is for eslint
+            Logger.nest(() => { true });
+            const line = logTestLine();
+            assert.ok(line);
+            assert.equal(line.log.indexOf("⎸"), -1);
+        })
+    })
+
     describe("plainFormat", () => {
         it("formats lines correctly", () => {
             const result = logTestLine();
