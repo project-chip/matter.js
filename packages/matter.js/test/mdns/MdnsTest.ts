@@ -21,9 +21,9 @@ import { Time } from "../../src/time/Time.js";
 import { TimeFake } from "../../src/time/TimeFake.js";
 import { VendorId } from "../../src/datatype/VendorId.js";
 import { Crypto } from "../../src/crypto/Crypto.js";
+import { singleton } from "../../src/util/Singleton.js";
 
-const fakeTime = new TimeFake(0);
-Time.get = () => fakeTime;
+Time.get = singleton(() => new TimeFake(0));
 
 Crypto.get = () => ({
     getRandomData: (length: number) => {
@@ -284,6 +284,7 @@ describe("MDNS Scanner and Broadcaster", () => {
 
     describe("integration", () => {
         it("the client directly returns server record if it has been announced before", async () => {
+            const fakeTime = Time.get() as TimeFake;
             let queryReceived = false;
             let dataWereSent = false;
             scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => {
@@ -307,8 +308,9 @@ describe("MDNS Scanner and Broadcaster", () => {
         });
 
         it("the client queries the server record if it has not been announced before", async () => {
-            const { promise: queryPromise, resolver } = await getPromiseResolver<ByteArray>();
-            broadcasterChannel.onData((_netInterface, _peerAddress, _peerPort, data) => resolver(data));
+            const fakeTime = Time.get() as TimeFake;
+            const sentData = new Array<ByteArray>();
+            scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => sentData.push(data));
 
             broadcaster.setFabrics(PORT, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
 
@@ -316,10 +318,9 @@ describe("MDNS Scanner and Broadcaster", () => {
 
             await fakeTime.yield(); // make sure responding promise is created
             await fakeTime.advanceTime(1); // Trigger timer to send query (0ms timer)
-            await fakeTime.yield(); // Make sure data were queried async
-            const query = await queryPromise; // make sure query was received async and processed
+            await fakeTime.yield(); // make sure responding promise is created
 
-            assert.deepEqual(DnsCodec.decode(query), {
+            assert.deepEqual(DnsCodec.decode(sentData[0]), {
                 "additionalRecords": [],
                 "answers": [],
                 "authorities": [],
@@ -328,8 +329,7 @@ describe("MDNS Scanner and Broadcaster", () => {
                     { "name": "0000000000000018-0000000000000001._matter._tcp.local", "recordClass": 1, "recordType": 33 }
                 ],
                 "transactionId": 0
-            }
-            );
+            });
 
             const result = await findPromise;
 
@@ -337,11 +337,10 @@ describe("MDNS Scanner and Broadcaster", () => {
         });
 
         it("the client queries the server record and get correct response also with multiple announced instances", async () => {
-            const { promise: queryPromise, resolver } = await getPromiseResolver<ByteArray[]>();
+            const fakeTime = Time.get() as TimeFake;
             const netData = new Array<ByteArray>();
             broadcasterChannel.onData((_netInterface, _peerAddress, _peerPort, data) => {
                 netData.push(data);
-                if (netData.length === 2) resolver(netData);
             });
 
             broadcaster.setCommissionMode(PORT, 1, {
@@ -358,9 +357,10 @@ describe("MDNS Scanner and Broadcaster", () => {
             await fakeTime.yield(); // make sure responding promise is created
             await fakeTime.advanceTime(1); // Trigger timer to send query (0ms timer)
             await fakeTime.yield(); // Make sure data were queried async
-            const networkData = await queryPromise; // make sure query was received async and processed
 
-            const query = DnsCodec.decode(networkData[0]);
+            assert.equal(netData.length, 3);
+
+            const query = DnsCodec.decode(netData[0]);
             assert.deepEqual(query, {
                 "additionalRecords": [],
                 "answers": [],
@@ -370,9 +370,28 @@ describe("MDNS Scanner and Broadcaster", () => {
                     { "name": "0000000000000018-0000000000000001._matter._tcp.local", "recordClass": 1, "recordType": 33 }
                 ],
                 "transactionId": 0
-            }
-            );
-            const response = DnsCodec.decode(networkData[1]);
+            });
+            const response2 = DnsCodec.decode(netData[1]);
+            assert.deepEqual(response2, {
+                "additionalRecords": [
+                    { "name": "_services._dns-sd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_matter._tcp.local" },
+                    { "name": "_services._dns-sd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_I0000000000000018._sub._matter._tcp.local" },
+                    { "name": "_matter._tcp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "0000000000000018-0000000000000001._matter._tcp.local" },
+                    { "name": "_I0000000000000018._sub._matter._tcp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "0000000000000018-0000000000000001._matter._tcp.local" },
+                    { "name": "0000000000000018-0000000000000001._matter._tcp.local", "recordClass": 1, "recordType": 16, "ttl": 120, "value": ["SII=5000", "SAI=300", "T=0"] },
+                    { "name": "00B0D063C2260000.local", "recordClass": 1, "recordType": 1, "ttl": 120, "value": "192.168.200.1" },
+                    { "name": "00B0D063C2260000.local", "recordClass": 1, "recordType": 28, "ttl": 120, "value": "fe80::e777:4f5e:c61e:7314" }
+                ],
+                "answers": [
+                    { "name": "0000000000000018-0000000000000001._matter._tcp.local", "recordClass": 1, "recordType": 33, "ttl": 120, "value": { "port": PORT2, "priority": 0, "target": "00B0D063C2260000.local", "weight": 0 } }
+                ],
+                "authorities": [],
+                "messageType": 33792,
+                "queries": [],
+                "transactionId": 0
+            });
+
+            const response = DnsCodec.decode(netData[2]);
             assert.deepEqual(response, {
                 "additionalRecords": [
                     { "name": "_services._dns-sd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_matter._tcp.local" },
@@ -390,15 +409,14 @@ describe("MDNS Scanner and Broadcaster", () => {
                 "messageType": 33792,
                 "queries": [],
                 "transactionId": 0
-            }
-            );
-
+            });
             const result = await findPromise;
 
             assert.deepEqual(result, [{ ip: `${SERVER_IPv6}%fakeInterface`, port: PORT2 }, { ip: SERVER_IPv4, port: PORT2 }]);
         });
 
         it("the client queries the server record and get correct response when announced before", async () => {
+            const fakeTime = Time.get() as TimeFake;
             let dataWereSent = false;
             let queryReceived = false;
             scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => {

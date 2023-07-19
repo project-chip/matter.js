@@ -60,7 +60,6 @@ export class MdnsServer {
         if (message === undefined) return; // The message cannot be parsed
         const { transactionId, messageType, queries } = message;
         if (messageType !== DnsMessageType.Query && messageType !== DnsMessageType.TruncatedQuery) return;
-
         for (const portRecords of records.values()) {
             const answers = queries.flatMap(query => this.queryRecords(query, portRecords));
             if (answers.length === 0) continue;

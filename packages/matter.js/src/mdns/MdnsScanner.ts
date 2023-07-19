@@ -85,6 +85,7 @@ export class MdnsScanner implements Scanner {
      * @private
      */
     private async sendQueries() {
+        console.log("QUERY SEND START");
         this.queryTimer?.stop();
         const allQueries = Array.from(this.activeAnnounceQueries.values());
         const queries = allQueries.flatMap(({ queries }) => queries);
@@ -93,6 +94,7 @@ export class MdnsScanner implements Scanner {
         this.queryTimer = Time.getTimer(this.nextAnnounceIntervalSeconds * 1000, () => this.sendQueries()).start();
 
         logger.debug(`Sending ${queries.length} query records for ${this.activeAnnounceQueries.size} queries with ${answers.length} known answers. Re-Announce in ${this.nextAnnounceIntervalSeconds} seconds`);
+        console.log(`Sending ${queries.length} query records for ${this.activeAnnounceQueries.size} queries with ${answers.length} known answers. Re-Announce in ${this.nextAnnounceIntervalSeconds} seconds`);
 
         const nextAnnounceInterval = this.nextAnnounceIntervalSeconds * 2;
         this.nextAnnounceIntervalSeconds = Math.min(nextAnnounceInterval, 60 * 60 /* 1 hour */);
@@ -147,6 +149,7 @@ export class MdnsScanner implements Scanner {
         }
 
         await this.multicastServer.send(queryMessage);
+        console.log("QUERY SEND END");
     }
 
     /**
