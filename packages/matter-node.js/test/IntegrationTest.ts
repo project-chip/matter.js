@@ -30,13 +30,15 @@ import { MatterServer, CommissioningServer, CommissioningController } from "@pro
 import { OnOffLightDevice } from "@project-chip/matter.js/device";
 import { InteractionClient, ClusterServer } from "@project-chip/matter.js/interaction";
 
-const SERVER_IP = "192.168.200.1";
+const SERVER_IPv6 = "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:cafe";
+const SERVER_IPv4 = "192.168.200.1";
 const SERVER_MAC = "00:B0:D0:63:C2:26";
-const CLIENT_IP = "192.168.200.2";
+const CLIENT_IPv6 = "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:beef";
+const CLIENT_IPv4 = "192.168.200.2";
 const CLIENT_MAC = "CA:FE:00:00:BE:EF";
 
-const serverNetwork = new NetworkFake(SERVER_MAC, [SERVER_IP]);
-const clientNetwork = new NetworkFake(CLIENT_MAC, [CLIENT_IP]);
+const serverNetwork = new NetworkFake(SERVER_MAC, [SERVER_IPv6, SERVER_IPv4]);
+const clientNetwork = new NetworkFake(CLIENT_MAC, [CLIENT_IPv6, CLIENT_IPv4]);
 
 const deviceName = "Matter end-to-end device";
 const deviceType = 257 /* Dimmable bulb */;
@@ -72,12 +74,12 @@ describe("Integration Test", () => {
 
         matterClient = new MatterServer(controllerStorageManager);
         commissioningController = new CommissioningController({
-            serverAddress: { ip: SERVER_IP, port: matterPort },
-            disableIpv4: false,
+            serverAddress: { ip: SERVER_IPv6, port: matterPort },
+            disableIpv4: true,
             longDiscriminator,
             passcode: setupPin,
             listeningAddressIpv4: "1.2.3.4",
-            listeningAddressIpv6: CLIENT_IP,
+            listeningAddressIpv6: CLIENT_IPv6,
             delayedPairing: true,
             commissioningOptions: {
                 regulatoryLocation: RegulatoryLocationType.Indoor,
@@ -96,7 +98,8 @@ describe("Integration Test", () => {
         commissioningServer = new CommissioningServer({
             port: matterPort,
             disableIpv4: true,
-            listeningAddressIpv6: SERVER_IP,
+            listeningAddressIpv6: SERVER_IPv6,
+            listeningAddressIpv4: SERVER_IPv4,
             deviceName,
             deviceType,
             passcode: setupPin,
@@ -136,8 +139,8 @@ describe("Integration Test", () => {
         matterServer.addCommissioningServer(commissioningServer);
 
         // override the mdns scanner to avoid the client to try to resolve the server's address
-        commissioningServer.setMdnsScanner(await MdnsScanner.create(SERVER_IP));
-        commissioningServer.setMdnsBroadcaster(await MdnsBroadcaster.create(SERVER_IP));
+        commissioningServer.setMdnsScanner(await MdnsScanner.create(SERVER_IPv6));
+        commissioningServer.setMdnsBroadcaster(await MdnsBroadcaster.create(SERVER_IPv6));
         await commissioningServer.advertise();
 
         assert.ok(onOffLightDeviceServer.getClusterServer(OnOffCluster));
@@ -174,7 +177,7 @@ describe("Integration Test", () => {
     describe("commission", () => {
         it("the client commissions a new device", async () => {
             // override the mdns scanner to avoid the client to try to resolve the server's address
-            commissioningController.setMdnsScanner(await MdnsScanner.create(CLIENT_IP));
+            commissioningController.setMdnsScanner(await MdnsScanner.create(CLIENT_IPv6));
             await commissioningController.connect();
 
             Network.get = () => { throw new Error("Network should not be requested post starting") };
