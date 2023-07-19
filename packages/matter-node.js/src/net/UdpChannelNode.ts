@@ -60,10 +60,10 @@ export class UdpChannelNode implements UdpChannel {
     ) { }
 
     onData(listener: (netInterface: string, peerAddress: string, peerPort: number, data: ByteArray) => void) {
-        const messageListener = (data: ByteArray, { host, port }: { host: string, port: number }) => {
-            const netInterface = this.netInterface ?? NetworkNode.getNetInterfaceForIp(host);
+        const messageListener = (data: ByteArray, { address, port }: dgram.RemoteInfo) => {
+            const netInterface = this.netInterface ?? NetworkNode.getNetInterfaceForIp(address);
             if (netInterface === undefined) return;
-            listener(netInterface, host, port, data);
+            listener(netInterface, address, port, data);
         };
 
         this.socket.on("message", messageListener);
