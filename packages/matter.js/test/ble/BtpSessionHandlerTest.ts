@@ -11,7 +11,7 @@ import { TimeFake } from "../../src/time/TimeFake.js";
 Time.get = () => new TimeFake(0);
 
 import { ByteArray } from "../../src/util/ByteArray.js";
-import { BtpSessionHandler } from "../../src/ble/BtpSessionHandler.js";
+import {BtpProtocolError, BtpSessionHandler} from "../../src/ble/BtpSessionHandler.js";
 import { getPromiseResolver } from "../../src/util/Promises.js";
 import { BtpCodec } from "../../src/codec/BtpCodec.js";
 
@@ -21,7 +21,7 @@ describe("BtpSessionHandler", () => {
             const handshakeRequest = ByteArray.fromHex("656c04000000b90006");
             const { promise: writeBlePromise, resolver } = await getPromiseResolver<ByteArray>();
 
-            new BtpSessionHandler(
+            await BtpSessionHandler.createFromHandshakeRequest(
                 100,
                 handshakeRequest,
                 async (dataToWrite) => {
@@ -44,7 +44,7 @@ describe("BtpSessionHandler", () => {
             const handshakeRequest = ByteArray.fromHex("656c04000000000006");
             const { promise: writeBlePromise, resolver } = await getPromiseResolver<ByteArray>();
 
-            new BtpSessionHandler(
+            await BtpSessionHandler.createFromHandshakeRequest(
                 100,
                 handshakeRequest,
                 async (dataToWrite) => {
@@ -67,7 +67,7 @@ describe("BtpSessionHandler", () => {
             const handshakeRequest = ByteArray.fromHex("656c04000000000006");
             const { promise: writeBlePromise, resolver } = await getPromiseResolver<ByteArray>();
 
-            new BtpSessionHandler(
+            await BtpSessionHandler.createFromHandshakeRequest(
                 undefined,
                 handshakeRequest,
                 async (dataToWrite) => {
@@ -83,7 +83,7 @@ describe("BtpSessionHandler", () => {
 
             const result = await writeBlePromise;
 
-            assert.deepEqual(result, ByteArray.fromHex("656c04140006"));
+            assert.deepEqual(result, ByteArray.fromHex("656c04170006"));
         });
 
         it("Client does not share the same supported BTP version", async () => {
@@ -91,8 +91,8 @@ describe("BtpSessionHandler", () => {
             const handshakeRequest = ByteArray.fromHex("656c05000000000006");
             const { promise: disconnectBlePromise, resolver: disconnectBleResolver } = await getPromiseResolver<void>();
 
-            try {
-                new BtpSessionHandler(
+            await assert.rejects(async () => {
+                await BtpSessionHandler.createFromHandshakeRequest(
                     100,
                     handshakeRequest,
                     () => {
@@ -107,9 +107,7 @@ describe("BtpSessionHandler", () => {
                 );
                 await disconnectBlePromise;
 
-            } catch (error) {
-                expect(error).toStrictEqual(new Error("No supported BTP version found in 5"));
-            }
+            }, BtpProtocolError, "No supported BTP version found in 5");
         });
     });
 
@@ -139,7 +137,7 @@ describe("BtpSessionHandler", () => {
 
             const handshakeRequest = ByteArray.fromHex("656c04000000b90006");
 
-            btpSessionHandler = new BtpSessionHandler(
+            btpSessionHandler = await BtpSessionHandler.createFromHandshakeRequest(
                 20,
                 handshakeRequest,
                 async (dataToWrite) => {
@@ -154,7 +152,7 @@ describe("BtpSessionHandler", () => {
             );
 
             const result = await localWriteBlePromise;
-            assert.deepEqual(result, ByteArray.fromHex("656c04140006"));
+            assert.deepEqual(result, ByteArray.fromHex("656c04170006"));
         });
 
         it("disconnect when incoming message is another handshake", async () => {

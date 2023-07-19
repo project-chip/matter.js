@@ -6,7 +6,9 @@
 
 import { BlenoBleServer } from "./BlenoBleServer";
 import { VendorId } from "@project-chip/matter.js/datatype";
-import { Broadcaster } from "@project-chip/matter.js/common";
+import {
+    InstanceBroadcaster, CommissionerInstanceData, CommissioningModeInstanceData
+} from "@project-chip/matter.js/common";
 import { Logger } from "@project-chip/matter.js/log";
 import { ByteArray, DataWriter, Endian } from "@project-chip/matter.js/util";
 
@@ -14,7 +16,7 @@ const logger = Logger.get('BleBroadcaster');
 
 const MATTER_SERVICE_UUID = 0xFFF6;
 
-export class BleBroadcaster implements Broadcaster {
+export class BleBroadcaster implements InstanceBroadcaster {
     private vendorId: VendorId | undefined;
     private productId: number | undefined;
     private discriminator: number | undefined;
@@ -24,7 +26,7 @@ export class BleBroadcaster implements Broadcaster {
         private readonly additionalAdvertisementData?: ByteArray
     ) { }
 
-    setCommissionMode(mode: number, deviceName: string, deviceType: number, vendorId: VendorId, productId: number, discriminator: number) {
+    setCommissionMode(mode: number, { deviceName, deviceType, vendorId, productId, discriminator } : CommissioningModeInstanceData) {
         if (mode !== 1) {
             logger.info(`skip BLE announce because of commissioning mode ${mode} ${deviceName} ${deviceType} ${vendorId.id} ${productId} ${discriminator}`);
             this.blenoServer.stopAdvertising();
@@ -38,8 +40,13 @@ export class BleBroadcaster implements Broadcaster {
     }
 
     setFabrics() {
+        logger.info(`skip BLE announce because announcing an operational device is not supported`);
         this.blenoServer.stopAdvertising();
         return; // Not needed because we only advertise un-commissioned devices
+    }
+
+    setCommissionerInfo(_commissionerData: CommissionerInstanceData) {
+        logger.error(`skip BLE announce because announcing a commissioner is not supported`);
     }
 
     announce() {

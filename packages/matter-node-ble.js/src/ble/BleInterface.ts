@@ -22,7 +22,11 @@ export class BleInterface implements TransportInterface {
     onData(listener: (socket: Channel<ByteArray>, data: ByteArray) => void): Listener {
         this.blenoServer.setMatterMessageListener(listener);
         return {
-            close: () => this.blenoServer.close()
+            close: () => this.close()
         }
+    }
+
+    close(): void {
+        this.blenoServer.close();
     }
 }

@@ -168,7 +168,7 @@ class Device {
             const pairingData = commissioningServer.getPairingCode({
                 ble: hasParameter("ble"),
                 softAccessPoint: false,
-                onIpNetwork: true
+                onIpNetwork: false
             });
 
             const { qrCode, qrPairingCode, manualPairingCode } = pairingData;

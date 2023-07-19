@@ -10,7 +10,7 @@ import { ByteArray, getPromiseResolver } from "@project-chip/matter.js/util";
 import { MatterCoreSpecificationV1_1 } from "@project-chip/matter.js/spec";
 import { BtpSessionHandler } from "@project-chip/matter.js/ble";
 import { Channel } from "@project-chip/matter.js/common";
-import { Time, Timer } from "@project-chip/matter.js/time";
+import { Time } from "@project-chip/matter.js/time";
 
 const logger = Logger.get("BlenoBleServer");
 
@@ -55,10 +55,10 @@ class BtpIndicateCharacteristicC2 extends Bleno.Characteristic {
         });
     }
 
-    override onSubscribe(maxValueSize: number, updateValueCallback: (data: Buffer) => void) {
+    override async onSubscribe(maxValueSize: number, updateValueCallback: (data: Buffer) => void) {
         logger.debug(`C2 subscribe ${maxValueSize}`);
 
-        this.bleServer.handleC2SubscribeRequest(maxValueSize, updateValueCallback);
+        await this.bleServer.handleC2SubscribeRequest(maxValueSize, updateValueCallback);
     }
 
     override onUnsubscribe() {
@@ -127,7 +127,7 @@ export class BlenoBleServer implements Channel<ByteArray> {
     private writeConformationResolver: ((value: void) => void) | undefined;
 
     private clientAddress: string | undefined;
-    private btpHandshakeTimeout: Timer;
+    private btpHandshakeTimeout = Time.getTimer(BTP_CONN_RSP_TIMEOUT_MS, () => this.btpHandshakeTimeoutTriggered());
 
     private readonly matterBleService = new BtpService(this);
 
@@ -186,7 +186,6 @@ export class BlenoBleServer implements Channel<ByteArray> {
         Bleno.on('servicesSet', (error) => {
             logger.debug(`servicesSet: ${error ? `error ${error}` : 'success'}`);
         });
-        this.btpHandshakeTimeout = Time.getTimer(BTP_CONN_RSP_TIMEOUT_MS, () => this.btpHandshakeTimeoutTriggered());
     }
 
     /**
@@ -204,7 +203,6 @@ export class BlenoBleServer implements Channel<ByteArray> {
         }
 
         if (data[0] === 0x65 && data[1] === 0x6c && data.length === 9) { // Check if the first two bytes and length match the Matter handshake
-
             this.btpHandshakeTimeout.start(); // starts timer
 
             logger.info(`Received Matter handshake request: ${data.toString('hex')}, store until subscribe request comes in.`);
@@ -229,13 +227,13 @@ export class BlenoBleServer implements Channel<ByteArray> {
      * @param maxValueSize
      * @param updateValueCallback
      */
-    handleC2SubscribeRequest(maxValueSize: number, updateValueCallback: (data: Buffer) => void) {
+    async handleC2SubscribeRequest(maxValueSize: number, updateValueCallback: (data: Buffer) => void) {
         if (this.latestHandshakePayload === undefined) {
             throw new Error(`Subscription request received before handshake Request`);
         }
         this.btpHandshakeTimeout.stop();
 
-        this.btpSession = new BtpSessionHandler(
+        this.btpSession = await BtpSessionHandler.createFromHandshakeRequest(
             Math.min(Bleno.mtu - 3, maxValueSize),
             this.latestHandshakePayload,
 
@@ -281,12 +279,11 @@ export class BlenoBleServer implements Channel<ByteArray> {
         if (offset > this.additionalAdvertisingData.length) {
             throw new Error(`Offset ${offset} is larger than data ${this.additionalAdvertisingData.length}`);
         } else {
-            return this.additionalAdvertisingData.slice(offset);
+            return this.additionalAdvertisingData.subarray(offset);
         }
     }
 
     advertise(advertiseData: ByteArray, additionalAdvertisementData?: ByteArray) {
-        //const advertiseBuffer = Buffer.alloc(15);
         this.advertisingData = Buffer.from(advertiseData.buffer);
 
         if (additionalAdvertisementData) {
@@ -318,8 +315,8 @@ export class BlenoBleServer implements Channel<ByteArray> {
     }
 
     btpHandshakeTimeoutTriggered() {
-            Bleno.disconnect();
-            throw new Error("Timeout for handshake subscribe request on C2");
+        Bleno.disconnect();
+        logger.error("Timeout for handshake subscribe request on C2 reached, disconnecting.");
     }
 
     close() {

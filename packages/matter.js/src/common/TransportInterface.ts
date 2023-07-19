@@ -13,4 +13,5 @@ export interface Listener {
 
 export interface TransportInterface {
     onData(listener: (socket: Channel<ByteArray>, data: ByteArray) => void): Listener;
+    close(): void;
 }
