@@ -54,7 +54,9 @@ export const GeneralCommissioningClusterHandler: (options?: {
                     debugText: `Country code change not allowed: ${countryCode}`
                 };
             }
-            basicInformationCluster.setLocationAttribute(countryCode);
+            if (countryCode !== "XX") {
+                basicInformationCluster.setLocationAttribute(countryCode);
+            }
         }
 
         // Check and handle regulatory config for LocationCapability
@@ -67,7 +69,7 @@ export const GeneralCommissioningClusterHandler: (options?: {
                 validValues = [RegulatoryLocationType.Indoor];
                 break;
             case (RegulatoryLocationType.IndoorOutdoor):
-                validValues = [RegulatoryLocationType.Indoor, RegulatoryLocationType.Outdoor];
+                validValues = [RegulatoryLocationType.Indoor, RegulatoryLocationType.Outdoor, RegulatoryLocationType.IndoorOutdoor];
                 break;
             default:
                 return { errorCode: CommissioningError.ValueOutsideRange, debugText: `Invalid regulatory location: ${newRegulatoryConfig === RegulatoryLocationType.Indoor ? "Indoor" : "Outdoor"}` };
