@@ -197,15 +197,15 @@ export const GeneralDiagnosticsClusterSchema = Cluster({
     /** @see {@link MatterCoreSpecificationV1_0} § 11.11.9 */
     events: {
         /** Indicates a change in the set of hardware faults currently detected by the Node. */
-        hardwareFaultChange: OptionalEvent(0, EventPriority.Critical, TlvHardwareFaultChangeEventData),
+        hardwareFaultChange: OptionalEvent(0, EventPriority.Critical, TlvObject(TlvHardwareFaultChangeEventData)),
 
         /** Indicates a change in the set of radio faults currently detected by the Node. */
-        radioFaultChange: OptionalEvent(1, EventPriority.Critical, TlvRadioFaultChangeEventData),
+        radioFaultChange: OptionalEvent(1, EventPriority.Critical, TlvObject(TlvRadioFaultChangeEventData)),
 
         /** Indicates a change in the set of network faults currently detected by the Node. */
-        networkFaultChange: OptionalEvent(2, EventPriority.Critical, TlvNetworkFaultChangeEventData),
+        networkFaultChange: OptionalEvent(2, EventPriority.Critical, TlvObject(TlvNetworkFaultChangeEventData)),
 
         /** Indicate the reason that caused the device to start-up. */
-        bootReason: Event(3, EventPriority.Critical, TlvBootReasonEvent),
+        bootReason: Event(3, EventPriority.Critical, TlvObject(TlvBootReasonEvent)),
     }
 });

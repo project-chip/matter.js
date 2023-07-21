@@ -15,7 +15,7 @@ import { StatusCode, TlvAttributePath } from "./InteractionProtocol.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { FixedAttributeServer } from "../../cluster/index.js";
+import { FixedAttributeServer } from "../../cluster/server/AttributeServer.js";
 
 const logger = Logger.get("SubscriptionHandler");
 

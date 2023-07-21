@@ -6,9 +6,9 @@
 
 import { TlvSchema } from "../../tlv/TlvSchema.js";
 import { Endpoint } from "../../device/Endpoint.js";
-import { Time } from "../../time/index.js";
 import { EventPriority } from "../Cluster.js";
 import { EventData } from "../../protocol/interaction/EventHandler.js";
+import { Time } from "../../time/Time.js";
 
 export class EventServer<T> {
     private eventList = new Array<EventData<T>>();

@@ -12,9 +12,10 @@ import { TlvString, TlvString256max, TlvString32max, TlvString64max } from "../t
 import { TlvVendorId } from "../datatype/VendorId.js";
 import { TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
-import { TlvField } from "../tlv/TlvObject.js";
+import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvFabricIndex } from "../datatype/FabricIndex.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvNoArguments } from "../tlv/TlvNoArguments.js";
 
 /**
  * ====================== IMPORTANT INFORMATION ======================
@@ -92,15 +93,15 @@ export const BridgedDeviceBasicInformationCluster = Cluster({
     /** @see {@link MatterCoreSpecificationV1_0} § 11.1.6.5 */
     events: {
         /** First event fired as soon as reasonable after completing a boot or reboot process. */
-        startUp: OptionalEvent(0, EventPriority.Critical, { softwareVersion: TlvField(0, TlvUInt32) }),
+        startUp: OptionalEvent(0, EventPriority.Critical, TlvObject({ softwareVersion: TlvField(0, TlvUInt32) })),
 
         /** Last event fired prior to any orderly shutdown sequence on a best-effort basis. */
-        shutDown: OptionalEvent(1, EventPriority.Critical),
+        shutDown: OptionalEvent(1, EventPriority.Critical, TlvNoArguments),
 
         /** Fired prior to permanently leaving a given Fabric. */
-        leave: OptionalEvent(2, EventPriority.Info, { fabricIndex: TlvField(0, TlvFabricIndex) }),
+        leave: OptionalEvent(2, EventPriority.Info, TlvObject({ fabricIndex: TlvField(0, TlvFabricIndex) })),
 
         /** Fired when there is a change in the {@link BasicInformationCluster.attributes.reachable reachable} attribute */
-        reachableChanged: Event(3, EventPriority.Info, { reachableNewValue: TlvField(0, TlvBoolean) }),
+        reachableChanged: Event(3, EventPriority.Info, TlvObject({ reachableNewValue: TlvField(0, TlvBoolean) })),
     },
 });

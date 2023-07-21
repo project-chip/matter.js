@@ -59,7 +59,27 @@
             {
                 "checkLoops": false
             }
-        ]
+        ],
+
+        // Namespaces are the only way to nest types and merge with some
+        // declarations.  IOW they have uses beyond simple package structure
+        // which error verbiage indicates is the purpose of the test
+        "@typescript-eslint/no-namespace": "off",
+
+        // Cannot nest functions within namespaces with this on
+        "no-inner-declarations": "off",
+
+        // Blocks are the only way to have case-specific variables defined.
+        // Alternative is a bunch of lets for all possible variables for all
+        // cases above the switch.  Which sucks
+        "no-case-declarations": "off",
+
+        // Metaprogramming is impossible with this on
+        "@typescript-eslint/no-implied-eval": "off",
+
+        // I mean, I understand why this rule exists, but sometimes you need to
+        // assign "this" to a variable (see e.g. cd method in github.ts)
+        "@typescript-eslint/no-this-alias": "off"
     },
     "settings": {
         "import/extensions": [".ts"],
