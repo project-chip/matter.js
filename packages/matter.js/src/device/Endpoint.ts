@@ -17,8 +17,9 @@ import { FixedLabelCluster, UserLabelCluster } from "../cluster/LabelCluster.js"
 import { ClusterClientObj } from "../cluster/client/ClusterClient.js";
 import { ClusterServerObj, ClusterServerObjForCluster } from "../cluster/server/ClusterServer.js";
 import { InteractionClient } from "../protocol/interaction/InteractionClient.js";
-import { AllClustersMap, BridgedDeviceBasicInformationCluster } from "../cluster/index.js";
 import { BasicInformationCluster } from "../cluster/BasicInformationCluster.js";
+import { BridgedDeviceBasicInformationCluster } from "../cluster/BridgedDeviceBasicInformationCluster.js";
+import { AllClustersMap } from "../cluster/ClusterHelper.js";
 
 export interface EndpointOptions {
     endpointId?: number;

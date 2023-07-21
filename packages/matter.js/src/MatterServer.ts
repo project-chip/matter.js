@@ -9,6 +9,9 @@ import { MatterNode } from "./MatterNode.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { CommissioningController } from "./CommissioningController.js";
+import { Logger } from "./log/Logger.js";
+
+const logger = Logger.get("MatterServer");
 
 // TODO Move Mdns instances internally
 // TODO enhance storage manager to support multiple nodes
@@ -20,10 +23,13 @@ export type NodeOptions = {
 
 /**
  * Main Matter server class that represents the process on the host allowing to commission and pair multiple devices
- * by reusing MDNS scanner and Broadcaster
+ * by reusing MDNS scanner and broadcaster
  */
 export class MatterServer {
     private readonly nodes: MatterNode[] = [];
+
+    private mdnsScanner?: MdnsScanner;
+    private mdnsBroadcaster?: MdnsBroadcaster;
 
     /**
      * Create a new Matter server instance
@@ -44,21 +50,18 @@ export class MatterServer {
      * @param nodeOptions Optional options for the node (e.g. unique node id)
      */
     addCommissioningServer(commissioningServer: CommissioningServer, nodeOptions?: NodeOptions) {
-        if (this.nodes.length > 0) {
-            throw new Error("Only one node is allowed for now");
-        }
-
+        // TODO move port handling completely to MatterServer
         const portCheckMap = new Map<number, boolean>();
         for (const node of this.nodes) {
-            if (node instanceof CommissioningServer) {
-                const nodePort = node.getPort();
-                if (portCheckMap.has(nodePort)) {
-                    throw new Error(`Port ${nodePort} is already in use by other node`);
-                }
-                portCheckMap.set(nodePort, true);
+            const nodePort = node.getPort();
+            if (nodePort === undefined) continue;
+            if (portCheckMap.has(nodePort)) {
+                throw new Error(`Port ${nodePort} is already in use by other node`);
             }
+            portCheckMap.set(nodePort, true);
         }
         commissioningServer.setStorage(this.storageManager.createContext(nodeOptions?.uniqueNodeId ?? this.nodes.length.toString()));
+        this.prepareNode(commissioningServer);
         this.nodes.push(commissioningServer);
     }
 
@@ -69,11 +72,8 @@ export class MatterServer {
      * @param nodeOptions Optional options for the node (e.g. unique node id)
      */
     addCommissioningController(commissioningController: CommissioningController, nodeOptions?: NodeOptions) {
-        if (this.nodes.length > 0) {
-            throw new Error("Only one node is allowed for now");
-        }
-
         commissioningController.setStorage(this.storageManager.createContext(nodeOptions?.uniqueNodeId ?? this.nodes.length.toString()));
+        this.prepareNode(commissioningController);
         this.nodes.push(commissioningController);
     }
 
@@ -82,21 +82,26 @@ export class MatterServer {
      * be announced/paired immediately.
      */
     async start() {
+        if (this.mdnsBroadcaster === undefined) {
+            this.mdnsBroadcaster = await MdnsBroadcaster.create(this.mdnsAnnounceInterface);
+        }
+        if (this.mdnsScanner === undefined) {
+            this.mdnsScanner = await MdnsScanner.create();
+        }
         // TODO the mdns classes will later be in this class and assigned differently!!
         for (const node of this.nodes) {
-            if (node instanceof CommissioningServer) {
-                node.setMdnsBroadcaster(await MdnsBroadcaster.create(this.mdnsAnnounceInterface));
-                node.setMdnsScanner(await MdnsScanner.create());
-                if (!node.delayedAnnouncement) {
-                    await node.advertise();
-                }
-            } else if (node instanceof CommissioningController) {
-                node.setMdnsScanner(await MdnsScanner.create());
-                if (!node.delayedPairing) {
-                    await node.connect();
-                }
-            }
+            this.prepareNode(node);
+            await node.start();
         }
+    }
+
+    private prepareNode(node: MatterNode) {
+        if (this.mdnsBroadcaster === undefined || this.mdnsScanner === undefined) {
+            logger.debug("Mdns instances not yet created, delaying node preparation");
+            return;
+        }
+        node.setMdnsBroadcaster(this.mdnsBroadcaster);
+        node.setMdnsScanner(this.mdnsScanner);
     }
 
     /**
@@ -106,6 +111,8 @@ export class MatterServer {
         for (const node of this.nodes) {
             await node.close();
         }
+        this.mdnsBroadcaster?.close();
+        this.mdnsScanner?.close();
     }
 
 }

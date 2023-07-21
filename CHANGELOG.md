@@ -26,13 +26,16 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Enhance: Added possibility to define conditional cluster attribute/Command/event definitions and introduce runtime checking for these. Part of Cluster Structure rework still WIP
   * Enhance: (@vves) Add Window Covering Cluster definition  
   * Enhance: Split up and corrected PowerSource and PressureMeasurement Cluster based on Matter 1.1 Specs
+  * Enhance: Detailed cluster data model and related logic
+  * Enhance: Generate all clusters from Matter 1.1 specification and CHIP v1.1-branch
   * Fix: Added missing PulseWidthModulationLevelControlCluster to AllCLusters
   * Fix Typing of Commands in ClusterClient if no commands were present
-  * Fix: Fix equality checks in Attribute servers to check deeper than just === (and introduce new util method isDeepEqual)
-  * Fix: Make sure an error received from sending subscription seed data reports is not bubbling up and activate subscription after successful seeding
+  * Fix: Fixes equality checks in Attribute servers to check deeper than just === (and introduce new util method isDeepEqual)
+  * Fix: Makes sure an error received from sending subscription seed data reports is not bubbling up and activate subscription after successful seeding
   * Fix: Allows Node.js Buffer objects to be persisted to storage as a Uint8Arrays that they subclass
-  * Fix: Fix a Subscription timer duplication issue and collect attribute changes within a 50ms window to reduce the number of subscription messages
-  * Fix: Return correct Error-Status for Read-/Write-Requests
+  * Fix: Fixes a Subscription timer duplication issue and collect attribute changes within a 50ms window to reduce the number of subscription messages
+  * Fix: Returns correct Error-Status for Read-/Write-Requests
+  * Fix: Fixes TLV Encoding for strings with UTF8 relevant characters
   * Refactor: Refactor Endpoint structuring and determination to allow dynamic and updating structures
 * matter.js API:
   * Breaking: 
@@ -42,7 +45,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Deprecation: The classes MatterDevice and MatterController are deprecated to be used externally to the library and will be removed in later versions.
   * Feature: Enhance Storage system to allow to create subcontext stores to allow better separation of data
   * Feature: Allow to also remove devices from Aggregators
-  * Feature: Optionally allow to define discovery capabilities when generating Pairing codee 
+  * Feature: Optionally allow to define discovery capabilities when generating Pairing code
 * Reference implementation/Examples:
   * Breaking: The storage key structure got changed to allow multi node operations within one process. This requires to change the storage key structure and to migrate or reset the storage.
     * Migration: prepend any storage key except Device.* and Controller.* with "0." in the filename

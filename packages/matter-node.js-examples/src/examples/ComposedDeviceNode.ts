@@ -135,7 +135,11 @@ class BridgedDevice {
         for (let i = 1; i <= numDevices; i++) {
             const onOffDevice = getParameter(`type${i}`) === "socket" ? new OnOffPluginUnitDevice() : new OnOffLightDevice();
             onOffDevice.addFixedLabel("orientation", getParameter(`orientation${i}`) ?? `orientation ${i}`);
+
             onOffDevice.addOnOffListener(on => commandExecutor(on ? `on${i}` : `off${i}`)?.());
+            onOffDevice.addCommandHandler("identify", async ({ request: { identifyTime } }) =>
+                console.log(`Identify called for OnOffDevice ${onOffDevice.name} with id: ${i} and identifyTime: ${identifyTime}`));
+
             commissioningServer.addDevice(onOffDevice);
         }
 

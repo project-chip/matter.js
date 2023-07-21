@@ -356,9 +356,9 @@ export const ActionsCluster = Cluster({
     },
     events: {
         /** This event shall be generated when there is a change in the Status of an ActionID. */
-        stateChanged: Event(0, EventPriority.Info, StateChangedEvent),
+        stateChanged: Event(0, EventPriority.Info, TlvObject(StateChangedEvent)),
 
         /** This event shall be generated when there is some error which prevents the action from its normal planned execution. */
-        actionFailed: Event(1, EventPriority.Info, ActionFailedEvent),
+        actionFailed: Event(1, EventPriority.Info, TlvObject(ActionFailedEvent)),
     },
 });

@@ -20,8 +20,8 @@ export class SimulatedNetwork {
 
     private readonly listenersMap = new Map<string, Array<Listener>>();
 
-    onUdpData(address: string | undefined, port: number, listener: Listener): NetListener {
-        const ipPort = `${address ?? "*"}:${port}`;
+    onUdpData(host: string | undefined, port: number, listener: Listener): NetListener {
+        const ipPort = `${host ?? "*"}:${port}`;
         let listeners = this.listenersMap.get(ipPort);
         if (listeners === undefined) {
             listeners = new Array<Listener>();
@@ -29,12 +29,12 @@ export class SimulatedNetwork {
         }
         listeners.push(listener);
         return {
-            close: () => this.offUdpData(address, port, listener),
+            close: () => this.offUdpData(host, port, listener),
         }
     }
 
-    private offUdpData(address: string | undefined, port: number, listenerToRemove: Listener) {
-        const ipPort = `${address ?? "*"}:${port}`;
+    private offUdpData(host: string | undefined, port: number, listenerToRemove: Listener) {
+        const ipPort = `${host ?? "*"}:${port}`;
         const listeners = this.listenersMap.get(ipPort);
         if (listeners === undefined) return;
         const newListeners = listeners.filter(listener => listener !== listenerToRemove);

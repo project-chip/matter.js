@@ -1,0 +1,4 @@
+src/models/spec.ts linguist-generated=true
+src/models/chip.ts linguist-generated=true
+src/model/standard/elements/*.ts linguist-generated=true
+src/cluster/definitions/*.ts linguist-generated=true

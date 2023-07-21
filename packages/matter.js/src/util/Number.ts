@@ -6,6 +6,7 @@
 
 export const UINT8_MAX = 0xFF;
 export const UINT16_MAX = 0xFFFF;
+export const UINT24_MAX = 0xFFFFFF;
 export const UINT32_MAX = 0xFFFFFFFF;
 export const UINT64_MAX = BigInt("18446744073709551615");
 

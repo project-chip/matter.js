@@ -58,29 +58,24 @@ class ControllerNode {
          */
 
         const controllerStorage = storageManager.createContext("Controller");
-        const ip = getParameter("ip") ?? controllerStorage.get<string>("ip", "");
-        if (ip === "") throw new Error("Please specify the IP of the device to commission with -ip");
-        const port = getIntParameter("port") ?? controllerStorage.get("port", 5540);
+        const ip = controllerStorage.has("ip") ? controllerStorage.get<string>("ip") : getParameter("ip");
+        const port = controllerStorage.has("port") ? controllerStorage.get<number>("port") : getIntParameter("port");
 
         const pairingCode = getParameter("pairingcode");
-        let discriminator, setupPin;
+        let longDiscriminator, setupPin, shortDiscriminator;
         if (pairingCode !== undefined) {
             const pairingCodeCodec = ManualPairingCodeCodec.decode(pairingCode);
-            discriminator = pairingCodeCodec.shortDiscriminator;
+            shortDiscriminator = pairingCodeCodec.shortDiscriminator;
+            longDiscriminator = undefined;
             setupPin = pairingCodeCodec.passcode;
         } else {
-            discriminator = getIntParameter("discriminator") ?? controllerStorage.get("discriminator", 3840);
-            if (discriminator > 4095) throw new Error("Discriminator value must be less than 4096");
+            longDiscriminator = getIntParameter("longDiscriminator") ?? controllerStorage.get("longDiscriminator", 3840);
+            if (longDiscriminator > 4095) throw new Error("Discriminator value must be less than 4096");
             setupPin = getIntParameter("pin") ?? controllerStorage.get("pin", 20202021);
         }
-        if (discriminator === undefined) {
-            throw new Error("Please specify the discriminator of the device to commission with -discriminator or provide a valid passcode with -passcode");
+        if ((shortDiscriminator === undefined && longDiscriminator === undefined) || setupPin === undefined) {
+            throw new Error("Please specify the longDiscriminator of the device to commission with -longDiscriminator or provide a valid passcode with -passcode");
         }
-
-        controllerStorage.set("ip", ip);
-        controllerStorage.set("port", port);
-        controllerStorage.set("discriminator", discriminator);
-        controllerStorage.set("pin", setupPin);
 
         /**
          * Create Matter Server and Controller Node
@@ -97,9 +92,9 @@ class ControllerNode {
 
         const matterClient = new MatterServer(storageManager);
         const commissioningController = new CommissioningController({
-            ip,
-            port,
-            discriminator,
+            serverAddress: (ip !== undefined && port !== undefined) ? { ip, port } : undefined,
+            longDiscriminator,
+            shortDiscriminator,
             passcode: setupPin,
             delayedPairing: true,
         });
@@ -119,6 +114,16 @@ class ControllerNode {
          */
         try {
             await commissioningController.connect();
+
+            if (commissioningController.serverAddress !== undefined) {
+                const { ip, port } = commissioningController.serverAddress;
+                controllerStorage.set("ip", ip);
+                controllerStorage.set("port", port);
+            }
+            if (longDiscriminator !== undefined) {
+                controllerStorage.set("longDiscriminator", longDiscriminator);
+            }
+            controllerStorage.set("pin", setupPin);
 
             // Important: This is a temporary API to proof the methods working and this will change soon and is NOT stable!
             // It is provided to proof the concept
@@ -163,18 +168,21 @@ class ControllerNode {
 
                 const onOff = devices[0].getClusterClient(OnOffCluster);
                 if (onOff !== undefined) {
-                    /*
                     let onOffStatus = await onOff.getOnOffAttribute();
+                    console.log("onOffStatus", onOffStatus);
                     // read data every minute to keep up the connection to show the subscription is working
                     setInterval(() => {
-                        onOff.toggle().then(() => onOffStatus = !onOffStatus).catch(error => logger.error(error));
+                        onOff.toggle().then(() => {
+                            onOffStatus = !onOffStatus;
+                            console.log("onOffStatus", onOffStatus);
+                        }).catch(error => logger.error(error));
                     }, 60000);
-                    */
                 }
             }
 
         } finally {
-            await matterClient.close(); // Comment out when subscribes are used, else the connection will be closed
+            //await matterClient.close(); // Comment out when subscribes are used, else the connection will be closed
+            setTimeout(() => process.exit(0), 100000);
         }
     }
 }

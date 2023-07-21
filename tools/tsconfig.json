@@ -1,0 +1,22 @@
+{
+  "extends": "../packages/matter.js/tsconfig.json",
+  
+  "compilerOptions": {
+    "target": "es2018",
+    "composite": false,
+
+    "paths": {
+      "#util/*": [ "./tools/util/*" ],
+      "#models/*": [ "./links/models/*" ],
+      "#matter.js/*": [ "./links/matter.js/src/*" ]
+    }
+  },
+
+  "ts-node": {
+    "experimentalResolver": true
+  },
+
+  "include": [
+    "**/*.ts"
+  ]
+}

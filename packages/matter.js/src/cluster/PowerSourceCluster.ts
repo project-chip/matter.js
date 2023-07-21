@@ -9,7 +9,7 @@ import {
     ClusterExtend
 } from "./Cluster.js";
 import { BitFlag } from "../schema/BitmapSchema.js";
-import { TlvField } from "../tlv/TlvObject.js";
+import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { TlvEnum, TlvUInt16, TlvUInt32, TlvUInt8 } from "../tlv/TlvNumber.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvNullable } from "../tlv/TlvNullable.js";
@@ -275,25 +275,25 @@ export const enum BatApprovedChemistryEnum {
 }
 
 /** @see {@link MatterCoreSpecificationV1_1} § 11.7.6.2 Table 99 */
-const WiredFaultChangeEvent = {
+const WiredFaultChangeEvent = TlvObject({
     /** SHALL indicate a change in the set of wired faults  */
     current: TlvField(0, TlvArray(TlvEnum<WiredFaultEnum>(), { maxLength: 8 })),
     previous: TlvField(1, TlvArray(TlvEnum<WiredFaultEnum>(), { maxLength: 8 })),
-};
+});
 
 /** @see {@link MatterCoreSpecificationV1_1} § 11.7.6.2 Table 100 */
-const BatFaultChangeEvent = {
+const BatFaultChangeEvent = TlvObject({
     /** SHALL indicate a change in the set of battery faults */
     current: TlvField(0, TlvArray(TlvEnum<BatFaultEnum>(), { maxLength: 8 })),
     previous: TlvField(1, TlvArray(TlvEnum<BatFaultEnum>(), { maxLength: 8 })),
-};
+});
 
 /** @see {@link MatterCoreSpecificationV1_1} § 11.7.6.2 Table 101 */
-const BatChargeFaultChangeEvent = {
+const BatChargeFaultChangeEvent = TlvObject({
     /**  SHALL indicate a change in the set of charge faults */
     current: TlvField(0, TlvArray(TlvEnum<BatChargeFaultEnum>(), { maxLength: 16 })),
     previous: TlvField(1, TlvArray(TlvEnum<BatChargeFaultEnum>(), { maxLength: 16 })),
-};
+});
 
 
 const ReplaceableAttributes = {
