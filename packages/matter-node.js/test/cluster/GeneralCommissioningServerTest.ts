@@ -105,7 +105,7 @@ describe("GeneralCommissioning Server test", () => {
             assert.deepEqual(result, { code: 0, response: { debugText: "", errorCode: CommissioningError.Ok }, responseId: 3 });
             assert.deepEqual(generalCommissioningServer!.getRegulatoryConfigAttribute(), RegulatoryLocationType.Indoor);
             assert.deepEqual(generalCommissioningServer!.getBreadcrumbAttribute(), BigInt(4));
-            assert.deepEqual(basicInformationServer!.getLocationAttribute(), "XX");
+            assert.deepEqual(basicInformationServer!.getLocationAttribute(), "CA");
         });
     });
 
