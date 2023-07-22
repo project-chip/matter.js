@@ -13,7 +13,8 @@ import {
     ExtensibleCluster,
     validateFeatureSelection,
     extendCluster,
-    ClusterForBaseCluster
+    ClusterForBaseCluster,
+    AsConditional
 } from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import {
@@ -594,6 +595,10 @@ export type TimeSyncExtension<SF extends TypeFromPartialBitSchema<typeof TimeSyn
     & (SF extends { timeZone: true } ? typeof TimeZoneComponent : {})
     & (SF extends { ntpServer: true } ? typeof NtpServerComponent : {});
 
+const NTPC = { ntpClient: true };
+const TZ = { timeZone: true };
+const NTPS = { ntpServer: true };
+
 /**
  * This cluster supports all TimeSync features. It may support illegal feature combinations.
  *
@@ -601,7 +606,25 @@ export type TimeSyncExtension<SF extends TypeFromPartialBitSchema<typeof TimeSyn
  * legal per the Matter specification.
  */
 export const TimeSyncComplete = Cluster({
-    ...TimeSyncCluster,
-    attributes: { ...NtpClientComponent.attributes, ...TimeZoneComponent.attributes, ...NtpServerComponent.attributes },
-    events: { ...TimeZoneComponent.events }
+    id: TimeSyncCluster.id,
+    name: TimeSyncCluster.name,
+    revision: TimeSyncCluster.revision,
+    features: TimeSyncCluster.features,
+
+    attributes: {
+        ...TimeSyncCluster.attributes,
+        defaultNtp: AsConditional(NtpClientComponent.attributes.defaultNtp, { mandatoryIf: [NTPC] }),
+        timeZone: AsConditional(TimeZoneComponent.attributes.timeZone, { mandatoryIf: [TZ] }),
+        dstOffset: AsConditional(TimeZoneComponent.attributes.dstOffset, { mandatoryIf: [TZ] }),
+        localTime: AsConditional(TimeZoneComponent.attributes.localTime, { mandatoryIf: [TZ] }),
+        timeZoneDatabase: AsConditional(TimeZoneComponent.attributes.timeZoneDatabase, { mandatoryIf: [TZ] }),
+        ntpServerPort: AsConditional(NtpServerComponent.attributes.ntpServerPort, { mandatoryIf: [NTPS] })
+    },
+
+    commands: TimeSyncCluster.commands,
+    events: {
+        dstTableEmpty: AsConditional(TimeZoneComponent.events.dstTableEmpty, { mandatoryIf: [TZ] }),
+        dstStatus: AsConditional(TimeZoneComponent.events.dstStatus, { mandatoryIf: [TZ] }),
+        timeZoneStatus: AsConditional(TimeZoneComponent.events.timeZoneStatus, { mandatoryIf: [TZ] })
+    }
 });

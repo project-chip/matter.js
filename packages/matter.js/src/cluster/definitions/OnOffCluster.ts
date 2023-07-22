@@ -7,7 +7,14 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BaseClusterComponent, ClusterComponent, ExtensibleCluster, validateFeatureSelection, ClusterForBaseCluster } from "../../cluster/ClusterFactory.js";
+import {
+    BaseClusterComponent,
+    ClusterComponent,
+    ExtensibleCluster,
+    validateFeatureSelection,
+    ClusterForBaseCluster,
+    AsConditional
+} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitField, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { Attribute, Command, TlvNoResponse, WritableAttribute, AccessLevel, Cluster } from "../../cluster/Cluster.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
@@ -300,6 +307,7 @@ export type OnOffExtension<SF extends TypeFromPartialBitSchema<typeof OnOffBase.
     ClusterForBaseCluster<typeof OnOffBase, SF>
     & { supportedFeatures: SF }
     & (SF extends { levelControlForLighting: true } ? typeof LevelControlForLightingComponent : {});
+const LT = { levelControlForLighting: true };
 
 /**
  * This cluster supports all OnOff features. It may support illegal feature combinations.
@@ -308,7 +316,29 @@ export type OnOffExtension<SF extends TypeFromPartialBitSchema<typeof OnOffBase.
  * legal per the Matter specification.
  */
 export const OnOffComplete = Cluster({
-    ...OnOffCluster,
-    attributes: { ...LevelControlForLightingComponent.attributes },
-    commands: { ...LevelControlForLightingComponent.commands }
+    id: OnOffCluster.id,
+    name: OnOffCluster.name,
+    revision: OnOffCluster.revision,
+    features: OnOffCluster.features,
+
+    attributes: {
+        ...OnOffCluster.attributes,
+        globalSceneControl: AsConditional(
+            LevelControlForLightingComponent.attributes.globalSceneControl,
+            { mandatoryIf: [LT] }
+        ),
+        onTime: AsConditional(LevelControlForLightingComponent.attributes.onTime, { mandatoryIf: [LT] }),
+        offWaitTime: AsConditional(LevelControlForLightingComponent.attributes.offWaitTime, { mandatoryIf: [LT] }),
+        startUpOnOff: AsConditional(LevelControlForLightingComponent.attributes.startUpOnOff, { mandatoryIf: [LT] })
+    },
+
+    commands: {
+        ...OnOffCluster.commands,
+        offWithEffect: AsConditional(LevelControlForLightingComponent.commands.offWithEffect, { mandatoryIf: [LT] }),
+        onWithRecallGlobalScene: AsConditional(
+            LevelControlForLightingComponent.commands.onWithRecallGlobalScene,
+            { mandatoryIf: [LT] }
+        ),
+        onWithTimedOff: AsConditional(LevelControlForLightingComponent.commands.onWithTimedOff, { mandatoryIf: [LT] })
+    }
 });

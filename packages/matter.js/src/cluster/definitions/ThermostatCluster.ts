@@ -14,7 +14,8 @@ import {
     validateFeatureSelection,
     extendCluster,
     preventCluster,
-    ClusterForBaseCluster
+    ClusterForBaseCluster,
+    AsConditional
 } from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitsFromPartial, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import {
@@ -1497,6 +1498,13 @@ export type ThermostatExtension<SF extends TypeFromPartialBitSchema<typeof Therm
     & (SF extends { autoMode: true, cooling: false } ? never : {})
     & (SF extends { heating: false, cooling: false } ? never : {});
 
+const OCC = { occupancy: true };
+const HEAT = { heating: true };
+const COOL = { cooling: true };
+const AUTO = { autoMode: true };
+const SCH = { scheduleConfiguration: true };
+const SB = { setback: true };
+
 /**
  * This cluster supports all Thermostat features. It may support illegal feature combinations.
  *
@@ -1504,17 +1512,64 @@ export type ThermostatExtension<SF extends TypeFromPartialBitSchema<typeof Therm
  * legal per the Matter specification.
  */
 export const ThermostatComplete = Cluster({
-    ...ThermostatCluster,
+    id: ThermostatCluster.id,
+    name: ThermostatCluster.name,
+    revision: ThermostatCluster.revision,
+    features: ThermostatCluster.features,
 
     attributes: {
-        ...OccupancyComponent.attributes,
-        ...HeatingComponent.attributes,
-        ...CoolingComponent.attributes,
-        ...NotLocalTemperatureNotExposedComponent.attributes,
-        ...AutoModeComponent.attributes,
-        ...ScheduleConfigurationComponent.attributes,
-        ...SetbackComponent.attributes
+        ...ThermostatCluster.attributes,
+        occupancy: AsConditional(OccupancyComponent.attributes.occupancy, { mandatoryIf: [OCC] }),
+        absMinHeatSetpointLimit: AsConditional(HeatingComponent.attributes.absMinHeatSetpointLimit, { optionalIf: [HEAT] }),
+        absMaxHeatSetpointLimit: AsConditional(HeatingComponent.attributes.absMaxHeatSetpointLimit, { optionalIf: [HEAT] }),
+        absMinCoolSetpointLimit: AsConditional(CoolingComponent.attributes.absMinCoolSetpointLimit, { optionalIf: [COOL] }),
+        absMaxCoolSetpointLimit: AsConditional(CoolingComponent.attributes.absMaxCoolSetpointLimit, { optionalIf: [COOL] }),
+        piCoolingDemand: AsConditional(CoolingComponent.attributes.piCoolingDemand, { optionalIf: [COOL] }),
+        piHeatingDemand: AsConditional(HeatingComponent.attributes.piHeatingDemand, { optionalIf: [HEAT] }),
+        localTemperatureCalibration: AsConditional(
+            NotLocalTemperatureNotExposedComponent.attributes.localTemperatureCalibration,
+            { optionalIf: [] }
+        ),
+        occupiedCoolingSetpoint: AsConditional(CoolingComponent.attributes.occupiedCoolingSetpoint, { mandatoryIf: [COOL] }),
+        occupiedHeatingSetpoint: AsConditional(HeatingComponent.attributes.occupiedHeatingSetpoint, { mandatoryIf: [HEAT] }),
+        unoccupiedCoolingSetpoint: AsConditional(
+            CoolingComponent.attributes.unoccupiedCoolingSetpoint,
+            { optionalIf: [COOL] }
+        ),
+        unoccupiedHeatingSetpoint: AsConditional(
+            HeatingComponent.attributes.unoccupiedHeatingSetpoint,
+            { optionalIf: [HEAT] }
+        ),
+        minHeatSetpointLimit: AsConditional(HeatingComponent.attributes.minHeatSetpointLimit, { optionalIf: [HEAT] }),
+        maxHeatSetpointLimit: AsConditional(HeatingComponent.attributes.maxHeatSetpointLimit, { optionalIf: [HEAT] }),
+        minCoolSetpointLimit: AsConditional(CoolingComponent.attributes.minCoolSetpointLimit, { optionalIf: [COOL] }),
+        maxCoolSetpointLimit: AsConditional(CoolingComponent.attributes.maxCoolSetpointLimit, { optionalIf: [COOL] }),
+        minSetpointDeadBand: AsConditional(AutoModeComponent.attributes.minSetpointDeadBand, { mandatoryIf: [AUTO] }),
+        thermostatRunningMode: AsConditional(AutoModeComponent.attributes.thermostatRunningMode, { optionalIf: [AUTO] }),
+        startOfWeek: AsConditional(ScheduleConfigurationComponent.attributes.startOfWeek, { mandatoryIf: [SCH] }),
+        numberOfWeeklyTransitions: AsConditional(
+            ScheduleConfigurationComponent.attributes.numberOfWeeklyTransitions,
+            { mandatoryIf: [SCH] }
+        ),
+        numberOfDailyTransitions: AsConditional(
+            ScheduleConfigurationComponent.attributes.numberOfDailyTransitions,
+            { mandatoryIf: [SCH] }
+        ),
+        occupiedSetback: AsConditional(SetbackComponent.attributes.occupiedSetback, { mandatoryIf: [SB] }),
+        occupiedSetbackMin: AsConditional(SetbackComponent.attributes.occupiedSetbackMin, { mandatoryIf: [SB] }),
+        occupiedSetbackMax: AsConditional(SetbackComponent.attributes.occupiedSetbackMax, { mandatoryIf: [SB] }),
+        unoccupiedSetback: AsConditional(SetbackComponent.attributes.unoccupiedSetback, { optionalIf: [SB] }),
+        unoccupiedSetbackMin: AsConditional(SetbackComponent.attributes.unoccupiedSetbackMin, { optionalIf: [SB] }),
+        unoccupiedSetbackMax: AsConditional(SetbackComponent.attributes.unoccupiedSetbackMax, { optionalIf: [SB] })
     },
 
-    commands: { ...ScheduleConfigurationComponent.commands }
+    commands: {
+        ...ThermostatCluster.commands,
+        setWeeklySchedule: AsConditional(ScheduleConfigurationComponent.commands.setWeeklySchedule, { mandatoryIf: [SCH] }),
+        getWeeklySchedule: AsConditional(ScheduleConfigurationComponent.commands.getWeeklySchedule, { mandatoryIf: [SCH] }),
+        clearWeeklySchedule: AsConditional(
+            ScheduleConfigurationComponent.commands.clearWeeklySchedule,
+            { mandatoryIf: [SCH] }
+        )
+    }
 });

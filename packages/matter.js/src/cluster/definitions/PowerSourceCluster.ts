@@ -13,7 +13,8 @@ import {
     ExtensibleCluster,
     validateFeatureSelection,
     extendCluster,
-    ClusterForBaseCluster
+    ClusterForBaseCluster,
+    AsConditional
 } from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { Attribute, FixedAttribute, OptionalAttribute, OptionalFixedAttribute, OptionalEvent, EventPriority, Cluster } from "../../cluster/Cluster.js";
@@ -1321,6 +1322,11 @@ export type PowerSourceExtension<SF extends TypeFromPartialBitSchema<typeof Powe
     & (SF extends { replaceable: true } ? typeof ReplaceableComponent : {})
     & (SF extends { rechargeable: true } ? typeof RechargeableComponent : {});
 
+const WIRED = { wired: true };
+const BAT = { battery: true };
+const REPLC = { replaceable: true };
+const RECHG = { rechargeable: true };
+
 /**
  * This cluster supports all PowerSource features. It may support illegal feature combinations.
  *
@@ -1328,14 +1334,61 @@ export type PowerSourceExtension<SF extends TypeFromPartialBitSchema<typeof Powe
  * legal per the Matter specification.
  */
 export const PowerSourceComplete = Cluster({
-    ...PowerSourceCluster,
+    id: PowerSourceCluster.id,
+    name: PowerSourceCluster.name,
+    revision: PowerSourceCluster.revision,
+    features: PowerSourceCluster.features,
 
     attributes: {
-        ...WiredComponent.attributes,
-        ...BatteryComponent.attributes,
-        ...ReplaceableComponent.attributes,
-        ...RechargeableComponent.attributes
+        ...PowerSourceCluster.attributes,
+        wiredAssessedInputVoltage: AsConditional(
+            WiredComponent.attributes.wiredAssessedInputVoltage,
+            { optionalIf: [WIRED] }
+        ),
+        wiredAssessedInputFrequency: AsConditional(
+            WiredComponent.attributes.wiredAssessedInputFrequency,
+            { optionalIf: [WIRED] }
+        ),
+        wiredCurrentType: AsConditional(WiredComponent.attributes.wiredCurrentType, { mandatoryIf: [WIRED] }),
+        wiredAssessedCurrent: AsConditional(WiredComponent.attributes.wiredAssessedCurrent, { optionalIf: [WIRED] }),
+        wiredNominalVoltage: AsConditional(WiredComponent.attributes.wiredNominalVoltage, { optionalIf: [WIRED] }),
+        wiredMaximumCurrent: AsConditional(WiredComponent.attributes.wiredMaximumCurrent, { optionalIf: [WIRED] }),
+        wiredPresent: AsConditional(WiredComponent.attributes.wiredPresent, { optionalIf: [WIRED] }),
+        activeWiredFaults: AsConditional(WiredComponent.attributes.activeWiredFaults, { optionalIf: [WIRED] }),
+        batVoltage: AsConditional(BatteryComponent.attributes.batVoltage, { optionalIf: [BAT] }),
+        batPercentRemaining: AsConditional(BatteryComponent.attributes.batPercentRemaining, { optionalIf: [BAT] }),
+        batTimeRemaining: AsConditional(BatteryComponent.attributes.batTimeRemaining, { optionalIf: [BAT] }),
+        batChargeLevel: AsConditional(BatteryComponent.attributes.batChargeLevel, { mandatoryIf: [BAT] }),
+        batReplacementNeeded: AsConditional(BatteryComponent.attributes.batReplacementNeeded, { mandatoryIf: [BAT] }),
+        batReplaceability: AsConditional(BatteryComponent.attributes.batReplaceability, { mandatoryIf: [BAT] }),
+        batPresent: AsConditional(BatteryComponent.attributes.batPresent, { optionalIf: [BAT] }),
+        activeBatFaults: AsConditional(BatteryComponent.attributes.activeBatFaults, { optionalIf: [BAT] }),
+        batReplacementDescription: AsConditional(
+            ReplaceableComponent.attributes.batReplacementDescription,
+            { mandatoryIf: [REPLC] }
+        ),
+        batCommonDesignation: AsConditional(ReplaceableComponent.attributes.batCommonDesignation, { optionalIf: [REPLC] }),
+        batAnsiDesignation: AsConditional(ReplaceableComponent.attributes.batAnsiDesignation, { optionalIf: [REPLC] }),
+        batIecDesignation: AsConditional(ReplaceableComponent.attributes.batIecDesignation, { optionalIf: [REPLC] }),
+        batApprovedChemistry: AsConditional(ReplaceableComponent.attributes.batApprovedChemistry, { optionalIf: [REPLC] }),
+        batCapacity: AsConditional(ReplaceableComponent.attributes.batCapacity, { optionalIf: [REPLC] }),
+        batQuantity: AsConditional(ReplaceableComponent.attributes.batQuantity, { mandatoryIf: [REPLC] }),
+        batChargeState: AsConditional(RechargeableComponent.attributes.batChargeState, { mandatoryIf: [RECHG] }),
+        batTimeToFullCharge: AsConditional(RechargeableComponent.attributes.batTimeToFullCharge, { optionalIf: [RECHG] }),
+        batFunctionalWhileCharging: AsConditional(
+            RechargeableComponent.attributes.batFunctionalWhileCharging,
+            { mandatoryIf: [RECHG] }
+        ),
+        batChargingCurrent: AsConditional(RechargeableComponent.attributes.batChargingCurrent, { optionalIf: [RECHG] }),
+        activeBatChargeFaults: AsConditional(
+            RechargeableComponent.attributes.activeBatChargeFaults,
+            { optionalIf: [RECHG] }
+        )
     },
 
-    events: { ...WiredComponent.events, ...BatteryComponent.events, ...RechargeableComponent.events }
+    events: {
+        wiredFaultChange: AsConditional(WiredComponent.events.wiredFaultChange, { optionalIf: [WIRED] }),
+        batFaultChange: AsConditional(BatteryComponent.events.batFaultChange, { optionalIf: [BAT] }),
+        batChargeFaultChange: AsConditional(RechargeableComponent.events.batChargeFaultChange, { optionalIf: [RECHG] })
+    }
 });

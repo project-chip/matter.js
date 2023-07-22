@@ -7,7 +7,14 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BaseClusterComponent, ClusterComponent, ExtensibleCluster, validateFeatureSelection, ClusterForBaseCluster } from "../../cluster/ClusterFactory.js";
+import {
+    BaseClusterComponent,
+    ClusterComponent,
+    ExtensibleCluster,
+    validateFeatureSelection,
+    ClusterForBaseCluster,
+    AsConditional
+} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { Attribute, Command, TlvNoResponse, Cluster } from "../../cluster/Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
@@ -179,6 +186,7 @@ export type AudioOutputExtension<SF extends TypeFromPartialBitSchema<typeof Audi
     ClusterForBaseCluster<typeof AudioOutputBase, SF>
     & { supportedFeatures: SF }
     & (SF extends { nameUpdates: true } ? typeof NameUpdatesComponent : {});
+const NU = { nameUpdates: true };
 
 /**
  * This cluster supports all AudioOutput features. It may support illegal feature combinations.
@@ -186,4 +194,14 @@ export type AudioOutputExtension<SF extends TypeFromPartialBitSchema<typeof Audi
  * If you use this cluster you must manually specify which features are active and ensure the set of active features is
  * legal per the Matter specification.
  */
-export const AudioOutputComplete = Cluster({ ...AudioOutputCluster, commands: { ...NameUpdatesComponent.commands } });
+export const AudioOutputComplete = Cluster({
+    id: AudioOutputCluster.id,
+    name: AudioOutputCluster.name,
+    revision: AudioOutputCluster.revision,
+    features: AudioOutputCluster.features,
+    attributes: AudioOutputCluster.attributes,
+    commands: {
+        ...AudioOutputCluster.commands,
+        renameOutput: AsConditional(NameUpdatesComponent.commands.renameOutput, { mandatoryIf: [NU] })
+    }
+});

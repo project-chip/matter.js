@@ -13,7 +13,8 @@ import {
     ExtensibleCluster,
     validateFeatureSelection,
     extendCluster,
-    ClusterForBaseCluster
+    ClusterForBaseCluster,
+    AsConditional
 } from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { Attribute, OptionalAttribute, OptionalEvent, EventPriority, Command, TlvNoResponse, Cluster } from "../../cluster/Cluster.js";
@@ -442,6 +443,8 @@ export type WiFiNetworkDiagnosticsExtension<SF extends TypeFromPartialBitSchema<
     & { supportedFeatures: SF }
     & (SF extends { errorCounts: true } ? typeof ErrorCountsComponent : {})
     & (SF extends { packetCounts: true } ? typeof PacketCountsComponent : {});
+const ERRCNT = { errorCounts: true };
+const PKTCNT = { packetCounts: true };
 
 /**
  * This cluster supports all WiFiNetworkDiagnostics features. It may support illegal feature combinations.
@@ -450,7 +453,34 @@ export type WiFiNetworkDiagnosticsExtension<SF extends TypeFromPartialBitSchema<
  * legal per the Matter specification.
  */
 export const WiFiNetworkDiagnosticsComplete = Cluster({
-    ...WiFiNetworkDiagnosticsCluster,
-    attributes: { ...ErrorCountsComponent.attributes, ...PacketCountsComponent.attributes },
-    commands: { ...ErrorCountsComponent.commands }
+    id: WiFiNetworkDiagnosticsCluster.id,
+    name: WiFiNetworkDiagnosticsCluster.name,
+    revision: WiFiNetworkDiagnosticsCluster.revision,
+    features: WiFiNetworkDiagnosticsCluster.features,
+
+    attributes: {
+        ...WiFiNetworkDiagnosticsCluster.attributes,
+        beaconLostCount: AsConditional(ErrorCountsComponent.attributes.beaconLostCount, { mandatoryIf: [ERRCNT] }),
+        beaconRxCount: AsConditional(PacketCountsComponent.attributes.beaconRxCount, { mandatoryIf: [PKTCNT] }),
+        packetMulticastRxCount: AsConditional(
+            PacketCountsComponent.attributes.packetMulticastRxCount,
+            { mandatoryIf: [PKTCNT] }
+        ),
+        packetMulticastTxCount: AsConditional(
+            PacketCountsComponent.attributes.packetMulticastTxCount,
+            { mandatoryIf: [PKTCNT] }
+        ),
+        packetUnicastRxCount: AsConditional(
+            PacketCountsComponent.attributes.packetUnicastRxCount,
+            { mandatoryIf: [PKTCNT] }
+        ),
+        packetUnicastTxCount: AsConditional(
+            PacketCountsComponent.attributes.packetUnicastTxCount,
+            { mandatoryIf: [PKTCNT] }
+        ),
+        overrunCount: AsConditional(ErrorCountsComponent.attributes.overrunCount, { mandatoryIf: [ERRCNT] })
+    },
+
+    commands: { resetCounts: AsConditional(ErrorCountsComponent.commands.resetCounts, { mandatoryIf: [ERRCNT] }) },
+    events: WiFiNetworkDiagnosticsCluster.events
 });

@@ -14,7 +14,8 @@ import {
     validateFeatureSelection,
     extendCluster,
     preventCluster,
-    ClusterForBaseCluster
+    ClusterForBaseCluster,
+    AsConditional
 } from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { FixedAttribute, Attribute, Event, EventPriority, Cluster } from "../../cluster/Cluster.js";
@@ -381,6 +382,12 @@ export type SwitchExtension<SF extends TypeFromPartialBitSchema<typeof SwitchBas
     & (SF extends { latchingSwitch: true, momentarySwitch: true } ? never : {})
     & (SF extends { latchingSwitch: false, momentarySwitch: false } ? never : {});
 
+const MSM = { momentarySwitchMultiPress: true };
+const LS = { latchingSwitch: true };
+const MS = { momentarySwitch: true };
+const MSL = { momentarySwitchLongPress: true };
+const MSR = { momentarySwitchRelease: true };
+
 /**
  * This cluster supports all Switch features. It may support illegal feature combinations.
  *
@@ -388,14 +395,28 @@ export type SwitchExtension<SF extends TypeFromPartialBitSchema<typeof SwitchBas
  * legal per the Matter specification.
  */
 export const SwitchComplete = Cluster({
-    ...SwitchCluster,
-    attributes: { ...MomentarySwitchMultiPressComponent.attributes },
+    id: SwitchCluster.id,
+    name: SwitchCluster.name,
+    revision: SwitchCluster.revision,
+    features: SwitchCluster.features,
+    attributes: {
+        ...SwitchCluster.attributes,
+        multiPressMax: AsConditional(MomentarySwitchMultiPressComponent.attributes.multiPressMax, { mandatoryIf: [MSM] })
+    },
 
     events: {
-        ...MomentarySwitchMultiPressComponent.events,
-        ...LatchingSwitchComponent.events,
-        ...MomentarySwitchComponent.events,
-        ...MomentarySwitchLongPressComponent.events,
-        ...MomentarySwitchReleaseComponent.events
+        switchLatched: AsConditional(LatchingSwitchComponent.events.switchLatched, { mandatoryIf: [LS] }),
+        initialPress: AsConditional(MomentarySwitchComponent.events.initialPress, { mandatoryIf: [MS] }),
+        longPress: AsConditional(MomentarySwitchLongPressComponent.events.longPress, { mandatoryIf: [MSL] }),
+        shortRelease: AsConditional(MomentarySwitchReleaseComponent.events.shortRelease, { mandatoryIf: [MSR] }),
+        longRelease: AsConditional(MomentarySwitchLongPressComponent.events.longRelease, { mandatoryIf: [MSL] }),
+        multiPressOngoing: AsConditional(
+            MomentarySwitchMultiPressComponent.events.multiPressOngoing,
+            { mandatoryIf: [MSM] }
+        ),
+        multiPressComplete: AsConditional(
+            MomentarySwitchMultiPressComponent.events.multiPressComplete,
+            { mandatoryIf: [MSM] }
+        )
     }
 });

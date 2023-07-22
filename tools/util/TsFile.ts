@@ -480,7 +480,7 @@ class ExpressionBlock extends NestedBlock {
             case ExpressionLayout.SingleLine:
                 {
                     let line = serializedEntries.map(e => e.trim()).join(", ");
-                    if (isArrayOrObject && !line.startsWith("[") && !line.startsWith("{")) {
+                    if (isArrayOrObject && !this.prefix.endsWith("[") && !line.startsWith("{")) {
                         line = ` ${line} `;
                     }
                     return `${linePrefix}${this.prefix}${line}${this.suffix}`;

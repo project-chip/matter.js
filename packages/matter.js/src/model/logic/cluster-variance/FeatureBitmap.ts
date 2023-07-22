@@ -4,6 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { camelize } from "../../../util/index.js";
+import { ClusterModel, DatatypeModel } from "../../models/index.js";
+
 export type FeatureFlags = string[];
 export type FeatureBitmap = { [name: string]: boolean };
 export type FeatureNames = { [key: string]: string };
@@ -23,6 +26,9 @@ export function FeatureBitmap(bitmap: FeatureBitmap | FeatureFlags = {}): Featur
  * 
  * If a name isn't present leaves the feature code intact.
  */
-export function translateBitmap(bitmap: FeatureBitmap, mapping: FeatureNames) {
-    return Object.fromEntries(Object.entries(bitmap).map(([k, v]) => [mapping[k] ?? k, v]));
+export function translateBitmap(bitmap: FeatureBitmap, cluster: ClusterModel) {
+    return Object.fromEntries(Object.entries(bitmap).map(([k, v]) => {
+        const feature = cluster.featureMap.get(DatatypeModel, k);
+        return [camelize(feature?.description ?? k, false), v];
+    }));
 }

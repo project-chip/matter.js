@@ -14,7 +14,8 @@ import {
     validateFeatureSelection,
     extendCluster,
     preventCluster,
-    ClusterForBaseCluster
+    ClusterForBaseCluster,
+    AsConditional
 } from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import {
@@ -957,6 +958,13 @@ export type PumpConfigurationAndControlExtension<SF extends TypeFromPartialBitSc
     & (SF extends { constantTemperature: true } ? typeof ConstantTemperatureComponent : {})
     & (SF extends { constantPressure: false, compensatedPressure: false, constantFlow: false, constantSpeed: false, constantTemperature: false } ? never : {});
 
+const PRSCONST = { constantPressure: true };
+const AUTO = { automatic: true };
+const PRSCOMP = { compensatedPressure: true };
+const SPD = { constantSpeed: true };
+const FLW = { constantFlow: true };
+const TEMP = { constantTemperature: true };
+
 /**
  * This cluster supports all PumpConfigurationAndControl features. It may support illegal feature combinations.
  *
@@ -964,14 +972,42 @@ export type PumpConfigurationAndControlExtension<SF extends TypeFromPartialBitSc
  * legal per the Matter specification.
  */
 export const PumpConfigurationAndControlComplete = Cluster({
-    ...PumpConfigurationAndControlCluster,
+    id: PumpConfigurationAndControlCluster.id,
+    name: PumpConfigurationAndControlCluster.name,
+    revision: PumpConfigurationAndControlCluster.revision,
+    features: PumpConfigurationAndControlCluster.features,
 
     attributes: {
-        ...ConstantPressureComponent.attributes,
-        ...AutomaticComponent.attributes,
-        ...CompensatedPressureComponent.attributes,
-        ...ConstantSpeedComponent.attributes,
-        ...ConstantFlowComponent.attributes,
-        ...ConstantTemperatureComponent.attributes
-    }
+        ...PumpConfigurationAndControlCluster.attributes,
+        minConstPressure: AsConditional(
+            ConstantPressureComponent.attributes.minConstPressure,
+            { mandatoryIf: [PRSCONST], optionalIf: [AUTO] }
+        ),
+        maxConstPressure: AsConditional(
+            ConstantPressureComponent.attributes.maxConstPressure,
+            { mandatoryIf: [PRSCONST], optionalIf: [AUTO] }
+        ),
+        minCompPressure: AsConditional(
+            AutomaticComponent.attributes.minCompPressure,
+            { optionalIf: [AUTO], mandatoryIf: [PRSCOMP] }
+        ),
+        maxCompPressure: AsConditional(
+            AutomaticComponent.attributes.maxCompPressure,
+            { optionalIf: [AUTO], mandatoryIf: [PRSCOMP] }
+        ),
+        minConstSpeed: AsConditional(
+            AutomaticComponent.attributes.minConstSpeed,
+            { optionalIf: [AUTO], mandatoryIf: [SPD] }
+        ),
+        maxConstSpeed: AsConditional(
+            AutomaticComponent.attributes.maxConstSpeed,
+            { optionalIf: [AUTO], mandatoryIf: [SPD] }
+        ),
+        minConstFlow: AsConditional(AutomaticComponent.attributes.minConstFlow, { optionalIf: [AUTO], mandatoryIf: [FLW] }),
+        maxConstFlow: AsConditional(AutomaticComponent.attributes.maxConstFlow, { optionalIf: [AUTO], mandatoryIf: [FLW] }),
+        minConstTemp: AsConditional(AutomaticComponent.attributes.minConstTemp, { optionalIf: [AUTO], mandatoryIf: [TEMP] }),
+        maxConstTemp: AsConditional(AutomaticComponent.attributes.maxConstTemp, { optionalIf: [AUTO], mandatoryIf: [TEMP] })
+    },
+
+    events: PumpConfigurationAndControlCluster.events
 });

@@ -451,11 +451,3 @@ export const GroupKeyManagementCluster = ExtensibleCluster({
 export type GroupKeyManagementExtension<SF extends TypeFromPartialBitSchema<typeof GroupKeyManagementBase.features>> =
     ClusterForBaseCluster<typeof GroupKeyManagementBase, SF>
     & { supportedFeatures: SF };
-
-/**
- * This cluster supports all GroupKeyManagement features. It may support illegal feature combinations.
- *
- * If you use this cluster you must manually specify which features are active and ensure the set of active features is
- * legal per the Matter specification.
- */
-export const GroupKeyManagementComplete = Cluster({ ...GroupKeyManagementCluster });

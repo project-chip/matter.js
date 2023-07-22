@@ -254,11 +254,3 @@ export const KeypadInputCluster = ExtensibleCluster({
 export type KeypadInputExtension<SF extends TypeFromPartialBitSchema<typeof KeypadInputBase.features>> =
     ClusterForBaseCluster<typeof KeypadInputBase, SF>
     & { supportedFeatures: SF };
-
-/**
- * This cluster supports all KeypadInput features. It may support illegal feature combinations.
- *
- * If you use this cluster you must manually specify which features are active and ensure the set of active features is
- * legal per the Matter specification.
- */
-export const KeypadInputComplete = Cluster({ ...KeypadInputCluster });

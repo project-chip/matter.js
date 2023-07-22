@@ -13,7 +13,8 @@ import {
     ExtensibleCluster,
     validateFeatureSelection,
     extendCluster,
-    ClusterForBaseCluster
+    ClusterForBaseCluster,
+    AsConditional
 } from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import {
@@ -435,6 +436,8 @@ export type PulseWidthModulationExtension<SF extends TypeFromPartialBitSchema<ty
     & { supportedFeatures: SF }
     & (SF extends { lighting: true } ? typeof LightingComponent : {})
     & (SF extends { frequency: true } ? typeof FrequencyComponent : {});
+const LT = { lighting: true };
+const FQ = { frequency: true };
 
 /**
  * This cluster supports all PulseWidthModulation features. It may support illegal feature combinations.
@@ -443,7 +446,22 @@ export type PulseWidthModulationExtension<SF extends TypeFromPartialBitSchema<ty
  * legal per the Matter specification.
  */
 export const PulseWidthModulationComplete = Cluster({
-    ...PulseWidthModulationCluster,
-    attributes: { ...LightingComponent.attributes, ...FrequencyComponent.attributes },
-    commands: { ...FrequencyComponent.commands }
+    id: PulseWidthModulationCluster.id,
+    name: PulseWidthModulationCluster.name,
+    revision: PulseWidthModulationCluster.revision,
+    features: PulseWidthModulationCluster.features,
+
+    attributes: {
+        ...PulseWidthModulationCluster.attributes,
+        remainingTime: AsConditional(LightingComponent.attributes.remainingTime, { mandatoryIf: [LT] }),
+        currentFrequency: AsConditional(FrequencyComponent.attributes.currentFrequency, { mandatoryIf: [FQ] }),
+        minFrequency: AsConditional(FrequencyComponent.attributes.minFrequency, { mandatoryIf: [FQ] }),
+        maxFrequency: AsConditional(FrequencyComponent.attributes.maxFrequency, { mandatoryIf: [FQ] }),
+        startUpCurrentLevel: AsConditional(LightingComponent.attributes.startUpCurrentLevel, { mandatoryIf: [LT] })
+    },
+
+    commands: {
+        ...PulseWidthModulationCluster.commands,
+        moveToClosestFrequency: AsConditional(FrequencyComponent.commands.moveToClosestFrequency, { mandatoryIf: [FQ] })
+    }
 });

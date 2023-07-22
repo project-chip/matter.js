@@ -13,7 +13,8 @@ import {
     ExtensibleCluster,
     validateFeatureSelection,
     extendCluster,
-    ClusterForBaseCluster
+    ClusterForBaseCluster,
+    AsConditional
 } from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitField, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import {
@@ -1551,6 +1552,12 @@ export type ColorControlExtension<SF extends TypeFromPartialBitSchema<typeof Col
     & (SF extends { colorLoop: true } ? typeof ColorLoopComponent : {})
     & (SF extends { hueSaturation: true } | { xy: true } | { colorTemperature: true } ? typeof HueSaturationOrXyOrColorTemperatureComponent : {});
 
+const HS = { hueSaturation: true };
+const XY = { xy: true };
+const CT = { colorTemperature: true };
+const EHUE = { enhancedHue: true };
+const CL = { colorLoop: true };
+
 /**
  * This cluster supports all ColorControl features. It may support illegal feature combinations.
  *
@@ -1558,22 +1565,79 @@ export type ColorControlExtension<SF extends TypeFromPartialBitSchema<typeof Col
  * legal per the Matter specification.
  */
 export const ColorControlComplete = Cluster({
-    ...ColorControlCluster,
+    id: ColorControlCluster.id,
+    name: ColorControlCluster.name,
+    revision: ColorControlCluster.revision,
+    features: ColorControlCluster.features,
 
     attributes: {
-        ...HueSaturationComponent.attributes,
-        ...XyComponent.attributes,
-        ...ColorTemperatureComponent.attributes,
-        ...EnhancedHueComponent.attributes,
-        ...ColorLoopComponent.attributes
+        ...ColorControlCluster.attributes,
+        currentHue: AsConditional(HueSaturationComponent.attributes.currentHue, { mandatoryIf: [HS] }),
+        currentSaturation: AsConditional(HueSaturationComponent.attributes.currentSaturation, { mandatoryIf: [HS] }),
+        currentX: AsConditional(XyComponent.attributes.currentX, { mandatoryIf: [XY] }),
+        currentY: AsConditional(XyComponent.attributes.currentY, { mandatoryIf: [XY] }),
+        colorTemperatureMireds: AsConditional(
+            ColorTemperatureComponent.attributes.colorTemperatureMireds,
+            { mandatoryIf: [CT] }
+        ),
+        enhancedCurrentHue: AsConditional(EnhancedHueComponent.attributes.enhancedCurrentHue, { mandatoryIf: [EHUE] }),
+        colorLoopActive: AsConditional(ColorLoopComponent.attributes.colorLoopActive, { mandatoryIf: [CL] }),
+        colorLoopDirection: AsConditional(ColorLoopComponent.attributes.colorLoopDirection, { mandatoryIf: [CL] }),
+        colorLoopTime: AsConditional(ColorLoopComponent.attributes.colorLoopTime, { mandatoryIf: [CL] }),
+        colorLoopStartEnhancedHue: AsConditional(
+            ColorLoopComponent.attributes.colorLoopStartEnhancedHue,
+            { mandatoryIf: [CL] }
+        ),
+        colorLoopStoredEnhancedHue: AsConditional(
+            ColorLoopComponent.attributes.colorLoopStoredEnhancedHue,
+            { mandatoryIf: [CL] }
+        ),
+        colorTempPhysicalMinMireds: AsConditional(
+            ColorTemperatureComponent.attributes.colorTempPhysicalMinMireds,
+            { mandatoryIf: [CT] }
+        ),
+        colorTempPhysicalMaxMireds: AsConditional(
+            ColorTemperatureComponent.attributes.colorTempPhysicalMaxMireds,
+            { mandatoryIf: [CT] }
+        ),
+        coupleColorTempToLevelMinMireds: AsConditional(
+            ColorTemperatureComponent.attributes.coupleColorTempToLevelMinMireds,
+            { optionalIf: [CT] }
+        ),
+        startUpColorTemperatureMireds: AsConditional(
+            ColorTemperatureComponent.attributes.startUpColorTemperatureMireds,
+            { optionalIf: [CT] }
+        )
     },
 
     commands: {
-        ...HueSaturationComponent.commands,
-        ...XyComponent.commands,
-        ...ColorTemperatureComponent.commands,
-        ...EnhancedHueComponent.commands,
-        ...ColorLoopComponent.commands,
-        ...HueSaturationOrXyOrColorTemperatureComponent.commands
+        moveToHue: AsConditional(HueSaturationComponent.commands.moveToHue, { mandatoryIf: [HS] }),
+        moveHue: AsConditional(HueSaturationComponent.commands.moveHue, { mandatoryIf: [HS] }),
+        stepHue: AsConditional(HueSaturationComponent.commands.stepHue, { mandatoryIf: [HS] }),
+        moveToSaturation: AsConditional(HueSaturationComponent.commands.moveToSaturation, { mandatoryIf: [HS] }),
+        moveSaturation: AsConditional(HueSaturationComponent.commands.moveSaturation, { mandatoryIf: [HS] }),
+        stepSaturation: AsConditional(HueSaturationComponent.commands.stepSaturation, { mandatoryIf: [HS] }),
+        moveToHueAndSaturation: AsConditional(HueSaturationComponent.commands.moveToHueAndSaturation, { mandatoryIf: [HS] }),
+        moveToColor: AsConditional(XyComponent.commands.moveToColor, { mandatoryIf: [XY] }),
+        moveColor: AsConditional(XyComponent.commands.moveColor, { mandatoryIf: [XY] }),
+        stepColor: AsConditional(XyComponent.commands.stepColor, { mandatoryIf: [XY] }),
+        moveToColorTemperature: AsConditional(
+            ColorTemperatureComponent.commands.moveToColorTemperature,
+            { mandatoryIf: [CT] }
+        ),
+        enhancedMoveToHue: AsConditional(EnhancedHueComponent.commands.enhancedMoveToHue, { mandatoryIf: [EHUE] }),
+        enhancedMoveHue: AsConditional(EnhancedHueComponent.commands.enhancedMoveHue, { mandatoryIf: [EHUE] }),
+        enhancedStepHue: AsConditional(EnhancedHueComponent.commands.enhancedStepHue, { mandatoryIf: [EHUE] }),
+        enhancedMoveToHueAndSaturation: AsConditional(
+            EnhancedHueComponent.commands.enhancedMoveToHueAndSaturation,
+            { mandatoryIf: [EHUE] }
+        ),
+        colorLoopSet: AsConditional(ColorLoopComponent.commands.colorLoopSet, { mandatoryIf: [CL] }),
+        stopMoveStep: AsConditional(
+            HueSaturationOrXyOrColorTemperatureComponent.commands.stopMoveStep,
+            { mandatoryIf: [HS, XY, CT] }
+        ),
+        moveColorTemperature: AsConditional(ColorTemperatureComponent.commands.moveColorTemperature, { mandatoryIf: [CT] }),
+        stepColorTemperature: AsConditional(ColorTemperatureComponent.commands.stepColorTemperature, { mandatoryIf: [CT] })
     }
 });

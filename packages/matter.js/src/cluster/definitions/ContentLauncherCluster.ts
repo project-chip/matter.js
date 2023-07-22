@@ -13,7 +13,8 @@ import {
     ExtensibleCluster,
     validateFeatureSelection,
     extendCluster,
-    ClusterForBaseCluster
+    ClusterForBaseCluster,
+    AsConditional
 } from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { Attribute, Command, Cluster } from "../../cluster/Cluster.js";
@@ -574,6 +575,9 @@ export type ContentLauncherExtension<SF extends TypeFromPartialBitSchema<typeof 
     & (SF extends { contentSearch: true } ? typeof ContentSearchComponent : {})
     & (SF extends { contentSearch: true } | { urlPlayback: true } ? typeof ContentSearchOrUrlPlaybackComponent : {});
 
+const UP = { urlPlayback: true };
+const CS = { contentSearch: true };
+
 /**
  * This cluster supports all ContentLauncher features. It may support illegal feature combinations.
  *
@@ -581,11 +585,21 @@ export type ContentLauncherExtension<SF extends TypeFromPartialBitSchema<typeof 
  * legal per the Matter specification.
  */
 export const ContentLauncherComplete = Cluster({
-    ...ContentLauncherCluster,
-    attributes: { ...UrlPlaybackComponent.attributes },
+    id: ContentLauncherCluster.id,
+    name: ContentLauncherCluster.name,
+    revision: ContentLauncherCluster.revision,
+    features: ContentLauncherCluster.features,
+
+    attributes: {
+        acceptHeader: AsConditional(UrlPlaybackComponent.attributes.acceptHeader, { mandatoryIf: [UP] }),
+        supportedStreamingProtocols: AsConditional(
+            UrlPlaybackComponent.attributes.supportedStreamingProtocols,
+            { mandatoryIf: [UP] }
+        )
+    },
+
     commands: {
-        ...UrlPlaybackComponent.commands,
-        ...ContentSearchComponent.commands,
-        ...ContentSearchOrUrlPlaybackComponent.commands
+        launchContent: AsConditional(ContentSearchComponent.commands.launchContent, { mandatoryIf: [CS] }),
+        launchUrl: AsConditional(UrlPlaybackComponent.commands.launchUrl, { mandatoryIf: [UP] })
     }
 });

@@ -14,7 +14,8 @@ import {
     validateFeatureSelection,
     extendCluster,
     preventCluster,
-    ClusterForBaseCluster
+    ClusterForBaseCluster,
+    AsConditional
 } from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitsFromPartial, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import {
@@ -2315,6 +2316,22 @@ export type DoorLockExtension<SF extends TypeFromPartialBitSchema<typeof DoorLoc
     & (SF extends { rfidCredential: true, user: false } ? typeof RfidCredentialNotUserComponent : {})
     & (SF extends { user: true, pinCredential: false, rfidCredential: false, fingerCredentials: false, faceCredentials: false } ? never : {});
 
+const DPS = { doorPositionSensor: true };
+const LOG = { logging: true };
+const USR = { user: true };
+const PIN = { pinCredential: true };
+const RID = { rfidCredential: true };
+const WDSCH = { weekDayAccessSchedules: true };
+const YDSCH = { yearDayAccessSchedules: true };
+const HDSCH = { holidaySchedules: true };
+const COTA = { credentialOverTheAirAccess: true };
+const NOT_PIN = { notification: true, pinCredential: true };
+const NOT = { notification: true };
+const NOT_RID = { notification: true, rfidCredential: true };
+const PIN_NOT_USR = { pinCredential: true, user: false };
+const PIN_RID_FGP_NOT_USR = { pinCredential: true, rfidCredential: true, fingerCredentials: true, user: false };
+const RID_NOT_USR = { rfidCredential: true, user: false };
+
 /**
  * This cluster supports all DoorLock features. It may support illegal feature combinations.
  *
@@ -2322,36 +2339,173 @@ export type DoorLockExtension<SF extends TypeFromPartialBitSchema<typeof DoorLoc
  * legal per the Matter specification.
  */
 export const DoorLockComplete = Cluster({
-    ...DoorLockCluster,
+    id: DoorLockCluster.id,
+    name: DoorLockCluster.name,
+    revision: DoorLockCluster.revision,
+    features: DoorLockCluster.features,
 
     attributes: {
-        ...DoorPositionSensorComponent.attributes,
-        ...LoggingComponent.attributes,
-        ...UserComponent.attributes,
-        ...PinCredentialComponent.attributes,
-        ...RfidCredentialComponent.attributes,
-        ...WeekDayAccessSchedulesComponent.attributes,
-        ...YearDayAccessSchedulesComponent.attributes,
-        ...HolidaySchedulesComponent.attributes,
-        ...PinCredentialOrRfidCredentialComponent.attributes,
-        ...CredentialOverTheAirAccessComponent.attributes,
-        ...NotificationAndPinCredentialComponent.attributes,
-        ...NotificationComponent.attributes,
-        ...NotificationAndRfidCredentialComponent.attributes
+        ...DoorLockCluster.attributes,
+        doorState: AsConditional(DoorPositionSensorComponent.attributes.doorState, { mandatoryIf: [DPS] }),
+        doorOpenEvents: AsConditional(DoorPositionSensorComponent.attributes.doorOpenEvents, { optionalIf: [DPS] }),
+        doorClosedEvents: AsConditional(DoorPositionSensorComponent.attributes.doorClosedEvents, { optionalIf: [DPS] }),
+        openPeriod: AsConditional(DoorPositionSensorComponent.attributes.openPeriod, { optionalIf: [DPS] }),
+        numberOfLogRecordsSupported: AsConditional(
+            LoggingComponent.attributes.numberOfLogRecordsSupported,
+            { mandatoryIf: [LOG] }
+        ),
+        numberOfTotalUsersSupported: AsConditional(
+            UserComponent.attributes.numberOfTotalUsersSupported,
+            { mandatoryIf: [USR] }
+        ),
+        numberOfPinUsersSupported: AsConditional(
+            PinCredentialComponent.attributes.numberOfPinUsersSupported,
+            { mandatoryIf: [PIN] }
+        ),
+        numberOfRfidUsersSupported: AsConditional(
+            RfidCredentialComponent.attributes.numberOfRfidUsersSupported,
+            { mandatoryIf: [RID] }
+        ),
+        numberOfWeekDaySchedulesSupportedPerUser: AsConditional(
+            WeekDayAccessSchedulesComponent.attributes.numberOfWeekDaySchedulesSupportedPerUser,
+            { mandatoryIf: [WDSCH] }
+        ),
+        numberOfYearDaySchedulesSupportedPerUser: AsConditional(
+            YearDayAccessSchedulesComponent.attributes.numberOfYearDaySchedulesSupportedPerUser,
+            { mandatoryIf: [YDSCH] }
+        ),
+        numberOfHolidaySchedulesSupported: AsConditional(
+            HolidaySchedulesComponent.attributes.numberOfHolidaySchedulesSupported,
+            { mandatoryIf: [HDSCH] }
+        ),
+        maxPinCodeLength: AsConditional(PinCredentialComponent.attributes.maxPinCodeLength, { mandatoryIf: [PIN] }),
+        minPinCodeLength: AsConditional(PinCredentialComponent.attributes.minPinCodeLength, { mandatoryIf: [PIN] }),
+        maxRfidCodeLength: AsConditional(RfidCredentialComponent.attributes.maxRfidCodeLength, { mandatoryIf: [RID] }),
+        minRfidCodeLength: AsConditional(RfidCredentialComponent.attributes.minRfidCodeLength, { mandatoryIf: [RID] }),
+        credentialRulesSupport: AsConditional(UserComponent.attributes.credentialRulesSupport, { mandatoryIf: [USR] }),
+        numberOfCredentialsSupportedPerUser: AsConditional(
+            UserComponent.attributes.numberOfCredentialsSupportedPerUser,
+            { mandatoryIf: [USR] }
+        ),
+        enableLogging: AsConditional(LoggingComponent.attributes.enableLogging, { mandatoryIf: [LOG] }),
+        wrongCodeEntryLimit: AsConditional(
+            PinCredentialOrRfidCredentialComponent.attributes.wrongCodeEntryLimit,
+            { mandatoryIf: [PIN, RID] }
+        ),
+        userCodeTemporaryDisableTime: AsConditional(
+            PinCredentialOrRfidCredentialComponent.attributes.userCodeTemporaryDisableTime,
+            { mandatoryIf: [PIN, RID] }
+        ),
+        sendPinOverTheAir: AsConditional(PinCredentialComponent.attributes.sendPinOverTheAir, { optionalIf: [PIN] }),
+        requirePiNforRemoteOperation: AsConditional(
+            CredentialOverTheAirAccessComponent.attributes.requirePiNforRemoteOperation,
+            { optionalIf: [COTA] }
+        ),
+        expiringUserTimeout: AsConditional(UserComponent.attributes.expiringUserTimeout, { optionalIf: [USR] }),
+        keypadOperationEventMask: AsConditional(
+            NotificationAndPinCredentialComponent.attributes.keypadOperationEventMask,
+            { optionalIf: [NOT_PIN] }
+        ),
+        remoteOperationEventMask: AsConditional(
+            NotificationComponent.attributes.remoteOperationEventMask,
+            { optionalIf: [NOT] }
+        ),
+        manualOperationEventMask: AsConditional(
+            NotificationComponent.attributes.manualOperationEventMask,
+            { optionalIf: [NOT] }
+        ),
+        rfidOperationEventMask: AsConditional(
+            NotificationAndRfidCredentialComponent.attributes.rfidOperationEventMask,
+            { optionalIf: [NOT_RID] }
+        ),
+        keypadProgrammingEventMask: AsConditional(
+            NotificationAndPinCredentialComponent.attributes.keypadProgrammingEventMask,
+            { optionalIf: [NOT_PIN] }
+        ),
+        remoteProgrammingEventMask: AsConditional(
+            NotificationComponent.attributes.remoteProgrammingEventMask,
+            { optionalIf: [NOT] }
+        ),
+        rfidProgrammingEventMask: AsConditional(
+            NotificationAndRfidCredentialComponent.attributes.rfidProgrammingEventMask,
+            { optionalIf: [NOT_RID] }
+        )
     },
 
-    events: { ...DoorPositionSensorComponent.events, ...UserComponent.events },
-
     commands: {
-        ...LoggingComponent.commands,
-        ...UserComponent.commands,
-        ...WeekDayAccessSchedulesComponent.commands,
-        ...YearDayAccessSchedulesComponent.commands,
-        ...HolidaySchedulesComponent.commands,
-        ...NotificationComponent.commands,
-        ...PinCredentialNotUserComponent.commands,
-        ...PinCredentialAndRfidCredentialAndFingerCredentialsNotUserComponent.commands,
-        ...NotUserComponent.commands,
-        ...RfidCredentialNotUserComponent.commands
+        ...DoorLockCluster.commands,
+        getLogRecord: AsConditional(LoggingComponent.commands.getLogRecord, { mandatoryIf: [LOG] }),
+        setPinCode: AsConditional(PinCredentialNotUserComponent.commands.setPinCode, { mandatoryIf: [PIN_NOT_USR] }),
+        getPinCode: AsConditional(PinCredentialNotUserComponent.commands.getPinCode, { mandatoryIf: [PIN_NOT_USR] }),
+        clearPinCode: AsConditional(PinCredentialNotUserComponent.commands.clearPinCode, { mandatoryIf: [PIN_NOT_USR] }),
+        clearAllPinCodes: AsConditional(
+            PinCredentialNotUserComponent.commands.clearAllPinCodes,
+            { mandatoryIf: [PIN_NOT_USR] }
+        ),
+        setUserStatus: AsConditional(
+            PinCredentialAndRfidCredentialAndFingerCredentialsNotUserComponent.commands.setUserStatus,
+            { optionalIf: [PIN_RID_FGP_NOT_USR] }
+        ),
+        getUserStatus: AsConditional(
+            PinCredentialAndRfidCredentialAndFingerCredentialsNotUserComponent.commands.getUserStatus,
+            { optionalIf: [PIN_RID_FGP_NOT_USR] }
+        ),
+        setWeekDaySchedule: AsConditional(
+            WeekDayAccessSchedulesComponent.commands.setWeekDaySchedule,
+            { mandatoryIf: [WDSCH] }
+        ),
+        getWeekDaySchedule: AsConditional(
+            WeekDayAccessSchedulesComponent.commands.getWeekDaySchedule,
+            { mandatoryIf: [WDSCH] }
+        ),
+        clearWeekDaySchedule: AsConditional(
+            WeekDayAccessSchedulesComponent.commands.clearWeekDaySchedule,
+            { mandatoryIf: [WDSCH] }
+        ),
+        setYearDaySchedule: AsConditional(
+            YearDayAccessSchedulesComponent.commands.setYearDaySchedule,
+            { mandatoryIf: [YDSCH] }
+        ),
+        getYearDaySchedule: AsConditional(
+            YearDayAccessSchedulesComponent.commands.getYearDaySchedule,
+            { mandatoryIf: [YDSCH] }
+        ),
+        clearYearDaySchedule: AsConditional(
+            YearDayAccessSchedulesComponent.commands.clearYearDaySchedule,
+            { mandatoryIf: [YDSCH] }
+        ),
+        setHolidaySchedule: AsConditional(HolidaySchedulesComponent.commands.setHolidaySchedule, { mandatoryIf: [HDSCH] }),
+        getHolidaySchedule: AsConditional(HolidaySchedulesComponent.commands.getHolidaySchedule, { mandatoryIf: [HDSCH] }),
+        clearHolidaySchedule: AsConditional(
+            HolidaySchedulesComponent.commands.clearHolidaySchedule,
+            { mandatoryIf: [HDSCH] }
+        ),
+        setUserType: AsConditional(
+            PinCredentialAndRfidCredentialAndFingerCredentialsNotUserComponent.commands.setUserType,
+            { optionalIf: [PIN_RID_FGP_NOT_USR] }
+        ),
+        getUserType: AsConditional(
+            PinCredentialAndRfidCredentialAndFingerCredentialsNotUserComponent.commands.getUserType,
+            { optionalIf: [PIN_RID_FGP_NOT_USR] }
+        ),
+        setRfidCode: AsConditional(RfidCredentialNotUserComponent.commands.setRfidCode, { mandatoryIf: [RID_NOT_USR] }),
+        getRfidCode: AsConditional(RfidCredentialNotUserComponent.commands.getRfidCode, { mandatoryIf: [RID_NOT_USR] }),
+        clearRfidCode: AsConditional(RfidCredentialNotUserComponent.commands.clearRfidCode, { mandatoryIf: [RID_NOT_USR] }),
+        clearAllRfidCodes: AsConditional(
+            RfidCredentialNotUserComponent.commands.clearAllRfidCodes,
+            { mandatoryIf: [RID_NOT_USR] }
+        ),
+        setUser: AsConditional(UserComponent.commands.setUser, { mandatoryIf: [USR] }),
+        getUser: AsConditional(UserComponent.commands.getUser, { mandatoryIf: [USR] }),
+        clearUser: AsConditional(UserComponent.commands.clearUser, { mandatoryIf: [USR] }),
+        setCredential: AsConditional(UserComponent.commands.setCredential, { mandatoryIf: [USR] }),
+        getCredentialStatus: AsConditional(UserComponent.commands.getCredentialStatus, { mandatoryIf: [USR] }),
+        clearCredential: AsConditional(UserComponent.commands.clearCredential, { mandatoryIf: [USR] })
+    },
+
+    events: {
+        ...DoorLockCluster.events,
+        doorStateChange: AsConditional(DoorPositionSensorComponent.events.doorStateChange, { mandatoryIf: [DPS] }),
+        lockUserChange: AsConditional(UserComponent.events.lockUserChange, { mandatoryIf: [USR] })
     }
 });

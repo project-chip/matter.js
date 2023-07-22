@@ -7,7 +7,14 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BaseClusterComponent, ClusterComponent, ExtensibleCluster, validateFeatureSelection, ClusterForBaseCluster } from "../../cluster/ClusterFactory.js";
+import {
+    BaseClusterComponent,
+    ClusterComponent,
+    ExtensibleCluster,
+    validateFeatureSelection,
+    ClusterForBaseCluster,
+    AsConditional
+} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { Attribute, Command, TlvNoResponse, Cluster } from "../../cluster/Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
@@ -215,6 +222,7 @@ export type MediaInputExtension<SF extends TypeFromPartialBitSchema<typeof Media
     ClusterForBaseCluster<typeof MediaInputBase, SF>
     & { supportedFeatures: SF }
     & (SF extends { nameUpdates: true } ? typeof NameUpdatesComponent : {});
+const NU = { nameUpdates: true };
 
 /**
  * This cluster supports all MediaInput features. It may support illegal feature combinations.
@@ -222,4 +230,14 @@ export type MediaInputExtension<SF extends TypeFromPartialBitSchema<typeof Media
  * If you use this cluster you must manually specify which features are active and ensure the set of active features is
  * legal per the Matter specification.
  */
-export const MediaInputComplete = Cluster({ ...MediaInputCluster, commands: { ...NameUpdatesComponent.commands } });
+export const MediaInputComplete = Cluster({
+    id: MediaInputCluster.id,
+    name: MediaInputCluster.name,
+    revision: MediaInputCluster.revision,
+    features: MediaInputCluster.features,
+    attributes: MediaInputCluster.attributes,
+    commands: {
+        ...MediaInputCluster.commands,
+        renameInput: AsConditional(NameUpdatesComponent.commands.renameInput, { mandatoryIf: [NU] })
+    }
+});
