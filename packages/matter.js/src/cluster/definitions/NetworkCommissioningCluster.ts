@@ -1064,10 +1064,7 @@ export const NetworkCommissioningCluster = ExtensibleCluster({
             cluster,
             { wiFiNetworkInterface: true, threadNetworkInterface: true },
             { wiFiNetworkInterface: true, ethernetNetworkInterface: true },
-            { threadNetworkInterface: true, wiFiNetworkInterface: true },
             { threadNetworkInterface: true, ethernetNetworkInterface: true },
-            { ethernetNetworkInterface: true, wiFiNetworkInterface: true },
-            { ethernetNetworkInterface: true, threadNetworkInterface: true },
             { wiFiNetworkInterface: false, threadNetworkInterface: false, ethernetNetworkInterface: false }
         );
 
@@ -1083,10 +1080,7 @@ export type NetworkCommissioningExtension<SF extends TypeFromPartialBitSchema<ty
     & (SF extends { threadNetworkInterface: true } ? typeof ThreadNetworkInterfaceComponent : {})
     & (SF extends { wiFiNetworkInterface: true, threadNetworkInterface: true } ? never : {})
     & (SF extends { wiFiNetworkInterface: true, ethernetNetworkInterface: true } ? never : {})
-    & (SF extends { threadNetworkInterface: true, wiFiNetworkInterface: true } ? never : {})
     & (SF extends { threadNetworkInterface: true, ethernetNetworkInterface: true } ? never : {})
-    & (SF extends { ethernetNetworkInterface: true, wiFiNetworkInterface: true } ? never : {})
-    & (SF extends { ethernetNetworkInterface: true, threadNetworkInterface: true } ? never : {})
     & (SF extends { wiFiNetworkInterface: false, threadNetworkInterface: false, ethernetNetworkInterface: false } ? never : {});
 
 /**

@@ -358,7 +358,6 @@ export const SwitchCluster = ExtensibleCluster({
             { momentarySwitchMultiPress: true, momentarySwitch: false },
             { momentarySwitchMultiPress: true, momentarySwitchRelease: false },
             { latchingSwitch: true, momentarySwitch: true },
-            { momentarySwitch: true, latchingSwitch: true },
             { latchingSwitch: false, momentarySwitch: false }
         );
 
@@ -380,7 +379,6 @@ export type SwitchExtension<SF extends TypeFromPartialBitSchema<typeof SwitchBas
     & (SF extends { momentarySwitchMultiPress: true, momentarySwitch: false } ? never : {})
     & (SF extends { momentarySwitchMultiPress: true, momentarySwitchRelease: false } ? never : {})
     & (SF extends { latchingSwitch: true, momentarySwitch: true } ? never : {})
-    & (SF extends { momentarySwitch: true, latchingSwitch: true } ? never : {})
     & (SF extends { latchingSwitch: false, momentarySwitch: false } ? never : {});
 
 /**
