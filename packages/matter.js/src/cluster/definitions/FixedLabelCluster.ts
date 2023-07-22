@@ -37,4 +37,4 @@ export const FixedLabelCluster = Cluster({
          */
         labelList: Attribute(0x0, TlvArray(TlvLabelStruct), { persistent: true, default: [] })
     }
-});
+})

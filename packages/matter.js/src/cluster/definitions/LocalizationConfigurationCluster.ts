@@ -55,4 +55,4 @@ export const LocalizationConfigurationCluster = Cluster({
          */
         supportedLocales: FixedAttribute(0x1, TlvArray(TlvString, { maxLength: 32 }), { default: [] })
     }
-});
+})

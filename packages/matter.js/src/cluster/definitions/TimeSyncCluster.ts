@@ -7,9 +7,27 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BaseClusterComponent, ClusterComponent, ExtensibleCluster, validateFeatureSelection, extendCluster, ClusterForBaseCluster } from "../../cluster/ClusterFactory.js";
+import {
+    BaseClusterComponent,
+    ClusterComponent,
+    ExtensibleCluster,
+    validateFeatureSelection,
+    extendCluster,
+    ClusterForBaseCluster
+} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { Attribute, OptionalAttribute, WritableAttribute, AccessLevel, Command, TlvNoResponse, FixedAttribute, Event, EventPriority, Cluster } from "../../cluster/Cluster.js";
+import {
+    Attribute,
+    OptionalAttribute,
+    WritableAttribute,
+    AccessLevel,
+    Command,
+    TlvNoResponse,
+    FixedAttribute,
+    Event,
+    EventPriority,
+    Cluster
+} from "../../cluster/Cluster.js";
 import { TlvEpochUs, TlvEnum, TlvInt32, TlvUInt16 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvNodeId } from "../../datatype/NodeId.js";

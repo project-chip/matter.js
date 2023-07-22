@@ -66,4 +66,4 @@ export const LeafWetnessMeasurementCluster = Cluster({
          */
         tolerance: OptionalAttribute(0x3, TlvUInt16.bound({ max: 2048 }))
     }
-});
+})

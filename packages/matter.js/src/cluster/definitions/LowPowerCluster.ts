@@ -30,4 +30,4 @@ export const LowPowerCluster = Cluster({
          */
         sleep: Command(0x0, TlvNoArguments, 0x0, TlvNoResponse)
     }
-});
+})

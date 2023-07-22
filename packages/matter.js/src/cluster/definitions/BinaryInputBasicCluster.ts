@@ -32,4 +32,4 @@ export const BinaryInputBasicCluster = Cluster({
         statusFlags: Attribute(0x6f, TlvUInt8),
         applicationType: OptionalAttribute(0x100, TlvUInt32)
     }
-});
+})

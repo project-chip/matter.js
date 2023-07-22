@@ -36,4 +36,4 @@ export const UserLabelCluster = Cluster({
             { persistent: true, default: [], writeAcl: AccessLevel.Manage }
         )
     }
-});
+})

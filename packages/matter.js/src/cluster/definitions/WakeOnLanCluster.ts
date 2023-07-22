@@ -46,4 +46,4 @@ export const WakeOnLanCluster = Cluster({
          */
         linkLocalAddress: OptionalFixedAttribute(0x1, TlvByteString.bound({ length: 16 }))
     }
-});
+})

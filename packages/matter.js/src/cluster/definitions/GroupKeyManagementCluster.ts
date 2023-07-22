@@ -9,7 +9,15 @@
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { BaseClusterComponent, ExtensibleCluster, validateFeatureSelection, ClusterForBaseCluster } from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { WritableFabricScopedAttribute, AccessLevel, FabricScopedAttribute, FixedAttribute, Command, TlvNoResponse, Cluster } from "../../cluster/Cluster.js";
+import {
+    WritableFabricScopedAttribute,
+    AccessLevel,
+    FabricScopedAttribute,
+    FixedAttribute,
+    Command,
+    TlvNoResponse,
+    Cluster
+} from "../../cluster/Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvGroupId } from "../../datatype/GroupId.js";

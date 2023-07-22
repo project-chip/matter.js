@@ -64,4 +64,4 @@ export const TemperatureMeasurementCluster = Cluster({
          */
         tolerance: OptionalAttribute(0x3, TlvUInt16.bound({ max: 2048 }), { default: 0 })
     }
-});
+})

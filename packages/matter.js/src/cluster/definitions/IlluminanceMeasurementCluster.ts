@@ -75,4 +75,4 @@ export const IlluminanceMeasurementCluster = Cluster({
          */
         lightSensorType: OptionalAttribute(0x4, TlvNullable(TlvUInt8), { default: null })
     }
-});
+})
