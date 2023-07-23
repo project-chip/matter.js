@@ -7,9 +7,26 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BaseClusterComponent, ClusterComponent, ExtensibleCluster, validateFeatureSelection, extendCluster, ClusterForBaseCluster } from "../../cluster/ClusterFactory.js";
+import {
+    BaseClusterComponent,
+    ClusterComponent,
+    ExtensibleCluster,
+    validateFeatureSelection,
+    extendCluster,
+    ClusterForBaseCluster,
+    AsConditional
+} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { Attribute, OptionalAttribute, WritableAttribute, OptionalWritableAttribute, Command, TlvNoResponse, AccessLevel, Cluster } from "../../cluster/Cluster.js";
+import {
+    Attribute,
+    OptionalAttribute,
+    WritableAttribute,
+    OptionalWritableAttribute,
+    Command,
+    TlvNoResponse,
+    AccessLevel,
+    Cluster
+} from "../../cluster/Cluster.js";
 import { TlvUInt8, TlvBitmap, TlvUInt16, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
@@ -462,6 +479,8 @@ export type LevelControlExtension<SF extends TypeFromPartialBitSchema<typeof Lev
     & { supportedFeatures: SF }
     & (SF extends { lighting: true } ? typeof LightingComponent : {})
     & (SF extends { frequency: true } ? typeof FrequencyComponent : {});
+const LT = { lighting: true };
+const FQ = { frequency: true };
 
 /**
  * This cluster supports all LevelControl features. It may support illegal feature combinations.
@@ -470,7 +489,22 @@ export type LevelControlExtension<SF extends TypeFromPartialBitSchema<typeof Lev
  * legal per the Matter specification.
  */
 export const LevelControlComplete = Cluster({
-    ...LevelControlCluster,
-    attributes: { ...LightingComponent.attributes, ...FrequencyComponent.attributes },
-    commands: { ...FrequencyComponent.commands }
+    id: LevelControlCluster.id,
+    name: LevelControlCluster.name,
+    revision: LevelControlCluster.revision,
+    features: LevelControlCluster.features,
+
+    attributes: {
+        ...LevelControlCluster.attributes,
+        remainingTime: AsConditional(LightingComponent.attributes.remainingTime, { mandatoryIf: [LT] }),
+        currentFrequency: AsConditional(FrequencyComponent.attributes.currentFrequency, { mandatoryIf: [FQ] }),
+        minFrequency: AsConditional(FrequencyComponent.attributes.minFrequency, { mandatoryIf: [FQ] }),
+        maxFrequency: AsConditional(FrequencyComponent.attributes.maxFrequency, { mandatoryIf: [FQ] }),
+        startUpCurrentLevel: AsConditional(LightingComponent.attributes.startUpCurrentLevel, { mandatoryIf: [LT] })
+    },
+
+    commands: {
+        ...LevelControlCluster.commands,
+        moveToClosestFrequency: AsConditional(FrequencyComponent.commands.moveToClosestFrequency, { mandatoryIf: [FQ] })
+    }
 });

@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { FeatureBitmap, FeatureNames, translateBitmap } from "./FeatureBitmap.js";
+import { ClusterModel } from "../../models/index.js";
+import { FeatureBitmap, translateBitmap } from "./FeatureBitmap.js";
 
 /**
  * The condition for supported patterns of complex variance on Cluster
@@ -19,7 +20,7 @@ export type VarianceCondition = {
 /**
  * Convert a VarianceCondition to an array of FeatureBitmaps.
  */
-export function conditionToBitmaps(condition: VarianceCondition, featureNames: FeatureNames = {}): FeatureBitmap[] {
+export function conditionToBitmaps(condition: VarianceCondition, cluster: ClusterModel): FeatureBitmap[] {
     const bitmap = {} as FeatureBitmap;
     if (condition.allOf) {
         for (const name of condition.allOf) {
@@ -31,12 +32,12 @@ export function conditionToBitmaps(condition: VarianceCondition, featureNames: F
     }
 
     if (!condition.anyOf) {
-        return [translateBitmap(bitmap, featureNames)];
+        return [translateBitmap(bitmap, cluster)];
     }
 
     const bitmaps = Array<typeof bitmap>();
     for (const name of condition.anyOf) {
-        bitmaps.push(translateBitmap({ ...bitmap, [name]: true }, featureNames));
+        bitmaps.push(translateBitmap({ ...bitmap, [name]: true }, cluster));
     }
 
     return bitmaps;

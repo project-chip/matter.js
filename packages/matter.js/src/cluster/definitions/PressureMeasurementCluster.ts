@@ -7,7 +7,14 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BaseClusterComponent, ClusterComponent, ExtensibleCluster, validateFeatureSelection, ClusterForBaseCluster } from "../../cluster/ClusterFactory.js";
+import {
+    BaseClusterComponent,
+    ClusterComponent,
+    ExtensibleCluster,
+    validateFeatureSelection,
+    ClusterForBaseCluster,
+    AsConditional
+} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { Attribute, OptionalAttribute, Cluster } from "../../cluster/Cluster.js";
 import { TlvInt16, TlvUInt16, TlvInt8 } from "../../tlv/TlvNumber.js";
@@ -177,6 +184,8 @@ export type PressureMeasurementExtension<SF extends TypeFromPartialBitSchema<typ
     & { supportedFeatures: SF }
     & (SF extends { extended: true } ? typeof ExtendedComponent : {});
 
+const EXT = { extended: true };
+
 /**
  * This cluster supports all PressureMeasurement features. It may support illegal feature combinations.
  *
@@ -184,6 +193,17 @@ export type PressureMeasurementExtension<SF extends TypeFromPartialBitSchema<typ
  * legal per the Matter specification.
  */
 export const PressureMeasurementComplete = Cluster({
-    ...PressureMeasurementCluster,
-    attributes: { ...ExtendedComponent.attributes }
+    id: PressureMeasurementCluster.id,
+    name: PressureMeasurementCluster.name,
+    revision: PressureMeasurementCluster.revision,
+    features: PressureMeasurementCluster.features,
+
+    attributes: {
+        ...PressureMeasurementCluster.attributes,
+        scaledValue: AsConditional(ExtendedComponent.attributes.scaledValue, { mandatoryIf: [EXT] }),
+        minScaledValue: AsConditional(ExtendedComponent.attributes.minScaledValue, { mandatoryIf: [EXT] }),
+        maxScaledValue: AsConditional(ExtendedComponent.attributes.maxScaledValue, { mandatoryIf: [EXT] }),
+        scaledTolerance: AsConditional(ExtendedComponent.attributes.scaledTolerance, { optionalIf: [EXT] }),
+        scale: AsConditional(ExtendedComponent.attributes.scale, { mandatoryIf: [EXT] })
+    }
 });

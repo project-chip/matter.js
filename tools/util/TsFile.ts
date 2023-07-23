@@ -43,6 +43,7 @@ function mapSpec(xref?: Specification.CrossReference) {
 export abstract class Entry {
     private documentation?: Documentation;
     private docText?: string;
+    public shouldGroup: boolean = false;
 
     constructor(protected parentBlock: Block | undefined) { }
 
@@ -145,6 +146,10 @@ export class Block extends Entry {
     private addBefore?: Entry;
     private definedNames = new Set<string>();
 
+    protected indent: string = "";
+    protected prefix: string = "";
+    protected suffix: string = "";
+
     constructor(parentBlock: Block | undefined) {
         super(parentBlock);
     }
@@ -165,29 +170,52 @@ export class Block extends Entry {
         return this.entries[index];
     }
 
-    serialize(linePrefix: string) {
-        const pieces = new Array<string>();
-        for (let i = 0; i < this.length; i++) {
-            const entry = this.get(i);
-            const text = entry.toString(linePrefix);
-
-            if (entry instanceof Block && text === "") {
-                continue;
-            }
-
-            pieces.push(`${text}${this.delimiterAfter(i, text)}`);
-
-            if (i < this.length - 1) {
-                if (entry instanceof Block) {
-                    // Always have blank line after blocks with following content
-                    pieces.push("");
-                } else if (entry instanceof Atom && (this.get(i + 1).isDocumented)) {
-                    // Always have blank line after atoms followed by a comment
-                    pieces.push("");
-                }
+    override serialize(linePrefix = "") {
+        const childLinePrefix = `${linePrefix}${this.indent}`;
+        const serializedEntries = Array<string>();
+        for (const entry of this.entries) {
+            const text = entry.toString(childLinePrefix);
+            if (!(entry instanceof Block) || text !== "") {
+                serializedEntries.push(text);
             }
         }
-        return pieces.join("\n");
+        return this.layOutEntries(linePrefix, serializedEntries);
+    }
+
+    layOutEntries(linePrefix: string, serializedEntries: string[]) {
+        const parts = Array<string>();
+        if (this.prefix) {
+            parts.push(`${linePrefix}${this.prefix}`);
+        }
+
+        let needSpace = false;
+        for (let i = 0; i < serializedEntries.length; i++) {
+            // Add delimiter to entry if necessary
+            const entry = `${serializedEntries[i]}${this.delimiterAfter(i, serializedEntries[i])}`;
+
+            // Separate documented and large elements from their siblings
+            if (this.entries[i].isDocumented || (entry.split("\n").length > 5 && !this.entries[i].shouldGroup)) {
+                if (i) {
+                    parts.push("");
+                }
+                needSpace = true;
+            } else if (needSpace) {
+                parts.push("");
+                needSpace = false;
+            }
+
+            if (this.entries[i].isDocumented) {
+                needSpace = true;
+            }
+
+            // Add the entry
+            parts.push(entry);
+        }
+
+        if (this.suffix) {
+            parts.push(`${linePrefix}${this.suffix}`);
+        }
+        return parts.join("\n");
     }
 
     /** Access the (required) parent */
@@ -348,56 +376,11 @@ abstract class NestedBlock extends Block {
     /** Add a TsDoc style comment */
     doc?: string | Documentation;
 
-    constructor(parent: Block | undefined, protected prefix: string, protected suffix: string) {
+    constructor(parent: Block | undefined, prefix: string, suffix: string) {
         super(parent);
-    }
-
-    override serialize(linePrefix = "") {
-        const childLinePrefix = `${linePrefix}${INDENT}`;
-        const serializedEntries = Array<string>();
-        for (const entry of this.entries) {
-            const text = entry.toString(childLinePrefix);
-            if (!(entry instanceof Block) || text !== "") {
-                serializedEntries.push(text);
-            }
-        }
-        return this.layOutEntries(linePrefix, serializedEntries);
-    }
-
-    layOutEntries(linePrefix: string, serializedEntries: string[]) {
-        const parts = Array<string>();
-        if (this.prefix) {
-            parts.push(`${linePrefix}${this.prefix}`);
-        }
-
-        let needSpace = false;
-        for (let i = 0; i < serializedEntries.length; i++) {
-            // Add delimiter to entry if necessary
-            const entry = `${serializedEntries[i]}${this.delimiterAfter(i, serializedEntries[i])}`;
-
-            // Separate documented and large elements from their siblings
-            if (this.entries[i].isDocumented || entry.split("\n").length > 5) {
-                if (i) {
-                    parts.push("");
-                }
-                needSpace = true;
-            } else if (needSpace) {
-                parts.push("");
-                needSpace = false;
-            }
-
-            if (this.entries[i].isDocumented) {
-                needSpace = true;
-            }
-
-            // Add the entry
-            parts.push(entry);
-        }
-
-        if (this.suffix) {
-            parts.push(`${linePrefix}${this.suffix}`);
-        }
-        return parts.join("\n");
+        this.indent = INDENT;
+        this.prefix = prefix;
+        this.suffix = suffix;
     }
 }
 
@@ -497,7 +480,7 @@ class ExpressionBlock extends NestedBlock {
             case ExpressionLayout.SingleLine:
                 {
                     let line = serializedEntries.map(e => e.trim()).join(", ");
-                    if (isArrayOrObject && !line.startsWith("[") && !line.startsWith("{")) {
+                    if (isArrayOrObject && !this.prefix.endsWith("[") && !line.startsWith("{")) {
                         line = ` ${line} `;
                     }
                     return `${linePrefix}${this.prefix}${line}${this.suffix}`;
@@ -553,10 +536,11 @@ export class TsFile extends Block {
     save() {
         if (this.imports.size) {
             const importBlock = this.header.section();
-            importBlock.blank();
             this.imports.forEach((symbols, name) => {
                 if (symbols.length) {
-                    importBlock.atom(`import { ${symbols.join(", ")} } from "${name}.js"`);
+                    const imp = importBlock.expressions("import {", `} from "${name}.js"`);
+                    imp.shouldGroup = true;
+                    symbols.forEach(s => imp.atom(s));
                 } else {
                     importBlock.atom(`import "${name}.js"`);
                 }

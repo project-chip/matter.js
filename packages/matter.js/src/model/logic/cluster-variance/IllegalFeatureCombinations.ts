@@ -5,6 +5,7 @@
  */
 
 import { InternalError } from "../../../common/InternalError.js";
+import { isDeepEqual } from "../../../util/DeepEqual.js";
 import { Conformance } from "../../aspects/index.js";
 import { ClusterModel, DatatypeModel } from "../../models/index.js";
 import { FeatureBitmap } from "./FeatureBitmap.js";
@@ -27,7 +28,7 @@ type Choices = {
  * the 1.1 specifications.
  * 
  * Throws an error if conformance does not adhere to supported rules.  This
- * indicates the ruleset needs to be augmented.
+ * indicates the ruleset needs augmentation.
  */
 export function IllegalFeatureCombinations(cluster: ClusterModel) {
     const illegal = [] as IllegalFeatureCombinations;
@@ -37,6 +38,12 @@ export function IllegalFeatureCombinations(cluster: ClusterModel) {
         addFeatureNode(f, f.conformance.ast, illegal, choices);
     }
 
+    function add(flags: FeatureBitmap) {
+        if (!illegal.some(e => isDeepEqual(e, flags))) {
+            illegal.push(flags);
+        }
+    }
+
     for (const choice of Object.values(choices)) {
         // If choices are mutually exclusive, reject any two flags in
         // combination
@@ -44,7 +51,7 @@ export function IllegalFeatureCombinations(cluster: ClusterModel) {
             for (const f1 of choice.features) {
                 for (const f2 of choice.features) {
                     if (f1 !== f2) {
-                        illegal.push({ [f1]: true, [f2]: true });
+                        add({ [f1]: true, [f2]: true });
                     }
                 }
             }
@@ -55,7 +62,8 @@ export function IllegalFeatureCombinations(cluster: ClusterModel) {
         for (const f of choice.features) {
             flags[f] = false;
         }
-        illegal.push(flags);
+
+        add(flags);
     }
 
     return { illegal, requiresFeatures: !!choices.length };

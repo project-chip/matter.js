@@ -7,7 +7,14 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BaseClusterComponent, ClusterComponent, ExtensibleCluster, validateFeatureSelection, ClusterForBaseCluster } from "../../cluster/ClusterFactory.js";
+import {
+    BaseClusterComponent,
+    ClusterComponent,
+    ExtensibleCluster,
+    validateFeatureSelection,
+    ClusterForBaseCluster,
+    AsConditional
+} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { WritableAttribute, AccessLevel, FixedAttribute, Cluster } from "../../cluster/Cluster.js";
 import { TlvEnum } from "../../tlv/TlvNumber.js";
@@ -212,6 +219,7 @@ export type TimeFormatLocalizationExtension<SF extends TypeFromPartialBitSchema<
     ClusterForBaseCluster<typeof TimeFormatLocalizationBase, SF>
     & { supportedFeatures: SF }
     & (SF extends { calendarFormat: true } ? typeof CalendarFormatComponent : {});
+const CALFMT = { calendarFormat: true };
 
 /**
  * This cluster supports all TimeFormatLocalization features. It may support illegal feature combinations.
@@ -220,6 +228,17 @@ export type TimeFormatLocalizationExtension<SF extends TypeFromPartialBitSchema<
  * legal per the Matter specification.
  */
 export const TimeFormatLocalizationComplete = Cluster({
-    ...TimeFormatLocalizationCluster,
-    attributes: { ...CalendarFormatComponent.attributes }
+    id: TimeFormatLocalizationCluster.id,
+    name: TimeFormatLocalizationCluster.name,
+    revision: TimeFormatLocalizationCluster.revision,
+    features: TimeFormatLocalizationCluster.features,
+
+    attributes: {
+        ...TimeFormatLocalizationCluster.attributes,
+        activeCalendarType: AsConditional(CalendarFormatComponent.attributes.activeCalendarType, { mandatoryIf: [CALFMT] }),
+        supportedCalendarTypes: AsConditional(
+            CalendarFormatComponent.attributes.supportedCalendarTypes,
+            { mandatoryIf: [CALFMT] }
+        )
+    }
 });

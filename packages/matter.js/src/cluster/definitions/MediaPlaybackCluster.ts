@@ -7,7 +7,15 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BaseClusterComponent, ClusterComponent, ExtensibleCluster, validateFeatureSelection, extendCluster, ClusterForBaseCluster } from "../../cluster/ClusterFactory.js";
+import {
+    BaseClusterComponent,
+    ClusterComponent,
+    ExtensibleCluster,
+    validateFeatureSelection,
+    extendCluster,
+    ClusterForBaseCluster,
+    AsConditional
+} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { Attribute, Command, OptionalCommand, Cluster } from "../../cluster/Cluster.js";
 import { TlvEnum, TlvUInt64, TlvEpochUs, TlvFloat } from "../../tlv/TlvNumber.js";
@@ -499,6 +507,8 @@ export type MediaPlaybackExtension<SF extends TypeFromPartialBitSchema<typeof Me
     & { supportedFeatures: SF }
     & (SF extends { advancedSeek: true } ? typeof AdvancedSeekComponent : {})
     & (SF extends { variableSpeed: true } ? typeof VariableSpeedComponent : {});
+const AS = { advancedSeek: true };
+const VS = { variableSpeed: true };
 
 /**
  * This cluster supports all MediaPlayback features. It may support illegal feature combinations.
@@ -507,7 +517,25 @@ export type MediaPlaybackExtension<SF extends TypeFromPartialBitSchema<typeof Me
  * legal per the Matter specification.
  */
 export const MediaPlaybackComplete = Cluster({
-    ...MediaPlaybackCluster,
-    attributes: { ...AdvancedSeekComponent.attributes },
-    commands: { ...AdvancedSeekComponent.commands, ...VariableSpeedComponent.commands }
+    id: MediaPlaybackCluster.id,
+    name: MediaPlaybackCluster.name,
+    revision: MediaPlaybackCluster.revision,
+    features: MediaPlaybackCluster.features,
+
+    attributes: {
+        ...MediaPlaybackCluster.attributes,
+        startTime: AsConditional(AdvancedSeekComponent.attributes.startTime, { mandatoryIf: [AS] }),
+        duration: AsConditional(AdvancedSeekComponent.attributes.duration, { mandatoryIf: [AS] }),
+        sampledPosition: AsConditional(AdvancedSeekComponent.attributes.sampledPosition, { mandatoryIf: [AS] }),
+        playbackSpeed: AsConditional(AdvancedSeekComponent.attributes.playbackSpeed, { mandatoryIf: [AS] }),
+        seekRangeEnd: AsConditional(AdvancedSeekComponent.attributes.seekRangeEnd, { mandatoryIf: [AS] }),
+        seekRangeStart: AsConditional(AdvancedSeekComponent.attributes.seekRangeStart, { mandatoryIf: [AS] })
+    },
+
+    commands: {
+        ...MediaPlaybackCluster.commands,
+        rewind: AsConditional(VariableSpeedComponent.commands.rewind, { mandatoryIf: [VS] }),
+        fastForward: AsConditional(VariableSpeedComponent.commands.fastForward, { mandatoryIf: [VS] }),
+        seek: AsConditional(AdvancedSeekComponent.commands.seek, { mandatoryIf: [AS] })
+    }
 });

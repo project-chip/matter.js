@@ -6,7 +6,18 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Cluster, FixedAttribute, WritableAttribute, AccessLevel, OptionalFixedAttribute, OptionalWritableAttribute, OptionalAttribute, Event, EventPriority, OptionalEvent } from "../../cluster/Cluster.js";
+import {
+    Cluster,
+    FixedAttribute,
+    WritableAttribute,
+    AccessLevel,
+    OptionalFixedAttribute,
+    OptionalWritableAttribute,
+    OptionalAttribute,
+    Event,
+    EventPriority,
+    OptionalEvent
+} from "../../cluster/Cluster.js";
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvUInt16, TlvUInt32, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvString } from "../../tlv/TlvString.js";

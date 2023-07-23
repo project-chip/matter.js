@@ -7,7 +7,14 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BaseClusterComponent, ClusterComponent, ExtensibleCluster, validateFeatureSelection, ClusterForBaseCluster } from "../../cluster/ClusterFactory.js";
+import {
+    BaseClusterComponent,
+    ClusterComponent,
+    ExtensibleCluster,
+    validateFeatureSelection,
+    ClusterForBaseCluster,
+    AsConditional
+} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { FixedAttribute, Attribute, OptionalWritableAttribute, Command, TlvNoResponse, WritableAttribute, Cluster } from "../../cluster/Cluster.js";
 import { TlvString } from "../../tlv/TlvString.js";
@@ -266,6 +273,7 @@ export type ModeSelectExtension<SF extends TypeFromPartialBitSchema<typeof ModeS
     ClusterForBaseCluster<typeof ModeSelectBase, SF>
     & { supportedFeatures: SF }
     & (SF extends { onOff: true } ? typeof OnOffComponent : {});
+const DEPONOFF = { onOff: true };
 
 /**
  * This cluster supports all ModeSelect features. It may support illegal feature combinations.
@@ -273,4 +281,14 @@ export type ModeSelectExtension<SF extends TypeFromPartialBitSchema<typeof ModeS
  * If you use this cluster you must manually specify which features are active and ensure the set of active features is
  * legal per the Matter specification.
  */
-export const ModeSelectComplete = Cluster({ ...ModeSelectCluster, attributes: { ...OnOffComponent.attributes } });
+export const ModeSelectComplete = Cluster({
+    id: ModeSelectCluster.id,
+    name: ModeSelectCluster.name,
+    revision: ModeSelectCluster.revision,
+    features: ModeSelectCluster.features,
+    attributes: {
+        ...ModeSelectCluster.attributes,
+        onMode: AsConditional(OnOffComponent.attributes.onMode, { mandatoryIf: [DEPONOFF] })
+    },
+    commands: ModeSelectCluster.commands
+});

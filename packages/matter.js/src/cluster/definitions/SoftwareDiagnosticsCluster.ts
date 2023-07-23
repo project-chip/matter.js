@@ -7,7 +7,14 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BaseClusterComponent, ClusterComponent, ExtensibleCluster, validateFeatureSelection, ClusterForBaseCluster } from "../../cluster/ClusterFactory.js";
+import {
+    BaseClusterComponent,
+    ClusterComponent,
+    ExtensibleCluster,
+    validateFeatureSelection,
+    ClusterForBaseCluster,
+    AsConditional
+} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { OptionalAttribute, OptionalEvent, EventPriority, Attribute, Command, TlvNoResponse, Cluster } from "../../cluster/Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
@@ -229,6 +236,7 @@ export type SoftwareDiagnosticsExtension<SF extends TypeFromPartialBitSchema<typ
     ClusterForBaseCluster<typeof SoftwareDiagnosticsBase, SF>
     & { supportedFeatures: SF }
     & (SF extends { watermarks: true } ? typeof WatermarksComponent : {});
+const WTRMRK = { watermarks: true };
 
 /**
  * This cluster supports all SoftwareDiagnostics features. It may support illegal feature combinations.
@@ -237,7 +245,19 @@ export type SoftwareDiagnosticsExtension<SF extends TypeFromPartialBitSchema<typ
  * legal per the Matter specification.
  */
 export const SoftwareDiagnosticsComplete = Cluster({
-    ...SoftwareDiagnosticsCluster,
-    attributes: { ...WatermarksComponent.attributes },
-    commands: { ...WatermarksComponent.commands }
+    id: SoftwareDiagnosticsCluster.id,
+    name: SoftwareDiagnosticsCluster.name,
+    revision: SoftwareDiagnosticsCluster.revision,
+    features: SoftwareDiagnosticsCluster.features,
+
+    attributes: {
+        ...SoftwareDiagnosticsCluster.attributes,
+        currentHeapHighWatermark: AsConditional(
+            WatermarksComponent.attributes.currentHeapHighWatermark,
+            { mandatoryIf: [WTRMRK] }
+        )
+    },
+
+    commands: { resetWatermarks: AsConditional(WatermarksComponent.commands.resetWatermarks, { mandatoryIf: [WTRMRK] }) },
+    events: SoftwareDiagnosticsCluster.events
 });

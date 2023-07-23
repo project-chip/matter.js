@@ -7,7 +7,15 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BaseClusterComponent, ClusterComponent, ExtensibleCluster, validateFeatureSelection, extendCluster, ClusterForBaseCluster } from "../../cluster/ClusterFactory.js";
+import {
+    BaseClusterComponent,
+    ClusterComponent,
+    ExtensibleCluster,
+    validateFeatureSelection,
+    extendCluster,
+    ClusterForBaseCluster,
+    AsConditional
+} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { OptionalAttribute, Attribute, Command, TlvNoResponse, Cluster } from "../../cluster/Cluster.js";
 import { TlvEnum, TlvUInt64 } from "../../tlv/TlvNumber.js";
@@ -274,6 +282,9 @@ export type EthernetNetworkDiagnosticsExtension<SF extends TypeFromPartialBitSch
     & (SF extends { errorCounts: true } ? typeof ErrorCountsComponent : {})
     & (SF extends { packetCounts: true } | { errorCounts: true } ? typeof PacketCountsOrErrorCountsComponent : {});
 
+const PKTCNT = { packetCounts: true };
+const ERRCNT = { errorCounts: true };
+
 /**
  * This cluster supports all EthernetNetworkDiagnostics features. It may support illegal feature combinations.
  *
@@ -281,7 +292,19 @@ export type EthernetNetworkDiagnosticsExtension<SF extends TypeFromPartialBitSch
  * legal per the Matter specification.
  */
 export const EthernetNetworkDiagnosticsComplete = Cluster({
-    ...EthernetNetworkDiagnosticsCluster,
-    attributes: { ...PacketCountsComponent.attributes, ...ErrorCountsComponent.attributes },
-    commands: { ...PacketCountsOrErrorCountsComponent.commands }
+    id: EthernetNetworkDiagnosticsCluster.id,
+    name: EthernetNetworkDiagnosticsCluster.name,
+    revision: EthernetNetworkDiagnosticsCluster.revision,
+    features: EthernetNetworkDiagnosticsCluster.features,
+
+    attributes: {
+        ...EthernetNetworkDiagnosticsCluster.attributes,
+        packetRxCount: AsConditional(PacketCountsComponent.attributes.packetRxCount, { mandatoryIf: [PKTCNT] }),
+        packetTxCount: AsConditional(PacketCountsComponent.attributes.packetTxCount, { mandatoryIf: [PKTCNT] }),
+        txErrCount: AsConditional(ErrorCountsComponent.attributes.txErrCount, { mandatoryIf: [ERRCNT] }),
+        collisionCount: AsConditional(ErrorCountsComponent.attributes.collisionCount, { mandatoryIf: [ERRCNT] }),
+        overrunCount: AsConditional(ErrorCountsComponent.attributes.overrunCount, { mandatoryIf: [ERRCNT] })
+    },
+
+    commands: { resetCounts: AsConditional(PacketCountsOrErrorCountsComponent.commands.resetCounts, { mandatoryIf: [PKTCNT, ERRCNT] }) }
 });

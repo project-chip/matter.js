@@ -7,7 +7,15 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BaseClusterComponent, ClusterComponent, ExtensibleCluster, validateFeatureSelection, extendCluster, ClusterForBaseCluster } from "../../cluster/ClusterFactory.js";
+import {
+    BaseClusterComponent,
+    ClusterComponent,
+    ExtensibleCluster,
+    validateFeatureSelection,
+    extendCluster,
+    ClusterForBaseCluster,
+    AsConditional
+} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { OptionalAttribute, Command, TlvNoResponse, Attribute, Cluster } from "../../cluster/Cluster.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
@@ -355,6 +363,9 @@ export type ChannelExtension<SF extends TypeFromPartialBitSchema<typeof ChannelB
     & (SF extends { lineupInfo: true } ? typeof LineupInfoComponent : {})
     & (SF extends { channelList: true } | { lineupInfo: true } ? typeof ChannelListOrLineupInfoComponent : {});
 
+const CL = { channelList: true };
+const LI = { lineupInfo: true };
+
 /**
  * This cluster supports all Channel features. It may support illegal feature combinations.
  *
@@ -362,7 +373,17 @@ export type ChannelExtension<SF extends TypeFromPartialBitSchema<typeof ChannelB
  * legal per the Matter specification.
  */
 export const ChannelComplete = Cluster({
-    ...ChannelCluster,
-    attributes: { ...ChannelListComponent.attributes, ...LineupInfoComponent.attributes },
-    commands: { ...ChannelListOrLineupInfoComponent.commands }
+    id: ChannelCluster.id,
+    name: ChannelCluster.name,
+    revision: ChannelCluster.revision,
+    features: ChannelCluster.features,
+    attributes: {
+        ...ChannelCluster.attributes,
+        channelList: AsConditional(ChannelListComponent.attributes.channelList, { mandatoryIf: [CL] }),
+        lineup: AsConditional(LineupInfoComponent.attributes.lineup, { mandatoryIf: [LI] })
+    },
+    commands: {
+        ...ChannelCluster.commands,
+        changeChannel: AsConditional(ChannelListOrLineupInfoComponent.commands.changeChannel, { mandatoryIf: [CL, LI] })
+    }
 });

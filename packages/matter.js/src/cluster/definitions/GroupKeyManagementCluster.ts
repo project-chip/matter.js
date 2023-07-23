@@ -9,7 +9,15 @@
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { BaseClusterComponent, ExtensibleCluster, validateFeatureSelection, ClusterForBaseCluster } from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { WritableFabricScopedAttribute, AccessLevel, FabricScopedAttribute, FixedAttribute, Command, TlvNoResponse, Cluster } from "../../cluster/Cluster.js";
+import {
+    WritableFabricScopedAttribute,
+    AccessLevel,
+    FabricScopedAttribute,
+    FixedAttribute,
+    Command,
+    TlvNoResponse,
+    Cluster
+} from "../../cluster/Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvGroupId } from "../../datatype/GroupId.js";
@@ -443,11 +451,3 @@ export const GroupKeyManagementCluster = ExtensibleCluster({
 export type GroupKeyManagementExtension<SF extends TypeFromPartialBitSchema<typeof GroupKeyManagementBase.features>> =
     ClusterForBaseCluster<typeof GroupKeyManagementBase, SF>
     & { supportedFeatures: SF };
-
-/**
- * This cluster supports all GroupKeyManagement features. It may support illegal feature combinations.
- *
- * If you use this cluster you must manually specify which features are active and ensure the set of active features is
- * legal per the Matter specification.
- */
-export const GroupKeyManagementComplete = Cluster({ ...GroupKeyManagementCluster });

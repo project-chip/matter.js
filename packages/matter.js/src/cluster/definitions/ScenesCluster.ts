@@ -508,11 +508,3 @@ export const ScenesCluster = ExtensibleCluster({
 export type ScenesExtension<SF extends TypeFromPartialBitSchema<typeof ScenesBase.features>> =
     ClusterForBaseCluster<typeof ScenesBase, SF>
     & { supportedFeatures: SF };
-
-/**
- * This cluster supports all Scenes features. It may support illegal feature combinations.
- *
- * If you use this cluster you must manually specify which features are active and ensure the set of active features is
- * legal per the Matter specification.
- */
-export const ScenesComplete = Cluster({ ...ScenesCluster });

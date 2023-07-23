@@ -7,9 +7,29 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BaseClusterComponent, ClusterComponent, ExtensibleCluster, validateFeatureSelection, extendCluster, preventCluster, ClusterForBaseCluster } from "../../cluster/ClusterFactory.js";
+import {
+    BaseClusterComponent,
+    ClusterComponent,
+    ExtensibleCluster,
+    validateFeatureSelection,
+    extendCluster,
+    preventCluster,
+    ClusterForBaseCluster,
+    AsConditional
+} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitsFromPartial, BitFieldEnum, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { FixedAttribute, Attribute, WritableAttribute, AccessLevel, OptionalAttribute, Command, TlvNoResponse, OptionalFixedAttribute, OptionalCommand, Cluster } from "../../cluster/Cluster.js";
+import {
+    FixedAttribute,
+    Attribute,
+    WritableAttribute,
+    AccessLevel,
+    OptionalAttribute,
+    Command,
+    TlvNoResponse,
+    OptionalFixedAttribute,
+    OptionalCommand,
+    Cluster
+} from "../../cluster/Cluster.js";
 import { TlvEnum, TlvUInt8, TlvBitmap, TlvUInt16, TlvPercent100ths, TlvPercent } from "../../tlv/TlvNumber.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
@@ -929,6 +949,15 @@ export type WindowCoveringExtension<SF extends TypeFromPartialBitSchema<typeof W
     & (SF extends { positionAwareTilt: true, tilt: false } ? never : {})
     & (SF extends { lift: false, tilt: false } ? never : {});
 
+const LF_PA_LF_ABS = { lift: true, positionAwareLift: true, absolutePosition: true };
+const TL_PA_TL_ABS = { tilt: true, positionAwareTilt: true, absolutePosition: true };
+const LF = { lift: true };
+const TL = { tilt: true };
+const LF_PA_LF = { lift: true, positionAwareLift: true };
+const TL_PA_TL = { tilt: true, positionAwareTilt: true };
+const LF_ABS = { lift: true, absolutePosition: true };
+const TL_ABS = { tilt: true, absolutePosition: true };
+
 /**
  * This cluster supports all WindowCovering features. It may support illegal feature combinations.
  *
@@ -936,23 +965,84 @@ export type WindowCoveringExtension<SF extends TypeFromPartialBitSchema<typeof W
  * legal per the Matter specification.
  */
 export const WindowCoveringComplete = Cluster({
-    ...WindowCoveringCluster,
+    id: WindowCoveringCluster.id,
+    name: WindowCoveringCluster.name,
+    revision: WindowCoveringCluster.revision,
+    features: WindowCoveringCluster.features,
 
     attributes: {
-        ...LiftAndPositionAwareLiftAndAbsolutePositionComponent.attributes,
-        ...TiltAndPositionAwareTiltAndAbsolutePositionComponent.attributes,
-        ...LiftComponent.attributes,
-        ...TiltComponent.attributes,
-        ...LiftAndPositionAwareLiftComponent.attributes,
-        ...TiltAndPositionAwareTiltComponent.attributes
+        ...WindowCoveringCluster.attributes,
+        physicalClosedLimitLift: AsConditional(
+            LiftAndPositionAwareLiftAndAbsolutePositionComponent.attributes.physicalClosedLimitLift,
+            { optionalIf: [LF_PA_LF_ABS] }
+        ),
+        physicalClosedLimitTilt: AsConditional(
+            TiltAndPositionAwareTiltAndAbsolutePositionComponent.attributes.physicalClosedLimitTilt,
+            { optionalIf: [TL_PA_TL_ABS] }
+        ),
+        currentPositionLift: AsConditional(
+            LiftAndPositionAwareLiftAndAbsolutePositionComponent.attributes.currentPositionLift,
+            { optionalIf: [LF_PA_LF_ABS] }
+        ),
+        currentPositionTilt: AsConditional(
+            TiltAndPositionAwareTiltAndAbsolutePositionComponent.attributes.currentPositionTilt,
+            { optionalIf: [TL_PA_TL_ABS] }
+        ),
+        numberOfActuationsLift: AsConditional(LiftComponent.attributes.numberOfActuationsLift, { optionalIf: [LF] }),
+        numberOfActuationsTilt: AsConditional(TiltComponent.attributes.numberOfActuationsTilt, { optionalIf: [TL] }),
+        currentPositionLiftPercentage: AsConditional(
+            LiftAndPositionAwareLiftComponent.attributes.currentPositionLiftPercentage,
+            { optionalIf: [LF_PA_LF] }
+        ),
+        currentPositionTiltPercentage: AsConditional(
+            TiltAndPositionAwareTiltComponent.attributes.currentPositionTiltPercentage,
+            { optionalIf: [TL_PA_TL] }
+        ),
+        targetPositionLiftPercent100Ths: AsConditional(
+            LiftComponent.attributes.targetPositionLiftPercent100Ths,
+            { optionalIf: [LF] }
+        ),
+        targetPositionTiltPercent100Ths: AsConditional(
+            TiltComponent.attributes.targetPositionTiltPercent100Ths,
+            { optionalIf: [TL] }
+        ),
+        currentPositionLiftPercent100Ths: AsConditional(
+            LiftComponent.attributes.currentPositionLiftPercent100Ths,
+            { optionalIf: [LF] }
+        ),
+        currentPositionTiltPercent100Ths: AsConditional(
+            TiltComponent.attributes.currentPositionTiltPercent100Ths,
+            { optionalIf: [TL] }
+        ),
+        installedOpenLimitLift: AsConditional(
+            LiftAndPositionAwareLiftAndAbsolutePositionComponent.attributes.installedOpenLimitLift,
+            { mandatoryIf: [LF_PA_LF_ABS] }
+        ),
+        installedClosedLimitLift: AsConditional(
+            LiftAndPositionAwareLiftAndAbsolutePositionComponent.attributes.installedClosedLimitLift,
+            { mandatoryIf: [LF_PA_LF_ABS] }
+        ),
+        installedOpenLimitTilt: AsConditional(
+            TiltAndPositionAwareTiltAndAbsolutePositionComponent.attributes.installedOpenLimitTilt,
+            { mandatoryIf: [TL_PA_TL_ABS] }
+        ),
+        installedClosedLimitTilt: AsConditional(
+            TiltAndPositionAwareTiltAndAbsolutePositionComponent.attributes.installedClosedLimitTilt,
+            { mandatoryIf: [TL_PA_TL_ABS] }
+        )
     },
 
     commands: {
-        ...LiftComponent.commands,
-        ...TiltComponent.commands,
-        ...LiftAndPositionAwareLiftComponent.commands,
-        ...TiltAndPositionAwareTiltComponent.commands,
-        ...LiftAndAbsolutePositionComponent.commands,
-        ...TiltAndAbsolutePositionComponent.commands
+        ...WindowCoveringCluster.commands,
+        goToLiftValue: AsConditional(LiftAndAbsolutePositionComponent.commands.goToLiftValue, { optionalIf: [LF_ABS] }),
+        goToLiftPercentage: AsConditional(
+            LiftComponent.commands.goToLiftPercentage,
+            { optionalIf: [LF], mandatoryIf: [LF_PA_LF] }
+        ),
+        goToTiltValue: AsConditional(TiltAndAbsolutePositionComponent.commands.goToTiltValue, { optionalIf: [TL_ABS] }),
+        goToTiltPercentage: AsConditional(
+            TiltComponent.commands.goToTiltPercentage,
+            { optionalIf: [TL], mandatoryIf: [TL_PA_TL] }
+        )
     }
 });

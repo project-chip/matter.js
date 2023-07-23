@@ -7,7 +7,16 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BaseClusterComponent, ClusterComponent, ExtensibleCluster, validateFeatureSelection, extendCluster, preventCluster, ClusterForBaseCluster } from "../../cluster/ClusterFactory.js";
+import {
+    BaseClusterComponent,
+    ClusterComponent,
+    ExtensibleCluster,
+    validateFeatureSelection,
+    extendCluster,
+    preventCluster,
+    ClusterForBaseCluster,
+    AsConditional
+} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { FixedAttribute, Attribute, Event, EventPriority, Cluster } from "../../cluster/Cluster.js";
 import { TlvUInt8 } from "../../tlv/TlvNumber.js";
@@ -350,7 +359,6 @@ export const SwitchCluster = ExtensibleCluster({
             { momentarySwitchMultiPress: true, momentarySwitch: false },
             { momentarySwitchMultiPress: true, momentarySwitchRelease: false },
             { latchingSwitch: true, momentarySwitch: true },
-            { momentarySwitch: true, latchingSwitch: true },
             { latchingSwitch: false, momentarySwitch: false }
         );
 
@@ -372,8 +380,13 @@ export type SwitchExtension<SF extends TypeFromPartialBitSchema<typeof SwitchBas
     & (SF extends { momentarySwitchMultiPress: true, momentarySwitch: false } ? never : {})
     & (SF extends { momentarySwitchMultiPress: true, momentarySwitchRelease: false } ? never : {})
     & (SF extends { latchingSwitch: true, momentarySwitch: true } ? never : {})
-    & (SF extends { momentarySwitch: true, latchingSwitch: true } ? never : {})
     & (SF extends { latchingSwitch: false, momentarySwitch: false } ? never : {});
+
+const MSM = { momentarySwitchMultiPress: true };
+const LS = { latchingSwitch: true };
+const MS = { momentarySwitch: true };
+const MSL = { momentarySwitchLongPress: true };
+const MSR = { momentarySwitchRelease: true };
 
 /**
  * This cluster supports all Switch features. It may support illegal feature combinations.
@@ -382,14 +395,28 @@ export type SwitchExtension<SF extends TypeFromPartialBitSchema<typeof SwitchBas
  * legal per the Matter specification.
  */
 export const SwitchComplete = Cluster({
-    ...SwitchCluster,
-    attributes: { ...MomentarySwitchMultiPressComponent.attributes },
+    id: SwitchCluster.id,
+    name: SwitchCluster.name,
+    revision: SwitchCluster.revision,
+    features: SwitchCluster.features,
+    attributes: {
+        ...SwitchCluster.attributes,
+        multiPressMax: AsConditional(MomentarySwitchMultiPressComponent.attributes.multiPressMax, { mandatoryIf: [MSM] })
+    },
 
     events: {
-        ...MomentarySwitchMultiPressComponent.events,
-        ...LatchingSwitchComponent.events,
-        ...MomentarySwitchComponent.events,
-        ...MomentarySwitchLongPressComponent.events,
-        ...MomentarySwitchReleaseComponent.events
+        switchLatched: AsConditional(LatchingSwitchComponent.events.switchLatched, { mandatoryIf: [LS] }),
+        initialPress: AsConditional(MomentarySwitchComponent.events.initialPress, { mandatoryIf: [MS] }),
+        longPress: AsConditional(MomentarySwitchLongPressComponent.events.longPress, { mandatoryIf: [MSL] }),
+        shortRelease: AsConditional(MomentarySwitchReleaseComponent.events.shortRelease, { mandatoryIf: [MSR] }),
+        longRelease: AsConditional(MomentarySwitchLongPressComponent.events.longRelease, { mandatoryIf: [MSL] }),
+        multiPressOngoing: AsConditional(
+            MomentarySwitchMultiPressComponent.events.multiPressOngoing,
+            { mandatoryIf: [MSM] }
+        ),
+        multiPressComplete: AsConditional(
+            MomentarySwitchMultiPressComponent.events.multiPressComplete,
+            { mandatoryIf: [MSM] }
+        )
     }
 });

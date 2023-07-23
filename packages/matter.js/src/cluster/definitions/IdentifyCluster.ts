@@ -7,7 +7,14 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BaseClusterComponent, ClusterComponent, ExtensibleCluster, validateFeatureSelection, ClusterForBaseCluster } from "../../cluster/ClusterFactory.js";
+import {
+    BaseClusterComponent,
+    ClusterComponent,
+    ExtensibleCluster,
+    validateFeatureSelection,
+    ClusterForBaseCluster,
+    AsConditional
+} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { WritableAttribute, Attribute, Command, TlvNoResponse, OptionalCommand, Cluster } from "../../cluster/Cluster.js";
 import { TlvUInt16, TlvEnum } from "../../tlv/TlvNumber.js";
@@ -288,6 +295,7 @@ export type IdentifyExtension<SF extends TypeFromPartialBitSchema<typeof Identif
     ClusterForBaseCluster<typeof IdentifyBase, SF>
     & { supportedFeatures: SF }
     & (SF extends { query: true } ? typeof QueryComponent : {});
+const QRY = { query: true };
 
 /**
  * This cluster supports all Identify features. It may support illegal feature combinations.
@@ -295,4 +303,14 @@ export type IdentifyExtension<SF extends TypeFromPartialBitSchema<typeof Identif
  * If you use this cluster you must manually specify which features are active and ensure the set of active features is
  * legal per the Matter specification.
  */
-export const IdentifyComplete = Cluster({ ...IdentifyCluster, commands: { ...QueryComponent.commands } });
+export const IdentifyComplete = Cluster({
+    id: IdentifyCluster.id,
+    name: IdentifyCluster.name,
+    revision: IdentifyCluster.revision,
+    features: IdentifyCluster.features,
+    attributes: IdentifyCluster.attributes,
+    commands: {
+        ...IdentifyCluster.commands,
+        identifyQuery: AsConditional(QueryComponent.commands.identifyQuery, { mandatoryIf: [QRY] })
+    }
+});

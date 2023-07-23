@@ -6,7 +6,16 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Cluster, WritableFabricScopedAttribute, AccessLevel, Attribute, OptionalCommand, TlvNoResponse, Event, EventPriority } from "../../cluster/Cluster.js";
+import {
+    Cluster,
+    WritableFabricScopedAttribute,
+    AccessLevel,
+    Attribute,
+    OptionalCommand,
+    TlvNoResponse,
+    Event,
+    EventPriority
+} from "../../cluster/Cluster.js";
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";

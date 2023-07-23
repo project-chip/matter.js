@@ -7,7 +7,14 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BaseClusterComponent, ClusterComponent, ExtensibleCluster, validateFeatureSelection, ClusterForBaseCluster } from "../../cluster/ClusterFactory.js";
+import {
+    BaseClusterComponent,
+    ClusterComponent,
+    ExtensibleCluster,
+    validateFeatureSelection,
+    ClusterForBaseCluster,
+    AsConditional
+} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { OptionalAttribute, Command, Attribute, Cluster } from "../../cluster/Cluster.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
@@ -306,6 +313,7 @@ export type ApplicationLauncherExtension<SF extends TypeFromPartialBitSchema<typ
     ClusterForBaseCluster<typeof ApplicationLauncherBase, SF>
     & { supportedFeatures: SF }
     & (SF extends { applicationPlatform: true } ? typeof ApplicationPlatformComponent : {});
+const AP = { applicationPlatform: true };
 
 /**
  * This cluster supports all ApplicationLauncher features. It may support illegal feature combinations.
@@ -314,6 +322,13 @@ export type ApplicationLauncherExtension<SF extends TypeFromPartialBitSchema<typ
  * legal per the Matter specification.
  */
 export const ApplicationLauncherComplete = Cluster({
-    ...ApplicationLauncherCluster,
-    attributes: { ...ApplicationPlatformComponent.attributes }
+    id: ApplicationLauncherCluster.id,
+    name: ApplicationLauncherCluster.name,
+    revision: ApplicationLauncherCluster.revision,
+    features: ApplicationLauncherCluster.features,
+    attributes: {
+        ...ApplicationLauncherCluster.attributes,
+        catalogList: AsConditional(ApplicationPlatformComponent.attributes.catalogList, { mandatoryIf: [AP] })
+    },
+    commands: ApplicationLauncherCluster.commands
 });

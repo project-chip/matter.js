@@ -7,7 +7,14 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BaseClusterComponent, ClusterComponent, ExtensibleCluster, validateFeatureSelection, ClusterForBaseCluster } from "../../cluster/ClusterFactory.js";
+import {
+    BaseClusterComponent,
+    ClusterComponent,
+    ExtensibleCluster,
+    validateFeatureSelection,
+    ClusterForBaseCluster,
+    AsConditional
+} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { WritableAttribute, AccessLevel, Cluster } from "../../cluster/Cluster.js";
 import { TlvEnum } from "../../tlv/TlvNumber.js";
@@ -126,6 +133,7 @@ export type UnitLocalizationExtension<SF extends TypeFromPartialBitSchema<typeof
     ClusterForBaseCluster<typeof UnitLocalizationBase, SF>
     & { supportedFeatures: SF }
     & (SF extends { temperatureUnit: true } ? typeof TemperatureUnitComponent : {});
+const TEMP = { temperatureUnit: true };
 
 /**
  * This cluster supports all UnitLocalization features. It may support illegal feature combinations.
@@ -134,6 +142,11 @@ export type UnitLocalizationExtension<SF extends TypeFromPartialBitSchema<typeof
  * legal per the Matter specification.
  */
 export const UnitLocalizationComplete = Cluster({
-    ...UnitLocalizationCluster,
-    attributes: { ...TemperatureUnitComponent.attributes }
+    id: UnitLocalizationCluster.id,
+    name: UnitLocalizationCluster.name,
+    revision: UnitLocalizationCluster.revision,
+    features: UnitLocalizationCluster.features,
+    attributes: {
+        temperatureUnit: AsConditional(TemperatureUnitComponent.attributes.temperatureUnit, { mandatoryIf: [TEMP] })
+    }
 });

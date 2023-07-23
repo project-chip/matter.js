@@ -276,11 +276,3 @@ export const GroupsCluster = ExtensibleCluster({
 export type GroupsExtension<SF extends TypeFromPartialBitSchema<typeof GroupsBase.features>> =
     ClusterForBaseCluster<typeof GroupsBase, SF>
     & { supportedFeatures: SF };
-
-/**
- * This cluster supports all Groups features. It may support illegal feature combinations.
- *
- * If you use this cluster you must manually specify which features are active and ensure the set of active features is
- * legal per the Matter specification.
- */
-export const GroupsComplete = Cluster({ ...GroupsCluster });

@@ -8,7 +8,17 @@ import { MatterError } from "../common/MatterError.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { serialize } from "../util/String.js";
 import { Merge } from "../util/Type.js";
-import { Attributes, Cluster, Commands, Events, GlobalAttributes } from "./Cluster.js";
+import {
+    Attribute,
+    Attributes,
+    Cluster,
+    Command,
+    Commands,
+    ConditionalFeatureList,
+    Event,
+    Events,
+    GlobalAttributes,
+} from "./Cluster.js";
 
 export class IllegalClusterError extends MatterError { }
 
@@ -242,4 +252,37 @@ export function ExtensionRequiredCluster<
     factory: W
 }): ExtensionRequiredCluster<W> {
     return { with: factory };
+}
+
+export type ClusterElement<F extends BitSchema> =
+    Attribute<any, F>
+    | Command<any, any, F>
+    | Event<any, F>;
+
+export type AsConditional<
+    F extends BitSchema,
+    E extends ClusterElement<F>
+> = Omit<E, "optional"> & { optional: false, isConditional: true };
+
+export type ClusterElementConditions<F extends BitSchema> = {
+    optionalIf: ConditionalFeatureList<F>,
+    mandatoryIf: ConditionalFeatureList<F>
+}
+
+export function AsConditional<
+    F extends BitSchema,
+    E extends ClusterElement<F>
+>(
+    element: E,
+    { optionalIf = [], mandatoryIf = [] }: Partial<ClusterElementConditions<F>>
+) {
+    const result = {
+        ...element,
+        optional: false,
+        isConditional: true,
+        optionalIf: optionalIf,
+        mandatoryIf: mandatoryIf
+    };
+    result.optional = false;
+    return result as AsConditional<F, E>;
 }

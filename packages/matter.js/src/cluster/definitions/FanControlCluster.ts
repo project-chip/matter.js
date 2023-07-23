@@ -7,7 +7,15 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BaseClusterComponent, ClusterComponent, ExtensibleCluster, validateFeatureSelection, extendCluster, ClusterForBaseCluster } from "../../cluster/ClusterFactory.js";
+import {
+    BaseClusterComponent,
+    ClusterComponent,
+    ExtensibleCluster,
+    validateFeatureSelection,
+    extendCluster,
+    ClusterForBaseCluster,
+    AsConditional
+} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { WritableAttribute, Attribute, FixedAttribute, Cluster } from "../../cluster/Cluster.js";
 import { TlvEnum, TlvUInt8, TlvBitmap } from "../../tlv/TlvNumber.js";
@@ -374,6 +382,10 @@ export type FanControlExtension<SF extends TypeFromPartialBitSchema<typeof FanCo
     & (SF extends { rocking: true } ? typeof RockingComponent : {})
     & (SF extends { wind: true } ? typeof WindComponent : {});
 
+const SPD = { multiSpeed: true };
+const RCK = { rocking: true };
+const WND = { wind: true };
+
 /**
  * This cluster supports all FanControl features. It may support illegal feature combinations.
  *
@@ -381,6 +393,19 @@ export type FanControlExtension<SF extends TypeFromPartialBitSchema<typeof FanCo
  * legal per the Matter specification.
  */
 export const FanControlComplete = Cluster({
-    ...FanControlCluster,
-    attributes: { ...MultiSpeedComponent.attributes, ...RockingComponent.attributes, ...WindComponent.attributes }
+    id: FanControlCluster.id,
+    name: FanControlCluster.name,
+    revision: FanControlCluster.revision,
+    features: FanControlCluster.features,
+
+    attributes: {
+        ...FanControlCluster.attributes,
+        speedMax: AsConditional(MultiSpeedComponent.attributes.speedMax, { mandatoryIf: [SPD] }),
+        speedSetting: AsConditional(MultiSpeedComponent.attributes.speedSetting, { mandatoryIf: [SPD] }),
+        speedCurrent: AsConditional(MultiSpeedComponent.attributes.speedCurrent, { mandatoryIf: [SPD] }),
+        rockSupport: AsConditional(RockingComponent.attributes.rockSupport, { mandatoryIf: [RCK] }),
+        rockSetting: AsConditional(RockingComponent.attributes.rockSetting, { mandatoryIf: [RCK] }),
+        windSupport: AsConditional(WindComponent.attributes.windSupport, { mandatoryIf: [WND] }),
+        windSetting: AsConditional(WindComponent.attributes.windSetting, { mandatoryIf: [WND] })
+    }
 });

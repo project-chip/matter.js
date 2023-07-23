@@ -7,7 +7,16 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BaseClusterComponent, ClusterComponent, ExtensibleCluster, validateFeatureSelection, extendCluster, preventCluster, ClusterForBaseCluster } from "../../cluster/ClusterFactory.js";
+import {
+    BaseClusterComponent,
+    ClusterComponent,
+    ExtensibleCluster,
+    validateFeatureSelection,
+    extendCluster,
+    preventCluster,
+    ClusterForBaseCluster,
+    AsConditional
+} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { FixedAttribute, AccessLevel, Attribute, WritableAttribute, Command, Cluster } from "../../cluster/Cluster.js";
 import { TlvUInt8, TlvEnum, TlvInt32, TlvUInt64, TlvBitmap, TlvUInt16, TlvInt8 } from "../../tlv/TlvNumber.js";
@@ -1056,10 +1065,7 @@ export const NetworkCommissioningCluster = ExtensibleCluster({
             cluster,
             { wiFiNetworkInterface: true, threadNetworkInterface: true },
             { wiFiNetworkInterface: true, ethernetNetworkInterface: true },
-            { threadNetworkInterface: true, wiFiNetworkInterface: true },
             { threadNetworkInterface: true, ethernetNetworkInterface: true },
-            { ethernetNetworkInterface: true, wiFiNetworkInterface: true },
-            { ethernetNetworkInterface: true, threadNetworkInterface: true },
             { wiFiNetworkInterface: false, threadNetworkInterface: false, ethernetNetworkInterface: false }
         );
 
@@ -1075,11 +1081,11 @@ export type NetworkCommissioningExtension<SF extends TypeFromPartialBitSchema<ty
     & (SF extends { threadNetworkInterface: true } ? typeof ThreadNetworkInterfaceComponent : {})
     & (SF extends { wiFiNetworkInterface: true, threadNetworkInterface: true } ? never : {})
     & (SF extends { wiFiNetworkInterface: true, ethernetNetworkInterface: true } ? never : {})
-    & (SF extends { threadNetworkInterface: true, wiFiNetworkInterface: true } ? never : {})
     & (SF extends { threadNetworkInterface: true, ethernetNetworkInterface: true } ? never : {})
-    & (SF extends { ethernetNetworkInterface: true, wiFiNetworkInterface: true } ? never : {})
-    & (SF extends { ethernetNetworkInterface: true, threadNetworkInterface: true } ? never : {})
     & (SF extends { wiFiNetworkInterface: false, threadNetworkInterface: false, ethernetNetworkInterface: false } ? never : {});
+
+const WI = { wiFiNetworkInterface: true };
+const TH = { threadNetworkInterface: true };
 
 /**
  * This cluster supports all NetworkCommissioning features. It may support illegal feature combinations.
@@ -1088,11 +1094,47 @@ export type NetworkCommissioningExtension<SF extends TypeFromPartialBitSchema<ty
  * legal per the Matter specification.
  */
 export const NetworkCommissioningComplete = Cluster({
-    ...NetworkCommissioningCluster,
-    attributes: { ...WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.attributes },
+    id: NetworkCommissioningCluster.id,
+    name: NetworkCommissioningCluster.name,
+    revision: NetworkCommissioningCluster.revision,
+    features: NetworkCommissioningCluster.features,
+
+    attributes: {
+        ...NetworkCommissioningCluster.attributes,
+        scanMaxTimeSeconds: AsConditional(
+            WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.attributes.scanMaxTimeSeconds,
+            { mandatoryIf: [WI, TH] }
+        ),
+        connectMaxTimeSeconds: AsConditional(
+            WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.attributes.connectMaxTimeSeconds,
+            { mandatoryIf: [WI, TH] }
+        )
+    },
+
     commands: {
-        ...WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands,
-        ...WiFiNetworkInterfaceComponent.commands,
-        ...ThreadNetworkInterfaceComponent.commands
+        scanNetworks: AsConditional(
+            WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands.scanNetworks,
+            { mandatoryIf: [WI, TH] }
+        ),
+        addOrUpdateWiFiNetwork: AsConditional(
+            WiFiNetworkInterfaceComponent.commands.addOrUpdateWiFiNetwork,
+            { mandatoryIf: [WI] }
+        ),
+        addOrUpdateThreadNetwork: AsConditional(
+            ThreadNetworkInterfaceComponent.commands.addOrUpdateThreadNetwork,
+            { mandatoryIf: [TH] }
+        ),
+        removeNetwork: AsConditional(
+            WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands.removeNetwork,
+            { mandatoryIf: [WI, TH] }
+        ),
+        connectNetwork: AsConditional(
+            WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands.connectNetwork,
+            { mandatoryIf: [WI, TH] }
+        ),
+        reorderNetwork: AsConditional(
+            WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands.reorderNetwork,
+            { mandatoryIf: [WI, TH] }
+        )
     }
 });

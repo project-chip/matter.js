@@ -7,7 +7,14 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BaseClusterComponent, ClusterComponent, ExtensibleCluster, validateFeatureSelection, ClusterForBaseCluster } from "../../cluster/ClusterFactory.js";
+import {
+    BaseClusterComponent,
+    ClusterComponent,
+    ExtensibleCluster,
+    validateFeatureSelection,
+    ClusterForBaseCluster,
+    AsConditional
+} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { Attribute, Command, TlvNoResponse, Cluster } from "../../cluster/Cluster.js";
 import { TlvEnum, TlvUInt16, TlvUInt32 } from "../../tlv/TlvNumber.js";
@@ -304,6 +311,7 @@ export type AdministratorCommissioningExtension<SF extends TypeFromPartialBitSch
     ClusterForBaseCluster<typeof AdministratorCommissioningBase, SF>
     & { supportedFeatures: SF }
     & (SF extends { basic: true } ? typeof BasicComponent : {});
+const BC = { basic: true };
 
 /**
  * This cluster supports all AdministratorCommissioning features. It may support illegal feature combinations.
@@ -312,6 +320,17 @@ export type AdministratorCommissioningExtension<SF extends TypeFromPartialBitSch
  * legal per the Matter specification.
  */
 export const AdministratorCommissioningComplete = Cluster({
-    ...AdministratorCommissioningCluster,
-    commands: { ...BasicComponent.commands }
+    id: AdministratorCommissioningCluster.id,
+    name: AdministratorCommissioningCluster.name,
+    revision: AdministratorCommissioningCluster.revision,
+    features: AdministratorCommissioningCluster.features,
+    attributes: AdministratorCommissioningCluster.attributes,
+
+    commands: {
+        ...AdministratorCommissioningCluster.commands,
+        openBasicCommissioningWindow: AsConditional(
+            BasicComponent.commands.openBasicCommissioningWindow,
+            { mandatoryIf: [BC] }
+        )
+    }
 });
