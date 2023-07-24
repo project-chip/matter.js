@@ -1,0 +1,9 @@
+{
+  "extends": "../tools/tsconfig.json",
+
+  "compilerOptions": {
+    "paths": {
+      "#matter.js/*": [ "./links/matter.js/src/*" ]
+    }
+  }
+}

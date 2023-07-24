@@ -59,10 +59,17 @@ function formatTime(time: Date) {
     return `${time.getFullYear()}-${(time.getMonth() + 1).toString().padStart(2, "0")}-${time.getDate().toString().padStart(2, "0")} ${time.getHours().toString().padStart(2, "0")}:${time.getMinutes().toString().padStart(2, "0")}:${time.getSeconds().toString().padStart(2, "0")}.${time.getMilliseconds().toString().padStart(3, "0")}`
 }
 
+function nestingPrefix() {
+    if (Logger.nestingLevel) {
+        return "⎸".padEnd(Logger.nestingLevel * 2);
+    }
+    return "";
+}
+
 function plainLogFormatter(now: Date, level: Level, facility: string, values: any[]) {
     const formattedValues = formatValues(values);
 
-    return `${formatTime(now)} ${Level[level]} ${facility} ${formattedValues}`;
+    return `${formatTime(now)} ${Level[level]} ${facility} ${nestingPrefix()}${formattedValues}`;
 }
 
 const ANSI_CODES = {
@@ -80,10 +87,26 @@ const ANSI_CODES = {
 function ansiLogFormatter(now: Date, level: Level, facility: string, values: any[]) {
     const levelCode = (<any>ANSI_CODES)[`LEVEL_${Level[level]}`];
 
-    const formattedValues = formatValues(values, (key) => `${ANSI_CODES.KEY}${key}:${levelCode} `);
-    const formattedFacility = facility.length > 20 ? `${facility.slice(0, 10)}~${facility.slice(facility.length - 9)}` : facility.padEnd(20);
+    const formattedPrefix = `${ANSI_CODES.PREFIX}${formatTime(now)} ${Level[level].padEnd(5)}${ANSI_CODES.NONE}`;
 
-    return `${ANSI_CODES.PREFIX}${formatTime(now)} ${Level[level].padEnd(5)}${ANSI_CODES.NONE} ${ANSI_CODES.FACILITY}${formattedFacility}${ANSI_CODES.NONE} ${levelCode}${formattedValues}${ANSI_CODES.NONE}`;
+    let formattedFacility = facility.length > 20 ? `${facility.slice(0, 10)}~${facility.slice(facility.length - 9)}` : facility.padEnd(20);
+    formattedFacility = `${ANSI_CODES.FACILITY}${formattedFacility}${ANSI_CODES.NONE}`;
+
+    let formattedValues = formatValues(values,
+        (key) => `${ANSI_CODES.KEY}${key}:${levelCode} `,
+        (value) => value
+            .replace(/([✓✔])/g, `${ANSI_CODES.LEVEL_INFO}$1${levelCode}`)
+            .replace(/([✗✘])/g, `${ANSI_CODES.LEVEL_ERROR}$1${levelCode}`));
+    formattedValues = `${nestingPrefix()}${formattedValues}`;
+    const prefixedMatch = formattedValues.match(/^(⎸? *\d+ )(.*)$/);
+    if (prefixedMatch) {
+        // Use prefix color for nesting and/or line number prefixes in the message
+        formattedValues = `${ANSI_CODES.PREFIX}${prefixedMatch[1]}${ANSI_CODES.NONE}${levelCode}${prefixedMatch[2]}${ANSI_CODES.NONE}`;
+    } else {
+        formattedValues = `${levelCode}${formattedValues}${ANSI_CODES.NONE}`
+    }
+
+    return `${formattedPrefix} ${formattedFacility} ${formattedValues}`;
 }
 
 function htmlSpan(type: string, value: string) {
@@ -99,7 +122,9 @@ function htmlLogFormatter(now: Date, level: Level, facility: string, values: any
         (key) => htmlSpan('key', htmlEscape(`${key}:`)) + " ",
         (value) => htmlSpan('value', htmlEscape(value)));
 
-    return htmlSpan('matter-log-line', `${htmlSpan('time', formatTime(now))} ${htmlSpan('level', Level[level])} ${htmlSpan('facility', facility)} ${formattedValues}`);
+    const np = nestingPrefix().replace(/ /g, "&nbsp;");
+
+    return htmlSpan('matter-log-line', `${htmlSpan('time', formatTime(now))} ${htmlSpan('level', Level[level])} ${htmlSpan('facility', facility)} ${np}${formattedValues}`);
 }
 
 function consoleLogger(level: Level, formattedLog: string) {
@@ -186,6 +211,7 @@ export class Logger {
     static log: (level: Level, formattedLog: string) => void = consoleLogger;
     static defaultLogLevel = Level.DEBUG;
     static logLevels: { [facility: string]: Level } = {};
+    static nestingLevel = 0;
 
     /**
      * Set logFormatter using configuration-style format name.
@@ -236,6 +262,31 @@ export class Logger {
      */
     static dict(entries: { [KEY: string]: any }) {
         return new DiagnosticDictionary(entries);
+    }
+
+    /**
+     * Perform operations in a nested logging context.  Messages will be
+     * indented while the context executes.
+     */
+    static nest<T>(context: () => T): T {
+        this.nestingLevel++;
+        try {
+            return context();
+        } finally {
+            this.nestingLevel--;
+        }
+    }
+
+    /**
+     * Async version of above.
+     */
+    static async nestAsync(context: () => Promise<any>) {
+        this.nestingLevel++;
+        try {
+            return await context();
+        } finally {
+            this.nestingLevel--;
+        }
     }
 
     constructor(

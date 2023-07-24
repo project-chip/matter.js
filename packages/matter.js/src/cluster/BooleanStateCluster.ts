@@ -6,7 +6,7 @@
 
 import { Attribute, OptionalEvent, EventPriority, Cluster } from "./Cluster.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
-import { TlvField } from "../tlv/TlvObject.js";
+import { TlvField, TlvObject } from "../tlv/TlvObject.js";
 import { MatterApplicationClusterSpecificationV1_0 } from "../spec/Specifications.js";
 
 /**
@@ -40,6 +40,6 @@ export const BooleanStateCluster = Cluster({
     /** @see {@link MatterApplicationClusterSpecificationV1_0 1.7.5} */
     events: {
         /** generated when the StateValue attribute changes */
-        stateChange: OptionalEvent(0, EventPriority.Info, { stateValue: TlvField(0, TlvBoolean) }),
+        stateChange: OptionalEvent(0, EventPriority.Info, TlvObject({ stateValue: TlvField(0, TlvBoolean) })),
     },
 });

@@ -6,7 +6,7 @@
 import { BitmapSchema, BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import {
     FLOAT32_MAX, FLOAT32_MIN, INT16_MAX, INT16_MIN, INT32_MAX, INT32_MIN, INT64_MAX, INT64_MIN, INT8_MAX, INT8_MIN,
-    maxValue, minValue, UINT16_MAX, UINT32_MAX, UINT64_MAX, UINT8_MAX
+    maxValue, minValue, UINT16_MAX, UINT24_MAX, UINT32_MAX, UINT64_MAX, UINT8_MAX
 } from "../util/Number.js";
 import { TlvCodec, TlvLength, TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
@@ -102,6 +102,7 @@ export const TlvInt32 = new TlvNumberSchema(TlvType.SignedInt, value => TlvCodec
 export const TlvInt64 = new TlvLongNumberSchema(TlvType.SignedInt, value => TlvCodec.getIntTlvLength(value), INT64_MIN, INT64_MAX);
 export const TlvUInt8 = new TlvNumberSchema(TlvType.UnsignedInt, value => TlvCodec.getUIntTlvLength(value), 0, UINT8_MAX);
 export const TlvUInt16 = new TlvNumberSchema(TlvType.UnsignedInt, value => TlvCodec.getUIntTlvLength(value), 0, UINT16_MAX);
+export const TlvUInt24 = new TlvNumberSchema(TlvType.UnsignedInt, value => TlvCodec.getUIntTlvLength(value), 0, UINT24_MAX);
 export const TlvUInt32 = new TlvNumberSchema(TlvType.UnsignedInt, value => TlvCodec.getUIntTlvLength(value), 0, UINT32_MAX);
 export const TlvUInt64 = new TlvLongNumberSchema(TlvType.UnsignedInt, value => TlvCodec.getUIntTlvLength(value), 0, UINT64_MAX);
 export const TlvEnum = <T>() => TlvUInt32 as TlvSchema<number> as TlvSchema<T>;

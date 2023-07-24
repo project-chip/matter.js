@@ -8,7 +8,7 @@ import {
     EventPriority, Cluster, Attribute, FixedAttribute, ConditionalFixedAttribute, ConditionalAttribute, ConditionalEvent
 } from "../Cluster.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
-import { TlvField } from "../../tlv/TlvObject.js";
+import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
 import { TlvEnum, TlvUInt16, TlvUInt32, TlvUInt8 } from "../../tlv/TlvNumber.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
@@ -478,17 +478,17 @@ export const PowerSourceClusterSchema = Cluster({
     /** @see {@link MatterCoreSpecificationV1_1} § 11.7.6.2. */
     events: {
         /** SHALL indicate a change in the set of wired faults currently detected.  */
-        wiredFaultChange: ConditionalEvent(0x0, EventPriority.Info, TlvWiredFaultChangeEvent, {
+        wiredFaultChange: ConditionalEvent(0x0, EventPriority.Info, TlvObject(TlvWiredFaultChangeEvent), {
             optionalIf: [{ wired: true }]
         }),
 
         /** SHALL indicate a change in the set of battery faults currently detected */
-        batFaultChange: ConditionalEvent(0x1, EventPriority.Info, TlvBatFaultChangeEvent, {
+        batFaultChange: ConditionalEvent(0x1, EventPriority.Info, TlvObject(TlvBatFaultChangeEvent), {
             optionalIf: [{ battery: true }]
         }),
 
         /** SHALL indicate a change in the set of charge faults currently detected*/
-        batChargeFaultChange: ConditionalEvent(0x2, EventPriority.Info, TlvBatChargeFaultChangeEvent, {
+        batChargeFaultChange: ConditionalEvent(0x2, EventPriority.Info, TlvObject(TlvBatChargeFaultChangeEvent), {
             optionalIf: [{ rechargeable: true }]
         }),
     },

@@ -5,7 +5,9 @@
         "packages/matter.js",
         "packages/matter-node.js",
         "packages/matter-node-ble.js",
-        "packages/matter-node.js-examples"
+        "packages/matter-node.js-examples",
+        "tools",
+        "models"
     ],
     "scripts": {
         "prepare": "npm run build-clean",

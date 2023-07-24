@@ -1,0 +1,26 @@
+{
+  "name": "@project-chip/matter.js-intermediate-models",
+  "version": "0.1.0",
+  "description": "Matter.js intermediate models",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "clean": "true",
+    "build": "true",
+    "build-clean": "true",
+    "test": "true"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/project-chip/matter.js.git"
+  },
+  "author": "Project CHIP Authors",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/project-chip/matter.js/issues"
+  },
+  "homepage": "https://github.com/project-chip/matter.js#readme",
+  "imports": {
+    "#matter.js/*": "./links/matter.js/*"
+  }
+}
