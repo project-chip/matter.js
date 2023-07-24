@@ -29,6 +29,7 @@ import { BitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
 import { ServerAddressIp } from "./common/ServerAddress.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
+import { Ble } from "./ble/Ble.js";
 
 const logger = new Logger("CommissioningController");
 
@@ -132,9 +133,32 @@ export class CommissioningController extends MatterNode {
                 identifierData = {};
             }
 
-            this.nodeId = await this.controllerInstance.commission(identifierData, this.passcode, 120, this.serverAddress);
+            let bleEnabled = false;
+            try {
+                bleEnabled = !!Ble.get();
+            } catch (e) {
+                logger.warn(`Ble not enabled: ${e}`);
+            }
+
+            // TODO: Make the process more parallel and favor MDNS over BLE, but for testing right now lets do that way
+            let nodeId: NodeId | undefined;
+            if (bleEnabled) {
+                try {
+                    nodeId = await this.controllerInstance.commissionViaBle(identifierData, this.passcode, 15);
+                } catch (error) {
+                    logger.warn(`Ble commissioning failed: ${error}`);
+                }
+            }
+
+            if (nodeId === undefined) {
+                nodeId = await this.controllerInstance.commission(identifierData, this.passcode, 15, this.serverAddress);
+            }
+
+            this.nodeId = nodeId;
         }
         this.serverAddress = this.controllerInstance.getOperationalServerAddress();
+
+        logger.debug(`Successfully Paired with Node ID ${this.nodeId} ... requesting endpoint structure`);
 
         await this.initializeEndpointStructure();
     }
