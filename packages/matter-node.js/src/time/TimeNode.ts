@@ -17,6 +17,8 @@ class TimerNode implements Timer {
     ) { }
 
     start() {
+        if (this.isRunning) this.stop();
+        this.isRunning = true;
         this.timerId = (this.periodic ? setInterval : setTimeout)(() => {
             if (!this.periodic) {
                 this.isRunning = false;
