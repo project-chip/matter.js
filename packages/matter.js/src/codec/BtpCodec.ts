@@ -8,6 +8,7 @@ import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataReader } from "../util/DataReader.js";
 import { DataWriter } from "../util/DataWriter.js";
 import { BtpProtocolError } from "../ble/BtpSessionHandler.js";
+import { VendorId } from "../datatype/VendorId.js";
 
 export interface BtpHandshakeRequest {
     versions: number[],
@@ -89,6 +90,19 @@ export class BtpCodec {
             this.encodeBtpPacketHeader(header),
             this.encodeBtpPacketPayload(header, payload)
         )
+    }
+
+    static encodeBtpHandshakeRequest({ versions, attMtu, clientWindowSize }: BtpHandshakeRequest): ByteArray {
+        const writer = new DataWriter(Endian.Little);
+        writer.writeUInt8(HANDSHAKE_HEADER);
+        writer.writeUInt8(BtpOpcode.HandshakeManagementOpcode);
+        writer.writeUInt8(versions[1] << 4 | versions[0]);
+        writer.writeUInt8(versions[3] << 4 | versions[2]);
+        writer.writeUInt8(versions[5] << 4 | versions[4]);
+        writer.writeUInt8(versions[7] << 4 | versions[6]);
+        writer.writeUInt16(attMtu);
+        writer.writeUInt8(clientWindowSize);
+        return writer.toByteArray();
     }
 
     static encodeBtpHandshakeResponse({ version, attMtu, windowSize }: BtpHandshakeResponse): ByteArray {
@@ -192,6 +206,24 @@ export class BtpCodec {
         return { versions, attMtu, clientWindowSize };
     }
 
+    static decodeBtpHandshakeResponsePayload(data: ByteArray): BtpHandshakeResponse {
+        const reader = new DataReader(data, Endian.Little);
+        const header = reader.readUInt8();
+        if (header !== HANDSHAKE_HEADER) {
+            throw new BtpProtocolError("Header for expected BTP Handshake Request is incorrect.");
+        }
+
+        const opcode = reader.readUInt8();
+        if (opcode !== BtpOpcode.HandshakeManagementOpcode) {
+            throw new BtpProtocolError("Management Opcode for BTP Handshake Request is incorrect.");
+        }
+
+        const version = reader.readUInt8() & 0x0F;
+        const attMtu = reader.readUInt16();
+        const windowSize = reader.readUInt8();
+        return { version, attMtu, windowSize };
+    }
+
     private static decodeBtpPacketHeader(reader: DataReader<Endian.Little>): BtpHeader {
         const headerBits = reader.readUInt8();
         const isHandshakeRequest = (headerBits & BtpHeaderBits.HandshakeBit) !== 0;
@@ -224,5 +256,46 @@ export class BtpCodec {
 
         writer.writeUInt8(header);
         return writer.toByteArray();
+    }
+
+    static encodeBleAdvertisementData(discriminator: number, vendorId: VendorId, productId: number, hasAdditionalAdvertisementData = false) {
+        const writer = new DataWriter(Endian.Little);
+        writer.writeUInt8(0x02);
+        writer.writeUInt8(0x01);
+        writer.writeUInt8(0x06);
+        writer.writeUInt8(0x0B);
+        writer.writeUInt8(0x16)
+        writer.writeUInt16(0xFFF6);
+        writer.writeUInt8(0x00);
+        writer.writeUInt16(discriminator);
+        writer.writeUInt16(vendorId.id);
+        writer.writeUInt16(productId);
+        writer.writeUInt8(hasAdditionalAdvertisementData ? 0x01 : 0x00);
+        return writer.toByteArray();
+    }
+
+    static decodeBleAdvertisementData(data: ByteArray) {
+        const reader = new DataReader(data, Endian.Little);
+        if (reader.readUInt8() !== 0x02 || reader.readUInt8() !== 0x01 || reader.readUInt8() !== 0x06 || reader.readUInt8() !== 0x0B || reader.readUInt8() !== 0x16) {
+            throw new Error("Invalid BLE advertisement data");
+        }
+        const serviceUuid = reader.readUInt16();
+        if (serviceUuid !== 0xFFF6) {
+            throw new Error("Invalid BLE advertisement data");
+        }
+        const { discriminator, vendorId, productId, hasAdditionalAdvertisementData } = this.decodeBleAdvertisementServiceData(reader.getRemainingBytes());
+        return { discriminator, vendorId, productId, hasAdditionalAdvertisementData };
+    }
+
+    static decodeBleAdvertisementServiceData(data: ByteArray) {
+        const reader = new DataReader(data, Endian.Little);
+        if (reader.readUInt8() !== 0x00) {
+            throw new Error("Invalid BLE advertisement data");
+        }
+        const discriminator = reader.readUInt16();
+        const vendorId = reader.readUInt16();
+        const productId = reader.readUInt16();
+        const hasAdditionalAdvertisementData = !!reader.readUInt8();
+        return { discriminator, vendorId: new VendorId(vendorId), productId, hasAdditionalAdvertisementData };
     }
 }
