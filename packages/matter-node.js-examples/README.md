@@ -67,7 +67,7 @@ The following parameters are available:
 * -uniqueid: a unique ID for this device to be used in naming and to store structure information (default: ms time now)
 * -type: the device type to use for pairing (default: light, alternative value is "socket")
 * -announceinterface: limit mdns announcements to the provided network interface, e.g. "en0" (default: all interfaces available)
-* -ble: enable BLE support (default: false)
+* -ble: enable BLE support (default: false) If this is enabled the device will announce itself _only_ via BLE if not commissioned and also presents a "Wifi only" device for commissioning to show this feature!
 * -port: the port to listen on for the device (default: 5540)
 * -store: the storage location (directory) to use for storing the pairing information (default: device-node). Delete the directory or provide an alternative name to reset the device
 * -clearstorage: the storage location will be reset on start of the process
@@ -177,6 +177,7 @@ The following parameters are available:
 * -pairingcode: code to use for pairing (-longDiscriminator and -pin will be ignored)
 * -store: the storage location (directory) to use for storing the pairing information (default: controller-node). Delete the directory or provide an alternative name to reset the controller
 * -clearstorage: the storage location will be reset on start of the process
+* -ble: enable BLE support (default: false) If this is enabled the controller will try to connect via BLE first (15s timeout) and then via IP if not commissioned yet!
 
 ## Development on basis of the examples
 
