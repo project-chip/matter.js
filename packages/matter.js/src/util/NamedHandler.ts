@@ -16,7 +16,7 @@ export class NamedHandler<H extends Record<keyof H, HandlerFunction>> {
     async executeHandler<K extends keyof H>(action: K, ...args: Parameters<H[K]>) {
         for (const { action: a, handler } of this.handler) {
             if (a === action) {
-                await handler(...args);
+                return await handler(...args);
             }
         }
     }
