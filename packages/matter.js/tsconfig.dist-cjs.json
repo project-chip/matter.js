@@ -12,6 +12,7 @@
   "include": ["src/**/*.ts"],
   "typedocOptions": {
     "entryPoints": [
+      "src/ble/index.ts",
       "src/certificate/index.ts",
       "src/cluster/index.ts",
       "src/codec/index.ts",

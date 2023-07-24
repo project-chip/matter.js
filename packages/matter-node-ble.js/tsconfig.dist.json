@@ -11,30 +11,8 @@
   "include": ["src/**/*.ts"],
   "typedocOptions": {
     "entryPoints": [
-      "src/exports/certificate.ts",
-      "src/exports/cluster.ts",
-      "src/exports/codec.ts",
-      "src/exports/common.ts",
-      "src/crypto/index.ts",
-      "src/exports/datatype.ts",
-      "src/exports/device.ts",
-      "src/exports/fabric.ts",
-      "src/exports/log.ts",
-      "src/exports/math.ts",
-      "src/exports/mdns.ts",
-      "src/net/index.ts",
-      "src/exports/protocol.ts",
-      "src/exports/interaction.ts",
-      "src/exports/securechannel.ts",
-      "src/exports/schema.ts",
-      "src/exports/session.ts",
-      "src/exports/spec.ts",
-      "src/storage/index.ts",
-      "src/time/index.ts",
-      "src/exports/tlv.ts",
-      "src/util/index.ts",
-      "src/index.ts"
+      "src/ble/index.ts"
     ],
-    "out": "../../docs/matter-node.js"
+    "out": "../../docs/matter-node-ble.js"
   }
 }

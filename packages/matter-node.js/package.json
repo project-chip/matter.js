@@ -67,6 +67,10 @@
             "default": "./dist/index.js"
         },
         "./package.json": "./package.json",
+        "./ble": {
+            "types": "./dist/exports/ble.d.ts",
+            "default": "./dist/exports/ble.js"
+        },
         "./certificate": {
             "types": "./dist/exports/certificate.d.ts",
             "default": "./dist/exports/certificate.js"
@@ -142,6 +146,9 @@
     },
     "typesVersions": {
         "*": {
+            "ble": [
+                "/dist/exports/ble.d.ts"
+            ],
             "certificate": [
                 "/dist/exports/certificate.d.ts"
             ],

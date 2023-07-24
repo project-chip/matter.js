@@ -19,3 +19,5 @@ export function Merge<
 
 /** Type that represents a class constructor of a defined type or extend of it */
 export type ClassExtends<C> = { new(...args: any[]): C };
+
+export type MakeMandatory<T> = Exclude<T, undefined>;
