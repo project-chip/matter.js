@@ -10,20 +10,18 @@ import { Logger } from "../log/Logger.js";
 import { Time } from "../time/Time.js";
 import { DataReader } from "../util/DataReader.js";
 import { MatterError } from "../common/MatterError.js";
+import {
+    BTP_ACK_TIMEOUT_MS, BTP_SEND_ACK_TIMEOUT_MS, BLE_MAXIMUM_BTP_MTU, BTP_MAXIMUM_WINDOW_SIZE, BLE_MINIMUM_ATT_MTU,
+} from "./BleConsts.js";
 
 export class BtpMatterError extends MatterError { }
 export class BtpProtocolError extends BtpMatterError { }
 export class BtpFlowError extends BtpMatterError { }
 
-const logger = Logger.get("BtpSessionHandler");
-
-const SUPPORTED_BTP_VERSIONS = [4]; // needs to be sort in descending order!
-const MINIMUM_ATT_MTU = 23; // 23-byte minimum ATT_MTU - 3 bytes for ATT operation header
-const MAXIMUM_BTP_MTU = 247; // Maximum size of BTP segment
-const MAXIMUM_WINDOW_SIZE = 255; // Server maximum window size
-const BTP_ACK_TIMEOUT_MS = 15000; // timer in ms before ack should be sent for a segment
-const BTP_SEND_ACK_TIMEOUT_MS = 5000; // BTP_ACK_TIMEOUT_MS / 3: timer starts when we receive a packet and stops when we sends its ack
+export const BTP_SUPPORTED_VERSIONS = [4]; // needs to be sort in descending order!
 const MAXIMUM_SEQUENCE_NUMBER = 255;
+
+const logger = Logger.get("BtpSessionHandler");
 
 export class BtpSessionHandler {
     private currentIncomingSegmentedMsgLength: number | undefined;
@@ -39,37 +37,13 @@ export class BtpSessionHandler {
     private readonly sendAckTimer = Time.getTimer(BTP_SEND_ACK_TIMEOUT_MS, () => this.btpSendAckTimeoutTriggered());
     private isActive = true;
 
-    /**
-     * Creates a new BTP session handler
-     *
-     * @param btpVersion The BTP protocol version to use
-     * @param fragmentSize The fragment size to use for the messages
-     * @param clientWindowSize The client window size to use
-     * @param writeBleCallback Callback to write data to the BLE transport
-     * @param disconnectBleCallback Callback to disconnect the BLE transport
-     * @param handleMatterMessagePayload Callback to handle a Matter message payload
-     */
-    constructor(
-        btpVersion: number,
-        private readonly fragmentSize: number,
-        private readonly clientWindowSize: number,
-        private readonly writeBleCallback: (data: ByteArray) => Promise<void>,
-        private readonly disconnectBleCallback: () => void,
-        private readonly handleMatterMessagePayload: (data: ByteArray) => void,
-    ) {
-        if (btpVersion !== 4) {
-            throw new BtpProtocolError(`Unsupported BTP version ${btpVersion}`);
-        }
-        this.ackReceiveTimer.start();
-    }
-
     /** Factory method to create a new BTPSessionHandler from a received handshake request */
     static async createFromHandshakeRequest(
         maxDataSize: number | undefined,
         handshakeRequestPayload: ByteArray,
         writeBleCallback: (data: ByteArray) => Promise<void>,
-        disconnectBleCallback: () => void,
-        handleMatterMessagePayload: (data: ByteArray) => void,
+        disconnectBleCallback: () => Promise<void>,
+        handleMatterMessagePayload: (data: ByteArray) => Promise<void>,
     ): Promise<BtpSessionHandler> {
         // Decode handshake request
         const handshakeRequest = BtpCodec.decodeBtpHandshakeRequest(handshakeRequestPayload);
@@ -77,26 +51,26 @@ export class BtpSessionHandler {
         const { versions, attMtu: handshakeMtu, clientWindowSize } = handshakeRequest;
 
         // Verify handshake request and choose the highest supported version for both parties
-        const version = SUPPORTED_BTP_VERSIONS.find(version => versions.includes(version));
+        const version = BTP_SUPPORTED_VERSIONS.find(version => versions.includes(version));
         if (version === undefined) {
-            disconnectBleCallback();
+            await disconnectBleCallback();
             throw new BtpProtocolError(`No supported BTP version found in ${versions}`);
         }
 
-        let attMtu = MINIMUM_ATT_MTU;
+        let attMtu = BLE_MINIMUM_ATT_MTU
         if (maxDataSize !== undefined) {
             maxDataSize += 3; // This is without the 3 bytes GATT PDU header
-            if (maxDataSize > MINIMUM_ATT_MTU) {
-                if (handshakeMtu <= MINIMUM_ATT_MTU) {
-                    attMtu = Math.min(maxDataSize, MAXIMUM_BTP_MTU);
+            if (maxDataSize > BLE_MINIMUM_ATT_MTU) {
+                if (handshakeMtu <= BLE_MINIMUM_ATT_MTU) {
+                    attMtu = Math.min(maxDataSize, BLE_MAXIMUM_BTP_MTU);
                 } else {
-                    attMtu = Math.min(handshakeMtu, maxDataSize, MAXIMUM_BTP_MTU);
+                    attMtu = Math.min(handshakeMtu, maxDataSize, BLE_MAXIMUM_BTP_MTU);
                 }
             }
         }
 
         const fragmentSize = attMtu - 3; // Each GATT PDU used by the BTP protocol introduces 3 byte header overhead.
-        const windowSize = Math.min(MAXIMUM_WINDOW_SIZE, clientWindowSize);
+        const windowSize = Math.min(BTP_MAXIMUM_WINDOW_SIZE, clientWindowSize);
 
         // Generate and send out handshake response
         const handshakeResponse = BtpCodec.encodeBtpHandshakeResponse({
@@ -109,12 +83,61 @@ export class BtpSessionHandler {
         })}`);
 
         const btpSession = new BtpSessionHandler(
-            version, fragmentSize, windowSize, writeBleCallback, disconnectBleCallback, handleMatterMessagePayload
+            "peripheral", version, fragmentSize, windowSize, writeBleCallback, disconnectBleCallback, handleMatterMessagePayload
         );
 
         await writeBleCallback(handshakeResponse);
 
         return btpSession;
+    }
+
+    static async createAsCentral(
+        handshakeResponsePayload: ByteArray,
+        writeBleCallback: (data: ByteArray) => Promise<void>,
+        disconnectBleCallback: () => Promise<void>,
+        handleMatterMessagePayload: (data: ByteArray) => Promise<void>,
+    ) {
+        const handshakeRequest = BtpCodec.decodeBtpHandshakeResponsePayload(handshakeResponsePayload);
+
+        const { version, attMtu: handshakeMtu, windowSize } = handshakeRequest;
+        const fragmentSize = handshakeMtu - 3; // Each GATT PDU used by the BTP protocol introduces 3 byte header overhead.
+
+        return new BtpSessionHandler(
+            "central", version, fragmentSize, windowSize, writeBleCallback, disconnectBleCallback, handleMatterMessagePayload
+        );
+    }
+
+    /**
+     * Creates a new BTP session handler
+     *
+     * @param role The role of the BTP session handler
+     * @param btpVersion The BTP protocol version to use
+     * @param fragmentSize The fragment size to use for the messages
+     * @param clientWindowSize The client window size to use
+     * @param writeBleCallback Callback to write data to the BLE transport
+     * @param disconnectBleCallback Callback to disconnect the BLE transport
+     * @param handleMatterMessagePayload Callback to handle a Matter message payload
+     */
+    constructor(
+        role: "central" | "peripheral",
+        btpVersion: number,
+        private readonly fragmentSize: number,
+        private readonly clientWindowSize: number,
+        private readonly writeBleCallback: (data: ByteArray) => Promise<void>,
+        private readonly disconnectBleCallback: () => Promise<void>,
+        private readonly handleMatterMessagePayload: (data: ByteArray) => Promise<void>,
+    ) {
+        if (btpVersion !== 4) {
+            throw new BtpProtocolError(`Unsupported BTP version ${btpVersion}`);
+        }
+        if (role === "peripheral") {
+            this.ackReceiveTimer.start();
+        } else {
+            this.sendAckTimer.start();
+            this.prevIncomingSequenceNumber = 0;
+            this.prevIncomingAckNumber = -1;
+            this.sequenceNumber = -1; // First sequence number needs to be 0
+        }
     }
 
     /**
@@ -123,7 +146,11 @@ export class BtpSessionHandler {
      *
      * @param data ByteArray containing the data
      */
-    public handleIncomingBleData(data: ByteArray) {
+    public async handleIncomingBleData(data: ByteArray) {
+        if (!this.isActive) {
+            logger.debug(`BTP session is not active, ignoring incoming BLE data`);
+            return;
+        }
         try {
             if (data.length > this.fragmentSize) { // Apple seems to interpret the ATT_MTU as the maximum size of a single ATT packet
                 if (data.length > this.fragmentSize + 3) {
@@ -173,7 +200,7 @@ export class BtpSessionHandler {
                 this.prevIncomingAckNumber = ackNumber;
 
                 // if still waiting for ack for sequence number restart timer
-                if (ackNumber < this.sequenceNumber) {
+                if (ackNumber !== this.sequenceNumber) {
                     this.ackReceiveTimer.start();
                 }
             }
@@ -208,12 +235,12 @@ export class BtpSessionHandler {
                 this.currentIncomingSegmentedPayload = undefined; // resetting current segment Payload to empty byte array
 
                 // Hand over the resulting Matter message to ExchangeManager via the callback
-                this.handleMatterMessagePayload(payloadToProcess);
+                await this.handleMatterMessagePayload(payloadToProcess);
             }
 
         } catch (error) {
             logger.error(`Error while handling incoming BTP data: ${error}`);
-            this.close();
+            await this.close();
             if (!(error instanceof BtpProtocolError)) { // If no BTP protocol error, rethrow
                 throw error;
             }
@@ -228,6 +255,9 @@ export class BtpSessionHandler {
      * @param data ByteArray containing the Matter message
      */
     public async sendMatterMessage(data: ByteArray) {
+        if (!this.isActive) {
+            throw new BtpFlowError("BTP session is not active");
+        }
         logger.debug(`Got Matter message to send via BLE transport: ${data.toHex()}`);
 
         if (data.length === 0) {
@@ -247,7 +277,6 @@ export class BtpSessionHandler {
 
         this.sendInProgress = true;
 
-
         while (this.queuedOutgoingMatterMessages.length > 0) {
             const currentProcessedMessage = this.queuedOutgoingMatterMessages[0];
             const remainingMessageLength = currentProcessedMessage.getRemainingBytesCount();
@@ -258,7 +287,7 @@ export class BtpSessionHandler {
             })}`);
 
             //checks if last ack number sent < ack number to be sent
-            const hasAckNumber = this.prevIncomingSequenceNumber > this.prevAckedSequenceNumber;
+            const hasAckNumber = this.prevIncomingSequenceNumber !== this.prevAckedSequenceNumber;
             if (hasAckNumber) {
                 this.prevAckedSequenceNumber = this.prevIncomingSequenceNumber;
                 this.sendAckTimer.stop();
@@ -320,12 +349,13 @@ export class BtpSessionHandler {
     /**
      * Close the BTP session. This method is called when the BLE transport is disconnected and so the BTP session gets closed.
      */
-    public close() {
-        this.ackReceiveTimer.stop();
+    public async close() {
         this.sendAckTimer.stop();
+        this.ackReceiveTimer.stop();
         if (this.isActive) {
+            logger.debug(`Closing BTP session`);
             this.isActive = false;
-            this.disconnectBleCallback();
+            await this.disconnectBleCallback();
         }
     }
 
@@ -363,10 +393,10 @@ export class BtpSessionHandler {
      * If a peer’s acknowledgement-received timer expires, or if a peer receives an invalid acknowledgement,
      * the peer SHALL close the BTP session and report an error to the application.
      */
-    private btpAckTimeoutTriggered() {
+    private async btpAckTimeoutTriggered() {
         if (this.prevIncomingAckNumber !== this.sequenceNumber) {
             logger.warn("Acknowledgement for the sent sequence number was not received ... disconnect");
-            this.close()
+            await this.close()
         }
     }
 

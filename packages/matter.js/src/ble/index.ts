@@ -5,4 +5,5 @@
  */
 
 export * from "./Ble.js";
+export * from "./BleConsts.js";
 export * from "./BtpSessionHandler.js";

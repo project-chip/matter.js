@@ -98,7 +98,7 @@ describe("BtpSessionHandler", () => {
                     () => {
                         throw new Error("Should not be called");
                     },
-                    () => {
+                    async () => {
                         disconnectBleResolver();
                     },
                     (_matterMessageToHandle) => {
@@ -114,15 +114,15 @@ describe("BtpSessionHandler", () => {
     describe("Test Matter Message handling", () => {
         let btpSessionHandler: BtpSessionHandler | undefined;
 
-        let onWriteBleCallback = (_dataToWrite: ByteArray): void => {
+        let onWriteBleCallback = (_dataToWrite: ByteArray): Promise<void> => {
             throw new Error("Should not be called");
         }
 
-        let onDisconnectBleCallback = (): void => {
+        let onDisconnectBleCallback = (): Promise<void> => {
             throw new Error("Should not be called");
         };
 
-        let onHandleMatterMessageCallback = (_matterMessage: ByteArray): void => {
+        let onHandleMatterMessageCallback = async (_matterMessage: ByteArray): Promise<void> => {
             throw new Error("Should not be called");
         }
 
@@ -131,7 +131,7 @@ describe("BtpSessionHandler", () => {
         beforeEach(async () => {
             const { promise: localWriteBlePromise, resolver: localWriteBleResolver } = await getPromiseResolver<ByteArray>();
 
-            onWriteBleCallback = (dataToWrite: ByteArray) => {
+            onWriteBleCallback = async (dataToWrite: ByteArray) => {
                 localWriteBleResolver(dataToWrite);
             }
 
@@ -141,13 +141,13 @@ describe("BtpSessionHandler", () => {
                 20,
                 handshakeRequest,
                 async (dataToWrite) => {
-                    onWriteBleCallback(dataToWrite);
+                    await onWriteBleCallback(dataToWrite);
                 },
-                (): void => {
-                    onDisconnectBleCallback();
+                async () => {
+                    await onDisconnectBleCallback();
                 },
-                (matterMessage: ByteArray): void => {
-                    onHandleMatterMessageCallback(matterMessage);
+                async (matterMessage: ByteArray) => {
+                    await onHandleMatterMessageCallback(matterMessage);
                 }
             );
 
@@ -160,11 +160,11 @@ describe("BtpSessionHandler", () => {
 
             const matterMessage = ByteArray.fromHex("656c04000000b90006");
 
-            onDisconnectBleCallback = () => {
+            onDisconnectBleCallback = async () => {
                 disconnectBleResolver();
             }
 
-            btpSessionHandler?.handleIncomingBleData(matterMessage);
+            await btpSessionHandler?.handleIncomingBleData(matterMessage);
 
             await disconnectBlePromise;
         });
@@ -174,11 +174,11 @@ describe("BtpSessionHandler", () => {
 
             const matterMessage = ByteArray.fromHex("0d6c04000000b90006");
 
-            onDisconnectBleCallback = () => {
+            onDisconnectBleCallback = async () => {
                 disconnectBleResolver();
             }
 
-            btpSessionHandler?.handleIncomingBleData(matterMessage);
+            await btpSessionHandler?.handleIncomingBleData(matterMessage);
 
             await disconnectBlePromise;
         });
@@ -205,16 +205,16 @@ describe("BtpSessionHandler", () => {
                 }
             });
 
-            onHandleMatterMessageCallback = (matterMessage: ByteArray) => {
+            onHandleMatterMessageCallback = async (matterMessage: ByteArray) => {
                 handleMatterMessageResolver(matterMessage);
-                void btpSessionHandler?.sendMatterMessage(ByteArray.fromHex("090807060504030201"));
+                await btpSessionHandler?.sendMatterMessage(ByteArray.fromHex("090807060504030201"));
             };
 
-            onWriteBleCallback = (dataToWrite: ByteArray) => {
+            onWriteBleCallback = async (dataToWrite: ByteArray) => {
                 writeBleResolver(dataToWrite);
             }
 
-            btpSessionHandler?.handleIncomingBleData(matterMessage);
+            await btpSessionHandler?.handleIncomingBleData(matterMessage);
 
             const matterHandlerResult = await handleMatterMessagePromise;
             assert.deepEqual(matterHandlerResult, segmentPayload);
@@ -244,11 +244,11 @@ describe("BtpSessionHandler", () => {
                 }
             });
 
-            onDisconnectBleCallback = () => {
+            onDisconnectBleCallback = async () => {
                 disconnectBleResolver();
             }
 
-            btpSessionHandler?.handleIncomingBleData(matterMessage);
+            await btpSessionHandler?.handleIncomingBleData(matterMessage);
             await disconnectBlePromise;
         });
 
@@ -296,17 +296,17 @@ describe("BtpSessionHandler", () => {
                 }
             });
 
-            onHandleMatterMessageCallback = (matterMessage: ByteArray) => {
+            onHandleMatterMessageCallback = async (matterMessage: ByteArray) => {
                 handleMatterMessageResolver(matterMessage);
-                void btpSessionHandler?.sendMatterMessage(ByteArray.fromHex("030201090807060504030201090807060504"));
+                await btpSessionHandler?.sendMatterMessage(ByteArray.fromHex("030201090807060504030201090807060504"));
             };
 
-            onWriteBleCallback = (dataToWrite: ByteArray) => {
+            onWriteBleCallback = async (dataToWrite: ByteArray) => {
                 promiseResolver.push(dataToWrite);
             }
 
-            btpSessionHandler?.handleIncomingBleData(matterMessage1);
-            btpSessionHandler?.handleIncomingBleData(matterMessage2);
+            await btpSessionHandler?.handleIncomingBleData(matterMessage1);
+            await btpSessionHandler?.handleIncomingBleData(matterMessage2);
 
             const matterHandlerResult = await handleMatterMessagePromise;
 
@@ -338,16 +338,16 @@ describe("BtpSessionHandler", () => {
                 }
             });
 
-            onHandleMatterMessageCallback = (matterMessage: ByteArray) => {
+            onHandleMatterMessageCallback = async (matterMessage: ByteArray) => {
                 handleMatterMessageResolver(matterMessage);
                 fakeTime.getTimer(5000, () => btpSessionHandler?.sendMatterMessage(ByteArray.fromHex("090807060504030201")));
             };
 
-            onWriteBleCallback = (dataToWrite: ByteArray) => {
+            onWriteBleCallback = async (dataToWrite: ByteArray) => {
                 writeBleResolver(dataToWrite);
             }
 
-            btpSessionHandler?.handleIncomingBleData(matterMessage);
+            await btpSessionHandler?.handleIncomingBleData(matterMessage);
             await fakeTime.advanceTime(5000);
 
             const result = await writeBlePromise;
@@ -380,22 +380,20 @@ describe("BtpSessionHandler", () => {
                 }
             });
 
-            onHandleMatterMessageCallback = (matterMessage: ByteArray) => {
+            onHandleMatterMessageCallback = async (matterMessage: ByteArray) => {
                 handleMatterMessageResolver(matterMessage);
-                void btpSessionHandler?.sendMatterMessage(ByteArray.fromHex("090807060504030201"));
+                await btpSessionHandler?.sendMatterMessage(ByteArray.fromHex("090807060504030201"));
             };
 
-            onDisconnectBleCallback = () => {
+            onDisconnectBleCallback = async () => {
                 disconnectBleResolver();
             }
 
-            await assert.rejects(async () => {
-                btpSessionHandler?.handleIncomingBleData(matterMessage);
+            await btpSessionHandler?.handleIncomingBleData(matterMessage); // BLE data coming in
 
-                await fakeTime.advanceTime(15000);
-                await handleMatterMessagePromise;
-                await disconnectBlePromise;
-            }, "Acknowledgement for the sent sequence number was not received");
+            await handleMatterMessagePromise; // Getting parsed and sent to Matter layer
+            await fakeTime.advanceTime(15000); // now nothing happens in 15s
+            await disconnectBlePromise; // disconnected because of error
         });
 
         it("payload size and message Length does not match", async () => {
@@ -418,11 +416,11 @@ describe("BtpSessionHandler", () => {
                     segmentPayload
                 }
             });
-            onDisconnectBleCallback = () => {
+            onDisconnectBleCallback = async () => {
                 disconnectBleResolver();
             }
 
-            btpSessionHandler?.handleIncomingBleData(matterMessage);
+            await btpSessionHandler?.handleIncomingBleData(matterMessage);
             await disconnectBlePromise;
         });
 
@@ -451,16 +449,16 @@ describe("BtpSessionHandler", () => {
                 };
                 const matterMessage = BtpCodec.encodeBtpPacket(packet);
 
-                onHandleMatterMessageCallback = (matterMessage: ByteArray) => {
+                onHandleMatterMessageCallback = async (matterMessage: ByteArray) => {
                     handleMatterMessageResolver(matterMessage);
-                    void btpSessionHandler?.sendMatterMessage(ByteArray.fromHex("090807060504030201"));
+                    await btpSessionHandler?.sendMatterMessage(ByteArray.fromHex("090807060504030201"));
                 };
 
-                onWriteBleCallback = (dataToWrite: ByteArray) => {
+                onWriteBleCallback = async (dataToWrite: ByteArray) => {
                     writeBleResolver(dataToWrite);
                 }
 
-                btpSessionHandler?.handleIncomingBleData(matterMessage);
+                await btpSessionHandler?.handleIncomingBleData(matterMessage);
                 const matterHandlerResult = await handleMatterMessagePromise;
                 assert.deepEqual(matterHandlerResult, segmentPayload);
 
