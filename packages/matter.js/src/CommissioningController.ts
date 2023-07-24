@@ -422,7 +422,7 @@ export class CommissioningController extends MatterNode {
      * close network connections of the device
      */
     async close() {
-        this.controllerInstance?.close();
+        await this.controllerInstance?.close();
     }
 
     getPort() {

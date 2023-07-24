@@ -485,10 +485,10 @@ export class MatterController {
         // nothing TODO maybe with UDC
     }
 
-    close() {
-        this.scanner.close();
+    async close() {
+        this.mdnsScanner.close();
         this.exchangeManager.close();
-        this.netInterfaceIpv4?.close();
-        this.netInterfaceIpv6.close();
+        await this.netInterfaceIpv4?.close();
+        await this.netInterfaceIpv6.close();
     }
 }
