@@ -21,16 +21,17 @@ describe("BtpSessionHandler", () => {
             const handshakeRequest = ByteArray.fromHex("656c04000000b90006");
             const { promise: writeBlePromise, resolver } = await getPromiseResolver<ByteArray>();
 
-            await BtpSessionHandler.createFromHandshakeRequest(
+            let allowClose = false;
+            const btpSession = await BtpSessionHandler.createFromHandshakeRequest(
                 100,
                 handshakeRequest,
                 async (dataToWrite) => {
                     resolver(dataToWrite);
                 },
-                () => {
-                    throw new Error("Should not be called");
+                async () => {
+                    if (!allowClose) throw new Error("Should not be called");
                 },
-                (_matterMessageToHandle) => {
+                async (_matterMessageToHandle) => {
                     throw new Error("Should not be called");
                 }
             );
@@ -38,22 +39,26 @@ describe("BtpSessionHandler", () => {
             const result = await writeBlePromise;
 
             assert.deepEqual(result, ByteArray.fromHex("656c04670006"));
+
+            allowClose = true;
+            await btpSession.close();
         });
 
         it("handles a zero attMtu in Handshake", async () => {
             const handshakeRequest = ByteArray.fromHex("656c04000000000006");
             const { promise: writeBlePromise, resolver } = await getPromiseResolver<ByteArray>();
 
-            await BtpSessionHandler.createFromHandshakeRequest(
+            let allowClose = false;
+            const btpSession = await BtpSessionHandler.createFromHandshakeRequest(
                 100,
                 handshakeRequest,
                 async (dataToWrite) => {
                     resolver(dataToWrite);
                 },
-                () => {
-                    throw new Error("Should not be called");
+                async () => {
+                    if (!allowClose) throw new Error("Should not be called");
                 },
-                (_matterMessageToHandle) => {
+                async (_matterMessageToHandle) => {
                     throw new Error("Should not be called");
                 }
             );
@@ -61,22 +66,26 @@ describe("BtpSessionHandler", () => {
             const result = await writeBlePromise;
 
             assert.deepEqual(result, ByteArray.fromHex("656c04670006"));
+
+            allowClose = true;
+            await btpSession.close();
         });
 
         it("handles a undefined maxDataSize in Handshake", async () => {
             const handshakeRequest = ByteArray.fromHex("656c04000000000006");
             const { promise: writeBlePromise, resolver } = await getPromiseResolver<ByteArray>();
 
-            await BtpSessionHandler.createFromHandshakeRequest(
+            let allowClose = false;
+            const btpSession = await BtpSessionHandler.createFromHandshakeRequest(
                 undefined,
                 handshakeRequest,
                 async (dataToWrite) => {
                     resolver(dataToWrite);
                 },
-                () => {
-                    throw new Error("Should not be called");
+                async () => {
+                    if (!allowClose) throw new Error("Should not be called");
                 },
-                (_matterMessageToHandle) => {
+                async (_matterMessageToHandle) => {
                     throw new Error("Should not be called");
                 }
             );
@@ -84,6 +93,9 @@ describe("BtpSessionHandler", () => {
             const result = await writeBlePromise;
 
             assert.deepEqual(result, ByteArray.fromHex("656c04170006"));
+
+            allowClose = true;
+            await btpSession.close();
         });
 
         it("Client does not share the same supported BTP version", async () => {
@@ -92,7 +104,7 @@ describe("BtpSessionHandler", () => {
             const { promise: disconnectBlePromise, resolver: disconnectBleResolver } = await getPromiseResolver<void>();
 
             await assert.rejects(async () => {
-                await BtpSessionHandler.createFromHandshakeRequest(
+                const btpSession = await BtpSessionHandler.createFromHandshakeRequest(
                     100,
                     handshakeRequest,
                     () => {
@@ -107,6 +119,7 @@ describe("BtpSessionHandler", () => {
                 );
                 await disconnectBlePromise;
 
+                await btpSession.close();
             }, BtpProtocolError, "No supported BTP version found in 5");
         });
     });
@@ -153,6 +166,10 @@ describe("BtpSessionHandler", () => {
 
             const result = await localWriteBlePromise;
             assert.deepEqual(result, ByteArray.fromHex("656c04170006"));
+        });
+
+        afterEach(async () => {
+            await btpSessionHandler?.close();
         });
 
         it("disconnect when incoming message is another handshake", async () => {
