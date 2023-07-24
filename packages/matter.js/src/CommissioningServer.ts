@@ -42,7 +42,7 @@ import { NamedHandler } from "./util/NamedHandler.js";
 import { Attributes, Commands, Events } from "./cluster/Cluster.js";
 import { Logger } from "./log/Logger.js";
 import { Aggregator } from "./device/Aggregator.js";
-import { TypeFromBitSchema } from "./schema/BitmapSchema.js";
+import { TypeFromBitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import { Endpoint } from "./device/Endpoint.js";
 import { StorageContext } from "./storage/StorageContext.js";
 import { MdnsInstanceBroadcaster } from "./mdns/MdnsInstanceBroadcaster.js";
@@ -336,9 +336,12 @@ export class CommissioningServer extends MatterNode {
     }
 
     /**
-     * Advertise the node via mDNS and start the commissioning process
+     * Advertise the node via all available interfaces (Ethernet/MDNS, BLE, ...) and start the commissioning process
+     *
+     * @param limitTo Limit the advertisement to the given discovery capabilities. Default is to advertise on ethernet
+     *                and BLE if configured
      */
-    async advertise() {
+    async advertise(limitTo?: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap>) {
         if (
             this.mdnsInstanceBroadcaster === undefined ||
             this.mdnsScanner === undefined ||
@@ -385,22 +388,50 @@ export class CommissioningServer extends MatterNode {
         this.interactionServer.setRootEndpoint(this.rootEndpoint); // Initialize the interaction server with the root endpoint
 
         // TODO adjust later and refactor MatterDevice
-        this.deviceInstance = new MatterDevice(this.deviceName, this.deviceType, vendorId, productId, this.discriminator, this.storage)
+        this.deviceInstance = new MatterDevice(
+            this.deviceName,
+            this.deviceType,
+            vendorId,
+            productId,
+            this.discriminator,
+            this.storage,
+            () => {
+                // When first Fabric is added (aka initial commissioning) and we did not advertised on MDNS before, add broadcaster now
+                // TODO Refactor this out when we remove MatterDevice class
+                if (limitTo !== undefined && !limitTo.onIpNetwork) {
+                    if (this.mdnsInstanceBroadcaster !== undefined) {
+                        this.deviceInstance?.addBroadcaster(this.mdnsInstanceBroadcaster);
+                    }
+                }
+            })
             .addTransportInterface(await UdpInterface.create("udp6", this.port, this.listeningAddressIpv6))
             .addScanner(this.mdnsScanner)
-            .addBroadcaster(this.mdnsInstanceBroadcaster)
             .addProtocolHandler(secureChannelProtocol)
             .addProtocolHandler(this.interactionServer);
         if (!this.disableIpv4) {
             this.deviceInstance.addTransportInterface(await UdpInterface.create("udp4", this.port, this.listeningAddressIpv4))
         }
 
-        try {
-            const ble = Ble.get();
-            this.deviceInstance.addTransportInterface(ble.getBlePeripheralNetworkInterface());
-            this.deviceInstance.addBroadcaster(ble.getBleBroadcaster(this.additionalBleAdvertisementData));
-        } catch (e) {
-            logger.warn("Ble not enabled");
+        if (this.isCommissioned()) {
+            limitTo = { onIpNetwork: true }; // If already commissioned the device is on network already
+        } else { // BLE or SoftAP only relevant when not commissioned yet
+            try {
+                const ble = Ble.get();
+                this.deviceInstance.addTransportInterface(ble.getBlePeripheralInterface());
+                if (limitTo === undefined || limitTo.ble) {
+                    this.deviceInstance.addBroadcaster(ble.getBleBroadcaster(this.additionalBleAdvertisementData));
+                }
+            } catch (e) {
+                logger.debug("Ble not enabled");
+            }
+
+            if (limitTo?.softAccessPoint) {
+                logger.error("Advertising as SoftAP not implemented yet. Ignoring ...");
+            }
+        }
+
+        if (limitTo === undefined || limitTo.onIpNetwork) {
+            this.deviceInstance.addBroadcaster(this.mdnsInstanceBroadcaster);
         }
 
         await this.deviceInstance.start();

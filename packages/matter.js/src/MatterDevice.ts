@@ -54,6 +54,7 @@ export class MatterDevice {
         private readonly productId: number,
         private readonly discriminator: number,
         private readonly storage: StorageContext,
+        private readonly initialCommissioningCallback: () => void,
     ) {
         this.fabricManager = new FabricManager(this.storage);
 
@@ -160,6 +161,9 @@ export class MatterDevice {
     }
 
     addFabric(fabric: Fabric) {
+        if (this.fabricManager.getFabrics().length === 0) {
+            this.initialCommissioningCallback(); // Inform upper layer to pot add MDNS Broadcaster: TODO Change when refactoring MatterDevice away
+        }
         this.fabricManager.addFabric(fabric);
         this.broadcasters.forEach(broadcaster => {
             broadcaster.setFabrics([fabric]);
@@ -225,7 +229,6 @@ export class MatterDevice {
         // TODO: return the first not undefined answer or undefined
         const matterServer = await this.scanners[0].findOperationalDevice(fabric, nodeId, timeOutSeconds);
         if (matterServer.length === 0) return undefined;
-        const { ip, port } = matterServer[0]; // TODO
         const session = this.sessionManager.getSessionForNode(fabric, nodeId);
         if (session === undefined) return undefined;
         // TODO: have the interface and scanner linked
@@ -233,7 +236,7 @@ export class MatterDevice {
         if (networkInterface === undefined || !isNetworkInterface(networkInterface)) {
             throw new Error("No network interface found");
         } // TODO meeehhh
-        return { session, channel: await networkInterface.openChannel(ip, port) };
+        return { session, channel: await networkInterface.openChannel(matterServer[0]) };
     }
 
     async stop() {
