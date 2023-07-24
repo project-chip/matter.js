@@ -15,15 +15,20 @@
  */
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
 import { CommissioningServer, MatterServer } from "@project-chip/matter-node.js";
-import { commandExecutor, getIntParameter, getParameter, requireMinNodeVersion, hasParameter } from "@project-chip/matter-node.js/util";
+import {
+    commandExecutor, getIntParameter, getParameter, requireMinNodeVersion, hasParameter, singleton, ByteArray
+} from "@project-chip/matter-node.js/util";
 import { Time } from "@project-chip/matter-node.js/time";
 import { OnOffLightDevice, OnOffPluginUnitDevice } from "@project-chip/matter-node.js/device";
 import { VendorId } from "@project-chip/matter-node.js/datatype";
 import { Logger } from "@project-chip/matter-node.js/log";
 import { StorageManager, StorageBackendDisk } from "@project-chip/matter-node.js/storage";
-import { Ble } from "@project-chip/matter.js/ble";
+import { Ble } from "@project-chip/matter-node.js/ble";
 import { BleNode } from "@project-chip/matter-node-ble.js/ble";
-import { singleton } from "@project-chip/matter.js/util";
+import {
+    WifiNetworkCommissioningCluster, NetworkCommissioningStatus, ClusterServerHandlers, GeneralCommissioningCluster
+} from "@project-chip/matter-node.js/cluster";
+import { ClusterServer } from "@project-chip/matter-node.js/interaction";
 
 if (hasParameter("ble")) {
     // Initialize Ble
@@ -137,11 +142,185 @@ class Device {
                 productLabel: productName,
                 productId,
                 serialNumber: `node-matter-${uniqueId}`,
-            }
+            },
+            delayedAnnouncement: hasParameter("ble") // Delay announcement when BLE is used to show how limited advertisement works
         });
 
         // optionally add a listener for the testEventTrigger command from the GeneralDiagnostics cluster
         commissioningServer.addCommandHandler("testEventTrigger", async ({ request: { enableKey, eventTrigger } }) => logger.info(`testEventTrigger called on GeneralDiagnostic cluster: ${enableKey} ${eventTrigger}`));
+
+        /**
+         * Modify automatically added clusters of the Root endpoint if needed
+         * In this example we change the networkCommissioning cluster into one for "Wifi only" devices when BLE is used
+         * for commissioning, to demonstrate how to do this.
+         * If you want to implement Ethernet only devices that get connected to the network via LAN/Ethernet cable,
+         * then all this is not needed.
+         * The same as shown here for Wi-Fi is also possible theoretical for Thread only or combined devices.
+         */
+
+        if (hasParameter("ble")) {
+            // matter.js will create a Ethernet-only device by default when ut comes to Network Commissioning Features.
+            // To offer e.g. a "Wi-Fi only device" (or any other combination) we need to override the Network Commissioning
+            // cluster and implement all the need handling here. This is a "static implementation" for pure demonstration
+            // purposes and just "simulates" the actions to be done. In a real world implementation this would be done by
+            // the device implementor based on the relevant networking stack.
+            // The NetworkCommissioningCluster and all logics are described in Matter Core Specifications section 11.8
+            const firstNetworkId = new ByteArray(32);
+            commissioningServer.addRootClusterServer(ClusterServer(
+                WifiNetworkCommissioningCluster,
+                {
+                    maxNetworks: 1,
+                    interfaceEnabled: true,
+                    lastConnectErrorValue: 0,
+                    lastNetworkId: null,
+                    lastNetworkingStatus: null,
+                    networks: [{ networkId: firstNetworkId, connected: false }],
+                    scanMaxTimeSeconds: 3,
+                    connectMaxTimeSeconds: 3,
+                },
+                {
+                    scanNetworks: async ({
+                        request: { ssid, breadcrumb },
+                        attributes: { lastNetworkingStatus },
+                        endpoint
+                    }) => {
+                        console.log(`---> scanNetworks called on NetworkCommissioning cluster: ${ssid?.toHex()} ${breadcrumb}`);
+
+                        // Simulate successful scan
+                        if (breadcrumb !== undefined) {
+                            const generalCommissioningCluster = endpoint.getClusterServer(GeneralCommissioningCluster);
+                            generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
+                        }
+
+                        const networkingStatus = NetworkCommissioningStatus.Success
+                        lastNetworkingStatus?.setLocal(networkingStatus);
+
+                        return {
+                            networkingStatus,
+                            wiFiScanResults: [{
+                                security: {
+                                    Unencrypted: true,
+                                    Wep: true,
+                                    'WPA-PERSONAL': true,
+                                    'WPA2-PERSONAL': true,
+                                    'WPA3-PERSONAL': true,
+                                },
+                                ssid: ssid || ByteArray.fromString("ApollonHome"),
+                                bssid: ByteArray.fromString("00:00:00:00:00:00"),
+                                channel: 1,
+                            }],
+                        }
+                    },
+                    addOrUpdateWiFiNetwork: async ({
+                        request: { ssid, credentials, breadcrumb },
+                        attributes: { lastNetworkingStatus, lastNetworkId },
+                        endpoint
+                    }) => {
+                        console.log(`---> addOrUpdateWiFiNetwork called on NetworkCommissioning cluster: ${ssid.toHex()} ${credentials.toHex()} ${breadcrumb}`);
+
+                        // TODO Check if failsafe is armed
+
+                        // Simulate successful add or update
+                        if (breadcrumb !== undefined) {
+                            const generalCommissioningCluster = endpoint.getClusterServer(GeneralCommissioningCluster);
+                            generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
+                        }
+
+                        const networkingStatus = NetworkCommissioningStatus.Success
+                        lastNetworkingStatus?.setLocal(networkingStatus);
+                        lastNetworkId?.setLocal(firstNetworkId);
+
+                        return {
+                            networkingStatus: NetworkCommissioningStatus.Success,
+                            networkIndex: 0
+                        };
+                    },
+                    removeNetwork: async ({
+                        request: { networkId, breadcrumb },
+                        attributes: { lastNetworkingStatus, lastNetworkId },
+                        endpoint
+                    }) => {
+                        console.log(`---> removeNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${breadcrumb}`);
+
+                        // TODO Check if failsafe is armed
+
+                        // Simulate successful add or update
+                        if (breadcrumb !== undefined) {
+                            const generalCommissioningCluster = endpoint.getClusterServer(GeneralCommissioningCluster);
+                            generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
+                        }
+
+                        const networkingStatus = NetworkCommissioningStatus.Success
+                        lastNetworkingStatus?.setLocal(networkingStatus);
+                        lastNetworkId?.setLocal(firstNetworkId);
+
+                        return {
+                            networkingStatus: NetworkCommissioningStatus.Success,
+                            networkIndex: 0
+                        };
+                    },
+                    connectNetwork: async ({
+                        request: { networkId, breadcrumb },
+                        attributes: {
+                            lastNetworkingStatus,
+                            lastNetworkId,
+                            lastConnectErrorValue,
+                            networks
+                        },
+                        endpoint, session
+                    }) => {
+                        console.log(`---> connectNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${breadcrumb}`);
+
+                        // TODO Check if failsafe is armed
+
+                        // Simulate successful connection
+                        if (breadcrumb !== undefined) {
+                            const generalCommissioningCluster = endpoint.getClusterServer(GeneralCommissioningCluster);
+                            generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
+                        }
+
+                        const networkList = networks.getLocal();
+                        networkList[0].connected = true;
+                        networks.setLocal(networkList);
+
+                        const networkingStatus = NetworkCommissioningStatus.Success
+                        lastNetworkingStatus?.setLocal(networkingStatus);
+                        lastNetworkId?.setLocal(firstNetworkId);
+                        lastConnectErrorValue?.setLocal(null);
+
+                        // Announce operational in IP network
+                        const device = session.getContext();
+                        device.startAnnouncement();
+
+                        return {
+                            networkingStatus: NetworkCommissioningStatus.Success,
+                            errorValue: null,
+                        }
+                    },
+                    reorderNetwork: async ({
+                        request: { networkId, networkIndex, breadcrumb },
+                        attributes: { lastNetworkingStatus },
+                        endpoint
+                    }) => {
+                        console.log(`---> reorderNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${networkIndex} ${breadcrumb}`);
+
+                        // Simulate successful connection
+                        if (breadcrumb !== undefined) {
+                            const generalCommissioningCluster = endpoint.getClusterServer(GeneralCommissioningCluster);
+                            generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
+                        }
+
+                        const networkingStatus = NetworkCommissioningStatus.Success
+                        lastNetworkingStatus?.setLocal(networkingStatus);
+
+                        return {
+                            networkingStatus: NetworkCommissioningStatus.Success,
+                            networkIndex: 0
+                        };
+                    },
+                } as ClusterServerHandlers<typeof WifiNetworkCommissioningCluster>
+            ));
+        }
 
         commissioningServer.addDevice(onOffDevice);
 
@@ -155,6 +334,14 @@ class Device {
          */
 
         await matterServer.start();
+
+        // When we want to limit the initial announcement to one medium (e.g. BLE) then we need to delay the
+        // announcement and provide the limiting information.
+        // Without delaying the announcement is directly triggered with the above "start()" call.
+        if (hasParameter("ble")) {
+            // Announce operational in BLE network only if we have ble enabled, else everywhere
+            await commissioningServer.advertise({ ble: true });
+        }
 
         /**
          * Print Pairing Information
