@@ -8,7 +8,7 @@ import assert from "assert";
 import { Time } from "../../src/time/Time.js";
 import { TimeFake } from "../../src/time/TimeFake.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
-import { BtpProtocolError, BtpSessionHandler } from "../../src/ble/BtpSessionHandler.js";
+import { BtpProtocolError, BtpSessionHandler, BtpFlowError } from "../../src/ble/BtpSessionHandler.js";
 import { getPromiseResolver } from "../../src/util/Promises.js";
 import { BtpCodec } from "../../src/codec/BtpCodec.js";
 import { singleton } from "../../src/util/index.js";
@@ -270,8 +270,7 @@ describe("BtpSessionHandler", () => {
         });
 
         it("Btp packet must not be 0", async () => {
-            await expect(btpSessionHandler?.sendMatterMessage(ByteArray.fromHex("")))
-                .rejects.toThrowError("BTP packet must not be empty");
+            await assert.rejects(async () => await btpSessionHandler?.sendMatterMessage(ByteArray.fromHex("")), BtpFlowError, "BTP packet must not be empty");
         });
 
         it("handles a correct two segment long Matter Message", async () => {
