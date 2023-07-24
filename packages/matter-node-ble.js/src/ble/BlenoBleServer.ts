@@ -7,27 +7,21 @@
 import Bleno from "@abandonware/bleno";
 import { Logger } from "@project-chip/matter.js/log";
 import { ByteArray, getPromiseResolver } from "@project-chip/matter.js/util";
-import { MatterCoreSpecificationV1_1 } from "@project-chip/matter.js/spec";
-import { BtpSessionHandler } from "@project-chip/matter.js/ble";
+import {
+    BLE_MATTER_C1_CHARACTERISTIC_UUID, BLE_MATTER_C2_CHARACTERISTIC_UUID, BLE_MATTER_C3_CHARACTERISTIC_UUID,
+    BLE_MATTER_SERVICE_UUID, BTP_CONN_RSP_TIMEOUT_MS, BtpSessionHandler
+} from "@project-chip/matter.js/ble";
 import { Channel } from "@project-chip/matter.js/common";
 import { Time } from "@project-chip/matter.js/time";
 
 const logger = Logger.get("BlenoBleServer");
-
-/** @see {@link MatterCoreSpecificationV1_1} § 4.17.3.2 */
-const MATTER_SERVICE_UUID = "fff6";
-const MATTER_C1_CHARACTERISTIC_UUID = "18EE2EF5-263D-4559-959F-4F9C429F9D11";
-const MATTER_C2_CHARACTERISTIC_UUID = "18EE2EF5-263D-4559-959F-4F9C429F9D12";
-const MATTER_C3_CHARACTERISTIC_UUID = "64630238-8772-45F2-B87D-748A83218F04";
-
-const BTP_CONN_RSP_TIMEOUT_MS = 5000; // timer starts when receives handshake request & waits for a subscription request on c2
 
 class BtpWriteCharacteristicC1 extends Bleno.Characteristic {
     constructor(
         private readonly bleServer: BlenoBleServer
     ) {
         super({
-            uuid: MATTER_C1_CHARACTERISTIC_UUID,
+            uuid: BLE_MATTER_C1_CHARACTERISTIC_UUID,
             properties: ['write']
         });
     }
@@ -50,7 +44,7 @@ class BtpIndicateCharacteristicC2 extends Bleno.Characteristic {
         private readonly bleServer: BlenoBleServer
     ) {
         super({
-            uuid: MATTER_C2_CHARACTERISTIC_UUID,
+            uuid: BLE_MATTER_C2_CHARACTERISTIC_UUID,
             properties: ['indicate']
         });
     }
@@ -61,8 +55,9 @@ class BtpIndicateCharacteristicC2 extends Bleno.Characteristic {
         await this.bleServer.handleC2SubscribeRequest(maxValueSize, updateValueCallback);
     }
 
-    override onUnsubscribe() {
+    override async onUnsubscribe() {
         logger.debug('C2 unsubscribe');
+        await this.bleServer.close();
     }
 
     override onIndicate() {
@@ -76,7 +71,7 @@ class BtpReadCharacteristicC3 extends Bleno.Characteristic {
         private readonly bleServer: BlenoBleServer
     ) {
         super({
-            uuid: MATTER_C3_CHARACTERISTIC_UUID,
+            uuid: BLE_MATTER_C3_CHARACTERISTIC_UUID,
             properties: ['read']
         });
     }
@@ -98,7 +93,7 @@ class BtpService extends Bleno.PrimaryService {
         bleServer: BlenoBleServer
     ) {
         super({
-            uuid: MATTER_SERVICE_UUID,
+            uuid: BLE_MATTER_SERVICE_UUID,
             characteristics: [
                 new BtpWriteCharacteristicC1(bleServer),
                 new BtpIndicateCharacteristicC2(bleServer),
@@ -150,15 +145,16 @@ export class BlenoBleServer implements Channel<ByteArray> {
 
         // Linux only events /////////////////
         Bleno.on('accept', (clientAddress) => {
-            logger.debug(`accept, client: ${clientAddress}`);
+            logger.debug(`accept new connection, client: ${clientAddress}`);
             this.clientAddress = clientAddress;
             Bleno.updateRssi();
         });
 
-        Bleno.on('disconnect', (clientAddress) => {
+        Bleno.on('disconnect', clientAddress => {
             logger.debug(`disconnect, client: ${clientAddress}`);
-            this.btpSession?.close();
-            this.btpSession = undefined;
+            if (this.btpSession !== undefined) {
+                this.btpSession.close().then(() => { this.btpSession = undefined; }).catch(() => { this.btpSession = undefined; });
+            }
         });
 
         Bleno.on('rssiUpdate', (rssi) => {
@@ -211,7 +207,7 @@ export class BlenoBleServer implements Channel<ByteArray> {
         } else {
             if (this.btpSession !== undefined) {
                 logger.debug(`Received Matter data for BTP Session: ${data.toString('hex')}`);
-                this.btpSession.handleIncomingBleData(ByteArray.from(data));
+                void this.btpSession.handleIncomingBleData(new ByteArray(data));
             } else {
                 throw new Error(`Received Matter data but no BTP session was initialized: ${data.toString('hex')}`);
             }
@@ -231,11 +227,14 @@ export class BlenoBleServer implements Channel<ByteArray> {
         if (this.latestHandshakePayload === undefined) {
             throw new Error(`Subscription request received before handshake Request`);
         }
+        if (this.btpSession !== undefined) {
+            throw new Error(`Subscription request received but BTP session already initialized. Can not handle two sessions!`);
+        }
         this.btpHandshakeTimeout.stop();
 
         this.btpSession = await BtpSessionHandler.createFromHandshakeRequest(
             Math.min(Bleno.mtu - 3, maxValueSize),
-            this.latestHandshakePayload,
+            new ByteArray(this.latestHandshakePayload),
 
             // callback to write data to characteristic C2
             async (data: ByteArray) => {
@@ -247,10 +246,10 @@ export class BlenoBleServer implements Channel<ByteArray> {
             },
 
             // callback to disconnect the BLE connection
-            () => this.close(),
+            async () => this.close(),
 
             // callback to forward decoded and de-assembled Matter messages to ExchangeManager
-            (data: ByteArray) => {
+            async (data: ByteArray) => {
                 if (this.onMatterMessageListener === undefined) {
                     throw new Error(`No listener registered for Matter messages`);
                 }
@@ -292,6 +291,11 @@ export class BlenoBleServer implements Channel<ByteArray> {
             this.additionalAdvertisingData = Buffer.alloc(0);
         }
 
+        if (this.isAdvertising) {
+            Bleno.stopAdvertising();
+            this.isAdvertising = false;
+        }
+
         if (this.state === 'poweredOn') {
             Bleno.startAdvertisingWithEIRData(this.advertisingData);
             this.isAdvertising = true;
@@ -319,11 +323,13 @@ export class BlenoBleServer implements Channel<ByteArray> {
         logger.error("Timeout for handshake subscribe request on C2 reached, disconnecting.");
     }
 
-    close() {
+    async close() {
         this.btpHandshakeTimeout.stop();
         Bleno.disconnect();
-        this.btpSession?.close();
-        this.btpSession = undefined;
+        if (this.btpSession !== undefined) {
+            await this.btpSession.close()
+            this.btpSession = undefined;
+        }
     }
 
     // Channel<ByteArray>
