@@ -21,11 +21,11 @@ import { NodeId } from "../datatype/NodeId.js";
 import { isIPv6 } from "../util/Ip.js";
 import { Logger } from "../log/Logger.js";
 import { VendorId } from "../datatype/VendorId.js";
-import { ServerAddress } from "../common/ServerAddress.js";
+import { ServerAddress, ServerAddressIp } from "../common/ServerAddress.js";
 
 const logger = Logger.get("MdnsScanner");
 
-type MatterServerRecordWithExpire = ServerAddress & {
+type MatterServerRecordWithExpire = ServerAddressIp & {
     expires: number,
 };
 
@@ -85,7 +85,6 @@ export class MdnsScanner implements Scanner {
      * @private
      */
     private async sendQueries() {
-        console.log("QUERY SEND START");
         this.queryTimer?.stop();
         const allQueries = Array.from(this.activeAnnounceQueries.values());
         const queries = allQueries.flatMap(({ queries }) => queries);
@@ -94,7 +93,6 @@ export class MdnsScanner implements Scanner {
         this.queryTimer = Time.getTimer(this.nextAnnounceIntervalSeconds * 1000, () => this.sendQueries()).start();
 
         logger.debug(`Sending ${queries.length} query records for ${this.activeAnnounceQueries.size} queries with ${answers.length} known answers. Re-Announce in ${this.nextAnnounceIntervalSeconds} seconds`);
-        console.log(`Sending ${queries.length} query records for ${this.activeAnnounceQueries.size} queries with ${answers.length} known answers. Re-Announce in ${this.nextAnnounceIntervalSeconds} seconds`);
 
         const nextAnnounceInterval = this.nextAnnounceIntervalSeconds * 2;
         this.nextAnnounceIntervalSeconds = Math.min(nextAnnounceInterval, 60 * 60 /* 1 hour */);
@@ -149,7 +147,6 @@ export class MdnsScanner implements Scanner {
         }
 
         await this.multicastServer.send(queryMessage);
-        console.log("QUERY SEND END");
     }
 
     /**
@@ -194,7 +191,7 @@ export class MdnsScanner implements Scanner {
     private getOperationalDeviceRecords(deviceMatterQname: string) {
         const recordMap = this.operationalDeviceRecords.get(deviceMatterQname);
         if (recordMap !== undefined) {
-            return this.sortServerEntries(Array.from(recordMap.values())).map(({ ip, port }) => ({ ip, port }));
+            return this.sortServerEntries(Array.from(recordMap.values())).map(({ ip, port }) => ({ ip, port, type: "udp" })) as ServerAddressIp[];
         }
         return [];
     }
@@ -266,7 +263,7 @@ export class MdnsScanner implements Scanner {
      * Method to find an operational device (already commissioned) and return a promise with the list of discovered
      * IP/ports or an empty array if not found.
      */
-    async findOperationalDevice({ operationalId }: Fabric, nodeId: NodeId, timeoutSeconds = 5): Promise<ServerAddress[]> {
+    async findOperationalDevice({ operationalId }: Fabric, nodeId: NodeId, timeoutSeconds = 5): Promise<ServerAddressIp[]> {
         const deviceMatterQname = this.createOperationalMatterQName(operationalId, nodeId);
 
         let storedRecords = this.getOperationalDeviceRecords(deviceMatterQname);
@@ -323,7 +320,7 @@ export class MdnsScanner implements Scanner {
         return foundRecords.map(record => {
             return {
                 ...record,
-                addresses: this.sortServerEntries(Array.from(record.addresses.values())).map(({ ip, port }) => ({ ip, port })),
+                addresses: this.sortServerEntries(Array.from(record.addresses.values())).map(({ ip, port }) => ({ ip, port, type: "udp" })) as ServerAddressIp[],
                 expires: undefined
             };
         });
@@ -521,7 +518,7 @@ export class MdnsScanner implements Scanner {
         const storedRecords = this.operationalDeviceRecords.get(matterName) ?? new Map<string, MatterServerRecordWithExpire>();
         if (ips.length > 0) {
             for (const ip of ips) {
-                const matterServer = storedRecords.get(ip) ?? { ip, port, expires: 0 };
+                const matterServer = storedRecords.get(ip) ?? { ip, port, type: "udp", expires: 0 };
                 matterServer.expires = Time.nowMs() + ttl * 1000;
 
                 storedRecords.set(matterServer.ip, matterServer);
@@ -587,7 +584,7 @@ export class MdnsScanner implements Scanner {
                 ], answers)
             } else {
                 for (const ip of ips) {
-                    const matterServer = storedRecord.addresses.get(ip) ?? { ip, port, expires: 0 };
+                    const matterServer = storedRecord.addresses.get(ip) ?? { ip, port, type: "udp", expires: 0 };
                     matterServer.expires = Time.nowMs() + ttl * 1000;
 
                     storedRecord.addresses.set(ip, matterServer);

@@ -27,7 +27,7 @@ import { AllClustersMap } from "./cluster/ClusterHelper.js";
 import { ClusterClientObj, isClusterClient } from "./cluster/client/ClusterClient.js";
 import { BitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
-import { ServerAddress } from "./common/ServerAddress.js";
+import { ServerAddressIp } from "./common/ServerAddress.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 
 const logger = new Logger("CommissioningController");
@@ -41,7 +41,7 @@ const logger = new Logger("CommissioningController");
  * Constructor options for the CommissioningController class
  */
 export interface CommissioningControllerOptions {
-    serverAddress?: ServerAddress;
+    serverAddress?: ServerAddressIp;
     localPort?: number;
     disableIpv4?: boolean;
     listeningAddressIpv4?: string;
@@ -57,7 +57,7 @@ export interface CommissioningControllerOptions {
 }
 
 export class CommissioningController extends MatterNode {
-    serverAddress?: ServerAddress;
+    serverAddress?: ServerAddressIp;
     private readonly disableIpv4: boolean;
     private readonly localPort?: number;
     private readonly listeningAddressIpv4?: string;

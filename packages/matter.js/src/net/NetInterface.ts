@@ -7,9 +7,13 @@
 import { Channel } from "../common/Channel.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { TransportInterface } from "../common/TransportInterface.js";
+import { ServerAddress } from "../common/ServerAddress.js";
 
+/**
+ * A Network interface enhances a TransportInterface with the ability to open a channel to a remote server.
+ */
 export interface NetInterface extends TransportInterface {
-    openChannel(host: string, port: number): Promise<Channel<ByteArray>>;
+    openChannel(address: ServerAddress): Promise<Channel<ByteArray>>;
 }
 
 export function isNetworkInterface(obj: TransportInterface | NetInterface): obj is NetInterface {

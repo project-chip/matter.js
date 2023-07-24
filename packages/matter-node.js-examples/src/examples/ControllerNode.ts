@@ -92,7 +92,7 @@ class ControllerNode {
 
         const matterClient = new MatterServer(storageManager);
         const commissioningController = new CommissioningController({
-            serverAddress: (ip !== undefined && port !== undefined) ? { ip, port } : undefined,
+            serverAddress: (ip !== undefined && port !== undefined) ? { ip, port, type: "udp" } : undefined,
             longDiscriminator,
             shortDiscriminator,
             passcode: setupPin,

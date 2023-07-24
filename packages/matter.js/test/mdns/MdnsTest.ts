@@ -304,7 +304,7 @@ describe("MDNS Scanner and Broadcaster", () => {
 
             assert.equal(dataWereSent, true);
             assert.equal(queryReceived, false);
-            assert.deepEqual(result, [{ ip: `${SERVER_IPv6}%fakeInterface`, port: PORT }, { ip: SERVER_IPv4, port: PORT }]);
+            assert.deepEqual(result, [{ ip: `${SERVER_IPv6}%fakeInterface`, port: PORT, type: "udp" }, { ip: SERVER_IPv4, port: PORT, type: "udp" }]);
         });
 
         it("the client queries the server record if it has not been announced before", async () => {
@@ -333,7 +333,7 @@ describe("MDNS Scanner and Broadcaster", () => {
 
             const result = await findPromise;
 
-            assert.deepEqual(result, [{ ip: `${SERVER_IPv6}%fakeInterface`, port: PORT }, { ip: SERVER_IPv4, port: PORT }]);
+            assert.deepEqual(result, [{ ip: `${SERVER_IPv6}%fakeInterface`, port: PORT, type: "udp" }, { ip: SERVER_IPv4, port: PORT, type: "udp" }]);
         });
 
         it("the client queries the server record and get correct response also with multiple announced instances", async () => {
@@ -412,7 +412,7 @@ describe("MDNS Scanner and Broadcaster", () => {
             });
             const result = await findPromise;
 
-            assert.deepEqual(result, [{ ip: `${SERVER_IPv6}%fakeInterface`, port: PORT2 }, { ip: SERVER_IPv4, port: PORT2 }]);
+            assert.deepEqual(result, [{ ip: `${SERVER_IPv6}%fakeInterface`, port: PORT2, type: "udp" }, { ip: SERVER_IPv4, port: PORT2, type: "udp" }]);
         });
 
         it("the client queries the server record and get correct response when announced before", async () => {
@@ -446,7 +446,7 @@ describe("MDNS Scanner and Broadcaster", () => {
 
             assert.equal(dataWereSent, true);
             assert.equal(queryReceived, false);
-            assert.deepEqual(result, [{ ip: `${SERVER_IPv6}%fakeInterface`, port: PORT2 }, { ip: SERVER_IPv4, port: PORT2 }]);
+            assert.deepEqual(result, [{ ip: `${SERVER_IPv6}%fakeInterface`, port: PORT2, type: "udp" }, { ip: SERVER_IPv4, port: PORT2, type: "udp" }]);
         });
     });
 });

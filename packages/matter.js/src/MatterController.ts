@@ -98,14 +98,14 @@ export class MatterController {
         private readonly certificateManager: RootCertificateManager,
         private readonly fabric: Fabric,
         private readonly storage: StorageContext,
-        public operationalServerAddress?: ServerAddress,
+        public operationalServerAddress?: ServerAddressIp,
         commissioningOptions?: CommissioningData
     ) {
         this.controllerStorage = this.storage.createContext("MatterController");
 
         // If controller has a stored operational server address, use it, irrelevant what was passed in the constructor
         if (this.controllerStorage.has("operationalServerAddress")) {
-            this.operationalServerAddress = this.controllerStorage.get<ServerAddress>("operationalServerAddress");
+            this.operationalServerAddress = this.controllerStorage.get<ServerAddressIp>("operationalServerAddress");
         }
 
         this.sessionManager = new SessionManager(this, this.storage);
@@ -311,21 +311,20 @@ export class MatterController {
      * discovered addresses or devices) and then next server address is tried.The result of the first successful method
      * call is returned. The logic makes sure to only try each unique address (IP/port) once.
      */
-    async iterateServerAddresses<T, E extends Error>(servers: ServerAddress[], errorType: ClassExtends<E>, updateNetworkInterfaceFunc: () => Promise<ServerAddress[]>, func: (server: ServerAddress) => Promise<T>, lastKnownServer?: ServerAddress): Promise<{ result: T, resultAddress: ServerAddress }> {
+    async iterateServerAddresses<SA extends ServerAddress, T, E extends Error>(servers: SA[], errorType: ClassExtends<E>, updateNetworkInterfaceFunc: () => Promise<SA[]>, func: (server: SA) => Promise<T>, lastKnownServer?: SA): Promise<{ result: T, resultAddress: SA }> {
         if (lastKnownServer !== undefined) {
-            servers = servers.filter(server => server.ip !== lastKnownServer.ip || server.port !== lastKnownServer.port);
+            servers = servers.filter(server => !isDeepEqual(server, lastKnownServer));
             servers.unshift(lastKnownServer);
         }
         const serversSet = new Set(servers);
 
         const triedServers = new Set<string>();
         while (true) {
-            logger.debug(`Server addresses to try: ${Array.from(serversSet.values()).map(({ ip, port }) => `${ip}:${port}`).join(",")}`);
+            logger.debug(`Server addresses to try: ${Array.from(serversSet.values()).map((server) => server.type === "udp" ? `udp://${server.ip}:${server.port}` : `ble://${server.peripheralAddress}`).join(",")}`);
 
             let triedOne = false;
             for (const server of serversSet) {
-                const { ip, port } = server;
-                const serverKey = `${ip}:${port}`;
+                const serverKey = server.type === "udp" ? `udp://${server.ip}:${server.port}` : `ble://${server.peripheralAddress}`;
                 if (triedServers.has(serverKey)) continue;
                 triedServers.add(serverKey);
 
@@ -388,17 +387,17 @@ export class MatterController {
     }
 
     /** Pair with an operational device (already commissioned) and establish a CASE session. */
-    async pair(peerNodeId: NodeId, operationalServerAddress: ServerAddress) {
-        const { ip: operationalIp, port: operationalPort } = operationalServerAddress;
+    async pair(peerNodeId: NodeId, operationalServerAddress: ServerAddressIp) {
+        const { ip, port } = operationalServerAddress;
         // Do CASE pairing
-        const isIpv6Address = isIPv6(operationalIp);
+        const isIpv6Address = isIPv6(ip);
         const operationalInterface = isIpv6Address ? this.netInterfaceIpv6 : this.netInterfaceIpv4;
 
         if (operationalInterface === undefined) {
-            throw new PairRetransmissionLimitReachedError(`IPv${isIpv6Address ? "6" : "4"} interface not initialized for port ${operationalPort}. Cannot use ${operationalIp} for pairing.`);
+            throw new PairRetransmissionLimitReachedError(`IPv${isIpv6Address ? "6" : "4"} interface not initialized for port ${port}. Cannot use ${ip} for pairing.`);
         }
 
-        const operationalChannel = await operationalInterface.openChannel(operationalIp, operationalPort);
+        const operationalChannel = await operationalInterface.openChannel(operationalServerAddress);
         const operationalUnsecureMessageExchange = new MessageChannel(operationalChannel, this.sessionManager.getUnsecureSession());
         const operationalSecureSession = await tryCatchAsync(
             async () => {
@@ -421,7 +420,7 @@ export class MatterController {
         return this.controllerStorage.get("fabricCommissioned", false);
     }
 
-    setOperationalServerAddress(address: ServerAddress) {
+    setOperationalServerAddress(address: ServerAddressIp) {
         this.operationalServerAddress = address;
         this.controllerStorage.set("operationalServerAddress", address);
     }
