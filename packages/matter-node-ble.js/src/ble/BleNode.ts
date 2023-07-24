@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {InstanceBroadcaster, Scanner, TransportInterface} from "@project-chip/matter.js/common";
+import { InstanceBroadcaster, Scanner, TransportInterface } from "@project-chip/matter.js/common";
 import { Ble } from "@project-chip/matter.js/ble";
 import { BlenoBleServer } from "./BlenoBleServer";
 import { BlePeripheralInterface } from "./BlePeripheralInterface";
