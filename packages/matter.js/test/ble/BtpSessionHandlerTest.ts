@@ -7,13 +7,13 @@
 import assert from "assert";
 import { Time } from "../../src/time/Time.js";
 import { TimeFake } from "../../src/time/TimeFake.js";
-
-Time.get = () => new TimeFake(0);
-
 import { ByteArray } from "../../src/util/ByteArray.js";
 import { BtpProtocolError, BtpSessionHandler } from "../../src/ble/BtpSessionHandler.js";
 import { getPromiseResolver } from "../../src/util/Promises.js";
 import { BtpCodec } from "../../src/codec/BtpCodec.js";
+import { singleton } from "../../src/util/index.js";
+
+Time.get = singleton(() => new TimeFake(0));
 
 describe("BtpSessionHandler", () => {
     describe("Test Handshake", () => {
@@ -223,67 +223,259 @@ describe("BtpSessionHandler", () => {
             assert.deepEqual(result, ByteArray.fromHex("0d00010900090807060504030201"));
         });
 
-        // it("handles a correct two segment long Matter Message", async () => {
-        //     // const { promise: writeBlePromise, resolver: writeBleResolver } = await getPromiseResolver<ByteArray>();
-        //     const { promise: writeBlePromise, resolver: writeBleResolver } = await getPromiseResolver<ByteArray>();
-        //     const { promise: handleMatterMessagePromise, resolver: handleMatterMessageResolver } = await getPromiseResolver<ByteArray>();
-        //
-        //     const segmentPayload = ByteArray.fromHex("01020304050607080901020304");
-        //     const segmentPayload1 = ByteArray.fromHex("010203040506070809010203");
-        //     const matterMessage1 = BtpCodec.encodeBtpPacket({
-        //         header: {
-        //             isHandshakeRequest: false,
-        //             hasManagementOpcode: false,
-        //             hasAckNumber: true,
-        //             isEndingSegment: false,
-        //             isContinuingSegment: false,
-        //             isBeginningSegment: true
-        //         },
-        //         payload: {
-        //             ackNumber: 0,
-        //             sequenceNumber: 1,
-        //             messageLength: segmentPayload.length,
-        //             segmentPayload: segmentPayload1
-        //         }
-        //     });
-        //
-        //     const segmentPayload2 = ByteArray.fromHex("04");
-        //     const matterMessage2 = BtpCodec.encodeBtpPacket({
-        //         header: {
-        //             isHandshakeRequest: false,
-        //             hasManagementOpcode: false,
-        //             hasAckNumber: false,
-        //             isEndingSegment: true,
-        //             isContinuingSegment: false,
-        //             isBeginningSegment: false
-        //         },
-        //         payload: {
-        //             sequenceNumber: 2,
-        //             segmentPayload: segmentPayload2
-        //         }
-        //     });
-        //
-        //     onHandleMatterMessageCallback = (matterMessage: ByteArray) => {
-        //         handleMatterMessageResolver(matterMessage);
-        //         void btpSessionHandler?.sendMatterMessage(ByteArray.fromHex("0302010908070605040302010908"));
-        //     };
-        //
-        //     onWriteBleCallback = (dataToWrite: ByteArray) => {
-        //         writeBleResolver(dataToWrite);
-        //     }
-        //
-        //     btpSessionHandler?.handleIncomingBleData(matterMessage1);
-        //
-        //     const result = writeBlePromise;
-        //
-        //     btpSessionHandler?.handleIncomingBleData(matterMessage2);
-        //
-        //     const result1 = await writeBlePromise;
-        //     const matterHandlerResult = await handleMatterMessagePromise;
-        //
-        //     assert.deepEqual(matterHandlerResult, segmentPayload);
-        //     assert.deepEqual(result, ByteArray.fromHex("0901020e00030201090807060504030201"));
-        //     assert.deepEqual(result1, ByteArray.fromHex("0901020e00030201090807060504030201"));
-        // });
+        it("received bytes more than fragment size", async () => {
+            const { promise: disconnectBlePromise, resolver: disconnectBleResolver } = await getPromiseResolver<void>();
+
+            const segmentPayload = ByteArray.fromHex("01020304050607080901020304050607080901");
+            const matterMessage = BtpCodec.encodeBtpPacket({
+                header: {
+                    isHandshakeRequest: false,
+                    hasManagementOpcode: false,
+                    hasAckNumber: true,
+                    isEndingSegment: true,
+                    isContinuingSegment: false,
+                    isBeginningSegment: true
+                },
+                payload: {
+                    ackNumber: 0,
+                    sequenceNumber: 0,
+                    messageLength: segmentPayload.length,
+                    segmentPayload
+                }
+            });
+
+            onDisconnectBleCallback = () => {
+                disconnectBleResolver();
+            }
+
+            btpSessionHandler?.handleIncomingBleData(matterMessage);
+            await disconnectBlePromise;
+        });
+
+        it("Btp packet must not be 0", async () => {
+            await expect(btpSessionHandler?.sendMatterMessage(ByteArray.fromHex("")))
+                .rejects.toThrowError("BTP packet must not be empty");
+        });
+
+        it("handles a correct two segment long Matter Message", async () => {
+            const { promise: handleMatterMessagePromise, resolver: handleMatterMessageResolver } = await getPromiseResolver<ByteArray>();
+
+            const segmentPayload = ByteArray.fromHex("01020304050607080901020304050607");
+            const segmentPayload1 = ByteArray.fromHex("010203040506070809010203040506");
+            const promiseResolver = new Array<ByteArray>();
+
+            const matterMessage1 = BtpCodec.encodeBtpPacket({
+                header: {
+                    isHandshakeRequest: false,
+                    hasManagementOpcode: false,
+                    hasAckNumber: true,
+                    isEndingSegment: false,
+                    isContinuingSegment: false,
+                    isBeginningSegment: true
+                },
+                payload: {
+                    ackNumber: 0,
+                    sequenceNumber: 0,
+                    messageLength: segmentPayload.length,
+                    segmentPayload: segmentPayload1
+                }
+            });
+            const segmentPayload2 = ByteArray.fromHex("07");
+            const matterMessage2 = BtpCodec.encodeBtpPacket({
+                header: {
+                    isHandshakeRequest: false,
+                    hasManagementOpcode: false,
+                    hasAckNumber: false,
+                    isEndingSegment: true,
+                    isContinuingSegment: true,
+                    isBeginningSegment: false
+                },
+                payload: {
+                    sequenceNumber: 1,
+                    segmentPayload: segmentPayload2
+                }
+            });
+
+            onHandleMatterMessageCallback = (matterMessage: ByteArray) => {
+                handleMatterMessageResolver(matterMessage);
+                void btpSessionHandler?.sendMatterMessage(ByteArray.fromHex("030201090807060504030201090807060504"));
+            };
+
+            onWriteBleCallback = (dataToWrite: ByteArray) => {
+                promiseResolver.push(dataToWrite);
+            }
+
+            btpSessionHandler?.handleIncomingBleData(matterMessage1);
+            btpSessionHandler?.handleIncomingBleData(matterMessage2);
+
+            const matterHandlerResult = await handleMatterMessagePromise;
+
+            assert.deepEqual(matterHandlerResult, segmentPayload);
+            assert.deepEqual(promiseResolver[0], ByteArray.fromHex("0901011200030201090807060504030201090807"));
+            assert.deepEqual(promiseResolver[1], ByteArray.fromHex("0602060504"));
+        });
+
+        it("triggers timeout as did not send ack within 5 sec", async () => {
+            const fakeTime = Time.get() as TimeFake;
+            const { promise: writeBlePromise, resolver: writeBleResolver } = await getPromiseResolver<ByteArray>();
+            const { promise: handleMatterMessagePromise, resolver: handleMatterMessageResolver } = await getPromiseResolver<ByteArray>();
+
+            const segmentPayload = ByteArray.fromHex("010203040506070809");
+            const matterMessage = BtpCodec.encodeBtpPacket({
+                header: {
+                    isHandshakeRequest: false,
+                    hasManagementOpcode: false,
+                    hasAckNumber: true,
+                    isEndingSegment: true,
+                    isContinuingSegment: false,
+                    isBeginningSegment: true
+                },
+                payload: {
+                    ackNumber: 0,
+                    sequenceNumber: 0,
+                    messageLength: segmentPayload.length,
+                    segmentPayload
+                }
+            });
+
+            onHandleMatterMessageCallback = (matterMessage: ByteArray) => {
+                handleMatterMessageResolver(matterMessage);
+                fakeTime.getTimer(5000, () => btpSessionHandler?.sendMatterMessage(ByteArray.fromHex("090807060504030201")));
+            };
+
+            onWriteBleCallback = (dataToWrite: ByteArray) => {
+                writeBleResolver(dataToWrite);
+            }
+
+            btpSessionHandler?.handleIncomingBleData(matterMessage);
+            await fakeTime.advanceTime(5000);
+
+            const result = await writeBlePromise;
+            const matterHandlerResult = await handleMatterMessagePromise;
+
+            assert.deepEqual(result, ByteArray.fromHex("080001"));
+            assert.deepEqual(matterHandlerResult, segmentPayload);
+        });
+
+        it("triggers timeout as did not receive ack within 15 sec", async () => {
+            const fakeTime = Time.get() as TimeFake;
+            const { promise: disconnectBlePromise, resolver: disconnectBleResolver } = await getPromiseResolver<void>();
+            const { promise: handleMatterMessagePromise, resolver: handleMatterMessageResolver } = await getPromiseResolver<ByteArray>();
+
+            const segmentPayload = ByteArray.fromHex("010203040506070809");
+            const matterMessage = BtpCodec.encodeBtpPacket({
+                header: {
+                    isHandshakeRequest: false,
+                    hasManagementOpcode: false,
+                    hasAckNumber: false,
+                    isEndingSegment: true,
+                    isContinuingSegment: false,
+                    isBeginningSegment: true
+                },
+                payload: {
+                    ackNumber: undefined,
+                    sequenceNumber: 0,
+                    messageLength: segmentPayload.length,
+                    segmentPayload
+                }
+            });
+
+            onHandleMatterMessageCallback = (matterMessage: ByteArray) => {
+                handleMatterMessageResolver(matterMessage);
+                void btpSessionHandler?.sendMatterMessage(ByteArray.fromHex("090807060504030201"));
+            };
+
+            onDisconnectBleCallback = () => {
+                disconnectBleResolver();
+            }
+
+            await assert.rejects(async () => {
+                btpSessionHandler?.handleIncomingBleData(matterMessage);
+
+                await fakeTime.advanceTime(15000);
+                await handleMatterMessagePromise;
+                await disconnectBlePromise;
+            }, "Acknowledgement for the sent sequence number was not received");
+        });
+
+        it("payload size and message Length does not match", async () => {
+            const { promise: disconnectBlePromise, resolver: disconnectBleResolver } = await getPromiseResolver<void>();
+
+            const segmentPayload = ByteArray.fromHex("010203040506070809");
+            const matterMessage = BtpCodec.encodeBtpPacket({
+                header: {
+                    isHandshakeRequest: false,
+                    hasManagementOpcode: false,
+                    hasAckNumber: true,
+                    isEndingSegment: true,
+                    isContinuingSegment: false,
+                    isBeginningSegment: true
+                },
+                payload: {
+                    ackNumber: 0,
+                    sequenceNumber: 0,
+                    messageLength: 8,
+                    segmentPayload
+                }
+            });
+            onDisconnectBleCallback = () => {
+                disconnectBleResolver();
+            }
+
+            btpSessionHandler?.handleIncomingBleData(matterMessage);
+            await disconnectBlePromise;
+        });
+
+        it("handles rounding off sequence numbers", async () => {
+            const { promise: writeBlePromise, resolver: writeBleResolver } = await getPromiseResolver<ByteArray>();
+            const { promise: handleMatterMessagePromise, resolver: handleMatterMessageResolver } = await getPromiseResolver<ByteArray>();
+
+            for (let i = 0; i < 257; i++) {
+                const segmentPayload = ByteArray.fromHex("010203040506070809");
+
+                const packet = {
+                    header: {
+                        isHandshakeRequest: false,
+                        hasManagementOpcode: false,
+                        hasAckNumber: true,
+                        isEndingSegment: true,
+                        isContinuingSegment: false,
+                        isBeginningSegment: true
+                    },
+                    payload: {
+                        ackNumber: getSequenceNumber(i - 1),
+                        sequenceNumber: getSequenceNumber(i - 1),
+                        messageLength: segmentPayload.length,
+                        segmentPayload
+                    }
+                };
+                const matterMessage = BtpCodec.encodeBtpPacket(packet);
+
+                onHandleMatterMessageCallback = (matterMessage: ByteArray) => {
+                    handleMatterMessageResolver(matterMessage);
+                    void btpSessionHandler?.sendMatterMessage(ByteArray.fromHex("090807060504030201"));
+                };
+
+                onWriteBleCallback = (dataToWrite: ByteArray) => {
+                    writeBleResolver(dataToWrite);
+                }
+
+                btpSessionHandler?.handleIncomingBleData(matterMessage);
+                const matterHandlerResult = await handleMatterMessagePromise;
+                assert.deepEqual(matterHandlerResult, segmentPayload);
+
+                const result = await writeBlePromise;
+                assert.deepEqual(result, ByteArray.fromHex("0d00010900090807060504030201"));
+            }
+        });
     });
 });
+
+function getSequenceNumber(sequenceNumber: number) {
+    sequenceNumber++;
+    if (sequenceNumber > 255) {
+        sequenceNumber = 0;
+    }
+    return sequenceNumber;
+}
+

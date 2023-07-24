@@ -128,7 +128,7 @@ export class BtpCodec {
             throw new BtpProtocolError("Ending segment flag can't be set without continuing segment flag.");
         }
         if ((isBeginningSegment || isContinuingSegment) && (segmentPayload === undefined || segmentPayload.length === 0)) {
-            throw new BtpProtocolError("Payload needs to be set because header flag indicates a a message with payload.");
+            throw new BtpProtocolError("Payload needs to be set because header flag indicates a message with payload.");
         }
         if (isBeginningSegment && messageLength === undefined) {
             throw new BtpProtocolError("Message length needs to be set because paket is a beginning segment.");
