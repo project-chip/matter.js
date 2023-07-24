@@ -29,7 +29,7 @@ export class SimulatedNetwork {
         }
         listeners.push(listener);
         return {
-            close: () => this.offUdpData(host, port, listener),
+            close: async () => this.offUdpData(host, port, listener),
         }
     }
 

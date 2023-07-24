@@ -28,7 +28,7 @@ export class UdpInterface implements NetInterface {
     onData(listener: (channel: Channel<ByteArray>, messageBytes: ByteArray) => void): Listener {
         return this.server.onData((_netInterface, peerAddress, peerPort, data) => listener(new UdpConnection(this.server, peerAddress, peerPort), data));
     }
-    close() {
+    async close() {
         this.server.close();
     }
 }
@@ -46,5 +46,9 @@ class UdpConnection implements Channel<ByteArray> {
 
     getName() {
         return `udp://${this.peerAddress}:${this.peerPort}`;
+    }
+
+    async close() {
+        // UDP is connectionless, so nothing to do here
     }
 }

@@ -8,10 +8,14 @@ import { Channel } from "./Channel.js";
 import { ByteArray } from "../util/ByteArray.js";
 
 export interface Listener {
-    close(): void;
+    close(): Promise<void>;
 }
 
+/**
+ * A TransportInterface is a generic interface for sending and receiving data on an established incoming connection.
+ * It can not open new connections.
+ */
 export interface TransportInterface {
     onData(listener: (socket: Channel<ByteArray>, data: ByteArray) => void): Listener;
-    close(): void;
+    close(): Promise<void>;
 }

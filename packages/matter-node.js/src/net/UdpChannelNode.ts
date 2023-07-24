@@ -68,7 +68,7 @@ export class UdpChannelNode implements UdpChannel {
 
         this.socket.on("message", messageListener);
         return {
-            close: () => {
+            close: async () => {
                 this.socket.removeListener("message", messageListener);
             }
         };
@@ -86,7 +86,7 @@ export class UdpChannelNode implements UdpChannel {
         });
     }
 
-    close() {
+    async close() {
         this.socket.close();
     }
 }

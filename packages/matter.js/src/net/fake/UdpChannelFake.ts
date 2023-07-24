@@ -42,8 +42,10 @@ export class UdpChannelFake implements UdpChannel {
         this.simulatedNetwork.sendUdp(this.localAddress, this.listeningPort, host, port, data);
     }
 
-    close() {
-        this.netListeners.forEach(netListener => netListener.close());
+    async close() {
+        for (const netListener of this.netListeners) {
+            await netListener.close();
+        }
         this.netListeners.length = 0;
     }
 }

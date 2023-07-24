@@ -38,6 +38,10 @@ export class MessageChannel<ContextT> implements Channel<Message> {
     getName() {
         return `${this.channel.getName()} on session ${this.session.getName()}`;
     }
+
+    async close() {
+        await this.channel.close();
+    }
 }
 
 export class ExchangeManager<ContextT> {
@@ -76,8 +80,10 @@ export class ExchangeManager<ContextT> {
         return exchange;
     }
 
-    close() {
-        this.transportListeners.forEach(netListener => netListener.close());
+    async close() {
+        for (const netListener of this.transportListeners) {
+            await netListener.close();
+        }
         this.transportListeners.length = 0;
         [...this.exchanges.values()].forEach(exchange => exchange.close());
         this.exchanges.clear();
