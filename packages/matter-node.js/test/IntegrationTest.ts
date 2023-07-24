@@ -15,7 +15,7 @@ Crypto.get = () => new CryptoNode();
 import {
     OnOffCluster, BasicInformationCluster, OperationalCertStatus, OperationalCredentialsCluster, DescriptorCluster,
     IdentifyCluster, GroupsCluster, AccessControlCluster, ScenesCluster, GeneralCommissioningCluster,
-    RegulatoryLocationType, NetworkCommissioningHandler, NetworkCommissioningStatus,
+    RegulatoryLocationType, NetworkCommissioningStatus,
     WifiAndEthernetAndThreadNetworkCommissioningCluster
 } from "@project-chip/matter.js/cluster";
 import { VendorId, FabricIndex, GroupId, ClusterId } from "@project-chip/matter.js/datatype";
@@ -131,7 +131,31 @@ describe("Integration Test", () => {
                     lastNetworkingStatus: NetworkCommissioningStatus.Success,
                     networks: [{ networkId: ByteArray.fromHex("0000000000000000000000000000000000000000000000000000000000000000"), connected: true }],
                 },
-                NetworkCommissioningHandler()
+                {
+                    scanNetworks: async function() {
+                        throw new Error("Not implemented");
+                    },
+
+                    removeNetwork: async function() {
+                        throw new Error("Not implemented");
+                    },
+
+                    connectNetwork: async function() {
+                        throw new Error("Not implemented");
+                    },
+
+                    reorderNetwork: async function() {
+                        throw new Error("Not implemented");
+                    },
+
+                    addOrUpdateWiFiNetwork: async function() {
+                        throw new Error("Not implemented");
+                    },
+
+                    addOrUpdateThreadNetwork: async function() {
+                        throw new Error("Not implemented");
+                    }
+                }
             )
         );
 

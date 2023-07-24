@@ -24,7 +24,6 @@ import { OperationalCredentialsClusterHandler, OperationalCredentialsServerConf 
 import { AttestationCertificateManager } from "./certificate/AttestationCertificateManager.js";
 import { CertificationDeclarationManager } from "./certificate/CertificationDeclarationManager.js";
 import { GeneralCommissioningClusterHandler } from "./cluster/server/GeneralCommissioningServer.js";
-import { NetworkCommissioningHandler } from "./cluster/server/NetworkCommissioningServer.js";
 import { AccessControlCluster } from "./cluster/AccessControlCluster.js";
 import { GroupKeyManagementCluster } from "./cluster/GroupKeyManagementCluster.js";
 import { BootReason, GeneralDiagnosticsCluster } from "./cluster/GeneralDiagnosticsCluster.js";
@@ -244,6 +243,7 @@ export class CommissioningServer extends MatterNode {
             )
         );
 
+        const networkId = new ByteArray(32);
         this.rootEndpoint.addClusterServer(
             ClusterServer(
                 EthernetNetworkCommissioningCluster,
@@ -251,11 +251,11 @@ export class CommissioningServer extends MatterNode {
                     maxNetworks: 1,
                     interfaceEnabled: true,
                     lastConnectErrorValue: 0,
-                    lastNetworkId: ByteArray.fromHex("0000000000000000000000000000000000000000000000000000000000000000"),
+                    lastNetworkId: networkId,
                     lastNetworkingStatus: NetworkCommissioningStatus.Success,
-                    networks: [{ networkId: ByteArray.fromHex("0000000000000000000000000000000000000000000000000000000000000000"), connected: true }],
+                    networks: [{ networkId: networkId, connected: true }],
                 },
-                NetworkCommissioningHandler()
+                {} // Ethernet is not requiring any methods
             )
         );
 
