@@ -34,10 +34,11 @@ export abstract class BaseAttributeServer<T> {
         this.endpoint = endpoint;
     }
 
-    /** Initialize the value of the attribute, used when a persisted value is set initially */
-    init(_value: T, _version: number) {
-        /* no init for fixed because configuration wins */
-    }
+    /**
+     * Initialize the value of the attribute, used when a persisted value is set initially or when values needs to be
+     * adjusted before the Device gets announced. Do not use this method to change values when the device is in use!
+     */
+    abstract init(value: T, version?: number): void;
 }
 
 /**
@@ -57,6 +58,14 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
 
     getLocal(): T {
         return this.value;
+    }
+
+    init(value: T, version?: number) {
+        if (version !== undefined) {
+            throw new Error("Version is not supported on fixed attributes");
+        }
+        this.validator(value, this.name);
+        this.value = value;
     }
 }
 
@@ -236,5 +245,9 @@ export class FabricScopedAttributeServer<T> extends BaseAttributeServer<T>{
 
     removeListener(listener: (newValue: T, oldValue: T) => void) {
         this.listeners.splice(this.listeners.findIndex(item => item === listener), 1);
+    }
+
+    init(_value: T, _version?: number) {
+        throw new Error("Initialization is not supported on fabric scoped attributes");
     }
 }

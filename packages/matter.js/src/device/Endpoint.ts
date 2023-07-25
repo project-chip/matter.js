@@ -119,13 +119,13 @@ export class Endpoint {
             this.descriptorCluster = cluster as unknown as ClusterServerObjForCluster<typeof DescriptorCluster>;
         }
         this.clusterServers.set(cluster.id, cluster);
-        this.descriptorCluster.attributes.serverList.setLocal(Array.from(this.clusterServers.keys()).map((id) => new ClusterId(id)));
+        this.descriptorCluster.attributes.serverList.init(Array.from(this.clusterServers.keys()).map((id) => new ClusterId(id)));
         this.structureChangedCallback(); // Inform parent about structure change
     }
 
     addClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(cluster: ClusterClientObj<F, A, C, E>) {
         this.clusterClients.set(cluster.id, cluster);
-        this.descriptorCluster.attributes.clientList.setLocal(Array.from(this.clusterClients.keys()).map((id) => new ClusterId(id)));
+        this.descriptorCluster.attributes.clientList.init(Array.from(this.clusterClients.keys()).map((id) => new ClusterId(id)));
         this.structureChangedCallback(); // Inform parent about structure change
     }
 
@@ -183,7 +183,7 @@ export class Endpoint {
         this.name = deviceTypes[0].name;
 
         // Update descriptor cluster
-        this.descriptorCluster.attributes.deviceTypeList.setLocal(
+        this.descriptorCluster.attributes.deviceTypeList.init(
             this.deviceTypes.map(deviceType => ({
                 deviceType: new DeviceTypeId(deviceType.code),
                 revision: deviceType.revision
