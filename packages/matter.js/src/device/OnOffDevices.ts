@@ -10,8 +10,8 @@ import { createDefaultGroupsClusterServer } from "../cluster/server/GroupsServer
 import { createDefaultScenesClusterServer } from "../cluster/server/ScenesServer.js";
 import { createDefaultIdentifyClusterServer } from "../cluster/server/IdentifyServer.js";
 import { AttributeInitialValues, ClusterServerHandlers } from "../cluster/server/ClusterServer.js";
-import { IdentifyCluster, } from "../cluster/IdentifyCluster.js";
-import { OnOffCluster } from "../cluster/OnOffCluster.js";
+import { IdentifyCluster, } from "../cluster/definitions/IdentifyCluster.js";
+import { OnOffCluster } from "../cluster/definitions/OnOffCluster.js";
 import { extendPublicHandlerMethods } from "../util/NamedHandler.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";

@@ -38,7 +38,7 @@ import { capitalize } from "../../util/String.js";
 import { Endpoint } from "../../device/Endpoint.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { CommandId } from "../../datatype/CommandId.js";
-import { TlvAttributeValuePair } from "../../cluster/ScenesCluster.js";
+import { TlvAttributeValuePair } from "../../cluster/definitions/ScenesCluster.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { EventId } from "../../datatype/EventId.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
@@ -137,6 +137,10 @@ export function ClusterServer<F extends BitSchema, SF extends TypeFromPartialBit
             //  transition is manufacturer dependent.
 
             for (const { attributeId, attributeValue } of values) {
+                if (attributeId === undefined) {
+                    logger.warn(`Empty attributeId in scene extension field not supported for "set" yet`);
+                    continue;
+                }
                 const attributeName = sceneAttributeList.find(name => (attributes as any)[name].id === attributeId.id);
                 if (attributeName) {
                     const attributeServer = (attributes as any)[attributeName];
@@ -147,6 +151,10 @@ export function ClusterServer<F extends BitSchema, SF extends TypeFromPartialBit
 
         _verifySceneExtensionFieldSets(values: TypeFromSchema<typeof TlvAttributeValuePair>[]) {
             for (const { attributeId, attributeValue } of values) {
+                if (attributeId === undefined) {
+                    logger.warn(`Empty attributeId in scene extension field not supported for "verify" yet`);
+                    continue;
+                }
                 const attributeName = sceneAttributeList.find(name => (attributes as any)[name].id === attributeId.id);
                 if (attributeName) {
                     const attributeServer = (attributes as any)[attributeName];

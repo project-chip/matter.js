@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { OnOffCluster } from "../OnOffCluster.js";
+import { OnOffCluster } from "../definitions/OnOffCluster.js";
 import { AttributeInitialValues, ClusterServerHandlers } from "./ClusterServer.js";
 import { ClusterServer } from "../../protocol/interaction/InteractionServer.js";
 

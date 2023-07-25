@@ -9,9 +9,9 @@ import { MatterDevice } from "../../MatterDevice.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import {
     CommissioningError, GeneralCommissioningCluster, RegulatoryLocationType
-} from "../GeneralCommissioningCluster.js";
+} from "../definitions/GeneralCommissioningCluster.js";
 import { ClusterServerHandlers } from "./ClusterServer.js";
-import { BasicInformationCluster } from "../BasicInformationCluster.js";
+import { BasicInformationCluster } from "../definitions/BasicInformationCluster.js";
 
 const SuccessResponse = { errorCode: CommissioningError.Ok, debugText: "" };
 const logger = Logger.get("GeneralCommissioningClusterHandler");

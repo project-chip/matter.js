@@ -16,7 +16,7 @@ import {
     OnOffCluster, BasicInformationCluster, OperationalCertStatus, OperationalCredentialsCluster, DescriptorCluster,
     IdentifyCluster, GroupsCluster, AccessControlCluster, ScenesCluster, GeneralCommissioningCluster,
     RegulatoryLocationType, NetworkCommissioningHandler, NetworkCommissioningStatus,
-    WifiAndEthernetAndThreadNetworkCommissioningCluster
+    NetworkCommissioningCluster
 } from "@project-chip/matter.js/cluster";
 import { VendorId, FabricIndex, GroupId, ClusterId } from "@project-chip/matter.js/datatype";
 
@@ -122,7 +122,7 @@ describe("Integration Test", () => {
         // Override NetworkCommissioning Cluster for now unless configurable
         commissioningServer.addRootClusterServer(
             ClusterServer(
-                WifiAndEthernetAndThreadNetworkCommissioningCluster,
+                NetworkCommissioningCluster.with("EthernetNetworkInterface", "WiFiNetworkInterface", "ThreadNetworkInterface"),
                 {
                     maxNetworks: 1,
                     interfaceEnabled: true,
@@ -571,7 +571,7 @@ describe("Integration Test", () => {
             assert.ok(operationalCredentialsCluster);
 
             const result = await operationalCredentialsCluster.commands.removeFabric({ fabricIndex: new FabricIndex(250) });
-            assert.equal(result.status, OperationalCertStatus.InvalidFabricIndex);
+            assert.equal(result.statusCode, OperationalCertStatus.InvalidFabricIndex);
             assert.equal(result.fabricIndex, undefined);
             assert.equal(result.debugText, "Fabric 250 not found");
         });
@@ -585,7 +585,7 @@ describe("Integration Test", () => {
             assert.equal(fabricIndex.index, 1);
 
             const result = await operationalCredentialsCluster.commands.removeFabric({ fabricIndex });
-            assert.equal(result.status, OperationalCertStatus.Success);
+            assert.equal(result.statusCode, OperationalCertStatus.Success);
             assert.deepEqual(result.fabricIndex, fabricIndex);
             assert.equal(result.debugText, "Fabric removed");
         });

@@ -5,7 +5,7 @@
  */
 
 import { ClusterServerHandlers } from "./ClusterServer.js";
-import { GroupKeyManagementCluster } from "../GroupKeyManagementCluster.js";
+import { GroupKeyManagementCluster } from "../definitions/GroupKeyManagementCluster.js";
 
 // TODO: Implement this
 

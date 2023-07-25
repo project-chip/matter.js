@@ -11,10 +11,14 @@ import { MatterDevice } from "../../MatterDevice.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { ByteArray } from "../../util/ByteArray.js";
 import {
-    CertificateChainType, OperationalCertStatus, OperationalCredentialsCluster, TlvAttestation, TlvCertSigningRequest
-} from "../OperationalCredentialsCluster.js";
+    CertificateChainType, NodeOperationalCertStatus, OperationalCredentialsCluster
+} from "../definitions/OperationalCredentialsCluster.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
 import { ClusterServerHandlers } from "./ClusterServer.js";
+import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
+import { TlvByteString } from "../../tlv/TlvString.js";
+import { TlvUInt32 } from "../../tlv/TlvNumber.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 
 export interface OperationalCredentialsServerConf {
     devicePrivateKey: ByteArray,
@@ -23,42 +27,59 @@ export interface OperationalCredentialsServerConf {
     certificationDeclaration: ByteArray,
 }
 
+/** @see {@link MatterCoreSpecificationV1_1} § 11.17.5.4 */
+export const TlvAttestation = TlvObject({
+    declaration: TlvField(1, TlvByteString),
+    attestationNonce: TlvField(2, TlvByteString.bound({ length: 32 })),
+    timestamp: TlvField(3, TlvUInt32), // TODO: check actual max length in specs
+    firmwareInfo: TlvOptionalField(4, TlvByteString),
+});
+
+/** @see {@link MatterCoreSpecificationV1_1} § 11.17.5.6 */
+export const TlvCertSigningRequest = TlvObject({
+    certSigningRequest: TlvField(1, TlvByteString),
+    csrNonce: TlvField(2, TlvByteString.bound({ length: 32 })),
+    vendorReserved1: TlvOptionalField(3, TlvByteString),
+    vendorReserved2: TlvOptionalField(4, TlvByteString),
+    vendorReserved3: TlvOptionalField(5, TlvByteString),
+});
+
 function signWithDeviceKey(conf: OperationalCredentialsServerConf, session: SecureSession<MatterDevice>, data: ByteArray) {
     return Crypto.signPkcs8(conf.devicePrivateKey, [data, session.getAttestationChallengeKey()]);
 }
 
 export const OperationalCredentialsClusterHandler: (conf: OperationalCredentialsServerConf) => ClusterServerHandlers<typeof OperationalCredentialsCluster> = (conf) => ({
-    requestAttestation: async ({ request: { attestationNonce }, session }) => {
+    attestationRequest: async ({ request: { attestationNonce }, session }) => {
         const elements = TlvAttestation.encode({ declaration: conf.certificationDeclaration, attestationNonce, timestamp: 0 });
-        return { elements: elements, signature: signWithDeviceKey(conf, session as SecureSession<MatterDevice>, elements) };
+        return { attestationElements: elements, attestationSignature: signWithDeviceKey(conf, session as SecureSession<MatterDevice>, elements) };
     },
 
-    requestCertSigning: async ({ request: { certSigningRequestNonce }, session }) => {
+    csrRequest: async ({ request: { csrNonce }, session }) => {
         const certSigningRequest = session.getContext().getFabricBuilder().createCertificateSigningRequest();
-        const elements = TlvCertSigningRequest.encode({ certSigningRequest, certSigningRequestNonce });
-        return { elements, signature: signWithDeviceKey(conf, session as SecureSession<MatterDevice>, elements) };
+        const nocsrElements = TlvCertSigningRequest.encode({ certSigningRequest, csrNonce });
+        return { nocsrElements, attestationSignature: signWithDeviceKey(conf, session as SecureSession<MatterDevice>, nocsrElements) };
     },
 
-    requestCertChain: async ({ request: { type } }) => {
-        switch (type) {
-            case CertificateChainType.DeviceAttestation:
+    certificateChainRequest: async ({ request: { certificateType } }) => {
+        switch (certificateType) {
+            case CertificateChainType.DacCertificate:
                 return { certificate: conf.deviceCertificate };
-            case CertificateChainType.ProductAttestationIntermediate:
+            case CertificateChainType.PaiCertificate:
                 return { certificate: conf.deviceIntermediateCertificate };
             default:
-                throw new Error(`Unsupported certificate type: ${type}`);
+                throw new Error(`Unsupported certificate type: ${certificateType}`);
         }
     },
 
-    addOperationalCert: async ({ request: { operationalCert, intermediateCaCert, identityProtectionKey, caseAdminNode, adminVendorId }, session }) => {
+    addNoc: async ({ request: { nocValue, icacValue, ipkValue, caseAdminSubject, adminVendorId }, session }) => {
         if (!session.isSecure()) throw new Error("addOperationalCert should be called on a secure session.");
         const device = session.getContext();
         const fabricBuilder = device.getFabricBuilder();
-        fabricBuilder.setOperationalCert(operationalCert);
-        if (intermediateCaCert && intermediateCaCert.length > 0) fabricBuilder.setIntermediateCACert(intermediateCaCert);
+        fabricBuilder.setOperationalCert(nocValue);
+        if (icacValue && icacValue.length > 0) fabricBuilder.setIntermediateCACert(icacValue);
         fabricBuilder.setRootVendorId(adminVendorId);
-        fabricBuilder.setIdentityProtectionKey(identityProtectionKey);
-        fabricBuilder.setRootNodeId(caseAdminNode);
+        fabricBuilder.setIdentityProtectionKey(ipkValue);
+        fabricBuilder.setRootNodeId(caseAdminSubject);
 
         const fabric = await fabricBuilder.build();
         device.addFabric(fabric);
@@ -66,7 +87,7 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         // TODO: create ACL with caseAdminNode
         console.log("addOperationalCert success")
 
-        return { status: OperationalCertStatus.Success, fabricIndex: fabric.fabricIndex };
+        return { statusCode: NodeOperationalCertStatus.Ok, fabricIndex: fabric.fabricIndex };
     },
 
     getFabrics: ({ session }) => {
@@ -88,7 +109,7 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         return (session as SecureSession<MatterDevice>).getFabric()?.fabricIndex ?? FabricIndex.NO_FABRIC;
     },
 
-    updateOperationalCert: async () => {
+    updateNoc: async () => {
         throw new Error("Not implemented");
     },
 
@@ -100,7 +121,7 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
 
         fabric.setLabel(label);
 
-        return { status: OperationalCertStatus.Success };
+        return { statusCode: NodeOperationalCertStatus.Ok };
     },
 
     removeFabric: async ({ request: { fabricIndex }, session }) => {
@@ -109,14 +130,14 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         const fabric = device.getFabricByIndex(fabricIndex);
 
         if (fabric === undefined) {
-            return { status: OperationalCertStatus.InvalidFabricIndex, debugText: `Fabric ${fabricIndex.index} not found` };
+            return { statusCode: NodeOperationalCertStatus.InvalidFabricIndex, debugText: `Fabric ${fabricIndex.index} not found` };
         }
 
         fabric.remove();
-        return { status: OperationalCertStatus.Success, fabricIndex, debugText: "Fabric removed" };
+        return { statusCode: NodeOperationalCertStatus.Ok, fabricIndex, debugText: "Fabric removed" };
     },
 
-    addRootCert: async ({ request: { certificate }, session }) => {
-        session.getContext().getFabricBuilder().setRootCert(certificate);
+    addTrustedRootCertificate: async ({ request: { rootCaCertificate }, session }) => {
+        session.getContext().getFabricBuilder().setRootCert(rootCaCertificate);
     },
 });

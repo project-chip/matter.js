@@ -12,7 +12,7 @@ import { ClusterClientObj, isClusterClient } from "../cluster/client/ClusterClie
 import { ClusterServerObj, isClusterServer } from "../cluster/server/ClusterServer.js";
 import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
-import { BindingCluster } from "../cluster/BindingCluster.js";
+import { BindingCluster } from "../cluster/definitions/BindingCluster.js";
 import { ClusterServer } from "../protocol/interaction/InteractionServer.js";
 
 /**
@@ -112,7 +112,7 @@ export class Device extends Endpoint {
             this.addClusterServer(ClusterServer(
                 BindingCluster,
                 {
-                    bindingList: []
+                    binding: []
                 },
                 {}
             ));

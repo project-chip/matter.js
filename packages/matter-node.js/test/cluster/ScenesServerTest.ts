@@ -40,13 +40,13 @@ describe("Scenes Server test", () => {
 
     // TODO make that nicer and maybe  move to a "testing support library"
     async function initializeTestEnv() {
-        groupsServer = ClusterServer(GroupsCluster, { nameSupport: { groupNames: true } }, GroupsClusterHandler());
+        groupsServer = ClusterServer(GroupsCluster, { nameSupport: { nameSupport: true } }, GroupsClusterHandler());
         scenesServer = ClusterServer(ScenesCluster, {
             sceneCount: 0,
             currentScene: 0,
             currentGroup: new GroupId(0),
             sceneValid: false,
-            nameSupport: { sceneNames: true },
+            nameSupport: { nameSupport: true },
             lastConfiguredBy: null
         }, ScenesClusterHandler());
         onOffServer = ClusterServer(OnOffCluster, { onOff: true }, OnOffClusterHandler());
@@ -324,13 +324,13 @@ describe("Scenes Server test", () => {
         it("copy one Scene error to group does not exist", async () => {
             const result = await callCommandOnClusterServer(scenesServer!, "copyScene", {
                 mode: 0,
-                groupIdFrom: new GroupId(5),
-                sceneIdFrom: 1,
-                groupIdTo: new GroupId(1),
-                sceneIdTo: 2,
+                groupIdentifierFrom: new GroupId(5),
+                sceneIdentifierFrom: 1,
+                groupIdentifierTo: new GroupId(1),
+                sceneIdentifierTo: 2,
             }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
-            assert.deepEqual(result, { code: StatusCode.Success, responseId: 66, response: { status: StatusCode.InvalidCommand, groupIdFrom: new GroupId(5), sceneIdFrom: 1 } });
+            assert.deepEqual(result, { code: StatusCode.Success, responseId: 66, response: { status: StatusCode.InvalidCommand, groupIdentifierFrom: new GroupId(5), sceneIdentifierFrom: 1 } });
         });
 
         it("copy one Scene same group", async () => {
@@ -339,13 +339,13 @@ describe("Scenes Server test", () => {
 
             const result = await callCommandOnClusterServer(scenesServer!, "copyScene", {
                 mode: 0,
-                groupIdFrom: new GroupId(1),
-                sceneIdFrom: 1,
-                groupIdTo: new GroupId(1),
-                sceneIdTo: 2,
+                groupIdentifierFrom: new GroupId(1),
+                sceneIdentifierFrom: 1,
+                groupIdentifierTo: new GroupId(1),
+                sceneIdentifierTo: 2,
             }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
-            assert.deepEqual(result, { code: StatusCode.Success, responseId: 66, response: { status: StatusCode.Success, groupIdFrom: new GroupId(1), sceneIdFrom: 1 } });
+            assert.deepEqual(result, { code: StatusCode.Success, responseId: 66, response: { status: StatusCode.Success, groupIdentifierFrom: new GroupId(1), sceneIdentifierFrom: 1 } });
 
             const persistedData = await firstPromise;
 
@@ -365,13 +365,13 @@ describe("Scenes Server test", () => {
 
             const result = await callCommandOnClusterServer(scenesServer!, "copyScene", {
                 mode: 0,
-                groupIdFrom: new GroupId(1),
-                sceneIdFrom: 1,
-                groupIdTo: new GroupId(2),
-                sceneIdTo: 3,
+                groupIdentifierFrom: new GroupId(1),
+                sceneIdentifierFrom: 1,
+                groupIdentifierTo: new GroupId(2),
+                sceneIdentifierTo: 3,
             }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
-            assert.deepEqual(result, { code: StatusCode.Success, responseId: 66, response: { status: StatusCode.Success, groupIdFrom: new GroupId(1), sceneIdFrom: 1 } });
+            assert.deepEqual(result, { code: StatusCode.Success, responseId: 66, response: { status: StatusCode.Success, groupIdentifierFrom: new GroupId(1), sceneIdentifierFrom: 1 } });
 
             const persistedData = await firstPromise;
 
@@ -391,13 +391,13 @@ describe("Scenes Server test", () => {
 
             const result = await callCommandOnClusterServer(scenesServer!, "copyScene", {
                 mode: { copyAllScenes: true },
-                groupIdFrom: new GroupId(1),
-                sceneIdFrom: 0,
-                groupIdTo: new GroupId(3),
-                sceneIdTo: 0,
+                groupIdentifierFrom: new GroupId(1),
+                sceneIdentifierFrom: 0,
+                groupIdentifierTo: new GroupId(3),
+                sceneIdentifierTo: 0,
             }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
-            assert.deepEqual(result, { code: StatusCode.Success, responseId: 66, response: { status: StatusCode.Success, groupIdFrom: new GroupId(1), sceneIdFrom: 0 } });
+            assert.deepEqual(result, { code: StatusCode.Success, responseId: 66, response: { status: StatusCode.Success, groupIdentifierFrom: new GroupId(1), sceneIdentifierFrom: 0 } });
 
             const persistedData = await firstPromise;
 

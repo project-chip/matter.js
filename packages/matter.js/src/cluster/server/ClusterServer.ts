@@ -19,7 +19,7 @@ import { CommandServer } from "./CommandServer.js";
 import { StorageContext } from "../../storage/StorageContext.js";
 import { ClusterClientObj } from "../client/ClusterClient.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { TlvAttributeValuePair } from "../ScenesCluster.js";
+import { TlvAttributeValuePair } from "../definitions/ScenesCluster.js";
 import { Endpoint } from "../../device/Endpoint.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { EventServer } from "./EventServer.js";

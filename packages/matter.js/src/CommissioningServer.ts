@@ -10,7 +10,7 @@ import {
     QrPairingCodeCodec
 } from "./schema/PairingCodeSchema.js";
 import { ClusterServer, InteractionServer } from "./protocol/interaction/InteractionServer.js";
-import { AdminCommissioningHandler } from "./cluster/server/AdminCommissioningServer.js";
+import { AdministratorCommissioningHandler } from "./cluster/server/AdministratorCommissioningServer.js";
 import { SecureChannelProtocol } from "./protocol/securechannel/SecureChannelProtocol.js";
 import { PaseServer } from "./session/pase/PaseServer.js";
 import { Crypto } from "./crypto/Crypto.js";
@@ -25,16 +25,16 @@ import { AttestationCertificateManager } from "./certificate/AttestationCertific
 import { CertificationDeclarationManager } from "./certificate/CertificationDeclarationManager.js";
 import { GeneralCommissioningClusterHandler } from "./cluster/server/GeneralCommissioningServer.js";
 import { NetworkCommissioningHandler } from "./cluster/server/NetworkCommissioningServer.js";
-import { AccessControlCluster } from "./cluster/AccessControlCluster.js";
-import { GroupKeyManagementCluster } from "./cluster/GroupKeyManagementCluster.js";
-import { BootReason, GeneralDiagnosticsCluster } from "./cluster/GeneralDiagnosticsCluster.js";
+import { AccessControlCluster } from "./cluster/definitions/AccessControlCluster.js";
+import { GroupKeyManagementCluster } from "./cluster/definitions/GroupKeyManagementCluster.js";
+import { BootReason, GeneralDiagnosticsCluster } from "./cluster/definitions/GeneralDiagnosticsCluster.js";
 import { VendorId } from "./datatype/VendorId.js";
-import { BasicInformationCluster } from "./cluster/BasicInformationCluster.js";
-import { OperationalCredentialsCluster } from "./cluster/OperationalCredentialsCluster.js";
+import { BasicInformationCluster } from "./cluster/definitions/BasicInformationCluster.js";
+import { OperationalCredentialsCluster } from "./cluster/definitions/OperationalCredentialsCluster.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
-import { GeneralCommissioningCluster, RegulatoryLocationType } from "./cluster/GeneralCommissioningCluster.js";
-import { EthernetNetworkCommissioningCluster, NetworkCommissioningStatus } from "./cluster/NetworkCommissioningCluster.js";
-import { AdminCommissioningCluster, CommissioningWindowStatus } from "./cluster/AdminCommissioningCluster.js";
+import { GeneralCommissioningCluster, RegulatoryLocationType } from "./cluster/definitions/GeneralCommissioningCluster.js";
+import { NetworkCommissioningCluster, NetworkCommissioningStatus } from "./cluster/definitions/NetworkCommissioningCluster.js";
+import { AdministratorCommissioningCluster, CommissioningWindowStatus } from "./cluster/definitions/AdministratorCommissioningCluster.js";
 import { GroupKeyManagementClusterHandler } from "./cluster/server/GroupKeyManagementServer.js";
 import { QrCode } from "./schema/QrCodeSchema.js";
 import { Device } from "./device/Device.js";
@@ -231,7 +231,7 @@ export class CommissioningServer extends MatterNode {
                     },
                     regulatoryConfig: options.generalCommissioning?.regulatoryConfig ?? RegulatoryLocationType.Outdoor, // Default is the most restrictive one
                     locationCapability: options.generalCommissioning?.locationCapability ?? RegulatoryLocationType.IndoorOutdoor,
-                    supportsConcurrentConnections: options.generalCommissioning?.supportsConcurrentConnections ?? true
+                    supportsConcurrentConnection: options.generalCommissioning?.supportsConcurrentConnection ?? true
                 },
                 GeneralCommissioningClusterHandler({
                     allowCountryCodeChange: options.generalCommissioning?.allowCountryCodeChange ?? true,
@@ -242,7 +242,7 @@ export class CommissioningServer extends MatterNode {
 
         this.rootEndpoint.addClusterServer(
             ClusterServer(
-                EthernetNetworkCommissioningCluster,
+                NetworkCommissioningCluster.with("EthernetNetworkInterface"),
                 {
                     maxNetworks: 1,
                     interfaceEnabled: true,
@@ -354,13 +354,13 @@ export class CommissioningServer extends MatterNode {
 
         this.addRootClusterServer(
             ClusterServer(
-                AdminCommissioningCluster,
+                AdministratorCommissioningCluster,
                 {
                     windowStatus: CommissioningWindowStatus.WindowNotOpen,
                     adminFabricIndex: null,
                     adminVendorId: null
                 },
-                AdminCommissioningHandler(secureChannelProtocol)
+                AdministratorCommissioningHandler(secureChannelProtocol)
             )
         );
 

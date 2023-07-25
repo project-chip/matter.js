@@ -7,18 +7,19 @@
 import { DeviceTypeDefinition } from "./DeviceTypes.js";
 import { ClusterServer } from "../protocol/interaction/InteractionServer.js";
 import { AtLeastOne } from "../util/Array.js";
-import { DescriptorCluster } from "../cluster/DescriptorCluster.js";
+import { DescriptorCluster } from "../cluster/definitions/DescriptorCluster.js";
 import { DeviceTypeId } from "../datatype/DeviceTypeId.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
-import { FixedLabelCluster, UserLabelCluster } from "../cluster/LabelCluster.js";
+import { FixedLabelCluster } from "../cluster/definitions/FixedLabelCluster.js";
+import { UserLabelCluster } from "../cluster/definitions/UserLabelCluster.js";
 import { ClusterClientObj } from "../cluster/client/ClusterClient.js";
 import { ClusterServerObj, ClusterServerObjForCluster } from "../cluster/server/ClusterServer.js";
 import { InteractionClient } from "../protocol/interaction/InteractionClient.js";
-import { BasicInformationCluster } from "../cluster/BasicInformationCluster.js";
-import { BridgedDeviceBasicInformationCluster } from "../cluster/BridgedDeviceBasicInformationCluster.js";
+import { BasicInformationCluster } from "../cluster/definitions/BasicInformationCluster.js";
+import { BridgedDeviceBasicInformationCluster } from "../cluster/definitions/BridgedDeviceBasicInformationCluster.js";
 import { AllClustersMap } from "../cluster/ClusterHelper.js";
 
 export interface EndpointOptions {
