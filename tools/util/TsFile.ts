@@ -400,7 +400,7 @@ enum ExpressionLayout {
     Verbose
 }
 
-function chooseExpressionLayout(lineLength: number, serializedEntries: string[]) {
+function chooseExpressionLayout(lineLength: number, prefix: string, serializedEntries: string[]) {
     let currentLayout = ExpressionLayout.None;
     for (const entry of serializedEntries) {
         const multiline = entry.indexOf("\n") !== -1;
@@ -413,28 +413,39 @@ function chooseExpressionLayout(lineLength: number, serializedEntries: string[])
         switch (currentLayout) {
             case ExpressionLayout.None:
                 if (multiline) {
-                    currentLayout = ExpressionLayout.SingleNested;
+                    if (prefix.endsWith("{")) {
+                        // Multiline object entry always forces verbose mode
+                        currentLayout = ExpressionLayout.Verbose;
+                    } else {
+                        // Arrays we will wrap around a single multi-line entry
+                        currentLayout = ExpressionLayout.SingleNested;
+                    }
                 } else {
                     lineLength += entry.trim().length;
                     if (lineLength >= WRAP_WIDTH + INDENT.length) {
+                        // If the entry is too long, place on a new line
                         currentLayout = ExpressionLayout.MultipleLines;
                     } else {
+                        // Wrap entry on a single line
                         currentLayout = ExpressionLayout.SingleLine;
                     }
                 }
                 break;
 
             case ExpressionLayout.SingleNested:
+                // If previously we saw multiple lines, any other entry forces verbose mode
                 return ExpressionLayout.Verbose;
 
             case ExpressionLayout.SingleLine:
                 if (multiline) {
+                    // More than one multi-line entry always forces verbose mode
                     return ExpressionLayout.Verbose;
                 }
 
                 lineLength += entry.trim().length + 2;
 
-                if (lineLength >= WRAP_WIDTH + INDENT.length) {
+                if (lineLength >= WRAP_WIDTH) {
+                    // Entries do not fit on one line; move to multi-line mode
                     currentLayout = ExpressionLayout.MultipleLines;
                 }
 
@@ -456,14 +467,14 @@ class ExpressionBlock extends NestedBlock {
     }
 
     override layOutEntries(linePrefix: string, serializedEntries: string[]) {
-        let adornmentLength = linePrefix.length + this.prefix.length;
-        const isArrayOrObject = this.prefix.match(/[[{]/);
+        let adornmentLength = linePrefix.length + this.prefix.length + this.suffix.length;
+        const isArrayOrObject = this.prefix.match(/[[{]$/);
         if (isArrayOrObject) {
             adornmentLength += 2;
         }
 
         // Scan the entries to determine how we format the code
-        const layout = chooseExpressionLayout(adornmentLength, serializedEntries);
+        const layout = chooseExpressionLayout(adornmentLength, this.prefix, serializedEntries);
 
         // Render optimized layouts
         switch (layout) {

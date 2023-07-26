@@ -17,7 +17,15 @@ import {
     AsConditional
 } from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { Attribute, OptionalAttribute, OptionalEvent, EventPriority, Command, TlvNoResponse, Cluster as CreateCluster } from "../../cluster/Cluster.js";
+import {
+    Attribute,
+    OptionalAttribute,
+    OptionalEvent,
+    EventPriority,
+    Command,
+    TlvNoResponse,
+    Cluster as CreateCluster
+} from "../../cluster/Cluster.js";
 import { TlvUInt16, TlvEnum, TlvUInt64, TlvUInt32, TlvUInt8, TlvInt8 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvString, TlvByteString } from "../../tlv/TlvString.js";
@@ -1197,7 +1205,10 @@ export namespace ThreadNetworkDiagnostics {
             childRoleCount: AsConditional(MleCountsComponent.attributes.childRoleCount, { optionalIf: [MLECNT] }),
             routerRoleCount: AsConditional(MleCountsComponent.attributes.routerRoleCount, { optionalIf: [MLECNT] }),
             leaderRoleCount: AsConditional(MleCountsComponent.attributes.leaderRoleCount, { optionalIf: [MLECNT] }),
-            attachAttemptCount: AsConditional(MleCountsComponent.attributes.attachAttemptCount, { optionalIf: [MLECNT] }),
+            attachAttemptCount: AsConditional(
+                MleCountsComponent.attributes.attachAttemptCount,
+                { optionalIf: [MLECNT] }
+            ),
             partitionIdChangeCount: AsConditional(
                 MleCountsComponent.attributes.partitionIdChangeCount,
                 { optionalIf: [MLECNT] }
@@ -1210,7 +1221,10 @@ export namespace ThreadNetworkDiagnostics {
             txTotalCount: AsConditional(MacCountsComponent.attributes.txTotalCount, { optionalIf: [MACCNT] }),
             txUnicastCount: AsConditional(MacCountsComponent.attributes.txUnicastCount, { optionalIf: [MACCNT] }),
             txBroadcastCount: AsConditional(MacCountsComponent.attributes.txBroadcastCount, { optionalIf: [MACCNT] }),
-            txAckRequestedCount: AsConditional(MacCountsComponent.attributes.txAckRequestedCount, { optionalIf: [MACCNT] }),
+            txAckRequestedCount: AsConditional(
+                MacCountsComponent.attributes.txAckRequestedCount,
+                { optionalIf: [MACCNT] }
+            ),
             txAckedCount: AsConditional(MacCountsComponent.attributes.txAckedCount, { optionalIf: [MACCNT] }),
             txNoAckRequestedCount: AsConditional(
                 MacCountsComponent.attributes.txNoAckRequestedCount,

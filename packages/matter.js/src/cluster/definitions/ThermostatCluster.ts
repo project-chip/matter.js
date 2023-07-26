@@ -712,7 +712,11 @@ export namespace Thermostat {
             controlSequenceOfOperation: WritableAttribute(
                 0x1b,
                 TlvEnum<ControlSequenceOfOperation>(),
-                { persistent: true, default: ControlSequenceOfOperation.CoolingAndHeating, writeAcl: AccessLevel.Manage }
+                {
+                    persistent: true,
+                    default: ControlSequenceOfOperation.CoolingAndHeating,
+                    writeAcl: AccessLevel.Manage
+                }
             ),
 
             /**
@@ -1388,7 +1392,11 @@ export namespace Thermostat {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.38
              */
-            occupiedSetbackMin: FixedAttribute(0x35, TlvNullable(TlvUInt8.bound({ min: 0, max: 254 })), { default: null }),
+            occupiedSetbackMin: FixedAttribute(
+                0x35,
+                TlvNullable(TlvUInt8.bound({ min: 0, max: 254 })),
+                { default: null }
+            ),
 
             /**
              * This attribute specifies the maximum value that the Thermostat server will allow the OccupiedSetback
@@ -1452,7 +1460,11 @@ export namespace Thermostat {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.42
              */
-            unoccupiedSetbackMax: OptionalFixedAttribute(0x39, TlvNullable(TlvUInt8.bound({ max: 254 })), { default: null })
+            unoccupiedSetbackMax: OptionalFixedAttribute(
+                0x39,
+                TlvNullable(TlvUInt8.bound({ max: 254 })),
+                { default: null }
+            )
         }
     });
 
@@ -1572,12 +1584,30 @@ export namespace Thermostat {
                 HeatingComponent.attributes.unoccupiedHeatingSetpoint,
                 { optionalIf: [HEAT] }
             ),
-            minHeatSetpointLimit: AsConditional(HeatingComponent.attributes.minHeatSetpointLimit, { optionalIf: [HEAT] }),
-            maxHeatSetpointLimit: AsConditional(HeatingComponent.attributes.maxHeatSetpointLimit, { optionalIf: [HEAT] }),
-            minCoolSetpointLimit: AsConditional(CoolingComponent.attributes.minCoolSetpointLimit, { optionalIf: [COOL] }),
-            maxCoolSetpointLimit: AsConditional(CoolingComponent.attributes.maxCoolSetpointLimit, { optionalIf: [COOL] }),
-            minSetpointDeadBand: AsConditional(AutoModeComponent.attributes.minSetpointDeadBand, { mandatoryIf: [AUTO] }),
-            thermostatRunningMode: AsConditional(AutoModeComponent.attributes.thermostatRunningMode, { optionalIf: [AUTO] }),
+            minHeatSetpointLimit: AsConditional(
+                HeatingComponent.attributes.minHeatSetpointLimit,
+                { optionalIf: [HEAT] }
+            ),
+            maxHeatSetpointLimit: AsConditional(
+                HeatingComponent.attributes.maxHeatSetpointLimit,
+                { optionalIf: [HEAT] }
+            ),
+            minCoolSetpointLimit: AsConditional(
+                CoolingComponent.attributes.minCoolSetpointLimit,
+                { optionalIf: [COOL] }
+            ),
+            maxCoolSetpointLimit: AsConditional(
+                CoolingComponent.attributes.maxCoolSetpointLimit,
+                { optionalIf: [COOL] }
+            ),
+            minSetpointDeadBand: AsConditional(
+                AutoModeComponent.attributes.minSetpointDeadBand,
+                { mandatoryIf: [AUTO] }
+            ),
+            thermostatRunningMode: AsConditional(
+                AutoModeComponent.attributes.thermostatRunningMode,
+                { optionalIf: [AUTO] }
+            ),
             startOfWeek: AsConditional(ScheduleConfigurationComponent.attributes.startOfWeek, { mandatoryIf: [SCH] }),
             numberOfWeeklyTransitions: AsConditional(
                 ScheduleConfigurationComponent.attributes.numberOfWeeklyTransitions,

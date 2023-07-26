@@ -420,7 +420,10 @@ Matter.children.push({
                     tag: "datatype", name: "Unspecified", id: 0x0, conformance: "M",
                     description: "Indicates an interface of an unspecified type."
                 },
-                { tag: "datatype", name: "WiFi", id: 0x1, conformance: "O", description: "Indicates a Wi-Fi interface." },
+                {
+                    tag: "datatype", name: "WiFi", id: 0x1, conformance: "O",
+                    description: "Indicates a Wi-Fi interface."
+                },
                 {
                     tag: "datatype", name: "Ethernet", id: 0x2, conformance: "O",
                     description: "Indicates a Ethernet interface."
@@ -429,7 +432,10 @@ Matter.children.push({
                     tag: "datatype", name: "Cellular", id: 0x3, conformance: "O",
                     description: "Indicates a Cellular interface."
                 },
-                { tag: "datatype", name: "Thread", id: 0x4, conformance: "O", description: "Indicates a Thread interface." }
+                {
+                    tag: "datatype", name: "Thread", id: 0x4, conformance: "O",
+                    description: "Indicates a Thread interface."
+                }
             ]
         },
 

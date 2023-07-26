@@ -24,8 +24,14 @@ Matter.children.push({
             xref: { document: "core", section: "11.7.4" },
 
             children: [
-                { tag: "datatype", name: "WIRED", constraint: "0", description: "Wired", details: "A wired power source" },
-                { tag: "datatype", name: "BAT", constraint: "1", description: "Battery", details: "A battery power source" },
+                {
+                    tag: "datatype", name: "WIRED", constraint: "0", description: "Wired",
+                    details: "A wired power source"
+                },
+                {
+                    tag: "datatype", name: "BAT", constraint: "1", description: "Battery",
+                    details: "A battery power source"
+                },
                 {
                     tag: "datatype", name: "RECHG", constraint: "2", description: "Rechargeable",
                     details: "A rechargeable battery power source (requires Battery feature)"
@@ -602,79 +608,277 @@ Matter.children.push({
                 { tag: "datatype", name: "4V5", id: 0x5, conformance: "M", description: "Common type is as specified" },
                 { tag: "datatype", name: "6V0", id: 0x6, conformance: "M", description: "Common type is as specified" },
                 { tag: "datatype", name: "9V0", id: 0x7, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "12Aa", id: 0x8, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Aaaa", id: 0x9, conformance: "M", description: "Common type is as specified" },
+                {
+                    tag: "datatype", name: "12Aa", id: 0x8, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "Aaaa", id: 0x9, conformance: "M",
+                    description: "Common type is as specified"
+                },
                 { tag: "datatype", name: "A", id: 0xa, conformance: "M", description: "Common type is as specified" },
                 { tag: "datatype", name: "B", id: 0xb, conformance: "M", description: "Common type is as specified" },
                 { tag: "datatype", name: "F", id: 0xc, conformance: "M", description: "Common type is as specified" },
                 { tag: "datatype", name: "N", id: 0xd, conformance: "M", description: "Common type is as specified" },
                 { tag: "datatype", name: "No6", id: 0xe, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "SubC", id: 0xf, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "A23", id: 0x10, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "A27", id: 0x11, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Ba5800", id: 0x12, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Duplex", id: 0x13, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "4Sr44", id: 0x14, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "523", id: 0x15, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "531", id: 0x16, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "15V0", id: 0x17, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "22V5", id: 0x18, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "30V0", id: 0x19, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "45V0", id: 0x1a, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "67V5", id: 0x1b, conformance: "M", description: "Common type is as specified" },
+                {
+                    tag: "datatype", name: "SubC", id: 0xf, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "A23", id: 0x10, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "A27", id: 0x11, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "Ba5800", id: 0x12, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "Duplex", id: 0x13, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "4Sr44", id: 0x14, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "523", id: 0x15, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "531", id: 0x16, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "15V0", id: 0x17, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "22V5", id: 0x18, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "30V0", id: 0x19, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "45V0", id: 0x1a, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "67V5", id: 0x1b, conformance: "M",
+                    description: "Common type is as specified"
+                },
                 { tag: "datatype", name: "J", id: 0x1c, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Cr123A", id: 0x1d, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Cr2", id: 0x1e, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "2Cr5", id: 0x1f, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "CrP2", id: 0x20, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "CrV3", id: 0x21, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Sr41", id: 0x22, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Sr43", id: 0x23, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Sr44", id: 0x24, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Sr45", id: 0x25, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Sr48", id: 0x26, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Sr54", id: 0x27, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Sr55", id: 0x28, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Sr57", id: 0x29, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Sr58", id: 0x2a, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Sr59", id: 0x2b, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Sr60", id: 0x2c, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Sr63", id: 0x2d, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Sr64", id: 0x2e, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Sr65", id: 0x2f, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Sr66", id: 0x30, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Sr67", id: 0x31, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Sr68", id: 0x32, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Sr69", id: 0x33, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Sr516", id: 0x34, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Sr731", id: 0x35, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Sr712", id: 0x36, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Lr932", id: 0x37, conformance: "M", description: "Common type is as specified" },
+                {
+                    tag: "datatype", name: "Cr123A", id: 0x1d, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "Cr2", id: 0x1e, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "2Cr5", id: 0x1f, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "CrP2", id: 0x20, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "CrV3", id: 0x21, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "Sr41", id: 0x22, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "Sr43", id: 0x23, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "Sr44", id: 0x24, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "Sr45", id: 0x25, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "Sr48", id: 0x26, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "Sr54", id: 0x27, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "Sr55", id: 0x28, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "Sr57", id: 0x29, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "Sr58", id: 0x2a, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "Sr59", id: 0x2b, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "Sr60", id: 0x2c, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "Sr63", id: 0x2d, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "Sr64", id: 0x2e, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "Sr65", id: 0x2f, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "Sr66", id: 0x30, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "Sr67", id: 0x31, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "Sr68", id: 0x32, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "Sr69", id: 0x33, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "Sr516", id: 0x34, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "Sr731", id: 0x35, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "Sr712", id: 0x36, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "Lr932", id: 0x37, conformance: "M",
+                    description: "Common type is as specified"
+                },
                 { tag: "datatype", name: "A5", id: 0x38, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "A10", id: 0x39, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "A13", id: 0x3a, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "A312", id: 0x3b, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "A675", id: 0x3c, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Ac41E", id: 0x3d, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "10180", id: 0x3e, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "10280", id: 0x3f, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "10440", id: 0x40, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "14250", id: 0x41, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "14430", id: 0x42, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "14500", id: 0x43, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "14650", id: 0x44, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "15270", id: 0x45, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "16340", id: 0x46, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "Rcr123A", id: 0x47, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "17500", id: 0x48, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "17670", id: 0x49, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "18350", id: 0x4a, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "18500", id: 0x4b, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "18650", id: 0x4c, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "19670", id: 0x4d, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "25500", id: 0x4e, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "26650", id: 0x4f, conformance: "M", description: "Common type is as specified" },
-                { tag: "datatype", name: "32600", id: 0x50, conformance: "M", description: "Common type is as specified" }
+                {
+                    tag: "datatype", name: "A10", id: 0x39, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "A13", id: 0x3a, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "A312", id: 0x3b, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "A675", id: 0x3c, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "Ac41E", id: 0x3d, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "10180", id: 0x3e, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "10280", id: 0x3f, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "10440", id: 0x40, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "14250", id: 0x41, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "14430", id: 0x42, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "14500", id: 0x43, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "14650", id: 0x44, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "15270", id: 0x45, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "16340", id: 0x46, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "Rcr123A", id: 0x47, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "17500", id: 0x48, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "17670", id: 0x49, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "18350", id: 0x4a, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "18500", id: 0x4b, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "18650", id: 0x4c, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "19670", id: 0x4d, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "25500", id: 0x4e, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "26650", id: 0x4f, conformance: "M",
+                    description: "Common type is as specified"
+                },
+                {
+                    tag: "datatype", name: "32600", id: 0x50, conformance: "M",
+                    description: "Common type is as specified"
+                }
             ]
         },
 
@@ -687,7 +891,10 @@ Matter.children.push({
                     tag: "datatype", name: "Unspecified", id: 0x0, conformance: "M",
                     description: "Cell chemistry is unspecified or unknown"
                 },
-                { tag: "datatype", name: "Alkaline", id: 0x1, conformance: "M", description: "Cell chemistry is alkaline" },
+                {
+                    tag: "datatype", name: "Alkaline", id: 0x1, conformance: "M",
+                    description: "Cell chemistry is alkaline"
+                },
                 {
                     tag: "datatype", name: "LithiumCarbonFluoride", id: 0x2, conformance: "M",
                     description: "Cell chemistry is lithium carbon fluoride"
@@ -728,7 +935,10 @@ Matter.children.push({
                     tag: "datatype", name: "SilverOxide", id: 0xb, conformance: "M",
                     description: "Cell chemistry is silver oxide"
                 },
-                { tag: "datatype", name: "ZincAir", id: 0xc, conformance: "M", description: "Cell chemistry is zinc air" },
+                {
+                    tag: "datatype", name: "ZincAir", id: 0xc, conformance: "M",
+                    description: "Cell chemistry is zinc air"
+                },
                 {
                     tag: "datatype", name: "ZincCarbon", id: 0xd, conformance: "M",
                     description: "Cell chemistry is zinc carbon"
@@ -821,7 +1031,10 @@ Matter.children.push({
                     tag: "datatype", name: "Unknown", id: 0x0, conformance: "M",
                     description: "Unable to determine the charging state"
                 },
-                { tag: "datatype", name: "IsCharging", id: 0x1, conformance: "M", description: "The battery is charging" },
+                {
+                    tag: "datatype", name: "IsCharging", id: 0x1, conformance: "M",
+                    description: "The battery is charging"
+                },
                 {
                     tag: "datatype", name: "IsAtFullCharge", id: 0x2, conformance: "M",
                     description: "The battery is at full charge"

@@ -31,7 +31,10 @@ Matter.children.push({
                     tag: "datatype", name: "RCK", constraint: "2", description: "Rocking",
                     details: "Rocking movement supported"
                 },
-                { tag: "datatype", name: "WND", constraint: "3", description: "Wind", details: "Wind emulation supported" }
+                {
+                    tag: "datatype", name: "WND", constraint: "3", description: "Wind",
+                    details: "Wind emulation supported"
+                }
             ]
         },
 

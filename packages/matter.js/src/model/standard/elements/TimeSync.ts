@@ -229,8 +229,12 @@ Matter.children.push({
                 "zone database [https://www.iana.org/time-zones].",
 
             xref: { document: "core", section: "11.16.10.3" },
+
             children: [
-                { tag: "datatype", name: "Offset", id: 0x0, type: "int32", conformance: "M", constraint: "-43200 to 50400" },
+                {
+                    tag: "datatype", name: "Offset", id: 0x0, type: "int32", conformance: "M",
+                    constraint: "-43200 to 50400"
+                },
                 { tag: "datatype", name: "Name", id: 0x1, type: "string", conformance: "O", constraint: "0 to 64" }
             ]
         },

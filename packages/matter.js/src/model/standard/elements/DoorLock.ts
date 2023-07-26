@@ -111,7 +111,10 @@ Matter.children.push({
                     tag: "datatype", name: "NotFullyLocked", id: 0x0, conformance: "M",
                     description: "Lock state is not fully locked"
                 },
-                { tag: "datatype", name: "Locked", id: 0x1, conformance: "M", description: "Lock state is fully locked" },
+                {
+                    tag: "datatype", name: "Locked", id: 0x1, conformance: "M",
+                    description: "Lock state is fully locked"
+                },
                 {
                     tag: "datatype", name: "Unlocked", id: 0x2, conformance: "M",
                     description: "Lock state is fully unlocked"
@@ -133,7 +136,10 @@ Matter.children.push({
                     tag: "datatype", name: "Magnetic", id: 0x1, conformance: "M",
                     description: "Physical lock type is magnetic"
                 },
-                { tag: "datatype", name: "Other", id: 0x2, conformance: "M", description: "Physical lock type is other" },
+                {
+                    tag: "datatype", name: "Other", id: 0x2, conformance: "M",
+                    description: "Physical lock type is other"
+                },
                 {
                     tag: "datatype", name: "Mortise", id: 0x3, conformance: "M",
                     description: "Physical lock type is mortise"
@@ -1210,7 +1216,10 @@ Matter.children.push({
                     children: [{ tag: "datatype", name: "entry", type: "CredentialStruct" }]
                 },
                 { tag: "datatype", name: "CreatorFabricIndex", type: "fabric-idx", conformance: "M", quality: "X" },
-                { tag: "datatype", name: "LastModifiedFabricIndex", type: "fabric-idx", conformance: "M", quality: "X" },
+                {
+                    tag: "datatype", name: "LastModifiedFabricIndex", type: "fabric-idx", conformance: "M",
+                    quality: "X"
+                },
                 { tag: "datatype", name: "NextUserIndex", type: "uint16", conformance: "M", quality: "X" }
             ]
         },
@@ -1274,7 +1283,10 @@ Matter.children.push({
                 { tag: "datatype", name: "CredentialExists", type: "bool", conformance: "M" },
                 { tag: "datatype", name: "UserIndex", type: "uint16", conformance: "M", quality: "X" },
                 { tag: "datatype", name: "CreatorFabricIndex", type: "fabric-idx", conformance: "M", quality: "X" },
-                { tag: "datatype", name: "LastModifiedFabricIndex", type: "fabric-idx", conformance: "M", quality: "X" },
+                {
+                    tag: "datatype", name: "LastModifiedFabricIndex", type: "fabric-idx", conformance: "M",
+                    quality: "X"
+                },
                 { tag: "datatype", name: "NextCredentialIndex", type: "uint16", conformance: "M", quality: "X" }
             ]
         },
@@ -1292,7 +1304,10 @@ Matter.children.push({
             xref: { document: "cluster", section: "5.2.6.1" },
 
             children: [
-                { tag: "datatype", name: "LockJammed", id: 0x0, conformance: "M", description: "Locking Mechanism Jammed" },
+                {
+                    tag: "datatype", name: "LockJammed", id: 0x0, conformance: "M",
+                    description: "Locking Mechanism Jammed"
+                },
                 {
                     tag: "datatype", name: "LockFactoryReset", id: 0x1, conformance: "O",
                     description: "Lock Reset to Factory Defaults"
@@ -1314,7 +1329,10 @@ Matter.children.push({
                     description: "Forced Door Open under Door Locked Condition"
                 },
                 { tag: "datatype", name: "DoorAjar", id: 0x7, conformance: "[DPS]", description: "Door ajar" },
-                { tag: "datatype", name: "ForcedUser", id: 0x8, conformance: "[USR]", description: "Force User SOS alarm" }
+                {
+                    tag: "datatype", name: "ForcedUser", id: 0x8, conformance: "[USR]",
+                    description: "Force User SOS alarm"
+                }
             ]
         },
 
@@ -1374,7 +1392,10 @@ Matter.children.push({
             xref: { document: "cluster", section: "5.2.6.5" },
 
             children: [
-                { tag: "datatype", name: "Add", id: 0x0, conformance: "M", description: "Data is being added or was added" },
+                {
+                    tag: "datatype", name: "Add", id: 0x0, conformance: "M",
+                    description: "Data is being added or was added"
+                },
                 {
                     tag: "datatype", name: "Clear", id: 0x1, conformance: "M",
                     description: "Data is being cleared or was cleared"
@@ -1412,8 +1433,14 @@ Matter.children.push({
 
             children: [
                 { tag: "datatype", name: "DoorOpen", id: 0x0, conformance: "DPS", description: "Door state is open" },
-                { tag: "datatype", name: "DoorClosed", id: 0x1, conformance: "DPS", description: "Door state is closed" },
-                { tag: "datatype", name: "DoorJammed", id: 0x2, conformance: "[DPS]", description: "Door state is jammed" },
+                {
+                    tag: "datatype", name: "DoorClosed", id: 0x1, conformance: "DPS",
+                    description: "Door state is closed"
+                },
+                {
+                    tag: "datatype", name: "DoorJammed", id: 0x2, conformance: "[DPS]",
+                    description: "Door state is jammed"
+                },
                 {
                     tag: "datatype", name: "DoorForcedOpen", id: 0x3, conformance: "[DPS]",
                     description: "Door state is currently forced open"

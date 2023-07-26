@@ -6,7 +6,12 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Cluster as CreateCluster, WritableAttribute, AccessLevel, OptionalWritableAttribute } from "../../cluster/Cluster.js";
+import {
+    Cluster as CreateCluster,
+    WritableAttribute,
+    AccessLevel,
+    OptionalWritableAttribute
+} from "../../cluster/Cluster.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvEnum } from "../../tlv/TlvNumber.js";
 

@@ -840,12 +840,18 @@ Matter.children.push({
 
             children: [
                 { tag: "datatype", name: "Unknown", id: 0x0, conformance: "O", description: "Unknown AC Type" },
-                { tag: "datatype", name: "CoolingFixed", id: 0x1, conformance: "O", description: "Cooling and Fixed Speed" },
+                {
+                    tag: "datatype", name: "CoolingFixed", id: 0x1, conformance: "O",
+                    description: "Cooling and Fixed Speed"
+                },
                 {
                     tag: "datatype", name: "HeatPumpFixed", id: 0x2, conformance: "O",
                     description: "Heat Pump and Fixed Speed"
                 },
-                { tag: "datatype", name: "CoolingInverter", id: 0x3, conformance: "O", description: "Cooling and Inverter" },
+                {
+                    tag: "datatype", name: "CoolingInverter", id: 0x3, conformance: "O",
+                    description: "Cooling and Inverter"
+                },
                 {
                     tag: "datatype", name: "HeatPumpInverter", id: 0x4, conformance: "O",
                     description: "Heat Pump and Inverter"
@@ -870,7 +876,10 @@ Matter.children.push({
             xref: { document: "cluster", section: "4.3.7.46" },
 
             children: [
-                { tag: "datatype", name: "Unknown", id: 0x0, conformance: "O", description: "Unknown Refrigerant Type" },
+                {
+                    tag: "datatype", name: "Unknown", id: 0x0, conformance: "O",
+                    description: "Unknown Refrigerant Type"
+                },
                 { tag: "datatype", name: "R22", id: 0x1, conformance: "O", description: "R22 Refrigerant" },
                 { tag: "datatype", name: "R410A", id: 0x2, conformance: "O", description: "R410a Refrigerant" },
                 { tag: "datatype", name: "R407C", id: 0x3, conformance: "O", description: "R407c Refrigerant" }
@@ -907,7 +916,10 @@ Matter.children.push({
                     tag: "datatype", name: "CompressorFail", constraint: "0",
                     description: "Compressor Failure or Refrigerant Leakage"
                 },
-                { tag: "datatype", name: "RoomSensorFail", constraint: "1", description: "Room Temperature Sensor Failure" },
+                {
+                    tag: "datatype", name: "RoomSensorFail", constraint: "1",
+                    description: "Room Temperature Sensor Failure"
+                },
                 {
                     tag: "datatype", name: "OutdoorSensorFail", constraint: "2",
                     description: "Outdoor Temperature Sensor Failure"
@@ -933,7 +945,10 @@ Matter.children.push({
                 { tag: "datatype", name: "Open", id: 0x2, conformance: "O", description: "Fully Open" },
                 { tag: "datatype", name: "Quarter", id: 0x3, conformance: "O", description: "Quarter Open" },
                 { tag: "datatype", name: "Half", id: 0x4, conformance: "O", description: "Half Open" },
-                { tag: "datatype", name: "ThreeQuarters", id: 0x5, conformance: "O", description: "Three Quarters Open" }
+                {
+                    tag: "datatype", name: "ThreeQuarters", id: 0x5, conformance: "O",
+                    description: "Three Quarters Open"
+                }
             ]
         },
 
@@ -952,9 +967,7 @@ Matter.children.push({
                 "\n" +
                 "Table 87. ACCapacity Values",
             xref: { document: "cluster", section: "4.3.7.51" },
-            children: [
-                { tag: "datatype", name: "BtUh", id: 0x0, conformance: "O", description: "British Thermal Unit per Hour" }
-            ]
+            children: [{ tag: "datatype", name: "BtUh", id: 0x0, conformance: "O", description: "British Thermal Unit per Hour" }]
         },
 
         {

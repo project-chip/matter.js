@@ -220,7 +220,10 @@ Matter.children.push({
                 "TIVE_INTERVAL for at least the entire duration of the CommissioningTimeout.",
 
             xref: { document: "core", section: "11.18.8.2" },
-            children: [{ tag: "datatype", name: "CommissioningTimeout", id: 0x0, type: "uint16", conformance: "M", constraint: "desc" }]
+            children: [{
+                tag: "datatype", name: "CommissioningTimeout", id: 0x0, type: "uint16", conformance: "M",
+                constraint: "desc"
+            }]
         },
 
         {

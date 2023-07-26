@@ -559,9 +559,15 @@ Matter.children.push({
             xref: { document: "core", section: "9.14.4.3" },
 
             children: [
-                { tag: "datatype", name: "Inactive", id: 0x0, conformance: "M", description: "The action is not active" },
+                {
+                    tag: "datatype", name: "Inactive", id: 0x0, conformance: "M",
+                    description: "The action is not active"
+                },
                 { tag: "datatype", name: "Active", id: 0x1, conformance: "M", description: "The action is active" },
-                { tag: "datatype", name: "Paused", id: 0x2, conformance: "M", description: "The action has been paused" },
+                {
+                    tag: "datatype", name: "Paused", id: 0x2, conformance: "M",
+                    description: "The action has been paused"
+                },
                 {
                     tag: "datatype", name: "Disabled", id: 0x3, conformance: "M",
                     description: "The action has been disabled"
