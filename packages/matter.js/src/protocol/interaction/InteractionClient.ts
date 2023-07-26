@@ -30,6 +30,7 @@ import { tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { EventClient } from "../../cluster/client/EventClient.js";
 import { BitSchema } from "../../schema/BitmapSchema.js";
 import { Merge } from "../../util/Type.js";
+import { resolveAttributeName, resolveCommandName } from "../../cluster/ClusterHelper.js";
 
 const logger = Logger.get("InteractionClient");
 
@@ -240,6 +241,8 @@ export class InteractionClient {
     }
 
     private async processReadRequest(messenger: InteractionClientMessenger, request: ReadRequest): Promise<DecodedAttributeReportValue[]> {
+        const { attributeRequests } = request;
+        logger.debug(`Sending read request to ${messenger.getExchangeChannelName()} : ${attributeRequests?.map(path => resolveAttributeName(path)).join(", ")}`);
         // Send read request and combine all (potentially chunked) responses
         let response = await messenger.sendReadRequest(request);
         const result: TypeFromSchema<typeof TlvAttributeReport>[] = [];
@@ -255,7 +258,9 @@ export class InteractionClient {
         }
 
         // Normalize and decode the response
-        return normalizeAndDecodeReadAttributeReport(result);
+        const normalizedResult = normalizeAndDecodeReadAttributeReport(result);
+        logger.debug(`Received read response: ${normalizedResult.map(({ path, value }) => `${resolveAttributeName(path)} = ${Logger.toJSON(value)}`).join(", ")}`);
+        return normalizedResult;
     }
 
     async set<T>(endpointId: number, clusterId: number, attribute: Attribute<T, any>, value: T, dataVersion?: number): Promise<void> {
@@ -272,6 +277,9 @@ export class InteractionClient {
 
     async setMultipleAttributes(attributes: { endpointId: number, clusterId: number, attribute: Attribute<any, any>, value: any, dataVersion?: number }[]): Promise<AttributeStatus[]> {
         return this.withMessenger<AttributeStatus[]>(async messenger => {
+            logger.debug(`Sending write request: ${attributes.map((
+                { endpointId, clusterId, attribute: { id }, value, dataVersion }
+            ) => `${resolveAttributeName({ endpointId, clusterId, attributeId: id })} = ${Logger.toJSON(value)} (version=${dataVersion}`).join(", ")}`);
             const writeRequests = attributes.map((
                 { endpointId, clusterId, attribute: { id, schema }, value, dataVersion }
             ) => ({
@@ -303,6 +311,7 @@ export class InteractionClient {
     ): Promise<void> {
         return this.withMessenger<void>(async messenger => {
             const { id: attributeId } = attribute;
+            logger.debug(`Sending subscribe request: ${resolveAttributeName({ endpointId, clusterId, attributeId })}`);
             const { report, subscribeResponse: { subscriptionId } } = await messenger.sendSubscribeRequest({
                 attributeRequests: [{ endpointId, clusterId, attributeId }],
                 keepSubscriptions: true,
@@ -343,6 +352,7 @@ export class InteractionClient {
 
     async subscribeMultipleAttributes(attributeRequests: { endpointId?: number, clusterId?: number, attributeId?: number }[], minIntervalFloorSeconds: number, maxIntervalCeilingSeconds: number, listener?: (data: DecodedAttributeReportValue) => void): Promise<void> {
         return this.withMessenger<void>(async messenger => {
+            logger.debug(`Sending subscribe request: ${attributeRequests.map(path => resolveAttributeName(path)).join(", ")}`);
             const { report, subscribeResponse: { subscriptionId } } = await messenger.sendSubscribeRequest({
                 attributeRequests,
                 keepSubscriptions: true,
@@ -373,6 +383,7 @@ export class InteractionClient {
 
     async invoke<C extends Command<any, any, any>>(endpointId: number, clusterId: number, request: RequestType<C>, id: number, requestSchema: TlvSchema<RequestType<C>>, _responseId: number, responseSchema: TlvSchema<ResponseType<C>>, optional: boolean): Promise<ResponseType<C>> {
         return this.withMessenger<ResponseType<C>>(async messenger => {
+            logger.debug(`Invoking command: ${resolveCommandName({ endpointId, clusterId, commandId: id })} with ${Logger.toJSON(request)}`);
             const commandFields = requestSchema.encodeTlv(request);
 
             const invokeResponse = await messenger.sendInvokeCommand({
@@ -397,7 +408,9 @@ export class InteractionClient {
                     if ((responseSchema as any) !== TlvNoResponse) throw new Error("A response was expected for this command");
                     return undefined as unknown as ResponseType<C>; // ResponseType is void, force casting the empty result
                 }
-                return responseSchema.decodeTlv(command.commandFields);
+                const response = responseSchema.decodeTlv(command.commandFields);
+                logger.debug(`Received invoke response: ${resolveCommandName({ endpointId, clusterId, commandId: id })} with ${Logger.toJSON(response)})}`);
+                return response;
             } if (optional) {
                 return undefined as ResponseType<C>; // ResponseType allows undefined for optional commands
             }

@@ -95,6 +95,10 @@ class InteractionMessenger<ContextT> {
         const { status } = TlvStatusResponse.decode(payload);
         if (status !== StatusCode.Success) throw new StatusResponseError(`Received error status: ${status}`, status);
     }
+
+    getExchangeChannelName() {
+        return this.exchange.channel.getName();
+    }
 }
 
 export class InteractionServerMessenger extends InteractionMessenger<MatterDevice> {
