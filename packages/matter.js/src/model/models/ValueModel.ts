@@ -263,6 +263,32 @@ export abstract class ValueModel extends Model implements ValueElement {
     }
 
     /**
+     * Determine whether this element overrides key properties of its shadow.
+     */
+    get overridesShadow() {
+        const shadow = this.shadow;
+        if (!shadow || !(shadow instanceof ValueModel)) {
+            return;
+        }
+
+        if (this.type && this.type !== shadow.type) {
+            return true;
+        }
+        if (!this.conformance.empty && !this.conformance.equals(shadow.conformance)) {
+            return true;
+        }
+        if (!this.quality.empty && !this.quality.equals(shadow.quality)) {
+            return true;
+        }
+        if (!this.constraint.empty && !this.constraint.equals(shadow.constraint)) {
+            return true;
+        }
+        if (!this.access.empty && !this.access.equals(shadow.access)) {
+            return true;
+        }
+    }
+
+    /**
      * Search the inheritance chain for a bitmap field defining a specific bit.
      */
     bitDefinition(bit: number) {

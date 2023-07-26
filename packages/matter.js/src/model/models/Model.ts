@@ -209,6 +209,14 @@ export abstract class Model {
     }
 
     /**
+     * Get shadow model, if any.  A "shadow" is an element in my parent's
+     * inheritance hierarchy that I override.
+     */
+    get shadow() {
+        return new ModelTraversal().findShadow(this);
+    }
+
+    /**
      * Get the first global base type.  This may have semantic meaning more
      * specific than the base primitive type.
      */

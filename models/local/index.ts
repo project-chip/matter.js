@@ -14,7 +14,7 @@
 
 import "./ColorControlOverrides.js";
 import "./WindowCoveringOverrides.js";
-import "./AdministratorCommissioningClusterOverrides.js";
+import "./AdministratorCommissioningOverrides.js";
 import "./DoorLockOverrides.js";
 import "./PumpConfigurationAndControlOverrides.js";
 import "./ModeSelectOverrides.js";

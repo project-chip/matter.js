@@ -149,15 +149,6 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
             case Metatype.enum:
             case Metatype.bitmap:
                 if (!this.model.children.length && !this.model.global) {
-                    // if (
-                    //     this.model.parent?.tag === CommandElement.Tag
-                    //     || this.model.parent?.tag === DatatypeElement.Tag
-                    // ) {
-                    //     // The specification defines some fields as enums without specific values, so
-                    //     // allow this under command and datatype fields
-                    //     break;
-                    // }
-
                     this.error(
                         `CHILDLESS_${metatype.toUpperCase()}`,
                         `${this.model.type} with no children`);

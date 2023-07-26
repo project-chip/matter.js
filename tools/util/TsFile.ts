@@ -528,6 +528,8 @@ export class TsFile extends Block {
         }
         if (name && list.indexOf(name) === -1) {
             list.push(name);
+
+            name = name.replace(/^\w+ as /, "");
             this.nameDefined(name);
         }
         return this;

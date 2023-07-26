@@ -10,13 +10,17 @@ import { clean } from "#util/file.js";
 
 export class ClusterFile extends TsFile {
     clusterName: string;
+    typesName: string;
     types: Block;
+    ns: Block;
 
     constructor(public cluster: ClusterModel) {
         const name = `${cluster.name}Cluster`;
         super(ClusterFile.createFilename(name));
         this.clusterName = name;
-        this.types = this.section();
+        this.typesName = cluster.name;
+        this.ns = this.statements(`export namespace ${this.typesName} {`, "}");
+        this.types = this.ns.section();
     }
 
     static clean() {

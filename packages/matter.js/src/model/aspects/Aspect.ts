@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { isDeepEqual } from "../../util/DeepEqual.js";
 import { serialize } from "../../util/String.js";
 import { DefinitionError } from "../definitions/DefinitionError.js";
 
@@ -31,6 +32,16 @@ export class Aspect<D> {
             }
         }
         return true;
+    }
+
+    /**
+     * Test for logical equivalence.
+     */
+    equals(other: any) {
+        if (!(other instanceof this.constructor)) {
+            return false;
+        }
+        return isDeepEqual(this.valueOf(), other.valueOf());
     }
 
     valueOf() {

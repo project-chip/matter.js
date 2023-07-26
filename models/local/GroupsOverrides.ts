@@ -21,7 +21,7 @@ LocalMatter.children.push({
         // Set NameSupport default to match feature default per the specification
         {
             tag: "attribute", id: 0, name: "NameSupport",
-            children: [{ tag: "datatype", name: "NameSupport", default: true }]
+            children: [{ tag: "datatype", name: "NameSupport", default: true, constraint: "7" }]
         }
     ]
 })
