@@ -408,8 +408,8 @@ export class TlvGenerator {
         // actually use the type.  Currently not an issue.
         const definingScope = defining.owner(ClusterModel);
         if (definingScope && definingScope !== this.cluster) {
-            this.file.addImport(`cluster/definitions/${definingScope.name}Cluster`, name);
-            return name;
+            this.file.addImport(`cluster/definitions/${definingScope.name}Cluster`, definingScope.name);
+            return `${definingScope.name}.${name}`;
         }
 
         // Define the type
