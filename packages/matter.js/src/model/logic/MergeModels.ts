@@ -38,6 +38,17 @@ export function MergeModels(
             return merged;
         }
 
+        // Update the type for any untyped variant.  This allows model logic
+        // relying on parent type to work without overrides specifying the type
+        // explicitly
+        if (merged.type) {
+            for (const variant of Object.values(variants.map)) {
+                if (variant.type === undefined) {
+                    variant.type = merged.type;
+                }
+            }
+        }
+
         merged.children = recurse();
 
         return merged;
