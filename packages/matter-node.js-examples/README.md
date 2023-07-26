@@ -69,7 +69,7 @@ The following parameters are available:
 * -announceinterface: limit mdns announcements to the provided network interface, e.g. "en0" (default: all interfaces available)
 * -ble: enable BLE support (default: false) If this is enabled the device will announce itself _only_ via BLE if not commissioned and also presents a "Wifi only" device for commissioning to show this feature!
 * -port: the port to listen on for the device (default: 5540)
-* -store: the storage location (directory) to use for storing the pairing information (default: device-node). Delete the directory or provide an alternative name to reset the device
+* -store: the storage location (directory) to use for storing the pairing information (default: .device-node). Ideally use names starting with a ".". Delete the directory or provide an alternative name to reset the device
 * -clearstorage: the storage location will be reset on start of the process
 * -on: the command to run when the device is turned on (see example above)
 * -off: the command to run when the device is turned off (see example above)
@@ -179,7 +179,7 @@ The following parameters are available:
 * -longDiscriminator: the discriminator to use for pairing (default: 3840, value between 0 and 4095)
 * -pin: the pin to use for pairing (default: 20202021)
 * -pairingcode: code to use for pairing (-longDiscriminator and -pin will be ignored)
-* -store: the storage location (directory) to use for storing the pairing information (default: controller-node). Delete the directory or provide an alternative name to reset the controller
+* -store: the storage location (directory) to use for storing the pairing information (default: .controller-node). Ideally use names with "." at the beginning. Delete the directory or provide an alternative name to reset the controller
 * -clearstorage: the storage location will be reset on start of the process
 * -ble: enable BLE support (default: false) If this is enabled the controller will try to connect via BLE first (15s timeout) and then via IP if not commissioned yet!
 

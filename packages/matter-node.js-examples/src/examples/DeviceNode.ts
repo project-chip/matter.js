@@ -39,7 +39,7 @@ const logger = Logger.get("Device");
 
 requireMinNodeVersion(16);
 
-const storageLocation = getParameter("store") ?? "device-node";
+const storageLocation = getParameter("store") ?? ".device-node";
 const storage = new StorageBackendDisk(storageLocation, hasParameter("clearstorage"));
 logger.info(`Storage location: ${storageLocation} (Directory)`);
 logger.info('Use the parameter "-store NAME" to specify a different storage location, use -clearstorage to start with an empty storage.')
