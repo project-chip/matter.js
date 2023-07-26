@@ -32,10 +32,8 @@ import { NetworkCommissioningCluster } from "./cluster/definitions/NetworkCommis
 import { TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import { isIPv6 } from "./util/Ip.js";
 import { BasicInformationCluster } from "./cluster/definitions/BasicInformationCluster.js";
-import {
-    CommissioningError, GeneralCommissioningCluster, RegulatoryLocationType
-} from "./cluster/definitions/GeneralCommissioningCluster.js";
-import { CertificateChainType, OperationalCredentialsCluster } from "./cluster/definitions/OperationalCredentialsCluster.js";
+import { GeneralCommissioning, GeneralCommissioningCluster } from "./cluster/definitions/GeneralCommissioningCluster.js";
+import { OperationalCredentials, OperationalCredentialsCluster } from "./cluster/definitions/OperationalCredentialsCluster.js";
 import { ByteArray } from "./util/ByteArray.js";
 import { RetransmissionLimitReachedError } from "./protocol/index.js";
 import { tryCatchAsync } from "./common/index.js";
@@ -48,13 +46,13 @@ import { TlvString } from "./tlv/TlvString.js";
 import { TlvCertSigningRequest } from "./cluster/server/OperationalCredentialsServer.js";
 
 export type CommissioningData = {
-    regulatoryLocation: RegulatoryLocationType;
+    regulatoryLocation: GeneralCommissioning.RegulatoryLocationType;
     regulatoryCountryCode: string;
 }
 
 const TlvCommissioningSuccessFailureResponse = TlvObject({
     /** Contain the result of the operation. */
-    errorCode: TlvField(0, TlvEnum<CommissioningError>()),
+    errorCode: TlvField(0, TlvEnum<GeneralCommissioning.CommissioningError>()),
 
     /** Should help developers in troubleshooting errors. The value MAY go into logs or crash reports, not User UIs. */
     debugText: TlvField(1, TlvString.bound({ maxLength: 128 })),
@@ -131,7 +129,7 @@ export class MatterController {
         this.exchangeManager.addNetInterface(netInterfaceIpv6);
 
         this.commissioningOptions = commissioningOptions ?? {
-            regulatoryLocation: RegulatoryLocationType.Outdoor, // Set to the most restrictive if relevant
+            regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Outdoor, // Set to the most restrictive if relevant
             regulatoryCountryCode: "XX"
         };
     }
@@ -254,10 +252,10 @@ export class MatterController {
 
         if (hasRadioNetwork) {
             let locationCapability = await generalCommissioningClusterClient.getLocationCapabilityAttribute();
-            if (locationCapability === RegulatoryLocationType.IndoorOutdoor) {
+            if (locationCapability === GeneralCommissioning.RegulatoryLocationType.IndoorOutdoor) {
                 locationCapability = this.commissioningOptions.regulatoryLocation;
             } else {
-                logger.debug(`Device does not support a configurable regulatory location type. Location is set to "${locationCapability === RegulatoryLocationType.Indoor ? "Indoor" : "Outdoor"}"`);
+                logger.debug(`Device does not support a configurable regulatory location type. Location is set to "${locationCapability === GeneralCommissioning.RegulatoryLocationType.Indoor ? "Indoor" : "Outdoor"}"`);
             }
             let countryCode = this.commissioningOptions.regulatoryCountryCode;
             const regulatoryResult = await generalCommissioningClusterClient.setRegulatoryConfig({
@@ -265,7 +263,7 @@ export class MatterController {
                 newRegulatoryConfig: locationCapability,
                 countryCode
             });
-            if (regulatoryResult.errorCode === CommissioningError.ValueOutsideRange && countryCode !== "XX") {
+            if (regulatoryResult.errorCode === GeneralCommissioning.CommissioningError.ValueOutsideRange && countryCode !== "XX") {
                 logger.debug(`Device does not support a configurable country code. Use "XX" instead of "${countryCode}"`);
                 countryCode = "XX";
                 this.ensureSuccess("setRegulatoryConfig", await generalCommissioningClusterClient.setRegulatoryConfig({
@@ -279,9 +277,9 @@ export class MatterController {
         }
 
         const operationalCredentialsClusterClient = ClusterClient(OperationalCredentialsCluster, 0, interactionClient);
-        const { certificate: deviceAttestation } = await operationalCredentialsClusterClient.certificateChainRequest({ certificateType: CertificateChainType.DacCertificate });
+        const { certificate: deviceAttestation } = await operationalCredentialsClusterClient.certificateChainRequest({ certificateType: OperationalCredentials.CertificateChainType.DacCertificate });
         // TODO: extract device public key from deviceAttestation
-        const { certificate: productAttestation } = await operationalCredentialsClusterClient.certificateChainRequest({ certificateType: CertificateChainType.PaiCertificate });
+        const { certificate: productAttestation } = await operationalCredentialsClusterClient.certificateChainRequest({ certificateType: OperationalCredentials.CertificateChainType.PaiCertificate });
         // TODO: validate deviceAttestation and productAttestation
         const { attestationElements, attestationSignature } = await operationalCredentialsClusterClient.attestationRequest({ attestationNonce: Crypto.getRandomData(32) });
         // TODO: validate attestationSignature using device public key
@@ -467,7 +465,7 @@ export class MatterController {
 
     /** Helper method to check for errorCode/debugTest responses and throw error on failure */
     private ensureSuccess(context: string, { errorCode, debugText }: CommissioningSuccessFailureResponse) {
-        if (errorCode === CommissioningError.Ok) return;
+        if (errorCode === GeneralCommissioning.CommissioningError.Ok) return;
         throw new Error(`Commission error for "${context}": ${errorCode}, ${debugText}`);
     }
 

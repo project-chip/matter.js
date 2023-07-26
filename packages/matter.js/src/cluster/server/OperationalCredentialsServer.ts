@@ -10,9 +10,7 @@ import { Crypto } from "../../crypto/Crypto.js";
 import { MatterDevice } from "../../MatterDevice.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { ByteArray } from "../../util/ByteArray.js";
-import {
-    CertificateChainType, NodeOperationalCertStatus, OperationalCredentialsCluster
-} from "../definitions/OperationalCredentialsCluster.js";
+import { OperationalCredentials, OperationalCredentialsCluster } from "../definitions/OperationalCredentialsCluster.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
 import { ClusterServerHandlers } from "./ClusterServer.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
@@ -62,9 +60,9 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
 
     certificateChainRequest: async ({ request: { certificateType } }) => {
         switch (certificateType) {
-            case CertificateChainType.DacCertificate:
+            case OperationalCredentials.CertificateChainType.DacCertificate:
                 return { certificate: conf.deviceCertificate };
-            case CertificateChainType.PaiCertificate:
+            case OperationalCredentials.CertificateChainType.PaiCertificate:
                 return { certificate: conf.deviceIntermediateCertificate };
             default:
                 throw new Error(`Unsupported certificate type: ${certificateType}`);
@@ -87,7 +85,7 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         // TODO: create ACL with caseAdminNode
         console.log("addOperationalCert success")
 
-        return { statusCode: NodeOperationalCertStatus.Ok, fabricIndex: fabric.fabricIndex };
+        return { statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok, fabricIndex: fabric.fabricIndex };
     },
 
     getFabrics: ({ session }) => {
@@ -121,7 +119,7 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
 
         fabric.setLabel(label);
 
-        return { statusCode: NodeOperationalCertStatus.Ok };
+        return { statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok };
     },
 
     removeFabric: async ({ request: { fabricIndex }, session }) => {
@@ -130,11 +128,11 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         const fabric = device.getFabricByIndex(fabricIndex);
 
         if (fabric === undefined) {
-            return { statusCode: NodeOperationalCertStatus.InvalidFabricIndex, debugText: `Fabric ${fabricIndex.index} not found` };
+            return { statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidFabricIndex, debugText: `Fabric ${fabricIndex.index} not found` };
         }
 
         fabric.remove();
-        return { statusCode: NodeOperationalCertStatus.Ok, fabricIndex, debugText: "Fabric removed" };
+        return { statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok, fabricIndex, debugText: "Fabric removed" };
     },
 
     addTrustedRootCertificate: async ({ request: { rootCaCertificate }, session }) => {

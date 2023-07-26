@@ -27,14 +27,14 @@ import { GeneralCommissioningClusterHandler } from "./cluster/server/GeneralComm
 import { NetworkCommissioningHandler } from "./cluster/server/NetworkCommissioningServer.js";
 import { AccessControlCluster } from "./cluster/definitions/AccessControlCluster.js";
 import { GroupKeyManagementCluster } from "./cluster/definitions/GroupKeyManagementCluster.js";
-import { BootReason, GeneralDiagnosticsCluster } from "./cluster/definitions/GeneralDiagnosticsCluster.js";
+import { GeneralDiagnostics, GeneralDiagnosticsCluster } from "./cluster/definitions/GeneralDiagnosticsCluster.js";
 import { VendorId } from "./datatype/VendorId.js";
 import { BasicInformationCluster } from "./cluster/definitions/BasicInformationCluster.js";
 import { OperationalCredentialsCluster } from "./cluster/definitions/OperationalCredentialsCluster.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
-import { GeneralCommissioningCluster, RegulatoryLocationType } from "./cluster/definitions/GeneralCommissioningCluster.js";
-import { NetworkCommissioningCluster, NetworkCommissioningStatus } from "./cluster/definitions/NetworkCommissioningCluster.js";
-import { AdministratorCommissioningCluster, CommissioningWindowStatus } from "./cluster/definitions/AdministratorCommissioningCluster.js";
+import { GeneralCommissioningCluster, GeneralCommissioning } from "./cluster/definitions/GeneralCommissioningCluster.js";
+import { NetworkCommissioningCluster, NetworkCommissioning } from "./cluster/definitions/NetworkCommissioningCluster.js";
+import { AdministratorCommissioningCluster, AdministratorCommissioning } from "./cluster/definitions/AdministratorCommissioningCluster.js";
 import { GroupKeyManagementClusterHandler } from "./cluster/server/GroupKeyManagementServer.js";
 import { QrCode } from "./schema/QrCodeSchema.js";
 import { Device } from "./device/Device.js";
@@ -229,8 +229,8 @@ export class CommissioningServer extends MatterNode {
                         failSafeExpiryLengthSeconds: 60 /* 1min */,
                         maxCumulativeFailsafeSeconds: 900 /* Recommended according to Specs */
                     },
-                    regulatoryConfig: options.generalCommissioning?.regulatoryConfig ?? RegulatoryLocationType.Outdoor, // Default is the most restrictive one
-                    locationCapability: options.generalCommissioning?.locationCapability ?? RegulatoryLocationType.IndoorOutdoor,
+                    regulatoryConfig: options.generalCommissioning?.regulatoryConfig ?? GeneralCommissioning.RegulatoryLocationType.Outdoor, // Default is the most restrictive one
+                    locationCapability: options.generalCommissioning?.locationCapability ?? GeneralCommissioning.RegulatoryLocationType.IndoorOutdoor,
                     supportsConcurrentConnection: options.generalCommissioning?.supportsConcurrentConnection ?? true
                 },
                 GeneralCommissioningClusterHandler({
@@ -248,7 +248,7 @@ export class CommissioningServer extends MatterNode {
                     interfaceEnabled: true,
                     lastConnectErrorValue: 0,
                     lastNetworkId: ByteArray.fromHex("0000000000000000000000000000000000000000000000000000000000000000"),
-                    lastNetworkingStatus: NetworkCommissioningStatus.Success,
+                    lastNetworkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
                     networks: [{ networkId: ByteArray.fromHex("0000000000000000000000000000000000000000000000000000000000000000"), connected: true }],
                 },
                 NetworkCommissioningHandler()
@@ -294,7 +294,7 @@ export class CommissioningServer extends MatterNode {
                     rebootCount: 0,
                     upTime: 0,
                     totalOperationalHours: 0,
-                    bootReason: BootReason.Unspecified,
+                    bootReason: GeneralDiagnostics.BootReason.Unspecified,
                     activeHardwareFaults: [],
                     activeRadioFaults: [],
                     activeNetworkFaults: [],
@@ -356,7 +356,7 @@ export class CommissioningServer extends MatterNode {
             ClusterServer(
                 AdministratorCommissioningCluster,
                 {
-                    windowStatus: CommissioningWindowStatus.WindowNotOpen,
+                    windowStatus: AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen,
                     adminFabricIndex: null,
                     adminVendorId: null
                 },

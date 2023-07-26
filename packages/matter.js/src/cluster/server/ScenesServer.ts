@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ScenesCluster, TlvExtensionFieldSet } from "../definitions/ScenesCluster.js";
+import { ScenesCluster, Scenes } from "../definitions/ScenesCluster.js";
 import { GroupId } from "../../datatype/GroupId.js";
 import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
 import { ClusterServerHandlers } from "./ClusterServer.js";
@@ -36,7 +36,7 @@ interface scenesTableEntry {
      * marked with "S" in the Quality column of the cluster definition. Each extension field set holds a set of values of
      * these attributes for a cluster implemented on the same endpoint. The sum of all such sets defines a scene.
      */
-    extensionFieldSets: TypeFromSchema<typeof TlvExtensionFieldSet>[];
+    extensionFieldSets: TypeFromSchema<typeof Scenes.TlvExtensionFieldSet>[];
 
     /** Together with the SceneTransitionTime field, this field allows the transition time to be specified in tenths of a second. */
     transitionTime100ms: number;
@@ -225,7 +225,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                 return { status: StatusCode.InvalidCommand, groupId, sceneId };
             }
 
-            const extensionFieldSets = new Array<TypeFromSchema<typeof TlvExtensionFieldSet>>();
+            const extensionFieldSets = new Array<TypeFromSchema<typeof Scenes.TlvExtensionFieldSet>>();
             endpoint.getAllClusterServers().forEach((cluster) => {
                 const attributeValueList = cluster._getSceneExtensionFieldSets();
                 if (attributeValueList.length) {

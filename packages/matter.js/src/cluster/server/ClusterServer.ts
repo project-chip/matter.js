@@ -19,7 +19,7 @@ import { CommandServer } from "./CommandServer.js";
 import { StorageContext } from "../../storage/StorageContext.js";
 import { ClusterClientObj } from "../client/ClusterClient.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { TlvAttributeValuePair } from "../definitions/ScenesCluster.js";
+import { Scenes } from "../definitions/ScenesCluster.js";
 import { Endpoint } from "../../device/Endpoint.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { EventServer } from "./EventServer.js";
@@ -141,19 +141,19 @@ export type ClusterServerObj<A extends Attributes, C extends Commands, E extends
          * Get the Scene Extension Fields for this cluster. Used by the Scenes cluster.
          * @private
          */
-        _getSceneExtensionFieldSets: () => TypeFromSchema<typeof TlvAttributeValuePair>[];
+        _getSceneExtensionFieldSets: () => TypeFromSchema<typeof Scenes.TlvAttributeValuePair>[];
 
         /**
          * Set the Scene Extension Fields for this cluster. Used by the Scenes cluster.
          * @private
          */
-        _setSceneExtensionFieldSets: (values: TypeFromSchema<typeof TlvAttributeValuePair>[], transitionTime: number) => void;
+        _setSceneExtensionFieldSets: (values: TypeFromSchema<typeof Scenes.TlvAttributeValuePair>[], transitionTime: number) => void;
 
         /**
          * Verify if a set of Scene Extension Fields match to the current attribute state for this cluster. Used by the Scenes cluster.
          * @private
          */
-        _verifySceneExtensionFieldSets: (values: TypeFromSchema<typeof TlvAttributeValuePair>[]) => boolean
+        _verifySceneExtensionFieldSets: (values: TypeFromSchema<typeof Scenes.TlvAttributeValuePair>[]) => boolean
     }
     & ServerAttributeGetters<A>
     & ServerAttributeSetters<A>

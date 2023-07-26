@@ -14,6 +14,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
     * Updated all Cluster definitions that use such attribute types
   * Breaking: Add Interface for Events which requires to define the supported events when creating a ClusterServer (Event Logic WIP in separate PR)
   * Breaking: GeneralCommissioningServerHandler is now a function that takes configuration for setRegulatoryConfig handling
+  * Breaking: Types of specific clusters are no longer exported flat on main level. Cluster exports are now namespaces that include their types.
   * Feature: Enhance CommissioningServer options to also specify GeneralCommissioningServer details and settings
   * Feature: Adjust RegulatoryConfig Handling in Device and Controller to match with specifications
   * Feature: Endpoint Structures use custom-unique-id (from EndpointOptions)/uniqueStorageKey (from BasicInformationCluster)/serialNumber (from BasicInformationCluster)/ Index (in this order) to store and restore the endpoint ID in structures
@@ -27,7 +28,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Enhance: (@vves) Add Window Covering Cluster definition  
   * Enhance: Split up and corrected PowerSource and PressureMeasurement Cluster based on Matter 1.1 Specs
   * Enhance: Detailed cluster data model and related logic
-  * Enhance: Generate all clusters from Matter 1.1 specification and CHIP v1.1-branch
+  * Enhance: Generate all cluster definitions from Matter 1.1 specification and CHIP v1.1-branch automatically. This brings basic definition support for all clusters!
   * Fix: Added missing PulseWidthModulationLevelControlCluster to AllCLusters
   * Fix Typing of Commands in ClusterClient if no commands were present
   * Fix: Fixes equality checks in Attribute servers to check deeper than just === (and introduce new util method isDeepEqual)

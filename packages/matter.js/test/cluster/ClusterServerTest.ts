@@ -17,16 +17,14 @@ import { VendorId } from "../../src/datatype/VendorId.js";
 import { DeviceTypes } from "../../src/device/DeviceTypes.js";
 import { Endpoint } from "../../src/device/Endpoint.js";
 import { Fabric } from "../../src/fabric/Fabric.js";
-import {
-    EndProductType, WindowCoveringType, MovementStatus, WindowCoveringComplete
-} from "../../src/cluster/definitions/WindowCoveringCluster.js";
+import { WindowCovering } from "../../src/cluster/definitions/WindowCoveringCluster.js";
 import { Level, Logger } from "../../src/log/Logger.js";
 import { BasicInformationCluster } from "../../src/cluster/definitions/BasicInformationCluster.js";
 import {
     AttributeServer, FixedAttributeServer
 } from "../../src/cluster/server/AttributeServer.js";
 import { BindingCluster } from "../../src/cluster/definitions/BindingCluster.js";
-import { IdentifyCluster, IdentifyType } from "../../src/cluster/definitions/IdentifyCluster.js";
+import { IdentifyCluster, Identify } from "../../src/cluster/definitions/IdentifyCluster.js";
 import { Cluster, ClusterExtend } from "../../src/cluster/Cluster.js";
 
 describe("ClusterServer structure", () => {
@@ -410,7 +408,7 @@ describe("ClusterServer structure", () => {
                 IdentifyCluster,
                 {
                     identifyTime: 100,
-                    identifyType: IdentifyType.None
+                    identifyType: Identify.IdentifyType.None
                 },
                 {
                     identify: async () => { /* dummy */ },
@@ -431,7 +429,7 @@ describe("ClusterServer structure", () => {
                 IdentifyCluster,
                 {
                     identifyTime: 100,
-                    identifyType: IdentifyType.None
+                    identifyType: Identify.IdentifyType.None
                 },
                 {
                     identify: async () => { /* dummy */ },
@@ -452,7 +450,7 @@ describe("ClusterServer structure", () => {
                 IdentifyCluster,
                 {
                     identifyTime: 100,
-                    identifyType: IdentifyType.None
+                    identifyType: Identify.IdentifyType.None
                 },
                 {
                     identify: async () => { /* dummy */ },
@@ -496,7 +494,7 @@ describe("ClusterServer structure", () => {
             const fakeLogSink = new Array<{ level: Level, log: string }>();
             Logger.log = (level, log) => fakeLogSink.push({ level, log });
 
-            const TestCluster = ClusterExtend(WindowCoveringComplete, {
+            const TestCluster = ClusterExtend(WindowCovering.Complete, {
                 supportedFeatures: {
                     lift: true,
                     positionAwareLift: true,
@@ -505,7 +503,7 @@ describe("ClusterServer structure", () => {
             ClusterServer(
                 TestCluster,
                 {
-                    type: WindowCoveringType.Rollershade,
+                    type: WindowCovering.WindowCoveringType.Rollershade,
                     configStatus: {
                         liftPositionAware: false,
                         onlineReserved: false,
@@ -516,11 +514,11 @@ describe("ClusterServer structure", () => {
                         tiltEncoderControlled: false,
                     },
                     operationalStatus: {
-                        global: MovementStatus.Stopped,
-                        lift: MovementStatus.Stopped,
-                        tilt: MovementStatus.Stopped,
+                        global: WindowCovering.MovementStatus.Stopped,
+                        lift: WindowCovering.MovementStatus.Stopped,
+                        tilt: WindowCovering.MovementStatus.Stopped,
                     },
-                    endProductType: EndProductType.RollerShade,
+                    endProductType: WindowCovering.EndProductType.RollerShade,
                     mode: {
                         motorDirectionReversed: false,
                         calibrationMode: false,
