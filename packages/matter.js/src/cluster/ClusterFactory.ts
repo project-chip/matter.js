@@ -99,7 +99,8 @@ export type ClusterForBaseCluster<T, SF> =
     : never;
 
 /**
- * Injects a set of functionality into a cluster.
+ * Injects a set of functionality into a cluster if the cluster supports the
+ * specified features.
  */
 export function extendCluster<F extends BitSchema>(
     cluster: Cluster<F, any, any, any, any>,
@@ -109,7 +110,7 @@ export function extendCluster<F extends BitSchema>(
     let applicable = false;
     pool: for (const features of applicableFeatures) {
         for (const k in features) {
-            if (cluster.supportedFeatures[k] !== features[k]) {
+            if (!!cluster.supportedFeatures[k] !== !!features[k]) {
                 continue pool;
             }
         }
@@ -168,7 +169,7 @@ export function preventCluster<F extends BitSchema>(
 ) {
     pool: for (const bitmap of illegalFeatureCombinations) {
         for (const k in bitmap) {
-            if (cluster.supportedFeatures[k] !== bitmap[k]) {
+            if (!!cluster.supportedFeatures[k] !== !!bitmap[k]) {
                 continue pool;
             }
         }
