@@ -75,15 +75,15 @@ LocalMatter.children.push({
 
             children: [
                 {
-                    tag: "datatype", name: "Global", type: "MovementStatus",
-                    description: "Movement status of the cover"
+                    tag: "datatype", name: "Global", type: "MovementStatus", constraint: "0 to 2",
+                    description: "Movement status of the cover",
                 },
                 {
-                    tag: "datatype", name: "Lift", type: "MovementStatus",
+                    tag: "datatype", name: "Lift", type: "MovementStatus", constraint: "2 to 4",
                     description: "Movement status of the cover's lift function"
                 },
                 {
-                    tag: "datatype", name: "Tilt", type: "MovementStatus",
+                    tag: "datatype", name: "Tilt", type: "MovementStatus", constraint: "4 to 6",
                     description: "Movement status of the cover's tilt function"
                 }
             ]

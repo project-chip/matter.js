@@ -21,7 +21,7 @@ for (const cluster of mom.clusters) {
     file.save();
 
     if (cluster.id !== undefined) {
-        index.atom(`export { ${file.clusterName} } from "./${file.clusterName}.js"`);
+        index.atom(`export { ${file.clusterName}, ${file.typesName} } from "./${file.clusterName}.js"`);
     }
 }
 

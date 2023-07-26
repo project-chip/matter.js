@@ -81,10 +81,10 @@ npm run generate-model
 
 ### Spec data model
 
-Input model _[spec.ts](../../models/spec.ts)_ is the data model
+Input model _[spec.ts](../../../../models/spec.ts)_ is the data model
 defined by the Matter specification.
 
-We generate [spec.ts](../../models/spec.ts) from the Matter specification
+We generate [spec.ts](../../../../models/spec.ts) from the Matter specification
 documents.  This ensures our definitions align with the specification and gives
 us detailed information unavailable elsewhere.
 

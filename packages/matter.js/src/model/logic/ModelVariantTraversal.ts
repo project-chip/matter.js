@@ -8,7 +8,7 @@ import { InternalError } from "../../common/InternalError.js";
 import { Logger } from "../../log/Logger.js";
 import { ElementTag } from "../definitions/index.js";
 import { AnyElement } from "../elements/index.js";
-import { CommandModel, Model } from "../models/index.js";
+import { Model, ValueModel } from "../models/index.js";
 import { ModelTraversal } from "./ModelTraversal.js";
 
 const logger = Logger.get("ModelVariantTraversal");
@@ -151,16 +151,28 @@ export abstract class ModelVariantTraversal<S = void> {
                         const detail = this.createVariantDetail(childVariants);
 
                         // If a cluster child is defined directly in one variant but inherited in another, ignore the
-                        // direct variant so we will continue to properly reflect the inheritance structure
+                        // direct variant so we will continue to properly reflect the inheritance structure.  Only do
+                        // this if the element doesn't actually have overrides though
+                        let inherited = false;
+                        let overrides = false;
                         if (variants.tag === ElementTag.Cluster) {
                             for (const k in variants.map) {
                                 if (childVariants[k] === undefined) {
-                                    const inherited = variants.map[k].base?.member(detail.name, [detail.tag]);
-                                    if (inherited) {
-                                        continue mappings;
+                                    const inheritedModel = variants.map[k].base?.member(detail.name, [detail.tag]);
+                                    if (inheritedModel) {
+                                        inherited = true;
                                     }
+                                    continue;
                                 }
+                                const child = childVariants[k];
+                                if (child instanceof ValueModel && child.overridesShadow) {
+                                    overrides = true;
+                                }
+
                             }
+                        }
+                        if (inherited && !overrides) {
+                            continue mappings;
                         }
 
                         result.push(this.visitVariants(detail));
@@ -197,6 +209,7 @@ export abstract class ModelVariantTraversal<S = void> {
             // For each child of this variant, associated it with a slot
             for (let i = 0; i < variant.children.length; i++) {
                 const child = variant.children[i];
+
                 if (child.global) {
                     // Ignore globals, they're managed by the MatterModel
                     continue;
@@ -205,22 +218,14 @@ export abstract class ModelVariantTraversal<S = void> {
                 const mapping = mappings[child.tag] ||
                     (mappings[child.tag] = { slots: [], idToSlot: {}, nameToSlot: {} });
 
-                const childId = child.effectiveId;
+                const childId = child.key;
                 const childName = this.getCanonicalName(child);
 
                 let slot;
-                let key: string | undefined;
+
+                // Find existing slot by ID
                 if (childId !== undefined) {
-                    key = childId.toString();
-
-                    // Commands may re-use the ID for request and response
-                    // So append the direction to the ID
-                    if (child instanceof CommandModel) {
-                        key = `${key}:${child.direction}`
-                    }
-
-                    // Find existing slot by ID
-                    slot = mapping.idToSlot[key];
+                    slot = mapping.idToSlot[childId];
                 }
 
                 // Find existing slot by name
@@ -235,9 +240,9 @@ export abstract class ModelVariantTraversal<S = void> {
                 }
 
                 // Map the child's ID to the slot
-                if (key !== undefined) {
-                    if (mapping.idToSlot[key] === undefined) {
-                        mapping.idToSlot[key] = slot;
+                if (childId !== undefined) {
+                    if (mapping.idToSlot[childId] === undefined) {
+                        mapping.idToSlot[childId] = slot;
                     }
                 }
 

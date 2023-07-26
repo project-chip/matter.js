@@ -8,9 +8,9 @@ import { singleton } from "@project-chip/matter.js/util";
 import { Time } from "@project-chip/matter.js/time";
 import { TimeNode } from "./time/TimeNode";
 
-// Check if Time singleton is already registered and auto register if not
+// Check if Time singleton is already registered and has a getTimer logic (so not DefaultTime) and auto register if not
 try {
-    Time.get();
+    Time.get().getTimer(0, () => { /* Do nothing */ });
 } catch {
     Time.get = singleton(() => new TimeNode());
 }

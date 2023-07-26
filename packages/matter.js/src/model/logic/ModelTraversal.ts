@@ -231,7 +231,7 @@ export class ModelTraversal {
      * Find a child in the parent's inheritance hierarchy with the same tag
      * and ID/name.
      */
-    findShadow(model: Model | undefined) {
+    findShadow(model: Model | undefined): Model | undefined {
         if (model === undefined) {
             return undefined;
         }
