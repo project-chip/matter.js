@@ -52,6 +52,17 @@ export const enum CommissioningWindowStatus {
  */
 export const TlvOpenCommissioningWindowRequest = TlvObject({
     /**
+     * This field shall specify the time in seconds during which commissioning session establishment is allowed by the
+     * Node. This is known as Open Commissioning Window (OCW). This timeout value shall follow guidance as specified in
+     * Announcement Duration. The CommissioningTimeout applies only to cessation of any announcements and to accepting
+     * of new commissioning sessions; it does not apply to abortion of connections, i.e., a commissioning session
+     * SHOULD NOT abort prematurely upon expiration of this timeout.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.18.8.1.1
+     */
+    commissioningTimeout: TlvField(0, TlvUInt16),
+
+    /**
      * This field shall specify an ephemeral PAKE passcode verifier (see Section 3.10, “Password-Authenticated Key
      * Exchange (PAKE)”) computed by the existing Administrator to be used for this commissioning. The field is
      * concatenation of two values (w0 || L) shall be (CRYPTO_GROUP_SIZE_BYTES + CRYPTO_PUBLIC_KEY_SIZE_BYTES)-octets

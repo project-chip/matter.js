@@ -116,6 +116,20 @@ Matter.children.push({
 
             children: [
                 {
+                    tag: "datatype", name: "CommissioningTimeout", id: 0x0, type: "uint16", conformance: "M",
+                    constraint: "desc",
+
+                    details: "This field shall specify the time in seconds during which commissioning session establishment is " +
+                        "allowed by the Node. This is known as Open Commissioning Window (OCW). This timeout value shall " +
+                        "follow guidance as specified in Announcement Duration. The CommissioningTimeout applies only to " +
+                        "cessation of any announcements and to accepting of new commissioning sessions; it does not apply to " +
+                        "abortion of connections, i.e., a commissioning session SHOULD NOT abort prematurely upon expiration " +
+                        "of this timeout.",
+
+                    xref: { document: "core", section: "11.18.8.1.1" }
+                },
+
+                {
                     tag: "datatype", name: "PakePasscodeVerifier", id: 0x1, type: "octstr", conformance: "M",
                     constraint: "97",
 
