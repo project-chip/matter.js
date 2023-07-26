@@ -193,7 +193,7 @@ namespace Fixtures {
                     tag: "attribute", name: "Mode", id: 0x17, type: "map8", access: "RW VM", conformance: "M",
                     default: 0, quality: "N",
                     xref: { document: "cluster", section: "5.3.5.21" }
-                },
+                }
             ]
         }),
 
@@ -210,22 +210,22 @@ namespace Fixtures {
                     tag: "datatype", name: "Mode", type: "map8", conformance: "M",
                     children: [
                         {
-                            tag: "datatype", name: "MotorDirectionReversed", id: 0x1, conformance: "M"
+                            tag: "datatype", name: "MotorDirectionReversed", constraint: "1", conformance: "M"
                         },
 
                         {
-                            tag: "datatype", name: "CalibrationMode", id: 0x2, conformance: "M"
+                            tag: "datatype", name: "CalibrationMode", constraint: "2", conformance: "M"
                         },
 
                         {
-                            tag: "datatype", name: "MaintenanceMode", id: 0x4, conformance: "M"
+                            tag: "datatype", name: "MaintenanceMode", constraint: "3", conformance: "M"
                         },
 
                         {
-                            tag: "datatype", name: "LedFeedback", id: 0x8, conformance: "M"
+                            tag: "datatype", name: "LedFeedback", constraint: "4", conformance: "M"
                         }
                     ]
-                },
+                }
             ]
         })
     }
