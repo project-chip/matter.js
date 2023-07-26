@@ -697,9 +697,13 @@ Matter.children.push({
         {
             tag: "datatype", name: "ConnectionStatusEnum", type: "enum8", conformance: "M",
             xref: { document: "core", section: "11.13.5.2" },
+
             children: [
                 { tag: "datatype", name: "Connected", id: 0x0, conformance: "M", description: "Node is connected" },
-                { tag: "datatype", name: "NotConnected", id: 0x1, conformance: "M", description: "Node is not connected" }
+                {
+                    tag: "datatype", name: "NotConnected", id: 0x1, conformance: "M",
+                    description: "Node is not connected"
+                }
             ]
         },
 

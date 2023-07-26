@@ -6,7 +6,13 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Cluster as CreateCluster, OptionalWritableAttribute, WritableAttribute, OptionalAttribute, Attribute } from "../../cluster/Cluster.js";
+import {
+    Cluster as CreateCluster,
+    OptionalWritableAttribute,
+    WritableAttribute,
+    OptionalAttribute,
+    Attribute
+} from "../../cluster/Cluster.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvUInt8, TlvUInt32 } from "../../tlv/TlvNumber.js";

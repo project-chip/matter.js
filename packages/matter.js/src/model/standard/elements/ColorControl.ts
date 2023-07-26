@@ -690,7 +690,10 @@ Matter.children.push({
             xref: { document: "cluster", section: "3.2.11.7" },
 
             children: [
-                { tag: "datatype", name: "Saturation", id: 0x0, type: "uint8", conformance: "M", constraint: "0 to 254" },
+                {
+                    tag: "datatype", name: "Saturation", id: 0x0, type: "uint8", conformance: "M",
+                    constraint: "0 to 254"
+                },
                 {
                     tag: "datatype", name: "TransitionTime", id: 0x1, type: "uint16", conformance: "M",
                     constraint: "0 to 65534"
@@ -789,7 +792,10 @@ Matter.children.push({
 
             children: [
                 { tag: "datatype", name: "Hue", id: 0x0, type: "uint8", conformance: "M", constraint: "0 to 254" },
-                { tag: "datatype", name: "Saturation", id: 0x1, type: "uint8", conformance: "M", constraint: "0 to 254" },
+                {
+                    tag: "datatype", name: "Saturation", id: 0x1, type: "uint8", conformance: "M",
+                    constraint: "0 to 254"
+                },
                 {
                     tag: "datatype", name: "TransitionTime", id: 0x2, type: "uint16", conformance: "M",
                     constraint: "0 to 65534"
@@ -811,8 +817,14 @@ Matter.children.push({
             xref: { document: "cluster", section: "3.2.11.11" },
 
             children: [
-                { tag: "datatype", name: "ColorX", id: 0x0, type: "uint16", conformance: "M", constraint: "0 to 65279" },
-                { tag: "datatype", name: "ColorY", id: 0x1, type: "uint16", conformance: "M", constraint: "0 to 65279" },
+                {
+                    tag: "datatype", name: "ColorX", id: 0x0, type: "uint16", conformance: "M",
+                    constraint: "0 to 65279"
+                },
+                {
+                    tag: "datatype", name: "ColorY", id: 0x1, type: "uint16", conformance: "M",
+                    constraint: "0 to 65279"
+                },
                 {
                     tag: "datatype", name: "TransitionTime", id: 0x2, type: "uint16", conformance: "M",
                     constraint: "0 to 65534"

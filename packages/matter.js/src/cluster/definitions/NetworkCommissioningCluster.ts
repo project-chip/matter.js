@@ -18,7 +18,14 @@ import {
     AsConditional
 } from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { FixedAttribute, AccessLevel, Attribute, WritableAttribute, Command, Cluster as CreateCluster } from "../../cluster/Cluster.js";
+import {
+    FixedAttribute,
+    AccessLevel,
+    Attribute,
+    WritableAttribute,
+    Command,
+    Cluster as CreateCluster
+} from "../../cluster/Cluster.js";
 import { TlvUInt8, TlvEnum, TlvInt32, TlvUInt64, TlvBitmap, TlvUInt16, TlvInt8 } from "../../tlv/TlvNumber.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";

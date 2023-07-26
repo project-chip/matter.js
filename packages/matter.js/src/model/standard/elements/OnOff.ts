@@ -206,8 +206,14 @@ Matter.children.push({
             xref: { document: "cluster", section: "1.5.5.1" },
 
             children: [
-                { tag: "datatype", name: "Off", id: 0x0, conformance: "M", description: "Set the OnOff attribute to FALSE" },
-                { tag: "datatype", name: "On", id: 0x1, conformance: "M", description: "Set the OnOff attribute to TRUE" },
+                {
+                    tag: "datatype", name: "Off", id: 0x0, conformance: "M",
+                    description: "Set the OnOff attribute to FALSE"
+                },
+                {
+                    tag: "datatype", name: "On", id: 0x1, conformance: "M",
+                    description: "Set the OnOff attribute to TRUE"
+                },
                 {
                     tag: "datatype", name: "Toggle", id: 0x2, conformance: "M",
                     description: "If the previous value of the OnOff attribute is equal to FALSE, set the OnOff attribute to TRUE. If the previous value of the OnOff attribute is equal to TRUE, set the OnOff attribute to FALSE (toggle)."

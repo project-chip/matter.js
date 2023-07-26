@@ -6,7 +6,13 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Cluster as CreateCluster, OptionalFixedAttribute, FixedAttribute, Attribute, AccessLevel } from "../../cluster/Cluster.js";
+import {
+    Cluster as CreateCluster,
+    OptionalFixedAttribute,
+    FixedAttribute,
+    Attribute,
+    AccessLevel
+} from "../../cluster/Cluster.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TlvVendorId, VendorId } from "../../datatype/VendorId.js";

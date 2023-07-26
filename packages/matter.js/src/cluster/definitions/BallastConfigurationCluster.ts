@@ -6,7 +6,14 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Cluster as CreateCluster, Attribute, OptionalAttribute, WritableAttribute, AccessLevel, OptionalWritableAttribute } from "../../cluster/Cluster.js";
+import {
+    Cluster as CreateCluster,
+    Attribute,
+    OptionalAttribute,
+    WritableAttribute,
+    AccessLevel,
+    OptionalWritableAttribute
+} from "../../cluster/Cluster.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvUInt8, TlvBitmap, TlvUInt24 } from "../../tlv/TlvNumber.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
@@ -103,7 +110,11 @@ export namespace BallastConfiguration {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.3.7.3
              */
-            intrinsicBallastFactor: OptionalWritableAttribute(0x14, TlvNullable(TlvUInt8), { writeAcl: AccessLevel.Manage }),
+            intrinsicBallastFactor: OptionalWritableAttribute(
+                0x14,
+                TlvNullable(TlvUInt8),
+                { writeAcl: AccessLevel.Manage }
+            ),
 
             /**
              * The BallastFactorAdjustment attribute specifies the multiplication factor, as a percentage, to be

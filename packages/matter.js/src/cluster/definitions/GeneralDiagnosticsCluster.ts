@@ -458,7 +458,11 @@ export namespace GeneralDiagnostics {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.11.6.4
              */
-            totalOperationalHours: OptionalAttribute(0x3, TlvUInt32, { persistent: true, omitChanges: true, default: 0 }),
+            totalOperationalHours: OptionalAttribute(
+                0x3,
+                TlvUInt32,
+                { persistent: true, omitChanges: true, default: 0 }
+            ),
 
             /**
              * The BootReason attribute shall indicate the reason for the Node’s most recent boot.
@@ -496,7 +500,11 @@ export namespace GeneralDiagnostics {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.11.6.7
              */
-            activeRadioFaults: OptionalAttribute(0x6, TlvArray(TlvEnum<RadioFault>(), { maxLength: 7 }), { default: [] }),
+            activeRadioFaults: OptionalAttribute(
+                0x6,
+                TlvArray(TlvEnum<RadioFault>(), { maxLength: 7 }),
+                { default: [] }
+            ),
 
             /**
              * The ActiveNetworkFaults attribute shall indicate the set of faults currently detected by the Node. When

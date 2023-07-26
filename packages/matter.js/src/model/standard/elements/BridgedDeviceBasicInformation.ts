@@ -60,13 +60,19 @@ Matter.children.push({
             constraint: "max 32",
             xref: { document: "core", section: "9.13.4" }
         },
-        { tag: "attribute", name: "ProductId", id: 0x4, conformance: "X", xref: { document: "core", section: "9.13.4" } },
+        {
+            tag: "attribute", name: "ProductId", id: 0x4, conformance: "X",
+            xref: { document: "core", section: "9.13.4" }
+        },
         {
             tag: "attribute", name: "NodeLabel", id: 0x5, type: "string", access: "RW", conformance: "O",
             constraint: "max 32", default: "",
             xref: { document: "core", section: "9.13.4" }
         },
-        { tag: "attribute", name: "Location", id: 0x6, conformance: "X", xref: { document: "core", section: "9.13.4" } },
+        {
+            tag: "attribute", name: "Location", id: 0x6, conformance: "X",
+            xref: { document: "core", section: "9.13.4" }
+        },
         {
             tag: "attribute", name: "HardwareVersion", id: 0x7, type: "uint16", conformance: "O", default: 0,
             xref: { document: "core", section: "9.13.4" }

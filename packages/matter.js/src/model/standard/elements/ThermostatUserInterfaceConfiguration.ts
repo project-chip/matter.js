@@ -28,7 +28,10 @@ Matter.children.push({
             xref: { document: "cluster", section: "4.5.5.1" },
 
             children: [
-                { tag: "datatype", name: "Celsius", id: 0x0, conformance: "M", description: "Temperature displayed in °C" },
+                {
+                    tag: "datatype", name: "Celsius", id: 0x0, conformance: "M",
+                    description: "Temperature displayed in °C"
+                },
                 {
                     tag: "datatype", name: "Fahrenheit", id: 0x1, conformance: "M",
                     description: "Temperature displayed in °F"

@@ -53,7 +53,10 @@ Matter.children.push({
                     tag: "datatype", name: "Dash", constraint: "0",
                     description: "Device supports Dynamic Adaptive Streaming over HTTP (DASH)"
                 },
-                { tag: "datatype", name: "Hls", constraint: "1", description: "Device supports HTTP Live Streaming (HLS)" }
+                {
+                    tag: "datatype", name: "Hls", constraint: "1",
+                    description: "Device supports HTTP Live Streaming (HLS)"
+                }
             ]
         },
 

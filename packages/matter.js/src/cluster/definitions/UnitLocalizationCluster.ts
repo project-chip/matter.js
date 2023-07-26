@@ -144,8 +144,12 @@ export namespace UnitLocalization {
         name: Cluster.name,
         revision: Cluster.revision,
         features: Cluster.features,
+
         attributes: {
-            temperatureUnit: AsConditional(TemperatureUnitComponent.attributes.temperatureUnit, { mandatoryIf: [TEMP] })
+            temperatureUnit: AsConditional(
+                TemperatureUnitComponent.attributes.temperatureUnit,
+                { mandatoryIf: [TEMP] }
+            )
         }
     });
 }

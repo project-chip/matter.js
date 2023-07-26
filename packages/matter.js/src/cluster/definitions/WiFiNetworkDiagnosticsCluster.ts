@@ -17,7 +17,15 @@ import {
     AsConditional
 } from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { Attribute, OptionalAttribute, OptionalEvent, EventPriority, Command, TlvNoResponse, Cluster as CreateCluster } from "../../cluster/Cluster.js";
+import {
+    Attribute,
+    OptionalAttribute,
+    OptionalEvent,
+    EventPriority,
+    Command,
+    TlvNoResponse,
+    Cluster as CreateCluster
+} from "../../cluster/Cluster.js";
 import { TlvByteString } from "../../tlv/TlvString.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvEnum, TlvUInt16, TlvInt8, TlvUInt64, TlvUInt32 } from "../../tlv/TlvNumber.js";
@@ -272,7 +280,11 @@ export namespace WiFiNetworkDiagnostics {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.14.6.5
              */
-            rssi: Attribute(0x4, TlvNullable(TlvInt8.bound({ min: -120, max: 0 })), { omitChanges: true, default: null }),
+            rssi: Attribute(
+                0x4,
+                TlvNullable(TlvInt8.bound({ min: -120, max: 0 })),
+                { omitChanges: true, default: null }
+            ),
 
             /**
              * The CurrentMaxRate attribute shall indicate the current maximum PHY rate of transfer of data in

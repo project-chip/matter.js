@@ -7,7 +7,12 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BaseClusterComponent, ExtensibleCluster, validateFeatureSelection, ClusterForBaseCluster } from "../../cluster/ClusterFactory.js";
+import {
+    BaseClusterComponent,
+    ExtensibleCluster,
+    validateFeatureSelection,
+    ClusterForBaseCluster
+} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import {
     WritableFabricScopedAttribute,
@@ -298,7 +303,11 @@ export namespace GroupKeyManagement {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.2.7.2
              */
-            groupTable: FabricScopedAttribute(0x1, TlvArray(TlvGroupInfoMapStruct, { maxLength: 254 }), { default: [] }),
+            groupTable: FabricScopedAttribute(
+                0x1,
+                TlvArray(TlvGroupInfoMapStruct, { maxLength: 254 }),
+                { default: [] }
+            ),
 
             /**
              * This attribute shall indicate the maximum number of groups that this node supports per fabric. The value
