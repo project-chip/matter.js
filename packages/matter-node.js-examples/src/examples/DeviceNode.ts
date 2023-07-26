@@ -199,14 +199,14 @@ class Device {
                             networkingStatus,
                             wiFiScanResults: [{
                                 security: {
-                                    Unencrypted: true,
-                                    Wep: true,
-                                    'WPA-PERSONAL': true,
+                                    Unencrypted: false,
+                                    Wep: false,
+                                    'WPA-PERSONAL': false,
                                     'WPA2-PERSONAL': true,
                                     'WPA3-PERSONAL': true,
                                 },
-                                ssid: ssid || ByteArray.fromString("ApollonHome"),
-                                bssid: ByteArray.fromString("00:00:00:00:00:00"),
+                                ssid: ssid || ByteArray.fromString(getParameter("ble-wifi-scan-ssid") ?? "TestSSID"), // Set a valid existing local Wi-Fi SSID here
+                                bssid: ByteArray.fromString(getParameter("ble-wifi-scan-bssid") ?? "00:00:00:00:00:00"),
                                 channel: 1,
                             }],
                         }
