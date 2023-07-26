@@ -9,9 +9,10 @@ import { ByteArray } from "../util/ByteArray.js";
 import { Scanner } from "../common/Scanner.js";
 import { NetInterface } from "../net/NetInterface.js";
 import { TransportInterface } from "../common/TransportInterface.js";
+import { NoProviderError } from "../common/MatterError.js";
 
 export abstract class Ble {
-    static get: () => Ble = () => { throw new Error("No provider configured"); };
+    static get: () => Ble = () => { throw new NoProviderError("No provider configured"); };
 
     abstract getBlePeripheralInterface(): TransportInterface;
     abstract getBleCentralInterface(): NetInterface;

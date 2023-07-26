@@ -30,6 +30,7 @@ import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
 import { ServerAddressIp } from "./common/ServerAddress.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { Ble } from "./ble/Ble.js";
+import { NoProviderError } from "./common/MatterError.js";
 
 const logger = new Logger("CommissioningController");
 
@@ -136,11 +137,17 @@ export class CommissioningController extends MatterNode {
             let bleEnabled = false;
             try {
                 bleEnabled = !!Ble.get();
-            } catch (e) {
-                logger.warn(`Ble not enabled: ${e}`);
+            } catch (error) {
+                if (error instanceof NoProviderError) {
+                    logger.debug(`Ble not enabled`);
+                } else {
+                    throw error;
+                }
             }
 
             // TODO: Make the process more parallel and favor MDNS over BLE, but for testing right now lets do that way
+            //       The real solution is to discovery via all methods in parallel and collect all and try them then in
+            //       the order they were found if we really want to have a generic controller.
             let nodeId: NodeId | undefined;
             if (bleEnabled) {
                 try {

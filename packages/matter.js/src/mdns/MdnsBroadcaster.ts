@@ -241,12 +241,12 @@ export class MdnsBroadcaster {
         });
     }
 
-    announce(announcementPort: number) {
+    async announce(announcementPort: number) {
         this.mdnsServer.announce(announcementPort)
             .catch(error => logger.error(error));
     }
 
-    close() {
+    async close() {
         this.mdnsServer.close();
     }
 }

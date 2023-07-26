@@ -202,5 +202,5 @@ export interface InstanceBroadcaster {
     setCommissionerInfo(commissionerData: CommissionerInstanceData): void;
 
     /** Send out announcements for this instance. */
-    announce(): void;
+    announce(): Promise<void>;
 }

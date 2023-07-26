@@ -145,7 +145,7 @@ export class BtpCodec {
             throw new BtpProtocolError("Payload needs to be set because header flag indicates a message with payload.");
         }
         if (isBeginningSegment && messageLength === undefined) {
-            throw new BtpProtocolError("Message length needs to be set because paket is a beginning segment.");
+            throw new BtpProtocolError("Message length needs to be set because packet is a beginning segment.");
         }
         if (!isBeginningSegment && messageLength !== undefined) {
             throw new BtpProtocolError("Message length shouldn't be set because the package is not a beginning segment.");

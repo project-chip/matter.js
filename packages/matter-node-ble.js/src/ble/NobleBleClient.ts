@@ -48,9 +48,7 @@ export class NobleBleClient {
                 void this.stopScanning();
             }
         });
-        noble.on('discover', peripheral => {
-            void this.handleDiscoveredDevice(peripheral)
-        });
+        noble.on('discover', peripheral => this.handleDiscoveredDevice(peripheral));
         noble.on('scanStart', () => this.isScanning = true);
         noble.on('scanStop', () => this.isScanning = false);
     }
@@ -79,7 +77,7 @@ export class NobleBleClient {
         await noble.stopScanningAsync();
     }
 
-    private async handleDiscoveredDevice(peripheral: Peripheral) {
+    private handleDiscoveredDevice(peripheral: Peripheral) {
         // The advertisement data contains a name, power level (if available), certain advertised service uuids,
         // as well as manufacturer data.
         // {"localName":"MATTER-3840","serviceData":[{"uuid":"fff6","data":{"type":"Buffer","data":[0,0,15,241,255,1,128,0]}}],"serviceUuids":["fff6"],"solicitationServiceUuids":[],"serviceSolicitationUuids":[]}

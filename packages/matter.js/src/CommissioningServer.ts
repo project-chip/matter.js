@@ -47,6 +47,7 @@ import { Endpoint } from "./device/Endpoint.js";
 import { StorageContext } from "./storage/StorageContext.js";
 import { MdnsInstanceBroadcaster } from "./mdns/MdnsInstanceBroadcaster.js";
 import { Ble } from "./ble/Ble.js";
+import { NoProviderError } from "./common/MatterError.js";
 
 const logger = Logger.get("CommissioningServer");
 
@@ -421,8 +422,12 @@ export class CommissioningServer extends MatterNode {
                 if (limitTo === undefined || limitTo.ble) {
                     this.deviceInstance.addBroadcaster(ble.getBleBroadcaster(this.additionalBleAdvertisementData));
                 }
-            } catch (e) {
-                logger.debug("Ble not enabled");
+            } catch (error) {
+                if (error instanceof NoProviderError) {
+                    logger.debug("Ble not enabled");
+                } else {
+                    throw error;
+                }
             }
 
             if (limitTo?.softAccessPoint) {
@@ -535,8 +540,10 @@ export class CommissioningServer extends MatterNode {
         let bleEnabled = false;
         try {
             bleEnabled = !!Ble.get();
-        } catch {
-            // ignore
+        } catch (error) {
+            if (!(error instanceof NoProviderError)) { // only ignore NoProviderError cases
+                throw error;
+            }
         }
 
         const qrPairingCode = QrPairingCodeCodec.encode({

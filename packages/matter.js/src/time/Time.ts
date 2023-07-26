@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "../common/InternalError.js";
+import { NoProviderError } from "../common/MatterError.js";
 
 export type TimerCallback = () => Promise<any> | any;
 
@@ -38,7 +38,7 @@ const DefaultTime = new class extends Time {
     }
 
     getTimer(): Timer {
-        throw new InternalError("Default time provider does not implement timers")
+        throw new NoProviderError("Default time provider does not implement timers")
     }
 
     getPeriodicTimer() {

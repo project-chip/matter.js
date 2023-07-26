@@ -7,6 +7,7 @@
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataReader } from "../util/DataReader.js";
 import BN from "bn.js";
+import { NoProviderError } from "../common/MatterError.js";
 
 export const CRYPTO_RANDOM_LENGTH = 32;
 export const CRYPTO_ENCRYPT_ALGORITHM = "aes-128-ccm";
@@ -22,7 +23,7 @@ export type KeyPair = {
 }
 
 export abstract class Crypto {
-    static get: () => Crypto = () => { throw new Error("No provider configured"); };
+    static get: () => Crypto = () => { throw new NoProviderError("No provider configured"); };
 
     abstract encrypt(key: ByteArray, data: ByteArray, nonce: ByteArray, aad?: ByteArray): ByteArray;
     static readonly encrypt = (key: ByteArray, data: ByteArray, nonce: ByteArray, aad?: ByteArray): ByteArray => Crypto.get().encrypt(key, data, nonce, aad);

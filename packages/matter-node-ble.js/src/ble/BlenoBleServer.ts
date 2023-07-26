@@ -136,7 +136,6 @@ export class BlenoBleServer implements Channel<ByteArray> {
             logger.debug(`stateChange: ${state}, address = ${Bleno.address}`);
             if (state !== 'poweredOn') {
                 Bleno.stopAdvertising();
-                this.isAdvertising = false;
             } else if (this.advertisingData) {
                 Bleno.startAdvertisingWithEIRData(this.advertisingData);
                 this.isAdvertising = true;
@@ -282,7 +281,7 @@ export class BlenoBleServer implements Channel<ByteArray> {
         }
     }
 
-    advertise(advertiseData: ByteArray, additionalAdvertisementData?: ByteArray) {
+    async advertise(advertiseData: ByteArray, additionalAdvertisementData?: ByteArray) {
         this.advertisingData = Buffer.from(advertiseData.buffer);
 
         if (additionalAdvertisementData) {
@@ -292,7 +291,7 @@ export class BlenoBleServer implements Channel<ByteArray> {
         }
 
         if (this.isAdvertising) {
-            Bleno.stopAdvertising();
+            await this.stopAdvertising();
             this.isAdvertising = false;
         }
 
@@ -302,12 +301,20 @@ export class BlenoBleServer implements Channel<ByteArray> {
         } else {
             logger.debug(`State is ${this.state}, advertise when powered on`);
         }
+        return new Promise<void>((resolve) => {
+            Bleno.once("advertisingStart", () => resolve());
+        });
     }
 
-    stopAdvertising() {
+    async stopAdvertising() {
         if (this.isAdvertising) {
-            Bleno.stopAdvertising();
-            this.isAdvertising = false;
+            return new Promise<void>(resolve => {
+                Bleno.stopAdvertising();
+                Bleno.once("advertisingStop", () => {
+                    this.isAdvertising = false;
+                    resolve();
+                });
+            })
         }
     }
 
@@ -318,18 +325,25 @@ export class BlenoBleServer implements Channel<ByteArray> {
         this.onMatterMessageListener = listener;
     }
 
-    btpHandshakeTimeoutTriggered() {
-        Bleno.disconnect();
+    async btpHandshakeTimeoutTriggered() {
+        await this.disconnect();
         logger.error("Timeout for handshake subscribe request on C2 reached, disconnecting.");
     }
 
     async close() {
         this.btpHandshakeTimeout.stop();
-        Bleno.disconnect();
+        await this.disconnect();
         if (this.btpSession !== undefined) {
             await this.btpSession.close()
             this.btpSession = undefined;
         }
+    }
+
+    async disconnect() {
+        return new Promise<void>((resolve) => {
+            Bleno.once("disconnect", () => resolve());
+            Bleno.disconnect();
+        });
     }
 
     // Channel<ByteArray>

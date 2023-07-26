@@ -46,6 +46,7 @@ import { ServerAddress, ServerAddressBle, ServerAddressIp } from "./common/Serve
 import { Ble } from "./ble/Ble.js";
 import { isDeepEqual } from "./util/DeepEqual.js";
 import { Channel } from "./common/Channel.js";
+import { NoProviderError } from "./common/MatterError.js";
 
 export type CommissioningData = {
     regulatoryLocation: RegulatoryLocationType;
@@ -155,8 +156,12 @@ export class MatterController {
             ble = Ble.get();
             this.netInterfaceBle = ble.getBleCentralInterface();
             this.addTransportInterface(this.netInterfaceBle);
-        } catch (e) {
-            throw new Error("BLE is not supported on this platform");
+        } catch (error) {
+            if (error instanceof NoProviderError) {
+                throw new Error("BLE is not supported on this platform");
+            } else {
+                throw error;
+            }
         }
 
         const bleScanner = ble.getBleScanner();

@@ -162,7 +162,9 @@ export class MatterDevice {
 
     addFabric(fabric: Fabric) {
         if (this.fabricManager.getFabrics().length === 0) {
-            this.initialCommissioningCallback(); // Inform upper layer to pot add MDNS Broadcaster: TODO Change when refactoring MatterDevice away
+            // Inform upper layer to add MDNS Broadcaster delayed if we limited announcements to BLE till now
+            // TODO Change when refactoring MatterDevice away
+            this.initialCommissioningCallback();
         }
         this.fabricManager.addFabric(fabric);
         this.broadcasters.forEach(broadcaster => {

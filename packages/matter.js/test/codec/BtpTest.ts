@@ -264,7 +264,7 @@ describe("BtpCodec", () => {
 
         it("message length should be present if beginning segment is true", () => {
             expect(() => BtpCodec.encodeBtpPacket(DECODED_PACKET_7))
-                .toThrowError("Message length needs to be set because paket is a beginning segment.");
+                .toThrowError("Message length needs to be set because packet is a beginning segment.");
         });
 
         it("packet should not have management opcode", () => {

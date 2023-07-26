@@ -31,7 +31,7 @@ export class MdnsInstanceBroadcaster implements InstanceBroadcaster {
         this.mdnsBroadcaster.setCommissionerInfo(this.instancePort, commissionerData);
     }
 
-    announce() {
+    async announce() {
         this.mdnsBroadcaster.announce(this.instancePort);
     }
 }

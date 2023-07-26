@@ -53,7 +53,7 @@ export class BleBroadcaster implements InstanceBroadcaster {
         logger.error(`skip BLE announce because announcing a commissioner is not supported`);
     }
 
-    announce() {
+    async announce() {
         if (this.vendorId === undefined || this.productId === undefined || this.discriminator === undefined) {
             logger.debug(`skip BLE announce because of missing commissioning data vendorId, productId or discriminator`);
             return;
@@ -68,11 +68,11 @@ export class BleBroadcaster implements InstanceBroadcaster {
         // TODO if needed implement this according to the spec 5.4.2.5.3. (first 30s 20-60ms, 150-1200ms after)
         process.env['BLENO_ADVERTISING_INTERVAL'] = '100'; // use statically 100ms for now
 
-        this.blenoServer.advertise(advertisementData, this.additionalAdvertisementData);
+        await this.blenoServer.advertise(advertisementData, this.additionalAdvertisementData);
     }
 
-    close() {
-        this.blenoServer.stopAdvertising();
+    async close() {
+        await this.blenoServer.stopAdvertising();
     }
 }
 
