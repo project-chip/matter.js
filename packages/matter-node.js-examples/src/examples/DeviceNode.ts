@@ -26,7 +26,7 @@ import { StorageManager, StorageBackendDisk } from "@project-chip/matter-node.js
 import { Ble } from "@project-chip/matter-node.js/ble";
 import { BleNode } from "@project-chip/matter-node-ble.js/ble";
 import {
-    WifiNetworkCommissioningCluster, NetworkCommissioningStatus, ClusterServerHandlers, GeneralCommissioningCluster
+    NetworkCommissioningStatus, ClusterServerHandlers, GeneralCommissioningCluster, NetworkCommissioning
 } from "@project-chip/matter-node.js/cluster";
 import { ClusterServer } from "@project-chip/matter-node.js/interaction";
 
@@ -166,8 +166,9 @@ class Device {
             // the device implementor based on the relevant networking stack.
             // The NetworkCommissioningCluster and all logics are described in Matter Core Specifications section 11.8
             const firstNetworkId = new ByteArray(32);
+            const Cluster = NetworkCommissioning.Cluster.with("WiFiNetworkInterface");
             commissioningServer.addRootClusterServer(ClusterServer(
-                WifiNetworkCommissioningCluster,
+                Cluster,
                 {
                     maxNetworks: 1,
                     interfaceEnabled: true,
@@ -318,7 +319,7 @@ class Device {
                             networkIndex: 0
                         };
                     },
-                } as ClusterServerHandlers<typeof WifiNetworkCommissioningCluster>
+                } as ClusterServerHandlers<typeof Cluster>
             ));
         }
 
