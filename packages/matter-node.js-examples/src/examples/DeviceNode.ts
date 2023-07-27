@@ -166,9 +166,8 @@ class Device {
             // the device implementor based on the relevant networking stack.
             // The NetworkCommissioningCluster and all logics are described in Matter Core Specifications section 11.8
             const firstNetworkId = new ByteArray(32);
-            const Cluster = NetworkCommissioning.Cluster.with("WiFiNetworkInterface");
             commissioningServer.addRootClusterServer(ClusterServer(
-                Cluster,
+                NetworkCommissioning.Cluster.with("WiFiNetworkInterface"),
                 {
                     maxNetworks: 1,
                     interfaceEnabled: true,
@@ -319,7 +318,7 @@ class Device {
                             networkIndex: 0
                         };
                     },
-                } as ClusterServerHandlers<typeof Cluster>
+                } as ClusterServerHandlers<NetworkCommissioning.Extension<{ wiFiNetworkInterface: true }>>
             ));
         }
 
