@@ -539,7 +539,7 @@ describe("DataReportDecoder", () => {
                         "endpointId": 0,
                         "clusterId": 40,
                         "attributeId": 13,
-                        "attributeName": "productURL",
+                        "attributeName": "productUrl",
                         "nodeId": undefined
                     },
                     "version": 2020087125,

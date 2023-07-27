@@ -422,7 +422,7 @@ describe("InteractionProtocol", () => {
                 extension: [],
                 subjectsPerAccessControlEntry: 4,
                 targetsPerAccessControlEntry: 4,
-                accessControlEntriesPerFabric: 3
+                accessControlEntriesPerFabric: 4
             }, {}, {
                 accessControlEntryChanged: true,
                 accessControlExtensionChanged: true,

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ScenesCluster, TlvExtensionFieldSet } from "../ScenesCluster.js";
+import { ScenesCluster, Scenes } from "../definitions/ScenesCluster.js";
 import { GroupId } from "../../datatype/GroupId.js";
 import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
 import { ClusterServerHandlers } from "./ClusterServer.js";
@@ -36,7 +36,7 @@ interface scenesTableEntry {
      * marked with "S" in the Quality column of the cluster definition. Each extension field set holds a set of values of
      * these attributes for a cluster implemented on the same endpoint. The sum of all such sets defines a scene.
      */
-    extensionFieldSets: TypeFromSchema<typeof TlvExtensionFieldSet>[];
+    extensionFieldSets: TypeFromSchema<typeof Scenes.TlvExtensionFieldSet>[];
 
     /** Together with the SceneTransitionTime field, this field allows the transition time to be specified in tenths of a second. */
     transitionTime100ms: number;
@@ -225,7 +225,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                 return { status: StatusCode.InvalidCommand, groupId, sceneId };
             }
 
-            const extensionFieldSets = new Array<TypeFromSchema<typeof TlvExtensionFieldSet>>();
+            const extensionFieldSets = new Array<TypeFromSchema<typeof Scenes.TlvExtensionFieldSet>>();
             endpoint.getAllClusterServers().forEach((cluster) => {
                 const attributeValueList = cluster._getSceneExtensionFieldSets();
                 if (attributeValueList.length) {
@@ -339,7 +339,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             };
         },
 
-        copyScene: async ({ request: { mode, groupIdFrom, sceneIdFrom, groupIdTo, sceneIdTo }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
+        copyScene: async ({ request: { mode, groupIdentifierFrom, sceneIdentifierFrom, groupIdentifierTo, sceneIdentifierTo }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
             if (sessionType !== SessionType.Unicast) {
                 throw new Error("Groupcast not supported");
                 // TODO: When Unicast we generate a response, else not
@@ -347,18 +347,18 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
 
             const fabric = (session as SecureSession<MatterDevice>).getAccessingFabric();
 
-            if (groupIdFrom.id !== 0 && !GroupsManager.hasGroup(fabric, endpoint.getId(), groupIdFrom)) {
-                return { status: StatusCode.InvalidCommand, groupIdFrom, sceneIdFrom };
+            if (groupIdentifierFrom.id !== 0 && !GroupsManager.hasGroup(fabric, endpoint.getId(), groupIdentifierFrom)) {
+                return { status: StatusCode.InvalidCommand, groupIdentifierFrom, sceneIdentifierFrom };
             }
-            if (groupIdTo.id !== 0 && !GroupsManager.hasGroup(fabric, endpoint.getId(), groupIdTo)) {
-                return { status: StatusCode.InvalidCommand, groupIdFrom, sceneIdFrom };
+            if (groupIdentifierTo.id !== 0 && !GroupsManager.hasGroup(fabric, endpoint.getId(), groupIdentifierTo)) {
+                return { status: StatusCode.InvalidCommand, groupIdentifierFrom, sceneIdentifierFrom };
             }
 
             if (mode.copyAllScenes) {
                 // All scenes of group are copied. Ignore sceneIdFrom and sceneIdTo
-                const sceneEntries = ScenesManager.getAllScenes(fabric, endpoint.getId(), groupIdFrom);
+                const sceneEntries = ScenesManager.getAllScenes(fabric, endpoint.getId(), groupIdentifierFrom);
                 const newSceneEntries = sceneEntries.map(({ sceneId, sceneName, sceneTransitionTime, extensionFieldSets, transitionTime100ms }) => ({
-                    scenesGroupId: groupIdTo.id,
+                    scenesGroupId: groupIdentifierTo.id,
                     sceneId,
                     sceneName,
                     sceneTransitionTime,
@@ -367,14 +367,14 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                 }));
                 ScenesManager.setScenes(fabric, endpoint.getId(), newSceneEntries);
             } else {
-                const sceneEntryFrom = ScenesManager.getSceneEntry(fabric, endpoint.getId(), groupIdFrom, sceneIdFrom);
+                const sceneEntryFrom = ScenesManager.getSceneEntry(fabric, endpoint.getId(), groupIdentifierFrom, sceneIdentifierFrom);
                 if (sceneEntryFrom === undefined) {
-                    return { status: StatusCode.NotFound, groupIdFrom, sceneIdFrom };
+                    return { status: StatusCode.NotFound, groupIdentifierFrom, sceneIdentifierFrom };
                 }
                 const { sceneName, sceneTransitionTime, transitionTime100ms, extensionFieldSets } = sceneEntryFrom;
                 ScenesManager.setScenes(fabric, endpoint.getId(), [{
-                    scenesGroupId: groupIdTo.id,
-                    sceneId: sceneIdTo,
+                    scenesGroupId: groupIdentifierTo.id,
+                    sceneId: sceneIdentifierTo,
                     sceneName,
                     sceneTransitionTime,
                     extensionFieldSets,
@@ -382,7 +382,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                 }]);
             }
 
-            return { status: StatusCode.Success, groupIdFrom, sceneIdFrom };
+            return { status: StatusCode.Success, groupIdentifierFrom, sceneIdentifierFrom };
         },
 
         getSceneValid: ({ session, attributes: { currentScene, currentGroup }, endpoint }) => {
@@ -417,7 +417,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             const endpointScenes = ScenesManager.getEndpointScenes(fabric, endpoint.getId());
             if (endpointScenes === undefined) return 0;
             let sceneCount = 0;
-            for (const [_groupId, scenes] of endpointScenes) {
+            for (const scenes of endpointScenes.values()) {
                 sceneCount += scenes.size;
             }
             return sceneCount;
@@ -433,7 +433,7 @@ export const createDefaultScenesClusterServer = () => ClusterServer(
         currentGroup: new GroupId(0),
         sceneValid: false,
         nameSupport: {
-            sceneNames: true,
+            nameSupport: true,
         },
         lastConfiguredBy: null,
     },

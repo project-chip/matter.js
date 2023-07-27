@@ -4,14 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { ClusterServer } from "../../protocol/interaction/InteractionServer.js";
-import { IdentifyCluster, IdentifyType } from "../IdentifyCluster.js";
+import { IdentifyCluster, Identify } from "../definitions/IdentifyCluster.js";
 import { ClusterServerHandlers } from "./ClusterServer.js";
 
 export const createDefaultIdentifyClusterServer = (handlers: ClusterServerHandlers<typeof IdentifyCluster>) => ClusterServer(
     IdentifyCluster,
     {
         identifyTime: 0,
-        identifyType: IdentifyType.None,
+        identifyType: Identify.IdentifyType.None,
     },
     handlers
 );

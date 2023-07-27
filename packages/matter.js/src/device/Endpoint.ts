@@ -7,18 +7,19 @@
 import { DeviceTypeDefinition } from "./DeviceTypes.js";
 import { ClusterServer } from "../protocol/interaction/InteractionServer.js";
 import { AtLeastOne } from "../util/Array.js";
-import { DescriptorCluster } from "../cluster/DescriptorCluster.js";
+import { DescriptorCluster } from "../cluster/definitions/DescriptorCluster.js";
 import { DeviceTypeId } from "../datatype/DeviceTypeId.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
-import { FixedLabelCluster, UserLabelCluster } from "../cluster/LabelCluster.js";
+import { FixedLabelCluster } from "../cluster/definitions/FixedLabelCluster.js";
+import { UserLabelCluster } from "../cluster/definitions/UserLabelCluster.js";
 import { ClusterClientObj } from "../cluster/client/ClusterClient.js";
 import { ClusterServerObj, ClusterServerObjForCluster } from "../cluster/server/ClusterServer.js";
 import { InteractionClient } from "../protocol/interaction/InteractionClient.js";
-import { BasicInformationCluster } from "../cluster/BasicInformationCluster.js";
-import { BridgedDeviceBasicInformationCluster } from "../cluster/BridgedDeviceBasicInformationCluster.js";
+import { BasicInformationCluster } from "../cluster/definitions/BasicInformationCluster.js";
+import { BridgedDeviceBasicInformationCluster } from "../cluster/definitions/BridgedDeviceBasicInformationCluster.js";
 import { AllClustersMap } from "../cluster/ClusterHelper.js";
 
 export interface EndpointOptions {
@@ -118,13 +119,13 @@ export class Endpoint {
             this.descriptorCluster = cluster as unknown as ClusterServerObjForCluster<typeof DescriptorCluster>;
         }
         this.clusterServers.set(cluster.id, cluster);
-        this.descriptorCluster.attributes.serverList.setLocal(Array.from(this.clusterServers.keys()).map((id) => new ClusterId(id)));
+        this.descriptorCluster.attributes.serverList.init(Array.from(this.clusterServers.keys()).map((id) => new ClusterId(id)));
         this.structureChangedCallback(); // Inform parent about structure change
     }
 
     addClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(cluster: ClusterClientObj<F, A, C, E>) {
         this.clusterClients.set(cluster.id, cluster);
-        this.descriptorCluster.attributes.clientList.setLocal(Array.from(this.clusterClients.keys()).map((id) => new ClusterId(id)));
+        this.descriptorCluster.attributes.clientList.init(Array.from(this.clusterClients.keys()).map((id) => new ClusterId(id)));
         this.structureChangedCallback(); // Inform parent about structure change
     }
 
@@ -182,7 +183,7 @@ export class Endpoint {
         this.name = deviceTypes[0].name;
 
         // Update descriptor cluster
-        this.descriptorCluster.attributes.deviceTypeList.setLocal(
+        this.descriptorCluster.attributes.deviceTypeList.init(
             this.deviceTypes.map(deviceType => ({
                 deviceType: new DeviceTypeId(deviceType.code),
                 revision: deviceType.revision

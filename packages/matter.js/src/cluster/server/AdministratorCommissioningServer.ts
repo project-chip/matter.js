@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AdminCommissioningCluster } from "../AdminCommissioningCluster.js"
+import { AdministratorCommissioningCluster } from "../definitions/AdministratorCommissioningCluster.js"
 import { ClusterServerHandlers } from "./ClusterServer.js"
 import { PaseServer } from "../../session/pase/PaseServer.js";
 import { SecureChannelProtocol } from "../../protocol/securechannel/SecureChannelProtocol.js";
 
-export const AdminCommissioningHandler: (secureChannelProtocol: SecureChannelProtocol) => ClusterServerHandlers<typeof AdminCommissioningCluster> = (secureChannelProtocol) => ({
+export const AdministratorCommissioningHandler: (secureChannelProtocol: SecureChannelProtocol) => ClusterServerHandlers<typeof AdministratorCommissioningCluster> = (secureChannelProtocol) => ({
     openCommissioningWindow: async function({ request: { pakePasscodeVerifier: pakeVerifier, discriminator, iterations, salt, commissioningTimeout }, session, /* attributes: { windowStatus } */ }) {
         //windowStatus.set(CommissioningWindowStatus.EnhancedWindowOpen);
         secureChannelProtocol.updatePaseCommissioner(PaseServer.fromVerificationValue(pakeVerifier, { iterations, salt }));

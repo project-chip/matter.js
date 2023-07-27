@@ -263,7 +263,7 @@ export type ClusterElement<F extends BitSchema> =
 export type AsConditional<
     F extends BitSchema,
     E extends ClusterElement<F>
-> = Omit<E, "optional"> & { optional: false, isConditional: true };
+> = Omit<E, "optional"> & { optional: true, isConditional: true };
 
 export type ClusterElementConditions<F extends BitSchema> = {
     optionalIf: ConditionalFeatureList<F>,
@@ -279,11 +279,11 @@ export function AsConditional<
 ) {
     const result = {
         ...element,
-        optional: false,
+        optional: true,
         isConditional: true,
         optionalIf: optionalIf,
         mandatoryIf: mandatoryIf
     };
-    result.optional = false;
+    result.optional = true;
     return result as AsConditional<F, E>;
 }

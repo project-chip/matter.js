@@ -7,7 +7,7 @@ import { Device } from "./Device.js";
 import { DeviceTypes } from "./DeviceTypes.js";
 import { ComposedDevice } from "./ComposedDevice.js";
 import { AttributeInitialValues } from "../cluster/server/ClusterServer.js";
-import { BridgedDeviceBasicInformationCluster } from "../cluster/BridgedDeviceBasicInformationCluster.js";
+import { BridgedDeviceBasicInformationCluster } from "../cluster/definitions/BridgedDeviceBasicInformationCluster.js";
 import { ClusterServer } from "../protocol/interaction/InteractionServer.js";
 import { Endpoint, EndpointOptions } from "./Endpoint.js";
 

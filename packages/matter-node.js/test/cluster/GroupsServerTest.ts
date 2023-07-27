@@ -20,7 +20,7 @@ import { ClusterServer, StatusCode } from "@project-chip/matter.js/interaction";
 import { SecureSession } from "@project-chip/matter.js/session";
 import { Fabric, FabricJsonObject } from "@project-chip/matter.js/fabric";
 import {
-    ClusterServerObjForCluster, GroupsCluster, GroupsClusterHandler, IdentifyCluster, ClusterServerHandlers, IdentifyType
+    ClusterServerObjForCluster, GroupsCluster, GroupsClusterHandler, Identify, ClusterServerHandlers
 } from "@project-chip/matter.js/cluster";
 import { GroupId } from "@project-chip/matter.js/datatype";
 import { getPromiseResolver } from "@project-chip/matter.js/util";
@@ -37,16 +37,16 @@ describe("Groups Server test", () => {
 
     // TODO make that nicer and maybe  move to a "testing support library"
     async function initializeTestEnv() {
-        groupsServer = ClusterServer(GroupsCluster, { nameSupport: { groupNames: true } }, GroupsClusterHandler());
+        groupsServer = ClusterServer(GroupsCluster, { nameSupport: { nameSupport: true } }, GroupsClusterHandler());
         const identifyServer = ClusterServer(
-            IdentifyCluster,
+            Identify.Cluster,
             {
                 identifyTime: 100,
-                identifyType: IdentifyType.None
+                identifyType: Identify.IdentifyType.None
             },
             {
                 identify: async ({ request: { identifyTime } }) => { console.log(identifyTime); /* */ }
-            } as ClusterServerHandlers<typeof IdentifyCluster>
+            } as ClusterServerHandlers<typeof Identify.Cluster>
         );
 
         testSession = await createTestSessionWithFabric();
@@ -240,7 +240,7 @@ describe("Groups Server test", () => {
     describe("Add group while identifying without identifying test", () => {
         beforeAll(async () => {
             await initializeTestEnv();
-            const identifyCluster = endpoint?.getClusterServer(IdentifyCluster);
+            const identifyCluster = endpoint?.getClusterServer(Identify.Cluster);
             assert.ok(identifyCluster);
             identifyCluster.attributes.identifyTime.setLocal(0); // Change to not identifying
         });

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { GroupsCluster } from "../GroupsCluster.js";
+import { GroupsCluster } from "../definitions/GroupsCluster.js";
 import { GroupId } from "../../datatype/GroupId.js";
 import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
 import { ClusterServerHandlers } from "./ClusterServer.js";
@@ -13,7 +13,7 @@ import { SecureSession } from "../../session/SecureSession.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { SessionType } from "../../codec/MessageCodec.js";
 import { ScenesManager } from "./ScenesServer.js";
-import { IdentifyCluster } from "../IdentifyCluster.js";
+import { IdentifyCluster } from "../definitions/IdentifyCluster.js";
 import { ClusterServer } from "../../protocol/interaction/InteractionServer.js";
 
 /*
@@ -186,7 +186,7 @@ export const createDefaultGroupsClusterServer = () => ClusterServer(
     GroupsCluster,
     {
         nameSupport: {
-            groupNames: true,
+            nameSupport: true,
         },
     },
     GroupsClusterHandler()
