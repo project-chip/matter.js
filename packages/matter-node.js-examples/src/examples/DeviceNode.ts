@@ -25,9 +25,7 @@ import { Logger } from "@project-chip/matter-node.js/log";
 import { StorageManager, StorageBackendDisk } from "@project-chip/matter-node.js/storage";
 import { Ble } from "@project-chip/matter-node.js/ble";
 import { BleNode } from "@project-chip/matter-node-ble.js/ble";
-import {
-    NetworkCommissioningStatus, ClusterServerHandlers, GeneralCommissioningCluster, NetworkCommissioning
-} from "@project-chip/matter-node.js/cluster";
+import { NetworkCommissioning, GeneralCommissioningCluster, ClusterServerHandlers } from "@project-chip/matter-node.js/cluster";
 import { ClusterServer } from "@project-chip/matter-node.js/interaction";
 
 if (hasParameter("ble")) {
@@ -166,8 +164,9 @@ class Device {
             // the device implementor based on the relevant networking stack.
             // The NetworkCommissioningCluster and all logics are described in Matter Core Specifications section 11.8
             const firstNetworkId = new ByteArray(32);
+            const WifiCluster = NetworkCommissioning.Cluster.with(NetworkCommissioning.Feature.WiFiNetworkInterface);
             commissioningServer.addRootClusterServer(ClusterServer(
-                NetworkCommissioning.Cluster.with("WiFiNetworkInterface"),
+                WifiCluster,
                 {
                     maxNetworks: 1,
                     interfaceEnabled: true,
@@ -192,7 +191,7 @@ class Device {
                             generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
                         }
 
-                        const networkingStatus = NetworkCommissioningStatus.Success
+                        const networkingStatus = NetworkCommissioning.NetworkCommissioningStatus.Success
                         lastNetworkingStatus?.setLocal(networkingStatus);
 
                         return {
@@ -226,12 +225,12 @@ class Device {
                             generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
                         }
 
-                        const networkingStatus = NetworkCommissioningStatus.Success
+                        const networkingStatus = NetworkCommissioning.NetworkCommissioningStatus.Success
                         lastNetworkingStatus?.setLocal(networkingStatus);
                         lastNetworkId?.setLocal(firstNetworkId);
 
                         return {
-                            networkingStatus: NetworkCommissioningStatus.Success,
+                            networkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
                             networkIndex: 0
                         };
                     },
@@ -250,12 +249,12 @@ class Device {
                             generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
                         }
 
-                        const networkingStatus = NetworkCommissioningStatus.Success
+                        const networkingStatus = NetworkCommissioning.NetworkCommissioningStatus.Success
                         lastNetworkingStatus?.setLocal(networkingStatus);
                         lastNetworkId?.setLocal(firstNetworkId);
 
                         return {
-                            networkingStatus: NetworkCommissioningStatus.Success,
+                            networkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
                             networkIndex: 0
                         };
                     },
@@ -283,7 +282,7 @@ class Device {
                         networkList[0].connected = true;
                         networks.setLocal(networkList);
 
-                        const networkingStatus = NetworkCommissioningStatus.Success
+                        const networkingStatus = NetworkCommissioning.NetworkCommissioningStatus.Success
                         lastNetworkingStatus?.setLocal(networkingStatus);
                         lastNetworkId?.setLocal(firstNetworkId);
                         lastConnectErrorValue?.setLocal(null);
@@ -293,7 +292,7 @@ class Device {
                         device.startAnnouncement();
 
                         return {
-                            networkingStatus: NetworkCommissioningStatus.Success,
+                            networkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
                             errorValue: null,
                         }
                     },
@@ -310,15 +309,15 @@ class Device {
                             generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
                         }
 
-                        const networkingStatus = NetworkCommissioningStatus.Success
+                        const networkingStatus = NetworkCommissioning.NetworkCommissioningStatus.Success
                         lastNetworkingStatus?.setLocal(networkingStatus);
 
                         return {
-                            networkingStatus: NetworkCommissioningStatus.Success,
+                            networkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
                             networkIndex: 0
                         };
                     },
-                } as ClusterServerHandlers<NetworkCommissioning.Extension<{ wiFiNetworkInterface: true }>>
+                } as ClusterServerHandlers<typeof WifiCluster>
             ));
         }
 
