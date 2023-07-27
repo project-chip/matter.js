@@ -18,7 +18,7 @@ import { ClusterServer } from "@project-chip/matter.js/interaction";
 import { SecureSession } from "@project-chip/matter.js/session";
 import {
     ClusterServerObjForCluster, BasicInformationCluster, GeneralCommissioningCluster,
-    GeneralCommissioningClusterHandler, RegulatoryLocationType, CommissioningError
+    GeneralCommissioningClusterHandler, GeneralCommissioning
 } from "@project-chip/matter.js/cluster";
 import { SessionType, Message } from "@project-chip/matter.js/codec";
 import { callCommandOnClusterServer, createTestSessionWithFabric } from "./ClusterServerTestingUtil";
@@ -34,7 +34,7 @@ describe("GeneralCommissioning Server test", () => {
     let endpoint: Endpoint | undefined;
 
     // TODO make that nicer and maybe  move to a "testing support library"
-    async function initializeTestEnv(location: string, regulatoryConfig: RegulatoryLocationType, locationCapability: RegulatoryLocationType, allowCountryCodeChange: boolean, countryCodeWhitelist?: string[]) {
+    async function initializeTestEnv(location: string, regulatoryConfig: GeneralCommissioning.RegulatoryLocationType, locationCapability: GeneralCommissioning.RegulatoryLocationType, allowCountryCodeChange: boolean, countryCodeWhitelist?: string[]) {
         generalCommissioningServer = ClusterServer(
             GeneralCommissioningCluster,
             {
@@ -45,7 +45,7 @@ describe("GeneralCommissioning Server test", () => {
                 },
                 regulatoryConfig,
                 locationCapability,
-                supportsConcurrentConnections: true,
+                supportsConcurrentConnection: true,
             }, GeneralCommissioningClusterHandler({ allowCountryCodeChange, countryCodeWhitelist }));
         basicInformationServer = ClusterServer(BasicInformationCluster, {
             dataModelRevision: 1,
@@ -78,32 +78,32 @@ describe("GeneralCommissioning Server test", () => {
 
     describe("setRegulatoryConfig: Allow changing commissionable info and country", () => {
         beforeAll(async () => {
-            await initializeTestEnv("US", RegulatoryLocationType.IndoorOutdoor, RegulatoryLocationType.IndoorOutdoor, true);
+            await initializeTestEnv("US", GeneralCommissioning.RegulatoryLocationType.IndoorOutdoor, GeneralCommissioning.RegulatoryLocationType.IndoorOutdoor, true);
         });
 
         it("setRegulatoryConfig success", async () => {
-            const result = await callCommandOnClusterServer(generalCommissioningServer!, "setRegulatoryConfig", { breadcrumb: BigInt(2), newRegulatoryConfig: RegulatoryLocationType.Indoor, countryCode: "DE" }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
+            const result = await callCommandOnClusterServer(generalCommissioningServer!, "setRegulatoryConfig", { breadcrumb: BigInt(2), newRegulatoryConfig: GeneralCommissioning.RegulatoryLocationType.Indoor, countryCode: "DE" }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
-            assert.deepEqual(result, { code: 0, response: { debugText: "", errorCode: CommissioningError.Ok }, responseId: 3 });
-            assert.deepEqual(generalCommissioningServer!.getRegulatoryConfigAttribute(), RegulatoryLocationType.Indoor);
+            assert.deepEqual(result, { code: 0, response: { debugText: "", errorCode: GeneralCommissioning.CommissioningError.Ok }, responseId: 3 });
+            assert.deepEqual(generalCommissioningServer!.getRegulatoryConfigAttribute(), GeneralCommissioning.RegulatoryLocationType.Indoor);
             assert.deepEqual(generalCommissioningServer!.getBreadcrumbAttribute(), BigInt(2));
             assert.deepEqual(basicInformationServer!.getLocationAttribute(), "DE");
         });
 
         it("setRegulatoryConfig success #2", async () => {
-            const result = await callCommandOnClusterServer(generalCommissioningServer!, "setRegulatoryConfig", { breadcrumb: BigInt(3), newRegulatoryConfig: RegulatoryLocationType.Outdoor, countryCode: "CA" }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
+            const result = await callCommandOnClusterServer(generalCommissioningServer!, "setRegulatoryConfig", { breadcrumb: BigInt(3), newRegulatoryConfig: GeneralCommissioning.RegulatoryLocationType.Outdoor, countryCode: "CA" }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
-            assert.deepEqual(result, { code: 0, response: { debugText: "", errorCode: CommissioningError.Ok }, responseId: 3 });
-            assert.deepEqual(generalCommissioningServer!.getRegulatoryConfigAttribute(), RegulatoryLocationType.Outdoor);
+            assert.deepEqual(result, { code: 0, response: { debugText: "", errorCode: GeneralCommissioning.CommissioningError.Ok }, responseId: 3 });
+            assert.deepEqual(generalCommissioningServer!.getRegulatoryConfigAttribute(), GeneralCommissioning.RegulatoryLocationType.Outdoor);
             assert.deepEqual(generalCommissioningServer!.getBreadcrumbAttribute(), BigInt(3));
             assert.deepEqual(basicInformationServer!.getLocationAttribute(), "CA");
         });
 
         it("setRegulatoryConfig success #3 without changing country", async () => {
-            const result = await callCommandOnClusterServer(generalCommissioningServer!, "setRegulatoryConfig", { breadcrumb: BigInt(4), newRegulatoryConfig: RegulatoryLocationType.Indoor, countryCode: "XX" }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
+            const result = await callCommandOnClusterServer(generalCommissioningServer!, "setRegulatoryConfig", { breadcrumb: BigInt(4), newRegulatoryConfig: GeneralCommissioning.RegulatoryLocationType.Indoor, countryCode: "XX" }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
-            assert.deepEqual(result, { code: 0, response: { debugText: "", errorCode: CommissioningError.Ok }, responseId: 3 });
-            assert.deepEqual(generalCommissioningServer!.getRegulatoryConfigAttribute(), RegulatoryLocationType.Indoor);
+            assert.deepEqual(result, { code: 0, response: { debugText: "", errorCode: GeneralCommissioning.CommissioningError.Ok }, responseId: 3 });
+            assert.deepEqual(generalCommissioningServer!.getRegulatoryConfigAttribute(), GeneralCommissioning.RegulatoryLocationType.Indoor);
             assert.deepEqual(generalCommissioningServer!.getBreadcrumbAttribute(), BigInt(4));
             assert.deepEqual(basicInformationServer!.getLocationAttribute(), "CA");
         });
@@ -111,23 +111,23 @@ describe("GeneralCommissioning Server test", () => {
 
     describe("setRegulatoryConfig: Allow changing regulatory location info but not country", () => {
         beforeAll(async () => {
-            await initializeTestEnv("DE", RegulatoryLocationType.IndoorOutdoor, RegulatoryLocationType.IndoorOutdoor, false);
+            await initializeTestEnv("DE", GeneralCommissioning.RegulatoryLocationType.IndoorOutdoor, GeneralCommissioning.RegulatoryLocationType.IndoorOutdoor, false);
         });
 
         it("setRegulatoryConfig country error", async () => {
-            const result = await callCommandOnClusterServer(generalCommissioningServer!, "setRegulatoryConfig", { breadcrumb: BigInt(2), newRegulatoryConfig: RegulatoryLocationType.Indoor, countryCode: "US" }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
+            const result = await callCommandOnClusterServer(generalCommissioningServer!, "setRegulatoryConfig", { breadcrumb: BigInt(2), newRegulatoryConfig: GeneralCommissioning.RegulatoryLocationType.Indoor, countryCode: "US" }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
-            assert.deepEqual(result, { code: 0, response: { debugText: "Country code change not allowed: US", errorCode: CommissioningError.ValueOutsideRange }, responseId: 3 });
-            assert.deepEqual(generalCommissioningServer!.getRegulatoryConfigAttribute(), RegulatoryLocationType.IndoorOutdoor);
+            assert.deepEqual(result, { code: 0, response: { debugText: "Country code change not allowed: US", errorCode: GeneralCommissioning.CommissioningError.ValueOutsideRange }, responseId: 3 });
+            assert.deepEqual(generalCommissioningServer!.getRegulatoryConfigAttribute(), GeneralCommissioning.RegulatoryLocationType.IndoorOutdoor);
             assert.deepEqual(generalCommissioningServer!.getBreadcrumbAttribute(), BigInt(0));
             assert.deepEqual(basicInformationServer!.getLocationAttribute(), "DE");
         });
 
         it("setRegulatoryConfig success without changing country", async () => {
-            const result = await callCommandOnClusterServer(generalCommissioningServer!, "setRegulatoryConfig", { breadcrumb: BigInt(2), newRegulatoryConfig: RegulatoryLocationType.Outdoor, countryCode: "DE" }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
+            const result = await callCommandOnClusterServer(generalCommissioningServer!, "setRegulatoryConfig", { breadcrumb: BigInt(2), newRegulatoryConfig: GeneralCommissioning.RegulatoryLocationType.Outdoor, countryCode: "DE" }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
             assert.deepEqual(result, { code: 0, response: { debugText: "", errorCode: 0 }, responseId: 3 });
-            assert.deepEqual(generalCommissioningServer!.getRegulatoryConfigAttribute(), RegulatoryLocationType.Outdoor);
+            assert.deepEqual(generalCommissioningServer!.getRegulatoryConfigAttribute(), GeneralCommissioning.RegulatoryLocationType.Outdoor);
             assert.deepEqual(generalCommissioningServer!.getBreadcrumbAttribute(), BigInt(2));
             assert.deepEqual(basicInformationServer!.getLocationAttribute(), "DE");
         });
@@ -135,32 +135,32 @@ describe("GeneralCommissioning Server test", () => {
 
     describe("setRegulatoryConfig: Allow changing nothing", () => {
         beforeAll(async () => {
-            await initializeTestEnv("XX", RegulatoryLocationType.Indoor, RegulatoryLocationType.Indoor, false);
+            await initializeTestEnv("XX", GeneralCommissioning.RegulatoryLocationType.Indoor, GeneralCommissioning.RegulatoryLocationType.Indoor, false);
         });
 
         it("setRegulatoryConfig country error", async () => {
-            const result = await callCommandOnClusterServer(generalCommissioningServer!, "setRegulatoryConfig", { breadcrumb: BigInt(2), newRegulatoryConfig: RegulatoryLocationType.Outdoor, countryCode: "DE" }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
+            const result = await callCommandOnClusterServer(generalCommissioningServer!, "setRegulatoryConfig", { breadcrumb: BigInt(2), newRegulatoryConfig: GeneralCommissioning.RegulatoryLocationType.Outdoor, countryCode: "DE" }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
-            assert.deepEqual(result, { code: 0, response: { debugText: "Country code change not allowed: DE", errorCode: CommissioningError.ValueOutsideRange }, responseId: 3 });
-            assert.deepEqual(generalCommissioningServer!.getRegulatoryConfigAttribute(), RegulatoryLocationType.Indoor);
+            assert.deepEqual(result, { code: 0, response: { debugText: "Country code change not allowed: DE", errorCode: GeneralCommissioning.CommissioningError.ValueOutsideRange }, responseId: 3 });
+            assert.deepEqual(generalCommissioningServer!.getRegulatoryConfigAttribute(), GeneralCommissioning.RegulatoryLocationType.Indoor);
             assert.deepEqual(generalCommissioningServer!.getBreadcrumbAttribute(), BigInt(0));
             assert.deepEqual(basicInformationServer!.getLocationAttribute(), "XX");
         });
 
         it("setRegulatoryConfig regulatory location error", async () => {
-            const result = await callCommandOnClusterServer(generalCommissioningServer!, "setRegulatoryConfig", { breadcrumb: BigInt(2), newRegulatoryConfig: RegulatoryLocationType.Outdoor, countryCode: "XX" }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
+            const result = await callCommandOnClusterServer(generalCommissioningServer!, "setRegulatoryConfig", { breadcrumb: BigInt(2), newRegulatoryConfig: GeneralCommissioning.RegulatoryLocationType.Outdoor, countryCode: "XX" }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
-            assert.deepEqual(result, { code: 0, response: { debugText: "Invalid regulatory location: Outdoor", errorCode: CommissioningError.ValueOutsideRange }, responseId: 3 });
-            assert.deepEqual(generalCommissioningServer!.getRegulatoryConfigAttribute(), RegulatoryLocationType.Indoor);
+            assert.deepEqual(result, { code: 0, response: { debugText: "Invalid regulatory location: Outdoor", errorCode: GeneralCommissioning.CommissioningError.ValueOutsideRange }, responseId: 3 });
+            assert.deepEqual(generalCommissioningServer!.getRegulatoryConfigAttribute(), GeneralCommissioning.RegulatoryLocationType.Indoor);
             assert.deepEqual(generalCommissioningServer!.getBreadcrumbAttribute(), BigInt(0));
             assert.deepEqual(basicInformationServer!.getLocationAttribute(), "XX");
         });
 
         it("setRegulatoryConfig success without changing anything", async () => {
-            const result = await callCommandOnClusterServer(generalCommissioningServer!, "setRegulatoryConfig", { breadcrumb: BigInt(2), newRegulatoryConfig: RegulatoryLocationType.Indoor, countryCode: "XX" }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
+            const result = await callCommandOnClusterServer(generalCommissioningServer!, "setRegulatoryConfig", { breadcrumb: BigInt(2), newRegulatoryConfig: GeneralCommissioning.RegulatoryLocationType.Indoor, countryCode: "XX" }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
-            assert.deepEqual(result, { code: 0, response: { debugText: "", errorCode: CommissioningError.Ok }, responseId: 3 });
-            assert.deepEqual(generalCommissioningServer!.getRegulatoryConfigAttribute(), RegulatoryLocationType.Indoor);
+            assert.deepEqual(result, { code: 0, response: { debugText: "", errorCode: GeneralCommissioning.CommissioningError.Ok }, responseId: 3 });
+            assert.deepEqual(generalCommissioningServer!.getRegulatoryConfigAttribute(), GeneralCommissioning.RegulatoryLocationType.Indoor);
             assert.deepEqual(generalCommissioningServer!.getBreadcrumbAttribute(), BigInt(2));
             assert.deepEqual(basicInformationServer!.getLocationAttribute(), "XX");
         });
@@ -168,23 +168,23 @@ describe("GeneralCommissioning Server test", () => {
 
     describe("setRegulatoryConfig: Allow changing country on whitelist", () => {
         beforeAll(async () => {
-            await initializeTestEnv("XX", RegulatoryLocationType.Indoor, RegulatoryLocationType.Indoor, true, ["DE", "CA"]);
+            await initializeTestEnv("XX", GeneralCommissioning.RegulatoryLocationType.Indoor, GeneralCommissioning.RegulatoryLocationType.Indoor, true, ["DE", "CA"]);
         });
 
         it("setRegulatoryConfig country error", async () => {
-            const result = await callCommandOnClusterServer(generalCommissioningServer!, "setRegulatoryConfig", { breadcrumb: BigInt(2), newRegulatoryConfig: RegulatoryLocationType.Indoor, countryCode: "US" }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
+            const result = await callCommandOnClusterServer(generalCommissioningServer!, "setRegulatoryConfig", { breadcrumb: BigInt(2), newRegulatoryConfig: GeneralCommissioning.RegulatoryLocationType.Indoor, countryCode: "US" }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
-            assert.deepEqual(result, { code: 0, response: { debugText: "Country code change not allowed: US", errorCode: CommissioningError.ValueOutsideRange }, responseId: 3 });
-            assert.deepEqual(generalCommissioningServer!.getRegulatoryConfigAttribute(), RegulatoryLocationType.Indoor);
+            assert.deepEqual(result, { code: 0, response: { debugText: "Country code change not allowed: US", errorCode: GeneralCommissioning.CommissioningError.ValueOutsideRange }, responseId: 3 });
+            assert.deepEqual(generalCommissioningServer!.getRegulatoryConfigAttribute(), GeneralCommissioning.RegulatoryLocationType.Indoor);
             assert.deepEqual(generalCommissioningServer!.getBreadcrumbAttribute(), BigInt(0));
             assert.deepEqual(basicInformationServer!.getLocationAttribute(), "XX");
         });
 
         it("setRegulatoryConfig success", async () => {
-            const result = await callCommandOnClusterServer(generalCommissioningServer!, "setRegulatoryConfig", { breadcrumb: BigInt(2), newRegulatoryConfig: RegulatoryLocationType.Indoor, countryCode: "DE" }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
+            const result = await callCommandOnClusterServer(generalCommissioningServer!, "setRegulatoryConfig", { breadcrumb: BigInt(2), newRegulatoryConfig: GeneralCommissioning.RegulatoryLocationType.Indoor, countryCode: "DE" }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
-            assert.deepEqual(result, { code: 0, response: { debugText: "", errorCode: CommissioningError.Ok }, responseId: 3 });
-            assert.deepEqual(generalCommissioningServer!.getRegulatoryConfigAttribute(), RegulatoryLocationType.Indoor);
+            assert.deepEqual(result, { code: 0, response: { debugText: "", errorCode: GeneralCommissioning.CommissioningError.Ok }, responseId: 3 });
+            assert.deepEqual(generalCommissioningServer!.getRegulatoryConfigAttribute(), GeneralCommissioning.RegulatoryLocationType.Indoor);
             assert.deepEqual(generalCommissioningServer!.getBreadcrumbAttribute(), BigInt(2));
             assert.deepEqual(basicInformationServer!.getLocationAttribute(), "DE");
         });
