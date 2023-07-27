@@ -307,7 +307,7 @@ export class CommissioningServer extends MatterNode {
                 },
                 {
                     testEventTrigger: async (args) => await this.commandHandler.executeHandler("testEventTrigger", args)
-                } as ClusterServerHandlers<typeof GeneralDiagnosticsCluster>,
+                },
                 {
                     bootReason: true
                 }
