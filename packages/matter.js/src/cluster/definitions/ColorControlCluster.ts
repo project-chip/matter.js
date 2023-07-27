@@ -893,7 +893,11 @@ export namespace ColorControl {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.9
              */
-            colorMode: Attribute(0x8, TlvEnum<ColorMode>(), { persistent: true, default: ColorMode.CurrentXAndCurrentY }),
+            colorMode: Attribute(
+                0x8,
+                TlvEnum<ColorMode>(),
+                { persistent: true, default: ColorMode.CurrentXAndCurrentY }
+            ),
 
             /**
              * The Options attribute is meant to be changed only during commissioning. The Options attribute is a
@@ -1050,7 +1054,11 @@ export namespace ColorControl {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.10.1
              */
-            whitePointX: OptionalWritableAttribute(0x30, TlvUInt16.bound({ max: 65279 }), { writeAcl: AccessLevel.Manage }),
+            whitePointX: OptionalWritableAttribute(
+                0x30,
+                TlvUInt16.bound({ max: 65279 }),
+                { writeAcl: AccessLevel.Manage }
+            ),
 
             /**
              * The WhitePointY attribute contains the normalized chromaticity value y, as defined in the CIE xyY Color
@@ -1061,7 +1069,11 @@ export namespace ColorControl {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.10.2
              */
-            whitePointY: OptionalWritableAttribute(0x31, TlvUInt16.bound({ max: 65279 }), { writeAcl: AccessLevel.Manage }),
+            whitePointY: OptionalWritableAttribute(
+                0x31,
+                TlvUInt16.bound({ max: 65279 }),
+                { writeAcl: AccessLevel.Manage }
+            ),
 
             /**
              * The ColorPointRX attribute contains the normalized chromaticity value x, as defined in the CIE xyY Color
@@ -1072,7 +1084,11 @@ export namespace ColorControl {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.10.3
              */
-            colorPointRx: OptionalWritableAttribute(0x32, TlvUInt16.bound({ max: 65279 }), { writeAcl: AccessLevel.Manage }),
+            colorPointRx: OptionalWritableAttribute(
+                0x32,
+                TlvUInt16.bound({ max: 65279 }),
+                { writeAcl: AccessLevel.Manage }
+            ),
 
             /**
              * The ColorPointRY attribute contains the normalized chromaticity value y, as defined in the CIE xyY Color
@@ -1083,7 +1099,11 @@ export namespace ColorControl {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.10.4
              */
-            colorPointRy: OptionalWritableAttribute(0x33, TlvUInt16.bound({ max: 65279 }), { writeAcl: AccessLevel.Manage }),
+            colorPointRy: OptionalWritableAttribute(
+                0x33,
+                TlvUInt16.bound({ max: 65279 }),
+                { writeAcl: AccessLevel.Manage }
+            ),
 
             /**
              * The ColorPointRIntensity attribute contains a representation of the relative intensity of the red color
@@ -1095,37 +1115,65 @@ export namespace ColorControl {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.10.5
              */
-            colorPointRIntensity: OptionalWritableAttribute(0x34, TlvNullable(TlvUInt8), { writeAcl: AccessLevel.Manage }),
+            colorPointRIntensity: OptionalWritableAttribute(
+                0x34,
+                TlvNullable(TlvUInt8),
+                { writeAcl: AccessLevel.Manage }
+            ),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.10
              */
-            colorPointGx: OptionalWritableAttribute(0x36, TlvUInt16.bound({ max: 65279 }), { writeAcl: AccessLevel.Manage }),
+            colorPointGx: OptionalWritableAttribute(
+                0x36,
+                TlvUInt16.bound({ max: 65279 }),
+                { writeAcl: AccessLevel.Manage }
+            ),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.10
              */
-            colorPointGy: OptionalWritableAttribute(0x37, TlvUInt16.bound({ max: 65279 }), { writeAcl: AccessLevel.Manage }),
+            colorPointGy: OptionalWritableAttribute(
+                0x37,
+                TlvUInt16.bound({ max: 65279 }),
+                { writeAcl: AccessLevel.Manage }
+            ),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.10
              */
-            colorPointGIntensity: OptionalWritableAttribute(0x38, TlvNullable(TlvUInt8), { writeAcl: AccessLevel.Manage }),
+            colorPointGIntensity: OptionalWritableAttribute(
+                0x38,
+                TlvNullable(TlvUInt8),
+                { writeAcl: AccessLevel.Manage }
+            ),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.10
              */
-            colorPointBx: OptionalWritableAttribute(0x3a, TlvUInt16.bound({ max: 65279 }), { writeAcl: AccessLevel.Manage }),
+            colorPointBx: OptionalWritableAttribute(
+                0x3a,
+                TlvUInt16.bound({ max: 65279 }),
+                { writeAcl: AccessLevel.Manage }
+            ),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.10
              */
-            colorPointBy: OptionalWritableAttribute(0x3b, TlvUInt16.bound({ max: 65279 }), { writeAcl: AccessLevel.Manage }),
+            colorPointBy: OptionalWritableAttribute(
+                0x3b,
+                TlvUInt16.bound({ max: 65279 }),
+                { writeAcl: AccessLevel.Manage }
+            ),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.10
              */
-            colorPointBIntensity: OptionalWritableAttribute(0x3c, TlvNullable(TlvUInt8), { writeAcl: AccessLevel.Manage }),
+            colorPointBIntensity: OptionalWritableAttribute(
+                0x3c,
+                TlvNullable(TlvUInt8),
+                { writeAcl: AccessLevel.Manage }
+            ),
 
             /**
              * The EnhancedColorMode attribute specifies which attributes are currently determining the color of the
@@ -1184,7 +1232,11 @@ export namespace ColorControl {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.2
              */
-            currentSaturation: Attribute(0x1, TlvUInt8.bound({ max: 254 }), { scene: true, persistent: true, default: 0 })
+            currentSaturation: Attribute(
+                0x1,
+                TlvUInt8.bound({ max: 254 }),
+                { scene: true, persistent: true, default: 0 }
+            )
         },
 
         commands: {
@@ -1239,7 +1291,11 @@ export namespace ColorControl {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.4
              */
-            currentX: Attribute(0x3, TlvUInt16.bound({ max: 65279 }), { scene: true, persistent: true, default: 24939 }),
+            currentX: Attribute(
+                0x3,
+                TlvUInt16.bound({ max: 65279 }),
+                { scene: true, persistent: true, default: 24939 }
+            ),
 
             /**
              * The CurrentY attribute contains the current value of the normalized chromaticity value y, as defined in
@@ -1250,7 +1306,11 @@ export namespace ColorControl {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.5
              */
-            currentY: Attribute(0x4, TlvUInt16.bound({ max: 65279 }), { scene: true, persistent: true, default: 24701 })
+            currentY: Attribute(
+                0x4,
+                TlvUInt16.bound({ max: 65279 }),
+                { scene: true, persistent: true, default: 24701 }
+            )
         },
 
         commands: {
@@ -1428,7 +1488,12 @@ export namespace ColorControl {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.18
              */
-            enhancedMoveToHueAndSaturation: Command(0x43, TlvEnhancedMoveToHueAndSaturationRequest, 0x43, TlvNoResponse)
+            enhancedMoveToHueAndSaturation: Command(
+                0x43,
+                TlvEnhancedMoveToHueAndSaturationRequest,
+                0x43,
+                TlvNoResponse
+            )
         }
     });
 
@@ -1582,14 +1647,20 @@ export namespace ColorControl {
         attributes: {
             ...Cluster.attributes,
             currentHue: AsConditional(HueSaturationComponent.attributes.currentHue, { mandatoryIf: [HS] }),
-            currentSaturation: AsConditional(HueSaturationComponent.attributes.currentSaturation, { mandatoryIf: [HS] }),
+            currentSaturation: AsConditional(
+                HueSaturationComponent.attributes.currentSaturation,
+                { mandatoryIf: [HS] }
+            ),
             currentX: AsConditional(XyComponent.attributes.currentX, { mandatoryIf: [XY] }),
             currentY: AsConditional(XyComponent.attributes.currentY, { mandatoryIf: [XY] }),
             colorTemperatureMireds: AsConditional(
                 ColorTemperatureComponent.attributes.colorTemperatureMireds,
                 { mandatoryIf: [CT] }
             ),
-            enhancedCurrentHue: AsConditional(EnhancedHueComponent.attributes.enhancedCurrentHue, { mandatoryIf: [EHUE] }),
+            enhancedCurrentHue: AsConditional(
+                EnhancedHueComponent.attributes.enhancedCurrentHue,
+                { mandatoryIf: [EHUE] }
+            ),
             colorLoopActive: AsConditional(ColorLoopComponent.attributes.colorLoopActive, { mandatoryIf: [CL] }),
             colorLoopDirection: AsConditional(ColorLoopComponent.attributes.colorLoopDirection, { mandatoryIf: [CL] }),
             colorLoopTime: AsConditional(ColorLoopComponent.attributes.colorLoopTime, { mandatoryIf: [CL] }),

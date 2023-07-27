@@ -6,7 +6,15 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Cluster as CreateCluster, FabricScopedAttribute, AccessLevel, FixedAttribute, Attribute, Command, TlvNoResponse } from "../../cluster/Cluster.js";
+import {
+    Cluster as CreateCluster,
+    FabricScopedAttribute,
+    AccessLevel,
+    FixedAttribute,
+    Attribute,
+    Command,
+    TlvNoResponse
+} from "../../cluster/Cluster.js";
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";

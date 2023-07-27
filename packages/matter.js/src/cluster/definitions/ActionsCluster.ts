@@ -6,7 +6,15 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Cluster as CreateCluster, Attribute, OptionalAttribute, OptionalCommand, TlvNoResponse, Event, EventPriority } from "../../cluster/Cluster.js";
+import {
+    Cluster as CreateCluster,
+    Attribute,
+    OptionalAttribute,
+    OptionalCommand,
+    TlvNoResponse,
+    Event,
+    EventPriority
+} from "../../cluster/Cluster.js";
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
@@ -628,7 +636,12 @@ export namespace Actions {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.2
              */
-            instantActionWithTransition: OptionalCommand(0x1, TlvInstantActionWithTransitionRequest, 0x1, TlvNoResponse),
+            instantActionWithTransition: OptionalCommand(
+                0x1,
+                TlvInstantActionWithTransitionRequest,
+                0x1,
+                TlvNoResponse
+            ),
 
             /**
              * This command triggers the commencement of an action on the involved endpoints. Afterwards, the action’s

@@ -118,9 +118,7 @@ Matter.children.push({
                 "recipient shall fail the command with a Status Code of INVALID_COMMAND. The AttestationNonce field " +
                 "shall be used in the computation of the Attestation Information.",
             xref: { document: "core", section: "11.17.6.1" },
-            children: [
-                { tag: "datatype", name: "AttestationNonce", id: 0x0, type: "octstr", conformance: "M", constraint: "32" }
-            ]
+            children: [{ tag: "datatype", name: "AttestationNonce", id: 0x0, type: "octstr", conformance: "M", constraint: "32" }]
         },
 
         {
@@ -269,7 +267,10 @@ Matter.children.push({
 
             children: [
                 { tag: "datatype", name: "NocValue", id: 0x0, type: "octstr", conformance: "M", constraint: "max 400" },
-                { tag: "datatype", name: "IcacValue", id: 0x1, type: "octstr", conformance: "O", constraint: "max 400" },
+                {
+                    tag: "datatype", name: "IcacValue", id: 0x1, type: "octstr", conformance: "O",
+                    constraint: "max 400"
+                },
 
                 {
                     tag: "datatype", name: "IpkValue", id: 0x2, type: "octstr", conformance: "M", constraint: "16",
@@ -565,7 +566,10 @@ Matter.children.push({
                 "updated.",
 
             xref: { document: "core", section: "11.17.6.11" },
-            children: [{ tag: "datatype", name: "Label", id: 0x0, type: "string", access: "F", conformance: "M", constraint: "max 32" }]
+            children: [{
+                tag: "datatype", name: "Label", id: 0x0, type: "string", access: "F", conformance: "M",
+                constraint: "max 32"
+            }]
         },
 
         {
@@ -628,7 +632,10 @@ Matter.children.push({
                 "session with the target.",
 
             xref: { document: "core", section: "11.17.6.12" },
-            children: [{ tag: "datatype", name: "FabricIndex", id: 0x0, type: "fabric-idx", conformance: "M", constraint: "1 to 254" }]
+            children: [{
+                tag: "datatype", name: "FabricIndex", id: 0x0, type: "fabric-idx", conformance: "M",
+                constraint: "1 to 254"
+            }]
         },
 
         {
@@ -663,7 +670,10 @@ Matter.children.push({
                 "root of trust using the RemoveFabric command.",
 
             xref: { document: "core", section: "11.17.6.13" },
-            children: [{ tag: "datatype", name: "RootCaCertificate", id: 0x0, type: "octstr", conformance: "M", constraint: "max 400" }]
+            children: [{
+                tag: "datatype", name: "RootCaCertificate", id: 0x0, type: "octstr", conformance: "M",
+                constraint: "max 400"
+            }]
         },
 
         {

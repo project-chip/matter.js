@@ -17,7 +17,13 @@ import {
     AsConditional
 } from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { OptionalAttribute, Command, TlvNoResponse, Attribute, Cluster as CreateCluster } from "../../cluster/Cluster.js";
+import {
+    OptionalAttribute,
+    Command,
+    TlvNoResponse,
+    Attribute,
+    Cluster as CreateCluster
+} from "../../cluster/Cluster.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvUInt16, TlvInt16, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvString, TlvByteString } from "../../tlv/TlvString.js";
@@ -383,9 +389,13 @@ export namespace Channel {
             channelList: AsConditional(ChannelListComponent.attributes.channelList, { mandatoryIf: [CL] }),
             lineup: AsConditional(LineupInfoComponent.attributes.lineup, { mandatoryIf: [LI] })
         },
+
         commands: {
             ...Cluster.commands,
-            changeChannel: AsConditional(ChannelListOrLineupInfoComponent.commands.changeChannel, { mandatoryIf: [CL, LI] })
+            changeChannel: AsConditional(
+                ChannelListOrLineupInfoComponent.commands.changeChannel,
+                { mandatoryIf: [CL, LI] }
+            )
         }
     });
 }

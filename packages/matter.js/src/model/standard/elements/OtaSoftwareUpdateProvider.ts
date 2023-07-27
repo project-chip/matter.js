@@ -35,7 +35,10 @@ Matter.children.push({
                 },
                 { tag: "datatype", name: "HardwareVersion", id: 0x4, type: "uint16", conformance: "O" },
                 { tag: "datatype", name: "Location", id: 0x5, type: "string", conformance: "O", constraint: "2" },
-                { tag: "datatype", name: "RequestorCanConsent", id: 0x6, type: "bool", conformance: "O", default: true },
+                {
+                    tag: "datatype", name: "RequestorCanConsent", id: 0x6, type: "bool", conformance: "O",
+                    default: true
+                },
                 {
                     tag: "datatype", name: "MetadataForProvider", id: 0x7, type: "octstr", conformance: "O",
                     constraint: "max 512"
@@ -56,7 +59,10 @@ Matter.children.push({
                     tag: "datatype", name: "SoftwareVersionString", id: 0x4, type: "string", conformance: "O",
                     constraint: "1 to 64"
                 },
-                { tag: "datatype", name: "UpdateToken", id: 0x5, type: "octstr", conformance: "O", constraint: "8 to 32" },
+                {
+                    tag: "datatype", name: "UpdateToken", id: 0x5, type: "octstr", conformance: "O",
+                    constraint: "8 to 32"
+                },
                 { tag: "datatype", name: "UserConsentNeeded", id: 0x6, type: "bool", conformance: "O", default: true },
                 {
                     tag: "datatype", name: "MetadataForRequestor", id: 0x7, type: "octstr", conformance: "O",
@@ -72,8 +78,12 @@ Matter.children.push({
                 "This field may be used by the OTA Provider to track minimal lifecycle state to allow finer-grained " +
                 "scheduling of the application of Software Images by OTA Requestors.",
             xref: { document: "core", section: "11.19.6.5.18" },
+
             children: [
-                { tag: "datatype", name: "UpdateToken", id: 0x0, type: "octstr", conformance: "M", constraint: "8 to 32" },
+                {
+                    tag: "datatype", name: "UpdateToken", id: 0x0, type: "octstr", conformance: "M",
+                    constraint: "8 to 32"
+                },
                 { tag: "datatype", name: "NewVersion", id: 0x1, type: "uint32", conformance: "M" }
             ]
         },
@@ -124,8 +134,12 @@ Matter.children.push({
                 "cached Software Images, or use it for other similar administrative purposes.",
 
             xref: { document: "core", section: "11.19.6.5.22" },
+
             children: [
-                { tag: "datatype", name: "UpdateToken", id: 0x0, type: "octstr", conformance: "M", constraint: "8 to 32" },
+                {
+                    tag: "datatype", name: "UpdateToken", id: 0x0, type: "octstr", conformance: "M",
+                    constraint: "8 to 32"
+                },
                 { tag: "datatype", name: "SoftwareVersion", id: 0x1, type: "uint32", conformance: "M" }
             ]
         },
@@ -191,7 +205,10 @@ Matter.children.push({
                     tag: "datatype", name: "BdxAsynchronous", id: 0x1, conformance: "O",
                     description: "Indicates support for asynchronous BDX."
                 },
-                { tag: "datatype", name: "Https", id: 0x2, conformance: "O", description: "Indicates support for HTTPS." },
+                {
+                    tag: "datatype", name: "Https", id: 0x2, conformance: "O",
+                    description: "Indicates support for HTTPS."
+                },
                 {
                     tag: "datatype", name: "VendorSpecific", id: 0x3, conformance: "O",
                     description: "Indicates support for vendor specific protocol."

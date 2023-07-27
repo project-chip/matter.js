@@ -473,8 +473,12 @@ Matter.children.push({
                 "See Section 11.8.7.1.2, “Breadcrumb Field” for usage.",
 
             xref: { document: "core", section: "11.8.7.7" },
+
             children: [
-                { tag: "datatype", name: "NetworkId", id: 0x0, type: "octstr", conformance: "M", constraint: "1 to 32" },
+                {
+                    tag: "datatype", name: "NetworkId", id: 0x0, type: "octstr", conformance: "M",
+                    constraint: "1 to 32"
+                },
                 { tag: "datatype", name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O" }
             ]
         },
@@ -518,7 +522,10 @@ Matter.children.push({
                     tag: "datatype", name: "NetworkingStatus", id: 0x0, type: "NetworkCommissioningStatusEnum",
                     conformance: "M", constraint: "desc"
                 },
-                { tag: "datatype", name: "DebugText", id: 0x1, type: "string", conformance: "O", constraint: "max 512" },
+                {
+                    tag: "datatype", name: "DebugText", id: 0x1, type: "string", conformance: "O",
+                    constraint: "max 512"
+                },
 
                 {
                     tag: "datatype", name: "NetworkIndex", id: 0x2, type: "uint8", conformance: "O",
@@ -606,8 +613,12 @@ Matter.children.push({
                 "See Section 11.8.7.1.2, “Breadcrumb Field” for usage.",
 
             xref: { document: "core", section: "11.8.7.9" },
+
             children: [
-                { tag: "datatype", name: "NetworkId", id: 0x0, type: "octstr", conformance: "M", constraint: "1 to 32" },
+                {
+                    tag: "datatype", name: "NetworkId", id: 0x0, type: "octstr", conformance: "M",
+                    constraint: "1 to 32"
+                },
                 { tag: "datatype", name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O" }
             ]
         },
@@ -750,8 +761,12 @@ Matter.children.push({
                 "lowest priority network in the list.",
 
             xref: { document: "core", section: "11.8.7.11" },
+
             children: [
-                { tag: "datatype", name: "NetworkId", id: 0x0, type: "octstr", conformance: "M", constraint: "1 to 32" },
+                {
+                    tag: "datatype", name: "NetworkId", id: 0x0, type: "octstr", conformance: "M",
+                    constraint: "1 to 32"
+                },
                 { tag: "datatype", name: "NetworkIndex", id: 0x1, type: "uint8", conformance: "M", constraint: "desc" },
                 { tag: "datatype", name: "Breadcrumb", id: 0x2, type: "uint64", conformance: "O" }
             ]
@@ -943,9 +958,15 @@ Matter.children.push({
             xref: { document: "core", section: "11.8.5.6" },
 
             children: [
-                { tag: "datatype", name: "PanId", id: 0x0, type: "uint16", conformance: "TH", constraint: "0 to 65534" },
+                {
+                    tag: "datatype", name: "PanId", id: 0x0, type: "uint16", conformance: "TH",
+                    constraint: "0 to 65534"
+                },
                 { tag: "datatype", name: "ExtendedPanId", id: 0x1, type: "uint64", conformance: "TH" },
-                { tag: "datatype", name: "NetworkName", id: 0x2, type: "string", conformance: "TH", constraint: "1 to 16" },
+                {
+                    tag: "datatype", name: "NetworkName", id: 0x2, type: "string", conformance: "TH",
+                    constraint: "1 to 16"
+                },
                 { tag: "datatype", name: "Channel", id: 0x3, type: "uint16", conformance: "TH" },
                 { tag: "datatype", name: "Version", id: 0x4, type: "uint8", conformance: "TH" },
                 {

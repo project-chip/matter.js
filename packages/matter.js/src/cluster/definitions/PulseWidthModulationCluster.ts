@@ -462,7 +462,10 @@ export namespace PulseWidthModulation {
 
         commands: {
             ...Cluster.commands,
-            moveToClosestFrequency: AsConditional(FrequencyComponent.commands.moveToClosestFrequency, { mandatoryIf: [FQ] })
+            moveToClosestFrequency: AsConditional(
+                FrequencyComponent.commands.moveToClosestFrequency,
+                { mandatoryIf: [FQ] }
+            )
         }
     });
 }

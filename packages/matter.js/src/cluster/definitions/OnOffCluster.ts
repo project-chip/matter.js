@@ -16,7 +16,14 @@ import {
     AsConditional
 } from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitField, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { Attribute, Command, TlvNoResponse, WritableAttribute, AccessLevel, Cluster as CreateCluster } from "../../cluster/Cluster.js";
+import {
+    Attribute,
+    Command,
+    TlvNoResponse,
+    WritableAttribute,
+    AccessLevel,
+    Cluster as CreateCluster
+} from "../../cluster/Cluster.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TlvUInt16, TlvEnum, TlvUInt8, TlvBitmap } from "../../tlv/TlvNumber.js";
@@ -331,17 +338,26 @@ export namespace OnOff {
             ),
             onTime: AsConditional(LevelControlForLightingComponent.attributes.onTime, { mandatoryIf: [LT] }),
             offWaitTime: AsConditional(LevelControlForLightingComponent.attributes.offWaitTime, { mandatoryIf: [LT] }),
-            startUpOnOff: AsConditional(LevelControlForLightingComponent.attributes.startUpOnOff, { mandatoryIf: [LT] })
+            startUpOnOff: AsConditional(
+                LevelControlForLightingComponent.attributes.startUpOnOff,
+                { mandatoryIf: [LT] }
+            )
         },
 
         commands: {
             ...Cluster.commands,
-            offWithEffect: AsConditional(LevelControlForLightingComponent.commands.offWithEffect, { mandatoryIf: [LT] }),
+            offWithEffect: AsConditional(
+                LevelControlForLightingComponent.commands.offWithEffect,
+                { mandatoryIf: [LT] }
+            ),
             onWithRecallGlobalScene: AsConditional(
                 LevelControlForLightingComponent.commands.onWithRecallGlobalScene,
                 { mandatoryIf: [LT] }
             ),
-            onWithTimedOff: AsConditional(LevelControlForLightingComponent.commands.onWithTimedOff, { mandatoryIf: [LT] })
+            onWithTimedOff: AsConditional(
+                LevelControlForLightingComponent.commands.onWithTimedOff,
+                { mandatoryIf: [LT] }
+            )
         }
     });
 }

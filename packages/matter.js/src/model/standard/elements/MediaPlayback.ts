@@ -323,7 +323,10 @@ Matter.children.push({
                     tag: "datatype", name: "Playing", id: 0x0, conformance: "M",
                     description: "Media is currently playing (includes FF and REW)"
                 },
-                { tag: "datatype", name: "Paused", id: 0x1, conformance: "M", description: "Media is currently paused" },
+                {
+                    tag: "datatype", name: "Paused", id: 0x1, conformance: "M",
+                    description: "Media is currently paused"
+                },
                 {
                     tag: "datatype", name: "NotPlaying", id: 0x2, conformance: "M",
                     description: "Media is not currently playing"
