@@ -61,10 +61,17 @@ function isConditionMatching<F extends BitSchema, SF extends TypeFromPartialBitS
     return false;
 }
 
-export function ClusterServer<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
+export function ClusterServer<
+    F extends BitSchema,
+    SF extends TypeFromPartialBitSchema<F>,
+    A extends Attributes,
+    C extends Commands,
+    E extends Events,
+    H extends ClusterServerHandlers<Cluster<F, SF, A, C, E>>
+>(
     clusterDef: Cluster<F, SF, A, C, E>,
     attributesInitialValues: AttributeInitialValues<A>,
-    handlers: ClusterServerHandlers<Cluster<F, SF, A, C, E>>,
+    handlers: H,
     supportedEvents: SupportedEventsList<E> = <SupportedEventsList<E>>{}
 ): ClusterServerObj<A, C, E> {
     const {
