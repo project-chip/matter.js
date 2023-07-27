@@ -15,8 +15,7 @@ Crypto.get = () => new CryptoNode();
 import {
     OnOffCluster, BasicInformationCluster, OperationalCredentials, OperationalCredentialsCluster, DescriptorCluster,
     IdentifyCluster, GroupsCluster, AccessControlCluster, ScenesCluster, GeneralCommissioningCluster,
-    GeneralCommissioning, NetworkCommissioningHandler, NetworkCommissioning,
-    NetworkCommissioningCluster
+    GeneralCommissioning, NetworkCommissioning, NetworkCommissioningCluster
 } from "@project-chip/matter.js/cluster";
 import { VendorId, FabricIndex, GroupId, ClusterId } from "@project-chip/matter.js/datatype";
 
@@ -119,10 +118,11 @@ describe("Integration Test", () => {
         onOffLightDeviceServer = new OnOffLightDevice();
         commissioningServer.addDevice(onOffLightDeviceServer);
 
+        const netCluster = NetworkCommissioningCluster.with(NetworkCommissioning.Feature.WiFiNetworkInterface);
         // Override NetworkCommissioning Cluster for now unless configurable
         commissioningServer.addRootClusterServer(
             ClusterServer(
-                NetworkCommissioningCluster.with(NetworkCommissioning.Feature.EthernetNetworkInterface, NetworkCommissioning.Feature.WiFiNetworkInterface, NetworkCommissioning.Feature.ThreadNetworkInterface),
+                netCluster,
                 {
                     maxNetworks: 1,
                     interfaceEnabled: true,
@@ -131,7 +131,27 @@ describe("Integration Test", () => {
                     lastNetworkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
                     networks: [{ networkId: ByteArray.fromHex("0000000000000000000000000000000000000000000000000000000000000000"), connected: true }],
                 },
-                NetworkCommissioningHandler()
+                {
+                    scanNetworks: async function() {
+                        throw new Error("Not implemented");
+                    },
+
+                    removeNetwork: async function() {
+                        throw new Error("Not implemented");
+                    },
+
+                    connectNetwork: async function() {
+                        throw new Error("Not implemented");
+                    },
+
+                    reorderNetwork: async function() {
+                        throw new Error("Not implemented");
+                    },
+
+                    addOrUpdateWiFiNetwork: async function() {
+                        throw new Error("Not implemented");
+                    },
+                }
             )
         );
 
