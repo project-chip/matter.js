@@ -24,7 +24,6 @@ import { OperationalCredentialsClusterHandler, OperationalCredentialsServerConf 
 import { AttestationCertificateManager } from "./certificate/AttestationCertificateManager.js";
 import { CertificationDeclarationManager } from "./certificate/CertificationDeclarationManager.js";
 import { GeneralCommissioningClusterHandler } from "./cluster/server/GeneralCommissioningServer.js";
-import { NetworkCommissioningHandler } from "./cluster/server/NetworkCommissioningServer.js";
 import { AccessControlCluster } from "./cluster/definitions/AccessControlCluster.js";
 import { GroupKeyManagementCluster } from "./cluster/definitions/GroupKeyManagementCluster.js";
 import { GeneralDiagnostics, GeneralDiagnosticsCluster } from "./cluster/definitions/GeneralDiagnosticsCluster.js";
@@ -43,10 +42,12 @@ import { NamedHandler } from "./util/NamedHandler.js";
 import { Attributes, Commands, Events } from "./cluster/Cluster.js";
 import { Logger } from "./log/Logger.js";
 import { Aggregator } from "./device/Aggregator.js";
-import { TypeFromBitSchema } from "./schema/BitmapSchema.js";
+import { TypeFromBitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import { Endpoint } from "./device/Endpoint.js";
 import { StorageContext } from "./storage/StorageContext.js";
 import { MdnsInstanceBroadcaster } from "./mdns/MdnsInstanceBroadcaster.js";
+import { Ble } from "./ble/Ble.js";
+import { NoProviderError } from "./common/MatterError.js";
 
 const logger = Logger.get("CommissioningServer");
 
@@ -76,6 +77,7 @@ export interface CommissioningServerOptions {
     passcode: number,
     discriminator: number,
     flowType?: CommissionningFlowType,
+    additionalBleAdvertisementData?: ByteArray,
 
     delayedAnnouncement?: boolean;
 
@@ -121,6 +123,7 @@ export class CommissioningServer extends MatterNode {
     private readonly passcode: number;
     private readonly discriminator: number;
     private readonly flowType: CommissionningFlowType;
+    private readonly additionalBleAdvertisementData?: ByteArray;
 
     private storage?: StorageContext;
     private endpointStructureStorage?: StorageContext;
@@ -154,6 +157,7 @@ export class CommissioningServer extends MatterNode {
         this.flowType = options.flowType ?? CommissionningFlowType.Standard;
         this.nextEndpointId = options.nextEndpointId ?? 1;
         this.delayedAnnouncement = options.delayedAnnouncement ?? false;
+        this.additionalBleAdvertisementData = options.additionalBleAdvertisementData;
 
         const {
             basicInformation: { vendorId, productId }
@@ -240,6 +244,7 @@ export class CommissioningServer extends MatterNode {
             )
         );
 
+        const networkId = new ByteArray(32);
         this.rootEndpoint.addClusterServer(
             ClusterServer(
                 NetworkCommissioningCluster.with("EthernetNetworkInterface"),
@@ -247,11 +252,11 @@ export class CommissioningServer extends MatterNode {
                     maxNetworks: 1,
                     interfaceEnabled: true,
                     lastConnectErrorValue: 0,
-                    lastNetworkId: ByteArray.fromHex("0000000000000000000000000000000000000000000000000000000000000000"),
+                    lastNetworkId: networkId,
                     lastNetworkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
-                    networks: [{ networkId: ByteArray.fromHex("0000000000000000000000000000000000000000000000000000000000000000"), connected: true }],
+                    networks: [{ networkId: networkId, connected: true }],
                 },
-                NetworkCommissioningHandler()
+                {} // Ethernet is not requiring any methods
             )
         );
 
@@ -332,9 +337,12 @@ export class CommissioningServer extends MatterNode {
     }
 
     /**
-     * Advertise the node via mDNS and start the commissioning process
+     * Advertise the node via all available interfaces (Ethernet/MDNS, BLE, ...) and start the commissioning process
+     *
+     * @param limitTo Limit the advertisement to the given discovery capabilities. Default is to advertise on ethernet
+     *                and BLE if configured
      */
-    async advertise() {
+    async advertise(limitTo?: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap>) {
         if (
             this.mdnsInstanceBroadcaster === undefined ||
             this.mdnsScanner === undefined ||
@@ -381,14 +389,54 @@ export class CommissioningServer extends MatterNode {
         this.interactionServer.setRootEndpoint(this.rootEndpoint); // Initialize the interaction server with the root endpoint
 
         // TODO adjust later and refactor MatterDevice
-        this.deviceInstance = new MatterDevice(this.deviceName, this.deviceType, vendorId, productId, this.discriminator, this.storage)
-            .addNetInterface(await UdpInterface.create("udp6", this.port, this.listeningAddressIpv6))
+        this.deviceInstance = new MatterDevice(
+            this.deviceName,
+            this.deviceType,
+            vendorId,
+            productId,
+            this.discriminator,
+            this.storage,
+            () => {
+                // When first Fabric is added (aka initial commissioning) and we did not advertised on MDNS before, add broadcaster now
+                // TODO Refactor this out when we remove MatterDevice class
+                if (limitTo !== undefined && !limitTo.onIpNetwork) {
+                    if (this.mdnsInstanceBroadcaster !== undefined) {
+                        this.deviceInstance?.addBroadcaster(this.mdnsInstanceBroadcaster);
+                    }
+                }
+            })
+            .addTransportInterface(await UdpInterface.create("udp6", this.port, this.listeningAddressIpv6))
             .addScanner(this.mdnsScanner)
-            .addBroadcaster(this.mdnsInstanceBroadcaster)
             .addProtocolHandler(secureChannelProtocol)
             .addProtocolHandler(this.interactionServer);
         if (!this.disableIpv4) {
-            this.deviceInstance.addNetInterface(await UdpInterface.create("udp4", this.port, this.listeningAddressIpv4))
+            this.deviceInstance.addTransportInterface(await UdpInterface.create("udp4", this.port, this.listeningAddressIpv4))
+        }
+
+        if (this.isCommissioned()) {
+            limitTo = { onIpNetwork: true }; // If already commissioned the device is on network already
+        } else { // BLE or SoftAP only relevant when not commissioned yet
+            try {
+                const ble = Ble.get();
+                this.deviceInstance.addTransportInterface(ble.getBlePeripheralInterface());
+                if (limitTo === undefined || limitTo.ble) {
+                    this.deviceInstance.addBroadcaster(ble.getBleBroadcaster(this.additionalBleAdvertisementData));
+                }
+            } catch (error) {
+                if (error instanceof NoProviderError) {
+                    logger.debug("Ble not enabled");
+                } else {
+                    throw error;
+                }
+            }
+
+            if (limitTo?.softAccessPoint) {
+                logger.error("Advertising as SoftAP not implemented yet. Ignoring ...");
+            }
+        }
+
+        if (limitTo === undefined || limitTo.onIpNetwork) {
+            this.deviceInstance.addBroadcaster(this.mdnsInstanceBroadcaster);
         }
 
         await this.deviceInstance.start();
@@ -489,6 +537,15 @@ export class CommissioningServer extends MatterNode {
         const vendorId = basicInformation.attributes.vendorId.getLocal();
         const productId = basicInformation.attributes.productId.getLocal();
 
+        let bleEnabled = false;
+        try {
+            bleEnabled = !!Ble.get();
+        } catch (error) {
+            if (!(error instanceof NoProviderError)) { // only ignore NoProviderError cases
+                throw error;
+            }
+        }
+
         const qrPairingCode = QrPairingCodeCodec.encode({
             version: 0,
             vendorId: vendorId.id,
@@ -497,7 +554,7 @@ export class CommissioningServer extends MatterNode {
             discriminator: this.discriminator,
             passcode: this.passcode,
             discoveryCapabilities: DiscoveryCapabilitiesSchema.encode(discoveryCapabilities ?? {
-                ble: false,
+                ble: bleEnabled,
                 softAccessPoint: false,
                 onIpNetwork: true
             }),

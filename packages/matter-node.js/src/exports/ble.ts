@@ -4,7 +4,4 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export interface Channel<T> {
-    send(data: T): Promise<void>;
-    getName(): string;
-}
+export * from "@project-chip/matter.js/ble";

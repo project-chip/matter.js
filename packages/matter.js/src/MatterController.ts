@@ -14,7 +14,7 @@ import { SECURE_CHANNEL_PROTOCOL_ID } from "./protocol/securechannel/SecureChann
 import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { PaseClient } from "./session/pase/PaseClient.js";
 import { CaseClient } from "./session/case/CaseClient.js";
-import { NetInterface } from "./net/NetInterface.js";
+import { NetInterface } from "./net/NetInterface.js"; // TODO clean up
 import { ClusterClient, InteractionClient } from "./protocol/interaction/InteractionClient.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
 import { NodeId } from "./datatype/NodeId.js";
@@ -35,10 +35,14 @@ import { BasicInformationCluster } from "./cluster/definitions/BasicInformationC
 import { GeneralCommissioning, GeneralCommissioningCluster } from "./cluster/definitions/GeneralCommissioningCluster.js";
 import { OperationalCredentials, OperationalCredentialsCluster } from "./cluster/definitions/OperationalCredentialsCluster.js";
 import { ByteArray } from "./util/ByteArray.js";
-import { RetransmissionLimitReachedError } from "./protocol/index.js";
-import { tryCatchAsync } from "./common/index.js";
+import { RetransmissionLimitReachedError } from "./protocol/MessageExchange.js";
+import { tryCatchAsync } from "./common/TryCatchHandler.js";
 import { ClassExtends } from "./util/Type.js";
-import { ServerAddress } from "./common/ServerAddress.js";
+import { ServerAddress, ServerAddressBle, ServerAddressIp } from "./common/ServerAddress.js";
+import { Ble } from "./ble/Ble.js";
+import { isDeepEqual } from "./util/DeepEqual.js";
+import { Channel } from "./common/Channel.js";
+import { NoProviderError } from "./common/MatterError.js";
 import { TypeFromSchema } from "./tlv/TlvSchema.js";
 import { TlvField, TlvObject } from "./tlv/TlvObject.js";
 import { TlvEnum } from "./tlv/TlvNumber.js";
@@ -72,7 +76,7 @@ const logger = Logger.get("MatterController");
 export class PairRetransmissionLimitReachedError extends RetransmissionLimitReachedError { }
 
 export class MatterController {
-    public static async create(scanner: Scanner, netInterfaceIpv4: NetInterface | undefined, netInterfaceIpv6: NetInterface, storage: StorageContext, operationalServerAddress?: ServerAddress, commissioningOptions?: CommissioningData): Promise<MatterController> {
+    public static async create(scanner: Scanner, netInterfaceIpv4: NetInterface | undefined, netInterfaceIpv6: NetInterface, storage: StorageContext, operationalServerAddress?: ServerAddressIp, commissioningOptions?: CommissioningData): Promise<MatterController> {
         const CONTROLLER_NODE_ID = new NodeId(Crypto.getRandomBigUInt64());
         const certificateManager = new RootCertificateManager(storage);
 
@@ -101,22 +105,23 @@ export class MatterController {
     private readonly caseClient = new CaseClient();
     private readonly controllerStorage: StorageContext;
     private readonly commissioningOptions: CommissioningData;
+    private netInterfaceBle: NetInterface | undefined;
 
     constructor(
-        private readonly scanner: Scanner,
+        private readonly mdnsScanner: Scanner,
         private readonly netInterfaceIpv4: NetInterface | undefined,
         private readonly netInterfaceIpv6: NetInterface,
         private readonly certificateManager: RootCertificateManager,
         private readonly fabric: Fabric,
         private readonly storage: StorageContext,
-        public operationalServerAddress?: ServerAddress,
+        public operationalServerAddress?: ServerAddressIp,
         commissioningOptions?: CommissioningData
     ) {
         this.controllerStorage = this.storage.createContext("MatterController");
 
         // If controller has a stored operational server address, use it, irrelevant what was passed in the constructor
         if (this.controllerStorage.has("operationalServerAddress")) {
-            this.operationalServerAddress = this.controllerStorage.get<ServerAddress>("operationalServerAddress");
+            this.operationalServerAddress = this.controllerStorage.get<ServerAddressIp>("operationalServerAddress");
         }
 
         this.sessionManager = new SessionManager(this, this.storage);
@@ -124,9 +129,9 @@ export class MatterController {
 
         this.exchangeManager = new ExchangeManager<MatterController>(this.sessionManager, this.channelManager);
         if (netInterfaceIpv4 !== undefined) {
-            this.exchangeManager.addNetInterface(netInterfaceIpv4);
+            this.addTransportInterface(netInterfaceIpv4);
         }
-        this.exchangeManager.addNetInterface(netInterfaceIpv6);
+        this.addTransportInterface(netInterfaceIpv6);
 
         this.commissioningOptions = commissioningOptions ?? {
             regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Outdoor, // Set to the most restrictive if relevant
@@ -134,16 +139,16 @@ export class MatterController {
         };
     }
 
+    public addTransportInterface(netInterface: NetInterface) {
+        this.exchangeManager.addTransportInterface(netInterface);
+    }
+
     /**
      * Discovers devices by a provided identifier. It returns after the timeout or if at least one device was found.
      * The method returns a list of addresses of the discovered devices.
      */
-    async discoverDeviceAddressesByIdentifier(identifier: CommissionableDeviceIdentifiers, timeoutSeconds = 30) {
-        if (this.scanner === undefined) {
-            throw new Error("MDNS scanner not initialized. Add the node to the Matter instance before!");
-        }
-
-        const foundDevices = await this.scanner.findCommissionableDevices(identifier, timeoutSeconds);
+    private async discoverDeviceAddressesByIdentifier(scanner: Scanner, identifier: CommissionableDeviceIdentifiers, timeoutSeconds = 30) {
+        const foundDevices = await scanner.findCommissionableDevices(identifier, timeoutSeconds);
         if (foundDevices.length === 0) {
             throw new Error(`No device discovered using identifier ${Logger.toJSON(identifier)}! Please check that the relevant device is online.`);
         }
@@ -156,6 +161,36 @@ export class MatterController {
         return addresses;
     }
 
+    async commissionViaBle(identifierData: CommissionableDeviceIdentifiers, passCode: number, timeoutSeconds = 30) {
+        let ble: Ble;
+        try {
+            ble = Ble.get();
+            this.netInterfaceBle = ble.getBleCentralInterface();
+            this.addTransportInterface(this.netInterfaceBle);
+        } catch (error) {
+            if (error instanceof NoProviderError) {
+                throw new Error("BLE is not supported on this platform");
+            } else {
+                throw error;
+            }
+        }
+
+        const bleScanner = ble.getBleScanner();
+        const commissionServers = await this.discoverDeviceAddressesByIdentifier(bleScanner, identifierData, timeoutSeconds);
+
+        const commissionIpAddresses = commissionServers.filter(server => server.type === "ble") as ServerAddressBle[];
+
+        const { result: paseSecureChannel } = await this.iterateServerAddresses(
+            commissionIpAddresses,
+            RetransmissionLimitReachedError,
+            async () => bleScanner?.getDiscoveredCommissionableDevices(identifierData).flatMap((device) => device.addresses) as ServerAddressBle[],
+            async address => await this.initializePaseSecureChannel(address, passCode),
+        );
+
+        // Pairing was successful via BLE, so use the established secure channel
+        return await this.commissionDevice(paseSecureChannel);
+    }
+
     /**
      * Commission a device by its identifier and the Passcode. If a known address is provided this is tried first
      * before discovering devices in the network. If multiple addresses or devices are found, they are tried all after
@@ -165,14 +200,16 @@ export class MatterController {
      */
     async commission(identifierData: CommissionableDeviceIdentifiers, passCode: number, timeoutSeconds = 30, knownAddress?: ServerAddress): Promise<NodeId> {
         // If we have a known address we try this first before we discover the device
-        const commissionServers = knownAddress !== undefined ? [knownAddress] : await this.discoverDeviceAddressesByIdentifier(identifierData, timeoutSeconds);
+        const commissionServers = knownAddress !== undefined ? [knownAddress] : await this.discoverDeviceAddressesByIdentifier(this.mdnsScanner, identifierData, timeoutSeconds);
+
+        const commissionIpAddresses = commissionServers.filter(server => server.type === "udp") as ServerAddressIp[];
 
         let paseSecureChannel: MessageChannel<MatterController> | undefined;
         try {
             const { result, resultAddress } = await this.iterateServerAddresses(
-                commissionServers,
+                commissionIpAddresses,
                 RetransmissionLimitReachedError,
-                async () => this.scanner.getDiscoveredCommissionableDevices(identifierData).flatMap((device) => device.addresses),
+                async () => this.mdnsScanner.getDiscoveredCommissionableDevices(identifierData).flatMap((device) => device.addresses) as ServerAddressIp[],
                 async address => await this.initializePaseSecureChannel(address, passCode),
             );
 
@@ -198,14 +235,22 @@ export class MatterController {
      * is wrong.
      */
     private async initializePaseSecureChannel(address: ServerAddress, passCode: number): Promise<MessageChannel<MatterController>> {
-        const { ip, port } = address;
+        let paseChannel: Channel<ByteArray>;
+        if (address.type === "udp") {
+            const { ip } = address;
 
-        const isIpv6Address = isIPv6(ip);
-        const paseInterface = isIpv6Address ? this.netInterfaceIpv6 : this.netInterfaceIpv4;
-        if (paseInterface === undefined) { // mainly IPv4 address when IPv4 is disabled
-            throw new PairRetransmissionLimitReachedError(`IPv${isIpv6Address ? "6" : "4"} interface not initialized. Cannot use ${ip} for commissioning.`);
+            const isIpv6Address = isIPv6(ip);
+            const paseInterface = isIpv6Address ? this.netInterfaceIpv6 : this.netInterfaceIpv4;
+            if (paseInterface === undefined) { // mainly IPv4 address when IPv4 is disabled
+                throw new PairRetransmissionLimitReachedError(`IPv${isIpv6Address ? "6" : "4"} interface not initialized. Cannot use ${ip} for commissioning.`);
+            }
+            paseChannel = await paseInterface.openChannel(address);
+        } else {
+            if (this.netInterfaceBle === undefined) {
+                throw new PairRetransmissionLimitReachedError(`BLE interface not initialized. Cannot use ${address.peripheralAddress} for commissioning.`);
+            }
+            paseChannel = await this.netInterfaceBle.openChannel(address);
         }
-        const paseChannel = await paseInterface.openChannel(ip, port);
 
         // Do PASE paring
         const paseUnsecureMessageChannel = new MessageChannel(paseChannel, this.sessionManager.getUnsecureSession());
@@ -224,7 +269,7 @@ export class MatterController {
      * success.
      * TODO: Split this out into an own CommissioningHandler class
      */
-    private async commissionDevice(paseSecureMessageChannel: MessageChannel<MatterController>) {
+    private async commissionDevice(paseSecureMessageChannel: MessageChannel<MatterController>): Promise<NodeId> {
         // Use the created secure session to do the commissioning
         let interactionClient = new InteractionClient(new ExchangeProvider(this.exchangeManager, paseSecureMessageChannel));
 
@@ -303,6 +348,8 @@ export class MatterController {
             caseAdminSubject: peerNodeId,
         });
 
+        await paseSecureMessageChannel.close();  // We reconnect using Case, so close Pase connection
+
         // Look for the device broadcast over MDNS and do CASE pairing
         interactionClient = await this.connect(peerNodeId, 120);
 
@@ -322,21 +369,20 @@ export class MatterController {
      * discovered addresses or devices) and then next server address is tried.The result of the first successful method
      * call is returned. The logic makes sure to only try each unique address (IP/port) once.
      */
-    async iterateServerAddresses<T, E extends Error>(servers: ServerAddress[], errorType: ClassExtends<E>, updateNetworkInterfaceFunc: () => Promise<ServerAddress[]>, func: (server: ServerAddress) => Promise<T>, lastKnownServer?: ServerAddress): Promise<{ result: T, resultAddress: ServerAddress }> {
+    async iterateServerAddresses<SA extends ServerAddress, T, E extends Error>(servers: SA[], errorType: ClassExtends<E>, updateNetworkInterfaceFunc: () => Promise<SA[]>, func: (server: SA) => Promise<T>, lastKnownServer?: SA): Promise<{ result: T, resultAddress: SA }> {
         if (lastKnownServer !== undefined) {
-            servers = servers.filter(server => server.ip !== lastKnownServer.ip || server.port !== lastKnownServer.port);
+            servers = servers.filter(server => !isDeepEqual(server, lastKnownServer));
             servers.unshift(lastKnownServer);
         }
         const serversSet = new Set(servers);
 
         const triedServers = new Set<string>();
         while (true) {
-            logger.debug(`Server addresses to try: ${Array.from(serversSet.values()).map(({ ip, port }) => `${ip}:${port}`).join(",")}`);
+            logger.debug(`Server addresses to try: ${Array.from(serversSet.values()).map((server) => server.type === "udp" ? `udp://${server.ip}:${server.port}` : `ble://${server.peripheralAddress}`).join(",")}`);
 
             let triedOne = false;
             for (const server of serversSet) {
-                const { ip, port } = server;
-                const serverKey = `${ip}:${port}`;
+                const serverKey = server.type === "udp" ? `udp://${server.ip}:${server.port}` : `ble://${server.peripheralAddress}`;
                 if (triedServers.has(serverKey)) continue;
                 triedServers.add(serverKey);
 
@@ -383,13 +429,13 @@ export class MatterController {
             }
         }
 
-        const scanResult = await this.scanner.findOperationalDevice(this.fabric, peerNodeId, timeoutSeconds);
+        const scanResult = await this.mdnsScanner.findOperationalDevice(this.fabric, peerNodeId, timeoutSeconds);
         if (!scanResult.length) throw new Error("The operational device cannot be found on the network. Please make sure it is online.");
 
         const { result, resultAddress } = await this.iterateServerAddresses(
             scanResult,
             PairRetransmissionLimitReachedError,
-            async () => this.scanner.getDiscoveredOperationalDevices(this.fabric, peerNodeId),
+            async () => this.mdnsScanner.getDiscoveredOperationalDevices(this.fabric, peerNodeId),
             async address => await this.pair(peerNodeId, address)
         );
 
@@ -399,17 +445,17 @@ export class MatterController {
     }
 
     /** Pair with an operational device (already commissioned) and establish a CASE session. */
-    async pair(peerNodeId: NodeId, operationalServerAddress: ServerAddress) {
-        const { ip: operationalIp, port: operationalPort } = operationalServerAddress;
+    async pair(peerNodeId: NodeId, operationalServerAddress: ServerAddressIp) {
+        const { ip, port } = operationalServerAddress;
         // Do CASE pairing
-        const isIpv6Address = isIPv6(operationalIp);
+        const isIpv6Address = isIPv6(ip);
         const operationalInterface = isIpv6Address ? this.netInterfaceIpv6 : this.netInterfaceIpv4;
 
         if (operationalInterface === undefined) {
-            throw new PairRetransmissionLimitReachedError(`IPv${isIpv6Address ? "6" : "4"} interface not initialized for port ${operationalPort}. Cannot use ${operationalIp} for pairing.`);
+            throw new PairRetransmissionLimitReachedError(`IPv${isIpv6Address ? "6" : "4"} interface not initialized for port ${port}. Cannot use ${ip} for pairing.`);
         }
 
-        const operationalChannel = await operationalInterface.openChannel(operationalIp, operationalPort);
+        const operationalChannel = await operationalInterface.openChannel(operationalServerAddress);
         const operationalUnsecureMessageExchange = new MessageChannel(operationalChannel, this.sessionManager.getUnsecureSession());
         const operationalSecureSession = await tryCatchAsync(
             async () => {
@@ -432,7 +478,7 @@ export class MatterController {
         return this.controllerStorage.get("fabricCommissioned", false);
     }
 
-    setOperationalServerAddress(address: ServerAddress) {
+    setOperationalServerAddress(address: ServerAddressIp) {
         this.operationalServerAddress = address;
         this.controllerStorage.set("operationalServerAddress", address);
     }
@@ -497,10 +543,10 @@ export class MatterController {
         // nothing TODO maybe with UDC
     }
 
-    close() {
-        this.scanner.close();
+    async close() {
+        this.mdnsScanner.close();
         this.exchangeManager.close();
-        this.netInterfaceIpv4?.close();
-        this.netInterfaceIpv6.close();
+        await this.netInterfaceIpv4?.close();
+        await this.netInterfaceIpv6.close();
     }
 }

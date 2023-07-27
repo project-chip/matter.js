@@ -9,6 +9,7 @@
     "esModuleInterop": true, // needed for jest tests
   },
   "references": [
-      { "path": "../matter-node.js" }
+      { "path": "../matter-node.js" },
+      { "path": "../matter-node-ble.js"}
   ],
 }

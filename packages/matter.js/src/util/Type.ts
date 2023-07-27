@@ -51,3 +51,5 @@ export function Pluck<T extends Properties[], K extends keyof T[number]>(key: K,
 export function isNullish(a: any) {
     return a === undefined || a === null;
 }
+
+export type MakeMandatory<T> = Exclude<T, undefined>;

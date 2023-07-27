@@ -14,8 +14,8 @@ import { Session } from "./session/Session.js";
 import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { Fabric } from "./fabric/Fabric.js";
 import { FabricManager } from "./fabric/FabricManager.js";
-import { Channel } from "./net/Channel.js";
-import { NetInterface } from "./net/NetInterface.js";
+import { Channel } from "./common/Channel.js";
+import { TransportInterface } from "./common/TransportInterface.js";
 import { ChannelManager } from "./protocol/ChannelManager.js";
 import { ExchangeManager } from "./protocol/ExchangeManager.js";
 import { ProtocolHandler } from "./protocol/ProtocolHandler.js";
@@ -28,6 +28,7 @@ import { Logger } from "./log/Logger.js";
 import { Time, Timer } from "./time/Time.js";
 import { ByteArray } from "./util/ByteArray.js";
 import { StorageContext } from "./storage/StorageContext.js";
+import { isNetworkInterface, NetInterface } from "./net/NetInterface.js";
 
 const logger = Logger.get("MatterDevice");
 
@@ -37,7 +38,7 @@ const DEVICE_ANNOUNCEMENT_INTERVAL = 60 * 1000; /** 1 minute */
 export class MatterDevice {
     private readonly scanners = new Array<Scanner>();
     private readonly broadcasters = new Array<InstanceBroadcaster>();
-    private readonly netInterfaces = new Array<NetInterface>();
+    private readonly transportInterfaces = new Array<TransportInterface | NetInterface>();
     private readonly fabricManager;
     private readonly sessionManager;
     private readonly channelManager = new ChannelManager();
@@ -53,6 +54,7 @@ export class MatterDevice {
         private readonly productId: number,
         private readonly discriminator: number,
         private readonly storage: StorageContext,
+        private readonly initialCommissioningCallback: () => void,
     ) {
         this.fabricManager = new FabricManager(this.storage);
 
@@ -72,9 +74,9 @@ export class MatterDevice {
         return this;
     }
 
-    addNetInterface(netInterface: NetInterface) {
-        this.exchangeManager.addNetInterface(netInterface);
-        this.netInterfaces.push(netInterface);
+    addTransportInterface(netInterface: TransportInterface) {
+        this.exchangeManager.addTransportInterface(netInterface);
+        this.transportInterfaces.push(netInterface);
         return this;
     }
 
@@ -159,6 +161,11 @@ export class MatterDevice {
     }
 
     addFabric(fabric: Fabric) {
+        if (this.fabricManager.getFabrics().length === 0) {
+            // Inform upper layer to add MDNS Broadcaster delayed if we limited announcements to BLE till now
+            // TODO Change when refactoring MatterDevice away
+            this.initialCommissioningCallback();
+        }
         this.fabricManager.addFabric(fabric);
         this.broadcasters.forEach(broadcaster => {
             broadcaster.setFabrics([fabric]);
@@ -224,11 +231,14 @@ export class MatterDevice {
         // TODO: return the first not undefined answer or undefined
         const matterServer = await this.scanners[0].findOperationalDevice(fabric, nodeId, timeOutSeconds);
         if (matterServer.length === 0) return undefined;
-        const { ip, port } = matterServer[0]; // TODO
         const session = this.sessionManager.getSessionForNode(fabric, nodeId);
         if (session === undefined) return undefined;
         // TODO: have the interface and scanner linked
-        return { session, channel: await this.netInterfaces[0].openChannel(ip, port) };
+        const networkInterface = this.transportInterfaces.find(netInterface => isNetworkInterface(netInterface));
+        if (networkInterface === undefined || !isNetworkInterface(networkInterface)) {
+            throw new Error("No network interface found");
+        } // TODO meeehhh
+        return { session, channel: await networkInterface.openChannel(matterServer[0]) };
     }
 
     async stop() {

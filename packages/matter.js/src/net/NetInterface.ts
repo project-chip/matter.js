@@ -4,15 +4,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Channel } from "./Channel.js";
+import { Channel } from "../common/Channel.js";
 import { ByteArray } from "../util/ByteArray.js";
+import { TransportInterface } from "../common/TransportInterface.js";
+import { ServerAddress } from "../common/ServerAddress.js";
 
-export interface NetListener {
-    close(): void;
+/**
+ * A Network interface enhances a TransportInterface with the ability to open a channel to a remote server.
+ */
+export interface NetInterface extends TransportInterface {
+    openChannel(address: ServerAddress): Promise<Channel<ByteArray>>;
 }
 
-export interface NetInterface {
-    openChannel(host: string, port: number): Promise<Channel<ByteArray>>;
-    onData(listener: (socket: Channel<ByteArray>, data: ByteArray) => void): NetListener;
-    close(): void;
+export function isNetworkInterface(obj: TransportInterface | NetInterface): obj is NetInterface {
+    return "openChannel" in obj;
 }

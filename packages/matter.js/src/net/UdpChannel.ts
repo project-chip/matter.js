@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NetListener } from "./NetInterface.js";
+import { Listener } from "../common/TransportInterface.js";
 import { ByteArray } from "../util/ByteArray.js";
 
 export interface UdpChannelOptions {
@@ -15,7 +15,7 @@ export interface UdpChannelOptions {
 }
 
 export interface UdpChannel {
-    onData(listener: (netInterface: string, peerAddress: string, peerPort: number, data: ByteArray) => void): NetListener;
+    onData(listener: (netInterface: string, peerAddress: string, peerPort: number, data: ByteArray) => void): Listener;
     send(host: string, port: number, data: ByteArray): Promise<void>;
     close(): void;
 }

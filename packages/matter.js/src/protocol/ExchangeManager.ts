@@ -6,8 +6,8 @@
 
 import { Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
 import { Crypto } from "../crypto/Crypto.js";
-import { Channel } from "../net/Channel.js";
-import { NetInterface, NetListener } from "../net/NetInterface.js";
+import { Channel } from "../common/Channel.js";
+import { Listener, TransportInterface } from "../common/TransportInterface.js";
 import { SessionManager } from "../session/SessionManager.js";
 import { Session } from "../session/Session.js";
 import { MessageExchange } from "./MessageExchange.js";
@@ -38,6 +38,10 @@ export class MessageChannel<ContextT> implements Channel<Message> {
     getName() {
         return `${this.channel.getName()} on session ${this.session.getName()}`;
     }
+
+    async close() {
+        await this.channel.close();
+    }
 }
 
 export class ExchangeManager<ContextT> {
@@ -45,15 +49,15 @@ export class ExchangeManager<ContextT> {
     private readonly messageCounter = new MessageCounter();
     private readonly exchanges = new Map<number, MessageExchange<ContextT>>();
     private readonly protocols = new Map<number, ProtocolHandler<ContextT>>();
-    private readonly netListeners = new Array<NetListener>();
+    private readonly transportListeners = new Array<Listener>();
 
     constructor(
         private readonly sessionManager: SessionManager<ContextT>,
         private readonly channelManager: ChannelManager,
     ) { }
 
-    addNetInterface(netInterface: NetInterface) {
-        this.netListeners.push(netInterface.onData((socket, data) => {
+    addTransportInterface(netInterface: TransportInterface) {
+        this.transportListeners.push(netInterface.onData((socket, data) => {
             this.onMessage(socket, data)
                 .catch(error => logger.error(error));
         }));
@@ -76,9 +80,11 @@ export class ExchangeManager<ContextT> {
         return exchange;
     }
 
-    close() {
-        this.netListeners.forEach(netListener => netListener.close());
-        this.netListeners.length = 0;
+    async close() {
+        for (const netListener of this.transportListeners) {
+            await netListener.close();
+        }
+        this.transportListeners.length = 0;
         [...this.exchanges.values()].forEach(exchange => exchange.close());
         this.exchanges.clear();
     }

@@ -5,9 +5,10 @@
  */
 
 import { UdpChannel, UdpChannelOptions } from "./UdpChannel.js";
+import { NoProviderError } from "../common/MatterError.js";
 
 export abstract class Network {
-    static get: () => Network = () => { throw new Error("No provider configured"); };
+    static get: () => Network = () => { throw new NoProviderError("No provider configured"); };
 
     abstract getNetInterfaces(): string[];
     abstract getIpMac(netInterface: string): { mac: string, ips: string[] } | undefined;

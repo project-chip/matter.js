@@ -1,0 +1,18 @@
+/* Base configuration */
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true, // Link from type definition (.d.ts) to source .ts for code navigation
+  },
+  "include": ["src/**/*.ts"],
+  "typedocOptions": {
+    "entryPoints": [
+      "src/ble/index.ts"
+    ],
+    "out": "../../docs/matter-node-ble.js"
+  }
+}

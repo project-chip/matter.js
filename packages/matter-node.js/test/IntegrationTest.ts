@@ -73,7 +73,7 @@ describe("Integration Test", () => {
 
         matterClient = new MatterServer(controllerStorageManager);
         commissioningController = new CommissioningController({
-            serverAddress: { ip: SERVER_IPv6, port: matterPort },
+            serverAddress: { ip: SERVER_IPv6, port: matterPort, type: "udp" },
             disableIpv4: true,
             longDiscriminator,
             passcode: setupPin,

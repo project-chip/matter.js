@@ -10,3 +10,5 @@ export * from "./InternalError.js";
 export * from "./Scanner.js";
 export * from "./TryCatchHandler.js";
 export * from "./ServerAddress.js";
+export * from "./TransportInterface.js";
+export * from "./Channel.js";

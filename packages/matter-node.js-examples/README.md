@@ -10,6 +10,8 @@ This project provides a set of reference implementations to offer several types 
 
 To better show how to use the library we provide some reference implementations in the examples directory. They are usable as CLI scripts without changes in the first place but are very simple. They are meant to be used as a starting point for your own implementation, or to experiment with Matter at all in a first place.
 
+For BLE usage please also see the [matter-node-ble.js README.md](../matter-node-ble.js/README.md)  for prerequisites and limitations!
+
 ## Installation
 
 ### From NPM
@@ -67,11 +69,16 @@ The following parameters are available:
 * -uniqueid: a unique ID for this device to be used in naming and to store structure information (default: ms time now)
 * -type: the device type to use for pairing (default: light, alternative value is "socket")
 * -announceinterface: limit mdns announcements to the provided network interface, e.g. "en0" (default: all interfaces available)
+* -ble: enable BLE support (default: false) If this is enabled the device will announce itself _only_ via BLE if not commissioned and also presents a "Wifi only" device for commissioning to show this feature!
 * -port: the port to listen on for the device (default: 5540)
 * -store: the storage location (directory) to use for storing the pairing information (default: .device-node). Ideally use names starting with a ".". Delete the directory or provide an alternative name to reset the device
 * -clearstorage: the storage location will be reset on start of the process
 * -on: the command to run when the device is turned on (see example above)
 * -off: the command to run when the device is turned off (see example above)
+
+Additionally, there are some Testing parameters:
+* -ble-wifi-scan-ssid: The Wi-Fi SSID returned by the "ScanNetworks" call of the Wifi Network commissioning cluster used when using BLE commissioning (default: "TestSSID"). Ideally use a really existing SSID that also the commissioner (Apple, Alexa, ...) knows to make it easier to commission. Else you could get errors while commissioning.
+* -ble-wifi-scan-bssid: The Wi-Fi BSSID returned by the "ScanNetworks" call of the Wifi Network commissioning cluster used when using BLE commissioning (default: "00:00:00:00:00:00").
 
 ### Start a Matter Bridge
 
@@ -176,6 +183,7 @@ The following parameters are available:
 * -pairingcode: code to use for pairing (-longDiscriminator and -pin will be ignored)
 * -store: the storage location (directory) to use for storing the pairing information (default: .controller-node). Ideally use names with "." at the beginning. Delete the directory or provide an alternative name to reset the controller
 * -clearstorage: the storage location will be reset on start of the process
+* -ble: enable BLE support (default: false) If this is enabled the controller will try to connect via BLE first (15s timeout) and then via IP if not commissioned yet!
 
 ## Development on basis of the examples
 

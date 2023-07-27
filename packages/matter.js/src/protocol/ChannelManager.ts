@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Channel } from "../net/Channel.js";
+import { Channel } from "../common/Channel.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { SecureSession } from "../session/SecureSession.js";
 import { Session } from "../session/Session.js";

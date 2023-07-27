@@ -21,6 +21,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Feature: (@mahimamandhanaa) Add BTP (Bluetooth Transport Protocol) codec class for encoding and decoding of BTP messages
   * Feature: Enhanced BitMap typing and Schemas to allow "Partially" provided Bitmaps by suppressing the "unset" bits
   * Feature: Allow to define discoveryCapabilities structure when getting pairing code in CommissioningServer
+  * Feature: Added Bluetooth package (matter-node-ble.js) to allow to use Bluetooth as transport layer for initial commissioning. Implemented device side for now
   * Feature: Global Attributes are also accessible in ClusterClient instances (e.g. to get the list of features of the cluster)
   * Enhance: Device port in MDNSBroadcaster is now dynamically set and add UDC (User directed Commissioning) Announcements
   * Enhance: Enhanced MessageCodec and check some more fields
@@ -53,6 +54,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Deprecation: The CLI Examples LegacyDeviceNode and LegacyControllerNode is removed in this version! Use the new variants please.
   * The default storage names now start with a "." at the beginning to allow to hide them in some file explorers and git.
   * Example script are moved to package matter-node.js-examples
+  * The Device example script got a new parameter -ble to also initialize the Bluetooth transport layer
 * Misc:
   * Added Specification links for Matter Specifications 1.1
   * Optimize typing exports for node10 TS settings

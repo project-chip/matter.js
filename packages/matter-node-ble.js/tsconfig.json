@@ -1,0 +1,17 @@
+/* Dev configuration */
+{
+    "extends": "./tsconfig.base.json",
+    "compilerOptions": {
+        "module": "node16",
+        "moduleResolution": "node16", // Required to support exports on package.json
+        "composite": true,  // For linking this package from matter-node.js
+        // Local dev compilation checks
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitAny": true,
+        "noImplicitOverride": true,
+        "noUnusedParameters": true,
+        "noUnusedLocals": true,
+        "strict": true,
+    },
+    "include": ["src/**/*.ts", "test/**/*.ts"],
+}

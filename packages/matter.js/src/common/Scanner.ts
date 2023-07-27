@@ -7,7 +7,7 @@
 import { Fabric } from "../fabric/Fabric.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { VendorId } from "../datatype/VendorId.js";
-import { ServerAddress } from "./ServerAddress.js";
+import { ServerAddress, ServerAddressIp } from "./ServerAddress.js";
 
 /**
  * All information exposed by a commissionable device via announcements.
@@ -85,13 +85,13 @@ export interface Scanner {
      * Send DNS-SD queries to discover the current addresses of an operational paired device by its operational ID
      * and return them.
      */
-    findOperationalDevice(fabric: Fabric, nodeId: NodeId, timeoutSeconds?: number): Promise<ServerAddress[]>;
+    findOperationalDevice(fabric: Fabric, nodeId: NodeId, timeoutSeconds?: number): Promise<ServerAddressIp[]>;
 
     /**
      * Return already discovered addresses of an operational paired device and return them. Does not send out new
      * DNS-SD queries.
      */
-    getDiscoveredOperationalDevices(fabric: Fabric, nodeId: NodeId): ServerAddress[];
+    getDiscoveredOperationalDevices(fabric: Fabric, nodeId: NodeId): ServerAddressIp[];
 
     /**
      * Send DNS-SD queries to discover commissionable devices by an provided identifier (e.g. discriminator,

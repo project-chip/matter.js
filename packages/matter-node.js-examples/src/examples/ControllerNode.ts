@@ -20,8 +20,15 @@ import { MatterServer, CommissioningController } from "@project-chip/matter-node
 import { Logger } from "@project-chip/matter-node.js/log";
 import { StorageManager, StorageBackendDisk } from "@project-chip/matter-node.js/storage";
 import { BasicInformationCluster, DescriptorCluster, OnOffCluster } from "@project-chip/matter-node.js/cluster";
-import { getIntParameter, getParameter, requireMinNodeVersion, hasParameter } from "@project-chip/matter-node.js/util";
+import { getIntParameter, getParameter, requireMinNodeVersion, hasParameter, singleton } from "@project-chip/matter-node.js/util";
 import { ManualPairingCodeCodec } from "@project-chip/matter-node.js/schema";
+import { Ble } from "@project-chip/matter-node.js/ble";
+import { BleNode } from "@project-chip/matter-node-ble.js/ble";
+
+if (hasParameter("ble")) {
+    // Initialize Ble
+    Ble.get = singleton(() => new BleNode());
+}
 
 const logger = Logger.get("Controller");
 
@@ -92,7 +99,7 @@ class ControllerNode {
 
         const matterClient = new MatterServer(storageManager);
         const commissioningController = new CommissioningController({
-            serverAddress: (ip !== undefined && port !== undefined) ? { ip, port } : undefined,
+            serverAddress: (ip !== undefined && port !== undefined) ? { ip, port, type: "udp" } : undefined,
             longDiscriminator,
             shortDiscriminator,
             passcode: setupPin,

@@ -11,6 +11,7 @@
   "include": ["src/**/*.ts"],
   "typedocOptions": {
     "entryPoints": [
+      "src/exports/ble.ts",
       "src/exports/certificate.ts",
       "src/exports/cluster.ts",
       "src/exports/codec.ts",

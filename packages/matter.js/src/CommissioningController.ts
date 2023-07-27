@@ -27,8 +27,10 @@ import { AllClustersMap } from "./cluster/ClusterHelper.js";
 import { ClusterClientObj, isClusterClient } from "./cluster/client/ClusterClient.js";
 import { BitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
-import { ServerAddress } from "./common/ServerAddress.js";
+import { ServerAddressIp } from "./common/ServerAddress.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
+import { Ble } from "./ble/Ble.js";
+import { NoProviderError } from "./common/MatterError.js";
 
 const logger = new Logger("CommissioningController");
 
@@ -41,7 +43,7 @@ const logger = new Logger("CommissioningController");
  * Constructor options for the CommissioningController class
  */
 export interface CommissioningControllerOptions {
-    serverAddress?: ServerAddress;
+    serverAddress?: ServerAddressIp;
     localPort?: number;
     disableIpv4?: boolean;
     listeningAddressIpv4?: string;
@@ -57,7 +59,7 @@ export interface CommissioningControllerOptions {
 }
 
 export class CommissioningController extends MatterNode {
-    serverAddress?: ServerAddress;
+    serverAddress?: ServerAddressIp;
     private readonly disableIpv4: boolean;
     private readonly localPort?: number;
     private readonly listeningAddressIpv4?: string;
@@ -132,9 +134,38 @@ export class CommissioningController extends MatterNode {
                 identifierData = {};
             }
 
-            this.nodeId = await this.controllerInstance.commission(identifierData, this.passcode, 120, this.serverAddress);
+            let bleEnabled = false;
+            try {
+                bleEnabled = !!Ble.get();
+            } catch (error) {
+                if (error instanceof NoProviderError) {
+                    logger.debug(`Ble not enabled`);
+                } else {
+                    throw error;
+                }
+            }
+
+            // TODO: Make the process more parallel and favor MDNS over BLE, but for testing right now lets do that way
+            //       The real solution is to discovery via all methods in parallel and collect all and try them then in
+            //       the order they were found if we really want to have a generic controller.
+            let nodeId: NodeId | undefined;
+            if (bleEnabled) {
+                try {
+                    nodeId = await this.controllerInstance.commissionViaBle(identifierData, this.passcode, 15);
+                } catch (error) {
+                    logger.warn(`Ble commissioning failed: ${error}`);
+                }
+            }
+
+            if (nodeId === undefined) {
+                nodeId = await this.controllerInstance.commission(identifierData, this.passcode, 15, this.serverAddress);
+            }
+
+            this.nodeId = nodeId;
         }
         this.serverAddress = this.controllerInstance.getOperationalServerAddress();
+
+        logger.debug(`Successfully Paired with Node ID ${this.nodeId} ... requesting endpoint structure`);
 
         await this.initializeEndpointStructure();
     }
@@ -422,7 +453,7 @@ export class CommissioningController extends MatterNode {
      * close network connections of the device
      */
     async close() {
-        this.controllerInstance?.close();
+        await this.controllerInstance?.close();
     }
 
     getPort() {

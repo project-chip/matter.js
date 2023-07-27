@@ -32,7 +32,6 @@ import { CaseServer } from "../../src/session/case/CaseServer.js";
 import { BN } from "bn.js";
 import { ComposedDevice } from "../../src/device/ComposedDevice.js";
 import { GeneralCommissioningClusterHandler } from "../../src/cluster/server/GeneralCommissioningServer.js";
-import { NetworkCommissioningHandler } from "../../src/cluster/server/NetworkCommissioningServer.js";
 import { AccessControlCluster } from "../../src/cluster/definitions/AccessControlCluster.js";
 import { GroupKeyManagementCluster } from "../../src/cluster/definitions/GroupKeyManagementCluster.js";
 import { GeneralDiagnostics } from "../../src/cluster/definitions/GeneralDiagnosticsCluster.js";
@@ -168,7 +167,7 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
                 lastNetworkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
                 networks: [{ networkId: ByteArray.fromHex("0000000000000000000000000000000000000000000000000000000000000000"), connected: true }],
             },
-            NetworkCommissioningHandler()
+            {}
         )
     );
 
