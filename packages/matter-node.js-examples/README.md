@@ -10,6 +10,8 @@ This project provides a set of reference implementations to offer several types 
 
 To better show how to use the library we provide some reference implementations in the examples directory. They are usable as CLI scripts without changes in the first place but are very simple. They are meant to be used as a starting point for your own implementation, or to experiment with Matter at all in a first place.
 
+For BLE usage please also see the [matter-node-ble.js README.md](../matter-node-ble.js/README.md)  for prerequisites and limitations!
+
 ## Installation
 
 ### From NPM
