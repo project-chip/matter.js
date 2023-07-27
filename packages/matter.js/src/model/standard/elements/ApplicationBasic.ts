@@ -117,7 +117,10 @@ Matter.children.push({
             xref: { document: "cluster", section: "6.3.4.2" },
 
             children: [
-                { tag: "datatype", name: "Stopped", id: 0x0, conformance: "M", description: "Application is not running." },
+                {
+                    tag: "datatype", name: "Stopped", id: 0x0, conformance: "M",
+                    description: "Application is not running."
+                },
                 {
                     tag: "datatype", name: "ActiveVisibleFocus", id: 0x1, conformance: "M",
                     description: "Application is running, is visible to the user, and is the active target for input."

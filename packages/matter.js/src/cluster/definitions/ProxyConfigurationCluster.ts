@@ -50,7 +50,11 @@ export namespace ProxyConfiguration {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 9.15.14.5.1
              */
-            configurationList: WritableAttribute(0x0, TlvArray(TlvConfigurationStruct), { persistent: true, default: [] })
+            configurationList: WritableAttribute(
+                0x0,
+                TlvArray(TlvConfigurationStruct),
+                { persistent: true, default: [] }
+            )
         }
     });
 }

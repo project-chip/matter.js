@@ -17,7 +17,13 @@ import {
     ClusterForBaseCluster,
     AsConditional
 } from "../../cluster/ClusterFactory.js";
-import { BitFlag, BitsFromPartial, BitFieldEnum, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
+import {
+    BitFlag,
+    BitsFromPartial,
+    BitFieldEnum,
+    BitFlags,
+    TypeFromPartialBitSchema
+} from "../../schema/BitmapSchema.js";
 import {
     FixedAttribute,
     Attribute,
@@ -427,7 +433,10 @@ export namespace WindowCovering {
             configStatus: Attribute(
                 0x7,
                 TlvBitmap(TlvUInt8, ConfigStatus),
-                { persistent: true, default: BitsFromPartial(ConfigStatus, { operational: true, onlineReserved: true }) }
+                {
+                    persistent: true,
+                    default: BitsFromPartial(ConfigStatus, { operational: true, onlineReserved: true })
+                }
             ),
 
             /**
@@ -458,7 +467,11 @@ export namespace WindowCovering {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.21
              */
-            mode: WritableAttribute(0x17, TlvBitmap(TlvUInt8, Mode), { persistent: true, writeAcl: AccessLevel.Manage }),
+            mode: WritableAttribute(
+                0x17,
+                TlvBitmap(TlvUInt8, Mode),
+                { persistent: true, writeAcl: AccessLevel.Manage }
+            ),
 
             /**
              * The SafetyStatus attribute reflects the state of the safety sensors and the common issues preventing
@@ -592,7 +605,11 @@ export namespace WindowCovering {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.18
              */
-            installedClosedLimitLift: Attribute(0x11, TlvUInt16.bound({ max: 65534 }), { persistent: true, default: 65534 })
+            installedClosedLimitLift: Attribute(
+                0x11,
+                TlvUInt16.bound({ max: 65534 }),
+                { persistent: true, default: 65534 }
+            )
         }
     });
 
@@ -636,7 +653,11 @@ export namespace WindowCovering {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.20
              */
-            installedClosedLimitTilt: Attribute(0x13, TlvUInt16.bound({ max: 65534 }), { persistent: true, default: 65534 })
+            installedClosedLimitTilt: Attribute(
+                0x13,
+                TlvUInt16.bound({ max: 65534 }),
+                { persistent: true, default: 65534 }
+            )
         }
     });
 
@@ -990,8 +1011,14 @@ export namespace WindowCovering {
                 TiltAndPositionAwareTiltAndAbsolutePositionComponent.attributes.currentPositionTilt,
                 { optionalIf: [TL_PA_TL_ABS] }
             ),
-            numberOfActuationsLift: AsConditional(LiftComponent.attributes.numberOfActuationsLift, { optionalIf: [LF] }),
-            numberOfActuationsTilt: AsConditional(TiltComponent.attributes.numberOfActuationsTilt, { optionalIf: [TL] }),
+            numberOfActuationsLift: AsConditional(
+                LiftComponent.attributes.numberOfActuationsLift,
+                { optionalIf: [LF] }
+            ),
+            numberOfActuationsTilt: AsConditional(
+                TiltComponent.attributes.numberOfActuationsTilt,
+                { optionalIf: [TL] }
+            ),
             currentPositionLiftPercentage: AsConditional(
                 LiftAndPositionAwareLiftComponent.attributes.currentPositionLiftPercentage,
                 { optionalIf: [LF_PA_LF] }
@@ -1036,12 +1063,18 @@ export namespace WindowCovering {
 
         commands: {
             ...Cluster.commands,
-            goToLiftValue: AsConditional(LiftAndAbsolutePositionComponent.commands.goToLiftValue, { optionalIf: [LF_ABS] }),
+            goToLiftValue: AsConditional(
+                LiftAndAbsolutePositionComponent.commands.goToLiftValue,
+                { optionalIf: [LF_ABS] }
+            ),
             goToLiftPercentage: AsConditional(
                 LiftComponent.commands.goToLiftPercentage,
                 { optionalIf: [LF], mandatoryIf: [LF_PA_LF] }
             ),
-            goToTiltValue: AsConditional(TiltAndAbsolutePositionComponent.commands.goToTiltValue, { optionalIf: [TL_ABS] }),
+            goToTiltValue: AsConditional(
+                TiltAndAbsolutePositionComponent.commands.goToTiltValue,
+                { optionalIf: [TL_ABS] }
+            ),
             goToTiltPercentage: AsConditional(
                 TiltComponent.commands.goToTiltPercentage,
                 { optionalIf: [TL], mandatoryIf: [TL_PA_TL] }

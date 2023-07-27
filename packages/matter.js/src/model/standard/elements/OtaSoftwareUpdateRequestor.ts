@@ -80,7 +80,10 @@ Matter.children.push({
             xref: { document: "core", section: "11.19.7.7.1" },
 
             children: [
-                { tag: "datatype", name: "PreviousState", id: 0x0, type: "UpdateStateEnum", conformance: "M", default: 0 },
+                {
+                    tag: "datatype", name: "PreviousState", id: 0x0, type: "UpdateStateEnum", conformance: "M",
+                    default: 0
+                },
                 { tag: "datatype", name: "NewState", id: 0x1, type: "UpdateStateEnum", conformance: "M" },
                 { tag: "datatype", name: "Reason", id: 0x2, type: "ChangeReasonEnum", conformance: "M" },
                 {

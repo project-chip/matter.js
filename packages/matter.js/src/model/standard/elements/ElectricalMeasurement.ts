@@ -59,11 +59,26 @@ Matter.children.push({
             tag: "attribute", name: "TotalApparentPower", id: 0x306, type: "uint32", conformance: "O",
             constraint: "max 16777215", default: 1
         },
-        { tag: "attribute", name: "Measured1StHarmonicCurrent", id: 0x307, type: "int16", conformance: "O", default: 32768 },
-        { tag: "attribute", name: "Measured3RdHarmonicCurrent", id: 0x308, type: "int16", conformance: "O", default: 32768 },
-        { tag: "attribute", name: "Measured5ThHarmonicCurrent", id: 0x309, type: "int16", conformance: "O", default: 32768 },
-        { tag: "attribute", name: "Measured7ThHarmonicCurrent", id: 0x30a, type: "int16", conformance: "O", default: 32768 },
-        { tag: "attribute", name: "Measured9ThHarmonicCurrent", id: 0x30b, type: "int16", conformance: "O", default: 32768 },
+        {
+            tag: "attribute", name: "Measured1StHarmonicCurrent", id: 0x307, type: "int16", conformance: "O",
+            default: 32768
+        },
+        {
+            tag: "attribute", name: "Measured3RdHarmonicCurrent", id: 0x308, type: "int16", conformance: "O",
+            default: 32768
+        },
+        {
+            tag: "attribute", name: "Measured5ThHarmonicCurrent", id: 0x309, type: "int16", conformance: "O",
+            default: 32768
+        },
+        {
+            tag: "attribute", name: "Measured7ThHarmonicCurrent", id: 0x30a, type: "int16", conformance: "O",
+            default: 32768
+        },
+        {
+            tag: "attribute", name: "Measured9ThHarmonicCurrent", id: 0x30b, type: "int16", conformance: "O",
+            default: 32768
+        },
         {
             tag: "attribute", name: "Measured11ThHarmonicCurrent", id: 0x30c, type: "int16", conformance: "O",
             default: 32768
@@ -117,8 +132,14 @@ Matter.children.push({
             constraint: "min -127", default: 0
         },
         { tag: "attribute", name: "InstantaneousVoltage", id: 0x500, type: "int16", conformance: "O", default: 65535 },
-        { tag: "attribute", name: "InstantaneousLineCurrent", id: 0x501, type: "uint16", conformance: "O", default: 65535 },
-        { tag: "attribute", name: "InstantaneousActiveCurrent", id: 0x502, type: "int16", conformance: "O", default: 65535 },
+        {
+            tag: "attribute", name: "InstantaneousLineCurrent", id: 0x501, type: "uint16", conformance: "O",
+            default: 65535
+        },
+        {
+            tag: "attribute", name: "InstantaneousActiveCurrent", id: 0x502, type: "int16", conformance: "O",
+            default: 65535
+        },
         {
             tag: "attribute", name: "InstantaneousReactiveCurrent", id: 0x503, type: "int16", conformance: "O",
             default: 65535
@@ -200,11 +221,20 @@ Matter.children.push({
         { tag: "attribute", name: "AcVoltageOverload", id: 0x801, type: "int16", conformance: "O", default: 65535 },
         { tag: "attribute", name: "AcCurrentOverload", id: 0x802, type: "int16", conformance: "O", default: 65535 },
         { tag: "attribute", name: "AcPowerOverload", id: 0x803, type: "int16", conformance: "O", default: 65535 },
-        { tag: "attribute", name: "AcReactivePowerOverload", id: 0x804, type: "int16", conformance: "O", default: 65535 },
+        {
+            tag: "attribute", name: "AcReactivePowerOverload", id: 0x804, type: "int16", conformance: "O",
+            default: 65535
+        },
         { tag: "attribute", name: "AverageRmsOverVoltage", id: 0x805, type: "int16", conformance: "O", default: 65535 },
-        { tag: "attribute", name: "AverageRmsUnderVoltage", id: 0x806, type: "int16", conformance: "O", default: 65535 },
+        {
+            tag: "attribute", name: "AverageRmsUnderVoltage", id: 0x806, type: "int16", conformance: "O",
+            default: 65535
+        },
         { tag: "attribute", name: "RmsExtremeOverVoltage", id: 0x807, type: "int16", conformance: "O", default: 65535 },
-        { tag: "attribute", name: "RmsExtremeUnderVoltage", id: 0x808, type: "int16", conformance: "O", default: 65535 },
+        {
+            tag: "attribute", name: "RmsExtremeUnderVoltage", id: 0x808, type: "int16", conformance: "O",
+            default: 65535
+        },
         { tag: "attribute", name: "RmsVoltageSag", id: 0x809, type: "int16", conformance: "O", default: 65535 },
         { tag: "attribute", name: "RmsVoltageSwell", id: 0x80a, type: "int16", conformance: "O", default: 65535 },
         { tag: "attribute", name: "LineCurrentPhaseB", id: 0x901, type: "uint16", conformance: "O", default: 65535 },
@@ -245,8 +275,14 @@ Matter.children.push({
             tag: "attribute", name: "RmsExtremeUnderVoltagePeriodPhaseB", id: 0x915, type: "uint16",
             conformance: "O", default: 0
         },
-        { tag: "attribute", name: "RmsVoltageSagPeriodPhaseB", id: 0x916, type: "uint16", conformance: "O", default: 0 },
-        { tag: "attribute", name: "RmsVoltageSwellPeriodPhaseB", id: 0x917, type: "uint16", conformance: "O", default: 0 },
+        {
+            tag: "attribute", name: "RmsVoltageSagPeriodPhaseB", id: 0x916, type: "uint16", conformance: "O",
+            default: 0
+        },
+        {
+            tag: "attribute", name: "RmsVoltageSwellPeriodPhaseB", id: 0x917, type: "uint16", conformance: "O",
+            default: 0
+        },
         { tag: "attribute", name: "LineCurrentPhaseC", id: 0xa01, type: "uint16", conformance: "O", default: 65535 },
         { tag: "attribute", name: "ActiveCurrentPhaseC", id: 0xa02, type: "int16", conformance: "O", default: 65535 },
         { tag: "attribute", name: "ReactiveCurrentPhaseC", id: 0xa03, type: "int16", conformance: "O", default: 65535 },
@@ -285,8 +321,14 @@ Matter.children.push({
             tag: "attribute", name: "RmsExtremeUnderVoltagePeriodPhaseC", id: 0xa15, type: "uint16",
             conformance: "O", default: 0
         },
-        { tag: "attribute", name: "RmsVoltageSagPeriodPhaseC", id: 0xa16, type: "uint16", conformance: "O", default: 0 },
-        { tag: "attribute", name: "RmsVoltageSwellPeriodPhaseC", id: 0xa17, type: "uint16", conformance: "O", default: 0 },
+        {
+            tag: "attribute", name: "RmsVoltageSagPeriodPhaseC", id: 0xa16, type: "uint16", conformance: "O",
+            default: 0
+        },
+        {
+            tag: "attribute", name: "RmsVoltageSwellPeriodPhaseC", id: 0xa17, type: "uint16", conformance: "O",
+            default: 0
+        },
 
         {
             tag: "command", name: "GetProfileInfoResponseCommand", id: 0x0, conformance: "O",

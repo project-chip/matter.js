@@ -6,7 +6,14 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Cluster as CreateCluster, WritableAttribute, AccessLevel, FixedAttribute, Attribute, Command } from "../../cluster/Cluster.js";
+import {
+    Cluster as CreateCluster,
+    WritableAttribute,
+    AccessLevel,
+    FixedAttribute,
+    Attribute,
+    Command
+} from "../../cluster/Cluster.js";
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvUInt64, TlvUInt16, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";

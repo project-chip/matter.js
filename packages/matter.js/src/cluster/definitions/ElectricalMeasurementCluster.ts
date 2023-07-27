@@ -6,7 +6,13 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Cluster as CreateCluster, OptionalAttribute, OptionalWritableAttribute, OptionalCommand, TlvNoResponse } from "../../cluster/Cluster.js";
+import {
+    Cluster as CreateCluster,
+    OptionalAttribute,
+    OptionalWritableAttribute,
+    OptionalCommand,
+    TlvNoResponse
+} from "../../cluster/Cluster.js";
 import { TlvUInt32, TlvInt16, TlvUInt16, TlvInt32, TlvInt8, TlvUInt8 } from "../../tlv/TlvNumber.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
@@ -166,7 +172,13 @@ export namespace ElectricalMeasurement {
 
         commands: {
             getProfileInfoCommand: OptionalCommand(0x0, TlvNoArguments, 0x0, TlvNoResponse),
-            getMeasurementProfileCommand: OptionalCommand(0x1, TlvGetMeasurementProfileCommandRequest, 0x1, TlvNoResponse)
+
+            getMeasurementProfileCommand: OptionalCommand(
+                0x1,
+                TlvGetMeasurementProfileCommandRequest,
+                0x1,
+                TlvNoResponse
+            )
         }
     });
 }

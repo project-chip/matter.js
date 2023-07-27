@@ -51,6 +51,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Breaking: The storage key structure got changed to allow multi node operations within one process. This requires to change the storage key structure and to migrate or reset the storage.
     * Migration: prepend any storage key except Device.* and Controller.* with "0." in the filename
   * Deprecation: The CLI Examples LegacyDeviceNode and LegacyControllerNode is removed in this version! Use the new variants please.
+  * The default storage names now start with a "." at the beginning to allow to hide them in some file explorers and git.
   * Example script are moved to package matter-node.js-examples
 * Misc:
   * Added Specification links for Matter Specifications 1.1

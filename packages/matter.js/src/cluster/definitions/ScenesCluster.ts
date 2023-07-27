@@ -7,9 +7,21 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BaseClusterComponent, ExtensibleCluster, validateFeatureSelection, ClusterForBaseCluster } from "../../cluster/ClusterFactory.js";
+import {
+    BaseClusterComponent,
+    ExtensibleCluster,
+    validateFeatureSelection,
+    ClusterForBaseCluster
+} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitField, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { Attribute, OptionalAttribute, Command, TlvNoResponse, OptionalCommand, Cluster as CreateCluster } from "../../cluster/Cluster.js";
+import {
+    Attribute,
+    OptionalAttribute,
+    Command,
+    TlvNoResponse,
+    OptionalCommand,
+    Cluster as CreateCluster
+} from "../../cluster/Cluster.js";
 import { TlvUInt8, TlvBitmap, TlvUInt16, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvGroupId, GroupId } from "../../datatype/GroupId.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
@@ -119,7 +131,10 @@ export namespace Scenes {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.4
      */
-    export const TlvRemoveSceneRequest = TlvObject({ groupId: TlvField(0, TlvGroupId), sceneId: TlvField(1, TlvUInt8) });
+    export const TlvRemoveSceneRequest = TlvObject({
+        groupId: TlvField(0, TlvGroupId),
+        sceneId: TlvField(1, TlvUInt8)
+    });
 
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.14

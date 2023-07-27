@@ -220,7 +220,10 @@ Matter.children.push({
                     tag: "datatype", name: "Changed", id: 0x0, conformance: "M",
                     description: "Entry or extension was changed"
                 },
-                { tag: "datatype", name: "Added", id: 0x1, conformance: "M", description: "Entry or extension was added" },
+                {
+                    tag: "datatype", name: "Added", id: 0x1, conformance: "M",
+                    description: "Entry or extension was added"
+                },
                 {
                     tag: "datatype", name: "Removed", id: 0x2, conformance: "M",
                     description: "Entry or extension was removed"
@@ -273,12 +276,18 @@ Matter.children.push({
             xref: { document: "core", section: "9.10.4.3" },
 
             children: [
-                { tag: "datatype", name: "Pase", id: 0x1, conformance: "M", description: "Passcode authenticated session" },
+                {
+                    tag: "datatype", name: "Pase", id: 0x1, conformance: "M",
+                    description: "Passcode authenticated session"
+                },
                 {
                     tag: "datatype", name: "Case", id: 0x2, conformance: "M",
                     description: "Certificate authenticated session"
                 },
-                { tag: "datatype", name: "Group", id: 0x3, conformance: "M", description: "Group authenticated session" }
+                {
+                    tag: "datatype", name: "Group", id: 0x3, conformance: "M",
+                    description: "Group authenticated session"
+                }
             ]
         },
 

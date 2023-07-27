@@ -1085,7 +1085,11 @@ export namespace PowerSource {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.7.6.13
              */
-            batPercentRemaining: OptionalAttribute(0xc, TlvNullable(TlvUInt8.bound({ max: 200 })), { omitChanges: true }),
+            batPercentRemaining: OptionalAttribute(
+                0xc,
+                TlvNullable(TlvUInt8.bound({ max: 200 })),
+                { omitChanges: true }
+            ),
 
             /**
              * This attribute shall indicate the estimated time in seconds before the battery will no longer be able to
@@ -1366,7 +1370,10 @@ export namespace PowerSource {
                 { optionalIf: [WIRED] }
             ),
             wiredCurrentType: AsConditional(WiredComponent.attributes.wiredCurrentType, { mandatoryIf: [WIRED] }),
-            wiredAssessedCurrent: AsConditional(WiredComponent.attributes.wiredAssessedCurrent, { optionalIf: [WIRED] }),
+            wiredAssessedCurrent: AsConditional(
+                WiredComponent.attributes.wiredAssessedCurrent,
+                { optionalIf: [WIRED] }
+            ),
             wiredNominalVoltage: AsConditional(WiredComponent.attributes.wiredNominalVoltage, { optionalIf: [WIRED] }),
             wiredMaximumCurrent: AsConditional(WiredComponent.attributes.wiredMaximumCurrent, { optionalIf: [WIRED] }),
             wiredPresent: AsConditional(WiredComponent.attributes.wiredPresent, { optionalIf: [WIRED] }),
@@ -1375,7 +1382,10 @@ export namespace PowerSource {
             batPercentRemaining: AsConditional(BatteryComponent.attributes.batPercentRemaining, { optionalIf: [BAT] }),
             batTimeRemaining: AsConditional(BatteryComponent.attributes.batTimeRemaining, { optionalIf: [BAT] }),
             batChargeLevel: AsConditional(BatteryComponent.attributes.batChargeLevel, { mandatoryIf: [BAT] }),
-            batReplacementNeeded: AsConditional(BatteryComponent.attributes.batReplacementNeeded, { mandatoryIf: [BAT] }),
+            batReplacementNeeded: AsConditional(
+                BatteryComponent.attributes.batReplacementNeeded,
+                { mandatoryIf: [BAT] }
+            ),
             batReplaceability: AsConditional(BatteryComponent.attributes.batReplaceability, { mandatoryIf: [BAT] }),
             batPresent: AsConditional(BatteryComponent.attributes.batPresent, { optionalIf: [BAT] }),
             activeBatFaults: AsConditional(BatteryComponent.attributes.activeBatFaults, { optionalIf: [BAT] }),
@@ -1387,8 +1397,14 @@ export namespace PowerSource {
                 ReplaceableComponent.attributes.batCommonDesignation,
                 { optionalIf: [REPLC] }
             ),
-            batAnsiDesignation: AsConditional(ReplaceableComponent.attributes.batAnsiDesignation, { optionalIf: [REPLC] }),
-            batIecDesignation: AsConditional(ReplaceableComponent.attributes.batIecDesignation, { optionalIf: [REPLC] }),
+            batAnsiDesignation: AsConditional(
+                ReplaceableComponent.attributes.batAnsiDesignation,
+                { optionalIf: [REPLC] }
+            ),
+            batIecDesignation: AsConditional(
+                ReplaceableComponent.attributes.batIecDesignation,
+                { optionalIf: [REPLC] }
+            ),
             batApprovedChemistry: AsConditional(
                 ReplaceableComponent.attributes.batApprovedChemistry,
                 { optionalIf: [REPLC] }
@@ -1404,7 +1420,10 @@ export namespace PowerSource {
                 RechargeableComponent.attributes.batFunctionalWhileCharging,
                 { mandatoryIf: [RECHG] }
             ),
-            batChargingCurrent: AsConditional(RechargeableComponent.attributes.batChargingCurrent, { optionalIf: [RECHG] }),
+            batChargingCurrent: AsConditional(
+                RechargeableComponent.attributes.batChargingCurrent,
+                { optionalIf: [RECHG] }
+            ),
             activeBatChargeFaults: AsConditional(
                 RechargeableComponent.attributes.activeBatChargeFaults,
                 { optionalIf: [RECHG] }
@@ -1414,7 +1433,10 @@ export namespace PowerSource {
         events: {
             wiredFaultChange: AsConditional(WiredComponent.events.wiredFaultChange, { optionalIf: [WIRED] }),
             batFaultChange: AsConditional(BatteryComponent.events.batFaultChange, { optionalIf: [BAT] }),
-            batChargeFaultChange: AsConditional(RechargeableComponent.events.batChargeFaultChange, { optionalIf: [RECHG] })
+            batChargeFaultChange: AsConditional(
+                RechargeableComponent.events.batChargeFaultChange,
+                { optionalIf: [RECHG] }
+            )
         }
     });
 }

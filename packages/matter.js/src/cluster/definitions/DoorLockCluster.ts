@@ -1424,7 +1424,11 @@ export namespace DoorLock {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.22
              */
-            language: OptionalWritableAttribute(0x21, TlvString.bound({ maxLength: 3 }), { writeAcl: AccessLevel.Manage }),
+            language: OptionalWritableAttribute(
+                0x21,
+                TlvString.bound({ maxLength: 3 }),
+                { writeAcl: AccessLevel.Manage }
+            ),
 
             /**
              * The settings for the LED support three different modes
@@ -1997,7 +2001,11 @@ export namespace DoorLock {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.34
              */
-            wrongCodeEntryLimit: WritableAttribute(0x30, TlvUInt8.bound({ min: 1 }), { writeAcl: AccessLevel.Administer }),
+            wrongCodeEntryLimit: WritableAttribute(
+                0x30,
+                TlvUInt8.bound({ min: 1 }),
+                { writeAcl: AccessLevel.Administer }
+            ),
 
             /**
              * The number of seconds that the lock shuts down following wrong code entry. Valid range is 1-255 seconds.
@@ -2307,7 +2315,11 @@ export namespace DoorLock {
             extendCluster(cluster, CredentialOverTheAirAccessComponent, { credentialOverTheAirAccess: true });
             extendCluster(cluster, NotificationAndPinCredentialComponent, { notification: true, pinCredential: true });
             extendCluster(cluster, NotificationComponent, { notification: true });
-            extendCluster(cluster, NotificationAndRfidCredentialComponent, { notification: true, rfidCredential: true });
+            extendCluster(
+                cluster,
+                NotificationAndRfidCredentialComponent,
+                { notification: true, rfidCredential: true }
+            );
             extendCluster(cluster, PinCredentialNotUserComponent, { pinCredential: true, user: false });
             extendCluster(
                 cluster,
@@ -2387,7 +2399,10 @@ export namespace DoorLock {
             ...Cluster.attributes,
             doorState: AsConditional(DoorPositionSensorComponent.attributes.doorState, { mandatoryIf: [DPS] }),
             doorOpenEvents: AsConditional(DoorPositionSensorComponent.attributes.doorOpenEvents, { optionalIf: [DPS] }),
-            doorClosedEvents: AsConditional(DoorPositionSensorComponent.attributes.doorClosedEvents, { optionalIf: [DPS] }),
+            doorClosedEvents: AsConditional(
+                DoorPositionSensorComponent.attributes.doorClosedEvents,
+                { optionalIf: [DPS] }
+            ),
             openPeriod: AsConditional(DoorPositionSensorComponent.attributes.openPeriod, { optionalIf: [DPS] }),
             numberOfLogRecordsSupported: AsConditional(
                 LoggingComponent.attributes.numberOfLogRecordsSupported,
@@ -2419,9 +2434,18 @@ export namespace DoorLock {
             ),
             maxPinCodeLength: AsConditional(PinCredentialComponent.attributes.maxPinCodeLength, { mandatoryIf: [PIN] }),
             minPinCodeLength: AsConditional(PinCredentialComponent.attributes.minPinCodeLength, { mandatoryIf: [PIN] }),
-            maxRfidCodeLength: AsConditional(RfidCredentialComponent.attributes.maxRfidCodeLength, { mandatoryIf: [RID] }),
-            minRfidCodeLength: AsConditional(RfidCredentialComponent.attributes.minRfidCodeLength, { mandatoryIf: [RID] }),
-            credentialRulesSupport: AsConditional(UserComponent.attributes.credentialRulesSupport, { mandatoryIf: [USR] }),
+            maxRfidCodeLength: AsConditional(
+                RfidCredentialComponent.attributes.maxRfidCodeLength,
+                { mandatoryIf: [RID] }
+            ),
+            minRfidCodeLength: AsConditional(
+                RfidCredentialComponent.attributes.minRfidCodeLength,
+                { mandatoryIf: [RID] }
+            ),
+            credentialRulesSupport: AsConditional(
+                UserComponent.attributes.credentialRulesSupport,
+                { mandatoryIf: [USR] }
+            ),
             numberOfCredentialsSupportedPerUser: AsConditional(
                 UserComponent.attributes.numberOfCredentialsSupportedPerUser,
                 { mandatoryIf: [USR] }
@@ -2435,7 +2459,10 @@ export namespace DoorLock {
                 PinCredentialOrRfidCredentialComponent.attributes.userCodeTemporaryDisableTime,
                 { mandatoryIf: [PIN, RID] }
             ),
-            sendPinOverTheAir: AsConditional(PinCredentialComponent.attributes.sendPinOverTheAir, { optionalIf: [PIN] }),
+            sendPinOverTheAir: AsConditional(
+                PinCredentialComponent.attributes.sendPinOverTheAir,
+                { optionalIf: [PIN] }
+            ),
             requirePiNforRemoteOperation: AsConditional(
                 CredentialOverTheAirAccessComponent.attributes.requirePiNforRemoteOperation,
                 { optionalIf: [COTA] }
@@ -2474,9 +2501,18 @@ export namespace DoorLock {
         commands: {
             ...Cluster.commands,
             getLogRecord: AsConditional(LoggingComponent.commands.getLogRecord, { mandatoryIf: [LOG] }),
-            setPinCode: AsConditional(PinCredentialNotUserComponent.commands.setPinCode, { mandatoryIf: [PIN_NOT_USR] }),
-            getPinCode: AsConditional(PinCredentialNotUserComponent.commands.getPinCode, { mandatoryIf: [PIN_NOT_USR] }),
-            clearPinCode: AsConditional(PinCredentialNotUserComponent.commands.clearPinCode, { mandatoryIf: [PIN_NOT_USR] }),
+            setPinCode: AsConditional(
+                PinCredentialNotUserComponent.commands.setPinCode,
+                { mandatoryIf: [PIN_NOT_USR] }
+            ),
+            getPinCode: AsConditional(
+                PinCredentialNotUserComponent.commands.getPinCode,
+                { mandatoryIf: [PIN_NOT_USR] }
+            ),
+            clearPinCode: AsConditional(
+                PinCredentialNotUserComponent.commands.clearPinCode,
+                { mandatoryIf: [PIN_NOT_USR] }
+            ),
             clearAllPinCodes: AsConditional(
                 PinCredentialNotUserComponent.commands.clearAllPinCodes,
                 { mandatoryIf: [PIN_NOT_USR] }
@@ -2533,8 +2569,14 @@ export namespace DoorLock {
                 PinCredentialAndRfidCredentialAndFingerCredentialsNotUserComponent.commands.getUserType,
                 { optionalIf: [PIN_RID_FGP_NOT_USR] }
             ),
-            setRfidCode: AsConditional(RfidCredentialNotUserComponent.commands.setRfidCode, { mandatoryIf: [RID_NOT_USR] }),
-            getRfidCode: AsConditional(RfidCredentialNotUserComponent.commands.getRfidCode, { mandatoryIf: [RID_NOT_USR] }),
+            setRfidCode: AsConditional(
+                RfidCredentialNotUserComponent.commands.setRfidCode,
+                { mandatoryIf: [RID_NOT_USR] }
+            ),
+            getRfidCode: AsConditional(
+                RfidCredentialNotUserComponent.commands.getRfidCode,
+                { mandatoryIf: [RID_NOT_USR] }
+            ),
             clearRfidCode: AsConditional(
                 RfidCredentialNotUserComponent.commands.clearRfidCode,
                 { mandatoryIf: [RID_NOT_USR] }

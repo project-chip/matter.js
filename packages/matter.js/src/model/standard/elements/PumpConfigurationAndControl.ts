@@ -514,7 +514,10 @@ Matter.children.push({
                 },
 
                 { tag: "datatype", name: "SpeedLow", constraint: "2", description: "Setpoint is too low to achieve." },
-                { tag: "datatype", name: "SpeedHigh", constraint: "3", description: "Setpoint is too high to achieve." },
+                {
+                    tag: "datatype", name: "SpeedHigh", constraint: "3",
+                    description: "Setpoint is too high to achieve."
+                },
 
                 {
                     tag: "datatype", name: "LocalOverride", constraint: "4",

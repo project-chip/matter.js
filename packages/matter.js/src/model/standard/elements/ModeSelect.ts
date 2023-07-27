@@ -138,7 +138,9 @@ Matter.children.push({
                 "\n" +
                 "server shall respond with an INVALID_COMMAND status response.",
             xref: { document: "cluster", section: "1.8.6.1" },
-            children: [{ tag: "datatype", name: "NewMode", id: 0x0, type: "uint8", conformance: "M", constraint: "desc" }]
+            children: [
+                { tag: "datatype", name: "NewMode", id: 0x0, type: "uint8", conformance: "M", constraint: "desc" }
+            ]
         },
 
         {
