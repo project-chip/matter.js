@@ -13,10 +13,9 @@ import { CryptoNode } from "../src/crypto/CryptoNode";
 Crypto.get = () => new CryptoNode();
 
 import {
-    OnOffCluster, BasicInformationCluster, OperationalCertStatus, OperationalCredentialsCluster, DescriptorCluster,
+    OnOffCluster, BasicInformationCluster, OperationalCredentials, OperationalCredentialsCluster, DescriptorCluster,
     IdentifyCluster, GroupsCluster, AccessControlCluster, ScenesCluster, GeneralCommissioningCluster,
-    RegulatoryLocationType, NetworkCommissioningHandler, NetworkCommissioningStatus,
-    WifiAndEthernetAndThreadNetworkCommissioningCluster
+    GeneralCommissioning, NetworkCommissioning, NetworkCommissioningCluster
 } from "@project-chip/matter.js/cluster";
 import { VendorId, FabricIndex, GroupId, ClusterId } from "@project-chip/matter.js/datatype";
 
@@ -82,7 +81,7 @@ describe("Integration Test", () => {
             listeningAddressIpv6: CLIENT_IPv6,
             delayedPairing: true,
             commissioningOptions: {
-                regulatoryLocation: RegulatoryLocationType.Indoor,
+                regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Indoor,
                 regulatoryCountryCode: "DE"
             }
         });
@@ -119,22 +118,42 @@ describe("Integration Test", () => {
         onOffLightDeviceServer = new OnOffLightDevice();
         commissioningServer.addDevice(onOffLightDeviceServer);
 
+        const netCluster = NetworkCommissioningCluster.with(NetworkCommissioning.Feature.WiFiNetworkInterface);
         // Override NetworkCommissioning Cluster for now unless configurable
         commissioningServer.addRootClusterServer(
             ClusterServer(
-                WifiAndEthernetAndThreadNetworkCommissioningCluster,
+                netCluster,
                 {
                     maxNetworks: 1,
                     interfaceEnabled: true,
                     lastConnectErrorValue: 0,
                     lastNetworkId: ByteArray.fromHex("0000000000000000000000000000000000000000000000000000000000000000"),
-                    lastNetworkingStatus: NetworkCommissioningStatus.Success,
+                    lastNetworkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
                     networks: [{ networkId: ByteArray.fromHex("0000000000000000000000000000000000000000000000000000000000000000"), connected: true }],
                 },
-                NetworkCommissioningHandler()
+                {
+                    scanNetworks: async function() {
+                        throw new Error("Not implemented");
+                    },
+
+                    removeNetwork: async function() {
+                        throw new Error("Not implemented");
+                    },
+
+                    connectNetwork: async function() {
+                        throw new Error("Not implemented");
+                    },
+
+                    reorderNetwork: async function() {
+                        throw new Error("Not implemented");
+                    },
+
+                    addOrUpdateWiFiNetwork: async function() {
+                        throw new Error("Not implemented");
+                    },
+                }
             )
         );
-
 
         matterServer.addCommissioningServer(commissioningServer);
 
@@ -192,7 +211,7 @@ describe("Integration Test", () => {
 
         it("Verify that commissioning changed the Regulatory Config/Location values", async () => {
             const generalCommissioningCluster = commissioningController.getRootClusterClient(GeneralCommissioningCluster);
-            assert.equal(await generalCommissioningCluster?.getRegulatoryConfigAttribute(), RegulatoryLocationType.Indoor);
+            assert.equal(await generalCommissioningCluster?.getRegulatoryConfigAttribute(), GeneralCommissioning.RegulatoryLocationType.Indoor);
 
             const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformationCluster);
             assert.equal(await basicInfoCluster?.getLocationAttribute(), "DE");
@@ -276,7 +295,7 @@ describe("Integration Test", () => {
                     clusterId: DescriptorCluster.id,
                     attributeId: DescriptorCluster.attributes.serverList.id,
                     attributeName: "serverList"
-                }, value: [new ClusterId(29), new ClusterId(40), new ClusterId(62), new ClusterId(48), new ClusterId(49), new ClusterId(31), new ClusterId(63), new ClusterId(51), new ClusterId(60)], version: 9
+                }, value: [new ClusterId(29), new ClusterId(40), new ClusterId(62), new ClusterId(48), new ClusterId(49), new ClusterId(31), new ClusterId(63), new ClusterId(51), new ClusterId(60)], version: 0
             })
 
             assert.equal(response.filter(({
@@ -571,7 +590,7 @@ describe("Integration Test", () => {
             assert.ok(operationalCredentialsCluster);
 
             const result = await operationalCredentialsCluster.commands.removeFabric({ fabricIndex: new FabricIndex(250) });
-            assert.equal(result.status, OperationalCertStatus.InvalidFabricIndex);
+            assert.equal(result.statusCode, OperationalCredentials.NodeOperationalCertStatus.InvalidFabricIndex);
             assert.equal(result.fabricIndex, undefined);
             assert.equal(result.debugText, "Fabric 250 not found");
         });
@@ -585,7 +604,7 @@ describe("Integration Test", () => {
             assert.equal(fabricIndex.index, 1);
 
             const result = await operationalCredentialsCluster.commands.removeFabric({ fabricIndex });
-            assert.equal(result.status, OperationalCertStatus.Success);
+            assert.equal(result.statusCode, OperationalCredentials.NodeOperationalCertStatus.Ok);
             assert.deepEqual(result.fabricIndex, fabricIndex);
             assert.equal(result.debugText, "Fabric removed");
         });

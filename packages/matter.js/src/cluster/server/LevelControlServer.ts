@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { LevelControlCluster } from "../LevelControlCluster.js";
+import { LevelControlCluster } from "../definitions/LevelControlCluster.js";
 import { ClusterServerHandlers } from "./ClusterServer.js";
 
 

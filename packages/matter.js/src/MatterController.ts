@@ -28,30 +28,41 @@ import { Fabric, FabricBuilder, FabricJsonObject } from "./fabric/Fabric.js";
 import { ChannelManager, NoChannelError } from "./protocol/ChannelManager.js";
 import { StorageContext } from "./storage/StorageContext.js";
 import { ExchangeManager, ExchangeProvider, MessageChannel } from "./protocol/ExchangeManager.js";
-import { NetworkCommissioningClusterSchema } from "./cluster/schema/NetworkCommissioning.js";
+import { NetworkCommissioningCluster } from "./cluster/definitions/NetworkCommissioningCluster.js";
 import { TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import { isIPv6 } from "./util/Ip.js";
-import { BasicInformationCluster } from "./cluster/BasicInformationCluster.js";
-import {
-    CommissioningError, CommissioningSuccessFailureResponse, GeneralCommissioningCluster, RegulatoryLocationType
-} from "./cluster/GeneralCommissioningCluster.js";
-import {
-    CertificateChainType, OperationalCredentialsCluster, TlvCertSigningRequest
-} from "./cluster/OperationalCredentialsCluster.js";
+import { BasicInformationCluster } from "./cluster/definitions/BasicInformationCluster.js";
+import { GeneralCommissioning, GeneralCommissioningCluster } from "./cluster/definitions/GeneralCommissioningCluster.js";
+import { OperationalCredentials, OperationalCredentialsCluster } from "./cluster/definitions/OperationalCredentialsCluster.js";
 import { ByteArray } from "./util/ByteArray.js";
 import { RetransmissionLimitReachedError } from "./protocol/index.js";
 import { tryCatchAsync } from "./common/index.js";
 import { ClassExtends } from "./util/Type.js";
 import { ServerAddress } from "./common/ServerAddress.js";
+import { TypeFromSchema } from "./tlv/TlvSchema.js";
+import { TlvField, TlvObject } from "./tlv/TlvObject.js";
+import { TlvEnum } from "./tlv/TlvNumber.js";
+import { TlvString } from "./tlv/TlvString.js";
+import { TlvCertSigningRequest } from "./cluster/server/OperationalCredentialsServer.js";
 
 export type CommissioningData = {
-    regulatoryLocation: RegulatoryLocationType;
+    regulatoryLocation: GeneralCommissioning.RegulatoryLocationType;
     regulatoryCountryCode: string;
 }
+
+const TlvCommissioningSuccessFailureResponse = TlvObject({
+    /** Contain the result of the operation. */
+    errorCode: TlvField(0, TlvEnum<GeneralCommissioning.CommissioningError>()),
+
+    /** Should help developers in troubleshooting errors. The value MAY go into logs or crash reports, not User UIs. */
+    debugText: TlvField(1, TlvString.bound({ maxLength: 128 })),
+});
+export type CommissioningSuccessFailureResponse = TypeFromSchema<typeof TlvCommissioningSuccessFailureResponse>;
 
 const FABRIC_INDEX = new FabricIndex(1);
 const FABRIC_ID = BigInt(1);
 const ADMIN_VENDOR_ID = new VendorId(752);
+
 const logger = Logger.get("MatterController");
 
 /**
@@ -118,7 +129,7 @@ export class MatterController {
         this.exchangeManager.addNetInterface(netInterfaceIpv6);
 
         this.commissioningOptions = commissioningOptions ?? {
-            regulatoryLocation: RegulatoryLocationType.Outdoor, // Set to the most restrictive if relevant
+            regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Outdoor, // Set to the most restrictive if relevant
             regulatoryCountryCode: "XX"
         };
     }
@@ -226,13 +237,13 @@ export class MatterController {
         const networkFeatureAttributes = await interactionClient.getMultipleAttributes(
             [
                 {
-                    clusterId: NetworkCommissioningClusterSchema.id,
-                    attributeId: NetworkCommissioningClusterSchema.attributes.featureMap.id
+                    clusterId: NetworkCommissioningCluster.id,
+                    attributeId: NetworkCommissioningCluster.attributes.featureMap.id
                 }
             ]
         );
         const hasRadioNetwork = !!networkFeatureAttributes.find(
-            ({ value: { wifi, thread } }: { value: TypeFromPartialBitSchema<typeof NetworkCommissioningClusterSchema.features> }) => thread || wifi
+            ({ value: { wiFiNetworkInterface, threadNetworkInterface } }: { value: TypeFromPartialBitSchema<typeof NetworkCommissioningCluster.features> }) => wiFiNetworkInterface || threadNetworkInterface
         );
 
         // Do the commissioning
@@ -241,10 +252,10 @@ export class MatterController {
 
         if (hasRadioNetwork) {
             let locationCapability = await generalCommissioningClusterClient.getLocationCapabilityAttribute();
-            if (locationCapability === RegulatoryLocationType.IndoorOutdoor) {
+            if (locationCapability === GeneralCommissioning.RegulatoryLocationType.IndoorOutdoor) {
                 locationCapability = this.commissioningOptions.regulatoryLocation;
             } else {
-                logger.debug(`Device does not support a configurable regulatory location type. Location is set to "${locationCapability === RegulatoryLocationType.Indoor ? "Indoor" : "Outdoor"}"`);
+                logger.debug(`Device does not support a configurable regulatory location type. Location is set to "${locationCapability === GeneralCommissioning.RegulatoryLocationType.Indoor ? "Indoor" : "Outdoor"}"`);
             }
             let countryCode = this.commissioningOptions.regulatoryCountryCode;
             const regulatoryResult = await generalCommissioningClusterClient.setRegulatoryConfig({
@@ -252,7 +263,7 @@ export class MatterController {
                 newRegulatoryConfig: locationCapability,
                 countryCode
             });
-            if (regulatoryResult.errorCode === CommissioningError.ValueOutsideRange && countryCode !== "XX") {
+            if (regulatoryResult.errorCode === GeneralCommissioning.CommissioningError.ValueOutsideRange && countryCode !== "XX") {
                 logger.debug(`Device does not support a configurable country code. Use "XX" instead of "${countryCode}"`);
                 countryCode = "XX";
                 this.ensureSuccess("setRegulatoryConfig", await generalCommissioningClusterClient.setRegulatoryConfig({
@@ -266,30 +277,30 @@ export class MatterController {
         }
 
         const operationalCredentialsClusterClient = ClusterClient(OperationalCredentialsCluster, 0, interactionClient);
-        const { certificate: deviceAttestation } = await operationalCredentialsClusterClient.requestCertChain({ type: CertificateChainType.DeviceAttestation });
+        const { certificate: deviceAttestation } = await operationalCredentialsClusterClient.certificateChainRequest({ certificateType: OperationalCredentials.CertificateChainType.DacCertificate });
         // TODO: extract device public key from deviceAttestation
-        const { certificate: productAttestation } = await operationalCredentialsClusterClient.requestCertChain({ type: CertificateChainType.ProductAttestationIntermediate });
+        const { certificate: productAttestation } = await operationalCredentialsClusterClient.certificateChainRequest({ certificateType: OperationalCredentials.CertificateChainType.PaiCertificate });
         // TODO: validate deviceAttestation and productAttestation
-        const { elements: attestationElements, signature: attestationSignature } = await operationalCredentialsClusterClient.requestAttestation({ attestationNonce: Crypto.getRandomData(32) });
+        const { attestationElements, attestationSignature } = await operationalCredentialsClusterClient.attestationRequest({ attestationNonce: Crypto.getRandomData(32) });
         // TODO: validate attestationSignature using device public key
-        const { elements: csrElements, signature: csrSignature } = await operationalCredentialsClusterClient.requestCertSigning({ certSigningRequestNonce: Crypto.getRandomData(32) });
-        if (deviceAttestation.length === 0 || productAttestation.length === 0 || attestationElements.length === 0 || attestationSignature.length === 0 || csrElements.length === 0 || csrSignature.length === 0) {
+        const { nocsrElements, attestationSignature: csrSignature } = await operationalCredentialsClusterClient.csrRequest({ csrNonce: Crypto.getRandomData(32) });
+        if (deviceAttestation.length === 0 || productAttestation.length === 0 || attestationElements.length === 0 || attestationSignature.length === 0 || nocsrElements.length === 0 || csrSignature.length === 0) {
             // TODO: validate the data really
             throw new Error("Invalid response from device");
         }
         // TODO: validate csrSignature using device public key
-        const { certSigningRequest } = TlvCertSigningRequest.decode(csrElements);
+        const { certSigningRequest } = TlvCertSigningRequest.decode(nocsrElements);
         const operationalPublicKey = CertificateManager.getPublicKeyFromCsr(certSigningRequest);
 
-        await operationalCredentialsClusterClient.addRootCert({ certificate: this.certificateManager.getRootCert() });
+        await operationalCredentialsClusterClient.addTrustedRootCertificate({ rootCaCertificate: this.certificateManager.getRootCert() });
         const peerNodeId = this.fabric.rootNodeId;
         const peerOperationalCert = this.certificateManager.generateNoc(operationalPublicKey, FABRIC_ID, peerNodeId);
-        await operationalCredentialsClusterClient.addOperationalCert({
-            operationalCert: peerOperationalCert,
-            intermediateCaCert: new ByteArray(0),
-            identityProtectionKey: this.fabric.identityProtectionKey,
+        await operationalCredentialsClusterClient.addNoc({
+            nocValue: peerOperationalCert,
+            icacValue: new ByteArray(0),
+            ipkValue: this.fabric.identityProtectionKey,
             adminVendorId: ADMIN_VENDOR_ID,
-            caseAdminNode: peerNodeId,
+            caseAdminSubject: peerNodeId,
         });
 
         // Look for the device broadcast over MDNS and do CASE pairing
@@ -454,7 +465,7 @@ export class MatterController {
 
     /** Helper method to check for errorCode/debugTest responses and throw error on failure */
     private ensureSuccess(context: string, { errorCode, debugText }: CommissioningSuccessFailureResponse) {
-        if (errorCode === CommissioningError.Ok) return;
+        if (errorCode === GeneralCommissioning.CommissioningError.Ok) return;
         throw new Error(`Commission error for "${context}": ${errorCode}, ${debugText}`);
     }
 

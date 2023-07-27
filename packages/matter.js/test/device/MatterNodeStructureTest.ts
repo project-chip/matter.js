@@ -25,7 +25,7 @@ import { attributePathToId, ClusterServer } from "../../src/protocol/interaction
 import { InteractionEndpointStructure } from "../../src/protocol/interaction/InteractionEndpointStructure.js";
 import { Aggregator } from "../../src/device/Aggregator.js";
 import { DeviceTypes } from "../../src/device/DeviceTypes.js";
-import { AdminCommissioningHandler } from "../../src/cluster/server/AdminCommissioningServer.js";
+import { AdministratorCommissioningHandler } from "../../src/cluster/server/AdministratorCommissioningServer.js";
 import { SecureChannelProtocol } from "../../src/protocol/securechannel/SecureChannelProtocol.js";
 import { PaseServer } from "../../src/session/pase/PaseServer.js";
 import { CaseServer } from "../../src/session/case/CaseServer.js";
@@ -33,28 +33,28 @@ import { BN } from "bn.js";
 import { ComposedDevice } from "../../src/device/ComposedDevice.js";
 import { GeneralCommissioningClusterHandler } from "../../src/cluster/server/GeneralCommissioningServer.js";
 import { NetworkCommissioningHandler } from "../../src/cluster/server/NetworkCommissioningServer.js";
-import { AccessControlCluster } from "../../src/cluster/AccessControlCluster.js";
-import { GroupKeyManagementCluster } from "../../src/cluster/GroupKeyManagementCluster.js";
-import { BootReason, GeneralDiagnosticsCluster } from "../../src/cluster/GeneralDiagnosticsCluster.js";
-import { BasicInformationCluster } from "../../src/cluster/BasicInformationCluster.js";
+import { AccessControlCluster } from "../../src/cluster/definitions/AccessControlCluster.js";
+import { GroupKeyManagementCluster } from "../../src/cluster/definitions/GroupKeyManagementCluster.js";
+import { GeneralDiagnostics } from "../../src/cluster/definitions/GeneralDiagnosticsCluster.js";
+import { BasicInformationCluster } from "../../src/cluster/definitions/BasicInformationCluster.js";
 import { VendorId } from "../../src/datatype/VendorId.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
-import { GeneralCommissioningCluster, RegulatoryLocationType } from "../../src/cluster/GeneralCommissioningCluster.js";
-import { EthernetNetworkCommissioningCluster, NetworkCommissioningStatus } from "../../src/cluster/NetworkCommissioningCluster.js";
-import { AdminCommissioningCluster, CommissioningWindowStatus } from "../../src/cluster/AdminCommissioningCluster.js";
+import { GeneralCommissioning } from "../../src/cluster/definitions/GeneralCommissioningCluster.js";
+import { NetworkCommissioning } from "../../src/cluster/definitions/NetworkCommissioningCluster.js";
+import { AdministratorCommissioning } from "../../src/cluster/definitions/AdministratorCommissioningCluster.js";
 import { EndpointNumber } from "../../src/datatype/EndpointNumber.js";
-import { DescriptorCluster } from "../../src/cluster/DescriptorCluster.js";
-import { OperationalCredentialsCluster } from "../../src/cluster/OperationalCredentialsCluster.js";
-import { IdentifyCluster } from "../../src/cluster/IdentifyCluster.js";
-import { GroupsCluster } from "../../src/cluster/GroupsCluster.js";
-import { ScenesCluster } from "../../src/cluster/ScenesCluster.js";
-import { OnOffCluster } from "../../src/cluster/OnOffCluster.js";
-import { BridgedDeviceBasicInformationCluster } from "../../src/cluster/BridgedDeviceBasicInformationCluster.js";
+import { DescriptorCluster } from "../../src/cluster/definitions/DescriptorCluster.js";
+import { OperationalCredentialsCluster } from "../../src/cluster/definitions/OperationalCredentialsCluster.js";
+import { IdentifyCluster } from "../../src/cluster/definitions/IdentifyCluster.js";
+import { GroupsCluster } from "../../src/cluster/definitions/GroupsCluster.js";
+import { ScenesCluster } from "../../src/cluster/definitions/ScenesCluster.js";
+import { OnOffCluster } from "../../src/cluster/definitions/OnOffCluster.js";
+import { BridgedDeviceBasicInformationCluster } from "../../src/cluster/definitions/BridgedDeviceBasicInformationCluster.js";
 import { DeviceTypeId } from "../../src/datatype/DeviceTypeId.js";
-import { FixedLabelCluster } from "../../src/cluster/LabelCluster.js";
+import { FixedLabelCluster } from "../../src/cluster/definitions/FixedLabelCluster.js";
 import { GroupKeyManagementClusterHandler } from "../../src/cluster/server/GroupKeyManagementServer.js";
 import { Endpoint } from "../../src/device/Endpoint.js";
-import { BindingCluster } from "../../src/cluster/BindingCluster.js";
+import { BindingCluster } from "../../src/cluster/definitions/BindingCluster.js";
 import { StorageBackendMemory, StorageManager } from "../../src/storage/index.js";
 import { CommissioningServer } from "../../src/index.js";
 import { FabricIndex } from "../../src/datatype/FabricIndex.js";
@@ -142,16 +142,16 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
 
     node.addRootClusterServer(
         ClusterServer(
-            GeneralCommissioningCluster,
+            GeneralCommissioning.Cluster,
             {
                 breadcrumb: BigInt(0),
                 basicCommissioningInfo: {
                     failSafeExpiryLengthSeconds: 60 /* 1min */,
                     maxCumulativeFailsafeSeconds: 900 /* Recommended according to Specs */
                 },
-                regulatoryConfig: RegulatoryLocationType.Indoor,
-                locationCapability: RegulatoryLocationType.IndoorOutdoor,
-                supportsConcurrentConnections: true
+                regulatoryConfig: GeneralCommissioning.RegulatoryLocationType.Indoor,
+                locationCapability: GeneralCommissioning.RegulatoryLocationType.IndoorOutdoor,
+                supportsConcurrentConnection: true
             },
             GeneralCommissioningClusterHandler()
         )
@@ -159,13 +159,13 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
 
     node.addRootClusterServer(
         ClusterServer(
-            EthernetNetworkCommissioningCluster,
+            NetworkCommissioning.Cluster.with("EthernetNetworkInterface"),
             {
                 maxNetworks: 1,
                 interfaceEnabled: true,
                 lastConnectErrorValue: 0,
                 lastNetworkId: ByteArray.fromHex("0000000000000000000000000000000000000000000000000000000000000000"),
-                lastNetworkingStatus: NetworkCommissioningStatus.Success,
+                lastNetworkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
                 networks: [{ networkId: ByteArray.fromHex("0000000000000000000000000000000000000000000000000000000000000000"), connected: true }],
             },
             NetworkCommissioningHandler()
@@ -204,13 +204,13 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
 
     node.addRootClusterServer(
         ClusterServer(
-            GeneralDiagnosticsCluster,
+            GeneralDiagnostics.Cluster,
             {
                 networkInterfaces: [],
                 rebootCount: 0,
                 upTime: 0,
                 totalOperationalHours: 0,
-                bootReason: BootReason.Unspecified,
+                bootReason: GeneralDiagnostics.BootReason.Unspecified,
                 activeHardwareFaults: [],
                 activeRadioFaults: [],
                 activeNetworkFaults: [],
@@ -228,13 +228,13 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
     if (includeAdminCommissioningCluster) {
         node.addRootClusterServer(
             ClusterServer(
-                AdminCommissioningCluster,
+                AdministratorCommissioning.Cluster,
                 {
-                    windowStatus: CommissioningWindowStatus.WindowNotOpen,
+                    windowStatus: AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen,
                     adminFabricIndex: null,
                     adminVendorId: null
                 },
-                AdminCommissioningHandler(new SecureChannelProtocol(
+                AdministratorCommissioningHandler(new SecureChannelProtocol(
                     new PaseServer(new BN(0), ByteArray.fromHex("00")),
                     new CaseServer()
                 ))
@@ -323,12 +323,12 @@ describe("Endpoint Structures", () => {
             assert.ok(endpoints.get(0)?.hasClusterServer(DescriptorCluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(BasicInformationCluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(OperationalCredentialsCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(EthernetNetworkCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioning.Cluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(NetworkCommissioning.Cluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(AccessControlCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(AdminCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AdministratorCommissioning.Cluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(GroupKeyManagementCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioning.Cluster));
 
             assert.equal(attributePaths.length, 110);
             assert.equal(commandPaths.length, 18);
@@ -403,12 +403,12 @@ describe("Endpoint Structures", () => {
             assert.ok(endpoints.get(0)?.hasClusterServer(DescriptorCluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(BasicInformationCluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(OperationalCredentialsCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(EthernetNetworkCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioning.Cluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(NetworkCommissioning.Cluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(AccessControlCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(AdminCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AdministratorCommissioning.Cluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(GroupKeyManagementCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioning.Cluster));
 
             assert.equal(endpoints.get(1)?.getAllClusterServers().length, 6);
             assert.ok(endpoints.get(1)?.hasClusterServer(DescriptorCluster));
@@ -498,12 +498,12 @@ describe("Endpoint Structures", () => {
             assert.ok(endpoints.get(0)?.hasClusterServer(DescriptorCluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(BasicInformationCluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(OperationalCredentialsCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(EthernetNetworkCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioning.Cluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(NetworkCommissioning.Cluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(AccessControlCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(AdminCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AdministratorCommissioning.Cluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(GroupKeyManagementCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioning.Cluster));
 
             assert.equal(endpoints.get(1)?.getAllClusterServers().length, 6);
             assert.ok(endpoints.get(1)?.hasClusterServer(DescriptorCluster));
@@ -594,12 +594,12 @@ describe("Endpoint Structures", () => {
             assert.ok(endpoints.get(0)?.hasClusterServer(DescriptorCluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(BasicInformationCluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(OperationalCredentialsCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(EthernetNetworkCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioning.Cluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(NetworkCommissioning.Cluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(AccessControlCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(AdminCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AdministratorCommissioning.Cluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(GroupKeyManagementCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioning.Cluster));
 
             assert.equal(endpoints.get(10)?.getAllClusterServers().length, 6);
             assert.ok(endpoints.get(10)?.hasClusterServer(DescriptorCluster));
@@ -690,12 +690,12 @@ describe("Endpoint Structures", () => {
             assert.ok(endpoints.get(0)?.hasClusterServer(DescriptorCluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(BasicInformationCluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(OperationalCredentialsCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(EthernetNetworkCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioning.Cluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(NetworkCommissioning.Cluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(AccessControlCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(AdminCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AdministratorCommissioning.Cluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(GroupKeyManagementCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioning.Cluster));
 
             assert.equal(endpoints.get(10)?.getAllClusterServers().length, 6);
             assert.ok(endpoints.get(10)?.hasClusterServer(DescriptorCluster));
@@ -753,12 +753,12 @@ describe("Endpoint Structures", () => {
             assert.ok(endpoints.get(0)?.hasClusterServer(DescriptorCluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(BasicInformationCluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(OperationalCredentialsCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(EthernetNetworkCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioning.Cluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(NetworkCommissioning.Cluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(AccessControlCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(AdminCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AdministratorCommissioning.Cluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(GroupKeyManagementCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioning.Cluster));
 
             assert.equal(endpoints.get(1)?.getAllClusterServers().length, 1);
             assert.ok(endpoints.get(1)?.hasClusterServer(DescriptorCluster));
@@ -830,12 +830,12 @@ describe("Endpoint Structures", () => {
             assert.ok(endpoints.get(0)?.hasClusterServer(DescriptorCluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(BasicInformationCluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(OperationalCredentialsCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(EthernetNetworkCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioning.Cluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(NetworkCommissioning.Cluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(AccessControlCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(AdminCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AdministratorCommissioning.Cluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(GroupKeyManagementCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioning.Cluster));
 
             assert.equal(endpoints.get(1)?.getAllClusterServers().length, 1);
             assert.ok(endpoints.get(1)?.hasClusterServer(DescriptorCluster));
@@ -944,12 +944,12 @@ describe("Endpoint Structures", () => {
             assert.ok(endpoints.get(0)?.hasClusterServer(DescriptorCluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(BasicInformationCluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(OperationalCredentialsCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(EthernetNetworkCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioning.Cluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(NetworkCommissioning.Cluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(AccessControlCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(AdminCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AdministratorCommissioning.Cluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(GroupKeyManagementCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioning.Cluster));
 
             assert.equal(endpoints.get(1)?.getAllClusterServers().length, 2);
             assert.ok(endpoints.get(1)?.hasClusterServer(DescriptorCluster));
@@ -1110,12 +1110,12 @@ describe("Endpoint Structures", () => {
             assert.ok(endpoints.get(0)?.hasClusterServer(DescriptorCluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(BasicInformationCluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(OperationalCredentialsCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(EthernetNetworkCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioning.Cluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(NetworkCommissioning.Cluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(AccessControlCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(AdminCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AdministratorCommissioning.Cluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(GroupKeyManagementCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioning.Cluster));
 
             assert.equal(endpoints.get(1)?.getAllClusterServers().length, 2);
             assert.ok(endpoints.get(1)?.hasClusterServer(DescriptorCluster));
@@ -1293,12 +1293,12 @@ describe("Endpoint Structures", () => {
             assert.ok(endpoints.get(0)?.hasClusterServer(DescriptorCluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(BasicInformationCluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(OperationalCredentialsCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(EthernetNetworkCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioning.Cluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(NetworkCommissioning.Cluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(AccessControlCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(AdminCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AdministratorCommissioning.Cluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(GroupKeyManagementCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioning.Cluster));
 
             assert.equal(endpoints.get(37)?.getAllClusterServers().length, 2);
             assert.ok(endpoints.get(37)?.hasClusterServer(DescriptorCluster));
@@ -1504,12 +1504,12 @@ describe("Endpoint Structures", () => {
             assert.ok(endpoints.get(0)?.hasClusterServer(DescriptorCluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(BasicInformationCluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(OperationalCredentialsCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(EthernetNetworkCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioning.Cluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(NetworkCommissioning.Cluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(AccessControlCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(AdminCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(AdministratorCommissioning.Cluster));
             assert.ok(endpoints.get(0)?.hasClusterServer(GroupKeyManagementCluster));
-            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioningCluster));
+            assert.ok(endpoints.get(0)?.hasClusterServer(GeneralCommissioning.Cluster));
 
             assert.equal(endpoints.get(37)?.getAllClusterServers().length, 2);
             assert.ok(endpoints.get(37)?.hasClusterServer(DescriptorCluster));

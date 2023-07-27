@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { EthernetNetworkCommissioningCluster } from "../NetworkCommissioningCluster.js"
+import { NetworkCommissioningCluster } from "../definitions/NetworkCommissioningCluster.js"
 import { ClusterServerHandlers } from "./ClusterServer.js"
 
-export const NetworkCommissioningHandler: () => ClusterServerHandlers<typeof EthernetNetworkCommissioningCluster> = () => ({
+export const NetworkCommissioningHandler: () => ClusterServerHandlers<typeof NetworkCommissioningCluster> = () => ({
     scanNetworks: async function() {
         throw new Error("Not implemented");
     },

@@ -22,7 +22,7 @@ import { ClusterServer } from "./protocol/interaction/InteractionServer.js";
 import { Aggregator } from "./device/Aggregator.js";
 import { PairedDevice } from "./device/Device.js";
 import { ComposedDevice } from "./device/ComposedDevice.js";
-import { DescriptorCluster } from "./cluster/DescriptorCluster.js";
+import { DescriptorCluster } from "./cluster/definitions/DescriptorCluster.js";
 import { AllClustersMap } from "./cluster/ClusterHelper.js";
 import { ClusterClientObj, isClusterClient } from "./cluster/client/ClusterClient.js";
 import { BitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";

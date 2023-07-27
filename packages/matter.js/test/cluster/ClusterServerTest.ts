@@ -4,27 +4,28 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as assert from "assert";
 import { Time } from "../../src/time/Time.js";
 import { TimeFake } from "../../src/time/TimeFake.js";
-import * as assert from "assert";
-import { AdminCommissioningCluster } from "../../src/cluster/AdminCommissioningCluster.js";
-import { GroupsCluster } from "../../src/cluster/GroupsCluster.js";
+import { AdministratorCommissioningCluster } from "../../src/cluster/definitions/AdministratorCommissioningCluster.js";
+import { GroupsCluster } from "../../src/cluster/definitions/GroupsCluster.js";
 import { AttributeId } from "../../src/datatype/AttributeId.js";
 import { CommandId } from "../../src/datatype/CommandId.js";
 import { FabricIndex } from "../../src/datatype/FabricIndex.js";
 import { ClusterServer } from "../../src/protocol/interaction/InteractionServer.js";
+import { VendorId } from "../../src/datatype/VendorId.js";
+import { DeviceTypes } from "../../src/device/DeviceTypes.js";
+import { Endpoint } from "../../src/device/Endpoint.js";
+import { Fabric } from "../../src/fabric/Fabric.js";
+import { WindowCovering } from "../../src/cluster/definitions/WindowCoveringCluster.js";
+import { Level, Logger } from "../../src/log/Logger.js";
+import { BasicInformationCluster } from "../../src/cluster/definitions/BasicInformationCluster.js";
 import {
-    AttributeServer, BasicInformationCluster, BindingCluster, Cluster, ClusterExtend, FixedAttributeServer,
-    IdentifyCluster, IdentifyType
-} from "../../src/cluster/index.js";
-import { VendorId } from "../../src/datatype/index.js";
-import { DeviceTypes, Endpoint } from "../../src/device/index.js";
-import { Fabric } from "../../src/fabric/index.js";
-import {
-    WindowCoveringClusterSchema, WindowCoveringEndProductType, WindowCoveringOperationalStatusEnum,
-    WindowCoveringType
-} from "../../src/cluster/schema/WindowCovering.js";
-import { Level, Logger } from "../../src/log/index.js";
+    AttributeServer, FixedAttributeServer
+} from "../../src/cluster/server/AttributeServer.js";
+import { BindingCluster } from "../../src/cluster/definitions/BindingCluster.js";
+import { IdentifyCluster, Identify } from "../../src/cluster/definitions/IdentifyCluster.js";
+import { Cluster, ClusterExtend } from "../../src/cluster/Cluster.js";
 
 describe("ClusterServer structure", () => {
     describe("correct attribute servers are used and exposed", () => {
@@ -348,7 +349,7 @@ describe("ClusterServer structure", () => {
 
         it("Fabric scoped attribute servers call fabric methods", () => {
             const binding = ClusterServer(BindingCluster, {
-                bindingList: []
+                binding: []
             }, {});
 
             let getScopedClusterDataValueCalledCounter = 0;
@@ -358,21 +359,21 @@ describe("ClusterServer structure", () => {
                 getScopedClusterDataValue: (cluster: Cluster<any, any, any, any, any>, name: string) => {
                     getScopedClusterDataValueCalledCounter++;
                     assert.equal(cluster.id, BindingCluster.id);
-                    assert.equal(name, "bindingList");
+                    assert.equal(name, "binding");
                     return [];
                 },
                 setScopedClusterDataValue<T>(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string, value: T) {
                     setScopedClusterDataValueCalledCounter++;
                     assert.equal(cluster.id, BindingCluster.id);
-                    assert.equal(clusterDataKey, "bindingList");
+                    assert.equal(clusterDataKey, "binding");
                     assert.deepEqual(value, { value: [{}], version: 1 });
                 }
             } as Fabric;
 
-            assert.deepEqual(binding.attributes.bindingList.getLocal(fabric), []);
-            binding.attributes.bindingList.setLocal([{}], fabric);
-            assert.deepEqual(binding.getBindingListAttribute(fabric), []);
-            binding.setBindingListAttribute([{}], fabric);
+            assert.deepEqual(binding.attributes.binding.getLocal(fabric), []);
+            binding.attributes.binding.setLocal([{}], fabric);
+            assert.deepEqual(binding.getBindingAttribute(fabric), []);
+            binding.setBindingAttribute([{}], fabric);
 
             assert.equal(getScopedClusterDataValueCalledCounter, 4);
             assert.equal(setScopedClusterDataValueCalledCounter, 2);
@@ -382,7 +383,7 @@ describe("ClusterServer structure", () => {
     describe("check Server and global attributes", () => {
         it("AdminCommissioningCluster without optional commands", () => {
             const server = ClusterServer(
-                AdminCommissioningCluster,
+                AdministratorCommissioningCluster,
                 {
                     windowStatus: 0,
                     adminFabricIndex: new FabricIndex(1),
@@ -395,7 +396,7 @@ describe("ClusterServer structure", () => {
             );
             assert.ok(server);
             // as any is trick because these attributes are not officially exposed by typings
-            assert.deepEqual((server.attributes as any).featureMap.get(), { basic: false });
+            assert.deepEqual((server.attributes as any).featureMap.get(), {});
             assert.deepEqual((server.attributes as any).attributeList.get(), [new AttributeId(0), new AttributeId(1), new AttributeId(2), new AttributeId(65533), new AttributeId(65532), new AttributeId(65531), new AttributeId(65530), new AttributeId(65529), new AttributeId(65528)]);
             assert.deepEqual((server.attributes as any).acceptedCommandList.get(), [new CommandId(0), new CommandId(2)]);
             assert.deepEqual((server.attributes as any).generatedCommandList.get(), []);
@@ -407,7 +408,7 @@ describe("ClusterServer structure", () => {
                 IdentifyCluster,
                 {
                     identifyTime: 100,
-                    identifyType: IdentifyType.None
+                    identifyType: Identify.IdentifyType.None
                 },
                 {
                     identify: async () => { /* dummy */ },
@@ -428,7 +429,7 @@ describe("ClusterServer structure", () => {
                 IdentifyCluster,
                 {
                     identifyTime: 100,
-                    identifyType: IdentifyType.None
+                    identifyType: Identify.IdentifyType.None
                 },
                 {
                     identify: async () => { /* dummy */ },
@@ -449,7 +450,7 @@ describe("ClusterServer structure", () => {
                 IdentifyCluster,
                 {
                     identifyTime: 100,
-                    identifyType: IdentifyType.None
+                    identifyType: Identify.IdentifyType.None
                 },
                 {
                     identify: async () => { /* dummy */ },
@@ -467,7 +468,7 @@ describe("ClusterServer structure", () => {
             const server = ClusterServer(
                 GroupsCluster,
                 {
-                    nameSupport: { groupNames: true },
+                    nameSupport: { nameSupport: true },
                 },
                 {
                     addGroup: async () => { throw new Error("not implemented"); },
@@ -480,7 +481,7 @@ describe("ClusterServer structure", () => {
             );
             assert.ok(server);
             // as any is trick because these attributes are not officially exposed by typings
-            assert.deepEqual((server.attributes as any).featureMap.get(), {});
+            assert.deepEqual((server.attributes as any).featureMap.get(), { groupNames: true });
             assert.deepEqual((server.attributes as any).attributeList.get(), [new AttributeId(0), new AttributeId(65533), new AttributeId(65532), new AttributeId(65531), new AttributeId(65530), new AttributeId(65529), new AttributeId(65528)]);
             assert.deepEqual((server.attributes as any).acceptedCommandList.get(), [new CommandId(0), new CommandId(1), new CommandId(2), new CommandId(3), new CommandId(4), new CommandId(5)]);
             assert.deepEqual((server.attributes as any).generatedCommandList.get(), [new CommandId(0), new CommandId(1), new CommandId(2), new CommandId(3)]);
@@ -493,7 +494,7 @@ describe("ClusterServer structure", () => {
             const fakeLogSink = new Array<{ level: Level, log: string }>();
             Logger.log = (level, log) => fakeLogSink.push({ level, log });
 
-            const TestCluster = ClusterExtend(WindowCoveringClusterSchema, {
+            const TestCluster = ClusterExtend(WindowCovering.Complete, {
                 supportedFeatures: {
                     lift: true,
                     positionAwareLift: true,
@@ -502,9 +503,10 @@ describe("ClusterServer structure", () => {
             ClusterServer(
                 TestCluster,
                 {
-                    type: WindowCoveringType.RollerShade,
+                    type: WindowCovering.WindowCoveringType.Rollershade,
                     configStatus: {
                         liftPositionAware: false,
+                        onlineReserved: false,
                         operational: false,
                         liftEncoderControlled: false,
                         liftMovementReversed: false,
@@ -512,11 +514,11 @@ describe("ClusterServer structure", () => {
                         tiltEncoderControlled: false,
                     },
                     operationalStatus: {
-                        coveringStatus: WindowCoveringOperationalStatusEnum.Stopped,
-                        liftStatus: WindowCoveringOperationalStatusEnum.Stopped,
-                        tiltStatus: WindowCoveringOperationalStatusEnum.Stopped,
+                        global: WindowCovering.MovementStatus.Stopped,
+                        lift: WindowCovering.MovementStatus.Stopped,
+                        tilt: WindowCovering.MovementStatus.Stopped,
                     },
-                    endProductType: WindowCoveringEndProductType.RollerShade,
+                    endProductType: WindowCovering.EndProductType.RollerShade,
                     mode: {
                         motorDirectionReversed: false,
                         calibrationMode: false,
@@ -524,11 +526,9 @@ describe("ClusterServer structure", () => {
                         ledFeedback: false,
                     },
                     numberOfActuationsLift: 0,
-                    targetPositionLiftPercent100ths: 0,
-                    currentPositionLiftPercent100ths: 0,
-                    installedOpenLimitLift: 0,
-                    // installedClosedLimitLift: 0, // Should be existing but not set
-                    currentPositionTiltPercent100ths: 0, // Should not be there because not valid for feature-combination
+                    targetPositionLiftPercent100Ths: 0,
+                    currentPositionLiftPercent100Ths: 0,
+                    currentPositionTiltPercent100Ths: 0, // Should not be there because not valid for feature-combination
                 },
                 {
                     upOrOpen: async () => { /* dummy */ },
@@ -541,12 +541,9 @@ describe("ClusterServer structure", () => {
             // TODO: Find out how to set TZ=UTC when executing single tests locally
 
             assert.deepEqual(fakeLogSink, [
-                { level: Level.DEBUG, log: '1970-01-01 00:00:00.000 DEBUG InteractionProtocol InitialAttributeValue for "WindowCovering/physicalClosedLimitLift" is optional by supportedFeatures: {"lift":true,"positionAwareLift":true} and is not set!' },
-                { level: Level.DEBUG, log: '1970-01-01 00:00:00.000 DEBUG InteractionProtocol InitialAttributeValue for "WindowCovering/currentPositionLift" is optional by supportedFeatures: {"lift":true,"positionAwareLift":true} and is not set!' },
                 { level: Level.DEBUG, log: '1970-01-01 00:00:00.000 DEBUG InteractionProtocol InitialAttributeValue for "WindowCovering/currentPositionLiftPercentage" is optional by supportedFeatures: {"lift":true,"positionAwareLift":true} and is not set!' },
-                { level: Level.WARN, log: '1970-01-01 00:00:00.000 WARN InteractionProtocol InitialAttributeValue for "WindowCovering/currentPositionTiltPercent100ths" is provided but it\'s neither optional or mandatory for supportedFeatures: {"lift":true,"positionAwareLift":true} but is set!' },
-                { level: Level.WARN, log: '1970-01-01 00:00:00.000 WARN InteractionProtocol InitialAttributeValue for "WindowCovering/installedClosedLimitLift" is REQUIRED by supportedFeatures: {"lift":true,"positionAwareLift":true} but is not set!' },
-                { level: Level.WARN, log: '1970-01-01 00:00:00.000 WARN InteractionProtocol Command "WindowCovering/goToLiftPercent" is REQUIRED by supportedFeatures: {"lift":true,"positionAwareLift":true} but is not set!' }
+                { level: Level.WARN, log: '1970-01-01 00:00:00.000 WARN InteractionProtocol InitialAttributeValue for "WindowCovering/currentPositionTiltPercent100Ths" is provided but it\'s neither optional or mandatory for supportedFeatures: {"lift":true,"positionAwareLift":true} but is set!' },
+                { level: Level.WARN, log: '1970-01-01 00:00:00.000 WARN InteractionProtocol Command "WindowCovering/goToLiftPercentage" is REQUIRED by supportedFeatures: {"lift":true,"positionAwareLift":true} but is not set!' }
             ]);
         });
     });

@@ -7,13 +7,11 @@
 import { Logger } from "../../log/Logger.js";
 import { MatterDevice } from "../../MatterDevice.js";
 import { SecureSession } from "../../session/SecureSession.js";
-import {
-    CommissioningError, GeneralCommissioningCluster, RegulatoryLocationType
-} from "../GeneralCommissioningCluster.js";
+import { GeneralCommissioning, GeneralCommissioningCluster } from "../definitions/GeneralCommissioningCluster.js";
 import { ClusterServerHandlers } from "./ClusterServer.js";
-import { BasicInformationCluster } from "../BasicInformationCluster.js";
+import { BasicInformationCluster } from "../definitions/BasicInformationCluster.js";
 
-const SuccessResponse = { errorCode: CommissioningError.Ok, debugText: "" };
+const SuccessResponse = { errorCode: GeneralCommissioning.CommissioningError.Ok, debugText: "" };
 const logger = Logger.get("GeneralCommissioningClusterHandler");
 
 export const GeneralCommissioningClusterHandler: (options?: {
@@ -44,13 +42,13 @@ export const GeneralCommissioningClusterHandler: (options?: {
         if (currentLocationCountryCode !== countryCode) {
             if (options?.allowCountryCodeChange === false && countryCode !== "XX") {
                 return {
-                    errorCode: CommissioningError.ValueOutsideRange,
+                    errorCode: GeneralCommissioning.CommissioningError.ValueOutsideRange,
                     debugText: `Country code change not allowed: ${countryCode}`
                 };
             }
             if (options?.countryCodeWhitelist !== undefined && !options?.countryCodeWhitelist.includes(countryCode)) {
                 return {
-                    errorCode: CommissioningError.ValueOutsideRange,
+                    errorCode: GeneralCommissioning.CommissioningError.ValueOutsideRange,
                     debugText: `Country code change not allowed: ${countryCode}`
                 };
             }
@@ -62,20 +60,30 @@ export const GeneralCommissioningClusterHandler: (options?: {
         // Check and handle regulatory config for LocationCapability
         let validValues;
         switch (locationCapabilityValue) {
-            case (RegulatoryLocationType.Outdoor):
-                validValues = [RegulatoryLocationType.Outdoor];
+            case (GeneralCommissioning.RegulatoryLocationType.Outdoor):
+                validValues = [GeneralCommissioning.RegulatoryLocationType.Outdoor];
                 break;
-            case (RegulatoryLocationType.Indoor):
-                validValues = [RegulatoryLocationType.Indoor];
+            case (GeneralCommissioning.RegulatoryLocationType.Indoor):
+                validValues = [GeneralCommissioning.RegulatoryLocationType.Indoor];
                 break;
-            case (RegulatoryLocationType.IndoorOutdoor):
-                validValues = [RegulatoryLocationType.Indoor, RegulatoryLocationType.Outdoor, RegulatoryLocationType.IndoorOutdoor];
+            case (GeneralCommissioning.RegulatoryLocationType.IndoorOutdoor):
+                validValues = [
+                    GeneralCommissioning.RegulatoryLocationType.Indoor,
+                    GeneralCommissioning.RegulatoryLocationType.Outdoor,
+                    GeneralCommissioning.RegulatoryLocationType.IndoorOutdoor
+                ];
                 break;
             default:
-                return { errorCode: CommissioningError.ValueOutsideRange, debugText: `Invalid regulatory location: ${newRegulatoryConfig === RegulatoryLocationType.Indoor ? "Indoor" : "Outdoor"}` };
+                return {
+                    errorCode: GeneralCommissioning.CommissioningError.ValueOutsideRange,
+                    debugText: `Invalid regulatory location: ${newRegulatoryConfig === GeneralCommissioning.RegulatoryLocationType.Indoor ? "Indoor" : "Outdoor"}`
+                };
         }
         if (!validValues.includes(newRegulatoryConfig)) {
-            return { errorCode: CommissioningError.ValueOutsideRange, debugText: `Invalid regulatory location: ${newRegulatoryConfig === RegulatoryLocationType.Indoor ? "Indoor" : "Outdoor"}` };
+            return {
+                errorCode: GeneralCommissioning.CommissioningError.ValueOutsideRange,
+                debugText: `Invalid regulatory location: ${newRegulatoryConfig === GeneralCommissioning.RegulatoryLocationType.Indoor ? "Indoor" : "Outdoor"}`
+            };
         }
         regulatoryConfig.setLocal(newRegulatoryConfig);
 

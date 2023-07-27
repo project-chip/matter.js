@@ -4,69 +4,85 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { Attribute, Cluster } from "./Cluster.js";
-import { AccessControlCluster } from "./AccessControlCluster.js";
-import { ActionsCluster } from "./ActionsCluster.js";
-import { AdminCommissioningCluster } from "./AdminCommissioningCluster.js";
-import { BasicInformationCluster } from "./BasicInformationCluster.js";
-import { BindingCluster } from "./BindingCluster.js";
-import { BooleanStateCluster } from "./BooleanStateCluster.js";
-import { BridgedDeviceBasicInformationCluster } from "./BridgedDeviceBasicInformationCluster.js";
-import { DescriptorCluster } from "./DescriptorCluster.js";
-import { FlowMeasurementCluster } from "./FlowMeasurementCluster.js";
-import { GeneralCommissioningCluster } from "./GeneralCommissioningCluster.js";
-import { GroupsCluster } from "./GroupsCluster.js";
-import { IdentifyCluster } from "./IdentifyCluster.js";
-import { IlluminanceMeasurementCluster } from "./IlluminanceMeasurementCluster.js";
-import { UserLabelCluster, FixedLabelCluster } from "./LabelCluster.js";
-import { LevelControlCluster, PulseWidthModulationLevelControlCluster } from "./LevelControlCluster.js";
-import { WifiAndEthernetAndThreadNetworkCommissioningCluster } from "./NetworkCommissioningCluster.js";
-import { OccupancySensingCluster } from "./OccupancySensingCluster.js";
-import { OnOffCluster } from "./OnOffCluster.js";
-import { OperationalCredentialsCluster } from "./OperationalCredentialsCluster.js";
-import { WiredPowerSourceCluster } from "./PowerSourceCluster.js";
-import { PowerSourceConfigurationCluster } from "./PowerSourceConfigurationCluster.js";
-import { PressureMeasurementCluster } from "./PressureMeasurementCluster.js";
-import { ScenesCluster } from "./ScenesCluster.js";
-import { TemperatureMeasurementCluster } from "./TemperatureMeasurementCluster.js";
-import { RelativeHumidityCluster, SoilMoistureMeasurementCluster, LeafWetnessMeasurementCluster } from "./WaterContentMeasurementCluster.js";
-import { GeneralDiagnosticsCluster } from "./GeneralDiagnosticsCluster.js";
-import { GroupKeyManagementCluster } from "./GroupKeyManagementCluster.js";
+import * as Clusters from "./definitions/index.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { TlvAttributePath, TlvCommandPath, TlvEventPath } from "../protocol/interaction/InteractionProtocol.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 
 export const AllClustersMap: { [key: Cluster<any, any, any, any, any>["id"]]: Cluster<any, any, any, any, any> } = {
-    [AccessControlCluster.id]: AccessControlCluster,
-    [ActionsCluster.id]: ActionsCluster,
-    [AdminCommissioningCluster.id]: AdminCommissioningCluster,
-    [BasicInformationCluster.id]: BasicInformationCluster,
-    [BindingCluster.id]: BindingCluster,
-    [BooleanStateCluster.id]: BooleanStateCluster,
-    [BridgedDeviceBasicInformationCluster.id]: BridgedDeviceBasicInformationCluster,
-    [DescriptorCluster.id]: DescriptorCluster,
-    [FlowMeasurementCluster.id]: FlowMeasurementCluster,
-    [GeneralCommissioningCluster.id]: GeneralCommissioningCluster,
-    [GeneralDiagnosticsCluster.id]: GeneralDiagnosticsCluster,
-    [GroupKeyManagementCluster.id]: GroupKeyManagementCluster,
-    [GroupsCluster.id]: GroupsCluster,
-    [IdentifyCluster.id]: IdentifyCluster,
-    [IlluminanceMeasurementCluster.id]: IlluminanceMeasurementCluster,
-    [UserLabelCluster.id]: UserLabelCluster,
-    [FixedLabelCluster.id]: FixedLabelCluster,
-    [LevelControlCluster.id]: LevelControlCluster,
-    [WifiAndEthernetAndThreadNetworkCommissioningCluster.id]: WifiAndEthernetAndThreadNetworkCommissioningCluster,
-    [OccupancySensingCluster.id]: OccupancySensingCluster,
-    [OnOffCluster.id]: OnOffCluster,
-    [OperationalCredentialsCluster.id]: OperationalCredentialsCluster,
-    [PulseWidthModulationLevelControlCluster.id]: PulseWidthModulationLevelControlCluster,
-    [WiredPowerSourceCluster.id]: WiredPowerSourceCluster,
-    [PowerSourceConfigurationCluster.id]: PowerSourceConfigurationCluster,
-    [PressureMeasurementCluster.id]: PressureMeasurementCluster,
-    [ScenesCluster.id]: ScenesCluster,
-    [TemperatureMeasurementCluster.id]: TemperatureMeasurementCluster,
-    [RelativeHumidityCluster.id]: RelativeHumidityCluster,
-    [LeafWetnessMeasurementCluster.id]: LeafWetnessMeasurementCluster,
-    [SoilMoistureMeasurementCluster.id]: SoilMoistureMeasurementCluster,
+    [Clusters.AccessControlCluster.id]: Clusters.AccessControlCluster,
+    [Clusters.AccountLoginCluster.id]: Clusters.AccountLoginCluster,
+    [Clusters.ActionsCluster.id]: Clusters.ActionsCluster,
+    [Clusters.AdministratorCommissioningCluster.id]: Clusters.AdministratorCommissioning.Complete,
+    [Clusters.ApplicationBasicCluster.id]: Clusters.ApplicationBasicCluster,
+    [Clusters.ApplicationLauncherCluster.id]: Clusters.ApplicationLauncher.Complete,
+    [Clusters.AudioOutputCluster.id]: Clusters.AudioOutput.Complete,
+    [Clusters.BallastConfigurationCluster.id]: Clusters.BallastConfigurationCluster,
+    [Clusters.BarrierControlCluster.id]: Clusters.BarrierControlCluster,
+    [Clusters.BasicInformationCluster.id]: Clusters.BasicInformationCluster,
+    [Clusters.BinaryInputBasicCluster.id]: Clusters.BinaryInputBasicCluster,
+    [Clusters.BindingCluster.id]: Clusters.BindingCluster,
+    [Clusters.BooleanStateCluster.id]: Clusters.BooleanStateCluster,
+    [Clusters.BridgedDeviceBasicInformationCluster.id]: Clusters.BridgedDeviceBasicInformationCluster,
+    [Clusters.ChannelCluster.id]: Clusters.Channel.Complete,
+    [Clusters.ClientMonitoringCluster.id]: Clusters.ClientMonitoringCluster,
+    [Clusters.ColorControlCluster.id]: Clusters.ColorControl.Complete,
+    [Clusters.ContentLauncherCluster.id]: Clusters.ContentLauncher.Complete,
+    [Clusters.DescriptorCluster.id]: Clusters.DescriptorCluster,
+    [Clusters.DiagnosticLogsCluster.id]: Clusters.DiagnosticLogsCluster,
+    [Clusters.DoorLockCluster.id]: Clusters.DoorLock.Complete,
+    [Clusters.ElectricalMeasurementCluster.id]: Clusters.ElectricalMeasurementCluster,
+    [Clusters.EthernetNetworkDiagnosticsCluster.id]: Clusters.EthernetNetworkDiagnostics.Complete,
+    [Clusters.FanControlCluster.id]: Clusters.FanControl.Complete,
+    [Clusters.FaultInjectionCluster.id]: Clusters.FaultInjectionCluster,
+    [Clusters.FixedLabelCluster.id]: Clusters.FixedLabelCluster,
+    [Clusters.FlowMeasurementCluster.id]: Clusters.FlowMeasurementCluster,
+    [Clusters.GeneralCommissioningCluster.id]: Clusters.GeneralCommissioningCluster,
+    [Clusters.GeneralDiagnosticsCluster.id]: Clusters.GeneralDiagnosticsCluster,
+    [Clusters.GroupKeyManagementCluster.id]: Clusters.GroupKeyManagementCluster,
+    [Clusters.GroupsCluster.id]: Clusters.GroupsCluster,
+    [Clusters.IdentifyCluster.id]: Clusters.Identify.Complete,
+    [Clusters.IlluminanceMeasurementCluster.id]: Clusters.IlluminanceMeasurementCluster,
+    [Clusters.KeypadInputCluster.id]: Clusters.KeypadInputCluster,
+    [Clusters.LeafWetnessMeasurementCluster.id]: Clusters.LeafWetnessMeasurementCluster,
+    [Clusters.LevelControlCluster.id]: Clusters.LevelControl.Complete,
+    [Clusters.LocalizationConfigurationCluster.id]: Clusters.LocalizationConfigurationCluster,
+    [Clusters.LowPowerCluster.id]: Clusters.LowPowerCluster,
+    [Clusters.MediaInputCluster.id]: Clusters.MediaInput.Complete,
+    [Clusters.MediaPlaybackCluster.id]: Clusters.MediaPlayback.Complete,
+    [Clusters.ModeSelectCluster.id]: Clusters.ModeSelect.Complete,
+    [Clusters.NetworkCommissioningCluster.id]: Clusters.NetworkCommissioning.Complete,
+    [Clusters.OccupancySensingCluster.id]: Clusters.OccupancySensingCluster,
+    [Clusters.OnOffCluster.id]: Clusters.OnOff.Complete,
+    [Clusters.OnOffSwitchConfigurationCluster.id]: Clusters.OnOffSwitchConfigurationCluster,
+    [Clusters.OperationalCredentialsCluster.id]: Clusters.OperationalCredentialsCluster,
+    [Clusters.OtaSoftwareUpdateProviderCluster.id]: Clusters.OtaSoftwareUpdateProviderCluster,
+    [Clusters.OtaSoftwareUpdateRequestorCluster.id]: Clusters.OtaSoftwareUpdateRequestorCluster,
+    [Clusters.PowerSourceCluster.id]: Clusters.PowerSource.Complete,
+    [Clusters.PowerSourceConfigurationCluster.id]: Clusters.PowerSourceConfigurationCluster,
+    [Clusters.PressureMeasurementCluster.id]: Clusters.PressureMeasurement.Complete,
+    [Clusters.ProxyConfigurationCluster.id]: Clusters.ProxyConfigurationCluster,
+    [Clusters.ProxyDiscoveryCluster.id]: Clusters.ProxyDiscoveryCluster,
+    [Clusters.PulseWidthModulationCluster.id]: Clusters.PulseWidthModulation.Complete,
+    [Clusters.PumpConfigurationAndControlCluster.id]: Clusters.PumpConfigurationAndControl.Complete,
+    [Clusters.RelativeHumidityMeasurementCluster.id]: Clusters.RelativeHumidityMeasurementCluster,
+    [Clusters.ScenesCluster.id]: Clusters.ScenesCluster,
+    [Clusters.SoftwareDiagnosticsCluster.id]: Clusters.SoftwareDiagnostics.Complete,
+    [Clusters.SoilMoistureMeasurementCluster.id]: Clusters.SoilMoistureMeasurementCluster,
+    [Clusters.SwitchCluster.id]: Clusters.Switch.Complete,
+    [Clusters.TargetNavigatorCluster.id]: Clusters.TargetNavigatorCluster,
+    [Clusters.TemperatureMeasurementCluster.id]: Clusters.TemperatureMeasurementCluster,
+    [Clusters.ThermostatCluster.id]: Clusters.Thermostat.Complete,
+    [Clusters.ThermostatUserInterfaceConfigurationCluster.id]: Clusters.ThermostatUserInterfaceConfigurationCluster,
+    [Clusters.ThreadNetworkDiagnosticsCluster.id]: Clusters.ThreadNetworkDiagnostics.Complete,
+    [Clusters.TimeFormatLocalizationCluster.id]: Clusters.TimeFormatLocalization.Complete,
+    [Clusters.TimeSyncCluster.id]: Clusters.TimeSync.Complete,
+    [Clusters.UnitLocalizationCluster.id]: Clusters.UnitLocalization.Complete,
+    [Clusters.UserLabelCluster.id]: Clusters.UserLabelCluster,
+    [Clusters.ValidProxiesCluster.id]: Clusters.ValidProxiesCluster,
+    [Clusters.WakeOnLanCluster.id]: Clusters.WakeOnLanCluster,
+    [Clusters.WiFiNetworkDiagnosticsCluster.id]: Clusters.WiFiNetworkDiagnostics.Complete,
+    [Clusters.WindowCoveringCluster.id]: Clusters.WindowCovering.Complete,
 };
 
 interface CachedAttributeInfo {
