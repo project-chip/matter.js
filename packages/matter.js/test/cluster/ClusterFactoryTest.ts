@@ -9,6 +9,9 @@ import { Attribute, Cluster, Command, Event, EventPriority, TlvNoResponse } from
 import { TlvUInt8 } from "../../src/tlv/TlvNumber.js";
 import { TlvNoArguments } from "../../src/tlv/TlvNoArguments.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../src/schema/BitmapSchema.js";
+import { TlvField, TlvObject } from "../../src/tlv/TlvObject.js";
+import { ClusterServer } from "../../src/protocol/interaction/InteractionServer.js";
+import { ClusterServerHandlers } from "../../src/cluster/server/ClusterServer.js";
 
 enum Feature {
     Extended = "Extended",
@@ -31,7 +34,7 @@ const METADATA = {
     features: FEATURES
 }
 
-const ELEMENTS = {
+const ELEMENTS = ClusterComponent({
     attributes: {
         attr1: Attribute(1, TlvUInt8)
     },
@@ -41,19 +44,22 @@ const ELEMENTS = {
     events: {
         ev1: Event(3, EventPriority.Debug, TlvNoArguments)
     }
-}
+})
 
-const ELEMENTS2 = {
+const ELEMENTS2 = ClusterComponent({
     attributes: {
         attr2: Attribute(4, TlvUInt8)
     },
     commands: {
-        cmd2: Command(5, TlvNoArguments, 5, TlvNoResponse)
+        cmd2: Command(
+            5, TlvObject({ cmd2RequestField: TlvField(1, TlvUInt8) }),
+            5, TlvObject({ cmd2ResponseField: TlvField(1, TlvUInt8) })
+        )
     },
     events: {
         ev2: Event(6, EventPriority.Debug, TlvNoArguments)
     }
-}
+})
 
 function expectMetadata(component: BaseClusterComponent<any, any, any, any>) {
     expect(component.id).toBe(METADATA.id);
@@ -249,5 +255,135 @@ describe("ClusterFactory", () => {
                 TestExtensibleCluster.with("Extended", "AbsolutelyFabulous", "BitterDisappointment");
             }).toThrowError(IllegalClusterError);
         })
+    })
+
+    /**
+     * Not a runtime test.  If this compiles the test "passes".
+     * 
+     * Ensures that ClusterServer instantiates correctly from extended
+     * clusters.
+     */
+    it("ClusterServer type is correct for automatic cluster", () => {
+        const MyCluster = TestExtensibleCluster.with("Extended");
+
+        // Create handlers directly
+        const handlers: ClusterServerHandlers<typeof MyCluster> = {
+            cmd1: ({ attributes: { attr1, attr2 }, session, endpoint }) => {
+                attr1; attr2; session; endpoint;
+            },
+            cmd2: ({ request: { cmd2RequestField }, attributes: { attr1, attr2 }, session, endpoint }) => {
+                cmd2RequestField; attr1; attr2; session; endpoint;
+                return { cmd2ResponseField: 5 };
+            },
+            getAttr1: ({ attributes: { attr1, attr2 }, session, endpoint }) => {
+                if (attr1 == undefined || attr2 == undefined || session === undefined || endpoint === undefined) throw new Error("Missing attribute");
+                return 5;
+            }
+        };
+        handlers;
+
+        // Create cluster server
+        ClusterServer(
+            MyCluster,
+            {
+                attr1: 1,
+                attr2: 2,
+            }, {
+            cmd1: ({ attributes: { attr1, attr2 }, session, endpoint }) => {
+                attr1; attr2; session; endpoint;
+            },
+            cmd2: ({ request: { cmd2RequestField }, attributes: { attr1, attr2 }, session, endpoint }) => {
+                cmd2RequestField; attr1; attr2; session; endpoint;
+                return { cmd2ResponseField: 5 };
+            },
+            getAttr1: ({ attributes: { attr1, attr2 }, session, endpoint }) => {
+                if (attr1 == undefined || attr2 == undefined || session === undefined || endpoint === undefined) throw new Error("Missing attribute");
+                return 5;
+            }
+        }, {
+            ev1: true,
+            ev2: true,
+        }
+        );
+    })
+
+    /**
+     * Not a runtime test.  If this compiles the test "passes".
+     * 
+     * Equivalent of above but removes ClusterFactory from the equation.
+     */
+    it("ClusterServer type is correct for manually defined equivalent", () => {
+        const MyCluster = Cluster({
+            id: 0x901,
+            name: "MyCluster",
+            revision: 2,
+            features: {
+                extended: BitFlag(0),
+                fancy: BitFlag(1),
+                absolutelyFabulous: BitFlag(2),
+                bitterDisappointment: BitFlag(3)
+            },
+            supportedFeatures: {
+                extended: true,
+                fancy: false,
+                absolutelyFabulous: false,
+                bitterDisappointment: false
+            },
+            attributes: {
+                attr1: Attribute(1, TlvUInt8),
+                attr2: Attribute(4, TlvUInt8)
+            },
+            commands: {
+                cmd1: Command(2, TlvNoArguments, 2, TlvNoResponse),
+                cmd2: Command(
+                    5, TlvObject({ cmd2RequestField: TlvField(1, TlvUInt8) }),
+                    5, TlvObject({ cmd2ResponseField: TlvField(1, TlvUInt8) })
+                )
+            },
+            events: {
+                ev1: Event(3, EventPriority.Debug, TlvNoArguments),
+                ev2: Event(6, EventPriority.Debug, TlvNoArguments)
+            }
+        })
+
+        // Create handlers directly
+        const handlers: ClusterServerHandlers<typeof MyCluster> = {
+            cmd1: ({ attributes: { attr1, attr2 }, session, endpoint }) => {
+                attr1; attr2; session; endpoint;
+            },
+            cmd2: ({ request: { cmd2RequestField }, attributes: { attr1, attr2 }, session, endpoint }) => {
+                cmd2RequestField; attr1; attr2; session; endpoint;
+                return { cmd2ResponseField: 5 };
+            },
+            getAttr1: ({ attributes: { attr1, attr2 }, session, endpoint }) => {
+                if (attr1 == undefined || attr2 == undefined || session === undefined || endpoint === undefined) throw new Error("Missing attribute");
+                return 5;
+            }
+        };
+        handlers;
+
+        // Create the cluster server
+        ClusterServer(
+            MyCluster,
+            {
+                attr1: 1,
+                attr2: 2,
+            }, {
+            cmd1: ({ attributes: { attr1, attr2 }, session, endpoint }) => {
+                attr1; attr2; session; endpoint;
+            },
+            cmd2: ({ request: { cmd2RequestField }, attributes: { attr1, attr2 }, session, endpoint }) => {
+                cmd2RequestField; attr1; attr2; session; endpoint;
+                return { cmd2ResponseField: 5 };
+            },
+            getAttr1: ({ attributes: { attr1, attr2 }, session, endpoint }) => {
+                if (attr1 == undefined || attr2 == undefined || session === undefined || endpoint === undefined) throw new Error("Missing attribute");
+                return 5;
+            }
+        }, {
+            ev1: true,
+            ev2: true,
+        }
+        );
     })
 })

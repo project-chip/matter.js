@@ -46,7 +46,7 @@ describe("Groups Server test", () => {
             },
             {
                 identify: async ({ request: { identifyTime } }) => { console.log(identifyTime); /* */ }
-            } as ClusterServerHandlers<typeof Identify.Cluster>
+            }
         );
 
         testSession = await createTestSessionWithFabric();
