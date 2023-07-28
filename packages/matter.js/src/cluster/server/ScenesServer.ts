@@ -147,13 +147,17 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
     };
 
     return {
-        addScene: async ({ request: { groupId, sceneId, transitionTime, sceneName, extensionFieldSets }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
+        addScene: async ({ request: { groupId, sceneId, transitionTime, sceneName, extensionFieldSets }, attributes: { sceneCount }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
             if (sessionType !== SessionType.Unicast) {
                 throw new Error("Groupcast not supported");
                 // TODO: When Unicast we generate a response, else not
             }
 
-            return addSceneLogic(endpoint.getId(), groupId, sceneId, transitionTime, sceneName, extensionFieldSets, 0, (session as SecureSession<MatterDevice>).getAccessingFabric());
+            const result = addSceneLogic(endpoint.getId(), groupId, sceneId, transitionTime, sceneName, extensionFieldSets, 0, (session as SecureSession<MatterDevice>).getAccessingFabric());
+            if (result.status === StatusCode.Success) {
+                sceneCount.update(session as SecureSession<MatterDevice>);
+            }
+            return result;
         },
 
         viewScene: async ({ request: { groupId, sceneId }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
@@ -178,7 +182,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             return { status: StatusCode.Success, groupId, sceneId, sceneName, transitionTime: sceneTransitionTime, extensionFieldSets };
         },
 
-        removeScene: async ({ request: { groupId, sceneId }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
+        removeScene: async ({ request: { groupId, sceneId }, attributes: { sceneCount }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
             if (sessionType !== SessionType.Unicast) {
                 throw new Error("Groupcast not supported");
                 // TODO: When Unicast we generate a response, else not
@@ -191,6 +195,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             }
 
             if (ScenesManager.removeScene(fabric, endpoint.getId(), groupId, sceneId)) {
+                sceneCount.update(session as SecureSession<MatterDevice>);
                 return { status: StatusCode.Success, groupId, sceneId };
             }
             return { status: StatusCode.NotFound, groupId, sceneId };
@@ -213,7 +218,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             return { status: StatusCode.Success, groupId };
         },
 
-        storeScene: async ({ request: { groupId, sceneId }, session, attributes: { currentScene, currentGroup }, message: { packetHeader: { sessionType } }, endpoint }) => {
+        storeScene: async ({ request: { groupId, sceneId }, session, attributes: { currentScene, currentGroup, sceneValid }, message: { packetHeader: { sessionType } }, endpoint }) => {
             if (sessionType !== SessionType.Unicast) {
                 throw new Error("Groupcast not supported");
                 // TODO: When Unicast we generate a response, else not
@@ -252,11 +257,12 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
 
             currentScene.set(sceneId);
             currentGroup.set(groupId);
+            sceneValid.update(session as SecureSession<MatterDevice>);
 
             return { status: StatusCode.Success, groupId, sceneId };
         },
 
-        recallScene: async ({ request: { groupId, sceneId, transitionTime }, attributes: { currentScene, currentGroup }, session, endpoint }) => {
+        recallScene: async ({ request: { groupId, sceneId, transitionTime }, attributes: { currentScene, currentGroup, sceneValid }, session, endpoint }) => {
             const fabric = (session as SecureSession<MatterDevice>).getAccessingFabric();
 
             if (groupId.id !== 0 && !GroupsManager.hasGroup(fabric, endpoint.getId(), groupId)) {
@@ -279,7 +285,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             });
             currentScene.set(sceneId);
             currentGroup.set(groupId);
-            // TODO: setSceneValid attribute to true
+            sceneValid.update(session as SecureSession<MatterDevice>);
         },
 
         getSceneMembership: async ({ request: { groupId }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
@@ -302,13 +308,17 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             return { status: StatusCode.Success, groupId, capacity, sceneList };
         },
 
-        enhancedAddScene: async ({ request: { groupId, sceneId, transitionTime, sceneName, extensionFieldSets }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
+        enhancedAddScene: async ({ request: { groupId, sceneId, transitionTime, sceneName, extensionFieldSets }, attributes: { sceneCount }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
             if (sessionType !== SessionType.Unicast) {
                 throw new Error("Groupcast not supported");
                 // TODO: When Unicast we generate a response, else not
             }
 
-            return addSceneLogic(endpoint.getId(), groupId, sceneId, Math.floor(transitionTime / 10), sceneName, extensionFieldSets, transitionTime % 10, (session as SecureSession<MatterDevice>).getAccessingFabric());
+            const result = addSceneLogic(endpoint.getId(), groupId, sceneId, Math.floor(transitionTime / 10), sceneName, extensionFieldSets, transitionTime % 10, (session as SecureSession<MatterDevice>).getAccessingFabric());
+            if (result.status === StatusCode.Success) {
+                sceneCount.update(session as SecureSession<MatterDevice>);
+            }
+            return result;
         },
 
         enhancedViewScene: async ({ request: { groupId, sceneId }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
@@ -339,7 +349,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             };
         },
 
-        copyScene: async ({ request: { mode, groupIdentifierFrom, sceneIdentifierFrom, groupIdentifierTo, sceneIdentifierTo }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
+        copyScene: async ({ request: { mode, groupIdentifierFrom, sceneIdentifierFrom, groupIdentifierTo, sceneIdentifierTo }, attributes: { sceneCount }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
             if (sessionType !== SessionType.Unicast) {
                 throw new Error("Groupcast not supported");
                 // TODO: When Unicast we generate a response, else not
@@ -382,10 +392,12 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                 }]);
             }
 
+            sceneCount.update(session as SecureSession<MatterDevice>);
+
             return { status: StatusCode.Success, groupIdentifierFrom, sceneIdentifierFrom };
         },
 
-        getSceneValid: ({ session, attributes: { currentScene, currentGroup }, endpoint }) => {
+        sceneValidAttributeGetter: ({ session, attributes: { currentScene, currentGroup }, endpoint }) => {
             if (session === undefined || endpoint === undefined) {
                 return false;
             }
@@ -408,7 +420,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             return true;
         },
 
-        getSceneCount: ({ session, endpoint }) => {
+        sceneCountAttributeGetter: ({ session, endpoint }) => {
             if (session === undefined || endpoint === undefined) {
                 throw new Error("getSceneCount: session or endpoint undefined");
             }

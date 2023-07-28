@@ -69,7 +69,7 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         }
     },
 
-    addNoc: async ({ request: { nocValue, icacValue, ipkValue, caseAdminSubject, adminVendorId }, session }) => {
+    addNoc: async ({ request: { nocValue, icacValue, ipkValue, caseAdminSubject, adminVendorId }, attributes: { nocs, commissionedFabrics, fabrics, trustedRootCertificates }, session }) => {
         if (!session.isSecure()) throw new Error("addOperationalCert should be called on a secure session.");
         const device = session.getContext();
         const fabricBuilder = device.getFabricBuilder();
@@ -81,6 +81,12 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
 
         const fabric = await fabricBuilder.build();
         device.addFabric(fabric);
+
+        // Update connected attributes
+        nocs.update(session as SecureSession<MatterDevice>);
+        commissionedFabrics.update(session as SecureSession<MatterDevice>);
+        fabrics.update(session as SecureSession<MatterDevice>);
+        trustedRootCertificates.update(session as SecureSession<MatterDevice>);
 
         // TODO: create ACL with caseAdminNode
         console.log("addOperationalCert success")
@@ -111,7 +117,7 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         throw new Error("Not implemented");
     },
 
-    updateFabricLabel: async ({ request: { label }, session }) => {
+    updateFabricLabel: async ({ request: { label }, attributes: { fabrics }, session }) => {
         if (!session.isSecure()) throw new Error("updateOperationalCert should be called on a secure session.");
         const secureSession = session as SecureSession<MatterDevice>;
         const fabric = secureSession.getFabric();
@@ -119,10 +125,12 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
 
         fabric.setLabel(label);
 
+        fabrics.update(session as SecureSession<MatterDevice>);
+
         return { statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok };
     },
 
-    removeFabric: async ({ request: { fabricIndex }, session }) => {
+    removeFabric: async ({ request: { fabricIndex }, attributes: { nocs, commissionedFabrics, fabrics, trustedRootCertificates }, session }) => {
         const device = session.getContext();
 
         const fabric = device.getFabricByIndex(fabricIndex);
@@ -132,6 +140,12 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         }
 
         fabric.remove();
+
+        nocs.update(session as SecureSession<MatterDevice>);
+        commissionedFabrics.update(session as SecureSession<MatterDevice>);
+        fabrics.update(session as SecureSession<MatterDevice>);
+        trustedRootCertificates.update(session as SecureSession<MatterDevice>);
+
         return { statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok, fabricIndex, debugText: "Fabric removed" };
     },
 

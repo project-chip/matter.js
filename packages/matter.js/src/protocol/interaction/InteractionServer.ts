@@ -410,7 +410,7 @@ export function ClusterServer<
             result[`trigger${capitalizedEventName}Event`] = <T,>(event: T) => (events as any)[eventName].triggerEvent(event);
         }
     }
-    (attributes as any).eventList.set(eventList.map(id => new EventId(id)));
+    (attributes as any).eventList.setLocal(eventList.map(id => new EventId(id)));
 
     return result as ClusterServerObj<A, C, E>;
 }
