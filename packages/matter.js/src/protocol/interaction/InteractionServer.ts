@@ -326,7 +326,7 @@ export function ClusterServer<
             }
         }
     }
-    (attributes as any).attributeList.set(attributeList);
+    (attributes as any).attributeList.setLocal(attributeList);
 
     // Create commands
     const acceptedCommandList = new Array<number>();
@@ -370,8 +370,8 @@ export function ClusterServer<
             }
         }
     }
-    (attributes as any).acceptedCommandList.set(acceptedCommandList.map(id => new CommandId(id)));
-    (attributes as any).generatedCommandList.set(generatedCommandList.map(id => new CommandId(id)));
+    (attributes as any).acceptedCommandList.setLocal(acceptedCommandList.map(id => new CommandId(id)));
+    (attributes as any).generatedCommandList.setLocal(generatedCommandList.map(id => new CommandId(id)));
 
     const eventList = new Array<number>();
     for (const eventName in eventDef) {

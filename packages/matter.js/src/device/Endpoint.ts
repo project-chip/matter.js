@@ -110,7 +110,7 @@ export class Endpoint {
         const fixedLabelCluster = this.getClusterServer(UserLabelCluster);
         const labelList = fixedLabelCluster?.attributes.labelList.get() ?? [];
         labelList.push({ label, value });
-        fixedLabelCluster?.attributes.labelList.set(labelList);
+        fixedLabelCluster?.attributes.labelList.setLocal(labelList);
     }
 
     addClusterServer<A extends Attributes, C extends Commands, E extends Events>(cluster: ClusterServerObj<A, C, E>) {

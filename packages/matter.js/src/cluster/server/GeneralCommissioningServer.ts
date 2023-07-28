@@ -24,7 +24,7 @@ export const GeneralCommissioningClusterHandler: (options?: {
         // TODO Add handling for ExpiryLengthSeconds field and Error handling, see 11.9.7.2
 
         session.getContext().armFailSafe();
-        breadcrumb.set(breadcrumbStep);
+        breadcrumb.setLocal(breadcrumbStep);
         return SuccessResponse;
     },
 
