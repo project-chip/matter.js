@@ -108,7 +108,25 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         }));
     },
 
-    getCurrentFabricIndex: ({ session }) => {
+    nocsAttributeGetter: ({ session }) => {
+        if (session === undefined || !session.isSecure()) return []; // ???
+        return session.getContext().getFabrics().map(fabric => ({
+            noc: fabric.operationalCert,
+            icac: fabric.intermediateCACert ?? null
+        }));
+    },
+
+    commissionedFabricsAttributeGetter: ({ session }) => {
+        if (session === undefined || !session.isSecure()) return 0; // ???
+        return session.getContext().getFabrics().length;
+    },
+
+    trustedRootCertificatesAttributeGetter: ({ session }) => {
+        if (session === undefined || !session.isSecure()) return []; // ???
+        return session.getContext().getFabrics().map(fabric => fabric.rootCert);
+    },
+
+    currentFabricIndexAttributeGetter: ({ session }) => {
         if (session === undefined || !session.isSecure()) return FabricIndex.NO_FABRIC;
         return (session as SecureSession<MatterDevice>).getFabric()?.fabricIndex ?? FabricIndex.NO_FABRIC;
     },
