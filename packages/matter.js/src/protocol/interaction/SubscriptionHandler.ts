@@ -135,7 +135,7 @@ export class SubscriptionHandler {
         this.updateTimer.stop();
 
         const values = this.attributes.map(({ path, attribute }) => {
-            const { value, version } = attribute.getWithVersion(session);
+            const { value, version } = attribute.getWithVersion(session, true); // TODO How to handle fabric scoped in subscribes?
             return { path, value, version, schema: attribute.schema };
         }).filter(({ value }) => value !== undefined) as PathValueVersion<any>[];
         this.lastUpdateTimeMs = Time.nowMs();
