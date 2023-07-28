@@ -94,16 +94,16 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         return { statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok, fabricIndex: fabric.fabricIndex };
     },
 
-    getFabrics: ({ session }) => {
+    fabricsAttributeGetter: ({ session, isFabricFiltered }) => {
         if (session === undefined || !session.isSecure()) return []; // ???
-        // TODO add support for "fabric filtered TRUE" to only return "the" one fabric
-        return session.getContext().getFabrics().map(fabric => ({
+        const fabrics = isFabricFiltered ? [session.getAccessingFabric()] : session.getContext().getFabrics();
+
+        return fabrics.map(fabric => ({
             fabricId: fabric.fabricId,
             label: fabric.label,
             nodeId: fabric.nodeId,
             rootPublicKey: fabric.rootPublicKey,
             vendorId: fabric.rootVendorId,
-            // TODO: this is a hack. Fabric-scoped data need to be handled automatically
             fabricIndex: fabric.fabricIndex,
         }));
     },
