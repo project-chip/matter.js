@@ -20,9 +20,7 @@ import { Fabric } from "../../src/fabric/Fabric.js";
 import { WindowCovering } from "../../src/cluster/definitions/WindowCoveringCluster.js";
 import { Level, Logger } from "../../src/log/Logger.js";
 import { BasicInformationCluster } from "../../src/cluster/definitions/BasicInformationCluster.js";
-import {
-    AttributeServer, FixedAttributeServer
-} from "../../src/cluster/server/AttributeServer.js";
+import { AttributeServer, FixedAttributeServer } from "../../src/cluster/server/AttributeServer.js";
 import { BindingCluster } from "../../src/cluster/definitions/BindingCluster.js";
 import { IdentifyCluster, Identify } from "../../src/cluster/definitions/IdentifyCluster.js";
 import { Cluster, ClusterExtend } from "../../src/cluster/Cluster.js";
@@ -54,7 +52,7 @@ describe("ClusterServer structure", () => {
             // TS ignore to allow a check, remove to test typing)
 
             assert.equal(basic.attributes.softwareVersion.getLocal(), 1);
-            assert.ok(basic.attributes.softwareVersion instanceof FixedAttributeServer);
+            assert.ok(basic.attributes.softwareVersion.isFixed);
             assert.equal(basic.getSoftwareVersionAttribute(), 1);
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
@@ -74,7 +72,7 @@ describe("ClusterServer structure", () => {
             assert.ok(basic2);
 
             assert.equal(basic2.attributes.softwareVersion.getLocal(), 1);
-            assert.ok(basic2.attributes.softwareVersion instanceof FixedAttributeServer);
+            assert.ok(basic2.attributes.softwareVersion.isFixed);
             assert.equal(basic2.getSoftwareVersionAttribute(), 1);
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
@@ -160,7 +158,7 @@ describe("ClusterServer structure", () => {
 
             // guard needed because as per types optional are potentially undefined
             assert.equal(basic.attributes.manufacturingDate?.getLocal(), "12345678");
-            assert.ok(basic.attributes.manufacturingDate instanceof FixedAttributeServer);
+            assert.ok(basic.attributes.manufacturingDate instanceof FixedAttributeServer && basic.attributes.manufacturingDate.isFixed);
             // guard needed because as per types optional are potentially undefined
             assert.equal(basic.getManufacturingDateAttribute?.(), "12345678");
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -182,7 +180,7 @@ describe("ClusterServer structure", () => {
 
             // guard needed because as per types optional are potentially undefined
             assert.equal(basic2.attributes.manufacturingDate?.getLocal(), "12345678");
-            assert.ok(basic2.attributes.manufacturingDate instanceof FixedAttributeServer);
+            assert.ok(basic2.attributes.manufacturingDate instanceof FixedAttributeServer && basic2.attributes.manufacturingDate.isFixed);
             // guard needed because as per types optional are potentially undefined
             assert.equal(basic2.getManufacturingDateAttribute?.(), "12345678");
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -366,13 +364,13 @@ describe("ClusterServer structure", () => {
                     setScopedClusterDataValueCalledCounter++;
                     assert.equal(cluster.id, BindingCluster.id);
                     assert.equal(clusterDataKey, "binding");
-                    assert.deepEqual(value, { value: [{}], version: 1 });
+                    assert.deepEqual(value, { value: [{}] });
                 }
             } as Fabric;
 
-            assert.deepEqual(binding.attributes.binding.getLocal(fabric), []);
+            assert.deepEqual(binding.attributes.binding.getLocal(fabric, true), []);
             binding.attributes.binding.setLocal([{}], fabric);
-            assert.deepEqual(binding.getBindingAttribute(fabric), []);
+            assert.deepEqual(binding.getBindingAttribute(fabric, true), []);
             binding.setBindingAttribute([{}], fabric);
 
             assert.equal(getScopedClusterDataValueCalledCounter, 4);

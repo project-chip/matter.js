@@ -171,14 +171,14 @@ describe("Integration Test", () => {
             assert.ok(basicInfoCluster);
 
             // check API access for a Mandatory field with both APIs, get and set
-            const v1_objApi = basicInfoCluster.attributes.softwareVersionString.get();
+            const v1_objApi = basicInfoCluster.attributes.softwareVersionString.getLocal();
             assert.equal(v1_objApi, "v1");
 
             // check API access for an existing optional field with both APIs, get and set
             assert.ok(basicInfoCluster.attributes.nodeLabel);
-            const nodeLabel_objApi = basicInfoCluster.attributes.nodeLabel.get();
+            const nodeLabel_objApi = basicInfoCluster.attributes.nodeLabel.getLocal();
             assert.equal(nodeLabel_objApi, "");
-            basicInfoCluster.attributes.nodeLabel.set("234567");
+            basicInfoCluster.attributes.nodeLabel.setLocal("234567");
             const nodeLabel_accessorApi = basicInfoCluster.getNodeLabelAttribute();
             assert.equal(nodeLabel_accessorApi, "234567");
             basicInfoCluster.setNodeLabelAttribute("345678");

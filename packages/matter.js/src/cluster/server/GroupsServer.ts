@@ -169,7 +169,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
 
             const identifyCluster = endpoint.getClusterServer(IdentifyCluster);
             if (identifyCluster) {
-                if (identifyCluster.attributes.identifyTime.getLocal() > 0) { // We identify ourself currently
+                if (identifyCluster.attributes.identifyTime.getLocal() > 0) { // We identify ourselves currently
                     addGroupLogic(groupId, groupName, sessionType, (session as SecureSession<MatterDevice>).getAccessingFabric(), endpoint.getId());
                 }
             }

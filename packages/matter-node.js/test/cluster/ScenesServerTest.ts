@@ -409,10 +409,10 @@ describe("Scenes Server test", () => {
         });
 
         it("recallScene", async () => {
-            onOffServer?.attributes.onOff.set(false);
-            assert.equal(onOffServer?.attributes.onOff.get(), false);
-            assert.deepEqual(scenesServer?.attributes.currentGroup.get(), new GroupId(1));
-            assert.equal(scenesServer?.attributes.currentScene.get(), 1);
+            onOffServer?.attributes.onOff.setLocal(false);
+            assert.equal(onOffServer?.attributes.onOff.getLocal(), false);
+            assert.deepEqual(scenesServer?.attributes.currentGroup.getLocal(), new GroupId(1));
+            assert.equal(scenesServer?.attributes.currentScene.getLocal(), 1);
 
             assert.equal(scenesServer?.attributes.sceneValid.get(testSession), false);
 
@@ -422,9 +422,9 @@ describe("Scenes Server test", () => {
             }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
             assert.deepEqual(result, { code: StatusCode.Success, responseId: 5, response: undefined });
-            assert.equal(onOffServer?.attributes.onOff.get(), true);
-            assert.deepEqual(scenesServer?.attributes.currentGroup.get(), new GroupId(3));
-            assert.equal(scenesServer?.attributes.currentScene.get(), 2);
+            assert.equal(onOffServer?.attributes.onOff.getLocal(), true);
+            assert.deepEqual(scenesServer?.attributes.currentGroup.getLocal(), new GroupId(3));
+            assert.equal(scenesServer?.attributes.currentScene.getLocal(), 2);
             assert.equal(scenesServer?.attributes.sceneValid.get(testSession), true);
         });
 

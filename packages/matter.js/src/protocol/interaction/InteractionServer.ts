@@ -151,7 +151,7 @@ export function ClusterServer<
                 const attributeName = sceneAttributeList.find(name => (attributes as any)[name].id === attributeId.id);
                 if (attributeName) {
                     const attributeServer = (attributes as any)[attributeName];
-                    attributeServer.set(attributeServer.schema.decodeTlv(attributeValue));
+                    attributeServer.setLocal(attributeServer.schema.decodeTlv(attributeValue));
                 }
             }
         },
@@ -165,7 +165,7 @@ export function ClusterServer<
                 const attributeName = sceneAttributeList.find(name => (attributes as any)[name].id === attributeId.id);
                 if (attributeName) {
                     const attributeServer = (attributes as any)[attributeName];
-                    if (attributeServer.get() !== attributeServer.schema.decodeTlv(attributeValue)) return false;
+                    if (attributeServer.getLocal() !== attributeServer.schema.decodeTlv(attributeValue)) return false;
                 }
             }
             return true;

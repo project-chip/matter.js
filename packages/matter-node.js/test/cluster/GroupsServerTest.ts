@@ -20,7 +20,7 @@ import { ClusterServer, StatusCode } from "@project-chip/matter.js/interaction";
 import { SecureSession } from "@project-chip/matter.js/session";
 import { Fabric, FabricJsonObject } from "@project-chip/matter.js/fabric";
 import {
-    ClusterServerObjForCluster, GroupsCluster, GroupsClusterHandler, Identify, ClusterServerHandlers
+    ClusterServerObjForCluster, GroupsCluster, GroupsClusterHandler, Identify
 } from "@project-chip/matter.js/cluster";
 import { GroupId } from "@project-chip/matter.js/datatype";
 import { getPromiseResolver } from "@project-chip/matter.js/util";

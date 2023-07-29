@@ -255,8 +255,8 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
 
             ScenesManager.setScenes(fabric, endpoint.getId(), [newSceneEntry]);
 
-            currentScene.set(sceneId);
-            currentGroup.set(groupId);
+            currentScene.setLocal(sceneId);
+            currentGroup.setLocal(groupId);
             sceneValid.update(session as SecureSession<MatterDevice>);
 
             return { status: StatusCode.Success, groupId, sceneId };
@@ -283,8 +283,8 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                     cluster._setSceneExtensionFieldSets(attributeValueList, usedTransitionTime);
                 }
             });
-            currentScene.set(sceneId);
-            currentGroup.set(groupId);
+            currentScene.setLocal(sceneId);
+            currentGroup.setLocal(groupId);
             sceneValid.update(session as SecureSession<MatterDevice>);
         },
 
@@ -403,7 +403,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             }
             const fabric = (session as SecureSession<MatterDevice>).getAccessingFabric();
 
-            const existingSceneEntry = ScenesManager.getSceneEntry(fabric, endpoint.getId(), currentGroup.get(), currentScene.get());
+            const existingSceneEntry = ScenesManager.getSceneEntry(fabric, endpoint.getId(), currentGroup.getLocal(), currentScene.getLocal());
             if (existingSceneEntry === undefined) {
                 return false;
             }

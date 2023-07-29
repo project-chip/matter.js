@@ -413,7 +413,7 @@ describe("InteractionProtocol", () => {
             const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, WRITE_REQUEST);
 
             assert.deepEqual(result, WRITE_RESPONSE);
-            assert.equal(basicCluster.attributes.nodeLabel.get(), "test");
+            assert.equal(basicCluster.attributes.nodeLabel.getLocal(), "test");
         });
 
         it("write chunked array values and return errors on invalid values", async () => {
@@ -441,7 +441,7 @@ describe("InteractionProtocol", () => {
             const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" }, session: testSession }) as unknown as MessageExchange<any>, CHUNKED_ARRAY_WRITE_REQUEST);
 
             assert.deepEqual(result, CHUNKED_ARRAY_WRITE_RESPONSE);
-            assert.deepEqual(accessControlCluster.attributes.acl.get(testSession), [
+            assert.deepEqual(accessControlCluster.attributes.acl.getLocal(testFabric, true), [
                 {
                     privilege: 1,
                     authMode: 2,
@@ -484,10 +484,10 @@ describe("InteractionProtocol", () => {
             const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, MASS_WRITE_REQUEST);
 
             assert.deepEqual(result, MASS_WRITE_RESPONSE);
-            assert.equal(basicCluster.attributes.vendorName.get(), "vendor");
-            assert.equal(basicCluster.attributes.productName.get(), "product");
-            assert.equal(basicCluster.attributes.location.get(), "US");
-            assert.equal(basicCluster.attributes.nodeLabel.get(), "test");
+            assert.equal(basicCluster.attributes.vendorName.getLocal(), "vendor");
+            assert.equal(basicCluster.attributes.productName.getLocal(), "product");
+            assert.equal(basicCluster.attributes.location.getLocal(), "US");
+            assert.equal(basicCluster.attributes.nodeLabel.getLocal(), "test");
         });
     });
 
