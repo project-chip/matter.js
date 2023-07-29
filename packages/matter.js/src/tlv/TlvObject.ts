@@ -56,7 +56,9 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
             const { id, schema, optional: isOptional } = this.fieldDefinitions[name];
             const fieldValue = (value as any)[name];
             if (fieldValue === undefined) {
-                if (!isOptional) throw new Error(`Missing mandatory field ${name}`);
+                if (!isOptional) {
+                    throw new Error(`Missing mandatory field ${name}`);
+                }
                 continue;
             }
             schema.encodeTlvInternal(writer, fieldValue, { id });
@@ -87,8 +89,9 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
             if (optional) continue;
             const value = result[name];
             if (value !== undefined) continue;
-            if (fallback === undefined) throw new Error(`Missing mandatory field ${name}`);
-            result[name] = fallback;
+            if (fallback !== undefined) {
+                result[name] = fallback;
+            }
         }
         return result as TypeFromFields<F>;
     }
@@ -96,8 +99,12 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
     override validate(value: TypeFromFields<F>): void {
         for (const name in this.fieldDefinitions) {
             const { optional, schema } = this.fieldDefinitions[name];
-            if (optional && (value as any)[name] === undefined) continue;
-            if (!optional && (value as any)[name] === undefined) throw new Error(`Missing mandatory field ${name}`);
+            if ((value as any)[name] === undefined) {
+                if (optional) {
+                    continue;
+                }
+                throw new Error(`Missing mandatory field ${name}`);
+            }
             schema.validate((value as any)[name]);
         }
     }

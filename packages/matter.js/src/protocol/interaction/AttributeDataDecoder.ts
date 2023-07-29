@@ -13,7 +13,7 @@ import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Logger } from "../../log/Logger.js";
 import { TlvAttributeData, TlvAttributeReport } from "./InteractionProtocol.js";
 
-const logger = Logger.get("DataReportDecoder");
+const logger = Logger.get("AttributeDataDecoder");
 
 export interface DecodedAttributeReportValue {
     path: {
@@ -159,7 +159,6 @@ export function decodeChunkedArray<T>(schema: ArraySchema<T>, values: TypeFromSc
             result[listIndex] = schema.elementSchema.decodeTlv(data);
         }
     });
-    schema.validate(result);
     return result;
 }
 
