@@ -14,7 +14,7 @@ import { FabricId } from "../../src/datatype/FabricId.js";
 import { NodeId } from "../../src/datatype/NodeId.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 import { VendorId } from "../../src/datatype/VendorId.js";
-import {MatterDevice} from "../../src/MatterDevice.js";
+import { MatterDevice } from "../../src/MatterDevice.js";
 import { SecureSession } from "../../src/session/SecureSession.js";
 
 describe("AttributeServerTest", () => {
@@ -240,12 +240,12 @@ describe("AttributeServerTest", () => {
             testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
 
             const server = new FabricScopedAttributeServer(1, "test", TlvUInt8, () => {/* */ }, true, false, 3, BasicInformationCluster);
-            server.addMatterListener((value, version) => { valueTriggered = value; versionTriggered = version;});
+            server.addMatterListener((value, version) => { valueTriggered = value; versionTriggered = version; });
             server.addListener((newValue, oldValue) => { valueTriggered2 = newValue; oldValueTriggered2 = oldValue; });
 
             server.setLocal(7, testFabric)
             assert.strictEqual(server.getLocal(testFabric, true), 7);
-            assert.deepEqual(testFabric.getScopedClusterDataValue(BasicInformationCluster, "test"), {value: 7});
+            assert.deepEqual(testFabric.getScopedClusterDataValue(BasicInformationCluster, "test"), { value: 7 });
             assert.strictEqual(valueTriggered, 7);
             assert.strictEqual(versionTriggered, 1);
             assert.strictEqual(valueTriggered2, 7);
@@ -259,12 +259,12 @@ describe("AttributeServerTest", () => {
             testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
 
             const server = new FabricScopedAttributeServer(1, "test", TlvUInt8, () => {/* */ }, true, false, 3, BasicInformationCluster);
-            server.addMatterListener(() => { throw new Error("Should not be triggered");});
+            server.addMatterListener(() => { throw new Error("Should not be triggered"); });
             server.addListener((newValue, oldValue) => { valueTriggered2 = newValue; oldValueTriggered2 = oldValue; });
 
             server.setLocal(5, testFabric)
             assert.strictEqual(server.getLocal(testFabric, true), 5);
-            assert.deepEqual(testFabric.getScopedClusterDataValue(BasicInformationCluster, "test"), {value: 5});
+            assert.deepEqual(testFabric.getScopedClusterDataValue(BasicInformationCluster, "test"), { value: 5 });
             assert.strictEqual(valueTriggered2, 5);
             assert.strictEqual(oldValueTriggered2, 5);
         });
@@ -272,8 +272,8 @@ describe("AttributeServerTest", () => {
 
 
 
-        it ("should throw an error if only getter is implemented but writable", () => {
-            assert.throws(() => new FabricScopedAttributeServer(1, "test", TlvUInt8, () => 3, true, false, 3, BasicInformationCluster, () => 7), {message: "Getter and setter must be implemented together when attribute is writeable."});
+        it("should throw an error if only getter is implemented but writable", () => {
+            assert.throws(() => new FabricScopedAttributeServer(1, "test", TlvUInt8, () => 3, true, false, 3, BasicInformationCluster, () => 7), { message: "Getter and setter must be implemented together when attribute is writeable." });
         });
 
         it("should throw an error when trying to get getter method value locally", () => {
@@ -281,7 +281,7 @@ describe("AttributeServerTest", () => {
             testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
 
             const server = new FabricScopedAttributeServer(1, "test", TlvUInt8, () => {/* */ }, false, false, 3, BasicInformationCluster, () => 7);
-            assert.throws(() => server.getLocal(testFabric, true), {message: "Getter method is not allowed to get fabric scoped attributes locally."});
+            assert.throws(() => server.getLocal(testFabric, true), { message: "Getter method is not allowed to get fabric scoped attributes locally." });
         });
 
         it("should return value from getter when used non-locally", () => {
@@ -303,7 +303,7 @@ describe("AttributeServerTest", () => {
 
             const server = new FabricScopedAttributeServer(1, "test", TlvUInt8, () => {/* */ }, true, false, 3, BasicInformationCluster, () => 7, () => true);
             server.init(undefined, 2);
-            server.addMatterListener((value, version) => { valueTriggered = value; versionTriggered = version;});
+            server.addMatterListener((value, version) => { valueTriggered = value; versionTriggered = version; });
             server.addListener((newValue, oldValue) => { valueTriggered2 = newValue; oldValueTriggered2 = oldValue; });
 
             server.set(9, testSession);
