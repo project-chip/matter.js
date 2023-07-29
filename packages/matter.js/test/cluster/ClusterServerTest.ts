@@ -108,7 +108,7 @@ describe("ClusterServer structure", () => {
             });
 
             assert.equal(basic.attributes.nodeLabel.getLocal(), "");
-            assert.ok(basic.attributes.nodeLabel instanceof AttributeServer);
+            assert.ok(!basic.attributes.nodeLabel.isFixed);
             assert.equal(basic.getNodeLabelAttribute(), "");
             basic.attributes.nodeLabel.setLocal("new");
             basic.setNodeLabelAttribute("new 2");
