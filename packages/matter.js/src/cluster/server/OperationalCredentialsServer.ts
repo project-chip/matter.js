@@ -113,6 +113,7 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         return session.getContext().getFabrics().map(fabric => ({
             noc: fabric.operationalCert,
             icac: fabric.intermediateCACert ?? null
+            //fabricIndex: fabric.fabricIndex,
         }));
     },
 

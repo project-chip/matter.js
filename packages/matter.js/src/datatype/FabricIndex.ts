@@ -29,6 +29,6 @@ export class FabricIndex {
 /** Tlv Schema for a Fabric Index. */
 export const TlvFabricIndex = new TlvWrapper<FabricIndex, number>(
     TlvUInt8.bound({ min: 0, max: 254 }),
-    farbricIndex => farbricIndex.index,
+    fabricIndex => fabricIndex.index,
     value => value === 0 ? FabricIndex.NO_FABRIC : new FabricIndex(value),
 );

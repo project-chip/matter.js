@@ -107,10 +107,7 @@ export namespace OperationalCredentials {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 11.17.4.5.5
          */
-        label: TlvField(5, TlvString.bound({ maxLength: 32 })),
-
-        // TODO: this data is scoped in the fabric context and should be marked as such
-        fabricIndex: TlvField(0xfe, TlvFabricIndex),
+        label: TlvField(5, TlvString.bound({ maxLength: 32 }))
     });
 
     /**
