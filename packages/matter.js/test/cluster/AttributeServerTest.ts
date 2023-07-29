@@ -49,10 +49,10 @@ describe("AttributeServerTest", () => {
         });
 
         it("should set the value locally and trigger listeners on change", () => {
-            let valueTriggered = undefined;
-            let versionTriggered = undefined;
-            let valueTriggered2 = undefined;
-            let oldValueTriggered2 = undefined;
+            let valueTriggered: number | undefined = undefined;
+            let versionTriggered: number | undefined = undefined;
+            let valueTriggered2: number | undefined = undefined;
+            let oldValueTriggered2: number | undefined = undefined;
             const server = new AttributeServer(1, "test", TlvUInt8, () => {/* */ }, false, false, 3,);
             server.addMatterListener((value, version) => { valueTriggered = value; versionTriggered = version; });
             server.addListener((newValue, oldValue) => { valueTriggered2 = newValue; oldValueTriggered2 = oldValue; });
@@ -67,8 +67,8 @@ describe("AttributeServerTest", () => {
         });
 
         it("should set the value locally and trigger listeners on non change", () => {
-            let valueTriggered2 = undefined;
-            let oldValueTriggered2 = undefined;
+            let valueTriggered2: number | undefined = undefined;
+            let oldValueTriggered2: number | undefined = undefined;
             const server = new AttributeServer(1, "test", TlvUInt8, () => {/* */ }, false, false, 3,);
             server.addMatterListener(() => { throw new Error("Should not be triggered."); });
             server.addListener((newValue, oldValue) => { valueTriggered2 = newValue; oldValueTriggered2 = oldValue; });
@@ -92,7 +92,7 @@ describe("AttributeServerTest", () => {
         });
 
         it("should return the value from getter also with setter but increased version on change", () => {
-            let valueSet = undefined;
+            let valueSet: number | undefined = undefined;
             const server = new AttributeServer(1, "test", TlvUInt8, () => {/* */ }, false, false, 3, () => 4, (value) => { valueSet = value; return true; });
             assert.deepEqual(server.getWithVersion(), { value: 4, version: 0 });
             server.setLocal(5);
@@ -101,7 +101,7 @@ describe("AttributeServerTest", () => {
         });
 
         it("should return the value from getter also with setter but not increased version when no change", () => {
-            let valueSet = undefined;
+            let valueSet: number | undefined = undefined;
             const server = new AttributeServer(1, "test", TlvUInt8, () => {/* */ }, false, false, 3, () => 4, (value) => { valueSet = value; return false; });
             assert.deepEqual(server.getWithVersion(), { value: 4, version: 0 });
             server.setLocal(5);
@@ -110,7 +110,7 @@ describe("AttributeServerTest", () => {
         });
 
         it("should return the value from getter and increased version after update", () => {
-            let valueSet = undefined;
+            let valueSet: number | undefined = undefined;
             const server = new AttributeServer(1, "test", TlvUInt8, () => {/* */ }, false, false, 3, () => 4, (value) => { valueSet = value; return false; });
             assert.deepEqual(server.getWithVersion(), { value: 4, version: 0 });
             server.updated();
@@ -119,11 +119,11 @@ describe("AttributeServerTest", () => {
         });
 
         it("should trigger listeners with getter also with setter but increased version on change", () => {
-            let valueSet = undefined;
-            let valueTriggered = undefined;
-            let versionTriggered = undefined;
-            let valueTriggered2 = undefined;
-            let oldValueTriggered2 = undefined;
+            let valueSet: number | undefined = undefined;
+            let valueTriggered: number | undefined = undefined;
+            let versionTriggered: number | undefined = undefined;
+            let valueTriggered2: number | undefined = undefined;
+            let oldValueTriggered2: number | undefined = undefined;
             const server = new AttributeServer(1, "test", TlvUInt8, () => {/* */ }, false, false, 3, () => 4, (value) => { valueSet = value; return true; });
             server.addMatterListener((value, version) => { valueTriggered = value; versionTriggered = version; });
             server.addListener((newValue, oldValue) => { valueTriggered2 = newValue; oldValueTriggered2 = oldValue; });
@@ -138,9 +138,9 @@ describe("AttributeServerTest", () => {
         });
 
         it("should return the value from getter also with setter but not increased version when no change", () => {
-            let valueSet = undefined;
-            let valueTriggered2 = undefined;
-            let oldValueTriggered2 = undefined;
+            let valueSet: number | undefined = undefined;
+            let valueTriggered2: number | undefined = undefined;
+            let oldValueTriggered2: number | undefined = undefined;
             const server = new AttributeServer(1, "test", TlvUInt8, () => {/* */ }, false, false, 3, () => 4, (value) => { valueSet = value; return false; });
             server.addMatterListener(() => { throw new Error("Should not be triggered"); });
             server.addListener((newValue, oldValue) => { valueTriggered2 = newValue; oldValueTriggered2 = oldValue; });
@@ -153,7 +153,7 @@ describe("AttributeServerTest", () => {
         });
 
         it("should return the value from getter and increased version after update", () => {
-            let valueSet = undefined;
+            let valueSet: number | undefined = undefined;
             const server = new AttributeServer(1, "test", TlvUInt8, () => {/* */ }, false, false, 3, () => 4, (value) => { valueSet = value; return false; });
             assert.deepEqual(server.getWithVersion(), { value: 4, version: 0 });
             server.updated();
@@ -232,10 +232,10 @@ describe("AttributeServerTest", () => {
         });
 
         it("should update the value from fabric scoped storage when set and trigger listeners", () => {
-            let valueTriggered = undefined;
-            let versionTriggered = undefined;
-            let valueTriggered2 = undefined;
-            let oldValueTriggered2 = undefined;
+            let valueTriggered: number | undefined = undefined;
+            let versionTriggered: number | undefined = undefined;
+            let valueTriggered2: number | undefined = undefined;
+            let oldValueTriggered2: number | undefined = undefined;
             const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ByteArray.fromHex("00"), ByteArray.fromHex("00"), { privateKey: ByteArray.fromHex("00"), publicKey: ByteArray.fromHex("00") }, new VendorId(1), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), "");
             testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
 
@@ -253,8 +253,8 @@ describe("AttributeServerTest", () => {
         });
 
         it("should handle the value from fabric scoped storage when set and trigger ony external listeners", () => {
-            let valueTriggered2 = undefined;
-            let oldValueTriggered2 = undefined;
+            let valueTriggered2: number | undefined = undefined;
+            let oldValueTriggered2: number | undefined = undefined;
             const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ByteArray.fromHex("00"), ByteArray.fromHex("00"), { privateKey: ByteArray.fromHex("00"), publicKey: ByteArray.fromHex("00") }, new VendorId(1), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), "");
             testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
 
@@ -268,9 +268,6 @@ describe("AttributeServerTest", () => {
             assert.strictEqual(valueTriggered2, 5);
             assert.strictEqual(oldValueTriggered2, 5);
         });
-
-
-
 
         it("should throw an error if only getter is implemented but writable", () => {
             assert.throws(() => new FabricScopedAttributeServer(1, "test", TlvUInt8, () => 3, true, false, 3, BasicInformationCluster, () => 7), { message: "Getter and setter must be implemented together when attribute is writeable." });
@@ -294,10 +291,10 @@ describe("AttributeServerTest", () => {
         });
 
         it("should use getter amd setter and trigger listeners", () => {
-            let valueTriggered = undefined;
-            let versionTriggered = undefined;
-            let valueTriggered2 = undefined;
-            let oldValueTriggered2 = undefined;
+            let valueTriggered: number | undefined = undefined;
+            let versionTriggered: number | undefined = undefined;
+            let valueTriggered2: number | undefined = undefined;
+            let oldValueTriggered2: number | undefined = undefined;
             const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ByteArray.fromHex("00"), ByteArray.fromHex("00"), { privateKey: ByteArray.fromHex("00"), publicKey: ByteArray.fromHex("00") }, new VendorId(1), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), "");
             const testSession = { getAccessingFabric: () => testFabric } as SecureSession<MatterDevice>;
 
