@@ -88,6 +88,11 @@ Matter.children.push({
                         "is present, the client cluster shall also exist on this endpoint (with this Binding cluster). If " +
                         "this field is present, the target shall be this cluster on the target endpoint(s).",
                     xref: { document: "core", section: "9.6.5.1.4" }
+                },
+
+                {
+                    tag: "datatype", name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V",
+                    conformance: "M", constraint: "1 to 254"
                 }
             ]
         }

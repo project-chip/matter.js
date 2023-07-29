@@ -24,6 +24,7 @@ import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvClusterId } from "../../datatype/ClusterId.js";
 import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
 import { TlvDeviceTypeId } from "../../datatype/DeviceTypeId.js";
+import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
 import { TlvByteString } from "../../tlv/TlvString.js";
 import { TlvNodeId } from "../../datatype/NodeId.js";
 
@@ -200,7 +201,9 @@ export namespace AccessControl {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 9.10.4.5.4
          */
-        targets: TlvField(4, TlvNullable(TlvArray(TlvAccessControlTargetStruct)))
+        targets: TlvField(4, TlvNullable(TlvArray(TlvAccessControlTargetStruct))),
+
+        fabricIndex: TlvField(254, TlvFabricIndex)
     });
 
     /**
@@ -220,7 +223,9 @@ export namespace AccessControl {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 9.10.4.6.1
          */
-        data: TlvField(1, TlvByteString.bound({ maxLength: 128 }))
+        data: TlvField(1, TlvByteString.bound({ maxLength: 128 })),
+
+        fabricIndex: TlvField(254, TlvFabricIndex)
     });
 
     /**
@@ -285,7 +290,9 @@ export namespace AccessControl {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 9.10.7.1.4
          */
-        latestValue: TlvField(4, TlvNullable(TlvAccessControlEntryStruct))
+        latestValue: TlvField(4, TlvNullable(TlvAccessControlEntryStruct)),
+
+        fabricIndex: TlvField(254, TlvFabricIndex)
     });
 
     /**
@@ -297,7 +304,8 @@ export namespace AccessControl {
         adminNodeId: TlvField(1, TlvNullable(TlvNodeId)),
         adminPasscodeId: TlvField(2, TlvNullable(TlvUInt16)),
         changeType: TlvField(3, TlvEnum<ChangeType>()),
-        latestValue: TlvField(4, TlvNullable(TlvAccessControlExtensionStruct))
+        latestValue: TlvField(4, TlvNullable(TlvAccessControlExtensionStruct)),
+        fabricIndex: TlvField(254, TlvFabricIndex)
     });
 
     /**

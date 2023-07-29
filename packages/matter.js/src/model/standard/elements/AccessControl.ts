@@ -156,6 +156,11 @@ Matter.children.push({
                         "This field SHOULD be set if resources are adequate for it; otherwise it shall be set to NULL if " +
                         "resources are scarce.",
                     xref: { document: "core", section: "9.10.7.1.4" }
+                },
+
+                {
+                    tag: "datatype", name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V",
+                    conformance: "M", constraint: "1 to 254"
                 }
             ]
         },
@@ -207,6 +212,10 @@ Matter.children.push({
                 {
                     tag: "datatype", name: "LatestValue", id: 0x4, type: "AccessControlExtensionStruct", access: "S",
                     conformance: "M", quality: "X"
+                },
+                {
+                    tag: "datatype", name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V",
+                    conformance: "M", constraint: "1 to 254"
                 }
             ]
         },
@@ -410,6 +419,11 @@ Matter.children.push({
 
                     xref: { document: "core", section: "9.10.4.5.4" },
                     children: [{ tag: "datatype", name: "entry", type: "AccessControlTargetStruct" }]
+                },
+
+                {
+                    tag: "datatype", name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V",
+                    conformance: "M", constraint: "1 to 254"
                 }
             ]
         },
@@ -419,23 +433,30 @@ Matter.children.push({
             conformance: "M",
             xref: { document: "core", section: "9.10.4.6" },
 
-            children: [{
-                tag: "datatype", name: "Data", id: 0x1, type: "octstr", access: "S", conformance: "M",
-                constraint: "max 128",
+            children: [
+                {
+                    tag: "datatype", name: "Data", id: 0x1, type: "octstr", access: "S", conformance: "M",
+                    constraint: "max 128",
 
-                details: "This field may be used by manufacturers to store arbitrary TLV-encoded data related to a fabric’s" +
-                    "\n" +
-                    "Access Control Entries." +
-                    "\n" +
-                    "The contents shall consist of a top-level anonymous list; each list element shall include a " +
-                    "profile-specific tag encoded in fully-qualified form." +
-                    "\n" +
-                    "Administrators may iterate over this list of elements, and interpret selected elements at their " +
-                    "discretion. The content of each element is not specified, but may be coordinated among " +
-                    "manufacturers at their discretion.",
+                    details: "This field may be used by manufacturers to store arbitrary TLV-encoded data related to a fabric’s" +
+                        "\n" +
+                        "Access Control Entries." +
+                        "\n" +
+                        "The contents shall consist of a top-level anonymous list; each list element shall include a " +
+                        "profile-specific tag encoded in fully-qualified form." +
+                        "\n" +
+                        "Administrators may iterate over this list of elements, and interpret selected elements at their " +
+                        "discretion. The content of each element is not specified, but may be coordinated among " +
+                        "manufacturers at their discretion.",
 
-                xref: { document: "core", section: "9.10.4.6.1" }
-            }]
+                    xref: { document: "core", section: "9.10.4.6.1" }
+                },
+
+                {
+                    tag: "datatype", name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V",
+                    conformance: "M", constraint: "1 to 254"
+                }
+            ]
         }
     ]
 });

@@ -10743,6 +10743,11 @@ export const SpecMatter: MatterElement = {
                                 "is present, the client cluster shall also exist on this endpoint (with this Binding cluster). If " +
                                 "this field is present, the target shall be this cluster on the target endpoint(s).",
                             xref: { document: "core", section: "9.6.5.1.4" }
+                        },
+
+                        {
+                            tag: "datatype", name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V",
+                            conformance: "M", constraint: "1 to 254"
                         }
                     ]
                 }
@@ -10988,6 +10993,11 @@ export const SpecMatter: MatterElement = {
                                 "This field SHOULD be set if resources are adequate for it; otherwise it shall be set to NULL if " +
                                 "resources are scarce.",
                             xref: { document: "core", section: "9.10.7.1.4" }
+                        },
+
+                        {
+                            tag: "datatype", name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V",
+                            conformance: "M", constraint: "1 to 254"
                         }
                     ]
                 },
@@ -11041,6 +11051,10 @@ export const SpecMatter: MatterElement = {
                         {
                             tag: "datatype", name: "LatestValue", id: 0x4, type: "AccessControlExtensionStruct", access: "S",
                             conformance: "M", quality: "X"
+                        },
+                        {
+                            tag: "datatype", name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V",
+                            conformance: "M", constraint: "1 to 254"
                         }
                     ]
                 },
@@ -11247,6 +11261,11 @@ export const SpecMatter: MatterElement = {
 
                             xref: { document: "core", section: "9.10.4.5.4" },
                             children: [{ tag: "datatype", name: "entry", type: "AccessControlTargetStruct" }]
+                        },
+
+                        {
+                            tag: "datatype", name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V",
+                            conformance: "M", constraint: "1 to 254"
                         }
                     ]
                 },
@@ -11255,23 +11274,30 @@ export const SpecMatter: MatterElement = {
                     tag: "datatype", name: "AccessControlExtensionStruct", type: "struct",
                     xref: { document: "core", section: "9.10.4.6" },
 
-                    children: [{
-                        tag: "datatype", name: "Data", id: 0x1, type: "octstr", access: "S", conformance: "M",
-                        constraint: "max 128",
+                    children: [
+                        {
+                            tag: "datatype", name: "Data", id: 0x1, type: "octstr", access: "S", conformance: "M",
+                            constraint: "max 128",
 
-                        details: "This field may be used by manufacturers to store arbitrary TLV-encoded data related to a fabric’s" +
-                            "\n" +
-                            "Access Control Entries." +
-                            "\n" +
-                            "The contents shall consist of a top-level anonymous list; each list element shall include a " +
-                            "profile-specific tag encoded in fully-qualified form." +
-                            "\n" +
-                            "Administrators may iterate over this list of elements, and interpret selected elements at their " +
-                            "discretion. The content of each element is not specified, but may be coordinated among " +
-                            "manufacturers at their discretion.",
+                            details: "This field may be used by manufacturers to store arbitrary TLV-encoded data related to a fabric’s" +
+                                "\n" +
+                                "Access Control Entries." +
+                                "\n" +
+                                "The contents shall consist of a top-level anonymous list; each list element shall include a " +
+                                "profile-specific tag encoded in fully-qualified form." +
+                                "\n" +
+                                "Administrators may iterate over this list of elements, and interpret selected elements at their " +
+                                "discretion. The content of each element is not specified, but may be coordinated among " +
+                                "manufacturers at their discretion.",
 
-                        xref: { document: "core", section: "9.10.4.6.1" }
-                    }]
+                            xref: { document: "core", section: "9.10.4.6.1" }
+                        },
+
+                        {
+                            tag: "datatype", name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V",
+                            conformance: "M", constraint: "1 to 254"
+                        }
+                    ]
                 }
             ]
         },
@@ -12827,6 +12853,11 @@ export const SpecMatter: MatterElement = {
                                 "\n" +
                                 "A GroupKeyMapStruct shall NOT accept GroupKeySetID of 0, which is reserved for the IPK.",
                             xref: { document: "core", section: "11.2.6.3.2" }
+                        },
+
+                        {
+                            tag: "datatype", name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V",
+                            conformance: "M", constraint: "1 to 254"
                         }
                     ]
                 },
@@ -12945,6 +12976,11 @@ export const SpecMatter: MatterElement = {
                             details: "This field provides a name for the group. This field shall contain the last GroupName written for a " +
                                 "given GroupId on any Endpoint via the Groups cluster.",
                             xref: { document: "core", section: "11.2.6.5.2" }
+                        },
+
+                        {
+                            tag: "datatype", name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V",
+                            conformance: "M", constraint: "1 to 254"
                         }
                     ]
                 }
@@ -19057,6 +19093,10 @@ export const SpecMatter: MatterElement = {
                         {
                             tag: "datatype", name: "IcacValue", id: 0x1, type: "octstr", access: "F", conformance: "O",
                             constraint: "max 400"
+                        },
+                        {
+                            tag: "datatype", name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V",
+                            conformance: "M", constraint: "1 to 254"
                         }
                     ]
                 },
@@ -19135,10 +19175,17 @@ export const SpecMatter: MatterElement = {
                         "updated.",
 
                     xref: { document: "core", section: "11.17.6.11" },
-                    children: [{
-                        tag: "datatype", name: "Label", id: 0x0, type: "string", access: "F", conformance: "M",
-                        constraint: "max 32"
-                    }]
+
+                    children: [
+                        {
+                            tag: "datatype", name: "Label", id: 0x0, type: "string", access: "F", conformance: "M",
+                            constraint: "max 32"
+                        },
+                        {
+                            tag: "datatype", name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V",
+                            conformance: "M", constraint: "1 to 254"
+                        }
+                    ]
                 },
 
                 {
@@ -19335,6 +19382,11 @@ export const SpecMatter: MatterElement = {
                             details: "This field shall contain the ICAC or the struct’s associated fabric, encoded using Matter " +
                                 "Certificate Encoding. If no ICAC is present in the chain, this field shall be set to null.",
                             xref: { document: "core", section: "11.17.4.4.2" }
+                        },
+
+                        {
+                            tag: "datatype", name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V",
+                            conformance: "M", constraint: "1 to 254"
                         }
                     ]
                 },
@@ -19392,6 +19444,11 @@ export const SpecMatter: MatterElement = {
                             details: "This field shall contain a commissioner-set label for the fabric referenced by FabricIndex. This " +
                                 "label is set by the UpdateFabricLabel command.",
                             xref: { document: "core", section: "11.17.4.5.5" }
+                        },
+
+                        {
+                            tag: "datatype", name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V",
+                            conformance: "M", constraint: "1 to 254"
                         }
                     ]
                 }
@@ -20031,7 +20088,11 @@ export const SpecMatter: MatterElement = {
                             tag: "datatype", name: "MetadataForNode", id: 0x3, type: "octstr", access: "F", conformance: "O",
                             constraint: "max 512"
                         },
-                        { tag: "datatype", name: "Endpoint", id: 0x4, type: "endpoint-no", access: "F", conformance: "M" }
+                        { tag: "datatype", name: "Endpoint", id: 0x4, type: "endpoint-no", access: "F", conformance: "M" },
+                        {
+                            tag: "datatype", name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V",
+                            conformance: "M", constraint: "1 to 254"
+                        }
                     ]
                 },
 
@@ -20137,7 +20198,11 @@ export const SpecMatter: MatterElement = {
                         {
                             tag: "datatype", name: "ProviderNodeId", id: 0x1, type: "node-id", access: "F", conformance: "M"
                         },
-                        { tag: "datatype", name: "Endpoint", id: 0x2, type: "endpoint-no", access: "F", conformance: "M" }
+                        { tag: "datatype", name: "Endpoint", id: 0x2, type: "endpoint-no", access: "F", conformance: "M" },
+                        {
+                            tag: "datatype", name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V",
+                            conformance: "M", constraint: "1 to 254"
+                        }
                     ]
                 }
             ]

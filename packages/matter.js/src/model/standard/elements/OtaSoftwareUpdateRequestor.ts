@@ -153,7 +153,11 @@ Matter.children.push({
                     tag: "datatype", name: "MetadataForNode", id: 0x3, type: "octstr", access: "F", conformance: "O",
                     constraint: "max 512"
                 },
-                { tag: "datatype", name: "Endpoint", id: 0x4, type: "endpoint-no", access: "F", conformance: "M" }
+                { tag: "datatype", name: "Endpoint", id: 0x4, type: "endpoint-no", access: "F", conformance: "M" },
+                {
+                    tag: "datatype", name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V",
+                    conformance: "M", constraint: "1 to 254"
+                }
             ]
         },
 
@@ -254,9 +258,14 @@ Matter.children.push({
             tag: "datatype", name: "ProviderLocationStruct", type: "struct", access: "R F", conformance: "M",
             details: "This structure encodes a fabric-scoped location of an OTA provider on a given fabric.",
             xref: { document: "core", section: "11.19.7.4.20" },
+
             children: [
                 { tag: "datatype", name: "ProviderNodeId", id: 0x1, type: "node-id", access: "F", conformance: "M" },
-                { tag: "datatype", name: "Endpoint", id: 0x2, type: "endpoint-no", access: "F", conformance: "M" }
+                { tag: "datatype", name: "Endpoint", id: 0x2, type: "endpoint-no", access: "F", conformance: "M" },
+                {
+                    tag: "datatype", name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V",
+                    conformance: "M", constraint: "1 to 254"
+                }
             ]
         }
     ]

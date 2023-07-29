@@ -488,6 +488,10 @@ Matter.children.push({
                 {
                     tag: "datatype", name: "IcacValue", id: 0x1, type: "octstr", access: "F", conformance: "O",
                     constraint: "max 400"
+                },
+                {
+                    tag: "datatype", name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V",
+                    conformance: "M", constraint: "1 to 254"
                 }
             ]
         },
@@ -566,10 +570,17 @@ Matter.children.push({
                 "updated.",
 
             xref: { document: "core", section: "11.17.6.11" },
-            children: [{
-                tag: "datatype", name: "Label", id: 0x0, type: "string", access: "F", conformance: "M",
-                constraint: "max 32"
-            }]
+
+            children: [
+                {
+                    tag: "datatype", name: "Label", id: 0x0, type: "string", access: "F", conformance: "M",
+                    constraint: "max 32"
+                },
+                {
+                    tag: "datatype", name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V",
+                    conformance: "M", constraint: "1 to 254"
+                }
+            ]
         },
 
         {
@@ -766,6 +777,11 @@ Matter.children.push({
                     details: "This field shall contain the ICAC or the struct’s associated fabric, encoded using Matter " +
                         "Certificate Encoding. If no ICAC is present in the chain, this field shall be set to null.",
                     xref: { document: "core", section: "11.17.4.4.2" }
+                },
+
+                {
+                    tag: "datatype", name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V",
+                    conformance: "M", constraint: "1 to 254"
                 }
             ]
         },
@@ -823,6 +839,11 @@ Matter.children.push({
                     details: "This field shall contain a commissioner-set label for the fabric referenced by FabricIndex. This " +
                         "label is set by the UpdateFabricLabel command.",
                     xref: { document: "core", section: "11.17.4.5.5" }
+                },
+
+                {
+                    tag: "datatype", name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V",
+                    conformance: "M", constraint: "1 to 254"
                 }
             ]
         }

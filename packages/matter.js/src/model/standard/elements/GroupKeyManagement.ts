@@ -270,6 +270,11 @@ Matter.children.push({
                         "\n" +
                         "A GroupKeyMapStruct shall NOT accept GroupKeySetID of 0, which is reserved for the IPK.",
                     xref: { document: "core", section: "11.2.6.3.2" }
+                },
+
+                {
+                    tag: "datatype", name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V",
+                    conformance: "M", constraint: "1 to 254"
                 }
             ]
         },
@@ -388,6 +393,11 @@ Matter.children.push({
                     details: "This field provides a name for the group. This field shall contain the last GroupName written for a " +
                         "given GroupId on any Endpoint via the Groups cluster.",
                     xref: { document: "core", section: "11.2.6.5.2" }
+                },
+
+                {
+                    tag: "datatype", name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V",
+                    conformance: "M", constraint: "1 to 254"
                 }
             ]
         }
