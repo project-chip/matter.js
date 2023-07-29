@@ -308,7 +308,7 @@ export function ClusterServer<
                 result[`subscribe${capitalizedAttributeName}Attribute`] = <T,>(listener: (newValue: T, oldValue: T) => void) => (attributes as any)[attributeName].addListener(listener);
             }
             if (persistent || getter || setter) {
-                const listener = (value: any, version: number) => attributeStorageListener(attributeName, version, value);
+                const listener = (value: any, version: number) => attributeStorageListener(attributeName, version, (fabricScoped || getter || setter) ? undefined : value);
                 attributeStorageListeners.set(id, listener);
                 (attributes as any)[attributeName].addMatterListener(listener);
             }

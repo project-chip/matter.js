@@ -144,7 +144,7 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
      */
     init(value: T | undefined, version?: number) {
         if (version !== undefined) {
-            throw new Error("Version is not supported on fixed attributes");
+            throw new Error("Version is not supported on fixed attributes.");
         }
         if (this.setter !== undefined || this.getter !== undefined) {
             throw new Error("Can not initialize fixed attributes with getter or setter methods.");
