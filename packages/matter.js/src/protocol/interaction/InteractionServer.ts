@@ -300,17 +300,17 @@ export function ClusterServer<
                         session,
                     }) : undefined,
                 );
-                if (persistent || getter || setter) {
-                    const listener = (value: any, version: number) => attributeStorageListener(attributeName, version, value);
-                    attributeStorageListeners.set(id, listener);
-                    (attributes as any)[attributeName].addMatterListener(listener);
-                }
                 if (scene) {
                     sceneAttributeList.push(attributeName);
                 }
                 result[`get${capitalizedAttributeName}Attribute`] = () => (attributes as any)[attributeName].getLocal();
                 result[`set${capitalizedAttributeName}Attribute`] = <T,>(value: T) => (attributes as any)[attributeName].setLocal(value);
                 result[`subscribe${capitalizedAttributeName}Attribute`] = <T,>(listener: (newValue: T, oldValue: T) => void) => (attributes as any)[attributeName].addListener(listener);
+            }
+            if (persistent || getter || setter) {
+                const listener = (value: any, version: number) => attributeStorageListener(attributeName, version, value);
+                attributeStorageListeners.set(id, listener);
+                (attributes as any)[attributeName].addMatterListener(listener);
             }
             attributeList.push(new AttributeId(id));
         } else {
@@ -578,13 +578,16 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                 try {
                     const value = decodeValueForSchema(schema, values, defaultValue);
                     logger.debug(`Handle write request from ${exchange.channel.getName()} resolved to: ${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(value)} (Version=${dataVersion})`);
-                    if (attribute instanceof FixedAttributeServer) {
-                        throw new Error("Fixed attributes cannot be written");
+                    if (!(attribute instanceof AttributeServer) && !(attribute instanceof FabricScopedAttributeServer)) {
+                        throw new StatusResponseError("Fixed attributes cannot be written", StatusCode.UnsupportedWrite);
                     }
                     attribute.set(value, exchange.session);
                 } catch (error: any) {
                     if (attributes.length === 1) { // For Multi-Attribute-Writes we ignore errors
                         logger.error(`Error while handling write request from ${exchange.channel.getName()} to ${this.endpointStructure.resolveAttributeName(path)}: ${error.message}`);
+                        if (error instanceof StatusResponseError) {
+                            return { path, statusCode: error.code };
+                        }
                         return { path, statusCode: StatusCode.ConstraintError };
                     } else {
                         logger.debug(`While handling write request from ${exchange.channel.getName()} to ${this.endpointStructure.resolveAttributeName(path)} ignored: ${error.message}`);

@@ -71,7 +71,7 @@ export abstract class BaseAttributeServer<T> {
         schemaValidator(defaultValue, name);
         if (this.getter === undefined && this.setter === undefined) {
             this.value = defaultValue;
-        } else if (isWritable && (this.getter !== undefined || this.setter !== undefined)) {
+        } else if (isWritable && (this.getter === undefined || this.setter === undefined)) {
             throw new Error("Getter and setter must be implemented together when attribute is writeable.");
         }
         if (this.validator !== undefined && this.setter !== undefined) {
@@ -95,6 +95,8 @@ export abstract class BaseAttributeServer<T> {
  * Attribute server types.
  */
 export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
+    readonly isFixed: boolean = true;
+
     /**
      * Get the value of the attribute. This method is used by the Interaction model to read the value of the attribute
      * and includes the ACL check. It should not be used locally in the code!
@@ -159,6 +161,7 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
  * Attribute server for normal attributes that can be read and written.
  */
 export class AttributeServer<T> extends FixedAttributeServer<T> {
+    override readonly isFixed = false;
     private readonly matterListeners = new Array<(value: T, version: number) => void>();
     private readonly listeners = new Array<(newValue: T, oldValue: T) => void>();
 
@@ -313,6 +316,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
  * on fabric level if no custom getter or setter is defined.
  */
 export class FabricScopedAttributeServer<T> extends BaseAttributeServer<T>{
+    readonly isFixed = false;
     private readonly matterListeners = new Array<(value: T, version: number) => void>();
     private readonly listeners = new Array<(newValue: T, oldValue: T) => void>();
 
@@ -446,6 +450,7 @@ export class FabricScopedAttributeServer<T> extends BaseAttributeServer<T>{
     /**
      * Get the value of the attribute locally. This method should be used locally in the code and does not include the
      * ACL check.
+     * When the value is not handled by a getter isFabricFiltered needs to be true.
      * If a getter is defined the value is determined by that getter method.
      */
     getLocal(fabric: Fabric, isFabricFiltered?: boolean): T {

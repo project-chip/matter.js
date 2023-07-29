@@ -15,7 +15,7 @@ import { StatusCode, TlvAttributePath } from "./InteractionProtocol.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { FixedAttributeServer } from "../../cluster/server/AttributeServer.js";
+import { AttributeServer, FabricScopedAttributeServer } from "../../cluster/server/AttributeServer.js";
 
 const logger = Logger.get("SubscriptionHandler");
 
@@ -69,7 +69,7 @@ export class SubscriptionHandler {
         this.sendDelayTimer = Time.getTimer(50, () => this.sendUpdate()); // will be started later
 
         attributes.forEach(({ path, attribute }) => {
-            if (attribute instanceof FixedAttributeServer) return; // Fixed values will never change
+            if (!(attribute instanceof AttributeServer) && !(attribute instanceof FabricScopedAttributeServer)) return; // Fixed values will never change
             // TODO: handle attributes with "getter" methods
             const listener = (value: any, version: number) => this.attributeChangeListener(path, attribute.schema, version, value);
             this.attributeListeners.set(attributePathToId(path), listener);
@@ -164,7 +164,7 @@ export class SubscriptionHandler {
         this.attributes.forEach(({ path, attribute }) => {
             const pathId = attributePathToId(path);
             const listener = this.attributeListeners.get(pathId);
-            if (listener !== undefined && !(attribute instanceof FixedAttributeServer)) {
+            if (listener !== undefined && (attribute instanceof AttributeServer || attribute instanceof FabricScopedAttributeServer)) {
                 attribute.removeMatterListener(listener);
             }
             this.attributeListeners.delete(pathId);
