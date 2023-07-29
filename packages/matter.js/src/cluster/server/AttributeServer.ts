@@ -32,6 +32,7 @@ export abstract class BaseAttributeServer<T> {
         readonly schema: TlvSchema<T>,
         protected readonly schemaValidator: (value: T, name: string) => void,
         readonly isWritable: boolean,
+        readonly isSubscribable: boolean,
         readonly defaultValue: T,
 
         /**
@@ -262,9 +263,9 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
      * listeners.
      * ACL checks needs to be performed before calling this method.
      */
-    update(session?: SecureSession<MatterDevice>) {
+    updated(session?: SecureSession<MatterDevice>) {
         if (this.getter === undefined && this.setter === undefined) {
-            throw new Error("Update can only be used if the attribute has a getter or setter method.");
+            throw new Error("Updated can only be used if the attribute has a getter or setter method.");
         }
         const value = this.get(session, true);
         this.version++;
@@ -326,13 +327,14 @@ export class FabricScopedAttributeServer<T> extends BaseAttributeServer<T>{
         schema: TlvSchema<T>,
         schemaValidator: (value: T, name: string) => void,
         isWritable: boolean,
+        isSubscribable: boolean,
         defaultValue: T,
         readonly cluster: Cluster<any, any, any, any, any>,
         getter?: (session?: Session<MatterDevice>, endpoint?: Endpoint, isFabricFiltered?: boolean) => T,
         setter?: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => boolean,
         validator?: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => void,
     ) {
-        super(id, name, schema, schemaValidator, isWritable, defaultValue, getter, setter, validator);
+        super(id, name, schema, schemaValidator, isWritable, isSubscribable, defaultValue, getter, setter, validator);
     }
 
     /**
@@ -470,7 +472,7 @@ export class FabricScopedAttributeServer<T> extends BaseAttributeServer<T>{
      * internal listeners. External listeners are not triggered by this method.
      * ACL checks needs to be performed before calling this method.
      */
-    update(session?: SecureSession<MatterDevice>) {
+    updated(session?: SecureSession<MatterDevice>) {
         const value = this.get(session, true);
         this.version++;
         this.matterListeners.forEach(listener => listener(value, this.version));

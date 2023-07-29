@@ -219,7 +219,7 @@ export function ClusterServer<
             }
         }
 
-        const { id, schema, writable, persistent, fabricScoped, scene, fixed } = attributeDef[attributeName];
+        const { id, schema, writable, persistent, fabricScoped, scene, fixed, omitChanges } = attributeDef[attributeName];
         if ((attributesInitialValues as any)[attributeName] !== undefined) {
             const schemaValidator = typeof schema.validate === 'function' ? schema.validate.bind(schema) : undefined;
 
@@ -236,6 +236,7 @@ export function ClusterServer<
                     schema,
                     schemaValidator ?? (() => { /* no validation */ }),
                     writable,
+                    !omitChanges,
                     (attributesInitialValues as any)[attributeName],
                     getter ? (session, endpoint, isFabricFiltered) => getter({
                         attributes,
@@ -253,6 +254,7 @@ export function ClusterServer<
                     schema,
                     schemaValidator ?? (() => { /* no validation */ }),
                     writable,
+                    !omitChanges,
                     (attributesInitialValues as any)[attributeName],
                     clusterDef,
                     getter ? (session, endpoint, fabricScoped) => getter({
@@ -282,6 +284,7 @@ export function ClusterServer<
                     schema,
                     schemaValidator ?? (() => { /* no validation */ }),
                     writable,
+                    !omitChanges,
                     (attributesInitialValues as any)[attributeName],
                     getter ? (session, endpoint, fabricScoped) => getter({
                         attributes,

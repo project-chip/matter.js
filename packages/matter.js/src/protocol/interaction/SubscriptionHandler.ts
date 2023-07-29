@@ -70,7 +70,7 @@ export class SubscriptionHandler {
 
         attributes.forEach(({ path, attribute }) => {
             if (!(attribute instanceof AttributeServer) && !(attribute instanceof FabricScopedAttributeServer)) return; // Fixed values will never change
-            // TODO: handle attributes with "getter" methods
+            if (!attribute.isSubscribable) return; // Changes should be omitted
             const listener = (value: any, version: number) => this.attributeChangeListener(path, attribute.schema, version, value);
             this.attributeListeners.set(attributePathToId(path), listener);
             attribute.addMatterListener(listener);
@@ -176,7 +176,7 @@ export class SubscriptionHandler {
         logger.debug(`Sending subscription update message for ID ${this.subscriptionId} with ${values.length} values`);
         const exchange = this.server.initiateExchange(this.fabric, this.peerNodeId, INTERACTION_PROTOCOL_ID);
         if (exchange === undefined) return;
-        logger.debug(`Sending subscription changes for ID ${this.subscriptionId}: ${Logger.toJSON(values)}`);
+        logger.debug(`Sending subscription changes for ID ${this.subscriptionId}: ${values.map(({ path, value, version }) => `${Logger.toJSON(path)}=${Logger.toJSON(value)}(${version})`).join(", ")}`);
         const messenger = new InteractionServerMessenger(exchange);
 
         try {

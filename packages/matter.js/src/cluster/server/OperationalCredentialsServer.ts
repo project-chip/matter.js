@@ -83,10 +83,10 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         device.addFabric(fabric);
 
         // Update connected attributes
-        nocs.update(session as SecureSession<MatterDevice>);
-        commissionedFabrics.update(session as SecureSession<MatterDevice>);
-        fabrics.update(session as SecureSession<MatterDevice>);
-        trustedRootCertificates.update(session as SecureSession<MatterDevice>);
+        nocs.updated(session as SecureSession<MatterDevice>);
+        commissionedFabrics.updated(session as SecureSession<MatterDevice>);
+        fabrics.updated(session as SecureSession<MatterDevice>);
+        trustedRootCertificates.updated(session as SecureSession<MatterDevice>);
 
         // TODO: create ACL with caseAdminNode
         console.log("addOperationalCert success")
@@ -143,7 +143,7 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
 
         fabric.setLabel(label);
 
-        fabrics.update(session as SecureSession<MatterDevice>);
+        fabrics.updated(session as SecureSession<MatterDevice>);
 
         return { statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok };
     },
@@ -159,10 +159,10 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
 
         fabric.remove();
 
-        nocs.update(session as SecureSession<MatterDevice>);
-        commissionedFabrics.update(session as SecureSession<MatterDevice>);
-        fabrics.update(session as SecureSession<MatterDevice>);
-        trustedRootCertificates.update(session as SecureSession<MatterDevice>);
+        nocs.updated(session as SecureSession<MatterDevice>);
+        commissionedFabrics.updated(session as SecureSession<MatterDevice>);
+        fabrics.updated(session as SecureSession<MatterDevice>);
+        trustedRootCertificates.updated(session as SecureSession<MatterDevice>);
 
         return { statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok, fabricIndex, debugText: "Fabric removed" };
     },

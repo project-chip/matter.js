@@ -155,7 +155,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
 
             const result = addSceneLogic(endpoint.getId(), groupId, sceneId, transitionTime, sceneName, extensionFieldSets, 0, (session as SecureSession<MatterDevice>).getAccessingFabric());
             if (result.status === StatusCode.Success) {
-                sceneCount.update(session as SecureSession<MatterDevice>);
+                sceneCount.updated(session as SecureSession<MatterDevice>);
             }
             return result;
         },
@@ -195,7 +195,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             }
 
             if (ScenesManager.removeScene(fabric, endpoint.getId(), groupId, sceneId)) {
-                sceneCount.update(session as SecureSession<MatterDevice>);
+                sceneCount.updated(session as SecureSession<MatterDevice>);
                 return { status: StatusCode.Success, groupId, sceneId };
             }
             return { status: StatusCode.NotFound, groupId, sceneId };
@@ -257,7 +257,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
 
             currentScene.setLocal(sceneId);
             currentGroup.setLocal(groupId);
-            sceneValid.update(session as SecureSession<MatterDevice>);
+            sceneValid.updated(session as SecureSession<MatterDevice>);
 
             return { status: StatusCode.Success, groupId, sceneId };
         },
@@ -285,7 +285,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             });
             currentScene.setLocal(sceneId);
             currentGroup.setLocal(groupId);
-            sceneValid.update(session as SecureSession<MatterDevice>);
+            sceneValid.updated(session as SecureSession<MatterDevice>);
         },
 
         getSceneMembership: async ({ request: { groupId }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
@@ -316,7 +316,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
 
             const result = addSceneLogic(endpoint.getId(), groupId, sceneId, Math.floor(transitionTime / 10), sceneName, extensionFieldSets, transitionTime % 10, (session as SecureSession<MatterDevice>).getAccessingFabric());
             if (result.status === StatusCode.Success) {
-                sceneCount.update(session as SecureSession<MatterDevice>);
+                sceneCount.updated(session as SecureSession<MatterDevice>);
             }
             return result;
         },
@@ -392,7 +392,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                 }]);
             }
 
-            sceneCount.update(session as SecureSession<MatterDevice>);
+            sceneCount.updated(session as SecureSession<MatterDevice>);
 
             return { status: StatusCode.Success, groupIdentifierFrom, sceneIdentifierFrom };
         },
