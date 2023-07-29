@@ -457,7 +457,7 @@ export class FabricScopedAttributeServer<T> extends BaseAttributeServer<T>{
      */
     getLocal(fabric: Fabric, isFabricFiltered?: boolean): T {
         if (this.getter !== undefined) {
-            return this.getter(undefined, this.endpoint, isFabricFiltered);
+            throw new Error("Getter method is not allowed to get fabric scoped attributes locally.");
         }
 
         if (!isFabricFiltered) throw new Error("Default attribute getter only support Fabric scoped reads");
