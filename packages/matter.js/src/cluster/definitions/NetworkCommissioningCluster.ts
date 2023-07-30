@@ -344,7 +344,7 @@ export namespace NetworkCommissioning {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.2.3
          */
-        wiFiScanResults: TlvField(2, TlvArray(TlvWiFiInterfaceScanResultStruct)),
+        wiFiScanResults: TlvOptionalField(2, TlvArray(TlvWiFiInterfaceScanResultStruct)), // TODO Optional as workaround for #243
 
         /**
          * If NetworkingStatus was Success, this field shall contain the Thread network scan results. The list may be
@@ -360,7 +360,7 @@ export namespace NetworkCommissioning {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.2.4
          */
-        threadScanResults: TlvField(3, TlvArray(TlvThreadInterfaceScanResultStruct))
+        threadScanResults: TlvOptionalField(3, TlvArray(TlvThreadInterfaceScanResultStruct)) // TODO Optional as workaround for #243
     });
 
     /**
@@ -1074,6 +1074,9 @@ export namespace NetworkCommissioning {
             const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
             extendCluster(cluster, WiFiNetworkInterfaceComponent, { wiFiNetworkInterface: true });
             extendCluster(cluster, ThreadNetworkInterfaceComponent, { threadNetworkInterface: true });
+            // TODO Manual additional because generator issue #242
+            extendCluster(cluster, WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent, { wiFiNetworkInterface: true });
+            extendCluster(cluster, WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent, { threadNetworkInterface: true });
 
             preventCluster(
                 cluster,
