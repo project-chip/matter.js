@@ -73,7 +73,7 @@ export namespace ApplicationLauncher {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.4.4.1.1
          */
-        application: TlvField(0, TlvApplicationStruct),
+        application: TlvOptionalField(0, TlvApplicationStruct),
 
         /**
          * This field shall specify optional app-specific data to be sent to the app.
@@ -140,7 +140,7 @@ export namespace ApplicationLauncher {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.4.4.2.1
          */
-        application: TlvField(0, TlvApplicationStruct)
+        application: TlvOptionalField(0, TlvApplicationStruct)
     });
 
     /**
@@ -154,7 +154,7 @@ export namespace ApplicationLauncher {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.4.4.3.1
          */
-        application: TlvField(0, TlvApplicationStruct)
+        application: TlvOptionalField(0, TlvApplicationStruct)
     });
 
     /**
