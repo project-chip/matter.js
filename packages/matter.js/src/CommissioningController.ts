@@ -7,7 +7,7 @@ import { MatterNode } from "./MatterNode.js";
 import { UdpInterface } from "./net/UdpInterface.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { StorageContext } from "./storage/StorageContext.js";
-import { CommissioningData, MatterController } from "./MatterController.js";
+import { MatterController } from "./MatterController.js";
 import { InteractionClient, ClusterClient } from "./protocol/interaction/InteractionClient.js";
 import { NodeId } from "./datatype/NodeId.js";
 import { structureReadDataToClusterObject } from "./protocol/interaction/AttributeDataDecoder.js";
@@ -31,6 +31,7 @@ import { ServerAddressIp } from "./common/ServerAddress.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { Ble } from "./ble/Ble.js";
 import { NoProviderError } from "./common/MatterError.js";
+import { CommissioningOptions } from "./protocol/ControllerCommissioningHandler.js";
 
 const logger = new Logger("CommissioningController");
 
@@ -55,7 +56,7 @@ export interface CommissioningControllerOptions {
     longDiscriminator?: number,
     shortDiscriminator?: number, // TODO: Move into commissioningOptions
 
-    commissioningOptions?: CommissioningData
+    commissioningOptions?: CommissioningOptions
 }
 
 export class CommissioningController extends MatterNode {
@@ -68,7 +69,7 @@ export class CommissioningController extends MatterNode {
     private readonly passcode: number;
     private longDiscriminator?: number;
     private shortDiscriminator?: number;
-    private readonly commissioningOptions?: CommissioningData;
+    private readonly commissioningOptions?: CommissioningOptions;
 
     readonly delayedPairing: boolean;
 

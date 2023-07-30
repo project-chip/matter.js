@@ -175,15 +175,23 @@ npm run matter-controller -- -pairingcode 12345678901
 
 This will commission a MatterServer device (for debugging/capability showing purpose only for now).
 
-The following parameters are available:
-* -ip: the IP address of the device to commission (can be used but discovery via pairingcode or discriminator or also just pin (passode) is most likely better)
-* -port the port of the device to commission (default: 5540)
-* -longDiscriminator: the discriminator to use for pairing (default: 3840, value between 0 and 4095)
-* -pin: the pin to use for pairing (default: 20202021)
-* -pairingcode: code to use for pairing (-longDiscriminator and -pin will be ignored)
-* -store: the storage location (directory) to use for storing the pairing information (default: .controller-node). Ideally use names with "." at the beginning. Delete the directory or provide an alternative name to reset the controller
-* -clearstorage: the storage location will be reset on start of the process
-* -ble: enable BLE support (default: false) If this is enabled the controller will try to connect via BLE first (15s timeout) and then via IP if not commissioned yet!
+The following parameters are available and used to initially commission a device (they can be omitted after this):
+* If the IP and Port of the device is known (should be only the case in testing cases) you can use the following parameters:
+  * -ip: the IP address of the device to commission (can be used but discovery via pairingcode or discriminator or also just pin (passode) is most likely better)
+  * -port the port of the device to commission (default: 5540)
+* Device identification options:
+  * -pairingcode: code to use for pairing (-longDiscriminator and -pin will be ignored) - usually the code below the QR Code on the device or displayed in the app!
+  * -longDiscriminator: the discriminator to use for pairing (default: 3840, value between 0 and 4095)
+  * -pin: the pin to use for pairing (default: 20202021)
+* When the device to commission is not already in the IP network and also not an Ethernet device commission can be done via ble. In this case the following parameters are used:
+  * -ble: enable BLE support (default: false) If this is enabled the controller will try to connect via BLE first (15s timeout) and then via IP if not commissioned yet!
+  * -ble-wifi-ssid: SSID/Name of the Wifi network to connect to - The device will scan especially for this network and commissioning will fail if not found
+  * -ble-wifi-credentials: Credentials for the Wifi network to connect to
+  * -ble-thread-networkname: Name of the Thread network to connect to - The device will verify that a thread network with this name is reachable by the device and commissioning will fail if not found
+  * -ble-thread-operationaldataset: Operational dataset as hex string to use for commissioning (of using OTBR use `ot-ctl dataset active -x` to get the value)
+* Storage configuration parameter
+  * -store: the storage location (directory) to use for storing the pairing information (default: .controller-node). Ideally use names with "." at the beginning. Delete the directory or provide an alternative name to reset the controller
+  * -clearstorage: the storage location will be reset on start of the process
 
 ## Development on basis of the examples
 
