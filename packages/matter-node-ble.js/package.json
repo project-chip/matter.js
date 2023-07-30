@@ -43,7 +43,7 @@
     "dependencies": {
         "@project-chip/matter.js": "^0.4.0",
         "@abandonware/bleno": "^0.6.1",
-        "@abandonware/noble": "^1.9.2-21"
+        "@abandonware/noble": "^1.9.2-23"
     },
     "engines": {
         "node": ">=16.0.0"
