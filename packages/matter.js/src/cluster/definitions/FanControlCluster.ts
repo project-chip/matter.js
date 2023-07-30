@@ -372,6 +372,7 @@ export namespace FanControl {
         factory: <T extends `${Feature}`[]>(...features: [...T]) => {
             validateFeatureSelection(features, Feature);
             const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
+            extendCluster(cluster, MultiSpeedComponent, { multiSpeed: true });
             extendCluster(cluster, RockingComponent, { rocking: true });
             extendCluster(cluster, WindComponent, { wind: true });
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;

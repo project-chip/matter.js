@@ -936,6 +936,11 @@ export namespace WindowCovering {
             const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
             extendCluster(
                 cluster,
+                LiftAndPositionAwareLiftAndAbsolutePositionComponent,
+                { lift: true, positionAwareLift: true, absolutePosition: true }
+            );
+            extendCluster(
+                cluster,
                 TiltAndPositionAwareTiltAndAbsolutePositionComponent,
                 { tilt: true, positionAwareTilt: true, absolutePosition: true }
             );

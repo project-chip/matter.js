@@ -1072,6 +1072,14 @@ export namespace NetworkCommissioning {
         factory: <T extends `${Feature}`[]>(...features: [...T]) => {
             validateFeatureSelection(features, Feature);
             const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
+
+            extendCluster(
+                cluster,
+                WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent,
+                { wiFiNetworkInterface: true },
+                { threadNetworkInterface: true }
+            );
+
             extendCluster(cluster, WiFiNetworkInterfaceComponent, { wiFiNetworkInterface: true });
             extendCluster(cluster, ThreadNetworkInterfaceComponent, { threadNetworkInterface: true });
 

@@ -277,6 +277,7 @@ export namespace EthernetNetworkDiagnostics {
         factory: <T extends `${Feature}`[]>(...features: [...T]) => {
             validateFeatureSelection(features, Feature);
             const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
+            extendCluster(cluster, PacketCountsComponent, { packetCounts: true });
             extendCluster(cluster, ErrorCountsComponent, { errorCounts: true });
             extendCluster(cluster, PacketCountsOrErrorCountsComponent, { packetCounts: true }, { errorCounts: true });
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;

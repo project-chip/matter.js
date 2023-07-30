@@ -2297,6 +2297,7 @@ export namespace DoorLock {
         factory: <T extends `${Feature}`[]>(...features: [...T]) => {
             validateFeatureSelection(features, Feature);
             const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
+            extendCluster(cluster, DoorPositionSensorComponent, { doorPositionSensor: true });
             extendCluster(cluster, LoggingComponent, { logging: true });
             extendCluster(cluster, UserComponent, { user: true });
             extendCluster(cluster, PinCredentialComponent, { pinCredential: true });

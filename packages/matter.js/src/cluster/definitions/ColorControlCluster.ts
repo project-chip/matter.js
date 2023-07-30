@@ -1599,6 +1599,7 @@ export namespace ColorControl {
         factory: <T extends `${Feature}`[]>(...features: [...T]) => {
             validateFeatureSelection(features, Feature);
             const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
+            extendCluster(cluster, HueSaturationComponent, { hueSaturation: true });
             extendCluster(cluster, XyComponent, { xy: true });
             extendCluster(cluster, ColorTemperatureComponent, { colorTemperature: true });
             extendCluster(cluster, EnhancedHueComponent, { enhancedHue: true });
