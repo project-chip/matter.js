@@ -39,7 +39,7 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
     private readonly fieldById = new Array<{ name: string, field: FieldType<any> }>();
 
     constructor(
-        private readonly fieldDefinitions: F,
+        readonly fieldDefinitions: F,
         private readonly type: TlvType.Structure | TlvType.List = TlvType.Structure,
     ) {
         super();

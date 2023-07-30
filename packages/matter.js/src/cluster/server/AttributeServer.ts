@@ -12,6 +12,18 @@ import { Endpoint } from "../../device/Endpoint.js";
 import { Cluster } from "../Cluster.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { isDeepEqual } from "../../util/DeepEqual.js";
+import { FabricIndex } from "../../datatype/FabricIndex.js";
+import { ArraySchema } from "../../tlv/TlvArray.js";
+import { NullableSchema } from "../../tlv/TlvNullable.js";
+import { FieldType, ObjectSchema } from "../../tlv/TlvObject.js";
+import { MatterError } from "../../common/MatterError.js";
+import { Globals } from "../../model/index.js";
+
+/**
+ * Thrown when an operation cannot complete because fabric information is
+ * unavailable.
+ */
+export class FabricScopeError extends MatterError { };
 
 export abstract class BaseAttributeServer<T> {
     protected value: T;
@@ -22,12 +34,11 @@ export abstract class BaseAttributeServer<T> {
         readonly id: number,
         readonly name: string,
         readonly schema: TlvSchema<T>,
-        protected readonly validator: (value: T, name: string) => void,
         readonly isWritable: boolean,
         readonly defaultValue: T,
     ) {
-        validator(defaultValue, name);
         this.value = defaultValue;
+        this.schema.validate(defaultValue);
     }
 
     assignToEndpoint(endpoint: Endpoint) {
@@ -64,21 +75,73 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
         if (version !== undefined) {
             throw new Error("Version is not supported on fixed attributes");
         }
-        this.validator(value, this.name);
+        this.schema.validate(value);
         this.value = value;
+    }
+}
+
+/**
+ * Base class for attribute servers that back mutable (non-fixed) attributes.
+ */
+export abstract class MutableAttributeServer<T> extends BaseAttributeServer<T> {
+    set(value: T, session?: Session<MatterDevice>) {
+        // TODO - ACL enforcement
+
+        this.setFabricIndex(value, session?.getAccessingFabric().fabricIndex, this.schema);
+
+        this.setRemote(value, session);
+    }
+
+    /**
+     * Set an attribute value in the context of a remote request.
+     */
+    abstract setRemote(value: T, session?: Session<MatterDevice>): void;
+
+    /**
+     * Set the value for the global "FabricIndex" attribute.
+     */
+    private setFabricIndex(value: any, fabricIndex: FabricIndex | undefined, schema: TlvSchema<any>) {
+        if (schema instanceof ArraySchema) {
+            if (Array.isArray(value)) {
+                for (const item of value) {
+                    this.setFabricIndex(item, fabricIndex, schema.elementSchema);
+                }
+            }
+        } else if (schema instanceof NullableSchema) {
+            this.setFabricIndex(value, fabricIndex, schema.schema);
+        } else if (schema instanceof ObjectSchema) {
+            if (typeof schema !== "object") {
+                return;
+            }
+
+            for (const k in schema.fieldDefinitions) {
+                const field = schema.fieldDefinitions[k] as FieldType<any>;
+
+                // 0xfe = global FieldIndex attribute
+                if (field.id === Globals.FabricIndex.id) {
+                    if (fabricIndex === undefined) {
+                        throw new FabricScopeError("Session is required to initialize fabricIndex attribute");
+                    }
+
+                    value[k] = fabricIndex;
+                } else {
+                    this.setFabricIndex(value[k], fabricIndex, field.schema);
+                }
+            }
+        }
     }
 }
 
 /**
  * Attribute server for normal attributes that can be read and written.
  */
-export class AttributeServer<T> extends BaseAttributeServer<T> {
+export class AttributeServer<T> extends MutableAttributeServer<T> {
     private readonly matterListeners = new Array<(value: T, version: number) => void>();
     private readonly listeners = new Array<(newValue: T, oldValue: T) => void>();
 
     /** Initialize the value of the attribute, used when a persisted value is set initially */
     override init(value: T, version: number) {
-        this.validator(value, this.name);
+        this.schema.validate(value);
         this.version = version;
         this.value = value;
     }
@@ -97,16 +160,14 @@ export class AttributeServer<T> extends BaseAttributeServer<T> {
         return this.value;
     }
 
-    set(value: T, _session?: Session<MatterDevice>) {
-        // TODO: check ACL
-
+    setRemote(value: T, _session?: Session<MatterDevice>) {
         this.setLocal(value);
     }
 
     setLocal(value: T) {
         const oldValue = this.value;
         if (!isDeepEqual(value, oldValue)) {
-            this.validator(value, this.name);
+            this.schema.validate(value);
             this.version++;
             this.value = value;
             this.matterListeners.forEach(listener => listener(value, this.version));
@@ -145,12 +206,11 @@ export class AttributeGetterServer<T> extends AttributeServer<T> {
         id: number,
         name: string,
         schema: TlvSchema<T>,
-        validator: (value: T, name: string) => void,
         isWritable: boolean,
         defaultValue: T,
         readonly getter: (session?: Session<MatterDevice>, endpoint?: Endpoint) => T,
     ) {
-        super(id, name, schema, validator, isWritable, defaultValue);
+        super(id, name, schema, isWritable, defaultValue);
     }
 
     override setLocal(_value: T) {
@@ -168,7 +228,7 @@ export class AttributeGetterServer<T> extends AttributeServer<T> {
  * Attribute server which is getting and setting the value for a defined fabric. The data are automatically persisted
  * on fabric level.
  */
-export class FabricScopedAttributeServer<T> extends BaseAttributeServer<T>{
+export class FabricScopedAttributeServer<T> extends MutableAttributeServer<T>{
     private readonly matterListeners = new Array<(value: T, version: number) => void>();
     private readonly listeners = new Array<(newValue: T, oldValue: T) => void>();
 
@@ -176,17 +236,15 @@ export class FabricScopedAttributeServer<T> extends BaseAttributeServer<T>{
         id: number,
         name: string,
         schema: TlvSchema<T>,
-        validator: (value: T, name: string) => void,
         isWritable: boolean,
         defaultValue: T,
         readonly cluster: Cluster<any, any, any, any, any>,
     ) {
-        super(id, name, schema, validator, isWritable, defaultValue);
+        super(id, name, schema, isWritable, defaultValue);
     }
 
-    set(value: T, session?: Session<MatterDevice>) {
-        if (session === undefined) throw new Error("Session is required for fabric scoped attributes");
-        // TODO: check ACL
+    setRemote(value: T, session?: Session<MatterDevice>) {
+        if (session === undefined) throw new FabricScopeError("Session is required for fabric scoped attributes");
         this.setLocal(value, (session as SecureSession<MatterDevice>).getAccessingFabric());
     }
 
@@ -195,7 +253,7 @@ export class FabricScopedAttributeServer<T> extends BaseAttributeServer<T>{
         const oldValue = oldData?.value ?? this.defaultValue;
         let version = oldData?.version ?? 0;
         if (!isDeepEqual(value, oldValue)) {
-            this.validator(value, this.name);
+            this.schema.validate(value);
             version++;
             fabric.setScopedClusterDataValue(this.cluster, this.name, { version, value });
             this.matterListeners.forEach(listener => listener(value, version)); // TODO Make callbacks sense without fabric, but then they would have other signature?
@@ -205,14 +263,14 @@ export class FabricScopedAttributeServer<T> extends BaseAttributeServer<T>{
 
     get(session?: Session<MatterDevice>): T {
         // TODO: check ACL
-        if (session === undefined) throw new Error("Session is required for fabric scoped attributes");
+        if (session === undefined) throw new FabricScopeError("Session is required for fabric scoped attributes");
 
         return this.getLocal((session as SecureSession<MatterDevice>).getAccessingFabric());
     }
 
     getWithVersion(session?: Session<MatterDevice>) {
         // TODO: check ACL
-        if (session === undefined) throw new Error("Session is required for fabric scoped attributes");
+        if (session === undefined) throw new FabricScopeError("Session is required for fabric scoped attributes");
 
         const fabric = (session as SecureSession<MatterDevice>).getAccessingFabric();
         const data = fabric.getScopedClusterDataValue<{ version: number, value: T }>(this.cluster, this.name);

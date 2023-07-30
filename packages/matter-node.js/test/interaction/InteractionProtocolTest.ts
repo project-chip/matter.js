@@ -447,6 +447,7 @@ describe("InteractionProtocol", () => {
                     authMode: 2,
                     subjects: null,
                     targets: null,
+                    fabricIndex: { index: 1 }
                 }
             ]);
         });

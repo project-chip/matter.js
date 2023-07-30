@@ -366,14 +366,14 @@ describe("ClusterServer structure", () => {
                     setScopedClusterDataValueCalledCounter++;
                     assert.equal(cluster.id, BindingCluster.id);
                     assert.equal(clusterDataKey, "binding");
-                    assert.deepEqual(value, { value: [{}], version: 1 });
+                    assert.deepEqual(value, { value: [{ fabricIndex: { index: 1 } }], version: 1 });
                 }
             } as Fabric;
 
             assert.deepEqual(binding.attributes.binding.getLocal(fabric), []);
-            binding.attributes.binding.setLocal([{}], fabric);
+            binding.attributes.binding.setLocal([{ fabricIndex: { index: 1 } }], fabric);
             assert.deepEqual(binding.getBindingAttribute(fabric), []);
-            binding.setBindingAttribute([{}], fabric);
+            binding.setBindingAttribute([{ fabricIndex: { index: 1 } }], fabric);
 
             assert.equal(getScopedClusterDataValueCalledCounter, 4);
             assert.equal(setScopedClusterDataValueCalledCounter, 2);

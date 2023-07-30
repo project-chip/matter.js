@@ -27,7 +27,7 @@ const TlvAclTestSchema = TlvObject({
     privilege: TlvField(1, TlvUInt8),
     authMode: TlvField(2, TlvUInt8),
     subjects: TlvField(3, TlvNullable(TlvUInt8)),
-    targets: TlvField(4, TlvNullable(TlvUInt8)),
+    targets: TlvField(4, TlvNullable(TlvUInt8))
 });
 
 const fakeTime = new TimeFake(0);

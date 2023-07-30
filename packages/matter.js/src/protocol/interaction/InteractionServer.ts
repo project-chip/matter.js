@@ -221,30 +221,51 @@ export function ClusterServer<
 
         const { id, schema, writable, persistent, fabricScoped, scene, fixed } = attributeDef[attributeName];
         if ((attributesInitialValues as any)[attributeName] !== undefined) {
-            const validator = typeof schema.validate === 'function' ? schema.validate.bind(schema) : undefined;
             if (fixed) {
-                (attributes as any)[attributeName] = new FixedAttributeServer(id, attributeName, schema, validator ?? (() => { /* no validation */
-                }), writable, (attributesInitialValues as any)[attributeName]);
+                (attributes as any)[attributeName] = new FixedAttributeServer(
+                    id,
+                    attributeName,
+                    schema,
+                    writable,
+                    (attributesInitialValues as any)[attributeName]
+                );
                 result[`get${capitalizedAttributeName}Attribute`] = () => (attributes as any)[attributeName].getLocal();
             }
             else if (fabricScoped) {
-                (attributes as any)[attributeName] = new FabricScopedAttributeServer(id, attributeName, schema, validator ?? (() => { /* no validation */
-                }), writable, (attributesInitialValues as any)[attributeName], clusterDef);
+                (attributes as any)[attributeName] = new FabricScopedAttributeServer(
+                    id,
+                    attributeName,
+                    schema,
+                    writable,
+                    (attributesInitialValues as any)[attributeName],
+                    clusterDef
+                );
                 result[`get${capitalizedAttributeName}Attribute`] = (fabric: Fabric) => (attributes as any)[attributeName].getLocal(fabric);
                 result[`set${capitalizedAttributeName}Attribute`] = <T,>(value: T, fabric: Fabric) => (attributes as any)[attributeName].setLocal(value, fabric);
                 result[`subscribe${capitalizedAttributeName}Attribute`] = <T,>(listener: (newValue: T, oldValue: T) => void) => (attributes as any)[attributeName].addListener(listener);
             } else {
                 const getter = (handlers as any)[`get${capitalize(attributeName)}`];
                 if (getter === undefined) {
-                    (attributes as any)[attributeName] = new AttributeServer(id, attributeName, schema, validator ?? (() => { /* no validation */
-                    }), writable, (attributesInitialValues as any)[attributeName]);
+                    (attributes as any)[attributeName] = new AttributeServer(
+                        id,
+                        attributeName,
+                        schema,
+                        writable,
+                        (attributesInitialValues as any)[attributeName]
+                    );
                 } else {
-                    (attributes as any)[attributeName] = new AttributeGetterServer(id, attributeName, schema, validator ?? (() => { /* no validation */
-                    }), writable, (attributesInitialValues as any)[attributeName], (session, endpoint) => getter({
-                        attributes,
-                        endpoint,
-                        session
-                    }));
+                    (attributes as any)[attributeName] = new AttributeGetterServer(
+                        id,
+                        attributeName,
+                        schema,
+                        writable,
+                        (attributesInitialValues as any)[attributeName],
+                        (session, endpoint) => getter({
+                            attributes,
+                            endpoint,
+                            session
+                        })
+                    );
                 }
                 if (persistent) {
                     const listener = (value: any, version: number) => attributeStorageListener(attributeName, version, value);
