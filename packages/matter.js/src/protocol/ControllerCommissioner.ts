@@ -44,7 +44,8 @@ export type CommissioningOptions = {
     threadNetwork?: {
         networkName: string;
         operationalDataset: string;
-    }
+    },
+    adminVendorId?: VendorId;
 }
 
 /**
@@ -114,7 +115,7 @@ const DEFAULT_FAILSAFE_TIME_MS = 60000;
 
 // TODO Do not hard code them!
 const FABRIC_ID = BigInt(1); // TODO Random?
-const ADMIN_VENDOR_ID = new VendorId(752); // TODO: WHICH Vendor ID to use? Check Chip tool
+const DEFAULT_ADMIN_VENDOR_ID = new VendorId(0xFFF1);
 
 /**
  * Class to abstract the Device commission flow in a step wise way as defined in Specs. The specs are not 100%
@@ -513,7 +514,7 @@ export class ControllerCommissioner {
             nocValue: peerOperationalCert,
             icacValue: new ByteArray(0),
             ipkValue: this.fabric.identityProtectionKey,
-            adminVendorId: ADMIN_VENDOR_ID,
+            adminVendorId: this.commissioningOptions.adminVendorId ?? DEFAULT_ADMIN_VENDOR_ID,
             caseAdminSubject: peerNodeId,
         });
 

@@ -55,7 +55,7 @@ export type CommissioningSuccessFailureResponse = TypeFromSchema<typeof TlvCommi
 
 const FABRIC_INDEX = new FabricIndex(1);
 const FABRIC_ID = BigInt(1);
-const ADMIN_VENDOR_ID = new VendorId(752);
+const DEFAULT_ADMIN_VENDOR_ID = new VendorId(0xFFF1); // TODO combine into ControllerCommissioner!
 
 const logger = Logger.get("MatterController");
 
@@ -67,6 +67,7 @@ export class PairRetransmissionLimitReachedError extends RetransmissionLimitReac
 
 export class MatterController {
     public static async create(scanner: Scanner, netInterfaceIpv4: NetInterface | undefined, netInterfaceIpv6: NetInterface, storage: StorageContext, operationalServerAddress?: ServerAddressIp, commissioningOptions?: CommissioningOptions): Promise<MatterController> {
+        // TODO move to ControllerCommissioner
         const CONTROLLER_NODE_ID = new NodeId(Crypto.getRandomBigUInt64());
         const certificateManager = new RootCertificateManager(storage);
 
@@ -75,7 +76,7 @@ export class MatterController {
             .setRootCert(certificateManager.getRootCert())
             .setRootNodeId(CONTROLLER_NODE_ID)
             .setIdentityProtectionKey(ipkValue)
-            .setRootVendorId(ADMIN_VENDOR_ID);
+            .setRootVendorId(commissioningOptions?.adminVendorId ?? DEFAULT_ADMIN_VENDOR_ID)
         fabricBuilder.setOperationalCert(certificateManager.generateNoc(fabricBuilder.getPublicKey(), FABRIC_ID, CONTROLLER_NODE_ID));
 
         // Check if we have a fabric stored in the storage, if yes initialize this one, else build a new one
