@@ -42,7 +42,7 @@ import { TypeFromSchema } from "./tlv/TlvSchema.js";
 import { TlvField, TlvObject } from "./tlv/TlvObject.js";
 import { TlvEnum } from "./tlv/TlvNumber.js";
 import { TlvString } from "./tlv/TlvString.js";
-import { CommissioningOptions, ControllerCommissioningHandler } from "./protocol/ControllerCommissioningHandler.js";
+import { CommissioningOptions, ControllerCommissioner } from "./protocol/ControllerCommissioner.js";
 
 const TlvCommissioningSuccessFailureResponse = TlvObject({
     /** Contain the result of the operation. */
@@ -289,7 +289,7 @@ export class MatterController {
             Commissionee SHALL exit Commissioning Mode after 20 failed attempts.
          */
 
-        const commissioningManager = new ControllerCommissioningHandler(
+        const commissioningManager = new ControllerCommissioner(
             // Use the created secure session to do the commissioning
             new InteractionClient(new ExchangeProvider(this.exchangeManager, paseSecureMessageChannel)),
 

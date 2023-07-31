@@ -29,7 +29,7 @@ import { TlvCertSigningRequest } from "../cluster/server/OperationalCredentialsS
 import { CertificateManager } from "../certificate/CertificateManager.js";
 import { NodeId } from "../datatype/NodeId.js";
 
-const logger = Logger.get("ControllerCommissioningHandler");
+const logger = Logger.get("ControllerCommissioner");
 
 /**
  * User specific options for the Commissioning process
@@ -119,7 +119,7 @@ const ADMIN_VENDOR_ID = new VendorId(752); // TODO: WHICH Vendor ID to use? Chec
 /**
  * Class to abstract the Device commission flow in a step wise way as defined in Specs. The specs are not 100%
  */
-export class ControllerCommissioningHandler {
+export class ControllerCommissioner {
     private readonly commissioningSteps = new Array<CommissioningStep>();
     private readonly commissioningStepResults = new Map<string, CommissioningStepResult>();
     private readonly clusterClients = new Map<number, ClusterClientObj<any, Attributes, Commands, Events>>();
@@ -300,7 +300,7 @@ export class ControllerCommissioningHandler {
         logger.debug(`Commissioning step ${context} returned ${errorCode}, ${debugText}`);
 
         if (errorCode === GeneralCommissioning.CommissioningError.Ok) return;
-        throw new Error(`Commission error for "${context}": ${errorCode}, ${debugText}`);
+        throw new CommissioningError(`Commission error for "${context}": ${errorCode}, ${debugText}`);
     }
 
     /**
@@ -396,7 +396,7 @@ export class ControllerCommissioningHandler {
      */
     private async configureRegulatoryInformation() {
         if (this.collectedCommissioningData.networkFeatures === undefined) {
-            throw new Error("Commissioning step 5.1: No network features collected");
+            throw new CommissioningError("No network features collected");
         }
         // Read the infos for all Network Commissioning clusters
         const hasRadioNetwork = !!this.collectedCommissioningData.networkFeatures.find(
@@ -449,7 +449,7 @@ export class ControllerCommissioningHandler {
      */
     private async synchronizeTime() {
         if (this.collectedCommissioningData.rootServerList !== undefined && this.collectedCommissioningData.rootServerList.find(clusterId => clusterId.id === TimeSyncCluster.id)) {
-            logger.debug("Commissioning step 5.2: TimeSync cluster is supported");
+            logger.debug("TimeSync cluster is supported");
             // TODO: implement
         }
         return {
@@ -473,7 +473,7 @@ export class ControllerCommissioningHandler {
         // TODO: validate attestationSignature using device public key
         if (deviceAttestation.length === 0 || productAttestation.length === 0 || attestationElements.length === 0 || attestationSignature.length === 0) {
             // TODO: validate the data really
-            throw new Error("Invalid response from device");
+            throw new CommissioningError("Device Attestation data missing from device");
         }
         return {
             code: CommissioningStepResultCode.Success,
@@ -753,9 +753,9 @@ export class ControllerCommissioningHandler {
      *
      */
     private async reconnectWithDevice() {
-        logger.debug("Commissioning step 13-14: Reconnecting with device ...");
+        logger.debug("Reconnecting with device ...");
         this.interactionClient = await this.reconnectWithDeviceCallback(this.fabric.rootNodeId);
-        logger.debug("Commissioning step 13-14: Successfully reconnected with device ...");
+        logger.debug("Successfully reconnected with device ...");
 
         this.clusterClients.clear();
         return {

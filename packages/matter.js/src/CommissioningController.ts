@@ -31,7 +31,7 @@ import { ServerAddressIp } from "./common/ServerAddress.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { Ble } from "./ble/Ble.js";
 import { NoProviderError } from "./common/MatterError.js";
-import { CommissioningOptions } from "./protocol/ControllerCommissioningHandler.js";
+import { CommissioningOptions } from "./protocol/ControllerCommissioner.js";
 
 const logger = new Logger("CommissioningController");
 
