@@ -1082,9 +1082,6 @@ export namespace NetworkCommissioning {
 
             extendCluster(cluster, WiFiNetworkInterfaceComponent, { wiFiNetworkInterface: true });
             extendCluster(cluster, ThreadNetworkInterfaceComponent, { threadNetworkInterface: true });
-            // TODO Manual additional because generator issue #242
-            extendCluster(cluster, WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent, { wiFiNetworkInterface: true });
-            extendCluster(cluster, WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent, { threadNetworkInterface: true });
 
             preventCluster(
                 cluster,
