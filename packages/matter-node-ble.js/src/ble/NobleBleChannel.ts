@@ -135,11 +135,11 @@ export class NobleBleChannel implements Channel<ByteArray> {
 
     static async create(peripheral: Peripheral, characteristicC1ForWrite: Characteristic, characteristicC2ForSubscribe: Characteristic, onMatterMessageListener: ((socket: Channel<ByteArray>, data: ByteArray) => void), _additionalCommissioningRelatedData?: ByteArray): Promise<NobleBleChannel> {
 
-        let mtu = (peripheral as any).mtu ?? 0;
+        let mtu = peripheral.mtu ?? 0;
         if (mtu > BLE_MAXIMUM_BTP_MTU) {
             mtu = BLE_MAXIMUM_BTP_MTU;
         }
-        logger.debug(`Using MTU= ${mtu} (Peripheral MTU = ${(peripheral as any).mtu})`); // TODO Fix noble types
+        logger.debug(`Using MTU=${mtu} (Peripheral MTU=${peripheral.mtu})`); // TODO Fix noble types
         const btpHandshakeRequest = BtpCodec.encodeBtpHandshakeRequest({
             versions: BTP_SUPPORTED_VERSIONS,
             attMtu: mtu,
