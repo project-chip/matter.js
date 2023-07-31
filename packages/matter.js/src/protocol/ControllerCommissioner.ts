@@ -219,9 +219,25 @@ export class ControllerCommissioner {
         this.commissioningSteps.push({
             stepNumber: 11,
             subStepNumber: 1,
-            name: "NetworkCommissioning",
-            stepLogic: () => this.configureNetwork()
+            name: "NetworkCommissioning.Validate",
+            stepLogic: () => this.validateNetwork()
         });
+        if (this.commissioningOptions.wifiNetwork !== undefined) {
+            this.commissioningSteps.push({
+                stepNumber: 11,
+                subStepNumber: 2,
+                name: "NetworkCommissioning.Wifi",
+                stepLogic: () => this.configureNetworkWifi()
+            });
+        }
+        if (this.commissioningOptions.threadNetwork !== undefined) {
+            this.commissioningSteps.push({
+                stepNumber: 11,
+                subStepNumber: 3,
+                name: "NetworkCommissioning.Thread",
+                stepLogic: () => this.configureNetworkThread()
+            });
+        }
 
         this.commissioningSteps.push({
             stepNumber: 12,
@@ -552,46 +568,27 @@ export class ControllerCommissioner {
      * 12: The Commissioner SHALL trigger the Commissionee to connect to the operational network using ConnectNetwork
      * command (see Section 11.8.7.9, “ConnectNetwork Command”) unless the Commissionee is already on the desired operational network.
      */
-    private async configureNetwork() {
-        if (this.commissioningOptions.wifiNetwork === undefined && this.commissioningOptions.threadNetwork === undefined) {
-            logger.debug("Commissioning step 11: No network credentials are configured");
-            return {
-                code: CommissioningStepResultCode.Skipped,
-                breadcrumb: this.lastBreadcrumb,
-            }
+    private async validateNetwork() {
+        if (this.collectedCommissioningData.networkFeatures === undefined || this.collectedCommissioningData.networkStatus === undefined) {
+            throw new CommissioningError("Could not get network details from the device ... Stop commissioning!");
         }
-        if (this.collectedCommissioningData.networkFeatures !== undefined && this.collectedCommissioningData.networkStatus !== undefined) {
-            const rootNetworkFeatures = this.collectedCommissioningData.networkFeatures.find(({ endpointId }) => endpointId === 0)?.value;
-            if (rootNetworkFeatures?.wiFiNetworkInterface) {
-                if (this.commissioningOptions.wifiNetwork !== undefined) {
-                    logger.debug("Commissioning step 11: Configuring WiFi network ...");
-                    return await this.configureNetworkWifi();
-                } else {
-                    logger.debug("Commissioning step 11: WiFi network could be commissioned but is not configured");
-                }
-            }
-            if (rootNetworkFeatures?.threadNetworkInterface) {
-                if (this.commissioningOptions.threadNetwork !== undefined) {
-                    logger.debug("Commissioning step 11: Configuring Thread network ...");
-                    return await this.configureNetworkThread();
-                } else {
-                    logger.debug("Commissioning step 11: Thread network could be commissioned but is not configured");
-                }
-            }
-            if (!rootNetworkFeatures?.ethernetNetworkInterface) {
-                throw new CommissioningError("Commissioning step 11: Did not found any Wifi or Thread network interface to configure on Root Endpoint");
+        if (this.commissioningOptions.wifiNetwork === undefined && this.commissioningOptions.threadNetwork === undefined) {
+            const anyEthernetInterface = !!this.collectedCommissioningData.networkFeatures.find(({ value: {ethernetNetworkInterface} }) => ethernetNetworkInterface === true);
+            const anyInterfaceConnected = this.collectedCommissioningData.networkStatus.find(({ value }) => !!value.find(({connected}) => connected === true));
+            if (!anyEthernetInterface && !anyInterfaceConnected) {
+                throw new CommissioningError("No network credentials are configured for commissioning and no Ethernet interface is available on the device and no interface already connected.");
             }
         }
 
         return {
-            code: CommissioningStepResultCode.Skipped,
+            code: CommissioningStepResultCode.Success,
             breadcrumb: this.lastBreadcrumb,
         }
     }
 
     private async configureNetworkWifi() {
         if (this.commissioningOptions.wifiNetwork === undefined) {
-            logger.debug("Commissioning step 11: WiFi network is not configured");
+            logger.debug("WiFi network is not configured");
             return {
                 code: CommissioningStepResultCode.Skipped,
                 breadcrumb: this.lastBreadcrumb,
@@ -618,6 +615,8 @@ export class ControllerCommissioner {
                 }
             }
         }
+
+        logger.debug("Configuring WiFi network ...");
         const networkCommissioningClusterClient = this.getClusterClient(NetworkCommissioning.Cluster.with("WiFiNetworkInterface"), 0, true);
         const ssid = ByteArray.fromString(this.commissioningOptions.wifiNetwork.wifiSsid);
         const credentials = ByteArray.fromString(this.commissioningOptions.wifiNetwork.wifiCredentials);
@@ -667,7 +666,7 @@ export class ControllerCommissioner {
 
     private async configureNetworkThread() {
         if (this.commissioningOptions.threadNetwork === undefined) {
-            logger.debug("Commissioning step 11: Thread network is not configured");
+            logger.debug("Thread network is not configured");
             return {
                 code: CommissioningStepResultCode.Skipped,
                 breadcrumb: this.lastBreadcrumb,
@@ -694,6 +693,8 @@ export class ControllerCommissioner {
                 }
             }
         }
+
+        logger.debug("Configuring Thread network ...");
         const networkCommissioningClusterClient = this.getClusterClient(NetworkCommissioning.Cluster.with("ThreadNetworkInterface"), 0, true);
 
         const { networkingStatus, threadScanResults, debugText } = await networkCommissioningClusterClient.scanNetworks({ breadcrumb: this.lastBreadcrumb++ });
