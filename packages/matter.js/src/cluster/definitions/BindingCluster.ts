@@ -9,11 +9,12 @@
 import { Cluster as CreateCluster, WritableFabricScopedAttribute, AccessLevel } from "../../cluster/Cluster.js";
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
-import { TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
+import { TlvObject, TlvOptionalField, TlvField } from "../../tlv/TlvObject.js";
 import { TlvNodeId } from "../../datatype/NodeId.js";
 import { TlvGroupId } from "../../datatype/GroupId.js";
 import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
 import { TlvClusterId } from "../../datatype/ClusterId.js";
+import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
 
 export namespace Binding {
     /**
@@ -50,7 +51,9 @@ export namespace Binding {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 9.6.5.1.4
          */
-        cluster: TlvOptionalField(4, TlvClusterId)
+        cluster: TlvOptionalField(4, TlvClusterId),
+
+        fabricIndex: TlvField(254, TlvFabricIndex)
     });
 
     /**

@@ -21,6 +21,7 @@ import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvNodeId } from "../../datatype/NodeId.js";
 import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
+import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvEnum, TlvUInt8, TlvUInt32, TlvUInt16, TlvUInt64, TlvInt64 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
@@ -35,7 +36,8 @@ export namespace OtaSoftwareUpdateRequestor {
      */
     export const TlvProviderLocationStruct = TlvObject({
         providerNodeId: TlvField(1, TlvNodeId),
-        endpoint: TlvField(2, TlvEndpointNumber)
+        endpoint: TlvField(2, TlvEndpointNumber),
+        fabricIndex: TlvField(254, TlvFabricIndex)
     });
 
     /**
@@ -120,7 +122,8 @@ export namespace OtaSoftwareUpdateRequestor {
         vendorId: TlvField(1, TlvVendorId),
         announcementReason: TlvField(2, TlvEnum<AnnouncementReason>()),
         metadataForNode: TlvOptionalField(3, TlvByteString.bound({ maxLength: 512 })),
-        endpoint: TlvField(4, TlvEndpointNumber)
+        endpoint: TlvField(4, TlvEndpointNumber),
+        fabricIndex: TlvField(254, TlvFabricIndex)
     });
 
     /**

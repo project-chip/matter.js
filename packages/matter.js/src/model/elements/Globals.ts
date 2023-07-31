@@ -195,7 +195,7 @@ export const Globals = {
     }),
     FabricIndex: DatatypeElement({
         id: 0xfe, name: "FabricIndex", type: "fabric-idx",
-        constraint: "1 to 254", access: "R V F"
+        constraint: "1 to 254", access: "R V F", conformance: "M"
     }),
 
     // Not defined as global in the specification but used across multiple
