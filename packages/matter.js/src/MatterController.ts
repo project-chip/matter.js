@@ -249,6 +249,7 @@ export class MatterController {
             if (this.netInterfaceBle === undefined) {
                 throw new PairRetransmissionLimitReachedError(`BLE interface not initialized. Cannot use ${address.peripheralAddress} for commissioning.`);
             }
+            // TODO Have a Timeout mechanism here for connections
             paseChannel = await this.netInterfaceBle.openChannel(address);
         }
 
