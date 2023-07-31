@@ -587,6 +587,7 @@ export namespace TimeSync {
         factory: <T extends `${Feature}`[]>(...features: [...T]) => {
             validateFeatureSelection(features, Feature);
             const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
+            extendCluster(cluster, NtpClientComponent, { ntpClient: true });
             extendCluster(cluster, TimeZoneComponent, { timeZone: true });
             extendCluster(cluster, NtpServerComponent, { ntpServer: true });
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;

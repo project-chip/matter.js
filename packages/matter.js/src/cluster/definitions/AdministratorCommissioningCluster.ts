@@ -12,6 +12,7 @@ import {
     ClusterComponent,
     ExtensibleCluster,
     validateFeatureSelection,
+    extendCluster,
     ClusterForBaseCluster,
     AsConditional
 } from "../../cluster/ClusterFactory.js";
@@ -314,6 +315,7 @@ export namespace AdministratorCommissioning {
         factory: <T extends `${Feature}`[]>(...features: [...T]) => {
             validateFeatureSelection(features, Feature);
             const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
+            extendCluster(cluster, BasicComponent, { basic: true });
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }
     });

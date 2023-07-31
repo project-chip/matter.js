@@ -189,8 +189,7 @@ function generateFactory(base: Block, variance: ClusterVariance, illegal: Illega
     file.addImport("schema/BitmapSchema", "BitFlags");
     cluster.atom(`supportedFeatures: BitFlags(Base.features, ...features)`);
 
-    for (let i = 1; i < variance.components.length; i++) {
-        const component = variance.components[i];
+    for (const component of variance.components) {
         file.addImport("cluster/ClusterFactory", "extendCluster");
         const extension = factoryFunction.expressions(`extendCluster(`, ")");
         extension.atom("cluster");
