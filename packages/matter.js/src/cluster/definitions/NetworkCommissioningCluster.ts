@@ -245,10 +245,10 @@ export namespace NetworkCommissioning {
      * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.5
      */
     export const TlvWiFiInterfaceScanResultStruct = TlvObject({
-        security: TlvField(0, TlvBitmap(TlvUInt8, WiFiSecurityBitmap)),
-        ssid: TlvField(1, TlvByteString.bound({ maxLength: 32 })),
-        bssid: TlvField(2, TlvByteString.bound({ length: 6 })),
-        channel: TlvField(3, TlvUInt16),
+        security: TlvOptionalField(0, TlvBitmap(TlvUInt8, WiFiSecurityBitmap)),
+        ssid: TlvOptionalField(1, TlvByteString.bound({ maxLength: 32 })),
+        bssid: TlvOptionalField(2, TlvByteString.bound({ length: 6 })),
+        channel: TlvOptionalField(3, TlvUInt16),
 
         /**
          * This field, if present, may be used to differentiate overlapping channel number values across different
@@ -272,21 +272,21 @@ export namespace NetworkCommissioning {
      * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.6
      */
     export const TlvThreadInterfaceScanResultStruct = TlvObject({
-        panId: TlvField(0, TlvUInt16.bound({ max: 65534 })),
-        extendedPanId: TlvField(1, TlvUInt64),
-        networkName: TlvField(2, TlvString.bound({ minLength: 1, maxLength: 16 })),
-        channel: TlvField(3, TlvUInt16),
-        version: TlvField(4, TlvUInt8),
+        panId: TlvOptionalField(0, TlvUInt16.bound({ max: 65534 })),
+        extendedPanId: TlvOptionalField(1, TlvUInt64),
+        networkName: TlvOptionalField(2, TlvString.bound({ minLength: 1, maxLength: 16 })),
+        channel: TlvOptionalField(3, TlvUInt16),
+        version: TlvOptionalField(4, TlvUInt8),
 
         /**
          * ExtendedAddress stands for an IEEE 802.15.4 Extended Address.
          *
          * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.6.1
          */
-        extendedAddress: TlvField(5, TlvByteString.bound({ minLength: 6, maxLength: 8 })),
+        extendedAddress: TlvOptionalField(5, TlvByteString.bound({ minLength: 6, maxLength: 8 })),
 
-        rssi: TlvField(6, TlvInt8),
-        lqi: TlvField(7, TlvUInt8)
+        rssi: TlvOptionalField(6, TlvInt8),
+        lqi: TlvOptionalField(7, TlvUInt8)
     });
 
     /**
@@ -344,7 +344,7 @@ export namespace NetworkCommissioning {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.2.3
          */
-        wiFiScanResults: TlvOptionalField(2, TlvArray(TlvWiFiInterfaceScanResultStruct)), // TODO Optional as workaround for #243
+        wiFiScanResults: TlvOptionalField(2, TlvArray(TlvWiFiInterfaceScanResultStruct)),
 
         /**
          * If NetworkingStatus was Success, this field shall contain the Thread network scan results. The list may be
@@ -360,7 +360,7 @@ export namespace NetworkCommissioning {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.2.4
          */
-        threadScanResults: TlvOptionalField(3, TlvArray(TlvThreadInterfaceScanResultStruct)) // TODO Optional as workaround for #243
+        threadScanResults: TlvOptionalField(3, TlvArray(TlvThreadInterfaceScanResultStruct))
     });
 
     /**
@@ -1072,6 +1072,14 @@ export namespace NetworkCommissioning {
         factory: <T extends `${Feature}`[]>(...features: [...T]) => {
             validateFeatureSelection(features, Feature);
             const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
+
+            extendCluster(
+                cluster,
+                WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent,
+                { wiFiNetworkInterface: true },
+                { threadNetworkInterface: true }
+            );
+
             extendCluster(cluster, WiFiNetworkInterfaceComponent, { wiFiNetworkInterface: true });
             extendCluster(cluster, ThreadNetworkInterfaceComponent, { threadNetworkInterface: true });
             // TODO Manual additional because generator issue #242

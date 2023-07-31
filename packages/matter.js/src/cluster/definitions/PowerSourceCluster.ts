@@ -1327,6 +1327,7 @@ export namespace PowerSource {
         factory: <T extends `${Feature}`[]>(...features: [...T]) => {
             validateFeatureSelection(features, Feature);
             const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
+            extendCluster(cluster, WiredComponent, { wired: true });
             extendCluster(cluster, BatteryComponent, { battery: true });
             extendCluster(cluster, ReplaceableComponent, { replaceable: true });
             extendCluster(cluster, RechargeableComponent, { rechargeable: true });

@@ -1169,6 +1169,7 @@ export namespace ThreadNetworkDiagnostics {
         factory: <T extends `${Feature}`[]>(...features: [...T]) => {
             validateFeatureSelection(features, Feature);
             const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
+            extendCluster(cluster, ErrorCountsComponent, { errorCounts: true });
             extendCluster(cluster, MleCountsComponent, { mleCounts: true });
             extendCluster(cluster, MacCountsComponent, { macCounts: true });
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;

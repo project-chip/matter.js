@@ -12,6 +12,7 @@ import {
     ClusterComponent,
     ExtensibleCluster,
     validateFeatureSelection,
+    extendCluster,
     ClusterForBaseCluster,
     AsConditional
 } from "../../cluster/ClusterFactory.js";
@@ -209,6 +210,7 @@ export namespace TimeFormatLocalization {
         factory: <T extends `${Feature}`[]>(...features: [...T]) => {
             validateFeatureSelection(features, Feature);
             const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
+            extendCluster(cluster, CalendarFormatComponent, { calendarFormat: true });
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }
     });

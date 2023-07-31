@@ -562,10 +562,13 @@ export const SpecMatter: MatterElement = {
                     tag: "command", name: "RecallScene", id: 0x5, access: "O", conformance: "M", direction: "request",
                     response: "status",
                     xref: { document: "cluster", section: "1.4.9.7" },
+
                     children: [
                         { tag: "datatype", name: "GroupId", id: 0x0, type: "group-id", conformance: "M" },
                         { tag: "datatype", name: "SceneId", id: 0x1, type: "uint8", conformance: "M" },
-                        { tag: "datatype", name: "TransitionTime", id: 0x2, type: "uint16", conformance: "O", quality: "X" }
+                        {
+                            tag: "datatype", name: "TransitionTime", id: 0x2, type: "uint16", conformance: "O", quality: "X"
+                        }
                     ]
                 },
 
@@ -1261,8 +1264,12 @@ export const SpecMatter: MatterElement = {
                     xref: { document: "cluster", section: "1.6.6.1" },
 
                     children: [
-                        { tag: "datatype", name: "Level", id: 0x0, type: "uint8", conformance: "M", constraint: "0 to 254" },
-                        { tag: "datatype", name: "TransitionTime", id: 0x1, type: "uint16", conformance: "M", quality: "X" },
+                        {
+                            tag: "datatype", name: "Level", id: 0x0, type: "uint8", conformance: "M", constraint: "0 to 254"
+                        },
+                        {
+                            tag: "datatype", name: "TransitionTime", id: 0x1, type: "uint16", conformance: "M", quality: "X"
+                        },
                         {
                             tag: "datatype", name: "OptionsMask", id: 0x2, type: "Options", conformance: "M",
                             constraint: "desc", default: 0
@@ -1332,7 +1339,9 @@ export const SpecMatter: MatterElement = {
                     children: [
                         { tag: "datatype", name: "StepMode", id: 0x0, type: "enum8", conformance: "M", constraint: "desc" },
                         { tag: "datatype", name: "StepSize", id: 0x1, type: "uint8", conformance: "M" },
-                        { tag: "datatype", name: "TransitionTime", id: 0x2, type: "uint16", conformance: "M", quality: "X" },
+                        {
+                            tag: "datatype", name: "TransitionTime", id: 0x2, type: "uint16", conformance: "M", quality: "X"
+                        },
                         {
                             tag: "datatype", name: "OptionsMask", id: 0x3, type: "Options", conformance: "M",
                             constraint: "desc", default: 0
@@ -1578,8 +1587,12 @@ export const SpecMatter: MatterElement = {
                     xref: { document: "cluster", section: "1.6.6.1" },
 
                     children: [
-                        { tag: "datatype", name: "Level", id: 0x0, type: "uint8", conformance: "M", constraint: "0 to 254" },
-                        { tag: "datatype", name: "TransitionTime", id: 0x1, type: "uint16", conformance: "M", quality: "X" },
+                        {
+                            tag: "datatype", name: "Level", id: 0x0, type: "uint8", conformance: "M", constraint: "0 to 254"
+                        },
+                        {
+                            tag: "datatype", name: "TransitionTime", id: 0x1, type: "uint16", conformance: "M", quality: "X"
+                        },
                         {
                             tag: "datatype", name: "OptionsMask", id: 0x2, type: "Options", conformance: "M",
                             constraint: "desc", default: 0
@@ -1649,7 +1662,9 @@ export const SpecMatter: MatterElement = {
                     children: [
                         { tag: "datatype", name: "StepMode", id: 0x0, type: "enum8", conformance: "M", constraint: "desc" },
                         { tag: "datatype", name: "StepSize", id: 0x1, type: "uint8", conformance: "M" },
-                        { tag: "datatype", name: "TransitionTime", id: 0x2, type: "uint16", conformance: "M", quality: "X" },
+                        {
+                            tag: "datatype", name: "TransitionTime", id: 0x2, type: "uint16", conformance: "M", quality: "X"
+                        },
                         {
                             tag: "datatype", name: "OptionsMask", id: 0x3, type: "Options", conformance: "M",
                             constraint: "desc", default: 0
@@ -2028,7 +2043,9 @@ export const SpecMatter: MatterElement = {
 
                     children: [
                         { tag: "datatype", name: "LS", conformance: "O.a", constraint: "0", description: "LatchingSwitch" },
-                        { tag: "datatype", name: "MS", conformance: "O.a", constraint: "1", description: "MomentarySwitch" },
+                        {
+                            tag: "datatype", name: "MS", conformance: "O.a", constraint: "1", description: "MomentarySwitch"
+                        },
                         {
                             tag: "datatype", name: "MSR", conformance: "[MS]", constraint: "2",
                             description: "MomentarySwitchRelease"
@@ -5930,9 +5947,15 @@ export const SpecMatter: MatterElement = {
                         {
                             tag: "datatype", name: "Unknown", id: 0x0, conformance: "O", description: "Unknown compressor type"
                         },
-                        { tag: "datatype", name: "T1", id: 0x1, conformance: "O", description: "Max working ambient 43 °C" },
-                        { tag: "datatype", name: "T2", id: 0x2, conformance: "O", description: "Max working ambient 35 °C" },
-                        { tag: "datatype", name: "T3", id: 0x3, conformance: "O", description: "Max working ambient 52 °C" }
+                        {
+                            tag: "datatype", name: "T1", id: 0x1, conformance: "O", description: "Max working ambient 43 °C"
+                        },
+                        {
+                            tag: "datatype", name: "T2", id: 0x2, conformance: "O", description: "Max working ambient 35 °C"
+                        },
+                        {
+                            tag: "datatype", name: "T3", id: 0x3, conformance: "O", description: "Max working ambient 52 °C"
+                        }
                     ]
                 },
 
@@ -6612,7 +6635,9 @@ export const SpecMatter: MatterElement = {
                             tag: "datatype", name: "CylindricalLock", id: 0x6,
                             description: "Physical lock type is cylindrical lock"
                         },
-                        { tag: "datatype", name: "TubularLock", id: 0x7, description: "Physical lock type is tubular lock" },
+                        {
+                            tag: "datatype", name: "TubularLock", id: 0x7, description: "Physical lock type is tubular lock"
+                        },
                         {
                             tag: "datatype", name: "InterconnectedLock", id: 0x8,
                             description: "Physical lock type is interconnected lock"
@@ -11103,10 +11128,13 @@ export const SpecMatter: MatterElement = {
                 {
                     tag: "datatype", name: "AccessControlTargetStruct", type: "struct",
                     xref: { document: "core", section: "9.10.4.4" },
+
                     children: [
                         { tag: "datatype", name: "Cluster", id: 0x0, type: "cluster-id", conformance: "M", quality: "X" },
                         { tag: "datatype", name: "Endpoint", id: 0x1, type: "endpoint-no", conformance: "M", quality: "X" },
-                        { tag: "datatype", name: "DeviceType", id: 0x2, type: "devtype-id", conformance: "M", quality: "X" }
+                        {
+                            tag: "datatype", name: "DeviceType", id: 0x2, type: "devtype-id", conformance: "M", quality: "X"
+                        }
                     ]
                 },
 
@@ -15022,7 +15050,9 @@ export const SpecMatter: MatterElement = {
                     xref: { document: "core", section: "11.8.5.1" },
 
                     children: [
-                        { tag: "datatype", name: "Unencrypted", constraint: "0", description: "Supports unencrypted Wi-Fi" },
+                        {
+                            tag: "datatype", name: "Unencrypted", constraint: "0", description: "Supports unencrypted Wi-Fi"
+                        },
                         { tag: "datatype", name: "Wep", constraint: "1", description: "Supports Wi-Fi using WEP security" },
                         {
                             tag: "datatype", name: "WpaPersonal", constraint: "2",
@@ -15088,7 +15118,9 @@ export const SpecMatter: MatterElement = {
                             tag: "datatype", name: "DuplicateNetworkId", id: 0x4,
                             description: "The NetworkID is already among the collection of added networks"
                         },
-                        { tag: "datatype", name: "NetworkNotFound", id: 0x5, description: "Cannot find AP: SSID Not found" },
+                        {
+                            tag: "datatype", name: "NetworkNotFound", id: 0x5, description: "Cannot find AP: SSID Not found"
+                        },
                         {
                             tag: "datatype", name: "RegulatoryError", id: 0x6,
                             description: "Cannot find AP: Mismatch on band/channels/regulatory domain / 2.4GHz vs 5GHz"
@@ -15104,7 +15136,9 @@ export const SpecMatter: MatterElement = {
                         {
                             tag: "datatype", name: "OtherConnectionFailure", id: 0x9, description: "Other association failure"
                         },
-                        { tag: "datatype", name: "Ipv6Failed", id: 0xa, description: "Failure to generate an IPv6 address" },
+                        {
+                            tag: "datatype", name: "Ipv6Failed", id: 0xa, description: "Failure to generate an IPv6 address"
+                        },
                         {
                             tag: "datatype", name: "IpBindFailed", id: 0xb,
                             description: "Failure to bind Wi-Fi <-> IP interfaces"
@@ -15506,7 +15540,9 @@ export const SpecMatter: MatterElement = {
                             tag: "datatype", name: "NewRegulatoryConfig", id: 0x0, type: "RegulatoryLocationTypeEnum",
                             conformance: "M"
                         },
-                        { tag: "datatype", name: "CountryCode", id: 0x1, type: "string", conformance: "M", constraint: "2" },
+                        {
+                            tag: "datatype", name: "CountryCode", id: 0x1, type: "string", conformance: "M", constraint: "2"
+                        },
                         { tag: "datatype", name: "Breadcrumb", id: 0x2, type: "uint64", conformance: "M" }
                     ]
                 },
@@ -15641,10 +15677,13 @@ export const SpecMatter: MatterElement = {
                     details: "This enumeration is used by the RegulatoryConfig and LocationCapability attributes to indicate " +
                         "possible radio usage.",
                     xref: { document: "core", section: "11.9.4.2" },
+
                     children: [
                         { tag: "datatype", name: "Indoor", id: 0x0, conformance: "M", description: "Indoor only" },
                         { tag: "datatype", name: "Outdoor", id: 0x1, conformance: "M", description: "Outdoor only" },
-                        { tag: "datatype", name: "IndoorOutdoor", id: 0x2, conformance: "M", description: "Indoor/Outdoor" }
+                        {
+                            tag: "datatype", name: "IndoorOutdoor", id: 0x2, conformance: "M", description: "Indoor/Outdoor"
+                        }
                     ]
                 },
 
@@ -18071,15 +18110,23 @@ export const SpecMatter: MatterElement = {
 
                     children: [
                         { tag: "datatype", name: "Rate10M", id: 0x0, conformance: "M", description: "PHY rate is 10Mbps" },
-                        { tag: "datatype", name: "Rate100M", id: 0x1, conformance: "M", description: "PHY rate is 100Mbps" },
+                        {
+                            tag: "datatype", name: "Rate100M", id: 0x1, conformance: "M", description: "PHY rate is 100Mbps"
+                        },
                         { tag: "datatype", name: "Rate1G", id: 0x2, conformance: "M", description: "PHY rate is 1Gbps" },
                         { tag: "datatype", name: "Rate25G", id: 0x3, conformance: "M", description: "PHY rate is 2.5Gbps" },
                         { tag: "datatype", name: "Rate5G", id: 0x4, conformance: "M", description: "PHY rate is 5Gbps" },
                         { tag: "datatype", name: "Rate10G", id: 0x5, conformance: "M", description: "PHY rate is 10Gbps" },
                         { tag: "datatype", name: "Rate40G", id: 0x6, conformance: "M", description: "PHY rate is 40Gbps" },
-                        { tag: "datatype", name: "Rate100G", id: 0x7, conformance: "M", description: "PHY rate is 100Gbps" },
-                        { tag: "datatype", name: "Rate200G", id: 0x8, conformance: "M", description: "PHY rate is 200Gbps" },
-                        { tag: "datatype", name: "Rate400G", id: 0x9, conformance: "M", description: "PHY rate is 400Gbps" }
+                        {
+                            tag: "datatype", name: "Rate100G", id: 0x7, conformance: "M", description: "PHY rate is 100Gbps"
+                        },
+                        {
+                            tag: "datatype", name: "Rate200G", id: 0x8, conformance: "M", description: "PHY rate is 200Gbps"
+                        },
+                        {
+                            tag: "datatype", name: "Rate400G", id: 0x9, conformance: "M", description: "PHY rate is 400Gbps"
+                        }
                     ]
                 }
             ]
@@ -19972,7 +20019,9 @@ export const SpecMatter: MatterElement = {
                     xref: { document: "core", section: "11.19.7.6.1" },
 
                     children: [
-                        { tag: "datatype", name: "ProviderNodeId", id: 0x0, type: "node-id", access: "F", conformance: "M" },
+                        {
+                            tag: "datatype", name: "ProviderNodeId", id: 0x0, type: "node-id", access: "F", conformance: "M"
+                        },
                         { tag: "datatype", name: "VendorId", id: 0x1, type: "vendor-id", access: "F", conformance: "M" },
                         {
                             tag: "datatype", name: "AnnouncementReason", id: 0x2, type: "AnnouncementReasonEnum", access: "F",
@@ -20083,8 +20132,11 @@ export const SpecMatter: MatterElement = {
                     tag: "datatype", name: "ProviderLocationStruct", type: "struct",
                     details: "This structure encodes a fabric-scoped location of an OTA provider on a given fabric.",
                     xref: { document: "core", section: "11.19.7.4.20" },
+
                     children: [
-                        { tag: "datatype", name: "ProviderNodeId", id: 0x1, type: "node-id", access: "F", conformance: "M" },
+                        {
+                            tag: "datatype", name: "ProviderNodeId", id: 0x1, type: "node-id", access: "F", conformance: "M"
+                        },
                         { tag: "datatype", name: "Endpoint", id: 0x2, type: "endpoint-no", access: "F", conformance: "M" }
                     ]
                 }

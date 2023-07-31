@@ -256,9 +256,6 @@ export abstract class ValueModel extends Model implements ValueElement {
                 }
             }
         }
-        if (conformance.type === Conformance.Special.Name) {
-            return conformance.param.match(/^[A-Z]+$/);
-        }
         return false;
     }
 
