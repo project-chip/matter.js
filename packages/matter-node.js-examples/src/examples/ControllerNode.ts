@@ -97,12 +97,14 @@ class ControllerNode {
             const threadNetworkName = getParameter("ble-thread-networkname");
             const threadOperationalDataset = getParameter("ble-thread-operationaldataset");
             if (wifiSsid !== undefined && wifiCredentials !== undefined) {
+                logger.info(`Registering Commissioning over BLE with WiFi: ${wifiSsid}`);
                 commissioningOptions.wifiNetwork = {
                     wifiSsid: wifiSsid,
                     wifiCredentials: wifiCredentials,
                 };
             }
             if (threadNetworkName !== undefined && threadOperationalDataset !== undefined) {
+                logger.info(`Registering Commissioning over BLE with Thread: ${threadNetworkName}`);
                 commissioningOptions.threadNetwork = {
                     networkName: threadNetworkName,
                     operationalDataset: threadOperationalDataset,

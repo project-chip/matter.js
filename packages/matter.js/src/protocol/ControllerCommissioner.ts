@@ -573,8 +573,8 @@ export class ControllerCommissioner {
             throw new CommissioningError("Could not get network details from the device ... Stop commissioning!");
         }
         if (this.commissioningOptions.wifiNetwork === undefined && this.commissioningOptions.threadNetwork === undefined) {
-            const anyEthernetInterface = !!this.collectedCommissioningData.networkFeatures.find(({ value: {ethernetNetworkInterface} }) => ethernetNetworkInterface === true);
-            const anyInterfaceConnected = this.collectedCommissioningData.networkStatus.find(({ value }) => !!value.find(({connected}) => connected === true));
+            const anyEthernetInterface = !!this.collectedCommissioningData.networkFeatures.find(({ value: { ethernetNetworkInterface } }) => ethernetNetworkInterface === true);
+            const anyInterfaceConnected = this.collectedCommissioningData.networkStatus.find(({ value }) => !!value.find(({ connected }) => connected === true));
             if (!anyEthernetInterface && !anyInterfaceConnected) {
                 throw new CommissioningError("No network credentials are configured for commissioning and no Ethernet interface is available on the device and no interface already connected.");
             }
