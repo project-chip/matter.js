@@ -80,7 +80,7 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         fabricBuilder.setRootNodeId(caseAdminSubject);
 
         const fabric = await fabricBuilder.build();
-        device.addFabric(fabric);
+        await device.addFabric(fabric);
 
         // Update connected attributes
         nocs.updated(session as SecureSession<MatterDevice>);
@@ -108,12 +108,13 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         }));
     },
 
-    nocsAttributeGetter: ({ session }) => {
+    nocsAttributeGetter: ({ session, isFabricFiltered }) => {
         if (session === undefined || !session.isSecure()) return []; // ???
-        return session.getContext().getFabrics().map(fabric => ({
+        const fabrics = isFabricFiltered ? [session.getAssociatedFabric()] : session.getContext().getFabrics();
+        return fabrics.map(fabric => ({
             noc: fabric.operationalCert,
-            icac: fabric.intermediateCACert ?? null
-            //fabricIndex: fabric.fabricIndex,
+            icac: fabric.intermediateCACert ?? null,
+            fabricIndex: fabric.fabricIndex,
         }));
     },
 
@@ -122,9 +123,10 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         return session.getContext().getFabrics().length;
     },
 
-    trustedRootCertificatesAttributeGetter: ({ session }) => {
+    trustedRootCertificatesAttributeGetter: ({ session, isFabricFiltered }) => {
         if (session === undefined || !session.isSecure()) return []; // ???
-        return session.getContext().getFabrics().map(fabric => fabric.rootCert);
+        const fabrics = isFabricFiltered ? [session.getAssociatedFabric()] : session.getContext().getFabrics();
+        return fabrics.map(fabric => fabric.rootCert);
     },
 
     currentFabricIndexAttributeGetter: ({ session }) => {
