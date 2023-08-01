@@ -438,4 +438,8 @@ export class InteractionClient {
             messenger.close();
         }
     }
+
+    getSession() {
+        return this.exchangeProvider.getSession();
+    }
 }
