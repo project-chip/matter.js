@@ -200,7 +200,7 @@ Matter.children.push({
         },
 
         {
-            tag: "attribute", name: "TargetPositionLiftPercent100Ths", id: 0xb, type: "percent100ths",
+            tag: "attribute", name: "TargetPositionLiftPercent100ths", id: 0xb, type: "percent100ths",
             access: "R V", conformance: "LF & PA_LF", constraint: "0 to 10000", default: null, quality: "X S P",
             details: "The TargetPositionLiftPercent100ths attribute identifies the position where the Window Covering " +
                 "Lift will go or is moving to as a percentage.",
@@ -208,7 +208,7 @@ Matter.children.push({
         },
 
         {
-            tag: "attribute", name: "TargetPositionTiltPercent100Ths", id: 0xc, type: "percent100ths",
+            tag: "attribute", name: "TargetPositionTiltPercent100ths", id: 0xc, type: "percent100ths",
             access: "R V", conformance: "TL & PA_TL", constraint: "0 to 10000", default: null, quality: "X S P",
             details: "The TargetPositionTiltPercent100ths attribute identifies the position where the Window Covering " +
                 "Tilt will go or is moving to as a percentage.",
@@ -253,7 +253,7 @@ Matter.children.push({
         },
 
         {
-            tag: "attribute", name: "CurrentPositionLiftPercent100Ths", id: 0xe, type: "percent100ths",
+            tag: "attribute", name: "CurrentPositionLiftPercent100ths", id: 0xe, type: "percent100ths",
             access: "R V", conformance: "LF & PA_LF", constraint: "0 to 10000", default: null, quality: "X N P",
             details: "The CurrentPositionLiftPercent100ths attribute identifies the actual position as a percentage with " +
                 "a minimal step of 0.01%. E.g Max 10000 equals 100.00%.",
@@ -261,7 +261,7 @@ Matter.children.push({
         },
 
         {
-            tag: "attribute", name: "CurrentPositionTiltPercent100Ths", id: 0xf, type: "percent100ths",
+            tag: "attribute", name: "CurrentPositionTiltPercent100ths", id: 0xf, type: "percent100ths",
             access: "R V", conformance: "TL & PA_TL", constraint: "0 to 10000", default: null, quality: "X N P",
             details: "The CurrentPositionTiltPercent100ths attribute identifies the actual position as a percentage with " +
                 "a minimal step of 0.01%. E.g Max 10000 equals 100.00%.",
@@ -545,7 +545,7 @@ Matter.children.push({
                     constraint: "desc"
                 },
                 {
-                    tag: "datatype", name: "LiftPercent100ThsValue", id: 0x1, type: "percent100ths", conformance: "O.a",
+                    tag: "datatype", name: "LiftPercent100thsValue", id: 0x1, type: "percent100ths", conformance: "O.a",
                     constraint: "desc"
                 }
             ]
@@ -597,7 +597,7 @@ Matter.children.push({
                     constraint: "desc"
                 },
                 {
-                    tag: "datatype", name: "TiltPercent100ThsValue", id: 0x1, type: "percent100ths", conformance: "O.a",
+                    tag: "datatype", name: "TiltPercent100thsValue", id: 0x1, type: "percent100ths", conformance: "O.a",
                     constraint: "desc"
                 }
             ]

@@ -1076,22 +1076,6 @@ export namespace Thermostat {
             ),
 
             /**
-             * This attribute specifies the heating mode setpoint when the room is unoccupied.
-             *
-             * Refer to Setpoint Limits for constraints. If an attempt is made to set this attribute such that these
-             * constraints are violated, a response with the status code CONSTRAINT_ERROR shall be returned.
-             *
-             * If the occupancy status of the room is unknown, this attribute shall not be used.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.16
-             */
-            unoccupiedHeatingSetpoint: OptionalWritableAttribute(
-                0x14,
-                TlvInt16.bound({ min: -27315 }),
-                { persistent: true, default: 2000 }
-            ),
-
-            /**
              * This attribute specifies the minimum level that the heating setpoint may be set to.
              *
              * This attribute, and the following three attributes, allow the user to define setpoint limits more
@@ -1185,22 +1169,6 @@ export namespace Thermostat {
             ),
 
             /**
-             * This attribute specifies the cooling mode setpoint when the room is unoccupied.
-             *
-             * Refer to Setpoint Limits for constraints. If an attempt is made to set this attribute such that these
-             * constraints are violated, a response with the status code CONSTRAINT_ERROR shall be returned.
-             *
-             * If the occupancy status of the room is unknown, this attribute shall not be used.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.15
-             */
-            unoccupiedCoolingSetpoint: OptionalWritableAttribute(
-                0x13,
-                TlvInt16.bound({ min: -27315 }),
-                { persistent: true, default: 2600 }
-            ),
-
-            /**
              * This attribute specifies the minimum level that the cooling setpoint may be set to.
              *
              * Refer to Setpoint Limits for constraints. If an attempt is made to set this attribute to a value which
@@ -1260,6 +1228,52 @@ export namespace Thermostat {
                 0x10,
                 TlvInt8.bound({ min: -25, max: 25 }),
                 { persistent: true, default: 0, writeAcl: AccessLevel.Manage }
+            )
+        }
+    });
+
+    /**
+     * A ThermostatCluster supports these elements if it supports features Cooling and Occupancy.
+     */
+    export const CoolingAndOccupancyComponent = ClusterComponent({
+        attributes: {
+            /**
+             * This attribute specifies the cooling mode setpoint when the room is unoccupied.
+             *
+             * Refer to Setpoint Limits for constraints. If an attempt is made to set this attribute such that these
+             * constraints are violated, a response with the status code CONSTRAINT_ERROR shall be returned.
+             *
+             * If the occupancy status of the room is unknown, this attribute shall not be used.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.15
+             */
+            unoccupiedCoolingSetpoint: WritableAttribute(
+                0x13,
+                TlvInt16.bound({ min: -27315 }),
+                { persistent: true, default: 2600 }
+            )
+        }
+    });
+
+    /**
+     * A ThermostatCluster supports these elements if it supports features Heating and Occupancy.
+     */
+    export const HeatingAndOccupancyComponent = ClusterComponent({
+        attributes: {
+            /**
+             * This attribute specifies the heating mode setpoint when the room is unoccupied.
+             *
+             * Refer to Setpoint Limits for constraints. If an attempt is made to set this attribute such that these
+             * constraints are violated, a response with the status code CONSTRAINT_ERROR shall be returned.
+             *
+             * If the occupancy status of the room is unknown, this attribute shall not be used.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.16
+             */
+            unoccupiedHeatingSetpoint: WritableAttribute(
+                0x14,
+                TlvInt16.bound({ min: -27315 }),
+                { persistent: true, default: 2000 }
             )
         }
     });
@@ -1406,8 +1420,15 @@ export namespace Thermostat {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.39
              */
-            occupiedSetbackMax: FixedAttribute(0x36, TlvNullable(TlvUInt8.bound({ max: 254 })), { default: null }),
+            occupiedSetbackMax: FixedAttribute(0x36, TlvNullable(TlvUInt8.bound({ max: 254 })), { default: null })
+        }
+    });
 
+    /**
+     * A ThermostatCluster supports these elements if it supports features Setback and Occupancy.
+     */
+    export const SetbackAndOccupancyComponent = ClusterComponent({
+        attributes: {
             /**
              * This attribute specifies the amount that the Thermostat server will allow the LocalTemperature Value to
              * float above the UnoccupiedCooling setpoint (i.e., UnoccupiedCooling + UnoccupiedSetback) or below the
@@ -1432,7 +1453,7 @@ export namespace Thermostat {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.40
              */
-            unoccupiedSetback: OptionalWritableAttribute(
+            unoccupiedSetback: WritableAttribute(
                 0x37,
                 TlvNullable(TlvUInt8.bound({ max: 254 })),
                 { persistent: true, default: null, writeAcl: AccessLevel.Manage }
@@ -1446,7 +1467,7 @@ export namespace Thermostat {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.41
              */
-            unoccupiedSetbackMin: OptionalFixedAttribute(
+            unoccupiedSetbackMin: FixedAttribute(
                 0x38,
                 TlvNullable(TlvUInt8.bound({ min: 0, max: 254 })),
                 { default: null }
@@ -1460,11 +1481,7 @@ export namespace Thermostat {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.42
              */
-            unoccupiedSetbackMax: OptionalFixedAttribute(
-                0x39,
-                TlvNullable(TlvUInt8.bound({ max: 254 })),
-                { default: null }
-            )
+            unoccupiedSetbackMax: FixedAttribute(0x39, TlvNullable(TlvUInt8.bound({ max: 254 })), { default: null })
         }
     });
 
@@ -1496,9 +1513,12 @@ export namespace Thermostat {
             extendCluster(cluster, HeatingComponent, { heating: true });
             extendCluster(cluster, CoolingComponent, { cooling: true });
             extendCluster(cluster, NotLocalTemperatureNotExposedComponent, { localTemperatureNotExposed: false });
+            extendCluster(cluster, CoolingAndOccupancyComponent, { cooling: true, occupancy: true });
+            extendCluster(cluster, HeatingAndOccupancyComponent, { heating: true, occupancy: true });
             extendCluster(cluster, AutoModeComponent, { autoMode: true });
             extendCluster(cluster, ScheduleConfigurationComponent, { scheduleConfiguration: true });
             extendCluster(cluster, SetbackComponent, { setback: true });
+            extendCluster(cluster, SetbackAndOccupancyComponent, { setback: true, occupancy: true });
 
             preventCluster(
                 cluster,
@@ -1518,9 +1538,12 @@ export namespace Thermostat {
         & (SF extends { heating: true } ? typeof HeatingComponent : {})
         & (SF extends { cooling: true } ? typeof CoolingComponent : {})
         & (SF extends { localTemperatureNotExposed: false } ? typeof NotLocalTemperatureNotExposedComponent : {})
+        & (SF extends { cooling: true, occupancy: true } ? typeof CoolingAndOccupancyComponent : {})
+        & (SF extends { heating: true, occupancy: true } ? typeof HeatingAndOccupancyComponent : {})
         & (SF extends { autoMode: true } ? typeof AutoModeComponent : {})
         & (SF extends { scheduleConfiguration: true } ? typeof ScheduleConfigurationComponent : {})
         & (SF extends { setback: true } ? typeof SetbackComponent : {})
+        & (SF extends { setback: true, occupancy: true } ? typeof SetbackAndOccupancyComponent : {})
         & (SF extends { autoMode: true, heating: false } ? never : {})
         & (SF extends { autoMode: true, cooling: false } ? never : {})
         & (SF extends { heating: false, cooling: false } ? never : {});
@@ -1528,9 +1551,12 @@ export namespace Thermostat {
     const OCC = { occupancy: true };
     const HEAT = { heating: true };
     const COOL = { cooling: true };
+    const COOL_OCC = { cooling: true, occupancy: true };
+    const HEAT_OCC = { heating: true, occupancy: true };
     const AUTO = { autoMode: true };
     const SCH = { scheduleConfiguration: true };
     const SB = { setback: true };
+    const SB_OCC = { setback: true, occupancy: true };
 
     /**
      * This cluster supports all Thermostat features. It may support illegal feature combinations.
@@ -1578,12 +1604,12 @@ export namespace Thermostat {
                 { mandatoryIf: [HEAT] }
             ),
             unoccupiedCoolingSetpoint: AsConditional(
-                CoolingComponent.attributes.unoccupiedCoolingSetpoint,
-                { optionalIf: [COOL] }
+                CoolingAndOccupancyComponent.attributes.unoccupiedCoolingSetpoint,
+                { mandatoryIf: [COOL_OCC] }
             ),
             unoccupiedHeatingSetpoint: AsConditional(
-                HeatingComponent.attributes.unoccupiedHeatingSetpoint,
-                { optionalIf: [HEAT] }
+                HeatingAndOccupancyComponent.attributes.unoccupiedHeatingSetpoint,
+                { mandatoryIf: [HEAT_OCC] }
             ),
             minHeatSetpointLimit: AsConditional(
                 HeatingComponent.attributes.minHeatSetpointLimit,
@@ -1621,9 +1647,18 @@ export namespace Thermostat {
             occupiedSetback: AsConditional(SetbackComponent.attributes.occupiedSetback, { mandatoryIf: [SB] }),
             occupiedSetbackMin: AsConditional(SetbackComponent.attributes.occupiedSetbackMin, { mandatoryIf: [SB] }),
             occupiedSetbackMax: AsConditional(SetbackComponent.attributes.occupiedSetbackMax, { mandatoryIf: [SB] }),
-            unoccupiedSetback: AsConditional(SetbackComponent.attributes.unoccupiedSetback, { optionalIf: [SB] }),
-            unoccupiedSetbackMin: AsConditional(SetbackComponent.attributes.unoccupiedSetbackMin, { optionalIf: [SB] }),
-            unoccupiedSetbackMax: AsConditional(SetbackComponent.attributes.unoccupiedSetbackMax, { optionalIf: [SB] })
+            unoccupiedSetback: AsConditional(
+                SetbackAndOccupancyComponent.attributes.unoccupiedSetback,
+                { mandatoryIf: [SB_OCC] }
+            ),
+            unoccupiedSetbackMin: AsConditional(
+                SetbackAndOccupancyComponent.attributes.unoccupiedSetbackMin,
+                { mandatoryIf: [SB_OCC] }
+            ),
+            unoccupiedSetbackMax: AsConditional(
+                SetbackAndOccupancyComponent.attributes.unoccupiedSetbackMax,
+                { mandatoryIf: [SB_OCC] }
+            )
         },
 
         commands: {

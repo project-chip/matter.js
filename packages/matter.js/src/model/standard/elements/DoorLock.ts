@@ -522,7 +522,7 @@ Matter.children.push({
         },
 
         {
-            tag: "attribute", name: "RequirePiNforRemoteOperation", id: 0x33, type: "bool", access: "R[W] VA",
+            tag: "attribute", name: "RequirePinForRemoteOperation", id: 0x33, type: "bool", access: "R[W] VA",
             conformance: "COTA & PIN", default: true, quality: "P",
             details: "Boolean set to True if the door lock server requires that an optional PINs be included in the " +
                 "payload of remote lock operation events like Lock, Unlock, Unlock with Timeout and Toggle in order " +
