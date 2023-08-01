@@ -12,7 +12,7 @@ import { ClusterServerHandlers } from "./ClusterServer.js";
 
 export const LevelControlClusterHandler: () => ClusterServerHandlers<typeof LevelControlCluster> = () => ({
     moveToLevel: async ({ request: { level }, attributes: { currentLevel } }) => {
-        currentLevel.set(level);
+        currentLevel.setLocal(level);
     },
 
     // TODO: How much this capability should be in the library vs. in the caller of the library? Doing the
@@ -41,7 +41,7 @@ export const LevelControlClusterHandler: () => ClusterServerHandlers<typeof Leve
         }
         */
 
-        currentLevel.set(level);
+        currentLevel.setLocal(level);
     },
 
     moveWithOnOff: async () => {
