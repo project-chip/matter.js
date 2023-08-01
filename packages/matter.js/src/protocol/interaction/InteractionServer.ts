@@ -221,8 +221,6 @@ export function ClusterServer<
 
         const { id, schema, writable, persistent, fabricScoped, scene, fixed, omitChanges } = attributeDef[attributeName];
         if ((attributesInitialValues as any)[attributeName] !== undefined) {
-            const schemaValidator = typeof schema.validate === 'function' ? schema.validate.bind(schema) : undefined;
-
             // Get the handlers for this attribute if present
             const getter = (handlers as any)[`${attributeName}AttributeGetter`];
             const setter = (handlers as any)[`${attributeName}AttributeSetter`];
@@ -234,7 +232,6 @@ export function ClusterServer<
                     id,
                     attributeName,
                     schema,
-                    schemaValidator ?? (() => { /* no validation */ }),
                     writable,
                     !omitChanges,
                     (attributesInitialValues as any)[attributeName],
@@ -252,7 +249,6 @@ export function ClusterServer<
                     id,
                     attributeName,
                     schema,
-                    schemaValidator ?? (() => { /* no validation */ }),
                     writable,
                     !omitChanges,
                     (attributesInitialValues as any)[attributeName],
@@ -274,15 +270,14 @@ export function ClusterServer<
                         session,
                     }) : undefined,
                 );
-                result[`get${capitalizedAttributeName}Attribute`] = (fabric: Fabric, isFabricScoped?: boolean) => (attributes as any)[attributeName].getLocal(fabric, isFabricScoped);
-                result[`set${capitalizedAttributeName}Attribute`] = <T,>(value: T, fabric: Fabric) => (attributes as any)[attributeName].setLocal(value, fabric);
+                result[`get${capitalizedAttributeName}Attribute`] = (fabric: Fabric, isFabricScoped?: boolean) => (attributes as any)[attributeName].getLocalForFabric(fabric, isFabricScoped);
+                result[`set${capitalizedAttributeName}Attribute`] = <T,>(value: T, fabric: Fabric) => (attributes as any)[attributeName].setLocalForFabric(value, fabric);
                 result[`subscribe${capitalizedAttributeName}Attribute`] = <T,>(listener: (newValue: T, oldValue: T) => void) => (attributes as any)[attributeName].addListener(listener);
             } else {
                 (attributes as any)[attributeName] = new AttributeServer(
                     id,
                     attributeName,
                     schema,
-                    schemaValidator ?? (() => { /* no validation */ }),
                     writable,
                     !omitChanges,
                     (attributesInitialValues as any)[attributeName],
