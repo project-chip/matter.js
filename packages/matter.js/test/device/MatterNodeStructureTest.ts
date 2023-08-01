@@ -54,8 +54,9 @@ import { FixedLabelCluster } from "../../src/cluster/definitions/FixedLabelClust
 import { GroupKeyManagementClusterHandler } from "../../src/cluster/server/GroupKeyManagementServer.js";
 import { Endpoint } from "../../src/device/Endpoint.js";
 import { BindingCluster } from "../../src/cluster/definitions/BindingCluster.js";
-import { StorageBackendMemory, StorageManager } from "../../src/storage/index.js";
-import { CommissioningServer } from "../../src/index.js";
+import { StorageManager } from "../../src/storage/StorageManager.js";
+import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
+import { CommissioningServer } from "../../src/CommissioningServer.js";
 import { FabricIndex } from "../../src/datatype/FabricIndex.js";
 import { OperationalCredentialsClusterHandler } from "../../src/cluster/server/OperationalCredentialsServer.js";
 

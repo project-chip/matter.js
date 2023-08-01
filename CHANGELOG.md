@@ -15,6 +15,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Breaking: Add Interface for Events which requires to define the supported events when creating a ClusterServer (Event Logic WIP in separate PR)
   * Breaking: GeneralCommissioningServerHandler is now a function that takes configuration for setRegulatoryConfig handling
   * Breaking: Types of specific clusters are no longer exported flat on main level. Cluster exports are now namespaces that include their types.
+  * Breaking: All collection files meant to be used for exports only are renamed to export.ts and should not be used for internal imports
   * Feature: Enhance CommissioningServer options to also specify GeneralCommissioningServer details and settings
   * Feature: Adjust RegulatoryConfig Handling in Device and Controller to match with specifications
   * Feature: Endpoint Structures use custom-unique-id (from EndpointOptions)/uniqueStorageKey (from BasicInformationCluster)/serialNumber (from BasicInformationCluster)/ Index (in this order) to store and restore the endpoint ID in structures

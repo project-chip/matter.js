@@ -56,14 +56,14 @@
     "exports": {
         "./package.json": "./package.json",
         "./*": {
-            "types": "./dist/*/index.d.ts",
-            "default": "./dist/*/index.js"
+            "types": "./dist/*/export.d.ts",
+            "default": "./dist/*/export.js"
         }
     },
     "typesVersions": {
         "*": {
             "*": [
-                "/dist/*/index.d.ts"
+                "/dist/*/export.d.ts"
             ]
         }
     },

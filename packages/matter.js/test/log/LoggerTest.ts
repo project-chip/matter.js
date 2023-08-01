@@ -5,10 +5,10 @@
  */
 
 import * as assert from "assert";
-import { Level, Format, Logger, DiagnosticDictionary } from "../../../src/log/Logger.js";
-import { Time } from "../../../src/time/Time.js";
-import { TimeFake } from "../../../src/time/TimeFake.js";
-import { ByteArray } from "../../../src/util/ByteArray.js";
+import { Level, Format, Logger, DiagnosticDictionary } from "../../src/log/Logger.js";
+import { Time } from "../../src/time/Time.js";
+import { TimeFake } from "../../src/time/TimeFake.js";
+import { ByteArray } from "../../src/util/ByteArray.js";
 
 const fakeTime = new TimeFake(1262679233478);
 

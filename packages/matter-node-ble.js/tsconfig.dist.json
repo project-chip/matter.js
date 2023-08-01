@@ -11,7 +11,7 @@
   "include": ["src/**/*.ts"],
   "typedocOptions": {
     "entryPoints": [
-      "src/ble/index.ts"
+      "src/ble/export.ts"
     ],
     "out": "../../docs/matter-node-ble.js"
   }
