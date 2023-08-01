@@ -5,17 +5,17 @@
  */
 
 import * as assert from "assert";
-import { AttributeId } from "../../../src/datatype/AttributeId.js";
-import { ClusterId } from "../../../src/datatype/ClusterId.js";
-import { CommandId } from "../../../src/datatype/CommandId.js";
-import { EndpointNumber } from "../../../src/datatype/EndpointNumber.js";
-import { EventId } from "../../../src/datatype/EventId.js";
-import { FabricId } from "../../../src/datatype/FabricId.js";
-import { FabricIndex } from "../../../src/datatype/FabricIndex.js";
-import { GroupId } from "../../../src/datatype/GroupId.js";
-import { NodeId } from "../../../src/datatype/NodeId.js";
-import { VendorId } from "../../../src/datatype/VendorId.js";
-import { fromJson, toJson } from "../../../src/storage/StringifyTools.js";
+import { AttributeId } from "../../src/datatype/AttributeId.js";
+import { ClusterId } from "../../src/datatype/ClusterId.js";
+import { CommandId } from "../../src/datatype/CommandId.js";
+import { EndpointNumber } from "../../src/datatype/EndpointNumber.js";
+import { EventId } from "../../src/datatype/EventId.js";
+import { FabricId } from "../../src/datatype/FabricId.js";
+import { FabricIndex } from "../../src/datatype/FabricIndex.js";
+import { GroupId } from "../../src/datatype/GroupId.js";
+import { NodeId } from "../../src/datatype/NodeId.js";
+import { VendorId } from "../../src/datatype/VendorId.js";
+import { fromJson, toJson } from "../../src/storage/StringifyTools.js";
 
 describe("JsonConverter", () => {
 

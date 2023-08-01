@@ -59,12 +59,12 @@
         "LICENSE",
         "README.md"
     ],
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
+    "main": "dist/export.js",
+    "types": "dist/export.d.ts",
     "exports": {
         ".": {
-            "types": "./dist/index.d.ts",
-            "default": "./dist/index.js"
+            "types": "./dist/export.d.ts",
+            "default": "./dist/export.js"
         },
         "./package.json": "./package.json",
         "./ble": {
@@ -140,8 +140,8 @@
             "default": "./dist/exports/tlv.js"
         },
         "./*": {
-            "types": "./dist/*/index.d.ts",
-            "default": "./dist/*/index.js"
+            "types": "./dist/*/export.d.ts",
+            "default": "./dist/*/export.js"
         }
     },
     "typesVersions": {
@@ -201,10 +201,10 @@
                 "/dist/exports/tlv.d.ts"
             ],
             ".": [
-                "/dist/index.d.ts"
+                "/dist/export.d.ts"
             ],
             "*": [
-                "/dist/*/index.d.ts"
+                "/dist/*/export.d.ts"
             ]
         }
     },
