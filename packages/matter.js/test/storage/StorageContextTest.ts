@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { StorageBackendMemory } from "../../../src/storage/StorageBackendMemory.js";
-import { StorageContext } from "../../../src/storage/StorageContext.js";
 import * as assert from "assert";
-import { SupportedStorageTypes } from "../../../src/storage/StringifyTools.js";
-import { ByteArray } from "../../../src/util/ByteArray.js";
-import { StorageManager } from "../../../src/storage/index.js";
+import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
+import { StorageContext } from "../../src/storage/StorageContext.js";
+import { SupportedStorageTypes } from "../../src/storage/StringifyTools.js";
+import { ByteArray } from "../../src/util/ByteArray.js";
+import { StorageManager } from "../../src/storage/StorageManager.js";
 
 type TestVector = { [testName: string]: { key: string, input: SupportedStorageTypes } };
 
