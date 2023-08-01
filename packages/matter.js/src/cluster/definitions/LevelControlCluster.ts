@@ -472,6 +472,7 @@ export namespace LevelControl {
         factory: <T extends `${Feature}`[]>(...features: [...T]) => {
             validateFeatureSelection(features, Feature);
             const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
+            extendCluster(cluster, LightingComponent, { lighting: true });
             extendCluster(cluster, FrequencyComponent, { frequency: true });
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }

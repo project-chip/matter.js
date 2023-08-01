@@ -931,6 +931,7 @@ export namespace PumpConfigurationAndControl {
         factory: <T extends `${Feature}`[]>(...features: [...T]) => {
             validateFeatureSelection(features, Feature);
             const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
+            extendCluster(cluster, ConstantPressureComponent, { constantPressure: true });
             extendCluster(cluster, AutomaticComponent, { automatic: true });
             extendCluster(cluster, CompensatedPressureComponent, { compensatedPressure: true });
             extendCluster(cluster, ConstantSpeedComponent, { constantSpeed: true });

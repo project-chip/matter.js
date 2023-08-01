@@ -353,6 +353,7 @@ export namespace Switch {
         factory: <T extends `${Feature}`[]>(...features: [...T]) => {
             validateFeatureSelection(features, Feature);
             const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
+            extendCluster(cluster, MomentarySwitchMultiPressComponent, { momentarySwitchMultiPress: true });
             extendCluster(cluster, LatchingSwitchComponent, { latchingSwitch: true });
             extendCluster(cluster, MomentarySwitchComponent, { momentarySwitch: true });
             extendCluster(cluster, MomentarySwitchLongPressComponent, { momentarySwitchLongPress: true });

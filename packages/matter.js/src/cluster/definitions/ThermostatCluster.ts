@@ -1492,6 +1492,7 @@ export namespace Thermostat {
         factory: <T extends `${Feature}`[]>(...features: [...T]) => {
             validateFeatureSelection(features, Feature);
             const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
+            extendCluster(cluster, OccupancyComponent, { occupancy: true });
             extendCluster(cluster, HeatingComponent, { heating: true });
             extendCluster(cluster, CoolingComponent, { cooling: true });
             extendCluster(cluster, NotLocalTemperatureNotExposedComponent, { localTemperatureNotExposed: false });
