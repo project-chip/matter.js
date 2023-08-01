@@ -497,6 +497,7 @@ export namespace MediaPlayback {
         factory: <T extends `${Feature}`[]>(...features: [...T]) => {
             validateFeatureSelection(features, Feature);
             const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
+            extendCluster(cluster, AdvancedSeekComponent, { advancedSeek: true });
             extendCluster(cluster, VariableSpeedComponent, { variableSpeed: true });
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }

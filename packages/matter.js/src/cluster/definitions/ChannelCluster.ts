@@ -357,6 +357,7 @@ export namespace Channel {
         factory: <T extends `${Feature}`[]>(...features: [...T]) => {
             validateFeatureSelection(features, Feature);
             const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
+            extendCluster(cluster, ChannelListComponent, { channelList: true });
             extendCluster(cluster, LineupInfoComponent, { lineupInfo: true });
             extendCluster(cluster, ChannelListOrLineupInfoComponent, { channelList: true }, { lineupInfo: true });
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
