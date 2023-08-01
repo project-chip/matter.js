@@ -18,10 +18,14 @@ import { VendorId } from "@project-chip/matter.js/datatype";
 const logger = Logger.get("BleScanner");
 
 export type DiscoveredBleDevice = {
-    deviceData: CommissionableDevice,
+    deviceData: CommissionableDeviceData,
     peripheral: Peripheral,
     hasAdditionalAdvertisementData: boolean
 }
+
+type CommissionableDeviceData = CommissionableDevice & {
+    SD: number, // Additional Field for Short discriminator
+};
 
 export class BleScanner implements Scanner {
     private readonly recordWaiters = new Map<string, { resolver: () => void, timer: Timer }>();
@@ -75,12 +79,14 @@ export class BleScanner implements Scanner {
         try {
             const { discriminator, vendorId, productId, hasAdditionalAdvertisementData } = BtpCodec.decodeBleAdvertisementServiceData(manufacturerServiceData);
 
-            const commissionableDevice: CommissionableDevice = {
+            const commissionableDevice: CommissionableDeviceData = {
                 D: discriminator,
+                SD: (discriminator >> 8) & 0x0F,
                 VP: `${vendorId.id}+${productId}`,
                 CM: 1, // Can be no other mode,
                 addresses: [{ type: "ble", peripheralAddress: peripheral.address }]
             };
+            logger.debug(`Discovered device ${peripheral.address} data: ${JSON.stringify(commissionableDevice)}`);
 
             this.discoveredMatterDevices.set(peripheral.address, { deviceData: commissionableDevice, peripheral: peripheral, hasAdditionalAdvertisementData });
 
@@ -93,10 +99,15 @@ export class BleScanner implements Scanner {
         }
     }
 
-    private findCommissionableQueryIdentifier(record: CommissionableDevice) {
+    private findCommissionableQueryIdentifier(record: CommissionableDeviceData) {
         const longDiscriminatorQueryId = this.buildCommissionableQueryIdentifier({ longDiscriminator: record.D });
         if (this.recordWaiters.has(longDiscriminatorQueryId)) {
             return longDiscriminatorQueryId;
+        }
+
+        const shortDiscriminatorQueryId = this.buildCommissionableQueryIdentifier({ shortDiscriminator: record.SD });
+        if (this.recordWaiters.has(shortDiscriminatorQueryId)) {
+            return shortDiscriminatorQueryId;
         }
 
         if (record.VP !== undefined) {
@@ -127,6 +138,9 @@ export class BleScanner implements Scanner {
         if ("longDiscriminator" in identifier) {
             return `D:${identifier.longDiscriminator}`;
         }
+        else if ("shortDiscriminator" in identifier) {
+            return `SD:${identifier.shortDiscriminator}`;
+        }
         else if ("vendorId" in identifier) {
             return `V:${identifier.vendorId.id}`;
         }
@@ -142,6 +156,9 @@ export class BleScanner implements Scanner {
         const foundRecords = new Array<DiscoveredBleDevice>();
         if ("longDiscriminator" in identifier) {
             foundRecords.push(...storedRecords.filter(({ deviceData: { D } }) => D === identifier.longDiscriminator));
+        }
+        else if ("shortDiscriminator" in identifier) {
+            foundRecords.push(...storedRecords.filter(({ deviceData: { SD } }) => SD === identifier.shortDiscriminator));
         }
         else if ("vendorId" in identifier) {
             foundRecords.push(...storedRecords.filter(({ deviceData: { VP } }) => VP === `${identifier.vendorId.id}` || VP?.startsWith(`${identifier.vendorId.id}+`)));
