@@ -5,7 +5,7 @@
  */
 
 import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
-import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
+import { TlvReader, TlvSchema, TlvStream, TlvWriter } from "./TlvSchema.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 type LengthConstraints = {
@@ -13,6 +13,12 @@ type LengthConstraints = {
     maxLength?: number,
     length?: number,
 };
+
+type ArrayChunkData = {
+    listIndex: number | null | undefined,
+    element: TlvStream
+}
+export type ArrayAsChunked = ArrayChunkData[];
 
 /**
  * Schema to encode an array or string in TLV.
