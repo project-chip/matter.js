@@ -11,7 +11,7 @@ import { ByteArray } from "../../src/util/ByteArray.js";
 import { BtpProtocolError, BtpSessionHandler, BtpFlowError } from "../../src/ble/BtpSessionHandler.js";
 import { getPromiseResolver } from "../../src/util/Promises.js";
 import { BtpCodec } from "../../src/codec/BtpCodec.js";
-import { singleton } from "../../src/util/index.js";
+import { singleton } from "../../src/util/Singleton.js";
 
 Time.get = singleton(() => new TimeFake(0));
 
