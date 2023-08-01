@@ -20,6 +20,7 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
  */
 export class FabricIndex {
     static NO_FABRIC = new FabricIndex(0);
+    static OMIT_FABRIC = new FabricIndex(-1);
 
     constructor(
         readonly index: number,
@@ -27,8 +28,17 @@ export class FabricIndex {
 }
 
 /** Tlv Schema for a Fabric Index. */
-export const TlvFabricIndex = new TlvWrapper<FabricIndex, number>(
+export const TlvFabricIndex = new TlvWrapper<FabricIndex, number | undefined>(
     TlvUInt8.bound({ min: 0, max: 254 }),
-    fabricIndex => fabricIndex.index,
-    value => value === 0 ? FabricIndex.NO_FABRIC : new FabricIndex(value),
+    fabricIndex => fabricIndex.index === -1 ? undefined : fabricIndex.index,
+    value => {
+        switch (value) {
+            case undefined:
+                return FabricIndex.OMIT_FABRIC;
+            case 0:
+                return FabricIndex.NO_FABRIC;
+            default:
+                return new FabricIndex(value);
+        }
+    },
 );
