@@ -6,10 +6,14 @@
 
 import { InteractionClient } from "../../protocol/interaction/InteractionClient.js";
 import { Attribute } from "../Cluster.js";
+import { TlvSchema } from "../../tlv/TlvSchema.js";
+import { Globals } from "../../model/index.js";
+import { FabricIndex } from "../../datatype/FabricIndex.js";
 
 export class AttributeClient<T> {
-    private readonly writable: boolean;
-    private readonly validator: (value: T, name: string) => void;
+    private readonly isWritable: boolean;
+    private readonly isFabricScoped: boolean;
+    protected readonly schema: TlvSchema<any>;
     private readonly listeners = new Array<(newValue: T/*, oldValue: T*/) => void>();
 
     constructor(
@@ -19,22 +23,42 @@ export class AttributeClient<T> {
         readonly clusterId: number,
         private getInteractionClientCallback: () => Promise<InteractionClient>,
     ) {
-        const { schema, writable } = attribute;
-        this.writable = writable;
-
-        const validator = typeof schema.validate === 'function' ? schema.validate.bind(schema) : undefined;
-        this.validator = validator ?? (() => { /* no validation */ });
+        const { schema, writable, fabricScoped } = attribute;
+        this.schema = schema;
+        this.isWritable = writable;
+        this.isFabricScoped = fabricScoped;
     }
 
     async set(value: T) {
-        if (!this.writable) throw new Error(`Attribute ${this.name} is not writable`);
+        if (!this.isWritable) throw new Error(`Attribute ${this.name} is not writable`);
 
-        this.validator(value, this.name);
+        this.schema.validate(value);
 
         const interactionClient = await this.getInteractionClientCallback();
         if (interactionClient === undefined) {
             throw new Error("No InteractionClient available");
         }
+
+        if (this.isFabricScoped) {
+            // Remove fabric index from structures if the OMIT_FABRIC instance was used (Should be used for all outgoing writes)
+            value = this.schema.removeField(
+                value,
+                <number>Globals.FabricIndex.id,
+                (existingFieldIndex) => existingFieldIndex === FabricIndex.OMIT_FABRIC
+            );
+            try {
+                const sessionFabric = interactionClient.getSession().getAssociatedFabric();
+                // also remove fabric index if it is the same as the session fabric
+                value = this.schema.removeField(
+                    value,
+                    <number>Globals.FabricIndex.id,
+                    (existingFieldIndex) => existingFieldIndex.index === sessionFabric.fabricIndex.index
+                );
+            } catch {
+                // When no fabric is assigned to session we can not remove field data
+            }
+        }
+
         return await interactionClient.set<T>(this.endpointId, this.clusterId, this.attribute, value);
     }
 
