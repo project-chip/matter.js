@@ -14,13 +14,12 @@ import { SECURE_CHANNEL_PROTOCOL_ID } from "./protocol/securechannel/SecureChann
 import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { PaseClient } from "./session/pase/PaseClient.js";
 import { CaseClient } from "./session/case/CaseClient.js";
-import { NetInterface } from "./net/NetInterface.js"; // TODO clean up
-import { ClusterClient, InteractionClient } from "./protocol/interaction/InteractionClient.js";
+import { NetInterface } from "./net/NetInterface.js";
+import { InteractionClient } from "./protocol/interaction/InteractionClient.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
 import { NodeId } from "./datatype/NodeId.js";
 import { VendorId } from "./datatype/VendorId.js";
 import { Crypto } from "./crypto/Crypto.js";
-import { CertificateManager } from "./certificate/CertificateManager.js";
 import { RootCertificateManager } from "./certificate/RootCertificateManager.js";
 import { CommissionableDeviceIdentifiers, Scanner } from "./common/Scanner.js";
 import { Logger } from "./log/Logger.js";
@@ -28,12 +27,8 @@ import { Fabric, FabricBuilder, FabricJsonObject } from "./fabric/Fabric.js";
 import { ChannelManager, NoChannelError } from "./protocol/ChannelManager.js";
 import { StorageContext } from "./storage/StorageContext.js";
 import { ExchangeManager, ExchangeProvider, MessageChannel } from "./protocol/ExchangeManager.js";
-import { NetworkCommissioningCluster } from "./cluster/definitions/NetworkCommissioningCluster.js";
-import { TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import { isIPv6 } from "./util/Ip.js";
-import { BasicInformationCluster } from "./cluster/definitions/BasicInformationCluster.js";
-import { GeneralCommissioning, GeneralCommissioningCluster } from "./cluster/definitions/GeneralCommissioningCluster.js";
-import { OperationalCredentials, OperationalCredentialsCluster } from "./cluster/definitions/OperationalCredentialsCluster.js";
+import { GeneralCommissioning } from "./cluster/definitions/GeneralCommissioningCluster.js";
 import { ByteArray } from "./util/ByteArray.js";
 import { RetransmissionLimitReachedError } from "./protocol/MessageExchange.js";
 import { tryCatchAsync } from "./common/TryCatchHandler.js";
@@ -47,12 +42,7 @@ import { TypeFromSchema } from "./tlv/TlvSchema.js";
 import { TlvField, TlvObject } from "./tlv/TlvObject.js";
 import { TlvEnum } from "./tlv/TlvNumber.js";
 import { TlvString } from "./tlv/TlvString.js";
-import { TlvCertSigningRequest } from "./cluster/server/OperationalCredentialsServer.js";
-
-export type CommissioningData = {
-    regulatoryLocation: GeneralCommissioning.RegulatoryLocationType;
-    regulatoryCountryCode: string;
-}
+import { CommissioningOptions, ControllerCommissioner } from "./protocol/ControllerCommissioner.js";
 
 const TlvCommissioningSuccessFailureResponse = TlvObject({
     /** Contain the result of the operation. */
@@ -65,7 +55,7 @@ export type CommissioningSuccessFailureResponse = TypeFromSchema<typeof TlvCommi
 
 const FABRIC_INDEX = new FabricIndex(1);
 const FABRIC_ID = BigInt(1);
-const ADMIN_VENDOR_ID = new VendorId(752);
+const DEFAULT_ADMIN_VENDOR_ID = new VendorId(0xFFF1); // TODO combine into ControllerCommissioner!
 
 const logger = Logger.get("MatterController");
 
@@ -76,7 +66,8 @@ const logger = Logger.get("MatterController");
 export class PairRetransmissionLimitReachedError extends RetransmissionLimitReachedError { }
 
 export class MatterController {
-    public static async create(scanner: Scanner, netInterfaceIpv4: NetInterface | undefined, netInterfaceIpv6: NetInterface, storage: StorageContext, operationalServerAddress?: ServerAddressIp, commissioningOptions?: CommissioningData): Promise<MatterController> {
+    public static async create(scanner: Scanner, netInterfaceIpv4: NetInterface | undefined, netInterfaceIpv6: NetInterface, storage: StorageContext, operationalServerAddress?: ServerAddressIp, commissioningOptions?: CommissioningOptions): Promise<MatterController> {
+        // TODO move to ControllerCommissioner
         const CONTROLLER_NODE_ID = new NodeId(Crypto.getRandomBigUInt64());
         const certificateManager = new RootCertificateManager(storage);
 
@@ -85,7 +76,7 @@ export class MatterController {
             .setRootCert(certificateManager.getRootCert())
             .setRootNodeId(CONTROLLER_NODE_ID)
             .setIdentityProtectionKey(ipkValue)
-            .setRootVendorId(ADMIN_VENDOR_ID);
+            .setRootVendorId(commissioningOptions?.adminVendorId ?? DEFAULT_ADMIN_VENDOR_ID)
         fabricBuilder.setOperationalCert(certificateManager.generateNoc(fabricBuilder.getPublicKey(), FABRIC_ID, CONTROLLER_NODE_ID));
 
         // Check if we have a fabric stored in the storage, if yes initialize this one, else build a new one
@@ -104,7 +95,7 @@ export class MatterController {
     private readonly paseClient = new PaseClient();
     private readonly caseClient = new CaseClient();
     private readonly controllerStorage: StorageContext;
-    private readonly commissioningOptions: CommissioningData;
+    private readonly commissioningOptions: CommissioningOptions;
     private netInterfaceBle: NetInterface | undefined;
 
     constructor(
@@ -115,7 +106,7 @@ export class MatterController {
         private readonly fabric: Fabric,
         private readonly storage: StorageContext,
         public operationalServerAddress?: ServerAddressIp,
-        commissioningOptions?: CommissioningData
+        commissioningOptions?: CommissioningOptions
     ) {
         this.controllerStorage = this.storage.createContext("MatterController");
 
@@ -270,97 +261,66 @@ export class MatterController {
      * TODO: Split this out into an own CommissioningHandler class
      */
     private async commissionDevice(paseSecureMessageChannel: MessageChannel<MatterController>): Promise<NodeId> {
-        // Use the created secure session to do the commissioning
-        let interactionClient = new InteractionClient(new ExchangeProvider(this.exchangeManager, paseSecureMessageChannel));
 
-        // Get and display the product name (just for debugging)
-        const basicClusterClient = ClusterClient(BasicInformationCluster, 0, interactionClient);
-        const productName = await basicClusterClient.getProductNameAttribute();
-        logger.info("Paired with device:", productName);
+        // TODO: Create the fabric only when needed before commissioning (to do when refactoring MatterController away)
+        // TODO also move certificateManager and other parts into that class to get rid of them here
+        // TODO Depending on the Error type during commissioning we can do a retry ...
+        /*
+            Whenever the Fail-Safe timer is armed, Commissioners and Administrators SHALL NOT consider any cluster
+            operation to have timed-out before waiting at least 30 seconds for a valid response from the cluster server.
+            Some commands and attributes with complex side-effects MAY require longer and have specific timing requirements
+            stated in their respective cluster specification.
 
-        // Get Features from all NetworkCommissioningClusters in the device
-        const networkFeatureAttributes = await interactionClient.getMultipleAttributes(
-            [
-                {
-                    clusterId: NetworkCommissioningCluster.id,
-                    attributeId: NetworkCommissioningCluster.attributes.featureMap.id
-                }
-            ]
-        );
-        const hasRadioNetwork = !!networkFeatureAttributes.find(
-            ({ value: { wiFiNetworkInterface, threadNetworkInterface } }: { value: TypeFromPartialBitSchema<typeof NetworkCommissioningCluster.features> }) => wiFiNetworkInterface || threadNetworkInterface
-        );
+            In concurrent connection commissioning flow, the failure of any of the steps 2 through 10 SHALL result in the
+            Commissioner and Commissionee returning to step 2 (device discovery and commissioning channel establishment) and
+            repeating each step. The failure of any of the steps 11 through 15 in concurrent connection commissioning flow
+            SHALL result in the Commissioner and Commissionee returning to step 11 (configuration of operational network
+            information). In the case of failure of any of the steps 11 through 15 in concurrent connection commissioning
+            flow, the Commissioner and Commissionee SHALL reuse the existing PASE-derived encryption keys over the
+            commissioning channel and all steps up to and including step 10 are considered to have been successfully
+            completed.
+            In non-concurrent connection commissioning flow, the failure of any of the steps 2 through 15 SHALL result in
+            the Commissioner and Commissionee returning to step 2 (device discovery and commissioning channel establishment)
+            and repeating each step.
 
-        // Do the commissioning
-        let generalCommissioningClusterClient = ClusterClient(GeneralCommissioningCluster, 0, interactionClient);
-        this.ensureSuccess("armFailSafe", await generalCommissioningClusterClient.armFailSafe({ breadcrumb: BigInt(1), expiryLengthSeconds: 60 }));
+            Commissioners that need to restart from step 2 MAY immediately expire the fail-safe by invoking the ArmFailSafe
+            command with an ExpiryLengthSeconds field set to 0. Otherwise, Commissioners will need to wait until the current
+            fail-safe timer has expired for the Commissionee to begin accepting PASE again.
+            In both concurrent connection commissioning flow and non-concurrent connection commissioning flow, the
+            Commissionee SHALL exit Commissioning Mode after 20 failed attempts.
+         */
 
-        if (hasRadioNetwork) {
-            let locationCapability = await generalCommissioningClusterClient.getLocationCapabilityAttribute();
-            if (locationCapability === GeneralCommissioning.RegulatoryLocationType.IndoorOutdoor) {
-                locationCapability = this.commissioningOptions.regulatoryLocation;
-            } else {
-                logger.debug(`Device does not support a configurable regulatory location type. Location is set to "${locationCapability === GeneralCommissioning.RegulatoryLocationType.Indoor ? "Indoor" : "Outdoor"}"`);
+        const commissioningManager = new ControllerCommissioner(
+            // Use the created secure session to do the commissioning
+            new InteractionClient(new ExchangeProvider(this.exchangeManager, paseSecureMessageChannel)),
+
+            this.certificateManager,
+            this.fabric,
+            this.commissioningOptions,
+
+            async (peerNodeId: NodeId) => {
+                // TODO Right now we always close after step 12 because we do not check for commissioning flow requirements
+                /*
+                    In concurrent connection commissioning flow the commissioning channel SHALL terminate after
+                    successful step 15 (CommissioningComplete command invocation). In non-concurrent connection
+                    commissioning flow the commissioning channel SHALL terminate after successful step 12 (trigger
+                    joining of operational network at Commissionee). The PASE-derived encryption keys SHALL be deleted
+                    when commissioning channel terminates. The PASE session SHALL be terminated by both Commissioner and
+                    Commissionee once the CommissioningComplete command is received by the Commissionee.
+                 */
+                await paseSecureMessageChannel.close();  // We reconnect using Case, so close Pase connection
+
+                // Look for the device broadcast over MDNS and do CASE pairing
+                return await this.connect(peerNodeId, 120);
             }
-            let countryCode = this.commissioningOptions.regulatoryCountryCode;
-            const regulatoryResult = await generalCommissioningClusterClient.setRegulatoryConfig({
-                breadcrumb: BigInt(2),
-                newRegulatoryConfig: locationCapability,
-                countryCode
-            });
-            if (regulatoryResult.errorCode === GeneralCommissioning.CommissioningError.ValueOutsideRange && countryCode !== "XX") {
-                logger.debug(`Device does not support a configurable country code. Use "XX" instead of "${countryCode}"`);
-                countryCode = "XX";
-                this.ensureSuccess("setRegulatoryConfig", await generalCommissioningClusterClient.setRegulatoryConfig({
-                    breadcrumb: BigInt(2),
-                    newRegulatoryConfig: locationCapability,
-                    countryCode
-                }));
-            } else {
-                this.ensureSuccess("setRegulatoryConfig", regulatoryResult);
-            }
-        }
+        );
 
-        const operationalCredentialsClusterClient = ClusterClient(OperationalCredentialsCluster, 0, interactionClient);
-        const { certificate: deviceAttestation } = await operationalCredentialsClusterClient.certificateChainRequest({ certificateType: OperationalCredentials.CertificateChainType.DacCertificate });
-        // TODO: extract device public key from deviceAttestation
-        const { certificate: productAttestation } = await operationalCredentialsClusterClient.certificateChainRequest({ certificateType: OperationalCredentials.CertificateChainType.PaiCertificate });
-        // TODO: validate deviceAttestation and productAttestation
-        const { attestationElements, attestationSignature } = await operationalCredentialsClusterClient.attestationRequest({ attestationNonce: Crypto.getRandomData(32) });
-        // TODO: validate attestationSignature using device public key
-        const { nocsrElements, attestationSignature: csrSignature } = await operationalCredentialsClusterClient.csrRequest({ csrNonce: Crypto.getRandomData(32) });
-        if (deviceAttestation.length === 0 || productAttestation.length === 0 || attestationElements.length === 0 || attestationSignature.length === 0 || nocsrElements.length === 0 || csrSignature.length === 0) {
-            // TODO: validate the data really
-            throw new Error("Invalid response from device");
-        }
-        // TODO: validate csrSignature using device public key
-        const { certSigningRequest } = TlvCertSigningRequest.decode(nocsrElements);
-        const operationalPublicKey = CertificateManager.getPublicKeyFromCsr(certSigningRequest);
-
-        await operationalCredentialsClusterClient.addTrustedRootCertificate({ rootCaCertificate: this.certificateManager.getRootCert() });
-        const peerNodeId = this.fabric.rootNodeId;
-        const peerOperationalCert = this.certificateManager.generateNoc(operationalPublicKey, FABRIC_ID, peerNodeId);
-        await operationalCredentialsClusterClient.addNoc({
-            nocValue: peerOperationalCert,
-            icacValue: new ByteArray(0),
-            ipkValue: this.fabric.identityProtectionKey,
-            adminVendorId: ADMIN_VENDOR_ID,
-            caseAdminSubject: peerNodeId,
-        });
-
-        await paseSecureMessageChannel.close();  // We reconnect using Case, so close Pase connection
-
-        // Look for the device broadcast over MDNS and do CASE pairing
-        interactionClient = await this.connect(peerNodeId, 120);
-
-        // Complete the commission
-        generalCommissioningClusterClient = ClusterClient(GeneralCommissioningCluster, 0, interactionClient);
-        this.ensureSuccess("commissioningComplete", await generalCommissioningClusterClient.commissioningComplete());
+        await commissioningManager.executeCommissioning();
 
         this.controllerStorage.set("fabric", this.fabric.toStorageObject());
         this.controllerStorage.set("fabricCommissioned", true);
 
-        return peerNodeId;
+        return this.fabric.rootNodeId;
     }
 
     /**
@@ -507,12 +467,6 @@ export class MatterController {
             await this.resume(nodeId);
             return this.channelManager.getChannel(this.fabric, nodeId);
         }));
-    }
-
-    /** Helper method to check for errorCode/debugTest responses and throw error on failure */
-    private ensureSuccess(context: string, { errorCode, debugText }: CommissioningSuccessFailureResponse) {
-        if (errorCode === GeneralCommissioning.CommissioningError.Ok) return;
-        throw new Error(`Commission error for "${context}": ${errorCode}, ${debugText}`);
     }
 
     getNextAvailableSessionId() {

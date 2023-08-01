@@ -19,9 +19,10 @@
 import { MatterServer, CommissioningController } from "@project-chip/matter-node.js";
 import { Logger } from "@project-chip/matter-node.js/log";
 import { StorageManager, StorageBackendDisk } from "@project-chip/matter-node.js/storage";
-import { BasicInformationCluster, DescriptorCluster, OnOffCluster } from "@project-chip/matter-node.js/cluster";
+import { BasicInformationCluster, DescriptorCluster, OnOffCluster, GeneralCommissioning } from "@project-chip/matter-node.js/cluster";
 import { getIntParameter, getParameter, requireMinNodeVersion, hasParameter, singleton } from "@project-chip/matter-node.js/util";
 import { ManualPairingCodeCodec } from "@project-chip/matter-node.js/schema";
+import { CommissioningOptions } from "@project-chip/matter-node.js/protocol";
 import { Ble } from "@project-chip/matter-node.js/ble";
 import { BleNode } from "@project-chip/matter-node-ble.js/ble";
 
@@ -75,6 +76,7 @@ class ControllerNode {
             shortDiscriminator = pairingCodeCodec.shortDiscriminator;
             longDiscriminator = undefined;
             setupPin = pairingCodeCodec.passcode;
+            logger.debug(`Data extracted from pairing code: ${Logger.toJSON(pairingCodeCodec)}`);
         } else {
             longDiscriminator = getIntParameter("longDiscriminator") ?? controllerStorage.get("longDiscriminator", 3840);
             if (longDiscriminator > 4095) throw new Error("Discriminator value must be less than 4096");
@@ -82,6 +84,32 @@ class ControllerNode {
         }
         if ((shortDiscriminator === undefined && longDiscriminator === undefined) || setupPin === undefined) {
             throw new Error("Please specify the longDiscriminator of the device to commission with -longDiscriminator or provide a valid passcode with -passcode");
+        }
+
+        // Collect commissioning options from commandline parameters
+        const commissioningOptions: CommissioningOptions = {
+            regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.IndoorOutdoor,
+            regulatoryCountryCode: "XX",
+        };
+        if (hasParameter("ble")) {
+            const wifiSsid = getParameter("ble-wifi-ssid");
+            const wifiCredentials = getParameter("ble-wifi-credentials");
+            const threadNetworkName = getParameter("ble-thread-networkname");
+            const threadOperationalDataset = getParameter("ble-thread-operationaldataset");
+            if (wifiSsid !== undefined && wifiCredentials !== undefined) {
+                logger.info(`Registering Commissioning over BLE with WiFi: ${wifiSsid}`);
+                commissioningOptions.wifiNetwork = {
+                    wifiSsid: wifiSsid,
+                    wifiCredentials: wifiCredentials,
+                };
+            }
+            if (threadNetworkName !== undefined && threadOperationalDataset !== undefined) {
+                logger.info(`Registering Commissioning over BLE with Thread: ${threadNetworkName}`);
+                commissioningOptions.threadNetwork = {
+                    networkName: threadNetworkName,
+                    operationalDataset: threadOperationalDataset,
+                };
+            }
         }
 
         /**
@@ -104,6 +132,7 @@ class ControllerNode {
             shortDiscriminator,
             passcode: setupPin,
             delayedPairing: true,
+            commissioningOptions,
         });
         matterClient.addCommissioningController(commissioningController);
 

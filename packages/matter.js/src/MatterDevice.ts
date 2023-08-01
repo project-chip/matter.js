@@ -86,20 +86,16 @@ export class MatterDevice {
     }
 
     async start() {
-        /*for (const broadcaster of this.broadcasters) {
-            broadcaster.setCommissionMode(0, this.deviceName, this.deviceType, this.vendorId, this.productId, this.discriminator);
-            broadcaster.announce();
-        }*/
-        this.startAnnouncement();
+        await this.startAnnouncement();
     }
 
-    startAnnouncement() {
+    async startAnnouncement() {
         this.announcementStartedTime = Time.nowMs();
         this.announceInterval = Time.getPeriodicTimer(DEVICE_ANNOUNCEMENT_INTERVAL, () => this.announce()).start();
-        this.announce();
+        await this.announce();
     }
 
-    announce(announceOnce = false) {
+    async announce(announceOnce = false) {
         if (!announceOnce) {
             // Stop announcement if duration is reached
             if (this.announcementStartedTime !== null && Time.nowMs() - this.announcementStartedTime > DEVICE_ANNOUNCEMENT_DURATION) {
@@ -111,7 +107,7 @@ export class MatterDevice {
             if (this.commissioningWindowOpened) {
                 // Re-Announce but do not re-set Fabrics
                 for (const broadcaster of this.broadcasters) {
-                    broadcaster.announce();
+                    await broadcaster.announce();
                 }
                 return;
             }
@@ -131,7 +127,7 @@ export class MatterDevice {
             }
             for (const broadcaster of this.broadcasters) {
                 broadcaster.setFabrics(fabricsToAnnounce);
-                broadcaster.announce();
+                await broadcaster.announce();
             }
         } else {
             // No fabric paired yeet, so announce as "ready for commissioning"
@@ -143,7 +139,7 @@ export class MatterDevice {
                     productId: this.productId,
                     discriminator: this.discriminator,
                 });
-                broadcaster.announce();
+                await broadcaster.announce();
             }
         }
     }
@@ -160,17 +156,17 @@ export class MatterDevice {
         return this.fabricManager.findFabricFromDestinationId(destinationId, peerRandom);
     }
 
-    addFabric(fabric: Fabric) {
+    async addFabric(fabric: Fabric) {
         if (this.fabricManager.getFabrics().length === 0) {
             // Inform upper layer to add MDNS Broadcaster delayed if we limited announcements to BLE till now
             // TODO Change when refactoring MatterDevice away
             this.initialCommissioningCallback();
         }
         this.fabricManager.addFabric(fabric);
-        this.broadcasters.forEach(broadcaster => {
+        for (const broadcaster of this.broadcasters) {
             broadcaster.setFabrics([fabric]);
-            broadcaster.announce();
-        });
+            await broadcaster.announce();
+        }
         return fabric.fabricIndex;
     }
 
@@ -211,9 +207,16 @@ export class MatterDevice {
         return !!this.fabricManager.getFabrics().length;
     }
 
-    openCommissioningModeWindow(mode: number, discriminator: number, timeout: number) {
+    openCommissioningModeWindow(mode: number, discriminator: number | undefined, timeout: number) {
+        if (discriminator === undefined) {
+            if (mode === 1) {
+                discriminator = this.discriminator;
+            } else {
+                throw new Error("Discriminator must be set for mode 2");
+            }
+        }
         this.commissioningWindowOpened = true;
-        this.broadcasters.forEach(broadcaster => {
+        for (const broadcaster of this.broadcasters) {
             broadcaster.setCommissionMode(mode, {
                 deviceName: this.deviceName,
                 deviceType: this.deviceType,
@@ -221,7 +224,7 @@ export class MatterDevice {
                 productId: this.productId,
                 discriminator,
             });
-        });
+        }
         this.startAnnouncement();
 
         Time.getTimer(timeout * 1000, () => this.commissioningWindowOpened = false).start();

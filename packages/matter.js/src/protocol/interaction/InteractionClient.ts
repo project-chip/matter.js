@@ -44,12 +44,24 @@ export interface AttributeStatus {
     status: StatusCode,
 }
 
-export function ClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
+export function ClusterClient<
+    F extends BitSchema,
+    A extends Attributes,
+    C extends Commands,
+    E extends Events
+>(
     clusterDef: Cluster<F, any, A, C, E>,
     endpointId: number,
     interactionClient: InteractionClient
 ): ClusterClientObj<F, A, C, E> {
-    const { id: clusterId, name, commands: commandDef, attributes: attributeDef, events: eventDef, features } = clusterDef;
+    const {
+        id: clusterId,
+        name,
+        commands: commandDef,
+        attributes: attributeDef,
+        events: eventDef,
+        features
+    } = clusterDef;
     const attributes = <AttributeClients<F, A>>{};
     const events = <EventClients<E>>{};
     const commands = <{ [P in keyof C]: SignatureFromCommandSpec<C[P]> }>{};
