@@ -303,8 +303,7 @@ describe("ClusterFactory", () => {
         }, {
             ev1: true,
             ev2: true,
-        }
-        );
+        });
     })
 
     /**
@@ -363,7 +362,7 @@ describe("ClusterFactory", () => {
         handlers;
 
         // Create the cluster server
-        ClusterServer(
+        const server = ClusterServer(
             MyCluster,
             {
                 attr1: 1,
@@ -383,7 +382,8 @@ describe("ClusterFactory", () => {
         }, {
             ev1: true,
             ev2: true,
-        }
-        );
+        });
+
+        server.attributes.attr2
     })
 })

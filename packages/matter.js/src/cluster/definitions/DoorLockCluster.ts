@@ -2024,9 +2024,9 @@ export namespace DoorLock {
     });
 
     /**
-     * A DoorLockCluster supports these elements if it supports feature CredentialOverTheAirAccess.
+     * A DoorLockCluster supports these elements if it supports features CredentialOverTheAirAccess and PinCredential.
      */
-    export const CredentialOverTheAirAccessComponent = ClusterComponent({
+    export const CredentialOverTheAirAccessAndPinCredentialComponent = ClusterComponent({
         attributes: {
             /**
              * Boolean set to True if the door lock server requires that an optional PINs be included in the payload of
@@ -2034,7 +2034,7 @@ export namespace DoorLock {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.37
              */
-            requirePiNforRemoteOperation: OptionalWritableAttribute(
+            requirePinForRemoteOperation: WritableAttribute(
                 0x33,
                 TlvBoolean,
                 { default: true, writeAcl: AccessLevel.Administer }
@@ -2313,7 +2313,11 @@ export namespace DoorLock {
                 { rfidCredential: true }
             );
 
-            extendCluster(cluster, CredentialOverTheAirAccessComponent, { credentialOverTheAirAccess: true });
+            extendCluster(
+                cluster,
+                CredentialOverTheAirAccessAndPinCredentialComponent,
+                { credentialOverTheAirAccess: true, pinCredential: true }
+            );
             extendCluster(cluster, NotificationAndPinCredentialComponent, { notification: true, pinCredential: true });
             extendCluster(cluster, NotificationComponent, { notification: true });
             extendCluster(
@@ -2358,7 +2362,7 @@ export namespace DoorLock {
         & (SF extends { yearDayAccessSchedules: true } ? typeof YearDayAccessSchedulesComponent : {})
         & (SF extends { holidaySchedules: true } ? typeof HolidaySchedulesComponent : {})
         & (SF extends { pinCredential: true } | { rfidCredential: true } ? typeof PinCredentialOrRfidCredentialComponent : {})
-        & (SF extends { credentialOverTheAirAccess: true } ? typeof CredentialOverTheAirAccessComponent : {})
+        & (SF extends { credentialOverTheAirAccess: true, pinCredential: true } ? typeof CredentialOverTheAirAccessAndPinCredentialComponent : {})
         & (SF extends { notification: true, pinCredential: true } ? typeof NotificationAndPinCredentialComponent : {})
         & (SF extends { notification: true } ? typeof NotificationComponent : {})
         & (SF extends { notification: true, rfidCredential: true } ? typeof NotificationAndRfidCredentialComponent : {})
@@ -2376,7 +2380,7 @@ export namespace DoorLock {
     const WDSCH = { weekDayAccessSchedules: true };
     const YDSCH = { yearDayAccessSchedules: true };
     const HDSCH = { holidaySchedules: true };
-    const COTA = { credentialOverTheAirAccess: true };
+    const COTA_PIN = { credentialOverTheAirAccess: true, pinCredential: true };
     const NOT_PIN = { notification: true, pinCredential: true };
     const NOT = { notification: true };
     const NOT_RID = { notification: true, rfidCredential: true };
@@ -2464,9 +2468,9 @@ export namespace DoorLock {
                 PinCredentialComponent.attributes.sendPinOverTheAir,
                 { optionalIf: [PIN] }
             ),
-            requirePiNforRemoteOperation: AsConditional(
-                CredentialOverTheAirAccessComponent.attributes.requirePiNforRemoteOperation,
-                { optionalIf: [COTA] }
+            requirePinForRemoteOperation: AsConditional(
+                CredentialOverTheAirAccessAndPinCredentialComponent.attributes.requirePinForRemoteOperation,
+                { mandatoryIf: [COTA_PIN] }
             ),
             expiringUserTimeout: AsConditional(UserComponent.attributes.expiringUserTimeout, { optionalIf: [USR] }),
             keypadOperationEventMask: AsConditional(
