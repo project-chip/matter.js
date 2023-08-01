@@ -9,6 +9,8 @@ import { TlvField, TlvObject, TlvOptionalField } from "../../src/tlv/TlvObject.j
 import { TypeFromSchema } from "../../src/tlv/TlvSchema.js";
 import { TlvString } from "../../src/tlv/TlvString.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
+import { TlvNullable } from "../../src/tlv/TlvNullable.js";
+import { TlvArray } from "../../src/tlv/TlvArray.js";
 
 const schema = TlvObject({
     /** Mandatory field jsdoc */
@@ -66,5 +68,74 @@ describe("TlvObject", () => {
                 expect(tlvDecoded).toEqual(decoded);
             });
         }
+    });
+
+    describe('inject Field value', () => {
+        it('injects field value on missing value', () => {
+            const result = schema.injectField({ mandatoryField: 1 }, 2, "test", () => true);
+            expect(result).toEqual({ mandatoryField: 1, optionalField: "test" });
+        });
+
+        it('injects field value on existing', () => {
+            const result = schema.injectField({ mandatoryField: 1, optionalField: "original" }, 2, "test", () => true);
+            expect(result).toEqual({ mandatoryField: 1, optionalField: "test" });
+        });
+
+        it('do not inject field value when not wanted', () => {
+            const result = schema.injectField({ mandatoryField: 1 }, 2, "test", () => false);
+            expect(result).toEqual({ mandatoryField: 1 });
+        });
+
+        it('do not inject field value when existing', () => {
+            const result = schema.injectField({ mandatoryField: 1, optionalField: "original" }, 2, "test", () => false);
+            expect(result).toEqual({ mandatoryField: 1, optionalField: "original" });
+        });
+
+        it('throw error on invalid field value', () => {
+            expect(() => schema.injectField({ mandatoryField: 1 }, 2, 2, () => true)).toThrow(new Error("Expected string, got number."));
+        });
+
+        it('injects field value also on nullable array schema', () => {
+            const schema = TlvNullable(TlvArray(TlvObject({
+                /** Mandatory field jsdoc */
+                mandatoryField: TlvField(1, TlvUInt8),
+
+                /** Optional field jsdoc */
+                optionalField: TlvOptionalField(2, TlvString),
+            })));
+
+            const result = schema.injectField([{ mandatoryField: 1 }, { mandatoryField: 2 }], 2, "test", () => true);
+            expect(result).toEqual([{ mandatoryField: 1, optionalField: "test" }, { mandatoryField: 2, optionalField: "test" }]);
+        });
+    });
+
+    describe('remove Field value', () => {
+        it('remove field value on missing value', () => {
+            const result = schema.removeField({ mandatoryField: 1, optionalField: "test" }, 2, () => true);
+            expect(result).toEqual({ mandatoryField: 1 });
+        });
+
+        it('do not change field value when missing', () => {
+            const result = schema.removeField({ mandatoryField: 1 }, 2, () => true);
+            expect(result).toEqual({ mandatoryField: 1 });
+        });
+
+        it('do not remove field value when existing but unwanted', () => {
+            const result = schema.removeField({ mandatoryField: 1, optionalField: "original" }, 2, () => false);
+            expect(result).toEqual({ mandatoryField: 1, optionalField: "original" });
+        });
+
+        it('removes field value also on nullable array schema', () => {
+            const schema = TlvNullable(TlvArray(TlvObject({
+                /** Mandatory field jsdoc */
+                mandatoryField: TlvField(1, TlvUInt8),
+
+                /** Optional field jsdoc */
+                optionalField: TlvOptionalField(2, TlvString),
+            })));
+
+            const result = schema.removeField([{ mandatoryField: 1, optionalField: "test" }, { mandatoryField: 2, optionalField: "test" }], 2, () => true);
+            expect(result).toEqual([{ mandatoryField: 1 }, { mandatoryField: 2 }]);
+        });
     });
 });
