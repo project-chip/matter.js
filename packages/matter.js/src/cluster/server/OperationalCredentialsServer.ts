@@ -96,7 +96,7 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
 
     fabricsAttributeGetter: ({ session, isFabricFiltered }) => {
         if (session === undefined || !session.isSecure()) return []; // ???
-        const fabrics = isFabricFiltered ? [session.getAccessingFabric()] : session.getContext().getFabrics();
+        const fabrics = isFabricFiltered ? [session.getAssociatedFabric()] : session.getContext().getFabrics();
 
         return fabrics.map(fabric => ({
             fabricId: fabric.fabricId,

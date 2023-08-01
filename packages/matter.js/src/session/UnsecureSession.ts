@@ -82,7 +82,7 @@ export class UnsecureSession<T> implements Session<T> {
         throw new Error("The unsecure session should never be destroyed.");
     }
 
-    getAccessingFabric(): Fabric {
+    getAssociatedFabric(): Fabric {
         throw new Error("Session needs to be a secure session");
     }
 

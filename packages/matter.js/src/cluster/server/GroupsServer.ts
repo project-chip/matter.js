@@ -85,7 +85,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
 
     return {
         addGroup: async ({ request: { groupId, groupName }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
-            return addGroupLogic(groupId, groupName, sessionType, (session as SecureSession<MatterDevice>).getAccessingFabric(), endpoint.getId());
+            return addGroupLogic(groupId, groupName, sessionType, (session as SecureSession<MatterDevice>).getAssociatedFabric(), endpoint.getId());
         },
 
         viewGroup: async ({ request: { groupId }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
@@ -99,7 +99,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
                 return { status: StatusCode.ConstraintError, groupId, groupName: '' };
             }
 
-            const groupName = GroupsManager.getGroupName((session as SecureSession<MatterDevice>).getAccessingFabric(), endpoint.getId(), groupId);
+            const groupName = GroupsManager.getGroupName((session as SecureSession<MatterDevice>).getAssociatedFabric(), endpoint.getId(), groupId);
             if (groupName !== undefined) {
                 return { status: StatusCode.Success, groupId, groupName: groupName };
             }
@@ -116,7 +116,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
                 throw new Error("Groupcast not supported");
             }
 
-            const endpointGroups = GroupsManager.getGroups((session as SecureSession<MatterDevice>).getAccessingFabric(), endpoint.getId());
+            const endpointGroups = GroupsManager.getGroups((session as SecureSession<MatterDevice>).getAssociatedFabric(), endpoint.getId());
             const fabricGroupsList = Array.from(endpointGroups.keys());
             const capacity = fabricGroupsList.length < 0xff ? 0xfe - fabricGroupsList.length : 0;
             if (groupList.length === 0) {
@@ -140,8 +140,8 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
                 return { status: StatusCode.ConstraintError, groupId };
             }
 
-            const fabric = (session as SecureSession<MatterDevice>).getAccessingFabric();
-            if (GroupsManager.removeGroup((session as SecureSession<MatterDevice>).getAccessingFabric(), endpoint.getId(), groupId)) {
+            const fabric = (session as SecureSession<MatterDevice>).getAssociatedFabric();
+            if (GroupsManager.removeGroup((session as SecureSession<MatterDevice>).getAssociatedFabric(), endpoint.getId(), groupId)) {
                 ScenesManager.removeAllScenesForGroup(fabric, endpoint.getId(), groupId.id);
                 return { status: StatusCode.Success, groupId };
             }
@@ -154,7 +154,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
                 // TODO: When Unicast we generate a response, else not
             }
 
-            const fabric = (session as SecureSession<MatterDevice>).getAccessingFabric();
+            const fabric = (session as SecureSession<MatterDevice>).getAssociatedFabric();
             GroupsManager.removeAllGroups(fabric, endpoint.getId());
             ScenesManager.removeAllNonGlobalScenesForEndpoint(fabric, endpoint.getId());
 
@@ -170,7 +170,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             const identifyCluster = endpoint.getClusterServer(IdentifyCluster);
             if (identifyCluster) {
                 if (identifyCluster.attributes.identifyTime.getLocal() > 0) { // We identify ourselves currently
-                    addGroupLogic(groupId, groupName, sessionType, (session as SecureSession<MatterDevice>).getAccessingFabric(), endpoint.getId());
+                    addGroupLogic(groupId, groupName, sessionType, (session as SecureSession<MatterDevice>).getAssociatedFabric(), endpoint.getId());
                 }
             }
 

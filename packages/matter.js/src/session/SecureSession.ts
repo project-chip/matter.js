@@ -91,7 +91,7 @@ export class SecureSession<T> implements Session<T> {
         return this.fabric;
     }
 
-    getAccessingFabric(): Fabric {
+    getAssociatedFabric(): Fabric {
         if (this.fabric === undefined) throw new Error("Session needs to have an associated Fabric");
         return this.fabric;
     }

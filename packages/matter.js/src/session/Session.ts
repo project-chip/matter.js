@@ -41,5 +41,5 @@ export interface Session<T> {
     destroy(): void;
     notifyActivity(messageReceived: boolean): void;
     isPeerActive(): boolean;
-    getAccessingFabric(): Fabric;
+    getAssociatedFabric(): Fabric;
 }
