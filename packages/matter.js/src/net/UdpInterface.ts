@@ -10,7 +10,7 @@ import { NetInterface } from "./NetInterface.js";
 import { Listener } from "../common/TransportInterface.js";
 import { Network } from './Network.js';
 import { ByteArray } from "../util/ByteArray.js";
-import { ServerAddress } from "../common/index.js";
+import { ServerAddress } from "../common/ServerAddress.js";
 
 export class UdpInterface implements NetInterface {
 

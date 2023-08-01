@@ -57,65 +57,65 @@
     "README.md"
   ],
   "type": "module",
-  "main": "dist/cjs/index.js",
-  "module": "dist/es/index.js",
+  "main": "dist/cjs/export.js",
+  "module": "dist/es/export.js",
   "exports": {
     ".": {
       "import": {
-        "types": "./dist/es/index.d.ts",
-        "default": "./dist/es/index.js"
+        "types": "./dist/es/export.d.ts",
+        "default": "./dist/es/export.js"
       },
       "require": {
-        "types": "./dist/cjs/index.d.ts",
-        "default": "./dist/cjs/index.js"
+        "types": "./dist/cjs/export.d.ts",
+        "default": "./dist/cjs/export.js"
       }
     },
     "./package.json": "./package.json",
     "./interaction": {
       "import": {
-        "types": "./dist/es/protocol/interaction/index.d.ts",
-        "default": "./dist/es/protocol/interaction/index.js"
+        "types": "./dist/es/protocol/interaction/export.d.ts",
+        "default": "./dist/es/protocol/interaction/export.js"
       },
       "require": {
-        "types": "./dist/cjs/protocol/interaction/index.d.ts",
-        "default": "./dist/cjs/protocol/interaction/index.js"
+        "types": "./dist/cjs/protocol/interaction/export.d.ts",
+        "default": "./dist/cjs/protocol/interaction/export.js"
       }
     },
     "./securechannel": {
       "import": {
-        "types": "./dist/es/protocol/securechannel/index.d.ts",
-        "default": "./dist/es/protocol/securechannel/index.js"
+        "types": "./dist/es/protocol/securechannel/export.d.ts",
+        "default": "./dist/es/protocol/securechannel/export.js"
       },
       "require": {
-        "types": "./dist/cjs/protocol/securechannel/index.d.ts",
-        "default": "./dist/cjs/protocol/securechannel/index.js"
+        "types": "./dist/cjs/protocol/securechannel/export.d.ts",
+        "default": "./dist/cjs/protocol/securechannel/export.js"
       }
     },
     "./*": {
       "import": {
-        "types": "./dist/es/*/index.d.ts",
-        "default": "./dist/es/*/index.js"
+        "types": "./dist/es/*/export.d.ts",
+        "default": "./dist/es/*/export.js"
       },
       "require": {
-        "types": "./dist/cjs/*/index.d.ts",
-        "default": "./dist/cjs/*/index.js"
+        "types": "./dist/cjs/*/export.d.ts",
+        "default": "./dist/cjs/*/export.js"
       }
     }
   },
-  "types": "dist/es/index.d.ts",
+  "types": "dist/es/export.d.ts",
   "typesVersions": {
     "*": {
       "interaction": [
-        "/dist/cjs/protocol/interaction/index.d.ts"
+        "/dist/cjs/protocol/interaction/export.d.ts"
       ],
       "securechannel": [
-        "/dist/cjs/protocol/securechannel/index.d.ts"
+        "/dist/cjs/protocol/securechannel/export.d.ts"
       ],
       ".": [
-        "/dist/cjs/index.d.ts"
+        "/dist/cjs/export.d.ts"
       ],
       "*": [
-        "/dist/cjs/*/index.d.ts"
+        "/dist/cjs/*/export.d.ts"
       ]
     }
   },
