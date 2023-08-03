@@ -233,7 +233,7 @@ export function ClusterServer<
                     attributeName,
                     schema,
                     writable,
-                    !omitChanges,
+                    false,
                     (attributesInitialValues as any)[attributeName],
                     getter ? (session, endpoint, isFabricFiltered) => getter({
                         attributes,
@@ -272,7 +272,7 @@ export function ClusterServer<
                 );
                 result[`get${capitalizedAttributeName}Attribute`] = (fabric: Fabric, isFabricScoped?: boolean) => (attributes as any)[attributeName].getLocalForFabric(fabric, isFabricScoped);
                 result[`set${capitalizedAttributeName}Attribute`] = <T,>(value: T, fabric: Fabric) => (attributes as any)[attributeName].setLocalForFabric(value, fabric);
-                result[`subscribe${capitalizedAttributeName}Attribute`] = <T,>(listener: (newValue: T, oldValue: T) => void) => (attributes as any)[attributeName].addListener(listener);
+                result[`subscribe${capitalizedAttributeName}Attribute`] = <T,>(listener: (newValue: T, oldValue: T) => void) => (attributes as any)[attributeName].addValueSetListener(listener);
             } else {
                 (attributes as any)[attributeName] = new AttributeServer(
                     id,
@@ -303,12 +303,12 @@ export function ClusterServer<
                 }
                 result[`get${capitalizedAttributeName}Attribute`] = () => (attributes as any)[attributeName].getLocal();
                 result[`set${capitalizedAttributeName}Attribute`] = <T,>(value: T) => (attributes as any)[attributeName].setLocal(value);
-                result[`subscribe${capitalizedAttributeName}Attribute`] = <T,>(listener: (newValue: T, oldValue: T) => void) => (attributes as any)[attributeName].addListener(listener);
+                result[`subscribe${capitalizedAttributeName}Attribute`] = <T,>(listener: (newValue: T, oldValue: T) => void) => (attributes as any)[attributeName].addValueSetListener(listener);
             }
             if (persistent || getter || setter) {
                 const listener = (value: any, version: number) => attributeStorageListener(attributeName, version, (fabricScoped || getter || setter) ? undefined : value);
                 attributeStorageListeners.set(id, listener);
-                (attributes as any)[attributeName].addMatterListener(listener);
+                (attributes as any)[attributeName].addValueChangeListener(listener);
             }
             attributeList.push(new AttributeId(id));
         } else {

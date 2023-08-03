@@ -6,7 +6,7 @@
 
 import { MatterDevice } from "../../MatterDevice.js";
 import { Session } from "../../session/Session.js";
-import { SecureSession } from "../../session/SecureSession.js";
+import { assertSecureSession, SecureSession } from "../../session/SecureSession.js";
 import { TlvSchema } from "../../tlv/TlvSchema.js";
 import { Endpoint } from "../../device/Endpoint.js";
 import { Cluster } from "../Cluster.js";
@@ -14,7 +14,7 @@ import { Fabric } from "../../fabric/Fabric.js";
 import { isDeepEqual } from "../../util/DeepEqual.js";
 import { StatusResponseError } from "../../protocol/interaction/InteractionMessenger.js";
 import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
-import { MatterError } from "../../common/MatterError.js";
+import { MatterError, ValidationError } from "../../common/MatterError.js";
 import { Globals } from "../../model/index.js";
 
 /**
@@ -41,49 +41,19 @@ export abstract class BaseAttributeServer<T> {
         readonly isWritable: boolean,
         readonly isSubscribable: boolean,
         readonly defaultValue: T,
-
-        /**
-         * Optional getter function to handle special requirements or the data are stored in different places.
-         * If a getter method is used for a writable attribute, the setter method must be implemented as well.
-         *
-         * @param session the session that is requesting the value (if any).
-         * @param endpoint the endpoint the cluster server of this attribute is assigned to.
-         * @param isFabricFiltered whether the read request is fabric scoped or not
-         */
-        readonly getter?: (session?: Session<MatterDevice>, endpoint?: Endpoint, isFabricFiltered?: boolean) => T,
-
-        /**
-         * Optional setter function to handle special requirements or the data are stored in different places.
-         * If a setter method is used for a writable attribute, the getter method must be implemented as well.
-         * The method needs to return if the stored value has changed or not.
-         *
-         * @param value the value to be set.
-         * @param session the session that is requesting the value (if any).
-         * @param endpoint the endpoint the cluster server of this attribute is assigned to.
-         * @returns true if the value has changed, false otherwise.
-         */
-        readonly setter?: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => boolean,
-
-        /**
-         * Optional Validator function to handle special requirements for verification of stored data.
-         * The method should throw an error if the value is not valid. If a StatusResponseError is thrown this one is
-         * also returned to the client.
-         * If a setter is used then no validator should be used as the setter should handle the validation itself!
-         *
-         * @param value the value to be set.
-         * @param session the session that is requesting the value (if any).
-         * @param endpoint the endpoint the cluster server of this attribute is assigned to.
-         */
-        readonly validator?: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => void,
     ) {
-        this.schema.validate(defaultValue);
-        if (this.getter === undefined && this.setter === undefined) {
-            this.value = defaultValue;
-        } else if (isWritable && (this.getter === undefined || this.setter === undefined)) {
-            throw new Error("Getter and setter must be implemented together when attribute is writeable.");
-        }
-        if (this.validator !== undefined && this.setter !== undefined) {
-            throw new Error("Validator and setter must not be implemented together.");
+        this.validateWithSchema(defaultValue);
+        this.value = defaultValue;
+    }
+
+    validateWithSchema(value: T) {
+        try {
+            this.schema.validate(value);
+        } catch (error) {
+            if (error instanceof ValidationError) {
+                error.message = `Validation error for attribute "${this.name}": ${error.message}`;
+            }
+            throw error;
         }
     }
 
@@ -104,6 +74,38 @@ export abstract class BaseAttributeServer<T> {
  */
 export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
     readonly isFixed: boolean = true;
+    protected readonly getter: (session?: Session<MatterDevice>, endpoint?: Endpoint, isFabricFiltered?: boolean) => T;
+
+    constructor(
+        id: number,
+        name: string,
+        schema: TlvSchema<T>,
+        isWritable: boolean,
+        isSubscribable: boolean,
+        defaultValue: T,
+
+        /**
+         * Optional getter function to handle special requirements or the data are stored in different places.
+         *
+         * @param session the session that is requesting the value (if any).
+         * @param endpoint the endpoint the cluster server of this attribute is assigned to.
+         * @param isFabricFiltered whether the read request is fabric scoped or not
+         */
+        getter?: (session?: Session<MatterDevice>, endpoint?: Endpoint, isFabricFiltered?: boolean) => T,
+    ) {
+        super(id, name, schema, isWritable, isSubscribable, defaultValue); // Fixed attributes do not change, so are not subscribable
+
+        if (getter === undefined) {
+            this.getter = () => {
+                if (this.value === undefined) { // Should not happen
+                    throw new Error(`Attribute value for attribute "${name}" is not initialized.`);
+                }
+                return this.value;
+            }
+        } else {
+            this.getter = getter;
+        }
+    }
 
     /**
      * Get the value of the attribute. This method is used by the Interaction model to read the value of the attribute
@@ -113,15 +115,7 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
     get(session: Session<MatterDevice>, isFabricFiltered: boolean): T {
         // TODO: check ACL
 
-        if (this.getter !== undefined) {
-            return this.getter(session, this.endpoint, isFabricFiltered);
-        }
-
-        return this.getRemote(session, isFabricFiltered);
-    }
-
-    protected getRemote(_session: Session<MatterDevice>, _isFabricFiltered: boolean): T {
-        return this.getLocal();
+        return this.getter(session, this.endpoint, isFabricFiltered);
     }
 
     /**
@@ -140,13 +134,7 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
      * If a getter is defined the value is determined by that getter method.
      */
     getLocal(): T {
-        if (this.getter !== undefined) {
-            return this.getter(undefined, this.endpoint);
-        }
-        if (this.value === undefined) { // Should not happen
-            throw new Error("Attribute value is not initialized.");
-        }
-        return this.value;
+        return this.getter(undefined, this.endpoint);
     }
 
     /**
@@ -156,16 +144,51 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
      */
     init(value: T | undefined, version?: number) {
         if (version !== undefined) {
-            throw new Error("Version is not supported on fixed attributes.");
-        }
-        if (this.setter !== undefined || this.getter !== undefined) {
-            throw new Error("Can not initialize fixed attributes with getter or setter methods.");
+            throw new Error(`Version is not supported on fixed attribute "${this.name}".`);
         }
         if (value === undefined) {
-            throw new Error("Can not initialize fixed attributes with undefined value.");
+            throw new Error(`Can not initialize fixed attribute "${this.name}" with undefined value.`);
         }
-        this.schema.validate(value);
+        this.validateWithSchema(value);
         this.value = value;
+    }
+
+    /**
+     * Add an internal listener that is called when the value of the attribute changes. The listener is called with the
+     * new value and the version number.
+     */
+    addValueChangeListener(_listener: (value: T, version: number) => void) {
+        /** Fixed attributes do not change. */
+    }
+
+    /**
+     * Remove an internal listener.
+     */
+    removeValueChangeListener(_listener: (value: T, version: number) => void) {
+        /** Fixed attributes do not change. */
+    }
+
+    /**
+     * Add an external listener that is called when the value of the attribute changes. The listener is called with the
+     * new value and the old value.
+     */
+    addValueSetListener(_listener: (newValue: T, oldValue: T) => void) {
+        /** Fixed attributes do not change. */
+    }
+
+    /**
+     * Add an external listener that is called when the value of the attribute changes. The listener is called with the
+     * new value and the old value. This method is a convenient alias for addValueSetListener.
+     */
+    subscribe(_listener: (newValue: T, oldValue: T) => void) {
+        /** Fixed attributes do not change. */
+    }
+
+    /**
+     * Remove an external listener.
+     */
+    removeValueSetListener(_listener: (newValue: T, oldValue: T) => void) {
+        /** Fixed attributes do not change. */
     }
 }
 
@@ -174,25 +197,81 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
  */
 export class AttributeServer<T> extends FixedAttributeServer<T> {
     override readonly isFixed = false;
-    protected readonly matterListeners = new Array<(value: T, version: number) => void>();
-    protected readonly listeners = new Array<(newValue: T, oldValue: T) => void>();
+    protected readonly valueChangeListeners = new Array<(value: T, version: number) => void>();
+    protected readonly valueSetListeners = new Array<(newValue: T, oldValue: T) => void>();
+    protected readonly setter: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => boolean;
+    protected readonly validator: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => void;
+
+    constructor(
+        id: number,
+        name: string,
+        schema: TlvSchema<T>,
+        isWritable: boolean,
+        isSubscribable: boolean,
+        defaultValue: T,
+        getter?: (session?: Session<MatterDevice>, endpoint?: Endpoint, isFabricFiltered?: boolean) => T,
+
+        /**
+         * Optional setter function to handle special requirements or the data are stored in different places.
+         * If a setter method is used for a writable attribute, the getter method must be implemented as well.
+         * The method needs to return if the stored value has changed or not.
+         *
+         * @param value the value to be set.
+         * @param session the session that is requesting the value (if any).
+         * @param endpoint the endpoint the cluster server of this attribute is assigned to.
+         * @returns true if the value has changed, false otherwise.
+         */
+        setter?: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => boolean,
+
+        /**
+         * Optional Validator function to handle special requirements for verification of stored data.
+         * The method should throw an error if the value is not valid. If a StatusResponseError is thrown this one is
+         * also returned to the client.
+         * If a setter is used then no validator should be used as the setter should handle the validation itself!
+         *
+         * @param value the value to be set.
+         * @param session the session that is requesting the value (if any).
+         * @param endpoint the endpoint the cluster server of this attribute is assigned to.
+         */
+        validator?: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => void,
+    ) {
+        if (isWritable && (getter === undefined || setter === undefined) && !(getter === undefined && setter === undefined)) {
+            throw new Error(`Getter and setter must be implemented together for writeable attribute "${name}".`);
+        }
+
+        super(id, name, schema, isWritable, isSubscribable, defaultValue, getter);
+
+        if (setter === undefined) {
+            this.setter = (value) => {
+                const oldValue = this.value;
+                this.value = value;
+                return !isDeepEqual(value, oldValue);
+            }
+        } else {
+            this.setter = setter;
+        }
+
+        this.validator = (value, session, endpoint) => {
+            this.validateWithSchema(value);
+            if (validator !== undefined) {
+                validator(value, session, endpoint);
+            }
+        }
+    }
 
     /**
      * Initialize the value of the attribute, used when a persisted value is set initially or when values needs to be
      * adjusted before the Device gets announced. Do not use this method to change values when the device is in use!
      */
     override init(value: T | undefined, version: number) {
-        if (this.setter !== undefined || this.getter !== undefined) {
-            if (value !== undefined) {
-                throw new Error("Can not initialize attributes with getter or setter methods and a value.");
-            }
-        } else if (value === undefined) {
-            throw new Error("Can not initialize attributes with undefined value.");
+        if (value === undefined) {
+            value = this.getter(undefined, this.endpoint);
         }
-        if (value !== undefined) {
-            this.schema.validate(value);
-            this.value = value;
+        if (value === undefined) {
+            throw new Error(`Can not initialize attribute "${this.name}" with undefined value.`);
         }
+        this.validator(value, undefined, this.endpoint);
+        this.value = value;
         this.version = version;
     }
 
@@ -204,32 +283,19 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
      */
     set(value: T, session: Session<MatterDevice>) {
         if (!this.isWritable) {
-            throw new StatusResponseError(`Attribute ${this.name} is not writable.`, StatusCode.UnsupportedWrite);
+            throw new StatusResponseError(`Attribute "${this.name}" is not writable.`, StatusCode.UnsupportedWrite);
         }
         // TODO: check ACL
 
         this.setRemote(value, session);
     }
 
+    /**
+     * Method that contains the logic to set a value "from remote" (e.g. from a client).
+     */
     protected setRemote(value: T, session: Session<MatterDevice>) {
-        if (this.setter !== undefined) {
-            if (this.getter === undefined) {
-                throw new Error("Attributes with Setter methods also need a Getter method to be readable.");
-            }
-
-            this.schema.validate(value);
-
-            const oldValue = this.getter(session, this.endpoint);
-            const valueChanged = this.setter(value, session, this.endpoint);
-            if (valueChanged) {
-                this.version++;
-                this.matterListeners.forEach(listener => listener(value, this.version));
-            }
-            this.listeners.forEach(listener => listener(value, oldValue));
-            return;
-        }
-
-        this.setLocal(value);
+        this.processSet(value, session);
+        this.value = value;
     }
 
     /**
@@ -240,35 +306,31 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
      * Listeners are called when the value changes (internal listeners) or in any case (external listeners).
      */
     setLocal(value: T) {
-        this.schema.validate(value);
+        this.processSet(value, undefined);
+        this.value = value;
+    }
 
-        if (this.setter !== undefined) {
-            if (this.getter === undefined) {
-                throw new Error("Attributes with Setter methods also need a Getter method to be readable.");
-            }
+    /**
+     * Helper Method to process the set of a value in a generic way. This method is used internally.
+     */
+    protected processSet(value: T, session?: Session<MatterDevice>) {
+        this.validator(value, session, this.endpoint);
+        const oldValue = this.getter(session, this.endpoint);
+        const valueChanged = this.setter(value, session, this.endpoint);
+        this.handleVersionAndTriggerListeners(value, oldValue, valueChanged);
+    }
 
-            const oldValue = this.getter(undefined, this.endpoint);
-            const valueChanged = this.setter(value, undefined, this.endpoint);
-            if (valueChanged) {
-                this.version++;
-                this.matterListeners.forEach(listener => listener(value, this.version));
-            }
-            this.listeners.forEach(listener => listener(value, oldValue));
-            return;
-        }
-
-        if (this.validator !== undefined) {
-            this.validator(value, undefined, this.endpoint);
-        }
-
-        const oldValue = this.value;
-        if (!isDeepEqual(value, oldValue)) {
+    /**
+     * Helper Method to handle needed version increases and trigger the relevant listeners. This method is used
+     * internally.
+     */
+    protected handleVersionAndTriggerListeners(value: T, oldValue: T | undefined, considerVersionChanged: boolean) {
+        if (considerVersionChanged) {
             this.version++;
-            this.value = value;
-            this.matterListeners.forEach(listener => listener(value, this.version));
+            this.valueChangeListeners.forEach(listener => listener(value, this.version));
         }
-        if (oldValue !== undefined) { // should always be the case, but let's make sure
-            this.listeners.forEach(listener => listener(value, oldValue));
+        if (oldValue !== undefined) {
+            this.valueSetListeners.forEach(listener => listener(value, oldValue));
         }
     }
 
@@ -279,51 +341,47 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
      * ACL checks needs to be performed before calling this method.
      */
     updated(session: SecureSession<MatterDevice>) {
-        if (this.getter === undefined && this.setter === undefined) {
-            throw new Error("Updated can only be used if the attribute has a getter or setter method.");
-        }
-        const value = this.get(session, true);
-        this.version++;
-        this.matterListeners.forEach(listener => listener(value, this.version));
-        // We can not call the internal listeners here, because we do not know the old value.
+        const oldValue = this.value;
+        this.value = this.get(session, true);
+        this.handleVersionAndTriggerListeners(this.value, oldValue, true);
     }
 
     /**
      * Add an internal listener that is called when the value of the attribute changes. The listener is called with the
      * new value and the version number.
      */
-    addMatterListener(listener: (value: T, version: number) => void) {
-        this.matterListeners.push(listener);
+    override addValueChangeListener(listener: (value: T, version: number) => void) {
+        this.valueChangeListeners.push(listener);
     }
 
     /**
      * Remove an internal listener.
      */
-    removeMatterListener(listener: (value: T, version: number) => void) {
-        this.matterListeners.splice(this.matterListeners.findIndex(item => item === listener), 1);
+    override removeValueChangeListener(listener: (value: T, version: number) => void) {
+        this.valueChangeListeners.splice(this.valueChangeListeners.findIndex(item => item === listener), 1);
     }
 
     /**
      * Add an external listener that is called when the value of the attribute changes. The listener is called with the
      * new value and the old value.
      */
-    addListener(listener: (newValue: T, oldValue: T) => void) {
-        this.listeners.push(listener);
+    override addValueSetListener(listener: (newValue: T, oldValue: T) => void) {
+        this.valueSetListeners.push(listener);
     }
 
     /**
      * Add an external listener that is called when the value of the attribute changes. The listener is called with the
-     * new value and the old value. This method is a convenient alias for addListener.
+     * new value and the old value. This method is a convenient alias for addValueSetListener.
      */
-    subscribe(listener: (newValue: T, oldValue: T) => void) {
-        this.addListener(listener);
+    override subscribe(listener: (newValue: T, oldValue: T) => void) {
+        this.addValueSetListener(listener);
     }
 
     /**
      * Remove an external listener.
      */
-    removeListener(listener: (newValue: T, oldValue: T) => void) {
-        this.listeners.splice(this.listeners.findIndex(item => item === listener), 1);
+    override removeValueSetListener(listener: (newValue: T, oldValue: T) => void) {
+        this.valueSetListeners.splice(this.valueSetListeners.findIndex(item => item === listener), 1);
     }
 }
 
@@ -332,6 +390,9 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
  * on fabric level if no custom getter or setter is defined.
  */
 export class FabricScopedAttributeServer<T> extends AttributeServer<T>{
+    private readonly isCustomGetter: boolean;
+    private readonly isCustomSetter: boolean;
+
     constructor(
         id: number,
         name: string,
@@ -344,7 +405,58 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T>{
         setter?: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => boolean,
         validator?: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => void,
     ) {
+        if (isWritable && (getter === undefined || setter === undefined) && !(getter === undefined && setter === undefined)) {
+            throw new Error(`Getter and setter must be implemented together writeable fabric scoped attribute "${name}".`);
+        }
+
+        let isCustomGetter = false;
+        if (getter === undefined) {
+            getter = (session, _endpoint, isFabricFiltered) => {
+                if (session === undefined) throw new FabricScopeError(`Session is required for fabric scoped attribute ${name}`);
+
+                if (isFabricFiltered === true) {
+                    assertSecureSession(session);
+                    return this.getLocalForFabric(session.getAssociatedFabric());
+                } else {
+                    const fabrics = session.getContext().getFabrics();
+                    const values = new Array<any>();
+                    for (const fabric of fabrics) {
+                        const value = this.getLocalForFabric(fabric);
+                        if (!Array.isArray(value)) {
+                            throw new FabricScopeError(`Fabric scoped attribute "${name}" can only be read for all fabrics if they are arrays.`);
+                        }
+                        values.push(...value);
+                    }
+                    return values as T;
+                }
+            }
+        } else {
+            isCustomGetter = true;
+        }
+
+        let isCustomSetter = false;
+        if (setter === undefined) {
+            setter = (value, session) => {
+                if (session === undefined) throw new FabricScopeError(`Session is required for fabric scoped attribute "${name}".`);
+
+                assertSecureSession(session);
+                const fabric = session.getAssociatedFabric();
+
+                const oldData = fabric.getScopedClusterDataValue<{ value: T }>(this.cluster, this.name);
+                const oldValue = oldData?.value ?? this.defaultValue;
+                if (!isDeepEqual(value, oldValue)) {
+                    fabric.setScopedClusterDataValue(this.cluster, this.name, { value });
+                    return true;
+                }
+                return false;
+            }
+        } else {
+            isCustomSetter = true;
+        }
+
         super(id, name, schema, isWritable, isSubscribable, defaultValue, getter, setter, validator);
+        this.isCustomGetter = isCustomGetter;
+        this.isCustomSetter = isCustomSetter;
     }
 
     /**
@@ -353,43 +465,32 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T>{
      */
     override init(value: T | undefined, version?: number) {
         if (value !== undefined) {
-            throw new Error("Can not initialize fabric scoped attributes with a value.");
+            throw new Error(`Can not initialize fabric scoped attribute "${this.name}" with a value.`);
         }
         this.version = version ?? 0;
     }
 
-    override setLocal(_value: T) {
-        throw new FabricScopeError("Fabric scoped attributes can only be set locally by providing a Fabric. Use setLocalForFabric instead.");
-    }
-
+    /**
+     * Method that contains the logic to set a value "from remote" (e.g. from a client). For Fabric scoped attributes
+     * we need to inject the fabric index into the value.
+     */
     protected override setRemote(value: T, session: Session<MatterDevice>) {
-        if (session === undefined) throw new FabricScopeError("Session is required for fabric scoped attributes");
-
         // Inject fabric index into structures in general if undefined, if set it will be used
         value = this.schema.injectField(
             value,
             <number>Globals.FabricIndex.id,
-            session?.getAssociatedFabric().fabricIndex,
+            session.getAssociatedFabric().fabricIndex,
             (existingFieldIndex) => existingFieldIndex === undefined
         );
 
-        if (this.setter !== undefined) {
-            if (this.getter === undefined) {
-                throw new FabricScopeError("Attributes with Setter methods also need a Getter method to be readable.");
-            }
-            this.schema.validate(value);
+        super.setRemote(value, session);
+    }
 
-            const oldValue = this.getter(session, this.endpoint, true);
-            const valueChanged = this.setter(value, session, this.endpoint);
-            if (valueChanged) {
-                this.version++;
-                this.matterListeners.forEach(listener => listener(value, this.version)); // TODO Make callbacks sense without fabric, but then they would have other signature?
-            }
-            this.listeners.forEach(listener => listener(value, oldValue));
-            return;
-        }
-
-        this.setLocalForFabric(value, (session as SecureSession<MatterDevice>).getAssociatedFabric());
+    /**
+     * Set Local is not allowed for fabric scoped attributes. Use setLocalForFabric instead.
+     */
+    override setLocal(_value: T) {
+        throw new FabricScopeError(`Fabric scoped attribute "${this.name}" can only be set locally by providing a Fabric. Use setLocalForFabric instead.`);
     }
 
     /**
@@ -400,48 +501,17 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T>{
      * Listeners are called when the value changes (internal listeners) or in any case (external listeners).
      */
     setLocalForFabric(value: T, fabric: Fabric) {
-        if (this.setter !== undefined) {
-            throw new Error("Setter method is not allowed to set fabric scoped attributes locally.");
+        if (this.isCustomSetter) {
+            throw new FabricScopeError(`Fabric scoped attribute "${this.name}" can not be set locally when a custom setter is defined.`);
         }
+        this.validator(value, undefined, this.endpoint);
 
-        this.schema.validate(value);
-
-        if (this.validator !== undefined) {
-            this.validator(value, undefined, this.endpoint);
-        }
-
-        const oldData = fabric.getScopedClusterDataValue<{ value: T }>(this.cluster, this.name);
-        const oldValue = oldData?.value ?? this.defaultValue;
-        if (!isDeepEqual(value, oldValue)) {
-            this.version++;
+        const oldValue = this.getLocalForFabric(fabric);
+        const valueChanged = !isDeepEqual(value, oldValue);
+        if (valueChanged) {
             fabric.setScopedClusterDataValue(this.cluster, this.name, { value });
-            this.matterListeners.forEach(listener => listener(value, this.version)); // TODO Make callbacks sense without fabric, but then they would have other signature?
         }
-        this.listeners.forEach(listener => listener(value, oldValue)); // TODO Make callbacks sense without fabric, but then they would have other signature?
-    }
-
-    /**
-     * Get the value of the attribute. This method is used by the Interaction model to read the value of the attribute
-     * and includes the ACL check. It should not be used locally in the code!
-     * If a getter is defined the value is determined by that getter method.
-     */
-    protected override getRemote(session: Session<MatterDevice>, isFabricFiltered: boolean): T {
-        if (session === undefined) throw new FabricScopeError("Session is required for fabric scoped attributes");
-
-        if (isFabricFiltered) {
-            return this.getLocalForFabric((session as SecureSession<MatterDevice>).getAssociatedFabric());
-        } else {
-            const fabrics = session.getContext().getFabrics();
-            const values = new Array<any>();
-            for (const fabric of fabrics) {
-                const value = this.getLocalForFabric(fabric);
-                if (!Array.isArray(value)) {
-                    throw new FabricScopeError("Fabric scoped attributes can only be read for all fabrics if they are arrays.");
-                }
-                values.push(...value);
-            }
-            return values as T;
-        }
+        this.handleVersionAndTriggerListeners(value, oldValue, valueChanged); // TODO Make callbacks sense without fabric, but then they would have other signature?
     }
 
     /**
@@ -450,10 +520,9 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T>{
      * If a getter is defined this method returns an error and the value should be retrieved directly internally.
      */
     getLocalForFabric(fabric: Fabric): T {
-        if (this.getter !== undefined) {
-            throw new Error("Getter method is not allowed to get fabric scoped attributes locally.");
+        if (this.isCustomGetter) {
+            throw new FabricScopeError(`Fabric scoped attribute "${this.name}" can not be read locally when a custom getter is defined.`);
         }
-
         const data = fabric.getScopedClusterDataValue<{ value: T }>(this.cluster, this.name);
         return data?.value ?? this.defaultValue;
     }
