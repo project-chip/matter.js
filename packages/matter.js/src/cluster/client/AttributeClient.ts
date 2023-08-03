@@ -9,6 +9,8 @@ import { Attribute } from "../Cluster.js";
 import { TlvSchema } from "../../tlv/TlvSchema.js";
 import { Globals } from "../../model/index.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
+import { NoAssociatedFabricError } from "../../session/SecureSession.js";
+import { tryCatch } from "../../common/TryCatchHandler.js";
 
 export class AttributeClient<T> {
     private readonly isWritable: boolean;
@@ -46,17 +48,15 @@ export class AttributeClient<T> {
                 <number>Globals.FabricIndex.id,
                 (existingFieldIndex) => existingFieldIndex === FabricIndex.OMIT_FABRIC
             );
-            try {
-                const sessionFabric = interactionClient.getSession().getAssociatedFabric();
+            value = tryCatch(() => {
+                const sessionFabric = interactionClient.session.getAssociatedFabric();
                 // also remove fabric index if it is the same as the session fabric
-                value = this.schema.removeField(
+                return this.schema.removeField(
                     value,
                     <number>Globals.FabricIndex.id,
                     (existingFieldIndex) => existingFieldIndex.index === sessionFabric.fabricIndex.index
                 );
-            } catch {
-                // When no fabric is assigned to session we can not remove field data
-            }
+            }, NoAssociatedFabricError, value);
         }
 
         return await interactionClient.set<T>(this.endpointId, this.clusterId, this.attribute, value);

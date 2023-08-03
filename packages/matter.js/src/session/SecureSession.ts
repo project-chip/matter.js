@@ -21,6 +21,8 @@ const logger = Logger.get("SecureSession");
 const SESSION_KEYS_INFO = ByteArray.fromString("SessionKeys");
 const SESSION_RESUMPTION_KEYS_INFO = ByteArray.fromString("SessionResumptionKeys");
 
+export class NoAssociatedFabricError extends Error { }
+
 export class SecureSession<T> implements Session<T> {
     private readonly subscriptions = new Array<SubscriptionHandler>();
     private timestamp = Time.nowMs();
@@ -92,7 +94,7 @@ export class SecureSession<T> implements Session<T> {
     }
 
     getAssociatedFabric(): Fabric {
-        if (this.fabric === undefined) throw new Error("Session needs to have an associated Fabric");
+        if (this.fabric === undefined) throw new NoAssociatedFabricError("Session needs to have an associated Fabric");
         return this.fabric;
     }
 
