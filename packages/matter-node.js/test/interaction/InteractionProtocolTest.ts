@@ -398,7 +398,7 @@ describe("InteractionProtocol", () => {
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = interactionProtocol.handleReadRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, READ_REQUEST);
+            const result = interactionProtocol.handleReadRequest(({ channel: { name: "test" } }) as MessageExchange<any>, READ_REQUEST);
 
             assert.deepEqual(result, READ_RESPONSE);
         });
@@ -435,7 +435,7 @@ describe("InteractionProtocol", () => {
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, WRITE_REQUEST);
+            const result = interactionProtocol.handleWriteRequest(({ channel: { name: "test" } }) as MessageExchange<any>, WRITE_REQUEST);
 
             assert.deepEqual(result, WRITE_RESPONSE);
             assert.equal(basicCluster.attributes.nodeLabel.getLocal(), "test");
@@ -462,8 +462,8 @@ describe("InteractionProtocol", () => {
             interactionProtocol.setRootEndpoint(endpoint);
 
             const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ByteArray.fromHex("00"), ByteArray.fromHex("00"), { privateKey: ByteArray.fromHex("00"), publicKey: ByteArray.fromHex("00") }, new VendorId(1), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), "");
-            const testSession = await SecureSession.create({} as any, 1, testFabric, new NodeId(BigInt(1)), 1, ByteArray.fromHex("00"), ByteArray.fromHex("00"), false, false, () => {/* nothing */ }, 1000, 1000);
-            const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" }, session: testSession }) as unknown as MessageExchange<any>, CHUNKED_ARRAY_WRITE_REQUEST);
+            const testSession = await SecureSession.create({ getFabrics: () => [] } as any, 1, testFabric, new NodeId(BigInt(1)), 1, ByteArray.fromHex("00"), ByteArray.fromHex("00"), false, false, () => {/* nothing */ }, 1000, 1000);
+            const result = interactionProtocol.handleWriteRequest(({ channel: { name: "test" }, session: testSession }) as unknown as MessageExchange<any>, CHUNKED_ARRAY_WRITE_REQUEST);
 
             assert.deepEqual(result, CHUNKED_ARRAY_WRITE_RESPONSE);
             assert.deepEqual(accessControlCluster.attributes.acl.getLocalForFabric(testFabric), [
@@ -521,7 +521,7 @@ describe("InteractionProtocol", () => {
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, MASS_WRITE_REQUEST);
+            const result = interactionProtocol.handleWriteRequest(({ channel: { name: "test" } }) as MessageExchange<any>, MASS_WRITE_REQUEST);
 
             assert.deepEqual(result, MASS_WRITE_RESPONSE);
             assert.equal(basicCluster.attributes.vendorName.getLocal(), "vendor");
@@ -556,7 +556,7 @@ describe("InteractionProtocol", () => {
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = await interactionProtocol.handleInvokeRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS, {} as Message);
+            const result = await interactionProtocol.handleInvokeRequest(({ channel: { name: "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS, {} as Message);
 
             assert.deepEqual(result, INVOKE_COMMAND_RESPONSE);
             assert.equal(onOffState, true);
@@ -587,7 +587,7 @@ describe("InteractionProtocol", () => {
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = await interactionProtocol.handleInvokeRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_WITH_NO_ARGS, {} as Message);
+            const result = await interactionProtocol.handleInvokeRequest(({ channel: { name: "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_WITH_NO_ARGS, {} as Message);
 
             assert.deepEqual(result, INVOKE_COMMAND_RESPONSE);
             assert.equal(onOffState, true);
@@ -617,7 +617,7 @@ describe("InteractionProtocol", () => {
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = await interactionProtocol.handleInvokeRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_INVALID, {} as Message);
+            const result = await interactionProtocol.handleInvokeRequest(({ channel: { name: "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_INVALID, {} as Message);
 
             assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_INVALID);
             assert.equal(onOffState, false);
@@ -651,7 +651,7 @@ describe("InteractionProtocol", () => {
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = await interactionProtocol.handleInvokeRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_MULTI, {} as Message);
+            const result = await interactionProtocol.handleInvokeRequest(({ channel: { name: "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_MULTI, {} as Message);
 
             assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_MULTI);
             assert.equal(triggeredOn, true);

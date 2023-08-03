@@ -438,7 +438,7 @@ describe("Integration Test", () => {
             const { promise: firstPromise, resolver: firstResolver } = await getPromiseResolver<{ value: boolean, time: number }>();
             let callback = (value: boolean) => firstResolver({ value, time: Time.nowMs() });
 
-            //onOffClient.attributes.onOff.addListener(value => callback(value));
+            //onOffClient.attributes.onOff.addValueSetListener(value => callback(value));
             //await onOffClient.attributes.onOff.subscribe(0, 5);
             await onOffClient.subscribeOnOffAttribute(value => callback(value), 0, 5);
 
@@ -488,7 +488,7 @@ describe("Integration Test", () => {
             const { promise: firstPromise, resolver: firstResolver } = await getPromiseResolver<{ value: number, time: number }>();
             const callback = (value: number) => firstResolver({ value, time: Time.nowMs() });
 
-            //onOffClient.attributes.onOff.addListener(value => callback(value));
+            //onOffClient.attributes.onOff.addValueSetListener(value => callback(value));
             //await onOffClient.attributes.onOff.subscribe(0, 5);
             await scenesClient.subscribeSceneCountAttribute(value => callback(value), 0, 5);
 

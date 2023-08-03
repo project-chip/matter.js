@@ -38,7 +38,7 @@ describe("AttributeServerTest", () => {
 
         it("should throw an error if initialized with a version", () => {
             const server = new FixedAttributeServer(1, "test", TlvUInt8, false, false, 3);
-            assert.throws(() => server.init(2, 1), { message: "Version is not supported on fixed attributes." });
+            assert.throws(() => server.init(2, 1), { message: 'Version is not supported on fixed attribute "test".' });
         });
     });
 
@@ -54,8 +54,8 @@ describe("AttributeServerTest", () => {
             let valueTriggered2: number | undefined = undefined;
             let oldValueTriggered2: number | undefined = undefined;
             const server = new AttributeServer(1, "test", TlvUInt8, false, false, 3,);
-            server.addMatterListener((value, version) => { valueTriggered = value; versionTriggered = version; });
-            server.addListener((newValue, oldValue) => { valueTriggered2 = newValue; oldValueTriggered2 = oldValue; });
+            server.addValueChangeListener((value, version) => { valueTriggered = value; versionTriggered = version; });
+            server.addValueSetListener((newValue, oldValue) => { valueTriggered2 = newValue; oldValueTriggered2 = oldValue; });
 
             assert.strictEqual(server.getLocal(), 3);
             server.setLocal(4);
@@ -70,8 +70,8 @@ describe("AttributeServerTest", () => {
             let valueTriggered2: number | undefined = undefined;
             let oldValueTriggered2: number | undefined = undefined;
             const server = new AttributeServer(1, "test", TlvUInt8, false, false, 3,);
-            server.addMatterListener(() => { throw new Error("Should not be triggered."); });
-            server.addListener((newValue, oldValue) => { valueTriggered2 = newValue; oldValueTriggered2 = oldValue; });
+            server.addValueChangeListener(() => { throw new Error("Should not be triggered."); });
+            server.addValueSetListener((newValue, oldValue) => { valueTriggered2 = newValue; oldValueTriggered2 = oldValue; });
 
             assert.strictEqual(server.getLocal(), 3);
             server.setLocal(3);
@@ -83,7 +83,7 @@ describe("AttributeServerTest", () => {
         it("should throw an error if the value is set non locally and not writable", () => {
             const server = new AttributeServer(1, "test", TlvUInt8, false, false, 3,);
             assert.strictEqual(server.getLocal(), 3);
-            assert.throws(() => server.set(4, {} as SecureSession<MatterDevice>), { message: "(136) Attribute test is not writable." });
+            assert.throws(() => server.set(4, {} as SecureSession<MatterDevice>), { message: '(136) Attribute "test" is not writable.' });
         });
 
         it("should return the value from getter", () => {
@@ -125,8 +125,8 @@ describe("AttributeServerTest", () => {
             let valueTriggered2: number | undefined = undefined;
             let oldValueTriggered2: number | undefined = undefined;
             const server = new AttributeServer(1, "test", TlvUInt8, false, false, 3, () => 4, (value) => { valueSet = value; return true; });
-            server.addMatterListener((value, version) => { valueTriggered = value; versionTriggered = version; });
-            server.addListener((newValue, oldValue) => { valueTriggered2 = newValue; oldValueTriggered2 = oldValue; });
+            server.addValueChangeListener((value, version) => { valueTriggered = value; versionTriggered = version; });
+            server.addValueSetListener((newValue, oldValue) => { valueTriggered2 = newValue; oldValueTriggered2 = oldValue; });
             assert.deepEqual(server.getWithVersion({} as SecureSession<MatterDevice>, false), { value: 4, version: 0 });
             server.setLocal(5);
             assert.deepEqual(server.getWithVersion({} as SecureSession<MatterDevice>, false), { value: 4, version: 1 });
@@ -142,8 +142,8 @@ describe("AttributeServerTest", () => {
             let valueTriggered2: number | undefined = undefined;
             let oldValueTriggered2: number | undefined = undefined;
             const server = new AttributeServer(1, "test", TlvUInt8, false, false, 3, () => 4, (value) => { valueSet = value; return false; });
-            server.addMatterListener(() => { throw new Error("Should not be triggered"); });
-            server.addListener((newValue, oldValue) => { valueTriggered2 = newValue; oldValueTriggered2 = oldValue; });
+            server.addValueChangeListener(() => { throw new Error("Should not be triggered"); });
+            server.addValueSetListener((newValue, oldValue) => { valueTriggered2 = newValue; oldValueTriggered2 = oldValue; });
             assert.deepEqual(server.getWithVersion({} as SecureSession<MatterDevice>, false), { value: 4, version: 0 });
             server.setLocal(5);
             assert.deepEqual(server.getWithVersion({} as SecureSession<MatterDevice>, false), { value: 4, version: 0 });
@@ -167,44 +167,38 @@ describe("AttributeServerTest", () => {
             assert.strictEqual(server.getLocal(), 5);
         });
 
-        it("should throw an error if initialized with undefined value", () => {
+        it("if initialized with undefined value the default value uis used", () => {
             const server = new AttributeServer(1, "test", TlvUInt8, false, false, 3);
-            assert.throws(() => server.init(undefined, 1), { message: "Can not initialize attributes with undefined value." });
+            server.init(undefined, 1);
+            assert.strictEqual(server.getLocal(), 3);
         });
 
-        it("should throw an error if initialized with getter provided", () => {
+        it("use getter value if initialized with undefined", () => {
             const server = new AttributeServer(1, "test", TlvUInt8, false, false, 3, () => 4);
-            assert.throws(() => server.init(1, 1), { message: "Can not initialize attributes with getter or setter methods and a value." });
+            server.init(1, 1);
+            assert.strictEqual(server.getLocal(), 4);
         });
 
-        it("should throw an error if initialized with setter provided", () => {
-            const server = new AttributeServer(1, "test", TlvUInt8, false, false, 3, undefined, () => true);
-            assert.throws(() => server.init(1, 1), { message: "Can not initialize attributes with getter or setter methods and a value." });
+        it("setter is not called when initialized", () => {
+            let setterCalled = false;
+            const server = new AttributeServer(1, "test", TlvUInt8, false, false, 3, undefined, () => { setterCalled = true; return true; });
+            server.init(1, 1);
+            assert.strictEqual(setterCalled, false);
         });
 
         it("should throw an error if default value is invalid", () => {
-            assert.throws(() => new AttributeServer(1, "test", TlvUInt8.bound({ min: 0, max: 2 }), false, false, 3), { message: "Invalid value: 3 is above the maximum, 2." });
+            assert.throws(() => new AttributeServer(1, "test", TlvUInt8.bound({ min: 0, max: 2 }), false, false, 3), { message: 'Validation error for attribute "test": Invalid value: 3 is above the maximum, 2.' });
         });
 
         it("should throw an error if set value is invalid according to schema validator", () => {
             const server = new AttributeServer(1, "test", TlvUInt8.bound({ min: 0, max: 3 }), false, false, 3, undefined, () => true);
-            assert.throws(() => server.setLocal(11), { message: "Invalid value: 11 is above the maximum, 3." });
-        });
-
-        it("should throw an error if setter and validator are both implemented", () => {
-            assert.throws(() => new AttributeServer(1, "test", TlvUInt8, false, false, 3, undefined, () => true, () => { throw new Error("Validator error") }), { message: "Validator and setter must not be implemented together." });
+            assert.throws(() => server.setLocal(11), { message: 'Validation error for attribute "test": Invalid value: 11 is above the maximum, 3.' });
         });
 
         it("should throw an error if set value is invalid according to custom validator only on set", () => {
             const server = new AttributeServer(1, "test", TlvUInt8, false, false, 3, undefined, undefined, () => { throw new Error("Validator error") });
             assert.throws(() => server.setLocal(11), { message: "Validator error" });
         });
-
-        it("should throw an error if update is used without getter", () => {
-            const server = new AttributeServer(1, "test", TlvUInt8, false, false, 3, undefined, undefined, () => { throw new Error("Validator error") });
-            assert.throws(() => server.updated({} as SecureSession<MatterDevice>), { message: "Updated can only be used if the attribute has a getter or setter method." });
-        });
-
     });
 
     describe("FabricScopedAttributeServer", () => {
@@ -240,8 +234,8 @@ describe("AttributeServerTest", () => {
             testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
 
             const server = new FabricScopedAttributeServer(1, "test", TlvUInt8, true, false, 3, BasicInformationCluster);
-            server.addMatterListener((value, version) => { valueTriggered = value; versionTriggered = version; });
-            server.addListener((newValue, oldValue) => { valueTriggered2 = newValue; oldValueTriggered2 = oldValue; });
+            server.addValueChangeListener((value, version) => { valueTriggered = value; versionTriggered = version; });
+            server.addValueSetListener((newValue, oldValue) => { valueTriggered2 = newValue; oldValueTriggered2 = oldValue; });
 
             server.setLocalForFabric(7, testFabric)
             assert.strictEqual(server.getLocalForFabric(testFabric), 7);
@@ -259,8 +253,8 @@ describe("AttributeServerTest", () => {
             testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
 
             const server = new FabricScopedAttributeServer(1, "test", TlvUInt8, true, false, 3, BasicInformationCluster);
-            server.addMatterListener(() => { throw new Error("Should not be triggered"); });
-            server.addListener((newValue, oldValue) => { valueTriggered2 = newValue; oldValueTriggered2 = oldValue; });
+            server.addValueChangeListener(() => { throw new Error("Should not be triggered"); });
+            server.addValueSetListener((newValue, oldValue) => { valueTriggered2 = newValue; oldValueTriggered2 = oldValue; });
 
             server.setLocalForFabric(5, testFabric)
             assert.strictEqual(server.getLocalForFabric(testFabric), 5);
@@ -270,7 +264,7 @@ describe("AttributeServerTest", () => {
         });
 
         it("should throw an error if only getter is implemented but writable", () => {
-            assert.throws(() => new FabricScopedAttributeServer(1, "test", TlvUInt8, true, false, 3, BasicInformationCluster, () => 7), { message: "Getter and setter must be implemented together when attribute is writeable." });
+            assert.throws(() => new FabricScopedAttributeServer(1, "test", TlvUInt8, true, false, 3, BasicInformationCluster, () => 7), { message: 'Getter and setter must be implemented together writeable fabric scoped attribute "test".' });
         });
 
         it("should throw an error when trying to get getter method value locally", () => {
@@ -278,7 +272,7 @@ describe("AttributeServerTest", () => {
             testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
 
             const server = new FabricScopedAttributeServer(1, "test", TlvUInt8, false, false, 3, BasicInformationCluster, () => 7);
-            assert.throws(() => server.getLocalForFabric(testFabric), { message: "Getter method is not allowed to get fabric scoped attributes locally." });
+            assert.throws(() => server.getLocalForFabric(testFabric), { message: 'Fabric scoped attribute "test" can not be read locally when a custom getter is defined.' });
         });
 
         it("should return value from getter when used non-locally", () => {
@@ -300,8 +294,8 @@ describe("AttributeServerTest", () => {
 
             const server = new FabricScopedAttributeServer(1, "test", TlvUInt8, true, false, 3, BasicInformationCluster, () => 7, () => true);
             server.init(undefined, 2);
-            server.addMatterListener((value, version) => { valueTriggered = value; versionTriggered = version; });
-            server.addListener((newValue, oldValue) => { valueTriggered2 = newValue; oldValueTriggered2 = oldValue; });
+            server.addValueChangeListener((value, version) => { valueTriggered = value; versionTriggered = version; });
+            server.addValueSetListener((newValue, oldValue) => { valueTriggered2 = newValue; oldValueTriggered2 = oldValue; });
 
             server.set(9, testSession);
             assert.strictEqual(server.get(testSession, false), 7);

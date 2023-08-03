@@ -318,11 +318,11 @@ describe("ClusterFactory", () => {
                 if (value === undefined || attr1 == undefined || attr2 == undefined || session === undefined || endpoint === undefined) throw new Error("Missing attribute");
                 return true;
             },
-        }, 
-        {
-            ev1: true,
-            ev2: true,
-        });
+        },
+            {
+                ev1: true,
+                ev2: true,
+            });
     })
 
     /**
