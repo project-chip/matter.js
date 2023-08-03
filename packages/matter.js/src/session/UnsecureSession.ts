@@ -47,7 +47,7 @@ export class UnsecureSession<T> implements Session<T> {
         throw new Error("Not supported on an unsecure session");
     }
 
-    getName() {
+    get name() {
         return "unsecure";
     }
 

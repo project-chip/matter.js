@@ -227,7 +227,7 @@ export class NobleBleChannel implements Channel<ByteArray> {
     }
 
     // Channel<ByteArray>
-    getName() {
+    get name() {
         return `ble://${this.peripheral.address}`;
     }
 

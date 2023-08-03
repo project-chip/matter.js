@@ -59,7 +59,7 @@ export class SecureChannelMessenger<ContextT> {
     }
 
     getChannelName() {
-        return this.exchange.channel.channel.getName();
+        return this.exchange.channel.channel.name;
     }
 
     close() {

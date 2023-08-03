@@ -28,8 +28,9 @@ interface MrpParameters {
 }
 
 export interface Session<T> {
+    name: string
+
     isSecure(): boolean;
-    getName(): string;
     decode(packet: Packet): Message;
     encode(message: Message): Packet;
     getMrpParameters(): MrpParameters;

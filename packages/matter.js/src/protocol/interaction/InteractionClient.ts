@@ -439,7 +439,7 @@ export class InteractionClient {
         }
     }
 
-    getSession() {
-        return this.exchangeProvider.getSession();
+    get session() {
+        return this.exchangeProvider.session;
     }
 }

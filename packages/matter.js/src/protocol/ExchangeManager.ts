@@ -35,12 +35,8 @@ export class MessageChannel<ContextT> implements Channel<Message> {
         return this.channel.send(bytes);
     }
 
-    getName() {
-        return `${this.channel.getName()} on session ${this.session.getName()}`;
-    }
-
-    getSession() {
-        return this.session;
+    get name() {
+        return `${this.channel.name} on session ${this.session.name}`;
     }
 
     async close() {
@@ -163,7 +159,7 @@ export class ExchangeProvider {
         return true;
     }
 
-    getSession() {
-        return this.channel.getSession();
+    get session() {
+        return this.channel.session;
     }
 }

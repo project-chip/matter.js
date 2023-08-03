@@ -98,7 +98,7 @@ export class SecureSession<T> implements Session<T> {
         return this.fabric;
     }
 
-    getName() {
+    get name() {
         return `secure/${this.id}`;
     }
 
@@ -129,7 +129,7 @@ export class SecureSession<T> implements Session<T> {
 
     addSubscription(subscription: SubscriptionHandler) {
         this.subscriptions.push(subscription);
-        logger.debug(`Added subscription ${subscription.subscriptionId} to ${this.getName()}/${this.id}`);
+        logger.debug(`Added subscription ${subscription.subscriptionId} to ${this.name}/${this.id}`);
     }
 
     clearSubscriptions() {
