@@ -206,7 +206,7 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
 // For some reason, "default" fabric access appears in an informational row
 // instead of the access column in many of the core definitions.  Fix this.
 //
-// We also use the presence of this record to add the implicity FabrixIndex
+// We also use the presence of this record to add the implicit FabrixIndex
 // field
 function applyAccessNotes(fields?: HtmlReference, records?: { id: number, access?: string }[]) {
     if (!fields?.table?.notes.length || !records) {

@@ -44,6 +44,7 @@ export interface AttributeStatus {
     status: StatusCode,
 }
 
+// TODO Split out into own File
 export function ClusterClient<
     F extends BitSchema,
     A extends Attributes,
