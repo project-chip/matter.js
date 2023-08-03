@@ -12,6 +12,7 @@ import { TlvCodec, TlvLength, TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 import { TlvWrapper } from "./TlvWrapper.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { ValidationError } from "../common/MatterError.js";
 
 /**
  * Schema to encode an unsigned integer in TLV.
@@ -40,13 +41,13 @@ export class TlvNumericSchema<T extends bigint | number> extends TlvSchema<T> {
     }
 
     override validate(value: T): void {
-        if (typeof value !== "number" && typeof value !== 'bigint') throw new Error(`Expected number, got ${typeof value}.`);
+        if (typeof value !== "number" && typeof value !== 'bigint') throw new ValidationError(`Expected number, got ${typeof value}.`);
         this.validateBoundaries(value);
     }
 
     validateBoundaries(value: T): void {
-        if (this.min !== undefined && value < this.min) throw new Error(`Invalid value: ${value} is below the minimum, ${this.min}.`);
-        if (this.max !== undefined && value > this.max) throw new Error(`Invalid value: ${value} is above the maximum, ${this.max}.`);
+        if (this.min !== undefined && value < this.min) throw new ValidationError(`Invalid value: ${value} is below the minimum, ${this.min}.`);
+        if (this.max !== undefined && value > this.max) throw new ValidationError(`Invalid value: ${value} is above the maximum, ${this.max}.`);
     }
 
     /** Restrict value range. */
@@ -85,7 +86,7 @@ export class TlvNumberSchema extends TlvNumericSchema<number> {
     }
 
     override validate(value: number): void {
-        if (typeof value !== "number") throw new Error(`Expected number, got ${typeof value}.`);
+        if (typeof value !== "number") throw new ValidationError(`Expected number, got ${typeof value}.`);
         this.validateBoundaries(value);
     }
 }

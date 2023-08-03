@@ -7,6 +7,7 @@
 import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvStream, TlvWriter } from "./TlvSchema.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { ValidationError } from "../common/MatterError.js";
 
 type LengthConstraints = {
     minLength?: number,
@@ -69,9 +70,9 @@ export class ArraySchema<T> extends TlvSchema<T[]> {
     }
 
     override validate(data: T[]): void {
-        if (!Array.isArray(data)) throw new Error(`Expected array, got ${typeof data}.`);
-        if (data.length > this.maxLength) throw new Error(`Array is too long: ${data.length}, max ${this.maxLength}.`);
-        if (data.length < this.minLength) throw new Error(`Array is too short: ${data.length}, min ${this.minLength}.`);
+        if (!Array.isArray(data)) throw new ValidationError(`Expected array, got ${typeof data}.`);
+        if (data.length > this.maxLength) throw new ValidationError(`Array is too long: ${data.length}, max ${this.maxLength}.`);
+        if (data.length < this.minLength) throw new ValidationError(`Array is too short: ${data.length}, min ${this.minLength}.`);
         data.forEach(element => this.elementSchema.validate(element));
     }
 

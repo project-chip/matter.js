@@ -9,6 +9,7 @@ import { TlvAny } from "./TlvAny.js";
 import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { ValidationError } from "../common/MatterError.js";
 
 export interface FieldType<T> {
     id: number,
@@ -103,7 +104,7 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
                 if (optional) {
                     continue;
                 }
-                throw new Error(`Missing mandatory field ${name}`);
+                throw new ValidationError(`Missing mandatory field ${name}`);
             }
             schema.validate((value as any)[name]);
         }
