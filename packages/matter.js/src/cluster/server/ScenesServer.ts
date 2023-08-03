@@ -8,8 +8,7 @@ import { ScenesCluster, Scenes } from "../definitions/ScenesCluster.js";
 import { GroupId } from "../../datatype/GroupId.js";
 import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
 import { ClusterServerHandlers } from "./ClusterServer.js";
-import { MatterDevice } from "../../MatterDevice.js";
-import { SecureSession } from "../../session/SecureSession.js";
+import { assertSecureSession } from "../../session/SecureSession.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { SessionType } from "../../codec/MessageCodec.js";
 import { StatusResponseError } from "../../protocol/interaction/InteractionMessenger.js";
@@ -153,9 +152,10 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                 // TODO: When Unicast we generate a response, else not
             }
 
-            const result = addSceneLogic(endpoint.getId(), groupId, sceneId, transitionTime, sceneName, extensionFieldSets, 0, (session as SecureSession<MatterDevice>).getAssociatedFabric());
+            assertSecureSession(session);
+            const result = addSceneLogic(endpoint.getId(), groupId, sceneId, transitionTime, sceneName, extensionFieldSets, 0, session.getAssociatedFabric());
             if (result.status === StatusCode.Success) {
-                sceneCount.updated(session as SecureSession<MatterDevice>);
+                sceneCount.updated(session);
             }
             return result;
         },
@@ -167,7 +167,8 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                 // TODO: When Unicast we generate a response, else not
             }
 
-            const fabric = (session as SecureSession<MatterDevice>).getAssociatedFabric();
+            assertSecureSession(session);
+            const fabric = session.getAssociatedFabric();
 
             if (groupId.id !== 0 && !GroupsManager.hasGroup(fabric, endpoint.getId(), groupId)) {
                 return { status: StatusCode.InvalidCommand, groupId, sceneId };
@@ -188,14 +189,15 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                 // TODO: When Unicast we generate a response, else not
             }
 
-            const fabric = (session as SecureSession<MatterDevice>).getAssociatedFabric();
+            assertSecureSession(session);
+            const fabric = session.getAssociatedFabric();
 
             if (groupId.id !== 0 && !GroupsManager.hasGroup(fabric, endpoint.getId(), groupId)) {
                 return { status: StatusCode.InvalidCommand, groupId, sceneId };
             }
 
             if (ScenesManager.removeScene(fabric, endpoint.getId(), groupId, sceneId)) {
-                sceneCount.updated(session as SecureSession<MatterDevice>);
+                sceneCount.updated(session);
                 return { status: StatusCode.Success, groupId, sceneId };
             }
             return { status: StatusCode.NotFound, groupId, sceneId };
@@ -207,7 +209,8 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                 // TODO: When Unicast we generate a response, else not
             }
 
-            const fabric = (session as SecureSession<MatterDevice>).getAssociatedFabric();
+            assertSecureSession(session);
+            const fabric = session.getAssociatedFabric();
 
             if (groupId.id !== 0 && !GroupsManager.hasGroup(fabric, endpoint.getId(), groupId)) {
                 return { status: StatusCode.InvalidCommand, groupId };
@@ -224,7 +227,8 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                 // TODO: When Unicast we generate a response, else not
             }
 
-            const fabric = (session as SecureSession<MatterDevice>).getAssociatedFabric();
+            assertSecureSession(session);
+            const fabric = session.getAssociatedFabric();
 
             if (groupId.id !== 0 && !GroupsManager.hasGroup(fabric, endpoint.getId(), groupId)) {
                 return { status: StatusCode.InvalidCommand, groupId, sceneId };
@@ -257,13 +261,14 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
 
             currentScene.setLocal(sceneId);
             currentGroup.setLocal(groupId);
-            sceneValid.updated(session as SecureSession<MatterDevice>);
+            sceneValid.updated(session);
 
             return { status: StatusCode.Success, groupId, sceneId };
         },
 
         recallScene: async ({ request: { groupId, sceneId, transitionTime }, attributes: { currentScene, currentGroup, sceneValid }, session, endpoint }) => {
-            const fabric = (session as SecureSession<MatterDevice>).getAssociatedFabric();
+            assertSecureSession(session);
+            const fabric = session.getAssociatedFabric();
 
             if (groupId.id !== 0 && !GroupsManager.hasGroup(fabric, endpoint.getId(), groupId)) {
                 throw new StatusResponseError(`Group ${groupId.id} does not exist on this endpoint`, StatusCode.InvalidCommand);
@@ -285,7 +290,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             });
             currentScene.setLocal(sceneId);
             currentGroup.setLocal(groupId);
-            sceneValid.updated(session as SecureSession<MatterDevice>);
+            sceneValid.updated(session);
         },
 
         getSceneMembership: async ({ request: { groupId }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
@@ -295,7 +300,8 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                 // TODO: When Unicast we generate a response, else not
             }
 
-            const fabric = (session as SecureSession<MatterDevice>).getAssociatedFabric();
+            assertSecureSession(session);
+            const fabric = session.getAssociatedFabric();
 
             const endpointScenes = ScenesManager.getAllScenes(fabric, endpoint.getId(), groupId);
             const capacity = endpointScenes.length < 0xff ? 0xfe - endpointScenes.length : 0;
@@ -314,9 +320,10 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                 // TODO: When Unicast we generate a response, else not
             }
 
-            const result = addSceneLogic(endpoint.getId(), groupId, sceneId, Math.floor(transitionTime / 10), sceneName, extensionFieldSets, transitionTime % 10, (session as SecureSession<MatterDevice>).getAssociatedFabric());
+            assertSecureSession(session);
+            const result = addSceneLogic(endpoint.getId(), groupId, sceneId, Math.floor(transitionTime / 10), sceneName, extensionFieldSets, transitionTime % 10, session.getAssociatedFabric());
             if (result.status === StatusCode.Success) {
-                sceneCount.updated(session as SecureSession<MatterDevice>);
+                sceneCount.updated(session);
             }
             return result;
         },
@@ -328,7 +335,8 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                 // TODO: When Unicast we generate a response, else not
             }
 
-            const fabric = (session as SecureSession<MatterDevice>).getAssociatedFabric();
+            assertSecureSession(session);
+            const fabric = session.getAssociatedFabric();
 
             if (groupId.id !== 0 && !GroupsManager.hasGroup(fabric, endpoint.getId(), groupId)) {
                 return { status: StatusCode.InvalidCommand, groupId, sceneId };
@@ -355,7 +363,8 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                 // TODO: When Unicast we generate a response, else not
             }
 
-            const fabric = (session as SecureSession<MatterDevice>).getAssociatedFabric();
+            assertSecureSession(session);
+            const fabric = session.getAssociatedFabric();
 
             if (groupIdentifierFrom.id !== 0 && !GroupsManager.hasGroup(fabric, endpoint.getId(), groupIdentifierFrom)) {
                 return { status: StatusCode.InvalidCommand, groupIdentifierFrom, sceneIdentifierFrom };
@@ -392,7 +401,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                 }]);
             }
 
-            sceneCount.updated(session as SecureSession<MatterDevice>);
+            sceneCount.updated(session);
 
             return { status: StatusCode.Success, groupIdentifierFrom, sceneIdentifierFrom };
         },
@@ -401,7 +410,8 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             if (session === undefined || endpoint === undefined) {
                 return false;
             }
-            const fabric = (session as SecureSession<MatterDevice>).getAssociatedFabric();
+            assertSecureSession(session);
+            const fabric = session.getAssociatedFabric();
 
             const existingSceneEntry = ScenesManager.getSceneEntry(fabric, endpoint.getId(), currentGroup.getLocal(), currentScene.getLocal());
             if (existingSceneEntry === undefined) {
@@ -425,7 +435,8 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                 throw new Error("getSceneCount: session or endpoint undefined");
             }
 
-            const fabric = (session as SecureSession<MatterDevice>).getAssociatedFabric();
+            assertSecureSession(session);
+            const fabric = session.getAssociatedFabric();
             const endpointScenes = ScenesManager.getEndpointScenes(fabric, endpoint.getId());
             if (endpointScenes === undefined) return 0;
             let sceneCount = 0;

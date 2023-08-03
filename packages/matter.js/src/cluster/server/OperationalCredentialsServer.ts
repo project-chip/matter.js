@@ -8,7 +8,7 @@
 
 import { Crypto } from "../../crypto/Crypto.js";
 import { MatterDevice } from "../../MatterDevice.js";
-import { SecureSession } from "../../session/SecureSession.js";
+import { assertSecureSession, SecureSession } from "../../session/SecureSession.js";
 import { ByteArray } from "../../util/ByteArray.js";
 import { OperationalCredentials, OperationalCredentialsCluster } from "../definitions/OperationalCredentialsCluster.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
@@ -48,14 +48,16 @@ function signWithDeviceKey(conf: OperationalCredentialsServerConf, session: Secu
 
 export const OperationalCredentialsClusterHandler: (conf: OperationalCredentialsServerConf) => ClusterServerHandlers<typeof OperationalCredentialsCluster> = (conf) => ({
     attestationRequest: async ({ request: { attestationNonce }, session }) => {
+        assertSecureSession(session);
         const elements = TlvAttestation.encode({ declaration: conf.certificationDeclaration, attestationNonce, timestamp: 0 });
-        return { attestationElements: elements, attestationSignature: signWithDeviceKey(conf, session as SecureSession<MatterDevice>, elements) };
+        return { attestationElements: elements, attestationSignature: signWithDeviceKey(conf, session, elements) };
     },
 
     csrRequest: async ({ request: { csrNonce }, session }) => {
+        assertSecureSession(session);
         const certSigningRequest = session.getContext().getFabricBuilder().createCertificateSigningRequest();
         const nocsrElements = TlvCertSigningRequest.encode({ certSigningRequest, csrNonce });
-        return { nocsrElements, attestationSignature: signWithDeviceKey(conf, session as SecureSession<MatterDevice>, nocsrElements) };
+        return { nocsrElements, attestationSignature: signWithDeviceKey(conf, session, nocsrElements) };
     },
 
     certificateChainRequest: async ({ request: { certificateType } }) => {
@@ -82,11 +84,12 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         const fabric = await fabricBuilder.build();
         await device.addFabric(fabric);
 
+        assertSecureSession(session);
         // Update connected attributes
-        nocs.updated(session as SecureSession<MatterDevice>);
-        commissionedFabrics.updated(session as SecureSession<MatterDevice>);
-        fabrics.updated(session as SecureSession<MatterDevice>);
-        trustedRootCertificates.updated(session as SecureSession<MatterDevice>);
+        nocs.updated(session);
+        commissionedFabrics.updated(session);
+        fabrics.updated(session);
+        trustedRootCertificates.updated(session);
 
         // TODO: create ACL with caseAdminNode
         console.log("addOperationalCert success")
@@ -139,14 +142,13 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
     },
 
     updateFabricLabel: async ({ request: { label }, attributes: { fabrics }, session }) => {
-        if (!session.isSecure()) throw new Error("updateOperationalCert should be called on a secure session.");
-        const secureSession = session as SecureSession<MatterDevice>;
-        const fabric = secureSession.getFabric();
+        assertSecureSession(session, "updateOperationalCert should be called on a secure session.");
+        const fabric = session.getFabric();
         if (fabric === undefined) throw new Error("updateOperationalCert on a session linked to a fabric.");
 
         fabric.setLabel(label);
 
-        fabrics.updated(session as SecureSession<MatterDevice>);
+        fabrics.updated(session);
 
         return { statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok };
     },
@@ -162,10 +164,11 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
 
         fabric.remove();
 
-        nocs.updated(session as SecureSession<MatterDevice>);
-        commissionedFabrics.updated(session as SecureSession<MatterDevice>);
-        fabrics.updated(session as SecureSession<MatterDevice>);
-        trustedRootCertificates.updated(session as SecureSession<MatterDevice>);
+        assertSecureSession(session);
+        nocs.updated(session);
+        commissionedFabrics.updated(session);
+        fabrics.updated(session);
+        trustedRootCertificates.updated(session);
 
         return { statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok, fabricIndex, debugText: "Fabric removed" };
     },

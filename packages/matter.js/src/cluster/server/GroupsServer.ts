@@ -8,8 +8,7 @@ import { GroupsCluster } from "../definitions/GroupsCluster.js";
 import { GroupId } from "../../datatype/GroupId.js";
 import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
 import { ClusterServerHandlers } from "./ClusterServer.js";
-import { MatterDevice } from "../../MatterDevice.js";
-import { SecureSession } from "../../session/SecureSession.js";
+import { assertSecureSession } from "../../session/SecureSession.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { SessionType } from "../../codec/MessageCodec.js";
 import { ScenesManager } from "./ScenesServer.js";
@@ -85,7 +84,8 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
 
     return {
         addGroup: async ({ request: { groupId, groupName }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
-            return addGroupLogic(groupId, groupName, sessionType, (session as SecureSession<MatterDevice>).getAssociatedFabric(), endpoint.getId());
+            assertSecureSession(session);
+            return addGroupLogic(groupId, groupName, sessionType, session.getAssociatedFabric(), endpoint.getId());
         },
 
         viewGroup: async ({ request: { groupId }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
@@ -99,7 +99,8 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
                 return { status: StatusCode.ConstraintError, groupId, groupName: '' };
             }
 
-            const groupName = GroupsManager.getGroupName((session as SecureSession<MatterDevice>).getAssociatedFabric(), endpoint.getId(), groupId);
+            assertSecureSession(session);
+            const groupName = GroupsManager.getGroupName(session.getAssociatedFabric(), endpoint.getId(), groupId);
             if (groupName !== undefined) {
                 return { status: StatusCode.Success, groupId, groupName: groupName };
             }
@@ -116,7 +117,8 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
                 throw new Error("Groupcast not supported");
             }
 
-            const endpointGroups = GroupsManager.getGroups((session as SecureSession<MatterDevice>).getAssociatedFabric(), endpoint.getId());
+            assertSecureSession(session);
+            const endpointGroups = GroupsManager.getGroups(session.getAssociatedFabric(), endpoint.getId());
             const fabricGroupsList = Array.from(endpointGroups.keys());
             const capacity = fabricGroupsList.length < 0xff ? 0xfe - fabricGroupsList.length : 0;
             if (groupList.length === 0) {
@@ -140,8 +142,9 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
                 return { status: StatusCode.ConstraintError, groupId };
             }
 
-            const fabric = (session as SecureSession<MatterDevice>).getAssociatedFabric();
-            if (GroupsManager.removeGroup((session as SecureSession<MatterDevice>).getAssociatedFabric(), endpoint.getId(), groupId)) {
+            assertSecureSession(session);
+            const fabric = session.getAssociatedFabric();
+            if (GroupsManager.removeGroup(session.getAssociatedFabric(), endpoint.getId(), groupId)) {
                 ScenesManager.removeAllScenesForGroup(fabric, endpoint.getId(), groupId.id);
                 return { status: StatusCode.Success, groupId };
             }
@@ -154,7 +157,8 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
                 // TODO: When Unicast we generate a response, else not
             }
 
-            const fabric = (session as SecureSession<MatterDevice>).getAssociatedFabric();
+            assertSecureSession(session);
+            const fabric = session.getAssociatedFabric();
             GroupsManager.removeAllGroups(fabric, endpoint.getId());
             ScenesManager.removeAllNonGlobalScenesForEndpoint(fabric, endpoint.getId());
 
@@ -170,7 +174,8 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             const identifyCluster = endpoint.getClusterServer(IdentifyCluster);
             if (identifyCluster) {
                 if (identifyCluster.attributes.identifyTime.getLocal() > 0) { // We identify ourselves currently
-                    addGroupLogic(groupId, groupName, sessionType, (session as SecureSession<MatterDevice>).getAssociatedFabric(), endpoint.getId());
+                    assertSecureSession(session);
+                    addGroupLogic(groupId, groupName, sessionType, session.getAssociatedFabric(), endpoint.getId());
                 }
             }
 

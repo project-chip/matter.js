@@ -19,7 +19,7 @@ import {
 import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
-import { SecureSession } from "../../session/SecureSession.js";
+import { assertSecureSession } from "../../session/SecureSession.js";
 import { SubscriptionHandler } from "./SubscriptionHandler.js";
 import { Message } from "../../codec/MessageCodec.js";
 import { Crypto } from "../../crypto/Crypto.js";
@@ -609,8 +609,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     async handleSubscribeRequest(exchange: MessageExchange<MatterDevice>, { minIntervalFloorSeconds, maxIntervalCeilingSeconds, attributeRequests, eventRequests, keepSubscriptions }: SubscribeRequest, messenger: InteractionServerMessenger): Promise<void> {
         logger.debug(`Received subscribe request from ${exchange.channel.getName()}`);
 
-        if (!exchange.session.isSecure()) throw new Error("Subscriptions are only implemented on secure sessions");
-        const session = exchange.session as SecureSession<MatterDevice>;
+        assertSecureSession(exchange.session, "Subscriptions are only implemented on secure sessions");
+        const session = exchange.session;
         const fabric = session.getFabric();
         if (fabric === undefined) throw new Error("Subscriptions are only implemented after a fabric has been assigned");
 
