@@ -118,6 +118,26 @@ describe("ClusterVariance", () => {
                 }
             )
         })
+
+        it("parses FOO & BAR", () => {
+            expectComponents(
+                attrs(["FOO", "BAR"], { name: "attr", conformance: "FOO & BAR" }),
+                {
+                    mandatory: ["attr"],
+                    condition: { allOf: ["FOO", "BAR"] }
+                }
+            )
+        })
+
+        it("parses FOO & BarBar", () => {
+            expectComponents(
+                attrs(["FOO", "BAR"], { name: "attr", conformance: "FOO & BarBar" }),
+                {
+                    optional: ["attr"],
+                    condition: { allOf: ["FOO"] }
+                }
+            )
+        })
     })
 })
 

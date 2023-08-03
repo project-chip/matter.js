@@ -57,7 +57,7 @@ export function camelize(name: string, upperFirst = true) {
     addPiece(i);
 
     let didFirst = false;
-    return pieces.map((piece) => {
+    let result = pieces.map((piece) => {
         let firstChar = piece[0];
         if (upperFirst || didFirst) {
             firstChar = firstChar.toUpperCase();
@@ -67,6 +67,11 @@ export function camelize(name: string, upperFirst = true) {
         }
         return `${firstChar}${piece.slice(1).toLowerCase()}`;
     }).join("");
+
+    // Special case so "100ths" doesn't become "100Ths" which is formally correct but goofy
+    result = result.replace(/(\d+)Ths/i, "$1ths");
+
+    return result;
 }
 
 /**

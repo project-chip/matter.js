@@ -60,7 +60,7 @@ const FEATURE_NAME = "[A-Z_][A-Z_]+";
 const FEATURE = `(${FEATURE_NAME})`;
 const CONJUNCT_FEATURES = `(${FEATURE_NAME}(?: & ${FEATURE_NAME})*)`;
 const DISJUNCT_FEATURES = CONJUNCT_FEATURES.replace("&", "[|,]");
-const FIELD = "[A-Z][A-Za-z_$]+";
+const FIELD = "[A-Z][A-Za-z_$]*[a-z][A-Za-z_$]*";
 const AND = " & ";
 const NOT = "!";
 

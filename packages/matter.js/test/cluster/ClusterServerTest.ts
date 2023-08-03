@@ -524,9 +524,9 @@ describe("ClusterServer structure", () => {
                         ledFeedback: false,
                     },
                     numberOfActuationsLift: 0,
-                    targetPositionLiftPercent100Ths: 0,
-                    currentPositionLiftPercent100Ths: 0,
-                    currentPositionTiltPercent100Ths: 0, // Should not be there because not valid for feature-combination
+                    targetPositionLiftPercent100ths: 0,
+                    currentPositionLiftPercent100ths: 0,
+                    currentPositionTiltPercent100ths: 0, // Should not be there because not valid for feature-combination
                 },
                 {
                     upOrOpen: async () => { /* dummy */ },
@@ -540,7 +540,7 @@ describe("ClusterServer structure", () => {
 
             assert.deepEqual(fakeLogSink, [
                 { level: Level.DEBUG, log: '1970-01-01 00:00:00.000 DEBUG InteractionProtocol InitialAttributeValue for "WindowCovering/currentPositionLiftPercentage" is optional by supportedFeatures: {"lift":true,"positionAwareLift":true} and is not set!' },
-                { level: Level.WARN, log: '1970-01-01 00:00:00.000 WARN InteractionProtocol InitialAttributeValue for "WindowCovering/currentPositionTiltPercent100Ths" is provided but it\'s neither optional or mandatory for supportedFeatures: {"lift":true,"positionAwareLift":true} but is set!' },
+                { level: Level.WARN, log: '1970-01-01 00:00:00.000 WARN InteractionProtocol InitialAttributeValue for "WindowCovering/currentPositionTiltPercent100ths" is provided but it\'s neither optional or mandatory for supportedFeatures: {"lift":true,"positionAwareLift":true} but is set!' },
                 { level: Level.WARN, log: '1970-01-01 00:00:00.000 WARN InteractionProtocol Command "WindowCovering/goToLiftPercentage" is REQUIRED by supportedFeatures: {"lift":true,"positionAwareLift":true} but is not set!' }
             ]);
         });

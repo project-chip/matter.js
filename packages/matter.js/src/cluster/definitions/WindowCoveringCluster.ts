@@ -36,7 +36,7 @@ import {
     OptionalCommand,
     Cluster as CreateCluster
 } from "../../cluster/Cluster.js";
-import { TlvEnum, TlvUInt8, TlvBitmap, TlvUInt16, TlvPercent100ths, TlvPercent } from "../../tlv/TlvNumber.js";
+import { TlvEnum, TlvUInt8, TlvBitmap, TlvUInt16, TlvPercent, TlvPercent100ths } from "../../tlv/TlvNumber.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvObject, TlvOptionalField, TlvField } from "../../tlv/TlvObject.js";
@@ -300,7 +300,7 @@ export namespace WindowCovering {
      */
     export const TlvGoToLiftPercentageRequest = TlvObject({
         liftPercentageValue: TlvOptionalField(0, TlvPercent),
-        liftPercent100ThsValue: TlvOptionalField(1, TlvPercent100ths)
+        liftPercent100thsValue: TlvOptionalField(1, TlvPercent100ths)
     });
 
     /**
@@ -310,7 +310,7 @@ export namespace WindowCovering {
      */
     export const TlvGoToTiltPercentageRequest = TlvObject({
         tiltPercentageValue: TlvOptionalField(0, TlvPercent),
-        tiltPercent100ThsValue: TlvOptionalField(1, TlvPercent100ths)
+        tiltPercent100thsValue: TlvOptionalField(1, TlvPercent100ths)
     });
 
     /**
@@ -672,31 +672,7 @@ export namespace WindowCovering {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.6
              */
-            numberOfActuationsLift: OptionalAttribute(0x5, TlvUInt16, { persistent: true, default: 0 }),
-
-            /**
-             * The TargetPositionLiftPercent100ths attribute identifies the position where the Window Covering Lift
-             * will go or is moving to as a percentage.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.13
-             */
-            targetPositionLiftPercent100Ths: OptionalAttribute(
-                0xb,
-                TlvNullable(TlvPercent100ths),
-                { scene: true, default: null }
-            ),
-
-            /**
-             * The CurrentPositionLiftPercent100ths attribute identifies the actual position as a percentage with a
-             * minimal step of 0.01%. E.g Max 10000 equals 100.00%.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.9
-             */
-            currentPositionLiftPercent100Ths: OptionalAttribute(
-                0xe,
-                TlvNullable(TlvPercent100ths),
-                { persistent: true, default: null }
-            )
+            numberOfActuationsLift: OptionalAttribute(0x5, TlvUInt16, { persistent: true, default: 0 })
         },
 
         commands: {
@@ -734,31 +710,7 @@ export namespace WindowCovering {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.7
              */
-            numberOfActuationsTilt: OptionalAttribute(0x6, TlvUInt16, { persistent: true, default: 0 }),
-
-            /**
-             * The TargetPositionTiltPercent100ths attribute identifies the position where the Window Covering Tilt
-             * will go or is moving to as a percentage.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.14
-             */
-            targetPositionTiltPercent100Ths: OptionalAttribute(
-                0xc,
-                TlvNullable(TlvPercent100ths),
-                { scene: true, default: null }
-            ),
-
-            /**
-             * The CurrentPositionTiltPercent100ths attribute identifies the actual position as a percentage with a
-             * minimal step of 0.01%. E.g Max 10000 equals 100.00%.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.10
-             */
-            currentPositionTiltPercent100Ths: OptionalAttribute(
-                0xf,
-                TlvNullable(TlvPercent100ths),
-                { persistent: true, default: null }
-            )
+            numberOfActuationsTilt: OptionalAttribute(0x6, TlvUInt16, { persistent: true, default: 0 })
         },
 
         commands: {
@@ -802,6 +754,30 @@ export namespace WindowCovering {
                 0x8,
                 TlvNullable(TlvPercent),
                 { scene: true, persistent: true, default: null }
+            ),
+
+            /**
+             * The TargetPositionLiftPercent100ths attribute identifies the position where the Window Covering Lift
+             * will go or is moving to as a percentage.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.13
+             */
+            targetPositionLiftPercent100ths: Attribute(
+                0xb,
+                TlvNullable(TlvPercent100ths),
+                { scene: true, default: null }
+            ),
+
+            /**
+             * The CurrentPositionLiftPercent100ths attribute identifies the actual position as a percentage with a
+             * minimal step of 0.01%. E.g Max 10000 equals 100.00%.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.9
+             */
+            currentPositionLiftPercent100ths: Attribute(
+                0xe,
+                TlvNullable(TlvPercent100ths),
+                { persistent: true, default: null }
             )
         },
 
@@ -845,6 +821,30 @@ export namespace WindowCovering {
                 0x9,
                 TlvNullable(TlvPercent),
                 { scene: true, persistent: true, default: null }
+            ),
+
+            /**
+             * The TargetPositionTiltPercent100ths attribute identifies the position where the Window Covering Tilt
+             * will go or is moving to as a percentage.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.14
+             */
+            targetPositionTiltPercent100ths: Attribute(
+                0xc,
+                TlvNullable(TlvPercent100ths),
+                { scene: true, default: null }
+            ),
+
+            /**
+             * The CurrentPositionTiltPercent100ths attribute identifies the actual position as a percentage with a
+             * minimal step of 0.01%. E.g Max 10000 equals 100.00%.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.10
+             */
+            currentPositionTiltPercent100ths: Attribute(
+                0xf,
+                TlvNullable(TlvPercent100ths),
+                { persistent: true, default: null }
             )
         },
 
@@ -1032,21 +1032,21 @@ export namespace WindowCovering {
                 TiltAndPositionAwareTiltComponent.attributes.currentPositionTiltPercentage,
                 { optionalIf: [TL_PA_TL] }
             ),
-            targetPositionLiftPercent100Ths: AsConditional(
-                LiftComponent.attributes.targetPositionLiftPercent100Ths,
-                { optionalIf: [LF] }
+            targetPositionLiftPercent100ths: AsConditional(
+                LiftAndPositionAwareLiftComponent.attributes.targetPositionLiftPercent100ths,
+                { mandatoryIf: [LF_PA_LF] }
             ),
-            targetPositionTiltPercent100Ths: AsConditional(
-                TiltComponent.attributes.targetPositionTiltPercent100Ths,
-                { optionalIf: [TL] }
+            targetPositionTiltPercent100ths: AsConditional(
+                TiltAndPositionAwareTiltComponent.attributes.targetPositionTiltPercent100ths,
+                { mandatoryIf: [TL_PA_TL] }
             ),
-            currentPositionLiftPercent100Ths: AsConditional(
-                LiftComponent.attributes.currentPositionLiftPercent100Ths,
-                { optionalIf: [LF] }
+            currentPositionLiftPercent100ths: AsConditional(
+                LiftAndPositionAwareLiftComponent.attributes.currentPositionLiftPercent100ths,
+                { mandatoryIf: [LF_PA_LF] }
             ),
-            currentPositionTiltPercent100Ths: AsConditional(
-                TiltComponent.attributes.currentPositionTiltPercent100Ths,
-                { optionalIf: [TL] }
+            currentPositionTiltPercent100ths: AsConditional(
+                TiltAndPositionAwareTiltComponent.attributes.currentPositionTiltPercent100ths,
+                { mandatoryIf: [TL_PA_TL] }
             ),
             installedOpenLimitLift: AsConditional(
                 LiftAndPositionAwareLiftAndAbsolutePositionComponent.attributes.installedOpenLimitLift,

@@ -49,6 +49,9 @@ LocalMatter.children.push({
         // types for these guys.  Would be easy to detect but since we've
         // already got overrides going on just doing it here
         { tag: "attribute", id: 0x3, name: "DoorState", type: "DoorStateEnum" },
-        { tag: "attribute", id: 0x25, name: "OperatingMode", type: "OperatingModeEnum" }
+        { tag: "attribute", id: 0x25, name: "OperatingMode", type: "OperatingModeEnum" },
+
+        // This name gets mangled by spec importer
+        { tag: "attribute", id: 0x33, name: "RequirePinForRemoteOperation" }
     ]
 })

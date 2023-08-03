@@ -318,12 +318,11 @@ describe("ClusterFactory", () => {
                 if (value === undefined || attr1 == undefined || attr2 == undefined || session === undefined || endpoint === undefined) throw new Error("Missing attribute");
                 return true;
             },
-        },
-            {
-                ev1: true,
-                ev2: true,
-            }
-        );
+        }, 
+        {
+            ev1: true,
+            ev2: true,
+        });
     })
 
     /**
@@ -386,7 +385,7 @@ describe("ClusterFactory", () => {
         handlers;
 
         // Create the cluster server
-        ClusterServer(
+        const server = ClusterServer(
             MyCluster,
             {
                 attr1: 1,
@@ -410,7 +409,8 @@ describe("ClusterFactory", () => {
         }, {
             ev1: true,
             ev2: true,
-        }
-        );
+        });
+
+        server.attributes.attr2
     })
 })
