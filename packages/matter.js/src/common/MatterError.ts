@@ -8,3 +8,5 @@
 export class MatterError extends Error { }
 
 export class NoProviderError extends MatterError { }
+
+export class ValidationError extends MatterError { }

@@ -15,7 +15,6 @@ import { StatusCode, TlvAttributePath } from "./InteractionProtocol.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { FixedAttributeServer } from "../../cluster/server/AttributeServer.js";
 
 const logger = Logger.get("SubscriptionHandler");
 
@@ -69,11 +68,10 @@ export class SubscriptionHandler {
         this.sendDelayTimer = Time.getTimer(50, () => this.sendUpdate()); // will be started later
 
         attributes.forEach(({ path, attribute }) => {
-            if (attribute instanceof FixedAttributeServer) return; // Fixed values will never change
-            // TODO: handle attributes with "getter" methods
+            if (!attribute.isSubscribable) return; // Changes should be omitted
             const listener = (value: any, version: number) => this.attributeChangeListener(path, attribute.schema, version, value);
             this.attributeListeners.set(attributePathToId(path), listener);
-            attribute.addMatterListener(listener);
+            attribute.addValueChangeListener(listener);
         });
     }
 
@@ -135,7 +133,7 @@ export class SubscriptionHandler {
         this.updateTimer.stop();
 
         const values = this.attributes.map(({ path, attribute }) => {
-            const { value, version } = attribute.getWithVersion(session);
+            const { value, version } = attribute.getWithVersion(session, true); // TODO How to handle fabric scoped in subscribes?
             return { path, value, version, schema: attribute.schema };
         }).filter(({ value }) => value !== undefined) as PathValueVersion<any>[];
         this.lastUpdateTimeMs = Time.nowMs();
@@ -164,8 +162,8 @@ export class SubscriptionHandler {
         this.attributes.forEach(({ path, attribute }) => {
             const pathId = attributePathToId(path);
             const listener = this.attributeListeners.get(pathId);
-            if (listener !== undefined && !(attribute instanceof FixedAttributeServer)) {
-                attribute.removeMatterListener(listener);
+            if (listener !== undefined) {
+                attribute.removeValueChangeListener(listener);
             }
             this.attributeListeners.delete(pathId);
         });
@@ -176,7 +174,7 @@ export class SubscriptionHandler {
         logger.debug(`Sending subscription update message for ID ${this.subscriptionId} with ${values.length} values`);
         const exchange = this.server.initiateExchange(this.fabric, this.peerNodeId, INTERACTION_PROTOCOL_ID);
         if (exchange === undefined) return;
-        logger.debug(`Sending subscription changes for ID ${this.subscriptionId}: ${Logger.toJSON(values)}`);
+        logger.debug(`Sending subscription changes for ID ${this.subscriptionId}: ${values.map(({ path, value, version }) => `${Logger.toJSON(path)}=${Logger.toJSON(value)}(${version})`).join(", ")}`); // TODO Format path better using endpoint structure
         const messenger = new InteractionServerMessenger(exchange);
 
         try {

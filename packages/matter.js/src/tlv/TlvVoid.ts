@@ -6,6 +6,7 @@
 
 import { TlvTag, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvStream, TlvWriter } from "./TlvSchema.js";
+import { ValidationError } from "../common/MatterError.js";
 
 /**
  * Schema to encode void.
@@ -25,7 +26,7 @@ export class VoidSchema extends TlvSchema<void> {
     }
 
     override validate(data: void): void {
-        if (data !== undefined) throw new Error(`Expected void, got ${typeof data}.`);
+        if (data !== undefined) throw new ValidationError(`Expected void, got ${typeof data}.`);
     }
 }
 

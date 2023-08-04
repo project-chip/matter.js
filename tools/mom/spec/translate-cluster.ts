@@ -205,7 +205,10 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
 
 // For some reason, "default" fabric access appears in an informational row
 // instead of the access column in many of the core definitions.  Fix this.
-function applyAccessNotes(fields?: HtmlReference, records?: { access?: string }[]) {
+//
+// We also use the presence of this record to add the implicit FabrixIndex
+// field
+function applyAccessNotes(fields?: HtmlReference, records?: { id: number, access?: string }[]) {
     if (!fields?.table?.notes.length || !records) {
         return;
     }
@@ -236,15 +239,27 @@ function applyAccessNotes(fields?: HtmlReference, records?: { access?: string }[
         }
     }
 
-    // If we have the flag, apply it unless the row already has an access flag
+    // If we have the flag, apply it
     if (flag) {
+        // Update access for each record unless it already has a fabric flag
+        let haveFabricIndex = false;
         for (const r of records) {
+            if (r.id === Globals.FabricIndex.id) {
+                haveFabricIndex = true;
+            }
             const access = r.access;
             if (!access) {
                 r.access = flag;
             } else if (!access.match(/[SF]/i)) {
                 r.access += flag;
             }
+        }
+
+        // Add the FabricIndex field if not already present
+        if (!haveFabricIndex) {
+            const fabricIndex = { ...Globals.FabricIndex };
+            delete fabricIndex.global;
+            records.push(fabricIndex as { id: number, name: string });
         }
     }
 }
@@ -464,8 +479,6 @@ function translateInvokable(definition: ClusterReference, children: Array<Cluste
             children: Children(translateValueChildren)
         });
 
-        applyAccessNotes(definition.commands, records);
-
         const commands = translateRecordsToMatter("command", records, (r) => {
             let direction: CommandElement.Direction | undefined;
             if (r.direction.match(/client.*server/i)) {
@@ -504,8 +517,6 @@ function translateInvokable(definition: ClusterReference, children: Array<Cluste
             conformance: Optional(Code),
             children: Children(translateValueChildren)
         });
-
-        applyAccessNotes(definition.events, records);
 
         const events = translateRecordsToMatter("event", records, (r) => {
             let priority: EventElement.Priority;

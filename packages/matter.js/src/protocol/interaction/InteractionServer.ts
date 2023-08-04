@@ -19,7 +19,7 @@ import {
 import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
-import { SecureSession } from "../../session/SecureSession.js";
+import { assertSecureSession } from "../../session/SecureSession.js";
 import { SubscriptionHandler } from "./SubscriptionHandler.js";
 import { Message } from "../../codec/MessageCodec.js";
 import { Crypto } from "../../crypto/Crypto.js";
@@ -30,7 +30,7 @@ import {
 } from "../../cluster/server/ClusterServer.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import {
-    AttributeGetterServer, AttributeServer, FabricScopedAttributeServer, FixedAttributeServer
+    AttributeServer, FabricScopedAttributeServer, FixedAttributeServer
 } from "../../cluster/server/AttributeServer.js";
 import { Logger } from "../../log/Logger.js";
 import { StorageContext } from "../../storage/StorageContext.js";
@@ -61,6 +61,7 @@ function isConditionMatching<F extends BitSchema, SF extends TypeFromPartialBitS
     return false;
 }
 
+// TODO Split out into own File
 export function ClusterServer<
     F extends BitSchema,
     SF extends TypeFromPartialBitSchema<F>,
@@ -151,7 +152,7 @@ export function ClusterServer<
                 const attributeName = sceneAttributeList.find(name => (attributes as any)[name].id === attributeId.id);
                 if (attributeName) {
                     const attributeServer = (attributes as any)[attributeName];
-                    attributeServer.set(attributeServer.schema.decodeTlv(attributeValue));
+                    attributeServer.setLocal(attributeServer.schema.decodeTlv(attributeValue));
                 }
             }
         },
@@ -165,7 +166,7 @@ export function ClusterServer<
                 const attributeName = sceneAttributeList.find(name => (attributes as any)[name].id === attributeId.id);
                 if (attributeName) {
                     const attributeServer = (attributes as any)[attributeName];
-                    if (attributeServer.get() !== attributeServer.schema.decodeTlv(attributeValue)) return false;
+                    if (attributeServer.getLocal() !== attributeServer.schema.decodeTlv(attributeValue)) return false;
                 }
             }
             return true;
@@ -219,44 +220,96 @@ export function ClusterServer<
             }
         }
 
-        const { id, schema, writable, persistent, fabricScoped, scene, fixed } = attributeDef[attributeName];
+        const { id, schema, writable, persistent, fabricScoped, scene, fixed, omitChanges } = attributeDef[attributeName];
         if ((attributesInitialValues as any)[attributeName] !== undefined) {
-            const validator = typeof schema.validate === 'function' ? schema.validate.bind(schema) : undefined;
+            // Get the handlers for this attribute if present
+            const getter = (handlers as any)[`${attributeName}AttributeGetter`];
+            const setter = (handlers as any)[`${attributeName}AttributeSetter`];
+            const validator = (handlers as any)[`${attributeName}AttributeValidator`];
+
+            // Create the relevant attribute server based on the attribute definition
             if (fixed) {
-                (attributes as any)[attributeName] = new FixedAttributeServer(id, attributeName, schema, validator ?? (() => { /* no validation */
-                }), writable, (attributesInitialValues as any)[attributeName]);
+                (attributes as any)[attributeName] = new FixedAttributeServer(
+                    id,
+                    attributeName,
+                    schema,
+                    writable,
+                    false,
+                    (attributesInitialValues as any)[attributeName],
+                    getter ? (session, endpoint, isFabricFiltered) => getter({
+                        attributes,
+                        endpoint,
+                        session,
+                        isFabricFiltered
+                    }) : undefined,
+                );
                 result[`get${capitalizedAttributeName}Attribute`] = () => (attributes as any)[attributeName].getLocal();
             }
             else if (fabricScoped) {
-                (attributes as any)[attributeName] = new FabricScopedAttributeServer(id, attributeName, schema, validator ?? (() => { /* no validation */
-                }), writable, (attributesInitialValues as any)[attributeName], clusterDef);
-                result[`get${capitalizedAttributeName}Attribute`] = (fabric: Fabric) => (attributes as any)[attributeName].getLocal(fabric);
-                result[`set${capitalizedAttributeName}Attribute`] = <T,>(value: T, fabric: Fabric) => (attributes as any)[attributeName].setLocal(value, fabric);
-                result[`subscribe${capitalizedAttributeName}Attribute`] = <T,>(listener: (newValue: T, oldValue: T) => void) => (attributes as any)[attributeName].addListener(listener);
-            } else {
-                const getter = (handlers as any)[`get${capitalize(attributeName)}`];
-                if (getter === undefined) {
-                    (attributes as any)[attributeName] = new AttributeServer(id, attributeName, schema, validator ?? (() => { /* no validation */
-                    }), writable, (attributesInitialValues as any)[attributeName]);
-                } else {
-                    (attributes as any)[attributeName] = new AttributeGetterServer(id, attributeName, schema, validator ?? (() => { /* no validation */
-                    }), writable, (attributesInitialValues as any)[attributeName], (session, endpoint) => getter({
+                (attributes as any)[attributeName] = new FabricScopedAttributeServer(
+                    id,
+                    attributeName,
+                    schema,
+                    writable,
+                    !omitChanges,
+                    (attributesInitialValues as any)[attributeName],
+                    clusterDef,
+                    getter ? (session, endpoint, fabricScoped) => getter({
                         attributes,
                         endpoint,
-                        session
-                    }));
-                }
-                if (persistent) {
-                    const listener = (value: any, version: number) => attributeStorageListener(attributeName, version, value);
-                    attributeStorageListeners.set(id, listener);
-                    (attributes as any)[attributeName].addMatterListener(listener);
-                }
+                        session,
+                        fabricScoped
+                    }) : undefined,
+                    setter ? (value, session, endpoint) => setter(value, {
+                        attributes,
+                        endpoint,
+                        session,
+                    }) : undefined,
+                    validator ? (value, session, endpoint) => validator(value, {
+                        attributes,
+                        endpoint,
+                        session,
+                    }) : undefined,
+                );
+                result[`get${capitalizedAttributeName}Attribute`] = (fabric: Fabric, isFabricScoped?: boolean) => (attributes as any)[attributeName].getLocalForFabric(fabric, isFabricScoped);
+                result[`set${capitalizedAttributeName}Attribute`] = <T,>(value: T, fabric: Fabric) => (attributes as any)[attributeName].setLocalForFabric(value, fabric);
+                result[`subscribe${capitalizedAttributeName}Attribute`] = <T,>(listener: (newValue: T, oldValue: T) => void) => (attributes as any)[attributeName].addValueSetListener(listener);
+            } else {
+                (attributes as any)[attributeName] = new AttributeServer(
+                    id,
+                    attributeName,
+                    schema,
+                    writable,
+                    !omitChanges,
+                    (attributesInitialValues as any)[attributeName],
+                    getter ? (session, endpoint, fabricScoped) => getter({
+                        attributes,
+                        endpoint,
+                        session,
+                        fabricScoped
+                    }) : undefined,
+                    setter ? (value, session, endpoint) => setter(value, {
+                        attributes,
+                        endpoint,
+                        session,
+                    }) : undefined,
+                    validator ? (value, session, endpoint) => validator(value, {
+                        attributes,
+                        endpoint,
+                        session,
+                    }) : undefined,
+                );
                 if (scene) {
                     sceneAttributeList.push(attributeName);
                 }
                 result[`get${capitalizedAttributeName}Attribute`] = () => (attributes as any)[attributeName].getLocal();
                 result[`set${capitalizedAttributeName}Attribute`] = <T,>(value: T) => (attributes as any)[attributeName].setLocal(value);
-                result[`subscribe${capitalizedAttributeName}Attribute`] = <T,>(listener: (newValue: T, oldValue: T) => void) => (attributes as any)[attributeName].addListener(listener);
+                result[`subscribe${capitalizedAttributeName}Attribute`] = <T,>(listener: (newValue: T, oldValue: T) => void) => (attributes as any)[attributeName].addValueSetListener(listener);
+            }
+            if (persistent || getter || setter) {
+                const listener = (value: any, version: number) => attributeStorageListener(attributeName, version, (fabricScoped || getter || setter) ? undefined : value);
+                attributeStorageListeners.set(id, listener);
+                (attributes as any)[attributeName].addValueChangeListener(listener);
             }
             attributeList.push(new AttributeId(id));
         } else {
@@ -272,7 +325,7 @@ export function ClusterServer<
             }
         }
     }
-    (attributes as any).attributeList.set(attributeList);
+    (attributes as any).attributeList.setLocal(attributeList);
 
     // Create commands
     const acceptedCommandList = new Array<number>();
@@ -316,8 +369,8 @@ export function ClusterServer<
             }
         }
     }
-    (attributes as any).acceptedCommandList.set(acceptedCommandList.map(id => new CommandId(id)));
-    (attributes as any).generatedCommandList.set(generatedCommandList.map(id => new CommandId(id)));
+    (attributes as any).acceptedCommandList.setLocal(acceptedCommandList.map(id => new CommandId(id)));
+    (attributes as any).generatedCommandList.setLocal(generatedCommandList.map(id => new CommandId(id)));
 
     const eventList = new Array<number>();
     for (const eventName in eventDef) {
@@ -356,7 +409,7 @@ export function ClusterServer<
             result[`trigger${capitalizedEventName}Event`] = <T,>(event: T) => (events as any)[eventName].triggerEvent(event);
         }
     }
-    (attributes as any).eventList.set(eventList.map(id => new EventId(id)));
+    (attributes as any).eventList.setLocal(eventList.map(id => new EventId(id)));
 
     return result as ClusterServerObj<A, C, E>;
 }
@@ -451,7 +504,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         if (attributePaths === undefined) {
             throw new StatusResponseError("Only Read requests with attributeRequests are supported right now", StatusCode.UnsupportedRead);
         }
-        logger.debug(`Received read request from ${exchange.channel.getName()}: ${attributePaths.map(path => this.endpointStructure.resolveAttributeName(path)).join(", ")}, isFabricFiltered=${isFabricFiltered}`);
+        logger.debug(`Received read request from ${exchange.channel.name}: ${attributePaths.map(path => this.endpointStructure.resolveAttributeName(path)).join(", ")}, isFabricFiltered=${isFabricFiltered}`);
 
         // UnsupportedNode/UnsupportedEndpoint/UnsupportedCluster/UnsupportedAttribute/UnsupportedRead
 
@@ -460,7 +513,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             if (attributes.length === 0) {
                 const { endpointId, clusterId, attributeId } = path;
                 if (endpointId === undefined || clusterId === undefined || attributeId === undefined) { // Wildcard path: Just leave out values
-                    logger.debug(`Read from ${exchange.channel.getName()}: ${this.endpointStructure.resolveAttributeName(path)} ignore non-existing attribute`);
+                    logger.debug(`Read from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(path)} ignore non-existing attribute`);
                 } else { // Else return correct status
                     let status = StatusCode.UnsupportedAttribute;
                     if (!this.endpointStructure.hasEndpoint(endpointId)) {
@@ -468,14 +521,14 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                     } else if (!this.endpointStructure.hasClusterServer(endpointId, clusterId)) {
                         status = StatusCode.UnsupportedCluster;
                     }
-                    logger.debug(`Read from ${exchange.channel.getName()}: ${this.endpointStructure.resolveAttributeName(path)} unsupported path: Status=${status}`);
+                    logger.debug(`Read from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(path)} unsupported path: Status=${status}`);
                     return [{ attributeStatus: { path, status: { status } } }];
                 }
             }
 
             return attributes.map(({ path, attribute }) => {
-                const { value, version } = attribute.getWithVersion(exchange.session); // TODO check ACL
-                logger.debug(`Read from ${exchange.channel.getName()}: ${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(value)} (version=${version})`);
+                const { value, version } = attribute.getWithVersion(exchange.session, isFabricFiltered);
+                logger.debug(`Read from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(value)} (version=${version})`);
                 return { attributeData: { path, data: attribute.schema.encodeTlv(value), dataVersion: version } };
             });
         });
@@ -488,7 +541,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     }
 
     handleWriteRequest(exchange: MessageExchange<MatterDevice>, { suppressResponse, writeRequests }: WriteRequest): WriteResponse {
-        logger.debug(`Received write request from ${exchange.channel.getName()}: ${writeRequests.map(req => this.endpointStructure.resolveAttributeName(req.path)).join(", ")}, suppressResponse=${suppressResponse}`);
+        logger.debug(`Received write request from ${exchange.channel.name}: ${writeRequests.map(req => this.endpointStructure.resolveAttributeName(req.path)).join(", ")}, suppressResponse=${suppressResponse}`);
 
         // TODO consider TimedRequest constraints
 
@@ -501,7 +554,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                 // TODO: Also check nodeId
                 const { endpointId, clusterId, attributeId } = path;
                 if (endpointId === undefined || clusterId === undefined || attributeId === undefined) { // Wildcard path: Just ignore
-                    logger.debug(`Write from ${exchange.channel.getName()}: ${this.endpointStructure.resolveAttributeName(path)} ignore non-existing attribute`);
+                    logger.debug(`Write from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(path)} ignore non-existing attribute`);
                 } else { // Else return correct status
                     let statusCode = StatusCode.UnsupportedAttribute;
                     if (this.endpointStructure.hasAttribute(endpointId, clusterId, attributeId)) { // If attribute exists but was not returned above, it is not writeable
@@ -511,7 +564,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                     } else if (!this.endpointStructure.hasClusterServer(endpointId, clusterId)) {
                         statusCode = StatusCode.UnsupportedCluster;
                     }
-                    logger.debug(`Write from ${exchange.channel.getName()}: ${this.endpointStructure.resolveAttributeName(path)} unsupported path: Status=${statusCode}`);
+                    logger.debug(`Write from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(path)} unsupported path: Status=${statusCode}`);
                     return [{ path, statusCode }];
                 }
             }
@@ -523,17 +576,20 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
                 try {
                     const value = decodeValueForSchema(schema, values, defaultValue);
-                    logger.debug(`Handle write request from ${exchange.channel.getName()} resolved to: ${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(value)} (Version=${dataVersion})`);
-                    if (attribute instanceof FixedAttributeServer) {
-                        throw new Error("Fixed attributes cannot be written");
+                    logger.debug(`Handle write request from ${exchange.channel.name} resolved to: ${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(value)} (Version=${dataVersion})`);
+                    if (!(attribute instanceof AttributeServer) && !(attribute instanceof FabricScopedAttributeServer)) {
+                        throw new StatusResponseError("Fixed attributes cannot be written", StatusCode.UnsupportedWrite);
                     }
                     attribute.set(value, exchange.session);
                 } catch (error: any) {
                     if (attributes.length === 1) { // For Multi-Attribute-Writes we ignore errors
-                        logger.error(`Error while handling write request from ${exchange.channel.getName()} to ${this.endpointStructure.resolveAttributeName(path)}: ${error.message}`);
+                        logger.error(`Error while handling write request from ${exchange.channel.name} to ${this.endpointStructure.resolveAttributeName(path)}: ${error.message}`);
+                        if (error instanceof StatusResponseError) {
+                            return { path, statusCode: error.code };
+                        }
                         return { path, statusCode: StatusCode.ConstraintError };
                     } else {
-                        logger.debug(`While handling write request from ${exchange.channel.getName()} to ${this.endpointStructure.resolveAttributeName(path)} ignored: ${error.message}`);
+                        logger.debug(`While handling write request from ${exchange.channel.name} to ${this.endpointStructure.resolveAttributeName(path)} ignored: ${error.message}`);
                     }
                 }
                 return { path, statusCode: StatusCode.Success };
@@ -543,7 +599,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         // TODO respect suppressResponse, potentially also needs adjustment in InteractionMessenger class!
         const errorResults = writeResults.filter(({ statusCode }) => statusCode !== StatusCode.Success);
-        logger.debug(`Write request from ${exchange.channel.getName()} done ${errorResults.length ? `with following errors: ${errorResults.map(({ path, statusCode }) => `${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(statusCode)}`).join(", ")}` : "without errors"}`);
+        logger.debug(`Write request from ${exchange.channel.name} done ${errorResults.length ? `with following errors: ${errorResults.map(({ path, statusCode }) => `${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(statusCode)}`).join(", ")}` : "without errors"}`);
 
         return {
             interactionModelRevision: 1,
@@ -552,10 +608,10 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     }
 
     async handleSubscribeRequest(exchange: MessageExchange<MatterDevice>, { minIntervalFloorSeconds, maxIntervalCeilingSeconds, attributeRequests, eventRequests, keepSubscriptions }: SubscribeRequest, messenger: InteractionServerMessenger): Promise<void> {
-        logger.debug(`Received subscribe request from ${exchange.channel.getName()}`);
+        logger.debug(`Received subscribe request from ${exchange.channel.name}`);
 
-        if (!exchange.session.isSecure()) throw new Error("Subscriptions are only implemented on secure sessions");
-        const session = exchange.session as SecureSession<MatterDevice>;
+        assertSecureSession(exchange.session, "Subscriptions are only implemented on secure sessions");
+        const session = exchange.session;
         const fabric = session.getFabric();
         if (fabric === undefined) throw new Error("Subscriptions are only implemented after a fabric has been assigned");
 
@@ -608,7 +664,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     }
 
     async handleInvokeRequest(exchange: MessageExchange<MatterDevice>, { invokeRequests }: InvokeRequest, message: Message): Promise<InvokeResponse> {
-        logger.debug(`Received invoke request from ${exchange.channel.getName()}: ${invokeRequests.map(({ commandPath: { endpointId, clusterId, commandId } }) => this.endpointStructure.resolveCommandName({ endpointId, clusterId, commandId })).join(", ")}`);
+        logger.debug(`Received invoke request from ${exchange.channel.name}: ${invokeRequests.map(({ commandPath: { endpointId, clusterId, commandId } }) => this.endpointStructure.resolveCommandName({ endpointId, clusterId, commandId })).join(", ")}`);
 
         const invokeResponses: TypeFromSchema<typeof TlvInvokeResponseData>[] = [];
 
@@ -621,7 +677,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                 // TODO Also check nodeId
                 const { endpointId, clusterId, commandId } = commandPath;
                 if (endpointId === undefined || clusterId === undefined || commandId === undefined) { // Wildcard path: Just ignore
-                    logger.debug(`Invoke from ${exchange.channel.getName()}: ${this.endpointStructure.resolveCommandName(commandPath)} ignore non-existing attribute`);
+                    logger.debug(`Invoke from ${exchange.channel.name}: ${this.endpointStructure.resolveCommandName(commandPath)} ignore non-existing attribute`);
                 } else { // Else return correct status
                     let status = StatusCode.UnsupportedCommand;
                     if (!this.endpointStructure.hasEndpoint(endpointId)) {
@@ -629,7 +685,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                     } else if (!this.endpointStructure.hasClusterServer(endpointId, clusterId)) {
                         status = StatusCode.UnsupportedCluster;
                     }
-                    logger.debug(`Invoke from ${exchange.channel.getName()}: ${this.endpointStructure.resolveCommandName(commandPath)} unsupported path: Status=${status}`);
+                    logger.debug(`Invoke from ${exchange.channel.name}: ${this.endpointStructure.resolveCommandName(commandPath)} unsupported path: Status=${status}`);
                     invokeResponses.push({ status: { commandPath, status: { status } } });
                     return;
                 }
@@ -638,13 +694,13 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             for (const { command, path } of commands) {
                 const { endpointId } = path;
                 if (endpointId === undefined) { // Should never happen
-                    logger.error(`Invoke from ${exchange.channel.getName()}: ${this.endpointStructure.resolveCommandName(path)} invalid path because empty endpoint!`);
+                    logger.error(`Invoke from ${exchange.channel.name}: ${this.endpointStructure.resolveCommandName(path)} invalid path because empty endpoint!`);
                     invokeResponses.push({ status: { commandPath: path, status: { status: StatusCode.UnsupportedEndpoint } } });
                     continue;
                 }
                 const endpoint = this.endpointStructure.getEndpoint(endpointId);
                 if (endpoint === undefined) { // Should never happen
-                    logger.error(`Invoke from ${exchange.channel.getName()}: ${this.endpointStructure.resolveCommandName(path)} invalid path because endpoint not found!`);
+                    logger.error(`Invoke from ${exchange.channel.name}: ${this.endpointStructure.resolveCommandName(path)} invalid path because endpoint not found!`);
                     invokeResponses.push({ status: { commandPath: path, status: { status: StatusCode.UnsupportedEndpoint } } });
                     continue;
                 }
@@ -675,7 +731,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     }
 
     handleTimedRequest(exchange: MessageExchange<MatterDevice>, { timeout }: TimedRequest) {
-        logger.debug(`Received timed request (${timeout}) from ${exchange.channel.getName()}`);
+        logger.debug(`Received timed request (${timeout}) from ${exchange.channel.name}`);
         // TODO: implement this
     }
 

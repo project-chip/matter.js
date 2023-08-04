@@ -360,7 +360,7 @@ export class BlenoBleServer implements Channel<ByteArray> {
     }
 
     // Channel<ByteArray>
-    getName() {
+    get name() {
         return `ble://${this.clientAddress}`;
     }
 }

@@ -5,14 +5,21 @@
  */
 
 import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
-import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
+import { TlvReader, TlvSchema, TlvStream, TlvWriter } from "./TlvSchema.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { ValidationError } from "../common/MatterError.js";
 
 type LengthConstraints = {
     minLength?: number,
     maxLength?: number,
     length?: number,
 };
+
+type ArrayChunkData = {
+    listIndex: number | null | undefined,
+    element: TlvStream
+}
+export type ArrayAsChunked = ArrayChunkData[];
 
 /**
  * Schema to encode an array or string in TLV.
@@ -46,11 +53,57 @@ export class ArraySchema<T> extends TlvSchema<T[]> {
         return result;
     }
 
+    override injectField(value: T[], fieldId: number, fieldValue: any, injectChecker: (fieldValue: any | undefined) => boolean): T[] {
+        if (Array.isArray(value)) {
+            value.forEach((item, index) =>
+                value[index] = this.elementSchema.injectField(item, fieldId, fieldValue, injectChecker));
+        }
+        return value;
+    }
+
+    override removeField(value: T[], fieldId: number, removeChecker: (fieldValue: any) => boolean): T[] {
+        if (Array.isArray(value)) {
+            value.forEach((item, index) =>
+                value[index] = this.elementSchema.removeField(item, fieldId, removeChecker));
+        }
+        return value;
+    }
+
     override validate(data: T[]): void {
-        if (!Array.isArray(data)) throw new Error(`Expected array, got ${typeof data}.`);
-        if (data.length > this.maxLength) throw new Error(`Array is too long: ${data.length}, max ${this.maxLength}.`);
-        if (data.length < this.minLength) throw new Error(`Array is too short: ${data.length}, min ${this.minLength}.`);
+        if (!Array.isArray(data)) throw new ValidationError(`Expected array, got ${typeof data}.`);
+        if (data.length > this.maxLength) throw new ValidationError(`Array is too long: ${data.length}, max ${this.maxLength}.`);
+        if (data.length < this.minLength) throw new ValidationError(`Array is too short: ${data.length}, min ${this.minLength}.`);
         data.forEach(element => this.elementSchema.validate(element));
+    }
+
+    decodeFromChunkedArray(chunks: ArrayAsChunked, currentValue?: T[]): T[] {
+        if (currentValue === undefined && chunks[0].listIndex !== undefined) {
+            throw new Error(`When no current value is supplied the first chunked element needs to have a list index of undefined, but received ${chunks[0].listIndex}.`);
+        }
+        currentValue = currentValue ?? []; // For the sake of typing; the above check makes sure it is an array
+        for (const { listIndex, element } of chunks) {
+            if (listIndex === undefined) { // not set listIndex means "Override the whole array"
+                currentValue = this.decodeTlv(element);
+            } else if (listIndex === null) { // null listIndex means "Append to the array"
+                const decodedElement = this.elementSchema.decodeTlv(element);
+                currentValue.push(decodedElement);
+            } else if (element[0].typeLength.type === TlvType.Null) { // null element means "Remove from the array"
+                currentValue.splice(listIndex, 1);
+            } else { // otherwise, set the element at the given index
+                currentValue[listIndex] = this.elementSchema.decodeTlv(element);
+            }
+        }
+        return currentValue;
+    }
+
+    encodeAsChunkedArray(value: T[]): ArrayAsChunked {
+        const result: ArrayAsChunked = [];
+        result.push({ listIndex: undefined, element: this.encodeTlv([]) });
+        value.forEach(element => {
+            const elementStream = this.elementSchema.encodeTlv(element);
+            result.push({ listIndex: null, element: elementStream });
+        });
+        return result;
     }
 }
 

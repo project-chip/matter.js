@@ -20,11 +20,11 @@ import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvByteString, TlvString } from "../../tlv/TlvString.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { TlvFabricIndex, FabricIndex } from "../../datatype/FabricIndex.js";
 import { TlvVendorId } from "../../datatype/VendorId.js";
 import { TlvFabricId } from "../../datatype/FabricId.js";
 import { TlvNodeId } from "../../datatype/NodeId.js";
 import { TlvUInt8, TlvEnum } from "../../tlv/TlvNumber.js";
-import { TlvFabricIndex, FabricIndex } from "../../datatype/FabricIndex.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvSubjectId } from "../../datatype/SubjectId.js";
 
@@ -52,7 +52,9 @@ export namespace OperationalCredentials {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 11.17.4.4.2
          */
-        icac: TlvField(2, TlvNullable(TlvByteString.bound({ maxLength: 400 })))
+        icac: TlvField(2, TlvNullable(TlvByteString.bound({ maxLength: 400 }))),
+
+        fabricIndex: TlvField(254, TlvFabricIndex)
     });
 
     /**
@@ -107,7 +109,9 @@ export namespace OperationalCredentials {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 11.17.4.5.5
          */
-        label: TlvField(5, TlvString.bound({ maxLength: 32 }))
+        label: TlvField(5, TlvString.bound({ maxLength: 32 })),
+
+        fabricIndex: TlvField(254, TlvFabricIndex)
     });
 
     /**
@@ -470,7 +474,8 @@ export namespace OperationalCredentials {
      */
     export const TlvUpdateNocRequest = TlvObject({
         nocValue: TlvField(0, TlvByteString.bound({ maxLength: 400 })),
-        icacValue: TlvOptionalField(1, TlvByteString.bound({ maxLength: 400 }))
+        icacValue: TlvOptionalField(1, TlvByteString.bound({ maxLength: 400 })),
+        fabricIndex: TlvField(254, TlvFabricIndex)
     });
 
     /**
@@ -478,7 +483,10 @@ export namespace OperationalCredentials {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.11
      */
-    export const TlvUpdateFabricLabelRequest = TlvObject({ label: TlvField(0, TlvString.bound({ maxLength: 32 })) });
+    export const TlvUpdateFabricLabelRequest = TlvObject({
+        label: TlvField(0, TlvString.bound({ maxLength: 32 })),
+        fabricIndex: TlvField(254, TlvFabricIndex)
+    });
 
     /**
      * Input to the OperationalCredentials removeFabric command

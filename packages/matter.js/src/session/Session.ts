@@ -28,8 +28,9 @@ interface MrpParameters {
 }
 
 export interface Session<T> {
+    name: string
+
     isSecure(): boolean;
-    getName(): string;
     decode(packet: Packet): Message;
     encode(message: Message): Packet;
     getMrpParameters(): MrpParameters;
@@ -41,5 +42,5 @@ export interface Session<T> {
     destroy(): void;
     notifyActivity(messageReceived: boolean): void;
     isPeerActive(): boolean;
-    getAccessingFabric(): Fabric;
+    getAssociatedFabric(): Fabric;
 }

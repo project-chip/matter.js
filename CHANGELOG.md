@@ -16,6 +16,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Breaking: GeneralCommissioningServerHandler is now a function that takes configuration for setRegulatoryConfig handling
   * Breaking: Types of specific clusters are no longer exported flat on main level. Cluster exports are now namespaces that include their types.
   * Breaking: All collection files meant to be used for exports only are renamed to export.ts and should not be used for internal imports
+  * Breaking: Attribute listener methods renamed: addListener -> addValueSetListener, addMatterListener -> addValueChangeListener (also remove methods) to make it more clear what they do
   * Feature: Enhance CommissioningServer options to also specify GeneralCommissioningServer details and settings
   * Feature: Adjust RegulatoryConfig Handling in Device and Controller to match with specifications
   * Feature: Endpoint Structures use custom-unique-id (from EndpointOptions)/uniqueStorageKey (from BasicInformationCluster)/serialNumber (from BasicInformationCluster)/ Index (in this order) to store and restore the endpoint ID in structures
@@ -24,6 +25,8 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Feature: Allow to define discoveryCapabilities structure when getting pairing code in CommissioningServer
   * Feature: Added Bluetooth package (matter-node-ble.js) to allow to use Bluetooth as transport layer for initial commissioning. Implemented device side for now
   * Feature: Global Attributes are also accessible in ClusterClient instances (e.g. to get the list of features of the cluster)
+  * Feature: Refactor Controller Commissioning process and add network commissioning support
+  * Feature: Correctly Handle FabricIndex fields for Read and Write requests
   * Enhance: Device port in MDNSBroadcaster is now dynamically set and add UDC (User directed Commissioning) Announcements
   * Enhance: Enhanced MessageCodec and check some more fields
   * Enhance: Added possibility to define conditional cluster attribute/Command/event definitions and introduce runtime checking for these. Part of Cluster Structure rework still WIP
@@ -53,9 +56,11 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Breaking: The storage key structure got changed to allow multi node operations within one process. This requires to change the storage key structure and to migrate or reset the storage.
     * Migration: prepend any storage key except Device.* and Controller.* with "0." in the filename
   * Deprecation: The CLI Examples LegacyDeviceNode and LegacyControllerNode is removed in this version! Use the new variants please.
-  * The default storage names now start with a "." at the beginning to allow to hide them in some file explorers and git.
-  * Example script are moved to package matter-node.js-examples
-  * The Device example script got a new parameter -ble to also initialize the Bluetooth transport layer
+  * Change: The default storage names now start with a "." at the beginning to allow to hide them in some file explorers and git.
+  * Change: Example script are moved to package matter-node.js-examples
+  * Feature: The Device example script got a new parameter -ble to also initialize the Bluetooth transport layer
+  * Feature: The Controller example script got a new parameter -ble to also initialize the Bluetooth transport layer
+  * Feature: The Controller example script got a new parameters -ble-* to provide Wi-Fi/Thread network credentials to use for device commissioning
 * Misc:
   * Added Specification links for Matter Specifications 1.1
   * Optimize typing exports for node10 TS settings

@@ -10,6 +10,7 @@ import { DEFAULT_ACTIVE_RETRANSMISSION_TIMEOUT_MS, DEFAULT_IDLE_RETRANSMISSION_T
 import { UNICAST_UNSECURE_SESSION_ID } from "./SessionManager.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { NodeId } from "../datatype/NodeId.js";
+import { NoAssociatedFabricError } from "./SecureSession.js";
 
 export class UnsecureSession<T> implements Session<T> {
     private readonly initiatorNodeId = NodeId.getRandomOperationalNodeId();
@@ -46,7 +47,7 @@ export class UnsecureSession<T> implements Session<T> {
         throw new Error("Not supported on an unsecure session");
     }
 
-    getName() {
+    get name() {
         return "unsecure";
     }
 
@@ -82,8 +83,8 @@ export class UnsecureSession<T> implements Session<T> {
         throw new Error("The unsecure session should never be destroyed.");
     }
 
-    getAccessingFabric(): Fabric {
-        throw new Error("Session needs to be a secure session");
+    getAssociatedFabric(): Fabric {
+        throw new NoAssociatedFabricError("Session needs to be a secure session");
     }
 
 }

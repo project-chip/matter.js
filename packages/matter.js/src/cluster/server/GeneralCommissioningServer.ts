@@ -5,8 +5,7 @@
  */
 
 import { Logger } from "../../log/Logger.js";
-import { MatterDevice } from "../../MatterDevice.js";
-import { SecureSession } from "../../session/SecureSession.js";
+import { assertSecureSession } from "../../session/SecureSession.js";
 import { GeneralCommissioning, GeneralCommissioningCluster } from "../definitions/GeneralCommissioningCluster.js";
 import { ClusterServerHandlers } from "./ClusterServer.js";
 import { BasicInformationCluster } from "../definitions/BasicInformationCluster.js";
@@ -24,7 +23,7 @@ export const GeneralCommissioningClusterHandler: (options?: {
         // TODO Add handling for ExpiryLengthSeconds field and Error handling, see 11.9.7.2
 
         session.getContext().armFailSafe();
-        breadcrumb.set(breadcrumbStep);
+        breadcrumb.setLocal(breadcrumbStep);
         return SuccessResponse;
     },
 
@@ -94,8 +93,8 @@ export const GeneralCommissioningClusterHandler: (options?: {
     commissioningComplete: async ({ session, attributes: { breadcrumb } }) => {
         // TODO Add error handling as defined in 11.9.7.6
 
-        if (!session.isSecure()) throw new Error("commissioningComplete can only be called on a secure session");
-        const fabric = (session as SecureSession<MatterDevice>).getFabric();
+        assertSecureSession(session, "commissioningComplete can only be called on a secure session");
+        const fabric = session.getFabric();
         if (fabric === undefined) throw new Error("commissioningComplete is called but the fabric has not been defined yet");
         breadcrumb.setLocal(BigInt(0));
         logger.info(`Commissioning completed on fabric #${fabric.fabricId.id} as node #${fabric.nodeId}.`);

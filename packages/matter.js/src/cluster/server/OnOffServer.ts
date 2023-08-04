@@ -24,16 +24,16 @@ TODO: Global Cluster fields needs to be added also here because, as discussed, b
 
 export const OnOffClusterHandler: () => ClusterServerHandlers<typeof OnOffCluster> = () => ({
     on: async ({ attributes: { onOff } }) => {
-        onOff.set(true);
+        onOff.setLocal(true);
     },
     off: async ({ attributes: { onOff } }) => {
-        onOff.set(false);
+        onOff.setLocal(false);
     },
     toggle: async ({ attributes: { onOff } }) => {
-        if (onOff.get()) {
-            onOff.set(false);
+        if (onOff.getLocal()) {
+            onOff.setLocal(false);
         } else {
-            onOff.set(true);
+            onOff.setLocal(true);
         }
     },
 });

@@ -8,12 +8,11 @@ import { Attribute, AttributeJsType } from "../../cluster/Cluster.js";
 import { getClusterAttributeById, getClusterById } from "../../cluster/ClusterHelper.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { ArraySchema } from "../../tlv/TlvArray.js";
-import { TlvType } from "../../tlv/TlvCodec.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Logger } from "../../log/Logger.js";
 import { TlvAttributeData, TlvAttributeReport } from "./InteractionProtocol.js";
 
-const logger = Logger.get("DataReportDecoder");
+const logger = Logger.get("AttributeDataDecoder");
 
 export interface DecodedAttributeReportValue {
     path: {
@@ -138,30 +137,9 @@ export function decodeValueForSchema<T>(schema: TlvSchema<T>, values: TypeFromSc
     if (!(schema instanceof ArraySchema)) {
         throw new Error(`Attribute is not an list but multiple values were returned`);
     }
-    return decodeChunkedArray(schema, values) as T;
+    return schema.decodeFromChunkedArray(values.map(({ data, path: { listIndex } }) => ({ listIndex, element: data }))) as T;
 }
 
-export function decodeChunkedArray<T>(schema: ArraySchema<T>, values: TypeFromSchema<typeof TlvAttributeData>[]): T[] {
-    if (!values.length) throw new Error('No values');
-    if (values[0].path.listIndex !== undefined) {
-        throw new Error(`List index ${values[0].path.listIndex} on first array element not supported`);
-    }
-    let result: T[] = [];
-    values.forEach(({ data, path: { listIndex } }) => {
-        if (listIndex === undefined) {
-            result = schema.decodeTlv(data);
-        } else if (listIndex === null) {
-            const element = schema.elementSchema.decodeTlv(data);
-            result.push(element);
-        } else if (data[0].typeLength.type === TlvType.Null) {
-            result.splice(listIndex, 1);
-        } else {
-            result[listIndex] = schema.elementSchema.decodeTlv(data);
-        }
-    });
-    schema.validate(result);
-    return result;
-}
 
 export function structureReadDataToClusterObject(data: DecodedAttributeReportValue[]) {
     const structure: { [key: number]: { [key: number]: { [key: string]: any } } } = {};

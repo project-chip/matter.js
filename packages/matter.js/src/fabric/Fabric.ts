@@ -56,7 +56,7 @@ export class Fabric {
         readonly rootPublicKey: ByteArray,
         private readonly keyPair: KeyPair,
         readonly rootVendorId: VendorId,
-        private readonly rootCert: ByteArray,
+        readonly rootCert: ByteArray,
         readonly identityProtectionKey: ByteArray,
         readonly operationalIdentityProtectionKey: ByteArray,
         readonly intermediateCACert: ByteArray | undefined,

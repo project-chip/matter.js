@@ -171,14 +171,14 @@ describe("Integration Test", () => {
             assert.ok(basicInfoCluster);
 
             // check API access for a Mandatory field with both APIs, get and set
-            const v1_objApi = basicInfoCluster.attributes.softwareVersionString.get();
+            const v1_objApi = basicInfoCluster.attributes.softwareVersionString.getLocal();
             assert.equal(v1_objApi, "v1");
 
             // check API access for an existing optional field with both APIs, get and set
             assert.ok(basicInfoCluster.attributes.nodeLabel);
-            const nodeLabel_objApi = basicInfoCluster.attributes.nodeLabel.get();
+            const nodeLabel_objApi = basicInfoCluster.attributes.nodeLabel.getLocal();
             assert.equal(nodeLabel_objApi, "");
-            basicInfoCluster.attributes.nodeLabel.set("234567");
+            basicInfoCluster.attributes.nodeLabel.setLocal("234567");
             const nodeLabel_accessorApi = basicInfoCluster.getNodeLabelAttribute();
             assert.equal(nodeLabel_accessorApi, "234567");
             basicInfoCluster.setNodeLabelAttribute("345678");
@@ -438,7 +438,7 @@ describe("Integration Test", () => {
             const { promise: firstPromise, resolver: firstResolver } = await getPromiseResolver<{ value: boolean, time: number }>();
             let callback = (value: boolean) => firstResolver({ value, time: Time.nowMs() });
 
-            //onOffClient.attributes.onOff.addListener(value => callback(value));
+            //onOffClient.attributes.onOff.addValueSetListener(value => callback(value));
             //await onOffClient.attributes.onOff.subscribe(0, 5);
             await onOffClient.subscribeOnOffAttribute(value => callback(value), 0, 5);
 
@@ -488,7 +488,7 @@ describe("Integration Test", () => {
             const { promise: firstPromise, resolver: firstResolver } = await getPromiseResolver<{ value: number, time: number }>();
             const callback = (value: number) => firstResolver({ value, time: Time.nowMs() });
 
-            //onOffClient.attributes.onOff.addListener(value => callback(value));
+            //onOffClient.attributes.onOff.addValueSetListener(value => callback(value));
             //await onOffClient.attributes.onOff.subscribe(0, 5);
             await scenesClient.subscribeSceneCountAttribute(value => callback(value), 0, 5);
 

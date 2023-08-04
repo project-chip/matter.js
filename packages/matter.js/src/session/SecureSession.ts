@@ -15,11 +15,14 @@ import { ByteArray, Endian } from "../util/ByteArray.js";
 import { Logger } from "../log/Logger.js";
 import { Time } from "../time/Time.js";
 import { DataWriter } from "../util/DataWriter.js";
+import { InternalError } from "../common/InternalError.js";
 
 const logger = Logger.get("SecureSession");
 
 const SESSION_KEYS_INFO = ByteArray.fromString("SessionKeys");
 const SESSION_RESUMPTION_KEYS_INFO = ByteArray.fromString("SessionResumptionKeys");
+
+export class NoAssociatedFabricError extends Error { }
 
 export class SecureSession<T> implements Session<T> {
     private readonly subscriptions = new Array<SubscriptionHandler>();
@@ -91,12 +94,12 @@ export class SecureSession<T> implements Session<T> {
         return this.fabric;
     }
 
-    getAccessingFabric(): Fabric {
-        if (this.fabric === undefined) throw new Error("Session needs to have an associated Fabric");
+    getAssociatedFabric(): Fabric {
+        if (this.fabric === undefined) throw new NoAssociatedFabricError("Session needs to have an associated Fabric");
         return this.fabric;
     }
 
-    getName() {
+    get name() {
         return `secure/${this.id}`;
     }
 
@@ -127,7 +130,7 @@ export class SecureSession<T> implements Session<T> {
 
     addSubscription(subscription: SubscriptionHandler) {
         this.subscriptions.push(subscription);
-        logger.debug(`Added subscription ${subscription.subscriptionId} to ${this.getName()}/${this.id}`);
+        logger.debug(`Added subscription ${subscription.subscriptionId} to ${this.name}/${this.id}`);
     }
 
     clearSubscriptions() {
@@ -147,5 +150,11 @@ export class SecureSession<T> implements Session<T> {
         writer.writeUInt32(messageId);
         writer.writeUInt64(nodeId.id);
         return writer.toByteArray();
+    }
+}
+
+export function assertSecureSession<T>(session: Session<T>, errorText?: string): asserts session is SecureSession<T> {
+    if (!session.isSecure()) {
+        throw new InternalError(errorText ?? "Insecure session in secure context");
     }
 }

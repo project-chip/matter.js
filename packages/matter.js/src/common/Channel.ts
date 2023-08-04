@@ -5,7 +5,7 @@
  */
 
 export interface Channel<T> {
+    name: string;
     send(data: T): Promise<void>;
-    getName(): string;
     close(): Promise<void>;
 }

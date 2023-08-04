@@ -27,6 +27,7 @@ import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvGroupId } from "../../datatype/GroupId.js";
 import { TlvUInt16, TlvEnum, TlvEpochUs } from "../../tlv/TlvNumber.js";
+import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
 import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
 import { TlvString, TlvByteString } from "../../tlv/TlvString.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
@@ -53,7 +54,9 @@ export namespace GroupKeyManagement {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 11.2.6.3.2
          */
-        groupKeySetId: TlvField(2, TlvUInt16.bound({ min: 1 }))
+        groupKeySetId: TlvField(2, TlvUInt16.bound({ min: 1 })),
+
+        fabricIndex: TlvField(254, TlvFabricIndex)
     });
 
     /**
@@ -77,7 +80,9 @@ export namespace GroupKeyManagement {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 11.2.6.5.2
          */
-        groupName: TlvOptionalField(3, TlvString.bound({ maxLength: 16 }))
+        groupName: TlvOptionalField(3, TlvString.bound({ maxLength: 16 })),
+
+        fabricIndex: TlvField(254, TlvFabricIndex)
     });
 
     /**

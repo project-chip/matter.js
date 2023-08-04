@@ -97,7 +97,7 @@ class InteractionMessenger<ContextT> {
     }
 
     getExchangeChannelName() {
-        return this.exchange.channel.getName();
+        return this.exchange.channel.name;
     }
 }
 

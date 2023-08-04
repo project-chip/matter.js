@@ -21,8 +21,10 @@ import {
 } from "@project-chip/matter.js/interaction";
 import { MessageExchange } from "@project-chip/matter.js/protocol";
 import { Endpoint, DeviceTypeDefinition, DeviceClasses } from "@project-chip/matter.js/device";
-import { FabricId, FabricIndex, NodeId, VendorId } from "@project-chip/matter.js/datatype";
-import { TlvString, TlvUInt8, TlvNoArguments, TlvArray, TlvField, TlvObject, TlvNullable } from "@project-chip/matter.js/tlv";
+import { FabricId, FabricIndex, NodeId, VendorId, TlvFabricIndex } from "@project-chip/matter.js/datatype";
+import {
+    TlvString, TlvUInt8, TlvNoArguments, TlvArray, TlvField, TlvObject, TlvNullable, TlvOptionalField
+} from "@project-chip/matter.js/tlv";
 import { BasicInformationCluster, OnOffCluster, AccessControlCluster } from "@project-chip/matter.js/cluster";
 import { Message } from "@project-chip/matter.js/codec";
 import { Fabric } from "@project-chip/matter.js/fabric";
@@ -187,6 +189,7 @@ const TlvAclTestSchema = TlvObject({
     authMode: TlvField(2, TlvUInt8),
     subjects: TlvField(3, TlvNullable(TlvUInt8)),
     targets: TlvField(4, TlvNullable(TlvUInt8)),
+    fabricIndex: TlvOptionalField(254, TlvFabricIndex),
 });
 
 const CHUNKED_ARRAY_WRITE_REQUEST: WriteRequest = {
@@ -203,9 +206,31 @@ const CHUNKED_ARRAY_WRITE_REQUEST: WriteRequest = {
             path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: null },
             data: TlvAclTestSchema.encodeTlv({
                 privilege: 1,
+                authMode: 1,
+                subjects: null,
+                targets: null,
+            }),
+            dataVersion: 0,
+        },
+        {
+            path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: null },
+            data: TlvAclTestSchema.encodeTlv({
+                privilege: 1,
+                authMode: 0,
+                subjects: null,
+                targets: null,
+                fabricIndex: FabricIndex.NO_FABRIC,
+            }),
+            dataVersion: 0,
+        },
+        {
+            path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: null },
+            data: TlvAclTestSchema.encodeTlv({
+                privilege: 1,
                 authMode: 2,
                 subjects: null,
                 targets: null,
+                fabricIndex: new FabricIndex(2),
             }),
             dataVersion: 0,
         },
@@ -373,7 +398,7 @@ describe("InteractionProtocol", () => {
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = interactionProtocol.handleReadRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, READ_REQUEST);
+            const result = interactionProtocol.handleReadRequest(({ channel: { name: "test" } }) as MessageExchange<any>, READ_REQUEST);
 
             assert.deepEqual(result, READ_RESPONSE);
         });
@@ -410,13 +435,13 @@ describe("InteractionProtocol", () => {
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, WRITE_REQUEST);
+            const result = interactionProtocol.handleWriteRequest(({ channel: { name: "test" } }) as MessageExchange<any>, WRITE_REQUEST);
 
             assert.deepEqual(result, WRITE_RESPONSE);
-            assert.equal(basicCluster.attributes.nodeLabel.get(), "test");
+            assert.equal(basicCluster.attributes.nodeLabel.getLocal(), "test");
         });
 
-        it("write chunked array values and return errors on invalid values", async () => {
+        it("write chunked array values with Fabric Index handling", async () => {
             const accessControlCluster = ClusterServer(AccessControlCluster, {
                 acl: [],
                 extension: [],
@@ -437,16 +462,31 @@ describe("InteractionProtocol", () => {
             interactionProtocol.setRootEndpoint(endpoint);
 
             const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ByteArray.fromHex("00"), ByteArray.fromHex("00"), { privateKey: ByteArray.fromHex("00"), publicKey: ByteArray.fromHex("00") }, new VendorId(1), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), "");
-            const testSession = await SecureSession.create({} as any, 1, testFabric, new NodeId(BigInt(1)), 1, ByteArray.fromHex("00"), ByteArray.fromHex("00"), false, false, () => {/* nothing */ }, 1000, 1000);
-            const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" }, session: testSession }) as unknown as MessageExchange<any>, CHUNKED_ARRAY_WRITE_REQUEST);
+            const testSession = await SecureSession.create({ getFabrics: () => [] } as any, 1, testFabric, new NodeId(BigInt(1)), 1, ByteArray.fromHex("00"), ByteArray.fromHex("00"), false, false, () => {/* nothing */ }, 1000, 1000);
+            const result = interactionProtocol.handleWriteRequest(({ channel: { name: "test" }, session: testSession }) as unknown as MessageExchange<any>, CHUNKED_ARRAY_WRITE_REQUEST);
 
             assert.deepEqual(result, CHUNKED_ARRAY_WRITE_RESPONSE);
-            assert.deepEqual(accessControlCluster.attributes.acl.get(testSession), [
+            assert.deepEqual(accessControlCluster.attributes.acl.getLocalForFabric(testFabric), [
+                {
+                    privilege: 1,
+                    authMode: 1,
+                    subjects: null,
+                    targets: null,
+                    fabricIndex: new FabricIndex(1), // Set from session
+                },
+                {
+                    privilege: 1,
+                    authMode: 0,
+                    subjects: null,
+                    targets: null,
+                    fabricIndex: new FabricIndex(0), // existing value 0
+                },
                 {
                     privilege: 1,
                     authMode: 2,
                     subjects: null,
                     targets: null,
+                    fabricIndex: new FabricIndex(2), // existing value 2
                 }
             ]);
         });
@@ -481,13 +521,13 @@ describe("InteractionProtocol", () => {
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = interactionProtocol.handleWriteRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, MASS_WRITE_REQUEST);
+            const result = interactionProtocol.handleWriteRequest(({ channel: { name: "test" } }) as MessageExchange<any>, MASS_WRITE_REQUEST);
 
             assert.deepEqual(result, MASS_WRITE_RESPONSE);
-            assert.equal(basicCluster.attributes.vendorName.get(), "vendor");
-            assert.equal(basicCluster.attributes.productName.get(), "product");
-            assert.equal(basicCluster.attributes.location.get(), "US");
-            assert.equal(basicCluster.attributes.nodeLabel.get(), "test");
+            assert.equal(basicCluster.attributes.vendorName.getLocal(), "vendor");
+            assert.equal(basicCluster.attributes.productName.getLocal(), "product");
+            assert.equal(basicCluster.attributes.location.getLocal(), "US");
+            assert.equal(basicCluster.attributes.nodeLabel.getLocal(), "test");
         });
     });
 
@@ -516,7 +556,7 @@ describe("InteractionProtocol", () => {
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = await interactionProtocol.handleInvokeRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS, {} as Message);
+            const result = await interactionProtocol.handleInvokeRequest(({ channel: { name: "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS, {} as Message);
 
             assert.deepEqual(result, INVOKE_COMMAND_RESPONSE);
             assert.equal(onOffState, true);
@@ -547,7 +587,7 @@ describe("InteractionProtocol", () => {
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = await interactionProtocol.handleInvokeRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_WITH_NO_ARGS, {} as Message);
+            const result = await interactionProtocol.handleInvokeRequest(({ channel: { name: "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_WITH_NO_ARGS, {} as Message);
 
             assert.deepEqual(result, INVOKE_COMMAND_RESPONSE);
             assert.equal(onOffState, true);
@@ -577,7 +617,7 @@ describe("InteractionProtocol", () => {
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = await interactionProtocol.handleInvokeRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_INVALID, {} as Message);
+            const result = await interactionProtocol.handleInvokeRequest(({ channel: { name: "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_INVALID, {} as Message);
 
             assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_INVALID);
             assert.equal(onOffState, false);
@@ -611,7 +651,7 @@ describe("InteractionProtocol", () => {
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = await interactionProtocol.handleInvokeRequest(({ channel: { getName: () => "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_MULTI, {} as Message);
+            const result = await interactionProtocol.handleInvokeRequest(({ channel: { name: "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_MULTI, {} as Message);
 
             assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_MULTI);
             assert.equal(triggeredOn, true);

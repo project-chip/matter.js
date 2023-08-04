@@ -5,7 +5,7 @@
  */
 
 import { BaseClusterComponent, ClusterComponent, ClusterForBaseCluster, ExtensibleCluster, IllegalClusterError, extendCluster, preventCluster, validateFeatureSelection } from "../../src/cluster/ClusterFactory.js";
-import { Attribute, Cluster, Command, Event, EventPriority, TlvNoResponse } from "../../src/cluster/Cluster.js";
+import { Attribute, Cluster, Command, Event, EventPriority, TlvNoResponse, WritableAttribute } from "../../src/cluster/Cluster.js";
 import { TlvUInt8 } from "../../src/tlv/TlvNumber.js";
 import { TlvNoArguments } from "../../src/tlv/TlvNoArguments.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../src/schema/BitmapSchema.js";
@@ -36,7 +36,7 @@ const METADATA = {
 
 const ELEMENTS = ClusterComponent({
     attributes: {
-        attr1: Attribute(1, TlvUInt8)
+        attr1: WritableAttribute(1, TlvUInt8)
     },
     commands: {
         cmd1: Command(2, TlvNoArguments, 2, TlvNoResponse)
@@ -259,7 +259,7 @@ describe("ClusterFactory", () => {
 
     /**
      * Not a runtime test.  If this compiles the test "passes".
-     * 
+     *
      * Ensures that ClusterServer instantiates correctly from extended
      * clusters.
      */
@@ -275,9 +275,16 @@ describe("ClusterFactory", () => {
                 cmd2RequestField; attr1; attr2; session; endpoint;
                 return { cmd2ResponseField: 5 };
             },
-            getAttr1: ({ attributes: { attr1, attr2 }, session, endpoint }) => {
+            attr1AttributeGetter: ({ attributes: { attr1, attr2 }, session, endpoint }) => {
                 if (attr1 == undefined || attr2 == undefined || session === undefined || endpoint === undefined) throw new Error("Missing attribute");
                 return 5;
+            },
+            attr1AttributeSetter: (value, { attributes: { attr1, attr2 }, session, endpoint }) => {
+                if (value === undefined || attr1 == undefined || attr2 == undefined || session === undefined || endpoint === undefined) throw new Error("Missing attribute");
+                return true;
+            },
+            attr1AttributeValidator: (value, { attributes: { attr1, attr2 }, session, endpoint }) => {
+                if (value === undefined || attr1 == undefined || attr2 == undefined || session === undefined || endpoint === undefined) throw new Error("Missing attribute");
             }
         };
         handlers;
@@ -290,25 +297,37 @@ describe("ClusterFactory", () => {
                 attr2: 2,
             }, {
             cmd1: ({ attributes: { attr1, attr2 }, session, endpoint }) => {
-                attr1; attr2; session; endpoint;
+                attr1;
+                attr2;
+                session;
+                endpoint;
             },
             cmd2: ({ request: { cmd2RequestField }, attributes: { attr1, attr2 }, session, endpoint }) => {
-                cmd2RequestField; attr1; attr2; session; endpoint;
+                cmd2RequestField;
+                attr1;
+                attr2;
+                session;
+                endpoint;
                 return { cmd2ResponseField: 5 };
             },
-            getAttr1: ({ attributes: { attr1, attr2 }, session, endpoint }) => {
+            attr1AttributeGetter: ({ attributes: { attr1, attr2 }, session, endpoint }) => {
                 if (attr1 == undefined || attr2 == undefined || session === undefined || endpoint === undefined) throw new Error("Missing attribute");
                 return 5;
-            }
-        }, {
-            ev1: true,
-            ev2: true,
-        });
+            },
+            attr1AttributeSetter: (value, { attributes: { attr1, attr2 }, session, endpoint }) => {
+                if (value === undefined || attr1 == undefined || attr2 == undefined || session === undefined || endpoint === undefined) throw new Error("Missing attribute");
+                return true;
+            },
+        },
+            {
+                ev1: true,
+                ev2: true,
+            });
     })
 
     /**
      * Not a runtime test.  If this compiles the test "passes".
-     * 
+     *
      * Equivalent of above but removes ClusterFactory from the equation.
      */
     it("ClusterServer type is correct for manually defined equivalent", () => {
@@ -354,10 +373,14 @@ describe("ClusterFactory", () => {
                 cmd2RequestField; attr1; attr2; session; endpoint;
                 return { cmd2ResponseField: 5 };
             },
-            getAttr1: ({ attributes: { attr1, attr2 }, session, endpoint }) => {
+            attr1AttributeGetter: ({ attributes: { attr1, attr2 }, session, endpoint }) => {
                 if (attr1 == undefined || attr2 == undefined || session === undefined || endpoint === undefined) throw new Error("Missing attribute");
                 return 5;
-            }
+            },
+            attr1AttributeSetter: (value, { attributes: { attr1, attr2 }, session, endpoint }) => {
+                if (value === undefined || attr1 == undefined || attr2 == undefined || session === undefined || endpoint === undefined) throw new Error("Missing attribute");
+                return true;
+            },
         };
         handlers;
 
@@ -375,10 +398,14 @@ describe("ClusterFactory", () => {
                 cmd2RequestField; attr1; attr2; session; endpoint;
                 return { cmd2ResponseField: 5 };
             },
-            getAttr1: ({ attributes: { attr1, attr2 }, session, endpoint }) => {
+            attr1AttributeGetter: ({ attributes: { attr1, attr2 }, session, endpoint }) => {
                 if (attr1 == undefined || attr2 == undefined || session === undefined || endpoint === undefined) throw new Error("Missing attribute");
                 return 5;
-            }
+            },
+            attr1AttributeSetter: (value, { attributes: { attr1, attr2 }, session, endpoint }) => {
+                if (value === undefined || attr1 == undefined || attr2 == undefined || session === undefined || endpoint === undefined) throw new Error("Missing attribute");
+                return true;
+            },
         }, {
             ev1: true,
             ev2: true,

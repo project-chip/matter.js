@@ -7,6 +7,7 @@
 import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { ValidationError } from "../common/MatterError.js";
 
 /**
  * Schema to encode a boolean in TLV.
@@ -24,7 +25,7 @@ export class BooleanSchema extends TlvSchema<boolean> {
     }
 
     override validate(value: boolean): void {
-        if (typeof value !== "boolean") throw new Error(`Expected boolean, got ${typeof value}.`);
+        if (typeof value !== "boolean") throw new ValidationError(`Expected boolean, got ${typeof value}.`);
     }
 }
 

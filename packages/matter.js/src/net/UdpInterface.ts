@@ -49,7 +49,7 @@ class UdpConnection implements Channel<ByteArray> {
         return this.server.send(this.peerAddress, this.peerPort, data);
     }
 
-    getName() {
+    get name() {
         return `udp://${this.peerAddress}:${this.peerPort}`;
     }
 
