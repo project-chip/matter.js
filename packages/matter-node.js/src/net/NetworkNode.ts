@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { UdpChannelOptions, UdpChannel, Network } from "@project-chip/matter.js/net";
+import { UdpChannelOptions, UdpChannel, Network, NetworkError } from "@project-chip/matter.js/net";
 import { onSameNetwork, Cache, isIPv6 } from "@project-chip/matter.js/util";
 
 import { UdpChannelNode } from "./UdpChannelNode";
@@ -15,13 +15,13 @@ export class NetworkNode extends Network {
     static getMulticastInterface(netInterface: string, ipv4: boolean) {
         if (ipv4) {
             const netInterfaceInfo = networkInterfaces()[netInterface];
-            if (netInterfaceInfo === undefined) throw new Error(`Unknown interface: ${netInterface}`);
+            if (netInterfaceInfo === undefined) throw new NetworkError(`Unknown interface: ${netInterface}`);
             for (const { address, family } of netInterfaceInfo) {
                 if (family === "IPv4") {
                     return address;
                 }
             }
-            throw new Error(`No IPv4 addresses on interface: ${netInterface}`);
+            throw new NetworkError(`No IPv4 addresses on interface: ${netInterface}`);
         } else {
             return `::%${netInterface}`;
         }

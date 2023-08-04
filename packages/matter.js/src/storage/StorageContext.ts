@@ -4,7 +4,7 @@
 * SPDX-License-Identifier: Apache-2.0
 */
 
-import { Storage } from "./Storage.js";
+import { Storage, StorageError } from "./Storage.js";
 import { SupportedStorageTypes } from "./StringifyTools.js";
 
 export class StorageContext {
@@ -17,7 +17,7 @@ export class StorageContext {
         const value = this.storage.get<T>(this.contexts, key);
         if (value !== undefined) return value;
         if (defaultValue === undefined) {
-            throw new Error(`No value found for key ${key} in context ${this.contexts} and no default value specified!`);
+            throw new StorageError(`No value found for key ${key} in context ${this.contexts} and no default value specified!`);
         }
         return defaultValue;
     }
@@ -31,8 +31,8 @@ export class StorageContext {
     }
 
     createContext(context: string) {
-        if (context.length === 0) throw new Error("Context must not be an empty string");
-        if (context.includes('.')) throw new Error("Context must not contain dots!");
+        if (context.length === 0) throw new StorageError("Context must not be an empty string");
+        if (context.includes('.')) throw new StorageError("Context must not contain dots!");
         return new StorageContext(this.storage, [...this.contexts, context]);
     }
 }

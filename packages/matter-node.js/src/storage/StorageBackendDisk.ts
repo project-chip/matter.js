@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Storage, fromJson, SupportedStorageTypes, toJson } from "@project-chip/matter.js/storage";
+import { Storage, fromJson, SupportedStorageTypes, toJson, StorageError } from "@project-chip/matter.js/storage";
 
 import { LocalStorage } from "node-localstorage";
 
@@ -29,19 +29,19 @@ export class StorageBackendDisk implements Storage {
 
     buildStorageKey(contexts: string[], key: string): string {
         const contextKey = contexts.join('.');
-        if (!key.length || !contextKey.length || contextKey.includes("..") || contextKey.startsWith(".") || contextKey.endsWith(".")) throw new Error("Context must not be an empty string!");
+        if (!key.length || !contextKey.length || contextKey.includes("..") || contextKey.startsWith(".") || contextKey.endsWith(".")) throw new StorageError("Context must not be an empty string!");
         return `${contextKey}.${key}`;
     }
 
     get<T extends SupportedStorageTypes>(contexts: string[], key: string): T | undefined {
-        if (!contexts.length || !key.length) throw new Error("Context and key must not be empty strings!");
+        if (!contexts.length || !key.length) throw new StorageError("Context and key must not be empty strings!");
         const value = this.localStorage.getItem(this.buildStorageKey(contexts, key));
         if (value === null) return undefined;
         return fromJson(value) as T
     }
 
     set<T extends SupportedStorageTypes>(contexts: string[], key: string, value: T): void {
-        if (!contexts.length || !key.length) throw new Error("Context and key must not be empty strings!");
+        if (!contexts.length || !key.length) throw new StorageError("Context and key must not be empty strings!");
         this.localStorage.setItem(this.buildStorageKey(contexts, key), toJson(value));
     }
 }

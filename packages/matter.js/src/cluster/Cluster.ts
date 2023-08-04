@@ -14,6 +14,9 @@ import { CommandId, TlvCommandId } from "../datatype/CommandId.js";
 import { TlvBitmap, TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { MatterError } from "../common/MatterError.js";
+
+export class AttributeError extends MatterError { }
 
 export const enum AccessLevel {
     View,

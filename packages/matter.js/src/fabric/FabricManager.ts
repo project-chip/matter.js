@@ -5,7 +5,7 @@
  */
 
 import { Fabric, FabricBuilder, FabricJsonObject } from "./Fabric.js";
-import { MatterError } from "../common/MatterError.js";
+import { InternalError, MatterError, MatterFlowError } from "../common/MatterError.js";
 import { FabricIndex } from "../datatype/FabricIndex.js";
 import { StorageContext } from "../storage/StorageContext.js";
 import { ByteArray } from "../util/ByteArray.js";
@@ -55,7 +55,7 @@ export class FabricManager {
             return fabric;
         }
 
-        throw new Error("Fabric cannot be found from destinationId");
+        throw new InternalError("Fabric cannot be found from destinationId");
     }
 
     armFailSafe() {
@@ -64,12 +64,12 @@ export class FabricManager {
 
     getFabricBuilder() {
         const result = this.fabricBuilder;
-        if (result === undefined) throw new Error("armFailSafe should be called first!");
+        if (result === undefined) throw new MatterFlowError("armFailSafe should be called first!");
         return result;
     }
 
     async tentativelyAddFabric() {
-        if (this.fabricBuilder === undefined) throw new Error("armFailSafe should be called first!");
+        if (this.fabricBuilder === undefined) throw new MatterFlowError("armFailSafe should be called first!");
         this.fabrics.push(await this.fabricBuilder.build());
         this.fabricBuilder = undefined;
     }

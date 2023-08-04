@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ValidationError } from "@project-chip/matter.js/common";
 import { execSync } from "child_process";
 
 const commandArguments = process.argv.slice(2);
@@ -22,7 +23,7 @@ export function getIntParameter(name: string) {
     const value = getParameter(name);
     if (value === undefined) return undefined;
     const intValue = parseInt(value, 10);
-    if (isNaN(intValue)) throw new Error(`Invalid value for parameter ${name}: ${value} is not a number`);
+    if (isNaN(intValue)) throw new ValidationError(`Invalid value for parameter ${name}: ${value} is not a number`);
     return intValue;
 }
 

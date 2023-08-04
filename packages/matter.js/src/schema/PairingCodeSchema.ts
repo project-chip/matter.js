@@ -10,6 +10,7 @@ import {
 import { Schema } from "./Schema.js";
 import { Base38 } from "./Base38Schema.js";
 import { Verhoeff } from "../math/Verhoeff.js";
+import { UnexpectedDataError } from "../common/MatterError.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 /** See {@link MatterCoreSpecificationV1_0} § 5.1.3.1 Table 35 */
@@ -57,7 +58,7 @@ class QrPairingCodeSchema extends Schema<QrCodeData, string> {
     }
 
     protected decodeInternal(encoded: string): QrCodeData {
-        if (!encoded.startsWith(PREFIX)) throw new Error("The pairing code should start with MT:");
+        if (!encoded.startsWith(PREFIX)) throw new UnexpectedDataError("The pairing code should start with MT:");
         return QrCodeDataSchema.decode(Base38.decode(encoded.slice(PREFIX.length)));
     }
 }
@@ -75,8 +76,8 @@ export type ManualPairingData = {
 /** See {@link MatterCoreSpecificationV1_0} § 5.1.4.1 Table 38/39/40 */
 class ManualPairingCodeSchema extends Schema<ManualPairingData, string> {
     protected encodeInternal({ discriminator, passcode, vendorId, productId }: ManualPairingData): string {
-        if (discriminator === undefined) throw new Error("discriminator is required");
-        if (discriminator > 4095) throw new Error("discriminator value must be less than 4096");
+        if (discriminator === undefined) throw new UnexpectedDataError("discriminator is required");
+        if (discriminator > 4095) throw new UnexpectedDataError("discriminator value must be less than 4096");
         let result = "";
         const hasVendorProductIds = (vendorId !== undefined) && (productId !== undefined);
         result += ((discriminator >> 10) | (hasVendorProductIds ? (1 << 2) : 0));
@@ -92,10 +93,10 @@ class ManualPairingCodeSchema extends Schema<ManualPairingData, string> {
 
     protected decodeInternal(encoded: string): ManualPairingData {
         if (encoded.length !== 11 && encoded.length != 21) {
-            throw new Error("Invalid pairing code");
+            throw new UnexpectedDataError("Invalid pairing code");
         }
         if (new Verhoeff().computeChecksum(encoded.slice(0, -1)) !== parseInt(encoded.slice(-1))) {
-            throw new Error("Invalid checksum");
+            throw new UnexpectedDataError("Invalid checksum");
         }
         const hasVendorProductIds = !!(parseInt(encoded[0]) & (1 << 2));
         const shortDiscriminator = (parseInt(encoded[0]) & 0x03) << 2 | (parseInt(encoded.slice(1, 6)) >> 14) & 0x3

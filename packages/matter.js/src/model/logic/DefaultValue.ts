@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "../../common/InternalError.js";
+import { NotImplementedError } from "../../common/MatterError.js";
 import { ByteArray } from "../../util/ByteArray.js";
 import { camelize } from "../../util/String.js";
 import { FieldValue, Metatype } from "../index.js";
@@ -12,7 +12,7 @@ import { ValueModel } from "../models/index.js";
 
 /**
  * Obtain a native JS default value for a ValueModel.
- * 
+ *
  * This code assumes defaults have been previously validated (e.g. by model
  * validator).  It throws errors for a few structural issues but generally
  * returns undefined if the model's default value cannot be converted to the
@@ -101,7 +101,7 @@ function castValue(model: ValueModel) {
             return !!modelDefault;
 
         default:
-            throw new InternalError(`Unsupported metatype "${metatype}"`);
+            throw new NotImplementedError(`Unsupported metatype "${metatype}"`);
     }
 }
 /**

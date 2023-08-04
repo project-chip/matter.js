@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "../../../common/InternalError.js";
+import { InternalError } from "../../../common/MatterError.js";
 import { isDeepEqual } from "../../../util/DeepEqual.js";
 import { Conformance } from "../../aspects/index.js";
 import { ClusterModel, DatatypeModel } from "../../models/index.js";
@@ -22,11 +22,11 @@ type Choices = {
 /**
  * Analyzes feature conformance to ascertain feature combinations that are
  * unsupported.  Uses rules to match the conformance AST.
- * 
+ *
  * Rule matching is not exhaustive but supports a significant subset of the
  * conformance dialect that is inclusive of all feature conformances used by
  * the 1.1 specifications.
- * 
+ *
  * Throws an error if conformance does not adhere to supported rules.  This
  * indicates the ruleset needs augmentation.
  */

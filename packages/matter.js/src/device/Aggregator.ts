@@ -10,6 +10,7 @@ import { AttributeInitialValues } from "../cluster/server/ClusterServer.js";
 import { BridgedDeviceBasicInformationCluster } from "../cluster/definitions/BridgedDeviceBasicInformationCluster.js";
 import { ClusterServer } from "../protocol/interaction/InteractionServer.js";
 import { Endpoint, EndpointOptions } from "./Endpoint.js";
+import { ImplementationError } from "../common/MatterError.js";
 
 /**
  * An Aggregator is a special endpoint that exposes multiple devices as a "bridge" into the matter ecosystem.
@@ -57,7 +58,7 @@ export class Aggregator extends Endpoint {
             ));
         } else {
             if (!device.hasClusterServer(BridgedDeviceBasicInformationCluster)) {
-                throw new Error("BridgedDeviceBasicInformationCluster is required for bridged devices. Please add yourself or provide as second parameter");
+                throw new ImplementationError("BridgedDeviceBasicInformationCluster is required for bridged devices. Please add yourself or provide as second parameter");
             }
         }
         this.addChildEndpoint(device);
@@ -83,7 +84,7 @@ export class Aggregator extends Endpoint {
             device.addClusterServer(ClusterServer(BridgedDeviceBasicInformationCluster, bridgedBasicInformation, {}));
         } else {
             if (!device.hasClusterServer(BridgedDeviceBasicInformationCluster)) {
-                throw new Error("BridgedDeviceBasicInformationCluster is required for bridged devices. Please add yourself or provide as second parameter");
+                throw new ImplementationError("BridgedDeviceBasicInformationCluster is required for bridged devices. Please add yourself or provide as second parameter");
             }
         }
         this.addChildEndpoint(device);

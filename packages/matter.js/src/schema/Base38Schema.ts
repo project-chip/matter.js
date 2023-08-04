@@ -6,6 +6,7 @@
 
 import { Schema } from "./Schema.js";
 import { ByteArray } from "../util/ByteArray.js";
+import { UnexpectedDataError } from "../common/MatterError.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 const BASE38_ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-.";
@@ -53,7 +54,7 @@ class Base38Schema extends Schema<ByteArray, string> {
                 decodeLength += 1;
                 break;
             default:
-                throw new Error(`Invalid base38 encoded string length: ${encodedLength}`);
+                throw new UnexpectedDataError(`Invalid base38 encoded string length: ${encodedLength}`);
         }
         const result = new ByteArray(decodeLength);
         let decodedOffset = 0;
@@ -86,7 +87,7 @@ class Base38Schema extends Schema<ByteArray, string> {
             const char = encoded[offset + i];
             // TODO: replace this with a lookup table for performance
             const code = BASE38_ALPHABET.indexOf(char);
-            if (code === -1) throw new Error(`Unexpected character ${char} at ${offset + i}`);
+            if (code === -1) throw new UnexpectedDataError(`Unexpected character ${char} at ${offset + i}`);
             result = result * 38 + code;
         }
         return result;

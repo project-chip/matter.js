@@ -12,6 +12,9 @@ import { StorageContext } from "../storage/StorageContext.js";
 import { SecureSession } from "./SecureSession.js";
 import { Session } from "./Session.js";
 import { UnsecureSession } from "./UnsecureSession.js";
+import { Logger } from "../log/Logger.js";
+
+const logger = Logger.get("SessionManager");
 
 export const UNDEFINED_NODE_ID = new NodeId(BigInt(0));
 
@@ -117,10 +120,10 @@ export class SessionManager<ContextT> {
         const storedResumptionRecords = this.sessionStorage.get<ResumptionStorageRecord[]>("resumptionRecords", []);
 
         storedResumptionRecords.forEach(({ nodeId, sharedSecret, resumptionId, fabricId, peerNodeId }) => {
-            console.log("restoring resumption record for node", nodeId);
+            logger.info("restoring resumption record for node", nodeId);
             const fabric = fabrics.find(fabric => fabric.fabricId.id === fabricId);
             if (!fabric) {
-                console.log("fabric not found for resumption record", fabricId);
+                logger.error("fabric not found for resumption record", fabricId);
                 return;
             }
             this.resumptionRecords.set(nodeId, {

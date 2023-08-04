@@ -9,9 +9,9 @@ import { Logger } from "@project-chip/matter.js/log";
 import { ByteArray, getPromiseResolver } from "@project-chip/matter.js/util";
 import {
     BLE_MATTER_C1_CHARACTERISTIC_UUID, BLE_MATTER_C2_CHARACTERISTIC_UUID, BLE_MATTER_C3_CHARACTERISTIC_UUID,
-    BLE_MATTER_SERVICE_UUID, BTP_CONN_RSP_TIMEOUT_MS, BtpSessionHandler
+    BLE_MATTER_SERVICE_UUID, BTP_CONN_RSP_TIMEOUT_MS, BtpSessionHandler, BleError, BtpFlowError
 } from "@project-chip/matter.js/ble";
-import { Channel } from "@project-chip/matter.js/common";
+import { Channel, InternalError } from "@project-chip/matter.js/common";
 import { Time } from "@project-chip/matter.js/time";
 
 const logger = Logger.get("BlenoBleServer");
@@ -194,7 +194,7 @@ export class BlenoBleServer implements Channel<ByteArray> {
      */
     handleC1WriteRequest(data: Buffer, offset: number, withoutResponse: boolean) {
         if (offset !== 0 || withoutResponse) {
-            throw new Error(`Offset ${offset} or withoutResponse ${withoutResponse} not supported`);
+            throw new BleError(`Offset ${offset} or withoutResponse ${withoutResponse} not supported`);
         }
 
         if (data[0] === 0x65 && data[1] === 0x6c && data.length === 9) { // Check if the first two bytes and length match the Matter handshake
@@ -208,7 +208,7 @@ export class BlenoBleServer implements Channel<ByteArray> {
                 logger.debug(`Received Matter data for BTP Session: ${data.toString('hex')}`);
                 void this.btpSession.handleIncomingBleData(new ByteArray(data));
             } else {
-                throw new Error(`Received Matter data but no BTP session was initialized: ${data.toString('hex')}`);
+                throw new BtpFlowError(`Received Matter data but no BTP session was initialized: ${data.toString('hex')}`);
             }
         }
     }
@@ -224,10 +224,10 @@ export class BlenoBleServer implements Channel<ByteArray> {
      */
     async handleC2SubscribeRequest(maxValueSize: number, updateValueCallback: (data: Buffer) => void) {
         if (this.latestHandshakePayload === undefined) {
-            throw new Error(`Subscription request received before handshake Request`);
+            throw new BtpFlowError(`Subscription request received before handshake Request`);
         }
         if (this.btpSession !== undefined) {
-            throw new Error(`Subscription request received but BTP session already initialized. Can not handle two sessions!`);
+            throw new BtpFlowError(`Subscription request received but BTP session already initialized. Can not handle two sessions!`);
         }
         this.btpHandshakeTimeout.stop();
 
@@ -250,7 +250,7 @@ export class BlenoBleServer implements Channel<ByteArray> {
             // callback to forward decoded and de-assembled Matter messages to ExchangeManager
             async (data: ByteArray) => {
                 if (this.onMatterMessageListener === undefined) {
-                    throw new Error(`No listener registered for Matter messages`);
+                    throw new InternalError(`No listener registered for Matter messages`);
                 }
                 this.onMatterMessageListener(this, data);
             }
@@ -275,7 +275,7 @@ export class BlenoBleServer implements Channel<ByteArray> {
      */
     handleC3ReadRequest(offset: number) {
         if (offset > this.additionalAdvertisingData.length) {
-            throw new Error(`Offset ${offset} is larger than data ${this.additionalAdvertisingData.length}`);
+            throw new BleError(`Offset ${offset} is larger than data ${this.additionalAdvertisingData.length}`);
         } else {
             return this.additionalAdvertisingData.subarray(offset);
         }
@@ -320,7 +320,7 @@ export class BlenoBleServer implements Channel<ByteArray> {
 
     setMatterMessageListener(listener: (socket: Channel<ByteArray>, data: ByteArray) => void) {
         if (this.onMatterMessageListener !== undefined) {
-            throw new Error(`onData listener already set`);
+            throw new InternalError(`onData listener already set`);
         }
         this.onMatterMessageListener = listener;
     }
@@ -354,7 +354,7 @@ export class BlenoBleServer implements Channel<ByteArray> {
      */
     async send(data: ByteArray) {
         if (this.btpSession === undefined) {
-            throw new Error(`Can not send data, no BTP session initialized`);
+            throw new BtpFlowError(`Can not send data, no BTP session initialized`);
         }
         await this.btpSession.sendMatterMessage(data);
     }

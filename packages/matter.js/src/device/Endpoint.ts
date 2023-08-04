@@ -21,6 +21,7 @@ import { InteractionClient } from "../protocol/interaction/InteractionClient.js"
 import { BasicInformationCluster } from "../cluster/definitions/BasicInformationCluster.js";
 import { BridgedDeviceBasicInformationCluster } from "../cluster/definitions/BridgedDeviceBasicInformationCluster.js";
 import { AllClustersMap } from "../cluster/ClusterHelper.js";
+import { ImplementationError, InternalError, NotImplementedError } from "../common/MatterError.js";
 
 export interface EndpointOptions {
     endpointId?: number;
@@ -84,7 +85,7 @@ export class Endpoint {
 
     getId() {
         if (this.id === undefined) {
-            throw new Error("Endpoint has not been assigned yet");
+            throw new InternalError("Endpoint has not been assigned yet");
         }
         return this.id;
     }
@@ -208,7 +209,7 @@ export class Endpoint {
     protected removeChildEndpoint(endpoint: Endpoint): void {
         const index = this.childEndpoints.indexOf(endpoint);
         if (index === -1) {
-            throw new Error(`Provided endpoint for deletion does not exist as child endpoint.`);
+            throw new ImplementationError(`Provided endpoint for deletion does not exist as child endpoint.`);
         }
         this.childEndpoints.splice(index, 1);
         endpoint.clearStructureChangedCallback(); // remove
@@ -240,17 +241,17 @@ export class Endpoint {
             deviceType.requiredServerClusters?.forEach(clusterId => {
                 if (!this.clusterServers.has(clusterId)) {
                     const clusterName = AllClustersMap[clusterId] ? AllClustersMap[clusterId].name : "unknown";
-                    throw new Error(`Device type ${deviceType.name} (0x${deviceType.code.toString(16)}) requires cluster server ${clusterName}(0x${clusterId.toString(16)}) but it is not present on endpoint ${this.id}`);
+                    throw new ImplementationError(`Device type ${deviceType.name} (0x${deviceType.code.toString(16)}) requires cluster server ${clusterName}(0x${clusterId.toString(16)}) but it is not present on endpoint ${this.id}`);
                 }
             });
 
             if (this.clusterClients.size > 0) { // TODO remove once supported
-                throw new Error(`Devices with client clusters are not supported yet`);
+                throw new NotImplementedError(`Devices with client clusters are not supported yet`);
             }
             deviceType.requiredClientClusters?.forEach(clusterId => {
                 const clusterName = AllClustersMap[clusterId] ? AllClustersMap[clusterId].name : "unknown";
                 if (!this.clusterClients.has(clusterId)) {
-                    throw new Error(`Device type ${deviceType.name} (0x${deviceType.code.toString(16)}) requires cluster client ${clusterName}(0x${clusterId.toString(16)}) but it is not present on endpoint ${this.id}`);
+                    throw new ImplementationError(`Device type ${deviceType.name} (0x${deviceType.code.toString(16)}) requires cluster client ${clusterName}(0x${clusterId.toString(16)}) but it is not present on endpoint ${this.id}`);
                 }
             });
         });
@@ -271,7 +272,7 @@ export class Endpoint {
             const childPartsList = child.updatePartsList();
 
             if (child.id === undefined) {
-                throw new Error(`Child endpoint has no id, can not add to parts list`);
+                throw new InternalError(`Child endpoint has no id, can not add to parts list`);
             }
 
             newPartsList.push(new EndpointNumber(child.id));

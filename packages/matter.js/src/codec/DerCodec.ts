@@ -5,6 +5,7 @@
  */
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataReader } from "../util/DataReader.js";
+import { UnexpectedDataError } from "../common/MatterError.js";
 
 export const OBJECT_ID_KEY = "_objectId";
 export const TAG_ID_KEY = "_tag";
@@ -67,7 +68,7 @@ export class DerCodec {
         } else if (value === undefined) {
             return new ByteArray(0);
         } else {
-            throw new Error(`Unsupported type ${typeof value}`);
+            throw new UnexpectedDataError(`Unsupported type ${typeof value}`);
         }
     }
 

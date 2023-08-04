@@ -19,6 +19,7 @@ import { Logger } from "../log/Logger.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { MatterController } from "../MatterController.js";
 import { INTERACTION_PROTOCOL_ID } from "../protocol/interaction/InteractionServer.js"
+import { MatterFlowError, NotImplementedError } from "../common/MatterError.js";
 
 const logger = Logger.get("ExchangeManager");
 
@@ -92,10 +93,10 @@ export class ExchangeManager<ContextT> {
     private async onMessage(channel: Channel<ByteArray>, messageBytes: ByteArray) {
         const packet = MessageCodec.decodePacket(messageBytes);
 
-        if (packet.header.sessionType === SessionType.Group) throw new Error("Group messages are not supported");
+        if (packet.header.sessionType === SessionType.Group) throw new NotImplementedError("Group messages are not supported");
 
         const session = this.sessionManager.getSession(packet.header.sessionId);
-        if (session === undefined) throw new Error(`Cannot find a session for ID ${packet.header.sessionId}`);
+        if (session === undefined) throw new MatterFlowError(`Cannot find a session for ID ${packet.header.sessionId}`);
 
         const message = session.decode(packet);
         const exchangeIndex = message.payloadHeader.isInitiatorMessage ? message.payloadHeader.exchangeId : (message.payloadHeader.exchangeId | 0x10000);
@@ -107,7 +108,7 @@ export class ExchangeManager<ContextT> {
             this.exchanges.set(exchangeIndex, exchange);
             await exchange.onMessageReceived(message);
             const protocolHandler = this.protocols.get(message.payloadHeader.protocolId);
-            if (protocolHandler === undefined) throw new Error(`Unsupported protocol ${message.payloadHeader.protocolId}`);
+            if (protocolHandler === undefined) throw new MatterFlowError(`Unsupported protocol ${message.payloadHeader.protocolId}`);
             await protocolHandler.onNewExchange(exchange, message);
         }
     }

@@ -22,6 +22,7 @@ import { isIPv6 } from "../util/Ip.js";
 import { Logger } from "../log/Logger.js";
 import { VendorId } from "../datatype/VendorId.js";
 import { ServerAddress, ServerAddressIp } from "../common/ServerAddress.js";
+import { ImplementationError } from "../common/MatterError.js";
 
 const logger = Logger.get("MdnsScanner");
 
@@ -159,7 +160,7 @@ export class MdnsScanner implements Scanner {
             answers = [...activeExistingQuery.answers, ...answers];
         }
         this.activeAnnounceQueries.set(queryId, { queries, answers });
-        console.log(`Set ${queries.length} query records for query ${queryId}: ${JSON.stringify(queries)}`);
+        logger.debug(`Set ${queries.length} query records for query ${queryId}: ${JSON.stringify(queries)}`);
         this.queryTimer?.stop();
         this.nextAnnounceIntervalSeconds = START_ANNOUNCE_INTERVAL_SECONDS; // Reset query interval
         this.queryTimer = Time.getTimer(0, () => this.sendQueries()).start();
@@ -352,7 +353,7 @@ export class MdnsScanner implements Scanner {
         else if (Object.keys(identifier).length === 0) {
             return getCommissioningModeQname();
         }
-        throw new Error(`Invalid commissionable device identifier : ${identifier}`); // Should neven happen
+        throw new ImplementationError(`Invalid commissionable device identifier : ${identifier}`); // Should neven happen
     }
 
     extractInstanceId(instanceName: string) {

@@ -7,7 +7,7 @@
 import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-import { ValidationError } from "../common/MatterError.js";
+import { UnexpectedDataError, ValidationError } from "../common/MatterError.js";
 
 /**
  * Schema to encode a boolean in TLV.
@@ -20,7 +20,7 @@ export class BooleanSchema extends TlvSchema<boolean> {
     }
 
     override decodeTlvInternalValue(_reader: TlvReader, typeLength: TlvTypeLength) {
-        if (typeLength.type !== TlvType.Boolean) throw new Error(`Unexpected type ${typeLength.type}.`)
+        if (typeLength.type !== TlvType.Boolean) throw new UnexpectedDataError(`Unexpected type ${typeLength.type}.`)
         return typeLength.value;
     }
 

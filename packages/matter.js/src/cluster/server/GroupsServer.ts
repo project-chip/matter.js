@@ -14,6 +14,7 @@ import { SessionType } from "../../codec/MessageCodec.js";
 import { ScenesManager } from "./ScenesServer.js";
 import { IdentifyCluster } from "../definitions/IdentifyCluster.js";
 import { ClusterServer } from "../../protocol/interaction/InteractionServer.js";
+import { NotImplementedError } from "../../common/MatterError.js";
 
 /*
 TODO: If the Scenes server cluster is implemented on the same endpoint, the following extension field SHALL
@@ -68,7 +69,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
         //      command with the Status field set to the evaluated status. If the AddGroup command was received
         //      as a groupcast, the server SHALL NOT generate an AddGroupResponse command.
         if (sessionType !== SessionType.Unicast) {
-            throw new Error("Groupcast not supported");
+            throw new NotImplementedError("Groupcast not supported");
         }
         if (groupId.id < 1) {
             return { status: StatusCode.ConstraintError, groupId };
@@ -93,7 +94,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             //      command with the Status field set to the evaluated status. If the ViewGroup command was received
             //      as a groupcast, the server SHALL NOT generate an ViewGroupResponse command.
             if (sessionType !== SessionType.Unicast) {
-                throw new Error("Groupcast not supported");
+                throw new NotImplementedError("Groupcast not supported");
             }
             if (groupId.id < 1) {
                 return { status: StatusCode.ConstraintError, groupId, groupName: '' };
@@ -114,7 +115,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
 
             // TODO the server SHALL only respond in this case if the command is unicast.
             if (sessionType !== SessionType.Unicast) {
-                throw new Error("Groupcast not supported");
+                throw new NotImplementedError("Groupcast not supported");
             }
 
             assertSecureSession(session);
@@ -134,7 +135,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
 
         removeGroup: async ({ request: { groupId }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
             if (sessionType !== SessionType.Unicast) {
-                throw new Error("Groupcast not supported");
+                throw new NotImplementedError("Groupcast not supported");
                 // TODO: When Unicast we generate a response, else not
             }
 
@@ -153,7 +154,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
 
         removeAllGroups: async ({ session, message: { packetHeader: { sessionType } }, endpoint }) => {
             if (sessionType !== SessionType.Unicast) {
-                throw new Error("Groupcast not supported");
+                throw new NotImplementedError("Groupcast not supported");
                 // TODO: When Unicast we generate a response, else not
             }
 
@@ -167,7 +168,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
 
         addGroupIfIdentifying: async ({ request: { groupId, groupName }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
             if (sessionType !== SessionType.Unicast) {
-                throw new Error("Groupcast not supported");
+                throw new NotImplementedError("Groupcast not supported");
                 // TODO: When Unicast we generate a response, else not
             }
 

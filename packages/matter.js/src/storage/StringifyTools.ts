@@ -15,6 +15,7 @@ import { GroupId } from "../datatype/GroupId.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { VendorId } from "../datatype/VendorId.js";
 import { ByteArray } from "../util/ByteArray.js";
+import { UnexpectedDataError } from "../common/MatterError.js";
 
 /** Supported base types to stringify the data for the storage that can be used as keys and also values. */
 type SupportedStorageBaseTypes =
@@ -132,7 +133,7 @@ export function fromJson(json: string): SupportedStorageTypes {
                     return new VendorId(data[JSON_SPECIAL_KEY_VALUE]);
 
                 default:
-                    throw new Error(`Unknown object type: ${object}`);
+                    throw new UnexpectedDataError(`Unknown object type: ${object}`);
             }
         }
         return value;

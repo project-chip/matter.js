@@ -14,7 +14,7 @@ import { Fabric } from "../../fabric/Fabric.js";
 import { isDeepEqual } from "../../util/DeepEqual.js";
 import { StatusResponseError } from "../../protocol/interaction/InteractionMessenger.js";
 import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
-import { MatterError, ValidationError } from "../../common/MatterError.js";
+import { ImplementationError, InternalError, MatterError, ValidationError } from "../../common/MatterError.js";
 import { Globals } from "../../model/index.js";
 
 /**
@@ -100,7 +100,7 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
         if (getter === undefined) {
             this.getter = () => {
                 if (this.value === undefined) { // Should not happen
-                    throw new Error(`Attribute value for attribute "${name}" is not initialized.`);
+                    throw new InternalError(`Attribute value for attribute "${name}" is not initialized.`);
                 }
                 return this.value;
             }
@@ -146,10 +146,10 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
      */
     init(value: T | undefined, version?: number) {
         if (version !== undefined) {
-            throw new Error(`Version is not supported on fixed attribute "${this.name}".`);
+            throw new InternalError(`Version is not supported on fixed attribute "${this.name}".`);
         }
         if (value === undefined) {
-            throw new Error(`Can not initialize fixed attribute "${this.name}" with undefined value.`);
+            throw new InternalError(`Can not initialize fixed attribute "${this.name}" with undefined value.`);
         }
         this.validateWithSchema(value);
         this.value = value;
@@ -238,7 +238,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
         validator?: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => void,
     ) {
         if (isWritable && (getter === undefined || setter === undefined) && !(getter === undefined && setter === undefined)) {
-            throw new Error(`Getter and setter must be implemented together for writeable attribute "${name}".`);
+            throw new ImplementationError(`Getter and setter must be implemented together for writeable attribute "${name}".`);
         }
 
         super(id, name, schema, isWritable, isSubscribable, defaultValue, getter);
@@ -270,7 +270,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
             value = this.getter(undefined, this.endpoint);
         }
         if (value === undefined) {
-            throw new Error(`Can not initialize attribute "${this.name}" with undefined value.`);
+            throw new InternalError(`Can not initialize attribute "${this.name}" with undefined value.`);
         }
         this.validator(value, undefined, this.endpoint);
         this.value = value;
@@ -408,7 +408,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T>{
         validator?: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => void,
     ) {
         if (isWritable && (getter === undefined || setter === undefined) && !(getter === undefined && setter === undefined)) {
-            throw new Error(`Getter and setter must be implemented together writeable fabric scoped attribute "${name}".`);
+            throw new ImplementationError(`Getter and setter must be implemented together writeable fabric scoped attribute "${name}".`);
         }
 
         let isCustomGetter = false;
@@ -467,7 +467,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T>{
      */
     override init(value: T | undefined, version?: number) {
         if (value !== undefined) {
-            throw new Error(`Can not initialize fabric scoped attribute "${this.name}" with a value.`);
+            throw new InternalError(`Can not initialize fabric scoped attribute "${this.name}" with a value.`);
         }
         this.version = version ?? 0;
     }

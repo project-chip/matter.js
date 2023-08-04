@@ -9,6 +9,7 @@ import { assertSecureSession } from "../../session/SecureSession.js";
 import { GeneralCommissioning, GeneralCommissioningCluster } from "../definitions/GeneralCommissioningCluster.js";
 import { ClusterServerHandlers } from "./ClusterServer.js";
 import { BasicInformationCluster } from "../definitions/BasicInformationCluster.js";
+import { ImplementationError, MatterFlowError } from "../../common/MatterError.js";
 
 const SuccessResponse = { errorCode: GeneralCommissioning.CommissioningError.Ok, debugText: "" };
 const logger = Logger.get("GeneralCommissioningClusterHandler");
@@ -34,7 +35,7 @@ export const GeneralCommissioningClusterHandler: (options?: {
         // Check and handle country code
         const basicInformationCluster = endpoint.getClusterServer(BasicInformationCluster);
         if (basicInformationCluster === undefined) {
-            throw new Error("BasicInformationCluster needs to be present on the root endpoint");
+            throw new ImplementationError("BasicInformationCluster needs to be present on the root endpoint");
         }
         const currentLocationCountryCode = basicInformationCluster.getLocationAttribute();
 
@@ -95,7 +96,7 @@ export const GeneralCommissioningClusterHandler: (options?: {
 
         assertSecureSession(session, "commissioningComplete can only be called on a secure session");
         const fabric = session.getFabric();
-        if (fabric === undefined) throw new Error("commissioningComplete is called but the fabric has not been defined yet");
+        if (fabric === undefined) throw new MatterFlowError("commissioningComplete is called but the fabric has not been defined yet");
         breadcrumb.setLocal(BigInt(0));
         logger.info(`Commissioning completed on fabric #${fabric.fabricId.id} as node #${fabric.nodeId}.`);
 

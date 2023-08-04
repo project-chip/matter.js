@@ -12,7 +12,7 @@ import { TlvCodec, TlvLength, TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 import { TlvWrapper } from "./TlvWrapper.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-import { ValidationError } from "../common/MatterError.js";
+import { UnexpectedDataError, ValidationError } from "../common/MatterError.js";
 
 /**
  * Schema to encode an unsigned integer in TLV.
@@ -36,7 +36,7 @@ export class TlvNumericSchema<T extends bigint | number> extends TlvSchema<T> {
     }
 
     override decodeTlvInternalValue(reader: TlvReader, typeLength: TlvTypeLength): T {
-        if (typeLength.type !== this.type) throw new Error(`Unexpected type ${typeLength.type}, was expecting ${this.type}.`);
+        if (typeLength.type !== this.type) throw new UnexpectedDataError(`Unexpected type ${typeLength.type}, was expecting ${this.type}.`);
         return reader.readPrimitive(typeLength);
     }
 

@@ -9,6 +9,7 @@ import { DataReader } from "../util/DataReader.js";
 import { DataWriter } from "../util/DataWriter.js";
 import { BtpProtocolError } from "../ble/BtpSessionHandler.js";
 import { VendorId } from "../datatype/VendorId.js";
+import { BleError } from "../ble/Ble.js";
 
 export interface BtpHandshakeRequest {
     versions: number[],
@@ -277,11 +278,11 @@ export class BtpCodec {
     static decodeBleAdvertisementData(data: ByteArray) {
         const reader = new DataReader(data, Endian.Little);
         if (reader.readUInt8() !== 0x02 || reader.readUInt8() !== 0x01 || reader.readUInt8() !== 0x06 || reader.readUInt8() !== 0x0B || reader.readUInt8() !== 0x16) {
-            throw new Error("Invalid BLE advertisement data");
+            throw new BleError("Invalid BLE advertisement data");
         }
         const serviceUuid = reader.readUInt16();
         if (serviceUuid !== 0xFFF6) {
-            throw new Error("Invalid BLE advertisement data");
+            throw new BleError("Invalid BLE advertisement data");
         }
         const { discriminator, vendorId, productId, hasAdditionalAdvertisementData } = this.decodeBleAdvertisementServiceData(reader.getRemainingBytes());
         return { discriminator, vendorId, productId, hasAdditionalAdvertisementData };
@@ -290,7 +291,7 @@ export class BtpCodec {
     static decodeBleAdvertisementServiceData(data: ByteArray) {
         const reader = new DataReader(data, Endian.Little);
         if (reader.readUInt8() !== 0x00) {
-            throw new Error("Invalid BLE advertisement data");
+            throw new BleError("Invalid BLE advertisement data");
         }
         const discriminator = reader.readUInt16();
         const vendorId = reader.readUInt16();

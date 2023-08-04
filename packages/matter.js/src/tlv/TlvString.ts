@@ -9,7 +9,7 @@ import { maxValue, minValue } from "../util/Number.js";
 import { TlvCodec, TlvTag, TlvToPrimitive, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-import { ValidationError } from "../common/MatterError.js";
+import { InternalError, UnexpectedDataError, ValidationError } from "../common/MatterError.js";
 
 type LengthConstraints = {
     minLength?: number,
@@ -30,7 +30,7 @@ export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> ext
     ) {
         super();
 
-        if (minLength < 0) throw new Error("Minimum length should be a positive number.");
+        if (minLength < 0) throw new InternalError("Minimum length should be a positive number.");
     }
 
     override encodeTlvInternal(writer: TlvWriter, value: TlvToPrimitive[T], tag?: TlvTag): void {
@@ -40,7 +40,7 @@ export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> ext
     }
 
     override decodeTlvInternalValue(reader: TlvReader, typeLength: TlvTypeLength): TlvToPrimitive[T] {
-        if (typeLength.type !== this.type) throw new Error(`Unexpected type ${typeLength.type}.`);
+        if (typeLength.type !== this.type) throw new UnexpectedDataError(`Unexpected type ${typeLength.type}.`);
         return reader.readPrimitive(typeLength);
     }
 

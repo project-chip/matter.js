@@ -4,13 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Attribute, AttributeJsType } from "../../cluster/Cluster.js";
+import { Attribute, AttributeError, AttributeJsType } from "../../cluster/Cluster.js";
 import { getClusterAttributeById, getClusterById } from "../../cluster/ClusterHelper.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { ArraySchema } from "../../tlv/TlvArray.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Logger } from "../../log/Logger.js";
 import { TlvAttributeData, TlvAttributeReport } from "./InteractionProtocol.js";
+import { UnexpectedDataError } from "../../common/MatterError.js";
 
 const logger = Logger.get("AttributeDataDecoder");
 
@@ -52,7 +53,7 @@ export function normalizeAttributeData(data: TypeFromSchema<typeof TlvAttributeD
         if (value === undefined) return;
         const { path } = value;
         if (path.enableTagCompression) {
-            if (lastPath === undefined) throw new Error('Tag compression enabled, but no previous path');
+            if (lastPath === undefined) throw new UnexpectedDataError('Tag compression enabled, but no previous path');
             if (path.nodeId === undefined && lastPath.nodeId !== undefined) path.nodeId = lastPath.nodeId;
             if (path.endpointId === undefined) path.endpointId = lastPath.endpointId;
             if (path.clusterId === undefined) path.clusterId = lastPath.clusterId;
@@ -60,7 +61,7 @@ export function normalizeAttributeData(data: TypeFromSchema<typeof TlvAttributeD
         } else if (path.endpointId !== undefined && path.clusterId !== undefined && path.attributeId !== undefined) {
             lastPath = { nodeId: path.nodeId, endpointId: path.endpointId, clusterId: path.clusterId, attributeId: path.attributeId };
         } else if (!acceptWildcardPaths) {
-            throw new Error('Tag compression disabled, but path is incomplete: ' + Logger.toJSON(path));
+            throw new UnexpectedDataError('Tag compression disabled, but path is incomplete: ' + Logger.toJSON(path));
         }
     });
 
@@ -86,7 +87,7 @@ export function normalizeAndDecodeAttributeData(data: TypeFromSchema<typeof TlvA
         const { path: { nodeId, endpointId, clusterId, attributeId }, dataVersion } = values[0];
 
         if (endpointId === undefined || clusterId === undefined || attributeId === undefined) {
-            throw new Error(`Invalid attribute path ${endpointId}/${clusterId}/${attributeId}`);
+            throw new UnexpectedDataError(`Invalid attribute path ${endpointId}/${clusterId}/${attributeId}`);
         }
         try {
             const cluster = getClusterById(clusterId);
@@ -115,7 +116,7 @@ export function decodeValueForAttribute<A extends Attribute<any, any>>(attribute
     // No values, so use default value if available
     if (!values.length) {
         if (optional) return undefined;
-        if (conformanceValue === undefined) throw new Error(`Attribute not found`);
+        if (conformanceValue === undefined) throw new AttributeError(`Attribute not found`);
         return conformanceValue;
     }
 
@@ -135,7 +136,7 @@ export function decodeValueForSchema<T>(schema: TlvSchema<T>, values: TypeFromSc
 
     // Return contained multiple tlv values as an array
     if (!(schema instanceof ArraySchema)) {
-        throw new Error(`Attribute is not an list but multiple values were returned`);
+        throw new UnexpectedDataError(`Attribute is not an list but multiple values were returned`);
     }
     return schema.decodeFromChunkedArray(values.map(({ data, path: { listIndex } }) => ({ listIndex, element: data }))) as T;
 }

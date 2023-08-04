@@ -20,9 +20,9 @@ import { TlvUInt16, TlvUInt32, TlvUInt64, TlvUInt8 } from "../tlv/TlvNumber.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
+import { MatterError } from "../common/MatterError.js";
 
-
-
+export class CertificateError extends MatterError { }
 
 const YEAR_S = 365 * 24 * 60 * 60;
 const EPOCH_OFFSET_S = 10957 * 24 * 60 * 60;
@@ -438,25 +438,25 @@ export class CertificateManager {
 
     static getPublicKeyFromCsr(csr: ByteArray) {
         const { [ELEMENTS_KEY]: rootElements } = DerCodec.decode(csr);
-        if (rootElements?.length !== 3) throw new Error("Invalid CSR data");
+        if (rootElements?.length !== 3) throw new CertificateError("Invalid CSR data");
         const [requestNode, signAlgorithmNode, signatureNode] = rootElements;
 
         // Extract the public key
         const { [ELEMENTS_KEY]: requestElements } = requestNode;
-        if (requestElements?.length !== 4) throw new Error("Invalid CSR data");
+        if (requestElements?.length !== 4) throw new CertificateError("Invalid CSR data");
         const [versionNode, _subjectNode, publicKeyNode] = requestElements;
         const requestVersion = versionNode[BYTES_KEY][0];
-        if (requestVersion !== 0) throw new Error(`Unsupported request version${requestVersion}`);
+        if (requestVersion !== 0) throw new CertificateError(`Unsupported request version${requestVersion}`);
         // TODO: verify subject = { OrganisationName: "CSR" }
 
         const { [ELEMENTS_KEY]: publicKeyElements } = publicKeyNode;
-        if (publicKeyElements?.length !== 2) throw new Error("Invalid CSR data");
+        if (publicKeyElements?.length !== 2) throw new CertificateError("Invalid CSR data");
         const [_publicKeyTypeNode, publicKeyBytesNode] = publicKeyElements;
         // TODO: verify publicKey algorithm
         const publicKey = publicKeyBytesNode[BYTES_KEY];
 
         // Verify the CSR signature
-        if (!EcdsaWithSHA256_X962[OBJECT_ID_KEY][BYTES_KEY].equals(signAlgorithmNode[ELEMENTS_KEY]?.[0]?.[BYTES_KEY])) throw new Error("Unsupported signature type");
+        if (!EcdsaWithSHA256_X962[OBJECT_ID_KEY][BYTES_KEY].equals(signAlgorithmNode[ELEMENTS_KEY]?.[0]?.[BYTES_KEY])) throw new CertificateError("Unsupported signature type");
         Crypto.verifySpki(publicKey, DerCodec.encode(requestNode), signatureNode[BYTES_KEY], "der");
 
         return publicKey;

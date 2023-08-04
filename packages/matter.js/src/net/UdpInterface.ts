@@ -8,7 +8,7 @@ import { UdpChannel } from './UdpChannel.js';
 import { Channel } from "../common/Channel.js";
 import { NetInterface } from "./NetInterface.js";
 import { Listener } from "../common/TransportInterface.js";
-import { Network } from './Network.js';
+import { Network, NetworkError } from './Network.js';
 import { ByteArray } from "../util/ByteArray.js";
 import { ServerAddress } from "../common/ServerAddress.js";
 
@@ -24,7 +24,7 @@ export class UdpInterface implements NetInterface {
 
     async openChannel(address: ServerAddress) {
         if (address.type !== "udp") {
-            throw new Error(`Unsupported address type ${address.type}`);
+            throw new NetworkError(`Unsupported address type ${address.type}`);
         }
         const { ip, port } = address;
         return Promise.resolve(new UdpConnection(this.server, ip, port));

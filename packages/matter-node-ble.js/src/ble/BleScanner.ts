@@ -14,6 +14,7 @@ import { BtpCodec } from "@project-chip/matter.js/codec";
 import { ByteArray, getPromiseResolver } from "@project-chip/matter.js/util";
 import { Time, Timer } from "@project-chip/matter.js/time";
 import { VendorId } from "@project-chip/matter.js/datatype";
+import { BleError } from "@project-chip/matter.js/ble";
 
 const logger = Logger.get("BleScanner");
 
@@ -40,7 +41,7 @@ export class BleScanner implements Scanner {
     public getDiscoveredDevice(address: string): DiscoveredBleDevice {
         const device = this.discoveredMatterDevices.get(address);
         if (device === undefined) {
-            throw new Error(`No device found for address ${address}`);
+            throw new BleError(`No device found for address ${address}`);
         }
         return device;
     }

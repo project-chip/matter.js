@@ -5,7 +5,9 @@
  */
 
 import { UdpChannel, UdpChannelOptions } from "./UdpChannel.js";
-import { NoProviderError } from "../common/MatterError.js";
+import { MatterError, NoProviderError } from "../common/MatterError.js";
+
+export class NetworkError extends MatterError { }
 
 export abstract class Network {
     static get: () => Network = () => { throw new NoProviderError("No provider configured"); };
