@@ -23,6 +23,8 @@ import { Globals } from "../../model/index.js";
  */
 export class FabricScopeError extends MatterError { }
 
+// TODO create Factory method to create AttributeServer instances
+
 /**
  * Base class for all attribute servers.
  */
