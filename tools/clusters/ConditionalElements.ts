@@ -56,7 +56,7 @@ export class ConditionalElements {
 
     private addElements(models: Model[], type: "optionalIf" | "mandatoryIf", bitmaps: string[]) {
         models.forEach(model => {
-            let conditions = this.conditions.get(model);
+            const conditions = this.conditions.get(model);
             if (conditions === undefined) {
                 this.conditions.set(model, { [type]: bitmaps });
             } else {
