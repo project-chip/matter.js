@@ -98,17 +98,12 @@ export class CryptoNode extends Crypto {
         } else {
             signer.update(data);
         }
-        try {
-            return new ByteArray(signer.sign({
-                key: Buffer.concat([EC_PRIVATE_KEY_PKCS8_HEADER, privateKey]), // key has to be a node.js Buffer object
-                format: "der",
-                type: "pkcs8",
-                dsaEncoding,
-            }));
-        } catch (error) {
-            console.log(`Crypto Error data: ${data.length} bytes of data with Private key ${privateKey.toHex()} (encoding ${dsaEncoding})`);
-            throw error;
-        }
+        return new ByteArray(signer.sign({
+            key: Buffer.concat([EC_PRIVATE_KEY_PKCS8_HEADER, privateKey]), // key has to be a node.js Buffer object
+            format: "der",
+            type: "pkcs8",
+            dsaEncoding,
+        }));
     }
 
     signSec1(privateKey: ByteArray, data: ByteArray | ByteArray[], dsaEncoding: CryptoDsaEncoding = "ieee-p1363"): ByteArray {
