@@ -146,8 +146,21 @@ export class CryptoNode extends Crypto {
     }
 
     createKeyPair(): { publicKey: ByteArray, privateKey: ByteArray } {
-        const ecdh = crypto.createECDH(CRYPTO_EC_CURVE);
-        ecdh.generateKeys();
-        return { publicKey: new ByteArray(ecdh.getPublicKey()), privateKey: new ByteArray(ecdh.getPrivateKey()) };
+        /**
+         * Sometimes we have this issue that the privateKey returned by the below logic is just 31 and not 32 bytes
+         * long. This then breaks the crypto functions.
+         * This is a hack to work around the issue and try up to 3 times in  such a rare case.
+         * TODO: Fix this correctly
+         */
+        for (let i = 0; i < 3; i++) {
+            const ecdh = crypto.createECDH(CRYPTO_EC_CURVE);
+            ecdh.generateKeys();
+            const publicKey = ecdh.getPublicKey();
+            if (i < 2 && publicKey.length !== 32) continue;
+            const privateKey = ecdh.getPrivateKey();
+            if (i < 2 && privateKey.length !== 32) continue;
+            return { publicKey: new ByteArray(publicKey), privateKey: new ByteArray(privateKey) };
+        }
+        throw new CryptoError("Failed to generate key pair in 3 tries.");
     }
 }
