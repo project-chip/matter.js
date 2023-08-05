@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "../../common/InternalError.js";
+import { InternalError } from "../../common/MatterError.js";
 import { ElementTag, Metatype } from "../definitions/index.js";
 import { AnyElement } from "../elements/index.js";
 import { Constraint } from "../index.js";
@@ -28,7 +28,7 @@ export function MergeModels(
 
         // If the manual override specifies a type but no children, ignore
         // children from other variants.  This allows us to override to a type
-        // that doesn't have children 
+        // that doesn't have children
         const manual = priority.get(variants.tag, "type")[0];
         if (
             merged.type
@@ -231,7 +231,7 @@ class PriorityHandler {
  *
  * To keep things simple we do this in a separate preprocessing pass before
  * performing the actual merge.
- * 
+ *
  * Another simplifying assumption we make is that we will only ever move
  * children *into* the direct parent from the cluster-scoped type, not the
  * other way around.  We know this is true because CHIP doesn't support direct

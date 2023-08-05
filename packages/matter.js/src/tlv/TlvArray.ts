@@ -7,7 +7,7 @@
 import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvStream, TlvWriter } from "./TlvSchema.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-import { ValidationError } from "../common/MatterError.js";
+import { UnexpectedDataError, ValidationError } from "../common/MatterError.js";
 
 type LengthConstraints = {
     minLength?: number,
@@ -42,11 +42,11 @@ export class ArraySchema<T> extends TlvSchema<T[]> {
     }
 
     override decodeTlvInternalValue(reader: TlvReader, typeLength: TlvTypeLength): T[] {
-        if (typeLength.type !== TlvType.Array) throw new Error(`Unexpected type ${typeLength.type}.`);
+        if (typeLength.type !== TlvType.Array) throw new UnexpectedDataError(`Unexpected type ${typeLength.type}.`);
         const result = new Array<T>();
         while (true) {
             const { tag: elementTag, typeLength: elementTypeLength } = reader.readTagType();
-            if (elementTag !== undefined) throw new Error("Array element tags should be anonymous.");
+            if (elementTag !== undefined) throw new UnexpectedDataError("Array element tags should be anonymous.");
             if (elementTypeLength.type === TlvType.EndOfContainer) break;
             result.push(this.elementSchema.decodeTlvInternalValue(reader, elementTypeLength));
         }
@@ -78,7 +78,7 @@ export class ArraySchema<T> extends TlvSchema<T[]> {
 
     decodeFromChunkedArray(chunks: ArrayAsChunked, currentValue?: T[]): T[] {
         if (currentValue === undefined && chunks[0].listIndex !== undefined) {
-            throw new Error(`When no current value is supplied the first chunked element needs to have a list index of undefined, but received ${chunks[0].listIndex}.`);
+            throw new UnexpectedDataError(`When no current value is supplied the first chunked element needs to have a list index of undefined, but received ${chunks[0].listIndex}.`);
         }
         currentValue = currentValue ?? []; // For the sake of typing; the above check makes sure it is an array
         for (const { listIndex, element } of chunks) {

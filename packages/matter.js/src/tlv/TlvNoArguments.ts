@@ -8,6 +8,7 @@ import { TlvTag } from "./TlvCodec.js";
 import { TlvWriter } from "./TlvSchema.js";
 import { TlvObject } from "./TlvObject.js";
 import { VoidSchema } from "./TlvVoid.js";
+import { UnexpectedDataError } from "../common/MatterError.js";
 
 const TlvEmptyObject = TlvObject({});
 
@@ -17,7 +18,7 @@ const TlvEmptyObject = TlvObject({});
 export class NoArgumentsSchema extends VoidSchema {
 
     override encodeTlvInternal(writer: TlvWriter, value: void, tag?: TlvTag): void {
-        if (value !== undefined) throw new Error("No value should be passed");
+        if (value !== undefined) throw new UnexpectedDataError("No value should be passed");
         TlvEmptyObject.encodeTlvInternal(writer, {}, tag);
     }
 }

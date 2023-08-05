@@ -45,6 +45,9 @@ import { EventServer } from "../../cluster/server/EventServer.js";
 import { EventData, EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { InteractionEndpointStructure } from "./InteractionEndpointStructure.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
+import {
+    ImplementationError, MatterFlowError, NotImplementedError, UnexpectedDataError
+} from "../../common/MatterError.js";
 
 export const INTERACTION_PROTOCOL_ID = 0x0001;
 
@@ -317,10 +320,10 @@ export function ClusterServer<
             result[`get${capitalizedAttributeName}Attribute`] = () => undefined;
             if (!fixed) {
                 result[`set${capitalizedAttributeName}Attribute`] = () => {
-                    throw new Error(`Attribute ${attributeName} is optional and not initialized. To use it please initialize it first.`);
+                    throw new ImplementationError(`Attribute ${attributeName} is optional and not initialized. To use it please initialize it first.`);
                 };
                 result[`subscribe${capitalizedAttributeName}Attribute`] = () => {
-                    throw new Error(`Attribute ${attributeName} is optional and not initialized. To use it please initialize it first.`);
+                    throw new ImplementationError(`Attribute ${attributeName} is optional and not initialized. To use it please initialize it first.`);
                 };
             }
         }
@@ -376,7 +379,7 @@ export function ClusterServer<
     for (const eventName in eventDef) {
         const { id, schema, priority, optional } = eventDef[eventName];
         if (!optional && (supportedEvents as any)[eventName] !== true) {
-            throw new Error(`Event ${eventName} needs to be supported by cluster ${name} (${clusterId})`);
+            throw new ImplementationError(`Event ${eventName} needs to be supported by cluster ${name} (${clusterId})`);
         }
 
         if (eventDef[eventName].isConditional) {
@@ -613,7 +616,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         assertSecureSession(exchange.session, "Subscriptions are only implemented on secure sessions");
         const session = exchange.session;
         const fabric = session.getFabric();
-        if (fabric === undefined) throw new Error("Subscriptions are only implemented after a fabric has been assigned");
+        if (fabric === undefined) throw new MatterFlowError("Subscriptions are only implemented after a fabric has been assigned");
 
         if ((!Array.isArray(attributeRequests) || attributeRequests.length === 0) && (!Array.isArray(eventRequests) || eventRequests.length === 0)) {
             throw new StatusResponseError("No attributes or events requested", StatusCode.InvalidAction);
@@ -627,10 +630,10 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         if (attributeRequests !== undefined) {
             logger.debug(`Subscribe to ${attributeRequests.map(path => this.endpointStructure.resolveAttributeName(path)).join(", ")}`);
 
-            if (attributeRequests.length === 0) throw new Error("Unsupported subscription request with empty attribute list");
-            if (minIntervalFloorSeconds < 0) throw new Error("minIntervalFloorSeconds should be greater or equal to 0");
-            if (maxIntervalCeilingSeconds < 0) throw new Error("maxIntervalCeilingSeconds should be greater or equal to 1");
-            if (maxIntervalCeilingSeconds < minIntervalFloorSeconds) throw new Error("maxIntervalCeilingSeconds should be greater or equal to minIntervalFloorSeconds");
+            if (attributeRequests.length === 0) throw new NotImplementedError("Unsupported subscription request with empty attribute list");
+            if (minIntervalFloorSeconds < 0) throw new UnexpectedDataError("minIntervalFloorSeconds should be greater or equal to 0");
+            if (maxIntervalCeilingSeconds < 0) throw new UnexpectedDataError("maxIntervalCeilingSeconds should be greater or equal to 1");
+            if (maxIntervalCeilingSeconds < minIntervalFloorSeconds) throw new UnexpectedDataError("maxIntervalCeilingSeconds should be greater or equal to minIntervalFloorSeconds");
 
             const attributes = this.endpointStructure.getAttributes(attributeRequests);
 

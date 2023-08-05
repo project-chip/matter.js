@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { ByteArray } from "../util/ByteArray.js";
+import { UnexpectedDataError } from "../common/MatterError.js";
 
 class GaloisField {
     private readonly exp = new Array<number>();
@@ -70,7 +71,7 @@ export class ReedSolomon {
 
     computeErrorCorrection(data: ByteArray, ecLength: number) {
         const { length } = data;
-        if (length + ecLength > this.galoisField.size) throw new Error("Message is too long");
+        if (length + ecLength > this.galoisField.size) throw new UnexpectedDataError("Message is too long");
 
         const generator = this.generatePolynom(ecLength);
         const { length: generatorLength } = generator;

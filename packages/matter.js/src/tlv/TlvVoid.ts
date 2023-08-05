@@ -6,7 +6,7 @@
 
 import { TlvTag, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvStream, TlvWriter } from "./TlvSchema.js";
-import { ValidationError } from "../common/MatterError.js";
+import { InternalError, ValidationError } from "../common/MatterError.js";
 
 /**
  * Schema to encode void.
@@ -22,7 +22,7 @@ export class VoidSchema extends TlvSchema<void> {
     }
 
     override decodeTlvInternalValue(_reader: TlvReader, _typeLength: TlvTypeLength): void {
-        throw new Error("decodeTlvInternalValue should never be called");
+        throw new InternalError("decodeTlvInternalValue should never be called");
     }
 
     override validate(data: void): void {

@@ -17,6 +17,10 @@ import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvByteString } from "../../tlv/TlvString.js";
 import { TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { MatterFlowError, NotImplementedError } from "../../common/MatterError.js";
+import { Logger } from "../../log/Logger.js";
+
+const logger = Logger.get("OperationalCredentialsServer");
 
 export interface OperationalCredentialsServerConf {
     devicePrivateKey: ByteArray,
@@ -67,12 +71,12 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
             case OperationalCredentials.CertificateChainType.PaiCertificate:
                 return { certificate: conf.deviceIntermediateCertificate };
             default:
-                throw new Error(`Unsupported certificate type: ${certificateType}`);
+                throw new MatterFlowError(`Unsupported certificate type: ${certificateType}`);
         }
     },
 
     addNoc: async ({ request: { nocValue, icacValue, ipkValue, caseAdminSubject, adminVendorId }, attributes: { nocs, commissionedFabrics, fabrics, trustedRootCertificates }, session }) => {
-        if (!session.isSecure()) throw new Error("addOperationalCert should be called on a secure session.");
+        if (!session.isSecure()) throw new MatterFlowError("addOperationalCert should be called on a secure session.");
         const device = session.getContext();
         const fabricBuilder = device.getFabricBuilder();
         fabricBuilder.setOperationalCert(nocValue);
@@ -92,7 +96,7 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         trustedRootCertificates.updated(session);
 
         // TODO: create ACL with caseAdminNode
-        console.log("addOperationalCert success")
+        logger.info("addOperationalCert success")
 
         return { statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok, fabricIndex: fabric.fabricIndex };
     },
@@ -138,13 +142,13 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
     },
 
     updateNoc: async () => {
-        throw new Error("Not implemented");
+        throw new NotImplementedError("Not implemented");
     },
 
     updateFabricLabel: async ({ request: { label }, attributes: { fabrics }, session }) => {
         assertSecureSession(session, "updateOperationalCert should be called on a secure session.");
         const fabric = session.getFabric();
-        if (fabric === undefined) throw new Error("updateOperationalCert on a session linked to a fabric.");
+        if (fabric === undefined) throw new MatterFlowError("updateOperationalCert on a session linked to a fabric.");
 
         fabric.setLabel(label);
 

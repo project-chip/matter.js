@@ -16,6 +16,7 @@ import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { GroupsManager } from "./GroupsServer.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { ClusterServer } from "../../protocol/interaction/InteractionServer.js";
+import { NotImplementedError } from "../../common/MatterError.js";
 
 interface scenesTableEntry {
     /** The group identifier for which this scene applies, or 0 if the scene is not associated with a group. */
@@ -148,7 +149,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
     return {
         addScene: async ({ request: { groupId, sceneId, transitionTime, sceneName, extensionFieldSets }, attributes: { sceneCount }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
             if (sessionType !== SessionType.Unicast) {
-                throw new Error("Groupcast not supported");
+                throw new NotImplementedError("Groupcast not supported");
                 // TODO: When Unicast we generate a response, else not
             }
 
@@ -163,7 +164,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
         viewScene: async ({ request: { groupId, sceneId }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
 
             if (sessionType !== SessionType.Unicast) {
-                throw new Error("Groupcast not supported");
+                throw new NotImplementedError("Groupcast not supported");
                 // TODO: When Unicast we generate a response, else not
             }
 
@@ -185,7 +186,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
 
         removeScene: async ({ request: { groupId, sceneId }, attributes: { sceneCount }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
             if (sessionType !== SessionType.Unicast) {
-                throw new Error("Groupcast not supported");
+                throw new NotImplementedError("Groupcast not supported");
                 // TODO: When Unicast we generate a response, else not
             }
 
@@ -205,7 +206,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
 
         removeAllScenes: async ({ request: { groupId }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
             if (sessionType !== SessionType.Unicast) {
-                throw new Error("Groupcast not supported");
+                throw new NotImplementedError("Groupcast not supported");
                 // TODO: When Unicast we generate a response, else not
             }
 
@@ -223,7 +224,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
 
         storeScene: async ({ request: { groupId, sceneId }, session, attributes: { currentScene, currentGroup, sceneValid }, message: { packetHeader: { sessionType } }, endpoint }) => {
             if (sessionType !== SessionType.Unicast) {
-                throw new Error("Groupcast not supported");
+                throw new NotImplementedError("Groupcast not supported");
                 // TODO: When Unicast we generate a response, else not
             }
 
@@ -296,7 +297,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
         getSceneMembership: async ({ request: { groupId }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
 
             if (sessionType !== SessionType.Unicast) {
-                throw new Error("Groupcast not supported");
+                throw new NotImplementedError("Groupcast not supported");
                 // TODO: When Unicast we generate a response, else not
             }
 
@@ -316,7 +317,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
 
         enhancedAddScene: async ({ request: { groupId, sceneId, transitionTime, sceneName, extensionFieldSets }, attributes: { sceneCount }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
             if (sessionType !== SessionType.Unicast) {
-                throw new Error("Groupcast not supported");
+                throw new NotImplementedError("Groupcast not supported");
                 // TODO: When Unicast we generate a response, else not
             }
 
@@ -331,7 +332,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
         enhancedViewScene: async ({ request: { groupId, sceneId }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
 
             if (sessionType !== SessionType.Unicast) {
-                throw new Error("Groupcast not supported");
+                throw new NotImplementedError("Groupcast not supported");
                 // TODO: When Unicast we generate a response, else not
             }
 
@@ -359,7 +360,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
 
         copyScene: async ({ request: { mode, groupIdentifierFrom, sceneIdentifierFrom, groupIdentifierTo, sceneIdentifierTo }, attributes: { sceneCount }, session, message: { packetHeader: { sessionType } }, endpoint }) => {
             if (sessionType !== SessionType.Unicast) {
-                throw new Error("Groupcast not supported");
+                throw new NotImplementedError("Groupcast not supported");
                 // TODO: When Unicast we generate a response, else not
             }
 
@@ -432,7 +433,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
 
         sceneCountAttributeGetter: ({ session, endpoint }) => {
             if (session === undefined || endpoint === undefined) {
-                throw new Error("getSceneCount: session or endpoint undefined");
+                throw new NotImplementedError("getSceneCount: session or endpoint undefined");
             }
 
             assertSecureSession(session);

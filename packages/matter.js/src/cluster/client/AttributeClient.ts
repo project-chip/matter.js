@@ -5,12 +5,13 @@
  */
 
 import { InteractionClient } from "../../protocol/interaction/InteractionClient.js";
-import { Attribute } from "../Cluster.js";
+import { Attribute, AttributeError } from "../Cluster.js";
 import { TlvSchema } from "../../tlv/TlvSchema.js";
 import { Globals } from "../../model/index.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
 import { NoAssociatedFabricError } from "../../session/SecureSession.js";
 import { tryCatch } from "../../common/TryCatchHandler.js";
+import { InternalError } from "../../common/MatterError.js";
 
 export class AttributeClient<T> {
     private readonly isWritable: boolean;
@@ -32,13 +33,13 @@ export class AttributeClient<T> {
     }
 
     async set(value: T) {
-        if (!this.isWritable) throw new Error(`Attribute ${this.name} is not writable`);
+        if (!this.isWritable) throw new AttributeError(`Attribute ${this.name} is not writable`);
 
         this.schema.validate(value);
 
         const interactionClient = await this.getInteractionClientCallback();
         if (interactionClient === undefined) {
-            throw new Error("No InteractionClient available");
+            throw new InternalError("No InteractionClient available");
         }
 
         if (this.isFabricScoped) {
@@ -65,7 +66,7 @@ export class AttributeClient<T> {
     async get(alwaysRequestFromRemote = false) {
         const interactionClient = await this.getInteractionClientCallback();
         if (interactionClient === undefined) {
-            throw new Error("No InteractionClient available");
+            throw new InternalError("No InteractionClient available");
         }
         return await interactionClient.get(this.endpointId, this.clusterId, this.attribute, alwaysRequestFromRemote);
     }
@@ -73,7 +74,7 @@ export class AttributeClient<T> {
     async getWithVersion(alwaysRequestFromRemote = false) {
         const interactionClient = await this.getInteractionClientCallback();
         if (interactionClient === undefined) {
-            throw new Error("No InteractionClient available");
+            throw new InternalError("No InteractionClient available");
         }
         return await interactionClient.getWithVersion(this.endpointId, this.clusterId, this.attribute, alwaysRequestFromRemote);
     }
@@ -81,7 +82,7 @@ export class AttributeClient<T> {
     async subscribe(minIntervalS: number, maxIntervalS: number) {
         const interactionClient = await this.getInteractionClientCallback();
         if (interactionClient === undefined) {
-            throw new Error("No InteractionClient available");
+            throw new InternalError("No InteractionClient available");
         }
         return await interactionClient.subscribe(this.endpointId, this.clusterId, this.attribute, minIntervalS, maxIntervalS, this.update.bind(this));
     }

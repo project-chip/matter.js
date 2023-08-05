@@ -5,7 +5,7 @@
  */
 
 import { Time } from "@project-chip/matter.js/time";
-import { StorageBackendMemory, fromJson, SupportedStorageTypes, toJson } from "@project-chip/matter.js/storage";
+import { StorageBackendMemory, fromJson, SupportedStorageTypes, toJson, StorageError } from "@project-chip/matter.js/storage";
 import { readFile, writeFile } from "fs/promises";
 
 /** We store changes 1s after a value was set to the storage, but not more often than every 1s. */
@@ -24,7 +24,7 @@ export class StorageBackendJsonFile extends StorageBackendMemory {
     }
 
     override async initialize() {
-        if (this.initialized) throw new Error("Storage already initialized!");
+        if (this.initialized) throw new StorageError("Storage already initialized!");
         try {
             this.store = this.fromJson(await readFile(this.path, "utf-8"));
         } catch (error: any) {

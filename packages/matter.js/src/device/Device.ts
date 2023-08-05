@@ -14,6 +14,7 @@ import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { BindingCluster } from "../cluster/definitions/BindingCluster.js";
 import { ClusterServer } from "../protocol/interaction/InteractionServer.js";
+import { ImplementationError, NotImplementedError } from "../common/MatterError.js";
 
 /**
  * Temporary used device class for paired devices until we added a layer to choose the right specialized device class
@@ -50,7 +51,7 @@ export class PairedDevice extends Endpoint {
      */
     override addClusterServer<A extends Attributes, C extends Commands, E extends Events>(cluster: ClusterServerObj<A, C, E>) {
         if (this.declineAddingMoreClusters) {
-            throw new Error("PairedDevice does not support adding additional clusters");
+            throw new ImplementationError("PairedDevice does not support adding additional clusters");
         }
         return super.addClusterServer(cluster);
     }
@@ -60,7 +61,7 @@ export class PairedDevice extends Endpoint {
      */
     override addClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(cluster: ClusterClientObj<F, A, C, E>) {
         if (this.declineAddingMoreClusters) {
-            throw new Error("PairedDevice does not support adding additional clusters");
+            throw new ImplementationError("PairedDevice does not support adding additional clusters");
         }
         return super.addClusterClient(cluster);
     }
@@ -104,7 +105,7 @@ export class Device extends Endpoint {
         options: EndpointOptions = {}
     ) {
         if (definition.deviceClass === DeviceClasses.Node) {
-            throw new Error("MatterNode devices are not supported");
+            throw new NotImplementedError("MatterNode devices are not supported");
         }
         super([definition], options);
         this.deviceType = definition.code;
@@ -155,12 +156,12 @@ export class Device extends Endpoint {
 
     protected createOptionalClusterServer<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(_cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, C, E> {
         // TODO: Implement this in upper classes to add optional clusters on the fly
-        throw new Error("createOptionalClusterServer needs to be implemented by derived classes");
+        throw new ImplementationError("createOptionalClusterServer needs to be implemented by derived classes");
     }
 
     protected createOptionalClusterClient<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(_cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<F, A, C, E> {
         // TODO: Implement this in upper classes to add optional clusters on the fly
-        throw new Error("createOptionalClusterClient needs to be implemented by derived classes");
+        throw new ImplementationError("createOptionalClusterClient needs to be implemented by derived classes");
     }
 
     override getClusterServer<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, C, E> | undefined {

@@ -17,6 +17,7 @@ import { CaseClientMessenger } from "./CaseMessenger.js";
 import { ByteArray } from "../../util/ByteArray.js";
 import { Logger } from "../../log/Logger.js";
 import { NodeId } from "../../datatype/NodeId.js";
+import { UnexpectedDataError } from "../../common/MatterError.js";
 
 const logger = Logger.get("CaseClient");
 
@@ -46,7 +47,7 @@ export class CaseClient {
         const { sigma2Bytes, sigma2, sigma2Resume } = await messenger.readSigma2();
         if (sigma2Resume !== undefined) {
             // Process sigma2 resume
-            if (resumptionRecord === undefined) throw new Error("Received an unexpected sigma2Resume");
+            if (resumptionRecord === undefined) throw new UnexpectedDataError("Received an unexpected sigma2Resume.");
             const { sharedSecret, fabric } = resumptionRecord;
             const { sessionId: peerSessionId, resumptionId, resumeMic } = sigma2Resume;
 
@@ -70,7 +71,7 @@ export class CaseClient {
             const { nodeOpCert: peerNewOpCert, intermediateCACert: peerIntermediateCACert, signature: peerSignature, resumptionId: peerResumptionId } = TlvEncryptedDataSigma2.decode(peerEncryptedData);
             const peerSignatureData = TlvSignedData.encode({ nodeOpCert: peerNewOpCert, intermediateCACert: peerIntermediateCACert, ecdhPublicKey: peerEcdhPublicKey, peerEcdhPublicKey: ecdhPublicKey });
             const { ellipticCurvePublicKey: peerPublicKey, subject: { nodeId: peerNodeIdCert } } = TlvOperationalCertificate.decode(peerNewOpCert);
-            if (peerNodeIdCert.id !== peerNodeId.id) throw new Error("The node ID in the peer certificate doesn't match the expected peer node ID");
+            if (peerNodeIdCert.id !== peerNodeId.id) throw new UnexpectedDataError("The node ID in the peer certificate doesn't match the expected peer node ID.");
             Crypto.verifySpki(peerPublicKey, peerSignatureData, peerSignature);
 
             // Generate and send sigma3

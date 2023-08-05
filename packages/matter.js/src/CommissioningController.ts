@@ -30,7 +30,7 @@ import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
 import { ServerAddressIp } from "./common/ServerAddress.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { Ble } from "./ble/Ble.js";
-import { NoProviderError } from "./common/MatterError.js";
+import { NoProviderError, MatterError, ImplementationError, InternalError } from "./common/MatterError.js";
 import { CommissioningOptions } from "./protocol/ControllerCommissioner.js";
 
 const logger = new Logger("CommissioningController");
@@ -105,10 +105,10 @@ export class CommissioningController extends MatterNode {
      */
     async connect() {
         if (this.controllerInstance !== undefined) {
-            throw new Error("Controller instance already connected!");
+            throw new ImplementationError("Controller instance already connected!");
         }
         if (this.mdnsScanner === undefined || this.storage === undefined) {
-            throw new Error("Add the node to the Matter instance before!");
+            throw new ImplementationError("Add the node to the Matter instance before!");
         }
 
         this.controllerInstance = await MatterController.create(
@@ -130,7 +130,7 @@ export class CommissioningController extends MatterNode {
                 identifierData = { shortDiscriminator: this.shortDiscriminator };
             } else {
                 if (this.passcode === undefined) {
-                    throw new Error("To commission a new device a passcode needs to be specified in the constructor data!");
+                    throw new ImplementationError("To commission a new device a passcode needs to be specified in the constructor data!");
                 }
                 identifierData = {};
             }
@@ -203,7 +203,7 @@ export class CommissioningController extends MatterNode {
      */
     getFabric() {
         if (this.controllerInstance === undefined) {
-            throw new Error("Controller instance not yet paired!");
+            throw new ImplementationError("Controller instance not yet paired!");
         }
         return this.controllerInstance.getFabric();
     }
@@ -212,10 +212,7 @@ export class CommissioningController extends MatterNode {
      * Return info if a device is successfully paired.
      */
     isCommissioned() {
-        if (this.controllerInstance === undefined) {
-            throw new Error("Controller instance not yet paired!");
-        }
-        return this.controllerInstance.isCommissioned();
+        return !!this.controllerInstance?.isCommissioned();
     }
 
     /**
@@ -224,7 +221,7 @@ export class CommissioningController extends MatterNode {
      */
     async createInteractionClient(): Promise<InteractionClient> {
         if (this.controllerInstance === undefined || this.nodeId === undefined) {
-            throw new Error("Controller instance not yet paired!");
+            throw new ImplementationError("Controller instance not yet paired!");
         }
         return this.controllerInstance.connect(this.nodeId);
     }
@@ -287,7 +284,7 @@ export class CommissioningController extends MatterNode {
             // get all endpoints with only one usage
             const singleUsageEndpoints = Object.entries(endpointUsages).filter(([_, usages]) => usages.length === 1);
             if (singleUsageEndpoints.length === 0) {
-                if (Object.entries(endpointUsages).length) throw new Error("Endpoint structure could not be parsed!");
+                if (Object.entries(endpointUsages).length) throw new InternalError("Endpoint structure could not be parsed!");
                 break;
             }
 
@@ -298,7 +295,7 @@ export class CommissioningController extends MatterNode {
                 const childEndpoint = this.endpoints.get(parseInt(childId));
                 const parentEndpoint = this.endpoints.get(usages[0]);
                 if (childEndpoint === undefined || parentEndpoint === undefined) {
-                    throw new Error("Endpoint not found!"); // Should never happen!
+                    throw new InternalError("Endpoint not found!"); // Should never happen!
                 }
 
                 logger.debug(`Endpoint structure: Child: ${childEndpoint.id} -> Parent: ${parentEndpoint.id}`);
@@ -344,7 +341,7 @@ export class CommissioningController extends MatterNode {
         });
         if (deviceTypes.length === 0) {
             logger.info(`No device type found for endpoint ${endpointId}, ignore`);
-            throw new Error("No device type found for endpoint");
+            throw new MatterError("No device type found for endpoint");
         }
 
         const endpointClusters = Array<ClusterServerObj<Attributes, Commands, Events> | ClusterClientObj<any, Attributes, Commands, Events>>();

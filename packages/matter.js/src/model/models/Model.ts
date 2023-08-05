@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterError } from "../../common/MatterError.js";
+import { InternalError } from "../../common/MatterError.js";
 import { DefinitionError, ElementTag, Specification } from "../definitions/index.js";
 import { AnyElement, BaseElement } from "../elements/index.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
@@ -149,7 +149,7 @@ export abstract class Model {
             set: (target, p, newValue, receiver) => {
                 if (typeof p === "string" && p.match(/^[0-9]+$/)) {
                     if (typeof newValue !== "object" || newValue === null || !newValue.tag) {
-                        throw new MatterError("Child must be Model or AnyElement");
+                        throw new InternalError("Child must be Model or AnyElement");
                     }
                 }
                 const result = Reflect.set(target, p, newValue, receiver);
@@ -194,7 +194,7 @@ export abstract class Model {
     /**
      * In some circumstances the base type can be inferred.  This inference
      * happens here.
-     * 
+     *
      * Does not recurse so only returns the direct base type.
      */
     get effectiveType() {
@@ -250,20 +250,20 @@ export abstract class Model {
      */
     static create(definition: AnyElement) {
         if (typeof definition !== "object") {
-            throw new MatterError(`Model definition must be object, not ${typeof definition}`);
+            throw new InternalError(`Model definition must be object, not ${typeof definition}`);
         }
         const t = definition["tag"];
         const constructor = Model.constructors[t];
         if (!constructor) {
-            throw new MatterError(`Unknown element tag "${t}"`);
+            throw new InternalError(`Unknown element tag "${t}"`);
         }
         return new constructor(definition);
     }
 
     /**
      * Retrieve all models of a specific element type from local scope.
-     * 
-     * @param test model class or a predicate object
+     *
+     * @param constructor model class or a predicate object
      */
     all<T extends Model>(constructor: Model.Constructor<T>) {
         return this.children.filter(c => c instanceof constructor) as T[];

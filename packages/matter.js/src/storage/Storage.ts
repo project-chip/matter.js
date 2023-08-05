@@ -4,6 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { SupportedStorageTypes } from "./StringifyTools.js";
+import { MatterError } from "../common/MatterError.js";
+
+export class StorageError extends MatterError { }
 
 export abstract class Storage {
     abstract initialize(): Promise<void>;

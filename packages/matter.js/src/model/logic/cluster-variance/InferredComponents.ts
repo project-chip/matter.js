@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "../../../common/InternalError.js";
+import { NotImplementedError } from "../../../common/MatterError.js";
 import { isDeepEqual } from "../../../util/DeepEqual.js";
 import { AttributeModel, ClusterModel, ValueModel } from "../../models/index.js";
 import { VarianceCondition } from "./VarianceCondition.js";
@@ -76,11 +76,11 @@ function splitDisjunction(disjunction: string) {
  * We use a rules-based approach to infer cluster variance.  The goal is to
  * classify into as few sets as possible.  This leads to fewer duplicated
  * elements and reduced complexity of generated clusters.
- * 
+ *
  * Matches string form rather than the AST because that is also simpler for
  * the moment.  Note this is less fragile than it may appear because string is
  * normalized product of parser -> AST -> serializer.
- * 
+ *
  * Note also that this only applies to conformance of cluster-level elements.
  * There is considerably more variance in field-level conformance but we handle
  * that with the record validator which supports the entire dialect.
@@ -240,7 +240,7 @@ function addElement(components: InferredComponents, element: ValueModel) {
             return;
         }
     }
-    throw new InternalError(`New rule needed for conformance "${element.conformance}" (element ${element.path})`);
+    throw new NotImplementedError(`New rule needed for conformance "${element.conformance}" (element ${element.path})`);
 }
 
 function addVariance(components: InferredComponents, element: ValueModel, optional?: boolean, condition?: VarianceCondition) {

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterError } from "../../common/MatterError.js";
+import { UnexpectedDataError } from "../../common/MatterError.js";
 import { serialize as stringSerialize } from "../../util/String.js";
 
 /**
@@ -197,10 +197,10 @@ export namespace FieldValue {
                 return numericValue(value, typeName);
 
             case undefined:
-                throw new MatterError(`Field value objects must be wrappers with "type" field`);
+                throw new UnexpectedDataError(`Field value objects must be wrappers with "type" field`);
 
             default:
-                throw new MatterError(`Unsupported wrapped object type "${type}"`);
+                throw new UnexpectedDataError(`Unsupported wrapped object type "${type}"`);
         }
     }
 

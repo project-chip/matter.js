@@ -12,6 +12,7 @@ import { DataWriter } from "../util/DataWriter.js";
 import {
     INT16_MAX, INT16_MIN, INT32_MAX, INT32_MIN, INT8_MAX, INT8_MIN, UINT16_MAX, UINT32_MAX, UINT8_MAX
 } from "../util/Number.js";
+import { NotImplementedError, UnexpectedDataError } from "../common/MatterError.js";
 
 /**
  * TLV element types.
@@ -160,11 +161,11 @@ export class TlvCodec {
                 return { profile: MATTER_COMMON_PROFILE, id: reader.readUInt32() };
             case TagControl.ImplicitProfile16:
             case TagControl.ImplicitProfile32:
-                throw new Error(`Unsupported implicit profile ${tagControl}`);
+                throw new NotImplementedError(`Unsupported implicit profile ${tagControl}`);
             case TagControl.FullyQualified48:
                 return { profile: reader.readUInt32(), id: reader.readUInt16() };
             default:
-                throw new Error(`Unexpected tagControl ${tagControl}`);
+                throw new NotImplementedError(`Unexpected tagControl ${tagControl}`);
         }
     }
 
@@ -183,7 +184,7 @@ export class TlvCodec {
                     case TlvLength.TwoBytes: return { type, value: true };
                     case TlvLength.FourBytes: return { type: TlvType.Float, length };
                     case TlvLength.EightBytes: return { type: TlvType.Float, length };
-                    default: throw new Error(`Unexpected Boolean length ${length}`);
+                    default: throw new UnexpectedDataError(`Unexpected Boolean length ${length}`);
                 }
             default:
                 return { type: typeLength };
@@ -204,7 +205,7 @@ export class TlvCodec {
                     case TlvLength.EightBytes:
                         return reader.readInt64() as V;
                     default:
-                        throw new Error(`Unexpected SignedInt length ${length}`);
+                        throw new UnexpectedDataError(`Unexpected SignedInt length ${length}`);
                 }
             }
             case TlvType.UnsignedInt: {
@@ -219,7 +220,7 @@ export class TlvCodec {
                     case TlvLength.EightBytes:
                         return reader.readUInt64() as V;
                     default:
-                        throw new Error(`Unexpected UnsignedInt length ${length}`);
+                        throw new UnexpectedDataError(`Unexpected UnsignedInt length ${length}`);
                 }
             }
             case TlvType.Float: {
@@ -230,7 +231,7 @@ export class TlvCodec {
                     case TlvLength.EightBytes:
                         return reader.readDouble() as V;
                     default:
-                        throw new Error(`Unexpected Float length ${length}`);
+                        throw new UnexpectedDataError(`Unexpected Float length ${length}`);
                 }
             }
             case TlvType.Utf8String: {
@@ -245,7 +246,7 @@ export class TlvCodec {
                     case TlvLength.EightBytes:
                         return reader.readUtf8String(Number(reader.readUInt64())) as V;
                     default:
-                        throw new Error(`Unexpected Utf8String length ${length}`);
+                        throw new UnexpectedDataError(`Unexpected Utf8String length ${length}`);
                 }
             }
             case TlvType.ByteString: {
@@ -260,7 +261,7 @@ export class TlvCodec {
                     case TlvLength.EightBytes:
                         return reader.readByteArray(Number(reader.readUInt64())) as V;
                     default:
-                        throw new Error(`Unexpected ByteString length ${length}`);
+                        throw new UnexpectedDataError(`Unexpected ByteString length ${length}`);
                 }
             }
             case TlvType.Boolean:
@@ -268,7 +269,7 @@ export class TlvCodec {
             case TlvType.Null:
                 return null as V;
             default:
-                throw new Error(`Unexpected TLV type ${typeLength.type}`);
+                throw new UnexpectedDataError(`Unexpected TLV type ${typeLength.type}`);
         }
     }
 
@@ -294,11 +295,11 @@ export class TlvCodec {
         if (profile === undefined && id === undefined) {
             writer.writeUInt8(ControlByteSchema.encode({ tagControl: TagControl.Anonymous, typeLength }));
         } else if (profile === undefined) {
-            if (id === undefined) throw new Error("Invalid TLV tag: id should be defined for a context specific tag.");
+            if (id === undefined) throw new UnexpectedDataError("Invalid TLV tag: id should be defined for a context specific tag.");
             writer.writeUInt8(ControlByteSchema.encode({ tagControl: TagControl.ContextSpecific, typeLength }));
             writer.writeUInt8(id);
         } else if (profile === MATTER_COMMON_PROFILE) {
-            if (id === undefined) throw new Error("Invalid TLV tag: id should be defined for a datatype profile.");
+            if (id === undefined) throw new UnexpectedDataError("Invalid TLV tag: id should be defined for a datatype profile.");
             if ((id & 0xFFFF0000) === 0) {
                 writer.writeUInt8(ControlByteSchema.encode({ tagControl: TagControl.CommonProfile16, typeLength }));
                 writer.writeUInt16(id);
@@ -307,7 +308,7 @@ export class TlvCodec {
                 writer.writeUInt32(id);
             }
         } else {
-            if (id === undefined) throw new Error("Invalid TLV tag: id should be defined for a custom profile.");
+            if (id === undefined) throw new UnexpectedDataError("Invalid TLV tag: id should be defined for a custom profile.");
             if ((id & 0xFFFF0000) === 0) {
                 writer.writeUInt8(ControlByteSchema.encode({ tagControl: TagControl.FullyQualified48, typeLength }));
                 writer.writeUInt32(profile);
@@ -336,7 +337,7 @@ export class TlvCodec {
                     case TlvLength.EightBytes:
                         return writer.writeUInt64(value as TlvToPrimitive[typeof typeLength.type]);
                     default:
-                        throw new Error(`Unexpected UnsignedInt length ${length}`);
+                        throw new UnexpectedDataError(`Unexpected UnsignedInt length ${length}`);
                 }
             }
             case TlvType.Float: {
@@ -347,7 +348,7 @@ export class TlvCodec {
                     case TlvLength.EightBytes:
                         return writer.writeDouble(value as TlvToPrimitive[typeof typeLength.type]);
                     default:
-                        throw new Error(`Unexpected Float length ${length}`);
+                        throw new UnexpectedDataError(`Unexpected Float length ${length}`);
                 }
             }
             case TlvType.Utf8String: {
@@ -364,7 +365,7 @@ export class TlvCodec {
             case TlvType.Boolean:
                 return;
             default:
-                throw new Error(`Unexpected TLV type ${typeLength.type}`);
+                throw new UnexpectedDataError(`Unexpected TLV type ${typeLength.type}`);
         }
     }
 

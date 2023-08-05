@@ -16,6 +16,7 @@ import { ByteArray, Endian } from "../util/ByteArray.js";
 import { SupportedStorageTypes } from "../storage/StringifyTools.js";
 import { DataWriter } from "../util/DataWriter.js";
 import { toBigInt } from "../util/Number.js";
+import { InternalError } from "../common/MatterError.js";
 
 const COMPRESSED_FABRIC_ID_INFO = ByteArray.fromString("CompressedFabric");
 const GROUP_SECURITY_INFO = ByteArray.fromString("GroupKey v1.0");
@@ -261,11 +262,11 @@ export class FabricBuilder {
     }
 
     async build() {
-        if (this.rootNodeId === undefined) throw new Error("rootNodeId needs to be set");
-        if (this.rootVendorId === undefined) throw new Error("vendorId needs to be set");
-        if (this.rootCert === undefined || this.rootPublicKey === undefined) throw new Error("rootCert needs to be set");
-        if (this.identityProtectionKey === undefined) throw new Error("identityProtectionKey needs to be set");
-        if (this.operationalCert === undefined || this.fabricId === undefined || this.nodeId === undefined) throw new Error("operationalCert needs to be set");
+        if (this.rootNodeId === undefined) throw new InternalError("rootNodeId needs to be set");
+        if (this.rootVendorId === undefined) throw new InternalError("vendorId needs to be set");
+        if (this.rootCert === undefined || this.rootPublicKey === undefined) throw new InternalError("rootCert needs to be set");
+        if (this.identityProtectionKey === undefined) throw new InternalError("identityProtectionKey needs to be set");
+        if (this.operationalCert === undefined || this.fabricId === undefined || this.nodeId === undefined) throw new InternalError("operationalCert needs to be set");
 
         const saltWriter = new DataWriter(Endian.Big);
         saltWriter.writeUInt64(this.fabricId.id);

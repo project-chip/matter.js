@@ -34,6 +34,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Enhance: Split up and corrected PowerSource and PressureMeasurement Cluster based on Matter 1.1 Specs
   * Enhance: Detailed cluster data model and related logic
   * Enhance: Generate all cluster definitions from Matter 1.1 specification and CHIP v1.1-branch automatically. This brings basic definition support for all clusters!
+  * Enhance: All Errors thrown by the library are now derived from the MatterError class and split up into several subclasses
   * Fix: Added missing PulseWidthModulationLevelControlCluster to AllCLusters
   * Fix Typing of Commands in ClusterClient if no commands were present
   * Fix: Fixes equality checks in Attribute servers to check deeper than just === (and introduce new util method isDeepEqual)

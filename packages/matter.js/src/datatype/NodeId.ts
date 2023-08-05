@@ -9,6 +9,7 @@ import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { Crypto } from "../crypto/Crypto.js";
 import { DataWriter } from "../util/DataWriter.js";
 import { Endian } from "../util/ByteArray.js";
+import { UnexpectedDataError } from "../common/MatterError.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 const OPERATIONAL_NODE_MIN = BigInt('0x0000000000000001');
@@ -42,7 +43,7 @@ export class NodeId {
 
     static getGroupNodeId(groupId: number) {
         if (groupId < 0 || groupId > 0xFFFF) {
-            throw new Error(`Invalid group ID: ${groupId}`);
+            throw new UnexpectedDataError(`Invalid group ID: ${groupId}`);
         }
         return new NodeId(BigInt('0xFFFFFFFFFFFF' + groupId.toString(16).padStart(4, "0")));
     }

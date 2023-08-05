@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { UnexpectedDataError } from "../common/MatterError.js";
+
 declare global {
     interface Uint8Array {
         /** Displays as an hex string. */
@@ -43,9 +45,9 @@ Uint8Array.prototype.equals = function(other: Uint8Array) {
 
 Uint8Array.fromHex = function(hexString: string) {
     if (hexString.length === 0) return new ByteArray(0);
-    if (hexString.length % 2 !== 0) throw new Error("Hex string should have an even length.");
+    if (hexString.length % 2 !== 0) throw new UnexpectedDataError("Hex string should have an even length.");
     const bytes = hexString.match(/.{1,2}/g)?.map(byteHex => parseInt(byteHex, 16));
-    if (bytes === undefined) throw new Error("Failed to parse the hex string.");
+    if (bytes === undefined) throw new UnexpectedDataError("Failed to parse the hex string.");
     return ByteArray.from(bytes);
 }
 

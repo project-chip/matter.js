@@ -7,7 +7,7 @@
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataReader } from "../util/DataReader.js";
 import BN from "bn.js";
-import { NoProviderError } from "../common/MatterError.js";
+import { MatterError, NoProviderError } from "../common/MatterError.js";
 
 export const CRYPTO_RANDOM_LENGTH = 32;
 export const CRYPTO_ENCRYPT_ALGORITHM = "aes-128-ccm";
@@ -16,6 +16,8 @@ export const CRYPTO_EC_CURVE = "prime256v1";
 export const CRYPTO_AUTH_TAG_LENGTH = 16;
 export const CRYPTO_SYMMETRIC_KEY_LENGTH = 16;
 export type CryptoDsaEncoding = "ieee-p1363" | "der";
+
+export class CryptoError extends MatterError { }
 
 export type KeyPair = {
     publicKey: ByteArray,

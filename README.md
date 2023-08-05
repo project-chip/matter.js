@@ -8,7 +8,7 @@ Matter is a new secure / reliable / local / standard protocol for smart devices 
 To know more about Matter: https://csa-iot.org/all-solutions/matter/
 
 ## Compatibility
-matter.js/matter-node.js is compatible with:
+Devices created with matter.js/matter-node.js are compatible with:
 - **Apple iOS (iPhone or iPad) and tvOS 16 (Apple TV) - "Home" app by Apple**: fully working
 - **Google Home Ecosystem (Android or Google Nest smart speakers/display) - "Google Home" app**: fully working
 - **Amazon Alexa (Amazon Echo smart speakers/displays)** : fully working
@@ -21,6 +21,12 @@ We also collected a [list of known device types supported by which ecosystem](#D
 Each ecosystem have their own specialities, see [Pairing and Usage Information](#Pairing-and-Usage-Information) for more details.
 
 A list ok known issues with some ecosystems can be found in [KNOWN_ISSUES.md](KNOWN_ISSUES.md).
+
+matter.js/matter-node.js as Controller was successfully tested with the following devices:
+* Eve Energy (paired as secondary Controller via Apple Hub and also into own Thread network directly)
+* TP-Link P-125M (US) Smart Plug (paired as secondary Controller via Apple Hub and also into own Wi-Fi network directly)
+* Meross MSS115 (US) Smart Plug (paired as secondary Controller via Apple Hub and also into own Wi-Fi network directly)
+* Chip-Tool
 
 ## Monorepo Overview
 

@@ -8,6 +8,7 @@ import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataReader } from "../util/DataReader.js";
 import { DataWriter } from "../util/DataWriter.js";
 import { isIPv4, isIPv6 } from "../util/Ip.js";
+import { InternalError, NotImplementedError, UnexpectedDataError } from "../common/MatterError.js";
 
 export const PtrRecord = (name: string, ptr: string): DnsRecord<string> => ({ name, value: ptr, ttl: 120, recordType: DnsRecordType.PTR, recordClass: DnsRecordClass.IN });
 export const ARecord = (name: string, ip: string): DnsRecord<string> => ({ name, value: ip, ttl: 120, recordType: DnsRecordType.A, recordClass: DnsRecordClass.IN });
@@ -206,9 +207,9 @@ export class DnsCodec {
     }
 
     static encode({ messageType, transactionId = 0, queries = [], answers = [], authorities = [], additionalRecords = [] }: Partial<DnsMessage>): ByteArray {
-        if (messageType === undefined) throw new Error("Message type must be specified!");
-        if (queries.length > 0 && messageType !== DnsMessageType.Query) throw new Error("Queries can only be included in query messages!");
-        if (authorities.length > 0) throw new Error("Authority answers are not supported yet!");
+        if (messageType === undefined) throw new InternalError("Message type must be specified!");
+        if (queries.length > 0 && messageType !== DnsMessageType.Query) throw new InternalError("Queries can only be included in query messages!");
+        if (authorities.length > 0) throw new NotImplementedError("Authority answers are not supported yet!");
 
         const writer = new DataWriter(Endian.Big);
         writer.writeUInt16(transactionId);
@@ -254,12 +255,12 @@ export class DnsCodec {
                 return this.encodeARecord(value as string);
             default:
                 if (value instanceof ByteArray) return value;
-                throw new Error(`Unsupported record type ${recordType}`);
+                throw new UnexpectedDataError(`Unsupported record type ${recordType}`);
         }
     }
 
     private static encodeARecord(ip: string) {
-        if (!isIPv4(ip)) throw new Error(`Invalid A Record value: ${ip}`);
+        if (!isIPv4(ip)) throw new UnexpectedDataError(`Invalid A Record value: ${ip}`);
         const writer = new DataWriter(Endian.Big);
         ip.split(".").forEach(part => {
             writer.writeUInt8(parseInt(part));
@@ -268,7 +269,7 @@ export class DnsCodec {
     }
 
     private static encodeAaaaRecord(ip: string) {
-        if (!isIPv6(ip)) throw new Error(`Invalid AAAA Record value: ${ip}`);
+        if (!isIPv6(ip)) throw new UnexpectedDataError(`Invalid AAAA Record value: ${ip}`);
         const writer = new DataWriter(Endian.Big);
         const parts = ip.split(":");
         parts.forEach(part => {

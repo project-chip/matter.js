@@ -10,6 +10,7 @@ import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { CommissioningController } from "./CommissioningController.js";
 import { Logger } from "./log/Logger.js";
+import { NetworkError } from "./net/Network.js";
 
 const logger = Logger.get("MatterServer");
 
@@ -56,7 +57,7 @@ export class MatterServer {
             const nodePort = node.getPort();
             if (nodePort === undefined) continue;
             if (portCheckMap.has(nodePort)) {
-                throw new Error(`Port ${nodePort} is already in use by other node`);
+                throw new NetworkError(`Port ${nodePort} is already in use by other node`);
             }
             portCheckMap.set(nodePort, true);
         }

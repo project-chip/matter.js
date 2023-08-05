@@ -15,7 +15,7 @@ import { ByteArray, Endian } from "../util/ByteArray.js";
 import { Logger } from "../log/Logger.js";
 import { Time } from "../time/Time.js";
 import { DataWriter } from "../util/DataWriter.js";
-import { InternalError } from "../common/InternalError.js";
+import { MatterFlowError } from "../common/MatterError.js";
 
 const logger = Logger.get("SecureSession");
 
@@ -155,6 +155,6 @@ export class SecureSession<T> implements Session<T> {
 
 export function assertSecureSession<T>(session: Session<T>, errorText?: string): asserts session is SecureSession<T> {
     if (!session.isSecure()) {
-        throw new InternalError(errorText ?? "Insecure session in secure context");
+        throw new MatterFlowError(errorText ?? "Insecure session in secure context");
     }
 }

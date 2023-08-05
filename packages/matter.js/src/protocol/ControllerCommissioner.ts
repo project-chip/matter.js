@@ -10,7 +10,7 @@ import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { ClusterClientObj } from "../cluster/client/ClusterClient.js";
 import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
 import { GeneralCommissioning } from "../cluster/definitions/GeneralCommissioningCluster.js";
-import { MatterError } from "../common/MatterError.js";
+import { MatterError, UnexpectedDataError } from "../common/MatterError.js";
 import { Time } from "../time/Time.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { BasicInformation } from "../cluster/definitions/BasicInformationCluster.js";
@@ -105,10 +105,10 @@ type CollectedCommissioningData = {
     supportsConcurrentConnection?: boolean,
 }
 
-/** Error that throws when Commissioning Fails and process can not be continued. */
-class CommissioningError extends MatterError { }
+/** Error that throws when Commissioning fails and process can not be continued. */
+export class CommissioningError extends MatterError { }
 
-/** Error that throws when Commissioning Fails but process can be continued. */
+/** Error that throws when Commissioning fails but process can be continued. */
 class RecoverableCommissioningError extends CommissioningError { }
 
 const DEFAULT_FAILSAFE_TIME_MS = 60000;
@@ -517,7 +517,7 @@ export class ControllerCommissioner {
         const { nocsrElements, attestationSignature: csrSignature } = await operationalCredentialsClusterClient.csrRequest({ csrNonce: Crypto.getRandomData(32) });
         if (nocsrElements.length === 0 || csrSignature.length === 0) {
             // TODO: validate the data really
-            throw new Error("Invalid response from device");
+            throw new UnexpectedDataError("Invalid response from device");
         }
         // TODO: validate csrSignature using device public key
         const { certSigningRequest } = TlvCertSigningRequest.decode(nocsrElements);

@@ -9,7 +9,7 @@ import { Session, SLEEPY_ACTIVE_INTERVAL_MS, SLEEPY_IDLE_INTERVAL_MS } from "../
 import { SecureChannelProtocol } from "./securechannel/SecureChannelProtocol.js";
 import { MessageChannel, MessageCounter } from "./ExchangeManager.js";
 import { NodeId } from "../datatype/NodeId.js";
-import { MatterError } from "../common/MatterError.js";
+import { MatterError, MatterFlowError } from "../common/MatterError.js";
 import { Logger } from "../log/Logger.js";
 import { Queue } from "../util/Queue.js";
 import { Time, Timer } from "../time/Time.js";
@@ -148,13 +148,13 @@ export class MessageExchange<ContextT> {
         if (sentMessageIdToAck !== undefined) {
             if (ackedMessageId === undefined) {
                 // The message has no ack, but one previous message sent still needs to be acked.
-                throw new Error("Previous message ack is missing");
+                throw new MatterFlowError("Previous message ack is missing");
             } else if (ackedMessageId !== sentMessageIdToAck) {
                 // The message has an ack for another message.
                 if (SecureChannelProtocol.isStandaloneAck(protocolId, messageType)) {
                     // Ignore if this is a standalone ack, probably this was a retransmission.
                 } else {
-                    throw new Error(`Incorrect ack received. Expected ${sentMessageIdToAck}, received: ${ackedMessageId}`);
+                    throw new MatterFlowError(`Incorrect ack received. Expected ${sentMessageIdToAck}, received: ${ackedMessageId}`);
                 }
             } else {
                 // The other side has received our previous message
@@ -170,7 +170,7 @@ export class MessageExchange<ContextT> {
             return;
         }
         if (protocolId !== this.protocolId) {
-            throw new Error(`Received a message for an unexpected protocol. Expected: ${this.protocolId}, received: ${protocolId}`);
+            throw new MatterFlowError(`Received a message for an unexpected protocol. Expected: ${this.protocolId}, received: ${protocolId}`);
         }
         if (requiresAck) {
             this.receivedMessageToAck = message;
@@ -179,7 +179,7 @@ export class MessageExchange<ContextT> {
     }
 
     async send(messageType: number, payload: ByteArray, expectAckOnly = false) {
-        if (this.sentMessageToAck !== undefined) throw new Error("The previous message has not been acked yet, cannot send a new message");
+        if (this.sentMessageToAck !== undefined) throw new MatterFlowError("The previous message has not been acked yet, cannot send a new message.");
 
         this.session.notifyActivity(false);
 
@@ -241,7 +241,7 @@ export class MessageExchange<ContextT> {
         const message = await this.messagesQueue.read();
         const { payloadHeader: { messageType: receivedMessageType } } = message;
         if (receivedMessageType !== messageType)
-            throw new Error(`Received unexpected message type ${receivedMessageType.toString(16)}. Expected ${messageType.toString(16)}`);
+            throw new MatterFlowError(`Received unexpected message type ${receivedMessageType.toString(16)}. Expected ${messageType.toString(16)}`);
         return message;
     }
 

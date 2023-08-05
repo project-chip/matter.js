@@ -31,6 +31,7 @@ import { EventClient } from "../../cluster/client/EventClient.js";
 import { BitSchema } from "../../schema/BitmapSchema.js";
 import { Merge } from "../../util/Type.js";
 import { resolveAttributeName, resolveCommandName } from "../../cluster/ClusterHelper.js";
+import { InternalError, MatterError, MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
 
 const logger = Logger.get("InteractionClient");
 
@@ -77,7 +78,7 @@ export function ClusterClient<
         commands,
         subscribeAllAttributes: async (minIntervalFloorSeconds: number, maxIntervalCeilingSeconds: number) => {
             if (interactionClient === undefined) {
-                throw new Error("InteractionClient not set");
+                throw new InternalError("InteractionClient not set");
             }
             return await interactionClient.subscribeMultipleAttributes([{ endpointId: endpointId, clusterId: clusterId }], minIntervalFloorSeconds, maxIntervalCeilingSeconds, (data) => {
                 const { path, value } = data;
@@ -164,7 +165,7 @@ export function ClusterClient<
 
         commands[commandName] = async <RequestT, ResponseT>(request: RequestT) => {
             if (interactionClient === undefined) {
-                throw new Error("InteractionClient not set");
+                throw new InternalError("InteractionClient not set");
             }
             return interactionClient.invoke<Command<RequestT, ResponseT, any>>(endpointId, clusterId, request, requestId, requestSchema, responseId, responseSchema, optional);
         };
@@ -190,12 +191,12 @@ export class SubscriptionClient implements ProtocolHandler<MatterController> {
         const subscriptionId = dataReport.subscriptionId;
         if (subscriptionId === undefined) {
             await messenger.sendStatus(StatusCode.InvalidSubscription);
-            throw new Error("Invalid Data report without Subscription ID");
+            throw new UnexpectedDataError("Invalid Data report without Subscription ID");
         }
         const listener = this.subscriptionListeners.get(subscriptionId);
         if (listener === undefined) {
             await messenger.sendStatus(StatusCode.InvalidSubscription);
-            throw new Error(`Unknown subscription ID ${subscriptionId}`);
+            throw new UnexpectedDataError(`Unknown subscription ID ${subscriptionId}`);
         }
         await messenger.sendStatus(StatusCode.Success);
 
@@ -248,7 +249,7 @@ export class InteractionClient {
             return undefined;
         }
         if (response.length > 1) {
-            throw new Error("Unexpected response with more then one attribute");
+            throw new UnexpectedDataError("Unexpected response with more then one attribute");
         }
         return { value: response[0].value, version: response[0].version };
     }
@@ -306,7 +307,7 @@ export class InteractionClient {
                 interactionModelRevision: 1,
             });
             if (response === undefined) {
-                throw new Error(`No response received`);
+                throw new MatterFlowError(`No response received`);
             }
             return response.writeResponses.flatMap(({ status: { status, clusterStatus }, path: { nodeId, endpointId, clusterId, attributeId } }) => {
                 return { path: { nodeId, endpointId, clusterId, attributeId }, status: status ?? clusterStatus ?? StatusCode.Failure };
@@ -342,13 +343,13 @@ export class InteractionClient {
                 const data = normalizeAndDecodeReadAttributeReport(dataReport.attributeReports);
 
                 if (data.length === 0) {
-                    throw new Error('Subscription result reporting undefined/no value not specified');
+                    throw new MatterFlowError('Subscription result reporting undefined/no value not specified');
                 }
                 if (data.length > 1) {
-                    throw new Error("Unexpected response with more then one attribute");
+                    throw new UnexpectedDataError("Unexpected response with more then one attribute");
                 }
                 const { path: { endpointId, clusterId, attributeId }, value, version } = data[0];
-                if (value === undefined) throw new Error('Subscription result reporting undefined value not specified');
+                if (value === undefined) throw new MatterFlowError('Subscription result reporting undefined value not specified');
 
                 this.subscribedLocalValues.set(attributePathToId({ endpointId, clusterId, attributeId }), { value, version });
                 listener?.(value, version);
@@ -383,7 +384,7 @@ export class InteractionClient {
 
                 values.forEach(data => {
                     const { path: { endpointId, clusterId, attributeId }, value, version } = data;
-                    if (value === undefined) throw new Error('Subscription result reporting undefined value not specified');
+                    if (value === undefined) throw new MatterFlowError('Subscription result reporting undefined value not specified');
                     this.subscribedLocalValues.set(attributePathToId({ endpointId, clusterId, attributeId }), { value, version });
                     listener?.(data);
                 });
@@ -407,18 +408,18 @@ export class InteractionClient {
                 suppressResponse: false,
                 interactionModelRevision: 1,
             });
-            if (invokeResponse === undefined) throw new Error("No response received");
+            if (invokeResponse === undefined) throw new MatterFlowError("No response received");
             const { invokeResponses } = invokeResponse;
-            if (invokeResponses.length === 0) throw new Error("No response received");
+            if (invokeResponses.length === 0) throw new MatterFlowError("No response received");
             const { command, status } = invokeResponses[0];
             if (status !== undefined) {
                 const resultCode = status.status.status;
-                if (resultCode !== StatusCode.Success) throw new Error(`Received non-success result: ${resultCode}`);
-                if ((responseSchema as any) !== TlvNoResponse) throw new Error("A response was expected for this command");
+                if (resultCode !== StatusCode.Success) throw new MatterError(`Received non-success result: ${resultCode}`);
+                if ((responseSchema as any) !== TlvNoResponse) throw new MatterFlowError("A response was expected for this command");
                 return undefined as unknown as ResponseType<C>; // ResponseType is void, force casting the empty result
             } if (command !== undefined) {
                 if (command.commandFields === undefined) {
-                    if ((responseSchema as any) !== TlvNoResponse) throw new Error("A response was expected for this command");
+                    if ((responseSchema as any) !== TlvNoResponse) throw new MatterFlowError("A response was expected for this command");
                     return undefined as unknown as ResponseType<C>; // ResponseType is void, force casting the empty result
                 }
                 const response = responseSchema.decodeTlv(command.commandFields);
@@ -427,7 +428,7 @@ export class InteractionClient {
             } if (optional) {
                 return undefined as ResponseType<C>; // ResponseType allows undefined for optional commands
             }
-            throw new Error("Received invoke response with no result nor response");
+            throw new MatterFlowError("Received invoke response with no result nor response");
         });
     }
 

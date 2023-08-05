@@ -8,6 +8,7 @@ import { ByteArray } from "../util/ByteArray.js";
 import { capitalize } from "../util/String.js";
 import { Merge } from "../util/Type.js";
 import { Schema } from "./Schema.js";
+import { UnexpectedDataError } from "../common/MatterError.js";
 
 const enum BitRangeType {
     Flag,
@@ -149,7 +150,7 @@ export class ByteArrayBitmapSchemaInternal<T extends BitSchema> extends Schema<T
     }
 
     override decodeInternal(bitmap: ByteArray) {
-        if (bitmap.length !== this.byteArrayLength) throw new Error(`Unexpected length: ${bitmap.length}. Expected ${this.byteArrayLength}`);
+        if (bitmap.length !== this.byteArrayLength) throw new UnexpectedDataError(`Unexpected length: ${bitmap.length}. Expected ${this.byteArrayLength}`);
         const result = {} as any;
         for (const name in this.bitSchemas) {
             const { type } = this.bitSchemas[name];

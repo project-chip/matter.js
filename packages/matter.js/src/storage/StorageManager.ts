@@ -5,7 +5,7 @@
 */
 
 import { StorageContext } from "./StorageContext.js";
-import { Storage } from "./Storage.js";
+import { Storage, StorageError } from "./Storage.js";
 
 export class StorageManager {
     private initialized = false;
@@ -24,9 +24,9 @@ export class StorageManager {
     }
 
     createContext(context: string) {
-        if (!this.initialized) throw new Error("The storage needs to be initialized first!");
-        if (!context.length) throw new Error("Context must not be an empty string!");
-        if (context.includes('.')) throw new Error("Context must not contain dots!");
+        if (!this.initialized) throw new StorageError("The storage needs to be initialized first!");
+        if (!context.length) throw new StorageError("Context must not be an empty string!");
+        if (context.includes('.')) throw new StorageError("Context must not contain dots!");
         return new StorageContext(this.storage, [context]);
     }
 }

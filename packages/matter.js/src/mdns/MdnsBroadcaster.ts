@@ -21,6 +21,7 @@ import {
     PairingHintBitmapSchema
 } from "../common/InstanceBroadcaster.js";
 import { TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
+import { ImplementationError } from "../common/MatterError.js";
 
 const logger = Logger.get("MdnsBroadcaster");
 
@@ -57,7 +58,7 @@ export class MdnsBroadcaster {
             "pressSetupButtonNumberOfTimes"
         ].find(hint => (pairingHint as any)[hint] === true);
         if (needsInstructions && pairingInstructions.length === 0) {
-            throw new Error(`Pairing instructions required for Pairing Hint of type "${needsInstructions}"`);
+            throw new ImplementationError(`Pairing instructions required for Pairing Hint of type "${needsInstructions}"`);
         }
     }
 

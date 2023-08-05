@@ -9,6 +9,7 @@ import { Endpoint } from "../../device/Endpoint.js";
 import { EventPriority } from "../Cluster.js";
 import { EventData } from "../../protocol/interaction/EventHandler.js";
 import { Time } from "../../time/Time.js";
+import { InternalError } from "../../common/MatterError.js";
 
 export class EventServer<T> {
     private eventList = new Array<EventData<T>>();
@@ -29,7 +30,7 @@ export class EventServer<T> {
 
     triggerEvent(value: T) {
         if (this.endpoint === undefined || this.endpoint.id === undefined) {
-            throw new Error("Endpoint not assigned");
+            throw new InternalError("Endpoint not assigned");
         }
         const event: EventData<T> = {
             eventId: this.id,

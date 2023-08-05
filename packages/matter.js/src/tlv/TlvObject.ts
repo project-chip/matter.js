@@ -9,7 +9,7 @@ import { TlvAny } from "./TlvAny.js";
 import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-import { ValidationError } from "../common/MatterError.js";
+import { UnexpectedDataError, ValidationError } from "../common/MatterError.js";
 
 export interface FieldType<T> {
     id: number,
@@ -58,7 +58,7 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
             const fieldValue = (value as any)[name];
             if (fieldValue === undefined) {
                 if (!isOptional) {
-                    throw new Error(`Missing mandatory field ${name}`);
+                    throw new ValidationError(`Missing mandatory field ${name}`);
                 }
                 continue;
             }
@@ -68,13 +68,13 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
     }
 
     override decodeTlvInternalValue(reader: TlvReader, typeLength: TlvTypeLength): TypeFromFields<F> {
-        if (typeLength.type !== this.type) throw new Error(`Unexpected type ${typeLength.type}.`);
+        if (typeLength.type !== this.type) throw new UnexpectedDataError(`Unexpected type ${typeLength.type}.`);
         const result: any = {};
         while (true) {
             const { tag: { profile, id } = {}, typeLength: elementTypeLength } = reader.readTagType();
             if (elementTypeLength.type === TlvType.EndOfContainer) break;
-            if (profile !== undefined) throw new Error("Structure element tags should be context-specific.");
-            if (id === undefined) throw new Error("Structure element tags should have an id.");
+            if (profile !== undefined) throw new UnexpectedDataError("Structure element tags should be context-specific.");
+            if (id === undefined) throw new UnexpectedDataError("Structure element tags should have an id.");
             const fieldName = this.fieldById[id];
             if (fieldName === undefined) {
                 // Ignore unknown field by decoding it as raw TLV so we skip forward the proper length.

@@ -29,6 +29,8 @@ import { Time, Timer } from "./time/Time.js";
 import { ByteArray } from "./util/ByteArray.js";
 import { StorageContext } from "./storage/StorageContext.js";
 import { isNetworkInterface, NetInterface } from "./net/NetInterface.js";
+import { InternalError } from "./common/MatterError.js";
+import { NetworkError } from "./net/Network.js";
 
 const logger = Logger.get("MatterDevice");
 
@@ -212,7 +214,7 @@ export class MatterDevice {
             if (mode === 1) {
                 discriminator = this.discriminator;
             } else {
-                throw new Error("Discriminator must be set for mode 2");
+                throw new InternalError("Discriminator must be set for mode 2");
             }
         }
         this.commissioningWindowOpened = true;
@@ -239,7 +241,7 @@ export class MatterDevice {
         // TODO: have the interface and scanner linked
         const networkInterface = this.transportInterfaces.find(netInterface => isNetworkInterface(netInterface));
         if (networkInterface === undefined || !isNetworkInterface(networkInterface)) {
-            throw new Error("No network interface found");
+            throw new NetworkError("No network interface found");
         } // TODO meeehhh
         return { session, channel: await networkInterface.openChannel(matterServer[0]) };
     }

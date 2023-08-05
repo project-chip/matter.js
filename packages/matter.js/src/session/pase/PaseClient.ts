@@ -13,6 +13,7 @@ import { MatterController } from "../../MatterController.js";
 import { UNDEFINED_NODE_ID } from "../SessionManager.js";
 import { DEFAULT_PASSCODE_ID, PaseClientMessenger, SPAKE_CONTEXT } from "./PaseMessenger.js";
 import { SecureSession } from "../SecureSession.js";
+import { UnexpectedDataError } from "../../common/MatterError.js";
 
 const logger = Logger.get("PaseClient");
 
@@ -25,7 +26,7 @@ export class PaseClient {
         // Send pbkdRequest and Read pbkdResponse
         const requestPayload = await messenger.sendPbkdfParamRequest({ random, sessionId, passcodeId: DEFAULT_PASSCODE_ID, hasPbkdfParameters: false });
         const { responsePayload, response: { pbkdfParameters, sessionId: peerSessionId } } = await messenger.readPbkdfParamResponse();
-        if (pbkdfParameters === undefined) throw new Error("Missing requested PbkdfParameters in the response");
+        if (pbkdfParameters === undefined) throw new UnexpectedDataError("Missing requested PbkdfParameters in the response");
 
         // Compute pake1 and read pake2
         const { w0, w1 } = await Spake2p.computeW0W1(pbkdfParameters, setupPin);
@@ -36,7 +37,7 @@ export class PaseClient {
         // Process pack2 and send pake3
         const { y: Y, verifier } = await messenger.readPasePake2();
         const { Ke, hAY, hBX } = await spake2p.computeSecretAndVerifiersFromY(w1, X, Y);
-        if (!verifier.equals(hBX)) throw new Error("Received incorrect key confirmation from the receiver");
+        if (!verifier.equals(hBX)) throw new UnexpectedDataError("Received incorrect key confirmation from the receiver");
         await messenger.sendPasePake3({ verifier: hAY });
 
         // All good! Creating the secure session

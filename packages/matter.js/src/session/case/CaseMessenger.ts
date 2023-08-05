@@ -10,6 +10,7 @@ import { TlvCaseSigma1, TlvCaseSigma2Resume, TlvCaseSigma2, TlvCaseSigma3 } from
 import { SecureChannelMessenger } from "../../protocol/securechannel/SecureChannelMessenger.js";
 import { MessageType } from "../../protocol/securechannel/SecureChannelMessages.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { MatterFlowError } from "../../common/MatterError.js";
 
 export class CaseServerMessenger extends SecureChannelMessenger<MatterDevice> {
     async readSigma1() {
@@ -44,7 +45,7 @@ export class CaseClientMessenger extends SecureChannelMessenger<MatterController
             case MessageType.Sigma2Resume:
                 return { sigma2Resume: TlvCaseSigma2Resume.decode(payload) };
             default:
-                throw new Error(`Received unexpected message type: ${messageType}, expected: ${MessageType.Sigma2} or ${MessageType.Sigma2Resume}`);
+                throw new MatterFlowError(`Received unexpected message type: ${messageType}, expected: ${MessageType.Sigma2} or ${MessageType.Sigma2Resume}`);
         }
     }
 

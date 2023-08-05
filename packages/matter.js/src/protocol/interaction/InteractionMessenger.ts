@@ -7,7 +7,7 @@
 import { ByteArray } from "../../util/ByteArray.js";
 import { Logger } from "../../log/Logger.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
-import { MatterError } from "../../common/MatterError.js";
+import { MatterError, MatterFlowError, NotImplementedError, UnexpectedDataError } from "../../common/MatterError.js";
 import { MessageExchange, UnexpectedMessageError, RetransmissionLimitReachedError } from "../../protocol/MessageExchange.js";
 import { ExchangeProvider } from "../../protocol/ExchangeManager.js";
 import { MatterController } from "../../MatterController.js";
@@ -80,7 +80,9 @@ class InteractionMessenger<ContextT> {
         const message = await this.exchange.nextMessage();
         const messageType = message.payloadHeader.messageType;
         this.throwIfErrorStatusMessage(message);
-        if (expectedMessageType !== undefined && messageType !== expectedMessageType) throw new Error(`Received unexpected message type: ${messageType}, expected: ${expectedMessageType}`);
+        if (expectedMessageType !== undefined && messageType !== expectedMessageType) {
+            throw new UnexpectedDataError(`Received unexpected message type: ${messageType}, expected: ${expectedMessageType}`);
+        }
         return message;
     }
 
@@ -146,7 +148,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                         break;
                     }
                     default:
-                        throw new Error(`Unsupported message type ${message.payloadHeader.messageType}`);
+                        throw new NotImplementedError(`Unsupported message type ${message.payloadHeader.messageType}`);
                 }
             }
         } catch (error: any) {
@@ -183,7 +185,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                 const attributeReportBytes = TlvAttributeReport.encode(attributeReport).length;
                 if (messageSize + attributeReportBytes > MAX_SPDU_LENGTH) {
                     if (messageSize === emptyDataReportBytes.length) {
-                        throw new Error(`Attribute report for is too long to fit in a single chunk, Array chunking not yet supported`);
+                        throw new NotImplementedError(`Attribute report for is too long to fit in a single chunk, Array chunking not yet supported`);
                     }
                     // Report doesn't fit, sending this chunk
                     await this.send(MessageType.ReportData, TlvDataReport.encode(dataReport));
@@ -221,7 +223,7 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger<Mat
             if (subscriptionId === undefined && report.subscriptionId !== undefined) {
                 subscriptionId = report.subscriptionId;
             } else if ((subscriptionId !== undefined || report.subscriptionId !== undefined) && report.subscriptionId !== subscriptionId) {
-                throw new Error(`Invalid subscription ID ${report.subscriptionId} received`);
+                throw new UnexpectedDataError(`Invalid subscription ID ${report.subscriptionId} received`);
             }
 
             if (Array.isArray(report.attributeReports) && report.attributeReports.length > 0) {
@@ -273,7 +275,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         const { subscriptionId } = report;
 
         if (subscriptionId === undefined) {
-            throw new Error(`Subscription ID not provided in report`);
+            throw new UnexpectedDataError(`Subscription ID not provided in report`);
         }
 
         await this.sendStatus(StatusCode.Success);
@@ -282,7 +284,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         const subscribeResponse = TlvSubscribeResponse.decode(subscribeResponseMessage.payload);
 
         if (subscribeResponse.subscriptionId !== subscriptionId) {
-            throw new Error(`Received subscription ID ${subscribeResponse.subscriptionId} instead of ${subscriptionId}`);
+            throw new MatterFlowError(`Received subscription ID ${subscribeResponse.subscriptionId} instead of ${subscriptionId}`);
         }
 
         return {

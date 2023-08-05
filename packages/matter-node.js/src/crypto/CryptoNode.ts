@@ -8,7 +8,7 @@ import * as crypto from "crypto";
 import { ByteArray } from "@project-chip/matter.js/util";
 import {
     CRYPTO_AUTH_TAG_LENGTH, CRYPTO_EC_CURVE, CRYPTO_ENCRYPT_ALGORITHM, CRYPTO_HASH_ALGORITHM, CRYPTO_SYMMETRIC_KEY_LENGTH,
-    CryptoDsaEncoding, Crypto,
+    CryptoDsaEncoding, Crypto, CryptoError
 } from "@project-chip/matter.js/crypto";
 
 const EC_PRIVATE_KEY_PKCS8_HEADER = ByteArray.fromHex("308141020100301306072a8648ce3d020106082a8648ce3d030107042730250201010420");
@@ -130,7 +130,7 @@ export class CryptoNode extends Crypto {
             type: "spki",
             dsaEncoding,
         }, signature);
-        if (!success) throw new Error("Signature verification failed");
+        if (!success) throw new CryptoError("Signature verification failed");
     }
 
     verifySpki(publicKey: ByteArray, data: ByteArray, signature: ByteArray, dsaEncoding: CryptoDsaEncoding = "ieee-p1363") {
@@ -142,7 +142,7 @@ export class CryptoNode extends Crypto {
             type: "spki",
             dsaEncoding,
         }, signature);
-        if (!success) throw new Error("Signature verification failed");
+        if (!success) throw new CryptoError("Signature verification failed");
     }
 
     createKeyPair(): { publicKey: ByteArray, privateKey: ByteArray } {

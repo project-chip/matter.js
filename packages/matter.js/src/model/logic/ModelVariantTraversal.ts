@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "../../common/InternalError.js";
+import { InternalError } from "../../common/MatterError.js";
 import { Logger } from "../../log/Logger.js";
 import { ElementTag } from "../definitions/index.js";
 import { AnyElement } from "../elements/index.js";
@@ -98,7 +98,7 @@ export abstract class ModelVariantTraversal<S = void> {
      * This is the primary callback.  It is invoked for every set of variants
      * during traversal.  It may optionally return state that is returned
      * from traverse().
-     * 
+     *
      * @param variants the set of equivalent models
      * @param recurse call this function to recurse into variant children
      */
@@ -305,7 +305,7 @@ export abstract class ModelVariantTraversal<S = void> {
 type NameMapping = Map<Model, string>;
 
 /**
- * This type manages state that changes when we enter a cluster. 
+ * This type manages state that changes when we enter a cluster.
  */
 type ClusterState = {
     canonicalNames: NameMapping
@@ -314,10 +314,10 @@ type ClusterState = {
 /**
  * We go to a whole lot of work to choose proper datatype names.  This is to
  * reduce the number of manual overrides we need to correct dirty data.
- * 
+ *
  * This may seem like an unreasonable amount of logic but with evolving
  * specifications and 3k+ named elements (and counting) it seems worthwhile.
- * 
+ *
  * ModelVariantTraversal calls this function each time it enters a cluster.
  * Thus we are only dealing with names scoped to a single cluster
  */
@@ -344,7 +344,7 @@ function computeCanonicalNames(sourceNames: string[], variants: VariantDetail) {
 /**
  * Populate the canonical datatype name lookup for a specific cluster.  This is
  * pretty ugly but in pseudo code:
- * 
+ *
  * for each datatype that has a base type:
  *     find the name referenced by the variant of highest priority
  *     add a mapping from the referenced name to the name we found

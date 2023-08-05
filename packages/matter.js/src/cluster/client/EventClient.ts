@@ -6,6 +6,7 @@
 
 import { InteractionClient } from "../../protocol/interaction/InteractionClient.js";
 import { Event } from "../Cluster.js";
+import { InternalError, NotImplementedError } from "../../common/MatterError.js";
 
 export class EventClient<T> {
     private readonly listeners = new Array<(event: T/*, oldValue: T*/) => void>();
@@ -21,9 +22,9 @@ export class EventClient<T> {
     async get(_alwaysRequestFromRemote = false) {
         const interactionClient = await this.getInteractionClientCallback();
         if (interactionClient === undefined) {
-            throw new Error("No InteractionClient available");
+            throw new InternalError("No InteractionClient available");
         }
-        throw new Error("Not yet implemented");
+        throw new NotImplementedError("Not yet implemented");
         /*
         return await interactionClient.get(this.endpointId, this.clusterId, this.event, alwaysRequestFromRemote);*/
         // TODO: implement
@@ -32,9 +33,9 @@ export class EventClient<T> {
     async subscribe(_minIntervalS: number, _maxIntervalS: number) {
         const interactionClient = await this.getInteractionClientCallback();
         if (interactionClient === undefined) {
-            throw new Error("No InteractionClient available");
+            throw new InternalError("No InteractionClient available");
         }
-        throw new Error("Not yet implemented");
+        throw new NotImplementedError("Not yet implemented");
         /*
         return await interactionClient.subscribe(this.endpointId, this.clusterId, this.attribute, minIntervalS, maxIntervalS, this.update.bind(this));*/
         // TODO implement

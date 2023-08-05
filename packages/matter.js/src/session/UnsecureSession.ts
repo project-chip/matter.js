@@ -11,6 +11,7 @@ import { UNICAST_UNSECURE_SESSION_ID } from "./SessionManager.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { NoAssociatedFabricError } from "./SecureSession.js";
+import { InternalError, MatterFlowError } from "../common/MatterError.js";
 
 export class UnsecureSession<T> implements Session<T> {
     private readonly initiatorNodeId = NodeId.getRandomOperationalNodeId();
@@ -40,11 +41,11 @@ export class UnsecureSession<T> implements Session<T> {
     }
 
     getAttestationChallengeKey(): ByteArray {
-        throw new Error("Not supported on an unsecure session");
+        throw new MatterFlowError("Not supported on an unsecure session");
     }
 
     setFabric(_fabric: Fabric): void {
-        throw new Error("Not supported on an unsecure session");
+        throw new MatterFlowError("Not supported on an unsecure session");
     }
 
     get name() {
@@ -80,7 +81,7 @@ export class UnsecureSession<T> implements Session<T> {
     }
 
     destroy() {
-        throw new Error("The unsecure session should never be destroyed.");
+        throw new InternalError("The unsecure session should never be destroyed.");
     }
 
     getAssociatedFabric(): Fabric {

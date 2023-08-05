@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Channel, Listener, ServerAddress } from "@project-chip/matter.js/common";
+import { Channel, Listener, ServerAddress, InternalError } from "@project-chip/matter.js/common";
 import { ByteArray, getPromiseResolver } from "@project-chip/matter.js/util";
 import {
     BLE_MATTER_C1_CHARACTERISTIC_UUID, BLE_MATTER_C2_CHARACTERISTIC_UUID, BLE_MATTER_SERVICE_UUID,
     BTP_CONN_RSP_TIMEOUT_MS, BTP_MAXIMUM_WINDOW_SIZE, BTP_SUPPORTED_VERSIONS, BtpSessionHandler,
-    BLE_MATTER_C3_CHARACTERISTIC_UUID, BLE_MAXIMUM_BTP_MTU, Ble,
+    BLE_MATTER_C3_CHARACTERISTIC_UUID, BLE_MAXIMUM_BTP_MTU, Ble, BtpFlowError, BleError
 } from "@project-chip/matter.js/ble";
 import { Logger } from "@project-chip/matter.js/log";
 import { BtpCodec } from "@project-chip/matter.js/codec";
@@ -50,19 +50,19 @@ export class NobleBleCentralInterface implements NetInterface {
 
     async openChannel(address: ServerAddress): Promise<Channel<ByteArray>> {
         if (address.type !== "ble") {
-            throw new Error(`Unsupported address type ${address.type}.`);
+            throw new InternalError(`Unsupported address type ${address.type}.`);
         }
         if (this.onMatterMessageListener === undefined) {
-            throw new Error(`Network Interface was not added to the system yet.`);
+            throw new InternalError(`Network Interface was not added to the system yet.`);
         }
 
         // Get the peripheral by address and connect to it.
         const { peripheral, hasAdditionalAdvertisementData } = (Ble.get().getBleScanner() as BleScanner).getDiscoveredDevice(address.peripheralAddress);
         if (peripheral.state === "connected" || peripheral.state === "connecting") {
-            throw new Error(`Peripheral ${address.peripheralAddress} is already connected or connecting. Only one connection supported right now.`);
+            throw new BleError(`Peripheral ${address.peripheralAddress} is already connected or connecting. Only one connection supported right now.`);
         }
         if (this.openChannels.has(address)) {
-            throw new Error(`Peripheral ${address.peripheralAddress} is already connected. Only one connection supported right now.`);
+            throw new BleError(`Peripheral ${address.peripheralAddress} is already connected. Only one connection supported right now.`);
         }
         await peripheral.connectAsync();
 
@@ -114,7 +114,7 @@ export class NobleBleCentralInterface implements NetInterface {
             return await NobleBleChannel.create(peripheral, characteristicC1ForWrite, characteristicC2ForSubscribe, this.onMatterMessageListener, additionalCommissioningRelatedData);
         }
 
-        throw new Error(`No Matter service found on peripheral ${peripheral.address}`);
+        throw new BleError(`No Matter service found on peripheral ${peripheral.address}`);
     }
 
     onData(listener: (socket: Channel<ByteArray>, data: ByteArray) => void): Listener {
@@ -181,7 +181,7 @@ export class NobleBleChannel implements Channel<ByteArray> {
             // callback to forward decoded and de-assembled Matter messages to ExchangeManager
             async (data: ByteArray) => {
                 if (onMatterMessageListener === undefined) {
-                    throw new Error(`No listener registered for Matter messages`);
+                    throw new InternalError(`No listener registered for Matter messages`);
                 }
                 onMatterMessageListener(nobleChannel, data);
             },
@@ -221,7 +221,7 @@ export class NobleBleChannel implements Channel<ByteArray> {
             return;
         }
         if (this.btpSession === undefined) {
-            throw new Error(`Cannot send data, no BTP session initialized`);
+            throw new BtpFlowError(`Cannot send data, no BTP session initialized`);
         }
         await this.btpSession.sendMatterMessage(data);
     }

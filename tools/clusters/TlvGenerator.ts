@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "#matter.js/common/InternalError.js";
+import { InternalError } from "#matter.js/common/MatterError.js";
 import {
     ClusterModel,
     CommandModel,
@@ -72,7 +72,7 @@ export class TlvGenerator {
 
     /**
      * Reference a TLV type.  Adds definitions to the file as necessary.
-     * 
+     *
      * @return the referencing TS expression as a string
      */
     reference(model: ValueModel): string {

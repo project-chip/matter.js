@@ -15,6 +15,7 @@ import { ByteArray } from "../../util/ByteArray.js";
 import { Logger } from "../../log/Logger.js";
 import BN from "bn.js";
 import { SECURE_CHANNEL_PROTOCOL_ID } from "../../protocol/securechannel/SecureChannelMessages.js";
+import { UnexpectedDataError } from "../../common/MatterError.js";
 
 const logger = Logger.get("PaseServer");
 
@@ -58,7 +59,7 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
 
         // Read pbkdRequest and send pbkdResponse
         const { requestPayload, request: { random: peerRandom, mrpParameters, passcodeId, hasPbkdfParameters, sessionId: peerSessionId } } = await messenger.readPbkdfParamRequest();
-        if (passcodeId !== DEFAULT_PASSCODE_ID) throw new Error(`Unsupported passcode ID ${passcodeId}`);
+        if (passcodeId !== DEFAULT_PASSCODE_ID) throw new UnexpectedDataError(`Unsupported passcode ID ${passcodeId}`);
         const responsePayload = await messenger.sendPbkdfParamResponse({ peerRandom, random, sessionId, mrpParameters, pbkdfParameters: hasPbkdfParameters ? undefined : this.pbkdfParameters });
 
         // Process pake1 and send pake2
@@ -70,7 +71,7 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
 
         // Read and process pake3
         const { verifier } = await messenger.readPasePake3();
-        if (!verifier.equals(hAY)) throw new Error("Received incorrect key confirmation from the initiator");
+        if (!verifier.equals(hAY)) throw new UnexpectedDataError("Received incorrect key confirmation from the initiator");
 
         // All good! Creating the secure session
         await server.createSecureSession(sessionId, undefined /* fabric */, UNDEFINED_NODE_ID, peerSessionId, Ke, new ByteArray(0), false, false, mrpParameters?.idleRetransTimeoutMs, mrpParameters?.activeRetransTimeoutMs);

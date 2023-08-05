@@ -6,6 +6,7 @@
 
 import { ByteArray } from "../util/ByteArray.js";
 import { Time } from "../time/Time.js";
+import { NotImplementedError } from "../common/MatterError.js";
 import * as console from "console";
 
 export enum Level {
@@ -223,7 +224,7 @@ export class Logger {
             case Format.PLAIN: Logger.logFormatter = plainLogFormatter; break;
             case Format.ANSI: Logger.logFormatter = ansiLogFormatter; break;
             case Format.HTML: Logger.logFormatter = htmlLogFormatter; break;
-            default: throw new Error(`Unsupported log format "${format}"`);
+            default: throw new NotImplementedError(`Unsupported log format "${format}"`);
         }
     }
 
@@ -240,7 +241,7 @@ export class Logger {
     /**
      * Stringify a value (BigInt aware) as JSON.
      *
-     * @param: data the value to stringify
+     * @param data the value to stringify
      * @returns the stringified value
      */
     static toJSON(data: any) {

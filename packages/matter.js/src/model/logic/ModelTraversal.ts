@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "../../common/InternalError.js";
+import { InternalError } from "../../common/MatterError.js";
 import { Aspect, Constraint } from "../aspects/index.js";
 import { ElementTag, FieldValue, Metatype } from "../definitions/index.js";
 import { AnyElement, Globals } from "../elements/index.js";
@@ -16,10 +16,10 @@ const OPERATION_DEPTH_LIMIT = 20;
  * This class performs lookups of models in the scope of a specific model.  We
  * use a class so the lookup can maintain state and guard against circular
  * references.
- * 
+ *
  * Any logic that requires traversal of a multi-model ownership or inheritance
  * should use this class.
- * 
+ *
  * Note that we don't currently utilize any kind of index when we perform
  * search.  Not currently a problem but may need to address if it becomes too
  * inefficient.

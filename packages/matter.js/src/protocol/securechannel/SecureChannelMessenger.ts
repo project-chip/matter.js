@@ -7,7 +7,7 @@
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { GeneralStatusCode, ProtocolStatusCode, MessageType, SECURE_CHANNEL_PROTOCOL_ID } from "./SecureChannelMessages.js";
 import { TlvSchema } from "../../tlv/TlvSchema.js";
-import { MatterError } from "../../common/MatterError.js";
+import { MatterError, UnexpectedDataError } from "../../common/MatterError.js";
 import { TlvSecureChannelStatusMessage } from "./SecureChannelStatusMessageSchema.js";
 import { Message } from "../../codec/MessageCodec.js";
 
@@ -31,7 +31,7 @@ export class SecureChannelMessenger<ContextT> {
         const message = await this.exchange.nextMessage();
         const messageType = message.payloadHeader.messageType;
         this.throwIfErrorStatusReport(message);
-        if (expectedMessageType !== undefined && messageType !== expectedMessageType) throw new Error(`Received unexpected message type: ${messageType}, expected: ${expectedMessageType}`);
+        if (expectedMessageType !== undefined && messageType !== expectedMessageType) throw new UnexpectedDataError(`Received unexpected message type: ${messageType}, expected: ${expectedMessageType}`);
         return message;
     }
 

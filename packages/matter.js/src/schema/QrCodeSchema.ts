@@ -7,6 +7,7 @@
 import { Schema } from "./Schema.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { ReedSolomon } from "../math/ReedSolomon.js";
+import { NotImplementedError, UnexpectedDataError } from "../common/MatterError.js";
 
 const QR_MASK = [
     [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0],
@@ -200,12 +201,12 @@ export class QrCodeSchema extends Schema<string, string> {
 
     private getCode(char: string) {
         const code = ALPHABET.indexOf(char);
-        if (code === -1) throw new Error(`Invalid character ${char}`);
+        if (code === -1) throw new UnexpectedDataError(`Invalid character ${char}`);
         return code;
     }
 
     protected decodeInternal(_encoded: string): string {
-        throw new Error("Method not implemented.");
+        throw new NotImplementedError("Method not implemented.");
     }
 }
 

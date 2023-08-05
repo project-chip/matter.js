@@ -10,13 +10,14 @@ import { FAKE_INTERFACE_NAME, SimulatedNetwork } from "./SimulatedNetwork.js";
 import { isIPv4 } from "../../util/Ip.js";
 import { ByteArray } from "../../util/ByteArray.js";
 import { NetworkFake } from "./NetworkFake.js";
+import { NetworkError } from "../Network.js";
 
 export class UdpChannelFake implements UdpChannel {
     static async create(network: NetworkFake, { listeningAddress, listeningPort, netInterface, type }: UdpChannelOptions) {
         const { ips } = network.getIpMac(netInterface ?? FAKE_INTERFACE_NAME);
         const ipv4 = type === "udp4";
         const localAddress = ips.filter(ip => isIPv4(ip) || !ipv4)[0];
-        if (localAddress === undefined) throw new Error("No matching IP on the specified interface");
+        if (localAddress === undefined) throw new NetworkError("No matching IP on the specified interface");
         return new UdpChannelFake(localAddress, listeningAddress, listeningPort);
     }
 

@@ -11,6 +11,7 @@ import { CaseServer } from "../../session/case/CaseServer.js";
 import { PaseServer } from "../../session/pase/PaseServer.js";
 import { MessageType, SECURE_CHANNEL_PROTOCOL_ID } from "./SecureChannelMessages.js";
 import { MatterDevice } from "../../MatterDevice.js";
+import { MatterFlowError } from "../../common/MatterError.js";
 
 export class SecureChannelProtocol implements ProtocolHandler<MatterDevice> {
 
@@ -38,7 +39,7 @@ export class SecureChannelProtocol implements ProtocolHandler<MatterDevice> {
                 await this.caseCommissioner.onNewExchange(exchange);
                 break;
             default:
-                throw new Error(`Unexpected initial message on secure channel protocol: ${messageType.toString(16)}`);
+                throw new MatterFlowError(`Unexpected initial message on secure channel protocol: ${messageType.toString(16)}`);
         }
     }
 

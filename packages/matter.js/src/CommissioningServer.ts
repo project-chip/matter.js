@@ -47,7 +47,7 @@ import { Endpoint } from "./device/Endpoint.js";
 import { StorageContext } from "./storage/StorageContext.js";
 import { MdnsInstanceBroadcaster } from "./mdns/MdnsInstanceBroadcaster.js";
 import { Ble } from "./ble/Ble.js";
-import { NoProviderError } from "./common/MatterError.js";
+import { NoProviderError, ImplementationError } from "./common/MatterError.js";
 
 const logger = Logger.get("CommissioningServer");
 
@@ -324,12 +324,12 @@ export class CommissioningServer extends MatterNode {
      */
     override addRootClusterServer<A extends Attributes, C extends Commands, E extends Events>(cluster: ClusterServerObj<A, C, E>) {
         if (cluster.id === BasicInformationCluster.id) {
-            throw new Error(
+            throw new ImplementationError(
                 "BasicInformationCluster can not be modified, provide all details in constructor options!"
             );
         }
         if (cluster.id === OperationalCredentialsCluster.id) {
-            throw new Error(
+            throw new ImplementationError(
                 "OperationalCredentialsCluster can not be modified, provide the certificates in constructor options!"
             );
         }
@@ -349,7 +349,7 @@ export class CommissioningServer extends MatterNode {
             this.storage === undefined ||
             this.endpointStructureStorage === undefined
         ) {
-            throw new Error("Add the node to the Matter instance before!");
+            throw new ImplementationError("Add the node to the Matter instance before!");
         }
 
         const secureChannelProtocol = new SecureChannelProtocol(
@@ -374,7 +374,7 @@ export class CommissioningServer extends MatterNode {
 
         const basicInformation = this.getRootClusterServer(BasicInformationCluster);
         if (basicInformation == undefined) {
-            throw new Error("BasicInformationCluster needs to be set!");
+            throw new ImplementationError("BasicInformationCluster needs to be set!");
         }
         const vendorId = basicInformation.attributes.vendorId.getLocal();
         const productId = basicInformation.attributes.productId.getLocal();
@@ -465,7 +465,7 @@ export class CommissioningServer extends MatterNode {
 
     private initializeEndpointIdsFromStorage(endpoint: Endpoint, parentUniquePrefix = "") {
         if (this.endpointStructureStorage === undefined) {
-            throw new Error("Storage manager must be initialized to enable initialization from storage.");
+            throw new ImplementationError("Storage manager must be initialized to enable initialization from storage.");
         }
         const endpoints = endpoint.getChildEndpoints();
         for (let endpointIndex = 0; endpointIndex < endpoints.length; endpointIndex++) {
@@ -496,7 +496,7 @@ export class CommissioningServer extends MatterNode {
 
     private fillAndStoreEndpointIds(endpoint: Endpoint, parentUniquePrefix = "") {
         if (this.endpointStructureStorage === undefined) {
-            throw new Error("endpointStructureStorage not set!");
+            throw new ImplementationError("endpointStructureStorage not set!");
         }
         const endpoints = endpoint.getChildEndpoints();
         for (let endpointIndex = 0; endpointIndex < endpoints.length; endpointIndex++) {
@@ -531,7 +531,7 @@ export class CommissioningServer extends MatterNode {
     getPairingCode(discoveryCapabilities?: TypeFromBitSchema<typeof DiscoveryCapabilitiesBitmap>): DevicePairingInformation {
         const basicInformation = this.getRootClusterServer(BasicInformationCluster);
         if (basicInformation == undefined) {
-            throw new Error("BasicInformationCluster needs to be set!");
+            throw new ImplementationError("BasicInformationCluster needs to be set!");
         }
 
         const vendorId = basicInformation.attributes.vendorId.getLocal();

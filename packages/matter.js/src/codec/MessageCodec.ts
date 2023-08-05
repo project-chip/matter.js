@@ -9,6 +9,7 @@ import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataReader } from "../util/DataReader.js";
 import { DataWriter } from "../util/DataWriter.js";
 import { DiagnosticDictionary } from "../log/Logger.js";
+import { NotImplementedError, UnexpectedDataError } from "../common/MatterError.js";
 
 export interface PacketHeader {
     sessionId: number,
@@ -119,8 +120,8 @@ export class MessageCodec {
         const hasDestGroupId = (flags & PacketHeaderFlag.HasDestGroupId) !== 0;
         const hasSourceNodeId = (flags & PacketHeaderFlag.HasSourceNodeId) !== 0;
 
-        if (hasDestNodeId && hasDestGroupId) throw new Error("The header cannot contain destination group and node at the same time");
-        if (version !== HEADER_VERSION) throw new Error(`Unsupported header version ${version}`);
+        if (hasDestNodeId && hasDestGroupId) throw new UnexpectedDataError("The header cannot contain destination group and node at the same time");
+        if (version !== HEADER_VERSION) throw new NotImplementedError(`Unsupported header version ${version}`);
 
         const sessionId = reader.readUInt16();
         const securityFlags = reader.readUInt8();
@@ -130,13 +131,13 @@ export class MessageCodec {
         const destGroupId = hasDestGroupId ? reader.readUInt16() : undefined;
 
         const sessionType = securityFlags & 0b00000011;
-        if (sessionType !== SessionType.Group && sessionType !== SessionType.Unicast) throw new Error(`Unsupported session type ${sessionType}`);
+        if (sessionType !== SessionType.Group && sessionType !== SessionType.Unicast) throw new UnexpectedDataError(`Unsupported session type ${sessionType}`);
         const hasPrivacyEnhancements = (securityFlags & SecurityFlag.HasPrivacyEnhancements) !== 0;
-        if (hasPrivacyEnhancements) throw new Error(`Privacy enhancements not supported`);
+        if (hasPrivacyEnhancements) throw new NotImplementedError(`Privacy enhancements not supported`);
         const isControlMessage = (securityFlags & SecurityFlag.IsControlMessage) !== 0;
-        if (isControlMessage) throw new Error(`Control Messages not supported`);
+        if (isControlMessage) throw new NotImplementedError(`Control Messages not supported`);
         const hasMessageExtensions = (securityFlags & SecurityFlag.HasMessageExtension) !== 0;
-        if (hasMessageExtensions) throw new Error(`Message extensions not supported`);
+        if (hasMessageExtensions) throw new NotImplementedError(`Message extensions not supported`);
 
         return { sessionId, sourceNodeId, messageId, destGroupId, destNodeId, sessionType, hasPrivacyEnhancements, isControlMessage, hasMessageExtensions };
     }
@@ -148,7 +149,7 @@ export class MessageCodec {
         const requiresAck = (exchangeFlags & PayloadHeaderFlag.RequiresAck) !== 0;
         const hasSecuredExtension = (exchangeFlags & PayloadHeaderFlag.HasSecureExtension) !== 0;
         const hasVendorId = (exchangeFlags & PayloadHeaderFlag.HasVendorId) !== 0;
-        if (hasSecuredExtension) throw new Error("Secured extension is not supported");
+        if (hasSecuredExtension) throw new NotImplementedError("Secured extension is not supported");
 
         const messageType = reader.readUInt8();
         const exchangeId = reader.readUInt16();

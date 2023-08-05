@@ -18,6 +18,7 @@ import {
     AttributePath, attributePathToId, AttributeWithPath, CommandPath, commandPathToId, CommandWithPath, EventPath,
     eventPathToId, EventWithPath, genericElementPathToId
 } from "./InteractionServer.js";
+import { ImplementationError, InternalError } from "../../common/MatterError.js";
 
 export class InteractionEndpointStructure {
     endpoints = new Map<number, Endpoint>();
@@ -55,7 +56,7 @@ export class InteractionEndpointStructure {
 
     private verifyAndInitializeStructureElementsFromEndpoint(endpoint: Endpoint) {
         if (endpoint.id === undefined) {
-            throw new Error(`Endpoint ID is undefined. It needs to be initialized first!`);
+            throw new InternalError(`Endpoint ID is undefined. It needs to be initialized first!`);
         }
 
         endpoint.verifyRequiredClusters();
@@ -87,7 +88,7 @@ export class InteractionEndpointStructure {
             }
         }
 
-        if (this.endpoints.has(endpoint.id)) throw new Error(`Endpoint ID ${endpoint.id} exists twice`);
+        if (this.endpoints.has(endpoint.id)) throw new ImplementationError(`Endpoint ID ${endpoint.id} exists twice`);
 
         this.endpoints.set(endpoint.id, endpoint);
     }

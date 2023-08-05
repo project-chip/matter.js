@@ -6,20 +6,21 @@
 
 import { ClusterServerHandlers } from "./ClusterServer.js";
 import { GroupKeyManagementCluster } from "../definitions/GroupKeyManagementCluster.js";
+import { NotImplementedError } from "../../common/MatterError.js";
 
 // TODO: Implement this
 
 export const GroupKeyManagementClusterHandler: () => ClusterServerHandlers<typeof GroupKeyManagementCluster> = () => ({
     keySetWrite: async () => {
-        throw new Error("Not implemented");
+        throw new NotImplementedError("Not implemented");
     },
     keySetRead: async () => {
-        throw new Error("Not implemented");
+        throw new NotImplementedError("Not implemented");
     },
     keySetRemove: async () => {
-        throw new Error("Not implemented");
+        throw new NotImplementedError("Not implemented");
     },
     keySetReadAllIndices: async () => {
-        throw new Error("Not implemented");
+        throw new NotImplementedError("Not implemented");
     }
 });

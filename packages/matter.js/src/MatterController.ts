@@ -34,7 +34,7 @@ import { RetransmissionLimitReachedError } from "./protocol/MessageExchange.js";
 import { tryCatchAsync } from "./common/TryCatchHandler.js";
 import { ClassExtends } from "./util/Type.js";
 import { ServerAddress, ServerAddressBle, ServerAddressIp } from "./common/ServerAddress.js";
-import { Ble } from "./ble/Ble.js";
+import { Ble, BleError } from "./ble/Ble.js";
 import { isDeepEqual } from "./util/DeepEqual.js";
 import { Channel } from "./common/Channel.js";
 import { NoProviderError } from "./common/MatterError.js";
@@ -42,7 +42,8 @@ import { TypeFromSchema } from "./tlv/TlvSchema.js";
 import { TlvField, TlvObject } from "./tlv/TlvObject.js";
 import { TlvEnum } from "./tlv/TlvNumber.js";
 import { TlvString } from "./tlv/TlvString.js";
-import { CommissioningOptions, ControllerCommissioner } from "./protocol/ControllerCommissioner.js";
+import { CommissioningError, CommissioningOptions, ControllerCommissioner } from "./protocol/ControllerCommissioner.js";
+import { NetworkError } from "./net/Network.js";
 
 const TlvCommissioningSuccessFailureResponse = TlvObject({
     /** Contain the result of the operation. */
@@ -141,12 +142,12 @@ export class MatterController {
     private async discoverDeviceAddressesByIdentifier(scanner: Scanner, identifier: CommissionableDeviceIdentifiers, timeoutSeconds = 30) {
         const foundDevices = await scanner.findCommissionableDevices(identifier, timeoutSeconds);
         if (foundDevices.length === 0) {
-            throw new Error(`No device discovered using identifier ${Logger.toJSON(identifier)}! Please check that the relevant device is online.`);
+            throw new CommissioningError(`No device discovered using identifier ${Logger.toJSON(identifier)}! Please check that the relevant device is online.`);
         }
 
         const addresses = foundDevices.flatMap((device) => device.addresses);
         if (addresses.length === 0) {
-            throw new Error(`Device discovered using identifier ${Logger.toJSON(identifier)}, but no Network addresses discovered.`);
+            throw new CommissioningError(`Device discovered using identifier ${Logger.toJSON(identifier)}, but no Network addresses discovered.`);
         }
 
         return addresses;
@@ -160,7 +161,7 @@ export class MatterController {
             this.addTransportInterface(this.netInterfaceBle);
         } catch (error) {
             if (error instanceof NoProviderError) {
-                throw new Error("BLE is not supported on this platform");
+                throw new BleError("BLE is not supported on this platform");
             } else {
                 throw error;
             }
@@ -391,7 +392,7 @@ export class MatterController {
         }
 
         const scanResult = await this.mdnsScanner.findOperationalDevice(this.fabric, peerNodeId, timeoutSeconds);
-        if (!scanResult.length) throw new Error("The operational device cannot be found on the network. Please make sure it is online.");
+        if (!scanResult.length) throw new NetworkError("The operational device cannot be found on the network. Please make sure it is online.");
 
         const { result, resultAddress } = await this.iterateServerAddresses(
             scanResult,

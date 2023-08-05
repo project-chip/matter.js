@@ -11,6 +11,7 @@ import { SecureChannelProtocol } from "../../protocol/securechannel/SecureChanne
 import { MatterDevice } from "../../MatterDevice.js";
 import { Session } from "../../session/Session.js";
 import { ByteArray } from "../../util/ByteArray.js";
+import { MatterFlowError, NotImplementedError } from "../../common/MatterError.js";
 
 function openCommissioningWindow(secureChannelProtocol: SecureChannelProtocol, pakeVerifier: ByteArray, discriminator: number, iterations: number, salt: ByteArray, commissioningTimeout: number, session: Session<MatterDevice>) {
     //windowStatus.set(CommissioningWindowStatus.EnhancedWindowOpen);
@@ -20,7 +21,7 @@ function openCommissioningWindow(secureChannelProtocol: SecureChannelProtocol, p
 
 function revokeCommissioning() {
     // TODO: implement this
-    throw new Error("Not implemented");
+    throw new NotImplementedError("Not implemented");
 }
 
 export const AdministratorCommissioningHandler: (secureChannelProtocol: SecureChannelProtocol) => ClusterServerHandlers<typeof AdministratorCommissioning.Cluster> = (secureChannelProtocol) => ({
@@ -46,7 +47,7 @@ export const BasicAdminCommissioningHandler: (secureChannelProtocol: SecureChann
     openBasicCommissioningWindow: async function({ request: { commissioningTimeout }, session, /* attributes: { windowStatus } */ }) {
         const device = session.getContext();
         if (device.getFabrics().length > 0) {
-            throw new Error("Already commissioned"); // is that correct?
+            throw new MatterFlowError("Already commissioned"); // is that correct?
         }
         session.getContext().openCommissioningModeWindow(1, undefined, commissioningTimeout);
     },

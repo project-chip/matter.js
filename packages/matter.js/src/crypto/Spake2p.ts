@@ -9,6 +9,7 @@ import { ec } from "elliptic";
 import { Crypto } from "./Crypto.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataWriter } from "../util/DataWriter.js";
+import { InternalError } from "../common/MatterError.js";
 
 const P256_CURVE = new ec("p256").curve;
 
@@ -61,7 +62,7 @@ export class Spake2p {
 
     async computeSecretAndVerifiersFromY(w1: BN, X: ByteArray, Y: ByteArray) {
         const YPoint = P256_CURVE.decodePoint(Y);
-        if (!YPoint.validate()) throw new Error("Y is not on the curve");
+        if (!YPoint.validate()) throw new InternalError("Y is not on the curve");
         const yNwo = YPoint.add(N.mul(this.w0).neg());
         const Z = yNwo.mul(this.random);
         const V = yNwo.mul(w1);
@@ -71,7 +72,7 @@ export class Spake2p {
     async computeSecretAndVerifiersFromX(L: ByteArray, X: ByteArray, Y: ByteArray) {
         const XPoint = P256_CURVE.decodePoint(X);
         const LPoint = P256_CURVE.decodePoint(L);
-        if (!XPoint.validate()) throw new Error("X is not on the curve");
+        if (!XPoint.validate()) throw new InternalError("X is not on the curve");
         const Z = XPoint.add(M.mul(this.w0).neg()).mul(this.random);
         const V = LPoint.mul(this.random);
         return this.computeSecretAndVerifiers(X, Y, ByteArray.from(Z.encode()), ByteArray.from(V.encode()));
