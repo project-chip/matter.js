@@ -10,6 +10,7 @@ import { Crypto } from "../crypto/Crypto.js";
 import { Time } from "../time/Time.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { VendorId } from "../datatype/VendorId.js";
+import { PrivateKey } from "../crypto/Key.js";
 
 function getPaiCommonName(vendorId: VendorId, productId?: number) {
     return `node-matter Dev PAI 0x${vendorId.id.toString(16).toUpperCase()} ${productId === undefined ? 'no PID' : `0x${productId.toString(16).toUpperCase()}`}`;
@@ -29,10 +30,10 @@ export class AttestationCertificateManager {
 
     // We use the official PAA cert for now because else pairing with Chip tool do not work because
     // only this one is the Certificate store
-    private readonly paaKeyPair = {
-        privateKey: TestCert_PAA_NoVID_PrivateKey,
-        publicKey: TestCert_PAA_NoVID_PublicKey
-    };
+    private readonly paaKeyPair = PrivateKey(
+        TestCert_PAA_NoVID_PrivateKey,
+        { publicKey: TestCert_PAA_NoVID_PublicKey }
+    );
     private readonly paaKeyIdentifier = TestCert_PAA_NoVID_SKID;
     private readonly paiCertId = BigInt(1);
     private readonly paiKeyPair = Crypto.createKeyPair();

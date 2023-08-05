@@ -12,6 +12,8 @@ Time.get = () => new TimeFake(0);
 import { Crypto } from "@project-chip/matter.js/crypto";
 import { CryptoNode } from "../../src/crypto/CryptoNode";
 
+import { KEY } from "../cluster/ClusterServerTestingUtil.js";
+
 Crypto.get = () => new CryptoNode();
 
 import * as assert from "assert";
@@ -461,7 +463,7 @@ describe("InteractionProtocol", () => {
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ByteArray.fromHex("00"), ByteArray.fromHex("00"), { privateKey: ByteArray.fromHex("00"), publicKey: ByteArray.fromHex("00") }, new VendorId(1), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), "");
+            const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ByteArray.fromHex("00"), ByteArray.fromHex("00"), KEY, new VendorId(1), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), "");
             const testSession = await SecureSession.create({ getFabrics: () => [] } as any, 1, testFabric, new NodeId(BigInt(1)), 1, ByteArray.fromHex("00"), ByteArray.fromHex("00"), false, false, () => {/* nothing */ }, 1000, 1000);
             const result = interactionProtocol.handleWriteRequest(({ channel: { name: "test" }, session: testSession }) as unknown as MessageExchange<any>, CHUNKED_ARRAY_WRITE_REQUEST);
 

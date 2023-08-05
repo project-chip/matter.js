@@ -8,6 +8,7 @@ import * as assert from "assert";
 import { CryptoNode } from "../../src/crypto/CryptoNode";
 import * as crypto from "crypto";
 import { ByteArray } from "@project-chip/matter.js/util";
+import { Key, PrivateKey, PublicKey } from "../../src/crypto/export";
 
 const KEY = ByteArray.fromHex("abf227feffea8c38e688ddcbffc459f1");
 const ENCRYPTED_DATA = ByteArray.fromHex("c4527bd6965518e8382edbbd28f27f42492d0766124f9961a772");
@@ -47,25 +48,25 @@ describe("Crypto", () => {
         });
     });
 
-    describe("signPkcs8 / verifySpki", () => {
+    describe("sign & verify with raw keys", () => {
         it("signs data with known private key", () => {
-            const result = cryptoNode.signPkcs8(PRIVATE_KEY, ENCRYPTED_DATA);
+            const result = cryptoNode.sign(PrivateKey(PRIVATE_KEY), ENCRYPTED_DATA);
 
-            cryptoNode.verifySpki(PUBLIC_KEY, ENCRYPTED_DATA, result);
+            cryptoNode.verify(PublicKey(PUBLIC_KEY), ENCRYPTED_DATA, result);
         });
 
         it("signs data with generated private key", () => {
             const ecdh = crypto.createECDH("prime256v1");
             ecdh.generateKeys();
-            const result = cryptoNode.signPkcs8(ecdh.getPrivateKey(), ENCRYPTED_DATA);
+            const result = cryptoNode.sign(PrivateKey(ecdh.getPrivateKey()), ENCRYPTED_DATA);
 
-            cryptoNode.verifySpki(ecdh.getPublicKey(), ENCRYPTED_DATA, result);
+            cryptoNode.verify(PublicKey(ecdh.getPublicKey()), ENCRYPTED_DATA, result);
         });
     });
 
-    describe("signSec1 / verifySpki", () => {
+    describe("sign & verify with SEC1 private and SPKI public keys", () => {
         it("signs data with known sec1 key", () => {
-            const result = cryptoNode.signSec1(SEC1_KEY, ENCRYPTED_DATA, "der");
+            const result = cryptoNode.sign(Key({ sec1: SEC1_KEY }), ENCRYPTED_DATA, "der");
 
             const privateKeyObject = crypto.createPrivateKey({
                 key: Buffer.from(SEC1_KEY),
@@ -74,15 +75,15 @@ describe("Crypto", () => {
             });
             const publicKey = crypto.createPublicKey(privateKeyObject).export({ format: "der", type: "spki" });
 
-            cryptoNode.verifySpkiEc(publicKey, ENCRYPTED_DATA, result, "der");
+            cryptoNode.verify(Key({ spki: publicKey }), ENCRYPTED_DATA, result, "der");
         });
     });
 
     describe("createKeyPair", () => {
         it("generates a working key pair", () => {
-            const { privateKey, publicKey } = cryptoNode.createKeyPair();
+            const key = cryptoNode.createKeyPair();
 
-            cryptoNode.verifySpki(publicKey, ENCRYPTED_DATA, cryptoNode.signPkcs8(privateKey, ENCRYPTED_DATA));
+            cryptoNode.verify(key, ENCRYPTED_DATA, cryptoNode.sign(key, ENCRYPTED_DATA));
         });
     });
 });

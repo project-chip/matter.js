@@ -8,6 +8,7 @@ import * as assert from "assert";
 import { TlvEncryptedDataSigma2, TlvEncryptedDataSigma3, TlvSignedData } from "@project-chip/matter.js/session";
 import { ByteArray } from "@project-chip/matter.js/util";
 import { CryptoNode } from "../../../src/crypto/CryptoNode";
+import { PublicKey } from "../../../src/crypto/export";
 
 const cryptoNode = new CryptoNode();
 
@@ -38,7 +39,7 @@ describe("CasePairing", () => {
 
             const signature = ByteArray.fromHex("1736972364d84c4ae069f642f491256c6e74c86eda9f5ed4d89dfd7cadb68b67574f032afa2764fcc890e9218eaedcc484576d2d65e4df1ae22dd916f12ab59e");
 
-            cryptoNode.verifySpki(fabricPubKey, signatureData, signature);
+            cryptoNode.verify(PublicKey(fabricPubKey), signatureData, signature);
 
             const encryptedDataPlain = TlvEncryptedDataSigma2.encode({ nodeOpCert: noc, signature, resumptionId: ByteArray.fromHex("8731f8cec507136df7558fca9360e9fc") });
 
@@ -54,7 +55,7 @@ describe("CasePairing", () => {
             const signatureData = ByteArray.fromHex("153001f1153001010124020137032414001826048012542826058015203b370624150124115d18240701240801300941049bfa105c3d209ff226c31da689dafb297b73499ec1844bba89c60ce65938b722300dd0abbb201e9451c6ab284ec99b8d90c5dd892388c59fde30c299c64af8c4370a3501280118240201360304020401183004142c3494bc756f4b58a73bde64a3141285a3efd5c9300514e766069362d7e35b79687161644d222bdde93a6818300b406772b5445ef466a669d9e5e5663238b817511e73ce992937ddd975690abda8b86b0a79f2fd49bae78c653fad9bd3d53463d4abd7f996964988a7644c4cc1d0321830020030034104473bd04e2a9c4e6a12b9008739c64a16d0113295822faf17e3d2ffcb77b0cae437701b0f0525ddcc6139da5a56dfda2af2b86a2836ef6b03f8f5c231dbaf950b3004410441838848a7e58ab46a1a71a539c474780002bf22adccbeaa43ee07f5176c61aaa3d718102333fc856595ea3a6a5bfd37d2890049acb82c49440e1f490cd970e018");
             const signature = ByteArray.fromHex("75e35c22a5da60805d65772b3d4decc8c6eabe30bd2925608524ea12b729efd00a12faeb5757cdfc65aaefddd01c57be9f14d37e2c0beca43434f8ebdd81d635");
 
-            cryptoNode.verifySpki(fabricPubKey, signatureData, signature);
+            cryptoNode.verify(PublicKey(fabricPubKey), signatureData, signature);
         });
 
         it("generates the right bytes for sigma 3", async () => {

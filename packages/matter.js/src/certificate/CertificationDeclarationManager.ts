@@ -6,11 +6,28 @@
 import { CertificateManager, TlvCertificationDeclaration } from "./CertificateManager.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { VendorId } from "../datatype/VendorId.js";
+import { PrivateKey } from "../crypto/Key.js";
 
-// CD Signer Certificate and Key taken from Chip-Tool repository
+// This is the private key from Appendix F of the Matter 1.1 Core Specification.
+// The specification specifies it in PEM format:
+//
+// -----BEGIN EC PRIVATE KEY-----
+// MHcCAQEEIK7zSEEW6UgexXvgRy30G/SZBk5QJK2GnspeiJgC1IB1oAoGCCqGSM49
+// AwEHoUQDQgAEPDmJIkUrVcrzicJb0bykZWlSzLkOiGkkmthHRlMBTL+V1oeWXgNr
+// UhxRA35rjO3vyh60QEZpT6CIgu7WUZ3sug==
+// -----END EC PRIVATE KEY-----
+//
+// You can extract the key using openssl:
+//
+// openssl asn1parse -in key.txt
+const TestCMS_SignerPrivateKey = ByteArray.fromHex("AEF3484116E9481EC57BE0472DF41BF499064E5024AD869ECA5E889802D48075");
 
-const TestCMS_SignerPrivateKey = ByteArray.fromHex("30770201010420aef3484116e9481ec57be0472df41bf499064e5024ad869eca5e889802d48075a00a06082a8648ce3d030107a144034200043c398922452b55caf389c25bd1bca4656952ccb90e8869249ad8474653014cbf95d687965e036b521c51037e6b8cedefca1eb44046694fa08882eed6519decba");
-
+// You can extract the subject key identifier from the certificate in the same
+// section.  The x509 command is best for that:
+//
+// openssl x509 -in cert.txt -text
+//
+// Look for the line under "X509v3 Subject Key Identifier:"
 const TestCMS_SignerSubjectKeyIdentifier = ByteArray.fromHex("62FA823359ACFAA9963E1CFA140ADDF504F37160");
 
 export class CertificationDeclarationManager {
@@ -27,7 +44,6 @@ export class CertificationDeclarationManager {
             certificationType: 0,
         });
 
-        return CertificateManager.CertificationDeclarationToAsn1(certificationElements, TestCMS_SignerSubjectKeyIdentifier, TestCMS_SignerPrivateKey);
+        return CertificateManager.CertificationDeclarationToAsn1(certificationElements, TestCMS_SignerSubjectKeyIdentifier, PrivateKey(TestCMS_SignerPrivateKey));
     }
 }
-

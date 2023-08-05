@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Crypto, KeyPair } from "../crypto/Crypto.js";
+import { Crypto } from "../crypto/Crypto.js";
+import { BinaryKeyPair, Key, PrivateKey } from "../crypto/Key.js";
 import { CertificateManager, TlvOperationalCertificate, TlvRootCertificate } from "../certificate/CertificateManager.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { FabricIndex } from "../datatype/FabricIndex.js";
@@ -28,7 +29,7 @@ export type FabricJsonObject = {
     rootNodeId: bigint;
     operationalId: ByteArray;
     rootPublicKey: ByteArray;
-    keyPair: KeyPair;
+    keyPair: BinaryKeyPair;
     rootVendorId: number;
     rootCert: ByteArray;
     identityProtectionKey: ByteArray;
@@ -55,7 +56,7 @@ export class Fabric {
         readonly rootNodeId: NodeId,
         readonly operationalId: ByteArray,
         readonly rootPublicKey: ByteArray,
-        private readonly keyPair: KeyPair,
+        private readonly keyPair: Key,
         readonly rootVendorId: VendorId,
         readonly rootCert: ByteArray,
         readonly identityProtectionKey: ByteArray,
@@ -76,7 +77,7 @@ export class Fabric {
             rootNodeId: this.rootNodeId.id,
             operationalId: this.operationalId,
             rootPublicKey: this.rootPublicKey,
-            keyPair: this.keyPair,
+            keyPair: this.keyPair.keyPair,
             rootVendorId: this.rootVendorId.id,
             rootCert: this.rootCert,
             identityProtectionKey: this.identityProtectionKey,
@@ -96,7 +97,7 @@ export class Fabric {
             new NodeId(fabricObject.rootNodeId),
             fabricObject.operationalId,
             fabricObject.rootPublicKey,
-            fabricObject.keyPair,
+            PrivateKey(fabricObject.keyPair),
             new VendorId(fabricObject.rootVendorId),
             fabricObject.rootCert,
             fabricObject.identityProtectionKey,
@@ -117,7 +118,7 @@ export class Fabric {
     }
 
     sign(data: ByteArray) {
-        return Crypto.signPkcs8(this.keyPair.privateKey, data);
+        return Crypto.sign(this.keyPair, data);
     }
 
     verifyCredentials(_operationalCert: ByteArray, _intermediateCACert: ByteArray | undefined) {

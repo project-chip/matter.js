@@ -8,3 +8,4 @@ export * from "./BtpCodec.js";
 export * from "./DerCodec.js";
 export * from "./DnsCodec.js";
 export * from "./MessageCodec.js";
+export * from "./Base64Codec.js";

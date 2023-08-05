@@ -14,6 +14,7 @@ import { TlvOperationalCertificate } from "../../certificate/CertificateManager.
 import { SECURE_CHANNEL_PROTOCOL_ID } from "../../protocol/securechannel/SecureChannelMessages.js";
 import { ByteArray } from "../../util/ByteArray.js";
 import { Logger } from "../../log/Logger.js";
+import { PublicKey } from "../../crypto/Key.js";
 
 const logger = Logger.get("CaseServer");
 
@@ -98,7 +99,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             fabric.verifyCredentials(peerNewOpCert, peerIntermediateCACert);
             const peerSignatureData = TlvSignedData.encode({ nodeOpCert: peerNewOpCert, intermediateCACert: peerIntermediateCACert, ecdhPublicKey: peerEcdhPublicKey, peerEcdhPublicKey: ecdhPublicKey });
             const { ellipticCurvePublicKey: peerPublicKey, subject: { nodeId: peerNodeId } } = TlvOperationalCertificate.decode(peerNewOpCert);
-            Crypto.verifySpki(peerPublicKey, peerSignatureData, peerSignature);
+            Crypto.verify(PublicKey(peerPublicKey), peerSignatureData, peerSignature);
 
             // All good! Create secure session
             const secureSessionSalt = ByteArray.concat(operationalIdentityProtectionKey, Crypto.hash([sigma1Bytes, sigma2Bytes, sigma3Bytes]));

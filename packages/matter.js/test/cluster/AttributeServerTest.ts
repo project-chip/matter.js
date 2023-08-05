@@ -16,6 +16,12 @@ import { ByteArray } from "../../src/util/ByteArray.js";
 import { VendorId } from "../../src/datatype/VendorId.js";
 import { MatterDevice } from "../../src/MatterDevice.js";
 import { SecureSession } from "../../src/session/SecureSession.js";
+import { PrivateKey } from "../../src/crypto/Key.js";
+
+const ZERO = new ByteArray(1);
+const PRIVATE_KEY = new ByteArray(32);
+PRIVATE_KEY[31] = 1; // EC doesn't like all-zero private key
+const KEY = PrivateKey(PRIVATE_KEY);
 
 describe("AttributeServerTest", () => {
 
@@ -203,14 +209,14 @@ describe("AttributeServerTest", () => {
 
     describe("FabricScopedAttributeServer", () => {
         it("should return the value set in the constructor if fabric context is empty", () => {
-            const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ByteArray.fromHex("00"), ByteArray.fromHex("00"), { privateKey: ByteArray.fromHex("00"), publicKey: ByteArray.fromHex("00") }, new VendorId(1), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), "");
+            const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ZERO, ZERO, KEY, new VendorId(1), ZERO, ZERO, ZERO, ZERO, ZERO, "");
 
             const server = new FabricScopedAttributeServer(1, "test", TlvUInt8, true, false, 3, BasicInformationCluster);
             assert.strictEqual(server.getLocalForFabric(testFabric), 3);
         });
 
         it("should return the value from fabric context if set", () => {
-            const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ByteArray.fromHex("00"), ByteArray.fromHex("00"), { privateKey: ByteArray.fromHex("00"), publicKey: ByteArray.fromHex("00") }, new VendorId(1), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), "");
+            const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ZERO, ZERO, KEY, new VendorId(1), ZERO, ZERO, ZERO, ZERO, ZERO, "");
             testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
 
             const server = new FabricScopedAttributeServer(1, "test", TlvUInt8, true, false, 3, BasicInformationCluster);
@@ -218,7 +224,7 @@ describe("AttributeServerTest", () => {
         });
 
         it("should return the value from fabric scoped storage when changed", () => {
-            const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ByteArray.fromHex("00"), ByteArray.fromHex("00"), { privateKey: ByteArray.fromHex("00"), publicKey: ByteArray.fromHex("00") }, new VendorId(1), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), "");
+            const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ZERO, ZERO, KEY, new VendorId(1), ZERO, ZERO, ZERO, ZERO, ZERO, "");
 
             const server = new FabricScopedAttributeServer(1, "test", TlvUInt8, true, false, 3, BasicInformationCluster);
             testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
@@ -230,7 +236,7 @@ describe("AttributeServerTest", () => {
             let versionTriggered: number | undefined = undefined;
             let valueTriggered2: number | undefined = undefined;
             let oldValueTriggered2: number | undefined = undefined;
-            const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ByteArray.fromHex("00"), ByteArray.fromHex("00"), { privateKey: ByteArray.fromHex("00"), publicKey: ByteArray.fromHex("00") }, new VendorId(1), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), "");
+            const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ZERO, ZERO, KEY, new VendorId(1), ZERO, ZERO, ZERO, ZERO, ZERO, "");
             testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
 
             const server = new FabricScopedAttributeServer(1, "test", TlvUInt8, true, false, 3, BasicInformationCluster);
@@ -249,7 +255,7 @@ describe("AttributeServerTest", () => {
         it("should handle the value from fabric scoped storage when set and trigger ony external listeners", () => {
             let valueTriggered2: number | undefined = undefined;
             let oldValueTriggered2: number | undefined = undefined;
-            const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ByteArray.fromHex("00"), ByteArray.fromHex("00"), { privateKey: ByteArray.fromHex("00"), publicKey: ByteArray.fromHex("00") }, new VendorId(1), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), "");
+            const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ZERO, ZERO, KEY, new VendorId(1), ZERO, ZERO, ZERO, ZERO, ZERO, "");
             testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
 
             const server = new FabricScopedAttributeServer(1, "test", TlvUInt8, true, false, 3, BasicInformationCluster);
@@ -268,7 +274,7 @@ describe("AttributeServerTest", () => {
         });
 
         it("should throw an error when trying to get getter method value locally", () => {
-            const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ByteArray.fromHex("00"), ByteArray.fromHex("00"), { privateKey: ByteArray.fromHex("00"), publicKey: ByteArray.fromHex("00") }, new VendorId(1), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), "");
+            const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ZERO, ZERO, KEY, new VendorId(1), ZERO, ZERO, ZERO, ZERO, ZERO, "");
             testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
 
             const server = new FabricScopedAttributeServer(1, "test", TlvUInt8, false, false, 3, BasicInformationCluster, () => 7);
@@ -276,7 +282,7 @@ describe("AttributeServerTest", () => {
         });
 
         it("should return value from getter when used non-locally", () => {
-            const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ByteArray.fromHex("00"), ByteArray.fromHex("00"), { privateKey: ByteArray.fromHex("00"), publicKey: ByteArray.fromHex("00") }, new VendorId(1), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), "");
+            const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ZERO, ZERO, KEY, new VendorId(1), ZERO, ZERO, ZERO, ZERO, ZERO, "");
             const testSession = { getAssociatedFabric: () => testFabric } as SecureSession<MatterDevice>;
             testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
 
@@ -284,12 +290,12 @@ describe("AttributeServerTest", () => {
             assert.strictEqual(server.get(testSession, true), 7);
         });
 
-        it("should use getter amd setter and trigger listeners", () => {
+        it("should use getter and setter and trigger listeners", () => {
             let valueTriggered: number | undefined = undefined;
             let versionTriggered: number | undefined = undefined;
             let valueTriggered2: number | undefined = undefined;
             let oldValueTriggered2: number | undefined = undefined;
-            const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ByteArray.fromHex("00"), ByteArray.fromHex("00"), { privateKey: ByteArray.fromHex("00"), publicKey: ByteArray.fromHex("00") }, new VendorId(1), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), "");
+            const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ZERO, ZERO, KEY, new VendorId(1), ZERO, ZERO, ZERO, ZERO, ZERO, "");
             const testSession = { getAssociatedFabric: () => testFabric } as SecureSession<MatterDevice>;
 
             const server = new FabricScopedAttributeServer(1, "test", TlvUInt8, true, false, 3, BasicInformationCluster, () => 7, () => true);
