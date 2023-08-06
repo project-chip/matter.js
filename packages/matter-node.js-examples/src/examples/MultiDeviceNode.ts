@@ -34,7 +34,9 @@ const storage = new StorageBackendDisk(storageLocation, hasParameter("clearstora
 logger.info(`Storage location: ${storageLocation} (Directory)`);
 logger.info('Use the parameter "-store NAME" to specify a different storage location, use -clearstorage to start with an empty storage.')
 
-class BridgedDevice {
+class Device {
+    private matterServer: MatterServer | undefined;
+
     async start() {
         logger.info(`node-matter`);
 
@@ -75,7 +77,7 @@ class BridgedDevice {
          * are called.
          */
 
-        const matterServer = new MatterServer(storageManager, netAnnounceInterface);
+        this.matterServer = new MatterServer(storageManager, netAnnounceInterface);
 
         /**
          * Create Device instance and add needed Listener
@@ -147,7 +149,7 @@ class BridgedDevice {
             onOffDevice.addOnOffListener(on => commandExecutor(on ? `on${i}` : `off${i}`)?.());
             commissioningServer.addDevice(onOffDevice);
 
-            matterServer.addCommissioningServer(commissioningServer);
+            this.matterServer.addCommissioningServer(commissioningServer);
 
             commissioningServers.push(commissioningServer);
         }
@@ -159,7 +161,7 @@ class BridgedDevice {
          * CommissioningServer node then this command also starts the announcement of the device into the network.
          */
 
-        await matterServer.start();
+        await this.matterServer.start();
 
         /**
          * Print Pairing Information
@@ -186,11 +188,18 @@ class BridgedDevice {
             console.log();
         });
     }
+
+    async stop() {
+        await this.matterServer?.close();
+    }
 }
 
-new BridgedDevice().start().then(() => { /* done */ }).catch(err => console.error(err));
+const device = new Device();
+device.start().then(() => { /* done */ }).catch(err => console.error(err));
 
 process.on("SIGINT", () => {
-    // Pragmatic way to make sure the storage is correctly closed before the process ends.
-    storage.close().then(() => process.exit(0)).catch(err => console.error(err));
+    device.stop().then(() => {
+        // Pragmatic way to make sure the storage is correctly closed before the process ends.
+        storage.close().then(() => process.exit(0)).catch(err => console.error(err));
+    }).catch(err => console.error(err));
 });
