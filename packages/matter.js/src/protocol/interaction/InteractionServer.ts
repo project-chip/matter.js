@@ -498,6 +498,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     }
 
     async onNewExchange(exchange: MessageExchange<MatterDevice>) {
+        if (this.isClosing) return; // We are closing, ignore anything newly incoming
         await new InteractionServerMessenger(exchange).handleRequest(
             readRequest => this.handleReadRequest(exchange, readRequest),
             writeRequest => this.handleWriteRequest(exchange, writeRequest),
@@ -753,4 +754,11 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         // TODO: implement this
     }
 
+    async close() {
+        this.isClosing = true;
+        for (const subscription of this.subscriptionMap.values()) {
+            await subscription.flush();
+            subscription.cancel();
+        }
+    }
 }
