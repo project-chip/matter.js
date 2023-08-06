@@ -27,7 +27,7 @@ import { StorageManager, StorageBackendMemory } from "@project-chip/matter.js/st
 import { FabricJsonObject } from "@project-chip/matter.js/fabric";
 import { MatterServer, CommissioningServer, CommissioningController } from "@project-chip/matter.js";
 import { OnOffLightDevice } from "@project-chip/matter.js/device";
-import { InteractionClient, ClusterServer } from "@project-chip/matter.js/interaction";
+import { InteractionClient, ClusterServer, DecodedEventData } from "@project-chip/matter.js/interaction";
 
 const SERVER_IPv6 = "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:cafe";
 const SERVER_IPv4 = "192.168.200.1";
@@ -111,6 +111,7 @@ describe("Integration Test", () => {
                 partNumber: "123456",
                 nodeLabel: "",
                 location: "US",
+                reachable: true,
             },
             delayedAnnouncement: true, // delay because we need to override Mdns classes
         });
@@ -253,10 +254,11 @@ describe("Integration Test", () => {
             assert.equal(await onoffCluster.attributes.onOff.get(), false);
         });
 
-        it("read all attributes", async () => {
-            const response = await defaultInteractionClient.getAllAttributes();
-
+        it("read all attributes and events", async () => {
+            const response = await defaultInteractionClient.getAllAttributesAndEvents();
             assert.ok(response);
+            assert.ok(response.attributeReports.length);
+            assert.ok(response.eventReports.length);
         });
 
         it("read multiple attributes", async () => {
@@ -356,6 +358,60 @@ describe("Integration Test", () => {
 
         });
 
+        it("read events", async () => {
+            const response = await defaultInteractionClient.getMultipleEvents([
+                { clusterId: BasicInformation.Cluster.id }, // * /BasicInformationCluster/ *
+                { endpointId: 0, clusterId: GeneralDiagnostics.Cluster.id, eventId: GeneralDiagnostics.Cluster.events.bootReason.id }, // 0/GeneralDiagnosticsCluster/bootReason
+                { endpointId: 2 }, // 2 / * /* - will be discarded in results!
+            ]);
+
+            assert.equal(response.length, 2);
+            assert.equal(response.filter(({
+                path: {
+                    endpointId,
+                    clusterId
+                }
+            }) => endpointId === 0 && clusterId === BasicInformation.Cluster.id).length, 1);
+
+            const startUpEventData = response.find(({
+                path: {
+                    endpointId,
+                    clusterId,
+                    eventId
+                }
+            }) => endpointId === 0 && clusterId === BasicInformation.Cluster.id && eventId === BasicInformation.Cluster.events.startUp.id);
+
+            assert.deepEqual(startUpEventData?.events, [{
+                eventNumber: 1,
+                epochTimestamp: fakeTime.nowMs(),
+                priority: BasicInformation.Cluster.events.startUp.priority,
+                systemTimestamp: undefined,
+                deltaEpochTimestamp: undefined,
+                deltaSystemTimestamp: undefined,
+                data: {
+                    softwareVersion: 1,
+                }
+            }]);
+
+            const bootReasonEventData = response.find(({
+                path: {
+                    endpointId,
+                    clusterId,
+                    eventId
+                }
+            }) => endpointId === 0 && clusterId === GeneralDiagnostics.Cluster.id && eventId === GeneralDiagnostics.Cluster.events.bootReason.id);
+            assert.deepEqual(bootReasonEventData?.events, [{
+                eventNumber: 2,
+                epochTimestamp: fakeTime.nowMs(),
+                priority: BasicInformation.Cluster.events.startUp.priority,
+                systemTimestamp: undefined,
+                deltaEpochTimestamp: undefined,
+                deltaSystemTimestamp: undefined,
+                data: {
+                    bootReason: GeneralDiagnostics.BootReason.Unspecified,
+                }
+            }]);
+        });
     });
 
     describe("write attributes", () => {
@@ -424,7 +480,7 @@ describe("Integration Test", () => {
         });
     });
 
-    describe("subscribe attributes", () => {
+    describe("subscriptions", () => {
         it("subscription of one attribute sends updates when the value changes", async () => {
             const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
             assert.ok(onoffEndpoint);
@@ -507,6 +563,64 @@ describe("Integration Test", () => {
 
             assert.deepEqual(updateReport, { value: true, time: startTime + 2 * 1000 });
             */
+        });
+
+        it("subscription of one event sends updates when event got triggered via auto-wiring", async () => {
+            const basicInformationClient = commissioningController.getRootClusterClient(BasicInformation.Cluster, await commissioningController.createInteractionClient());
+            assert.ok(basicInformationClient);
+
+            const basicInformationServer = commissioningServer.getRootClusterServer(BasicInformation.Cluster);
+            assert.ok(basicInformationServer);
+            basicInformationServer.setReachableAttribute(false);
+
+            const startTime = Time.nowMs();
+
+            // Await initial Data
+            const { promise: firstPromise, resolver: firstResolver } = await getPromiseResolver<{ value: DecodedEventData<any>, time: number }>();
+            let callback = (value: DecodedEventData<any>) => firstResolver({ value, time: Time.nowMs() });
+
+            await basicInformationClient.subscribeReachableChangedEvent(event => callback(event), 0, 5, true);
+
+            await fakeTime.advanceTime(0);
+            const firstReport = await firstPromise;
+            assert.deepEqual(firstReport, {
+                value: {
+                    eventNumber: 3,
+                    priority: 1,
+                    epochTimestamp: BigInt(startTime),
+                    systemTimestamp: undefined,
+                    deltaEpochTimestamp: undefined,
+                    deltaSystemTimestamp: undefined,
+                    data: {
+                        reachableNewValue: false
+                    }
+                },
+                time: startTime
+            });
+
+            // Await update Report on value change
+            const { promise: updatePromise, resolver: updateResolver } = await getPromiseResolver<{ value: DecodedEventData<any>, time: number }>();
+            callback = (value: DecodedEventData<any>) => updateResolver({ value, time: Time.nowMs() });
+
+            await fakeTime.advanceTime(2 * 1000);
+            basicInformationServer.setReachableAttribute(true);
+            await fakeTime.advanceTime(100);
+            const updateReport = await updatePromise;
+
+            assert.deepEqual(updateReport, {
+                value: {
+                    eventNumber: 4,
+                    priority: 1,
+                    epochTimestamp: BigInt(startTime + 2 * 1000), // Triggered directly
+                    systemTimestamp: undefined,
+                    deltaEpochTimestamp: undefined,
+                    deltaSystemTimestamp: undefined,
+                    data: {
+                        reachableNewValue: true
+                    }
+                },
+                time: startTime + 2 * 1000 + 100
+            });
         });
     });
 
