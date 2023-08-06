@@ -332,7 +332,7 @@ describe("Endpoint Structures", () => {
 
             assert.equal(attributePaths.length, 110);
             assert.equal(commandPaths.length, 18);
-            assert.equal(eventPaths.length, 4);
+            assert.equal(eventPaths.length, 5);
         });
 
         it("One device with one Light endpoints - no unique id, use index", async () => {
@@ -427,7 +427,7 @@ describe("Endpoint Structures", () => {
 
             assert.equal(attributePaths.length, 161);
             assert.equal(commandPaths.length, 38);
-            assert.equal(eventPaths.length, 4);
+            assert.equal(eventPaths.length, 5);
         });
 
         it("One device with one Light endpoints - with uniqueid", async () => {
@@ -522,7 +522,7 @@ describe("Endpoint Structures", () => {
 
             assert.equal(attributePaths.length, 161);
             assert.equal(commandPaths.length, 38);
-            assert.equal(eventPaths.length, 4);
+            assert.equal(eventPaths.length, 5);
         });
 
         it("One device with one Light endpoints - no uniqueid, use index, from storage", async () => {
@@ -618,7 +618,7 @@ describe("Endpoint Structures", () => {
 
             assert.equal(attributePaths.length, 161);
             assert.equal(commandPaths.length, 38);
-            assert.equal(eventPaths.length, 4);
+            assert.equal(eventPaths.length, 5);
         });
 
         it("One device with one Light endpoints - with uniqueid, from storage", async () => {
@@ -714,7 +714,7 @@ describe("Endpoint Structures", () => {
 
             assert.equal(attributePaths.length, 161);
             assert.equal(commandPaths.length, 38);
-            assert.equal(eventPaths.length, 4);
+            assert.equal(eventPaths.length, 5);
         });
     });
 
@@ -1172,7 +1172,7 @@ describe("Endpoint Structures", () => {
 
             assert.equal(attributePaths.length, 380);
             assert.equal(commandPaths.length, 98);
-            assert.equal(eventPaths.length, 8);
+            assert.equal(eventPaths.length, 9);
         });
 
         it("Device Structure with two aggregators and three Light/Composed endpoints and all partly auto-assigned endpoint IDs", async () => {
@@ -1382,7 +1382,7 @@ describe("Endpoint Structures", () => {
 
             assert.equal(attributePaths.length, 502);
             assert.equal(commandPaths.length, 138);
-            assert.equal(eventPaths.length, 9);
+            assert.equal(eventPaths.length, 10);
         });
 
         it("Device Structure with two aggregators and three Light/Composed endpoints and all partly auto-assigned endpoint IDs and removing adding devices", async () => {
@@ -1593,7 +1593,7 @@ describe("Endpoint Structures", () => {
 
             assert.equal(attributePaths.length, 502);
             assert.equal(commandPaths.length, 138);
-            assert.equal(eventPaths.length, 9);
+            assert.equal(eventPaths.length, 10);
 
             let structureChangeCounter = 0;
             rootEndpoint.setStructureChangedCallback(() => {
