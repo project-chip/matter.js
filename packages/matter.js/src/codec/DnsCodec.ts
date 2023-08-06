@@ -208,7 +208,7 @@ export class DnsCodec {
 
     static encode({ messageType, transactionId = 0, queries = [], answers = [], authorities = [], additionalRecords = [] }: Partial<DnsMessage>): ByteArray {
         if (messageType === undefined) throw new InternalError("Message type must be specified!");
-        if (queries.length > 0 && messageType !== DnsMessageType.Query) throw new InternalError("Queries can only be included in query messages!");
+        if (queries.length > 0 && messageType !== DnsMessageType.Query && messageType !== DnsMessageType.TruncatedQuery) throw new InternalError("Queries can only be included in query messages!");
         if (authorities.length > 0) throw new NotImplementedError("Authority answers are not supported yet!");
 
         const writer = new DataWriter(Endian.Big);
