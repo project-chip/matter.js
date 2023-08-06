@@ -638,8 +638,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         };
     }
 
-    async handleSubscribeRequest(exchange: MessageExchange<MatterDevice>, { minIntervalFloorSeconds, maxIntervalCeilingSeconds, attributeRequests, eventRequests, keepSubscriptions }: SubscribeRequest, messenger: InteractionServerMessenger): Promise<void> {
-        logger.debug(`Received subscribe request from ${exchange.channel.name}`);
+    async handleSubscribeRequest(exchange: MessageExchange<MatterDevice>, { minIntervalFloorSeconds, maxIntervalCeilingSeconds, attributeRequests, eventRequests, eventFilters, keepSubscriptions }: SubscribeRequest, messenger: InteractionServerMessenger): Promise<void> {
+        logger.debug(`Received subscribe request from ${exchange.channel.name} (keepSubscriptions = ${keepSubscriptions})`);
 
         assertSecureSession(exchange.session, "Subscriptions are only implemented on secure sessions");
         const session = exchange.session;

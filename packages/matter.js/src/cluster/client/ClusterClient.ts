@@ -14,6 +14,7 @@ import { InteractionClient } from "../../protocol/interaction/InteractionClient.
 import { ClusterServerObj } from "../server/ClusterServer.js";
 import { EventClient } from "./EventClient.js";
 import { BitSchema } from "../../schema/BitmapSchema.js";
+import { DecodedEventData } from "../../protocol/interaction/EventDataDecoder.js";
 
 export type AttributeClients<F extends BitSchema, A extends Attributes> = Merge<Merge<{ [P in MandatoryAttributeNames<A>]: AttributeClient<AttributeJsType<A[P]>> }, { [P in OptionalAttributeNames<A>]: AttributeClient<AttributeJsType<A[P]> | undefined> }>, { [P in GlobalAttributeNames<F>]: AttributeClient<AttributeJsType<GlobalAttributes<F>[P]>> }>;
 
@@ -29,8 +30,8 @@ type ClientAttributeSubscribers<A extends Attributes> = { [P in keyof A as `subs
 
 type CommandServers<C extends Commands> = { [P in keyof C]: SignatureFromCommandSpec<C[P]> };
 
-type ClientEventGetters<E extends Events> = { [P in keyof E as `get${Capitalize<string & P>}Event`]: () => Promise<EventType<E[P]>> };
-type ClientEventSubscribers<E extends Events> = { [P in keyof E as `subscribe${Capitalize<string & P>}Event`]: (listener: (value: EventType<E[P]>) => void, minIntervalS: number, maxIntervalS: number) => Promise<void> };
+type ClientEventGetters<E extends Events> = { [P in keyof E as `get${Capitalize<string & P>}Event`]: (minimumEventNumber?: number | bigint, isFabricFiltered?: boolean) => Promise<DecodedEventData<EventType<E[P]>>> };
+type ClientEventSubscribers<E extends Events> = { [P in keyof E as `subscribe${Capitalize<string & P>}Event`]: (listener: (value: DecodedEventData<EventType<E[P]>>) => void, minIntervalS: number, maxIntervalS: number, isUrgent?: boolean, minimumEventNumber?: number | bigint, isFabricFiltered?: boolean) => Promise<void> };
 
 export type ClusterClientObjForCluster<C extends Cluster<any, any, any, any, any>> = ClusterClientObj<C["features"], C["attributes"], C["commands"], C["events"]>;
 
@@ -44,7 +45,7 @@ export type ClusterClientObj<F extends BitSchema, A extends Attributes, C extend
         attributes: AttributeClients<F, A>;
         events: EventClients<E>;
         commands: CommandServers<C>;
-        subscriptAllAttributes: (minIntervalFloorSeconds: number, maxIntervalCeilingSeconds: number) => Promise<void>;
+        subscribeAllAttributes: (minIntervalFloorSeconds: number, maxIntervalCeilingSeconds: number, keepSubscriptions?: boolean, isFabricFiltered?: boolean) => Promise<void>;
         _clone: (newInteractionClient?: InteractionClient) => ClusterClientObj<F, A, C, E>;
     }
     & ClientAttributeGetters<A>
