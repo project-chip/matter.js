@@ -280,8 +280,8 @@ export class CommissioningServer extends MatterNode {
                 },
                 {},
                 {
-                    accessControlEntryChanged: true,
-                    accessControlExtensionChanged: true
+                    accessControlEntryChanged: true, // TODO
+                    accessControlExtensionChanged: true // TODO
                 }
             )
         );
