@@ -166,35 +166,67 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
 
     async sendDataReport(dataReport: DataReport) {
         const messageBytes = TlvDataReport.encode(dataReport);
-        if (dataReport.attributeReports !== undefined && messageBytes.length > MAX_SPDU_LENGTH) {
+        if ((dataReport.attributeReports !== undefined || dataReport.eventReports !== undefined) && messageBytes.length > MAX_SPDU_LENGTH) {
             // DataReport is too long, it needs to be sent in chunks
-            const attributeReportsToSend = [...dataReport.attributeReports];
-            dataReport.attributeReports.length = 0;
+            const attributeReportsToSend = [...(dataReport.attributeReports ?? [])];
+            const eventReportsToSend = [...dataReport.eventReports ?? []];
+            dataReport.attributeReports = undefined;
+            dataReport.eventReports = undefined;
             dataReport.moreChunkedMessages = true;
 
             const emptyDataReportBytes = TlvDataReport.encode(dataReport);
 
             let messageSize = emptyDataReportBytes.length;
             while (true) {
-                const attributeReport = attributeReportsToSend.pop();
-                if (attributeReport === undefined) {
+                if (attributeReportsToSend.length > 0) {
+                    const attributeReport = attributeReportsToSend.shift();
+                    if (attributeReport !== undefined) {
+                        const attributeReportBytes = TlvAttributeReport.encode(attributeReport).length;
+                        if (messageSize + attributeReportBytes > MAX_SPDU_LENGTH) {
+                            if (messageSize === emptyDataReportBytes.length) {
+                                throw new NotImplementedError(`Attribute report for is too long to fit in a single chunk, Array chunking not yet supported`);
+                            }
+                            // Report doesn't fit, sending this chunk
+                            logger.debug(`Sending DataReport chunk with ${dataReport.attributeReports?.length} attributes: ${messageSize} bytes`);
+                            await this.send(MessageType.ReportData, TlvDataReport.encode(dataReport));
+                            await this.waitForSuccess();
+                            dataReport.attributeReports = undefined;
+                            messageSize = emptyDataReportBytes.length;
+                        }
+                        messageSize += attributeReportBytes;
+                        if (dataReport.attributeReports === undefined) dataReport.attributeReports = [];
+                        dataReport.attributeReports.push(attributeReport);
+                    }
+                }
+                else if (eventReportsToSend.length > 0) {
+                    const eventReport = eventReportsToSend.shift();
+                    if (eventReport === undefined) {
+                        // No more chunks to send
+                        dataReport.moreChunkedMessages = undefined;
+                        break;
+                    }
+                    const eventReportBytes = TlvAttributeReport.encode(eventReport).length;
+                    if (messageSize + eventReportBytes > MAX_SPDU_LENGTH) {
+                        if (messageSize === emptyDataReportBytes.length) {
+                            throw new NotImplementedError(`Event report for is too long to fit in a single chunk, Array chunking not yet supported`);
+                        }
+                        // Report doesn't fit, sending this chunk
+                        logger.debug(`Sending DataReport chunk with ${dataReport.attributeReports?.length} attributes and ${dataReport.eventReports?.length} events: ${messageSize} bytes`);
+                        await this.send(MessageType.ReportData, TlvDataReport.encode(dataReport));
+                        await this.waitForSuccess();
+                        dataReport.attributeReports = undefined;
+                        dataReport.eventReports = undefined;
+                        messageSize = emptyDataReportBytes.length;
+                    }
+                    messageSize += eventReportBytes;
+                    if (dataReport.eventReports === undefined) dataReport.eventReports = [];
+                    dataReport.eventReports.push(eventReport);
+                }
+                else {
                     // No more chunks to send
                     dataReport.moreChunkedMessages = undefined;
                     break;
                 }
-                const attributeReportBytes = TlvAttributeReport.encode(attributeReport).length;
-                if (messageSize + attributeReportBytes > MAX_SPDU_LENGTH) {
-                    if (messageSize === emptyDataReportBytes.length) {
-                        throw new NotImplementedError(`Attribute report for is too long to fit in a single chunk, Array chunking not yet supported`);
-                    }
-                    // Report doesn't fit, sending this chunk
-                    await this.send(MessageType.ReportData, TlvDataReport.encode(dataReport));
-                    await this.waitForSuccess();
-                    dataReport.attributeReports.length = 0;
-                    messageSize = emptyDataReportBytes.length;
-                }
-                messageSize += attributeReportBytes;
-                dataReport.attributeReports.push(attributeReport);
             }
         }
 
@@ -205,6 +237,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                 this.throwIfErrorStatusMessage(receivedMessage);
             });
         } else {
+            logger.debug(`Sending (final) data report with ${dataReport.attributeReports?.length} attributes and ${dataReport.eventReports?.length} reports`);
             await this.exchange.send(MessageType.ReportData, TlvDataReport.encode(dataReport));
             await this.waitForSuccess();
         }
