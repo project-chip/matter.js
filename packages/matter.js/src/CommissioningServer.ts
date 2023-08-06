@@ -163,35 +163,43 @@ export class CommissioningServer extends MatterNode {
             basicInformation: { vendorId, productId }
         } = options;
 
+        // Set the required basicInformation and respect the provided values
+        const basicInformationAttributes = Object.assign(
+            {
+                dataModelRevision: 1,
+                nodeLabel: "",
+                hardwareVersion: 0,
+                hardwareVersionString: "0",
+                location: "XX",
+                localConfigDisabled: false,
+                softwareVersion: 1,
+                softwareVersionString: "v1",
+                capabilityMinima: {
+                    caseSessionsPerFabric: 3,
+                    subscriptionsPerFabric: 3
+                },
+                serialNumber: `node-matter-${Crypto.get().getRandomData(4).toHex()}`
+            },
+            options.basicInformation
+        ) as AttributeInitialValues<typeof BasicInformationCluster.attributes>;
+
+        const reachabilitySupported = basicInformationAttributes.reachable !== undefined;
         // Add basic Information cluster to root directly because it is not allowed to be changed afterward
-        this.rootEndpoint.addClusterServer(
-            ClusterServer(
-                BasicInformationCluster,
-                // Set the required basicInformation and respect the provided values
-                Object.assign(
-                    {
-                        dataModelRevision: 1,
-                        nodeLabel: "",
-                        hardwareVersion: 0,
-                        hardwareVersionString: "0",
-                        location: "XX",
-                        localConfigDisabled: false,
-                        softwareVersion: 1,
-                        softwareVersionString: "v1",
-                        capabilityMinima: {
-                            caseSessionsPerFabric: 3,
-                            subscriptionsPerFabric: 3
-                        },
-                        serialNumber: `node-matter-${Crypto.get().getRandomData(4).toHex()}`
-                    },
-                    options.basicInformation
-                ),
-                {},
-                {
-                    startUp: true
-                }
-            )
+        const basicInformationCluster = ClusterServer(
+            BasicInformationCluster,
+            basicInformationAttributes,
+            {},
+            {
+                startUp: true,
+                shutDown: true,
+                reachableChanged: reachabilitySupported
+            }
         );
+        this.rootEndpoint.addClusterServer(basicInformationCluster);
+
+        if (reachabilitySupported) {
+            basicInformationCluster.subscribeReachableAttribute(newValue => basicInformationCluster.triggerReachableChangedEvent?.({ reachableNewValue: newValue }));
+        }
 
         // Use provided certificates for OperationalCredentialsCluster or generate own ones
         let certificates = options.certificates;
