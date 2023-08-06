@@ -468,6 +468,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     private endpointStructure = new InteractionEndpointStructure();
     private nextSubscriptionId = Crypto.getRandomUInt32();
     private eventHandler = new EventHandler(this.storage);
+    private readonly subscriptionMap = new Map<number, SubscriptionHandler>();
+    private isClosing = false;
 
     constructor(
         private readonly storage: StorageContext
@@ -486,6 +488,10 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                 cluster._setStorage(this.storage.createContext(`Cluster-${endpoint.id}-${cluster.id}`));
                 cluster._registerEventHandler(this.eventHandler);
             }
+        }
+
+        for (const subscription of this.subscriptionMap.values()) {
+            subscription.updateSubscription();
         }
 
         return;
@@ -599,7 +605,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                 const { schema, defaultValue } = attribute;
 
                 try {
-                    const value = decodeValueForSchema(schema, values, defaultValue);
+                    const value = decodeAttributeValueWithSchema(schema, values, defaultValue);
                     logger.debug(`Handle write request from ${exchange.channel.name} resolved to: ${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(value)} (Version=${dataVersion})`);
                     if (!(attribute instanceof AttributeServer) && !(attribute instanceof FabricScopedAttributeServer)) {
                         throw new StatusResponseError("Fixed attributes cannot be written", StatusCode.UnsupportedWrite);
@@ -643,48 +649,36 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             throw new StatusResponseError("No attributes or events requested", StatusCode.InvalidAction);
         }
 
-        if (!keepSubscriptions) {
-            session.clearSubscriptions();
+        logger.debug(`Subscribe to attributes:${attributeRequests?.map(path => this.endpointStructure.resolveAttributeName(path)).join(", ")}, events:${eventRequests?.map(path => this.endpointStructure.resolveEventName(path)).join(", ")}`);
+        if (eventFilters !== undefined) logger.debug(`Event filters: ${eventFilters.map(filter => `${filter.nodeId}/${filter.eventMin}`).join(", ")}`);
+
+        if (minIntervalFloorSeconds < 0) throw new UnexpectedDataError("minIntervalFloorSeconds should be greater or equal to 0");
+        if (maxIntervalCeilingSeconds < 0) throw new UnexpectedDataError("maxIntervalCeilingSeconds should be greater or equal to 1");
+        if (maxIntervalCeilingSeconds < minIntervalFloorSeconds) throw new UnexpectedDataError("maxIntervalCeilingSeconds should be greater or equal to minIntervalFloorSeconds");
+
+        // TODO: Interpret specs:
+        // The publisher SHALL compute an appropriate value for the MaxInterval field in the action. This SHALL respect the following constraint: MinIntervalFloor ≤ MaxInterval ≤ MAX(SUBSCRIPTION_MAX_INTERVAL_PUBLISHER_LIMIT=60mn, MaxIntervalCeiling)
+
+        if (this.nextSubscriptionId === 0xFFFFFFFF) this.nextSubscriptionId = 0;
+        const subscriptionId = this.nextSubscriptionId++;
+        const subscriptionHandler = new SubscriptionHandler(subscriptionId, session, this.endpointStructure, attributeRequests, eventRequests, eventFilters, this.eventHandler, keepSubscriptions, minIntervalFloorSeconds, maxIntervalCeilingSeconds, () => this.subscriptionMap.delete(subscriptionId));
+
+        try {
+            // Send initial data report to prime the subscription with initial data
+            await subscriptionHandler.sendInitialReport(messenger);
+        } catch (error: any) {
+            logger.error(`Subscription ${subscriptionId} for Session ${session.getId()}: Error while sending initial data reports: ${error.message}`);
+            subscriptionHandler.cancel();
+            return; // Make sure to not bubble up the exception
         }
 
-        // TODO add eventsRequest and other missing supports
-        if (attributeRequests !== undefined) {
-            logger.debug(`Subscribe to ${attributeRequests.map(path => this.endpointStructure.resolveAttributeName(path)).join(", ")}`);
+        this.subscriptionMap.set(subscriptionId, subscriptionHandler);
 
-            if (attributeRequests.length === 0) throw new NotImplementedError("Unsupported subscription request with empty attribute list");
-            if (minIntervalFloorSeconds < 0) throw new UnexpectedDataError("minIntervalFloorSeconds should be greater or equal to 0");
-            if (maxIntervalCeilingSeconds < 0) throw new UnexpectedDataError("maxIntervalCeilingSeconds should be greater or equal to 1");
-            if (maxIntervalCeilingSeconds < minIntervalFloorSeconds) throw new UnexpectedDataError("maxIntervalCeilingSeconds should be greater or equal to minIntervalFloorSeconds");
-
-            const attributes = this.endpointStructure.getAttributes(attributeRequests);
-
-            if (!attributes.length) {
-                throw new StatusResponseError("Attributes not found", StatusCode.UnsupportedAttribute);
-            }
-
-            // TODO: Interpret specs:
-            // The publisher SHALL compute an appropriate value for the MaxInterval field in the action. This SHALL respect the following constraint: MinIntervalFloor ≤ MaxInterval ≤ MAX(SUBSCRIPTION_MAX_INTERVAL_PUBLISHER_LIMIT=60mn, MaxIntervalCeiling)
-
-            if (this.nextSubscriptionId === 0xFFFFFFFF) this.nextSubscriptionId = 0;
-            const subscriptionId = this.nextSubscriptionId++;
-            const subscriptionHandler = new SubscriptionHandler(subscriptionId, session.getContext(), fabric, session.getPeerNodeId(), attributes, minIntervalFloorSeconds, maxIntervalCeilingSeconds);
-
-            try {
-                // Send initial data report to prime the subscription with initial data
-                await subscriptionHandler.sendInitialReport(messenger, session);
-            } catch (error: any) {
-                logger.error(`Subscription subscription ${subscriptionId} for Session ${session.getId()}: Error while sending initial data reports: ${error.message}`);
-                return; // Make sure to not bubble up the exception
-            }
-
-            session.addSubscription(subscriptionHandler);
-
-            const maxInterval = subscriptionHandler.getMaxInterval();
-            logger.info(`Created subscription ${subscriptionId} for Session ${session.getId()} with ${attributes.length} attributes. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${maxInterval} seconds`);
-            // Then send the subscription response
-            await messenger.send(MessageType.SubscribeResponse, TlvSubscribeResponse.encode({ subscriptionId, maxInterval, interactionModelRevision: 1 }));
-            subscriptionHandler.activateSendingUpdates();
-        }
+        const maxInterval = subscriptionHandler.getMaxInterval();
+        logger.info(`Successfully created subscription ${subscriptionId} for Session ${session.getId()}. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${maxInterval} seconds`);
+        // Then send the subscription response
+        await messenger.send(MessageType.SubscribeResponse, TlvSubscribeResponse.encode({ subscriptionId, maxInterval, interactionModelRevision: 1 }));
+        subscriptionHandler.activateSendingUpdates();
     }
 
     async handleInvokeRequest(exchange: MessageExchange<MatterDevice>, { invokeRequests }: InvokeRequest, message: Message): Promise<InvokeResponse> {
