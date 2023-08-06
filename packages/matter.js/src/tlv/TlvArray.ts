@@ -42,7 +42,7 @@ export class ArraySchema<T> extends TlvSchema<T[]> {
     }
 
     override decodeTlvInternalValue(reader: TlvReader, typeLength: TlvTypeLength): T[] {
-        if (typeLength.type !== TlvType.Array) throw new UnexpectedDataError(`Unexpected type ${typeLength.type}.`);
+        if (typeLength.type !== TlvType.Array) throw new UnexpectedDataError(`Unexpected type ${typeLength.type}, expected Array (${TlvType.Array}).`);
         const result = new Array<T>();
         while (true) {
             const { tag: elementTag, typeLength: elementTypeLength } = reader.readTagType();

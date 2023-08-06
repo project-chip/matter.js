@@ -68,7 +68,7 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
     }
 
     override decodeTlvInternalValue(reader: TlvReader, typeLength: TlvTypeLength): TypeFromFields<F> {
-        if (typeLength.type !== this.type) throw new UnexpectedDataError(`Unexpected type ${typeLength.type}.`);
+        if (typeLength.type !== this.type) throw new UnexpectedDataError(`Unexpected type ${typeLength.type} (expected ${this.type}).`);
         const result: any = {};
         while (true) {
             const { tag: { profile, id } = {}, typeLength: elementTypeLength } = reader.readTagType();
