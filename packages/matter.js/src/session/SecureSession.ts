@@ -133,6 +133,14 @@ export class SecureSession<T> implements Session<T> {
         logger.debug(`Added subscription ${subscription.subscriptionId} to ${this.name}/${this.id}`);
     }
 
+    removeSubscription(subscriptionId: number) {
+        const index = this.subscriptions.findIndex(subscription => subscription.subscriptionId === subscriptionId);
+        if (index !== -1) {
+            this.subscriptions.splice(index, 1);
+            logger.debug(`Removed subscription ${subscriptionId} from ${this.name}/${this.id}`);
+        }
+    }
+
     clearSubscriptions() {
         this.subscriptions.forEach(subscription => subscription.cancel());
         this.subscriptions.length = 0;
