@@ -125,7 +125,7 @@ class ControllerNode {
          * are called.
          */
 
-        const matterClient = new MatterServer(storageManager);
+        const matterServer = new MatterServer(storageManager);
         const commissioningController = new CommissioningController({
             serverAddress: (ip !== undefined && port !== undefined) ? { ip, port, type: "udp" } : undefined,
             longDiscriminator,
@@ -134,7 +134,7 @@ class ControllerNode {
             delayedPairing: true,
             commissioningOptions,
         });
-        matterClient.addCommissioningController(commissioningController);
+        matterServer.addCommissioningController(commissioningController);
 
         /**
          * Start the Matter Server
@@ -143,7 +143,7 @@ class ControllerNode {
          * CommissioningServer node then this command also starts the announcement of the device into the network.
          */
 
-        await matterClient.start();
+        await matterServer.start();
 
         /**
          * TBD
@@ -217,7 +217,7 @@ class ControllerNode {
             }
 
         } finally {
-            //await matterClient.close(); // Comment out when subscribes are used, else the connection will be closed
+            //await matterServer.close(); // Comment out when subscribes are used, else the connection will be closed
             setTimeout(() => process.exit(0), 100000);
         }
     }
