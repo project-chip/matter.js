@@ -113,23 +113,23 @@ export function ClusterServer<
         _setStorage: (storageContext: StorageContext) => {
             clusterStorage = storageContext;
 
-            for (const name in attributes) {
-                const attribute = (attributes as any)[name];
+            for (const attributeName in attributes) {
+                const attribute = (attributes as any)[attributeName];
                 if (!attributeStorageListeners.has(attribute.id)) return;
                 if (!storageContext.has(attribute.name)) return;
                 try {
                     const data = storageContext.get<{ version: number, value: any }>(attribute.name);
-                    logger.debug(`Restoring attribute ${attribute.name} (${attribute.id}) in cluster ${name} (${clusterId})`);
+                    logger.debug(`Restoring attribute ${attributeName} (${attribute.id}) in cluster ${name} (${clusterId})`);
                     attribute.init(data.value, data.version);
                 } catch (error) {
-                    logger.warn(`Failed to restore attribute ${attribute.name} (${attribute.id}) in cluster ${name} (${clusterId})`, error);
+                    logger.warn(`Failed to restore attribute ${attributeName} (${attribute.id}) in cluster ${name} (${clusterId})`, error);
                 }
             }
         },
 
         _registerEventHandler: (eventHandler: EventHandler) => {
-            for (const name in events) {
-                (events as any)[name].addListener((eventData: EventData<any>) => eventHandler.pushEvent(eventData));
+            for (const eventName in events) {
+                (events as any)[eventName].bindToEventHandler(eventHandler);
             }
         },
 
