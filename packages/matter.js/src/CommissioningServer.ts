@@ -633,6 +633,8 @@ export class CommissioningServer extends MatterNode {
      * close network connections of the device
      */
     async close() {
+        this.rootEndpoint.getClusterServer(BasicInformationCluster)?.triggerShutDownEvent?.();
+        await this.interactionServer?.close();
         await this.deviceInstance?.stop();
     }
 
