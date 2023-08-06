@@ -129,8 +129,8 @@ export class InteractionEndpointStructure {
         return this.resolveGenericElementName(nodeId, endpointId, clusterId, attributeId, this.attributes);
     }
 
-    resolveEventName({ nodeId, endpointId, clusterId, eventId }: TypeFromSchema<typeof TlvEventPath>) {
-        return this.resolveGenericElementName(nodeId, endpointId, clusterId, eventId, this.events);
+    resolveEventName({ nodeId, endpointId, clusterId, eventId, isUrgent }: TypeFromSchema<typeof TlvEventPath>) {
+        return `${isUrgent ? "!" : ""}${this.resolveGenericElementName(nodeId, endpointId, clusterId, eventId, this.events)}`;
     }
 
     resolveCommandName({ endpointId, clusterId, commandId }: TypeFromSchema<typeof TlvCommandPath>) {
@@ -207,9 +207,9 @@ export class InteractionEndpointStructure {
     getEvents(filters: TypeFromSchema<typeof TlvEventPath>[]): EventWithPath[] {
         const result = new Array<EventWithPath>();
 
-        filters.forEach(({ endpointId, clusterId, eventId }) => {
+        filters.forEach(({ endpointId, clusterId, eventId, isUrgent }) => {
             if (endpointId !== undefined && clusterId !== undefined && eventId !== undefined) {
-                const path = { endpointId, clusterId, eventId };
+                const path = { endpointId, clusterId, eventId, isUrgent };
                 const event = this.events.get(eventPathToId(path));
                 if (event === undefined) return;
                 result.push({ path, event });
@@ -218,10 +218,11 @@ export class InteractionEndpointStructure {
                     (endpointId === undefined || endpointId === path.endpointId)
                     && (clusterId === undefined || clusterId === path.clusterId)
                     && (eventId === undefined || eventId === path.eventId))
-                    .forEach(path => {
+                    .forEach(({ endpointId, clusterId, eventId }) => {
+                        const path = { endpointId, clusterId, eventId, isUrgent };
                         const event = this.events.get(eventPathToId(path));
                         if (event === undefined) return;
-                        result.push({ path, event })
+                        result.push({ path, event });
                     });
             }
         });
