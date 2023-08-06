@@ -13,7 +13,7 @@ import { InternalError } from "../../common/MatterError.js";
 
 export class EventServer<T> {
     private eventList = new Array<EventData<T>>();
-    private readonly listeners = new Array<(event: EventData<T>) => void>();
+    private readonly listeners = new Array<(event: EventStorageData<T>) => void>();
     protected endpoint?: Endpoint;
 
     constructor(
@@ -44,11 +44,14 @@ export class EventServer<T> {
         this.listeners.forEach(listener => listener(event));
     }
 
-    addListener(listener: (event: EventData<T>) => void) {
+    addListener(listener: (event: EventStorageData<T>) => void) {
         this.listeners.push(listener);
     }
 
-    removeListener(listener: (event: EventData<T>) => void) {
-        this.listeners.splice(this.listeners.findIndex(item => item === listener), 1);
+    removeListener(listener: (event: EventStorageData<T>) => void) {
+        const entryIndex = this.listeners.findIndex(item => item === listener);
+        if (entryIndex !== -1) {
+            this.listeners.splice(entryIndex, 1);
+        }
     }
 }

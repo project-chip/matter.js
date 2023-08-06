@@ -17,7 +17,7 @@ export class AttributeClient<T> {
     private readonly isWritable: boolean;
     private readonly isFabricScoped: boolean;
     protected readonly schema: TlvSchema<any>;
-    private readonly listeners = new Array<(newValue: T/*, oldValue: T*/) => void>();
+    private readonly listeners = new Array<(newValue: T) => void>();
 
     constructor(
         readonly attribute: Attribute<T, any>,
@@ -88,10 +88,6 @@ export class AttributeClient<T> {
     }
 
     update(value: T) {
-        /*const oldValue = await this.get();
-        if (value !== oldValue) {
-            this.validator(value, this.name);
-        }*/
         this.listeners.forEach(listener => listener(value));
     }
 
@@ -99,11 +95,14 @@ export class AttributeClient<T> {
         this.getInteractionClientCallback = callback;
     }
 
-    addListener(listener: (newValue: T/*, oldValue: T*/) => void) {
+    addListener(listener: (newValue: T) => void) {
         this.listeners.push(listener);
     }
 
-    removeListener(listener: (newValue: T/*, oldValue: T*/) => void) {
-        this.listeners.splice(this.listeners.findIndex(item => item === listener), 1);
+    removeListener(listener: (newValue: T) => void) {
+        const entryIndex = this.listeners.findIndex(item => item === listener);
+        if (entryIndex !== -1) {
+            this.listeners.splice(entryIndex, 1);
+        }
     }
 }
