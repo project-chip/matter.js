@@ -13,8 +13,8 @@ import {
 } from "./InteractionMessenger.js";
 import { Attributes, Cluster, Commands, ConditionalFeatureList, Events, TlvNoResponse } from "../../cluster/Cluster.js";
 import {
-    StatusCode, TlvAttributePath, TlvAttributeReport, TlvCommandPath, TlvEventPath, TlvInvokeResponseData,
-    TlvSubscribeResponse
+    StatusCode, TlvAttributePath, TlvAttributeReport, TlvCommandPath, TlvEventPath, TlvEventReport,
+    TlvInvokeResponseData, TlvSubscribeResponse
 } from "./InteractionProtocol.js"
 import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
@@ -23,7 +23,7 @@ import { assertSecureSession } from "../../session/SecureSession.js";
 import { SubscriptionHandler } from "./SubscriptionHandler.js";
 import { Message } from "../../codec/MessageCodec.js";
 import { Crypto } from "../../crypto/Crypto.js";
-import { decodeValueForSchema, normalizeAttributeData } from "./AttributeDataDecoder.js";
+import { decodeAttributeValueWithSchema, normalizeAttributeData } from "./AttributeDataDecoder.js";
 import {
     AttributeInitialValues, AttributeServers, ClusterServerHandlers, ClusterServerObj, CommandServers, EventServers,
     SupportedEventsList,
@@ -42,12 +42,10 @@ import { Scenes } from "../../cluster/definitions/ScenesCluster.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { EventId } from "../../datatype/EventId.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
-import { EventData, EventHandler } from "../../protocol/interaction/EventHandler.js";
+import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { InteractionEndpointStructure } from "./InteractionEndpointStructure.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
-import {
-    ImplementationError, MatterFlowError, NotImplementedError, UnexpectedDataError
-} from "../../common/MatterError.js";
+import { ImplementationError, MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
 
 export const INTERACTION_PROTOCOL_ID = 0x0001;
 
@@ -503,15 +501,15 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         );
     }
 
-    handleReadRequest(exchange: MessageExchange<MatterDevice>, { attributeRequests: attributePaths, isFabricFiltered }: ReadRequest): DataReport {
-        if (attributePaths === undefined) {
-            throw new StatusResponseError("Only Read requests with attributeRequests are supported right now", StatusCode.UnsupportedRead);
+    handleReadRequest(exchange: MessageExchange<MatterDevice>, { attributeRequests, eventRequests, eventFilters, isFabricFiltered }: ReadRequest): DataReport {
+        if (attributeRequests === undefined && eventRequests === undefined) {
+            throw new StatusResponseError("Only Read requests with attributeRequests or eventRequests are supported right now", StatusCode.UnsupportedRead);
         }
-        logger.debug(`Received read request from ${exchange.channel.name}: ${attributePaths.map(path => this.endpointStructure.resolveAttributeName(path)).join(", ")}, isFabricFiltered=${isFabricFiltered}`);
+        logger.debug(`Received read request from ${exchange.channel.name}: attributes:${attributeRequests?.map(path => this.endpointStructure.resolveAttributeName(path)).join(", ")}, events:${eventRequests?.map(path => this.endpointStructure.resolveEventName(path)).join(", ")} isFabricFiltered=${isFabricFiltered}`);
 
         // UnsupportedNode/UnsupportedEndpoint/UnsupportedCluster/UnsupportedAttribute/UnsupportedRead
 
-        const attributeReports = attributePaths.flatMap((path: TypeFromSchema<typeof TlvAttributePath>): TypeFromSchema<typeof TlvAttributeReport>[] => {
+        const attributeReports = attributeRequests?.flatMap((path: TypeFromSchema<typeof TlvAttributePath>): TypeFromSchema<typeof TlvAttributeReport>[] => {
             const attributes = this.endpointStructure.getAttributes([path]);
             if (attributes.length === 0) {
                 const { endpointId, clusterId, attributeId } = path;
@@ -524,22 +522,45 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                     } else if (!this.endpointStructure.hasClusterServer(endpointId, clusterId)) {
                         status = StatusCode.UnsupportedCluster;
                     }
-                    logger.debug(`Read from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(path)} unsupported path: Status=${status}`);
+                    logger.debug(`Read attribute from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(path)} unsupported path: Status=${status}`);
                     return [{ attributeStatus: { path, status: { status } } }];
                 }
             }
 
             return attributes.map(({ path, attribute }) => {
                 const { value, version } = attribute.getWithVersion(exchange.session, isFabricFiltered);
-                logger.debug(`Read from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(value)} (version=${version})`);
+                logger.debug(`Read attribute from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(value)} (version=${version})`);
                 return { attributeData: { path, data: attribute.schema.encodeTlv(value), dataVersion: version } };
             });
+        });
+
+        const eventReports = eventRequests?.flatMap((path: TypeFromSchema<typeof TlvEventPath>): TypeFromSchema<typeof TlvEventReport>[] => {
+            const events = this.endpointStructure.getEvents([path]);
+            if (events.length === 0) {
+                logger.debug(`Read event from ${exchange.channel.name}: ${this.endpointStructure.resolveEventName(path)} unsupported path`);
+                return [{ eventStatus: { path, status: { status: StatusCode.UnsupportedEvent } } }]; // TODO: Find correct status code
+            }
+
+            return events.flatMap(({ path, event }) => {
+                const matchingEvents = this.eventHandler.getEvents(path, eventFilters);
+                logger.debug(`Read event from ${exchange.channel.name}:  ${this.endpointStructure.resolveEventName(path)}=${Logger.toJSON(matchingEvents)}`);
+                return matchingEvents.map(eventData => ({
+                    eventData: {
+                        path,
+                        eventNumber: eventData.eventNumber,
+                        priority: eventData.priority,
+                        epochTimestamp: eventData.timestamp,
+                        data: event.schema.encodeTlv(eventData.value),
+                    }
+                }));
+            }).sort((a, b) => a.eventData.eventNumber - b.eventData.eventNumber);
         });
 
         return {
             interactionModelRevision: 1,
             suppressResponse: false,
-            attributeReports
+            attributeReports,
+            eventReports,
         };
     }
 
