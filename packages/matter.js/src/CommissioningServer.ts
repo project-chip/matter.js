@@ -448,6 +448,14 @@ export class CommissioningServer extends MatterNode {
         }
 
         await this.deviceInstance.start();
+
+        // Send required events
+        basicInformation.triggerStartUpEvent({ softwareVersion: basicInformation.getSoftwareVersionAttribute() });
+
+        const generalDiagnostics = this.getRootClusterServer(GeneralDiagnosticsCluster);
+        if (generalDiagnostics !== undefined) {
+            this.getRootClusterServer(GeneralDiagnosticsCluster)?.triggerBootReasonEvent({ bootReason: generalDiagnostics.getBootReasonAttribute?.() ?? GeneralDiagnostics.BootReason.Unspecified });
+        }
     }
 
     updateStructure() {
