@@ -266,10 +266,6 @@ export class SubscriptionHandler {
         this.outstandingEventUpdates.clear();
         this.lastUpdateTimeMs = Time.nowMs();
 
-        if (attributeUpdatesToSend.length === 0 && eventUpdatesToSend.length === 0) {
-            return;
-        }
-
         try {
             await this.sendUpdateMessage(attributeUpdatesToSend, eventUpdatesToSend);
         } catch (error) {
@@ -331,7 +327,9 @@ export class SubscriptionHandler {
 
     async flush() {
         this.sendDelayTimer.stop();
-        await this.sendUpdate()
+        if (this.outstandingAttributeUpdates.size > 0 || this.outstandingEventUpdates.size > 0) {
+            void this.sendUpdate();
+        }
     }
 
     cancel() {
