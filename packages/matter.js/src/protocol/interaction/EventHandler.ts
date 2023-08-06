@@ -6,6 +6,12 @@
 
 import { StorageContext } from "../../storage/StorageContext.js";
 import { EventPriority } from "../../cluster/Cluster.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { TlvEventFilter, TlvEventPath } from "./InteractionProtocol.js";
+import { Logger } from "../../log/Logger.js";
+import { resolveEventName } from "../../cluster/ClusterHelper.js";
+
+const logger = Logger.get("EventHandler");
 
 const MAX_EVENTS = 10_000;
 
@@ -24,7 +30,7 @@ export interface EventData<T> {
 /**
  * Data of an event which was triggered and stored internally
  */
-interface EventStorageData<T> extends EventData<T> {
+export interface EventStorageData<T> extends EventData<T> {
     eventNumber: number;
 }
 
@@ -45,6 +51,23 @@ export class EventHandler {
     constructor(storage: StorageContext) {
         this.eventStorage = storage.createContext("EventHandler");
         this.eventNumber = this.eventStorage.get("lastEventNumber", this.eventNumber);
+        logger.debug(`Set/Restore last event number: ${this.eventNumber}`);
+    }
+
+    getEvents(eventPath: TypeFromSchema<typeof TlvEventPath>, filters?: TypeFromSchema<typeof TlvEventFilter>[]) {
+        const eventFilter = filters ? (event: EventStorageData<any>) => filters.some(filter => filter.eventMin !== undefined && event.eventNumber >= filter.eventMin) : () => true; // TODO also add Node Id check
+        const events = new Array<EventStorageData<any>>();
+        const { endpointId, clusterId, eventId } = eventPath;
+        for (const priority of [EventPriority.Critical, EventPriority.Info, EventPriority.Debug]) {
+            const eventsToCheck = this.events[priority];
+            for (const event of eventsToCheck) {
+                if (eventFilter(event) && endpointId === event.endpointId && clusterId === event.clusterId && eventId === event.eventId) {
+                    events.push(event);
+                }
+            }
+        }
+        logger.debug(`Got ${events.length} events for ${resolveEventName(eventPath)} with filters: ${Logger.toJSON(filters)}`);
+        return events;
     }
 
     pushEvent(event: EventData<any>) {
@@ -52,19 +75,22 @@ export class EventHandler {
             eventNumber: ++this.eventNumber,
             ...event,
         };
+        logger.debug(`Received event: ${JSON.stringify(eventData)}`);
         this.events[event.priority].push(eventData);
         this.storedEventCount++;
         this.eventStorage.set("lastEventNumber", this.eventNumber);
         this.cleanUpEvents();
+        return eventData;
     }
 
     cleanUpEvents() {
         if (this.storedEventCount < MAX_EVENTS) return;
-        const eventsToDelete = this.storedEventCount - MAX_EVENTS; // should be always 1, but lets be sure
+        const eventsToDelete = this.storedEventCount - MAX_EVENTS; // should be always 1, but let's be sure
         for (const priority of [EventPriority.Debug, EventPriority.Info, EventPriority.Critical]) {
             const events = this.events[priority];
             if (events.length > 0) {
-                events.splice(0, events.length - eventsToDelete);
+                const removedEvents = events.splice(0, events.length - eventsToDelete);
+                logger.debug(`Removed ${removedEvents.length} events from priority ${priority}`);
                 return;
             }
         }
