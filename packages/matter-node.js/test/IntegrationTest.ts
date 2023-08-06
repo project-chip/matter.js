@@ -13,9 +13,8 @@ import { CryptoNode } from "../src/crypto/CryptoNode";
 Crypto.get = () => new CryptoNode();
 
 import {
-    OnOffCluster, BasicInformationCluster, OperationalCredentials, OperationalCredentialsCluster, DescriptorCluster,
-    IdentifyCluster, GroupsCluster, AccessControlCluster, ScenesCluster, GeneralCommissioningCluster,
-    GeneralCommissioning, NetworkCommissioning, NetworkCommissioningCluster
+    OnOffCluster, BasicInformation, OperationalCredentials, Descriptor, Identify, Groups, AccessControl, Scenes,
+    GeneralCommissioning, NetworkCommissioning, GeneralDiagnostics
 } from "@project-chip/matter.js/cluster";
 import { VendorId, FabricIndex, GroupId, ClusterId } from "@project-chip/matter.js/datatype";
 
@@ -119,7 +118,7 @@ describe("Integration Test", () => {
         onOffLightDeviceServer = new OnOffLightDevice();
         commissioningServer.addDevice(onOffLightDeviceServer);
 
-        const netCluster = NetworkCommissioningCluster.with(NetworkCommissioning.Feature.WiFiNetworkInterface);
+        const netCluster = NetworkCommissioning.Cluster.with(NetworkCommissioning.Feature.WiFiNetworkInterface);
         // Override NetworkCommissioning Cluster for now unless configurable
         commissioningServer.addRootClusterServer(
             ClusterServer(
@@ -168,7 +167,7 @@ describe("Integration Test", () => {
 
     describe("Check Server API", () => {
         it("Access cluster servers via api", async () => {
-            const basicInfoCluster = commissioningServer.getRootClusterServer(BasicInformationCluster);
+            const basicInfoCluster = commissioningServer.getRootClusterServer(BasicInformation.Cluster);
             assert.ok(basicInfoCluster);
 
             // check API access for a Mandatory field with both APIs, get and set
@@ -211,10 +210,10 @@ describe("Integration Test", () => {
         });
 
         it("Verify that commissioning changed the Regulatory Config/Location values", async () => {
-            const generalCommissioningCluster = commissioningController.getRootClusterClient(GeneralCommissioningCluster);
+            const generalCommissioningCluster = commissioningController.getRootClusterClient(GeneralCommissioning.Cluster);
             assert.equal(await generalCommissioningCluster?.getRegulatoryConfigAttribute(), GeneralCommissioning.RegulatoryLocationType.Indoor);
 
-            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformationCluster);
+            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformation.Cluster);
             assert.equal(await basicInfoCluster?.getLocationAttribute(), "DE");
         });
 
@@ -223,7 +222,7 @@ describe("Integration Test", () => {
 
     describe("read attributes", () => {
         it("read one specific attribute including schema parsing", async () => {
-            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformationCluster);
+            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInfoCluster);
 
             // Access a Mandatory field with both APIs
@@ -263,25 +262,25 @@ describe("Integration Test", () => {
 
         it("read multiple attributes", async () => {
             const response = await defaultInteractionClient.getMultipleAttributes([
-                { clusterId: DescriptorCluster.id }, // * /DescriptorCluster/ *
-                { endpointId: 0, clusterId: BasicInformationCluster.id }, // 0/BasicInformationCluster/ *
+                { clusterId: Descriptor.Cluster.id }, // * /DescriptorCluster/ *
+                { endpointId: 0, clusterId: BasicInformation.Cluster.id }, // 0/BasicInformationCluster/ *
                 { endpointId: 1, clusterId: OnOffCluster.id, attributeId: OnOffCluster.attributes.onOff.id }, // 1/OnOffCluster/onOff
                 { endpointId: 2 }, // 2 / * /* - will be discarded in results!
             ]);
 
-            assert.equal(response.length, 42);
+            assert.equal(response.length, 43);
             assert.equal(response.filter(({
                 path: {
                     endpointId,
                     clusterId
                 }
-            }) => endpointId === 0 && clusterId === DescriptorCluster.id).length, 10);
+            }) => endpointId === 0 && clusterId === Descriptor.Cluster.id).length, 10);
             assert.equal(response.filter(({
                 path: {
                     endpointId,
                     clusterId
                 }
-            }) => endpointId === 1 && clusterId === DescriptorCluster.id).length, 10);
+            }) => endpointId === 1 && clusterId === Descriptor.Cluster.id).length, 10);
 
             const descriptorServerListData = response.find(({
                 path: {
@@ -289,13 +288,13 @@ describe("Integration Test", () => {
                     clusterId,
                     attributeId
                 }
-            }) => endpointId === 0 && clusterId === DescriptorCluster.id && attributeId === DescriptorCluster.attributes.serverList.id);
+            }) => endpointId === 0 && clusterId === Descriptor.Cluster.id && attributeId === Descriptor.Cluster.attributes.serverList.id);
             assert.deepEqual(descriptorServerListData, {
                 path: {
                     nodeId: undefined,
                     endpointId: 0,
-                    clusterId: DescriptorCluster.id,
-                    attributeId: DescriptorCluster.attributes.serverList.id,
+                    clusterId: Descriptor.Cluster.id,
+                    attributeId: Descriptor.Cluster.attributes.serverList.id,
                     attributeName: "serverList"
                 }, value: [new ClusterId(29), new ClusterId(40), new ClusterId(62), new ClusterId(48), new ClusterId(49), new ClusterId(31), new ClusterId(63), new ClusterId(51), new ClusterId(60)], version: 0
             })
@@ -305,20 +304,20 @@ describe("Integration Test", () => {
                     endpointId,
                     clusterId
                 }
-            }) => endpointId === 0 && clusterId === BasicInformationCluster.id).length, 21);
+            }) => endpointId === 0 && clusterId === BasicInformation.Cluster.id).length, 22);
             const softwareVersionStringData = response.find(({
                 path: {
                     endpointId,
                     clusterId,
                     attributeId
                 }
-            }) => endpointId === 0 && clusterId === BasicInformationCluster.id && attributeId === BasicInformationCluster.attributes.softwareVersionString.id);
+            }) => endpointId === 0 && clusterId === BasicInformation.Cluster.id && attributeId === BasicInformation.Cluster.attributes.softwareVersionString.id);
             assert.deepEqual(softwareVersionStringData, {
                 path: {
                     nodeId: undefined,
                     endpointId: 0,
-                    clusterId: BasicInformationCluster.id,
-                    attributeId: BasicInformationCluster.attributes.softwareVersionString.id,
+                    clusterId: BasicInformation.Cluster.id,
+                    attributeId: BasicInformation.Cluster.attributes.softwareVersionString.id,
                     attributeName: "softwareVersionString"
                 }, value: "v1", version: 0
             });
@@ -328,13 +327,13 @@ describe("Integration Test", () => {
                     clusterId,
                     attributeId
                 }
-            }) => endpointId === 0 && clusterId === BasicInformationCluster.id && attributeId === BasicInformationCluster.attributes.nodeLabel.id);
+            }) => endpointId === 0 && clusterId === BasicInformation.Cluster.id && attributeId === BasicInformation.Cluster.attributes.nodeLabel.id);
             assert.deepEqual(nodeLabelData, {
                 path: {
                     nodeId: undefined,
                     endpointId: 0,
-                    clusterId: BasicInformationCluster.id,
-                    attributeId: BasicInformationCluster.attributes.nodeLabel.id,
+                    clusterId: BasicInformation.Cluster.id,
+                    attributeId: BasicInformation.Cluster.attributes.nodeLabel.id,
                     attributeName: "nodeLabel"
                 }, value: "345678", version: 2
             });
@@ -355,7 +354,6 @@ describe("Integration Test", () => {
                     attributeName: "onOff"
                 }, value: false, version: 0
             });
-
         });
 
         it("read events", async () => {
@@ -417,7 +415,7 @@ describe("Integration Test", () => {
     describe("write attributes", () => {
 
         it("write one attribute", async () => {
-            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformationCluster);
+            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInfoCluster);
 
             await basicInfoCluster.attributes.nodeLabel.set("testLabel");
@@ -426,7 +424,7 @@ describe("Integration Test", () => {
         });
 
         it("write one attribute with error", async () => {
-            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformationCluster);
+            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInfoCluster);
 
             await assert.rejects(async () => await basicInfoCluster.attributes.location.set("XXX"), {
@@ -438,14 +436,14 @@ describe("Integration Test", () => {
             const client = await commissioningController.createInteractionClient(); // We can also use a new Interaction clint
 
             const response = await client.setMultipleAttributes([
-                { endpointId: 0, clusterId: BasicInformationCluster.id, attribute: BasicInformationCluster.attributes.nodeLabel, value: "testLabel2" },
-                { endpointId: 0, clusterId: BasicInformationCluster.id, attribute: BasicInformationCluster.attributes.location, value: "GB" },
+                { endpointId: 0, clusterId: BasicInformation.Cluster.id, attribute: BasicInformation.Cluster.attributes.nodeLabel, value: "testLabel2" },
+                { endpointId: 0, clusterId: BasicInformation.Cluster.id, attribute: BasicInformation.Cluster.attributes.location, value: "GB" },
             ]);
 
             assert.equal(Array.isArray(response), true);
             assert.equal(response.length, 0);
 
-            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformationCluster, client);
+            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformation.Cluster, client);
             assert.ok(basicInfoCluster);
             assert.equal(await basicInfoCluster.attributes.nodeLabel.get(), "testLabel2");
             assert.equal(await basicInfoCluster.getLocationAttribute(), "GB");
@@ -453,15 +451,15 @@ describe("Integration Test", () => {
 
         it("write multiple attributes with partial errors", async () => {
             const response = await defaultInteractionClient.setMultipleAttributes([
-                { endpointId: 0, clusterId: BasicInformationCluster.id, attribute: BasicInformationCluster.attributes.nodeLabel, value: "testLabel3" },
-                { endpointId: 0, clusterId: BasicInformationCluster.id, attribute: BasicInformationCluster.attributes.location, value: "XXX" },
+                { endpointId: 0, clusterId: BasicInformation.Cluster.id, attribute: BasicInformation.Cluster.attributes.nodeLabel, value: "testLabel3" },
+                { endpointId: 0, clusterId: BasicInformation.Cluster.id, attribute: BasicInformation.Cluster.attributes.location, value: "XXX" },
             ]);
 
             assert.equal(response.length, 1);
-            assert.equal(response[0].path.attributeId, BasicInformationCluster.attributes.location.id);
+            assert.equal(response[0].path.attributeId, BasicInformation.Cluster.attributes.location.id);
             assert.equal(response[0].status, 135 /* StatusCode.ConstraintError */);
 
-            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformationCluster, defaultInteractionClient);
+            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformation.Cluster, defaultInteractionClient);
             assert.ok(basicInfoCluster);
 
             assert.equal(await basicInfoCluster.attributes.nodeLabel.get(), "testLabel3");
@@ -474,7 +472,7 @@ describe("Integration Test", () => {
         it("add a group", async () => {
             const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
             assert.ok(onoffEndpoint);
-            const groupsCluster = onoffEndpoint.getClusterClient(GroupsCluster, defaultInteractionClient);
+            const groupsCluster = onoffEndpoint.getClusterClient(Groups.Cluster, defaultInteractionClient);
             assert.ok(groupsCluster);
             await groupsCluster.commands.addGroup({ groupId: new GroupId(1), groupName: "Group 1" });
         });
@@ -532,10 +530,10 @@ describe("Integration Test", () => {
         it("subscribe an attribute with getter that needs endpoint", async () => {
             const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
             assert.ok(onoffEndpoint);
-            const scenesClient = onoffEndpoint.getClusterClient(ScenesCluster, await commissioningController.createInteractionClient());
+            const scenesClient = onoffEndpoint.getClusterClient(Scenes.Cluster, await commissioningController.createInteractionClient());
             assert.ok(scenesClient);
 
-            const scenesServer = onOffLightDeviceServer.getClusterServer(ScenesCluster);
+            const scenesServer = onOffLightDeviceServer.getClusterServer(Scenes.Cluster);
             assert.ok(scenesServer);
 
             const startTime = Time.nowMs();
@@ -626,7 +624,7 @@ describe("Integration Test", () => {
 
     describe("Access Control server fabric scoped attribute storage", () => {
         it("set empty acl", async () => {
-            const accessControlCluster = commissioningController.getRootClusterClient(AccessControlCluster, defaultInteractionClient);
+            const accessControlCluster = commissioningController.getRootClusterClient(AccessControl.Cluster, defaultInteractionClient);
             assert.ok(accessControlCluster);
             await accessControlCluster.attributes.acl.set([]);
             await accessControlCluster.setAclAttribute([]);
@@ -645,7 +643,7 @@ describe("Integration Test", () => {
         it("Trigger identify command and trigger command handler", async () => {
             const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
             assert.ok(onoffEndpoint);
-            const identifyClient = onoffEndpoint.getClusterClient(IdentifyCluster, defaultInteractionClient);
+            const identifyClient = onoffEndpoint.getClusterClient(Identify.Cluster, defaultInteractionClient);
             assert.ok(identifyClient);
 
             const { promise: firstPromise, resolver: firstResolver } = await getPromiseResolver<number>();
@@ -668,7 +666,7 @@ describe("Integration Test", () => {
             assert.equal(firstFabric.fabricIndex, 1);
             assert.equal(firstFabric.fabricId, 1);
 
-            const groupsClusterEndpointMap = firstFabric.scopedClusterData.get(GroupsCluster.id);
+            const groupsClusterEndpointMap = firstFabric.scopedClusterData.get(Groups.Cluster.id);
             assert.ok(groupsClusterEndpointMap);
             assert.equal(groupsClusterEndpointMap.size, 1);
             const groupsClusterData = groupsClusterEndpointMap.get("1");
@@ -700,7 +698,7 @@ describe("Integration Test", () => {
 
     describe("remove Fabric", () => {
         it("try to remove invalid fabric", async () => {
-            const operationalCredentialsCluster = commissioningController.getRootClusterClient(OperationalCredentialsCluster, defaultInteractionClient);
+            const operationalCredentialsCluster = commissioningController.getRootClusterClient(OperationalCredentials.Cluster, defaultInteractionClient);
             assert.ok(operationalCredentialsCluster);
 
             const result = await operationalCredentialsCluster.commands.removeFabric({ fabricIndex: new FabricIndex(250) });
@@ -710,7 +708,7 @@ describe("Integration Test", () => {
         });
 
         it("read and remove fabric", async () => {
-            const operationalCredentialsCluster = commissioningController.getRootClusterClient(OperationalCredentialsCluster, defaultInteractionClient);
+            const operationalCredentialsCluster = commissioningController.getRootClusterClient(OperationalCredentials.Cluster, defaultInteractionClient);
             assert.ok(operationalCredentialsCluster);
 
             const fabricIndex = await operationalCredentialsCluster.attributes.currentFabricIndex.get();
