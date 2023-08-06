@@ -7,7 +7,7 @@
 import { TlvSchema } from "../../tlv/TlvSchema.js";
 import { Endpoint } from "../../device/Endpoint.js";
 import { EventPriority } from "../Cluster.js";
-import { EventData } from "../../protocol/interaction/EventHandler.js";
+import { EventData, EventHandler, EventStorageData } from "../../protocol/interaction/EventHandler.js";
 import { Time } from "../../time/Time.js";
 import { InternalError } from "../../common/MatterError.js";
 
@@ -15,6 +15,7 @@ export class EventServer<T> {
     private eventList = new Array<EventData<T>>();
     private readonly listeners = new Array<(event: EventStorageData<T>) => void>();
     protected endpoint?: Endpoint;
+    protected eventHandler?: EventHandler;
 
     constructor(
         readonly id: number,
@@ -26,6 +27,16 @@ export class EventServer<T> {
 
     assignToEndpoint(endpoint: Endpoint) {
         this.endpoint = endpoint;
+    }
+
+    bindToEventHandler(eventHandler: EventHandler) {
+        this.eventHandler = eventHandler;
+        // Send all stored events to the new listener
+        for (const event of this.eventList) {
+            const finalEvent = this.eventHandler.pushEvent(event);
+            this.listeners.forEach(listener => listener(finalEvent));
+        }
+        this.eventList = [];
     }
 
     triggerEvent(value: T) {
@@ -40,8 +51,12 @@ export class EventServer<T> {
             priority: this.priority,
             value,
         };
-        this.eventList.push(event);
-        this.listeners.forEach(listener => listener(event));
+        if (this.eventHandler === undefined) { // As long as we have no eventManager, we store the events
+            this.eventList.push(event);
+        } else {
+            const finalEvent = this.eventHandler.pushEvent(event);
+            this.listeners.forEach(listener => listener(finalEvent));
+        }
     }
 
     addListener(listener: (event: EventStorageData<T>) => void) {
