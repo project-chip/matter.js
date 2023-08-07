@@ -23,6 +23,7 @@ import {
     AttributeServer, FabricScopedAttributeServer, FixedAttributeServer
 } from "../../cluster/server/AttributeServer.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
+import { RetransmissionLimitReachedError } from "../MessageExchange.js";
 
 const logger = Logger.get("SubscriptionHandler");
 
@@ -69,6 +70,10 @@ export class SubscriptionHandler {
     private readonly server: MatterDevice;
     private readonly fabric: Fabric;
     private readonly peerNodeId: NodeId;
+
+    private sendingUpdateInProgress = false;
+    private sendNextUpdateImmediately = false;
+    private sendUpdateErrorCounter = 0;
 
     constructor(
         readonly subscriptionId: number,
@@ -261,17 +266,40 @@ export class SubscriptionHandler {
      * Determine all attributes that have changed since the last update and send them tout to the subscriber.
      */
     async sendUpdate() {
+        if (this.sendingUpdateInProgress) {
+            logger.debug("Sending update already in progress, delaying update ...");
+            this.sendNextUpdateImmediately = true;
+            return;
+        }
         const attributeUpdatesToSend = Array.from(this.outstandingAttributeUpdates.values());
         this.outstandingAttributeUpdates.clear();
         const eventUpdatesToSend = Array.from(this.outstandingEventUpdates.values());
         this.outstandingEventUpdates.clear();
         this.lastUpdateTimeMs = Time.nowMs();
 
+        this.sendingUpdateInProgress = true;
         try {
             await this.sendUpdateMessage(attributeUpdatesToSend, eventUpdatesToSend);
+            this.sendUpdateErrorCounter = 0;
         } catch (error) {
-            // TODO: Add maybe a counter and cancel subscription update sending after a certain number of errors?
-            logger.error("Error sending subscription update message", error);
+            this.sendUpdateErrorCounter++;
+            logger.error(`Error sending subscription update message (error count=${this.sendUpdateErrorCounter}):`, error);
+            if (this.sendUpdateErrorCounter > 2) {
+                logger.error(`Sending update failed 3 times in a row, canceling subscription ${this.subscriptionId} and let controller subscribe again.`);
+                this.sendNextUpdateImmediately = false;
+                if (error instanceof RetransmissionLimitReachedError) { // We could not send at all, consider session as dead
+                    this.session.destroy();
+                } else {
+                    this.cancel();
+                }
+            }
+        }
+        this.sendingUpdateInProgress = false;
+
+        if (this.sendNextUpdateImmediately) {
+            logger.debug("Sending delayed update immediately after last one was sent.");
+            this.sendNextUpdateImmediately = false;
+            await this.sendUpdate();
         }
     }
 
@@ -279,6 +307,7 @@ export class SubscriptionHandler {
         this.updateTimer.stop();
 
         const attributes = this.registerNewAttributes().map(({ path, attribute }) => {
+            // TODO: Maybe add try/catch when we add ACL handling and ignore the update if we can not get the value?
             const { value, version } = attribute.getWithVersion(this.session, this.isFabricFiltered);
             return { path, value, version, schema: attribute.schema };
         }).filter(({ value }) => value !== undefined) as AttributePathWithValueVersion<any>[];
@@ -319,7 +348,10 @@ export class SubscriptionHandler {
         if (attributeListenerData === undefined) return; // Ignore changes to attributes that are not subscribed to
 
         const { attribute } = attributeListenerData;
-        if (attribute instanceof FabricScopedAttributeServer) { // We can not be sure what value we got for fabric filtered attributes, so get it again
+        if (attribute instanceof FabricScopedAttributeServer) {
+            // We can not be sure what value we got for fabric filtered attributes (and from which fabric),
+            // so get it again for this relevant fabric
+            // TODO: Maybe add try/catch when we add ACL handling and ignore the update if we can not get the value?
             value = attribute.get(this.session, this.isFabricFiltered);
         }
         this.outstandingAttributeUpdates.set(attributePathToId(path), { path, schema, version, value });
