@@ -17,6 +17,7 @@ import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvByteString } from "../../tlv/TlvString.js";
 import { TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { PrivateKey } from "../../crypto/Key.js";
 import { MatterFlowError, NotImplementedError } from "../../common/MatterError.js";
 import { Logger } from "../../log/Logger.js";
 
@@ -47,7 +48,7 @@ export const TlvCertSigningRequest = TlvObject({
 });
 
 function signWithDeviceKey(conf: OperationalCredentialsServerConf, session: SecureSession<MatterDevice>, data: ByteArray) {
-    return Crypto.signPkcs8(conf.devicePrivateKey, [data, session.getAttestationChallengeKey()]);
+    return Crypto.sign(PrivateKey(conf.devicePrivateKey), [data, session.getAttestationChallengeKey()]);
 }
 
 export const OperationalCredentialsClusterHandler: (conf: OperationalCredentialsServerConf) => ClusterServerHandlers<typeof OperationalCredentialsCluster> = (conf) => ({

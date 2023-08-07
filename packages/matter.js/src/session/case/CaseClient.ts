@@ -17,6 +17,7 @@ import { CaseClientMessenger } from "./CaseMessenger.js";
 import { ByteArray } from "../../util/ByteArray.js";
 import { Logger } from "../../log/Logger.js";
 import { NodeId } from "../../datatype/NodeId.js";
+import { PublicKey } from "../../crypto/Key.js";
 import { UnexpectedDataError } from "../../common/MatterError.js";
 
 const logger = Logger.get("CaseClient");
@@ -71,8 +72,8 @@ export class CaseClient {
             const { nodeOpCert: peerNewOpCert, intermediateCACert: peerIntermediateCACert, signature: peerSignature, resumptionId: peerResumptionId } = TlvEncryptedDataSigma2.decode(peerEncryptedData);
             const peerSignatureData = TlvSignedData.encode({ nodeOpCert: peerNewOpCert, intermediateCACert: peerIntermediateCACert, ecdhPublicKey: peerEcdhPublicKey, peerEcdhPublicKey: ecdhPublicKey });
             const { ellipticCurvePublicKey: peerPublicKey, subject: { nodeId: peerNodeIdCert } } = TlvOperationalCertificate.decode(peerNewOpCert);
-            if (peerNodeIdCert.id !== peerNodeId.id) throw new UnexpectedDataError("The node ID in the peer certificate doesn't match the expected peer node ID.");
-            Crypto.verifySpki(peerPublicKey, peerSignatureData, peerSignature);
+            if (peerNodeIdCert.id !== peerNodeId.id) throw new UnexpectedDataError("The node ID in the peer certificate doesn't match the expected peer node ID");
+            Crypto.verify(PublicKey(peerPublicKey), peerSignatureData, peerSignature);
 
             // Generate and send sigma3
             const sigma3Salt = ByteArray.concat(operationalIdentityProtectionKey, Crypto.hash([sigma1Bytes, sigma2Bytes]));
