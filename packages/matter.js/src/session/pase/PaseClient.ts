@@ -12,7 +12,6 @@ import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { MatterController } from "../../MatterController.js";
 import { UNDEFINED_NODE_ID } from "../SessionManager.js";
 import { DEFAULT_PASSCODE_ID, PaseClientMessenger, SPAKE_CONTEXT } from "./PaseMessenger.js";
-import { SecureSession } from "../SecureSession.js";
 import { UnexpectedDataError } from "../../common/MatterError.js";
 
 const logger = Logger.get("PaseClient");
@@ -42,7 +41,7 @@ export class PaseClient {
 
         // All good! Creating the secure session
         await messenger.waitForSuccess();
-        const secureSession = await client.createSecureSession(sessionId, undefined, UNDEFINED_NODE_ID, peerSessionId, Ke, new ByteArray(0), true, false) as SecureSession<MatterController>;
+        const secureSession = await client.createSecureSession(sessionId, undefined, UNDEFINED_NODE_ID, peerSessionId, Ke, new ByteArray(0), true, false);
         messenger.close();
         logger.info(`Pase client: Paired successfully with ${messenger.getChannelName()}`);
 

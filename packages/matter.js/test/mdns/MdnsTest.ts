@@ -63,8 +63,8 @@ describe("MDNS Scanner and Broadcaster", () => {
         Network.get = () => { throw new Error("Network should not be requested post creation") };
     });
 
-    afterEach(() => {
-        broadcaster.close();
+    afterEach(async () => {
+        await broadcaster.close();
         scanner.close();
         scannerChannel.close();
     });
@@ -78,7 +78,7 @@ describe("MDNS Scanner and Broadcaster", () => {
                 sleepIdleInterval: 100,
                 sleepActiveInterval: 200
             });
-            broadcaster.announce(PORT);
+            await broadcaster.announce(PORT);
 
             const result = DnsCodec.decode(await promise);
 
@@ -113,7 +113,7 @@ describe("MDNS Scanner and Broadcaster", () => {
                 productId: 0x8000,
                 discriminator: 1234
             });
-            broadcaster.announce(PORT);
+            await broadcaster.announce(PORT);
 
             const result = DnsCodec.decode(await promise);
 
@@ -155,7 +155,7 @@ describe("MDNS Scanner and Broadcaster", () => {
                 vendorId: new VendorId(1),
                 productId: 0x8000,
             });
-            broadcaster.announce(PORT);
+            await broadcaster.announce(PORT);
 
             const result = DnsCodec.decode(await promise);
 
@@ -202,9 +202,9 @@ describe("MDNS Scanner and Broadcaster", () => {
                 vendorId: new VendorId(1),
                 productId: 0x8000,
             });
-            broadcaster.announce(PORT);
-            broadcaster.announce(PORT2);
-            broadcaster.announce(PORT3);
+            await broadcaster.announce(PORT);
+            await broadcaster.announce(PORT2);
+            await broadcaster.announce(PORT3);
 
             await promise;
 
@@ -294,7 +294,7 @@ describe("MDNS Scanner and Broadcaster", () => {
                 }
             });
             broadcaster.setFabrics(PORT, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
-            broadcaster.announce(PORT);
+            await broadcaster.announce(PORT);
 
             await fakeTime.yield(); // Make sure data were broadcasted async
             await fakeTime.yield(); // Make sure data were received and processed async
@@ -444,8 +444,8 @@ describe("MDNS Scanner and Broadcaster", () => {
             });
             broadcaster.setFabrics(PORT2, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
 
-            broadcaster.announce(PORT);
-            broadcaster.announce(PORT2);
+            await broadcaster.announce(PORT);
+            await broadcaster.announce(PORT2);
 
             await fakeTime.yield();
             await fakeTime.yield();

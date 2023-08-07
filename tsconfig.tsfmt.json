@@ -18,6 +18,8 @@
     ],
     "exclude": [
         "packages/*/dist",
+        "tools/links/**",
+        "models/links/**",
 
         // This is formatted like a table and should remain that way
         "packages/matter.js/src/model/elements/Globals.ts"

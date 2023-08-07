@@ -288,7 +288,7 @@ class Device {
 
                         // Announce operational in IP network
                         const device = session.getContext();
-                        device.startAnnouncement();
+                        await device.startAnnouncement();
 
                         return {
                             networkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,

@@ -209,7 +209,7 @@ export class MatterDevice {
         return !!this.fabricManager.getFabrics().length;
     }
 
-    openCommissioningModeWindow(mode: number, discriminator: number | undefined, timeout: number) {
+    async openCommissioningModeWindow(mode: number, discriminator: number | undefined, timeout: number) {
         if (discriminator === undefined) {
             if (mode === 1) {
                 discriminator = this.discriminator;
@@ -227,7 +227,7 @@ export class MatterDevice {
                 discriminator,
             });
         }
-        this.startAnnouncement();
+        await this.startAnnouncement();
 
         Time.getTimer(timeout * 1000, () => this.commissioningWindowOpened = false).start();
     }
@@ -247,7 +247,7 @@ export class MatterDevice {
     }
 
     async stop() {
-        this.exchangeManager.close();
+        await this.exchangeManager.close();
         this.announceInterval?.stop();
     }
 }

@@ -13,10 +13,10 @@ import { Session } from "../../session/Session.js";
 import { ByteArray } from "../../util/ByteArray.js";
 import { MatterFlowError, NotImplementedError } from "../../common/MatterError.js";
 
-function openCommissioningWindow(secureChannelProtocol: SecureChannelProtocol, pakeVerifier: ByteArray, discriminator: number, iterations: number, salt: ByteArray, commissioningTimeout: number, session: Session<MatterDevice>) {
+async function openCommissioningWindow(secureChannelProtocol: SecureChannelProtocol, pakeVerifier: ByteArray, discriminator: number, iterations: number, salt: ByteArray, commissioningTimeout: number, session: Session<MatterDevice>) {
     //windowStatus.set(CommissioningWindowStatus.EnhancedWindowOpen);
     secureChannelProtocol.updatePaseCommissioner(PaseServer.fromVerificationValue(pakeVerifier, { iterations, salt }));
-    session.getContext().openCommissioningModeWindow(2, discriminator, commissioningTimeout);
+    await session.getContext().openCommissioningModeWindow(2, discriminator, commissioningTimeout);
 }
 
 function revokeCommissioning() {
@@ -26,7 +26,7 @@ function revokeCommissioning() {
 
 export const AdministratorCommissioningHandler: (secureChannelProtocol: SecureChannelProtocol) => ClusterServerHandlers<typeof AdministratorCommissioning.Cluster> = (secureChannelProtocol) => ({
     openCommissioningWindow: async function({ request: { pakePasscodeVerifier: pakeVerifier, discriminator, iterations, salt, commissioningTimeout }, session, /* attributes: { windowStatus } */ }) {
-        openCommissioningWindow(secureChannelProtocol, pakeVerifier, discriminator, iterations, salt, commissioningTimeout, session);
+        await openCommissioningWindow(secureChannelProtocol, pakeVerifier, discriminator, iterations, salt, commissioningTimeout, session);
     },
 
     revokeCommissioning: async function() {
@@ -37,7 +37,7 @@ export const AdministratorCommissioningHandler: (secureChannelProtocol: SecureCh
 const Cluster = AdministratorCommissioning.Cluster.with("Basic");
 export const BasicAdminCommissioningHandler: (secureChannelProtocol: SecureChannelProtocol) => ClusterServerHandlers<typeof Cluster> = (secureChannelProtocol) => ({
     openCommissioningWindow: async function({ request: { pakePasscodeVerifier: pakeVerifier, discriminator, iterations, salt, commissioningTimeout }, session, /* attributes: { windowStatus } */ }) {
-        openCommissioningWindow(secureChannelProtocol, pakeVerifier, discriminator, iterations, salt, commissioningTimeout, session);
+        await openCommissioningWindow(secureChannelProtocol, pakeVerifier, discriminator, iterations, salt, commissioningTimeout, session);
     },
 
     revokeCommissioning: async function() {
@@ -49,6 +49,6 @@ export const BasicAdminCommissioningHandler: (secureChannelProtocol: SecureChann
         if (device.getFabrics().length > 0) {
             throw new MatterFlowError("Already commissioned"); // is that correct?
         }
-        session.getContext().openCommissioningModeWindow(1, undefined, commissioningTimeout);
+        await session.getContext().openCommissioningModeWindow(1, undefined, commissioningTimeout);
     },
 });

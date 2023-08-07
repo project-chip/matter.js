@@ -6,6 +6,7 @@
 
 import { HtmlReference } from "./spec-types.js";
 
+// eslint-disable-next-line require-yield
 export function* translateDevice(deviceRef: HtmlReference) {
     // TODO
     deviceRef;

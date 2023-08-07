@@ -112,8 +112,7 @@ export class MatterServer {
         for (const node of this.nodes) {
             await node.close();
         }
-        this.mdnsBroadcaster?.close();
+        await this.mdnsBroadcaster?.close();
         this.mdnsScanner?.close();
     }
-
 }
