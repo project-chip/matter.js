@@ -78,6 +78,7 @@ export class SubscriptionHandler {
         private readonly eventRequests: TypeFromSchema<typeof TlvEventPath>[] | undefined,
         private readonly eventFilters: TypeFromSchema<typeof TlvEventFilter>[] | undefined,
         private readonly eventHandler: EventHandler,
+        private readonly isFabricFiltered: boolean,
         keepSubscriptions: boolean,
         minIntervalFloor: number,
         maxIntervalCeiling: number,
@@ -278,7 +279,7 @@ export class SubscriptionHandler {
         this.updateTimer.stop();
 
         const attributes = this.registerNewAttributes().map(({ path, attribute }) => {
-            const { value, version } = attribute.getWithVersion(this.session, true); // TODO How to handle fabric scoped in subscribes?
+            const { value, version } = attribute.getWithVersion(this.session, this.isFabricFiltered);
             return { path, value, version, schema: attribute.schema };
         }).filter(({ value }) => value !== undefined) as AttributePathWithValueVersion<any>[];
         const attributeReports = attributes.map(({ path, schema, value, version }) => ({
@@ -313,12 +314,19 @@ export class SubscriptionHandler {
         });
     }
 
-    attributeChangeListener(path: TypeFromSchema<typeof TlvAttributePath>, schema: TlvSchema<any>, version: number, value: any) {
+    attributeChangeListener<T>(path: TypeFromSchema<typeof TlvAttributePath>, schema: TlvSchema<T>, version: number, value: T) {
+        const attributeListenerData = this.attributeListeners.get(attributePathToId(path));
+        if (attributeListenerData === undefined) return; // Ignore changes to attributes that are not subscribed to
+
+        const { attribute } = attributeListenerData;
+        if (attribute instanceof FabricScopedAttributeServer) { // We can not be sure what value we got for fabric filtered attributes, so get it again
+            value = attribute.get(this.session, this.isFabricFiltered);
+        }
         this.outstandingAttributeUpdates.set(attributePathToId(path), { path, schema, version, value });
         this.prepareDataUpdate();
     }
 
-    eventChangeListener(path: TypeFromSchema<typeof TlvEventPath>, schema: TlvSchema<any>, newEvent: EventStorageData<any>) {
+    eventChangeListener<T>(path: TypeFromSchema<typeof TlvEventPath>, schema: TlvSchema<T>, newEvent: EventStorageData<T>) {
         this.outstandingEventUpdates.add({ path, schema, event: newEvent });
         if (path.isUrgent) {
             this.prepareDataUpdate();

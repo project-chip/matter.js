@@ -11,6 +11,8 @@ import { EventData, EventHandler, EventStorageData } from "../../protocol/intera
 import { Time } from "../../time/Time.js";
 import { InternalError } from "../../common/MatterError.js";
 
+// TODO Add Fabric Scoped EventServer when needed
+
 export class EventServer<T> {
     private eventList = new Array<EventData<T>>();
     private readonly listeners = new Array<(event: EventStorageData<T>) => void>();

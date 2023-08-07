@@ -638,8 +638,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         };
     }
 
-    async handleSubscribeRequest(exchange: MessageExchange<MatterDevice>, { minIntervalFloorSeconds, maxIntervalCeilingSeconds, attributeRequests, eventRequests, eventFilters, keepSubscriptions }: SubscribeRequest, messenger: InteractionServerMessenger): Promise<void> {
-        logger.debug(`Received subscribe request from ${exchange.channel.name} (keepSubscriptions = ${keepSubscriptions})`);
+    async handleSubscribeRequest(exchange: MessageExchange<MatterDevice>, { minIntervalFloorSeconds, maxIntervalCeilingSeconds, attributeRequests, eventRequests, eventFilters, keepSubscriptions, isFabricFiltered }: SubscribeRequest, messenger: InteractionServerMessenger): Promise<void> {
+        logger.debug(`Received subscribe request from ${exchange.channel.name} (keepSubscriptions=${keepSubscriptions}, isFabricFiltered=${isFabricFiltered})`);
 
         assertSecureSession(exchange.session, "Subscriptions are only implemented on secure sessions");
         const session = exchange.session;
@@ -662,7 +662,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         if (this.nextSubscriptionId === 0xFFFFFFFF) this.nextSubscriptionId = 0;
         const subscriptionId = this.nextSubscriptionId++;
-        const subscriptionHandler = new SubscriptionHandler(subscriptionId, session, this.endpointStructure, attributeRequests, eventRequests, eventFilters, this.eventHandler, keepSubscriptions, minIntervalFloorSeconds, maxIntervalCeilingSeconds, () => this.subscriptionMap.delete(subscriptionId));
+        const subscriptionHandler = new SubscriptionHandler(subscriptionId, session, this.endpointStructure, attributeRequests, eventRequests, eventFilters, this.eventHandler, isFabricFiltered, keepSubscriptions, minIntervalFloorSeconds, maxIntervalCeilingSeconds, () => this.subscriptionMap.delete(subscriptionId));
 
         try {
             // Send initial data report to prime the subscription with initial data
