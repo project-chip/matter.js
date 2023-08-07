@@ -194,13 +194,13 @@ describe("ClusterFactory", () => {
         it("accepts a supported feature", () => {
             expect(() => {
                 validateFeatureSelection(["AbsolutelyFabulous"], Feature)
-            }).not.toThrowError(IllegalClusterError)
+            }).not.toThrow(IllegalClusterError)
         })
 
         it("rejects an unsupported feature", () => {
             expect(() => {
                 validateFeatureSelection(["SomewhatFabulous"], Feature)
-            }).toThrowError(IllegalClusterError);
+            }).toThrow(new IllegalClusterError('"SomewhatFabulous" is not a valid feature identifier'));
         })
     })
 
@@ -220,7 +220,7 @@ describe("ClusterFactory", () => {
                     createCluster({ absolutelyFabulous: true, bitterDisappointment: true }),
                     { absolutelyFabulous: true, bitterDisappointment: true }
                 )
-            }).toThrowError(/Feature combination.*is disallowed/);
+            }).toThrow(new IllegalClusterError("Feature combination { absolutelyFabulous: true, bitterDisappointment: true } is disallowed by the Matter specification"));
         })
     })
 
@@ -238,7 +238,7 @@ describe("ClusterFactory", () => {
                 fancy: false,
                 absolutelyFabulous: false,
                 bitterDisappointment: false
-            })
+            });
             expectElements(cluster);
             expectElements2(cluster);
             expectElementCounts(cluster, 2);
@@ -247,13 +247,13 @@ describe("ClusterFactory", () => {
         it("rejects unsupported features", () => {
             expect(() => {
                 TestExtensibleCluster.with("AbsolutelyFabulous", "BitterDisappointment");
-            }).toThrowError(IllegalClusterError);
+            }).toThrow(new IllegalClusterError("Feature combination { absolutelyFabulous: true, bitterDisappointment: true } is disallowed by the Matter specification"));
         })
 
         it("rejects unsupported features with supported features", () => {
             expect(() => {
                 TestExtensibleCluster.with("Extended", "AbsolutelyFabulous", "BitterDisappointment");
-            }).toThrowError(IllegalClusterError);
+            }).toThrow(new IllegalClusterError("Feature combination { absolutelyFabulous: true, bitterDisappointment: true } is disallowed by the Matter specification"));
         })
     })
 
@@ -385,7 +385,7 @@ describe("ClusterFactory", () => {
         handlers;
 
         // Create the cluster server
-        const server = ClusterServer(
+        ClusterServer(
             MyCluster,
             {
                 attr1: 1,
@@ -409,8 +409,7 @@ describe("ClusterFactory", () => {
         }, {
             ev1: true,
             ev2: true,
-        });
-
-        server.attributes.attr2
+        }
+        );
     })
 })

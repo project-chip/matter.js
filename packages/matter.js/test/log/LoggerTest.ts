@@ -4,140 +4,124 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as assert from "assert";
 import { Level, Format, Logger, DiagnosticDictionary } from "../../src/log/Logger.js";
-import { Time } from "../../src/time/Time.js";
-import { TimeFake } from "../../src/time/TimeFake.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 
-const fakeTime = new TimeFake(1262679233478);
-
-const defaultFormatter = Logger.logFormatter;
-const defaultLevel = Logger.defaultLogLevel;
-const defaultLevels = Logger.logLevels;
-const defaultSink = Logger.log;
-const fakeLogSink = new Array<{ level: Level, log: string }>();
-
 const LOGGER_NAME = "UnitTest";
+
+type LogOptions = {
+    format?: Format,
+    levels?: typeof Logger.logLevels,
+    method?: "info" | "debug" | "warn" | "error" | "fatal"
+}
 
 describe("Logger", () => {
 
     const logger = Logger.get(LOGGER_NAME);
 
-    beforeAll(() => {
-        Time.get = () => fakeTime;
-
-        Logger.defaultLogLevel = Level.DEBUG;
-        Logger.log = (level, log) => fakeLogSink.push({ level, log });
-    });
-
-    beforeEach(() => {
-        Logger.logFormatter = defaultFormatter;
-        Logger.logLevels = {};
-        Logger.defaultLogLevel = Level.DEBUG;
-    });
-
-    afterEach(() => {
-        fakeLogSink.length = 0;
-    });
-
-    afterAll(() => {
-        Logger.defaultLogLevel = defaultLevel;
-        Logger.log = defaultSink;
-        Logger.logFormatter = defaultFormatter;
-        Logger.logLevels = defaultLevels;
-    });
-
-    function logTestLine(format = Format.PLAIN) {
-        Logger.format = format;
-        logger.debug("test");
-        return fakeLogSink.pop();
+    function capture(fn: () => void, { format, levels }: LogOptions) {
+        return captureLog(() => {
+            Logger.format = format ?? Format.PLAIN;
+            if (levels) {
+                Logger.logLevels = levels;
+            }
+            fn();
+        })
     }
 
-    function logTestDict(format = Format.PLAIN) {
-        Logger.format = format;
-        logger.debug("dict test", Logger.dict({
-            foo: "bar",
-            biz: 1
-        }));
-        return fakeLogSink.pop();
+    function logTestLine(options: LogOptions = {}) {
+        return capture(() => logger[options.method ?? "debug"]("test"), options);
+    }
+
+    function logTestDict(options: LogOptions = {}) {
+        return capture(() =>
+            logger[options.method ?? "debug"]("dict test", Logger.dict({
+                foo: "bar",
+                biz: 1
+            })),
+            options
+        );
     }
 
     describe("debug", () => {
         it("logs a message if level is debug", () => {
             const result = logTestLine();
-            assert.equal(result?.level, Level.DEBUG);
+            expect(result?.level).toBe(Level.DEBUG)
         });
 
         it("doesn't log a message if level is above debug", () => {
-            Logger.logLevels[LOGGER_NAME] = Level.INFO;
+            const result = captureLog(() => {
+                logTestLine({ levels: { [LOGGER_NAME]: Level.INFO } });
+            });
 
-            const result = logTestLine();
-
-            assert.equal(result, undefined);
+            expect(result).toBe(undefined)
         });
     });
 
     describe("info", () => {
         it("logs a message if level is info", () => {
-            logger.info("test");
-            const result = fakeLogSink.pop();
+            const result = logTestLine({
+                method: "info"
+            });
 
-            assert.equal(result?.level, Level.INFO);
+            expect(result?.level).toBe(Level.INFO)
         });
 
         it("doesn't log a message if level is above info", () => {
-            Logger.logLevels[LOGGER_NAME] = Level.ERROR;
+            const result = logTestLine({
+                method: "info",
+                levels: { [LOGGER_NAME]: Level.ERROR }
+            })
 
-            logger.info("test");
-            const result = fakeLogSink.pop();
-
-            assert.equal(result, undefined);
+            expect(result).toBe(undefined)
         });
     });
 
     describe("warn", () => {
         it("logs a message if level is warn", () => {
-            logger.warn("test");
-            const result = fakeLogSink.pop();
+            const result = logTestLine({
+                method: "warn"
+            })
 
-            assert.equal(result?.level, Level.WARN);
+            expect(result?.level).toBe(Level.WARN)
         });
 
         it("doesn't log a message if level is above warn", () => {
-            Logger.logLevels[LOGGER_NAME] = Level.ERROR;
+            const result = logTestLine({
+                method: "warn",
+                levels: { [LOGGER_NAME]: Level.ERROR }
+            })
 
-            logger.warn("test");
-            const result = fakeLogSink.pop();
-
-            assert.equal(result, undefined);
+            expect(result).toBe(undefined)
         });
     });
 
     describe("error", () => {
         it("logs a message if level is error", () => {
-            logger.error("test");
-            const result = fakeLogSink.pop();
+            const result = logTestLine({
+                method: "error"
+            })
 
-            assert.equal(result?.level, Level.ERROR);
+            expect(result?.level).toBe(Level.ERROR)
         });
 
         it("doesn't log a message if level is above error", () => {
-            Logger.logLevels[LOGGER_NAME] = Level.FATAL;
+            const result = logTestLine({
+                method: "error",
+                levels: { [LOGGER_NAME]: Level.FATAL }
+            })
 
-            logger.error("test");
-            const result = fakeLogSink.pop();
-
-            assert.equal(result, undefined);
+            expect(result).toBe(undefined)
         });
     });
 
     describe("fatal", () => {
         it("logs a message", () => {
-            logger.fatal("test");
-            const result = fakeLogSink.pop();
+            const result = logTestLine({
+                method: "fatal"
+            })
 
-            assert.equal(result?.level, Level.FATAL);
+            expect(result?.level).toBe(Level.FATAL)
         });
     });
 
@@ -145,8 +129,8 @@ describe("Logger", () => {
         it("nests once", () => {
             Logger.nest(() => {
                 const line = logTestLine();
-                assert.ok(line);
-                assert.ok(line.log.match(/⎸ test/));
+                expect(line).toBeTruthy();
+                expect(line?.message).toMatch(/⎸ test/);
             });
         });
 
@@ -154,8 +138,8 @@ describe("Logger", () => {
             Logger.nest(() => {
                 Logger.nest(() => {
                     const line = logTestLine();
-                    assert.ok(line);
-                    assert.ok(line.log.match(/⎸ {3}test/));
+                    expect(line).toBeTruthy();
+                    expect(line?.message).toMatch(/⎸ {3}test/);
                 });
             });
         });
@@ -164,8 +148,8 @@ describe("Logger", () => {
             // "true" is for eslint
             Logger.nest(() => { true });
             const line = logTestLine();
-            assert.ok(line);
-            assert.equal(line.log.indexOf("⎸"), -1);
+            expect(line).toBeTruthy();
+            expect(line?.message.indexOf("⎸")).toBe(-1)
         })
     })
 
@@ -173,91 +157,95 @@ describe("Logger", () => {
         it("formats lines correctly", () => {
             const result = logTestLine();
 
-            assert.equal(result?.log, "2010-01-05 08:13:53.478 DEBUG UnitTest test");
+            expect(result?.message).toBe("xxxx-xx-xx xx:xx:xx.xxx DEBUG UnitTest test")
         });
 
         it("formats keys correctly", () => {
             const result = logTestDict();
 
-            assert.equal(result?.log, "2010-01-05 08:13:53.478 DEBUG UnitTest dict test foo: bar biz: 1")
+            expect(result?.message).toBe("xxxx-xx-xx xx:xx:xx.xxx DEBUG UnitTest dict test foo: bar biz: 1")
         });
 
         it("accepts multiple values", () => {
-            logger.debug("value1", "value2");
-            const result = fakeLogSink.pop();
+            const result = captureLog(() => {
+                logger.debug("value1", "value2");
+            });
 
-            assert.equal(result?.log, "2010-01-05 08:13:53.478 DEBUG UnitTest value1 value2");
+            expect(result?.message).toBe("xxxx-xx-xx xx:xx:xx.xxx DEBUG UnitTest value1 value2")
         });
 
         it("converts ByteArray to hex strings", () => {
-            logger.debug(ByteArray.fromHex("00deadbeef"));
-            const result = fakeLogSink.pop();
+            const result = captureLog(() => {
+                logger.debug(ByteArray.fromHex("00deadbeef"));
+            });
 
-            assert.equal(result?.log, "2010-01-05 08:13:53.478 DEBUG UnitTest 00deadbeef");
+            expect(result?.message).toBe("xxxx-xx-xx xx:xx:xx.xxx DEBUG UnitTest 00deadbeef")
         });
 
         it("accepts custom formatters", () => {
-            Logger.logFormatter = (_now, _level, _logger, values) => values[0].toString();
+            const result = captureLog(() => {
+                Logger.logFormatter = (_now, _level, _logger, values) => values[0].toString();
+                logger.debug("test");
+            });
 
-            logger.debug("test");
-            const result = fakeLogSink.pop();
-
-            assert.equal(result?.log, "test");
+            expect(result?.message).toBe("test")
         });
 
         it("logs error stack traces", () => {
-            logger.error("Uh", new Error("oh"));
-            const result = fakeLogSink.pop();
+            const result = captureLog(() => {
+                logger.error("Uh", new Error("oh"));
+            });
 
-            const lines = `${result?.log}`.split("\n");
-            assert.ok(lines.length > 1);
-            assert.equal(lines[0], "2010-01-05 08:13:53.478 ERROR UnitTest Uh oh");
+            const lines = `${result?.message}`.split("\n");
+            expect(lines.length > 1).toBeTruthy();
+            expect(lines[0]).toBe("xxxx-xx-xx xx:xx:xx.xxx ERROR UnitTest Uh oh")
         });
 
         it("handles missing stack traces", () => {
             const error = new Error("oh");
             delete error.stack;
+            const result = captureLog(() => {
+                logger.error("Uh", error);
+            });
 
-            logger.error("Uh", error);
-            const result = fakeLogSink.pop();
-
-            assert.equal(result?.log, "2010-01-05 08:13:53.478 ERROR UnitTest Uh (details unavailable)");
+            expect(result?.message).toBe("xxxx-xx-xx xx:xx:xx.xxx ERROR UnitTest Uh (details unavailable)")
         })
     });
 
     describe("ansiFormat", () => {
         it("format lines correctly", () => {
-            const result = logTestLine(Format.ANSI);
+            const result = logTestLine({ format: Format.ANSI });
 
-            assert.equal(result?.log, "\u001b[37m\u001b[2m2010-01-05 08:13:53.478 DEBUG\u001b[0m \u001b[37m\u001b[1mUnitTest            \u001b[0m \u001b[37mtest\u001b[0m");
+            expect(result?.message).toBe("\u001b[37m\u001b[2mxxxx-xx-xx xx:xx:xx.xxx DEBUG\u001b[0m \u001b[37m\u001b[1mUnitTest            \u001b[0m \u001b[37mtest\u001b[0m")
         });
 
         it("formats keys correctly", () => {
-            const result = logTestDict(Format.ANSI);
+            const result = logTestDict({ format: Format.ANSI });
 
-            assert.equal(result?.log, "\u001b[37m\u001b[2m2010-01-05 08:13:53.478 DEBUG\u001b[0m \u001b[37m\u001b[1mUnitTest            \u001b[0m \u001b[37mdict test \u001b[34mfoo:\u001b[37m bar \u001b[34mbiz:\u001b[37m 1\u001b[0m");
+            expect(result?.message).toBe("\u001b[37m\u001b[2mxxxx-xx-xx xx:xx:xx.xxx DEBUG\u001b[0m \u001b[37m\u001b[1mUnitTest            \u001b[0m \u001b[37mdict test \u001b[34mfoo:\u001b[37m bar \u001b[34mbiz:\u001b[37m 1\u001b[0m")
         });
 
         it("truncates facility", () => {
-            Logger.format = Format.ANSI;
-            const logger = Logger.get("ThisIsAFacilityWithAReallyLongName");
-            logger.debug("test");
-            const result = fakeLogSink.pop();
-            assert.equal(result?.log, "\u001b[37m\u001b[2m2010-01-05 08:13:53.478 DEBUG\u001b[0m \u001b[37m\u001b[1mThisIsAFac~yLongName\u001b[0m \u001b[37mtest\u001b[0m");
+            const result = captureLog(() => {
+                Logger.format = Format.ANSI;
+                const logger = Logger.get("ThisIsAFacilityWithAReallyLongName");
+                logger.debug("test");
+            });
+            expect(result?.message).toBe("\u001b[37m\u001b[2mxxxx-xx-xx xx:xx:xx.xxx DEBUG\u001b[0m \u001b[37m\u001b[1mThisIsAFac~yLongName\u001b[0m \u001b[37mtest\u001b[0m")
         });
     });
 
     describe("htmlFormat", () => {
         it("formats lines correctly", () => {
-            const result = logTestLine(Format.HTML);
+            const result = logTestLine({ format: Format.HTML });
 
-            assert.equal(result?.log, "<span class=\"matter-log-matter-log-line\"><span class=\"matter-log-time\">2010-01-05 08:13:53.478</span> <span class=\"matter-log-level\">DEBUG</span> <span class=\"matter-log-facility\">UnitTest</span> <span class=\"matter-log-value\">test</span></span>");
+            expect(result?.message).toBe("<span class=\"matter-log-matter-log-line\"><span class=\"matter-log-time\">xxxx-xx-xx xx:xx:xx.xxx</span> <span class=\"matter-log-level\">DEBUG</span> <span class=\"matter-log-facility\">UnitTest</span> <span class=\"matter-log-value\">test</span></span>")
         });
 
         it("formats keys correctly", () => {
-            const result = logTestDict(Format.HTML);
+            const result = logTestDict({ format: Format.HTML });
 
-            assert.equal(result?.log, "<span class=\"matter-log-matter-log-line\"><span class=\"matter-log-time\">2010-01-05 08:13:53.478</span> <span class=\"matter-log-level\">DEBUG</span> <span class=\"matter-log-facility\">UnitTest</span> <span class=\"matter-log-value\">dict test</span> <span class=\"matter-log-key\">foo:</span> <span class=\"matter-log-value\">bar</span> <span class=\"matter-log-key\">biz:</span> <span class=\"matter-log-value\">1</span></span>");
+            expect(result?.message).toBe("<span class=\"matter-log-matter-log-line\"><span class=\"matter-log-time\">xxxx-xx-xx xx:xx:xx.xxx</span> <span class=\"matter-log-level\">DEBUG</span> <span class=\"matter-log-facility\">UnitTest</span> <span class=\"matter-log-value\">dict test</span> <span class=\"matter-log-key\">foo:</span> <span class=\"matter-log-value\">bar</span> <span class=\"matter-log-key\">biz:</span> <span class=\"matter-log-value\">1</span></span>")
         });
     });
 
@@ -265,42 +253,42 @@ describe("Logger", () => {
         it("throws if format is unknown", () => {
             let message;
             try {
-                Logger.format = "foo";
+                captureLog(() => {
+                    Logger.format = "foo";
+                });
             } catch (e: unknown) {
                 message = (<any>e).message;
             }
-            assert.equal(message, 'Unsupported log format "foo"');
+            expect(message).toBe('Unsupported log format "foo"')
         })
     });
 
     describe("toJSON", () => {
         it("works", () => {
-            assert.equal(Logger.toJSON("foo"), '"foo"');
+            expect(Logger.toJSON("foo")).toBe('"foo"')
         });
 
         it("handles BigInt", () => {
-            assert.equal(Logger.toJSON(BigInt(4)), '"4"');
+            expect(Logger.toJSON(BigInt(4))).toBe('"4"')
         });
     });
 
     describe("DiagnosticDictionary", () => {
         it("converts to plain string", () => {
-            assert.equal(Logger.dict({ foo: "bar", biz: true }).toString(), "foo: bar biz: true");
+            expect(Logger.dict({ foo: "bar", biz: true }).toString()).toBe("foo: bar biz: true");
         });
 
         it("constructs empty", () => {
-            assert.equal(new DiagnosticDictionary().toString(), "");
+            expect(new DiagnosticDictionary().toString()).toBe("")
         });
 
         it("formats byte array in value", () => {
-            assert.equal(new DiagnosticDictionary({ bytes: new ByteArray([0x12, 0x3a, 0xbc]) }).toString(), "bytes: 123abc")
+            expect(new DiagnosticDictionary({ bytes: new ByteArray([0x12, 0x3a, 0xbc]) }).toString()).toBe("bytes: 123abc")
         });
     });
 
     function itUsesCorrectConsoleMethod(sourceName: string, sinkName: string = sourceName) {
         it(`maps logger.${sourceName} to console.${sinkName}`, () => {
-            Logger.log = defaultSink;
-
             const actualConsole = (<any>Logger.log).console;
             let result: string | undefined = undefined;
             let calls = 0;
@@ -318,8 +306,9 @@ describe("Logger", () => {
                 (<any>Logger.log).console = actualConsole;
             }
 
-            assert.equal(calls, 1);
-            assert.equal(result, `2010-01-05 08:13:53.478 ${sourceName.toUpperCase()} UnitTest test`);
+            expect(calls).toBe(1)
+            expect(result).toBeDefined();
+            expect(result).toMatch(new RegExp(`\\d{4}-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d.\\d\\d\\d ${sourceName.toUpperCase()} UnitTest test`));
         });
     }
 

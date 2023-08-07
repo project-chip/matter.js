@@ -9,10 +9,12 @@ module.exports = function(config) {
         },
         files: [
           'src/**/*.ts',
+          'test/support/*.ts',
           'test/**/*Test.ts'
         ],
         preprocessors: {
             "src/**/*.ts": ["karma-typescript", "coverage"],
+            "test/support/*.ts": ["karma-typescript"],
             "test/**/*Test.ts": ["karma-typescript"]
         },
         reporters: ["progress", "coverage", "karma-typescript"],

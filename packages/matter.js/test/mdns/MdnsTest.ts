@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as assert from "assert";
 import { DnsCodec, DnsMessageType } from "../../src/codec/DnsCodec.js";
 import { UdpChannelFake } from "../../src/net/fake/UdpChannelFake.js";
 import { UdpChannel } from "../../src/net/UdpChannel.js";
@@ -83,7 +82,7 @@ describe("MDNS Scanner and Broadcaster", () => {
 
             const result = DnsCodec.decode(await promise);
 
-            assert.deepEqual(result, {
+            expect(result).toEqual({
                 transactionId: 0,
                 messageType: 33792,
                 queries: [],
@@ -118,7 +117,7 @@ describe("MDNS Scanner and Broadcaster", () => {
 
             const result = DnsCodec.decode(await promise);
 
-            assert.deepEqual(result, {
+            expect(result).toEqual({
                 "additionalRecords": [
                     { "name": "0000000000000000._matterc._udp.local", "recordClass": 1, "recordType": 33, "ttl": 120, "value": { "port": PORT, "priority": 0, "target": "00B0D063C2260000.local", "weight": 0 } },
                     { "name": "0000000000000000._matterc._udp.local", "recordClass": 1, "recordType": 16, "ttl": 120, "value": ["VP=1+32768", "DT=1", "DN=Test Device", "SII=5000", "SAI=300", "T=0", "D=1234", "CM=1", "PH=33", "PI="] },
@@ -160,7 +159,7 @@ describe("MDNS Scanner and Broadcaster", () => {
 
             const result = DnsCodec.decode(await promise);
 
-            assert.deepEqual(result, {
+            expect(result).toEqual({
                 "additionalRecords": [
                     { "name": "0000000000000000._matterd._udp.local", "recordClass": 1, "recordType": 33, "ttl": 120, "value": { "port": PORT, "priority": 0, "target": "00B0D063C2260000.local", "weight": 0 } },
                     { "name": "0000000000000000._matterd._udp.local", "recordClass": 1, "recordType": 16, "ttl": 120, "value": ["VP=1+32768", "DT=1", "DN=Test Commissioner", "SII=5000", "SAI=300", "T=0"] },
@@ -210,7 +209,7 @@ describe("MDNS Scanner and Broadcaster", () => {
             await promise;
 
             const result1 = DnsCodec.decode(dataArr[0]);
-            assert.deepEqual(result1, {
+            expect(result1).toEqual({
                 transactionId: 0,
                 messageType: 33792,
                 queries: [],
@@ -232,7 +231,7 @@ describe("MDNS Scanner and Broadcaster", () => {
             });
 
             const result2 = DnsCodec.decode(dataArr[1]);
-            assert.deepEqual(result2, {
+            expect(result2).toEqual({
                 "additionalRecords": [
                     { "name": "0000000000000000._matterc._udp.local", "recordClass": 1, "recordType": 33, "ttl": 120, "value": { "port": PORT2, "priority": 0, "target": "00B0D063C2260000.local", "weight": 0 } },
                     { "name": "0000000000000000._matterc._udp.local", "recordClass": 1, "recordType": 16, "ttl": 120, "value": ["VP=1+32768", "DT=1", "DN=Test Device", "SII=5000", "SAI=300", "T=0", "D=1234", "CM=1", "PH=33", "PI="] },
@@ -260,7 +259,7 @@ describe("MDNS Scanner and Broadcaster", () => {
             });
 
             const result3 = DnsCodec.decode(dataArr[2]);
-            assert.deepEqual(result3, {
+            expect(result3).toEqual({
                 "additionalRecords": [
                     { "name": "0000000000000000._matterd._udp.local", "recordClass": 1, "recordType": 33, "ttl": 120, "value": { "port": PORT3, "priority": 0, "target": "00B0D063C2260000.local", "weight": 0 } },
                     { "name": "0000000000000000._matterd._udp.local", "recordClass": 1, "recordType": 16, "ttl": 120, "value": ["VP=1+32768", "DT=1", "DN=Test Commissioner", "SII=5000", "SAI=300", "T=0"] },
@@ -302,9 +301,12 @@ describe("MDNS Scanner and Broadcaster", () => {
 
             const result = await scanner.findOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID, 1);
 
-            assert.equal(dataWereSent, true);
-            assert.equal(queryReceived, false);
-            assert.deepEqual(result, [{ ip: `${SERVER_IPv6}%fakeInterface`, port: PORT, type: "udp" }, { ip: SERVER_IPv4, port: PORT, type: "udp" }]);
+            expect(dataWereSent).toBe(true)
+            expect(queryReceived).toBe(false)
+            expect(result).toEqual([
+                { ip: `${SERVER_IPv6}%fakeInterface`, port: PORT, type: "udp" },
+                { ip: SERVER_IPv4, port: PORT, type: "udp" }
+            ]);
         });
 
         it("the client queries the server record if it has not been announced before", async () => {
@@ -320,7 +322,7 @@ describe("MDNS Scanner and Broadcaster", () => {
             await fakeTime.advanceTime(1); // Trigger timer to send query (0ms timer)
             await fakeTime.yield(); // make sure responding promise is created
 
-            assert.deepEqual(DnsCodec.decode(sentData[0]), {
+            expect(DnsCodec.decode(sentData[0])).toEqual({
                 "additionalRecords": [],
                 "answers": [],
                 "authorities": [],
@@ -333,7 +335,10 @@ describe("MDNS Scanner and Broadcaster", () => {
 
             const result = await findPromise;
 
-            assert.deepEqual(result, [{ ip: `${SERVER_IPv6}%fakeInterface`, port: PORT, type: "udp" }, { ip: SERVER_IPv4, port: PORT, type: "udp" }]);
+            expect(result).toEqual([
+                { ip: `${SERVER_IPv6}%fakeInterface`, port: PORT, type: "udp" },
+                { ip: SERVER_IPv4, port: PORT, type: "udp" }
+            ]);
         });
 
         it("the client queries the server record and get correct response also with multiple announced instances", async () => {
@@ -358,10 +363,10 @@ describe("MDNS Scanner and Broadcaster", () => {
             await fakeTime.advanceTime(1); // Trigger timer to send query (0ms timer)
             await fakeTime.yield(); // Make sure data were queried async
 
-            assert.equal(netData.length, 3);
+            expect(netData.length).toBe(3)
 
             const query = DnsCodec.decode(netData[0]);
-            assert.deepEqual(query, {
+            expect(query).toEqual({
                 "additionalRecords": [],
                 "answers": [],
                 "authorities": [],
@@ -372,7 +377,7 @@ describe("MDNS Scanner and Broadcaster", () => {
                 "transactionId": 0
             });
             const response2 = DnsCodec.decode(netData[1]);
-            assert.deepEqual(response2, {
+            expect(response2).toEqual({
                 "additionalRecords": [
                     { "name": "_services._dns-sd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_matter._tcp.local" },
                     { "name": "_services._dns-sd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_I0000000000000018._sub._matter._tcp.local" },
@@ -392,7 +397,7 @@ describe("MDNS Scanner and Broadcaster", () => {
             });
 
             const response = DnsCodec.decode(netData[2]);
-            assert.deepEqual(response, {
+            expect(response).toEqual({
                 "additionalRecords": [
                     { "name": "_services._dns-sd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_matter._tcp.local" },
                     { "name": "_services._dns-sd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_I0000000000000018._sub._matter._tcp.local" },
@@ -412,7 +417,10 @@ describe("MDNS Scanner and Broadcaster", () => {
             });
             const result = await findPromise;
 
-            assert.deepEqual(result, [{ ip: `${SERVER_IPv6}%fakeInterface`, port: PORT2, type: "udp" }, { ip: SERVER_IPv4, port: PORT2, type: "udp" }]);
+            expect(result).toEqual([
+                { ip: `${SERVER_IPv6}%fakeInterface`, port: PORT2, type: "udp" },
+                { ip: SERVER_IPv4, port: PORT2, type: "udp" }
+            ]);
         });
 
         it("the client queries the server record and get correct response when announced before", async () => {
@@ -444,9 +452,12 @@ describe("MDNS Scanner and Broadcaster", () => {
 
             const result = await scanner.findOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID);
 
-            assert.equal(dataWereSent, true);
-            assert.equal(queryReceived, false);
-            assert.deepEqual(result, [{ ip: `${SERVER_IPv6}%fakeInterface`, port: PORT2, type: "udp" }, { ip: SERVER_IPv4, port: PORT2, type: "udp" }]);
+            expect(dataWereSent).toBe(true)
+            expect(queryReceived).toBe(false)
+            expect(result).toEqual([
+                { ip: `${SERVER_IPv6}%fakeInterface`, port: PORT2, type: "udp" },
+                { ip: SERVER_IPv4, port: PORT2, type: "udp" }
+            ]);
         });
     });
 });

@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as assert from "assert";
 import { camelize, capitalize } from "../../src/util/String.js";
 
 const CAMELIZE_TESTS = {
@@ -21,19 +20,19 @@ const CAMELIZE_TESTS = {
 describe("String", () => {
     describe("capitalize", () => {
         it("capitalizes", () => {
-            assert.equal(capitalize("foo"), "Foo");
+            expect(capitalize("foo")).toBe("Foo")
         })
     })
 
     describe("camelize", () => {
         for (const [k, v] of Object.entries(CAMELIZE_TESTS)) {
             it(`camelizes "${k}"`, () => {
-                assert.equal(camelize(k), v)
+                expect(camelize(k)).toBe(v)
             });
         }
 
         it(`camelizes lowercase`, () => {
-            assert.equal(camelize("Foo", false), "foo");
+            expect(camelize("Foo", false)).toBe("foo");
         })
     })
 })

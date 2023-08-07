@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ValidationError } from "../../src/common/MatterError.js";
 import { TlvByteString, TlvString } from "../../src/tlv/TlvString.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 
@@ -105,13 +106,12 @@ describe("TlvByteString", () => {
     describe("validation", () => {
         it("throws an error if the value is not a ByteString", () => {
             expect(() => TlvByteString.validate(5 as any))
-                .toThrowError("Expected ByteArray, got number.");
+                .toThrow(new ValidationError("Expected ByteArray, got number."));
         });
 
         it("throws an error if the value is not a String", () => {
             expect(() => TlvString.validate(true as any))
-                .toThrowError("Expected string, got boolean.");
+                .toThrow(new ValidationError("Expected string, got boolean."));
         });
     });
-
 });
