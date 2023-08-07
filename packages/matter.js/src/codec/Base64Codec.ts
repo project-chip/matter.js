@@ -6,17 +6,21 @@
 
 import { ByteArray } from "../util/ByteArray.js";
 
+function cp(text: string) {
+    return text.codePointAt(0) ?? 0;
+}
+
 const A2B = <number[]>[];
 const B2A = new ByteArray(64);
 const B2A_URL = new ByteArray(64);
-const PAD = "=".codePointAt(0)!;
+const PAD = cp("=");
 
 {
     let pos = 0;
 
     function addRange(start: string, stop: string) {
-        const end = stop.codePointAt(0)! + 1;
-        for (let i = start.codePointAt(0)!; i < end; i++) {
+        const end = cp(stop) + 1;
+        for (let i = cp(start); i < end; i++) {
             A2B[i] = pos;
             B2A[pos++] = i;
         }
@@ -28,13 +32,13 @@ const PAD = "=".codePointAt(0)!;
     addRange('/', '/');
 
     // base64url
-    const slashValue = A2B["/".codePointAt(0)!];
-    const plusValue = A2B["+".codePointAt(0)!];
-    A2B["_".codePointAt(0)!] = slashValue;
-    A2B["-".codePointAt(0)!] = plusValue;
+    const slashValue = A2B[cp("/")];
+    const plusValue = A2B[cp("+")];
+    A2B[cp("_")] = slashValue;
+    A2B[cp("-")] = plusValue;
     B2A_URL.set(B2A);
-    B2A_URL[slashValue] = "_".codePointAt(0)!;
-    B2A_URL[plusValue] = "-".codePointAt(0)!;
+    B2A_URL[slashValue] = cp("_");
+    B2A_URL[plusValue] = cp("-");
 }
 
 export namespace Base64 {
@@ -104,14 +108,14 @@ export namespace Base64 {
         for (let inPos = 0, outPos = 0; ;) {
             function lookup() {
                 if (inPos >= inputLength) return 0;
-                let v = A2B[input.codePointAt(inPos++)!];
+                const v = A2B[input.codePointAt(inPos++) ?? -1];
                 if (v === undefined) {
                     throw new Error("Invalid base-64 encoding");
                 }
                 return v;
             }
 
-            let n = (lookup() << 18) + (lookup() << 12) + (lookup() << 6) + lookup();
+            const n = (lookup() << 18) + (lookup() << 12) + (lookup() << 6) + lookup();
             out[outPos++] = n >>> 16;
             if (outPos < outLength) {
                 out[outPos++] = n >>> 8 & 0xff;

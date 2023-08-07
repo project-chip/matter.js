@@ -501,7 +501,7 @@ export class MatterController {
 
     async close() {
         this.mdnsScanner.close();
-        this.exchangeManager.close();
+        await this.exchangeManager.close();
         await this.netInterfaceIpv4?.close();
         await this.netInterfaceIpv6.close();
     }

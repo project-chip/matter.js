@@ -89,9 +89,10 @@ describe("WindowCoveringCluster", () => {
                 )
             },
             {
-                downOrClose: () => { },
-                stopMotion: () => { },
-                upOrOpen: () => { }
+                // trues for eslint
+                downOrClose: () => { true },
+                stopMotion: () => { true },
+                upOrOpen: () => { true }
             }
         );
 

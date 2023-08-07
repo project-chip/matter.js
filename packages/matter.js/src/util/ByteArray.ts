@@ -31,7 +31,7 @@ declare global {
 }
 
 Uint8Array.prototype.toHex = function() {
-    return (this as Uint8Array).reduce((result, byte) => result + byte.toString(16).padStart(2, "0"), "");
+    return this.reduce((result, byte) => result + byte.toString(16).padStart(2, "0"), "");
 }
 
 Uint8Array.prototype.getDataView = function() {
@@ -40,7 +40,7 @@ Uint8Array.prototype.getDataView = function() {
 
 Uint8Array.prototype.equals = function(other: Uint8Array) {
     if (other.length !== this.length) return false;
-    return (this as Uint8Array).every((value, index) => other[index] === value);
+    return this.every((value, index) => other[index] === value);
 }
 
 Uint8Array.fromHex = function(hexString: string) {

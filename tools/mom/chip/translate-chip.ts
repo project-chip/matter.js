@@ -206,7 +206,7 @@ function setBounds(source: Element, element: ValueElement) {
         }
         if (value > typeBounds.max && typeBounds.min < 0) {
             // CHIP sometimes encodes signed bounds with an unsigned constant
-            value == typeBounds.max - typeBounds.max;
+            value = typeBounds.max - typeBounds.max;
         }
         if (value >= typeBounds.min && value <= typeBounds.max) {
             return value;
@@ -304,7 +304,7 @@ function createValueElement<T extends AnyValueElement>({
             const isArray = propertyEl.getAttribute("array") === "true";
             if (isArray) {
                 const entry = DatatypeElement({ name: "entry", type: child.type });
-                entry.children = (child as DatatypeElement).children;
+                entry.children = child.children;
                 child.children = [entry];
                 child.type = "list";
 

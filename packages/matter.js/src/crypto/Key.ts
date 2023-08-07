@@ -8,7 +8,7 @@ import { DerType, DerCodec, DerNode } from "../codec/DerCodec.js";
 import { Base64 } from "../codec/Base64Codec.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { ec as EC } from "elliptic";
-import { MatterError } from "../common/MatterError.js";
+import { MatterError, NotImplementedError } from "../common/MatterError.js";
 
 class KeyError extends MatterError { }
 
@@ -18,32 +18,31 @@ export enum KeyType {
     EC = "EC",
     RSA = "RSA",
     oct = "oct"
-};
+}
 
 export enum CurveType {
     p256 = "P-256",
     p384 = "P-384",
     p521 = "P-521"
-};
+}
 
 enum Asn1ObjectID {
     ecPublicKey = "2a8648ce3d0201",
     prime256r1 = "2a8648ce3d030107",
     prime384r1 = "0103840022",
     prime521r1 = "0103840023"
-};
+}
 
 const CurveLookup = {
     [Asn1ObjectID.prime256r1]: CurveType.p256,
     [Asn1ObjectID.prime384r1]: CurveType.p384,
     [Asn1ObjectID.prime521r1]: CurveType.p521
-};
+}
 
 export type BinaryKeyPair = {
     publicKey: ByteArray,
     privateKey: ByteArray
-};
-
+}
 
 /**
  * Represents a cryptographic key.
@@ -165,7 +164,7 @@ export interface Key extends JsonWebKey {
      * Alias for keyPairBits that throws if a complete key pair is not present.
      */
     keyPair: BinaryKeyPair;
-};
+}
 
 /**
  * EC key without private fields.
@@ -244,7 +243,7 @@ function getDerKey(type: string, node?: DerNode, derType: DerType = DerType.Octe
 }
 
 // These are private members of Key, each implementing a key import field
-module Translators {
+namespace Translators {
     // Import SEC1 private key
     export const sec1 = {
         set: function(this: Key, input: ByteArray) {
@@ -268,7 +267,7 @@ module Translators {
         },
 
         get: function() {
-            throw new KeyError("SEC1 export Not implemented");
+            throw new NotImplementedError("SEC1 export not implemented");
         }
     }
 
@@ -305,7 +304,7 @@ module Translators {
         },
 
         get: function() {
-            throw new KeyError("PKCS #8 export not implemented");
+            throw new NotImplementedError("PKCS #8 export not implemented");
         }
     }
 
@@ -326,7 +325,7 @@ module Translators {
             const curve = getDerCurve("SPKI", algorithmElements?.[1]);
 
             // Key
-            let key = getDerKey("SPKI", decoded?._elements?.[1], DerType.BitString);
+            const key = getDerKey("SPKI", decoded?._elements?.[1], DerType.BitString);
 
             this.type = KeyType.EC;
             this.curve = curve;
@@ -334,7 +333,7 @@ module Translators {
         },
 
         get: function() {
-            throw new KeyError("SPKI export not implemented");
+            throw new NotImplementedError("SPKI export not implemented");
         }
     }
 
@@ -403,19 +402,19 @@ enum Aliases {
     operations = "key_ops",
     private = "d",
     extractable = "ext"
-};
+}
 
 enum Base64Codecs {
     privateBits = "d",
     xBits = "x",
     yBits = "y"
-};
+}
 
 enum AssertedAliases {
     publicKey = "publicBits",
     privateKey = "privateBits",
     keyPair = "keyPairBits"
-};
+}
 
 function inferCurve(key: Key, bytes: number) {
     if (!key.curve) {
@@ -447,7 +446,7 @@ export function Key(properties: Partial<Key>) {
 
     // Assign base JWK properties.  All other properties are some form of alias
     for (const key of JWK_KEYS) {
-        if (properties?.hasOwnProperty(key))
+        if ((properties as any)[key] !== undefined)
             (that as any)[key] = (properties as any)[key];
     }
     function assign(name: string) {
@@ -542,7 +541,7 @@ export function Key(properties: Partial<Key>) {
     }
 
     return that;
-};
+}
 
 /**
  * Private key factory.
