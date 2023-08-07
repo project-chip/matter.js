@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import assert from "assert";
 import { Time } from "../../src/time/Time.js";
 import { TimeFake } from "../../src/time/TimeFake.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
@@ -38,7 +37,7 @@ describe("BtpSessionHandler", () => {
 
             const result = await writeBlePromise;
 
-            assert.deepEqual(result, ByteArray.fromHex("656c04670006"));
+            expect(result).toEqual(ByteArray.fromHex("656c04670006"))
 
             allowClose = true;
             await btpSession.close();
@@ -65,7 +64,7 @@ describe("BtpSessionHandler", () => {
 
             const result = await writeBlePromise;
 
-            assert.deepEqual(result, ByteArray.fromHex("656c04670006"));
+            expect(result).toEqual(ByteArray.fromHex("656c04670006"))
 
             allowClose = true;
             await btpSession.close();
@@ -92,18 +91,19 @@ describe("BtpSessionHandler", () => {
 
             const result = await writeBlePromise;
 
-            assert.deepEqual(result, ByteArray.fromHex("656c04170006"));
+            expect(result).toEqual(ByteArray.fromHex("656c04170006"))
 
             allowClose = true;
             await btpSession.close();
         });
 
         it("Client does not share the same supported BTP version", async () => {
-
             const handshakeRequest = ByteArray.fromHex("656c05000000000006");
             const { promise: disconnectBlePromise, resolver: disconnectBleResolver } = await getPromiseResolver<void>();
 
-            await assert.rejects(async () => {
+            // change to expect().rejects.toThrow() when no longer using jasmine expect
+            let error;
+            try {
                 const btpSession = await BtpSessionHandler.createFromHandshakeRequest(
                     100,
                     handshakeRequest,
@@ -120,7 +120,10 @@ describe("BtpSessionHandler", () => {
                 await disconnectBlePromise;
 
                 await btpSession.close();
-            }, BtpProtocolError, "No supported BTP version found in 5");
+            } catch (e) {
+                error = e;
+            }
+            expect(error).toEqual(new BtpProtocolError("No supported BTP version found in 5"));
         });
     });
 
@@ -165,7 +168,7 @@ describe("BtpSessionHandler", () => {
             );
 
             const result = await localWriteBlePromise;
-            assert.deepEqual(result, ByteArray.fromHex("656c04170006"));
+            expect(result).toEqual(ByteArray.fromHex("656c04170006"))
         });
 
         afterEach(async () => {
@@ -234,10 +237,10 @@ describe("BtpSessionHandler", () => {
             await btpSessionHandler?.handleIncomingBleData(matterMessage);
 
             const matterHandlerResult = await handleMatterMessagePromise;
-            assert.deepEqual(matterHandlerResult, segmentPayload);
+            expect(matterHandlerResult).toEqual(segmentPayload)
 
             const result = await writeBlePromise;
-            assert.deepEqual(result, ByteArray.fromHex("0d00010900090807060504030201"));
+            expect(result).toEqual(ByteArray.fromHex("0d00010900090807060504030201"))
         });
 
         it("received bytes more than fragment size", async () => {
@@ -270,7 +273,14 @@ describe("BtpSessionHandler", () => {
         });
 
         it("Btp packet must not be 0", async () => {
-            await assert.rejects(async () => await btpSessionHandler?.sendMatterMessage(ByteArray.fromHex("")), BtpFlowError, "BTP packet must not be empty");
+            // change to expect().rejects.toThrow() when no longer using jasmine expect
+            let error;
+            try {
+                await btpSessionHandler?.sendMatterMessage(ByteArray.fromHex(""))
+            } catch (e) {
+                error = e;
+            }
+            expect(error).toEqual(new BtpFlowError("BTP packet must not be empty"));
         });
 
         it("handles a correct two segment long Matter Message", async () => {
@@ -326,9 +336,9 @@ describe("BtpSessionHandler", () => {
 
             const matterHandlerResult = await handleMatterMessagePromise;
 
-            assert.deepEqual(matterHandlerResult, segmentPayload);
-            assert.deepEqual(promiseResolver[0], ByteArray.fromHex("0901011200030201090807060504030201090807"));
-            assert.deepEqual(promiseResolver[1], ByteArray.fromHex("0602060504"));
+            expect(matterHandlerResult).toEqual(segmentPayload)
+            expect(promiseResolver[0]).toEqual(ByteArray.fromHex("0901011200030201090807060504030201090807"))
+            expect(promiseResolver[1]).toEqual(ByteArray.fromHex("0602060504"))
         });
 
         it("triggers timeout as did not send ack within 5 sec", async () => {
@@ -369,8 +379,8 @@ describe("BtpSessionHandler", () => {
             const result = await writeBlePromise;
             const matterHandlerResult = await handleMatterMessagePromise;
 
-            assert.deepEqual(result, ByteArray.fromHex("080001"));
-            assert.deepEqual(matterHandlerResult, segmentPayload);
+            expect(result).toEqual(ByteArray.fromHex("080001"))
+            expect(matterHandlerResult).toEqual(segmentPayload)
         });
 
         it("triggers timeout as did not receive ack within 15 sec", async () => {
@@ -476,10 +486,10 @@ describe("BtpSessionHandler", () => {
 
                 await btpSessionHandler?.handleIncomingBleData(matterMessage);
                 const matterHandlerResult = await handleMatterMessagePromise;
-                assert.deepEqual(matterHandlerResult, segmentPayload);
+                expect(matterHandlerResult).toEqual(segmentPayload)
 
                 const result = await writeBlePromise;
-                assert.deepEqual(result, ByteArray.fromHex("0d00010900090807060504030201"));
+                expect(result).toEqual(ByteArray.fromHex("0d00010900090807060504030201"))
             }
         });
     });

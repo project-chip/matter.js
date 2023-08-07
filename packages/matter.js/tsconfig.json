@@ -19,5 +19,14 @@
   },
   /* During dev, src are included, so they are also modified during refactorings. */
   "include": ["src/**/*.ts", "test/**/*.ts"],
-  "exclude": []
+  "exclude": [],
+
+  "typeRoots": [
+    "./node_modules/@types",
+    "./test/support"
+  ],
+
+  "types": [
+    "globals"
+  ]
 }

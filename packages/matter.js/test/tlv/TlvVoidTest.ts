@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ValidationError } from "../../src/common/MatterError.js";
 import { TlvVoid } from "../../src/tlv/TlvVoid.js";
 
 describe("TlvVoid", () => {
@@ -16,9 +17,9 @@ describe("TlvVoid", () => {
     });
 
     describe("validation", () => {
-        it("throws an error if the value is not undefined", () => {
+        it("throws an error if the value is.toBeDefined()", () => {
             expect(() => TlvVoid.validate("a" as any))
-                .toThrowError("Expected void, got string.");
+                .toThrow(new ValidationError("Expected void, got string."));
         });
 
         it("does not throw an error if the value is undefined", () => {

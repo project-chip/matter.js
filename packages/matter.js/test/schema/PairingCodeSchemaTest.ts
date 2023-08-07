@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as assert from "assert";
 import { CommissionningFlowType, DiscoveryCapabilitiesSchema, QrCodeData, QrPairingCodeCodec, ManualPairingCodeCodec, ManualPairingData } from "../../src/schema/PairingCodeSchema.js";
 
 const QR_CODE = "MT:YNJV7VSC00CMVH7SR00";
@@ -59,7 +58,7 @@ describe("QrPairingCodeCodec", () => {
         it("encodes the data", () => {
             const result = QrPairingCodeCodec.encode(QR_CODE_DATA);
 
-            assert.equal(result, QR_CODE);
+            expect(result).toBe(QR_CODE)
         });
     });
 
@@ -67,7 +66,7 @@ describe("QrPairingCodeCodec", () => {
         it("decodes the data", () => {
             const result = QrPairingCodeCodec.decode(QR_CODE);
 
-            assert.deepEqual(result, QR_CODE_DATA);
+            expect(result).toEqual(QR_CODE_DATA)
         });
     });
 });
@@ -79,7 +78,7 @@ describe("ManualPairingCodeCodec", () => {
             for (const pairingCode of MANUAL_PAIRING_DATA_CODES) {
                 const result = ManualPairingCodeCodec.encode(pairingCode.data);
 
-                assert.equal(result, pairingCode.code);
+                expect(result).toBe(pairingCode.code)
             }
         });
 
@@ -87,8 +86,8 @@ describe("ManualPairingCodeCodec", () => {
             for (const dataCode of MANUAL_PAIRING_DATA_CODES) {
                 const result = ManualPairingCodeCodec.decode(dataCode.code);
 
-                assert.equal(result.shortDiscriminator, dataCode.data.shortDiscriminator);
-                assert.equal(result.passcode, dataCode.data.passcode);
+                expect(result.shortDiscriminator).toBe(dataCode.data.shortDiscriminator)
+                expect(result.passcode).toBe(dataCode.data.passcode)
             }
         });
     });

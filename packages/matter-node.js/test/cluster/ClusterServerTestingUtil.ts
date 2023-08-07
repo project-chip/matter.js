@@ -12,7 +12,7 @@ import { FabricIndex, VendorId, FabricId, NodeId } from "@project-chip/matter.js
 import { ByteArray } from "@project-chip/matter.js/util";
 import { Attributes, ClusterServerObj, Commands, Events } from "@project-chip/matter.js/cluster";
 import { Endpoint } from "@project-chip/matter.js/device";
-import { PrivateKey } from "../../src/crypto/export";
+import { PrivateKey } from "@project-chip/matter.js/crypto";
 
 export const ZERO = new ByteArray(1);
 const PRIVATE_KEY = new ByteArray(32);
