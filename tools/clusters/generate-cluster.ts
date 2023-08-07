@@ -39,7 +39,8 @@ export function generateCluster(file: ClusterFile) {
         // Base cluster
         file.addImport("cluster/ClusterFactory", "ClusterComponent");
         base = file.ns.expressions(`export const Base = ClusterComponent({`, "})")
-            .document(`${cluster.name} is a derived cluster, not to be used directly.  These elements are present in all clusters derived from ${cluster.name}.`);
+            .document(`${cluster.name} is             // change to expect().rejects.toThrow() when no longer using jasmine expect
+            a derived cluster, not to be used directly.  These elements are present in all clusters derived from ${cluster.name}.`);
     } else if (!features.length) {
         // Non-extensible cluster
         file.addImport("cluster/Cluster", "Cluster as CreateCluster");

@@ -30,8 +30,8 @@
     "build": "npm run build-cjs && npm run build-es",
     "build-clean": "npm run clean && npm run build",
     "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --gitRemote upstream --tsconfig tsconfig.dist-cjs.json",
-    "test-node": "TZ=utc NODE_OPTIONS=--experimental-vm-modules jest",
-    "test-web": "TZ=utc karma start test/karma.conf.cjs",
+    "test-node": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test-web": "karma start test/karma.conf.cjs",
     "test": "npm run test-node && npm run test-web"
   },
   "dependencies": {
@@ -41,7 +41,7 @@
   "devDependencies": {
     "@types/bn.js": "^5.1.1",
     "@types/elliptic": "^6.4.14",
-    "@types/jest": "^29.5.1",
+    "@types/expect": "^24.3.0",
     "jest": "^29.5.0",
     "karma": "^6.4.2",
     "karma-chrome-launcher": "^3.2.0",

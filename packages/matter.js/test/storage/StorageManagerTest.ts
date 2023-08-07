@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as assert from "assert";
+import { StorageError } from "../../src/storage/Storage.js";
 import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
 import { StorageManager } from "../../src/storage/StorageManager.js";
 
@@ -22,7 +22,7 @@ describe("StorageManager", () => {
         storageContext.set("key", "value");
 
         const valueFromStorage = storageContext.get("key");
-        assert.equal(valueFromStorage, "value");
+        expect(valueFromStorage).toBe("value")
     });
 
     it("creating StorageManager without initialize throws error when creating StorageContext", async () => {
@@ -30,11 +30,9 @@ describe("StorageManager", () => {
 
         const storageManager = new StorageManager(storage);
 
-        assert.throws(() => {
+        expect(() => {
             storageManager.createContext("context");
-        }, {
-            message: "The storage needs to be initialized first!"
-        });
+        }).toThrow(new StorageError("The storage needs to be initialized first!"));
     });
 
     it("creating StorageContext with  dot in name fails", async () => {
@@ -43,11 +41,9 @@ describe("StorageManager", () => {
         const storageManager = new StorageManager(storage);
         await storageManager.initialize();
 
-        assert.throws(() => {
+        expect(() => {
             storageManager.createContext("my.context");
-        }, {
-            message: "Context must not contain dots!"
-        });
+        }).toThrow(new StorageError("Context must not contain dots!"));
     });
 
     it("getting same StorageContext context access same data", async () => {
@@ -63,7 +59,7 @@ describe("StorageManager", () => {
         storageContext1.set("key", "value");
 
         const valueFromStorage2 = storageContext2.get("key");
-        assert.equal(valueFromStorage2, "value");
+        expect(valueFromStorage2).toBe("value")
     });
 
     it("getting same StorageContext context access same data with subcontext", async () => {
@@ -81,6 +77,6 @@ describe("StorageManager", () => {
         storageSubContext1.set("key", "value");
 
         const valueFromStorage2 = storageSubContext2.get("key");
-        assert.equal(valueFromStorage2, "value");
+        expect(valueFromStorage2).toBe("value")
     });
 });

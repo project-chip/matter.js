@@ -154,7 +154,7 @@ export function extendCluster<F extends BitSchema>(
 export function validateFeatureSelection(features: string[], validFeatures: { [name: string]: string }) {
     for (const f of features) {
         if (!validFeatures[f]) {
-            throw new IllegalClusterError(`"${f} is not a valid feature identifier`);
+            throw new IllegalClusterError(`"${f}" is not a valid feature identifier`);
         }
     }
 }

@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as assert from "assert";
 import { AttributeId } from "../../src/datatype/AttributeId.js";
 import { ClusterId } from "../../src/datatype/ClusterId.js";
 import { CommandId } from "../../src/datatype/CommandId.js";
@@ -35,11 +34,13 @@ describe("JsonConverter", () => {
 
             const json = toJson(obj);
 
-            assert.equal(json, `{"aNumber":1,"aNumberString":"2","aString":"hello","aBoolean":true,"aNull":null,"anObject":{"a":1,"b":2,"c":3},"anNumberArray":[1,2,3],"anStringArray":["a","b","c"],"anObjectArray":[{"a":1},{"b":2},{"c":3}]}`);
+            expect(json).toBe(
+                `{"aNumber":1,"aNumberString":"2","aString":"hello","aBoolean":true,"aNull":null,"anObject":{"a":1,"b":2,"c":3},"anNumberArray":[1,2,3],"anStringArray":["a","b","c"],"anObjectArray":[{"a":1},{"b":2},{"c":3}]}`
+            );
 
             const decodedObj = fromJson(json);
 
-            assert.deepEqual(decodedObj, obj);
+            expect(decodedObj).toEqual(obj)
         });
 
         it("encode/decode BigInt", () => {
@@ -47,12 +48,12 @@ describe("JsonConverter", () => {
 
             const json = toJson(obj);
 
-            assert.equal(json, `"{\\"__object__\\":\\"BigInt\\",\\"__value__\\":\\"12345678901234567890\\"}"`);
+            expect(json).toBe(`"{\\"__object__\\":\\"BigInt\\",\\"__value__\\":\\"12345678901234567890\\"}"`);
 
             const decodedObj = fromJson(json);
 
-            assert.deepEqual(decodedObj, obj);
-            assert.equal(typeof decodedObj, "bigint");
+            expect(decodedObj).toEqual(obj)
+            expect(typeof decodedObj).toBe("bigint")
         });
 
         it("encode/decode Uint8Array", () => {
@@ -60,12 +61,12 @@ describe("JsonConverter", () => {
 
             const json = toJson(obj);
 
-            assert.equal(json, `"{\\"__object__\\":\\"Uint8Array\\",\\"__value__\\":\\"010203\\"}"`);
+            expect(json).toBe(`"{\\"__object__\\":\\"Uint8Array\\",\\"__value__\\":\\"010203\\"}"`);
 
             const decodedObj = fromJson(json);
 
-            assert.deepEqual(decodedObj, obj);
-            assert.ok(decodedObj instanceof Uint8Array);
+            expect(decodedObj).toEqual(obj)
+            expect(decodedObj instanceof Uint8Array).toBeTruthy();
         });
 
         it("encode/decode Node.js Buffer", () => {
@@ -77,11 +78,11 @@ describe("JsonConverter", () => {
 
             const json = toJson(obj);
 
-            assert.equal(json, `"{\\"__object__\\":\\"Uint8Array\\",\\"__value__\\":\\"010203\\"}"`);
+            expect(json).toBe(`"{\\"__object__\\":\\"Uint8Array\\",\\"__value__\\":\\"010203\\"}"`);
 
             const decodedObj = fromJson(json);
 
-            assert.ok(decodedObj instanceof Uint8Array);
+            expect(decodedObj instanceof Uint8Array).toBeTruthy();
         });
 
         it("encode/decode Map", () => {
@@ -89,13 +90,13 @@ describe("JsonConverter", () => {
 
             const json = toJson(obj);
 
-            assert.equal(json, `"{\\"__object__\\":\\"Map\\",\\"__value__\\":\\"[[\\\\\\"a\\\\\\",1],[\\\\\\"b\\\\\\",2],[\\\\\\"c\\\\\\",3]]\\"}"`);
+            expect(json).toBe(`"{\\"__object__\\":\\"Map\\",\\"__value__\\":\\"[[\\\\\\"a\\\\\\",1],[\\\\\\"b\\\\\\",2],[\\\\\\"c\\\\\\",3]]\\"}"`);
 
             const decodedObj = fromJson(json);
 
-            assert.deepEqual(decodedObj, obj);
-            assert.ok(decodedObj instanceof Map);
-            assert.equal(decodedObj.get("a"), 1);
+            expect(decodedObj).toEqual(obj)
+            expect(decodedObj instanceof Map).toBeTruthy();
+            expect((decodedObj as Map<any, any>).get("a")).toBe(1)
         });
 
         it("encode/decide Map of Maps", () => {
@@ -103,19 +104,23 @@ describe("JsonConverter", () => {
 
             const json = toJson(obj);
 
-            assert.equal(json, `"{\\"__object__\\":\\"Map\\",\\"__value__\\":\\"[[1,\\\\\\"{\\\\\\\\\\\\\\"__object__\\\\\\\\\\\\\\":\\\\\\\\\\\\\\"Map\\\\\\\\\\\\\\",\\\\\\\\\\\\\\"__value__\\\\\\\\\\\\\\":\\\\\\\\\\\\\\"[[\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"a\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",1]]\\\\\\\\\\\\\\"}\\\\\\"],[2,\\\\\\"{\\\\\\\\\\\\\\"__object__\\\\\\\\\\\\\\":\\\\\\\\\\\\\\"Map\\\\\\\\\\\\\\",\\\\\\\\\\\\\\"__value__\\\\\\\\\\\\\\":\\\\\\\\\\\\\\"[[\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"b\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",2]]\\\\\\\\\\\\\\"}\\\\\\"]]\\"}"`);
+            expect(json).toBe(`"{\\"__object__\\":\\"Map\\",\\"__value__\\":\\"[[1,\\\\\\"{\\\\\\\\\\\\\\"__object__\\\\\\\\\\\\\\":\\\\\\\\\\\\\\"Map\\\\\\\\\\\\\\",\\\\\\\\\\\\\\"__value__\\\\\\\\\\\\\\":\\\\\\\\\\\\\\"[[\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"a\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",1]]\\\\\\\\\\\\\\"}\\\\\\"],[2,\\\\\\"{\\\\\\\\\\\\\\"__object__\\\\\\\\\\\\\\":\\\\\\\\\\\\\\"Map\\\\\\\\\\\\\\",\\\\\\\\\\\\\\"__value__\\\\\\\\\\\\\\":\\\\\\\\\\\\\\"[[\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"b\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",2]]\\\\\\\\\\\\\\"}\\\\\\"]]\\"}"`);
 
             const decodedObj = fromJson(json);
 
-            assert.deepEqual(decodedObj, obj);
+            expect(decodedObj).toEqual(obj)
 
-            assert.ok(decodedObj instanceof Map);
-            const map1 = decodedObj.get(1);
-            const map2 = decodedObj.get(2);
-            assert.ok(map1 instanceof Map);
-            assert.equal(map1.get("a"), 1);
-            assert.ok(map2 instanceof Map);
-            assert.equal(map2.get("b"), 2);
+            expect(decodedObj).toBeInstanceOf(Map);
+            if (!(decodedObj instanceof Map)) return;
+
+            const map1 = decodedObj?.get(1);
+            const map2 = decodedObj?.get(2);
+            expect(map1).toBeInstanceOf(Map);
+            expect(map2).toBeInstanceOf(Map);
+            if (!(map1 instanceof Map) || !(map2 instanceof Map)) return;
+
+            expect(map1.get("a")).toBe(1);
+            expect(map2.get("b")).toBe(2)
         });
 
         it("encode/decode object with matter.js datatypes", () => {
@@ -134,11 +139,11 @@ describe("JsonConverter", () => {
 
             const json = toJson(obj);
 
-            assert.equal(json, `{"attribute":"{\\"__object__\\":\\"AttributeId\\",\\"__value__\\":1}","cluster":"{\\"__object__\\":\\"ClusterId\\",\\"__value__\\":2}","command":"{\\"__object__\\":\\"CommandId\\",\\"__value__\\":3}","endpoint":"{\\"__object__\\":\\"EndpointNumber\\",\\"__value__\\":4}","event":"{\\"__object__\\":\\"EventId\\",\\"__value__\\":5}","fabric":"{\\"__object__\\":\\"FabricId\\",\\"__value__\\":\\"6\\"}","fabricIndex":"{\\"__object__\\":\\"FabricIndex\\",\\"__value__\\":7}","group":"{\\"__object__\\":\\"GroupId\\",\\"__value__\\":8}","node":"{\\"__object__\\":\\"NodeId\\",\\"__value__\\":\\"9\\"}","vendor":"{\\"__object__\\":\\"VendorId\\",\\"__value__\\":11}"}`);
+            expect(json).toBe(`{"attribute":"{\\"__object__\\":\\"AttributeId\\",\\"__value__\\":1}","cluster":"{\\"__object__\\":\\"ClusterId\\",\\"__value__\\":2}","command":"{\\"__object__\\":\\"CommandId\\",\\"__value__\\":3}","endpoint":"{\\"__object__\\":\\"EndpointNumber\\",\\"__value__\\":4}","event":"{\\"__object__\\":\\"EventId\\",\\"__value__\\":5}","fabric":"{\\"__object__\\":\\"FabricId\\",\\"__value__\\":\\"6\\"}","fabricIndex":"{\\"__object__\\":\\"FabricIndex\\",\\"__value__\\":7}","group":"{\\"__object__\\":\\"GroupId\\",\\"__value__\\":8}","node":"{\\"__object__\\":\\"NodeId\\",\\"__value__\\":\\"9\\"}","vendor":"{\\"__object__\\":\\"VendorId\\",\\"__value__\\":11}"}`);
 
             const decodedObj = fromJson(json);
 
-            assert.deepEqual(decodedObj, obj);
+            expect(decodedObj).toEqual(obj)
         });
     });
 });
