@@ -3,8 +3,8 @@
  * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+
 import { normalizeAndDecodeReadAttributeReport, normalizeAttributeData } from "../../../src/protocol/interaction/AttributeDataDecoder.js";
-import * as assert from "assert";
 import { TlvField, TlvObject } from "../../../src/tlv/TlvObject.js";
 import { TlvUInt8 } from "../../../src/tlv/TlvNumber.js";
 import { TlvNullable } from "../../../src/tlv/TlvNullable.js";
@@ -63,15 +63,15 @@ describe("AttributeDataDecoder", () => {
             ];
             const normalizedData = normalizeAndDecodeReadAttributeReport(data);
 
-            assert.equal(normalizedData.length, 1);
-            assert.deepEqual(normalizedData[0].path, {
+            expect(normalizedData.length).toBe(1)
+            expect(normalizedData[0].path).toEqual({
                 attributeId: 0,
                 attributeName: "acl",
                 clusterId: 0x1f,
                 endpointId: 0,
                 nodeId: undefined
             });
-            assert.deepEqual(normalizedData[0].value, [
+            expect(normalizedData[0].value).toEqual([
                 {
                     privilege: 1,
                     authMode: 2,
@@ -123,15 +123,15 @@ describe("AttributeDataDecoder", () => {
             ];
             const normalizedData = normalizeAndDecodeReadAttributeReport(data);
 
-            assert.equal(normalizedData.length, 1);
-            assert.deepEqual(normalizedData[0].path, {
+            expect(normalizedData.length).toBe(1)
+            expect(normalizedData[0].path).toEqual({
                 attributeId: 0,
                 attributeName: "acl",
                 clusterId: 0x1f,
                 endpointId: 0,
                 nodeId: undefined
             });
-            assert.deepEqual(normalizedData[0].value, [
+            expect(normalizedData[0].value).toEqual([
                 {
                     privilege: 1,
                     authMode: 2,
@@ -202,15 +202,15 @@ describe("AttributeDataDecoder", () => {
             ];
             const normalizedData = normalizeAndDecodeReadAttributeReport(data);
 
-            assert.equal(normalizedData.length, 1);
-            assert.deepEqual(normalizedData[0].path, {
+            expect(normalizedData.length).toBe(1)
+            expect(normalizedData[0].path).toEqual({
                 attributeId: 0,
                 attributeName: "acl",
                 clusterId: 0x1f,
                 endpointId: 0,
                 nodeId: undefined
             });
-            assert.deepEqual(normalizedData[0].value, [
+            expect(normalizedData[0].value).toEqual([
                 {
                     privilege: 1,
                     authMode: 2,
@@ -285,15 +285,15 @@ describe("AttributeDataDecoder", () => {
             ];
             const normalizedData = normalizeAndDecodeReadAttributeReport(data);
 
-            assert.equal(normalizedData.length, 1);
-            assert.deepEqual(normalizedData[0].path, {
+            expect(normalizedData.length).toBe(1)
+            expect(normalizedData[0].path).toEqual({
                 attributeId: 0,
                 attributeName: "acl",
                 clusterId: 0x1f,
                 endpointId: 0,
                 nodeId: undefined
             });
-            assert.deepEqual(normalizedData[0].value, [
+            expect(normalizedData[0].value).toEqual([
                 {
                     privilege: 1,
                     authMode: 2,
@@ -323,20 +323,21 @@ describe("AttributeDataDecoder", () => {
             const tlvData = ByteArray.fromHex("1536011535012600605bd045370124020024031d2404011836021818181535012600605bd045370124020024031d24040134051824020418181535012600605bd045370124020024031d24040134051824021d18181535012600605bd045370124020024031d24040134051824021f18181535012600605bd045370124020024031d24040134051824022818181535012600605bd045370124020024031d24040134051824022a18181535012600605bd045370124020024031d24040134051824022b18181535012600605bd045370124020024031d24040134051824022c18181535012600605bd045370124020024031d24040134051824023018181535012600605bd045370124020024031d24040134051824023118181535012600605bd045370124020024031d24040134051824023218181535012600605bd045370124020024031d24040134051824023318181535012600605bd045370124020024031d24040134051824023418181535012600605bd045370124020024031d24040134051824023518181535012600605bd045370124020024031d24040134051824023618181535012600605bd045370124020024031d24040134051824023718181535012600605bd045370124020024031d24040134051824023b18181535012600605bd045370124020024031d24040134051824023c18181535012600605bd045370124020024031d24040134051824023e18181535012600605bd045370124020024031d24040134051824023f18181535012600605bd045370124020024031d24040134051824024018181535012600605bd045370124020024031d240401340518240241181818290424ff0118");
             const decodedData = TlvDataReport.decode(tlvData);
 
-            assert.ok(decodedData);
-            assert.ok(Array.isArray(decodedData.attributeReports));
+            expect(decodedData).toBeTruthy();
+            expect(Array.isArray(decodedData.attributeReports)).toBeTruthy();
+            if (!decodedData.attributeReports) return;
 
             const normalizedData = normalizeAndDecodeReadAttributeReport(decodedData.attributeReports);
 
-            assert.equal(normalizedData.length, 1);
-            assert.deepEqual(normalizedData[0].path, {
+            expect(normalizedData.length).toBe(1)
+            expect(normalizedData[0].path).toEqual({
                 attributeId: 1,
                 attributeName: "serverList",
                 clusterId: 29,
                 endpointId: 0,
                 nodeId: undefined
             });
-            assert.deepEqual(normalizedData[0].value, [
+            expect(normalizedData[0].value).toEqual([
                 new ClusterId(4), new ClusterId(29), new ClusterId(31), new ClusterId(40), new ClusterId(42),
                 new ClusterId(43), new ClusterId(44), new ClusterId(48), new ClusterId(49), new ClusterId(50),
                 new ClusterId(51), new ClusterId(52), new ClusterId(53), new ClusterId(54), new ClusterId(55),
@@ -351,20 +352,21 @@ describe("AttributeDataDecoder", () => {
             const tlvData = ByteArray.fromHex("153601153501260055156878370124020024032824040918240201181818290424ff0118");
             const decodedData = TlvDataReport.decode(tlvData);
 
-            assert.ok(decodedData);
-            assert.ok(Array.isArray(decodedData.attributeReports));
+            expect(decodedData).toBeTruthy();
+            expect(Array.isArray(decodedData.attributeReports)).toBeTruthy();
+            if (!decodedData.attributeReports) return;
 
             const normalizedData = normalizeAndDecodeReadAttributeReport(decodedData.attributeReports);
 
-            assert.equal(normalizedData.length, 1);
-            assert.deepEqual(normalizedData[0].path, {
+            expect(normalizedData.length).toBe(1)
+            expect(normalizedData[0].path).toEqual({
                 attributeId: 9,
                 attributeName: "softwareVersion",
                 clusterId: 40,
                 endpointId: 0,
                 nodeId: undefined
             });
-            assert.deepEqual(normalizedData[0].value, 1);
+            expect(normalizedData[0].value).toEqual(1)
         });
 
 
@@ -373,12 +375,13 @@ describe("AttributeDataDecoder", () => {
             const tlvData = ByteArray.fromHex("15360115350126005515687837012402002403282404001824020118181535012600551568783701240200240328240401182c020b544553545f56454e444f5218181535012600551568783701240200240328240402182502f1ff18181535012600551568783701240200240328240403182c020c544553545f50524f4455435418181535012600551568783701240200240328240404182502018018181535012600551568783701240200240328240405182c020018181535012600551568783701240200240328240406182c02025553181815350126005515687837012402002403282404071824020018181535012600551568783701240200240328240408182c020c544553545f56455253494f4e18181535012600551568783701240200240328240409182402011818153501260055156878370124020024032824040a182c0203312e301818153501260055156878370124020024032824040b182c020832303230303130311818153501260055156878370124020024032824040c182c02001818153501260055156878370124020024032824040d182c02001818153501260055156878370124020024032824040e182c02001818153501260055156878370124020024032824040f182c0207544553545f534e181815350126005515687837012402002403282404101828021818153501260055156878370124020024032824041118290218181535012600551568783701240200240328240412182c021032354536333242424137354642453943181815350126005515687837012402002403282404131835022400032501ffff18181815350126005515687837012402002403282504fcff18240200181815350126005515687837012402002403282504fdff18240201181815350126005515687837012402002403282504f8ff18360218181815350126005515687837012402002403282504f9ff18360218181815350126005515687837012402002403282504faff18360218181815350126005515687837012402002403282504faff340518240200181815350126005515687837012402002403282504faff340518240201181815350126005515687837012402002403282504faff340518240202181815350126005515687837012402002403282504fbff18360218181815350126005515687837012402002403282504fbff340518240200181815350126005515687837012402002403282504fbff340518240201181815350126005515687837012402002403282504fbff340518240202181815350126005515687837012402002403282504fbff340518240203181815350126005515687837012402002403282504fbff340518240204181818290324ff0118");
             const decodedData = TlvDataReport.decode(tlvData);
 
-            assert.ok(decodedData);
-            assert.ok(Array.isArray(decodedData.attributeReports));
+            expect(decodedData).toBeTruthy();
+            expect(Array.isArray(decodedData.attributeReports)).toBeTruthy();
+            if (!decodedData.attributeReports) return;
 
             const normalizedData = normalizeAndDecodeReadAttributeReport(decodedData.attributeReports);
 
-            assert.deepEqual(normalizedData, [
+            expect(normalizedData).toEqual([
                 {
                     "path": {
                         "endpointId": 0,
@@ -704,7 +707,7 @@ describe("AttributeDataDecoder", () => {
 
             const normalized = normalizeAttributeData(data);
 
-            assert.deepEqual(normalized, [data]);
+            expect(normalized).toEqual([data])
         });
 
         it("normalize data with all paths given for two endpoints", () => {
@@ -745,7 +748,7 @@ describe("AttributeDataDecoder", () => {
 
             const normalized = normalizeAttributeData([...data1, ...data2]);
 
-            assert.deepEqual(normalized, [data1, data2]);
+            expect(normalized).toEqual([data1, data2]);
         });
 
         it("normalize data with all paths given for two endpoints with enabledtagCompression", () => {
@@ -792,7 +795,7 @@ describe("AttributeDataDecoder", () => {
 
             const normalized = normalizeAttributeData([...data1, ...data2]);
 
-            assert.deepEqual(normalized, [resultData1, resultData2]);
+            expect(normalized).toEqual([resultData1, resultData2]);
         });
     });
 });

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ValidationError } from "../../src/common/MatterError.js";
 import { Schema } from "../../src/schema/Schema.js";
 import { TlvDouble, TlvFloat, TlvInt64, TlvUInt32, TlvUInt64 } from "../../src/tlv/TlvNumber.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
@@ -78,26 +79,25 @@ describe("TlvNumber", () => {
     describe("validate", () => {
         it("throws an error if the value is not a number", () => {
             expect(() => TlvUInt32.validate("a" as any))
-                .toThrowError("Expected number, got string.");
+                .toThrow(new ValidationError("Expected number, got string."));
         });
 
         it("throws an error if the value is not a bigint", () => {
             expect(() => TlvUInt64.validate("a" as any))
-                .toThrowError("Expected number, got string.");
+                .toThrow(new ValidationError("Expected number, got string."));
         });
 
         it("throws an error if the value is not a bigint", () => {
             expect(() => TlvUInt32.validate(BigInt(12345678790) as any))
-                .toThrowError("Expected number, got bigint.");
+                .toThrow(new ValidationError("Expected number, got bigint."));
         });
 
         it("does not throw an error if the value is a number", () => {
-            expect(TlvUInt64.validate(12345)).toBe(undefined);
+            expect(TlvUInt64.validate(12345)).not.toBeDefined();
         });
 
         it("does not throw an error if the value is a bigint", () => {
-            expect(TlvUInt64.validate(BigInt(12345678790))).toBe(undefined);
+            expect(TlvUInt64.validate(BigInt(12345678790))).not.toBeDefined();
         });
-
     });
 });

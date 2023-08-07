@@ -3,8 +3,6 @@
  * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-
-import * as assert from "assert";
 import { TimeFake } from "../../src/time/TimeFake.js";
 
 const FAKE_TIME = 36000000;
@@ -20,7 +18,7 @@ describe("TimeFake", () => {
         it("returns the fake date", () => {
             const result = timeFake.now();
 
-            assert.equal(result.getTime(), FAKE_TIME);
+            expect(result.getTime()).toBe(FAKE_TIME)
         });
     });
 
@@ -28,7 +26,7 @@ describe("TimeFake", () => {
         it("returns the fake time", () => {
             const result = timeFake.nowMs();
 
-            assert.equal(result, FAKE_TIME);
+            expect(result).toBe(FAKE_TIME)
         });
     });
 
@@ -36,7 +34,7 @@ describe("TimeFake", () => {
         it("advances the time by the duration specified", async () => {
             await timeFake.advanceTime(45);
 
-            assert.equal(timeFake.nowMs(), FAKE_TIME + 45);
+            expect(timeFake.nowMs()).toBe(FAKE_TIME + 45)
         });
     });
 
@@ -45,25 +43,25 @@ describe("TimeFake", () => {
             let firedTime;
 
             const result = timeFake.getPeriodicTimer(30, () => firedTime = timeFake.nowMs());
-            assert.equal(result.isRunning, false);
+            expect(result.isRunning).toBe(false)
 
             result.start();
 
-            assert.equal(result.isRunning, true);
-            assert.equal(firedTime, undefined);
+            expect(result.isRunning).toBe(true)
+            expect(firedTime).toBe(undefined)
 
             await timeFake.advanceTime(45);
 
-            assert.equal(firedTime, FAKE_TIME + 30);
+            expect(firedTime).toBe(FAKE_TIME + 30)
 
             await timeFake.advanceTime(20);
 
-            assert.equal(firedTime, FAKE_TIME + 60);
+            expect(firedTime).toBe(FAKE_TIME + 60)
 
-            assert.equal(result.isRunning, true);
+            expect(result.isRunning).toBe(true)
 
             result.stop();
-            assert.equal(result.isRunning, false);
+            expect(result.isRunning).toBe(false)
         });
 
         it("returns a periodic timer that can be stopped", async () => {
@@ -73,12 +71,12 @@ describe("TimeFake", () => {
             result.start();
             result.stop();
 
-            assert.equal(firedTime, undefined);
+            expect(firedTime).toBe(undefined)
 
             await timeFake.advanceTime(45);
 
-            assert.equal(firedTime, undefined);
-            assert.equal(result.isRunning, false);
+            expect(firedTime).toBe(undefined)
+            expect(result.isRunning).toBe(false)
         });
     });
 
@@ -87,34 +85,34 @@ describe("TimeFake", () => {
             let firedTime;
 
             const result = timeFake.getTimer(30, () => firedTime = timeFake.nowMs());
-            assert.equal(result.isRunning, false);
+            expect(result.isRunning).toBe(false)
             result.start();
-            assert.equal(result.isRunning, true);
+            expect(result.isRunning).toBe(true)
 
-            assert.equal(firedTime, undefined);
+            expect(firedTime).toBe(undefined)
 
             await timeFake.advanceTime(45);
 
-            assert.equal(firedTime, FAKE_TIME + 30);
-            assert.equal(result.isRunning, false);
+            expect(firedTime).toBe(FAKE_TIME + 30)
+            expect(result.isRunning).toBe(false)
         });
 
         it("returns a timer that can be stopped", async () => {
             let firedTime;
 
             const result = timeFake.getTimer(30, () => firedTime = timeFake.nowMs());
-            assert.equal(result.isRunning, false);
+            expect(result.isRunning).toBe(false)
             result.start();
-            assert.equal(result.isRunning, true);
+            expect(result.isRunning).toBe(true)
             result.stop();
-            assert.equal(result.isRunning, false);
+            expect(result.isRunning).toBe(false)
 
-            assert.equal(firedTime, undefined);
+            expect(firedTime).toBe(undefined)
 
             await timeFake.advanceTime(45);
 
-            assert.equal(firedTime, undefined);
-            assert.equal(result.isRunning, false);
+            expect(firedTime).toBe(undefined)
+            expect(result.isRunning).toBe(false)
         });
     });
 });

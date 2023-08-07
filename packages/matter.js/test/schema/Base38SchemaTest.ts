@@ -3,6 +3,7 @@
  * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+
 import { ByteArray } from "../../src/util/ByteArray.js";
 import { Base38 } from "../../src/schema/Base38Schema.js";
 
