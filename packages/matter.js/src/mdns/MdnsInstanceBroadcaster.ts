@@ -32,6 +32,6 @@ export class MdnsInstanceBroadcaster implements InstanceBroadcaster {
     }
 
     async announce() {
-        this.mdnsBroadcaster.announce(this.instancePort);
+        await this.mdnsBroadcaster.announce(this.instancePort);
     }
 }

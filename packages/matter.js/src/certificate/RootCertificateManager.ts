@@ -5,11 +5,12 @@
  */
 
 import { CertificateManager, jsToMatterDate, TlvOperationalCertificate, TlvRootCertificate } from "./CertificateManager.js";
-import { Crypto, KeyPair } from "../crypto/Crypto.js";
+import { Crypto } from "../crypto/Crypto.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Time } from "../time/Time.js";
 import { StorageContext } from "../storage/StorageContext.js";
+import { BinaryKeyPair, PrivateKey } from "../crypto/Key.js";
 
 export class RootCertificateManager {
     private rootCertId = BigInt(0);
@@ -27,12 +28,12 @@ export class RootCertificateManager {
                 // Read and set the values from storage,
                 // if one fail we use the pre-generated values, else we overwrite them
                 const rootCertId = storage.get<bigint>("rootCertId");
-                const rootKeyPair = storage.get<KeyPair>("rootKeyPair");
+                const rootKeyPair = storage.get<BinaryKeyPair>("rootKeyPair");
                 const rootKeyIdentifier = storage.get<ByteArray>("rootKeyIdentifier");
                 const rootCertBytes = storage.get<ByteArray>("rootCertBytes");
                 const nextCertificateId = storage.get<number>("nextCertificateId");
                 this.rootCertId = rootCertId;
-                this.rootKeyPair = rootKeyPair;
+                this.rootKeyPair = PrivateKey(rootKeyPair);
                 this.rootKeyIdentifier = rootKeyIdentifier;
                 this.rootCertBytes = rootCertBytes;
                 this.nextCertificateId = nextCertificateId;
@@ -42,7 +43,7 @@ export class RootCertificateManager {
             }
         }
         storage.set("rootCertId", this.rootCertId);
-        storage.set("rootKeyPair", this.rootKeyPair);
+        storage.set("rootKeyPair", this.rootKeyPair.keyPair);
         storage.set("rootKeyIdentifier", this.rootKeyIdentifier);
         storage.set("rootCertBytes", this.rootCertBytes);
         storage.set("nextCertificateId", this.nextCertificateId);
@@ -71,7 +72,7 @@ export class RootCertificateManager {
                 authorityKeyIdentifier: this.rootKeyIdentifier,
             },
         };
-        const signature = Crypto.signPkcs8(this.rootKeyPair.privateKey, CertificateManager.rootCertToAsn1(unsignedCertificate));
+        const signature = Crypto.sign(this.rootKeyPair, CertificateManager.rootCertToAsn1(unsignedCertificate));
         return TlvRootCertificate.encode({ ...unsignedCertificate, signature });
     }
 
@@ -96,7 +97,7 @@ export class RootCertificateManager {
                 authorityKeyIdentifier: this.rootKeyIdentifier,
             },
         };
-        const signature = Crypto.signPkcs8(this.rootKeyPair.privateKey, CertificateManager.nocCertToAsn1(unsignedCertificate));
+        const signature = Crypto.sign(this.rootKeyPair, CertificateManager.nocCertToAsn1(unsignedCertificate));
         return TlvOperationalCertificate.encode({ ...unsignedCertificate, signature });
     }
 }

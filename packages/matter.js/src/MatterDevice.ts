@@ -247,7 +247,7 @@ export class MatterDevice {
     }
 
     async stop() {
-        this.exchangeManager.close();
+        await this.exchangeManager.close();
         this.announceInterval?.stop();
     }
 }

@@ -12,6 +12,12 @@ import { FabricIndex, VendorId, FabricId, NodeId } from "@project-chip/matter.js
 import { ByteArray } from "@project-chip/matter.js/util";
 import { Attributes, ClusterServerObj, Commands, Events } from "@project-chip/matter.js/cluster";
 import { Endpoint } from "@project-chip/matter.js/device";
+import { PrivateKey } from "@project-chip/matter.js/crypto";
+
+export const ZERO = new ByteArray(1);
+const PRIVATE_KEY = new ByteArray(32);
+PRIVATE_KEY[31] = 1; // EC doesn't like all-zero private key
+export const KEY = PrivateKey(PRIVATE_KEY);
 
 // TODO make that nicer
 export async function callCommandOnClusterServer<A extends Attributes, C extends Commands, E extends Events>(clusterServer: ClusterServerObj<A, C, E>, commandName: string, args: any, endpoint: Endpoint, session?: SecureSession<any>, message?: Message): Promise<{ code: StatusCode, responseId: number, response: any }> {
@@ -22,6 +28,6 @@ export async function callCommandOnClusterServer<A extends Attributes, C extends
 }
 
 export async function createTestSessionWithFabric() {
-    const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ByteArray.fromHex("00"), ByteArray.fromHex("00"), { privateKey: ByteArray.fromHex("00"), publicKey: ByteArray.fromHex("00") }, new VendorId(1), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), "");
-    return await SecureSession.create({} as any, 1, testFabric, new NodeId(BigInt(1)), 1, ByteArray.fromHex("00"), ByteArray.fromHex("00"), false, false, () => { /* */ }, 1, 2);
+    const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ZERO, ZERO, KEY, new VendorId(1), ZERO, ZERO, ZERO, ZERO, ZERO, "");
+    return await SecureSession.create({} as any, 1, testFabric, new NodeId(BigInt(1)), 1, ZERO, ZERO, false, false, () => { /* */ }, 1, 2);
 }

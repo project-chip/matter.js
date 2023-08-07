@@ -7,6 +7,7 @@
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataReader } from "../util/DataReader.js";
 import BN from "bn.js";
+import { PrivateKey } from "./Key.js";
 import { MatterError, NoProviderError } from "../common/MatterError.js";
 
 export const CRYPTO_RANDOM_LENGTH = 32;
@@ -18,11 +19,6 @@ export const CRYPTO_SYMMETRIC_KEY_LENGTH = 16;
 export type CryptoDsaEncoding = "ieee-p1363" | "der";
 
 export class CryptoError extends MatterError { }
-
-export type KeyPair = {
-    publicKey: ByteArray,
-    privateKey: ByteArray,
-}
 
 export abstract class Crypto {
     static get: () => Crypto = () => { throw new NoProviderError("No provider configured"); };
@@ -72,18 +68,12 @@ export abstract class Crypto {
     abstract hmac(key: ByteArray, data: ByteArray): ByteArray;
     static readonly hmac = (key: ByteArray, data: ByteArray): ByteArray => Crypto.get().hmac(key, data);
 
-    abstract signPkcs8(privateKey: ByteArray, data: ByteArray | ByteArray[], dsaEncoding?: CryptoDsaEncoding): ByteArray;
-    static readonly signPkcs8 = (privateKey: ByteArray, data: ByteArray | ByteArray[], dsaEncoding?: CryptoDsaEncoding): ByteArray => Crypto.get().signPkcs8(privateKey, data, dsaEncoding);
+    abstract sign(privateKey: JsonWebKey, data: ByteArray | ByteArray[], dsaEncoding?: CryptoDsaEncoding): ByteArray;
+    static readonly sign = (privateKey: JsonWebKey, data: ByteArray | ByteArray[], dsaEncoding?: CryptoDsaEncoding): ByteArray => Crypto.get().sign(privateKey, data, dsaEncoding);
 
-    abstract signSec1(privateKey: ByteArray, data: ByteArray | ByteArray[], dsaEncoding?: CryptoDsaEncoding): ByteArray;
-    static readonly signSec1 = (privateKey: ByteArray, data: ByteArray | ByteArray[], dsaEncoding?: CryptoDsaEncoding): ByteArray => Crypto.get().signSec1(privateKey, data, dsaEncoding);
+    abstract verify(publicKey: JsonWebKey, data: ByteArray, signature: ByteArray, dsaEncoding?: CryptoDsaEncoding): void;
+    static readonly verify = (publicKey: JsonWebKey, data: ByteArray, signature: ByteArray, dsaEncoding?: CryptoDsaEncoding): void => Crypto.get().verify(publicKey, data, signature, dsaEncoding);
 
-    abstract verifySpkiEc(publicKey: ByteArray, data: ByteArray, signature: ByteArray, dsaEncoding?: CryptoDsaEncoding): void;
-    static readonly verifySpkiEc = (publicKey: ByteArray, data: ByteArray, signature: ByteArray, dsaEncoding?: CryptoDsaEncoding): void => Crypto.get().verifySpkiEc(publicKey, data, signature, dsaEncoding);
-
-    abstract verifySpki(publicKey: ByteArray, data: ByteArray, signature: ByteArray, dsaEncoding?: CryptoDsaEncoding): void;
-    static readonly verifySpki = (publicKey: ByteArray, data: ByteArray, signature: ByteArray, dsaEncoding?: CryptoDsaEncoding): void => Crypto.get().verifySpki(publicKey, data, signature, dsaEncoding);
-
-    abstract createKeyPair(): KeyPair
-    static readonly createKeyPair = (): KeyPair => Crypto.get().createKeyPair();
+    abstract createKeyPair(): PrivateKey
+    static readonly createKeyPair = (): PrivateKey => Crypto.get().createKeyPair();
 }

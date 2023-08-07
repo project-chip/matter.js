@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Crypto } from "@project-chip/matter.js/crypto";
+import { Crypto, PrivateKey, PublicKey } from "@project-chip/matter.js/crypto";
 import { CryptoNode } from "../../src/crypto/CryptoNode";
 
 Crypto.get = () => new CryptoNode();
@@ -55,7 +55,7 @@ describe("CertificateManager", () => {
 
     describe("createCertificateSigningRequest", () => {
         it("generates a valid CSR", () => {
-            const result = CertificateManager.createCertificateSigningRequest({ publicKey: PUBLIC_KEY, privateKey: PRIVATE_KEY });
+            const result = CertificateManager.createCertificateSigningRequest(PrivateKey(PRIVATE_KEY, { publicKey: PUBLIC_KEY }));
 
             const derNode = DerCodec.decode(result);
             assert.equal(derNode[ELEMENTS_KEY]?.length, 3);
@@ -63,13 +63,13 @@ describe("CertificateManager", () => {
             assert.deepEqual(DerCodec.encode(signatureAlgorithmNode), DerCodec.encode(EcdsaWithSHA256_X962));
             const requestBytes = DerCodec.encode(requestNode);
             assert.deepEqual(requestBytes, CSR_REQUEST_ASN1);
-            Crypto.verifySpki(PUBLIC_KEY, DerCodec.encode(requestNode), signatureNode[BYTES_KEY], "der");
+            Crypto.verify(PublicKey(PUBLIC_KEY), DerCodec.encode(requestNode), signatureNode[BYTES_KEY], "der");
         });
     });
 
     describe("getPublicKeyFromCsr", () => {
         it("get the public key from the CSR", () => {
-            const csr = CertificateManager.createCertificateSigningRequest({ publicKey: PUBLIC_KEY, privateKey: PRIVATE_KEY });
+            const csr = CertificateManager.createCertificateSigningRequest(PrivateKey(PRIVATE_KEY, { publicKey: PUBLIC_KEY }));
 
             const result = CertificateManager.getPublicKeyFromCsr(csr);
 

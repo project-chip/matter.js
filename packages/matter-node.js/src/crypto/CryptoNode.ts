@@ -7,12 +7,16 @@
 import * as crypto from "crypto";
 import { ByteArray } from "@project-chip/matter.js/util";
 import {
-    CRYPTO_AUTH_TAG_LENGTH, CRYPTO_EC_CURVE, CRYPTO_ENCRYPT_ALGORITHM, CRYPTO_HASH_ALGORITHM, CRYPTO_SYMMETRIC_KEY_LENGTH,
-    CryptoDsaEncoding, Crypto, CryptoError
+    CRYPTO_AUTH_TAG_LENGTH,
+    CRYPTO_EC_CURVE,
+    CRYPTO_ENCRYPT_ALGORITHM,
+    CRYPTO_HASH_ALGORITHM,
+    CRYPTO_SYMMETRIC_KEY_LENGTH,
+    CryptoDsaEncoding,
+    Crypto,
+    PrivateKey,
+    CryptoError
 } from "@project-chip/matter.js/crypto";
-
-const EC_PRIVATE_KEY_PKCS8_HEADER = ByteArray.fromHex("308141020100301306072a8648ce3d020106082a8648ce3d030107042730250201010420");
-const EC_PUBLIC_KEY_SPKI_HEADER = ByteArray.fromHex("3059301306072a8648ce3d020106082a8648ce3d030107034200");
 
 export class CryptoNode extends Crypto {
     encrypt(key: ByteArray, data: ByteArray, nonce: ByteArray, aad?: ByteArray): ByteArray {
@@ -91,7 +95,7 @@ export class CryptoNode extends Crypto {
         return new ByteArray(hmac.digest());
     }
 
-    signPkcs8(privateKey: ByteArray, data: ByteArray | ByteArray[], dsaEncoding: CryptoDsaEncoding = "ieee-p1363"): ByteArray {
+    sign(privateKey: JsonWebKey, data: ByteArray | ByteArray[], dsaEncoding: CryptoDsaEncoding = "ieee-p1363"): ByteArray {
         const signer = crypto.createSign(CRYPTO_HASH_ALGORITHM);
         if (Array.isArray(data)) {
             data.forEach(chunk => signer.update(chunk));
@@ -99,55 +103,31 @@ export class CryptoNode extends Crypto {
             signer.update(data);
         }
         return new ByteArray(signer.sign({
-            key: Buffer.concat([EC_PRIVATE_KEY_PKCS8_HEADER, privateKey]), // key has to be a node.js Buffer object
-            format: "der",
+            key: privateKey as any,
+            format: "jwk",
             type: "pkcs8",
             dsaEncoding,
         }));
     }
 
-    signSec1(privateKey: ByteArray, data: ByteArray | ByteArray[], dsaEncoding: CryptoDsaEncoding = "ieee-p1363"): ByteArray {
-        const signer = crypto.createSign(CRYPTO_HASH_ALGORITHM);
-        if (Array.isArray(data)) {
-            data.forEach(chunk => signer.update(chunk));
-        } else {
-            signer.update(data);
-        }
-        return new ByteArray(signer.sign({
-            key: Buffer.from(privateKey), // key has to be a node.js Buffer object
-            format: "der",
-            type: "sec1",
-            dsaEncoding,
-        }));
-    }
-
-    verifySpkiEc(publicKey: ByteArray, data: ByteArray, signature: ByteArray, dsaEncoding: CryptoDsaEncoding = "ieee-p1363") {
+    verify(publicKey: JsonWebKey, data: ByteArray, signature: ByteArray, dsaEncoding: CryptoDsaEncoding = "ieee-p1363") {
         const verifier = crypto.createVerify(CRYPTO_HASH_ALGORITHM);
         verifier.update(data);
         const success = verifier.verify({
-            key: Buffer.from(publicKey), // key has to be a node.js Buffer object
-            format: "der",
+            key: publicKey as any,
+            format: "jwk",
             type: "spki",
             dsaEncoding,
         }, signature);
         if (!success) throw new CryptoError("Signature verification failed");
     }
 
-    verifySpki(publicKey: ByteArray, data: ByteArray, signature: ByteArray, dsaEncoding: CryptoDsaEncoding = "ieee-p1363") {
-        const verifier = crypto.createVerify(CRYPTO_HASH_ALGORITHM);
-        verifier.update(data);
-        const success = verifier.verify({
-            key: Buffer.concat([EC_PUBLIC_KEY_SPKI_HEADER, publicKey]), // key has to be a node.js Buffer object
-            format: "der",
-            type: "spki",
-            dsaEncoding,
-        }, signature);
-        if (!success) throw new CryptoError("Signature verification failed");
-    }
-
-    createKeyPair(): { publicKey: ByteArray, privateKey: ByteArray } {
+    createKeyPair() {
         const ecdh = crypto.createECDH(CRYPTO_EC_CURVE);
         ecdh.generateKeys();
-        return { publicKey: new ByteArray(ecdh.getPublicKey()), privateKey: new ByteArray(ecdh.getPrivateKey()) };
+        return PrivateKey(
+            ecdh.getPrivateKey(),
+            { publicKey: ecdh.getPublicKey() }
+        );
     }
 }

@@ -43,7 +43,7 @@ function mapSpec(xref?: Specification.CrossReference) {
 export abstract class Entry {
     private documentation?: Documentation;
     private docText?: string;
-    public shouldGroup: boolean = false;
+    public shouldGroup = false;
 
     constructor(protected parentBlock: Block | undefined) { }
 
@@ -146,9 +146,9 @@ export class Block extends Entry {
     private addBefore?: Entry;
     private definedNames = new Set<string>();
 
-    protected indent: string = "";
-    protected prefix: string = "";
-    protected suffix: string = "";
+    protected indent = "";
+    protected prefix = "";
+    protected suffix = "";
 
     constructor(parentBlock: Block | undefined) {
         super(parentBlock);

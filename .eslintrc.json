@@ -3,7 +3,11 @@
     "parserOptions": {
         "ecmaVersion": 2018, // Allows for the parsing of modern ECMAScript features
         "sourceType": "module", // Allows for the use of imports
-        "project": "./tsconfig.tsfmt.lint.json"
+        "project": [
+            "tools/tsconfig.json",
+            "models/tsconfig.json",
+            "packages/*/tsconfig.json"
+        ]
     },
     "extends": [
         "eslint:recommended",
@@ -18,7 +22,11 @@
     "env": {
         "node": true
     },
-    "ignorePatterns": ["packages/*/dist/**/*"],
+    "ignorePatterns": [
+        "*/links/**",
+        "packages/*/dist/**/*",
+        "**/jest.config.ts"
+    ],
     "rules": {
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/ban-types": [
@@ -54,10 +62,27 @@
 
         "@typescript-eslint/restrict-template-expressions": "off",
 
-        "no-constant-condition":[
+        "no-constant-condition": [
             "error",
             {
                 "checkLoops": false
+            }
+        ],
+
+        "no-restricted-imports": [
+            "error",
+            {
+                "patterns": [
+                    {
+                        "group": [ "**/export" ],
+                        "message": "Please import the directory rather than the export file"
+                    },
+
+                    {
+                        "group": [ "**/export.js" ],
+                        "message": "Please import directly from the defining file"
+                    }
+                ]
             }
         ],
 

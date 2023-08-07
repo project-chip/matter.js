@@ -13,7 +13,7 @@ const config: Config = {
     setupFiles: [
         "<rootDir>/test/support/define-globals.ts"
     ],
-    maxWorkers: "50%", // to make sure jest is not using all available resources
+    maxWorkers: "25%", // to make sure jest is not using all available resources
 };
 
 export default config;
