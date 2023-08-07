@@ -1447,13 +1447,13 @@ describe("Endpoint Structures", () => {
                 new EndpointNumber(43)
             ]);
 
-            expect(endpointStorage.get("serial_node-matter-0000-index_0-index_1")).toBe(38)
-            expect(endpointStorage.get("serial_node-matter-0000-index_1-unique_COMPOSED2-custom_COMPOSED.SUB1")).toBe(42)
-            expect(endpointStorage.get("serial_node-matter-0000-index_1-unique_COMPOSED2-index_1")).toBe(43)
+            expect(endpointStorage.get("serial_node-matter-0000-index_0-index_1")).toBe(38);
+            expect(endpointStorage.get("serial_node-matter-0000-index_1-unique_COMPOSED2-custom_COMPOSED.SUB1")).toBe(42);
+            expect(endpointStorage.get("serial_node-matter-0000-index_1-unique_COMPOSED2-index_1")).toBe(43);
 
             expect(attributePaths.length).toBe(502);
             expect(commandPaths.length).toBe(138);
-            expect(eventPaths.length).toBe(9);
+            expect(eventPaths.length).toBe(10);
         });
 
         it("Device Structure with two aggregators and three Light/Composed endpoints and all partly auto-assigned endpoint IDs and removing adding devices", async () => {

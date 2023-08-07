@@ -3,7 +3,6 @@
  * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import * as assert from "assert";
 import { TlvEventData } from "../../../src/protocol/interaction/InteractionProtocol.js";
 import { TypeFromSchema } from "../../../src/tlv/TlvSchema.js";
 import { normalizeAndDecodeEventData, normalizeEventData } from "../../../src/protocol/interaction/EventDataDecoder.js";
@@ -33,7 +32,7 @@ describe("EventDataDecoder", () => {
 
             const normalized = normalizeEventData(data);
 
-            assert.deepEqual(normalized, [
+            expect(normalized).toEqual([
                 [{
                     path: { endpointId: 0, clusterId: 0x28, eventId: 0 },
                     eventNumber: 1,
@@ -78,7 +77,7 @@ describe("EventDataDecoder", () => {
 
             const normalized = normalizeEventData(data);
 
-            assert.deepEqual(normalized, [
+            expect(normalized).toEqual([
                 [
                     {
                         path: data[0].path,
@@ -135,7 +134,7 @@ describe("EventDataDecoder", () => {
 
             const normalized = normalizeAndDecodeEventData(data);
 
-            assert.deepEqual(normalized, [
+            expect(normalized).toEqual([
                 {
                     path: { endpointId: 0, clusterId: 0x28, eventId: 0, nodeId: undefined, eventName: "startUp" },
                     events: [{
@@ -199,7 +198,7 @@ describe("EventDataDecoder", () => {
 
             const normalized = normalizeAndDecodeEventData(data);
 
-            assert.deepEqual(normalized, [
+            expect(normalized).toEqual([
                 {
                     path: { endpointId: 0, clusterId: 0x28, eventId: 0, nodeId: undefined, eventName: "startUp" },
                     events: [
