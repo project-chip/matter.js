@@ -360,7 +360,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
      * Remove an internal listener.
      */
     override removeValueChangeListener(listener: (value: T, version: number) => void) {
-        const entryIndex = this.valueChangeListeners.findIndex(item => item === listener);
+        const entryIndex = this.valueChangeListeners.indexOf(listener);
         if (entryIndex !== -1) {
             this.valueChangeListeners.splice(entryIndex, 1);
         }
@@ -386,7 +386,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
      * Remove an external listener.
      */
     override removeValueSetListener(listener: (newValue: T, oldValue: T) => void) {
-        const entryIndex = this.valueSetListeners.findIndex(item => item === listener);
+        const entryIndex = this.valueSetListeners.indexOf(listener);
         if (entryIndex !== -1) {
             this.valueSetListeners.splice(entryIndex, 1);
         }

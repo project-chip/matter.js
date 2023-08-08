@@ -556,8 +556,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                         path,
                         eventNumber: eventData.eventNumber,
                         priority: eventData.priority,
-                        epochTimestamp: eventData.timestamp,
-                        data: event.schema.encodeTlv(eventData.value),
+                        epochTimestamp: eventData.epochTimestamp,
+                        data: event.schema.encodeTlv(eventData.data),
                     }
                 }));
             }).sort((a, b) => a.eventData.eventNumber - b.eventData.eventNumber);

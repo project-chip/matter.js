@@ -176,6 +176,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
 
             const emptyDataReportBytes = TlvDataReport.encode(dataReport);
 
+            // TODO reduce code duplication in below blocks
             let messageSize = emptyDataReportBytes.length;
             while (true) {
                 if (attributeReportsToSend.length > 0) {
@@ -184,7 +185,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                         const attributeReportBytes = TlvAttributeReport.encode(attributeReport).length;
                         if (messageSize + attributeReportBytes > MAX_SPDU_LENGTH) {
                             if (messageSize === emptyDataReportBytes.length) {
-                                throw new NotImplementedError(`Attribute report for is too long to fit in a single chunk, Array chunking not yet supported`);
+                                throw new NotImplementedError(`Attribute report is too long to fit in a single chunk, Array chunking not yet supported.`);
                             }
                             // Report doesn't fit, sending this chunk
                             logger.debug(`Sending DataReport chunk with ${dataReport.attributeReports?.length} attributes: ${messageSize} bytes`);
@@ -208,7 +209,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                     const eventReportBytes = TlvAttributeReport.encode(eventReport).length;
                     if (messageSize + eventReportBytes > MAX_SPDU_LENGTH) {
                         if (messageSize === emptyDataReportBytes.length) {
-                            throw new NotImplementedError(`Event report for is too long to fit in a single chunk, Array chunking not yet supported`);
+                            throw new NotImplementedError(`Event report is too long to fit in a single chunk, Array chunking not yet supported.`);
                         }
                         // Report doesn't fit, sending this chunk
                         logger.debug(`Sending DataReport chunk with ${dataReport.attributeReports?.length} attributes and ${dataReport.eventReports?.length} events: ${messageSize} bytes`);
@@ -237,7 +238,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                 this.throwIfErrorStatusMessage(receivedMessage);
             });
         } else {
-            logger.debug(`Sending (final) data report with ${dataReport.attributeReports?.length} attributes and ${dataReport.eventReports?.length} reports`);
+            logger.debug(`Sending (final) data report with ${dataReport.attributeReports?.length} attributes and ${dataReport.eventReports?.length} events`);
             await this.exchange.send(MessageType.ReportData, TlvDataReport.encode(dataReport));
             await this.waitForSuccess();
         }

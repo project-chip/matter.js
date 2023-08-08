@@ -78,14 +78,9 @@ export function normalizeAndDecodeEventData(data: TypeFromSchema<typeof TlvEvent
                 return;
             }
             const { event: { schema }, name } = eventDetail;
-            const events = values.map(({ eventNumber, priority, epochTimestamp, systemTimestamp, deltaEpochTimestamp, deltaSystemTimestamp, data }) => ({
-                eventNumber,
-                priority,
-                epochTimestamp,
-                systemTimestamp,
-                deltaEpochTimestamp,
-                deltaSystemTimestamp,
-                data: data !== undefined ? schema.decodeTlv(data) : undefined
+            const events = values.map(eventData => ({
+                ...eventData,
+                data: eventData.data === undefined ? undefined : schema.decodeTlv(eventData.data)
             }));
             result.push({ path: { nodeId, endpointId, clusterId, eventId, eventName: name }, events });
         } catch (error: any) {

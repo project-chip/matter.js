@@ -326,8 +326,8 @@ export class SubscriptionHandler {
                     path,
                     eventNumber: eventData.eventNumber,
                     priority: eventData.priority,
-                    epochTimestamp: eventData.timestamp,
-                    data: event.schema.encodeTlv(eventData.value),
+                    epochTimestamp: eventData.epochTimestamp,
+                    data: event.schema.encodeTlv(eventData.data),
                 }
             }));
         }).sort((a, b) => (a.eventData?.eventNumber as number ?? 0) - (b.eventData?.eventNumber as number ?? 0)); // TODO BigInt
@@ -414,8 +414,8 @@ export class SubscriptionHandler {
                                 path,
                                 eventNumber: event.eventNumber,
                                 priority: event.priority,
-                                epochTimestamp: event.timestamp,
-                                data: schema.encodeTlv(event.value),
+                                epochTimestamp: event.epochTimestamp,
+                                data: schema.encodeTlv(event.data),
                             }
                         })),
                     });

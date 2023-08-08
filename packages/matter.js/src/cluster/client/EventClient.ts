@@ -20,15 +20,30 @@ export class EventClient<T> {
         private getInteractionClientCallback: () => Promise<InteractionClient>,
     ) { }
 
-    async get(minimumEventNumber?: number | bigint, isFabricFiltered?: boolean): Promise<DecodedEventData<T>[] | undefined> {
+    async get(
+        minimumEventNumber?: number | bigint,
+        isFabricFiltered?: boolean
+    ): Promise<DecodedEventData<T>[] | undefined> {
         const interactionClient = await this.getInteractionClientCallback();
         if (interactionClient === undefined) {
             throw new InternalError("No InteractionClient available");
         }
-        return await interactionClient.getEvent(this.endpointId, this.clusterId, this.event, minimumEventNumber, isFabricFiltered);
+        return await interactionClient.getEvent(
+            this.endpointId,
+            this.clusterId,
+            this.event,
+            minimumEventNumber,
+            isFabricFiltered
+        );
     }
 
-    async subscribe(minIntervalS: number, maxIntervalS: number, isUrgent = true, minimumEventNumber?: number | bigint, isFabricFiltered?: boolean) {
+    async subscribe(
+        minIntervalS: number,
+        maxIntervalS: number,
+        isUrgent = true,
+        minimumEventNumber?: number | bigint,
+        isFabricFiltered?: boolean
+    ) {
         const interactionClient = await this.getInteractionClientCallback();
         if (interactionClient === undefined) {
             throw new InternalError("No InteractionClient available");
@@ -51,7 +66,7 @@ export class EventClient<T> {
     }
 
     removeListener(listener: (newValue: DecodedEventData<T>) => void) {
-        const entryIndex = this.listeners.findIndex(item => item === listener);
+        const entryIndex = this.listeners.indexOf(listener);
         if (entryIndex !== -1) {
             this.listeners.splice(entryIndex, 1);
         }

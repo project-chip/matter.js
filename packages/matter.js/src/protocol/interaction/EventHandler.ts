@@ -22,9 +22,9 @@ export interface EventData<T> {
     endpointId: number;
     clusterId: number;
     eventId: number
-    timestamp: number;
+    epochTimestamp: number;
     priority: EventPriority;
-    value: T;
+    data: T;
 }
 
 /**

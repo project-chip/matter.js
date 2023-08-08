@@ -164,6 +164,7 @@ export class CommissioningServer extends MatterNode {
         } = options;
 
         // Set the required basicInformation and respect the provided values
+        // TODO Get the defaults from the cluster meta details
         const basicInformationAttributes = Object.assign(
             {
                 dataModelRevision: 1,
@@ -217,6 +218,7 @@ export class CommissioningServer extends MatterNode {
         }
 
         // Add Operational credentials cluster to root directly because it is not allowed to be changed afterward
+        // TODO Get the defaults from the cluster meta details
         this.rootEndpoint.addClusterServer(
             ClusterServer(
                 OperationalCredentialsCluster,
@@ -232,6 +234,7 @@ export class CommissioningServer extends MatterNode {
             )
         );
 
+        // TODO Get the defaults from the cluster meta details
         this.rootEndpoint.addClusterServer(
             ClusterServer(
                 GeneralCommissioningCluster,
@@ -253,6 +256,7 @@ export class CommissioningServer extends MatterNode {
         );
 
         const networkId = new ByteArray(32);
+        // TODO Get the defaults from the cluster meta details
         this.rootEndpoint.addClusterServer(
             ClusterServer(
                 NetworkCommissioningCluster.with("EthernetNetworkInterface"),
@@ -268,6 +272,7 @@ export class CommissioningServer extends MatterNode {
             )
         );
 
+        // TODO Get the defaults from the cluster meta details
         this.rootEndpoint.addClusterServer(
             ClusterServer(
                 AccessControlCluster,
@@ -286,6 +291,7 @@ export class CommissioningServer extends MatterNode {
             )
         );
 
+        // TODO Get the defaults from the cluster meta details
         this.rootEndpoint.addClusterServer(
             ClusterServer(
                 GroupKeyManagementCluster,
@@ -299,6 +305,7 @@ export class CommissioningServer extends MatterNode {
             )
         );
 
+        // TODO Get the defaults from the cluster meta details
         this.rootEndpoint.addClusterServer(
             ClusterServer(
                 GeneralDiagnosticsCluster,

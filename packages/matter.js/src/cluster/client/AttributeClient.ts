@@ -100,7 +100,7 @@ export class AttributeClient<T> {
     }
 
     removeListener(listener: (newValue: T) => void) {
-        const entryIndex = this.listeners.findIndex(item => item === listener);
+        const entryIndex = this.listeners.indexOf(listener);
         if (entryIndex !== -1) {
             this.listeners.splice(entryIndex, 1);
         }
