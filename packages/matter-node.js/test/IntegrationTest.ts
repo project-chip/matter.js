@@ -383,12 +383,10 @@ describe("Integration Test", () => {
                 eventNumber: 1,
                 epochTimestamp: fakeTime.nowMs(),
                 priority: BasicInformation.Cluster.events.startUp.priority,
-                systemTimestamp: undefined,
-                deltaEpochTimestamp: undefined,
-                deltaSystemTimestamp: undefined,
                 data: {
                     softwareVersion: 1,
-                }
+                },
+                path: undefined,
             }]);
 
             const bootReasonEventData = response.find(({
@@ -402,12 +400,10 @@ describe("Integration Test", () => {
                 eventNumber: 2,
                 epochTimestamp: fakeTime.nowMs(),
                 priority: BasicInformation.Cluster.events.startUp.priority,
-                systemTimestamp: undefined,
-                deltaEpochTimestamp: undefined,
-                deltaSystemTimestamp: undefined,
                 data: {
                     bootReason: GeneralDiagnostics.BootReason.Unspecified,
-                }
+                },
+                path: undefined,
             }]);
         });
     });
@@ -586,12 +582,10 @@ describe("Integration Test", () => {
                     eventNumber: 3,
                     priority: 1,
                     epochTimestamp: BigInt(startTime),
-                    systemTimestamp: undefined,
-                    deltaEpochTimestamp: undefined,
-                    deltaSystemTimestamp: undefined,
                     data: {
                         reachableNewValue: false
-                    }
+                    },
+                    path: undefined,
                 },
                 time: startTime
             });
@@ -610,12 +604,10 @@ describe("Integration Test", () => {
                     eventNumber: 4,
                     priority: 1,
                     epochTimestamp: BigInt(startTime + 2 * 1000), // Triggered directly
-                    systemTimestamp: undefined,
-                    deltaEpochTimestamp: undefined,
-                    deltaSystemTimestamp: undefined,
                     data: {
                         reachableNewValue: true
-                    }
+                    },
+                    path: undefined,
                 },
                 time: startTime + 2 * 1000 + 100
             });
