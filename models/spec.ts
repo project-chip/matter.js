@@ -20206,6 +20206,2098 @@ export const SpecMatter: MatterElement = {
                     ]
                 }
             ]
+        },
+
+        {
+            tag: "deviceType", name: "Base", classification: "base",
+
+            children: [
+                {
+                    tag: "datatype", name: "conditions", type: "enum8",
+
+                    children: [
+                        {
+                            tag: "datatype", name: "Zha", description: "Zigbee Home Automation standard",
+                            xref: { document: "device", section: "1.1.3" }
+                        },
+                        {
+                            tag: "datatype", name: "Zse", description: "Zigbee Smart Energy standard",
+                            xref: { document: "device", section: "1.1.3" }
+                        },
+                        {
+                            tag: "datatype", name: "Gp", description: "Zigbee Green Power standard",
+                            xref: { document: "device", section: "1.1.3" }
+                        },
+                        {
+                            tag: "datatype", name: "Zigbee", description: "Zigbee standard",
+                            xref: { document: "device", section: "1.1.3" }
+                        },
+                        {
+                            tag: "datatype", name: "SuZi", description: "Zigbee PRO Sub-GHz standard",
+                            xref: { document: "device", section: "1.1.3" }
+                        },
+                        {
+                            tag: "datatype", name: "Matter", description: "Matter standard",
+                            xref: { document: "device", section: "1.1.3" }
+                        },
+                        {
+                            tag: "datatype", name: "Sleepy",
+                            description: "The node is normally asleep and wakes to perform function",
+                            xref: { document: "device", section: "1.1.4" }
+                        },
+                        {
+                            tag: "datatype", name: "Awake", description: "The node is always able to communicate",
+                            xref: { document: "device", section: "1.1.4" }
+                        },
+                        {
+                            tag: "datatype", name: "Simplex", description: "One way communication, client to server",
+                            xref: { document: "device", section: "1.1.4" }
+                        },
+                        {
+                            tag: "datatype", name: "Node",
+                            description: "the device type is classified as a Node device type (see Data Model specification)",
+                            xref: { document: "device", section: "1.1.5" }
+                        },
+                        {
+                            tag: "datatype", name: "App",
+                            description: "the device type is classified as an Application device type (see Data Model specification)",
+                            xref: { document: "device", section: "1.1.5" }
+                        },
+                        {
+                            tag: "datatype", name: "Simple",
+                            description: "the device type is classified as a Simple device type (see Data Model specification)",
+                            xref: { document: "device", section: "1.1.5" }
+                        },
+                        {
+                            tag: "datatype", name: "Dynamic",
+                            description: "the device type is classified as a Dynamic device type (see Data Model specification)",
+                            xref: { document: "device", section: "1.1.5" }
+                        },
+                        {
+                            tag: "datatype", name: "Client",
+                            description: "there exists a client application cluster on the endpoint",
+                            xref: { document: "device", section: "1.1.5" }
+                        },
+                        {
+                            tag: "datatype", name: "Server",
+                            description: "there exists a server application cluster on the endpoint",
+                            xref: { document: "device", section: "1.1.5" }
+                        },
+                        {
+                            tag: "datatype", name: "Composed",
+                            description: "the device type is composed of 2 or more device types (see System Model specification)",
+                            xref: { document: "device", section: "1.1.5" }
+                        },
+                        {
+                            tag: "datatype", name: "Multiple",
+                            description: "a Composed device type that is composed of 2 or more endpoints with the same device type (see System Model specification)",
+                            xref: { document: "device", section: "1.1.5" }
+                        },
+                        {
+                            tag: "datatype", name: "EzInitiator",
+                            description: "the endpoint is an Initiator for Zigbee EZ-Mode Finding & Binding",
+                            xref: { document: "device", section: "1.1.5" }
+                        },
+                        {
+                            tag: "datatype", name: "EzTarget",
+                            description: "the endpoint is a Target for Zigbee EZ-Mode Finding & Binding",
+                            xref: { document: "device", section: "1.1.5" }
+                        },
+                        {
+                            tag: "datatype", name: "BridgedPowerSourceInfo",
+                            description: "the endpoint represents a Bridged Device, for which information about the state of its power source is available to the Bridge",
+                            xref: { document: "device", section: "1.1.5" }
+                        }
+                    ]
+                },
+
+                {
+                    tag: "requirement", name: "Descriptor", element: "serverCluster",
+                    xref: { document: "device", section: "1.1.7" }
+                },
+                {
+                    tag: "requirement", name: "Binding", element: "serverCluster",
+                    xref: { document: "device", section: "1.1.7" }
+                },
+                {
+                    tag: "requirement", name: "FixedLabel", element: "serverCluster",
+                    xref: { document: "device", section: "1.1.7" }
+                },
+                {
+                    tag: "requirement", name: "UserLabel", element: "serverCluster",
+                    xref: { document: "device", section: "1.1.7" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "RootNode", id: 0x16, classification: "node",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 22 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 1 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "datatype", name: "conditions", type: "enum8",
+                    children: [{
+                        tag: "datatype", name: "CustomNetworkConfig",
+                        description: "The node only supports out-of-band-configured networking (e.g. rich user interface, manufacturer-specific means, custom commissioning flows, or future IP-compliant network technology not yet directly supported by NetworkCommissioning cluster).",
+                        xref: { document: "device", section: "2.1.3" }
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "BasicInformation", id: 0x28, element: "serverCluster",
+                    xref: { document: "device", section: "2.1.4" }
+                },
+                {
+                    tag: "requirement", name: "AccessControl", id: 0x1f, element: "serverCluster",
+                    xref: { document: "device", section: "2.1.4" }
+                },
+                {
+                    tag: "requirement", name: "PowerSourceConfiguration", id: 0x2e, element: "serverCluster",
+                    xref: { document: "device", section: "2.1.4" }
+                },
+                {
+                    tag: "requirement", name: "TimeSynchronization", id: 0x38, element: "serverCluster",
+                    xref: { document: "device", section: "2.1.4" }
+                },
+                {
+                    tag: "requirement", name: "GroupKeyManagement", id: 0x3f, element: "serverCluster",
+                    xref: { document: "device", section: "2.1.4" }
+                },
+                {
+                    tag: "requirement", name: "GeneralCommissioning", id: 0x30, element: "serverCluster",
+                    xref: { document: "device", section: "2.1.4" }
+                },
+                {
+                    tag: "requirement", name: "NetworkCommissioning", id: 0x31, element: "serverCluster",
+                    xref: { document: "device", section: "2.1.4" }
+                },
+                {
+                    tag: "requirement", name: "AdministratorCommissioning", id: 0x3c, element: "serverCluster",
+                    xref: { document: "device", section: "2.1.4" }
+                },
+                {
+                    tag: "requirement", name: "NodeOperationalCredentials", id: 0x3e, element: "serverCluster",
+                    xref: { document: "device", section: "2.1.4" }
+                },
+                {
+                    tag: "requirement", name: "LocalizationConfiguration", id: 0x2b, element: "serverCluster",
+                    xref: { document: "device", section: "2.1.4" }
+                },
+                {
+                    tag: "requirement", name: "TimeFormatLocalization", id: 0x2c, element: "serverCluster",
+                    xref: { document: "device", section: "2.1.4" }
+                },
+                {
+                    tag: "requirement", name: "UnitLocalization", id: 0x2d, element: "serverCluster",
+                    xref: { document: "device", section: "2.1.4" }
+                },
+                {
+                    tag: "requirement", name: "GeneralDiagnostics", id: 0x33, element: "serverCluster",
+                    xref: { document: "device", section: "2.1.4" }
+                },
+                {
+                    tag: "requirement", name: "DiagnosticLogs", id: 0x32, element: "serverCluster",
+                    xref: { document: "device", section: "2.1.4" }
+                },
+                {
+                    tag: "requirement", name: "SoftwareDiagnostics", id: 0x34, element: "serverCluster",
+                    xref: { document: "device", section: "2.1.4" }
+                },
+                {
+                    tag: "requirement", name: "EthernetNetworkDiagnostics", id: 0x37, element: "serverCluster",
+                    xref: { document: "device", section: "2.1.4" }
+                },
+                {
+                    tag: "requirement", name: "WiFiNetworkDiagnostics", id: 0x36, element: "serverCluster",
+                    xref: { document: "device", section: "2.1.4" }
+                },
+                {
+                    tag: "requirement", name: "ThreadNetworkDiagnostics", id: 0x35, element: "serverCluster",
+                    xref: { document: "device", section: "2.1.4" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "PowerSource", id: 0x11, classification: "utility",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 17 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 1 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "PowerSource", id: 0x2f, element: "serverCluster",
+                    xref: { document: "device", section: "2.2.3" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "OtaRequestor", id: 0x12, classification: "utility",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 18 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 1 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "OtaSoftwareUpdateRequestor", element: "serverCluster",
+                    xref: { document: "device", section: "2.3.3" }
+                },
+                {
+                    tag: "requirement", name: "OtaSoftwareUpdateProvider", element: "clientCluster",
+                    xref: { document: "device", section: "2.3.3" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "OtaProvider", id: 0x14, classification: "utility",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 20 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 1 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "OtaSoftwareUpdateRequestor", element: "clientCluster",
+                    xref: { document: "device", section: "2.4.3" }
+                },
+                {
+                    tag: "requirement", name: "OtaSoftwareUpdateProvider", element: "serverCluster",
+                    xref: { document: "device", section: "2.4.3" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "Aggregator", id: 0xe, classification: "dynamic",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 14 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 1 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "Actions", element: "serverCluster",
+                    xref: { document: "device", section: "2.5.4" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "BridgedNode", id: 0x13, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 19 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 1 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "BridgedDeviceBasicInformation", element: "serverCluster",
+                    xref: { document: "device", section: "2.6.4" }
+                },
+                {
+                    tag: "requirement", name: "PowerSourceConfiguration", element: "serverCluster",
+                    xref: { document: "device", section: "2.6.4" }
+                },
+                {
+                    tag: "requirement", name: "PowerSource", element: "serverCluster",
+                    xref: { document: "device", section: "2.6.4" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "OnOffLight", id: 0x100, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 256 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 2 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+                    xref: { document: "device", section: "4.1.4" },
+                    children: [
+                        { tag: "requirement", name: "Query", element: "feature" },
+                        { tag: "requirement", name: "TriggerEffect", element: "command" }
+                    ]
+                },
+
+                {
+                    tag: "requirement", name: "Groups", id: 0x4, element: "serverCluster",
+                    xref: { document: "device", section: "4.1.4" }
+                },
+
+                {
+                    tag: "requirement", name: "Scenes", id: 0x5, element: "serverCluster",
+                    xref: { document: "device", section: "4.1.4" },
+                    children: [
+                        { tag: "requirement", name: "EnhancedAddScene", element: "command" },
+                        { tag: "requirement", name: "EnhancedViewScene", element: "command" },
+                        { tag: "requirement", name: "CopyScene", element: "command" }
+                    ]
+                },
+
+                {
+                    tag: "requirement", name: "OnOff", id: 0x6, element: "serverCluster",
+                    xref: { document: "device", section: "4.1.4" },
+                    children: [{ tag: "requirement", name: "Lt", element: "feature" }]
+                },
+
+                {
+                    tag: "requirement", name: "LevelControl", id: 0x8, element: "serverCluster",
+                    xref: { document: "device", section: "4.1.4" },
+
+                    children: [
+                        { tag: "requirement", name: "Oo", element: "feature" },
+                        { tag: "requirement", name: "Lt", element: "feature" },
+                        { tag: "requirement", name: "CurrentLevel", element: "attribute" },
+                        { tag: "requirement", name: "MinLevel", element: "attribute" },
+                        { tag: "requirement", name: "MaxLevel", element: "attribute" }
+                    ]
+                },
+
+                {
+                    tag: "requirement", name: "OccupancySensing", id: 0x406, element: "clientCluster",
+                    xref: { document: "device", section: "4.1.4" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "DimmableLight", id: 0x101, type: "OnOffLight", classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 257 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 2 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+                    xref: { document: "device", section: "4.2.4" },
+                    children: [
+                        { tag: "requirement", name: "Query", element: "feature" },
+                        { tag: "requirement", name: "TriggerEffect", element: "command" }
+                    ]
+                },
+
+                {
+                    tag: "requirement", name: "Groups", id: 0x4, element: "serverCluster",
+                    xref: { document: "device", section: "4.2.4" }
+                },
+
+                {
+                    tag: "requirement", name: "Scenes", id: 0x5, element: "serverCluster",
+                    xref: { document: "device", section: "4.2.4" },
+                    children: [
+                        { tag: "requirement", name: "EnhancedAddScene", element: "command" },
+                        { tag: "requirement", name: "EnhancedViewScene", element: "command" },
+                        { tag: "requirement", name: "CopyScene", element: "command" }
+                    ]
+                },
+
+                {
+                    tag: "requirement", name: "OnOff", id: 0x6, element: "serverCluster",
+                    xref: { document: "device", section: "4.2.4" },
+                    children: [{ tag: "requirement", name: "Lt", element: "feature" }]
+                },
+
+                {
+                    tag: "requirement", name: "LevelControl", id: 0x8, element: "serverCluster",
+                    xref: { document: "device", section: "4.2.4" },
+
+                    children: [
+                        { tag: "requirement", name: "Oo", element: "feature" },
+                        { tag: "requirement", name: "Lt", element: "feature" },
+                        { tag: "requirement", name: "CurrentLevel", element: "attribute" },
+                        { tag: "requirement", name: "MinLevel", element: "attribute" },
+                        { tag: "requirement", name: "MaxLevel", element: "attribute" }
+                    ]
+                },
+
+                {
+                    tag: "requirement", name: "OccupancySensing", id: 0x406, element: "clientCluster",
+                    xref: { document: "device", section: "4.2.4" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "ColorTemperatureLight", id: 0x10c, type: "DimmableLight",
+            classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 268 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 2 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+                    xref: { document: "device", section: "4.3.4" },
+                    children: [
+                        { tag: "requirement", name: "Query", element: "feature" },
+                        { tag: "requirement", name: "TriggerEffect", element: "command" }
+                    ]
+                },
+
+                {
+                    tag: "requirement", name: "Groups", id: 0x4, element: "serverCluster",
+                    xref: { document: "device", section: "4.3.4" }
+                },
+
+                {
+                    tag: "requirement", name: "Scenes", id: 0x5, element: "serverCluster",
+                    xref: { document: "device", section: "4.3.4" },
+                    children: [
+                        { tag: "requirement", name: "EnhancedAddScene", element: "command" },
+                        { tag: "requirement", name: "EnhancedViewScene", element: "command" },
+                        { tag: "requirement", name: "CopyScene", element: "command" }
+                    ]
+                },
+
+                {
+                    tag: "requirement", name: "OnOff", id: 0x6, element: "serverCluster",
+                    xref: { document: "device", section: "4.3.4" },
+                    children: [{ tag: "requirement", name: "Lt", element: "feature" }]
+                },
+
+                {
+                    tag: "requirement", name: "LevelControl", id: 0x8, element: "serverCluster",
+                    xref: { document: "device", section: "4.3.4" },
+
+                    children: [
+                        { tag: "requirement", name: "Oo", element: "feature" },
+                        { tag: "requirement", name: "Lt", element: "feature" },
+                        { tag: "requirement", name: "CurrentLevel", element: "attribute" },
+                        { tag: "requirement", name: "MinLevel", element: "attribute" },
+                        { tag: "requirement", name: "MaxLevel", element: "attribute" }
+                    ]
+                },
+
+                {
+                    tag: "requirement", name: "ColorControl", id: 0x300, element: "serverCluster",
+                    xref: { document: "device", section: "4.3.4" },
+                    children: [
+                        { tag: "requirement", name: "Ct", element: "feature" },
+                        { tag: "requirement", name: "RemainingTime", element: "attribute" }
+                    ]
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "ExtendedColorLight", id: 0x10d, type: "ColorTemperatureLight",
+            classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 269 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 2 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+                    xref: { document: "device", section: "4.4.4" },
+                    children: [
+                        { tag: "requirement", name: "Query", element: "feature" },
+                        { tag: "requirement", name: "TriggerEffect", element: "command" }
+                    ]
+                },
+
+                {
+                    tag: "requirement", name: "Groups", id: 0x4, element: "serverCluster",
+                    xref: { document: "device", section: "4.4.4" }
+                },
+
+                {
+                    tag: "requirement", name: "Scenes", id: 0x5, element: "serverCluster",
+                    xref: { document: "device", section: "4.4.4" },
+                    children: [
+                        { tag: "requirement", name: "EnhancedAddScene", element: "command" },
+                        { tag: "requirement", name: "EnhancedViewScene", element: "command" },
+                        { tag: "requirement", name: "CopyScene", element: "command" }
+                    ]
+                },
+
+                {
+                    tag: "requirement", name: "OnOff", id: 0x6, element: "serverCluster",
+                    xref: { document: "device", section: "4.4.4" },
+                    children: [{ tag: "requirement", name: "Lt", element: "feature" }]
+                },
+
+                {
+                    tag: "requirement", name: "LevelControl", id: 0x8, element: "serverCluster",
+                    xref: { document: "device", section: "4.4.4" },
+
+                    children: [
+                        { tag: "requirement", name: "Oo", element: "feature" },
+                        { tag: "requirement", name: "Lt", element: "feature" },
+                        { tag: "requirement", name: "CurrentLevel", element: "attribute" },
+                        { tag: "requirement", name: "MinLevel", element: "attribute" },
+                        { tag: "requirement", name: "MaxLevel", element: "attribute" }
+                    ]
+                },
+
+                {
+                    tag: "requirement", name: "ColorControl", id: 0x300, element: "serverCluster",
+                    xref: { document: "device", section: "4.4.4" },
+
+                    children: [
+                        { tag: "requirement", name: "Hs", element: "feature" },
+                        { tag: "requirement", name: "Ehue", element: "feature" },
+                        { tag: "requirement", name: "Cl", element: "feature" },
+                        { tag: "requirement", name: "Xy", element: "feature" },
+                        { tag: "requirement", name: "Ct", element: "feature" },
+                        { tag: "requirement", name: "RemainingTime", element: "attribute" }
+                    ]
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "OnOffPlugInUnit", id: 0x10a, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 266 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 2 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+                    xref: { document: "device", section: "5.1.4" }
+                },
+                {
+                    tag: "requirement", name: "Groups", id: 0x4, element: "serverCluster",
+                    xref: { document: "device", section: "5.1.4" }
+                },
+                {
+                    tag: "requirement", name: "Scenes", id: 0x5, element: "serverCluster",
+                    xref: { document: "device", section: "5.1.4" }
+                },
+                {
+                    tag: "requirement", name: "OnOff", id: 0x6, element: "serverCluster",
+                    xref: { document: "device", section: "5.1.4" }
+                },
+                {
+                    tag: "requirement", name: "LevelControl", id: 0x8, element: "serverCluster",
+                    xref: { document: "device", section: "5.1.4" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "DimmablePlugInUnit", id: 0x10b, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 267 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 2 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+                    xref: { document: "device", section: "5.2.4" },
+                    children: [
+                        { tag: "requirement", name: "Query", element: "feature" },
+                        { tag: "requirement", name: "TriggerEffect", element: "command" }
+                    ]
+                },
+
+                {
+                    tag: "requirement", name: "Groups", id: 0x4, element: "serverCluster",
+                    xref: { document: "device", section: "5.2.4" }
+                },
+
+                {
+                    tag: "requirement", name: "Scenes", id: 0x5, element: "serverCluster",
+                    xref: { document: "device", section: "5.2.4" },
+                    children: [
+                        { tag: "requirement", name: "EnhancedAddScene", element: "command" },
+                        { tag: "requirement", name: "EnhancedViewScene", element: "command" },
+                        { tag: "requirement", name: "CopyScene", element: "command" }
+                    ]
+                },
+
+                {
+                    tag: "requirement", name: "OnOff", id: 0x6, element: "serverCluster",
+                    xref: { document: "device", section: "5.2.4" },
+                    children: [{ tag: "requirement", name: "Lt", element: "feature" }]
+                },
+
+                {
+                    tag: "requirement", name: "LevelControl", id: 0x8, element: "serverCluster",
+                    xref: { document: "device", section: "5.2.4" },
+
+                    children: [
+                        { tag: "requirement", name: "Oo", element: "feature" },
+                        { tag: "requirement", name: "Lt", element: "feature" },
+                        { tag: "requirement", name: "CurrentLevel", element: "attribute" },
+                        { tag: "requirement", name: "MinLevel", element: "attribute" },
+                        { tag: "requirement", name: "MaxLevel", element: "attribute" }
+                    ]
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "Pump", id: 0x303, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 771 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 2 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "OnOff", id: 0x6, element: "serverCluster",
+                    xref: { document: "device", section: "5.3.4" }
+                },
+                {
+                    tag: "requirement", name: "PumpConfigurationAndControl", id: 0x200, element: "serverCluster",
+                    xref: { document: "device", section: "5.3.4" }
+                },
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+                    xref: { document: "device", section: "5.3.4" },
+                    children: [{ tag: "requirement", name: "Query", element: "feature" }]
+                },
+                {
+                    tag: "requirement", name: "Level", id: 0x8, element: "serverCluster",
+                    xref: { document: "device", section: "5.3.4" }
+                },
+                {
+                    tag: "requirement", name: "Scenes", id: 0x5, element: "serverCluster",
+                    xref: { document: "device", section: "5.3.4" }
+                },
+                {
+                    tag: "requirement", name: "Groups", id: 0x4, element: "serverCluster",
+                    xref: { document: "device", section: "5.3.4" }
+                },
+                {
+                    tag: "requirement", name: "TemperatureMeasurement", id: 0x402, element: "serverCluster",
+                    xref: { document: "device", section: "5.3.4" }
+                },
+                {
+                    tag: "requirement", name: "PressureMeasurement", id: 0x403, element: "serverCluster",
+                    xref: { document: "device", section: "5.3.4" }
+                },
+                {
+                    tag: "requirement", name: "FlowMeasurement", id: 0x404, element: "serverCluster",
+                    xref: { document: "device", section: "5.3.4" }
+                },
+                {
+                    tag: "requirement", name: "TemperatureMeasurement", id: 0x402, element: "clientCluster",
+                    xref: { document: "device", section: "5.3.4" }
+                },
+                {
+                    tag: "requirement", name: "PressureMeasurement", id: 0x403, element: "clientCluster",
+                    xref: { document: "device", section: "5.3.4" }
+                },
+                {
+                    tag: "requirement", name: "FlowMeasurement", id: 0x404, element: "clientCluster",
+                    xref: { document: "device", section: "5.3.4" }
+                },
+                {
+                    tag: "requirement", name: "OccupancySensing", id: 0x406, element: "clientCluster",
+                    xref: { document: "device", section: "5.3.4" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "OnOffLightSwitch", id: 0x103, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 259 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 2 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+                    xref: { document: "device", section: "6.1.4" }
+                },
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "clientCluster",
+                    xref: { document: "device", section: "6.1.4" },
+                    children: [{ tag: "requirement", name: "Query", element: "feature" }]
+                },
+                {
+                    tag: "requirement", name: "Groups", id: 0x4, element: "clientCluster",
+                    xref: { document: "device", section: "6.1.4" }
+                },
+                {
+                    tag: "requirement", name: "Scenes", id: 0x5, element: "clientCluster",
+                    xref: { document: "device", section: "6.1.4" }
+                },
+                {
+                    tag: "requirement", name: "OnOff", id: 0x6, element: "clientCluster",
+                    xref: { document: "device", section: "6.1.4" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "DimmerSwitch", id: 0x104, type: "OnOffLightSwitch",
+            classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 260 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 2 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+                    xref: { document: "device", section: "6.2.4" }
+                },
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "clientCluster",
+                    xref: { document: "device", section: "6.2.4" },
+                    children: [{ tag: "requirement", name: "Query", element: "feature" }]
+                },
+                {
+                    tag: "requirement", name: "Groups", id: 0x4, element: "clientCluster",
+                    xref: { document: "device", section: "6.2.4" }
+                },
+                {
+                    tag: "requirement", name: "Scenes", id: 0x5, element: "clientCluster",
+                    xref: { document: "device", section: "6.2.4" }
+                },
+                {
+                    tag: "requirement", name: "OnOff", id: 0x6, element: "clientCluster",
+                    xref: { document: "device", section: "6.2.4" }
+                },
+                {
+                    tag: "requirement", name: "LevelControl", id: 0x8, element: "clientCluster",
+                    xref: { document: "device", section: "6.2.4" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "ColorDimmerSwitch", id: 0x105, type: "DimmerSwitch",
+            classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 261 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 2 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+                    xref: { document: "device", section: "6.3.4" }
+                },
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "clientCluster",
+                    xref: { document: "device", section: "6.3.4" },
+                    children: [{ tag: "requirement", name: "Query", element: "feature" }]
+                },
+                {
+                    tag: "requirement", name: "Groups", id: 0x4, element: "clientCluster",
+                    xref: { document: "device", section: "6.3.4" }
+                },
+                {
+                    tag: "requirement", name: "Scenes", id: 0x5, element: "clientCluster",
+                    xref: { document: "device", section: "6.3.4" }
+                },
+                {
+                    tag: "requirement", name: "OnOff", id: 0x6, element: "clientCluster",
+                    xref: { document: "device", section: "6.3.4" }
+                },
+                {
+                    tag: "requirement", name: "LevelControl", id: 0x8, element: "clientCluster",
+                    xref: { document: "device", section: "6.3.4" }
+                },
+                {
+                    tag: "requirement", name: "ColorControl", id: 0x300, element: "clientCluster",
+                    xref: { document: "device", section: "6.3.4" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "ControlBridge", id: 0x840, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 2112 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 2 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+                    xref: { document: "device", section: "6.4.4" }
+                },
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "clientCluster",
+                    xref: { document: "device", section: "6.4.4" },
+                    children: [{ tag: "requirement", name: "Query", element: "feature" }]
+                },
+                {
+                    tag: "requirement", name: "Groups", id: 0x4, element: "clientCluster",
+                    xref: { document: "device", section: "6.4.4" }
+                },
+                {
+                    tag: "requirement", name: "Scenes", id: 0x5, element: "clientCluster",
+                    xref: { document: "device", section: "6.4.4" }
+                },
+                {
+                    tag: "requirement", name: "OnOff", id: 0x6, element: "clientCluster",
+                    xref: { document: "device", section: "6.4.4" }
+                },
+                {
+                    tag: "requirement", name: "LevelControl", id: 0x8, element: "clientCluster",
+                    xref: { document: "device", section: "6.4.4" }
+                },
+                {
+                    tag: "requirement", name: "ColorControl", id: 0x300, element: "clientCluster",
+                    xref: { document: "device", section: "6.4.4" }
+                },
+                {
+                    tag: "requirement", name: "IlluminanceMeasurement", id: 0x400, element: "clientCluster",
+                    xref: { document: "device", section: "6.4.4" }
+                },
+                {
+                    tag: "requirement", name: "OccupancySensing", id: 0x406, element: "clientCluster",
+                    xref: { document: "device", section: "6.4.4" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "PumpController", id: 0x304, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 772 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 2 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "Binding", id: 0x1e, element: "clientCluster",
+                    xref: { document: "device", section: "6.5.3" }
+                },
+                {
+                    tag: "requirement", name: "OnOff", id: 0x6, element: "clientCluster",
+                    xref: { document: "device", section: "6.5.3" }
+                },
+                {
+                    tag: "requirement", name: "PumpConfigurationAndControl", id: 0x200, element: "clientCluster",
+                    xref: { document: "device", section: "6.5.3" }
+                },
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+                    xref: { document: "device", section: "6.5.3" }
+                },
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "clientCluster",
+                    xref: { document: "device", section: "6.5.3" },
+                    children: [{ tag: "requirement", name: "Query", element: "feature" }]
+                },
+                {
+                    tag: "requirement", name: "Groups", id: 0x4, element: "clientCluster",
+                    xref: { document: "device", section: "6.5.3" }
+                },
+                {
+                    tag: "requirement", name: "Scenes", id: 0x5, element: "clientCluster",
+                    xref: { document: "device", section: "6.5.3" }
+                },
+                {
+                    tag: "requirement", name: "Level", id: 0x8, element: "clientCluster",
+                    xref: { document: "device", section: "6.5.3" }
+                },
+                {
+                    tag: "requirement", name: "TemperatureMeasurement", id: 0x402, element: "clientCluster",
+                    xref: { document: "device", section: "6.5.3" }
+                },
+                {
+                    tag: "requirement", name: "PressureMeasurement", id: 0x403, element: "clientCluster",
+                    xref: { document: "device", section: "6.5.3" }
+                },
+                {
+                    tag: "requirement", name: "FlowMeasurement", id: 0x404, element: "clientCluster",
+                    xref: { document: "device", section: "6.5.3" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "GenericSwitch", id: 0xf, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 15 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 1 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "Identify", element: "serverCluster",
+                    xref: { document: "device", section: "6.6.4" }
+                },
+                {
+                    tag: "requirement", name: "Switch", element: "serverCluster",
+                    xref: { document: "device", section: "6.6.4" }
+                },
+                {
+                    tag: "requirement", name: "FixedLabel", element: "serverCluster",
+                    xref: { document: "device", section: "6.6.4" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "ContactSensor", id: 0x15, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 21 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 1 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+                    xref: { document: "device", section: "7.1.4" },
+                    children: [{ tag: "requirement", name: "Query", element: "feature" }]
+                },
+                {
+                    tag: "requirement", name: "BooleanState", id: 0x45, element: "serverCluster",
+                    xref: { document: "device", section: "7.1.4" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "LightSensor", id: 0x106, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 262 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 2 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+                    xref: { document: "device", section: "7.2.4" },
+                    children: [{ tag: "requirement", name: "Query", element: "feature" }]
+                },
+                {
+                    tag: "requirement", name: "Groups", id: 0x4, element: "clientCluster",
+                    xref: { document: "device", section: "7.2.4" }
+                },
+                {
+                    tag: "requirement", name: "IlluminanceMeasurement", id: 0x400, element: "serverCluster",
+                    xref: { document: "device", section: "7.2.4" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "OccupancySensor", id: 0x107, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 263 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 2 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+                    xref: { document: "device", section: "7.3.4" },
+                    children: [{ tag: "requirement", name: "Query", element: "feature" }]
+                },
+                {
+                    tag: "requirement", name: "Groups", id: 0x4, element: "clientCluster",
+                    xref: { document: "device", section: "7.3.4" }
+                },
+                {
+                    tag: "requirement", name: "OccupancySensing", id: 0x406, element: "serverCluster",
+                    xref: { document: "device", section: "7.3.4" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "TemperatureSensor", id: 0x302, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 770 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 2 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "TemperatureMeasurement", id: 0x402, element: "serverCluster",
+                    xref: { document: "device", section: "7.4.4" }
+                },
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+                    xref: { document: "device", section: "7.4.4" }
+                },
+                {
+                    tag: "requirement", name: "Groups", id: 0x4, element: "clientCluster",
+                    xref: { document: "device", section: "7.4.4" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "PressureSensor", id: 0x305, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 773 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 2 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "PressureMeasurement", id: 0x403, element: "serverCluster",
+                    xref: { document: "device", section: "7.5.4" }
+                },
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+                    xref: { document: "device", section: "7.5.4" },
+                    children: [{ tag: "requirement", name: "Query", element: "feature" }]
+                },
+                {
+                    tag: "requirement", name: "Groups", id: 0x4, element: "clientCluster",
+                    xref: { document: "device", section: "7.5.4" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "FlowSensor", id: 0x306, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 774 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 2 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "FlowMeasurement", id: 0x404, element: "serverCluster",
+                    xref: { document: "device", section: "7.6.4" }
+                },
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+                    xref: { document: "device", section: "7.6.4" },
+                    children: [{ tag: "requirement", name: "Query", element: "feature" }]
+                },
+                {
+                    tag: "requirement", name: "Groups", id: 0x4, element: "clientCluster",
+                    xref: { document: "device", section: "7.6.4" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "HumiditySensor", id: 0x307, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 775 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 2 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+                    xref: { document: "device", section: "7.7.4" },
+                    children: [{ tag: "requirement", name: "Query", element: "feature" }]
+                },
+                {
+                    tag: "requirement", name: "RelativeHumidityMeasurement", id: 0x405, element: "serverCluster",
+                    xref: { document: "device", section: "7.7.4" }
+                },
+                {
+                    tag: "requirement", name: "Groups", id: 0x4, element: "clientCluster",
+                    xref: { document: "device", section: "7.7.4" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "OnOffSensor", id: 0x850, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 2128 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 2 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+                    xref: { document: "device", section: "7.8.4" }
+                },
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "clientCluster",
+                    xref: { document: "device", section: "7.8.4" },
+                    children: [{ tag: "requirement", name: "Query", element: "feature" }]
+                },
+                {
+                    tag: "requirement", name: "Groups", id: 0x4, element: "clientCluster",
+                    xref: { document: "device", section: "7.8.4" }
+                },
+                {
+                    tag: "requirement", name: "Scenes", id: 0x5, element: "clientCluster",
+                    xref: { document: "device", section: "7.8.4" }
+                },
+                {
+                    tag: "requirement", name: "OnOff", id: 0x6, element: "clientCluster",
+                    xref: { document: "device", section: "7.8.4" }
+                },
+                {
+                    tag: "requirement", name: "LevelControl", id: 0x8, element: "clientCluster",
+                    xref: { document: "device", section: "7.8.4" }
+                },
+                {
+                    tag: "requirement", name: "ColorControl", id: 0x300, element: "clientCluster",
+                    xref: { document: "device", section: "7.8.4" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "DoorLock", id: 0xa, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 10 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 2 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+                    xref: { document: "device", section: "8.1.4" },
+                    children: [{ tag: "requirement", name: "Qry", element: "feature" }]
+                },
+                {
+                    tag: "requirement", name: "Groups", id: 0x4, element: "serverCluster",
+                    xref: { document: "device", section: "8.1.4" }
+                },
+                {
+                    tag: "requirement", name: "Scenes", id: 0x5, element: "serverCluster",
+                    xref: { document: "device", section: "8.1.4" }
+                },
+
+                {
+                    tag: "requirement", name: "DoorLock", id: 0x101, element: "serverCluster",
+                    xref: { document: "device", section: "8.1.4" },
+
+                    children: [
+                        { tag: "requirement", name: "Rid", element: "feature" },
+                        { tag: "requirement", name: "Log", element: "feature" },
+                        { tag: "requirement", name: "Usr", element: "feature" },
+                        { tag: "requirement", name: "Not", element: "feature" },
+                        { tag: "requirement", name: "AlarmMask", element: "attribute" },
+                        { tag: "requirement", name: "KeypadOperationEventMask", element: "attribute" },
+                        { tag: "requirement", name: "RemoteOperationEventMask", element: "attribute" },
+                        { tag: "requirement", name: "ManualOperationEventMask", element: "attribute" },
+                        { tag: "requirement", name: "RfidOperationEventMask", element: "attribute" },
+                        { tag: "requirement", name: "KeypadProgrammingEventMask", element: "attribute" },
+                        { tag: "requirement", name: "RemoteProgrammingEventMask", element: "attribute" },
+                        { tag: "requirement", name: "RfidProgrammingEventMask", element: "attribute" },
+                        { tag: "requirement", name: "OperatingEventNotification", element: "command" },
+                        { tag: "requirement", name: "ProgrammingEventNotification", element: "command" }
+                    ]
+                },
+
+                {
+                    tag: "requirement", name: "Alarms", id: 0x9, element: "serverCluster",
+                    xref: { document: "device", section: "8.1.4" }
+                },
+                {
+                    tag: "requirement", name: "PollControl", id: 0x20, element: "serverCluster",
+                    xref: { document: "device", section: "8.1.4" }
+                },
+                {
+                    tag: "requirement", name: "Time", id: 0xa, element: "clientCluster",
+                    xref: { document: "device", section: "8.1.4" }
+                },
+                {
+                    tag: "requirement", name: "TimeSync", id: 0x38, element: "clientCluster",
+                    xref: { document: "device", section: "8.1.4" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "DoorLockController", id: 0xb, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 11 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 2 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+                    xref: { document: "device", section: "8.2.3" }
+                },
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "clientCluster",
+                    xref: { document: "device", section: "8.2.3" },
+                    children: [{ tag: "requirement", name: "Query", element: "feature" }]
+                },
+                {
+                    tag: "requirement", name: "Groups", id: 0x4, element: "clientCluster",
+                    xref: { document: "device", section: "8.2.3" }
+                },
+                {
+                    tag: "requirement", name: "Scenes", id: 0x5, element: "clientCluster",
+                    xref: { document: "device", section: "8.2.3" }
+                },
+                {
+                    tag: "requirement", name: "DoorLock", id: 0x101, element: "clientCluster",
+                    xref: { document: "device", section: "8.2.3" }
+                },
+                {
+                    tag: "requirement", name: "TimeSync", id: 0x38, element: "serverCluster",
+                    xref: { document: "device", section: "8.2.3" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "WindowCovering", id: 0x202, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 514 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 2 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+                    xref: { document: "device", section: "8.3.4" },
+                    children: [{ tag: "requirement", name: "Query", element: "feature" }]
+                },
+                {
+                    tag: "requirement", name: "Groups", id: 0x4, element: "serverCluster",
+                    xref: { document: "device", section: "8.3.4" }
+                },
+                {
+                    tag: "requirement", name: "Scenes", id: 0x5, element: "serverCluster",
+                    xref: { document: "device", section: "8.3.4" }
+                },
+
+                {
+                    tag: "requirement", name: "WindowCovering", id: 0x102, element: "serverCluster",
+                    xref: { document: "device", section: "8.3.4" },
+
+                    children: [
+                        { tag: "requirement", name: "AbsolutePosition", element: "feature" },
+                        { tag: "requirement", name: "GoToLiftPercentageLiftPercentageValue", element: "commandField" },
+                        { tag: "requirement", name: "GoToTiltPercentageTiltPercentageValue", element: "commandField" },
+                        { tag: "requirement", name: "GoToLiftPercentageLiftPercent100thsValue", element: "commandField" },
+                        { tag: "requirement", name: "GoToTiltPercentageTiltPercent100thsValue", element: "commandField" }
+                    ]
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "WindowCoveringController", id: 0x203, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 515 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 2 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+                    xref: { document: "device", section: "8.4.4" }
+                },
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "clientCluster",
+                    xref: { document: "device", section: "8.4.4" },
+                    children: [{ tag: "requirement", name: "Query", element: "feature" }]
+                },
+                {
+                    tag: "requirement", name: "Groups", id: 0x4, element: "clientCluster",
+                    xref: { document: "device", section: "8.4.4" }
+                },
+                {
+                    tag: "requirement", name: "Scenes", id: 0x5, element: "clientCluster",
+                    xref: { document: "device", section: "8.4.4" }
+                },
+                {
+                    tag: "requirement", name: "WindowCovering", id: 0x102, element: "clientCluster",
+                    xref: { document: "device", section: "8.4.4" },
+                    children: [{ tag: "requirement", name: "AbsolutePosition", element: "feature" }]
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "HeatingCoolingUnit", id: 0x300, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 768 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 2 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+                    xref: { document: "device", section: "9.1.4" },
+                    children: [{ tag: "requirement", name: "Query", element: "feature" }]
+                },
+                {
+                    tag: "requirement", name: "Groups", id: 0x4, element: "serverCluster",
+                    xref: { document: "device", section: "9.1.4" }
+                },
+                {
+                    tag: "requirement", name: "OnOff", id: 0x6, element: "serverCluster",
+                    xref: { document: "device", section: "9.1.4" }
+                },
+                {
+                    tag: "requirement", name: "Thermostat", id: 0x201, element: "clientCluster",
+                    xref: { document: "device", section: "9.1.4" }
+                },
+                {
+                    tag: "requirement", name: "Scenes", id: 0x5, element: "serverCluster",
+                    xref: { document: "device", section: "9.1.4" }
+                },
+                {
+                    tag: "requirement", name: "Level", id: 0x8, element: "serverCluster",
+                    xref: { document: "device", section: "9.1.4" }
+                },
+                {
+                    tag: "requirement", name: "FanControl", id: 0x202, element: "serverCluster",
+                    xref: { document: "device", section: "9.1.4" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "Thermostat", id: 0x301, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 769 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 2 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+                    xref: { document: "device", section: "9.2.4" },
+                    children: [{ tag: "requirement", name: "Query", element: "feature" }]
+                },
+                {
+                    tag: "requirement", name: "Groups", id: 0x4, element: "serverCluster",
+                    xref: { document: "device", section: "9.2.4" }
+                },
+
+                {
+                    tag: "requirement", name: "Thermostat", id: 0x201, element: "serverCluster",
+                    xref: { document: "device", section: "9.2.4" },
+
+                    children: [
+                        { tag: "requirement", name: "ScheduleConfiguration", element: "feature" },
+                        { tag: "requirement", name: "AlarmMask", element: "attribute" },
+                        { tag: "requirement", name: "GetRelayStatusLog", element: "command" },
+                        { tag: "requirement", name: "GetRelayStatusLogResponse", element: "command" }
+                    ]
+                },
+
+                {
+                    tag: "requirement", name: "Scenes", id: 0x5, element: "serverCluster",
+                    xref: { document: "device", section: "9.2.4" }
+                },
+                {
+                    tag: "requirement", name: "Alarms", id: 0x9, element: "serverCluster",
+                    xref: { document: "device", section: "9.2.4" }
+                },
+                {
+                    tag: "requirement", name: "ThermostatUserInterfaceConfiguration", id: 0x204,
+                    element: "serverCluster",
+                    xref: { document: "device", section: "9.2.4" }
+                },
+                {
+                    tag: "requirement", name: "RelativeHumidityMeasurement", id: 0x405, element: "clientCluster",
+                    xref: { document: "device", section: "9.2.4" }
+                },
+                {
+                    tag: "requirement", name: "Time", id: 0xa, element: "clientCluster",
+                    xref: { document: "device", section: "9.2.4" }
+                },
+                {
+                    tag: "requirement", name: "TimeSync", id: 0x38, element: "serverCluster",
+                    xref: { document: "device", section: "9.2.4" }
+                },
+                {
+                    tag: "requirement", name: "TimeSync", id: 0x38, element: "clientCluster",
+                    xref: { document: "device", section: "9.2.4" }
+                },
+                {
+                    tag: "requirement", name: "FanControl", id: 0x202, element: "clientCluster",
+                    xref: { document: "device", section: "9.2.4" }
+                },
+                {
+                    tag: "requirement", name: "TemperatureMeasurement", id: 0x402, element: "clientCluster",
+                    xref: { document: "device", section: "9.2.4" }
+                },
+                {
+                    tag: "requirement", name: "OccupancySensing", id: 0x406, element: "clientCluster",
+                    xref: { document: "device", section: "9.2.4" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "Fan", id: 0x2b, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 43 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 1 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+                    xref: { document: "device", section: "9.3.4" },
+                    children: [{ tag: "requirement", name: "Query", element: "feature" }]
+                },
+                {
+                    tag: "requirement", name: "Groups", id: 0x4, element: "serverCluster",
+                    xref: { document: "device", section: "9.3.4" }
+                },
+                {
+                    tag: "requirement", name: "FanControl", id: 0x202, element: "serverCluster",
+                    xref: { document: "device", section: "9.3.4" },
+                    children: [{ tag: "requirement", name: "FanModeSequence", element: "attribute" }]
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "BasicVideoPlayer", id: 0x28, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 40 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 1 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "datatype", name: "conditions", type: "enum8",
+                    children: [{
+                        tag: "datatype", name: "PhysicalInputs", description: "The device has physical inputs for media.",
+                        xref: { document: "device", section: "10.2.3" }
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "OnOff", id: 0x6, element: "serverCluster",
+                    xref: { document: "device", section: "10.2.4" }
+                },
+                {
+                    tag: "requirement", name: "WakeOnLan", id: 0x503, element: "serverCluster",
+                    xref: { document: "device", section: "10.2.4" }
+                },
+                {
+                    tag: "requirement", name: "Channel", id: 0x504, element: "serverCluster",
+                    xref: { document: "device", section: "10.2.4" }
+                },
+                {
+                    tag: "requirement", name: "TargetNavigator", id: 0x505, element: "serverCluster",
+                    xref: { document: "device", section: "10.2.4" }
+                },
+                {
+                    tag: "requirement", name: "MediaPlayback", id: 0x506, element: "serverCluster",
+                    xref: { document: "device", section: "10.2.4" }
+                },
+                {
+                    tag: "requirement", name: "MediaInput", id: 0x507, element: "serverCluster",
+                    xref: { document: "device", section: "10.2.4" }
+                },
+                {
+                    tag: "requirement", name: "LowPower", id: 0x508, element: "serverCluster",
+                    xref: { document: "device", section: "10.2.4" }
+                },
+                {
+                    tag: "requirement", name: "KeypadInput", id: 0x509, element: "serverCluster",
+                    xref: { document: "device", section: "10.2.4" }
+                },
+                {
+                    tag: "requirement", name: "AudioOutput", id: 0x50b, element: "serverCluster",
+                    xref: { document: "device", section: "10.2.4" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "CastingVideoPlayer", id: 0x23, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 35 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 1 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "datatype", name: "conditions", type: "enum8",
+
+                    children: [
+                        {
+                            tag: "datatype", name: "ContentAppPlatform",
+                            description: "The device includes a Content App Platform. A Content App is usually an application built by a Content Provider. A Casting Video Player with a Content App Platform is able to launch Content Apps and represent these apps as separate endpoints.",
+                            xref: { document: "device", section: "10.3.3" }
+                        },
+                        {
+                            tag: "datatype", name: "PhysicalInputs", description: "The device has physical inputs for media.",
+                            xref: { document: "device", section: "10.3.3" }
+                        }
+                    ]
+                },
+
+                {
+                    tag: "requirement", name: "OnOff", id: 0x6, element: "serverCluster",
+                    xref: { document: "device", section: "10.3.4" }
+                },
+                {
+                    tag: "requirement", name: "WakeOnLan", id: 0x503, element: "serverCluster",
+                    xref: { document: "device", section: "10.3.4" }
+                },
+                {
+                    tag: "requirement", name: "Channel", id: 0x504, element: "serverCluster",
+                    xref: { document: "device", section: "10.3.4" }
+                },
+                {
+                    tag: "requirement", name: "TargetNavigator", id: 0x505, element: "serverCluster",
+                    xref: { document: "device", section: "10.3.4" }
+                },
+                {
+                    tag: "requirement", name: "MediaPlayback", id: 0x506, element: "serverCluster",
+                    xref: { document: "device", section: "10.3.4" }
+                },
+                {
+                    tag: "requirement", name: "MediaInput", id: 0x507, element: "serverCluster",
+                    xref: { document: "device", section: "10.3.4" }
+                },
+                {
+                    tag: "requirement", name: "LowPower", id: 0x508, element: "serverCluster",
+                    xref: { document: "device", section: "10.3.4" }
+                },
+                {
+                    tag: "requirement", name: "KeypadInput", id: 0x509, element: "serverCluster",
+                    xref: { document: "device", section: "10.3.4" }
+                },
+                {
+                    tag: "requirement", name: "ContentLauncher", id: 0x50a, element: "serverCluster",
+                    xref: { document: "device", section: "10.3.4" }
+                },
+                {
+                    tag: "requirement", name: "AudioOutput", id: 0x50b, element: "serverCluster",
+                    xref: { document: "device", section: "10.3.4" }
+                },
+                {
+                    tag: "requirement", name: "ApplicationLauncher", id: 0x50c, element: "serverCluster",
+                    xref: { document: "device", section: "10.3.4" },
+                    children: [{ tag: "requirement", name: "ApplicationPlatform", element: "feature" }]
+                },
+                {
+                    tag: "requirement", name: "AccountLogin", id: 0x50e, element: "serverCluster",
+                    xref: { document: "device", section: "10.3.4" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "Speaker", id: 0x22, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 34 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 1 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "OnOff", id: 0x6, element: "serverCluster",
+                    xref: { document: "device", section: "10.4.4" }
+                },
+                {
+                    tag: "requirement", name: "Level", id: 0x8, element: "serverCluster",
+                    xref: { document: "device", section: "10.4.4" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "ContentApp", id: 0x24, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 36 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 1 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "Channel", id: 0x504, element: "serverCluster",
+                    xref: { document: "device", section: "10.5.4" }
+                },
+                {
+                    tag: "requirement", name: "TargetNavigator", id: 0x505, element: "serverCluster",
+                    xref: { document: "device", section: "10.5.4" }
+                },
+                {
+                    tag: "requirement", name: "MediaPlayback", id: 0x506, element: "serverCluster",
+                    xref: { document: "device", section: "10.5.4" }
+                },
+                {
+                    tag: "requirement", name: "KeypadInput", id: 0x509, element: "serverCluster",
+                    xref: { document: "device", section: "10.5.4" }
+                },
+                {
+                    tag: "requirement", name: "ContentLauncher", id: 0x50a, element: "serverCluster",
+                    xref: { document: "device", section: "10.5.4" }
+                },
+                {
+                    tag: "requirement", name: "ApplicationLauncher", id: 0x50c, element: "serverCluster",
+                    xref: { document: "device", section: "10.5.4" },
+                    children: [{ tag: "requirement", name: "ApplicationPlatform", element: "feature" }]
+                },
+                {
+                    tag: "requirement", name: "ApplicationBasic", id: 0x50d, element: "serverCluster",
+                    xref: { document: "device", section: "10.5.4" }
+                },
+                {
+                    tag: "requirement", name: "AccountLogin", id: 0x50e, element: "serverCluster",
+                    xref: { document: "device", section: "10.5.4" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "CastingVideoClient", id: 0x29, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 41 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 1 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "OnOff", id: 0x6, element: "clientCluster",
+                    xref: { document: "device", section: "10.6.4" }
+                },
+                {
+                    tag: "requirement", name: "Level", id: 0x8, element: "clientCluster",
+                    xref: { document: "device", section: "10.6.4" }
+                },
+                {
+                    tag: "requirement", name: "WakeOnLan", id: 0x503, element: "clientCluster",
+                    xref: { document: "device", section: "10.6.4" }
+                },
+                {
+                    tag: "requirement", name: "Channel", id: 0x504, element: "clientCluster",
+                    xref: { document: "device", section: "10.6.4" }
+                },
+                {
+                    tag: "requirement", name: "TargetNavigator", id: 0x505, element: "clientCluster",
+                    xref: { document: "device", section: "10.6.4" }
+                },
+                {
+                    tag: "requirement", name: "MediaPlayback", id: 0x506, element: "clientCluster",
+                    xref: { document: "device", section: "10.6.4" }
+                },
+                {
+                    tag: "requirement", name: "MediaInput", id: 0x507, element: "clientCluster",
+                    xref: { document: "device", section: "10.6.4" }
+                },
+                {
+                    tag: "requirement", name: "LowPower", id: 0x508, element: "clientCluster",
+                    xref: { document: "device", section: "10.6.4" }
+                },
+                {
+                    tag: "requirement", name: "KeypadInput", id: 0x509, element: "clientCluster",
+                    xref: { document: "device", section: "10.6.4" }
+                },
+                {
+                    tag: "requirement", name: "ContentLauncher", id: 0x50a, element: "clientCluster",
+                    xref: { document: "device", section: "10.6.4" }
+                },
+                {
+                    tag: "requirement", name: "AudioOutput", id: 0x50b, element: "clientCluster",
+                    xref: { document: "device", section: "10.6.4" }
+                },
+                {
+                    tag: "requirement", name: "ApplicationLauncher", id: 0x50c, element: "clientCluster",
+                    xref: { document: "device", section: "10.6.4" }
+                },
+                {
+                    tag: "requirement", name: "ApplicationBasic", id: 0x50d, element: "clientCluster",
+                    xref: { document: "device", section: "10.6.4" }
+                },
+                {
+                    tag: "requirement", name: "AccountLogin", id: 0x50e, element: "clientCluster",
+                    xref: { document: "device", section: "10.6.4" }
+                }
+            ]
+        },
+
+        {
+            tag: "deviceType", name: "VideoRemoteControl", id: 0x2a, classification: "simple",
+
+            children: [
+                {
+                    tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+
+                    children: [{
+                        tag: "datatype", name: "DeviceTypeStruct", type: "struct",
+                        children: [
+                            { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 42 },
+                            { tag: "datatype", name: "Revision", type: "uint16", default: 1 }
+                        ]
+                    }]
+                },
+
+                {
+                    tag: "requirement", name: "OnOff", id: 0x6, element: "clientCluster",
+                    xref: { document: "device", section: "10.7.4" }
+                },
+                {
+                    tag: "requirement", name: "Level", id: 0x8, element: "clientCluster",
+                    xref: { document: "device", section: "10.7.4" }
+                },
+                {
+                    tag: "requirement", name: "WakeOnLan", id: 0x503, element: "clientCluster",
+                    xref: { document: "device", section: "10.7.4" }
+                },
+                {
+                    tag: "requirement", name: "Channel", id: 0x504, element: "clientCluster",
+                    xref: { document: "device", section: "10.7.4" }
+                },
+                {
+                    tag: "requirement", name: "TargetNavigator", id: 0x505, element: "clientCluster",
+                    xref: { document: "device", section: "10.7.4" }
+                },
+                {
+                    tag: "requirement", name: "MediaPlayback", id: 0x506, element: "clientCluster",
+                    xref: { document: "device", section: "10.7.4" }
+                },
+                {
+                    tag: "requirement", name: "MediaInput", id: 0x507, element: "clientCluster",
+                    xref: { document: "device", section: "10.7.4" }
+                },
+                {
+                    tag: "requirement", name: "LowPower", id: 0x508, element: "clientCluster",
+                    xref: { document: "device", section: "10.7.4" }
+                },
+                {
+                    tag: "requirement", name: "KeypadInput", id: 0x509, element: "clientCluster",
+                    xref: { document: "device", section: "10.7.4" }
+                },
+                {
+                    tag: "requirement", name: "ContentLauncher", id: 0x50a, element: "clientCluster",
+                    xref: { document: "device", section: "10.7.4" }
+                },
+                {
+                    tag: "requirement", name: "AudioOutput", id: 0x50b, element: "clientCluster",
+                    xref: { document: "device", section: "10.7.4" }
+                },
+                {
+                    tag: "requirement", name: "ApplicationLauncher", id: 0x50c, element: "clientCluster",
+                    xref: { document: "device", section: "10.7.4" }
+                },
+                {
+                    tag: "requirement", name: "AccountLogin", id: 0x50e, element: "clientCluster",
+                    xref: { document: "device", section: "10.7.4" }
+                }
+            ]
         }
     ]
 };

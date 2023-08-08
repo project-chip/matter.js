@@ -85,8 +85,24 @@ function convertTable(el: HTMLTableElement) {
     return table;
 }
 
+type Navigator = (html: Document, initial: boolean) => Iterable<Element> | undefined;
+
+export const NavigateViaToc: Navigator = (html, initial) => {
+    if (initial) {
+        return html.querySelectorAll(".toc a");
+    }
+};
+
+export const NavigateViaNav: Navigator = (html) => {
+    for (const a of html.querySelectorAll(".top_nav a")) {
+        if (a.textContent === "Next >") {
+            return [a];
+        }
+    }
+};
+
 // Parses all pages in a specific section
-export function* scanSection(ref: HtmlReference) {
+export function* scanSection(ref: HtmlReference, navigator: Navigator) {
     // State for scanSectionPage.  We maintain it across calls because some
     // broken pages don't mention their section in the heading, so we simply
     // continue the last known section
@@ -111,11 +127,14 @@ export function* scanSection(ref: HtmlReference) {
     yield* scanSectionPage(ref, html);
 
     // Scan all subpages referenced from the index page
-    const toc = html.querySelectorAll(".toc a");
-    for (const link of toc as NodeListOf<HTMLAnchorElement>) {
-        path = join(dirname(ref.path), link.href);
-        html = loadHtml(path);
-        yield* scanSectionPage({ ...ref, path: path }, html);
+    let links = navigator(html, true);
+    while (links) {
+        for (const link of links as NodeListOf<HTMLAnchorElement>) {
+            path = join(dirname(path), link.href);
+            html = loadHtml(path);
+            yield* scanSectionPage({ ...ref, path: path }, html);
+        }
+        links = navigator(html, false);
     }
 
     // Handle final emit outside of scanSectionPage

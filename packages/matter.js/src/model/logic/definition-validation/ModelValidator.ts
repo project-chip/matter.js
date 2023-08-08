@@ -5,7 +5,7 @@
  */
 
 import { ElementTag } from "../../definitions/index.js";
-import { CommandModel, Model } from "../../models/index.js";
+import { CommandModel, Model, RequirementModel } from "../../models/index.js";
 
 /**
  * Base class for all model validators.
@@ -56,7 +56,7 @@ export class ModelValidator<T extends Model> {
                     }
                 }
                 if (!ok) {
-                    this.error("UNACCEPTABLE_TYPE", `Children[${index}] type ${child.constructor.name} is not allowed`);
+                    this.error("UNACCEPTABLE_TYPE", `${this.model.path}.children[${index}] type ${child.constructor.name} is not allowed`);
                 }
                 index++;
             }
@@ -108,7 +108,9 @@ export class ModelValidator<T extends Model> {
         for (const child of this.model.children) {
             function addIdentity(id: string | number) {
                 if (child instanceof CommandModel) {
-                    id = `${id}:${child.direction}`
+                    id = `${id}:${child.direction}`;
+                } else if (child instanceof RequirementModel) {
+                    id = `${id}:${child.element}`;
                 }
                 const identity = `${child.tag};${id};${(child as any).conformance}`;
                 if (identities[identity]) {

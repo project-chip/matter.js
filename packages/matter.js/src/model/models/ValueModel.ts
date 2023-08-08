@@ -15,6 +15,7 @@ import { Model } from "./Model.js";
 import { type DatatypeModel } from "./DatatypeModel.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
 import { DefaultValue } from "../logic/index.js";
+import { Aspects } from "./Aspects.js";
 
 const CONSTRAINT: unique symbol = Symbol("constraint");
 const CONFORMANCE: unique symbol = Symbol("conformance");
@@ -40,43 +41,43 @@ export abstract class ValueModel extends Model implements ValueElement {
     }
 
     get constraint(): Constraint {
-        return this.getAspect(CONSTRAINT, Constraint);
+        return Aspects.getAspect(this, CONSTRAINT, Constraint);
     }
     set constraint(definition: Constraint | Constraint.Definition) {
-        this.setAspect(CONSTRAINT, Constraint, definition);
+        Aspects.setAspect(this, CONSTRAINT, Constraint, definition);
     }
     get effectiveConstraint(): Constraint {
         return new ModelTraversal().findConstraint(this, CONSTRAINT) || this.constraint;
     }
 
     get conformance(): Conformance {
-        return this.getAspect(CONFORMANCE, Conformance);
+        return Aspects.getAspect(this, CONFORMANCE, Conformance);
     }
     set conformance(definition: Conformance | Conformance.Definition) {
-        this.setAspect(CONFORMANCE, Conformance, definition);
+        Aspects.setAspect(this, CONFORMANCE, Conformance, definition);
     }
     get effectiveConformance(): Conformance {
-        return this.getEffectiveAspect(CONFORMANCE, Conformance);
+        return Aspects.getEffectiveAspect(this, CONFORMANCE, Conformance);
     }
 
     get access(): Access {
-        return this.getAspect(ACCESS, Access);
+        return Aspects.getAspect(this, ACCESS, Access);
     }
     set access(definition: Access | Access.Definition) {
-        this.setAspect(ACCESS, Access, definition);
+        Aspects.setAspect(this, ACCESS, Access, definition);
     }
     get effectiveAccess(): Access {
-        return this.getEffectiveAspect(ACCESS, Access);
+        return Aspects.getEffectiveAspect(this, ACCESS, Access);
     }
 
     get quality(): Quality {
-        return this.getAspect(QUALITY, Quality);
+        return Aspects.getAspect(this, QUALITY, Quality);
     }
     set quality(definition: Quality | Quality.Definition) {
-        this.setAspect(QUALITY, Quality, definition);
+        Aspects.setAspect(this, QUALITY, Quality, definition);
     }
     get effectiveQuality(): Quality {
-        return this.getEffectiveAspect(QUALITY, Quality);
+        return Aspects.getEffectiveAspect(this, QUALITY, Quality);
     }
 
     /**
@@ -314,25 +315,5 @@ export abstract class ValueModel extends Model implements ValueElement {
             this.type = "list";
             this.children.push(new Model.constructors.datatype({ name: "entry", type: match[1] }) as DatatypeModel);
         }
-    }
-
-    private getAspect(symbol: symbol, constructor: new (definition: any) => any) {
-        return (this as any)[symbol] || ((this as any)[symbol] = new constructor(undefined));
-    }
-
-    private setAspect(symbol: symbol, constructor: new (definition: any) => any, value: any) {
-        if (value instanceof constructor) {
-            (this as any)[symbol] = value;
-        } else {
-            (this as any)[symbol] = new constructor(value);
-        }
-    }
-
-    private getEffectiveAspect(symbol: symbol, constructor: new (definition: any) => any) {
-        const aspect = new ModelTraversal().findAspect(this, symbol);
-        if (aspect) {
-            return aspect;
-        }
-        return this.getAspect(symbol, constructor);
     }
 }

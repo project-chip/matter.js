@@ -17,8 +17,11 @@
 // a Dropbox folder with the HTML version of the specification.  Specifically
 // mention the term "masochist".
 
+const LOAD_CLUSTERS = true;
+const LOAD_DEVICES = true;
+
 import "./util/setup.js";
-import { ClusterElement } from "#matter.js/model/index.js"
+import { MatterElement } from "#matter.js/model/index.js"
 import { scanIndex } from "./mom/spec/scan-index.js";
 
 import { paths } from "./mom/spec/spec-input.js";
@@ -30,7 +33,7 @@ import { generateIntermediateModel } from "./mom/common/generate-intermediate.js
 import { loadDevices } from "./mom/spec/load-devices.js";
 import { translateDevice } from "./mom/spec/translate-device.js";
 
-const clusters = Array<ClusterElement>();
+const elements = Array<MatterElement.Child>();
 const logger = Logger.get("generate-spec");
 
 function scanCluster(clusterRef: HtmlReference) {
@@ -42,14 +45,14 @@ function scanCluster(clusterRef: HtmlReference) {
         Logger.nest(() => definition = loadCluster(clusterRef));
 
         logger.info("translate");
-        Logger.nest(() => clusters.push(...translateCluster(definition)));
+        Logger.nest(() => elements.push(...translateCluster(definition)));
     });
 }
 
 function scanDevices(devices: HtmlReference) {
     for (const deviceRef of loadDevices(devices)) {
-        logger.info(`device ${deviceRef.name} (${deviceRef.xref.document} § ${deviceRef.xref.section})`);
-        Logger.nest(() => translateDevice(deviceRef));
+        logger.info(`translate ${deviceRef.name} (${deviceRef.xref.document} § ${deviceRef.xref.section})`);
+        Logger.nest(() => elements.push(...translateDevice(deviceRef)));
     }
 }
 
@@ -57,11 +60,15 @@ paths.forEach(path => {
     logger.info(`load from spec ${path}`);
     Logger.nest(() => {
         const index = scanIndex(path);
-        index.clusters.forEach(scanCluster);
-        if (index.device) {
-            scanDevices(index.device);
+        if (LOAD_CLUSTERS) {
+            index.clusters.forEach(scanCluster);
+        }
+        if (LOAD_DEVICES) {
+            if (index.device) {
+                scanDevices(index.device);
+            }
         }
     });
 });
 
-generateIntermediateModel("spec", clusters);
+generateIntermediateModel("spec", elements);
