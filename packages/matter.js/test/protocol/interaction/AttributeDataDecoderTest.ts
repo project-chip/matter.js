@@ -10,11 +10,7 @@ import { TlvUInt8 } from "../../../src/tlv/TlvNumber.js";
 import { TlvNullable } from "../../../src/tlv/TlvNullable.js";
 import { TlvArray } from "../../../src/tlv/TlvArray.js";
 import { ByteArray } from "../../../src/util/ByteArray.js";
-import {
-    TlvAttributeData,
-    TlvAttributeReport,
-    TlvDataReport
-} from "../../../src/protocol/interaction/InteractionProtocol.js";
+import { TlvAttributeData, TlvAttributeReport, TlvDataReport } from "../../../src/protocol/interaction/InteractionProtocol.js";
 import { ClusterId } from "../../../src/datatype/ClusterId.js";
 import { VendorId } from "../../../src/datatype/VendorId.js";
 import { AttributeId } from "../../../src/datatype/AttributeId.js";
@@ -28,7 +24,7 @@ const TlvAclTestSchema = TlvObject({
     targets: TlvField(4, TlvNullable(TlvUInt8)),
 });
 
-describe("DataReportDecoder", () => {
+describe("AttributeDataDecoder", () => {
 
     describe("decode chunked array using raw data from chip-tool", () => {
         it("decode chunked array with two elements", () => {
@@ -681,7 +677,7 @@ describe("DataReportDecoder", () => {
 
     describe("normalizeAttributeData", () => {
         it("normalize data with all paths given for one endpoint", () => {
-            const data = [
+            const data: TypeFromSchema<typeof TlvAttributeData>[] = [
                 {
                     path: { endpointId: 0, clusterId: 0x1f, attributeId: 0 },
                     data: TlvArray(TlvAclTestSchema).encodeTlv([]),
@@ -715,7 +711,7 @@ describe("DataReportDecoder", () => {
         });
 
         it("normalize data with all paths given for two endpoints", () => {
-            const data1 = [
+            const data1: TypeFromSchema<typeof TlvAttributeData>[] = [
                 {
                     path: { endpointId: 0, clusterId: 0x1f, attributeId: 0 },
                     data: TlvArray(TlvAclTestSchema).encodeTlv([]),
@@ -742,7 +738,7 @@ describe("DataReportDecoder", () => {
                     dataVersion: 0,
                 },
             ];
-            const data2 = [
+            const data2: TypeFromSchema<typeof TlvAttributeData>[] = [
                 {
                     path: { endpointId: 0, clusterId: 0x1f, attributeId: 1 },
                     data: TlvArray(TlvAclTestSchema).encodeTlv([]),

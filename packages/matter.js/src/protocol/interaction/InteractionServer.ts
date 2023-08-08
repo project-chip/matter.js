@@ -13,8 +13,8 @@ import {
 } from "./InteractionMessenger.js";
 import { Attributes, Cluster, Commands, ConditionalFeatureList, Events, TlvNoResponse } from "../../cluster/Cluster.js";
 import {
-    StatusCode, TlvAttributePath, TlvAttributeReport, TlvCommandPath, TlvEventPath, TlvInvokeResponseData,
-    TlvSubscribeResponse
+    StatusCode, TlvAttributePath, TlvAttributeReport, TlvCommandPath, TlvEventPath, TlvEventReport,
+    TlvInvokeResponseData, TlvSubscribeResponse
 } from "./InteractionProtocol.js"
 import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
@@ -23,7 +23,7 @@ import { assertSecureSession } from "../../session/SecureSession.js";
 import { SubscriptionHandler } from "./SubscriptionHandler.js";
 import { Message } from "../../codec/MessageCodec.js";
 import { Crypto } from "../../crypto/Crypto.js";
-import { decodeValueForSchema, normalizeAttributeData } from "./AttributeDataDecoder.js";
+import { decodeAttributeValueWithSchema, normalizeAttributeData } from "./AttributeDataDecoder.js";
 import {
     AttributeInitialValues, AttributeServers, ClusterServerHandlers, ClusterServerObj, CommandServers, EventServers,
     SupportedEventsList,
@@ -42,12 +42,10 @@ import { Scenes } from "../../cluster/definitions/ScenesCluster.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { EventId } from "../../datatype/EventId.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
-import { EventData, EventHandler } from "../../protocol/interaction/EventHandler.js";
+import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { InteractionEndpointStructure } from "./InteractionEndpointStructure.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
-import {
-    ImplementationError, MatterFlowError, NotImplementedError, UnexpectedDataError
-} from "../../common/MatterError.js";
+import { ImplementationError, MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
 
 export const INTERACTION_PROTOCOL_ID = 0x0001;
 
@@ -113,23 +111,23 @@ export function ClusterServer<
         _setStorage: (storageContext: StorageContext) => {
             clusterStorage = storageContext;
 
-            for (const name in attributes) {
-                const attribute = (attributes as any)[name];
+            for (const attributeName in attributes) {
+                const attribute = (attributes as any)[attributeName];
                 if (!attributeStorageListeners.has(attribute.id)) return;
                 if (!storageContext.has(attribute.name)) return;
                 try {
                     const data = storageContext.get<{ version: number, value: any }>(attribute.name);
-                    logger.debug(`Restoring attribute ${attribute.name} (${attribute.id}) in cluster ${name} (${clusterId})`);
+                    logger.debug(`Restoring attribute ${attributeName} (${attribute.id}) in cluster ${name} (${clusterId})`);
                     attribute.init(data.value, data.version);
                 } catch (error) {
-                    logger.warn(`Failed to restore attribute ${attribute.name} (${attribute.id}) in cluster ${name} (${clusterId})`, error);
+                    logger.warn(`Failed to restore attribute ${attributeName} (${attribute.id}) in cluster ${name} (${clusterId})`, error);
                 }
             }
         },
 
         _registerEventHandler: (eventHandler: EventHandler) => {
-            for (const name in events) {
-                (events as any)[name].addListener((eventData: EventData<any>) => eventHandler.pushEvent(eventData));
+            for (const eventName in events) {
+                (events as any)[eventName].bindToEventHandler(eventHandler);
             }
         },
 
@@ -470,6 +468,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     private endpointStructure = new InteractionEndpointStructure();
     private nextSubscriptionId = Crypto.getRandomUInt32();
     private eventHandler = new EventHandler(this.storage);
+    private readonly subscriptionMap = new Map<number, SubscriptionHandler>();
+    private isClosing = false;
 
     constructor(
         private readonly storage: StorageContext
@@ -490,10 +490,15 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             }
         }
 
+        for (const subscription of this.subscriptionMap.values()) {
+            subscription.updateSubscription();
+        }
+
         return;
     }
 
     async onNewExchange(exchange: MessageExchange<MatterDevice>) {
+        if (this.isClosing) return; // We are closing, ignore anything newly incoming
         await new InteractionServerMessenger(exchange).handleRequest(
             readRequest => this.handleReadRequest(exchange, readRequest),
             writeRequest => this.handleWriteRequest(exchange, writeRequest),
@@ -503,15 +508,15 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         );
     }
 
-    handleReadRequest(exchange: MessageExchange<MatterDevice>, { attributeRequests: attributePaths, isFabricFiltered }: ReadRequest): DataReport {
-        if (attributePaths === undefined) {
-            throw new StatusResponseError("Only Read requests with attributeRequests are supported right now", StatusCode.UnsupportedRead);
+    handleReadRequest(exchange: MessageExchange<MatterDevice>, { attributeRequests, eventRequests, eventFilters, isFabricFiltered }: ReadRequest): DataReport {
+        if (attributeRequests === undefined && eventRequests === undefined) {
+            throw new StatusResponseError("Only Read requests with attributeRequests or eventRequests are supported right now", StatusCode.UnsupportedRead);
         }
-        logger.debug(`Received read request from ${exchange.channel.name}: ${attributePaths.map(path => this.endpointStructure.resolveAttributeName(path)).join(", ")}, isFabricFiltered=${isFabricFiltered}`);
+        logger.debug(`Received read request from ${exchange.channel.name}: attributes:${attributeRequests?.map(path => this.endpointStructure.resolveAttributeName(path)).join(", ")}, events:${eventRequests?.map(path => this.endpointStructure.resolveEventName(path)).join(", ")} isFabricFiltered=${isFabricFiltered}`);
 
         // UnsupportedNode/UnsupportedEndpoint/UnsupportedCluster/UnsupportedAttribute/UnsupportedRead
 
-        const attributeReports = attributePaths.flatMap((path: TypeFromSchema<typeof TlvAttributePath>): TypeFromSchema<typeof TlvAttributeReport>[] => {
+        const attributeReports = attributeRequests?.flatMap((path: TypeFromSchema<typeof TlvAttributePath>): TypeFromSchema<typeof TlvAttributeReport>[] => {
             const attributes = this.endpointStructure.getAttributes([path]);
             if (attributes.length === 0) {
                 const { endpointId, clusterId, attributeId } = path;
@@ -524,22 +529,45 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                     } else if (!this.endpointStructure.hasClusterServer(endpointId, clusterId)) {
                         status = StatusCode.UnsupportedCluster;
                     }
-                    logger.debug(`Read from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(path)} unsupported path: Status=${status}`);
+                    logger.debug(`Read attribute from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(path)} unsupported path: Status=${status}`);
                     return [{ attributeStatus: { path, status: { status } } }];
                 }
             }
 
             return attributes.map(({ path, attribute }) => {
                 const { value, version } = attribute.getWithVersion(exchange.session, isFabricFiltered);
-                logger.debug(`Read from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(value)} (version=${version})`);
+                logger.debug(`Read attribute from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(value)} (version=${version})`);
                 return { attributeData: { path, data: attribute.schema.encodeTlv(value), dataVersion: version } };
             });
+        });
+
+        const eventReports = eventRequests?.flatMap((path: TypeFromSchema<typeof TlvEventPath>): TypeFromSchema<typeof TlvEventReport>[] => {
+            const events = this.endpointStructure.getEvents([path]);
+            if (events.length === 0) {
+                logger.debug(`Read event from ${exchange.channel.name}: ${this.endpointStructure.resolveEventName(path)} unsupported path`);
+                return [{ eventStatus: { path, status: { status: StatusCode.UnsupportedEvent } } }]; // TODO: Find correct status code
+            }
+
+            return events.flatMap(({ path, event }) => {
+                const matchingEvents = this.eventHandler.getEvents(path, eventFilters);
+                logger.debug(`Read event from ${exchange.channel.name}:  ${this.endpointStructure.resolveEventName(path)}=${Logger.toJSON(matchingEvents)}`);
+                return matchingEvents.map(eventData => ({
+                    eventData: {
+                        path,
+                        eventNumber: eventData.eventNumber,
+                        priority: eventData.priority,
+                        epochTimestamp: eventData.epochTimestamp,
+                        data: event.schema.encodeTlv(eventData.data),
+                    }
+                }));
+            }).sort((a, b) => a.eventData.eventNumber - b.eventData.eventNumber);
         });
 
         return {
             interactionModelRevision: 1,
             suppressResponse: false,
-            attributeReports
+            attributeReports,
+            eventReports,
         };
     }
 
@@ -578,7 +606,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                 const { schema, defaultValue } = attribute;
 
                 try {
-                    const value = decodeValueForSchema(schema, values, defaultValue);
+                    const value = decodeAttributeValueWithSchema(schema, values, defaultValue);
                     logger.debug(`Handle write request from ${exchange.channel.name} resolved to: ${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(value)} (Version=${dataVersion})`);
                     if (!(attribute instanceof AttributeServer) && !(attribute instanceof FabricScopedAttributeServer)) {
                         throw new StatusResponseError("Fixed attributes cannot be written", StatusCode.UnsupportedWrite);
@@ -610,8 +638,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         };
     }
 
-    async handleSubscribeRequest(exchange: MessageExchange<MatterDevice>, { minIntervalFloorSeconds, maxIntervalCeilingSeconds, attributeRequests, eventRequests, keepSubscriptions }: SubscribeRequest, messenger: InteractionServerMessenger): Promise<void> {
-        logger.debug(`Received subscribe request from ${exchange.channel.name}`);
+    async handleSubscribeRequest(exchange: MessageExchange<MatterDevice>, { minIntervalFloorSeconds, maxIntervalCeilingSeconds, attributeRequests, eventRequests, eventFilters, keepSubscriptions, isFabricFiltered }: SubscribeRequest, messenger: InteractionServerMessenger): Promise<void> {
+        logger.debug(`Received subscribe request from ${exchange.channel.name} (keepSubscriptions=${keepSubscriptions}, isFabricFiltered=${isFabricFiltered})`);
 
         assertSecureSession(exchange.session, "Subscriptions are only implemented on secure sessions");
         const session = exchange.session;
@@ -622,48 +650,36 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             throw new StatusResponseError("No attributes or events requested", StatusCode.InvalidAction);
         }
 
-        if (!keepSubscriptions) {
-            session.clearSubscriptions();
+        logger.debug(`Subscribe to attributes:${attributeRequests?.map(path => this.endpointStructure.resolveAttributeName(path)).join(", ")}, events:${eventRequests?.map(path => this.endpointStructure.resolveEventName(path)).join(", ")}`);
+        if (eventFilters !== undefined) logger.debug(`Event filters: ${eventFilters.map(filter => `${filter.nodeId}/${filter.eventMin}`).join(", ")}`);
+
+        if (minIntervalFloorSeconds < 0) throw new UnexpectedDataError("minIntervalFloorSeconds should be greater or equal to 0");
+        if (maxIntervalCeilingSeconds < 0) throw new UnexpectedDataError("maxIntervalCeilingSeconds should be greater or equal to 1");
+        if (maxIntervalCeilingSeconds < minIntervalFloorSeconds) throw new UnexpectedDataError("maxIntervalCeilingSeconds should be greater or equal to minIntervalFloorSeconds");
+
+        // TODO: Interpret specs:
+        // The publisher SHALL compute an appropriate value for the MaxInterval field in the action. This SHALL respect the following constraint: MinIntervalFloor ≤ MaxInterval ≤ MAX(SUBSCRIPTION_MAX_INTERVAL_PUBLISHER_LIMIT=60mn, MaxIntervalCeiling)
+
+        if (this.nextSubscriptionId === 0xFFFFFFFF) this.nextSubscriptionId = 0;
+        const subscriptionId = this.nextSubscriptionId++;
+        const subscriptionHandler = new SubscriptionHandler(subscriptionId, session, this.endpointStructure, attributeRequests, eventRequests, eventFilters, this.eventHandler, isFabricFiltered, keepSubscriptions, minIntervalFloorSeconds, maxIntervalCeilingSeconds, () => this.subscriptionMap.delete(subscriptionId));
+
+        try {
+            // Send initial data report to prime the subscription with initial data
+            await subscriptionHandler.sendInitialReport(messenger);
+        } catch (error: any) {
+            logger.error(`Subscription ${subscriptionId} for Session ${session.getId()}: Error while sending initial data reports: ${error.message}`);
+            subscriptionHandler.cancel();
+            return; // Make sure to not bubble up the exception
         }
 
-        // TODO add eventsRequest and other missing supports
-        if (attributeRequests !== undefined) {
-            logger.debug(`Subscribe to ${attributeRequests.map(path => this.endpointStructure.resolveAttributeName(path)).join(", ")}`);
+        this.subscriptionMap.set(subscriptionId, subscriptionHandler);
 
-            if (attributeRequests.length === 0) throw new NotImplementedError("Unsupported subscription request with empty attribute list");
-            if (minIntervalFloorSeconds < 0) throw new UnexpectedDataError("minIntervalFloorSeconds should be greater or equal to 0");
-            if (maxIntervalCeilingSeconds < 0) throw new UnexpectedDataError("maxIntervalCeilingSeconds should be greater or equal to 1");
-            if (maxIntervalCeilingSeconds < minIntervalFloorSeconds) throw new UnexpectedDataError("maxIntervalCeilingSeconds should be greater or equal to minIntervalFloorSeconds");
-
-            const attributes = this.endpointStructure.getAttributes(attributeRequests);
-
-            if (!attributes.length) {
-                throw new StatusResponseError("Attributes not found", StatusCode.UnsupportedAttribute);
-            }
-
-            // TODO: Interpret specs:
-            // The publisher SHALL compute an appropriate value for the MaxInterval field in the action. This SHALL respect the following constraint: MinIntervalFloor ≤ MaxInterval ≤ MAX(SUBSCRIPTION_MAX_INTERVAL_PUBLISHER_LIMIT=60mn, MaxIntervalCeiling)
-
-            if (this.nextSubscriptionId === 0xFFFFFFFF) this.nextSubscriptionId = 0;
-            const subscriptionId = this.nextSubscriptionId++;
-            const subscriptionHandler = new SubscriptionHandler(subscriptionId, session.getContext(), fabric, session.getPeerNodeId(), attributes, minIntervalFloorSeconds, maxIntervalCeilingSeconds);
-
-            try {
-                // Send initial data report to prime the subscription with initial data
-                await subscriptionHandler.sendInitialReport(messenger, session);
-            } catch (error: any) {
-                logger.error(`Subscription subscription ${subscriptionId} for Session ${session.getId()}: Error while sending initial data reports: ${error.message}`);
-                return; // Make sure to not bubble up the exception
-            }
-
-            session.addSubscription(subscriptionHandler);
-
-            const maxInterval = subscriptionHandler.getMaxInterval();
-            logger.info(`Created subscription ${subscriptionId} for Session ${session.getId()} with ${attributes.length} attributes. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${maxInterval} seconds`);
-            // Then send the subscription response
-            await messenger.send(MessageType.SubscribeResponse, TlvSubscribeResponse.encode({ subscriptionId, maxInterval, interactionModelRevision: 1 }));
-            subscriptionHandler.activateSendingUpdates();
-        }
+        const maxInterval = subscriptionHandler.getMaxInterval();
+        logger.info(`Successfully created subscription ${subscriptionId} for Session ${session.getId()}. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${maxInterval} seconds`);
+        // Then send the subscription response
+        await messenger.send(MessageType.SubscribeResponse, TlvSubscribeResponse.encode({ subscriptionId, maxInterval, interactionModelRevision: 1 }));
+        subscriptionHandler.activateSendingUpdates();
     }
 
     async handleInvokeRequest(exchange: MessageExchange<MatterDevice>, { invokeRequests }: InvokeRequest, message: Message): Promise<InvokeResponse> {
@@ -738,4 +754,11 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         // TODO: implement this
     }
 
+    async close() {
+        this.isClosing = true;
+        for (const subscription of this.subscriptionMap.values()) {
+            await subscription.flush();
+            subscription.cancel();
+        }
+    }
 }

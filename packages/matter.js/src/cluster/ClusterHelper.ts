@@ -3,7 +3,7 @@
  * Copyright 2022 The node-matter Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Attribute, Cluster } from "./Cluster.js";
+import { Attribute, Cluster, Event, Command } from "./Cluster.js";
 import * as Clusters from "./definitions/index.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { TlvAttributePath, TlvCommandPath, TlvEventPath } from "../protocol/interaction/InteractionProtocol.js";
@@ -90,11 +90,11 @@ interface CachedAttributeInfo {
     name: string;
 }
 interface CachedEventInfo {
-    event: Attribute<any, any>;
+    event: Event<any, any>;
     name: string;
 }
 interface CachedCommandInfo {
-    command: Attribute<any, any>;
+    command: Command<any, any, any>;
     name: string;
 }
 const clusterAttributeCache = new Map<number, Map<number, CachedAttributeInfo>>();

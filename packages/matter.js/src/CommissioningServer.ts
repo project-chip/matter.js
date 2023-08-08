@@ -163,35 +163,44 @@ export class CommissioningServer extends MatterNode {
             basicInformation: { vendorId, productId }
         } = options;
 
+        // Set the required basicInformation and respect the provided values
+        // TODO Get the defaults from the cluster meta details
+        const basicInformationAttributes = Object.assign(
+            {
+                dataModelRevision: 1,
+                nodeLabel: "",
+                hardwareVersion: 0,
+                hardwareVersionString: "0",
+                location: "XX",
+                localConfigDisabled: false,
+                softwareVersion: 1,
+                softwareVersionString: "v1",
+                capabilityMinima: {
+                    caseSessionsPerFabric: 3,
+                    subscriptionsPerFabric: 3
+                },
+                serialNumber: `node-matter-${Crypto.get().getRandomData(4).toHex()}`
+            },
+            options.basicInformation
+        ) as AttributeInitialValues<typeof BasicInformationCluster.attributes>;
+
+        const reachabilitySupported = basicInformationAttributes.reachable !== undefined;
         // Add basic Information cluster to root directly because it is not allowed to be changed afterward
-        this.rootEndpoint.addClusterServer(
-            ClusterServer(
-                BasicInformationCluster,
-                // Set the required basicInformation and respect the provided values
-                Object.assign(
-                    {
-                        dataModelRevision: 1,
-                        nodeLabel: "",
-                        hardwareVersion: 0,
-                        hardwareVersionString: "0",
-                        location: "XX",
-                        localConfigDisabled: false,
-                        softwareVersion: 1,
-                        softwareVersionString: "v1",
-                        capabilityMinima: {
-                            caseSessionsPerFabric: 3,
-                            subscriptionsPerFabric: 3
-                        },
-                        serialNumber: `node-matter-${Crypto.get().getRandomData(4).toHex()}`
-                    },
-                    options.basicInformation
-                ),
-                {},
-                {
-                    startUp: true
-                }
-            )
+        const basicInformationCluster = ClusterServer(
+            BasicInformationCluster,
+            basicInformationAttributes,
+            {},
+            {
+                startUp: true,
+                shutDown: true,
+                reachableChanged: reachabilitySupported
+            }
         );
+        this.rootEndpoint.addClusterServer(basicInformationCluster);
+
+        if (reachabilitySupported) {
+            basicInformationCluster.subscribeReachableAttribute(newValue => basicInformationCluster.triggerReachableChangedEvent?.({ reachableNewValue: newValue }));
+        }
 
         // Use provided certificates for OperationalCredentialsCluster or generate own ones
         let certificates = options.certificates;
@@ -209,6 +218,7 @@ export class CommissioningServer extends MatterNode {
         }
 
         // Add Operational credentials cluster to root directly because it is not allowed to be changed afterward
+        // TODO Get the defaults from the cluster meta details
         this.rootEndpoint.addClusterServer(
             ClusterServer(
                 OperationalCredentialsCluster,
@@ -224,6 +234,7 @@ export class CommissioningServer extends MatterNode {
             )
         );
 
+        // TODO Get the defaults from the cluster meta details
         this.rootEndpoint.addClusterServer(
             ClusterServer(
                 GeneralCommissioningCluster,
@@ -245,6 +256,7 @@ export class CommissioningServer extends MatterNode {
         );
 
         const networkId = new ByteArray(32);
+        // TODO Get the defaults from the cluster meta details
         this.rootEndpoint.addClusterServer(
             ClusterServer(
                 NetworkCommissioningCluster.with("EthernetNetworkInterface"),
@@ -260,6 +272,7 @@ export class CommissioningServer extends MatterNode {
             )
         );
 
+        // TODO Get the defaults from the cluster meta details
         this.rootEndpoint.addClusterServer(
             ClusterServer(
                 AccessControlCluster,
@@ -272,12 +285,13 @@ export class CommissioningServer extends MatterNode {
                 },
                 {},
                 {
-                    accessControlEntryChanged: true,
-                    accessControlExtensionChanged: true
+                    accessControlEntryChanged: true, // TODO
+                    accessControlExtensionChanged: true // TODO
                 }
             )
         );
 
+        // TODO Get the defaults from the cluster meta details
         this.rootEndpoint.addClusterServer(
             ClusterServer(
                 GroupKeyManagementCluster,
@@ -291,6 +305,7 @@ export class CommissioningServer extends MatterNode {
             )
         );
 
+        // TODO Get the defaults from the cluster meta details
         this.rootEndpoint.addClusterServer(
             ClusterServer(
                 GeneralDiagnosticsCluster,
@@ -440,6 +455,14 @@ export class CommissioningServer extends MatterNode {
         }
 
         await this.deviceInstance.start();
+
+        // Send required events
+        basicInformation.triggerStartUpEvent({ softwareVersion: basicInformation.getSoftwareVersionAttribute() });
+
+        const generalDiagnostics = this.getRootClusterServer(GeneralDiagnosticsCluster);
+        if (generalDiagnostics !== undefined) {
+            this.getRootClusterServer(GeneralDiagnosticsCluster)?.triggerBootReasonEvent({ bootReason: generalDiagnostics.getBootReasonAttribute?.() ?? GeneralDiagnostics.BootReason.Unspecified });
+        }
     }
 
     updateStructure() {
@@ -617,6 +640,8 @@ export class CommissioningServer extends MatterNode {
      * close network connections of the device
      */
     async close() {
+        this.rootEndpoint.getClusterServer(BasicInformationCluster)?.triggerShutDownEvent?.();
+        await this.interactionServer?.close();
         await this.deviceInstance?.stop();
     }
 

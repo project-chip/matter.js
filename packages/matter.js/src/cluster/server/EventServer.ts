@@ -7,14 +7,17 @@
 import { TlvSchema } from "../../tlv/TlvSchema.js";
 import { Endpoint } from "../../device/Endpoint.js";
 import { EventPriority } from "../Cluster.js";
-import { EventData } from "../../protocol/interaction/EventHandler.js";
+import { EventData, EventHandler, EventStorageData } from "../../protocol/interaction/EventHandler.js";
 import { Time } from "../../time/Time.js";
 import { InternalError } from "../../common/MatterError.js";
 
+// TODO Add Fabric Scoped EventServer when needed
+
 export class EventServer<T> {
     private eventList = new Array<EventData<T>>();
-    private readonly listeners = new Array<(event: EventData<T>) => void>();
+    private readonly listeners = new Array<(event: EventStorageData<T>) => void>();
     protected endpoint?: Endpoint;
+    protected eventHandler?: EventHandler;
 
     constructor(
         readonly id: number,
@@ -28,7 +31,19 @@ export class EventServer<T> {
         this.endpoint = endpoint;
     }
 
-    triggerEvent(value: T) {
+    // TODO Try to get rid of that late binding and simply things again
+    //      potentially with refactoring out MatterDevice and MatterController
+    bindToEventHandler(eventHandler: EventHandler) {
+        this.eventHandler = eventHandler;
+        // Send all stored events to the new listener
+        for (const event of this.eventList) {
+            const finalEvent = this.eventHandler.pushEvent(event);
+            this.listeners.forEach(listener => listener(finalEvent));
+        }
+        this.eventList = [];
+    }
+
+    triggerEvent(data: T) {
         if (this.endpoint === undefined || this.endpoint.id === undefined) {
             throw new InternalError("Endpoint not assigned");
         }
@@ -36,19 +51,26 @@ export class EventServer<T> {
             eventId: this.id,
             clusterId: this.clusterId,
             endpointId: this.endpoint.id,
-            timestamp: Time.nowMs(),
+            epochTimestamp: Time.nowMs(),
             priority: this.priority,
-            value,
+            data,
         };
-        this.eventList.push(event);
-        this.listeners.forEach(listener => listener(event));
+        if (this.eventHandler === undefined) { // As long as we have no eventManager, we store the events
+            this.eventList.push(event);
+        } else {
+            const finalEvent = this.eventHandler.pushEvent(event);
+            this.listeners.forEach(listener => listener(finalEvent));
+        }
     }
 
-    addListener(listener: (event: EventData<T>) => void) {
+    addListener(listener: (event: EventStorageData<T>) => void) {
         this.listeners.push(listener);
     }
 
-    removeListener(listener: (event: EventData<T>) => void) {
-        this.listeners.splice(this.listeners.findIndex(item => item === listener), 1);
+    removeListener(listener: (event: EventStorageData<T>) => void) {
+        const entryIndex = this.listeners.indexOf(listener);
+        if (entryIndex !== -1) {
+            this.listeners.splice(entryIndex, 1);
+        }
     }
 }

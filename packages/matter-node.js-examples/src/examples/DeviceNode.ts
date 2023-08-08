@@ -43,6 +43,8 @@ logger.info(`Storage location: ${storageLocation} (Directory)`);
 logger.info('Use the parameter "-store NAME" to specify a different storage location, use -clearstorage to start with an empty storage.')
 
 class Device {
+    private matterServer: MatterServer | undefined;
+
     async start() {
         logger.info(`node-matter`);
 
@@ -124,7 +126,7 @@ class Device {
          * are called.
          */
 
-        const matterServer = new MatterServer(storageManager, netAnnounceInterface);
+        this.matterServer = new MatterServer(storageManager, netAnnounceInterface);
 
         const commissioningServer = new CommissioningServer({
             port,
@@ -322,7 +324,7 @@ class Device {
 
         commissioningServer.addDevice(onOffDevice);
 
-        matterServer.addCommissioningServer(commissioningServer);
+        this.matterServer.addCommissioningServer(commissioningServer);
 
         /**
          * Start the Matter Server
@@ -331,7 +333,7 @@ class Device {
          * CommissioningServer node then this command also starts the announcement of the device into the network.
          */
 
-        await matterServer.start();
+        await this.matterServer.start();
 
         // When we want to limit the initial announcement to one medium (e.g. BLE) then we need to delay the
         // announcement and provide the limiting information.
@@ -365,11 +367,18 @@ class Device {
             logger.info("Device is already commissioned. Waiting for controllers to connect ...");
         }
     }
+
+    async stop() {
+        await this.matterServer?.close();
+    }
 }
 
-new Device().start().then(() => { /* done */ }).catch(err => console.error(err));
+const device = new Device();
+device.start().then(() => { /* done */ }).catch(err => console.error(err));
 
 process.on("SIGINT", () => {
-    // Pragmatic way to make sure the storage is correctly closed before the process ends.
-    storage.close().then(() => process.exit(0)).catch(err => console.error(err));
+    device.stop().then(() => {
+        // Pragmatic way to make sure the storage is correctly closed before the process ends.
+        storage.close().then(() => process.exit(0)).catch(err => console.error(err));
+    }).catch(err => console.error(err));
 });

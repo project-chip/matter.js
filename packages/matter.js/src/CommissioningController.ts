@@ -10,7 +10,7 @@ import { StorageContext } from "./storage/StorageContext.js";
 import { MatterController } from "./MatterController.js";
 import { InteractionClient, ClusterClient } from "./protocol/interaction/InteractionClient.js";
 import { NodeId } from "./datatype/NodeId.js";
-import { structureReadDataToClusterObject } from "./protocol/interaction/AttributeDataDecoder.js";
+import { structureReadAttributeDataToClusterObject } from "./protocol/interaction/AttributeDataDecoder.js";
 import { Endpoint } from "./device/Endpoint.js";
 import { Logger } from "./log/Logger.js";
 import { DeviceTypes, DeviceTypeDefinition, getDeviceTypeDefinitionByCode } from "./device/DeviceTypes.js";
@@ -246,7 +246,7 @@ export class CommissioningController extends MatterNode {
         const interactionClient = await this.createInteractionClient();
 
         const allClusterAttributes = await interactionClient.getAllAttributes();
-        const allData = structureReadDataToClusterObject(allClusterAttributes);
+        const allData = structureReadAttributeDataToClusterObject(allClusterAttributes);
         logger.debug("Device all data", Logger.toJSON(allData));
 
         const partLists = new Map<number, number[]>();

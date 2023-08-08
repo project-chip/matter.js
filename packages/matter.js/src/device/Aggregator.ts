@@ -34,8 +34,9 @@ export class Aggregator extends Endpoint {
 
     /**
      * Add a bridged device to the Aggregator. If provided the bridgedBasicInformation is used to automatically add the
-     * BridgedDeviceBasicInformationCluster to the device. If not provided the BridgedDeviceBasicInformationCluster must
-     * be already existing on the device!
+     * BridgedDeviceBasicInformationCluster to the device and also handles Reachability event triggering when
+     * reachability event changes. If not provided the BridgedDeviceBasicInformationCluster must be already existing
+     * on the device!
      *
      * @param device Device instance to add
      * @param bridgedBasicInformation Optional BridgedDeviceBasicInformationCluster attribute values to
@@ -48,14 +49,19 @@ export class Aggregator extends Endpoint {
             device.setDeviceTypes(deviceTypes);
         }
         if (bridgedBasicInformation !== undefined) {
-            device.addClusterServer(ClusterServer(
+            const bridgedBasicInformationCluster = ClusterServer(
                 BridgedDeviceBasicInformationCluster,
                 bridgedBasicInformation,
                 {},
                 {
                     reachableChanged: true
                 }
-            ));
+            );
+            device.addClusterServer(bridgedBasicInformationCluster);
+
+            bridgedBasicInformationCluster.subscribeReachableAttribute((newValue) => {
+                bridgedBasicInformationCluster.triggerReachableChangedEvent({ reachableNewValue: newValue });
+            });
         } else {
             if (!device.hasClusterServer(BridgedDeviceBasicInformationCluster)) {
                 throw new ImplementationError("BridgedDeviceBasicInformationCluster is required for bridged devices. Please add yourself or provide as second parameter");

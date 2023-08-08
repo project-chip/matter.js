@@ -9,6 +9,7 @@ export * from "./InteractionProtocol.js";
 
 // Export Interaction Classes
 export * from "./AttributeDataDecoder.js";
+export * from "./EventDataDecoder.js";
 export * from "./InteractionClient.js";
 export * from "./InteractionMessenger.js";
 export * from "./InteractionServer.js";

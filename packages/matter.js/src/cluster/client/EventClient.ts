@@ -6,10 +6,11 @@
 
 import { InteractionClient } from "../../protocol/interaction/InteractionClient.js";
 import { Event } from "../Cluster.js";
-import { InternalError, NotImplementedError } from "../../common/MatterError.js";
+import { InternalError } from "../../common/MatterError.js";
+import { DecodedEventData } from "../../protocol/interaction/EventDataDecoder.js";
 
 export class EventClient<T> {
-    private readonly listeners = new Array<(event: T/*, oldValue: T*/) => void>();
+    private readonly listeners = new Array<(event: DecodedEventData<T>) => void>();
 
     constructor(
         readonly event: Event<T, any>,
@@ -19,37 +20,55 @@ export class EventClient<T> {
         private getInteractionClientCallback: () => Promise<InteractionClient>,
     ) { }
 
-    async get(_alwaysRequestFromRemote = false) {
+    async get(
+        minimumEventNumber?: number | bigint,
+        isFabricFiltered?: boolean
+    ): Promise<DecodedEventData<T>[] | undefined> {
         const interactionClient = await this.getInteractionClientCallback();
         if (interactionClient === undefined) {
             throw new InternalError("No InteractionClient available");
         }
-        throw new NotImplementedError("Not yet implemented");
-        /*
-        return await interactionClient.get(this.endpointId, this.clusterId, this.event, alwaysRequestFromRemote);*/
-        // TODO: implement
+        return await interactionClient.getEvent(
+            this.endpointId,
+            this.clusterId,
+            this.event,
+            minimumEventNumber,
+            isFabricFiltered
+        );
     }
 
-    async subscribe(_minIntervalS: number, _maxIntervalS: number) {
+    async subscribe(
+        minIntervalS: number,
+        maxIntervalS: number,
+        isUrgent = true,
+        minimumEventNumber?: number | bigint,
+        isFabricFiltered?: boolean
+    ) {
         const interactionClient = await this.getInteractionClientCallback();
         if (interactionClient === undefined) {
             throw new InternalError("No InteractionClient available");
         }
-        throw new NotImplementedError("Not yet implemented");
-        /*
-        return await interactionClient.subscribe(this.endpointId, this.clusterId, this.attribute, minIntervalS, maxIntervalS, this.update.bind(this));*/
-        // TODO implement
+        return await interactionClient.subscribeEvent(this.endpointId, this.clusterId, this.event, minIntervalS, maxIntervalS, isUrgent, minimumEventNumber, isFabricFiltered, this.update.bind(this));
     }
 
     setInteractionClientRequestorCallback(callback: () => Promise<InteractionClient>) {
         this.getInteractionClientCallback = callback;
     }
 
-    addListener(listener: (newValue: T/*, oldValue: T*/) => void) {
+    update(newEvent: DecodedEventData<T>) {
+        for (const listener of this.listeners) {
+            listener(newEvent);
+        }
+    }
+
+    addListener(listener: (newValue: DecodedEventData<T>) => void) {
         this.listeners.push(listener);
     }
 
-    removeListener(listener: (newValue: T/*, oldValue: T*/) => void) {
-        this.listeners.splice(this.listeners.findIndex(item => item === listener), 1);
+    removeListener(listener: (newValue: DecodedEventData<T>) => void) {
+        const entryIndex = this.listeners.indexOf(listener);
+        if (entryIndex !== -1) {
+            this.listeners.splice(entryIndex, 1);
+        }
     }
 }

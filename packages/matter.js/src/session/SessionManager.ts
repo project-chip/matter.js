@@ -63,6 +63,7 @@ export class SessionManager<ContextT> {
         this.sessions.delete(sessionId);
         this.resumptionRecords.delete(peerNodeId.id);
         this.storeResumptionRecords();
+        // TODO if the last session of a fabric got removed, start announcing the fabric again that controller can discover it
     }
 
     getNextAvailableSessionId() {

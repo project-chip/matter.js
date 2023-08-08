@@ -12,7 +12,8 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
     * Added FabricScopedAttributeServer which gets and sets the value based on the provided fabric
     * Updated ClusterServerObj and ClusterClientObj typings to respect these Attribute types
     * Updated all Cluster definitions that use such attribute types
-  * Breaking: Add Interface for Events which requires to define the supported events when creating a ClusterServer (Event Logic WIP in separate PR)
+  * Breaking: Add Interface for Events which requires to define the supported events when creating a ClusterServer
+  * Breaking: Include Event support in InteractionClient which changes several Read/Subscribe method signatures or adds new methods
   * Breaking: GeneralCommissioningServerHandler is now a function that takes configuration for setRegulatoryConfig handling
   * Breaking: Types of specific clusters are no longer exported flat on main level. Cluster exports are now namespaces that include their types.
   * Breaking: All collection files meant to be used for exports only are renamed to export.ts and should not be used for internal imports
@@ -27,13 +28,18 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Feature: Global Attributes are also accessible in ClusterClient instances (e.g. to get the list of features of the cluster)
   * Feature: Refactor Controller Commissioning process and add network commissioning support
   * Feature: Correctly Handle FabricIndex fields for Read and Write requests
+  * Feature: Handle subscription errors and destroy session if failing more than 3 times
+  * Feature: Add full event support (Device and Controller) including triggering some default events automatically (startup, shutdown, reachabilitycChanged, bootReason)
+  * Feature: Add more parameters to several InteractionClient methods to allow to configure more parameters of the requests
+  * Feature: Allows subscripts to be updated dynamically when the endpoint structure for bridges changes by adding or removing a device
   * Enhance: Device port in MDNSBroadcaster is now dynamically set and add UDC (User directed Commissioning) Announcements
   * Enhance: Enhanced MessageCodec and check some more fields
   * Enhance: Added possibility to define conditional cluster attribute/Command/event definitions and introduce runtime checking for these. Part of Cluster Structure rework still WIP
   * Enhance: (@vves) Add Window Covering Cluster definition  
   * Enhance: Split up and corrected PowerSource and PressureMeasurement Cluster based on Matter 1.1 Specs
   * Enhance: Detailed cluster data model and related logic
-  * Enhance: Generate all cluster definitions from Matter 1.1 specification and CHIP v1.1-branch automatically. This brings basic definition support for all clusters!
+  * Enhance: Generates all cluster definitions from Matter 1.1 specification and CHIP v1.1-branch automatically. This brings basic definition support for all clusters!
+  * Enhance: Makes sure Fabric-Scoped requests are handled correctly for read and subscriptions 
   * Enhance: All Errors thrown by the library are now derived from the MatterError class and split up into several subclasses
   * Fix: Added missing PulseWidthModulationLevelControlCluster to AllCLusters
   * Fix Typing of Commands in ClusterClient if no commands were present
@@ -41,7 +47,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Fix: Makes sure an error received from sending subscription seed data reports is not bubbling up and activate subscription after successful seeding
   * Fix: Allows Node.js Buffer objects to be persisted to storage as a Uint8Arrays that they subclass
   * Fix: Fixes a Subscription timer duplication issue and collect attribute changes within a 50ms window to reduce the number of subscription messages
-  * Fix: Returns correct Error-Status for Read-/Write-Requests
+  * Fix: Returns correct Error-Status for Read-/Write-/Subscribe- and Invoke-Requests
   * Fix: Fixes TLV Encoding for strings with UTF8 relevant characters
   * Refactor: Refactor Endpoint structuring and determination to allow dynamic and updating structures
 * matter.js API:
@@ -62,6 +68,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Feature: The Device example script got a new parameter -ble to also initialize the Bluetooth transport layer
   * Feature: The Controller example script got a new parameter -ble to also initialize the Bluetooth transport layer
   * Feature: The Controller example script got a new parameters -ble-* to provide Wi-Fi/Thread network credentials to use for device commissioning
+  * Feature: Add stopping of the example scripts to allow clean shutdown and sending shutdown Event
 * Misc:
   * Added Specification links for Matter Specifications 1.1
   * Optimize typing exports for node10 TS settings

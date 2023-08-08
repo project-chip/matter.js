@@ -18,6 +18,8 @@ import { MatterError } from "../common/MatterError.js";
 
 export class AttributeError extends MatterError { }
 
+export class EventError extends MatterError { }
+
 export const enum AccessLevel {
     View,
     Operate,

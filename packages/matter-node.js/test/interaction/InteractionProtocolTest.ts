@@ -57,6 +57,7 @@ const READ_REQUEST: ReadRequest = {
 const READ_RESPONSE: DataReport = {
     interactionModelRevision: 1,
     suppressResponse: false,
+    eventReports: undefined,
     attributeReports: [
         {
             attributeData: {

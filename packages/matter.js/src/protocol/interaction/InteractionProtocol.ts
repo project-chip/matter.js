@@ -9,7 +9,7 @@ import { TlvAny } from "../../tlv/TlvAny.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
-import { TlvEnum, TlvInt64, TlvUInt16, TlvUInt32, TlvUInt64, TlvUInt8 } from "../../tlv/TlvNumber.js";
+import { TlvEnum, TlvUInt16, TlvUInt32, TlvUInt64, TlvUInt8 } from "../../tlv/TlvNumber.js";
 import { TlvField, TlvList, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { MatterCoreSpecificationV1_0 } from "../../spec/Specifications.js";
 
@@ -70,7 +70,7 @@ export const TlvEventData = TlvObject({ // EventDataIB
     path: TlvField(0, TlvEventPath),
     eventNumber: TlvField(1, TlvUInt64),
     priority: TlvField(2, TlvUInt8),
-    epochTimestamp: TlvOptionalField(3, TlvInt64),
+    epochTimestamp: TlvOptionalField(3, TlvUInt64),
     systemTimestamp: TlvOptionalField(4, TlvUInt64),
     deltaEpochTimestamp: TlvOptionalField(5, TlvUInt64),
     deltaSystemTimestamp: TlvOptionalField(6, TlvUInt64),
@@ -78,7 +78,7 @@ export const TlvEventData = TlvObject({ // EventDataIB
 });
 
 /** @see {@link MatterCoreSpecificationV1_0}, section 10.5.6 */
-export const TlvEventFilter = TlvList({ // EventFilterIB
+export const TlvEventFilter = TlvObject({ // EventFilterIB
     nodeId: TlvOptionalField(0, TlvNodeId),
     eventMin: TlvField(1, TlvUInt64),
 });
@@ -135,8 +135,8 @@ export const TlvEventStatus = TlvObject({ // EventStatusIB
 
 /** @see {@link MatterCoreSpecificationV1_0}, section 10.5.10 */
 export const TlvEventReport = TlvObject({ // EventReportIB
-    eventStatus: TlvField(0, TlvEventStatus),
-    eventData: TlvField(1, TlvEventData),
+    eventStatus: TlvOptionalField(0, TlvEventStatus),
+    eventData: TlvOptionalField(1, TlvEventData),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0}, section 10.5.11 */

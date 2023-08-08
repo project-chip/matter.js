@@ -17,7 +17,7 @@ export class AttributeClient<T> {
     private readonly isWritable: boolean;
     private readonly isFabricScoped: boolean;
     protected readonly schema: TlvSchema<any>;
-    private readonly listeners = new Array<(newValue: T/*, oldValue: T*/) => void>();
+    private readonly listeners = new Array<(newValue: T) => void>();
 
     constructor(
         readonly attribute: Attribute<T, any>,
@@ -60,7 +60,7 @@ export class AttributeClient<T> {
             }, NoAssociatedFabricError, value);
         }
 
-        return await interactionClient.set<T>(this.endpointId, this.clusterId, this.attribute, value);
+        return await interactionClient.setAttribute<T>(this.endpointId, this.clusterId, this.attribute, value);
     }
 
     async get(alwaysRequestFromRemote = false) {
@@ -68,7 +68,7 @@ export class AttributeClient<T> {
         if (interactionClient === undefined) {
             throw new InternalError("No InteractionClient available");
         }
-        return await interactionClient.get(this.endpointId, this.clusterId, this.attribute, alwaysRequestFromRemote);
+        return await interactionClient.getAttribute(this.endpointId, this.clusterId, this.attribute, alwaysRequestFromRemote);
     }
 
     async getWithVersion(alwaysRequestFromRemote = false) {
@@ -76,22 +76,18 @@ export class AttributeClient<T> {
         if (interactionClient === undefined) {
             throw new InternalError("No InteractionClient available");
         }
-        return await interactionClient.getWithVersion(this.endpointId, this.clusterId, this.attribute, alwaysRequestFromRemote);
+        return await interactionClient.getAttributeWithVersion(this.endpointId, this.clusterId, this.attribute, alwaysRequestFromRemote);
     }
 
-    async subscribe(minIntervalS: number, maxIntervalS: number) {
+    async subscribe(minIntervalS: number, maxIntervalS: number, isFabricFiltered?: boolean) {
         const interactionClient = await this.getInteractionClientCallback();
         if (interactionClient === undefined) {
             throw new InternalError("No InteractionClient available");
         }
-        return await interactionClient.subscribe(this.endpointId, this.clusterId, this.attribute, minIntervalS, maxIntervalS, this.update.bind(this));
+        return await interactionClient.subscribeAttribute(this.endpointId, this.clusterId, this.attribute, minIntervalS, maxIntervalS, isFabricFiltered, this.update.bind(this));
     }
 
     update(value: T) {
-        /*const oldValue = await this.get();
-        if (value !== oldValue) {
-            this.validator(value, this.name);
-        }*/
         this.listeners.forEach(listener => listener(value));
     }
 
@@ -99,11 +95,14 @@ export class AttributeClient<T> {
         this.getInteractionClientCallback = callback;
     }
 
-    addListener(listener: (newValue: T/*, oldValue: T*/) => void) {
+    addListener(listener: (newValue: T) => void) {
         this.listeners.push(listener);
     }
 
-    removeListener(listener: (newValue: T/*, oldValue: T*/) => void) {
-        this.listeners.splice(this.listeners.findIndex(item => item === listener), 1);
+    removeListener(listener: (newValue: T) => void) {
+        const entryIndex = this.listeners.indexOf(listener);
+        if (entryIndex !== -1) {
+            this.listeners.splice(entryIndex, 1);
+        }
     }
 }
