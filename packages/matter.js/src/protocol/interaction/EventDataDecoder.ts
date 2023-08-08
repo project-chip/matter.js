@@ -80,7 +80,8 @@ export function normalizeAndDecodeEventData(data: TypeFromSchema<typeof TlvEvent
             const { event: { schema }, name } = eventDetail;
             const events = values.map(eventData => ({
                 ...eventData,
-                data: eventData.data === undefined ? undefined : schema.decodeTlv(eventData.data)
+                data: eventData.data === undefined ? undefined : schema.decodeTlv(eventData.data),
+                path: undefined,
             }));
             result.push({ path: { nodeId, endpointId, clusterId, eventId, eventName: name }, events });
         } catch (error: any) {

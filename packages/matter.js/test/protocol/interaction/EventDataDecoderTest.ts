@@ -145,6 +145,7 @@ describe("EventDataDecoder", () => {
                         deltaEpochTimestamp: undefined,
                         deltaSystemTimestamp: undefined,
                         data: { softwareVersion: 1 },
+                        path: undefined
                     }],
                 },
                 {
@@ -157,6 +158,7 @@ describe("EventDataDecoder", () => {
                         deltaEpochTimestamp: undefined,
                         deltaSystemTimestamp: undefined,
                         data: undefined,
+                        path: undefined
                     }]
                 },
             ]);
@@ -210,6 +212,7 @@ describe("EventDataDecoder", () => {
                             deltaEpochTimestamp: undefined,
                             deltaSystemTimestamp: undefined,
                             data: { softwareVersion: 1 },
+                            path: undefined
                         },
                         {
                             eventNumber: 3,
@@ -219,6 +222,7 @@ describe("EventDataDecoder", () => {
                             deltaEpochTimestamp: undefined,
                             deltaSystemTimestamp: undefined,
                             data: { softwareVersion: 3 },
+                            path: undefined
                         }
                     ],
                 },
@@ -232,6 +236,7 @@ describe("EventDataDecoder", () => {
                         deltaEpochTimestamp: undefined,
                         deltaSystemTimestamp: undefined,
                         data: undefined,
+                        path: undefined
                     }]
                 },
             ]);
