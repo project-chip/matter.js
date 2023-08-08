@@ -12,12 +12,12 @@ import { DatatypeModel } from "./DatatypeModel.js";
 import { EventModel } from "./EventModel.js";
 import { Model } from "./Model.js";
 
-export class ClusterModel extends Model implements ClusterElement {
+export class ClusterModel extends Model {
     override tag: ClusterElement.Tag = ClusterElement.Tag;
     override id?: Mei;
+    classification?: ClusterElement.Classification;
     override isTypeScope = true;
     singleton?: boolean;
-    classification?: ClusterElement.Classification;
 
     get attributes() {
         return this.all(AttributeModel);

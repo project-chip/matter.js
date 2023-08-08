@@ -78,7 +78,7 @@ export function translateTable<T extends TableSchema>(
 
     const aliases = Array<[string, string]>();
     const optional = new Set<string>();
-    const translators = Array<[string, Translator<any>]>();
+    const translators = Array<[string, Translator<any> | string | number]>();
     let childTranslator: ChildTranslator | undefined;
 
     nextField: for (const kv of Object.entries(schema)) {
@@ -129,7 +129,12 @@ export function translateTable<T extends TableSchema>(
         // Translate each field
         for (const [name, translator] of translators) {
             const el = source[name];
-            const value = el === undefined ? undefined : translator(el);
+            let value;
+            if (typeof translator === "function") {
+                value = el === undefined ? undefined : translator(el);
+            } else {
+                value = translator;
+            }
 
             // Ignore the row if required values are missing
             const empty = value === undefined || value === null || value === "" || Number.isNaN(value);

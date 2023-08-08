@@ -12,6 +12,7 @@ import "./ClusterValidator.js";
 import "./CommandValidator.js";
 import "./DatatypeValidator.js";
 import "./ValueValidator.js";
+import "./RequirementValidator.js";
 import "./DeviceTypeValidator.js";
 import "./EndpointValidator.js";
 import "./EventValidator.js";
