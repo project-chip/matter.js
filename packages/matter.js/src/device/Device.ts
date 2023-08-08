@@ -15,6 +15,8 @@ import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { BindingCluster } from "../cluster/definitions/BindingCluster.js";
 import { ClusterServer } from "../protocol/interaction/InteractionServer.js";
 import { ImplementationError, NotImplementedError } from "../common/MatterError.js";
+import { EndpointNumber } from "../datatype/EndpointNumber.js";
+import { DeviceTypeId } from "../datatype/DeviceTypeId.js";
 
 /**
  * Temporary used device class for paired devices until we added a layer to choose the right specialized device class
@@ -32,7 +34,7 @@ export class PairedDevice extends Endpoint {
     constructor(
         definition: AtLeastOne<DeviceTypeDefinition>,
         clusters: (ClusterServerObj<Attributes, Commands, Events> | ClusterClientObj<any, Attributes, Commands, Events>)[] = [],
-        endpointId: number
+        endpointId: EndpointNumber
     ) {
         super(definition, { endpointId });
         clusters.forEach(cluster => {
@@ -71,14 +73,14 @@ export class PairedDevice extends Endpoint {
  * Root endpoint of a device. This is used internally and not needed to be instanced by the user.
  */
 export class RootEndpoint extends Endpoint {
-    readonly deviceType: number;
+    readonly deviceType: DeviceTypeId;
 
     /**
      * Create a new RootEndpoint instance. This is automatically instanced by the CommissioningServer class.
      */
     constructor(
     ) {
-        super([DeviceTypes.ROOT], { endpointId: 0 });
+        super([DeviceTypes.ROOT], { endpointId: EndpointNumber(0) });
         this.deviceType = DeviceTypes.ROOT.code;
     }
 }

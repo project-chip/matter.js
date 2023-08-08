@@ -98,7 +98,7 @@ export const GeneralCommissioningClusterHandler: (options?: {
         const fabric = session.getFabric();
         if (fabric === undefined) throw new MatterFlowError("commissioningComplete is called but the fabric has not been defined yet");
         breadcrumb.setLocal(BigInt(0));
-        logger.info(`Commissioning completed on fabric #${fabric.fabricId.id} as node #${fabric.nodeId}.`);
+        logger.info(`Commissioning completed on fabric #${fabric.fabricId} as node #${fabric.nodeId}.`);
 
         session.getContext().completeCommission();
 

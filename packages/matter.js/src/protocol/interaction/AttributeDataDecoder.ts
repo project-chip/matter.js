@@ -12,15 +12,18 @@ import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Logger } from "../../log/Logger.js";
 import { TlvAttributeData, TlvAttributeReport } from "./InteractionProtocol.js";
 import { UnexpectedDataError } from "../../common/MatterError.js";
+import { EndpointNumber } from "../../datatype/EndpointNumber.js";
+import { ClusterId } from "../../datatype/ClusterId.js";
+import { AttributeId } from "../../datatype/AttributeId.js";
 
 const logger = Logger.get("AttributeDataDecoder");
 
 export interface DecodedAttributeReportValue<T> {
     path: {
         nodeId?: NodeId,
-        endpointId: number,
-        clusterId: number,
-        attributeId: number,
+        endpointId: EndpointNumber,
+        clusterId: ClusterId,
+        attributeId: AttributeId,
         attributeName: string
     },
     version: number,
@@ -30,9 +33,9 @@ export interface DecodedAttributeReportValue<T> {
 export interface DecodedAttributeValue<T> {
     path: {
         nodeId?: NodeId,
-        endpointId: number,
-        clusterId: number,
-        attributeId: number,
+        endpointId: EndpointNumber,
+        clusterId: ClusterId,
+        attributeId: AttributeId,
         attributeName: string
     },
     version?: number,
@@ -48,7 +51,7 @@ export function normalizeAndDecodeReadAttributeReport(data: TypeFromSchema<typeo
 
 export function normalizeAttributeData(data: TypeFromSchema<typeof TlvAttributeData>[], acceptWildcardPaths = false): TypeFromSchema<typeof TlvAttributeData>[][] {
     // Fill in missing path elements when tag compression is used
-    let lastPath: { nodeId?: NodeId, endpointId: number, clusterId: number, attributeId: number } | undefined;
+    let lastPath: { nodeId?: NodeId, endpointId: EndpointNumber, clusterId: ClusterId, attributeId: AttributeId } | undefined;
     data.forEach(value => {
         if (value === undefined) return;
         const { path } = value;

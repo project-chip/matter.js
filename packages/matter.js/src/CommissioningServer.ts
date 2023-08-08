@@ -48,6 +48,8 @@ import { StorageContext } from "./storage/StorageContext.js";
 import { MdnsInstanceBroadcaster } from "./mdns/MdnsInstanceBroadcaster.js";
 import { Ble } from "./ble/Ble.js";
 import { NoProviderError, ImplementationError } from "./common/MatterError.js";
+import { EndpointNumber } from "./datatype/EndpointNumber.js";
+import { DeviceTypeId } from "./datatype/DeviceTypeId.js";
 
 const logger = Logger.get("CommissioningServer");
 
@@ -83,7 +85,7 @@ export interface CommissioningServerOptions {
 
     basicInformation:
     | {
-        vendorId: VendorId;
+        vendorId: number;
         vendorName: string;
         productId: number;
         productName: string;
@@ -119,7 +121,7 @@ export class CommissioningServer extends MatterNode {
     private readonly listeningAddressIpv4?: string;
     private readonly listeningAddressIpv6?: string;
     private readonly deviceName: string;
-    private readonly deviceType: number;
+    private readonly deviceType: DeviceTypeId;
     private readonly passcode: number;
     private readonly discriminator: number;
     private readonly flowType: CommissionningFlowType;
@@ -133,7 +135,7 @@ export class CommissioningServer extends MatterNode {
     private deviceInstance?: MatterDevice;
     private interactionServer?: InteractionServer;
 
-    private nextEndpointId: number;
+    private nextEndpointId: EndpointNumber;
 
     readonly delayedAnnouncement?: boolean;
 
@@ -151,17 +153,16 @@ export class CommissioningServer extends MatterNode {
         this.listeningAddressIpv4 = options.listeningAddressIpv4;
         this.listeningAddressIpv6 = options.listeningAddressIpv6;
         this.deviceName = options.deviceName;
-        this.deviceType = options.deviceType;
+        this.deviceType = DeviceTypeId(options.deviceType);
         this.passcode = options.passcode;
         this.discriminator = options.discriminator;
         this.flowType = options.flowType ?? CommissionningFlowType.Standard;
-        this.nextEndpointId = options.nextEndpointId ?? 1;
+        this.nextEndpointId = EndpointNumber(options.nextEndpointId ?? 1);
         this.delayedAnnouncement = options.delayedAnnouncement ?? false;
         this.additionalBleAdvertisementData = options.additionalBleAdvertisementData;
 
-        const {
-            basicInformation: { vendorId, productId }
-        } = options;
+        const vendorId = VendorId(options.basicInformation.vendorId);
+        const productId = options.basicInformation.productId;
 
         // Set the required basicInformation and respect the provided values
         // TODO Get the defaults from the cluster meta details
@@ -506,12 +507,12 @@ export class CommissioningServer extends MatterNode {
 
             if (endpoint.id === undefined) {
                 if (this.endpointStructureStorage.has(endpointUniquePrefix)) {
-                    endpoint.id = this.endpointStructureStorage.get<number>(endpointUniquePrefix);
+                    endpoint.id = this.endpointStructureStorage.get<EndpointNumber>(endpointUniquePrefix);
                     logger.debug(`Restored endpoint id ${endpoint.id} for endpoint with ${endpointUniquePrefix} / device ${endpoint.name} from storage`);
                 }
             }
             if (endpoint.id !== undefined && endpoint.id > this.nextEndpointId) {
-                this.nextEndpointId = endpoint.id + 1;
+                this.nextEndpointId = EndpointNumber(endpoint.id + 1);
             }
             this.initializeEndpointIdsFromStorage(endpoint, endpointUniquePrefix);
         }
@@ -533,7 +534,7 @@ export class CommissioningServer extends MatterNode {
             }
 
             if (endpoint.id === undefined) {
-                endpoint.id = this.nextEndpointId++;
+                endpoint.id = EndpointNumber(this.nextEndpointId++);
                 this.endpointStructureStorage.set(endpointUniquePrefix, endpoint.id);
                 logger.debug(`Assigned endpoint id ${endpoint.id} for endpoint with ${endpointUniquePrefix} / device ${endpoint.name} and stored it`);
             }
@@ -571,7 +572,7 @@ export class CommissioningServer extends MatterNode {
 
         const qrPairingCode = QrPairingCodeCodec.encode({
             version: 0,
-            vendorId: vendorId.id,
+            vendorId: vendorId,
             productId,
             flowType: this.flowType,
             discriminator: this.discriminator,

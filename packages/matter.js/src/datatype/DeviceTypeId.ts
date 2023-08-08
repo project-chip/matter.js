@@ -5,23 +5,24 @@
  */
 
 import { TlvUInt32 } from "../tlv/TlvNumber.js";
-import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { Branded } from "../util/Type.js";
+import { TlvWrapper } from "../tlv/TlvWrapper.js";
 
 /**
  * A Device type ID is a 32-bit number that defines the type of the device.
  *
  * @see {@link MatterCoreSpecificationV1_0} § 7.15
  */
-export class DeviceTypeId {
-    constructor(
-        readonly id: number
-    ) { }
+export type DeviceTypeId = Branded<number, "DeviceTypeId">;
+
+export function DeviceTypeId(v: number): DeviceTypeId {
+    return v as DeviceTypeId;
 }
 
 /** Tlv schema for a Device type ID. */
 export const TlvDeviceTypeId = new TlvWrapper<DeviceTypeId, number>(
     TlvUInt32,
-    deviceTypeId => deviceTypeId.id,
-    value => new DeviceTypeId(value),
+    deviceTypeId => deviceTypeId,
+    value => DeviceTypeId(value),
 );

@@ -24,33 +24,33 @@ TODO: If the Scenes server cluster is implemented on the same endpoint, the foll
 
 export class GroupsManager {
     static setGroup(fabric: Fabric, endpointId: number, groupId: GroupId, groupName: string) {
-        let endpointGroups = fabric.getScopedClusterDataValue<Map<number, string>>(GroupsCluster, endpointId.toString());
+        let endpointGroups = fabric.getScopedClusterDataValue<Map<GroupId, string>>(GroupsCluster, endpointId.toString());
         if (endpointGroups === undefined) {
-            endpointGroups = new Map<number, string>();
+            endpointGroups = new Map<GroupId, string>();
         }
-        endpointGroups.set(groupId.id, groupName || '');
+        endpointGroups.set(groupId, groupName || '');
 
         fabric.setScopedClusterDataValue(GroupsCluster, endpointId.toString(), endpointGroups);
     }
 
     static getGroupName(fabric: Fabric, endpointId: number, groupId: GroupId): string | undefined {
-        const endpointGroups = fabric.getScopedClusterDataValue<Map<number, string>>(GroupsCluster, endpointId.toString());
-        return endpointGroups?.get(groupId.id);
+        const endpointGroups = fabric.getScopedClusterDataValue<Map<GroupId, string>>(GroupsCluster, endpointId.toString());
+        return endpointGroups?.get(groupId);
     }
 
     static hasGroup(fabric: Fabric, endpointId: number, groupId: GroupId): boolean {
-        const endpointGroups = fabric.getScopedClusterDataValue<Map<number, string>>(GroupsCluster, endpointId.toString());
-        return endpointGroups?.has(groupId.id) ?? false;
+        const endpointGroups = fabric.getScopedClusterDataValue<Map<GroupId, string>>(GroupsCluster, endpointId.toString());
+        return endpointGroups?.has(groupId) ?? false;
     }
 
-    static getGroups(fabric: Fabric, endpointId: number): Map<number, string> {
-        return fabric.getScopedClusterDataValue<Map<number, string>>(GroupsCluster, endpointId.toString()) ?? new Map<number, string>();
+    static getGroups(fabric: Fabric, endpointId: number): Map<GroupId, string> {
+        return fabric.getScopedClusterDataValue<Map<GroupId, string>>(GroupsCluster, endpointId.toString()) ?? new Map<GroupId, string>();
     }
 
     static removeGroup(fabric: Fabric, endpointId: number, groupId: GroupId): boolean {
-        const endpointGroups = fabric.getScopedClusterDataValue<Map<number, string>>(GroupsCluster, endpointId.toString());
+        const endpointGroups = fabric.getScopedClusterDataValue<Map<GroupId, string>>(GroupsCluster, endpointId.toString());
         if (endpointGroups !== undefined) {
-            if (endpointGroups.delete(groupId.id)) {
+            if (endpointGroups.delete(groupId)) {
                 fabric.persist(); // persist scoped cluster data changes
                 return true;
             }
@@ -71,7 +71,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
         if (sessionType !== SessionType.Unicast) {
             throw new NotImplementedError("Groupcast not supported");
         }
-        if (groupId.id < 1) {
+        if (groupId < 1) {
             return { status: StatusCode.ConstraintError, groupId };
         }
         if (groupName.length > 16) {
@@ -96,7 +96,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             if (sessionType !== SessionType.Unicast) {
                 throw new NotImplementedError("Groupcast not supported");
             }
-            if (groupId.id < 1) {
+            if (groupId < 1) {
                 return { status: StatusCode.ConstraintError, groupId, groupName: '' };
             }
 
@@ -123,9 +123,9 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             const fabricGroupsList = Array.from(endpointGroups.keys());
             const capacity = fabricGroupsList.length < 0xff ? 0xfe - fabricGroupsList.length : 0;
             if (groupList.length === 0) {
-                return { capacity, groupList: fabricGroupsList.map(id => new GroupId(id)) };
+                return { capacity, groupList: fabricGroupsList };
             }
-            const filteredGroupsList = groupList.filter(groupId => endpointGroups.get(groupId.id));
+            const filteredGroupsList = groupList.filter(groupId => endpointGroups.get(groupId));
             if (filteredGroupsList.length === 0) {
                 // respond only when unicast!
                 return { capacity, groupList: [] };
@@ -139,14 +139,14 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
                 // TODO: When Unicast we generate a response, else not
             }
 
-            if (groupId.id < 1) {
+            if (groupId < 1) {
                 return { status: StatusCode.ConstraintError, groupId };
             }
 
             assertSecureSession(session);
             const fabric = session.getAssociatedFabric();
             if (GroupsManager.removeGroup(session.getAssociatedFabric(), endpoint.getId(), groupId)) {
-                ScenesManager.removeAllScenesForGroup(fabric, endpoint.getId(), groupId.id);
+                ScenesManager.removeAllScenesForGroup(fabric, endpoint.getId(), groupId);
                 return { status: StatusCode.Success, groupId };
             }
             return { status: StatusCode.NotFound, groupId };

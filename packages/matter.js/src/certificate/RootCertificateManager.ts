@@ -11,6 +11,7 @@ import { NodeId } from "../datatype/NodeId.js";
 import { Time } from "../time/Time.js";
 import { StorageContext } from "../storage/StorageContext.js";
 import { BinaryKeyPair, PrivateKey } from "../crypto/Key.js";
+import { FabricId } from "../datatype/FabricId.js";
 
 export class RootCertificateManager {
     private rootCertId = BigInt(0);
@@ -76,7 +77,7 @@ export class RootCertificateManager {
         return TlvRootCertificate.encode({ ...unsignedCertificate, signature });
     }
 
-    generateNoc(publicKey: ByteArray, fabricId: bigint, nodeId: NodeId) {
+    generateNoc(publicKey: ByteArray, fabricId: FabricId, nodeId: NodeId) {
         const now = Time.get().now();
         const certId = this.nextCertificateId++;
         const unsignedCertificate = {

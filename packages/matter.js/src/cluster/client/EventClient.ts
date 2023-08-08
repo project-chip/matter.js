@@ -8,6 +8,8 @@ import { InteractionClient } from "../../protocol/interaction/InteractionClient.
 import { Event } from "../Cluster.js";
 import { InternalError } from "../../common/MatterError.js";
 import { DecodedEventData } from "../../protocol/interaction/EventDataDecoder.js";
+import { EndpointNumber } from "../../datatype/EndpointNumber.js";
+import { ClusterId } from "../../datatype/ClusterId.js";
 
 export class EventClient<T> {
     private readonly listeners = new Array<(event: DecodedEventData<T>) => void>();
@@ -15,8 +17,8 @@ export class EventClient<T> {
     constructor(
         readonly event: Event<T, any>,
         readonly name: string,
-        readonly endpointId: number,
-        readonly clusterId: number,
+        readonly endpointId: EndpointNumber,
+        readonly clusterId: ClusterId,
         private getInteractionClientCallback: () => Promise<InteractionClient>,
     ) { }
 

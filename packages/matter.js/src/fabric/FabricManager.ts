@@ -38,7 +38,7 @@ export class FabricManager {
     }
 
     removeFabric(fabricIndex: FabricIndex) {
-        const index = this.fabrics.findIndex(fabric => fabric.fabricIndex.index === fabricIndex.index);
+        const index = this.fabrics.findIndex(fabric => fabric.fabricIndex === fabricIndex);
         if (index === -1) throw new FabricNotFoundError(`Fabric with index ${fabricIndex} cannot be removed because it does not exist.`);
         this.fabrics.splice(index, 1);
         this.persistFabrics();
@@ -59,7 +59,7 @@ export class FabricManager {
     }
 
     armFailSafe() {
-        this.fabricBuilder = new FabricBuilder(new FabricIndex(this.nextFabricIndex++));
+        this.fabricBuilder = new FabricBuilder(FabricIndex(this.nextFabricIndex++));
     }
 
     getFabricBuilder() {

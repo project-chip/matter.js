@@ -13,8 +13,8 @@ import { NobleBleClient } from "./NobleBleClient";
 import { BtpCodec } from "@project-chip/matter.js/codec";
 import { ByteArray, getPromiseResolver } from "@project-chip/matter.js/util";
 import { Time, Timer } from "@project-chip/matter.js/time";
-import { VendorId } from "@project-chip/matter.js/datatype";
 import { BleError } from "@project-chip/matter.js/ble";
+import { VendorId } from "@project-chip/matter.js/datatype";
 
 const logger = Logger.get("BleScanner");
 
@@ -83,7 +83,7 @@ export class BleScanner implements Scanner {
             const commissionableDevice: CommissionableDeviceData = {
                 D: discriminator,
                 SD: (discriminator >> 8) & 0x0F,
-                VP: `${vendorId.id}+${productId}`,
+                VP: `${vendorId}+${productId}`,
                 CM: 1, // Can be no other mode,
                 addresses: [{ type: "ble", peripheralAddress: peripheral.address }]
             };
@@ -112,12 +112,12 @@ export class BleScanner implements Scanner {
         }
 
         if (record.VP !== undefined) {
-            const vendorIdQueryId = this.buildCommissionableQueryIdentifier({ vendorId: new VendorId(parseInt(record.VP.split("+")[0])) });
+            const vendorIdQueryId = this.buildCommissionableQueryIdentifier({ vendorId: VendorId(parseInt(record.VP.split("+")[0])) });
             if (this.recordWaiters.has(vendorIdQueryId)) {
                 return vendorIdQueryId;
             }
             if (record.VP.includes("+")) {
-                const productIdQueryId = this.buildCommissionableQueryIdentifier({ vendorId: new VendorId(parseInt(record.VP.split("+")[1])) });
+                const productIdQueryId = this.buildCommissionableQueryIdentifier({ vendorId: VendorId(parseInt(record.VP.split("+")[1])) });
                 if (this.recordWaiters.has(productIdQueryId)) {
                     return productIdQueryId;
                 }
@@ -143,7 +143,7 @@ export class BleScanner implements Scanner {
             return `SD:${identifier.shortDiscriminator}`;
         }
         else if ("vendorId" in identifier) {
-            return `V:${identifier.vendorId.id}`;
+            return `V:${identifier.vendorId}`;
         }
         else if ("productId" in identifier) { // Custom identifier because normally productId is only included in TXT record
             return `P:${identifier.productId}`;
@@ -162,7 +162,7 @@ export class BleScanner implements Scanner {
             foundRecords.push(...storedRecords.filter(({ deviceData: { SD } }) => SD === identifier.shortDiscriminator));
         }
         else if ("vendorId" in identifier) {
-            foundRecords.push(...storedRecords.filter(({ deviceData: { VP } }) => VP === `${identifier.vendorId.id}` || VP?.startsWith(`${identifier.vendorId.id}+`)));
+            foundRecords.push(...storedRecords.filter(({ deviceData: { VP } }) => VP === `${identifier.vendorId}` || VP?.startsWith(`${identifier.vendorId}+`)));
         }
         else if ("productId" in identifier) {
             foundRecords.push(...storedRecords.filter(({ deviceData: { VP } }) => VP?.endsWith(`+${identifier.productId}`)));

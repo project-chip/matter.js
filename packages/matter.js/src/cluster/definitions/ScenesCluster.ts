@@ -375,7 +375,7 @@ export namespace Scenes {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.7.3
              */
-            currentGroup: Attribute(0x2, TlvGroupId, { default: new GroupId(0) }),
+            currentGroup: Attribute(0x2, TlvGroupId, { default: GroupId(0) }),
 
             /**
              * The SceneValid attribute indicates whether the state of the server corresponds to that associated with

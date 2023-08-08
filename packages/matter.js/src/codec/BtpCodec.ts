@@ -269,7 +269,7 @@ export class BtpCodec {
         writer.writeUInt16(0xFFF6);
         writer.writeUInt8(0x00);
         writer.writeUInt16(discriminator);
-        writer.writeUInt16(vendorId.id);
+        writer.writeUInt16(vendorId);
         writer.writeUInt16(productId);
         writer.writeUInt8(hasAdditionalAdvertisementData ? 0x01 : 0x00);
         return writer.toByteArray();
@@ -297,6 +297,6 @@ export class BtpCodec {
         const vendorId = reader.readUInt16();
         const productId = reader.readUInt16();
         const hasAdditionalAdvertisementData = !!reader.readUInt8();
-        return { discriminator, vendorId: new VendorId(vendorId), productId, hasAdditionalAdvertisementData };
+        return { discriminator, vendorId, productId, hasAdditionalAdvertisementData };
     }
 }

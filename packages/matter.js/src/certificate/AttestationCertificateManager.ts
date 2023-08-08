@@ -13,11 +13,11 @@ import { VendorId } from "../datatype/VendorId.js";
 import { PrivateKey } from "../crypto/Key.js";
 
 function getPaiCommonName(vendorId: VendorId, productId?: number) {
-    return `node-matter Dev PAI 0x${vendorId.id.toString(16).toUpperCase()} ${productId === undefined ? 'no PID' : `0x${productId.toString(16).toUpperCase()}`}`;
+    return `node-matter Dev PAI 0x${vendorId.toString(16).toUpperCase()} ${productId === undefined ? 'no PID' : `0x${productId.toString(16).toUpperCase()}`}`;
 }
 
 function getDacCommonName(vendorId: VendorId, productId: number) {
-    return `node-matter Dev DAC 0x${vendorId.id.toString(16).toUpperCase()}/0x${productId.toString(16).toUpperCase()}`;
+    return `node-matter Dev DAC 0x${vendorId.toString(16).toUpperCase()}/0x${productId.toString(16).toUpperCase()}`;
 }
 
 function getPaaCommonName() {

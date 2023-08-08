@@ -16,6 +16,7 @@ import { VendorId } from "../../../src/datatype/VendorId.js";
 import { AttributeId } from "../../../src/datatype/AttributeId.js";
 import { EventId } from "../../../src/datatype/EventId.js";
 import { TypeFromSchema } from "../../../src/tlv/TlvSchema.js";
+import { EndpointNumber } from "../../../src/datatype/EndpointNumber.js";
 
 const TlvAclTestSchema = TlvObject({
     privilege: TlvField(1, TlvUInt8),
@@ -31,14 +32,14 @@ describe("AttributeDataDecoder", () => {
             const data: TypeFromSchema<typeof TlvAttributeReport>[] = [
                 {
                     attributeData: {
-                        path: { endpointId: 0, clusterId: 0x1f, attributeId: 0 },
+                        path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0) },
                         data: TlvArray(TlvAclTestSchema).encodeTlv([]),
                         dataVersion: 0,
                     }
                 },
                 {
                     attributeData: {
-                        path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: null },
+                        path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0), listIndex: null },
                         data: TlvAclTestSchema.encodeTlv({
                             privilege: 1,
                             authMode: 2,
@@ -50,7 +51,7 @@ describe("AttributeDataDecoder", () => {
                 },
                 {
                     attributeData: {
-                        path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: null },
+                        path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0), listIndex: null },
                         data: TlvAclTestSchema.encodeTlv({
                             privilege: 2,
                             authMode: 2,
@@ -65,10 +66,10 @@ describe("AttributeDataDecoder", () => {
 
             expect(normalizedData.length).toBe(1)
             expect(normalizedData[0].path).toEqual({
-                attributeId: 0,
+                attributeId: AttributeId(0),
                 attributeName: "acl",
-                clusterId: 0x1f,
-                endpointId: 0,
+                clusterId: ClusterId(0x1f),
+                endpointId: EndpointNumber(0),
                 nodeId: undefined
             });
             expect(normalizedData[0].value).toEqual([
@@ -91,14 +92,14 @@ describe("AttributeDataDecoder", () => {
             const data: TypeFromSchema<typeof TlvAttributeReport>[] = [
                 {
                     attributeData: {
-                        path: { endpointId: 0, clusterId: 0x1f, attributeId: 0 },
+                        path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0) },
                         data: TlvArray(TlvAclTestSchema).encodeTlv([]),
                         dataVersion: 0,
                     }
                 },
                 {
                     attributeData: {
-                        path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: 0 },
+                        path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0), listIndex: 0 },
                         data: TlvAclTestSchema.encodeTlv({
                             privilege: 1,
                             authMode: 2,
@@ -110,7 +111,7 @@ describe("AttributeDataDecoder", () => {
                 },
                 {
                     attributeData: {
-                        path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: 1 },
+                        path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0), listIndex: 1 },
                         data: TlvAclTestSchema.encodeTlv({
                             privilege: 2,
                             authMode: 2,
@@ -125,10 +126,10 @@ describe("AttributeDataDecoder", () => {
 
             expect(normalizedData.length).toBe(1)
             expect(normalizedData[0].path).toEqual({
-                attributeId: 0,
+                attributeId: AttributeId(0),
                 attributeName: "acl",
-                clusterId: 0x1f,
-                endpointId: 0,
+                clusterId: ClusterId(0x1f),
+                endpointId: EndpointNumber(0),
                 nodeId: undefined
             });
             expect(normalizedData[0].value).toEqual([
@@ -151,14 +152,14 @@ describe("AttributeDataDecoder", () => {
             const data: TypeFromSchema<typeof TlvAttributeReport>[] = [
                 {
                     attributeData: {
-                        path: { endpointId: 0, clusterId: 0x1f, attributeId: 0 },
+                        path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0) },
                         data: TlvArray(TlvAclTestSchema).encodeTlv([]),
                         dataVersion: 0,
                     }
                 },
                 {
                     attributeData: {
-                        path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: 0 },
+                        path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0), listIndex: 0 },
                         data: TlvAclTestSchema.encodeTlv({
                             privilege: 1,
                             authMode: 2,
@@ -170,7 +171,7 @@ describe("AttributeDataDecoder", () => {
                 },
                 {
                     attributeData: {
-                        path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: 1 },
+                        path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0), listIndex: 1 },
                         data: TlvAclTestSchema.encodeTlv({
                             privilege: 2,
                             authMode: 2,
@@ -182,7 +183,7 @@ describe("AttributeDataDecoder", () => {
                 },
                 {
                     attributeData: {
-                        path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: 2 },
+                        path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0), listIndex: 2 },
                         data: TlvAclTestSchema.encodeTlv({
                             privilege: 3,
                             authMode: 2,
@@ -194,7 +195,7 @@ describe("AttributeDataDecoder", () => {
                 },
                 {
                     attributeData: {
-                        path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: 1 },
+                        path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0), listIndex: 1 },
                         data: TlvNullable(TlvAclTestSchema).encodeTlv(null),
                         dataVersion: 0,
                     }
@@ -204,10 +205,10 @@ describe("AttributeDataDecoder", () => {
 
             expect(normalizedData.length).toBe(1)
             expect(normalizedData[0].path).toEqual({
-                attributeId: 0,
+                attributeId: AttributeId(0),
                 attributeName: "acl",
-                clusterId: 0x1f,
-                endpointId: 0,
+                clusterId: ClusterId(0x1f),
+                endpointId: EndpointNumber(0),
                 nodeId: undefined
             });
             expect(normalizedData[0].value).toEqual([
@@ -229,14 +230,14 @@ describe("AttributeDataDecoder", () => {
             const data: TypeFromSchema<typeof TlvAttributeReport>[] = [
                 {
                     attributeData: {
-                        path: { endpointId: 0, clusterId: 0x1f, attributeId: 0 },
+                        path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0) },
                         data: TlvArray(TlvAclTestSchema).encodeTlv([]),
                         dataVersion: 0,
                     }
                 },
                 {
                     attributeData: {
-                        path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: 0 },
+                        path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0), listIndex: 0 },
                         data: TlvAclTestSchema.encodeTlv({
                             privilege: 1,
                             authMode: 2,
@@ -248,7 +249,7 @@ describe("AttributeDataDecoder", () => {
                 },
                 {
                     attributeData: {
-                        path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: 1 },
+                        path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0), listIndex: 1 },
                         data: TlvAclTestSchema.encodeTlv({
                             privilege: 2,
                             authMode: 2,
@@ -260,7 +261,7 @@ describe("AttributeDataDecoder", () => {
                 },
                 {
                     attributeData: {
-                        path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: 2 },
+                        path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0), listIndex: 2 },
                         data: TlvAclTestSchema.encodeTlv({
                             privilege: 3,
                             authMode: 2,
@@ -272,7 +273,7 @@ describe("AttributeDataDecoder", () => {
                 },
                 {
                     attributeData: {
-                        path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: 1 },
+                        path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0), listIndex: 1 },
                         data: TlvAclTestSchema.encodeTlv({
                             privilege: 4,
                             authMode: 2,
@@ -287,10 +288,10 @@ describe("AttributeDataDecoder", () => {
 
             expect(normalizedData.length).toBe(1)
             expect(normalizedData[0].path).toEqual({
-                attributeId: 0,
+                attributeId: AttributeId(0),
                 attributeName: "acl",
-                clusterId: 0x1f,
-                endpointId: 0,
+                clusterId: ClusterId(0x1f),
+                endpointId: EndpointNumber(0),
                 nodeId: undefined
             });
             expect(normalizedData[0].value).toEqual([
@@ -331,18 +332,18 @@ describe("AttributeDataDecoder", () => {
 
             expect(normalizedData.length).toBe(1)
             expect(normalizedData[0].path).toEqual({
-                attributeId: 1,
+                attributeId: AttributeId(1),
                 attributeName: "serverList",
-                clusterId: 29,
-                endpointId: 0,
+                clusterId: ClusterId(29),
+                endpointId: EndpointNumber(0),
                 nodeId: undefined
             });
             expect(normalizedData[0].value).toEqual([
-                new ClusterId(4), new ClusterId(29), new ClusterId(31), new ClusterId(40), new ClusterId(42),
-                new ClusterId(43), new ClusterId(44), new ClusterId(48), new ClusterId(49), new ClusterId(50),
-                new ClusterId(51), new ClusterId(52), new ClusterId(53), new ClusterId(54), new ClusterId(55),
-                new ClusterId(59), new ClusterId(60), new ClusterId(62), new ClusterId(63), new ClusterId(64),
-                new ClusterId(65)
+                ClusterId(4), ClusterId(29), ClusterId(31), ClusterId(40), ClusterId(42),
+                ClusterId(43), ClusterId(44), ClusterId(48), ClusterId(49), ClusterId(50),
+                ClusterId(51), ClusterId(52), ClusterId(53), ClusterId(54), ClusterId(55),
+                ClusterId(59), ClusterId(60), ClusterId(62), ClusterId(63), ClusterId(64),
+                ClusterId(65)
             ]);
 
         });
@@ -360,10 +361,10 @@ describe("AttributeDataDecoder", () => {
 
             expect(normalizedData.length).toBe(1)
             expect(normalizedData[0].path).toEqual({
-                attributeId: 9,
+                attributeId: AttributeId(9),
                 attributeName: "softwareVersion",
-                clusterId: 40,
-                endpointId: 0,
+                clusterId: ClusterId(40),
+                endpointId: EndpointNumber(0),
                 nodeId: undefined
             });
             expect(normalizedData[0].value).toEqual(1)
@@ -413,7 +414,7 @@ describe("AttributeDataDecoder", () => {
                         "nodeId": undefined
                     },
                     "version": 2020087125,
-                    "value": new VendorId(65521)
+                    "value": VendorId(65521)
                 },
                 {
                     "path": {
@@ -658,7 +659,7 @@ describe("AttributeDataDecoder", () => {
                         "nodeId": undefined
                     },
                     "version": 2020087125,
-                    "value": [new EventId(0), new EventId(1), new EventId(2)]
+                    "value": [EventId(0), EventId(1), EventId(2)]
                 },
                 {
                     "path": {
@@ -669,7 +670,7 @@ describe("AttributeDataDecoder", () => {
                         "nodeId": undefined
                     },
                     "version": 2020087125,
-                    "value": [new AttributeId(0), new AttributeId(1), new AttributeId(2), new AttributeId(3), new AttributeId(4)]
+                    "value": [AttributeId(0), AttributeId(1), AttributeId(2), AttributeId(3), AttributeId(4)]
                 }
             ]);
         });
@@ -679,12 +680,12 @@ describe("AttributeDataDecoder", () => {
         it("normalize data with all paths given for one endpoint", () => {
             const data: TypeFromSchema<typeof TlvAttributeData>[] = [
                 {
-                    path: { endpointId: 0, clusterId: 0x1f, attributeId: 0 },
+                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0) },
                     data: TlvArray(TlvAclTestSchema).encodeTlv([]),
                     dataVersion: 0,
                 },
                 {
-                    path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: 0 },
+                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0), listIndex: 0 },
                     data: TlvAclTestSchema.encodeTlv({
                         privilege: 1,
                         authMode: 2,
@@ -694,7 +695,7 @@ describe("AttributeDataDecoder", () => {
                     dataVersion: 0,
                 },
                 {
-                    path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: 1 },
+                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0), listIndex: 1 },
                     data: TlvAclTestSchema.encodeTlv({
                         privilege: 2,
                         authMode: 2,
@@ -713,12 +714,12 @@ describe("AttributeDataDecoder", () => {
         it("normalize data with all paths given for two endpoints", () => {
             const data1: TypeFromSchema<typeof TlvAttributeData>[] = [
                 {
-                    path: { endpointId: 0, clusterId: 0x1f, attributeId: 0 },
+                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0) },
                     data: TlvArray(TlvAclTestSchema).encodeTlv([]),
                     dataVersion: 0,
                 },
                 {
-                    path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: 0 },
+                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0), listIndex: 0 },
                     data: TlvAclTestSchema.encodeTlv({
                         privilege: 1,
                         authMode: 2,
@@ -728,7 +729,7 @@ describe("AttributeDataDecoder", () => {
                     dataVersion: 0,
                 },
                 {
-                    path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: 1 },
+                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0), listIndex: 1 },
                     data: TlvAclTestSchema.encodeTlv({
                         privilege: 2,
                         authMode: 2,
@@ -740,7 +741,7 @@ describe("AttributeDataDecoder", () => {
             ];
             const data2: TypeFromSchema<typeof TlvAttributeData>[] = [
                 {
-                    path: { endpointId: 0, clusterId: 0x1f, attributeId: 1 },
+                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(1) },
                     data: TlvArray(TlvAclTestSchema).encodeTlv([]),
                     dataVersion: 0,
                 }
@@ -754,7 +755,7 @@ describe("AttributeDataDecoder", () => {
         it("normalize data with all paths given for two endpoints with enabledtagCompression", () => {
             const data1: TypeFromSchema<typeof TlvAttributeData>[] = [
                 {
-                    path: { endpointId: 0, clusterId: 0x1f, attributeId: 0 },
+                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0) },
                     data: TlvArray(TlvAclTestSchema).encodeTlv([]),
                     dataVersion: 0,
                 },
@@ -781,17 +782,17 @@ describe("AttributeDataDecoder", () => {
             ];
             const data2: TypeFromSchema<typeof TlvAttributeData>[] = [
                 {
-                    path: { enableTagCompression: true, attributeId: 1 },
+                    path: { enableTagCompression: true, attributeId: AttributeId(1) },
                     data: TlvArray(TlvAclTestSchema).encodeTlv([]),
                     dataVersion: 0,
                 }
             ];
 
             const resultData1 = data1;
-            resultData1[1].path = { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: 0, enableTagCompression: true };
-            resultData1[2].path = { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: 1, enableTagCompression: true };
+            resultData1[1].path = { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0), listIndex: 0, enableTagCompression: true };
+            resultData1[2].path = { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0), listIndex: 1, enableTagCompression: true };
             const resultData2 = data2;
-            resultData2[0].path = { endpointId: 0, clusterId: 0x1f, attributeId: 1, enableTagCompression: true };
+            resultData2[0].path = { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(1), enableTagCompression: true };
 
             const normalized = normalizeAttributeData([...data1, ...data2]);
 

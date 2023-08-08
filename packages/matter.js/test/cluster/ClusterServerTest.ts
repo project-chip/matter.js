@@ -22,6 +22,7 @@ import { BindingCluster } from "../../src/cluster/definitions/BindingCluster.js"
 import { IdentifyCluster, Identify } from "../../src/cluster/definitions/IdentifyCluster.js";
 import { Cluster, ClusterExtend } from "../../src/cluster/Cluster.js";
 import { ImplementationError } from "../../src/common/MatterError.js";
+import { EndpointNumber } from "../../src/datatype/EndpointNumber.js";
 
 describe("ClusterServer structure", () => {
     describe("correct attribute servers are used and exposed", () => {
@@ -30,7 +31,7 @@ describe("ClusterServer structure", () => {
                 {
                     dataModelRevision: 1,
                     vendorName: "test",
-                    vendorId: new VendorId(0),
+                    vendorId: VendorId(0),
                     productName: "test",
                     productId: 1,
                     nodeLabel: "",
@@ -63,7 +64,7 @@ describe("ClusterServer structure", () => {
             expect(basic.subscribeSoftwareVersionAttribute).not.toBeDefined();
 
             // Now we set this Cluster into Endpoint and retrieve it again and verify it is the same
-            const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: 1 });
+            const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: EndpointNumber(1) });
             endpoint.addClusterServer(basic);
 
             const basic2 = endpoint.getClusterServer(BasicInformationCluster);
@@ -88,7 +89,7 @@ describe("ClusterServer structure", () => {
                 {
                     dataModelRevision: 1,
                     vendorName: "test",
-                    vendorId: new VendorId(0),
+                    vendorId: VendorId(0),
                     productName: "test",
                     productId: 1,
                     nodeLabel: "",
@@ -114,7 +115,7 @@ describe("ClusterServer structure", () => {
             expect(basic.getNodeLabelAttribute()).toBe("new 2")
 
             // Now we set this Cluster into Endpoint and retrieve it again and verify it is the same
-            const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: 1 });
+            const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: EndpointNumber(1) });
             endpoint.addClusterServer(basic);
 
             const basic2 = endpoint.getClusterServer(BasicInformationCluster);
@@ -134,7 +135,7 @@ describe("ClusterServer structure", () => {
                 {
                     dataModelRevision: 1,
                     vendorName: "test",
-                    vendorId: new VendorId(0),
+                    vendorId: VendorId(0),
                     productName: "test",
                     productId: 1,
                     nodeLabel: "",
@@ -170,7 +171,7 @@ describe("ClusterServer structure", () => {
             expect(basic.subscribeManufacturingDateAttribute).not.toBeDefined();
 
             // Now we set this Cluster into Endpoint and retrieve it again and verify it is the same
-            const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: 1 });
+            const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: EndpointNumber(1) });
             endpoint.addClusterServer(basic);
 
             const basic2 = endpoint.getClusterServer(BasicInformationCluster);
@@ -197,7 +198,7 @@ describe("ClusterServer structure", () => {
                 {
                     dataModelRevision: 1,
                     vendorName: "test",
-                    vendorId: new VendorId(0),
+                    vendorId: VendorId(0),
                     productName: "test",
                     productId: 1,
                     nodeLabel: "",
@@ -225,7 +226,7 @@ describe("ClusterServer structure", () => {
             basic.setReachableAttribute(true);
 
             // Now we set this Cluster into Endpoint and retrieve it again and verify it is the same
-            const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: 1 });
+            const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: EndpointNumber(1) });
             endpoint.addClusterServer(basic);
 
             const basic2 = endpoint.getClusterServer(BasicInformationCluster);
@@ -246,7 +247,7 @@ describe("ClusterServer structure", () => {
                 {
                     dataModelRevision: 1,
                     vendorName: "test",
-                    vendorId: new VendorId(0),
+                    vendorId: VendorId(0),
                     productName: "test",
                     productId: 1,
                     nodeLabel: "",
@@ -275,7 +276,7 @@ describe("ClusterServer structure", () => {
             expect(basic.subscribeSerialNumberAttribute).not.toBeDefined();
 
             // Now we set this Cluster into Endpoint and retrieve it again and verify it is the same
-            const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: 1 });
+            const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: EndpointNumber(1) });
             endpoint.addClusterServer(basic);
 
             const basic2 = endpoint.getClusterServer(BasicInformationCluster);
@@ -298,7 +299,7 @@ describe("ClusterServer structure", () => {
                 {
                     dataModelRevision: 1,
                     vendorName: "test",
-                    vendorId: new VendorId(0),
+                    vendorId: VendorId(0),
                     productName: "test",
                     productId: 1,
                     nodeLabel: "",
@@ -326,7 +327,7 @@ describe("ClusterServer structure", () => {
             );
 
             // Now we set this Cluster into Endpoint and retrieve it again and verify it is the same
-            const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: 1 });
+            const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: EndpointNumber(1) });
             endpoint.addClusterServer(basic);
 
             const basic2 = endpoint.getClusterServer(BasicInformationCluster);
@@ -362,14 +363,14 @@ describe("ClusterServer structure", () => {
                     setScopedClusterDataValueCalledCounter++;
                     expect(cluster.id).toBe(BindingCluster.id)
                     expect(clusterDataKey).toBe("binding")
-                    expect(value).toEqual({ value: [{ fabricIndex: new FabricIndex(1) }] });
+                    expect(value).toEqual({ value: [{ fabricIndex: FabricIndex(1) }] });
                 }
             } as Fabric;
 
             expect(binding.attributes.binding.getLocalForFabric(fabric)).toEqual([])
-            binding.attributes.binding.setLocalForFabric([{ fabricIndex: new FabricIndex(1) }], fabric);
+            binding.attributes.binding.setLocalForFabric([{ fabricIndex: FabricIndex(1) }], fabric);
             expect(binding.getBindingAttribute(fabric, true)).toEqual([])
-            binding.setBindingAttribute([{ fabricIndex: new FabricIndex(1) }], fabric);
+            binding.setBindingAttribute([{ fabricIndex: FabricIndex(1) }], fabric);
 
             expect(getScopedClusterDataValueCalledCounter).toBe(4)
             expect(setScopedClusterDataValueCalledCounter).toBe(2)
@@ -382,7 +383,7 @@ describe("ClusterServer structure", () => {
                 AdministratorCommissioningCluster,
                 {
                     windowStatus: 0,
-                    adminFabricIndex: new FabricIndex(1),
+                    adminFabricIndex: FabricIndex(1),
                     adminVendorId: null
                 },
                 {
@@ -394,19 +395,19 @@ describe("ClusterServer structure", () => {
             // as any is trick because these attributes are not officially exposed by typings
             expect((server.attributes as any).featureMap.get()).toEqual({})
             expect((server.attributes as any).attributeList.get()).toEqual([
-                new AttributeId(0),
-                new AttributeId(1),
-                new AttributeId(2),
-                new AttributeId(65533),
-                new AttributeId(65532),
-                new AttributeId(65531),
-                new AttributeId(65530),
-                new AttributeId(65529),
-                new AttributeId(65528)
+                AttributeId(0),
+                AttributeId(1),
+                AttributeId(2),
+                AttributeId(65533),
+                AttributeId(65532),
+                AttributeId(65531),
+                AttributeId(65530),
+                AttributeId(65529),
+                AttributeId(65528)
             ]);
             expect((server.attributes as any).acceptedCommandList.get()).toEqual([
-                new CommandId(0),
-                new CommandId(2)
+                CommandId(0),
+                CommandId(2)
             ]);
             expect((server.attributes as any).generatedCommandList.get()).toEqual([])
             expect((server.attributes as any).eventList.get()).toEqual([])
@@ -428,18 +429,18 @@ describe("ClusterServer structure", () => {
             // as any is trick because these attributes are not officially exposed by typings
             expect((server.attributes as any).featureMap.get()).toEqual({})
             expect((server.attributes as any).attributeList.get()).toEqual([
-                new AttributeId(0),
-                new AttributeId(1),
-                new AttributeId(65533),
-                new AttributeId(65532),
-                new AttributeId(65531),
-                new AttributeId(65530),
-                new AttributeId(65529),
-                new AttributeId(65528)
+                AttributeId(0),
+                AttributeId(1),
+                AttributeId(65533),
+                AttributeId(65532),
+                AttributeId(65531),
+                AttributeId(65530),
+                AttributeId(65529),
+                AttributeId(65528)
             ]);
             expect((server.attributes as any).acceptedCommandList.get()).toEqual([
-                new CommandId(0),
-                new CommandId(0x40)
+                CommandId(0),
+                CommandId(0x40)
             ]);
             expect((server.attributes as any).generatedCommandList.get()).toEqual([])
             expect((server.attributes as any).eventList.get()).toEqual([])
@@ -461,18 +462,18 @@ describe("ClusterServer structure", () => {
             // as any is trick because these attributes are not officially exposed by typings
             expect((server.attributes as any).featureMap.get()).toEqual({})
             expect((server.attributes as any).attributeList.get()).toEqual([
-                new AttributeId(0),
-                new AttributeId(1),
-                new AttributeId(65533),
-                new AttributeId(65532),
-                new AttributeId(65531),
-                new AttributeId(65530),
-                new AttributeId(65529),
-                new AttributeId(65528)
+                AttributeId(0),
+                AttributeId(1),
+                AttributeId(65533),
+                AttributeId(65532),
+                AttributeId(65531),
+                AttributeId(65530),
+                AttributeId(65529),
+                AttributeId(65528)
             ]);
             expect((server.attributes as any).acceptedCommandList.get()).toEqual([
-                new CommandId(0),
-                new CommandId(0x40)
+                CommandId(0),
+                CommandId(0x40)
             ]);
             expect((server.attributes as any).generatedCommandList.get()).toEqual([])
             expect((server.attributes as any).eventList.get()).toEqual([])
@@ -493,16 +494,16 @@ describe("ClusterServer structure", () => {
             // as any is trick because these attributes are not officially exposed by typings
             expect((server.attributes as any).featureMap.get()).toEqual({})
             expect((server.attributes as any).attributeList.get()).toEqual([
-                new AttributeId(0),
-                new AttributeId(1),
-                new AttributeId(65533),
-                new AttributeId(65532),
-                new AttributeId(65531),
-                new AttributeId(65530),
-                new AttributeId(65529),
-                new AttributeId(65528)
+                AttributeId(0),
+                AttributeId(1),
+                AttributeId(65533),
+                AttributeId(65532),
+                AttributeId(65531),
+                AttributeId(65530),
+                AttributeId(65529),
+                AttributeId(65528)
             ]);
-            expect((server.attributes as any).acceptedCommandList.get()).toEqual([new CommandId(0)])
+            expect((server.attributes as any).acceptedCommandList.get()).toEqual([CommandId(0)])
             expect((server.attributes as any).generatedCommandList.get()).toEqual([])
         });
 
@@ -525,27 +526,27 @@ describe("ClusterServer structure", () => {
             // as any is trick because these attributes are not officially exposed by typings
             expect((server.attributes as any).featureMap.get()).toEqual({ groupNames: true })
             expect((server.attributes as any).attributeList.get()).toEqual([
-                new AttributeId(0),
-                new AttributeId(65533),
-                new AttributeId(65532),
-                new AttributeId(65531),
-                new AttributeId(65530),
-                new AttributeId(65529),
-                new AttributeId(65528)
+                AttributeId(0),
+                AttributeId(65533),
+                AttributeId(65532),
+                AttributeId(65531),
+                AttributeId(65530),
+                AttributeId(65529),
+                AttributeId(65528)
             ]);
             expect((server.attributes as any).acceptedCommandList.get()).toEqual([
-                new CommandId(0),
-                new CommandId(1),
-                new CommandId(2),
-                new CommandId(3),
-                new CommandId(4),
-                new CommandId(5)
+                CommandId(0),
+                CommandId(1),
+                CommandId(2),
+                CommandId(3),
+                CommandId(4),
+                CommandId(5)
             ]);
             expect((server.attributes as any).generatedCommandList.get()).toEqual([
-                new CommandId(0),
-                new CommandId(1),
-                new CommandId(2),
-                new CommandId(3)
+                CommandId(0),
+                CommandId(1),
+                CommandId(2),
+                CommandId(3)
             ]);
             expect((server.attributes as any).eventList.get()).toEqual([])
         });

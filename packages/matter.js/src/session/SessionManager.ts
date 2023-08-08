@@ -13,10 +13,11 @@ import { SecureSession } from "./SecureSession.js";
 import { Session } from "./Session.js";
 import { UnsecureSession } from "./UnsecureSession.js";
 import { Logger } from "../log/Logger.js";
+import { FabricId } from "../datatype/FabricId.js";
 
 const logger = Logger.get("SessionManager");
 
-export const UNDEFINED_NODE_ID = new NodeId(BigInt(0));
+export const UNDEFINED_NODE_ID = NodeId(0);
 
 export const UNICAST_UNSECURE_SESSION_ID = 0x0000;
 
@@ -28,18 +29,18 @@ export interface ResumptionRecord {
 }
 
 type ResumptionStorageRecord = {
-    nodeId: bigint,
+    nodeId: NodeId,
     sharedSecret: Uint8Array,
     resumptionId: Uint8Array,
-    fabricId: bigint,
-    peerNodeId: bigint,
+    fabricId: FabricId,
+    peerNodeId: NodeId,
 }
 
 export class SessionManager<ContextT> {
     private readonly unsecureSession: UnsecureSession<ContextT>;
     private readonly sessions = new Map<number, Session<ContextT>>();
     private nextSessionId = Crypto.getRandomUInt16();
-    private resumptionRecords = new Map<bigint, ResumptionRecord>();
+    private resumptionRecords = new Map<NodeId, ResumptionRecord>();
     private readonly sessionStorage: StorageContext;
 
     constructor(
@@ -61,7 +62,7 @@ export class SessionManager<ContextT> {
 
     removeSession(sessionId: number, peerNodeId: NodeId) {
         this.sessions.delete(sessionId);
-        this.resumptionRecords.delete(peerNodeId.id);
+        this.resumptionRecords.delete(peerNodeId);
         this.storeResumptionRecords();
         // TODO if the last session of a fabric got removed, start announcing the fabric again that controller can discover it
     }
@@ -86,7 +87,7 @@ export class SessionManager<ContextT> {
         return [...this.sessions.values()].find(session => {
             if (!session.isSecure()) return false;
             const secureSession = session as SecureSession<any>;
-            return secureSession.getFabric()?.fabricId.id === fabric.fabricId.id && secureSession.getPeerNodeId().id === nodeId.id;
+            return secureSession.getFabric()?.fabricId === fabric.fabricId && secureSession.getPeerNodeId() === nodeId;
         });
     }
 
@@ -99,11 +100,11 @@ export class SessionManager<ContextT> {
     }
 
     findResumptionRecordByNodeId(nodeId: NodeId) {
-        return this.resumptionRecords.get(nodeId.id);
+        return this.resumptionRecords.get(nodeId);
     }
 
     saveResumptionRecord(resumptionRecord: ResumptionRecord) {
-        this.resumptionRecords.set(resumptionRecord.peerNodeId.id, resumptionRecord);
+        this.resumptionRecords.set(resumptionRecord.peerNodeId, resumptionRecord);
         this.storeResumptionRecords();
     }
 
@@ -112,8 +113,8 @@ export class SessionManager<ContextT> {
             nodeId,
             sharedSecret,
             resumptionId,
-            fabricId: fabric.fabricId.id,
-            peerNodeId: peerNodeId.id,
+            fabricId: fabric.fabricId,
+            peerNodeId: peerNodeId,
         })));
     }
 
@@ -122,7 +123,7 @@ export class SessionManager<ContextT> {
 
         storedResumptionRecords.forEach(({ nodeId, sharedSecret, resumptionId, fabricId, peerNodeId }) => {
             logger.info("restoring resumption record for node", nodeId);
-            const fabric = fabrics.find(fabric => fabric.fabricId.id === fabricId);
+            const fabric = fabrics.find(fabric => fabric.fabricId === fabricId);
             if (!fabric) {
                 logger.error("fabric not found for resumption record", fabricId);
                 return;
@@ -131,7 +132,7 @@ export class SessionManager<ContextT> {
                 sharedSecret,
                 resumptionId,
                 fabric,
-                peerNodeId: new NodeId(peerNodeId),
+                peerNodeId: peerNodeId,
             });
         });
     }

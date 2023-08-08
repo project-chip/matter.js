@@ -29,11 +29,11 @@ export class BleBroadcaster implements InstanceBroadcaster {
     async setCommissionMode(mode: number, { deviceName, deviceType, vendorId, productId, discriminator }: CommissioningModeInstanceData) {
         if (mode !== 1) {
             this.advertise = false;
-            logger.info(`skip BLE announce because of commissioning mode ${mode} ${deviceName} ${deviceType} ${vendorId.id} ${productId} ${discriminator}`);
+            logger.info(`skip BLE announce because of commissioning mode ${mode} ${deviceName} ${deviceType} ${vendorId} ${productId} ${discriminator}`);
             await this.blenoServer.stopAdvertising();
             return;
         }
-        logger.debug(`store data for commissioning mode ${mode} ${deviceName} ${deviceType} ${vendorId.id} ${productId} ${discriminator}`);
+        logger.debug(`store data for commissioning mode ${mode} ${deviceName} ${deviceType} ${vendorId} ${productId} ${discriminator}`);
         this.productId = productId;
         this.vendorId = vendorId;
         this.discriminator = discriminator;
@@ -48,7 +48,7 @@ export class BleBroadcaster implements InstanceBroadcaster {
         return; // Not needed because we only advertise un-commissioned devices
     }
 
-    setCommissionerInfo(_commissionerData: CommissionerInstanceData) {
+    async setCommissionerInfo(_commissionerData: CommissionerInstanceData) {
         this.advertise = false;
         logger.error(`skip BLE announce because announcing a commissioner is not supported`);
     }

@@ -14,7 +14,7 @@ const DECODED = {
     packetHeader: {
         sessionId: 0,
         sessionType: 0,
-        sourceNodeId: new NodeId(BigInt("5936706156730294398")),
+        sourceNodeId: NodeId(BigInt("5936706156730294398")),
         messageId: 401755914,
         destGroupId: undefined,
         destNodeId: undefined,
@@ -42,7 +42,7 @@ const DECODED_2 = {
         sourceNodeId: undefined,
         messageId: 2031257377,
         destGroupId: undefined,
-        destNodeId: new NodeId(BigInt("5936706156730294398")),
+        destNodeId: NodeId(BigInt("5936706156730294398")),
         hasPrivacyEnhancements: false,
         isControlMessage: false,
         hasMessageExtensions: false,

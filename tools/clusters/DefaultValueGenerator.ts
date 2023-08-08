@@ -58,7 +58,7 @@ export class DefaultValueGenerator {
             }
             const constructor = importConf[1].replace("Tlv", "");
             this.tlv.importTlv(importConf[0], constructor);
-            return serialize.asIs(`new ${constructor}(${defaultValue})`);
+            return serialize.asIs(`${constructor}(${defaultValue})`);
         }
         return defaultValue;
     }

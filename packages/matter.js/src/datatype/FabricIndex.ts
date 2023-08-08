@@ -7,6 +7,7 @@
 import { TlvUInt8 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { Branded } from "../util/Type.js";
 
 /**
  * Each fabric supported on a node is referenced by fabric-index that is unique on the node. This
@@ -18,19 +19,21 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
  *
  * @see {@link MatterCoreSpecificationV1_0} § 7.5.2
  */
-export class FabricIndex {
-    static NO_FABRIC = new FabricIndex(0);
-    static OMIT_FABRIC = new FabricIndex(-1);
+export type FabricIndex = Branded<number, "FabricIndex">;
 
-    constructor(
-        readonly index: number,
-    ) { }
+export function FabricIndex(value: number): FabricIndex {
+    return value as FabricIndex;
+}
+
+export namespace FabricIndex {
+    export const NO_FABRIC = 0 as FabricIndex;
+    export const OMIT_FABRIC = -1 as FabricIndex;
 }
 
 /** Tlv Schema for a Fabric Index. */
 export const TlvFabricIndex = new TlvWrapper<FabricIndex, number | undefined>(
     TlvUInt8.bound({ min: 0, max: 254 }),
-    fabricIndex => fabricIndex.index === -1 ? undefined : fabricIndex.index,
+    fabricIndex => fabricIndex === -1 ? undefined : fabricIndex,
     value => {
         switch (value) {
             case undefined:
@@ -38,7 +41,7 @@ export const TlvFabricIndex = new TlvWrapper<FabricIndex, number | undefined>(
             case 0:
                 return FabricIndex.NO_FABRIC;
             default:
-                return new FabricIndex(value);
+                return value as FabricIndex;
         }
-    },
+    }
 );

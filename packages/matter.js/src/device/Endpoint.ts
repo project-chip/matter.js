@@ -8,10 +8,8 @@ import { DeviceTypeDefinition } from "./DeviceTypes.js";
 import { ClusterServer } from "../protocol/interaction/InteractionServer.js";
 import { AtLeastOne } from "../util/Array.js";
 import { DescriptorCluster } from "../cluster/definitions/DescriptorCluster.js";
-import { DeviceTypeId } from "../datatype/DeviceTypeId.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
-import { ClusterId } from "../datatype/ClusterId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { FixedLabelCluster } from "../cluster/definitions/FixedLabelCluster.js";
 import { UserLabelCluster } from "../cluster/definitions/UserLabelCluster.js";
@@ -22,17 +20,18 @@ import { BasicInformationCluster } from "../cluster/definitions/BasicInformation
 import { BridgedDeviceBasicInformationCluster } from "../cluster/definitions/BridgedDeviceBasicInformationCluster.js";
 import { AllClustersMap } from "../cluster/ClusterHelper.js";
 import { ImplementationError, InternalError, NotImplementedError } from "../common/MatterError.js";
+import { ClusterId } from "../datatype/ClusterId.js";
 
 export interface EndpointOptions {
-    endpointId?: number;
+    endpointId?: EndpointNumber;
     uniqueStorageKey?: string;
 }
 
 export class Endpoint {
-    private readonly clusterServers = new Map<number, ClusterServerObj<Attributes, Commands, Events>>();
-    private readonly clusterClients = new Map<number, ClusterClientObj<any, Attributes, Commands, Events>>();
+    private readonly clusterServers = new Map<ClusterId, ClusterServerObj<Attributes, Commands, Events>>();
+    private readonly clusterClients = new Map<ClusterId, ClusterClientObj<any, Attributes, Commands, Events>>();
     private readonly childEndpoints: Endpoint[] = [];
-    id: number | undefined;
+    id: EndpointNumber | undefined;
     uniqueStorageKey: string | undefined;
     name = "";
     private structureChangedCallback: () => void = () => {/** noop until officially set **/ };
@@ -53,7 +52,7 @@ export class Endpoint {
             DescriptorCluster,
             {
                 deviceTypeList: deviceTypes.map(deviceType => ({
-                    deviceType: new DeviceTypeId(deviceType.code),
+                    deviceType: deviceType.code,
                     revision: deviceType.revision
                 })),
                 serverList: [],
@@ -120,13 +119,13 @@ export class Endpoint {
             this.descriptorCluster = cluster as unknown as ClusterServerObjForCluster<typeof DescriptorCluster>;
         }
         this.clusterServers.set(cluster.id, cluster);
-        this.descriptorCluster.attributes.serverList.init(Array.from(this.clusterServers.keys()).map((id) => new ClusterId(id)));
+        this.descriptorCluster.attributes.serverList.init(Array.from(this.clusterServers.keys()).map((id) => id));
         this.structureChangedCallback(); // Inform parent about structure change
     }
 
     addClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(cluster: ClusterClientObj<F, A, C, E>) {
         this.clusterClients.set(cluster.id, cluster);
-        this.descriptorCluster.attributes.clientList.init(Array.from(this.clusterClients.keys()).map((id) => new ClusterId(id)));
+        this.descriptorCluster.attributes.clientList.init(Array.from(this.clusterClients.keys()).map((id) => id));
         this.structureChangedCallback(); // Inform parent about structure change
     }
 
@@ -152,11 +151,11 @@ export class Endpoint {
         return undefined;
     }
 
-    getClusterServerById(clusterId: number): ClusterServerObj<Attributes, Commands, Events> | undefined {
+    getClusterServerById(clusterId: ClusterId): ClusterServerObj<Attributes, Commands, Events> | undefined {
         return this.clusterServers.get(clusterId);
     }
 
-    getClusterClientById(clusterId: number): ClusterClientObj<any, Attributes, Commands, Events> | undefined {
+    getClusterClientById(clusterId: ClusterId): ClusterClientObj<any, Attributes, Commands, Events> | undefined {
         return this.clusterClients.get(clusterId);
     }
 
@@ -186,7 +185,7 @@ export class Endpoint {
         // Update descriptor cluster
         this.descriptorCluster.attributes.deviceTypeList.init(
             this.deviceTypes.map(deviceType => ({
-                deviceType: new DeviceTypeId(deviceType.code),
+                deviceType: deviceType.code,
                 revision: deviceType.revision
             }))
         );
@@ -198,7 +197,7 @@ export class Endpoint {
         this.structureChangedCallback(); // Inform parent about structure change
     }
 
-    getChildEndpoint(id: number): Endpoint | undefined {
+    getChildEndpoint(id: EndpointNumber): Endpoint | undefined {
         return this.childEndpoints.find(endpoint => endpoint.id === id);
     }
 
@@ -275,7 +274,7 @@ export class Endpoint {
                 throw new InternalError(`Child endpoint has no id, can not add to parts list`);
             }
 
-            newPartsList.push(new EndpointNumber(child.id));
+            newPartsList.push(EndpointNumber(child.id));
             newPartsList.push(...childPartsList);
         }
 

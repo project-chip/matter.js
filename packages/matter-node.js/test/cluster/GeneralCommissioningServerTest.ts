@@ -23,7 +23,7 @@ import {
 import { SessionType, Message } from "@project-chip/matter.js/codec";
 import { callCommandOnClusterServer, createTestSessionWithFabric } from "./ClusterServerTestingUtil";
 import { Endpoint, DeviceTypes } from "@project-chip/matter.js/device";
-import { VendorId } from "@project-chip/matter.js/datatype";
+import { EndpointNumber, VendorId } from "@project-chip/matter.js/datatype";
 
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
@@ -49,7 +49,7 @@ describe("GeneralCommissioning Server test", () => {
             }, GeneralCommissioningClusterHandler({ allowCountryCodeChange, countryCodeWhitelist }));
         basicInformationServer = ClusterServer(BasicInformationCluster, {
             dataModelRevision: 1,
-            vendorId: new VendorId(1),
+            vendorId: VendorId(1),
             vendorName: "test",
             productId: 1,
             productName: "test",
@@ -71,7 +71,7 @@ describe("GeneralCommissioning Server test", () => {
 
         testSession = await createTestSessionWithFabric();
 
-        endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: 1 });
+        endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: EndpointNumber(1) });
         endpoint.addClusterServer(basicInformationServer);
         endpoint.addClusterServer(generalCommissioningServer);
     }

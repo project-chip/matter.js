@@ -18,9 +18,9 @@ import { ByteArray } from "../../src/util/ByteArray.js";
 import { FAKE_INTERFACE_NAME } from "../../src/net/fake/SimulatedNetwork.js";
 import { Time } from "../../src/time/Time.js";
 import { TimeFake } from "../../src/time/TimeFake.js";
-import { VendorId } from "../../src/datatype/VendorId.js";
 import { Crypto } from "../../src/crypto/Crypto.js";
 import { singleton } from "../../src/util/Singleton.js";
+import { VendorId } from "../../src/datatype/VendorId.js";
 
 Time.get = singleton(() => new TimeFake(0));
 
@@ -43,7 +43,7 @@ const serverNetwork = new NetworkFake(SERVER_MAC, [SERVER_IPv4, SERVER_IPv6]);
 const clientNetwork = new NetworkFake(CLIENT_MAC, [CLIENT_IP]);
 
 const OPERATIONAL_ID = ByteArray.fromHex("0000000000000018")
-const NODE_ID = new NodeId(BigInt(1));
+const NODE_ID = NodeId(BigInt(1));
 
 describe("MDNS Scanner and Broadcaster", () => {
     let broadcaster: MdnsBroadcaster;
@@ -109,7 +109,7 @@ describe("MDNS Scanner and Broadcaster", () => {
             broadcaster.setCommissionMode(PORT, 1, {
                 deviceName: "Test Device",
                 deviceType: 1,
-                vendorId: new VendorId(1),
+                vendorId: VendorId(1),
                 productId: 0x8000,
                 discriminator: 1234
             });
@@ -152,7 +152,7 @@ describe("MDNS Scanner and Broadcaster", () => {
             broadcaster.setCommissionerInfo(PORT, {
                 deviceName: "Test Commissioner",
                 deviceType: 1,
-                vendorId: new VendorId(1),
+                vendorId: VendorId(1),
                 productId: 0x8000,
             });
             await broadcaster.announce(PORT);
@@ -192,14 +192,14 @@ describe("MDNS Scanner and Broadcaster", () => {
             broadcaster.setCommissionMode(PORT2, 1, {
                 deviceName: "Test Device",
                 deviceType: 1,
-                vendorId: new VendorId(1),
+                vendorId: VendorId(1),
                 productId: 0x8000,
                 discriminator: 1234
             });
             broadcaster.setCommissionerInfo(PORT3, {
                 deviceName: "Test Commissioner",
                 deviceType: 1,
-                vendorId: new VendorId(1),
+                vendorId: VendorId(1),
                 productId: 0x8000,
             });
             await broadcaster.announce(PORT);
@@ -351,7 +351,7 @@ describe("MDNS Scanner and Broadcaster", () => {
             broadcaster.setCommissionMode(PORT, 1, {
                 deviceName: "Test Device",
                 deviceType: 1,
-                vendorId: new VendorId(1),
+                vendorId: VendorId(1),
                 productId: 0x8000,
                 discriminator: 1234
             });
@@ -438,7 +438,7 @@ describe("MDNS Scanner and Broadcaster", () => {
             broadcaster.setCommissionMode(PORT, 1, {
                 deviceName: "Test Device",
                 deviceType: 1,
-                vendorId: new VendorId(1),
+                vendorId: VendorId(1),
                 productId: 0x8000,
                 discriminator: 1234
             });

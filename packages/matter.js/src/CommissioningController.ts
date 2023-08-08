@@ -32,6 +32,8 @@ import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { Ble } from "./ble/Ble.js";
 import { NoProviderError, MatterError, ImplementationError, InternalError } from "./common/MatterError.js";
 import { CommissioningOptions } from "./protocol/ControllerCommissioner.js";
+import { EndpointNumber } from "./datatype/EndpointNumber.js";
+import { ClusterId } from "./datatype/ClusterId.js";
 
 const logger = new Logger("CommissioningController");
 
@@ -79,7 +81,7 @@ export class CommissioningController extends MatterNode {
     private controllerInstance?: MatterController;
 
     private nodeId?: NodeId;
-    private endpoints = new Map<number, Endpoint>();
+    private endpoints = new Map<EndpointNumber, Endpoint>();
 
     /**
      * Creates a new CommissioningController instance
@@ -249,12 +251,12 @@ export class CommissioningController extends MatterNode {
         const allData = structureReadAttributeDataToClusterObject(allClusterAttributes);
         logger.debug("Device all data", Logger.toJSON(allData));
 
-        const partLists = new Map<number, number[]>();
+        const partLists = new Map<EndpointNumber, EndpointNumber[]>();
         for (const [endpointId, clusters] of Object.entries(allData)) {
-            const endpointIdNumber = parseInt(endpointId);
+            const endpointIdNumber = EndpointNumber(parseInt(endpointId));
             const descriptorData = clusters[DescriptorCluster.id] as AttributeServerValues<typeof DescriptorCluster.attributes>;
 
-            partLists.set(endpointIdNumber, descriptorData.partsList.map(({ number }) => number));
+            partLists.set(endpointIdNumber, descriptorData.partsList);
 
             logger.debug("Creating device", endpointId, Logger.toJSON(clusters));
             this.endpoints.set(endpointIdNumber, this.createDevice(endpointIdNumber, clusters, interactionClient));
@@ -269,10 +271,10 @@ export class CommissioningController extends MatterNode {
      * @param partLists A Map  of the partsList attributes of all endpoints to structure
      * @private
      */
-    private structureEndpoints(partLists: Map<number, number[]>) {
+    private structureEndpoints(partLists: Map<EndpointNumber, EndpointNumber[]>) {
         logger.debug("Endpoints from Partslists", Logger.toJSON(Array.from(partLists.entries())));
 
-        const endpointUsages: { [key: number]: number[] } = {};
+        const endpointUsages: { [key: EndpointNumber]: EndpointNumber[] } = {};
         Array.from(partLists.entries()).forEach(([parent, partsList]) => partsList.forEach(endPoint => {
             endpointUsages[endPoint] = endpointUsages[endPoint] || [];
             endpointUsages[endPoint].push(parent);
@@ -290,9 +292,9 @@ export class CommissioningController extends MatterNode {
 
             logger.debug(`Processing Endpoint ${JSON.stringify(singleUsageEndpoints)}`);
 
-            const idsToCleanup: { [key: number]: boolean } = {}
+            const idsToCleanup: { [key: EndpointNumber]: boolean } = {}
             singleUsageEndpoints.forEach(([childId, usages]) => {
-                const childEndpoint = this.endpoints.get(parseInt(childId));
+                const childEndpoint = this.endpoints.get(EndpointNumber(parseInt(childId)));
                 const parentEndpoint = this.endpoints.get(usages[0]);
                 if (childEndpoint === undefined || parentEndpoint === undefined) {
                     throw new InternalError("Endpoint not found!"); // Should never happen!
@@ -301,15 +303,16 @@ export class CommissioningController extends MatterNode {
                 logger.debug(`Endpoint structure: Child: ${childEndpoint.id} -> Parent: ${parentEndpoint.id}`);
 
                 parentEndpoint.addChildEndpoint(childEndpoint);
-                delete (endpointUsages[parseInt(childId)]);
+                delete (endpointUsages[EndpointNumber(parseInt(childId))]);
                 idsToCleanup[usages[0]] = true;
             });
             logger.debug("Endpoint data Cleanup", JSON.stringify(idsToCleanup));
             Object.keys(idsToCleanup).forEach(idToCleanup => {
                 Object.keys(endpointUsages).forEach(id => {
-                    endpointUsages[parseInt(id)] = endpointUsages[parseInt(id)].filter(endpointId => endpointId !== parseInt(idToCleanup));
-                    if (!endpointUsages[parseInt(id)].length) {
-                        delete (endpointUsages[parseInt(id)]);
+                    const usageId = EndpointNumber(parseInt(id));
+                    endpointUsages[usageId] = endpointUsages[usageId].filter(endpointId => endpointId !== parseInt(idToCleanup));
+                    if (!endpointUsages[usageId].length) {
+                        delete (endpointUsages[usageId]);
                     }
                 });
             });
@@ -324,17 +327,17 @@ export class CommissioningController extends MatterNode {
      * @param interactionClient InteractionClient to communicate with the device
      * @private
      */
-    private createDevice(endpointId: number, data: { [key: number]: { [key: string]: any } }, interactionClient: InteractionClient) {
+    private createDevice(endpointId: EndpointNumber, data: { [key: ClusterId]: { [key: string]: any } }, interactionClient: InteractionClient) {
         const descriptorData = data[DescriptorCluster.id] as AttributeServerValues<typeof DescriptorCluster.attributes>;
 
         const deviceTypes = descriptorData.deviceTypeList.flatMap(({ deviceType, revision }) => {
-            const deviceTypeDefinition = getDeviceTypeDefinitionByCode(deviceType.id);
+            const deviceTypeDefinition = getDeviceTypeDefinitionByCode(deviceType);
             if (deviceTypeDefinition === undefined) {
-                logger.info(`Device type with code ${deviceType.id} not known, ignore`);
+                logger.info(`Device type with code ${deviceType} not known, ignore`);
                 return [];
             }
             if (deviceTypeDefinition.revision !== revision) {
-                logger.info(`Device type with code ${deviceType.id} and revision ${revision} not known, ignore`);
+                logger.info(`Device type with code ${deviceType} and revision ${revision} not known, ignore`);
                 //return [];
             }
             return deviceTypeDefinition;
@@ -348,7 +351,7 @@ export class CommissioningController extends MatterNode {
 
         // Add ClusterClients for all server clusters of the device
         for (const clusterId of descriptorData.serverList) {
-            const cluster = AllClustersMap[clusterId.id];
+            const cluster = AllClustersMap[clusterId];
             if (cluster === undefined) {
                 logger.info(`Cluster with id ${clusterId} not known, ignore`);
                 continue;
@@ -360,12 +363,12 @@ export class CommissioningController extends MatterNode {
         // TODO use the attributes attributeList, acceptedCommands, generatedCommands to crate the ClusterClient/Server objects
         // Add ClusterServers for all client clusters of the device
         for (const clusterId of descriptorData.clientList) {
-            const cluster = AllClustersMap[clusterId.id];
+            const cluster = AllClustersMap[clusterId];
             if (cluster === undefined) {
-                logger.info(`Cluster with id ${clusterId.id} not known, ignore`);
+                logger.info(`Cluster with id ${clusterId} not known, ignore`);
                 continue;
             }
-            const clusterData = (data[clusterId.id] ?? {}) as AttributeInitialValues<Attributes>; // TODO correct typing
+            const clusterData = (data[clusterId] ?? {}) as AttributeInitialValues<Attributes>; // TODO correct typing
             // Todo add logic for Events
             endpointClusters.push(ClusterServer(cluster, /*clusterData.featureMap,*/ clusterData, {}) as ClusterServerObj<Attributes, Commands, Events>); // TODO Add Default handler!
         }

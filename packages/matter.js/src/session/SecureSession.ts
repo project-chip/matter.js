@@ -156,7 +156,7 @@ export class SecureSession<T> implements Session<T> {
         const writer = new DataWriter(Endian.Little);
         writer.writeUInt8(securityFlags);
         writer.writeUInt32(messageId);
-        writer.writeUInt64(nodeId.id);
+        writer.writeUInt64(nodeId);
         return writer.toByteArray();
     }
 }

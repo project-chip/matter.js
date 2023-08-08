@@ -614,7 +614,7 @@ export namespace OperationalCredentials {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.17.5.6
              */
-            currentFabricIndex: Attribute(0x5, TlvFabricIndex, { default: new FabricIndex(0) })
+            currentFabricIndex: Attribute(0x5, TlvFabricIndex, { default: FabricIndex(0) })
         },
 
         commands: {

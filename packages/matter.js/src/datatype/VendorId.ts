@@ -5,8 +5,9 @@
  */
 
 import { TlvUInt16 } from "../tlv/TlvNumber.js";
-import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { Branded } from "../util/Type.js";
+import { TlvWrapper } from "../tlv/TlvWrapper.js";
 
 /**
  * A Vendor Identifier (Vendor ID or VID) is a 16-bit number that uniquely identifies a particular
@@ -15,15 +16,15 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
  *
  * @see {@link MatterCoreSpecificationV1_0} § 2.5.2
  */
-export class VendorId {
-    constructor(
-        readonly id: number,
-    ) { }
+export type VendorId = Branded<number, "VendorId">;
+
+export function VendorId(v: number): VendorId {
+    return v as VendorId;
 }
 
 /** Data model for a Vendor Identifier. */
 export const TlvVendorId = new TlvWrapper<VendorId, number>(
     TlvUInt16,
-    vendorId => vendorId.id,
-    value => new VendorId(value),
+    vendorId => vendorId,
+    value => VendorId(value),
 );

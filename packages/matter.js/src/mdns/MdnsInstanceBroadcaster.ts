@@ -17,17 +17,17 @@ export class MdnsInstanceBroadcaster implements InstanceBroadcaster {
         private readonly mdnsBroadcaster: MdnsBroadcaster,
     ) { }
 
-    setCommissionMode(mode: number, deviceData: CommissioningModeInstanceData) {
+    async setCommissionMode(mode: number, deviceData: CommissioningModeInstanceData) {
         this.mdnsBroadcaster.setCommissionMode(this.instancePort, mode, deviceData);
     }
 
     /** Set the Broadcaster Data to announce a device for operative discovery (aka "already paired") */
-    setFabrics(fabrics: Fabric[]) {
+    async setFabrics(fabrics: Fabric[]) {
         this.mdnsBroadcaster.setFabrics(this.instancePort, fabrics);
     }
 
     /** Set the Broadcaster data to announce a Commissioner (aka Commissioner discovery) */
-    setCommissionerInfo(commissionerData: CommissionerInstanceData) {
+    async setCommissionerInfo(commissionerData: CommissionerInstanceData) {
         this.mdnsBroadcaster.setCommissionerInfo(this.instancePort, commissionerData);
     }
 

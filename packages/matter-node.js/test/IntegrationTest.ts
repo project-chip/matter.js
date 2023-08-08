@@ -16,7 +16,9 @@ import {
     OnOffCluster, BasicInformation, OperationalCredentials, Descriptor, Identify, Groups, AccessControl, Scenes,
     GeneralCommissioning, NetworkCommissioning, GeneralDiagnostics
 } from "@project-chip/matter.js/cluster";
-import { VendorId, FabricIndex, GroupId, ClusterId } from "@project-chip/matter.js/datatype";
+import {
+    VendorId, FabricIndex, GroupId, ClusterId, DeviceTypeId, EndpointNumber
+} from "@project-chip/matter.js/datatype";
 
 import { MdnsBroadcaster, MdnsScanner } from "@project-chip/matter.js/mdns";
 import { Network, NetworkFake } from "@project-chip/matter.js/net";
@@ -39,9 +41,9 @@ const serverNetwork = new NetworkFake(SERVER_MAC, [SERVER_IPv6, SERVER_IPv4]);
 const clientNetwork = new NetworkFake(CLIENT_MAC, [CLIENT_IPv6, CLIENT_IPv4]);
 
 const deviceName = "Matter end-to-end device";
-const deviceType = 257 /* Dimmable bulb */;
+const deviceType = DeviceTypeId(257) /* Dimmable bulb */;
 const vendorName = "matter-node.js";
-const vendorId = new VendorId(0xFFF1);
+const vendorId = VendorId(0xFFF1);
 const productName = "Matter end-to-end device";
 const productId = 0X8001;
 const longDiscriminator = 3840;
@@ -201,7 +203,7 @@ describe("Integration Test", () => {
 
             Network.get = () => { throw new Error("Network should not be requested post starting") };
 
-            assert.ok(commissioningController.getFabric().nodeId.id);
+            assert.ok(commissioningController.getFabric().nodeId);
         }, 60 * 1000 /* 1mn timeout */);
 
         it("the session is resumed if it has been established previously", async () => {
@@ -263,9 +265,9 @@ describe("Integration Test", () => {
         it("read multiple attributes", async () => {
             const response = await defaultInteractionClient.getMultipleAttributes([
                 { clusterId: Descriptor.Cluster.id }, // * /DescriptorCluster/ *
-                { endpointId: 0, clusterId: BasicInformation.Cluster.id }, // 0/BasicInformationCluster/ *
-                { endpointId: 1, clusterId: OnOffCluster.id, attributeId: OnOffCluster.attributes.onOff.id }, // 1/OnOffCluster/onOff
-                { endpointId: 2 }, // 2 / * /* - will be discarded in results!
+                { endpointId: EndpointNumber(0), clusterId: BasicInformation.Cluster.id }, // 0/BasicInformationCluster/ *
+                { endpointId: EndpointNumber(1), clusterId: OnOffCluster.id, attributeId: OnOffCluster.attributes.onOff.id }, // 1/OnOffCluster/onOff
+                { endpointId: EndpointNumber(2) }, // 2 / * /* - will be discarded in results!
             ]);
 
             assert.equal(response.length, 43);
@@ -296,7 +298,7 @@ describe("Integration Test", () => {
                     clusterId: Descriptor.Cluster.id,
                     attributeId: Descriptor.Cluster.attributes.serverList.id,
                     attributeName: "serverList"
-                }, value: [new ClusterId(29), new ClusterId(40), new ClusterId(62), new ClusterId(48), new ClusterId(49), new ClusterId(31), new ClusterId(63), new ClusterId(51), new ClusterId(60)], version: 0
+                }, value: [ClusterId(29), ClusterId(40), ClusterId(62), ClusterId(48), ClusterId(49), ClusterId(31), ClusterId(63), ClusterId(51), ClusterId(60)], version: 0
             })
 
             assert.equal(response.filter(({
@@ -359,8 +361,8 @@ describe("Integration Test", () => {
         it("read events", async () => {
             const response = await defaultInteractionClient.getMultipleEvents([
                 { clusterId: BasicInformation.Cluster.id }, // * /BasicInformationCluster/ *
-                { endpointId: 0, clusterId: GeneralDiagnostics.Cluster.id, eventId: GeneralDiagnostics.Cluster.events.bootReason.id }, // 0/GeneralDiagnosticsCluster/bootReason
-                { endpointId: 2 }, // 2 / * /* - will be discarded in results!
+                { endpointId: EndpointNumber(0), clusterId: GeneralDiagnostics.Cluster.id, eventId: GeneralDiagnostics.Cluster.events.bootReason.id }, // 0/GeneralDiagnosticsCluster/bootReason
+                { endpointId: EndpointNumber(2) }, // 2 / * /* - will be discarded in results!
             ]);
 
             assert.equal(response.length, 2);
@@ -432,8 +434,8 @@ describe("Integration Test", () => {
             const client = await commissioningController.createInteractionClient(); // We can also use a new Interaction clint
 
             const response = await client.setMultipleAttributes([
-                { endpointId: 0, clusterId: BasicInformation.Cluster.id, attribute: BasicInformation.Cluster.attributes.nodeLabel, value: "testLabel2" },
-                { endpointId: 0, clusterId: BasicInformation.Cluster.id, attribute: BasicInformation.Cluster.attributes.location, value: "GB" },
+                { endpointId: EndpointNumber(0), clusterId: BasicInformation.Cluster.id, attribute: BasicInformation.Cluster.attributes.nodeLabel, value: "testLabel2" },
+                { endpointId: EndpointNumber(0), clusterId: BasicInformation.Cluster.id, attribute: BasicInformation.Cluster.attributes.location, value: "GB" },
             ]);
 
             assert.equal(Array.isArray(response), true);
@@ -447,8 +449,8 @@ describe("Integration Test", () => {
 
         it("write multiple attributes with partial errors", async () => {
             const response = await defaultInteractionClient.setMultipleAttributes([
-                { endpointId: 0, clusterId: BasicInformation.Cluster.id, attribute: BasicInformation.Cluster.attributes.nodeLabel, value: "testLabel3" },
-                { endpointId: 0, clusterId: BasicInformation.Cluster.id, attribute: BasicInformation.Cluster.attributes.location, value: "XXX" },
+                { endpointId: EndpointNumber(0), clusterId: BasicInformation.Cluster.id, attribute: BasicInformation.Cluster.attributes.nodeLabel, value: "testLabel3" },
+                { endpointId: EndpointNumber(0), clusterId: BasicInformation.Cluster.id, attribute: BasicInformation.Cluster.attributes.location, value: "XXX" },
             ]);
 
             assert.equal(response.length, 1);
@@ -470,7 +472,7 @@ describe("Integration Test", () => {
             assert.ok(onoffEndpoint);
             const groupsCluster = onoffEndpoint.getClusterClient(Groups.Cluster, defaultInteractionClient);
             assert.ok(groupsCluster);
-            await groupsCluster.commands.addGroup({ groupId: new GroupId(1), groupName: "Group 1" });
+            await groupsCluster.commands.addGroup({ groupId: GroupId(1), groupName: "Group 1" });
         });
     });
 
@@ -693,7 +695,7 @@ describe("Integration Test", () => {
             const operationalCredentialsCluster = commissioningController.getRootClusterClient(OperationalCredentials.Cluster, defaultInteractionClient);
             assert.ok(operationalCredentialsCluster);
 
-            const result = await operationalCredentialsCluster.commands.removeFabric({ fabricIndex: new FabricIndex(250) });
+            const result = await operationalCredentialsCluster.commands.removeFabric({ fabricIndex: FabricIndex(250) });
             assert.equal(result.statusCode, OperationalCredentials.NodeOperationalCertStatus.InvalidFabricIndex);
             assert.equal(result.fabricIndex, undefined);
             assert.equal(result.debugText, "Fabric 250 not found");
@@ -705,7 +707,7 @@ describe("Integration Test", () => {
 
             const fabricIndex = await operationalCredentialsCluster.attributes.currentFabricIndex.get();
             assert.ok(fabricIndex);
-            assert.equal(fabricIndex.index, 1);
+            assert.equal(fabricIndex, 1);
 
             const result = await operationalCredentialsCluster.commands.removeFabric({ fabricIndex });
             assert.equal(result.statusCode, OperationalCredentials.NodeOperationalCertStatus.Ok);
