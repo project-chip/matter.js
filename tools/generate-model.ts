@@ -8,7 +8,7 @@
 
 import "./util/setup.js";
 import { Logger } from "#matter.js/log/Logger.js";
-import { AnyElement, MatterElement, MatterModel } from "#matter.js/model/index.js";
+import { AnyElement, ElementTag, MatterElement, MatterModel } from "#matter.js/model/index.js";
 import { MergeModels } from "#matter.js/model/logic/index.js";
 import { TsFile } from "./util/TsFile.js";
 import { clean } from "./util/file.js";
@@ -19,10 +19,17 @@ export const CLUSTER_SUFFIX = "Element";
 
 const logger = Logger.get("generate-model");
 
+function elementFilename(element: AnyElement) {
+    if (element.tag === ElementTag.DeviceType) {
+        return `${element.name}DT`;
+    }
+    return element.name;
+}
+
 function generateElementFile(element: AnyElement) {
     logger.debug(element.name);
 
-    const file = new TsFile(`#elements/${element.name}`);
+    const file = new TsFile(`#elements/${elementFilename(element)}`);
 
     file.addImport(`../Matter`, `Matter`);
 
@@ -40,7 +47,7 @@ function generateIndex(elements: AnyElement[]) {
     const file = new TsFile(`#elements/index`);
     elements.forEach(element => {
         if (!element.global) {
-            file.addImport(`./${element.name}`);
+            file.addImport(`./${elementFilename(element)}`);
         }
     });
 

@@ -7,7 +7,7 @@
 import { Logger } from "#matter.js/log/Logger.js";
 import { camelize } from "#util/string.js";
 import { ClusterReference, HtmlReference } from "./spec-types.js";
-import { scanSection } from "./scan-section.js";
+import { NavigateViaToc, scanSection } from "./scan-section.js";
 import { Specification } from "#matter.js/model/index.js";
 
 const logger = Logger.get("load-cluster");
@@ -58,7 +58,7 @@ export function loadCluster(clusterRef: HtmlReference) {
     // A stack of functions that ingest subsections
     const collectors = Array<SubsectionCollector>();
 
-    for (const subref of scanSection(clusterRef)) {
+    for (const subref of scanSection(clusterRef, NavigateViaToc)) {
         applyPatches(subref, clusterRef);
         if (subref.ignore) {
             continue;

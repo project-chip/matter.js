@@ -49,3 +49,15 @@ export type ClusterReference = HtmlReference & {
     statusCodes?: HtmlReference,
     datatypes?: HtmlReference[]
 }
+
+/**
+ * Intermediate representation of a device.
+ */
+export type DeviceReference = HtmlReference & {
+    category?: string,
+    classification?: HtmlReference,
+    revisions?: HtmlReference,
+    conditionSets?: HtmlReference[],
+    clusters?: HtmlReference,
+    elements?: HtmlReference
+}

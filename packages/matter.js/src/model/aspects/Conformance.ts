@@ -665,6 +665,9 @@ class Parser {
 
     private parseAtomicExpression(): string | Conformance.Ast | undefined {
         const expr = this.parseAtomicExpressionWithoutChoice();
+        if (!expr) {
+            return;
+        }
 
         return this.parseChoice(expr);
     }

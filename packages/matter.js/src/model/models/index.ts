@@ -13,7 +13,9 @@ export * from "./CommandModel.js";
 export * from "./EventModel.js";
 export * from "./ClusterModel.js";
 
+export * from "./RequirementModel.js";
 export * from "./DeviceTypeModel.js";
+
 export * from "./EndpointModel.js";
 export * from "./NodeModel.js";
 export * from "./FabricModel.js";
