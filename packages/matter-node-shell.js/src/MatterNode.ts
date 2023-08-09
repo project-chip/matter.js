@@ -2,13 +2,13 @@
  * Import needed modules from @project-chip/matter-node.js
  */
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
-import { MatterServer, CommissioningController } from "@project-chip/matter-node.js";
-import { Logger } from "@project-chip/matter-node.js/log";
-import { StorageManager, StorageBackendDisk, StorageContext } from "@project-chip/matter-node.js/storage";
-import { BasicInformationCluster, DescriptorCluster, OnOffCluster } from "@project-chip/matter-node.js/cluster";
-import { requireMinNodeVersion, hasParameter, singleton } from "@project-chip/matter-node.js/util";
-import { Ble } from "@project-chip/matter-node.js/ble";
 import { BleNode } from "@project-chip/matter-node-ble.js/ble";
+import { CommissioningController, MatterServer } from "@project-chip/matter-node.js";
+import { Ble } from "@project-chip/matter-node.js/ble";
+import { BasicInformationCluster, DescriptorCluster, OnOffCluster } from "@project-chip/matter-node.js/cluster";
+import { Logger } from "@project-chip/matter-node.js/log";
+import { StorageBackendDisk, StorageContext, StorageManager } from "@project-chip/matter-node.js/storage";
+import { hasParameter, requireMinNodeVersion, singleton } from "@project-chip/matter-node.js/util";
 
 requireMinNodeVersion(16);
 
@@ -20,7 +20,6 @@ if (hasParameter("ble")) {
 }
 
 export class MatterNode {
-
     private storageLocation?: string;
     private storage?: StorageBackendDisk;
     private storageManager?: StorageManager;
@@ -29,12 +28,21 @@ export class MatterNode {
     private commissioningController?: CommissioningController;
     private matterDevice?: MatterServer;
 
-    get Store() { return this.storageContext; }
-
-    close() {
-        this.storage?.close().then(() => process.exit(0)).catch(() => process.exit(1));
+    get Store() {
+        return this.storageContext;
     }
 
+    async close() {
+        await this.matterDevice?.close();
+        this.closeStorage();
+    }
+
+    closeStorage() {
+        this.storage
+            ?.close()
+            .then(() => process.exit(0))
+            .catch(() => process.exit(1));
+    }
 
     async start(nodenum = 0) {
         logger.info(`matter.js shell started`);
@@ -44,7 +52,7 @@ export class MatterNode {
          *
          * The storage manager is then also used by the Matter server, so this code block in general is required,
          * but you can choose a different storage backend as long as it implements the required API.
-        */
+         */
 
         this.storageLocation = `.matter-shell-${nodenum}`;
         this.storage = new StorageBackendDisk(this.storageLocation, false);
@@ -76,7 +84,7 @@ export class MatterNode {
         store.set("pin", setupPin);
         store.set("discriminator", longDiscriminator);
 
-        const shortDiscriminator = (longDiscriminator >> 8) & 0x0F;
+        const shortDiscriminator = (longDiscriminator >> 8) & 0x0f;
 
         /**
          * Create Matter Server and Controller Node
@@ -93,7 +101,7 @@ export class MatterNode {
 
         this.matterDevice = new MatterServer(this.storageManager);
         this.commissioningController = new CommissioningController({
-            serverAddress: (ip !== undefined && port !== undefined) ? { ip, port, type: "udp" } : undefined,
+            serverAddress: ip !== undefined && port !== undefined ? { ip, port, type: "udp" } : undefined,
             longDiscriminator,
             shortDiscriminator,
             passcode: setupPin,
@@ -179,15 +187,17 @@ export class MatterNode {
                         console.log("onOffStatus", onOffStatus);
                         // read data every minute to keep up the connection to show the subscription is working
                         setInterval(() => {
-                            onOff.toggle().then(() => {
-                                onOffStatus = !onOffStatus;
-                                console.log("onOffStatus", onOffStatus);
-                            }).catch(error => logger.error(error));
+                            onOff
+                                .toggle()
+                                .then(() => {
+                                    onOffStatus = !onOffStatus;
+                                    console.log("onOffStatus", onOffStatus);
+                                })
+                                .catch(error => logger.error(error));
                         }, 60000);
                     }
                 }
             }
-
         } finally {
             //await matterDevice.close(); // Comment out when subscribes are used, else the connection will be closed
             //setTimeout(() => process.exit(0), 100000);

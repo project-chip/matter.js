@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-import { theNode } from '../MatterNode';
-import yargs from 'yargs/yargs';
+import yargs from "yargs/yargs";
+import { theNode } from "../MatterNode";
 
 export class cmd_pair {
-
     /**
      * Get / Set the NodeId.
      *
@@ -26,20 +25,19 @@ export class cmd_pair {
      * @returns 0
      */
     static async doPair(args: string[]) {
-
         const argv = yargs(args)
             .options({
                 descriminator: {
-                    alias: 'd',
-                    description: 'Long descriminator',
-                    type: 'number',
-                }
+                    alias: "d",
+                    description: "Long descriminator",
+                    type: "number",
+                },
             })
-            .help('help')           // provide help on `help` in addition to `--help`
-            .exitProcess(false)     // do not exit when help option is passed
+            .help("help") // provide help on `help` in addition to `--help`
+            .exitProcess(false) // do not exit when help option is passed
             .parseSync();
 
-        if (argv.help) return 0
+        if (argv.help) return 0;
 
         await theNode.pair();
     }

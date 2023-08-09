@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-import { theNode } from '../MatterNode';
-import yargs from 'yargs/yargs';
+import yargs from "yargs/yargs";
+import { theNode } from "../MatterNode";
 
 export class cmd_config {
-
     /**
      * Get / Set the NodeId.
      *
@@ -26,22 +25,19 @@ export class cmd_config {
      * @returns 0
      */
     static doConfig(args: string[]) {
-
         let argv = yargs(args)
             .options({
                 dump: {
-                    alias: 'd',
-                    description: 'Dump all storage',
-                    type: 'boolean',
-                }
+                    alias: "d",
+                    description: "Dump all storage",
+                    type: "boolean",
+                },
             })
-            .help('help')           // provide help on `help` in addition to `--help`
-            .exitProcess(false)     // do not exit when help option is passed
+            .help("help") // provide help on `help` in addition to `--help`
+            .exitProcess(false) // do not exit when help option is passed
             .parseSync();
 
-        if (argv.help) return 0
-
-
+        if (argv.help) return 0;
 
         console.log(argv);
 
@@ -87,7 +83,7 @@ export class cmd_config {
     }
 
     static doPin(args: string[]) {
-        let v = theNode.Store.get<number>("pin", 20202021)
+        let v = theNode.Store.get<number>("pin", 20202021);
         if (args.length > 1) {
             v = Number(args[1]);
             theNode.Store.set("pin", v);
@@ -97,7 +93,7 @@ export class cmd_config {
     }
 
     static doNodeNum(args: string[]) {
-        let v = theNode.Store.get<number>("nodenum", 0)
+        let v = theNode.Store.get<number>("nodenum", 0);
         if (args.length > 1) {
             v = Number(args[1]);
             theNode.Store.set("nodenum", v);
@@ -107,7 +103,7 @@ export class cmd_config {
     }
 
     static doIpPort(args: string[]) {
-        let v = theNode.Store.get<number>("port", 5540)
+        let v = theNode.Store.get<number>("port", 5540);
         if (args.length > 1) {
             v = Number(args[1]);
             theNode.Store.set("port", v);
@@ -117,7 +113,7 @@ export class cmd_config {
     }
 
     static doIp(args: string[]) {
-        let v = theNode.Store.get<string>("ip", "::1")
+        let v = theNode.Store.get<string>("ip", "::1");
         if (args.length > 1) {
             v = args[1];
             theNode.Store.set("ip", v);
