@@ -46,7 +46,7 @@ export class MatterDevice {
     private readonly sessionManager;
     private readonly channelManager = new ChannelManager();
     private readonly exchangeManager;
-    private announceInterval: Timer | null = null;
+    private announceInterval: Timer;
     private announcementStartedTime: number | null = null
     private commissioningWindowOpened = false;
 
@@ -65,6 +65,8 @@ export class MatterDevice {
         this.sessionManager.initFromStorage(this.fabricManager.getFabrics());
 
         this.exchangeManager = new ExchangeManager<MatterDevice>(this.sessionManager, this.channelManager);
+
+        this.announceInterval = Time.getPeriodicTimer(DEVICE_ANNOUNCEMENT_INTERVAL, () => this.announce());
     }
 
     addScanner(scanner: Scanner) {
@@ -93,8 +95,11 @@ export class MatterDevice {
     }
 
     async startAnnouncement() {
+        if (this.announceInterval.isRunning) {
+            this.announceInterval.stop();
+        }
         this.announcementStartedTime = Time.nowMs();
-        this.announceInterval = Time.getPeriodicTimer(DEVICE_ANNOUNCEMENT_INTERVAL, () => this.announce()).start();
+        this.announceInterval.start();
         await this.announce();
     }
 
@@ -102,7 +107,7 @@ export class MatterDevice {
         if (!announceOnce) {
             // Stop announcement if duration is reached
             if (this.announcementStartedTime !== null && Time.nowMs() - this.announcementStartedTime > DEVICE_ANNOUNCEMENT_DURATION) {
-                this.announceInterval?.stop();
+                this.announceInterval.stop();
                 this.announcementStartedTime = null;
                 logger.debug("Announcement duration reached, stop announcing");
                 return;
@@ -152,7 +157,18 @@ export class MatterDevice {
     }
 
     createSecureSession(sessionId: number, fabric: Fabric | undefined, peerNodeId: NodeId, peerSessionId: number, sharedSecret: ByteArray, salt: ByteArray, isInitiator: boolean, isResumption: boolean, idleRetransTimeoutMs?: number, activeRetransTimeoutMs?: number) {
-        return this.sessionManager.createSecureSession(sessionId, fabric, peerNodeId, peerSessionId, sharedSecret, salt, isInitiator, isResumption, idleRetransTimeoutMs, activeRetransTimeoutMs);
+        return this.sessionManager.createSecureSession(
+            sessionId,
+            fabric,
+            peerNodeId,
+            peerSessionId,
+            sharedSecret,
+            salt, isInitiator,
+            isResumption,
+            idleRetransTimeoutMs,
+            activeRetransTimeoutMs,
+            () => void this.startAnnouncement(),
+        );
     }
 
     findFabricFromDestinationId(destinationId: ByteArray, peerRandom: ByteArray) {
@@ -249,6 +265,6 @@ export class MatterDevice {
 
     async stop() {
         await this.exchangeManager.close();
-        this.announceInterval?.stop();
+        this.announceInterval.stop();
     }
 }

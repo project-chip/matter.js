@@ -68,7 +68,7 @@ const logger = Logger.get("MatterController");
 export class PairRetransmissionLimitReachedError extends RetransmissionLimitReachedError { }
 
 export class MatterController {
-    public static async create(scanner: Scanner, netInterfaceIpv4: NetInterface | undefined, netInterfaceIpv6: NetInterface, storage: StorageContext, operationalServerAddress?: ServerAddressIp, commissioningOptions?: CommissioningOptions): Promise<MatterController> {
+    public static async create(scanner: Scanner, netInterfaceIpv4: NetInterface | undefined, netInterfaceIpv6: NetInterface, storage: StorageContext, operationalServerAddress?: ServerAddressIp, commissioningOptions?: CommissioningOptions, sessionClosedCallback?: (peerNodeId: NodeId) => void): Promise<MatterController> {
         // TODO move to ControllerCommissioner
         const CONTROLLER_NODE_ID = NodeId(Crypto.getRandomBigUInt64());
         const certificateManager = new RootCertificateManager(storage);
@@ -85,9 +85,9 @@ export class MatterController {
         const controllerStorage = storage.createContext("MatterController");
         if (controllerStorage.has("fabric")) {
             const storedFabric = Fabric.createFromStorageObject(controllerStorage.get<FabricJsonObject>("fabric"));
-            return new MatterController(scanner, netInterfaceIpv4, netInterfaceIpv6, certificateManager, storedFabric, storage, operationalServerAddress, commissioningOptions);
+            return new MatterController(scanner, netInterfaceIpv4, netInterfaceIpv6, certificateManager, storedFabric, storage, operationalServerAddress, commissioningOptions, sessionClosedCallback);
         } else {
-            return new MatterController(scanner, netInterfaceIpv4, netInterfaceIpv6, certificateManager, await fabricBuilder.build(), storage, operationalServerAddress, commissioningOptions);
+            return new MatterController(scanner, netInterfaceIpv4, netInterfaceIpv6, certificateManager, await fabricBuilder.build(), storage, operationalServerAddress, commissioningOptions, sessionClosedCallback);
         }
     }
 
@@ -108,7 +108,8 @@ export class MatterController {
         private readonly fabric: Fabric,
         private readonly storage: StorageContext,
         public operationalServerAddress?: ServerAddressIp,
-        commissioningOptions?: CommissioningOptions
+        commissioningOptions?: CommissioningOptions,
+        private readonly sessionClosedCallback?: (peerNodeId: NodeId) => void
     ) {
         this.controllerStorage = this.storage.createContext("MatterController");
 
@@ -480,8 +481,31 @@ export class MatterController {
         return this.fabric;
     }
 
-    createSecureSession(sessionId: number, fabric: Fabric | undefined, peerNodeId: NodeId, peerSessionId: number, sharedSecret: ByteArray, salt: ByteArray, isInitiator: boolean, isResumption: boolean, idleRetransTimeoutMs?: number, activeRetransTimeoutMs?: number) {
-        return this.sessionManager.createSecureSession(sessionId, fabric, peerNodeId, peerSessionId, sharedSecret, salt, isInitiator, isResumption, idleRetransTimeoutMs, activeRetransTimeoutMs);
+    createSecureSession(
+        sessionId: number,
+        fabric: Fabric | undefined,
+        peerNodeId: NodeId,
+        peerSessionId: number,
+        sharedSecret: ByteArray,
+        salt: ByteArray,
+        isInitiator: boolean,
+        isResumption: boolean,
+        idleRetransTimeoutMs?: number,
+        activeRetransTimeoutMs?: number
+    ) {
+        return this.sessionManager.createSecureSession(
+            sessionId,
+            fabric,
+            peerNodeId,
+            peerSessionId,
+            sharedSecret,
+            salt,
+            isInitiator,
+            isResumption,
+            idleRetransTimeoutMs,
+            activeRetransTimeoutMs,
+            () => this.sessionClosedCallback?.(peerNodeId)
+        );
     }
 
     getResumptionRecord(resumptionId: ByteArray) {
