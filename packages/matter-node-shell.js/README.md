@@ -1,5 +1,7 @@
 # MATTER NODE SHELL
 
+STATUS: Work In Progress (WIP)
+
 This project provides a light-weight node.js implementation of a Matter Node shell application:
 https://github.com/project-chip/connectedhomeip
 
@@ -18,7 +20,7 @@ npm run build
 ```
 ## Run
 
-There are three ways to start matternode. The `nodenum` parameter provides a unique identifier for the matternode process mainly to allocate a unique port number. If `nodenum` is not passed, it will default to `0`. The node will allocate a default port of `nodenum + 5540` unless a config file already exists with a manually configured port for the node.
+There are three ways to start matter-node-shell. The `nodenum` parameter provides a unique identifier for the matter-node-shell process mainly to allocate a unique port number. If `nodenum` is not passed, it will default to `0`. The node will allocate a default port of `nodenum + 5540` unless a config file already exists with a manually configured port for the node.
 
 ```
 npm start <nodenum>
@@ -139,7 +141,7 @@ Done
 `matter-node-shell` uses the `node-localstorage` package to persistantly store configuration data of each node on disk. In order to run multiple nodes on one machine, start each node with their own `nodenum` so each will create and use their own `.matter-shell-#` directory and use different ports for communication where `#` is the `nodenum` passed from the commandline.
 
 ```
-# From matternode top-level
+# From matter-node-shell top-level
 npm start 1
 
 # In different terminal

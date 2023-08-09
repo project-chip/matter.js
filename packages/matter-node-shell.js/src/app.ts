@@ -39,7 +39,7 @@ function main() {
     theNode.start(nodenum).catch(error => logger.error(error));
 }
 
-process.on("message", function (message) {
+process.on("message", function(message) {
     console.log(`Message to shell.ts: ${message}`)
 
     switch (message) {

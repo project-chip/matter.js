@@ -76,7 +76,8 @@ export class MatterNode {
         store.set("pin", setupPin);
         store.set("discriminator", longDiscriminator);
 
-        const shortDiscriminator = longDiscriminator >> 8;
+        const shortDiscriminator = (longDiscriminator >> 8) & 0x0F;
+
         /**
          * Create Matter Server and Controller Node
          *
