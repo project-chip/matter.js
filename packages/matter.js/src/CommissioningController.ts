@@ -8,7 +8,7 @@ import { UdpInterface } from "./net/UdpInterface.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { StorageContext } from "./storage/StorageContext.js";
 import { MatterController } from "./MatterController.js";
-import { InteractionClient, ClusterClient } from "./protocol/interaction/InteractionClient.js";
+import { InteractionClient } from "./protocol/interaction/InteractionClient.js";
 import { NodeId } from "./datatype/NodeId.js";
 import { structureReadAttributeDataToClusterObject } from "./protocol/interaction/AttributeDataDecoder.js";
 import { Endpoint } from "./device/Endpoint.js";
@@ -18,7 +18,6 @@ import {
     AttributeInitialValues, AttributeServerValues, ClusterServerObj, isClusterServer
 } from "./cluster/server/ClusterServerTypes.js";
 import { AtLeastOne } from "./util/Array.js";
-import { ClusterServer } from "./protocol/interaction/InteractionServer.js";
 import { Aggregator } from "./device/Aggregator.js";
 import { PairedDevice } from "./device/Device.js";
 import { ComposedDevice } from "./device/ComposedDevice.js";
@@ -34,6 +33,8 @@ import { NoProviderError, MatterError, ImplementationError, InternalError } from
 import { CommissioningOptions } from "./protocol/ControllerCommissioner.js";
 import { EndpointNumber } from "./datatype/EndpointNumber.js";
 import { ClusterId } from "./datatype/ClusterId.js";
+import { ClusterServer } from "./cluster/server/ClusterServer.js";
+import { ClusterClient } from "./cluster/client/ClusterClient.js";
 
 const logger = new Logger("CommissioningController");
 

@@ -9,7 +9,7 @@ import {
     CommissionningFlowType, DiscoveryCapabilitiesBitmap, DiscoveryCapabilitiesSchema, ManualPairingCodeCodec,
     QrPairingCodeCodec
 } from "./schema/PairingCodeSchema.js";
-import { ClusterServer, InteractionServer } from "./protocol/interaction/InteractionServer.js";
+import { InteractionServer } from "./protocol/interaction/InteractionServer.js";
 import { AdministratorCommissioningHandler } from "./cluster/server/AdministratorCommissioningServer.js";
 import { SecureChannelProtocol } from "./protocol/securechannel/SecureChannelProtocol.js";
 import { PaseServer } from "./session/pase/PaseServer.js";
@@ -50,6 +50,7 @@ import { Ble } from "./ble/Ble.js";
 import { NoProviderError, ImplementationError } from "./common/MatterError.js";
 import { EndpointNumber } from "./datatype/EndpointNumber.js";
 import { DeviceTypeId } from "./datatype/DeviceTypeId.js";
+import { ClusterServer } from "./cluster/server/ClusterServer.js";
 
 const logger = Logger.get("CommissioningServer");
 

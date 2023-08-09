@@ -14,10 +14,9 @@ import { Time, TimeFake } from "@project-chip/matter.js/time";
 Time.get = () => new TimeFake(0);
 
 import * as assert from "assert";
-import { ClusterServer } from "@project-chip/matter.js/interaction";
 import { SecureSession } from "@project-chip/matter.js/session";
 import {
-    ClusterServerObjForCluster, BasicInformationCluster, GeneralCommissioningCluster,
+    ClusterServer, ClusterServerObjForCluster, BasicInformationCluster, GeneralCommissioningCluster,
     GeneralCommissioningClusterHandler, GeneralCommissioning
 } from "@project-chip/matter.js/cluster";
 import { SessionType, Message } from "@project-chip/matter.js/codec";

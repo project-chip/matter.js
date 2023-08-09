@@ -14,8 +14,8 @@ import { SessionType } from "../../codec/MessageCodec.js";
 import { StatusResponseError } from "../../protocol/interaction/InteractionMessenger.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { GroupsManager } from "./GroupsServer.js";
-import { ClusterServer } from "../../protocol/interaction/InteractionServer.js";
 import { NotImplementedError } from "../../common/MatterError.js";
+import { ClusterServer } from "./ClusterServer.js";
 
 interface scenesTableEntry {
     /** The group identifier for which this scene applies, or 0 if the scene is not associated with a group. */

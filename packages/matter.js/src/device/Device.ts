@@ -13,10 +13,10 @@ import { ClusterServerObj, isClusterServer } from "../cluster/server/ClusterServ
 import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { BindingCluster } from "../cluster/definitions/BindingCluster.js";
-import { ClusterServer } from "../protocol/interaction/InteractionServer.js";
 import { ImplementationError, NotImplementedError } from "../common/MatterError.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { DeviceTypeId } from "../datatype/DeviceTypeId.js";
+import { ClusterServer } from "../cluster/server/ClusterServer.js";
 
 /**
  * Temporary used device class for paired devices until we added a layer to choose the right specialized device class

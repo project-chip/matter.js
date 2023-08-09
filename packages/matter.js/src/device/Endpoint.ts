@@ -5,7 +5,6 @@
  */
 
 import { DeviceTypeDefinition } from "./DeviceTypes.js";
-import { ClusterServer } from "../protocol/interaction/InteractionServer.js";
 import { AtLeastOne } from "../util/Array.js";
 import { DescriptorCluster } from "../cluster/definitions/DescriptorCluster.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
@@ -21,6 +20,7 @@ import { BridgedDeviceBasicInformationCluster } from "../cluster/definitions/Bri
 import { AllClustersMap } from "../cluster/ClusterHelper.js";
 import { ImplementationError, InternalError, NotImplementedError } from "../common/MatterError.js";
 import { ClusterId } from "../datatype/ClusterId.js";
+import { ClusterServer } from "../cluster/server/ClusterServer.js";
 
 export interface EndpointOptions {
     endpointId?: EndpointNumber;

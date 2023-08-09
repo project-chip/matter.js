@@ -14,7 +14,7 @@ Crypto.get = () => ({
 import { MatterNode } from "../../src/MatterNode.js";
 import { OnOffLightDevice, OnOffPluginUnitDevice } from "../../src/device/OnOffDevices.js";
 import { AttributeServer } from "../../src/cluster/server/AttributeServer.js";
-import { attributePathToId, ClusterServer } from "../../src/protocol/interaction/InteractionServer.js";
+import { attributePathToId } from "../../src/protocol/interaction/InteractionServer.js";
 import { InteractionEndpointStructure } from "../../src/protocol/interaction/InteractionEndpointStructure.js";
 import { Aggregator } from "../../src/device/Aggregator.js";
 import { DeviceTypes } from "../../src/device/DeviceTypes.js";
@@ -53,6 +53,7 @@ import { CommissioningServer } from "../../src/CommissioningServer.js";
 import { FabricIndex } from "../../src/datatype/FabricIndex.js";
 import { OperationalCredentialsClusterHandler } from "../../src/cluster/server/OperationalCredentialsServer.js";
 import { ImplementationError } from "../../src/common/MatterError.js";
+import { ClusterServer } from "../../src/cluster/server/ClusterServer.js";
 
 /** Needed for tests because MatterNode is an abstract class */
 class TestNode extends MatterNode {

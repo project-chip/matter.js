@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ClusterClient, InteractionClient } from "./interaction/InteractionClient.js";
+import { InteractionClient } from "./interaction/InteractionClient.js";
 import { Logger } from "../log/Logger.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
@@ -29,6 +29,7 @@ import { TlvCertSigningRequest } from "../cluster/server/OperationalCredentialsS
 import { CertificateManager } from "../certificate/CertificateManager.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { FabricId } from "../datatype/FabricId.js";
+import { ClusterClient } from "../cluster/client/ClusterClient.js";
 
 const logger = Logger.get("ControllerCommissioner");
 
