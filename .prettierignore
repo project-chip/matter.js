@@ -1,0 +1,6 @@
+**/node_modules/**/*
+**/dist/**/*
+packages/*/dist
+tools/links/**
+models/links/**
+packages/matter.js/src/model/elements/Globals.ts
