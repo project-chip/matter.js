@@ -139,7 +139,8 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
 
     currentFabricIndexAttributeGetter: ({ session }) => {
         if (session === undefined || !session.isSecure()) return FabricIndex.NO_FABRIC;
-        return (session as SecureSession<MatterDevice>).getFabric()?.fabricIndex ?? FabricIndex.NO_FABRIC;
+        assertSecureSession(session);
+        return session.getFabric()?.fabricIndex ?? FabricIndex.NO_FABRIC;
     },
 
     updateNoc: async () => {

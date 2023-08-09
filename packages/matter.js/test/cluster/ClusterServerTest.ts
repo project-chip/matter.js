@@ -369,7 +369,7 @@ describe("ClusterServer structure", () => {
 
             expect(binding.attributes.binding.getLocalForFabric(fabric)).toEqual([])
             binding.attributes.binding.setLocalForFabric([{ fabricIndex: FabricIndex(1) }], fabric);
-            expect(binding.getBindingAttribute(fabric, true)).toEqual([])
+            expect(binding.getBindingAttribute(fabric)).toEqual([])
             binding.setBindingAttribute([{ fabricIndex: FabricIndex(1) }], fabric);
 
             expect(getScopedClusterDataValueCalledCounter).toBe(4)
