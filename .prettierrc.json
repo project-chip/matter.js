@@ -8,5 +8,8 @@
     "endOfLine": "lf",
     "bracketSpacing": true,
     "arrowParens": "avoid",
-    "quoteProps": "as-needed"
+    "quoteProps": "as-needed",
+    "plugins": [
+        "prettier-plugin-organize-imports"
+    ]
 }
