@@ -193,13 +193,13 @@ export type OperationalInstanceData = {
 export interface InstanceBroadcaster {
 
     /** Set a commissionable mode and details to announce a commissionable device. */
-    setCommissionMode(mode: number, deviceData: CommissioningModeInstanceData): void;
+    setCommissionMode(mode: number, deviceData: CommissioningModeInstanceData): Promise<void>;
 
     /** Set operational details to Announce an operational device which is already commissioned. */
-    setFabrics(fabrics: Fabric[]): void;
+    setFabrics(fabrics: Fabric[]): Promise<void>;
 
     /** Set commissioner details to announce a commissioner service for User directed commissioning (UDC). */
-    setCommissionerInfo(commissionerData: CommissionerInstanceData): void;
+    setCommissionerInfo(commissionerData: CommissionerInstanceData): Promise<void>;
 
     /** Send out announcements for this instance. */
     announce(): Promise<void>;

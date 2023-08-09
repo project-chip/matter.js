@@ -23,7 +23,9 @@ import {
 } from "@project-chip/matter.js/interaction";
 import { MessageExchange } from "@project-chip/matter.js/protocol";
 import { Endpoint, DeviceTypeDefinition, DeviceClasses } from "@project-chip/matter.js/device";
-import { FabricId, FabricIndex, NodeId, VendorId, TlvFabricIndex } from "@project-chip/matter.js/datatype";
+import {
+    FabricId, FabricIndex, NodeId, VendorId, TlvFabricIndex, EndpointNumber, ClusterId, AttributeId, CommandId
+} from "@project-chip/matter.js/datatype";
 import {
     TlvString, TlvUInt8, TlvNoArguments, TlvArray, TlvField, TlvObject, TlvNullable, TlvOptionalField
 } from "@project-chip/matter.js/tlv";
@@ -44,13 +46,13 @@ const READ_REQUEST: ReadRequest = {
     interactionModelRevision: 1,
     isFabricFiltered: true,
     attributeRequests: [
-        { endpointId: 0, clusterId: 0x28, attributeId: 2 },
-        { endpointId: 0, clusterId: 0x28, attributeId: 4 },
-        { endpointId: 0, clusterId: 0x28, attributeId: 400 }, // unsupported attribute
-        { endpointId: 0, clusterId: 0x99, attributeId: 4 }, // unsupported cluster
-        { endpointId: 1, clusterId: 0x28, attributeId: 1 }, // unsupported endpoint
-        { endpointId: undefined, clusterId: 0x28, attributeId: 3 },
-        { endpointId: undefined, clusterId: 0x99, attributeId: 3 }, // ignore
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(2) },
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(4) },
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(400) }, // unsupported attribute
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), attributeId: AttributeId(4) }, // unsupported cluster
+        { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), attributeId: AttributeId(1) }, // unsupported endpoint
+        { endpointId: undefined, clusterId: ClusterId(0x28), attributeId: AttributeId(3) },
+        { endpointId: undefined, clusterId: ClusterId(0x99), attributeId: AttributeId(3) }, // ignore
     ],
 };
 
@@ -61,39 +63,39 @@ const READ_RESPONSE: DataReport = {
     attributeReports: [
         {
             attributeData: {
-                path: { endpointId: 0, clusterId: 0x28, attributeId: 2 },
+                path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(2) },
                 data: TlvUInt8.encodeTlv(1),
                 dataVersion: 0,
             }
         },
         {
             attributeData: {
-                path: { endpointId: 0, clusterId: 0x28, attributeId: 4 },
+                path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(4) },
                 data: TlvUInt8.encodeTlv(2),
                 dataVersion: 0,
             }
         },
         {
             attributeStatus: {
-                path: { endpointId: 0, clusterId: 0x28, attributeId: 400 },
+                path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(400) },
                 status: { status: 134 },
             }
         },
         {
             attributeStatus: {
-                path: { endpointId: 0, clusterId: 0x99, attributeId: 4 },
+                path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), attributeId: AttributeId(4) },
                 status: { status: 195 },
             }
         },
         {
             attributeStatus: {
-                path: { endpointId: 1, clusterId: 0x28, attributeId: 1 },
+                path: { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), attributeId: AttributeId(1) },
                 status: { status: 127 },
             }
         },
         {
             attributeData: {
-                path: { endpointId: 0, clusterId: 0x28, attributeId: 3 },
+                path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(3) },
                 data: TlvString.encodeTlv("product"),
                 dataVersion: 0,
             }
@@ -107,22 +109,22 @@ const WRITE_REQUEST: WriteRequest = {
     timedRequest: false,
     writeRequests: [
         {
-            path: { endpointId: 0, clusterId: 0x28, attributeId: 100 },
+            path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(100) },
             data: TlvUInt8.encodeTlv(3),
             dataVersion: 0,
         },
         {
-            path: { endpointId: 0, clusterId: 0x99, attributeId: 4 },
+            path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), attributeId: AttributeId(4) },
             data: TlvUInt8.encodeTlv(3),
             dataVersion: 0,
         },
         {
-            path: { endpointId: 1, clusterId: 0x28, attributeId: 4 },
+            path: { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), attributeId: AttributeId(4) },
             data: TlvUInt8.encodeTlv(3),
             dataVersion: 0,
         },
         {
-            path: { endpointId: 0, clusterId: 0x28, attributeId: 5 },
+            path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(5) },
             data: TlvString.encodeTlv("test"),
             dataVersion: 0,
         },
@@ -134,16 +136,16 @@ const WRITE_RESPONSE: WriteResponse = {
     interactionModelRevision: 1,
     writeResponses: [
         {
-            path: { attributeId: 100, clusterId: 40, endpointId: 0 }, status: { status: 134 }
+            path: { attributeId: AttributeId(100), clusterId: ClusterId(40), endpointId: EndpointNumber(0) }, status: { status: 134 }
         },
         {
-            path: { attributeId: 4, clusterId: 0x99, endpointId: 0 }, status: { status: 195 }
+            path: { attributeId: AttributeId(4), clusterId: ClusterId(0x99), endpointId: EndpointNumber(0) }, status: { status: 195 }
         },
         {
-            path: { attributeId: 4, clusterId: 40, endpointId: 1 }, status: { status: 127 }
+            path: { attributeId: AttributeId(4), clusterId: ClusterId(40), endpointId: EndpointNumber(1) }, status: { status: 127 }
         },
         {
-            path: { attributeId: 5, clusterId: 40, endpointId: 0 }, status: { status: 0 }
+            path: { attributeId: AttributeId(5), clusterId: ClusterId(40), endpointId: EndpointNumber(0) }, status: { status: 0 }
         }
     ]
 };
@@ -154,17 +156,17 @@ const MASS_WRITE_REQUEST: WriteRequest = {
     timedRequest: false,
     writeRequests: [
         {
-            path: { endpointId: 0, clusterId: 0x28 },
+            path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28) },
             data: TlvString.encodeTlv("test"),
             dataVersion: 0,
         },
         {
-            path: { endpointId: 0, clusterId: 0x99 },
+            path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99) },
             data: TlvString.encodeTlv("test"),
             dataVersion: 0,
         },
         {
-            path: { endpointId: 1, clusterId: 0x28 },
+            path: { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28) },
             data: TlvString.encodeTlv("test"),
             dataVersion: 0,
         }
@@ -176,13 +178,13 @@ const MASS_WRITE_RESPONSE: WriteResponse = {
     interactionModelRevision: 1,
     writeResponses: [
         {
-            path: { attributeId: 5, clusterId: 40, endpointId: 0 }, status: { status: 0 }
+            path: { attributeId: AttributeId(5), clusterId: ClusterId(40), endpointId: EndpointNumber(0) }, status: { status: 0 }
         },
         {
-            path: { attributeId: 6, clusterId: 40, endpointId: 0 }, status: { status: 0 }
+            path: { attributeId: AttributeId(6), clusterId: ClusterId(40), endpointId: EndpointNumber(0) }, status: { status: 0 }
         },
         {
-            path: { attributeId: 16, clusterId: 40, endpointId: 0 }, status: { status: 0 }
+            path: { attributeId: AttributeId(16), clusterId: ClusterId(40), endpointId: EndpointNumber(0) }, status: { status: 0 }
         }
     ]
 };
@@ -201,12 +203,12 @@ const CHUNKED_ARRAY_WRITE_REQUEST: WriteRequest = {
     timedRequest: false,
     writeRequests: [
         {
-            path: { endpointId: 0, clusterId: 0x1f, attributeId: 0 },
+            path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0) },
             data: TlvArray(TlvAclTestSchema).encodeTlv([]),
             dataVersion: 0,
         },
         {
-            path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: null },
+            path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0), listIndex: null },
             data: TlvAclTestSchema.encodeTlv({
                 privilege: 1,
                 authMode: 1,
@@ -216,7 +218,7 @@ const CHUNKED_ARRAY_WRITE_REQUEST: WriteRequest = {
             dataVersion: 0,
         },
         {
-            path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: null },
+            path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0), listIndex: null },
             data: TlvAclTestSchema.encodeTlv({
                 privilege: 1,
                 authMode: 0,
@@ -227,13 +229,13 @@ const CHUNKED_ARRAY_WRITE_REQUEST: WriteRequest = {
             dataVersion: 0,
         },
         {
-            path: { endpointId: 0, clusterId: 0x1f, attributeId: 0, listIndex: null },
+            path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0), listIndex: null },
             data: TlvAclTestSchema.encodeTlv({
                 privilege: 1,
                 authMode: 2,
                 subjects: null,
                 targets: null,
-                fabricIndex: new FabricIndex(2),
+                fabricIndex: FabricIndex(2),
             }),
             dataVersion: 0,
         },
@@ -245,7 +247,7 @@ const CHUNKED_ARRAY_WRITE_RESPONSE: WriteResponse = {
     interactionModelRevision: 1,
     writeResponses: [
         {
-            path: { attributeId: 0, clusterId: 31, endpointId: 0 }, status: { status: 0 }
+            path: { attributeId: AttributeId(0), clusterId: ClusterId(31), endpointId: EndpointNumber(0) }, status: { status: 0 }
         }
     ]
 };
@@ -257,9 +259,9 @@ const INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS: InvokeRequest = {
     invokeRequests: [
         {
             commandPath: {
-                endpointId: 0,
-                clusterId: 6,
-                commandId: 1,
+                endpointId: EndpointNumber(0),
+                clusterId: ClusterId(6),
+                commandId: CommandId(1),
             },
             commandFields: TlvNoArguments.encodeTlv(undefined),
         }
@@ -272,7 +274,7 @@ const INVOKE_COMMAND_REQUEST_WITH_NO_ARGS: InvokeRequest = {
     timedRequest: false,
     invokeRequests: [
         {
-            commandPath: { endpointId: 0, clusterId: 6, commandId: 1 },
+            commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(1) },
         }
     ]
 };
@@ -283,22 +285,22 @@ const INVOKE_COMMAND_REQUEST_MULTI: InvokeRequest = {
     timedRequest: false,
     invokeRequests: [
         {
-            commandPath: { endpointId: 0, clusterId: 6, commandId: 1 },
+            commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(1) },
         },
         {
-            commandPath: { endpointId: undefined, clusterId: 6, commandId: 0 },
+            commandPath: { endpointId: undefined, clusterId: ClusterId(6), commandId: CommandId(0) },
         },
         {
-            commandPath: { endpointId: undefined, clusterId: 6, commandId: 99 },
+            commandPath: { endpointId: undefined, clusterId: ClusterId(6), commandId: CommandId(99) },
         },
         {
-            commandPath: { endpointId: 0, clusterId: 6, commandId: 100 },
+            commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(100) },
         },
         {
-            commandPath: { endpointId: 0, clusterId: 90, commandId: 1 },
+            commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(90), commandId: CommandId(1) },
         },
         {
-            commandPath: { endpointId: 99, clusterId: 6, commandId: 1 },
+            commandPath: { endpointId: EndpointNumber(99), clusterId: ClusterId(6), commandId: CommandId(1) },
         }
     ]
 };
@@ -309,7 +311,7 @@ const INVOKE_COMMAND_REQUEST_INVALID: InvokeRequest = {
     timedRequest: false,
     invokeRequests: [
         {
-            commandPath: { endpointId: 0, clusterId: 6, commandId: 10 },
+            commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(10) },
         }
     ]
 };
@@ -320,7 +322,7 @@ const INVOKE_COMMAND_RESPONSE: InvokeResponse = {
     invokeResponses: [
         {
             status: {
-                commandPath: { clusterId: 6, commandId: 1, endpointId: 0 }, status: { status: 0 }
+                commandPath: { clusterId: ClusterId(6), commandId: CommandId(1), endpointId: EndpointNumber(0) }, status: { status: 0 }
             }
         }
     ]
@@ -332,7 +334,7 @@ const INVOKE_COMMAND_RESPONSE_INVALID: InvokeResponse = {
     invokeResponses: [
         {
             status: {
-                commandPath: { clusterId: 6, commandId: 10, endpointId: 0 }, status: { status: 0x81 }
+                commandPath: { clusterId: ClusterId(6), commandId: CommandId(10), endpointId: EndpointNumber(0) }, status: { status: 0x81 }
             }
         }
     ]
@@ -344,27 +346,27 @@ const INVOKE_COMMAND_RESPONSE_MULTI: InvokeResponse = {
     invokeResponses: [
         {
             status: {
-                commandPath: { clusterId: 6, commandId: 100, endpointId: 0 }, status: { status: 129 }
+                commandPath: { clusterId: ClusterId(6), commandId: CommandId(100), endpointId: EndpointNumber(0) }, status: { status: 129 }
             }
         },
         {
             status: {
-                commandPath: { clusterId: 90, commandId: 1, endpointId: 0 }, status: { status: 195 }
+                commandPath: { clusterId: ClusterId(90), commandId: CommandId(1), endpointId: EndpointNumber(0) }, status: { status: 195 }
             }
         },
         {
             status: {
-                commandPath: { clusterId: 6, commandId: 1, endpointId: 99 }, status: { status: 127 }
+                commandPath: { clusterId: ClusterId(6), commandId: CommandId(1), endpointId: EndpointNumber(99) }, status: { status: 127 }
             }
         },
         {
             status: {
-                commandPath: { clusterId: 6, commandId: 1, endpointId: 0 }, status: { status: 0 }
+                commandPath: { clusterId: ClusterId(6), commandId: CommandId(1), endpointId: EndpointNumber(0) }, status: { status: 0 }
             }
         },
         {
             status: {
-                commandPath: { clusterId: 6, commandId: 0, endpointId: 0 }, status: { status: 0 }
+                commandPath: { clusterId: ClusterId(6), commandId: CommandId(0), endpointId: EndpointNumber(0) }, status: { status: 0 }
             }
         },
     ]
@@ -377,11 +379,11 @@ describe("InteractionProtocol", () => {
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
             const storageContext = storageManager.createContext("test");
-            const endpoint = new Endpoint([DummyTestDevice], { endpointId: 0 });
+            const endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
             endpoint.addClusterServer(ClusterServer(BasicInformationCluster, {
                 dataModelRevision: 1,
                 vendorName: "vendor",
-                vendorId: new VendorId(1),
+                vendorId: VendorId(1),
                 productName: "product",
                 productId: 2,
                 nodeLabel: "",
@@ -412,7 +414,7 @@ describe("InteractionProtocol", () => {
             const basicCluster = ClusterServer(BasicInformationCluster, {
                 dataModelRevision: 1,
                 vendorName: "vendor",
-                vendorId: new VendorId(1),
+                vendorId: VendorId(1),
                 productName: "product",
                 productId: 2,
                 nodeLabel: "",
@@ -433,7 +435,7 @@ describe("InteractionProtocol", () => {
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
             const storageContext = storageManager.createContext("test");
-            const endpoint = new Endpoint([DummyTestDevice], { endpointId: 0 });
+            const endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
             endpoint.addClusterServer(basicCluster);
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
@@ -459,13 +461,13 @@ describe("InteractionProtocol", () => {
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
             const storageContext = storageManager.createContext("test");
-            const endpoint = new Endpoint([DummyTestDevice], { endpointId: 0 });
+            const endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
             endpoint.addClusterServer(accessControlCluster);
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ByteArray.fromHex("00"), ByteArray.fromHex("00"), KEY, new VendorId(1), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), "");
-            const testSession = await SecureSession.create({ getFabrics: () => [] } as any, 1, testFabric, new NodeId(BigInt(1)), 1, ByteArray.fromHex("00"), ByteArray.fromHex("00"), false, false, () => {/* nothing */ }, 1000, 1000);
+            const testFabric = new Fabric(FabricIndex(1), FabricId(1), NodeId(BigInt(1)), NodeId(1), ByteArray.fromHex("00"), ByteArray.fromHex("00"), KEY, VendorId(1), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), "");
+            const testSession = await SecureSession.create({ getFabrics: () => [] } as any, 1, testFabric, NodeId(1), 1, ByteArray.fromHex("00"), ByteArray.fromHex("00"), false, false, () => {/* nothing */ }, 1000, 1000);
             const result = interactionProtocol.handleWriteRequest(({ channel: { name: "test" }, session: testSession }) as unknown as MessageExchange<any>, CHUNKED_ARRAY_WRITE_REQUEST);
 
             assert.deepEqual(result, CHUNKED_ARRAY_WRITE_RESPONSE);
@@ -475,21 +477,21 @@ describe("InteractionProtocol", () => {
                     authMode: 1,
                     subjects: null,
                     targets: null,
-                    fabricIndex: new FabricIndex(1), // Set from session
+                    fabricIndex: FabricIndex(1), // Set from session
                 },
                 {
                     privilege: 1,
                     authMode: 0,
                     subjects: null,
                     targets: null,
-                    fabricIndex: new FabricIndex(0), // existing value 0
+                    fabricIndex: FabricIndex(0), // existing value 0
                 },
                 {
                     privilege: 1,
                     authMode: 2,
                     subjects: null,
                     targets: null,
-                    fabricIndex: new FabricIndex(2), // existing value 2
+                    fabricIndex: FabricIndex(2), // existing value 2
                 }
             ]);
         });
@@ -498,7 +500,7 @@ describe("InteractionProtocol", () => {
             const basicCluster = ClusterServer(BasicInformationCluster, {
                 dataModelRevision: 1,
                 vendorName: "vendor",
-                vendorId: new VendorId(1),
+                vendorId: VendorId(1),
                 productName: "product",
                 productId: 2,
                 nodeLabel: "",
@@ -519,7 +521,7 @@ describe("InteractionProtocol", () => {
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
             const storageContext = storageManager.createContext("test");
-            const endpoint = new Endpoint([DummyTestDevice], { endpointId: 0 });
+            const endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
             endpoint.addClusterServer(basicCluster);
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
@@ -554,7 +556,7 @@ describe("InteractionProtocol", () => {
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
             const storageContext = storageManager.createContext("test");
-            const endpoint = new Endpoint([DummyTestDevice], { endpointId: 0 });
+            const endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
             endpoint.addClusterServer(onOffCluster);
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
@@ -585,7 +587,7 @@ describe("InteractionProtocol", () => {
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
             const storageContext = storageManager.createContext("test");
-            const endpoint = new Endpoint([DummyTestDevice], { endpointId: 0 });
+            const endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
             endpoint.addClusterServer(onOffCluster);
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
@@ -615,7 +617,7 @@ describe("InteractionProtocol", () => {
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
             const storageContext = storageManager.createContext("test");
-            const endpoint = new Endpoint([DummyTestDevice], { endpointId: 0 });
+            const endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
             endpoint.addClusterServer(onOffCluster);
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
@@ -649,7 +651,7 @@ describe("InteractionProtocol", () => {
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
             const storageContext = storageManager.createContext("test");
-            const endpoint = new Endpoint([DummyTestDevice], { endpointId: 0 });
+            const endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
             endpoint.addClusterServer(onOffCluster);
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);

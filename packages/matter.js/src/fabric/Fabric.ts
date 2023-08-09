@@ -16,21 +16,20 @@ import { SecureSession } from "../session/SecureSession.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { SupportedStorageTypes } from "../storage/StringifyTools.js";
 import { DataWriter } from "../util/DataWriter.js";
-import { toBigInt } from "../util/Number.js";
 import { InternalError } from "../common/MatterError.js";
 
 const COMPRESSED_FABRIC_ID_INFO = ByteArray.fromString("CompressedFabric");
 const GROUP_SECURITY_INFO = ByteArray.fromString("GroupKey v1.0");
 
 export type FabricJsonObject = {
-    fabricIndex: number;
-    fabricId: bigint;
-    nodeId: bigint;
-    rootNodeId: bigint;
+    fabricIndex: FabricIndex;
+    fabricId: FabricId;
+    nodeId: NodeId;
+    rootNodeId: NodeId;
     operationalId: ByteArray;
     rootPublicKey: ByteArray;
     keyPair: BinaryKeyPair;
-    rootVendorId: number;
+    rootVendorId: VendorId;
     rootCert: ByteArray;
     identityProtectionKey: ByteArray;
     operationalIdentityProtectionKey: ByteArray;
@@ -71,14 +70,14 @@ export class Fabric {
 
     toStorageObject(): FabricJsonObject {
         return {
-            fabricIndex: this.fabricIndex.index,
-            fabricId: this.fabricId.id,
-            nodeId: this.nodeId.id,
-            rootNodeId: this.rootNodeId.id,
+            fabricIndex: this.fabricIndex,
+            fabricId: this.fabricId,
+            nodeId: this.nodeId,
+            rootNodeId: this.rootNodeId,
             operationalId: this.operationalId,
             rootPublicKey: this.rootPublicKey,
             keyPair: this.keyPair.keyPair,
-            rootVendorId: this.rootVendorId.id,
+            rootVendorId: this.rootVendorId,
             rootCert: this.rootCert,
             identityProtectionKey: this.identityProtectionKey,
             operationalIdentityProtectionKey: this.operationalIdentityProtectionKey,
@@ -91,14 +90,14 @@ export class Fabric {
 
     static createFromStorageObject(fabricObject: FabricJsonObject): Fabric {
         return new Fabric(
-            new FabricIndex(fabricObject.fabricIndex),
-            new FabricId(fabricObject.fabricId),
-            new NodeId(fabricObject.nodeId),
-            new NodeId(fabricObject.rootNodeId),
+            fabricObject.fabricIndex,
+            fabricObject.fabricId,
+            fabricObject.nodeId,
+            fabricObject.rootNodeId,
             fabricObject.operationalId,
             fabricObject.rootPublicKey,
             PrivateKey(fabricObject.keyPair),
-            new VendorId(fabricObject.rootVendorId),
+            fabricObject.rootVendorId,
             fabricObject.rootCert,
             fabricObject.identityProtectionKey,
             fabricObject.operationalIdentityProtectionKey,
@@ -130,8 +129,8 @@ export class Fabric {
         const writer = new DataWriter(Endian.Little);
         writer.writeByteArray(random);
         writer.writeByteArray(this.rootPublicKey);
-        writer.writeUInt64(this.fabricId.id);
-        writer.writeUInt64(nodeId.id);
+        writer.writeUInt64(this.fabricId);
+        writer.writeUInt64(nodeId);
         return Crypto.hmac(this.operationalIdentityProtectionKey, writer.toByteArray());
     }
 
@@ -237,7 +236,7 @@ export class FabricBuilder {
     setOperationalCert(operationalCert: ByteArray) {
         this.operationalCert = operationalCert;
         const { subject: { nodeId, fabricId } } = TlvOperationalCertificate.decode(operationalCert);
-        this.fabricId = new FabricId(toBigInt(fabricId));
+        this.fabricId = FabricId(fabricId);
         this.nodeId = nodeId;
         return this;
     }
@@ -270,7 +269,7 @@ export class FabricBuilder {
         if (this.operationalCert === undefined || this.fabricId === undefined || this.nodeId === undefined) throw new InternalError("operationalCert needs to be set");
 
         const saltWriter = new DataWriter(Endian.Big);
-        saltWriter.writeUInt64(this.fabricId.id);
+        saltWriter.writeUInt64(this.fabricId);
         const operationalId = await Crypto.hkdf(this.rootPublicKey.slice(1), saltWriter.toByteArray(), COMPRESSED_FABRIC_ID_INFO, 8);
 
         return new Fabric(

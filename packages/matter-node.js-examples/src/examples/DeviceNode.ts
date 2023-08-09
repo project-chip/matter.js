@@ -20,13 +20,13 @@ import {
 } from "@project-chip/matter-node.js/util";
 import { Time } from "@project-chip/matter-node.js/time";
 import { OnOffLightDevice, OnOffPluginUnitDevice } from "@project-chip/matter-node.js/device";
-import { VendorId } from "@project-chip/matter-node.js/datatype";
 import { Logger } from "@project-chip/matter-node.js/log";
 import { StorageManager, StorageBackendDisk } from "@project-chip/matter-node.js/storage";
 import { Ble } from "@project-chip/matter-node.js/ble";
 import { BleNode } from "@project-chip/matter-node-ble.js/ble";
 import { NetworkCommissioning, GeneralCommissioningCluster } from "@project-chip/matter-node.js/cluster";
 import { ClusterServer } from "@project-chip/matter-node.js/interaction";
+import { DeviceTypeId, VendorId } from "@project-chip/matter.js/datatype";
 
 if (hasParameter("ble")) {
     // Initialize Ble
@@ -80,7 +80,7 @@ class Device {
         const passcode = getIntParameter("passcode") ?? deviceStorage.get("passcode", 20202021);
         const discriminator = getIntParameter("discriminator") ?? deviceStorage.get("discriminator", 3840);
         // product name / id and vendor id should match what is in the device certificate
-        const vendorId = new VendorId(getIntParameter("vendorid") ?? deviceStorage.get("vendorid", 0xFFF1));
+        const vendorId = getIntParameter("vendorid") ?? deviceStorage.get("vendorid", 0xFFF1);
         const productName = `node-matter OnOff ${isSocket ? "Socket" : "Light"}`;
         const productId = getIntParameter("productid") ?? deviceStorage.get("productid", 0x8000);
 
@@ -91,7 +91,7 @@ class Device {
 
         deviceStorage.set("passcode", passcode);
         deviceStorage.set("discriminator", discriminator);
-        deviceStorage.set("vendorid", vendorId.id);
+        deviceStorage.set("vendorid", vendorId);
         deviceStorage.set("productid", productId);
         deviceStorage.set("isSocket", isSocket);
         deviceStorage.set("uniqueid", uniqueId);
@@ -131,12 +131,12 @@ class Device {
         const commissioningServer = new CommissioningServer({
             port,
             deviceName,
-            deviceType: onOffDevice.deviceType,
+            deviceType: DeviceTypeId(onOffDevice.deviceType),
             passcode,
             discriminator,
             basicInformation: {
                 vendorName,
-                vendorId,
+                vendorId: VendorId(vendorId),
                 nodeLabel: productName,
                 productName,
                 productLabel: productName,

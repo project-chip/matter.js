@@ -55,8 +55,8 @@ const codecVector: CodecVector<TypeFromSchema<typeof schema>, string> = {
             ],
             optionalString: "test",
             nullableBoolean: true,
-            optionalWrapperBigInt: new FabricId(BigInt(1)),
-            optionalWrapperNumber: new FabricIndex(2),
+            optionalWrapperBigInt: FabricId(BigInt(1)),
+            optionalWrapperNumber: FabricIndex(2),
         },
         encoded: "15360115240101300203000000181524010230020399999918182c020474657374290324040124050218"
     },
@@ -135,7 +135,7 @@ const codecErrorVector: CodecErrorVector<TypeFromSchema<typeof schema>> = {
                 },
             ],
             nullableBoolean: null,
-            optionalWrapperNumber: new FabricIndex(0x12345678),
+            optionalWrapperNumber: FabricIndex(0x12345678),
         },
         expectedError: "Invalid value: 305419896 is above the maximum, 254."
     },

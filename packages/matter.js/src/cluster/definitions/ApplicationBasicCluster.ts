@@ -102,7 +102,7 @@ export namespace ApplicationBasic {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.3.3.2
              */
-            vendorId: OptionalFixedAttribute(0x1, TlvVendorId, { default: new VendorId(0) }),
+            vendorId: OptionalFixedAttribute(0x1, TlvVendorId, { default: VendorId(0) }),
 
             /**
              * This attribute shall specify a human readable (displayable) name of the Content App assigned by the

@@ -16,6 +16,7 @@ import { StatusResponseError } from "../../protocol/interaction/InteractionMesse
 import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
 import { ImplementationError, InternalError, MatterError, ValidationError } from "../../common/MatterError.js";
 import { Globals } from "../../model/index.js";
+import { AttributeId } from "../../datatype/AttributeId.js";
 
 /**
  * Thrown when an operation cannot complete because fabric information is
@@ -37,7 +38,7 @@ export abstract class BaseAttributeServer<T> {
     protected endpoint?: Endpoint;
 
     constructor(
-        readonly id: number,
+        readonly id: AttributeId,
         readonly name: string,
         readonly schema: TlvSchema<T>,
         readonly isWritable: boolean,
@@ -79,7 +80,7 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
     protected readonly getter: (session?: Session<MatterDevice>, endpoint?: Endpoint, isFabricFiltered?: boolean) => T;
 
     constructor(
-        id: number,
+        id: AttributeId,
         name: string,
         schema: TlvSchema<T>,
         isWritable: boolean,
@@ -205,7 +206,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
     protected readonly validator: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => void;
 
     constructor(
-        id: number,
+        id: AttributeId,
         name: string,
         schema: TlvSchema<T>,
         isWritable: boolean,
@@ -402,7 +403,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T>{
     private readonly isCustomSetter: boolean;
 
     constructor(
-        id: number,
+        id: AttributeId,
         name: string,
         schema: TlvSchema<T>,
         isWritable: boolean,

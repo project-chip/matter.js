@@ -20,9 +20,9 @@ import { Fabric } from "../fabric/Fabric.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { isIPv6 } from "../util/Ip.js";
 import { Logger } from "../log/Logger.js";
-import { VendorId } from "../datatype/VendorId.js";
 import { ServerAddress, ServerAddressIp } from "../common/ServerAddress.js";
 import { ImplementationError } from "../common/MatterError.js";
+import { VendorId } from "../datatype/VendorId.js";
 
 const logger = Logger.get("MdnsScanner");
 
@@ -257,7 +257,7 @@ export class MdnsScanner implements Scanner {
 
     private createOperationalMatterQName(operationalId: ByteArray, nodeId: NodeId) {
         const operationalIdString = operationalId.toHex().toUpperCase();
-        return getDeviceMatterQname(operationalIdString, nodeId.toString());
+        return getDeviceMatterQname(operationalIdString, NodeId.toHexString(nodeId));
     }
 
     /**
@@ -306,7 +306,7 @@ export class MdnsScanner implements Scanner {
             foundRecords.push(...storedRecords.filter(({ SD }) => SD === identifier.shortDiscriminator));
         }
         else if ("vendorId" in identifier) {
-            foundRecords.push(...storedRecords.filter(({ V }) => V === identifier.vendorId.id));
+            foundRecords.push(...storedRecords.filter(({ V }) => V === identifier.vendorId));
         }
         else if ("deviceType" in identifier) {
             foundRecords.push(...storedRecords.filter(({ DT }) => DT === identifier.deviceType));
@@ -384,7 +384,7 @@ export class MdnsScanner implements Scanner {
         }
 
         if (record.V !== undefined) {
-            const vendorIdQueryId = this.buildCommissionableQueryIdentifier({ vendorId: new VendorId(record.V) });
+            const vendorIdQueryId = this.buildCommissionableQueryIdentifier({ vendorId: VendorId(record.V) });
             if (this.activeAnnounceQueries.has(vendorIdQueryId)) {
                 return vendorIdQueryId;
             }

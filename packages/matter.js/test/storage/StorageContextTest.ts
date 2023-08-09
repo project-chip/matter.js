@@ -10,6 +10,8 @@ import { SupportedStorageTypes } from "../../src/storage/StringifyTools.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 import { StorageManager } from "../../src/storage/StorageManager.js";
 import { StorageError } from "../../src/storage/Storage.js";
+import { NodeId } from "../../src/datatype/NodeId.js";
+import { AttributeId } from "../../src/datatype/AttributeId.js";
 
 type TestVector = { [testName: string]: { key: string, input: SupportedStorageTypes } };
 
@@ -17,6 +19,8 @@ const validateStorageTestVector: TestVector = {
     "store and retrieve string": { key: "stringKey", input: "value" },
     "store and retrieve number": { key: "numberKey", input: 1234 },
     "store and retrieve boolean": { key: "booleanKey", input: true },
+    "store and retrieve AttributeId": { key: "attributeIdKey", input: AttributeId(123) },
+    "store and retrieve NodeId": { key: "nodeIdKey", input: NodeId(123456789) },
     "store and retrieve bigint": { key: "bigintKey", input: BigInt(123456789) },
     "store and retrieve ByteArray": { key: "ByteArrayKey", input: ByteArray.fromHex("010203040506070809") },
     "store and retrieve array of string": { key: "stringArrayKey", input: ["1", "2", "3"] },

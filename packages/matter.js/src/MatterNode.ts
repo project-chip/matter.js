@@ -13,6 +13,7 @@ import { ClusterServerObj } from "./cluster/server/ClusterServer.js";
 import { InteractionClient } from "./protocol/interaction/InteractionClient.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js"
+import { EndpointNumber } from "./datatype/EndpointNumber.js";
 
 /**
  * Abstract base class that represents a node in the matter ecosystem.
@@ -86,7 +87,7 @@ export abstract class MatterNode {
      * @param endpointId Endpoint ID of the child endpoint to get
      * @protected
      */
-    protected getChildEndpoint(endpointId: number): Endpoint | undefined {
+    protected getChildEndpoint(endpointId: EndpointNumber): Endpoint | undefined {
         return this.rootEndpoint.getChildEndpoint(endpointId);
     }
 

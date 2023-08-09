@@ -15,6 +15,7 @@ import { SECURE_CHANNEL_PROTOCOL_ID } from "../../protocol/securechannel/SecureC
 import { ByteArray } from "../../util/ByteArray.js";
 import { Logger } from "../../log/Logger.js";
 import { PublicKey } from "../../crypto/Key.js";
+import { NodeId } from "../../datatype/NodeId.js";
 
 const logger = Logger.get("CaseServer");
 
@@ -69,7 +70,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
                 throw error;
             }
 
-            logger.info(`session ${secureSession.getId()} resumed with ${messenger.getChannelName()} for Fabric ${fabric.nodeId.id.toString(16)}(index ${fabric.fabricIndex.index}) and PeerNode ${peerNodeId.id.toString(16)}`);
+            logger.info(`session ${secureSession.getId()} resumed with ${messenger.getChannelName()} for Fabric ${NodeId.toHexString(fabric.nodeId)}(index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(peerNodeId)}`);
             resumptionRecord.resumptionId = resumptionId; /* Update the ID */
 
             // Wait for success on the peer side
@@ -104,7 +105,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             // All good! Create secure session
             const secureSessionSalt = ByteArray.concat(operationalIdentityProtectionKey, Crypto.hash([sigma1Bytes, sigma2Bytes, sigma3Bytes]));
             const secureSession = await server.createSecureSession(sessionId, fabric, peerNodeId, peerSessionId, sharedSecret, secureSessionSalt, false, false, mrpParams?.idleRetransTimeoutMs, mrpParams?.activeRetransTimeoutMs);
-            logger.info(`session ${secureSession.getId()} created with ${messenger.getChannelName()} for Fabric ${fabric.nodeId.id.toString(16)}(index ${fabric.fabricIndex.index}) and PeerNode ${peerNodeId.id.toString(16)}`);
+            logger.info(`session ${secureSession.getId()} created with ${messenger.getChannelName()} for Fabric ${NodeId.toHexString(fabric.nodeId)}(index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(peerNodeId)}`);
             await messenger.sendSuccess();
 
             resumptionRecord = { peerNodeId, fabric, sharedSecret, resumptionId };

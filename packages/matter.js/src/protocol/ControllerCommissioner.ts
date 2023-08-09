@@ -28,6 +28,7 @@ import { Fabric } from "../fabric/Fabric.js";
 import { TlvCertSigningRequest } from "../cluster/server/OperationalCredentialsServer.js";
 import { CertificateManager } from "../certificate/CertificateManager.js";
 import { NodeId } from "../datatype/NodeId.js";
+import { FabricId } from "../datatype/FabricId.js";
 
 const logger = Logger.get("ControllerCommissioner");
 
@@ -45,7 +46,7 @@ export type CommissioningOptions = {
         networkName: string;
         operationalDataset: string;
     },
-    adminVendorId?: VendorId;
+    adminVendorId?: number;
 }
 
 /**
@@ -114,8 +115,8 @@ class RecoverableCommissioningError extends CommissioningError { }
 const DEFAULT_FAILSAFE_TIME_MS = 60000;
 
 // TODO Do not hard code them!
-const FABRIC_ID = BigInt(1); // TODO Random?
-const DEFAULT_ADMIN_VENDOR_ID = new VendorId(0xFFF1);
+const FABRIC_ID = FabricId(1); // TODO Random?
+const DEFAULT_ADMIN_VENDOR_ID = VendorId(0xFFF1);
 
 /**
  * Class to abstract the Device commission flow in a step wise way as defined in Specs. The specs are not 100%
@@ -147,7 +148,7 @@ export class ControllerCommissioner {
      */
     private getClusterClient<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
         cluster: Cluster<F, SF, A, C, E>,
-        endpointId = 0,
+        endpointId = EndpointNumber(0),
         isFeatureSpecific = false
     ): ClusterClientObj<F, A, C, E> {
         if (!isFeatureSpecific && endpointId === 0) {
@@ -465,7 +466,7 @@ export class ControllerCommissioner {
      * “DSTOffset Attribute”), respectively.
      */
     private async synchronizeTime() {
-        if (this.collectedCommissioningData.rootServerList !== undefined && this.collectedCommissioningData.rootServerList.find(clusterId => clusterId.id === TimeSyncCluster.id)) {
+        if (this.collectedCommissioningData.rootServerList !== undefined && this.collectedCommissioningData.rootServerList.find(clusterId => clusterId === TimeSyncCluster.id)) {
             logger.debug("TimeSync cluster is supported");
             // TODO: implement
         }
@@ -530,7 +531,7 @@ export class ControllerCommissioner {
             nocValue: peerOperationalCert,
             icacValue: new ByteArray(0),
             ipkValue: this.fabric.identityProtectionKey,
-            adminVendorId: this.commissioningOptions.adminVendorId ?? DEFAULT_ADMIN_VENDOR_ID,
+            adminVendorId: VendorId(this.commissioningOptions.adminVendorId ?? DEFAULT_ADMIN_VENDOR_ID),
             caseAdminSubject: peerNodeId,
         });
 
@@ -617,7 +618,7 @@ export class ControllerCommissioner {
         }
 
         logger.debug("Configuring WiFi network ...");
-        const networkCommissioningClusterClient = this.getClusterClient(NetworkCommissioning.Cluster.with("WiFiNetworkInterface"), 0, true);
+        const networkCommissioningClusterClient = this.getClusterClient(NetworkCommissioning.Cluster.with("WiFiNetworkInterface"), EndpointNumber(0), true);
         const ssid = ByteArray.fromString(this.commissioningOptions.wifiNetwork.wifiSsid);
         const credentials = ByteArray.fromString(this.commissioningOptions.wifiNetwork.wifiCredentials);
 
@@ -695,7 +696,7 @@ export class ControllerCommissioner {
         }
 
         logger.debug("Configuring Thread network ...");
-        const networkCommissioningClusterClient = this.getClusterClient(NetworkCommissioning.Cluster.with("ThreadNetworkInterface"), 0, true);
+        const networkCommissioningClusterClient = this.getClusterClient(NetworkCommissioning.Cluster.with("ThreadNetworkInterface"), EndpointNumber(0), true);
 
         const { networkingStatus, threadScanResults, debugText } = await networkCommissioningClusterClient.scanNetworks({ breadcrumb: this.lastBreadcrumb++ });
         if (networkingStatus !== NetworkCommissioning.NetworkCommissioningStatus.Success) {

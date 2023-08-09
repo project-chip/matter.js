@@ -125,21 +125,21 @@ describe("JsonConverter", () => {
 
         it("encode/decode object with matter.js datatypes", () => {
             const obj = {
-                attribute: new AttributeId(1),
-                cluster: new ClusterId(2),
-                command: new CommandId(3),
-                endpoint: new EndpointNumber(4),
-                event: new EventId(5),
-                fabric: new FabricId(BigInt(6)),
-                fabricIndex: new FabricIndex(7),
-                group: new GroupId(8),
-                node: new NodeId(BigInt(9)),
-                vendor: new VendorId(11)
+                attribute: AttributeId(1),
+                cluster: ClusterId(2),
+                command: CommandId(3),
+                endpoint: EndpointNumber(4),
+                event: EventId(5),
+                fabric: FabricId(BigInt(6)),
+                fabricIndex: FabricIndex(7),
+                group: GroupId(8),
+                node: NodeId(BigInt(9)),
+                vendor: VendorId(11)
             };
 
             const json = toJson(obj);
 
-            expect(json).toBe(`{"attribute":"{\\"__object__\\":\\"AttributeId\\",\\"__value__\\":1}","cluster":"{\\"__object__\\":\\"ClusterId\\",\\"__value__\\":2}","command":"{\\"__object__\\":\\"CommandId\\",\\"__value__\\":3}","endpoint":"{\\"__object__\\":\\"EndpointNumber\\",\\"__value__\\":4}","event":"{\\"__object__\\":\\"EventId\\",\\"__value__\\":5}","fabric":"{\\"__object__\\":\\"FabricId\\",\\"__value__\\":\\"6\\"}","fabricIndex":"{\\"__object__\\":\\"FabricIndex\\",\\"__value__\\":7}","group":"{\\"__object__\\":\\"GroupId\\",\\"__value__\\":8}","node":"{\\"__object__\\":\\"NodeId\\",\\"__value__\\":\\"9\\"}","vendor":"{\\"__object__\\":\\"VendorId\\",\\"__value__\\":11}"}`);
+            expect(json).toBe(`{"attribute":1,"cluster":2,"command":3,"endpoint":4,"event":5,"fabric":"{\\"__object__\\":\\"BigInt\\",\\"__value__\\":\\"6\\"}","fabricIndex":7,"group":8,"node":"{\\"__object__\\":\\"BigInt\\",\\"__value__\\":\\"9\\"}","vendor":11}`);
 
             const decodedObj = fromJson(json);
 

@@ -8,6 +8,9 @@ import { TypeFromSchema } from "../../../src/tlv/TlvSchema.js";
 import { normalizeAndDecodeEventData, normalizeEventData } from "../../../src/protocol/interaction/EventDataDecoder.js";
 import { BasicInformation } from "../../../src/cluster/definitions/BasicInformationCluster.js";
 import { TlvVoid } from "../../../src/tlv/TlvVoid.js";
+import { ClusterId } from "../../../src/datatype/ClusterId.js";
+import { EventId } from "../../../src/datatype/EventId.js";
+import { EndpointNumber } from "../../../src/datatype/EndpointNumber.js";
 
 describe("EventDataDecoder", () => {
 
@@ -15,14 +18,14 @@ describe("EventDataDecoder", () => {
         it("normalize data with all paths given for single event entries", () => {
             const data: TypeFromSchema<typeof TlvEventData>[] = [
                 {
-                    path: { endpointId: 0, clusterId: 0x28, eventId: 0 },
+                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0) },
                     eventNumber: 1,
                     priority: 1,
                     epochTimestamp: 0,
                     data: BasicInformation.TlvStartUpEvent.encodeTlv({ softwareVersion: 1 }),
                 },
                 {
-                    path: { endpointId: 0, clusterId: 0x28, eventId: 1 },
+                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(1) },
                     eventNumber: 2,
                     priority: 1,
                     epochTimestamp: 0,
@@ -34,14 +37,14 @@ describe("EventDataDecoder", () => {
 
             expect(normalized).toEqual([
                 [{
-                    path: { endpointId: 0, clusterId: 0x28, eventId: 0 },
+                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0) },
                     eventNumber: 1,
                     priority: 1,
                     epochTimestamp: 0,
                     data: BasicInformation.TlvStartUpEvent.encodeTlv({ softwareVersion: 1 }),
                 }],
                 [{
-                    path: { endpointId: 0, clusterId: 0x28, eventId: 1 },
+                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(1) },
                     eventNumber: 2,
                     priority: 1,
                     epochTimestamp: 0,
@@ -53,21 +56,21 @@ describe("EventDataDecoder", () => {
         it("normalize data with all paths given for multiple events", () => {
             const data: TypeFromSchema<typeof TlvEventData>[] = [
                 {
-                    path: { endpointId: 0, clusterId: 0x28, eventId: 0 },
+                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0) },
                     eventNumber: 1,
                     priority: 1,
                     epochTimestamp: 0,
                     data: BasicInformation.TlvStartUpEvent.encodeTlv({ softwareVersion: 1 }),
                 },
                 {
-                    path: { endpointId: 0, clusterId: 0x28, eventId: 1 },
+                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(1) },
                     eventNumber: 2,
                     priority: 1,
                     epochTimestamp: 0,
                     data: TlvVoid.encodeTlv(),
                 },
                 {
-                    path: { endpointId: 0, clusterId: 0x28, eventId: 0 },
+                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0) },
                     eventNumber: 3,
                     priority: 1,
                     epochTimestamp: 0,
@@ -111,7 +114,7 @@ describe("EventDataDecoder", () => {
         it("normalize and decode data with all paths given for single event entries", () => {
             const data: TypeFromSchema<typeof TlvEventData>[] = [
                 {
-                    path: { endpointId: 0, clusterId: 0x28, eventId: 0 },
+                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0) },
                     eventNumber: 1,
                     priority: 1,
                     epochTimestamp: 0,
@@ -121,7 +124,7 @@ describe("EventDataDecoder", () => {
                     data: BasicInformation.TlvStartUpEvent.encodeTlv({ softwareVersion: 1 }),
                 },
                 {
-                    path: { endpointId: 0, clusterId: 0x28, eventId: 1 },
+                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(1) },
                     eventNumber: 2,
                     priority: 1,
                     epochTimestamp: 0,
@@ -136,7 +139,7 @@ describe("EventDataDecoder", () => {
 
             expect(normalized).toEqual([
                 {
-                    path: { endpointId: 0, clusterId: 0x28, eventId: 0, nodeId: undefined, eventName: "startUp" },
+                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0), nodeId: undefined, eventName: "startUp" },
                     events: [{
                         eventNumber: 1,
                         priority: 1,
@@ -149,7 +152,7 @@ describe("EventDataDecoder", () => {
                     }],
                 },
                 {
-                    path: { endpointId: 0, clusterId: 0x28, eventId: 1, nodeId: undefined, eventName: "shutDown" },
+                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(1), nodeId: undefined, eventName: "shutDown" },
                     events: [{
                         eventNumber: 2,
                         priority: 1,
@@ -167,7 +170,7 @@ describe("EventDataDecoder", () => {
         it("normalize and decode data with all paths given for multiple events", () => {
             const data: TypeFromSchema<typeof TlvEventData>[] = [
                 {
-                    path: { endpointId: 0, clusterId: 0x28, eventId: 0 },
+                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0) },
                     eventNumber: 1,
                     priority: 1,
                     epochTimestamp: 0,
@@ -177,7 +180,7 @@ describe("EventDataDecoder", () => {
                     data: BasicInformation.TlvStartUpEvent.encodeTlv({ softwareVersion: 1 }),
                 },
                 {
-                    path: { endpointId: 0, clusterId: 0x28, eventId: 1 },
+                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(1) },
                     eventNumber: 2,
                     priority: 1,
                     epochTimestamp: 0,
@@ -187,7 +190,7 @@ describe("EventDataDecoder", () => {
                     data: TlvVoid.encodeTlv(),
                 },
                 {
-                    path: { endpointId: 0, clusterId: 0x28, eventId: 0 },
+                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0) },
                     eventNumber: 3,
                     priority: 1,
                     epochTimestamp: 0,
@@ -202,7 +205,7 @@ describe("EventDataDecoder", () => {
 
             expect(normalized).toEqual([
                 {
-                    path: { endpointId: 0, clusterId: 0x28, eventId: 0, nodeId: undefined, eventName: "startUp" },
+                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0), nodeId: undefined, eventName: "startUp" },
                     events: [
                         {
                             eventNumber: 1,
@@ -227,7 +230,7 @@ describe("EventDataDecoder", () => {
                     ],
                 },
                 {
-                    path: { endpointId: 0, clusterId: 0x28, eventId: 1, nodeId: undefined, eventName: "shutDown" },
+                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(1), nodeId: undefined, eventName: "shutDown" },
                     events: [{
                         eventNumber: 2,
                         priority: 1,

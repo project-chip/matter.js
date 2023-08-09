@@ -9,9 +9,15 @@ import { TlvAny } from "../../tlv/TlvAny.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
-import { TlvEnum, TlvUInt16, TlvUInt32, TlvUInt64, TlvUInt8 } from "../../tlv/TlvNumber.js";
+import { TlvEnum, TlvPosixMs, TlvSysTimeMS, TlvUInt16, TlvUInt32, TlvUInt64, TlvUInt8 } from "../../tlv/TlvNumber.js";
 import { TlvField, TlvList, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { MatterCoreSpecificationV1_0 } from "../../spec/Specifications.js";
+import { TlvClusterId } from "../../datatype/ClusterId.js";
+import { TlvEventId } from "../../datatype/EventId.js";
+import { TlvAttributeId } from "../../datatype/AttributeId.js";
+import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
+import { TlvCommandId } from "../../datatype/CommandId.js";
+import { EventPriority } from "../../cluster/Cluster.js";
 
 /** @see {@link MatterCoreSpecificationV1_0}, section 8.10 */
 export const enum StatusCode {
@@ -50,18 +56,18 @@ export const enum StatusCode {
 export const TlvAttributePath = TlvList({ // AttributePathIB
     enableTagCompression: TlvOptionalField(0, TlvBoolean),
     nodeId: TlvOptionalField(1, TlvNodeId),
-    endpointId: TlvOptionalField(2, TlvUInt16),
-    clusterId: TlvOptionalField(3, TlvUInt32),
-    attributeId: TlvOptionalField(4, TlvUInt32),
+    endpointId: TlvOptionalField(2, TlvEndpointNumber),
+    clusterId: TlvOptionalField(3, TlvClusterId),
+    attributeId: TlvOptionalField(4, TlvAttributeId),
     listIndex: TlvOptionalField(5, TlvNullable(TlvUInt16)),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0}, section 10.5.8 */
 export const TlvEventPath = TlvList({ // EventPathIB
     nodeId: TlvOptionalField(0, TlvNodeId),
-    endpointId: TlvOptionalField(1, TlvUInt16),
-    clusterId: TlvOptionalField(2, TlvUInt32),
-    eventId: TlvOptionalField(3, TlvUInt32),
+    endpointId: TlvOptionalField(1, TlvEndpointNumber),
+    clusterId: TlvOptionalField(2, TlvClusterId),
+    eventId: TlvOptionalField(3, TlvEventId),
     isUrgent: TlvOptionalField(4, TlvBoolean),
 });
 
@@ -69,11 +75,11 @@ export const TlvEventPath = TlvList({ // EventPathIB
 export const TlvEventData = TlvObject({ // EventDataIB
     path: TlvField(0, TlvEventPath),
     eventNumber: TlvField(1, TlvUInt64),
-    priority: TlvField(2, TlvUInt8),
-    epochTimestamp: TlvOptionalField(3, TlvUInt64),
-    systemTimestamp: TlvOptionalField(4, TlvUInt64),
-    deltaEpochTimestamp: TlvOptionalField(5, TlvUInt64),
-    deltaSystemTimestamp: TlvOptionalField(6, TlvUInt64),
+    priority: TlvField(2, TlvEnum<EventPriority>()),
+    epochTimestamp: TlvOptionalField(3, TlvPosixMs),
+    systemTimestamp: TlvOptionalField(4, TlvSysTimeMS),
+    deltaEpochTimestamp: TlvOptionalField(5, TlvPosixMs),
+    deltaSystemTimestamp: TlvOptionalField(6, TlvSysTimeMS),
     data: TlvOptionalField(7, TlvAny),
 });
 
@@ -86,8 +92,8 @@ export const TlvEventFilter = TlvObject({ // EventFilterIB
 /** @see {@link MatterCoreSpecificationV1_0}, section 10.5.7 */
 export const TlvClusterPath = TlvList({ // ClusterPathIB
     nodeId: TlvOptionalField(0, TlvNodeId),
-    endpointId: TlvField(1, TlvUInt16),
-    clusterId: TlvField(2, TlvUInt32),
+    endpointId: TlvField(1, TlvEndpointNumber),
+    clusterId: TlvField(2, TlvClusterId),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0}, section 10.5.3 */
@@ -141,9 +147,9 @@ export const TlvEventReport = TlvObject({ // EventReportIB
 
 /** @see {@link MatterCoreSpecificationV1_0}, section 10.5.11 */
 export const TlvCommandPath = TlvList({ // CommandPathIB
-    endpointId: TlvOptionalField(0, TlvUInt16),
-    clusterId: TlvField(1, TlvUInt32),
-    commandId: TlvField(2, TlvUInt32),
+    endpointId: TlvOptionalField(0, TlvEndpointNumber),
+    clusterId: TlvField(1, TlvClusterId),
+    commandId: TlvField(2, TlvCommandId),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0}, section 10.5.12 */

@@ -72,7 +72,7 @@ export class CaseClient {
             const { nodeOpCert: peerNewOpCert, intermediateCACert: peerIntermediateCACert, signature: peerSignature, resumptionId: peerResumptionId } = TlvEncryptedDataSigma2.decode(peerEncryptedData);
             const peerSignatureData = TlvSignedData.encode({ nodeOpCert: peerNewOpCert, intermediateCACert: peerIntermediateCACert, ecdhPublicKey: peerEcdhPublicKey, peerEcdhPublicKey: ecdhPublicKey });
             const { ellipticCurvePublicKey: peerPublicKey, subject: { nodeId: peerNodeIdCert } } = TlvOperationalCertificate.decode(peerNewOpCert);
-            if (peerNodeIdCert.id !== peerNodeId.id) throw new UnexpectedDataError("The node ID in the peer certificate doesn't match the expected peer node ID");
+            if (peerNodeIdCert !== peerNodeId) throw new UnexpectedDataError("The node ID in the peer certificate doesn't match the expected peer node ID");
             Crypto.verify(PublicKey(peerPublicKey), peerSignatureData, peerSignature);
 
             // Generate and send sigma3

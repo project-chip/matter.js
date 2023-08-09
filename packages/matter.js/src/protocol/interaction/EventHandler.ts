@@ -10,6 +10,9 @@ import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvEventFilter, TlvEventPath } from "./InteractionProtocol.js";
 import { Logger } from "../../log/Logger.js";
 import { resolveEventName } from "../../cluster/ClusterHelper.js";
+import { EndpointNumber } from "../../datatype/EndpointNumber.js";
+import { ClusterId } from "../../datatype/ClusterId.js";
+import { EventId } from "../../datatype/EventId.js";
 
 const logger = Logger.get("EventHandler");
 
@@ -19,9 +22,9 @@ const MAX_EVENTS = 10_000;
  * Data of one Event
  */
 export interface EventData<T> {
-    endpointId: number;
-    clusterId: number;
-    eventId: number
+    endpointId: EndpointNumber;
+    clusterId: ClusterId;
+    eventId: EventId
     epochTimestamp: number;
     priority: EventPriority;
     data: T;

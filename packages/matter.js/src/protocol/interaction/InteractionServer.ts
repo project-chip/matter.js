@@ -46,6 +46,8 @@ import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { InteractionEndpointStructure } from "./InteractionEndpointStructure.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { ImplementationError, MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
+import { EndpointNumber } from "../../datatype/EndpointNumber.js";
+import { ClusterId } from "../../datatype/ClusterId.js";
 
 export const INTERACTION_PROTOCOL_ID = 0x0001;
 
@@ -85,7 +87,7 @@ export function ClusterServer<
         supportedFeatures
     } = clusterDef;
     let clusterStorage: StorageContext | null = null;
-    const attributeStorageListeners = new Map<number, (value: any, version: number) => void>();
+    const attributeStorageListeners = new Map<AttributeId, (value: any, version: number) => void>();
     const sceneAttributeList = new Array<string>();
     const attributes = <AttributeServers<A>>{};
     const commands = <CommandServers<C>>{};
@@ -135,7 +137,7 @@ export function ClusterServer<
             const values = new Array<TypeFromSchema<typeof Scenes.TlvAttributeValuePair>>();
             for (const name of sceneAttributeList) {
                 const attributeServer = (attributes as any)[name];
-                values.push({ attributeId: new AttributeId(attributeServer.id), attributeValue: attributeServer.schema.encodeTlv(attributeServer.get()) });
+                values.push({ attributeId: attributeServer.id, attributeValue: attributeServer.schema.encodeTlv(attributeServer.get()) });
             }
             return values;
         },
@@ -150,7 +152,7 @@ export function ClusterServer<
                     logger.warn(`Empty attributeId in scene extension field not supported for "set" yet`);
                     continue;
                 }
-                const attributeName = sceneAttributeList.find(name => (attributes as any)[name].id === attributeId.id);
+                const attributeName = sceneAttributeList.find(name => (attributes as any)[name].id === attributeId);
                 if (attributeName) {
                     const attributeServer = (attributes as any)[attributeName];
                     attributeServer.setLocal(attributeServer.schema.decodeTlv(attributeValue));
@@ -164,7 +166,7 @@ export function ClusterServer<
                     logger.warn(`Empty attributeId in scene extension field not supported for "verify" yet`);
                     continue;
                 }
-                const attributeName = sceneAttributeList.find(name => (attributes as any)[name].id === attributeId.id);
+                const attributeName = sceneAttributeList.find(name => (attributes as any)[name].id === attributeId);
                 if (attributeName) {
                     const attributeServer = (attributes as any)[attributeName];
                     if (attributeServer.getLocal() !== attributeServer.schema.decodeTlv(attributeValue)) return false;
@@ -312,7 +314,7 @@ export function ClusterServer<
                 attributeStorageListeners.set(id, listener);
                 (attributes as any)[attributeName].addValueChangeListener(listener);
             }
-            attributeList.push(new AttributeId(id));
+            attributeList.push(AttributeId(id));
         } else {
             // TODO: Find maybe a better way to do this including strong typing according to attribute initial values set?
             result[`get${capitalizedAttributeName}Attribute`] = () => undefined;
@@ -329,8 +331,8 @@ export function ClusterServer<
     (attributes as any).attributeList.setLocal(attributeList);
 
     // Create commands
-    const acceptedCommandList = new Array<number>();
-    const generatedCommandList = new Array<number>();
+    const acceptedCommandList = new Array<CommandId>();
+    const generatedCommandList = new Array<CommandId>();
     for (const name in commandDef) {
         const handler = (handlers as any)[name];
 
@@ -370,10 +372,10 @@ export function ClusterServer<
             }
         }
     }
-    (attributes as any).acceptedCommandList.setLocal(acceptedCommandList.map(id => new CommandId(id)));
-    (attributes as any).generatedCommandList.setLocal(generatedCommandList.map(id => new CommandId(id)));
+    (attributes as any).acceptedCommandList.setLocal(acceptedCommandList.map(id => id));
+    (attributes as any).generatedCommandList.setLocal(generatedCommandList.map(id => id));
 
-    const eventList = new Array<number>();
+    const eventList = new Array<EventId>();
     for (const eventName in eventDef) {
         const { id, schema, priority, optional } = eventDef[eventName];
         if (!optional && (supportedEvents as any)[eventName] !== true) {
@@ -410,27 +412,27 @@ export function ClusterServer<
             result[`trigger${capitalizedEventName}Event`] = <T,>(event: T) => (events as any)[eventName].triggerEvent(event);
         }
     }
-    (attributes as any).eventList.setLocal(eventList.map(id => new EventId(id)));
+    (attributes as any).eventList.setLocal(eventList.map(id => id));
 
     return result as ClusterServerObj<A, C, E>;
 }
 
 export interface CommandPath {
-    endpointId: number,
-    clusterId: number,
-    commandId: number,
+    endpointId: EndpointNumber,
+    clusterId: ClusterId,
+    commandId: CommandId,
 }
 
 export interface AttributePath {
-    endpointId: number,
-    clusterId: number,
-    attributeId: number,
+    endpointId: EndpointNumber,
+    clusterId: ClusterId,
+    attributeId: AttributeId,
 }
 
 export interface EventPath {
-    endpointId: number,
-    clusterId: number,
-    eventId: number,
+    endpointId: EndpointNumber,
+    clusterId: ClusterId,
+    eventId: EventId,
 }
 
 export interface AttributeWithPath {
@@ -448,7 +450,7 @@ export interface CommandWithPath {
     command: CommandServer<any, any>,
 }
 
-export function genericElementPathToId(endpointId: number | undefined, clusterId: number | undefined, elementId: number | undefined) {
+export function genericElementPathToId(endpointId: EndpointNumber | undefined, clusterId: ClusterId | undefined, elementId: number | undefined) {
     return `${endpointId}/${clusterId}/${elementId}`;
 }
 

@@ -10,6 +10,7 @@ import { DataReader } from "../util/DataReader.js";
 import { DataWriter } from "../util/DataWriter.js";
 import { DiagnosticDictionary } from "../log/Logger.js";
 import { NotImplementedError, UnexpectedDataError } from "../common/MatterError.js";
+import { GroupId } from "../datatype/GroupId.js";
 
 export interface PacketHeader {
     sessionId: number,
@@ -126,9 +127,9 @@ export class MessageCodec {
         const sessionId = reader.readUInt16();
         const securityFlags = reader.readUInt8();
         const messageId = reader.readUInt32();
-        const sourceNodeId = hasSourceNodeId ? new NodeId(reader.readUInt64()) : undefined;
-        const destNodeId = hasDestNodeId ? new NodeId(reader.readUInt64()) : undefined;
-        const destGroupId = hasDestGroupId ? reader.readUInt16() : undefined;
+        const sourceNodeId = hasSourceNodeId ? NodeId(reader.readUInt64()) : undefined;
+        const destNodeId = hasDestNodeId ? NodeId(reader.readUInt64()) : undefined;
+        const destGroupId = hasDestGroupId ? GroupId(reader.readUInt16()) : undefined;
 
         const sessionType = securityFlags & 0b00000011;
         if (sessionType !== SessionType.Group && sessionType !== SessionType.Unicast) throw new UnexpectedDataError(`Unsupported session type ${sessionType}`);
@@ -172,8 +173,8 @@ export class MessageCodec {
         writer.writeUInt16(sessionId);
         writer.writeUInt8(securityFlags);
         writer.writeUInt32(messageCounter);
-        if (sourceNodeId !== undefined) writer.writeUInt64(sourceNodeId.id);
-        if (destNodeId !== undefined) writer.writeUInt64(destNodeId.id);
+        if (sourceNodeId !== undefined) writer.writeUInt64(sourceNodeId);
+        if (destNodeId !== undefined) writer.writeUInt64(destNodeId);
         if (destGroupId !== undefined) writer.writeUInt32(destGroupId);
         return writer.toByteArray();
     }

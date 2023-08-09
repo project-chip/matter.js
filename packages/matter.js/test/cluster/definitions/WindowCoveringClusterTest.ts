@@ -5,14 +5,8 @@
  */
 
 import { WindowCovering, WindowCoveringCluster } from "../../../src/cluster/definitions/WindowCoveringCluster.js";
-import { AttributeId } from "../../../src/datatype/AttributeId.js";
-import { CommandId } from "../../../src/datatype/CommandId.js";
 import { ClusterServer } from "../../../src/protocol/interaction/InteractionServer.js";
 import { BitFlags } from "../../../src/schema/BitmapSchema.js";
-
-function wrapIds<T>(factory: new (id: number) => T, ...ids: number[]) {
-    return ids.map(id => new factory(id));
-}
 
 describe("WindowCoveringCluster", () => {
     const WindowCovering_LF_PALF = WindowCoveringCluster.with("Lift", "PositionAwareLift");
@@ -102,12 +96,8 @@ describe("WindowCoveringCluster", () => {
         );
 
         expect(attrValues).toEqual({ // TODO - make strict after updating web tester
-            acceptedCommandList: wrapIds(CommandId,
-                0, 1, 2
-            ),
-            attributeList: wrapIds(AttributeId,
-                0, 7, 10, 13, 23, 26, 65533, 65532, 65531, 65530, 65529, 65528, 11, 14
-            ),
+            acceptedCommandList: [0, 1, 2],
+            attributeList: [0, 7, 10, 13, 23, 26, 65533, 65532, 65531, 65530, 65529, 65528, 11, 14],
             clusterRevision: 5,
             configStatus: {
                 operational: true,

@@ -11,6 +11,9 @@ import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Logger } from "../../log/Logger.js";
 import { TlvEventData, TlvEventReport } from "./InteractionProtocol.js";
 import { UnexpectedDataError } from "../../common/MatterError.js";
+import { EndpointNumber } from "../../datatype/EndpointNumber.js";
+import { ClusterId } from "../../datatype/ClusterId.js";
+import { EventId } from "../../datatype/EventId.js";
 
 const logger = Logger.get("EventDataDecoder");
 
@@ -27,9 +30,9 @@ export type DecodedEventData<T> = {
 export type DecodedEventReportValue<T> = {
     path: {
         nodeId?: NodeId,
-        endpointId: number,
-        clusterId: number,
-        eventId: number,
+        endpointId: EndpointNumber,
+        clusterId: ClusterId,
+        eventId: EventId,
         eventName: string
     },
     events: DecodedEventData<T>[],

@@ -21,9 +21,9 @@ import { CommissioningServer, MatterServer } from "@project-chip/matter-node.js"
 import { commandExecutor, getIntParameter, getParameter, requireMinNodeVersion, hasParameter } from "@project-chip/matter-node.js/util";
 import { Time } from "@project-chip/matter-node.js/time";
 import { OnOffLightDevice, OnOffPluginUnitDevice, DeviceTypes } from "@project-chip/matter-node.js/device";
-import { VendorId } from "@project-chip/matter-node.js/datatype";
 import { Logger } from "@project-chip/matter-node.js/log";
 import { StorageManager, StorageBackendDisk } from "@project-chip/matter-node.js/storage";
+import { VendorId } from "@project-chip/matter.js/datatype";
 
 const logger = Logger.get("MultiDevice");
 
@@ -110,7 +110,7 @@ class Device {
             const passcode = getIntParameter(`passcode${i}`) ?? deviceStorage.get(`passcode${i}`, defaultPasscode++);
             const discriminator = getIntParameter(`discriminator${i}`) ?? deviceStorage.get(`discriminator${i}`, defaultDiscriminator++);
             // product name / id and vendor id should match what is in the device certificate
-            const vendorId = new VendorId(getIntParameter(`vendorid${i}`) ?? deviceStorage.get(`vendorid${i}`, 0xFFF1));
+            const vendorId = getIntParameter(`vendorid${i}`) ?? deviceStorage.get(`vendorid${i}`, 0xFFF1);
             const productName = `node-matter OnOff-Device ${i}`;
             const productId = getIntParameter(`productid${i}`) ?? deviceStorage.get(`productid${i}`, 0x8000);
 
@@ -120,7 +120,7 @@ class Device {
 
             deviceStorage.set(`passcode${i}`, passcode);
             deviceStorage.set(`discriminator${i}`, discriminator);
-            deviceStorage.set(`vendorid${i}`, vendorId.id);
+            deviceStorage.set(`vendorid${i}`, vendorId);
             deviceStorage.set(`productid${i}`, productId);
             deviceStorage.set(`isSocket${i}`, isSocket);
             deviceStorage.set(`uniqueid${i}`, uniqueId);
@@ -133,7 +133,7 @@ class Device {
                 discriminator,
                 basicInformation: {
                     vendorName,
-                    vendorId,
+                    vendorId: VendorId(vendorId),
                     nodeLabel: productName,
                     productName,
                     productLabel: productName,

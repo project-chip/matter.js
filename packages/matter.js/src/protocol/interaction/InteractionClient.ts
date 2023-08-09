@@ -33,6 +33,11 @@ import { Merge } from "../../util/Type.js";
 import { resolveAttributeName, resolveCommandName, resolveEventName } from "../../cluster/ClusterHelper.js";
 import { InternalError, MatterError, MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
 import { DecodedEventData, DecodedEventReportValue, normalizeAndDecodeReadEventReport } from "./EventDataDecoder.js";
+import { EndpointNumber } from "../../datatype/EndpointNumber.js";
+import { ClusterId } from "../../datatype/ClusterId.js";
+import { AttributeId } from "../../datatype/AttributeId.js";
+import { EventId } from "../../datatype/EventId.js";
+import { CommandId } from "../../datatype/CommandId.js";
 
 const logger = Logger.get("InteractionClient");
 
@@ -41,9 +46,9 @@ const REQUEST_ALL = [{}];
 export interface AttributeStatus {
     path: {
         nodeId?: NodeId,
-        endpointId?: number,
-        clusterId?: number,
-        attributeId?: number,
+        endpointId?: EndpointNumber,
+        clusterId?: ClusterId,
+        attributeId?: AttributeId,
     },
     status: StatusCode,
 }
@@ -56,7 +61,7 @@ export function ClusterClient<
     E extends Events
 >(
     clusterDef: Cluster<F, any, A, C, E>,
-    endpointId: number,
+    endpointId: EndpointNumber,
     interactionClient: InteractionClient
 ): ClusterClientObj<F, A, C, E> {
     const {
@@ -127,7 +132,7 @@ export function ClusterClient<
         }
     };
 
-    const attributeToId = <{ [key: number]: string }>{};
+    const attributeToId = <{ [key: AttributeId]: string }>{};
 
     const allAttributeDefs = Merge<A, GlobalAttributes<F>>(attributeDef, GlobalAttributes(features));
     // Add accessors
@@ -154,7 +159,7 @@ export function ClusterClient<
         }
     }
 
-    const eventToId = <{ [key: number]: string }>{};
+    const eventToId = <{ [key: EventId]: string }>{};
 
     // add events
     for (const eventName in eventDef) {
@@ -246,15 +251,15 @@ export class InteractionClient {
         return this.getMultipleAttributesAndEvents(REQUEST_ALL, REQUEST_ALL, eventFilters);
     }
 
-    async getMultipleAttributes(attributeRequests?: { endpointId?: number, clusterId?: number, attributeId?: number }[], isFabricFiltered = true): Promise<DecodedAttributeReportValue<any>[]> {
+    async getMultipleAttributes(attributeRequests?: { endpointId?: EndpointNumber, clusterId?: ClusterId, attributeId?: AttributeId }[], isFabricFiltered = true): Promise<DecodedAttributeReportValue<any>[]> {
         return (await this.getMultipleAttributesAndEvents(attributeRequests, undefined, undefined, isFabricFiltered)).attributeReports;
     }
 
-    async getMultipleEvents(eventRequests?: { endpointId?: number, clusterId?: number, eventId?: number }[], eventFilters?: TypeFromSchema<typeof TlvEventFilter>[], isFabricFiltered = true): Promise<DecodedEventReportValue<any>[]> {
+    async getMultipleEvents(eventRequests?: { endpointId?: EndpointNumber, clusterId?: ClusterId, eventId?: EventId }[], eventFilters?: TypeFromSchema<typeof TlvEventFilter>[], isFabricFiltered = true): Promise<DecodedEventReportValue<any>[]> {
         return (await this.getMultipleAttributesAndEvents(undefined, eventRequests, eventFilters, isFabricFiltered)).eventReports;
     }
 
-    async getMultipleAttributesAndEvents(attributeRequests?: { endpointId?: number, clusterId?: number, attributeId?: number }[], eventRequests?: { endpointId?: number, clusterId?: number, eventId?: number }[], eventFilters?: TypeFromSchema<typeof TlvEventFilter>[], isFabricFiltered = true): Promise<{ attributeReports: DecodedAttributeReportValue<any>[], eventReports: DecodedEventReportValue<any>[] }> {
+    async getMultipleAttributesAndEvents(attributeRequests?: { endpointId?: EndpointNumber, clusterId?: ClusterId, attributeId?: AttributeId }[], eventRequests?: { endpointId?: EndpointNumber, clusterId?: ClusterId, eventId?: EventId }[], eventFilters?: TypeFromSchema<typeof TlvEventFilter>[], isFabricFiltered = true): Promise<{ attributeReports: DecodedAttributeReportValue<any>[], eventReports: DecodedEventReportValue<any>[] }> {
         return this.withMessenger<{ attributeReports: DecodedAttributeReportValue<any>[], eventReports: DecodedEventReportValue<any>[] }>(async messenger => {
             return await this.processReadRequest(messenger, {
                 attributeRequests,
@@ -266,12 +271,12 @@ export class InteractionClient {
         });
     }
 
-    async getAttribute<A extends Attribute<any, any>>(endpointId: number, clusterId: number, attribute: A, alwaysRequestFromRemote = false): Promise<AttributeJsType<A> | undefined> {
+    async getAttribute<A extends Attribute<any, any>>(endpointId: EndpointNumber, clusterId: ClusterId, attribute: A, alwaysRequestFromRemote = false): Promise<AttributeJsType<A> | undefined> {
         const response = await this.getAttributeWithVersion(endpointId, clusterId, attribute, alwaysRequestFromRemote);
         return response?.value;
     }
 
-    async getAttributeWithVersion<A extends Attribute<any, any>>(endpointId: number, clusterId: number, attribute: A, alwaysRequestFromRemote = false): Promise<{ value: AttributeJsType<A>, version: number } | undefined> {
+    async getAttributeWithVersion<A extends Attribute<any, any>>(endpointId: EndpointNumber, clusterId: ClusterId, attribute: A, alwaysRequestFromRemote = false): Promise<{ value: AttributeJsType<A>, version: number } | undefined> {
         const { id: attributeId } = attribute;
         if (!alwaysRequestFromRemote) {
             const localValue = this.subscribedLocalValues.get(attributePathToId({ endpointId, clusterId, attributeId }))
@@ -291,7 +296,7 @@ export class InteractionClient {
         return { value: attributeReports[0].value, version: attributeReports[0].version };
     }
 
-    async getEvent<T, E extends Event<T, any>>(endpointId: number, clusterId: number, event: E, minimumEventNumber?: number | bigint, isFabricFiltered = true): Promise<DecodedEventData<T>[] | undefined> {
+    async getEvent<T, E extends Event<T, any>>(endpointId: EndpointNumber, clusterId: ClusterId, event: E, minimumEventNumber?: number | bigint, isFabricFiltered = true): Promise<DecodedEventData<T>[] | undefined> {
         const { id: eventId } = event;
         const response = await this.getMultipleAttributesAndEvents(
             undefined,
@@ -333,7 +338,7 @@ export class InteractionClient {
         return normalizedResult;
     }
 
-    async setAttribute<T>(endpointId: number, clusterId: number, attribute: Attribute<T, any>, value: T, dataVersion?: number): Promise<void> {
+    async setAttribute<T>(endpointId: EndpointNumber, clusterId: ClusterId, attribute: Attribute<T, any>, value: T, dataVersion?: number): Promise<void> {
         const response = await this.setMultipleAttributes([{ endpointId, clusterId, attribute, value, dataVersion }]);
 
         // Response contains Status error if there was an error on write
@@ -345,7 +350,7 @@ export class InteractionClient {
         }
     }
 
-    async setMultipleAttributes(attributes: { endpointId: number, clusterId: number, attribute: Attribute<any, any>, value: any, dataVersion?: number }[]): Promise<AttributeStatus[]> {
+    async setMultipleAttributes(attributes: { endpointId: EndpointNumber, clusterId: ClusterId, attribute: Attribute<any, any>, value: any, dataVersion?: number }[]): Promise<AttributeStatus[]> {
         return this.withMessenger<AttributeStatus[]>(async messenger => {
             logger.debug(`Sending write request: ${attributes.map((
                 { endpointId, clusterId, attribute: { id }, value, dataVersion }
@@ -372,8 +377,8 @@ export class InteractionClient {
     }
 
     async subscribeAttribute<A extends Attribute<any, any>>(
-        endpointId: number,
-        clusterId: number,
+        endpointId: EndpointNumber,
+        clusterId: ClusterId,
         attribute: A,
         minIntervalFloorSeconds: number,
         maxIntervalCeilingSeconds: number,
@@ -418,8 +423,8 @@ export class InteractionClient {
     }
 
     async subscribeEvent<T, E extends Event<T, any>>(
-        endpointId: number,
-        clusterId: number,
+        endpointId: EndpointNumber,
+        clusterId: ClusterId,
         event: E,
         minIntervalFloorSeconds: number,
         maxIntervalCeilingSeconds: number,
@@ -471,7 +476,7 @@ export class InteractionClient {
         return this.subscribeMultipleAttributesAndEvents([{}], [{ isUrgent }], minIntervalFloorSeconds, maxIntervalCeilingSeconds, keepSubscriptions, isFabricFiltered, attributeListener, eventListener);
     }
 
-    async subscribeMultipleAttributesAndEvents(attributeRequests: { endpointId?: number, clusterId?: number, attributeId?: number }[], eventRequests: { endpointId?: number, clusterId?: number, eventId?: number, isUrgent?: boolean }[], minIntervalFloorSeconds: number, maxIntervalCeilingSeconds: number, keepSubscriptions = true, isFabricFiltered = true, attributeListener?: (data: DecodedAttributeReportValue<any>) => void, eventListener?: (data: DecodedEventReportValue<any>) => void): Promise<void> {
+    async subscribeMultipleAttributesAndEvents(attributeRequests: { endpointId?: EndpointNumber, clusterId?: ClusterId, attributeId?: AttributeId }[], eventRequests: { endpointId?: EndpointNumber, clusterId?: ClusterId, eventId?: EventId, isUrgent?: boolean }[], minIntervalFloorSeconds: number, maxIntervalCeilingSeconds: number, keepSubscriptions = true, isFabricFiltered = true, attributeListener?: (data: DecodedAttributeReportValue<any>) => void, eventListener?: (data: DecodedEventReportValue<any>) => void): Promise<void> {
         return this.withMessenger<void>(async messenger => {
             logger.debug(`Sending subscribe request: attributes: ${attributeRequests.map(path => resolveAttributeName(path)).join(", ")} and events: ${eventRequests.map(path => resolveEventName(path)).join(", ")}`);
             const { report, subscribeResponse: { subscriptionId } } = await messenger.sendSubscribeRequest({
@@ -519,7 +524,7 @@ export class InteractionClient {
         });
     }
 
-    async invoke<C extends Command<any, any, any>>(endpointId: number, clusterId: number, request: RequestType<C>, id: number, requestSchema: TlvSchema<RequestType<C>>, _responseId: number, responseSchema: TlvSchema<ResponseType<C>>, optional: boolean): Promise<ResponseType<C>> {
+    async invoke<C extends Command<any, any, any>>(endpointId: EndpointNumber, clusterId: ClusterId, request: RequestType<C>, id: CommandId, requestSchema: TlvSchema<RequestType<C>>, _responseId: CommandId, responseSchema: TlvSchema<ResponseType<C>>, optional: boolean): Promise<ResponseType<C>> {
         return this.withMessenger<ResponseType<C>>(async messenger => {
             logger.debug(`Invoking command: ${resolveCommandName({ endpointId, clusterId, commandId: id })} with ${Logger.toJSON(request)}`);
             const commandFields = requestSchema.encodeTlv(request);

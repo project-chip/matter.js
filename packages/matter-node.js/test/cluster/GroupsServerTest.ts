@@ -22,7 +22,7 @@ import { Fabric, FabricJsonObject } from "@project-chip/matter.js/fabric";
 import {
     ClusterServerObjForCluster, GroupsCluster, GroupsClusterHandler, Identify
 } from "@project-chip/matter.js/cluster";
-import { GroupId } from "@project-chip/matter.js/datatype";
+import { EndpointNumber, GroupId } from "@project-chip/matter.js/datatype";
 import { getPromiseResolver } from "@project-chip/matter.js/util";
 import { SessionType, Message } from "@project-chip/matter.js/codec";
 import { callCommandOnClusterServer, createTestSessionWithFabric } from "./ClusterServerTestingUtil";
@@ -52,11 +52,11 @@ describe("Groups Server test", () => {
         testSession = await createTestSessionWithFabric();
         testFabric = testSession.getFabric();
 
-        endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: 1 });
+        endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: EndpointNumber(1) });
         endpoint.addClusterServer(groupsServer);
         endpoint.addClusterServer(identifyServer);
 
-        endpoint2 = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: 2 });
+        endpoint2 = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: EndpointNumber(2) });
     }
 
     describe("Basic groups actions", () => {
@@ -68,11 +68,11 @@ describe("Groups Server test", () => {
             const { promise: firstPromise, resolver: firstResolver } = await getPromiseResolver<FabricJsonObject>();
             testFabric?.setPersistCallback(() => firstResolver(testFabric!.toStorageObject()));
 
-            const result = await callCommandOnClusterServer(groupsServer!, "addGroup", { groupId: new GroupId(1), groupName: "Group 1" }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
+            const result = await callCommandOnClusterServer(groupsServer!, "addGroup", { groupId: GroupId(1), groupName: "Group 1" }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
             const persistedData = await firstPromise;
 
-            assert.deepEqual(result, { code: StatusCode.Success, responseId: 0, response: { status: StatusCode.Success, groupId: new GroupId(1) } });
+            assert.deepEqual(result, { code: StatusCode.Success, responseId: 0, response: { status: StatusCode.Success, groupId: GroupId(1) } });
             assert.ok(persistedData);
             assert.ok(persistedData.scopedClusterData);
             const groupData = persistedData.scopedClusterData.get(GroupsCluster.id);
@@ -84,11 +84,11 @@ describe("Groups Server test", () => {
             const { promise: firstPromise, resolver: firstResolver } = await getPromiseResolver<FabricJsonObject>();
             testFabric?.setPersistCallback(() => firstResolver(testFabric!.toStorageObject()));
 
-            const result = await callCommandOnClusterServer(groupsServer!, "addGroup", { groupId: new GroupId(2), groupName: "Group 2" }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
+            const result = await callCommandOnClusterServer(groupsServer!, "addGroup", { groupId: GroupId(2), groupName: "Group 2" }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
             const persistedData = await firstPromise;
 
-            assert.deepEqual(result, { code: StatusCode.Success, responseId: 0, response: { status: StatusCode.Success, groupId: new GroupId(2) } });
+            assert.deepEqual(result, { code: StatusCode.Success, responseId: 0, response: { status: StatusCode.Success, groupId: GroupId(2) } });
             assert.ok(persistedData);
             assert.ok(persistedData.scopedClusterData);
             const groupData = persistedData.scopedClusterData.get(GroupsCluster.id);
@@ -100,11 +100,11 @@ describe("Groups Server test", () => {
             const { promise: firstPromise, resolver: firstResolver } = await getPromiseResolver<FabricJsonObject>();
             testFabric?.setPersistCallback(() => firstResolver(testFabric!.toStorageObject()));
 
-            const result = await callCommandOnClusterServer(groupsServer!, "addGroup", { groupId: new GroupId(5), groupName: "Group 5" }, endpoint2!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
+            const result = await callCommandOnClusterServer(groupsServer!, "addGroup", { groupId: GroupId(5), groupName: "Group 5" }, endpoint2!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
             const persistedData = await firstPromise;
 
-            assert.deepEqual(result, { code: StatusCode.Success, responseId: 0, response: { status: StatusCode.Success, groupId: new GroupId(5) } });
+            assert.deepEqual(result, { code: StatusCode.Success, responseId: 0, response: { status: StatusCode.Success, groupId: GroupId(5) } });
             assert.ok(persistedData);
             assert.ok(persistedData.scopedClusterData);
             const groupData = persistedData.scopedClusterData.get(GroupsCluster.id);
@@ -113,31 +113,31 @@ describe("Groups Server test", () => {
         });
 
         it("get group name", async () => {
-            const result = await callCommandOnClusterServer(groupsServer!, "viewGroup", { groupId: new GroupId(1) }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
+            const result = await callCommandOnClusterServer(groupsServer!, "viewGroup", { groupId: GroupId(1) }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
-            assert.deepEqual(result, { code: StatusCode.Success, responseId: 1, response: { status: StatusCode.Success, groupId: new GroupId(1), groupName: "Group 1" } });
+            assert.deepEqual(result, { code: StatusCode.Success, responseId: 1, response: { status: StatusCode.Success, groupId: GroupId(1), groupName: "Group 1" } });
         });
 
         it("get group membership for no id", async () => {
             const result = await callCommandOnClusterServer(groupsServer!, "getGroupMembership", { groupList: [] }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
-            assert.deepEqual(result, { code: StatusCode.Success, responseId: 2, response: { capacity: 252, groupList: [new GroupId(1), new GroupId(2)] } });
+            assert.deepEqual(result, { code: StatusCode.Success, responseId: 2, response: { capacity: 252, groupList: [GroupId(1), GroupId(2)] } });
         });
 
         it("get group membership of a defined group", async () => {
-            const result = await callCommandOnClusterServer(groupsServer!, "getGroupMembership", { groupList: [new GroupId(1)] }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
+            const result = await callCommandOnClusterServer(groupsServer!, "getGroupMembership", { groupList: [GroupId(1)] }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
-            assert.deepEqual(result, { code: StatusCode.Success, responseId: 2, response: { capacity: 252, groupList: [new GroupId(1)] } });
+            assert.deepEqual(result, { code: StatusCode.Success, responseId: 2, response: { capacity: 252, groupList: [GroupId(1)] } });
         });
 
         it("get group membership of two defined groups", async () => {
-            const result = await callCommandOnClusterServer(groupsServer!, "getGroupMembership", { groupList: [new GroupId(1), new GroupId(2)] }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
+            const result = await callCommandOnClusterServer(groupsServer!, "getGroupMembership", { groupList: [GroupId(1), GroupId(2)] }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
-            assert.deepEqual(result, { code: StatusCode.Success, responseId: 2, response: { capacity: 252, groupList: [new GroupId(1), new GroupId(2)] } });
+            assert.deepEqual(result, { code: StatusCode.Success, responseId: 2, response: { capacity: 252, groupList: [GroupId(1), GroupId(2)] } });
         });
 
         it("get group membership of a unknown group", async () => {
-            const result = await callCommandOnClusterServer(groupsServer!, "getGroupMembership", { groupList: [new GroupId(3)] }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
+            const result = await callCommandOnClusterServer(groupsServer!, "getGroupMembership", { groupList: [GroupId(3)] }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
             assert.deepEqual(result, { code: StatusCode.Success, responseId: 2, response: { capacity: 252, groupList: [] } });
         });
@@ -146,11 +146,11 @@ describe("Groups Server test", () => {
             const { promise: firstPromise, resolver: firstResolver } = await getPromiseResolver<FabricJsonObject>();
             testFabric?.setPersistCallback(() => firstResolver(testFabric!.toStorageObject()));
 
-            const result = await callCommandOnClusterServer(groupsServer!, "removeGroup", { groupId: new GroupId(1) }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
+            const result = await callCommandOnClusterServer(groupsServer!, "removeGroup", { groupId: GroupId(1) }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
             const persistedData = await firstPromise;
 
-            assert.deepEqual(result, { code: StatusCode.Success, responseId: 3, response: { status: StatusCode.Success, groupId: new GroupId(1) } });
+            assert.deepEqual(result, { code: StatusCode.Success, responseId: 3, response: { status: StatusCode.Success, groupId: GroupId(1) } });
             assert.ok(persistedData);
             assert.ok(persistedData.scopedClusterData);
             const groupData = persistedData.scopedClusterData.get(GroupsCluster.id);
@@ -181,34 +181,34 @@ describe("Groups Server test", () => {
         });
 
         it("error on read non existing group", async () => {
-            const result = await callCommandOnClusterServer(groupsServer!, "viewGroup", { groupId: new GroupId(1) }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
+            const result = await callCommandOnClusterServer(groupsServer!, "viewGroup", { groupId: GroupId(1) }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
             assert.ok(result);
             assert.equal(result.code, StatusCode.Success);
             assert.equal(result.response.status, StatusCode.NotFound);
-            assert.deepEqual(result.response.groupId, new GroupId(1));
+            assert.deepEqual(result.response.groupId, GroupId(1));
         });
 
         it("error on delete non existing group", async () => {
-            const result = await callCommandOnClusterServer(groupsServer!, "removeGroup", { groupId: new GroupId(1) }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
+            const result = await callCommandOnClusterServer(groupsServer!, "removeGroup", { groupId: GroupId(1) }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
             assert.ok(result);
             assert.equal(result.code, StatusCode.Success);
             assert.equal(result.response.status, StatusCode.NotFound);
-            assert.deepEqual(result.response.groupId, new GroupId(1));
+            assert.deepEqual(result.response.groupId, GroupId(1));
         });
 
         it("error on adding group with too long name", async () => {
-            const result = await callCommandOnClusterServer(groupsServer!, "addGroup", { groupId: new GroupId(1), groupName: '12345678901234567' }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
+            const result = await callCommandOnClusterServer(groupsServer!, "addGroup", { groupId: GroupId(1), groupName: '12345678901234567' }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
             assert.ok(result);
             assert.equal(result.code, StatusCode.Success);
             assert.equal(result.response.status, StatusCode.ConstraintError);
-            assert.deepEqual(result.response.groupId, new GroupId(1));
+            assert.deepEqual(result.response.groupId, GroupId(1));
         });
 
         it("error on Groupcast message", async () => {
-            await assert.rejects(async () => await callCommandOnClusterServer(groupsServer!, "viewGroup", { groupId: new GroupId(1) }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Group } } as Message),
+            await assert.rejects(async () => await callCommandOnClusterServer(groupsServer!, "viewGroup", { groupId: GroupId(1) }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Group } } as Message),
                 {
                     message: "Groupcast not supported"
                 });
@@ -224,7 +224,7 @@ describe("Groups Server test", () => {
             const { promise: firstPromise, resolver: firstResolver } = await getPromiseResolver<FabricJsonObject>();
             testFabric?.setPersistCallback(() => firstResolver(testFabric!.toStorageObject()));
 
-            const result = await callCommandOnClusterServer(groupsServer!, "addGroupIfIdentifying", { groupId: new GroupId(3), groupName: "Group 3" }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
+            const result = await callCommandOnClusterServer(groupsServer!, "addGroupIfIdentifying", { groupId: GroupId(3), groupName: "Group 3" }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
             const persistedData = await firstPromise;
 
@@ -246,16 +246,16 @@ describe("Groups Server test", () => {
         });
 
         it("nothing is added because we are not identifying", async () => {
-            const result = await callCommandOnClusterServer(groupsServer!, "addGroupIfIdentifying", { groupId: new GroupId(3), groupName: "Group 3" }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
+            const result = await callCommandOnClusterServer(groupsServer!, "addGroupIfIdentifying", { groupId: GroupId(3), groupName: "Group 3" }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
             assert.deepEqual(result, { code: StatusCode.Success, responseId: 5, response: undefined });
 
-            const resultRead = await callCommandOnClusterServer(groupsServer!, "viewGroup", { groupId: new GroupId(3) }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
+            const resultRead = await callCommandOnClusterServer(groupsServer!, "viewGroup", { groupId: GroupId(3) }, endpoint!, testSession, { packetHeader: { sessionType: SessionType.Unicast } } as Message);
 
             assert.ok(resultRead);
             assert.equal(resultRead.code, StatusCode.Success);
             assert.equal(resultRead.response.status, StatusCode.NotFound);
-            assert.deepEqual(resultRead.response.groupId, new GroupId(3));
+            assert.deepEqual(resultRead.response.groupId, GroupId(3));
         });
     });
 });

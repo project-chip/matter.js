@@ -22,6 +22,7 @@ import {
 } from "../common/InstanceBroadcaster.js";
 import { TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { ImplementationError } from "../common/MatterError.js";
+import { NodeId } from "../datatype/NodeId.js";
 
 const logger = Logger.get("MdnsBroadcaster");
 
@@ -72,7 +73,7 @@ export class MdnsBroadcaster {
             pairingInstructions = ""
         }: CommissioningModeInstanceData
     ) {
-        logger.debug(`announce commissioning mode ${mode} ${deviceName} ${deviceType} ${vendorId.id} ${productId} ${discriminator}`);
+        logger.debug(`announce commissioning mode ${mode} ${deviceName} ${deviceType} ${vendorId} ${productId} ${discriminator}`);
 
         const shortDiscriminator = (discriminator >> 8) & 0x0F;
         const instanceId = Crypto.getRandomData(8).toHex().toUpperCase();
@@ -113,7 +114,7 @@ export class MdnsBroadcaster {
                 PtrRecord(commissionModeQname, deviceQname),
                 SrvRecord(deviceQname, { priority: 0, weight: 0, port: announcedNetPort, target: hostname }),
                 TxtRecord(deviceQname, [
-                    `VP=${vendorId.id}+${productId}`,                    /* Vendor / Product */
+                    `VP=${vendorId}+${productId}`,                    /* Vendor / Product */
                     `DT=${deviceType}`,                                  /* Device Type */
                     `DN=${deviceName}`,                                  /* Device Name */
                     `SII=${sleepIdleInterval}`,                          /* Sleepy Idle Interval */
@@ -157,10 +158,10 @@ export class MdnsBroadcaster {
                 const { operationalId, nodeId } = fabric;
                 const operationalIdString = operationalId.toHex().toUpperCase();
                 const fabricQname = getFabricQname(operationalIdString);
-                const deviceMatterQname = getDeviceMatterQname(operationalIdString, nodeId.toString());
+                const deviceMatterQname = getDeviceMatterQname(operationalIdString, NodeId.toHexString(nodeId));
 
                 logger.debug("Announcement: Fabric", Logger.dict({
-                    id: `${operationalId.toHex()}/${nodeId.id}`,
+                    id: `${operationalId.toHex()}/${nodeId}`,
                     qname: deviceMatterQname,
                     port: announcedNetPort,
                     interface: netInterface
@@ -204,7 +205,7 @@ export class MdnsBroadcaster {
 
         const instanceId = Crypto.getRandomData(8).toHex().toUpperCase();
         const deviceTypeQname = `_T${deviceType}._sub.${MATTER_COMMISSIONER_SERVICE_QNAME}`;
-        const vendorQname = `_V${vendorId.id}._sub.${MATTER_COMMISSIONER_SERVICE_QNAME}`;
+        const vendorQname = `_V${vendorId}._sub.${MATTER_COMMISSIONER_SERVICE_QNAME}`;
         const deviceQname = `${instanceId}.${MATTER_COMMISSIONER_SERVICE_QNAME}`;
 
         this.mdnsServer.setRecordsGenerator(announcedNetPort, netInterface => {
@@ -218,7 +219,7 @@ export class MdnsBroadcaster {
                 PtrRecord(vendorQname, deviceQname),
                 SrvRecord(deviceQname, { priority: 0, weight: 0, port: announcedNetPort, target: hostname }),
                 TxtRecord(deviceQname, [
-                    `VP=${vendorId.id}+${productId}`, /* Vendor / Product */
+                    `VP=${vendorId}+${productId}`, /* Vendor / Product */
                     `DT=${deviceType}`,               /* Device Type */
                     `DN=${deviceName}`,               /* Device Name */
                     `SII=${sleepIdleInterval}`,       /* Sleepy Idle Interval */

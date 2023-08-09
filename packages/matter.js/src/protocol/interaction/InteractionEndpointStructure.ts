@@ -19,9 +19,14 @@ import {
     eventPathToId, EventWithPath, genericElementPathToId
 } from "./InteractionServer.js";
 import { ImplementationError, InternalError } from "../../common/MatterError.js";
+import { ClusterId } from "../../datatype/ClusterId.js";
+import { EndpointNumber } from "../../datatype/EndpointNumber.js";
+import { CommandId } from "../../datatype/CommandId.js";
+import { EventId } from "../../datatype/EventId.js";
+import { AttributeId } from "../../datatype/AttributeId.js";
 
 export class InteractionEndpointStructure {
-    endpoints = new Map<number, Endpoint>();
+    endpoints = new Map<EndpointNumber, Endpoint>();
     attributes = new Map<string, (AttributeServer<any> | FabricScopedAttributeServer<any> | FixedAttributeServer<any>)>();
     attributePaths = new Array<AttributePath>();
     events = new Map<string, EventServer<any>>();
@@ -97,8 +102,8 @@ export class InteractionEndpointStructure {
         return value === undefined ? "*" : `0x${value.toString(16)}`;
     }
 
-    resolveGenericElementName(nodeId: NodeId | undefined, endpointId: number | undefined, clusterId: number | undefined, elementId: number | undefined, elementMap: Map<string, any>) {
-        const nodeIdPrefix = nodeId === undefined ? "" : `${this.toHex(nodeId.id)}/`;
+    resolveGenericElementName(nodeId: NodeId | undefined, endpointId: EndpointNumber | undefined, clusterId: ClusterId | undefined, elementId: number | undefined, elementMap: Map<string, any>) {
+        const nodeIdPrefix = nodeId === undefined ? "" : `${this.toHex(nodeId)}/`;
         if (endpointId === undefined) {
             return `${nodeIdPrefix}*/${this.toHex(clusterId)}/${this.toHex(elementId)}`;
         }
@@ -137,43 +142,43 @@ export class InteractionEndpointStructure {
         return this.resolveGenericElementName(undefined, endpointId, clusterId, commandId, this.commands);
     }
 
-    getEndpoint(endpointId: number): Endpoint | undefined {
+    getEndpoint(endpointId: EndpointNumber): Endpoint | undefined {
         return this.endpoints.get(endpointId);
     }
 
-    hasEndpoint(endpointId: number): boolean {
+    hasEndpoint(endpointId: EndpointNumber): boolean {
         return this.endpoints.has(endpointId);
     }
 
-    getClusterServer(endpointId: number, clusterId: number): ClusterServerObj<any, any, any> | undefined {
+    getClusterServer(endpointId: EndpointNumber, clusterId: ClusterId): ClusterServerObj<any, any, any> | undefined {
         return this.endpoints.get(endpointId)?.getClusterServerById(clusterId);
     }
 
-    hasClusterServer(endpointId: number, clusterId: number): boolean {
+    hasClusterServer(endpointId: EndpointNumber, clusterId: ClusterId): boolean {
         return !!this.getClusterServer(endpointId, clusterId);
     }
 
-    getAttribute(endpointId: number, clusterId: number, attributeId: number): AttributeServer<any> | FabricScopedAttributeServer<any> | FixedAttributeServer<any> | undefined {
+    getAttribute(endpointId: EndpointNumber, clusterId: ClusterId, attributeId: AttributeId): AttributeServer<any> | FabricScopedAttributeServer<any> | FixedAttributeServer<any> | undefined {
         return this.attributes.get(attributePathToId({ endpointId, clusterId, attributeId }));
     }
 
-    hasAttribute(endpointId: number, clusterId: number, attributeId: number): boolean {
+    hasAttribute(endpointId: EndpointNumber, clusterId: ClusterId, attributeId: AttributeId): boolean {
         return !!this.getAttribute(endpointId, clusterId, attributeId);
     }
 
-    getEvent(endpointId: number, clusterId: number, eventId: number): EventServer<any> | undefined {
+    getEvent(endpointId: EndpointNumber, clusterId: ClusterId, eventId: EventId): EventServer<any> | undefined {
         return this.events.get(eventPathToId({ endpointId, clusterId, eventId }));
     }
 
-    hasEvent(endpointId: number, clusterId: number, eventId: number): boolean {
+    hasEvent(endpointId: EndpointNumber, clusterId: ClusterId, eventId: EventId): boolean {
         return !!this.getEvent(endpointId, clusterId, eventId);
     }
 
-    getCommand(endpointId: number, clusterId: number, commandId: number): CommandServer<any, any> | undefined {
+    getCommand(endpointId: EndpointNumber, clusterId: ClusterId, commandId: CommandId): CommandServer<any, any> | undefined {
         return this.commands.get(commandPathToId({ endpointId, clusterId, commandId }));
     }
 
-    hasCommand(endpointId: number, clusterId: number, commandId: number): boolean {
+    hasCommand(endpointId: EndpointNumber, clusterId: ClusterId, commandId: CommandId): boolean {
         return !!this.getCommand(endpointId, clusterId, commandId);
     }
 

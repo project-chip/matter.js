@@ -15,6 +15,7 @@ import { ClusterServerObj } from "../server/ClusterServer.js";
 import { EventClient } from "./EventClient.js";
 import { BitSchema } from "../../schema/BitmapSchema.js";
 import { DecodedEventData } from "../../protocol/interaction/EventDataDecoder.js";
+import { ClusterId } from "../../datatype/ClusterId.js";
 
 export type AttributeClients<F extends BitSchema, A extends Attributes> = Merge<
     Merge<
@@ -77,7 +78,7 @@ export type ClusterClientObjForCluster<C extends Cluster<any, any, any, any, any
 /** Strongly typed interface of a cluster client */
 export type ClusterClientObj<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events> =
     {
-        id: number;
+        id: ClusterId;
         _type: "ClusterClient";
         name: string;
         endpointId: number;

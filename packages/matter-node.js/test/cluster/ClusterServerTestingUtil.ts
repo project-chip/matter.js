@@ -28,6 +28,6 @@ export async function callCommandOnClusterServer<A extends Attributes, C extends
 }
 
 export async function createTestSessionWithFabric() {
-    const testFabric = new Fabric(new FabricIndex(1), new FabricId(BigInt(1)), new NodeId(BigInt(1)), new NodeId(BigInt(2)), ZERO, ZERO, KEY, new VendorId(1), ZERO, ZERO, ZERO, ZERO, ZERO, "");
-    return await SecureSession.create({} as any, 1, testFabric, new NodeId(BigInt(1)), 1, ZERO, ZERO, false, false, () => { /* */ }, 1, 2);
+    const testFabric = new Fabric(FabricIndex(1), FabricId(BigInt(1)), NodeId(BigInt(1)), NodeId(BigInt(2)), ZERO, ZERO, KEY, VendorId(1), ZERO, ZERO, ZERO, ZERO, ZERO, "");
+    return await SecureSession.create({} as any, 1, testFabric, NodeId(BigInt(1)), 1, ZERO, ZERO, false, false, () => { /* */ }, 1, 2);
 }

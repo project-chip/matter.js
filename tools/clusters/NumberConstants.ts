@@ -27,7 +27,6 @@ import {
  * Map of matter datatype names to TlvGenerator.tlvImport arguments.
  */
 export const SpecializedNumbers: { [name: string]: [string, string] } = {
-    [Globals.actionId.name]: ["datatype", "TlvActionId"],
     [Globals.attributeId.name]: ["datatype", "TlvAttributeId"],
     [Globals.clusterId.name]: ["datatype", "TlvClusterId"],
     [Globals.commandId.name]: ["datatype", "TlvCommandId"],
@@ -52,23 +51,23 @@ export const SpecializedNumbers: { [name: string]: [string, string] } = {
 /**
  * Map of matter datatype names of wrapped TLV types to the wrapping field
  * name.
- * 
+ *
  * Turns out we don't actually need the key because we use the constructor but
  * leaving in place in case something changes.
  */
 export const WrappedConstantKeys = {
-    [Globals.actionId.name]: "id",
-    [Globals.clusterId.name]: "id",
-    [Globals.commandId.name]: "id",
-    [Globals.deviceTypeId.name]: "id",
-    [Globals.endpointNo.name]: "number",
-    [Globals.eventId.name]: "id",
-    [Globals.fabricId.name]: "id",
-    [Globals.fabricIdx.name]: "index",
-    [Globals.groupId.name]: "id",
-    [Globals.nodeId.name]: "id",
-    [Globals.SubjectId.name]: "id",
-    [Globals.vendorId.name]: "id"
+    [Globals.attributeId.name]: true,
+    [Globals.clusterId.name]: true,
+    [Globals.commandId.name]: true,
+    [Globals.deviceTypeId.name]: true,
+    [Globals.endpointNo.name]: true,
+    [Globals.eventId.name]: true,
+    [Globals.fabricId.name]: true,
+    [Globals.fabricIdx.name]: true,
+    [Globals.groupId.name]: true,
+    [Globals.nodeId.name]: true,
+    [Globals.SubjectId.name]: true,
+    [Globals.vendorId.name]: true,
 }
 
 /**
@@ -86,5 +85,5 @@ export const NumericRanges = {
     int64: { min: INT64_MIN, max: INT64_MAX },
     float32: { min: FLOAT32_MIN, max: FLOAT32_MAX },
     percent: { min: 0, max: 100 },
-    percent100ths: { min: 0, max: 10000 }
+    percent100ths: { min: 0, max: 10000 },
 }

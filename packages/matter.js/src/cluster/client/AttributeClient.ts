@@ -12,6 +12,8 @@ import { FabricIndex } from "../../datatype/FabricIndex.js";
 import { NoAssociatedFabricError } from "../../session/SecureSession.js";
 import { tryCatch } from "../../common/TryCatchHandler.js";
 import { InternalError } from "../../common/MatterError.js";
+import { EndpointNumber } from "../../datatype/EndpointNumber.js";
+import { ClusterId } from "../../datatype/ClusterId.js";
 
 export class AttributeClient<T> {
     private readonly isWritable: boolean;
@@ -22,8 +24,8 @@ export class AttributeClient<T> {
     constructor(
         readonly attribute: Attribute<T, any>,
         readonly name: string,
-        readonly endpointId: number,
-        readonly clusterId: number,
+        readonly endpointId: EndpointNumber,
+        readonly clusterId: ClusterId,
         private getInteractionClientCallback: () => Promise<InteractionClient>,
     ) {
         const { schema, writable, fabricScoped } = attribute;
@@ -55,7 +57,7 @@ export class AttributeClient<T> {
                 return this.schema.removeField(
                     value,
                     <number>Globals.FabricIndex.id,
-                    (existingFieldIndex) => existingFieldIndex.index === sessionFabric.fabricIndex.index
+                    (existingFieldIndex) => existingFieldIndex.index === sessionFabric.fabricIndex
                 );
             }, NoAssociatedFabricError, value);
         }

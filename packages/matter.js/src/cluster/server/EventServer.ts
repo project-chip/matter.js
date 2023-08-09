@@ -10,6 +10,8 @@ import { EventPriority } from "../Cluster.js";
 import { EventData, EventHandler, EventStorageData } from "../../protocol/interaction/EventHandler.js";
 import { Time } from "../../time/Time.js";
 import { InternalError } from "../../common/MatterError.js";
+import { EventId } from "../../datatype/EventId.js";
+import { ClusterId } from "../../datatype/ClusterId.js";
 
 // TODO Add Fabric Scoped EventServer when needed
 
@@ -20,8 +22,8 @@ export class EventServer<T> {
     protected eventHandler?: EventHandler;
 
     constructor(
-        readonly id: number,
-        readonly clusterId: number,
+        readonly id: EventId,
+        readonly clusterId: ClusterId,
         readonly name: string,
         readonly schema: TlvSchema<T>,
         readonly priority: EventPriority,

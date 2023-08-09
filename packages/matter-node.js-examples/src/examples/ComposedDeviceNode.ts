@@ -21,9 +21,9 @@ import { CommissioningServer, MatterServer } from "@project-chip/matter-node.js"
 import { commandExecutor, getIntParameter, getParameter, requireMinNodeVersion, hasParameter } from "@project-chip/matter-node.js/util";
 import { Time } from "@project-chip/matter-node.js/time";
 import { OnOffLightDevice, OnOffPluginUnitDevice, DeviceTypes } from "@project-chip/matter-node.js/device";
-import { VendorId } from "@project-chip/matter-node.js/datatype";
 import { Logger } from "@project-chip/matter-node.js/log";
 import { StorageManager, StorageBackendDisk } from "@project-chip/matter-node.js/storage";
+import { VendorId } from "@project-chip/matter-node.js/datatype";
 
 const logger = Logger.get("Device");
 
@@ -73,7 +73,7 @@ class ComposedDevice {
         const passcode = getIntParameter("passcode") ?? deviceStorage.get("passcode", 20202021);
         const discriminator = getIntParameter("discriminator") ?? deviceStorage.get("discriminator", 3840);
         // product name / id and vendor id should match what is in the device certificate
-        const vendorId = new VendorId(getIntParameter("vendorid") ?? deviceStorage.get("vendorid", 0xFFF1));
+        const vendorId = getIntParameter("vendorid") ?? deviceStorage.get("vendorid", 0xFFF1);
         const productName = `node-matter OnOff-Bridge`;
         const productId = getIntParameter("productid") ?? deviceStorage.get("productid", 0x8000);
 
@@ -84,7 +84,7 @@ class ComposedDevice {
 
         deviceStorage.set("passcode", passcode);
         deviceStorage.set("discriminator", discriminator);
-        deviceStorage.set("vendorid", vendorId.id);
+        deviceStorage.set("vendorid", vendorId);
         deviceStorage.set("productid", productId);
         deviceStorage.set("isSocket", isSocket);
         deviceStorage.set("uniqueid", uniqueId);
@@ -112,7 +112,7 @@ class ComposedDevice {
             discriminator,
             basicInformation: {
                 vendorName,
-                vendorId,
+                vendorId: VendorId(vendorId),
                 nodeLabel: productName,
                 productName,
                 productLabel: productName,

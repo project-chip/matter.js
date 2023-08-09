@@ -52,8 +52,8 @@ describe("DeepEqual", () => {
     });
 
     it("Equality of special Matter objects", () => {
-        expect(isDeepEqual(new VendorId(0), new VendorId(0))).toBeTruthy();
-        expect(!isDeepEqual(new VendorId(0), new VendorId(1))).toBeTruthy();
+        expect(isDeepEqual(VendorId(0), VendorId(0))).toBeTruthy();
+        expect(!isDeepEqual(VendorId(0), VendorId(1))).toBeTruthy();
 
         expect(isDeepEqual(ByteArray.fromHex("00"), ByteArray.fromHex("00"))).toBeTruthy();
         expect(!isDeepEqual(ByteArray.fromHex("00"), ByteArray.fromHex("01"))).toBeTruthy();

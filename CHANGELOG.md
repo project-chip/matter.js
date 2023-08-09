@@ -18,6 +18,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Breaking: Types of specific clusters are no longer exported flat on main level. Cluster exports are now namespaces that include their types.
   * Breaking: All collection files meant to be used for exports only are renamed to export.ts and should not be used for internal imports
   * Breaking: Attribute listener methods renamed: addListener -> addValueSetListener, addMatterListener -> addValueChangeListener (also remove methods) to make it more clear what they do
+  * Breaking: Change from object style to Branded types for special Datatype objects (e.g. "new VendorId(0xFFF1)" -> "VendorId(0xFFF1)")
   * Feature: Enhance CommissioningServer options to also specify GeneralCommissioningServer details and settings
   * Feature: Adjust RegulatoryConfig Handling in Device and Controller to match with specifications
   * Feature: Endpoint Structures use custom-unique-id (from EndpointOptions)/uniqueStorageKey (from BasicInformationCluster)/serialNumber (from BasicInformationCluster)/ Index (in this order) to store and restore the endpoint ID in structures
@@ -29,7 +30,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Feature: Refactor Controller Commissioning process and add network commissioning support
   * Feature: Correctly Handle FabricIndex fields for Read and Write requests
   * Feature: Handle subscription errors and destroy session if failing more than 3 times
-  * Feature: Add full event support (Device and Controller) including triggering some default events automatically (startup, shutdown, reachabilitycChanged, bootReason)
+  * Feature: Add full event support (Device and Controller) including triggering some default events automatically (startup, shutdown, reachabilityChanged, bootReason)
   * Feature: Add more parameters to several InteractionClient methods to allow to configure more parameters of the requests
   * Feature: Allows subscripts to be updated dynamically when the endpoint structure for bridges changes by adding or removing a device
   * Enhance: Device port in MDNSBroadcaster is now dynamically set and add UDC (User directed Commissioning) Announcements

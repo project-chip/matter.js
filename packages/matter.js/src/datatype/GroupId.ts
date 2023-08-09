@@ -5,8 +5,9 @@
  */
 
 import { TlvUInt16 } from "../tlv/TlvNumber.js";
-import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { Branded } from "../util/Type.js";
+import { TlvWrapper } from "../tlv/TlvWrapper.js";
 
 /**
  * A Group Identifier (Group ID or GID) is a 16-bit number that identifies a set of Nodes across a
@@ -20,15 +21,15 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
  *
  * @see {@link MatterCoreSpecificationV1_0} § 2.5.4
  */
-export class GroupId {
-    constructor(
-        readonly id: number,
-    ) { }
+export type GroupId = Branded<number, "GroupId">;
+
+export function GroupId(v: number): GroupId {
+    return v as GroupId;
 }
 
 /** Tlv Schema for a Group Id. */
 export const TlvGroupId = new TlvWrapper<GroupId, number>(
     TlvUInt16,
-    groupId => groupId.id,
-    value => new GroupId(value),
+    groupId => groupId,
+    value => GroupId(value),
 );

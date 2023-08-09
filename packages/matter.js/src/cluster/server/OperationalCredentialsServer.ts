@@ -164,7 +164,7 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         const fabric = device.getFabricByIndex(fabricIndex);
 
         if (fabric === undefined) {
-            return { statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidFabricIndex, debugText: `Fabric ${fabricIndex.index} not found` };
+            return { statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidFabricIndex, debugText: `Fabric ${fabricIndex} not found` };
         }
 
         fabric.remove();

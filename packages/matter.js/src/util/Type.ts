@@ -53,3 +53,8 @@ export function isNullish(a: any) {
 }
 
 export type MakeMandatory<T> = Exclude<T, undefined>;
+
+/** Create a branded type */
+declare const __brand: unique symbol
+type Brand<B> = { [__brand]: B }
+export type Branded<T, B> = T & Brand<B>

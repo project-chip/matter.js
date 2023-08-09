@@ -6,6 +6,8 @@
 
 import * as MatterClusters from "../cluster/definitions/index.js";
 import { MatterDeviceLibrarySpecificationV1_0 } from "../spec/Specifications.js";
+import { DeviceTypeId } from "../datatype/DeviceTypeId.js";
+import { ClusterId } from "../datatype/ClusterId.js";
 
 /**
  * This represents a Root Node for devices.
@@ -62,14 +64,14 @@ export enum DeviceClasses {
 
 export interface DeviceTypeDefinition {
     name: string;
-    code: number;
+    code: DeviceTypeId;
     deviceClass: DeviceClasses;
     superSet?: string;
     revision: number;
-    requiredServerClusters: number[];
-    optionalServerClusters: number[];
-    requiredClientClusters: number[];
-    optionalClientClusters: number[];
+    requiredServerClusters: ClusterId[];
+    optionalServerClusters: ClusterId[];
+    requiredClientClusters: ClusterId[];
+    optionalClientClusters: ClusterId[];
 }
 
 export const DeviceTypeDefinition = ({
@@ -88,13 +90,13 @@ export const DeviceTypeDefinition = ({
     deviceClass: DeviceClasses;
     superSet?: string;
     revision: number;
-    requiredServerClusters?: number[];
-    optionalServerClusters?: number[];
-    requiredClientClusters?: number[];
-    optionalClientClusters?: number[];
+    requiredServerClusters?: ClusterId[];
+    optionalServerClusters?: ClusterId[];
+    requiredClientClusters?: ClusterId[];
+    optionalClientClusters?: ClusterId[];
 }): DeviceTypeDefinition => ({
     name,
-    code,
+    code: DeviceTypeId(code),
     deviceClass,
     superSet,
     revision,

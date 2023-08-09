@@ -22,6 +22,7 @@ import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { Key, PublicKey } from "../crypto/Key.js";
 import { MatterError } from "../common/MatterError.js";
+import { FabricId, TlvFabricId } from "../datatype/FabricId.js";
 
 export class CertificateError extends MatterError { }
 
@@ -56,16 +57,16 @@ function uInt16To4Chars(value: number) {
 export const CommonName_X520 = (name: string) => [DerObject("550403", { value: name })];
 
 /** matter-node-id = ASN.1 OID 1.3.6.1.4.1.37244.1.1 */
-export const NodeId_Matter = (nodeId: NodeId) => [DerObject("2b0601040182a27c0101", { value: intTo16Chars(nodeId.id) })];
+export const NodeId_Matter = (nodeId: NodeId) => [DerObject("2b0601040182a27c0101", { value: intTo16Chars(nodeId) })];
 
 /** matter-rcac-id = ASN.1 OID 1.3.6.1.4.1.37244.1.4 */
 export const RcacId_Matter = (id: bigint | number) => [DerObject("2b0601040182a27c0104", { value: intTo16Chars(id) })];
 
 /** matter-fabric-id = ASN.1 OID 1.3.6.1.4.1.37244.1.5 */
-export const FabricId_Matter = (id: bigint | number) => [DerObject("2b0601040182a27c0105", { value: intTo16Chars(id) })];
+export const FabricId_Matter = (id: FabricId) => [DerObject("2b0601040182a27c0105", { value: intTo16Chars(id) })];
 
 /** matter-oid-vid = ASN.1 OID 1.3.6.1.4.1.37244.2.1 */
-export const VendorId_Matter = (vendorId: VendorId) => [DerObject("2b0601040182a27c0201", { value: uInt16To4Chars(vendorId.id) })];
+export const VendorId_Matter = (vendorId: VendorId) => [DerObject("2b0601040182a27c0201", { value: uInt16To4Chars(vendorId) })];
 
 /** matter-oid-pid = ASN.1 OID 1.3.6.1.4.1.3724 4.2.2 */
 export const ProductId_Matter = (id: number) => [DerObject("2b0601040182a27c0202", { value: uInt16To4Chars(id) })];
@@ -107,7 +108,7 @@ export const TlvOperationalCertificate = TlvObject({
     notBefore: TlvField(4, TlvUInt32),
     notAfter: TlvField(5, TlvUInt32),
     subject: TlvField(6, TlvList({
-        fabricId: TlvField(21, TlvUInt64),
+        fabricId: TlvField(21, TlvFabricId),
         nodeId: TlvField(17, TlvNodeId),
     })),
     publicKeyAlgorithm: TlvField(7, TlvUInt8),
@@ -279,7 +280,7 @@ export class CertificateManager {
             },
             subject: {
                 fabricId: FabricId_Matter(fabricId),
-                nodeId: NodeId_Matter(nodeId),
+                nodeId: NodeId_Matter(NodeId(nodeId)),
             },
             publicKey: PublicKeyEcPrime256v1_X962(ellipticCurvePublicKey),
             extensions: ContextTagged(3, {

@@ -25,6 +25,7 @@ import { Fabric } from "../../fabric/Fabric.js";
 import { EventServer } from "./EventServer.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { BitSchema } from "../../schema/BitmapSchema.js";
+import { ClusterId } from "../../datatype/ClusterId.js";
 
 /** Cluster attributes accessible on the cluster server */
 type MandatoryAttributeServers<A extends Attributes> = Omit<{ [P in MandatoryAttributeNames<A>]: A[P] extends FabricScopedAttribute<any, any> ? FabricScopedAttributeServer<AttributeJsType<A[P]>> : (A[P] extends WritableFabricScopedAttribute<any, any> ? FabricScopedAttributeServer<AttributeJsType<A[P]>> : (A[P] extends FixedAttribute<any, any> ? FixedAttributeServer<AttributeJsType<A[P]>> : AttributeServer<AttributeJsType<A[P]>>)) }, keyof GlobalAttributes<any>>;
@@ -92,7 +93,7 @@ export type ClusterServerObjForCluster<C extends Cluster<any, any, any, any, any
 export type ClusterServerObj<A extends Attributes, C extends Commands, E extends Events> =
     {
         /** Cluster ID */
-        id: number;
+        id: ClusterId;
 
         /** Cluster name */
         name: string;

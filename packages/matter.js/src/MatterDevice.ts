@@ -31,6 +31,7 @@ import { StorageContext } from "./storage/StorageContext.js";
 import { isNetworkInterface, NetInterface } from "./net/NetInterface.js";
 import { InternalError } from "./common/MatterError.js";
 import { NetworkError } from "./net/Network.js";
+import { DeviceTypeId } from "./datatype/DeviceTypeId.js";
 
 const logger = Logger.get("MatterDevice");
 
@@ -51,7 +52,7 @@ export class MatterDevice {
 
     constructor(
         private readonly deviceName: string,
-        private readonly deviceType: number,
+        private readonly deviceType: DeviceTypeId,
         private readonly vendorId: VendorId,
         private readonly productId: number,
         private readonly discriminator: number,
@@ -121,20 +122,20 @@ export class MatterDevice {
                 const session = this.sessionManager.getSessionForNode(fabric, fabric.rootNodeId);
                 if (session) {
                     // We have a session, no need to re-announce
-                    logger.debug("Skipping announce for fabric", fabric.fabricId.id, "because we have a session", session.getId());
+                    logger.debug("Skipping announce for fabric", fabric.fabricId, "because we have a session", session.getId());
                     continue;
                 }
-                logger.debug("Announcing", Logger.dict({ fabric: fabric.fabricId.id }));
+                logger.debug("Announcing", Logger.dict({ fabric: fabric.fabricId }));
                 fabricsToAnnounce.push(fabric);
             }
             for (const broadcaster of this.broadcasters) {
-                broadcaster.setFabrics(fabricsToAnnounce);
+                await broadcaster.setFabrics(fabricsToAnnounce);
                 await broadcaster.announce();
             }
         } else {
             // No fabric paired yeet, so announce as "ready for commissioning"
             for (const broadcaster of this.broadcasters) {
-                broadcaster.setCommissionMode(1, {
+                await broadcaster.setCommissionMode(1, {
                     deviceName: this.deviceName,
                     deviceType: this.deviceType,
                     vendorId: this.vendorId,
@@ -166,14 +167,14 @@ export class MatterDevice {
         }
         this.fabricManager.addFabric(fabric);
         for (const broadcaster of this.broadcasters) {
-            broadcaster.setFabrics([fabric]);
+            await broadcaster.setFabrics([fabric]);
             await broadcaster.announce();
         }
         return fabric.fabricIndex;
     }
 
     getFabricByIndex(fabricIndex: FabricIndex) {
-        return this.fabricManager.getFabrics().find(fabric => fabric.fabricIndex.index === fabricIndex.index);
+        return this.fabricManager.getFabrics().find(fabric => fabric.fabricIndex === fabricIndex);
     }
 
     initiateExchange(fabric: Fabric, nodeId: NodeId, protocolId: number) {
@@ -219,7 +220,7 @@ export class MatterDevice {
         }
         this.commissioningWindowOpened = true;
         for (const broadcaster of this.broadcasters) {
-            broadcaster.setCommissionMode(mode, {
+            await broadcaster.setCommissionMode(mode, {
                 deviceName: this.deviceName,
                 deviceType: this.deviceType,
                 vendorId: this.vendorId,

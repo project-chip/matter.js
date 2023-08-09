@@ -6,8 +6,13 @@
 import { Attribute, Cluster, Event, Command } from "./Cluster.js";
 import * as Clusters from "./definitions/index.js";
 import { NodeId } from "../datatype/NodeId.js";
+import { ClusterId } from "../datatype/ClusterId.js";
 import { TlvAttributePath, TlvCommandPath, TlvEventPath } from "../protocol/interaction/InteractionProtocol.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
+import { EndpointNumber } from "../datatype/EndpointNumber.js";
+import { AttributeId } from "../datatype/AttributeId.js";
+import { EventId } from "../datatype/EventId.js";
+import { CommandId } from "../datatype/CommandId.js";
 
 export const AllClustersMap: { [key: Cluster<any, any, any, any, any>["id"]]: Cluster<any, any, any, any, any> } = {
     [Clusters.AccessControlCluster.id]: Clusters.AccessControlCluster,
@@ -97,17 +102,17 @@ interface CachedCommandInfo {
     command: Command<any, any, any>;
     name: string;
 }
-const clusterAttributeCache = new Map<number, Map<number, CachedAttributeInfo>>();
-const clusterEventCache = new Map<number, Map<number, CachedEventInfo>>();
-const clusterCommandCache = new Map<number, Map<number, CachedCommandInfo>>();
+const clusterAttributeCache = new Map<ClusterId, Map<AttributeId, CachedAttributeInfo>>();
+const clusterEventCache = new Map<ClusterId, Map<EventId, CachedEventInfo>>();
+const clusterCommandCache = new Map<ClusterId, Map<CommandId, CachedCommandInfo>>();
 
-export function getClusterById(clusterId: number): Cluster<any, any, any, any, any> {
+export function getClusterById(clusterId: ClusterId): Cluster<any, any, any, any, any> {
     return AllClustersMap[clusterId];
 }
 
-export function getClusterAttributeById(clusterDef: Cluster<any, any, any, any, any>, attributeId: number): CachedAttributeInfo | undefined {
+export function getClusterAttributeById(clusterDef: Cluster<any, any, any, any, any>, attributeId: AttributeId): CachedAttributeInfo | undefined {
     if (!clusterAttributeCache.has(clusterDef.id)) {
-        const attributeMap = new Map<number, CachedAttributeInfo>();
+        const attributeMap = new Map<AttributeId, CachedAttributeInfo>();
 
         const { attributes } = clusterDef;
 
@@ -127,9 +132,9 @@ export function getClusterAttributeById(clusterDef: Cluster<any, any, any, any, 
     return attributeMap.get(attributeId);
 }
 
-export function getClusterEventById(clusterDef: Cluster<any, any, any, any, any>, eventId: number): CachedEventInfo | undefined {
+export function getClusterEventById(clusterDef: Cluster<any, any, any, any, any>, eventId: EventId): CachedEventInfo | undefined {
     if (!clusterEventCache.has(clusterDef.id)) {
-        const eventMap = new Map<number, CachedEventInfo>();
+        const eventMap = new Map<EventId, CachedEventInfo>();
 
         const { events } = clusterDef;
 
@@ -149,9 +154,9 @@ export function getClusterEventById(clusterDef: Cluster<any, any, any, any, any>
     return eventMap.get(eventId);
 }
 
-export function getClusterCommandById(clusterDef: Cluster<any, any, any, any, any>, commandId: number): CachedCommandInfo | undefined {
+export function getClusterCommandById(clusterDef: Cluster<any, any, any, any, any>, commandId: CommandId): CachedCommandInfo | undefined {
     if (!clusterCommandCache.has(clusterDef.id)) {
-        const commandMap = new Map<number, CachedCommandInfo>();
+        const commandMap = new Map<CommandId, CachedCommandInfo>();
 
         const { commands } = clusterDef;
 
@@ -175,8 +180,8 @@ function toHex(value: number | bigint | undefined) {
     return value === undefined ? "*" : `0x${value.toString(16)}`;
 }
 
-function resolveEndpointClusterName(nodeId: NodeId | undefined, endpointId: number | undefined, clusterId: number | undefined) {
-    let elementName = nodeId === undefined ? "" : `${toHex(nodeId.id)}/`;
+function resolveEndpointClusterName(nodeId: NodeId | undefined, endpointId: EndpointNumber | undefined, clusterId: ClusterId | undefined) {
+    let elementName = nodeId === undefined ? "" : `${toHex(nodeId)}/`;
     if (endpointId === undefined) {
         elementName += "*";
     } else {
