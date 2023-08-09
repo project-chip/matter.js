@@ -5,7 +5,7 @@
  */
 
 import { OnOffCluster } from "../definitions/OnOffCluster.js";
-import { AttributeInitialValues, ClusterServerHandlers } from "./ClusterServer.js";
+import { AttributeInitialValues, ClusterServerHandlers } from "./ClusterServerTypes.js";
 import { ClusterServer } from "../../protocol/interaction/InteractionServer.js";
 
 /*

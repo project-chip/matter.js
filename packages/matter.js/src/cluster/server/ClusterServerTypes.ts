@@ -17,7 +17,7 @@ import { MatterDevice } from "../../MatterDevice.js";
 import { Session } from "../../session/Session.js";
 import { CommandServer } from "./CommandServer.js";
 import { StorageContext } from "../../storage/StorageContext.js";
-import { ClusterClientObj } from "../client/ClusterClient.js";
+import { ClusterClientObj } from "../client/ClusterClientTypes.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Scenes } from "../definitions/ScenesCluster.js";
 import { Endpoint } from "../../device/Endpoint.js";

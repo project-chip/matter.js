@@ -5,7 +5,7 @@
  */
 
 import { LevelControlCluster } from "../definitions/LevelControlCluster.js";
-import { ClusterServerHandlers } from "./ClusterServer.js";
+import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 import { NotImplementedError } from "../../common/MatterError.js";
 
 // TODO: Create temporary options based on mask and override. How to expose to user of the library?

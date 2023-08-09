@@ -5,7 +5,7 @@
  */
 import { ClusterServer } from "../../protocol/interaction/InteractionServer.js";
 import { IdentifyCluster, Identify } from "../definitions/IdentifyCluster.js";
-import { ClusterServerHandlers } from "./ClusterServer.js";
+import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 
 export const createDefaultIdentifyClusterServer = (handlers: ClusterServerHandlers<typeof IdentifyCluster>) => ClusterServer(
     IdentifyCluster,

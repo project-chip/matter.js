@@ -7,7 +7,7 @@
 import { GroupsCluster } from "../definitions/GroupsCluster.js";
 import { GroupId } from "../../datatype/GroupId.js";
 import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
-import { ClusterServerHandlers } from "./ClusterServer.js";
+import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 import { assertSecureSession } from "../../session/SecureSession.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { SessionType } from "../../codec/MessageCodec.js";

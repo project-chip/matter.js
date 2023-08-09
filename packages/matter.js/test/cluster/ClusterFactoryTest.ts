@@ -11,7 +11,7 @@ import { TlvNoArguments } from "../../src/tlv/TlvNoArguments.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../src/schema/BitmapSchema.js";
 import { TlvField, TlvObject } from "../../src/tlv/TlvObject.js";
 import { ClusterServer } from "../../src/protocol/interaction/InteractionServer.js";
-import { ClusterServerHandlers } from "../../src/cluster/server/ClusterServer.js";
+import { ClusterServerHandlers } from "../../src/cluster/server/ClusterServerTypes.js";
 
 enum Feature {
     Extended = "Extended",

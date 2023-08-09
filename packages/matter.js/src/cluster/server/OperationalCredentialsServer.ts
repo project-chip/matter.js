@@ -12,7 +12,7 @@ import { assertSecureSession, SecureSession } from "../../session/SecureSession.
 import { ByteArray } from "../../util/ByteArray.js";
 import { OperationalCredentials, OperationalCredentialsCluster } from "../definitions/OperationalCredentialsCluster.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
-import { ClusterServerHandlers } from "./ClusterServer.js";
+import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvByteString } from "../../tlv/TlvString.js";
 import { TlvUInt32 } from "../../tlv/TlvNumber.js";

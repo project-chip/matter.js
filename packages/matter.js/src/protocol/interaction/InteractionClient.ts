@@ -24,7 +24,7 @@ import {
 import { ExchangeProvider } from "../ExchangeManager.js";
 import {
     AttributeClients, SignatureFromCommandSpec, ClusterClientObj, EventClients
-} from "../../cluster/client/ClusterClient.js";
+} from "../../cluster/client/ClusterClientTypes.js";
 import { AttributeClient } from "../../cluster/client/AttributeClient.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { EventClient } from "../../cluster/client/EventClient.js";

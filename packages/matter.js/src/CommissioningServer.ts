@@ -19,7 +19,7 @@ import { MatterDevice } from "./MatterDevice.js";
 import { UdpInterface } from "./net/UdpInterface.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
-import { AttributeInitialValues, ClusterServerHandlers, ClusterServerObj } from "./cluster/server/ClusterServer.js";
+import { AttributeInitialValues, ClusterServerHandlers, ClusterServerObj } from "./cluster/server/ClusterServerTypes.js";
 import { OperationalCredentialsClusterHandler, OperationalCredentialsServerConf } from "./cluster/server/OperationalCredentialsServer.js";
 import { AttestationCertificateManager } from "./certificate/AttestationCertificateManager.js";
 import { CertificationDeclarationManager } from "./certificate/CertificationDeclarationManager.js";

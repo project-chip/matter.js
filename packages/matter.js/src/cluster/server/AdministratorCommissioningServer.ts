@@ -5,7 +5,7 @@
  */
 
 import { AdministratorCommissioning } from "../definitions/AdministratorCommissioningCluster.js"
-import { ClusterServerHandlers } from "./ClusterServer.js"
+import { ClusterServerHandlers } from "./ClusterServerTypes.js"
 import { PaseServer } from "../../session/pase/PaseServer.js";
 import { SecureChannelProtocol } from "../../protocol/securechannel/SecureChannelProtocol.js";
 import { MatterDevice } from "../../MatterDevice.js";

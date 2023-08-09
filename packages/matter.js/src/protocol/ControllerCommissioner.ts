@@ -7,7 +7,7 @@
 import { ClusterClient, InteractionClient } from "./interaction/InteractionClient.js";
 import { Logger } from "../log/Logger.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
-import { ClusterClientObj } from "../cluster/client/ClusterClient.js";
+import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
 import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
 import { GeneralCommissioning } from "../cluster/definitions/GeneralCommissioningCluster.js";
 import { MatterError, UnexpectedDataError } from "../common/MatterError.js";

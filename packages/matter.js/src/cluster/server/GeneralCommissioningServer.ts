@@ -7,7 +7,7 @@
 import { Logger } from "../../log/Logger.js";
 import { assertSecureSession } from "../../session/SecureSession.js";
 import { GeneralCommissioning, GeneralCommissioningCluster } from "../definitions/GeneralCommissioningCluster.js";
-import { ClusterServerHandlers } from "./ClusterServer.js";
+import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 import { BasicInformationCluster } from "../definitions/BasicInformationCluster.js";
 import { ImplementationError, MatterFlowError } from "../../common/MatterError.js";
 

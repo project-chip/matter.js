@@ -12,10 +12,10 @@ export * from "./ClusterHelper.js";
 export * from "./definitions/index.js";
 
 // Export all Client classes
-export * from "./client/ClusterClient.js";
+export * from "./client/ClusterClientTypes.js";
 
 // Export all Server classes
-export * from "./server/ClusterServer.js";
+export * from "./server/ClusterServerTypes.js";
 export * from "./server/AttributeServer.js";
 export * from "./server/CommandServer.js";
 

@@ -27,7 +27,7 @@ import { decodeAttributeValueWithSchema, normalizeAttributeData } from "./Attrib
 import {
     AttributeInitialValues, AttributeServers, ClusterServerHandlers, ClusterServerObj, CommandServers, EventServers,
     SupportedEventsList,
-} from "../../cluster/server/ClusterServer.js";
+} from "../../cluster/server/ClusterServerTypes.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import {
     AttributeServer, FabricScopedAttributeServer, FixedAttributeServer

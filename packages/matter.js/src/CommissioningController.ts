@@ -16,7 +16,7 @@ import { Logger } from "./log/Logger.js";
 import { DeviceTypes, DeviceTypeDefinition, getDeviceTypeDefinitionByCode } from "./device/DeviceTypes.js";
 import {
     AttributeInitialValues, AttributeServerValues, ClusterServerObj, isClusterServer
-} from "./cluster/server/ClusterServer.js";
+} from "./cluster/server/ClusterServerTypes.js";
 import { AtLeastOne } from "./util/Array.js";
 import { ClusterServer } from "./protocol/interaction/InteractionServer.js";
 import { Aggregator } from "./device/Aggregator.js";
@@ -24,7 +24,7 @@ import { PairedDevice } from "./device/Device.js";
 import { ComposedDevice } from "./device/ComposedDevice.js";
 import { DescriptorCluster } from "./cluster/definitions/DescriptorCluster.js";
 import { AllClustersMap } from "./cluster/ClusterHelper.js";
-import { ClusterClientObj, isClusterClient } from "./cluster/client/ClusterClient.js";
+import { ClusterClientObj, isClusterClient } from "./cluster/client/ClusterClientTypes.js";
 import { BitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
 import { ServerAddressIp } from "./common/ServerAddress.js";
