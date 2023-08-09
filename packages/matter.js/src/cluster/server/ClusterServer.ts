@@ -19,7 +19,7 @@ import { Scenes } from "../definitions/ScenesCluster.js";
 import { CommandId } from "../../datatype/CommandId.js";
 import { EventId } from "../../datatype/EventId.js";
 import { capitalize } from "../../util/String.js";
-import { AttributeServer, FabricScopedAttributeServer, FixedAttributeServer } from "./AttributeServer.js";
+import { createAttributeServer } from "./AttributeServer.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { ImplementationError } from "../../common/MatterError.js";
 import { CommandServer } from "./CommandServer.js";
@@ -200,90 +200,57 @@ export function ClusterServer<
             }
         }
 
-        const { id, schema, writable, persistent, fabricScoped, scene, fixed, omitChanges } = attributeDef[attributeName];
+        const { id, persistent, fabricScoped, scene, fixed } = attributeDef[attributeName];
         if ((attributesInitialValues as any)[attributeName] !== undefined) {
             // Get the handlers for this attribute if present
             const getter = (handlers as any)[`${attributeName}AttributeGetter`];
             const setter = (handlers as any)[`${attributeName}AttributeSetter`];
             const validator = (handlers as any)[`${attributeName}AttributeValidator`];
 
-            // Create the relevant attribute server based on the attribute definition
+            (attributes as any)[attributeName] = createAttributeServer(
+                clusterDef,
+                attributeDef[attributeName],
+                attributeName,
+                (attributesInitialValues as any)[attributeName],
+                getter ? (session, endpoint, isFabricFiltered) => getter({
+                    attributes,
+                    endpoint,
+                    session,
+                    isFabricFiltered
+                }) : undefined,
+                setter ? (value, session, endpoint) => setter(value, {
+                    attributes,
+                    endpoint,
+                    session,
+                }) : undefined,
+                validator ? (value, session, endpoint) => validator(value, {
+                    attributes,
+                    endpoint,
+                    session,
+                }) : undefined,
+            )
+
+            // Add the relevant convenient methods to the CLusterServerObj
             if (fixed) {
-                (attributes as any)[attributeName] = new FixedAttributeServer(
-                    id,
-                    attributeName,
-                    schema,
-                    writable,
-                    false,
-                    (attributesInitialValues as any)[attributeName],
-                    getter ? (session, endpoint, isFabricFiltered) => getter({
-                        attributes,
-                        endpoint,
-                        session,
-                        isFabricFiltered
-                    }) : undefined,
-                );
-                result[`get${capitalizedAttributeName}Attribute`] = () => (attributes as any)[attributeName].getLocal();
+                result[`get${capitalizedAttributeName}Attribute`] =
+                    () => (attributes as any)[attributeName].getLocal();
             } else if (fabricScoped) {
-                (attributes as any)[attributeName] = new FabricScopedAttributeServer(
-                    id,
-                    attributeName,
-                    schema,
-                    writable,
-                    !omitChanges,
-                    (attributesInitialValues as any)[attributeName],
-                    clusterDef,
-                    getter ? (session, endpoint, fabricScoped) => getter({
-                        attributes,
-                        endpoint,
-                        session,
-                        fabricScoped
-                    }) : undefined,
-                    setter ? (value, session, endpoint) => setter(value, {
-                        attributes,
-                        endpoint,
-                        session,
-                    }) : undefined,
-                    validator ? (value, session, endpoint) => validator(value, {
-                        attributes,
-                        endpoint,
-                        session,
-                    }) : undefined,
-                );
-                result[`get${capitalizedAttributeName}Attribute`] = (fabric: Fabric, isFabricScoped?: boolean) => (attributes as any)[attributeName].getLocalForFabric(fabric, isFabricScoped);
-                result[`set${capitalizedAttributeName}Attribute`] = <T,>(value: T, fabric: Fabric) => (attributes as any)[attributeName].setLocalForFabric(value, fabric);
-                result[`subscribe${capitalizedAttributeName}Attribute`] = <T,>(listener: (newValue: T, oldValue: T) => void) => (attributes as any)[attributeName].addValueSetListener(listener);
+                result[`get${capitalizedAttributeName}Attribute`] =
+                    (fabric: Fabric) => (attributes as any)[attributeName].getLocalForFabric(fabric);
+                result[`set${capitalizedAttributeName}Attribute`] =
+                    <T,>(value: T, fabric: Fabric) => (attributes as any)[attributeName].setLocalForFabric(value, fabric);
+                result[`subscribe${capitalizedAttributeName}Attribute`] =
+                    <T,>(listener: (newValue: T, oldValue: T) => void) => (attributes as any)[attributeName].addValueSetListener(listener);
             } else {
-                (attributes as any)[attributeName] = new AttributeServer(
-                    id,
-                    attributeName,
-                    schema,
-                    writable,
-                    !omitChanges,
-                    (attributesInitialValues as any)[attributeName],
-                    getter ? (session, endpoint, fabricScoped) => getter({
-                        attributes,
-                        endpoint,
-                        session,
-                        fabricScoped
-                    }) : undefined,
-                    setter ? (value, session, endpoint) => setter(value, {
-                        attributes,
-                        endpoint,
-                        session,
-                    }) : undefined,
-                    validator ? (value, session, endpoint) => validator(value, {
-                        attributes,
-                        endpoint,
-                        session,
-                    }) : undefined,
-                );
                 if (scene) {
                     sceneAttributeList.push(attributeName);
                 }
-                result[`get${capitalizedAttributeName}Attribute`] = () => (attributes as any)[attributeName].getLocal();
-                result[`set${capitalizedAttributeName}Attribute`] = <T,>(value: T) => (attributes as any)[attributeName].setLocal(value);
-                result[`subscribe${capitalizedAttributeName}Attribute`] = <T,>(listener: (newValue: T, oldValue: T) => void) => (attributes as any)[attributeName].addValueSetListener(listener);
+                result[`get${capitalizedAttributeName}Attribute`] =
+                    () => (attributes as any)[attributeName].getLocal();
+                result[`set${capitalizedAttributeName}Attribute`] =
+                    <T,>(value: T) => (attributes as any)[attributeName].setLocal(value);
+                result[`subscribe${capitalizedAttributeName}Attribute`] =
+                    <T,>(listener: (newValue: T, oldValue: T) => void) => (attributes as any)[attributeName].addValueSetListener(listener);
             }
             if (persistent || getter || setter) {
                 const listener = (value: any, version: number) => attributeStorageListener(attributeName, version, (fabricScoped || getter || setter) ? undefined : value);
