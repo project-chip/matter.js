@@ -336,14 +336,14 @@ describe("Integration Test", () => {
                 },
                 value: [
                     ClusterId(29),
+                    ClusterId(31),
                     ClusterId(40),
-                    ClusterId(62),
                     ClusterId(48),
                     ClusterId(49),
-                    ClusterId(31),
-                    ClusterId(63),
                     ClusterId(51),
                     ClusterId(60),
+                    ClusterId(62),
+                    ClusterId(63),
                 ],
                 version: 0,
             });
