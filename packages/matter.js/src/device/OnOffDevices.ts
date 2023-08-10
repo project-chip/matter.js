@@ -9,7 +9,7 @@ import { createDefaultOnOffClusterServer } from "../cluster/server/OnOffServer.j
 import { createDefaultGroupsClusterServer } from "../cluster/server/GroupsServer.js";
 import { createDefaultScenesClusterServer } from "../cluster/server/ScenesServer.js";
 import { createDefaultIdentifyClusterServer } from "../cluster/server/IdentifyServer.js";
-import { AttributeInitialValues, ClusterServerHandlers } from "../cluster/server/ClusterServer.js";
+import { AttributeInitialValues, ClusterServerHandlers } from "../cluster/server/ClusterServerTypes.js";
 import { IdentifyCluster, } from "../cluster/definitions/IdentifyCluster.js";
 import { OnOffCluster } from "../cluster/definitions/OnOffCluster.js";
 import { extendPublicHandlerMethods } from "../util/NamedHandler.js";

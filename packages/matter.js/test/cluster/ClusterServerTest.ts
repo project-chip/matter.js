@@ -9,7 +9,6 @@ import { GroupsCluster } from "../../src/cluster/definitions/GroupsCluster.js";
 import { AttributeId } from "../../src/datatype/AttributeId.js";
 import { CommandId } from "../../src/datatype/CommandId.js";
 import { FabricIndex } from "../../src/datatype/FabricIndex.js";
-import { ClusterServer } from "../../src/protocol/interaction/InteractionServer.js";
 import { VendorId } from "../../src/datatype/VendorId.js";
 import { DeviceTypes } from "../../src/device/DeviceTypes.js";
 import { Endpoint } from "../../src/device/Endpoint.js";
@@ -23,6 +22,7 @@ import { IdentifyCluster, Identify } from "../../src/cluster/definitions/Identif
 import { Cluster, ClusterExtend } from "../../src/cluster/Cluster.js";
 import { ImplementationError } from "../../src/common/MatterError.js";
 import { EndpointNumber } from "../../src/datatype/EndpointNumber.js";
+import { ClusterServer } from "../../src/cluster/server/ClusterServer.js";
 
 describe("ClusterServer structure", () => {
     describe("correct attribute servers are used and exposed", () => {
@@ -369,7 +369,7 @@ describe("ClusterServer structure", () => {
 
             expect(binding.attributes.binding.getLocalForFabric(fabric)).toEqual([])
             binding.attributes.binding.setLocalForFabric([{ fabricIndex: FabricIndex(1) }], fabric);
-            expect(binding.getBindingAttribute(fabric, true)).toEqual([])
+            expect(binding.getBindingAttribute(fabric)).toEqual([])
             binding.setBindingAttribute([{ fabricIndex: FabricIndex(1) }], fabric);
 
             expect(getScopedClusterDataValueCalledCounter).toBe(4)
@@ -599,9 +599,9 @@ describe("ClusterServer structure", () => {
             });
 
             expect(messages).toEqual([
-                { level: Level.DEBUG, message: 'xxxx-xx-xx xx:xx:xx.xxx DEBUG InteractionProtocol InitialAttributeValue for "WindowCovering/currentPositionLiftPercentage" is optional by supportedFeatures: {"lift":true,"positionAwareLift":true} and is not set!' },
-                { level: Level.WARN, message: 'xxxx-xx-xx xx:xx:xx.xxx WARN InteractionProtocol InitialAttributeValue for "WindowCovering/currentPositionTiltPercent100ths" is provided but it\'s neither optional or mandatory for supportedFeatures: {"lift":true,"positionAwareLift":true} but is set!' },
-                { level: Level.WARN, message: 'xxxx-xx-xx xx:xx:xx.xxx WARN InteractionProtocol Command "WindowCovering/goToLiftPercentage" is REQUIRED by supportedFeatures: {"lift":true,"positionAwareLift":true} but is not set!' }
+                { level: Level.DEBUG, message: 'xxxx-xx-xx xx:xx:xx.xxx DEBUG ClusterServer InitialAttributeValue for "WindowCovering/currentPositionLiftPercentage" is optional by supportedFeatures: {"lift":true,"positionAwareLift":true} and is not set!' },
+                { level: Level.WARN, message: 'xxxx-xx-xx xx:xx:xx.xxx WARN ClusterServer InitialAttributeValue for "WindowCovering/currentPositionTiltPercent100ths" is provided but it\'s neither optional or mandatory for supportedFeatures: {"lift":true,"positionAwareLift":true} but is set!' },
+                { level: Level.WARN, message: 'xxxx-xx-xx xx:xx:xx.xxx WARN ClusterServer Command "WindowCovering/goToLiftPercentage" is REQUIRED by supportedFeatures: {"lift":true,"positionAwareLift":true} but is not set!' }
             ]);
         });
     });

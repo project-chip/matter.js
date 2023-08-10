@@ -6,11 +6,11 @@
 import { Device } from "./Device.js";
 import { DeviceTypes } from "./DeviceTypes.js";
 import { ComposedDevice } from "./ComposedDevice.js";
-import { AttributeInitialValues } from "../cluster/server/ClusterServer.js";
+import { AttributeInitialValues } from "../cluster/server/ClusterServerTypes.js";
 import { BridgedDeviceBasicInformationCluster } from "../cluster/definitions/BridgedDeviceBasicInformationCluster.js";
-import { ClusterServer } from "../protocol/interaction/InteractionServer.js";
 import { Endpoint, EndpointOptions } from "./Endpoint.js";
 import { ImplementationError } from "../common/MatterError.js";
+import { ClusterServer } from "../cluster/server/ClusterServer.js";
 
 /**
  * An Aggregator is a special endpoint that exposes multiple devices as a "bridge" into the matter ecosystem.

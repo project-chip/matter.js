@@ -19,6 +19,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Breaking: All collection files meant to be used for exports only are renamed to export.ts and should not be used for internal imports
   * Breaking: Attribute listener methods renamed: addListener -> addValueSetListener, addMatterListener -> addValueChangeListener (also remove methods) to make it more clear what they do
   * Breaking: Change from object style to Branded types for special Datatype objects (e.g. "new VendorId(0xFFF1)" -> "VendorId(0xFFF1)")
+  * Breaking: ClusterClient and CLusterServer classes were moved from "interaction" export to "cluster" export
   * Feature: Enhance CommissioningServer options to also specify GeneralCommissioningServer details and settings
   * Feature: Adjust RegulatoryConfig Handling in Device and Controller to match with specifications
   * Feature: Endpoint Structures use custom-unique-id (from EndpointOptions)/uniqueStorageKey (from BasicInformationCluster)/serialNumber (from BasicInformationCluster)/ Index (in this order) to store and restore the endpoint ID in structures

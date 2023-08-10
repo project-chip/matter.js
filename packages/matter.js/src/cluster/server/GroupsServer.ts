@@ -7,14 +7,14 @@
 import { GroupsCluster } from "../definitions/GroupsCluster.js";
 import { GroupId } from "../../datatype/GroupId.js";
 import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
-import { ClusterServerHandlers } from "./ClusterServer.js";
+import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 import { assertSecureSession } from "../../session/SecureSession.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { SessionType } from "../../codec/MessageCodec.js";
 import { ScenesManager } from "./ScenesServer.js";
 import { IdentifyCluster } from "../definitions/IdentifyCluster.js";
-import { ClusterServer } from "../../protocol/interaction/InteractionServer.js";
 import { NotImplementedError } from "../../common/MatterError.js";
+import { ClusterServer } from "./ClusterServer.js";
 
 /*
 TODO: If the Scenes server cluster is implemented on the same endpoint, the following extension field SHALL

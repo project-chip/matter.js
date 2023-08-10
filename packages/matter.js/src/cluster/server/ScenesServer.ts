@@ -7,15 +7,15 @@
 import { ScenesCluster, Scenes } from "../definitions/ScenesCluster.js";
 import { GroupId } from "../../datatype/GroupId.js";
 import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
-import { ClusterServerHandlers } from "./ClusterServer.js";
+import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 import { assertSecureSession } from "../../session/SecureSession.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { SessionType } from "../../codec/MessageCodec.js";
 import { StatusResponseError } from "../../protocol/interaction/InteractionMessenger.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { GroupsManager } from "./GroupsServer.js";
-import { ClusterServer } from "../../protocol/interaction/InteractionServer.js";
 import { NotImplementedError } from "../../common/MatterError.js";
+import { ClusterServer } from "./ClusterServer.js";
 
 interface scenesTableEntry {
     /** The group identifier for which this scene applies, or 0 if the scene is not associated with a group. */

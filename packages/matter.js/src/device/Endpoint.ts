@@ -5,7 +5,6 @@
  */
 
 import { DeviceTypeDefinition } from "./DeviceTypes.js";
-import { ClusterServer } from "../protocol/interaction/InteractionServer.js";
 import { AtLeastOne } from "../util/Array.js";
 import { DescriptorCluster } from "../cluster/definitions/DescriptorCluster.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
@@ -13,14 +12,15 @@ import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { FixedLabelCluster } from "../cluster/definitions/FixedLabelCluster.js";
 import { UserLabelCluster } from "../cluster/definitions/UserLabelCluster.js";
-import { ClusterClientObj } from "../cluster/client/ClusterClient.js";
-import { ClusterServerObj, ClusterServerObjForCluster } from "../cluster/server/ClusterServer.js";
+import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
+import { ClusterServerObj, ClusterServerObjForCluster } from "../cluster/server/ClusterServerTypes.js";
 import { InteractionClient } from "../protocol/interaction/InteractionClient.js";
 import { BasicInformationCluster } from "../cluster/definitions/BasicInformationCluster.js";
 import { BridgedDeviceBasicInformationCluster } from "../cluster/definitions/BridgedDeviceBasicInformationCluster.js";
 import { AllClustersMap } from "../cluster/ClusterHelper.js";
 import { ImplementationError, InternalError, NotImplementedError } from "../common/MatterError.js";
 import { ClusterId } from "../datatype/ClusterId.js";
+import { ClusterServer } from "../cluster/server/ClusterServer.js";
 
 export interface EndpointOptions {
     endpointId?: EndpointNumber;

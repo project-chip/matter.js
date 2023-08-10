@@ -5,8 +5,9 @@
  */
 
 import { OnOffCluster } from "../definitions/OnOffCluster.js";
-import { AttributeInitialValues, ClusterServerHandlers } from "./ClusterServer.js";
-import { ClusterServer } from "../../protocol/interaction/InteractionServer.js";
+import { AttributeInitialValues, ClusterServerHandlers } from "./ClusterServerTypes.js";
+
+import { ClusterServer } from "./ClusterServer.js";
 
 /*
 TODO: Global Cluster fields needs to be added also here because, as discussed, based on the implementation.

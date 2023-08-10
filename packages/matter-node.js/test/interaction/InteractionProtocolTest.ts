@@ -19,8 +19,8 @@ Time.get = () => new TimeFake(0);
 
 import * as assert from "assert";
 import {
-    ClusterServer, InteractionServer, ReadRequest, DataReport, WriteRequest, WriteResponse, InvokeRequest,
-    InvokeResponse, InteractionServerMessenger, SubscribeRequest
+    InteractionServer, ReadRequest, DataReport, WriteRequest, WriteResponse, InvokeRequest, InvokeResponse,
+    InteractionServerMessenger, SubscribeRequest
 } from "@project-chip/matter.js/interaction";
 import { MessageExchange } from "@project-chip/matter.js/protocol";
 import { Endpoint, DeviceTypeDefinition, DeviceClasses } from "@project-chip/matter.js/device";
@@ -31,7 +31,7 @@ import {
 import {
     TlvString, TlvUInt8, TlvNoArguments, TlvArray, TlvField, TlvObject, TlvNullable, TlvOptionalField
 } from "@project-chip/matter.js/tlv";
-import { BasicInformationCluster, OnOffCluster, AccessControlCluster } from "@project-chip/matter.js/cluster";
+import { ClusterServer, BasicInformationCluster, OnOffCluster, AccessControlCluster } from "@project-chip/matter.js/cluster";
 import { Message } from "@project-chip/matter.js/codec";
 import { Fabric } from "@project-chip/matter.js/fabric";
 import { ByteArray } from "@project-chip/matter.js/util";
