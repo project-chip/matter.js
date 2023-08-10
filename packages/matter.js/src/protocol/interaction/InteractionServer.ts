@@ -114,6 +114,12 @@ export function eventPathToId({ endpointId, clusterId, eventId }: TypeFromSchema
     return genericElementPathToId(endpointId, clusterId, eventId);
 }
 
+export type InteractionServerOptions = {
+    subscriptionMaxIntervalSeconds?: number;
+    subscriptionMinIntervalSeconds?: number;
+    subscriptionRandomizationWindowSeconds?: number;
+};
+
 export class InteractionServer implements ProtocolHandler<MatterDevice> {
     private endpointStructure = new InteractionEndpointStructure();
     private nextSubscriptionId = Crypto.getRandomUInt32();
@@ -121,7 +127,10 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     private readonly subscriptionMap = new Map<number, SubscriptionHandler>();
     private isClosing = false;
 
-    constructor(private readonly storage: StorageContext) {}
+    constructor(
+        private readonly storage: StorageContext,
+        private readonly options?: InteractionServerOptions,
+    ) {}
 
     getId() {
         return INTERACTION_PROTOCOL_ID;
@@ -464,6 +473,9 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             keepSubscriptions,
             minIntervalFloorSeconds,
             maxIntervalCeilingSeconds,
+            this.options?.subscriptionMaxIntervalSeconds,
+            this.options?.subscriptionMinIntervalSeconds,
+            this.options?.subscriptionRandomizationWindowSeconds,
             () => this.subscriptionMap.delete(subscriptionId),
         );
 
@@ -488,7 +500,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         const maxInterval = subscriptionHandler.getMaxInterval();
         logger.info(
-            `Successfully created subscription ${subscriptionId} for Session ${session.getId()}. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${maxInterval} seconds`,
+            `Successfully created subscription ${subscriptionId} for Session ${session.getId()}. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${maxInterval} seconds (sendInterval = ${subscriptionHandler.getSendInterval()} seconds)`,
         );
         // Then send the subscription response
         await messenger.send(
