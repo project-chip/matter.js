@@ -136,12 +136,10 @@ function withArticle(what: string) {
 
 function generateExtensibleClusterBase(file: ClusterFile) {
     // Feature enum
-    const featureEnum = file.ns
-        .expressions(`export enum Feature {`, "}")
-        .document({
-            description: `These are optional features supported by ${file.clusterName}.`,
-            xref: file.cluster.featureMap.xref,
-        });
+    const featureEnum = file.ns.expressions(`export enum Feature {`, "}").document({
+        description: `These are optional features supported by ${file.clusterName}.`,
+        xref: file.cluster.featureMap.xref,
+    });
     for (const f of file.cluster.features) {
         const name = camelize(f.description ?? f.name);
         featureEnum.atom(`${name} = ${serialize(name)}`).document(f);
