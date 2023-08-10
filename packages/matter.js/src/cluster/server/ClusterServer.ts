@@ -95,8 +95,8 @@ export function ClusterServer<
 
             for (const attributeName in attributes) {
                 const attribute = (attributes as any)[attributeName];
-                if (!attributeStorageListeners.has(attribute.id)) return;
-                if (!storageContext.has(attribute.name)) return;
+                if (!attributeStorageListeners.has(attribute.id)) continue;
+                if (!storageContext.has(attribute.name)) continue;
                 try {
                     const data = storageContext.get<{ version: number; value: any }>(attribute.name);
                     logger.debug(
