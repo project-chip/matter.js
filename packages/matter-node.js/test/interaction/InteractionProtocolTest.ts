@@ -19,8 +19,8 @@ Time.get = () => new TimeFake(0);
 
 import * as assert from "assert";
 import {
-    ClusterServer, InteractionServer, ReadRequest, DataReport, WriteRequest, WriteResponse, InvokeRequest,
-    InvokeResponse, InteractionServerMessenger, SubscribeRequest
+    InteractionServer, ReadRequest, DataReport, WriteRequest, WriteResponse, InvokeRequest, InvokeResponse,
+    InteractionServerMessenger, SubscribeRequest
 } from "@project-chip/matter.js/interaction";
 import { MessageExchange } from "@project-chip/matter.js/protocol";
 import { Endpoint, DeviceTypeDefinition, DeviceClasses } from "@project-chip/matter.js/device";
