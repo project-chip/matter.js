@@ -20,10 +20,17 @@ import { cmd_config } from "./cmd_config";
 import { cmd_onoff } from "./cmd_onoff";
 import { cmd_pair } from "./cmd_pair";
 
+interface CommandEntry {
+    command: string;
+    help: string;
+    handler: (args: string[]) => number | Promise<number>;
+}
+
+/* eslint-disable */
 /**
  * JSON array defining all top-level commands.
  */
-export const theCommandList = [
+export const theCommandList: CommandEntry[] = [
     {
         command: "help",
         help: "Display list of all commands",
@@ -70,6 +77,7 @@ export const theCommandList = [
         handler: cmd_onoff.doOnOff,
     },
 ];
+/* eslint-enable */
 
 /**
  * Run the `exit` command and terminate the shell.
@@ -77,7 +85,7 @@ export const theCommandList = [
  * @param {string[]} args array of string arguments
  * @returns 0
  */
-function doExit(_: string[]) {
+function doExit(_: string[]): number {
     console.log("Goodbye");
     process.exit(0);
     return 0;
@@ -89,7 +97,7 @@ function doExit(_: string[]) {
  * @param {string[]} args array of string arguments
  * @returns 0
  */
-function doHelp(_: string[]) {
+function doHelp(_: string[]): number {
     theCommandList.forEach(entry => {
         console.log(entry["command"] + "\t" + entry["help"]);
     });

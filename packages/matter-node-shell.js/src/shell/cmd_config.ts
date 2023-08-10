@@ -24,8 +24,8 @@ export class cmd_config {
      * @param {Array} args
      * @returns 0
      */
-    static doConfig(args: string[]) {
-        let argv = yargs(args)
+    static doConfig(args: string[]): number {
+        const argv = yargs(args)
             .options({
                 dump: {
                     alias: "d",
@@ -42,6 +42,7 @@ export class cmd_config {
         console.log(argv);
 
         //theNode.Store.dump();
+        return 0;
     }
 
     static doLogLevel(args: string[]) {

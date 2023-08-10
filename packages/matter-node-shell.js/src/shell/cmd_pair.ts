@@ -24,7 +24,7 @@ export class cmd_pair {
      * @param {Array} args
      * @returns 0
      */
-    static async doPair(args: string[]) {
+    static async doPair(args: string[]): Promise<number> {
         const argv = yargs(args)
             .options({
                 descriminator: {
@@ -40,5 +40,7 @@ export class cmd_pair {
         if (argv.help) return 0;
 
         await theNode.pair();
+
+        return 0;
     }
 }

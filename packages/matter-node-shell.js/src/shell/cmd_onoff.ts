@@ -24,7 +24,7 @@ export class cmd_onoff {
      * @param {Array} args
      * @returns 0
      */
-    static async doOnOff(args: string[]) {
+    static async doOnOff(args: string[]): Promise<number> {
         const argv = yargs(args)
             .options({})
             .help("help") // provide help on `help` in addition to `--help`
@@ -34,5 +34,7 @@ export class cmd_onoff {
         if (argv.help) return 0;
 
         await theNode.onoff();
+
+        return 0;
     }
 }
