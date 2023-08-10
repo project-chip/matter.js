@@ -6,7 +6,7 @@
 
 /**
  * Types of elements per the Matter specification.
- * 
+ *
  * We use "tag" to differentiate elements so we can use "type" for datatypes.
  */
 export enum ElementTag {
@@ -25,5 +25,5 @@ export enum ElementTag {
     Requirement = "requirement",
 
     // Root element type - not formally part of specification
-    Matter = "matter"
+    Matter = "matter",
 }

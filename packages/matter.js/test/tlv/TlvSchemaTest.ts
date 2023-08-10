@@ -6,7 +6,18 @@
 
 import { TlvArray } from "../../src/tlv/TlvArray.js";
 import { TlvBoolean } from "../../src/tlv/TlvBoolean.js";
-import { TlvDouble, TlvFloat, TlvInt16, TlvInt32, TlvInt64, TlvInt8, TlvUInt16, TlvUInt32, TlvUInt64, TlvUInt8 } from "../../src/tlv/TlvNumber.js";
+import {
+    TlvDouble,
+    TlvFloat,
+    TlvInt16,
+    TlvInt32,
+    TlvInt64,
+    TlvInt8,
+    TlvUInt16,
+    TlvUInt32,
+    TlvUInt64,
+    TlvUInt8,
+} from "../../src/tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "../../src/tlv/TlvObject.js";
 import { TlvSchema } from "../../src/tlv/TlvSchema.js";
 import { TlvString } from "../../src/tlv/TlvString.js";
@@ -14,16 +25,14 @@ import { TlvWrapper } from "../../src/tlv/TlvWrapper.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 
 type TestEntry<T> = {
-    name: string,
-    schema: TlvSchema<T>,
-    tlv: string,
-    jsObj: T
-}
+    name: string;
+    schema: TlvSchema<T>;
+    tlv: string;
+    jsObj: T;
+};
 
 class CustomObject {
-    constructor(
-        readonly value: number,
-    ) { }
+    constructor(readonly value: number) {}
 }
 
 const theTestTlvVector = [
@@ -85,19 +94,28 @@ const theTestTlvVector = [
     {
         name: "TlvObject: nested struct and array of struct",
         schema: TlvObject({
-            fieldNested1: TlvField(1, TlvObject({
-                field1: TlvField(1, TlvString),
-                field2: TlvField(2, TlvString),
-            })),
-            fieldNested2: TlvField(2, TlvObject({
-                field1: TlvField(1, TlvString),
-                field2: TlvField(2, TlvString),
-            })),
-            fieldArrayOfStructs: TlvField(3, TlvArray(
+            fieldNested1: TlvField(
+                1,
                 TlvObject({
-                    fieldString: TlvField(5, TlvString),
-                })
-            )),
+                    field1: TlvField(1, TlvString),
+                    field2: TlvField(2, TlvString),
+                }),
+            ),
+            fieldNested2: TlvField(
+                2,
+                TlvObject({
+                    field1: TlvField(1, TlvString),
+                    field2: TlvField(2, TlvString),
+                }),
+            ),
+            fieldArrayOfStructs: TlvField(
+                3,
+                TlvArray(
+                    TlvObject({
+                        fieldString: TlvField(5, TlvString),
+                    }),
+                ),
+            ),
         }),
         tlv: "1535012c010574657374312c020574657374321835022c010574657374332c02057465737434183603152c0505746573743518152c0505746573743618152c05057465737437181818",
         jsObj: {
@@ -109,47 +127,46 @@ const theTestTlvVector = [
                 field1: "test3",
                 field2: "test4",
             },
-            fieldArrayOfStructs: [
-                { fieldString: "test5" },
-                { fieldString: "test6" },
-                { fieldString: "test7" },
-            ]
+            fieldArrayOfStructs: [{ fieldString: "test5" }, { fieldString: "test6" }, { fieldString: "test7" }],
         },
     },
     {
         name: "TlvWrapper",
-        schema: new TlvWrapper(TlvUInt16, (object: CustomObject) => object.value, value => new CustomObject(value)),
+        schema: new TlvWrapper(
+            TlvUInt16,
+            (object: CustomObject) => object.value,
+            value => new CustomObject(value),
+        ),
         tlv: "040c",
         jsObj: new CustomObject(12),
     },
-]
+];
 
 function testTlvSchemaEncode(testEntry: TestEntry<any>) {
-    const { name, schema, tlv, jsObj } = testEntry
-    const testName = "TlvSchema.encode " + name
+    const { name, schema, tlv, jsObj } = testEntry;
+    const testName = "TlvSchema.encode " + name;
 
     it(testName, () => {
-        const tlvByteArray = schema.encode(jsObj)
-        const tlvHex = tlvByteArray.toHex()
-        expect(tlvHex).toBe(tlv)
-    })
-
+        const tlvByteArray = schema.encode(jsObj);
+        const tlvHex = tlvByteArray.toHex();
+        expect(tlvHex).toBe(tlv);
+    });
 }
 
 function testTlvSchemaDecode(testEntry: TestEntry<any>) {
-    const { name, schema, tlv, jsObj } = testEntry
-    const testName = "TlvSchema.decode " + name
+    const { name, schema, tlv, jsObj } = testEntry;
+    const testName = "TlvSchema.decode " + name;
 
     it(testName, () => {
-        const tlvBuffer = ByteArray.fromHex(tlv)
-        const decoded = schema.decode(tlvBuffer)
-        expect(decoded).toEqual(jsObj)
-    })
+        const tlvBuffer = ByteArray.fromHex(tlv);
+        const decoded = schema.decode(tlvBuffer);
+        expect(decoded).toEqual(jsObj);
+    });
 }
 
 describe("Test TlvSchema", () => {
     theTestTlvVector.forEach(testEntry => {
-        testTlvSchemaEncode(testEntry)
-        testTlvSchemaDecode(testEntry)
-    })
-})
+        testTlvSchemaEncode(testEntry);
+        testTlvSchemaDecode(testEntry);
+    });
+});

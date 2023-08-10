@@ -14,15 +14,13 @@ import { HtmlReference } from "./spec-types.js";
  */
 export const EndContentFlags = [
     // OnOff cluster state diagram becomes a total mess
-    /These concepts are illustrated in Explanation of the Behavior of Store/
+    /These concepts are illustrated in Explanation of the Behavior of Store/,
 ];
 
 /**
  * Uncommon english words that are part of known splits.
  */
-export const NotWords = new Set([
-    "cur"
-]);
+export const NotWords = new Set(["cur"]);
 
 /**
  * A light attempt dropping text to make documentation seem slightly less

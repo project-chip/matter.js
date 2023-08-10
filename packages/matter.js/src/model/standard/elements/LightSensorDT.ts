@@ -9,33 +9,52 @@
 import { Matter } from "../Matter.js";
 
 Matter.children.push({
-    tag: "deviceType", name: "LightSensor", id: 0x106, classification: "simple",
+    tag: "deviceType",
+    name: "LightSensor",
+    id: 0x106,
+    classification: "simple",
 
     children: [
         {
-            tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+            tag: "requirement",
+            name: "Descriptor",
+            id: 0x1d,
+            element: "serverCluster",
 
-            children: [{
-                tag: "datatype", name: "DeviceTypeStruct", type: "struct",
-                children: [
-                    { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 262 },
-                    { tag: "datatype", name: "Revision", type: "uint16", default: 2 }
-                ]
-            }]
+            children: [
+                {
+                    tag: "datatype",
+                    name: "DeviceTypeStruct",
+                    type: "struct",
+                    children: [
+                        { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 262 },
+                        { tag: "datatype", name: "Revision", type: "uint16", default: 2 },
+                    ],
+                },
+            ],
         },
 
         {
-            tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+            tag: "requirement",
+            name: "Identify",
+            id: 0x3,
+            element: "serverCluster",
             xref: { document: "device", section: "7.2.4" },
-            children: [{ tag: "requirement", name: "Query", element: "feature" }]
+            children: [{ tag: "requirement", name: "Query", element: "feature" }],
         },
         {
-            tag: "requirement", name: "Groups", id: 0x4, element: "clientCluster",
-            xref: { document: "device", section: "7.2.4" }
+            tag: "requirement",
+            name: "Groups",
+            id: 0x4,
+            element: "clientCluster",
+            xref: { document: "device", section: "7.2.4" },
         },
         {
-            tag: "requirement", name: "IlluminanceMeasurement", id: 0x400, element: "serverCluster",
-            xref: { document: "device", section: "7.2.4" }
-        }
-    ]
+            tag: "requirement",
+            name: "IlluminanceMeasurement",
+            id: 0x400,
+            element: "serverCluster",
+            xref: { document: "device", section: "7.2.4" },
+        },
+    ],
 });

@@ -9,10 +9,14 @@
 import { Matter } from "../Matter.js";
 
 Matter.children.push({
-    tag: "cluster", name: "NetworkCommissioning", id: 0x31, classification: "node",
+    tag: "cluster",
+    name: "NetworkCommissioning",
+    id: 0x31,
+    classification: "node",
     description: "Network Commissioning",
 
-    details: "Network commissioning is part of the overall Node commissioning. The main goal of Network " +
+    details:
+        "Network commissioning is part of the overall Node commissioning. The main goal of Network " +
         "Commissioning Cluster is to associate a Node with or manage a Node’s one or more network " +
         "interfaces. These network interfaces can include the following types." +
         "\n" +
@@ -32,42 +36,68 @@ Matter.children.push({
         { tag: "attribute", name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 },
 
         {
-            tag: "attribute", name: "FeatureMap", id: 0xfffc, type: "FeatureMap",
+            tag: "attribute",
+            name: "FeatureMap",
+            id: 0xfffc,
+            type: "FeatureMap",
             xref: { document: "core", section: "11.8.4" },
 
             children: [
                 {
-                    tag: "datatype", name: "WI", conformance: "O.a", constraint: "0",
+                    tag: "datatype",
+                    name: "WI",
+                    conformance: "O.a",
+                    constraint: "0",
                     description: "WiFiNetworkInterface",
-                    details: "Wi-Fi related features"
+                    details: "Wi-Fi related features",
                 },
                 {
-                    tag: "datatype", name: "TH", conformance: "O.a", constraint: "1",
+                    tag: "datatype",
+                    name: "TH",
+                    conformance: "O.a",
+                    constraint: "1",
                     description: "ThreadNetworkInterface",
-                    details: "Thread related features"
+                    details: "Thread related features",
                 },
                 {
-                    tag: "datatype", name: "ET", conformance: "O.a", constraint: "2",
+                    tag: "datatype",
+                    name: "ET",
+                    conformance: "O.a",
+                    constraint: "2",
                     description: "EthernetNetworkInterface",
-                    details: "Ethernet related features"
-                }
-            ]
+                    details: "Ethernet related features",
+                },
+            ],
         },
 
         {
-            tag: "attribute", name: "MaxNetworks", id: 0x0, type: "uint8", access: "R A", conformance: "M",
-            constraint: "min 1", quality: "F",
-            details: "This shall indicate the maximum number of network configuration entries that can be added, based on " +
+            tag: "attribute",
+            name: "MaxNetworks",
+            id: 0x0,
+            type: "uint8",
+            access: "R A",
+            conformance: "M",
+            constraint: "min 1",
+            quality: "F",
+            details:
+                "This shall indicate the maximum number of network configuration entries that can be added, based on " +
                 "available device resources. The length of the Networks attribute list shall be less than or equal " +
                 "to this value.",
-            xref: { document: "core", section: "11.8.6.1" }
+            xref: { document: "core", section: "11.8.6.1" },
         },
 
         {
-            tag: "attribute", name: "Networks", id: 0x1, type: "list", access: "R A", conformance: "M",
-            constraint: "max MaxNetworks", default: [],
+            tag: "attribute",
+            name: "Networks",
+            id: 0x1,
+            type: "list",
+            access: "R A",
+            conformance: "M",
+            constraint: "max MaxNetworks",
+            default: [],
 
-            details: "This attribute shall indicate the network configurations that are usable on the network interface " +
+            details:
+                "This attribute shall indicate the network configurations that are usable on the network interface " +
                 "represented by this cluster server instance." +
                 "\n" +
                 "The order of configurations in the list reflects precedence. That is, any time the Node attempts to " +
@@ -85,35 +115,56 @@ Matter.children.push({
                 "network configurations to those Cluster instances.",
 
             xref: { document: "core", section: "11.8.6.2" },
-            children: [{ tag: "datatype", name: "entry", type: "NetworkInfoStruct" }]
+            children: [{ tag: "datatype", name: "entry", type: "NetworkInfoStruct" }],
         },
 
         {
-            tag: "attribute", name: "ScanMaxTimeSeconds", id: 0x2, type: "uint8", access: "R V",
-            conformance: "WI | TH", constraint: "desc", quality: "F",
-            details: "This attribute shall indicate the maximum duration taken, in seconds, by the network interface on " +
+            tag: "attribute",
+            name: "ScanMaxTimeSeconds",
+            id: 0x2,
+            type: "uint8",
+            access: "R V",
+            conformance: "WI | TH",
+            constraint: "desc",
+            quality: "F",
+            details:
+                "This attribute shall indicate the maximum duration taken, in seconds, by the network interface on " +
                 "this cluster server instance to provide scan results." +
                 "\n" +
                 "See Section 11.8.7.1, “ScanNetworks Command” for usage.",
-            xref: { document: "core", section: "11.8.6.3" }
+            xref: { document: "core", section: "11.8.6.3" },
         },
 
         {
-            tag: "attribute", name: "ConnectMaxTimeSeconds", id: 0x3, type: "uint8", access: "R V",
-            conformance: "WI | TH", constraint: "desc", quality: "F",
-            details: "This attribute shall indicate the maximum duration taken, in seconds, by the network interface on " +
+            tag: "attribute",
+            name: "ConnectMaxTimeSeconds",
+            id: 0x3,
+            type: "uint8",
+            access: "R V",
+            conformance: "WI | TH",
+            constraint: "desc",
+            quality: "F",
+            details:
+                "This attribute shall indicate the maximum duration taken, in seconds, by the network interface on " +
                 "this cluster server instance to report a successful or failed network connection indication. This " +
                 "maximum time shall account for all operations needed until a successful network connection is " +
                 "deemed to have occurred, including, for example, obtaining IP addresses, or the execution of " +
                 "necessary internal retries.",
-            xref: { document: "core", section: "11.8.6.4" }
+            xref: { document: "core", section: "11.8.6.4" },
         },
 
         {
-            tag: "attribute", name: "InterfaceEnabled", id: 0x4, type: "bool", access: "RW VA",
-            conformance: "M", default: true, quality: "N",
+            tag: "attribute",
+            name: "InterfaceEnabled",
+            id: 0x4,
+            type: "bool",
+            access: "RW VA",
+            conformance: "M",
+            default: true,
+            quality: "N",
 
-            details: "This attribute shall indicate whether the associated network interface is enabled or not. By " +
+            details:
+                "This attribute shall indicate whether the associated network interface is enabled or not. By " +
                 "default all network interfaces SHOULD be enabled during initial commissioning (InterfaceEnabled set " +
                 "to true)." +
                 "\n" +
@@ -131,14 +182,21 @@ Matter.children.push({
                 "On Ethernet-only Nodes, there shall always be at least one of the Network Commissioning server " +
                 "cluster instances with InterfaceEnabled set to true.",
 
-            xref: { document: "core", section: "11.8.6.5" }
+            xref: { document: "core", section: "11.8.6.5" },
         },
 
         {
-            tag: "attribute", name: "LastNetworkingStatus", id: 0x5, type: "NetworkCommissioningStatusEnum",
-            access: "R A", conformance: "M", default: null, quality: "X",
+            tag: "attribute",
+            name: "LastNetworkingStatus",
+            id: 0x5,
+            type: "NetworkCommissioningStatusEnum",
+            access: "R A",
+            conformance: "M",
+            default: null,
+            quality: "X",
 
-            details: "This attribute shall indicate the status of the last attempt either scan or connect to an " +
+            details:
+                "This attribute shall indicate the status of the last attempt either scan or connect to an " +
                 "operational network, using this interface, whether by invocation of the ConnectNetwork command or " +
                 "by autonomous connection after loss of connectivity or during initial establishment. If no such " +
                 "attempt was made, or no network configurations exist in the Networks attribute, then this attribute " +
@@ -147,14 +205,22 @@ Matter.children.push({
                 "This attribute is present to assist with error recovery during Network commissioning and to assist " +
                 "in non-concurrent networking commissioning flows.",
 
-            xref: { document: "core", section: "11.8.6.6" }
+            xref: { document: "core", section: "11.8.6.6" },
         },
 
         {
-            tag: "attribute", name: "LastNetworkId", id: 0x6, type: "octstr", access: "R A", conformance: "M",
-            constraint: "1 to 32", default: null, quality: "X",
+            tag: "attribute",
+            name: "LastNetworkId",
+            id: 0x6,
+            type: "octstr",
+            access: "R A",
+            conformance: "M",
+            constraint: "1 to 32",
+            default: null,
+            quality: "X",
 
-            details: "This attribute shall indicate the NetworkID used in the last attempt to connect to an operational " +
+            details:
+                "This attribute shall indicate the NetworkID used in the last attempt to connect to an operational " +
                 "network, using this interface, whether by invocation of the ConnectNetwork command or by autonomous " +
                 "connection after loss of connectivity or during initial establishment. If no such attempt was made, " +
                 "or no network configurations exist in the Networks attribute, then this attribute shall be set to " +
@@ -167,14 +233,21 @@ Matter.children.push({
                 "This attribute is present to assist with error recovery during Network commissioning and to assist " +
                 "in non-concurrent networking commissioning flows.",
 
-            xref: { document: "core", section: "11.8.6.7" }
+            xref: { document: "core", section: "11.8.6.7" },
         },
 
         {
-            tag: "attribute", name: "LastConnectErrorValue", id: 0x7, type: "int32", access: "R A",
-            conformance: "M", default: null, quality: "X",
+            tag: "attribute",
+            name: "LastConnectErrorValue",
+            id: 0x7,
+            type: "int32",
+            access: "R A",
+            conformance: "M",
+            default: null,
+            quality: "X",
 
-            details: "This attribute shall indicate the ErrorValue used in the last failed attempt to connect to an " +
+            details:
+                "This attribute shall indicate the ErrorValue used in the last failed attempt to connect to an " +
                 "operational network, using this interface, whether by invocation of the ConnectNetwork command or " +
                 "by autonomous connection after loss of connectivity or during initial establishment. If no such " +
                 "attempt was made, or no network configurations exist in the Networks attribute, then this attribute " +
@@ -186,14 +259,20 @@ Matter.children.push({
                 "This attribute is present to assist with error recovery during Network commissioning and to assist " +
                 "in non-concurrent networking commissioning flows.",
 
-            xref: { document: "core", section: "11.8.6.8" }
+            xref: { document: "core", section: "11.8.6.8" },
         },
 
         {
-            tag: "command", name: "ScanNetworks", id: 0x0, access: "A", conformance: "WI | TH",
-            direction: "request", response: "ScanNetworksResponse",
+            tag: "command",
+            name: "ScanNetworks",
+            id: 0x0,
+            access: "A",
+            conformance: "WI | TH",
+            direction: "request",
+            response: "ScanNetworksResponse",
 
-            details: "This command shall scan on the Cluster instance’s associated network interface for either of:" +
+            details:
+                "This command shall scan on the Cluster instance’s associated network interface for either of:" +
                 "\n" +
                 "  • All available networks (non-directed scanning)" +
                 "\n" +
@@ -225,29 +304,45 @@ Matter.children.push({
 
             children: [
                 {
-                    tag: "datatype", name: "Ssid", id: 0x0, type: "octstr", conformance: "[WI]", constraint: "1 to 32",
-                    default: null, quality: "X",
-                    details: "This field, if present, shall contain the SSID for a directed scan of that particular Wi-Fi SSID. " +
+                    tag: "datatype",
+                    name: "Ssid",
+                    id: 0x0,
+                    type: "octstr",
+                    conformance: "[WI]",
+                    constraint: "1 to 32",
+                    default: null,
+                    quality: "X",
+                    details:
+                        "This field, if present, shall contain the SSID for a directed scan of that particular Wi-Fi SSID. " +
                         "Otherwise, if the field is absent, or it is null, this shall indicate scanning of all BSSID in " +
                         "range. This field shall be ignored for ScanNetworks invocations on non-Wi-Fi server instances.",
-                    xref: { document: "core", section: "11.8.7.1.1" }
+                    xref: { document: "core", section: "11.8.7.1.1" },
                 },
 
                 {
-                    tag: "datatype", name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O",
-                    details: "The Breadcrumb field, if present, shall be used to atomically set the Breadcrumb attribute in the " +
+                    tag: "datatype",
+                    name: "Breadcrumb",
+                    id: 0x1,
+                    type: "uint64",
+                    conformance: "O",
+                    details:
+                        "The Breadcrumb field, if present, shall be used to atomically set the Breadcrumb attribute in the " +
                         "General Commissioning cluster on success of the associated command. If the command fails, the " +
                         "Breadcrumb attribute in the General Commissioning cluster shall be left unchanged.",
-                    xref: { document: "core", section: "11.8.7.1.2" }
-                }
-            ]
+                    xref: { document: "core", section: "11.8.7.1.2" },
+                },
+            ],
         },
 
         {
-            tag: "command", name: "ScanNetworksResponse", id: 0x1, conformance: "WI | TH",
+            tag: "command",
+            name: "ScanNetworksResponse",
+            id: 0x1,
+            conformance: "WI | TH",
             direction: "response",
 
-            details: "This command shall contain the status of the last ScanNetworks command, and the associated scan " +
+            details:
+                "This command shall contain the status of the last ScanNetworks command, and the associated scan " +
                 "results if the operation was successful." +
                 "\n" +
                 "Results are valid only if NetworkingStatus is Success." +
@@ -259,10 +354,15 @@ Matter.children.push({
 
             children: [
                 {
-                    tag: "datatype", name: "NetworkingStatus", id: 0x0, type: "NetworkCommissioningStatusEnum",
-                    conformance: "M", constraint: "desc",
+                    tag: "datatype",
+                    name: "NetworkingStatus",
+                    id: 0x0,
+                    type: "NetworkCommissioningStatusEnum",
+                    conformance: "M",
+                    constraint: "desc",
 
-                    details: "The NetworkingStatus field shall indicate the status of the last scan operation, taking one of " +
+                    details:
+                        "The NetworkingStatus field shall indicate the status of the last scan operation, taking one of " +
                         "these values:" +
                         "\n" +
                         "  • Success: Scanning succeeded." +
@@ -277,23 +377,33 @@ Matter.children.push({
                         "\n" +
                         "  • UnknownError: An internal error occurred during scanning.",
 
-                    xref: { document: "core", section: "11.8.7.2.1" }
+                    xref: { document: "core", section: "11.8.7.2.1" },
                 },
 
                 {
-                    tag: "datatype", name: "DebugText", id: 0x1, type: "string", conformance: "O",
+                    tag: "datatype",
+                    name: "DebugText",
+                    id: 0x1,
+                    type: "string",
+                    conformance: "O",
                     constraint: "max 512",
-                    details: "This field, if present and non-empty, may contain error information which may be communicated to " +
+                    details:
+                        "This field, if present and non-empty, may contain error information which may be communicated to " +
                         "the user in case the NetworkingStatus was not Success. Its purpose is to help developers in " +
                         "troubleshooting errors and may go into logs or crash reports.",
-                    xref: { document: "core", section: "11.8.7.2.2" }
+                    xref: { document: "core", section: "11.8.7.2.2" },
                 },
 
                 {
-                    tag: "datatype", name: "WiFiScanResults", id: 0x2, type: "list", conformance: "WI",
+                    tag: "datatype",
+                    name: "WiFiScanResults",
+                    id: 0x2,
+                    type: "list",
+                    conformance: "WI",
                     constraint: "desc",
 
-                    details: "If NetworkingStatus was Success, this field shall contain the Wi-Fi network scan results. The list " +
+                    details:
+                        "If NetworkingStatus was Success, this field shall contain the Wi-Fi network scan results. The list " +
                         "may be empty if none were found in range on the bands supported by the interface, or if directed " +
                         "scanning had been used and the desired SSID was not found in range." +
                         "\n" +
@@ -307,14 +417,19 @@ Matter.children.push({
                         "that most likely to be reachable elements are included within the size limits of the response.",
 
                     xref: { document: "core", section: "11.8.7.2.3" },
-                    children: [{ tag: "datatype", name: "entry", type: "WiFiInterfaceScanResultStruct" }]
+                    children: [{ tag: "datatype", name: "entry", type: "WiFiInterfaceScanResultStruct" }],
                 },
 
                 {
-                    tag: "datatype", name: "ThreadScanResults", id: 0x3, type: "list", conformance: "TH",
+                    tag: "datatype",
+                    name: "ThreadScanResults",
+                    id: 0x3,
+                    type: "list",
+                    conformance: "TH",
                     constraint: "desc",
 
-                    details: "If NetworkingStatus was Success, this field shall contain the Thread network scan results. The list " +
+                    details:
+                        "If NetworkingStatus was Success, this field shall contain the Thread network scan results. The list " +
                         "may be empty if none were found in range on the bands supported by the interface." +
                         "\n" +
                         "The maximum number of results present in the result list supported may depend on memory and may " +
@@ -327,16 +442,22 @@ Matter.children.push({
                         "included within the size limits of the response.",
 
                     xref: { document: "core", section: "11.8.7.2.4" },
-                    children: [{ tag: "datatype", name: "entry", type: "ThreadInterfaceScanResultStruct" }]
-                }
-            ]
+                    children: [{ tag: "datatype", name: "entry", type: "ThreadInterfaceScanResultStruct" }],
+                },
+            ],
         },
 
         {
-            tag: "command", name: "AddOrUpdateWiFiNetwork", id: 0x2, access: "A", conformance: "WI",
-            direction: "request", response: "NetworkConfigResponse",
+            tag: "command",
+            name: "AddOrUpdateWiFiNetwork",
+            id: 0x2,
+            access: "A",
+            conformance: "WI",
+            direction: "request",
+            response: "NetworkConfigResponse",
 
-            details: "This command shall be used to add or modify Wi-Fi network configurations." +
+            details:
+                "This command shall be used to add or modify Wi-Fi network configurations." +
                 "\n" +
                 "If this command is received without an armed fail-safe context (see Section 11.9.6.2, “ArmFailSafe " +
                 "Command”), then this command shall fail with a FAILSAFE_REQUIRED status code sent back to the " +
@@ -357,10 +478,15 @@ Matter.children.push({
                 { tag: "datatype", name: "Ssid", id: 0x0, type: "octstr", conformance: "M", constraint: "max 32" },
 
                 {
-                    tag: "datatype", name: "Credentials", id: 0x1, type: "octstr", conformance: "M",
+                    tag: "datatype",
+                    name: "Credentials",
+                    id: 0x1,
+                    type: "octstr",
+                    conformance: "M",
                     constraint: "max 64",
 
-                    details: "Credentials is the passphrase or PSK for the network (if any is needed)." +
+                    details:
+                        "Credentials is the passphrase or PSK for the network (if any is needed)." +
                         "\n" +
                         "Security type, cipher and credential format (passphrase or PSK) shall be contextually auto- " +
                         "selected during execution of the ConnectNetwork Command and during subsequent operational state " +
@@ -398,18 +524,24 @@ Matter.children.push({
                         "\n" +
                         "See Section 11.8.7.1.2, “Breadcrumb Field” for usage.",
 
-                    xref: { document: "core", section: "11.8.7.3.1" }
+                    xref: { document: "core", section: "11.8.7.3.1" },
                 },
 
-                { tag: "datatype", name: "Breadcrumb", id: 0x2, type: "uint64", conformance: "O" }
-            ]
+                { tag: "datatype", name: "Breadcrumb", id: 0x2, type: "uint64", conformance: "O" },
+            ],
         },
 
         {
-            tag: "command", name: "AddOrUpdateThreadNetwork", id: 0x3, access: "A", conformance: "TH",
-            direction: "request", response: "NetworkConfigResponse",
+            tag: "command",
+            name: "AddOrUpdateThreadNetwork",
+            id: 0x3,
+            access: "A",
+            conformance: "TH",
+            direction: "request",
+            response: "NetworkConfigResponse",
 
-            details: "This command shall be used to add or modify Thread network configurations." +
+            details:
+                "This command shall be used to add or modify Thread network configurations." +
                 "\n" +
                 "If this command is received without an armed fail-safe context (see Section 11.9.6.2, “ArmFailSafe " +
                 "Command”), then this command shall fail with a FAILSAFE_REQUIRED status code sent back to the " +
@@ -429,10 +561,15 @@ Matter.children.push({
 
             children: [
                 {
-                    tag: "datatype", name: "OperationalDataset", id: 0x0, type: "octstr", conformance: "M",
+                    tag: "datatype",
+                    name: "OperationalDataset",
+                    id: 0x0,
+                    type: "octstr",
+                    conformance: "M",
                     constraint: "max 254",
 
-                    details: "The OperationalDataset field shall contain the Thread Network Parameters, including channel, PAN " +
+                    details:
+                        "The OperationalDataset field shall contain the Thread Network Parameters, including channel, PAN " +
                         "ID, and Extended PAN ID." +
                         "\n" +
                         "The encoding for the OperationalDataset field is defined in the Thread specification. The client " +
@@ -440,18 +577,24 @@ Matter.children.push({
                         "\n" +
                         "See Section 11.8.7.1.2, “Breadcrumb Field” for usage.",
 
-                    xref: { document: "core", section: "11.8.7.4.1" }
+                    xref: { document: "core", section: "11.8.7.4.1" },
                 },
 
-                { tag: "datatype", name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O" }
-            ]
+                { tag: "datatype", name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O" },
+            ],
         },
 
         {
-            tag: "command", name: "RemoveNetwork", id: 0x4, access: "A", conformance: "WI | TH",
-            direction: "request", response: "NetworkConfigResponse",
+            tag: "command",
+            name: "RemoveNetwork",
+            id: 0x4,
+            access: "A",
+            conformance: "WI | TH",
+            direction: "request",
+            response: "NetworkConfigResponse",
 
-            details: "This command shall remove the network configuration from the Cluster if there was already a network " +
+            details:
+                "This command shall remove the network configuration from the Cluster if there was already a network " +
                 "configuration with the same NetworkID. The relative order of the entries in the Networks attribute " +
                 "list shall remain unchanged, except for the removal of the requested network configuration." +
                 "\n" +
@@ -476,18 +619,26 @@ Matter.children.push({
 
             children: [
                 {
-                    tag: "datatype", name: "NetworkId", id: 0x0, type: "octstr", conformance: "M",
-                    constraint: "1 to 32"
+                    tag: "datatype",
+                    name: "NetworkId",
+                    id: 0x0,
+                    type: "octstr",
+                    conformance: "M",
+                    constraint: "1 to 32",
                 },
-                { tag: "datatype", name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O" }
-            ]
+                { tag: "datatype", name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O" },
+            ],
         },
 
         {
-            tag: "command", name: "NetworkConfigResponse", id: 0x5, conformance: "WI | TH",
+            tag: "command",
+            name: "NetworkConfigResponse",
+            id: 0x5,
+            conformance: "WI | TH",
             direction: "response",
 
-            details: "This response command relates status information for some commands which require it as their " +
+            details:
+                "This response command relates status information for some commands which require it as their " +
                 "response command. See each individual cluster server command for the situations that may cause a " +
                 "NetworkingStatus different than Success." +
                 "\n" +
@@ -519,29 +670,48 @@ Matter.children.push({
 
             children: [
                 {
-                    tag: "datatype", name: "NetworkingStatus", id: 0x0, type: "NetworkCommissioningStatusEnum",
-                    conformance: "M", constraint: "desc"
+                    tag: "datatype",
+                    name: "NetworkingStatus",
+                    id: 0x0,
+                    type: "NetworkCommissioningStatusEnum",
+                    conformance: "M",
+                    constraint: "desc",
                 },
                 {
-                    tag: "datatype", name: "DebugText", id: 0x1, type: "string", conformance: "O",
-                    constraint: "max 512"
+                    tag: "datatype",
+                    name: "DebugText",
+                    id: 0x1,
+                    type: "string",
+                    conformance: "O",
+                    constraint: "max 512",
                 },
 
                 {
-                    tag: "datatype", name: "NetworkIndex", id: 0x2, type: "uint8", conformance: "O",
-                    details: "When the NetworkingStatus is Success, this field shall be present. It shall contain the 0-based " +
+                    tag: "datatype",
+                    name: "NetworkIndex",
+                    id: 0x2,
+                    type: "uint8",
+                    conformance: "O",
+                    details:
+                        "When the NetworkingStatus is Success, this field shall be present. It shall contain the 0-based " +
                         "index of the entry in the Networks attribute that was last added, updated or removed successfully " +
                         "by the associated request command.",
-                    xref: { document: "core", section: "11.8.7.8.1" }
-                }
-            ]
+                    xref: { document: "core", section: "11.8.7.8.1" },
+                },
+            ],
         },
 
         {
-            tag: "command", name: "ConnectNetwork", id: 0x6, access: "A", conformance: "WI | TH",
-            direction: "request", response: "ConnectNetworkResponse",
+            tag: "command",
+            name: "ConnectNetwork",
+            id: 0x6,
+            access: "A",
+            conformance: "WI | TH",
+            direction: "request",
+            response: "ConnectNetworkResponse",
 
-            details: "This command shall attempt to connect to a network whose configuration was previously added by " +
+            details:
+                "This command shall attempt to connect to a network whose configuration was previously added by " +
                 "either the AddOrUpdateWiFiNetwork or AddOrUpdateThreadNetwork commands. Network is identified by " +
                 "its NetworkID." +
                 "\n" +
@@ -616,18 +786,26 @@ Matter.children.push({
 
             children: [
                 {
-                    tag: "datatype", name: "NetworkId", id: 0x0, type: "octstr", conformance: "M",
-                    constraint: "1 to 32"
+                    tag: "datatype",
+                    name: "NetworkId",
+                    id: 0x0,
+                    type: "octstr",
+                    conformance: "M",
+                    constraint: "1 to 32",
                 },
-                { tag: "datatype", name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O" }
-            ]
+                { tag: "datatype", name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O" },
+            ],
         },
 
         {
-            tag: "command", name: "ConnectNetworkResponse", id: 0x7, conformance: "WI | TH",
+            tag: "command",
+            name: "ConnectNetworkResponse",
+            id: 0x7,
+            conformance: "WI | TH",
             direction: "response",
 
-            details: "Before generating a ConnectNetworkResponse, the server shall:" +
+            details:
+                "Before generating a ConnectNetworkResponse, the server shall:" +
                 "\n" +
                 "  • Set the LastNetworkingStatus attribute value to the NetworkingStatus matching the response." +
                 "\n" +
@@ -664,15 +842,24 @@ Matter.children.push({
 
             children: [
                 {
-                    tag: "datatype", name: "NetworkingStatus", id: 0x0, type: "NetworkCommissioningStatusEnum",
-                    conformance: "M"
+                    tag: "datatype",
+                    name: "NetworkingStatus",
+                    id: 0x0,
+                    type: "NetworkCommissioningStatusEnum",
+                    conformance: "M",
                 },
                 { tag: "datatype", name: "DebugText", id: 0x1, type: "string", conformance: "O" },
 
                 {
-                    tag: "datatype", name: "ErrorValue", id: 0x2, type: "int32", conformance: "M", quality: "X",
+                    tag: "datatype",
+                    name: "ErrorValue",
+                    id: 0x2,
+                    type: "int32",
+                    conformance: "M",
+                    quality: "X",
 
-                    details: "  • ErrorValue interpretation for Wi-Fi association errors:" +
+                    details:
+                        "  • ErrorValue interpretation for Wi-Fi association errors:" +
                         "\n" +
                         "    ◦ On any association failure during enabling of a network, the ErrorValue field shall be set to " +
                         "      the Status Code value that was present in the last frame related to association where Status " +
@@ -685,23 +872,29 @@ Matter.children.push({
                         "\n" +
                         "      ▪ Authentication (Type 0, Subtype 11)" +
                         "\n" +
-                        "    ◦ Table 9-50 \"Status Codes\" in IEEE 802.11-2020 contains a description of all values possible, " +
+                        '    ◦ Table 9-50 "Status Codes" in IEEE 802.11-2020 contains a description of all values possible, ' +
                         "      which can unambiguously be used to determine the cause, such as an invalid security type, " +
                         "      unsupported rate, etc." +
                         "\n" +
                         "  • Otherwise, the ErrorValue field shall contain an implementation-dependent value which may be " +
                         "    used by a reader of the structure to record, report or diagnose the failure.",
 
-                    xref: { document: "core", section: "11.8.7.10.1" }
-                }
-            ]
+                    xref: { document: "core", section: "11.8.7.10.1" },
+                },
+            ],
         },
 
         {
-            tag: "command", name: "ReorderNetwork", id: 0x8, access: "A", conformance: "WI | TH",
-            direction: "request", response: "NetworkConfigResponse",
+            tag: "command",
+            name: "ReorderNetwork",
+            id: 0x8,
+            access: "A",
+            conformance: "WI | TH",
+            direction: "request",
+            response: "NetworkConfigResponse",
 
-            details: "This command shall set the specific order of the network configuration selected by its NetworkID in " +
+            details:
+                "This command shall set the specific order of the network configuration selected by its NetworkID in " +
                 "the Networks attribute list to match the position given by NetworkIndex." +
                 "\n" +
                 "This field shall contain the NetworkID for the entry to reorder: the SSID for Wi-Fi and XPAN ID for " +
@@ -746,7 +939,7 @@ Matter.children.push({
                 "\n" +
                 "The outcome, after applying to the initial state would be:" +
                 "\n" +
-                "In the above outcome, FancyCat and BlueDolphin moved \"down\" and Home-Guest became the highest " +
+                'In the above outcome, FancyCat and BlueDolphin moved "down" and Home-Guest became the highest ' +
                 "priority network in the list." +
                 "\n" +
                 "On receiving ReorderNetwork with:" +
@@ -757,24 +950,32 @@ Matter.children.push({
                 "\n" +
                 "The outcome, after applying to the initial state would be:" +
                 "\n" +
-                "In the above outcome, BlueDolphin, Home-Guest and WillowTree moved \"up\" and FancyCat became the " +
+                'In the above outcome, BlueDolphin, Home-Guest and WillowTree moved "up" and FancyCat became the ' +
                 "lowest priority network in the list.",
 
             xref: { document: "core", section: "11.8.7.11" },
 
             children: [
                 {
-                    tag: "datatype", name: "NetworkId", id: 0x0, type: "octstr", conformance: "M",
-                    constraint: "1 to 32"
+                    tag: "datatype",
+                    name: "NetworkId",
+                    id: 0x0,
+                    type: "octstr",
+                    conformance: "M",
+                    constraint: "1 to 32",
                 },
                 { tag: "datatype", name: "NetworkIndex", id: 0x1, type: "uint8", conformance: "M", constraint: "desc" },
-                { tag: "datatype", name: "Breadcrumb", id: 0x2, type: "uint64", conformance: "O" }
-            ]
+                { tag: "datatype", name: "Breadcrumb", id: 0x2, type: "uint64", conformance: "O" },
+            ],
         },
 
         {
-            tag: "datatype", name: "WiFiSecurityBitmap", type: "map8", conformance: "M",
-            details: "WiFiSecurityBitmap encodes the supported Wi-Fi security types present in the Security field of the " +
+            tag: "datatype",
+            name: "WiFiSecurityBitmap",
+            type: "map8",
+            conformance: "M",
+            details:
+                "WiFiSecurityBitmap encodes the supported Wi-Fi security types present in the Security field of the " +
                 "WiFiInterfaceScanResultStruct.",
             xref: { document: "core", section: "11.8.5.1" },
 
@@ -782,113 +983,180 @@ Matter.children.push({
                 { tag: "datatype", name: "Unencrypted", constraint: "0", description: "Supports unencrypted Wi-Fi" },
                 { tag: "datatype", name: "Wep", constraint: "1", description: "Supports Wi-Fi using WEP security" },
                 {
-                    tag: "datatype", name: "WpaPersonal", constraint: "2",
-                    description: "Supports Wi-Fi using WPA-Personal security"
+                    tag: "datatype",
+                    name: "WpaPersonal",
+                    constraint: "2",
+                    description: "Supports Wi-Fi using WPA-Personal security",
                 },
                 {
-                    tag: "datatype", name: "Wpa2Personal", constraint: "3",
-                    description: "Supports Wi-Fi using WPA2-Personal security"
+                    tag: "datatype",
+                    name: "Wpa2Personal",
+                    constraint: "3",
+                    description: "Supports Wi-Fi using WPA2-Personal security",
                 },
                 {
-                    tag: "datatype", name: "Wpa3Personal", constraint: "4",
-                    description: "Supports Wi-Fi using WPA3-Personal security"
-                }
-            ]
+                    tag: "datatype",
+                    name: "Wpa3Personal",
+                    constraint: "4",
+                    description: "Supports Wi-Fi using WPA3-Personal security",
+                },
+            ],
         },
 
         {
-            tag: "datatype", name: "WiFiBandEnum", type: "enum8", conformance: "M",
-            details: "WiFiBandEnum encodes a supported Wi-Fi frequency band present in the WiFiBand field of the " +
+            tag: "datatype",
+            name: "WiFiBandEnum",
+            type: "enum8",
+            conformance: "M",
+            details:
+                "WiFiBandEnum encodes a supported Wi-Fi frequency band present in the WiFiBand field of the " +
                 "WiFiInterfaceScanResultStruct.",
             xref: { document: "core", section: "11.8.5.2" },
 
             children: [
                 {
-                    tag: "datatype", name: "2G4", id: 0x0, conformance: "O.a+",
-                    description: "2.4GHz - 2.401GHz to2.495GHz(802.11b/g/n/ax)"
+                    tag: "datatype",
+                    name: "2G4",
+                    id: 0x0,
+                    conformance: "O.a+",
+                    description: "2.4GHz - 2.401GHz to2.495GHz(802.11b/g/n/ax)",
                 },
                 {
-                    tag: "datatype", name: "3G65", id: 0x1, conformance: "O.a+",
-                    description: "3.65GHz - 3.655GHz to3.695GHz (802.11y)"
+                    tag: "datatype",
+                    name: "3G65",
+                    id: 0x1,
+                    conformance: "O.a+",
+                    description: "3.65GHz - 3.655GHz to3.695GHz (802.11y)",
                 },
                 {
-                    tag: "datatype", name: "5G", id: 0x2, conformance: "O.a+",
-                    description: "5GHz - 5.150GHz to5.895GHz(802.11a/n/ac/ax)"
+                    tag: "datatype",
+                    name: "5G",
+                    id: 0x2,
+                    conformance: "O.a+",
+                    description: "5GHz - 5.150GHz to5.895GHz(802.11a/n/ac/ax)",
                 },
                 {
-                    tag: "datatype", name: "6G", id: 0x3, conformance: "O.a+",
-                    description: "6GHz - 5.925GHz to7.125GHz (802.11ax / WiFi 6E)"
+                    tag: "datatype",
+                    name: "6G",
+                    id: 0x3,
+                    conformance: "O.a+",
+                    description: "6GHz - 5.925GHz to7.125GHz (802.11ax / WiFi 6E)",
                 },
                 {
-                    tag: "datatype", name: "60G", id: 0x4, conformance: "O.a+",
-                    description: "60GHz - 57.24GHz to70.20GHz (802.11ad/ay)"
-                }
-            ]
+                    tag: "datatype",
+                    name: "60G",
+                    id: 0x4,
+                    conformance: "O.a+",
+                    description: "60GHz - 57.24GHz to70.20GHz (802.11ad/ay)",
+                },
+            ],
         },
 
         {
-            tag: "datatype", name: "NetworkCommissioningStatusEnum", type: "enum8", conformance: "M",
+            tag: "datatype",
+            name: "NetworkCommissioningStatusEnum",
+            type: "enum8",
+            conformance: "M",
             xref: { document: "core", section: "11.8.5.3" },
 
             children: [
                 { tag: "datatype", name: "Success", id: 0x0, conformance: "M", description: "OK, no error" },
                 { tag: "datatype", name: "OutOfRange", id: 0x1, conformance: "M", description: "Value Outside Range" },
                 {
-                    tag: "datatype", name: "BoundsExceeded", id: 0x2, conformance: "M",
-                    description: "A collection would exceed its size limit"
+                    tag: "datatype",
+                    name: "BoundsExceeded",
+                    id: 0x2,
+                    conformance: "M",
+                    description: "A collection would exceed its size limit",
                 },
                 {
-                    tag: "datatype", name: "NetworkIdNotFound", id: 0x3, conformance: "M",
-                    description: "The NetworkID is not among the collection of added networks"
+                    tag: "datatype",
+                    name: "NetworkIdNotFound",
+                    id: 0x3,
+                    conformance: "M",
+                    description: "The NetworkID is not among the collection of added networks",
                 },
                 {
-                    tag: "datatype", name: "DuplicateNetworkId", id: 0x4, conformance: "M",
-                    description: "The NetworkID is already among the collection of added networks"
+                    tag: "datatype",
+                    name: "DuplicateNetworkId",
+                    id: 0x4,
+                    conformance: "M",
+                    description: "The NetworkID is already among the collection of added networks",
                 },
                 {
-                    tag: "datatype", name: "NetworkNotFound", id: 0x5, conformance: "M",
-                    description: "Cannot find AP: SSID Not found"
+                    tag: "datatype",
+                    name: "NetworkNotFound",
+                    id: 0x5,
+                    conformance: "M",
+                    description: "Cannot find AP: SSID Not found",
                 },
                 {
-                    tag: "datatype", name: "RegulatoryError", id: 0x6, conformance: "M",
-                    description: "Cannot find AP: Mismatch on band/channels/regulatory domain / 2.4GHz vs 5GHz"
+                    tag: "datatype",
+                    name: "RegulatoryError",
+                    id: 0x6,
+                    conformance: "M",
+                    description: "Cannot find AP: Mismatch on band/channels/regulatory domain / 2.4GHz vs 5GHz",
                 },
                 {
-                    tag: "datatype", name: "AuthFailure", id: 0x7, conformance: "M",
-                    description: "Cannot associate due to authentication failure"
+                    tag: "datatype",
+                    name: "AuthFailure",
+                    id: 0x7,
+                    conformance: "M",
+                    description: "Cannot associate due to authentication failure",
                 },
                 {
-                    tag: "datatype", name: "UnsupportedSecurity", id: 0x8, conformance: "M",
-                    description: "Cannot associate due to unsupported security mode"
+                    tag: "datatype",
+                    name: "UnsupportedSecurity",
+                    id: 0x8,
+                    conformance: "M",
+                    description: "Cannot associate due to unsupported security mode",
                 },
                 {
-                    tag: "datatype", name: "OtherConnectionFailure", id: 0x9, conformance: "M",
-                    description: "Other association failure"
+                    tag: "datatype",
+                    name: "OtherConnectionFailure",
+                    id: 0x9,
+                    conformance: "M",
+                    description: "Other association failure",
                 },
                 {
-                    tag: "datatype", name: "Ipv6Failed", id: 0xa, conformance: "M",
-                    description: "Failure to generate an IPv6 address"
+                    tag: "datatype",
+                    name: "Ipv6Failed",
+                    id: 0xa,
+                    conformance: "M",
+                    description: "Failure to generate an IPv6 address",
                 },
                 {
-                    tag: "datatype", name: "IpBindFailed", id: 0xb, conformance: "M",
-                    description: "Failure to bind Wi-Fi <-> IP interfaces"
+                    tag: "datatype",
+                    name: "IpBindFailed",
+                    id: 0xb,
+                    conformance: "M",
+                    description: "Failure to bind Wi-Fi <-> IP interfaces",
                 },
-                { tag: "datatype", name: "UnknownError", id: 0xc, conformance: "M", description: "Unknown error" }
-            ]
+                { tag: "datatype", name: "UnknownError", id: 0xc, conformance: "M", description: "Unknown error" },
+            ],
         },
 
         {
-            tag: "datatype", name: "NetworkInfoStruct", type: "struct", conformance: "M",
-            details: "NetworkInfoStruct struct describes an existing network configuration, as provided in the Networks " +
+            tag: "datatype",
+            name: "NetworkInfoStruct",
+            type: "struct",
+            conformance: "M",
+            details:
+                "NetworkInfoStruct struct describes an existing network configuration, as provided in the Networks " +
                 "attribute.",
             xref: { document: "core", section: "11.8.5.4" },
 
             children: [
                 {
-                    tag: "datatype", name: "NetworkId", id: 0x0, type: "octstr", conformance: "M",
+                    tag: "datatype",
+                    name: "NetworkId",
+                    id: 0x0,
+                    type: "octstr",
+                    conformance: "M",
                     constraint: "1 to 32",
 
-                    details: "Every network is uniquely identified (for purposes of commissioning) by a NetworkID mapping to the " +
+                    details:
+                        "Every network is uniquely identified (for purposes of commissioning) by a NetworkID mapping to the " +
                         "following technology-specific properties:" +
                         "\n" +
                         "  • SSID for Wi-Fi" +
@@ -907,27 +1175,35 @@ Matter.children.push({
                         "Implementations must be careful to support reporting byte strings without requiring a particular " +
                         "encoding for transfer. Only the commissioner should try to potentially decode the bytes. The most " +
                         "common encoding is UTF-8, however this is just a convention. Some configurations may use Latin-1 or " +
-                        "other character sets. A commissioner may decode using UTF-8, replacing encoding errors with \"?\" at " +
+                        'other character sets. A commissioner may decode using UTF-8, replacing encoding errors with "?" at ' +
                         "the application level while retaining the underlying representation." +
                         "\n" +
                         "XPAN ID is a big-endian 64-bit unsigned number, represented on the first 8 octets of the octet " +
                         "string.",
 
-                    xref: { document: "core", section: "11.8.5.4.1" }
+                    xref: { document: "core", section: "11.8.5.4.1" },
                 },
 
                 {
-                    tag: "datatype", name: "Connected", id: 0x1, type: "bool", conformance: "M",
-                    details: "This field shall indicate the connected status of the associated network, where \"connected\" means " +
+                    tag: "datatype",
+                    name: "Connected",
+                    id: 0x1,
+                    type: "bool",
+                    conformance: "M",
+                    details:
+                        'This field shall indicate the connected status of the associated network, where "connected" means ' +
                         "currently linked to the network technology (e.g. Associated for a Wi-Fi network, media connected " +
                         "for an Ethernet network).",
-                    xref: { document: "core", section: "11.8.5.4.2" }
-                }
-            ]
+                    xref: { document: "core", section: "11.8.5.4.2" },
+                },
+            ],
         },
 
         {
-            tag: "datatype", name: "WiFiInterfaceScanResultStruct", type: "struct", conformance: "M",
+            tag: "datatype",
+            name: "WiFiInterfaceScanResultStruct",
+            type: "struct",
+            conformance: "M",
             details: "WiFiInterfaceScanResultStruct represents a single Wi-Fi network scan result.",
             xref: { document: "core", section: "11.8.5.5" },
 
@@ -938,45 +1214,70 @@ Matter.children.push({
                 { tag: "datatype", name: "Channel", id: 0x3, type: "uint16", conformance: "WI" },
 
                 {
-                    tag: "datatype", name: "WiFiBand", id: 0x4, type: "WiFiBandEnum", conformance: "[WI]",
-                    details: "This field, if present, may be used to differentiate overlapping channel number values across " +
+                    tag: "datatype",
+                    name: "WiFiBand",
+                    id: 0x4,
+                    type: "WiFiBandEnum",
+                    conformance: "[WI]",
+                    details:
+                        "This field, if present, may be used to differentiate overlapping channel number values across " +
                         "different Wi-Fi frequency bands.",
-                    xref: { document: "core", section: "11.8.5.5.1" }
+                    xref: { document: "core", section: "11.8.5.5.1" },
                 },
 
                 {
-                    tag: "datatype", name: "Rssi", id: 0x5, type: "int8", conformance: "[WI]",
-                    details: "This field, if present, shall denote the signal strength in dBm of the associated scan result.",
-                    xref: { document: "core", section: "11.8.5.5.2" }
-                }
-            ]
+                    tag: "datatype",
+                    name: "Rssi",
+                    id: 0x5,
+                    type: "int8",
+                    conformance: "[WI]",
+                    details:
+                        "This field, if present, shall denote the signal strength in dBm of the associated scan result.",
+                    xref: { document: "core", section: "11.8.5.5.2" },
+                },
+            ],
         },
 
         {
-            tag: "datatype", name: "ThreadInterfaceScanResultStruct", type: "struct", conformance: "M",
+            tag: "datatype",
+            name: "ThreadInterfaceScanResultStruct",
+            type: "struct",
+            conformance: "M",
             details: "ThreadInterfaceScanResultStruct represents a single Thread network scan result.",
             xref: { document: "core", section: "11.8.5.6" },
 
             children: [
                 {
-                    tag: "datatype", name: "PanId", id: 0x0, type: "uint16", conformance: "TH",
-                    constraint: "0 to 65534"
+                    tag: "datatype",
+                    name: "PanId",
+                    id: 0x0,
+                    type: "uint16",
+                    conformance: "TH",
+                    constraint: "0 to 65534",
                 },
                 { tag: "datatype", name: "ExtendedPanId", id: 0x1, type: "uint64", conformance: "TH" },
                 {
-                    tag: "datatype", name: "NetworkName", id: 0x2, type: "string", conformance: "TH",
-                    constraint: "1 to 16"
+                    tag: "datatype",
+                    name: "NetworkName",
+                    id: 0x2,
+                    type: "string",
+                    conformance: "TH",
+                    constraint: "1 to 16",
                 },
                 { tag: "datatype", name: "Channel", id: 0x3, type: "uint16", conformance: "TH" },
                 { tag: "datatype", name: "Version", id: 0x4, type: "uint8", conformance: "TH" },
                 {
-                    tag: "datatype", name: "ExtendedAddress", id: 0x5, type: "hwadr", conformance: "TH",
+                    tag: "datatype",
+                    name: "ExtendedAddress",
+                    id: 0x5,
+                    type: "hwadr",
+                    conformance: "TH",
                     details: "ExtendedAddress stands for an IEEE 802.15.4 Extended Address.",
-                    xref: { document: "core", section: "11.8.5.6.1" }
+                    xref: { document: "core", section: "11.8.5.6.1" },
                 },
                 { tag: "datatype", name: "Rssi", id: 0x6, type: "int8", conformance: "TH" },
-                { tag: "datatype", name: "Lqi", id: 0x7, type: "uint8", conformance: "TH" }
-            ]
-        }
-    ]
+                { tag: "datatype", name: "Lqi", id: 0x7, type: "uint8", conformance: "TH" },
+            ],
+        },
+    ],
 });

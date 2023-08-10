@@ -10,7 +10,7 @@
 export enum Specification {
     Core = "core",
     Cluster = "cluster",
-    Device = "device"
+    Device = "device",
 }
 
 export namespace Specification {
@@ -20,7 +20,7 @@ export namespace Specification {
     export enum Names {
         core = "Matter Core Specification",
         cluster = "Matter Application Cluster Specification",
-        device = "Matter Device Library Specification"
+        device = "Matter Device Library Specification",
     }
 
     /**
@@ -30,12 +30,12 @@ export namespace Specification {
         /**
          * The defining document for the element.
          */
-        document: `${Specification}`,
+        document: `${Specification}`;
 
         /**
          * The section of the defining document that most specifically
          * addresses the element.
          */
-        section: string
-    }
+        section: string;
+    };
 }

@@ -5,20 +5,19 @@
  */
 
 import { Message } from "../../codec/MessageCodec.js";
+import { MatterFlowError } from "../../common/MatterError.js";
+import { MatterDevice } from "../../MatterDevice.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { CaseServer } from "../../session/case/CaseServer.js";
 import { PaseServer } from "../../session/pase/PaseServer.js";
 import { MessageType, SECURE_CHANNEL_PROTOCOL_ID } from "./SecureChannelMessages.js";
-import { MatterDevice } from "../../MatterDevice.js";
-import { MatterFlowError } from "../../common/MatterError.js";
 
 export class SecureChannelProtocol implements ProtocolHandler<MatterDevice> {
-
     constructor(
         private paseCommissioner: PaseServer,
         private readonly caseCommissioner: CaseServer,
-    ) { }
+    ) {}
 
     getId(): number {
         return SECURE_CHANNEL_PROTOCOL_ID;
@@ -39,7 +38,9 @@ export class SecureChannelProtocol implements ProtocolHandler<MatterDevice> {
                 await this.caseCommissioner.onNewExchange(exchange);
                 break;
             default:
-                throw new MatterFlowError(`Unexpected initial message on secure channel protocol: ${messageType.toString(16)}`);
+                throw new MatterFlowError(
+                    `Unexpected initial message on secure channel protocol: ${messageType.toString(16)}`,
+                );
         }
     }
 

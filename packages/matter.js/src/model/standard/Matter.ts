@@ -13,5 +13,5 @@ export const Matter = MatterElement({
     name: "Matter",
     description: "Matter Object Model",
     version: "1.1",
-    children: []
+    children: [],
 });

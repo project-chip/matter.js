@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterFlowError } from "../../common/MatterError.js";
 import { MatterController } from "../../MatterController.js";
 import { MatterDevice } from "../../MatterDevice.js";
-import { TlvCaseSigma1, TlvCaseSigma2Resume, TlvCaseSigma2, TlvCaseSigma3 } from "./CaseMessages.js";
-import { SecureChannelMessenger } from "../../protocol/securechannel/SecureChannelMessenger.js";
 import { MessageType } from "../../protocol/securechannel/SecureChannelMessages.js";
+import { SecureChannelMessenger } from "../../protocol/securechannel/SecureChannelMessenger.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { MatterFlowError } from "../../common/MatterError.js";
+import { TlvCaseSigma1, TlvCaseSigma2, TlvCaseSigma2Resume, TlvCaseSigma3 } from "./CaseMessages.js";
 
 export class CaseServerMessenger extends SecureChannelMessenger<MatterDevice> {
     async readSigma1() {
@@ -38,14 +38,19 @@ export class CaseClientMessenger extends SecureChannelMessenger<MatterController
     }
 
     async readSigma2() {
-        const { payload, payloadHeader: { messageType } } = await this.nextMessage();
+        const {
+            payload,
+            payloadHeader: { messageType },
+        } = await this.nextMessage();
         switch (messageType) {
             case MessageType.Sigma2:
                 return { sigma2Bytes: payload, sigma2: TlvCaseSigma2.decode(payload) };
             case MessageType.Sigma2Resume:
                 return { sigma2Resume: TlvCaseSigma2Resume.decode(payload) };
             default:
-                throw new MatterFlowError(`Received unexpected message type: ${messageType}, expected: ${MessageType.Sigma2} or ${MessageType.Sigma2Resume}`);
+                throw new MatterFlowError(
+                    `Received unexpected message type: ${messageType}, expected: ${MessageType.Sigma2} or ${MessageType.Sigma2Resume}`,
+                );
         }
     }
 

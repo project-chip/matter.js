@@ -40,7 +40,7 @@ export class Verhoeff {
         let checksum = 0;
         for (let i = 1; i <= length; i++) {
             const digit = Number.parseInt(digits[length - i]);
-            checksum = this.multiply[checksum][this.permute[(i) % 8][digit]];
+            checksum = this.multiply[checksum][this.permute[i % 8][digit]];
         }
         return this.inverse[checksum];
     }

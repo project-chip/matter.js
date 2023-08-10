@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TlvUInt64 } from "../tlv/TlvNumber.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvUInt64 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
-import { Branded } from "../util/Type.js";
 import { toBigInt } from "../util/Number.js";
+import { Branded } from "../util/Type.js";
 
 /**
  * A Fabric ID is a 64-bit number that uniquely identifies the Fabric within the scope of
@@ -26,5 +26,5 @@ export function FabricId(value: bigint | number): FabricId {
 export const TlvFabricId = new TlvWrapper<FabricId, number | bigint>(
     TlvUInt64,
     fabricId => fabricId,
-    value => FabricId(value)
+    value => FabricId(value),
 );

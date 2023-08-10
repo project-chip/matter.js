@@ -3,10 +3,10 @@
  * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { CertificateManager, TlvCertificationDeclaration } from "./CertificateManager.js";
-import { ByteArray } from "../util/ByteArray.js";
-import { VendorId } from "../datatype/VendorId.js";
 import { PrivateKey } from "../crypto/Key.js";
+import { VendorId } from "../datatype/VendorId.js";
+import { ByteArray } from "../util/ByteArray.js";
+import { CertificateManager, TlvCertificationDeclaration } from "./CertificateManager.js";
 
 // This is the private key from Appendix F of the Matter 1.1 Core Specification.
 // The specification specifies it in PEM format:
@@ -44,6 +44,10 @@ export class CertificationDeclarationManager {
             certificationType: 0,
         });
 
-        return CertificateManager.CertificationDeclarationToAsn1(certificationElements, TestCMS_SignerSubjectKeyIdentifier, PrivateKey(TestCMS_SignerPrivateKey));
+        return CertificateManager.CertificationDeclarationToAsn1(
+            certificationElements,
+            TestCMS_SignerSubjectKeyIdentifier,
+            PrivateKey(TestCMS_SignerPrivateKey),
+        );
     }
 }

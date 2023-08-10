@@ -19,14 +19,9 @@ export function generateElement(target: Block, element: AnyElement, prefix = "",
     delete fields.details;
 
     // First, tag/ID/name/type
-    const properties = Array<string>(
-        `tag: ${serialize(element.tag)}`,
-        `name: ${serialize(element.name)}`
-    );
+    const properties = Array<string>(`tag: ${serialize(element.tag)}`, `name: ${serialize(element.name)}`);
     if (element.id !== undefined) {
-        const idStr = element.id < 0
-            ? `${element.id}`
-            : `0x${element.id.toString(16)}`;
+        const idStr = element.id < 0 ? `${element.id}` : `0x${element.id.toString(16)}`;
         properties.push(`id: ${idStr}`);
     }
     delete fields.id;
@@ -40,7 +35,7 @@ export function generateElement(target: Block, element: AnyElement, prefix = "",
     properties.push(
         ...Object.entries(fields)
             .sort((a, b) => a[0].toLowerCase().localeCompare(b[0].toLowerCase()))
-            .map(([k, v]) => `${k}: ${serialize(v)}`)
+            .map(([k, v]) => `${k}: ${serialize(v)}`),
     );
 
     // Segment properties into rows
@@ -64,9 +59,7 @@ export function generateElement(target: Block, element: AnyElement, prefix = "",
     if (element.details) {
         const lines = wordWrap(element.details, 100);
         for (let i = 0; i < lines.length; i++) {
-            const prefix = i
-                ? "    "
-                : "details: ";
+            const prefix = i ? "    " : "details: ";
             const suffix = i < lines.length - 1 ? " +" : "";
             lines[i] = `${prefix}${serialize(lines[i] === "" ? "\n" : lines[i])}${suffix}`;
         }

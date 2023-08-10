@@ -16,13 +16,12 @@
 // Reach out in Matter Integrators Discord server if you would like access to
 // a Dropbox folder with the HTML version of the specification.
 
-import { resolve } from "path";
-import { homedir } from "os";
+import { readdirSync, readFileSync } from "fs";
 import { JSDOM } from "jsdom";
-import { readFileSync, readdirSync } from "fs";
+import { homedir } from "os";
+import { resolve } from "path";
 
-const SPECIFICATION_PATH = process.env.MATTER_SPECIFICATION_PATH ??
-    resolve(homedir(), "Dropbox", "iot", "matter-1.1");
+const SPECIFICATION_PATH = process.env.MATTER_SPECIFICATION_PATH ?? resolve(homedir(), "Dropbox", "iot", "matter-1.1");
 
 export function loadHtml(...paths: string[]) {
     const path = resolve(SPECIFICATION_PATH, ...paths);

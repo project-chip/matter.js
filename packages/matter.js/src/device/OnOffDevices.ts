@@ -3,23 +3,23 @@
  * Copyright 2022 The matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { DeviceTypes, DeviceTypeDefinition } from "./DeviceTypes.js";
-import { Device } from "./Device.js";
-import { createDefaultOnOffClusterServer } from "../cluster/server/OnOffServer.js";
-import { createDefaultGroupsClusterServer } from "../cluster/server/GroupsServer.js";
-import { createDefaultScenesClusterServer } from "../cluster/server/ScenesServer.js";
-import { createDefaultIdentifyClusterServer } from "../cluster/server/IdentifyServer.js";
-import { AttributeInitialValues, ClusterServerHandlers } from "../cluster/server/ClusterServerTypes.js";
-import { IdentifyCluster, } from "../cluster/definitions/IdentifyCluster.js";
-import { OnOffCluster } from "../cluster/definitions/OnOffCluster.js";
-import { extendPublicHandlerMethods } from "../util/NamedHandler.js";
-import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
+import { IdentifyCluster } from "../cluster/definitions/IdentifyCluster.js";
+import { OnOffCluster } from "../cluster/definitions/OnOffCluster.js";
+import { AttributeInitialValues, ClusterServerHandlers } from "../cluster/server/ClusterServerTypes.js";
+import { createDefaultGroupsClusterServer } from "../cluster/server/GroupsServer.js";
+import { createDefaultIdentifyClusterServer } from "../cluster/server/IdentifyServer.js";
+import { createDefaultOnOffClusterServer } from "../cluster/server/OnOffServer.js";
+import { createDefaultScenesClusterServer } from "../cluster/server/ScenesServer.js";
+import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
+import { extendPublicHandlerMethods } from "../util/NamedHandler.js";
+import { Device } from "./Device.js";
+import { DeviceTypeDefinition, DeviceTypes } from "./DeviceTypes.js";
 import { EndpointOptions } from "./Endpoint.js";
 
 type OnOffBaseDeviceCommands = {
     identify: ClusterServerHandlers<typeof IdentifyCluster>["identify"];
-}
+};
 
 /**
  * Utility function to get the initial attribute values for a cluster out of an object with initial attribute values
@@ -28,7 +28,16 @@ type OnOffBaseDeviceCommands = {
  * @param attributeInitialValues Object with initial attribute values for automatically added clusters
  * @param cluster Cluster to get the initial attribute values for
  */
-function getClusterInitialAttributeValues<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(attributeInitialValues: { [key: number]: AttributeInitialValues<any> } | undefined, cluster: Cluster<F, SF, A, C, E>): AttributeInitialValues<A> | undefined {
+function getClusterInitialAttributeValues<
+    F extends BitSchema,
+    SF extends TypeFromPartialBitSchema<F>,
+    A extends Attributes,
+    C extends Commands,
+    E extends Events,
+>(
+    attributeInitialValues: { [key: number]: AttributeInitialValues<any> } | undefined,
+    cluster: Cluster<F, SF, A, C, E>,
+): AttributeInitialValues<A> | undefined {
     if (attributeInitialValues === undefined) return undefined;
     return attributeInitialValues[cluster.id] as AttributeInitialValues<A>;
 }
@@ -37,7 +46,6 @@ function getClusterInitialAttributeValues<F extends BitSchema, SF extends TypeFr
  * Abstract Base class for OnOff devices
  */
 abstract class OnOffBaseDevice extends extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands>(Device) {
-
     /**
      * Creates a new OnOffBaseDevice
      *
@@ -46,7 +54,11 @@ abstract class OnOffBaseDevice extends extendPublicHandlerMethods<typeof Device,
      * @param attributeInitialValues Optional object with initial attribute values for automatically added clusters
      * @param options Optional endpoint options
      */
-    protected constructor(definition: DeviceTypeDefinition, attributeInitialValues?: { [key: number]: AttributeInitialValues<any> }, options: EndpointOptions = {}) {
+    protected constructor(
+        definition: DeviceTypeDefinition,
+        attributeInitialValues?: { [key: number]: AttributeInitialValues<any> },
+        options: EndpointOptions = {},
+    ) {
         super(definition, options);
         this.addDeviceClusters(attributeInitialValues);
     }
@@ -59,12 +71,16 @@ abstract class OnOffBaseDevice extends extendPublicHandlerMethods<typeof Device,
      */
     protected addDeviceClusters(attributeInitialValues?: { [key: number]: AttributeInitialValues<any> }) {
         // TODO: Find a way to make this automated based on the required clusters?
-        this.addClusterServer(createDefaultIdentifyClusterServer({
-            identify: async (data) => await this._executeHandler("identify", data)
-        }));
+        this.addClusterServer(
+            createDefaultIdentifyClusterServer({
+                identify: async data => await this._executeHandler("identify", data),
+            }),
+        );
         this.addClusterServer(createDefaultGroupsClusterServer());
         this.addClusterServer(createDefaultScenesClusterServer());
-        this.addClusterServer(createDefaultOnOffClusterServer(getClusterInitialAttributeValues(attributeInitialValues, OnOffCluster)));
+        this.addClusterServer(
+            createDefaultOnOffClusterServer(getClusterInitialAttributeValues(attributeInitialValues, OnOffCluster)),
+        );
     }
 
     /**
@@ -98,12 +114,14 @@ abstract class OnOffBaseDevice extends extendPublicHandlerMethods<typeof Device,
     }
 }
 
-
 /**
  * Device class for an OnOffPluginUnit Device
  */
 export class OnOffPluginUnitDevice extends OnOffBaseDevice {
-    constructor(onOffAttributeInitialValues?: AttributeInitialValues<typeof OnOffCluster.attributes>, options: EndpointOptions = {}) {
+    constructor(
+        onOffAttributeInitialValues?: AttributeInitialValues<typeof OnOffCluster.attributes>,
+        options: EndpointOptions = {},
+    ) {
         super(DeviceTypes.ON_OFF_PLUGIN_UNIT, onOffAttributeInitialValues, options);
     }
 }
@@ -112,11 +130,13 @@ export class OnOffPluginUnitDevice extends OnOffBaseDevice {
  * Device class for an OnOffPluginUnit Device
  */
 export class OnOffLightDevice extends OnOffBaseDevice {
-    constructor(onOffAttributeInitialValues?: AttributeInitialValues<typeof OnOffCluster.attributes>, options: EndpointOptions = {}) {
+    constructor(
+        onOffAttributeInitialValues?: AttributeInitialValues<typeof OnOffCluster.attributes>,
+        options: EndpointOptions = {},
+    ) {
         super(DeviceTypes.ON_OFF_LIGHT, onOffAttributeInitialValues, options);
     }
 }
-
 
 /*
 Example to enhance the exposed commands of the device

@@ -14,9 +14,9 @@ export type IllegalFeatureCombinations = FeatureBitmap[];
 
 type Choices = {
     [name: string]: {
-        exclusive: boolean,
+        exclusive: boolean;
         features: string[];
-    }
+    };
 };
 
 /**
@@ -69,7 +69,12 @@ export function IllegalFeatureCombinations(cluster: ClusterModel) {
     return { illegal, requiresFeatures: !!choices.length };
 }
 
-function addFeatureNode(feature: DatatypeModel, node: Conformance.Ast, illegal: IllegalFeatureCombinations, choices: Choices) {
+function addFeatureNode(
+    feature: DatatypeModel,
+    node: Conformance.Ast,
+    illegal: IllegalFeatureCombinations,
+    choices: Choices,
+) {
     function unsupported() {
         throw new InternalError(`New rule required to support ${feature.path} conformance "${feature.conformance}"`);
     }
@@ -123,7 +128,7 @@ function addFeatureNode(feature: DatatypeModel, node: Conformance.Ast, illegal: 
             } else {
                 choice = choices[node.param.name] = {
                     exclusive: !node.param.orMore,
-                    features: [feature.name]
+                    features: [feature.name],
                 };
             }
             break;

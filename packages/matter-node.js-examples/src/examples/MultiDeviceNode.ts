@@ -18,11 +18,17 @@
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
 import { CommissioningServer, MatterServer } from "@project-chip/matter-node.js";
 
-import { commandExecutor, getIntParameter, getParameter, requireMinNodeVersion, hasParameter } from "@project-chip/matter-node.js/util";
-import { Time } from "@project-chip/matter-node.js/time";
-import { OnOffLightDevice, OnOffPluginUnitDevice, DeviceTypes } from "@project-chip/matter-node.js/device";
+import { DeviceTypes, OnOffLightDevice, OnOffPluginUnitDevice } from "@project-chip/matter-node.js/device";
 import { Logger } from "@project-chip/matter-node.js/log";
-import { StorageManager, StorageBackendDisk } from "@project-chip/matter-node.js/storage";
+import { StorageBackendDisk, StorageManager } from "@project-chip/matter-node.js/storage";
+import { Time } from "@project-chip/matter-node.js/time";
+import {
+    commandExecutor,
+    getIntParameter,
+    getParameter,
+    hasParameter,
+    requireMinNodeVersion,
+} from "@project-chip/matter-node.js/util";
 import { VendorId } from "@project-chip/matter.js/datatype";
 
 const logger = Logger.get("MultiDevice");
@@ -32,7 +38,9 @@ requireMinNodeVersion(16);
 const storageLocation = getParameter("store") ?? ".device-node";
 const storage = new StorageBackendDisk(storageLocation, hasParameter("clearstorage"));
 logger.info(`Storage location: ${storageLocation} (Directory)`);
-logger.info('Use the parameter "-store NAME" to specify a different storage location, use -clearstorage to start with an empty storage.')
+logger.info(
+    'Use the parameter "-store NAME" to specify a different storage location, use -clearstorage to start with an empty storage.',
+);
 
 class Device {
     private matterServer: MatterServer | undefined;
@@ -99,24 +107,28 @@ class Device {
 
         const numDevices = getIntParameter("num") || 2;
         for (let i = 1; i <= numDevices; i++) {
-
             if (deviceStorage.has(`isSocket${i}`)) {
                 logger.info("Device type found in storage. -type parameter is ignored.");
             }
             const isSocket = deviceStorage.get(`isSocket${i}`, getParameter(`type${i}`) === "socket");
             const deviceName = `Matter ${getParameter(`type${i}`) ?? "light"} device ${i}`;
-            const deviceType = getParameter(`type${i}`) === "socket" ? DeviceTypes.ON_OFF_PLUGIN_UNIT.code : DeviceTypes.ON_OFF_LIGHT.code;
+            const deviceType =
+                getParameter(`type${i}`) === "socket"
+                    ? DeviceTypes.ON_OFF_PLUGIN_UNIT.code
+                    : DeviceTypes.ON_OFF_LIGHT.code;
             const vendorName = "matter-node.js";
             const passcode = getIntParameter(`passcode${i}`) ?? deviceStorage.get(`passcode${i}`, defaultPasscode++);
-            const discriminator = getIntParameter(`discriminator${i}`) ?? deviceStorage.get(`discriminator${i}`, defaultDiscriminator++);
+            const discriminator =
+                getIntParameter(`discriminator${i}`) ?? deviceStorage.get(`discriminator${i}`, defaultDiscriminator++);
             // product name / id and vendor id should match what is in the device certificate
-            const vendorId = getIntParameter(`vendorid${i}`) ?? deviceStorage.get(`vendorid${i}`, 0xFFF1);
+            const vendorId = getIntParameter(`vendorid${i}`) ?? deviceStorage.get(`vendorid${i}`, 0xfff1);
             const productName = `node-matter OnOff-Device ${i}`;
             const productId = getIntParameter(`productid${i}`) ?? deviceStorage.get(`productid${i}`, 0x8000);
 
             const port = getIntParameter(`port${i}`) ?? defaultPort++;
 
-            const uniqueId = getIntParameter(`uniqueid${i}`) ?? deviceStorage.get(`uniqueid${i}`, `${i}-${Time.nowMs()}`);
+            const uniqueId =
+                getIntParameter(`uniqueid${i}`) ?? deviceStorage.get(`uniqueid${i}`, `${i}-${Time.nowMs()}`);
 
             deviceStorage.set(`passcode${i}`, passcode);
             deviceStorage.set(`discriminator${i}`, discriminator);
@@ -139,12 +151,15 @@ class Device {
                     productLabel: productName,
                     productId,
                     serialNumber: `node-matter-${uniqueId}`,
-                }
+                },
             });
 
-            console.log(`Added device ${i} on port ${port} and unique id ${uniqueId}: Passcode: ${passcode}, Discriminator: ${discriminator}`);
+            console.log(
+                `Added device ${i} on port ${port} and unique id ${uniqueId}: Passcode: ${passcode}, Discriminator: ${discriminator}`,
+            );
 
-            const onOffDevice = getParameter(`type${i}`) === "socket" ? new OnOffPluginUnitDevice() : new OnOffLightDevice();
+            const onOffDevice =
+                getParameter(`type${i}`) === "socket" ? new OnOffPluginUnitDevice() : new OnOffLightDevice();
             onOffDevice.addFixedLabel("orientation", getParameter(`orientation${i}`) ?? `orientation ${i}`);
             onOffDevice.addOnOffListener(on => commandExecutor(on ? `on${i}` : `off${i}`)?.());
             commissioningServer.addDevice(onOffDevice);
@@ -173,14 +188,16 @@ class Device {
         logger.info("Listening");
         console.log();
         commissioningServers.forEach((commissioningServer, index) => {
-            console.log('----------------------------');
-            console.log(`Device ${index + 1}:`)
+            console.log("----------------------------");
+            console.log(`Device ${index + 1}:`);
             if (!commissioningServer.isCommissioned()) {
                 const pairingData = commissioningServer.getPairingCode();
                 const { qrCode, qrPairingCode, manualPairingCode } = pairingData;
 
                 console.log(qrCode);
-                console.log(`QR Code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}`);
+                console.log(
+                    `QR Code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}`,
+                );
                 console.log(`Manual pairing code: ${manualPairingCode}`);
             } else {
                 console.log("Device is already commissioned. Waiting for controllers to connect ...");
@@ -195,11 +212,22 @@ class Device {
 }
 
 const device = new Device();
-device.start().then(() => { /* done */ }).catch(err => console.error(err));
+device
+    .start()
+    .then(() => {
+        /* done */
+    })
+    .catch(err => console.error(err));
 
 process.on("SIGINT", () => {
-    device.stop().then(() => {
-        // Pragmatic way to make sure the storage is correctly closed before the process ends.
-        storage.close().then(() => process.exit(0)).catch(err => console.error(err));
-    }).catch(err => console.error(err));
+    device
+        .stop()
+        .then(() => {
+            // Pragmatic way to make sure the storage is correctly closed before the process ends.
+            storage
+                .close()
+                .then(() => process.exit(0))
+                .catch(err => console.error(err));
+        })
+        .catch(err => console.error(err));
 });

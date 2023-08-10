@@ -4,53 +4,53 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { BleError } from "../ble/Ble.js";
+import { BtpProtocolError } from "../ble/BtpSessionHandler.js";
+import { VendorId } from "../datatype/VendorId.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataReader } from "../util/DataReader.js";
 import { DataWriter } from "../util/DataWriter.js";
-import { BtpProtocolError } from "../ble/BtpSessionHandler.js";
-import { VendorId } from "../datatype/VendorId.js";
-import { BleError } from "../ble/Ble.js";
 
 export interface BtpHandshakeRequest {
-    versions: number[],
-    attMtu: number,
-    clientWindowSize: number,
+    versions: number[];
+    attMtu: number;
+    clientWindowSize: number;
 }
 
 export interface BtpHandshakeResponse {
-    version: number,
-    attMtu: number,
-    windowSize: number
+    version: number;
+    attMtu: number;
+    windowSize: number;
 }
 
 export interface BtpPacketPayload {
-    ackNumber?: number,
-    sequenceNumber: number,
-    messageLength?: number,
-    segmentPayload?: ByteArray
+    ackNumber?: number;
+    sequenceNumber: number;
+    messageLength?: number;
+    segmentPayload?: ByteArray;
 }
 
 export interface DecodedBtpPacketPayload extends BtpPacketPayload {
-    segmentPayload: ByteArray
+    segmentPayload: ByteArray;
 }
 
 export interface BtpHeader {
-    isHandshakeRequest: boolean,
-    hasManagementOpcode: boolean,
-    hasAckNumber: boolean,
-    isEndingSegment: boolean,
-    isContinuingSegment: boolean,
-    isBeginningSegment: boolean
+    isHandshakeRequest: boolean;
+    hasManagementOpcode: boolean;
+    hasAckNumber: boolean;
+    isEndingSegment: boolean;
+    isContinuingSegment: boolean;
+    isBeginningSegment: boolean;
 }
 
 export interface BtpPacket {
-    header: BtpHeader,
-    payload: BtpPacketPayload
+    header: BtpHeader;
+    payload: BtpPacketPayload;
 }
 
 export interface DecodedBtpPacket {
-    header: BtpHeader,
-    payload: DecodedBtpPacketPayload
+    header: BtpHeader;
+    payload: DecodedBtpPacketPayload;
 }
 
 export const enum BtpHeaderBits {
@@ -59,7 +59,7 @@ export const enum BtpHeaderBits {
     AckMsg = 0b00001000,
     EndSegment = 0b00000100,
     ContinuingSegment = 0b00000010,
-    BeginSegment = 0b00000001
+    BeginSegment = 0b00000001,
 }
 
 export const enum BtpOpcode {
@@ -69,7 +69,6 @@ export const enum BtpOpcode {
 const HANDSHAKE_HEADER = 0b01100101;
 
 export class BtpCodec {
-
     static decodeBtpHandshakeRequest(data: ByteArray): BtpHandshakeRequest {
         const reader = new DataReader(data, Endian.Little);
         return this.decodeHandshakeRequestPayload(reader);
@@ -82,25 +81,22 @@ export class BtpCodec {
 
         return {
             header,
-            payload: this.decodeBtpPacketPayload(reader, header)
+            payload: this.decodeBtpPacketPayload(reader, header),
         };
     }
 
     static encodeBtpPacket({ header, payload }: BtpPacket): ByteArray {
-        return ByteArray.concat(
-            this.encodeBtpPacketHeader(header),
-            this.encodeBtpPacketPayload(header, payload)
-        )
+        return ByteArray.concat(this.encodeBtpPacketHeader(header), this.encodeBtpPacketPayload(header, payload));
     }
 
     static encodeBtpHandshakeRequest({ versions, attMtu, clientWindowSize }: BtpHandshakeRequest): ByteArray {
         const writer = new DataWriter(Endian.Little);
         writer.writeUInt8(HANDSHAKE_HEADER);
         writer.writeUInt8(BtpOpcode.HandshakeManagementOpcode);
-        writer.writeUInt8(versions[1] << 4 | versions[0]);
-        writer.writeUInt8(versions[3] << 4 | versions[2]);
-        writer.writeUInt8(versions[5] << 4 | versions[4]);
-        writer.writeUInt8(versions[7] << 4 | versions[6]);
+        writer.writeUInt8((versions[1] << 4) | versions[0]);
+        writer.writeUInt8((versions[3] << 4) | versions[2]);
+        writer.writeUInt8((versions[5] << 4) | versions[4]);
+        writer.writeUInt8((versions[7] << 4) | versions[6]);
         writer.writeUInt16(attMtu);
         writer.writeUInt8(clientWindowSize);
         return writer.toByteArray();
@@ -116,7 +112,10 @@ export class BtpCodec {
         return writer.toByteArray();
     }
 
-    private static decodeBtpPacketPayload(reader: DataReader<Endian.Little>, header: BtpHeader): DecodedBtpPacketPayload {
+    private static decodeBtpPacketPayload(
+        reader: DataReader<Endian.Little>,
+        header: BtpHeader,
+    ): DecodedBtpPacketPayload {
         const { hasAckNumber, isBeginningSegment } = header;
         const ackNumber = hasAckNumber ? reader.readUInt8() : undefined;
         const sequenceNumber = reader.readUInt8();
@@ -126,7 +125,10 @@ export class BtpCodec {
         return { ackNumber, sequenceNumber, messageLength, segmentPayload };
     }
 
-    private static encodeBtpPacketPayload({ hasAckNumber, isBeginningSegment, isContinuingSegment, isEndingSegment }: BtpHeader, { ackNumber, sequenceNumber, messageLength, segmentPayload }: BtpPacketPayload): ByteArray {
+    private static encodeBtpPacketPayload(
+        { hasAckNumber, isBeginningSegment, isContinuingSegment, isEndingSegment }: BtpHeader,
+        { ackNumber, sequenceNumber, messageLength, segmentPayload }: BtpPacketPayload,
+    ): ByteArray {
         const writer = new DataWriter(Endian.Little);
 
         // Validate Header against Payload fields to make sure they match together
@@ -142,14 +144,19 @@ export class BtpCodec {
         if (isEndingSegment && !isContinuingSegment && !isBeginningSegment) {
             throw new BtpProtocolError("Ending segment flag can't be set without continuing segment flag.");
         }
-        if ((isBeginningSegment || isContinuingSegment) && (segmentPayload === undefined || segmentPayload.length === 0)) {
+        if (
+            (isBeginningSegment || isContinuingSegment) &&
+            (segmentPayload === undefined || segmentPayload.length === 0)
+        ) {
             throw new BtpProtocolError("Payload needs to be set because header flag indicates a message with payload.");
         }
         if (isBeginningSegment && messageLength === undefined) {
             throw new BtpProtocolError("Message length needs to be set because packet is a beginning segment.");
         }
         if (!isBeginningSegment && messageLength !== undefined) {
-            throw new BtpProtocolError("Message length shouldn't be set because the package is not a beginning segment.");
+            throw new BtpProtocolError(
+                "Message length shouldn't be set because the package is not a beginning segment.",
+            );
         }
 
         if (ackNumber !== undefined) {
@@ -181,22 +188,22 @@ export class BtpCodec {
         }
 
         const ver: number[] = [];
-        ver[0] = (version & 0xF0) >> 4;
-        ver[1] = version & 0x0F;
+        ver[0] = (version & 0xf0) >> 4;
+        ver[1] = version & 0x0f;
 
         version = reader.readUInt8();
-        ver[2] = (version & 0xF0) >> 4;
-        ver[3] = version & 0x0F;
+        ver[2] = (version & 0xf0) >> 4;
+        ver[3] = version & 0x0f;
 
         version = reader.readUInt8();
-        ver[4] = (version & 0xF0) >> 4;
-        ver[5] = version & 0x0F;
+        ver[4] = (version & 0xf0) >> 4;
+        ver[5] = version & 0x0f;
 
         version = reader.readUInt8();
-        ver[6] = (version & 0xF0) >> 4;
-        ver[7] = version & 0x0F;
+        ver[6] = (version & 0xf0) >> 4;
+        ver[7] = version & 0x0f;
 
-        const versions = ver.filter(v => v !== 0)
+        const versions = ver.filter(v => v !== 0);
         if (versions.length === 0) {
             throw new BtpProtocolError("No valid version provided.");
         }
@@ -219,7 +226,7 @@ export class BtpCodec {
             throw new BtpProtocolError("Management Opcode for BTP Handshake Request is incorrect.");
         }
 
-        const version = reader.readUInt8() & 0x0F;
+        const version = reader.readUInt8() & 0x0f;
         const attMtu = reader.readUInt16();
         const windowSize = reader.readUInt8();
         return { version, attMtu, windowSize };
@@ -238,35 +245,55 @@ export class BtpCodec {
             throw new BtpProtocolError("Management Opcode for BTPHandshake Request is not expected");
         }
 
-        return { isHandshakeRequest, hasManagementOpcode, hasAckNumber, isEndingSegment, isContinuingSegment, isBeginningSegment };
+        return {
+            isHandshakeRequest,
+            hasManagementOpcode,
+            hasAckNumber,
+            isEndingSegment,
+            isContinuingSegment,
+            isBeginningSegment,
+        };
     }
 
-    private static encodeBtpPacketHeader({ isHandshakeRequest, hasManagementOpcode, hasAckNumber, isEndingSegment, isContinuingSegment, isBeginningSegment }: BtpHeader): ByteArray {
+    private static encodeBtpPacketHeader({
+        isHandshakeRequest,
+        hasManagementOpcode,
+        hasAckNumber,
+        isEndingSegment,
+        isContinuingSegment,
+        isBeginningSegment,
+    }: BtpHeader): ByteArray {
         const writer = new DataWriter(Endian.Little);
 
         if (isHandshakeRequest || hasManagementOpcode) {
             throw new BtpProtocolError("Please use the specific methods to encode a Handshake packet");
         }
 
-        const header = (isHandshakeRequest ? BtpHeaderBits.HandshakeBit : 0)
-            | (hasManagementOpcode ? BtpHeaderBits.ManagementMsg : 0)
-            | (hasAckNumber ? BtpHeaderBits.AckMsg : 0)
-            | (isEndingSegment ? BtpHeaderBits.EndSegment : 0)
-            | (isContinuingSegment ? BtpHeaderBits.ContinuingSegment : 0)
-            | (isBeginningSegment ? BtpHeaderBits.BeginSegment : 0)
+        const header =
+            (isHandshakeRequest ? BtpHeaderBits.HandshakeBit : 0) |
+            (hasManagementOpcode ? BtpHeaderBits.ManagementMsg : 0) |
+            (hasAckNumber ? BtpHeaderBits.AckMsg : 0) |
+            (isEndingSegment ? BtpHeaderBits.EndSegment : 0) |
+            (isContinuingSegment ? BtpHeaderBits.ContinuingSegment : 0) |
+            (isBeginningSegment ? BtpHeaderBits.BeginSegment : 0);
 
         writer.writeUInt8(header);
         return writer.toByteArray();
     }
 
-    static encodeBleAdvertisementData(discriminator: number, vendorId: VendorId, productId: number, hasAdditionalAdvertisementData = false) {
+    static encodeBleAdvertisementData(
+        discriminator: number,
+        vendorId: VendorId,
+        productId: number,
+        hasAdditionalAdvertisementData = false,
+    ) {
         const writer = new DataWriter(Endian.Little);
         writer.writeUInt8(0x02);
         writer.writeUInt8(0x01);
         writer.writeUInt8(0x06);
-        writer.writeUInt8(0x0B);
-        writer.writeUInt8(0x16)
-        writer.writeUInt16(0xFFF6);
+        writer.writeUInt8(0x0b);
+        writer.writeUInt8(0x16);
+        writer.writeUInt16(0xfff6);
         writer.writeUInt8(0x00);
         writer.writeUInt16(discriminator);
         writer.writeUInt16(vendorId);
@@ -277,14 +304,21 @@ export class BtpCodec {
 
     static decodeBleAdvertisementData(data: ByteArray) {
         const reader = new DataReader(data, Endian.Little);
-        if (reader.readUInt8() !== 0x02 || reader.readUInt8() !== 0x01 || reader.readUInt8() !== 0x06 || reader.readUInt8() !== 0x0B || reader.readUInt8() !== 0x16) {
+        if (
+            reader.readUInt8() !== 0x02 ||
+            reader.readUInt8() !== 0x01 ||
+            reader.readUInt8() !== 0x06 ||
+            reader.readUInt8() !== 0x0b ||
+            reader.readUInt8() !== 0x16
+        ) {
             throw new BleError("Invalid BLE advertisement data");
         }
         const serviceUuid = reader.readUInt16();
-        if (serviceUuid !== 0xFFF6) {
+        if (serviceUuid !== 0xfff6) {
             throw new BleError("Invalid BLE advertisement data");
         }
-        const { discriminator, vendorId, productId, hasAdditionalAdvertisementData } = this.decodeBleAdvertisementServiceData(reader.getRemainingBytes());
+        const { discriminator, vendorId, productId, hasAdditionalAdvertisementData } =
+            this.decodeBleAdvertisementServiceData(reader.getRemainingBytes());
         return { discriminator, vendorId, productId, hasAdditionalAdvertisementData };
     }
 

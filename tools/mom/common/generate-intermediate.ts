@@ -9,8 +9,8 @@ export const INTERMEDIATE_PATH = "models";
 import { Logger } from "#matter.js/log/Logger.js";
 import { MatterElement, MatterModel } from "#matter.js/model/index.js";
 import { camelize } from "#util/string.js";
-import { TsFile } from "../../util/TsFile.js";
 import { finalizeModel } from "../../util/finalize-model.js";
+import { TsFile } from "../../util/TsFile.js";
 import { generateElement } from "./generate-element.js";
 
 const logger = Logger.get("generate-model");
@@ -24,7 +24,7 @@ export function generateIntermediateModel(source: string, elements: MatterElemen
     logger.info(`validate ${source}`);
     const matter = new MatterModel({
         name: `${camelize(source)}Matter`,
-        children: elements
+        children: elements,
     });
 
     const validationResult = finalizeModel(matter);

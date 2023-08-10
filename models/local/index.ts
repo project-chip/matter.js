@@ -12,14 +12,14 @@
 // ID and name so we provide both even though only one is required for
 // matching.
 
-import "./ColorControlOverrides.js";
-import "./WindowCoveringOverrides.js";
 import "./AdministratorCommissioningOverrides.js";
+import "./ColorControlOverrides.js";
 import "./DoorLockOverrides.js";
-import "./PumpConfigurationAndControlOverrides.js";
-import "./ModeSelectOverrides.js";
 import "./GroupKeyManagementOverrides.js";
-import "./IlluminanceMeasurementOverrides.js";
-import "./OperationalCredentialsOverrides.js";
 import "./GroupsOverrides.js";
+import "./IlluminanceMeasurementOverrides.js";
+import "./ModeSelectOverrides.js";
+import "./OperationalCredentialsOverrides.js";
+import "./PumpConfigurationAndControlOverrides.js";
 import "./ScenesOverrides.js";
+import "./WindowCoveringOverrides.js";

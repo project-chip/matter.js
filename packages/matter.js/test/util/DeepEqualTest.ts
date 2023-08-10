@@ -4,12 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { isDeepEqual } from "../../src/util/DeepEqual.js";
 import { VendorId } from "../../src/datatype/VendorId.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
+import { isDeepEqual } from "../../src/util/DeepEqual.js";
 
 describe("DeepEqual", () => {
-
     it("Equality of primitives", () => {
         expect(isDeepEqual(1, 1)).toBeTruthy();
         expect(!isDeepEqual(1, 2)).toBeTruthy();

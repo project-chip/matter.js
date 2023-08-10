@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 /**
  * Schema to encode a nullable value in TLV.
@@ -14,10 +14,7 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
  * @see {@link MatterCoreSpecificationV1_0} § A.11.6
  */
 export class NullableSchema<T> extends TlvSchema<T | null> {
-
-    constructor(
-        private readonly schema: TlvSchema<T>,
-    ) {
+    constructor(private readonly schema: TlvSchema<T>) {
         super();
     }
 
@@ -38,7 +35,12 @@ export class NullableSchema<T> extends TlvSchema<T | null> {
         if (value !== null) this.schema.validate(value);
     }
 
-    override injectField(value: T, fieldId: number, fieldValue: any, injectChecker: (fieldValue: any | undefined) => boolean): T {
+    override injectField(
+        value: T,
+        fieldId: number,
+        fieldValue: any,
+        injectChecker: (fieldValue: any | undefined) => boolean,
+    ): T {
         if (value !== null) {
             return this.schema.injectField(value, fieldId, fieldValue, injectChecker);
         }

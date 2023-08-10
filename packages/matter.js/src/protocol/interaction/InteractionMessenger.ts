@@ -4,20 +4,34 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ByteArray } from "../../util/ByteArray.js";
-import { Logger } from "../../log/Logger.js";
-import { tryCatchAsync } from "../../common/TryCatchHandler.js";
+import { Message } from "../../codec/MessageCodec.js";
 import { MatterError, MatterFlowError, NotImplementedError, UnexpectedDataError } from "../../common/MatterError.js";
-import { MessageExchange, UnexpectedMessageError, RetransmissionLimitReachedError } from "../../protocol/MessageExchange.js";
-import { ExchangeProvider } from "../../protocol/ExchangeManager.js";
+import { tryCatchAsync } from "../../common/TryCatchHandler.js";
+import { Logger } from "../../log/Logger.js";
 import { MatterController } from "../../MatterController.js";
 import { MatterDevice } from "../../MatterDevice.js";
+import { ExchangeProvider } from "../../protocol/ExchangeManager.js";
 import {
-    StatusCode, TlvAttributeReport, TlvDataReport, TlvInvokeRequest, TlvInvokeResponse, TlvReadRequest,
-    TlvStatusResponse, TlvSubscribeRequest, TlvSubscribeResponse, TlvTimedRequest, TlvWriteRequest, TlvWriteResponse
-} from "./InteractionProtocol.js";
+    MessageExchange,
+    RetransmissionLimitReachedError,
+    UnexpectedMessageError,
+} from "../../protocol/MessageExchange.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { Message } from "../../codec/MessageCodec.js";
+import { ByteArray } from "../../util/ByteArray.js";
+import {
+    StatusCode,
+    TlvAttributeReport,
+    TlvDataReport,
+    TlvInvokeRequest,
+    TlvInvokeResponse,
+    TlvReadRequest,
+    TlvStatusResponse,
+    TlvSubscribeRequest,
+    TlvSubscribeResponse,
+    TlvTimedRequest,
+    TlvWriteRequest,
+    TlvWriteResponse,
+} from "./InteractionProtocol.js";
 
 export const enum MessageType {
     StatusResponse = 0x01,
@@ -59,9 +73,7 @@ const MAX_SPDU_LENGTH = 1024;
 const logger = Logger.get("InteractionMessenger");
 
 class InteractionMessenger<ContextT> {
-    constructor(
-        protected exchange: MessageExchange<ContextT>,
-    ) { }
+    constructor(protected exchange: MessageExchange<ContextT>) {}
 
     async send(messageType: number, payload: ByteArray) {
         return this.exchange.send(messageType, payload);
@@ -81,7 +93,9 @@ class InteractionMessenger<ContextT> {
         const messageType = message.payloadHeader.messageType;
         this.throwIfErrorStatusMessage(message);
         if (expectedMessageType !== undefined && messageType !== expectedMessageType) {
-            throw new UnexpectedDataError(`Received unexpected message type: ${messageType}, expected: ${expectedMessageType}`);
+            throw new UnexpectedDataError(
+                `Received unexpected message type: ${messageType}, expected: ${expectedMessageType}`,
+            );
         }
         return message;
     }
@@ -91,7 +105,10 @@ class InteractionMessenger<ContextT> {
     }
 
     protected throwIfErrorStatusMessage(message: Message) {
-        const { payloadHeader: { messageType }, payload } = message;
+        const {
+            payloadHeader: { messageType },
+            payload,
+        } = message;
 
         if (messageType !== MessageType.StatusResponse) return;
         const { status } = TlvStatusResponse.decode(payload);
@@ -166,10 +183,13 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
 
     async sendDataReport(dataReport: DataReport) {
         const messageBytes = TlvDataReport.encode(dataReport);
-        if ((dataReport.attributeReports !== undefined || dataReport.eventReports !== undefined) && messageBytes.length > MAX_SPDU_LENGTH) {
+        if (
+            (dataReport.attributeReports !== undefined || dataReport.eventReports !== undefined) &&
+            messageBytes.length > MAX_SPDU_LENGTH
+        ) {
             // DataReport is too long, it needs to be sent in chunks
             const attributeReportsToSend = [...(dataReport.attributeReports ?? [])];
-            const eventReportsToSend = [...dataReport.eventReports ?? []];
+            const eventReportsToSend = [...(dataReport.eventReports ?? [])];
             dataReport.attributeReports = undefined;
             dataReport.eventReports = undefined;
             dataReport.moreChunkedMessages = true;
@@ -185,10 +205,14 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                         const attributeReportBytes = TlvAttributeReport.encode(attributeReport).length;
                         if (messageSize + attributeReportBytes > MAX_SPDU_LENGTH) {
                             if (messageSize === emptyDataReportBytes.length) {
-                                throw new NotImplementedError(`Attribute report is too long to fit in a single chunk, Array chunking not yet supported.`);
+                                throw new NotImplementedError(
+                                    `Attribute report is too long to fit in a single chunk, Array chunking not yet supported.`,
+                                );
                             }
                             // Report doesn't fit, sending this chunk
-                            logger.debug(`Sending DataReport chunk with ${dataReport.attributeReports?.length} attributes: ${messageSize} bytes`);
+                            logger.debug(
+                                `Sending DataReport chunk with ${dataReport.attributeReports?.length} attributes: ${messageSize} bytes`,
+                            );
                             await this.send(MessageType.ReportData, TlvDataReport.encode(dataReport));
                             await this.waitForSuccess();
                             dataReport.attributeReports = undefined;
@@ -198,8 +222,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                         if (dataReport.attributeReports === undefined) dataReport.attributeReports = [];
                         dataReport.attributeReports.push(attributeReport);
                     }
-                }
-                else if (eventReportsToSend.length > 0) {
+                } else if (eventReportsToSend.length > 0) {
                     const eventReport = eventReportsToSend.shift();
                     if (eventReport === undefined) {
                         // No more chunks to send
@@ -209,10 +232,14 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                     const eventReportBytes = TlvAttributeReport.encode(eventReport).length;
                     if (messageSize + eventReportBytes > MAX_SPDU_LENGTH) {
                         if (messageSize === emptyDataReportBytes.length) {
-                            throw new NotImplementedError(`Event report is too long to fit in a single chunk, Array chunking not yet supported.`);
+                            throw new NotImplementedError(
+                                `Event report is too long to fit in a single chunk, Array chunking not yet supported.`,
+                            );
                         }
                         // Report doesn't fit, sending this chunk
-                        logger.debug(`Sending DataReport chunk with ${dataReport.attributeReports?.length} attributes and ${dataReport.eventReports?.length} events: ${messageSize} bytes`);
+                        logger.debug(
+                            `Sending DataReport chunk with ${dataReport.attributeReports?.length} attributes and ${dataReport.eventReports?.length} events: ${messageSize} bytes`,
+                        );
                         await this.send(MessageType.ReportData, TlvDataReport.encode(dataReport));
                         await this.waitForSuccess();
                         dataReport.attributeReports = undefined;
@@ -222,8 +249,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                     messageSize += eventReportBytes;
                     if (dataReport.eventReports === undefined) dataReport.eventReports = [];
                     dataReport.eventReports.push(eventReport);
-                }
-                else {
+                } else {
                     // No more chunks to send
                     dataReport.moreChunkedMessages = undefined;
                     break;
@@ -233,12 +259,18 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
 
         if (dataReport.suppressResponse) {
             // We do not expect a response other than a Standalone Ack, so if we receive anything else, we throw an error
-            await tryCatchAsync(async () => await this.exchange.send(MessageType.ReportData, TlvDataReport.encode(dataReport), true), UnexpectedMessageError, async error => {
-                const { receivedMessage } = error;
-                this.throwIfErrorStatusMessage(receivedMessage);
-            });
+            await tryCatchAsync(
+                async () => await this.exchange.send(MessageType.ReportData, TlvDataReport.encode(dataReport), true),
+                UnexpectedMessageError,
+                async error => {
+                    const { receivedMessage } = error;
+                    this.throwIfErrorStatusMessage(receivedMessage);
+                },
+            );
         } else {
-            logger.debug(`Sending (final) data report with ${dataReport.attributeReports?.length} attributes and ${dataReport.eventReports?.length} events`);
+            logger.debug(
+                `Sending (final) data report with ${dataReport.attributeReports?.length} attributes and ${dataReport.eventReports?.length} events`,
+            );
             await this.exchange.send(MessageType.ReportData, TlvDataReport.encode(dataReport));
             await this.waitForSuccess();
         }
@@ -246,7 +278,6 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
 }
 
 export class IncomingInteractionClientMessenger extends InteractionMessenger<MatterController> {
-
     async readDataReport(): Promise<DataReport> {
         let subscriptionId: number | undefined;
         const values: TypeFromSchema<typeof TlvAttributeReport>[] = [];
@@ -256,7 +287,10 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger<Mat
             const report = TlvDataReport.decode(dataReportMessage.payload);
             if (subscriptionId === undefined && report.subscriptionId !== undefined) {
                 subscriptionId = report.subscriptionId;
-            } else if ((subscriptionId !== undefined || report.subscriptionId !== undefined) && report.subscriptionId !== subscriptionId) {
+            } else if (
+                (subscriptionId !== undefined || report.subscriptionId !== undefined) &&
+                report.subscriptionId !== subscriptionId
+            ) {
                 throw new UnexpectedDataError(`Invalid subscription ID ${report.subscriptionId} received`);
             }
 
@@ -274,9 +308,7 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger<Mat
 }
 
 export class InteractionClientMessenger extends IncomingInteractionClientMessenger {
-    constructor(
-        private readonly exchangeProvider: ExchangeProvider,
-    ) {
+    constructor(private readonly exchangeProvider: ExchangeProvider) {
         super(exchangeProvider.initiateExchange());
     }
 
@@ -299,7 +331,13 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
     }
 
     sendReadRequest(readRequest: ReadRequest) {
-        return this.request(MessageType.ReadRequest, TlvReadRequest, MessageType.ReportData, TlvDataReport, readRequest);
+        return this.request(
+            MessageType.ReadRequest,
+            TlvReadRequest,
+            MessageType.ReportData,
+            TlvDataReport,
+            readRequest,
+        );
     }
 
     async sendSubscribeRequest(subscribeRequest: SubscribeRequest) {
@@ -318,7 +356,9 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         const subscribeResponse = TlvSubscribeResponse.decode(subscribeResponseMessage.payload);
 
         if (subscribeResponse.subscriptionId !== subscriptionId) {
-            throw new MatterFlowError(`Received subscription ID ${subscribeResponse.subscriptionId} instead of ${subscriptionId}`);
+            throw new MatterFlowError(
+                `Received subscription ID ${subscribeResponse.subscriptionId} instead of ${subscriptionId}`,
+            );
         }
 
         return {
@@ -331,7 +371,13 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         if (invokeRequest.suppressResponse) {
             await this.requestWithSuppressedResponse(MessageType.InvokeCommandRequest, TlvInvokeRequest, invokeRequest);
         } else {
-            return await this.request(MessageType.InvokeCommandRequest, TlvInvokeRequest, MessageType.InvokeCommandResponse, TlvInvokeResponse, invokeRequest);
+            return await this.request(
+                MessageType.InvokeCommandRequest,
+                TlvInvokeRequest,
+                MessageType.InvokeCommandResponse,
+                TlvInvokeResponse,
+                invokeRequest,
+            );
         }
     }
 
@@ -339,22 +385,38 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         if (writeRequest.suppressResponse) {
             await this.requestWithSuppressedResponse(MessageType.WriteRequest, TlvWriteRequest, writeRequest);
         } else {
-            return await this.request(MessageType.WriteRequest, TlvWriteRequest, MessageType.WriteResponse, TlvWriteResponse, writeRequest);
+            return await this.request(
+                MessageType.WriteRequest,
+                TlvWriteRequest,
+                MessageType.WriteResponse,
+                TlvWriteResponse,
+                writeRequest,
+            );
         }
     }
 
     sendTimedRequest(timeoutSeconds: number) {
         return this.request(MessageType.TimedRequest, TlvTimedRequest, MessageType.StatusResponse, TlvStatusResponse, {
             timeout: timeoutSeconds,
-            interactionModelRevision: 1
+            interactionModelRevision: 1,
         });
     }
 
-    private async requestWithSuppressedResponse<RequestT>(requestMessageType: number, requestSchema: TlvSchema<RequestT>, request: RequestT): Promise<void> {
+    private async requestWithSuppressedResponse<RequestT>(
+        requestMessageType: number,
+        requestSchema: TlvSchema<RequestT>,
+        request: RequestT,
+    ): Promise<void> {
         await this.send(requestMessageType, requestSchema.encode(request), true);
     }
 
-    private async request<RequestT, ResponseT>(requestMessageType: number, requestSchema: TlvSchema<RequestT>, responseMessageType: number, responseSchema: TlvSchema<ResponseT>, request: RequestT): Promise<ResponseT> {
+    private async request<RequestT, ResponseT>(
+        requestMessageType: number,
+        requestSchema: TlvSchema<RequestT>,
+        responseMessageType: number,
+        responseSchema: TlvSchema<ResponseT>,
+        request: RequestT,
+    ): Promise<ResponseT> {
         await this.send(requestMessageType, requestSchema.encode(request));
         const responseMessage = await this.nextMessage(responseMessageType);
         return responseSchema.decode(responseMessage.payload);

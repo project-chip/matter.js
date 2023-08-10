@@ -23,7 +23,7 @@ export type VariantMap = { [sourceName: string]: Model };
 /**
  * Input to traverse().
  */
-export type TraverseMap = { [sourceName: string]: Model | AnyElement }
+export type TraverseMap = { [sourceName: string]: Model | AnyElement };
 
 /**
  * Supplies operational information about a set of variants.
@@ -64,7 +64,7 @@ export abstract class ModelVariantTraversal<S = void> {
      * of this list implies the priority used for choosing a name when multiple
      * model variants have different names.
      */
-    constructor(private sourceNames: string[]) { }
+    constructor(private sourceNames: string[]) {}
 
     /**
      * Initiate traversal.  The class is stateful so this call should not be
@@ -81,14 +81,18 @@ export abstract class ModelVariantTraversal<S = void> {
 
         this.visiting = true;
         try {
-            return this.visitVariants(this.createVariantDetail(
-                Object.fromEntries(Object.entries(variants).map(([sourceName, element]) => {
-                    if (!(element instanceof Model)) {
-                        element = Model.create(element);
-                    }
-                    return [sourceName, element];
-                }))
-            ));
+            return this.visitVariants(
+                this.createVariantDetail(
+                    Object.fromEntries(
+                        Object.entries(variants).map(([sourceName, element]) => {
+                            if (!(element instanceof Model)) {
+                                element = Model.create(element);
+                            }
+                            return [sourceName, element];
+                        }),
+                    ),
+                ),
+            );
         } finally {
             this.visiting = false;
         }
@@ -124,7 +128,7 @@ export abstract class ModelVariantTraversal<S = void> {
     protected enterCluster(variants: VariantDetail) {
         if (variants.tag === ElementTag.Cluster) {
             this.clusterState = {
-                canonicalNames: computeCanonicalNames(this.sourceNames, variants)
+                canonicalNames: computeCanonicalNames(this.sourceNames, variants),
             };
             return true;
         }
@@ -168,7 +172,6 @@ export abstract class ModelVariantTraversal<S = void> {
                                 if (child instanceof ValueModel && child.overridesShadow) {
                                     overrides = true;
                                 }
-
                             }
                         }
                         if (inherited && !overrides) {
@@ -185,7 +188,7 @@ export abstract class ModelVariantTraversal<S = void> {
                 }
 
                 return result;
-            })
+            });
         });
 
         return state;
@@ -194,14 +197,14 @@ export abstract class ModelVariantTraversal<S = void> {
     private mapChildren(variants: VariantDetail) {
         type ChildMapping = {
             // List of children associated by ID or name (ID gets priority)
-            slots: VariantMap[],
+            slots: VariantMap[];
 
             // Map of IDs to first slot the ID appeared
-            idToSlot: { [id: string]: number },
+            idToSlot: { [id: string]: number };
 
             // Map of names to first slot the name appeared
-            nameToSlot: { [name: string]: number }
-        }
+            nameToSlot: { [name: string]: number };
+        };
         const mappings = {} as { [tag: string]: ChildMapping };
 
         // Iterate over each model variant
@@ -215,8 +218,8 @@ export abstract class ModelVariantTraversal<S = void> {
                     continue;
                 }
 
-                const mapping = mappings[child.tag] ||
-                    (mappings[child.tag] = { slots: [], idToSlot: {}, nameToSlot: {} });
+                const mapping =
+                    mappings[child.tag] || (mappings[child.tag] = { slots: [], idToSlot: {}, nameToSlot: {} });
 
                 const childId = child.key;
                 const childName = this.getCanonicalName(child);
@@ -262,8 +265,7 @@ export abstract class ModelVariantTraversal<S = void> {
     /**
      * Create a VariantDetail from a VariantMap.
      */
-    private createVariantDetail(map: VariantMap):
-        VariantDetail {
+    private createVariantDetail(map: VariantMap): VariantDetail {
         let tag: ElementTag | undefined;
         let id: number | undefined;
         let name: string | undefined;
@@ -275,7 +277,9 @@ export abstract class ModelVariantTraversal<S = void> {
                     tag = variant.tag;
                 } else if (tag !== variant.tag) {
                     // Sanity check
-                    throw new InternalError(`Variant tag mismatch; previous variant identified as ${tag} but ${sourceName} identifies as ${tag}`);
+                    throw new InternalError(
+                        `Variant tag mismatch; previous variant identified as ${tag} but ${sourceName} identifies as ${tag}`,
+                    );
                 }
                 if (!id) {
                     id = variant.id;
@@ -284,7 +288,7 @@ export abstract class ModelVariantTraversal<S = void> {
                     name = this.getCanonicalName(variant);
                 }
             }
-        })
+        });
 
         if (!tag) {
             // Sanity check
@@ -308,8 +312,8 @@ type NameMapping = Map<Model, string>;
  * This type manages state that changes when we enter a cluster.
  */
 type ClusterState = {
-    canonicalNames: NameMapping
-}
+    canonicalNames: NameMapping;
+};
 
 /**
  * We go to a whole lot of work to choose proper datatype names.  This is to
@@ -349,21 +353,16 @@ function computeCanonicalNames(sourceNames: string[], variants: VariantDetail) {
  *     find the name referenced by the variant of highest priority
  *     add a mapping from the referenced name to the name we found
  */
-function inferEquivalentDatatypes(
-    sourceNames: string[],
-    variants: VariantDetail,
-    datatypeNameMap: NameMapping
-) {
+function inferEquivalentDatatypes(sourceNames: string[], variants: VariantDetail, datatypeNameMap: NameMapping) {
     type ModelNameMapping = {
-        mapTo: string | undefined,
-        priority: number
+        mapTo: string | undefined;
+        priority: number;
     };
     const nameVariants = new Map<Model, ModelNameMapping>();
 
     // Create a new traversal to visit each element
-    const traversal = new class extends ModelVariantTraversal {
+    const traversal = new (class extends ModelVariantTraversal {
         override visit(variants: VariantDetail, recurse: () => void[]) {
-
             let mapEntry: ModelNameMapping | undefined;
 
             for (let priority = 0; priority < sourceNames.length; priority++) {
@@ -383,8 +382,8 @@ function inferEquivalentDatatypes(
                 if (!mapEntry) {
                     mapEntry = {
                         mapTo: base.name,
-                        priority
-                    }
+                        priority,
+                    };
                 }
 
                 // Find existing entry
@@ -398,7 +397,9 @@ function inferEquivalentDatatypes(
                     if (existingEntry.priority > mapEntry.priority) {
                         nameVariants.set(base, mapEntry);
                     } else if (existingEntry.priority === mapEntry.priority && existingEntry.mapTo !== mapEntry.mapTo) {
-                        logger.warn(`Mapping ${sourceName} ${base.tag} ${base.name} to ${existingEntry.mapTo} but it also maps to ${mapEntry.mapTo}`);
+                        logger.warn(
+                            `Mapping ${sourceName} ${base.tag} ${base.name} to ${existingEntry.mapTo} but it also maps to ${mapEntry.mapTo}`,
+                        );
                     }
                 } else {
                     nameVariants.set(base, mapEntry);
@@ -418,7 +419,7 @@ function inferEquivalentDatatypes(
             }
             return false;
         }
-    }(sourceNames);
+    })(sourceNames);
     traversal.traverse(variants.map);
 
     // Convert the internal structure to NameMappings
@@ -436,11 +437,11 @@ function inferEquivalentDatatypes(
 function chooseCanonicalNames(
     sourceNames: string[],
     variants: VariantDetail,
-    datatypeNameMap: NameMapping
+    datatypeNameMap: NameMapping,
 ): NameMapping {
     const canonicalNames = new Map<Model, string>();
 
-    const traversal = new class extends ModelVariantTraversal {
+    const traversal = new (class extends ModelVariantTraversal {
         visit(variants: VariantDetail, recurse: () => void) {
             let canonicalName: string | undefined;
 
@@ -512,7 +513,7 @@ function chooseCanonicalNames(
             }
             return false;
         }
-    }(sourceNames);
+    })(sourceNames);
 
     traversal.traverse(variants.map);
 

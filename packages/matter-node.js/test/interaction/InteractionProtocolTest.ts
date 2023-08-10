@@ -17,31 +17,58 @@ import { Time, TimeFake } from "@project-chip/matter.js/time";
 
 Time.get = () => new TimeFake(0);
 
-import * as assert from "assert";
 import {
-    InteractionServer, ReadRequest, DataReport, WriteRequest, WriteResponse, InvokeRequest, InvokeResponse,
-    InteractionServerMessenger, SubscribeRequest
+    AccessControlCluster,
+    BasicInformationCluster,
+    ClusterServer,
+    OnOffCluster,
+} from "@project-chip/matter.js/cluster";
+import { Message } from "@project-chip/matter.js/codec";
+import {
+    AttributeId,
+    ClusterId,
+    CommandId,
+    EndpointNumber,
+    EventId,
+    FabricId,
+    FabricIndex,
+    NodeId,
+    TlvFabricIndex,
+    VendorId,
+} from "@project-chip/matter.js/datatype";
+import { DeviceClasses, DeviceTypeDefinition, Endpoint } from "@project-chip/matter.js/device";
+import { Fabric } from "@project-chip/matter.js/fabric";
+import {
+    DataReport,
+    InteractionServer,
+    InteractionServerMessenger,
+    InvokeRequest,
+    InvokeResponse,
+    ReadRequest,
+    SubscribeRequest,
+    WriteRequest,
+    WriteResponse,
 } from "@project-chip/matter.js/interaction";
 import { MessageExchange } from "@project-chip/matter.js/protocol";
-import { Endpoint, DeviceTypeDefinition, DeviceClasses } from "@project-chip/matter.js/device";
-import {
-    FabricId, FabricIndex, NodeId, VendorId, TlvFabricIndex, EndpointNumber, ClusterId, AttributeId, CommandId,
-    EventId
-} from "@project-chip/matter.js/datatype";
-import {
-    TlvString, TlvUInt8, TlvNoArguments, TlvArray, TlvField, TlvObject, TlvNullable, TlvOptionalField
-} from "@project-chip/matter.js/tlv";
-import { ClusterServer, BasicInformationCluster, OnOffCluster, AccessControlCluster } from "@project-chip/matter.js/cluster";
-import { Message } from "@project-chip/matter.js/codec";
-import { Fabric } from "@project-chip/matter.js/fabric";
-import { ByteArray } from "@project-chip/matter.js/util";
 import { SecureSession } from "@project-chip/matter.js/session";
+import {
+    TlvArray,
+    TlvField,
+    TlvNoArguments,
+    TlvNullable,
+    TlvObject,
+    TlvOptionalField,
+    TlvString,
+    TlvUInt8,
+} from "@project-chip/matter.js/tlv";
+import { ByteArray } from "@project-chip/matter.js/util";
+import * as assert from "assert";
 
 const DummyTestDevice = DeviceTypeDefinition({
     code: 0,
     name: "DummyTestDevice",
     deviceClass: DeviceClasses.Simple,
-    revision: 1
+    revision: 1,
 });
 
 const READ_REQUEST: ReadRequest = {
@@ -68,41 +95,41 @@ const READ_RESPONSE: DataReport = {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(2) },
                 data: TlvUInt8.encodeTlv(1),
                 dataVersion: 0,
-            }
+            },
         },
         {
             attributeData: {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(4) },
                 data: TlvUInt8.encodeTlv(2),
                 dataVersion: 0,
-            }
+            },
         },
         {
             attributeStatus: {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(400) },
                 status: { status: 134 },
-            }
+            },
         },
         {
             attributeStatus: {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), attributeId: AttributeId(4) },
                 status: { status: 195 },
-            }
+            },
         },
         {
             attributeStatus: {
                 path: { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), attributeId: AttributeId(1) },
                 status: { status: 127 },
-            }
+            },
         },
         {
             attributeData: {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(3) },
                 data: TlvString.encodeTlv("product"),
                 dataVersion: 0,
-            }
+            },
         },
-    ]
+    ],
 };
 
 const INVALID_SUBSCRIBE_REQUEST: SubscribeRequest = {
@@ -154,18 +181,22 @@ const WRITE_RESPONSE: WriteResponse = {
     interactionModelRevision: 1,
     writeResponses: [
         {
-            path: { attributeId: AttributeId(100), clusterId: ClusterId(40), endpointId: EndpointNumber(0) }, status: { status: 134 }
+            path: { attributeId: AttributeId(100), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
+            status: { status: 134 },
         },
         {
-            path: { attributeId: AttributeId(4), clusterId: ClusterId(0x99), endpointId: EndpointNumber(0) }, status: { status: 195 }
+            path: { attributeId: AttributeId(4), clusterId: ClusterId(0x99), endpointId: EndpointNumber(0) },
+            status: { status: 195 },
         },
         {
-            path: { attributeId: AttributeId(4), clusterId: ClusterId(40), endpointId: EndpointNumber(1) }, status: { status: 127 }
+            path: { attributeId: AttributeId(4), clusterId: ClusterId(40), endpointId: EndpointNumber(1) },
+            status: { status: 127 },
         },
         {
-            path: { attributeId: AttributeId(5), clusterId: ClusterId(40), endpointId: EndpointNumber(0) }, status: { status: 0 }
-        }
-    ]
+            path: { attributeId: AttributeId(5), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
+            status: { status: 0 },
+        },
+    ],
 };
 
 const MASS_WRITE_REQUEST: WriteRequest = {
@@ -187,7 +218,7 @@ const MASS_WRITE_REQUEST: WriteRequest = {
             path: { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28) },
             data: TlvString.encodeTlv("test"),
             dataVersion: 0,
-        }
+        },
     ],
     moreChunkedMessages: false,
 };
@@ -196,15 +227,18 @@ const MASS_WRITE_RESPONSE: WriteResponse = {
     interactionModelRevision: 1,
     writeResponses: [
         {
-            path: { attributeId: AttributeId(5), clusterId: ClusterId(40), endpointId: EndpointNumber(0) }, status: { status: 0 }
+            path: { attributeId: AttributeId(5), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
+            status: { status: 0 },
         },
         {
-            path: { attributeId: AttributeId(6), clusterId: ClusterId(40), endpointId: EndpointNumber(0) }, status: { status: 0 }
+            path: { attributeId: AttributeId(6), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
+            status: { status: 0 },
         },
         {
-            path: { attributeId: AttributeId(16), clusterId: ClusterId(40), endpointId: EndpointNumber(0) }, status: { status: 0 }
-        }
-    ]
+            path: { attributeId: AttributeId(16), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
+            status: { status: 0 },
+        },
+    ],
 };
 
 const TlvAclTestSchema = TlvObject({
@@ -226,7 +260,12 @@ const CHUNKED_ARRAY_WRITE_REQUEST: WriteRequest = {
             dataVersion: 0,
         },
         {
-            path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0), listIndex: null },
+            path: {
+                endpointId: EndpointNumber(0),
+                clusterId: ClusterId(0x1f),
+                attributeId: AttributeId(0),
+                listIndex: null,
+            },
             data: TlvAclTestSchema.encodeTlv({
                 privilege: 1,
                 authMode: 1,
@@ -236,7 +275,12 @@ const CHUNKED_ARRAY_WRITE_REQUEST: WriteRequest = {
             dataVersion: 0,
         },
         {
-            path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0), listIndex: null },
+            path: {
+                endpointId: EndpointNumber(0),
+                clusterId: ClusterId(0x1f),
+                attributeId: AttributeId(0),
+                listIndex: null,
+            },
             data: TlvAclTestSchema.encodeTlv({
                 privilege: 1,
                 authMode: 0,
@@ -247,7 +291,12 @@ const CHUNKED_ARRAY_WRITE_REQUEST: WriteRequest = {
             dataVersion: 0,
         },
         {
-            path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1f), attributeId: AttributeId(0), listIndex: null },
+            path: {
+                endpointId: EndpointNumber(0),
+                clusterId: ClusterId(0x1f),
+                attributeId: AttributeId(0),
+                listIndex: null,
+            },
             data: TlvAclTestSchema.encodeTlv({
                 privilege: 1,
                 authMode: 2,
@@ -265,9 +314,10 @@ const CHUNKED_ARRAY_WRITE_RESPONSE: WriteResponse = {
     interactionModelRevision: 1,
     writeResponses: [
         {
-            path: { attributeId: AttributeId(0), clusterId: ClusterId(31), endpointId: EndpointNumber(0) }, status: { status: 0 }
-        }
-    ]
+            path: { attributeId: AttributeId(0), clusterId: ClusterId(31), endpointId: EndpointNumber(0) },
+            status: { status: 0 },
+        },
+    ],
 };
 
 const INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS: InvokeRequest = {
@@ -282,8 +332,8 @@ const INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS: InvokeRequest = {
                 commandId: CommandId(1),
             },
             commandFields: TlvNoArguments.encodeTlv(undefined),
-        }
-    ]
+        },
+    ],
 };
 
 const INVOKE_COMMAND_REQUEST_WITH_NO_ARGS: InvokeRequest = {
@@ -293,8 +343,8 @@ const INVOKE_COMMAND_REQUEST_WITH_NO_ARGS: InvokeRequest = {
     invokeRequests: [
         {
             commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(1) },
-        }
-    ]
+        },
+    ],
 };
 
 const INVOKE_COMMAND_REQUEST_MULTI: InvokeRequest = {
@@ -319,8 +369,8 @@ const INVOKE_COMMAND_REQUEST_MULTI: InvokeRequest = {
         },
         {
             commandPath: { endpointId: EndpointNumber(99), clusterId: ClusterId(6), commandId: CommandId(1) },
-        }
-    ]
+        },
+    ],
 };
 
 const INVOKE_COMMAND_REQUEST_INVALID: InvokeRequest = {
@@ -330,8 +380,8 @@ const INVOKE_COMMAND_REQUEST_INVALID: InvokeRequest = {
     invokeRequests: [
         {
             commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(10) },
-        }
-    ]
+        },
+    ],
 };
 
 const INVOKE_COMMAND_RESPONSE: InvokeResponse = {
@@ -340,10 +390,11 @@ const INVOKE_COMMAND_RESPONSE: InvokeResponse = {
     invokeResponses: [
         {
             status: {
-                commandPath: { clusterId: ClusterId(6), commandId: CommandId(1), endpointId: EndpointNumber(0) }, status: { status: 0 }
-            }
-        }
-    ]
+                commandPath: { clusterId: ClusterId(6), commandId: CommandId(1), endpointId: EndpointNumber(0) },
+                status: { status: 0 },
+            },
+        },
+    ],
 };
 
 const INVOKE_COMMAND_RESPONSE_INVALID: InvokeResponse = {
@@ -352,10 +403,11 @@ const INVOKE_COMMAND_RESPONSE_INVALID: InvokeResponse = {
     invokeResponses: [
         {
             status: {
-                commandPath: { clusterId: ClusterId(6), commandId: CommandId(10), endpointId: EndpointNumber(0) }, status: { status: 0x81 }
-            }
-        }
-    ]
+                commandPath: { clusterId: ClusterId(6), commandId: CommandId(10), endpointId: EndpointNumber(0) },
+                status: { status: 0x81 },
+            },
+        },
+    ],
 };
 
 const INVOKE_COMMAND_RESPONSE_MULTI: InvokeResponse = {
@@ -364,64 +416,78 @@ const INVOKE_COMMAND_RESPONSE_MULTI: InvokeResponse = {
     invokeResponses: [
         {
             status: {
-                commandPath: { clusterId: ClusterId(6), commandId: CommandId(100), endpointId: EndpointNumber(0) }, status: { status: 129 }
-            }
+                commandPath: { clusterId: ClusterId(6), commandId: CommandId(100), endpointId: EndpointNumber(0) },
+                status: { status: 129 },
+            },
         },
         {
             status: {
-                commandPath: { clusterId: ClusterId(90), commandId: CommandId(1), endpointId: EndpointNumber(0) }, status: { status: 195 }
-            }
+                commandPath: { clusterId: ClusterId(90), commandId: CommandId(1), endpointId: EndpointNumber(0) },
+                status: { status: 195 },
+            },
         },
         {
             status: {
-                commandPath: { clusterId: ClusterId(6), commandId: CommandId(1), endpointId: EndpointNumber(99) }, status: { status: 127 }
-            }
+                commandPath: { clusterId: ClusterId(6), commandId: CommandId(1), endpointId: EndpointNumber(99) },
+                status: { status: 127 },
+            },
         },
         {
             status: {
-                commandPath: { clusterId: ClusterId(6), commandId: CommandId(1), endpointId: EndpointNumber(0) }, status: { status: 0 }
-            }
+                commandPath: { clusterId: ClusterId(6), commandId: CommandId(1), endpointId: EndpointNumber(0) },
+                status: { status: 0 },
+            },
         },
         {
             status: {
-                commandPath: { clusterId: ClusterId(6), commandId: CommandId(0), endpointId: EndpointNumber(0) }, status: { status: 0 }
-            }
+                commandPath: { clusterId: ClusterId(6), commandId: CommandId(0), endpointId: EndpointNumber(0) },
+                status: { status: 0 },
+            },
         },
-    ]
+    ],
 };
 
 describe("InteractionProtocol", () => {
-
     describe("handleReadRequest", () => {
         it("replies with attribute values", async () => {
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
             const storageContext = storageManager.createContext("test");
             const endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
-            endpoint.addClusterServer(ClusterServer(BasicInformationCluster, {
-                dataModelRevision: 1,
-                vendorName: "vendor",
-                vendorId: VendorId(1),
-                productName: "product",
-                productId: 2,
-                nodeLabel: "",
-                hardwareVersion: 0,
-                hardwareVersionString: "0",
-                location: "US",
-                localConfigDisabled: false,
-                softwareVersion: 1,
-                softwareVersionString: "v1",
-                capabilityMinima: {
-                    caseSessionsPerFabric: 100,
-                    subscriptionsPerFabric: 100,
-                },
-            }, {}, {
-                startUp: true
-            }));
+            endpoint.addClusterServer(
+                ClusterServer(
+                    BasicInformationCluster,
+                    {
+                        dataModelRevision: 1,
+                        vendorName: "vendor",
+                        vendorId: VendorId(1),
+                        productName: "product",
+                        productId: 2,
+                        nodeLabel: "",
+                        hardwareVersion: 0,
+                        hardwareVersionString: "0",
+                        location: "US",
+                        localConfigDisabled: false,
+                        softwareVersion: 1,
+                        softwareVersionString: "v1",
+                        capabilityMinima: {
+                            caseSessionsPerFabric: 100,
+                            subscriptionsPerFabric: 100,
+                        },
+                    },
+                    {},
+                    {
+                        startUp: true,
+                    },
+                ),
+            );
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = interactionProtocol.handleReadRequest(({ channel: { name: "test" } }) as MessageExchange<any>, READ_REQUEST);
+            const result = interactionProtocol.handleReadRequest(
+                { channel: { name: "test" } } as MessageExchange<any>,
+                READ_REQUEST,
+            );
 
             assert.deepEqual(result, READ_RESPONSE);
         });
@@ -435,63 +501,109 @@ describe("InteractionProtocol", () => {
             await storageManager.initialize();
             const storageContext = storageManager.createContext("test");
             const endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
-            endpoint.addClusterServer(ClusterServer(BasicInformationCluster, {
-                dataModelRevision: 1,
-                vendorName: "vendor",
-                vendorId: VendorId(1),
-                productName: "product",
-                productId: 2,
-                nodeLabel: "",
-                hardwareVersion: 0,
-                hardwareVersionString: "0",
-                location: "US",
-                localConfigDisabled: false,
-                softwareVersion: 1,
-                softwareVersionString: "v1",
-                capabilityMinima: {
-                    caseSessionsPerFabric: 100,
-                    subscriptionsPerFabric: 100,
-                },
-            }, {}, {
-                startUp: true
-            }));
+            endpoint.addClusterServer(
+                ClusterServer(
+                    BasicInformationCluster,
+                    {
+                        dataModelRevision: 1,
+                        vendorName: "vendor",
+                        vendorId: VendorId(1),
+                        productName: "product",
+                        productId: 2,
+                        nodeLabel: "",
+                        hardwareVersion: 0,
+                        hardwareVersionString: "0",
+                        location: "US",
+                        localConfigDisabled: false,
+                        softwareVersion: 1,
+                        softwareVersionString: "v1",
+                        capabilityMinima: {
+                            caseSessionsPerFabric: 100,
+                            subscriptionsPerFabric: 100,
+                        },
+                    },
+                    {},
+                    {
+                        startUp: true,
+                    },
+                ),
+            );
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const testFabric = new Fabric(FabricIndex(1), FabricId(1), NodeId(BigInt(1)), NodeId(1), ByteArray.fromHex("00"), ByteArray.fromHex("00"), KEY, VendorId(1), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), "");
-            const testSession = await SecureSession.create({ getFabrics: () => [] } as any, 1, testFabric, NodeId(1), 1, ByteArray.fromHex("00"), ByteArray.fromHex("00"), false, false, () => {/* nothing */ }, 1000, 1000);
+            const testFabric = new Fabric(
+                FabricIndex(1),
+                FabricId(1),
+                NodeId(BigInt(1)),
+                NodeId(1),
+                ByteArray.fromHex("00"),
+                ByteArray.fromHex("00"),
+                KEY,
+                VendorId(1),
+                ByteArray.fromHex("00"),
+                ByteArray.fromHex("00"),
+                ByteArray.fromHex("00"),
+                ByteArray.fromHex("00"),
+                ByteArray.fromHex("00"),
+                "",
+            );
+            const testSession = await SecureSession.create(
+                { getFabrics: () => [] } as any,
+                1,
+                testFabric,
+                NodeId(1),
+                1,
+                ByteArray.fromHex("00"),
+                ByteArray.fromHex("00"),
+                false,
+                false,
+                () => {
+                    /* nothing */
+                },
+                1000,
+                1000,
+            );
             let statusSent = -1;
-            await interactionProtocol.handleSubscribeRequest(({ channel: { name: "test" }, session: testSession }) as unknown as MessageExchange<any>, INVALID_SUBSCRIBE_REQUEST, {
-                sendStatus: code => {
-                    statusSent = code;
-                }
-            } as InteractionServerMessenger);
+            await interactionProtocol.handleSubscribeRequest(
+                { channel: { name: "test" }, session: testSession } as unknown as MessageExchange<any>,
+                INVALID_SUBSCRIBE_REQUEST,
+                {
+                    sendStatus: code => {
+                        statusSent = code;
+                    },
+                } as InteractionServerMessenger,
+            );
             expect(statusSent).toBe(128);
         });
     });
 
     describe("handleWriteRequest", () => {
         it("write values and return errors on invalid values", async () => {
-            const basicCluster = ClusterServer(BasicInformationCluster, {
-                dataModelRevision: 1,
-                vendorName: "vendor",
-                vendorId: VendorId(1),
-                productName: "product",
-                productId: 2,
-                nodeLabel: "",
-                hardwareVersion: 0,
-                hardwareVersionString: "0",
-                location: "US",
-                localConfigDisabled: false,
-                softwareVersion: 1,
-                softwareVersionString: "v1",
-                capabilityMinima: {
-                    caseSessionsPerFabric: 100,
-                    subscriptionsPerFabric: 100,
+            const basicCluster = ClusterServer(
+                BasicInformationCluster,
+                {
+                    dataModelRevision: 1,
+                    vendorName: "vendor",
+                    vendorId: VendorId(1),
+                    productName: "product",
+                    productId: 2,
+                    nodeLabel: "",
+                    hardwareVersion: 0,
+                    hardwareVersionString: "0",
+                    location: "US",
+                    localConfigDisabled: false,
+                    softwareVersion: 1,
+                    softwareVersionString: "v1",
+                    capabilityMinima: {
+                        caseSessionsPerFabric: 100,
+                        subscriptionsPerFabric: 100,
+                    },
                 },
-            }, {}, {
-                startUp: true
-            });
+                {},
+                {
+                    startUp: true,
+                },
+            );
 
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
@@ -501,23 +613,31 @@ describe("InteractionProtocol", () => {
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = interactionProtocol.handleWriteRequest(({ channel: { name: "test" } }) as MessageExchange<any>, WRITE_REQUEST);
+            const result = interactionProtocol.handleWriteRequest(
+                { channel: { name: "test" } } as MessageExchange<any>,
+                WRITE_REQUEST,
+            );
 
             assert.deepEqual(result, WRITE_RESPONSE);
             assert.equal(basicCluster.attributes.nodeLabel.getLocal(), "test");
         });
 
         it("write chunked array values with Fabric Index handling", async () => {
-            const accessControlCluster = ClusterServer(AccessControlCluster, {
-                acl: [],
-                extension: [],
-                subjectsPerAccessControlEntry: 4,
-                targetsPerAccessControlEntry: 4,
-                accessControlEntriesPerFabric: 4
-            }, {}, {
-                accessControlEntryChanged: true,
-                accessControlExtensionChanged: true,
-            });
+            const accessControlCluster = ClusterServer(
+                AccessControlCluster,
+                {
+                    acl: [],
+                    extension: [],
+                    subjectsPerAccessControlEntry: 4,
+                    targetsPerAccessControlEntry: 4,
+                    accessControlEntriesPerFabric: 4,
+                },
+                {},
+                {
+                    accessControlEntryChanged: true,
+                    accessControlExtensionChanged: true,
+                },
+            );
 
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
@@ -527,9 +647,42 @@ describe("InteractionProtocol", () => {
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const testFabric = new Fabric(FabricIndex(1), FabricId(1), NodeId(BigInt(1)), NodeId(1), ByteArray.fromHex("00"), ByteArray.fromHex("00"), KEY, VendorId(1), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), "");
-            const testSession = await SecureSession.create({ getFabrics: () => [] } as any, 1, testFabric, NodeId(1), 1, ByteArray.fromHex("00"), ByteArray.fromHex("00"), false, false, () => {/* nothing */ }, 1000, 1000);
-            const result = interactionProtocol.handleWriteRequest(({ channel: { name: "test" }, session: testSession }) as unknown as MessageExchange<any>, CHUNKED_ARRAY_WRITE_REQUEST);
+            const testFabric = new Fabric(
+                FabricIndex(1),
+                FabricId(1),
+                NodeId(BigInt(1)),
+                NodeId(1),
+                ByteArray.fromHex("00"),
+                ByteArray.fromHex("00"),
+                KEY,
+                VendorId(1),
+                ByteArray.fromHex("00"),
+                ByteArray.fromHex("00"),
+                ByteArray.fromHex("00"),
+                ByteArray.fromHex("00"),
+                ByteArray.fromHex("00"),
+                "",
+            );
+            const testSession = await SecureSession.create(
+                { getFabrics: () => [] } as any,
+                1,
+                testFabric,
+                NodeId(1),
+                1,
+                ByteArray.fromHex("00"),
+                ByteArray.fromHex("00"),
+                false,
+                false,
+                () => {
+                    /* nothing */
+                },
+                1000,
+                1000,
+            );
+            const result = interactionProtocol.handleWriteRequest(
+                { channel: { name: "test" }, session: testSession } as unknown as MessageExchange<any>,
+                CHUNKED_ARRAY_WRITE_REQUEST,
+            );
 
             assert.deepEqual(result, CHUNKED_ARRAY_WRITE_RESPONSE);
             assert.deepEqual(accessControlCluster.attributes.acl.getLocalForFabric(testFabric), [
@@ -553,31 +706,36 @@ describe("InteractionProtocol", () => {
                     subjects: null,
                     targets: null,
                     fabricIndex: FabricIndex(2), // existing value 2
-                }
+                },
             ]);
         });
 
         it("mass write values and only set the one allowed", async () => {
-            const basicCluster = ClusterServer(BasicInformationCluster, {
-                dataModelRevision: 1,
-                vendorName: "vendor",
-                vendorId: VendorId(1),
-                productName: "product",
-                productId: 2,
-                nodeLabel: "",
-                hardwareVersion: 0,
-                hardwareVersionString: "0",
-                location: "US",
-                localConfigDisabled: false,
-                softwareVersion: 1,
-                softwareVersionString: "v1",
-                capabilityMinima: {
-                    caseSessionsPerFabric: 100,
-                    subscriptionsPerFabric: 100,
+            const basicCluster = ClusterServer(
+                BasicInformationCluster,
+                {
+                    dataModelRevision: 1,
+                    vendorName: "vendor",
+                    vendorId: VendorId(1),
+                    productName: "product",
+                    productId: 2,
+                    nodeLabel: "",
+                    hardwareVersion: 0,
+                    hardwareVersionString: "0",
+                    location: "US",
+                    localConfigDisabled: false,
+                    softwareVersion: 1,
+                    softwareVersionString: "v1",
+                    capabilityMinima: {
+                        caseSessionsPerFabric: 100,
+                        subscriptionsPerFabric: 100,
+                    },
                 },
-            }, {}, {
-                startUp: true
-            });
+                {},
+                {
+                    startUp: true,
+                },
+            );
 
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
@@ -587,7 +745,10 @@ describe("InteractionProtocol", () => {
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = interactionProtocol.handleWriteRequest(({ channel: { name: "test" } }) as MessageExchange<any>, MASS_WRITE_REQUEST);
+            const result = interactionProtocol.handleWriteRequest(
+                { channel: { name: "test" } } as MessageExchange<any>,
+                MASS_WRITE_REQUEST,
+            );
 
             assert.deepEqual(result, MASS_WRITE_RESPONSE);
             assert.equal(basicCluster.attributes.vendorName.getLocal(), "vendor");
@@ -600,19 +761,23 @@ describe("InteractionProtocol", () => {
     describe("handleInvokeRequest", () => {
         it("invoke command with empty args", async () => {
             let onOffState = false;
-            const onOffCluster = ClusterServer(OnOffCluster, {
-                onOff: onOffState,
-            }, {
-                on: async () => {
-                    onOffState = true;
+            const onOffCluster = ClusterServer(
+                OnOffCluster,
+                {
+                    onOff: onOffState,
                 },
-                off: async () => {
-                    onOffState = false;
+                {
+                    on: async () => {
+                        onOffState = true;
+                    },
+                    off: async () => {
+                        onOffState = false;
+                    },
+                    toggle: async () => {
+                        onOffState = !onOffState;
+                    },
                 },
-                toggle: async () => {
-                    onOffState = !onOffState;
-                }
-            });
+            );
 
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
@@ -622,28 +787,35 @@ describe("InteractionProtocol", () => {
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = await interactionProtocol.handleInvokeRequest(({ channel: { name: "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS, {} as Message);
+            const result = await interactionProtocol.handleInvokeRequest(
+                { channel: { name: "test" } } as MessageExchange<any>,
+                INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS,
+                {} as Message,
+            );
 
             assert.deepEqual(result, INVOKE_COMMAND_RESPONSE);
             assert.equal(onOffState, true);
         });
 
         it("invoke command with no args", async () => {
-
             let onOffState = false;
-            const onOffCluster = ClusterServer(OnOffCluster, {
-                onOff: onOffState,
-            }, {
-                on: async () => {
-                    onOffState = true;
+            const onOffCluster = ClusterServer(
+                OnOffCluster,
+                {
+                    onOff: onOffState,
                 },
-                off: async () => {
-                    onOffState = false;
+                {
+                    on: async () => {
+                        onOffState = true;
+                    },
+                    off: async () => {
+                        onOffState = false;
+                    },
+                    toggle: async () => {
+                        onOffState = !onOffState;
+                    },
                 },
-                toggle: async () => {
-                    onOffState = !onOffState;
-                }
-            });
+            );
 
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
@@ -653,7 +825,11 @@ describe("InteractionProtocol", () => {
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = await interactionProtocol.handleInvokeRequest(({ channel: { name: "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_WITH_NO_ARGS, {} as Message);
+            const result = await interactionProtocol.handleInvokeRequest(
+                { channel: { name: "test" } } as MessageExchange<any>,
+                INVOKE_COMMAND_REQUEST_WITH_NO_ARGS,
+                {} as Message,
+            );
 
             assert.deepEqual(result, INVOKE_COMMAND_RESPONSE);
             assert.equal(onOffState, true);
@@ -661,19 +837,23 @@ describe("InteractionProtocol", () => {
 
         it("invalid invoke command", async () => {
             let onOffState = false;
-            const onOffCluster = ClusterServer(OnOffCluster, {
-                onOff: onOffState,
-            }, {
-                on: async () => {
-                    onOffState = true;
+            const onOffCluster = ClusterServer(
+                OnOffCluster,
+                {
+                    onOff: onOffState,
                 },
-                off: async () => {
-                    onOffState = false;
+                {
+                    on: async () => {
+                        onOffState = true;
+                    },
+                    off: async () => {
+                        onOffState = false;
+                    },
+                    toggle: async () => {
+                        onOffState = !onOffState;
+                    },
                 },
-                toggle: async () => {
-                    onOffState = !onOffState;
-                }
-            });
+            );
 
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
@@ -683,7 +863,11 @@ describe("InteractionProtocol", () => {
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = await interactionProtocol.handleInvokeRequest(({ channel: { name: "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_INVALID, {} as Message);
+            const result = await interactionProtocol.handleInvokeRequest(
+                { channel: { name: "test" } } as MessageExchange<any>,
+                INVOKE_COMMAND_REQUEST_INVALID,
+                {} as Message,
+            );
 
             assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_INVALID);
             assert.equal(onOffState, false);
@@ -693,21 +877,25 @@ describe("InteractionProtocol", () => {
             let onOffState = false;
             let triggeredOn = false;
             let triggeredOff = false;
-            const onOffCluster = ClusterServer(OnOffCluster, {
-                onOff: onOffState,
-            }, {
-                on: async () => {
-                    onOffState = true;
-                    triggeredOn = true;
+            const onOffCluster = ClusterServer(
+                OnOffCluster,
+                {
+                    onOff: onOffState,
                 },
-                off: async () => {
-                    onOffState = false;
-                    triggeredOff = true;
+                {
+                    on: async () => {
+                        onOffState = true;
+                        triggeredOn = true;
+                    },
+                    off: async () => {
+                        onOffState = false;
+                        triggeredOff = true;
+                    },
+                    toggle: async () => {
+                        onOffState = !onOffState;
+                    },
                 },
-                toggle: async () => {
-                    onOffState = !onOffState;
-                }
-            });
+            );
 
             const storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
@@ -717,7 +905,11 @@ describe("InteractionProtocol", () => {
             const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = await interactionProtocol.handleInvokeRequest(({ channel: { name: "test" } }) as MessageExchange<any>, INVOKE_COMMAND_REQUEST_MULTI, {} as Message);
+            const result = await interactionProtocol.handleInvokeRequest(
+                { channel: { name: "test" } } as MessageExchange<any>,
+                INVOKE_COMMAND_REQUEST_MULTI,
+                {} as Message,
+            );
 
             assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_MULTI);
             assert.equal(triggeredOn, true);

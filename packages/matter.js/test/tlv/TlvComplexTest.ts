@@ -17,7 +17,8 @@ import { ByteArray } from "../../src/util/ByteArray.js";
 
 const schema = TlvObject({
     /** Mandatory field jsdoc */
-    arrayField: TlvField(1,
+    arrayField: TlvField(
+        1,
         TlvArray(
             TlvObject({
                 /** Mandatory array field jsdoc */
@@ -25,8 +26,9 @@ const schema = TlvObject({
 
                 /** Optional array field jsdoc */
                 optionalByteString: TlvOptionalField(2, TlvByteString.bound({ minLength: 3, maxLength: 3 })),
-            }), { minLength: 1, maxLength: 2 }
-        )
+            }),
+            { minLength: 1, maxLength: 2 },
+        ),
     ),
 
     /** Optional field jsdoc */
@@ -40,11 +42,10 @@ const schema = TlvObject({
 
     /** Optional Wrapper number type */
     optionalWrapperNumber: TlvOptionalField(5, TlvFabricIndex),
-
 });
 
-type CodecVector<I, E> = { [valueDescription: string]: { encoded: E, decoded: I } };
-type CodecErrorVector<I> = { [valueDescription: string]: { structure: I, expectedError?: string } };
+type CodecVector<I, E> = { [valueDescription: string]: { encoded: E; decoded: I } };
+type CodecErrorVector<I> = { [valueDescription: string]: { structure: I; expectedError?: string } };
 
 const codecVector: CodecVector<TypeFromSchema<typeof schema>, string> = {
     "an object with all fields": {
@@ -58,16 +59,14 @@ const codecVector: CodecVector<TypeFromSchema<typeof schema>, string> = {
             optionalWrapperBigInt: FabricId(BigInt(1)),
             optionalWrapperNumber: FabricIndex(2),
         },
-        encoded: "15360115240101300203000000181524010230020399999918182c020474657374290324040124050218"
+        encoded: "15360115240101300203000000181524010230020399999918182c020474657374290324040124050218",
     },
     "an object with minimum fields": {
         decoded: {
-            arrayField: [
-                { mandatoryNumber: 1 },
-            ],
+            arrayField: [{ mandatoryNumber: 1 }],
             nullableBoolean: null,
         },
-        encoded: "153601152401011818340318"
+        encoded: "153601152401011818340318",
     },
     "an object without wrapped fields": {
         decoded: {
@@ -78,7 +77,7 @@ const codecVector: CodecVector<TypeFromSchema<typeof schema>, string> = {
             optionalString: "test",
             nullableBoolean: true,
         },
-        encoded: "15360115240101300203000000181524010230020399999918182c020474657374290318"
+        encoded: "15360115240101300203000000181524010230020399999918182c020474657374290318",
     },
 };
 
@@ -86,32 +85,29 @@ const codecErrorVector: CodecErrorVector<TypeFromSchema<typeof schema>> = {
     // "as any" used to bypass TS compiler checks to properly test validation logic
     "an object with no fields": {
         structure: {} as any,
-        expectedError: "Missing mandatory field arrayField"
+        expectedError: "Missing mandatory field arrayField",
     },
     "an object with empty array": {
         structure: {
-            arrayField: [
-            ],
+            arrayField: [],
         } as any,
-        expectedError: "Array is too short: 0, min 1."
+        expectedError: "Array is too short: 0, min 1.",
     },
     "an object with missing nullable value": {
         structure: {
-            arrayField: [
-                { mandatoryNumber: 1 },
-            ],
+            arrayField: [{ mandatoryNumber: 1 }],
         } as any,
-        expectedError: "Missing mandatory field nullableBoolean"
+        expectedError: "Missing mandatory field nullableBoolean",
     },
     "an object with invalid datatype in array": {
         structure: {
             arrayField: [
                 {
-                    mandatoryNumber: "test"
-                }
+                    mandatoryNumber: "test",
+                },
             ],
         } as any,
-        expectedError: "Expected number, got string."
+        expectedError: "Expected number, got string.",
     },
     "an object with invalid datatype in array #2": {
         structure: {
@@ -119,37 +115,34 @@ const codecErrorVector: CodecErrorVector<TypeFromSchema<typeof schema>> = {
                 {
                     mandatoryNumber: [
                         {
-                            mandatoryNumber: 1
+                            mandatoryNumber: 1,
                         },
-                    ]
+                    ],
                 },
             ],
         } as any,
-        expectedError: "Expected number, got object."
+        expectedError: "Expected number, got object.",
     },
     "an object with invalid number wrapper value": {
         structure: {
             arrayField: [
                 {
-                    mandatoryNumber: 1
+                    mandatoryNumber: 1,
                 },
             ],
             nullableBoolean: null,
             optionalWrapperNumber: FabricIndex(0x12345678),
         },
-        expectedError: "Invalid value: 305419896 is above the maximum, 254."
+        expectedError: "Invalid value: 305419896 is above the maximum, 254.",
     },
-
 };
 
 describe("TlvObject", () => {
-
     describe("encode", () => {
         for (const valueDescription in codecVector) {
             const { encoded, decoded } = codecVector[valueDescription];
             it(`encodes ${valueDescription}`, () => {
-                expect(schema.encode(decoded).toHex())
-                    .toBe(encoded);
+                expect(schema.encode(decoded).toHex()).toBe(encoded);
             });
         }
     });
@@ -158,8 +151,7 @@ describe("TlvObject", () => {
         for (const valueDescription in codecVector) {
             const { encoded, decoded } = codecVector[valueDescription];
             it(`decodes ${valueDescription}`, () => {
-                expect(schema.decode(ByteArray.fromHex(encoded)))
-                    .toEqual(decoded);
+                expect(schema.decode(ByteArray.fromHex(encoded))).toEqual(decoded);
             });
         }
     });
@@ -183,7 +175,7 @@ describe("TlvObject", () => {
                     schema.validate(structure);
                 } catch (error) {
                     expect(error instanceof Error).toBe(true);
-                    expect((error as Error).message).toBe(expectedError || '');
+                    expect((error as Error).message).toBe(expectedError || "");
                 }
             });
 
@@ -192,7 +184,7 @@ describe("TlvObject", () => {
                     schema.encode(structure);
                 } catch (error) {
                     expect(error instanceof Error).toBe(true);
-                    expect((error as Error).message).toBe(expectedError || '');
+                    expect((error as Error).message).toBe(expectedError || "");
                 }
             });
         }

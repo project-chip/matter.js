@@ -6,28 +6,28 @@
 
 // TODO: Rename to NodeOperationalCredentialsServer to match with specs
 
+import { MatterFlowError, NotImplementedError } from "../../common/MatterError.js";
 import { Crypto } from "../../crypto/Crypto.js";
+import { PrivateKey } from "../../crypto/Key.js";
+import { FabricIndex } from "../../datatype/FabricIndex.js";
+import { Logger } from "../../log/Logger.js";
 import { MatterDevice } from "../../MatterDevice.js";
 import { assertSecureSession, SecureSession } from "../../session/SecureSession.js";
-import { ByteArray } from "../../util/ByteArray.js";
-import { OperationalCredentials, OperationalCredentialsCluster } from "../definitions/OperationalCredentialsCluster.js";
-import { FabricIndex } from "../../datatype/FabricIndex.js";
-import { ClusterServerHandlers } from "./ClusterServerTypes.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvByteString } from "../../tlv/TlvString.js";
-import { TlvUInt32 } from "../../tlv/TlvNumber.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
-import { PrivateKey } from "../../crypto/Key.js";
-import { MatterFlowError, NotImplementedError } from "../../common/MatterError.js";
-import { Logger } from "../../log/Logger.js";
+import { ByteArray } from "../../util/ByteArray.js";
+import { OperationalCredentials, OperationalCredentialsCluster } from "../definitions/OperationalCredentialsCluster.js";
+import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 
 const logger = Logger.get("OperationalCredentialsServer");
 
 export interface OperationalCredentialsServerConf {
-    devicePrivateKey: ByteArray,
-    deviceCertificate: ByteArray,
-    deviceIntermediateCertificate: ByteArray,
-    certificationDeclaration: ByteArray,
+    devicePrivateKey: ByteArray;
+    deviceCertificate: ByteArray;
+    deviceIntermediateCertificate: ByteArray;
+    certificationDeclaration: ByteArray;
 }
 
 /** @see {@link MatterCoreSpecificationV1_1} § 11.17.5.4 */
@@ -47,14 +47,24 @@ export const TlvCertSigningRequest = TlvObject({
     vendorReserved3: TlvOptionalField(5, TlvByteString),
 });
 
-function signWithDeviceKey(conf: OperationalCredentialsServerConf, session: SecureSession<MatterDevice>, data: ByteArray) {
+function signWithDeviceKey(
+    conf: OperationalCredentialsServerConf,
+    session: SecureSession<MatterDevice>,
+    data: ByteArray,
+) {
     return Crypto.sign(PrivateKey(conf.devicePrivateKey), [data, session.getAttestationChallengeKey()]);
 }
 
-export const OperationalCredentialsClusterHandler: (conf: OperationalCredentialsServerConf) => ClusterServerHandlers<typeof OperationalCredentialsCluster> = (conf) => ({
+export const OperationalCredentialsClusterHandler: (
+    conf: OperationalCredentialsServerConf,
+) => ClusterServerHandlers<typeof OperationalCredentialsCluster> = conf => ({
     attestationRequest: async ({ request: { attestationNonce }, session }) => {
         assertSecureSession(session);
-        const elements = TlvAttestation.encode({ declaration: conf.certificationDeclaration, attestationNonce, timestamp: 0 });
+        const elements = TlvAttestation.encode({
+            declaration: conf.certificationDeclaration,
+            attestationNonce,
+            timestamp: 0,
+        });
         return { attestationElements: elements, attestationSignature: signWithDeviceKey(conf, session, elements) };
     },
 
@@ -76,7 +86,11 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         }
     },
 
-    addNoc: async ({ request: { nocValue, icacValue, ipkValue, caseAdminSubject, adminVendorId }, attributes: { nocs, commissionedFabrics, fabrics, trustedRootCertificates }, session }) => {
+    addNoc: async ({
+        request: { nocValue, icacValue, ipkValue, caseAdminSubject, adminVendorId },
+        attributes: { nocs, commissionedFabrics, fabrics, trustedRootCertificates },
+        session,
+    }) => {
         if (!session.isSecure()) throw new MatterFlowError("addOperationalCert should be called on a secure session.");
         const device = session.getContext();
         const fabricBuilder = device.getFabricBuilder();
@@ -97,7 +111,7 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         trustedRootCertificates.updated(session);
 
         // TODO: create ACL with caseAdminNode
-        logger.info("addOperationalCert success")
+        logger.info("addOperationalCert success");
 
         return { statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok, fabricIndex: fabric.fabricIndex };
     },
@@ -159,13 +173,20 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         return { statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok };
     },
 
-    removeFabric: async ({ request: { fabricIndex }, attributes: { nocs, commissionedFabrics, fabrics, trustedRootCertificates }, session }) => {
+    removeFabric: async ({
+        request: { fabricIndex },
+        attributes: { nocs, commissionedFabrics, fabrics, trustedRootCertificates },
+        session,
+    }) => {
         const device = session.getContext();
 
         const fabric = device.getFabricByIndex(fabricIndex);
 
         if (fabric === undefined) {
-            return { statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidFabricIndex, debugText: `Fabric ${fabricIndex} not found` };
+            return {
+                statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidFabricIndex,
+                debugText: `Fabric ${fabricIndex} not found`,
+            };
         }
 
         fabric.remove();
@@ -176,7 +197,11 @@ export const OperationalCredentialsClusterHandler: (conf: OperationalCredentials
         fabrics.updated(session);
         trustedRootCertificates.updated(session);
 
-        return { statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok, fabricIndex, debugText: "Fabric removed" };
+        return {
+            statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok,
+            fabricIndex,
+            debugText: "Fabric removed",
+        };
     },
 
     addTrustedRootCertificate: async ({ request: { rootCaCertificate }, session }) => {

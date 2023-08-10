@@ -19,7 +19,6 @@ new MatterModel(Matter).visit(model => {
     }
 });
 
-Object
-    .entries(names)
+Object.entries(names)
     .sort((a, b) => a[0].toLocaleLowerCase().localeCompare(b[0].toLocaleLowerCase()))
     .forEach(([name, count]) => console.log(name, count));

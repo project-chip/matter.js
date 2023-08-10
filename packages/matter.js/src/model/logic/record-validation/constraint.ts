@@ -10,7 +10,12 @@ import { ValueModel } from "../../models/index.js";
 import { type ValidatorBuilder } from "./ValidatorBuilder.js";
 
 export function addConstraint(builder: ValidatorBuilder, model: ValueModel, constraint: Constraint) {
-    builder.addTest(generateConstraintExpr(model, constraint), "CONSTRAINT_VIOLATION", model, "Value disallowed by constraint");
+    builder.addTest(
+        generateConstraintExpr(model, constraint),
+        "CONSTRAINT_VIOLATION",
+        model,
+        "Value disallowed by constraint",
+    );
 
     function generateConstraintExpr(model: ValueModel, ast: Constraint.Ast): string {
         if (ast.parts) {

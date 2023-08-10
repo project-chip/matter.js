@@ -6,12 +6,12 @@
 
 const LIST_INDENT = 2;
 
-export { camelize, serialize, describeList } from "#matter.js/util/String.ts";
+export { camelize, describeList, serialize } from "#matter.js/util/String.ts";
 
 /**
  * Performs word wrap.  Input is assumed to be a series of paragraphs separated
  * by a newline.  Output is an array of formatted lines.
- * 
+ *
  * Contains specialized support for lists and ESDoc directives.
  */
 export function wordWrap(text: string, width = 120) {
@@ -44,7 +44,7 @@ enum ListType {
     LowerAlpha = "alpha",
     UpperAlpha = "ALPHA",
     LowerRoman = "roman",
-    UpperRoman = "ROMAN"
+    UpperRoman = "ROMAN",
 }
 
 function detectList(text: string, listState: ListType[]) {
@@ -87,9 +87,9 @@ function detectList(text: string, listState: ListType[]) {
 }
 
 type TextStructure = {
-    prefixWidth: number,
-    entries: (string | TextStructure)[]
-}
+    prefixWidth: number;
+    entries: (string | TextStructure)[];
+};
 
 function extractPrefix(text: string) {
     const match = text.match(/^(\S+)\s+(.*)$/);
@@ -115,7 +115,7 @@ function detectStructure(text: string): TextStructure {
         const level = listState.length;
         const structure = {
             prefixWidth: 0,
-            entries: []
+            entries: [],
         } as TextStructure;
 
         while (index < paragraphs.length) {

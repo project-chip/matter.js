@@ -5,19 +5,19 @@
  */
 
 import { ElementTag, Mei } from "../definitions/index.js";
-import { ValueElement } from "./ValueElement.js";
 import { BaseElement } from "./BaseElement.js";
+import { ValueElement } from "./ValueElement.js";
 
 /**
  * An event is triggered by endpoints.
  */
 export type EventElement = ValueElement & {
-    id: Mei,
-    tag: `${EventElement.Tag}`,
+    id: Mei;
+    tag: `${EventElement.Tag}`;
 
     // Priority is required but we handle missing priority in validation
-    priority?: `${EventElement.Priority}`
-}
+    priority?: `${EventElement.Priority}`;
+};
 
 export function EventElement(definition: EventElement.Properties) {
     return ValueElement(EventElement.Tag, definition) as EventElement;
@@ -34,7 +34,7 @@ export namespace EventElement {
     export enum Priority {
         Debug = "debug",
         Info = "info",
-        Critical = "critical"
+        Critical = "critical",
     }
 
     /**
@@ -43,7 +43,7 @@ export namespace EventElement {
     export enum PriorityId {
         debug = 0,
         info = 1,
-        critical = 2
+        critical = 2,
     }
 }
 

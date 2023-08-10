@@ -4,14 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CertificateManager, jsToMatterDate, TlvOperationalCertificate, TlvRootCertificate } from "./CertificateManager.js";
 import { Crypto } from "../crypto/Crypto.js";
-import { ByteArray } from "../util/ByteArray.js";
-import { NodeId } from "../datatype/NodeId.js";
-import { Time } from "../time/Time.js";
-import { StorageContext } from "../storage/StorageContext.js";
 import { BinaryKeyPair, PrivateKey } from "../crypto/Key.js";
 import { FabricId } from "../datatype/FabricId.js";
+import { NodeId } from "../datatype/NodeId.js";
+import { StorageContext } from "../storage/StorageContext.js";
+import { Time } from "../time/Time.js";
+import { ByteArray } from "../util/ByteArray.js";
+import {
+    CertificateManager,
+    jsToMatterDate,
+    TlvOperationalCertificate,
+    TlvRootCertificate,
+} from "./CertificateManager.js";
 
 export class RootCertificateManager {
     private rootCertId = BigInt(0);

@@ -43,5 +43,5 @@ export enum Datatype {
     enum16 = "enum16",
 
     // Extension -- any value is allowed
-    any = "any"
+    any = "any",
 }

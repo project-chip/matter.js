@@ -5,37 +5,40 @@
  */
 
 import type { Peripheral } from "@abandonware/noble";
-import {
-    CommissionableDevice, CommissionableDeviceIdentifiers, Scanner, ServerAddressIp
-} from "@project-chip/matter.js/common";
-import { Logger } from "@project-chip/matter.js/log";
-import { NobleBleClient } from "./NobleBleClient";
-import { BtpCodec } from "@project-chip/matter.js/codec";
-import { ByteArray, getPromiseResolver } from "@project-chip/matter.js/util";
-import { Time, Timer } from "@project-chip/matter.js/time";
 import { BleError } from "@project-chip/matter.js/ble";
+import { BtpCodec } from "@project-chip/matter.js/codec";
+import {
+    CommissionableDevice,
+    CommissionableDeviceIdentifiers,
+    Scanner,
+    ServerAddressIp,
+} from "@project-chip/matter.js/common";
 import { VendorId } from "@project-chip/matter.js/datatype";
+import { Logger } from "@project-chip/matter.js/log";
+import { Time, Timer } from "@project-chip/matter.js/time";
+import { ByteArray, getPromiseResolver } from "@project-chip/matter.js/util";
+import { NobleBleClient } from "./NobleBleClient";
 
 const logger = Logger.get("BleScanner");
 
 export type DiscoveredBleDevice = {
-    deviceData: CommissionableDeviceData,
-    peripheral: Peripheral,
-    hasAdditionalAdvertisementData: boolean
-}
+    deviceData: CommissionableDeviceData;
+    peripheral: Peripheral;
+    hasAdditionalAdvertisementData: boolean;
+};
 
 type CommissionableDeviceData = CommissionableDevice & {
-    SD: number, // Additional Field for Short discriminator
+    SD: number; // Additional Field for Short discriminator
 };
 
 export class BleScanner implements Scanner {
-    private readonly recordWaiters = new Map<string, { resolver: () => void, timer: Timer }>();
+    private readonly recordWaiters = new Map<string, { resolver: () => void; timer: Timer }>();
     private readonly discoveredMatterDevices = new Map<string, DiscoveredBleDevice>();
 
-    constructor(
-        private readonly nobleClient: NobleBleClient
-    ) {
-        this.nobleClient.setDiscoveryCallback((address, manufacturerData) => this.handleDiscoveredDevice(address, manufacturerData));
+    constructor(private readonly nobleClient: NobleBleClient) {
+        this.nobleClient.setDiscoveryCallback((address, manufacturerData) =>
+            this.handleDiscoveredDevice(address, manufacturerData),
+        );
     }
 
     public getDiscoveredDevice(address: string): DiscoveredBleDevice {
@@ -78,18 +81,23 @@ export class BleScanner implements Scanner {
         logger.debug(`Discovered device ${peripheral.address} ${manufacturerServiceData?.toHex()}`);
 
         try {
-            const { discriminator, vendorId, productId, hasAdditionalAdvertisementData } = BtpCodec.decodeBleAdvertisementServiceData(manufacturerServiceData);
+            const { discriminator, vendorId, productId, hasAdditionalAdvertisementData } =
+                BtpCodec.decodeBleAdvertisementServiceData(manufacturerServiceData);
 
             const commissionableDevice: CommissionableDeviceData = {
                 D: discriminator,
-                SD: (discriminator >> 8) & 0x0F,
+                SD: (discriminator >> 8) & 0x0f,
                 VP: `${vendorId}+${productId}`,
                 CM: 1, // Can be no other mode,
-                addresses: [{ type: "ble", peripheralAddress: peripheral.address }]
+                addresses: [{ type: "ble", peripheralAddress: peripheral.address }],
             };
             logger.debug(`Discovered device ${peripheral.address} data: ${JSON.stringify(commissionableDevice)}`);
 
-            this.discoveredMatterDevices.set(peripheral.address, { deviceData: commissionableDevice, peripheral: peripheral, hasAdditionalAdvertisementData });
+            this.discoveredMatterDevices.set(peripheral.address, {
+                deviceData: commissionableDevice,
+                peripheral: peripheral,
+                hasAdditionalAdvertisementData,
+            });
 
             const queryKey = this.findCommissionableQueryIdentifier(commissionableDevice);
             if (queryKey !== undefined) {
@@ -112,12 +120,16 @@ export class BleScanner implements Scanner {
         }
 
         if (record.VP !== undefined) {
-            const vendorIdQueryId = this.buildCommissionableQueryIdentifier({ vendorId: VendorId(parseInt(record.VP.split("+")[0])) });
+            const vendorIdQueryId = this.buildCommissionableQueryIdentifier({
+                vendorId: VendorId(parseInt(record.VP.split("+")[0])),
+            });
             if (this.recordWaiters.has(vendorIdQueryId)) {
                 return vendorIdQueryId;
             }
             if (record.VP.includes("+")) {
-                const productIdQueryId = this.buildCommissionableQueryIdentifier({ vendorId: VendorId(parseInt(record.VP.split("+")[1])) });
+                const productIdQueryId = this.buildCommissionableQueryIdentifier({
+                    vendorId: VendorId(parseInt(record.VP.split("+")[1])),
+                });
                 if (this.recordWaiters.has(productIdQueryId)) {
                     return productIdQueryId;
                 }
@@ -138,17 +150,14 @@ export class BleScanner implements Scanner {
     private buildCommissionableQueryIdentifier(identifier: CommissionableDeviceIdentifiers) {
         if ("longDiscriminator" in identifier) {
             return `D:${identifier.longDiscriminator}`;
-        }
-        else if ("shortDiscriminator" in identifier) {
+        } else if ("shortDiscriminator" in identifier) {
             return `SD:${identifier.shortDiscriminator}`;
-        }
-        else if ("vendorId" in identifier) {
+        } else if ("vendorId" in identifier) {
             return `V:${identifier.vendorId}`;
-        }
-        else if ("productId" in identifier) { // Custom identifier because normally productId is only included in TXT record
+        } else if ("productId" in identifier) {
+            // Custom identifier because normally productId is only included in TXT record
             return `P:${identifier.productId}`;
-        }
-        else return "*";
+        } else return "*";
     }
 
     private getCommissionableDevices(identifier: CommissionableDeviceIdentifiers) {
@@ -157,17 +166,22 @@ export class BleScanner implements Scanner {
         const foundRecords = new Array<DiscoveredBleDevice>();
         if ("longDiscriminator" in identifier) {
             foundRecords.push(...storedRecords.filter(({ deviceData: { D } }) => D === identifier.longDiscriminator));
-        }
-        else if ("shortDiscriminator" in identifier) {
-            foundRecords.push(...storedRecords.filter(({ deviceData: { SD } }) => SD === identifier.shortDiscriminator));
-        }
-        else if ("vendorId" in identifier) {
-            foundRecords.push(...storedRecords.filter(({ deviceData: { VP } }) => VP === `${identifier.vendorId}` || VP?.startsWith(`${identifier.vendorId}+`)));
-        }
-        else if ("productId" in identifier) {
-            foundRecords.push(...storedRecords.filter(({ deviceData: { VP } }) => VP?.endsWith(`+${identifier.productId}`)));
-        }
-        else {
+        } else if ("shortDiscriminator" in identifier) {
+            foundRecords.push(
+                ...storedRecords.filter(({ deviceData: { SD } }) => SD === identifier.shortDiscriminator),
+            );
+        } else if ("vendorId" in identifier) {
+            foundRecords.push(
+                ...storedRecords.filter(
+                    ({ deviceData: { VP } }) =>
+                        VP === `${identifier.vendorId}` || VP?.startsWith(`${identifier.vendorId}+`),
+                ),
+            );
+        } else if ("productId" in identifier) {
+            foundRecords.push(
+                ...storedRecords.filter(({ deviceData: { VP } }) => VP?.endsWith(`+${identifier.productId}`)),
+            );
+        } else {
             foundRecords.push(...storedRecords.filter(({ deviceData: { CM } }) => CM === 1 || CM === 2));
         }
 
@@ -184,7 +198,10 @@ export class BleScanner implements Scanner {
         return [];
     }
 
-    async findCommissionableDevices(identifier: CommissionableDeviceIdentifiers, timeoutSeconds = 10): Promise<CommissionableDevice[]> {
+    async findCommissionableDevices(
+        identifier: CommissionableDeviceIdentifiers,
+        timeoutSeconds = 10,
+    ): Promise<CommissionableDevice[]> {
         let storedRecords = this.getCommissionableDevices(identifier);
         if (storedRecords.length === 0) {
             const queryKey = this.buildCommissionableQueryIdentifier(identifier);

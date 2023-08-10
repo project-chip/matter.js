@@ -87,8 +87,7 @@ function castValue(model: ValueModel) {
             if (modelDefault instanceof Date) {
                 return modelDefault;
             }
-            if (typeof modelDefault === "number" || typeof modelDefault === "string")
-                return new Date(modelDefault);
+            if (typeof modelDefault === "number" || typeof modelDefault === "string") return new Date(modelDefault);
             return;
 
         case Metatype.array:
@@ -115,10 +114,10 @@ function buildValue(model: ValueModel) {
             // non-nullable arrays where zero items is allowed; then we create
             // an empty array
             if (
-                !model.nullable
-                && model.effectiveMetatype === Metatype.array
-                && !model.constraint.min
-                && !model.constraint.value
+                !model.nullable &&
+                model.effectiveMetatype === Metatype.array &&
+                !model.constraint.min &&
+                !model.constraint.value
             ) {
                 return [];
             }
@@ -191,7 +190,7 @@ function buildBitmap(model: ValueModel) {
                 continue;
             }
             fieldsDefined |= mask;
-            if (defaultValue & 1 << i) {
+            if (defaultValue & (1 << i)) {
                 result |= mask;
             }
         }

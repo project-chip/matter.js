@@ -6,8 +6,8 @@
 
 import { Mei, Metatype } from "../definitions/index.js";
 import { DatatypeElement } from "../elements/index.js";
-import { ValueModel } from "./ValueModel.js";
 import { Model } from "./Model.js";
+import { ValueModel } from "./ValueModel.js";
 
 export class DatatypeModel extends ValueModel implements DatatypeElement {
     override tag: DatatypeElement.Tag = DatatypeElement.Tag;
@@ -20,7 +20,7 @@ export class DatatypeModel extends ValueModel implements DatatypeElement {
     /**
      * Datatypes parented by other datatypes can omit their ID.  In this case
      * we use their index within the parent as the ID.
-     * 
+     *
      * Note that this is only true for fields.  For named datatypes that appear
      * directly under the cluster the name is the canonical key.
      */

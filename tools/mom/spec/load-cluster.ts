@@ -5,17 +5,17 @@
  */
 
 import { Logger } from "#matter.js/log/Logger.js";
-import { camelize } from "#util/string.js";
-import { ClusterReference, HtmlReference } from "./spec-types.js";
-import { NavigateViaToc, scanSection } from "./scan-section.js";
 import { Specification } from "#matter.js/model/index.js";
+import { camelize } from "#util/string.js";
+import { NavigateViaToc, scanSection } from "./scan-section.js";
+import { ClusterReference, HtmlReference } from "./spec-types.js";
 
 const logger = Logger.get("load-cluster");
 
 type SubsectionCollector = {
-    subsection: string,
-    collector: ((ref: HtmlReference) => void)
-}
+    subsection: string;
+    collector: (ref: HtmlReference) => void;
+};
 
 function isCluster(ref: HtmlReference, document: Specification, name: string) {
     return ref.xref.document === document && ref.name === name;
@@ -31,7 +31,11 @@ function applyPatches(subref: HtmlReference, clusterRef: HtmlReference) {
         if (isSection(subref, "11.9.6") && subref.name === "Commands" && !subref.table) {
             // In 1.1 spec, command table is not here...
             subref.ignore = true;
-        } else if (isSection(subref, "11.9.6.1") && subref.name === "Common fields in General Commissioning cluster responses" && subref.table) {
+        } else if (
+            isSection(subref, "11.9.6.1") &&
+            subref.name === "Common fields in General Commissioning cluster responses" &&
+            subref.table
+        ) {
             // ...but here
             subref.name = "Commands";
             subref.detailSection = "11.9.6";
@@ -80,7 +84,7 @@ export function loadCluster(clusterRef: HtmlReference) {
                 break;
 
             case "features":
-                defineElement("features", subref)
+                defineElement("features", subref);
                 break;
 
             case "revisionhistory":
@@ -112,7 +116,7 @@ export function loadCluster(clusterRef: HtmlReference) {
                 // themselves are defined in subsections
                 collectors.push({
                     subsection: subref.xref.section,
-                    collector: (datatypeRef) => {
+                    collector: datatypeRef => {
                         if (!definition.datatypes) {
                             definition.datatypes = [];
                         }
@@ -124,8 +128,8 @@ export function loadCluster(clusterRef: HtmlReference) {
                             // individual items
                             collectDetails(datatypeRef);
                         }
-                    }
-                })
+                    },
+                });
                 break;
 
             default:
@@ -136,7 +140,7 @@ export function loadCluster(clusterRef: HtmlReference) {
                         definition.attributeSets = [];
                     }
                     logger.debug(`attribute set ${subref.name} § ${subref.xref.section}`);
-                    definition.attributeSets.push(subref)
+                    definition.attributeSets.push(subref);
                     if (subref.table) {
                         collectDetails(subref);
                     }
@@ -166,11 +170,22 @@ export function loadCluster(clusterRef: HtmlReference) {
                 if (subref.xref.section > ref.xref.section) {
                     collectDetails(subref);
                 }
-            }
+            },
         });
     }
 
-    function defineElement(name: "ids" | "features" | "attributes" | "commands" | "events" | "revisions" | "classifications" | "statusCodes", ref: HtmlReference) {
+    function defineElement(
+        name:
+            | "ids"
+            | "features"
+            | "attributes"
+            | "commands"
+            | "events"
+            | "revisions"
+            | "classifications"
+            | "statusCodes",
+        ref: HtmlReference,
+    ) {
         if (!ref.table) {
             // Sometimes there's a section with no table to indicate no
             // elements
@@ -193,7 +208,7 @@ export function loadCluster(clusterRef: HtmlReference) {
 
         logger.debug(`${name} § ${ref.xref.section}`);
 
-        collectDetails(definition[name] = ref);
+        collectDetails((definition[name] = ref));
     }
 
     return definition;

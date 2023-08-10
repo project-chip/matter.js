@@ -8,13 +8,12 @@ import { Storage, StorageError } from "./Storage.js";
 import { SupportedStorageTypes } from "./StringifyTools.js";
 
 export class StorageBackendMemory implements Storage {
-    constructor(
-        protected store: any = {}
-    ) { }
+    constructor(protected store: any = {}) {}
 
     private createContextKey(contexts: string[]) {
-        const key = contexts.join('.');
-        if (!key.length || key.includes("..") || key.startsWith(".") || key.endsWith(".")) throw new StorageError("Context must not be an empty string!");
+        const key = contexts.join(".");
+        if (!key.length || key.includes("..") || key.startsWith(".") || key.endsWith("."))
+            throw new StorageError("Context must not be an empty string!");
         return key;
     }
 

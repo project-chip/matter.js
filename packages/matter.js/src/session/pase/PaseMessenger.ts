@@ -6,11 +6,17 @@
 
 import { MatterController } from "../../MatterController.js";
 import { MatterDevice } from "../../MatterDevice.js";
-import { TlvPasePake1, TlvPasePake2, TlvPasePake3, TlvPbkdfParamRequest, TlvPbkdfParamResponse } from "./PaseMessages.js";
-import { SecureChannelMessenger } from "../../protocol/securechannel/SecureChannelMessenger.js";
-import { ByteArray } from "../../util/ByteArray.js";
-import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { MessageType } from "../../protocol/securechannel/SecureChannelMessages.js";
+import { SecureChannelMessenger } from "../../protocol/securechannel/SecureChannelMessenger.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { ByteArray } from "../../util/ByteArray.js";
+import {
+    TlvPasePake1,
+    TlvPasePake2,
+    TlvPasePake3,
+    TlvPbkdfParamRequest,
+    TlvPbkdfParamResponse,
+} from "./PaseMessages.js";
 
 export const DEFAULT_PASSCODE_ID = 0;
 export const SPAKE_CONTEXT = ByteArray.fromString("CHIP PAKE V1 Commissioning");

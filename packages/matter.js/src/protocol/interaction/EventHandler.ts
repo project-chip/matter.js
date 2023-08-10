@@ -4,15 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { StorageContext } from "../../storage/StorageContext.js";
 import { EventPriority } from "../../cluster/Cluster.js";
+import { resolveEventName } from "../../cluster/ClusterHelper.js";
+import { ClusterId } from "../../datatype/ClusterId.js";
+import { EndpointNumber } from "../../datatype/EndpointNumber.js";
+import { EventId } from "../../datatype/EventId.js";
+import { Logger } from "../../log/Logger.js";
+import { StorageContext } from "../../storage/StorageContext.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvEventFilter, TlvEventPath } from "./InteractionProtocol.js";
-import { Logger } from "../../log/Logger.js";
-import { resolveEventName } from "../../cluster/ClusterHelper.js";
-import { EndpointNumber } from "../../datatype/EndpointNumber.js";
-import { ClusterId } from "../../datatype/ClusterId.js";
-import { EventId } from "../../datatype/EventId.js";
 
 const logger = Logger.get("EventHandler");
 
@@ -24,7 +24,7 @@ const MAX_EVENTS = 10_000;
 export interface EventData<T> {
     endpointId: EndpointNumber;
     clusterId: ClusterId;
-    eventId: EventId
+    eventId: EventId;
     epochTimestamp: number;
     priority: EventPriority;
     data: T;
@@ -49,7 +49,7 @@ export class EventHandler {
         [EventPriority.Critical]: new Array<EventStorageData<any>>(),
         [EventPriority.Info]: new Array<EventStorageData<any>>(),
         [EventPriority.Debug]: new Array<EventStorageData<any>>(),
-    }
+    };
 
     constructor(storage: StorageContext) {
         this.eventStorage = storage.createContext("EventHandler");
@@ -58,18 +58,28 @@ export class EventHandler {
     }
 
     getEvents(eventPath: TypeFromSchema<typeof TlvEventPath>, filters?: TypeFromSchema<typeof TlvEventFilter>[]) {
-        const eventFilter = filters ? (event: EventStorageData<any>) => filters.some(filter => filter.eventMin !== undefined && event.eventNumber >= filter.eventMin) : () => true; // TODO also add Node Id check
+        const eventFilter = filters
+            ? (event: EventStorageData<any>) =>
+                  filters.some(filter => filter.eventMin !== undefined && event.eventNumber >= filter.eventMin)
+            : () => true; // TODO also add Node Id check
         const events = new Array<EventStorageData<any>>();
         const { endpointId, clusterId, eventId } = eventPath;
         for (const priority of [EventPriority.Critical, EventPriority.Info, EventPriority.Debug]) {
             const eventsToCheck = this.events[priority];
             for (const event of eventsToCheck) {
-                if (eventFilter(event) && endpointId === event.endpointId && clusterId === event.clusterId && eventId === event.eventId) {
+                if (
+                    eventFilter(event) &&
+                    endpointId === event.endpointId &&
+                    clusterId === event.clusterId &&
+                    eventId === event.eventId
+                ) {
                     events.push(event);
                 }
             }
         }
-        logger.debug(`Got ${events.length} events for ${resolveEventName(eventPath)} with filters: ${Logger.toJSON(filters)}`);
+        logger.debug(
+            `Got ${events.length} events for ${resolveEventName(eventPath)} with filters: ${Logger.toJSON(filters)}`,
+        );
         return events;
     }
 

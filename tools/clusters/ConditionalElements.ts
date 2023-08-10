@@ -4,17 +4,24 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ClusterModel, ClusterVariance, Model, FeatureBitmap, VarianceCondition, translateBitmap } from "#matter.js/model/index.js";
+import {
+    ClusterModel,
+    ClusterVariance,
+    FeatureBitmap,
+    Model,
+    translateBitmap,
+    VarianceCondition,
+} from "#matter.js/model/index.js";
 import { serialize } from "#util/string.js";
 
 export type ConditionBitmap = {
-    name: string,
-    bitmap: FeatureBitmap
-}
+    name: string;
+    bitmap: FeatureBitmap;
+};
 
 export type ElementConditions = {
-    optionalIf?: string[],
-    mandatoryIf?: string[]
+    optionalIf?: string[];
+    mandatoryIf?: string[];
 };
 
 /**
@@ -25,7 +32,10 @@ export class ConditionalElements {
     public definitions = {} as { [name: string]: FeatureBitmap };
     private conditions = new Map<Model, ElementConditions>();
 
-    constructor(private cluster: ClusterModel, variance: ClusterVariance) {
+    constructor(
+        private cluster: ClusterModel,
+        variance: ClusterVariance,
+    ) {
         for (const component of variance.components) {
             if (!component.condition) {
                 continue;
@@ -71,7 +81,11 @@ export class ConditionalElements {
     }
 
     private define(bitmap: FeatureBitmap) {
-        const name = serialize.asIs(Object.entries(bitmap).map(([k, v]) => v ? k : `NOT_${k}`).join("_"));
+        const name = serialize.asIs(
+            Object.entries(bitmap)
+                .map(([k, v]) => (v ? k : `NOT_${k}`))
+                .join("_"),
+        );
         this.definitions[name] = translateBitmap(bitmap, this.cluster);
         return name;
     }

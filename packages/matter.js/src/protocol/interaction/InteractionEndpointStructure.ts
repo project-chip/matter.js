@@ -5,29 +5,39 @@
  */
 
 import {
-    AttributeServer, FabricScopedAttributeServer, FixedAttributeServer
+    AttributeServer,
+    FabricScopedAttributeServer,
+    FixedAttributeServer,
 } from "../../cluster/server/AttributeServer.js";
 import { ClusterServerObj } from "../../cluster/server/ClusterServerTypes.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
+import { ImplementationError, InternalError } from "../../common/MatterError.js";
+import { AttributeId } from "../../datatype/AttributeId.js";
+import { ClusterId } from "../../datatype/ClusterId.js";
+import { CommandId } from "../../datatype/CommandId.js";
+import { EndpointNumber } from "../../datatype/EndpointNumber.js";
+import { EventId } from "../../datatype/EventId.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { Endpoint } from "../../device/Endpoint.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvAttributePath, TlvCommandPath, TlvEventPath } from "./InteractionProtocol.js";
 import {
-    AttributePath, attributePathToId, AttributeWithPath, CommandPath, commandPathToId, CommandWithPath, EventPath,
-    eventPathToId, EventWithPath, genericElementPathToId
+    AttributePath,
+    attributePathToId,
+    AttributeWithPath,
+    CommandPath,
+    commandPathToId,
+    CommandWithPath,
+    EventPath,
+    eventPathToId,
+    EventWithPath,
+    genericElementPathToId,
 } from "./InteractionServer.js";
-import { ImplementationError, InternalError } from "../../common/MatterError.js";
-import { ClusterId } from "../../datatype/ClusterId.js";
-import { EndpointNumber } from "../../datatype/EndpointNumber.js";
-import { CommandId } from "../../datatype/CommandId.js";
-import { EventId } from "../../datatype/EventId.js";
-import { AttributeId } from "../../datatype/AttributeId.js";
 
 export class InteractionEndpointStructure {
     endpoints = new Map<EndpointNumber, Endpoint>();
-    attributes = new Map<string, (AttributeServer<any> | FabricScopedAttributeServer<any> | FixedAttributeServer<any>)>();
+    attributes = new Map<string, AttributeServer<any> | FabricScopedAttributeServer<any> | FixedAttributeServer<any>>();
     attributePaths = new Array<AttributePath>();
     events = new Map<string, EventServer<any>>();
     eventPaths = new Array<EventPath>();
@@ -67,7 +77,12 @@ export class InteractionEndpointStructure {
         endpoint.verifyRequiredClusters();
 
         for (const cluster of endpoint.getAllClusterServers()) {
-            const { id: clusterId, attributes: clusterAttributes, _events: clusterEvents, _commands: clusterCommands } = cluster;
+            const {
+                id: clusterId,
+                attributes: clusterAttributes,
+                _events: clusterEvents,
+                _commands: clusterCommands,
+            } = cluster;
             // Add attributes
             for (const name in clusterAttributes) {
                 const attribute = clusterAttributes[name];
@@ -102,14 +117,22 @@ export class InteractionEndpointStructure {
         return value === undefined ? "*" : `0x${value.toString(16)}`;
     }
 
-    resolveGenericElementName(nodeId: NodeId | undefined, endpointId: EndpointNumber | undefined, clusterId: ClusterId | undefined, elementId: number | undefined, elementMap: Map<string, any>) {
+    resolveGenericElementName(
+        nodeId: NodeId | undefined,
+        endpointId: EndpointNumber | undefined,
+        clusterId: ClusterId | undefined,
+        elementId: number | undefined,
+        elementMap: Map<string, any>,
+    ) {
         const nodeIdPrefix = nodeId === undefined ? "" : `${this.toHex(nodeId)}/`;
         if (endpointId === undefined) {
             return `${nodeIdPrefix}*/${this.toHex(clusterId)}/${this.toHex(elementId)}`;
         }
         const endpoint = this.endpoints.get(endpointId);
         if (endpoint === undefined) {
-            return `${nodeIdPrefix}unknown(${this.toHex(endpointId)})/${this.toHex(clusterId)}/${this.toHex(elementId)}`;
+            return `${nodeIdPrefix}unknown(${this.toHex(endpointId)})/${this.toHex(clusterId)}/${this.toHex(
+                elementId,
+            )}`;
         }
         const endpointName = `${endpoint.name}(${this.toHex(endpointId)})`;
 
@@ -135,7 +158,13 @@ export class InteractionEndpointStructure {
     }
 
     resolveEventName({ nodeId, endpointId, clusterId, eventId, isUrgent }: TypeFromSchema<typeof TlvEventPath>) {
-        return `${isUrgent ? "!" : ""}${this.resolveGenericElementName(nodeId, endpointId, clusterId, eventId, this.events)}`;
+        return `${isUrgent ? "!" : ""}${this.resolveGenericElementName(
+            nodeId,
+            endpointId,
+            clusterId,
+            eventId,
+            this.events,
+        )}`;
     }
 
     resolveCommandName({ endpointId, clusterId, commandId }: TypeFromSchema<typeof TlvCommandPath>) {
@@ -158,7 +187,11 @@ export class InteractionEndpointStructure {
         return !!this.getClusterServer(endpointId, clusterId);
     }
 
-    getAttribute(endpointId: EndpointNumber, clusterId: ClusterId, attributeId: AttributeId): AttributeServer<any> | FabricScopedAttributeServer<any> | FixedAttributeServer<any> | undefined {
+    getAttribute(
+        endpointId: EndpointNumber,
+        clusterId: ClusterId,
+        attributeId: AttributeId,
+    ): AttributeServer<any> | FabricScopedAttributeServer<any> | FixedAttributeServer<any> | undefined {
         return this.attributes.get(attributePathToId({ endpointId, clusterId, attributeId }));
     }
 
@@ -174,7 +207,11 @@ export class InteractionEndpointStructure {
         return !!this.getEvent(endpointId, clusterId, eventId);
     }
 
-    getCommand(endpointId: EndpointNumber, clusterId: ClusterId, commandId: CommandId): CommandServer<any, any> | undefined {
+    getCommand(
+        endpointId: EndpointNumber,
+        clusterId: ClusterId,
+        commandId: CommandId,
+    ): CommandServer<any, any> | undefined {
         return this.commands.get(commandPathToId({ endpointId, clusterId, commandId }));
     }
 
@@ -193,15 +230,18 @@ export class InteractionEndpointStructure {
                 if (onlyWritable && !attribute.isWritable) return;
                 result.push({ path, attribute });
             } else {
-                this.attributePaths.filter(path =>
-                    (endpointId === undefined || endpointId === path.endpointId)
-                    && (clusterId === undefined || clusterId === path.clusterId)
-                    && (attributeId === undefined || attributeId === path.attributeId))
+                this.attributePaths
+                    .filter(
+                        path =>
+                            (endpointId === undefined || endpointId === path.endpointId) &&
+                            (clusterId === undefined || clusterId === path.clusterId) &&
+                            (attributeId === undefined || attributeId === path.attributeId),
+                    )
                     .forEach(path => {
                         const attribute = this.attributes.get(attributePathToId(path));
                         if (attribute === undefined) return;
                         if (onlyWritable && !attribute.isWritable) return;
-                        result.push({ path, attribute })
+                        result.push({ path, attribute });
                     });
             }
         });
@@ -219,10 +259,13 @@ export class InteractionEndpointStructure {
                 if (event === undefined) return;
                 result.push({ path, event });
             } else {
-                this.eventPaths.filter(path =>
-                    (endpointId === undefined || endpointId === path.endpointId)
-                    && (clusterId === undefined || clusterId === path.clusterId)
-                    && (eventId === undefined || eventId === path.eventId))
+                this.eventPaths
+                    .filter(
+                        path =>
+                            (endpointId === undefined || endpointId === path.endpointId) &&
+                            (clusterId === undefined || clusterId === path.clusterId) &&
+                            (eventId === undefined || eventId === path.eventId),
+                    )
                     .forEach(({ endpointId, clusterId, eventId }) => {
                         const path = { endpointId, clusterId, eventId, isUrgent };
                         const event = this.events.get(eventPathToId(path));
@@ -245,14 +288,17 @@ export class InteractionEndpointStructure {
                 if (command === undefined) return;
                 result.push({ path, command });
             } else {
-                this.commandPaths.filter(path =>
-                    (endpointId === undefined || endpointId === path.endpointId)
-                    && (clusterId === undefined || clusterId === path.clusterId)
-                    && (commandId === undefined || commandId === path.commandId))
+                this.commandPaths
+                    .filter(
+                        path =>
+                            (endpointId === undefined || endpointId === path.endpointId) &&
+                            (clusterId === undefined || clusterId === path.clusterId) &&
+                            (commandId === undefined || commandId === path.commandId),
+                    )
                     .forEach(path => {
                         const command = this.commands.get(commandPathToId(path));
                         if (command === undefined) return;
-                        result.push({ path, command })
+                        result.push({ path, command });
                     });
             }
         });

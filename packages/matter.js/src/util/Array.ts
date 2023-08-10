@@ -8,11 +8,7 @@
 
 export type AtLeastOne<T> = ArrayMinLength<T, 1>;
 
-type BuildArrayMinLength<
-    T,
-    N extends number,
-    Current extends T[]
-> = Current['length'] extends N
+type BuildArrayMinLength<T, N extends number, Current extends T[]> = Current["length"] extends N
     ? [...Current, ...T[]]
     : BuildArrayMinLength<T, N, [...Current, T]>;
 

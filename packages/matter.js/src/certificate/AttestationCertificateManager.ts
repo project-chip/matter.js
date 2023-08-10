@@ -4,16 +4,22 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TestCert_PAA_NoVID_PrivateKey, TestCert_PAA_NoVID_PublicKey, TestCert_PAA_NoVID_SKID } from "./ChipPAAuthorities.js";
-import { CertificateManager, jsToMatterDate } from "./CertificateManager.js";
 import { Crypto } from "../crypto/Crypto.js";
+import { PrivateKey } from "../crypto/Key.js";
+import { VendorId } from "../datatype/VendorId.js";
 import { Time } from "../time/Time.js";
 import { ByteArray } from "../util/ByteArray.js";
-import { VendorId } from "../datatype/VendorId.js";
-import { PrivateKey } from "../crypto/Key.js";
+import { CertificateManager, jsToMatterDate } from "./CertificateManager.js";
+import {
+    TestCert_PAA_NoVID_PrivateKey,
+    TestCert_PAA_NoVID_PublicKey,
+    TestCert_PAA_NoVID_SKID,
+} from "./ChipPAAuthorities.js";
 
 function getPaiCommonName(vendorId: VendorId, productId?: number) {
-    return `node-matter Dev PAI 0x${vendorId.toString(16).toUpperCase()} ${productId === undefined ? 'no PID' : `0x${productId.toString(16).toUpperCase()}`}`;
+    return `node-matter Dev PAI 0x${vendorId.toString(16).toUpperCase()} ${
+        productId === undefined ? "no PID" : `0x${productId.toString(16).toUpperCase()}`
+    }`;
 }
 
 function getDacCommonName(vendorId: VendorId, productId: number) {
@@ -30,10 +36,9 @@ export class AttestationCertificateManager {
 
     // We use the official PAA cert for now because else pairing with Chip tool do not work because
     // only this one is the Certificate store
-    private readonly paaKeyPair = PrivateKey(
-        TestCert_PAA_NoVID_PrivateKey,
-        { publicKey: TestCert_PAA_NoVID_PublicKey }
-    );
+    private readonly paaKeyPair = PrivateKey(TestCert_PAA_NoVID_PrivateKey, {
+        publicKey: TestCert_PAA_NoVID_PublicKey,
+    });
     private readonly paaKeyIdentifier = TestCert_PAA_NoVID_SKID;
     private readonly paiCertId = BigInt(1);
     private readonly paiKeyPair = Crypto.createKeyPair();
@@ -41,9 +46,7 @@ export class AttestationCertificateManager {
     private readonly paiCertBytes;
     private nextCertificateId = 2;
 
-    constructor(
-        private readonly vendorId: VendorId,
-    ) {
+    constructor(private readonly vendorId: VendorId) {
         this.paiCertBytes = this.generatePAICert(vendorId);
     }
 
@@ -55,7 +58,7 @@ export class AttestationCertificateManager {
         const dacKeyPair = Crypto.createKeyPair();
         return {
             keyPair: dacKeyPair,
-            dac: this.generateDaCert(dacKeyPair.publicKey, this.vendorId, productId)
+            dac: this.generateDaCert(dacKeyPair.publicKey, this.vendorId, productId),
         };
     }
 
@@ -83,12 +86,12 @@ export class AttestationCertificateManager {
             extensions: {
                 basicConstraints: {
                     isCa: true,
-                    pathLen: 1
+                    pathLen: 1,
                 },
                 keyUsage: 96,
                 subjectKeyIdentifier: this.paaKeyIdentifier,
                 authorityKeyIdentifier: this.paaKeyIdentifier,
-            }
+            },
         };
         return CertificateManager.paaCertToAsn1(unsignedCertificate, this.paaKeyPair);
     }
@@ -114,7 +117,7 @@ export class AttestationCertificateManager {
             extensions: {
                 basicConstraints: {
                     isCa: true,
-                    pathLen: 0
+                    pathLen: 0,
                 },
                 keyUsage: 96,
                 subjectKeyIdentifier: this.paiKeyIdentifier,
@@ -146,7 +149,7 @@ export class AttestationCertificateManager {
             ellipticCurvePublicKey: publicKey,
             extensions: {
                 basicConstraints: {
-                    isCa: false
+                    isCa: false,
                 },
                 keyUsage: 1,
                 subjectKeyIdentifier: Crypto.hash(publicKey).slice(0, 20),

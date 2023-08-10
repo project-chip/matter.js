@@ -5,7 +5,7 @@
  */
 import { MatterError } from "../common/MatterError.js";
 
-export class EndOfStreamError extends MatterError { }
+export class EndOfStreamError extends MatterError {}
 
 export interface Stream<T> {
     read(): Promise<T>;

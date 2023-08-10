@@ -12,6 +12,6 @@ LocalMatter.children.push({
 
     children: [
         // Spec defines this as enum8 but then allows other values.
-        { tag: "attribute", id: 0x4, name: "LightSensorType", type: "uint8" }
-    ]
-})
+        { tag: "attribute", id: 0x4, name: "LightSensorType", type: "uint8" },
+    ],
+});

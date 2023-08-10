@@ -3,38 +3,41 @@
  * Copyright 2022 The matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { MatterNode } from "./MatterNode.js";
-import { UdpInterface } from "./net/UdpInterface.js";
-import { MdnsScanner } from "./mdns/MdnsScanner.js";
-import { StorageContext } from "./storage/StorageContext.js";
-import { MatterController } from "./MatterController.js";
-import { InteractionClient } from "./protocol/interaction/InteractionClient.js";
+import { Ble } from "./ble/Ble.js";
+import { ClusterClient } from "./cluster/client/ClusterClient.js";
+import { ClusterClientObj, isClusterClient } from "./cluster/client/ClusterClientTypes.js";
+import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
+import { AllClustersMap } from "./cluster/ClusterHelper.js";
+import { DescriptorCluster } from "./cluster/definitions/DescriptorCluster.js";
+import { ClusterServer } from "./cluster/server/ClusterServer.js";
+import {
+    AttributeInitialValues,
+    AttributeServerValues,
+    ClusterServerObj,
+    isClusterServer,
+} from "./cluster/server/ClusterServerTypes.js";
+import { ImplementationError, InternalError, MatterError, NoProviderError } from "./common/MatterError.js";
+import { ServerAddressIp } from "./common/ServerAddress.js";
+import { ClusterId } from "./datatype/ClusterId.js";
+import { EndpointNumber } from "./datatype/EndpointNumber.js";
 import { NodeId } from "./datatype/NodeId.js";
-import { structureReadAttributeDataToClusterObject } from "./protocol/interaction/AttributeDataDecoder.js";
+import { Aggregator } from "./device/Aggregator.js";
+import { ComposedDevice } from "./device/ComposedDevice.js";
+import { PairedDevice } from "./device/Device.js";
+import { DeviceTypeDefinition, DeviceTypes, getDeviceTypeDefinitionByCode } from "./device/DeviceTypes.js";
 import { Endpoint } from "./device/Endpoint.js";
 import { Logger } from "./log/Logger.js";
-import { DeviceTypes, DeviceTypeDefinition, getDeviceTypeDefinitionByCode } from "./device/DeviceTypes.js";
-import {
-    AttributeInitialValues, AttributeServerValues, ClusterServerObj, isClusterServer
-} from "./cluster/server/ClusterServerTypes.js";
-import { AtLeastOne } from "./util/Array.js";
-import { Aggregator } from "./device/Aggregator.js";
-import { PairedDevice } from "./device/Device.js";
-import { ComposedDevice } from "./device/ComposedDevice.js";
-import { DescriptorCluster } from "./cluster/definitions/DescriptorCluster.js";
-import { AllClustersMap } from "./cluster/ClusterHelper.js";
-import { ClusterClientObj, isClusterClient } from "./cluster/client/ClusterClientTypes.js";
-import { BitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
-import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
-import { ServerAddressIp } from "./common/ServerAddress.js";
+import { MatterController } from "./MatterController.js";
+import { MatterNode } from "./MatterNode.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
-import { Ble } from "./ble/Ble.js";
-import { NoProviderError, MatterError, ImplementationError, InternalError } from "./common/MatterError.js";
+import { MdnsScanner } from "./mdns/MdnsScanner.js";
+import { UdpInterface } from "./net/UdpInterface.js";
 import { CommissioningOptions } from "./protocol/ControllerCommissioner.js";
-import { EndpointNumber } from "./datatype/EndpointNumber.js";
-import { ClusterId } from "./datatype/ClusterId.js";
-import { ClusterServer } from "./cluster/server/ClusterServer.js";
-import { ClusterClient } from "./cluster/client/ClusterClient.js";
+import { structureReadAttributeDataToClusterObject } from "./protocol/interaction/AttributeDataDecoder.js";
+import { InteractionClient } from "./protocol/interaction/InteractionClient.js";
+import { BitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
+import { StorageContext } from "./storage/StorageContext.js";
+import { AtLeastOne } from "./util/Array.js";
 
 const logger = new Logger("CommissioningController");
 
@@ -55,11 +58,11 @@ export interface CommissioningControllerOptions {
 
     delayedPairing?: boolean;
 
-    passcode: number, // TODO: Move into commissioningOptions
-    longDiscriminator?: number,
-    shortDiscriminator?: number, // TODO: Move into commissioningOptions
+    passcode: number; // TODO: Move into commissioningOptions
+    longDiscriminator?: number;
+    shortDiscriminator?: number; // TODO: Move into commissioningOptions
 
-    commissioningOptions?: CommissioningOptions
+    commissioningOptions?: CommissioningOptions;
 }
 
 export class CommissioningController extends MatterNode {
@@ -121,11 +124,11 @@ export class CommissioningController extends MatterNode {
             this.storage,
             this.serverAddress,
             this.commissioningOptions,
-            (peerNodeId) => {
+            peerNodeId => {
                 logger.info(`Peer node ${peerNodeId} disconnected ...`);
                 // TODO Add handling
                 // this.initializeAfterConnect().then().catch(); ....
-            }
+            },
         );
 
         if (this.controllerInstance.isCommissioned()) {
@@ -138,7 +141,9 @@ export class CommissioningController extends MatterNode {
                 identifierData = { shortDiscriminator: this.shortDiscriminator };
             } else {
                 if (this.passcode === undefined) {
-                    throw new ImplementationError("To commission a new device a passcode needs to be specified in the constructor data!");
+                    throw new ImplementationError(
+                        "To commission a new device a passcode needs to be specified in the constructor data!",
+                    );
                 }
                 identifierData = {};
             }
@@ -167,7 +172,12 @@ export class CommissioningController extends MatterNode {
             }
 
             if (nodeId === undefined) {
-                nodeId = await this.controllerInstance.commission(identifierData, this.passcode, 15, this.serverAddress);
+                nodeId = await this.controllerInstance.commission(
+                    identifierData,
+                    this.passcode,
+                    15,
+                    this.serverAddress,
+                );
             }
 
             this.nodeId = nodeId;
@@ -200,7 +210,6 @@ export class CommissioningController extends MatterNode {
     setMdnsBroadcaster(_mdnsBroadcaster: MdnsBroadcaster) {
         // not needed
     }
-
 
     /**
      * Set the Storage instance. Should be only used internally
@@ -243,9 +252,13 @@ export class CommissioningController extends MatterNode {
      *
      * @param cluster The cluster to get the client for
      */
-    async getRootClusterClientWithNewInteractionClient<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
-        cluster: Cluster<F, SF, A, C, E>
-    ): Promise<ClusterClientObj<F, A, C, E> | undefined> {
+    async getRootClusterClientWithNewInteractionClient<
+        F extends BitSchema,
+        SF extends TypeFromPartialBitSchema<F>,
+        A extends Attributes,
+        C extends Commands,
+        E extends Events,
+    >(cluster: Cluster<F, SF, A, C, E>): Promise<ClusterClientObj<F, A, C, E> | undefined> {
         return super.getRootClusterClient(cluster, await this.createInteractionClient());
     }
 
@@ -264,7 +277,9 @@ export class CommissioningController extends MatterNode {
         const partLists = new Map<EndpointNumber, EndpointNumber[]>();
         for (const [endpointId, clusters] of Object.entries(allData)) {
             const endpointIdNumber = EndpointNumber(parseInt(endpointId));
-            const descriptorData = clusters[DescriptorCluster.id] as AttributeServerValues<typeof DescriptorCluster.attributes>;
+            const descriptorData = clusters[DescriptorCluster.id] as AttributeServerValues<
+                typeof DescriptorCluster.attributes
+            >;
 
             partLists.set(endpointIdNumber, descriptorData.partsList);
 
@@ -285,10 +300,12 @@ export class CommissioningController extends MatterNode {
         logger.debug("Endpoints from Partslists", Logger.toJSON(Array.from(partLists.entries())));
 
         const endpointUsages: { [key: EndpointNumber]: EndpointNumber[] } = {};
-        Array.from(partLists.entries()).forEach(([parent, partsList]) => partsList.forEach(endPoint => {
-            endpointUsages[endPoint] = endpointUsages[endPoint] || [];
-            endpointUsages[endPoint].push(parent);
-        }));
+        Array.from(partLists.entries()).forEach(([parent, partsList]) =>
+            partsList.forEach(endPoint => {
+                endpointUsages[endPoint] = endpointUsages[endPoint] || [];
+                endpointUsages[endPoint].push(parent);
+            }),
+        );
 
         logger.debug("Endpoint usages", JSON.stringify(endpointUsages));
 
@@ -296,13 +313,14 @@ export class CommissioningController extends MatterNode {
             // get all endpoints with only one usage
             const singleUsageEndpoints = Object.entries(endpointUsages).filter(([_, usages]) => usages.length === 1);
             if (singleUsageEndpoints.length === 0) {
-                if (Object.entries(endpointUsages).length) throw new InternalError("Endpoint structure could not be parsed!");
+                if (Object.entries(endpointUsages).length)
+                    throw new InternalError("Endpoint structure could not be parsed!");
                 break;
             }
 
             logger.debug(`Processing Endpoint ${JSON.stringify(singleUsageEndpoints)}`);
 
-            const idsToCleanup: { [key: EndpointNumber]: boolean } = {}
+            const idsToCleanup: { [key: EndpointNumber]: boolean } = {};
             singleUsageEndpoints.forEach(([childId, usages]) => {
                 const childEndpoint = this.endpoints.get(EndpointNumber(parseInt(childId)));
                 const parentEndpoint = this.endpoints.get(usages[0]);
@@ -313,16 +331,18 @@ export class CommissioningController extends MatterNode {
                 logger.debug(`Endpoint structure: Child: ${childEndpoint.id} -> Parent: ${parentEndpoint.id}`);
 
                 parentEndpoint.addChildEndpoint(childEndpoint);
-                delete (endpointUsages[EndpointNumber(parseInt(childId))]);
+                delete endpointUsages[EndpointNumber(parseInt(childId))];
                 idsToCleanup[usages[0]] = true;
             });
             logger.debug("Endpoint data Cleanup", JSON.stringify(idsToCleanup));
             Object.keys(idsToCleanup).forEach(idToCleanup => {
                 Object.keys(endpointUsages).forEach(id => {
                     const usageId = EndpointNumber(parseInt(id));
-                    endpointUsages[usageId] = endpointUsages[usageId].filter(endpointId => endpointId !== parseInt(idToCleanup));
+                    endpointUsages[usageId] = endpointUsages[usageId].filter(
+                        endpointId => endpointId !== parseInt(idToCleanup),
+                    );
                     if (!endpointUsages[usageId].length) {
-                        delete (endpointUsages[usageId]);
+                        delete endpointUsages[usageId];
                     }
                 });
             });
@@ -337,7 +357,11 @@ export class CommissioningController extends MatterNode {
      * @param interactionClient InteractionClient to communicate with the device
      * @private
      */
-    private createDevice(endpointId: EndpointNumber, data: { [key: ClusterId]: { [key: string]: any } }, interactionClient: InteractionClient) {
+    private createDevice(
+        endpointId: EndpointNumber,
+        data: { [key: ClusterId]: { [key: string]: any } },
+        interactionClient: InteractionClient,
+    ) {
         const descriptorData = data[DescriptorCluster.id] as AttributeServerValues<typeof DescriptorCluster.attributes>;
 
         const deviceTypes = descriptorData.deviceTypeList.flatMap(({ deviceType, revision }) => {
@@ -357,7 +381,9 @@ export class CommissioningController extends MatterNode {
             throw new MatterError("No device type found for endpoint");
         }
 
-        const endpointClusters = Array<ClusterServerObj<Attributes, Commands, Events> | ClusterClientObj<any, Attributes, Commands, Events>>();
+        const endpointClusters = Array<
+            ClusterServerObj<Attributes, Commands, Events> | ClusterClientObj<any, Attributes, Commands, Events>
+        >();
 
         // Add ClusterClients for all server clusters of the device
         for (const clusterId of descriptorData.serverList) {
@@ -380,7 +406,13 @@ export class CommissioningController extends MatterNode {
             }
             const clusterData = (data[clusterId] ?? {}) as AttributeInitialValues<Attributes>; // TODO correct typing
             // Todo add logic for Events
-            endpointClusters.push(ClusterServer(cluster, /*clusterData.featureMap,*/ clusterData, {}) as ClusterServerObj<Attributes, Commands, Events>); // TODO Add Default handler!
+            endpointClusters.push(
+                ClusterServer(cluster, /*clusterData.featureMap,*/ clusterData, {}) as ClusterServerObj<
+                    Attributes,
+                    Commands,
+                    Events
+                >,
+            ); // TODO Add Default handler!
         }
 
         if (endpointId === 0) {
@@ -396,12 +428,10 @@ export class CommissioningController extends MatterNode {
             return this.rootEndpoint;
         } else if (deviceTypes.find(deviceType => deviceType.code === DeviceTypes.AGGREGATOR.code) !== undefined) {
             // When AGGREGATOR is in the device type list, this is an aggregator
-            const aggregator = new Aggregator(
-                [],
-                { endpointId }
-            );
+            const aggregator = new Aggregator([], { endpointId });
             aggregator.setDeviceTypes(deviceTypes as AtLeastOne<DeviceTypeDefinition>);
-            endpointClusters.forEach(cluster => { // TODO There should be none?
+            endpointClusters.forEach(cluster => {
+                // TODO There should be none?
                 if (isClusterServer(cluster)) {
                     aggregator.addClusterServer(cluster);
                 } else if (isClusterClient(cluster)) {
@@ -411,10 +441,7 @@ export class CommissioningController extends MatterNode {
             return aggregator;
         } else if (deviceTypes.find(deviceType => deviceType.code === DeviceTypes.BRIDGED_NODE.code) !== undefined) {
             // When BRIDGED_NODE is in the device type list, this is a bridged node
-            const aggregator = new Aggregator(
-                [],
-                { endpointId }
-            );
+            const aggregator = new Aggregator([], { endpointId });
             aggregator.setDeviceTypes(deviceTypes as AtLeastOne<DeviceTypeDefinition>);
             endpointClusters.forEach(cluster => {
                 if (isClusterServer(cluster)) {
@@ -427,11 +454,7 @@ export class CommissioningController extends MatterNode {
         } else {
             // It seems to be  device but has a partsList, so it is a composed device
             if (descriptorData.partsList.length > 0) {
-                const composedDevice = new ComposedDevice(
-                    deviceTypes[0],
-                    [],
-                    { endpointId }
-                );
+                const composedDevice = new ComposedDevice(deviceTypes[0], [], { endpointId });
                 composedDevice.setDeviceTypes(deviceTypes as AtLeastOne<DeviceTypeDefinition>);
                 endpointClusters.forEach(cluster => {
                     if (isClusterServer(cluster)) {
@@ -444,11 +467,7 @@ export class CommissioningController extends MatterNode {
             } else {
                 // else it's a normal Device
                 // TODO Should we find the really correct Device derived class to instance?
-                return new PairedDevice(
-                    deviceTypes as AtLeastOne<DeviceTypeDefinition>,
-                    endpointClusters,
-                    endpointId
-                );
+                return new PairedDevice(deviceTypes as AtLeastOne<DeviceTypeDefinition>, endpointClusters, endpointId);
             }
         }
     }

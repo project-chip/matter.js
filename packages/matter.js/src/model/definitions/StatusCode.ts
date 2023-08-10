@@ -6,7 +6,7 @@
 
 /**
  * Glboal status codes defined in Matter specification.
- * 
+ *
  * TODO - extract/merge with StatusCode in InteractionProtocol.ts
  */
 export enum StatusCode {
@@ -35,5 +35,5 @@ export enum StatusCode {
     UnsupportedEvent = 0xc7,
     PathsExhausted = 0xc8,
     TimedRequestMismatch = 0xc9,
-    FailsafeRequired = 0xca
+    FailsafeRequired = 0xca,
 }

@@ -17,7 +17,7 @@ import { RequirementElement } from "./RequirementElement.js";
  * Any Matter element.
  */
 export type AnyElement =
-    AnyValueElement
+    | AnyValueElement
     | ClusterElement
     | DeviceTypeElement
     | RequirementElement

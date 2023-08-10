@@ -14,12 +14,12 @@ const logger = Logger.get("ValidateModel");
 /**
  * Ensures that a model's definition is correct.  Places errors into the error
  * array of invalid models.
- * 
+ *
  * Makes a few minor modifications to the model as a side effect:
- * 
+ *
  * - Default values are cast to the correct type if possible
  * - Cross-references are deleted if they're redundant with the parent
- * 
+ *
  * Note that we run validation against model classes rather than element
  * datatypes.  The classes implement type resolution, error handling and other
  * logic we rely on for validation.
@@ -37,7 +37,7 @@ export function ValidateModel(model: Model) {
         try {
             new Validator(model).validate();
         } catch (e) {
-            console.error(`Error validating ${model.path}`)
+            console.error(`Error validating ${model.path}`);
             throw e;
         }
 
@@ -86,34 +86,40 @@ export namespace ValidateModel {
         errors = Array<DefinitionError>();
 
         get invalidElementPercent() {
-            return (this.invalidElementCount / this.elementCount * 100).toPrecision(2);
+            return ((this.invalidElementCount / this.elementCount) * 100).toPrecision(2);
         }
 
-        constructor(public model: Model) { }
+        constructor(public model: Model) {}
 
         report() {
             if (this.errors.length) {
                 logger.error("*** Validation error summary ***");
-                this.errors.forEach(error => logger.error(
-                    error.message,
-                    Logger.dict({ code: error.code, xref: error.xref, src: error.source })
-                ));
+                this.errors.forEach(error =>
+                    logger.error(error.message, Logger.dict({ code: error.code, xref: error.xref, src: error.source })),
+                );
 
                 logger.error("Error counts by code:");
                 Logger.nest(() => {
-                    const codes = Object.keys(this.errorCounts)
-                        .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }));
+                    const codes = Object.keys(this.errorCounts).sort((a, b) =>
+                        a.localeCompare(b, undefined, { sensitivity: "base" }),
+                    );
                     for (const code of codes) {
                         logger.error(`${code}: ${this.errorCounts[code]}`);
                     }
                 });
 
-                logger.error(`*** Total ${this.errors.length} validation error${this.errors.length === 1 ? "" : "s"} ***`);
-                logger.error(`*** Total ${this.invalidElementCount} invalid element${this.invalidElementCount === 1 ? "" : "s"} (${this.invalidElementPercent}%) ***`);
+                logger.error(
+                    `*** Total ${this.errors.length} validation error${this.errors.length === 1 ? "" : "s"} ***`,
+                );
+                logger.error(
+                    `*** Total ${this.invalidElementCount} invalid element${
+                        this.invalidElementCount === 1 ? "" : "s"
+                    } (${this.invalidElementPercent}%) ***`,
+                );
             } else {
-                logger.info(`*** Validation successful ***`)
+                logger.info(`*** Validation successful ***`);
             }
-            logger.debug(`*** Total ${this.elementCount} element${this.elementCount === 1 ? "" : "s"} ***`)
+            logger.debug(`*** Total ${this.elementCount} element${this.elementCount === 1 ? "" : "s"} ***`);
         }
     }
 }

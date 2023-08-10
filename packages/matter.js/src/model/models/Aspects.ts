@@ -9,7 +9,7 @@ import { Model } from "./Model.js";
 
 export namespace Aspects {
     export function getAspect<T>(model: Model, symbol: symbol, constructor: new (definition: any) => T) {
-        return (model as any)[symbol] as T || ((model as any)[symbol] = new constructor(undefined));
+        return ((model as any)[symbol] as T) || ((model as any)[symbol] = new constructor(undefined));
     }
 
     export function setAspect(model: Model, symbol: symbol, constructor: new (definition: any) => any, value: any) {

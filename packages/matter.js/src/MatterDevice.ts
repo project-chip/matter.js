@@ -10,28 +10,28 @@
  * @deprecated
  */
 
-import { Session } from "./session/Session.js";
-import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
+import { Channel } from "./common/Channel.js";
+import { InstanceBroadcaster } from "./common/InstanceBroadcaster.js";
+import { InternalError } from "./common/MatterError.js";
+import { Scanner } from "./common/Scanner.js";
+import { TransportInterface } from "./common/TransportInterface.js";
+import { DeviceTypeId } from "./datatype/DeviceTypeId.js";
+import { FabricIndex } from "./datatype/FabricIndex.js";
+import { NodeId } from "./datatype/NodeId.js";
+import { VendorId } from "./datatype/VendorId.js";
 import { Fabric } from "./fabric/Fabric.js";
 import { FabricManager } from "./fabric/FabricManager.js";
-import { Channel } from "./common/Channel.js";
-import { TransportInterface } from "./common/TransportInterface.js";
+import { Logger } from "./log/Logger.js";
+import { isNetworkInterface, NetInterface } from "./net/NetInterface.js";
+import { NetworkError } from "./net/Network.js";
 import { ChannelManager } from "./protocol/ChannelManager.js";
 import { ExchangeManager } from "./protocol/ExchangeManager.js";
 import { ProtocolHandler } from "./protocol/ProtocolHandler.js";
-import { InstanceBroadcaster } from "./common/InstanceBroadcaster.js";
-import { Scanner } from "./common/Scanner.js";
-import { VendorId } from "./datatype/VendorId.js";
-import { FabricIndex } from "./datatype/FabricIndex.js";
-import { NodeId } from "./datatype/NodeId.js";
-import { Logger } from "./log/Logger.js";
+import { Session } from "./session/Session.js";
+import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
+import { StorageContext } from "./storage/StorageContext.js";
 import { Time, Timer } from "./time/Time.js";
 import { ByteArray } from "./util/ByteArray.js";
-import { StorageContext } from "./storage/StorageContext.js";
-import { isNetworkInterface, NetInterface } from "./net/NetInterface.js";
-import { InternalError } from "./common/MatterError.js";
-import { NetworkError } from "./net/Network.js";
-import { DeviceTypeId } from "./datatype/DeviceTypeId.js";
 
 const logger = Logger.get("MatterDevice");
 
@@ -47,7 +47,7 @@ export class MatterDevice {
     private readonly channelManager = new ChannelManager();
     private readonly exchangeManager;
     private announceInterval: Timer;
-    private announcementStartedTime: number | null = null
+    private announcementStartedTime: number | null = null;
     private commissioningWindowOpened = false;
 
     constructor(
@@ -106,7 +106,10 @@ export class MatterDevice {
     async announce(announceOnce = false) {
         if (!announceOnce) {
             // Stop announcement if duration is reached
-            if (this.announcementStartedTime !== null && Time.nowMs() - this.announcementStartedTime > DEVICE_ANNOUNCEMENT_DURATION) {
+            if (
+                this.announcementStartedTime !== null &&
+                Time.nowMs() - this.announcementStartedTime > DEVICE_ANNOUNCEMENT_DURATION
+            ) {
                 this.announceInterval.stop();
                 this.announcementStartedTime = null;
                 logger.debug("Announcement duration reached, stop announcing");
@@ -127,7 +130,12 @@ export class MatterDevice {
                 const session = this.sessionManager.getSessionForNode(fabric, fabric.rootNodeId);
                 if (session) {
                     // We have a session, no need to re-announce
-                    logger.debug("Skipping announce for fabric", fabric.fabricId, "because we have a session", session.getId());
+                    logger.debug(
+                        "Skipping announce for fabric",
+                        fabric.fabricId,
+                        "because we have a session",
+                        session.getId(),
+                    );
                     continue;
                 }
                 logger.debug("Announcing", Logger.dict({ fabric: fabric.fabricId }));
@@ -156,14 +164,26 @@ export class MatterDevice {
         return this.sessionManager.getNextAvailableSessionId();
     }
 
-    createSecureSession(sessionId: number, fabric: Fabric | undefined, peerNodeId: NodeId, peerSessionId: number, sharedSecret: ByteArray, salt: ByteArray, isInitiator: boolean, isResumption: boolean, idleRetransTimeoutMs?: number, activeRetransTimeoutMs?: number) {
+    createSecureSession(
+        sessionId: number,
+        fabric: Fabric | undefined,
+        peerNodeId: NodeId,
+        peerSessionId: number,
+        sharedSecret: ByteArray,
+        salt: ByteArray,
+        isInitiator: boolean,
+        isResumption: boolean,
+        idleRetransTimeoutMs?: number,
+        activeRetransTimeoutMs?: number,
+    ) {
         return this.sessionManager.createSecureSession(
             sessionId,
             fabric,
             peerNodeId,
             peerSessionId,
             sharedSecret,
-            salt, isInitiator,
+            salt,
+            isInitiator,
             isResumption,
             idleRetransTimeoutMs,
             activeRetransTimeoutMs,
@@ -246,10 +266,14 @@ export class MatterDevice {
         }
         await this.startAnnouncement();
 
-        Time.getTimer(timeout * 1000, () => this.commissioningWindowOpened = false).start();
+        Time.getTimer(timeout * 1000, () => (this.commissioningWindowOpened = false)).start();
     }
 
-    async findDevice(fabric: Fabric, nodeId: NodeId, timeOutSeconds = 5): Promise<undefined | { session: Session<MatterDevice>, channel: Channel<ByteArray> }> {
+    async findDevice(
+        fabric: Fabric,
+        nodeId: NodeId,
+        timeOutSeconds = 5,
+    ): Promise<undefined | { session: Session<MatterDevice>; channel: Channel<ByteArray> }> {
         // TODO: return the first not undefined answer or undefined
         const matterServer = await this.scanners[0].findOperationalDevice(fabric, nodeId, timeOutSeconds);
         if (matterServer.length === 0) return undefined;

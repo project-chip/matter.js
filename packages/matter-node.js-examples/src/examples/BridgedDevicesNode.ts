@@ -16,11 +16,17 @@
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
 import { CommissioningServer, MatterServer } from "@project-chip/matter-node.js";
 
-import { OnOffLightDevice, OnOffPluginUnitDevice, Aggregator, DeviceTypes } from "@project-chip/matter-node.js/device";
+import { Aggregator, DeviceTypes, OnOffLightDevice, OnOffPluginUnitDevice } from "@project-chip/matter-node.js/device";
 import { Logger } from "@project-chip/matter-node.js/log";
-import { StorageManager, StorageBackendDisk } from "@project-chip/matter-node.js/storage";
-import { commandExecutor, getIntParameter, getParameter, requireMinNodeVersion, hasParameter } from "@project-chip/matter-node.js/util";
+import { StorageBackendDisk, StorageManager } from "@project-chip/matter-node.js/storage";
 import { Time } from "@project-chip/matter-node.js/time";
+import {
+    commandExecutor,
+    getIntParameter,
+    getParameter,
+    hasParameter,
+    requireMinNodeVersion,
+} from "@project-chip/matter-node.js/util";
 import { VendorId } from "@project-chip/matter.js/datatype";
 
 const logger = Logger.get("Device");
@@ -30,7 +36,9 @@ requireMinNodeVersion(16);
 const storageLocation = getParameter("store") ?? ".device-node";
 const storage = new StorageBackendDisk(storageLocation, hasParameter("clearstorage"));
 logger.info(`Storage location: ${storageLocation} (Directory)`);
-logger.info('Use the parameter "-store NAME" to specify a different storage location, use -clearstorage to start with an empty storage.')
+logger.info(
+    'Use the parameter "-store NAME" to specify a different storage location, use -clearstorage to start with an empty storage.',
+);
 
 class BridgedDevice {
     private matterServer: MatterServer | undefined;
@@ -67,7 +75,7 @@ class BridgedDevice {
         const passcode = getIntParameter("passcode") ?? deviceStorage.get("passcode", 20202021);
         const discriminator = getIntParameter("discriminator") ?? deviceStorage.get("discriminator", 3840);
         // product name / id and vendor id should match what is in the device certificate
-        const vendorId = getIntParameter("vendorid") ?? deviceStorage.get("vendorid", 0xFFF1);
+        const vendorId = getIntParameter("vendorid") ?? deviceStorage.get("vendorid", 0xfff1);
         const productName = `node-matter OnOff-Bridge`;
         const productId = getIntParameter("productid") ?? deviceStorage.get("productid", 0x8000);
 
@@ -111,7 +119,7 @@ class BridgedDevice {
                 productLabel: productName,
                 productId,
                 serialNumber: `node-matter-${uniqueId}`,
-            }
+            },
         });
 
         /**
@@ -130,19 +138,23 @@ class BridgedDevice {
 
         const numDevices = getIntParameter("num") || 2;
         for (let i = 1; i <= numDevices; i++) {
-            const onOffDevice = getParameter(`type${i}`) === "socket" ? new OnOffPluginUnitDevice() : new OnOffLightDevice();
+            const onOffDevice =
+                getParameter(`type${i}`) === "socket" ? new OnOffPluginUnitDevice() : new OnOffLightDevice();
 
             onOffDevice.addOnOffListener(on => commandExecutor(on ? `on${i}` : `off${i}`)?.());
             onOffDevice.addCommandHandler("identify", async ({ request: { identifyTime } }) =>
-                console.log(`Identify called for OnOffDevice ${onOffDevice.name} with id: ${i} and identifyTime: ${identifyTime}`));
+                console.log(
+                    `Identify called for OnOffDevice ${onOffDevice.name} with id: ${i} and identifyTime: ${identifyTime}`,
+                ),
+            );
 
-            const name = `OnOff ${onOffDevice instanceof OnOffPluginUnitDevice ? 'Socket' : 'Light'} ${i}`;
+            const name = `OnOff ${onOffDevice instanceof OnOffPluginUnitDevice ? "Socket" : "Light"} ${i}`;
             aggregator.addBridgedDevice(onOffDevice, {
                 nodeLabel: name,
                 productName: name,
                 productLabel: name,
                 serialNumber: `node-matter-${uniqueId}-${i}`,
-                reachable: true
+                reachable: true,
             });
         }
 
@@ -172,7 +184,9 @@ class BridgedDevice {
             const { qrCode, qrPairingCode, manualPairingCode } = pairingData;
 
             console.log(qrCode);
-            console.log(`QR Code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}`);
+            console.log(
+                `QR Code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}`,
+            );
             console.log(`Manual pairing code: ${manualPairingCode}`);
         } else {
             console.log("Device is already commissioned. Waiting for controllers to connect ...");
@@ -185,11 +199,22 @@ class BridgedDevice {
 }
 
 const device = new BridgedDevice();
-device.start().then(() => { /* done */ }).catch(err => console.error(err));
+device
+    .start()
+    .then(() => {
+        /* done */
+    })
+    .catch(err => console.error(err));
 
 process.on("SIGINT", () => {
-    device.stop().then(() => {
-        // Pragmatic way to make sure the storage is correctly closed before the process ends.
-        storage.close().then(() => process.exit(0)).catch(err => console.error(err));
-    }).catch(err => console.error(err));
+    device
+        .stop()
+        .then(() => {
+            // Pragmatic way to make sure the storage is correctly closed before the process ends.
+            storage
+                .close()
+                .then(() => process.exit(0))
+                .catch(err => console.error(err));
+        })
+        .catch(err => console.error(err));
 });

@@ -4,16 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { UdpChannel, UdpChannelOptions } from "../UdpChannel.js";
 import { Listener } from "../../common/TransportInterface.js";
-import { FAKE_INTERFACE_NAME, SimulatedNetwork } from "./SimulatedNetwork.js";
-import { isIPv4 } from "../../util/Ip.js";
 import { ByteArray } from "../../util/ByteArray.js";
-import { NetworkFake } from "./NetworkFake.js";
+import { isIPv4 } from "../../util/Ip.js";
 import { NetworkError } from "../Network.js";
+import { UdpChannel, UdpChannelOptions } from "../UdpChannel.js";
+import { NetworkFake } from "./NetworkFake.js";
+import { FAKE_INTERFACE_NAME, SimulatedNetwork } from "./SimulatedNetwork.js";
 
 export class UdpChannelFake implements UdpChannel {
-    static async create(network: NetworkFake, { listeningAddress, listeningPort, netInterface, type }: UdpChannelOptions) {
+    static async create(
+        network: NetworkFake,
+        { listeningAddress, listeningPort, netInterface, type }: UdpChannelOptions,
+    ) {
         const { ips } = network.getIpMac(netInterface ?? FAKE_INTERFACE_NAME);
         const ipv4 = type === "udp4";
         const localAddress = ips.filter(ip => isIPv4(ip) || !ipv4)[0];

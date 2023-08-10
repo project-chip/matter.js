@@ -6,9 +6,9 @@
 
 // Run a TypeScript REPL with key objects loaded
 
-import repl from "repl";
 import { homedir } from "os";
 import { join } from "path";
+import repl from "repl";
 
 import * as model from "#matter.js/model/index.js";
 
@@ -23,4 +23,4 @@ server.setupHistory(historyPath, error => {
         console.error(error);
         process.exit(1);
     }
-})
+});

@@ -4,12 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Fabric } from "../fabric/Fabric.js";
 import { VendorId } from "../datatype/VendorId.js";
+import { Fabric } from "../fabric/Fabric.js";
 import { BitFlag, BitmapSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 
 export const PairingHintBitmap = {
-
     /**
      * The Device will automatically enter Commissioning Mode upon power cycle (unplug/re- plug, remove/re-insert
      * batteries). This bit SHALL be set to 1 for devices using Standard Commissioning Flow, and set to 0 otherwise.
@@ -133,65 +132,63 @@ export const PairingHintBitmapSchema = BitmapSchema(PairingHintBitmap);
 
 export type CommissioningModeInstanceData = {
     /** Device name for commissionable announcements. */
-    deviceName: string,
+    deviceName: string;
 
     /** Device type for commissionable announcements. */
-    deviceType: number,
+    deviceType: number;
 
     /** Vendor ID for commissionable announcements. */
-    vendorId: VendorId,
+    vendorId: VendorId;
 
     /** Product ID for commissionable announcements. */
-    productId: number,
+    productId: number;
 
     /** Device discriminator for commissionable announcements. */
-    discriminator: number,
+    discriminator: number;
 
     /** Sleep Idle Interval of the device for commissionable announcements. */
-    sleepIdleInterval?: number,
+    sleepIdleInterval?: number;
 
     /** Sleep Active Interval of the device for commissionable announcements. */
-    sleepActiveInterval?: number,
+    sleepActiveInterval?: number;
 
     /** Pairing Hint of the device for commissionable announcements. */
-    pairingHint?: TypeFromPartialBitSchema<typeof PairingHintBitmap>,
+    pairingHint?: TypeFromPartialBitSchema<typeof PairingHintBitmap>;
 
     /** Pairing Instruction of the device for commissionable announcements. */
-    pairingInstructions?: string
+    pairingInstructions?: string;
 };
 
 export type CommissionerInstanceData = {
-
     /** Device name for commissionable announcements. */
-    deviceName: string,
+    deviceName: string;
 
     /** Device type for commissionable announcements. */
-    vendorId: VendorId,
+    vendorId: VendorId;
 
     /** Vendor ID for commissionable announcements. */
-    productId: number,
+    productId: number;
 
     /** Device type for commissionable announcements. */
-    deviceType?: number
+    deviceType?: number;
 
     /** Sleep Idle Interval of the device for commissionable announcements. */
-    sleepIdleInterval?: number,
+    sleepIdleInterval?: number;
 
     /** Sleep Active Interval of the device for commissionable announcements. */
-    sleepActiveInterval?: number,
+    sleepActiveInterval?: number;
 };
 
 export type OperationalInstanceData = {
     /** Sleep Idle Interval of the device for operational announcements. */
-    sleepIdleInterval?: number,
+    sleepIdleInterval?: number;
 
     /** Sleep Active Interval of the device for operational announcements. */
-    sleepActiveInterval?: number,
+    sleepActiveInterval?: number;
 };
 
 /** Interface for classes that allow to announce one Matter instance. */
 export interface InstanceBroadcaster {
-
     /** Set a commissionable mode and details to announce a commissionable device. */
     setCommissionMode(mode: number, deviceData: CommissioningModeInstanceData): Promise<void>;
 

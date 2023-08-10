@@ -27,8 +27,10 @@ export function FeatureBitmap(bitmap: FeatureBitmap | FeatureFlags = {}): Featur
  * If a name isn't present leaves the feature code intact.
  */
 export function translateBitmap(bitmap: FeatureBitmap, cluster: ClusterModel) {
-    return Object.fromEntries(Object.entries(bitmap).map(([k, v]) => {
-        const feature = cluster.featureMap.get(DatatypeModel, k);
-        return [camelize(feature?.description ?? k, false), v];
-    }));
+    return Object.fromEntries(
+        Object.entries(bitmap).map(([k, v]) => {
+            const feature = cluster.featureMap.get(DatatypeModel, k);
+            return [camelize(feature?.description ?? k, false), v];
+        }),
+    );
 }

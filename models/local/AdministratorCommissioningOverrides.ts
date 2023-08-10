@@ -16,11 +16,13 @@ LocalMatter.children.push({
     children: [
         // Constrain length of OpenCommissioningWindow.PakePasscodeVerifier using formula defined in specification
         {
-            tag: "command", id: 0, name: "OpenCommissioningWindow",
+            tag: "command",
+            id: 0,
+            name: "OpenCommissioningWindow",
 
             children: [
-                { tag: "datatype", id: 1, name: "PakePasscodeVerifier", constraint: PAKE_PASSCODE_VERIFIER_LENGTH }
-            ]
-        }
-    ]
+                { tag: "datatype", id: 1, name: "PakePasscodeVerifier", constraint: PAKE_PASSCODE_VERIFIER_LENGTH },
+            ],
+        },
+    ],
 });

@@ -5,24 +5,20 @@
  */
 
 // Export general Cluster specific types
-export * from "./Cluster.js";
-export * from "./ClusterHelper.js";
-
-// Export all Cluster definitions
-export * from "./definitions/index.js";
-
+export * from "./client/ClusterClient.js";
 // Export all Client classes
 export * from "./client/ClusterClientTypes.js";
-export * from "./client/ClusterClient.js";
-
-// Export all Server classes
-export * from "./server/ClusterServerTypes.js";
-export * from "./server/ClusterServer.js";
-export * from "./server/AttributeServer.js";
-export * from "./server/CommandServer.js";
-
+export * from "./Cluster.js";
+export * from "./ClusterHelper.js";
+// Export all Cluster definitions
+export * from "./definitions/index.js";
 // Export all Server handler
 export * from "./server/AdministratorCommissioningServer.js";
+export * from "./server/AttributeServer.js";
+export * from "./server/ClusterServer.js";
+// Export all Server classes
+export * from "./server/ClusterServerTypes.js";
+export * from "./server/CommandServer.js";
 export * from "./server/GeneralCommissioningServer.js";
 export * from "./server/GroupKeyManagementServer.js";
 export * from "./server/GroupsServer.js";

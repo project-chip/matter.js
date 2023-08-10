@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NodeId, TlvNodeId } from "./NodeId.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { NodeId, TlvNodeId } from "./NodeId.js";
 
 /**
  * The meaning of a "Subject" is primarily that of describing the source for an action, using a given

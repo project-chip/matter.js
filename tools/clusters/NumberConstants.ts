@@ -6,21 +6,21 @@
 
 import { Globals } from "#matter.js/model/elements/Globals.js";
 import {
-    UINT8_MAX,
+    FLOAT32_MAX,
+    FLOAT32_MIN,
+    INT16_MAX,
+    INT16_MIN,
+    INT32_MAX,
+    INT32_MIN,
+    INT64_MAX,
+    INT64_MIN,
+    INT8_MAX,
+    INT8_MIN,
     UINT16_MAX,
     UINT24_MAX,
     UINT32_MAX,
     UINT64_MAX,
-    INT8_MIN,
-    INT8_MAX,
-    INT16_MIN,
-    INT16_MAX,
-    INT32_MIN,
-    INT32_MAX,
-    INT64_MIN,
-    INT64_MAX,
-    FLOAT32_MIN,
-    FLOAT32_MAX
+    UINT8_MAX,
 } from "#matter.js/util/Number.js";
 
 /**
@@ -45,7 +45,7 @@ export const SpecializedNumbers: { [name: string]: [string, string] } = {
     [Globals.epochS.name]: ["number", "TlvEpochS"],
     [Globals.posixMs.name]: ["number", "TlvPosixMs"],
     [Globals.systimeUs.name]: ["number", "TlvSysTimeUs"],
-    [Globals.systimeMs.name]: ["number", "TlvSysTimeMS"]
+    [Globals.systimeMs.name]: ["number", "TlvSysTimeMS"],
 };
 
 /**
@@ -68,7 +68,7 @@ export const WrappedConstantKeys = {
     [Globals.nodeId.name]: true,
     [Globals.SubjectId.name]: true,
     [Globals.vendorId.name]: true,
-}
+};
 
 /**
  * Bounds for numeric types.
@@ -86,4 +86,4 @@ export const NumericRanges = {
     float32: { min: FLOAT32_MIN, max: FLOAT32_MAX },
     percent: { min: 0, max: 100 },
     percent100ths: { min: 0, max: 10000 },
-}
+};

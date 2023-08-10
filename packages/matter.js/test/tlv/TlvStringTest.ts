@@ -8,7 +8,7 @@ import { ValidationError } from "../../src/common/MatterError.js";
 import { TlvByteString, TlvString } from "../../src/tlv/TlvString.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 
-type TestVector<I, E> = { [testName: string]: { input: I, out: E } };
+type TestVector<I, E> = { [testName: string]: { input: I; out: E } };
 
 const validateUtfStringTestVector: TestVector<string, boolean> = {
     "validates a string with an acceptable length": { input: "abcde", out: false },
@@ -23,7 +23,6 @@ const validateByteStringTestVector: TestVector<string, boolean> = {
 };
 
 describe("TlvString", () => {
-
     describe("encode", () => {
         it("encodes a string", () => {
             const result = TlvString.encode("test");
@@ -70,7 +69,6 @@ describe("TlvString", () => {
 });
 
 describe("TlvByteString", () => {
-
     describe("encode", () => {
         it("encodes a byte string", () => {
             const result = TlvByteString.encode(ByteArray.fromHex("0001"));
@@ -105,13 +103,13 @@ describe("TlvByteString", () => {
 
     describe("validation", () => {
         it("throws an error if the value is not a ByteString", () => {
-            expect(() => TlvByteString.validate(5 as any))
-                .toThrow(new ValidationError("Expected ByteArray, got number."));
+            expect(() => TlvByteString.validate(5 as any)).toThrow(
+                new ValidationError("Expected ByteArray, got number."),
+            );
         });
 
         it("throws an error if the value is not a String", () => {
-            expect(() => TlvString.validate(true as any))
-                .toThrow(new ValidationError("Expected string, got boolean."));
+            expect(() => TlvString.validate(true as any)).toThrow(new ValidationError("Expected string, got boolean."));
         });
     });
 });

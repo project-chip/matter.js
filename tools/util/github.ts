@@ -5,23 +5,23 @@
  */
 
 type Entry = {
-    path: string,
-    url: string,
-    type: "blob" | "tree"
-}
+    path: string;
+    url: string;
+    type: "blob" | "tree";
+};
 
 type Cache = (name: string, generator: (name: string) => Promise<string>) => Promise<string>;
 
 export class Directory {
     private contents = {} as {
-        [key: string]: Entry
+        [key: string]: Entry;
     };
 
     constructor(
         public readonly url: string,
         private readonly cache: Cache,
         private readonly auth?: string,
-    ) { }
+    ) {}
 
     async ls(): Promise<string[]> {
         await this.load();
@@ -42,14 +42,14 @@ export class Directory {
     async get(name: string) {
         const entry = await this.find(name);
         if (entry.type !== "blob") throw new Error(`Path "${name}" not a regular file`);
-        return (await this.fetch(entry.url));
+        return await this.fetch(entry.url);
     }
 
     private async load() {
         if (Object.keys(this.contents).length) return;
         const tree = (await JSON.parse(await this.fetch(this.url))).tree;
         if (!tree) throw new Error("No tree in fetch response");
-        tree.forEach((e: Entry) => this.contents[e.path] = e);
+        tree.forEach((e: Entry) => (this.contents[e.path] = e));
     }
 
     private async find(name: string) {
@@ -63,11 +63,11 @@ export class Directory {
         return this.cache(url.replace(/^https:\/\//, ""), async () => {
             const options = {
                 headers: {
-                    accept: "application/vnd.github.raw"
-                } as any
+                    accept: "application/vnd.github.raw",
+                } as any,
             };
 
-            if (this.auth) options.headers.Authorization = `Bearer ${this.auth.trim()}`
+            if (this.auth) options.headers.Authorization = `Bearer ${this.auth.trim()}`;
 
             const result = await fetch(url, options);
             if (result.status !== 200) {
@@ -88,7 +88,7 @@ export class Repo extends Directory {
         repo: string,
         branch: string,
         cache: Cache = (name, generator) => generator(name),
-        auth?: string
+        auth?: string,
     ) {
         super(`https://api.github.com/repos/${org}/${repo}/git/trees/${branch}`, cache, auth);
     }

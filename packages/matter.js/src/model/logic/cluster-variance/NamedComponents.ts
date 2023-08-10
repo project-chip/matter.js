@@ -14,7 +14,7 @@ import { InferredComponent, InferredComponents } from "./InferredComponents.js";
 export type NamedComponent = InferredComponent & {
     name: string;
     documentation: string;
-}
+};
 
 /**
  * A set of components keyed by generated names.
@@ -39,7 +39,10 @@ export function NamedComponents(cluster: ClusterModel, inferredComponents: Infer
         if (allOf) {
             const names = allOf.map(f => featureNames[f]);
             name = names.join("And");
-            contributorDocumentation.push(`it supports feature${allOf.length === 1 ? "" : "s"}`, describeList("and", ...names));
+            contributorDocumentation.push(
+                `it supports feature${allOf.length === 1 ? "" : "s"}`,
+                describeList("and", ...names),
+            );
         }
 
         const anyOf = component.condition?.anyOf;
@@ -54,7 +57,10 @@ export function NamedComponents(cluster: ClusterModel, inferredComponents: Infer
             if (contributorDocumentation.length) {
                 contributorDocumentation.push("and it");
             }
-            contributorDocumentation.push(`it supports feature${anyOf.length === 1 ? "" : "s"}`, describeList("or", ...names))
+            contributorDocumentation.push(
+                `it supports feature${anyOf.length === 1 ? "" : "s"}`,
+                describeList("or", ...names),
+            );
         }
 
         const not = component.condition?.not;
@@ -76,8 +82,8 @@ export function NamedComponents(cluster: ClusterModel, inferredComponents: Infer
                 namedComponent = {
                     name,
                     documentation: `${contributorDocumentation.join(" ")}.`,
-                    ...component
-                }
+                    ...component,
+                };
                 namedComponentMap[name] = namedComponent;
 
                 components.push(namedComponent);

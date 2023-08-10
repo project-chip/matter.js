@@ -4,27 +4,27 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterDevice } from "../../MatterDevice.js";
-import { Session } from "../../session/Session.js";
-import { assertSecureSession, NoAssociatedFabricError, SecureSession } from "../../session/SecureSession.js";
-import { TlvSchema } from "../../tlv/TlvSchema.js";
+import { ImplementationError, InternalError, MatterError, ValidationError } from "../../common/MatterError.js";
+import { tryCatch } from "../../common/TryCatchHandler.js";
+import { AttributeId } from "../../datatype/AttributeId.js";
 import { Endpoint } from "../../device/Endpoint.js";
-import { Attribute, Attributes, Cluster, Commands, Events } from "../Cluster.js";
 import { Fabric } from "../../fabric/Fabric.js";
-import { isDeepEqual } from "../../util/DeepEqual.js";
+import { MatterDevice } from "../../MatterDevice.js";
+import { Globals } from "../../model/index.js";
 import { StatusResponseError } from "../../protocol/interaction/InteractionMessenger.js";
 import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
-import { ImplementationError, InternalError, MatterError, ValidationError } from "../../common/MatterError.js";
-import { Globals } from "../../model/index.js";
-import { AttributeId } from "../../datatype/AttributeId.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { tryCatch } from "../../common/TryCatchHandler.js";
+import { assertSecureSession, NoAssociatedFabricError, SecureSession } from "../../session/SecureSession.js";
+import { Session } from "../../session/Session.js";
+import { TlvSchema } from "../../tlv/TlvSchema.js";
+import { isDeepEqual } from "../../util/DeepEqual.js";
+import { Attribute, Attributes, Cluster, Commands, Events } from "../Cluster.js";
 
 /**
  * Thrown when an operation cannot complete because fabric information is
  * unavailable.
  */
-export class FabricScopeError extends MatterError { }
+export class FabricScopeError extends MatterError {}
 
 // TODO create Factory method to create AttributeServer instances
 
@@ -34,7 +34,7 @@ export function createAttributeServer<
     SF extends TypeFromPartialBitSchema<F>,
     A extends Attributes,
     C extends Commands,
-    E extends Events
+    E extends Events,
 >(
     clusterDef: Cluster<F, SF, A, C, E>,
     attributeDef: Attribute<T, F>,
@@ -47,15 +47,7 @@ export function createAttributeServer<
     const { id, schema, writable, fabricScoped, fixed, omitChanges } = attributeDef;
 
     if (fixed) {
-        return new FixedAttributeServer(
-            id,
-            attributeName,
-            schema,
-            writable,
-            false,
-            defaultValue,
-            getter,
-        );
+        return new FixedAttributeServer(id, attributeName, schema, writable, false, defaultValue, getter);
     }
 
     if (fabricScoped) {
@@ -160,11 +152,12 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
 
         if (getter === undefined) {
             this.getter = () => {
-                if (this.value === undefined) { // Should not happen
+                if (this.value === undefined) {
+                    // Should not happen
                     throw new InternalError(`Attribute value for attribute "${name}" is not initialized.`);
                 }
                 return this.value;
-            }
+            };
         } else {
             this.getter = getter;
         }
@@ -298,18 +291,24 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
          */
         validator?: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => void,
     ) {
-        if (isWritable && (getter === undefined || setter === undefined) && !(getter === undefined && setter === undefined)) {
-            throw new ImplementationError(`Getter and setter must be implemented together for writeable attribute "${name}".`);
+        if (
+            isWritable &&
+            (getter === undefined || setter === undefined) &&
+            !(getter === undefined && setter === undefined)
+        ) {
+            throw new ImplementationError(
+                `Getter and setter must be implemented together for writeable attribute "${name}".`,
+            );
         }
 
         super(id, name, schema, isWritable, isSubscribable, defaultValue, getter);
 
         if (setter === undefined) {
-            this.setter = (value) => {
+            this.setter = value => {
                 const oldValue = this.value;
                 this.value = value;
                 return !isDeepEqual(value, oldValue);
-            }
+            };
         } else {
             this.setter = setter;
         }
@@ -319,7 +318,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
             if (validator !== undefined) {
                 validator(value, session, endpoint);
             }
-        }
+        };
     }
 
     /**
@@ -408,7 +407,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
         this.value = tryCatch(
             () => this.get(session, true),
             NoAssociatedFabricError, // Handle potential error cases where the session does not have a fabric assigned.
-            this.value ?? this.defaultValue
+            this.value ?? this.defaultValue,
         );
         this.handleVersionAndTriggerListeners(this.value, oldValue, true);
     }
@@ -462,7 +461,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
  * Attribute server which is getting and setting the value for a defined fabric. The values are automatically persisted
  * on fabric level if no custom getter or setter is defined.
  */
-export class FabricScopedAttributeServer<T> extends AttributeServer<T>{
+export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
     private readonly isCustomGetter: boolean;
     private readonly isCustomSetter: boolean;
 
@@ -478,14 +477,21 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T>{
         setter?: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => boolean,
         validator?: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => void,
     ) {
-        if (isWritable && (getter === undefined || setter === undefined) && !(getter === undefined && setter === undefined)) {
-            throw new ImplementationError(`Getter and setter must be implemented together writeable fabric scoped attribute "${name}".`);
+        if (
+            isWritable &&
+            (getter === undefined || setter === undefined) &&
+            !(getter === undefined && setter === undefined)
+        ) {
+            throw new ImplementationError(
+                `Getter and setter must be implemented together writeable fabric scoped attribute "${name}".`,
+            );
         }
 
         let isCustomGetter = false;
         if (getter === undefined) {
             getter = (session, _endpoint, isFabricFiltered) => {
-                if (session === undefined) throw new FabricScopeError(`Session is required for fabric scoped attribute ${name}`);
+                if (session === undefined)
+                    throw new FabricScopeError(`Session is required for fabric scoped attribute ${name}`);
 
                 if (isFabricFiltered === true) {
                     assertSecureSession(session);
@@ -496,13 +502,15 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T>{
                     for (const fabric of fabrics) {
                         const value = this.getLocalForFabric(fabric);
                         if (!Array.isArray(value)) {
-                            throw new FabricScopeError(`Fabric scoped attribute "${name}" can only be read for all fabrics if they are arrays.`);
+                            throw new FabricScopeError(
+                                `Fabric scoped attribute "${name}" can only be read for all fabrics if they are arrays.`,
+                            );
                         }
                         values.push(...value);
                     }
                     return values as T;
                 }
-            }
+            };
         } else {
             isCustomGetter = true;
         }
@@ -510,7 +518,8 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T>{
         let isCustomSetter = false;
         if (setter === undefined) {
             setter = (value, session) => {
-                if (session === undefined) throw new FabricScopeError(`Session is required for fabric scoped attribute "${name}".`);
+                if (session === undefined)
+                    throw new FabricScopeError(`Session is required for fabric scoped attribute "${name}".`);
 
                 assertSecureSession(session);
                 const fabric = session.getAssociatedFabric();
@@ -522,7 +531,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T>{
                     return true;
                 }
                 return false;
-            }
+            };
         } else {
             isCustomSetter = true;
         }
@@ -553,7 +562,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T>{
             value,
             <number>Globals.FabricIndex.id,
             session.getAssociatedFabric().fabricIndex,
-            (existingFieldIndex) => existingFieldIndex === undefined
+            existingFieldIndex => existingFieldIndex === undefined,
         );
 
         super.setRemote(value, session);
@@ -563,7 +572,9 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T>{
      * Set Local is not allowed for fabric scoped attributes. Use setLocalForFabric instead.
      */
     override setLocal(_value: T) {
-        throw new FabricScopeError(`Fabric scoped attribute "${this.name}" can only be set locally by providing a Fabric. Use setLocalForFabric instead.`);
+        throw new FabricScopeError(
+            `Fabric scoped attribute "${this.name}" can only be set locally by providing a Fabric. Use setLocalForFabric instead.`,
+        );
     }
 
     /**
@@ -575,7 +586,9 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T>{
      */
     setLocalForFabric(value: T, fabric: Fabric) {
         if (this.isCustomSetter) {
-            throw new FabricScopeError(`Fabric scoped attribute "${this.name}" can not be set locally when a custom setter is defined.`);
+            throw new FabricScopeError(
+                `Fabric scoped attribute "${this.name}" can not be set locally when a custom setter is defined.`,
+            );
         }
         this.validator(value, undefined, this.endpoint);
 
@@ -594,7 +607,9 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T>{
      */
     getLocalForFabric(fabric: Fabric): T {
         if (this.isCustomGetter) {
-            throw new FabricScopeError(`Fabric scoped attribute "${this.name}" can not be read locally when a custom getter is defined.`);
+            throw new FabricScopeError(
+                `Fabric scoped attribute "${this.name}" can not be read locally when a custom getter is defined.`,
+            );
         }
         const data = fabric.getScopedClusterDataValue<{ value: T }>(this.cluster, this.name);
         return data?.value ?? this.defaultValue;

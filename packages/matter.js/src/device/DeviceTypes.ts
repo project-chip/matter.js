@@ -5,9 +5,9 @@
  */
 
 import * as MatterClusters from "../cluster/definitions/index.js";
-import { MatterDeviceLibrarySpecificationV1_0 } from "../spec/Specifications.js";
-import { DeviceTypeId } from "../datatype/DeviceTypeId.js";
 import { ClusterId } from "../datatype/ClusterId.js";
+import { DeviceTypeId } from "../datatype/DeviceTypeId.js";
+import { MatterDeviceLibrarySpecificationV1_0 } from "../spec/Specifications.js";
 
 /**
  * This represents a Root Node for devices.
@@ -152,7 +152,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         deviceClass: DeviceClasses.Node, // ???
         revision: 1,
         requiredServerClusters: [
-            MatterClusters.PowerSourceCluster.id // any cluster features allowed
+            MatterClusters.PowerSourceCluster.id, // any cluster features allowed
         ],
     }),
 
@@ -201,9 +201,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         code: 0x000e,
         deviceClass: DeviceClasses.Dynamic, // ???
         revision: 1,
-        optionalServerClusters: [
-            MatterClusters.ActionsCluster.id
-        ],
+        optionalServerClusters: [MatterClusters.ActionsCluster.id],
     }),
 
     /**
@@ -215,9 +213,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         code: 0x0013,
         deviceClass: DeviceClasses.Simple,
         revision: 1,
-        requiredServerClusters: [
-            MatterClusters.BridgedDeviceBasicInformationCluster.id,
-        ],
+        requiredServerClusters: [MatterClusters.BridgedDeviceBasicInformationCluster.id],
     }),
 
     /**
@@ -257,12 +253,8 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
             MatterClusters.ScenesCluster.id,
             MatterClusters.OnOffCluster.id,
         ],
-        optionalServerClusters: [
-            MatterClusters.LevelControlCluster.id,
-        ],
-        optionalClientClusters: [
-            MatterClusters.OccupancySensingCluster.id,
-        ],
+        optionalServerClusters: [MatterClusters.LevelControlCluster.id],
+        optionalClientClusters: [MatterClusters.OccupancySensingCluster.id],
     }),
 
     /**
@@ -286,9 +278,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
             MatterClusters.OnOffCluster.id,
             MatterClusters.LevelControlCluster.id,
         ],
-        optionalClientClusters: [
-            MatterClusters.OccupancySensingCluster.id,
-        ],
+        optionalClientClusters: [MatterClusters.OccupancySensingCluster.id],
     }),
 
     /**
@@ -360,9 +350,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
             MatterClusters.ScenesCluster.id,
             MatterClusters.OnOffCluster.id,
         ],
-        optionalServerClusters: [
-            MatterClusters.LevelControlCluster.id,
-        ],
+        optionalServerClusters: [MatterClusters.LevelControlCluster.id],
     }),
 
     /**
@@ -431,17 +419,9 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         code: 0x0103,
         deviceClass: DeviceClasses.Simple,
         revision: 2,
-        requiredServerClusters: [
-            MatterClusters.IdentifyCluster.id,
-        ],
-        requiredClientClusters: [
-            MatterClusters.IdentifyCluster.id,
-            MatterClusters.OnOffCluster.id,
-        ],
-        optionalClientClusters: [
-            MatterClusters.GroupsCluster.id,
-            MatterClusters.ScenesCluster.id,
-        ],
+        requiredServerClusters: [MatterClusters.IdentifyCluster.id],
+        requiredClientClusters: [MatterClusters.IdentifyCluster.id, MatterClusters.OnOffCluster.id],
+        optionalClientClusters: [MatterClusters.GroupsCluster.id, MatterClusters.ScenesCluster.id],
     }),
 
     /**
@@ -456,18 +436,13 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         deviceClass: DeviceClasses.Simple,
         superSet: "ON_OFF_LIGHT_SWITCH",
         revision: 2,
-        requiredServerClusters: [
-            MatterClusters.IdentifyCluster.id,
-        ],
+        requiredServerClusters: [MatterClusters.IdentifyCluster.id],
         requiredClientClusters: [
             MatterClusters.IdentifyCluster.id,
             MatterClusters.OnOffCluster.id,
             MatterClusters.LevelControlCluster.id,
         ],
-        optionalClientClusters: [
-            MatterClusters.GroupsCluster.id,
-            MatterClusters.ScenesCluster.id,
-        ],
+        optionalClientClusters: [MatterClusters.GroupsCluster.id, MatterClusters.ScenesCluster.id],
     }),
 
     /**
@@ -482,19 +457,14 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         deviceClass: DeviceClasses.Simple,
         superSet: "DIMMER_SWITCH",
         revision: 2,
-        requiredServerClusters: [
-            MatterClusters.IdentifyCluster.id,
-        ],
+        requiredServerClusters: [MatterClusters.IdentifyCluster.id],
         requiredClientClusters: [
             MatterClusters.IdentifyCluster.id,
             MatterClusters.OnOffCluster.id,
             MatterClusters.LevelControlCluster.id,
             MatterClusters.ColorControlCluster.id,
         ],
-        optionalClientClusters: [
-            MatterClusters.GroupsCluster.id,
-            MatterClusters.ScenesCluster.id,
-        ],
+        optionalClientClusters: [MatterClusters.GroupsCluster.id, MatterClusters.ScenesCluster.id],
     }),
 
     /**
@@ -510,9 +480,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         code: 0x0840,
         deviceClass: DeviceClasses.Simple,
         revision: 2,
-        requiredServerClusters: [
-            MatterClusters.IdentifyCluster.id,
-        ],
+        requiredServerClusters: [MatterClusters.IdentifyCluster.id],
         requiredClientClusters: [
             MatterClusters.IdentifyCluster.id,
             MatterClusters.GroupsCluster.id,
@@ -537,9 +505,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         code: 0x0304,
         deviceClass: DeviceClasses.Simple,
         revision: 2,
-        requiredServerClusters: [
-            MatterClusters.IdentifyCluster.id,
-        ],
+        requiredServerClusters: [MatterClusters.IdentifyCluster.id],
         requiredClientClusters: [
             MatterClusters.BindingCluster.id,
             MatterClusters.OnOffCluster.id,
@@ -565,13 +531,8 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         code: 0x000f,
         deviceClass: DeviceClasses.Simple,
         revision: 1,
-        requiredServerClusters: [
-            MatterClusters.IdentifyCluster.id,
-            MatterClusters.SwitchCluster.id,
-        ],
-        optionalServerClusters: [
-            MatterClusters.FixedLabelCluster.id,
-        ],
+        requiredServerClusters: [MatterClusters.IdentifyCluster.id, MatterClusters.SwitchCluster.id],
+        optionalServerClusters: [MatterClusters.FixedLabelCluster.id],
     }),
 
     /* ---------------------------- Sensors --------------------------- */
@@ -584,10 +545,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         code: 0x0015,
         deviceClass: DeviceClasses.Simple,
         revision: 1,
-        requiredServerClusters: [
-            MatterClusters.IdentifyCluster.id,
-            MatterClusters.BooleanStateCluster.id,
-        ],
+        requiredServerClusters: [MatterClusters.IdentifyCluster.id, MatterClusters.BooleanStateCluster.id],
     }),
 
     /**
@@ -601,13 +559,8 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         code: 0x0106,
         deviceClass: DeviceClasses.Simple,
         revision: 2,
-        requiredServerClusters: [
-            MatterClusters.IdentifyCluster.id,
-            MatterClusters.IlluminanceMeasurementCluster.id,
-        ],
-        optionalClientClusters: [
-            MatterClusters.GroupsCluster.id,
-        ],
+        requiredServerClusters: [MatterClusters.IdentifyCluster.id, MatterClusters.IlluminanceMeasurementCluster.id],
+        optionalClientClusters: [MatterClusters.GroupsCluster.id],
     }),
 
     /**
@@ -620,13 +573,8 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         code: 0x0107,
         deviceClass: DeviceClasses.Simple,
         revision: 2,
-        requiredServerClusters: [
-            MatterClusters.IdentifyCluster.id,
-            MatterClusters.OccupancySensingCluster.id,
-        ],
-        optionalClientClusters: [
-            MatterClusters.GroupsCluster.id,
-        ],
+        requiredServerClusters: [MatterClusters.IdentifyCluster.id, MatterClusters.OccupancySensingCluster.id],
+        optionalClientClusters: [MatterClusters.GroupsCluster.id],
     }),
 
     /**
@@ -638,10 +586,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         code: 0x0302,
         deviceClass: DeviceClasses.Simple,
         revision: 2,
-        requiredServerClusters: [
-            MatterClusters.TemperatureMeasurementCluster.id,
-            MatterClusters.IdentifyCluster.id,
-        ],
+        requiredServerClusters: [MatterClusters.TemperatureMeasurementCluster.id, MatterClusters.IdentifyCluster.id],
     }),
 
     /**
@@ -653,10 +598,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         code: 0x0305,
         deviceClass: DeviceClasses.Simple,
         revision: 2,
-        requiredServerClusters: [
-            MatterClusters.PressureMeasurementCluster.id,
-            MatterClusters.IdentifyCluster.id,
-        ],
+        requiredServerClusters: [MatterClusters.PressureMeasurementCluster.id, MatterClusters.IdentifyCluster.id],
     }),
 
     /**
@@ -668,10 +610,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         code: 0x0306,
         deviceClass: DeviceClasses.Simple,
         revision: 2,
-        requiredServerClusters: [
-            MatterClusters.FlowMeasurementCluster.id,
-            MatterClusters.IdentifyCluster.id,
-        ],
+        requiredServerClusters: [MatterClusters.FlowMeasurementCluster.id, MatterClusters.IdentifyCluster.id],
     }),
 
     /**
@@ -700,13 +639,8 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         code: 0x0850,
         deviceClass: DeviceClasses.Simple,
         revision: 2,
-        requiredServerClusters: [
-            MatterClusters.IdentifyCluster.id,
-        ],
-        requiredClientClusters: [
-            MatterClusters.IdentifyCluster.id,
-            MatterClusters.OnOffCluster.id,
-        ],
+        requiredServerClusters: [MatterClusters.IdentifyCluster.id],
+        requiredClientClusters: [MatterClusters.IdentifyCluster.id, MatterClusters.OnOffCluster.id],
         optionalClientClusters: [
             MatterClusters.GroupsCluster.id,
             MatterClusters.ScenesCluster.id,
@@ -726,16 +660,11 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         code: 0x000a,
         deviceClass: DeviceClasses.Simple,
         revision: 2,
-        requiredServerClusters: [
-            MatterClusters.IdentifyCluster.id,
-            MatterClusters.DoorLockCluster.id,
-        ],
+        requiredServerClusters: [MatterClusters.IdentifyCluster.id, MatterClusters.DoorLockCluster.id],
         optionalServerClusters: [
             //MatterClusters.PollControlCluster.id, //0x20 Not existing in Specs 1.1
         ],
-        optionalClientClusters: [
-            MatterClusters.TimeSyncCluster.id
-        ],
+        optionalClientClusters: [MatterClusters.TimeSyncCluster.id],
     }),
 
     /**
@@ -749,11 +678,9 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         revision: 2,
         optionalServerClusters: [
             MatterClusters.IdentifyCluster.id, // Optional if EZ-Target
-            MatterClusters.TimeSyncCluster.id
+            MatterClusters.TimeSyncCluster.id,
         ],
-        requiredClientClusters: [
-            MatterClusters.DoorLockCluster.id,
-        ],
+        requiredClientClusters: [MatterClusters.DoorLockCluster.id],
         optionalClientClusters: [
             MatterClusters.IdentifyCluster.id, // Optional if EZ-Initiator
             MatterClusters.GroupsCluster.id, // Required if Zigbee
@@ -770,10 +697,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         code: 0x0202,
         deviceClass: DeviceClasses.Simple,
         revision: 2,
-        requiredServerClusters: [
-            MatterClusters.IdentifyCluster.id,
-            MatterClusters.WindowCoveringCluster.id,
-        ],
+        requiredServerClusters: [MatterClusters.IdentifyCluster.id, MatterClusters.WindowCoveringCluster.id],
         optionalServerClusters: [
             MatterClusters.GroupsCluster.id, // Required when Awake, else optional
             MatterClusters.ScenesCluster.id, // Required when Awake, else optional
@@ -790,12 +714,8 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         code: 0x0203,
         deviceClass: DeviceClasses.Simple,
         revision: 2,
-        optionalServerClusters: [
-            MatterClusters.IdentifyCluster.id,
-        ],
-        requiredClientClusters: [
-            MatterClusters.WindowCoveringCluster.id,
-        ],
+        optionalServerClusters: [MatterClusters.IdentifyCluster.id],
+        requiredClientClusters: [MatterClusters.WindowCoveringCluster.id],
         optionalClientClusters: [
             MatterClusters.IdentifyCluster.id,
             MatterClusters.GroupsCluster.id, // Required when Awake, else optional
@@ -826,9 +746,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
             MatterClusters.LevelControlCluster.id,
             MatterClusters.FanControlCluster.id,
         ],
-        requiredClientClusters: [
-            MatterClusters.ThermostatCluster.id,
-        ],
+        requiredClientClusters: [MatterClusters.ThermostatCluster.id],
     }),
 
     /**
@@ -846,10 +764,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         code: 0x0301,
         deviceClass: DeviceClasses.Simple,
         revision: 2,
-        requiredServerClusters: [
-            MatterClusters.IdentifyCluster.id,
-            MatterClusters.ThermostatCluster.id,
-        ],
+        requiredServerClusters: [MatterClusters.IdentifyCluster.id, MatterClusters.ThermostatCluster.id],
         optionalServerClusters: [
             MatterClusters.GroupsCluster.id, // Required when Awake
             MatterClusters.ScenesCluster.id,
@@ -950,10 +865,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         code: 0x0022,
         deviceClass: DeviceClasses.Simple,
         revision: 1,
-        requiredServerClusters: [
-            MatterClusters.OnOffCluster.id,
-            MatterClusters.LevelControlCluster.id,
-        ],
+        requiredServerClusters: [MatterClusters.OnOffCluster.id, MatterClusters.LevelControlCluster.id],
     }),
 
     /**
@@ -1051,11 +963,9 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         code: 0x0027,
         deviceClass: DeviceClasses.Simple,
         revision: 1,
-        requiredServerClusters: [
-            MatterClusters.ModeSelectCluster.id,
-        ],
+        requiredServerClusters: [MatterClusters.ModeSelectCluster.id],
     }),
-}
+};
 
 export function getDeviceTypeDefinitionByCode(code: number): DeviceTypeDefinition | undefined {
     for (const key in DeviceTypes) {

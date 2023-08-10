@@ -4,14 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Fabric, FabricBuilder, FabricJsonObject } from "./Fabric.js";
 import { InternalError, MatterError, MatterFlowError } from "../common/MatterError.js";
 import { FabricIndex } from "../datatype/FabricIndex.js";
 import { StorageContext } from "../storage/StorageContext.js";
 import { ByteArray } from "../util/ByteArray.js";
+import { Fabric, FabricBuilder, FabricJsonObject } from "./Fabric.js";
 
 /** Specific Error for when a fabric is not found. */
-export class FabricNotFoundError extends MatterError { }
+export class FabricNotFoundError extends MatterError {}
 
 export class FabricManager {
     private nextFabricIndex = 1;
@@ -27,7 +27,10 @@ export class FabricManager {
     }
 
     persistFabrics() {
-        this.fabricStorage.set("fabrics", this.fabrics.map(fabric => fabric.toStorageObject()));
+        this.fabricStorage.set(
+            "fabrics",
+            this.fabrics.map(fabric => fabric.toStorageObject()),
+        );
         this.fabricStorage.set("nextFabricIndex", this.nextFabricIndex);
     }
 
@@ -39,7 +42,10 @@ export class FabricManager {
 
     removeFabric(fabricIndex: FabricIndex) {
         const index = this.fabrics.findIndex(fabric => fabric.fabricIndex === fabricIndex);
-        if (index === -1) throw new FabricNotFoundError(`Fabric with index ${fabricIndex} cannot be removed because it does not exist.`);
+        if (index === -1)
+            throw new FabricNotFoundError(
+                `Fabric with index ${fabricIndex} cannot be removed because it does not exist.`,
+            );
         this.fabrics.splice(index, 1);
         this.persistFabrics();
     }

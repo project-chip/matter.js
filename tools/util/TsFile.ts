@@ -22,10 +22,10 @@ const INDENT = "    ";
 const WRAP_WIDTH = 120;
 
 type Documentation = {
-    description?: string,
-    details?: string,
-    xref?: Specification.CrossReference
-}
+    description?: string;
+    details?: string;
+    xref?: Specification.CrossReference;
+};
 
 function mapSpec(xref?: Specification.CrossReference) {
     switch (xref?.document) {
@@ -45,10 +45,15 @@ export abstract class Entry {
     private docText?: string;
     public shouldGroup = false;
 
-    constructor(protected parentBlock: Block | undefined) { }
+    constructor(protected parentBlock: Block | undefined) {}
 
     get isDocumented() {
-        return !!(this.documentation?.description || this.documentation?.details || this.documentation?.xref || this.docText);
+        return !!(
+            this.documentation?.description ||
+            this.documentation?.details ||
+            this.documentation?.xref ||
+            this.docText
+        );
     }
 
     /** Add a TsDoc style comment */
@@ -101,12 +106,19 @@ export abstract class Entry {
         if (lines.length) {
             // Remove blank lines between jsdoc directives except for @see
             for (let i = 0; i < lines.length - 1; i++) {
-                if (lines[i][0] == "@" && lines[i + 1] == "" && lines[i + 2][0] == "@" && !lines[i + 2].startsWith("@see")) {
+                if (
+                    lines[i][0] == "@" &&
+                    lines[i + 1] == "" &&
+                    lines[i + 2][0] == "@" &&
+                    !lines[i + 2].startsWith("@see")
+                ) {
                     lines.splice(i + 1, 1);
                 }
             }
 
-            return `${linePrefix}/**\n${lines.map(l => `${linePrefix} * ${l}`.trimEnd()).join("\n")}\n${linePrefix} */\n`
+            return `${linePrefix}/**\n${lines
+                .map(l => `${linePrefix} * ${l}`.trimEnd())
+                .join("\n")}\n${linePrefix} */\n`;
         }
 
         return "";
@@ -125,7 +137,10 @@ class Raw extends Entry {
         if (this.text === undefined) {
             return "";
         }
-        return this.text.split("\n").map(l => `${linePrefix}${l}`).join("\n");
+        return this.text
+            .split("\n")
+            .map(l => `${linePrefix}${l}`)
+            .join("\n");
     }
 }
 
@@ -251,12 +266,14 @@ export class Block extends Entry {
             const s = e.toString();
             let m = s.match(/^(\w+):/);
             if (!m) {
-                m = s.match(/\s*(?:(?:export|public|private|const)\s+)*(?:(?:function|enum|class|interface|const|var|let)\s+)(\w+)/);
+                m = s.match(
+                    /\s*(?:(?:export|public|private|const)\s+)*(?:(?:function|enum|class|interface|const|var|let)\s+)(\w+)/,
+                );
             }
             if (m) {
                 this.nameDefined(m[1]);
             }
-        })
+        });
 
         if (this.addBefore) {
             const index = this.entries.indexOf(this.addBefore);
@@ -316,7 +333,7 @@ export class Block extends Entry {
 
         if (Array.isArray(value)) {
             const block = this.expressions(`${prefix}[`, `]${suffix}`);
-            value.forEach(v => v === undefined ? block.atom("null") : block.value(v));
+            value.forEach(v => (v === undefined ? block.atom("null") : block.value(v)));
             return block;
         }
 
@@ -397,7 +414,7 @@ enum ExpressionLayout {
     SingleLine,
     SingleNested,
     MultipleLines,
-    Verbose
+    Verbose,
 }
 
 function chooseExpressionLayout(lineLength: number, prefix: string, serializedEntries: string[]) {
@@ -481,21 +498,19 @@ class ExpressionBlock extends NestedBlock {
             case ExpressionLayout.None:
                 return `${linePrefix}${this.prefix}${this.suffix}`;
 
-            case ExpressionLayout.SingleNested:
-                {
-                    // Need to reserialize with reduced padding
-                    const line = this.entries[0].toString(linePrefix).trim();
-                    return `${linePrefix}${this.prefix}${line}${this.suffix}`;
-                }
+            case ExpressionLayout.SingleNested: {
+                // Need to reserialize with reduced padding
+                const line = this.entries[0].toString(linePrefix).trim();
+                return `${linePrefix}${this.prefix}${line}${this.suffix}`;
+            }
 
-            case ExpressionLayout.SingleLine:
-                {
-                    let line = serializedEntries.map(e => e.trim()).join(", ");
-                    if (isArrayOrObject && !this.prefix.endsWith("[") && !line.startsWith("{")) {
-                        line = ` ${line} `;
-                    }
-                    return `${linePrefix}${this.prefix}${line}${this.suffix}`;
+            case ExpressionLayout.SingleLine: {
+                let line = serializedEntries.map(e => e.trim()).join(", ");
+                if (isArrayOrObject && !this.prefix.endsWith("[") && !line.startsWith("{")) {
+                    line = ` ${line} `;
                 }
+                return `${linePrefix}${this.prefix}${line}${this.suffix}`;
+            }
 
             case ExpressionLayout.MultipleLines:
                 return `${linePrefix}${this.prefix}\n${serializedEntries.join(",\n")}\n${linePrefix}${this.suffix}`;

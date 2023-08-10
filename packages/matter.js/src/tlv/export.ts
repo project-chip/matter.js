@@ -8,7 +8,7 @@ export * from "./TlvAny.js";
 export * from "./TlvArray.js";
 export * from "./TlvBoolean.js";
 export * from "./TlvCodec.js";
-export * from "./TlvNoArguments.js"
+export * from "./TlvNoArguments.js";
 export * from "./TlvNullable.js";
 export * from "./TlvNumber.js";
 export * from "./TlvObject.js";

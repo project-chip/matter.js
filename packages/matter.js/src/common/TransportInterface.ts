@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Channel } from "./Channel.js";
 import { ByteArray } from "../util/ByteArray.js";
+import { Channel } from "./Channel.js";
 
 export interface Listener {
     close(): Promise<void>;

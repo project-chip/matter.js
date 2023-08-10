@@ -8,7 +8,7 @@ import { InternalError } from "../../common/MatterError.js";
 import { Aspect, Constraint } from "../aspects/index.js";
 import { ElementTag, FieldValue, Metatype } from "../definitions/index.js";
 import { AnyElement, Globals } from "../elements/index.js";
-import { type Model, type ValueModel, CommandModel } from "../models/index.js";
+import { CommandModel, type Model, type ValueModel } from "../models/index.js";
 
 const OPERATION_DEPTH_LIMIT = 20;
 
@@ -82,7 +82,7 @@ export class ModelTraversal {
 
             let result: string | undefined;
             const name = model.name;
-            this.visitInheritance(model.parent, (ancestor) => {
+            this.visitInheritance(model.parent, ancestor => {
                 // If parented by enum or bitmap, infer type as uint of same size
                 if ((ancestor as any).metatype) {
                     switch (ancestor.name) {
@@ -163,7 +163,7 @@ export class ModelTraversal {
         }
         let result: Model | undefined;
 
-        this.visitInheritance(model, (model) => {
+        this.visitInheritance(model, model => {
             if (model.global) {
                 result = model;
                 return false;
@@ -185,7 +185,7 @@ export class ModelTraversal {
         }
         let result = false;
 
-        this.visitInheritance(model, (model) => {
+        this.visitInheritance(model, model => {
             if (model.name === other.name && model.global === other.global) {
                 result = true;
                 return false;
@@ -207,7 +207,7 @@ export class ModelTraversal {
                 return model.xref;
             }
             return this.findXref(model.parent);
-        })
+        });
     }
 
     /**
@@ -215,7 +215,7 @@ export class ModelTraversal {
      */
     findDefiningModel(model: ValueModel | undefined): ValueModel | undefined {
         let result: ValueModel | undefined;
-        this.visitInheritance(model, (model) => {
+        this.visitInheritance(model, model => {
             if (!model.isType) {
                 return false;
             }
@@ -238,7 +238,7 @@ export class ModelTraversal {
 
         let shadow: Model | undefined;
         this.operationWithDismissal(model, () => {
-            this.visitInheritance(this.findBase(model?.parent), (parent) => {
+            this.visitInheritance(this.findBase(model?.parent), parent => {
                 if (model.id !== undefined) {
                     shadow = this.findLocal(parent, model.id, [model.tag]);
                     if (shadow) {
@@ -311,11 +311,10 @@ export class ModelTraversal {
                     return;
                 }
 
-                const referenced = this.findMember(
-                    model.parent,
-                    name,
-                    [ElementTag.Attribute, ElementTag.Datatype]
-                ) as ValueModel;
+                const referenced = this.findMember(model.parent, name, [
+                    ElementTag.Attribute,
+                    ElementTag.Datatype,
+                ]) as ValueModel;
                 if (!referenced) {
                     return;
                 }
@@ -324,7 +323,7 @@ export class ModelTraversal {
                 if (otherConstraint?.[field]) {
                     bounds[field] = otherConstraint[field];
                 }
-            }
+            };
 
             // The only reason the field filter exists is that some fields
             // referenced in constraints are circularly constrained (e.g. min
@@ -349,7 +348,11 @@ export class ModelTraversal {
     /**
      * Search inherited scope for a named member.
      */
-    findMember(scope: Model | undefined, key: ModelTraversal.ElementSelector, allowedTags: ElementTag[]): Model | undefined {
+    findMember(
+        scope: Model | undefined,
+        key: ModelTraversal.ElementSelector,
+        allowedTags: ElementTag[],
+    ): Model | undefined {
         return this.operation(() => {
             while (scope) {
                 const result = this.findLocal(scope, key, allowedTags);
@@ -401,7 +404,7 @@ export class ModelTraversal {
 
                 scope = this.findBase(scope);
             }
-        })
+        });
     }
 
     /**
@@ -506,7 +509,7 @@ export class ModelTraversal {
         }
         this.operation(() => {
             return this.findRoot(model.parent);
-        })
+        });
     }
 
     /**

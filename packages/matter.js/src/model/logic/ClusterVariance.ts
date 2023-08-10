@@ -16,27 +16,27 @@ export type ClusterVariance = {
     /**
      * The base component.
      */
-    base: InferredComponent,
+    base: InferredComponent;
 
     /**
      * Optional components.
      */
-    components: NamedComponents,
+    components: NamedComponents;
 
     /**
      * Illegal feature combinations as bit flags.
      */
-    illegal: IllegalFeatureCombinations,
+    illegal: IllegalFeatureCombinations;
 
     /**
      * If this is false, the cluster cannot be used without features.
      */
-    requiresFeatures: boolean
+    requiresFeatures: boolean;
 };
 
 /**
  * Analyzes a cluster to determine components, component names and feature
- * flag -> component mapping. 
+ * flag -> component mapping.
  */
 export function ClusterVariance(cluster: ClusterModel): ClusterVariance {
     const inferredComponents = InferredComponents(cluster);
@@ -47,6 +47,6 @@ export function ClusterVariance(cluster: ClusterModel): ClusterVariance {
         base,
         components,
         illegal,
-        requiresFeatures
-    }
+        requiresFeatures,
+    };
 }

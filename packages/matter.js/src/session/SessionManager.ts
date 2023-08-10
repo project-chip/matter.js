@@ -5,15 +5,15 @@
  */
 
 import { Crypto } from "../crypto/Crypto.js";
+import { FabricId } from "../datatype/FabricId.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
-import { ByteArray } from "../util/ByteArray.js";
+import { Logger } from "../log/Logger.js";
 import { StorageContext } from "../storage/StorageContext.js";
+import { ByteArray } from "../util/ByteArray.js";
 import { SecureSession } from "./SecureSession.js";
 import { Session } from "./Session.js";
 import { UnsecureSession } from "./UnsecureSession.js";
-import { Logger } from "../log/Logger.js";
-import { FabricId } from "../datatype/FabricId.js";
 
 const logger = Logger.get("SessionManager");
 
@@ -22,19 +22,19 @@ export const UNDEFINED_NODE_ID = NodeId(0);
 export const UNICAST_UNSECURE_SESSION_ID = 0x0000;
 
 export interface ResumptionRecord {
-    sharedSecret: ByteArray,
-    resumptionId: ByteArray,
-    fabric: Fabric,
-    peerNodeId: NodeId,
+    sharedSecret: ByteArray;
+    resumptionId: ByteArray;
+    fabric: Fabric;
+    peerNodeId: NodeId;
 }
 
 type ResumptionStorageRecord = {
-    nodeId: NodeId,
-    sharedSecret: Uint8Array,
-    resumptionId: Uint8Array,
-    fabricId: FabricId,
-    peerNodeId: NodeId,
-}
+    nodeId: NodeId;
+    sharedSecret: Uint8Array;
+    resumptionId: Uint8Array;
+    fabricId: FabricId;
+    peerNodeId: NodeId;
+};
 
 export class SessionManager<ContextT> {
     private readonly unsecureSession: UnsecureSession<ContextT>;
@@ -47,7 +47,7 @@ export class SessionManager<ContextT> {
         private readonly context: ContextT,
         storage: StorageContext,
     ) {
-        this.sessionStorage = storage.createContext("SessionManager")
+        this.sessionStorage = storage.createContext("SessionManager");
         this.unsecureSession = new UnsecureSession(context);
         this.sessions.set(UNICAST_UNSECURE_SESSION_ID, this.unsecureSession);
     }
@@ -63,7 +63,7 @@ export class SessionManager<ContextT> {
         isResumption: boolean,
         idleRetransTimeoutMs?: number,
         activeRetransTimeoutMs?: number,
-        closeCallback?: () => void
+        closeCallback?: () => void,
     ) {
         const session = await SecureSession.create(
             this.context,
@@ -80,7 +80,7 @@ export class SessionManager<ContextT> {
                 closeCallback?.();
             },
             idleRetransTimeoutMs,
-            activeRetransTimeoutMs
+            activeRetransTimeoutMs,
         );
         this.sessions.set(sessionId, session);
 
@@ -98,7 +98,7 @@ export class SessionManager<ContextT> {
     getNextAvailableSessionId() {
         while (true) {
             if (this.sessions.has(this.nextSessionId)) {
-                this.nextSessionId = (this.nextSessionId + 1) & 0xFFFF;
+                this.nextSessionId = (this.nextSessionId + 1) & 0xffff;
                 if (this.nextSessionId === 0) this.nextSessionId++;
                 continue;
             }
@@ -137,13 +137,16 @@ export class SessionManager<ContextT> {
     }
 
     storeResumptionRecords() {
-        this.sessionStorage.set<ResumptionStorageRecord[]>("resumptionRecords", [...this.resumptionRecords].map(([nodeId, { sharedSecret, resumptionId, peerNodeId, fabric }]) => ({
-            nodeId,
-            sharedSecret,
-            resumptionId,
-            fabricId: fabric.fabricId,
-            peerNodeId: peerNodeId,
-        })));
+        this.sessionStorage.set<ResumptionStorageRecord[]>(
+            "resumptionRecords",
+            [...this.resumptionRecords].map(([nodeId, { sharedSecret, resumptionId, peerNodeId, fabric }]) => ({
+                nodeId,
+                sharedSecret,
+                resumptionId,
+                fabricId: fabric.fabricId,
+                peerNodeId: peerNodeId,
+            })),
+        );
     }
 
     initFromStorage(fabrics: Fabric[]) {

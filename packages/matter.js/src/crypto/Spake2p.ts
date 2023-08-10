@@ -6,10 +6,10 @@
 
 import BN from "bn.js";
 import { ec } from "elliptic";
-import { Crypto } from "./Crypto.js";
+import { InternalError } from "../common/MatterError.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataWriter } from "../util/DataWriter.js";
-import { InternalError } from "../common/MatterError.js";
+import { Crypto } from "./Crypto.js";
 
 const P256_CURVE = new ec("p256").curve;
 
@@ -18,12 +18,11 @@ const M = P256_CURVE.decodePoint("02886e2f97ace46e55ba9dd7242579f2993b64e16ef3dc
 const N = P256_CURVE.decodePoint("03d8bbd6c639c62937b04d997f38c3770719c629d7014d49a24b4f98baa1292b49", "hex");
 
 export interface PbkdfParameters {
-    iterations: number,
-    salt: ByteArray,
+    iterations: number;
+    salt: ByteArray;
 }
 
 export class Spake2p {
-
     static async computeW0W1({ iterations, salt }: PbkdfParameters, pin: number) {
         const pinWriter = new DataWriter(Endian.Little);
         pinWriter.writeUInt32(pin);
@@ -48,7 +47,7 @@ export class Spake2p {
         private readonly context: ByteArray,
         private readonly random: BN,
         private readonly w0: BN,
-    ) { }
+    ) {}
 
     computeX(): ByteArray {
         const X = P256_CURVE.g.mul(this.random).add(M.mul(this.w0));

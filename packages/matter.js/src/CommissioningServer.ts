@@ -4,53 +4,72 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterNode } from "./MatterNode.js";
-import {
-    CommissionningFlowType, DiscoveryCapabilitiesBitmap, DiscoveryCapabilitiesSchema, ManualPairingCodeCodec,
-    QrPairingCodeCodec
-} from "./schema/PairingCodeSchema.js";
-import { InteractionServer } from "./protocol/interaction/InteractionServer.js";
-import { AdministratorCommissioningHandler } from "./cluster/server/AdministratorCommissioningServer.js";
-import { SecureChannelProtocol } from "./protocol/securechannel/SecureChannelProtocol.js";
-import { PaseServer } from "./session/pase/PaseServer.js";
-import { Crypto } from "./crypto/Crypto.js";
-import { CaseServer } from "./session/case/CaseServer.js";
-import { MatterDevice } from "./MatterDevice.js";
-import { UdpInterface } from "./net/UdpInterface.js";
-import { MdnsScanner } from "./mdns/MdnsScanner.js";
-import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
-import { AttributeInitialValues, ClusterServerHandlers, ClusterServerObj } from "./cluster/server/ClusterServerTypes.js";
-import { OperationalCredentialsClusterHandler, OperationalCredentialsServerConf } from "./cluster/server/OperationalCredentialsServer.js";
+import { Ble } from "./ble/Ble.js";
 import { AttestationCertificateManager } from "./certificate/AttestationCertificateManager.js";
 import { CertificationDeclarationManager } from "./certificate/CertificationDeclarationManager.js";
-import { GeneralCommissioningClusterHandler } from "./cluster/server/GeneralCommissioningServer.js";
+import { Attributes, Commands, Events } from "./cluster/Cluster.js";
 import { AccessControlCluster } from "./cluster/definitions/AccessControlCluster.js";
-import { GroupKeyManagementCluster } from "./cluster/definitions/GroupKeyManagementCluster.js";
-import { GeneralDiagnostics, GeneralDiagnosticsCluster } from "./cluster/definitions/GeneralDiagnosticsCluster.js";
-import { VendorId } from "./datatype/VendorId.js";
+import {
+    AdministratorCommissioning,
+    AdministratorCommissioningCluster,
+} from "./cluster/definitions/AdministratorCommissioningCluster.js";
 import { BasicInformationCluster } from "./cluster/definitions/BasicInformationCluster.js";
+import {
+    GeneralCommissioning,
+    GeneralCommissioningCluster,
+} from "./cluster/definitions/GeneralCommissioningCluster.js";
+import { GeneralDiagnostics, GeneralDiagnosticsCluster } from "./cluster/definitions/GeneralDiagnosticsCluster.js";
+import { GroupKeyManagementCluster } from "./cluster/definitions/GroupKeyManagementCluster.js";
+import {
+    NetworkCommissioning,
+    NetworkCommissioningCluster,
+} from "./cluster/definitions/NetworkCommissioningCluster.js";
 import { OperationalCredentialsCluster } from "./cluster/definitions/OperationalCredentialsCluster.js";
-import { FabricIndex } from "./datatype/FabricIndex.js";
-import { GeneralCommissioningCluster, GeneralCommissioning } from "./cluster/definitions/GeneralCommissioningCluster.js";
-import { NetworkCommissioningCluster, NetworkCommissioning } from "./cluster/definitions/NetworkCommissioningCluster.js";
-import { AdministratorCommissioningCluster, AdministratorCommissioning } from "./cluster/definitions/AdministratorCommissioningCluster.js";
+import { AdministratorCommissioningHandler } from "./cluster/server/AdministratorCommissioningServer.js";
+import { ClusterServer } from "./cluster/server/ClusterServer.js";
+import {
+    AttributeInitialValues,
+    ClusterServerHandlers,
+    ClusterServerObj,
+} from "./cluster/server/ClusterServerTypes.js";
+import { GeneralCommissioningClusterHandler } from "./cluster/server/GeneralCommissioningServer.js";
 import { GroupKeyManagementClusterHandler } from "./cluster/server/GroupKeyManagementServer.js";
-import { QrCode } from "./schema/QrCodeSchema.js";
+import {
+    OperationalCredentialsClusterHandler,
+    OperationalCredentialsServerConf,
+} from "./cluster/server/OperationalCredentialsServer.js";
+import { ImplementationError, NoProviderError } from "./common/MatterError.js";
+import { Crypto } from "./crypto/Crypto.js";
+import { DeviceTypeId } from "./datatype/DeviceTypeId.js";
+import { EndpointNumber } from "./datatype/EndpointNumber.js";
+import { FabricIndex } from "./datatype/FabricIndex.js";
+import { VendorId } from "./datatype/VendorId.js";
+import { Aggregator } from "./device/Aggregator.js";
 import { Device } from "./device/Device.js";
+import { Endpoint } from "./device/Endpoint.js";
+import { Logger } from "./log/Logger.js";
+import { MatterDevice } from "./MatterDevice.js";
+import { MatterNode } from "./MatterNode.js";
+import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
+import { MdnsInstanceBroadcaster } from "./mdns/MdnsInstanceBroadcaster.js";
+import { MdnsScanner } from "./mdns/MdnsScanner.js";
+import { UdpInterface } from "./net/UdpInterface.js";
+import { InteractionServer } from "./protocol/interaction/InteractionServer.js";
+import { SecureChannelProtocol } from "./protocol/securechannel/SecureChannelProtocol.js";
+import { TypeFromBitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
+import {
+    CommissionningFlowType,
+    DiscoveryCapabilitiesBitmap,
+    DiscoveryCapabilitiesSchema,
+    ManualPairingCodeCodec,
+    QrPairingCodeCodec,
+} from "./schema/PairingCodeSchema.js";
+import { QrCode } from "./schema/QrCodeSchema.js";
+import { CaseServer } from "./session/case/CaseServer.js";
+import { PaseServer } from "./session/pase/PaseServer.js";
+import { StorageContext } from "./storage/StorageContext.js";
 import { ByteArray } from "./util/ByteArray.js";
 import { NamedHandler } from "./util/NamedHandler.js";
-import { Attributes, Commands, Events } from "./cluster/Cluster.js";
-import { Logger } from "./log/Logger.js";
-import { Aggregator } from "./device/Aggregator.js";
-import { TypeFromBitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
-import { Endpoint } from "./device/Endpoint.js";
-import { StorageContext } from "./storage/StorageContext.js";
-import { MdnsInstanceBroadcaster } from "./mdns/MdnsInstanceBroadcaster.js";
-import { Ble } from "./ble/Ble.js";
-import { NoProviderError, ImplementationError } from "./common/MatterError.js";
-import { EndpointNumber } from "./datatype/EndpointNumber.js";
-import { DeviceTypeId } from "./datatype/DeviceTypeId.js";
-import { ClusterServer } from "./cluster/server/ClusterServer.js";
 
 const logger = Logger.get("CommissioningServer");
 
@@ -74,24 +93,24 @@ export interface CommissioningServerOptions {
     listeningAddressIpv4?: string;
     listeningAddressIpv6?: string;
     deviceName: string;
-    deviceType: number,
-    nextEndpointId?: number,
+    deviceType: number;
+    nextEndpointId?: number;
 
-    passcode: number,
-    discriminator: number,
-    flowType?: CommissionningFlowType,
-    additionalBleAdvertisementData?: ByteArray,
+    passcode: number;
+    discriminator: number;
+    flowType?: CommissionningFlowType;
+    additionalBleAdvertisementData?: ByteArray;
 
     delayedAnnouncement?: boolean;
 
     basicInformation:
-    | {
-        vendorId: number;
-        vendorName: string;
-        productId: number;
-        productName: string;
-    }
-    | AttributeInitialValues<typeof BasicInformationCluster.attributes>;
+        | {
+              vendorId: number;
+              vendorName: string;
+              productId: number;
+              productName: string;
+          }
+        | AttributeInitialValues<typeof BasicInformationCluster.attributes>;
 
     certificates?: OperationalCredentialsServerConf;
 
@@ -107,7 +126,7 @@ export interface CommissioningServerOptions {
 type CommissioningServerCommands = {
     /** Provide a means for certification tests to trigger some test-plan-specific events. */
     testEventTrigger: ClusterServerHandlers<typeof GeneralDiagnosticsCluster>["testEventTrigger"];
-}
+};
 
 // TODO decline using set/getRootClusterClient
 // TODO Decline cluster access after announced/paired
@@ -179,11 +198,11 @@ export class CommissioningServer extends MatterNode {
                 softwareVersionString: "v1",
                 capabilityMinima: {
                     caseSessionsPerFabric: 3,
-                    subscriptionsPerFabric: 3
+                    subscriptionsPerFabric: 3,
                 },
-                serialNumber: `node-matter-${Crypto.get().getRandomData(4).toHex()}`
+                serialNumber: `node-matter-${Crypto.get().getRandomData(4).toHex()}`,
             },
-            options.basicInformation
+            options.basicInformation,
         ) as AttributeInitialValues<typeof BasicInformationCluster.attributes>;
 
         const reachabilitySupported = basicInformationAttributes.reachable !== undefined;
@@ -195,13 +214,15 @@ export class CommissioningServer extends MatterNode {
             {
                 startUp: true,
                 shutDown: true,
-                reachableChanged: reachabilitySupported
-            }
+                reachableChanged: reachabilitySupported,
+            },
         );
         this.rootEndpoint.addClusterServer(basicInformationCluster);
 
         if (reachabilitySupported) {
-            basicInformationCluster.subscribeReachableAttribute(newValue => basicInformationCluster.triggerReachableChangedEvent?.({ reachableNewValue: newValue }));
+            basicInformationCluster.subscribeReachableAttribute(
+                newValue => basicInformationCluster.triggerReachableChangedEvent?.({ reachableNewValue: newValue }),
+            );
         }
 
         // Use provided certificates for OperationalCredentialsCluster or generate own ones
@@ -215,7 +236,7 @@ export class CommissioningServer extends MatterNode {
                 devicePrivateKey: dacKeyPair.privateKey,
                 deviceCertificate: dac,
                 deviceIntermediateCertificate: paa.getPAICert(),
-                certificationDeclaration
+                certificationDeclaration,
             };
         }
 
@@ -230,10 +251,10 @@ export class CommissioningServer extends MatterNode {
                     supportedFabrics: 254,
                     commissionedFabrics: 0,
                     trustedRootCertificates: [],
-                    currentFabricIndex: FabricIndex.NO_FABRIC
+                    currentFabricIndex: FabricIndex.NO_FABRIC,
                 },
-                OperationalCredentialsClusterHandler(certificates)
-            )
+                OperationalCredentialsClusterHandler(certificates),
+            ),
         );
 
         // TODO Get the defaults from the cluster meta details
@@ -244,17 +265,21 @@ export class CommissioningServer extends MatterNode {
                     breadcrumb: options.generalCommissioning?.breadcrumb ?? BigInt(0),
                     basicCommissioningInfo: options.generalCommissioning?.basicCommissioningInfo ?? {
                         failSafeExpiryLengthSeconds: 60 /* 1min */,
-                        maxCumulativeFailsafeSeconds: 900 /* Recommended according to Specs */
+                        maxCumulativeFailsafeSeconds: 900 /* Recommended according to Specs */,
                     },
-                    regulatoryConfig: options.generalCommissioning?.regulatoryConfig ?? GeneralCommissioning.RegulatoryLocationType.Outdoor, // Default is the most restrictive one
-                    locationCapability: options.generalCommissioning?.locationCapability ?? GeneralCommissioning.RegulatoryLocationType.IndoorOutdoor,
-                    supportsConcurrentConnection: options.generalCommissioning?.supportsConcurrentConnection ?? true
+                    regulatoryConfig:
+                        options.generalCommissioning?.regulatoryConfig ??
+                        GeneralCommissioning.RegulatoryLocationType.Outdoor, // Default is the most restrictive one
+                    locationCapability:
+                        options.generalCommissioning?.locationCapability ??
+                        GeneralCommissioning.RegulatoryLocationType.IndoorOutdoor,
+                    supportsConcurrentConnection: options.generalCommissioning?.supportsConcurrentConnection ?? true,
                 },
                 GeneralCommissioningClusterHandler({
                     allowCountryCodeChange: options.generalCommissioning?.allowCountryCodeChange ?? true,
-                    countryCodeWhitelist: options.generalCommissioning?.countryCodeWhitelist ?? undefined
-                })
-            )
+                    countryCodeWhitelist: options.generalCommissioning?.countryCodeWhitelist ?? undefined,
+                }),
+            ),
         );
 
         const networkId = new ByteArray(32);
@@ -270,8 +295,8 @@ export class CommissioningServer extends MatterNode {
                     lastNetworkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
                     networks: [{ networkId: networkId, connected: true }],
                 },
-                {} // Ethernet is not requiring any methods
-            )
+                {}, // Ethernet is not requiring any methods
+            ),
         );
 
         // TODO Get the defaults from the cluster meta details
@@ -288,9 +313,9 @@ export class CommissioningServer extends MatterNode {
                 {},
                 {
                     accessControlEntryChanged: true, // TODO
-                    accessControlExtensionChanged: true // TODO
-                }
-            )
+                    accessControlExtensionChanged: true, // TODO
+                },
+            ),
         );
 
         // TODO Get the defaults from the cluster meta details
@@ -303,8 +328,8 @@ export class CommissioningServer extends MatterNode {
                     maxGroupsPerFabric: 254,
                     maxGroupKeysPerFabric: 254,
                 },
-                GroupKeyManagementClusterHandler()
-            )
+                GroupKeyManagementClusterHandler(),
+            ),
         );
 
         // TODO Get the defaults from the cluster meta details
@@ -320,15 +345,15 @@ export class CommissioningServer extends MatterNode {
                     activeHardwareFaults: [],
                     activeRadioFaults: [],
                     activeNetworkFaults: [],
-                    testEventTriggersEnabled: false
+                    testEventTriggersEnabled: false,
                 },
                 {
-                    testEventTrigger: async (args) => await this.commandHandler.executeHandler("testEventTrigger", args)
+                    testEventTrigger: async args => await this.commandHandler.executeHandler("testEventTrigger", args),
                 },
                 {
-                    bootReason: true
-                }
-            )
+                    bootReason: true,
+                },
+            ),
         );
     }
 
@@ -339,15 +364,17 @@ export class CommissioningServer extends MatterNode {
      *
      * @param cluster
      */
-    override addRootClusterServer<A extends Attributes, C extends Commands, E extends Events>(cluster: ClusterServerObj<A, C, E>) {
+    override addRootClusterServer<A extends Attributes, C extends Commands, E extends Events>(
+        cluster: ClusterServerObj<A, C, E>,
+    ) {
         if (cluster.id === BasicInformationCluster.id) {
             throw new ImplementationError(
-                "BasicInformationCluster can not be modified, provide all details in constructor options!"
+                "BasicInformationCluster can not be modified, provide all details in constructor options!",
             );
         }
         if (cluster.id === OperationalCredentialsCluster.id) {
             throw new ImplementationError(
-                "OperationalCredentialsCluster can not be modified, provide the certificates in constructor options!"
+                "OperationalCredentialsCluster can not be modified, provide the certificates in constructor options!",
             );
         }
         super.addRootClusterServer(cluster);
@@ -372,9 +399,9 @@ export class CommissioningServer extends MatterNode {
         const secureChannelProtocol = new SecureChannelProtocol(
             await PaseServer.fromPin(this.passcode, {
                 iterations: 1000,
-                salt: Crypto.get().getRandomData(32)
+                salt: Crypto.get().getRandomData(32),
             }),
-            new CaseServer()
+            new CaseServer(),
         );
 
         this.addRootClusterServer(
@@ -383,10 +410,10 @@ export class CommissioningServer extends MatterNode {
                 {
                     windowStatus: AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen,
                     adminFabricIndex: null,
-                    adminVendorId: null
+                    adminVendorId: null,
                 },
-                AdministratorCommissioningHandler(secureChannelProtocol)
-            )
+                AdministratorCommissioningHandler(secureChannelProtocol),
+            ),
         );
 
         const basicInformation = this.getRootClusterServer(BasicInformationCluster);
@@ -421,18 +448,22 @@ export class CommissioningServer extends MatterNode {
                         this.deviceInstance?.addBroadcaster(this.mdnsInstanceBroadcaster);
                     }
                 }
-            })
+            },
+        )
             .addTransportInterface(await UdpInterface.create("udp6", this.port, this.listeningAddressIpv6))
             .addScanner(this.mdnsScanner)
             .addProtocolHandler(secureChannelProtocol)
             .addProtocolHandler(this.interactionServer);
         if (!this.disableIpv4) {
-            this.deviceInstance.addTransportInterface(await UdpInterface.create("udp4", this.port, this.listeningAddressIpv4))
+            this.deviceInstance.addTransportInterface(
+                await UdpInterface.create("udp4", this.port, this.listeningAddressIpv4),
+            );
         }
 
         if (this.isCommissioned()) {
             limitTo = { onIpNetwork: true }; // If already commissioned the device is on network already
-        } else { // BLE or SoftAP only relevant when not commissioned yet
+        } else {
+            // BLE or SoftAP only relevant when not commissioned yet
             try {
                 const ble = Ble.get();
                 this.deviceInstance.addTransportInterface(ble.getBlePeripheralInterface());
@@ -463,7 +494,9 @@ export class CommissioningServer extends MatterNode {
 
         const generalDiagnostics = this.getRootClusterServer(GeneralDiagnosticsCluster);
         if (generalDiagnostics !== undefined) {
-            this.getRootClusterServer(GeneralDiagnosticsCluster)?.triggerBootReasonEvent({ bootReason: generalDiagnostics.getBootReasonAttribute?.() ?? GeneralDiagnostics.BootReason.Unspecified });
+            this.getRootClusterServer(GeneralDiagnosticsCluster)?.triggerBootReasonEvent({
+                bootReason: generalDiagnostics.getBootReasonAttribute?.() ?? GeneralDiagnostics.BootReason.Unspecified,
+            });
         }
     }
 
@@ -499,7 +532,9 @@ export class CommissioningServer extends MatterNode {
             const thisUniqueId = endpoint.determineUniqueID();
             if (thisUniqueId === undefined) {
                 if (endpoint.id === undefined) {
-                    logger.debug(`No unique id found for endpoint on index ${endpointIndex} / device ${endpoint.name} - using index as unique identifier!`);
+                    logger.debug(
+                        `No unique id found for endpoint on index ${endpointIndex} / device ${endpoint.name} - using index as unique identifier!`,
+                    );
                 }
                 endpointUniquePrefix += `${endpointUniquePrefix === "" ? "" : "-"}index_${endpointIndex}`;
             } else {
@@ -509,7 +544,9 @@ export class CommissioningServer extends MatterNode {
             if (endpoint.id === undefined) {
                 if (this.endpointStructureStorage.has(endpointUniquePrefix)) {
                     endpoint.id = this.endpointStructureStorage.get<EndpointNumber>(endpointUniquePrefix);
-                    logger.debug(`Restored endpoint id ${endpoint.id} for endpoint with ${endpointUniquePrefix} / device ${endpoint.name} from storage`);
+                    logger.debug(
+                        `Restored endpoint id ${endpoint.id} for endpoint with ${endpointUniquePrefix} / device ${endpoint.name} from storage`,
+                    );
                 }
             }
             if (endpoint.id !== undefined && endpoint.id > this.nextEndpointId) {
@@ -537,7 +574,9 @@ export class CommissioningServer extends MatterNode {
             if (endpoint.id === undefined) {
                 endpoint.id = EndpointNumber(this.nextEndpointId++);
                 this.endpointStructureStorage.set(endpointUniquePrefix, endpoint.id);
-                logger.debug(`Assigned endpoint id ${endpoint.id} for endpoint with ${endpointUniquePrefix} / device ${endpoint.name} and stored it`);
+                logger.debug(
+                    `Assigned endpoint id ${endpoint.id} for endpoint with ${endpointUniquePrefix} / device ${endpoint.name} and stored it`,
+                );
             }
             this.fillAndStoreEndpointIds(endpoint, endpointUniquePrefix);
         }
@@ -553,7 +592,9 @@ export class CommissioningServer extends MatterNode {
     /**
      * Return the pairing information for the device
      */
-    getPairingCode(discoveryCapabilities?: TypeFromBitSchema<typeof DiscoveryCapabilitiesBitmap>): DevicePairingInformation {
+    getPairingCode(
+        discoveryCapabilities?: TypeFromBitSchema<typeof DiscoveryCapabilitiesBitmap>,
+    ): DevicePairingInformation {
         const basicInformation = this.getRootClusterServer(BasicInformationCluster);
         if (basicInformation == undefined) {
             throw new ImplementationError("BasicInformationCluster needs to be set!");
@@ -566,7 +607,8 @@ export class CommissioningServer extends MatterNode {
         try {
             bleEnabled = !!Ble.get();
         } catch (error) {
-            if (!(error instanceof NoProviderError)) { // only ignore NoProviderError cases
+            if (!(error instanceof NoProviderError)) {
+                // only ignore NoProviderError cases
                 throw error;
             }
         }
@@ -578,20 +620,22 @@ export class CommissioningServer extends MatterNode {
             flowType: this.flowType,
             discriminator: this.discriminator,
             passcode: this.passcode,
-            discoveryCapabilities: DiscoveryCapabilitiesSchema.encode(discoveryCapabilities ?? {
-                ble: bleEnabled,
-                softAccessPoint: false,
-                onIpNetwork: true
-            }),
+            discoveryCapabilities: DiscoveryCapabilitiesSchema.encode(
+                discoveryCapabilities ?? {
+                    ble: bleEnabled,
+                    softAccessPoint: false,
+                    onIpNetwork: true,
+                },
+            ),
         });
 
         return {
             manualPairingCode: ManualPairingCodeCodec.encode({
                 discriminator: this.discriminator,
-                passcode: this.passcode
+                passcode: this.passcode,
             }),
             qrPairingCode,
-            qrCode: QrCode.encode(qrPairingCode) // TODO: Really export that always?
+            qrCode: QrCode.encode(qrPairingCode), // TODO: Really export that always?
         };
     }
 
@@ -619,7 +663,7 @@ export class CommissioningServer extends MatterNode {
      */
     setStorage(storage: StorageContext) {
         this.storage = storage;
-        this.endpointStructureStorage = this.storage.createContext("EndpointStructure")
+        this.endpointStructureStorage = this.storage.createContext("EndpointStructure");
     }
 
     /**
@@ -653,7 +697,10 @@ export class CommissioningServer extends MatterNode {
      * @param command Command to add the handler for
      * @param handler Handler function to add
      */
-    addCommandHandler<K extends keyof CommissioningServerCommands>(command: K, handler: CommissioningServerCommands[K]) {
+    addCommandHandler<K extends keyof CommissioningServerCommands>(
+        command: K,
+        handler: CommissioningServerCommands[K],
+    ) {
         this.commandHandler.addHandler(command, handler);
     }
 
@@ -663,7 +710,10 @@ export class CommissioningServer extends MatterNode {
      * @param command Command to remove the handler for
      * @param handler Handler function to remove
      */
-    removeCommandHandler<K extends keyof CommissioningServerCommands>(command: K, handler: CommissioningServerCommands[K]) {
+    removeCommandHandler<K extends keyof CommissioningServerCommands>(
+        command: K,
+        handler: CommissioningServerCommands[K],
+    ) {
         this.commandHandler.removeHandler(command, handler);
     }
 

@@ -4,68 +4,98 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { InternalError, NotImplementedError, UnexpectedDataError } from "../common/MatterError.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataReader } from "../util/DataReader.js";
 import { DataWriter } from "../util/DataWriter.js";
 import { isIPv4, isIPv6 } from "../util/Ip.js";
-import { InternalError, NotImplementedError, UnexpectedDataError } from "../common/MatterError.js";
 
-export const PtrRecord = (name: string, ptr: string): DnsRecord<string> => ({ name, value: ptr, ttl: 120, recordType: DnsRecordType.PTR, recordClass: DnsRecordClass.IN });
-export const ARecord = (name: string, ip: string): DnsRecord<string> => ({ name, value: ip, ttl: 120, recordType: DnsRecordType.A, recordClass: DnsRecordClass.IN });
-export const AAAARecord = (name: string, ip: string): DnsRecord<string> => ({ name, value: ip, ttl: 120, recordType: DnsRecordType.AAAA, recordClass: DnsRecordClass.IN });
-export const TxtRecord = (name: string, entries: string[]): DnsRecord<string[]> => ({ name, value: entries, ttl: 120, recordType: DnsRecordType.TXT, recordClass: DnsRecordClass.IN });
-export const SrvRecord = (name: string, srv: SrvRecordValue): DnsRecord<SrvRecordValue> => ({ name, value: srv, ttl: 120, recordType: DnsRecordType.SRV, recordClass: DnsRecordClass.IN });
+export const PtrRecord = (name: string, ptr: string): DnsRecord<string> => ({
+    name,
+    value: ptr,
+    ttl: 120,
+    recordType: DnsRecordType.PTR,
+    recordClass: DnsRecordClass.IN,
+});
+export const ARecord = (name: string, ip: string): DnsRecord<string> => ({
+    name,
+    value: ip,
+    ttl: 120,
+    recordType: DnsRecordType.A,
+    recordClass: DnsRecordClass.IN,
+});
+export const AAAARecord = (name: string, ip: string): DnsRecord<string> => ({
+    name,
+    value: ip,
+    ttl: 120,
+    recordType: DnsRecordType.AAAA,
+    recordClass: DnsRecordClass.IN,
+});
+export const TxtRecord = (name: string, entries: string[]): DnsRecord<string[]> => ({
+    name,
+    value: entries,
+    ttl: 120,
+    recordType: DnsRecordType.TXT,
+    recordClass: DnsRecordClass.IN,
+});
+export const SrvRecord = (name: string, srv: SrvRecordValue): DnsRecord<SrvRecordValue> => ({
+    name,
+    value: srv,
+    ttl: 120,
+    recordType: DnsRecordType.SRV,
+    recordClass: DnsRecordClass.IN,
+});
 
 export interface SrvRecordValue {
-    priority: number,
-    weight: number,
-    port: number,
-    target: string,
+    priority: number;
+    weight: number;
+    port: number;
+    target: string;
 }
 
 export interface DnsQuery {
-    name: string,
-    recordType: DnsRecordType,
-    recordClass: DnsRecordClass,
+    name: string;
+    recordType: DnsRecordType;
+    recordClass: DnsRecordClass;
 }
 
 export interface DnsRecord<T> {
-    name: string,
-    recordType: DnsRecordType,
-    recordClass: DnsRecordClass,
-    ttl: number,
-    value: T,
+    name: string;
+    recordType: DnsRecordType;
+    recordClass: DnsRecordClass;
+    ttl: number;
+    value: T;
 }
 
 export interface DnsMessage {
-    transactionId: number,
-    messageType: DnsMessageType,
-    queries: DnsQuery[],
-    answers: DnsRecord<any>[],
-    authorities: DnsRecord<any>[],
-    additionalRecords: DnsRecord<any>[],
+    transactionId: number;
+    messageType: DnsMessageType;
+    queries: DnsQuery[];
+    answers: DnsRecord<any>[];
+    authorities: DnsRecord<any>[];
+    additionalRecords: DnsRecord<any>[];
 }
 
 export const enum DnsMessageType {
     Query = 0x0000,
     TruncatedQuery = 0x0200,
     Response = 0x8400, // Authoritative Answer
-    TruncatedResponse = 0x8600
+    TruncatedResponse = 0x8600,
 }
 
 export const enum DnsRecordType {
     A = 0x01,
-    PTR = 0x0C,
+    PTR = 0x0c,
     TXT = 0x10,
-    AAAA = 0x1C,
+    AAAA = 0x1c,
     SRV = 0x21,
-    NSEC = 0x2F,
-    ANY = 0xFF,
+    NSEC = 0x2f,
+    ANY = 0xff,
 }
 
 export const enum DnsRecordClass {
     IN = 0x01,
-    ANY = 0xFF,
+    ANY = 0xff,
 }
 
 export class DnsCodec {
@@ -123,9 +153,9 @@ export class DnsCodec {
         while (true) {
             const itemLength = reader.readUInt8();
             if (itemLength === 0) break;
-            if ((itemLength & 0xC0) !== 0) {
+            if ((itemLength & 0xc0) !== 0) {
                 // Compressed Qname
-                const indexInMessage = reader.readUInt8() | ((itemLength & 0x3F) << 8);
+                const indexInMessage = reader.readUInt8() | ((itemLength & 0x3f) << 8);
                 qNameItems.push(this.decodeQName(new DataReader(message.slice(indexInMessage), Endian.Big), message));
                 break;
             }
@@ -180,12 +210,14 @@ export class DnsCodec {
             ipItems.push(reader.readUInt16().toString(16));
         }
         // Compress 0 sequences
-        const zeroSequences = new Array<{ start: number, length: number }>();
+        const zeroSequences = new Array<{ start: number; length: number }>();
         for (let i = 0; i < 8; i++) {
             if (ipItems[i] !== "0") continue;
             const start = i;
             i++;
-            while (i < 8 && ipItems[i] === "0") { i++; }
+            while (i < 8 && ipItems[i] === "0") {
+                i++;
+            }
             zeroSequences.push({ start, length: i - start });
         }
         if (zeroSequences.length > 0) {
@@ -206,9 +238,17 @@ export class DnsCodec {
         return ipItems.join(".");
     }
 
-    static encode({ messageType, transactionId = 0, queries = [], answers = [], authorities = [], additionalRecords = [] }: Partial<DnsMessage>): ByteArray {
+    static encode({
+        messageType,
+        transactionId = 0,
+        queries = [],
+        answers = [],
+        authorities = [],
+        additionalRecords = [],
+    }: Partial<DnsMessage>): ByteArray {
         if (messageType === undefined) throw new InternalError("Message type must be specified!");
-        if (queries.length > 0 && messageType !== DnsMessageType.Query && messageType !== DnsMessageType.TruncatedQuery) throw new InternalError("Queries can only be included in query messages!");
+        if (queries.length > 0 && messageType !== DnsMessageType.Query && messageType !== DnsMessageType.TruncatedQuery)
+            throw new InternalError("Queries can only be included in query messages!");
         if (authorities.length > 0) throw new NotImplementedError("Authority answers are not supported yet!");
 
         const writer = new DataWriter(Endian.Big);
@@ -223,7 +263,9 @@ export class DnsCodec {
             writer.writeUInt16(recordType);
             writer.writeUInt16(recordClass);
         });
-        [...answers, ...authorities, ...additionalRecords].forEach(record => writer.writeByteArray(this.encodeRecord(record)));
+        [...answers, ...authorities, ...additionalRecords].forEach(record =>
+            writer.writeByteArray(this.encodeRecord(record)),
+        );
         return writer.toByteArray();
     }
 

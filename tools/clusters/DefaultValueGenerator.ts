@@ -5,8 +5,8 @@
  */
 
 import { Metatype, ValueModel } from "#matter.js/model/index.js";
-import { camelize, serialize } from "#util/string.js";
 import { Properties } from "#matter.js/util/Type.js";
+import { camelize, serialize } from "#util/string.js";
 import { SpecializedNumbers, WrappedConstantKeys } from "./NumberConstants.js";
 import { TlvGenerator } from "./TlvGenerator.js";
 
@@ -14,7 +14,7 @@ import { TlvGenerator } from "./TlvGenerator.js";
  * Generates a default value for fields based on model definitions.
  */
 export class DefaultValueGenerator {
-    constructor(private tlv: TlvGenerator) { }
+    constructor(private tlv: TlvGenerator) {}
 
     create(model: ValueModel, defaultValue = model.effectiveDefault) {
         // TODO - don't currently have a way to express "this field should
@@ -54,7 +54,7 @@ export class DefaultValueGenerator {
         if (type && (WrappedConstantKeys as any)[type]) {
             const importConf = SpecializedNumbers[type];
             if (!importConf) {
-                throw new Error(`Unable to ascertain constructor for wrapped ID type ${type}`)
+                throw new Error(`Unable to ascertain constructor for wrapped ID type ${type}`);
             }
             const constructor = importConf[1].replace("Tlv", "");
             this.tlv.importTlv(importConf[0], constructor);

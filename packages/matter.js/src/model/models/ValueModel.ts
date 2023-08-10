@@ -6,16 +6,16 @@
 
 import { Access, Aspect, Conformance, Constraint, Quality } from "../aspects/index.js";
 import { ElementTag, FieldValue, Metatype } from "../definitions/index.js";
-import { AnyElement, ValueElement, DatatypeElement, Globals } from "../elements/index.js";
+import { AnyElement, DatatypeElement, Globals, ValueElement } from "../elements/index.js";
 import { Model } from "./Model.js";
 
 // These are circular dependencies so just to be safe we only import the
 // types.  We also need the class, though, at runtime.  So we use the
 // references in the Model.constructors factory pool.
-import { type DatatypeModel } from "./DatatypeModel.js";
-import { ModelTraversal } from "../logic/ModelTraversal.js";
 import { DefaultValue } from "../logic/index.js";
+import { ModelTraversal } from "../logic/ModelTraversal.js";
 import { Aspects } from "./Aspects.js";
+import { type DatatypeModel } from "./DatatypeModel.js";
 
 const CONSTRAINT: unique symbol = Symbol("constraint");
 const CONFORMANCE: unique symbol = Symbol("conformance");
@@ -30,7 +30,7 @@ export abstract class ValueModel extends Model implements ValueElement {
     byteSize?: ValueElement.Size;
     default?: FieldValue;
     metatype?: Metatype;
-    override isType?= true;
+    override isType? = true;
 
     override get children(): DatatypeModel[] {
         return super.children as any;
@@ -197,12 +197,9 @@ export abstract class ValueModel extends Model implements ValueElement {
     get validationAspects() {
         const aspects = Array<Aspect<any>>();
 
-        new ModelTraversal().visitInheritance(this, (model) => {
+        new ModelTraversal().visitInheritance(this, model => {
             if (model instanceof ValueModel) {
-                if (
-                    !model.conformance.empty
-                    && model.conformance.type !== Conformance.Special.Desc
-                ) {
+                if (!model.conformance.empty && model.conformance.type !== Conformance.Special.Desc) {
                     aspects.push(model.conformance);
                 }
                 if (!model.constraint.empty && !model.constraint.desc) {

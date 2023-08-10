@@ -11,8 +11,7 @@ import { CommandModel, Model, RequirementModel } from "../../models/index.js";
  * Base class for all model validators.
  */
 export class ModelValidator<T extends Model> {
-    constructor(protected model: T) {
-    }
+    constructor(protected model: T) {}
 
     validate() {
         this.validateProperty({ name: "name", type: "string", required: true });
@@ -56,7 +55,10 @@ export class ModelValidator<T extends Model> {
                     }
                 }
                 if (!ok) {
-                    this.error("UNACCEPTABLE_TYPE", `${this.model.path}.children[${index}] type ${child.constructor.name} is not allowed`);
+                    this.error(
+                        "UNACCEPTABLE_TYPE",
+                        `${this.model.path}.children[${index}] type ${child.constructor.name} is not allowed`,
+                    );
                 }
                 index++;
             }
@@ -138,6 +140,6 @@ export class ModelValidator<T extends Model> {
 
 export namespace ModelValidator {
     export const validators = {} as {
-        [key in ElementTag]: new (model: any) => ModelValidator<any>
+        [key in ElementTag]: new (model: any) => ModelValidator<any>;
     };
 }

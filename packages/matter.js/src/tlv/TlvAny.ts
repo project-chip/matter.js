@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ValidationError } from "../common/MatterError.js";
 import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvElement, TlvReader, TlvSchema, TlvStream, TlvWriter } from "./TlvSchema.js";
-import { ValidationError } from "../common/MatterError.js";
 
 export class AnySchema extends TlvSchema<TlvStream> {
     override encodeTlvInternal(writer: TlvWriter, tlvStream: TlvStream, tagAssigned?: TlvTag | undefined): void {
@@ -72,8 +72,12 @@ export class AnySchema extends TlvSchema<TlvStream> {
     override validate(tlvStream: TlvStream): void {
         if (!Array.isArray(tlvStream)) throw new ValidationError(`Expected TlvStream, got ${typeof tlvStream}.`);
         tlvStream.forEach(({ typeLength }) => {
-            if (!typeLength || typeof typeLength !== "object") throw new ValidationError(`Expected typeLength properties in TlvStream, got ${typeof typeLength}.`);
-            if (typeof typeLength.type !== "number") throw new ValidationError(`Expected typeLength.type as number in TlvStream, got ${typeof typeLength.type}.`);
+            if (!typeLength || typeof typeLength !== "object")
+                throw new ValidationError(`Expected typeLength properties in TlvStream, got ${typeof typeLength}.`);
+            if (typeof typeLength.type !== "number")
+                throw new ValidationError(
+                    `Expected typeLength.type as number in TlvStream, got ${typeof typeLength.type}.`,
+                );
         });
     }
 }

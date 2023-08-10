@@ -5,8 +5,8 @@
  */
 
 import { ClusterModel } from "#matter.js/model/index.js";
-import { Block, TsFile } from "#util/TsFile.js";
 import { clean } from "#util/file.js";
+import { Block, TsFile } from "#util/TsFile.js";
 
 export class ClusterFile extends TsFile {
     clusterName: string;

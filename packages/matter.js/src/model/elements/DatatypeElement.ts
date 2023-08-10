@@ -5,20 +5,20 @@
  */
 
 import { ElementTag, Mei, Metatype } from "../definitions/index.js";
-import { ValueElement } from "./ValueElement.js";
 import { BaseElement } from "./BaseElement.js";
+import { ValueElement } from "./ValueElement.js";
 
 /**
  * A datatype element defines a standalone datatype.
  */
 export type DatatypeElement = ValueElement & {
-    tag: `${DatatypeElement.Tag}`,
+    tag: `${DatatypeElement.Tag}`;
 
     /**
      * A datatype defined locally within a cluster is referenced by name and
      * does not have an ID.  So we leave ID is optional for this type.
      */
-    id?: Mei,
+    id?: Mei;
 
     /**
      * A "metatype" provides enough semantics for us to translate a value into
@@ -26,10 +26,10 @@ export type DatatypeElement = ValueElement & {
      * only when the datatype should map directly to a specific native (JS)
      * type.
      */
-    metatype?: `${Metatype}`,
+    metatype?: `${Metatype}`;
 
-    children?: DatatypeElement[]
-}
+    children?: DatatypeElement[];
+};
 
 export function DatatypeElement(definition: DatatypeElement.Properties) {
     return ValueElement(DatatypeElement.Tag, definition) as DatatypeElement;
@@ -42,7 +42,7 @@ export namespace DatatypeElement {
 
     /**
      * Convert a TypeScript enum to Matter enum values.
-     * 
+     *
      * Matter enums include conformance and other metadata.  They may also have
      * multiple definitions of the same value selectable by conformance.  So
      * we can't use a TypeScript enum directly.
@@ -52,12 +52,14 @@ export namespace DatatypeElement {
 
         for (const [k, v] of Object.entries(values)) {
             if (typeof v === "number") {
-                result.push(DatatypeElement({
-                    id: v,
-                    name: k,
-                    type: "uint8",
-                    default: v
-                }));
+                result.push(
+                    DatatypeElement({
+                        id: v,
+                        name: k,
+                        type: "uint8",
+                        default: v,
+                    }),
+                );
             }
         }
 

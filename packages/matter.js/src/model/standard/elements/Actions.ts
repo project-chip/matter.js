@@ -9,9 +9,14 @@
 import { Matter } from "../Matter.js";
 
 Matter.children.push({
-    tag: "cluster", name: "Actions", id: 0x25, classification: "application", description: "Actions",
+    tag: "cluster",
+    name: "Actions",
+    id: 0x25,
+    classification: "application",
+    description: "Actions",
 
-    details: "This cluster provides a standardized way for a Node (typically a Bridge, but could be any Node) to " +
+    details:
+        "This cluster provides a standardized way for a Node (typically a Bridge, but could be any Node) to " +
         "expose" +
         "\n" +
         "  • Information about logical grouping of endpoints on the Node (example: lights in a room)" +
@@ -52,28 +57,49 @@ Matter.children.push({
         { tag: "attribute", name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 },
 
         {
-            tag: "attribute", name: "ActionList", id: 0x0, type: "list", access: "R V", conformance: "M",
-            constraint: "max 256", default: [],
-            details: "The ActionList attribute holds the list of actions. Each entry shall have an unique ActionID, and " +
+            tag: "attribute",
+            name: "ActionList",
+            id: 0x0,
+            type: "list",
+            access: "R V",
+            conformance: "M",
+            constraint: "max 256",
+            default: [],
+            details:
+                "The ActionList attribute holds the list of actions. Each entry shall have an unique ActionID, and " +
                 "its EndpointListID shall exist in the EndpointLists attribute.",
             xref: { document: "core", section: "9.14.5.1" },
-            children: [{ tag: "datatype", name: "entry", type: "ActionStruct" }]
+            children: [{ tag: "datatype", name: "entry", type: "ActionStruct" }],
         },
 
         {
-            tag: "attribute", name: "EndpointLists", id: 0x1, type: "list", access: "R V", conformance: "M",
-            constraint: "max 256", default: [],
-            details: "The EndpointLists attribute holds the list of endpoint lists. Each entry shall have an unique " +
+            tag: "attribute",
+            name: "EndpointLists",
+            id: 0x1,
+            type: "list",
+            access: "R V",
+            conformance: "M",
+            constraint: "max 256",
+            default: [],
+            details:
+                "The EndpointLists attribute holds the list of endpoint lists. Each entry shall have an unique " +
                 "EndpointListID.",
             xref: { document: "core", section: "9.14.5.2" },
-            children: [{ tag: "datatype", name: "entry", type: "EndpointListStruct" }]
+            children: [{ tag: "datatype", name: "entry", type: "EndpointListStruct" }],
         },
 
         {
-            tag: "attribute", name: "SetupUrl", id: 0x2, type: "string", access: "R V", conformance: "O",
-            constraint: "max 512", default: "",
+            tag: "attribute",
+            name: "SetupUrl",
+            id: 0x2,
+            type: "string",
+            access: "R V",
+            conformance: "O",
+            constraint: "max 512",
+            default: "",
 
-            details: "The SetupURL attribute (when provided) shall indicate a URL; its syntax shall follow the syntax as " +
+            details:
+                "The SetupURL attribute (when provided) shall indicate a URL; its syntax shall follow the syntax as " +
                 "specified in RFC 3986, max. 512 ASCII characters. The location referenced by this URL shall provide " +
                 "additional information for the actions provided:" +
                 "\n" +
@@ -84,7 +110,7 @@ Matter.children.push({
                 "      Matter/bridgev1/Actions for this generic case (access generic info how to use actions " +
                 "      provided by this cluster)." +
                 "\n" +
-                "  • When used with a suffix of \"/?a=\" and the decimal value of ActionID for one of the actions, it " +
+                '  • When used with a suffix of "/?a=" and the decimal value of ActionID for one of the actions, it ' +
                 "    may provide information about that particular action. This could be a deeplink to " +
                 "    manufacturer-app/website (associated somehow to the server node) with the " +
                 "    information/edit-screen for this action so that the user can view and update details of the " +
@@ -94,13 +120,19 @@ Matter.children.push({
                 "      https://domain.example/Matter/bridgev1/Actions/?a=12345 for linking to specific info/editing " +
                 "      of the action with ActionID 0x3039.",
 
-            xref: { document: "core", section: "9.14.5.3" }
+            xref: { document: "core", section: "9.14.5.3" },
         },
 
         {
-            tag: "event", name: "StateChanged", id: 0x0, access: "V", conformance: "M", priority: "info",
+            tag: "event",
+            name: "StateChanged",
+            id: 0x0,
+            access: "V",
+            conformance: "M",
+            priority: "info",
 
-            details: "This event shall be generated when there is a change in the State of an ActionID during the " +
+            details:
+                "This event shall be generated when there is a change in the State of an ActionID during the " +
                 "execution of an action and the most recent command using that ActionID used an InvokeID data field." +
                 "\n" +
                 "It provides feedback to the client about the progress of the action." +
@@ -121,24 +153,39 @@ Matter.children.push({
                 { tag: "datatype", name: "ActionId", id: 0x0, type: "uint16", conformance: "M" },
 
                 {
-                    tag: "datatype", name: "InvokeId", id: 0x1, type: "uint32", conformance: "M",
-                    details: "This field shall be set to the InvokeID which was provided to the most recent command referencing " +
+                    tag: "datatype",
+                    name: "InvokeId",
+                    id: 0x1,
+                    type: "uint32",
+                    conformance: "M",
+                    details:
+                        "This field shall be set to the InvokeID which was provided to the most recent command referencing " +
                         "this ActionID.",
-                    xref: { document: "core", section: "9.14.7.1.1" }
+                    xref: { document: "core", section: "9.14.7.1.1" },
                 },
 
                 {
-                    tag: "datatype", name: "NewState", id: 0x2, type: "ActionStateEnum", conformance: "M",
+                    tag: "datatype",
+                    name: "NewState",
+                    id: 0x2,
+                    type: "ActionStateEnum",
+                    conformance: "M",
                     details: "This field shall be set to state that the action has changed to.",
-                    xref: { document: "core", section: "9.14.7.1.2" }
-                }
-            ]
+                    xref: { document: "core", section: "9.14.7.1.2" },
+                },
+            ],
         },
 
         {
-            tag: "event", name: "ActionFailed", id: 0x1, access: "V", conformance: "M", priority: "info",
+            tag: "event",
+            name: "ActionFailed",
+            id: 0x1,
+            access: "V",
+            conformance: "M",
+            priority: "info",
 
-            details: "This event shall be generated when there is some error which prevents the action from its normal " +
+            details:
+                "This event shall be generated when there is some error which prevents the action from its normal " +
                 "planned execution and the most recent command using that ActionID used an InvokeID data field." +
                 "\n" +
                 "It provides feedback to the client about the non-successful progress of the action." +
@@ -180,32 +227,49 @@ Matter.children.push({
                 { tag: "datatype", name: "InvokeId", id: 0x1, type: "uint32", conformance: "M" },
                 { tag: "datatype", name: "NewState", id: 0x2, type: "ActionStateEnum", conformance: "M" },
                 {
-                    tag: "datatype", name: "Error", id: 0x3, type: "ActionErrorEnum", conformance: "M",
-                    details: "This field shall be set to indicate the reason for non-successful progress of the action.",
-                    xref: { document: "core", section: "9.14.7.2.1" }
-                }
-            ]
+                    tag: "datatype",
+                    name: "Error",
+                    id: 0x3,
+                    type: "ActionErrorEnum",
+                    conformance: "M",
+                    details:
+                        "This field shall be set to indicate the reason for non-successful progress of the action.",
+                    xref: { document: "core", section: "9.14.7.2.1" },
+                },
+            ],
         },
 
         {
-            tag: "command", name: "InstantAction", id: 0x0, access: "O", conformance: "desc",
-            direction: "request", response: "status",
-            details: "This command triggers an action (state change) on the involved endpoints, in a \"fire and forget\" " +
+            tag: "command",
+            name: "InstantAction",
+            id: 0x0,
+            access: "O",
+            conformance: "desc",
+            direction: "request",
+            response: "status",
+            details:
+                'This command triggers an action (state change) on the involved endpoints, in a "fire and forget" ' +
                 "manner. Afterwards, the action’s state shall be Inactive." +
                 "\n" +
                 "Example: recall a scene on a number of lights.",
             xref: { document: "core", section: "9.14.6.1" },
             children: [
                 { tag: "datatype", name: "ActionId", id: 0x0, type: "uint16", conformance: "M" },
-                { tag: "datatype", name: "InvokeId", id: 0x1, type: "uint32", conformance: "O" }
-            ]
+                { tag: "datatype", name: "InvokeId", id: 0x1, type: "uint32", conformance: "O" },
+            ],
         },
 
         {
-            tag: "command", name: "InstantActionWithTransition", id: 0x1, access: "O", conformance: "desc",
-            direction: "request", response: "status",
+            tag: "command",
+            name: "InstantActionWithTransition",
+            id: 0x1,
+            access: "O",
+            conformance: "desc",
+            direction: "request",
+            response: "status",
 
-            details: "It is recommended that, where possible (e.g., it is not possible for attributes with Boolean data " +
+            details:
+                "It is recommended that, where possible (e.g., it is not possible for attributes with Boolean data " +
                 "type), a gradual transition SHOULD take place from the old to the new state over this time period. " +
                 "However, the exact transition is manufacturer dependent." +
                 "\n" +
@@ -221,18 +285,28 @@ Matter.children.push({
                 { tag: "datatype", name: "ActionId", id: 0x0, type: "uint16", conformance: "M" },
                 { tag: "datatype", name: "InvokeId", id: 0x1, type: "uint32", conformance: "O" },
                 {
-                    tag: "datatype", name: "TransitionTime", id: 0x2, type: "uint16", conformance: "M",
+                    tag: "datatype",
+                    name: "TransitionTime",
+                    id: 0x2,
+                    type: "uint16",
+                    conformance: "M",
                     details: "This field shall indicate the transition time in 1/10th of seconds.",
-                    xref: { document: "core", section: "9.14.6.2.1" }
-                }
-            ]
+                    xref: { document: "core", section: "9.14.6.2.1" },
+                },
+            ],
         },
 
         {
-            tag: "command", name: "StartAction", id: 0x2, access: "O", conformance: "desc",
-            direction: "request", response: "status",
+            tag: "command",
+            name: "StartAction",
+            id: 0x2,
+            access: "O",
+            conformance: "desc",
+            direction: "request",
+            response: "status",
 
-            details: "This command triggers the commencement of an action on the involved endpoints. Afterwards, the " +
+            details:
+                "This command triggers the commencement of an action on the involved endpoints. Afterwards, the " +
                 "action’s state shall be Active." +
                 "\n" +
                 "Example: start a dynamic lighting pattern (such as gradually rotating the colors around the " +
@@ -244,15 +318,21 @@ Matter.children.push({
             xref: { document: "core", section: "9.14.6.3" },
             children: [
                 { tag: "datatype", name: "ActionId", id: 0x0, type: "uint16", conformance: "M" },
-                { tag: "datatype", name: "InvokeId", id: 0x1, type: "uint32", conformance: "O" }
-            ]
+                { tag: "datatype", name: "InvokeId", id: 0x1, type: "uint32", conformance: "O" },
+            ],
         },
 
         {
-            tag: "command", name: "StartActionWithDuration", id: 0x3, access: "O", conformance: "desc",
-            direction: "request", response: "status",
+            tag: "command",
+            name: "StartActionWithDuration",
+            id: 0x3,
+            access: "O",
+            conformance: "desc",
+            direction: "request",
+            response: "status",
 
-            details: "This command triggers the commencement of an action on the involved endpoints, and shall change the " +
+            details:
+                "This command triggers the commencement of an action on the involved endpoints, and shall change the " +
                 "action’s state to Active. After the specified Duration, the action will stop, and the action’s " +
                 "state shall change to Inactive." +
                 "\n" +
@@ -265,46 +345,68 @@ Matter.children.push({
                 { tag: "datatype", name: "ActionId", id: 0x0, type: "uint16", conformance: "M" },
                 { tag: "datatype", name: "InvokeId", id: 0x1, type: "uint32", conformance: "O" },
                 {
-                    tag: "datatype", name: "Duration", id: 0x2, type: "uint32", conformance: "M",
+                    tag: "datatype",
+                    name: "Duration",
+                    id: 0x2,
+                    type: "uint32",
+                    conformance: "M",
                     details: "This field shall indicate the requested duration in seconds.",
-                    xref: { document: "core", section: "9.14.6.4.1" }
-                }
-            ]
+                    xref: { document: "core", section: "9.14.6.4.1" },
+                },
+            ],
         },
 
         {
-            tag: "command", name: "StopAction", id: 0x4, access: "O", conformance: "desc", direction: "request",
+            tag: "command",
+            name: "StopAction",
+            id: 0x4,
+            access: "O",
+            conformance: "desc",
+            direction: "request",
             response: "status",
-            details: "This command stops the ongoing action on the involved endpoints. Afterwards, the action’s state " +
+            details:
+                "This command stops the ongoing action on the involved endpoints. Afterwards, the action’s state " +
                 "shall be Inactive." +
                 "\n" +
                 "Example: stop a dynamic lighting pattern which was previously started with StartAction.",
             xref: { document: "core", section: "9.14.6.5" },
             children: [
                 { tag: "datatype", name: "ActionId", id: 0x0, type: "uint16", conformance: "M" },
-                { tag: "datatype", name: "InvokeId", id: 0x1, type: "uint32", conformance: "O" }
-            ]
+                { tag: "datatype", name: "InvokeId", id: 0x1, type: "uint32", conformance: "O" },
+            ],
         },
 
         {
-            tag: "command", name: "PauseAction", id: 0x5, access: "O", conformance: "desc",
-            direction: "request", response: "status",
-            details: "This command pauses an ongoing action, and shall change the action’s state to Paused." +
+            tag: "command",
+            name: "PauseAction",
+            id: 0x5,
+            access: "O",
+            conformance: "desc",
+            direction: "request",
+            response: "status",
+            details:
+                "This command pauses an ongoing action, and shall change the action’s state to Paused." +
                 "\n" +
                 "Example: pause a dynamic lighting effect (the lights stay at their current color) which was " +
                 "previously started with StartAction.",
             xref: { document: "core", section: "9.14.6.6" },
             children: [
                 { tag: "datatype", name: "ActionId", id: 0x0, type: "uint16", conformance: "M" },
-                { tag: "datatype", name: "InvokeId", id: 0x1, type: "uint32", conformance: "O" }
-            ]
+                { tag: "datatype", name: "InvokeId", id: 0x1, type: "uint32", conformance: "O" },
+            ],
         },
 
         {
-            tag: "command", name: "PauseActionWithDuration", id: 0x6, access: "O", conformance: "desc",
-            direction: "request", response: "status",
+            tag: "command",
+            name: "PauseActionWithDuration",
+            id: 0x6,
+            access: "O",
+            conformance: "desc",
+            direction: "request",
+            response: "status",
 
-            details: "This command pauses an ongoing action, and shall change the action’s state to Paused. After the " +
+            details:
+                "This command pauses an ongoing action, and shall change the action’s state to Paused. After the " +
                 "specified Duration, the ongoing action will be automatically resumed. which shall change the " +
                 "action’s state to Active." +
                 "\n" +
@@ -323,15 +425,21 @@ Matter.children.push({
             children: [
                 { tag: "datatype", name: "ActionId", id: 0x0, type: "uint16", conformance: "M" },
                 { tag: "datatype", name: "InvokeId", id: 0x1, type: "uint32", conformance: "O" },
-                { tag: "datatype", name: "Duration", id: 0x2, type: "uint32", conformance: "M" }
-            ]
+                { tag: "datatype", name: "Duration", id: 0x2, type: "uint32", conformance: "M" },
+            ],
         },
 
         {
-            tag: "command", name: "ResumeAction", id: 0x7, access: "O", conformance: "desc",
-            direction: "request", response: "status",
+            tag: "command",
+            name: "ResumeAction",
+            id: 0x7,
+            access: "O",
+            conformance: "desc",
+            direction: "request",
+            response: "status",
 
-            details: "This command resumes a previously paused action, and shall change the action’s state to Active." +
+            details:
+                "This command resumes a previously paused action, and shall change the action’s state to Active." +
                 "\n" +
                 "The difference between ResumeAction and StartAction is that ResumeAction will continue the action " +
                 "from the state where it was paused, while StartAction will start the action from the beginning." +
@@ -342,32 +450,44 @@ Matter.children.push({
             xref: { document: "core", section: "9.14.6.8" },
             children: [
                 { tag: "datatype", name: "ActionId", id: 0x0, type: "uint16", conformance: "M" },
-                { tag: "datatype", name: "InvokeId", id: 0x1, type: "uint32", conformance: "O" }
-            ]
+                { tag: "datatype", name: "InvokeId", id: 0x1, type: "uint32", conformance: "O" },
+            ],
         },
 
         {
-            tag: "command", name: "EnableAction", id: 0x8, access: "O", conformance: "desc",
-            direction: "request", response: "status",
-            details: "This command enables a certain action or automation. Afterwards, the action’s state shall be Active." +
+            tag: "command",
+            name: "EnableAction",
+            id: 0x8,
+            access: "O",
+            conformance: "desc",
+            direction: "request",
+            response: "status",
+            details:
+                "This command enables a certain action or automation. Afterwards, the action’s state shall be Active." +
                 "\n" +
                 "Example: enable a motion sensor to control the lights in an area.",
             xref: { document: "core", section: "9.14.6.9" },
             children: [
                 { tag: "datatype", name: "ActionId", id: 0x0, type: "uint16", conformance: "M" },
-                { tag: "datatype", name: "InvokeId", id: 0x1, type: "uint32", conformance: "O" }
-            ]
+                { tag: "datatype", name: "InvokeId", id: 0x1, type: "uint32", conformance: "O" },
+            ],
         },
 
         {
-            tag: "command", name: "EnableActionWithDuration", id: 0x9, access: "O", conformance: "desc",
-            direction: "request", response: "status",
+            tag: "command",
+            name: "EnableActionWithDuration",
+            id: 0x9,
+            access: "O",
+            conformance: "desc",
+            direction: "request",
+            response: "status",
 
-            details: "This command enables a certain action or automation, and shall change the action’s state to be " +
+            details:
+                "This command enables a certain action or automation, and shall change the action’s state to be " +
                 "Active. After the specified Duration, the action or automation will stop, and the action’s state " +
                 "shall change to Disabled." +
                 "\n" +
-                "Example: enable a \"presence mimicking\" behavior for the lights in your home during a vacation; the " +
+                'Example: enable a "presence mimicking" behavior for the lights in your home during a vacation; the ' +
                 "Duration field is used to indicated the length of your absence from home. After that period, the " +
                 "presence mimicking behavior will no longer control these lights." +
                 "\n" +
@@ -377,33 +497,45 @@ Matter.children.push({
             children: [
                 { tag: "datatype", name: "ActionId", id: 0x0, type: "uint16", conformance: "M" },
                 { tag: "datatype", name: "InvokeId", id: 0x1, type: "uint32", conformance: "O" },
-                { tag: "datatype", name: "Duration", id: 0x2, type: "uint32", conformance: "M" }
-            ]
+                { tag: "datatype", name: "Duration", id: 0x2, type: "uint32", conformance: "M" },
+            ],
         },
 
         {
-            tag: "command", name: "DisableAction", id: 0xa, access: "O", conformance: "desc",
-            direction: "request", response: "status",
-            details: "This command disables a certain action or automation, and shall change the action’s state to " +
+            tag: "command",
+            name: "DisableAction",
+            id: 0xa,
+            access: "O",
+            conformance: "desc",
+            direction: "request",
+            response: "status",
+            details:
+                "This command disables a certain action or automation, and shall change the action’s state to " +
                 "Inactive." +
                 "\n" +
                 "Example: disable a motion sensor to no longer control the lights in an area.",
             xref: { document: "core", section: "9.14.6.11" },
             children: [
                 { tag: "datatype", name: "ActionId", id: 0x0, type: "uint16", conformance: "M" },
-                { tag: "datatype", name: "InvokeId", id: 0x1, type: "uint32", conformance: "O" }
-            ]
+                { tag: "datatype", name: "InvokeId", id: 0x1, type: "uint32", conformance: "O" },
+            ],
         },
 
         {
-            tag: "command", name: "DisableActionWithDuration", id: 0xb, access: "O", conformance: "desc",
-            direction: "request", response: "status",
+            tag: "command",
+            name: "DisableActionWithDuration",
+            id: 0xb,
+            access: "O",
+            conformance: "desc",
+            direction: "request",
+            response: "status",
 
-            details: "This command disables a certain action or automation, and shall change the action’s state to " +
+            details:
+                "This command disables a certain action or automation, and shall change the action’s state to " +
                 "Disabled. After the specified Duration, the action or automation will re-start, and the action’s " +
                 "state shall change to either Inactive or Active, depending on the actions (see examples 4 and 6)." +
                 "\n" +
-                "Example: disable a \"wakeup\" experience for a period of 1 week when going on holiday (to prevent " +
+                'Example: disable a "wakeup" experience for a period of 1 week when going on holiday (to prevent ' +
                 "them from turning on in the morning while you’re not at home). After this period, the wakeup " +
                 "experience will control the lights as before." +
                 "\n" +
@@ -413,294 +545,425 @@ Matter.children.push({
             children: [
                 { tag: "datatype", name: "ActionId", id: 0x0, type: "uint16", conformance: "M" },
                 { tag: "datatype", name: "InvokeId", id: 0x1, type: "uint32", conformance: "O" },
-                { tag: "datatype", name: "Duration", id: 0x2, type: "uint32", conformance: "M" }
-            ]
+                { tag: "datatype", name: "Duration", id: 0x2, type: "uint32", conformance: "M" },
+            ],
         },
 
         {
-            tag: "datatype", name: "CommandBits", type: "map16", conformance: "M",
+            tag: "datatype",
+            name: "CommandBits",
+            type: "map16",
+            conformance: "M",
             details: "Note - The bit allocation of this bitmap shall follow the ID’s of the Commands of this cluster.",
             xref: { document: "core", section: "9.14.4.1" },
 
             children: [
                 {
-                    tag: "datatype", name: "InstantAction", constraint: "0",
-                    description: "Indicate support for InstantAction command"
+                    tag: "datatype",
+                    name: "InstantAction",
+                    constraint: "0",
+                    description: "Indicate support for InstantAction command",
                 },
                 {
-                    tag: "datatype", name: "InstantActionWithTransition", constraint: "1",
-                    description: "Indicate support for InstantActionWithTransition command"
+                    tag: "datatype",
+                    name: "InstantActionWithTransition",
+                    constraint: "1",
+                    description: "Indicate support for InstantActionWithTransition command",
                 },
                 {
-                    tag: "datatype", name: "StartAction", constraint: "2",
-                    description: "Indicate support for StartAction command"
+                    tag: "datatype",
+                    name: "StartAction",
+                    constraint: "2",
+                    description: "Indicate support for StartAction command",
                 },
                 {
-                    tag: "datatype", name: "StartActionWithDuration", constraint: "3",
-                    description: "Indicate support for StartActionWithDuration command"
+                    tag: "datatype",
+                    name: "StartActionWithDuration",
+                    constraint: "3",
+                    description: "Indicate support for StartActionWithDuration command",
                 },
                 {
-                    tag: "datatype", name: "StopAction", constraint: "4",
-                    description: "Indicate support for StopAction command"
+                    tag: "datatype",
+                    name: "StopAction",
+                    constraint: "4",
+                    description: "Indicate support for StopAction command",
                 },
                 {
-                    tag: "datatype", name: "PauseAction", constraint: "5",
-                    description: "Indicate support for PauseAction command"
+                    tag: "datatype",
+                    name: "PauseAction",
+                    constraint: "5",
+                    description: "Indicate support for PauseAction command",
                 },
                 {
-                    tag: "datatype", name: "PauseActionWithDuration", constraint: "6",
-                    description: "Indicate support for PauseActionWithDuration command"
+                    tag: "datatype",
+                    name: "PauseActionWithDuration",
+                    constraint: "6",
+                    description: "Indicate support for PauseActionWithDuration command",
                 },
                 {
-                    tag: "datatype", name: "ResumeAction", constraint: "7",
-                    description: "Indicate support for ResumeAction command"
+                    tag: "datatype",
+                    name: "ResumeAction",
+                    constraint: "7",
+                    description: "Indicate support for ResumeAction command",
                 },
                 {
-                    tag: "datatype", name: "EnableAction", constraint: "8",
-                    description: "Indicate support for EnableAction command"
+                    tag: "datatype",
+                    name: "EnableAction",
+                    constraint: "8",
+                    description: "Indicate support for EnableAction command",
                 },
                 {
-                    tag: "datatype", name: "EnableActionWithDuration", constraint: "9",
-                    description: "Indicate support for EnableActionWithDuration command"
+                    tag: "datatype",
+                    name: "EnableActionWithDuration",
+                    constraint: "9",
+                    description: "Indicate support for EnableActionWithDuration command",
                 },
                 {
-                    tag: "datatype", name: "DisableAction", constraint: "10",
-                    description: "Indicate support for DisableAction command"
+                    tag: "datatype",
+                    name: "DisableAction",
+                    constraint: "10",
+                    description: "Indicate support for DisableAction command",
                 },
                 {
-                    tag: "datatype", name: "DisableActionWithDuration", constraint: "11",
-                    description: "Indicate support for DisableActionWithDuration command"
-                }
-            ]
+                    tag: "datatype",
+                    name: "DisableActionWithDuration",
+                    constraint: "11",
+                    description: "Indicate support for DisableActionWithDuration command",
+                },
+            ],
         },
 
         {
-            tag: "datatype", name: "ActionTypeEnum", type: "enum8", conformance: "M",
+            tag: "datatype",
+            name: "ActionTypeEnum",
+            type: "enum8",
+            conformance: "M",
             xref: { document: "core", section: "9.14.4.2" },
 
             children: [
                 {
-                    tag: "datatype", name: "Other", id: 0x0, conformance: "M",
-                    description: "Use this only when none of the other values applies"
+                    tag: "datatype",
+                    name: "Other",
+                    id: 0x0,
+                    conformance: "M",
+                    description: "Use this only when none of the other values applies",
                 },
 
                 {
-                    tag: "datatype", name: "Scene", id: 0x1, conformance: "M",
+                    tag: "datatype",
+                    name: "Scene",
+                    id: 0x1,
+                    conformance: "M",
                     description: "Bring the endpoints into a certain state",
 
-                    details: "Can be used to set a static state of the associated endpoints (typically using InstantAction or " +
+                    details:
+                        "Can be used to set a static state of the associated endpoints (typically using InstantAction or " +
                         "InstantActionWithTransition), or to bring these endpoints into a more dynamic state (typically " +
                         "using StartAction), where the endpoints would e.g. gradually cycle through certain colors for a " +
-                        "pleasing effect. A voice controller could use \"set\" (to map to InstantAction) or \"play\" (to map to " +
+                        'pleasing effect. A voice controller could use "set" (to map to InstantAction) or "play" (to map to ' +
                         "StartAction) to trig" +
                         "\n" +
                         "ger such actions." +
                         "\n" +
                         "Example: see examples 1 and 2.",
 
-                    xref: { document: "core", section: "9.14.4.2.1" }
+                    xref: { document: "core", section: "9.14.4.2.1" },
                 },
 
                 {
-                    tag: "datatype", name: "Sequence", id: 0x2, conformance: "M",
+                    tag: "datatype",
+                    name: "Sequence",
+                    id: 0x2,
+                    conformance: "M",
                     description: "A sequence of states with a certain time pattern",
-                    details: "Indicates an action which involves a sequence of events/states of the associated endpoints, such as " +
+                    details:
+                        "Indicates an action which involves a sequence of events/states of the associated endpoints, such as " +
                         "a wake-up experience." +
                         "\n" +
                         "Example: see example 4.",
-                    xref: { document: "core", section: "9.14.4.2.2" }
+                    xref: { document: "core", section: "9.14.4.2.2" },
                 },
 
                 {
-                    tag: "datatype", name: "Automation", id: 0x3, conformance: "M",
+                    tag: "datatype",
+                    name: "Automation",
+                    id: 0x3,
+                    conformance: "M",
                     description: "Control an automation (e.g. motion sensor controlling lights)",
-                    details: "Indications an automation (e.g. a motion sensor controlling lights, an alarm system) which can " +
+                    details:
+                        "Indications an automation (e.g. a motion sensor controlling lights, an alarm system) which can " +
                         "bee.g. started, stopped, paused, resumed. Example: see example 3.",
-                    xref: { document: "core", section: "9.14.4.2.3" }
+                    xref: { document: "core", section: "9.14.4.2.3" },
                 },
 
                 {
-                    tag: "datatype", name: "Exception", id: 0x4, conformance: "M",
+                    tag: "datatype",
+                    name: "Exception",
+                    id: 0x4,
+                    conformance: "M",
                     description: "Sequence that will run when something doesn’t happen",
-                    details: "Indicates some action which the server will execute when a certain condition (which normally does " +
+                    details:
+                        "Indicates some action which the server will execute when a certain condition (which normally does " +
                         "not happen) is not met." +
                         "\n" +
                         "Example: lock the doors when the server’s system has detected no one is at home while the doors are " +
                         "in the 'unlocked' state.",
-                    xref: { document: "core", section: "9.14.4.2.4" }
+                    xref: { document: "core", section: "9.14.4.2.4" },
                 },
 
                 {
-                    tag: "datatype", name: "Notification", id: 0x5, conformance: "M",
+                    tag: "datatype",
+                    name: "Notification",
+                    id: 0x5,
+                    conformance: "M",
                     description: "Use the endpoints to send a message to user",
-                    details: "Indicates an action that can be triggered (e.g. by InstantAction) to notify the user." +
+                    details:
+                        "Indicates an action that can be triggered (e.g. by InstantAction) to notify the user." +
                         "\n" +
                         "Example: play a pattern on the lights in the living room if there is someone in the garden in the " +
                         "evening.",
-                    xref: { document: "core", section: "9.14.4.2.5" }
+                    xref: { document: "core", section: "9.14.4.2.5" },
                 },
 
                 {
-                    tag: "datatype", name: "Alarm", id: 0x6, conformance: "M",
+                    tag: "datatype",
+                    name: "Alarm",
+                    id: 0x6,
+                    conformance: "M",
                     description: "Higher priority notification",
-                    details: "Similar to Notification but with a higher priority (and might override other endpoint states which " +
+                    details:
+                        "Similar to Notification but with a higher priority (and might override other endpoint states which " +
                         "Type=Notification would not override)." +
                         "\n" +
                         "Example: flash all lights in the house when CO sensor triggers.",
-                    xref: { document: "core", section: "9.14.4.2.6" }
-                }
-            ]
+                    xref: { document: "core", section: "9.14.4.2.6" },
+                },
+            ],
         },
 
         {
-            tag: "datatype", name: "ActionStateEnum", type: "enum8", conformance: "M",
-            details: "Note that some of these states are applicable only for certain actions, as determined by their " +
+            tag: "datatype",
+            name: "ActionStateEnum",
+            type: "enum8",
+            conformance: "M",
+            details:
+                "Note that some of these states are applicable only for certain actions, as determined by their " +
                 "SupportedCommands.",
             xref: { document: "core", section: "9.14.4.3" },
 
             children: [
                 {
-                    tag: "datatype", name: "Inactive", id: 0x0, conformance: "M",
-                    description: "The action is not active"
+                    tag: "datatype",
+                    name: "Inactive",
+                    id: 0x0,
+                    conformance: "M",
+                    description: "The action is not active",
                 },
                 { tag: "datatype", name: "Active", id: 0x1, conformance: "M", description: "The action is active" },
                 {
-                    tag: "datatype", name: "Paused", id: 0x2, conformance: "M",
-                    description: "The action has been paused"
+                    tag: "datatype",
+                    name: "Paused",
+                    id: 0x2,
+                    conformance: "M",
+                    description: "The action has been paused",
                 },
                 {
-                    tag: "datatype", name: "Disabled", id: 0x3, conformance: "M",
-                    description: "The action has been disabled"
-                }
-            ]
+                    tag: "datatype",
+                    name: "Disabled",
+                    id: 0x3,
+                    conformance: "M",
+                    description: "The action has been disabled",
+                },
+            ],
         },
 
         {
-            tag: "datatype", name: "ActionErrorEnum", type: "enum8", conformance: "M",
+            tag: "datatype",
+            name: "ActionErrorEnum",
+            type: "enum8",
+            conformance: "M",
             xref: { document: "core", section: "9.14.4.4" },
 
             children: [
                 {
-                    tag: "datatype", name: "Unknown", id: 0x0, conformance: "M",
-                    description: "Other reason not listed in the row(s) below"
+                    tag: "datatype",
+                    name: "Unknown",
+                    id: 0x0,
+                    conformance: "M",
+                    description: "Other reason not listed in the row(s) below",
                 },
                 {
-                    tag: "datatype", name: "Interrupted", id: 0x1, conformance: "M",
-                    description: "The action was interrupted by another command or interaction"
-                }
-            ]
+                    tag: "datatype",
+                    name: "Interrupted",
+                    id: 0x1,
+                    conformance: "M",
+                    description: "The action was interrupted by another command or interaction",
+                },
+            ],
         },
 
         {
-            tag: "datatype", name: "EndpointListTypeEnum", type: "enum8", conformance: "M",
-            details: "The Room and Zone values are provided for the cases where a user (or the system on behalf of the " +
+            tag: "datatype",
+            name: "EndpointListTypeEnum",
+            type: "enum8",
+            conformance: "M",
+            details:
+                "The Room and Zone values are provided for the cases where a user (or the system on behalf of the " +
                 "user) has created logical grouping of the endpoints (e.g. bridged devices) based on location.",
             xref: { document: "core", section: "9.14.4.5" },
 
             children: [
                 {
-                    tag: "datatype", name: "Other", id: 0x0, conformance: "M",
+                    tag: "datatype",
+                    name: "Other",
+                    id: 0x0,
+                    conformance: "M",
                     description: "Another group of endpoints",
-                    details: "This value is provided for the case of an endpoint list which is tied specifically to this action " +
+                    details:
+                        "This value is provided for the case of an endpoint list which is tied specifically to this action " +
                         "i.e. not independently created by the user. For Type=Other the Name may be empty. A Matter " +
                         "controller would typically not use this for anything else than just to know which endpoints would " +
                         "be affected by the action.",
-                    xref: { document: "core", section: "9.14.4.5.1" }
+                    xref: { document: "core", section: "9.14.4.5.1" },
                 },
 
                 {
-                    tag: "datatype", name: "Room", id: 0x1, conformance: "M",
+                    tag: "datatype",
+                    name: "Room",
+                    id: 0x1,
+                    conformance: "M",
                     description: "User-configured group of endpoints where an endpoint can be in only one room",
-                    details: "Is used for the situation where an endpoint can only be part of one such rooms (e.g. physical " +
+                    details:
+                        "Is used for the situation where an endpoint can only be part of one such rooms (e.g. physical " +
                         "mapping). Using these exposed logical groups, a Matter controller who has a similar grouping " +
                         "concept can use it to place each endpoint (bridged device) in the right room automatically, without " +
                         "user having to redo that setup for each device in each system - both at first contact and upon " +
                         "later updates to the endpoints (e.g. user adds a bridged device or creates a new room).",
-                    xref: { document: "core", section: "9.14.4.5.2" }
+                    xref: { document: "core", section: "9.14.4.5.2" },
                 },
 
                 {
-                    tag: "datatype", name: "Zone", id: 0x2, conformance: "M",
+                    tag: "datatype",
+                    name: "Zone",
+                    id: 0x2,
+                    conformance: "M",
                     description: "User-configured group of endpoints where an endpoint can be in any number of zones",
 
-                    details: "Is a more general concept where an endpoint can be part of multiple zones, e.g. a light in the " +
+                    details:
+                        "Is a more general concept where an endpoint can be part of multiple zones, e.g. a light in the " +
                         "living" +
                         "\n" +
-                        "room can be part of the \"reading corner\" zone (subset of the lights in the living room) but also " +
-                        "part of the \"downstairs\" zone which contains all the lights on a floor, e.g. combining living room, " +
+                        'room can be part of the "reading corner" zone (subset of the lights in the living room) but also ' +
+                        'part of the "downstairs" zone which contains all the lights on a floor, e.g. combining living room, ' +
                         "kitchen and hallway. This indicates that a user has defined this list of endpoints as something " +
                         "they logically would like to control as a group, so Matter controllers could provide the user with " +
                         "a way to do as such.",
 
-                    xref: { document: "core", section: "9.14.4.5.3" }
-                }
-            ]
+                    xref: { document: "core", section: "9.14.4.5.3" },
+                },
+            ],
         },
 
         {
-            tag: "datatype", name: "ActionStruct", type: "struct", conformance: "M",
+            tag: "datatype",
+            name: "ActionStruct",
+            type: "struct",
+            conformance: "M",
             details: "This data type holds the details of a single action, and contains the data fields below.",
             xref: { document: "core", section: "9.14.4.6" },
 
             children: [
                 {
-                    tag: "datatype", name: "ActionId", id: 0x0, type: "uint16", conformance: "M",
+                    tag: "datatype",
+                    name: "ActionId",
+                    id: 0x0,
+                    type: "uint16",
+                    conformance: "M",
                     details: "This field shall provide an unique identifier used to identify an action.",
-                    xref: { document: "core", section: "9.14.4.6.1" }
+                    xref: { document: "core", section: "9.14.4.6.1" },
                 },
 
                 {
-                    tag: "datatype", name: "Name", id: 0x1, type: "string", conformance: "M", constraint: "max 32[128]",
-                    details: "This field shall indicate the name (as assigned by the user or automatically by the server) " +
+                    tag: "datatype",
+                    name: "Name",
+                    id: 0x1,
+                    type: "string",
+                    conformance: "M",
+                    constraint: "max 32[128]",
+                    details:
+                        "This field shall indicate the name (as assigned by the user or automatically by the server) " +
                         "associated with this action. This can be used for identifying the action to the user by the client. " +
-                        "Example: \"my colorful scene\".",
-                    xref: { document: "core", section: "9.14.4.6.2" }
+                        'Example: "my colorful scene".',
+                    xref: { document: "core", section: "9.14.4.6.2" },
                 },
 
                 {
-                    tag: "datatype", name: "Type", id: 0x2, type: "ActionTypeEnum", conformance: "M",
-                    details: "This field shall indicate the type of action. The value of Type of an action, along with its " +
+                    tag: "datatype",
+                    name: "Type",
+                    id: 0x2,
+                    type: "ActionTypeEnum",
+                    conformance: "M",
+                    details:
+                        "This field shall indicate the type of action. The value of Type of an action, along with its " +
                         "SupportedCommands can be used by the client in its UX or logic to determine how to present or use " +
                         "such action. See ActionTypeEnum for details and examples.",
-                    xref: { document: "core", section: "9.14.4.6.3" }
+                    xref: { document: "core", section: "9.14.4.6.3" },
                 },
 
                 {
-                    tag: "datatype", name: "EndpointListId", id: 0x3, type: "uint16", conformance: "M",
-                    details: "This field shall provide a reference to the associated endpoint list, which specifies the endpoints " +
+                    tag: "datatype",
+                    name: "EndpointListId",
+                    id: 0x3,
+                    type: "uint16",
+                    conformance: "M",
+                    details:
+                        "This field shall provide a reference to the associated endpoint list, which specifies the endpoints " +
                         "on this Node which will be impacted by this ActionID.",
-                    xref: { document: "core", section: "9.14.4.6.4" }
+                    xref: { document: "core", section: "9.14.4.6.4" },
                 },
 
                 {
-                    tag: "datatype", name: "SupportedCommands", id: 0x4, type: "CommandBits", conformance: "M",
+                    tag: "datatype",
+                    name: "SupportedCommands",
+                    id: 0x4,
+                    type: "CommandBits",
+                    conformance: "M",
                     constraint: "0 to 4095",
-                    details: "This field is a bitmap which shall be used to indicate which of the cluster’s commands are sup" +
+                    details:
+                        "This field is a bitmap which shall be used to indicate which of the cluster’s commands are sup" +
                         "\n" +
                         "ported for this particular action, with a bit set to 1 for each supported command according to the " +
                         "table below. Other bits shall be set to 0.",
-                    xref: { document: "core", section: "9.14.4.6.5" }
+                    xref: { document: "core", section: "9.14.4.6.5" },
                 },
 
                 {
-                    tag: "datatype", name: "State", id: 0x5, type: "ActionStateEnum", conformance: "M",
+                    tag: "datatype",
+                    name: "State",
+                    id: 0x5,
+                    type: "ActionStateEnum",
+                    conformance: "M",
                     details: "This field shall indicate the current state of this action.",
-                    xref: { document: "core", section: "9.14.4.6.6" }
-                }
-            ]
+                    xref: { document: "core", section: "9.14.4.6.6" },
+                },
+            ],
         },
 
         {
-            tag: "datatype", name: "EndpointListStruct", type: "struct", conformance: "M",
+            tag: "datatype",
+            name: "EndpointListStruct",
+            type: "struct",
+            conformance: "M",
 
-            details: "This data type holds the details of a single endpoint list, which relates to a set of endpoints " +
+            details:
+                "This data type holds the details of a single endpoint list, which relates to a set of endpoints " +
                 "that have some logical relation, and contains the data fields below." +
                 "\n" +
                 "This field shall provide an unique identifier used to identify the endpoint list." +
                 "\n" +
                 "This field shall indicate the name (as assigned by the user or automatically by the server) " +
                 "associated with the set of endpoints in this list. This can be used for identifying the action to " +
-                "the user by the client. Example: \"living room\"." +
+                'the user by the client. Example: "living room".' +
                 "\n" +
                 "This field shall indicate the type of endpoint list, see EndpointListTypeEnum.",
 
@@ -712,12 +975,17 @@ Matter.children.push({
                 { tag: "datatype", name: "Type", id: 0x2, type: "EndpointListTypeEnum", conformance: "M" },
 
                 {
-                    tag: "datatype", name: "Endpoints", id: 0x3, type: "list", conformance: "M", constraint: "max 256",
+                    tag: "datatype",
+                    name: "Endpoints",
+                    id: 0x3,
+                    type: "list",
+                    conformance: "M",
+                    constraint: "max 256",
                     details: "This field shall provide a list of endpoint numbers.",
                     xref: { document: "core", section: "9.14.4.7.1" },
-                    children: [{ tag: "datatype", name: "entry", type: "endpoint-no" }]
-                }
-            ]
-        }
-    ]
+                    children: [{ tag: "datatype", name: "entry", type: "endpoint-no" }],
+                },
+            ],
+        },
+    ],
 });

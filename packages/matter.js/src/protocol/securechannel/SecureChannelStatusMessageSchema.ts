@@ -14,7 +14,7 @@ export type StatusMessage = {
     generalStatus: GeneralStatusCode;
     protocolId: number;
     protocolStatus: ProtocolStatusCode;
-}
+};
 
 export class SecureChannelStatusMessageSchema extends Schema<StatusMessage, ByteArray> {
     encodeInternal({ generalStatus, protocolId, protocolStatus }: StatusMessage) {

@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ClusterServerHandlers } from "./ClusterServerTypes.js";
-import { GroupKeyManagementCluster } from "../definitions/GroupKeyManagementCluster.js";
 import { NotImplementedError } from "../../common/MatterError.js";
+import { GroupKeyManagementCluster } from "../definitions/GroupKeyManagementCluster.js";
+import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 
 // TODO: Implement this
 
@@ -22,5 +22,5 @@ export const GroupKeyManagementClusterHandler: () => ClusterServerHandlers<typeo
     },
     keySetReadAllIndices: async () => {
         throw new NotImplementedError("Not implemented");
-    }
+    },
 });

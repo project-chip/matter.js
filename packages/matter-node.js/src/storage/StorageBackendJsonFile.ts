@@ -4,12 +4,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {
+    fromJson,
+    StorageBackendMemory,
+    StorageError,
+    SupportedStorageTypes,
+    toJson,
+} from "@project-chip/matter.js/storage";
 import { Time } from "@project-chip/matter.js/time";
-import { StorageBackendMemory, fromJson, SupportedStorageTypes, toJson, StorageError } from "@project-chip/matter.js/storage";
 import { readFile, writeFile } from "fs/promises";
 
 /** We store changes 1s after a value was set to the storage, but not more often than every 1s. */
-const COMMIT_DELAY = 1000 /* 1s */;
+const COMMIT_DELAY = 1000; /* 1s */
 
 export class StorageBackendJsonFile extends StorageBackendMemory {
     private readonly commitTimer = Time.getTimer(COMMIT_DELAY, () => this.commit());
@@ -17,9 +23,7 @@ export class StorageBackendJsonFile extends StorageBackendMemory {
     private closed = false;
     private initialized = false;
 
-    constructor(
-        private readonly path: string,
-    ) {
+    constructor(private readonly path: string) {
         super();
     }
 
@@ -61,6 +65,6 @@ export class StorageBackendJsonFile extends StorageBackendMemory {
     }
 
     private fromJson(json: string): any {
-        return fromJson(json)
+        return fromJson(json);
     }
 }

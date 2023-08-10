@@ -4,14 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TlvSchema } from "../../tlv/TlvSchema.js";
+import { InternalError } from "../../common/MatterError.js";
+import { ClusterId } from "../../datatype/ClusterId.js";
+import { EventId } from "../../datatype/EventId.js";
 import { Endpoint } from "../../device/Endpoint.js";
-import { EventPriority } from "../Cluster.js";
 import { EventData, EventHandler, EventStorageData } from "../../protocol/interaction/EventHandler.js";
 import { Time } from "../../time/Time.js";
-import { InternalError } from "../../common/MatterError.js";
-import { EventId } from "../../datatype/EventId.js";
-import { ClusterId } from "../../datatype/ClusterId.js";
+import { TlvSchema } from "../../tlv/TlvSchema.js";
+import { EventPriority } from "../Cluster.js";
 
 // TODO Add Fabric Scoped EventServer when needed
 
@@ -27,7 +27,7 @@ export class EventServer<T> {
         readonly name: string,
         readonly schema: TlvSchema<T>,
         readonly priority: EventPriority,
-    ) { }
+    ) {}
 
     assignToEndpoint(endpoint: Endpoint) {
         this.endpoint = endpoint;
@@ -57,7 +57,8 @@ export class EventServer<T> {
             priority: this.priority,
             data,
         };
-        if (this.eventHandler === undefined) { // As long as we have no eventManager, we store the events
+        if (this.eventHandler === undefined) {
+            // As long as we have no eventManager, we store the events
             this.eventList.push(event);
         } else {
             const finalEvent = this.eventHandler.pushEvent(event);

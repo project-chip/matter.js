@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ByteArray } from "@project-chip/matter.js/util";
 import { Logger } from "@project-chip/matter.js/log";
 import { UdpChannel, UdpChannelOptions } from "@project-chip/matter.js/net";
+import { ByteArray } from "@project-chip/matter.js/util";
 
 import * as dgram from "dgram";
 import { NetworkNode } from "./NetworkNode";
@@ -23,10 +23,13 @@ function createDgramSocket(host: string | undefined, port: number | undefined, o
         socket.on("error", handleBindError);
         socket.bind(port, host, () => {
             const { address: localHost, port: localPort } = socket.address();
-            logger.debug("Socket created and bound ", Logger.dict({
-                remoteAddress: `${host}:${port}`,
-                localAddress: `${localHost}:${localPort}`
-            }));
+            logger.debug(
+                "Socket created and bound ",
+                Logger.dict({
+                    remoteAddress: `${host}:${port}`,
+                    localAddress: `${localHost}:${localPort}`,
+                }),
+            );
             socket.removeListener("error", handleBindError);
             socket.on("error", error => logger.error(error));
             resolve(socket);
@@ -44,11 +47,14 @@ export class UdpChannelNode implements UdpChannel {
         socket.setBroadcast(true);
         if (netInterface !== undefined) {
             const multicastInterface = NetworkNode.getMulticastInterface(netInterface, type === "udp4");
-            logger.debug("Initialize multicast", Logger.dict({
-                address: `${multicastInterface}:${listeningPort}`,
-                interface: netInterface,
-                type: type
-            }));
+            logger.debug(
+                "Initialize multicast",
+                Logger.dict({
+                    address: `${multicastInterface}:${listeningPort}`,
+                    interface: netInterface,
+                    type: type,
+                }),
+            );
             socket.setMulticastInterface(multicastInterface);
         }
         return new UdpChannelNode(socket, netInterface);
@@ -57,7 +63,7 @@ export class UdpChannelNode implements UdpChannel {
     constructor(
         private readonly socket: dgram.Socket,
         private readonly netInterface?: string,
-    ) { }
+    ) {}
 
     onData(listener: (netInterface: string, peerAddress: string, peerPort: number, data: ByteArray) => void) {
         const messageListener = (data: ByteArray, { address, port }: dgram.RemoteInfo) => {
@@ -70,7 +76,7 @@ export class UdpChannelNode implements UdpChannel {
         return {
             close: async () => {
                 this.socket.removeListener("message", messageListener);
-            }
+            },
         };
     }
 

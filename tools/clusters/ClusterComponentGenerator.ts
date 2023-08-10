@@ -13,7 +13,7 @@ import {
     EventElement,
     EventModel,
     Model,
-    ValueModel
+    ValueModel,
 } from "#matter.js/model/index.js";
 import { InferredComponent } from "#matter.js/model/logic/cluster-variance/InferredComponents.js";
 import { NamedComponent } from "#matter.js/model/logic/cluster-variance/NamedComponents.js";
@@ -33,7 +33,10 @@ export class ClusterComponentGenerator {
     private defaults: DefaultValueGenerator;
     private file: ClusterFile;
 
-    constructor(private target: Block, private cluster: ClusterModel) {
+    constructor(
+        private target: Block,
+        private cluster: ClusterModel,
+    ) {
         this.file = target.file as ClusterFile;
         this.tlv = new TlvGenerator(this.file);
         this.defaults = new DefaultValueGenerator(this.tlv);
@@ -42,7 +45,8 @@ export class ClusterComponentGenerator {
     defineComponent(component: NamedComponent) {
         this.file.addImport("cluster/ClusterFactory", "ClusterComponent");
         const name = `${component.name}Component`;
-        const block = this.target.expressions(`export const ${name} = ClusterComponent({`, `})`)
+        const block = this.target
+            .expressions(`export const ${name} = ClusterComponent({`, `})`)
             .document(component.documentation);
         return this.populateComponent(component, block);
     }
@@ -50,8 +54,7 @@ export class ClusterComponentGenerator {
     populateComponent(component: InferredComponent, block: Block) {
         const mandatory = new Set(component.mandatory);
 
-        const elements = [...component.optional, ...component.mandatory]
-            .sort((a, b) => (a.id ?? 0) - (b.id ?? 0));
+        const elements = [...component.optional, ...component.mandatory].sort((a, b) => (a.id ?? 0) - (b.id ?? 0));
 
         this.defineTypedElements(AttributeModel, elements, block, (model, add) => {
             const factoryParts = Array<string>("Attribute");
@@ -171,22 +174,21 @@ export class ClusterComponentGenerator {
 
     private mapPrivilege(privilege: Access.Privilege) {
         this.file.addImport("cluster/Cluster", "AccessLevel");
-        return `AccessLevel.${Access.PrivilegeName[privilege]}`
+        return `AccessLevel.${Access.PrivilegeName[privilege]}`;
     }
 
     private defineTypedElements<T extends (new (...args: any[]) => Model) & { Tag: ElementTag }>(
         type: T,
         elements: ValueModel[],
         target: Block,
-        define: (model: InstanceType<T>, add: (factory: string) => Block) => void
+        define: (model: InstanceType<T>, add: (factory: string) => Block) => void,
     ) {
         const typed = elements.filter(e => e instanceof type && !e.deprecated);
 
         const definitions = target.expressions(`${type.Tag}s: {`, "}");
         for (const model of typed) {
             define(model as InstanceType<T>, factory =>
-                definitions.expressions(`${camelize(model.name, false)}: ${factory}(`, ")")
-                    .document(model)
+                definitions.expressions(`${camelize(model.name, false)}: ${factory}(`, ")").document(model),
             );
         }
         if (!definitions.length) {

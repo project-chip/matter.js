@@ -70,9 +70,5 @@ export class ClusterModel extends Model {
 }
 
 export namespace ClusterModel {
-    export type Child =
-        DatatypeModel
-        | AttributeModel
-        | CommandModel
-        | EventModel;
+    export type Child = DatatypeModel | AttributeModel | CommandModel | EventModel;
 }

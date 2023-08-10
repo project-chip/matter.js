@@ -9,7 +9,7 @@ import { Aspect } from "./Aspect.js";
 /**
  * An operational representation of "other quality" as defined by the Matter
  * specification.
- * 
+ *
  * "Other qualities" are defined behaviors of data fields and cluster elements
  * that do not involve access or conformance.
  */
@@ -33,7 +33,7 @@ export class Quality extends Aspect<Quality.Definition> implements Quality.Ast {
         if (typeof definition === "string") {
             this.parse(this, definition);
         } else if (Array.isArray(definition)) {
-            definition.map((f) => this.parse(this, f));
+            definition.map(f => this.parse(this, f));
         } else {
             Object.assign(this, definition);
         }
@@ -110,7 +110,7 @@ export namespace Quality {
         scene = "S",
         reportable = "P",
         changesOmitted = "C",
-        singleton = "I"
+        singleton = "I",
     }
 
     /**
@@ -123,7 +123,7 @@ export namespace Quality {
         S = "scene",
         P = "reportable",
         C = "changesOmitted",
-        I = "singleton"
+        I = "singleton",
     }
 
     /**
@@ -142,11 +142,11 @@ export namespace Quality {
     export type DataField = {
         /**
          * Designates a data field as nullable?
-         * 
+         *
          * Scope: data field
          */
-        nullable?: boolean,
-    }
+        nullable?: boolean;
+    };
 
     /**
      * Quality values that apply to attribute data.
@@ -155,19 +155,19 @@ export namespace Quality {
         /**
          * Designates attribute value persistant across restarts?
          */
-        nonvolatile?: boolean,
+        nonvolatile?: boolean;
 
         /**
          * Designates a value as unchanging short of software replacement.
          */
-        fixed?: boolean,
+        fixed?: boolean;
 
         /**
          * Designates a fast-changing value for which delta changes are
          * unavailable.
          */
-        changesOmitted?: boolean
-    }
+        changesOmitted?: boolean;
+    };
 
     /**
      * Quality values that apply to attributes.
@@ -176,13 +176,13 @@ export namespace Quality {
         /**
          * Designates an attribute as part of a scene.
          */
-        scene?: boolean,
+        scene?: boolean;
 
         /**
          * Designates best-effort reporting as available for an attribute.
          */
-        reportable?: boolean
-    }
+        reportable?: boolean;
+    };
 
     /**
      * Quality properties that apply to device types.
@@ -191,8 +191,8 @@ export namespace Quality {
         /**
          * Designates a cluster as a singleton on the node for the device type.
          */
-        singleton?: boolean
-    }
+        singleton?: boolean;
+    };
 
     /**
      * Quality values that apply to device types.
@@ -201,8 +201,8 @@ export namespace Quality {
         /**
          * Designates qualities that are disallowed for the device type.
          */
-        disallowed?: AllProperties
-    }
+        disallowed?: AllProperties;
+    };
 
     /**
      * Values for all qualities designated as "other qualities" in the Matter

@@ -6,16 +6,16 @@
 
 import { dirname, join } from "path";
 
+import { parseHeading } from "./scan-index.js";
 import { loadHtml } from "./spec-input.js";
 import { HtmlReference, Table } from "./spec-types.js";
-import { parseHeading } from "./scan-index.js";
 
 // Convert HTMLTableELement -> Table
 function convertTable(el: HTMLTableElement) {
     const table = {
         fields: [],
         rows: [],
-        notes: []
+        notes: [],
     } as Table;
     for (const tr of el.querySelectorAll("tr")) {
         const cells = tr.querySelectorAll("td, th");
@@ -52,13 +52,15 @@ function convertTable(el: HTMLTableElement) {
     if (col1 !== undefined) {
         // Scan the table.  We treat as broken if there are multiple rows but
         // the first column is empty except on the first row
-        const looksBorked = table.rows.length > 1 && table.rows.every((row, i) => {
-            let text = row[col1]?.textContent?.trim();
-            if (text === "") {
-                text = undefined;
-            }
-            return (!i && text !== undefined) || (i && text === undefined);
-        });
+        const looksBorked =
+            table.rows.length > 1 &&
+            table.rows.every((row, i) => {
+                let text = row[col1]?.textContent?.trim();
+                if (text === "") {
+                    text = undefined;
+                }
+                return (!i && text !== undefined) || (i && text === undefined);
+            });
 
         // If above test succeeds, concatenate all cells in column into first
         // row and remove rows except the first
@@ -93,7 +95,7 @@ export const NavigateViaToc: Navigator = (html, initial) => {
     }
 };
 
-export const NavigateViaNav: Navigator = (html) => {
+export const NavigateViaNav: Navigator = html => {
     for (const a of html.querySelectorAll(".top_nav a")) {
         if (a.textContent === "Next >") {
             return [a];
@@ -115,8 +117,8 @@ export function* scanSection(ref: HtmlReference, navigator: Navigator) {
         fakingField: false,
         actual: "",
         section: 1,
-        subsection: 1
-    }
+        subsection: 1,
+    };
 
     // State for scanSectionPage
     const namesIdentified = new Set<string>();
@@ -140,9 +142,7 @@ export function* scanSection(ref: HtmlReference, navigator: Navigator) {
     // Handle final emit outside of scanSectionPage
     yield* emit();
 
-
     // End of logic
-
 
     function* emit() {
         if (currentRef) {
@@ -178,7 +178,10 @@ export function* scanSection(ref: HtmlReference, navigator: Navigator) {
                     break;
 
                 case "P":
-                    const text = element.textContent?.trim().replace(/(\s\u200c)+/, "").replace(/\s*\([^)]+\)\s*/g, " ");
+                    const text = element.textContent
+                        ?.trim()
+                        .replace(/(\s\u200c)+/, "")
+                        .replace(/\s*\([^)]+\)\s*/g, " ");
 
                     // Sometimes heading is just in a P so we have to guess as to
                     // "headingness"
@@ -187,7 +190,11 @@ export function* scanSection(ref: HtmlReference, navigator: Navigator) {
                         if (possibleHeading && possibleHeading.section.startsWith(ref.xref.section)) {
                             // Yep, looks like a heading
                             yield* emit();
-                            currentRef = { ...ref, name: possibleHeading.name, xref: { ...ref.xref, section: possibleHeading.section } };
+                            currentRef = {
+                                ...ref,
+                                name: possibleHeading.name,
+                                xref: { ...ref.xref, section: possibleHeading.section },
+                            };
                             fakeSection.faking = false;
                             namesIdentified.add(possibleHeading.name);
                             break;
@@ -206,7 +213,14 @@ export function* scanSection(ref: HtmlReference, navigator: Navigator) {
                         // Already faking; treat these like a sub-headings to our fake heading
                         yield* emit();
                         fakeSection.subsection++;
-                        currentRef = { ...ref, name: text, xref: { ...ref.xref, section: `${fakeSection.actual}.${fakeSection.section}.${fakeSection.subsection}` } };
+                        currentRef = {
+                            ...ref,
+                            name: text,
+                            xref: {
+                                ...ref.xref,
+                                section: `${fakeSection.actual}.${fakeSection.section}.${fakeSection.subsection}`,
+                            },
+                        };
                         namesIdentified.add(text);
                         break;
                     } else if (text?.match(/^[a-z0-9]+(?:Enum|Struct| Attribute| Command| Event| Field| Value)$/i)) {
@@ -222,7 +236,11 @@ export function* scanSection(ref: HtmlReference, navigator: Navigator) {
                             fakeSection.section = 1;
                             fakeSection.subsection = 0;
                         }
-                        currentRef = { ...ref, name: text, xref: { ...ref.xref, section: `${fakeSection.actual}.${fakeSection.section}` } };
+                        currentRef = {
+                            ...ref,
+                            name: text,
+                            xref: { ...ref.xref, section: `${fakeSection.actual}.${fakeSection.section}` },
+                        };
 
                         // Note if we're faking a field or a value so we know
                         // not to treat them like subsections when we see them
@@ -257,9 +275,12 @@ export function* scanSection(ref: HtmlReference, navigator: Navigator) {
                     const other = currentRef.table;
                     if (other) {
                         if (table.rows.length) {
-                            if (!other.rows.length || Object.keys(other.rows[0]).join("/") === Object.keys(table.rows[0]).join("/")) {
+                            if (
+                                !other.rows.length ||
+                                Object.keys(other.rows[0]).join("/") === Object.keys(table.rows[0]).join("/")
+                            ) {
                                 // Merge tables
-                                other.notes.push(...table.notes)
+                                other.notes.push(...table.notes);
                                 other.rows.push(...table.rows);
                             }
                         }

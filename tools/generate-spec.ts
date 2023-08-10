@@ -20,17 +20,17 @@
 const LOAD_CLUSTERS = true;
 const LOAD_DEVICES = true;
 
-import "./util/setup.js";
-import { MatterElement } from "#matter.js/model/index.js"
+import { MatterElement } from "#matter.js/model/index.js";
 import { scanIndex } from "./mom/spec/scan-index.js";
+import "./util/setup.js";
 
-import { paths } from "./mom/spec/spec-input.js";
-import { ClusterReference, HtmlReference } from "./mom/spec/spec-types.js";
-import { loadCluster } from "./mom/spec/load-cluster.js";
-import { translateCluster } from "./mom/spec/translate-cluster.js";
 import { Logger } from "#matter.js/log/Logger.js";
 import { generateIntermediateModel } from "./mom/common/generate-intermediate.js";
+import { loadCluster } from "./mom/spec/load-cluster.js";
 import { loadDevices } from "./mom/spec/load-devices.js";
+import { paths } from "./mom/spec/spec-input.js";
+import { ClusterReference, HtmlReference } from "./mom/spec/spec-types.js";
+import { translateCluster } from "./mom/spec/translate-cluster.js";
 import { translateDevice } from "./mom/spec/translate-device.js";
 
 const elements = Array<MatterElement.Child>();
@@ -42,7 +42,7 @@ function scanCluster(clusterRef: HtmlReference) {
     Logger.nest(() => {
         logger.info("ingest");
         let definition: ClusterReference;
-        Logger.nest(() => definition = loadCluster(clusterRef));
+        Logger.nest(() => (definition = loadCluster(clusterRef)));
 
         logger.info("translate");
         Logger.nest(() => elements.push(...translateCluster(definition)));

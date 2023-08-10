@@ -20,30 +20,26 @@ import {
     GlobalAttributes,
 } from "./Cluster.js";
 
-export class IllegalClusterError extends MatterError { }
+export class IllegalClusterError extends MatterError {}
 
 /**
  * A "cluster component" is a set of elements that can be added to a cluster.
  */
 export type ClusterComponent<A extends Attributes, C extends Commands, E extends Events> = {
-    readonly attributes: A,
-    readonly commands: C,
-    readonly events: E
+    readonly attributes: A;
+    readonly commands: C;
+    readonly events: E;
 };
 
-export function ClusterComponent<
-    A extends Attributes,
-    C extends Commands,
-    E extends Events
->({
+export function ClusterComponent<A extends Attributes, C extends Commands, E extends Events>({
     attributes = {} as A,
     commands = {} as C,
-    events = {} as E
+    events = {} as E,
 }: Partial<ClusterComponent<A, C, E>>): ClusterComponent<A, C, E> {
     return {
         attributes,
         commands,
-        events
+        events,
     };
 }
 
@@ -52,30 +48,25 @@ export function ClusterComponent<
  * cluster regardless of which features are enabled.
  */
 export type BaseClusterComponent<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events> = {
-    id: number,
-    name: string,
-    revision: number,
-    readonly features: F
+    id: number;
+    name: string;
+    revision: number;
+    readonly features: F;
 } & ClusterComponent<A, C, E>;
 
-export function BaseClusterComponent<
-    F extends BitSchema,
-    A extends Attributes,
-    C extends Commands,
-    E extends Events
->({
+export function BaseClusterComponent<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>({
     id,
     name,
     revision,
     features = {} as F,
     attributes = {} as A,
     commands = {} as C,
-    events = {} as E
+    events = {} as E,
 }: {
-    id: number,
-    name: string,
-    revision: number,
-    features?: F
+    id: number;
+    name: string;
+    revision: number;
+    features?: F;
 } & Partial<ClusterComponent<A, C, E>>): BaseClusterComponent<F, A, C, E> {
     return {
         id,
@@ -84,18 +75,17 @@ export function BaseClusterComponent<
         features,
         attributes,
         commands,
-        events
+        events,
     };
 }
 
 /**
  * Obtain a cluster type for a BaseClusterComponent.
  */
-export type ClusterForBaseCluster<T, SF> =
-    T extends BaseClusterComponent<infer F, infer A, infer C, infer E>
+export type ClusterForBaseCluster<T, SF> = T extends BaseClusterComponent<infer F, infer A, infer C, infer E>
     ? SF extends TypeFromPartialBitSchema<F>
-    ? Cluster<F, SF, A, C, E>
-    : never
+        ? Cluster<F, SF, A, C, E>
+        : never
     : never;
 
 /**
@@ -173,7 +163,9 @@ export function preventCluster<F extends BitSchema>(
                 continue pool;
             }
         }
-        throw new IllegalClusterError(`Feature combination ${serialize(bitmap)} is disallowed by the Matter specification`);
+        throw new IllegalClusterError(
+            `Feature combination ${serialize(bitmap)} is disallowed by the Matter specification`,
+        );
     }
 }
 
@@ -188,9 +180,9 @@ export type ExtensibleCluster<
     A extends Attributes,
     C extends Commands,
     E extends Events,
-    W extends ClusterFactory
+    W extends ClusterFactory,
 > = Cluster<F, SF, A, C, E> & {
-    with: W
+    with: W;
 };
 
 export function ExtensibleCluster<
@@ -209,17 +201,17 @@ export function ExtensibleCluster<
     attributes = <A>{},
     commands = <C>{},
     events = <E>{},
-    factory
+    factory,
 }: {
-    id: number,
-    name: string,
-    revision: number,
-    features?: F,
-    supportedFeatures?: SF,
-    attributes?: A,
-    commands?: C,
-    events?: E,
-    factory: W
+    id: number;
+    name: string;
+    revision: number;
+    features?: F;
+    supportedFeatures?: SF;
+    attributes?: A;
+    commands?: C;
+    events?: E;
+    factory: W;
 }): ExtensibleCluster<F, SF, Merge<A, GlobalAttributes<F>>, C, E, W> {
     return {
         ...Cluster({
@@ -230,10 +222,10 @@ export function ExtensibleCluster<
             supportedFeatures,
             commands,
             attributes,
-            events
+            events,
         }),
-        with: factory
-    }
+        with: factory,
+    };
 }
 
 /**
@@ -242,47 +234,39 @@ export function ExtensibleCluster<
  * they need not all be present but one or more is required.
  */
 export type ExtensionRequiredCluster<W extends ClusterFactory> = {
-    with: W
-}
+    with: W;
+};
 
-export function ExtensionRequiredCluster<
-    W extends ClusterFactory
->({
-    factory
+export function ExtensionRequiredCluster<W extends ClusterFactory>({
+    factory,
 }: {
-    factory: W
+    factory: W;
 }): ExtensionRequiredCluster<W> {
     return { with: factory };
 }
 
-export type ClusterElement<F extends BitSchema> =
-    Attribute<any, F>
-    | Command<any, any, F>
-    | Event<any, F>;
+export type ClusterElement<F extends BitSchema> = Attribute<any, F> | Command<any, any, F> | Event<any, F>;
 
-export type AsConditional<
-    F extends BitSchema,
-    E extends ClusterElement<F>
-> = Omit<E, "optional"> & { optional: true, isConditional: true };
+export type AsConditional<F extends BitSchema, E extends ClusterElement<F>> = Omit<E, "optional"> & {
+    optional: true;
+    isConditional: true;
+};
 
 export type ClusterElementConditions<F extends BitSchema> = {
-    optionalIf: ConditionalFeatureList<F>,
-    mandatoryIf: ConditionalFeatureList<F>
-}
+    optionalIf: ConditionalFeatureList<F>;
+    mandatoryIf: ConditionalFeatureList<F>;
+};
 
-export function AsConditional<
-    F extends BitSchema,
-    E extends ClusterElement<F>
->(
+export function AsConditional<F extends BitSchema, E extends ClusterElement<F>>(
     element: E,
-    { optionalIf = [], mandatoryIf = [] }: Partial<ClusterElementConditions<F>>
+    { optionalIf = [], mandatoryIf = [] }: Partial<ClusterElementConditions<F>>,
 ) {
     const result = {
         ...element,
         optional: true,
         isConditional: true,
         optionalIf: optionalIf,
-        mandatoryIf: mandatoryIf
+        mandatoryIf: mandatoryIf,
     };
     result.optional = true;
     return result as AsConditional<F, E>;

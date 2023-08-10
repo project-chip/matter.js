@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { HtmlReference } from "./spec-types.js";
 import { Logger } from "#matter.js/log/Logger.js";
 import { AnyElement, DatatypeElement, Specification } from "#matter.js/model/index.js";
-import { Str } from "./html-translators.js";
 import { addDocumentation } from "./add-documentation.js";
+import { Str } from "./html-translators.js";
+import { HtmlReference } from "./spec-types.js";
 
 const logger = Logger.get("translate-table");
 
@@ -16,25 +16,25 @@ const logger = Logger.get("translate-table");
 type Translator<T> = (el: HTMLElement) => T;
 
 /** Modifier that allows a value to be undefined */
-type Optional<T> = { option: "optional", wrapped: Alias<T> | Translator<T> };
-export const Optional = <T>(wrapped: Alias<T> | Translator<T>): Optional<T> =>
-    ({ option: "optional", wrapped });
+type Optional<T> = { option: "optional"; wrapped: Alias<T> | Translator<T> };
+export const Optional = <T>(wrapped: Alias<T> | Translator<T>): Optional<T> => ({ option: "optional", wrapped });
 
 /** Modifier that maps one or more columns to a canonical name */
-type Alias<T> = { option: "alias", sources: string[], wrapped: Translator<T> };
-export const Alias = <T>(wrapped: Translator<T>, ...sources: string[]): Alias<T> =>
-    ({ option: "alias", sources, wrapped });
+type Alias<T> = { option: "alias"; sources: string[]; wrapped: Translator<T> };
+export const Alias = <T>(wrapped: Translator<T>, ...sources: string[]): Alias<T> => ({
+    option: "alias",
+    sources,
+    wrapped,
+});
 
 /** Injects a column with a fixed value */
-type Constant<T> = { option: "constant", value: T };
-export const Constant = <T>(value: T): Constant<T> =>
-    ({ option: "constant", value });
+type Constant<T> = { option: "constant"; value: T };
+export const Constant = <T>(value: T): Constant<T> => ({ option: "constant", value });
 
 /** Converts detail section into children */
 type ChildTranslator = (tag: string, parentRecord: any, definition: HtmlReference) => DatatypeElement[] | undefined;
-type Children = { option: "children", translator: ChildTranslator }
-export const Children = (translator: ChildTranslator) =>
-    ({ option: "children", translator });
+type Children = { option: "children"; translator: ChildTranslator };
+export const Children = (translator: ChildTranslator) => ({ option: "children", translator });
 
 /**
  * A simple schema format.  This is all a little fancy for an ugly scraping
@@ -42,27 +42,28 @@ export const Children = (translator: ChildTranslator) =>
  */
 type TableSchema = {
     [name: string]: any;
-}
+};
 
-type FieldType<F>
-    = F extends Optional<infer W> ? W | undefined
-    : F extends Alias<infer W> | Translator<infer W> | Constant<infer W> ? W
-    : F extends Children ? DatatypeElement[]
+type FieldType<F> = F extends Optional<infer W>
+    ? W | undefined
+    : F extends Alias<infer W> | Translator<infer W> | Constant<infer W>
+    ? W
+    : F extends Children
+    ? DatatypeElement[]
     : never;
 
 // Create TS object type from schema definition
 type TableRecord<T extends TableSchema> = {
-    [name in keyof T]: FieldType<T[name]>
-} & { xref?: Specification.CrossReference, name?: string, details?: string };
+    [name in keyof T]: FieldType<T[name]>;
+} & { xref?: Specification.CrossReference; name?: string; details?: string };
 
-const has = (object: object, name: string) =>
-    !!Object.getOwnPropertyDescriptor(object, name);
+const has = (object: object, name: string) => !!Object.getOwnPropertyDescriptor(object, name);
 
 /** Translates an array of key => HTMLElement records into a proper TS type */
 export function translateTable<T extends TableSchema>(
     tag: string,
     definition: HtmlReference | undefined,
-    schema: T
+    schema: T,
 ): Array<TableRecord<T>> {
     if (!definition) {
         return [];
@@ -152,8 +153,12 @@ export function translateTable<T extends TableSchema>(
     }
 
     if (missing.size) {
-        logger.error(`§ ${definition.xref.section} ignored one or more ${tag} rows due to missing fields: ${Array(...missing).join(', ')}`);
-        logger.error(`keys present are: ${Object.keys(definition.table.rows[0]).join(', ')}`);
+        logger.error(
+            `§ ${definition.xref.section} ignored one or more ${tag} rows due to missing fields: ${Array(
+                ...missing,
+            ).join(", ")}`,
+        );
+        logger.error(`keys present are: ${Object.keys(definition.table.rows[0]).join(", ")}`);
     }
 
     if (definition.details) {
@@ -166,10 +171,10 @@ export function translateTable<T extends TableSchema>(
 // Convert from raw records into a matter element.  Note that we have to
 // cast the element to any for automatic properties because TS isn't sure that
 // the extension hasn't changed the values
-export function translateRecordsToMatter<R, E extends { id?: number, name: string }>(
+export function translateRecordsToMatter<R, E extends { id?: number; name: string }>(
     desc: string,
     records: R[],
-    mapper: (record: R) => E | undefined
+    mapper: (record: R) => E | undefined,
 ): Array<E> | undefined {
     const result = Array<E>();
     for (const record of records) {
@@ -191,22 +196,19 @@ export function translateRecordsToMatter<R, E extends { id?: number, name: strin
 function installPreciseDetails(
     tag: string,
     definitions: HtmlReference[],
-    records: Array<{ name?: string, xref?: Specification.CrossReference, details?: string, children?: AnyElement[] }>,
-    childTranslator?: ChildTranslator
+    records: Array<{ name?: string; xref?: Specification.CrossReference; details?: string; children?: AnyElement[] }>,
+    childTranslator?: ChildTranslator,
 ) {
     const lookup = Object.fromEntries(
-        definitions.map((detail) =>
-            [detail.name.toLowerCase().replace(/\s*\([^)]+\)\s*/g, " "), detail]
-        )
+        definitions.map(detail => [detail.name.toLowerCase().replace(/\s*\([^)]+\)\s*/g, " "), detail]),
     );
 
-    records.forEach((r) => {
+    records.forEach(r => {
         if (!r.name) {
             return;
         }
 
-        const detail = lookup[`${r.name.toLowerCase()} ${tag}`]
-            || lookup[`${r.name.toLowerCase()}`];
+        const detail = lookup[`${r.name.toLowerCase()} ${tag}`] || lookup[`${r.name.toLowerCase()}`];
         if (detail) {
             r.xref = detail.xref;
 
@@ -221,14 +223,14 @@ function installPreciseDetails(
                 r.children = childTranslator(tag, r, detail);
             }
         }
-    })
+    });
 }
 
 /** The type of data we think is present in a field */
 enum InferredFieldType {
     Unknown,
     UniqueNumbers,
-    UniqueStrings
+    UniqueStrings,
 }
 
 /** Examine a field in every row to infer the type of a field */
@@ -283,7 +285,8 @@ export function chooseIdentityAliases(definition: HtmlReference, preferredIds: s
 
     let ids: string[] | undefined;
     let names: string[] | undefined;
-    let idIndex = -1, nameIndex = -1;
+    let idIndex = -1,
+        nameIndex = -1;
 
     if (fields && fields.length > 1) {
         // Use the first preferred ID that is present

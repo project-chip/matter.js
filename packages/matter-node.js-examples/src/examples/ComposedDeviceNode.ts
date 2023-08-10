@@ -18,12 +18,18 @@
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
 import { CommissioningServer, MatterServer } from "@project-chip/matter-node.js";
 
-import { commandExecutor, getIntParameter, getParameter, requireMinNodeVersion, hasParameter } from "@project-chip/matter-node.js/util";
-import { Time } from "@project-chip/matter-node.js/time";
-import { OnOffLightDevice, OnOffPluginUnitDevice, DeviceTypes } from "@project-chip/matter-node.js/device";
-import { Logger } from "@project-chip/matter-node.js/log";
-import { StorageManager, StorageBackendDisk } from "@project-chip/matter-node.js/storage";
 import { VendorId } from "@project-chip/matter-node.js/datatype";
+import { DeviceTypes, OnOffLightDevice, OnOffPluginUnitDevice } from "@project-chip/matter-node.js/device";
+import { Logger } from "@project-chip/matter-node.js/log";
+import { StorageBackendDisk, StorageManager } from "@project-chip/matter-node.js/storage";
+import { Time } from "@project-chip/matter-node.js/time";
+import {
+    commandExecutor,
+    getIntParameter,
+    getParameter,
+    hasParameter,
+    requireMinNodeVersion,
+} from "@project-chip/matter-node.js/util";
 
 const logger = Logger.get("Device");
 
@@ -32,7 +38,9 @@ requireMinNodeVersion(16);
 const storageLocation = getParameter("store") ?? ".device-node";
 const storage = new StorageBackendDisk(storageLocation, hasParameter("clearstorage"));
 logger.info(`Storage location: ${storageLocation} (Directory)`);
-logger.info('Use the parameter "-store NAME" to specify a different storage location, use -clearstorage to start with an empty storage.')
+logger.info(
+    'Use the parameter "-store NAME" to specify a different storage location, use -clearstorage to start with an empty storage.',
+);
 
 class ComposedDevice {
     private matterServer: MatterServer | undefined;
@@ -68,12 +76,13 @@ class ComposedDevice {
         }
         const isSocket = deviceStorage.get("isSocket", getParameter("type") === "socket");
         const deviceName = "Matter composed device";
-        const deviceType = getParameter("type") === "socket" ? DeviceTypes.ON_OFF_PLUGIN_UNIT.code : DeviceTypes.ON_OFF_LIGHT.code;
+        const deviceType =
+            getParameter("type") === "socket" ? DeviceTypes.ON_OFF_PLUGIN_UNIT.code : DeviceTypes.ON_OFF_LIGHT.code;
         const vendorName = "matter-node.js";
         const passcode = getIntParameter("passcode") ?? deviceStorage.get("passcode", 20202021);
         const discriminator = getIntParameter("discriminator") ?? deviceStorage.get("discriminator", 3840);
         // product name / id and vendor id should match what is in the device certificate
-        const vendorId = getIntParameter("vendorid") ?? deviceStorage.get("vendorid", 0xFFF1);
+        const vendorId = getIntParameter("vendorid") ?? deviceStorage.get("vendorid", 0xfff1);
         const productName = `node-matter OnOff-Bridge`;
         const productId = getIntParameter("productid") ?? deviceStorage.get("productid", 0x8000);
 
@@ -118,7 +127,7 @@ class ComposedDevice {
                 productLabel: productName,
                 productId,
                 serialNumber: `node-matter-${uniqueId}`,
-            }
+            },
         });
 
         /**
@@ -135,12 +144,16 @@ class ComposedDevice {
 
         const numDevices = getIntParameter("num") || 2;
         for (let i = 1; i <= numDevices; i++) {
-            const onOffDevice = getParameter(`type${i}`) === "socket" ? new OnOffPluginUnitDevice() : new OnOffLightDevice();
+            const onOffDevice =
+                getParameter(`type${i}`) === "socket" ? new OnOffPluginUnitDevice() : new OnOffLightDevice();
             onOffDevice.addFixedLabel("orientation", getParameter(`orientation${i}`) ?? `orientation ${i}`);
 
             onOffDevice.addOnOffListener(on => commandExecutor(on ? `on${i}` : `off${i}`)?.());
             onOffDevice.addCommandHandler("identify", async ({ request: { identifyTime } }) =>
-                console.log(`Identify called for OnOffDevice ${onOffDevice.name} with id: ${i} and identifyTime: ${identifyTime}`));
+                console.log(
+                    `Identify called for OnOffDevice ${onOffDevice.name} with id: ${i} and identifyTime: ${identifyTime}`,
+                ),
+            );
 
             commissioningServer.addDevice(onOffDevice);
         }
@@ -169,7 +182,9 @@ class ComposedDevice {
             const { qrCode, qrPairingCode, manualPairingCode } = pairingData;
 
             console.log(qrCode);
-            console.log(`QR Code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}`);
+            console.log(
+                `QR Code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}`,
+            );
             console.log(`Manual pairing code: ${manualPairingCode}`);
         } else {
             console.log("Device is already commissioned. Waiting for controllers to connect ...");
@@ -182,11 +197,22 @@ class ComposedDevice {
 }
 
 const device = new ComposedDevice();
-device.start().then(() => { /* done */ }).catch(err => console.error(err));
+device
+    .start()
+    .then(() => {
+        /* done */
+    })
+    .catch(err => console.error(err));
 
 process.on("SIGINT", () => {
-    device.stop().then(() => {
-        // Pragmatic way to make sure the storage is correctly closed before the process ends.
-        storage.close().then(() => process.exit(0)).catch(err => console.error(err));
-    }).catch(err => console.error(err));
+    device
+        .stop()
+        .then(() => {
+            // Pragmatic way to make sure the storage is correctly closed before the process ends.
+            storage
+                .close()
+                .then(() => process.exit(0))
+                .catch(err => console.error(err));
+        })
+        .catch(err => console.error(err));
 });

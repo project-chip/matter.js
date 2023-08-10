@@ -5,14 +5,14 @@
  */
 
 export type ServerAddressIp = {
-    type: "udp",
-    ip: string,
-    port: number,
-}
+    type: "udp";
+    ip: string;
+    port: number;
+};
 
 export type ServerAddressBle = {
-    type: "ble",
-    peripheralAddress: string,
-}
+    type: "ble";
+    peripheralAddress: string;
+};
 
-export type ServerAddress = ServerAddressIp | ServerAddressBle
+export type ServerAddress = ServerAddressIp | ServerAddressBle;

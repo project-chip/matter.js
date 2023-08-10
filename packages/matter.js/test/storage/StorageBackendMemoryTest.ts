@@ -8,14 +8,13 @@ import { StorageError } from "../../src/storage/Storage.js";
 import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
 
 describe("StorageInMemory", () => {
-
     it("write and read success", () => {
         const storage = new StorageBackendMemory();
 
         storage.set(["context"], "key", "value");
 
         const value = storage.get(["context"], "key");
-        expect(value).toBe("value")
+        expect(value).toBe("value");
     });
 
     it("write and read success with multiple context levels", () => {
@@ -24,7 +23,7 @@ describe("StorageInMemory", () => {
         storage.set(["context", "subcontext", "subsubcontext"], "key", "value");
 
         const value = storage.get(["context", "subcontext", "subsubcontext"], "key");
-        expect(value).toBe("value")
+        expect(value).toBe("value");
     });
 
     it("Throws error when context is empty on set", () => {

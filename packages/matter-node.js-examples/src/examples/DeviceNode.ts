@@ -14,17 +14,23 @@
  * Import needed modules from @project-chip/matter-node.js
  */
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
+import { BleNode } from "@project-chip/matter-node-ble.js/ble";
 import { CommissioningServer, MatterServer } from "@project-chip/matter-node.js";
-import {
-    commandExecutor, getIntParameter, getParameter, requireMinNodeVersion, hasParameter, singleton, ByteArray
-} from "@project-chip/matter-node.js/util";
-import { Time } from "@project-chip/matter-node.js/time";
+import { Ble } from "@project-chip/matter-node.js/ble";
+import { ClusterServer, GeneralCommissioningCluster, NetworkCommissioning } from "@project-chip/matter-node.js/cluster";
 import { OnOffLightDevice, OnOffPluginUnitDevice } from "@project-chip/matter-node.js/device";
 import { Logger } from "@project-chip/matter-node.js/log";
-import { StorageManager, StorageBackendDisk } from "@project-chip/matter-node.js/storage";
-import { Ble } from "@project-chip/matter-node.js/ble";
-import { BleNode } from "@project-chip/matter-node-ble.js/ble";
-import { ClusterServer, NetworkCommissioning, GeneralCommissioningCluster } from "@project-chip/matter-node.js/cluster";
+import { StorageBackendDisk, StorageManager } from "@project-chip/matter-node.js/storage";
+import { Time } from "@project-chip/matter-node.js/time";
+import {
+    ByteArray,
+    commandExecutor,
+    getIntParameter,
+    getParameter,
+    hasParameter,
+    requireMinNodeVersion,
+    singleton,
+} from "@project-chip/matter-node.js/util";
 import { DeviceTypeId, VendorId } from "@project-chip/matter.js/datatype";
 
 if (hasParameter("ble")) {
@@ -39,7 +45,9 @@ requireMinNodeVersion(16);
 const storageLocation = getParameter("store") ?? ".device-node";
 const storage = new StorageBackendDisk(storageLocation, hasParameter("clearstorage"));
 logger.info(`Storage location: ${storageLocation} (Directory)`);
-logger.info('Use the parameter "-store NAME" to specify a different storage location, use -clearstorage to start with an empty storage.')
+logger.info(
+    'Use the parameter "-store NAME" to specify a different storage location, use -clearstorage to start with an empty storage.',
+);
 
 class Device {
     private matterServer: MatterServer | undefined;
@@ -79,7 +87,7 @@ class Device {
         const passcode = getIntParameter("passcode") ?? deviceStorage.get("passcode", 20202021);
         const discriminator = getIntParameter("discriminator") ?? deviceStorage.get("discriminator", 3840);
         // product name / id and vendor id should match what is in the device certificate
-        const vendorId = getIntParameter("vendorid") ?? deviceStorage.get("vendorid", 0xFFF1);
+        const vendorId = getIntParameter("vendorid") ?? deviceStorage.get("vendorid", 0xfff1);
         const productName = `node-matter OnOff ${isSocket ? "Socket" : "Light"}`;
         const productId = getIntParameter("productid") ?? deviceStorage.get("productid", 0x8000);
 
@@ -110,7 +118,9 @@ class Device {
         const onOffDevice = isSocket ? new OnOffPluginUnitDevice() : new OnOffLightDevice();
         onOffDevice.addOnOffListener(on => commandExecutor(on ? "on" : "off")?.());
 
-        onOffDevice.addCommandHandler("identify", async ({ request: { identifyTime } }) => logger.info(`Identify called for OnOffDevice: ${identifyTime}`));
+        onOffDevice.addCommandHandler("identify", async ({ request: { identifyTime } }) =>
+            logger.info(`Identify called for OnOffDevice: ${identifyTime}`),
+        );
 
         /**
          * Create Matter Server and CommissioningServer Node
@@ -142,11 +152,13 @@ class Device {
                 productId,
                 serialNumber: `node-matter-${uniqueId}`,
             },
-            delayedAnnouncement: hasParameter("ble") // Delay announcement when BLE is used to show how limited advertisement works
+            delayedAnnouncement: hasParameter("ble"), // Delay announcement when BLE is used to show how limited advertisement works
         });
 
         // optionally add a listener for the testEventTrigger command from the GeneralDiagnostics cluster
-        commissioningServer.addCommandHandler("testEventTrigger", async ({ request: { enableKey, eventTrigger } }) => logger.info(`testEventTrigger called on GeneralDiagnostic cluster: ${enableKey} ${eventTrigger}`));
+        commissioningServer.addCommandHandler("testEventTrigger", async ({ request: { enableKey, eventTrigger } }) =>
+            logger.info(`testEventTrigger called on GeneralDiagnostic cluster: ${enableKey} ${eventTrigger}`),
+        );
 
         /**
          * Modify automatically added clusters of the Root endpoint if needed
@@ -165,160 +177,179 @@ class Device {
             // the device implementor based on the relevant networking stack.
             // The NetworkCommissioningCluster and all logics are described in Matter Core Specifications section 11.8
             const firstNetworkId = new ByteArray(32);
-            commissioningServer.addRootClusterServer(ClusterServer(
-                NetworkCommissioning.Cluster.with(NetworkCommissioning.Feature.WiFiNetworkInterface),
-                {
-                    maxNetworks: 1,
-                    interfaceEnabled: true,
-                    lastConnectErrorValue: 0,
-                    lastNetworkId: null,
-                    lastNetworkingStatus: null,
-                    networks: [{ networkId: firstNetworkId, connected: false }],
-                    scanMaxTimeSeconds: 3,
-                    connectMaxTimeSeconds: 3,
-                },
-                {
-                    scanNetworks: async ({
-                        request: { ssid, breadcrumb },
-                        attributes: { lastNetworkingStatus },
-                        endpoint
-                    }) => {
-                        console.log(`---> scanNetworks called on NetworkCommissioning cluster: ${ssid?.toHex()} ${breadcrumb}`);
-
-                        // Simulate successful scan
-                        if (breadcrumb !== undefined) {
-                            const generalCommissioningCluster = endpoint.getClusterServer(GeneralCommissioningCluster);
-                            generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
-                        }
-
-                        const networkingStatus = NetworkCommissioning.NetworkCommissioningStatus.Success
-                        lastNetworkingStatus?.setLocal(networkingStatus);
-
-                        return {
-                            networkingStatus,
-                            wiFiScanResults: [{
-                                security: {
-                                    Unencrypted: false,
-                                    Wep: false,
-                                    'WPA-PERSONAL': false,
-                                    'WPA2-PERSONAL': true,
-                                    'WPA3-PERSONAL': true,
-                                },
-                                ssid: ssid || ByteArray.fromString(getParameter("ble-wifi-scan-ssid") ?? "TestSSID"), // Set a valid existing local Wi-Fi SSID here
-                                bssid: ByteArray.fromString(getParameter("ble-wifi-scan-bssid") ?? "00:00:00:00:00:00"),
-                                channel: 1,
-                            }],
-                        }
+            commissioningServer.addRootClusterServer(
+                ClusterServer(
+                    NetworkCommissioning.Cluster.with(NetworkCommissioning.Feature.WiFiNetworkInterface),
+                    {
+                        maxNetworks: 1,
+                        interfaceEnabled: true,
+                        lastConnectErrorValue: 0,
+                        lastNetworkId: null,
+                        lastNetworkingStatus: null,
+                        networks: [{ networkId: firstNetworkId, connected: false }],
+                        scanMaxTimeSeconds: 3,
+                        connectMaxTimeSeconds: 3,
                     },
-                    addOrUpdateWiFiNetwork: async ({
-                        request: { ssid, credentials, breadcrumb },
-                        attributes: { lastNetworkingStatus, lastNetworkId },
-                        endpoint
-                    }) => {
-                        console.log(`---> addOrUpdateWiFiNetwork called on NetworkCommissioning cluster: ${ssid.toHex()} ${credentials.toHex()} ${breadcrumb}`);
+                    {
+                        scanNetworks: async ({
+                            request: { ssid, breadcrumb },
+                            attributes: { lastNetworkingStatus },
+                            endpoint,
+                        }) => {
+                            console.log(
+                                `---> scanNetworks called on NetworkCommissioning cluster: ${ssid?.toHex()} ${breadcrumb}`,
+                            );
 
-                        // TODO Check if failsafe is armed
+                            // Simulate successful scan
+                            if (breadcrumb !== undefined) {
+                                const generalCommissioningCluster =
+                                    endpoint.getClusterServer(GeneralCommissioningCluster);
+                                generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
+                            }
 
-                        // Simulate successful add or update
-                        if (breadcrumb !== undefined) {
-                            const generalCommissioningCluster = endpoint.getClusterServer(GeneralCommissioningCluster);
-                            generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
-                        }
+                            const networkingStatus = NetworkCommissioning.NetworkCommissioningStatus.Success;
+                            lastNetworkingStatus?.setLocal(networkingStatus);
 
-                        const networkingStatus = NetworkCommissioning.NetworkCommissioningStatus.Success
-                        lastNetworkingStatus?.setLocal(networkingStatus);
-                        lastNetworkId?.setLocal(firstNetworkId);
-
-                        return {
-                            networkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
-                            networkIndex: 0
-                        };
-                    },
-                    removeNetwork: async ({
-                        request: { networkId, breadcrumb },
-                        attributes: { lastNetworkingStatus, lastNetworkId },
-                        endpoint
-                    }) => {
-                        console.log(`---> removeNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${breadcrumb}`);
-
-                        // TODO Check if failsafe is armed
-
-                        // Simulate successful add or update
-                        if (breadcrumb !== undefined) {
-                            const generalCommissioningCluster = endpoint.getClusterServer(GeneralCommissioningCluster);
-                            generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
-                        }
-
-                        const networkingStatus = NetworkCommissioning.NetworkCommissioningStatus.Success
-                        lastNetworkingStatus?.setLocal(networkingStatus);
-                        lastNetworkId?.setLocal(firstNetworkId);
-
-                        return {
-                            networkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
-                            networkIndex: 0
-                        };
-                    },
-                    connectNetwork: async ({
-                        request: { networkId, breadcrumb },
-                        attributes: {
-                            lastNetworkingStatus,
-                            lastNetworkId,
-                            lastConnectErrorValue,
-                            networks
+                            return {
+                                networkingStatus,
+                                wiFiScanResults: [
+                                    {
+                                        security: {
+                                            Unencrypted: false,
+                                            Wep: false,
+                                            "WPA-PERSONAL": false,
+                                            "WPA2-PERSONAL": true,
+                                            "WPA3-PERSONAL": true,
+                                        },
+                                        ssid:
+                                            ssid ||
+                                            ByteArray.fromString(getParameter("ble-wifi-scan-ssid") ?? "TestSSID"), // Set a valid existing local Wi-Fi SSID here
+                                        bssid: ByteArray.fromString(
+                                            getParameter("ble-wifi-scan-bssid") ?? "00:00:00:00:00:00",
+                                        ),
+                                        channel: 1,
+                                    },
+                                ],
+                            };
                         },
-                        endpoint, session
-                    }) => {
-                        console.log(`---> connectNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${breadcrumb}`);
+                        addOrUpdateWiFiNetwork: async ({
+                            request: { ssid, credentials, breadcrumb },
+                            attributes: { lastNetworkingStatus, lastNetworkId },
+                            endpoint,
+                        }) => {
+                            console.log(
+                                `---> addOrUpdateWiFiNetwork called on NetworkCommissioning cluster: ${ssid.toHex()} ${credentials.toHex()} ${breadcrumb}`,
+                            );
 
-                        // TODO Check if failsafe is armed
+                            // TODO Check if failsafe is armed
 
-                        // Simulate successful connection
-                        if (breadcrumb !== undefined) {
-                            const generalCommissioningCluster = endpoint.getClusterServer(GeneralCommissioningCluster);
-                            generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
-                        }
+                            // Simulate successful add or update
+                            if (breadcrumb !== undefined) {
+                                const generalCommissioningCluster =
+                                    endpoint.getClusterServer(GeneralCommissioningCluster);
+                                generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
+                            }
 
-                        const networkList = networks.getLocal();
-                        networkList[0].connected = true;
-                        networks.setLocal(networkList);
+                            const networkingStatus = NetworkCommissioning.NetworkCommissioningStatus.Success;
+                            lastNetworkingStatus?.setLocal(networkingStatus);
+                            lastNetworkId?.setLocal(firstNetworkId);
 
-                        const networkingStatus = NetworkCommissioning.NetworkCommissioningStatus.Success
-                        lastNetworkingStatus?.setLocal(networkingStatus);
-                        lastNetworkId?.setLocal(firstNetworkId);
-                        lastConnectErrorValue?.setLocal(null);
+                            return {
+                                networkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
+                                networkIndex: 0,
+                            };
+                        },
+                        removeNetwork: async ({
+                            request: { networkId, breadcrumb },
+                            attributes: { lastNetworkingStatus, lastNetworkId },
+                            endpoint,
+                        }) => {
+                            console.log(
+                                `---> removeNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${breadcrumb}`,
+                            );
 
-                        // Announce operational in IP network
-                        const device = session.getContext();
-                        await device.startAnnouncement();
+                            // TODO Check if failsafe is armed
 
-                        return {
-                            networkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
-                            errorValue: null,
-                        }
+                            // Simulate successful add or update
+                            if (breadcrumb !== undefined) {
+                                const generalCommissioningCluster =
+                                    endpoint.getClusterServer(GeneralCommissioningCluster);
+                                generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
+                            }
+
+                            const networkingStatus = NetworkCommissioning.NetworkCommissioningStatus.Success;
+                            lastNetworkingStatus?.setLocal(networkingStatus);
+                            lastNetworkId?.setLocal(firstNetworkId);
+
+                            return {
+                                networkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
+                                networkIndex: 0,
+                            };
+                        },
+                        connectNetwork: async ({
+                            request: { networkId, breadcrumb },
+                            attributes: { lastNetworkingStatus, lastNetworkId, lastConnectErrorValue, networks },
+                            endpoint,
+                            session,
+                        }) => {
+                            console.log(
+                                `---> connectNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${breadcrumb}`,
+                            );
+
+                            // TODO Check if failsafe is armed
+
+                            // Simulate successful connection
+                            if (breadcrumb !== undefined) {
+                                const generalCommissioningCluster =
+                                    endpoint.getClusterServer(GeneralCommissioningCluster);
+                                generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
+                            }
+
+                            const networkList = networks.getLocal();
+                            networkList[0].connected = true;
+                            networks.setLocal(networkList);
+
+                            const networkingStatus = NetworkCommissioning.NetworkCommissioningStatus.Success;
+                            lastNetworkingStatus?.setLocal(networkingStatus);
+                            lastNetworkId?.setLocal(firstNetworkId);
+                            lastConnectErrorValue?.setLocal(null);
+
+                            // Announce operational in IP network
+                            const device = session.getContext();
+                            await device.startAnnouncement();
+
+                            return {
+                                networkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
+                                errorValue: null,
+                            };
+                        },
+                        reorderNetwork: async ({
+                            request: { networkId, networkIndex, breadcrumb },
+                            attributes: { lastNetworkingStatus },
+                            endpoint,
+                        }) => {
+                            console.log(
+                                `---> reorderNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${networkIndex} ${breadcrumb}`,
+                            );
+
+                            // Simulate successful connection
+                            if (breadcrumb !== undefined) {
+                                const generalCommissioningCluster =
+                                    endpoint.getClusterServer(GeneralCommissioningCluster);
+                                generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
+                            }
+
+                            const networkingStatus = NetworkCommissioning.NetworkCommissioningStatus.Success;
+                            lastNetworkingStatus?.setLocal(networkingStatus);
+
+                            return {
+                                networkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
+                                networkIndex: 0,
+                            };
+                        },
                     },
-                    reorderNetwork: async ({
-                        request: { networkId, networkIndex, breadcrumb },
-                        attributes: { lastNetworkingStatus },
-                        endpoint
-                    }) => {
-                        console.log(`---> reorderNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${networkIndex} ${breadcrumb}`);
-
-                        // Simulate successful connection
-                        if (breadcrumb !== undefined) {
-                            const generalCommissioningCluster = endpoint.getClusterServer(GeneralCommissioningCluster);
-                            generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
-                        }
-
-                        const networkingStatus = NetworkCommissioning.NetworkCommissioningStatus.Success
-                        lastNetworkingStatus?.setLocal(networkingStatus);
-
-                        return {
-                            networkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
-                            networkIndex: 0
-                        };
-                    },
-                }
-            ));
+                ),
+            );
         }
 
         commissioningServer.addDevice(onOffDevice);
@@ -354,13 +385,15 @@ class Device {
             const pairingData = commissioningServer.getPairingCode({
                 ble: hasParameter("ble"),
                 softAccessPoint: false,
-                onIpNetwork: false
+                onIpNetwork: false,
             });
 
             const { qrCode, qrPairingCode, manualPairingCode } = pairingData;
 
             console.log(qrCode);
-            logger.info(`QR Code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}`);
+            logger.info(
+                `QR Code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}`,
+            );
             logger.info(`Manual pairing code: ${manualPairingCode}`);
         } else {
             logger.info("Device is already commissioned. Waiting for controllers to connect ...");
@@ -373,11 +406,22 @@ class Device {
 }
 
 const device = new Device();
-device.start().then(() => { /* done */ }).catch(err => console.error(err));
+device
+    .start()
+    .then(() => {
+        /* done */
+    })
+    .catch(err => console.error(err));
 
 process.on("SIGINT", () => {
-    device.stop().then(() => {
-        // Pragmatic way to make sure the storage is correctly closed before the process ends.
-        storage.close().then(() => process.exit(0)).catch(err => console.error(err));
-    }).catch(err => console.error(err));
+    device
+        .stop()
+        .then(() => {
+            // Pragmatic way to make sure the storage is correctly closed before the process ends.
+            storage
+                .close()
+                .then(() => process.exit(0))
+                .catch(err => console.error(err));
+        })
+        .catch(err => console.error(err));
 });

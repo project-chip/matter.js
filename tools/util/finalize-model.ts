@@ -5,7 +5,17 @@
  */
 
 import { Logger } from "#matter.js/log/Logger.js";
-import { AttributeModel, ClusterModel, CommandModel, DatatypeModel, Globals, MatterModel, Metatype, ValidateModel, ValueModel } from "#matter.js/model/index.js";
+import {
+    AttributeModel,
+    ClusterModel,
+    CommandModel,
+    DatatypeModel,
+    Globals,
+    MatterModel,
+    Metatype,
+    ValidateModel,
+    ValueModel,
+} from "#matter.js/model/index.js";
 import { isDeepEqual } from "#matter.js/util/DeepEqual.js";
 
 const logger = Logger.get("create-model");
@@ -20,7 +30,7 @@ function childrenIdentity(model: ValueModel) {
         delete properties.xref;
         delete (properties as any).conformance;
         return properties;
-    })
+    });
 }
 
 /**
@@ -31,7 +41,7 @@ function childrenIdentity(model: ValueModel) {
 function patchClusterTypes(cluster: ClusterModel) {
     // First gather existing datatypes so we treat them as canonical
     const datatypes = {} as { [name: string]: ValueModel };
-    cluster.datatypes.forEach(datatype => datatypes[datatype.name] = datatype);
+    cluster.datatypes.forEach(datatype => (datatypes[datatype.name] = datatype));
 
     // Now add any element that may be promoted to a datatype
     cluster.visit(model => {
@@ -98,15 +108,17 @@ function patchClusterTypes(cluster: ClusterModel) {
             return;
         }
 
-        cluster.add(new DatatypeModel({
-            name: model.name,
-            type: model.type,
-            xref: model.xref,
-            children: model.children
-        }));
+        cluster.add(
+            new DatatypeModel({
+                name: model.name,
+                type: model.type,
+                xref: model.xref,
+                children: model.children,
+            }),
+        );
 
         model.type = model.name;
-    })
+    });
 }
 
 /**

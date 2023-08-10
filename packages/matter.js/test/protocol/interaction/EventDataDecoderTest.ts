@@ -3,17 +3,16 @@
  * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+import { BasicInformation } from "../../../src/cluster/definitions/BasicInformationCluster.js";
+import { ClusterId } from "../../../src/datatype/ClusterId.js";
+import { EndpointNumber } from "../../../src/datatype/EndpointNumber.js";
+import { EventId } from "../../../src/datatype/EventId.js";
+import { normalizeAndDecodeEventData, normalizeEventData } from "../../../src/protocol/interaction/EventDataDecoder.js";
 import { TlvEventData } from "../../../src/protocol/interaction/InteractionProtocol.js";
 import { TypeFromSchema } from "../../../src/tlv/TlvSchema.js";
-import { normalizeAndDecodeEventData, normalizeEventData } from "../../../src/protocol/interaction/EventDataDecoder.js";
-import { BasicInformation } from "../../../src/cluster/definitions/BasicInformationCluster.js";
 import { TlvVoid } from "../../../src/tlv/TlvVoid.js";
-import { ClusterId } from "../../../src/datatype/ClusterId.js";
-import { EventId } from "../../../src/datatype/EventId.js";
-import { EndpointNumber } from "../../../src/datatype/EndpointNumber.js";
 
 describe("EventDataDecoder", () => {
-
     describe("normalizeEventData", () => {
         it("normalize data with all paths given for single event entries", () => {
             const data: TypeFromSchema<typeof TlvEventData>[] = [
@@ -36,20 +35,24 @@ describe("EventDataDecoder", () => {
             const normalized = normalizeEventData(data);
 
             expect(normalized).toEqual([
-                [{
-                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0) },
-                    eventNumber: 1,
-                    priority: 1,
-                    epochTimestamp: 0,
-                    data: BasicInformation.TlvStartUpEvent.encodeTlv({ softwareVersion: 1 }),
-                }],
-                [{
-                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(1) },
-                    eventNumber: 2,
-                    priority: 1,
-                    epochTimestamp: 0,
-                    data: TlvVoid.encodeTlv(),
-                }],
+                [
+                    {
+                        path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0) },
+                        eventNumber: 1,
+                        priority: 1,
+                        epochTimestamp: 0,
+                        data: BasicInformation.TlvStartUpEvent.encodeTlv({ softwareVersion: 1 }),
+                    },
+                ],
+                [
+                    {
+                        path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(1) },
+                        eventNumber: 2,
+                        priority: 1,
+                        epochTimestamp: 0,
+                        data: TlvVoid.encodeTlv(),
+                    },
+                ],
             ]);
         });
 
@@ -94,8 +97,8 @@ describe("EventDataDecoder", () => {
                         eventNumber: data[2].eventNumber,
                         priority: data[2].priority,
                         epochTimestamp: data[2].epochTimestamp,
-                        data: data[2].data
-                    }
+                        data: data[2].data,
+                    },
                 ],
                 [
                     {
@@ -103,9 +106,9 @@ describe("EventDataDecoder", () => {
                         eventNumber: data[1].eventNumber,
                         priority: data[1].priority,
                         epochTimestamp: data[1].epochTimestamp,
-                        data: data[1].data
-                    }
-                ]
+                        data: data[1].data,
+                    },
+                ],
             ]);
         });
     });
@@ -139,30 +142,46 @@ describe("EventDataDecoder", () => {
 
             expect(normalized).toEqual([
                 {
-                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0), nodeId: undefined, eventName: "startUp" },
-                    events: [{
-                        eventNumber: 1,
-                        priority: 1,
-                        epochTimestamp: 0,
-                        systemTimestamp: undefined,
-                        deltaEpochTimestamp: undefined,
-                        deltaSystemTimestamp: undefined,
-                        data: { softwareVersion: 1 },
-                        path: undefined
-                    }],
+                    path: {
+                        endpointId: EndpointNumber(0),
+                        clusterId: ClusterId(0x28),
+                        eventId: EventId(0),
+                        nodeId: undefined,
+                        eventName: "startUp",
+                    },
+                    events: [
+                        {
+                            eventNumber: 1,
+                            priority: 1,
+                            epochTimestamp: 0,
+                            systemTimestamp: undefined,
+                            deltaEpochTimestamp: undefined,
+                            deltaSystemTimestamp: undefined,
+                            data: { softwareVersion: 1 },
+                            path: undefined,
+                        },
+                    ],
                 },
                 {
-                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(1), nodeId: undefined, eventName: "shutDown" },
-                    events: [{
-                        eventNumber: 2,
-                        priority: 1,
-                        epochTimestamp: 0,
-                        systemTimestamp: undefined,
-                        deltaEpochTimestamp: undefined,
-                        deltaSystemTimestamp: undefined,
-                        data: undefined,
-                        path: undefined
-                    }]
+                    path: {
+                        endpointId: EndpointNumber(0),
+                        clusterId: ClusterId(0x28),
+                        eventId: EventId(1),
+                        nodeId: undefined,
+                        eventName: "shutDown",
+                    },
+                    events: [
+                        {
+                            eventNumber: 2,
+                            priority: 1,
+                            epochTimestamp: 0,
+                            systemTimestamp: undefined,
+                            deltaEpochTimestamp: undefined,
+                            deltaSystemTimestamp: undefined,
+                            data: undefined,
+                            path: undefined,
+                        },
+                    ],
                 },
             ]);
         });
@@ -205,7 +224,13 @@ describe("EventDataDecoder", () => {
 
             expect(normalized).toEqual([
                 {
-                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0), nodeId: undefined, eventName: "startUp" },
+                    path: {
+                        endpointId: EndpointNumber(0),
+                        clusterId: ClusterId(0x28),
+                        eventId: EventId(0),
+                        nodeId: undefined,
+                        eventName: "startUp",
+                    },
                     events: [
                         {
                             eventNumber: 1,
@@ -215,7 +240,7 @@ describe("EventDataDecoder", () => {
                             deltaEpochTimestamp: undefined,
                             deltaSystemTimestamp: undefined,
                             data: { softwareVersion: 1 },
-                            path: undefined
+                            path: undefined,
                         },
                         {
                             eventNumber: 3,
@@ -225,22 +250,30 @@ describe("EventDataDecoder", () => {
                             deltaEpochTimestamp: undefined,
                             deltaSystemTimestamp: undefined,
                             data: { softwareVersion: 3 },
-                            path: undefined
-                        }
+                            path: undefined,
+                        },
                     ],
                 },
                 {
-                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(1), nodeId: undefined, eventName: "shutDown" },
-                    events: [{
-                        eventNumber: 2,
-                        priority: 1,
-                        epochTimestamp: 0,
-                        systemTimestamp: undefined,
-                        deltaEpochTimestamp: undefined,
-                        deltaSystemTimestamp: undefined,
-                        data: undefined,
-                        path: undefined
-                    }]
+                    path: {
+                        endpointId: EndpointNumber(0),
+                        clusterId: ClusterId(0x28),
+                        eventId: EventId(1),
+                        nodeId: undefined,
+                        eventName: "shutDown",
+                    },
+                    events: [
+                        {
+                            eventNumber: 2,
+                            priority: 1,
+                            epochTimestamp: 0,
+                            systemTimestamp: undefined,
+                            deltaEpochTimestamp: undefined,
+                            deltaSystemTimestamp: undefined,
+                            data: undefined,
+                            path: undefined,
+                        },
+                    ],
                 },
             ]);
         });

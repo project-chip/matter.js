@@ -66,7 +66,7 @@ export const TypeMap: { [name: string]: string } = {
     IPV4ADR: "ipv4adr",
     IPV6ADR: "ipv6adr",
     IPV6PRE: "ipv6pre",
-    HWADR: "hwadr"
+    HWADR: "hwadr",
 };
 
 export const ChildTypeMap: { [name: string]: string } = {
@@ -76,5 +76,5 @@ export const ChildTypeMap: { [name: string]: string } = {
     map32: "INT32U",
     map64: "INT64U",
     enum8: "INT8U",
-    enum16: "INT16U"
+    enum16: "INT16U",
 };

@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { resolve, dirname } from "path";
+import { mkdirSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from "fs";
+import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
-import { readdirSync, unlinkSync, readFileSync, writeFileSync, mkdirSync } from "fs";
 import { describeList } from "./string.js";
 
 // Paths we read/write must be defined here
@@ -14,7 +14,7 @@ const DIR_MAPPING = {
     "#cache": "../.cache",
     "#intermediate": "../../models",
     "#elements": "../../packages/matter.js/src/model/standard/elements",
-    "#clusters": "../../packages/matter.js/src/cluster/definitions"
+    "#clusters": "../../packages/matter.js/src/cluster/definitions",
 } as { [dirname: string]: string | undefined };
 
 function resolveFromPackage(path: string) {
@@ -40,7 +40,7 @@ function resolveFromPackage(path: string) {
     return resolve(dirname(fileURLToPath(import.meta.url)), path);
 }
 
-export function readMatterFile(path: string, encoding: BufferEncoding = 'utf-8') {
+export function readMatterFile(path: string, encoding: BufferEncoding = "utf-8") {
     return readFileSync(resolveFromPackage(path), { encoding: encoding });
 }
 
@@ -56,7 +56,7 @@ export function writeMatterFile(path: string, body: any) {
 export function clean(target: string, suffix = "") {
     const path = resolveFromPackage(target);
     try {
-        readdirSync(path).forEach((f) => {
+        readdirSync(path).forEach(f => {
             if (f.endsWith(`${suffix}.ts`)) {
                 unlinkSync(resolve(path, f));
             }

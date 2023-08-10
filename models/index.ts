@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "./local.js";
 export * from "./chip.js";
+export * from "./local.js";
 export * from "./spec.js";
 import "./local/index.js";

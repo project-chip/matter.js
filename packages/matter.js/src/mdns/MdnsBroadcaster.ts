@@ -4,25 +4,37 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AAAARecord, ARecord, PtrRecord, SrvRecord, TxtRecord, DnsRecord } from "../codec/DnsCodec.js";
-import { Crypto } from "../crypto/Crypto.js";
+import { AAAARecord, ARecord, DnsRecord, PtrRecord, SrvRecord, TxtRecord } from "../codec/DnsCodec.js";
 import {
-    getCommissioningModeQname, getDeviceInstanceQname, getDeviceMatterQname, getDeviceTypeQname, getFabricQname,
-    getLongDiscriminatorQname, getShortDiscriminatorQname, getVendorQname, MATTER_COMMISSION_SERVICE_QNAME,
-    MATTER_COMMISSIONER_SERVICE_QNAME, MATTER_SERVICE_QNAME, SERVICE_DISCOVERY_QNAME
+    CommissionerInstanceData,
+    CommissioningModeInstanceData,
+    OperationalInstanceData,
+    PairingHintBitmap,
+    PairingHintBitmapSchema,
+} from "../common/InstanceBroadcaster.js";
+import { ImplementationError } from "../common/MatterError.js";
+import { Crypto } from "../crypto/Crypto.js";
+import { NodeId } from "../datatype/NodeId.js";
+import { Fabric } from "../fabric/Fabric.js";
+import { Logger } from "../log/Logger.js";
+import { Network } from "../net/Network.js";
+import { TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
+import { isIPv4 } from "../util/Ip.js";
+import {
+    getCommissioningModeQname,
+    getDeviceInstanceQname,
+    getDeviceMatterQname,
+    getDeviceTypeQname,
+    getFabricQname,
+    getLongDiscriminatorQname,
+    getShortDiscriminatorQname,
+    getVendorQname,
+    MATTER_COMMISSIONER_SERVICE_QNAME,
+    MATTER_COMMISSION_SERVICE_QNAME,
+    MATTER_SERVICE_QNAME,
+    SERVICE_DISCOVERY_QNAME,
 } from "./MdnsConsts.js";
 import { MdnsServer } from "./MdnsServer.js";
-import { Network } from "../net/Network.js";
-import { isIPv4 } from "../util/Ip.js";
-import { Logger } from "../log/Logger.js";
-import { Fabric } from "../fabric/Fabric.js";
-import {
-    CommissionerInstanceData, CommissioningModeInstanceData, OperationalInstanceData, PairingHintBitmap,
-    PairingHintBitmapSchema
-} from "../common/InstanceBroadcaster.js";
-import { TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
-import { ImplementationError } from "../common/MatterError.js";
-import { NodeId } from "../datatype/NodeId.js";
 
 const logger = Logger.get("MdnsBroadcaster");
 
@@ -44,22 +56,29 @@ export class MdnsBroadcaster {
 
     private readonly network = Network.get();
 
-    constructor(
-        private readonly mdnsServer: MdnsServer,
-    ) { }
+    constructor(private readonly mdnsServer: MdnsServer) {}
 
-    validatePairingInstructions(pairingHint: TypeFromPartialBitSchema<typeof PairingHintBitmap>, pairingInstructions: string) {
+    validatePairingInstructions(
+        pairingHint: TypeFromPartialBitSchema<typeof PairingHintBitmap>,
+        pairingInstructions: string,
+    ) {
         const needsInstructions = [
-            "customInstruction", "pressRestButtonForNumberOfSeconds", "pressResetButtonUntilLightBlinks",
+            "customInstruction",
+            "pressRestButtonForNumberOfSeconds",
+            "pressResetButtonUntilLightBlinks",
             "pressResetButtonForNumberOfSecondsWithApplicationOfPower",
-            "pressResetButtonUntilLightBlinksWithApplicationOfPower", "pressResetButtonNumberOfTimes",
-            "pressSetupButtonForNumberOfSeconds", "pressSetupButtonUntilLightBlinks",
+            "pressResetButtonUntilLightBlinksWithApplicationOfPower",
+            "pressResetButtonNumberOfTimes",
+            "pressSetupButtonForNumberOfSeconds",
+            "pressSetupButtonUntilLightBlinks",
             "pressSetupButtonForNumberOfSecondsWithApplicationOfPower",
             "pressSetupButtonUntilLightBlinksWithApplicationOfPower",
-            "pressSetupButtonNumberOfTimes"
+            "pressSetupButtonNumberOfTimes",
         ].find(hint => (pairingHint as any)[hint] === true);
         if (needsInstructions && pairingInstructions.length === 0) {
-            throw new ImplementationError(`Pairing instructions required for Pairing Hint of type "${needsInstructions}"`);
+            throw new ImplementationError(
+                `Pairing instructions required for Pairing Hint of type "${needsInstructions}"`,
+            );
         }
     }
 
@@ -68,14 +87,22 @@ export class MdnsBroadcaster {
         announcedNetPort: number,
         mode: number,
         {
-            deviceName, deviceType, vendorId, productId, discriminator, sleepIdleInterval = DEFAULT_SLEEP_IDLE_INTERVAL,
-            sleepActiveInterval = DEFAULT_SLEEP_ACTIVE_INTERVAL, pairingHint = DEFAULT_PAIRING_HINT,
-            pairingInstructions = ""
-        }: CommissioningModeInstanceData
+            deviceName,
+            deviceType,
+            vendorId,
+            productId,
+            discriminator,
+            sleepIdleInterval = DEFAULT_SLEEP_IDLE_INTERVAL,
+            sleepActiveInterval = DEFAULT_SLEEP_ACTIVE_INTERVAL,
+            pairingHint = DEFAULT_PAIRING_HINT,
+            pairingInstructions = "",
+        }: CommissioningModeInstanceData,
     ) {
-        logger.debug(`announce commissioning mode ${mode} ${deviceName} ${deviceType} ${vendorId} ${productId} ${discriminator}`);
+        logger.debug(
+            `announce commissioning mode ${mode} ${deviceName} ${deviceType} ${vendorId} ${productId} ${discriminator}`,
+        );
 
-        const shortDiscriminator = (discriminator >> 8) & 0x0F;
+        const shortDiscriminator = (discriminator >> 8) & 0x0f;
         const instanceId = Crypto.getRandomData(8).toHex().toUpperCase();
         const vendorQname = getVendorQname(vendorId);
         const deviceTypeQname = getDeviceTypeQname(deviceType);
@@ -92,12 +119,15 @@ export class MdnsBroadcaster {
             const { mac, ips } = ipMac;
             const hostname = mac.replace(/:/g, "").toUpperCase() + "0000.local";
 
-            logger.debug("Announcement: Commission mode ", Logger.dict({
-                mode,
-                qname: deviceQname,
-                port: announcedNetPort,
-                interface: netInterface
-            }));
+            logger.debug(
+                "Announcement: Commission mode ",
+                Logger.dict({
+                    mode,
+                    qname: deviceQname,
+                    port: announcedNetPort,
+                    interface: netInterface,
+                }),
+            );
 
             const records = [
                 PtrRecord(SERVICE_DISCOVERY_QNAME, MATTER_COMMISSION_SERVICE_QNAME),
@@ -114,16 +144,16 @@ export class MdnsBroadcaster {
                 PtrRecord(commissionModeQname, deviceQname),
                 SrvRecord(deviceQname, { priority: 0, weight: 0, port: announcedNetPort, target: hostname }),
                 TxtRecord(deviceQname, [
-                    `VP=${vendorId}+${productId}`,                    /* Vendor / Product */
-                    `DT=${deviceType}`,                                  /* Device Type */
-                    `DN=${deviceName}`,                                  /* Device Name */
-                    `SII=${sleepIdleInterval}`,                          /* Sleepy Idle Interval */
-                    `SAI=${sleepActiveInterval}`,                        /* Sleepy Active Interval */
-                    `T=${TCP_SUPPORTED}`,                                /* TCP not supported */
-                    `D=${discriminator}`,                                /* Discriminator */
-                    `CM=${mode}`,                                        /* Commission Mode */
-                    `PH=${PairingHintBitmapSchema.encode(pairingHint)}`, /* Pairing Hint */
-                    `PI=${pairingInstructions}`,                         /* Pairing Instruction */
+                    `VP=${vendorId}+${productId}` /* Vendor / Product */,
+                    `DT=${deviceType}` /* Device Type */,
+                    `DN=${deviceName}` /* Device Name */,
+                    `SII=${sleepIdleInterval}` /* Sleepy Idle Interval */,
+                    `SAI=${sleepActiveInterval}` /* Sleepy Active Interval */,
+                    `T=${TCP_SUPPORTED}` /* TCP not supported */,
+                    `D=${discriminator}` /* Discriminator */,
+                    `CM=${mode}` /* Commission Mode */,
+                    `PH=${PairingHintBitmapSchema.encode(pairingHint)}` /* Pairing Hint */,
+                    `PI=${pairingInstructions}` /* Pairing Instruction */,
                 ]),
             ];
             ips.forEach(ip => {
@@ -142,8 +172,9 @@ export class MdnsBroadcaster {
         announcedNetPort: number,
         fabrics: Fabric[],
         {
-            sleepIdleInterval = DEFAULT_SLEEP_IDLE_INTERVAL, sleepActiveInterval = DEFAULT_SLEEP_ACTIVE_INTERVAL
-        }: OperationalInstanceData = {}
+            sleepIdleInterval = DEFAULT_SLEEP_IDLE_INTERVAL,
+            sleepActiveInterval = DEFAULT_SLEEP_ACTIVE_INTERVAL,
+        }: OperationalInstanceData = {},
     ) {
         this.mdnsServer.setRecordsGenerator(announcedNetPort, netInterface => {
             const ipMac = this.network.getIpMac(netInterface);
@@ -151,30 +182,31 @@ export class MdnsBroadcaster {
             const { mac, ips } = ipMac;
             const hostname = mac.replace(/:/g, "").toUpperCase() + "0000.local";
 
-            const records: DnsRecord<any>[] = [
-                PtrRecord(SERVICE_DISCOVERY_QNAME, MATTER_SERVICE_QNAME),
-            ];
+            const records: DnsRecord<any>[] = [PtrRecord(SERVICE_DISCOVERY_QNAME, MATTER_SERVICE_QNAME)];
             fabrics.forEach(fabric => {
                 const { operationalId, nodeId } = fabric;
                 const operationalIdString = operationalId.toHex().toUpperCase();
                 const fabricQname = getFabricQname(operationalIdString);
                 const deviceMatterQname = getDeviceMatterQname(operationalIdString, NodeId.toHexString(nodeId));
 
-                logger.debug("Announcement: Fabric", Logger.dict({
-                    id: `${operationalId.toHex()}/${nodeId}`,
-                    qname: deviceMatterQname,
-                    port: announcedNetPort,
-                    interface: netInterface
-                }));
+                logger.debug(
+                    "Announcement: Fabric",
+                    Logger.dict({
+                        id: `${operationalId.toHex()}/${nodeId}`,
+                        qname: deviceMatterQname,
+                        port: announcedNetPort,
+                        interface: netInterface,
+                    }),
+                );
                 const fabricRecords = [
                     PtrRecord(SERVICE_DISCOVERY_QNAME, fabricQname),
                     PtrRecord(MATTER_SERVICE_QNAME, deviceMatterQname),
                     PtrRecord(fabricQname, deviceMatterQname),
                     SrvRecord(deviceMatterQname, { priority: 0, weight: 0, port: announcedNetPort, target: hostname }),
                     TxtRecord(deviceMatterQname, [
-                        `SII=${sleepIdleInterval}`,   /* Sleepy Idle Interval */
-                        `SAI=${sleepActiveInterval}`, /* Sleepy Active Interval */
-                        `T=${TCP_SUPPORTED}`,         /* TCP not supported */
+                        `SII=${sleepIdleInterval}` /* Sleepy Idle Interval */,
+                        `SAI=${sleepActiveInterval}` /* Sleepy Active Interval */,
+                        `T=${TCP_SUPPORTED}` /* TCP not supported */,
                     ]),
                 ];
                 records.push(...fabricRecords);
@@ -194,14 +226,21 @@ export class MdnsBroadcaster {
     setCommissionerInfo(
         announcedNetPort: number,
         {
-            deviceName, deviceType, vendorId, productId, sleepIdleInterval = DEFAULT_SLEEP_IDLE_INTERVAL,
-            sleepActiveInterval = DEFAULT_SLEEP_ACTIVE_INTERVAL
-        }: CommissionerInstanceData
-    ) {
-        logger.debug("Announcement: Commissioner", Logger.dict({
-            port: announcedNetPort,
+            deviceName,
             deviceType,
-        }));
+            vendorId,
+            productId,
+            sleepIdleInterval = DEFAULT_SLEEP_IDLE_INTERVAL,
+            sleepActiveInterval = DEFAULT_SLEEP_ACTIVE_INTERVAL,
+        }: CommissionerInstanceData,
+    ) {
+        logger.debug(
+            "Announcement: Commissioner",
+            Logger.dict({
+                port: announcedNetPort,
+                deviceType,
+            }),
+        );
 
         const instanceId = Crypto.getRandomData(8).toHex().toUpperCase();
         const deviceTypeQname = `_T${deviceType}._sub.${MATTER_COMMISSIONER_SERVICE_QNAME}`;
@@ -219,12 +258,12 @@ export class MdnsBroadcaster {
                 PtrRecord(vendorQname, deviceQname),
                 SrvRecord(deviceQname, { priority: 0, weight: 0, port: announcedNetPort, target: hostname }),
                 TxtRecord(deviceQname, [
-                    `VP=${vendorId}+${productId}`, /* Vendor / Product */
-                    `DT=${deviceType}`,               /* Device Type */
-                    `DN=${deviceName}`,               /* Device Name */
-                    `SII=${sleepIdleInterval}`,       /* Sleepy Idle Interval */
-                    `SAI=${sleepActiveInterval}`,     /* Sleepy Active Interval */
-                    `T=${TCP_SUPPORTED}`,             /* TCP not supported */
+                    `VP=${vendorId}+${productId}` /* Vendor / Product */,
+                    `DT=${deviceType}` /* Device Type */,
+                    `DN=${deviceName}` /* Device Name */,
+                    `SII=${sleepIdleInterval}` /* Sleepy Idle Interval */,
+                    `SAI=${sleepActiveInterval}` /* Sleepy Active Interval */,
+                    `T=${TCP_SUPPORTED}` /* TCP not supported */,
                 ]),
             ];
             if (deviceType !== undefined) {
@@ -244,8 +283,7 @@ export class MdnsBroadcaster {
     }
 
     async announce(announcementPort: number) {
-        this.mdnsServer.announce(announcementPort)
-            .catch(error => logger.error(error));
+        this.mdnsServer.announce(announcementPort).catch(error => logger.error(error));
     }
 
     async close() {

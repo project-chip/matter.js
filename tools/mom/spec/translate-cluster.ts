@@ -5,24 +5,39 @@
  */
 
 import { Logger } from "#matter.js/log/Logger.js";
-import { AttributeElement, ClusterElement, CommandElement, DatatypeElement, EventElement, Globals, Metatype } from "#matter.js/model/index.js";
+import {
+    AttributeElement,
+    ClusterElement,
+    CommandElement,
+    DatatypeElement,
+    EventElement,
+    Globals,
+    Metatype,
+} from "#matter.js/model/index.js";
 import { camelize } from "#util/string.js";
 import { addDocumentation } from "./add-documentation.js";
 import { Bits, Code, Identifier, Integer, LowerIdentifier, NoSpace, Str, UpperIdentifier } from "./html-translators.js";
 import { ClusterReference, HtmlReference } from "./spec-types.js";
-import { translateTable, Optional, Alias, translateRecordsToMatter, Children, chooseIdentityAliases } from "./translate-table.js";
+import {
+    Alias,
+    Children,
+    chooseIdentityAliases,
+    Optional,
+    translateRecordsToMatter,
+    translateTable,
+} from "./translate-table.js";
 
 const logger = Logger.get("translate-cluster");
 
 const TYPE_ERRORS: { [badType: string]: string } = {
     "attribute-id": "attrib-id",
-    "bitmap8": "map8",
+    bitmap8: "map8",
     "node-idx": "node-id",
-    "SystemTimeMicroseconds": "systime-us",
-    "HardwareAddress": "hwadr",
-    "String": "string",
-    "variable": "any"
-}
+    SystemTimeMicroseconds: "systime-us",
+    HardwareAddress: "hwadr",
+    String: "string",
+    variable: "any",
+};
 
 function fixTypeError(type: string | undefined) {
     if (type !== undefined && TYPE_ERRORS[type]) {
@@ -52,7 +67,7 @@ export function* translateCluster(definition: ClusterReference) {
             classification: metadata.classification,
             children: children,
             type: metadata.derivesFrom,
-            xref: definition.xref
+            xref: definition.xref,
         });
 
         addDocumentation(cluster, definition);
@@ -77,8 +92,8 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
         ids: ids,
         classification: classification,
         revision: revision,
-        derivesFrom
-    }
+        derivesFrom,
+    };
 
     function translateIds() {
         const ids = translateTable("id", definition.ids, {
@@ -88,7 +103,7 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
             //
             // Note that ID is optional because base clusters may have no ID
             id: Alias(Str, "identifier"),
-            name: Identifier
+            name: Identifier,
         });
 
         // Some tables list the primary ID twice; only accept the secondary
@@ -127,7 +142,7 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
         const classifications = translateTable("classfication", definition.classifications, {
             hierarchy: Optional(Str),
             role: Optional(LowerIdentifier),
-            scope: Optional(Alias(LowerIdentifier, "context"))
+            scope: Optional(Alias(LowerIdentifier, "context")),
         });
 
         let classification: ClusterElement.Classification;
@@ -155,7 +170,7 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
 
     function translateRevision() {
         const revisions = translateTable("revision", definition.revisions, {
-            revision: Alias(Integer, "rev")
+            revision: Alias(Integer, "rev"),
         });
 
         let revision = revisions[revisions.length - 1]?.revision;
@@ -169,7 +184,7 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
             id: Globals.ClusterRevision.id,
             name: Globals.ClusterRevision.name,
             type: "ClusterRevision",
-            default: revision
+            default: revision,
         });
 
         return revision;
@@ -188,18 +203,19 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
             name: Alias(UpperIdentifier, "code", "feature"),
 
             // Actual type is numeric but we let Model handle that translation
-            default: Optional(Alias(NoSpace, "def"))
+            default: Optional(Alias(NoSpace, "def")),
         });
 
         const values = translateRecordsToMatter("feature", records, DatatypeElement);
-        values && children.push({
-            tag: Globals.FeatureMap.tag,
-            id: Globals.FeatureMap.id,
-            name: Globals.FeatureMap.name,
-            type: "FeatureMap",
-            children: values,
-            xref: definition.features?.xref
-        });
+        values &&
+            children.push({
+                tag: Globals.FeatureMap.tag,
+                id: Globals.FeatureMap.id,
+                name: Globals.FeatureMap.name,
+                type: "FeatureMap",
+                children: values,
+                xref: definition.features?.xref,
+            });
     }
 }
 
@@ -208,7 +224,7 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
 //
 // We also use the presence of this record to add the implicit FabrixIndex
 // field
-function applyAccessNotes(fields?: HtmlReference, records?: { id: number, access?: string }[]) {
+function applyAccessNotes(fields?: HtmlReference, records?: { id: number; access?: string }[]) {
     if (!fields?.table?.notes.length || !records) {
         return;
     }
@@ -259,7 +275,7 @@ function applyAccessNotes(fields?: HtmlReference, records?: { id: number, access
         if (!haveFabricIndex) {
             const fabricIndex = { ...Globals.FabricIndex };
             delete fabricIndex.global;
-            records.push(fabricIndex as { id: number, name: string });
+            records.push(fabricIndex as { id: number; name: string });
         }
     }
 }
@@ -278,7 +294,7 @@ function translateFields(desc: string, fields?: HtmlReference) {
         default: Optional(NoSpace),
         access: Optional(Str),
         conformance: Optional(Code),
-        children: Children(translateValueChildren)
+        children: Children(translateValueChildren),
     });
 
     records.forEach(r => {
@@ -351,7 +367,11 @@ function hasColumn(definition: HtmlReference, ...names: string[]) {
 
 // Translate children of enums, bitmaps, structs, commands, attributes and
 // events.  If "parent" is none of these, returns undefined
-function translateValueChildren(tag: string, parent: undefined | { type?: string }, definition: HtmlReference): DatatypeElement[] | undefined {
+function translateValueChildren(
+    tag: string,
+    parent: undefined | { type?: string },
+    definition: HtmlReference,
+): DatatypeElement[] | undefined {
     let type = parent?.type;
     if (type === undefined) {
         switch (tag) {
@@ -380,7 +400,7 @@ function translateValueChildren(tag: string, parent: undefined | { type?: string
             const { ids, names } = chooseIdentityAliases(
                 definition,
                 ["id", "value", "enum"],
-                ["name", "type", "statuscode", "description"]
+                ["name", "type", "statuscode", "description"],
             );
 
             let records = translateTable("value", definition, {
@@ -388,7 +408,7 @@ function translateValueChildren(tag: string, parent: undefined | { type?: string
                 name: Alias(Identifier, ...names),
                 conformance: Optional(Code),
                 description: Optional(Alias(Str, "summary", "notes")),
-                meaning: Optional(Str)
+                meaning: Optional(Str),
             });
 
             records = records.filter(r => r.name !== "Reserved");
@@ -404,10 +424,10 @@ function translateValueChildren(tag: string, parent: undefined | { type?: string
                 const records = translateTable("bit", definition, {
                     bit: Bits,
                     description: Str,
-                    conformance: Optional(Alias(Str, "M"))
+                    conformance: Optional(Alias(Str, "M")),
                 });
 
-                return translateRecordsToMatter("wc bit", records, (r) => {
+                return translateRecordsToMatter("wc bit", records, r => {
                     const constraint = r.bit;
                     let name;
                     if (typeof constraint === "number") {
@@ -420,7 +440,7 @@ function translateValueChildren(tag: string, parent: undefined | { type?: string
                             name,
                             constraint,
                             description: r.description,
-                            conformance: r.conformance
+                            conformance: r.conformance,
                         });
                     }
                 });
@@ -434,7 +454,7 @@ function translateValueChildren(tag: string, parent: undefined | { type?: string
             const records = translateTable("bit", definition, {
                 constraint: Alias(Bits, ...ids),
                 name: Alias(Identifier, ...names),
-                description: Optional(Alias(Str, "summary"))
+                description: Optional(Alias(Str, "summary")),
             });
 
             return translateRecordsToMatter("bit", records, DatatypeElement);
@@ -476,10 +496,10 @@ function translateInvokable(definition: ClusterReference, children: Array<Cluste
             response: Optional(Identifier),
             access: Optional(Str),
             conformance: Optional(Code),
-            children: Children(translateValueChildren)
+            children: Children(translateValueChildren),
         });
 
-        const commands = translateRecordsToMatter("command", records, (r) => {
+        const commands = translateRecordsToMatter("command", records, r => {
             let direction: CommandElement.Direction | undefined;
             if (r.direction.match(/client.*server/i)) {
                 direction = CommandElement.Direction.Request;
@@ -515,10 +535,10 @@ function translateInvokable(definition: ClusterReference, children: Array<Cluste
             priority: Optional(LowerIdentifier),
             access: Optional(Str),
             conformance: Optional(Code),
-            children: Children(translateValueChildren)
+            children: Children(translateValueChildren),
         });
 
-        const events = translateRecordsToMatter("event", records, (r) => {
+        const events = translateRecordsToMatter("event", records, r => {
             let priority: EventElement.Priority;
             switch (r.priority?.toLowerCase()) {
                 case "debug":
@@ -539,7 +559,7 @@ function translateInvokable(definition: ClusterReference, children: Array<Cluste
                     break;
 
                 default:
-                    logger.warn(`unrecognized priority "${r.priority}", assuming CRITICAL`)
+                    logger.warn(`unrecognized priority "${r.priority}", assuming CRITICAL`);
                     priority = EventElement.Priority.Critical;
             }
             return EventElement({ ...r, priority });
@@ -551,7 +571,7 @@ function translateInvokable(definition: ClusterReference, children: Array<Cluste
         const records = translateTable("statusCodes", definition.statusCodes, {
             id: Alias(Integer, "statuscode"),
             name: Alias(Identifier, "value"),
-            details: Alias(Str, "summary")
+            details: Alias(Str, "summary"),
         });
         const statusCodes = translateRecordsToMatter("statusCodes", records, DatatypeElement);
         statusCodes && children.push(DatatypeElement({ name: "StatusCode", type: "status", children: statusCodes }));
@@ -589,7 +609,7 @@ function translateDatatypes(definition: ClusterReference, children: Array<Cluste
 
         if (name.match(/enum$/i) || type?.match(/^enum/i)) {
             if (!type) {
-                logger.warn(`no base detected, guessing enum8`)
+                logger.warn(`no base detected, guessing enum8`);
                 type = "enum8";
             }
         } else if (name.match(/bits$/i) || type?.match(/^map/i)) {
@@ -599,10 +619,7 @@ function translateDatatypes(definition: ClusterReference, children: Array<Cluste
             } else if (type.match(/^bitmap/)) {
                 type = type.slice(3);
             }
-        } else if (name.match(/struct$/i)
-            || type === "struct"
-            || (definition.table?.rows[0].type)
-        ) {
+        } else if (name.match(/struct$/i) || type === "struct" || definition.table?.rows[0].type) {
             if (!type) {
                 type = "struct";
             }

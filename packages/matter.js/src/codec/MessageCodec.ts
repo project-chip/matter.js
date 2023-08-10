@@ -4,44 +4,44 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { NotImplementedError, UnexpectedDataError } from "../common/MatterError.js";
+import { GroupId } from "../datatype/GroupId.js";
 import { NodeId } from "../datatype/NodeId.js";
+import { DiagnosticDictionary } from "../log/Logger.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataReader } from "../util/DataReader.js";
 import { DataWriter } from "../util/DataWriter.js";
-import { DiagnosticDictionary } from "../log/Logger.js";
-import { NotImplementedError, UnexpectedDataError } from "../common/MatterError.js";
-import { GroupId } from "../datatype/GroupId.js";
 
 export interface PacketHeader {
-    sessionId: number,
-    sessionType: SessionType,
-    hasPrivacyEnhancements: boolean,
-    isControlMessage: boolean,
-    hasMessageExtensions: boolean,
-    messageId: number,
-    sourceNodeId?: NodeId,
-    destNodeId?: NodeId,
-    destGroupId?: number,
+    sessionId: number;
+    sessionType: SessionType;
+    hasPrivacyEnhancements: boolean;
+    isControlMessage: boolean;
+    hasMessageExtensions: boolean;
+    messageId: number;
+    sourceNodeId?: NodeId;
+    destNodeId?: NodeId;
+    destGroupId?: number;
 }
 
 export interface PayloadHeader {
-    exchangeId: number,
-    protocolId: number,
-    messageType: number,
-    isInitiatorMessage: boolean,
-    requiresAck: boolean,
-    ackedMessageId?: number,
+    exchangeId: number;
+    protocolId: number;
+    messageType: number;
+    isInitiatorMessage: boolean;
+    requiresAck: boolean;
+    ackedMessageId?: number;
 }
 
 export interface Packet {
-    header: PacketHeader,
-    bytes: ByteArray,
+    header: PacketHeader;
+    bytes: ByteArray;
 }
 
 export interface Message {
-    packetHeader: PacketHeader,
-    payloadHeader: PayloadHeader,
-    payload: ByteArray,
+    packetHeader: PacketHeader;
+    payloadHeader: PayloadHeader;
+    payload: ByteArray;
 }
 
 const HEADER_VERSION = 0x00;
@@ -76,7 +76,6 @@ const enum SecurityFlag {
 }
 
 export class MessageCodec {
-
     static decodePacket(data: ByteArray): Packet {
         const reader = new DataReader(data, Endian.Little);
         const header = this.decodePacketHeader(reader);
@@ -99,18 +98,12 @@ export class MessageCodec {
     static encodePayload({ packetHeader, payloadHeader, payload }: Message): Packet {
         return {
             header: packetHeader,
-            bytes: ByteArray.concat(
-                this.encodePayloadHeader(payloadHeader),
-                payload,
-            ),
+            bytes: ByteArray.concat(this.encodePayloadHeader(payloadHeader), payload),
         };
     }
 
     static encodePacket({ header, bytes }: Packet): ByteArray {
-        return ByteArray.concat(
-            this.encodePacketHeader(header),
-            bytes,
-        );
+        return ByteArray.concat(this.encodePacketHeader(header), bytes);
     }
 
     private static decodePacketHeader(reader: DataReader<Endian.Little>) {
@@ -121,7 +114,8 @@ export class MessageCodec {
         const hasDestGroupId = (flags & PacketHeaderFlag.HasDestGroupId) !== 0;
         const hasSourceNodeId = (flags & PacketHeaderFlag.HasSourceNodeId) !== 0;
 
-        if (hasDestNodeId && hasDestGroupId) throw new UnexpectedDataError("The header cannot contain destination group and node at the same time");
+        if (hasDestNodeId && hasDestGroupId)
+            throw new UnexpectedDataError("The header cannot contain destination group and node at the same time");
         if (version !== HEADER_VERSION) throw new NotImplementedError(`Unsupported header version ${version}`);
 
         const sessionId = reader.readUInt16();
@@ -132,7 +126,8 @@ export class MessageCodec {
         const destGroupId = hasDestGroupId ? GroupId(reader.readUInt16()) : undefined;
 
         const sessionType = securityFlags & 0b00000011;
-        if (sessionType !== SessionType.Group && sessionType !== SessionType.Unicast) throw new UnexpectedDataError(`Unsupported session type ${sessionType}`);
+        if (sessionType !== SessionType.Group && sessionType !== SessionType.Unicast)
+            throw new UnexpectedDataError(`Unsupported session type ${sessionType}`);
         const hasPrivacyEnhancements = (securityFlags & SecurityFlag.HasPrivacyEnhancements) !== 0;
         if (hasPrivacyEnhancements) throw new NotImplementedError(`Privacy enhancements not supported`);
         const isControlMessage = (securityFlags & SecurityFlag.IsControlMessage) !== 0;
@@ -140,7 +135,17 @@ export class MessageCodec {
         const hasMessageExtensions = (securityFlags & SecurityFlag.HasMessageExtension) !== 0;
         if (hasMessageExtensions) throw new NotImplementedError(`Message extensions not supported`);
 
-        return { sessionId, sourceNodeId, messageId, destGroupId, destNodeId, sessionType, hasPrivacyEnhancements, isControlMessage, hasMessageExtensions };
+        return {
+            sessionId,
+            sourceNodeId,
+            messageId,
+            destGroupId,
+            destNodeId,
+            sessionType,
+            hasPrivacyEnhancements,
+            isControlMessage,
+            hasMessageExtensions,
+        };
     }
 
     private static decodePayloadHeader(reader: DataReader<Endian.Little>): PayloadHeader {
@@ -155,18 +160,26 @@ export class MessageCodec {
         const messageType = reader.readUInt8();
         const exchangeId = reader.readUInt16();
         const vendorId = hasVendorId ? reader.readUInt16() : COMMON_VENDOR_ID;
-        const protocolId = vendorId << 16 | reader.readUInt16();
+        const protocolId = (vendorId << 16) | reader.readUInt16();
         const ackedMessageId = isAckMessage ? reader.readUInt32() : undefined;
 
         return { protocolId, exchangeId, messageType, isInitiatorMessage, requiresAck, ackedMessageId };
     }
 
-    static encodePacketHeader({ messageId: messageCounter, sessionId, destGroupId, destNodeId, sourceNodeId, sessionType }: PacketHeader) {
+    static encodePacketHeader({
+        messageId: messageCounter,
+        sessionId,
+        destGroupId,
+        destNodeId,
+        sourceNodeId,
+        sessionType,
+    }: PacketHeader) {
         const writer = new DataWriter(Endian.Little);
-        const flags = (HEADER_VERSION << 4)
-            | (destGroupId !== undefined ? PacketHeaderFlag.HasDestGroupId : 0)
-            | (destNodeId !== undefined ? PacketHeaderFlag.HasDestNodeId : 0)
-            | (sourceNodeId !== undefined ? PacketHeaderFlag.HasSourceNodeId : 0);
+        const flags =
+            (HEADER_VERSION << 4) |
+            (destGroupId !== undefined ? PacketHeaderFlag.HasDestGroupId : 0) |
+            (destNodeId !== undefined ? PacketHeaderFlag.HasDestNodeId : 0) |
+            (sourceNodeId !== undefined ? PacketHeaderFlag.HasSourceNodeId : 0);
         const securityFlags = sessionType;
 
         writer.writeUInt8(flags);
@@ -179,28 +192,40 @@ export class MessageCodec {
         return writer.toByteArray();
     }
 
-    static messageDiagnostics({ packetHeader: { messageId, sessionId }, payloadHeader: { exchangeId, messageType, protocolId, ackedMessageId, requiresAck }, payload }: Message) {
+    static messageDiagnostics({
+        packetHeader: { messageId, sessionId },
+        payloadHeader: { exchangeId, messageType, protocolId, ackedMessageId, requiresAck },
+        payload,
+    }: Message) {
         return new DiagnosticDictionary({
             id: `${sessionId}/${exchangeId}/${messageId}`,
             type: `${protocolId}/${messageType}`,
             acked: ackedMessageId,
             reqAck: requiresAck,
-            payload: payload
+            payload: payload,
         });
     }
 
-    private static encodePayloadHeader({ exchangeId, isInitiatorMessage, messageType, protocolId, requiresAck, ackedMessageId: ackedMessageCounter }: PayloadHeader) {
+    private static encodePayloadHeader({
+        exchangeId,
+        isInitiatorMessage,
+        messageType,
+        protocolId,
+        requiresAck,
+        ackedMessageId: ackedMessageCounter,
+    }: PayloadHeader) {
         const writer = new DataWriter(Endian.Little);
-        const vendorId = (protocolId & 0xFFFF0000) >> 16;
-        const flags = (isInitiatorMessage ? PayloadHeaderFlag.IsInitiatorMessage : 0)
-            | (ackedMessageCounter !== undefined ? PayloadHeaderFlag.IsAckMessage : 0)
-            | (requiresAck ? PayloadHeaderFlag.RequiresAck : 0)
-            | (vendorId !== COMMON_VENDOR_ID ? PayloadHeaderFlag.HasVendorId : 0);
+        const vendorId = (protocolId & 0xffff0000) >> 16;
+        const flags =
+            (isInitiatorMessage ? PayloadHeaderFlag.IsInitiatorMessage : 0) |
+            (ackedMessageCounter !== undefined ? PayloadHeaderFlag.IsAckMessage : 0) |
+            (requiresAck ? PayloadHeaderFlag.RequiresAck : 0) |
+            (vendorId !== COMMON_VENDOR_ID ? PayloadHeaderFlag.HasVendorId : 0);
 
         writer.writeUInt8(flags);
         writer.writeUInt8(messageType);
         writer.writeUInt16(exchangeId);
-        (vendorId !== COMMON_VENDOR_ID) ? writer.writeUInt32(protocolId) : writer.writeUInt16(protocolId);
+        vendorId !== COMMON_VENDOR_ID ? writer.writeUInt32(protocolId) : writer.writeUInt16(protocolId);
         if (ackedMessageCounter !== undefined) writer.writeUInt32(ackedMessageCounter);
         return writer.toByteArray();
     }

@@ -4,15 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { StorageBackendDisk } from "../../src/storage/StorageBackendDisk";
 import * as assert from "assert";
+import { readFile, stat } from "fs/promises";
 import { LocalStorage } from "node-localstorage";
-import { stat, readFile } from "fs/promises";
+import { StorageBackendDisk } from "../../src/storage/StorageBackendDisk";
 
 const TEST_STORAGE_LOCATION = __dirname + "/testdata-storage";
 
 describe("Storage node-localstorage", () => {
-
     beforeEach(() => {
         const localStorage = new LocalStorage(TEST_STORAGE_LOCATION);
         localStorage.clear();
@@ -44,53 +43,67 @@ describe("Storage node-localstorage", () => {
     });
 
     it("Throws error when context is empty on set", () => {
-        assert.throws(() => {
-            const storage = new StorageBackendDisk(TEST_STORAGE_LOCATION);
-            storage.set([""], "key", "value");
-        }, {
-            message: "Context must not be an empty string!"
-        });
+        assert.throws(
+            () => {
+                const storage = new StorageBackendDisk(TEST_STORAGE_LOCATION);
+                storage.set([""], "key", "value");
+            },
+            {
+                message: "Context must not be an empty string!",
+            },
+        );
     });
 
     it("Throws error when key is empty on set", () => {
-        assert.throws(() => {
-            const storage = new StorageBackendDisk(TEST_STORAGE_LOCATION);
-            storage.set(["context"], "", "value");
-        }, {
-            message: "Context and key must not be empty strings!"
-        });
+        assert.throws(
+            () => {
+                const storage = new StorageBackendDisk(TEST_STORAGE_LOCATION);
+                storage.set(["context"], "", "value");
+            },
+            {
+                message: "Context and key must not be empty strings!",
+            },
+        );
     });
 
     it("Throws error when context is empty on get", () => {
-        assert.throws(() => {
-            const storage = new StorageBackendDisk(TEST_STORAGE_LOCATION);
-            storage.get([""], "key");
-        }, {
-            message: "Context must not be an empty string!"
-        });
+        assert.throws(
+            () => {
+                const storage = new StorageBackendDisk(TEST_STORAGE_LOCATION);
+                storage.get([""], "key");
+            },
+            {
+                message: "Context must not be an empty string!",
+            },
+        );
     });
 
     it("Throws error when context is empty on get with subcontext", () => {
-        assert.throws(() => {
-            const storage = new StorageBackendDisk(TEST_STORAGE_LOCATION);
-            storage.get(["ok", ""], "key");
-        }, {
-            message: "Context must not be an empty string!"
-        });
+        assert.throws(
+            () => {
+                const storage = new StorageBackendDisk(TEST_STORAGE_LOCATION);
+                storage.get(["ok", ""], "key");
+            },
+            {
+                message: "Context must not be an empty string!",
+            },
+        );
     });
 
     it("Throws error when key is empty on get", () => {
-        assert.throws(() => {
-            const storage = new StorageBackendDisk(TEST_STORAGE_LOCATION);
-            storage.get(["context"], "");
-        }, {
-            message: "Context and key must not be empty strings!"
-        });
+        assert.throws(
+            () => {
+                const storage = new StorageBackendDisk(TEST_STORAGE_LOCATION);
+                storage.get(["context"], "");
+            },
+            {
+                message: "Context and key must not be empty strings!",
+            },
+        );
     });
 
     afterAll(() => {
         const localStorage = new LocalStorage(TEST_STORAGE_LOCATION);
         localStorage.clear();
     });
-
 });
