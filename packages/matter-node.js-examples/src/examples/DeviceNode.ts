@@ -24,8 +24,7 @@ import { Logger } from "@project-chip/matter-node.js/log";
 import { StorageManager, StorageBackendDisk } from "@project-chip/matter-node.js/storage";
 import { Ble } from "@project-chip/matter-node.js/ble";
 import { BleNode } from "@project-chip/matter-node-ble.js/ble";
-import { NetworkCommissioning, GeneralCommissioningCluster } from "@project-chip/matter-node.js/cluster";
-import { ClusterServer } from "@project-chip/matter-node.js/interaction";
+import { ClusterServer, NetworkCommissioning, GeneralCommissioningCluster } from "@project-chip/matter-node.js/cluster";
 import { DeviceTypeId, VendorId } from "@project-chip/matter.js/datatype";
 
 if (hasParameter("ble")) {

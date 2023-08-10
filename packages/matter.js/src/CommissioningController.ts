@@ -8,7 +8,7 @@ import { UdpInterface } from "./net/UdpInterface.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { StorageContext } from "./storage/StorageContext.js";
 import { MatterController } from "./MatterController.js";
-import { InteractionClient, ClusterClient } from "./protocol/interaction/InteractionClient.js";
+import { InteractionClient } from "./protocol/interaction/InteractionClient.js";
 import { NodeId } from "./datatype/NodeId.js";
 import { structureReadAttributeDataToClusterObject } from "./protocol/interaction/AttributeDataDecoder.js";
 import { Endpoint } from "./device/Endpoint.js";
@@ -16,15 +16,14 @@ import { Logger } from "./log/Logger.js";
 import { DeviceTypes, DeviceTypeDefinition, getDeviceTypeDefinitionByCode } from "./device/DeviceTypes.js";
 import {
     AttributeInitialValues, AttributeServerValues, ClusterServerObj, isClusterServer
-} from "./cluster/server/ClusterServer.js";
+} from "./cluster/server/ClusterServerTypes.js";
 import { AtLeastOne } from "./util/Array.js";
-import { ClusterServer } from "./protocol/interaction/InteractionServer.js";
 import { Aggregator } from "./device/Aggregator.js";
 import { PairedDevice } from "./device/Device.js";
 import { ComposedDevice } from "./device/ComposedDevice.js";
 import { DescriptorCluster } from "./cluster/definitions/DescriptorCluster.js";
 import { AllClustersMap } from "./cluster/ClusterHelper.js";
-import { ClusterClientObj, isClusterClient } from "./cluster/client/ClusterClient.js";
+import { ClusterClientObj, isClusterClient } from "./cluster/client/ClusterClientTypes.js";
 import { BitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
 import { ServerAddressIp } from "./common/ServerAddress.js";
@@ -34,6 +33,8 @@ import { NoProviderError, MatterError, ImplementationError, InternalError } from
 import { CommissioningOptions } from "./protocol/ControllerCommissioner.js";
 import { EndpointNumber } from "./datatype/EndpointNumber.js";
 import { ClusterId } from "./datatype/ClusterId.js";
+import { ClusterServer } from "./cluster/server/ClusterServer.js";
+import { ClusterClient } from "./cluster/client/ClusterClient.js";
 
 const logger = new Logger("CommissioningController");
 
@@ -119,7 +120,12 @@ export class CommissioningController extends MatterNode {
             await UdpInterface.create("udp6", this.localPort, this.listeningAddressIpv6),
             this.storage,
             this.serverAddress,
-            this.commissioningOptions
+            this.commissioningOptions,
+            (peerNodeId) => {
+                logger.info(`Peer node ${peerNodeId} disconnected ...`);
+                // TODO Add handling
+                // this.initializeAfterConnect().then().catch(); ....
+            }
         );
 
         if (this.controllerInstance.isCommissioned()) {
@@ -170,6 +176,10 @@ export class CommissioningController extends MatterNode {
 
         logger.debug(`Successfully Paired with Node ID ${this.nodeId} ... requesting endpoint structure`);
 
+        await this.initializeAfterConnect();
+    }
+
+    async initializeAfterConnect() {
         await this.initializeEndpointStructure();
     }
 

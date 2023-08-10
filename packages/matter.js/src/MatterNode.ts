@@ -8,8 +8,8 @@ import { RootEndpoint } from "./device/Device.js";
 import { Endpoint } from "./device/Endpoint.js";
 import { BitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
-import { ClusterClientObj } from "./cluster/client/ClusterClient.js";
-import { ClusterServerObj } from "./cluster/server/ClusterServer.js";
+import { ClusterClientObj } from "./cluster/client/ClusterClientTypes.js";
+import { ClusterServerObj } from "./cluster/server/ClusterServerTypes.js";
 import { InteractionClient } from "./protocol/interaction/InteractionClient.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js"

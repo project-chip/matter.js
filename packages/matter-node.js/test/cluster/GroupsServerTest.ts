@@ -16,11 +16,11 @@ import { Time, TimeFake } from "@project-chip/matter.js/time";
 Time.get = () => new TimeFake(0);
 
 import * as assert from "assert";
-import { ClusterServer, StatusCode } from "@project-chip/matter.js/interaction";
+import { StatusCode } from "@project-chip/matter.js/interaction";
 import { SecureSession } from "@project-chip/matter.js/session";
 import { Fabric, FabricJsonObject } from "@project-chip/matter.js/fabric";
 import {
-    ClusterServerObjForCluster, GroupsCluster, GroupsClusterHandler, Identify
+    ClusterServer, ClusterServerObjForCluster, GroupsCluster, GroupsClusterHandler, Identify
 } from "@project-chip/matter.js/cluster";
 import { EndpointNumber, GroupId } from "@project-chip/matter.js/datatype";
 import { getPromiseResolver } from "@project-chip/matter.js/util";

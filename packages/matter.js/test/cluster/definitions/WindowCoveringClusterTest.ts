@@ -5,8 +5,8 @@
  */
 
 import { WindowCovering, WindowCoveringCluster } from "../../../src/cluster/definitions/WindowCoveringCluster.js";
-import { ClusterServer } from "../../../src/protocol/interaction/InteractionServer.js";
 import { BitFlags } from "../../../src/schema/BitmapSchema.js";
+import { ClusterServer } from "../../../src/cluster/server/ClusterServer.js";
 
 describe("WindowCoveringCluster", () => {
     const WindowCovering_LF_PALF = WindowCoveringCluster.with("Lift", "PositionAwareLift");

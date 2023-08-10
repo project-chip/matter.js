@@ -6,10 +6,10 @@
 
 import { MatterDevice } from "../../MatterDevice.js";
 import { Session } from "../../session/Session.js";
-import { assertSecureSession, SecureSession } from "../../session/SecureSession.js";
+import { assertSecureSession, NoAssociatedFabricError, SecureSession } from "../../session/SecureSession.js";
 import { TlvSchema } from "../../tlv/TlvSchema.js";
 import { Endpoint } from "../../device/Endpoint.js";
-import { Cluster } from "../Cluster.js";
+import { Attribute, Attributes, Cluster, Commands, Events } from "../Cluster.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { isDeepEqual } from "../../util/DeepEqual.js";
 import { StatusResponseError } from "../../protocol/interaction/InteractionMessenger.js";
@@ -17,6 +17,8 @@ import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
 import { ImplementationError, InternalError, MatterError, ValidationError } from "../../common/MatterError.js";
 import { Globals } from "../../model/index.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
+import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
+import { tryCatch } from "../../common/TryCatchHandler.js";
 
 /**
  * Thrown when an operation cannot complete because fabric information is
@@ -25,6 +27,64 @@ import { AttributeId } from "../../datatype/AttributeId.js";
 export class FabricScopeError extends MatterError { }
 
 // TODO create Factory method to create AttributeServer instances
+
+export function createAttributeServer<
+    T,
+    F extends BitSchema,
+    SF extends TypeFromPartialBitSchema<F>,
+    A extends Attributes,
+    C extends Commands,
+    E extends Events
+>(
+    clusterDef: Cluster<F, SF, A, C, E>,
+    attributeDef: Attribute<T, F>,
+    attributeName: string,
+    defaultValue: T,
+    getter?: (session?: Session<MatterDevice>, endpoint?: Endpoint, isFabricFiltered?: boolean) => T,
+    setter?: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => boolean,
+    validator?: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => void,
+) {
+    const { id, schema, writable, fabricScoped, fixed, omitChanges } = attributeDef;
+
+    if (fixed) {
+        return new FixedAttributeServer(
+            id,
+            attributeName,
+            schema,
+            writable,
+            false,
+            defaultValue,
+            getter,
+        );
+    }
+
+    if (fabricScoped) {
+        return new FabricScopedAttributeServer(
+            id,
+            attributeName,
+            schema,
+            writable,
+            !omitChanges,
+            defaultValue,
+            clusterDef,
+            getter,
+            setter,
+            validator,
+        );
+    }
+
+    return new AttributeServer(
+        id,
+        attributeName,
+        schema,
+        writable,
+        !omitChanges,
+        defaultValue,
+        getter,
+        setter,
+        validator,
+    );
+}
 
 /**
  * Base class for all attribute servers.
@@ -345,7 +405,11 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
      */
     updated(session: SecureSession<MatterDevice>) {
         const oldValue = this.value;
-        this.value = this.get(session, true);
+        this.value = tryCatch(
+            () => this.get(session, true),
+            NoAssociatedFabricError, // Handle potential error cases where the session does not have a fabric assigned.
+            this.value ?? this.defaultValue
+        );
         this.handleVersionAndTriggerListeners(this.value, oldValue, true);
     }
 

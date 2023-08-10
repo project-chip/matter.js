@@ -7,7 +7,7 @@
 import {
     AttributeServer, FabricScopedAttributeServer, FixedAttributeServer
 } from "../../cluster/server/AttributeServer.js";
-import { ClusterServerObj } from "../../cluster/server/ClusterServer.js";
+import { ClusterServerObj } from "../../cluster/server/ClusterServerTypes.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
 import { NodeId } from "../../datatype/NodeId.js";

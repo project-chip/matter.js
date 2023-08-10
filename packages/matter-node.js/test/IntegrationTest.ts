@@ -14,7 +14,7 @@ Crypto.get = () => new CryptoNode();
 
 import {
     OnOffCluster, BasicInformation, OperationalCredentials, Descriptor, Identify, Groups, AccessControl, Scenes,
-    GeneralCommissioning, NetworkCommissioning, GeneralDiagnostics
+    GeneralCommissioning, NetworkCommissioning, GeneralDiagnostics, ClusterServer
 } from "@project-chip/matter.js/cluster";
 import {
     VendorId, FabricIndex, GroupId, ClusterId, DeviceTypeId, EndpointNumber
@@ -28,7 +28,7 @@ import { StorageManager, StorageBackendMemory } from "@project-chip/matter.js/st
 import { FabricJsonObject } from "@project-chip/matter.js/fabric";
 import { MatterServer, CommissioningServer, CommissioningController } from "@project-chip/matter.js";
 import { OnOffLightDevice } from "@project-chip/matter.js/device";
-import { InteractionClient, ClusterServer, DecodedEventData } from "@project-chip/matter.js/interaction";
+import { InteractionClient, DecodedEventData } from "@project-chip/matter.js/interaction";
 
 const SERVER_IPv6 = "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:cafe";
 const SERVER_IPv4 = "192.168.200.1";

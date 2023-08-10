@@ -9,7 +9,7 @@ import {
     CommissionningFlowType, DiscoveryCapabilitiesBitmap, DiscoveryCapabilitiesSchema, ManualPairingCodeCodec,
     QrPairingCodeCodec
 } from "./schema/PairingCodeSchema.js";
-import { ClusterServer, InteractionServer } from "./protocol/interaction/InteractionServer.js";
+import { InteractionServer } from "./protocol/interaction/InteractionServer.js";
 import { AdministratorCommissioningHandler } from "./cluster/server/AdministratorCommissioningServer.js";
 import { SecureChannelProtocol } from "./protocol/securechannel/SecureChannelProtocol.js";
 import { PaseServer } from "./session/pase/PaseServer.js";
@@ -19,7 +19,7 @@ import { MatterDevice } from "./MatterDevice.js";
 import { UdpInterface } from "./net/UdpInterface.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
-import { AttributeInitialValues, ClusterServerHandlers, ClusterServerObj } from "./cluster/server/ClusterServer.js";
+import { AttributeInitialValues, ClusterServerHandlers, ClusterServerObj } from "./cluster/server/ClusterServerTypes.js";
 import { OperationalCredentialsClusterHandler, OperationalCredentialsServerConf } from "./cluster/server/OperationalCredentialsServer.js";
 import { AttestationCertificateManager } from "./certificate/AttestationCertificateManager.js";
 import { CertificationDeclarationManager } from "./certificate/CertificationDeclarationManager.js";
@@ -50,6 +50,7 @@ import { Ble } from "./ble/Ble.js";
 import { NoProviderError, ImplementationError } from "./common/MatterError.js";
 import { EndpointNumber } from "./datatype/EndpointNumber.js";
 import { DeviceTypeId } from "./datatype/DeviceTypeId.js";
+import { ClusterServer } from "./cluster/server/ClusterServer.js";
 
 const logger = Logger.get("CommissioningServer");
 
