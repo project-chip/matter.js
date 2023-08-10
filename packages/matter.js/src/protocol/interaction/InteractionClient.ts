@@ -242,6 +242,7 @@ export class InteractionClient {
             const { id: attributeId } = attribute;
             logger.debug(`Sending subscribe request for attribute: ${resolveAttributeName({ endpointId, clusterId, attributeId })}`);
             const { report, subscribeResponse: { subscriptionId } } = await messenger.sendSubscribeRequest({
+                interactionModelRevision: 1,
                 attributeRequests: [{ endpointId, clusterId, attributeId }],
                 keepSubscriptions: true,
                 minIntervalFloorSeconds,
@@ -291,6 +292,7 @@ export class InteractionClient {
             logger.debug(`Sending subscribe request for event: ${resolveEventName({ endpointId, clusterId, eventId })}`);
             const { report, subscribeResponse: { subscriptionId } } = await messenger.sendSubscribeRequest(
                 {
+                    interactionModelRevision: 1,
                     eventRequests: [{ endpointId, clusterId, eventId, isUrgent }],
                     eventFilters: minimumEventNumber !== undefined ? [{ eventMin: minimumEventNumber }] : undefined,
                     keepSubscriptions: true,
@@ -333,6 +335,7 @@ export class InteractionClient {
         return this.withMessenger<void>(async messenger => {
             logger.debug(`Sending subscribe request: attributes: ${attributeRequests.map(path => resolveAttributeName(path)).join(", ")} and events: ${eventRequests.map(path => resolveEventName(path)).join(", ")}`);
             const { report, subscribeResponse: { subscriptionId } } = await messenger.sendSubscribeRequest({
+                interactionModelRevision: 1,
                 attributeRequests,
                 eventRequests,
                 keepSubscriptions,

@@ -5,9 +5,6 @@
  */
 
 import { StorageBackendMemory, StorageManager } from "@project-chip/matter.js/storage";
-import { Time, TimeFake } from "@project-chip/matter.js/time";
-
-Time.get = () => new TimeFake(0);
 
 import { Crypto } from "@project-chip/matter.js/crypto";
 import { CryptoNode } from "../../src/crypto/CryptoNode";
@@ -16,14 +13,20 @@ import { KEY } from "../cluster/ClusterServerTestingUtil.js";
 
 Crypto.get = () => new CryptoNode();
 
+import { Time, TimeFake } from "@project-chip/matter.js/time";
+
+Time.get = () => new TimeFake(0);
+
 import * as assert from "assert";
 import {
-    InteractionServer, ReadRequest, DataReport, WriteRequest, WriteResponse, InvokeRequest, InvokeResponse
+    ClusterServer, InteractionServer, ReadRequest, DataReport, WriteRequest, WriteResponse, InvokeRequest,
+    InvokeResponse, InteractionServerMessenger, SubscribeRequest
 } from "@project-chip/matter.js/interaction";
 import { MessageExchange } from "@project-chip/matter.js/protocol";
 import { Endpoint, DeviceTypeDefinition, DeviceClasses } from "@project-chip/matter.js/device";
 import {
-    FabricId, FabricIndex, NodeId, VendorId, TlvFabricIndex, EndpointNumber, ClusterId, AttributeId, CommandId
+    FabricId, FabricIndex, NodeId, VendorId, TlvFabricIndex, EndpointNumber, ClusterId, AttributeId, CommandId,
+    EventId
 } from "@project-chip/matter.js/datatype";
 import {
     TlvString, TlvUInt8, TlvNoArguments, TlvArray, TlvField, TlvObject, TlvNullable, TlvOptionalField
@@ -100,6 +103,22 @@ const READ_RESPONSE: DataReport = {
             }
         },
     ]
+};
+
+const INVALID_SUBSCRIBE_REQUEST: SubscribeRequest = {
+    interactionModelRevision: 1,
+    isFabricFiltered: true,
+    attributeRequests: [
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), attributeId: AttributeId(2) },
+        { endpointId: EndpointNumber(99) },
+    ],
+    eventRequests: [
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), eventId: EventId(2) },
+        { endpointId: EndpointNumber(99) },
+    ],
+    keepSubscriptions: true,
+    minIntervalFloorSeconds: 1,
+    maxIntervalCeilingSeconds: 2,
 };
 
 const WRITE_REQUEST: WriteRequest = {
@@ -405,6 +424,49 @@ describe("InteractionProtocol", () => {
             const result = interactionProtocol.handleReadRequest(({ channel: { name: "test" } }) as MessageExchange<any>, READ_REQUEST);
 
             assert.deepEqual(result, READ_RESPONSE);
+        });
+    });
+
+    describe("handleSubscribeRequest", () => {
+        // Success case is tested in Integration test
+
+        it("errors when no path match the requested path's", async () => {
+            const storageManager = new StorageManager(new StorageBackendMemory());
+            await storageManager.initialize();
+            const storageContext = storageManager.createContext("test");
+            const endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
+            endpoint.addClusterServer(ClusterServer(BasicInformationCluster, {
+                dataModelRevision: 1,
+                vendorName: "vendor",
+                vendorId: VendorId(1),
+                productName: "product",
+                productId: 2,
+                nodeLabel: "",
+                hardwareVersion: 0,
+                hardwareVersionString: "0",
+                location: "US",
+                localConfigDisabled: false,
+                softwareVersion: 1,
+                softwareVersionString: "v1",
+                capabilityMinima: {
+                    caseSessionsPerFabric: 100,
+                    subscriptionsPerFabric: 100,
+                },
+            }, {}, {
+                startUp: true
+            }));
+            const interactionProtocol = new InteractionServer(storageContext);
+            interactionProtocol.setRootEndpoint(endpoint);
+
+            const testFabric = new Fabric(FabricIndex(1), FabricId(1), NodeId(BigInt(1)), NodeId(1), ByteArray.fromHex("00"), ByteArray.fromHex("00"), KEY, VendorId(1), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), ByteArray.fromHex("00"), "");
+            const testSession = await SecureSession.create({ getFabrics: () => [] } as any, 1, testFabric, NodeId(1), 1, ByteArray.fromHex("00"), ByteArray.fromHex("00"), false, false, () => {/* nothing */ }, 1000, 1000);
+            let statusSent = -1;
+            await interactionProtocol.handleSubscribeRequest(({ channel: { name: "test" }, session: testSession }) as unknown as MessageExchange<any>, INVALID_SUBSCRIBE_REQUEST, {
+                sendStatus: code => {
+                    statusSent = code;
+                }
+            } as InteractionServerMessenger);
+            expect(statusSent).toBe(128);
         });
     });
 

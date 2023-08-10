@@ -120,7 +120,12 @@ export class CommissioningController extends MatterNode {
             await UdpInterface.create("udp6", this.localPort, this.listeningAddressIpv6),
             this.storage,
             this.serverAddress,
-            this.commissioningOptions
+            this.commissioningOptions,
+            (peerNodeId) => {
+                logger.info(`Peer node ${peerNodeId} disconnected ...`);
+                // TODO Add handling
+                // this.initializeAfterConnect().then().catch(); ....
+            }
         );
 
         if (this.controllerInstance.isCommissioned()) {
@@ -171,6 +176,10 @@ export class CommissioningController extends MatterNode {
 
         logger.debug(`Successfully Paired with Node ID ${this.nodeId} ... requesting endpoint structure`);
 
+        await this.initializeAfterConnect();
+    }
+
+    async initializeAfterConnect() {
         await this.initializeEndpointStructure();
     }
 
