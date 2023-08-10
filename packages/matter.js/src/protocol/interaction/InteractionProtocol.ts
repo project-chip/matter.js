@@ -208,6 +208,7 @@ export const TlvSubscribeRequest = TlvObject({
     eventFilters: TlvOptionalField(5, TlvArray(TlvEventFilter)),
     isFabricFiltered: TlvField(7, TlvBoolean),
     dataVersionFilters: TlvOptionalField(8, TlvArray(TlvDataVersionFilter)),
+    interactionModelRevision: TlvField(0xFF, TlvUInt8),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0}, section 10.6.5 */
@@ -235,7 +236,7 @@ export const TlvInvokeResponse = TlvObject({
 /** @see {@link MatterCoreSpecificationV1_0}, section 10.6.8 */
 export const TlvTimedRequest = TlvObject({
     timeout: TlvField(0, TlvUInt16),
-    interactionModelRevision: TlvField(0xFF, TlvUInt8), //??
+    interactionModelRevision: TlvField(0xFF, TlvUInt8),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0}, section 10.6.6 */

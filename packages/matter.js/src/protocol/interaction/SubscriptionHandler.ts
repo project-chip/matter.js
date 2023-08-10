@@ -13,7 +13,10 @@ import {
 import { Logger } from "../../log/Logger.js";
 import { Time, Timer } from "../../time/Time.js";
 import { NodeId } from "../../datatype/NodeId.js";
-import { StatusCode, TlvAttributePath, TlvEventFilter, TlvEventPath, TlvEventReport } from "./InteractionProtocol.js";
+import {
+    StatusCode, TlvAttributePath, TlvAttributeReport, TlvAttributeStatus, TlvEventFilter, TlvEventPath, TlvEventReport,
+    TlvEventStatus
+} from "./InteractionProtocol.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
@@ -112,38 +115,61 @@ export class SubscriptionHandler {
     }
 
     private registerNewAttributes() {
-        const attributes = this.attributeRequests !== undefined ? this.endpointStructure.getAttributes(this.attributeRequests) : [];
         const newAttributes = new Array<AttributeWithPath>();
+        const attributeErrors = new Array<TypeFromSchema<typeof TlvAttributeStatus>>();
         const formerAttributes = new Set<string>(this.attributeListeners.keys());
 
-        attributes.forEach(({ path, attribute }) => {
-            formerAttributes.delete(attributePathToId(path));
+        if (this.attributeRequests !== undefined) {
+            this.attributeRequests.forEach(path => {
+                const attributes = this.endpointStructure.getAttributes([path]);
 
-            const existingAttributeListener = this.attributeListeners.get(attributePathToId(path));
-            if (existingAttributeListener !== undefined) {
-                const { attribute: existingAttribute, listener: existingListener } = existingAttributeListener;
-                if (existingAttribute !== attribute) {
-                    if (existingListener !== undefined) {
-                        existingAttribute.removeValueChangeListener(existingListener);
+                if (attributes.length === 0) {
+                    const { endpointId, clusterId, attributeId } = path;
+                    if (endpointId === undefined || clusterId === undefined || attributeId === undefined) { // Wildcard path: Just leave out values
+                        logger.debug(`Subscription attribute ${this.endpointStructure.resolveAttributeName(path)}: ignore non-existing attribute`);
+                    } else { // Else return correct status
+                        let status = StatusCode.UnsupportedAttribute;
+                        if (!this.endpointStructure.hasEndpoint(endpointId)) {
+                            status = StatusCode.UnsupportedEndpoint;
+                        } else if (!this.endpointStructure.hasClusterServer(endpointId, clusterId)) {
+                            status = StatusCode.UnsupportedCluster;
+                        }
+                        logger.debug(`Subscription attribute ${this.endpointStructure.resolveAttributeName(path)}: unsupported path: Status=${status}`);
+                        attributeErrors.push({ path, status: { status } });
+                        return;
                     }
-                    this.attributeListeners.delete(attributePathToId(path));
-                } else {
-                    return; // Attribute is already registered and unchanged
                 }
-            }
-            if (attribute.isSubscribable) { // If subscribable register listener
-                const listener = (value: any, version: number) => this.attributeChangeListener(path, attribute.schema, version, value);
-                attribute.addValueChangeListener(listener);
-                this.attributeListeners.set(attributePathToId(path), { attribute, listener });
-            } else {
-                this.attributeListeners.set(attributePathToId(path), { attribute });
-            }
-            newAttributes.push({ path, attribute });
-        });
+
+                attributes.forEach(({ path, attribute }) => {
+                    formerAttributes.delete(attributePathToId(path));
+
+                    const existingAttributeListener = this.attributeListeners.get(attributePathToId(path));
+                    if (existingAttributeListener !== undefined) {
+                        const { attribute: existingAttribute, listener: existingListener } = existingAttributeListener;
+                        if (existingAttribute !== attribute) {
+                            if (existingListener !== undefined) {
+                                existingAttribute.removeValueChangeListener(existingListener);
+                            }
+                            this.attributeListeners.delete(attributePathToId(path));
+                        } else {
+                            return; // Attribute is already registered and unchanged
+                        }
+                    }
+                    if (attribute.isSubscribable) { // If subscribable register listener
+                        const listener = (value: any, version: number) => this.attributeChangeListener(path, attribute.schema, version, value);
+                        attribute.addValueChangeListener(listener);
+                        this.attributeListeners.set(attributePathToId(path), { attribute, listener });
+                    } else {
+                        this.attributeListeners.set(attributePathToId(path), { attribute });
+                    }
+                    newAttributes.push({ path, attribute });
+                });
+            });
+        }
 
         // Remove all listeners to attributes that no longer match the subscription
         this.unregisterAttributeListeners(Array.from(formerAttributes.values()));
-        return newAttributes;
+        return { newAttributes, attributeErrors };
     }
 
     unregisterAttributeListeners(list: Array<string>) {
@@ -160,35 +186,46 @@ export class SubscriptionHandler {
     }
 
     private registerNewEvents() {
-        const events = this.eventRequests !== undefined ? this.endpointStructure.getEvents(this.eventRequests) : [];
         const newEvents = new Array<EventWithPath>();
+        const eventErrors = new Array<TypeFromSchema<typeof TlvEventStatus>>();
         const formerEvents = new Set<string>(this.eventListeners.keys());
 
-        events.forEach(({ path, event }) => {
-            formerEvents.delete(eventPathToId(path));
-
-            const existingEventListener = this.eventListeners.get(eventPathToId(path));
-            if (existingEventListener !== undefined) {
-                const { event: existingEvent, listener: existingListener } = existingEventListener;
-                if (existingEvent !== event) {
-                    if (existingListener !== undefined) {
-                        existingEvent.removeListener(existingListener);
-                    }
-                    this.eventListeners.delete(eventPathToId(path));
-                } else {
-                    return; // Event is already registered and unchanged
+        if (this.eventRequests !== undefined) {
+            this.eventRequests.forEach(path => {
+                const events = this.endpointStructure.getEvents([path]);
+                if (events.length === 0) {
+                    logger.debug(`Subscription event ${this.endpointStructure.resolveEventName(path)}: unsupported path`);
+                    eventErrors.push({ path, status: { status: StatusCode.UnsupportedEvent } });
+                    return;
                 }
-            }
-            const listener = (newEvent: EventStorageData<any>) => this.eventChangeListener(path, event.schema, newEvent);
-            event.addListener(listener);
-            newEvents.push({ path, event });
-            this.eventListeners.set(eventPathToId(path), { event, listener });
-        });
+
+                events.forEach(({ path, event }) => {
+                    formerEvents.delete(eventPathToId(path));
+
+                    const existingEventListener = this.eventListeners.get(eventPathToId(path));
+                    if (existingEventListener !== undefined) {
+                        const { event: existingEvent, listener: existingListener } = existingEventListener;
+                        if (existingEvent !== event) {
+                            if (existingListener !== undefined) {
+                                existingEvent.removeListener(existingListener);
+                            }
+                            this.eventListeners.delete(eventPathToId(path));
+                        } else {
+                            return; // Event is already registered and unchanged
+                        }
+                    }
+                    const listener = (newEvent: EventStorageData<any>) => this.eventChangeListener(path, event.schema, newEvent);
+                    event.addListener(listener);
+                    newEvents.push({ path, event });
+                    this.eventListeners.set(eventPathToId(path), { event, listener });
+                });
+            });
+        }
 
         // Remove all listeners to events that no longer match the subscription
         this.unregisterEventListeners(Array.from(formerEvents.values()));
 
-        return newEvents;
+        return { newEvents, eventErrors };
     }
 
     unregisterEventListeners(list: Array<string>) {
@@ -211,7 +248,7 @@ export class SubscriptionHandler {
      * controller. The data of newly added events are not sent automatically.
      */
     updateSubscription() {
-        const newAttributes = this.registerNewAttributes();
+        const { newAttributes } = this.registerNewAttributes();
 
         for (const attributeWitPath of newAttributes) {
             const { path, attribute } = attributeWitPath;
@@ -306,20 +343,26 @@ export class SubscriptionHandler {
     async sendInitialReport(messenger: InteractionServerMessenger) {
         this.updateTimer.stop();
 
-        const attributes = this.registerNewAttributes().map(({ path, attribute }) => {
+        const { newAttributes, attributeErrors } = this.registerNewAttributes();
+
+        const attributes = newAttributes.map(({ path, attribute }) => {
             // TODO: Maybe add try/catch when we add ACL handling and ignore the update if we can not get the value?
             const { value, version } = attribute.getWithVersion(this.session, this.isFabricFiltered);
             return { path, value, version, schema: attribute.schema };
         }).filter(({ value }) => value !== undefined) as AttributePathWithValueVersion<any>[];
-        const attributeReports = attributes.map(({ path, schema, value, version }) => ({
+        const attributeReports: TypeFromSchema<typeof TlvAttributeReport>[] = attributes.map(({ path, schema, value, version }) => ({
             attributeData: {
                 path,
                 dataVersion: version,
                 data: schema.encodeTlv(value),
             },
         }));
+        attributeErrors.forEach(attributeStatus => attributeReports.push({ attributeStatus }));
 
-        const eventReports = this.registerNewEvents().flatMap(({ path, event }): TypeFromSchema<typeof TlvEventReport>[] => {
+        const { newEvents, eventErrors } = this.registerNewEvents();
+        console.log(newEvents, eventErrors);
+
+        const eventReports = newEvents.flatMap(({ path, event }): TypeFromSchema<typeof TlvEventReport>[] => {
             const matchingEvents = this.eventHandler.getEvents(path, this.eventFilters);
             return matchingEvents.map(eventData => ({
                 eventData: {
@@ -330,7 +373,22 @@ export class SubscriptionHandler {
                     data: event.schema.encodeTlv(eventData.data),
                 }
             }));
-        }).sort((a, b) => (a.eventData?.eventNumber as number ?? 0) - (b.eventData?.eventNumber as number ?? 0)); // TODO BigInt
+        }).sort((a, b) => {
+            if (a > b) {
+                return 1;
+            } else if (a < b) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
+
+        if (attributes.length === 0 && eventReports.length === 0) {
+            throw new StatusResponseError("Subscription failed because no attributes or events are matching the query", StatusCode.InvalidAction);
+        }
+
+        eventErrors.forEach(eventStatus => eventReports.push({ eventStatus }));
+
         logger.debug(`Initialize Subscription with ${attributes.length} attributes and ${eventReports.length} events`);
         this.lastUpdateTimeMs = Time.nowMs();
 

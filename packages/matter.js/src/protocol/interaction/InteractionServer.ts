@@ -45,7 +45,7 @@ import { EventServer } from "../../cluster/server/EventServer.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { InteractionEndpointStructure } from "./InteractionEndpointStructure.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
-import { ImplementationError, MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
+import { ImplementationError } from "../../common/MatterError.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 
@@ -516,14 +516,15 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         }
         logger.debug(`Received read request from ${exchange.channel.name}: attributes:${attributeRequests?.map(path => this.endpointStructure.resolveAttributeName(path)).join(", ")}, events:${eventRequests?.map(path => this.endpointStructure.resolveEventName(path)).join(", ")} isFabricFiltered=${isFabricFiltered}`);
 
-        // UnsupportedNode/UnsupportedEndpoint/UnsupportedCluster/UnsupportedAttribute/UnsupportedRead
+        // TODO UnsupportedNode
+        // TODO dataversionFilters
 
         const attributeReports = attributeRequests?.flatMap((path: TypeFromSchema<typeof TlvAttributePath>): TypeFromSchema<typeof TlvAttributeReport>[] => {
             const attributes = this.endpointStructure.getAttributes([path]);
             if (attributes.length === 0) {
                 const { endpointId, clusterId, attributeId } = path;
                 if (endpointId === undefined || clusterId === undefined || attributeId === undefined) { // Wildcard path: Just leave out values
-                    logger.debug(`Read from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(path)} ignore non-existing attribute`);
+                    logger.debug(`Read from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(path)}: ignore non-existing attribute`);
                 } else { // Else return correct status
                     let status = StatusCode.UnsupportedAttribute;
                     if (!this.endpointStructure.hasEndpoint(endpointId)) {
@@ -531,7 +532,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                     } else if (!this.endpointStructure.hasClusterServer(endpointId, clusterId)) {
                         status = StatusCode.UnsupportedCluster;
                     }
-                    logger.debug(`Read attribute from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(path)} unsupported path: Status=${status}`);
+                    logger.debug(`Read attribute from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(path)}: unsupported path: Status=${status}`);
                     return [{ attributeStatus: { path, status: { status } } }];
                 }
             }
@@ -546,7 +547,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         const eventReports = eventRequests?.flatMap((path: TypeFromSchema<typeof TlvEventPath>): TypeFromSchema<typeof TlvEventReport>[] => {
             const events = this.endpointStructure.getEvents([path]);
             if (events.length === 0) {
-                logger.debug(`Read event from ${exchange.channel.name}: ${this.endpointStructure.resolveEventName(path)} unsupported path`);
+                logger.debug(`Read event from ${exchange.channel.name}: ${this.endpointStructure.resolveEventName(path)}: unsupported path`);
                 return [{ eventStatus: { path, status: { status: StatusCode.UnsupportedEvent } } }]; // TODO: Find correct status code
             }
 
@@ -587,7 +588,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                 // TODO: Also check nodeId
                 const { endpointId, clusterId, attributeId } = path;
                 if (endpointId === undefined || clusterId === undefined || attributeId === undefined) { // Wildcard path: Just ignore
-                    logger.debug(`Write from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(path)} ignore non-existing attribute`);
+                    logger.debug(`Write from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(path)}: ignore non-existing attribute`);
                 } else { // Else return correct status
                     let statusCode = StatusCode.UnsupportedAttribute;
                     if (this.endpointStructure.hasAttribute(endpointId, clusterId, attributeId)) { // If attribute exists but was not returned above, it is not writeable
@@ -597,7 +598,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                     } else if (!this.endpointStructure.hasClusterServer(endpointId, clusterId)) {
                         statusCode = StatusCode.UnsupportedCluster;
                     }
-                    logger.debug(`Write from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(path)} unsupported path: Status=${statusCode}`);
+                    logger.debug(`Write from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(path)}: unsupported path: Status=${statusCode}`);
                     return [{ path, statusCode }];
                 }
             }
@@ -643,10 +644,12 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     async handleSubscribeRequest(exchange: MessageExchange<MatterDevice>, { minIntervalFloorSeconds, maxIntervalCeilingSeconds, attributeRequests, eventRequests, eventFilters, keepSubscriptions, isFabricFiltered }: SubscribeRequest, messenger: InteractionServerMessenger): Promise<void> {
         logger.debug(`Received subscribe request from ${exchange.channel.name} (keepSubscriptions=${keepSubscriptions}, isFabricFiltered=${isFabricFiltered})`);
 
+        // TODO dataversionFilters
+
         assertSecureSession(exchange.session, "Subscriptions are only implemented on secure sessions");
         const session = exchange.session;
         const fabric = session.getFabric();
-        if (fabric === undefined) throw new MatterFlowError("Subscriptions are only implemented after a fabric has been assigned");
+        if (fabric === undefined) throw new StatusResponseError("Subscriptions are only implemented after a fabric has been assigned", StatusCode.InvalidAction);
 
         if ((!Array.isArray(attributeRequests) || attributeRequests.length === 0) && (!Array.isArray(eventRequests) || eventRequests.length === 0)) {
             throw new StatusResponseError("No attributes or events requested", StatusCode.InvalidAction);
@@ -655,9 +658,15 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         logger.debug(`Subscribe to attributes:${attributeRequests?.map(path => this.endpointStructure.resolveAttributeName(path)).join(", ")}, events:${eventRequests?.map(path => this.endpointStructure.resolveEventName(path)).join(", ")}`);
         if (eventFilters !== undefined) logger.debug(`Event filters: ${eventFilters.map(filter => `${filter.nodeId}/${filter.eventMin}`).join(", ")}`);
 
-        if (minIntervalFloorSeconds < 0) throw new UnexpectedDataError("minIntervalFloorSeconds should be greater or equal to 0");
-        if (maxIntervalCeilingSeconds < 0) throw new UnexpectedDataError("maxIntervalCeilingSeconds should be greater or equal to 1");
-        if (maxIntervalCeilingSeconds < minIntervalFloorSeconds) throw new UnexpectedDataError("maxIntervalCeilingSeconds should be greater or equal to minIntervalFloorSeconds");
+        if (minIntervalFloorSeconds < 0) {
+            throw new StatusResponseError("minIntervalFloorSeconds should be greater or equal to 0", StatusCode.InvalidAction);
+        }
+        if (maxIntervalCeilingSeconds < 0) {
+            throw new StatusResponseError("maxIntervalCeilingSeconds should be greater or equal to 1", StatusCode.InvalidAction);
+        }
+        if (maxIntervalCeilingSeconds < minIntervalFloorSeconds) {
+            throw new StatusResponseError("maxIntervalCeilingSeconds should be greater or equal to minIntervalFloorSeconds", StatusCode.InvalidAction);
+        }
 
         // TODO: Interpret specs:
         // The publisher SHALL compute an appropriate value for the MaxInterval field in the action. This SHALL respect the following constraint: MinIntervalFloor ≤ MaxInterval ≤ MAX(SUBSCRIPTION_MAX_INTERVAL_PUBLISHER_LIMIT=60mn, MaxIntervalCeiling)
@@ -671,7 +680,11 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             await subscriptionHandler.sendInitialReport(messenger);
         } catch (error: any) {
             logger.error(`Subscription ${subscriptionId} for Session ${session.getId()}: Error while sending initial data reports: ${error.message}`);
-            subscriptionHandler.cancel();
+            subscriptionHandler.cancel(); // Cleanup
+            if (error instanceof StatusResponseError) {
+                logger.info(`Sending status response ${error.code} for interaction error: ${error}`);
+                await messenger.sendStatus(error.code);
+            }
             return; // Make sure to not bubble up the exception
         }
 
