@@ -11,5 +11,8 @@ import { MatterError } from "@project-chip/matter.js/common";
 export function requireMinNodeVersion(minVersion: number) {
     const version = process.versions.node;
     const versionMajor = parseInt(version.split(".")[0]);
-    if (versionMajor < minVersion) throw new MatterError(`Node version ${versionMajor} is not supported. Please upgrade to ${minVersion} or above.`)
+    if (versionMajor < minVersion)
+        throw new MatterError(
+            `Node version ${versionMajor} is not supported. Please upgrade to ${minVersion} or above.`,
+        );
 }

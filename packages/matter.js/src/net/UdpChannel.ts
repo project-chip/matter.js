@@ -8,10 +8,10 @@ import { Listener } from "../common/TransportInterface.js";
 import { ByteArray } from "../util/ByteArray.js";
 
 export interface UdpChannelOptions {
-    listeningPort?: number,
-    type: "udp4" | "udp6",
-    listeningAddress?: string,
-    netInterface?: string,
+    listeningPort?: number;
+    type: "udp4" | "udp6";
+    listeningAddress?: string;
+    netInterface?: string;
 }
 
 export interface UdpChannel {

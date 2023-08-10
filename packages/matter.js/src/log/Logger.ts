@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ByteArray } from "../util/ByteArray.js";
-import { Time } from "../time/Time.js";
-import { NotImplementedError } from "../common/MatterError.js";
 import * as console from "console";
+import { NotImplementedError } from "../common/MatterError.js";
+import { Time } from "../time/Time.js";
+import { ByteArray } from "../util/ByteArray.js";
 
 export enum Level {
     DEBUG = 0,
@@ -22,16 +22,20 @@ export enum Level {
  */
 export enum Format {
     /** Generate text only */
-    PLAIN = 'plain',
+    PLAIN = "plain",
 
     /** Format log messages using ANSI escape codes */
-    ANSI = 'ansi',
+    ANSI = "ansi",
 
     /** Format log messages using HTML tags */
-    HTML = 'html'
+    HTML = "html",
 }
 
-function formatValue(value: any, keyFormatter: typeof defaultKeyFormatter, valueFormatter: typeof defaultValueFormatter) {
+function formatValue(
+    value: any,
+    keyFormatter: typeof defaultKeyFormatter,
+    valueFormatter: typeof defaultValueFormatter,
+) {
     if (value instanceof ByteArray) {
         return valueFormatter(value.toHex());
     }
@@ -41,8 +45,7 @@ function formatValue(value: any, keyFormatter: typeof defaultKeyFormatter, value
             stack = "(details unavailable)";
         } else {
             stack = value.stack;
-            if (stack.startsWith("Error: "))
-                return stack.slice(7);
+            if (stack.startsWith("Error: ")) return stack.slice(7);
         }
         return valueFormatter(stack);
     }
@@ -53,11 +56,20 @@ function formatValue(value: any, keyFormatter: typeof defaultKeyFormatter, value
 }
 
 function formatValues(values: any[], keyFormatter = defaultKeyFormatter, valueFormatter = defaultValueFormatter) {
-    return values.map((value) => formatValue(value, keyFormatter, valueFormatter)).join(" ");
+    return values.map(value => formatValue(value, keyFormatter, valueFormatter)).join(" ");
 }
 
 function formatTime(time: Date) {
-    return `${time.getFullYear()}-${(time.getMonth() + 1).toString().padStart(2, "0")}-${time.getDate().toString().padStart(2, "0")} ${time.getHours().toString().padStart(2, "0")}:${time.getMinutes().toString().padStart(2, "0")}:${time.getSeconds().toString().padStart(2, "0")}.${time.getMilliseconds().toString().padStart(3, "0")}`
+    return `${time.getFullYear()}-${(time.getMonth() + 1).toString().padStart(2, "0")}-${time
+        .getDate()
+        .toString()
+        .padStart(2, "0")} ${time.getHours().toString().padStart(2, "0")}:${time
+        .getMinutes()
+        .toString()
+        .padStart(2, "0")}:${time.getSeconds().toString().padStart(2, "0")}.${time
+        .getMilliseconds()
+        .toString()
+        .padStart(3, "0")}`;
 }
 
 function nestingPrefix() {
@@ -82,7 +94,7 @@ const ANSI_CODES = {
     LEVEL_ERROR: "\x1b[31m",
     LEVEL_FATAL: "\x1b[31m\x1b[1m",
     KEY: "\x1b[34m",
-    NONE: "\x1b[0m"
+    NONE: "\x1b[0m",
 };
 
 function ansiLogFormatter(now: Date, level: Level, facility: string, values: any[]) {
@@ -90,21 +102,25 @@ function ansiLogFormatter(now: Date, level: Level, facility: string, values: any
 
     const formattedPrefix = `${ANSI_CODES.PREFIX}${formatTime(now)} ${Level[level].padEnd(5)}${ANSI_CODES.NONE}`;
 
-    let formattedFacility = facility.length > 20 ? `${facility.slice(0, 10)}~${facility.slice(facility.length - 9)}` : facility.padEnd(20);
+    let formattedFacility =
+        facility.length > 20 ? `${facility.slice(0, 10)}~${facility.slice(facility.length - 9)}` : facility.padEnd(20);
     formattedFacility = `${ANSI_CODES.FACILITY}${formattedFacility}${ANSI_CODES.NONE}`;
 
-    let formattedValues = formatValues(values,
-        (key) => `${ANSI_CODES.KEY}${key}:${levelCode} `,
-        (value) => value
-            .replace(/([✓✔])/g, `${ANSI_CODES.LEVEL_INFO}$1${levelCode}`)
-            .replace(/([✗✘])/g, `${ANSI_CODES.LEVEL_ERROR}$1${levelCode}`));
+    let formattedValues = formatValues(
+        values,
+        key => `${ANSI_CODES.KEY}${key}:${levelCode} `,
+        value =>
+            value
+                .replace(/([✓✔])/g, `${ANSI_CODES.LEVEL_INFO}$1${levelCode}`)
+                .replace(/([✗✘])/g, `${ANSI_CODES.LEVEL_ERROR}$1${levelCode}`),
+    );
     formattedValues = `${nestingPrefix()}${formattedValues}`;
     const prefixedMatch = formattedValues.match(/^(⎸? *\d+ )(.*)$/);
     if (prefixedMatch) {
         // Use prefix color for nesting and/or line number prefixes in the message
         formattedValues = `${ANSI_CODES.PREFIX}${prefixedMatch[1]}${ANSI_CODES.NONE}${levelCode}${prefixedMatch[2]}${ANSI_CODES.NONE}`;
     } else {
-        formattedValues = `${levelCode}${formattedValues}${ANSI_CODES.NONE}`
+        formattedValues = `${levelCode}${formattedValues}${ANSI_CODES.NONE}`;
     }
 
     return `${formattedPrefix} ${formattedFacility} ${formattedValues}`;
@@ -115,27 +131,45 @@ function htmlSpan(type: string, value: string) {
 }
 
 function htmlEscape(value: string) {
-    return value.toString().replace(/\n/g, '<br/>').replace(/</g, '&amp').replace(/</g, '&lt;').replace(/>/, '&gt;');
+    return value.toString().replace(/\n/g, "<br/>").replace(/</g, "&amp").replace(/</g, "&lt;").replace(/>/, "&gt;");
 }
 
 function htmlLogFormatter(now: Date, level: Level, facility: string, values: any[]) {
-    const formattedValues = formatValues(values,
-        (key) => htmlSpan('key', htmlEscape(`${key}:`)) + " ",
-        (value) => htmlSpan('value', htmlEscape(value)));
+    const formattedValues = formatValues(
+        values,
+        key => htmlSpan("key", htmlEscape(`${key}:`)) + " ",
+        value => htmlSpan("value", htmlEscape(value)),
+    );
 
     const np = nestingPrefix().replace(/ /g, "&nbsp;");
 
-    return htmlSpan('matter-log-line', `${htmlSpan('time', formatTime(now))} ${htmlSpan('level', Level[level])} ${htmlSpan('facility', facility)} ${np}${formattedValues}`);
+    return htmlSpan(
+        "matter-log-line",
+        `${htmlSpan("time", formatTime(now))} ${htmlSpan("level", Level[level])} ${htmlSpan(
+            "facility",
+            facility,
+        )} ${np}${formattedValues}`,
+    );
 }
 
 function consoleLogger(level: Level, formattedLog: string) {
     const console = (<any>consoleLogger).console;
     switch (level) {
-        case Level.DEBUG: console.debug(formattedLog); break;
-        case Level.INFO: console.info(formattedLog); break;
-        case Level.WARN: console.warn(formattedLog); break;
-        case Level.ERROR: console.error(formattedLog); break;
-        case Level.FATAL: console.error(formattedLog); break;
+        case Level.DEBUG:
+            console.debug(formattedLog);
+            break;
+        case Level.INFO:
+            console.info(formattedLog);
+            break;
+        case Level.WARN:
+            console.warn(formattedLog);
+            break;
+        case Level.ERROR:
+            console.error(formattedLog);
+            break;
+        case Level.FATAL:
+            console.error(formattedLog);
+            break;
     }
 }
 
@@ -186,7 +220,9 @@ export class DiagnosticDictionary {
      */
     public serialize(keyFormatter = defaultKeyFormatter, valueFormatter = defaultValueFormatter): string {
         const entries: string[] = [];
-        this.entries.forEach((v, k) => entries.push(`${keyFormatter(k)}${formatValue(v, keyFormatter, valueFormatter)}`));
+        this.entries.forEach((v, k) =>
+            entries.push(`${keyFormatter(k)}${formatValue(v, keyFormatter, valueFormatter)}`),
+        );
         return entries.join(" ");
     }
 
@@ -221,10 +257,17 @@ export class Logger {
      */
     public static set format(format: string) {
         switch (format) {
-            case Format.PLAIN: Logger.logFormatter = plainLogFormatter; break;
-            case Format.ANSI: Logger.logFormatter = ansiLogFormatter; break;
-            case Format.HTML: Logger.logFormatter = htmlLogFormatter; break;
-            default: throw new NotImplementedError(`Unsupported log format "${format}"`);
+            case Format.PLAIN:
+                Logger.logFormatter = plainLogFormatter;
+                break;
+            case Format.ANSI:
+                Logger.logFormatter = ansiLogFormatter;
+                break;
+            case Format.HTML:
+                Logger.logFormatter = htmlLogFormatter;
+                break;
+            default:
+                throw new NotImplementedError(`Unsupported log format "${format}"`);
         }
     }
 
@@ -246,7 +289,7 @@ export class Logger {
      */
     static toJSON(data: any) {
         return JSON.stringify(data, (_, value) => {
-            if (typeof value === 'bigint') {
+            if (typeof value === "bigint") {
                 return value.toString();
             }
             if (value instanceof ByteArray) {
@@ -290,9 +333,7 @@ export class Logger {
         }
     }
 
-    constructor(
-        private readonly name: string,
-    ) { }
+    constructor(private readonly name: string) {}
 
     debug = (...values: any[]) => this.log(Level.DEBUG, values);
     info = (...values: any[]) => this.log(Level.INFO, values);

@@ -6,11 +6,14 @@
 
 export function isDeepEqual(a: any, b: any) {
     if (
-        a === null || a === undefined || b === null || b === undefined ||
+        a === null ||
+        a === undefined ||
+        b === null ||
+        b === undefined ||
         typeof a !== typeof b ||
-        (typeof a !== 'object' && typeof b !== 'object')
+        (typeof a !== "object" && typeof b !== "object")
     ) {
-        return (a === b);
+        return a === b;
     }
     // Create arrays of property names
     const aProps = Object.getOwnPropertyNames(a);
@@ -28,12 +31,11 @@ export function isDeepEqual(a: any, b: any) {
         if (typeof a[propName] !== typeof b[propName]) {
             return false;
         }
-        if (typeof a[propName] === 'object') {
+        if (typeof a[propName] === "object") {
             if (!isDeepEqual(a[propName], b[propName])) {
                 return false;
             }
-        }
-        else {
+        } else {
             // If values of same property are not equal,
             // objects are not equivalent
             if (a[propName] !== b[propName]) {

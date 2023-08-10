@@ -12,11 +12,11 @@ describe("Quality", () => {
             const field = Quality.Flag[flag];
 
             it("loads from structured definition", () => {
-                expect((new Quality({ [field]: true }))[field]).toBe(true);
+                expect(new Quality({ [field]: true })[field]).toBe(true);
             });
 
             it("loads from text definition", () => {
-                expect((new Quality(`${flag}`))[field]).toBe(true);
+                expect(new Quality(`${flag}`)[field]).toBe(true);
             });
 
             it("disallows from text definition", () => {
@@ -24,18 +24,20 @@ describe("Quality", () => {
                 expect(quality[field]).toBe(undefined);
                 expect(quality.disallowed?.[field]).toBe(true);
             });
-        })
-    })
+        });
+    });
 
     describe("illegal flag", () => {
         it("throws", () => {
-            expect(new Quality("Z").errors).toEqual([{
-                code: "UNKNOWN_QUALITY_FLAG",
-                message: 'Unknown flag "Z"',
-                source: 'Quality "Z"'
-            }]);
-        })
-    })
+            expect(new Quality("Z").errors).toEqual([
+                {
+                    code: "UNKNOWN_QUALITY_FLAG",
+                    message: 'Unknown flag "Z"',
+                    source: 'Quality "Z"',
+                },
+            ]);
+        });
+    });
 
     describe("all flags", () => {
         const quality = new Quality(Quality.FlagNames.join("I N F S P C X"));
@@ -53,7 +55,7 @@ describe("Quality", () => {
         it("serialize", () => {
             expect(`${quality}`).toBe("X N F S P C I");
         });
-    })
+    });
 
     describe("mixed flags", () => {
         it("parse correctly", () => {
@@ -66,5 +68,5 @@ describe("Quality", () => {
             expect(quality.changesOmitted).toBe(undefined);
             expect(quality.singleton).toBe(undefined);
         });
-    })
-})
+    });
+});

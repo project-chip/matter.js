@@ -5,27 +5,28 @@
  */
 
 import { Logger } from "../../../log/Logger.js";
+import { camelize } from "../../../util/String.js";
 import { Conformance, Constraint, Quality } from "../../aspects/index.js";
+import { FeatureSet } from "../../definitions/index.js";
 import { ValueModel } from "../../models/index.js";
-import { RecordValidator } from "./RecordValidatorInterface.js";
 import { addConformance } from "./conformance.js";
 import { addConstraint } from "./constraint.js";
 import { addQuality } from "./quality.js";
+import { RecordValidator } from "./RecordValidatorInterface.js";
 import { addType } from "./type.js";
 import { type ValidatorImplementation } from "./ValidatorImplementation.js";
-import { camelize } from "../../../util/String.js";
-import { FeatureSet } from "../../definitions/index.js";
 
 const logger = new Logger("ValidatorBuilder");
 
 export class ValidatorBuilder extends Array<string> {
     hasChoices = false;
 
-    constructor(fields: ValueModel[], public definedFeatures: FeatureSet, public enabledFeatures: FeatureSet) {
-        super(
-            "this.result = { valid: true }",
-            "let v"
-        );
+    constructor(
+        fields: ValueModel[],
+        public definedFeatures: FeatureSet,
+        public enabledFeatures: FeatureSet,
+    ) {
+        super("this.result = { valid: true }", "let v");
 
         for (const child of fields) {
             if (!(child instanceof ValueModel)) {
@@ -62,7 +63,11 @@ export class ValidatorBuilder extends Array<string> {
         if (test == "true") {
             return;
         }
-        this.push(`if (!(${test})) { this.error(${JSON.stringify(code)}, ${JSON.stringify(source.path)}, ${JSON.stringify(message)}) }`);
+        this.push(
+            `if (!(${test})) { this.error(${JSON.stringify(code)}, ${JSON.stringify(source.path)}, ${JSON.stringify(
+                message,
+            )}) }`,
+        );
     }
 
     logInternalEvaluationError(message: string, e: any) {
@@ -75,7 +80,7 @@ export class ValidatorBuilder extends Array<string> {
         Logger.nest(() => {
             const lineNoWidth = (this.length - 1).toString().length;
             for (let i = 0; i < this.length; i++) {
-                logger.debug(`${i.toString().padStart(lineNoWidth, " ")} ${this[i]}`)
+                logger.debug(`${i.toString().padStart(lineNoWidth, " ")} ${this[i]}`);
             }
         });
     }
@@ -83,18 +88,15 @@ export class ValidatorBuilder extends Array<string> {
     compile() {
         const logInternalEvaluationError = this.logInternalEvaluationError.bind(this);
         try {
-            const fn = new Function(
-                "record",
-                this.join("\n")
-            ) as RecordValidator["validate"];
-            return function(this: ValidatorImplementation, record: { [name: string]: any }) {
+            const fn = new Function("record", this.join("\n")) as RecordValidator["validate"];
+            return function (this: ValidatorImplementation, record: { [name: string]: any }) {
                 try {
                     return fn.call(this, record);
                 } catch (e) {
                     logInternalEvaluationError(`Record validator evaluation failed`, e);
                     throw e;
                 }
-            }
+            };
         } catch (e) {
             logInternalEvaluationError("Record validator compilation failed", e);
             throw e;

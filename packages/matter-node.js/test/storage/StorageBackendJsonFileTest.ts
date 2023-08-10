@@ -9,14 +9,13 @@ import { Time, TimeFake } from "@project-chip/matter.js/time";
 const fakeTime = new TimeFake(0);
 Time.get = () => fakeTime;
 
-import { StorageBackendJsonFile } from "../../src/storage/StorageBackendJsonFile";
 import * as assert from "assert";
-import { unlink, readFile } from "fs/promises";
+import { readFile, unlink } from "fs/promises";
+import { StorageBackendJsonFile } from "../../src/storage/StorageBackendJsonFile";
 
 const TEST_STORAGE_LOCATION = __dirname + "/testdata-storage.json";
 
 describe("Storage in JSON File", () => {
-
     beforeEach(async () => {
         try {
             await unlink(TEST_STORAGE_LOCATION);
@@ -36,7 +35,7 @@ describe("Storage in JSON File", () => {
 
         await fakeTime.advanceTime(2 * 1000);
 
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // give FS time to write
+        await new Promise(resolve => setTimeout(resolve, 1000)); // give FS time to write
 
         const storageRead = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
         await storageRead.initialize();
@@ -45,50 +44,65 @@ describe("Storage in JSON File", () => {
         assert.equal(valueRead, "value");
 
         const fileContent = await readFile(TEST_STORAGE_LOCATION);
-        assert.equal(fileContent.toString(), `{
+        assert.equal(
+            fileContent.toString(),
+            `{
  "context": {
   "key": "value"
  }
-}`);
+}`,
+        );
 
         await storageRead.close();
         await storage.close();
     });
 
     it("Throws error when context is empty on set", () => {
-        assert.throws(() => {
-            const storage = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
-            storage.set([""], "key", "value");
-        }, {
-            message: "Context must not be an empty string!"
-        });
+        assert.throws(
+            () => {
+                const storage = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
+                storage.set([""], "key", "value");
+            },
+            {
+                message: "Context must not be an empty string!",
+            },
+        );
     });
 
     it("Throws error when key is empty on set", () => {
-        assert.throws(() => {
-            const storage = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
-            storage.set(["context"], "", "value");
-        }, {
-            message: "Context and key must not be empty!"
-        });
+        assert.throws(
+            () => {
+                const storage = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
+                storage.set(["context"], "", "value");
+            },
+            {
+                message: "Context and key must not be empty!",
+            },
+        );
     });
 
     it("Throws error when context is empty on get", () => {
-        assert.throws(() => {
-            const storage = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
-            storage.get([""], "key");
-        }, {
-            message: "Context must not be an empty string!"
-        });
+        assert.throws(
+            () => {
+                const storage = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
+                storage.get([""], "key");
+            },
+            {
+                message: "Context must not be an empty string!",
+            },
+        );
     });
 
     it("Throws error when key is empty on get", () => {
-        assert.throws(() => {
-            const storage = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
-            storage.get(["context"], "");
-        }, {
-            message: "Context and key must not be empty!"
-        });
+        assert.throws(
+            () => {
+                const storage = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
+                storage.get(["context"], "");
+            },
+            {
+                message: "Context and key must not be empty!",
+            },
+        );
     });
 
     afterAll(async () => {
@@ -98,5 +112,4 @@ describe("Storage in JSON File", () => {
             // Ignore
         }
     });
-
 });

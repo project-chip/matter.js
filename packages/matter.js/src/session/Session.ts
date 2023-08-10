@@ -22,13 +22,13 @@ export const SLEEPY_IDLE_INTERVAL_MS = 300;
 export const SLEEPY_ACTIVE_THRESHOLD_MS = 4000;
 
 interface MrpParameters {
-    idleRetransmissionTimeoutMs: number,
-    activeRetransmissionTimeoutMs: number,
-    retransmissionRetries: number,
+    idleRetransmissionTimeoutMs: number;
+    activeRetransmissionTimeoutMs: number;
+    retransmissionRetries: number;
 }
 
 export interface Session<T> {
-    name: string
+    name: string;
 
     isSecure(): boolean;
     decode(packet: Packet): Message;

@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { UnexpectedDataError } from "../common/MatterError.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { capitalize } from "../util/String.js";
 import { Merge } from "../util/Type.js";
 import { Schema } from "./Schema.js";
-import { UnexpectedDataError } from "../common/MatterError.js";
 
 const enum BitRangeType {
     Flag,
@@ -16,8 +16,17 @@ const enum BitRangeType {
     Enum,
 }
 
-type BitRange<T, TType extends BitRangeType = BitRangeType> = { type: TType, offset: number, length: number, _type?: T };
-const BitRange = <T, TType extends BitRangeType = BitRangeType>(type: TType, offset: number, length: number): BitRange<T, TType> => ({ type, offset, length });
+type BitRange<T, TType extends BitRangeType = BitRangeType> = {
+    type: TType;
+    offset: number;
+    length: number;
+    _type?: T;
+};
+const BitRange = <T, TType extends BitRangeType = BitRangeType>(
+    type: TType,
+    offset: number,
+    length: number,
+): BitRange<T, TType> => ({ type, offset, length });
 
 /** Defines the bit position of a boolean flag. */
 export type BitFlag = BitRange<boolean, BitRangeType.Flag>;
@@ -29,22 +38,27 @@ export const BitField = (offset: number, length: number): BitField => BitRange(B
 
 /** Defines the bit position and bit length of an enum flag. */
 export type BitFieldEnum<E extends number> = BitRange<E, BitRangeType.Enum>;
-export const BitFieldEnum = <E extends number>(offset: number, length: number): BitFieldEnum<E> => BitRange(BitRangeType.Enum, offset, length);
+export const BitFieldEnum = <E extends number>(offset: number, length: number): BitFieldEnum<E> =>
+    BitRange(BitRangeType.Enum, offset, length);
 
 export type BitSchema = { [key: string]: BitFlag | BitField | BitFieldEnum<any> };
-export type TypeFromBitSchema<T extends BitSchema> = { [K in keyof T]: T[K] extends BitFieldEnum<infer E> ? E : (T[K] extends BitField ? number : boolean) };
-export type TypeFromPartialBitSchema<T extends BitSchema> = { [K in keyof T]?: T[K] extends BitFieldEnum<infer E> ? E : (T[K] extends BitField ? number : boolean) };
+export type TypeFromBitSchema<T extends BitSchema> = {
+    [K in keyof T]: T[K] extends BitFieldEnum<infer E> ? E : T[K] extends BitField ? number : boolean;
+};
+export type TypeFromPartialBitSchema<T extends BitSchema> = {
+    [K in keyof T]?: T[K] extends BitFieldEnum<infer E> ? E : T[K] extends BitField ? number : boolean;
+};
 export type TypeFromBitmapSchema<S extends Schema<any, any>> = S extends Schema<infer T, any> ? T : never;
 
 type MaskFromBitSchema<T extends BitSchema> = { [K in keyof T]: number };
-type MaskOffsetFromBitSchema<T extends BitSchema> = { [K in keyof T]: { mask: number, byteOffset: number, bitOffset: number } };
+type MaskOffsetFromBitSchema<T extends BitSchema> = {
+    [K in keyof T]: { mask: number; byteOffset: number; bitOffset: number };
+};
 
 export class BitmapSchemaInternal<T extends BitSchema> extends Schema<TypeFromBitSchema<T>, number> {
     private readonly masks: MaskFromBitSchema<T>;
 
-    constructor(
-        private readonly bitSchemas: T,
-    ) {
+    constructor(private readonly bitSchemas: T) {
         super();
 
         const masks = <MaskFromBitSchema<T>>{};
@@ -99,9 +113,7 @@ export class ByteArrayBitmapSchemaInternal<T extends BitSchema> extends Schema<T
     private readonly byteArrayLength: number;
     private readonly maskOffset: MaskOffsetFromBitSchema<T>;
 
-    constructor(
-        private readonly bitSchemas: T,
-    ) {
+    constructor(private readonly bitSchemas: T) {
         super();
 
         let maxBitLength = 0;
@@ -138,7 +150,7 @@ export class ByteArrayBitmapSchemaInternal<T extends BitSchema> extends Schema<T
                 case BitRangeType.Number: {
                     let numValue = (value[name] as number) & mask;
                     while (numValue !== 0) {
-                        result[byteOffset++] |= (numValue << bitOffset) & 0xFF;
+                        result[byteOffset++] |= (numValue << bitOffset) & 0xff;
                         const bitWritten = 8 - bitOffset;
                         bitOffset = 0;
                         numValue = numValue >> bitWritten;
@@ -150,7 +162,8 @@ export class ByteArrayBitmapSchemaInternal<T extends BitSchema> extends Schema<T
     }
 
     override decodeInternal(bitmap: ByteArray) {
-        if (bitmap.length !== this.byteArrayLength) throw new UnexpectedDataError(`Unexpected length: ${bitmap.length}. Expected ${this.byteArrayLength}`);
+        if (bitmap.length !== this.byteArrayLength)
+            throw new UnexpectedDataError(`Unexpected length: ${bitmap.length}. Expected ${this.byteArrayLength}`);
         const result = {} as any;
         for (const name in this.bitSchemas) {
             const { type } = this.bitSchemas[name];
@@ -176,18 +189,26 @@ export class ByteArrayBitmapSchemaInternal<T extends BitSchema> extends Schema<T
 
 /** Create a partial bitmap from a flag sequence */
 export type FlagsToBitmap<T extends string[]> = {
-    [name in Uncapitalize<T[number]>]: true
-}
+    [name in Uncapitalize<T[number]>]: true;
+};
 
 /** Create a type with specified bit flags set */
-export type BitFlags<T extends BitSchema, F extends Capitalize<Extract<keyof T, string>>[]> =
-    Merge<{ [key in keyof T]: false }, FlagsToBitmap<F>>;
+export type BitFlags<T extends BitSchema, F extends Capitalize<Extract<keyof T, string>>[]> = Merge<
+    { [key in keyof T]: false },
+    FlagsToBitmap<F>
+>;
 
 /** Create a bitmap schema with a named subset of flags set */
-export function BitFlags<T extends BitSchema, F extends Capitalize<Extract<keyof T, string>>[]>(bitSchemas: T, ...flags: [...F]) {
-    return Object.fromEntries(Object.keys(bitSchemas).map(
-        (name) => [name, !(flags.indexOf(capitalize(name as Extract<keyof T, string>)) == -1)]
-    )) as BitFlags<T, F>;
+export function BitFlags<T extends BitSchema, F extends Capitalize<Extract<keyof T, string>>[]>(
+    bitSchemas: T,
+    ...flags: [...F]
+) {
+    return Object.fromEntries(
+        Object.keys(bitSchemas).map(name => [
+            name,
+            !(flags.indexOf(capitalize(name as Extract<keyof T, string>)) == -1),
+        ]),
+    ) as BitFlags<T, F>;
 }
 
 /** Create a full bitmap schema from a partial bitmap schema */
@@ -210,4 +231,5 @@ export function BitsFromPartial<S extends BitSchema, P extends TypeFromPartialBi
 export const BitmapSchema = <T extends BitSchema>(bitSchemas: T) => new BitmapSchemaInternal(bitSchemas);
 
 /** Declares a bitmap schema backed by a ByteArray by indicating the bit position and their names. */
-export const ByteArrayBitmapSchema = <T extends BitSchema>(bitSchemas: T) => new ByteArrayBitmapSchemaInternal(bitSchemas);
+export const ByteArrayBitmapSchema = <T extends BitSchema>(bitSchemas: T) =>
+    new ByteArrayBitmapSchemaInternal(bitSchemas);

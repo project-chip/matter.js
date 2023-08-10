@@ -15,22 +15,22 @@ import { EventElement } from "./EventElement.js";
  * A cluster describes a set of related functionality.
  */
 export type ClusterElement = BaseElement & {
-    id?: Mei,
+    id?: Mei;
 
-    tag: `${ClusterElement.Tag}`,
+    tag: `${ClusterElement.Tag}`;
 
     /**
      * Marks a cluster as a singleton per the Matter specification.
      */
-    singleton?: boolean,
+    singleton?: boolean;
 
     /**
      * Encodes both classification and scope from the Matter specification.
      */
-    classification?: `${ClusterElement.Classification}`,
+    classification?: `${ClusterElement.Classification}`;
 
-    children?: ClusterElement.Child[]
-}
+    children?: ClusterElement.Child[];
+};
 
 export function ClusterElement(definition: ClusterElement.Properties) {
     return BaseElement(ClusterElement.Tag, definition) as ClusterElement;
@@ -40,15 +40,11 @@ export namespace ClusterElement {
     export type Tag = ElementTag.Cluster;
     export const Tag = ElementTag.Cluster;
     export type Properties = BaseElement.Properties<ClusterElement>;
-    export type Child =
-        DatatypeElement
-        | AttributeElement
-        | CommandElement
-        | EventElement;
+    export type Child = DatatypeElement | AttributeElement | CommandElement | EventElement;
 
     export enum Classification {
         EndpointUtility = "endpoint",
         NodeUtility = "node",
-        Application = "application"
+        Application = "application",
     }
 }

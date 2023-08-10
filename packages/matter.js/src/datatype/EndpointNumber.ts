@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TlvUInt16 } from "../tlv/TlvNumber.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
-import { Branded } from "../util/Type.js";
+import { TlvUInt16 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
+import { Branded } from "../util/Type.js";
 
 /**
  * A Endpoint Number is a 16-bit number that that indicates an instance of a device type.

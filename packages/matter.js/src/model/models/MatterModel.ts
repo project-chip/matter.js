@@ -65,7 +65,7 @@ export class MatterModel extends Model implements MatterElement {
     }
 
     constructor(definition: MatterElement.Properties = Matter, globals = Object.values(Globals)) {
-        const children = [...globals, ...(definition.children || [])]
+        const children = [...globals, ...(definition.children || [])];
         super({ ...definition, children: children });
     }
 
@@ -75,10 +75,5 @@ export class MatterModel extends Model implements MatterElement {
 }
 
 export namespace MatterModel {
-    export type Child =
-        ClusterModel
-        | DeviceTypeModel
-        | DatatypeModel
-        | AttributeModel
-        | FabricModel;
+    export type Child = ClusterModel | DeviceTypeModel | DatatypeModel | AttributeModel | FabricModel;
 }

@@ -4,29 +4,41 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterDevice } from "../../MatterDevice.js";
-import { InteractionServerMessenger, StatusResponseError } from "./InteractionMessenger.js";
-import { Fabric } from "../../fabric/Fabric.js";
 import {
-    INTERACTION_PROTOCOL_ID, attributePathToId, eventPathToId, AttributeWithPath, EventWithPath
-} from "./InteractionServer.js";
-import { Logger } from "../../log/Logger.js";
-import { Time, Timer } from "../../time/Time.js";
-import { NodeId } from "../../datatype/NodeId.js";
-import {
-    StatusCode, TlvAttributePath, TlvAttributeReport, TlvAttributeStatus, TlvEventFilter, TlvEventPath, TlvEventReport,
-    TlvEventStatus
-} from "./InteractionProtocol.js";
-import { tryCatchAsync } from "../../common/TryCatchHandler.js";
-import { SecureSession } from "../../session/SecureSession.js";
-import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { EventHandler, EventStorageData } from "./EventHandler.js";
-import { InteractionEndpointStructure } from "./InteractionEndpointStructure.js";
-import {
-    AttributeServer, FabricScopedAttributeServer, FixedAttributeServer
+    AttributeServer,
+    FabricScopedAttributeServer,
+    FixedAttributeServer,
 } from "../../cluster/server/AttributeServer.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
+import { tryCatchAsync } from "../../common/TryCatchHandler.js";
+import { NodeId } from "../../datatype/NodeId.js";
+import { Fabric } from "../../fabric/Fabric.js";
+import { Logger } from "../../log/Logger.js";
+import { MatterDevice } from "../../MatterDevice.js";
+import { SecureSession } from "../../session/SecureSession.js";
+import { Time, Timer } from "../../time/Time.js";
+import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { RetransmissionLimitReachedError } from "../MessageExchange.js";
+import { EventHandler, EventStorageData } from "./EventHandler.js";
+import { InteractionEndpointStructure } from "./InteractionEndpointStructure.js";
+import { InteractionServerMessenger, StatusResponseError } from "./InteractionMessenger.js";
+import {
+    StatusCode,
+    TlvAttributePath,
+    TlvAttributeReport,
+    TlvAttributeStatus,
+    TlvEventFilter,
+    TlvEventPath,
+    TlvEventReport,
+    TlvEventStatus,
+} from "./InteractionProtocol.js";
+import {
+    attributePathToId,
+    AttributeWithPath,
+    eventPathToId,
+    EventWithPath,
+    INTERACTION_PROTOCOL_ID,
+} from "./InteractionServer.js";
 
 const logger = Logger.get("SubscriptionHandler");
 
@@ -39,32 +51,38 @@ const logger = Logger.get("SubscriptionHandler");
 const SUBSCRIPTION_MAX_INTERVAL_PUBLISHER_LIMIT_MS = 3 * 60 * 1000; /** 3 min */ // Officially: 1000 * 60 * 60; /** 1 hour */
 
 interface AttributePathWithValueVersion<T> {
-    path: TypeFromSchema<typeof TlvAttributePath>,
-    schema: TlvSchema<T>,
-    value: T,
-    version: number
+    path: TypeFromSchema<typeof TlvAttributePath>;
+    schema: TlvSchema<T>;
+    value: T;
+    version: number;
 }
 
 interface EventPathWithEventData<T> {
-    path: TypeFromSchema<typeof TlvEventPath>,
-    schema: TlvSchema<T>,
-    event: EventStorageData<T>
+    path: TypeFromSchema<typeof TlvEventPath>;
+    schema: TlvSchema<T>;
+    event: EventStorageData<T>;
 }
 
 export class SubscriptionHandler {
     private lastUpdateTimeMs = 0;
     private updateTimer: Timer;
-    private readonly sendDelayTimer: Timer
+    private readonly sendDelayTimer: Timer;
     private readonly outstandingAttributeUpdates = new Map<string, AttributePathWithValueVersion<any>>();
     private readonly outstandingEventUpdates = new Set<EventPathWithEventData<any>>();
-    private readonly attributeListeners = new Map<string, {
-        attribute: FixedAttributeServer<any> | AttributeServer<any> | FabricScopedAttributeServer<any>,
-        listener?: (value: any, version: number) => void
-    }>();
-    private readonly eventListeners = new Map<string, {
-        event: EventServer<any>,
-        listener?: (newEvent: EventStorageData<any>) => void
-    }>();
+    private readonly attributeListeners = new Map<
+        string,
+        {
+            attribute: FixedAttributeServer<any> | AttributeServer<any> | FabricScopedAttributeServer<any>;
+            listener?: (value: any, version: number) => void;
+        }
+    >();
+    private readonly eventListeners = new Map<
+        string,
+        {
+            event: EventServer<any>;
+            listener?: (newEvent: EventStorageData<any>) => void;
+        }
+    >();
     private sendUpdatesActivated = false;
     private readonly maxInterval: number;
     private readonly sendInterval: number;
@@ -102,8 +120,13 @@ export class SubscriptionHandler {
         // says that it should be more frequent than the max interval.
         // So let's calculate a maximum in the second half of the range between the two, but then already send at
         // half of that time (so ideally we have 2 updates per max interval, so one could fail, and we still are good).
-        const halfMaxIntervalCeilingMs = (Math.max(SUBSCRIPTION_MAX_INTERVAL_PUBLISHER_LIMIT_MS, this.maxIntervalCeilingMs) - this.minIntervalFloorMs) / 2;
-        this.maxInterval = Math.floor(this.minIntervalFloorMs + halfMaxIntervalCeilingMs + halfMaxIntervalCeilingMs * Math.random());
+        const halfMaxIntervalCeilingMs =
+            (Math.max(SUBSCRIPTION_MAX_INTERVAL_PUBLISHER_LIMIT_MS, this.maxIntervalCeilingMs) -
+                this.minIntervalFloorMs) /
+            2;
+        this.maxInterval = Math.floor(
+            this.minIntervalFloorMs + halfMaxIntervalCeilingMs + halfMaxIntervalCeilingMs * Math.random(),
+        );
         this.sendInterval = Math.floor(this.maxInterval / 2);
         this.updateTimer = Time.getTimer(this.sendInterval, () => this.prepareDataUpdate()); // will be started later
         this.sendDelayTimer = Time.getTimer(50, () => this.sendUpdate()); // will be started later
@@ -125,16 +148,26 @@ export class SubscriptionHandler {
 
                 if (attributes.length === 0) {
                     const { endpointId, clusterId, attributeId } = path;
-                    if (endpointId === undefined || clusterId === undefined || attributeId === undefined) { // Wildcard path: Just leave out values
-                        logger.debug(`Subscription attribute ${this.endpointStructure.resolveAttributeName(path)}: ignore non-existing attribute`);
-                    } else { // Else return correct status
+                    if (endpointId === undefined || clusterId === undefined || attributeId === undefined) {
+                        // Wildcard path: Just leave out values
+                        logger.debug(
+                            `Subscription attribute ${this.endpointStructure.resolveAttributeName(
+                                path,
+                            )}: ignore non-existing attribute`,
+                        );
+                    } else {
+                        // Else return correct status
                         let status = StatusCode.UnsupportedAttribute;
                         if (!this.endpointStructure.hasEndpoint(endpointId)) {
                             status = StatusCode.UnsupportedEndpoint;
                         } else if (!this.endpointStructure.hasClusterServer(endpointId, clusterId)) {
                             status = StatusCode.UnsupportedCluster;
                         }
-                        logger.debug(`Subscription attribute ${this.endpointStructure.resolveAttributeName(path)}: unsupported path: Status=${status}`);
+                        logger.debug(
+                            `Subscription attribute ${this.endpointStructure.resolveAttributeName(
+                                path,
+                            )}: unsupported path: Status=${status}`,
+                        );
                         attributeErrors.push({ path, status: { status } });
                         return;
                     }
@@ -155,8 +188,10 @@ export class SubscriptionHandler {
                             return; // Attribute is already registered and unchanged
                         }
                     }
-                    if (attribute.isSubscribable) { // If subscribable register listener
-                        const listener = (value: any, version: number) => this.attributeChangeListener(path, attribute.schema, version, value);
+                    if (attribute.isSubscribable) {
+                        // If subscribable register listener
+                        const listener = (value: any, version: number) =>
+                            this.attributeChangeListener(path, attribute.schema, version, value);
                         attribute.addValueChangeListener(listener);
                         this.attributeListeners.set(attributePathToId(path), { attribute, listener });
                     } else {
@@ -194,7 +229,9 @@ export class SubscriptionHandler {
             this.eventRequests.forEach(path => {
                 const events = this.endpointStructure.getEvents([path]);
                 if (events.length === 0) {
-                    logger.debug(`Subscription event ${this.endpointStructure.resolveEventName(path)}: unsupported path`);
+                    logger.debug(
+                        `Subscription event ${this.endpointStructure.resolveEventName(path)}: unsupported path`,
+                    );
                     eventErrors.push({ path, status: { status: StatusCode.UnsupportedEvent } });
                     return;
                 }
@@ -214,7 +251,8 @@ export class SubscriptionHandler {
                             return; // Event is already registered and unchanged
                         }
                     }
-                    const listener = (newEvent: EventStorageData<any>) => this.eventChangeListener(path, event.schema, newEvent);
+                    const listener = (newEvent: EventStorageData<any>) =>
+                        this.eventChangeListener(path, event.schema, newEvent);
                     event.addListener(listener);
                     newEvents.push({ path, event });
                     this.eventListeners.set(eventPathToId(path), { event, listener });
@@ -253,7 +291,12 @@ export class SubscriptionHandler {
         for (const attributeWitPath of newAttributes) {
             const { path, attribute } = attributeWitPath;
             const { version, value } = attribute.getWithVersion(this.session, true);
-            this.outstandingAttributeUpdates.set(attributePathToId(path), { path, schema: attribute.schema, version, value });
+            this.outstandingAttributeUpdates.set(attributePathToId(path), {
+                path,
+                schema: attribute.schema,
+                version,
+                value,
+            });
         }
 
         this.prepareDataUpdate();
@@ -278,7 +321,8 @@ export class SubscriptionHandler {
      * sending by 50ms in any case to mke sure to catch all updates.
      */
     prepareDataUpdate() {
-        if (this.sendDelayTimer.isRunning) { // sending data is already scheduled, data updates go in there
+        if (this.sendDelayTimer.isRunning) {
+            // sending data is already scheduled, data updates go in there
             return;
         }
 
@@ -291,7 +335,9 @@ export class SubscriptionHandler {
         const timeSinceLastUpdateMs = now - this.lastUpdateTimeMs;
         if (timeSinceLastUpdateMs < this.minIntervalFloorMs) {
             // Respect minimum delay time between updates
-            this.updateTimer = Time.getTimer(this.minIntervalFloorMs - timeSinceLastUpdateMs, () => this.prepareDataUpdate()).start();
+            this.updateTimer = Time.getTimer(this.minIntervalFloorMs - timeSinceLastUpdateMs, () =>
+                this.prepareDataUpdate(),
+            ).start();
             return;
         }
 
@@ -320,11 +366,17 @@ export class SubscriptionHandler {
             this.sendUpdateErrorCounter = 0;
         } catch (error) {
             this.sendUpdateErrorCounter++;
-            logger.error(`Error sending subscription update message (error count=${this.sendUpdateErrorCounter}):`, error);
+            logger.error(
+                `Error sending subscription update message (error count=${this.sendUpdateErrorCounter}):`,
+                error,
+            );
             if (this.sendUpdateErrorCounter > 2) {
-                logger.error(`Sending update failed 3 times in a row, canceling subscription ${this.subscriptionId} and let controller subscribe again.`);
+                logger.error(
+                    `Sending update failed 3 times in a row, canceling subscription ${this.subscriptionId} and let controller subscribe again.`,
+                );
                 this.sendNextUpdateImmediately = false;
-                if (error instanceof RetransmissionLimitReachedError) { // We could not send at all, consider session as dead
+                if (error instanceof RetransmissionLimitReachedError) {
+                    // We could not send at all, consider session as dead
                     this.session.destroy();
                 } else {
                     this.cancel();
@@ -345,46 +397,55 @@ export class SubscriptionHandler {
 
         const { newAttributes, attributeErrors } = this.registerNewAttributes();
 
-        const attributes = newAttributes.map(({ path, attribute }) => {
-            // TODO: Maybe add try/catch when we add ACL handling and ignore the update if we can not get the value?
-            const { value, version } = attribute.getWithVersion(this.session, this.isFabricFiltered);
-            return { path, value, version, schema: attribute.schema };
-        }).filter(({ value }) => value !== undefined) as AttributePathWithValueVersion<any>[];
-        const attributeReports: TypeFromSchema<typeof TlvAttributeReport>[] = attributes.map(({ path, schema, value, version }) => ({
-            attributeData: {
-                path,
-                dataVersion: version,
-                data: schema.encodeTlv(value),
-            },
-        }));
+        const attributes = newAttributes
+            .map(({ path, attribute }) => {
+                // TODO: Maybe add try/catch when we add ACL handling and ignore the update if we can not get the value?
+                const { value, version } = attribute.getWithVersion(this.session, this.isFabricFiltered);
+                return { path, value, version, schema: attribute.schema };
+            })
+            .filter(({ value }) => value !== undefined) as AttributePathWithValueVersion<any>[];
+        const attributeReports: TypeFromSchema<typeof TlvAttributeReport>[] = attributes.map(
+            ({ path, schema, value, version }) => ({
+                attributeData: {
+                    path,
+                    dataVersion: version,
+                    data: schema.encodeTlv(value),
+                },
+            }),
+        );
         attributeErrors.forEach(attributeStatus => attributeReports.push({ attributeStatus }));
 
         const { newEvents, eventErrors } = this.registerNewEvents();
         console.log(newEvents, eventErrors);
 
-        const eventReports = newEvents.flatMap(({ path, event }): TypeFromSchema<typeof TlvEventReport>[] => {
-            const matchingEvents = this.eventHandler.getEvents(path, this.eventFilters);
-            return matchingEvents.map(eventData => ({
-                eventData: {
-                    path,
-                    eventNumber: eventData.eventNumber,
-                    priority: eventData.priority,
-                    epochTimestamp: eventData.epochTimestamp,
-                    data: event.schema.encodeTlv(eventData.data),
+        const eventReports = newEvents
+            .flatMap(({ path, event }): TypeFromSchema<typeof TlvEventReport>[] => {
+                const matchingEvents = this.eventHandler.getEvents(path, this.eventFilters);
+                return matchingEvents.map(eventData => ({
+                    eventData: {
+                        path,
+                        eventNumber: eventData.eventNumber,
+                        priority: eventData.priority,
+                        epochTimestamp: eventData.epochTimestamp,
+                        data: event.schema.encodeTlv(eventData.data),
+                    },
+                }));
+            })
+            .sort((a, b) => {
+                if (a > b) {
+                    return 1;
+                } else if (a < b) {
+                    return -1;
+                } else {
+                    return 0;
                 }
-            }));
-        }).sort((a, b) => {
-            if (a > b) {
-                return 1;
-            } else if (a < b) {
-                return -1;
-            } else {
-                return 0;
-            }
-        });
+            });
 
         if (attributes.length === 0 && eventReports.length === 0) {
-            throw new StatusResponseError("Subscription failed because no attributes or events are matching the query", StatusCode.InvalidAction);
+            throw new StatusResponseError(
+                "Subscription failed because no attributes or events are matching the query",
+                StatusCode.InvalidAction,
+            );
         }
 
         eventErrors.forEach(eventStatus => eventReports.push({ eventStatus }));
@@ -401,7 +462,12 @@ export class SubscriptionHandler {
         });
     }
 
-    attributeChangeListener<T>(path: TypeFromSchema<typeof TlvAttributePath>, schema: TlvSchema<T>, version: number, value: T) {
+    attributeChangeListener<T>(
+        path: TypeFromSchema<typeof TlvAttributePath>,
+        schema: TlvSchema<T>,
+        version: number,
+        value: T,
+    ) {
         const attributeListenerData = this.attributeListeners.get(attributePathToId(path));
         if (attributeListenerData === undefined) return; // Ignore changes to attributes that are not subscribed to
 
@@ -416,7 +482,11 @@ export class SubscriptionHandler {
         this.prepareDataUpdate();
     }
 
-    eventChangeListener<T>(path: TypeFromSchema<typeof TlvEventPath>, schema: TlvSchema<T>, newEvent: EventStorageData<T>) {
+    eventChangeListener<T>(
+        path: TypeFromSchema<typeof TlvEventPath>,
+        schema: TlvSchema<T>,
+        newEvent: EventStorageData<T>,
+    ) {
         this.outstandingEventUpdates.add({ path, schema, event: newEvent });
         if (path.isUrgent) {
             this.prepareDataUpdate();
@@ -440,54 +510,68 @@ export class SubscriptionHandler {
         this.cancelCallback();
     }
 
-    private async sendUpdateMessage(attributes: AttributePathWithValueVersion<any>[], events: EventPathWithEventData<any>[]) {
-        logger.debug(`Sending subscription update message for ID ${this.subscriptionId} with ${attributes.length} attributes and ${events.length} events`);
+    private async sendUpdateMessage(
+        attributes: AttributePathWithValueVersion<any>[],
+        events: EventPathWithEventData<any>[],
+    ) {
+        logger.debug(
+            `Sending subscription update message for ID ${this.subscriptionId} with ${attributes.length} attributes and ${events.length} events`,
+        );
         const exchange = this.server.initiateExchange(this.fabric, this.peerNodeId, INTERACTION_PROTOCOL_ID);
         if (exchange === undefined) return;
-        logger.debug(`Sending subscription changes for ID ${this.subscriptionId}: ${attributes.map(({ path, value, version }) => `${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(value)} (${version})`).join(", ")}`); // TODO Format path better using endpoint structure
+        logger.debug(
+            `Sending subscription changes for ID ${this.subscriptionId}: ${attributes
+                .map(
+                    ({ path, value, version }) =>
+                        `${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(value)} (${version})`,
+                )
+                .join(", ")}`,
+        ); // TODO Format path better using endpoint structure
         const messenger = new InteractionServerMessenger(exchange);
 
         try {
-            await tryCatchAsync(async () => {
-                if (attributes.length === 0 && events.length === 0) {
-                    await messenger.sendDataReport({
-                        suppressResponse: true, // suppressResponse ok for empty DataReports
-                        subscriptionId: this.subscriptionId,
-                        interactionModelRevision: 1,
-                    });
-                } else {
-                    await messenger.sendDataReport({
-                        suppressResponse: false,
-                        subscriptionId: this.subscriptionId,
-                        interactionModelRevision: 1,
-                        attributeReports: attributes.map(({ path, schema, value, version }) => ({
-                            attributeData: {
-                                path,
-                                dataVersion: version,
-                                data: schema.encodeTlv(value),
-                            },
-                        })),
-                        eventReports: events.map(({ path, schema, event }) => ({
-                            eventData: {
-                                path,
-                                eventNumber: event.eventNumber,
-                                priority: event.priority,
-                                epochTimestamp: event.epochTimestamp,
-                                data: schema.encodeTlv(event.data),
-                            }
-                        })),
-                    });
-                }
-            }, StatusResponseError, async error => {
-                if (error.code === StatusCode.InvalidSubscription ||
-                    error.code === StatusCode.Failure
-                ) {
-                    logger.info(`Subscription ${this.subscriptionId} cancelled by peer.`);
-                    this.cancel();
-                } else {
-                    throw error;
-                }
-            });
+            await tryCatchAsync(
+                async () => {
+                    if (attributes.length === 0 && events.length === 0) {
+                        await messenger.sendDataReport({
+                            suppressResponse: true, // suppressResponse ok for empty DataReports
+                            subscriptionId: this.subscriptionId,
+                            interactionModelRevision: 1,
+                        });
+                    } else {
+                        await messenger.sendDataReport({
+                            suppressResponse: false,
+                            subscriptionId: this.subscriptionId,
+                            interactionModelRevision: 1,
+                            attributeReports: attributes.map(({ path, schema, value, version }) => ({
+                                attributeData: {
+                                    path,
+                                    dataVersion: version,
+                                    data: schema.encodeTlv(value),
+                                },
+                            })),
+                            eventReports: events.map(({ path, schema, event }) => ({
+                                eventData: {
+                                    path,
+                                    eventNumber: event.eventNumber,
+                                    priority: event.priority,
+                                    epochTimestamp: event.epochTimestamp,
+                                    data: schema.encodeTlv(event.data),
+                                },
+                            })),
+                        });
+                    }
+                },
+                StatusResponseError,
+                async error => {
+                    if (error.code === StatusCode.InvalidSubscription || error.code === StatusCode.Failure) {
+                        logger.info(`Subscription ${this.subscriptionId} cancelled by peer.`);
+                        this.cancel();
+                    } else {
+                        throw error;
+                    }
+                },
+            );
         } finally {
             messenger.close();
         }

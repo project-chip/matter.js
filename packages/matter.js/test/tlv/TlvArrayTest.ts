@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { TlvAny } from "../../src/tlv/TlvAny.js";
 import { ArrayAsChunked, ArraySchema, TlvArray } from "../../src/tlv/TlvArray.js";
+import { TlvNullable } from "../../src/tlv/TlvNullable.js";
 import { TlvString } from "../../src/tlv/TlvString.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
-import { TlvAny } from "../../src/tlv/TlvAny.js";
-import { TlvNullable } from "../../src/tlv/TlvNullable.js";
 
-type TestVector<I, E> = { [testName: string]: { input: I, out: E } };
+type TestVector<I, E> = { [testName: string]: { input: I; out: E } };
 
 const validateTestVector: TestVector<string[], boolean> = {
     "validates an array with an acceptable length": { input: ["a", "b"], out: false },
@@ -93,7 +93,6 @@ describe("TlvArray", () => {
             const decoded = schema.decodeFromChunkedArray(encoded, ["a2", "b"]);
             expect(decoded).toEqual(["a", "b", "c"]);
         });
-
     });
 
     describe("decode an self encoded tlv object", () => {

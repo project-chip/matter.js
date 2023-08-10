@@ -4,23 +4,22 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { UdpChannel } from './UdpChannel.js';
 import { Channel } from "../common/Channel.js";
-import { NetInterface } from "./NetInterface.js";
-import { Listener } from "../common/TransportInterface.js";
-import { Network, NetworkError } from './Network.js';
-import { ByteArray } from "../util/ByteArray.js";
 import { ServerAddress } from "../common/ServerAddress.js";
+import { Listener } from "../common/TransportInterface.js";
+import { ByteArray } from "../util/ByteArray.js";
+import { NetInterface } from "./NetInterface.js";
+import { Network, NetworkError } from "./Network.js";
+import { UdpChannel } from "./UdpChannel.js";
 
 export class UdpInterface implements NetInterface {
-
     static async create(type: "udp4" | "udp6", port?: number, host?: string, netInterface?: string) {
-        return new UdpInterface(await Network.get().createUdpChannel({ listeningPort: port, type, netInterface, listeningAddress: host }));
+        return new UdpInterface(
+            await Network.get().createUdpChannel({ listeningPort: port, type, netInterface, listeningAddress: host }),
+        );
     }
 
-    constructor(
-        private readonly server: UdpChannel,
-    ) { }
+    constructor(private readonly server: UdpChannel) {}
 
     async openChannel(address: ServerAddress) {
         if (address.type !== "udp") {
@@ -31,7 +30,9 @@ export class UdpInterface implements NetInterface {
     }
 
     onData(listener: (channel: Channel<ByteArray>, messageBytes: ByteArray) => void): Listener {
-        return this.server.onData((_netInterface, peerHost, peerPort, data) => listener(new UdpConnection(this.server, peerHost, peerPort), data));
+        return this.server.onData((_netInterface, peerHost, peerPort, data) =>
+            listener(new UdpConnection(this.server, peerHost, peerPort), data),
+        );
     }
     async close() {
         this.server.close();
@@ -43,7 +44,7 @@ class UdpConnection implements Channel<ByteArray> {
         private readonly server: UdpChannel,
         private readonly peerAddress: string,
         private readonly peerPort: number,
-    ) { }
+    ) {}
 
     send(data: ByteArray) {
         return this.server.send(this.peerAddress, this.peerPort, data);

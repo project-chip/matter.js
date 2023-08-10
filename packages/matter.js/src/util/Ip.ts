@@ -7,11 +7,11 @@
 import { ByteArray } from "./ByteArray.js";
 
 export function isIPv4(ip: string) {
-    return ip.includes(".")
+    return ip.includes(".");
 }
 
 export function isIPv6(ip: string) {
-    return ip.includes(":")
+    return ip.includes(":");
 }
 
 export function iPv4ToNumber(ip: string) {
@@ -34,7 +34,7 @@ export function iPv6ToArray(ip: string) {
     ipParts.forEach(part => {
         if (part === "") return;
         array[index++] = parseInt(part, 16);
-    })
+    });
     return array;
 }
 

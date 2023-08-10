@@ -4,19 +4,23 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {
+    CertificateManager,
+    TlvOperationalCertificate,
+    TlvRootCertificate,
+} from "../certificate/CertificateManager.js";
+import { Cluster } from "../cluster/Cluster.js";
+import { InternalError } from "../common/MatterError.js";
 import { Crypto } from "../crypto/Crypto.js";
 import { BinaryKeyPair, Key, PrivateKey } from "../crypto/Key.js";
-import { CertificateManager, TlvOperationalCertificate, TlvRootCertificate } from "../certificate/CertificateManager.js";
-import { NodeId } from "../datatype/NodeId.js";
-import { FabricIndex } from "../datatype/FabricIndex.js";
 import { FabricId } from "../datatype/FabricId.js";
+import { FabricIndex } from "../datatype/FabricIndex.js";
+import { NodeId } from "../datatype/NodeId.js";
 import { VendorId } from "../datatype/VendorId.js";
-import { Cluster } from "../cluster/Cluster.js";
 import { SecureSession } from "../session/SecureSession.js";
-import { ByteArray, Endian } from "../util/ByteArray.js";
 import { SupportedStorageTypes } from "../storage/StringifyTools.js";
+import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataWriter } from "../util/DataWriter.js";
-import { InternalError } from "../common/MatterError.js";
 
 const COMPRESSED_FABRIC_ID_INFO = ByteArray.fromString("CompressedFabric");
 const GROUP_SECURITY_INFO = ByteArray.fromString("GroupKey v1.0");
@@ -36,11 +40,10 @@ export type FabricJsonObject = {
     intermediateCACert: ByteArray | undefined;
     operationalCert: ByteArray;
     label: string;
-    scopedClusterData: Map<number, Map<string, SupportedStorageTypes>>
-}
+    scopedClusterData: Map<number, Map<string, SupportedStorageTypes>>;
+};
 
 export class Fabric {
-
     private readonly sessions = new Array<SecureSession<any>>();
 
     private readonly scopedClusterData: Map<number, any>;
@@ -63,7 +66,7 @@ export class Fabric {
         readonly intermediateCACert: ByteArray | undefined,
         readonly operationalCert: ByteArray,
         public label: string,
-        scopedClusterData?: Map<number, Map<string, SupportedStorageTypes>>
+        scopedClusterData?: Map<number, Map<string, SupportedStorageTypes>>,
     ) {
         this.scopedClusterData = scopedClusterData ?? new Map<number, Map<string, SupportedStorageTypes>>();
     }
@@ -84,7 +87,7 @@ export class Fabric {
             intermediateCACert: this.intermediateCACert,
             operationalCert: this.operationalCert,
             label: this.label,
-            scopedClusterData: this.scopedClusterData
+            scopedClusterData: this.scopedClusterData,
         };
     }
 
@@ -215,9 +218,7 @@ export class FabricBuilder {
     private rootPublicKey?: ByteArray;
     private identityProtectionKey?: ByteArray;
 
-    constructor(
-        private readonly fabricIndex: FabricIndex,
-    ) { }
+    constructor(private readonly fabricIndex: FabricIndex) {}
 
     getPublicKey() {
         return this.keyPair.publicKey;
@@ -235,7 +236,9 @@ export class FabricBuilder {
 
     setOperationalCert(operationalCert: ByteArray) {
         this.operationalCert = operationalCert;
-        const { subject: { nodeId, fabricId } } = TlvOperationalCertificate.decode(operationalCert);
+        const {
+            subject: { nodeId, fabricId },
+        } = TlvOperationalCertificate.decode(operationalCert);
         this.fabricId = FabricId(fabricId);
         this.nodeId = nodeId;
         return this;
@@ -264,13 +267,20 @@ export class FabricBuilder {
     async build() {
         if (this.rootNodeId === undefined) throw new InternalError("rootNodeId needs to be set");
         if (this.rootVendorId === undefined) throw new InternalError("vendorId needs to be set");
-        if (this.rootCert === undefined || this.rootPublicKey === undefined) throw new InternalError("rootCert needs to be set");
+        if (this.rootCert === undefined || this.rootPublicKey === undefined)
+            throw new InternalError("rootCert needs to be set");
         if (this.identityProtectionKey === undefined) throw new InternalError("identityProtectionKey needs to be set");
-        if (this.operationalCert === undefined || this.fabricId === undefined || this.nodeId === undefined) throw new InternalError("operationalCert needs to be set");
+        if (this.operationalCert === undefined || this.fabricId === undefined || this.nodeId === undefined)
+            throw new InternalError("operationalCert needs to be set");
 
         const saltWriter = new DataWriter(Endian.Big);
         saltWriter.writeUInt64(this.fabricId);
-        const operationalId = await Crypto.hkdf(this.rootPublicKey.slice(1), saltWriter.toByteArray(), COMPRESSED_FABRIC_ID_INFO, 8);
+        const operationalId = await Crypto.hkdf(
+            this.rootPublicKey.slice(1),
+            saltWriter.toByteArray(),
+            COMPRESSED_FABRIC_ID_INFO,
+            8,
+        );
 
         return new Fabric(
             this.fabricIndex,

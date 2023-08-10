@@ -3,8 +3,8 @@
  * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { ByteArray } from "../util/ByteArray.js";
 import { UnexpectedDataError } from "../common/MatterError.js";
+import { ByteArray } from "../util/ByteArray.js";
 
 class GaloisField {
     private readonly exp = new Array<number>();
@@ -12,7 +12,10 @@ class GaloisField {
     readonly size: number;
 
     constructor(
-        private readonly prime = 0x11d, generator = 2, c_exp = 8) {
+        private readonly prime = 0x11d,
+        generator = 2,
+        c_exp = 8,
+    ) {
         this.size = Math.floor(Math.pow(2, c_exp) - 1);
         let x = 1;
         for (let i = 0; i < this.size; i++) {

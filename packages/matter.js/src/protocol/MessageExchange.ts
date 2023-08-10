@@ -5,22 +5,22 @@
  */
 
 import { Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
-import { Session, SLEEPY_ACTIVE_INTERVAL_MS, SLEEPY_IDLE_INTERVAL_MS } from "../session/Session.js";
-import { SecureChannelProtocol } from "./securechannel/SecureChannelProtocol.js";
-import { MessageChannel, MessageCounter } from "./ExchangeManager.js";
-import { NodeId } from "../datatype/NodeId.js";
 import { MatterError, MatterFlowError } from "../common/MatterError.js";
+import { NodeId } from "../datatype/NodeId.js";
 import { Logger } from "../log/Logger.js";
-import { Queue } from "../util/Queue.js";
+import { Session, SLEEPY_ACTIVE_INTERVAL_MS, SLEEPY_IDLE_INTERVAL_MS } from "../session/Session.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { Time, Timer } from "../time/Time.js";
 import { ByteArray } from "../util/ByteArray.js";
-import { MessageType, SECURE_CHANNEL_PROTOCOL_ID } from "./securechannel/SecureChannelMessages.js";
 import { getPromiseResolver } from "../util/Promises.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { Queue } from "../util/Queue.js";
+import { MessageChannel, MessageCounter } from "./ExchangeManager.js";
+import { MessageType, SECURE_CHANNEL_PROTOCOL_ID } from "./securechannel/SecureChannelMessages.js";
+import { SecureChannelProtocol } from "./securechannel/SecureChannelProtocol.js";
 
 const logger = Logger.get("MessageExchange");
 
-export class RetransmissionLimitReachedError extends MatterError { }
+export class RetransmissionLimitReachedError extends MatterError {}
 
 export class UnexpectedMessageError extends MatterError {
     public constructor(
@@ -112,21 +112,28 @@ export class MessageExchange<ContextT> {
         private readonly protocolId: number,
         private readonly closeCallback: () => void,
     ) {
-        const { activeRetransmissionTimeoutMs, idleRetransmissionTimeoutMs, retransmissionRetries } = session.getMrpParameters();
+        const { activeRetransmissionTimeoutMs, idleRetransmissionTimeoutMs, retransmissionRetries } =
+            session.getMrpParameters();
         this.activeRetransmissionTimeoutMs = activeRetransmissionTimeoutMs ?? SLEEPY_ACTIVE_INTERVAL_MS;
         this.idleRetransmissionTimeoutMs = idleRetransmissionTimeoutMs ?? SLEEPY_IDLE_INTERVAL_MS;
         this.retransmissionRetries = retransmissionRetries;
-        logger.debug("New exchange", Logger.dict({
-            protocol: this.protocolId,
-            id: this.exchangeId,
-            "active retransmit ms": this.activeRetransmissionTimeoutMs,
-            "idle retransmit ms": this.idleRetransmissionTimeoutMs,
-            retries: this.retransmissionRetries
-        }));
+        logger.debug(
+            "New exchange",
+            Logger.dict({
+                protocol: this.protocolId,
+                id: this.exchangeId,
+                "active retransmit ms": this.activeRetransmissionTimeoutMs,
+                "idle retransmit ms": this.idleRetransmissionTimeoutMs,
+                retries: this.retransmissionRetries,
+            }),
+        );
     }
 
     async onMessageReceived(message: Message) {
-        const { packetHeader: { messageId }, payloadHeader: { requiresAck, ackedMessageId, protocolId, messageType } } = message;
+        const {
+            packetHeader: { messageId },
+            payloadHeader: { requiresAck, ackedMessageId, protocolId, messageType },
+        } = message;
 
         logger.debug("Message «", MessageCodec.messageDiagnostics(message));
         this.session.notifyActivity(true);
@@ -154,7 +161,9 @@ export class MessageExchange<ContextT> {
                 if (SecureChannelProtocol.isStandaloneAck(protocolId, messageType)) {
                     // Ignore if this is a standalone ack, probably this was a retransmission.
                 } else {
-                    throw new MatterFlowError(`Incorrect ack received. Expected ${sentMessageIdToAck}, received: ${ackedMessageId}`);
+                    throw new MatterFlowError(
+                        `Incorrect ack received. Expected ${sentMessageIdToAck}, received: ${ackedMessageId}`,
+                    );
                 }
             } else {
                 // The other side has received our previous message
@@ -170,7 +179,9 @@ export class MessageExchange<ContextT> {
             return;
         }
         if (protocolId !== this.protocolId) {
-            throw new MatterFlowError(`Received a message for an unexpected protocol. Expected: ${this.protocolId}, received: ${protocolId}`);
+            throw new MatterFlowError(
+                `Received a message for an unexpected protocol. Expected: ${this.protocolId}, received: ${protocolId}`,
+            );
         }
         if (requiresAck) {
             this.receivedMessageToAck = message;
@@ -179,7 +190,8 @@ export class MessageExchange<ContextT> {
     }
 
     async send(messageType: number, payload: ByteArray, expectAckOnly = false) {
-        if (this.sentMessageToAck !== undefined) throw new MatterFlowError("The previous message has not been acked yet, cannot send a new message.");
+        if (this.sentMessageToAck !== undefined)
+            throw new MatterFlowError("The previous message has not been acked yet, cannot send a new message.");
 
         this.session.notifyActivity(false);
 
@@ -210,7 +222,9 @@ export class MessageExchange<ContextT> {
         let ackPromise: Promise<Message> | undefined;
         if (message.payloadHeader.requiresAck) {
             this.sentMessageToAck = message;
-            this.retransmissionTimer = Time.getTimer(this.getResubmissionBackOffTime(0), () => this.retransmitMessage(message, 0));
+            this.retransmissionTimer = Time.getTimer(this.getResubmissionBackOffTime(0), () =>
+                this.retransmitMessage(message, 0),
+            );
             const { promise, resolver, rejecter } = await getPromiseResolver<Message>();
             ackPromise = promise;
             this.sentMessageAckSuccess = resolver;
@@ -226,7 +240,9 @@ export class MessageExchange<ContextT> {
             this.sentMessageAckSuccess = undefined;
             this.sentMessageAckFailure = undefined;
             // If we only expect an Ack without data but got data, throw an error
-            const { payloadHeader: { protocolId, messageType } } = responseMessage;
+            const {
+                payloadHeader: { protocolId, messageType },
+            } = responseMessage;
             if (expectAckOnly && !SecureChannelProtocol.isStandaloneAck(protocolId, messageType)) {
                 throw new UnexpectedMessageError("Expected ack only", responseMessage);
             }
@@ -239,16 +255,29 @@ export class MessageExchange<ContextT> {
 
     async waitFor(messageType: number) {
         const message = await this.messagesQueue.read();
-        const { payloadHeader: { messageType: receivedMessageType } } = message;
+        const {
+            payloadHeader: { messageType: receivedMessageType },
+        } = message;
         if (receivedMessageType !== messageType)
-            throw new MatterFlowError(`Received unexpected message type ${receivedMessageType.toString(16)}. Expected ${messageType.toString(16)}`);
+            throw new MatterFlowError(
+                `Received unexpected message type ${receivedMessageType.toString(16)}. Expected ${messageType.toString(
+                    16,
+                )}`,
+            );
         return message;
     }
 
     /** @see {@link MatterCoreSpecificationV1_0}, section 4.11.2.1 */
     private getResubmissionBackOffTime(retransmissionCount: number) {
-        const baseInterval = this.session.isPeerActive() ? this.activeRetransmissionTimeoutMs : this.idleRetransmissionTimeoutMs;
-        return Math.floor(MRP_BACKOFF_MARGIN * baseInterval * Math.pow(MRP_BACKOFF_BASE, Math.max(0, retransmissionCount - MRP_BACKOFF_THRESHOLD)) * (1 + Math.random() * MRP_BACKOFF_JITTER));
+        const baseInterval = this.session.isPeerActive()
+            ? this.activeRetransmissionTimeoutMs
+            : this.idleRetransmissionTimeoutMs;
+        return Math.floor(
+            MRP_BACKOFF_MARGIN *
+                baseInterval *
+                Math.pow(MRP_BACKOFF_BASE, Math.max(0, retransmissionCount - MRP_BACKOFF_THRESHOLD)) *
+                (1 + Math.random() * MRP_BACKOFF_JITTER),
+        );
     }
 
     private retransmitMessage(message: Message, retransmissionCount: number) {
@@ -269,20 +298,25 @@ export class MessageExchange<ContextT> {
             // this.session.getContext().announce(); // TODO: announce
         }
         const resubmissionBackoffTime = this.getResubmissionBackOffTime(retransmissionCount);
-        logger.debug(`Resubmit message ${message.packetHeader.messageId} (attempt ${retransmissionCount}, next backoff time ${resubmissionBackoffTime}ms))`);
+        logger.debug(
+            `Resubmit message ${message.packetHeader.messageId} (attempt ${retransmissionCount}, next backoff time ${resubmissionBackoffTime}ms))`,
+        );
 
-        this.channel.send(message)
+        this.channel
+            .send(message)
             .then(() => {
-                this.retransmissionTimer = Time.getTimer(resubmissionBackoffTime, () => this.retransmitMessage(message, retransmissionCount))
-                    .start();
+                this.retransmissionTimer = Time.getTimer(resubmissionBackoffTime, () =>
+                    this.retransmitMessage(message, retransmissionCount),
+                ).start();
             })
             .catch(error => logger.error("An error happened when retransmitting a message", error));
     }
 
     close() {
         if (this.receivedMessageToAck !== undefined) {
-            this.send(MessageType.StandaloneAck, new ByteArray(0))
-                .catch(error => logger.error("An error happened when closing the exchange", error));
+            this.send(MessageType.StandaloneAck, new ByteArray(0)).catch(error =>
+                logger.error("An error happened when closing the exchange", error),
+            );
         }
 
         // Wait until all potential Resubmissions are done, also for Standalone-Acks

@@ -5,36 +5,73 @@
  */
 
 import { Message, MessageCodec, Packet } from "../codec/MessageCodec.js";
-import { Crypto } from "../crypto/Crypto.js";
-import { Fabric } from "../fabric/Fabric.js";
-import { SubscriptionHandler } from "../protocol/interaction/SubscriptionHandler.js";
-import { DEFAULT_ACTIVE_RETRANSMISSION_TIMEOUT_MS, DEFAULT_IDLE_RETRANSMISSION_TIMEOUT_MS, DEFAULT_RETRANSMISSION_RETRIES, SLEEPY_ACTIVE_THRESHOLD_MS, Session } from "./Session.js";
-import { UNDEFINED_NODE_ID } from "./SessionManager.js";
-import { NodeId } from "../datatype/NodeId.js";
-import { ByteArray, Endian } from "../util/ByteArray.js";
-import { Logger } from "../log/Logger.js";
-import { Time } from "../time/Time.js";
-import { DataWriter } from "../util/DataWriter.js";
 import { MatterFlowError } from "../common/MatterError.js";
+import { Crypto } from "../crypto/Crypto.js";
+import { NodeId } from "../datatype/NodeId.js";
+import { Fabric } from "../fabric/Fabric.js";
+import { Logger } from "../log/Logger.js";
+import { SubscriptionHandler } from "../protocol/interaction/SubscriptionHandler.js";
+import { Time } from "../time/Time.js";
+import { ByteArray, Endian } from "../util/ByteArray.js";
+import { DataWriter } from "../util/DataWriter.js";
+import {
+    DEFAULT_ACTIVE_RETRANSMISSION_TIMEOUT_MS,
+    DEFAULT_IDLE_RETRANSMISSION_TIMEOUT_MS,
+    DEFAULT_RETRANSMISSION_RETRIES,
+    Session,
+    SLEEPY_ACTIVE_THRESHOLD_MS,
+} from "./Session.js";
+import { UNDEFINED_NODE_ID } from "./SessionManager.js";
 
 const logger = Logger.get("SecureSession");
 
 const SESSION_KEYS_INFO = ByteArray.fromString("SessionKeys");
 const SESSION_RESUMPTION_KEYS_INFO = ByteArray.fromString("SessionResumptionKeys");
 
-export class NoAssociatedFabricError extends Error { }
+export class NoAssociatedFabricError extends Error {}
 
 export class SecureSession<T> implements Session<T> {
     private readonly subscriptions = new Array<SubscriptionHandler>();
     private timestamp = Time.nowMs();
     private activeTimestamp = this.timestamp;
 
-    static async create<T>(context: T, id: number, fabric: Fabric | undefined, peerNodeId: NodeId, peerSessionId: number, sharedSecret: ByteArray, salt: ByteArray, isInitiator: boolean, isResumption: boolean, closeCallback: () => void, idleRetransTimeoutMs?: number, activeRetransTimeoutMs?: number) {
-        const keys = await Crypto.hkdf(sharedSecret, salt, isResumption ? SESSION_RESUMPTION_KEYS_INFO : SESSION_KEYS_INFO, 16 * 3);
+    static async create<T>(
+        context: T,
+        id: number,
+        fabric: Fabric | undefined,
+        peerNodeId: NodeId,
+        peerSessionId: number,
+        sharedSecret: ByteArray,
+        salt: ByteArray,
+        isInitiator: boolean,
+        isResumption: boolean,
+        closeCallback: () => void,
+        idleRetransTimeoutMs?: number,
+        activeRetransTimeoutMs?: number,
+    ) {
+        const keys = await Crypto.hkdf(
+            sharedSecret,
+            salt,
+            isResumption ? SESSION_RESUMPTION_KEYS_INFO : SESSION_KEYS_INFO,
+            16 * 3,
+        );
         const decryptKey = isInitiator ? keys.slice(16, 32) : keys.slice(0, 16);
         const encryptKey = isInitiator ? keys.slice(0, 16) : keys.slice(16, 32);
         const attestationKey = keys.slice(32, 48);
-        return new SecureSession(context, id, fabric, peerNodeId, peerSessionId, sharedSecret, decryptKey, encryptKey, attestationKey, closeCallback, idleRetransTimeoutMs, activeRetransTimeoutMs);
+        return new SecureSession(
+            context,
+            id,
+            fabric,
+            peerNodeId,
+            peerSessionId,
+            sharedSecret,
+            decryptKey,
+            encryptKey,
+            attestationKey,
+            closeCallback,
+            idleRetransTimeoutMs,
+            activeRetransTimeoutMs,
+        );
     }
 
     constructor(
@@ -61,20 +98,24 @@ export class SecureSession<T> implements Session<T> {
 
     notifyActivity(messageReceived: boolean) {
         this.timestamp = Time.nowMs();
-        if (messageReceived) { // only update active timestamp if we received a message
+        if (messageReceived) {
+            // only update active timestamp if we received a message
             this.activeTimestamp = this.timestamp;
         }
     }
 
     isPeerActive(): boolean {
-        return (Time.nowMs() - this.activeTimestamp) < SLEEPY_ACTIVE_THRESHOLD_MS;
+        return Time.nowMs() - this.activeTimestamp < SLEEPY_ACTIVE_THRESHOLD_MS;
     }
 
     decode({ header, bytes }: Packet): Message {
         const headerBytes = MessageCodec.encodePacketHeader(header);
         const securityFlags = headerBytes[3];
         const nonce = this.generateNonce(securityFlags, header.messageId, this.peerNodeId);
-        return MessageCodec.decodePayload({ header, bytes: Crypto.decrypt(this.decryptKey, bytes, nonce, headerBytes) });
+        return MessageCodec.decodePayload({
+            header,
+            bytes: Crypto.decrypt(this.decryptKey, bytes, nonce, headerBytes),
+        });
     }
 
     encode(message: Message): Packet {

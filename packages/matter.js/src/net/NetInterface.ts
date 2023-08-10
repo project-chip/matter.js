@@ -5,9 +5,9 @@
  */
 
 import { Channel } from "../common/Channel.js";
-import { ByteArray } from "../util/ByteArray.js";
-import { TransportInterface } from "../common/TransportInterface.js";
 import { ServerAddress } from "../common/ServerAddress.js";
+import { TransportInterface } from "../common/TransportInterface.js";
+import { ByteArray } from "../util/ByteArray.js";
 
 /**
  * A Network interface enhances a TransportInterface with the ability to open a channel to a remote server.

@@ -4,19 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { loadHtml } from "./spec-input.js";
-import { HtmlReference } from "./spec-types.js";
 import { Logger } from "#matter.js/log/Logger.js";
 import { Specification } from "#matter.js/model/index.js";
+import { loadHtml } from "./spec-input.js";
+import { HtmlReference } from "./spec-types.js";
 
 const logger = Logger.get("scan-index");
 
-const FAKE_CLUSTER_NAMES = [
-    "New",
-    "Sample",
-    "Disco Ball",
-    "Super Disco Ball"
-]
+const FAKE_CLUSTER_NAMES = ["New", "Sample", "Disco Ball", "Super Disco Ball"];
 
 // Parse the section ID and name from a heading element
 export function parseHeading(e: Node | null) {
@@ -36,21 +31,21 @@ export function parseHeading(e: Node | null) {
 
     return {
         section: parsed[1],
-        name: parsed[2]
-    }
+        name: parsed[2],
+    };
 }
 
 export type IndexDetail = {
-    clusters: HtmlReference[],
-    device?: HtmlReference
-}
+    clusters: HtmlReference[];
+    device?: HtmlReference;
+};
 
 // Read an index file to find the portions of the spec we care about
 export function scanIndex(path: string) {
     const result: IndexDetail = {
         clusters: Array<HtmlReference>(),
-        device: undefined
-    }
+        device: undefined,
+    };
 
     const source = loadHtml(path);
     const titleEl = source.querySelector("h1");
@@ -74,7 +69,7 @@ export function scanIndex(path: string) {
 
     const versionEl = titleEl.nextElementSibling;
     if (!versionEl || !versionEl.textContent || !versionEl.textContent.match(/version (?:\d\.)+/i)) {
-        logger.error(`version element unrecognized`)
+        logger.error(`version element unrecognized`);
         return result;
     }
     const version = versionEl.textContent.replace(/.*version ([\d.]+).*/i, "$1");
@@ -89,7 +84,7 @@ export function scanIndex(path: string) {
 
         const xref = {
             section: heading.section,
-            document: spec
+            document: spec,
         };
 
         // Proxy discovery heading got a little bit lost so fake it up
@@ -99,8 +94,8 @@ export function scanIndex(path: string) {
                 path: a.href,
                 xref: {
                     document: spec,
-                    section: "9.15.13"
-                }
+                    section: "9.15.13",
+                },
             });
             return;
         }
@@ -120,7 +115,7 @@ export function scanIndex(path: string) {
             result.clusters.push({
                 name: heading.name.slice(0, heading.name.length - 8),
                 path: a.href,
-                xref
+                xref,
             });
             return;
         }
@@ -133,7 +128,7 @@ export function scanIndex(path: string) {
                 const cluster = {
                     name: heading.name,
                     path: a.href,
-                    xref
+                    xref,
                 };
                 result.clusters.push(cluster);
             }
@@ -146,7 +141,7 @@ export function scanIndex(path: string) {
             result.device = {
                 name: heading.name,
                 path,
-                xref
+                xref,
             };
         }
     });

@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Schema } from "./Schema.js";
-import { ByteArray } from "../util/ByteArray.js";
 import { UnexpectedDataError } from "../common/MatterError.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { ByteArray } from "../util/ByteArray.js";
+import { Schema } from "./Schema.js";
 
 const BASE38_ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-.";
 
@@ -63,18 +63,18 @@ class Base38Schema extends Schema<ByteArray, string> {
             const remaining = encodedLength - encodedOffset;
             if (remaining > 5) {
                 const value = this.decodeBase38(encoded, encodedOffset, 5);
-                result[decodedOffset++] = value & 0xFF;
-                result[decodedOffset++] = (value >> 8) & 0xFF;
-                result[decodedOffset++] = (value >> 16) & 0xFF;
+                result[decodedOffset++] = value & 0xff;
+                result[decodedOffset++] = (value >> 8) & 0xff;
+                result[decodedOffset++] = (value >> 16) & 0xff;
                 encodedOffset += 5;
             } else if (remaining == 4) {
                 const value = this.decodeBase38(encoded, encodedOffset, 4);
-                result[decodedOffset++] = value & 0xFF;
-                result[decodedOffset++] = (value >> 8) & 0xFF;
+                result[decodedOffset++] = value & 0xff;
+                result[decodedOffset++] = (value >> 8) & 0xff;
                 break;
             } else {
                 const value = this.decodeBase38(encoded, encodedOffset, 2);
-                result[decodedOffset++] = value & 0xFF;
+                result[decodedOffset++] = value & 0xff;
                 break;
             }
         }

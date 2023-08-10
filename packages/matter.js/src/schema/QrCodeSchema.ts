@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Schema } from "./Schema.js";
-import { ByteArray } from "../util/ByteArray.js";
-import { ReedSolomon } from "../math/ReedSolomon.js";
 import { NotImplementedError, UnexpectedDataError } from "../common/MatterError.js";
+import { ReedSolomon } from "../math/ReedSolomon.js";
+import { ByteArray } from "../util/ByteArray.js";
+import { Schema } from "./Schema.js";
 
 const QR_MASK = [
     [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0],
@@ -35,7 +35,7 @@ const QR_MASK = [
 
 enum Direction {
     UP,
-    DOWN
+    DOWN,
 }
 
 const BLOCKS = [
@@ -122,7 +122,7 @@ export class QrCodeSchema extends Schema<string, string> {
         bitCount += 4;
 
         // Bit padding
-        const remainingBits = 8 - bitCount % 8;
+        const remainingBits = 8 - (bitCount % 8);
         if (remainingBits !== 0) {
             bitStringBuilder.push("".padStart(remainingBits, "0"));
             bitCount += remainingBits;
@@ -154,7 +154,7 @@ export class QrCodeSchema extends Schema<string, string> {
 
         // Copy base QR code
         const qrCode = <number[][]>[];
-        QR_MASK.forEach((line, index) => qrCode[index] = [...line]);
+        QR_MASK.forEach((line, index) => (qrCode[index] = [...line]));
 
         //qrCode.forEach((line, x) => line.forEach((_v, y) => qrCode[x][y] = 1))
 

@@ -5,8 +5,8 @@
  */
 
 import { WindowCovering, WindowCoveringCluster } from "../../../src/cluster/definitions/WindowCoveringCluster.js";
-import { BitFlags } from "../../../src/schema/BitmapSchema.js";
 import { ClusterServer } from "../../../src/cluster/server/ClusterServer.js";
+import { BitFlags } from "../../../src/schema/BitmapSchema.js";
 
 describe("WindowCoveringCluster", () => {
     const WindowCovering_LF_PALF = WindowCoveringCluster.with("Lift", "PositionAwareLift");
@@ -18,10 +18,16 @@ describe("WindowCoveringCluster", () => {
         const FIXED = [false, false, true, false];
 
         expect(
-            Object.fromEntries(Object.entries(WindowCovering_LF_PALF.attributes).map(
-                ([k, { optional, writable, fixed, fabricScoped }]) => [k, [optional, writable, fixed, fabricScoped]]
-            ))
-        ).toEqual({ // TODO - make strict after updating web tester
+            Object.fromEntries(
+                Object.entries(WindowCovering_LF_PALF.attributes).map(
+                    ([k, { optional, writable, fixed, fabricScoped }]) => [
+                        k,
+                        [optional, writable, fixed, fabricScoped],
+                    ],
+                ),
+            ),
+        ).toEqual({
+            // TODO - make strict after updating web tester
             acceptedCommandList: NONE,
             attributeList: NONE,
             clusterRevision: NONE,
@@ -37,19 +43,23 @@ describe("WindowCoveringCluster", () => {
             operationalStatus: NONE,
             safetyStatus: OPTIONAL,
             targetPositionLiftPercent100ths: NONE,
-            type: FIXED
+            type: FIXED,
         });
 
         expect(
-            Object.fromEntries(Object.entries(WindowCovering_LF_PALF.commands).map(
-                ([k, { optional }]) => [k, [optional, false, false, false]]
-            ))
-        ).toEqual({ // TODO - make strict after updating web tester
+            Object.fromEntries(
+                Object.entries(WindowCovering_LF_PALF.commands).map(([k, { optional }]) => [
+                    k,
+                    [optional, false, false, false],
+                ]),
+            ),
+        ).toEqual({
+            // TODO - make strict after updating web tester
             downOrClose: NONE,
             goToLiftPercentage: NONE,
             stopMotion: NONE,
-            upOrOpen: NONE
-        })
+            upOrOpen: NONE,
+        });
     });
 
     it("correctly configures ClusterServer for LF & PA_LF", () => {
@@ -63,39 +73,38 @@ describe("WindowCoveringCluster", () => {
                     WindowCovering.ConfigStatus,
                     "Operational",
                     "LiftPositionAware",
-                    "OnlineReserved"
+                    "OnlineReserved",
                 ),
 
                 currentPositionLiftPercent100ths: 5000,
                 targetPositionLiftPercent100ths: 5000,
                 endProductType: WindowCovering.EndProductType.PleatedShade,
-                mode: BitFlags(
-                    WindowCovering.Mode
-                ),
+                mode: BitFlags(WindowCovering.Mode),
                 operationalStatus: {
                     global: WindowCovering.MovementStatus.Stopped,
                     lift: WindowCovering.MovementStatus.Stopped,
-                    tilt: WindowCovering.MovementStatus.Stopped
+                    tilt: WindowCovering.MovementStatus.Stopped,
                 },
-                safetyStatus: BitFlags(
-                    WindowCovering.SafetyStatus,
-                    "ObstacleDetected"
-                )
+                safetyStatus: BitFlags(WindowCovering.SafetyStatus, "ObstacleDetected"),
             },
             {
                 // trues for eslint
-                downOrClose: () => { true },
-                stopMotion: () => { true },
-                upOrOpen: () => { true }
-            }
+                downOrClose: () => {
+                    true;
+                },
+                stopMotion: () => {
+                    true;
+                },
+                upOrOpen: () => {
+                    true;
+                },
+            },
         );
 
-        const attrValues = Object.fromEntries(
-            Object.entries(server.attributes)
-                .map(([k, v]) => [k, v.getLocal()])
-        );
+        const attrValues = Object.fromEntries(Object.entries(server.attributes).map(([k, v]) => [k, v.getLocal()]));
 
-        expect(attrValues).toEqual({ // TODO - make strict after updating web tester
+        expect(attrValues).toEqual({
+            // TODO - make strict after updating web tester
             acceptedCommandList: [0, 1, 2],
             attributeList: [0, 7, 10, 13, 23, 26, 65533, 65532, 65531, 65530, 65529, 65528, 11, 14],
             clusterRevision: 5,
@@ -106,7 +115,7 @@ describe("WindowCoveringCluster", () => {
                 liftPositionAware: true,
                 tiltPositionAware: false,
                 liftEncoderControlled: false,
-                tiltEncoderControlled: false
+                tiltEncoderControlled: false,
             },
             currentPositionLiftPercent100ths: 5000,
             endProductType: 4,
@@ -116,19 +125,19 @@ describe("WindowCoveringCluster", () => {
                 tilt: false,
                 positionAwareLift: true,
                 positionAwareTilt: false,
-                absolutePosition: false
+                absolutePosition: false,
             },
             generatedCommandList: [],
             mode: {
                 motorDirectionReversed: false,
                 calibrationMode: false,
                 maintenanceMode: false,
-                ledFeedback: false
+                ledFeedback: false,
             },
             operationalStatus: {
                 global: 0,
                 lift: 0,
-                tilt: 0
+                tilt: 0,
             },
             safetyStatus: {
                 failedCommunication: false,
@@ -142,10 +151,10 @@ describe("WindowCoveringCluster", () => {
                 remoteLockout: false,
                 stopInput: false,
                 tamperDetection: false,
-                thermalProtection: false
+                thermalProtection: false,
             },
             targetPositionLiftPercent100ths: 5000,
-            type: 9
-        })
-    })
-})
+            type: 9,
+        });
+    });
+});

@@ -4,21 +4,24 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Packet, Message, MessageCodec } from "../codec/MessageCodec.js";
-import { Fabric } from "../fabric/Fabric.js";
-import { DEFAULT_ACTIVE_RETRANSMISSION_TIMEOUT_MS, DEFAULT_IDLE_RETRANSMISSION_TIMEOUT_MS, DEFAULT_RETRANSMISSION_RETRIES, Session } from "./Session.js";
-import { UNICAST_UNSECURE_SESSION_ID } from "./SessionManager.js";
-import { ByteArray } from "../util/ByteArray.js";
-import { NodeId } from "../datatype/NodeId.js";
-import { NoAssociatedFabricError } from "./SecureSession.js";
+import { Message, MessageCodec, Packet } from "../codec/MessageCodec.js";
 import { InternalError, MatterFlowError } from "../common/MatterError.js";
+import { NodeId } from "../datatype/NodeId.js";
+import { Fabric } from "../fabric/Fabric.js";
+import { ByteArray } from "../util/ByteArray.js";
+import { NoAssociatedFabricError } from "./SecureSession.js";
+import {
+    DEFAULT_ACTIVE_RETRANSMISSION_TIMEOUT_MS,
+    DEFAULT_IDLE_RETRANSMISSION_TIMEOUT_MS,
+    DEFAULT_RETRANSMISSION_RETRIES,
+    Session,
+} from "./Session.js";
+import { UNICAST_UNSECURE_SESSION_ID } from "./SessionManager.js";
 
 export class UnsecureSession<T> implements Session<T> {
     private readonly initiatorNodeId = NodeId.getRandomOperationalNodeId();
 
-    constructor(
-        private readonly context: T,
-    ) { }
+    constructor(private readonly context: T) {}
 
     isSecure(): boolean {
         return false;
@@ -57,7 +60,7 @@ export class UnsecureSession<T> implements Session<T> {
             idleRetransmissionTimeoutMs: DEFAULT_IDLE_RETRANSMISSION_TIMEOUT_MS,
             activeRetransmissionTimeoutMs: DEFAULT_ACTIVE_RETRANSMISSION_TIMEOUT_MS,
             retransmissionRetries: DEFAULT_RETRANSMISSION_RETRIES,
-        }
+        };
     }
 
     getContext() {
@@ -87,5 +90,4 @@ export class UnsecureSession<T> implements Session<T> {
     getAssociatedFabric(): Fabric {
         throw new NoAssociatedFabricError("Session needs to be a secure session");
     }
-
 }

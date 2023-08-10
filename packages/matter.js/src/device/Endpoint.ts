@@ -4,23 +4,23 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DeviceTypeDefinition } from "./DeviceTypes.js";
-import { AtLeastOne } from "../util/Array.js";
-import { DescriptorCluster } from "../cluster/definitions/DescriptorCluster.js";
-import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
-import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
-import { EndpointNumber } from "../datatype/EndpointNumber.js";
-import { FixedLabelCluster } from "../cluster/definitions/FixedLabelCluster.js";
-import { UserLabelCluster } from "../cluster/definitions/UserLabelCluster.js";
 import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
-import { ClusterServerObj, ClusterServerObjForCluster } from "../cluster/server/ClusterServerTypes.js";
-import { InteractionClient } from "../protocol/interaction/InteractionClient.js";
+import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
+import { AllClustersMap } from "../cluster/ClusterHelper.js";
 import { BasicInformationCluster } from "../cluster/definitions/BasicInformationCluster.js";
 import { BridgedDeviceBasicInformationCluster } from "../cluster/definitions/BridgedDeviceBasicInformationCluster.js";
-import { AllClustersMap } from "../cluster/ClusterHelper.js";
+import { DescriptorCluster } from "../cluster/definitions/DescriptorCluster.js";
+import { FixedLabelCluster } from "../cluster/definitions/FixedLabelCluster.js";
+import { UserLabelCluster } from "../cluster/definitions/UserLabelCluster.js";
+import { ClusterServer } from "../cluster/server/ClusterServer.js";
+import { ClusterServerObj, ClusterServerObjForCluster } from "../cluster/server/ClusterServerTypes.js";
 import { ImplementationError, InternalError, NotImplementedError } from "../common/MatterError.js";
 import { ClusterId } from "../datatype/ClusterId.js";
-import { ClusterServer } from "../cluster/server/ClusterServer.js";
+import { EndpointNumber } from "../datatype/EndpointNumber.js";
+import { InteractionClient } from "../protocol/interaction/InteractionClient.js";
+import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
+import { AtLeastOne } from "../util/Array.js";
+import { DeviceTypeDefinition } from "./DeviceTypes.js";
 
 export interface EndpointOptions {
     endpointId?: EndpointNumber;
@@ -34,7 +34,9 @@ export class Endpoint {
     id: EndpointNumber | undefined;
     uniqueStorageKey: string | undefined;
     name = "";
-    private structureChangedCallback: () => void = () => {/** noop until officially set **/ };
+    private structureChangedCallback: () => void = () => {
+        /** noop until officially set **/
+    };
 
     private descriptorCluster: ClusterServerObjForCluster<typeof DescriptorCluster>;
 
@@ -46,20 +48,20 @@ export class Endpoint {
      */
     constructor(
         protected deviceTypes: AtLeastOne<DeviceTypeDefinition>,
-        options: EndpointOptions = {}
+        options: EndpointOptions = {},
     ) {
         this.descriptorCluster = ClusterServer(
             DescriptorCluster,
             {
                 deviceTypeList: deviceTypes.map(deviceType => ({
                     deviceType: deviceType.code,
-                    revision: deviceType.revision
+                    revision: deviceType.revision,
                 })),
                 serverList: [],
                 clientList: [],
-                partsList: []
+                partsList: [],
             },
-            {}
+            {},
         );
         this.addClusterServer(this.descriptorCluster);
         this.setDeviceTypes(deviceTypes);
@@ -78,7 +80,9 @@ export class Endpoint {
     }
 
     clearStructureChangedCallback() {
-        this.structureChangedCallback = () => {/** noop **/ };
+        this.structureChangedCallback = () => {
+            /** noop **/
+        };
         this.childEndpoints.forEach(endpoint => endpoint.clearStructureChangedCallback());
     }
 
@@ -91,9 +95,15 @@ export class Endpoint {
 
     addFixedLabel(label: string, value: string) {
         if (!this.hasClusterServer(FixedLabelCluster)) {
-            this.addClusterServer(ClusterServer(FixedLabelCluster, {
-                labelList: []
-            }, {}));
+            this.addClusterServer(
+                ClusterServer(
+                    FixedLabelCluster,
+                    {
+                        labelList: [],
+                    },
+                    {},
+                ),
+            );
         }
         const fixedLabelCluster = this.getClusterServer(FixedLabelCluster);
         const labelList = fixedLabelCluster?.attributes.labelList.getLocal() ?? [];
@@ -103,9 +113,15 @@ export class Endpoint {
 
     addUserLabel(label: string, value: string) {
         if (!this.hasClusterServer(UserLabelCluster)) {
-            this.addClusterServer(ClusterServer(UserLabelCluster, {
-                labelList: []
-            }, {}));
+            this.addClusterServer(
+                ClusterServer(
+                    UserLabelCluster,
+                    {
+                        labelList: [],
+                    },
+                    {},
+                ),
+            );
         }
         const fixedLabelCluster = this.getClusterServer(UserLabelCluster);
         const labelList = fixedLabelCluster?.attributes.labelList.getLocal() ?? [];
@@ -119,30 +135,42 @@ export class Endpoint {
             this.descriptorCluster = cluster as unknown as ClusterServerObjForCluster<typeof DescriptorCluster>;
         }
         this.clusterServers.set(cluster.id, cluster);
-        this.descriptorCluster.attributes.serverList.init(Array.from(this.clusterServers.keys()).map((id) => id));
+        this.descriptorCluster.attributes.serverList.init(Array.from(this.clusterServers.keys()).map(id => id));
         this.structureChangedCallback(); // Inform parent about structure change
     }
 
-    addClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(cluster: ClusterClientObj<F, A, C, E>) {
+    addClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
+        cluster: ClusterClientObj<F, A, C, E>,
+    ) {
         this.clusterClients.set(cluster.id, cluster);
-        this.descriptorCluster.attributes.clientList.init(Array.from(this.clusterClients.keys()).map((id) => id));
+        this.descriptorCluster.attributes.clientList.init(Array.from(this.clusterClients.keys()).map(id => id));
         this.structureChangedCallback(); // Inform parent about structure change
     }
 
     // TODO cleanup with id number vs ClusterId
     // TODO add instance if optional and not existing, maybe get rid of undefined by throwing?
-    getClusterServer<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
-        cluster: Cluster<F, SF, A, C, E>
-    ): ClusterServerObj<A, C, E> | undefined {
+    getClusterServer<
+        F extends BitSchema,
+        SF extends TypeFromPartialBitSchema<F>,
+        A extends Attributes,
+        C extends Commands,
+        E extends Events,
+    >(cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, C, E> | undefined {
         const clusterServer = this.clusterServers.get(cluster.id);
         if (clusterServer !== undefined) {
             return clusterServer as ClusterServerObj<A, C, E>;
         }
     }
 
-    getClusterClient<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
+    getClusterClient<
+        F extends BitSchema,
+        SF extends TypeFromPartialBitSchema<F>,
+        A extends Attributes,
+        C extends Commands,
+        E extends Events,
+    >(
         cluster: Cluster<F, SF, A, C, E>,
-        interactionClient?: InteractionClient
+        interactionClient?: InteractionClient,
     ): ClusterClientObj<F, A, C, E> | undefined {
         const clusterClient = this.clusterClients.get(cluster.id);
         if (clusterClient !== undefined) {
@@ -159,15 +187,23 @@ export class Endpoint {
         return this.clusterClients.get(clusterId);
     }
 
-    hasClusterServer<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
-        cluster: Cluster<F, SF, A, C, E>
-    ): boolean {
+    hasClusterServer<
+        F extends BitSchema,
+        SF extends TypeFromPartialBitSchema<F>,
+        A extends Attributes,
+        C extends Commands,
+        E extends Events,
+    >(cluster: Cluster<F, SF, A, C, E>): boolean {
         return this.clusterServers.has(cluster.id);
     }
 
-    hasClusterClient<F extends BitSchema, SF extends TypeFromPartialBitSchema<F>, A extends Attributes, C extends Commands, E extends Events>(
-        cluster: Cluster<F, SF, A, C, E>
-    ): boolean {
+    hasClusterClient<
+        F extends BitSchema,
+        SF extends TypeFromPartialBitSchema<F>,
+        A extends Attributes,
+        C extends Commands,
+        E extends Events,
+    >(cluster: Cluster<F, SF, A, C, E>): boolean {
         return this.clusterClients.has(cluster.id);
     }
 
@@ -186,8 +222,8 @@ export class Endpoint {
         this.descriptorCluster.attributes.deviceTypeList.init(
             this.deviceTypes.map(deviceType => ({
                 deviceType: deviceType.code,
-                revision: deviceType.revision
-            }))
+                revision: deviceType.revision,
+            })),
         );
     }
 
@@ -222,7 +258,9 @@ export class Endpoint {
         }
         // Else we check if we have a basic information cluster or bridged device basic information cluster and
         // use the uniqueId or serial number, if provided
-        const basicInformationCluster = this.getClusterServer(BasicInformationCluster) ?? this.getClusterServer(BridgedDeviceBasicInformationCluster);
+        const basicInformationCluster =
+            this.getClusterServer(BasicInformationCluster) ??
+            this.getClusterServer(BridgedDeviceBasicInformationCluster);
         if (basicInformationCluster !== undefined) {
             const uniqueId = basicInformationCluster.getUniqueIdAttribute?.();
             if (uniqueId !== undefined) {
@@ -240,17 +278,30 @@ export class Endpoint {
             deviceType.requiredServerClusters?.forEach(clusterId => {
                 if (!this.clusterServers.has(clusterId)) {
                     const clusterName = AllClustersMap[clusterId] ? AllClustersMap[clusterId].name : "unknown";
-                    throw new ImplementationError(`Device type ${deviceType.name} (0x${deviceType.code.toString(16)}) requires cluster server ${clusterName}(0x${clusterId.toString(16)}) but it is not present on endpoint ${this.id}`);
+                    throw new ImplementationError(
+                        `Device type ${deviceType.name} (0x${deviceType.code.toString(
+                            16,
+                        )}) requires cluster server ${clusterName}(0x${clusterId.toString(
+                            16,
+                        )}) but it is not present on endpoint ${this.id}`,
+                    );
                 }
             });
 
-            if (this.clusterClients.size > 0) { // TODO remove once supported
+            if (this.clusterClients.size > 0) {
+                // TODO remove once supported
                 throw new NotImplementedError(`Devices with client clusters are not supported yet`);
             }
             deviceType.requiredClientClusters?.forEach(clusterId => {
                 const clusterName = AllClustersMap[clusterId] ? AllClustersMap[clusterId].name : "unknown";
                 if (!this.clusterClients.has(clusterId)) {
-                    throw new ImplementationError(`Device type ${deviceType.name} (0x${deviceType.code.toString(16)}) requires cluster client ${clusterName}(0x${clusterId.toString(16)}) but it is not present on endpoint ${this.id}`);
+                    throw new ImplementationError(
+                        `Device type ${deviceType.name} (0x${deviceType.code.toString(
+                            16,
+                        )}) requires cluster client ${clusterName}(0x${clusterId.toString(
+                            16,
+                        )}) but it is not present on endpoint ${this.id}`,
+                    );
                 }
             });
         });
@@ -282,5 +333,4 @@ export class Endpoint {
 
         return newPartsList;
     }
-
 }

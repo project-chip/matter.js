@@ -4,35 +4,30 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BitSchema } from "../../schema/BitmapSchema.js";
-import { Attributes, Cluster, Command, Commands, Events, GlobalAttributes } from "../Cluster.js";
-import { EndpointNumber } from "../../datatype/EndpointNumber.js";
-import { AttributeClients, ClusterClientObj, EventClients, SignatureFromCommandSpec } from "./ClusterClientTypes.js";
 import { InternalError } from "../../common/MatterError.js";
-import { AttributeId } from "../../datatype/AttributeId.js";
-import { Merge } from "../../util/Type.js";
-import { AttributeClient } from "./AttributeClient.js";
-import { capitalize } from "../../util/String.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
-import { StatusResponseError } from "../../protocol/interaction/InteractionMessenger.js";
-import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
+import { AttributeId } from "../../datatype/AttributeId.js";
+import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { EventId } from "../../datatype/EventId.js";
-import { EventClient } from "./EventClient.js";
+import { Logger } from "../../log/Logger.js";
 import { DecodedEventData } from "../../protocol/interaction/EventDataDecoder.js";
 import { InteractionClient } from "../../protocol/interaction/InteractionClient.js";
-import { Logger } from "../../log/Logger.js";
+import { StatusResponseError } from "../../protocol/interaction/InteractionMessenger.js";
+import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
+import { BitSchema } from "../../schema/BitmapSchema.js";
+import { capitalize } from "../../util/String.js";
+import { Merge } from "../../util/Type.js";
+import { Attributes, Cluster, Command, Commands, Events, GlobalAttributes } from "../Cluster.js";
+import { AttributeClient } from "./AttributeClient.js";
+import { AttributeClients, ClusterClientObj, EventClients, SignatureFromCommandSpec } from "./ClusterClientTypes.js";
+import { EventClient } from "./EventClient.js";
 
 const logger = Logger.get("ClusterClient");
 
-export function ClusterClient<
-    F extends BitSchema,
-    A extends Attributes,
-    C extends Commands,
-    E extends Events
->(
+export function ClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
     clusterDef: Cluster<F, any, A, C, E>,
     endpointId: EndpointNumber,
-    interactionClient: InteractionClient
+    interactionClient: InteractionClient,
 ): ClusterClientObj<F, A, C, E> {
     const {
         id: clusterId,
@@ -40,7 +35,7 @@ export function ClusterClient<
         commands: commandDef,
         attributes: attributeDef,
         events: eventDef,
-        features
+        features,
     } = clusterDef;
     const attributes = <AttributeClients<F, A>>{};
     const events = <EventClients<E>>{};
@@ -54,7 +49,12 @@ export function ClusterClient<
         attributes,
         events,
         commands,
-        subscribeAllAttributes: async (minIntervalFloorSeconds: number, maxIntervalCeilingSeconds: number, keepSubscriptions?: boolean, isFabricFiltered?: boolean) => {
+        subscribeAllAttributes: async (
+            minIntervalFloorSeconds: number,
+            maxIntervalCeilingSeconds: number,
+            keepSubscriptions?: boolean,
+            isFabricFiltered?: boolean,
+        ) => {
             if (interactionClient === undefined) {
                 throw new InternalError("InteractionClient not set");
             }
@@ -75,14 +75,14 @@ export function ClusterClient<
                     (attributes as any)[attributeName].update(value);
                 },
                 eventData => {
-                    const { path, events } = eventData
+                    const { path, events } = eventData;
                     const eventName = eventToId[path.eventId];
                     if (eventName === undefined) {
                         logger.warn("Unknown event id", path.eventId);
                         return;
                     }
                     events.forEach(event => (events as any)[eventName].update(event));
-                }
+                },
             );
         },
 
@@ -93,13 +93,17 @@ export function ClusterClient<
          * @param newInteractionClient Optionally a new interactionClient to bind to
          */
         _clone(newInteractionClient?: InteractionClient) {
-            const clonedClusterClient = ClusterClient(clusterDef, endpointId, newInteractionClient ?? interactionClient);
+            const clonedClusterClient = ClusterClient(
+                clusterDef,
+                endpointId,
+                newInteractionClient ?? interactionClient,
+            );
             if (newInteractionClient === undefined) {
                 // When we keep the InteractionClient we also reuse the AttributeServers bound to it
                 clonedClusterClient.attributes = attributes;
             }
             return clonedClusterClient;
-        }
+        },
     };
 
     const attributeToId = <{ [key: AttributeId]: string }>{};
@@ -108,25 +112,40 @@ export function ClusterClient<
     // Add accessors
     for (const attributeName in allAttributeDefs) {
         const attribute = allAttributeDefs[attributeName];
-        (attributes as any)[attributeName] = new AttributeClient(attribute, attributeName, endpointId, clusterId, async () => interactionClient);
+        (attributes as any)[attributeName] = new AttributeClient(
+            attribute,
+            attributeName,
+            endpointId,
+            clusterId,
+            async () => interactionClient,
+        );
         attributeToId[attribute.id] = attributeName;
         const capitalizedAttributeName = capitalize(attributeName);
         result[`get${capitalizedAttributeName}Attribute`] = async (alwaysRequestFromRemote = false) => {
-            return await tryCatchAsync(async () => {
-                return await (attributes as any)[attributeName].get(alwaysRequestFromRemote);
-            }, StatusResponseError, (e) => {
-                const { code } = e;
-                if (code === StatusCode.UnsupportedAttribute) {
-                    return undefined;
-                }
-                throw e;
-            });
-        }
-        result[`set${capitalizedAttributeName}Attribute`] = async <T,>(value: T) => (attributes as any)[attributeName].set(value);
-        result[`subscribe${capitalizedAttributeName}Attribute`] = async <T,>(listener: (value: T) => void, minIntervalS: number, maxIntervalS: number) => {
+            return await tryCatchAsync(
+                async () => {
+                    return await (attributes as any)[attributeName].get(alwaysRequestFromRemote);
+                },
+                StatusResponseError,
+                e => {
+                    const { code } = e;
+                    if (code === StatusCode.UnsupportedAttribute) {
+                        return undefined;
+                    }
+                    throw e;
+                },
+            );
+        };
+        result[`set${capitalizedAttributeName}Attribute`] = async <T>(value: T) =>
+            (attributes as any)[attributeName].set(value);
+        result[`subscribe${capitalizedAttributeName}Attribute`] = async <T>(
+            listener: (value: T) => void,
+            minIntervalS: number,
+            maxIntervalS: number,
+        ) => {
             (attributes as any)[attributeName].addListener(listener);
             (attributes as any)[attributeName].subscribe(minIntervalS, maxIntervalS);
-        }
+        };
     }
 
     const eventToId = <{ [key: EventId]: string }>{};
@@ -134,24 +153,50 @@ export function ClusterClient<
     // add events
     for (const eventName in eventDef) {
         const event = eventDef[eventName];
-        (events as any)[eventName] = new EventClient(event, eventName, endpointId, clusterId, async () => interactionClient);
+        (events as any)[eventName] = new EventClient(
+            event,
+            eventName,
+            endpointId,
+            clusterId,
+            async () => interactionClient,
+        );
         eventToId[event.id] = eventName;
         const capitalizedEventName = capitalize(eventName);
-        result[`get${capitalizedEventName}Event`] = async (minimumEventNumber?: number | bigint, isFabricFiltered?: boolean) => {
-            return await tryCatchAsync(async () => {
-                return await (events as any)[eventName].get(minimumEventNumber, isFabricFiltered);
-            }, StatusResponseError, (e) => {
-                const { code } = e;
-                if (code === StatusCode.UnsupportedEvent) {
-                    return undefined;
-                }
-                throw e;
-            });
-        }
-        result[`subscribe${capitalizedEventName}Event`] = async <T,>(listener: (value: DecodedEventData<T>) => void, minIntervalS: number, maxIntervalS: number, isUrgent?: boolean, minimumEventNumber?: number | bigint, isFabricFiltered?: boolean) => {
+        result[`get${capitalizedEventName}Event`] = async (
+            minimumEventNumber?: number | bigint,
+            isFabricFiltered?: boolean,
+        ) => {
+            return await tryCatchAsync(
+                async () => {
+                    return await (events as any)[eventName].get(minimumEventNumber, isFabricFiltered);
+                },
+                StatusResponseError,
+                e => {
+                    const { code } = e;
+                    if (code === StatusCode.UnsupportedEvent) {
+                        return undefined;
+                    }
+                    throw e;
+                },
+            );
+        };
+        result[`subscribe${capitalizedEventName}Event`] = async <T>(
+            listener: (value: DecodedEventData<T>) => void,
+            minIntervalS: number,
+            maxIntervalS: number,
+            isUrgent?: boolean,
+            minimumEventNumber?: number | bigint,
+            isFabricFiltered?: boolean,
+        ) => {
             (events as any)[eventName].addListener(listener);
-            (events as any)[eventName].subscribe(minIntervalS, maxIntervalS, isUrgent, minimumEventNumber, isFabricFiltered);
-        }
+            (events as any)[eventName].subscribe(
+                minIntervalS,
+                maxIntervalS,
+                isUrgent,
+                minimumEventNumber,
+                isFabricFiltered,
+            );
+        };
     }
 
     // Add command calls
@@ -162,7 +207,16 @@ export function ClusterClient<
             if (interactionClient === undefined) {
                 throw new InternalError("InteractionClient not set");
             }
-            return interactionClient.invoke<Command<RequestT, ResponseT, any>>(endpointId, clusterId, request, requestId, requestSchema, responseId, responseSchema, optional);
+            return interactionClient.invoke<Command<RequestT, ResponseT, any>>(
+                endpointId,
+                clusterId,
+                request,
+                requestId,
+                requestSchema,
+                responseId,
+                responseSchema,
+                optional,
+            );
         };
         result[commandName] = result.commands[commandName];
     }

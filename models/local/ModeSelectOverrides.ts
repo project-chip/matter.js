@@ -16,6 +16,6 @@ LocalMatter.children.push({
         // unclear where these enum values come from or if there even is a
         // standard definition for them.  This doesn't affect the generated
         // output so this should be safe.
-        { tag: "attribute", id: 0x1, name: "StandardNamespace", type: "uint16" }
-    ]
-})
+        { tag: "attribute", id: 0x1, name: "StandardNamespace", type: "uint16" },
+    ],
+});

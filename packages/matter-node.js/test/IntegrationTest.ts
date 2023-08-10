@@ -6,29 +6,44 @@
 
 import * as assert from "assert";
 
-import { Time, TimeFake } from "@project-chip/matter.js/time";
 import { Crypto } from "@project-chip/matter.js/crypto";
+import { Time, TimeFake } from "@project-chip/matter.js/time";
 import { CryptoNode } from "../src/crypto/CryptoNode";
 
 Crypto.get = () => new CryptoNode();
 
 import {
-    OnOffCluster, BasicInformation, OperationalCredentials, Descriptor, Identify, Groups, AccessControl, Scenes,
-    GeneralCommissioning, NetworkCommissioning, GeneralDiagnostics, ClusterServer
+    AccessControl,
+    BasicInformation,
+    ClusterServer,
+    Descriptor,
+    GeneralCommissioning,
+    GeneralDiagnostics,
+    Groups,
+    Identify,
+    NetworkCommissioning,
+    OnOffCluster,
+    OperationalCredentials,
+    Scenes,
 } from "@project-chip/matter.js/cluster";
 import {
-    VendorId, FabricIndex, GroupId, ClusterId, DeviceTypeId, EndpointNumber
+    ClusterId,
+    DeviceTypeId,
+    EndpointNumber,
+    FabricIndex,
+    GroupId,
+    VendorId,
 } from "@project-chip/matter.js/datatype";
 
+import { CommissioningController, CommissioningServer, MatterServer } from "@project-chip/matter.js";
+import { OnOffLightDevice } from "@project-chip/matter.js/device";
+import { FabricJsonObject } from "@project-chip/matter.js/fabric";
+import { DecodedEventData, InteractionClient } from "@project-chip/matter.js/interaction";
+import { Level, Logger } from "@project-chip/matter.js/log";
 import { MdnsBroadcaster, MdnsScanner } from "@project-chip/matter.js/mdns";
 import { Network, NetworkFake } from "@project-chip/matter.js/net";
-import { Level, Logger } from "@project-chip/matter.js/log";
-import { getPromiseResolver, ByteArray } from "@project-chip/matter.js/util";
-import { StorageManager, StorageBackendMemory } from "@project-chip/matter.js/storage";
-import { FabricJsonObject } from "@project-chip/matter.js/fabric";
-import { MatterServer, CommissioningServer, CommissioningController } from "@project-chip/matter.js";
-import { OnOffLightDevice } from "@project-chip/matter.js/device";
-import { InteractionClient, DecodedEventData } from "@project-chip/matter.js/interaction";
+import { StorageBackendMemory, StorageManager } from "@project-chip/matter.js/storage";
+import { ByteArray, getPromiseResolver } from "@project-chip/matter.js/util";
 
 const SERVER_IPv6 = "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:cafe";
 const SERVER_IPv4 = "192.168.200.1";
@@ -41,11 +56,11 @@ const serverNetwork = new NetworkFake(SERVER_MAC, [SERVER_IPv6, SERVER_IPv4]);
 const clientNetwork = new NetworkFake(CLIENT_MAC, [CLIENT_IPv6, CLIENT_IPv4]);
 
 const deviceName = "Matter end-to-end device";
-const deviceType = DeviceTypeId(257) /* Dimmable bulb */;
+const deviceType = DeviceTypeId(257); /* Dimmable bulb */
 const vendorName = "matter-node.js";
-const vendorId = VendorId(0xFFF1);
+const vendorId = VendorId(0xfff1);
 const productName = "Matter end-to-end device";
-const productId = 0X8001;
+const productId = 0x8001;
 const longDiscriminator = 3840;
 const setupPin = 20202021;
 const matterPort = 5540;
@@ -83,8 +98,8 @@ describe("Integration Test", () => {
             delayedPairing: true,
             commissioningOptions: {
                 regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Indoor,
-                regulatoryCountryCode: "DE"
-            }
+                regulatoryCountryCode: "DE",
+            },
         });
         matterClient.addCommissioningController(commissioningController);
 
@@ -129,32 +144,41 @@ describe("Integration Test", () => {
                     maxNetworks: 1,
                     interfaceEnabled: true,
                     lastConnectErrorValue: 0,
-                    lastNetworkId: ByteArray.fromHex("0000000000000000000000000000000000000000000000000000000000000000"),
+                    lastNetworkId: ByteArray.fromHex(
+                        "0000000000000000000000000000000000000000000000000000000000000000",
+                    ),
                     lastNetworkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
-                    networks: [{ networkId: ByteArray.fromHex("0000000000000000000000000000000000000000000000000000000000000000"), connected: true }],
+                    networks: [
+                        {
+                            networkId: ByteArray.fromHex(
+                                "0000000000000000000000000000000000000000000000000000000000000000",
+                            ),
+                            connected: true,
+                        },
+                    ],
                 },
                 {
-                    scanNetworks: async function() {
+                    scanNetworks: async function () {
                         throw new Error("Not implemented");
                     },
 
-                    removeNetwork: async function() {
+                    removeNetwork: async function () {
                         throw new Error("Not implemented");
                     },
 
-                    connectNetwork: async function() {
+                    connectNetwork: async function () {
                         throw new Error("Not implemented");
                     },
 
-                    reorderNetwork: async function() {
+                    reorderNetwork: async function () {
                         throw new Error("Not implemented");
                     },
 
-                    addOrUpdateWiFiNetwork: async function() {
+                    addOrUpdateWiFiNetwork: async function () {
                         throw new Error("Not implemented");
                     },
-                }
-            )
+                },
+            ),
         );
 
         matterServer.addCommissioningServer(commissioningServer);
@@ -192,19 +216,24 @@ describe("Integration Test", () => {
             const manufactoringDate_accessorApi = basicInfoCluster.getManufacturingDateAttribute?.();
             assert.equal(manufactoringDate_accessorApi, undefined);
         });
-
     });
 
     describe("commission", () => {
-        it("the client commissions a new device", async () => {
-            // override the mdns scanner to avoid the client to try to resolve the server's address
-            commissioningController.setMdnsScanner(await MdnsScanner.create(CLIENT_IPv6));
-            await commissioningController.connect();
+        it(
+            "the client commissions a new device",
+            async () => {
+                // override the mdns scanner to avoid the client to try to resolve the server's address
+                commissioningController.setMdnsScanner(await MdnsScanner.create(CLIENT_IPv6));
+                await commissioningController.connect();
 
-            Network.get = () => { throw new Error("Network should not be requested post starting") };
+                Network.get = () => {
+                    throw new Error("Network should not be requested post starting");
+                };
 
-            assert.ok(commissioningController.getFabric().nodeId);
-        }, 60 * 1000 /* 1mn timeout */);
+                assert.ok(commissioningController.getFabric().nodeId);
+            },
+            60 * 1000 /* 1mn timeout */,
+        );
 
         it("the session is resumed if it has been established previously", async () => {
             defaultInteractionClient = await commissioningController.createInteractionClient();
@@ -212,15 +241,18 @@ describe("Integration Test", () => {
         });
 
         it("Verify that commissioning changed the Regulatory Config/Location values", async () => {
-            const generalCommissioningCluster = commissioningController.getRootClusterClient(GeneralCommissioning.Cluster);
-            assert.equal(await generalCommissioningCluster?.getRegulatoryConfigAttribute(), GeneralCommissioning.RegulatoryLocationType.Indoor);
+            const generalCommissioningCluster = commissioningController.getRootClusterClient(
+                GeneralCommissioning.Cluster,
+            );
+            assert.equal(
+                await generalCommissioningCluster?.getRegulatoryConfigAttribute(),
+                GeneralCommissioning.RegulatoryLocationType.Indoor,
+            );
 
             const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformation.Cluster);
             assert.equal(await basicInfoCluster?.getLocationAttribute(), "DE");
         });
-
     });
-
 
     describe("read attributes", () => {
         it("read one specific attribute including schema parsing", async () => {
@@ -266,152 +298,177 @@ describe("Integration Test", () => {
             const response = await defaultInteractionClient.getMultipleAttributes([
                 { clusterId: Descriptor.Cluster.id }, // * /DescriptorCluster/ *
                 { endpointId: EndpointNumber(0), clusterId: BasicInformation.Cluster.id }, // 0/BasicInformationCluster/ *
-                { endpointId: EndpointNumber(1), clusterId: OnOffCluster.id, attributeId: OnOffCluster.attributes.onOff.id }, // 1/OnOffCluster/onOff
+                {
+                    endpointId: EndpointNumber(1),
+                    clusterId: OnOffCluster.id,
+                    attributeId: OnOffCluster.attributes.onOff.id,
+                }, // 1/OnOffCluster/onOff
                 { endpointId: EndpointNumber(2) }, // 2 / * /* - will be discarded in results!
             ]);
 
             assert.equal(response.length, 43);
-            assert.equal(response.filter(({
-                path: {
-                    endpointId,
-                    clusterId
-                }
-            }) => endpointId === 0 && clusterId === Descriptor.Cluster.id).length, 10);
-            assert.equal(response.filter(({
-                path: {
-                    endpointId,
-                    clusterId
-                }
-            }) => endpointId === 1 && clusterId === Descriptor.Cluster.id).length, 10);
+            assert.equal(
+                response.filter(
+                    ({ path: { endpointId, clusterId } }) => endpointId === 0 && clusterId === Descriptor.Cluster.id,
+                ).length,
+                10,
+            );
+            assert.equal(
+                response.filter(
+                    ({ path: { endpointId, clusterId } }) => endpointId === 1 && clusterId === Descriptor.Cluster.id,
+                ).length,
+                10,
+            );
 
-            const descriptorServerListData = response.find(({
-                path: {
-                    endpointId,
-                    clusterId,
-                    attributeId
-                }
-            }) => endpointId === 0 && clusterId === Descriptor.Cluster.id && attributeId === Descriptor.Cluster.attributes.serverList.id);
+            const descriptorServerListData = response.find(
+                ({ path: { endpointId, clusterId, attributeId } }) =>
+                    endpointId === 0 &&
+                    clusterId === Descriptor.Cluster.id &&
+                    attributeId === Descriptor.Cluster.attributes.serverList.id,
+            );
             assert.deepEqual(descriptorServerListData, {
                 path: {
                     nodeId: undefined,
                     endpointId: 0,
                     clusterId: Descriptor.Cluster.id,
                     attributeId: Descriptor.Cluster.attributes.serverList.id,
-                    attributeName: "serverList"
-                }, value: [ClusterId(29), ClusterId(40), ClusterId(62), ClusterId(48), ClusterId(49), ClusterId(31), ClusterId(63), ClusterId(51), ClusterId(60)], version: 0
-            })
+                    attributeName: "serverList",
+                },
+                value: [
+                    ClusterId(29),
+                    ClusterId(40),
+                    ClusterId(62),
+                    ClusterId(48),
+                    ClusterId(49),
+                    ClusterId(31),
+                    ClusterId(63),
+                    ClusterId(51),
+                    ClusterId(60),
+                ],
+                version: 0,
+            });
 
-            assert.equal(response.filter(({
-                path: {
-                    endpointId,
-                    clusterId
-                }
-            }) => endpointId === 0 && clusterId === BasicInformation.Cluster.id).length, 22);
-            const softwareVersionStringData = response.find(({
-                path: {
-                    endpointId,
-                    clusterId,
-                    attributeId
-                }
-            }) => endpointId === 0 && clusterId === BasicInformation.Cluster.id && attributeId === BasicInformation.Cluster.attributes.softwareVersionString.id);
+            assert.equal(
+                response.filter(
+                    ({ path: { endpointId, clusterId } }) =>
+                        endpointId === 0 && clusterId === BasicInformation.Cluster.id,
+                ).length,
+                22,
+            );
+            const softwareVersionStringData = response.find(
+                ({ path: { endpointId, clusterId, attributeId } }) =>
+                    endpointId === 0 &&
+                    clusterId === BasicInformation.Cluster.id &&
+                    attributeId === BasicInformation.Cluster.attributes.softwareVersionString.id,
+            );
             assert.deepEqual(softwareVersionStringData, {
                 path: {
                     nodeId: undefined,
                     endpointId: 0,
                     clusterId: BasicInformation.Cluster.id,
                     attributeId: BasicInformation.Cluster.attributes.softwareVersionString.id,
-                    attributeName: "softwareVersionString"
-                }, value: "v1", version: 0
+                    attributeName: "softwareVersionString",
+                },
+                value: "v1",
+                version: 0,
             });
-            const nodeLabelData = response.find(({
-                path: {
-                    endpointId,
-                    clusterId,
-                    attributeId
-                }
-            }) => endpointId === 0 && clusterId === BasicInformation.Cluster.id && attributeId === BasicInformation.Cluster.attributes.nodeLabel.id);
+            const nodeLabelData = response.find(
+                ({ path: { endpointId, clusterId, attributeId } }) =>
+                    endpointId === 0 &&
+                    clusterId === BasicInformation.Cluster.id &&
+                    attributeId === BasicInformation.Cluster.attributes.nodeLabel.id,
+            );
             assert.deepEqual(nodeLabelData, {
                 path: {
                     nodeId: undefined,
                     endpointId: 0,
                     clusterId: BasicInformation.Cluster.id,
                     attributeId: BasicInformation.Cluster.attributes.nodeLabel.id,
-                    attributeName: "nodeLabel"
-                }, value: "345678", version: 2
+                    attributeName: "nodeLabel",
+                },
+                value: "345678",
+                version: 2,
             });
 
-            const onOffData = response.find(({
-                path: {
-                    endpointId,
-                    clusterId,
-                    attributeId
-                }
-            }) => endpointId === 1 && clusterId === OnOffCluster.id && attributeId === OnOffCluster.attributes.onOff.id)
+            const onOffData = response.find(
+                ({ path: { endpointId, clusterId, attributeId } }) =>
+                    endpointId === 1 &&
+                    clusterId === OnOffCluster.id &&
+                    attributeId === OnOffCluster.attributes.onOff.id,
+            );
             assert.deepEqual(onOffData, {
                 path: {
                     nodeId: undefined,
                     endpointId: 1,
                     clusterId: OnOffCluster.id,
                     attributeId: OnOffCluster.attributes.onOff.id,
-                    attributeName: "onOff"
-                }, value: false, version: 0
+                    attributeName: "onOff",
+                },
+                value: false,
+                version: 0,
             });
         });
 
         it("read events", async () => {
             const response = await defaultInteractionClient.getMultipleEvents([
                 { clusterId: BasicInformation.Cluster.id }, // * /BasicInformationCluster/ *
-                { endpointId: EndpointNumber(0), clusterId: GeneralDiagnostics.Cluster.id, eventId: GeneralDiagnostics.Cluster.events.bootReason.id }, // 0/GeneralDiagnosticsCluster/bootReason
+                {
+                    endpointId: EndpointNumber(0),
+                    clusterId: GeneralDiagnostics.Cluster.id,
+                    eventId: GeneralDiagnostics.Cluster.events.bootReason.id,
+                }, // 0/GeneralDiagnosticsCluster/bootReason
                 { endpointId: EndpointNumber(2) }, // 2 / * /* - will be discarded in results!
             ]);
 
             assert.equal(response.length, 2);
-            assert.equal(response.filter(({
-                path: {
-                    endpointId,
-                    clusterId
-                }
-            }) => endpointId === 0 && clusterId === BasicInformation.Cluster.id).length, 1);
+            assert.equal(
+                response.filter(
+                    ({ path: { endpointId, clusterId } }) =>
+                        endpointId === 0 && clusterId === BasicInformation.Cluster.id,
+                ).length,
+                1,
+            );
 
-            const startUpEventData = response.find(({
-                path: {
-                    endpointId,
-                    clusterId,
-                    eventId
-                }
-            }) => endpointId === 0 && clusterId === BasicInformation.Cluster.id && eventId === BasicInformation.Cluster.events.startUp.id);
+            const startUpEventData = response.find(
+                ({ path: { endpointId, clusterId, eventId } }) =>
+                    endpointId === 0 &&
+                    clusterId === BasicInformation.Cluster.id &&
+                    eventId === BasicInformation.Cluster.events.startUp.id,
+            );
 
-            assert.deepEqual(startUpEventData?.events, [{
-                eventNumber: 1,
-                epochTimestamp: fakeTime.nowMs(),
-                priority: BasicInformation.Cluster.events.startUp.priority,
-                data: {
-                    softwareVersion: 1,
+            assert.deepEqual(startUpEventData?.events, [
+                {
+                    eventNumber: 1,
+                    epochTimestamp: fakeTime.nowMs(),
+                    priority: BasicInformation.Cluster.events.startUp.priority,
+                    data: {
+                        softwareVersion: 1,
+                    },
+                    path: undefined,
                 },
-                path: undefined,
-            }]);
+            ]);
 
-            const bootReasonEventData = response.find(({
-                path: {
-                    endpointId,
-                    clusterId,
-                    eventId
-                }
-            }) => endpointId === 0 && clusterId === GeneralDiagnostics.Cluster.id && eventId === GeneralDiagnostics.Cluster.events.bootReason.id);
-            assert.deepEqual(bootReasonEventData?.events, [{
-                eventNumber: 2,
-                epochTimestamp: fakeTime.nowMs(),
-                priority: BasicInformation.Cluster.events.startUp.priority,
-                data: {
-                    bootReason: GeneralDiagnostics.BootReason.Unspecified,
+            const bootReasonEventData = response.find(
+                ({ path: { endpointId, clusterId, eventId } }) =>
+                    endpointId === 0 &&
+                    clusterId === GeneralDiagnostics.Cluster.id &&
+                    eventId === GeneralDiagnostics.Cluster.events.bootReason.id,
+            );
+            assert.deepEqual(bootReasonEventData?.events, [
+                {
+                    eventNumber: 2,
+                    epochTimestamp: fakeTime.nowMs(),
+                    priority: BasicInformation.Cluster.events.startUp.priority,
+                    data: {
+                        bootReason: GeneralDiagnostics.BootReason.Unspecified,
+                    },
+                    path: undefined,
                 },
-                path: undefined,
-            }]);
+            ]);
         });
     });
 
     describe("write attributes", () => {
-
         it("write one attribute", async () => {
             const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInfoCluster);
@@ -426,7 +483,7 @@ describe("Integration Test", () => {
             assert.ok(basicInfoCluster);
 
             await assert.rejects(async () => await basicInfoCluster.attributes.location.set("XXX"), {
-                message: "String is too long: 3, max 2."
+                message: "String is too long: 3, max 2.",
             });
         });
 
@@ -434,8 +491,18 @@ describe("Integration Test", () => {
             const client = await commissioningController.createInteractionClient(); // We can also use a new Interaction clint
 
             const response = await client.setMultipleAttributes([
-                { endpointId: EndpointNumber(0), clusterId: BasicInformation.Cluster.id, attribute: BasicInformation.Cluster.attributes.nodeLabel, value: "testLabel2" },
-                { endpointId: EndpointNumber(0), clusterId: BasicInformation.Cluster.id, attribute: BasicInformation.Cluster.attributes.location, value: "GB" },
+                {
+                    endpointId: EndpointNumber(0),
+                    clusterId: BasicInformation.Cluster.id,
+                    attribute: BasicInformation.Cluster.attributes.nodeLabel,
+                    value: "testLabel2",
+                },
+                {
+                    endpointId: EndpointNumber(0),
+                    clusterId: BasicInformation.Cluster.id,
+                    attribute: BasicInformation.Cluster.attributes.location,
+                    value: "GB",
+                },
             ]);
 
             assert.equal(Array.isArray(response), true);
@@ -449,21 +516,33 @@ describe("Integration Test", () => {
 
         it("write multiple attributes with partial errors", async () => {
             const response = await defaultInteractionClient.setMultipleAttributes([
-                { endpointId: EndpointNumber(0), clusterId: BasicInformation.Cluster.id, attribute: BasicInformation.Cluster.attributes.nodeLabel, value: "testLabel3" },
-                { endpointId: EndpointNumber(0), clusterId: BasicInformation.Cluster.id, attribute: BasicInformation.Cluster.attributes.location, value: "XXX" },
+                {
+                    endpointId: EndpointNumber(0),
+                    clusterId: BasicInformation.Cluster.id,
+                    attribute: BasicInformation.Cluster.attributes.nodeLabel,
+                    value: "testLabel3",
+                },
+                {
+                    endpointId: EndpointNumber(0),
+                    clusterId: BasicInformation.Cluster.id,
+                    attribute: BasicInformation.Cluster.attributes.location,
+                    value: "XXX",
+                },
             ]);
 
             assert.equal(response.length, 1);
             assert.equal(response[0].path.attributeId, BasicInformation.Cluster.attributes.location.id);
             assert.equal(response[0].status, 135 /* StatusCode.ConstraintError */);
 
-            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformation.Cluster, defaultInteractionClient);
+            const basicInfoCluster = commissioningController.getRootClusterClient(
+                BasicInformation.Cluster,
+                defaultInteractionClient,
+            );
             assert.ok(basicInfoCluster);
 
             assert.equal(await basicInfoCluster.attributes.nodeLabel.get(), "testLabel3");
             assert.equal(await basicInfoCluster.attributes.location.get(), "GB");
         });
-
     });
 
     describe("Groups server fabric scoped storage", () => {
@@ -480,14 +559,20 @@ describe("Integration Test", () => {
         it("subscription of one attribute sends updates when the value changes", async () => {
             const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
             assert.ok(onoffEndpoint);
-            const onOffClient = onoffEndpoint.getClusterClient(OnOffCluster, await commissioningController.createInteractionClient());
+            const onOffClient = onoffEndpoint.getClusterClient(
+                OnOffCluster,
+                await commissioningController.createInteractionClient(),
+            );
             assert.ok(onOffClient);
 
             assert.ok(onOffLightDeviceServer);
             const startTime = Time.nowMs();
 
             // Await initial Data
-            const { promise: firstPromise, resolver: firstResolver } = await getPromiseResolver<{ value: boolean, time: number }>();
+            const { promise: firstPromise, resolver: firstResolver } = await getPromiseResolver<{
+                value: boolean;
+                time: number;
+            }>();
             let callback = (value: boolean) => firstResolver({ value, time: Time.nowMs() });
 
             //onOffClient.attributes.onOff.addValueSetListener(value => callback(value));
@@ -499,7 +584,10 @@ describe("Integration Test", () => {
             assert.deepEqual(firstReport, { value: false, time: startTime });
 
             // Await update Report on value change
-            const { promise: updatePromise, resolver: updateResolver } = await getPromiseResolver<{ value: boolean, time: number }>();
+            const { promise: updatePromise, resolver: updateResolver } = await getPromiseResolver<{
+                value: boolean;
+                time: number;
+            }>();
             callback = (value: boolean) => updateResolver({ value, time: Time.nowMs() });
 
             await fakeTime.advanceTime(2 * 1000);
@@ -510,7 +598,10 @@ describe("Integration Test", () => {
             assert.deepEqual(updateReport, { value: true, time: startTime + 2 * 1000 + 100 });
 
             // Await update Report on value change without in between update
-            const { promise: lastPromise, resolver: lastResolver } = await getPromiseResolver<{ value: boolean, time: number }>();
+            const { promise: lastPromise, resolver: lastResolver } = await getPromiseResolver<{
+                value: boolean;
+                time: number;
+            }>();
             callback = (value: boolean) => lastResolver({ value, time: Time.nowMs() });
 
             // Verify that no update comes in after max cycle time 1h
@@ -528,7 +619,10 @@ describe("Integration Test", () => {
         it("subscribe an attribute with getter that needs endpoint", async () => {
             const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
             assert.ok(onoffEndpoint);
-            const scenesClient = onoffEndpoint.getClusterClient(Scenes.Cluster, await commissioningController.createInteractionClient());
+            const scenesClient = onoffEndpoint.getClusterClient(
+                Scenes.Cluster,
+                await commissioningController.createInteractionClient(),
+            );
             assert.ok(scenesClient);
 
             const scenesServer = onOffLightDeviceServer.getClusterServer(Scenes.Cluster);
@@ -537,7 +631,10 @@ describe("Integration Test", () => {
             const startTime = Time.nowMs();
 
             // Await initial Data
-            const { promise: firstPromise, resolver: firstResolver } = await getPromiseResolver<{ value: number, time: number }>();
+            const { promise: firstPromise, resolver: firstResolver } = await getPromiseResolver<{
+                value: number;
+                time: number;
+            }>();
             const callback = (value: number) => firstResolver({ value, time: Time.nowMs() });
 
             //onOffClient.attributes.onOff.addValueSetListener(value => callback(value));
@@ -562,7 +659,10 @@ describe("Integration Test", () => {
         });
 
         it("subscription of one event sends updates when event got triggered via auto-wiring", async () => {
-            const basicInformationClient = commissioningController.getRootClusterClient(BasicInformation.Cluster, await commissioningController.createInteractionClient());
+            const basicInformationClient = commissioningController.getRootClusterClient(
+                BasicInformation.Cluster,
+                await commissioningController.createInteractionClient(),
+            );
             assert.ok(basicInformationClient);
 
             const basicInformationServer = commissioningServer.getRootClusterServer(BasicInformation.Cluster);
@@ -572,7 +672,10 @@ describe("Integration Test", () => {
             const startTime = Time.nowMs();
 
             // Await initial Data
-            const { promise: firstPromise, resolver: firstResolver } = await getPromiseResolver<{ value: DecodedEventData<any>, time: number }>();
+            const { promise: firstPromise, resolver: firstResolver } = await getPromiseResolver<{
+                value: DecodedEventData<any>;
+                time: number;
+            }>();
             let callback = (value: DecodedEventData<any>) => firstResolver({ value, time: Time.nowMs() });
 
             await basicInformationClient.subscribeReachableChangedEvent(event => callback(event), 0, 5, true);
@@ -585,15 +688,18 @@ describe("Integration Test", () => {
                     priority: 1,
                     epochTimestamp: BigInt(startTime),
                     data: {
-                        reachableNewValue: false
+                        reachableNewValue: false,
                     },
                     path: undefined,
                 },
-                time: startTime
+                time: startTime,
             });
 
             // Await update Report on value change
-            const { promise: updatePromise, resolver: updateResolver } = await getPromiseResolver<{ value: DecodedEventData<any>, time: number }>();
+            const { promise: updatePromise, resolver: updateResolver } = await getPromiseResolver<{
+                value: DecodedEventData<any>;
+                time: number;
+            }>();
             callback = (value: DecodedEventData<any>) => updateResolver({ value, time: Time.nowMs() });
 
             await fakeTime.advanceTime(2 * 1000);
@@ -607,18 +713,21 @@ describe("Integration Test", () => {
                     priority: 1,
                     epochTimestamp: BigInt(startTime + 2 * 1000), // Triggered directly
                     data: {
-                        reachableNewValue: true
+                        reachableNewValue: true,
                     },
                     path: undefined,
                 },
-                time: startTime + 2 * 1000 + 100
+                time: startTime + 2 * 1000 + 100,
             });
         });
     });
 
     describe("Access Control server fabric scoped attribute storage", () => {
         it("set empty acl", async () => {
-            const accessControlCluster = commissioningController.getRootClusterClient(AccessControl.Cluster, defaultInteractionClient);
+            const accessControlCluster = commissioningController.getRootClusterClient(
+                AccessControl.Cluster,
+                defaultInteractionClient,
+            );
             assert.ok(accessControlCluster);
             await accessControlCluster.attributes.acl.set([]);
             await accessControlCluster.setAclAttribute([]);
@@ -641,12 +750,14 @@ describe("Integration Test", () => {
             assert.ok(identifyClient);
 
             const { promise: firstPromise, resolver: firstResolver } = await getPromiseResolver<number>();
-            onOffLightDeviceServer.addCommandHandler("identify", async ({ request: { identifyTime } }) => firstResolver(identifyTime));
+            onOffLightDeviceServer.addCommandHandler("identify", async ({ request: { identifyTime } }) =>
+                firstResolver(identifyTime),
+            );
 
             await identifyClient.commands.identify({ identifyTime: 5 });
 
             const result = await firstPromise;
-            assert.equal(result, 5)
+            assert.equal(result, 5);
         });
     });
 
@@ -669,7 +780,7 @@ describe("Integration Test", () => {
 
             assert.equal(fakeServerStorage.get(["0", "FabricManager"], "nextFabricIndex"), 2);
 
-            const onOffValue = fakeServerStorage.get<{ value: any, version: number }>(["0", "Cluster-1-6"], "onOff");
+            const onOffValue = fakeServerStorage.get<{ value: any; version: number }>(["0", "Cluster-1-6"], "onOff");
             assert.ok(typeof onOffValue === "object");
             assert.equal(onOffValue.version, 2);
             assert.equal(onOffValue.value, false);
@@ -681,7 +792,10 @@ describe("Integration Test", () => {
             assert.equal(fakeControllerStorage.get(["0", "RootCertificateManager"], "rootCertId"), BigInt(0));
             assert.equal(fakeControllerStorage.get(["0", "MatterController"], "fabricCommissioned"), true);
 
-            const storedControllerResumptionRecords = fakeServerStorage.get(["0", "SessionManager"], "resumptionRecords");
+            const storedControllerResumptionRecords = fakeServerStorage.get(
+                ["0", "SessionManager"],
+                "resumptionRecords",
+            );
             assert.ok(Array.isArray(storedControllerResumptionRecords));
             assert.equal(storedControllerResumptionRecords.length, 1);
 
@@ -692,7 +806,10 @@ describe("Integration Test", () => {
 
     describe("remove Fabric", () => {
         it("try to remove invalid fabric", async () => {
-            const operationalCredentialsCluster = commissioningController.getRootClusterClient(OperationalCredentials.Cluster, defaultInteractionClient);
+            const operationalCredentialsCluster = commissioningController.getRootClusterClient(
+                OperationalCredentials.Cluster,
+                defaultInteractionClient,
+            );
             assert.ok(operationalCredentialsCluster);
 
             const result = await operationalCredentialsCluster.commands.removeFabric({ fabricIndex: FabricIndex(250) });
@@ -702,7 +819,10 @@ describe("Integration Test", () => {
         });
 
         it("read and remove fabric", async () => {
-            const operationalCredentialsCluster = commissioningController.getRootClusterClient(OperationalCredentials.Cluster, defaultInteractionClient);
+            const operationalCredentialsCluster = commissioningController.getRootClusterClient(
+                OperationalCredentials.Cluster,
+                defaultInteractionClient,
+            );
             assert.ok(operationalCredentialsCluster);
 
             const fabricIndex = await operationalCredentialsCluster.attributes.currentFabricIndex.get();

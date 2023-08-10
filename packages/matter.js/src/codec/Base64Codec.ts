@@ -25,11 +25,11 @@ const PAD = cp("=");
             B2A[pos++] = i;
         }
     }
-    addRange('A', 'Z');
-    addRange('a', 'z');
-    addRange('0', '9');
-    addRange('+', '+');
-    addRange('/', '/');
+    addRange("A", "Z");
+    addRange("a", "z");
+    addRange("0", "9");
+    addRange("+", "+");
+    addRange("/", "/");
 
     // base64url
     const slashValue = A2B[cp("/")];
@@ -44,7 +44,7 @@ const PAD = cp("=");
 export namespace Base64 {
     /**
      * Encodes base64.
-     * 
+     *
      * @param input an indexable sequence of bytes
      * @param url set to true to encode as base46url
      * @returns an encoded string
@@ -60,16 +60,16 @@ export namespace Base64 {
         }
         const out = new ByteArray(outLength);
 
-        for (let inPos = 0, outPos = 0; outPos < outLength;) {
+        for (let inPos = 0, outPos = 0; outPos < outLength; ) {
             const n = (input[inPos++] << 16) + ((input[inPos++] ?? 0) << 8) + (input[inPos++] ?? 0);
 
             out[outPos++] = dict[n >>> 18];
-            out[outPos++] = dict[n >>> 12 & 0o77];
+            out[outPos++] = dict[(n >>> 12) & 0o77];
 
             if (inPos - input.length === 2) {
                 if (!url) out[outPos++] = PAD;
             } else {
-                out[outPos++] = dict[n >>> 6 & 0o77];
+                out[outPos++] = dict[(n >>> 6) & 0o77];
             }
 
             if (inPos > input.length) {
@@ -84,7 +84,7 @@ export namespace Base64 {
 
     /**
      * Decodes base64.
-     * 
+     *
      * @param input binary data encoded as a base64 or base64url string
      * @returns decoded bytes in a ByteArray
      */
@@ -98,14 +98,19 @@ export namespace Base64 {
 
         let outLength = Math.trunc(inputLength / 4) * 3;
         switch (inputLength % 4) {
-            case 3: outLength += 2; break;
-            case 2: outLength += 1; break;
-            case 1: throw new Error("Invalid base-64 encoding");
+            case 3:
+                outLength += 2;
+                break;
+            case 2:
+                outLength += 1;
+                break;
+            case 1:
+                throw new Error("Invalid base-64 encoding");
         }
 
         const out = new ByteArray(outLength);
 
-        for (let inPos = 0, outPos = 0; ;) {
+        for (let inPos = 0, outPos = 0; ; ) {
             function lookup() {
                 if (inPos >= inputLength) return 0;
                 const v = A2B[input.codePointAt(inPos++) ?? -1];
@@ -118,7 +123,7 @@ export namespace Base64 {
             const n = (lookup() << 18) + (lookup() << 12) + (lookup() << 6) + lookup();
             out[outPos++] = n >>> 16;
             if (outPos < outLength) {
-                out[outPos++] = n >>> 8 & 0xff;
+                out[outPos++] = (n >>> 8) & 0xff;
             } else {
                 break;
             }

@@ -21,16 +21,18 @@ export const Str = (el: HTMLElement) => {
         return "";
     }
 
-    return text
-        // Remove leading and trailing whitespace
-        .trim()
+    return (
+        text
+            // Remove leading and trailing whitespace
+            .trim()
 
-        // Remove soft hyphen and any surrounding whitespace
-        .replace(/\s*\u00ad\s*/g, "")
+            // Remove soft hyphen and any surrounding whitespace
+            .replace(/\s*\u00ad\s*/g, "")
 
-        // Collapse whitespace    
-        .replace(/\s+/g, " ");
-}
+            // Collapse whitespace
+            .replace(/\s+/g, " ")
+    );
+};
 
 /** String with no space at all */
 export const NoSpace = (el: HTMLElement) => Str(el).replace(/\s/g, "");
@@ -45,13 +47,13 @@ export const Integer = (el: HTMLElement) => {
     }
 
     return Number.parseInt(NoSpace(el));
-}
+};
 
 /** Number encoded as BIT(n) */
 export const Bit = (el: HTMLElement) => {
     const text = Str(el).replace(/bit\((\d+)\)/i, "$1");
     return Number.parseInt(text);
-}
+};
 
 /**
  * DSL or identifier.  Note we replace "Fo o" with "Foo" because space errors
@@ -92,7 +94,7 @@ export const Code = (el: HTMLElement) => {
     str = parts.join(" ");
 
     return str;
-}
+};
 
 /** Camelized identifier */
 export const Identifier = (el: HTMLElement) => {
@@ -103,7 +105,7 @@ export const Identifier = (el: HTMLElement) => {
     str = str.replace(/^([a-z0-9 _:,/\-$]+).*/i, "$1");
 
     return camelize(str, true);
-}
+};
 
 /** Identifier, all lowercase.  Used for matching so "_" removed */
 export const LowerIdentifier = (el: HTMLElement) => Identifier(el).toLowerCase();
@@ -113,7 +115,9 @@ export const UpperIdentifier = (el: HTMLElement) => Code(el).toUpperCase();
 
 /** Bits of the form "1", "1 - 2" or "1..2" into constraint definition */
 export const Bits = (el: HTMLElement) => {
-    const bits = Str(el).split(/\s*(?:\.\.|-|–)\s*/).map(b => Number.parseInt(b));
+    const bits = Str(el)
+        .split(/\s*(?:\.\.|-|–)\s*/)
+        .map(b => Number.parseInt(b));
     if (bits.findIndex(Number.isNaN) !== -1) {
         return;
     }
@@ -123,4 +127,4 @@ export const Bits = (el: HTMLElement) => {
     if (bits.length == 2) {
         return { min: bits[0], max: bits[1] + 1 };
     }
-}
+};

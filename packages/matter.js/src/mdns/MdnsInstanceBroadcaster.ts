@@ -4,7 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InstanceBroadcaster, CommissionerInstanceData, CommissioningModeInstanceData } from "../common/InstanceBroadcaster.js";
+import {
+    CommissionerInstanceData,
+    CommissioningModeInstanceData,
+    InstanceBroadcaster,
+} from "../common/InstanceBroadcaster.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { MdnsBroadcaster } from "./MdnsBroadcaster.js";
 
@@ -15,7 +19,7 @@ export class MdnsInstanceBroadcaster implements InstanceBroadcaster {
     constructor(
         private readonly instancePort: number,
         private readonly mdnsBroadcaster: MdnsBroadcaster,
-    ) { }
+    ) {}
 
     async setCommissionMode(mode: number, deviceData: CommissioningModeInstanceData) {
         this.mdnsBroadcaster.setCommissionMode(this.instancePort, mode, deviceData);

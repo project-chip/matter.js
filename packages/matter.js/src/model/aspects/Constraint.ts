@@ -10,9 +10,9 @@ import { Aspect } from "./Aspect.js";
 
 /**
  * An operational view of constraints as defined by the Matter specification.
- * 
+ *
  * A "constraint" limits possible data values.
- * 
+ *
  * Formally a constraint is not considered a quality by the specification.
  * It is handled similarly to qualities, though, so we keep it in the same
  * section.
@@ -96,7 +96,7 @@ export namespace Constraint {
          * Indicates constraint is defined in prose and cannot be enforced
          * automatically.
          */
-        desc?: boolean,
+        desc?: boolean;
 
         /**
          * Constant value.
@@ -106,23 +106,23 @@ export namespace Constraint {
         /**
          * Lower bound on value or sequence length.
          */
-        min?: FieldValue,
+        min?: FieldValue;
 
         /**
          * Upper bound on value or sequence length.
          */
-        max?: FieldValue,
+        max?: FieldValue;
 
         /**
          * Constraint on list child element.
          */
-        entry?: Ast,
+        entry?: Ast;
 
         /**
          * List of sub-constraints in a sequence.
          */
-        parts?: Ast[]
-    }
+        parts?: Ast[];
+    };
 
     /**
      * These are all ways to describe a constraint.
@@ -185,7 +185,10 @@ export namespace Constraint {
                         return { max: max };
 
                     default:
-                        constraint.error("INVALID_CONSTRAINT", `Two word constraint "${words.join(" ")}" does not start with "min" or "max"`)
+                        constraint.error(
+                            "INVALID_CONSTRAINT",
+                            `Two word constraint "${words.join(" ")}" does not start with "min" or "max"`,
+                        );
                 }
                 return;
 

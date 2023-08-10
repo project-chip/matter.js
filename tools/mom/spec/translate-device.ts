@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DatatypeElement, RequirementElement, DeviceTypeElement } from "#matter.js/model/index.js";
 import { Logger } from "#matter.js/log/Logger.js";
-import { DeviceReference } from "./spec-types.js";
-import { Identifier, Integer, LowerIdentifier, Str } from "./html-translators.js";
-import { Alias, Constant, Optional, translateRecordsToMatter, translateTable } from "./translate-table.js";
+import { DatatypeElement, DeviceTypeElement, RequirementElement } from "#matter.js/model/index.js";
 import { camelize } from "../../util/string.js";
+import { Identifier, Integer, LowerIdentifier, Str } from "./html-translators.js";
+import { DeviceReference } from "./spec-types.js";
+import { Alias, Constant, Optional, translateRecordsToMatter, translateTable } from "./translate-table.js";
 
 const logger = Logger.get("translate-devices");
 
@@ -29,7 +29,7 @@ function createDevice(deviceRef: DeviceReference) {
     if (deviceRef.name === "Base") {
         return DeviceTypeElement({
             name: "Base",
-            classification: DeviceTypeElement.Classification.Base
+            classification: DeviceTypeElement.Classification.Base,
         });
     }
 
@@ -38,7 +38,7 @@ function createDevice(deviceRef: DeviceReference) {
         name: Alias(Identifier, "devicename"),
         superset: Optional(Identifier),
         class: LowerIdentifier,
-        scope: LowerIdentifier
+        scope: LowerIdentifier,
     })[0];
 
     if (!metadata) {
@@ -63,7 +63,7 @@ function createDevice(deviceRef: DeviceReference) {
     }
 
     const revisions = translateTable("deviceType", deviceRef.revisions, {
-        revision: Alias(Integer, "rev")
+        revision: Alias(Integer, "rev"),
     });
     let revision = revisions[revisions.length - 1]?.revision;
     if (revision === undefined) {
@@ -75,7 +75,7 @@ function createDevice(deviceRef: DeviceReference) {
         id: metadata.id,
         name: metadata.name,
         category: deviceRef.category,
-        classification
+        classification,
     };
     const device = DeviceTypeElement(definition);
 
@@ -83,19 +83,23 @@ function createDevice(deviceRef: DeviceReference) {
         device.type = metadata.superset;
     }
 
-    device.children = [RequirementElement({
-        id: 0x1d,
-        name: "Descriptor",
-        element: RequirementElement.ElementType.ServerCluster,
-        children: [DatatypeElement({
-            name: "DeviceTypeStruct",
-            type: "struct",
+    device.children = [
+        RequirementElement({
+            id: 0x1d,
+            name: "Descriptor",
+            element: RequirementElement.ElementType.ServerCluster,
             children: [
-                DatatypeElement({ name: "DeviceType", type: "devtype-id", default: definition.id }),
-                DatatypeElement({ name: "Revision", type: "uint16", default: revision })
-            ]
-        })]
-    })];
+                DatatypeElement({
+                    name: "DeviceTypeStruct",
+                    type: "struct",
+                    children: [
+                        DatatypeElement({ name: "DeviceType", type: "devtype-id", default: definition.id }),
+                        DatatypeElement({ name: "Revision", type: "uint16", default: revision }),
+                    ],
+                }),
+            ],
+        }),
+    ];
 
     logger.debug("metadata", Logger.dict({ ...definition, revision, type: metadata.superset }));
 
@@ -122,9 +126,9 @@ function addConditions(device: DeviceTypeElement, deviceRef: DeviceReference) {
                 "protocoltag",
                 "interfacetag",
                 "capabilitytag",
-                "classtag"
+                "classtag",
             ),
-            description: Optional(Str)
+            description: Optional(Str),
         });
 
         if (definitions) {
@@ -138,11 +142,13 @@ function addConditions(device: DeviceTypeElement, deviceRef: DeviceReference) {
         if (!device.children) {
             device.children = [];
         }
-        device.children.push(DatatypeElement({
-            name: "conditions",
-            type: "enum8",
-            children: conditions
-        }));
+        device.children.push(
+            DatatypeElement({
+                name: "conditions",
+                type: "enum8",
+                children: conditions,
+            }),
+        );
     }
 }
 
@@ -150,30 +156,25 @@ function addClusters(device: DeviceTypeElement, deviceRef: DeviceReference) {
     const clusterRecords = translateTable("clusters", deviceRef.clusters, {
         id: Optional(Alias(Integer, "identifier")),
         name: Alias(Identifier, "clustername", "cluster"),
-        element: Alias(
-            (el: HTMLElement) => {
-                const cs = LowerIdentifier(el);
-                switch (cs) {
-                    case "client":
-                        return RequirementElement.ElementType.ClientCluster;
+        element: Alias((el: HTMLElement) => {
+            const cs = LowerIdentifier(el);
+            switch (cs) {
+                case "client":
+                    return RequirementElement.ElementType.ClientCluster;
 
-                    case "server":
-                        return RequirementElement.ElementType.ServerCluster;
+                case "server":
+                    return RequirementElement.ElementType.ServerCluster;
 
-                    default:
-                        logger.error(`Invalid client/server value ${cs} (assuming server)`)
-                        return RequirementElement.ElementType.ServerCluster;
-                }
-            }, "clientserver"),
+                default:
+                    logger.error(`Invalid client/server value ${cs} (assuming server)`);
+                    return RequirementElement.ElementType.ServerCluster;
+            }
+        }, "clientserver"),
         quality: Optional(Str),
-        conformance: Optional(Str)
+        conformance: Optional(Str),
     });
 
-    const clusters = translateRecordsToMatter(
-        "clusters",
-        clusterRecords,
-        RequirementElement
-    );
+    const clusters = translateRecordsToMatter("clusters", clusterRecords, RequirementElement);
     if (!clusters?.length) {
         return;
     }
@@ -199,7 +200,7 @@ function addClusters(device: DeviceTypeElement, deviceRef: DeviceReference) {
         name: Identifier,
         constraint: Optional(Str),
         access: Optional(Str),
-        conformance: Optional(Str)
+        conformance: Optional(Str),
     });
 
     for (const record of elementRecords) {
@@ -213,13 +214,15 @@ function addClusters(device: DeviceTypeElement, deviceRef: DeviceReference) {
             if (!cluster.children) {
                 cluster.children = [];
             }
-            cluster.children.push(RequirementElement({
-                element: camelize(record.element, false) as RequirementElement.ElementType,
-                name: record.name,
-                constraint: record.constraint,
-                access: record.access,
-                conformance: record.conformance
-            }));
+            cluster.children.push(
+                RequirementElement({
+                    element: camelize(record.element, false) as RequirementElement.ElementType,
+                    name: record.name,
+                    constraint: record.constraint,
+                    access: record.access,
+                    conformance: record.conformance,
+                }),
+            );
         }
     }
 }

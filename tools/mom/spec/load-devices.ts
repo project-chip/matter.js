@@ -15,7 +15,7 @@ function augmentDevice(device: DeviceReference, content: HtmlReference) {
     if (name.endsWith(" conditions")) {
         name = "conditions";
     } else if (name === "base cluster requirements for matter") {
-        name = "cluster requirements"
+        name = "cluster requirements";
     }
 
     let what: string | undefined;
@@ -88,8 +88,8 @@ export function* loadDevices(devices: HtmlReference) {
                 device = {
                     ...section,
                     name: section.name.replace(/\s+device type/i, ""),
-                    category
-                }
+                    category,
+                };
 
                 logger.info(`discovered ${device.name} (${device.xref.document} § ${device.xref.section})`);
                 break;

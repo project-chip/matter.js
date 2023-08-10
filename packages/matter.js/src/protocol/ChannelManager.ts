@@ -5,15 +5,15 @@
  */
 
 import { Channel } from "../common/Channel.js";
+import { MatterError } from "../common/MatterError.js";
+import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { SecureSession } from "../session/SecureSession.js";
 import { Session } from "../session/Session.js";
-import { MessageChannel } from "./ExchangeManager.js";
-import { NodeId } from "../datatype/NodeId.js";
-import { MatterError } from "../common/MatterError.js";
 import { ByteArray } from "../util/ByteArray.js";
+import { MessageChannel } from "./ExchangeManager.js";
 
-export class NoChannelError extends MatterError { }
+export class NoChannelError extends MatterError {}
 
 export class ChannelManager {
     private readonly channels = new Map<string, MessageChannel<any>>();

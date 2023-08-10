@@ -13,7 +13,7 @@ import { serialize as stringSerialize } from "../../util/String.js";
  * can capture the original semantic meaning.
  */
 export type FieldValue =
-    null
+    | null
     | string
     | number
     | bigint
@@ -65,9 +65,9 @@ export namespace FieldValue {
      * Reference to a named field
      */
     export type Reference = {
-        type: reference,
-        name: string
-    }
+        type: reference;
+        name: string;
+    };
 
     export function Reference(name: string): Reference {
         return { type: reference, name };
@@ -77,21 +77,21 @@ export namespace FieldValue {
      * Celsius value, typically .1°C or .01°C
      */
     export type Celsius = {
-        type: celsius,
-        value: number
-    }
+        type: celsius;
+        value: number;
+    };
 
     export function Celsius(value: number): Celsius {
-        return { type: celsius, value }
+        return { type: celsius, value };
     }
 
     /**
      * Percent value, units of either 1% (.01) or .01% (.0001)
      */
     export type Percent = {
-        type: percent,
-        value: number
-    }
+        type: percent;
+        value: number;
+    };
 
     export function Percent(value: number): Percent {
         return { type: percent, value };
@@ -101,9 +101,9 @@ export namespace FieldValue {
      * A set of struct property values keyed by name.
      */
     export type Properties = {
-        type: properties,
-        properties: { [name: string]: FieldValue }
-    }
+        type: properties;
+        properties: { [name: string]: FieldValue };
+    };
 
     /**
      * Convert the field value to a "defacto-standard" form.
@@ -119,7 +119,7 @@ export namespace FieldValue {
             return `${(value as Celsius).value}°C`;
         }
         if (is(value, percent)) {
-            return `${(value as Percent).value}%';`
+            return `${(value as Percent).value}%';`;
         }
         if (is(value, properties)) {
             return stringSerialize((value as Properties).properties);

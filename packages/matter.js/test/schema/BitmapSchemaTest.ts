@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ByteArray } from "../../src/util/ByteArray.js";
 import { BitField, BitFieldEnum, BitFlag, BitmapSchema, ByteArrayBitmapSchema } from "../../src/schema/BitmapSchema.js";
+import { ByteArray } from "../../src/util/ByteArray.js";
 
 describe("BitmapSchema", () => {
     const enum EnumTest {
@@ -36,7 +36,7 @@ describe("BitmapSchema", () => {
                 numberTest: 1,
             });
 
-            expect(result).toBe(0xC4);
+            expect(result).toBe(0xc4);
         });
 
         it("encodes a bitmap using the schema with not provided unset bits", () => {
@@ -46,7 +46,7 @@ describe("BitmapSchema", () => {
                 numberTest: 1,
             });
 
-            expect(result).toBe(0xC4);
+            expect(result).toBe(0xc4);
         });
 
         it("encodes a bitmap using the schema with not provided unset bits #2", () => {
@@ -66,7 +66,7 @@ describe("BitmapSchema", () => {
 
     describe("decode", () => {
         it("decodes a bitmap using the schema with all bit set", () => {
-            const result = TestBitmapSchema.decode(0xB4);
+            const result = TestBitmapSchema.decode(0xb4);
 
             expect(result).toEqual({
                 flag1: true,
@@ -77,7 +77,7 @@ describe("BitmapSchema", () => {
         });
 
         it("decodes a bitmap using the schema with some set", () => {
-            const result = TestBitmapSchema.decode(0xC4);
+            const result = TestBitmapSchema.decode(0xc4);
 
             expect(result).toEqual({
                 flag1: true,
@@ -117,7 +117,7 @@ describe("ByteArrayBitmapSchema", () => {
             const result = TestByteArrayBitmapSchema.encode({
                 flag1: true,
                 flag2: true,
-                number: 0X2000,
+                number: 0x2000,
             });
 
             expect(result.toHex()).toBe("01c0");
@@ -131,7 +131,7 @@ describe("ByteArrayBitmapSchema", () => {
             expect(result).toEqual({
                 flag1: true,
                 flag2: true,
-                number: 0X2000,
+                number: 0x2000,
             });
         });
     });

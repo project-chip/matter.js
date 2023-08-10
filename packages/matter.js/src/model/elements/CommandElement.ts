@@ -5,21 +5,21 @@
  */
 
 import { ElementTag, Mei } from "../definitions/index.js";
-import { ValueElement } from "./ValueElement.js";
 import { BaseElement } from "./BaseElement.js";
+import { ValueElement } from "./ValueElement.js";
 
 /**
  * A command describes a remote procedure call.
  */
 export type CommandElement = ValueElement & {
-    id: Mei,
-    tag: `${CommandElement.Tag}`,
+    id: Mei;
+    tag: `${CommandElement.Tag}`;
 
     // Direction is required but we handling missing direction in validation
-    direction?: `${CommandElement.Direction}`,
+    direction?: `${CommandElement.Direction}`;
 
-    response?: string
-}
+    response?: string;
+};
 
 export function CommandElement(definition: CommandElement.Properties) {
     return ValueElement(CommandElement.Tag, definition) as CommandElement;
@@ -35,6 +35,6 @@ export namespace CommandElement {
      */
     export enum Direction {
         Request = "request",
-        Response = "response"
+        Response = "response",
     }
 }

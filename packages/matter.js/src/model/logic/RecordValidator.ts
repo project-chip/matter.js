@@ -12,12 +12,12 @@ import { ValidatorImplementation } from "./record-validation/ValidatorImplementa
 
 /**
  * Creates a utility object that can validate records based on a model.
- * 
+ *
  * TODO - doesn't currently recurse into children
- * 
+ *
  * @param fields defines the record to test
  * @param features active features
- * 
+ *
  * @return a Validator
  */
 export function RecordValidator(fields: ValueModel[], featureMap: ValueModel, features: FeatureSet): RecordValidator {

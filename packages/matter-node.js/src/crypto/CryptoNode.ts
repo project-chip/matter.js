@@ -4,25 +4,27 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as crypto from "crypto";
-import { ByteArray } from "@project-chip/matter.js/util";
 import {
+    Crypto,
+    CryptoDsaEncoding,
+    CryptoError,
     CRYPTO_AUTH_TAG_LENGTH,
     CRYPTO_EC_CURVE,
     CRYPTO_ENCRYPT_ALGORITHM,
     CRYPTO_HASH_ALGORITHM,
     CRYPTO_SYMMETRIC_KEY_LENGTH,
-    CryptoDsaEncoding,
-    Crypto,
     PrivateKey,
-    CryptoError
 } from "@project-chip/matter.js/crypto";
+import { ByteArray } from "@project-chip/matter.js/util";
+import * as crypto from "crypto";
 
 export class CryptoNode extends Crypto {
     encrypt(key: ByteArray, data: ByteArray, nonce: ByteArray, aad?: ByteArray): ByteArray {
-        const cipher = crypto.createCipheriv(CRYPTO_ENCRYPT_ALGORITHM, key, nonce, { authTagLength: CRYPTO_AUTH_TAG_LENGTH });
+        const cipher = crypto.createCipheriv(CRYPTO_ENCRYPT_ALGORITHM, key, nonce, {
+            authTagLength: CRYPTO_AUTH_TAG_LENGTH,
+        });
         if (aad !== undefined) {
-            cipher.setAAD(aad, { plaintextLength: data.length })
+            cipher.setAAD(aad, { plaintextLength: data.length });
         }
         const encrypted = cipher.update(data);
         cipher.final();
@@ -30,10 +32,12 @@ export class CryptoNode extends Crypto {
     }
 
     decrypt(key: ByteArray, data: ByteArray, nonce: ByteArray, aad?: ByteArray): ByteArray {
-        const cipher = crypto.createDecipheriv(CRYPTO_ENCRYPT_ALGORITHM, key, nonce, { authTagLength: CRYPTO_AUTH_TAG_LENGTH });
+        const cipher = crypto.createDecipheriv(CRYPTO_ENCRYPT_ALGORITHM, key, nonce, {
+            authTagLength: CRYPTO_AUTH_TAG_LENGTH,
+        });
         const plaintextLength = data.length - CRYPTO_AUTH_TAG_LENGTH;
         if (aad !== undefined) {
-            cipher.setAAD(aad, { plaintextLength })
+            cipher.setAAD(aad, { plaintextLength });
         }
         cipher.setAuthTag(data.slice(plaintextLength));
         const result = cipher.update(data.slice(0, plaintextLength));
@@ -45,16 +49,19 @@ export class CryptoNode extends Crypto {
         return new ByteArray(crypto.randomBytes(length));
     }
 
-    ecdhGeneratePublicKey(): { publicKey: ByteArray, ecdh: any } {
+    ecdhGeneratePublicKey(): { publicKey: ByteArray; ecdh: any } {
         const ecdh = crypto.createECDH(CRYPTO_EC_CURVE);
         ecdh.generateKeys();
         return { publicKey: new ByteArray(ecdh.getPublicKey()), ecdh: ecdh };
     }
 
-    ecdhGeneratePublicKeyAndSecret(peerPublicKey: ByteArray): { publicKey: ByteArray, sharedSecret: ByteArray } {
+    ecdhGeneratePublicKeyAndSecret(peerPublicKey: ByteArray): { publicKey: ByteArray; sharedSecret: ByteArray } {
         const ecdh = crypto.createECDH(CRYPTO_EC_CURVE);
         ecdh.generateKeys();
-        return { publicKey: new ByteArray(ecdh.getPublicKey()), sharedSecret: new ByteArray(ecdh.computeSecret(peerPublicKey)) };
+        return {
+            publicKey: new ByteArray(ecdh.getPublicKey()),
+            sharedSecret: new ByteArray(ecdh.computeSecret(peerPublicKey)),
+        };
     }
 
     ecdhGenerateSecret(peerPublicKey: ByteArray, ecdh: crypto.ECDH): ByteArray {
@@ -80,7 +87,12 @@ export class CryptoNode extends Crypto {
         });
     }
 
-    hkdf(secret: ByteArray, salt: ByteArray, info: ByteArray, length: number = CRYPTO_SYMMETRIC_KEY_LENGTH): Promise<ByteArray> {
+    hkdf(
+        secret: ByteArray,
+        salt: ByteArray,
+        info: ByteArray,
+        length: number = CRYPTO_SYMMETRIC_KEY_LENGTH,
+    ): Promise<ByteArray> {
         return new Promise<ByteArray>((resolver, rejecter) => {
             crypto.hkdf(CRYPTO_HASH_ALGORITHM, secret, salt, info, length, (error, key) => {
                 if (error !== null) rejecter(error);
@@ -95,39 +107,50 @@ export class CryptoNode extends Crypto {
         return new ByteArray(hmac.digest());
     }
 
-    sign(privateKey: JsonWebKey, data: ByteArray | ByteArray[], dsaEncoding: CryptoDsaEncoding = "ieee-p1363"): ByteArray {
+    sign(
+        privateKey: JsonWebKey,
+        data: ByteArray | ByteArray[],
+        dsaEncoding: CryptoDsaEncoding = "ieee-p1363",
+    ): ByteArray {
         const signer = crypto.createSign(CRYPTO_HASH_ALGORITHM);
         if (Array.isArray(data)) {
             data.forEach(chunk => signer.update(chunk));
         } else {
             signer.update(data);
         }
-        return new ByteArray(signer.sign({
-            key: privateKey as any,
-            format: "jwk",
-            type: "pkcs8",
-            dsaEncoding,
-        }));
+        return new ByteArray(
+            signer.sign({
+                key: privateKey as any,
+                format: "jwk",
+                type: "pkcs8",
+                dsaEncoding,
+            }),
+        );
     }
 
-    verify(publicKey: JsonWebKey, data: ByteArray, signature: ByteArray, dsaEncoding: CryptoDsaEncoding = "ieee-p1363") {
+    verify(
+        publicKey: JsonWebKey,
+        data: ByteArray,
+        signature: ByteArray,
+        dsaEncoding: CryptoDsaEncoding = "ieee-p1363",
+    ) {
         const verifier = crypto.createVerify(CRYPTO_HASH_ALGORITHM);
         verifier.update(data);
-        const success = verifier.verify({
-            key: publicKey as any,
-            format: "jwk",
-            type: "spki",
-            dsaEncoding,
-        }, signature);
+        const success = verifier.verify(
+            {
+                key: publicKey as any,
+                format: "jwk",
+                type: "spki",
+                dsaEncoding,
+            },
+            signature,
+        );
         if (!success) throw new CryptoError("Signature verification failed");
     }
 
     createKeyPair() {
         const ecdh = crypto.createECDH(CRYPTO_EC_CURVE);
         ecdh.generateKeys();
-        return PrivateKey(
-            ecdh.getPrivateKey(),
-            { publicKey: ecdh.getPublicKey() }
-        );
+        return PrivateKey(ecdh.getPrivateKey(), { publicKey: ecdh.getPublicKey() });
     }
 }

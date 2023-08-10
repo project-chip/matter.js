@@ -26,18 +26,22 @@ function validate() {
 
 describe("Matter", () => {
     it("instantiates model", () => {
-        expect(() => { instantiate() }).not.toThrow();
-    })
+        expect(() => {
+            instantiate();
+        }).not.toThrow();
+    });
 
     it("validates", () => {
-        expect(() => { validate() }).not.toThrow();
-    })
+        expect(() => {
+            validate();
+        }).not.toThrow();
+    });
 
     it("has not increased in errors", () => {
         expect(validate().errors.length).toBeLessThanOrEqual(16);
-    })
+    });
 
     it("has not decreased in scope", () => {
         expect(validate().elementCount).toBeGreaterThanOrEqual(3582);
-    })
-})
+    });
+});

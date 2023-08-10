@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvUInt8 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { Branded } from "../util/Type.js";
 
 /**
@@ -33,7 +33,7 @@ export namespace FabricIndex {
 /** Tlv Schema for a Fabric Index. */
 export const TlvFabricIndex = new TlvWrapper<FabricIndex, number | undefined>(
     TlvUInt8.bound({ min: 0, max: 254 }),
-    fabricIndex => fabricIndex === -1 ? undefined : fabricIndex,
+    fabricIndex => (fabricIndex === -1 ? undefined : fabricIndex),
     value => {
         switch (value) {
             case undefined:
@@ -43,5 +43,5 @@ export const TlvFabricIndex = new TlvWrapper<FabricIndex, number | undefined>(
             default:
                 return value as FabricIndex;
         }
-    }
+    },
 );

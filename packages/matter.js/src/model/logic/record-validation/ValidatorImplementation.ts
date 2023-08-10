@@ -11,14 +11,14 @@ import { RecordValidationResult, RecordValidator } from "./RecordValidatorInterf
 import { ValidatorBuilder } from "./ValidatorBuilder.js";
 
 type ChoiceState = {
-    count: number,
-    num: number,
-    orMore?: boolean
-}
+    count: number;
+    num: number;
+    orMore?: boolean;
+};
 
 /**
  * This is an internal class that implements validation.
- * 
+ *
  * Actual validation occurs in a the generated "validate" method except for
  * portions exposed as utility methods on this class.
  */
@@ -29,7 +29,11 @@ export class ValidatorImplementation implements RecordValidator {
     choices?: { [name: string]: ChoiceState };
     result?: RecordValidationResult;
 
-    constructor(public fields: ValueModel[], definedFeatures: FeatureSet, public enabledFeatures: FeatureSet) {
+    constructor(
+        public fields: ValueModel[],
+        definedFeatures: FeatureSet,
+        public enabledFeatures: FeatureSet,
+    ) {
         const builder = new ValidatorBuilder(fields, definedFeatures, enabledFeatures);
         this.validate = builder.compile();
         this.logFailure = () => builder.logFailure();
@@ -60,8 +64,8 @@ export class ValidatorImplementation implements RecordValidator {
             choice = this.choices[name] = {
                 count: 0,
                 num: num,
-                orMore: orMore
-            }
+                orMore: orMore,
+            };
         }
         if (hasValue) {
             choice.count++;

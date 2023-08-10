@@ -8,8 +8,8 @@
  * Describes an error in model construction.
  */
 export type DefinitionError = {
-    code: string,
-    source: string,
-    message: string,
-    xref?: string
-}
+    code: string;
+    source: string;
+    message: string;
+    xref?: string;
+};

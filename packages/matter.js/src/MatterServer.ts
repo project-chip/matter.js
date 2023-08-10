@@ -3,14 +3,14 @@
  * Copyright 2022 The matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { StorageManager } from "./storage/StorageManager.js";
+import { CommissioningController } from "./CommissioningController.js";
 import { CommissioningServer } from "./CommissioningServer.js";
+import { Logger } from "./log/Logger.js";
 import { MatterNode } from "./MatterNode.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
-import { CommissioningController } from "./CommissioningController.js";
-import { Logger } from "./log/Logger.js";
 import { NetworkError } from "./net/Network.js";
+import { StorageManager } from "./storage/StorageManager.js";
 
 const logger = Logger.get("MatterServer");
 
@@ -20,7 +20,7 @@ const logger = Logger.get("MatterServer");
 export type NodeOptions = {
     /** Unique node id to use for the storage context of this node. If not provided the order of node addition is used. */
     uniqueNodeId?: string;
-}
+};
 
 /**
  * Main Matter server class that represents the process on the host allowing to commission and pair multiple devices
@@ -42,7 +42,7 @@ export class MatterServer {
     constructor(
         private storageManager: StorageManager,
         private mdnsAnnounceInterface?: string,
-    ) { }
+    ) {}
 
     /**
      * Add a CommissioningServer node to the server
@@ -61,7 +61,9 @@ export class MatterServer {
             }
             portCheckMap.set(nodePort, true);
         }
-        commissioningServer.setStorage(this.storageManager.createContext(nodeOptions?.uniqueNodeId ?? this.nodes.length.toString()));
+        commissioningServer.setStorage(
+            this.storageManager.createContext(nodeOptions?.uniqueNodeId ?? this.nodes.length.toString()),
+        );
         this.prepareNode(commissioningServer);
         this.nodes.push(commissioningServer);
     }
@@ -73,7 +75,9 @@ export class MatterServer {
      * @param nodeOptions Optional options for the node (e.g. unique node id)
      */
     addCommissioningController(commissioningController: CommissioningController, nodeOptions?: NodeOptions) {
-        commissioningController.setStorage(this.storageManager.createContext(nodeOptions?.uniqueNodeId ?? this.nodes.length.toString()));
+        commissioningController.setStorage(
+            this.storageManager.createContext(nodeOptions?.uniqueNodeId ?? this.nodes.length.toString()),
+        );
         this.prepareNode(commissioningController);
         this.nodes.push(commissioningController);
     }

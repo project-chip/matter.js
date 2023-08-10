@@ -3,12 +3,17 @@
  * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { CRYPTO_AEAD_MIC_LENGTH_BYTES, CRYPTO_GROUP_SIZE_BYTES, CRYPTO_HASH_LEN_BYTES, CRYPTO_PUBLIC_KEY_SIZE_BYTES } from "../../crypto/CryptoConstants.js";
+import {
+    CRYPTO_AEAD_MIC_LENGTH_BYTES,
+    CRYPTO_GROUP_SIZE_BYTES,
+    CRYPTO_HASH_LEN_BYTES,
+    CRYPTO_PUBLIC_KEY_SIZE_BYTES,
+} from "../../crypto/CryptoConstants.js";
+import { MatterCoreSpecificationV1_0 } from "../../spec/Specifications.js";
 import { TlvUInt16, TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvByteString } from "../../tlv/TlvString.js";
 import { ByteArray } from "../../util/ByteArray.js";
-import { MatterCoreSpecificationV1_0 } from "../../spec/Specifications.js";
 
 const CASE_SIGNATURE_LENGTH = CRYPTO_GROUP_SIZE_BYTES * 2;
 
@@ -26,10 +31,10 @@ export const TBE_DATA3_NONCE = ByteArray.fromString("NCASE_Sigma3N");
 /** @see {@link MatterCoreSpecificationV1_0} § 2.12.5 */
 const TlvSedParameters = TlvObject({
     /** Maximum sleep interval of node when in idle mode. */
-    idleRetransTimeoutMs: TlvOptionalField(1, TlvUInt32), /* default: 300ms */
+    idleRetransTimeoutMs: TlvOptionalField(1, TlvUInt32) /* default: 300ms */,
 
     /** Maximum sleep interval of node when in active mode. */
-    activeRetransTimeoutMs: TlvOptionalField(2, TlvUInt32), /* default: 300ms */
+    activeRetransTimeoutMs: TlvOptionalField(2, TlvUInt32) /* default: 300ms */,
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 4.13.2.3 */

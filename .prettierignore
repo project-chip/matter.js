@@ -1,0 +1,8 @@
+**/node_modules/**/*
+**/dist/**/*
+tools/links/**
+models/links/**
+models/spec.ts
+models/chip.ts
+packages/matter.js/src/cluster/definitions/*.ts
+packages/matter.js/src/model/elements/Globals.ts

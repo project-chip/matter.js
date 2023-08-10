@@ -4,7 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CommissionningFlowType, DiscoveryCapabilitiesSchema, QrCodeData, QrPairingCodeCodec, ManualPairingCodeCodec, ManualPairingData } from "../../src/schema/PairingCodeSchema.js";
+import {
+    CommissionningFlowType,
+    DiscoveryCapabilitiesSchema,
+    ManualPairingCodeCodec,
+    ManualPairingData,
+    QrCodeData,
+    QrPairingCodeCodec,
+} from "../../src/schema/PairingCodeSchema.js";
 
 const QR_CODE = "MT:YNJV7VSC00CMVH7SR00";
 const QR_CODE_DATA: QrCodeData = {
@@ -22,9 +29,9 @@ const QR_CODE_DATA: QrCodeData = {
 };
 
 type MANUAL_PAIRING_DATA_CODE = {
-    data: ManualPairingData,
-    code: string
-}
+    data: ManualPairingData;
+    code: string;
+};
 
 const MANUAL_PAIRING_DATA_CODES: Array<MANUAL_PAIRING_DATA_CODE> = [
     {
@@ -33,7 +40,7 @@ const MANUAL_PAIRING_DATA_CODES: Array<MANUAL_PAIRING_DATA_CODE> = [
             shortDiscriminator: 11,
             passcode: 34567890,
         },
-        code: "26318621095"
+        code: "26318621095",
     },
     {
         data: {
@@ -41,7 +48,7 @@ const MANUAL_PAIRING_DATA_CODES: Array<MANUAL_PAIRING_DATA_CODE> = [
             shortDiscriminator: 0,
             passcode: 12345678,
         },
-        code: "00852607537"
+        code: "00852607537",
     },
     {
         data: {
@@ -49,8 +56,8 @@ const MANUAL_PAIRING_DATA_CODES: Array<MANUAL_PAIRING_DATA_CODE> = [
             shortDiscriminator: 7,
             passcode: 23456789,
         },
-        code: "16043714310"
-    }
+        code: "16043714310",
+    },
 ];
 
 describe("QrPairingCodeCodec", () => {
@@ -58,7 +65,7 @@ describe("QrPairingCodeCodec", () => {
         it("encodes the data", () => {
             const result = QrPairingCodeCodec.encode(QR_CODE_DATA);
 
-            expect(result).toBe(QR_CODE)
+            expect(result).toBe(QR_CODE);
         });
     });
 
@@ -66,11 +73,10 @@ describe("QrPairingCodeCodec", () => {
         it("decodes the data", () => {
             const result = QrPairingCodeCodec.decode(QR_CODE);
 
-            expect(result).toEqual(QR_CODE_DATA)
+            expect(result).toEqual(QR_CODE_DATA);
         });
     });
 });
-
 
 describe("ManualPairingCodeCodec", () => {
     describe("encode", () => {
@@ -78,7 +84,7 @@ describe("ManualPairingCodeCodec", () => {
             for (const pairingCode of MANUAL_PAIRING_DATA_CODES) {
                 const result = ManualPairingCodeCodec.encode(pairingCode.data);
 
-                expect(result).toBe(pairingCode.code)
+                expect(result).toBe(pairingCode.code);
             }
         });
 
@@ -86,8 +92,8 @@ describe("ManualPairingCodeCodec", () => {
             for (const dataCode of MANUAL_PAIRING_DATA_CODES) {
                 const result = ManualPairingCodeCodec.decode(dataCode.code);
 
-                expect(result.shortDiscriminator).toBe(dataCode.data.shortDiscriminator)
-                expect(result.passcode).toBe(dataCode.data.passcode)
+                expect(result.shortDiscriminator).toBe(dataCode.data.shortDiscriminator);
+                expect(result.passcode).toBe(dataCode.data.passcode);
             }
         });
     });

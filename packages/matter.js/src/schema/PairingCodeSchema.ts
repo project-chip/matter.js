@@ -4,14 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { UnexpectedDataError } from "../common/MatterError.js";
+import { Verhoeff } from "../math/Verhoeff.js";
+import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { Base38 } from "./Base38Schema.js";
 import {
-    BitField, BitFieldEnum, BitFlag, BitmapSchema, ByteArrayBitmapSchema, TypeFromBitmapSchema
+    BitField,
+    BitFieldEnum,
+    BitFlag,
+    BitmapSchema,
+    ByteArrayBitmapSchema,
+    TypeFromBitmapSchema,
 } from "./BitmapSchema.js";
 import { Schema } from "./Schema.js";
-import { Base38 } from "./Base38Schema.js";
-import { Verhoeff } from "../math/Verhoeff.js";
-import { UnexpectedDataError } from "../common/MatterError.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 
 /** See {@link MatterCoreSpecificationV1_0} § 5.1.3.1 Table 35 */
 export enum CommissionningFlowType {
@@ -66,11 +71,11 @@ class QrPairingCodeSchema extends Schema<QrCodeData, string> {
 export const QrPairingCodeCodec = new QrPairingCodeSchema();
 
 export type ManualPairingData = {
-    discriminator?: number,
-    shortDiscriminator?: number,
-    passcode: number,
-    vendorId?: number,
-    productId?: number,
+    discriminator?: number;
+    shortDiscriminator?: number;
+    passcode: number;
+    vendorId?: number;
+    productId?: number;
 };
 
 /** See {@link MatterCoreSpecificationV1_0} § 5.1.4.1 Table 38/39/40 */
@@ -79,9 +84,9 @@ class ManualPairingCodeSchema extends Schema<ManualPairingData, string> {
         if (discriminator === undefined) throw new UnexpectedDataError("discriminator is required");
         if (discriminator > 4095) throw new UnexpectedDataError("discriminator value must be less than 4096");
         let result = "";
-        const hasVendorProductIds = (vendorId !== undefined) && (productId !== undefined);
-        result += ((discriminator >> 10) | (hasVendorProductIds ? (1 << 2) : 0));
-        result += (((discriminator & 0x300) << 6) | (passcode & 0x3FFF)).toString().padStart(5, "0");
+        const hasVendorProductIds = vendorId !== undefined && productId !== undefined;
+        result += (discriminator >> 10) | (hasVendorProductIds ? 1 << 2 : 0);
+        result += (((discriminator & 0x300) << 6) | (passcode & 0x3fff)).toString().padStart(5, "0");
         result += (passcode >> 14).toString().padStart(4, "0");
         if (hasVendorProductIds) {
             result += vendorId.toString().padStart(5, "0");
@@ -99,8 +104,8 @@ class ManualPairingCodeSchema extends Schema<ManualPairingData, string> {
             throw new UnexpectedDataError("Invalid checksum");
         }
         const hasVendorProductIds = !!(parseInt(encoded[0]) & (1 << 2));
-        const shortDiscriminator = (parseInt(encoded[0]) & 0x03) << 2 | (parseInt(encoded.slice(1, 6)) >> 14) & 0x3
-        const passcode = parseInt(encoded.slice(1, 6)) & 0x3FFF | parseInt(encoded.slice(6, 10)) << 14;
+        const shortDiscriminator = ((parseInt(encoded[0]) & 0x03) << 2) | ((parseInt(encoded.slice(1, 6)) >> 14) & 0x3);
+        const passcode = (parseInt(encoded.slice(1, 6)) & 0x3fff) | (parseInt(encoded.slice(6, 10)) << 14);
         let vendorId: number | undefined;
         let productId: number | undefined;
         if (hasVendorProductIds) {

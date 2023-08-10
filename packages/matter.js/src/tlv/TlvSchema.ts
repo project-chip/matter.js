@@ -11,7 +11,6 @@ import { DataWriter } from "../util/DataWriter.js";
 import { TlvCodec, TlvTag, TlvToPrimitive, TlvTypeLength } from "./TlvCodec.js";
 
 export abstract class TlvSchema<T> extends Schema<T, ByteArray> implements TlvSchema<T> {
-
     override decodeInternal(encoded: ByteArray): T {
         return this.decodeTlvInternal(new TlvByteArrayReader(encoded)).value;
     }
@@ -32,7 +31,7 @@ export abstract class TlvSchema<T> extends Schema<T, ByteArray> implements TlvSc
         return this.decodeTlvInternal(new TlvArrayReader(encoded)).value;
     }
 
-    decodeTlvInternal(reader: TlvReader): { value: T, tag?: TlvTag } {
+    decodeTlvInternal(reader: TlvReader): { value: T; tag?: TlvTag } {
         const { tag, typeLength } = reader.readTagType();
         return { tag, value: this.decodeTlvInternalValue(reader, typeLength) };
     }
@@ -41,7 +40,12 @@ export abstract class TlvSchema<T> extends Schema<T, ByteArray> implements TlvSc
 
     abstract encodeTlvInternal(writer: TlvWriter, value: T, tag?: TlvTag): void;
 
-    injectField(value: T, _fieldId: number, _fieldValue: any, _injectChecker: (fieldValue: any | undefined) => boolean): T {
+    injectField(
+        value: T,
+        _fieldId: number,
+        _fieldValue: any,
+        _injectChecker: (fieldValue: any | undefined) => boolean,
+    ): T {
         return value;
     }
 
@@ -53,9 +57,9 @@ export abstract class TlvSchema<T> extends Schema<T, ByteArray> implements TlvSc
 export type TlvStream = TlvElement<any>[];
 
 export type TlvElement<T extends TlvTypeLength> = {
-    tag?: TlvTag,
-    typeLength: T,
-    value?: TlvToPrimitive[T["type"]],
+    tag?: TlvTag;
+    typeLength: T;
+    value?: TlvToPrimitive[T["type"]];
 };
 
 export class TlvArrayWriter implements TlvWriter {
@@ -77,9 +81,7 @@ export class TlvArrayWriter implements TlvWriter {
 export class TlvArrayReader implements TlvReader {
     private index = -1;
 
-    constructor(
-        private readonly tlvElements: TlvElement<any>[],
-    ) { }
+    constructor(private readonly tlvElements: TlvElement<any>[]) {}
 
     readTagType() {
         this.index++;
@@ -95,7 +97,7 @@ export class TlvArrayReader implements TlvReader {
 export type TypeFromSchema<S extends TlvSchema<any>> = S extends TlvSchema<infer T> ? T : never;
 
 export interface TlvReader {
-    readTagType(): { tag?: TlvTag, typeLength: TlvTypeLength };
+    readTagType(): { tag?: TlvTag; typeLength: TlvTypeLength };
 
     readPrimitive<T extends TlvTypeLength, V = TlvToPrimitive[T["type"]]>(typeLength: T): V;
 }

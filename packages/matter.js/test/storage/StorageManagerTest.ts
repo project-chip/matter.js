@@ -9,7 +9,6 @@ import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js"
 import { StorageManager } from "../../src/storage/StorageManager.js";
 
 describe("StorageManager", () => {
-
     it("create StorageContext write and read success", async () => {
         const storage = new StorageBackendMemory();
 
@@ -22,7 +21,7 @@ describe("StorageManager", () => {
         storageContext.set("key", "value");
 
         const valueFromStorage = storageContext.get("key");
-        expect(valueFromStorage).toBe("value")
+        expect(valueFromStorage).toBe("value");
     });
 
     it("creating StorageManager without initialize throws error when creating StorageContext", async () => {
@@ -59,7 +58,7 @@ describe("StorageManager", () => {
         storageContext1.set("key", "value");
 
         const valueFromStorage2 = storageContext2.get("key");
-        expect(valueFromStorage2).toBe("value")
+        expect(valueFromStorage2).toBe("value");
     });
 
     it("getting same StorageContext context access same data with subcontext", async () => {
@@ -77,6 +76,6 @@ describe("StorageManager", () => {
         storageSubContext1.set("key", "value");
 
         const valueFromStorage2 = storageSubContext2.get("key");
-        expect(valueFromStorage2).toBe("value")
+        expect(valueFromStorage2).toBe("value");
     });
 });

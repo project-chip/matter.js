@@ -4,5 +4,5 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "./CryptoNode";
 export * from "@project-chip/matter.js/crypto";
+export * from "./CryptoNode";

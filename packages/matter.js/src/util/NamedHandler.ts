@@ -7,7 +7,7 @@
 export type HandlerFunction = (...args: any[]) => Promise<any> | any;
 
 export class NamedHandler<H extends Record<keyof H, HandlerFunction>> {
-    private handler: { action: keyof H, handler: H[keyof H] }[] = [];
+    private handler: { action: keyof H; handler: H[keyof H] }[] = [];
 
     addHandler<K extends keyof H>(action: K, handler: H[K]) {
         this.handler.push({ action, handler });
@@ -30,14 +30,14 @@ export class NamedHandler<H extends Record<keyof H, HandlerFunction>> {
 
 type ExtendPublicHandlerMethods<
     ParentClass extends new (...args: any[]) => any,
-    H extends Record<keyof H, HandlerFunction>
-> = ParentClass extends (new (...args: infer TArgs) => infer T) ? (
-    new (...args: TArgs) => (T & {
-        addCommandHandler<K extends keyof H>(action: K, handler: H[K]): void;
-        removeCommandHandler<K extends keyof H>(action: K, handler: H[K]): void;
-        _executeHandler<K extends keyof H>(action: K, ...args: Parameters<H[K]>): Promise<void>;
-    })
-) : never;
+    H extends Record<keyof H, HandlerFunction>,
+> = ParentClass extends new (...args: infer TArgs) => infer T
+    ? new (...args: TArgs) => T & {
+          addCommandHandler<K extends keyof H>(action: K, handler: H[K]): void;
+          removeCommandHandler<K extends keyof H>(action: K, handler: H[K]): void;
+          _executeHandler<K extends keyof H>(action: K, ...args: Parameters<H[K]>): Promise<void>;
+      }
+    : never;
 
 export function extendPublicHandlerMethods<
     ParentClass extends new (...args: any[]) => any,

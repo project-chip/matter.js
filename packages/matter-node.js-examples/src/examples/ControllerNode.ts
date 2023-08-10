@@ -16,15 +16,26 @@
  * Import needed modules from @project-chip/matter-node.js
  */
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
-import { MatterServer, CommissioningController } from "@project-chip/matter-node.js";
-import { Logger } from "@project-chip/matter-node.js/log";
-import { StorageManager, StorageBackendDisk } from "@project-chip/matter-node.js/storage";
-import { BasicInformationCluster, DescriptorCluster, OnOffCluster, GeneralCommissioning } from "@project-chip/matter-node.js/cluster";
-import { getIntParameter, getParameter, requireMinNodeVersion, hasParameter, singleton } from "@project-chip/matter-node.js/util";
-import { ManualPairingCodeCodec } from "@project-chip/matter-node.js/schema";
-import { CommissioningOptions } from "@project-chip/matter-node.js/protocol";
-import { Ble } from "@project-chip/matter-node.js/ble";
 import { BleNode } from "@project-chip/matter-node-ble.js/ble";
+import { CommissioningController, MatterServer } from "@project-chip/matter-node.js";
+import { Ble } from "@project-chip/matter-node.js/ble";
+import {
+    BasicInformationCluster,
+    DescriptorCluster,
+    GeneralCommissioning,
+    OnOffCluster,
+} from "@project-chip/matter-node.js/cluster";
+import { Logger } from "@project-chip/matter-node.js/log";
+import { CommissioningOptions } from "@project-chip/matter-node.js/protocol";
+import { ManualPairingCodeCodec } from "@project-chip/matter-node.js/schema";
+import { StorageBackendDisk, StorageManager } from "@project-chip/matter-node.js/storage";
+import {
+    getIntParameter,
+    getParameter,
+    hasParameter,
+    requireMinNodeVersion,
+    singleton,
+} from "@project-chip/matter-node.js/util";
 
 if (hasParameter("ble")) {
     // Initialize Ble
@@ -38,7 +49,9 @@ requireMinNodeVersion(16);
 const storageLocation = getParameter("store") ?? ".controller-node";
 const storage = new StorageBackendDisk(storageLocation, hasParameter("clearstorage"));
 logger.info(`Storage location: ${storageLocation} (Directory)`);
-logger.info('Use the parameter "-store NAME" to specify a different storage location, use -clearstorage to start with an empty storage.')
+logger.info(
+    'Use the parameter "-store NAME" to specify a different storage location, use -clearstorage to start with an empty storage.',
+);
 
 class ControllerNode {
     async start() {
@@ -78,12 +91,15 @@ class ControllerNode {
             setupPin = pairingCodeCodec.passcode;
             logger.debug(`Data extracted from pairing code: ${Logger.toJSON(pairingCodeCodec)}`);
         } else {
-            longDiscriminator = getIntParameter("longDiscriminator") ?? controllerStorage.get("longDiscriminator", 3840);
+            longDiscriminator =
+                getIntParameter("longDiscriminator") ?? controllerStorage.get("longDiscriminator", 3840);
             if (longDiscriminator > 4095) throw new Error("Discriminator value must be less than 4096");
             setupPin = getIntParameter("pin") ?? controllerStorage.get("pin", 20202021);
         }
         if ((shortDiscriminator === undefined && longDiscriminator === undefined) || setupPin === undefined) {
-            throw new Error("Please specify the longDiscriminator of the device to commission with -longDiscriminator or provide a valid passcode with -passcode");
+            throw new Error(
+                "Please specify the longDiscriminator of the device to commission with -longDiscriminator or provide a valid passcode with -passcode",
+            );
         }
 
         // Collect commissioning options from commandline parameters
@@ -127,7 +143,7 @@ class ControllerNode {
 
         const matterServer = new MatterServer(storageManager);
         const commissioningController = new CommissioningController({
-            serverAddress: (ip !== undefined && port !== undefined) ? { ip, port, type: "udp" } : undefined,
+            serverAddress: ip !== undefined && port !== undefined ? { ip, port, type: "udp" } : undefined,
             longDiscriminator,
             shortDiscriminator,
             passcode: setupPin,
@@ -208,14 +224,16 @@ class ControllerNode {
                     console.log("onOffStatus", onOffStatus);
                     // read data every minute to keep up the connection to show the subscription is working
                     setInterval(() => {
-                        onOff.toggle().then(() => {
-                            onOffStatus = !onOffStatus;
-                            console.log("onOffStatus", onOffStatus);
-                        }).catch(error => logger.error(error));
+                        onOff
+                            .toggle()
+                            .then(() => {
+                                onOffStatus = !onOffStatus;
+                                console.log("onOffStatus", onOffStatus);
+                            })
+                            .catch(error => logger.error(error));
                     }, 60000);
                 }
             }
-
         } finally {
             //await matterServer.close(); // Comment out when subscribes are used, else the connection will be closed
             setTimeout(() => process.exit(0), 100000);
@@ -227,5 +245,8 @@ new ControllerNode().start().catch(error => logger.error(error));
 
 process.on("SIGINT", () => {
     // Pragmatic way to make sure the storage is correctly closed before the process ends.
-    storage.close().then(() => process.exit(0)).catch(() => process.exit(1));
+    storage
+        .close()
+        .then(() => process.exit(0))
+        .catch(() => process.exit(1));
 });

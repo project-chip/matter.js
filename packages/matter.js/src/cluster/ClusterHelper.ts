@@ -3,16 +3,16 @@
  * Copyright 2022 The node-matter Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Attribute, Cluster, Event, Command } from "./Cluster.js";
-import * as Clusters from "./definitions/index.js";
-import { NodeId } from "../datatype/NodeId.js";
+import { AttributeId } from "../datatype/AttributeId.js";
 import { ClusterId } from "../datatype/ClusterId.js";
+import { CommandId } from "../datatype/CommandId.js";
+import { EndpointNumber } from "../datatype/EndpointNumber.js";
+import { EventId } from "../datatype/EventId.js";
+import { NodeId } from "../datatype/NodeId.js";
 import { TlvAttributePath, TlvCommandPath, TlvEventPath } from "../protocol/interaction/InteractionProtocol.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
-import { EndpointNumber } from "../datatype/EndpointNumber.js";
-import { AttributeId } from "../datatype/AttributeId.js";
-import { EventId } from "../datatype/EventId.js";
-import { CommandId } from "../datatype/CommandId.js";
+import { Attribute, Cluster, Command, Event } from "./Cluster.js";
+import * as Clusters from "./definitions/index.js";
 
 export const AllClustersMap: { [key: Cluster<any, any, any, any, any>["id"]]: Cluster<any, any, any, any, any> } = {
     [Clusters.AccessControlCluster.id]: Clusters.AccessControlCluster,
@@ -110,7 +110,10 @@ export function getClusterById(clusterId: ClusterId): Cluster<any, any, any, any
     return AllClustersMap[clusterId];
 }
 
-export function getClusterAttributeById(clusterDef: Cluster<any, any, any, any, any>, attributeId: AttributeId): CachedAttributeInfo | undefined {
+export function getClusterAttributeById(
+    clusterDef: Cluster<any, any, any, any, any>,
+    attributeId: AttributeId,
+): CachedAttributeInfo | undefined {
     if (!clusterAttributeCache.has(clusterDef.id)) {
         const attributeMap = new Map<AttributeId, CachedAttributeInfo>();
 
@@ -132,7 +135,10 @@ export function getClusterAttributeById(clusterDef: Cluster<any, any, any, any, 
     return attributeMap.get(attributeId);
 }
 
-export function getClusterEventById(clusterDef: Cluster<any, any, any, any, any>, eventId: EventId): CachedEventInfo | undefined {
+export function getClusterEventById(
+    clusterDef: Cluster<any, any, any, any, any>,
+    eventId: EventId,
+): CachedEventInfo | undefined {
     if (!clusterEventCache.has(clusterDef.id)) {
         const eventMap = new Map<EventId, CachedEventInfo>();
 
@@ -154,7 +160,10 @@ export function getClusterEventById(clusterDef: Cluster<any, any, any, any, any>
     return eventMap.get(eventId);
 }
 
-export function getClusterCommandById(clusterDef: Cluster<any, any, any, any, any>, commandId: CommandId): CachedCommandInfo | undefined {
+export function getClusterCommandById(
+    clusterDef: Cluster<any, any, any, any, any>,
+    commandId: CommandId,
+): CachedCommandInfo | undefined {
     if (!clusterCommandCache.has(clusterDef.id)) {
         const commandMap = new Map<CommandId, CachedCommandInfo>();
 
@@ -180,7 +189,11 @@ function toHex(value: number | bigint | undefined) {
     return value === undefined ? "*" : `0x${value.toString(16)}`;
 }
 
-function resolveEndpointClusterName(nodeId: NodeId | undefined, endpointId: EndpointNumber | undefined, clusterId: ClusterId | undefined) {
+function resolveEndpointClusterName(
+    nodeId: NodeId | undefined,
+    endpointId: EndpointNumber | undefined,
+    clusterId: ClusterId | undefined,
+) {
     let elementName = nodeId === undefined ? "" : `${toHex(nodeId)}/`;
     if (endpointId === undefined) {
         elementName += "*";
@@ -198,7 +211,12 @@ function resolveEndpointClusterName(nodeId: NodeId | undefined, endpointId: Endp
     return `${elementName}/${cluster.name}(${toHex(clusterId)})`;
 }
 
-export function resolveAttributeName({ nodeId, endpointId, clusterId, attributeId }: TypeFromSchema<typeof TlvAttributePath>) {
+export function resolveAttributeName({
+    nodeId,
+    endpointId,
+    clusterId,
+    attributeId,
+}: TypeFromSchema<typeof TlvAttributePath>) {
     const endpointClusterName = resolveEndpointClusterName(nodeId, endpointId, clusterId);
     if (endpointId === undefined || clusterId === undefined || attributeId === undefined) {
         return `${endpointClusterName}/${toHex(attributeId)}`;

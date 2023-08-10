@@ -11,5 +11,5 @@ import { captureLog, captureLogs } from "./logging.js";
 Object.assign(globalThis, {
     //expect: ExpectDefault.expect
     captureLog,
-    captureLogs
+    captureLogs,
 });

@@ -5,10 +5,10 @@
  */
 
 import { Mei } from "../definitions/index.js";
-import { DeviceTypeElement, RequirementElement, DatatypeElement } from "../elements/index.js";
+import { DatatypeElement, DeviceTypeElement, RequirementElement } from "../elements/index.js";
 import { DatatypeModel } from "./DatatypeModel.js";
-import { RequirementModel } from "./RequirementModel.js";
 import { Model } from "./Model.js";
+import { RequirementModel } from "./RequirementModel.js";
 
 export class DeviceTypeModel extends Model implements DeviceTypeElement {
     override tag: DeviceTypeElement.Tag = DeviceTypeElement.Tag;

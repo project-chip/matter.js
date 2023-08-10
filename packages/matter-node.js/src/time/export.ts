@@ -4,5 +4,5 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "./TimeNode";
 export * from "@project-chip/matter.js/time";
+export * from "./TimeNode";

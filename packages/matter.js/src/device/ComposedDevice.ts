@@ -3,9 +3,9 @@
  * Copyright 2022 The matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Endpoint, EndpointOptions } from "./Endpoint.js";
 import { Device } from "./Device.js";
 import { DeviceTypeDefinition } from "./DeviceTypes.js";
+import { Endpoint, EndpointOptions } from "./Endpoint.js";
 
 /**
  * A ComposedDevice is a special endpoint that allows to combine multiple sub devices and expose this as one device
@@ -19,11 +19,7 @@ export class ComposedDevice extends Endpoint {
      * @param devices Array with devices that should be combined into one device that are directly added.
      * @param options Optional Endpoint options
      */
-    constructor(
-        definition: DeviceTypeDefinition,
-        devices: Device[] = [],
-        options: EndpointOptions = {}
-    ) {
+    constructor(definition: DeviceTypeDefinition, devices: Device[] = [], options: EndpointOptions = {}) {
         super([definition], options);
         devices.forEach(device => this.addDevice(device));
     }

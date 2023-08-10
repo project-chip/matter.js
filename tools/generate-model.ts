@@ -6,15 +6,15 @@
 
 // Generates the runtime Matter model
 
-import "./util/setup.js";
 import { Logger } from "#matter.js/log/Logger.js";
 import { AnyElement, ElementTag, MatterElement, MatterModel } from "#matter.js/model/index.js";
 import { MergeModels } from "#matter.js/model/logic/index.js";
-import { TsFile } from "./util/TsFile.js";
-import { clean } from "./util/file.js";
+import { ChipMatter, LocalMatter, SpecMatter } from "#models/index.js";
 import { generateElement } from "./mom/common/generate-element.js";
-import { SpecMatter, ChipMatter, LocalMatter } from "#models/index.js";
+import { clean } from "./util/file.js";
 import { finalizeModel } from "./util/finalize-model.js";
+import "./util/setup.js";
+import { TsFile } from "./util/TsFile.js";
 export const CLUSTER_SUFFIX = "Element";
 
 const logger = Logger.get("generate-model");
@@ -33,12 +33,7 @@ function generateElementFile(element: AnyElement) {
 
     file.addImport(`../Matter`, `Matter`);
 
-    generateElement(
-        file,
-        element,
-        `Matter.children.push(`,
-        ")"
-    )
+    generateElement(file, element, `Matter.children.push(`, ")");
 
     file.save();
 }
@@ -54,11 +49,13 @@ function generateIndex(elements: AnyElement[]) {
     file.save();
 }
 
-const matter = new MatterModel(MergeModels({ spec: SpecMatter, chip: ChipMatter, local: LocalMatter }) as MatterElement);
+const matter = new MatterModel(
+    MergeModels({ spec: SpecMatter, chip: ChipMatter, local: LocalMatter }) as MatterElement,
+);
 
 const validationResult = finalizeModel(matter);
 
-logger.info("remove matter model elements")
+logger.info("remove matter model elements");
 clean("#elements");
 
 logger.info("generate matter model");

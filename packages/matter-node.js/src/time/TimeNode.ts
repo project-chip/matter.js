@@ -14,7 +14,7 @@ class TimerNode implements Timer {
         private readonly intervalMs: number,
         private readonly callback: TimerCallback,
         private readonly periodic: boolean,
-    ) { }
+    ) {}
 
     start() {
         if (this.isRunning) this.stop();

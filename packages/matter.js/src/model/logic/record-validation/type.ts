@@ -10,5 +10,6 @@ import { ValidatorBuilder } from "./ValidatorBuilder.js";
 export function addType(to: ValidatorBuilder, child: ValueModel) {
     // TODO - not sure how much value validation to implement but it will go
     // here
-    to; child;
+    to;
+    child;
 }

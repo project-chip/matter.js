@@ -16,9 +16,9 @@ import {
     Globals,
     Metatype,
     Model,
-    ValueModel
+    ValueModel,
 } from "#matter.js/model/index.js";
-import { camelize, serialize, asObjectKey } from "#util/string.js";
+import { asObjectKey, camelize, serialize } from "#util/string.js";
 import { Entry } from "#util/TsFile.js";
 import { ClusterFile } from "./ClusterFile.js";
 import { NumericRanges, SpecializedNumbers, WrappedConstantKeys } from "./NumberConstants.js";
@@ -38,7 +38,7 @@ export class TlvGenerator {
         // Datatypes at cluster level get to use their own name but for nested
         // structures we prepend the parent name
         const names = new Set<string>();
-        this.cluster.visit((model) => {
+        this.cluster.visit(model => {
             if (model instanceof DatatypeModel && model.children.length) {
                 const metatype = model.effectiveMetatype;
                 switch (metatype) {
@@ -52,7 +52,7 @@ export class TlvGenerator {
                         }
                 }
             }
-        })
+        });
     }
 
     /**
@@ -107,7 +107,10 @@ export class TlvGenerator {
             case Metatype.bytes:
             case Metatype.string:
                 {
-                    tlv = this.importTlv("tlv/TlvString", metabase.name === Globals.octstr.name ? "TlvByteString" : "TlvString");
+                    tlv = this.importTlv(
+                        "tlv/TlvString",
+                        metabase.name === Globals.octstr.name ? "TlvByteString" : "TlvString",
+                    );
                     const bounds = this.createLengthBounds(model);
                     if (bounds) {
                         tlv = `${tlv}.bound(${serialize(bounds)})`;
@@ -290,8 +293,7 @@ export class TlvGenerator {
                     // Typescript doesn't allow numeric enum keys
                     name = `E${name}`;
                 }
-                enumBlock.atom(`${asObjectKey(name)} = ${child.id}`)
-                    .document(child);
+                enumBlock.atom(`${asObjectKey(name)} = ${child.id}`).document(child);
             });
         });
         return enumBlock;
@@ -315,7 +317,8 @@ export class TlvGenerator {
                 }
 
                 this.importTlv("tlv/TlvObject", tlv);
-                struct.atom(camelize(field.name, false), `${tlv}(${field.effectiveId}, ${this.reference(field)})`)
+                struct
+                    .atom(camelize(field.name, false), `${tlv}(${field.effectiveId}, ${this.reference(field)})`)
                     .document(field);
             });
         });
@@ -352,7 +355,7 @@ export class TlvGenerator {
                 if (!type) {
                     // Raw bit range
                     this.importTlv("schema/BitmapSchema", "BitField");
-                    type = `BitField`
+                    type = `BitField`;
                 }
 
                 type = `${type}(${constraint.min}, ${constraint.max - constraint.min})`;
@@ -361,8 +364,7 @@ export class TlvGenerator {
                 continue;
             }
 
-            bitmap.atom(camelize(child.name, false), type)
-                .document(child);
+            bitmap.atom(camelize(child.name, false), type).document(child);
         }
 
         return bitmap;
@@ -443,7 +445,10 @@ export class TlvGenerator {
         // referencing that
         switch (model.tag) {
             case ElementTag.Attribute:
-                definition.document({ details: `The value of the ${this.cluster.name} ${camelize(model.name, false)} attribute`, xref: model.xref });
+                definition.document({
+                    details: `The value of the ${this.cluster.name} ${camelize(model.name, false)} attribute`,
+                    xref: model.xref,
+                });
                 break;
 
             case ElementTag.Command:
@@ -451,12 +456,18 @@ export class TlvGenerator {
                     // Responses do not appear in the commands field
                     definition.document(model);
                 } else {
-                    definition.document({ details: `Input to the ${this.cluster.name} ${camelize(model.name, false)} command`, xref: model.xref });
+                    definition.document({
+                        details: `Input to the ${this.cluster.name} ${camelize(model.name, false)} command`,
+                        xref: model.xref,
+                    });
                 }
                 break;
 
             case ElementTag.Event:
-                definition.document({ details: `Body of the ${this.cluster.name} ${camelize(model.name, false)} event`, xref: model.xref });
+                definition.document({
+                    details: `Body of the ${this.cluster.name} ${camelize(model.name, false)} event`,
+                    xref: model.xref,
+                });
                 break;
 
             default:
@@ -464,7 +475,10 @@ export class TlvGenerator {
                     // Standalone
                     definition.document(model);
                 } else {
-                    definition.document({ details: `The value of ${this.cluster.name}.${camelize(model.name, false)}`, xref: model.xref });
+                    definition.document({
+                        details: `The value of ${this.cluster.name}.${camelize(model.name, false)}`,
+                        xref: model.xref,
+                    });
                 }
                 break;
         }
@@ -479,7 +493,7 @@ export class TlvGenerator {
             return { length: value };
         }
 
-        return this.createRangeBounds(constraint, "minLength", "maxLength")
+        return this.createRangeBounds(constraint, "minLength", "maxLength");
     }
 
     private createNumberBounds(model: ValueModel) {
@@ -508,7 +522,7 @@ export class TlvGenerator {
             return;
         }
 
-        const bounds = {} as { [key: string]: number }
+        const bounds = {} as { [key: string]: number };
         if (min !== undefined) {
             bounds[minKey] = min;
         }

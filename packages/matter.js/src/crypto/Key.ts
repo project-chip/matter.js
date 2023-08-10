@@ -4,51 +4,69 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DerType, DerCodec, DerNode } from "../codec/DerCodec.js";
-import { Base64 } from "../codec/Base64Codec.js";
-import { ByteArray } from "../util/ByteArray.js";
 import { ec as EC } from "elliptic";
+import { Base64 } from "../codec/Base64Codec.js";
+import { DerCodec, DerNode, DerType } from "../codec/DerCodec.js";
 import { MatterError, NotImplementedError } from "../common/MatterError.js";
+import { ByteArray } from "../util/ByteArray.js";
 
-class KeyError extends MatterError { }
+class KeyError extends MatterError {}
 
-const JWK_KEYS = ["crv", "d", "dp", "dq", "e", "ext", "k", "key_ops", "kty", "n", "oth", "p", "q", "qi", "use", "x", "y"];
+const JWK_KEYS = [
+    "crv",
+    "d",
+    "dp",
+    "dq",
+    "e",
+    "ext",
+    "k",
+    "key_ops",
+    "kty",
+    "n",
+    "oth",
+    "p",
+    "q",
+    "qi",
+    "use",
+    "x",
+    "y",
+];
 
 export enum KeyType {
     EC = "EC",
     RSA = "RSA",
-    oct = "oct"
+    oct = "oct",
 }
 
 export enum CurveType {
     p256 = "P-256",
     p384 = "P-384",
-    p521 = "P-521"
+    p521 = "P-521",
 }
 
 enum Asn1ObjectID {
     ecPublicKey = "2a8648ce3d0201",
     prime256r1 = "2a8648ce3d030107",
     prime384r1 = "0103840022",
-    prime521r1 = "0103840023"
+    prime521r1 = "0103840023",
 }
 
 const CurveLookup = {
     [Asn1ObjectID.prime256r1]: CurveType.p256,
     [Asn1ObjectID.prime384r1]: CurveType.p384,
-    [Asn1ObjectID.prime521r1]: CurveType.p521
-}
+    [Asn1ObjectID.prime521r1]: CurveType.p521,
+};
 
 export type BinaryKeyPair = {
-    publicKey: ByteArray,
-    privateKey: ByteArray
-}
+    publicKey: ByteArray;
+    privateKey: ByteArray;
+};
 
 /**
  * Represents a cryptographic key.
- * 
+ *
  * Models keys as JWK.  Advantages of this format:
- * 
+ *
  *   - Standard
  *   - Widely supported
  *   - Fully models relevant key types
@@ -170,42 +188,39 @@ export interface Key extends JsonWebKey {
  * EC key without private fields.
  */
 export interface PublicKey extends Key {
-    type: KeyType.EC,
-    curve: CurveType,
-    x: string,
-    y: string,
-    xBits: ByteArray,
-    yBits: ByteArray,
-    publicBits: ByteArray
+    type: KeyType.EC;
+    curve: CurveType;
+    x: string;
+    y: string;
+    xBits: ByteArray;
+    yBits: ByteArray;
+    publicBits: ByteArray;
 }
 
 /**
  * EC key with extractable private fields.
  */
 export interface PrivateKey extends PublicKey {
-    private: string,
-    d: string,
-    privateBits: ByteArray,
-    privateKey: ByteArray,
-    keyPair: BinaryKeyPair,
-    keyPairBits: BinaryKeyPair
+    private: string;
+    d: string;
+    privateBits: ByteArray;
+    privateKey: ByteArray;
+    keyPair: BinaryKeyPair;
+    keyPairBits: BinaryKeyPair;
 }
 
 /**
  * Symmetric key.
  */
 export interface SymmetricKey extends Key {
-    type: KeyType.oct,
-    private: string,
-    d: string
+    type: KeyType.oct;
+    private: string;
+    d: string;
 }
 
 function checkDerVersion(type: string, node: DerNode | undefined, version: number) {
-    const derVersion = node
-        && node._tag === DerType.UnsignedInt
-        && node._bytes
-        && node._bytes.length === 1
-        && node._bytes[0];
+    const derVersion =
+        node && node._tag === DerType.UnsignedInt && node._bytes && node._bytes.length === 1 && node._bytes[0];
 
     if (derVersion !== version) {
         throw new KeyError(`${type} key version mismatch`);
@@ -213,10 +228,7 @@ function checkDerVersion(type: string, node: DerNode | undefined, version: numbe
 }
 
 function getDerObjectID(type: string, node?: DerNode) {
-    const id = node
-        && node._tag === DerType.ObjectIdentifier
-        && node._bytes?.length > 1
-        && node._bytes;
+    const id = node && node._tag === DerType.ObjectIdentifier && node._bytes?.length > 1 && node._bytes;
 
     if (id) return id;
 
@@ -226,16 +238,12 @@ function getDerObjectID(type: string, node?: DerNode) {
 function getDerCurve(type: string, node?: DerNode) {
     const oid = getDerObjectID(type, node);
     const curve = (<any>CurveLookup)[oid.toHex()];
-    if (curve)
-        return curve;
+    if (curve) return curve;
     throw new KeyError(`Unsupported ${type} EC curve`);
 }
 
 function getDerKey(type: string, node?: DerNode, derType: DerType = DerType.OctetString) {
-    const key = node
-        && node._tag === derType
-        && node._bytes?.length > 1
-        && node._bytes;
+    const key = node && node._tag === derType && node._bytes?.length > 1 && node._bytes;
 
     if (key) return key;
 
@@ -246,7 +254,7 @@ function getDerKey(type: string, node?: DerNode, derType: DerType = DerType.Octe
 namespace Translators {
     // Import SEC1 private key
     export const sec1 = {
-        set: function(this: Key, input: ByteArray) {
+        set: function (this: Key, input: ByteArray) {
             const decoded = DerCodec.decode(input);
 
             // Version
@@ -266,14 +274,14 @@ namespace Translators {
             this.privateBits = key;
         },
 
-        get: function() {
+        get: function () {
             throw new NotImplementedError("SEC1 export not implemented");
-        }
-    }
+        },
+    };
 
     // Import PKCS8 private key
     export const pkcs8 = {
-        set: function(this: Key, input: ByteArray) {
+        set: function (this: Key, input: ByteArray) {
             const outer = DerCodec.decode(input);
 
             // Version
@@ -303,14 +311,14 @@ namespace Translators {
             this.privateBits = key;
         },
 
-        get: function() {
+        get: function () {
             throw new NotImplementedError("PKCS #8 export not implemented");
-        }
-    }
+        },
+    };
 
     // Import SPKI public key
     export const spki = {
-        set: function(this: Key, input: ByteArray) {
+        set: function (this: Key, input: ByteArray) {
             const decoded = DerCodec.decode(input);
 
             const algorithmElements = decoded?._elements?.[0]?._elements;
@@ -332,14 +340,14 @@ namespace Translators {
             this.publicBits = key;
         },
 
-        get: function() {
+        get: function () {
             throw new NotImplementedError("SPKI export not implemented");
-        }
-    }
+        },
+    };
 
     // Import public key bytes in SEC1/SPKI format
     export const publicBits = {
-        set: function(this: Key, input: ByteArray) {
+        set: function (this: Key, input: ByteArray) {
             if (!(input.length % 2)) {
                 throw new KeyError("Invalid public key encoding");
             }
@@ -365,23 +373,23 @@ namespace Translators {
             this.yBits = input.slice(coordinateLength + 1);
         },
 
-        get: function(this: Key) {
+        get: function (this: Key) {
             if (this.xBits === undefined || this.yBits === undefined) {
                 return undefined;
             }
 
             return new ByteArray([0x04, ...this.xBits, ...this.yBits]);
-        }
-    }
+        },
+    };
 
     // Import/export from BinaryKeyPair
     export const keyPairBits = {
-        set: function(this: Key, keyPair: BinaryKeyPair) {
+        set: function (this: Key, keyPair: BinaryKeyPair) {
             this.publicBits = keyPair.publicKey;
             this.privateBits = keyPair.privateKey;
         },
 
-        get: function(this: Key): BinaryKeyPair | undefined {
+        get: function (this: Key): BinaryKeyPair | undefined {
             const publicBits = this.publicBits;
             const privateBits = this.privateBits;
             if (publicBits === undefined || privateBits === undefined) {
@@ -389,10 +397,10 @@ namespace Translators {
             }
             return {
                 publicKey: publicBits,
-                privateKey: privateBits
-            }
-        }
-    }
+                privateKey: privateBits,
+            };
+        },
+    };
 }
 
 enum Aliases {
@@ -401,19 +409,19 @@ enum Aliases {
     type = "kty",
     operations = "key_ops",
     private = "d",
-    extractable = "ext"
+    extractable = "ext",
 }
 
 enum Base64Codecs {
     privateBits = "d",
     xBits = "x",
-    yBits = "y"
+    yBits = "y",
 }
 
 enum AssertedAliases {
     publicKey = "publicBits",
     privateKey = "privateBits",
-    keyPair = "keyPairBits"
+    keyPair = "keyPairBits",
 }
 
 function inferCurve(key: Key, bytes: number) {
@@ -446,8 +454,7 @@ export function Key(properties: Partial<Key>) {
 
     // Assign base JWK properties.  All other properties are some form of alias
     for (const key of JWK_KEYS) {
-        if ((properties as any)[key] !== undefined)
-            (that as any)[key] = (properties as any)[key];
+        if ((properties as any)[key] !== undefined) (that as any)[key] = (properties as any)[key];
     }
     function assign(name: string) {
         const d = Object.getOwnPropertyDescriptor(properties, name);
@@ -462,7 +469,7 @@ export function Key(properties: Partial<Key>) {
     Object.entries(Aliases).forEach(([alias, target]) => {
         Object.defineProperty(that, alias, {
             get: () => that[target],
-            set: (value) => that[target] = value
+            set: value => (that[target] = value),
         });
         assign(alias);
     });
@@ -471,7 +478,7 @@ export function Key(properties: Partial<Key>) {
     Object.entries(Base64Codecs).forEach(([alias, target]) => {
         Object.defineProperty(that, alias, {
             get: () => that[target] !== undefined && Base64.decode(that[target] as string),
-            set: (value) => that[target] = value === undefined ? undefined : Base64.encode(value, true)
+            set: value => (that[target] = value === undefined ? undefined : Base64.encode(value, true)),
         });
         assign(alias);
     });
@@ -482,7 +489,7 @@ export function Key(properties: Partial<Key>) {
     });
 
     // Import invocation after all initializations due to dependencies
-    Object.keys(Translators).forEach((name) => assign(name));
+    Object.keys(Translators).forEach(name => assign(name));
 
     // Asserted aliases
     Object.entries(AssertedAliases).forEach(([alias, target]) => {
@@ -497,7 +504,7 @@ export function Key(properties: Partial<Key>) {
 
             set: (value: any) => {
                 that[target] = value;
-            }
+            },
         });
 
         assign(alias);
@@ -520,7 +527,7 @@ export function Key(properties: Partial<Key>) {
         }
 
         // Compute
-        const ec = new EC(crv.toLowerCase().replace(/-/g, ''));
+        const ec = new EC(crv.toLowerCase().replace(/-/g, ""));
         const ecKey = ec.keyFromPrivate(that.privateKey).getPublic();
 
         // Install
@@ -559,7 +566,7 @@ export function PrivateKey(privateKey: Uint8Array | BinaryKeyPair, options?: Par
         privateKey: priv,
         publicKey: pub,
         ...options,
-    }) as PrivateKey
+    }) as PrivateKey;
 }
 
 /**
@@ -569,7 +576,7 @@ export function PublicKey(publicKey: Uint8Array, options?: Partial<Key>) {
     return Key({
         type: KeyType.EC,
         publicKey,
-        ...options
+        ...options,
     }) as PublicKey;
 }
 
@@ -580,6 +587,6 @@ export function SymmetricKey(privateKey: Uint8Array, options?: Partial<Key>) {
     return Key({
         type: KeyType.oct,
         privateKey: privateKey,
-        ...options
-    })
+        ...options,
+    });
 }

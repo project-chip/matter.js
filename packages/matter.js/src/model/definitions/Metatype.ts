@@ -21,7 +21,7 @@ export enum Metatype {
     array = "array",
     object = "object",
     string = "string",
-    date = "date"
+    date = "date",
 }
 
 export namespace Metatype {
@@ -75,7 +75,7 @@ export namespace Metatype {
 
     /**
      * Cast a value to a specific type.
-     * 
+     *
      * @param type casts to a native equivalent of this type
      * @param value value to cast
      * @returns the cast value or FieldValue.Invalid if cast is not possible
@@ -233,7 +233,7 @@ export namespace Metatype {
      * These are the native types used by this module.
      */
     export type NativeType =
-        typeof Boolean
+        | typeof Boolean
         | typeof BigInt
         | typeof Number
         | typeof ByteArray

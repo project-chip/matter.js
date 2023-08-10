@@ -3,10 +3,10 @@
  * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { SupportedStorageTypes } from "./StringifyTools.js";
 import { MatterError } from "../common/MatterError.js";
+import { SupportedStorageTypes } from "./StringifyTools.js";
 
-export class StorageError extends MatterError { }
+export class StorageError extends MatterError {}
 
 export abstract class Storage {
     abstract initialize(): Promise<void>;

@@ -6,21 +6,21 @@
 
 import { ElementTag, Mei } from "../definitions/index.js";
 import { BaseElement } from "./BaseElement.js";
-import { RequirementElement } from "./RequirementElement.js";
 import { DatatypeElement } from "./DatatypeElement.js";
+import { RequirementElement } from "./RequirementElement.js";
 
 /**
  * Details on a specific device as defined in the Matter specification.
- * 
+ *
  * TODO - extract/merge DeviceTypes.ts?
  */
 export type DeviceTypeElement = BaseElement & {
-    id?: Mei,
-    tag: `${DeviceTypeElement.Tag}`,
-    classification: `${DeviceTypeElement.Classification}`,
-    category?: string,
-    children?: (RequirementElement | DatatypeElement)[]
-}
+    id?: Mei;
+    tag: `${DeviceTypeElement.Tag}`;
+    classification: `${DeviceTypeElement.Classification}`;
+    category?: string;
+    children?: (RequirementElement | DatatypeElement)[];
+};
 
 export function DeviceTypeElement(definition: DeviceTypeElement.Properties) {
     return BaseElement(DeviceTypeElement.Tag, definition) as DeviceTypeElement;
@@ -36,6 +36,6 @@ export namespace DeviceTypeElement {
         Node = "node",
         Utility = "utility",
         Simple = "simple",
-        Dynamic = "dynamic"
+        Dynamic = "dynamic",
     }
 }

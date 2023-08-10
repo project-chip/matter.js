@@ -14,10 +14,7 @@ import { ModelVariantTraversal, TraverseMap, VariantDetail } from "./ModelVarian
 /**
  * Merge multiple variants of an element into a single element.
  */
-export function MergeModels(
-    variants: TraverseMap,
-    priorities = MergeModels.DefaultPriorities
-): Model {
+export function MergeModels(variants: TraverseMap, priorities = MergeModels.DefaultPriorities): Model {
     const priority = new PriorityHandler(priorities || MergeModels.DefaultPriorities);
     const visitor = new MergeTraversal<Model>(priority, (variants, recurse) => {
         const merged = merge(variants);
@@ -30,11 +27,7 @@ export function MergeModels(
         // children from other variants.  This allows us to override to a type
         // that doesn't have children
         const manual = priority.get(variants.tag, "type")[0];
-        if (
-            merged.type
-            && variants.map[manual]?.type === merged.type
-            && !variants.map[manual].children?.length
-        ) {
+        if (merged.type && variants.map[manual]?.type === merged.type && !variants.map[manual].children?.length) {
             return merged;
         }
 
@@ -59,16 +52,14 @@ export function MergeModels(
      * Merge the fields (excluding children) of a specific model.
      */
     function merge(variants: VariantDetail): Model {
-        const variantValues = Object.fromEntries(Object.entries(variants.map).map(([variantName, variant]) => [variantName, variant.valueOf()]));
-
-        const keys = new Set(
-            Object.values(variantValues).flatMap(v => Object.keys(v))
+        const variantValues = Object.fromEntries(
+            Object.entries(variants.map).map(([variantName, variant]) => [variantName, variant.valueOf()]),
         );
+
+        const keys = new Set(Object.values(variantValues).flatMap(v => Object.keys(v)));
         keys.delete("children");
 
-        const properties = Object.fromEntries(
-            [...keys].map(k => [k, visitor.pluck(variants.tag, k, variantValues)])
-        );
+        const properties = Object.fromEntries([...keys].map(k => [k, visitor.pluck(variants.tag, k, variantValues)]));
 
         // Specialized support for type
         if (properties.type) {
@@ -102,15 +93,12 @@ export function MergeModels(
 class MergeTraversal<S> extends ModelVariantTraversal<S> {
     constructor(
         public priority: PriorityHandler,
-        public visitor: (variants: VariantDetail, recurse: () => S[]) => S
+        public visitor: (variants: VariantDetail, recurse: () => S[]) => S,
     ) {
         super(priority.get("*", "type"));
     }
 
-    visit(
-        variants: VariantDetail,
-        recurse: () => S[]
-    ) {
+    visit(variants: VariantDetail, recurse: () => S[]) {
         return this.visitor(variants, recurse);
     }
 
@@ -120,7 +108,7 @@ class MergeTraversal<S> extends ModelVariantTraversal<S> {
     pluck(
         tag: ElementTag | "*",
         fieldName: string,
-        variantValues: { [variantName: string]: { [fieldName: string]: any } }
+        variantValues: { [variantName: string]: { [fieldName: string]: any } },
     ) {
         const variantPriorities = this.priority.get(tag, fieldName);
 
@@ -135,9 +123,7 @@ class MergeTraversal<S> extends ModelVariantTraversal<S> {
     /**
      * Type selection is more complicated than other fields.
      */
-    chooseType(
-        variants: VariantDetail
-    ) {
+    chooseType(variants: VariantDetail) {
         const variantPriorities = this.priority.get(variants.tag, "type");
 
         let type: Model | undefined;
@@ -196,7 +182,7 @@ class MergeTraversal<S> extends ModelVariantTraversal<S> {
  * Utility class for working with merge priorities.
  */
 class PriorityHandler {
-    constructor(private priorities: MergeModels.Priorities) { }
+    constructor(private priorities: MergeModels.Priorities) {}
 
     /**
      * Get the priority for a specific tag and field.
@@ -288,7 +274,7 @@ function reparentToCanonicalParent(priority: PriorityHandler, variants: VariantD
 
     // Remove deparented datatypes.  We do this after recursing because
     // removing from a set we're actively visiting may be problematic
-    deparented.forEach(m => m.parent = undefined);
+    deparented.forEach(m => (m.parent = undefined));
 
     return variants;
 }
@@ -305,8 +291,8 @@ export namespace MergeModels {
             /**
              * A field name or "*" to match all fields.
              */
-            [fieldName: string]: string[]
-        }
+            [fieldName: string]: string[];
+        };
     };
 
     /**
@@ -336,7 +322,7 @@ export namespace MergeModels {
             details: ["local", "spec", "chip"],
 
             // Prefer spec for default values
-            default: ["local", "spec", "chip"]
-        }
-    }
+            default: ["local", "spec", "chip"],
+        },
+    };
 }

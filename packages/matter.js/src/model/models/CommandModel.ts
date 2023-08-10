@@ -6,15 +6,15 @@
 
 import { Mei } from "../definitions/index.js";
 import { CommandElement } from "../elements/index.js";
-import { ValueModel } from "./ValueModel.js";
-import { Model } from "./Model.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
+import { Model } from "./Model.js";
+import { ValueModel } from "./ValueModel.js";
 
 export class CommandModel extends ValueModel implements CommandElement {
     override tag: CommandElement.Tag = CommandElement.Tag;
     override id!: Mei;
     direction?: CommandElement.Direction;
-    response?: string
+    response?: string;
 
     get isRequest() {
         return this.direction === CommandElement.Direction.Request;

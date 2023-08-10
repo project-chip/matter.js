@@ -6,8 +6,8 @@
 
 import { Access, Conformance, Constraint, Quality } from "../aspects/index.js";
 import { ElementTag, FieldValue } from "../definitions/index.js";
-import { BaseElement } from "./BaseElement.js";
 import { type AnyValueElement } from "./AnyValueElement.js";
+import { BaseElement } from "./BaseElement.js";
 
 /**
  * A base element for all elements that represent data values.
@@ -16,48 +16,48 @@ export type ValueElement = BaseElement & {
     /**
      * Derived datatypes as defined by the Matter Specification must specify
      * the name of the base type.  This is every type that is not global.
-     * 
+     *
      * Elements may use the shortcut "list[EntryType]" to designate an element
      * as type "list" with a single child that is the entry type.
      */
-    type?: string,
+    type?: string;
 
     /**
      * Limits on values.
      */
-    constraint?: Constraint.Definition,
+    constraint?: Constraint.Definition;
 
     /**
      * Optionality control.
      */
-    conformance?: Conformance.Definition,
+    conformance?: Conformance.Definition;
 
     /**
      * Authorization limits.
      */
-    access?: Access.Definition,
+    access?: Access.Definition;
 
     /**
      * Other qualities not covered by conformance or access.
      */
-    quality?: Quality.Definition,
+    quality?: Quality.Definition;
 
     /**
      * Applies to numeric types.
      */
-    byteSize?: ValueElement.Size,
+    byteSize?: ValueElement.Size;
 
     /**
      * The default value for the element.
      */
-    default?: FieldValue,
+    default?: FieldValue;
 
     /**
      * Nested structures that may have data elements include enums, structs and
      * lists.
      */
-    children?: AnyValueElement[]
-}
+    children?: AnyValueElement[];
+};
 
 export function ValueElement(tag: ElementTag, definition: ValueElement) {
     definition = { ...definition };
@@ -83,7 +83,7 @@ export namespace ValueElement {
      */
     export enum Metatype {
         bool,
-        map
+        map,
     }
 
     /**

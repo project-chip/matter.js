@@ -24,10 +24,20 @@ LocalMatter.children.push({
 
         // Spec defines conformance on these as "CT | ColorTemperatureMireds" which doesn't
         // make sense because conformance on ColorTemperatureMireds is "CT"
-        { tag: "attribute", id: 0x400d, name: "CoupleColorTempToLevelMinMireds", conformance: "CT & ColorTemperatureMireds" },
-        { tag: "attribute", id: 0x4010, name: "StartUpColorTemperatureMireds", conformance: "CT & ColorTemperatureMireds" },
+        {
+            tag: "attribute",
+            id: 0x400d,
+            name: "CoupleColorTempToLevelMinMireds",
+            conformance: "CT & ColorTemperatureMireds",
+        },
+        {
+            tag: "attribute",
+            id: 0x4010,
+            name: "StartUpColorTemperatureMireds",
+            conformance: "CT & ColorTemperatureMireds",
+        },
 
         // Spec states the values of this bitmap are the same as the feature map
-        { tag: "attribute", id: 0x400a, name: "ColorCapabilities", type: "FeatureMap" }
-    ]
-})
+        { tag: "attribute", id: 0x400a, name: "ColorCapabilities", type: "FeatureMap" },
+    ],
+});

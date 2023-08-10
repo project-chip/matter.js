@@ -55,15 +55,15 @@ export class Aspect<D> {
         this.errors.push({
             code,
             source: `${this.constructor.name} ${serialize(this.definition)}`,
-            message
+            message,
         });
     }
 
     extend(other: Exclude<D, "string">) {
         const descriptors = [
             ...Object.entries(Object.getOwnPropertyDescriptors(this)),
-            ...Object.entries(Object.getOwnPropertyDescriptors(other))
-        ]
+            ...Object.entries(Object.getOwnPropertyDescriptors(other)),
+        ];
 
         const definition = {} as { [name: string]: any };
         for (const [name, descriptor] of descriptors) {

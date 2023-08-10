@@ -3,14 +3,14 @@
  * Copyright 2022 The matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+import { BridgedDeviceBasicInformationCluster } from "../cluster/definitions/BridgedDeviceBasicInformationCluster.js";
+import { ClusterServer } from "../cluster/server/ClusterServer.js";
+import { AttributeInitialValues } from "../cluster/server/ClusterServerTypes.js";
+import { ImplementationError } from "../common/MatterError.js";
+import { ComposedDevice } from "./ComposedDevice.js";
 import { Device } from "./Device.js";
 import { DeviceTypes } from "./DeviceTypes.js";
-import { ComposedDevice } from "./ComposedDevice.js";
-import { AttributeInitialValues } from "../cluster/server/ClusterServerTypes.js";
-import { BridgedDeviceBasicInformationCluster } from "../cluster/definitions/BridgedDeviceBasicInformationCluster.js";
 import { Endpoint, EndpointOptions } from "./Endpoint.js";
-import { ImplementationError } from "../common/MatterError.js";
-import { ClusterServer } from "../cluster/server/ClusterServer.js";
 
 /**
  * An Aggregator is a special endpoint that exposes multiple devices as a "bridge" into the matter ecosystem.
@@ -41,7 +41,10 @@ export class Aggregator extends Endpoint {
      * @param device Device instance to add
      * @param bridgedBasicInformation Optional BridgedDeviceBasicInformationCluster attribute values to
      */
-    addBridgedDevice(device: Device | ComposedDevice, bridgedBasicInformation?: AttributeInitialValues<typeof BridgedDeviceBasicInformationCluster.attributes>): void {
+    addBridgedDevice(
+        device: Device | ComposedDevice,
+        bridgedBasicInformation?: AttributeInitialValues<typeof BridgedDeviceBasicInformationCluster.attributes>,
+    ): void {
         // Add DeviceTypes.BRIDGED_DEVICE device type to the device exposed via Aggregator
         const deviceTypes = device.getDeviceTypes();
         if (!deviceTypes.includes(DeviceTypes.BRIDGED_NODE)) {
@@ -54,17 +57,19 @@ export class Aggregator extends Endpoint {
                 bridgedBasicInformation,
                 {},
                 {
-                    reachableChanged: true
-                }
+                    reachableChanged: true,
+                },
             );
             device.addClusterServer(bridgedBasicInformationCluster);
 
-            bridgedBasicInformationCluster.subscribeReachableAttribute((newValue) => {
+            bridgedBasicInformationCluster.subscribeReachableAttribute(newValue => {
                 bridgedBasicInformationCluster.triggerReachableChangedEvent({ reachableNewValue: newValue });
             });
         } else {
             if (!device.hasClusterServer(BridgedDeviceBasicInformationCluster)) {
-                throw new ImplementationError("BridgedDeviceBasicInformationCluster is required for bridged devices. Please add yourself or provide as second parameter");
+                throw new ImplementationError(
+                    "BridgedDeviceBasicInformationCluster is required for bridged devices. Please add yourself or provide as second parameter",
+                );
             }
         }
         this.addChildEndpoint(device);
@@ -79,7 +84,10 @@ export class Aggregator extends Endpoint {
      * @param device Device instance to add
      * @param bridgedBasicInformation Optional BridgedDeviceBasicInformationCluster attribute values to
      */
-    addBridgedDeviceWithPowerSourceInfo(device: Device | ComposedDevice, bridgedBasicInformation?: AttributeInitialValues<typeof BridgedDeviceBasicInformationCluster.attributes>): void {
+    addBridgedDeviceWithPowerSourceInfo(
+        device: Device | ComposedDevice,
+        bridgedBasicInformation?: AttributeInitialValues<typeof BridgedDeviceBasicInformationCluster.attributes>,
+    ): void {
         // Add DeviceTypes.BRIDGED_DEVICE_WITH_POWER_SOURCE_INFORMATION device type to the device exposed via Aggregator
         const deviceTypes = device.getDeviceTypes();
         if (!deviceTypes.includes(DeviceTypes.BRIDGED_DEVICE_WITH_POWER_SOURCE_INFORMATION)) {
@@ -90,7 +98,9 @@ export class Aggregator extends Endpoint {
             device.addClusterServer(ClusterServer(BridgedDeviceBasicInformationCluster, bridgedBasicInformation, {}));
         } else {
             if (!device.hasClusterServer(BridgedDeviceBasicInformationCluster)) {
-                throw new ImplementationError("BridgedDeviceBasicInformationCluster is required for bridged devices. Please add yourself or provide as second parameter");
+                throw new ImplementationError(
+                    "BridgedDeviceBasicInformationCluster is required for bridged devices. Please add yourself or provide as second parameter",
+                );
             }
         }
         this.addChildEndpoint(device);

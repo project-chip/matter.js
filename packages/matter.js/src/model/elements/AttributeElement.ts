@@ -12,9 +12,9 @@ import { ValueElement } from "./ValueElement.js";
  * A cluster property description.
  */
 export type AttributeElement = ValueElement & {
-    tag: `${AttributeElement.Tag}`,
-    id: Mei
-}
+    tag: `${AttributeElement.Tag}`;
+    id: Mei;
+};
 
 export function AttributeElement(definition: AttributeElement.Properties) {
     return ValueElement(AttributeElement.Tag, definition) as AttributeElement;

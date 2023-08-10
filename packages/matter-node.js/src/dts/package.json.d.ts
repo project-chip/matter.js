@@ -6,7 +6,7 @@
 
 declare module "*package.json" {
     const npmPackage: {
-        version: string
+        version: string;
     };
     export default npmPackage;
 }

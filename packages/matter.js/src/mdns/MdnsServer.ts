@@ -22,7 +22,7 @@ export class MdnsServer {
                 netInterface: netInterface,
                 broadcastAddressIpv4: MDNS_BROADCAST_IPV4,
                 broadcastAddressIpv6: MDNS_BROADCAST_IPV6,
-                listeningPort: MDNS_BROADCAST_PORT
+                listeningPort: MDNS_BROADCAST_PORT,
             }),
             netInterface,
         );
@@ -38,14 +38,16 @@ export class MdnsServer {
             }
             return portMap;
         },
-        15 * 60 * 1000 /* 15mn */
+        15 * 60 * 1000 /* 15mn */,
     );
 
     constructor(
         private readonly multicastServer: UdpMulticastServer,
         private readonly netInterface: string | undefined,
     ) {
-        multicastServer.onMessage((message, remoteIp, netInterface) => void this.handleDnsMessage(message, remoteIp, netInterface));
+        multicastServer.onMessage(
+            (message, remoteIp, netInterface) => void this.handleDnsMessage(message, remoteIp, netInterface),
+        );
     }
 
     private async handleDnsMessage(messageBytes: ByteArray, _remoteIp: string, netInterface: string) {
@@ -67,35 +69,45 @@ export class MdnsServer {
             const additionalRecords = portRecords.filter(record => !answers.includes(record));
 
             // TODO: try to combine the messages to avoid sending multiple messages but keep under 1500 bytes per message
-            this.multicastServer.send(DnsCodec.encode({
-                messageType: DnsMessageType.Response,
-                transactionId,
-                answers,
-                additionalRecords
-            }), netInterface).catch(() => {
-                // ignore because already caught in UdpMulticastServer
-            });
+            this.multicastServer
+                .send(
+                    DnsCodec.encode({
+                        messageType: DnsMessageType.Response,
+                        transactionId,
+                        answers,
+                        additionalRecords,
+                    }),
+                    netInterface,
+                )
+                .catch(() => {
+                    // ignore because already caught in UdpMulticastServer
+                });
             await Time.sleep(20 + Math.floor(Math.random() * 100)); // as per DNS-SD spec wait 20-120ms before sending more packets
         }
     }
 
     async announce(announcedNetPort?: number) {
-        await Promise.all(this.getMulticastInterfacesForAnnounce().map(async netInterface => {
-            const records = this.records.get(netInterface);
-            for (const [port, portRecords] of records) {
-                if (announcedNetPort !== undefined && announcedNetPort !== port) continue;
-                const answers = portRecords.filter(({ recordType }) => recordType === DnsRecordType.PTR);
-                const additionalRecords = portRecords.filter(({ recordType }) => recordType !== DnsRecordType.PTR);
+        await Promise.all(
+            this.getMulticastInterfacesForAnnounce().map(async netInterface => {
+                const records = this.records.get(netInterface);
+                for (const [port, portRecords] of records) {
+                    if (announcedNetPort !== undefined && announcedNetPort !== port) continue;
+                    const answers = portRecords.filter(({ recordType }) => recordType === DnsRecordType.PTR);
+                    const additionalRecords = portRecords.filter(({ recordType }) => recordType !== DnsRecordType.PTR);
 
-                // TODO: try to combine the messages to avoid sending multiple messages but keep under 1500 bytes per message
-                await this.multicastServer.send(DnsCodec.encode({
-                    messageType: DnsMessageType.Response,
-                    answers,
-                    additionalRecords
-                }), netInterface);
-                await Time.sleep(20 + Math.floor(Math.random() * 100)); // as per DNS-SD spec wait 20-120ms before sending more packets
-            }
-        }));
+                    // TODO: try to combine the messages to avoid sending multiple messages but keep under 1500 bytes per message
+                    await this.multicastServer.send(
+                        DnsCodec.encode({
+                            messageType: DnsMessageType.Response,
+                            answers,
+                            additionalRecords,
+                        }),
+                        netInterface,
+                    );
+                    await Time.sleep(20 + Math.floor(Math.random() * 100)); // as per DNS-SD spec wait 20-120ms before sending more packets
+                }
+            }),
+        );
     }
 
     setRecordsGenerator(hostPort: number, generator: (netInterface: string) => DnsRecord<any>[]) {
@@ -112,7 +124,7 @@ export class MdnsServer {
         return this.netInterface === undefined ? this.network.getNetInterfaces() : [this.netInterface];
     }
 
-    private queryRecords({ name, recordType }: { name: string, recordType: DnsRecordType }, records: DnsRecord<any>[]) {
+    private queryRecords({ name, recordType }: { name: string; recordType: DnsRecordType }, records: DnsRecord<any>[]) {
         if (recordType === DnsRecordType.ANY) {
             return records.filter(record => record.name === name);
         } else {

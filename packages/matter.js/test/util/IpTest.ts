@@ -11,7 +11,7 @@ describe("IP", () => {
         it("converts an IPv4 address to a number", () => {
             const result = iPv4ToNumber("192.168.200.250");
 
-            expect(result).toBe(0xC0A8C8FA)
+            expect(result).toBe(0xc0a8c8fa);
         });
     });
 
@@ -39,25 +39,25 @@ describe("IP", () => {
         it("returns true if two IPv4 addresses are on the same network", () => {
             const result = onSameNetwork("192.168.200.250", "192.168.200.1", "255.255.255.0");
 
-            expect(result).toBe(true)
+            expect(result).toBe(true);
         });
 
         it("returns false if two IPv4 addresses are not on the same network", () => {
             const result = onSameNetwork("192.168.200.250", "192.1.1.1", "255.255.255.0");
 
-            expect(result).toBe(false)
+            expect(result).toBe(false);
         });
 
         it("returns true if two IPv6 addresses are on the same network", () => {
             const result = onSameNetwork("fe80::e777:4f5e:c61e:7314", "fe80::e777:4f5e:1:1", "ffff:ffff:ffff:ffff::");
 
-            expect(result).toBe(true)
+            expect(result).toBe(true);
         });
 
         it("returns false if two IPv6 addresses are not on the same network", () => {
             const result = onSameNetwork("fe80::e777:4f5e:c61e:7314", "fe80:1::4f5e:1:1", "ffff:ffff:ffff:ffff::");
 
-            expect(result).toBe(false)
+            expect(result).toBe(false);
         });
     });
 });

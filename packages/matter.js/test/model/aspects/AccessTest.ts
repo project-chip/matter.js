@@ -24,7 +24,16 @@ const FLAG_PERMUTATIONS: [string, Access.Ast][] = [
     ["MA", { readPriv: Access.Privilege.Manage, writePriv: Access.Privilege.Administer }],
     ["A", { readPriv: Access.Privilege.Administer, writePriv: Access.Privilege.Administer }],
     ["T", { timed: true }],
-    ["RW F VO T", { rw: Access.Rw.ReadWrite, fabric: Access.Fabric.Scoped, readPriv: Access.Privilege.View, writePriv: Access.Privilege.Operate, timed: true }]
+    [
+        "RW F VO T",
+        {
+            rw: Access.Rw.ReadWrite,
+            fabric: Access.Fabric.Scoped,
+            readPriv: Access.Privilege.View,
+            writePriv: Access.Privilege.Operate,
+            timed: true,
+        },
+    ],
 ];
 
 describe("Access", () => {
@@ -36,7 +45,7 @@ describe("Access", () => {
 
             it("serializes", () => {
                 expect(new Access(ast).toString()).toBe(text);
-            })
+            });
         });
     });
 
@@ -46,9 +55,9 @@ describe("Access", () => {
                 {
                     code: "UNKNOWN_ACCESS_FLAG",
                     message: 'Unknown flag "Z"',
-                    source: 'Access "Z"'
-                }
+                    source: 'Access "Z"',
+                },
             ]);
         });
-    })
-})
+    });
+});

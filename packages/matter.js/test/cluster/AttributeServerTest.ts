@@ -5,19 +5,23 @@
  */
 
 import * as assert from "assert";
-import { AttributeServer, FixedAttributeServer, FabricScopedAttributeServer } from "../../src/cluster/server/AttributeServer.js";
-import { TlvUInt8 } from "../../src/tlv/TlvNumber.js";
 import { BasicInformationCluster } from "../../src/cluster/definitions/BasicInformationCluster.js";
-import { Fabric } from "../../src/fabric/Fabric.js";
-import { FabricIndex } from "../../src/datatype/FabricIndex.js";
-import { FabricId } from "../../src/datatype/FabricId.js";
-import { NodeId } from "../../src/datatype/NodeId.js";
-import { ByteArray } from "../../src/util/ByteArray.js";
-import { VendorId } from "../../src/datatype/VendorId.js";
-import { MatterDevice } from "../../src/MatterDevice.js";
-import { SecureSession } from "../../src/session/SecureSession.js";
+import {
+    AttributeServer,
+    FabricScopedAttributeServer,
+    FixedAttributeServer,
+} from "../../src/cluster/server/AttributeServer.js";
 import { PrivateKey } from "../../src/crypto/Key.js";
 import { AttributeId } from "../../src/datatype/AttributeId.js";
+import { FabricId } from "../../src/datatype/FabricId.js";
+import { FabricIndex } from "../../src/datatype/FabricIndex.js";
+import { NodeId } from "../../src/datatype/NodeId.js";
+import { VendorId } from "../../src/datatype/VendorId.js";
+import { Fabric } from "../../src/fabric/Fabric.js";
+import { MatterDevice } from "../../src/MatterDevice.js";
+import { SecureSession } from "../../src/session/SecureSession.js";
+import { TlvUInt8 } from "../../src/tlv/TlvNumber.js";
+import { ByteArray } from "../../src/util/ByteArray.js";
 
 const ZERO = new ByteArray(1);
 const PRIVATE_KEY = new ByteArray(32);
@@ -25,7 +29,6 @@ PRIVATE_KEY[31] = 1; // EC doesn't like all-zero private key
 const KEY = PrivateKey(PRIVATE_KEY);
 
 describe("AttributeServerTest", () => {
-
     describe("FixedAttributeServer", () => {
         it("should return the value set in the constructor", () => {
             const server = new FixedAttributeServer(AttributeId(1), "test", TlvUInt8, false, false, 3);
@@ -60,9 +63,15 @@ describe("AttributeServerTest", () => {
             let versionTriggered: number | undefined = undefined;
             let valueTriggered2: number | undefined = undefined;
             let oldValueTriggered2: number | undefined = undefined;
-            const server = new AttributeServer(AttributeId(1), "test", TlvUInt8, false, false, 3,);
-            server.addValueChangeListener((value, version) => { valueTriggered = value; versionTriggered = version; });
-            server.addValueSetListener((newValue, oldValue) => { valueTriggered2 = newValue; oldValueTriggered2 = oldValue; });
+            const server = new AttributeServer(AttributeId(1), "test", TlvUInt8, false, false, 3);
+            server.addValueChangeListener((value, version) => {
+                valueTriggered = value;
+                versionTriggered = version;
+            });
+            server.addValueSetListener((newValue, oldValue) => {
+                valueTriggered2 = newValue;
+                oldValueTriggered2 = oldValue;
+            });
 
             assert.strictEqual(server.getLocal(), 3);
             server.setLocal(4);
@@ -76,9 +85,14 @@ describe("AttributeServerTest", () => {
         it("should set the value locally and trigger listeners on non change", () => {
             let valueTriggered2: number | undefined = undefined;
             let oldValueTriggered2: number | undefined = undefined;
-            const server = new AttributeServer(AttributeId(1), "test", TlvUInt8, false, false, 3,);
-            server.addValueChangeListener(() => { throw new Error("Should not be triggered."); });
-            server.addValueSetListener((newValue, oldValue) => { valueTriggered2 = newValue; oldValueTriggered2 = oldValue; });
+            const server = new AttributeServer(AttributeId(1), "test", TlvUInt8, false, false, 3);
+            server.addValueChangeListener(() => {
+                throw new Error("Should not be triggered.");
+            });
+            server.addValueSetListener((newValue, oldValue) => {
+                valueTriggered2 = newValue;
+                oldValueTriggered2 = oldValue;
+            });
 
             assert.strictEqual(server.getLocal(), 3);
             server.setLocal(3);
@@ -88,9 +102,11 @@ describe("AttributeServerTest", () => {
         });
 
         it("should throw an error if the value is set non locally and not writable", () => {
-            const server = new AttributeServer(AttributeId(1), "test", TlvUInt8, false, false, 3,);
+            const server = new AttributeServer(AttributeId(1), "test", TlvUInt8, false, false, 3);
             assert.strictEqual(server.getLocal(), 3);
-            assert.throws(() => server.set(4, {} as SecureSession<MatterDevice>), { message: '(136) Attribute "test" is not writable.' });
+            assert.throws(() => server.set(4, {} as SecureSession<MatterDevice>), {
+                message: '(136) Attribute "test" is not writable.',
+            });
         });
 
         it("should return the value from getter", () => {
@@ -100,7 +116,19 @@ describe("AttributeServerTest", () => {
 
         it("should return the value from getter also with setter but increased version on change", () => {
             let valueSet: number | undefined = undefined;
-            const server = new AttributeServer(AttributeId(1), "test", TlvUInt8, false, false, 3, () => 4, (value) => { valueSet = value; return true; });
+            const server = new AttributeServer(
+                AttributeId(1),
+                "test",
+                TlvUInt8,
+                false,
+                false,
+                3,
+                () => 4,
+                value => {
+                    valueSet = value;
+                    return true;
+                },
+            );
             assert.deepEqual(server.getWithVersion({} as SecureSession<MatterDevice>, false), { value: 4, version: 0 });
             server.setLocal(5);
             assert.deepEqual(server.getWithVersion({} as SecureSession<MatterDevice>, false), { value: 4, version: 1 });
@@ -109,7 +137,19 @@ describe("AttributeServerTest", () => {
 
         it("should return the value from getter also with setter but not increased version when no change", () => {
             let valueSet: number | undefined = undefined;
-            const server = new AttributeServer(AttributeId(1), "test", TlvUInt8, false, false, 3, () => 4, (value) => { valueSet = value; return false; });
+            const server = new AttributeServer(
+                AttributeId(1),
+                "test",
+                TlvUInt8,
+                false,
+                false,
+                3,
+                () => 4,
+                value => {
+                    valueSet = value;
+                    return false;
+                },
+            );
             assert.deepEqual(server.getWithVersion({} as SecureSession<MatterDevice>, false), { value: 4, version: 0 });
             server.setLocal(5);
             assert.deepEqual(server.getWithVersion({} as SecureSession<MatterDevice>, false), { value: 4, version: 0 });
@@ -118,7 +158,19 @@ describe("AttributeServerTest", () => {
 
         it("should return the value from getter and increased version after update", () => {
             let valueSet: number | undefined = undefined;
-            const server = new AttributeServer(AttributeId(1), "test", TlvUInt8, false, false, 3, () => 4, (value) => { valueSet = value; return false; });
+            const server = new AttributeServer(
+                AttributeId(1),
+                "test",
+                TlvUInt8,
+                false,
+                false,
+                3,
+                () => 4,
+                value => {
+                    valueSet = value;
+                    return false;
+                },
+            );
             assert.deepEqual(server.getWithVersion({} as SecureSession<MatterDevice>, false), { value: 4, version: 0 });
             server.updated({} as SecureSession<MatterDevice>);
             assert.deepEqual(server.getWithVersion({} as SecureSession<MatterDevice>, false), { value: 4, version: 1 });
@@ -131,9 +183,27 @@ describe("AttributeServerTest", () => {
             let versionTriggered: number | undefined = undefined;
             let valueTriggered2: number | undefined = undefined;
             let oldValueTriggered2: number | undefined = undefined;
-            const server = new AttributeServer(AttributeId(1), "test", TlvUInt8, false, false, 3, () => 4, (value) => { valueSet = value; return true; });
-            server.addValueChangeListener((value, version) => { valueTriggered = value; versionTriggered = version; });
-            server.addValueSetListener((newValue, oldValue) => { valueTriggered2 = newValue; oldValueTriggered2 = oldValue; });
+            const server = new AttributeServer(
+                AttributeId(1),
+                "test",
+                TlvUInt8,
+                false,
+                false,
+                3,
+                () => 4,
+                value => {
+                    valueSet = value;
+                    return true;
+                },
+            );
+            server.addValueChangeListener((value, version) => {
+                valueTriggered = value;
+                versionTriggered = version;
+            });
+            server.addValueSetListener((newValue, oldValue) => {
+                valueTriggered2 = newValue;
+                oldValueTriggered2 = oldValue;
+            });
             assert.deepEqual(server.getWithVersion({} as SecureSession<MatterDevice>, false), { value: 4, version: 0 });
             server.setLocal(5);
             assert.deepEqual(server.getWithVersion({} as SecureSession<MatterDevice>, false), { value: 4, version: 1 });
@@ -148,9 +218,26 @@ describe("AttributeServerTest", () => {
             let valueSet: number | undefined = undefined;
             let valueTriggered2: number | undefined = undefined;
             let oldValueTriggered2: number | undefined = undefined;
-            const server = new AttributeServer(AttributeId(1), "test", TlvUInt8, false, false, 3, () => 4, (value) => { valueSet = value; return false; });
-            server.addValueChangeListener(() => { throw new Error("Should not be triggered"); });
-            server.addValueSetListener((newValue, oldValue) => { valueTriggered2 = newValue; oldValueTriggered2 = oldValue; });
+            const server = new AttributeServer(
+                AttributeId(1),
+                "test",
+                TlvUInt8,
+                false,
+                false,
+                3,
+                () => 4,
+                value => {
+                    valueSet = value;
+                    return false;
+                },
+            );
+            server.addValueChangeListener(() => {
+                throw new Error("Should not be triggered");
+            });
+            server.addValueSetListener((newValue, oldValue) => {
+                valueTriggered2 = newValue;
+                oldValueTriggered2 = oldValue;
+            });
             assert.deepEqual(server.getWithVersion({} as SecureSession<MatterDevice>, false), { value: 4, version: 0 });
             server.setLocal(5);
             assert.deepEqual(server.getWithVersion({} as SecureSession<MatterDevice>, false), { value: 4, version: 0 });
@@ -161,7 +248,19 @@ describe("AttributeServerTest", () => {
 
         it("should return the value from getter and increased version after update", () => {
             let valueSet: number | undefined = undefined;
-            const server = new AttributeServer(AttributeId(1), "test", TlvUInt8, false, false, 3, () => 4, (value) => { valueSet = value; return false; });
+            const server = new AttributeServer(
+                AttributeId(1),
+                "test",
+                TlvUInt8,
+                false,
+                false,
+                3,
+                () => 4,
+                value => {
+                    valueSet = value;
+                    return false;
+                },
+            );
             assert.deepEqual(server.getWithVersion({} as SecureSession<MatterDevice>, false), { value: 4, version: 0 });
             server.updated({} as SecureSession<MatterDevice>);
             assert.deepEqual(server.getWithVersion({} as SecureSession<MatterDevice>, false), { value: 4, version: 1 });
@@ -188,46 +287,144 @@ describe("AttributeServerTest", () => {
 
         it("setter is not called when initialized", () => {
             let setterCalled = false;
-            const server = new AttributeServer(AttributeId(1), "test", TlvUInt8, false, false, 3, undefined, () => { setterCalled = true; return true; });
+            const server = new AttributeServer(AttributeId(1), "test", TlvUInt8, false, false, 3, undefined, () => {
+                setterCalled = true;
+                return true;
+            });
             server.init(1, 1);
             assert.strictEqual(setterCalled, false);
         });
 
         it("should throw an error if default value is invalid", () => {
-            assert.throws(() => new AttributeServer(AttributeId(1), "test", TlvUInt8.bound({ min: 0, max: 2 }), false, false, 3), { message: 'Validation error for attribute "test": Invalid value: 3 is above the maximum, 2.' });
+            assert.throws(
+                () => new AttributeServer(AttributeId(1), "test", TlvUInt8.bound({ min: 0, max: 2 }), false, false, 3),
+                { message: 'Validation error for attribute "test": Invalid value: 3 is above the maximum, 2.' },
+            );
         });
 
         it("should throw an error if set value is invalid according to schema validator", () => {
-            const server = new AttributeServer(AttributeId(1), "test", TlvUInt8.bound({ min: 0, max: 3 }), false, false, 3, undefined, () => true);
-            assert.throws(() => server.setLocal(11), { message: 'Validation error for attribute "test": Invalid value: 11 is above the maximum, 3.' });
+            const server = new AttributeServer(
+                AttributeId(1),
+                "test",
+                TlvUInt8.bound({ min: 0, max: 3 }),
+                false,
+                false,
+                3,
+                undefined,
+                () => true,
+            );
+            assert.throws(() => server.setLocal(11), {
+                message: 'Validation error for attribute "test": Invalid value: 11 is above the maximum, 3.',
+            });
         });
 
         it("should throw an error if set value is invalid according to custom validator only on set", () => {
-            const server = new AttributeServer(AttributeId(1), "test", TlvUInt8, false, false, 3, undefined, undefined, () => { throw new Error("Validator error") });
+            const server = new AttributeServer(
+                AttributeId(1),
+                "test",
+                TlvUInt8,
+                false,
+                false,
+                3,
+                undefined,
+                undefined,
+                () => {
+                    throw new Error("Validator error");
+                },
+            );
             assert.throws(() => server.setLocal(11), { message: "Validator error" });
         });
     });
 
     describe("FabricScopedAttributeServer", () => {
         it("should return the value set in the constructor if fabric context is empty", () => {
-            const testFabric = new Fabric(FabricIndex(1), FabricId(BigInt(1)), NodeId(BigInt(1)), NodeId(BigInt(2)), ZERO, ZERO, KEY, VendorId(1), ZERO, ZERO, ZERO, ZERO, ZERO, "");
+            const testFabric = new Fabric(
+                FabricIndex(1),
+                FabricId(BigInt(1)),
+                NodeId(BigInt(1)),
+                NodeId(BigInt(2)),
+                ZERO,
+                ZERO,
+                KEY,
+                VendorId(1),
+                ZERO,
+                ZERO,
+                ZERO,
+                ZERO,
+                ZERO,
+                "",
+            );
 
-            const server = new FabricScopedAttributeServer(AttributeId(1), "test", TlvUInt8, true, false, 3, BasicInformationCluster);
+            const server = new FabricScopedAttributeServer(
+                AttributeId(1),
+                "test",
+                TlvUInt8,
+                true,
+                false,
+                3,
+                BasicInformationCluster,
+            );
             assert.strictEqual(server.getLocalForFabric(testFabric), 3);
         });
 
         it("should return the value from fabric context if set", () => {
-            const testFabric = new Fabric(FabricIndex(1), FabricId(BigInt(1)), NodeId(BigInt(1)), NodeId(BigInt(2)), ZERO, ZERO, KEY, VendorId(1), ZERO, ZERO, ZERO, ZERO, ZERO, "");
+            const testFabric = new Fabric(
+                FabricIndex(1),
+                FabricId(BigInt(1)),
+                NodeId(BigInt(1)),
+                NodeId(BigInt(2)),
+                ZERO,
+                ZERO,
+                KEY,
+                VendorId(1),
+                ZERO,
+                ZERO,
+                ZERO,
+                ZERO,
+                ZERO,
+                "",
+            );
             testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
 
-            const server = new FabricScopedAttributeServer(AttributeId(1), "test", TlvUInt8, true, false, 3, BasicInformationCluster);
+            const server = new FabricScopedAttributeServer(
+                AttributeId(1),
+                "test",
+                TlvUInt8,
+                true,
+                false,
+                3,
+                BasicInformationCluster,
+            );
             assert.strictEqual(server.getLocalForFabric(testFabric), 5);
         });
 
         it("should return the value from fabric scoped storage when changed", () => {
-            const testFabric = new Fabric(FabricIndex(1), FabricId(BigInt(1)), NodeId(BigInt(1)), NodeId(BigInt(2)), ZERO, ZERO, KEY, VendorId(1), ZERO, ZERO, ZERO, ZERO, ZERO, "");
+            const testFabric = new Fabric(
+                FabricIndex(1),
+                FabricId(BigInt(1)),
+                NodeId(BigInt(1)),
+                NodeId(BigInt(2)),
+                ZERO,
+                ZERO,
+                KEY,
+                VendorId(1),
+                ZERO,
+                ZERO,
+                ZERO,
+                ZERO,
+                ZERO,
+                "",
+            );
 
-            const server = new FabricScopedAttributeServer(AttributeId(1), "test", TlvUInt8, true, false, 3, BasicInformationCluster);
+            const server = new FabricScopedAttributeServer(
+                AttributeId(1),
+                "test",
+                TlvUInt8,
+                true,
+                false,
+                3,
+                BasicInformationCluster,
+            );
             testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
             assert.strictEqual(server.getLocalForFabric(testFabric), 5);
         });
@@ -237,14 +434,43 @@ describe("AttributeServerTest", () => {
             let versionTriggered: number | undefined = undefined;
             let valueTriggered2: number | undefined = undefined;
             let oldValueTriggered2: number | undefined = undefined;
-            const testFabric = new Fabric(FabricIndex(1), FabricId(BigInt(1)), NodeId(BigInt(1)), NodeId(BigInt(2)), ZERO, ZERO, KEY, VendorId(1), ZERO, ZERO, ZERO, ZERO, ZERO, "");
+            const testFabric = new Fabric(
+                FabricIndex(1),
+                FabricId(BigInt(1)),
+                NodeId(BigInt(1)),
+                NodeId(BigInt(2)),
+                ZERO,
+                ZERO,
+                KEY,
+                VendorId(1),
+                ZERO,
+                ZERO,
+                ZERO,
+                ZERO,
+                ZERO,
+                "",
+            );
             testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
 
-            const server = new FabricScopedAttributeServer(AttributeId(1), "test", TlvUInt8, true, false, 3, BasicInformationCluster);
-            server.addValueChangeListener((value, version) => { valueTriggered = value; versionTriggered = version; });
-            server.addValueSetListener((newValue, oldValue) => { valueTriggered2 = newValue; oldValueTriggered2 = oldValue; });
+            const server = new FabricScopedAttributeServer(
+                AttributeId(1),
+                "test",
+                TlvUInt8,
+                true,
+                false,
+                3,
+                BasicInformationCluster,
+            );
+            server.addValueChangeListener((value, version) => {
+                valueTriggered = value;
+                versionTriggered = version;
+            });
+            server.addValueSetListener((newValue, oldValue) => {
+                valueTriggered2 = newValue;
+                oldValueTriggered2 = oldValue;
+            });
 
-            server.setLocalForFabric(7, testFabric)
+            server.setLocalForFabric(7, testFabric);
             assert.strictEqual(server.getLocalForFabric(testFabric), 7);
             assert.deepEqual(testFabric.getScopedClusterDataValue(BasicInformationCluster, "test"), { value: 7 });
             assert.strictEqual(valueTriggered, 7);
@@ -256,14 +482,42 @@ describe("AttributeServerTest", () => {
         it("should handle the value from fabric scoped storage when set and trigger ony external listeners", () => {
             let valueTriggered2: number | undefined = undefined;
             let oldValueTriggered2: number | undefined = undefined;
-            const testFabric = new Fabric(FabricIndex(1), FabricId(BigInt(1)), NodeId(BigInt(1)), NodeId(BigInt(2)), ZERO, ZERO, KEY, VendorId(1), ZERO, ZERO, ZERO, ZERO, ZERO, "");
+            const testFabric = new Fabric(
+                FabricIndex(1),
+                FabricId(BigInt(1)),
+                NodeId(BigInt(1)),
+                NodeId(BigInt(2)),
+                ZERO,
+                ZERO,
+                KEY,
+                VendorId(1),
+                ZERO,
+                ZERO,
+                ZERO,
+                ZERO,
+                ZERO,
+                "",
+            );
             testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
 
-            const server = new FabricScopedAttributeServer(AttributeId(1), "test", TlvUInt8, true, false, 3, BasicInformationCluster);
-            server.addValueChangeListener(() => { throw new Error("Should not be triggered"); });
-            server.addValueSetListener((newValue, oldValue) => { valueTriggered2 = newValue; oldValueTriggered2 = oldValue; });
+            const server = new FabricScopedAttributeServer(
+                AttributeId(1),
+                "test",
+                TlvUInt8,
+                true,
+                false,
+                3,
+                BasicInformationCluster,
+            );
+            server.addValueChangeListener(() => {
+                throw new Error("Should not be triggered");
+            });
+            server.addValueSetListener((newValue, oldValue) => {
+                valueTriggered2 = newValue;
+                oldValueTriggered2 = oldValue;
+            });
 
-            server.setLocalForFabric(5, testFabric)
+            server.setLocalForFabric(5, testFabric);
             assert.strictEqual(server.getLocalForFabric(testFabric), 5);
             assert.deepEqual(testFabric.getScopedClusterDataValue(BasicInformationCluster, "test"), { value: 5 });
             assert.strictEqual(valueTriggered2, 5);
@@ -271,23 +525,86 @@ describe("AttributeServerTest", () => {
         });
 
         it("should throw an error if only getter is implemented but writable", () => {
-            assert.throws(() => new FabricScopedAttributeServer(AttributeId(1), "test", TlvUInt8, true, false, 3, BasicInformationCluster, () => 7), { message: 'Getter and setter must be implemented together writeable fabric scoped attribute "test".' });
+            assert.throws(
+                () =>
+                    new FabricScopedAttributeServer(
+                        AttributeId(1),
+                        "test",
+                        TlvUInt8,
+                        true,
+                        false,
+                        3,
+                        BasicInformationCluster,
+                        () => 7,
+                    ),
+                { message: 'Getter and setter must be implemented together writeable fabric scoped attribute "test".' },
+            );
         });
 
         it("should throw an error when trying to get getter method value locally", () => {
-            const testFabric = new Fabric(FabricIndex(1), FabricId(BigInt(1)), NodeId(BigInt(1)), NodeId(BigInt(2)), ZERO, ZERO, KEY, VendorId(1), ZERO, ZERO, ZERO, ZERO, ZERO, "");
+            const testFabric = new Fabric(
+                FabricIndex(1),
+                FabricId(BigInt(1)),
+                NodeId(BigInt(1)),
+                NodeId(BigInt(2)),
+                ZERO,
+                ZERO,
+                KEY,
+                VendorId(1),
+                ZERO,
+                ZERO,
+                ZERO,
+                ZERO,
+                ZERO,
+                "",
+            );
             testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
 
-            const server = new FabricScopedAttributeServer(AttributeId(1), "test", TlvUInt8, false, false, 3, BasicInformationCluster, () => 7);
-            assert.throws(() => server.getLocalForFabric(testFabric), { message: 'Fabric scoped attribute "test" can not be read locally when a custom getter is defined.' });
+            const server = new FabricScopedAttributeServer(
+                AttributeId(1),
+                "test",
+                TlvUInt8,
+                false,
+                false,
+                3,
+                BasicInformationCluster,
+                () => 7,
+            );
+            assert.throws(() => server.getLocalForFabric(testFabric), {
+                message: 'Fabric scoped attribute "test" can not be read locally when a custom getter is defined.',
+            });
         });
 
         it("should return value from getter when used non-locally", () => {
-            const testFabric = new Fabric(FabricIndex(1), FabricId(BigInt(1)), NodeId(BigInt(1)), NodeId(BigInt(2)), ZERO, ZERO, KEY, VendorId(1), ZERO, ZERO, ZERO, ZERO, ZERO, "");
+            const testFabric = new Fabric(
+                FabricIndex(1),
+                FabricId(BigInt(1)),
+                NodeId(BigInt(1)),
+                NodeId(BigInt(2)),
+                ZERO,
+                ZERO,
+                KEY,
+                VendorId(1),
+                ZERO,
+                ZERO,
+                ZERO,
+                ZERO,
+                ZERO,
+                "",
+            );
             const testSession = { getAssociatedFabric: () => testFabric } as SecureSession<MatterDevice>;
             testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
 
-            const server = new FabricScopedAttributeServer(AttributeId(1), "test", TlvUInt8, false, false, 3, BasicInformationCluster, () => 7);
+            const server = new FabricScopedAttributeServer(
+                AttributeId(1),
+                "test",
+                TlvUInt8,
+                false,
+                false,
+                3,
+                BasicInformationCluster,
+                () => 7,
+            );
             assert.strictEqual(server.get(testSession, true), 7);
         });
 
@@ -296,13 +613,44 @@ describe("AttributeServerTest", () => {
             let versionTriggered: number | undefined = undefined;
             let valueTriggered2: number | undefined = undefined;
             let oldValueTriggered2: number | undefined = undefined;
-            const testFabric = new Fabric(FabricIndex(1), FabricId(BigInt(1)), NodeId(BigInt(1)), NodeId(BigInt(2)), ZERO, ZERO, KEY, VendorId(1), ZERO, ZERO, ZERO, ZERO, ZERO, "");
+            const testFabric = new Fabric(
+                FabricIndex(1),
+                FabricId(BigInt(1)),
+                NodeId(BigInt(1)),
+                NodeId(BigInt(2)),
+                ZERO,
+                ZERO,
+                KEY,
+                VendorId(1),
+                ZERO,
+                ZERO,
+                ZERO,
+                ZERO,
+                ZERO,
+                "",
+            );
             const testSession = { getAssociatedFabric: () => testFabric } as SecureSession<MatterDevice>;
 
-            const server = new FabricScopedAttributeServer(AttributeId(1), "test", TlvUInt8, true, false, 3, BasicInformationCluster, () => 7, () => true);
+            const server = new FabricScopedAttributeServer(
+                AttributeId(1),
+                "test",
+                TlvUInt8,
+                true,
+                false,
+                3,
+                BasicInformationCluster,
+                () => 7,
+                () => true,
+            );
             server.init(undefined, 2);
-            server.addValueChangeListener((value, version) => { valueTriggered = value; versionTriggered = version; });
-            server.addValueSetListener((newValue, oldValue) => { valueTriggered2 = newValue; oldValueTriggered2 = oldValue; });
+            server.addValueChangeListener((value, version) => {
+                valueTriggered = value;
+                versionTriggered = version;
+            });
+            server.addValueSetListener((newValue, oldValue) => {
+                valueTriggered2 = newValue;
+                oldValueTriggered2 = oldValue;
+            });
 
             server.set(9, testSession);
             assert.strictEqual(server.get(testSession, false), 7);
@@ -312,5 +660,4 @@ describe("AttributeServerTest", () => {
             assert.strictEqual(oldValueTriggered2, 7);
         });
     });
-
 });

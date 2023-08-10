@@ -9,7 +9,7 @@ import { Time, Timer, TimerCallback } from "./Time.js";
 
 class TimerFake implements Timer {
     isRunning = false;
-    private readonly callback: TimerCallback
+    private readonly callback: TimerCallback;
 
     constructor(
         private readonly timeFake: TimeFake,
@@ -22,7 +22,7 @@ class TimerFake implements Timer {
             this.callback = () => {
                 this.isRunning = false;
                 callback();
-            }
+            };
         }
     }
 
@@ -50,11 +50,9 @@ class IntervalFake extends TimerFake {
 }
 
 export class TimeFake extends Time {
-    private readonly callbacks = new Array<{ atMs: number, callback: TimerCallback }>();
+    private readonly callbacks = new Array<{ atMs: number; callback: TimerCallback }>();
 
-    constructor(
-        private timeMs: number,
-    ) {
+    constructor(private timeMs: number) {
         super();
     }
 

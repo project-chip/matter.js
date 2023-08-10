@@ -25,24 +25,24 @@ const TEST_DEFINITIONS = [
     "Mom",
     "[AB].a",
     "[LF & PA_LF & ABS]",
-    "!USR & (PIN | RID | FGP)"
-]
+    "!USR & (PIN | RID | FGP)",
+];
 
 const TEST_DEFINITIONS2 = {
-    "(AX | WBL)": "AX | WBL"
-}
+    "(AX | WBL)": "AX | WBL",
+};
 
 function testOne(definition: string, expected = definition) {
     describe(definition, () => {
         it("parses", () => {
             expect(() => new Conformance(definition)).not.toThrow();
-        })
+        });
 
         it("serializes", () => {
             const conformance = new Conformance(definition);
             expect(`${conformance}`).toBe(expected);
-        })
-    })
+        });
+    });
 }
 
 describe("Conformance", () => {
@@ -54,6 +54,6 @@ describe("Conformance", () => {
             const conformance = new Conformance("%");
             expect(conformance.errors?.length).toBe(1);
             expect(conformance.toString()).toBe("");
-        })
-    })
-})
+        });
+    });
+});

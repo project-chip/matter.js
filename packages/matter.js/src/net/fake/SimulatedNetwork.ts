@@ -5,9 +5,9 @@
  */
 
 import { Listener } from "../../common/TransportInterface.js";
-import { singleton } from "../../util/Singleton.js";
-import { ByteArray } from "../../util/ByteArray.js";
 import { Logger } from "../../log/Logger.js";
+import { ByteArray } from "../../util/ByteArray.js";
+import { singleton } from "../../util/Singleton.js";
 
 export type ListenerFunc = (netInterface: string, peerAddress: string, peerPort: number, data: ByteArray) => void;
 
@@ -30,7 +30,7 @@ export class SimulatedNetwork {
         listeners.push(listener);
         return {
             close: async () => this.offUdpData(host, port, listener),
-        }
+        };
     }
 
     private offUdpData(host: string | undefined, port: number, listenerToRemove: ListenerFunc) {
@@ -46,12 +46,15 @@ export class SimulatedNetwork {
     }
 
     sendUdp(localAddress: string, localPort: number, remoteAddress: string, remotePort: number, data: ByteArray) {
-        [`${remoteAddress}:${remotePort}`, `*:${remotePort}`].forEach(ipPort => this.listenersMap.get(ipPort)?.forEach(listener => {
-            try {
-                listener(FAKE_INTERFACE_NAME, localAddress, localPort, data);
-            } catch (error) {
-                logger.error(error);
-            }
-        }));
+        [`${remoteAddress}:${remotePort}`, `*:${remotePort}`].forEach(
+            ipPort =>
+                this.listenersMap.get(ipPort)?.forEach(listener => {
+                    try {
+                        listener(FAKE_INTERFACE_NAME, localAddress, localPort, data);
+                    } catch (error) {
+                        logger.error(error);
+                    }
+                }),
+        );
     }
 }

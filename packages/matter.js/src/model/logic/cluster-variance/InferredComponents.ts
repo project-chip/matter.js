@@ -13,10 +13,10 @@ import { VarianceCondition } from "./VarianceCondition.js";
  * Lists mandatory and optional elements for a specific context.
  */
 export type InferredComponent = {
-    mandatory: ValueModel[],
-    optional: ValueModel[],
-    condition?: VarianceCondition
-}
+    mandatory: ValueModel[];
+    optional: ValueModel[];
+    condition?: VarianceCondition;
+};
 
 /**
  * A list of component definitions.
@@ -33,12 +33,9 @@ export function InferredComponents(cluster: ClusterModel): InferredComponents {
 }
 
 type VarianceMatcher = {
-    pattern: RegExp,
-    processor: (
-        add: (optional?: boolean, condition?: VarianceCondition) => void,
-        match: string[]
-    ) => void
-}
+    pattern: RegExp;
+    processor: (add: (optional?: boolean, condition?: VarianceCondition) => void, match: string[]) => void;
+};
 
 function pattern(...parts: string[]) {
     parts = parts.map(p => {
@@ -89,26 +86,26 @@ const VarianceMatchers: VarianceMatcher[] = [
     // Mandatory, unconditional
     {
         pattern: pattern("(?:|M)"),
-        processor: (add) => {
+        processor: add => {
             add();
-        }
+        },
     },
 
     // Optional, unconditional
     {
         pattern: pattern("(?:O|desc)"),
-        processor: (add) => {
+        processor: add => {
             add(true);
-        }
+        },
     },
 
     // Optional, unconditional.  Ignores field expression which can only be
     // enforced at runtime
     {
         pattern: pattern(FIELD, " > ", "\\d+"),
-        processor: (add) => {
+        processor: add => {
             add(true);
-        }
+        },
     },
 
     // FOO & fieldName (field ignored as must be runtime enforced)
@@ -116,23 +113,23 @@ const VarianceMatchers: VarianceMatcher[] = [
         pattern: pattern(FEATURE, AND, FIELD),
         processor: (add, match) => {
             add(true, { allOf: match });
-        }
+        },
     },
 
     // FOO<& BAR>*
     {
         pattern: pattern(CONJUNCT_FEATURES),
         processor: (add, match) => {
-            add(false, { allOf: splitConjunction(match[0]) })
-        }
+            add(false, { allOf: splitConjunction(match[0]) });
+        },
     },
 
     // [FOO<& BAR>*]
     {
         pattern: pattern("[", CONJUNCT_FEATURES, "]"),
         processor: (add, match) => {
-            add(true, { allOf: splitConjunction(match[0]) })
-        }
+            add(true, { allOf: splitConjunction(match[0]) });
+        },
     },
 
     // FOO<| BAR*> or FOO<, BAR>*
@@ -140,7 +137,7 @@ const VarianceMatchers: VarianceMatcher[] = [
         pattern: pattern(DISJUNCT_FEATURES),
         processor: (add, match) => {
             add(false, { anyOf: splitDisjunction(match[0]) });
-        }
+        },
     },
 
     // FOO, [BAR]
@@ -150,7 +147,7 @@ const VarianceMatchers: VarianceMatcher[] = [
             // Must add to two sets because optionality differs
             add(false, { allOf: [match[0]] });
             add(true, { allOf: [match[1]] });
-        }
+        },
     },
 
     // !FOO & BAR
@@ -158,7 +155,7 @@ const VarianceMatchers: VarianceMatcher[] = [
         pattern: pattern(NOT, FEATURE, AND, FEATURE),
         processor: (add, match) => {
             add(false, { allOf: [match[1]], not: match[0] });
-        }
+        },
     },
 
     // !FOO & [BAR]
@@ -166,7 +163,7 @@ const VarianceMatchers: VarianceMatcher[] = [
         pattern: pattern(NOT, FEATURE, AND, "[", FEATURE, "]"),
         processor: (add, match) => {
             add(true, { allOf: [match[1]], not: match[0] });
-        }
+        },
     },
 
     // !FOO & (BAR<| BIZ>*)
@@ -174,7 +171,7 @@ const VarianceMatchers: VarianceMatcher[] = [
         pattern: pattern(NOT, FEATURE, AND, "(", DISJUNCT_FEATURES, ")"),
         processor: (add, match) => {
             add(true, { allOf: splitDisjunction(match[1]), not: match[0] });
-        }
+        },
     },
 
     // !FOO
@@ -182,7 +179,7 @@ const VarianceMatchers: VarianceMatcher[] = [
         pattern: pattern(NOT, FEATURE),
         processor: (add, match) => {
             add(false, { not: match[0] });
-        }
+        },
     },
 
     // [!FOO]
@@ -190,7 +187,7 @@ const VarianceMatchers: VarianceMatcher[] = [
         pattern: pattern("[", NOT, FEATURE, "]"),
         processor: (add, match) => {
             add(true, { not: match[0] });
-        }
+        },
     },
 
     // FOO & BAR, [BIZ]
@@ -199,8 +196,8 @@ const VarianceMatchers: VarianceMatcher[] = [
         processor: (add, match) => {
             add(false, { allOf: match.slice(0, 2) });
             add(true, { allOf: [match[2]] });
-        }
-    }
+        },
+    },
 ];
 
 function addElement(components: InferredComponents, element: ValueModel) {
@@ -243,7 +240,12 @@ function addElement(components: InferredComponents, element: ValueModel) {
     throw new NotImplementedError(`New rule needed for conformance "${element.conformance}" (element ${element.path})`);
 }
 
-function addVariance(components: InferredComponents, element: ValueModel, optional?: boolean, condition?: VarianceCondition) {
+function addVariance(
+    components: InferredComponents,
+    element: ValueModel,
+    optional?: boolean,
+    condition?: VarianceCondition,
+) {
     let into: InferredComponent | undefined;
 
     // Find set
@@ -259,8 +261,8 @@ function addVariance(components: InferredComponents, element: ValueModel, option
         into = {
             condition,
             optional: [],
-            mandatory: []
-        }
+            mandatory: [],
+        };
         if (condition) {
             components.push(into);
         } else {

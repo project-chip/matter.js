@@ -20,11 +20,16 @@ const BinaryOperatorMap = {
     [Conformance.Operator.GT]: ">",
     [Conformance.Operator.LT]: "<",
     [Conformance.Operator.GTE]: ">=",
-    [Conformance.Operator.LTE]: "<="
-}
+    [Conformance.Operator.LTE]: "<=",
+};
 
 export function addConformance(builder: ValidatorBuilder, model: ValueModel, conformance: Conformance) {
-    builder.addTest(`(${expr(conformance.ast).text})`, "CONFORMANCE_VIOLATION", model, `Value of ${camelize(model.name, false)} is disallowed by conformance`);
+    builder.addTest(
+        `(${expr(conformance.ast).text})`,
+        "CONFORMANCE_VIOLATION",
+        model,
+        `Value of ${camelize(model.name, false)} is disallowed by conformance`,
+    );
 
     // Generates JS equivalent of conformance expression.  While generating the
     // expression we also track feature conformance because feature conformance
@@ -36,7 +41,7 @@ export function addConformance(builder: ValidatorBuilder, model: ValueModel, con
     // The generated value is a try-state expression.  "true" means the test
     // passes.  "false" means the test did not pass but in a group subsequent
     // tests should continue.  "null" means a group should fail entirely
-    function expr(ast: Conformance.Ast | undefined): { text: string, feature?: boolean } {
+    function expr(ast: Conformance.Ast | undefined): { text: string; feature?: boolean } {
         if (!ast) {
             logger.error("Undefined conformance AST type");
             return { text: "true" };
@@ -63,8 +68,12 @@ export function addConformance(builder: ValidatorBuilder, model: ValueModel, con
             case Conformance.Special.Choice:
                 builder.hasChoices = true;
                 const choice = ast.param;
-                const choiceName = `${model.parent?.path || "?"}.${choice.name}`
-                return { text: `this.testChoice(${JSON.stringify(choiceName)}, ${expr(choice.expr).text}, (v !== undefined && v !== null), ${choice.num}, ${choice.orMore ? "true" : "false"})` };
+                const choiceName = `${model.parent?.path || "?"}.${choice.name}`;
+                return {
+                    text: `this.testChoice(${JSON.stringify(choiceName)}, ${
+                        expr(choice.expr).text
+                    }, (v !== undefined && v !== null), ${choice.num}, ${choice.orMore ? "true" : "false"})`,
+                };
 
             case Conformance.Special.Group:
                 if (!Array.isArray(ast.param)) {
@@ -83,29 +92,28 @@ export function addConformance(builder: ValidatorBuilder, model: ValueModel, con
                 }
                 return { text: `record[${JSON.stringify(name)}]` };
 
-            case Conformance.Special.OptionalIf:
-                {
-                    const e = expr(ast.param);
+            case Conformance.Special.OptionalIf: {
+                const e = expr(ast.param);
 
-                    // If e is the result of a positive conformance test then
-                    // accept any value
-                    if (e.feature === true) {
-                        // Do not set feature flag; feature specialization
-                        // doesn't work on an optional group
-                        return { text: "true" };
-                    }
-
-                    // If e is the result of a failing conformance test then accept
-                    // no values
-                    if (e.feature === false) {
-                        // Do not set feature flag (same as above)
-                        return { text: "(v === undefined || v === null)" };
-                    }
-
-                    // Not sure if this is legal but whatever the expression is,
-                    // also except missing values
-                    return { text: `(${e.text} || v === undefined || v === null)` };
+                // If e is the result of a positive conformance test then
+                // accept any value
+                if (e.feature === true) {
+                    // Do not set feature flag; feature specialization
+                    // doesn't work on an optional group
+                    return { text: "true" };
                 }
+
+                // If e is the result of a failing conformance test then accept
+                // no values
+                if (e.feature === false) {
+                    // Do not set feature flag (same as above)
+                    return { text: "(v === undefined || v === null)" };
+                }
+
+                // Not sure if this is legal but whatever the expression is,
+                // also except missing values
+                return { text: `(${e.text} || v === undefined || v === null)` };
+            }
 
             case Conformance.Special.Value:
                 return { text: `(record[${JSON.stringify(ast.param)}] == undefined ? true : false)` };
@@ -124,53 +132,54 @@ export function addConformance(builder: ValidatorBuilder, model: ValueModel, con
             case Conformance.Operator.LT:
             case Conformance.Operator.GTE:
             case Conformance.Operator.LTE:
-            case Conformance.Operator.XOR:
-                {
-                    const e1 = expr(ast.param.lhs);
-                    const e2 = expr(ast.param.rhs);
+            case Conformance.Operator.XOR: {
+                const e1 = expr(ast.param.lhs);
+                const e2 = expr(ast.param.rhs);
 
-                    // Reduce feature conjunction/disjunction to a single
-                    // boolean expression
-                    if (e1.feature !== undefined && e2.feature !== undefined) {
-                        let feature: boolean | undefined;
-                        switch (ast.type) {
-                            case Conformance.Operator.AND:
-                                feature = e1.feature && e2.feature;
-                                break;
+                // Reduce feature conjunction/disjunction to a single
+                // boolean expression
+                if (e1.feature !== undefined && e2.feature !== undefined) {
+                    let feature: boolean | undefined;
+                    switch (ast.type) {
+                        case Conformance.Operator.AND:
+                            feature = e1.feature && e2.feature;
+                            break;
 
-                            case Conformance.Operator.OR:
-                                feature = e1.feature || e2.feature;
-                                break;
+                        case Conformance.Operator.OR:
+                            feature = e1.feature || e2.feature;
+                            break;
 
-                            case Conformance.Operator.XOR:
-                                feature = e1.feature !== e2.feature;
-                                break;
-                        }
-                        if (feature !== undefined) {
-                            return { text: feature ? "(v !== undefined && v !== null)" : "(v === undefined || v === null)", feature };
-                        }
+                        case Conformance.Operator.XOR:
+                            feature = e1.feature !== e2.feature;
+                            break;
                     }
-
-                    // XOR has no native equivalent except for bitwise ^ which
-                    // won't work with our tri-state return values
-                    if (ast.type == Conformance.Operator.XOR) {
-                        return { text: `${e1.text} ? !${e2.text} : ${e2.text}` };
+                    if (feature !== undefined) {
+                        return {
+                            text: feature ? "(v !== undefined && v !== null)" : "(v === undefined || v === null)",
+                            feature,
+                        };
                     }
-
-                    return { text: `${e1.text} ${BinaryOperatorMap[ast.type]} ${e2.text}` }
                 }
 
-            case Conformance.Operator.NOT:
-                {
-                    const e = expr(ast.param);
-
-                    // Invert feature state
-                    if (e.feature !== undefined) {
-                        e.feature = !e.feature;
-                    }
-
-                    return { text: `!${e.text}`, feature: e.feature };
+                // XOR has no native equivalent except for bitwise ^ which
+                // won't work with our tri-state return values
+                if (ast.type == Conformance.Operator.XOR) {
+                    return { text: `${e1.text} ? !${e2.text} : ${e2.text}` };
                 }
+
+                return { text: `${e1.text} ${BinaryOperatorMap[ast.type]} ${e2.text}` };
+            }
+
+            case Conformance.Operator.NOT: {
+                const e = expr(ast.param);
+
+                // Invert feature state
+                if (e.feature !== undefined) {
+                    e.feature = !e.feature;
+                }
+
+                return { text: `!${e.text}`, feature: e.feature };
+            }
         }
     }
 }

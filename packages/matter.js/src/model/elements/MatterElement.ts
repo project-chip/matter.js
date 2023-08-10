@@ -17,10 +17,10 @@ import { NodeElement } from "./NodeElement.js";
  * The root model element.
  */
 export type MatterElement = BaseElement & {
-    tag: `${ElementTag.Matter}`,
-    version?: string,
-    children: MatterElement.Child[]
-}
+    tag: `${ElementTag.Matter}`;
+    version?: string;
+    children: MatterElement.Child[];
+};
 
 export function MatterElement(definition: MatterElement.Properties) {
     return BaseElement(MatterElement.Tag, definition) as MatterElement;
@@ -30,5 +30,11 @@ export namespace MatterElement {
     export type Tag = ElementTag.Matter;
     export const Tag = ElementTag.Matter;
     export type Properties = BaseElement.Properties<MatterElement>;
-    export type Child = ClusterElement | DeviceTypeElement | FabricElement | NodeElement | DatatypeElement | AttributeElement;
+    export type Child =
+        | ClusterElement
+        | DeviceTypeElement
+        | FabricElement
+        | NodeElement
+        | DatatypeElement
+        | AttributeElement;
 }

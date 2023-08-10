@@ -176,7 +176,7 @@ export abstract class Model {
                     return true;
                 }
                 return false;
-            }
+            },
         });
 
         // Clone child array because if it references a former parent they'll
@@ -242,7 +242,7 @@ export abstract class Model {
      * Add a child.  children.push works too but only accepts models.
      */
     add(...children: (Model | AnyElement)[]) {
-        this.children.push(...children as any[]);
+        this.children.push(...(children as any[]));
     }
 
     /**
@@ -273,9 +273,8 @@ export abstract class Model {
      * Retrieve a specific model by ID or name.
      */
     get<T extends Model>(constructor: Model.Constructor<T>, key: number | string) {
-        return this.children.find(
-            c => c instanceof constructor
-                && typeof key === "number" ? c.effectiveId === key : c.name === key
+        return this.children.find(c =>
+            c instanceof constructor && typeof key === "number" ? c.effectiveId === key : c.name === key,
         ) as T;
     }
 
@@ -310,8 +309,8 @@ export abstract class Model {
             code,
             source: this.path,
             message,
-            xref: this.effectiveXref?.toString()
-        })
+            xref: this.effectiveXref?.toString(),
+        });
     }
 
     /**
@@ -361,7 +360,10 @@ export abstract class Model {
     /**
      * Search the inheritance chain for a child property.
      */
-    member(key: ModelTraversal.ElementSelector, allowedTags = [ElementTag.Datatype, ElementTag.Attribute]): Model | undefined {
+    member(
+        key: ModelTraversal.ElementSelector,
+        allowedTags = [ElementTag.Datatype, ElementTag.Attribute],
+    ): Model | undefined {
         return new ModelTraversal().findMember(this, key, allowedTags);
     }
 
@@ -391,15 +393,17 @@ export abstract class Model {
 export namespace Model {
     export type Constructor<T extends Model> = abstract new (...args: any) => T;
 
-    export type LookupPredicate<T extends Model> = Constructor<T> | { type: Constructor<T>, test: (model: Model) => boolean };
+    export type LookupPredicate<T extends Model> =
+        | Constructor<T>
+        | { type: Constructor<T>; test: (model: Model) => boolean };
 
     export type PropertyValidation = {
-        name: string,
-        type: string | (new (...args: any[]) => any) | { [key: string | number]: any } | undefined,
-        required?: boolean,
-        nullable?: boolean,
-        values?: { [name: string]: any }
-    }
+        name: string;
+        type: string | (new (...args: any[]) => any) | { [key: string | number]: any } | undefined;
+        required?: boolean;
+        nullable?: boolean;
+        values?: { [name: string]: any };
+    };
 
     export class CrossReference implements Specification.CrossReference {
         document: Specification;
@@ -412,7 +416,7 @@ export namespace Model {
         }
 
         toString() {
-            return `${this.document}§${this.section}`
+            return `${this.document}§${this.section}`;
         }
 
         static get(xref: Specification.CrossReference) {
@@ -421,7 +425,7 @@ export namespace Model {
             if (canonical) {
                 return canonical;
             }
-            return this.instances[key] = new CrossReference(xref);
+            return (this.instances[key] = new CrossReference(xref));
         }
     }
 }

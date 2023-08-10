@@ -4,16 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InteractionClient } from "../../protocol/interaction/InteractionClient.js";
-import { Attribute, AttributeError } from "../Cluster.js";
-import { TlvSchema } from "../../tlv/TlvSchema.js";
-import { Globals } from "../../model/index.js";
-import { FabricIndex } from "../../datatype/FabricIndex.js";
-import { NoAssociatedFabricError } from "../../session/SecureSession.js";
-import { tryCatch } from "../../common/TryCatchHandler.js";
 import { InternalError } from "../../common/MatterError.js";
-import { EndpointNumber } from "../../datatype/EndpointNumber.js";
+import { tryCatch } from "../../common/TryCatchHandler.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
+import { EndpointNumber } from "../../datatype/EndpointNumber.js";
+import { FabricIndex } from "../../datatype/FabricIndex.js";
+import { Globals } from "../../model/index.js";
+import { InteractionClient } from "../../protocol/interaction/InteractionClient.js";
+import { NoAssociatedFabricError } from "../../session/SecureSession.js";
+import { TlvSchema } from "../../tlv/TlvSchema.js";
+import { Attribute, AttributeError } from "../Cluster.js";
 
 export class AttributeClient<T> {
     private readonly isWritable: boolean;
@@ -49,17 +49,21 @@ export class AttributeClient<T> {
             value = this.schema.removeField(
                 value,
                 <number>Globals.FabricIndex.id,
-                (existingFieldIndex) => existingFieldIndex === FabricIndex.OMIT_FABRIC
+                existingFieldIndex => existingFieldIndex === FabricIndex.OMIT_FABRIC,
             );
-            value = tryCatch(() => {
-                const sessionFabric = interactionClient.session.getAssociatedFabric();
-                // also remove fabric index if it is the same as the session fabric
-                return this.schema.removeField(
-                    value,
-                    <number>Globals.FabricIndex.id,
-                    (existingFieldIndex) => existingFieldIndex.index === sessionFabric.fabricIndex
-                );
-            }, NoAssociatedFabricError, value);
+            value = tryCatch(
+                () => {
+                    const sessionFabric = interactionClient.session.getAssociatedFabric();
+                    // also remove fabric index if it is the same as the session fabric
+                    return this.schema.removeField(
+                        value,
+                        <number>Globals.FabricIndex.id,
+                        existingFieldIndex => existingFieldIndex.index === sessionFabric.fabricIndex,
+                    );
+                },
+                NoAssociatedFabricError,
+                value,
+            );
         }
 
         return await interactionClient.setAttribute<T>(this.endpointId, this.clusterId, this.attribute, value);
@@ -70,7 +74,12 @@ export class AttributeClient<T> {
         if (interactionClient === undefined) {
             throw new InternalError("No InteractionClient available");
         }
-        return await interactionClient.getAttribute(this.endpointId, this.clusterId, this.attribute, alwaysRequestFromRemote);
+        return await interactionClient.getAttribute(
+            this.endpointId,
+            this.clusterId,
+            this.attribute,
+            alwaysRequestFromRemote,
+        );
     }
 
     async getWithVersion(alwaysRequestFromRemote = false) {
@@ -78,7 +87,12 @@ export class AttributeClient<T> {
         if (interactionClient === undefined) {
             throw new InternalError("No InteractionClient available");
         }
-        return await interactionClient.getAttributeWithVersion(this.endpointId, this.clusterId, this.attribute, alwaysRequestFromRemote);
+        return await interactionClient.getAttributeWithVersion(
+            this.endpointId,
+            this.clusterId,
+            this.attribute,
+            alwaysRequestFromRemote,
+        );
     }
 
     async subscribe(minIntervalS: number, maxIntervalS: number, isFabricFiltered?: boolean) {
@@ -86,7 +100,15 @@ export class AttributeClient<T> {
         if (interactionClient === undefined) {
             throw new InternalError("No InteractionClient available");
         }
-        return await interactionClient.subscribeAttribute(this.endpointId, this.clusterId, this.attribute, minIntervalS, maxIntervalS, isFabricFiltered, this.update.bind(this));
+        return await interactionClient.subscribeAttribute(
+            this.endpointId,
+            this.clusterId,
+            this.attribute,
+            minIntervalS,
+            maxIntervalS,
+            isFabricFiltered,
+            this.update.bind(this),
+        );
     }
 
     update(value: T) {

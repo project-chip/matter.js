@@ -4,19 +4,28 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Channel, Listener, ServerAddress, InternalError } from "@project-chip/matter.js/common";
-import { ByteArray, getPromiseResolver } from "@project-chip/matter.js/util";
-import {
-    BLE_MATTER_C1_CHARACTERISTIC_UUID, BLE_MATTER_C2_CHARACTERISTIC_UUID, BLE_MATTER_SERVICE_UUID,
-    BTP_CONN_RSP_TIMEOUT_MS, BTP_MAXIMUM_WINDOW_SIZE, BTP_SUPPORTED_VERSIONS, BtpSessionHandler,
-    BLE_MATTER_C3_CHARACTERISTIC_UUID, BLE_MAXIMUM_BTP_MTU, Ble, BtpFlowError, BleError
-} from "@project-chip/matter.js/ble";
-import { Logger } from "@project-chip/matter.js/log";
-import { BtpCodec } from "@project-chip/matter.js/codec";
-import { Time } from "@project-chip/matter.js/time";
-import { BleScanner } from "./BleScanner";
 import type { Characteristic, Peripheral } from "@abandonware/noble";
+import {
+    Ble,
+    BleError,
+    BLE_MATTER_C1_CHARACTERISTIC_UUID,
+    BLE_MATTER_C2_CHARACTERISTIC_UUID,
+    BLE_MATTER_C3_CHARACTERISTIC_UUID,
+    BLE_MATTER_SERVICE_UUID,
+    BLE_MAXIMUM_BTP_MTU,
+    BtpFlowError,
+    BtpSessionHandler,
+    BTP_CONN_RSP_TIMEOUT_MS,
+    BTP_MAXIMUM_WINDOW_SIZE,
+    BTP_SUPPORTED_VERSIONS,
+} from "@project-chip/matter.js/ble";
+import { BtpCodec } from "@project-chip/matter.js/codec";
+import { Channel, InternalError, Listener, ServerAddress } from "@project-chip/matter.js/common";
+import { Logger } from "@project-chip/matter.js/log";
 import { NetInterface } from "@project-chip/matter.js/net";
+import { Time } from "@project-chip/matter.js/time";
+import { ByteArray, getPromiseResolver } from "@project-chip/matter.js/util";
+import { BleScanner } from "./BleScanner";
 
 const logger = Logger.get("BleChannel");
 
@@ -41,7 +50,7 @@ function nobleUuidToUuid(uuid: string): string {
         uuid.substring(20, 32),
     ];
 
-    return parts.join('-');
+    return parts.join("-");
 }
 
 export class NobleBleCentralInterface implements NetInterface {
@@ -57,12 +66,18 @@ export class NobleBleCentralInterface implements NetInterface {
         }
 
         // Get the peripheral by address and connect to it.
-        const { peripheral, hasAdditionalAdvertisementData } = (Ble.get().getBleScanner() as BleScanner).getDiscoveredDevice(address.peripheralAddress);
+        const { peripheral, hasAdditionalAdvertisementData } = (
+            Ble.get().getBleScanner() as BleScanner
+        ).getDiscoveredDevice(address.peripheralAddress);
         if (peripheral.state === "connected" || peripheral.state === "connecting") {
-            throw new BleError(`Peripheral ${address.peripheralAddress} is already connected or connecting. Only one connection supported right now.`);
+            throw new BleError(
+                `Peripheral ${address.peripheralAddress} is already connected or connecting. Only one connection supported right now.`,
+            );
         }
         if (this.openChannels.has(address)) {
-            throw new BleError(`Peripheral ${address.peripheralAddress} is already connected. Only one connection supported right now.`);
+            throw new BleError(
+                `Peripheral ${address.peripheralAddress} is already connected. Only one connection supported right now.`,
+            );
         }
         await peripheral.connectAsync();
 
@@ -82,7 +97,7 @@ export class NobleBleCentralInterface implements NetInterface {
 
             for (const characteristic of characteristics) {
                 // Loop through each characteristic and match them to the UUIDs that we know about.
-                logger.debug('found characteristic:', characteristic.uuid, characteristic.properties);
+                logger.debug("found characteristic:", characteristic.uuid, characteristic.properties);
 
                 switch (nobleUuidToUuid(characteristic.uuid)) {
                     case BLE_MATTER_C1_CHARACTERISTIC_UUID:
@@ -106,12 +121,18 @@ export class NobleBleCentralInterface implements NetInterface {
             }
 
             if (!characteristicC1ForWrite || !characteristicC2ForSubscribe) {
-                logger.debug('missing characteristics');
+                logger.debug("missing characteristics");
                 continue;
             }
 
             this.openChannels.set(address, peripheral);
-            return await NobleBleChannel.create(peripheral, characteristicC1ForWrite, characteristicC2ForSubscribe, this.onMatterMessageListener, additionalCommissioningRelatedData);
+            return await NobleBleChannel.create(
+                peripheral,
+                characteristicC1ForWrite,
+                characteristicC2ForSubscribe,
+                this.onMatterMessageListener,
+                additionalCommissioningRelatedData,
+            );
         }
 
         throw new BleError(`No Matter service found on peripheral ${peripheral.address}`);
@@ -120,8 +141,8 @@ export class NobleBleCentralInterface implements NetInterface {
     onData(listener: (socket: Channel<ByteArray>, data: ByteArray) => void): Listener {
         this.onMatterMessageListener = listener;
         return {
-            close: async () => await this.close()
-        }
+            close: async () => await this.close(),
+        };
     }
 
     async close() {
@@ -132,9 +153,13 @@ export class NobleBleCentralInterface implements NetInterface {
 }
 
 export class NobleBleChannel implements Channel<ByteArray> {
-
-    static async create(peripheral: Peripheral, characteristicC1ForWrite: Characteristic, characteristicC2ForSubscribe: Characteristic, onMatterMessageListener: ((socket: Channel<ByteArray>, data: ByteArray) => void), _additionalCommissioningRelatedData?: ByteArray): Promise<NobleBleChannel> {
-
+    static async create(
+        peripheral: Peripheral,
+        characteristicC1ForWrite: Characteristic,
+        characteristicC2ForSubscribe: Characteristic,
+        onMatterMessageListener: (socket: Channel<ByteArray>, data: ByteArray) => void,
+        _additionalCommissioningRelatedData?: ByteArray,
+    ): Promise<NobleBleChannel> {
         let mtu = peripheral.mtu ?? 0;
         if (mtu > BLE_MAXIMUM_BTP_MTU) {
             mtu = BLE_MAXIMUM_BTP_MTU;
@@ -149,20 +174,21 @@ export class NobleBleChannel implements Channel<ByteArray> {
         await characteristicC1ForWrite.writeAsync(Buffer.from(btpHandshakeRequest.buffer), false);
 
         const btpHandshakeTimeout = Time.getTimer(BTP_CONN_RSP_TIMEOUT_MS, async () => {
-            await peripheral.disconnectAsync()
-            logger.debug('Handshake Response not received. Disconnected from peripheral');
+            await peripheral.disconnectAsync();
+            logger.debug("Handshake Response not received. Disconnected from peripheral");
         }).start();
 
-        logger.debug('subscribing to C2 characteristic');
+        logger.debug("subscribing to C2 characteristic");
         await characteristicC2ForSubscribe.subscribeAsync();
 
         const { promise: handshakeResponseReceivedPromise, resolver } = await getPromiseResolver<Buffer>();
 
-        characteristicC2ForSubscribe.once('data', (data, isNotification) => {
+        characteristicC2ForSubscribe.once("data", (data, isNotification) => {
             logger.debug(`received first data on C2: ${data.toString("hex")} (isNotification: ${isNotification})`);
 
-            if (data[0] === 0x65 && data[1] === 0x6c && data.length === 6) { // Check if the first two bytes and length match the Matter handshake
-                logger.info(`Received Matter handshake response: ${data.toString('hex')}.`);
+            if (data[0] === 0x65 && data[1] === 0x6c && data.length === 6) {
+                // Check if the first two bytes and length match the Matter handshake
+                logger.info(`Received Matter handshake response: ${data.toString("hex")}.`);
                 btpHandshakeTimeout.stop();
                 resolver(data);
             }
@@ -177,7 +203,10 @@ export class NobleBleChannel implements Channel<ByteArray> {
                 return await characteristicC1ForWrite.writeAsync(Buffer.from(data.buffer), false);
             },
             // callback to disconnect the BLE connection
-            async () => void characteristicC2ForSubscribe.unsubscribeAsync().then(() => peripheral.disconnectAsync().then(() => logger.debug('disconnected from peripheral'))),
+            async () =>
+                void characteristicC2ForSubscribe
+                    .unsubscribeAsync()
+                    .then(() => peripheral.disconnectAsync().then(() => logger.debug("disconnected from peripheral"))),
             // callback to forward decoded and de-assembled Matter messages to ExchangeManager
             async (data: ByteArray) => {
                 if (onMatterMessageListener === undefined) {
@@ -187,7 +216,7 @@ export class NobleBleChannel implements Channel<ByteArray> {
             },
         );
 
-        characteristicC2ForSubscribe.on('data', (data, isNotification) => {
+        characteristicC2ForSubscribe.on("data", (data, isNotification) => {
             logger.debug(`received data on C2: ${data.toString("hex")} (isNotification: ${isNotification})`);
 
             void btpSession.handleIncomingBleData(new ByteArray(data));

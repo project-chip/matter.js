@@ -4,39 +4,53 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DnsCodec, DnsMessageType, DnsQuery, DnsRecord, DnsRecordClass, DnsRecordType, SrvRecordValue } from "../codec/DnsCodec.js";
-import { UdpMulticastServer } from "../net/UdpMulticastServer.js";
-import { MDNS_BROADCAST_IPV4, MDNS_BROADCAST_IPV6, MDNS_BROADCAST_PORT } from "./MdnsServer.js";
 import {
-    getCommissioningModeQname, getDeviceInstanceQname, getDeviceMatterQname, getDeviceTypeQname,
-    getLongDiscriminatorQname, getShortDiscriminatorQname, getVendorQname, MATTER_COMMISSION_SERVICE_QNAME,
-    MATTER_SERVICE_QNAME
-} from "./MdnsConsts.js";
-import { getPromiseResolver } from "../util/Promises.js";
-import { ByteArray } from "../util/ByteArray.js";
-import { Time, Timer } from "../time/Time.js";
-import { CommissionableDevice, CommissionableDeviceIdentifiers, Scanner } from "../common/Scanner.js";
-import { Fabric } from "../fabric/Fabric.js";
-import { NodeId } from "../datatype/NodeId.js";
-import { isIPv6 } from "../util/Ip.js";
-import { Logger } from "../log/Logger.js";
-import { ServerAddress, ServerAddressIp } from "../common/ServerAddress.js";
+    DnsCodec,
+    DnsMessageType,
+    DnsQuery,
+    DnsRecord,
+    DnsRecordClass,
+    DnsRecordType,
+    SrvRecordValue,
+} from "../codec/DnsCodec.js";
 import { ImplementationError } from "../common/MatterError.js";
+import { CommissionableDevice, CommissionableDeviceIdentifiers, Scanner } from "../common/Scanner.js";
+import { ServerAddress, ServerAddressIp } from "../common/ServerAddress.js";
+import { NodeId } from "../datatype/NodeId.js";
 import { VendorId } from "../datatype/VendorId.js";
+import { Fabric } from "../fabric/Fabric.js";
+import { Logger } from "../log/Logger.js";
+import { UdpMulticastServer } from "../net/UdpMulticastServer.js";
+import { Time, Timer } from "../time/Time.js";
+import { ByteArray } from "../util/ByteArray.js";
+import { isIPv6 } from "../util/Ip.js";
+import { getPromiseResolver } from "../util/Promises.js";
+import {
+    getCommissioningModeQname,
+    getDeviceInstanceQname,
+    getDeviceMatterQname,
+    getDeviceTypeQname,
+    getLongDiscriminatorQname,
+    getShortDiscriminatorQname,
+    getVendorQname,
+    MATTER_COMMISSION_SERVICE_QNAME,
+    MATTER_SERVICE_QNAME,
+} from "./MdnsConsts.js";
+import { MDNS_BROADCAST_IPV4, MDNS_BROADCAST_IPV6, MDNS_BROADCAST_PORT } from "./MdnsServer.js";
 
 const logger = Logger.get("MdnsScanner");
 
 type MatterServerRecordWithExpire = ServerAddressIp & {
-    expires: number,
+    expires: number;
 };
 
 type CommissionableDeviceRecordWithExpire = Omit<CommissionableDevice, "addresses"> & {
-    expires: number,
-    addresses: Map<string, MatterServerRecordWithExpire>, // Override addresses type to include expiration
-    instanceId: string, // instance ID
-    SD: number, // Additional Field for Short discriminator
-    V?: number, // Additional Field for Vendor ID
-    P?: number, // Additional Field for Product ID
+    expires: number;
+    addresses: Map<string, MatterServerRecordWithExpire>; // Override addresses type to include expiration
+    instanceId: string; // instance ID
+    SD: number; // Additional Field for Short discriminator
+    V?: number; // Additional Field for Vendor ID
+    P?: number; // Additional Field for Product ID
 };
 
 /** The initial number of seconds between two announcements. MDNS specs require 1-2 seconds, so lets use the middle. */
@@ -54,27 +68,29 @@ const MAX_MDNS_MESSAGE_SIZE = 1500;
  */
 export class MdnsScanner implements Scanner {
     static async create(netInterface?: string) {
-        return new MdnsScanner(await UdpMulticastServer.create({
-            netInterface: netInterface,
-            broadcastAddressIpv4: MDNS_BROADCAST_IPV4,
-            broadcastAddressIpv6: MDNS_BROADCAST_IPV6,
-            listeningPort: MDNS_BROADCAST_PORT,
-        }));
+        return new MdnsScanner(
+            await UdpMulticastServer.create({
+                netInterface: netInterface,
+                broadcastAddressIpv4: MDNS_BROADCAST_IPV4,
+                broadcastAddressIpv6: MDNS_BROADCAST_IPV6,
+                listeningPort: MDNS_BROADCAST_PORT,
+            }),
+        );
     }
 
-    private readonly activeAnnounceQueries = new Map<string, { queries: DnsQuery[], answers: DnsRecord<any>[] }>;
+    private readonly activeAnnounceQueries = new Map<string, { queries: DnsQuery[]; answers: DnsRecord<any>[] }>();
     private queryTimer?: Timer;
     private nextAnnounceIntervalSeconds = START_ANNOUNCE_INTERVAL_SECONDS;
 
     private readonly operationalDeviceRecords = new Map<string, Map<string, MatterServerRecordWithExpire>>();
     private readonly commissionableDeviceRecords = new Map<string, CommissionableDeviceRecordWithExpire>();
-    private readonly recordWaiters = new Map<string, { resolver: () => void, timer: Timer }>();
+    private readonly recordWaiters = new Map<string, { resolver: () => void; timer: Timer }>();
     private readonly periodicTimer: Timer;
 
-    constructor(
-        private readonly multicastServer: UdpMulticastServer,
-    ) {
-        multicastServer.onMessage((message, remoteIp, netInterface) => this.handleDnsMessage(message, remoteIp, netInterface));
+    constructor(private readonly multicastServer: UdpMulticastServer) {
+        multicastServer.onMessage((message, remoteIp, netInterface) =>
+            this.handleDnsMessage(message, remoteIp, netInterface),
+        );
         this.periodicTimer = Time.getPeriodicTimer(60 * 1000 /* 1 mn */, () => this.expire()).start();
     }
 
@@ -93,7 +109,9 @@ export class MdnsScanner implements Scanner {
 
         this.queryTimer = Time.getTimer(this.nextAnnounceIntervalSeconds * 1000, () => this.sendQueries()).start();
 
-        logger.debug(`Sending ${queries.length} query records for ${this.activeAnnounceQueries.size} queries with ${answers.length} known answers. Re-Announce in ${this.nextAnnounceIntervalSeconds} seconds`);
+        logger.debug(
+            `Sending ${queries.length} query records for ${this.activeAnnounceQueries.size} queries with ${answers.length} known answers. Re-Announce in ${this.nextAnnounceIntervalSeconds} seconds`,
+        );
 
         const nextAnnounceInterval = this.nextAnnounceIntervalSeconds * 2;
         this.nextAnnounceIntervalSeconds = Math.min(nextAnnounceInterval, 60 * 60 /* 1 hour */);
@@ -101,7 +119,7 @@ export class MdnsScanner implements Scanner {
         let queryMessage = DnsCodec.encode({
             messageType: DnsMessageType.Query,
             queries,
-            answers
+            answers,
         });
 
         if (queryMessage.length > MAX_MDNS_MESSAGE_SIZE) {
@@ -114,7 +132,8 @@ export class MdnsScanner implements Scanner {
             const includedAnswers = new Array<DnsRecord<any>>();
             while (true) {
                 const nextAnswer = answers.shift();
-                if (nextAnswer === undefined) { // We have included all messages, set the queryMessage correctly
+                if (nextAnswer === undefined) {
+                    // We have included all messages, set the queryMessage correctly
                     queryMessage = DnsCodec.encode({
                         messageType: DnsMessageType.Query,
                         queries,
@@ -126,7 +145,8 @@ export class MdnsScanner implements Scanner {
                 const nextAnswerLength = DnsCodec.encodeRecord(nextAnswer).length;
                 queryMessageSize += nextAnswerLength; // Add answers as long as size is ok
 
-                if (queryMessageSize > MAX_MDNS_MESSAGE_SIZE) { // New answer do not fit anymore, send out the message
+                if (queryMessageSize > MAX_MDNS_MESSAGE_SIZE) {
+                    // New answer do not fit anymore, send out the message
                     queryMessage = DnsCodec.encode({
                         messageType: DnsMessageType.TruncatedQuery,
                         queries,
@@ -143,7 +163,7 @@ export class MdnsScanner implements Scanner {
                     });
                     queryMessageSize = encodedMessage.length + nextAnswerLength;
                 }
-                includedAnswers.push(nextAnswer)
+                includedAnswers.push(nextAnswer);
             }
         }
 
@@ -180,8 +200,7 @@ export class MdnsScanner implements Scanner {
             logger.debug(`Removing last query ${queryId} and stopping announce timer`);
             this.queryTimer?.stop();
             this.nextAnnounceIntervalSeconds = START_ANNOUNCE_INTERVAL_SECONDS;
-        }
-        else {
+        } else {
             logger.debug(`Removing query ${queryId}`);
         }
     }
@@ -192,11 +211,14 @@ export class MdnsScanner implements Scanner {
     private getOperationalDeviceRecords(deviceMatterQname: string) {
         const recordMap = this.operationalDeviceRecords.get(deviceMatterQname);
         if (recordMap !== undefined) {
-            return this.sortServerEntries(Array.from(recordMap.values())).map(({ ip, port }) => ({ ip, port, type: "udp" })) as ServerAddressIp[];
+            return this.sortServerEntries(Array.from(recordMap.values())).map(({ ip, port }) => ({
+                ip,
+                port,
+                type: "udp",
+            })) as ServerAddressIp[];
         }
         return [];
     }
-
 
     /**
      * Sort the list of found IP/ports and make sure link-local IPv6 addresses come first, IPv6 next and IPv4 last.
@@ -213,13 +235,13 @@ export class MdnsScanner implements Scanner {
             } else if (!aIsIPv6 && bIsIPv6) {
                 return 1; // IPv4 comes after IPv6
             } else if (aIsIPv6 && bIsIPv6) {
-                if (a.ip.startsWith('fd') && !b.ip.startsWith('fd')) {
+                if (a.ip.startsWith("fd") && !b.ip.startsWith("fd")) {
                     return -1; // addresses starting with "fd" come before other IPv6 addresses
-                } else if (!a.ip.startsWith('fd') && b.ip.startsWith('fd')) {
+                } else if (!a.ip.startsWith("fd") && b.ip.startsWith("fd")) {
                     return 1; // addresses starting with "fd" come after other IPv6 addresses
-                } else if (a.ip.startsWith('fe80:') && !b.ip.startsWith('fe80:')) {
+                } else if (a.ip.startsWith("fe80:") && !b.ip.startsWith("fe80:")) {
                     return -1; // link-local IPv6 comes before other global IPv6 addresses
-                } else if (!a.ip.startsWith('fe80:') && b.ip.startsWith('fe80:')) {
+                } else if (!a.ip.startsWith("fe80:") && b.ip.startsWith("fe80:")) {
                     return 1; // link-local IPv6 comes after other global IPv6 addresses
                 }
             }
@@ -264,18 +286,24 @@ export class MdnsScanner implements Scanner {
      * Method to find an operational device (already commissioned) and return a promise with the list of discovered
      * IP/ports or an empty array if not found.
      */
-    async findOperationalDevice({ operationalId }: Fabric, nodeId: NodeId, timeoutSeconds = 5): Promise<ServerAddressIp[]> {
+    async findOperationalDevice(
+        { operationalId }: Fabric,
+        nodeId: NodeId,
+        timeoutSeconds = 5,
+    ): Promise<ServerAddressIp[]> {
         const deviceMatterQname = this.createOperationalMatterQName(operationalId, nodeId);
 
         let storedRecords = this.getOperationalDeviceRecords(deviceMatterQname);
         if (storedRecords.length === 0) {
             const { promise } = await this.registerWaiterPromise(deviceMatterQname, timeoutSeconds);
 
-            this.setQueryRecords(deviceMatterQname, [{
-                name: deviceMatterQname,
-                recordClass: DnsRecordClass.IN,
-                recordType: DnsRecordType.SRV
-            }]);
+            this.setQueryRecords(deviceMatterQname, [
+                {
+                    name: deviceMatterQname,
+                    recordClass: DnsRecordClass.IN,
+                    recordType: DnsRecordType.SRV,
+                },
+            ]);
 
             await promise;
             storedRecords = this.getOperationalDeviceRecords(deviceMatterQname);
@@ -298,31 +326,29 @@ export class MdnsScanner implements Scanner {
         const foundRecords = new Array<CommissionableDeviceRecordWithExpire>();
         if ("instanceId" in identifier) {
             foundRecords.push(...storedRecords.filter(({ instanceId }) => instanceId === identifier.instanceId));
-        }
-        else if ("longDiscriminator" in identifier) {
+        } else if ("longDiscriminator" in identifier) {
             foundRecords.push(...storedRecords.filter(({ D }) => D === identifier.longDiscriminator));
-        }
-        else if ("shortDiscriminator" in identifier) {
+        } else if ("shortDiscriminator" in identifier) {
             foundRecords.push(...storedRecords.filter(({ SD }) => SD === identifier.shortDiscriminator));
-        }
-        else if ("vendorId" in identifier) {
+        } else if ("vendorId" in identifier) {
             foundRecords.push(...storedRecords.filter(({ V }) => V === identifier.vendorId));
-        }
-        else if ("deviceType" in identifier) {
+        } else if ("deviceType" in identifier) {
             foundRecords.push(...storedRecords.filter(({ DT }) => DT === identifier.deviceType));
-        }
-        else if ("productId" in identifier) {
+        } else if ("productId" in identifier) {
             foundRecords.push(...storedRecords.filter(({ P }) => P === identifier.productId));
-        }
-        else if (Object.keys(identifier).length === 0) {
+        } else if (Object.keys(identifier).length === 0) {
             foundRecords.push(...storedRecords.filter(({ CM }) => CM === 1 || CM === 2));
         }
 
         return foundRecords.map(record => {
             return {
                 ...record,
-                addresses: this.sortServerEntries(Array.from(record.addresses.values())).map(({ ip, port }) => ({ ip, port, type: "udp" })) as ServerAddressIp[],
-                expires: undefined
+                addresses: this.sortServerEntries(Array.from(record.addresses.values())).map(({ ip, port }) => ({
+                    ip,
+                    port,
+                    type: "udp",
+                })) as ServerAddressIp[],
+                expires: undefined,
             };
         });
     }
@@ -334,30 +360,25 @@ export class MdnsScanner implements Scanner {
     private buildCommissionableQueryIdentifier(identifier: CommissionableDeviceIdentifiers) {
         if ("instanceId" in identifier) {
             return getDeviceInstanceQname(identifier.instanceId);
-        }
-        else if ("longDiscriminator" in identifier) {
+        } else if ("longDiscriminator" in identifier) {
             return getLongDiscriminatorQname(identifier.longDiscriminator);
-        }
-        else if ("shortDiscriminator" in identifier) {
+        } else if ("shortDiscriminator" in identifier) {
             return getShortDiscriminatorQname(identifier.shortDiscriminator);
-        }
-        else if ("vendorId" in identifier) {
+        } else if ("vendorId" in identifier) {
             return getVendorQname(identifier.vendorId);
-        }
-        else if ("deviceType" in identifier) {
+        } else if ("deviceType" in identifier) {
             return getDeviceTypeQname(identifier.deviceType);
-        }
-        else if ("productId" in identifier) { // Custom identifier because normally productId is only included in TXT record
+        } else if ("productId" in identifier) {
+            // Custom identifier because normally productId is only included in TXT record
             return `_P${identifier.productId}`;
-        }
-        else if (Object.keys(identifier).length === 0) {
+        } else if (Object.keys(identifier).length === 0) {
             return getCommissioningModeQname();
         }
         throw new ImplementationError(`Invalid commissionable device identifier : ${identifier}`); // Should neven happen
     }
 
     extractInstanceId(instanceName: string) {
-        const instanceNameSeparator = instanceName.indexOf('.');
+        const instanceNameSeparator = instanceName.indexOf(".");
         if (instanceNameSeparator !== -1) {
             return instanceName.substring(0, instanceNameSeparator);
         }
@@ -368,7 +389,9 @@ export class MdnsScanner implements Scanner {
      * Check all options for a query identifier and return the most relevant one with an active query
      */
     private findCommissionableQueryIdentifier(instanceName: string, record: CommissionableDeviceRecordWithExpire) {
-        const instanceQueryId = this.buildCommissionableQueryIdentifier({ instanceId: this.extractInstanceId(instanceName) });
+        const instanceQueryId = this.buildCommissionableQueryIdentifier({
+            instanceId: this.extractInstanceId(instanceName),
+        });
         if (this.activeAnnounceQueries.has(instanceQueryId)) {
             return instanceQueryId;
         }
@@ -420,33 +443,60 @@ export class MdnsScanner implements Scanner {
      * be requested ny the getCommissionableDevices method. If no device is discovered the promise is fulfilled after
      * the timeout period.
      */
-    async findCommissionableDevices(identifier: CommissionableDeviceIdentifiers, timeoutSeconds = 5): Promise<CommissionableDevice[]> {
+    async findCommissionableDevices(
+        identifier: CommissionableDeviceIdentifiers,
+        timeoutSeconds = 5,
+    ): Promise<CommissionableDevice[]> {
         let storedRecords = this.getCommissionableDeviceRecords(identifier);
         if (storedRecords.length === 0) {
             const queryId = this.buildCommissionableQueryIdentifier(identifier);
             const { promise } = await this.registerWaiterPromise(queryId, timeoutSeconds);
 
             const queries = [
-                { name: MATTER_COMMISSION_SERVICE_QNAME, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.PTR },
+                {
+                    name: MATTER_COMMISSION_SERVICE_QNAME,
+                    recordClass: DnsRecordClass.IN,
+                    recordType: DnsRecordType.PTR,
+                },
             ];
 
             if ("instanceId" in identifier) {
-                queries.push({ name: getDeviceInstanceQname(identifier.instanceId), recordClass: DnsRecordClass.IN, recordType: DnsRecordType.PTR });
-            }
-            else if ("longDiscriminator" in identifier) {
-                queries.push({ name: getLongDiscriminatorQname(identifier.longDiscriminator), recordClass: DnsRecordClass.IN, recordType: DnsRecordType.PTR });
-            }
-            else if ("shortDiscriminator" in identifier) {
-                queries.push({ name: getShortDiscriminatorQname(identifier.shortDiscriminator), recordClass: DnsRecordClass.IN, recordType: DnsRecordType.PTR });
-            }
-            else if ("vendorId" in identifier) {
-                queries.push({ name: getVendorQname(identifier.vendorId), recordClass: DnsRecordClass.IN, recordType: DnsRecordType.PTR });
-            }
-            else if ("deviceType" in identifier) {
-                queries.push({ name: getDeviceTypeQname(identifier.deviceType), recordClass: DnsRecordClass.IN, recordType: DnsRecordType.PTR });
-            }
-            else { // Other queries just scan for commissionable devices
-                queries.push({ name: getCommissioningModeQname(), recordClass: DnsRecordClass.IN, recordType: DnsRecordType.PTR });
+                queries.push({
+                    name: getDeviceInstanceQname(identifier.instanceId),
+                    recordClass: DnsRecordClass.IN,
+                    recordType: DnsRecordType.PTR,
+                });
+            } else if ("longDiscriminator" in identifier) {
+                queries.push({
+                    name: getLongDiscriminatorQname(identifier.longDiscriminator),
+                    recordClass: DnsRecordClass.IN,
+                    recordType: DnsRecordType.PTR,
+                });
+            } else if ("shortDiscriminator" in identifier) {
+                queries.push({
+                    name: getShortDiscriminatorQname(identifier.shortDiscriminator),
+                    recordClass: DnsRecordClass.IN,
+                    recordType: DnsRecordType.PTR,
+                });
+            } else if ("vendorId" in identifier) {
+                queries.push({
+                    name: getVendorQname(identifier.vendorId),
+                    recordClass: DnsRecordClass.IN,
+                    recordType: DnsRecordType.PTR,
+                });
+            } else if ("deviceType" in identifier) {
+                queries.push({
+                    name: getDeviceTypeQname(identifier.deviceType),
+                    recordClass: DnsRecordClass.IN,
+                    recordType: DnsRecordType.PTR,
+                });
+            } else {
+                // Other queries just scan for commissionable devices
+                queries.push({
+                    name: getCommissioningModeQname(),
+                    recordClass: DnsRecordClass.IN,
+                    recordType: DnsRecordType.PTR,
+                });
             }
 
             this.setQueryRecords(queryId, queries);
@@ -480,7 +530,8 @@ export class MdnsScanner implements Scanner {
     private handleDnsMessage(messageBytes: ByteArray, _remoteIp: string, netInterface: string) {
         const message = DnsCodec.decode(messageBytes);
         if (message === undefined) return; // The message cannot be parsed
-        if (message.messageType !== DnsMessageType.Response && message.messageType !== DnsMessageType.TruncatedResponse) return;
+        if (message.messageType !== DnsMessageType.Response && message.messageType !== DnsMessageType.TruncatedResponse)
+            return;
 
         const answers = [...message.answers, ...message.additionalRecords];
 
@@ -492,31 +543,49 @@ export class MdnsScanner implements Scanner {
     }
 
     private handleIpRecords(answers: DnsRecord<any>[], target: string, netInterface: string) {
-        const ipRecords = answers.filter(({ name, recordType }) => (recordType === DnsRecordType.A || recordType === DnsRecordType.AAAA) && name === target);
-        return (ipRecords as DnsRecord<string>[]).map(({ value }) => value.startsWith("fe80::") ? `${value}%${netInterface}` : value);
+        const ipRecords = answers.filter(
+            ({ name, recordType }) =>
+                (recordType === DnsRecordType.A || recordType === DnsRecordType.AAAA) && name === target,
+        );
+        return (ipRecords as DnsRecord<string>[]).map(({ value }) =>
+            value.startsWith("fe80::") ? `${value}%${netInterface}` : value,
+        );
     }
 
-    private handleOperationalSrvRecord(answers: DnsRecord<any>[], formerAnswers: DnsRecord<any>[], netInterface: string) {
-        let operationalSrvRecord = answers.find(({ name, recordType }) => (recordType === DnsRecordType.SRV && name.endsWith(MATTER_SERVICE_QNAME)));
+    private handleOperationalSrvRecord(
+        answers: DnsRecord<any>[],
+        formerAnswers: DnsRecord<any>[],
+        netInterface: string,
+    ) {
+        let operationalSrvRecord = answers.find(
+            ({ name, recordType }) => recordType === DnsRecordType.SRV && name.endsWith(MATTER_SERVICE_QNAME),
+        );
         if (operationalSrvRecord === undefined) {
-            operationalSrvRecord = formerAnswers.find(({ name, recordType }) => (recordType === DnsRecordType.SRV && name.endsWith(MATTER_SERVICE_QNAME)));
+            operationalSrvRecord = formerAnswers.find(
+                ({ name, recordType }) => recordType === DnsRecordType.SRV && name.endsWith(MATTER_SERVICE_QNAME),
+            );
             if (operationalSrvRecord === undefined) return false;
         }
 
         const {
             name: matterName,
             ttl,
-            value: { target, port }
+            value: { target, port },
         } = operationalSrvRecord;
 
         const ips = this.handleIpRecords([...answers, ...formerAnswers], target, netInterface);
         if (ips.length === 0 && !this.operationalDeviceRecords.has(matterName)) {
-            this.setQueryRecords(matterName, [
-                { name: target, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.A },
-                { name: target, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.AAAA },
-            ], answers)
+            this.setQueryRecords(
+                matterName,
+                [
+                    { name: target, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.A },
+                    { name: target, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.AAAA },
+                ],
+                answers,
+            );
         }
-        const storedRecords = this.operationalDeviceRecords.get(matterName) ?? new Map<string, MatterServerRecordWithExpire>();
+        const storedRecords =
+            this.operationalDeviceRecords.get(matterName) ?? new Map<string, MatterServerRecordWithExpire>();
         if (ips.length > 0) {
             for (const ip of ips) {
                 const matterServer = storedRecords.get(ip) ?? { ip, port, type: "udp", expires: 0 };
@@ -528,15 +597,19 @@ export class MdnsScanner implements Scanner {
 
             if (storedRecords.size > 0) {
                 this.finishWaiter(matterName, true);
-                return true
+                return true;
             }
         }
     }
 
-    private handleCommissionableRecords(answers: DnsRecord<any>[], formerAnswers: DnsRecord<any>[], netInterface: string) {
-        let commissionableRecords = answers.filter(({ name }) => (name.endsWith(MATTER_COMMISSION_SERVICE_QNAME)));
+    private handleCommissionableRecords(
+        answers: DnsRecord<any>[],
+        formerAnswers: DnsRecord<any>[],
+        netInterface: string,
+    ) {
+        let commissionableRecords = answers.filter(({ name }) => name.endsWith(MATTER_COMMISSION_SERVICE_QNAME));
         if (!commissionableRecords.length) {
-            commissionableRecords = formerAnswers.filter(({ name }) => (name.endsWith(MATTER_COMMISSION_SERVICE_QNAME)));
+            commissionableRecords = formerAnswers.filter(({ name }) => name.endsWith(MATTER_COMMISSION_SERVICE_QNAME));
             if (!commissionableRecords.length) return;
         }
 
@@ -552,7 +625,7 @@ export class MdnsScanner implements Scanner {
                 queryMissingDataForInstances.add(record.name);
                 parsedRecord.instanceId = this.extractInstanceId(record.name);
                 if (parsedRecord.D !== undefined && parsedRecord.SD === undefined) {
-                    parsedRecord.SD = (parsedRecord.D >> 8) & 0x0F
+                    parsedRecord.SD = (parsedRecord.D >> 8) & 0x0f;
                 }
                 if (parsedRecord.VP !== undefined) {
                     const VpValueArr = parsedRecord.VP.split("+");
@@ -560,7 +633,9 @@ export class MdnsScanner implements Scanner {
                     parsedRecord.P = VpValueArr[1] !== undefined ? parseInt(VpValueArr[1]) : undefined;
                 }
 
-                logger.debug(`Found commissionable device ${record.name} with discriminator ${parsedRecord.D}/${parsedRecord.SD} ...`);
+                logger.debug(
+                    `Found commissionable device ${record.name} with discriminator ${parsedRecord.D}/${parsedRecord.SD} ...`,
+                );
                 this.commissionableDeviceRecords.set(record.name, parsedRecord);
             }
         }
@@ -572,17 +647,21 @@ export class MdnsScanner implements Scanner {
             if (storedRecord === undefined) continue;
             const {
                 value: { target, port },
-                ttl
+                ttl,
             } = record as DnsRecord<SrvRecordValue>;
 
             const ips = this.handleIpRecords([...answers, ...formerAnswers], target, netInterface);
             if (ips.length === 0) {
                 const queryId = this.findCommissionableQueryIdentifier("", storedRecord);
                 if (queryId === undefined) continue;
-                this.setQueryRecords(queryId, [
-                    { name: target, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.A },
-                    { name: target, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.AAAA },
-                ], answers)
+                this.setQueryRecords(
+                    queryId,
+                    [
+                        { name: target, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.A },
+                        { name: target, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.AAAA },
+                    ],
+                    answers,
+                );
             } else {
                 for (const ip of ips) {
                     const matterServer = storedRecord.addresses.get(ip) ?? { ip, port, type: "udp", expires: 0 };
@@ -608,7 +687,11 @@ export class MdnsScanner implements Scanner {
                 if (storedRecord === undefined) continue;
                 const queryId = this.findCommissionableQueryIdentifier("", storedRecord);
                 if (queryId === undefined) continue;
-                this.setQueryRecords(queryId, [{ name, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.ANY }], answers)
+                this.setQueryRecords(
+                    queryId,
+                    [{ name, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.ANY }],
+                    answers,
+                );
             }
         }
     }
@@ -618,10 +701,10 @@ export class MdnsScanner implements Scanner {
         if (!Array.isArray(value)) return undefined;
         const result = {
             addresses: new Map<string, ServerAddress>(),
-            expires: Time.nowMs() + ttl * 1000
+            expires: Time.nowMs() + ttl * 1000,
         } as any;
         for (const item of value) {
-            const [key, value] = item.split('=');
+            const [key, value] = item.split("=");
             if (key === undefined || value === undefined) continue;
             if (["SII", "SAI", "T", "D", "CM", "DT", "PH"].includes(key)) {
                 const intValue = parseInt(value);
@@ -637,12 +720,15 @@ export class MdnsScanner implements Scanner {
 
     private expire() {
         const now = Time.nowMs();
-        [...this.operationalDeviceRecords.entries()].forEach(([_, recordMap]) => [...recordMap.entries()].forEach(([key, { expires }]) => {
-            if (now < expires) return;
-            recordMap.delete(key);
-        }));
+        [...this.operationalDeviceRecords.entries()].forEach(([_, recordMap]) =>
+            [...recordMap.entries()].forEach(([key, { expires }]) => {
+                if (now < expires) return;
+                recordMap.delete(key);
+            }),
+        );
         [...this.commissionableDeviceRecords.entries()].forEach(([recordKey, { addresses, expires }]) => {
-            if (now < expires) { // Entry still ok but check addresses for expiry
+            if (now < expires) {
+                // Entry still ok but check addresses for expiry
                 [...addresses.entries()].forEach(([key, { expires }]) => {
                     if (now < expires) return;
                     addresses.delete(key);

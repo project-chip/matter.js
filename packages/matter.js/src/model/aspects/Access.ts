@@ -9,7 +9,7 @@ import { Aspect } from "./Aspect.js";
 /**
  * An operational representation of "access" as defined by the Matter
  * specification.
- * 
+ *
  * "Access" controls the operations a remote party may perform on a data field
  * or cluster element.
  */
@@ -29,8 +29,9 @@ export class Access extends Aspect<Access.Definition> implements Access.Ast {
     }
 
     override get empty() {
-        return (!this.rw || this.rw === Access.Rw.Read) &&
-            !this.fabric && !this.readPriv && !this.writePriv && !this.timed;
+        return (
+            (!this.rw || this.rw === Access.Rw.Read) && !this.fabric && !this.readPriv && !this.writePriv && !this.timed
+        );
     }
 
     /**
@@ -62,18 +63,38 @@ export class Access extends Aspect<Access.Definition> implements Access.Ast {
         const flags = [] as Access.Flags;
         for (let i = 0; i < definition.length; i++) {
             switch (definition[i]) {
-                case 'R': flags.push(Access.Rw.Read); break;
-                case 'U': flags.push(Access.Fabric.Unaware); break;
-                case 'F': flags.push(Access.Fabric.Scoped); break;
-                case 'S': flags.push(Access.Fabric.Sensitive); break;
-                case 'V': flags.push(Access.Privilege.View); break;
-                case 'O': flags.push(Access.Privilege.Operate); break;
-                case 'M': flags.push(Access.Privilege.Manage); break;
-                case 'A': flags.push(Access.Privilege.Administer); break;
-                case 'T': flags.push(Access.Timed.Required); break;
-                case 'W': flags.push(Access.Rw.Write); break;
+                case "R":
+                    flags.push(Access.Rw.Read);
+                    break;
+                case "U":
+                    flags.push(Access.Fabric.Unaware);
+                    break;
+                case "F":
+                    flags.push(Access.Fabric.Scoped);
+                    break;
+                case "S":
+                    flags.push(Access.Fabric.Sensitive);
+                    break;
+                case "V":
+                    flags.push(Access.Privilege.View);
+                    break;
+                case "O":
+                    flags.push(Access.Privilege.Operate);
+                    break;
+                case "M":
+                    flags.push(Access.Privilege.Manage);
+                    break;
+                case "A":
+                    flags.push(Access.Privilege.Administer);
+                    break;
+                case "T":
+                    flags.push(Access.Timed.Required);
+                    break;
+                case "W":
+                    flags.push(Access.Rw.Write);
+                    break;
 
-                case '[':
+                case "[":
                     // Optional write syntax.  Note only R[W] is legal but we
                     // allow for bare [W]
                     if (i < definition.length - 2 && definition[i + 1] === "W" && definition[i + 2] === "]") {
@@ -82,7 +103,7 @@ export class Access extends Aspect<Access.Definition> implements Access.Ast {
                     }
                     break;
 
-                case '*':
+                case "*":
                     // Deprecated syntax, again allow for *W when only R*W is
                     // legal
                     if (i < definition.length - 1 && definition[i + 1] === "W") {
@@ -191,10 +212,10 @@ export class Access extends Aspect<Access.Definition> implements Access.Ast {
                 case Access.Privilege.Operate:
                 case Access.Privilege.Manage:
                 case Access.Privilege.Administer:
-                    if (!this.readPriv || (Access.PrivilegePriority[f] < Access.PrivilegePriority[this.readPriv])) {
+                    if (!this.readPriv || Access.PrivilegePriority[f] < Access.PrivilegePriority[this.readPriv]) {
                         this.readPriv = f;
                     }
-                    if (!this.writePriv || (Access.PrivilegePriority[f] > Access.PrivilegePriority[this.writePriv])) {
+                    if (!this.writePriv || Access.PrivilegePriority[f] > Access.PrivilegePriority[this.writePriv]) {
                         this.writePriv = f;
                     }
                     break;
@@ -214,7 +235,7 @@ export namespace Access {
         readPriv?: `${Privilege}`;
         writePriv?: `${Privilege}`;
         timed?: boolean;
-    }
+    };
 
     /**
      * Types of read/write access.
@@ -258,7 +279,7 @@ export namespace Access {
         /**
          * Readable and writable only by scoped fabric.
          */
-        Sensitive = "S"
+        Sensitive = "S",
     }
 
     /**
@@ -283,7 +304,7 @@ export namespace Access {
         /**
          * Administer privilege.
          */
-        Administer = "A"
+        Administer = "A",
     }
 
     /**
@@ -293,7 +314,7 @@ export namespace Access {
         V = "View",
         O = "Operate",
         M = "Manage",
-        A = "Administer"
+        A = "Administer",
     }
 
     /**
@@ -303,8 +324,8 @@ export namespace Access {
         V: 1,
         O: 2,
         M: 3,
-        A: 4
-    }
+        A: 4,
+    };
 
     /**
      * Timed access requirement.
@@ -313,17 +334,13 @@ export namespace Access {
         /**
          * Timed access required.
          */
-        Required = "T"
+        Required = "T",
     }
 
     /**
      * All atomic access control values.
      */
-    export type Flag
-        = Rw
-        | Fabric
-        | Privilege
-        | Timed;
+    export type Flag = Rw | Fabric | Privilege | Timed;
 
     /**
      * A defined set of access control values.
@@ -355,8 +372,8 @@ export namespace Access {
     /**
      * All valid privilege tags.
      */
-    export type Authorization
-        = typeof V
+    export type Authorization =
+        | typeof V
         | typeof VO
         | typeof VM
         | typeof VA
@@ -370,18 +387,13 @@ export namespace Access {
     /**
      * All valid timed tags.
      */
-    export type TimedTag
-        = typeof T;
+    export type TimedTag = typeof T;
 
     /**
      * Defines access as defined in the Matter 1.1 specification.
-     * 
+     *
      * In TypeScript and JavaScript, definitions adhering to this type look
      * like `[ RW, VA ]` or `[ Access.Rw.W, Access.Privilege.Operate ]`.
      */
-    export type Definition =
-        Ast
-        | (Flag | Authorization)[]
-        | string
-        | undefined;
+    export type Definition = Ast | (Flag | Authorization)[] | string | undefined;
 }

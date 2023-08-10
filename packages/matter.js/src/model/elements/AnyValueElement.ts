@@ -12,8 +12,4 @@ import { EventElement } from "./EventElement.js";
 /**
  * All Matter data elements.
  */
-export type AnyValueElement =
-    AttributeElement
-    | CommandElement
-    | EventElement
-    | DatatypeElement;
+export type AnyValueElement = AttributeElement | CommandElement | EventElement | DatatypeElement;

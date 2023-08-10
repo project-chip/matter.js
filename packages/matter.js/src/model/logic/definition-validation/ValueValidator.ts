@@ -22,7 +22,7 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
         this.validateProperty({ name: "quality", type: Quality });
         this.validateProperty({ name: "metatype", type: Metatype });
 
-        this.model.conformance.validateReferences((name) => {
+        this.model.conformance.validateReferences(name => {
             // Features are all caps, other names are field references
             if (name.match(/^[A-Z_$]+$/)) {
                 // Feature lookup
@@ -121,7 +121,9 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
                 // If the name didn't match, try case-insensitive search
                 if (!member) {
                     // Cast of def to string should be unnecessary here, TS bug?
-                    member = this.model.member(model => model.name.toLowerCase() === (defaultValue as string).toLowerCase());
+                    member = this.model.member(
+                        model => model.name.toLowerCase() === (defaultValue as string).toLowerCase(),
+                    );
                 }
 
                 if (member && member.effectiveId !== undefined) {
@@ -149,9 +151,7 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
             case Metatype.enum:
             case Metatype.bitmap:
                 if (!this.model.children.length && !this.model.global) {
-                    this.error(
-                        `CHILDLESS_${metatype.toUpperCase()}`,
-                        `${this.model.type} with no children`);
+                    this.error(`CHILDLESS_${metatype.toUpperCase()}`, `${this.model.type} with no children`);
                 }
                 if (metatype == Metatype.enum) {
                     this.validateEnumKeys();
@@ -178,21 +178,20 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
                 if (ids.has(c.id)) {
                     this.error(
                         "DUPLICATE_ENUM_ID",
-                        `${this.model.type} ID 0x${c.id.toString(16)} appears more than once`);
+                        `${this.model.type} ID 0x${c.id.toString(16)} appears more than once`,
+                    );
                 } else {
                     ids.add(c.id);
                 }
             }
             if (names.has(c.name)) {
-                this.error(
-                    "DUPLICATE_ENUM_NAME",
-                    `${this.model.type} name "${c.name}" appears more than once`)
+                this.error("DUPLICATE_ENUM_NAME", `${this.model.type} name "${c.name}" appears more than once`);
             }
         }
     }
 
     private validateBitFields() {
-        const ranges = Array<{ name: string, min: number, max: number }>();
+        const ranges = Array<{ name: string; min: number; max: number }>();
         for (const c of this.model.children) {
             let min, max;
 
@@ -205,8 +204,8 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
                 if (typeof min !== "number" || typeof max !== "number" || min < 0 || min > max) {
                     this.error(
                         "UNCONSTRAINED_BIT_RANGE",
-                        `${this.model.type} bit field "${c.name}" is not properly constrained`
-                    )
+                        `${this.model.type} bit field "${c.name}" is not properly constrained`,
+                    );
                     continue;
                 }
             }
@@ -215,7 +214,7 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
                 if (min < r.max && max > r.min) {
                     this.error(
                         "OVERLAPPING_BIT_RANGE",
-                        `${this.model.type} bit fields "${r.name}" and "${c.name}" overlap`
+                        `${this.model.type} bit fields "${r.name}" and "${c.name}" overlap`,
                     );
                 }
             }

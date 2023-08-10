@@ -5,7 +5,7 @@
  */
 
 export function capitalize<T extends string>(text: T) {
-    return text[0].toUpperCase() + text.slice(1) as Capitalize<T>;
+    return (text[0].toUpperCase() + text.slice(1)) as Capitalize<T>;
 }
 
 /**
@@ -48,7 +48,7 @@ export function camelize(name: string, upperFirst = true) {
         addPiece(i);
 
         if ((name[i] >= "0" && name[i] <= "9") || name[i] === "$") {
-            pieces.push(name[i])
+            pieces.push(name[i]);
         }
 
         pieceStart = i + 1;
@@ -57,16 +57,18 @@ export function camelize(name: string, upperFirst = true) {
     addPiece(i);
 
     let didFirst = false;
-    let result = pieces.map((piece) => {
-        let firstChar = piece[0];
-        if (upperFirst || didFirst) {
-            firstChar = firstChar.toUpperCase();
-        } else {
-            firstChar = firstChar.toLowerCase();
-            didFirst = true;
-        }
-        return `${firstChar}${piece.slice(1).toLowerCase()}`;
-    }).join("");
+    let result = pieces
+        .map(piece => {
+            let firstChar = piece[0];
+            if (upperFirst || didFirst) {
+                firstChar = firstChar.toUpperCase();
+            } else {
+                firstChar = firstChar.toLowerCase();
+                didFirst = true;
+            }
+            return `${firstChar}${piece.slice(1).toLowerCase()}`;
+        })
+        .join("");
 
     // Special case so "100ths" doesn't become "100Ths" which is formally correct but goofy
     result = result.replace(/(\d+)Ths/i, "$1ths");
@@ -148,7 +150,7 @@ export function serialize(value: any) {
                 return "{}";
             }
 
-            return `{ ${entries.join(", ")} }`
+            return `{ ${entries.join(", ")} }`;
         } finally {
             visited.delete(value);
         }
@@ -172,7 +174,9 @@ export namespace serialize {
             value = new String(value);
         }
         if (value !== undefined && value !== null) {
-            value[SERIALIZE] = function() { return this.toString(); };
+            value[SERIALIZE] = function () {
+                return this.toString();
+            };
         }
         return value;
     }
@@ -182,11 +186,11 @@ export namespace serialize {
      */
     export function isPrimitive(value: any) {
         if (
-            value === undefined
-            || value === null
-            || value instanceof Date
-            || ArrayBuffer.isView(value)
-            || value[SERIALIZE]
+            value === undefined ||
+            value === null ||
+            value instanceof Date ||
+            ArrayBuffer.isView(value) ||
+            value[SERIALIZE]
         ) {
             return true;
         }

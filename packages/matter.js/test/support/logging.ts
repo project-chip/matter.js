@@ -11,18 +11,16 @@ export function captureLogs(fn: () => void) {
         logFormatter: Logger.logFormatter,
         log: Logger.log,
         defaultLogLevel: Logger.defaultLogLevel,
-        logLevels: { ...Logger.logLevels }
+        logLevels: { ...Logger.logLevels },
     };
 
     try {
-        const captured = new Array<{ level: Level, message: string }>();
-        Logger.log = (level, message) => captured.push({
-            level,
-            message: message.replace(
-                /\d{4}-\d\d-\d\d \d\d:\d\d:\d\d\.\d\d\d/,
-                "xxxx-xx-xx xx:xx:xx.xxx"
-            )
-        });
+        const captured = new Array<{ level: Level; message: string }>();
+        Logger.log = (level, message) =>
+            captured.push({
+                level,
+                message: message.replace(/\d{4}-\d\d-\d\d \d\d:\d\d:\d\d\.\d\d\d/, "xxxx-xx-xx xx:xx:xx.xxx"),
+            });
         fn();
         return captured;
     } finally {

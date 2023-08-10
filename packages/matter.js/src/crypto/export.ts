@@ -6,5 +6,5 @@
 
 export * from "./Crypto.js";
 export * from "./CryptoConstants.js";
-export * from "./Spake2p.js";
 export * from "./Key.js";
+export * from "./Spake2p.js";

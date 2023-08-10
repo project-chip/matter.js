@@ -5,7 +5,21 @@
  */
 
 import { Logger } from "#matter.js/log/Logger.js";
-import { Access, AnyElement, AttributeElement, ValueElement, ClusterElement, CommandElement, Conformance, DatatypeElement, ElementTag, EventElement, AnyValueElement, Globals, Constraint } from "#matter.js/model/index.js";
+import {
+    Access,
+    AnyElement,
+    AnyValueElement,
+    AttributeElement,
+    ClusterElement,
+    CommandElement,
+    Conformance,
+    Constraint,
+    DatatypeElement,
+    ElementTag,
+    EventElement,
+    Globals,
+    ValueElement,
+} from "#matter.js/model/index.js";
 import { camelize } from "#util/string.js";
 import { NumericRanges } from "../../clusters/NumberConstants.js";
 import { TypeMap } from "./type-map.js";
@@ -77,29 +91,26 @@ function setAccessPrivileges(src: Element, target: Access.Ast) {
     const srcAccess = {
         read: undefined,
         invoke: undefined,
-        write: undefined
+        write: undefined,
     } as {
-        read?: Access.Privilege,
-        invoke?: Access.Privilege,
-        write?: Access.Privilege
-    }
+        read?: Access.Privilege;
+        invoke?: Access.Privilege;
+        write?: Access.Privilege;
+    };
 
-    children(src, "access").forEach((accessEl) => {
+    children(src, "access").forEach(accessEl => {
         if (accessEl.getAttribute("modifier")) {
             // These are removed in newer XML files
             return;
         }
-        const op = need(
-            "access op",
-            str(accessEl.getAttribute("op"))
-        ) as keyof typeof srcAccess;
+        const op = need("access op", str(accessEl.getAttribute("op"))) as keyof typeof srcAccess;
         if (Object.keys(srcAccess).indexOf(op) === -1) {
             throw new Error(`Unknown access op "${op}"`);
         }
 
         let privilege = need(
             "access role",
-            str(accessEl.getAttribute("privilege") || accessEl.getAttribute("role"))
+            str(accessEl.getAttribute("privilege") || accessEl.getAttribute("role")),
         ) as Access.Privilege;
         privilege = (Access.Privilege as any)[camelize(privilege)];
         if (!privilege) {
@@ -181,7 +192,7 @@ function mapType(chipType: string | undefined) {
 }
 
 function setBounds(source: Element, element: ValueElement) {
-    let typeBounds: { min: number, max: number };
+    let typeBounds: { min: number; max: number };
     switch (element.type) {
         case Globals.list.name:
         case Globals.string.name:
@@ -252,16 +263,19 @@ function createValueElement<T extends AnyValueElement>({
     isClass,
     type,
     propertyTag,
-    propertyIsClass
+    propertyIsClass,
 }: {
-    factory: ((properties: T) => T) & { Tag: ElementTag },
-    source: Element,
-    isClass?: boolean,
-    type?: string,
-    propertyTag?: string,
-    propertyIsClass?: boolean
+    factory: ((properties: T) => T) & { Tag: ElementTag };
+    source: Element;
+    isClass?: boolean;
+    type?: string;
+    propertyTag?: string;
+    propertyIsClass?: boolean;
 }): T {
-    const name = camelize(need(`${factory.Tag} name`, source.getAttribute("name") || source.getAttribute("define")), isClass);
+    const name = camelize(
+        need(`${factory.Tag} name`, source.getAttribute("name") || source.getAttribute("define")),
+        isClass,
+    );
     logger.debug(`${factory.Tag} ${name}`);
 
     const attr = (name: string) => source.getAttribute(name);
@@ -298,7 +312,7 @@ function createValueElement<T extends AnyValueElement>({
                 factory: DatatypeElement,
                 source: propertyEl,
                 isClass: propertyIsClass,
-                type: childType
+                type: childType,
             });
 
             const isArray = propertyEl.getAttribute("array") === "true";
@@ -315,7 +329,7 @@ function createValueElement<T extends AnyValueElement>({
             }
 
             element.children.push(child);
-        })
+        });
     }
 
     if (!element.children?.length) {
@@ -331,31 +345,31 @@ function createValueElement<T extends AnyValueElement>({
 type Translator = (source: Element) => AnyElement;
 
 const translators: { [name: string]: Translator } = {
-    attribute: (source) => {
+    attribute: source => {
         return createValueElement({
             factory: AttributeElement,
             source,
-            type: need("attribute type", str(source.getAttribute("type")))
+            type: need("attribute type", str(source.getAttribute("type"))),
         });
     },
 
-    event: (source) => {
+    event: source => {
         const event = createValueElement({
             factory: EventElement,
             source,
             isClass: true,
-            propertyTag: "field"
+            propertyTag: "field",
         });
         event.priority = need("event priority", str(source.getAttribute("priority"))) as typeof event.priority;
         return event;
     },
 
-    command: (source) => {
+    command: source => {
         const command = createValueElement({
             factory: CommandElement,
             source,
             isClass: true,
-            propertyTag: "arg"
+            propertyTag: "arg",
         });
 
         const response = str(source.getAttribute("response"));
@@ -373,34 +387,34 @@ const translators: { [name: string]: Translator } = {
         return command;
     },
 
-    struct: (source) => {
+    struct: source => {
         return createValueElement({
             factory: DatatypeElement,
             source,
             isClass: true,
             type: str(source.getAttribute("type")) ?? "STRUCT",
-            propertyTag: "item"
+            propertyTag: "item",
         });
     },
 
-    enum: (source) => {
+    enum: source => {
         return createValueElement({
             factory: DatatypeElement,
             source,
             isClass: true,
             type: need("enum type", str(source.getAttribute("type"))),
             propertyTag: "item",
-            propertyIsClass: true
-        })
+            propertyIsClass: true,
+        });
     },
 
-    bitmap: (source) => {
+    bitmap: source => {
         const bitmap = createValueElement({
             factory: DatatypeElement,
             source,
             isClass: true,
             type: need("bitmap type", str(source.getAttribute("type"))),
-            propertyIsClass: true
+            propertyIsClass: true,
         });
 
         children(source, "field").forEach(f => {
@@ -430,27 +444,27 @@ const translators: { [name: string]: Translator } = {
                 bitmap.children = [];
             }
 
-            const constraint = msb === lsb
-                ? { value: msb }
-                : { min: lsb, max: msb + 1 };
+            const constraint = msb === lsb ? { value: msb } : { min: lsb, max: msb + 1 };
 
-            bitmap.children.push(DatatypeElement({
-                name: need("bitmap field name", str(f.getAttribute("name"))),
-                constraint: constraint
-            }));
+            bitmap.children.push(
+                DatatypeElement({
+                    name: need("bitmap field name", str(f.getAttribute("name"))),
+                    constraint: constraint,
+                }),
+            );
         });
 
         return bitmap;
     },
 
-    cluster: (source) => {
+    cluster: source => {
         const id = int(child(source, "code"));
         const name = need("cluster name", str(child(source, "name"))).replace(/Cluster$/, "");
         const cluster = ClusterElement({
             id: need("cluster id", id),
             name: camelize(name),
             description: name,
-            details: str(child(source, "description"))
+            details: str(child(source, "description")),
         });
 
         if (bool(source.getAttribute("singleton"))) {
@@ -474,8 +488,8 @@ const translators: { [name: string]: Translator } = {
         }
 
         return cluster;
-    }
-}
+    },
+};
 
 function translate(from: Element) {
     const translator = translators[from.tagName];

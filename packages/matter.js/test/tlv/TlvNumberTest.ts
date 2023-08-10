@@ -9,8 +9,10 @@ import { Schema } from "../../src/schema/Schema.js";
 import { TlvDouble, TlvFloat, TlvInt64, TlvUInt32, TlvUInt64 } from "../../src/tlv/TlvNumber.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 
-type CodecVector<I, E> = { [valueDescription: string]: { schema: Schema<number | bigint, ByteArray>, encoded: I, decoded: E } };
-type TestVector<I, E> = { [testName: string]: { input: I, out: E } };
+type CodecVector<I, E> = {
+    [valueDescription: string]: { schema: Schema<number | bigint, ByteArray>; encoded: I; decoded: E };
+};
+type TestVector<I, E> = { [testName: string]: { input: I; out: E } };
 
 const codecVector: CodecVector<string, number | bigint> = {
     "a float": { schema: TlvFloat, decoded: 6546.25390625, encoded: "0a0892cc45" },
@@ -32,13 +34,11 @@ const validateTestVector: TestVector<number, boolean> = {
 };
 
 describe("TlvNumber", () => {
-
     describe("encode", () => {
         for (const valueDescription in codecVector) {
             const { schema, encoded, decoded } = codecVector[valueDescription];
             it(`encodes ${valueDescription}`, () => {
-                expect((schema.encode(decoded).toHex()))
-                    .toBe(encoded);
+                expect(schema.encode(decoded).toHex()).toBe(encoded);
             });
         }
     });
@@ -47,16 +47,14 @@ describe("TlvNumber", () => {
         for (const valueDescription in codecVector) {
             const { schema, encoded, decoded } = codecVector[valueDescription];
             it(`decodes ${valueDescription}`, () => {
-                expect(schema.decode(ByteArray.fromHex(encoded)))
-                    .toBe(decoded);
+                expect(schema.decode(ByteArray.fromHex(encoded))).toBe(decoded);
             });
         }
     });
 
     describe("decode", () => {
         it("decodes a 8 bytes small value as a number", () => {
-            expect(TlvUInt32.decode(ByteArray.fromHex("070100000000000000")))
-                .toBe(1);
+            expect(TlvUInt32.decode(ByteArray.fromHex("070100000000000000"))).toBe(1);
         });
     });
 
@@ -78,18 +76,17 @@ describe("TlvNumber", () => {
 
     describe("validate", () => {
         it("throws an error if the value is not a number", () => {
-            expect(() => TlvUInt32.validate("a" as any))
-                .toThrow(new ValidationError("Expected number, got string."));
+            expect(() => TlvUInt32.validate("a" as any)).toThrow(new ValidationError("Expected number, got string."));
         });
 
         it("throws an error if the value is not a bigint", () => {
-            expect(() => TlvUInt64.validate("a" as any))
-                .toThrow(new ValidationError("Expected number, got string."));
+            expect(() => TlvUInt64.validate("a" as any)).toThrow(new ValidationError("Expected number, got string."));
         });
 
         it("throws an error if the value is not a bigint", () => {
-            expect(() => TlvUInt32.validate(BigInt(12345678790) as any))
-                .toThrow(new ValidationError("Expected number, got bigint."));
+            expect(() => TlvUInt32.validate(BigInt(12345678790) as any)).toThrow(
+                new ValidationError("Expected number, got bigint."),
+            );
         });
 
         it("does not throw an error if the value is a number", () => {

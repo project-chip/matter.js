@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { UdpChannelOptions, UdpChannel } from "../UdpChannel.js";
 import { Network } from "../Network.js";
-import { UdpChannelFake } from "./UdpChannelFake.js";
+import { UdpChannel, UdpChannelOptions } from "../UdpChannel.js";
 import { FAKE_INTERFACE_NAME } from "./SimulatedNetwork.js";
+import { UdpChannelFake } from "./UdpChannelFake.js";
 
 export class NetworkFake extends Network {
     constructor(
@@ -21,7 +21,7 @@ export class NetworkFake extends Network {
         return [FAKE_INTERFACE_NAME];
     }
 
-    getIpMac(_netInterface: string): { mac: string; ips: string[]; } {
+    getIpMac(_netInterface: string): { mac: string; ips: string[] } {
         return { mac: this.mac, ips: this.ips };
     }
 

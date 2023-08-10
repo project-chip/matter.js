@@ -5,30 +5,31 @@
  */
 
 import { DnsCodec, DnsMessageType } from "../../src/codec/DnsCodec.js";
-import { UdpChannelFake } from "../../src/net/fake/UdpChannelFake.js";
-import { UdpChannel } from "../../src/net/UdpChannel.js";
-import { MdnsBroadcaster } from "../../src/mdns/MdnsBroadcaster.js";
-import { getPromiseResolver } from "../../src/util/Promises.js";
-import { NetworkFake } from "../../src/net/fake/NetworkFake.js";
-import { Network } from "../../src/net/Network.js";
-import { MdnsScanner } from "../../src/mdns/MdnsScanner.js";
-import { Fabric } from "../../src/fabric/Fabric.js";
+import { Crypto } from "../../src/crypto/Crypto.js";
 import { NodeId } from "../../src/datatype/NodeId.js";
-import { ByteArray } from "../../src/util/ByteArray.js";
+import { VendorId } from "../../src/datatype/VendorId.js";
+import { Fabric } from "../../src/fabric/Fabric.js";
+import { MdnsBroadcaster } from "../../src/mdns/MdnsBroadcaster.js";
+import { MdnsScanner } from "../../src/mdns/MdnsScanner.js";
+import { NetworkFake } from "../../src/net/fake/NetworkFake.js";
 import { FAKE_INTERFACE_NAME } from "../../src/net/fake/SimulatedNetwork.js";
+import { UdpChannelFake } from "../../src/net/fake/UdpChannelFake.js";
+import { Network } from "../../src/net/Network.js";
+import { UdpChannel } from "../../src/net/UdpChannel.js";
 import { Time } from "../../src/time/Time.js";
 import { TimeFake } from "../../src/time/TimeFake.js";
-import { Crypto } from "../../src/crypto/Crypto.js";
+import { ByteArray } from "../../src/util/ByteArray.js";
+import { getPromiseResolver } from "../../src/util/Promises.js";
 import { singleton } from "../../src/util/Singleton.js";
-import { VendorId } from "../../src/datatype/VendorId.js";
 
 Time.get = singleton(() => new TimeFake(0));
 
-Crypto.get = () => ({
-    getRandomData: (length: number) => {
-        return new Uint8Array(length);
-    }
-} as Crypto);
+Crypto.get = () =>
+    ({
+        getRandomData: (length: number) => {
+            return new Uint8Array(length);
+        },
+    }) as Crypto;
 
 const SERVER_IPv4 = "192.168.200.1";
 const SERVER_IPv6 = "fe80::e777:4f5e:c61e:7314";
@@ -42,7 +43,7 @@ const PORT3 = 5542;
 const serverNetwork = new NetworkFake(SERVER_MAC, [SERVER_IPv4, SERVER_IPv6]);
 const clientNetwork = new NetworkFake(CLIENT_MAC, [CLIENT_IP]);
 
-const OPERATIONAL_ID = ByteArray.fromHex("0000000000000018")
+const OPERATIONAL_ID = ByteArray.fromHex("0000000000000018");
 const NODE_ID = NodeId(BigInt(1));
 
 describe("MDNS Scanner and Broadcaster", () => {
@@ -54,13 +55,23 @@ describe("MDNS Scanner and Broadcaster", () => {
     beforeEach(async () => {
         Network.get = () => clientNetwork;
         scanner = await MdnsScanner.create(FAKE_INTERFACE_NAME);
-        scannerChannel = await UdpChannelFake.create(serverNetwork, { listeningPort: 5353, listeningAddress: "224.0.0.251", type: "udp4" });
+        scannerChannel = await UdpChannelFake.create(serverNetwork, {
+            listeningPort: 5353,
+            listeningAddress: "224.0.0.251",
+            type: "udp4",
+        });
 
         Network.get = () => serverNetwork;
         broadcaster = await MdnsBroadcaster.create(FAKE_INTERFACE_NAME);
-        broadcasterChannel = await UdpChannelFake.create(clientNetwork, { listeningPort: 5353, listeningAddress: "224.0.0.251", type: "udp4" });
+        broadcasterChannel = await UdpChannelFake.create(clientNetwork, {
+            listeningPort: 5353,
+            listeningAddress: "224.0.0.251",
+            type: "udp4",
+        });
 
-        Network.get = () => { throw new Error("Network should not be requested post creation") };
+        Network.get = () => {
+            throw new Error("Network should not be requested post creation");
+        };
     });
 
     afterEach(async () => {
@@ -76,7 +87,7 @@ describe("MDNS Scanner and Broadcaster", () => {
 
             broadcaster.setFabrics(PORT, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric], {
                 sleepIdleInterval: 100,
-                sleepActiveInterval: 200
+                sleepActiveInterval: 200,
             });
             await broadcaster.announce(PORT);
 
@@ -87,18 +98,60 @@ describe("MDNS Scanner and Broadcaster", () => {
                 messageType: 33792,
                 queries: [],
                 answers: [
-                    { name: '_services._dns-sd._udp.local', recordType: 12, recordClass: 1, ttl: 120, value: '_matter._tcp.local' },
-                    { name: '_services._dns-sd._udp.local', recordType: 12, recordClass: 1, ttl: 120, value: '_I0000000000000018._sub._matter._tcp.local' },
-                    { name: '_matter._tcp.local', recordType: 12, recordClass: 1, ttl: 120, value: '0000000000000018-0000000000000001._matter._tcp.local' },
-                    { name: '_I0000000000000018._sub._matter._tcp.local', recordType: 12, recordClass: 1, ttl: 120, value: '0000000000000018-0000000000000001._matter._tcp.local' },
+                    {
+                        name: "_services._dns-sd._udp.local",
+                        recordType: 12,
+                        recordClass: 1,
+                        ttl: 120,
+                        value: "_matter._tcp.local",
+                    },
+                    {
+                        name: "_services._dns-sd._udp.local",
+                        recordType: 12,
+                        recordClass: 1,
+                        ttl: 120,
+                        value: "_I0000000000000018._sub._matter._tcp.local",
+                    },
+                    {
+                        name: "_matter._tcp.local",
+                        recordType: 12,
+                        recordClass: 1,
+                        ttl: 120,
+                        value: "0000000000000018-0000000000000001._matter._tcp.local",
+                    },
+                    {
+                        name: "_I0000000000000018._sub._matter._tcp.local",
+                        recordType: 12,
+                        recordClass: 1,
+                        ttl: 120,
+                        value: "0000000000000018-0000000000000001._matter._tcp.local",
+                    },
                 ],
                 authorities: [],
                 additionalRecords: [
-                    { name: '0000000000000018-0000000000000001._matter._tcp.local', recordType: 33, recordClass: 1, ttl: 120, value: { priority: 0, weight: 0, port: PORT, target: '00B0D063C2260000.local' } },
-                    { name: '0000000000000018-0000000000000001._matter._tcp.local', recordType: 16, recordClass: 1, ttl: 120, value: ["SII=100", "SAI=200", "T=0"] },
-                    { name: '00B0D063C2260000.local', recordType: 1, recordClass: 1, ttl: 120, value: '192.168.200.1' },
-                    { name: '00B0D063C2260000.local', recordType: 28, recordClass: 1, ttl: 120, value: 'fe80::e777:4f5e:c61e:7314' },
-                ]
+                    {
+                        name: "0000000000000018-0000000000000001._matter._tcp.local",
+                        recordType: 33,
+                        recordClass: 1,
+                        ttl: 120,
+                        value: { priority: 0, weight: 0, port: PORT, target: "00B0D063C2260000.local" },
+                    },
+                    {
+                        name: "0000000000000018-0000000000000001._matter._tcp.local",
+                        recordType: 16,
+                        recordClass: 1,
+                        ttl: 120,
+                        value: ["SII=100", "SAI=200", "T=0"],
+                    },
+                    { name: "00B0D063C2260000.local", recordType: 1, recordClass: 1, ttl: 120, value: "192.168.200.1" },
+                    {
+                        name: "00B0D063C2260000.local",
+                        recordType: 28,
+                        recordClass: 1,
+                        ttl: 120,
+                        value: "fe80::e777:4f5e:c61e:7314",
+                    },
+                ],
             });
         });
 
@@ -111,37 +164,138 @@ describe("MDNS Scanner and Broadcaster", () => {
                 deviceType: 1,
                 vendorId: VendorId(1),
                 productId: 0x8000,
-                discriminator: 1234
+                discriminator: 1234,
             });
             await broadcaster.announce(PORT);
 
             const result = DnsCodec.decode(await promise);
 
             expect(result).toEqual({
-                "additionalRecords": [
-                    { "name": "0000000000000000._matterc._udp.local", "recordClass": 1, "recordType": 33, "ttl": 120, "value": { "port": PORT, "priority": 0, "target": "00B0D063C2260000.local", "weight": 0 } },
-                    { "name": "0000000000000000._matterc._udp.local", "recordClass": 1, "recordType": 16, "ttl": 120, "value": ["VP=1+32768", "DT=1", "DN=Test Device", "SII=5000", "SAI=300", "T=0", "D=1234", "CM=1", "PH=33", "PI="] },
-                    { "name": "00B0D063C2260000.local", "recordClass": 1, "recordType": 1, "ttl": 120, "value": "192.168.200.1" },
-                    { "name": "00B0D063C2260000.local", "recordClass": 1, "recordType": 28, "ttl": 120, "value": "fe80::e777:4f5e:c61e:7314" }
+                additionalRecords: [
+                    {
+                        name: "0000000000000000._matterc._udp.local",
+                        recordClass: 1,
+                        recordType: 33,
+                        ttl: 120,
+                        value: { port: PORT, priority: 0, target: "00B0D063C2260000.local", weight: 0 },
+                    },
+                    {
+                        name: "0000000000000000._matterc._udp.local",
+                        recordClass: 1,
+                        recordType: 16,
+                        ttl: 120,
+                        value: [
+                            "VP=1+32768",
+                            "DT=1",
+                            "DN=Test Device",
+                            "SII=5000",
+                            "SAI=300",
+                            "T=0",
+                            "D=1234",
+                            "CM=1",
+                            "PH=33",
+                            "PI=",
+                        ],
+                    },
+                    { name: "00B0D063C2260000.local", recordClass: 1, recordType: 1, ttl: 120, value: "192.168.200.1" },
+                    {
+                        name: "00B0D063C2260000.local",
+                        recordClass: 1,
+                        recordType: 28,
+                        ttl: 120,
+                        value: "fe80::e777:4f5e:c61e:7314",
+                    },
                 ],
-                "answers": [
-                    { "name": "_services._dns-sd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_matterc._udp.local" },
-                    { "name": "_services._dns-sd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_V1._sub._matterc._udp.local" },
-                    { "name": "_services._dns-sd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_T1._sub._matterc._udp.local" },
-                    { "name": "_services._dns-sd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_S4._sub._matterc._udp.local" },
-                    { "name": "_services._dns-sd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_L1234._sub._matterc._udp.local" },
-                    { "name": "_services._dns-sd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_CM._sub._matterc._udp.local" },
-                    { "name": "_matterc._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "0000000000000000._matterc._udp.local" },
-                    { "name": "_V1._sub._matterc._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "0000000000000000._matterc._udp.local" },
-                    { "name": "_T1._sub._matterc._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "0000000000000000._matterc._udp.local" },
-                    { "name": "_S4._sub._matterc._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "0000000000000000._matterc._udp.local" },
-                    { "name": "_L1234._sub._matterc._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "0000000000000000._matterc._udp.local" },
-                    { "name": "_CM._sub._matterc._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "0000000000000000._matterc._udp.local" }
+                answers: [
+                    {
+                        name: "_services._dns-sd._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "_matterc._udp.local",
+                    },
+                    {
+                        name: "_services._dns-sd._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "_V1._sub._matterc._udp.local",
+                    },
+                    {
+                        name: "_services._dns-sd._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "_T1._sub._matterc._udp.local",
+                    },
+                    {
+                        name: "_services._dns-sd._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "_S4._sub._matterc._udp.local",
+                    },
+                    {
+                        name: "_services._dns-sd._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "_L1234._sub._matterc._udp.local",
+                    },
+                    {
+                        name: "_services._dns-sd._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "_CM._sub._matterc._udp.local",
+                    },
+                    {
+                        name: "_matterc._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "0000000000000000._matterc._udp.local",
+                    },
+                    {
+                        name: "_V1._sub._matterc._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "0000000000000000._matterc._udp.local",
+                    },
+                    {
+                        name: "_T1._sub._matterc._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "0000000000000000._matterc._udp.local",
+                    },
+                    {
+                        name: "_S4._sub._matterc._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "0000000000000000._matterc._udp.local",
+                    },
+                    {
+                        name: "_L1234._sub._matterc._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "0000000000000000._matterc._udp.local",
+                    },
+                    {
+                        name: "_CM._sub._matterc._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "0000000000000000._matterc._udp.local",
+                    },
                 ],
-                "authorities": [],
-                "messageType": 33792,
-                "queries": [],
-                "transactionId": 0
+                authorities: [],
+                messageType: 33792,
+                queries: [],
+                transactionId: 0,
             });
         });
 
@@ -160,23 +314,71 @@ describe("MDNS Scanner and Broadcaster", () => {
             const result = DnsCodec.decode(await promise);
 
             expect(result).toEqual({
-                "additionalRecords": [
-                    { "name": "0000000000000000._matterd._udp.local", "recordClass": 1, "recordType": 33, "ttl": 120, "value": { "port": PORT, "priority": 0, "target": "00B0D063C2260000.local", "weight": 0 } },
-                    { "name": "0000000000000000._matterd._udp.local", "recordClass": 1, "recordType": 16, "ttl": 120, "value": ["VP=1+32768", "DT=1", "DN=Test Commissioner", "SII=5000", "SAI=300", "T=0"] },
-                    { "name": "00B0D063C2260000.local", "recordClass": 1, "recordType": 1, "ttl": 120, "value": "192.168.200.1" },
-                    { "name": "00B0D063C2260000.local", "recordClass": 1, "recordType": 28, "ttl": 120, "value": "fe80::e777:4f5e:c61e:7314" }
+                additionalRecords: [
+                    {
+                        name: "0000000000000000._matterd._udp.local",
+                        recordClass: 1,
+                        recordType: 33,
+                        ttl: 120,
+                        value: { port: PORT, priority: 0, target: "00B0D063C2260000.local", weight: 0 },
+                    },
+                    {
+                        name: "0000000000000000._matterd._udp.local",
+                        recordClass: 1,
+                        recordType: 16,
+                        ttl: 120,
+                        value: ["VP=1+32768", "DT=1", "DN=Test Commissioner", "SII=5000", "SAI=300", "T=0"],
+                    },
+                    { name: "00B0D063C2260000.local", recordClass: 1, recordType: 1, ttl: 120, value: "192.168.200.1" },
+                    {
+                        name: "00B0D063C2260000.local",
+                        recordClass: 1,
+                        recordType: 28,
+                        ttl: 120,
+                        value: "fe80::e777:4f5e:c61e:7314",
+                    },
                 ],
-                "answers": [
-                    { "name": "_services._dns-sd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_matterd._udp.local" },
-                    { "name": "_matterd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_V1._sub._matterd._udp.local" },
-                    { "name": "_V1._sub._matterd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "0000000000000000._matterd._udp.local" },
-                    { "name": "_services._dns-sd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_T1._sub._matterd._udp.local" },
-                    { "name": "_T1._sub._matterd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "0000000000000000._matterd._udp.local" }
+                answers: [
+                    {
+                        name: "_services._dns-sd._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "_matterd._udp.local",
+                    },
+                    {
+                        name: "_matterd._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "_V1._sub._matterd._udp.local",
+                    },
+                    {
+                        name: "_V1._sub._matterd._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "0000000000000000._matterd._udp.local",
+                    },
+                    {
+                        name: "_services._dns-sd._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "_T1._sub._matterd._udp.local",
+                    },
+                    {
+                        name: "_T1._sub._matterd._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "0000000000000000._matterd._udp.local",
+                    },
                 ],
-                "authorities": [],
-                "messageType": 33792,
-                "queries": [],
-                "transactionId": 0
+                authorities: [],
+                messageType: 33792,
+                queries: [],
+                transactionId: 0,
             });
         });
 
@@ -194,7 +396,7 @@ describe("MDNS Scanner and Broadcaster", () => {
                 deviceType: 1,
                 vendorId: VendorId(1),
                 productId: 0x8000,
-                discriminator: 1234
+                discriminator: 1234,
             });
             broadcaster.setCommissionerInfo(PORT3, {
                 deviceName: "Test Commissioner",
@@ -214,69 +416,258 @@ describe("MDNS Scanner and Broadcaster", () => {
                 messageType: 33792,
                 queries: [],
                 answers: [
-                    { name: '_services._dns-sd._udp.local', recordType: 12, recordClass: 1, ttl: 120, value: '_matter._tcp.local' },
-                    { name: '_services._dns-sd._udp.local', recordType: 12, recordClass: 1, ttl: 120, value: '_I0000000000000018._sub._matter._tcp.local' },
-                    { name: '_matter._tcp.local', recordType: 12, recordClass: 1, ttl: 120, value: '0000000000000018-0000000000000001._matter._tcp.local' },
-                    { name: '_I0000000000000018._sub._matter._tcp.local', recordType: 12, recordClass: 1, ttl: 120, value: '0000000000000018-0000000000000001._matter._tcp.local' },
+                    {
+                        name: "_services._dns-sd._udp.local",
+                        recordType: 12,
+                        recordClass: 1,
+                        ttl: 120,
+                        value: "_matter._tcp.local",
+                    },
+                    {
+                        name: "_services._dns-sd._udp.local",
+                        recordType: 12,
+                        recordClass: 1,
+                        ttl: 120,
+                        value: "_I0000000000000018._sub._matter._tcp.local",
+                    },
+                    {
+                        name: "_matter._tcp.local",
+                        recordType: 12,
+                        recordClass: 1,
+                        ttl: 120,
+                        value: "0000000000000018-0000000000000001._matter._tcp.local",
+                    },
+                    {
+                        name: "_I0000000000000018._sub._matter._tcp.local",
+                        recordType: 12,
+                        recordClass: 1,
+                        ttl: 120,
+                        value: "0000000000000018-0000000000000001._matter._tcp.local",
+                    },
                 ],
                 authorities: [],
                 additionalRecords: [
                     {
-                        name: '0000000000000018-0000000000000001._matter._tcp.local', recordType: 33, recordClass: 1, ttl: 120, value: { priority: 0, weight: 0, port: PORT, target: '00B0D063C2260000.local' }
+                        name: "0000000000000018-0000000000000001._matter._tcp.local",
+                        recordType: 33,
+                        recordClass: 1,
+                        ttl: 120,
+                        value: { priority: 0, weight: 0, port: PORT, target: "00B0D063C2260000.local" },
                     },
-                    { name: '0000000000000018-0000000000000001._matter._tcp.local', recordType: 16, recordClass: 1, ttl: 120, value: ["SII=5000", "SAI=300", "T=0"] },
-                    { name: '00B0D063C2260000.local', recordType: 1, recordClass: 1, ttl: 120, value: '192.168.200.1' },
-                    { name: '00B0D063C2260000.local', recordType: 28, recordClass: 1, ttl: 120, value: 'fe80::e777:4f5e:c61e:7314' },
-                ]
+                    {
+                        name: "0000000000000018-0000000000000001._matter._tcp.local",
+                        recordType: 16,
+                        recordClass: 1,
+                        ttl: 120,
+                        value: ["SII=5000", "SAI=300", "T=0"],
+                    },
+                    { name: "00B0D063C2260000.local", recordType: 1, recordClass: 1, ttl: 120, value: "192.168.200.1" },
+                    {
+                        name: "00B0D063C2260000.local",
+                        recordType: 28,
+                        recordClass: 1,
+                        ttl: 120,
+                        value: "fe80::e777:4f5e:c61e:7314",
+                    },
+                ],
             });
 
             const result2 = DnsCodec.decode(dataArr[1]);
             expect(result2).toEqual({
-                "additionalRecords": [
-                    { "name": "0000000000000000._matterc._udp.local", "recordClass": 1, "recordType": 33, "ttl": 120, "value": { "port": PORT2, "priority": 0, "target": "00B0D063C2260000.local", "weight": 0 } },
-                    { "name": "0000000000000000._matterc._udp.local", "recordClass": 1, "recordType": 16, "ttl": 120, "value": ["VP=1+32768", "DT=1", "DN=Test Device", "SII=5000", "SAI=300", "T=0", "D=1234", "CM=1", "PH=33", "PI="] },
-                    { "name": "00B0D063C2260000.local", "recordClass": 1, "recordType": 1, "ttl": 120, "value": "192.168.200.1" },
-                    { "name": "00B0D063C2260000.local", "recordClass": 1, "recordType": 28, "ttl": 120, "value": "fe80::e777:4f5e:c61e:7314" }
+                additionalRecords: [
+                    {
+                        name: "0000000000000000._matterc._udp.local",
+                        recordClass: 1,
+                        recordType: 33,
+                        ttl: 120,
+                        value: { port: PORT2, priority: 0, target: "00B0D063C2260000.local", weight: 0 },
+                    },
+                    {
+                        name: "0000000000000000._matterc._udp.local",
+                        recordClass: 1,
+                        recordType: 16,
+                        ttl: 120,
+                        value: [
+                            "VP=1+32768",
+                            "DT=1",
+                            "DN=Test Device",
+                            "SII=5000",
+                            "SAI=300",
+                            "T=0",
+                            "D=1234",
+                            "CM=1",
+                            "PH=33",
+                            "PI=",
+                        ],
+                    },
+                    { name: "00B0D063C2260000.local", recordClass: 1, recordType: 1, ttl: 120, value: "192.168.200.1" },
+                    {
+                        name: "00B0D063C2260000.local",
+                        recordClass: 1,
+                        recordType: 28,
+                        ttl: 120,
+                        value: "fe80::e777:4f5e:c61e:7314",
+                    },
                 ],
-                "answers": [
-                    { "name": "_services._dns-sd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_matterc._udp.local" },
-                    { "name": "_services._dns-sd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_V1._sub._matterc._udp.local" },
-                    { "name": "_services._dns-sd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_T1._sub._matterc._udp.local" },
-                    { "name": "_services._dns-sd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_S4._sub._matterc._udp.local" },
-                    { "name": "_services._dns-sd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_L1234._sub._matterc._udp.local" },
-                    { "name": "_services._dns-sd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_CM._sub._matterc._udp.local" },
-                    { "name": "_matterc._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "0000000000000000._matterc._udp.local" },
-                    { "name": "_V1._sub._matterc._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "0000000000000000._matterc._udp.local" },
-                    { "name": "_T1._sub._matterc._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "0000000000000000._matterc._udp.local" },
-                    { "name": "_S4._sub._matterc._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "0000000000000000._matterc._udp.local" },
-                    { "name": "_L1234._sub._matterc._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "0000000000000000._matterc._udp.local" },
-                    { "name": "_CM._sub._matterc._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "0000000000000000._matterc._udp.local" }
+                answers: [
+                    {
+                        name: "_services._dns-sd._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "_matterc._udp.local",
+                    },
+                    {
+                        name: "_services._dns-sd._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "_V1._sub._matterc._udp.local",
+                    },
+                    {
+                        name: "_services._dns-sd._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "_T1._sub._matterc._udp.local",
+                    },
+                    {
+                        name: "_services._dns-sd._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "_S4._sub._matterc._udp.local",
+                    },
+                    {
+                        name: "_services._dns-sd._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "_L1234._sub._matterc._udp.local",
+                    },
+                    {
+                        name: "_services._dns-sd._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "_CM._sub._matterc._udp.local",
+                    },
+                    {
+                        name: "_matterc._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "0000000000000000._matterc._udp.local",
+                    },
+                    {
+                        name: "_V1._sub._matterc._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "0000000000000000._matterc._udp.local",
+                    },
+                    {
+                        name: "_T1._sub._matterc._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "0000000000000000._matterc._udp.local",
+                    },
+                    {
+                        name: "_S4._sub._matterc._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "0000000000000000._matterc._udp.local",
+                    },
+                    {
+                        name: "_L1234._sub._matterc._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "0000000000000000._matterc._udp.local",
+                    },
+                    {
+                        name: "_CM._sub._matterc._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "0000000000000000._matterc._udp.local",
+                    },
                 ],
-                "authorities": [],
-                "messageType": 33792,
-                "queries": [],
-                "transactionId": 0
+                authorities: [],
+                messageType: 33792,
+                queries: [],
+                transactionId: 0,
             });
 
             const result3 = DnsCodec.decode(dataArr[2]);
             expect(result3).toEqual({
-                "additionalRecords": [
-                    { "name": "0000000000000000._matterd._udp.local", "recordClass": 1, "recordType": 33, "ttl": 120, "value": { "port": PORT3, "priority": 0, "target": "00B0D063C2260000.local", "weight": 0 } },
-                    { "name": "0000000000000000._matterd._udp.local", "recordClass": 1, "recordType": 16, "ttl": 120, "value": ["VP=1+32768", "DT=1", "DN=Test Commissioner", "SII=5000", "SAI=300", "T=0"] },
-                    { "name": "00B0D063C2260000.local", "recordClass": 1, "recordType": 1, "ttl": 120, "value": "192.168.200.1" },
-                    { "name": "00B0D063C2260000.local", "recordClass": 1, "recordType": 28, "ttl": 120, "value": "fe80::e777:4f5e:c61e:7314" }
+                additionalRecords: [
+                    {
+                        name: "0000000000000000._matterd._udp.local",
+                        recordClass: 1,
+                        recordType: 33,
+                        ttl: 120,
+                        value: { port: PORT3, priority: 0, target: "00B0D063C2260000.local", weight: 0 },
+                    },
+                    {
+                        name: "0000000000000000._matterd._udp.local",
+                        recordClass: 1,
+                        recordType: 16,
+                        ttl: 120,
+                        value: ["VP=1+32768", "DT=1", "DN=Test Commissioner", "SII=5000", "SAI=300", "T=0"],
+                    },
+                    { name: "00B0D063C2260000.local", recordClass: 1, recordType: 1, ttl: 120, value: "192.168.200.1" },
+                    {
+                        name: "00B0D063C2260000.local",
+                        recordClass: 1,
+                        recordType: 28,
+                        ttl: 120,
+                        value: "fe80::e777:4f5e:c61e:7314",
+                    },
                 ],
-                "answers": [
-                    { "name": "_services._dns-sd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_matterd._udp.local" },
-                    { "name": "_matterd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_V1._sub._matterd._udp.local" },
-                    { "name": "_V1._sub._matterd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "0000000000000000._matterd._udp.local" },
-                    { "name": "_services._dns-sd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_T1._sub._matterd._udp.local" },
-                    { "name": "_T1._sub._matterd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "0000000000000000._matterd._udp.local" }
+                answers: [
+                    {
+                        name: "_services._dns-sd._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "_matterd._udp.local",
+                    },
+                    {
+                        name: "_matterd._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "_V1._sub._matterd._udp.local",
+                    },
+                    {
+                        name: "_V1._sub._matterd._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "0000000000000000._matterd._udp.local",
+                    },
+                    {
+                        name: "_services._dns-sd._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "_T1._sub._matterd._udp.local",
+                    },
+                    {
+                        name: "_T1._sub._matterd._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "0000000000000000._matterd._udp.local",
+                    },
                 ],
-                "authorities": [],
-                "messageType": 33792,
-                "queries": [],
-                "transactionId": 0
+                authorities: [],
+                messageType: 33792,
+                queries: [],
+                transactionId: 0,
             });
         });
     });
@@ -301,11 +692,11 @@ describe("MDNS Scanner and Broadcaster", () => {
 
             const result = await scanner.findOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID, 1);
 
-            expect(dataWereSent).toBe(true)
-            expect(queryReceived).toBe(false)
+            expect(dataWereSent).toBe(true);
+            expect(queryReceived).toBe(false);
             expect(result).toEqual([
                 { ip: `${SERVER_IPv6}%fakeInterface`, port: PORT, type: "udp" },
-                { ip: SERVER_IPv4, port: PORT, type: "udp" }
+                { ip: SERVER_IPv4, port: PORT, type: "udp" },
             ]);
         });
 
@@ -323,21 +714,21 @@ describe("MDNS Scanner and Broadcaster", () => {
             await fakeTime.yield(); // make sure responding promise is created
 
             expect(DnsCodec.decode(sentData[0])).toEqual({
-                "additionalRecords": [],
-                "answers": [],
-                "authorities": [],
-                "messageType": 0,
-                "queries": [
-                    { "name": "0000000000000018-0000000000000001._matter._tcp.local", "recordClass": 1, "recordType": 33 }
+                additionalRecords: [],
+                answers: [],
+                authorities: [],
+                messageType: 0,
+                queries: [
+                    { name: "0000000000000018-0000000000000001._matter._tcp.local", recordClass: 1, recordType: 33 },
                 ],
-                "transactionId": 0
+                transactionId: 0,
             });
 
             const result = await findPromise;
 
             expect(result).toEqual([
                 { ip: `${SERVER_IPv6}%fakeInterface`, port: PORT, type: "udp" },
-                { ip: SERVER_IPv4, port: PORT, type: "udp" }
+                { ip: SERVER_IPv4, port: PORT, type: "udp" },
             ]);
         });
 
@@ -353,7 +744,7 @@ describe("MDNS Scanner and Broadcaster", () => {
                 deviceType: 1,
                 vendorId: VendorId(1),
                 productId: 0x8000,
-                discriminator: 1234
+                discriminator: 1234,
             });
             broadcaster.setFabrics(PORT2, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
 
@@ -363,63 +754,147 @@ describe("MDNS Scanner and Broadcaster", () => {
             await fakeTime.advanceTime(1); // Trigger timer to send query (0ms timer)
             await fakeTime.yield(); // Make sure data were queried async
 
-            expect(netData.length).toBe(3)
+            expect(netData.length).toBe(3);
 
             const query = DnsCodec.decode(netData[0]);
             expect(query).toEqual({
-                "additionalRecords": [],
-                "answers": [],
-                "authorities": [],
-                "messageType": 0,
-                "queries": [
-                    { "name": "0000000000000018-0000000000000001._matter._tcp.local", "recordClass": 1, "recordType": 33 }
+                additionalRecords: [],
+                answers: [],
+                authorities: [],
+                messageType: 0,
+                queries: [
+                    { name: "0000000000000018-0000000000000001._matter._tcp.local", recordClass: 1, recordType: 33 },
                 ],
-                "transactionId": 0
+                transactionId: 0,
             });
             const response2 = DnsCodec.decode(netData[1]);
             expect(response2).toEqual({
-                "additionalRecords": [
-                    { "name": "_services._dns-sd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_matter._tcp.local" },
-                    { "name": "_services._dns-sd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_I0000000000000018._sub._matter._tcp.local" },
-                    { "name": "_matter._tcp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "0000000000000018-0000000000000001._matter._tcp.local" },
-                    { "name": "_I0000000000000018._sub._matter._tcp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "0000000000000018-0000000000000001._matter._tcp.local" },
-                    { "name": "0000000000000018-0000000000000001._matter._tcp.local", "recordClass": 1, "recordType": 16, "ttl": 120, "value": ["SII=5000", "SAI=300", "T=0"] },
-                    { "name": "00B0D063C2260000.local", "recordClass": 1, "recordType": 1, "ttl": 120, "value": "192.168.200.1" },
-                    { "name": "00B0D063C2260000.local", "recordClass": 1, "recordType": 28, "ttl": 120, "value": "fe80::e777:4f5e:c61e:7314" }
+                additionalRecords: [
+                    {
+                        name: "_services._dns-sd._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "_matter._tcp.local",
+                    },
+                    {
+                        name: "_services._dns-sd._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "_I0000000000000018._sub._matter._tcp.local",
+                    },
+                    {
+                        name: "_matter._tcp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "0000000000000018-0000000000000001._matter._tcp.local",
+                    },
+                    {
+                        name: "_I0000000000000018._sub._matter._tcp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "0000000000000018-0000000000000001._matter._tcp.local",
+                    },
+                    {
+                        name: "0000000000000018-0000000000000001._matter._tcp.local",
+                        recordClass: 1,
+                        recordType: 16,
+                        ttl: 120,
+                        value: ["SII=5000", "SAI=300", "T=0"],
+                    },
+                    { name: "00B0D063C2260000.local", recordClass: 1, recordType: 1, ttl: 120, value: "192.168.200.1" },
+                    {
+                        name: "00B0D063C2260000.local",
+                        recordClass: 1,
+                        recordType: 28,
+                        ttl: 120,
+                        value: "fe80::e777:4f5e:c61e:7314",
+                    },
                 ],
-                "answers": [
-                    { "name": "0000000000000018-0000000000000001._matter._tcp.local", "recordClass": 1, "recordType": 33, "ttl": 120, "value": { "port": PORT2, "priority": 0, "target": "00B0D063C2260000.local", "weight": 0 } }
+                answers: [
+                    {
+                        name: "0000000000000018-0000000000000001._matter._tcp.local",
+                        recordClass: 1,
+                        recordType: 33,
+                        ttl: 120,
+                        value: { port: PORT2, priority: 0, target: "00B0D063C2260000.local", weight: 0 },
+                    },
                 ],
-                "authorities": [],
-                "messageType": 33792,
-                "queries": [],
-                "transactionId": 0
+                authorities: [],
+                messageType: 33792,
+                queries: [],
+                transactionId: 0,
             });
 
             const response = DnsCodec.decode(netData[2]);
             expect(response).toEqual({
-                "additionalRecords": [
-                    { "name": "_services._dns-sd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_matter._tcp.local" },
-                    { "name": "_services._dns-sd._udp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "_I0000000000000018._sub._matter._tcp.local" },
-                    { "name": "_matter._tcp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "0000000000000018-0000000000000001._matter._tcp.local" },
-                    { "name": "_I0000000000000018._sub._matter._tcp.local", "recordClass": 1, "recordType": 12, "ttl": 120, "value": "0000000000000018-0000000000000001._matter._tcp.local" },
-                    { "name": "0000000000000018-0000000000000001._matter._tcp.local", "recordClass": 1, "recordType": 16, "ttl": 120, "value": ["SII=5000", "SAI=300", "T=0"] },
-                    { "name": "00B0D063C2260000.local", "recordClass": 1, "recordType": 1, "ttl": 120, "value": "192.168.200.1" },
-                    { "name": "00B0D063C2260000.local", "recordClass": 1, "recordType": 28, "ttl": 120, "value": "fe80::e777:4f5e:c61e:7314" }
+                additionalRecords: [
+                    {
+                        name: "_services._dns-sd._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "_matter._tcp.local",
+                    },
+                    {
+                        name: "_services._dns-sd._udp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "_I0000000000000018._sub._matter._tcp.local",
+                    },
+                    {
+                        name: "_matter._tcp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "0000000000000018-0000000000000001._matter._tcp.local",
+                    },
+                    {
+                        name: "_I0000000000000018._sub._matter._tcp.local",
+                        recordClass: 1,
+                        recordType: 12,
+                        ttl: 120,
+                        value: "0000000000000018-0000000000000001._matter._tcp.local",
+                    },
+                    {
+                        name: "0000000000000018-0000000000000001._matter._tcp.local",
+                        recordClass: 1,
+                        recordType: 16,
+                        ttl: 120,
+                        value: ["SII=5000", "SAI=300", "T=0"],
+                    },
+                    { name: "00B0D063C2260000.local", recordClass: 1, recordType: 1, ttl: 120, value: "192.168.200.1" },
+                    {
+                        name: "00B0D063C2260000.local",
+                        recordClass: 1,
+                        recordType: 28,
+                        ttl: 120,
+                        value: "fe80::e777:4f5e:c61e:7314",
+                    },
                 ],
-                "answers": [
-                    { "name": "0000000000000018-0000000000000001._matter._tcp.local", "recordClass": 1, "recordType": 33, "ttl": 120, "value": { "port": PORT2, "priority": 0, "target": "00B0D063C2260000.local", "weight": 0 } }
+                answers: [
+                    {
+                        name: "0000000000000018-0000000000000001._matter._tcp.local",
+                        recordClass: 1,
+                        recordType: 33,
+                        ttl: 120,
+                        value: { port: PORT2, priority: 0, target: "00B0D063C2260000.local", weight: 0 },
+                    },
                 ],
-                "authorities": [],
-                "messageType": 33792,
-                "queries": [],
-                "transactionId": 0
+                authorities: [],
+                messageType: 33792,
+                queries: [],
+                transactionId: 0,
             });
             const result = await findPromise;
 
             expect(result).toEqual([
                 { ip: `${SERVER_IPv6}%fakeInterface`, port: PORT2, type: "udp" },
-                { ip: SERVER_IPv4, port: PORT2, type: "udp" }
+                { ip: SERVER_IPv4, port: PORT2, type: "udp" },
             ]);
         });
 
@@ -440,7 +915,7 @@ describe("MDNS Scanner and Broadcaster", () => {
                 deviceType: 1,
                 vendorId: VendorId(1),
                 productId: 0x8000,
-                discriminator: 1234
+                discriminator: 1234,
             });
             broadcaster.setFabrics(PORT2, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
 
@@ -452,11 +927,11 @@ describe("MDNS Scanner and Broadcaster", () => {
 
             const result = await scanner.findOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID);
 
-            expect(dataWereSent).toBe(true)
-            expect(queryReceived).toBe(false)
+            expect(dataWereSent).toBe(true);
+            expect(queryReceived).toBe(false);
             expect(result).toEqual([
                 { ip: `${SERVER_IPv6}%fakeInterface`, port: PORT2, type: "udp" },
-                { ip: SERVER_IPv4, port: PORT2, type: "udp" }
+                { ip: SERVER_IPv4, port: PORT2, type: "udp" },
             ]);
         });
     });

@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { NotImplementedError } from "../../common/MatterError.js";
 import { LevelControlCluster } from "../definitions/LevelControlCluster.js";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
-import { NotImplementedError } from "../../common/MatterError.js";
 
 // TODO: Create temporary options based on mask and override. How to expose to user of the library?
 
@@ -20,19 +20,18 @@ export const LevelControlClusterHandler: () => ClusterServerHandlers<typeof Leve
     // underlying hardware. But how to expose these paramters to the caller of the library? Callback with
     // temporary options?
     move: async () => {
-        throw new NotImplementedError("Not implemented")
+        throw new NotImplementedError("Not implemented");
     },
 
     step: async () => {
-        throw new NotImplementedError("Not implemented")
+        throw new NotImplementedError("Not implemented");
     },
 
     stop: async () => {
-        throw new NotImplementedError("Not implemented")
+        throw new NotImplementedError("Not implemented");
     },
 
-    moveToLevelWithOnOff: async function({ request: { level }, attributes: { currentLevel } }) {
-
+    moveToLevelWithOnOff: async function ({ request: { level }, attributes: { currentLevel } }) {
         /* TODO: Need to be able to access or check existance of optional attributes
         if ( level <= minLevel.get() && associated onOff device on){
            // turn associated onOff device off
@@ -45,14 +44,14 @@ export const LevelControlClusterHandler: () => ClusterServerHandlers<typeof Leve
     },
 
     moveWithOnOff: async () => {
-        throw new NotImplementedError("Not implemented")
+        throw new NotImplementedError("Not implemented");
     },
 
     stepWithOnOff: async () => {
-        throw new NotImplementedError("Not implemented")
+        throw new NotImplementedError("Not implemented");
     },
 
     stopWithOnOff: async () => {
-        throw new NotImplementedError("Not implemented")
+        throw new NotImplementedError("Not implemented");
     },
 });
