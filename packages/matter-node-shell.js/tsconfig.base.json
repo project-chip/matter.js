@@ -1,0 +1,15 @@
+/* Base configuration */
+{
+  "compilerOptions": {
+    "target": "ES2015",
+    "module": "node16",
+    "moduleResolution": "node16", // Required to support exports on package.json
+    "strictNullChecks": true, // Required to correctly generate Nullable types in d.ts
+    "incremental": true, // Speed up subsequent builds
+    "esModuleInterop": true, // needed for jest tests
+  },
+  "references": [
+      { "path": "../matter-node.js" },
+      { "path": "../matter-node-ble.js"}
+  ],
+}
