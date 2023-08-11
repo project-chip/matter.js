@@ -12270,7 +12270,7 @@ export const SpecMatter: MatterElement = {
             xref: { document: "core", section: "11.1" },
 
             children: [
-                { tag: "attribute", name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 2 },
+                { tag: "attribute", name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 },
 
                 {
                     tag: "attribute", name: "DataModelRevision", id: 0x0, type: "uint16", access: "R V",

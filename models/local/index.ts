@@ -13,6 +13,7 @@
 // matching.
 
 import "./AdministratorCommissioningOverrides.js";
+import "./BasicInformationOverrides.js";
 import "./ColorControlOverrides.js";
 import "./DoorLockOverrides.js";
 import "./GroupKeyManagementOverrides.js";
