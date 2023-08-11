@@ -151,7 +151,7 @@ export namespace BasicInformation {
     export const Cluster = CreateCluster({
         id: 0x28,
         name: "BasicInformation",
-        revision: 1,
+        revision: 2,
 
         attributes: {
             /**
