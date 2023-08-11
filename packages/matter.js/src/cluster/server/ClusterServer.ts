@@ -95,8 +95,8 @@ export function ClusterServer<
 
             for (const attributeName in attributes) {
                 const attribute = (attributes as any)[attributeName];
-                if (!attributeStorageListeners.has(attribute.id)) return;
-                if (!storageContext.has(attribute.name)) return;
+                if (!attributeStorageListeners.has(attribute.id)) continue;
+                if (!storageContext.has(attribute.name)) continue;
                 try {
                     const data = storageContext.get<{ version: number; value: any }>(attribute.name);
                     logger.debug(
@@ -321,7 +321,7 @@ export function ClusterServer<
             }
         }
     }
-    (attributes as any).attributeList.setLocal(attributeList);
+    (attributes as any).attributeList.setLocal(attributeList.sort((a, b) => a - b));
 
     // Create commands
     const acceptedCommandList = new Array<CommandId>();
@@ -394,8 +394,8 @@ export function ClusterServer<
             }
         }
     }
-    (attributes as any).acceptedCommandList.setLocal(acceptedCommandList.map(id => id));
-    (attributes as any).generatedCommandList.setLocal(generatedCommandList.map(id => id));
+    (attributes as any).acceptedCommandList.setLocal(acceptedCommandList.sort((a, b) => a - b));
+    (attributes as any).generatedCommandList.setLocal(generatedCommandList.sort((a, b) => a - b));
 
     const eventList = new Array<EventId>();
     for (const eventName in eventDef) {
@@ -449,7 +449,7 @@ export function ClusterServer<
                 (events as any)[eventName].triggerEvent(event);
         }
     }
-    (attributes as any).eventList.setLocal(eventList.map(id => id));
+    (attributes as any).eventList.setLocal(eventList.sort((a, b) => a - b));
 
     return result as ClusterServerObj<A, C, E>;
 }

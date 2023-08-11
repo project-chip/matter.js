@@ -135,7 +135,7 @@ export class Endpoint {
             this.descriptorCluster = cluster as unknown as ClusterServerObjForCluster<typeof DescriptorCluster>;
         }
         this.clusterServers.set(cluster.id, cluster);
-        this.descriptorCluster.attributes.serverList.init(Array.from(this.clusterServers.keys()).map(id => id));
+        this.descriptorCluster.attributes.serverList.init(Array.from(this.clusterServers.keys()).sort((a, b) => a - b));
         this.structureChangedCallback(); // Inform parent about structure change
     }
 
@@ -143,7 +143,7 @@ export class Endpoint {
         cluster: ClusterClientObj<F, A, C, E>,
     ) {
         this.clusterClients.set(cluster.id, cluster);
-        this.descriptorCluster.attributes.clientList.init(Array.from(this.clusterClients.keys()).map(id => id));
+        this.descriptorCluster.attributes.clientList.init(Array.from(this.clusterClients.keys()).sort((a, b) => a - b));
         this.structureChangedCallback(); // Inform parent about structure change
     }
 

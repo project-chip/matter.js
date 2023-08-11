@@ -457,12 +457,12 @@ describe("ClusterServer structure", () => {
                 AttributeId(0),
                 AttributeId(1),
                 AttributeId(2),
-                AttributeId(65533),
-                AttributeId(65532),
-                AttributeId(65531),
-                AttributeId(65530),
-                AttributeId(65529),
                 AttributeId(65528),
+                AttributeId(65529),
+                AttributeId(65530),
+                AttributeId(65531),
+                AttributeId(65532),
+                AttributeId(65533),
             ]);
             expect((server.attributes as any).acceptedCommandList.get()).toEqual([CommandId(0), CommandId(2)]);
             expect((server.attributes as any).generatedCommandList.get()).toEqual([]);
@@ -491,12 +491,12 @@ describe("ClusterServer structure", () => {
             expect((server.attributes as any).attributeList.get()).toEqual([
                 AttributeId(0),
                 AttributeId(1),
-                AttributeId(65533),
-                AttributeId(65532),
-                AttributeId(65531),
-                AttributeId(65530),
-                AttributeId(65529),
                 AttributeId(65528),
+                AttributeId(65529),
+                AttributeId(65530),
+                AttributeId(65531),
+                AttributeId(65532),
+                AttributeId(65533),
             ]);
             expect((server.attributes as any).acceptedCommandList.get()).toEqual([CommandId(0), CommandId(0x40)]);
             expect((server.attributes as any).generatedCommandList.get()).toEqual([]);
@@ -525,12 +525,12 @@ describe("ClusterServer structure", () => {
             expect((server.attributes as any).attributeList.get()).toEqual([
                 AttributeId(0),
                 AttributeId(1),
-                AttributeId(65533),
-                AttributeId(65532),
-                AttributeId(65531),
-                AttributeId(65530),
-                AttributeId(65529),
                 AttributeId(65528),
+                AttributeId(65529),
+                AttributeId(65530),
+                AttributeId(65531),
+                AttributeId(65532),
+                AttributeId(65533),
             ]);
             expect((server.attributes as any).acceptedCommandList.get()).toEqual([CommandId(0), CommandId(0x40)]);
             expect((server.attributes as any).generatedCommandList.get()).toEqual([]);
@@ -556,12 +556,12 @@ describe("ClusterServer structure", () => {
             expect((server.attributes as any).attributeList.get()).toEqual([
                 AttributeId(0),
                 AttributeId(1),
-                AttributeId(65533),
-                AttributeId(65532),
-                AttributeId(65531),
-                AttributeId(65530),
-                AttributeId(65529),
                 AttributeId(65528),
+                AttributeId(65529),
+                AttributeId(65530),
+                AttributeId(65531),
+                AttributeId(65532),
+                AttributeId(65533),
             ]);
             expect((server.attributes as any).acceptedCommandList.get()).toEqual([CommandId(0)]);
             expect((server.attributes as any).generatedCommandList.get()).toEqual([]);
@@ -599,12 +599,12 @@ describe("ClusterServer structure", () => {
             expect((server.attributes as any).featureMap.get()).toEqual({ groupNames: true });
             expect((server.attributes as any).attributeList.get()).toEqual([
                 AttributeId(0),
-                AttributeId(65533),
-                AttributeId(65532),
-                AttributeId(65531),
-                AttributeId(65530),
-                AttributeId(65529),
                 AttributeId(65528),
+                AttributeId(65529),
+                AttributeId(65530),
+                AttributeId(65531),
+                AttributeId(65532),
+                AttributeId(65533),
             ]);
             expect((server.attributes as any).acceptedCommandList.get()).toEqual([
                 CommandId(0),
