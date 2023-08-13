@@ -9,10 +9,13 @@ import { CommandId } from "../datatype/CommandId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { EventId } from "../datatype/EventId.js";
 import { NodeId } from "../datatype/NodeId.js";
+import { Logger } from "../log/Logger.js";
 import { TlvAttributePath, TlvCommandPath, TlvEventPath } from "../protocol/interaction/InteractionProtocol.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { Attribute, Cluster, Command, Event } from "./Cluster.js";
 import * as Clusters from "./definitions/index.js";
+
+const logger = Logger.get("ClusterHelper");
 
 export const AllClustersMap: { [key: Cluster<any, any, any, any, any>["id"]]: Cluster<any, any, any, any, any> } = {
     [Clusters.AccessControlCluster.id]: Clusters.AccessControlCluster,
@@ -106,7 +109,19 @@ const clusterAttributeCache = new Map<ClusterId, Map<AttributeId, CachedAttribut
 const clusterEventCache = new Map<ClusterId, Map<EventId, CachedEventInfo>>();
 const clusterCommandCache = new Map<ClusterId, Map<CommandId, CachedCommandInfo>>();
 
+export const UnknownCluster = (clusterId: ClusterId) =>
+    Cluster({
+        id: clusterId,
+        name: `Unknown cluster ${toHex(clusterId)}`,
+        revision: 0,
+        unknown: true,
+    });
+
 export function getClusterById(clusterId: ClusterId): Cluster<any, any, any, any, any> {
+    if (AllClustersMap[clusterId] === undefined) {
+        logger.info(`Unknown cluster ${toHex(clusterId)} requested: UnknownCluster instance added.`);
+        AllClustersMap[clusterId] = UnknownCluster(clusterId);
+    }
     return AllClustersMap[clusterId];
 }
 
@@ -205,7 +220,7 @@ function resolveEndpointClusterName(
         return `${elementName}/*`;
     }
     const cluster = getClusterById(clusterId);
-    if (cluster === undefined) {
+    if (cluster.unknown) {
         return `${elementName}/unknown(${toHex(clusterId)})`;
     }
     return `${elementName}/${cluster.name}(${toHex(clusterId)})`;
@@ -221,7 +236,8 @@ export function resolveAttributeName({
     if (endpointId === undefined || clusterId === undefined || attributeId === undefined) {
         return `${endpointClusterName}/${toHex(attributeId)}`;
     }
-    const attribute = getClusterAttributeById(getClusterById(clusterId), attributeId);
+    const cluster = getClusterById(clusterId);
+    const attribute = getClusterAttributeById(cluster, attributeId);
     if (attribute === undefined) {
         return `${endpointClusterName}/unknown(${toHex(attributeId)})`;
     }
