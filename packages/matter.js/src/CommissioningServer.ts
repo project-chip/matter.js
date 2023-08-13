@@ -723,21 +723,25 @@ export class CommissioningServer extends MatterNode {
         }
     }
 
+    /** Get some basic details of all Fabrics the server is commissioned to. */
     getCommissionedFabricInformation() {
         if (!this.isCommissioned()) return [];
         return this.deviceInstance?.getFabrics().map(fabric => fabric.getExternalInformation()) ?? [];
     }
 
+    /** get some basic details of all Fabrics where an active subscription exists. */
     getSubscribedFabricInformation() {
         if (!this.isCommissioned()) return [];
         return this.interactionServer?.getSubscribedFabricInformation() ?? [];
     }
 
+    /** Get the number of active subscriptions. */
     getNumberOfActiveSubscriptions() {
         if (!this.isCommissioned()) return 0;
         return this.interactionServer?.getNumberOfActiveSubscriptions() ?? 0;
     }
 
+    /** Returns true if at least one active subscription exists. */
     isSubscribed() {
         return this.getNumberOfActiveSubscriptions() > 0;
     }
