@@ -12,6 +12,7 @@ import { NodeId } from "../datatype/NodeId.js";
 import { Logger } from "../log/Logger.js";
 import { TlvAttributePath, TlvCommandPath, TlvEventPath } from "../protocol/interaction/InteractionProtocol.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
+import { toHexString } from "../util/Number.js";
 import { Attribute, Cluster, Command, Event } from "./Cluster.js";
 import * as Clusters from "./definitions/index.js";
 
@@ -116,6 +117,10 @@ export const UnknownCluster = (clusterId: ClusterId) =>
         revision: 0,
         unknown: true,
     });
+
+export function getClusterNameById(clusterId: ClusterId): string {
+    return AllClustersMap[clusterId]?.name ?? `Unknown cluster ${toHexString(clusterId)}`;
+}
 
 export function getClusterById(clusterId: ClusterId): Cluster<any, any, any, any, any> {
     if (AllClustersMap[clusterId] === undefined) {
