@@ -85,6 +85,9 @@ export class AnySchema extends TlvSchema<TlvStream> {
     }
 
     decodeAnyTlvStream(encoded: TlvStream) {
+        if (encoded.length === 0) {
+            return undefined;
+        }
         const reader = new TlvArrayReader(encoded);
         const result = this.decodeGenericElement(reader);
         const nextElement = reader.readTagType();

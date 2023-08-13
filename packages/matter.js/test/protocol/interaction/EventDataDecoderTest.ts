@@ -278,4 +278,78 @@ describe("EventDataDecoder", () => {
             ]);
         });
     });
+
+    describe("normalize and Decode EventReport for unknown event", () => {
+        it("normalize and decode data with all paths given for single event entries", () => {
+            const data: TypeFromSchema<typeof TlvEventData>[] = [
+                {
+                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x999), eventId: EventId(0) },
+                    eventNumber: 1,
+                    priority: 1,
+                    epochTimestamp: 0,
+                    systemTimestamp: undefined,
+                    deltaEpochTimestamp: undefined,
+                    deltaSystemTimestamp: undefined,
+                    data: BasicInformation.TlvStartUpEvent.encodeTlv({ softwareVersion: 1 }),
+                },
+                {
+                    path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x999), eventId: EventId(1) },
+                    eventNumber: 2,
+                    priority: 1,
+                    epochTimestamp: 0,
+                    systemTimestamp: undefined,
+                    deltaEpochTimestamp: undefined,
+                    deltaSystemTimestamp: undefined,
+                    data: TlvVoid.encodeTlv(),
+                },
+            ];
+
+            const normalized = normalizeAndDecodeEventData(data);
+
+            expect(normalized).toEqual([
+                {
+                    path: {
+                        endpointId: EndpointNumber(0),
+                        clusterId: ClusterId(0x999),
+                        eventId: EventId(0),
+                        nodeId: undefined,
+                        eventName: "Unknown (0x0)",
+                    },
+                    events: [
+                        {
+                            eventNumber: 1,
+                            priority: 1,
+                            epochTimestamp: 0,
+                            systemTimestamp: undefined,
+                            deltaEpochTimestamp: undefined,
+                            deltaSystemTimestamp: undefined,
+                            data: { "0": 1 },
+                            path: undefined,
+                        },
+                    ],
+                },
+                {
+                    path: {
+                        endpointId: EndpointNumber(0),
+                        clusterId: ClusterId(0x999),
+                        eventId: EventId(1),
+                        nodeId: undefined,
+                        eventName: "Unknown (0x1)",
+                    },
+                    events: [
+                        {
+                            eventNumber: 2,
+                            priority: 1,
+                            epochTimestamp: 0,
+                            systemTimestamp: undefined,
+                            deltaEpochTimestamp: undefined,
+                            deltaSystemTimestamp: undefined,
+                            data: undefined,
+                            path: undefined,
+                        },
+                    ],
+                },
+            ]);
+        });
+    });
 });
