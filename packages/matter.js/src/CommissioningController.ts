@@ -495,4 +495,8 @@ export class CommissioningController extends MatterNode {
             return this.connect();
         }
     }
+
+    getActiveSessionInformation() {
+        return this.controllerInstance?.getActiveSessionInformation() ?? [];
+    }
 }

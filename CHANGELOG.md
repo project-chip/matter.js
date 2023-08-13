@@ -61,7 +61,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Feature: Enhance Storage system to allow to create subcontext stores to allow better separation of data
   * Feature: Allow to also remove devices from Aggregators
   * Feature: Optionally allow to define discovery capabilities when generating Pairing code
-  * Feature: Add methods to CommissioningServer class to get information on active subscriptions and commissioned fabrics
+  * Feature: Add methods to CommissioningServer/Controller class to get information on active sessions and commissioned fabrics
 * Reference implementation/Examples:
   * Breaking: The storage key structure got changed to allow multi node operations within one process. This requires to change the storage key structure and to migrate or reset the storage.
     * Migration: prepend any storage key except Device.* and Controller.* with "0." in the filename

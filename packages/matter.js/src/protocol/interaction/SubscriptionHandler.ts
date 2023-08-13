@@ -568,8 +568,4 @@ export class SubscriptionHandler {
             messenger.close();
         }
     }
-
-    getFabric(): Fabric {
-        return this.fabric;
-    }
 }
