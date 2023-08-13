@@ -24,7 +24,12 @@ import { NodeId } from "./datatype/NodeId.js";
 import { Aggregator } from "./device/Aggregator.js";
 import { ComposedDevice } from "./device/ComposedDevice.js";
 import { PairedDevice } from "./device/Device.js";
-import { DeviceTypeDefinition, DeviceTypes, getDeviceTypeDefinitionByCode } from "./device/DeviceTypes.js";
+import {
+    DeviceTypeDefinition,
+    DeviceTypes,
+    getDeviceTypeDefinitionByCode,
+    UnknownDeviceType,
+} from "./device/DeviceTypes.js";
 import { Endpoint } from "./device/Endpoint.js";
 import { Logger } from "./log/Logger.js";
 import { MatterController } from "./MatterController.js";
@@ -367,8 +372,8 @@ export class CommissioningController extends MatterNode {
         const deviceTypes = descriptorData.deviceTypeList.flatMap(({ deviceType, revision }) => {
             const deviceTypeDefinition = getDeviceTypeDefinitionByCode(deviceType);
             if (deviceTypeDefinition === undefined) {
-                logger.info(`Device type with code ${deviceType} not known, ignore`);
-                return [];
+                logger.info(`Device type with code ${deviceType} not known, use generic replacement.`);
+                return UnknownDeviceType(deviceType);
             }
             if (deviceTypeDefinition.revision !== revision) {
                 logger.info(`Device type with code ${deviceType} and revision ${revision} not known, ignore`);
