@@ -34,6 +34,8 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Feature: Add full event support (Device and Controller) including triggering some default events automatically (startup, shutdown, reachabilityChanged, bootReason)
   * Feature: Add more parameters to several InteractionClient methods to allow to configure more parameters of the requests
   * Feature: Allows subscripts to be updated dynamically when the endpoint structure for bridges changes by adding or removing a device
+  * Feature: When used as Controller also "unknown" CLusters, Attributes, Events and DeviceTypes are generically parsed and supported and can be detected as unknown in code
+  * Feature: When used as controller the read data about supported attributes, events are considered when create Attribute/EventClient objects and can be differentiated by PresentAttributeClient/UnknownPresentAttributeClient class types 
   * Enhance: Device port in MDNSBroadcaster is now dynamically set and add UDC (User directed Commissioning) Announcements
   * Enhance: Enhanced MessageCodec and check some more fields
   * Enhance: Added possibility to define conditional cluster attribute/Command/event definitions and introduce runtime checking for these. Part of Cluster Structure rework still WIP
@@ -71,10 +73,13 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Feature: The Controller example script got a new parameter -ble to also initialize the Bluetooth transport layer
   * Feature: The Controller example script got a new parameters -ble-* to provide Wi-Fi/Thread network credentials to use for device commissioning
   * Feature: Add stopping of the example scripts to allow clean shutdown and sending shutdown Event
+  * Feature: Log the endpoint structure of the device/commissioned device on start
 * Misc:
   * Added Specification links for Matter Specifications 1.1
   * Optimize typing exports for node10 TS settings
-  * Add optional parameter to define a uniqueID used in serialnumber of examples
+  * Add optional parameter to define a uniqueID used in serial number of examples
+  * Add WIP package matter-node-shell.js with the goal to offer a node.js based shell-based controller implementation
+  * Add new util class EndpointStructureLogger which logs all endpoint details 
 
 ## 0.4.0 (2023-05-16)
 * Matter-Core functionality:
