@@ -722,4 +722,23 @@ export class CommissioningServer extends MatterNode {
             return this.advertise();
         }
     }
+
+    getCommissionedFabricInformation() {
+        if (!this.isCommissioned()) return [];
+        return this.deviceInstance?.getFabrics().map(fabric => fabric.getExternalInformation()) ?? [];
+    }
+
+    getSubscribedFabricInformation() {
+        if (!this.isCommissioned()) return [];
+        return this.interactionServer?.getSubscribedFabricInformation() ?? [];
+    }
+
+    getNumberOfActiveSubscriptions() {
+        if (!this.isCommissioned()) return 0;
+        return this.interactionServer?.getNumberOfActiveSubscriptions() ?? 0;
+    }
+
+    isSubscribed() {
+        return this.getNumberOfActiveSubscriptions() > 0;
+    }
 }

@@ -628,4 +628,14 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             subscription.cancel();
         }
     }
+
+    getSubscribedFabricInformation() {
+        return Array.from(this.subscriptionMap.values()).map(subscription =>
+            subscription.getFabric().getExternalInformation(),
+        );
+    }
+
+    getNumberOfActiveSubscriptions() {
+        return this.subscriptionMap.size;
+    }
 }
