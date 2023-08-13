@@ -102,6 +102,10 @@ abstract class OnOffBaseDevice extends extendPublicHandlerMethods<typeof Device,
         cluster?.setOnOffAttribute(!cluster?.getOnOffAttribute());
     }
 
+    async isOn() {
+        return this.getClusterServer(OnOffCluster)?.getOnOffAttribute();
+    }
+
     // Add Listeners convenient for chosen attributes
     /**
      * Adds a listener for the OnOff attribute
