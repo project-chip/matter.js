@@ -622,21 +622,4 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             await subscription.cancel(true);
         }
     }
-
-    getSubscribedFabricInformation() {
-        return Array.from(this.subscriptionMap.values()).map(subscription => {
-            const fabric = subscription.getFabric();
-            return {
-                fabricId: fabric.fabricId,
-                nodeId: fabric.nodeId,
-                rootNodeId: fabric.rootNodeId,
-                rootVendorId: fabric.rootVendorId,
-                label: fabric.label,
-            };
-        });
-    }
-
-    getNumberOfActiveSubscriptions() {
-        return this.subscriptionMap.size;
-    }
 }
