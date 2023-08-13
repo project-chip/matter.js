@@ -133,7 +133,7 @@ export class SubscriptionHandler {
 
         if (!keepSubscriptions) {
             logger.debug(`Clear subscriptions for Session ${session.name}`);
-            this.session.clearSubscriptions();
+            void this.session.clearSubscriptions(); // Temporary void: Will be cleaned up in PR #814
         }
     }
 
