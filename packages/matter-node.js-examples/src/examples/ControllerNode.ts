@@ -16,8 +16,9 @@
  * Import needed modules from @project-chip/matter-node.js
  */
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
-import { BleNode } from "@project-chip/matter-node-ble.js/ble";
 import { CommissioningController, MatterServer } from "@project-chip/matter-node.js";
+
+import { BleNode } from "@project-chip/matter-node-ble.js/ble";
 import { Ble } from "@project-chip/matter-node.js/ble";
 import {
     BasicInformationCluster,
