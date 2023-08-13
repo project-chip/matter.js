@@ -6,7 +6,7 @@
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { DecodedEventData } from "../../protocol/interaction/EventDataDecoder.js";
 import { InteractionClient } from "../../protocol/interaction/InteractionClient.js";
-import { BitSchema } from "../../schema/BitmapSchema.js";
+import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { Merge } from "../../util/Type.js";
 import {
     Attribute,
@@ -106,8 +106,11 @@ export type ClusterClientObjForCluster<C extends Cluster<any, any, any, any, any
 export type ClusterClientObj<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events> = {
     id: ClusterId;
     _type: "ClusterClient";
+    revision: number;
     name: string;
+    isUnknown: boolean;
     endpointId: number;
+    supportedFeatures: TypeFromPartialBitSchema<F>;
     attributes: AttributeClients<F, A>;
     events: EventClients<E>;
     commands: CommandServers<C>;
