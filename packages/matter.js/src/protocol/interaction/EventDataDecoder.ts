@@ -81,10 +81,6 @@ export function normalizeAndDecodeEventData(
         }
         try {
             const cluster = getClusterById(clusterId);
-            if (cluster === undefined) {
-                logger.debug(`Unknown cluster ${clusterId} - ignore`);
-                return;
-            }
             const eventDetail = getClusterEventById(cluster, eventId);
             if (eventDetail === undefined) {
                 logger.debug(`Unknown event ${clusterId}/${eventId} - ignore`);
