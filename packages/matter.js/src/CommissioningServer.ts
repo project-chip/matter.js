@@ -215,6 +215,7 @@ export class CommissioningServer extends MatterNode {
                 startUp: true,
                 shutDown: true,
                 reachableChanged: reachabilitySupported,
+                leave: true,
             },
         );
         this.rootEndpoint.addClusterServer(basicInformationCluster);

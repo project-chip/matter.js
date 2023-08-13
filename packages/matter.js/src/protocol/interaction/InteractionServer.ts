@@ -476,7 +476,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                     error.message
                 }`,
             );
-            subscriptionHandler.cancel(); // Cleanup
+            await subscriptionHandler.cancel(); // Cleanup
             if (error instanceof StatusResponseError) {
                 logger.info(`Sending status response ${error.code} for interaction error: ${error}`);
                 await messenger.sendStatus(error.code);
@@ -619,8 +619,24 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     async close() {
         this.isClosing = true;
         for (const subscription of this.subscriptionMap.values()) {
-            await subscription.flush();
-            subscription.cancel();
+            await subscription.cancel(true);
         }
+    }
+
+    getSubscribedFabricInformation() {
+        return Array.from(this.subscriptionMap.values()).map(subscription => {
+            const fabric = subscription.getFabric();
+            return {
+                fabricId: fabric.fabricId,
+                nodeId: fabric.nodeId,
+                rootNodeId: fabric.rootNodeId,
+                rootVendorId: fabric.rootVendorId,
+                label: fabric.label,
+            };
+        });
+    }
+
+    getNumberOfActiveSubscriptions() {
+        return this.subscriptionMap.size;
     }
 }

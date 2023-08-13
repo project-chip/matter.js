@@ -447,6 +447,7 @@ export function ClusterServer<
             const capitalizedEventName = capitalize(eventName);
             result[`trigger${capitalizedEventName}Event`] = <T>(event: T) =>
                 (events as any)[eventName].triggerEvent(event);
+            eventList.push(id);
         }
     }
     (attributes as any).eventList.setLocal(eventList.sort((a, b) => a - b));
