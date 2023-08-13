@@ -32,8 +32,8 @@ export class NoAssociatedFabricError extends Error {}
 
 export class SecureSession<T> implements Session<T> {
     private readonly subscriptions = new Array<SubscriptionHandler>();
-    private timestamp = Time.nowMs();
-    private activeTimestamp = this.timestamp;
+    timestamp = Time.nowMs();
+    activeTimestamp = this.timestamp;
 
     static async create<T>(
         context: T,
@@ -172,6 +172,10 @@ export class SecureSession<T> implements Session<T> {
     addSubscription(subscription: SubscriptionHandler) {
         this.subscriptions.push(subscription);
         logger.debug(`Added subscription ${subscription.subscriptionId} to ${this.name}/${this.id}`);
+    }
+
+    get numberOfActiveSubscriptions() {
+        return this.subscriptions.length;
     }
 
     removeSubscription(subscriptionId: number) {
