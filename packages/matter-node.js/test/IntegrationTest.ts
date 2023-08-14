@@ -685,27 +685,35 @@ describe("Integration Test", () => {
                 value: number;
                 time: number;
             }>();
-            const callback = (value: number) => firstResolver({ value, time: Time.nowMs() });
+            let callback = (value: number) => firstResolver({ value, time: Time.nowMs() });
 
             //onOffClient.attributes.onOff.addValueSetListener(value => callback(value));
             //await onOffClient.attributes.onOff.subscribe(0, 5);
             await scenesClient.subscribeSceneCountAttribute(value => callback(value), 0, 5);
 
-            await fakeTime.advanceTime(0);
+            await fakeTime.yield();
             const firstReport = await firstPromise;
             assert.deepEqual(firstReport, { value: 0, time: startTime });
 
-            /* Will be added later when we clean up getter subscriptions
             // Await update Report on value change
-            const { promise: updatePromise, resolver: updateResolver } = await getPromiseResolver<{ value: boolean, time: number }>();
-            callback = (value: boolean) => updateResolver({ value, time: Time.nowMs() });
+            const { promise: updatePromise, resolver: updateResolver } = await getPromiseResolver<{
+                value: number;
+                time: number;
+            }>();
+            callback = (value: number) => updateResolver({ value, time: Time.nowMs() });
 
             await fakeTime.advanceTime(2 * 1000);
-            await scenesClient.addScene({groupID: new GroupId(1), sceneId: 1, transitionTime: 0, sceneName: "Test", extensionFieldSets: []});
+            await scenesClient.addScene({
+                groupId: GroupId(1),
+                sceneId: 1,
+                transitionTime: 0,
+                sceneName: "Test",
+                extensionFieldSets: [],
+            });
+            await fakeTime.advanceTime(100);
             const updateReport = await updatePromise;
 
-            assert.deepEqual(updateReport, { value: true, time: startTime + 2 * 1000 });
-            */
+            assert.deepEqual(updateReport, { value: 1, time: startTime + 2 * 1000 + 100 });
         });
 
         it("subscription of one event sends updates when event got triggered via auto-wiring", async () => {
