@@ -304,16 +304,18 @@ describe("Integration Test", () => {
         });
 
         it("read multiple attributes", async () => {
-            const response = await defaultInteractionClient.getMultipleAttributes([
-                { clusterId: Descriptor.Cluster.id }, // * /DescriptorCluster/ *
-                { endpointId: EndpointNumber(0), clusterId: BasicInformation.Cluster.id }, // 0/BasicInformationCluster/ *
-                {
-                    endpointId: EndpointNumber(1),
-                    clusterId: OnOffCluster.id,
-                    attributeId: OnOffCluster.attributes.onOff.id,
-                }, // 1/OnOffCluster/onOff
-                { endpointId: EndpointNumber(2) }, // 2 / * /* - will be discarded in results!
-            ]);
+            const response = await defaultInteractionClient.getMultipleAttributes({
+                attributes: [
+                    { clusterId: Descriptor.Cluster.id }, // * /DescriptorCluster/ *
+                    { endpointId: EndpointNumber(0), clusterId: BasicInformation.Cluster.id }, // 0/BasicInformationCluster/ *
+                    {
+                        endpointId: EndpointNumber(1),
+                        clusterId: OnOffCluster.id,
+                        attributeId: OnOffCluster.attributes.onOff.id,
+                    }, // 1/OnOffCluster/onOff
+                    { endpointId: EndpointNumber(2) }, // 2 / * /* - will be discarded in results!
+                ],
+            });
 
             assert.equal(response.length, 43);
             assert.equal(
@@ -419,15 +421,17 @@ describe("Integration Test", () => {
         });
 
         it("read events", async () => {
-            const response = await defaultInteractionClient.getMultipleEvents([
-                { clusterId: BasicInformation.Cluster.id }, // * /BasicInformationCluster/ *
-                {
-                    endpointId: EndpointNumber(0),
-                    clusterId: GeneralDiagnostics.Cluster.id,
-                    eventId: GeneralDiagnostics.Cluster.events.bootReason.id,
-                }, // 0/GeneralDiagnosticsCluster/bootReason
-                { endpointId: EndpointNumber(2) }, // 2 / * /* - will be discarded in results!
-            ]);
+            const response = await defaultInteractionClient.getMultipleEvents({
+                events: [
+                    { clusterId: BasicInformation.Cluster.id }, // * /BasicInformationCluster/ *
+                    {
+                        endpointId: EndpointNumber(0),
+                        clusterId: GeneralDiagnostics.Cluster.id,
+                        eventId: GeneralDiagnostics.Cluster.events.bootReason.id,
+                    }, // 0/GeneralDiagnosticsCluster/bootReason
+                    { endpointId: EndpointNumber(2) }, // 2 / * /* - will be discarded in results!
+                ],
+            });
 
             assert.equal(response.length, 2);
             assert.equal(
