@@ -11,6 +11,9 @@ concurrency:
   group: ${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  CONNECTEDHOMEIP_TAG: "v1.1.0.1"
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,10 +26,9 @@ jobs:
       - name: Get Chip Repo
         id: connectedhomeip
         run: |
-          git clone https://github.com/project-chip/connectedhomeip.git --depth=1 --branch=master
+          git clone https://github.com/project-chip/connectedhomeip.git --depth=1 --branch=$CONNECTEDHOMEIP_TAG
           cd connectedhomeip
           scripts/checkout_submodules.py --shallow --platform linux
-          cd ..
       - name: Build Chiptool
         id: build_chiptool
         run: |
@@ -38,5 +40,11 @@ jobs:
       - name: Build examples
         id: build_examples
         run: |
+          cd connectedhomeip
           ./scripts/build/build_examples.py --target linux-x64-tests build
           ls -la ./out/
+      - name: Collect files
+        id: collect_files
+        run: |
+          mkdir bin
+          mv connectedhomeip/out/debug/chip-tool bin/
