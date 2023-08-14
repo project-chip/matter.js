@@ -256,7 +256,6 @@ export function ClusterServer<
                 (attributesInitialValues as any)[attributeName],
                 () => clusterDataVersion,
                 () => {
-                    console.trace();
                     if (clusterDataVersion === 0xffffffff) {
                         clusterDataVersion = -1;
                     }

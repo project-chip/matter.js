@@ -49,6 +49,7 @@ import {
     StatusCode,
     TlvAttributePath,
     TlvAttributeReport,
+    TlvClusterPath,
     TlvCommandPath,
     TlvEventPath,
     TlvEventReport,
@@ -114,6 +115,10 @@ export function eventPathToId({ endpointId, clusterId, eventId }: TypeFromSchema
     return genericElementPathToId(endpointId, clusterId, eventId);
 }
 
+function clusterPathToId({ nodeId, endpointId, clusterId }: TypeFromSchema<typeof TlvClusterPath>) {
+    return `${nodeId}/${endpointId}/${clusterId}`;
+}
+
 export class InteractionServer implements ProtocolHandler<MatterDevice> {
     private endpointStructure = new InteractionEndpointStructure();
     private nextSubscriptionId = Crypto.getRandomUInt32();
@@ -158,7 +163,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
     handleReadRequest(
         exchange: MessageExchange<MatterDevice>,
-        { attributeRequests, eventRequests, eventFilters, isFabricFiltered }: ReadRequest,
+        { attributeRequests, dataVersionFilters, eventRequests, eventFilters, isFabricFiltered }: ReadRequest,
     ): DataReport {
         if (attributeRequests === undefined && eventRequests === undefined) {
             throw new StatusResponseError(
@@ -167,15 +172,18 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             );
         }
         logger.debug(
-            `Received read request from ${exchange.channel.name}: attributes:${attributeRequests
-                ?.map(path => this.endpointStructure.resolveAttributeName(path))
-                .join(", ")}, events:${eventRequests
-                ?.map(path => this.endpointStructure.resolveEventName(path))
-                .join(", ")} isFabricFiltered=${isFabricFiltered}`,
+            `Received read request from ${exchange.channel.name}: attributes:${
+                attributeRequests?.map(path => this.endpointStructure.resolveAttributeName(path)).join(", ") ?? "none"
+            }, events:${
+                eventRequests?.map(path => this.endpointStructure.resolveEventName(path)).join(", ") ?? "none"
+            } isFabricFiltered=${isFabricFiltered}`,
         );
 
         // TODO UnsupportedNode
-        // TODO dataversionFilters
+
+        const dataVersionFilterMap = new Map<string, number>(
+            dataVersionFilters?.map(({ path, dataVersion }) => [clusterPathToId(path), dataVersion]) ?? [],
+        );
 
         const attributeReports = attributeRequests?.flatMap(
             (path: TypeFromSchema<typeof TlvAttributePath>): TypeFromSchema<typeof TlvAttributeReport>[] => {
@@ -208,14 +216,31 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                     }
                 }
 
-                return attributes.map(({ path, attribute }) => {
+                return attributes.flatMap(({ path, attribute }) => {
                     const { value, version } = attribute.getWithVersion(exchange.session, isFabricFiltered);
+                    const { nodeId, endpointId, clusterId } = path;
+
+                    const versionFilterValue =
+                        endpointId !== undefined && clusterId !== undefined
+                            ? dataVersionFilterMap.get(clusterPathToId({ nodeId, endpointId, clusterId }))
+                            : undefined;
+                    if (versionFilterValue !== undefined && versionFilterValue === version) {
+                        logger.debug(
+                            `Read attribute from ${
+                                exchange.channel.name
+                            }: ${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(
+                                value,
+                            )} (version=${version}) ignored because of dataVersionFilter`,
+                        );
+                        return [];
+                    }
+
                     logger.debug(
                         `Read attribute from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(
                             path,
                         )}=${Logger.toJSON(value)} (version=${version})`,
                     );
-                    return { attributeData: { path, data: attribute.schema.encodeTlv(value), dataVersion: version } };
+                    return [{ attributeData: { path, data: attribute.schema.encodeTlv(value), dataVersion: version } }];
                 });
             },
         );
