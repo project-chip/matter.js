@@ -115,7 +115,7 @@ export function eventPathToId({ endpointId, clusterId, eventId }: TypeFromSchema
     return genericElementPathToId(endpointId, clusterId, eventId);
 }
 
-function clusterPathToId({ nodeId, endpointId, clusterId }: TypeFromSchema<typeof TlvClusterPath>) {
+export function clusterPathToId({ nodeId, endpointId, clusterId }: TypeFromSchema<typeof TlvClusterPath>) {
     return `${nodeId}/${endpointId}/${clusterId}`;
 }
 
@@ -184,6 +184,13 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         const dataVersionFilterMap = new Map<string, number>(
             dataVersionFilters?.map(({ path, dataVersion }) => [clusterPathToId(path), dataVersion]) ?? [],
         );
+        if (dataVersionFilterMap.size > 0) {
+            logger.debug(
+                `DataVersionFilters: ${Array.from(dataVersionFilterMap.entries())
+                    .map(([path, version]) => `${path}=${version}`)
+                    .join(", ")}`,
+            );
+        }
 
         const attributeReports = attributeRequests?.flatMap(
             (path: TypeFromSchema<typeof TlvAttributePath>): TypeFromSchema<typeof TlvAttributeReport>[] => {
@@ -412,6 +419,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             minIntervalFloorSeconds,
             maxIntervalCeilingSeconds,
             attributeRequests,
+            dataVersionFilters,
             eventRequests,
             eventFilters,
             keepSubscriptions,
@@ -442,13 +450,24 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         }
 
         logger.debug(
-            `Subscribe to attributes:${attributeRequests
-                ?.map(path => this.endpointStructure.resolveAttributeName(path))
-                .join(", ")}, events:${eventRequests
-                ?.map(path => this.endpointStructure.resolveEventName(path))
-                .join(", ")}`,
+            `Subscribe to attributes:${
+                attributeRequests?.map(path => this.endpointStructure.resolveAttributeName(path)).join(", ") ?? "none"
+            }, events:${
+                eventRequests?.map(path => this.endpointStructure.resolveEventName(path)).join(", ") ?? "none"
+            }`,
         );
-        if (eventFilters !== undefined)
+
+        if (dataVersionFilters !== undefined && dataVersionFilters.length > 0) {
+            logger.debug(
+                `DataVersionFilters: ${dataVersionFilters
+                    .map(
+                        ({ path: { nodeId, endpointId, clusterId }, dataVersion }) =>
+                            `${clusterPathToId({ nodeId, endpointId, clusterId })}=${dataVersion}`,
+                    )
+                    .join(", ")}`,
+            );
+        }
+        if (eventFilters !== undefined && eventFilters.length > 0)
             logger.debug(
                 `Event filters: ${eventFilters.map(filter => `${filter.nodeId}/${filter.eventMin}`).join(", ")}`,
             );
@@ -482,6 +501,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             session,
             this.endpointStructure,
             attributeRequests,
+            dataVersionFilters,
             eventRequests,
             eventFilters,
             this.eventHandler,
