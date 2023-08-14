@@ -25,7 +25,7 @@ jobs:
       - name: Get Chip Repo
         id: connectedhomeip
         run: |
-          shallow clone the project its submodules
+        # shallow clone the project its submodules
           git clone https://github.com/project-chip/connectedhomeip.git --depth=1 --branch=master
           cd connectedhomeip
           scripts/checkout_submodules.py --shallow --platform linux
