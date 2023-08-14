@@ -1,0 +1,40 @@
+on:
+  schedule:
+    - cron: 0 2 * * * # Every day at 02:00
+  workflow_dispatch: # Manually on demand
+  push:
+    branches:
+      - * # All branches
+
+# Cancel previous PR/branch runs when a new commit is pushed
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Debian deps
+        id: install_deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install git gcc g++ pkg-config libssl-dev libdbus-1-dev \
+          libglib2.0-dev libavahi-client-dev ninja-build python3-venv python3-dev \
+          python3-pip unzip libgirepository1.0-dev libcairo2-dev libreadline-dev
+      - name: Get Chip Repo
+        id: connectedhomeip
+        run: |
+          shallow clone the project its submodules
+          git clone https://github.com/project-chip/connectedhomeip.git --depth=1 --branch=master
+          cd connectedhomeip
+          scripts/checkout_submodules.py --shallow --platform linux
+          cd ..
+      - name: Build Chiptool
+        id: build_chiptool
+        run: |
+          cd connectedhomeip
+          source scripts/activate.sh
+          gn gen out/debug
+          ninja -C out/debug chiptool
+          
