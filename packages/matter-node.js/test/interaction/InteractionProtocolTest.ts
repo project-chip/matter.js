@@ -11,7 +11,14 @@ import { CryptoNode } from "../../src/crypto/CryptoNode";
 
 import { KEY } from "../cluster/ClusterServerTestingUtil.js";
 
-Crypto.get = () => new CryptoNode();
+Crypto.get = () => {
+    const crypto = new CryptoNode();
+    // Force random data to be deterministic
+    crypto.getRandomData = (length: number) => {
+        return new Uint8Array(length);
+    };
+    return crypto;
+};
 
 import { Time, TimeFake } from "@project-chip/matter.js/time";
 

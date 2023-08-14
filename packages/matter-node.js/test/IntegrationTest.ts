@@ -108,6 +108,15 @@ describe("Integration Test", () => {
         const serverStorageManager = new StorageManager(fakeServerStorage);
         await serverStorageManager.initialize();
 
+        // make cluster data version deterministic
+        const nodeContext = serverStorageManager.createContext("0");
+        const cluster16Context = nodeContext.createContext("Cluster-1-6");
+        cluster16Context.set("_clusterDataVersion", 0); // Make sure the onoff attribute has deterministic start version for tests
+        const cluster029Context = nodeContext.createContext("Cluster-0-29");
+        cluster029Context.set("_clusterDataVersion", 0); // Make sure the serverList attribute has deterministic start version for tests
+        const cluster040Context = nodeContext.createContext("Cluster-0-40");
+        cluster040Context.set("_clusterDataVersion", 0); // Make sure the serverList attribute has deterministic start version for tests
+
         matterServer = new MatterServer(serverStorageManager);
 
         commissioningServer = new CommissioningServer({
@@ -370,7 +379,7 @@ describe("Integration Test", () => {
                     attributeName: "softwareVersionString",
                 },
                 value: "v1",
-                version: 0,
+                version: 3,
             });
             const nodeLabelData = response.find(
                 ({ path: { endpointId, clusterId, attributeId } }) =>
@@ -387,7 +396,7 @@ describe("Integration Test", () => {
                     attributeName: "nodeLabel",
                 },
                 value: "345678",
-                version: 2,
+                version: 3,
             });
 
             const onOffData = response.find(
@@ -780,10 +789,8 @@ describe("Integration Test", () => {
 
             assert.equal(fakeServerStorage.get(["0", "FabricManager"], "nextFabricIndex"), 2);
 
-            const onOffValue = fakeServerStorage.get<{ value: any; version: number }>(["0", "Cluster-1-6"], "onOff");
-            assert.ok(typeof onOffValue === "object");
-            assert.equal(onOffValue.version, 2);
-            assert.equal(onOffValue.value, false);
+            const onOffValue = fakeServerStorage.get<any>(["0", "Cluster-1-6"], "onOff");
+            assert.equal(onOffValue, false);
 
             const storedServerResumptionRecords = fakeServerStorage.get(["0", "SessionManager"], "resumptionRecords");
             assert.ok(Array.isArray(storedServerResumptionRecords));
