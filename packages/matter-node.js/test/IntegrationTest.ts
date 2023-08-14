@@ -588,7 +588,7 @@ describe("Integration Test", () => {
             //await onOffClient.attributes.onOff.subscribe(0, 5);
             await onOffClient.subscribeOnOffAttribute(value => callback(value), 0, 5);
 
-            await fakeTime.advanceTime(0);
+            await fakeTime.yield();
             const firstReport = await firstPromise;
             assert.deepEqual(firstReport, { value: false, time: startTime });
 
@@ -623,6 +623,47 @@ describe("Integration Test", () => {
             const lastReport = await lastPromise;
 
             assert.deepEqual(lastReport, { value: false, time: startTime + (60 * 60 + 4) * 1000 + 200 });
+        });
+
+        it("subscription of one attribute with known data version only sends updates when the value changes", async () => {
+            const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
+            assert.ok(onoffEndpoint);
+            const onOffClient = onoffEndpoint.getClusterClient(
+                OnOffCluster,
+                await commissioningController.createInteractionClient(),
+            );
+            assert.ok(onOffClient);
+
+            assert.ok(onOffLightDeviceServer);
+            const startTime = Time.nowMs();
+
+            const pushedUpdates = Array<{
+                value: boolean;
+                time: number;
+            }>();
+
+            const { promise: updatePromise, resolver: updateResolver } = await getPromiseResolver<void>();
+
+            await onOffClient.subscribeOnOffAttribute(
+                value => {
+                    pushedUpdates.push({ value, time: Time.nowMs() });
+                    updateResolver();
+                },
+                0,
+                5,
+                2,
+            );
+
+            assert.deepEqual(pushedUpdates, []);
+
+            await fakeTime.advanceTime(2 * 1000);
+            await onOffLightDeviceServer.onOff(true);
+            await fakeTime.advanceTime(100);
+            await fakeTime.yield();
+
+            await updatePromise;
+
+            assert.deepEqual(pushedUpdates, [{ value: true, time: startTime + 2 * 1000 + 100 }]);
         });
 
         it("subscribe an attribute with getter that needs endpoint", async () => {
@@ -790,7 +831,10 @@ describe("Integration Test", () => {
             assert.equal(fakeServerStorage.get(["0", "FabricManager"], "nextFabricIndex"), 2);
 
             const onOffValue = fakeServerStorage.get<any>(["0", "Cluster-1-6"], "onOff");
-            assert.equal(onOffValue, false);
+            assert.equal(onOffValue, true);
+
+            const onOffClusterDataVerison = fakeServerStorage.get<any>(["0", "Cluster-1-6"], "_clusterDataVersion");
+            assert.equal(onOffClusterDataVerison, 3);
 
             const storedServerResumptionRecords = fakeServerStorage.get(["0", "SessionManager"], "resumptionRecords");
             assert.ok(Array.isArray(storedServerResumptionRecords));
