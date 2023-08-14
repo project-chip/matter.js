@@ -57,10 +57,20 @@ jobs:
         id: build_examples
         run: |
           cd connectedhomeip
+          source scripts/activate.sh
           ./scripts/build/build_examples.py --target linux-x64-tests build
           ls -la ./out/
+          ls -la ./out/linux-x64-tests/
+          ls -la ./out/linux-x64-tests/examples/
       - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' }}
         name: Copy files
         id: copy_files
         run: |
-          mv connectedhomeip/out/debug/chip-tool bin/
+          cp connectedhomeip/out/debug/chip-tool bin/
+          cp connectedhomeip/out/linux-x64-tests/examples/* bin/
+      - name: test execution
+        id: test_execution
+        run: |
+          cd bin
+          ./chip-tool
+          ./chip-tool pairing onnetwork
