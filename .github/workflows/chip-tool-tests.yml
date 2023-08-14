@@ -33,5 +33,10 @@ jobs:
           cd connectedhomeip
           source scripts/activate.sh
           gn gen out/debug
-          ninja -C out/debug chiptool
-          
+          ninja -C out/debug chip-tool
+          ls -ls .out/debug/
+      - name: Build examples
+        id: build_examples
+        run: |
+          ./scripts/build/build_examples.py --target linux-x64-tests build
+          ls -la ./out/
