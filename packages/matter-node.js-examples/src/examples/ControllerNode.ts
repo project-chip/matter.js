@@ -16,8 +16,9 @@
  * Import needed modules from @project-chip/matter-node.js
  */
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
-import { BleNode } from "@project-chip/matter-node-ble.js/ble";
 import { CommissioningController, MatterServer } from "@project-chip/matter-node.js";
+
+import { BleNode } from "@project-chip/matter-node-ble.js/ble";
 import { Ble } from "@project-chip/matter-node.js/ble";
 import {
     BasicInformationCluster,
@@ -25,7 +26,7 @@ import {
     GeneralCommissioning,
     OnOffCluster,
 } from "@project-chip/matter-node.js/cluster";
-import { Logger } from "@project-chip/matter-node.js/log";
+import { Format, Level, Logger } from "@project-chip/matter-node.js/log";
 import { CommissioningOptions } from "@project-chip/matter-node.js/protocol";
 import { ManualPairingCodeCodec } from "@project-chip/matter-node.js/schema";
 import { StorageBackendDisk, StorageManager } from "@project-chip/matter-node.js/storage";
@@ -37,14 +38,41 @@ import {
     singleton,
 } from "@project-chip/matter-node.js/util";
 
+const logger = Logger.get("Controller");
+
+requireMinNodeVersion(16);
+
+/** Configure logging */
+switch (getParameter("loglevel")) {
+    case "fatal":
+        Logger.defaultLogLevel = Level.FATAL;
+        break;
+    case "error":
+        Logger.defaultLogLevel = Level.ERROR;
+        break;
+    case "warn":
+        Logger.defaultLogLevel = Level.WARN;
+        break;
+    case "info":
+        Logger.defaultLogLevel = Level.INFO;
+        break;
+}
+
+switch (getParameter("logformat")) {
+    case "plain":
+        Logger.format = Format.PLAIN;
+        break;
+    case "html":
+        Logger.format = Format.HTML;
+        break;
+    default:
+        if (process.stdin?.isTTY) Logger.format = Format.ANSI;
+}
+
 if (hasParameter("ble")) {
     // Initialize Ble
     Ble.get = singleton(() => new BleNode());
 }
-
-const logger = Logger.get("Controller");
-
-requireMinNodeVersion(16);
 
 const storageLocation = getParameter("store") ?? ".controller-node";
 const storage = new StorageBackendDisk(storageLocation, hasParameter("clearstorage"));

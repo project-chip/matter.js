@@ -86,9 +86,9 @@ function plainLogFormatter(now: Date, level: Level, facility: string, values: an
 }
 
 const ANSI_CODES = {
-    PREFIX: "\x1b[37m\x1b[2m",
-    FACILITY: "\x1b[37m\x1b[1m",
-    LEVEL_DEBUG: "\x1b[37m",
+    PREFIX: "\x1b[90m\x1b[2m",
+    FACILITY: "\x1b[90m\x1b[1m",
+    LEVEL_DEBUG: "\x1b[90m",
     LEVEL_INFO: "\x1b[32m",
     LEVEL_WARN: "\x1b[33m",
     LEVEL_ERROR: "\x1b[31m",
