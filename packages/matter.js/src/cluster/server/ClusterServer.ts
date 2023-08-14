@@ -118,6 +118,7 @@ export function ClusterServer<
                         `Failed to restore attribute ${attributeName} (${attribute.id}) in cluster ${name} (${clusterId})`,
                         error,
                     );
+                    storageContext.delete(attribute.name); // Storage broken so we should delete it
                 }
             }
         },
