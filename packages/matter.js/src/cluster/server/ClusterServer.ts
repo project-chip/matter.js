@@ -102,6 +102,7 @@ export function ClusterServer<
                     storageContext.has("_clusterDataVersion") ? "Restore" : "Set"
                 } cluster data version ${clusterDataVersion} in cluster ${name} (${clusterId})`,
             );
+            storageContext.set("_clusterDataVersion", clusterDataVersion);
 
             for (const attributeName in attributes) {
                 const attribute = (attributes as any)[attributeName];
