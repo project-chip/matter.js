@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  CONNECTEDHOMEIP_TAG: "v1.1.0.1"
+  CONNECTEDHOMEIP_TAG: "master" # v1.1.0.1 do not work
 
 jobs:
   build:
@@ -23,13 +23,28 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install git gcc g++ pkg-config libssl-dev libdbus-1-dev libglib2.0-dev libavahi-client-dev ninja-build python3-venv python3-dev python3-pip unzip libgirepository1.0-dev libcairo2-dev libreadline-dev
-      - name: Get Chip Repo
+      - name: Prepare Bin Directory
+        id: prepare_bin
+        run: |
+          mkdir bin
+
+      - name: Cache Bin files
+        id: cache_bin
+        uses: actions/cache@v3
+        env:
+          cache-name: chip-bin
+        with:
+          path: ./bin
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ env.CONNECTEDHOMEIP_TAG }}
+      - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' }}
+        name: Get Chip Repo
         id: connectedhomeip
         run: |
           git clone https://github.com/project-chip/connectedhomeip.git --depth=1 --branch=$CONNECTEDHOMEIP_TAG
           cd connectedhomeip
           scripts/checkout_submodules.py --shallow --platform linux
-      - name: Build Chiptool
+      - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' }}
+        name: Build Chiptool
         id: build_chiptool
         run: |
           cd connectedhomeip
@@ -37,14 +52,15 @@ jobs:
           gn gen out/debug
           ninja -C out/debug chip-tool
           ls -ls ./out/debug/
-      - name: Build examples
+      - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' }}
+        name: Build examples
         id: build_examples
         run: |
           cd connectedhomeip
           ./scripts/build/build_examples.py --target linux-x64-tests build
           ls -la ./out/
-      - name: Collect files
-        id: collect_files
+      - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' }}
+        name: Copy files
+        id: copy_files
         run: |
-          mkdir bin
           mv connectedhomeip/out/debug/chip-tool bin/
