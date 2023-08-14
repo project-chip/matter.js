@@ -34,7 +34,7 @@ jobs:
           source scripts/activate.sh
           gn gen out/debug
           ninja -C out/debug chip-tool
-          ls -ls .out/debug/
+          ls -ls ./out/debug/
       - name: Build examples
         id: build_examples
         run: |
