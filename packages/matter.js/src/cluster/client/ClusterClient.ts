@@ -82,7 +82,12 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
             isFabricFiltered?: boolean,
         ) => {
             (attributes as any)[attributeName].addListener(listener);
-            (attributes as any)[attributeName].subscribe(minIntervalS, maxIntervalS, knownDataVersion, isFabricFiltered);
+            (attributes as any)[attributeName].subscribe(
+                minIntervalS,
+                maxIntervalS,
+                knownDataVersion,
+                isFabricFiltered,
+            );
         };
     }
 
@@ -208,13 +213,13 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
                     (attributes as any)[attributeName].update(value);
                 },
                 eventListener: eventData => {
-                    const { path, events } = eventData;
+                    const { path, events: newEvents } = eventData;
                     const eventName = eventToId[path.eventId];
                     if (eventName === undefined) {
                         logger.warn("Unknown event id", path.eventId);
                         return;
                     }
-                    events.forEach(event => (events as any)[eventName].update(event));
+                    newEvents.forEach(event => (events as any)[eventName].update(event));
                 },
             });
         },
