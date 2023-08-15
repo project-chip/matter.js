@@ -31,6 +31,7 @@ jobs:
           mkdir bin
 
       - name: Cache Bin files
+        # Cache the bin directory
         id: cache-bin
         uses: actions/cache@v3
         env:
@@ -39,8 +40,8 @@ jobs:
           path: ./bin
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ env.CONNECTEDHOMEIP_TAG }}
 
-    # When no cached files exist, or when the commit message contains '[rebuild-chip]', rebuild the chip repo
       - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' || contains(github.event.head_commit.message, '[rebuild-chip]') == true }}
+        # When no cached files exist, or when the commit message contains '[rebuild-chip]', rebuild the chip repo
         name: Build executables
         id: build-executables
         run: |
@@ -102,8 +103,8 @@ jobs:
         #          rm -rf out/linux-x64-simulated-app2
           rm -rf connectedhomeip
 
-    # Execute the tests
       - name: test execution
+        # Execute the tests
         id: test-execution
         run: |
           cd bin
