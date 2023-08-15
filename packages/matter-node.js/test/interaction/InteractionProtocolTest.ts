@@ -11,7 +11,14 @@ import { CryptoNode } from "../../src/crypto/CryptoNode";
 
 import { KEY } from "../cluster/ClusterServerTestingUtil.js";
 
-Crypto.get = () => new CryptoNode();
+Crypto.get = () => {
+    const crypto = new CryptoNode();
+    // Force random data to be deterministic
+    crypto.getRandomData = (length: number) => {
+        return new Uint8Array(length);
+    };
+    return crypto;
+};
 
 import { Time, TimeFake } from "@project-chip/matter.js/time";
 
@@ -85,6 +92,36 @@ const READ_REQUEST: ReadRequest = {
     ],
 };
 
+const READ_REQUEST_WITH_UNUSED_FILTER: ReadRequest = {
+    interactionModelRevision: 1,
+    isFabricFiltered: true,
+    attributeRequests: [
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(2) },
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(4) },
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(400) }, // unsupported attribute
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), attributeId: AttributeId(4) }, // unsupported cluster
+        { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), attributeId: AttributeId(1) }, // unsupported endpoint
+        { endpointId: undefined, clusterId: ClusterId(0x28), attributeId: AttributeId(3) },
+        { endpointId: undefined, clusterId: ClusterId(0x99), attributeId: AttributeId(3) }, // ignore
+    ],
+    dataVersionFilters: [{ path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28) }, dataVersion: 1 }],
+};
+
+const READ_REQUEST_WITH_FILTER: ReadRequest = {
+    interactionModelRevision: 1,
+    isFabricFiltered: true,
+    attributeRequests: [
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(2) },
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(4) },
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(400) }, // unsupported attribute
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), attributeId: AttributeId(4) }, // unsupported cluster
+        { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), attributeId: AttributeId(1) }, // unsupported endpoint
+        { endpointId: undefined, clusterId: ClusterId(0x28), attributeId: AttributeId(3) },
+        { endpointId: undefined, clusterId: ClusterId(0x99), attributeId: AttributeId(3) }, // ignore
+    ],
+    dataVersionFilters: [{ path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28) }, dataVersion: 0 }],
+};
+
 const READ_RESPONSE: DataReport = {
     interactionModelRevision: 1,
     suppressResponse: false,
@@ -127,6 +164,32 @@ const READ_RESPONSE: DataReport = {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(3) },
                 data: TlvString.encodeTlv("product"),
                 dataVersion: 0,
+            },
+        },
+    ],
+};
+
+const READ_RESPONSE_WITH_FILTER: DataReport = {
+    interactionModelRevision: 1,
+    suppressResponse: false,
+    eventReports: undefined,
+    attributeReports: [
+        {
+            attributeStatus: {
+                path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(400) },
+                status: { status: 134 },
+            },
+        },
+        {
+            attributeStatus: {
+                path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), attributeId: AttributeId(4) },
+                status: { status: 195 },
+            },
+        },
+        {
+            attributeStatus: {
+                path: { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), attributeId: AttributeId(1) },
+                status: { status: 127 },
             },
         },
     ],
@@ -490,6 +553,92 @@ describe("InteractionProtocol", () => {
             );
 
             assert.deepEqual(result, READ_RESPONSE);
+        });
+
+        it("replies with attribute values using (unused) version filter", async () => {
+            const storageManager = new StorageManager(new StorageBackendMemory());
+            await storageManager.initialize();
+            const storageContext = storageManager.createContext("test");
+            const endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
+            endpoint.addClusterServer(
+                ClusterServer(
+                    BasicInformationCluster,
+                    {
+                        dataModelRevision: 1,
+                        vendorName: "vendor",
+                        vendorId: VendorId(1),
+                        productName: "product",
+                        productId: 2,
+                        nodeLabel: "",
+                        hardwareVersion: 0,
+                        hardwareVersionString: "0",
+                        location: "US",
+                        localConfigDisabled: false,
+                        softwareVersion: 1,
+                        softwareVersionString: "v1",
+                        capabilityMinima: {
+                            caseSessionsPerFabric: 100,
+                            subscriptionsPerFabric: 100,
+                        },
+                    },
+                    {},
+                    {
+                        startUp: true,
+                    },
+                ),
+            );
+            const interactionProtocol = new InteractionServer(storageContext);
+            interactionProtocol.setRootEndpoint(endpoint);
+
+            const result = interactionProtocol.handleReadRequest(
+                { channel: { name: "test" } } as MessageExchange<any>,
+                READ_REQUEST_WITH_UNUSED_FILTER,
+            );
+
+            assert.deepEqual(result, READ_RESPONSE);
+        });
+
+        it("replies with attribute values with active version filter", async () => {
+            const storageManager = new StorageManager(new StorageBackendMemory());
+            await storageManager.initialize();
+            const storageContext = storageManager.createContext("test");
+            const endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
+            endpoint.addClusterServer(
+                ClusterServer(
+                    BasicInformationCluster,
+                    {
+                        dataModelRevision: 1,
+                        vendorName: "vendor",
+                        vendorId: VendorId(1),
+                        productName: "product",
+                        productId: 2,
+                        nodeLabel: "",
+                        hardwareVersion: 0,
+                        hardwareVersionString: "0",
+                        location: "US",
+                        localConfigDisabled: false,
+                        softwareVersion: 1,
+                        softwareVersionString: "v1",
+                        capabilityMinima: {
+                            caseSessionsPerFabric: 100,
+                            subscriptionsPerFabric: 100,
+                        },
+                    },
+                    {},
+                    {
+                        startUp: true,
+                    },
+                ),
+            );
+            const interactionProtocol = new InteractionServer(storageContext);
+            interactionProtocol.setRootEndpoint(endpoint);
+
+            const result = interactionProtocol.handleReadRequest(
+                { channel: { name: "test" } } as MessageExchange<any>,
+                READ_REQUEST_WITH_FILTER,
+            );
+
+            assert.deepEqual(result, READ_RESPONSE_WITH_FILTER);
         });
     });
 

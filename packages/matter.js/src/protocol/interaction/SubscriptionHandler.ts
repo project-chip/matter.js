@@ -27,6 +27,7 @@ import {
     TlvAttributePath,
     TlvAttributeReport,
     TlvAttributeStatus,
+    TlvDataVersionFilter,
     TlvEventFilter,
     TlvEventPath,
     TlvEventReport,
@@ -35,6 +36,7 @@ import {
 import {
     attributePathToId,
     AttributeWithPath,
+    clusterPathToId,
     eventPathToId,
     EventWithPath,
     INTERACTION_PROTOCOL_ID,
@@ -103,6 +105,7 @@ export class SubscriptionHandler {
         private readonly session: SecureSession<any>,
         private readonly endpointStructure: InteractionEndpointStructure,
         private readonly attributeRequests: TypeFromSchema<typeof TlvAttributePath>[] | undefined,
+        private readonly dataVersionFilters: TypeFromSchema<typeof TlvDataVersionFilter>[] | undefined,
         private readonly eventRequests: TypeFromSchema<typeof TlvEventPath>[] | undefined,
         private readonly eventFilters: TypeFromSchema<typeof TlvEventFilter>[] | undefined,
         private readonly eventHandler: EventHandler,
@@ -345,6 +348,10 @@ export class SubscriptionHandler {
     }
 
     activateSendingUpdates() {
+        // We do not need these data anymore, so we can free some memory
+        if (this.eventFilters !== undefined) this.eventFilters.length = 0;
+        if (this.dataVersionFilters !== undefined) this.dataVersionFilters.length = 0;
+
         this.session.addSubscription(this);
 
         this.sendUpdatesActivated = true;
@@ -435,13 +442,25 @@ export class SubscriptionHandler {
 
         const { newAttributes, attributeErrors } = this.registerNewAttributes();
 
-        const attributes = newAttributes
-            .map(({ path, attribute }) => {
-                // TODO: Maybe add try/catch when we add ACL handling and ignore the update if we can not get the value?
-                const { value, version } = attribute.getWithVersion(this.session, this.isFabricFiltered);
-                return { path, value, version, schema: attribute.schema };
-            })
-            .filter(({ value }) => value !== undefined) as AttributePathWithValueVersion<any>[];
+        const dataVersionFilterMap = new Map<string, number>(
+            this.dataVersionFilters?.map(({ path, dataVersion }) => [clusterPathToId(path), dataVersion]) ?? [],
+        );
+
+        const attributes = newAttributes.flatMap(({ path, attribute }) => {
+            // TODO: Maybe add try/catch when we add ACL handling and ignore the update if we can not get the value?
+            const { value, version } = attribute.getWithVersion(this.session, this.isFabricFiltered);
+            if (value === undefined) return [];
+
+            const { nodeId, endpointId, clusterId } = path;
+
+            const versionFilterValue =
+                endpointId !== undefined && clusterId !== undefined
+                    ? dataVersionFilterMap.get(clusterPathToId({ nodeId, endpointId, clusterId }))
+                    : undefined;
+            if (versionFilterValue !== undefined && versionFilterValue === version) return [];
+
+            return [{ path, value, version, schema: attribute.schema }];
+        });
         const attributeReports: TypeFromSchema<typeof TlvAttributeReport>[] = attributes.map(
             ({ path, schema, value, version }) => ({
                 attributeData: {
@@ -478,7 +497,7 @@ export class SubscriptionHandler {
                 }
             });
 
-        if (attributes.length === 0 && eventReports.length === 0) {
+        if (newAttributes.length === 0 && newEvents.length === 0) {
             throw new StatusResponseError(
                 "Subscription failed because no attributes or events are matching the query",
                 StatusCode.InvalidAction,
