@@ -358,16 +358,18 @@ export class ControllerCommissioner {
         this.collectedCommissioningData.rootPartsList = await descriptorClient.getPartsListAttribute();
         this.collectedCommissioningData.rootServerList = await descriptorClient.getServerListAttribute();
 
-        const networkData = await this.interactionClient.getMultipleAttributes([
-            {
-                clusterId: NetworkCommissioning.Cluster.id,
-                attributeId: NetworkCommissioning.Cluster.attributes.featureMap.id,
-            },
-            {
-                clusterId: NetworkCommissioning.Cluster.id,
-                attributeId: NetworkCommissioning.Cluster.attributes.networks.id,
-            },
-        ]);
+        const networkData = await this.interactionClient.getMultipleAttributes({
+            attributes: [
+                {
+                    clusterId: NetworkCommissioning.Cluster.id,
+                    attributeId: NetworkCommissioning.Cluster.attributes.featureMap.id,
+                },
+                {
+                    clusterId: NetworkCommissioning.Cluster.id,
+                    attributeId: NetworkCommissioning.Cluster.attributes.networks.id,
+                },
+            ],
+        });
         const networkFeatures = new Array<{
             endpointId: number;
             value: TypeFromPartialBitSchema<typeof NetworkCommissioning.Cluster.features>;

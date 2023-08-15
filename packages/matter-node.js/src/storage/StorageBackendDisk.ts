@@ -48,4 +48,9 @@ export class StorageBackendDisk implements Storage {
         if (!contexts.length || !key.length) throw new StorageError("Context and key must not be empty strings!");
         this.localStorage.setItem(this.buildStorageKey(contexts, key), toJson(value));
     }
+
+    delete(contexts: string[], key: string): void {
+        if (!contexts.length || !key.length) throw new StorageError("Context and key must not be empty strings!");
+        this.localStorage.removeItem(this.buildStorageKey(contexts, key));
+    }
 }
