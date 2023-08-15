@@ -71,5 +71,5 @@ export const createDefaultLevelControlClusterServer = (
                 coupleColorTempToLevel: false,
             },
         },
-        WrapCommandHandler(commandHandler, LevelControlDefaultClusterHandler()),
+        WrapCommandHandler(LevelControlDefaultClusterHandler(), commandHandler),
     );

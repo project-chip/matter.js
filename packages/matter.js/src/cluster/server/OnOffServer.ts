@@ -37,7 +37,7 @@ export const OnOffClusterDefaultHandler: () => ClusterServerHandlers<typeof OnOf
 });
 
 export const createDefaultOnOffClusterServer = (
-    commandHandler: NamedHandler<any>,
+    commandHandler?: NamedHandler<any>,
     attributeInitialValues?: AttributeInitialValues<typeof OnOff.Cluster.attributes>,
 ) =>
     ClusterServer(
@@ -45,5 +45,5 @@ export const createDefaultOnOffClusterServer = (
         attributeInitialValues ?? {
             onOff: false,
         },
-        WrapCommandHandler(commandHandler, OnOffClusterDefaultHandler()),
+        WrapCommandHandler(OnOffClusterDefaultHandler(), commandHandler),
     );

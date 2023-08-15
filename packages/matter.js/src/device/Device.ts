@@ -26,9 +26,12 @@ import { Endpoint, EndpointOptions } from "./Endpoint.js";
  * @param handler Internal handlers instance to wrap the external handler into
  */
 export const WrapCommandHandler = <C extends Cluster<any, any, any, any, any>>(
-    commandHandler: NamedHandler<any>,
     handler: ClusterServerHandlers<C>,
+    commandHandler?: NamedHandler<any>,
 ): ClusterServerHandlers<C> => {
+    if (commandHandler === undefined) {
+        return handler;
+    }
     const mergedHandler = {} as any;
     for (const key in handler) {
         mergedHandler[key] = async (...args: any[]) => {
