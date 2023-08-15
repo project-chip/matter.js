@@ -5,6 +5,7 @@
  */
 
 import { ImplementationError } from "../../common/MatterError.js";
+import { Crypto } from "../../crypto/Crypto.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { CommandId } from "../../datatype/CommandId.js";
 import { EventId } from "../../datatype/EventId.js";
@@ -67,11 +68,13 @@ export function ClusterServer<
         supportedFeatures,
     } = clusterDef;
     let clusterStorage: StorageContext | null = null;
-    const attributeStorageListeners = new Map<AttributeId, (value: any, version: number) => void>();
+    const attributeStorageListeners = new Map<AttributeId, (value: any) => void>();
     const sceneAttributeList = new Array<string>();
     const attributes = <AttributeServers<A>>{};
     const commands = <CommandServers<C>>{};
     const events = <EventServers<E>>{};
+
+    let clusterDataVersion = Crypto.getRandomUInt32();
 
     const result: any = {
         id: clusterId,
@@ -93,21 +96,30 @@ export function ClusterServer<
         _setStorage: (storageContext: StorageContext) => {
             clusterStorage = storageContext;
 
+            clusterDataVersion = storageContext.get<number>("_clusterDataVersion", clusterDataVersion);
+            logger.debug(
+                `${
+                    storageContext.has("_clusterDataVersion") ? "Restore" : "Set"
+                } cluster data version ${clusterDataVersion} in cluster ${name} (${clusterId})`,
+            );
+            storageContext.set("_clusterDataVersion", clusterDataVersion);
+
             for (const attributeName in attributes) {
                 const attribute = (attributes as any)[attributeName];
                 if (!attributeStorageListeners.has(attribute.id)) continue;
                 if (!storageContext.has(attribute.name)) continue;
                 try {
-                    const data = storageContext.get<{ version: number; value: any }>(attribute.name);
+                    const value = storageContext.get<any>(attribute.name);
                     logger.debug(
                         `Restoring attribute ${attributeName} (${attribute.id}) in cluster ${name} (${clusterId})`,
                     );
-                    attribute.init(data.value, data.version);
+                    attribute.init(value);
                 } catch (error) {
                     logger.warn(
                         `Failed to restore attribute ${attributeName} (${attribute.id}) in cluster ${name} (${clusterId})`,
                         error,
                     );
+                    storageContext.delete(attribute.name); // Storage broken so we should delete it
                 }
             }
         },
@@ -167,10 +179,10 @@ export function ClusterServer<
         },
     };
 
-    const attributeStorageListener = (attributeName: string, version: number, value: any) => {
-        if (!clusterStorage) return;
+    const attributeStorageListener = (attributeName: string, value: any) => {
+        if (!clusterStorage || value === undefined) return;
         logger.debug(`Storing attribute ${attributeName} in cluster ${name} (${clusterId})`);
-        clusterStorage.set(attributeName, { version, value });
+        clusterStorage.set(attributeName, value);
     };
 
     // Create attributes
@@ -244,6 +256,14 @@ export function ClusterServer<
                 attributeDef[attributeName],
                 attributeName,
                 (attributesInitialValues as any)[attributeName],
+                () => clusterDataVersion,
+                () => {
+                    if (clusterDataVersion === 0xffffffff) {
+                        clusterDataVersion = -1;
+                    }
+                    clusterStorage?.set("_clusterDataVersion", ++clusterDataVersion);
+                    return clusterDataVersion;
+                },
                 getter
                     ? (session, endpoint, isFabricFiltered) =>
                           getter({
@@ -294,12 +314,8 @@ export function ClusterServer<
                 ) => (attributes as any)[attributeName].addValueSetListener(listener);
             }
             if (persistent || getter || setter) {
-                const listener = (value: any, version: number) =>
-                    attributeStorageListener(
-                        attributeName,
-                        version,
-                        fabricScoped || getter || setter ? undefined : value,
-                    );
+                const listener = (value: any) =>
+                    attributeStorageListener(attributeName, fabricScoped || getter || setter ? undefined : value);
                 attributeStorageListeners.set(id, listener);
                 (attributes as any)[attributeName].addValueChangeListener(listener);
             }

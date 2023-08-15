@@ -48,6 +48,14 @@ export class StorageBackendJsonFile extends StorageBackendMemory {
         }
     }
 
+    override delete(contexts: string[], key: string): void {
+        super.delete(contexts, key);
+        if (!this.waitForCommit) {
+            this.waitForCommit = true;
+            this.commitTimer.start();
+        }
+    }
+
     private async commit() {
         if (!this.initialized || this.closed) return;
         this.waitForCommit = false;

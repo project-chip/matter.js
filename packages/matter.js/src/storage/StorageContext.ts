@@ -32,6 +32,10 @@ export class StorageContext {
         this.storage.set<T>(this.contexts, key, value);
     }
 
+    delete(key: string): void {
+        this.storage.delete(this.contexts, key);
+    }
+
     createContext(context: string) {
         if (context.length === 0) throw new StorageError("Context must not be an empty string");
         if (context.includes(".")) throw new StorageError("Context must not contain dots!");

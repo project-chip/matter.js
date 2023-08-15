@@ -27,6 +27,7 @@ import {
     TlvAttributePath,
     TlvAttributeReport,
     TlvAttributeStatus,
+    TlvDataVersionFilter,
     TlvEventFilter,
     TlvEventPath,
     TlvEventReport,
@@ -35,6 +36,7 @@ import {
 import {
     attributePathToId,
     AttributeWithPath,
+    clusterPathToId,
     eventPathToId,
     EventWithPath,
     INTERACTION_PROTOCOL_ID,
@@ -48,7 +50,9 @@ const logger = Logger.get("SubscriptionHandler");
 // chip-tool is not respecting the 60 min at all and only respects the max sent by the controller
 // which can lead to spamming the network with unneeded packages. So I decided for 3 minutes for now
 // as a compromise until we have something better.
-const SUBSCRIPTION_MAX_INTERVAL_PUBLISHER_LIMIT_MS = 3 * 60 * 1000; /** 3 min */ // Officially: 1000 * 60 * 60; /** 1 hour */
+const SUBSCRIPTION_MAX_INTERVAL_PUBLISHER_LIMIT_S = 3 * 60; /** 3 min */ // Officially: 1000 * 60 * 60; /** 1 hour */
+const SUBSCRIPTION_MIN_INTERVAL_S = 2; // We do not send faster than 2 seconds
+const SUBSCRIPTION_DEFAULT_RANDOMIZATION_WINDOW_S = 10; // 10 seconds
 
 interface AttributePathWithValueVersion<T> {
     path: TypeFromSchema<typeof TlvAttributePath>;
@@ -84,8 +88,8 @@ export class SubscriptionHandler {
         }
     >();
     private sendUpdatesActivated = false;
-    private readonly maxInterval: number;
-    private readonly sendInterval: number;
+    readonly maxInterval: number;
+    readonly sendInterval: number;
     private readonly minIntervalFloorMs: number;
     private readonly maxIntervalCeilingMs: number;
     private readonly server: MatterDevice;
@@ -101,6 +105,7 @@ export class SubscriptionHandler {
         private readonly session: SecureSession<any>,
         private readonly endpointStructure: InteractionEndpointStructure,
         private readonly attributeRequests: TypeFromSchema<typeof TlvAttributePath>[] | undefined,
+        private readonly dataVersionFilters: TypeFromSchema<typeof TlvDataVersionFilter>[] | undefined,
         private readonly eventRequests: TypeFromSchema<typeof TlvEventPath>[] | undefined,
         private readonly eventFilters: TypeFromSchema<typeof TlvEventFilter>[] | undefined,
         private readonly eventHandler: EventHandler,
@@ -108,6 +113,9 @@ export class SubscriptionHandler {
         keepSubscriptions: boolean,
         minIntervalFloor: number,
         maxIntervalCeiling: number,
+        subscriptionMaxIntervalSeconds: number | undefined,
+        subscriptionMinIntervalSeconds: number | undefined,
+        subscriptionRandomizationWindowSeconds: number | undefined,
         private readonly cancelCallback: () => void,
     ) {
         this.server = this.session.getContext();
@@ -115,26 +123,55 @@ export class SubscriptionHandler {
         this.peerNodeId = this.session.getPeerNodeId();
         this.minIntervalFloorMs = minIntervalFloor * 1000;
         this.maxIntervalCeilingMs = maxIntervalCeiling * 1000;
-        // The final Max interval needs to be between min-floor and the MAX of max-ceiling and the defined publisher
-        // maximum of 60 minutes - this is to ensure that the publisher is not flooded with updates. But spec also
-        // says that it should be more frequent than the max interval.
-        // So let's calculate a maximum in the second half of the range between the two, but then already send at
-        // half of that time (so ideally we have 2 updates per max interval, so one could fail, and we still are good).
-        const halfMaxIntervalCeilingMs =
-            (Math.max(SUBSCRIPTION_MAX_INTERVAL_PUBLISHER_LIMIT_MS, this.maxIntervalCeilingMs) -
-                this.minIntervalFloorMs) /
-            2;
-        this.maxInterval = Math.floor(
-            this.minIntervalFloorMs + halfMaxIntervalCeilingMs + halfMaxIntervalCeilingMs * Math.random(),
+
+        const { maxInterval, sendInterval } = this.determineSendingIntervals(
+            (subscriptionMinIntervalSeconds ?? SUBSCRIPTION_MIN_INTERVAL_S) * 1000,
+            (subscriptionMaxIntervalSeconds ?? SUBSCRIPTION_MAX_INTERVAL_PUBLISHER_LIMIT_S) * 1000,
+            (subscriptionRandomizationWindowSeconds ?? SUBSCRIPTION_DEFAULT_RANDOMIZATION_WINDOW_S) * 1000,
         );
-        this.sendInterval = Math.floor(this.maxInterval / 2);
+        this.maxInterval = maxInterval;
+        this.sendInterval = sendInterval;
+
         this.updateTimer = Time.getTimer(this.sendInterval, () => this.prepareDataUpdate()); // will be started later
         this.sendDelayTimer = Time.getTimer(50, () => this.sendUpdate()); // will be started later
-
         if (!keepSubscriptions) {
             logger.debug(`Clear subscriptions for Session ${session.name}`);
             this.session.clearSubscriptions();
         }
+    }
+
+    private determineSendingIntervals(
+        subscriptionMinIntervalMs: number,
+        subscriptionMaxIntervalMs: number,
+        subscriptionRandomizationWindowMs: number,
+    ): { maxInterval: number; sendInterval: number } {
+        // Max Interval is the Max interval that the controller request, unless the configured one from the developer
+        // is lower. In that case we use the configured one. But we make sure to not be smaller than the requested
+        // controller minimum. But in general never faster than minimum interval configured or 2 seconds
+        // (SUBSCRIPTION_MIN_INTERVAL_S). Additionally, we add a randomization window to the max interval to avoid all
+        // devices sending at the same time.
+        const maxInterval =
+            Math.max(
+                Math.max(subscriptionMinIntervalMs, SUBSCRIPTION_MIN_INTERVAL_S * 1000),
+                Math.max(this.minIntervalFloorMs, Math.min(subscriptionMaxIntervalMs, this.maxIntervalCeilingMs)),
+            ) + Math.floor(subscriptionRandomizationWindowMs * Math.random());
+        console.log("maxInterval", maxInterval);
+        let sendInterval = Math.floor(maxInterval / 2); // Ideally we send at half the max interval
+        if (sendInterval < 60_000) {
+            // But if we have no chance of at least one full resubmission process we do like chip-tool.
+            // One full resubmission process takes 33-45 seconds. So 60s means we reach at least first 2 retries of a
+            // second subscription report after first failed.
+            sendInterval = Math.max(this.minIntervalFloorMs, Math.floor(maxInterval * 0.8));
+        }
+        if (sendInterval < subscriptionMinIntervalMs) {
+            // But not faster than once every 2s
+            logger.warn(
+                `Determined subscription send interval of ${sendInterval}ms is too low. Using maxInterval (${maxInterval}ms) instead.`,
+            );
+            sendInterval = Math.max(subscriptionMinIntervalMs, SUBSCRIPTION_MIN_INTERVAL_S * 1000);
+        }
+        console.log("sendInterval", sendInterval);
+        return { maxInterval, sendInterval };
     }
 
     private registerNewAttributes() {
@@ -306,7 +343,15 @@ export class SubscriptionHandler {
         return Math.ceil(this.maxInterval / 1000);
     }
 
+    getSendInterval(): number {
+        return Math.ceil(this.sendInterval / 1000);
+    }
+
     activateSendingUpdates() {
+        // We do not need these data anymore, so we can free some memory
+        if (this.eventFilters !== undefined) this.eventFilters.length = 0;
+        if (this.dataVersionFilters !== undefined) this.dataVersionFilters.length = 0;
+
         this.session.addSubscription(this);
 
         this.sendUpdatesActivated = true;
@@ -397,13 +442,25 @@ export class SubscriptionHandler {
 
         const { newAttributes, attributeErrors } = this.registerNewAttributes();
 
-        const attributes = newAttributes
-            .map(({ path, attribute }) => {
-                // TODO: Maybe add try/catch when we add ACL handling and ignore the update if we can not get the value?
-                const { value, version } = attribute.getWithVersion(this.session, this.isFabricFiltered);
-                return { path, value, version, schema: attribute.schema };
-            })
-            .filter(({ value }) => value !== undefined) as AttributePathWithValueVersion<any>[];
+        const dataVersionFilterMap = new Map<string, number>(
+            this.dataVersionFilters?.map(({ path, dataVersion }) => [clusterPathToId(path), dataVersion]) ?? [],
+        );
+
+        const attributes = newAttributes.flatMap(({ path, attribute }) => {
+            // TODO: Maybe add try/catch when we add ACL handling and ignore the update if we can not get the value?
+            const { value, version } = attribute.getWithVersion(this.session, this.isFabricFiltered);
+            if (value === undefined) return [];
+
+            const { nodeId, endpointId, clusterId } = path;
+
+            const versionFilterValue =
+                endpointId !== undefined && clusterId !== undefined
+                    ? dataVersionFilterMap.get(clusterPathToId({ nodeId, endpointId, clusterId }))
+                    : undefined;
+            if (versionFilterValue !== undefined && versionFilterValue === version) return [];
+
+            return [{ path, value, version, schema: attribute.schema }];
+        });
         const attributeReports: TypeFromSchema<typeof TlvAttributeReport>[] = attributes.map(
             ({ path, schema, value, version }) => ({
                 attributeData: {
@@ -416,7 +473,6 @@ export class SubscriptionHandler {
         attributeErrors.forEach(attributeStatus => attributeReports.push({ attributeStatus }));
 
         const { newEvents, eventErrors } = this.registerNewEvents();
-        console.log(newEvents, eventErrors);
 
         const eventReports = newEvents
             .flatMap(({ path, event }): TypeFromSchema<typeof TlvEventReport>[] => {
@@ -441,7 +497,7 @@ export class SubscriptionHandler {
                 }
             });
 
-        if (attributes.length === 0 && eventReports.length === 0) {
+        if (newAttributes.length === 0 && newEvents.length === 0) {
             throw new StatusResponseError(
                 "Subscription failed because no attributes or events are matching the query",
                 StatusCode.InvalidAction,
