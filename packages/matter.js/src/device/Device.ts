@@ -6,9 +6,9 @@
 
 import { ClusterClientObj, isClusterClient } from "../cluster/client/ClusterClientTypes.js";
 import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
-import { BindingCluster } from "../cluster/definitions/BindingCluster.js";
+import { Binding } from "../cluster/definitions/BindingCluster.js";
 import { ClusterServer } from "../cluster/server/ClusterServer.js";
-import { ClusterServerObj, isClusterServer } from "../cluster/server/ClusterServerTypes.js";
+import { ClusterServerHandlers, ClusterServerObj, isClusterServer } from "../cluster/server/ClusterServerTypes.js";
 import { ImplementationError, NotImplementedError } from "../common/MatterError.js";
 import { DeviceTypeId } from "../datatype/DeviceTypeId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
@@ -46,7 +46,7 @@ export const WrapCommandHandler = <C extends Cluster<any, any, any, any, any>>(
  * based on the device classes and features of the paired device
  */
 export class PairedDevice extends Endpoint {
-    private declineAddingMoreClusters = false;
+    private readonly declineAddingMoreClusters: boolean;
     /**
      * Create a new PairedDevice instance. All data are automatically parsed from the paired device!
      *
@@ -75,6 +75,7 @@ export class PairedDevice extends Endpoint {
     }
 
     /**
+     * Add cluster servers (used internally only!)
      * @deprecated PairedDevice does not support adding additional clusters
      */
     override addClusterServer<A extends Attributes, C extends Commands, E extends Events>(
@@ -87,6 +88,7 @@ export class PairedDevice extends Endpoint {
     }
 
     /**
+     * Add cluster clients (used internally only!)
      * @deprecated PairedDevice does not support adding additional clusters
      */
     override addClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
@@ -123,7 +125,7 @@ export class RootEndpoint extends Endpoint {
  */
 export class Device extends Endpoint {
     readonly deviceType: number;
-    private commandHandler = new NamedHandler<any>();
+    protected commandHandler = new NamedHandler<any>();
 
     /**
      * Create a new Device instance.
@@ -140,7 +142,7 @@ export class Device extends Endpoint {
         if (definition.deviceClass === DeviceClasses.Simple || definition.deviceClass === DeviceClasses.Client) {
             this.addClusterServer(
                 ClusterServer(
-                    BindingCluster,
+                    Binding.Cluster,
                     {
                         binding: [],
                     },
