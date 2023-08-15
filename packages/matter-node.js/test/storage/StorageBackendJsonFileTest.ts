@@ -57,6 +57,40 @@ describe("Storage in JSON File", () => {
         await storage.close();
     });
 
+    it("write and delete success", async () => {
+        const storage = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
+        await storage.initialize();
+
+        storage.set(["context"], "key", "value");
+
+        const value = storage.get(["context"], "key");
+        assert.equal(value, "value");
+
+        storage.delete(["context"], "key");
+        assert.equal(storage.get(["context"], "key"), undefined);
+
+        await fakeTime.advanceTime(2 * 1000);
+
+        await new Promise(resolve => setTimeout(resolve, 1000)); // give FS time to write
+
+        const storageRead = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
+        await storageRead.initialize();
+
+        const valueRead = storage.get(["context"], "key");
+        assert.equal(valueRead, undefined);
+
+        const fileContent = await readFile(TEST_STORAGE_LOCATION);
+        assert.equal(
+            fileContent.toString(),
+            `{
+ "context": {}
+}`,
+        );
+
+        await storageRead.close();
+        await storage.close();
+    });
+
     it("Throws error when context is empty on set", () => {
         assert.throws(
             () => {

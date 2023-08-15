@@ -73,6 +73,8 @@ type ClientAttributeSubscribers<A extends Attributes> = {
         listener: (value: AttributeJsType<A[P]>) => void,
         minIntervalS: number,
         maxIntervalS: number,
+        knownDataVersion?: number,
+        isFabricFiltered?: boolean,
     ) => Promise<void>;
 };
 

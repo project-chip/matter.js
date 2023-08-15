@@ -57,18 +57,18 @@ export class EventClient<T> {
         if (interactionClient === undefined) {
             throw new InternalError("No InteractionClient available");
         }
-        return await interactionClient.getEvent(
-            this.endpointId,
-            this.clusterId,
-            this.event,
+        return await interactionClient.getEvent({
+            endpointId: this.endpointId,
+            clusterId: this.clusterId,
+            event: this.event,
             minimumEventNumber,
             isFabricFiltered,
-        );
+        });
     }
 
     async subscribe(
-        minIntervalS: number,
-        maxIntervalS: number,
+        minIntervalFloorSeconds: number,
+        maxIntervalCeilingSeconds: number,
         isUrgent = true,
         minimumEventNumber?: number | bigint,
         isFabricFiltered?: boolean,
@@ -77,17 +77,17 @@ export class EventClient<T> {
         if (interactionClient === undefined) {
             throw new InternalError("No InteractionClient available");
         }
-        return await interactionClient.subscribeEvent(
-            this.endpointId,
-            this.clusterId,
-            this.event,
-            minIntervalS,
-            maxIntervalS,
+        return await interactionClient.subscribeEvent({
+            endpointId: this.endpointId,
+            clusterId: this.clusterId,
+            event: this.event,
+            minIntervalFloorSeconds,
+            maxIntervalCeilingSeconds,
             isUrgent,
             minimumEventNumber,
             isFabricFiltered,
-            this.update.bind(this),
-        );
+            listener: this.update.bind(this),
+        });
     }
 
     setInteractionClientRequestorCallback(callback: () => Promise<InteractionClient>) {
