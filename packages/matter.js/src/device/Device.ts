@@ -19,6 +19,29 @@ import { DeviceClasses, DeviceTypeDefinition, DeviceTypes } from "./DeviceTypes.
 import { Endpoint, EndpointOptions } from "./Endpoint.js";
 
 /**
+ * Utility function to wrap externally registered command handlers into the internal command handler and make sure
+ * the custom ones are used if defined
+ *
+ * @param commandHandler Command handler instance with the registered handlers
+ * @param handler Internal handlers instance to wrap the external handler into
+ */
+export const WrapCommandHandler = <C extends Cluster<any, any, any, any, any>>(
+    commandHandler: NamedHandler<any>,
+    handler: ClusterServerHandlers<C>,
+): ClusterServerHandlers<C> => {
+    const mergedHandler = {} as any;
+    for (const key in handler) {
+        mergedHandler[key] = async (...args: any[]) => {
+            if (commandHandler.hasHandler(key)) {
+                return await commandHandler.executeHandler(key, ...args);
+            }
+            return await (handler as any)[key](...args);
+        };
+    }
+    return mergedHandler as ClusterServerHandlers<C>;
+};
+
+/**
  * Temporary used device class for paired devices until we added a layer to choose the right specialized device class
  * based on the device classes and features of the paired device
  */
