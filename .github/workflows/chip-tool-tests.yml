@@ -38,18 +38,15 @@ jobs:
         with:
           path: ./bin
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ env.CONNECTEDHOMEIP_TAG }}
-      - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' || contains(github.event.head_commit.message, '[rebuild-chip]') == true }}
-        name: Get Chip Repo
-        id: connectedhomeip
-        run: |
-          git clone https://github.com/project-chip/connectedhomeip.git --depth=1 --branch=$CONNECTEDHOMEIP_TAG
-          cd connectedhomeip
-          scripts/checkout_submodules.py --shallow --platform linux
+
+      # When no cached files exist, or when the commit message contains '[rebuild-chip]', rebuild the chip repo
       - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' || contains(github.event.head_commit.message, '[rebuild-chip]') == true }}
         name: Build executables
         id: build-executables
         run: |
+          git clone https://github.com/project-chip/connectedhomeip.git --depth=1 --branch=$CONNECTEDHOMEIP_TAG
           cd connectedhomeip
+          scripts/checkout_submodules.py --shallow --platform linux
           source scripts/activate.sh
           ./scripts/build/build_examples.py --target linux-x64-light build
           cp out/linux-x64-light/chip-lighting-app ../bin/
@@ -103,11 +100,9 @@ jobs:
         #          ./scripts/build/build_examples.py --target linux-x64-simulated-app2 build
         #          cp out/linux-x64-simulated-app2/chip-app2 ../bin/
         #          rm -rf out/linux-x64-simulated-app2
-      - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' || contains(github.event.head_commit.message, '[rebuild-chip]') == true }}
-        name: Cleanup
-        id: cleanup
-        run: |
           rm -rf connectedhomeip
+
+      # Execute the tests
       - name: test execution
         id: test-execution
         run: |
