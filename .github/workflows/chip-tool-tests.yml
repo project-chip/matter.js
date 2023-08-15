@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  CONNECTEDHOMEIP_TAG: "master" # v1.1.0.1 do not work
+  CONNECTEDHOMEIP_TAG: "v1.1-branch" # v1.1.0.1 do not work
 
 jobs:
   build:
