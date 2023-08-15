@@ -1,3 +1,5 @@
+name: Chip Tool tests
+
 on:
   schedule:
     - cron: 0 2 * * * # Every day at 02:00
