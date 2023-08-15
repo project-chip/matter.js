@@ -17,6 +17,16 @@ describe("StorageInMemory", () => {
         expect(value).toBe("value");
     });
 
+    it("write and delete success", () => {
+        const storage = new StorageBackendMemory();
+
+        storage.set(["context"], "key", "value");
+        storage.delete(["context"], "key");
+
+        const value = storage.get(["context"], "key");
+        expect(value).toBe(undefined);
+    });
+
     it("write and read success with multiple context levels", () => {
         const storage = new StorageBackendMemory();
 

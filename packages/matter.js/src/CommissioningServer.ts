@@ -88,21 +88,66 @@ export interface DevicePairingInformation {
  * and allows to override the certificates used for the OperationalCredentials cluster
  */
 export interface CommissioningServerOptions {
+    /** Port of the server, normally automatically managed. */
     port: number;
+
+    /** If set to true no IPv4 socket listener is sed and only IPv6 is supported. */
     disableIpv4?: boolean;
+
+    /** IPv4 listener address, defaults to all interfaces.*/
     listeningAddressIpv4?: string;
+
+    /** IPv6 listener address, defaults to all interfaces.*/
     listeningAddressIpv6?: string;
+
+    /** The device name to be used for the BasicInformation cluster. */
     deviceName: string;
+
+    /** The device type to be used for the BasicInformation cluster. */
     deviceType: number;
+
+    /** The next endpoint ID to be assigned to a new endpoint. */
     nextEndpointId?: number;
 
+    /** The passcode/pin of the device to use for initial commissioning. */
     passcode: number;
+
+    /** The Discriminator to use for initial commissioning. */
     discriminator: number;
+
+    /** The Flow type of the Commissioning flow used in announcements. */
     flowType?: CommissionningFlowType;
+
+    /** Optional Vendor specific additional BLE Advertisement data. */
     additionalBleAdvertisementData?: ByteArray;
 
+    /** Should the device directly be announced automatically by the MatterServer of manually via announce(). */
     delayedAnnouncement?: boolean;
 
+    /**
+     * Optional maximum subscription interval to use for sending subscription reports. It will be used if not too low
+     * and inside the range requested by the connected controller.
+     */
+    subscriptionMaxIntervalSeconds?: number;
+
+    /**
+     * Optional minimum subscription interval to use for sending subscription reports. It will be used when other
+     * calculated values are smaller than it. Use this to make sure your device hardware can handle the load and to set
+     * limits.
+     */
+    subscriptionMinIntervalSeconds?: number;
+
+    /**
+     * Optional subscription randomization window to use for sending subscription reports. This specifies a window in
+     * seconds from which a random part is added to the calculated maximum interval to make sure that devices that get
+     * powered on in parallel not all send at the same timepoint.
+     */
+    subscriptionRandomizationWindowSeconds?: number;
+
+    /**
+     * Device details to be used for the BasicInformation cluster. Some of the values are initialized with defaults if
+     * not set here.
+     */
     basicInformation:
         | {
               vendorId: number;
@@ -112,11 +157,19 @@ export interface CommissioningServerOptions {
           }
         | AttributeInitialValues<typeof BasicInformationCluster.attributes>;
 
+    /**
+     * Vendor specific certificates to be used for the OperationalCredentials cluster. If not set Test certificates
+     * (official Chip tool test Root certificate is used) are generated automatically.
+     */
     certificates?: OperationalCredentialsServerConf;
 
+    /**
+     * Optional configuration for the GeneralCommissioning cluster. If not set the default values are used.
+     * Use these options to limit the allowed countries for regulatory configuration.
+     */
     generalCommissioning?: Partial<AttributeInitialValues<typeof GeneralCommissioningCluster.attributes>> & {
         allowCountryCodeChange?: boolean; // Default true if not set
-        countryCodeWhitelist?: string[];
+        countryCodeWhitelist?: string[]; // Default all countries are allowed
     };
 }
 
@@ -137,15 +190,9 @@ type CommissioningServerCommands = {
  */
 export class CommissioningServer extends MatterNode {
     private readonly port: number;
-    private readonly disableIpv4: boolean;
-    private readonly listeningAddressIpv4?: string;
-    private readonly listeningAddressIpv6?: string;
-    private readonly deviceName: string;
-    private readonly deviceType: DeviceTypeId;
     private readonly passcode: number;
     private readonly discriminator: number;
     private readonly flowType: CommissionningFlowType;
-    private readonly additionalBleAdvertisementData?: ByteArray;
 
     private storage?: StorageContext;
     private endpointStructureStorage?: StorageContext;
@@ -166,20 +213,13 @@ export class CommissioningServer extends MatterNode {
      *
      * @param options The options for the CommissioningServer node
      */
-    constructor(options: CommissioningServerOptions) {
+    constructor(private readonly options: CommissioningServerOptions) {
         super();
         this.port = options.port;
-        this.disableIpv4 = options.disableIpv4 ?? false;
-        this.listeningAddressIpv4 = options.listeningAddressIpv4;
-        this.listeningAddressIpv6 = options.listeningAddressIpv6;
-        this.deviceName = options.deviceName;
-        this.deviceType = DeviceTypeId(options.deviceType);
         this.passcode = options.passcode;
         this.discriminator = options.discriminator;
         this.flowType = options.flowType ?? CommissionningFlowType.Standard;
         this.nextEndpointId = EndpointNumber(options.nextEndpointId ?? 1);
-        this.delayedAnnouncement = options.delayedAnnouncement ?? false;
-        this.additionalBleAdvertisementData = options.additionalBleAdvertisementData;
 
         const vendorId = VendorId(options.basicInformation.vendorId);
         const productId = options.basicInformation.productId;
@@ -424,7 +464,11 @@ export class CommissioningServer extends MatterNode {
         const vendorId = basicInformation.attributes.vendorId.getLocal();
         const productId = basicInformation.attributes.productId.getLocal();
 
-        this.interactionServer = new InteractionServer(this.storage);
+        this.interactionServer = new InteractionServer(this.storage, {
+            subscriptionMaxIntervalSeconds: this.options.subscriptionMaxIntervalSeconds,
+            subscriptionMinIntervalSeconds: this.options.subscriptionMinIntervalSeconds,
+            subscriptionRandomizationWindowSeconds: this.options.subscriptionRandomizationWindowSeconds,
+        });
 
         this.nextEndpointId = this.endpointStructureStorage.get("nextEndpointId", this.nextEndpointId);
 
@@ -435,8 +479,8 @@ export class CommissioningServer extends MatterNode {
 
         // TODO adjust later and refactor MatterDevice
         this.deviceInstance = new MatterDevice(
-            this.deviceName,
-            this.deviceType,
+            this.options.deviceName,
+            DeviceTypeId(this.options.deviceType),
             vendorId,
             productId,
             this.discriminator,
@@ -451,13 +495,13 @@ export class CommissioningServer extends MatterNode {
                 }
             },
         )
-            .addTransportInterface(await UdpInterface.create("udp6", this.port, this.listeningAddressIpv6))
+            .addTransportInterface(await UdpInterface.create("udp6", this.port, this.options.listeningAddressIpv6))
             .addScanner(this.mdnsScanner)
             .addProtocolHandler(secureChannelProtocol)
             .addProtocolHandler(this.interactionServer);
-        if (!this.disableIpv4) {
+        if (this.options.disableIpv4 !== true) {
             this.deviceInstance.addTransportInterface(
-                await UdpInterface.create("udp4", this.port, this.listeningAddressIpv4),
+                await UdpInterface.create("udp4", this.port, this.options.listeningAddressIpv4),
             );
         }
 
@@ -469,7 +513,9 @@ export class CommissioningServer extends MatterNode {
                 const ble = Ble.get();
                 this.deviceInstance.addTransportInterface(ble.getBlePeripheralInterface());
                 if (limitTo === undefined || limitTo.ble) {
-                    this.deviceInstance.addBroadcaster(ble.getBleBroadcaster(this.additionalBleAdvertisementData));
+                    this.deviceInstance.addBroadcaster(
+                        ble.getBleBroadcaster(this.options.additionalBleAdvertisementData),
+                    );
                 }
             } catch (error) {
                 if (error instanceof NoProviderError) {
@@ -719,7 +765,7 @@ export class CommissioningServer extends MatterNode {
     }
 
     async start() {
-        if (!this.delayedAnnouncement) {
+        if (this.delayedAnnouncement !== true) {
             return this.advertise();
         }
     }

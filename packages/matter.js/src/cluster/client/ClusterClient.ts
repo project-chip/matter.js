@@ -7,14 +7,16 @@
 import { InternalError } from "../../common/MatterError.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
+import { ClusterId } from "../../datatype/ClusterId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { EventId } from "../../datatype/EventId.js";
 import { Logger } from "../../log/Logger.js";
 import { DecodedEventData } from "../../protocol/interaction/EventDataDecoder.js";
 import { InteractionClient } from "../../protocol/interaction/InteractionClient.js";
 import { StatusResponseError } from "../../protocol/interaction/InteractionMessenger.js";
-import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
+import { StatusCode, TlvEventFilter } from "../../protocol/interaction/InteractionProtocol.js";
 import { BitSchema } from "../../schema/BitmapSchema.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { capitalize } from "../../util/String.js";
 import { Merge } from "../../util/Type.js";
 import { Attributes, Cluster, Command, Commands, Events, GlobalAttributes } from "../Cluster.js";
@@ -49,23 +51,37 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
         attributes,
         events,
         commands,
-        subscribeAllAttributes: async (
-            minIntervalFloorSeconds: number,
-            maxIntervalCeilingSeconds: number,
-            keepSubscriptions?: boolean,
-            isFabricFiltered?: boolean,
-        ) => {
+        subscribeAllAttributes: async (options: {
+            minIntervalFloorSeconds: number;
+            maxIntervalCeilingSeconds: number;
+            keepSubscriptions?: boolean;
+            isFabricFiltered?: boolean;
+            eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
+            dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
+        }) => {
             if (interactionClient === undefined) {
                 throw new InternalError("InteractionClient not set");
             }
-            return await interactionClient.subscribeMultipleAttributesAndEvents(
-                [{ endpointId: endpointId, clusterId: clusterId }],
-                [{ endpointId: endpointId, clusterId: clusterId }],
+
+            const {
                 minIntervalFloorSeconds,
                 maxIntervalCeilingSeconds,
                 keepSubscriptions,
                 isFabricFiltered,
-                attributeData => {
+                eventFilters,
+                dataVersionFilters,
+            } = options;
+
+            return await interactionClient.subscribeMultipleAttributesAndEvents({
+                attributes: [{ endpointId: endpointId, clusterId: clusterId }],
+                events: [{ endpointId: endpointId, clusterId: clusterId }],
+                minIntervalFloorSeconds,
+                maxIntervalCeilingSeconds,
+                keepSubscriptions,
+                isFabricFiltered,
+                eventFilters,
+                dataVersionFilters,
+                attributeListener: attributeData => {
                     const { path, value } = attributeData;
                     const attributeName = attributeToId[path.attributeId];
                     if (attributeName === undefined) {
@@ -74,7 +90,7 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
                     }
                     (attributes as any)[attributeName].update(value);
                 },
-                eventData => {
+                eventListener: eventData => {
                     const { path, events } = eventData;
                     const eventName = eventToId[path.eventId];
                     if (eventName === undefined) {
@@ -83,7 +99,7 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
                     }
                     events.forEach(event => (events as any)[eventName].update(event));
                 },
-            );
+            });
         },
 
         /**
@@ -142,9 +158,16 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
             listener: (value: T) => void,
             minIntervalS: number,
             maxIntervalS: number,
+            knownDataVersion?: number,
+            isFabricFiltered?: boolean,
         ) => {
             (attributes as any)[attributeName].addListener(listener);
-            (attributes as any)[attributeName].subscribe(minIntervalS, maxIntervalS);
+            (attributes as any)[attributeName].subscribe(
+                minIntervalS,
+                maxIntervalS,
+                knownDataVersion,
+                isFabricFiltered,
+            );
         };
     }
 
