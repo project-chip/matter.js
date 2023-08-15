@@ -103,6 +103,13 @@ jobs:
         #          ./scripts/build/build_examples.py --target linux-x64-simulated-app2 build
         #          cp out/linux-x64-simulated-app2/chip-app2 ../bin/
         #          rm -rf out/linux-x64-simulated-app2
+
+      - name: Install and build matter.js
+        uses: actions/checkout@v3
+        run: |
+          npm ci
+          npm run build
+
       # Execute tests
       - name: test execution
         id: test-execution
