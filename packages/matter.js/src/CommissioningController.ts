@@ -59,7 +59,7 @@ export interface CommissioningControllerOptions {
     delayedPairing?: boolean;
 
     passcode: number; // TODO: Move into commissioningOptions
-    longDiscriminator?: number;
+    longDiscriminator?: number; // TODO: Move into commissioningOptions
     shortDiscriminator?: number; // TODO: Move into commissioningOptions
 
     commissioningOptions?: CommissioningOptions;
@@ -67,17 +67,8 @@ export interface CommissioningControllerOptions {
 
 export class CommissioningController extends MatterNode {
     serverAddress?: ServerAddressIp;
-    private readonly disableIpv4: boolean;
-    private readonly localPort?: number;
     private readonly listeningAddressIpv4?: string;
     private readonly listeningAddressIpv6?: string;
-
-    private readonly passcode: number;
-    private longDiscriminator?: number;
-    private shortDiscriminator?: number;
-    private readonly commissioningOptions?: CommissioningOptions;
-
-    readonly delayedPairing: boolean;
 
     private storage?: StorageContext;
     private mdnsScanner?: MdnsScanner;
@@ -92,17 +83,9 @@ export class CommissioningController extends MatterNode {
      *
      * @param options The options for the CommissioningController
      */
-    constructor(options: CommissioningControllerOptions) {
+    constructor(private readonly options: CommissioningControllerOptions) {
         super();
         this.serverAddress = options.serverAddress;
-        this.disableIpv4 = options.disableIpv4 ?? false;
-        this.localPort = options.localPort;
-        this.delayedPairing = options.delayedPairing ?? false;
-
-        this.passcode = options.passcode;
-        this.longDiscriminator = options.longDiscriminator;
-        this.shortDiscriminator = options.shortDiscriminator;
-        this.commissioningOptions = options.commissioningOptions;
     }
 
     /**
@@ -117,13 +100,16 @@ export class CommissioningController extends MatterNode {
             throw new ImplementationError("Add the node to the Matter instance before!");
         }
 
+        const { localPort, passcode, longDiscriminator, shortDiscriminator } = this.options;
         this.controllerInstance = await MatterController.create(
             this.mdnsScanner,
-            this.disableIpv4 ? undefined : await UdpInterface.create("udp4", this.localPort, this.listeningAddressIpv4),
-            await UdpInterface.create("udp6", this.localPort, this.listeningAddressIpv6),
+            this.options.disableIpv4 !== true
+                ? undefined
+                : await UdpInterface.create("udp4", localPort, this.listeningAddressIpv4),
+            await UdpInterface.create("udp6", localPort, this.listeningAddressIpv6),
             this.storage,
             this.serverAddress,
-            this.commissioningOptions,
+            this.options.commissioningOptions,
             peerNodeId => {
                 logger.info(`Peer node ${peerNodeId} disconnected ...`);
                 // TODO Add handling
@@ -135,12 +121,12 @@ export class CommissioningController extends MatterNode {
             this.nodeId = this.controllerInstance.getFabric().nodeId;
         } else {
             let identifierData;
-            if (this.longDiscriminator !== undefined) {
-                identifierData = { longDiscriminator: this.longDiscriminator };
-            } else if (this.shortDiscriminator !== undefined) {
-                identifierData = { shortDiscriminator: this.shortDiscriminator };
+            if (longDiscriminator !== undefined) {
+                identifierData = { longDiscriminator };
+            } else if (shortDiscriminator !== undefined) {
+                identifierData = { shortDiscriminator };
             } else {
-                if (this.passcode === undefined) {
+                if (passcode === undefined) {
                     throw new ImplementationError(
                         "To commission a new device a passcode needs to be specified in the constructor data!",
                     );
@@ -165,19 +151,14 @@ export class CommissioningController extends MatterNode {
             let nodeId: NodeId | undefined;
             if (bleEnabled) {
                 try {
-                    nodeId = await this.controllerInstance.commissionViaBle(identifierData, this.passcode, 15);
+                    nodeId = await this.controllerInstance.commissionViaBle(identifierData, passcode, 15);
                 } catch (error) {
                     logger.warn(`Ble commissioning failed: ${error}`);
                 }
             }
 
             if (nodeId === undefined) {
-                nodeId = await this.controllerInstance.commission(
-                    identifierData,
-                    this.passcode,
-                    15,
-                    this.serverAddress,
-                );
+                nodeId = await this.controllerInstance.commission(identifierData, passcode, 15, this.serverAddress);
             }
 
             this.nodeId = nodeId;
@@ -491,7 +472,7 @@ export class CommissioningController extends MatterNode {
     }
 
     async start() {
-        if (!this.delayedPairing) {
+        if (this.options.delayedPairing !== true) {
             return this.connect();
         }
     }
