@@ -38,16 +38,16 @@ jobs:
         with:
           path: ./bin
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ env.CONNECTEDHOMEIP_TAG }}
-      - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' }}
+      - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' || contains(github.event.head_commit.message, '[rebuild-chip]') == true }}
         name: Get Chip Repo
         id: connectedhomeip
         run: |
           git clone https://github.com/project-chip/connectedhomeip.git --depth=1 --branch=$CONNECTEDHOMEIP_TAG
           cd connectedhomeip
           scripts/checkout_submodules.py --shallow --platform linux
-      - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' }} || contains(github.event.head_commit.message, '[rebuild-chip]') == true
+      - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' || contains(github.event.head_commit.message, '[rebuild-chip]') == true }}
         name: Build executables
-        id: build_executables
+        id: build-executables
         run: |
           cd connectedhomeip
           source scripts/activate.sh
@@ -103,7 +103,7 @@ jobs:
         #          ./scripts/build/build_examples.py --target linux-x64-simulated-app2 build
         #          cp out/linux-x64-simulated-app2/chip-app2 ../bin/
         #          rm -rf out/linux-x64-simulated-app2
-      - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' }} || contains(github.event.head_commit.message, '[rebuild-chip]') == true
+      - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' || contains(github.event.head_commit.message, '[rebuild-chip]') == true }}
         name: Cleanup
         id: cleanup
         run: |
