@@ -9,6 +9,10 @@ export type HandlerFunction = (...args: any[]) => Promise<any> | any;
 export class NamedHandler<H extends Record<keyof H, HandlerFunction>> {
     private handler: { action: keyof H; handler: H[keyof H] }[] = [];
 
+    hasHandler<K extends keyof H>(action: K) {
+        return this.handler.some(({ action: a }) => a === action);
+    }
+
     addHandler<K extends keyof H>(action: K, handler: H[K]) {
         this.handler.push({ action, handler });
     }
