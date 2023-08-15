@@ -109,4 +109,3 @@ jobs:
         run: |
           cd bin
           ./chip-tool || true
-          ./chip-tool pairing onnetwork 999 20202021 || true
