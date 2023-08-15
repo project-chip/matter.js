@@ -14,7 +14,7 @@ import {
     TlvNoResponse,
 } from "../../cluster/Cluster.js";
 import { resolveAttributeName, resolveCommandName, resolveEventName } from "../../cluster/ClusterHelper.js";
-import { MatterError, MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
+import { ImplementationError, MatterError, MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { CommandId } from "../../datatype/CommandId.js";
@@ -88,74 +88,147 @@ export class InteractionClient {
         this.exchangeProvider.addProtocolHandler(new SubscriptionClient(this.subscriptionListeners));
     }
 
-    async getAllAttributes(): Promise<DecodedAttributeReportValue<any>[]> {
-        return (await this.getMultipleAttributesAndEvents(REQUEST_ALL)).attributeReports;
+    async getAllAttributes(
+        options: {
+            dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
+            isFabricFiltered?: boolean;
+        } = {},
+    ): Promise<DecodedAttributeReportValue<any>[]> {
+        const { dataVersionFilters, isFabricFiltered } = options;
+        return (
+            await this.getMultipleAttributesAndEvents({
+                attributes: REQUEST_ALL,
+                dataVersionFilters,
+                isFabricFiltered,
+            })
+        ).attributeReports;
     }
+
     async getAllEvents(
-        eventFilters?: TypeFromSchema<typeof TlvEventFilter>[],
+        options: {
+            eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
+            isFabricFiltered?: boolean;
+        } = {},
     ): Promise<DecodedEventReportValue<any>[]> {
-        return (await this.getMultipleAttributesAndEvents(undefined, REQUEST_ALL, eventFilters)).eventReports;
+        const { eventFilters, isFabricFiltered } = options;
+        return (await this.getMultipleAttributesAndEvents({ events: REQUEST_ALL, eventFilters, isFabricFiltered }))
+            .eventReports;
     }
 
     async getAllAttributesAndEvents(
-        eventFilters?: TypeFromSchema<typeof TlvEventFilter>[],
-    ): Promise<{ attributeReports: DecodedAttributeReportValue<any>[]; eventReports: DecodedEventReportValue<any>[] }> {
-        return this.getMultipleAttributesAndEvents(REQUEST_ALL, REQUEST_ALL, eventFilters);
+        options: {
+            dataVersionFilters?: {
+                endpointId: EndpointNumber;
+                clusterId: ClusterId;
+                dataVersion: number;
+            }[];
+            eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
+            isFabricFiltered?: boolean;
+        } = {},
+    ): Promise<{
+        attributeReports: DecodedAttributeReportValue<any>[];
+        eventReports: DecodedEventReportValue<any>[];
+    }> {
+        const { dataVersionFilters, eventFilters, isFabricFiltered } = options;
+        return this.getMultipleAttributesAndEvents({
+            attributes: REQUEST_ALL,
+            events: REQUEST_ALL,
+            eventFilters,
+            dataVersionFilters,
+            isFabricFiltered,
+        });
     }
 
     async getMultipleAttributes(
-        attributeRequests?: { endpointId?: EndpointNumber; clusterId?: ClusterId; attributeId?: AttributeId }[],
-        isFabricFiltered = true,
+        options: {
+            attributes?: { endpointId?: EndpointNumber; clusterId?: ClusterId; attributeId?: AttributeId }[];
+            dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
+            isFabricFiltered?: boolean;
+        } = {},
     ): Promise<DecodedAttributeReportValue<any>[]> {
-        return (await this.getMultipleAttributesAndEvents(attributeRequests, undefined, undefined, isFabricFiltered))
+        const { attributes, dataVersionFilters, isFabricFiltered } = options;
+        return (await this.getMultipleAttributesAndEvents({ attributes, dataVersionFilters, isFabricFiltered }))
             .attributeReports;
     }
 
     async getMultipleEvents(
-        eventRequests?: { endpointId?: EndpointNumber; clusterId?: ClusterId; eventId?: EventId }[],
-        eventFilters?: TypeFromSchema<typeof TlvEventFilter>[],
-        isFabricFiltered = true,
+        options: {
+            events?: { endpointId?: EndpointNumber; clusterId?: ClusterId; eventId?: EventId }[];
+            eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
+            isFabricFiltered?: boolean;
+        } = {},
     ): Promise<DecodedEventReportValue<any>[]> {
-        return (await this.getMultipleAttributesAndEvents(undefined, eventRequests, eventFilters, isFabricFiltered))
-            .eventReports;
+        const { events, eventFilters, isFabricFiltered } = options;
+        return (await this.getMultipleAttributesAndEvents({ events, eventFilters, isFabricFiltered })).eventReports;
     }
 
     async getMultipleAttributesAndEvents(
-        attributeRequests?: { endpointId?: EndpointNumber; clusterId?: ClusterId; attributeId?: AttributeId }[],
-        eventRequests?: { endpointId?: EndpointNumber; clusterId?: ClusterId; eventId?: EventId }[],
-        eventFilters?: TypeFromSchema<typeof TlvEventFilter>[],
-        isFabricFiltered = true,
-    ): Promise<{ attributeReports: DecodedAttributeReportValue<any>[]; eventReports: DecodedEventReportValue<any>[] }> {
+        options: {
+            attributes?: { endpointId?: EndpointNumber; clusterId?: ClusterId; attributeId?: AttributeId }[];
+            dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
+            events?: { endpointId?: EndpointNumber; clusterId?: ClusterId; eventId?: EventId }[];
+            eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
+            isFabricFiltered?: boolean;
+        } = {},
+    ): Promise<{
+        attributeReports: DecodedAttributeReportValue<any>[];
+        eventReports: DecodedEventReportValue<any>[];
+    }> {
+        const {
+            attributes: attributeRequests,
+            dataVersionFilters,
+            events: eventRequests,
+            eventFilters,
+            isFabricFiltered = true,
+        } = options;
+        if (attributeRequests === undefined && eventRequests === undefined) {
+            throw new ImplementationError("When reading attributes and events, at least one must be specified.");
+        }
+
         return this.withMessenger<{
             attributeReports: DecodedAttributeReportValue<any>[];
             eventReports: DecodedEventReportValue<any>[];
         }>(async messenger => {
             return await this.processReadRequest(messenger, {
                 attributeRequests,
+                dataVersionFilters: dataVersionFilters?.map(({ endpointId, clusterId, dataVersion }) => ({
+                    path: { endpointId, clusterId },
+                    dataVersion,
+                })),
                 eventRequests,
                 eventFilters,
-                interactionModelRevision: 1,
                 isFabricFiltered,
+                interactionModelRevision: 1,
             });
         });
     }
 
-    async getAttribute<A extends Attribute<any, any>>(
-        endpointId: EndpointNumber,
-        clusterId: ClusterId,
-        attribute: A,
-        alwaysRequestFromRemote = false,
-    ): Promise<AttributeJsType<A> | undefined> {
-        const response = await this.getAttributeWithVersion(endpointId, clusterId, attribute, alwaysRequestFromRemote);
+    async getAttribute<A extends Attribute<any, any>>(options: {
+        endpointId: EndpointNumber;
+        clusterId: ClusterId;
+        attribute: A;
+        isFabricFiltered?: boolean;
+        alwaysRequestFromRemote?: boolean;
+    }): Promise<AttributeJsType<A> | undefined> {
+        const { endpointId, clusterId, attribute, alwaysRequestFromRemote = false, isFabricFiltered } = options;
+        const response = await this.getAttributeWithVersion({
+            endpointId,
+            clusterId,
+            attribute,
+            alwaysRequestFromRemote,
+            isFabricFiltered,
+        });
         return response?.value;
     }
 
-    async getAttributeWithVersion<A extends Attribute<any, any>>(
-        endpointId: EndpointNumber,
-        clusterId: ClusterId,
-        attribute: A,
-        alwaysRequestFromRemote = false,
-    ): Promise<{ value: AttributeJsType<A>; version: number } | undefined> {
+    async getAttributeWithVersion<A extends Attribute<any, any>>(options: {
+        endpointId: EndpointNumber;
+        clusterId: ClusterId;
+        attribute: A;
+        isFabricFiltered?: boolean;
+        alwaysRequestFromRemote?: boolean;
+    }): Promise<{ value: AttributeJsType<A>; version: number } | undefined> {
+        const { endpointId, clusterId, attribute, alwaysRequestFromRemote = false, isFabricFiltered } = options;
         const { id: attributeId } = attribute;
         if (!alwaysRequestFromRemote) {
             const localValue = this.subscribedLocalValues.get(
@@ -166,9 +239,10 @@ export class InteractionClient {
             }
         }
 
-        const { attributeReports } = await this.getMultipleAttributesAndEvents([
-            { endpointId, clusterId, attributeId },
-        ]);
+        const { attributeReports } = await this.getMultipleAttributesAndEvents({
+            attributes: [{ endpointId, clusterId, attributeId }],
+            isFabricFiltered,
+        });
 
         if (attributeReports.length === 0) {
             return undefined;
@@ -179,20 +253,20 @@ export class InteractionClient {
         return { value: attributeReports[0].value, version: attributeReports[0].version };
     }
 
-    async getEvent<T, E extends Event<T, any>>(
-        endpointId: EndpointNumber,
-        clusterId: ClusterId,
-        event: E,
-        minimumEventNumber?: number | bigint,
-        isFabricFiltered = true,
-    ): Promise<DecodedEventData<T>[] | undefined> {
+    async getEvent<T, E extends Event<T, any>>(options: {
+        endpointId: EndpointNumber;
+        clusterId: ClusterId;
+        event: E;
+        minimumEventNumber?: number | bigint;
+        isFabricFiltered?: boolean;
+    }): Promise<DecodedEventData<T>[] | undefined> {
+        const { endpointId, clusterId, event, minimumEventNumber, isFabricFiltered = true } = options;
         const { id: eventId } = event;
-        const response = await this.getMultipleAttributesAndEvents(
-            undefined,
-            [{ endpointId, clusterId, eventId }],
-            minimumEventNumber !== undefined ? [{ eventMin: minimumEventNumber }] : undefined,
+        const response = await this.getMultipleAttributesAndEvents({
+            events: [{ endpointId, clusterId, eventId }],
+            eventFilters: minimumEventNumber !== undefined ? [{ eventMin: minimumEventNumber }] : undefined,
             isFabricFiltered,
-        );
+        });
         return response?.eventReports[0]?.events;
     }
 
@@ -240,13 +314,14 @@ export class InteractionClient {
         return normalizedResult;
     }
 
-    async setAttribute<T>(
-        endpointId: EndpointNumber,
-        clusterId: ClusterId,
-        attribute: Attribute<T, any>,
-        value: T,
-        dataVersion?: number,
-    ): Promise<void> {
+    async setAttribute<T>(attributeData: {
+        endpointId: EndpointNumber;
+        clusterId: ClusterId;
+        attribute: Attribute<T, any>;
+        value: T;
+        dataVersion?: number;
+    }): Promise<void> {
+        const { endpointId, clusterId, attribute, value, dataVersion } = attributeData;
         const response = await this.setMultipleAttributes([{ endpointId, clusterId, attribute, value, dataVersion }]);
 
         // Response contains Status error if there was an error on write
@@ -314,15 +389,28 @@ export class InteractionClient {
         });
     }
 
-    async subscribeAttribute<A extends Attribute<any, any>>(
-        endpointId: EndpointNumber,
-        clusterId: ClusterId,
-        attribute: A,
-        minIntervalFloorSeconds: number,
-        maxIntervalCeilingSeconds: number,
-        isFabricFiltered = true,
-        listener?: (value: AttributeJsType<A>, version: number) => void,
-    ): Promise<void> {
+    async subscribeAttribute<A extends Attribute<any, any>>(options: {
+        endpointId: EndpointNumber;
+        clusterId: ClusterId;
+        attribute: A;
+        minIntervalFloorSeconds: number;
+        maxIntervalCeilingSeconds: number;
+        isFabricFiltered?: boolean;
+        knownDataVersion?: number;
+        keepSubscriptions?: boolean;
+        listener?: (value: AttributeJsType<A>, version: number) => void;
+    }): Promise<void> {
+        const {
+            endpointId,
+            clusterId,
+            attribute,
+            minIntervalFloorSeconds,
+            maxIntervalCeilingSeconds,
+            isFabricFiltered = true,
+            listener,
+            knownDataVersion,
+            keepSubscriptions = true,
+        } = options;
         return this.withMessenger<void>(async messenger => {
             const { id: attributeId } = attribute;
             logger.debug(
@@ -338,7 +426,11 @@ export class InteractionClient {
             } = await messenger.sendSubscribeRequest({
                 interactionModelRevision: 1,
                 attributeRequests: [{ endpointId, clusterId, attributeId }],
-                keepSubscriptions: true,
+                dataVersionFilters:
+                    knownDataVersion !== undefined
+                        ? [{ path: { endpointId, clusterId }, dataVersion: knownDataVersion }]
+                        : undefined,
+                keepSubscriptions,
                 minIntervalFloorSeconds,
                 maxIntervalCeilingSeconds,
                 isFabricFiltered,
@@ -378,18 +470,29 @@ export class InteractionClient {
         });
     }
 
-    async subscribeEvent<T, E extends Event<T, any>>(
-        endpointId: EndpointNumber,
-        clusterId: ClusterId,
-        event: E,
-        minIntervalFloorSeconds: number,
-        maxIntervalCeilingSeconds: number,
-        isUrgent?: boolean,
-        minimumEventNumber?: number | bigint,
-        isFabricFiltered = true,
-        listener?: (value: DecodedEventData<T>) => void,
-    ): Promise<void> {
+    async subscribeEvent<T, E extends Event<T, any>>(options: {
+        endpointId: EndpointNumber;
+        clusterId: ClusterId;
+        event: E;
+        minIntervalFloorSeconds: number;
+        maxIntervalCeilingSeconds: number;
+        isUrgent?: boolean;
+        minimumEventNumber?: number | bigint;
+        isFabricFiltered?: boolean;
+        listener?: (value: DecodedEventData<T>) => void;
+    }): Promise<void> {
         return this.withMessenger<void>(async messenger => {
+            const {
+                endpointId,
+                clusterId,
+                event,
+                minIntervalFloorSeconds,
+                maxIntervalCeilingSeconds,
+                isUrgent,
+                minimumEventNumber,
+                isFabricFiltered = true,
+                listener,
+            } = options;
             const { id: eventId } = event;
             logger.debug(
                 `Sending subscribe request for event: ${resolveEventName({ endpointId, clusterId, eventId })}`,
@@ -433,37 +536,66 @@ export class InteractionClient {
         });
     }
 
-    async subscribeAllAttributesAndEvents(
-        minIntervalFloorSeconds: number,
-        maxIntervalCeilingSeconds: number,
-        attributeListener?: (data: DecodedAttributeReportValue<any>) => void,
-        eventListener?: (data: DecodedEventReportValue<any>) => void,
-        isUrgent?: boolean,
-        keepSubscriptions?: boolean,
-        isFabricFiltered?: boolean,
-    ): Promise<void> {
-        return this.subscribeMultipleAttributesAndEvents(
-            [{}],
-            [{ isUrgent }],
+    async subscribeAllAttributesAndEvents(options: {
+        minIntervalFloorSeconds: number;
+        maxIntervalCeilingSeconds: number;
+        attributeListener?: (data: DecodedAttributeReportValue<any>) => void;
+        eventListener?: (data: DecodedEventReportValue<any>) => void;
+        isUrgent?: boolean;
+        keepSubscriptions?: boolean;
+        isFabricFiltered?: boolean;
+        eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
+        dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
+    }): Promise<void> {
+        const {
+            minIntervalFloorSeconds,
+            maxIntervalCeilingSeconds,
+            attributeListener,
+            eventListener,
+            isUrgent,
+            keepSubscriptions = true,
+            isFabricFiltered = true,
+            eventFilters,
+            dataVersionFilters,
+        } = options;
+        return this.subscribeMultipleAttributesAndEvents({
+            attributes: REQUEST_ALL,
+            events: [{ isUrgent }],
             minIntervalFloorSeconds,
             maxIntervalCeilingSeconds,
             keepSubscriptions,
             isFabricFiltered,
             attributeListener,
             eventListener,
-        );
+            eventFilters,
+            dataVersionFilters,
+        });
     }
 
-    async subscribeMultipleAttributesAndEvents(
-        attributeRequests: { endpointId?: EndpointNumber; clusterId?: ClusterId; attributeId?: AttributeId }[],
-        eventRequests: { endpointId?: EndpointNumber; clusterId?: ClusterId; eventId?: EventId; isUrgent?: boolean }[],
-        minIntervalFloorSeconds: number,
-        maxIntervalCeilingSeconds: number,
-        keepSubscriptions = true,
-        isFabricFiltered = true,
-        attributeListener?: (data: DecodedAttributeReportValue<any>) => void,
-        eventListener?: (data: DecodedEventReportValue<any>) => void,
-    ): Promise<void> {
+    async subscribeMultipleAttributesAndEvents(options: {
+        attributes: { endpointId?: EndpointNumber; clusterId?: ClusterId; attributeId?: AttributeId }[];
+        events: { endpointId?: EndpointNumber; clusterId?: ClusterId; eventId?: EventId; isUrgent?: boolean }[];
+        minIntervalFloorSeconds: number;
+        maxIntervalCeilingSeconds: number;
+        keepSubscriptions?: boolean;
+        isFabricFiltered?: boolean;
+        attributeListener?: (data: DecodedAttributeReportValue<any>) => void;
+        eventListener?: (data: DecodedEventReportValue<any>) => void;
+        eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
+        dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
+    }): Promise<void> {
+        const {
+            attributes: attributeRequests,
+            events: eventRequests,
+            minIntervalFloorSeconds,
+            maxIntervalCeilingSeconds,
+            keepSubscriptions = true,
+            isFabricFiltered = true,
+            attributeListener,
+            eventListener,
+            eventFilters,
+            dataVersionFilters,
+        } = options;
         return this.withMessenger<void>(async messenger => {
             logger.debug(
                 `Sending subscribe request: attributes: ${attributeRequests
@@ -481,6 +613,11 @@ export class InteractionClient {
                 minIntervalFloorSeconds,
                 maxIntervalCeilingSeconds,
                 isFabricFiltered,
+                eventFilters,
+                dataVersionFilters: dataVersionFilters?.map(({ endpointId, clusterId, dataVersion }) => ({
+                    path: { endpointId, clusterId },
+                    dataVersion,
+                })),
             });
 
             const subscriptionListener = (dataReport: DataReport) => {
@@ -518,7 +655,6 @@ export class InteractionClient {
             };
             this.subscriptionListeners.set(subscriptionId, subscriptionListener);
             subscriptionListener(report);
-            return;
         });
     }
 

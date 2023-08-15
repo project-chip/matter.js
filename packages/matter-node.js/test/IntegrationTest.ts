@@ -108,6 +108,15 @@ describe("Integration Test", () => {
         const serverStorageManager = new StorageManager(fakeServerStorage);
         await serverStorageManager.initialize();
 
+        // make cluster data version deterministic
+        const nodeContext = serverStorageManager.createContext("0");
+        const cluster16Context = nodeContext.createContext("Cluster-1-6");
+        cluster16Context.set("_clusterDataVersion", 0); // Make sure the onoff attribute has deterministic start version for tests
+        const cluster029Context = nodeContext.createContext("Cluster-0-29");
+        cluster029Context.set("_clusterDataVersion", 0); // Make sure the serverList attribute has deterministic start version for tests
+        const cluster040Context = nodeContext.createContext("Cluster-0-40");
+        cluster040Context.set("_clusterDataVersion", 0); // Make sure the serverList attribute has deterministic start version for tests
+
         matterServer = new MatterServer(serverStorageManager);
 
         commissioningServer = new CommissioningServer({
@@ -295,16 +304,18 @@ describe("Integration Test", () => {
         });
 
         it("read multiple attributes", async () => {
-            const response = await defaultInteractionClient.getMultipleAttributes([
-                { clusterId: Descriptor.Cluster.id }, // * /DescriptorCluster/ *
-                { endpointId: EndpointNumber(0), clusterId: BasicInformation.Cluster.id }, // 0/BasicInformationCluster/ *
-                {
-                    endpointId: EndpointNumber(1),
-                    clusterId: OnOffCluster.id,
-                    attributeId: OnOffCluster.attributes.onOff.id,
-                }, // 1/OnOffCluster/onOff
-                { endpointId: EndpointNumber(2) }, // 2 / * /* - will be discarded in results!
-            ]);
+            const response = await defaultInteractionClient.getMultipleAttributes({
+                attributes: [
+                    { clusterId: Descriptor.Cluster.id }, // * /DescriptorCluster/ *
+                    { endpointId: EndpointNumber(0), clusterId: BasicInformation.Cluster.id }, // 0/BasicInformationCluster/ *
+                    {
+                        endpointId: EndpointNumber(1),
+                        clusterId: OnOffCluster.id,
+                        attributeId: OnOffCluster.attributes.onOff.id,
+                    }, // 1/OnOffCluster/onOff
+                    { endpointId: EndpointNumber(2) }, // 2 / * /* - will be discarded in results!
+                ],
+            });
 
             assert.equal(response.length, 43);
             assert.equal(
@@ -370,7 +381,7 @@ describe("Integration Test", () => {
                     attributeName: "softwareVersionString",
                 },
                 value: "v1",
-                version: 0,
+                version: 3,
             });
             const nodeLabelData = response.find(
                 ({ path: { endpointId, clusterId, attributeId } }) =>
@@ -387,7 +398,7 @@ describe("Integration Test", () => {
                     attributeName: "nodeLabel",
                 },
                 value: "345678",
-                version: 2,
+                version: 3,
             });
 
             const onOffData = response.find(
@@ -410,15 +421,17 @@ describe("Integration Test", () => {
         });
 
         it("read events", async () => {
-            const response = await defaultInteractionClient.getMultipleEvents([
-                { clusterId: BasicInformation.Cluster.id }, // * /BasicInformationCluster/ *
-                {
-                    endpointId: EndpointNumber(0),
-                    clusterId: GeneralDiagnostics.Cluster.id,
-                    eventId: GeneralDiagnostics.Cluster.events.bootReason.id,
-                }, // 0/GeneralDiagnosticsCluster/bootReason
-                { endpointId: EndpointNumber(2) }, // 2 / * /* - will be discarded in results!
-            ]);
+            const response = await defaultInteractionClient.getMultipleEvents({
+                events: [
+                    { clusterId: BasicInformation.Cluster.id }, // * /BasicInformationCluster/ *
+                    {
+                        endpointId: EndpointNumber(0),
+                        clusterId: GeneralDiagnostics.Cluster.id,
+                        eventId: GeneralDiagnostics.Cluster.events.bootReason.id,
+                    }, // 0/GeneralDiagnosticsCluster/bootReason
+                    { endpointId: EndpointNumber(2) }, // 2 / * /* - will be discarded in results!
+                ],
+            });
 
             assert.equal(response.length, 2);
             assert.equal(
@@ -579,7 +592,7 @@ describe("Integration Test", () => {
             //await onOffClient.attributes.onOff.subscribe(0, 5);
             await onOffClient.subscribeOnOffAttribute(value => callback(value), 0, 5);
 
-            await fakeTime.advanceTime(0);
+            await fakeTime.yield();
             const firstReport = await firstPromise;
             assert.deepEqual(firstReport, { value: false, time: startTime });
 
@@ -616,6 +629,47 @@ describe("Integration Test", () => {
             assert.deepEqual(lastReport, { value: false, time: startTime + (60 * 60 + 4) * 1000 + 200 });
         });
 
+        it("subscription of one attribute with known data version only sends updates when the value changes", async () => {
+            const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
+            assert.ok(onoffEndpoint);
+            const onOffClient = onoffEndpoint.getClusterClient(
+                OnOffCluster,
+                await commissioningController.createInteractionClient(),
+            );
+            assert.ok(onOffClient);
+
+            assert.ok(onOffLightDeviceServer);
+            const startTime = Time.nowMs();
+
+            const pushedUpdates = Array<{
+                value: boolean;
+                time: number;
+            }>();
+
+            const { promise: updatePromise, resolver: updateResolver } = await getPromiseResolver<void>();
+
+            await onOffClient.subscribeOnOffAttribute(
+                value => {
+                    pushedUpdates.push({ value, time: Time.nowMs() });
+                    updateResolver();
+                },
+                0,
+                5,
+                2,
+            );
+
+            assert.deepEqual(pushedUpdates, []);
+
+            await fakeTime.advanceTime(2 * 1000);
+            await onOffLightDeviceServer.onOff(true);
+            await fakeTime.advanceTime(100);
+            await fakeTime.yield();
+
+            await updatePromise;
+
+            assert.deepEqual(pushedUpdates, [{ value: true, time: startTime + 2 * 1000 + 100 }]);
+        });
+
         it("subscribe an attribute with getter that needs endpoint", async () => {
             const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
             assert.ok(onoffEndpoint);
@@ -635,27 +689,35 @@ describe("Integration Test", () => {
                 value: number;
                 time: number;
             }>();
-            const callback = (value: number) => firstResolver({ value, time: Time.nowMs() });
+            let callback = (value: number) => firstResolver({ value, time: Time.nowMs() });
 
             //onOffClient.attributes.onOff.addValueSetListener(value => callback(value));
             //await onOffClient.attributes.onOff.subscribe(0, 5);
             await scenesClient.subscribeSceneCountAttribute(value => callback(value), 0, 5);
 
-            await fakeTime.advanceTime(0);
+            await fakeTime.yield();
             const firstReport = await firstPromise;
             assert.deepEqual(firstReport, { value: 0, time: startTime });
 
-            /* Will be added later when we clean up getter subscriptions
             // Await update Report on value change
-            const { promise: updatePromise, resolver: updateResolver } = await getPromiseResolver<{ value: boolean, time: number }>();
-            callback = (value: boolean) => updateResolver({ value, time: Time.nowMs() });
+            const { promise: updatePromise, resolver: updateResolver } = await getPromiseResolver<{
+                value: number;
+                time: number;
+            }>();
+            callback = (value: number) => updateResolver({ value, time: Time.nowMs() });
 
             await fakeTime.advanceTime(2 * 1000);
-            await scenesClient.addScene({groupID: new GroupId(1), sceneId: 1, transitionTime: 0, sceneName: "Test", extensionFieldSets: []});
+            await scenesClient.addScene({
+                groupId: GroupId(1),
+                sceneId: 1,
+                transitionTime: 0,
+                sceneName: "Test",
+                extensionFieldSets: [],
+            });
+            await fakeTime.advanceTime(100);
             const updateReport = await updatePromise;
 
-            assert.deepEqual(updateReport, { value: true, time: startTime + 2 * 1000 });
-            */
+            assert.deepEqual(updateReport, { value: 1, time: startTime + 2 * 1000 + 100 });
         });
 
         it("subscription of one event sends updates when event got triggered via auto-wiring", async () => {
@@ -780,10 +842,11 @@ describe("Integration Test", () => {
 
             assert.equal(fakeServerStorage.get(["0", "FabricManager"], "nextFabricIndex"), 2);
 
-            const onOffValue = fakeServerStorage.get<{ value: any; version: number }>(["0", "Cluster-1-6"], "onOff");
-            assert.ok(typeof onOffValue === "object");
-            assert.equal(onOffValue.version, 2);
-            assert.equal(onOffValue.value, false);
+            const onOffValue = fakeServerStorage.get<any>(["0", "Cluster-1-6"], "onOff");
+            assert.equal(onOffValue, true);
+
+            const onOffClusterDataVerison = fakeServerStorage.get<any>(["0", "Cluster-1-6"], "_clusterDataVersion");
+            assert.equal(onOffClusterDataVerison, 3);
 
             const storedServerResumptionRecords = fakeServerStorage.get(["0", "SessionManager"], "resumptionRecords");
             assert.ok(Array.isArray(storedServerResumptionRecords));

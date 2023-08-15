@@ -38,4 +38,9 @@ export class StorageBackendMemory implements Storage {
         }
         this.store[contextKey][key] = value;
     }
+
+    delete(contexts: string[], key: string): void {
+        if (!contexts.length || !key.length) throw new StorageError("Context and key must not be empty!");
+        delete this.store[this.createContextKey(contexts)]?.[key];
+    }
 }

@@ -49,6 +49,7 @@ import {
     StatusCode,
     TlvAttributePath,
     TlvAttributeReport,
+    TlvClusterPath,
     TlvCommandPath,
     TlvEventPath,
     TlvEventReport,
@@ -114,6 +115,16 @@ export function eventPathToId({ endpointId, clusterId, eventId }: TypeFromSchema
     return genericElementPathToId(endpointId, clusterId, eventId);
 }
 
+export function clusterPathToId({ nodeId, endpointId, clusterId }: TypeFromSchema<typeof TlvClusterPath>) {
+    return `${nodeId}/${endpointId}/${clusterId}`;
+}
+
+export type InteractionServerOptions = {
+    subscriptionMaxIntervalSeconds?: number;
+    subscriptionMinIntervalSeconds?: number;
+    subscriptionRandomizationWindowSeconds?: number;
+};
+
 export class InteractionServer implements ProtocolHandler<MatterDevice> {
     private endpointStructure = new InteractionEndpointStructure();
     private nextSubscriptionId = Crypto.getRandomUInt32();
@@ -121,7 +132,10 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     private readonly subscriptionMap = new Map<number, SubscriptionHandler>();
     private isClosing = false;
 
-    constructor(private readonly storage: StorageContext) {}
+    constructor(
+        private readonly storage: StorageContext,
+        private readonly options?: InteractionServerOptions,
+    ) {}
 
     getId() {
         return INTERACTION_PROTOCOL_ID;
@@ -158,7 +172,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
     handleReadRequest(
         exchange: MessageExchange<MatterDevice>,
-        { attributeRequests, eventRequests, eventFilters, isFabricFiltered }: ReadRequest,
+        { attributeRequests, dataVersionFilters, eventRequests, eventFilters, isFabricFiltered }: ReadRequest,
     ): DataReport {
         if (attributeRequests === undefined && eventRequests === undefined) {
             throw new StatusResponseError(
@@ -167,15 +181,25 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             );
         }
         logger.debug(
-            `Received read request from ${exchange.channel.name}: attributes:${attributeRequests
-                ?.map(path => this.endpointStructure.resolveAttributeName(path))
-                .join(", ")}, events:${eventRequests
-                ?.map(path => this.endpointStructure.resolveEventName(path))
-                .join(", ")} isFabricFiltered=${isFabricFiltered}`,
+            `Received read request from ${exchange.channel.name}: attributes:${
+                attributeRequests?.map(path => this.endpointStructure.resolveAttributeName(path)).join(", ") ?? "none"
+            }, events:${
+                eventRequests?.map(path => this.endpointStructure.resolveEventName(path)).join(", ") ?? "none"
+            } isFabricFiltered=${isFabricFiltered}`,
         );
 
         // TODO UnsupportedNode
-        // TODO dataversionFilters
+
+        const dataVersionFilterMap = new Map<string, number>(
+            dataVersionFilters?.map(({ path, dataVersion }) => [clusterPathToId(path), dataVersion]) ?? [],
+        );
+        if (dataVersionFilterMap.size > 0) {
+            logger.debug(
+                `DataVersionFilters: ${Array.from(dataVersionFilterMap.entries())
+                    .map(([path, version]) => `${path}=${version}`)
+                    .join(", ")}`,
+            );
+        }
 
         const attributeReports = attributeRequests?.flatMap(
             (path: TypeFromSchema<typeof TlvAttributePath>): TypeFromSchema<typeof TlvAttributeReport>[] => {
@@ -208,14 +232,31 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                     }
                 }
 
-                return attributes.map(({ path, attribute }) => {
+                return attributes.flatMap(({ path, attribute }) => {
                     const { value, version } = attribute.getWithVersion(exchange.session, isFabricFiltered);
+                    const { nodeId, endpointId, clusterId } = path;
+
+                    const versionFilterValue =
+                        endpointId !== undefined && clusterId !== undefined
+                            ? dataVersionFilterMap.get(clusterPathToId({ nodeId, endpointId, clusterId }))
+                            : undefined;
+                    if (versionFilterValue !== undefined && versionFilterValue === version) {
+                        logger.debug(
+                            `Read attribute from ${
+                                exchange.channel.name
+                            }: ${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(
+                                value,
+                            )} (version=${version}) ignored because of dataVersionFilter`,
+                        );
+                        return [];
+                    }
+
                     logger.debug(
                         `Read attribute from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(
                             path,
                         )}=${Logger.toJSON(value)} (version=${version})`,
                     );
-                    return { attributeData: { path, data: attribute.schema.encodeTlv(value), dataVersion: version } };
+                    return [{ attributeData: { path, data: attribute.schema.encodeTlv(value), dataVersion: version } }];
                 });
             },
         );
@@ -387,6 +428,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             minIntervalFloorSeconds,
             maxIntervalCeilingSeconds,
             attributeRequests,
+            dataVersionFilters,
             eventRequests,
             eventFilters,
             keepSubscriptions,
@@ -417,13 +459,24 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         }
 
         logger.debug(
-            `Subscribe to attributes:${attributeRequests
-                ?.map(path => this.endpointStructure.resolveAttributeName(path))
-                .join(", ")}, events:${eventRequests
-                ?.map(path => this.endpointStructure.resolveEventName(path))
-                .join(", ")}`,
+            `Subscribe to attributes:${
+                attributeRequests?.map(path => this.endpointStructure.resolveAttributeName(path)).join(", ") ?? "none"
+            }, events:${
+                eventRequests?.map(path => this.endpointStructure.resolveEventName(path)).join(", ") ?? "none"
+            }`,
         );
-        if (eventFilters !== undefined)
+
+        if (dataVersionFilters !== undefined && dataVersionFilters.length > 0) {
+            logger.debug(
+                `DataVersionFilters: ${dataVersionFilters
+                    .map(
+                        ({ path: { nodeId, endpointId, clusterId }, dataVersion }) =>
+                            `${clusterPathToId({ nodeId, endpointId, clusterId })}=${dataVersion}`,
+                    )
+                    .join(", ")}`,
+            );
+        }
+        if (eventFilters !== undefined && eventFilters.length > 0)
             logger.debug(
                 `Event filters: ${eventFilters.map(filter => `${filter.nodeId}/${filter.eventMin}`).join(", ")}`,
             );
@@ -457,12 +510,16 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             session,
             this.endpointStructure,
             attributeRequests,
+            dataVersionFilters,
             eventRequests,
             eventFilters,
             this.eventHandler,
             isFabricFiltered,
             minIntervalFloorSeconds,
             maxIntervalCeilingSeconds,
+            this.options?.subscriptionMaxIntervalSeconds,
+            this.options?.subscriptionMinIntervalSeconds,
+            this.options?.subscriptionRandomizationWindowSeconds,
             () => this.subscriptionMap.delete(subscriptionId),
         );
 
@@ -490,7 +547,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         const maxInterval = subscriptionHandler.getMaxInterval();
         logger.info(
-            `Successfully created subscription ${subscriptionId} for Session ${session.getId()}. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${maxInterval} seconds`,
+            `Successfully created subscription ${subscriptionId} for Session ${session.getId()}. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${maxInterval} seconds (sendInterval = ${subscriptionHandler.getSendInterval()} seconds)`,
         );
         // Then send the subscription response
         await messenger.send(
