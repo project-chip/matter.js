@@ -20,6 +20,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v3
+
       - name: Install Debian deps
         id: install-deps
         run: |
@@ -103,9 +106,6 @@ jobs:
         #          ./scripts/build/build_examples.py --target linux-x64-simulated-app2 build
         #          cp out/linux-x64-simulated-app2/chip-app2 ../bin/
         #          rm -rf out/linux-x64-simulated-app2
-
-      - name: Check out matter.js
-        uses: actions/checkout@v3
 
       - name: Install and build matter.js
         run: |
