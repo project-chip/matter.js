@@ -44,18 +44,65 @@ jobs:
           cd connectedhomeip
           scripts/checkout_submodules.py --shallow --platform linux
       - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' }} || contains(github.event.head_commit.message, '[rebuild-chip]') == true
-        name: Build examples
-        id: build_examples
+        name: Build executables
+        id: build_executables
         run: |
           cd connectedhomeip
           source scripts/activate.sh
-          ./scripts/build/build_examples.py --target linux-x64-all-clusters --target linux-x64-all-clusters-minimal --target linux-x64-thermostat --target linux-x64-light --target linux-x64-lock --target linux-x64-shell --target linux-x64-ota-provider --target linux-x64-ota-requestor --target linux-x64-tv-app --target linux-x64-tv-casting-app --target linux-x64-bridge --target linux-x64-contact-sensor --target linux-x64-dishwasher --target linux-x64-chip-cert --target linux-x64-simulated-app1 --target linux-x64-simulated-app2 --target linux-x64-chip-tool build
+          ./scripts/build/build_examples.py --target linux-x64-all-clusters 
+          cp connectedhomeip/out/linux-x64-all-clusters/chip-all-clusters-app bin/
+          rm -rf connectedhomeip/out/linux-x64-all-clusters
+          ./scripts/build/build_examples.py --target linux-x64-all-clusters-minimal
+          cp connectedhomeip/out/linux-x64-all-clusters-minimal/chip-all-clusters-minimal-app bin/
+          rm -rf connectedhomeip/out/linux-x64-all-clusters-minimal
+          ./scripts/build/build_examples.py --target linux-x64-thermostat
+          cp connectedhomeip/out/linux-x64-thermostat/thermostat-app bin/
+          rm -rf connectedhomeip/out/linux-x64-thermostat
+          ./scripts/build/build_examples.py --target linux-x64-light
+          cp connectedhomeip/out/linux-x64-light/chip-lighting-app bin/
+          rm -rf connectedhomeip/out/linux-x64-light
+          ./scripts/build/build_examples.py --target linux-x64-lock
+          cp connectedhomeip/out/linux-x64-lock/chip-lock-app bin/
+          rm -rf connectedhomeip/out/linux-x64-lock
+          ./scripts/build/build_examples.py --target linux-x64-shell
+          cp connectedhomeip/out/linux-x64-shell/chip-shell bin/
+          rm -rf connectedhomeip/out/linux-x64-shell
+          ./scripts/build/build_examples.py --target linux-x64-ota-provider
+          cp connectedhomeip/out/linux-x64-ota-provider/chip-ota-provider-app bin/
+          rm -rf connectedhomeip/out/linux-x64-ota-provider
+          ./scripts/build/build_examples.py --target linux-x64-ota-requestor
+          cp connectedhomeip/out/linux-x64-ota-requestor/chip-ota-requestor-app bin/
+          rm -rf connectedhomeip/out/linux-x64-ota-requestor
+          ./scripts/build/build_examples.py --target linux-x64-tv-app
+          cp connectedhomeip/out/linux-x64-tv-app/chip-tv-app bin/
+          rm -rf connectedhomeip/out/linux-x64-tv-app
+          ./scripts/build/build_examples.py --target linux-x64-tv-casting-app  
+          cp connectedhomeip/out/linux-x64-tv-casting-app/chip-tv-casting-app bin/
+          rm -rf connectedhomeip/out/linux-x64-tv-casting-app
+          ./scripts/build/build_examples.py --target linux-x64-bridge
+          cp connectedhomeip/out/linux-x64-bridge/chip-bridge-app bin/
+          rm -rf connectedhomeip/out/linux-x64-bridge
+          ./scripts/build/build_examples.py --target linux-x64-contact-sensor
+          cp connectedhomeip/out/linux-x64-contact-sensor/contact-sensor-app bin/
+          rm -rf connectedhomeip/out/linux-x64-contact-sensor
+          ./scripts/build/build_examples.py --target linux-x64-dishwasher
+          cp connectedhomeip/out/linux-x64-dishwasher/chip-dishwasher-app bin/
+          rm -rf connectedhomeip/out/linux-x64-dishwasher
+          ./scripts/build/build_examples.py --target linux-x64-chip-cert
+          cp connectedhomeip/out/linux-x64-chip-cert/chip-cert bin/
+          rm -rf connectedhomeip/out/linux-x64-chip-cert
+          ./scripts/build/build_examples.py --target linux-x64-simulated-app1
+          cp connectedhomeip/out/linux-x64-simulated-app1/chip-app1 bin/
+          rm -rf connectedhomeip/out/linux-x64-simulated-app1
+          ./scripts/build/build_examples.py --target linux-x64-simulated-app2
+          cp connectedhomeip/out/linux-x64-simulated-app2/chip-app2 bin/
+          rm -rf connectedhomeip/out/linux-x64-simulated-app2
+          ./scripts/build/build_examples.py --target linux-x64-chip-tool build
+          cp connectedhomeip/out/linux--x64-chip-tool/chip-tool bin/
       - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' }} || contains(github.event.head_commit.message, '[rebuild-chip]') == true
-        name: Copy files
-        id: copy_files
+        name: Cleanup
+        id: cleanup
         run: |
-          cp connectedhomeip/out/debug/chip-tool bin/
-          cp connectedhomeip/out/linux-x64-tests/tests/* bin/
           rm -rf connectedhomeip
       - name: test execution
         id: test_execution
