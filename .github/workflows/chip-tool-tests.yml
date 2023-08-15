@@ -29,7 +29,6 @@ jobs:
         id: prepare_bin
         run: |
           mkdir bin
-
       - name: Cache Bin files
         id: cache-bin
         uses: actions/cache@v3
@@ -38,7 +37,6 @@ jobs:
         with:
           path: ./bin
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ env.CONNECTEDHOMEIP_TAG }}
-
       - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' || contains(github.event.head_commit.message, '[rebuild-chip]') == true }}
         name: Build executables
         id: build-executables
@@ -53,6 +51,7 @@ jobs:
           ./scripts/build/build_examples.py --target linux-x64-chip-tool build
           cp out/linux-x64-chip-tool/chip-tool ../bin/
           rm -rf out/linux-x64-chip-tool
+          rm -rf connectedhomeip
         #          More options for later, but takes long to build
         #          ./scripts/build/build_examples.py --target linux-x64-all-clusters build
         #          cp out/linux-x64-all-clusters/chip-all-clusters-app ../bin/
@@ -99,8 +98,6 @@ jobs:
         #          ./scripts/build/build_examples.py --target linux-x64-simulated-app2 build
         #          cp out/linux-x64-simulated-app2/chip-app2 ../bin/
         #          rm -rf out/linux-x64-simulated-app2
-          rm -rf connectedhomeip
-
       - name: test execution
         id: test-execution
         run: |
