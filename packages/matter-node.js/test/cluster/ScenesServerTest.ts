@@ -21,7 +21,7 @@ import {
     GroupsCluster,
     GroupsClusterHandler,
     OnOffCluster,
-    OnOffClusterHandler,
+    OnOffClusterDefaultHandler,
     ScenesCluster,
     ScenesClusterHandler,
 } from "@project-chip/matter.js/cluster";
@@ -59,7 +59,7 @@ describe("Scenes Server test", () => {
             },
             ScenesClusterHandler(),
         );
-        onOffServer = ClusterServer(OnOffCluster, { onOff: true }, OnOffClusterHandler());
+        onOffServer = ClusterServer(OnOffCluster, { onOff: true }, OnOffClusterDefaultHandler());
         testSession = await createTestSessionWithFabric();
         testFabric = testSession.getFabric();
 
