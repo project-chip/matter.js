@@ -156,8 +156,10 @@ export class Fabric {
         this.persistCallback = callback;
     }
 
-    remove() {
-        this.sessions.forEach(session => session.destroy());
+    async remove() {
+        for (const session of this.sessions) {
+            await session.end();
+        }
         this.removeCallback?.();
     }
 

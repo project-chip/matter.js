@@ -136,7 +136,7 @@ export class SubscriptionHandler {
         this.sendDelayTimer = Time.getTimer(50, () => this.sendUpdate()); // will be started later
         if (!keepSubscriptions) {
             logger.debug(`Clear subscriptions for Session ${session.name}`);
-            this.session.clearSubscriptions();
+            void this.session.clearSubscriptions(); // Temporary void: Will be cleaned up in PR #814
         }
     }
 
@@ -422,9 +422,9 @@ export class SubscriptionHandler {
                 this.sendNextUpdateImmediately = false;
                 if (error instanceof RetransmissionLimitReachedError) {
                     // We could not send at all, consider session as dead
-                    this.session.destroy();
+                    await this.session.destroy();
                 } else {
-                    this.cancel();
+                    await this.cancel();
                 }
             }
         }
@@ -556,12 +556,15 @@ export class SubscriptionHandler {
         }
     }
 
-    cancel() {
+    async cancel(flush = false) {
         this.sendUpdatesActivated = false;
         this.updateTimer.stop();
         this.sendDelayTimer.stop();
         this.unregisterAttributeListeners(Array.from(this.attributeListeners.keys()));
         this.unregisterEventListeners(Array.from(this.eventListeners.keys()));
+        if (flush) {
+            await this.flush();
+        }
         this.session.removeSubscription(this.subscriptionId);
         this.cancelCallback();
     }
@@ -622,7 +625,7 @@ export class SubscriptionHandler {
                 async error => {
                     if (error.code === StatusCode.InvalidSubscription || error.code === StatusCode.Failure) {
                         logger.info(`Subscription ${this.subscriptionId} cancelled by peer.`);
-                        this.cancel();
+                        await this.cancel();
                     } else {
                         throw error;
                     }

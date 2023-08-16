@@ -334,7 +334,21 @@ describe("Endpoint Structures", () => {
 
             expect(attributePaths.length).toBe(110);
             expect(commandPaths.length).toBe(18);
-            expect(eventPaths.length).toBe(5);
+            expect(eventPaths.length).toBe(6);
+
+            const basicInformationCluster = rootEndpoint.getClusterServer(BasicInformationCluster);
+            expect(basicInformationCluster).toBeDefined();
+            expect((basicInformationCluster?.attributes as any).attributeList.get().length).toBe(20);
+            expect((basicInformationCluster?.attributes as any).eventList.get().length).toBe(3);
+            expect((basicInformationCluster?.attributes as any).generatedCommandList.get().length).toBe(0);
+            expect((basicInformationCluster?.attributes as any).acceptedCommandList.get().length).toBe(0);
+
+            const generalCommissioningCluster = rootEndpoint.getClusterServer(GeneralCommissioning.Cluster);
+            expect(generalCommissioningCluster).toBeDefined();
+            expect((generalCommissioningCluster?.attributes as any).attributeList.get().length).toBe(11);
+            expect((generalCommissioningCluster?.attributes as any).eventList.get().length).toBe(0);
+            expect((generalCommissioningCluster?.attributes as any).generatedCommandList.get().length).toBe(3);
+            expect((generalCommissioningCluster?.attributes as any).acceptedCommandList.get().length).toBe(3);
         });
 
         it("One device with one Light endpoints - no unique id, use index", async () => {
@@ -425,7 +439,7 @@ describe("Endpoint Structures", () => {
 
             expect(attributePaths.length).toBe(161);
             expect(commandPaths.length).toBe(38);
-            expect(eventPaths.length).toBe(5);
+            expect(eventPaths.length).toBe(6);
         });
 
         it("One device with one Light endpoints - with uniqueid", async () => {
@@ -516,7 +530,7 @@ describe("Endpoint Structures", () => {
 
             expect(attributePaths.length).toBe(161);
             expect(commandPaths.length).toBe(38);
-            expect(eventPaths.length).toBe(5);
+            expect(eventPaths.length).toBe(6);
         });
 
         it("One device with one Light endpoints - no uniqueid, use index, from storage", async () => {
@@ -608,7 +622,7 @@ describe("Endpoint Structures", () => {
 
             expect(attributePaths.length).toBe(161);
             expect(commandPaths.length).toBe(38);
-            expect(eventPaths.length).toBe(5);
+            expect(eventPaths.length).toBe(6);
         });
 
         it("One device with one Light endpoints - with uniqueid, from storage", async () => {
@@ -700,7 +714,7 @@ describe("Endpoint Structures", () => {
 
             expect(attributePaths.length).toBe(161);
             expect(commandPaths.length).toBe(38);
-            expect(eventPaths.length).toBe(5);
+            expect(eventPaths.length).toBe(6);
         });
     });
 
@@ -1314,7 +1328,7 @@ describe("Endpoint Structures", () => {
 
             expect(attributePaths.length).toBe(380);
             expect(commandPaths.length).toBe(98);
-            expect(eventPaths.length).toBe(9);
+            expect(eventPaths.length).toBe(10);
         });
 
         it("Device Structure with two aggregators and three Light/Composed endpoints and all partly auto-assigned endpoint IDs", async () => {
@@ -1574,7 +1588,7 @@ describe("Endpoint Structures", () => {
 
             expect(attributePaths.length).toBe(502);
             expect(commandPaths.length).toBe(138);
-            expect(eventPaths.length).toBe(10);
+            expect(eventPaths.length).toBe(11);
         });
 
         it("Device Structure with two aggregators and three Light/Composed endpoints and all partly auto-assigned endpoint IDs and removing adding devices", async () => {
@@ -1835,7 +1849,7 @@ describe("Endpoint Structures", () => {
 
             expect(attributePaths.length).toBe(502);
             expect(commandPaths.length).toBe(138);
-            expect(eventPaths.length).toBe(10);
+            expect(eventPaths.length).toBe(11);
 
             let structureChangeCounter = 0;
             rootEndpoint.setStructureChangedCallback(() => {
