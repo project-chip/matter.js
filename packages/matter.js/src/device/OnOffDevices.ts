@@ -4,21 +4,26 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
-import { IdentifyCluster } from "../cluster/definitions/IdentifyCluster.js";
-import { OnOffCluster } from "../cluster/definitions/OnOffCluster.js";
+import { Groups } from "../cluster/definitions/GroupsCluster.js";
+import { Identify } from "../cluster/definitions/IdentifyCluster.js";
+import { OnOff } from "../cluster/definitions/OnOffCluster.js";
+import { Scenes } from "../cluster/definitions/ScenesCluster.js";
 import { AttributeInitialValues, ClusterServerHandlers } from "../cluster/server/ClusterServerTypes.js";
 import { createDefaultGroupsClusterServer } from "../cluster/server/GroupsServer.js";
 import { createDefaultIdentifyClusterServer } from "../cluster/server/IdentifyServer.js";
 import { createDefaultOnOffClusterServer } from "../cluster/server/OnOffServer.js";
 import { createDefaultScenesClusterServer } from "../cluster/server/ScenesServer.js";
+import { ClusterId } from "../datatype/ClusterId.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { extendPublicHandlerMethods } from "../util/NamedHandler.js";
+import { MakeMandatory } from "../util/Type.js";
 import { Device } from "./Device.js";
 import { DeviceTypeDefinition, DeviceTypes } from "./DeviceTypes.js";
 import { EndpointOptions } from "./Endpoint.js";
 
 type OnOffBaseDeviceCommands = {
-    identify: ClusterServerHandlers<typeof IdentifyCluster>["identify"];
+    identify: ClusterServerHandlers<typeof Identify.Cluster>["identify"];
+    offWithEffect: MakeMandatory<ClusterServerHandlers<typeof OnOff.Complete>["offWithEffect"]>;
 };
 
 /**
@@ -28,14 +33,14 @@ type OnOffBaseDeviceCommands = {
  * @param attributeInitialValues Object with initial attribute values for automatically added clusters
  * @param cluster Cluster to get the initial attribute values for
  */
-function getClusterInitialAttributeValues<
+export function getClusterInitialAttributeValues<
     F extends BitSchema,
     SF extends TypeFromPartialBitSchema<F>,
     A extends Attributes,
     C extends Commands,
     E extends Events,
 >(
-    attributeInitialValues: { [key: number]: AttributeInitialValues<any> } | undefined,
+    attributeInitialValues: { [key: ClusterId]: AttributeInitialValues<any> } | undefined,
     cluster: Cluster<F, SF, A, C, E>,
 ): AttributeInitialValues<A> | undefined {
     if (attributeInitialValues === undefined) return undefined;
@@ -45,7 +50,7 @@ function getClusterInitialAttributeValues<
 /**
  * Abstract Base class for OnOff devices
  */
-abstract class OnOffBaseDevice extends extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands>(Device) {
+export class OnOffBaseDevice extends extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands>(Device) {
     /**
      * Creates a new OnOffBaseDevice
      *
@@ -54,9 +59,9 @@ abstract class OnOffBaseDevice extends extendPublicHandlerMethods<typeof Device,
      * @param attributeInitialValues Optional object with initial attribute values for automatically added clusters
      * @param options Optional endpoint options
      */
-    protected constructor(
+    constructor(
         definition: DeviceTypeDefinition,
-        attributeInitialValues?: { [key: number]: AttributeInitialValues<any> },
+        attributeInitialValues?: { [key: ClusterId]: AttributeInitialValues<any> },
         options: EndpointOptions = {},
     ) {
         super(definition, options);
@@ -68,19 +73,34 @@ abstract class OnOffBaseDevice extends extendPublicHandlerMethods<typeof Device,
      *
      * @protected
      * @param attributeInitialValues Optional object with initial attribute values for automatically added clusters
+     * @param excludeList List of clusters to exclude from being added
      */
-    protected addDeviceClusters(attributeInitialValues?: { [key: number]: AttributeInitialValues<any> }) {
+    protected addDeviceClusters(
+        attributeInitialValues?: { [key: ClusterId]: AttributeInitialValues<any> },
+        excludeList: ClusterId[] = [],
+    ) {
         // TODO: Find a way to make this automated based on the required clusters?
-        this.addClusterServer(
-            createDefaultIdentifyClusterServer({
-                identify: async data => await this._executeHandler("identify", data),
-            }),
-        );
-        this.addClusterServer(createDefaultGroupsClusterServer());
-        this.addClusterServer(createDefaultScenesClusterServer());
-        this.addClusterServer(
-            createDefaultOnOffClusterServer(getClusterInitialAttributeValues(attributeInitialValues, OnOffCluster)),
-        );
+        if (!excludeList.includes(Identify.Cluster.id)) {
+            this.addClusterServer(
+                createDefaultIdentifyClusterServer({
+                    identify: async data => await this._executeHandler("identify", data),
+                }),
+            );
+        }
+        if (!excludeList.includes(Groups.Cluster.id)) {
+            this.addClusterServer(createDefaultGroupsClusterServer());
+        }
+        if (!excludeList.includes(Scenes.Cluster.id)) {
+            this.addClusterServer(createDefaultScenesClusterServer());
+        }
+        if (!excludeList.includes(OnOff.Cluster.id)) {
+            this.addClusterServer(
+                createDefaultOnOffClusterServer(
+                    this.commandHandler,
+                    getClusterInitialAttributeValues(attributeInitialValues, OnOff.Cluster),
+                ),
+            );
+        }
     }
 
     /**
@@ -90,7 +110,7 @@ abstract class OnOffBaseDevice extends extendPublicHandlerMethods<typeof Device,
      * @param onOff true to turn on, false to turn off
      */
     async onOff(onOff: boolean) {
-        this.getClusterServer(OnOffCluster)?.setOnOffAttribute(onOff);
+        this.getClusterServer(OnOff.Cluster)?.setOnOffAttribute(onOff);
     }
 
     /**
@@ -98,12 +118,12 @@ abstract class OnOffBaseDevice extends extendPublicHandlerMethods<typeof Device,
      * This is an example f a convenient device class API to control the device without need to access clusters
      */
     async toggle() {
-        const cluster = this.getClusterServer(OnOffCluster);
+        const cluster = this.getClusterServer(OnOff.Cluster);
         cluster?.setOnOffAttribute(!cluster?.getOnOffAttribute());
     }
 
     async isOn() {
-        return this.getClusterServer(OnOffCluster)?.getOnOffAttribute();
+        return this.getClusterServer(OnOff.Cluster)?.getOnOffAttribute();
     }
 
     // Add Listeners convenient for chosen attributes
@@ -114,7 +134,7 @@ abstract class OnOffBaseDevice extends extendPublicHandlerMethods<typeof Device,
      * @param listener Listener function to be called when the attribute changes
      */
     addOnOffListener(listener: (newValue: boolean, oldValue: boolean) => void) {
-        this.getClusterServer(OnOffCluster)?.subscribeOnOffAttribute(listener);
+        this.getClusterServer(OnOff.Cluster)?.subscribeOnOffAttribute(listener);
     }
 }
 
@@ -123,10 +143,14 @@ abstract class OnOffBaseDevice extends extendPublicHandlerMethods<typeof Device,
  */
 export class OnOffPluginUnitDevice extends OnOffBaseDevice {
     constructor(
-        onOffAttributeInitialValues?: AttributeInitialValues<typeof OnOffCluster.attributes>,
+        onOffAttributeInitialValues?: AttributeInitialValues<typeof OnOff.Cluster.attributes>,
         options: EndpointOptions = {},
     ) {
-        super(DeviceTypes.ON_OFF_PLUGIN_UNIT, onOffAttributeInitialValues, options);
+        const initialAttributeValues: { [key: ClusterId]: AttributeInitialValues<any> } = {};
+        if (onOffAttributeInitialValues !== undefined) {
+            initialAttributeValues[OnOff.Cluster.id] = onOffAttributeInitialValues;
+        }
+        super(DeviceTypes.ON_OFF_PLUGIN_UNIT, initialAttributeValues, options);
     }
 }
 
@@ -135,10 +159,32 @@ export class OnOffPluginUnitDevice extends OnOffBaseDevice {
  */
 export class OnOffLightDevice extends OnOffBaseDevice {
     constructor(
-        onOffAttributeInitialValues?: AttributeInitialValues<typeof OnOffCluster.attributes>,
+        onOffAttributeInitialValues?: AttributeInitialValues<typeof OnOff.Cluster.attributes>,
         options: EndpointOptions = {},
     ) {
-        super(DeviceTypes.ON_OFF_LIGHT, onOffAttributeInitialValues, options);
+        const initialAttributeValues: { [key: ClusterId]: AttributeInitialValues<any> } = {};
+        if (onOffAttributeInitialValues !== undefined) {
+            initialAttributeValues[OnOff.Cluster.id] = onOffAttributeInitialValues;
+        }
+        super(DeviceTypes.ON_OFF_LIGHT, initialAttributeValues, options);
+    }
+
+    protected override addDeviceClusters(
+        attributeInitialValues?: { [key: ClusterId]: AttributeInitialValues<any> },
+        excludeList: ClusterId[] = [],
+    ) {
+        super.addDeviceClusters(attributeInitialValues, [OnOff.Cluster.id]);
+        if (!excludeList.includes(OnOff.Cluster.id)) {
+            this.addClusterServer(
+                createDefaultOnOffClusterServer(
+                    this.commandHandler,
+                    getClusterInitialAttributeValues(
+                        attributeInitialValues,
+                        OnOff.Cluster.with(OnOff.Feature.LevelControlForLighting),
+                    ),
+                ),
+            );
+        }
     }
 }
 
