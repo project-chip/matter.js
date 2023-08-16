@@ -6,6 +6,7 @@
 
 import { InternalError } from "../../common/MatterError.js";
 import { tryCatch } from "../../common/TryCatchHandler.js";
+import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
@@ -15,11 +16,35 @@ import { NoAssociatedFabricError } from "../../session/SecureSession.js";
 import { TlvSchema } from "../../tlv/TlvSchema.js";
 import { Attribute, AttributeError } from "../Cluster.js";
 
+/**
+ * Factory function to create an AttributeClient for a given attribute.
+ */
+export function createAttributeClient<T>(
+    attribute: Attribute<T, any>,
+    name: string,
+    endpointId: EndpointNumber,
+    clusterId: ClusterId,
+    getInteractionClientCallback: () => Promise<InteractionClient>,
+    present = false,
+): AttributeClient<T> {
+    if (attribute.unknown) {
+        return new UnknownPresentAttributeClient(attribute, name, endpointId, clusterId, getInteractionClientCallback);
+    }
+    if (present) {
+        return new PresentAttributeClient(attribute, name, endpointId, clusterId, getInteractionClientCallback);
+    }
+    return new AttributeClient(attribute, name, endpointId, clusterId, getInteractionClientCallback);
+}
+
+/**
+ * General class for AttributeClients
+ */
 export class AttributeClient<T> {
     private readonly isWritable: boolean;
     private readonly isFabricScoped: boolean;
     protected readonly schema: TlvSchema<any>;
     private readonly listeners = new Array<(newValue: T) => void>();
+    readonly id: AttributeId;
 
     constructor(
         readonly attribute: Attribute<T, any>,
@@ -28,10 +53,11 @@ export class AttributeClient<T> {
         readonly clusterId: ClusterId,
         private getInteractionClientCallback: () => Promise<InteractionClient>,
     ) {
-        const { schema, writable, fabricScoped } = attribute;
+        const { schema, writable, fabricScoped, id } = attribute;
         this.schema = schema;
         this.isWritable = writable;
         this.isFabricScoped = fabricScoped;
+        this.id = id;
     }
 
     async set(value: T) {
@@ -141,3 +167,14 @@ export class AttributeClient<T> {
         }
     }
 }
+
+/**
+ * Special AttributeClient class to allow identifying attributes that are present because reported by the Devices.
+ */
+export class PresentAttributeClient<T> extends AttributeClient<T> {}
+
+/**
+ * Special AttributeClient class to allow identifying attributes that are present because reported by the Devices,
+ * but the contained attribute is unknown.
+ */
+export class UnknownPresentAttributeClient extends PresentAttributeClient<any> {}

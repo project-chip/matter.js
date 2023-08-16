@@ -14,8 +14,9 @@
  * Import needed modules from @project-chip/matter-node.js
  */
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
-import { BleNode } from "@project-chip/matter-node-ble.js/ble";
 import { CommissioningServer, MatterServer } from "@project-chip/matter-node.js";
+
+import { BleNode } from "@project-chip/matter-node-ble.js/ble";
 import { Ble } from "@project-chip/matter-node.js/ble";
 import { ClusterServer, GeneralCommissioningCluster, NetworkCommissioning } from "@project-chip/matter-node.js/cluster";
 import { OnOffLightDevice, OnOffPluginUnitDevice } from "@project-chip/matter-node.js/device";
@@ -28,6 +29,7 @@ import {
     getIntParameter,
     getParameter,
     hasParameter,
+    logEndpoint,
     requireMinNodeVersion,
     singleton,
 } from "@project-chip/matter-node.js/util";
@@ -364,6 +366,8 @@ class Device {
          */
 
         await this.matterServer.start();
+
+        logEndpoint(commissioningServer.getRootEndpoint());
 
         // When we want to limit the initial announcement to one medium (e.g. BLE) then we need to delay the
         // announcement and provide the limiting information.
