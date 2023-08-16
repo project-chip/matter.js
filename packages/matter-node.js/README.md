@@ -79,7 +79,7 @@ To make sure that matter.js is compliant to the Matter specifications we impleme
 In order to execute the tests you need to have used the connectedhomeip repository and have build a "chip-tool" binary. This binary is needed to execute the tests. This binary needs to be placed in a own folder and needs to be executable for the user that executes these tests. By default the folder is called "bin" and is assumed to be in the root directory of the matter.js repository. If you want to use a different folder you need to set the environment variable "CHIP_TOOL_BIN_PATH" to the path of the folder.
 The user that executes the tests need also be allowed to add new files and directories to this folder because the tests needs to create additional files and directories in this folder!
 
-Currently the tests are designed to ork with a chip-tool compiled from the "v1.1-branch" of the connectedhomeip repository. Other branches migth have different requirements and tests may fail!
+Currently the tests are designed to ork with a chip-tool compiled from the "master" of the connectedhomeip repository. Other branches might have different requirements and tests may fail! As soon as v1.2 is released we switch to this branch.
 
 ### Execution
 To execute the tests you need to run `npm run test-chip` in the packages/matter-node.js folder.
