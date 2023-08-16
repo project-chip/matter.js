@@ -157,6 +157,16 @@ export class MatterNode {
         }
     }
 
+    public async sessions() {
+        if (!this.commissioningController) return 1;
+
+        const sessions = this.commissioningController?.getActiveSessionInformation();
+        console.log(sessions);
+
+        return 0;
+    }
+
+
     public async onoff() {
         try {
             await this.commissioningController?.connect();

@@ -19,6 +19,7 @@
 import { cmd_config } from "./cmd_config";
 import { cmd_onoff } from "./cmd_onoff";
 import { cmd_pair } from "./cmd_pair";
+import { cmd_session } from "./cmd_session";
 
 interface CommandEntry {
     command: string;
@@ -70,6 +71,11 @@ export const theCommandList: CommandEntry[] = [
         command: "pair",
         help: "Commission a device",
         handler: cmd_pair.doPair,
+    },
+    {
+        command: "sessions",
+        help: "Manage active CASE / PASE sessions",
+        handler: cmd_session.doSession,
     },
     {
         command: "onoff",
