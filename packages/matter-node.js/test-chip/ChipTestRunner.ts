@@ -126,10 +126,6 @@ async function pairWithChipTool(startedCallback?: () => Promise<void>) {
 }
 
 describe("Chip-Tool-Tests", () => {
-    const storage = new StorageBackendMemory();
-    const storageManager = new StorageManager(storage);
-    void storageManager.initialize(); // hacky but works
-
     /** Add scripts to the chip-tool binary folder because needed for execution of some tests. */
     beforeAll(async () => {
         await fs.mkdir(`${CHIP_BIN_PATH}/src/app/tests/suites/commands/system/scripts`, { recursive: true });
@@ -144,6 +140,9 @@ describe("Chip-Tool-Tests", () => {
     for (const suiteName in Tests) {
         describe(suiteName, () => {
             const suite = (Tests as any)[suiteName];
+            const storage = new StorageBackendMemory();
+            const storageManager = new StorageManager(storage);
+            void storageManager.initialize(); // hacky but works
             const testInstance = new suite(storageManager) as DeviceTestInstance;
 
             it(`"${suiteName}": Setup test instance`, async () => await testInstance.setup());
