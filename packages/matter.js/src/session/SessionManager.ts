@@ -181,4 +181,14 @@ export class SessionManager<ContextT> {
             numberOfActiveSubscriptions: session instanceof SecureSession ? session.numberOfActiveSubscriptions : 0,
         }));
     }
+
+    close() {
+        this.storeResumptionRecords();
+        [...this.sessions.keys()].forEach(sessionId => {
+            if (sessionId === UNICAST_UNSECURE_SESSION_ID) return;
+            const session = this.sessions.get(sessionId);
+            session?.destroy();
+            this.sessions.delete(sessionId);
+        });
+    }
 }
