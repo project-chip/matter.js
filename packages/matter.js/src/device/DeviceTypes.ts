@@ -72,6 +72,7 @@ export interface DeviceTypeDefinition {
     optionalServerClusters: ClusterId[];
     requiredClientClusters: ClusterId[];
     optionalClientClusters: ClusterId[];
+    unknown: boolean;
 }
 
 export const DeviceTypeDefinition = ({
@@ -84,6 +85,7 @@ export const DeviceTypeDefinition = ({
     optionalServerClusters = [],
     requiredClientClusters = [],
     optionalClientClusters = [],
+    unknown = false,
 }: {
     name: string;
     code: number;
@@ -94,6 +96,7 @@ export const DeviceTypeDefinition = ({
     optionalServerClusters?: ClusterId[];
     requiredClientClusters?: ClusterId[];
     optionalClientClusters?: ClusterId[];
+    unknown?: boolean;
 }): DeviceTypeDefinition => ({
     name,
     code: DeviceTypeId(code),
@@ -104,6 +107,7 @@ export const DeviceTypeDefinition = ({
     optionalServerClusters,
     requiredClientClusters,
     optionalClientClusters,
+    unknown,
 });
 
 export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
@@ -966,6 +970,15 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
         requiredServerClusters: [MatterClusters.ModeSelectCluster.id],
     }),
 };
+
+export const UnknownDeviceType = (code: number) =>
+    DeviceTypeDefinition({
+        code,
+        name: `Unknown Device Type ${code}`,
+        deviceClass: DeviceClasses.Simple,
+        revision: 0,
+        unknown: true,
+    });
 
 export function getDeviceTypeDefinitionByCode(code: number): DeviceTypeDefinition | undefined {
     for (const key in DeviceTypes) {

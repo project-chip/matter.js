@@ -26,8 +26,9 @@ import { Attribute, Attributes, Cluster, Commands, Events } from "../Cluster.js"
  */
 export class FabricScopeError extends MatterError {}
 
-// TODO create Factory method to create AttributeServer instances
-
+/**
+ * Factory function to create an attribute server.
+ */
 export function createAttributeServer<
     T,
     F extends BitSchema,

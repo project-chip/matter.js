@@ -10,7 +10,7 @@ import { ClusterId } from "../datatype/ClusterId.js";
 import { CommandId, TlvCommandId } from "../datatype/CommandId.js";
 import { EventId, TlvEventId } from "../datatype/EventId.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
+import { TlvAny } from "../tlv/TlvAny.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvBitmap, TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
 import { TlvSchema } from "../tlv/TlvSchema.js";
@@ -47,6 +47,7 @@ export interface Attribute<T, F extends BitSchema> {
     isConditional: boolean;
     optionalIf: ConditionalFeatureList<F>;
     mandatoryIf: ConditionalFeatureList<F>;
+    unknown: boolean;
 }
 
 export interface OptionalAttribute<T, F extends BitSchema> extends Attribute<T, F> {
@@ -143,6 +144,7 @@ export const Attribute = <T, V extends T, F extends BitSchema>(
     isConditional: false,
     optionalIf: [],
     mandatoryIf: [],
+    unknown: false,
 });
 
 export const OptionalAttribute = <T, V extends T, F extends BitSchema>(
@@ -170,6 +172,7 @@ export const OptionalAttribute = <T, V extends T, F extends BitSchema>(
     isConditional: false,
     optionalIf: [],
     mandatoryIf: [],
+    unknown: false,
 });
 
 export const ConditionalAttribute = <T, V extends T, F extends BitSchema>(
@@ -199,6 +202,7 @@ export const ConditionalAttribute = <T, V extends T, F extends BitSchema>(
     isConditional: true,
     optionalIf,
     mandatoryIf,
+    unknown: false,
 });
 
 export const WritableAttribute = <T, V extends T, F extends BitSchema>(
@@ -228,6 +232,7 @@ export const WritableAttribute = <T, V extends T, F extends BitSchema>(
     isConditional: false,
     optionalIf: [],
     mandatoryIf: [],
+    unknown: false,
 });
 
 export const OptionalWritableAttribute = <T, V extends T, F extends BitSchema>(
@@ -257,6 +262,7 @@ export const OptionalWritableAttribute = <T, V extends T, F extends BitSchema>(
     isConditional: false,
     optionalIf: [],
     mandatoryIf: [],
+    unknown: false,
 });
 
 export const ConditionalWritableAttribute = <T, V extends T, F extends BitSchema>(
@@ -288,6 +294,7 @@ export const ConditionalWritableAttribute = <T, V extends T, F extends BitSchema
     isConditional: true,
     optionalIf,
     mandatoryIf,
+    unknown: false,
 });
 
 export const FabricScopedAttribute = <T, V extends T, F extends BitSchema>(
@@ -315,6 +322,7 @@ export const FabricScopedAttribute = <T, V extends T, F extends BitSchema>(
     isConditional: false,
     optionalIf: [],
     mandatoryIf: [],
+    unknown: false,
 });
 
 export const WritableFabricScopedAttribute = <T, V extends T, F extends BitSchema>(
@@ -344,6 +352,7 @@ export const WritableFabricScopedAttribute = <T, V extends T, F extends BitSchem
     isConditional: false,
     optionalIf: [],
     mandatoryIf: [],
+    unknown: false,
 });
 
 export const OptionalWritableFabricScopedAttribute = <T, V extends T, F extends BitSchema>(
@@ -373,6 +382,7 @@ export const OptionalWritableFabricScopedAttribute = <T, V extends T, F extends 
     isConditional: false,
     optionalIf: [],
     mandatoryIf: [],
+    unknown: false,
 });
 
 export const ConditionalWritableFabricScopedAttribute = <T, V extends T, F extends BitSchema>(
@@ -404,6 +414,7 @@ export const ConditionalWritableFabricScopedAttribute = <T, V extends T, F exten
     isConditional: true,
     optionalIf,
     mandatoryIf,
+    unknown: false,
 });
 
 export const FixedAttribute = <T, V extends T, F extends BitSchema>(
@@ -431,6 +442,7 @@ export const FixedAttribute = <T, V extends T, F extends BitSchema>(
     isConditional: false,
     optionalIf: [],
     mandatoryIf: [],
+    unknown: false,
 });
 
 export const WritableFixedAttribute = <T, V extends T, F extends BitSchema>(
@@ -458,6 +470,7 @@ export const WritableFixedAttribute = <T, V extends T, F extends BitSchema>(
     isConditional: false,
     optionalIf: [],
     mandatoryIf: [],
+    unknown: false,
 });
 
 export const OptionalFixedAttribute = <T, V extends T, F extends BitSchema>(
@@ -485,6 +498,7 @@ export const OptionalFixedAttribute = <T, V extends T, F extends BitSchema>(
     isConditional: false,
     optionalIf: [],
     mandatoryIf: [],
+    unknown: false,
 });
 
 export const ConditionalFixedAttribute = <T, V extends T, F extends BitSchema>(
@@ -514,6 +528,28 @@ export const ConditionalFixedAttribute = <T, V extends T, F extends BitSchema>(
     isConditional: true,
     optionalIf,
     mandatoryIf,
+    unknown: false,
+});
+
+export interface UnknownAttribute<T, F extends BitSchema> extends Attribute<T, F> {
+    unknown: true;
+}
+export const UnknownAttribute = <F extends BitSchema>(id: number): UnknownAttribute<any, F> => ({
+    id: AttributeId(id),
+    schema: TlvAny,
+    optional: false,
+    writable: true,
+    fixed: false,
+    scene: false,
+    persistent: false,
+    fabricScoped: false,
+    omitChanges: false,
+    default: undefined,
+    readAcl: AccessLevel.View,
+    isConditional: true,
+    optionalIf: [],
+    mandatoryIf: [],
+    unknown: true,
 });
 
 export type MandatoryAttributeNames<A extends Attributes> = {
@@ -627,6 +663,11 @@ export interface Event<T, F extends BitSchema> {
     isConditional: boolean;
     optionalIf: ConditionalFeatureList<F>;
     mandatoryIf: ConditionalFeatureList<F>;
+    unknown: boolean;
+}
+
+export interface UnknownEvent<F extends BitSchema> extends Event<any, F> {
+    unknown: true;
 }
 
 interface ConditionalEventOptions<F extends BitSchema> {
@@ -654,6 +695,7 @@ export const Event = <T, F extends BitSchema>(
     isConditional: false,
     optionalIf: [],
     mandatoryIf: [],
+    unknown: false,
 });
 
 export const OptionalEvent = <T, F extends BitSchema>(
@@ -668,6 +710,7 @@ export const OptionalEvent = <T, F extends BitSchema>(
     isConditional: false,
     optionalIf: [],
     mandatoryIf: [],
+    unknown: false,
 });
 
 export const ConditionalEvent = <T, F extends BitSchema>(
@@ -683,6 +726,18 @@ export const ConditionalEvent = <T, F extends BitSchema>(
     isConditional: true,
     optionalIf,
     mandatoryIf,
+    unknown: false,
+});
+
+export const UnknownEvent = <F extends BitSchema>(id: number): Event<unknown, F> => ({
+    id: EventId(id),
+    schema: TlvVoid,
+    priority: EventPriority.Debug,
+    optional: false,
+    isConditional: false,
+    optionalIf: [],
+    mandatoryIf: [],
+    unknown: true,
 });
 
 export type EventType<T extends Event<any, any>> = T extends OptionalEvent<infer EventT, any>
@@ -757,6 +812,7 @@ export interface Cluster<
     attributes: A;
     commands: C;
     events: E;
+    unknown: boolean;
 }
 
 export const Cluster = <
@@ -774,6 +830,7 @@ export const Cluster = <
     attributes = <A>{},
     commands = <C>{},
     events = <E>{},
+    unknown = false,
 }: {
     id: number;
     name: string;
@@ -783,6 +840,7 @@ export const Cluster = <
     attributes?: A;
     commands?: C;
     events?: E;
+    unknown?: boolean;
 }): Cluster<F, SF, Merge<A, GlobalAttributes<F>>, C, E> => ({
     id: ClusterId(id),
     name,
@@ -792,6 +850,7 @@ export const Cluster = <
     commands,
     attributes: Merge(attributes, GlobalAttributes(features)),
     events,
+    unknown,
 });
 
 type ClusterExtend<
@@ -829,6 +888,7 @@ export const ClusterExtend = <
         attributes,
         commands,
         events,
+        unknown,
     }: Cluster<F, SF_BASE, A_BASE, C_BASE, E_BASE>,
     {
         supportedFeatures: supportedFeaturesExtend,
@@ -851,4 +911,5 @@ export const ClusterExtend = <
     attributes: Merge(attributes, attributesExtend),
     commands: Merge(commands, commandsExtend),
     events: Merge(events, eventsExtend),
+    unknown,
 });

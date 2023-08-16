@@ -532,7 +532,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                     error.message
                 }`,
             );
-            subscriptionHandler.cancel(); // Cleanup
+            await subscriptionHandler.cancel(); // Cleanup
             if (error instanceof StatusResponseError) {
                 logger.info(`Sending status response ${error.code} for interaction error: ${error}`);
                 await messenger.sendStatus(error.code);
@@ -681,8 +681,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     async close() {
         this.isClosing = true;
         for (const subscription of this.subscriptionMap.values()) {
-            await subscription.flush();
-            subscription.cancel();
+            await subscription.cancel(true);
         }
     }
 }

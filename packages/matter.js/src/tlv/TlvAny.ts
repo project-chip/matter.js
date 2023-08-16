@@ -4,9 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ValidationError } from "../common/MatterError.js";
+import { UnexpectedDataError, ValidationError } from "../common/MatterError.js";
+import { Logger } from "../log/Logger.js";
 import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
-import { TlvElement, TlvReader, TlvSchema, TlvStream, TlvWriter } from "./TlvSchema.js";
+import { TlvArrayReader, TlvElement, TlvReader, TlvSchema, TlvStream, TlvWriter } from "./TlvSchema.js";
 
 export class AnySchema extends TlvSchema<TlvStream> {
     override encodeTlvInternal(writer: TlvWriter, tlvStream: TlvStream, tagAssigned?: TlvTag | undefined): void {
@@ -44,6 +45,8 @@ export class AnySchema extends TlvSchema<TlvStream> {
     decodeTlvValueRec(reader: TlvReader, typeLength: TlvTypeLength, tlvStream: TlvStream, tag?: TlvTag) {
         switch (typeLength.type) {
             case TlvType.Null:
+                tlvStream.push({ tag, typeLength, value: null });
+                break;
             case TlvType.Boolean:
             case TlvType.UnsignedInt:
             case TlvType.SignedInt:
@@ -79,6 +82,93 @@ export class AnySchema extends TlvSchema<TlvStream> {
                     `Expected typeLength.type as number in TlvStream, got ${typeof typeLength.type}.`,
                 );
         });
+    }
+
+    decodeAnyTlvStream(encoded: TlvStream) {
+        if (encoded.length === 0) {
+            return undefined;
+        }
+        const reader = new TlvArrayReader(encoded);
+        const result = this.decodeGenericElement(reader);
+        const nextElement = reader.readTagType();
+        if (nextElement !== undefined) {
+            throw new UnexpectedDataError(`Unexpected data left after parsing all data: ${Logger.toJSON(nextElement)}`);
+        }
+        return result;
+    }
+
+    decodeGenericElement(reader: TlvArrayReader, preReadElement?: TlvElement<any>, allowTag = false) {
+        while (true) {
+            const element = preReadElement ?? reader.readTagType();
+            const {
+                tag,
+                typeLength: { type },
+            } = element;
+
+            switch (type) {
+                case TlvType.Null:
+                case TlvType.Boolean:
+                case TlvType.UnsignedInt:
+                case TlvType.SignedInt:
+                case TlvType.Float:
+                case TlvType.Utf8String:
+                case TlvType.ByteString: {
+                    if (tag !== undefined && !allowTag) {
+                        throw new UnexpectedDataError(
+                            `Tag detected or invalid length for a native type: ${Logger.toJSON(element)}`,
+                        );
+                    }
+                    return reader.readPrimitive(element.typeLength);
+                }
+                case TlvType.Array:
+                case TlvType.List: {
+                    return this.decodeGenericArrayOrList(reader);
+                }
+                case TlvType.Structure: {
+                    return this.decodeGenericStructure(reader);
+                }
+                default:
+                    throw new UnexpectedDataError(`Unknown type: ${type}`);
+            }
+        }
+    }
+
+    decodeGenericArrayOrList(reader: TlvArrayReader) {
+        const result = new Array<any>();
+        while (true) {
+            const element = reader.readTagType();
+            const {
+                tag,
+                typeLength: { type },
+            } = element;
+            if (type === TlvType.EndOfContainer) break;
+            if (tag !== undefined) {
+                throw new UnexpectedDataError(
+                    `Tag detected or invalid length for a native type: ${Logger.toJSON(element)}`,
+                );
+            }
+            result.push(this.decodeGenericElement(reader, element));
+        }
+        return result;
+    }
+
+    decodeGenericStructure(reader: TlvArrayReader) {
+        const result: { [key: string]: any } = {};
+        while (true) {
+            const element = reader.readTagType();
+            const {
+                tag,
+                typeLength: { type },
+            } = element;
+            if (type === TlvType.EndOfContainer) break;
+            if (tag === undefined || tag.id === undefined) {
+                throw new UnexpectedDataError(
+                    `Tag not detected or invalid length for a structure: ${Logger.toJSON(element)}`,
+                );
+            }
+            result[tag.id] = this.decodeGenericElement(reader, element, true);
+        }
+        return result;
     }
 }
 
