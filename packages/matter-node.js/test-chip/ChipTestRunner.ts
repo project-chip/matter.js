@@ -148,13 +148,13 @@ describe("Chip-Tool-Tests", () => {
             it(`"${suiteName}": Setup test instance`, async () => await testInstance.setup());
 
             it(
-                `${suiteName}": Start chip-tool and test instance for initial pairing`,
+                `"${suiteName}": Start chip-tool and test instance for initial pairing`,
                 async () => await pairWithChipTool(async () => testInstance.start()),
                 30000,
             );
 
             it(
-                `Execute "{suiteName}" Tests`,
+                `"${suiteName}": Execute tests`,
                 async () =>
                     await executeChipToolTest(
                         testInstance.testName,
