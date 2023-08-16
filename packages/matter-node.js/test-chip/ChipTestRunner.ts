@@ -39,10 +39,10 @@ async function executeProcess(
                     const params = string.substring(commandEndIndex + 2, string.indexOf("\n", commandEndIndex)).trim();
                     void commandCallback(command, params.split(",")); // Verify Params when we get some real
                 }
-                if (string.includes("[TOO]")) {
-                    const lines = string.match(/^(.*\[TOO\].*)$/gm);
+                if (string.includes("TOO")) {
+                    const lines = string.match(/^(.*[[:]TOO[\]:].*)$/gm);
                     if (lines !== null && lines.length > 0) {
-                        const userPromptLineIndex = lines.findIndex(line => line.includes("[TOO] USER_PROMPT"));
+                        const userPromptLineIndex = lines.findIndex(line => line.includes(" USER_PROMPT: "));
                         const userPromptLine = lines[userPromptLineIndex];
                         if (userPromptLine !== undefined && userPromptCallback !== undefined) {
                             const userPromptPreviousLine =
