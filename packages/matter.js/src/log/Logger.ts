@@ -86,15 +86,15 @@ function plainLogFormatter(now: Date, level: Level, facility: string, values: an
 }
 
 const ANSI_CODES = {
-    PREFIX: "\x1b[90m\x1b[2m",
-    FACILITY: "\x1b[90m\x1b[1m",
-    LEVEL_DEBUG: "\x1b[90m",
-    LEVEL_INFO: "\x1b[32m",
-    LEVEL_WARN: "\x1b[33m",
-    LEVEL_ERROR: "\x1b[31m",
-    LEVEL_FATAL: "\x1b[31m\x1b[1m",
-    KEY: "\x1b[34m",
-    NONE: "\x1b[0m",
+    PREFIX: "\x1b[90m\x1b[2m", // dark gray, dim
+    FACILITY: "\x1b[90m\x1b[1m", // dark grey, bold
+    LEVEL_DEBUG: "\x1b[90m", // dark gray
+    LEVEL_INFO: "\x1b[32m", // green
+    LEVEL_WARN: "\x1b[33m", // yellow
+    LEVEL_ERROR: "\x1b[31m", // red
+    LEVEL_FATAL: "\x1b[31m\x1b[1m", // red, bold
+    KEY: "\x1b[34m", // blue
+    NONE: "\x1b[0m", // reset
 };
 
 function ansiLogFormatter(now: Date, level: Level, facility: string, values: any[]) {
