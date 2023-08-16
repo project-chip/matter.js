@@ -13,5 +13,5 @@
         "noUnusedLocals": true,
         "strict": true,
     },
-    "include": ["src/**/*.ts", "test/**/*.ts"],
+    "include": ["src/**/*.ts", "test/**/*.ts", "test-chip/**/*.ts"],
 }
