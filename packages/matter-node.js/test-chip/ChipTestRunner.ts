@@ -12,84 +12,78 @@ const CHIP_BIN_PATH = process.env.CHIP_BIN_PATH ?? `${__dirname}/../../../bin`;
  * For test interaction callbacks are support for commands and user prompts from the chip test suites.
  * Additionally, all "TOO" lines (from chip-tool) are collected and printed at the end of the test as summary.
  */
-function executeProcess(
+async function executeProcess(
     executable: string,
     params: string[] = [],
     cwd?: string,
+    startedCallback?: () => Promise<void>,
     commandCallback?: (command: string, params: string[]) => Promise<void>,
     userPromptCallback?: (testDescription: string, userPrompt: string) => Promise<string>,
 ): Promise<void> {
-    try {
-        const proc = spawn(executable, params, {
-            shell: true,
-            cwd,
-            stdio: commandCallback !== undefined ? undefined : "inherit",
-        });
+    const proc = spawn(executable, params, {
+        shell: true,
+        cwd,
+        stdio: commandCallback !== undefined ? undefined : "inherit",
+    });
 
-        const testResults = new Array<string>();
-        if (commandCallback !== undefined || userPromptCallback !== undefined) {
-            proc.stdout?.on("data", (data: Buffer) => {
-                process.stdout.write(data);
-                setImmediate(() => {
-                    const string = data.toString();
-                    const commandIndex = string.indexOf("@ChipTestRunner: Command: '");
-                    if (commandIndex !== -1 && commandCallback !== undefined) {
-                        const commandEndIndex = string.indexOf("'", commandIndex + 27);
-                        const command = string.substring(commandIndex + 27, commandEndIndex);
-                        const params = string
-                            .substring(commandEndIndex + 2, string.indexOf("\n", commandEndIndex))
-                            .trim();
-                        void commandCallback(command, params.split(",")); // Verify Params when we get some real
-                    }
-                    if (string.includes("[TOO]")) {
-                        const lines = string.match(/^(.*\[TOO\].*)$/gm);
-                        if (lines !== null && lines.length > 0) {
-                            const userPromptLineIndex = lines.findIndex(line => line.includes("[TOO] USER_PROMPT"));
-                            const userPromptLine = lines[userPromptLineIndex];
-                            if (userPromptLine !== undefined && userPromptCallback !== undefined) {
-                                const userPromptPreviousLine =
-                                    lines[userPromptLineIndex - 1] ?? testResults[testResults.length - 1] ?? "";
-                                const userPrompt = userPromptLine.substring(
-                                    userPromptLine.indexOf("USER_PROMPT: ") + 13,
-                                );
-                                process.stdout.write(
-                                    `====> Chip test Runner: Detected TH USER_PROMPT: ${userPrompt}\n`,
-                                );
-                                userPromptCallback(userPrompt, userPromptPreviousLine)
-                                    .then(answer => proc.stdin?.write(answer)) // We acknowledge the TH reads as checked
-                                    .catch(e => console.log(e));
-                            }
-                            testResults.push(...lines);
+    const testResults = new Array<string>();
+    if (commandCallback !== undefined || userPromptCallback !== undefined) {
+        proc.stdout?.on("data", (data: Buffer) => {
+            process.stdout.write(data);
+            setImmediate(() => {
+                const string = data.toString();
+                const commandIndex = string.indexOf("@ChipTestRunner: Command: '");
+                if (commandIndex !== -1 && commandCallback !== undefined) {
+                    const commandEndIndex = string.indexOf("'", commandIndex + 27);
+                    const command = string.substring(commandIndex + 27, commandEndIndex);
+                    const params = string.substring(commandEndIndex + 2, string.indexOf("\n", commandEndIndex)).trim();
+                    void commandCallback(command, params.split(",")); // Verify Params when we get some real
+                }
+                if (string.includes("[TOO]")) {
+                    const lines = string.match(/^(.*\[TOO\].*)$/gm);
+                    if (lines !== null && lines.length > 0) {
+                        const userPromptLineIndex = lines.findIndex(line => line.includes("[TOO] USER_PROMPT"));
+                        const userPromptLine = lines[userPromptLineIndex];
+                        if (userPromptLine !== undefined && userPromptCallback !== undefined) {
+                            const userPromptPreviousLine =
+                                lines[userPromptLineIndex - 1] ?? testResults[testResults.length - 1] ?? "";
+                            const userPrompt = userPromptLine.substring(userPromptLine.indexOf("USER_PROMPT: ") + 13);
+                            process.stdout.write(`====> Chip test Runner: Detected TH USER_PROMPT: ${userPrompt}\n`);
+                            userPromptCallback(userPrompt, userPromptPreviousLine)
+                                .then(answer => proc.stdin?.write(answer)) // We acknowledge the TH reads as checked
+                                .catch(e => console.log(e));
                         }
+                        testResults.push(...lines);
                     }
-                });
-            });
-            proc.stderr?.on("data", (data: Buffer) => process.stderr.write(data));
-
-            proc.unref();
-        }
-
-        return new Promise<void>((resolve, reject) => {
-            proc.on("close", (code: number) => {
-                process.stdout.write(
-                    `====> Chip test Runner: process execution of "${executable} ${params.join(
-                        " ",
-                    )}" ended with code ${code}\n`,
-                );
-                if (testResults.length > 0) {
-                    process.stdout.write(`====> Chip test Runner: TOO Test summary:\n`);
-                    testResults.forEach(line => process.stdout.write(`====> Chip test Runner: TOO: ${line}\n`));
-                }
-                if (code !== 0 && code !== null) {
-                    reject(`process ${executable} exited with code ${code}`);
-                } else {
-                    resolve();
                 }
             });
         });
-    } catch (e) {
-        return Promise.reject(e);
+        proc.stderr?.on("data", (data: Buffer) => process.stderr.write(data));
+
+        proc.unref();
     }
+    if (startedCallback !== undefined) {
+        await startedCallback();
+    }
+
+    return new Promise<void>((resolve, reject) => {
+        proc.on("close", (code: number) => {
+            process.stdout.write(
+                `====> Chip test Runner: process execution of "${executable} ${params.join(
+                    " ",
+                )}" ended with code ${code}\n`,
+            );
+            if (testResults.length > 0) {
+                process.stdout.write(`====> Chip test Runner: TOO Test summary:\n`);
+                testResults.forEach(line => process.stdout.write(`====> Chip test Runner: TOO: ${line}\n`));
+            }
+            if (code !== 0 && code !== null) {
+                reject(`process ${executable} exited with code ${code}`);
+            } else {
+                resolve();
+            }
+        });
+    });
 }
 
 /** Wrapper method to execute a chip tool test with the correct parameters. */
@@ -106,13 +100,14 @@ async function executeChipToolTest(
         "./chip-tool",
         ["tests", testName, "--PICS", `${__dirname}/config/${picsFilename}`],
         CHIP_BIN_PATH,
+        undefined,
         commandCallback,
         userPromptCallback,
     );
 }
 
 /** Wrapper method to initially clean up and pair the test device with chip-tool to prepare testing. */
-async function pairWithChipTool() {
+async function pairWithChipTool(startedCallback?: () => Promise<void>) {
     process.stdout.write(`====> Chip test Runner: Cleanup /tmp/chip* for a new Test\n`);
     try {
         await executeProcess("rm", ["/tmp/chip_*"]);
@@ -122,7 +117,12 @@ async function pairWithChipTool() {
 
     process.stdout.write(`====> Chip test Runner: Pairing with Chip-Tool\n`);
 
-    await executeProcess("./chip-tool", ["pairing", "onnetwork", "305414945", "20202021"], CHIP_BIN_PATH);
+    await executeProcess(
+        "./chip-tool",
+        ["pairing", "onnetwork", "305414945", "20202021"],
+        CHIP_BIN_PATH,
+        startedCallback,
+    );
 }
 
 describe("Chip-Tool-Tests", () => {
@@ -148,12 +148,11 @@ describe("Chip-Tool-Tests", () => {
 
             it(`"${suiteName}": Setup test instance`, async () => await testInstance.setup());
 
-            it(`${suiteName}": Start test instance and pair with Chip tool`, async () => {
-                const instancePromise = testInstance.start();
-                const chipPromise = pairWithChipTool();
-                await instancePromise;
-                await chipPromise;
-            }, 30000);
+            it(
+                `${suiteName}": Start chip-tool and test instance for initial pairing`,
+                async () => await pairWithChipTool(async () => testInstance.start()),
+                30000,
+            );
 
             it(
                 `Execute "{suiteName}" Tests`,
