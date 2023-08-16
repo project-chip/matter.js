@@ -14,7 +14,7 @@ let noble: typeof import("@abandonware/noble");
 
 function loadNoble(hciId = 0) {
     // load noble driver with the correct device selected
-    process.env.NOBLE_HCI_DEVICE_ID = hciId.toString();
+    //process.env.NOBLE_HCI_DEVICE_ID = hciId.toString();
     try {
         noble = require("@abandonware/noble");
         if (typeof noble.on !== "function") {

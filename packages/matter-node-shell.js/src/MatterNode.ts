@@ -25,7 +25,7 @@ export class MatterNode {
     private storageManager?: StorageManager;
     private storageContext: StorageContext;
 
-    private commissioningController?: CommissioningController;
+    public commissioningController?: CommissioningController;
     private matterDevice?: MatterServer;
 
     get Store() {

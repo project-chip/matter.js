@@ -82,15 +82,29 @@ export class CommissioningController extends MatterNode {
 
     private nodeId?: NodeId;
     private endpoints = new Map<EndpointNumber, Endpoint>();
+    private options: CommissioningControllerOptions;
 
     /**
      * Creates a new CommissioningController instance
      *
      * @param options The options for the CommissioningController
      */
-    constructor(private readonly options: CommissioningControllerOptions) {
+    constructor(options: CommissioningControllerOptions) {
         super();
+        this.options = options;
         this.serverAddress = options.serverAddress;
+    }
+
+    public set Pincode(v: number) {
+        this.options.passcode = v;
+    }
+
+    public set Discriminator(v: number) {
+        this.options.longDiscriminator = v;
+    }
+
+    public set CommissioningOptions(v:CommissioningOptions) {
+            this.options.commissioningOptions = v;
     }
 
     /**

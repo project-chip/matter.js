@@ -18,6 +18,7 @@
 
 import { cmd_config } from "./cmd_config";
 import { cmd_onoff } from "./cmd_onoff";
+import { cmd_lock } from "./cmd_lock";
 import { cmd_pair } from "./cmd_pair";
 import { cmd_session } from "./cmd_session";
 
@@ -86,6 +87,11 @@ export const theCommandList: CommandEntry[] = [
         command: "onoff",
         help: "Control on/off cluster state",
         handler: cmd_onoff.doOnOff,
+    },
+    {
+        command: "lock",
+        help: "Control lock cluster",
+        handler: cmd_lock.doLock,
     },
 ];
 /* eslint-enable */
