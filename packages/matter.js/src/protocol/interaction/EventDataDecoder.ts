@@ -12,7 +12,9 @@ import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { EventId } from "../../datatype/EventId.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { Logger } from "../../log/Logger.js";
-import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { TlvAny } from "../../tlv/TlvAny.js";
+import { TlvStream, TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { toHexString } from "../../util/Number.js";
 import { TlvEventData, TlvEventReport } from "./InteractionProtocol.js";
 
 const logger = Logger.get("EventDataDecoder");
@@ -81,13 +83,21 @@ export function normalizeAndDecodeEventData(
         }
         try {
             const cluster = getClusterById(clusterId);
-            if (cluster === undefined) {
-                logger.debug(`Unknown cluster ${clusterId} - ignore`);
-                return;
-            }
             const eventDetail = getClusterEventById(cluster, eventId);
             if (eventDetail === undefined) {
-                logger.debug(`Unknown event ${clusterId}/${eventId} - ignore`);
+                logger.debug(
+                    `Decode unknown event ${toHexString(clusterId)}/${toHexString(eventId)} via the AnySchema.`,
+                );
+
+                const eventName = `Unknown (${toHexString(eventId)})`;
+
+                const events = values.map(eventData => ({
+                    ...eventData,
+                    data: eventData.data === undefined ? undefined : decodeUnknownEventValue(eventData.data),
+                    path: undefined,
+                }));
+                result.push({ path: { nodeId, endpointId, clusterId, eventId, eventName }, events });
+
                 return;
             }
             const {
@@ -105,4 +115,15 @@ export function normalizeAndDecodeEventData(
         }
     });
     return result;
+}
+
+export function decodeUnknownEventValue(data: TlvStream): any {
+    const schema = TlvAny;
+
+    if (data.length === 0) {
+        return undefined;
+    }
+
+    const tlvEncoded = schema.decodeTlv(data);
+    return schema.decodeAnyTlvStream(tlvEncoded);
 }

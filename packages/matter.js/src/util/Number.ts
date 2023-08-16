@@ -41,3 +41,7 @@ export function maxValue<T extends bigint | number>(a: T | undefined, b: T | und
     if (b === undefined) return a;
     return a > b ? a : b;
 }
+
+export function toHexString(value: number | bigint) {
+    return `0x${value.toString(16)}`;
+}

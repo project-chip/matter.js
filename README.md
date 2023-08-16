@@ -35,6 +35,8 @@ This repository contains multiple packages (and because of this it is a monorepo
 * matter.js: the core Matter implementation in typescript which is JavaScript only and has no native dependencies.
 * matter-node.js: a node.js implementation of a Matter DeviceNode and ControllerNode which also re-exports all matter.js exports and so can be used as only dependency
 * matter-node.js-examples: Reference implementations of Matter devices and controller as CLI scripts using matter-node.js
+* matter-node-ble.js: a node.js based implementation of BLE features for matter-node.js to allow commissioning via BLE (Device and Controller)
+* matter-node-shell.js: a node.js based Matter Shell script to allow to interact with Matter devices as controllers via a CLI interface
 
 For each package the [API Documentation](./docs/README.md) is updated on each release, but can be built locally using `npm run build-doc`.
 

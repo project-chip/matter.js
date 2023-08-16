@@ -60,4 +60,67 @@ describe("TlvAny", () => {
             expect(TlvAny.validate([{ typeLength: { type: TlvType.Null } }])).toBe(undefined);
         });
     });
+
+    describe("generic decoding", () => {
+        it("decodes a boolean", () => {
+            expect(TlvAny.decodeAnyTlvStream([{ typeLength: { type: TlvType.Boolean }, value: true }])).toBe(true);
+        });
+
+        it("decodes a null", () => {
+            expect(TlvAny.decodeAnyTlvStream([{ typeLength: { type: TlvType.Null }, value: null }])).toBe(null);
+        });
+
+        it("decodes an array of integers", () => {
+            expect(
+                TlvAny.decodeAnyTlvStream([
+                    { typeLength: { type: TlvType.Array } },
+                    { typeLength: { type: TlvType.UnsignedInt }, value: 1 },
+                    { typeLength: { type: TlvType.UnsignedInt }, value: 2 },
+                    { typeLength: { type: TlvType.EndOfContainer } },
+                ]),
+            ).toEqual([1, 2]);
+        });
+
+        it("decodes a list of strings", () => {
+            expect(
+                TlvAny.decodeAnyTlvStream([
+                    { typeLength: { type: TlvType.List } },
+                    { typeLength: { type: TlvType.Utf8String }, value: "a" },
+                    { typeLength: { type: TlvType.Utf8String }, value: "b" },
+                    { typeLength: { type: TlvType.EndOfContainer } },
+                ]),
+            ).toEqual(["a", "b"]);
+        });
+
+        it("decodes a structure", () => {
+            expect(
+                TlvAny.decodeAnyTlvStream([
+                    { typeLength: { type: TlvType.Structure } },
+                    { tag: { id: 1 }, typeLength: { type: TlvType.Utf8String }, value: "a" },
+                    { tag: { id: 2 }, typeLength: { type: TlvType.Utf8String }, value: "b" },
+                    { typeLength: { type: TlvType.EndOfContainer } },
+                ]),
+            ).toEqual({ "1": "a", "2": "b" });
+        });
+
+        it("decodes and array of structures", () => {
+            expect(
+                TlvAny.decodeAnyTlvStream([
+                    { typeLength: { type: TlvType.Array } },
+                    { typeLength: { type: TlvType.Structure } },
+                    { tag: { id: 1 }, typeLength: { type: TlvType.Utf8String }, value: "a" },
+                    { tag: { id: 2 }, typeLength: { type: TlvType.Utf8String }, value: "b" },
+                    { typeLength: { type: TlvType.EndOfContainer } },
+                    { typeLength: { type: TlvType.Structure } },
+                    { tag: { id: 3 }, typeLength: { type: TlvType.Utf8String }, value: "c" },
+                    { tag: { id: 4 }, typeLength: { type: TlvType.Utf8String }, value: "d" },
+                    { typeLength: { type: TlvType.EndOfContainer } },
+                    { typeLength: { type: TlvType.EndOfContainer } },
+                ]),
+            ).toEqual([
+                { "1": "a", "2": "b" },
+                { "3": "c", "4": "d" },
+            ]);
+        });
+    });
 });
