@@ -123,7 +123,7 @@ export class OnOffBaseDevice extends extendPublicHandlerMethods<typeof Device, O
     }
 
     async isOn() {
-        return this.getClusterServer(OnOffCluster)?.getOnOffAttribute();
+        return this.getClusterServer(OnOff.Cluster)?.getOnOffAttribute();
     }
 
     // Add Listeners convenient for chosen attributes
