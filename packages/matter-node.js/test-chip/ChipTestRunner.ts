@@ -148,9 +148,12 @@ describe("Chip-Tool-Tests", () => {
 
             it(`"${suiteName}": Setup test instance`, async () => await testInstance.setup());
 
-            it(`${suiteName}": Start test instance`, async () => await testInstance.start());
-
-            it(`${suiteName}": Pair with chip-tool`, async () => await pairWithChipTool(), 30000);
+            it(`${suiteName}": Start test instance and pair with Chip tool`, async () => {
+                const instancePromise = testInstance.start();
+                const chipPromise = pairWithChipTool();
+                await instancePromise;
+                await chipPromise;
+            }, 30000);
 
             it(
                 `Execute "{suiteName}" Tests`,
