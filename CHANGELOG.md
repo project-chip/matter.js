@@ -77,6 +77,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Feature: The Controller example script got a new parameter -ble to also initialize the Bluetooth transport layer
   * Feature: The Controller example script got a new parameters -ble-* to provide Wi-Fi/Thread network credentials to use for device commissioning
   * Feature: Add stopping of the example scripts to allow clean shutdown and sending shutdown Event
+  * Feature: Add CLI parameter to define the loglevel and log format; default log format changed to ANSI when executed in a shell/tty
   * Feature: Log the endpoint structure of the device/commissioned device on start
 * Misc:
   * Added Specification links for Matter Specifications 1.1

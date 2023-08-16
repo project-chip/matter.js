@@ -20,7 +20,7 @@ import { BleNode } from "@project-chip/matter-node-ble.js/ble";
 import { Ble } from "@project-chip/matter-node.js/ble";
 import { ClusterServer, GeneralCommissioningCluster, NetworkCommissioning } from "@project-chip/matter-node.js/cluster";
 import { OnOffLightDevice, OnOffPluginUnitDevice } from "@project-chip/matter-node.js/device";
-import { Logger } from "@project-chip/matter-node.js/log";
+import { Format, Level, Logger } from "@project-chip/matter-node.js/log";
 import { StorageBackendDisk, StorageManager } from "@project-chip/matter-node.js/storage";
 import { Time } from "@project-chip/matter-node.js/time";
 import {
@@ -35,14 +35,41 @@ import {
 } from "@project-chip/matter-node.js/util";
 import { DeviceTypeId, VendorId } from "@project-chip/matter.js/datatype";
 
+const logger = Logger.get("Device");
+
+requireMinNodeVersion(16);
+
+/** Configure logging */
+switch (getParameter("loglevel")) {
+    case "fatal":
+        Logger.defaultLogLevel = Level.FATAL;
+        break;
+    case "error":
+        Logger.defaultLogLevel = Level.ERROR;
+        break;
+    case "warn":
+        Logger.defaultLogLevel = Level.WARN;
+        break;
+    case "info":
+        Logger.defaultLogLevel = Level.INFO;
+        break;
+}
+
+switch (getParameter("logformat")) {
+    case "plain":
+        Logger.format = Format.PLAIN;
+        break;
+    case "html":
+        Logger.format = Format.HTML;
+        break;
+    default:
+        if (process.stdin?.isTTY) Logger.format = Format.ANSI;
+}
+
 if (hasParameter("ble")) {
     // Initialize Ble
     Ble.get = singleton(() => new BleNode());
 }
-
-const logger = Logger.get("Device");
-
-requireMinNodeVersion(16);
 
 const storageLocation = getParameter("store") ?? ".device-node";
 const storage = new StorageBackendDisk(storageLocation, hasParameter("clearstorage"));

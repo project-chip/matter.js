@@ -19,7 +19,7 @@
 import { CommissioningServer, MatterServer } from "@project-chip/matter-node.js";
 
 import { DeviceTypes, OnOffLightDevice, OnOffPluginUnitDevice } from "@project-chip/matter-node.js/device";
-import { Logger } from "@project-chip/matter-node.js/log";
+import { Format, Level, Logger } from "@project-chip/matter-node.js/log";
 import { StorageBackendDisk, StorageManager } from "@project-chip/matter-node.js/storage";
 import { Time } from "@project-chip/matter-node.js/time";
 import {
@@ -34,6 +34,33 @@ import { VendorId } from "@project-chip/matter.js/datatype";
 const logger = Logger.get("MultiDevice");
 
 requireMinNodeVersion(16);
+
+/** Configure logging */
+switch (getParameter("loglevel")) {
+    case "fatal":
+        Logger.defaultLogLevel = Level.FATAL;
+        break;
+    case "error":
+        Logger.defaultLogLevel = Level.ERROR;
+        break;
+    case "warn":
+        Logger.defaultLogLevel = Level.WARN;
+        break;
+    case "info":
+        Logger.defaultLogLevel = Level.INFO;
+        break;
+}
+
+switch (getParameter("logformat")) {
+    case "plain":
+        Logger.format = Format.PLAIN;
+        break;
+    case "html":
+        Logger.format = Format.HTML;
+        break;
+    default:
+        if (process.stdin?.isTTY) Logger.format = Format.ANSI;
+}
 
 const storageLocation = getParameter("store") ?? ".device-node";
 const storage = new StorageBackendDisk(storageLocation, hasParameter("clearstorage"));
