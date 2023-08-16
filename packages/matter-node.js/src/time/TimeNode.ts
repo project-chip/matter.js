@@ -7,7 +7,7 @@
 import { Time, Timer, TimerCallback } from "@project-chip/matter.js/time";
 
 class TimerNode implements Timer {
-    private timerId: NodeJS.Timer | undefined;
+    private timerId: NodeJS.Timeout | undefined;
     isRunning = false;
 
     constructor(
