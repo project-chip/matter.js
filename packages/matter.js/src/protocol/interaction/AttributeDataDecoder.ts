@@ -12,8 +12,10 @@ import { ClusterId } from "../../datatype/ClusterId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { Logger } from "../../log/Logger.js";
+import { TlvAny } from "../../tlv/TlvAny.js";
 import { ArraySchema } from "../../tlv/TlvArray.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { toHexString } from "../../util/Number.js";
 import { TlvAttributeData, TlvAttributeReport } from "./InteractionProtocol.js";
 
 const logger = Logger.get("AttributeDataDecoder");
@@ -112,13 +114,20 @@ export function normalizeAndDecodeAttributeData(
         }
         try {
             const cluster = getClusterById(clusterId);
-            if (cluster === undefined) {
-                logger.debug(`Unknown cluster ${clusterId} - ignore`);
-                return;
-            }
             const attributeDetail = getClusterAttributeById(cluster, attributeId);
             if (attributeDetail === undefined) {
-                logger.debug(`Unknown attribute ${clusterId}/${attributeId} - ignore`);
+                logger.debug(
+                    `Decode unknown attribute ${toHexString(clusterId)}/${toHexString(attributeId)} via the AnySchema.`,
+                );
+
+                const attributeName = `Unknown (${toHexString(attributeId)})`;
+                const value = decodeUnknownAttributeValue(values);
+                result.push({
+                    path: { nodeId, endpointId, clusterId, attributeId, attributeName },
+                    version: dataVersion,
+                    value,
+                });
+
                 return;
             }
             const { attribute, name } = attributeDetail;
@@ -129,7 +138,11 @@ export function normalizeAndDecodeAttributeData(
                 value,
             });
         } catch (error: any) {
-            logger.error(`Error decoding attribute ${endpointId}/${clusterId}/${attributeId}: ${error.message}`);
+            logger.error(
+                `Error decoding attribute ${endpointId}/${toHexString(clusterId)}/${toHexString(attributeId)}: ${
+                    error.message
+                }`,
+            );
         }
     });
     return result;
@@ -144,7 +157,7 @@ export function decodeValueForAttribute<A extends Attribute<any, any>>(
     // No values, so use default value if available
     if (!values.length) {
         if (optional) return undefined;
-        if (conformanceValue === undefined) throw new AttributeError(`Attribute not found`);
+        if (conformanceValue === undefined) throw new AttributeError(`Attribute not found.`);
         return conformanceValue;
     }
 
@@ -168,11 +181,31 @@ export function decodeAttributeValueWithSchema<T>(
 
     // Return contained multiple tlv values as an array
     if (!(schema instanceof ArraySchema)) {
-        throw new UnexpectedDataError(`Attribute is not an list but multiple values were returned`);
+        throw new UnexpectedDataError(`Attribute is not an list but multiple values were returned.`);
     }
     return schema.decodeFromChunkedArray(
         values.map(({ data, path: { listIndex } }) => ({ listIndex, element: data })),
     ) as T;
+}
+
+export function decodeUnknownAttributeValue(values: TypeFromSchema<typeof TlvAttributeData>[]): any {
+    const schema = TlvAny;
+    // No values, so use default value if available
+    if (!values.length) {
+        return undefined;
+    }
+
+    // The value was returned as one Tlv value, so decode it normally
+    if (values.length === 1 && values[0].path.listIndex === undefined) {
+        const tlvEncoded = schema.decodeTlv(values[0].data);
+        return schema.decodeAnyTlvStream(tlvEncoded);
+    } else {
+        // Chunked any data
+        const tlvEncoded = new ArraySchema(schema).decodeFromChunkedArray(
+            values.map(({ data, path: { listIndex } }) => ({ listIndex, element: data })),
+        );
+        return tlvEncoded.map(element => schema.decodeAnyTlvStream(element));
+    }
 }
 
 export function structureReadAttributeDataToClusterObject(data: DecodedAttributeReportValue<any>[]) {

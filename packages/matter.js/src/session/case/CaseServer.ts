@@ -105,7 +105,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
                 await messenger.sendSigma2Resume({ resumptionId, resumeMic, sessionId });
             } catch (error) {
                 // If we fail to send the resume, we destroy the session
-                secureSession.destroy();
+                await secureSession.destroy();
                 throw error;
             }
 

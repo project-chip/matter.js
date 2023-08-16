@@ -7,7 +7,7 @@ import { Ble } from "./ble/Ble.js";
 import { ClusterClient } from "./cluster/client/ClusterClient.js";
 import { ClusterClientObj, isClusterClient } from "./cluster/client/ClusterClientTypes.js";
 import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
-import { AllClustersMap } from "./cluster/ClusterHelper.js";
+import { getClusterById } from "./cluster/ClusterHelper.js";
 import { DescriptorCluster } from "./cluster/definitions/DescriptorCluster.js";
 import { ClusterServer } from "./cluster/server/ClusterServer.js";
 import {
@@ -24,7 +24,12 @@ import { NodeId } from "./datatype/NodeId.js";
 import { Aggregator } from "./device/Aggregator.js";
 import { ComposedDevice } from "./device/ComposedDevice.js";
 import { PairedDevice } from "./device/Device.js";
-import { DeviceTypeDefinition, DeviceTypes, getDeviceTypeDefinitionByCode } from "./device/DeviceTypes.js";
+import {
+    DeviceTypeDefinition,
+    DeviceTypes,
+    getDeviceTypeDefinitionByCode,
+    UnknownDeviceType,
+} from "./device/DeviceTypes.js";
 import { Endpoint } from "./device/Endpoint.js";
 import { Logger } from "./log/Logger.js";
 import { MatterController } from "./MatterController.js";
@@ -253,7 +258,6 @@ export class CommissioningController extends MatterNode {
 
         const allClusterAttributes = await interactionClient.getAllAttributes();
         const allData = structureReadAttributeDataToClusterObject(allClusterAttributes);
-        logger.debug("Device all data", Logger.toJSON(allData));
 
         const partLists = new Map<EndpointNumber, EndpointNumber[]>();
         for (const [endpointId, clusters] of Object.entries(allData)) {
@@ -348,12 +352,13 @@ export class CommissioningController extends MatterNode {
         const deviceTypes = descriptorData.deviceTypeList.flatMap(({ deviceType, revision }) => {
             const deviceTypeDefinition = getDeviceTypeDefinitionByCode(deviceType);
             if (deviceTypeDefinition === undefined) {
-                logger.info(`Device type with code ${deviceType} not known, ignore`);
-                return [];
+                logger.info(`Device type with code ${deviceType} not known, use generic replacement.`);
+                return UnknownDeviceType(deviceType);
             }
-            if (deviceTypeDefinition.revision !== revision) {
-                logger.info(`Device type with code ${deviceType} and revision ${revision} not known, ignore`);
-                //return [];
+            if (deviceTypeDefinition.revision < revision) {
+                logger.debug(
+                    `Device type with code ${deviceType} and revision ${revision} not supported, some data might be unknown.`,
+                );
             }
             return deviceTypeDefinition;
         });
@@ -368,23 +373,15 @@ export class CommissioningController extends MatterNode {
 
         // Add ClusterClients for all server clusters of the device
         for (const clusterId of descriptorData.serverList) {
-            const cluster = AllClustersMap[clusterId];
-            if (cluster === undefined) {
-                logger.info(`Cluster with id ${clusterId} not known, ignore`);
-                continue;
-            }
-            const clusterClient = ClusterClient(cluster, endpointId, interactionClient);
+            const cluster = getClusterById(clusterId);
+            const clusterClient = ClusterClient(cluster, endpointId, interactionClient, data[clusterId]);
             endpointClusters.push(clusterClient);
         }
 
         // TODO use the attributes attributeList, acceptedCommands, generatedCommands to crate the ClusterClient/Server objects
         // Add ClusterServers for all client clusters of the device
         for (const clusterId of descriptorData.clientList) {
-            const cluster = AllClustersMap[clusterId];
-            if (cluster === undefined) {
-                logger.info(`Cluster with id ${clusterId} not known, ignore`);
-                continue;
-            }
+            const cluster = getClusterById(clusterId);
             const clusterData = (data[clusterId] ?? {}) as AttributeInitialValues<Attributes>; // TODO correct typing
             // Todo add logic for Events
             endpointClusters.push(
@@ -475,5 +472,9 @@ export class CommissioningController extends MatterNode {
         if (this.options.delayedPairing !== true) {
             return this.connect();
         }
+    }
+
+    getActiveSessionInformation() {
+        return this.controllerInstance?.getActiveSessionInformation() ?? [];
     }
 }

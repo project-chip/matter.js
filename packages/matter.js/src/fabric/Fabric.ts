@@ -156,8 +156,10 @@ export class Fabric {
         this.persistCallback = callback;
     }
 
-    remove() {
-        this.sessions.forEach(session => session.destroy());
+    async remove() {
+        for (const session of this.sessions) {
+            await session.end();
+        }
         this.removeCallback?.();
     }
 
@@ -203,6 +205,16 @@ export class Fabric {
             return [];
         }
         return Array.from(this.scopedClusterData.get(cluster.id).keys());
+    }
+
+    getExternalInformation() {
+        return {
+            fabricId: this.fabricId,
+            nodeId: this.nodeId,
+            rootNodeId: this.rootNodeId,
+            rootVendorId: this.rootVendorId,
+            label: this.label,
+        };
     }
 }
 

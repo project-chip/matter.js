@@ -29,6 +29,7 @@ import {
     getIntParameter,
     getParameter,
     hasParameter,
+    logEndpoint,
     requireMinNodeVersion,
     singleton,
 } from "@project-chip/matter-node.js/util";
@@ -392,6 +393,8 @@ class Device {
          */
 
         await this.matterServer.start();
+
+        logEndpoint(commissioningServer.getRootEndpoint());
 
         // When we want to limit the initial announcement to one medium (e.g. BLE) then we need to delay the
         // announcement and provide the limiting information.

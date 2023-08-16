@@ -110,7 +110,6 @@ export class SubscriptionHandler {
         private readonly eventFilters: TypeFromSchema<typeof TlvEventFilter>[] | undefined,
         private readonly eventHandler: EventHandler,
         private readonly isFabricFiltered: boolean,
-        keepSubscriptions: boolean,
         minIntervalFloor: number,
         maxIntervalCeiling: number,
         subscriptionMaxIntervalSeconds: number | undefined,
@@ -134,10 +133,6 @@ export class SubscriptionHandler {
 
         this.updateTimer = Time.getTimer(this.sendInterval, () => this.prepareDataUpdate()); // will be started later
         this.sendDelayTimer = Time.getTimer(50, () => this.sendUpdate()); // will be started later
-        if (!keepSubscriptions) {
-            logger.debug(`Clear subscriptions for Session ${session.name}`);
-            this.session.clearSubscriptions();
-        }
     }
 
     private determineSendingIntervals(
@@ -352,8 +347,6 @@ export class SubscriptionHandler {
         if (this.eventFilters !== undefined) this.eventFilters.length = 0;
         if (this.dataVersionFilters !== undefined) this.dataVersionFilters.length = 0;
 
-        this.session.addSubscription(this);
-
         this.sendUpdatesActivated = true;
         if (this.outstandingAttributeUpdates.size > 0 || this.outstandingEventUpdates.size > 0) {
             void this.sendUpdate();
@@ -422,9 +415,9 @@ export class SubscriptionHandler {
                 this.sendNextUpdateImmediately = false;
                 if (error instanceof RetransmissionLimitReachedError) {
                     // We could not send at all, consider session as dead
-                    this.session.destroy();
+                    await this.session.destroy();
                 } else {
-                    this.cancel();
+                    await this.cancel();
                 }
             }
         }
@@ -556,12 +549,15 @@ export class SubscriptionHandler {
         }
     }
 
-    cancel() {
+    async cancel(flush = false) {
         this.sendUpdatesActivated = false;
         this.updateTimer.stop();
         this.sendDelayTimer.stop();
         this.unregisterAttributeListeners(Array.from(this.attributeListeners.keys()));
         this.unregisterEventListeners(Array.from(this.eventListeners.keys()));
+        if (flush) {
+            await this.flush();
+        }
         this.session.removeSubscription(this.subscriptionId);
         this.cancelCallback();
     }
@@ -622,7 +618,7 @@ export class SubscriptionHandler {
                 async error => {
                     if (error.code === StatusCode.InvalidSubscription || error.code === StatusCode.Failure) {
                         logger.info(`Subscription ${this.subscriptionId} cancelled by peer.`);
-                        this.cancel();
+                        await this.cancel();
                     } else {
                         throw error;
                     }

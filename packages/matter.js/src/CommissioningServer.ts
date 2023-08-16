@@ -255,6 +255,7 @@ export class CommissioningServer extends MatterNode {
                 startUp: true,
                 shutDown: true,
                 reachableChanged: reachabilitySupported,
+                leave: true,
             },
         );
         this.rootEndpoint.addClusterServer(basicInformationCluster);
@@ -767,5 +768,17 @@ export class CommissioningServer extends MatterNode {
         if (this.delayedAnnouncement !== true) {
             return this.advertise();
         }
+    }
+
+    /** Get some basic details of all Fabrics the server is commissioned to. */
+    getCommissionedFabricInformation() {
+        if (!this.isCommissioned()) return [];
+        return this.deviceInstance?.getFabrics().map(fabric => fabric.getExternalInformation()) ?? [];
+    }
+
+    /** Get some basic details of all currently active sessions. */
+    getActiveSessionInformation() {
+        if (!this.isCommissioned()) return [];
+        return this.deviceInstance?.getActiveSessionInformation() ?? [];
     }
 }

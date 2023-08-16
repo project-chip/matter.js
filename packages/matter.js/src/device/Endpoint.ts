@@ -6,7 +6,7 @@
 
 import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
 import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
-import { AllClustersMap } from "../cluster/ClusterHelper.js";
+import { getClusterNameById } from "../cluster/ClusterHelper.js";
 import { BasicInformationCluster } from "../cluster/definitions/BasicInformationCluster.js";
 import { BridgedDeviceBasicInformationCluster } from "../cluster/definitions/BridgedDeviceBasicInformationCluster.js";
 import { DescriptorCluster } from "../cluster/definitions/DescriptorCluster.js";
@@ -277,7 +277,7 @@ export class Endpoint {
         this.deviceTypes.forEach(deviceType => {
             deviceType.requiredServerClusters?.forEach(clusterId => {
                 if (!this.clusterServers.has(clusterId)) {
-                    const clusterName = AllClustersMap[clusterId] ? AllClustersMap[clusterId].name : "unknown";
+                    const clusterName = getClusterNameById(clusterId);
                     throw new ImplementationError(
                         `Device type ${deviceType.name} (0x${deviceType.code.toString(
                             16,
@@ -293,7 +293,7 @@ export class Endpoint {
                 throw new NotImplementedError(`Devices with client clusters are not supported yet`);
             }
             deviceType.requiredClientClusters?.forEach(clusterId => {
-                const clusterName = AllClustersMap[clusterId] ? AllClustersMap[clusterId].name : "unknown";
+                const clusterName = getClusterNameById(clusterId);
                 if (!this.clusterClients.has(clusterId)) {
                     throw new ImplementationError(
                         `Device type ${deviceType.name} (0x${deviceType.code.toString(

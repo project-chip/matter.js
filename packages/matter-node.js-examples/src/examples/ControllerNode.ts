@@ -34,6 +34,7 @@ import {
     getIntParameter,
     getParameter,
     hasParameter,
+    logEndpoint,
     requireMinNodeVersion,
     singleton,
 } from "@project-chip/matter-node.js/util";
@@ -207,6 +208,8 @@ class ControllerNode {
 
             // Important: This is a temporary API to proof the methods working and this will change soon and is NOT stable!
             // It is provided to proof the concept
+
+            logEndpoint(commissioningController.getRootEndpoint());
 
             // Example to initialize a ClusterClient and access concrete fields as API methods
             const descriptor = commissioningController.getRootClusterClient(DescriptorCluster);
