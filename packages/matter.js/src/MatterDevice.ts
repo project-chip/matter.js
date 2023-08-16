@@ -49,6 +49,8 @@ export class MatterDevice {
     private announceInterval: Timer;
     private announcementStartedTime: number | null = null;
     private commissioningWindowOpened = false;
+    private commissioningWindowTimeout?: Timer;
+    private isClosing = false;
 
     constructor(
         private readonly deviceName: string,
@@ -95,6 +97,7 @@ export class MatterDevice {
     }
 
     async startAnnouncement() {
+        if (this.isClosing) return;
         if (this.announceInterval.isRunning) {
             this.announceInterval.stop();
         }
@@ -266,7 +269,13 @@ export class MatterDevice {
         }
         await this.startAnnouncement();
 
-        Time.getTimer(timeout * 1000, () => (this.commissioningWindowOpened = false)).start();
+        if (this.commissioningWindowTimeout !== undefined) {
+            this.commissioningWindowTimeout.stop();
+        }
+        this.commissioningWindowTimeout = Time.getTimer(timeout * 1000, () => {
+            this.commissioningWindowTimeout = undefined;
+            this.commissioningWindowOpened = false;
+        }).start();
     }
 
     async findDevice(
@@ -288,8 +297,16 @@ export class MatterDevice {
     }
 
     async stop() {
-        await this.exchangeManager.close();
+        this.isClosing = true;
         this.announceInterval.stop();
+        this.announcementStartedTime = null;
+        await this.exchangeManager.close();
+        this.sessionManager.close();
+        await this.channelManager.close();
+        for (const transportInterface of this.transportInterfaces) {
+            await transportInterface.close();
+        }
+        this.commissioningWindowTimeout?.stop();
     }
 
     getActiveSessionInformation() {
