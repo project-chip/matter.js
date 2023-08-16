@@ -542,7 +542,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         if (!keepSubscriptions) {
             logger.debug(`Clear subscriptions for Session ${session.name}`);
-            session.clearSubscriptions(); // Before merge needs to be changed to await!!
+            await session.clearSubscriptions();
         }
 
         const maxInterval = subscriptionHandler.getMaxInterval();
