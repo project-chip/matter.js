@@ -75,9 +75,9 @@ export class SessionManager<ContextT> {
             salt,
             isInitiator,
             isResumption,
-            () => {
-                this.removeSession(sessionId, peerNodeId);
-                closeCallback?.();
+            async () => {
+                this.sessions.delete(sessionId);
+                await closeCallback?.();
             },
             idleRetransTimeoutMs,
             activeRetransTimeoutMs,
