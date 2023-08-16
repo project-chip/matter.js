@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  CONNECTEDHOMEIP_TAG: "v1.1-branch"
+  CONNECTEDHOMEIP_TAG: "master" # "v1.1-branch" is not containing our current status, so we use master till 1.2 comes out
 
 jobs:
   chip-tests:
@@ -129,4 +129,4 @@ jobs:
         id: test-execution
         run: |
           cd packages/matter-node.js
-          npm run test-chip
+          npm run test-chip -- --forceExit
