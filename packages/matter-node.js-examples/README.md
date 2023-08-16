@@ -28,6 +28,13 @@ Then after `cd packages/matter-node.js-examples` you can use `npm run matter-dev
 
 ## CLI usage
 
+### Common CLI parameter for all examples
+The following CLI parameters are the same for all examples:
+
+* -clearstorage: the storage location will be reset on start of the process. The sorage location is set via parameter "-store" (see concrete examples below)
+* -loglevel: the log level to use (default: debug, possible values: fatal, error, warn, info, debug)
+* -logformat: the log format to use (default: ansi (if executed in a shell/tty), else plain, possible values: ansi, plain, html)
+
 ### Start a simple Matter Device Node
 
 > The code for this example is in [src/examples/DeviceNode.ts](./src/examples/DeviceNode.ts).
@@ -72,7 +79,6 @@ The following parameters are available:
 * -ble: enable BLE support (default: false) If this is enabled the device will announce itself _only_ via BLE if not commissioned and also presents a "Wifi only" device for commissioning to show this feature!
 * -port: the port to listen on for the device (default: 5540)
 * -store: the storage location (directory) to use for storing the pairing information (default: .device-node). Ideally use names starting with a ".". Delete the directory or provide an alternative name to reset the device
-* -clearstorage: the storage location will be reset on start of the process
 * -on: the command to run when the device is turned on (see example above)
 * -off: the command to run when the device is turned off (see example above)
 

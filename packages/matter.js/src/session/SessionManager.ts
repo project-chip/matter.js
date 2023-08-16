@@ -167,4 +167,18 @@ export class SessionManager<ContextT> {
             });
         });
     }
+
+    getActiveSessionInformation() {
+        return [...this.sessions.values()].map(session => ({
+            name: session.name,
+            nodeId: session.getNodeId(),
+            peerNodeId: session.getPeerNodeId(),
+            fabric: session instanceof SecureSession ? session.getFabric()?.getExternalInformation() : undefined,
+            isPeerActive: session.isPeerActive(),
+            secure: session.isSecure(),
+            lastInteractionTimestamp: session instanceof SecureSession ? session.timestamp : undefined,
+            lastActiveTimestamp: session instanceof SecureSession ? session.activeTimestamp : undefined,
+            numberOfActiveSubscriptions: session instanceof SecureSession ? session.numberOfActiveSubscriptions : 0,
+        }));
+    }
 }

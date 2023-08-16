@@ -7,7 +7,7 @@ import { Ble } from "./ble/Ble.js";
 import { ClusterClient } from "./cluster/client/ClusterClient.js";
 import { ClusterClientObj, isClusterClient } from "./cluster/client/ClusterClientTypes.js";
 import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
-import { AllClustersMap } from "./cluster/ClusterHelper.js";
+import { getClusterById } from "./cluster/ClusterHelper.js";
 import { DescriptorCluster } from "./cluster/definitions/DescriptorCluster.js";
 import { ClusterServer } from "./cluster/server/ClusterServer.js";
 import {
@@ -24,7 +24,12 @@ import { NodeId } from "./datatype/NodeId.js";
 import { Aggregator } from "./device/Aggregator.js";
 import { ComposedDevice } from "./device/ComposedDevice.js";
 import { PairedDevice } from "./device/Device.js";
-import { DeviceTypeDefinition, DeviceTypes, getDeviceTypeDefinitionByCode } from "./device/DeviceTypes.js";
+import {
+    DeviceTypeDefinition,
+    DeviceTypes,
+    getDeviceTypeDefinitionByCode,
+    UnknownDeviceType,
+} from "./device/DeviceTypes.js";
 import { Endpoint } from "./device/Endpoint.js";
 import { Logger } from "./log/Logger.js";
 import { MatterController } from "./MatterController.js";
@@ -59,7 +64,7 @@ export interface CommissioningControllerOptions {
     delayedPairing?: boolean;
 
     passcode: number; // TODO: Move into commissioningOptions
-    longDiscriminator?: number;
+    longDiscriminator?: number; // TODO: Move into commissioningOptions
     shortDiscriminator?: number; // TODO: Move into commissioningOptions
 
     commissioningOptions?: CommissioningOptions;
@@ -67,17 +72,8 @@ export interface CommissioningControllerOptions {
 
 export class CommissioningController extends MatterNode {
     serverAddress?: ServerAddressIp;
-    private readonly disableIpv4: boolean;
-    private readonly localPort?: number;
     private readonly listeningAddressIpv4?: string;
     private readonly listeningAddressIpv6?: string;
-
-    private readonly passcode: number;
-    private longDiscriminator?: number;
-    private shortDiscriminator?: number;
-    private readonly commissioningOptions?: CommissioningOptions;
-
-    readonly delayedPairing: boolean;
 
     private storage?: StorageContext;
     private mdnsScanner?: MdnsScanner;
@@ -92,17 +88,9 @@ export class CommissioningController extends MatterNode {
      *
      * @param options The options for the CommissioningController
      */
-    constructor(options: CommissioningControllerOptions) {
+    constructor(private readonly options: CommissioningControllerOptions) {
         super();
         this.serverAddress = options.serverAddress;
-        this.disableIpv4 = options.disableIpv4 ?? false;
-        this.localPort = options.localPort;
-        this.delayedPairing = options.delayedPairing ?? false;
-
-        this.passcode = options.passcode;
-        this.longDiscriminator = options.longDiscriminator;
-        this.shortDiscriminator = options.shortDiscriminator;
-        this.commissioningOptions = options.commissioningOptions;
     }
 
     /**
@@ -117,13 +105,16 @@ export class CommissioningController extends MatterNode {
             throw new ImplementationError("Add the node to the Matter instance before!");
         }
 
+        const { localPort, passcode, longDiscriminator, shortDiscriminator } = this.options;
         this.controllerInstance = await MatterController.create(
             this.mdnsScanner,
-            this.disableIpv4 ? undefined : await UdpInterface.create("udp4", this.localPort, this.listeningAddressIpv4),
-            await UdpInterface.create("udp6", this.localPort, this.listeningAddressIpv6),
+            this.options.disableIpv4 !== true
+                ? undefined
+                : await UdpInterface.create("udp4", localPort, this.listeningAddressIpv4),
+            await UdpInterface.create("udp6", localPort, this.listeningAddressIpv6),
             this.storage,
             this.serverAddress,
-            this.commissioningOptions,
+            this.options.commissioningOptions,
             peerNodeId => {
                 logger.info(`Peer node ${peerNodeId} disconnected ...`);
                 // TODO Add handling
@@ -135,12 +126,12 @@ export class CommissioningController extends MatterNode {
             this.nodeId = this.controllerInstance.getFabric().nodeId;
         } else {
             let identifierData;
-            if (this.longDiscriminator !== undefined) {
-                identifierData = { longDiscriminator: this.longDiscriminator };
-            } else if (this.shortDiscriminator !== undefined) {
-                identifierData = { shortDiscriminator: this.shortDiscriminator };
+            if (longDiscriminator !== undefined) {
+                identifierData = { longDiscriminator };
+            } else if (shortDiscriminator !== undefined) {
+                identifierData = { shortDiscriminator };
             } else {
-                if (this.passcode === undefined) {
+                if (passcode === undefined) {
                     throw new ImplementationError(
                         "To commission a new device a passcode needs to be specified in the constructor data!",
                     );
@@ -165,19 +156,14 @@ export class CommissioningController extends MatterNode {
             let nodeId: NodeId | undefined;
             if (bleEnabled) {
                 try {
-                    nodeId = await this.controllerInstance.commissionViaBle(identifierData, this.passcode, 15);
+                    nodeId = await this.controllerInstance.commissionViaBle(identifierData, passcode, 15);
                 } catch (error) {
                     logger.warn(`Ble commissioning failed: ${error}`);
                 }
             }
 
             if (nodeId === undefined) {
-                nodeId = await this.controllerInstance.commission(
-                    identifierData,
-                    this.passcode,
-                    15,
-                    this.serverAddress,
-                );
+                nodeId = await this.controllerInstance.commission(identifierData, passcode, 15, this.serverAddress);
             }
 
             this.nodeId = nodeId;
@@ -272,7 +258,6 @@ export class CommissioningController extends MatterNode {
 
         const allClusterAttributes = await interactionClient.getAllAttributes();
         const allData = structureReadAttributeDataToClusterObject(allClusterAttributes);
-        logger.debug("Device all data", Logger.toJSON(allData));
 
         const partLists = new Map<EndpointNumber, EndpointNumber[]>();
         for (const [endpointId, clusters] of Object.entries(allData)) {
@@ -367,12 +352,13 @@ export class CommissioningController extends MatterNode {
         const deviceTypes = descriptorData.deviceTypeList.flatMap(({ deviceType, revision }) => {
             const deviceTypeDefinition = getDeviceTypeDefinitionByCode(deviceType);
             if (deviceTypeDefinition === undefined) {
-                logger.info(`Device type with code ${deviceType} not known, ignore`);
-                return [];
+                logger.info(`Device type with code ${deviceType} not known, use generic replacement.`);
+                return UnknownDeviceType(deviceType);
             }
-            if (deviceTypeDefinition.revision !== revision) {
-                logger.info(`Device type with code ${deviceType} and revision ${revision} not known, ignore`);
-                //return [];
+            if (deviceTypeDefinition.revision < revision) {
+                logger.debug(
+                    `Device type with code ${deviceType} and revision ${revision} not supported, some data might be unknown.`,
+                );
             }
             return deviceTypeDefinition;
         });
@@ -387,23 +373,15 @@ export class CommissioningController extends MatterNode {
 
         // Add ClusterClients for all server clusters of the device
         for (const clusterId of descriptorData.serverList) {
-            const cluster = AllClustersMap[clusterId];
-            if (cluster === undefined) {
-                logger.info(`Cluster with id ${clusterId} not known, ignore`);
-                continue;
-            }
-            const clusterClient = ClusterClient(cluster, endpointId, interactionClient);
+            const cluster = getClusterById(clusterId);
+            const clusterClient = ClusterClient(cluster, endpointId, interactionClient, data[clusterId]);
             endpointClusters.push(clusterClient);
         }
 
         // TODO use the attributes attributeList, acceptedCommands, generatedCommands to crate the ClusterClient/Server objects
         // Add ClusterServers for all client clusters of the device
         for (const clusterId of descriptorData.clientList) {
-            const cluster = AllClustersMap[clusterId];
-            if (cluster === undefined) {
-                logger.info(`Cluster with id ${clusterId} not known, ignore`);
-                continue;
-            }
+            const cluster = getClusterById(clusterId);
             const clusterData = (data[clusterId] ?? {}) as AttributeInitialValues<Attributes>; // TODO correct typing
             // Todo add logic for Events
             endpointClusters.push(
@@ -491,8 +469,12 @@ export class CommissioningController extends MatterNode {
     }
 
     async start() {
-        if (!this.delayedPairing) {
+        if (this.options.delayedPairing !== true) {
             return this.connect();
         }
+    }
+
+    getActiveSessionInformation() {
+        return this.controllerInstance?.getActiveSessionInformation() ?? [];
     }
 }

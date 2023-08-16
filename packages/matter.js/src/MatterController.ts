@@ -647,4 +647,8 @@ export class MatterController {
         await this.netInterfaceIpv4?.close();
         await this.netInterfaceIpv6.close();
     }
+
+    getActiveSessionInformation() {
+        return this.sessionManager.getActiveSessionInformation();
+    }
 }

@@ -32,8 +32,8 @@ export class NoAssociatedFabricError extends Error {}
 
 export class SecureSession<T> implements Session<T> {
     private readonly subscriptions = new Array<SubscriptionHandler>();
-    private timestamp = Time.nowMs();
-    private activeTimestamp = this.timestamp;
+    timestamp = Time.nowMs();
+    activeTimestamp = this.timestamp;
 
     static async create<T>(
         context: T,
@@ -174,6 +174,10 @@ export class SecureSession<T> implements Session<T> {
         logger.debug(`Added subscription ${subscription.subscriptionId} to ${this.name}/${this.id}`);
     }
 
+    get numberOfActiveSubscriptions() {
+        return this.subscriptions.length;
+    }
+
     removeSubscription(subscriptionId: number) {
         const index = this.subscriptions.findIndex(subscription => subscription.subscriptionId === subscriptionId);
         if (index !== -1) {
@@ -182,13 +186,22 @@ export class SecureSession<T> implements Session<T> {
         }
     }
 
-    clearSubscriptions() {
-        this.subscriptions.forEach(subscription => subscription.cancel());
+    async clearSubscriptions(flushSubscriptions = false) {
+        for (const subscription of this.subscriptions) {
+            await subscription.cancel(flushSubscriptions);
+        }
         this.subscriptions.length = 0;
     }
 
-    destroy() {
-        this.clearSubscriptions();
+    /** Ends a session. Outstanding subscription data will be flushed before the session is destroyed. */
+    async end() {
+        await this.clearSubscriptions(true);
+        await this.destroy();
+    }
+
+    /** Destroys a session. Outstanding subscription data will be discarded. */
+    async destroy() {
+        await this.clearSubscriptions(false);
         this.fabric?.removeSession(this);
         this.closeCallback();
     }

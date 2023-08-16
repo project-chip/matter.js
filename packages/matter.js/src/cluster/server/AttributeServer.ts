@@ -26,8 +26,9 @@ import { Attribute, Attributes, Cluster, Commands, Events } from "../Cluster.js"
  */
 export class FabricScopeError extends MatterError {}
 
-// TODO create Factory method to create AttributeServer instances
-
+/**
+ * Factory function to create an attribute server.
+ */
 export function createAttributeServer<
     T,
     F extends BitSchema,
@@ -40,6 +41,8 @@ export function createAttributeServer<
     attributeDef: Attribute<T, F>,
     attributeName: string,
     defaultValue: T,
+    getClusterDataVersion: () => number,
+    increaseClusterDataVersion: () => number,
     getter?: (session?: Session<MatterDevice>, endpoint?: Endpoint, isFabricFiltered?: boolean) => T,
     setter?: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => boolean,
     validator?: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => void,
@@ -47,7 +50,16 @@ export function createAttributeServer<
     const { id, schema, writable, fabricScoped, fixed, omitChanges } = attributeDef;
 
     if (fixed) {
-        return new FixedAttributeServer(id, attributeName, schema, writable, false, defaultValue, getter);
+        return new FixedAttributeServer(
+            id,
+            attributeName,
+            schema,
+            writable,
+            false,
+            defaultValue,
+            getClusterDataVersion,
+            getter,
+        );
     }
 
     if (fabricScoped) {
@@ -59,6 +71,8 @@ export function createAttributeServer<
             !omitChanges,
             defaultValue,
             clusterDef,
+            getClusterDataVersion,
+            increaseClusterDataVersion,
             getter,
             setter,
             validator,
@@ -72,6 +86,8 @@ export function createAttributeServer<
         writable,
         !omitChanges,
         defaultValue,
+        getClusterDataVersion,
+        increaseClusterDataVersion,
         getter,
         setter,
         validator,
@@ -86,7 +102,6 @@ export abstract class BaseAttributeServer<T> {
      * The value is undefined when getter/setter are used. But we still handle the version number here.
      */
     protected value: T | undefined = undefined;
-    protected version = 0;
     protected endpoint?: Endpoint;
 
     constructor(
@@ -120,7 +135,7 @@ export abstract class BaseAttributeServer<T> {
      * Initialize the value of the attribute, used when a persisted value is set initially or when values needs to be
      * adjusted before the Device gets announced. Do not use this method to change values when the device is in use!
      */
-    abstract init(value: T | undefined, version?: number): void;
+    abstract init(value: T | undefined): void;
 }
 
 /**
@@ -138,6 +153,7 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
         isWritable: boolean,
         isSubscribable: boolean,
         defaultValue: T,
+        protected readonly getClusterDataVersion: () => number,
 
         /**
          * Optional getter function to handle special requirements or the data are stored in different places.
@@ -181,7 +197,7 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
      * attributes.
      */
     getWithVersion(session: Session<MatterDevice>, isFabricFiltered: boolean) {
-        return { version: this.version, value: this.get(session, isFabricFiltered) };
+        return { version: this.getClusterDataVersion(), value: this.get(session, isFabricFiltered) };
     }
 
     /**
@@ -198,10 +214,7 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
      * adjusted before the Device gets announced. Do not use this method to change values when the device is in use!
      * If a getter or setter is defined the value must be undefined The version number must also be undefined.
      */
-    init(value: T | undefined, version?: number) {
-        if (version !== undefined) {
-            throw new InternalError(`Version is not supported on fixed attribute "${this.name}".`);
-        }
+    init(value: T | undefined) {
         if (value === undefined) {
             throw new InternalError(`Can not initialize fixed attribute "${this.name}" with undefined value.`);
         }
@@ -265,6 +278,8 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
         isWritable: boolean,
         isSubscribable: boolean,
         defaultValue: T,
+        getClusterDataVersion: () => number,
+        protected readonly increaseClusterDataVersion: () => number,
         getter?: (session?: Session<MatterDevice>, endpoint?: Endpoint, isFabricFiltered?: boolean) => T,
 
         /**
@@ -301,7 +316,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
             );
         }
 
-        super(id, name, schema, isWritable, isSubscribable, defaultValue, getter);
+        super(id, name, schema, isWritable, isSubscribable, defaultValue, getClusterDataVersion, getter);
 
         if (setter === undefined) {
             this.setter = value => {
@@ -325,7 +340,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
      * Initialize the value of the attribute, used when a persisted value is set initially or when values needs to be
      * adjusted before the Device gets announced. Do not use this method to change values when the device is in use!
      */
-    override init(value: T | undefined, version: number) {
+    override init(value: T | undefined) {
         if (value === undefined) {
             value = this.getter(undefined, this.endpoint);
         }
@@ -334,7 +349,6 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
         }
         this.validator(value, undefined, this.endpoint);
         this.value = value;
-        this.version = version;
     }
 
     /**
@@ -388,8 +402,8 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
      */
     protected handleVersionAndTriggerListeners(value: T, oldValue: T | undefined, considerVersionChanged: boolean) {
         if (considerVersionChanged) {
-            this.version++;
-            this.valueChangeListeners.forEach(listener => listener(value, this.version));
+            const version = this.increaseClusterDataVersion();
+            this.valueChangeListeners.forEach(listener => listener(value, version));
         }
         if (oldValue !== undefined) {
             this.valueSetListeners.forEach(listener => listener(value, oldValue));
@@ -473,6 +487,8 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
         isSubscribable: boolean,
         defaultValue: T,
         readonly cluster: Cluster<any, any, any, any, any>,
+        getClusterDataVersion: () => number,
+        increaseClusterDataVersion: () => number,
         getter?: (session?: Session<MatterDevice>, endpoint?: Endpoint, isFabricFiltered?: boolean) => T,
         setter?: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => boolean,
         validator?: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => void,
@@ -536,7 +552,19 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
             isCustomSetter = true;
         }
 
-        super(id, name, schema, isWritable, isSubscribable, defaultValue, getter, setter, validator);
+        super(
+            id,
+            name,
+            schema,
+            isWritable,
+            isSubscribable,
+            defaultValue,
+            getClusterDataVersion,
+            increaseClusterDataVersion,
+            getter,
+            setter,
+            validator,
+        );
         this.isCustomGetter = isCustomGetter;
         this.isCustomSetter = isCustomSetter;
     }
@@ -545,11 +573,10 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
      * Initialize the attribute with a value. Because the value is stored on fabric level this method only initializes
      * the version number.
      */
-    override init(value: T | undefined, version?: number) {
+    override init(value: T | undefined) {
         if (value !== undefined) {
             throw new InternalError(`Can not initialize fabric scoped attribute "${this.name}" with a value.`);
         }
-        this.version = version ?? 0;
     }
 
     /**

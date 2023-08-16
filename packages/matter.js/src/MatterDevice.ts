@@ -291,4 +291,8 @@ export class MatterDevice {
         await this.exchangeManager.close();
         this.announceInterval.stop();
     }
+
+    getActiveSessionInformation() {
+        return this.sessionManager.getActiveSessionInformation();
+    }
 }

@@ -4,26 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { OnOffCluster } from "../definitions/OnOffCluster.js";
+import { NotImplementedError } from "../../common/MatterError.js";
+import { WrapCommandHandler } from "../../device/Device.js";
+import { NamedHandler } from "../../util/NamedHandler.js";
+import { OnOff, OnOffCluster } from "../definitions/OnOffCluster.js";
+import { ClusterServer } from "./ClusterServer.js";
 import { AttributeInitialValues, ClusterServerHandlers } from "./ClusterServerTypes.js";
 
-import { ClusterServer } from "./ClusterServer.js";
-
-/*
-TODO: Global Cluster fields needs to be added also here because, as discussed, based on the implementation.
-* Cluster Revision: 4 (If I get it right from the Specs - Application Cluster Specs 1.5.1)
-* FeatureMap:
-  * Bit 0 set to 0 for now because not supported
-* AttributeList:
-  * onOff
-* AcceptedCommandList:
-  * Supported always: Off, On, Toggle
-* GeneratedCommandList: empty
-* EventList: empty
-* FabricIndex: empty
- */
-
-export const OnOffClusterHandler: () => ClusterServerHandlers<typeof OnOffCluster> = () => ({
+export const OnOffClusterDefaultHandler: () => ClusterServerHandlers<typeof OnOff.Complete> = () => ({
     on: async ({ attributes: { onOff } }) => {
         onOff.setLocal(true);
     },
@@ -37,15 +25,25 @@ export const OnOffClusterHandler: () => ClusterServerHandlers<typeof OnOffCluste
             onOff.setLocal(true);
         }
     },
+    offWithEffect: async () => {
+        throw new NotImplementedError("Not implemented");
+    },
+    onWithRecallGlobalScene: async () => {
+        throw new NotImplementedError("Not implemented");
+    },
+    onWithTimedOff: async () => {
+        throw new NotImplementedError("Not implemented");
+    },
 });
 
 export const createDefaultOnOffClusterServer = (
-    attributeInitialValues?: AttributeInitialValues<typeof OnOffCluster.attributes>,
+    commandHandler?: NamedHandler<any>,
+    attributeInitialValues?: AttributeInitialValues<typeof OnOff.Cluster.attributes>,
 ) =>
     ClusterServer(
         OnOffCluster,
         attributeInitialValues ?? {
             onOff: false,
         },
-        OnOffClusterHandler(),
+        WrapCommandHandler(OnOffClusterDefaultHandler(), commandHandler),
     );

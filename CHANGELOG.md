@@ -19,7 +19,8 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Breaking: All collection files meant to be used for exports only are renamed to export.ts and should not be used for internal imports
   * Breaking: Attribute listener methods renamed: addListener -> addValueSetListener, addMatterListener -> addValueChangeListener (also remove methods) to make it more clear what they do
   * Breaking: Change from object style to Branded types for special Datatype objects (e.g. "new VendorId(0xFFF1)" -> "VendorId(0xFFF1)")
-  * Breaking: ClusterClient and CLusterServer classes were moved from "interaction" export to "cluster" export
+  * Breaking: ClusterClient and ClusterServer classes were moved from "interaction" export to "cluster" export
+  * Breaking: Refactor the (low level) ClusterClient API to be more convenient to use with many optional fields for read/write/subscribe
   * Feature: Enhance CommissioningServer options to also specify GeneralCommissioningServer details and settings
   * Feature: Adjust RegulatoryConfig Handling in Device and Controller to match with specifications
   * Feature: Endpoint Structures use custom-unique-id (from EndpointOptions)/uniqueStorageKey (from BasicInformationCluster)/serialNumber (from BasicInformationCluster)/ Index (in this order) to store and restore the endpoint ID in structures
@@ -32,8 +33,11 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Feature: Correctly Handle FabricIndex fields for Read and Write requests
   * Feature: Handle subscription errors and destroy session if failing more than 3 times
   * Feature: Add full event support (Device and Controller) including triggering some default events automatically (startup, shutdown, reachabilityChanged, bootReason)
-  * Feature: Add more parameters to several InteractionClient methods to allow to configure more parameters of the requests
+  * Feature: Added support for dataVersionFiltering and eventFilters for read and subscribe requests for Device and Controllers
+  * Feature: Added more parameters to several InteractionClient methods to allow to configure more parameters of the requests
   * Feature: Allows subscripts to be updated dynamically when the endpoint structure for bridges changes by adding or removing a device
+  * Feature: When used as Controller also "unknown" CLusters, Attributes, Events and DeviceTypes are generically parsed and supported and can be detected as unknown in code
+  * Feature: When used as controller the read data about supported attributes, events are considered when create Attribute/EventClient objects and can be differentiated by PresentAttributeClient/UnknownPresentAttributeClient class types 
   * Enhance: Device port in MDNSBroadcaster is now dynamically set and add UDC (User directed Commissioning) Announcements
   * Enhance: Enhanced MessageCodec and check some more fields
   * Enhance: Added possibility to define conditional cluster attribute/Command/event definitions and introduce runtime checking for these. Part of Cluster Structure rework still WIP
@@ -51,6 +55,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Fix: Fixes a Subscription timer duplication issue and collect attribute changes within a 50ms window to reduce the number of subscription messages
   * Fix: Returns correct Error-Status for Read-/Write-/Subscribe- and Invoke-Requests
   * Fix: Fixes TLV Encoding for strings with UTF8 relevant characters
+  * Fix: Adjusted DataVersion handling to track version on ClusterInstance level as required by Specs. Stored values that might got invalid by this change are deleted and recreated on next change.
   * Refactor: Refactor Endpoint structuring and determination to allow dynamic and updating structures
 * matter.js API:
   * Breaking: 
@@ -61,6 +66,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Feature: Enhance Storage system to allow to create subcontext stores to allow better separation of data
   * Feature: Allow to also remove devices from Aggregators
   * Feature: Optionally allow to define discovery capabilities when generating Pairing code
+  * Feature: Add methods to CommissioningServer/Controller class to get information on active sessions and commissioned fabrics
 * Reference implementation/Examples:
   * Breaking: The storage key structure got changed to allow multi node operations within one process. This requires to change the storage key structure and to migrate or reset the storage.
     * Migration: prepend any storage key except Device.* and Controller.* with "0." in the filename
@@ -71,10 +77,14 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Feature: The Controller example script got a new parameter -ble to also initialize the Bluetooth transport layer
   * Feature: The Controller example script got a new parameters -ble-* to provide Wi-Fi/Thread network credentials to use for device commissioning
   * Feature: Add stopping of the example scripts to allow clean shutdown and sending shutdown Event
+  * Feature: Add CLI parameter to define the loglevel and log format; default log format changed to ANSI when executed in a shell/tty
+  * Feature: Log the endpoint structure of the device/commissioned device on start
 * Misc:
   * Added Specification links for Matter Specifications 1.1
   * Optimize typing exports for node10 TS settings
-  * Add optional parameter to define a uniqueID used in serialnumber of examples
+  * Add optional parameter to define a uniqueID used in serial number of examples
+  * Add WIP package matter-node-shell.js with the goal to offer a node.js based shell-based controller implementation
+  * Add new util class EndpointStructureLogger which logs all endpoint details 
 
 ## 0.4.0 (2023-05-16)
 * Matter-Core functionality:

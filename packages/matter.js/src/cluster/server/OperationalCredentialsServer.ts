@@ -18,7 +18,8 @@ import { TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvByteString } from "../../tlv/TlvString.js";
 import { ByteArray } from "../../util/ByteArray.js";
-import { OperationalCredentials, OperationalCredentialsCluster } from "../definitions/OperationalCredentialsCluster.js";
+import { BasicInformation } from "../definitions/BasicInformationCluster.js";
+import { OperationalCredentials } from "../definitions/OperationalCredentialsCluster.js";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 
 const logger = Logger.get("OperationalCredentialsServer");
@@ -57,7 +58,7 @@ function signWithDeviceKey(
 
 export const OperationalCredentialsClusterHandler: (
     conf: OperationalCredentialsServerConf,
-) => ClusterServerHandlers<typeof OperationalCredentialsCluster> = conf => ({
+) => ClusterServerHandlers<typeof OperationalCredentials.Cluster> = conf => ({
     attestationRequest: async ({ request: { attestationNonce }, session }) => {
         assertSecureSession(session);
         const elements = TlvAttestation.encode({
@@ -177,6 +178,7 @@ export const OperationalCredentialsClusterHandler: (
         request: { fabricIndex },
         attributes: { nocs, commissionedFabrics, fabrics, trustedRootCertificates },
         session,
+        endpoint,
     }) => {
         const device = session.getContext();
 
@@ -189,7 +191,10 @@ export const OperationalCredentialsClusterHandler: (
             };
         }
 
-        fabric.remove();
+        const basicInformationCluster = endpoint.getClusterServer(BasicInformation.Cluster);
+        basicInformationCluster?.triggerLeaveEvent?.({ fabricIndex });
+
+        await fabric.remove();
 
         assertSecureSession(session);
         nocs.updated(session);
