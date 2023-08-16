@@ -16,6 +16,7 @@ export class Cache<T> {
     constructor(
         private readonly generator: (...params: any[]) => T,
         private readonly expirationMs: number,
+        private readonly expireCallback?: (key: string, value: T) => Promise<void>,
     ) {
         this.periodicTimer = Time.getPeriodicTimer(expirationMs, () => this.expire()).start();
     }
@@ -31,22 +32,33 @@ export class Cache<T> {
         return value;
     }
 
-    clear() {
+    private async deleteEntry(key: string) {
+        const value = this.values.get(key);
+        if (this.expireCallback !== undefined && value !== undefined) {
+            await this.expireCallback(key, value);
+        }
+        this.values.delete(key);
+        this.timestamps.delete(key);
+    }
+
+    async clear() {
+        for (const key of this.values.keys()) {
+            await this.deleteEntry(key);
+        }
         this.values.clear();
         this.timestamps.clear();
     }
 
-    close() {
-        this.clear();
+    async close() {
+        await this.clear();
         this.periodicTimer.stop();
     }
 
-    private expire() {
+    private async expire() {
         const now = Time.nowMs();
-        [...this.timestamps.entries()].forEach(([key, timestamp]) => {
-            if (now - timestamp < this.expirationMs) return;
-            this.values.delete(key);
-            this.timestamps.delete(key);
-        });
+        for (const [key, timestamp] of this.timestamps.entries()) {
+            if (now - timestamp < this.expirationMs) continue;
+            await this.deleteEntry(key);
+        }
     }
 }
