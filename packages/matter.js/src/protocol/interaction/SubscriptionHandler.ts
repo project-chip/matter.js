@@ -110,7 +110,6 @@ export class SubscriptionHandler {
         private readonly eventFilters: TypeFromSchema<typeof TlvEventFilter>[] | undefined,
         private readonly eventHandler: EventHandler,
         private readonly isFabricFiltered: boolean,
-        keepSubscriptions: boolean,
         minIntervalFloor: number,
         maxIntervalCeiling: number,
         subscriptionMaxIntervalSeconds: number | undefined,
@@ -134,10 +133,6 @@ export class SubscriptionHandler {
 
         this.updateTimer = Time.getTimer(this.sendInterval, () => this.prepareDataUpdate()); // will be started later
         this.sendDelayTimer = Time.getTimer(50, () => this.sendUpdate()); // will be started later
-        if (!keepSubscriptions) {
-            logger.debug(`Clear subscriptions for Session ${session.name}`);
-            void this.session.clearSubscriptions(); // Temporary void: Will be cleaned up in PR #814
-        }
     }
 
     private determineSendingIntervals(
@@ -351,8 +346,6 @@ export class SubscriptionHandler {
         // We do not need these data anymore, so we can free some memory
         if (this.eventFilters !== undefined) this.eventFilters.length = 0;
         if (this.dataVersionFilters !== undefined) this.dataVersionFilters.length = 0;
-
-        this.session.addSubscription(this);
 
         this.sendUpdatesActivated = true;
         if (this.outstandingAttributeUpdates.size > 0 || this.outstandingEventUpdates.size > 0) {

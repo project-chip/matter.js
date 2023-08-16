@@ -515,7 +515,6 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             eventFilters,
             this.eventHandler,
             isFabricFiltered,
-            keepSubscriptions,
             minIntervalFloorSeconds,
             maxIntervalCeilingSeconds,
             this.options?.subscriptionMaxIntervalSeconds,
@@ -541,7 +540,10 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             return; // Make sure to not bubble up the exception
         }
 
-        this.subscriptionMap.set(subscriptionId, subscriptionHandler);
+        if (!keepSubscriptions) {
+            logger.debug(`Clear subscriptions for Session ${session.name}`);
+            await session.clearSubscriptions();
+        }
 
         const maxInterval = subscriptionHandler.getMaxInterval();
         logger.info(
@@ -552,6 +554,9 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             MessageType.SubscribeResponse,
             TlvSubscribeResponse.encode({ subscriptionId, maxInterval, interactionModelRevision: 1 }),
         );
+
+        this.subscriptionMap.set(subscriptionId, subscriptionHandler);
+        session.addSubscription(subscriptionHandler);
         subscriptionHandler.activateSendingUpdates();
     }
 

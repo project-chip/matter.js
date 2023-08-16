@@ -206,6 +206,16 @@ export class Fabric {
         }
         return Array.from(this.scopedClusterData.get(cluster.id).keys());
     }
+
+    getExternalInformation() {
+        return {
+            fabricId: this.fabricId,
+            nodeId: this.nodeId,
+            rootNodeId: this.rootNodeId,
+            rootVendorId: this.rootVendorId,
+            label: this.label,
+        };
+    }
 }
 
 export class FabricBuilder {
