@@ -166,6 +166,19 @@ export class MatterNode {
         return 0;
     }
 
+    public async devices() {
+        try {
+            await this.commissioningController?.connect();
+
+            if (this.commissioningController) {
+                const devices = this.commissioningController.getDevices();
+                console.log(devices);
+            }
+        } finally {
+            //await matterDevice.close(); // Comment out when subscribes are used, else the connection will be closed
+            //setTimeout(() => process.exit(0), 100000);
+        }
+    }
 
     public async onoff() {
         try {

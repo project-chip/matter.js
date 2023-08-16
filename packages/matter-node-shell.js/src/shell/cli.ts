@@ -78,6 +78,11 @@ export const theCommandList: CommandEntry[] = [
         handler: cmd_session.doSession,
     },
     {
+        command: "devices",
+        help: "Display known devices",
+        handler: cmd_session.doDevices,
+    },
+    {
         command: "onoff",
         help: "Control on/off cluster state",
         handler: cmd_onoff.doOnOff,

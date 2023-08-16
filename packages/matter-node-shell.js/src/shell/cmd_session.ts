@@ -19,7 +19,7 @@ import { theNode } from "../MatterNode";
 
 export class cmd_session {
     /**
-     * Get / Set the NodeId.
+     * Show sessions info.
      *
      * @param {Array} args
      * @returns 0
@@ -40,6 +40,32 @@ export class cmd_session {
         if (argv.help) return 0;
 
         await theNode.sessions();
+
+        return 0;
+    }
+
+   /**
+     * Show devices info.
+     *
+     * @param {Array} args
+     * @returns 0
+     */
+    static async doDevices(args: string[]): Promise<number> {
+        const argv = yargs(args)
+            .options({
+                descriminator: {
+                    alias: "d",
+                    description: "Long descriminator",
+                    type: "number",
+                },
+            })
+            .help("help") // provide help on `help` in addition to `--help`
+            .exitProcess(false) // do not exit when help option is passed
+            .parseSync();
+
+        if (argv.help) return 0;
+
+        await theNode.devices();
 
         return 0;
     }
