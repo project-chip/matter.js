@@ -516,10 +516,10 @@ export class MdnsScanner implements Scanner {
     /**
      * Close all connects, end all timers and resolve all pending promises.
      */
-    close() {
+    async close() {
         this.periodicTimer.stop();
         this.queryTimer?.stop();
-        this.multicastServer.close();
+        await this.multicastServer.close();
         [...this.recordWaiters.keys()].forEach(queryId => this.finishWaiter(queryId, true));
     }
 

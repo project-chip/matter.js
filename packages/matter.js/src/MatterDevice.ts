@@ -190,7 +190,7 @@ export class MatterDevice {
             isResumption,
             idleRetransTimeoutMs,
             activeRetransTimeoutMs,
-            () => void this.startAnnouncement(),
+            async () => await this.startAnnouncement(),
         );
     }
 

@@ -625,7 +625,7 @@ export class SubscriptionHandler {
                 },
             );
         } finally {
-            messenger.close();
+            await messenger.close();
         }
     }
 }

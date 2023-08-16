@@ -45,7 +45,7 @@ export class SecureSession<T> implements Session<T> {
         salt: ByteArray,
         isInitiator: boolean,
         isResumption: boolean,
-        closeCallback: () => void,
+        closeCallback: () => Promise<void>,
         idleRetransTimeoutMs?: number,
         activeRetransTimeoutMs?: number,
     ) {
@@ -84,7 +84,7 @@ export class SecureSession<T> implements Session<T> {
         private readonly decryptKey: ByteArray,
         private readonly encryptKey: ByteArray,
         private readonly attestationKey: ByteArray,
-        private readonly closeCallback: () => void,
+        private readonly closeCallback: () => Promise<void>,
         private readonly idleRetransmissionTimeoutMs: number = DEFAULT_IDLE_RETRANSMISSION_TIMEOUT_MS,
         private readonly activeRetransmissionTimeoutMs: number = DEFAULT_ACTIVE_RETRANSMISSION_TIMEOUT_MS,
         private readonly retransmissionRetries: number = DEFAULT_RETRANSMISSION_RETRIES,
@@ -203,7 +203,7 @@ export class SecureSession<T> implements Session<T> {
     async destroy() {
         await this.clearSubscriptions(false);
         this.fabric?.removeSession(this);
-        this.closeCallback();
+        await this.closeCallback();
     }
 
     private generateNonce(securityFlags: number, messageId: number, nodeId: NodeId) {

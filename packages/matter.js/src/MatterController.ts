@@ -325,7 +325,7 @@ export class MatterController {
             Error,
             async error => {
                 // Close the exchange if the pairing fails and rethrow the error
-                paseExchange.close();
+                await paseExchange.close();
                 throw error;
             },
         );
@@ -538,7 +538,7 @@ export class MatterController {
                     Error,
                     async error => {
                         // Close the exchange if the pairing fails and rethrow the error
-                        exchange.close();
+                        await exchange.close();
                         throw error;
                     },
                 );
@@ -621,7 +621,7 @@ export class MatterController {
             isResumption,
             idleRetransTimeoutMs,
             activeRetransTimeoutMs,
-            () => this.sessionClosedCallback?.(peerNodeId),
+            async () => this.sessionClosedCallback?.(peerNodeId),
         );
     }
 
@@ -642,8 +642,10 @@ export class MatterController {
     }
 
     async close() {
-        this.mdnsScanner.close();
         await this.exchangeManager.close();
+        this.sessionManager.close();
+        await this.channelManager.close();
+        await this.netInterfaceBle?.close();
         await this.netInterfaceIpv4?.close();
         await this.netInterfaceIpv6.close();
     }
