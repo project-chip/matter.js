@@ -173,6 +173,6 @@ describe("Chip-Tool-Tests", () => {
     }
 
     afterAll(async () => {
-        Network.get().close();
+        await Network.get().close();
     });
 });
