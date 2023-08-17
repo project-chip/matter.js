@@ -20,9 +20,10 @@ The used packages have some limitations and prerequisites. Please check the Read
   * When using Device and Controller in parallel: https://github.com/abandonware/noble#bleno-compatibility-linux-specific (NOBLE_MULTI_ROLE might be needed to set)
   * Please also see common issues and solutions: https://github.com/abandonware/noble#common-problems
 
-## Environment Variables used for customization
-* Linux: Set the HCI interface for Bleno/Device if multiple are existing: BLENO_HCI_DEVICE_ID=x (default 1) - this is only used for Peripheral/Device side
-* Linux: Set the HCI interface for Noble/Controller if multiple are existing: NOBLE_HCI_DEVICE_ID=x (default 0) - this is only used for Central/Controller side
+## How to choose the HCI device (Linux)
+
+You can optionally set an options object when instantiating BleNode. this object can have the following properties:
+* hciId: HCI ID (number) of the HCI device to use. If not set, ID 0 is used
 
 ## Building
 

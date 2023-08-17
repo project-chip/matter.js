@@ -15,38 +15,42 @@ import { BleScanner } from "./BleScanner";
 import { NobleBleCentralInterface } from "./NobleBleChannel";
 import { NobleBleClient } from "./NobleBleClient";
 
+export type BleOptions = {
+    hciId?: number;
+};
+
 export class BleNode extends Ble {
     private blePeripheral: BlenoBleServer | undefined;
     private bleCentral: NobleBleClient | undefined;
 
-    constructor() {
+    constructor(private readonly options?: BleOptions) {
         super();
     }
 
     getBlePeripheralInterface(): TransportInterface {
         if (this.blePeripheral === undefined) {
-            this.blePeripheral = new BlenoBleServer();
+            this.blePeripheral = new BlenoBleServer(this.options);
         }
         return new BlePeripheralInterface(this.blePeripheral);
     }
 
     getBleCentralInterface(): NetInterface {
         if (this.bleCentral === undefined) {
-            this.bleCentral = new NobleBleClient();
+            this.bleCentral = new NobleBleClient(this.options);
         }
         return new NobleBleCentralInterface();
     }
 
     getBleBroadcaster(additionalAdvertisementData?: ByteArray): InstanceBroadcaster {
         if (this.blePeripheral === undefined) {
-            this.blePeripheral = new BlenoBleServer();
+            this.blePeripheral = new BlenoBleServer(this.options);
         }
         return new BleBroadcaster(this.blePeripheral, additionalAdvertisementData);
     }
 
     getBleScanner(): Scanner {
         if (this.bleCentral === undefined) {
-            this.bleCentral = new NobleBleClient();
+            this.bleCentral = new NobleBleClient(this.options);
         }
         return new BleScanner(this.bleCentral);
     }

@@ -77,6 +77,7 @@ The following parameters are available:
 * -type: the device type to use for pairing (default: light, alternative value is "socket")
 * -announceinterface: limit mdns announcements to the provided network interface, e.g. "en0" (default: all interfaces available)
 * -ble: enable BLE support (default: false) If this is enabled the device will announce itself _only_ via BLE if not commissioned and also presents a "Wifi only" device for commissioning to show this feature!
+* -ble-hci-id: Optionally, HCI ID to use (Linux only, default 0)
 * -port: the port to listen on for the device (default: 5540)
 * -store: the storage location (directory) to use for storing the pairing information (default: .device-node). Ideally use names starting with a ".". Delete the directory or provide an alternative name to reset the device
 * -on: the command to run when the device is turned on (see example above)
@@ -191,6 +192,7 @@ The following parameters are available and used to initially commission a device
   * -pin: the pin to use for pairing (default: 20202021)
 * When the device to commission is not already in the IP network and also not an Ethernet device commission can be done via ble. In this case the following parameters are used:
   * -ble: enable BLE support (default: false) If this is enabled the controller will try to connect via BLE first (15s timeout) and then via IP if not commissioned yet!
+  * -ble-hci-id: Optionally, HCI ID to use (Linux only, default 0)
   * -ble-wifi-ssid: SSID/Name of the Wifi network to connect to - The device will scan especially for this network and commissioning will fail if not found
   * -ble-wifi-credentials: Credentials for the Wifi network to connect to
   * -ble-thread-networkname: Name of the Thread network to connect to - The device will verify that a thread network with this name is reachable by the device and commissioning will fail if not found

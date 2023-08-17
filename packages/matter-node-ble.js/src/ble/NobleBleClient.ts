@@ -8,13 +8,16 @@ import type { Peripheral } from "@abandonware/noble";
 import { BLE_MATTER_SERVICE_UUID } from "@project-chip/matter.js/ble";
 import { Logger } from "@project-chip/matter.js/log";
 import { ByteArray } from "@project-chip/matter.js/util";
+import { BleOptions } from "./BleNode";
 
 const logger = Logger.get("NobleBleClient");
 let noble: typeof import("@abandonware/noble");
 
-function loadNoble(hciId = 0) {
+function loadNoble(hciId?: number) {
     // load noble driver with the correct device selected
-    process.env.NOBLE_HCI_DEVICE_ID = hciId.toString();
+    if (hciId !== undefined) {
+        process.env.NOBLE_HCI_DEVICE_ID = hciId.toString();
+    }
     try {
         noble = require("@abandonware/noble");
         if (typeof noble.on !== "function") {
@@ -38,8 +41,8 @@ export class NobleBleClient {
     private nobleState = "unknown";
     private deviceDiscoveredCallback: ((peripheral: Peripheral, manufacturerData: ByteArray) => void) | undefined;
 
-    constructor() {
-        loadNoble();
+    constructor(options?: BleOptions) {
+        loadNoble(options?.hciId);
         noble.on("stateChange", state => {
             this.nobleState = state;
             logger.debug(`Noble state changed to ${state}`);
