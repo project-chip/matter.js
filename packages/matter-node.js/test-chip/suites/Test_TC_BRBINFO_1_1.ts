@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+// eslint-disable-next-line no-restricted-imports
 import { CommissioningServer } from "../../src/export";
 
 import { BridgedDeviceBasicInformation } from "@project-chip/matter.js/cluster";
