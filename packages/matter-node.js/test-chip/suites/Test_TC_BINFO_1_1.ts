@@ -1,3 +1,9 @@
+/**
+ * @license
+ * Copyright 2022 The node-matter Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 // eslint-disable-next-line no-restricted-imports
 import { CommissioningServer } from "../../src/export";
 
@@ -7,19 +13,23 @@ import { OnOffPluginUnitDevice } from "@project-chip/matter.js/device";
 import { StorageManager } from "@project-chip/matter.js/storage";
 import { DeviceTestInstance } from "../DeviceTestInstance";
 
-/** Test case "TC_BINFO_1.1" */
+/**
+ * Test case "TC_BINFO_1.1"
+ * 12.1.1. [TC-BINFO-1.1] Global Attributes for Basic Information Cluster [DUT-Server]
+ */
 export class Test_TC_BINFO_1_1Test extends DeviceTestInstance {
-    constructor(storageManager: StorageManager) {
-        super("Test_TC_BINFO_1_1", "GeneralTestPicsFile.txt", storageManager);
+    onOffDevice = new OnOffPluginUnitDevice();
+    commissioningServer?: CommissioningServer;
+
+    constructor(storageManager: StorageManager, overrideTestName?: string) {
+        super(overrideTestName ?? "Test_TC_BINFO_1_1", "GeneralTestPicsFile.txt", storageManager);
     }
 
     async setupCommissioningServer() {
-        const onOffDevice = new OnOffPluginUnitDevice();
-
-        const commissioningServer = new CommissioningServer({
+        this.commissioningServer = new CommissioningServer({
             port: 5540,
             deviceName: "Testdevice",
-            deviceType: DeviceTypeId(onOffDevice.deviceType),
+            deviceType: DeviceTypeId(this.onOffDevice.deviceType),
             passcode: 20202021,
             discriminator: 3840,
             basicInformation: {
@@ -43,9 +53,9 @@ export class Test_TC_BINFO_1_1Test extends DeviceTestInstance {
             delayedAnnouncement: false,
         });
 
-        commissioningServer.addDevice(onOffDevice);
+        this.commissioningServer.addDevice(this.onOffDevice);
 
-        return commissioningServer;
+        return this.commissioningServer;
     }
 
     override async handleUserprompt(_userPrompt: string, testDescription: string) {

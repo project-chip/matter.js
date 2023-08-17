@@ -49,6 +49,7 @@ export abstract class DeviceTestInstance {
         );
         switch (command) {
             case "Reboot":
+                await new Promise(resolve => setTimeout(resolve, 500));
                 await this.stop();
                 this.matterServer = undefined;
                 process.stdout.write(`====> Chip test Runner "${this.testName}": Instance stopped for reboot ...\n`);

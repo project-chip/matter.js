@@ -138,6 +138,9 @@ describe("Chip-Tool-Tests", () => {
 
     /** Collect and execute all tests that are exported from the suites folder. */
     for (const suiteName in Tests) {
+        if (process.env.LIMIT_TO_ONE_TEST !== undefined && suiteName !== process.env.LIMIT_TO_ONE_TEST) {
+            continue;
+        }
         describe(suiteName, () => {
             const suite = (Tests as any)[suiteName];
             const storage = new StorageBackendMemory();
