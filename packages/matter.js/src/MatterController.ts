@@ -643,7 +643,7 @@ export class MatterController {
 
     async close() {
         await this.exchangeManager.close();
-        this.sessionManager.close();
+        await this.sessionManager.close();
         await this.channelManager.close();
         await this.netInterfaceBle?.close();
         await this.netInterfaceIpv4?.close();

@@ -301,7 +301,7 @@ export class MatterDevice {
         this.announceInterval.stop();
         this.announcementStartedTime = null;
         await this.exchangeManager.close();
-        this.sessionManager.close();
+        await this.sessionManager.close();
         await this.channelManager.close();
         for (const transportInterface of this.transportInterfaces) {
             await transportInterface.close();
