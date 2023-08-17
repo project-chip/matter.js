@@ -32,6 +32,8 @@ async function executeProcess(
             process.stdout.write(data);
             setImmediate(() => {
                 const string = data.toString();
+                // TODO: Optimize to make sure we always have complete lines ... so maybe we need to buffer
+                //       an uncomplete "last line" or such
                 const commandIndex = string.indexOf("@ChipTestRunner: Command: '");
                 if (commandIndex !== -1 && commandCallback !== undefined) {
                     const commandEndIndex = string.indexOf("'", commandIndex + 27);
