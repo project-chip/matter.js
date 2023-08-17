@@ -110,7 +110,7 @@ export namespace BridgedDeviceBasicInformation {
     export const Cluster = CreateCluster({
         id: 0x39,
         name: "BridgedDeviceBasicInformation",
-        revision: 1,
+        revision: 2,
 
         attributes: {
             /**
