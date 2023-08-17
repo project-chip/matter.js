@@ -30,4 +30,4 @@ The following test cases are currently not automated and need to be executed man
 
 * TC_BINFO_3_1
 * TC_BRBINFO_2_2
-* TC_BRBINFO_3_1
+* TC_BRBINFO_3_1 
