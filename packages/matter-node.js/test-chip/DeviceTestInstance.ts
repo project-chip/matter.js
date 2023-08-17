@@ -65,7 +65,10 @@ export abstract class DeviceTestInstance {
     }
 
     /** Handle a user prompt from the chip-tool. The response is the answer to give. */
-    async handleUserprompt(testDescription: string, userPrompt: string): Promise<string> {
+    async handleUserprompt(userPrompt: string, testDescription: string): Promise<string> {
+        if (testDescription.includes("TH reads")) {
+            return "y\n"; // We acknowledge the TH reads as checked
+        }
         throw new Error(
             `Test instance ${this.testName} do not know how to handle Userprompt ${testDescription} with prompt: ${userPrompt}`,
         );

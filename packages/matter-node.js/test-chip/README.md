@@ -25,3 +25,9 @@ Additionally, the tests can be triggered When the commit contains special keywor
 * `[execute-chiptests]` to execute the tests on the current branch
 * `[rebuild-chip]` to rebuild the chip-tool executable from the connectedhomeip repository used by the CI (Attention: this needs 20+ minutes!)
 
+## Known manual test cases
+The following test cases are currently not automated and need to be executed manually:
+
+* TC_BINFO_3_1
+* TC_BRBINFO_2_2
+* TC_BRBINFO_3_1

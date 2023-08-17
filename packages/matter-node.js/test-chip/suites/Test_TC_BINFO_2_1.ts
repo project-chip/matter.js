@@ -15,7 +15,7 @@ export class Test_TC_BINFO_2_1Test extends Test_TC_BINFO_1_1Test {
         super(storageManager, "Test_TC_BINFO_2_1");
     }
 
-    override async handleUserprompt(_userPrompt: string, testDescription: string) {
+    override async handleUserprompt(userPrompt: string, testDescription: string) {
         if (testDescription.includes("TH Saves the CountryCode Information")) {
             return "y\n"; // We acknowledge the TH reads as checked
         }
@@ -42,6 +42,6 @@ export class Test_TC_BINFO_2_1Test extends Test_TC_BINFO_1_1Test {
         if (testDescription.includes("Verify that it does not include the name of the vendor")) {
             return "y\n"; // We acknowledge the TH reads as checked
         }
-        return super.handleUserprompt(_userPrompt, testDescription);
+        return super.handleUserprompt(userPrompt, testDescription);
     }
 }

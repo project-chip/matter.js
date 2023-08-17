@@ -14,7 +14,7 @@ export class Test_TC_BINFO_2_2Test extends Test_TC_BINFO_1_1Test {
         super(storageManager, "Test_TC_BINFO_2_2");
     }
 
-    override async handleUserprompt(_userPrompt: string, testDescription: string) {
+    override async handleUserprompt(userPrompt: string, testDescription: string) {
         if (testDescription.includes("Reboot target device(DUT)")) {
             return "y\n"; // We acknowledge the TH reads as checked
         }
@@ -26,6 +26,6 @@ export class Test_TC_BINFO_2_2Test extends Test_TC_BINFO_1_1Test {
         if (testDescription.includes("Verify that ShutDown event has priority set as CRITICAL")) {
             return "y\n"; // We acknowledge the TH reads as checked
         }
-        return super.handleUserprompt(_userPrompt, testDescription);
+        return super.handleUserprompt(userPrompt, testDescription);
     }
 }
