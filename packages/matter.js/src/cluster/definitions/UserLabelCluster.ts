@@ -33,7 +33,7 @@ export namespace UserLabel {
              */
             labelList: WritableAttribute(
                 0x0,
-                TlvArray(Label.TlvLabelStruct, { minLength: 4 }),
+                TlvArray(Label.TlvLabelStruct, { minLength: 0 }),
                 { persistent: true, default: [], writeAcl: AccessLevel.Manage }
             )
         }

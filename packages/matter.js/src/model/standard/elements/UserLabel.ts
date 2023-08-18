@@ -28,7 +28,7 @@ Matter.children.push({
             type: "list",
             access: "RW VM",
             conformance: "M",
-            constraint: "min 4",
+            constraint: "min 0",
             default: [],
             quality: "N",
             details:

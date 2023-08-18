@@ -24,4 +24,5 @@ import "./ModeSelectOverrides.js";
 import "./OperationalCredentialsOverrides.js";
 import "./PumpConfigurationAndControlOverrides.js";
 import "./ScenesOverrides.js";
+import "./UserLabelOverrides.js";
 import "./WindowCoveringOverrides.js";
