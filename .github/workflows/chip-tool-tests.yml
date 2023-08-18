@@ -20,6 +20,9 @@ jobs:
   chip-tests:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v3
+
       - uses: dorny/paths-filter@v2
         id: changes
         with:
@@ -29,10 +32,6 @@ jobs:
               - "packages/matter.js/src/cluster/**"
               - "packages/matter.js/src/tlv/**"
               - ".github/workflows/chip-tool-tests.yml"
-
-      - if: ${{ github.event_name == 'schedule' || (github.event_name == 'push' && steps.changes.outputs.src == 'true') || github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[execute-chiptests]') == true || contains(github.event.head_commit.message, '[rebuild-chip]') == true }}
-        name: Check out matter.js
-        uses: actions/checkout@v3
 
       - if: ${{ github.event_name == 'schedule' || (github.event_name == 'push' && steps.changes.outputs.src == 'true') || github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[execute-chiptests]') == true }}
         name: Install Debian deps
