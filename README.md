@@ -165,7 +165,7 @@ Table Legend:
 | * Speaker                         |       | X             | -      | -           | -    |
 | * Content App                     | -     | -             | -      | -           | -    |
 | **Generic Devices**               |       |               |        |             |      |
-| * Mode Select                     | -     | -             | -      | -           | -    |
+| * Mode Select                     | -     | -             | X      | -           | -    |
 
 ## Pairing and Usage Information
 
