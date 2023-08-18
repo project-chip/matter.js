@@ -5,6 +5,8 @@ on:
     - cron: 0 2 * * * # Every day at 02:00
   workflow_dispatch: # Manually on demand
   push:
+    branches:
+      - "*"
     paths:
       - "packages/matter-node.js/test-chip/**"
       - "packages/matter.js/src/cluster/**"
