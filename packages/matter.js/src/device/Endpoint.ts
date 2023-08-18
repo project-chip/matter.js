@@ -106,7 +106,9 @@ export class Endpoint {
             );
         }
         const fixedLabelCluster = this.getClusterServer(FixedLabelCluster);
-        const labelList = fixedLabelCluster?.attributes.labelList.getLocal() ?? [];
+        const labelList = (fixedLabelCluster?.attributes.labelList.getLocal() ?? []).filter(
+            ({ label: entryLabel }) => entryLabel !== label, // Prevent adding duplicate labels
+        );
         labelList.push({ label, value });
         fixedLabelCluster?.attributes.labelList.setLocal(labelList);
     }
@@ -123,10 +125,12 @@ export class Endpoint {
                 ),
             );
         }
-        const fixedLabelCluster = this.getClusterServer(UserLabelCluster);
-        const labelList = fixedLabelCluster?.attributes.labelList.getLocal() ?? [];
+        const userLabelCluster = this.getClusterServer(UserLabelCluster);
+        const labelList = (userLabelCluster?.attributes.labelList.getLocal() ?? []).filter(
+            ({ label: entryLabel }) => entryLabel !== label, // Prevent adding duplicate labels
+        );
         labelList.push({ label, value });
-        fixedLabelCluster?.attributes.labelList.setLocal(labelList);
+        userLabelCluster?.attributes.labelList.setLocal(labelList);
     }
 
     addClusterServer<A extends Attributes, C extends Commands, E extends Events>(cluster: ClusterServerObj<A, C, E>) {
