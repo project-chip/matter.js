@@ -154,7 +154,7 @@ describe("Chip-Tool-Tests", () => {
 
             it(
                 `"${suiteName}": Start chip-tool and test instance for initial pairing`,
-                async () => await pairWithChipTool(async () => testInstance.start()),
+                async () => await pairWithChipTool(async () => await testInstance.start()),
                 30000,
             );
 
