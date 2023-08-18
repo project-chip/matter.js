@@ -7,6 +7,11 @@ on:
   push:
     branches:
       - "*"
+    paths:
+      - "packages/matter-node.js/test-chip/**"
+      - "packages/matter.js/src/cluster/**"
+      - "packages/matter.js/src/tlv/**"
+      - ".github/workflows/chip-tool-tests.yml"
 
 # Cancel previous PR/branch runs when a new commit is pushed
 concurrency:
