@@ -5,7 +5,7 @@
  */
 import { Ble } from "./ble/Ble.js";
 import { ClusterClient } from "./cluster/client/ClusterClient.js";
-import { asClusterClientInternal, ClusterClientObj, isClusterClient } from "./cluster/client/ClusterClientTypes.js";
+import { ClusterClientObj, isClusterClient } from "./cluster/client/ClusterClientTypes.js";
 import { Attributes, Commands, Events } from "./cluster/Cluster.js";
 import { getClusterById } from "./cluster/ClusterHelper.js";
 import { DescriptorCluster } from "./cluster/definitions/DescriptorCluster.js";
@@ -238,9 +238,9 @@ export class CommissioningController extends MatterNode {
      * @private
      */
     private async initializeEndpointStructure() {
-        const interactionClient = await this.createInteractionClient();
+        this.defaultInteractionClient = await this.createInteractionClient();
 
-        const allClusterAttributes = await interactionClient.getAllAttributes();
+        const allClusterAttributes = await this.defaultInteractionClient.getAllAttributes();
         const allData = structureReadAttributeDataToClusterObject(allClusterAttributes);
 
         const partLists = new Map<EndpointNumber, EndpointNumber[]>();

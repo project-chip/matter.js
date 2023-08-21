@@ -563,10 +563,7 @@ describe("Integration Test", () => {
         it("subscription of one attribute sends updates when the value changes", async () => {
             const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
             assert.ok(onoffEndpoint);
-            const onOffClient = onoffEndpoint.getClusterClient(
-                OnOffCluster,
-                await commissioningController.createInteractionClient(),
-            );
+            const onOffClient = onoffEndpoint.getClusterClient(OnOffCluster);
             assert.ok(onOffClient);
 
             assert.ok(onOffLightDeviceServer);
