@@ -142,10 +142,7 @@ export class AttributeClient<T> {
         this.listeners.forEach(listener => listener(value));
     }
 
-    setInteractionClientRequestorCallback(callback: () => Promise<InteractionClient>) {
-        this.getInteractionClientCallback = callback;
-    }
-
+    /** Add a listener to the attribute. */
     addListener(listener: (newValue: T) => void) {
         this.listeners.push(listener);
     }
