@@ -132,7 +132,7 @@ Table Legend:
 
 | Device type                       | Apple | Google        | Amazon | SmartThings | Tuya |
 |-----------------------------------|-------|---------------|--------|-------------|------|
-| **Bridge Support**                | X     | X             | -      | -           | -    |
+| **Bridge Support**                | X     | X             | X      | -           | -    |
 | **Light devices**                 |       |               |        |             |      |
 | * On/Off Light                    | X     | X             | X      | X           | X    |
 | * Dimmable Light                  | X     | X             | X      | X           | X    |
@@ -165,7 +165,7 @@ Table Legend:
 | * Speaker                         |       | X             | -      | -           | -    |
 | * Content App                     | -     | -             | -      | -           | -    |
 | **Generic Devices**               |       |               |        |             |      |
-| * Mode Select                     | -     | -             | -      | -           | -    |
+| * Mode Select                     | -     | -             | X      | -           | -    |
 
 ## Pairing and Usage Information
 
