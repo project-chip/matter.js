@@ -38,7 +38,7 @@ import {
 import { CommissioningController, CommissioningServer, MatterServer } from "@project-chip/matter.js";
 import { OnOffLightDevice } from "@project-chip/matter.js/device";
 import { FabricJsonObject } from "@project-chip/matter.js/fabric";
-import { DecodedEventData, InteractionClient } from "@project-chip/matter.js/interaction";
+import { DecodedEventData } from "@project-chip/matter.js/interaction";
 import { Level, Logger } from "@project-chip/matter.js/log";
 import { MdnsBroadcaster, MdnsScanner } from "@project-chip/matter.js/mdns";
 import { Network, NetworkFake } from "@project-chip/matter.js/net";
@@ -77,7 +77,6 @@ describe("Integration Test", () => {
     let commissioningController: CommissioningController;
     let commissioningServer: CommissioningServer;
     let onOffLightDeviceServer: OnOffLightDevice;
-    let defaultInteractionClient: InteractionClient;
 
     beforeAll(async () => {
         Logger.defaultLogLevel = Level.DEBUG;
@@ -244,11 +243,6 @@ describe("Integration Test", () => {
             60 * 1000 /* 1mn timeout */,
         );
 
-        it("the session is resumed if it has been established previously", async () => {
-            defaultInteractionClient = await commissioningController.createInteractionClient();
-            assert.ok(defaultInteractionClient);
-        });
-
         it("Verify that commissioning changed the Regulatory Config/Location values", async () => {
             const generalCommissioningCluster = commissioningController.getRootClusterClient(
                 GeneralCommissioning.Cluster,
@@ -297,14 +291,14 @@ describe("Integration Test", () => {
         });
 
         it("read all attributes and events", async () => {
-            const response = await defaultInteractionClient.getAllAttributesAndEvents();
+            const response = await commissioningController.interactionClient.getAllAttributesAndEvents();
             assert.ok(response);
             assert.ok(response.attributeReports.length);
             assert.ok(response.eventReports.length);
         });
 
         it("read multiple attributes", async () => {
-            const response = await defaultInteractionClient.getMultipleAttributes({
+            const response = await commissioningController.interactionClient.getMultipleAttributes({
                 attributes: [
                     { clusterId: Descriptor.Cluster.id }, // * /DescriptorCluster/ *
                     { endpointId: EndpointNumber(0), clusterId: BasicInformation.Cluster.id }, // 0/BasicInformationCluster/ *
@@ -421,7 +415,7 @@ describe("Integration Test", () => {
         });
 
         it("read events", async () => {
-            const response = await defaultInteractionClient.getMultipleEvents({
+            const response = await commissioningController.interactionClient.getMultipleEvents({
                 events: [
                     { clusterId: BasicInformation.Cluster.id }, // * /BasicInformationCluster/ *
                     {
@@ -501,7 +495,7 @@ describe("Integration Test", () => {
         });
 
         it("write multiple attributes", async () => {
-            const client = await commissioningController.createInteractionClient(); // We can also use a new Interaction clint
+            const client = commissioningController.interactionClient; // We can also use a new Interaction clint
 
             const response = await client.setMultipleAttributes([
                 {
@@ -521,14 +515,14 @@ describe("Integration Test", () => {
             assert.equal(Array.isArray(response), true);
             assert.equal(response.length, 0);
 
-            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformation.Cluster, client);
+            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInfoCluster);
             assert.equal(await basicInfoCluster.attributes.nodeLabel.get(), "testLabel2");
             assert.equal(await basicInfoCluster.getLocationAttribute(), "GB");
         });
 
         it("write multiple attributes with partial errors", async () => {
-            const response = await defaultInteractionClient.setMultipleAttributes([
+            const response = await commissioningController.interactionClient.setMultipleAttributes([
                 {
                     endpointId: EndpointNumber(0),
                     clusterId: BasicInformation.Cluster.id,
@@ -547,10 +541,7 @@ describe("Integration Test", () => {
             assert.equal(response[0].path.attributeId, BasicInformation.Cluster.attributes.location.id);
             assert.equal(response[0].status, 135 /* StatusCode.ConstraintError */);
 
-            const basicInfoCluster = commissioningController.getRootClusterClient(
-                BasicInformation.Cluster,
-                defaultInteractionClient,
-            );
+            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInfoCluster);
 
             assert.equal(await basicInfoCluster.attributes.nodeLabel.get(), "testLabel3");
@@ -562,7 +553,7 @@ describe("Integration Test", () => {
         it("add a group", async () => {
             const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
             assert.ok(onoffEndpoint);
-            const groupsCluster = onoffEndpoint.getClusterClient(Groups.Cluster, defaultInteractionClient);
+            const groupsCluster = onoffEndpoint.getClusterClient(Groups.Cluster);
             assert.ok(groupsCluster);
             await groupsCluster.commands.addGroup({ groupId: GroupId(1), groupName: "Group 1" });
         });
@@ -632,10 +623,7 @@ describe("Integration Test", () => {
         it("subscription of one attribute with known data version only sends updates when the value changes", async () => {
             const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
             assert.ok(onoffEndpoint);
-            const onOffClient = onoffEndpoint.getClusterClient(
-                OnOffCluster,
-                await commissioningController.createInteractionClient(),
-            );
+            const onOffClient = onoffEndpoint.getClusterClient(OnOffCluster);
             assert.ok(onOffClient);
 
             assert.ok(onOffLightDeviceServer);
@@ -673,10 +661,7 @@ describe("Integration Test", () => {
         it("subscribe an attribute with getter that needs endpoint", async () => {
             const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
             assert.ok(onoffEndpoint);
-            const scenesClient = onoffEndpoint.getClusterClient(
-                Scenes.Cluster,
-                await commissioningController.createInteractionClient(),
-            );
+            const scenesClient = onoffEndpoint.getClusterClient(Scenes.Cluster);
             assert.ok(scenesClient);
 
             const scenesServer = onOffLightDeviceServer.getClusterServer(Scenes.Cluster);
@@ -721,10 +706,7 @@ describe("Integration Test", () => {
         });
 
         it("subscription of one event sends updates when event got triggered via auto-wiring", async () => {
-            const basicInformationClient = commissioningController.getRootClusterClient(
-                BasicInformation.Cluster,
-                await commissioningController.createInteractionClient(),
-            );
+            const basicInformationClient = commissioningController.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInformationClient);
 
             const basicInformationServer = commissioningServer.getRootClusterServer(BasicInformation.Cluster);
@@ -786,10 +768,7 @@ describe("Integration Test", () => {
 
     describe("Access Control server fabric scoped attribute storage", () => {
         it("set empty acl", async () => {
-            const accessControlCluster = commissioningController.getRootClusterClient(
-                AccessControl.Cluster,
-                defaultInteractionClient,
-            );
+            const accessControlCluster = commissioningController.getRootClusterClient(AccessControl.Cluster);
             assert.ok(accessControlCluster);
             await accessControlCluster.attributes.acl.set([]);
             await accessControlCluster.setAclAttribute([]);
@@ -808,7 +787,7 @@ describe("Integration Test", () => {
         it("Trigger identify command and trigger command handler", async () => {
             const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
             assert.ok(onoffEndpoint);
-            const identifyClient = onoffEndpoint.getClusterClient(Identify.Cluster, defaultInteractionClient);
+            const identifyClient = onoffEndpoint.getClusterClient(Identify.Cluster);
             assert.ok(identifyClient);
 
             const { promise: firstPromise, resolver: firstResolver } = await getPromiseResolver<number>();
@@ -871,7 +850,6 @@ describe("Integration Test", () => {
         it("try to remove invalid fabric", async () => {
             const operationalCredentialsCluster = commissioningController.getRootClusterClient(
                 OperationalCredentials.Cluster,
-                defaultInteractionClient,
             );
             assert.ok(operationalCredentialsCluster);
 
@@ -884,7 +862,6 @@ describe("Integration Test", () => {
         it("read and remove fabric", async () => {
             const operationalCredentialsCluster = commissioningController.getRootClusterClient(
                 OperationalCredentials.Cluster,
-                defaultInteractionClient,
             );
             assert.ok(operationalCredentialsCluster);
 

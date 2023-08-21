@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "../../common/MatterError.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { EventId } from "../../datatype/EventId.js";
@@ -20,16 +19,16 @@ export function createEventClient<T>(
     name: string,
     endpointId: EndpointNumber,
     clusterId: ClusterId,
-    getInteractionClientCallback: () => Promise<InteractionClient>,
+    interactionClient: InteractionClient,
     present = false,
 ): EventClient<T> {
     if (event.unknown) {
-        return new UnknownPresentEventClient(event, name, endpointId, clusterId, getInteractionClientCallback);
+        return new UnknownPresentEventClient(event, name, endpointId, clusterId, interactionClient);
     }
     if (present) {
-        return new PresentEventClient(event, name, endpointId, clusterId, getInteractionClientCallback);
+        return new PresentEventClient(event, name, endpointId, clusterId, interactionClient);
     }
-    return new EventClient(event, name, endpointId, clusterId, getInteractionClientCallback);
+    return new EventClient(event, name, endpointId, clusterId, interactionClient);
 }
 
 /**
@@ -44,7 +43,7 @@ export class EventClient<T> {
         readonly name: string,
         readonly endpointId: EndpointNumber,
         readonly clusterId: ClusterId,
-        private getInteractionClientCallback: () => Promise<InteractionClient>,
+        private readonly interactionClient: InteractionClient,
     ) {
         this.id = event.id;
     }
@@ -53,11 +52,7 @@ export class EventClient<T> {
         minimumEventNumber?: number | bigint,
         isFabricFiltered?: boolean,
     ): Promise<DecodedEventData<T>[] | undefined> {
-        const interactionClient = await this.getInteractionClientCallback();
-        if (interactionClient === undefined) {
-            throw new InternalError("No InteractionClient available");
-        }
-        return await interactionClient.getEvent({
+        return await this.interactionClient.getEvent({
             endpointId: this.endpointId,
             clusterId: this.clusterId,
             event: this.event,
@@ -73,11 +68,7 @@ export class EventClient<T> {
         minimumEventNumber?: number | bigint,
         isFabricFiltered?: boolean,
     ) {
-        const interactionClient = await this.getInteractionClientCallback();
-        if (interactionClient === undefined) {
-            throw new InternalError("No InteractionClient available");
-        }
-        return await interactionClient.subscribeEvent({
+        return await this.interactionClient.subscribeEvent({
             endpointId: this.endpointId,
             clusterId: this.clusterId,
             event: this.event,
@@ -88,10 +79,6 @@ export class EventClient<T> {
             isFabricFiltered,
             listener: this.update.bind(this),
         });
-    }
-
-    setInteractionClientRequestorCallback(callback: () => Promise<InteractionClient>) {
-        this.getInteractionClientCallback = callback;
     }
 
     update(newEvent: DecodedEventData<T>) {

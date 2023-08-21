@@ -12,7 +12,6 @@ import { RootEndpoint } from "./device/Device.js";
 import { Endpoint } from "./device/Endpoint.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
-import { InteractionClient } from "./protocol/interaction/InteractionClient.js";
 import { BitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 
 /**
@@ -62,8 +61,6 @@ export abstract class MatterNode {
      * Get a cluster client from the root endpoint. This is mainly used internally and not needed to be called by the user.
      *
      * @param cluster ClusterClient to get or undefined if not existing
-     * @param interactionClient Optional InteractionClient to use for the cluster client. If not provided, the default
-     *                          InteractionClient of the root endpoint is used.
      */
     getRootClusterClient<
         F extends BitSchema,
@@ -71,11 +68,8 @@ export abstract class MatterNode {
         A extends Attributes,
         C extends Commands,
         E extends Events,
-    >(
-        cluster: Cluster<F, SF, A, C, E>,
-        interactionClient?: InteractionClient,
-    ): ClusterClientObj<F, A, C, E> | undefined {
-        return this.rootEndpoint.getClusterClient(cluster, interactionClient);
+    >(cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<F, A, C, E> | undefined {
+        return this.rootEndpoint.getClusterClient(cluster);
     }
 
     /**

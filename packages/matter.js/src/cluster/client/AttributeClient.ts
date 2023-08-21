@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "../../common/MatterError.js";
 import { tryCatch } from "../../common/TryCatchHandler.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
@@ -24,16 +23,16 @@ export function createAttributeClient<T>(
     name: string,
     endpointId: EndpointNumber,
     clusterId: ClusterId,
-    getInteractionClientCallback: () => Promise<InteractionClient>,
+    interactionClient: InteractionClient,
     present = false,
 ): AttributeClient<T> {
     if (attribute.unknown) {
-        return new UnknownPresentAttributeClient(attribute, name, endpointId, clusterId, getInteractionClientCallback);
+        return new UnknownPresentAttributeClient(attribute, name, endpointId, clusterId, interactionClient);
     }
     if (present) {
-        return new PresentAttributeClient(attribute, name, endpointId, clusterId, getInteractionClientCallback);
+        return new PresentAttributeClient(attribute, name, endpointId, clusterId, interactionClient);
     }
-    return new AttributeClient(attribute, name, endpointId, clusterId, getInteractionClientCallback);
+    return new AttributeClient(attribute, name, endpointId, clusterId, interactionClient);
 }
 
 /**
@@ -51,7 +50,7 @@ export class AttributeClient<T> {
         readonly name: string,
         readonly endpointId: EndpointNumber,
         readonly clusterId: ClusterId,
-        private getInteractionClientCallback: () => Promise<InteractionClient>,
+        private readonly interactionClient: InteractionClient,
     ) {
         const { schema, writable, fabricScoped, id } = attribute;
         this.schema = schema;
@@ -65,11 +64,6 @@ export class AttributeClient<T> {
 
         this.schema.validate(value);
 
-        const interactionClient = await this.getInteractionClientCallback();
-        if (interactionClient === undefined) {
-            throw new InternalError("No InteractionClient available");
-        }
-
         if (this.isFabricScoped) {
             // Remove fabric index from structures if the OMIT_FABRIC instance was used (Should be used for all outgoing writes)
             value = this.schema.removeField(
@@ -79,7 +73,7 @@ export class AttributeClient<T> {
             );
             value = tryCatch(
                 () => {
-                    const sessionFabric = interactionClient.session.getAssociatedFabric();
+                    const sessionFabric = this.interactionClient.session.getAssociatedFabric();
                     // also remove fabric index if it is the same as the session fabric
                     return this.schema.removeField(
                         value,
@@ -92,7 +86,7 @@ export class AttributeClient<T> {
             );
         }
 
-        return await interactionClient.setAttribute<T>({
+        return await this.interactionClient.setAttribute<T>({
             endpointId: this.endpointId,
             clusterId: this.clusterId,
             attribute: this.attribute,
@@ -105,7 +99,7 @@ export class AttributeClient<T> {
         if (interactionClient === undefined) {
             throw new InternalError("No InteractionClient available");
         }
-        return await interactionClient.getAttribute({
+        return await this.interactionClient.getAttribute({
             endpointId: this.endpointId,
             clusterId: this.clusterId,
             attribute: this.attribute,
@@ -118,7 +112,7 @@ export class AttributeClient<T> {
         if (interactionClient === undefined) {
             throw new InternalError("No InteractionClient available");
         }
-        return await interactionClient.getAttributeWithVersion({
+        return await this.interactionClient.getAttributeWithVersion({
             endpointId: this.endpointId,
             clusterId: this.clusterId,
             attribute: this.attribute,
@@ -132,11 +126,7 @@ export class AttributeClient<T> {
         knownDataVersion?: number,
         isFabricFiltered = true,
     ) {
-        const interactionClient = await this.getInteractionClientCallback();
-        if (interactionClient === undefined) {
-            throw new InternalError("No InteractionClient available");
-        }
-        return await interactionClient.subscribeAttribute({
+        return await this.interactionClient.subscribeAttribute({
             endpointId: this.endpointId,
             clusterId: this.clusterId,
             attribute: this.attribute,

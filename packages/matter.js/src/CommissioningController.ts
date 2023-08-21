@@ -79,6 +79,7 @@ export class CommissioningController extends MatterNode {
     private mdnsScanner?: MdnsScanner;
 
     private controllerInstance?: MatterController;
+    private defaultInteractionClient?: InteractionClient;
 
     private nodeId?: NodeId;
     private endpoints = new Map<EndpointNumber, Endpoint>();
@@ -223,29 +224,13 @@ export class CommissioningController extends MatterNode {
     }
 
     /**
-     * Creates and Return a new InteractionClient to communicate with the device. This is only needed if you want to
-     * separate requests on a separate client.
+     * Creates and Return a new InteractionClient to communicate with the device.
      */
-    async createInteractionClient(): Promise<InteractionClient> {
+    private async createInteractionClient(): Promise<InteractionClient> {
         if (this.controllerInstance === undefined || this.nodeId === undefined) {
             throw new ImplementationError("Controller instance not yet paired!");
         }
         return this.controllerInstance.connect(this.nodeId);
-    }
-
-    /**
-     * Returns a cluster client of a root endpoint cluster bound to a new InteractionClient.
-     *
-     * @param cluster The cluster to get the client for
-     */
-    async getRootClusterClientWithNewInteractionClient<
-        F extends BitSchema,
-        SF extends TypeFromPartialBitSchema<F>,
-        A extends Attributes,
-        C extends Commands,
-        E extends Events,
-    >(cluster: Cluster<F, SF, A, C, E>): Promise<ClusterClientObj<F, A, C, E> | undefined> {
-        return super.getRootClusterClient(cluster, await this.createInteractionClient());
     }
 
     /**
@@ -269,7 +254,7 @@ export class CommissioningController extends MatterNode {
             partLists.set(endpointIdNumber, descriptorData.partsList);
 
             logger.debug("Creating device", endpointId, Logger.toJSON(clusters));
-            this.endpoints.set(endpointIdNumber, this.createDevice(endpointIdNumber, clusters, interactionClient));
+            this.endpoints.set(endpointIdNumber, this.createDevice(endpointIdNumber, clusters));
         }
 
         this.structureEndpoints(partLists);
@@ -339,14 +324,12 @@ export class CommissioningController extends MatterNode {
      *
      * @param endpointId Endpoint ID
      * @param data Data of all clusters read from the device
-     * @param interactionClient InteractionClient to communicate with the device
      * @private
      */
-    private createDevice(
-        endpointId: EndpointNumber,
-        data: { [key: ClusterId]: { [key: string]: any } },
-        interactionClient: InteractionClient,
-    ) {
+    private createDevice(endpointId: EndpointNumber, data: { [key: ClusterId]: { [key: string]: any } }) {
+        if (this.defaultInteractionClient === undefined) {
+            throw new ImplementationError("Device do not connected!");
+        }
         const descriptorData = data[DescriptorCluster.id] as AttributeServerValues<typeof DescriptorCluster.attributes>;
 
         const deviceTypes = descriptorData.deviceTypeList.flatMap(({ deviceType, revision }) => {
@@ -374,7 +357,7 @@ export class CommissioningController extends MatterNode {
         // Add ClusterClients for all server clusters of the device
         for (const clusterId of descriptorData.serverList) {
             const cluster = getClusterById(clusterId);
-            const clusterClient = ClusterClient(cluster, endpointId, interactionClient, data[clusterId]);
+            const clusterClient = ClusterClient(cluster, endpointId, this.defaultInteractionClient, data[clusterId]);
             endpointClusters.push(clusterClient);
         }
 
@@ -462,6 +445,8 @@ export class CommissioningController extends MatterNode {
      */
     async close() {
         await this.controllerInstance?.close();
+        this.controllerInstance = undefined;
+        this.defaultInteractionClient = undefined;
     }
 
     getPort() {
@@ -476,5 +461,12 @@ export class CommissioningController extends MatterNode {
 
     getActiveSessionInformation() {
         return this.controllerInstance?.getActiveSessionInformation() ?? [];
+    }
+
+    get interactionClient() {
+        if (this.defaultInteractionClient === undefined) {
+            throw new ImplementationError("Device do not connected!");
+        }
+        return this.defaultInteractionClient;
     }
 }

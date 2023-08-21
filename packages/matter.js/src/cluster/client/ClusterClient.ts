@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "../../common/MatterError.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
@@ -52,7 +51,7 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
             attributeName,
             endpointId,
             clusterId,
-            async () => interactionClient,
+            interactionClient,
             globalAttributeValues?.attributeList ? globalAttributeValues?.attributeList.includes(attribute.id) : false,
         );
         attributeToId[attribute.id] = attributeName;
@@ -97,7 +96,7 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
             eventName,
             endpointId,
             clusterId,
-            async () => interactionClient,
+            interactionClient,
             globalAttributeValues?.eventList ? globalAttributeValues?.eventList.includes(event.id) : false,
         );
         eventToId[event.id] = eventName;
@@ -181,10 +180,6 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
             eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
             dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
         }) => {
-            if (interactionClient === undefined) {
-                throw new InternalError("InteractionClient not set.");
-            }
-
             const {
                 minIntervalFloorSeconds,
                 maxIntervalCeilingSeconds,
@@ -288,9 +283,6 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
 
         commandToId[requestId] = commandName;
         commands[commandName] = async <RequestT, ResponseT>(request: RequestT) => {
-            if (interactionClient === undefined) {
-                throw new InternalError("InteractionClient not set.");
-            }
             return interactionClient.invoke<Command<RequestT, ResponseT, any>>(
                 endpointId,
                 clusterId,
