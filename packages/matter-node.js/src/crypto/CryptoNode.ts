@@ -10,6 +10,7 @@ import {
     CryptoError,
     CRYPTO_AUTH_TAG_LENGTH,
     CRYPTO_EC_CURVE,
+    CRYPTO_EC_KEY_BYTES,
     CRYPTO_ENCRYPT_ALGORITHM,
     CRYPTO_HASH_ALGORITHM,
     CRYPTO_SYMMETRIC_KEY_LENGTH,
@@ -151,6 +152,14 @@ export class CryptoNode extends Crypto {
     createKeyPair() {
         const ecdh = crypto.createECDH(CRYPTO_EC_CURVE);
         ecdh.generateKeys();
-        return PrivateKey(ecdh.getPrivateKey(), { publicKey: ecdh.getPublicKey() });
+
+        // The key exported from Node doesn't include most-significant bytes
+        // that are 0.  This doesn't affect how we currently use keys but it's
+        // a little weird so 0 pad to avoid future confusion
+        const privateKey = new ByteArray(CRYPTO_EC_KEY_BYTES);
+        const nodePrivateKey = ecdh.getPrivateKey();
+        privateKey.set(nodePrivateKey, CRYPTO_EC_KEY_BYTES - nodePrivateKey.length);
+
+        return PrivateKey(privateKey, { publicKey: ecdh.getPublicKey() });
     }
 }
