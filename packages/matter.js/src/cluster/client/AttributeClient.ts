@@ -59,7 +59,11 @@ export class AttributeClient<T> {
         this.id = id;
     }
 
-    async set(value: T) {
+    /**
+     * Set the value of the attribute. When dataVersion parameter is provided the value is only set when the
+     * cluster dataVersion of the server matches. If it does not match it is rejected with an Error.
+     */
+    async set(value: T, dataVersion?: number) {
         if (!this.isWritable) throw new AttributeError(`Attribute ${this.name} is not writable`);
 
         this.schema.validate(value);
@@ -91,35 +95,45 @@ export class AttributeClient<T> {
             clusterId: this.clusterId,
             attribute: this.attribute,
             value,
+            dataVersion,
         });
     }
 
-    async get(alwaysRequestFromRemote = false) {
-        const interactionClient = await this.getInteractionClientCallback();
-        if (interactionClient === undefined) {
-            throw new InternalError("No InteractionClient available");
+    /** Get the value of the attribute. Fabric scoped reads are always done with the remote. */
+    async get(alwaysRequestFromRemote?: boolean, isFabricFiltered = true) {
+        if (alwaysRequestFromRemote === undefined) {
+            alwaysRequestFromRemote = this.isFabricScoped;
+        } else if (!alwaysRequestFromRemote && this.isFabricScoped) {
+            alwaysRequestFromRemote = true;
         }
         return await this.interactionClient.getAttribute({
             endpointId: this.endpointId,
             clusterId: this.clusterId,
             attribute: this.attribute,
+            isFabricFiltered,
             alwaysRequestFromRemote,
         });
     }
 
-    async getWithVersion(alwaysRequestFromRemote = false) {
-        const interactionClient = await this.getInteractionClientCallback();
-        if (interactionClient === undefined) {
-            throw new InternalError("No InteractionClient available");
+    /**
+     * Get the value with version of the attribute. Fabric scoped reads are always done with the remote.
+     * */
+    async getWithVersion(alwaysRequestFromRemote?: boolean, isFabricFiltered = true) {
+        if (alwaysRequestFromRemote === undefined) {
+            alwaysRequestFromRemote = this.isFabricScoped;
+        } else if (!alwaysRequestFromRemote && this.isFabricScoped) {
+            alwaysRequestFromRemote = true;
         }
         return await this.interactionClient.getAttributeWithVersion({
             endpointId: this.endpointId,
             clusterId: this.clusterId,
             attribute: this.attribute,
+            isFabricFiltered,
             alwaysRequestFromRemote,
         });
     }
 
+    /** Subscribe to the attribute. */
     async subscribe(
         minIntervalFloorSeconds: number,
         maxIntervalCeilingSeconds: number,
@@ -138,6 +152,10 @@ export class AttributeClient<T> {
         });
     }
 
+    /**
+     * Update the value of the attribute. Just internally used!
+     * @private
+     */
     update(value: T) {
         this.listeners.forEach(listener => listener(value));
     }
@@ -147,6 +165,7 @@ export class AttributeClient<T> {
         this.listeners.push(listener);
     }
 
+    /** Remove a listener from the attribute. */
     removeListener(listener: (newValue: T) => void) {
         const entryIndex = this.listeners.indexOf(listener);
         if (entryIndex !== -1) {

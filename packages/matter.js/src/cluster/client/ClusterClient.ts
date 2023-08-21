@@ -56,10 +56,13 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
         );
         attributeToId[attribute.id] = attributeName;
         const capitalizedAttributeName = capitalize(attributeName);
-        result[`get${capitalizedAttributeName}Attribute`] = async (alwaysRequestFromRemote = false) => {
+        result[`get${capitalizedAttributeName}Attribute`] = async (
+            alwaysRequestFromRemote?: boolean,
+            isFabricFiltered = true,
+        ) => {
             return await tryCatchAsync(
                 async () => {
-                    return await (attributes as any)[attributeName].get(alwaysRequestFromRemote);
+                    return await (attributes as any)[attributeName].get(isFabricFiltered, alwaysRequestFromRemote);
                 },
                 StatusResponseError,
                 e => {
@@ -71,8 +74,8 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
                 },
             );
         };
-        result[`set${capitalizedAttributeName}Attribute`] = async <T>(value: T) =>
-            (attributes as any)[attributeName].set(value);
+        result[`set${capitalizedAttributeName}Attribute`] = async <T>(value: T, dataVersion?: number) =>
+            (attributes as any)[attributeName].set(value, dataVersion);
         result[`subscribe${capitalizedAttributeName}Attribute`] = async <T>(
             listener: (value: T) => void,
             minIntervalS: number,
@@ -87,6 +90,9 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
                 knownDataVersion,
                 isFabricFiltered,
             );
+        };
+        result[`add${capitalizedAttributeName}AttributeListener`] = <T>(listener: (value: T) => void) => {
+            (attributes as any)[attributeName].addListener(listener);
         };
     }
 
@@ -135,6 +141,9 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
                 minimumEventNumber,
                 isFabricFiltered,
             );
+        };
+        result[`add${capitalizedEventName}EventListener`] = <T>(listener: (value: DecodedEventData<T>) => void) => {
+            (events as any)[eventName].addListener(listener);
         };
     }
 
