@@ -1,6 +1,6 @@
 # Chip Tool Testing
 
-This testig framework allows to run Chip tool certification tests against matter.js to validate the interoperability of 
+This testing framework allows to run Chip tool certification tests against matter.js to validate the interoperability of 
 the implementation.
 
 The Available Tests in Chip tool are listed in the [Chip tool test catalog](https://github.com/project-chip/connectedhomeip/tree/master/src/app/tests/suites/certification).
