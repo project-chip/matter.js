@@ -227,25 +227,6 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
                 },
             });
         },
-
-        /**
-         * Clones the cluster client, optionally with a new interaction client.
-         * When the clusterClient is the same then also AttributeClients will be reused.
-         *
-         * @param newInteractionClient Optionally a new interactionClient to bind to
-         */
-        _clone(newInteractionClient?: InteractionClient) {
-            const clonedClusterClient = ClusterClient(
-                clusterDef,
-                endpointId,
-                newInteractionClient ?? interactionClient,
-            );
-            if (newInteractionClient === undefined) {
-                // When we keep the InteractionClient we also reuse the AttributeServers bound to it
-                clonedClusterClient.attributes = attributes;
-            }
-            return clonedClusterClient;
-        },
     };
 
     const attributeToId = <{ [key: AttributeId]: string }>{};
