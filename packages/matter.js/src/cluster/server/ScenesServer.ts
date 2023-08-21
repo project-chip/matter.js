@@ -14,7 +14,7 @@ import { assertSecureSession } from "../../session/SecureSession.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Scenes, ScenesCluster } from "../definitions/ScenesCluster.js";
 import { ClusterServer } from "./ClusterServer.js";
-import { ClusterServerHandlers } from "./ClusterServerTypes.js";
+import { asClusterServerInternal, ClusterServerHandlers } from "./ClusterServerTypes.js";
 import { GroupsManager } from "./GroupsServer.js";
 
 interface scenesTableEntry {
@@ -314,7 +314,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
 
             const extensionFieldSets = new Array<TypeFromSchema<typeof Scenes.TlvExtensionFieldSet>>();
             endpoint.getAllClusterServers().forEach(cluster => {
-                const attributeValueList = cluster._getSceneExtensionFieldSets();
+                const attributeValueList = asClusterServerInternal(cluster)._getSceneExtensionFieldSets();
                 if (attributeValueList.length) {
                     extensionFieldSets.push({ clusterId: cluster.id, attributeValueList });
                 }
@@ -375,7 +375,10 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                 const { clusterId, attributeValueList } = clusterData;
                 const cluster = endpoint.getClusterServerById(clusterId);
                 if (cluster !== undefined) {
-                    cluster._setSceneExtensionFieldSets(attributeValueList, usedTransitionTime);
+                    asClusterServerInternal(cluster)._setSceneExtensionFieldSets(
+                        attributeValueList,
+                        usedTransitionTime,
+                    );
                 }
             });
             currentScene.setLocal(sceneId);
@@ -563,7 +566,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                 const { clusterId, attributeValueList } = clusterData;
                 const cluster = endpoint.getClusterServerById(clusterId);
                 if (cluster !== undefined) {
-                    if (!cluster._verifySceneExtensionFieldSets(attributeValueList)) {
+                    if (!asClusterServerInternal(cluster)._verifySceneExtensionFieldSets(attributeValueList)) {
                         return false;
                     }
                 }

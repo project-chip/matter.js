@@ -109,9 +109,9 @@ export class Endpoint {
             );
         }
         const fixedLabelCluster = this.getClusterServer(FixedLabelCluster);
-        const labelList = fixedLabelCluster?.attributes.labelList.getLocal() ?? [];
+        const labelList = fixedLabelCluster?.getLabelListAttribute() ?? [];
         labelList.push({ label, value });
-        fixedLabelCluster?.attributes.labelList.setLocal(labelList);
+        fixedLabelCluster?.setLabelListAttribute(labelList);
     }
 
     addUserLabel(label: string, value: string) {
@@ -127,13 +127,13 @@ export class Endpoint {
             );
         }
         const fixedLabelCluster = this.getClusterServer(UserLabelCluster);
-        const labelList = fixedLabelCluster?.attributes.labelList.getLocal() ?? [];
+        const labelList = fixedLabelCluster?.getLabelListAttribute() ?? [];
         labelList.push({ label, value });
-        fixedLabelCluster?.attributes.labelList.setLocal(labelList);
+        fixedLabelCluster?.setLabelListAttribute(labelList);
     }
 
-    addClusterServer<A extends Attributes, C extends Commands, E extends Events>(cluster: ClusterServerObj<A, C, E>) {
-        cluster._assignToEndpoint(this);
+    addClusterServer<A extends Attributes, E extends Events>(cluster: ClusterServerObj<A, E>) {
+        asClusterServerInternal(cluster)._assignToEndpoint(this);
         if (cluster.id === DescriptorCluster.id) {
             this.descriptorCluster = cluster as unknown as ClusterServerObjForCluster<typeof DescriptorCluster>;
         }
