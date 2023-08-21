@@ -59,10 +59,7 @@ export class PairedDevice extends Endpoint {
      */
     constructor(
         definition: AtLeastOne<DeviceTypeDefinition>,
-        clusters: (
-            | ClusterServerObj<Attributes, Commands, Events>
-            | ClusterClientObj<any, Attributes, Commands, Events>
-        )[] = [],
+        clusters: (ClusterServerObj<Attributes, Events> | ClusterClientObj<any, Attributes, Commands, Events>)[] = [],
         endpointId: EndpointNumber,
     ) {
         super(definition, { endpointId });
@@ -81,9 +78,7 @@ export class PairedDevice extends Endpoint {
      * Add cluster servers (used internally only!)
      * @deprecated PairedDevice does not support adding additional clusters
      */
-    override addClusterServer<A extends Attributes, C extends Commands, E extends Events>(
-        cluster: ClusterServerObj<A, C, E>,
-    ) {
+    override addClusterServer<A extends Attributes, E extends Events>(cluster: ClusterServerObj<A, E>) {
         if (this.declineAddingMoreClusters) {
             throw new ImplementationError("PairedDevice does not support adding additional clusters");
         }
@@ -195,7 +190,7 @@ export class Device extends Endpoint {
         A extends Attributes,
         C extends Commands,
         E extends Events,
-    >(_cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, C, E> {
+    >(_cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, E> {
         // TODO: Implement this in upper classes to add optional clusters on the fly
         throw new ImplementationError("createOptionalClusterServer needs to be implemented by derived classes");
     }
@@ -217,7 +212,7 @@ export class Device extends Endpoint {
         A extends Attributes,
         C extends Commands,
         E extends Events,
-    >(cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, C, E> | undefined {
+    >(cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, E> | undefined {
         const clusterServer = super.getClusterServer(cluster);
         if (clusterServer !== undefined) {
             return clusterServer;

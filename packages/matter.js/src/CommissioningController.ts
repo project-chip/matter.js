@@ -5,8 +5,8 @@
  */
 import { Ble } from "./ble/Ble.js";
 import { ClusterClient } from "./cluster/client/ClusterClient.js";
-import { ClusterClientObj, isClusterClient } from "./cluster/client/ClusterClientTypes.js";
-import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
+import { asClusterClientInternal, ClusterClientObj, isClusterClient } from "./cluster/client/ClusterClientTypes.js";
+import { Attributes, Commands, Events } from "./cluster/Cluster.js";
 import { getClusterById } from "./cluster/ClusterHelper.js";
 import { DescriptorCluster } from "./cluster/definitions/DescriptorCluster.js";
 import { ClusterServer } from "./cluster/server/ClusterServer.js";
@@ -40,7 +40,6 @@ import { UdpInterface } from "./net/UdpInterface.js";
 import { CommissioningOptions } from "./protocol/ControllerCommissioner.js";
 import { structureReadAttributeDataToClusterObject } from "./protocol/interaction/AttributeDataDecoder.js";
 import { InteractionClient } from "./protocol/interaction/InteractionClient.js";
-import { BitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import { StorageContext } from "./storage/StorageContext.js";
 import { AtLeastOne } from "./util/Array.js";
 
@@ -351,7 +350,7 @@ export class CommissioningController extends MatterNode {
         }
 
         const endpointClusters = Array<
-            ClusterServerObj<Attributes, Commands, Events> | ClusterClientObj<any, Attributes, Commands, Events>
+            ClusterServerObj<Attributes, Events> | ClusterClientObj<any, Attributes, Commands, Events>
         >();
 
         // Add ClusterClients for all server clusters of the device
@@ -370,7 +369,6 @@ export class CommissioningController extends MatterNode {
             endpointClusters.push(
                 ClusterServer(cluster, /*clusterData.featureMap,*/ clusterData, {}) as ClusterServerObj<
                     Attributes,
-                    Commands,
                     Events
                 >,
             ); // TODO Add Default handler!

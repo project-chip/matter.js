@@ -13,11 +13,14 @@ import { DescriptorCluster } from "../cluster/definitions/DescriptorCluster.js";
 import { FixedLabelCluster } from "../cluster/definitions/FixedLabelCluster.js";
 import { UserLabelCluster } from "../cluster/definitions/UserLabelCluster.js";
 import { ClusterServer } from "../cluster/server/ClusterServer.js";
-import { ClusterServerObj, ClusterServerObjForCluster } from "../cluster/server/ClusterServerTypes.js";
+import {
+    asClusterServerInternal,
+    ClusterServerObj,
+    ClusterServerObjForCluster,
+} from "../cluster/server/ClusterServerTypes.js";
 import { ImplementationError, InternalError, NotImplementedError } from "../common/MatterError.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
-import { InteractionClient } from "../protocol/interaction/InteractionClient.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { AtLeastOne } from "../util/Array.js";
 import { DeviceTypeDefinition } from "./DeviceTypes.js";
@@ -28,7 +31,7 @@ export interface EndpointOptions {
 }
 
 export class Endpoint {
-    private readonly clusterServers = new Map<ClusterId, ClusterServerObj<Attributes, Commands, Events>>();
+    private readonly clusterServers = new Map<ClusterId, ClusterServerObj<Attributes, Events>>();
     private readonly clusterClients = new Map<ClusterId, ClusterClientObj<any, Attributes, Commands, Events>>();
     private readonly childEndpoints: Endpoint[] = [];
     id: EndpointNumber | undefined;
@@ -155,10 +158,10 @@ export class Endpoint {
         A extends Attributes,
         C extends Commands,
         E extends Events,
-    >(cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, C, E> | undefined {
+    >(cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, E> | undefined {
         const clusterServer = this.clusterServers.get(cluster.id);
         if (clusterServer !== undefined) {
-            return clusterServer as ClusterServerObj<A, C, E>;
+            return clusterServer as ClusterServerObj<A, E>;
         }
     }
 
@@ -168,18 +171,11 @@ export class Endpoint {
         A extends Attributes,
         C extends Commands,
         E extends Events,
-    >(
-        cluster: Cluster<F, SF, A, C, E>,
-        interactionClient?: InteractionClient,
-    ): ClusterClientObj<F, A, C, E> | undefined {
-        const clusterClient = this.clusterClients.get(cluster.id);
-        if (clusterClient !== undefined) {
-            return clusterClient._clone(interactionClient) as ClusterClientObj<F, A, C, E>;
-        }
-        return undefined;
+    >(cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<F, A, C, E> | undefined {
+        return this.clusterClients.get(cluster.id) as ClusterClientObj<F, A, C, E>;
     }
 
-    getClusterServerById(clusterId: ClusterId): ClusterServerObj<Attributes, Commands, Events> | undefined {
+    getClusterServerById(clusterId: ClusterId): ClusterServerObj<Attributes, Events> | undefined {
         return this.clusterServers.get(clusterId);
     }
 
@@ -307,7 +303,7 @@ export class Endpoint {
         });
     }
 
-    getAllClusterServers(): ClusterServerObj<Attributes, Commands, Events>[] {
+    getAllClusterServers(): ClusterServerObj<Attributes, Events>[] {
         return Array.from(this.clusterServers.values());
     }
 

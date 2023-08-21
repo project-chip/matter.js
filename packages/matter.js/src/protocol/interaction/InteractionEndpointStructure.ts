@@ -179,7 +179,7 @@ export class InteractionEndpointStructure {
         return this.endpoints.has(endpointId);
     }
 
-    getClusterServer(endpointId: EndpointNumber, clusterId: ClusterId): ClusterServerObj<any, any, any> | undefined {
+    getClusterServer(endpointId: EndpointNumber, clusterId: ClusterId): ClusterServerObj<any, any> | undefined {
         return this.endpoints.get(endpointId)?.getClusterServerById(clusterId);
     }
 

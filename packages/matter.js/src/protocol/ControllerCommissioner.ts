@@ -128,7 +128,7 @@ const DEFAULT_ADMIN_VENDOR_ID = VendorId(0xfff1);
 export class ControllerCommissioner {
     private readonly commissioningSteps = new Array<CommissioningStep>();
     private readonly commissioningStepResults = new Map<string, CommissioningStepResult>();
-    private readonly clusterClients = new Map<number, ClusterClientObj<any, Attributes, Commands, Events>>();
+    private readonly clusterClients = new Map<ClusterId, ClusterClientObj<any, Attributes, Commands, Events>>();
     private commissioningStartedTime: number | undefined;
     private commissioningExpiryTime: number | undefined;
     private lastFailSafeTime: number | undefined;

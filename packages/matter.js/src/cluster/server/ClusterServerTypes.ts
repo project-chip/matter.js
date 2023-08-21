@@ -244,38 +244,55 @@ export type SupportedEventsList<E extends Events> = Merge<
 
 export type ClusterServerObjForCluster<C extends Cluster<any, any, any, any, any>> = ClusterServerObj<
     C["attributes"],
-    C["commands"],
     C["events"]
 >;
 
 /** Strongly typed interface of a cluster server */
-export type ClusterServerObj<A extends Attributes, C extends Commands, E extends Events> = {
-    /** Cluster ID */
+export type ClusterServerObjInternal<A extends Attributes, C extends Commands, E extends Events> = {
+    /**
+     * Cluster ID
+     * @readonly
+     */
     id: ClusterId;
 
-    /** Cluster name */
-    name: string;
+    /**
+     * Cluster name
+     * @readonly
+     */
+    readonly name: string;
 
     /**
      * Cluster type
      * @private
+     * @readonly
      */
     _type: "ClusterServer";
 
-    /** Cluster attributes as named object */
-    attributes: AttributeServers<A>;
+    /**
+     * Cluster data version
+     * @readonly
+     */
+    readonly clusterDataVersion: number;
+
+    /**
+     * Cluster attributes as named object
+     * @readonly
+     */
+    readonly attributes: AttributeServers<A>;
 
     /**
      * Cluster commands as array
      * @private
+     * @readonly
      */
-    _commands: CommandServers<C>;
+    readonly _commands: CommandServers<C>;
 
     /**
      * Cluster events as named object
      * @private
+     * @readonly
      */
-    _events: EventServers<E>;
+    readonly _events: EventServers<E>;
 
     /**
      * Assign this cluster to a specific endpoint
@@ -283,7 +300,7 @@ export type ClusterServerObj<A extends Attributes, C extends Commands, E extends
      *
      * @param endpoint Endpoint to assign to
      */
-    _assignToEndpoint: (endpoint: Endpoint) => void;
+    readonly _assignToEndpoint: (endpoint: Endpoint) => void;
 
     /**
      * Register an event handler for this cluster
@@ -291,25 +308,25 @@ export type ClusterServerObj<A extends Attributes, C extends Commands, E extends
      *
      * @param eventHandler
      */
-    _registerEventHandler: (eventHandler: EventHandler) => void;
+    readonly _registerEventHandler: (eventHandler: EventHandler) => void;
 
     /**
      * Set Storage context used by this cluster
      * @private
      */
-    _setStorage: (storageContext: StorageContext) => void;
+    readonly _setStorage: (storageContext: StorageContext) => void;
 
     /**
      * Get the Scene Extension Fields for this cluster. Used by the Scenes cluster.
      * @private
      */
-    _getSceneExtensionFieldSets: () => TypeFromSchema<typeof Scenes.TlvAttributeValuePair>[];
+    readonly _getSceneExtensionFieldSets: () => TypeFromSchema<typeof Scenes.TlvAttributeValuePair>[];
 
     /**
      * Set the Scene Extension Fields for this cluster. Used by the Scenes cluster.
      * @private
      */
-    _setSceneExtensionFieldSets: (
+    readonly _setSceneExtensionFieldSets: (
         values: TypeFromSchema<typeof Scenes.TlvAttributeValuePair>[],
         transitionTime: number,
     ) => void;
@@ -318,14 +335,81 @@ export type ClusterServerObj<A extends Attributes, C extends Commands, E extends
      * Verify if a set of Scene Extension Fields match to the current attribute state for this cluster. Used by the Scenes cluster.
      * @private
      */
-    _verifySceneExtensionFieldSets: (values: TypeFromSchema<typeof Scenes.TlvAttributeValuePair>[]) => boolean;
+    readonly _verifySceneExtensionFieldSets: (values: TypeFromSchema<typeof Scenes.TlvAttributeValuePair>[]) => boolean;
 } & ServerAttributeGetters<A> &
     ServerAttributeSetters<A> &
     ServerAttributeSubscribers<A> &
     ServerEventTriggers<E>;
 
+export type ClusterServerObj<A extends Attributes, E extends Events> =
+    // TODO: Get rid of copying it here
+    /** Not working because then it has issues to resolve the AttributeServer types correctly
+    Omit<
+    ClusterServerObjInternal<A, C, E>,
+    | "_events"
+    | "_assignToEndpoint"
+    | "_registerEventHandler"
+    | "_setStorage"
+    | "_getSceneExtensionFieldSets"
+    | "_setSceneExtensionFieldSets"
+    | "_verifySceneExtensionFieldSets"
+>;*/
+    {
+        /**
+         * Cluster ID
+         * @readonly
+         */
+        id: ClusterId;
+
+        /**
+         * Cluster name
+         * @readonly
+         */
+        readonly name: string;
+
+        /**
+         * Cluster type
+         * @private
+         * @readonly
+         */
+        _type: "ClusterServer";
+
+        /**
+         * Cluster data version
+         * @readonly
+         */
+        readonly clusterDataVersion: number;
+
+        /**
+         * Cluster attributes as named object that can be used to programmatically work with available attributes
+         * @readonly
+         */
+        readonly attributes: AttributeServers<A>;
+    } & ServerAttributeGetters<A> &
+        ServerAttributeSetters<A> &
+        ServerAttributeSubscribers<A> &
+        ServerEventTriggers<E>;
+
 export function isClusterServer<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
-    obj: ClusterClientObj<F, A, C, E> | ClusterServerObj<A, C, E>,
-): obj is ClusterServerObj<A, C, E> {
+    obj: ClusterClientObj<F, A, C, E> | ClusterServerObj<A, E>,
+): obj is ClusterServerObj<A, E> {
     return obj._type === "ClusterServer";
+}
+
+export function isClusterServerInternal<
+    F extends BitSchema,
+    A extends Attributes,
+    C extends Commands,
+    E extends Events,
+>(obj: ClusterClientObj<F, A, C, E> | ClusterServerObj<A, E>): obj is ClusterServerObjInternal<A, C, E> {
+    return obj._type === "ClusterServer";
+}
+
+export function asClusterServerInternal<A extends Attributes, E extends Events>(
+    obj: ClusterServerObj<A, E>,
+): ClusterServerObjInternal<A, Commands, E> {
+    if (!isClusterServerInternal(obj)) {
+        throw new Error("Object is not a ClusterServerObj instance.");
+    }
+    return obj;
 }

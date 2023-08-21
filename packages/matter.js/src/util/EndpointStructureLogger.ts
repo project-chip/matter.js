@@ -38,7 +38,7 @@ type EndpointLoggingOptions = {
     logAttributePrimitiveValues?: boolean;
     logAttributeObjectValues?: boolean;
 
-    clusterServerFilter?: (endpoint: Endpoint, cluster: ClusterServerObj<any, any, any>) => boolean;
+    clusterServerFilter?: (endpoint: Endpoint, cluster: ClusterServerObj<any, any>) => boolean;
     clusterClientFilter?: (endpoint: Endpoint, cluster: ClusterClientObj<any, any, any, any>) => boolean;
     endpointFilter?: (endpoint: Endpoint) => boolean;
 };
@@ -78,7 +78,7 @@ function getAttributeServerValue(
 
 function logClusterServer(
     endpoint: Endpoint,
-    clusterServer: ClusterServerObj<any, any, any>,
+    clusterServer: ClusterServerObj<any, any>,
     options: EndpointLoggingOptions = {},
 ) {
     if (options.clusterServerFilter !== undefined && !options.clusterServerFilter(endpoint, clusterServer)) return;

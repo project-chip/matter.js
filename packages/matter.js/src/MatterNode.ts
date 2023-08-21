@@ -25,9 +25,7 @@ export abstract class MatterNode {
      *
      * @param cluster ClusterServer object to add
      */
-    addRootClusterServer<A extends Attributes, C extends Commands, E extends Events>(
-        cluster: ClusterServerObj<A, C, E>,
-    ) {
+    addRootClusterServer<A extends Attributes, E extends Events>(cluster: ClusterServerObj<A, E>) {
         this.rootEndpoint.addClusterServer(cluster);
     }
 
@@ -42,7 +40,7 @@ export abstract class MatterNode {
         A extends Attributes,
         C extends Commands,
         E extends Events,
-    >(cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, C, E> | undefined {
+    >(cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, E> | undefined {
         return this.rootEndpoint.getClusterServer(cluster);
     }
 
