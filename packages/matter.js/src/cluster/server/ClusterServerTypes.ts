@@ -247,8 +247,7 @@ export type ClusterServerObjForCluster<C extends Cluster<any, any, any, any, any
     C["events"]
 >;
 
-/** Strongly typed interface of a cluster server */
-export type ClusterServerObjInternal<A extends Attributes, C extends Commands, E extends Events> = {
+export type ClusterServerObj<A extends Attributes, E extends Events> = {
     /**
      * Cluster ID
      * @readonly
@@ -275,11 +274,17 @@ export type ClusterServerObjInternal<A extends Attributes, C extends Commands, E
     readonly clusterDataVersion: number;
 
     /**
-     * Cluster attributes as named object
+     * Cluster attributes as named object that can be used to programmatically work with available attributes
      * @readonly
      */
     readonly attributes: AttributeServers<A>;
+} & ServerAttributeGetters<A> &
+    ServerAttributeSetters<A> &
+    ServerAttributeSubscribers<A> &
+    ServerEventTriggers<E>;
 
+/** Strongly typed interface of a cluster server */
+export type ClusterServerObjInternal<A extends Attributes, C extends Commands, E extends Events> = ClusterServerObj<A, E> & {
     /**
      * Cluster commands as array
      * @private
@@ -336,59 +341,7 @@ export type ClusterServerObjInternal<A extends Attributes, C extends Commands, E
      * @private
      */
     readonly _verifySceneExtensionFieldSets: (values: TypeFromSchema<typeof Scenes.TlvAttributeValuePair>[]) => boolean;
-} & ServerAttributeGetters<A> &
-    ServerAttributeSetters<A> &
-    ServerAttributeSubscribers<A> &
-    ServerEventTriggers<E>;
-
-export type ClusterServerObj<A extends Attributes, E extends Events> =
-    // TODO: Get rid of copying it here
-    /** Not working because then it has issues to resolve the AttributeServer types correctly
-    Omit<
-    ClusterServerObjInternal<A, C, E>,
-    | "_events"
-    | "_assignToEndpoint"
-    | "_registerEventHandler"
-    | "_setStorage"
-    | "_getSceneExtensionFieldSets"
-    | "_setSceneExtensionFieldSets"
-    | "_verifySceneExtensionFieldSets"
->;*/
-    {
-        /**
-         * Cluster ID
-         * @readonly
-         */
-        id: ClusterId;
-
-        /**
-         * Cluster name
-         * @readonly
-         */
-        readonly name: string;
-
-        /**
-         * Cluster type
-         * @private
-         * @readonly
-         */
-        _type: "ClusterServer";
-
-        /**
-         * Cluster data version
-         * @readonly
-         */
-        readonly clusterDataVersion: number;
-
-        /**
-         * Cluster attributes as named object that can be used to programmatically work with available attributes
-         * @readonly
-         */
-        readonly attributes: AttributeServers<A>;
-    } & ServerAttributeGetters<A> &
-        ServerAttributeSetters<A> &
-        ServerAttributeSubscribers<A> &
-        ServerEventTriggers<E>;
+};
 
 export function isClusterServer<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
     obj: ClusterClientObj<F, A, C, E> | ClusterServerObj<A, E>,
