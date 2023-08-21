@@ -40,7 +40,7 @@ import { createEventClient } from "./EventClient.js";
 const logger = Logger.get("ClusterClient");
 
 export function ClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
-    clusterDef: Cluster<F, any, A, C, E>,
+    clusterDef: Cluster<F, TypeFromPartialBitSchema<F>, A, C, E>,
     endpointId: EndpointNumber,
     interactionClient: InteractionClient,
     globalAttributeValues: Partial<AttributeServerValues<GlobalAttributes<F>>> = {},
