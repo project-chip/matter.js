@@ -13,7 +13,7 @@ on:
 
 # Cancel previous PR/branch runs when a new commit is pushed
 concurrency:
-  group: ${{ github.ref }}
+  group: ${{ github.ref }}-chip-tool-tests
   cancel-in-progress: true
 
 env:
