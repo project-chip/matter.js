@@ -25,7 +25,7 @@ export class Test_TC_FLABEL_2_1Test extends Test_TC_FLABEL_1_1Test {
                 labelList[0].label === "foo" &&
                 labelList[0].value === "bar2"
             ) {
-                return "y\n"; // We acknowledge the TH reads as checked
+                return "y\n";
             }
             return "n\n";
         }

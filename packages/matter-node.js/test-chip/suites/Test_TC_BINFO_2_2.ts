@@ -16,15 +16,15 @@ export class Test_TC_BINFO_2_2Test extends Test_TC_BINFO_1_1Test {
 
     override async handleUserprompt(userPrompt: string, testDescription: string) {
         if (testDescription.includes("Reboot target device(DUT)")) {
-            return "y\n"; // We acknowledge the TH reads as checked
+            return "y\n";
         }
         if (testDescription.includes("Verify that StartUp event has priority set as CRITICAL")) {
-            return "y\n"; // We acknowledge the TH reads as checked
+            return "y\n";
         }
         // TODO Clarify if events needs to be persisted across restarts because this test expects so
         //      Formally currently we do not fulfill this requirement
         if (testDescription.includes("Verify that ShutDown event has priority set as CRITICAL")) {
-            return "y\n"; // We acknowledge the TH reads as checked
+            return "y\n";
         }
         return super.handleUserprompt(userPrompt, testDescription);
     }

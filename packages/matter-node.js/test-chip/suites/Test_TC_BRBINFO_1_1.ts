@@ -74,7 +74,7 @@ export class Test_TC_BRBINFO_1_1Test extends DeviceTestInstance {
 
     override async handleUserprompt(userPrompt: string, testDescription: string) {
         if (testDescription.includes("Read EventList attribute from the DUT")) {
-            return "y\n"; // We acknowledge the TH reads as checked
+            return "y\n";
         }
         return super.handleUserprompt(userPrompt, testDescription);
     }

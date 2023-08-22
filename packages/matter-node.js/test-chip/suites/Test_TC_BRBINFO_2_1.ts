@@ -16,19 +16,19 @@ export class Test_TC_BRBINFO_2_1Test extends Test_TC_BRBINFO_1_1Test {
 
     override async handleUserprompt(userPrompt: string, testDescription: string) {
         if (testDescription.includes("Verify that VendorID matches the value assigned to this manufacturer")) {
-            return "y\n"; // We acknowledge the TH reads as checked
+            return "y\n";
         }
         if (testDescription.includes("TH writes NodeLabel")) {
             return "y\n";
         }
         if (testDescription.includes("Verify if the first 8 characters specify date according to ISO 8601")) {
-            return "y\n"; // We acknowledge the TH reads as checked
+            return "y\n";
         }
         if (testDescription.includes("Verify that it specifies a link to a specific web page")) {
-            return "y\n"; // We acknowledge the TH reads as checked
+            return "y\n";
         }
         if (testDescription.includes("Verify that it does not include the name of the vendor")) {
-            return "y\n"; // We acknowledge the TH reads as checked
+            return "y\n";
         }
         return super.handleUserprompt(userPrompt, testDescription);
     }

@@ -52,7 +52,7 @@ export class Test_TC_ULABEL_1_1Test extends DeviceTestInstance {
 
     override async handleUserprompt(userPrompt: string, testDescription: string) {
         if (testDescription.includes("Read the global attribute")) {
-            return "y\n"; // We acknowledge the TH reads as checked
+            return "y\n";
         }
         return super.handleUserprompt(userPrompt, testDescription);
     }
