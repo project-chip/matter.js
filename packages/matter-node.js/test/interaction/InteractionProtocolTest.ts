@@ -219,12 +219,10 @@ const WRITE_REQUEST: WriteRequest = {
         {
             path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(100) },
             data: TlvUInt8.encodeTlv(3),
-            dataVersion: 0,
         },
         {
             path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), attributeId: AttributeId(4) },
             data: TlvUInt8.encodeTlv(3),
-            dataVersion: 0,
         },
         {
             path: { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), attributeId: AttributeId(4) },
