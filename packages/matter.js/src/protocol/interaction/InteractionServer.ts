@@ -323,9 +323,10 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             (values): { path: TypeFromSchema<typeof TlvAttributePath>; statusCode: StatusCode }[] => {
                 const { path, dataVersion } = values[0];
                 const attributes = this.endpointStructure.getAttributes([path], true);
+                const { endpointId, clusterId, attributeId } = path;
                 if (attributes.length === 0) {
+                    // No attribute found
                     // TODO: Also check nodeId
-                    const { endpointId, clusterId, attributeId } = path;
                     if (endpointId === undefined || clusterId === undefined || attributeId === undefined) {
                         // Wildcard path: Just ignore
                         logger.debug(
@@ -343,18 +344,37 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                             statusCode = StatusCode.UnsupportedEndpoint;
                         } else if (!this.endpointStructure.hasClusterServer(endpointId, clusterId)) {
                             statusCode = StatusCode.UnsupportedCluster;
+                        } else {
+                            // check if concrete path and just "not writable"
+                            const allAttributes = this.endpointStructure.getAttributes([path]);
+                            if (allAttributes.length > 0) {
+                                statusCode = StatusCode.UnsupportedWrite;
+                            }
                         }
                         logger.debug(
                             `Write from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(
                                 path,
-                            )}: unsupported path: Status=${statusCode}`,
+                            )} not allowed: Status=${statusCode}`,
                         );
                         return [{ path, statusCode }];
+                    }
+                } else if (
+                    attributes.length === 1 &&
+                    endpointId !== undefined &&
+                    clusterId !== undefined &&
+                    attributeId !== undefined
+                ) {
+                    // Concrete path
+                    if (dataVersion !== undefined) {
+                        const cluster = this.endpointStructure.getClusterServer(endpointId, clusterId);
+                        if (cluster !== undefined && dataVersion !== cluster.clusterDataVersion) {
+                            return [{ path, statusCode: StatusCode.DataVersionMismatch }];
+                        }
                     }
                 }
 
                 return attributes.map(({ path, attribute }) => {
-                    // TODO add checks or dataVersion
+                    // TODO add checks for timed writes, fabric scoped writes
                     // TODO add ACL checks
                     const { schema, defaultValue } = attribute;
 
