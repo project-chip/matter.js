@@ -9,6 +9,7 @@
 ### Enumeration Members
 
 - [Critical](exports_cluster.EventPriority.md#critical)
+- [Debug](exports_cluster.EventPriority.md#debug)
 - [Info](exports_cluster.EventPriority.md#info)
 
 ## Enumeration Members
@@ -19,7 +20,17 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:74
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:147
+
+___
+
+### Debug
+
+• **Debug** = ``2``
+
+#### Defined in
+
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:149
 
 ___
 
@@ -29,4 +40,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:75
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:148

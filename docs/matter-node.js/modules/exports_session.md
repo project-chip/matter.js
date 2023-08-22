@@ -10,6 +10,7 @@
 - [CaseClientMessenger](../classes/exports_session.CaseClientMessenger.md)
 - [CaseServer](../classes/exports_session.CaseServer.md)
 - [CaseServerMessenger](../classes/exports_session.CaseServerMessenger.md)
+- [NoAssociatedFabricError](../classes/exports_session.NoAssociatedFabricError.md)
 - [PaseClient](../classes/exports_session.PaseClient.md)
 - [PaseClientMessenger](../classes/exports_session.PaseClientMessenger.md)
 - [PaseServer](../classes/exports_session.PaseServer.md)
@@ -56,6 +57,10 @@
 - [UNDEFINED\_NODE\_ID](exports_session.md#undefined_node_id)
 - [UNICAST\_UNSECURE\_SESSION\_ID](exports_session.md#unicast_unsecure_session_id)
 
+### Functions
+
+- [assertSecureSession](exports_session.md#assertsecuresession)
+
 ## Variables
 
 ### DEFAULT\_ACTIVE\_RETRANSMISSION\_TIMEOUT\_MS
@@ -64,7 +69,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:9
+packages/matter.js/dist/cjs/session/Session.d.ts:10
 
 ___
 
@@ -74,7 +79,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:8
+packages/matter.js/dist/cjs/session/Session.d.ts:9
 
 ___
 
@@ -94,7 +99,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:10
+packages/matter.js/dist/cjs/session/Session.d.ts:11
 
 ___
 
@@ -166,7 +171,7 @@ Maximum sleep interval of node when in active mode.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:12
+packages/matter.js/dist/cjs/session/Session.d.ts:13
 
 ___
 
@@ -178,7 +183,7 @@ Minimum amount the node SHOULD stay awake after network activity.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:16
+packages/matter.js/dist/cjs/session/Session.d.ts:17
 
 ___
 
@@ -190,7 +195,7 @@ Maximum sleep interval of node when in idle mode.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:14
+packages/matter.js/dist/cjs/session/Session.d.ts:15
 
 ___
 
@@ -226,7 +231,7 @@ ___
 
 ### TlvCaseSigma1
 
-• `Const` **TlvCaseSigma1**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvCaseSigma1**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -240,7 +245,7 @@ ___
 
 ### TlvCaseSigma2
 
-• `Const` **TlvCaseSigma2**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvCaseSigma2**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -254,7 +259,7 @@ ___
 
 ### TlvCaseSigma2Resume
 
-• `Const` **TlvCaseSigma2Resume**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvCaseSigma2Resume**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -268,7 +273,7 @@ ___
 
 ### TlvCaseSigma3
 
-• `Const` **TlvCaseSigma3**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvCaseSigma3**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -282,7 +287,7 @@ ___
 
 ### TlvEncryptedDataSigma2
 
-• `Const` **TlvEncryptedDataSigma2**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvEncryptedDataSigma2**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -296,7 +301,7 @@ ___
 
 ### TlvEncryptedDataSigma3
 
-• `Const` **TlvEncryptedDataSigma3**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvEncryptedDataSigma3**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -310,7 +315,7 @@ ___
 
 ### TlvPasePake1
 
-• `Const` **TlvPasePake1**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvPasePake1**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -324,7 +329,7 @@ ___
 
 ### TlvPasePake2
 
-• `Const` **TlvPasePake2**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvPasePake2**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -338,7 +343,7 @@ ___
 
 ### TlvPasePake3
 
-• `Const` **TlvPasePake3**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvPasePake3**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -352,7 +357,7 @@ ___
 
 ### TlvPbkdfParamRequest
 
-• `Const` **TlvPbkdfParamRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvPbkdfParamRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -366,7 +371,7 @@ ___
 
 ### TlvPbkdfParamResponse
 
-• `Const` **TlvPbkdfParamResponse**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvPbkdfParamResponse**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -380,7 +385,7 @@ ___
 
 ### TlvSignedData
 
-• `Const` **TlvSignedData**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvSignedData**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -394,11 +399,11 @@ ___
 
 ### UNDEFINED\_NODE\_ID
 
-• `Const` **UNDEFINED\_NODE\_ID**: [`NodeId`](../classes/exports_datatype.NodeId.md)
+• `Const` **UNDEFINED\_NODE\_ID**: [`NodeId`](exports_datatype.md#nodeid)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SessionManager.d.ts:13
+packages/matter.js/dist/cjs/session/SessionManager.d.ts:14
 
 ___
 
@@ -408,4 +413,31 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SessionManager.d.ts:14
+packages/matter.js/dist/cjs/session/SessionManager.d.ts:15
+
+## Functions
+
+### assertSecureSession
+
+▸ **assertSecureSession**<`T`\>(`session`, `errorText?`): asserts session is SecureSession<T\>
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `session` | [`Session`](../interfaces/exports_session.Session.md)<`T`\> |
+| `errorText?` | `string` |
+
+#### Returns
+
+asserts session is SecureSession<T\>
+
+#### Defined in
+
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:61

@@ -17,6 +17,7 @@
 
 ### Methods
 
+- [close](exports_protocol.ChannelManager.md#close)
 - [getChannel](exports_protocol.ChannelManager.md#getchannel)
 - [getOrCreateChannel](exports_protocol.ChannelManager.md#getorcreatechannel)
 - [removeChannel](exports_protocol.ChannelManager.md#removechannel)
@@ -50,6 +51,20 @@ packages/matter.js/dist/cjs/protocol/ChannelManager.d.ts:17
 
 ## Methods
 
+### close
+
+▸ **close**(): `Promise`<`void`\>
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+packages/matter.js/dist/cjs/protocol/ChannelManager.d.ts:22
+
+___
+
 ### getChannel
 
 ▸ **getChannel**(`fabric`, `nodeId`): [`MessageChannel`](exports_protocol.MessageChannel.md)<`any`\>
@@ -59,7 +74,7 @@ packages/matter.js/dist/cjs/protocol/ChannelManager.d.ts:17
 | Name | Type |
 | :------ | :------ |
 | `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
-| `nodeId` | [`NodeId`](exports_datatype.NodeId.md) |
+| `nodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 
 #### Returns
 
@@ -79,7 +94,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `byteArrayChannel` | [`Channel`](../interfaces/net.Channel.md)<`Uint8Array`\> |
+| `byteArrayChannel` | [`Channel`](../interfaces/exports_common.Channel.md)<`Uint8Array`\> |
 | `session` | [`Session`](../interfaces/exports_session.Session.md)<`any`\> |
 
 #### Returns
@@ -101,7 +116,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
-| `nodeId` | [`NodeId`](exports_datatype.NodeId.md) |
+| `nodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 
 #### Returns
 
@@ -122,7 +137,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
-| `nodeId` | [`NodeId`](exports_datatype.NodeId.md) |
+| `nodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 | `channel` | [`MessageChannel`](exports_protocol.MessageChannel.md)<`any`\> |
 
 #### Returns

@@ -34,6 +34,7 @@ Logger.format = Format.ANSI enables colorization via ANSI escape sequences in de
 - [log](exports_log.Logger.md#log-1)
 - [logFormatter](exports_log.Logger.md#logformatter)
 - [logLevels](exports_log.Logger.md#loglevels)
+- [nestingLevel](exports_log.Logger.md#nestinglevel)
 
 ### Accessors
 
@@ -43,6 +44,8 @@ Logger.format = Format.ANSI enables colorization via ANSI escape sequences in de
 
 - [dict](exports_log.Logger.md#dict)
 - [get](exports_log.Logger.md#get)
+- [nest](exports_log.Logger.md#nest)
+- [nestAsync](exports_log.Logger.md#nestasync)
 - [toJSON](exports_log.Logger.md#tojson)
 
 ## Constructors
@@ -59,7 +62,7 @@ Logger.format = Format.ANSI enables colorization via ANSI escape sequences in de
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:103
+packages/matter.js/dist/cjs/log/Logger.d.ts:113
 
 ## Properties
 
@@ -83,7 +86,7 @@ packages/matter.js/dist/cjs/log/Logger.d.ts:103
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:104
+packages/matter.js/dist/cjs/log/Logger.d.ts:114
 
 ___
 
@@ -107,7 +110,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:107
+packages/matter.js/dist/cjs/log/Logger.d.ts:117
 
 ___
 
@@ -131,7 +134,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:108
+packages/matter.js/dist/cjs/log/Logger.d.ts:118
 
 ___
 
@@ -155,7 +158,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:105
+packages/matter.js/dist/cjs/log/Logger.d.ts:115
 
 ___
 
@@ -165,7 +168,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:109
+packages/matter.js/dist/cjs/log/Logger.d.ts:119
 
 ___
 
@@ -199,7 +202,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:106
+packages/matter.js/dist/cjs/log/Logger.d.ts:116
 
 ___
 
@@ -277,6 +280,16 @@ ___
 
 packages/matter.js/dist/cjs/log/Logger.d.ts:72
 
+___
+
+### nestingLevel
+
+▪ `Static` **nestingLevel**: `number`
+
+#### Defined in
+
+packages/matter.js/dist/cjs/log/Logger.d.ts:75
+
 ## Accessors
 
 ### format
@@ -297,7 +310,7 @@ Set logFormatter using configuration-style format name.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:80
+packages/matter.js/dist/cjs/log/Logger.d.ts:81
 
 ## Methods
 
@@ -319,7 +332,7 @@ Shortcut for new DiagnosticDictionary().
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:100
+packages/matter.js/dist/cjs/log/Logger.d.ts:101
 
 ___
 
@@ -343,7 +356,58 @@ a new facility
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:87
+packages/matter.js/dist/cjs/log/Logger.d.ts:88
+
+___
+
+### nest
+
+▸ `Static` **nest**<`T`\>(`context`): `T`
+
+Perform operations in a nested logging context.  Messages will be
+indented while the context executes.
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `context` | () => `T` |
+
+#### Returns
+
+`T`
+
+#### Defined in
+
+packages/matter.js/dist/cjs/log/Logger.d.ts:108
+
+___
+
+### nestAsync
+
+▸ `Static` **nestAsync**(`context`): `Promise`<`any`\>
+
+Async version of above.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `context` | () => `Promise`<`any`\> |
+
+#### Returns
+
+`Promise`<`any`\>
+
+#### Defined in
+
+packages/matter.js/dist/cjs/log/Logger.d.ts:112
 
 ___
 
@@ -353,13 +417,11 @@ ___
 
 Stringify a value (BigInt aware) as JSON.
 
-@param: data the value to stringify
-
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `data` | `any` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `data` | `any` | the value to stringify |
 
 #### Returns
 
@@ -369,4 +431,4 @@ the stringified value
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:94
+packages/matter.js/dist/cjs/log/Logger.d.ts:95

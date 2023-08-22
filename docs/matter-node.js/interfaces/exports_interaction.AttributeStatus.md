@@ -21,14 +21,14 @@
 
 | Name | Type |
 | :------ | :------ |
-| `attributeId?` | `number` |
-| `clusterId?` | `number` |
-| `endpointId?` | `number` |
-| `nodeId?` | [`NodeId`](../classes/exports_datatype.NodeId.md) |
+| `attributeId?` | [`AttributeId`](../modules/exports_datatype.md#attributeid) |
+| `clusterId?` | [`ClusterId`](../modules/exports_datatype.md#clusterid) |
+| `endpointId?` | [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber) |
+| `nodeId?` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:18
+packages/matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:23
 
 ___
 
@@ -38,4 +38,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:24
+packages/matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:29

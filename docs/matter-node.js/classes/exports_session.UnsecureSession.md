@@ -25,16 +25,21 @@
 - [context](exports_session.UnsecureSession.md#context)
 - [initiatorNodeId](exports_session.UnsecureSession.md#initiatornodeid)
 
+### Accessors
+
+- [name](exports_session.UnsecureSession.md#name)
+
 ### Methods
 
 - [decode](exports_session.UnsecureSession.md#decode)
 - [destroy](exports_session.UnsecureSession.md#destroy)
 - [encode](exports_session.UnsecureSession.md#encode)
+- [end](exports_session.UnsecureSession.md#end)
+- [getAssociatedFabric](exports_session.UnsecureSession.md#getassociatedfabric)
 - [getAttestationChallengeKey](exports_session.UnsecureSession.md#getattestationchallengekey)
 - [getContext](exports_session.UnsecureSession.md#getcontext)
 - [getId](exports_session.UnsecureSession.md#getid)
 - [getMrpParameters](exports_session.UnsecureSession.md#getmrpparameters)
-- [getName](exports_session.UnsecureSession.md#getname)
 - [getNodeId](exports_session.UnsecureSession.md#getnodeid)
 - [getPeerNodeId](exports_session.UnsecureSession.md#getpeernodeid)
 - [getPeerSessionId](exports_session.UnsecureSession.md#getpeersessionid)
@@ -85,6 +90,24 @@ ___
 
 packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:13
 
+## Accessors
+
+### name
+
+• `get` **name**(): `string`
+
+#### Returns
+
+`string`
+
+#### Implementation of
+
+[Session](../interfaces/exports_session.Session.md).[name](../interfaces/exports_session.Session.md#name)
+
+#### Defined in
+
+packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:22
+
 ## Methods
 
 ### decode
@@ -113,11 +136,11 @@ ___
 
 ### destroy
 
-▸ **destroy**(): `void`
+▸ **destroy**(): `Promise`<`void`\>
 
 #### Returns
 
-`void`
+`Promise`<`void`\>
 
 #### Implementation of
 
@@ -150,6 +173,42 @@ ___
 #### Defined in
 
 packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:19
+
+___
+
+### end
+
+▸ **end**(): `Promise`<`void`\>
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Implementation of
+
+[Session](../interfaces/exports_session.Session.md).[end](../interfaces/exports_session.Session.md#end)
+
+#### Defined in
+
+packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:34
+
+___
+
+### getAssociatedFabric
+
+▸ **getAssociatedFabric**(): [`Fabric`](exports_fabric.Fabric.md)
+
+#### Returns
+
+[`Fabric`](exports_fabric.Fabric.md)
+
+#### Implementation of
+
+[Session](../interfaces/exports_session.Session.md).[getAssociatedFabric](../interfaces/exports_session.Session.md#getassociatedfabric)
+
+#### Defined in
+
+packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:35
 
 ___
 
@@ -227,31 +286,13 @@ packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:23
 
 ___
 
-### getName
-
-▸ **getName**(): `string`
-
-#### Returns
-
-`string`
-
-#### Implementation of
-
-[Session](../interfaces/exports_session.Session.md).[getName](../interfaces/exports_session.Session.md#getname)
-
-#### Defined in
-
-packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:22
-
-___
-
 ### getNodeId
 
-▸ **getNodeId**(): [`NodeId`](exports_datatype.NodeId.md)
+▸ **getNodeId**(): [`NodeId`](../modules/exports_datatype.md#nodeid)
 
 #### Returns
 
-[`NodeId`](exports_datatype.NodeId.md)
+[`NodeId`](../modules/exports_datatype.md#nodeid)
 
 #### Implementation of
 

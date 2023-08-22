@@ -25,21 +25,21 @@
 
 | Name | Type |
 | :------ | :------ |
-| `fabricId` | `bigint` |
-| `fabricIndex` | `number` |
-| `identityProtectionKey` | [`ByteArray`](util.md#bytearray-1) |
-| `intermediateCACert` | [`ByteArray`](util.md#bytearray-1) \| `undefined` |
-| `keyPair` | [`KeyPair`](crypto.md#keypair) |
+| `fabricId` | [`FabricId`](exports_datatype.md#fabricid) |
+| `fabricIndex` | [`FabricIndex`](exports_datatype.md#fabricindex) |
+| `identityProtectionKey` | [`ByteArray`](util_export.md#bytearray-1) |
+| `intermediateCACert` | [`ByteArray`](util_export.md#bytearray-1) \| `undefined` |
+| `keyPair` | [`BinaryKeyPair`](crypto_export.md#binarykeypair) |
 | `label` | `string` |
-| `nodeId` | `bigint` |
-| `operationalCert` | [`ByteArray`](util.md#bytearray-1) |
-| `operationalId` | [`ByteArray`](util.md#bytearray-1) |
-| `operationalIdentityProtectionKey` | [`ByteArray`](util.md#bytearray-1) |
-| `rootCert` | [`ByteArray`](util.md#bytearray-1) |
-| `rootNodeId` | `bigint` |
-| `rootPublicKey` | [`ByteArray`](util.md#bytearray-1) |
-| `rootVendorId` | `number` |
-| `scopedClusterData` | `Map`<`number`, `Map`<`string`, [`SupportedStorageTypes`](storage.md#supportedstoragetypes)\>\> |
+| `nodeId` | [`NodeId`](exports_datatype.md#nodeid) |
+| `operationalCert` | [`ByteArray`](util_export.md#bytearray-1) |
+| `operationalId` | [`ByteArray`](util_export.md#bytearray-1) |
+| `operationalIdentityProtectionKey` | [`ByteArray`](util_export.md#bytearray-1) |
+| `rootCert` | [`ByteArray`](util_export.md#bytearray-1) |
+| `rootNodeId` | [`NodeId`](exports_datatype.md#nodeid) |
+| `rootPublicKey` | [`ByteArray`](util_export.md#bytearray-1) |
+| `rootVendorId` | [`VendorId`](exports_datatype.md#vendorid) |
+| `scopedClusterData` | `Map`<`number`, `Map`<`string`, [`SupportedStorageTypes`](storage_export.md#supportedstoragetypes)\>\> |
 
 #### Defined in
 

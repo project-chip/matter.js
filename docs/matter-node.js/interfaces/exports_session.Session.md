@@ -17,21 +17,36 @@
 
 ## Table of contents
 
+### Properties
+
+- [name](exports_session.Session.md#name)
+
 ### Methods
 
 - [decode](exports_session.Session.md#decode)
 - [destroy](exports_session.Session.md#destroy)
 - [encode](exports_session.Session.md#encode)
+- [end](exports_session.Session.md#end)
+- [getAssociatedFabric](exports_session.Session.md#getassociatedfabric)
 - [getContext](exports_session.Session.md#getcontext)
 - [getId](exports_session.Session.md#getid)
 - [getMrpParameters](exports_session.Session.md#getmrpparameters)
-- [getName](exports_session.Session.md#getname)
 - [getNodeId](exports_session.Session.md#getnodeid)
 - [getPeerNodeId](exports_session.Session.md#getpeernodeid)
 - [getPeerSessionId](exports_session.Session.md#getpeersessionid)
 - [isPeerActive](exports_session.Session.md#ispeeractive)
 - [isSecure](exports_session.Session.md#issecure)
 - [notifyActivity](exports_session.Session.md#notifyactivity)
+
+## Properties
+
+### name
+
+• **name**: `string`
+
+#### Defined in
+
+packages/matter.js/dist/cjs/session/Session.d.ts:24
 
 ## Methods
 
@@ -51,21 +66,21 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:25
+packages/matter.js/dist/cjs/session/Session.d.ts:26
 
 ___
 
 ### destroy
 
-▸ **destroy**(): `void`
+▸ **destroy**(): `Promise`<`void`\>
 
 #### Returns
 
-`void`
+`Promise`<`void`\>
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:33
+packages/matter.js/dist/cjs/session/Session.d.ts:35
 
 ___
 
@@ -85,7 +100,35 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:26
+packages/matter.js/dist/cjs/session/Session.d.ts:27
+
+___
+
+### end
+
+▸ **end**(): `Promise`<`void`\>
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+packages/matter.js/dist/cjs/session/Session.d.ts:34
+
+___
+
+### getAssociatedFabric
+
+▸ **getAssociatedFabric**(): [`Fabric`](../classes/exports_fabric.Fabric.md)
+
+#### Returns
+
+[`Fabric`](../classes/exports_fabric.Fabric.md)
+
+#### Defined in
+
+packages/matter.js/dist/cjs/session/Session.d.ts:38
 
 ___
 
@@ -99,7 +142,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:28
+packages/matter.js/dist/cjs/session/Session.d.ts:29
 
 ___
 
@@ -113,63 +156,49 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:29
+packages/matter.js/dist/cjs/session/Session.d.ts:30
 
 ___
 
 ### getMrpParameters
 
-▸ **getMrpParameters**(): [`MrpParameters`](index._internal_.MrpParameters.md)
+▸ **getMrpParameters**(): [`MrpParameters`](export._internal_.MrpParameters.md)
 
 #### Returns
 
-[`MrpParameters`](index._internal_.MrpParameters.md)
+[`MrpParameters`](export._internal_.MrpParameters.md)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:27
-
-___
-
-### getName
-
-▸ **getName**(): `string`
-
-#### Returns
-
-`string`
-
-#### Defined in
-
-packages/matter.js/dist/cjs/session/Session.d.ts:24
+packages/matter.js/dist/cjs/session/Session.d.ts:28
 
 ___
 
 ### getNodeId
 
-▸ **getNodeId**(): `undefined` \| [`NodeId`](../classes/exports_datatype.NodeId.md)
+▸ **getNodeId**(): `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid)
 
 #### Returns
 
-`undefined` \| [`NodeId`](../classes/exports_datatype.NodeId.md)
+`undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:31
+packages/matter.js/dist/cjs/session/Session.d.ts:32
 
 ___
 
 ### getPeerNodeId
 
-▸ **getPeerNodeId**(): `undefined` \| [`NodeId`](../classes/exports_datatype.NodeId.md)
+▸ **getPeerNodeId**(): `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid)
 
 #### Returns
 
-`undefined` \| [`NodeId`](../classes/exports_datatype.NodeId.md)
+`undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:32
+packages/matter.js/dist/cjs/session/Session.d.ts:33
 
 ___
 
@@ -183,7 +212,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:30
+packages/matter.js/dist/cjs/session/Session.d.ts:31
 
 ___
 
@@ -197,7 +226,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:35
+packages/matter.js/dist/cjs/session/Session.d.ts:37
 
 ___
 
@@ -211,7 +240,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:23
+packages/matter.js/dist/cjs/session/Session.d.ts:25
 
 ___
 
@@ -231,4 +260,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:34
+packages/matter.js/dist/cjs/session/Session.d.ts:36

@@ -41,7 +41,7 @@
 | :------ | :------ |
 | `eContent` | `Uint8Array` |
 | `subjectKeyIdentifier` | `Uint8Array` |
-| `privateKey` | `Uint8Array` |
+| `privateKey` | `JsonWebKey` |
 
 #### Returns
 
@@ -49,19 +49,19 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:195
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:199
 
 ___
 
 ### createCertificateSigningRequest
 
-▸ `Static` **createCertificateSigningRequest**(`keys`): `Uint8Array`
+▸ `Static` **createCertificateSigningRequest**(`key`): `Uint8Array`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `keys` | [`KeyPair`](../modules/crypto.md#keypair) |
+| `key` | [`Key`](../modules/crypto_export.md#key) |
 
 #### Returns
 
@@ -69,20 +69,20 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:198
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:202
 
 ___
 
 ### daCertToAsn1
 
-▸ `Static` **daCertToAsn1**(`«destructured»`, `keys`): `Uint8Array`
+▸ `Static` **daCertToAsn1**(`«destructured»`, `key`): `Uint8Array`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`Unsigned`](../modules/index._internal_.md#unsigned)<[`DeviceAttestationCertificate`](../interfaces/exports_certificate.DeviceAttestationCertificate.md)\> |
-| `keys` | [`KeyPair`](../modules/crypto.md#keypair) |
+| `«destructured»` | [`Unsigned`](../modules/export._internal_.md#unsigned)<[`DeviceAttestationCertificate`](../interfaces/exports_certificate.DeviceAttestationCertificate.md)\> |
+| `key` | [`Key`](../modules/crypto_export.md#key) |
 
 #### Returns
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:192
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:196
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:199
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:203
 
 ___
 
@@ -122,7 +122,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`Unsigned`](../modules/index._internal_.md#unsigned)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `ellipticCurveIdentifier`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `ellipticCurvePublicKey`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `extensions`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `authorityKeyIdentifier`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `basicConstraints`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `isCa`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`boolean`\> ; `pathLen`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\>  }\>\> ; `extendedKeyUsage`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`[]\> ; `futureExtension`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`Uint8Array`\> ; `keyUsage`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `subjectKeyIdentifier`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\>  }\>\> ; `issuer`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `issuerRcacId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\>  }\>\> ; `notAfter`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `notBefore`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `publicKeyAlgorithm`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `serialNumber`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `signature`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `signatureAlgorithm`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `subject`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `fabricId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number` \| `bigint`\> ; `nodeId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`NodeId`](exports_datatype.NodeId.md)\>  }\>\>  }\>\> |
+| `«destructured»` | [`Unsigned`](../modules/export._internal_.md#unsigned)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `ellipticCurveIdentifier`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `ellipticCurvePublicKey`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `extensions`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `authorityKeyIdentifier`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `basicConstraints`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `isCa`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`boolean`\> ; `pathLen`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\>  }\>\> ; `extendedKeyUsage`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`[]\> ; `futureExtension`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`Uint8Array`\> ; `keyUsage`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `subjectKeyIdentifier`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\>  }\>\> ; `issuer`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `issuerRcacId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\>  }\>\> ; `notAfter`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `notBefore`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `publicKeyAlgorithm`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `serialNumber`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `signature`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `signatureAlgorithm`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `subject`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `fabricId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`FabricId`](../modules/exports_datatype.md#fabricid)\> ; `nodeId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\>\>  }\>\> |
 
 #### Returns
 
@@ -130,20 +130,20 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:191
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:195
 
 ___
 
 ### paaCertToAsn1
 
-▸ `Static` **paaCertToAsn1**(`«destructured»`, `keys`): `Uint8Array`
+▸ `Static` **paaCertToAsn1**(`«destructured»`, `key`): `Uint8Array`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`Unsigned`](../modules/index._internal_.md#unsigned)<[`ProductAttestationAuthorityCertificate`](../interfaces/exports_certificate.ProductAttestationAuthorityCertificate.md)\> |
-| `keys` | [`KeyPair`](../modules/crypto.md#keypair) |
+| `«destructured»` | [`Unsigned`](../modules/export._internal_.md#unsigned)<[`ProductAttestationAuthorityCertificate`](../interfaces/exports_certificate.ProductAttestationAuthorityCertificate.md)\> |
+| `key` | [`Key`](../modules/crypto_export.md#key) |
 
 #### Returns
 
@@ -151,20 +151,20 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:194
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:198
 
 ___
 
 ### paiCertToAsn1
 
-▸ `Static` **paiCertToAsn1**(`«destructured»`, `keys`): `Uint8Array`
+▸ `Static` **paiCertToAsn1**(`«destructured»`, `key`): `Uint8Array`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`Unsigned`](../modules/index._internal_.md#unsigned)<[`ProductAttestationIntermediateCertificate`](../interfaces/exports_certificate.ProductAttestationIntermediateCertificate.md)\> |
-| `keys` | [`KeyPair`](../modules/crypto.md#keypair) |
+| `«destructured»` | [`Unsigned`](../modules/export._internal_.md#unsigned)<[`ProductAttestationIntermediateCertificate`](../interfaces/exports_certificate.ProductAttestationIntermediateCertificate.md)\> |
+| `key` | [`Key`](../modules/crypto_export.md#key) |
 
 #### Returns
 
@@ -172,7 +172,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:193
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:197
 
 ___
 
@@ -184,7 +184,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`Unsigned`](../modules/index._internal_.md#unsigned)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `ellipticCurveIdentifier`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `ellipticCurvePublicKey`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `extensions`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `authorityKeyIdentifier`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `basicConstraints`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `isCa`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`boolean`\> ; `pathLen`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\>  }\>\> ; `extendedKeyUsage`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`[]\> ; `futureExtension`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`Uint8Array`\> ; `keyUsage`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `subjectKeyIdentifier`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\>  }\>\> ; `issuer`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `issuerRcacId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\>  }\>\> ; `notAfter`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `notBefore`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `publicKeyAlgorithm`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `serialNumber`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `signature`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `signatureAlgorithm`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `subject`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `rcacId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number` \| `bigint`\>  }\>\>  }\>\> |
+| `«destructured»` | [`Unsigned`](../modules/export._internal_.md#unsigned)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `ellipticCurveIdentifier`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `ellipticCurvePublicKey`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `extensions`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `authorityKeyIdentifier`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `basicConstraints`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `isCa`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`boolean`\> ; `pathLen`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\>  }\>\> ; `extendedKeyUsage`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`[]\> ; `futureExtension`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`Uint8Array`\> ; `keyUsage`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `subjectKeyIdentifier`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\>  }\>\> ; `issuer`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `issuerRcacId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\>  }\>\> ; `notAfter`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `notBefore`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `publicKeyAlgorithm`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `serialNumber`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `signature`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `signatureAlgorithm`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `subject`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `rcacId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number` \| `bigint`\>  }\>\>  }\>\> |
 
 #### Returns
 
@@ -192,7 +192,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:190
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:194
 
 ___
 
@@ -205,7 +205,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `rootCert` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `ellipticCurveIdentifier`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `ellipticCurvePublicKey`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `extensions`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `authorityKeyIdentifier`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `basicConstraints`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `isCa`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`boolean`\> ; `pathLen`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\>  }\>\> ; `extendedKeyUsage`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`[]\> ; `futureExtension`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`Uint8Array`\> ; `keyUsage`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `subjectKeyIdentifier`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\>  }\>\> ; `issuer`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `issuerRcacId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\>  }\>\> ; `notAfter`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `notBefore`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `publicKeyAlgorithm`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `serialNumber`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `signature`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `signatureAlgorithm`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `subject`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `rcacId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number` \| `bigint`\>  }\>\>  }\> |
-| `nocCert` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `ellipticCurveIdentifier`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `ellipticCurvePublicKey`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `extensions`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `authorityKeyIdentifier`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `basicConstraints`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `isCa`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`boolean`\> ; `pathLen`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\>  }\>\> ; `extendedKeyUsage`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`[]\> ; `futureExtension`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`Uint8Array`\> ; `keyUsage`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `subjectKeyIdentifier`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\>  }\>\> ; `issuer`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `issuerRcacId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\>  }\>\> ; `notAfter`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `notBefore`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `publicKeyAlgorithm`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `serialNumber`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `signature`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `signatureAlgorithm`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `subject`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `fabricId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number` \| `bigint`\> ; `nodeId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`NodeId`](exports_datatype.NodeId.md)\>  }\>\>  }\> |
+| `nocCert` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `ellipticCurveIdentifier`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `ellipticCurvePublicKey`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `extensions`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `authorityKeyIdentifier`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `basicConstraints`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `isCa`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`boolean`\> ; `pathLen`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\>  }\>\> ; `extendedKeyUsage`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`[]\> ; `futureExtension`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`Uint8Array`\> ; `keyUsage`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `subjectKeyIdentifier`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\>  }\>\> ; `issuer`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `issuerRcacId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\>  }\>\> ; `notAfter`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `notBefore`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `publicKeyAlgorithm`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `serialNumber`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `signature`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `signatureAlgorithm`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `subject`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `fabricId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`FabricId`](../modules/exports_datatype.md#fabricid)\> ; `nodeId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\>\>  }\> |
 
 #### Returns
 
@@ -213,7 +213,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:197
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:201
 
 ___
 
@@ -233,4 +233,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:196
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:200

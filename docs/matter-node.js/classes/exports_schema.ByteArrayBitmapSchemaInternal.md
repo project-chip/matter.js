@@ -14,7 +14,7 @@ Define a schema to encode / decode convert type T to type E.
 
 ## Hierarchy
 
-- [`Schema`](exports_schema.Schema.md)<[`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)<`T`\>, [`ByteArray`](../modules/util.md#bytearray-1)\>
+- [`Schema`](exports_schema.Schema.md)<[`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)<`T`\>, [`ByteArray`](../modules/util_export.md#bytearray-1)\>
 
   ↳ **`ByteArrayBitmapSchemaInternal`**
 
@@ -62,7 +62,7 @@ Define a schema to encode / decode convert type T to type E.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:47
+packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:56
 
 ## Properties
 
@@ -72,7 +72,7 @@ packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:47
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:44
+packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:53
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:45
+packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:54
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:46
+packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:55
 
 ## Methods
 
@@ -143,7 +143,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:49
+packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:58
 
 ___
 
@@ -193,7 +193,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:48
+packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:57
 
 ___
 

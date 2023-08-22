@@ -32,7 +32,7 @@ ___
 
 • **Standard** = ``0``
 
-When uncommissioned, the device always enters commissioning mode upon power-up.
+When not commissioned, the device always enters commissioning mode upon power-up.
 
 #### Defined in
 

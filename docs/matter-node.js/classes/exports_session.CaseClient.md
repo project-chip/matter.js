@@ -30,10 +30,10 @@
 
 | Name | Type |
 | :------ | :------ |
-| `client` | [`MatterController`](index.MatterController.md) |
-| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)<[`MatterController`](index.MatterController.md)\> |
+| `client` | [`MatterController`](export._internal_.MatterController.md) |
+| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)<[`MatterController`](export._internal_.MatterController.md)\> |
 | `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
-| `peerNodeId` | [`NodeId`](exports_datatype.NodeId.md) |
+| `peerNodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 
 #### Returns
 

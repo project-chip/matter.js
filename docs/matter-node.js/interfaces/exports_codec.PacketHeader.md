@@ -10,6 +10,9 @@
 
 - [destGroupId](exports_codec.PacketHeader.md#destgroupid)
 - [destNodeId](exports_codec.PacketHeader.md#destnodeid)
+- [hasMessageExtensions](exports_codec.PacketHeader.md#hasmessageextensions)
+- [hasPrivacyEnhancements](exports_codec.PacketHeader.md#hasprivacyenhancements)
+- [isControlMessage](exports_codec.PacketHeader.md#iscontrolmessage)
 - [messageId](exports_codec.PacketHeader.md#messageid)
 - [sessionId](exports_codec.PacketHeader.md#sessionid)
 - [sessionType](exports_codec.PacketHeader.md#sessiontype)
@@ -23,17 +26,47 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:15
+packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:18
 
 ___
 
 ### destNodeId
 
-• `Optional` **destNodeId**: [`NodeId`](../classes/exports_datatype.NodeId.md)
+• `Optional` **destNodeId**: [`NodeId`](../modules/exports_datatype.md#nodeid)
+
+#### Defined in
+
+packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:17
+
+___
+
+### hasMessageExtensions
+
+• **hasMessageExtensions**: `boolean`
 
 #### Defined in
 
 packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:14
+
+___
+
+### hasPrivacyEnhancements
+
+• **hasPrivacyEnhancements**: `boolean`
+
+#### Defined in
+
+packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:12
+
+___
+
+### isControlMessage
+
+• **isControlMessage**: `boolean`
+
+#### Defined in
+
+packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:13
 
 ___
 
@@ -43,7 +76,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:12
+packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:15
 
 ___
 
@@ -69,8 +102,8 @@ ___
 
 ### sourceNodeId
 
-• `Optional` **sourceNodeId**: [`NodeId`](../classes/exports_datatype.NodeId.md)
+• `Optional` **sourceNodeId**: [`NodeId`](../modules/exports_datatype.md#nodeid)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:13
+packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:16

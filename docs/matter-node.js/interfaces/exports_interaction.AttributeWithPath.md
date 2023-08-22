@@ -15,18 +15,18 @@
 
 ### attribute
 
-• **attribute**: [`AttributeServer`](../classes/exports_cluster.AttributeServer.md)<`any`\>
+• **attribute**: [`AttributeServer`](../classes/exports_cluster.AttributeServer.md)<`any`\> \| [`FabricScopedAttributeServer`](../classes/exports_cluster.FabricScopedAttributeServer.md)<`any`\> \| [`FixedAttributeServer`](../classes/exports_cluster.FixedAttributeServer.md)<`any`\>
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:33
+packages/matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:41
 
 ___
 
 ### path
 
-• **path**: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)<`number`\> ; `clusterId`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)<`number`\> ; `enableTagCompression`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)<`number`\> ; `listIndex`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)<[`NodeId`](../classes/exports_datatype.NodeId.md)\>  }\>
+• **path**: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)<[`AttributeId`](../modules/exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)<[`ClusterId`](../modules/exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)<[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\>
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:32
+packages/matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:40

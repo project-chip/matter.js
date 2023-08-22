@@ -4,28 +4,43 @@
 
 ## Table of contents
 
+### Namespaces
+
+- [Base64](exports_codec.Base64.md)
+
 ### Enumerations
 
-- [MessageType](../enums/exports_codec.MessageType.md)
-- [RecordClass](../enums/exports_codec.RecordClass.md)
-- [RecordType](../enums/exports_codec.RecordType.md)
+- [BtpHeaderBits](../enums/exports_codec.BtpHeaderBits.md)
+- [BtpOpcode](../enums/exports_codec.BtpOpcode.md)
+- [DerType](../enums/exports_codec.DerType.md)
+- [DnsMessageType](../enums/exports_codec.DnsMessageType.md)
+- [DnsRecordClass](../enums/exports_codec.DnsRecordClass.md)
+- [DnsRecordType](../enums/exports_codec.DnsRecordType.md)
 - [SessionType](../enums/exports_codec.SessionType.md)
 
 ### Classes
 
+- [BtpCodec](../classes/exports_codec.BtpCodec.md)
 - [DerCodec](../classes/exports_codec.DerCodec.md)
 - [DnsCodec](../classes/exports_codec.DnsCodec.md)
 - [MessageCodec](../classes/exports_codec.MessageCodec.md)
 
 ### Interfaces
 
+- [BtpHandshakeRequest](../interfaces/exports_codec.BtpHandshakeRequest.md)
+- [BtpHandshakeResponse](../interfaces/exports_codec.BtpHandshakeResponse.md)
+- [BtpHeader](../interfaces/exports_codec.BtpHeader.md)
+- [BtpPacket](../interfaces/exports_codec.BtpPacket.md)
+- [BtpPacketPayload](../interfaces/exports_codec.BtpPacketPayload.md)
+- [DecodedBtpPacket](../interfaces/exports_codec.DecodedBtpPacket.md)
+- [DecodedBtpPacketPayload](../interfaces/exports_codec.DecodedBtpPacketPayload.md)
 - [DnsMessage](../interfaces/exports_codec.DnsMessage.md)
+- [DnsQuery](../interfaces/exports_codec.DnsQuery.md)
+- [DnsRecord](../interfaces/exports_codec.DnsRecord.md)
 - [Message](../interfaces/exports_codec.Message.md)
 - [Packet](../interfaces/exports_codec.Packet.md)
 - [PacketHeader](../interfaces/exports_codec.PacketHeader.md)
 - [PayloadHeader](../interfaces/exports_codec.PayloadHeader.md)
-- [Query](../interfaces/exports_codec.Query.md)
-- [Record](../interfaces/exports_codec.Record.md)
 - [SrvRecordValue](../interfaces/exports_codec.SrvRecordValue.md)
 
 ### Type Aliases
@@ -75,14 +90,14 @@
 
 | Name | Type |
 | :------ | :------ |
-| `_bytes` | [`ByteArray`](util.md#bytearray-1) |
+| `_bytes` | [`ByteArray`](util_export.md#bytearray-1) |
 | `_elements?` | [`DerNode`](exports_codec.md#dernode)[] |
 | `_padding?` | `number` |
 | `_tag` | `number` |
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:30
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:36
 
 ## Variables
 
@@ -92,7 +107,7 @@ packages/matter.js/dist/cjs/codec/DerCodec.d.ts:30
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:11
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:6
 
 ___
 
@@ -102,7 +117,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:9
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:4
 
 ___
 
@@ -112,7 +127,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:10
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:5
 
 ___
 
@@ -122,7 +137,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:68
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:74
 
 ___
 
@@ -132,7 +147,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:79
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:85
 
 ___
 
@@ -142,7 +157,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:78
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:84
 
 ___
 
@@ -152,7 +167,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:7
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:2
 
 ___
 
@@ -162,7 +177,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:69
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:75
 
 ___
 
@@ -172,13 +187,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:8
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:3
 
 ## Functions
 
 ### AAAARecord
 
-▸ **AAAARecord**(`name`, `ip`): [`Record`](../interfaces/exports_codec.Record.md)<`string`\>
+▸ **AAAARecord**(`name`, `ip`): [`DnsRecord`](../interfaces/exports_codec.DnsRecord.md)<`string`\>
 
 #### Parameters
 
@@ -189,7 +204,7 @@ packages/matter.js/dist/cjs/codec/DerCodec.d.ts:8
 
 #### Returns
 
-[`Record`](../interfaces/exports_codec.Record.md)<`string`\>
+[`DnsRecord`](../interfaces/exports_codec.DnsRecord.md)<`string`\>
 
 #### Defined in
 
@@ -199,7 +214,7 @@ ___
 
 ### ARecord
 
-▸ **ARecord**(`name`, `ip`): [`Record`](../interfaces/exports_codec.Record.md)<`string`\>
+▸ **ARecord**(`name`, `ip`): [`DnsRecord`](../interfaces/exports_codec.DnsRecord.md)<`string`\>
 
 #### Parameters
 
@@ -210,7 +225,7 @@ ___
 
 #### Returns
 
-[`Record`](../interfaces/exports_codec.Record.md)<`string`\>
+[`DnsRecord`](../interfaces/exports_codec.DnsRecord.md)<`string`\>
 
 #### Defined in
 
@@ -234,7 +249,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:72
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:78
 
 ___
 
@@ -254,7 +269,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:73
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:79
 
 ___
 
@@ -281,7 +296,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:17
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:23
 
 ___
 
@@ -307,7 +322,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:22
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:28
 
 ___
 
@@ -333,7 +348,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:26
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:32
 
 ___
 
@@ -354,7 +369,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:16
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:22
 
 ___
 
@@ -376,7 +391,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:74
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:80
 
 ___
 
@@ -401,7 +416,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:12
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:18
 
 ___
 
@@ -421,7 +436,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:70
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:76
 
 ___
 
@@ -441,7 +456,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:80
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:86
 
 ___
 
@@ -461,13 +476,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:81
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:87
 
 ___
 
 ### PtrRecord
 
-▸ **PtrRecord**(`name`, `ptr`): [`Record`](../interfaces/exports_codec.Record.md)<`string`\>
+▸ **PtrRecord**(`name`, `ptr`): [`DnsRecord`](../interfaces/exports_codec.DnsRecord.md)<`string`\>
 
 #### Parameters
 
@@ -478,7 +493,7 @@ ___
 
 #### Returns
 
-[`Record`](../interfaces/exports_codec.Record.md)<`string`\>
+[`DnsRecord`](../interfaces/exports_codec.DnsRecord.md)<`string`\>
 
 #### Defined in
 
@@ -516,13 +531,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:51
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:57
 
 ___
 
 ### SrvRecord
 
-▸ **SrvRecord**(`name`, `srv`): [`Record`](../interfaces/exports_codec.Record.md)<[`SrvRecordValue`](../interfaces/exports_codec.SrvRecordValue.md)\>
+▸ **SrvRecord**(`name`, `srv`): [`DnsRecord`](../interfaces/exports_codec.DnsRecord.md)<[`SrvRecordValue`](../interfaces/exports_codec.SrvRecordValue.md)\>
 
 #### Parameters
 
@@ -533,7 +548,7 @@ ___
 
 #### Returns
 
-[`Record`](../interfaces/exports_codec.Record.md)<[`SrvRecordValue`](../interfaces/exports_codec.SrvRecordValue.md)\>
+[`DnsRecord`](../interfaces/exports_codec.DnsRecord.md)<[`SrvRecordValue`](../interfaces/exports_codec.SrvRecordValue.md)\>
 
 #### Defined in
 
@@ -557,13 +572,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:71
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:77
 
 ___
 
 ### TxtRecord
 
-▸ **TxtRecord**(`name`, `entries`): [`Record`](../interfaces/exports_codec.Record.md)<`string`[]\>
+▸ **TxtRecord**(`name`, `entries`): [`DnsRecord`](../interfaces/exports_codec.DnsRecord.md)<`string`[]\>
 
 #### Parameters
 
@@ -574,7 +589,7 @@ ___
 
 #### Returns
 
-[`Record`](../interfaces/exports_codec.Record.md)<`string`[]\>
+[`DnsRecord`](../interfaces/exports_codec.DnsRecord.md)<`string`[]\>
 
 #### Defined in
 

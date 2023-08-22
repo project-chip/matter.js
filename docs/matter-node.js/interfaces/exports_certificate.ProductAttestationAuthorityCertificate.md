@@ -28,7 +28,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:155
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:159
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:156
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:160
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:157
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:161
 
 ___
 
@@ -74,11 +74,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `commonName` | `string` |
-| `vendorId?` | [`VendorId`](../classes/exports_datatype.VendorId.md) |
+| `vendorId?` | [`VendorId`](../modules/exports_datatype.md#vendorid) |
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:144
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:148
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:149
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:153
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:148
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:152
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:154
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:158
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:142
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:146
 
 ___
 
@@ -128,7 +128,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:168
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:172
 
 ___
 
@@ -138,7 +138,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:143
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:147
 
 ___
 
@@ -151,8 +151,8 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `commonName` | `string` |
-| `vendorId?` | [`VendorId`](../classes/exports_datatype.VendorId.md) |
+| `vendorId?` | [`VendorId`](../modules/exports_datatype.md#vendorid) |
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:150
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:154

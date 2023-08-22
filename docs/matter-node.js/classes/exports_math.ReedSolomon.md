@@ -33,7 +33,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/math/ReedSolomon.d.ts:8
+packages/matter.js/dist/cjs/math/ReedSolomon.d.ts:3
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/math/ReedSolomon.d.ts:10
+packages/matter.js/dist/cjs/math/ReedSolomon.d.ts:5
 
 ## Methods
 
@@ -64,4 +64,4 @@ packages/matter.js/dist/cjs/math/ReedSolomon.d.ts:10
 
 #### Defined in
 
-packages/matter.js/dist/cjs/math/ReedSolomon.d.ts:9
+packages/matter.js/dist/cjs/math/ReedSolomon.d.ts:4

@@ -6,7 +6,7 @@
 
 ## Hierarchy
 
-- [`SecureChannelMessenger`](exports_securechannel.SecureChannelMessenger.md)<[`MatterController`](index.MatterController.md)\>
+- [`SecureChannelMessenger`](exports_securechannel.SecureChannelMessenger.md)<[`MatterController`](export._internal_.MatterController.md)\>
 
   ↳ **`CaseClientMessenger`**
 
@@ -45,7 +45,7 @@
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)<[`MatterController`](index.MatterController.md)\> |
+| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)<[`MatterController`](export._internal_.MatterController.md)\> |
 
 #### Inherited from
 
@@ -59,7 +59,7 @@ packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:1
 
 ### exchange
 
-• `Protected` `Readonly` **exchange**: [`MessageExchange`](exports_protocol.MessageExchange.md)<[`MatterController`](index.MatterController.md)\>
+• `Protected` `Readonly` **exchange**: [`MessageExchange`](exports_protocol.MessageExchange.md)<[`MatterController`](export._internal_.MatterController.md)\>
 
 #### Inherited from
 
@@ -73,11 +73,11 @@ packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:1
 
 ### close
 
-▸ **close**(): `void`
+▸ **close**(): `Promise`<`void`\>
 
 #### Returns
 
-`void`
+`Promise`<`void`\>
 
 #### Inherited from
 

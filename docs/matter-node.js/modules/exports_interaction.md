@@ -14,6 +14,7 @@
 - [IncomingInteractionClientMessenger](../classes/exports_interaction.IncomingInteractionClientMessenger.md)
 - [InteractionClient](../classes/exports_interaction.InteractionClient.md)
 - [InteractionClientMessenger](../classes/exports_interaction.InteractionClientMessenger.md)
+- [InteractionEndpointStructure](../classes/exports_interaction.InteractionEndpointStructure.md)
 - [InteractionServer](../classes/exports_interaction.InteractionServer.md)
 - [InteractionServerMessenger](../classes/exports_interaction.InteractionServerMessenger.md)
 - [StatusResponseError](../classes/exports_interaction.StatusResponseError.md)
@@ -26,12 +27,18 @@
 - [AttributeStatus](../interfaces/exports_interaction.AttributeStatus.md)
 - [AttributeWithPath](../interfaces/exports_interaction.AttributeWithPath.md)
 - [CommandPath](../interfaces/exports_interaction.CommandPath.md)
+- [CommandWithPath](../interfaces/exports_interaction.CommandWithPath.md)
 - [DecodedAttributeReportValue](../interfaces/exports_interaction.DecodedAttributeReportValue.md)
 - [DecodedAttributeValue](../interfaces/exports_interaction.DecodedAttributeValue.md)
+- [EventPath](../interfaces/exports_interaction.EventPath.md)
+- [EventWithPath](../interfaces/exports_interaction.EventWithPath.md)
 
 ### Type Aliases
 
 - [DataReport](exports_interaction.md#datareport)
+- [DecodedEventData](exports_interaction.md#decodedeventdata)
+- [DecodedEventReportValue](exports_interaction.md#decodedeventreportvalue)
+- [InteractionServerOptions](exports_interaction.md#interactionserveroptions)
 - [InvokeRequest](exports_interaction.md#invokerequest)
 - [InvokeResponse](exports_interaction.md#invokeresponse)
 - [ReadRequest](exports_interaction.md#readrequest)
@@ -74,17 +81,22 @@
 
 ### Functions
 
-- [ClusterClient](exports_interaction.md#clusterclient)
-- [ClusterServer](exports_interaction.md#clusterserver)
 - [attributePathToId](exports_interaction.md#attributepathtoid)
+- [clusterPathToId](exports_interaction.md#clusterpathtoid)
 - [commandPathToId](exports_interaction.md#commandpathtoid)
-- [decodeChunkedArray](exports_interaction.md#decodechunkedarray)
+- [decodeAttributeValueWithSchema](exports_interaction.md#decodeattributevaluewithschema)
+- [decodeUnknownAttributeValue](exports_interaction.md#decodeunknownattributevalue)
+- [decodeUnknownEventValue](exports_interaction.md#decodeunknowneventvalue)
 - [decodeValueForAttribute](exports_interaction.md#decodevalueforattribute)
-- [decodeValueForSchema](exports_interaction.md#decodevalueforschema)
+- [eventPathToId](exports_interaction.md#eventpathtoid)
+- [genericElementPathToId](exports_interaction.md#genericelementpathtoid)
 - [normalizeAndDecodeAttributeData](exports_interaction.md#normalizeanddecodeattributedata)
+- [normalizeAndDecodeEventData](exports_interaction.md#normalizeanddecodeeventdata)
 - [normalizeAndDecodeReadAttributeReport](exports_interaction.md#normalizeanddecodereadattributereport)
+- [normalizeAndDecodeReadEventReport](exports_interaction.md#normalizeanddecodereadeventreport)
 - [normalizeAttributeData](exports_interaction.md#normalizeattributedata)
-- [structureReadDataToClusterObject](exports_interaction.md#structurereaddatatoclusterobject)
+- [normalizeEventData](exports_interaction.md#normalizeeventdata)
+- [structureReadAttributeDataToClusterObject](exports_interaction.md#structurereadattributedatatoclusterobject)
 
 ## Type Aliases
 
@@ -95,6 +107,80 @@
 #### Defined in
 
 packages/matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:28
+
+___
+
+### DecodedEventData
+
+Ƭ **DecodedEventData**<`T`\>: `Object`
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `data?` | `T` |
+| `deltaEpochTimestamp?` | `number` \| `bigint` |
+| `deltaSystemTimestamp?` | `number` \| `bigint` |
+| `epochTimestamp?` | `number` \| `bigint` |
+| `eventNumber` | `number` \| `bigint` |
+| `priority` | [`EventPriority`](../enums/exports_cluster.EventPriority.md) |
+| `systemTimestamp?` | `number` \| `bigint` |
+
+#### Defined in
+
+packages/matter.js/dist/cjs/protocol/interaction/EventDataDecoder.d.ts:13
+
+___
+
+### DecodedEventReportValue
+
+Ƭ **DecodedEventReportValue**<`T`\>: `Object`
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `events` | [`DecodedEventData`](exports_interaction.md#decodedeventdata)<`T`\>[] |
+| `path` | { `clusterId`: [`ClusterId`](exports_datatype.md#clusterid) ; `endpointId`: [`EndpointNumber`](exports_datatype.md#endpointnumber) ; `eventId`: [`EventId`](exports_datatype.md#eventid) ; `eventName`: `string` ; `nodeId?`: [`NodeId`](exports_datatype.md#nodeid)  } |
+| `path.clusterId` | [`ClusterId`](exports_datatype.md#clusterid) |
+| `path.endpointId` | [`EndpointNumber`](exports_datatype.md#endpointnumber) |
+| `path.eventId` | [`EventId`](exports_datatype.md#eventid) |
+| `path.eventName` | `string` |
+| `path.nodeId?` | [`NodeId`](exports_datatype.md#nodeid) |
+
+#### Defined in
+
+packages/matter.js/dist/cjs/protocol/interaction/EventDataDecoder.d.ts:22
+
+___
+
+### InteractionServerOptions
+
+Ƭ **InteractionServerOptions**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `subscriptionMaxIntervalSeconds?` | `number` |
+| `subscriptionMinIntervalSeconds?` | `number` |
+| `subscriptionRandomizationWindowSeconds?` | `number` |
+
+#### Defined in
+
+packages/matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:56
 
 ___
 
@@ -184,13 +270,13 @@ packages/matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:35
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:19
+packages/matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:23
 
 ___
 
 ### TlvAttributeData
 
-• `Const` **TlvAttributeData**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvAttributeData**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -198,13 +284,13 @@ MatterCoreSpecificationV1_0, section 10.5.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:111
+packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:112
 
 ___
 
 ### TlvAttributePath
 
-• `Const` **TlvAttributePath**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvAttributePath**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -212,13 +298,13 @@ MatterCoreSpecificationV1_0, section 10.5.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:37
+packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:38
 
 ___
 
 ### TlvAttributeReport
 
-• `Const` **TlvAttributeReport**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvAttributeReport**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -226,23 +312,23 @@ MatterCoreSpecificationV1_0, section 10.5.5
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:136
+packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:137
 
 ___
 
 ### TlvAttributeReportData
 
-• `Const` **TlvAttributeReportData**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvAttributeReportData**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:123
+packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:124
 
 ___
 
 ### TlvAttributeStatus
 
-• `Const` **TlvAttributeStatus**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvAttributeStatus**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -250,13 +336,13 @@ MatterCoreSpecificationV1_0, section 10.5.16
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:96
+packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:97
 
 ___
 
 ### TlvClusterPath
 
-• `Const` **TlvClusterPath**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvClusterPath**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -264,13 +350,13 @@ MatterCoreSpecificationV1_0, section 10.5.7
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:76
+packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:77
 
 ___
 
 ### TlvCommandData
 
-• `Const` **TlvCommandData**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvCommandData**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -278,13 +364,13 @@ MatterCoreSpecificationV1_0, section 10.5.12
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:217
+packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:218
 
 ___
 
 ### TlvCommandPath
 
-• `Const` **TlvCommandPath**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvCommandPath**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -292,13 +378,13 @@ MatterCoreSpecificationV1_0, section 10.5.11
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:211
+packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:212
 
 ___
 
 ### TlvCommandStatus
 
-• `Const` **TlvCommandStatus**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvCommandStatus**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -306,13 +392,13 @@ MatterCoreSpecificationV1_0, section 10.5.14
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:226
+packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:227
 
 ___
 
 ### TlvDataReport
 
-• `Const` **TlvDataReport**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvDataReport**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -320,13 +406,13 @@ MatterCoreSpecificationV1_0, section 10.6.3
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:297
+packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:298
 
 ___
 
 ### TlvDataVersionFilter
 
-• `Const` **TlvDataVersionFilter**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvDataVersionFilter**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -334,13 +420,13 @@ MatterCoreSpecificationV1_0, section 10.5.3
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:82
+packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:83
 
 ___
 
 ### TlvEventData
 
-• `Const` **TlvEventData**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvEventData**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -348,13 +434,13 @@ MatterCoreSpecificationV1_0, section 10.5.9
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:54
+packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:55
 
 ___
 
 ### TlvEventFilter
 
-• `Const` **TlvEventFilter**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvEventFilter**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -362,13 +448,13 @@ MatterCoreSpecificationV1_0, section 10.5.6
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:71
+packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:72
 
 ___
 
 ### TlvEventPath
 
-• `Const` **TlvEventPath**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvEventPath**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -376,13 +462,13 @@ MatterCoreSpecificationV1_0, section 10.5.8
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:46
+packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:47
 
 ___
 
 ### TlvEventReport
 
-• `Const` **TlvEventReport**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvEventReport**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -390,13 +476,13 @@ MatterCoreSpecificationV1_0, section 10.5.10
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:179
+packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:180
 
 ___
 
 ### TlvEventStatus
 
-• `Const` **TlvEventStatus**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvEventStatus**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -404,13 +490,13 @@ MatterCoreSpecificationV1_0, section 10.5.15
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:165
+packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:166
 
 ___
 
 ### TlvInvokeRequest
 
-• `Const` **TlvInvokeRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvInvokeRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -418,13 +504,13 @@ MatterCoreSpecificationV1_0, section 10.6.9
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:403
+packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:405
 
 ___
 
 ### TlvInvokeResponse
 
-• `Const` **TlvInvokeResponse**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvInvokeResponse**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -432,13 +518,13 @@ MatterCoreSpecificationV1_0, section 10.6.10
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:417
+packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:419
 
 ___
 
 ### TlvInvokeResponseData
 
-• `Const` **TlvInvokeResponseData**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvInvokeResponseData**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -446,13 +532,13 @@ MatterCoreSpecificationV1_0, section 10.5.13
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:238
+packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:239
 
 ___
 
 ### TlvReadRequest
 
-• `Const` **TlvReadRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvReadRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -460,13 +546,13 @@ MatterCoreSpecificationV1_0, section 10.6.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:265
+packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:266
 
 ___
 
 ### TlvStatus
 
-• `Const` **TlvStatus**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvStatus**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -474,13 +560,13 @@ MatterCoreSpecificationV1_0, section 10.5.17
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:91
+packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:92
 
 ___
 
 ### TlvStatusResponse
 
-• `Const` **TlvStatusResponse**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvStatusResponse**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -488,13 +574,13 @@ MatterCoreSpecificationV1_0, section 10.6.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:260
+packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:261
 
 ___
 
 ### TlvSubscribeRequest
 
-• `Const` **TlvSubscribeRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvSubscribeRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -502,13 +588,13 @@ MatterCoreSpecificationV1_0, section 10.6.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:363
+packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:364
 
 ___
 
 ### TlvSubscribeResponse
 
-• `Const` **TlvSubscribeResponse**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvSubscribeResponse**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -516,13 +602,13 @@ MatterCoreSpecificationV1_0, section 10.6.5
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:397
+packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:399
 
 ___
 
 ### TlvTimedRequest
 
-• `Const` **TlvTimedRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvTimedRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -530,13 +616,13 @@ MatterCoreSpecificationV1_0, section 10.6.8
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:443
+packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:445
 
 ___
 
 ### TlvWriteRequest
 
-• `Const` **TlvWriteRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvWriteRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -544,13 +630,13 @@ MatterCoreSpecificationV1_0, section 10.6.6
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:448
+packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:450
 
 ___
 
 ### TlvWriteResponse
 
-• `Const` **TlvWriteResponse**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvWriteResponse**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -558,70 +644,9 @@ MatterCoreSpecificationV1_0, section 10.6.7
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:467
+packages/matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:469
 
 ## Functions
-
-### ClusterClient
-
-▸ **ClusterClient**<`A`, `C`\>(`clusterDef`, `endpointId`, `interactionClient`): [`ClusterClientObj`](exports_cluster.md#clusterclientobj)<`A`, `C`\>
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
-| `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `clusterDef` | [`Cluster`](exports_cluster.md#cluster)<`any`, `any`, `A`, `C`, `any`\> |
-| `endpointId` | `number` |
-| `interactionClient` | [`InteractionClient`](../classes/exports_interaction.InteractionClient.md) |
-
-#### Returns
-
-[`ClusterClientObj`](exports_cluster.md#clusterclientobj)<`A`, `C`\>
-
-#### Defined in
-
-packages/matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:26
-
-___
-
-### ClusterServer
-
-▸ **ClusterServer**<`F`, `SF`, `A`, `C`, `E`\>(`clusterDef`, `attributesInitialValues`, `handlers`): [`ClusterServerObj`](exports_cluster.md#clusterserverobj)<`A`, `C`\>
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `F` | extends [`BitSchema`](exports_schema.md#bitschema) |
-| `SF` | extends [`TypeFromBitSchema`](exports_schema.md#typefrombitschema)<`F`\> |
-| `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
-| `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
-| `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `clusterDef` | [`Cluster`](exports_cluster.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> |
-| `attributesInitialValues` | [`AttributeInitialValues`](exports_cluster.md#attributeinitialvalues)<`A`\> |
-| `handlers` | [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)<[`Cluster`](exports_cluster.md#cluster)<`F`, `SF`, `A`, `C`, `E`\>\> |
-
-#### Returns
-
-[`ClusterServerObj`](exports_cluster.md#clusterserverobj)<`A`, `C`\>
-
-#### Defined in
-
-packages/matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:20
-
-___
 
 ### attributePathToId
 
@@ -631,7 +656,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](../classes/exports_datatype.NodeId.md)\>  }\> |
+| `«destructured»` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`AttributeId`](exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`ClusterId`](exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](exports_datatype.md#nodeid)\>  }\> |
 
 #### Returns
 
@@ -639,7 +664,27 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:36
+packages/matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:53
+
+___
+
+### clusterPathToId
+
+▸ **clusterPathToId**(`«destructured»`): `string`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `«destructured»` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `clusterId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`ClusterId`](exports_datatype.md#clusterid)\> ; `endpointId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](exports_datatype.md#nodeid)\>  }\> |
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+packages/matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:55
 
 ___
 
@@ -659,67 +704,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:35
+packages/matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:52
 
 ___
 
-### decodeChunkedArray
+### decodeAttributeValueWithSchema
 
-▸ **decodeChunkedArray**<`T`\>(`schema`, `values`): `T`[]
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `T` |
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `schema` | [`ArraySchema`](../classes/exports_tlv.ArraySchema.md)<`T`\> |
-| `values` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `data`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `dataVersion`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](../classes/exports_datatype.NodeId.md)\>  }\>\>  }\>[] |
-
-#### Returns
-
-`T`[]
-
-#### Defined in
-
-packages/matter.js/dist/cjs/protocol/interaction/AttributeDataDecoder.d.ts:38
-
-___
-
-### decodeValueForAttribute
-
-▸ **decodeValueForAttribute**<`A`\>(`attribute`, `values`): [`AttributeJsType`](exports_cluster.md#attributejstype)<`A`\> \| `undefined`
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `A` | extends [`Attribute`](exports_cluster.md#attribute)<`any`, `A`\> |
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `attribute` | `A` |
-| `values` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `data`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `dataVersion`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](../classes/exports_datatype.NodeId.md)\>  }\>\>  }\>[] |
-
-#### Returns
-
-[`AttributeJsType`](exports_cluster.md#attributejstype)<`A`\> \| `undefined`
-
-#### Defined in
-
-packages/matter.js/dist/cjs/protocol/interaction/AttributeDataDecoder.d.ts:36
-
-___
-
-### decodeValueForSchema
-
-▸ **decodeValueForSchema**<`T`\>(`schema`, `values`, `defaultValue?`): `T` \| `undefined`
+▸ **decodeAttributeValueWithSchema**<`T`\>(`schema`, `values`, `defaultValue?`): `T` \| `undefined`
 
 #### Type parameters
 
@@ -732,7 +723,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `schema` | [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)<`T`\> |
-| `values` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `data`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `dataVersion`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](../classes/exports_datatype.NodeId.md)\>  }\>\>  }\>[] |
+| `values` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `data`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `dataVersion`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`AttributeId`](exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`ClusterId`](exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\>  }\>[] |
 | `defaultValue?` | `T` |
 
 #### Returns
@@ -741,23 +732,172 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/AttributeDataDecoder.d.ts:37
+packages/matter.js/dist/cjs/protocol/interaction/AttributeDataDecoder.d.ts:39
 
 ___
 
-### normalizeAndDecodeAttributeData
+### decodeUnknownAttributeValue
 
-▸ **normalizeAndDecodeAttributeData**(`data`): [`DecodedAttributeValue`](../interfaces/exports_interaction.DecodedAttributeValue.md)[]
+▸ **decodeUnknownAttributeValue**(`values`): `any`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `data` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `data`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `dataVersion`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](../classes/exports_datatype.NodeId.md)\>  }\>\>  }\>[] |
+| `values` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `data`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `dataVersion`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`AttributeId`](exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`ClusterId`](exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\>  }\>[] |
 
 #### Returns
 
-[`DecodedAttributeValue`](../interfaces/exports_interaction.DecodedAttributeValue.md)[]
+`any`
+
+#### Defined in
+
+packages/matter.js/dist/cjs/protocol/interaction/AttributeDataDecoder.d.ts:40
+
+___
+
+### decodeUnknownEventValue
+
+▸ **decodeUnknownEventValue**(`data`): `any`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `data` | [`TlvStream`](exports_tlv.md#tlvstream) |
+
+#### Returns
+
+`any`
+
+#### Defined in
+
+packages/matter.js/dist/cjs/protocol/interaction/EventDataDecoder.d.ts:35
+
+___
+
+### decodeValueForAttribute
+
+▸ **decodeValueForAttribute**<`A`\>(`attribute`, `values`): [`AttributeJsType`](exports_cluster.md#attributejstype)<`A`\> \| `undefined`
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `A` | extends [`Attribute`](exports_cluster.md#attribute)<`any`, `any`, `A`\> |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `attribute` | `A` |
+| `values` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `data`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `dataVersion`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`AttributeId`](exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`ClusterId`](exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\>  }\>[] |
+
+#### Returns
+
+[`AttributeJsType`](exports_cluster.md#attributejstype)<`A`\> \| `undefined`
+
+#### Defined in
+
+packages/matter.js/dist/cjs/protocol/interaction/AttributeDataDecoder.d.ts:38
+
+___
+
+### eventPathToId
+
+▸ **eventPathToId**(`«destructured»`): `string`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `«destructured»` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`ClusterId`](exports_datatype.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EventId`](exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](exports_datatype.md#nodeid)\>  }\> |
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+packages/matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:54
+
+___
+
+### genericElementPathToId
+
+▸ **genericElementPathToId**(`endpointId`, `clusterId`, `elementId`): `string`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `endpointId` | `undefined` \| [`EndpointNumber`](exports_datatype.md#endpointnumber) |
+| `clusterId` | `undefined` \| [`ClusterId`](exports_datatype.md#clusterid) |
+| `elementId` | `undefined` \| `number` |
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+packages/matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:51
+
+___
+
+### normalizeAndDecodeAttributeData
+
+▸ **normalizeAndDecodeAttributeData**(`data`): [`DecodedAttributeValue`](../interfaces/exports_interaction.DecodedAttributeValue.md)<`any`\>[]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `data` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `data`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `dataVersion`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`AttributeId`](exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`ClusterId`](exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\>  }\>[] |
+
+#### Returns
+
+[`DecodedAttributeValue`](../interfaces/exports_interaction.DecodedAttributeValue.md)<`any`\>[]
+
+#### Defined in
+
+packages/matter.js/dist/cjs/protocol/interaction/AttributeDataDecoder.d.ts:37
+
+___
+
+### normalizeAndDecodeEventData
+
+▸ **normalizeAndDecodeEventData**(`data`): [`DecodedEventReportValue`](exports_interaction.md#decodedeventreportvalue)<`any`\>[]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `data` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `data`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `deltaEpochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\> ; `deltaSystemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\> ; `epochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\> ; `eventNumber`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number` \| `bigint`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`ClusterId`](exports_datatype.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EventId`](exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\> ; `priority`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`EventPriority`](../enums/exports_cluster.EventPriority.md)\> ; `systemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\>  }\>[] |
+
+#### Returns
+
+[`DecodedEventReportValue`](exports_interaction.md#decodedeventreportvalue)<`any`\>[]
+
+#### Defined in
+
+packages/matter.js/dist/cjs/protocol/interaction/EventDataDecoder.d.ts:34
+
+___
+
+### normalizeAndDecodeReadAttributeReport
+
+▸ **normalizeAndDecodeReadAttributeReport**(`data`): [`DecodedAttributeReportValue`](../interfaces/exports_interaction.DecodedAttributeReportValue.md)<`any`\>[]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `data` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `attributeData`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `data`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `dataVersion`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`AttributeId`](exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`ClusterId`](exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\>  }\>\> ; `attributeStatus`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`AttributeId`](exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`ClusterId`](exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\> ; `status`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `clusterStatus`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`StatusCode`](../enums/exports_interaction.StatusCode.md)\> ; `status`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`StatusCode`](../enums/exports_interaction.StatusCode.md)\>  }\>\>  }\>\>  }\>[] |
+
+#### Returns
+
+[`DecodedAttributeReportValue`](../interfaces/exports_interaction.DecodedAttributeReportValue.md)<`any`\>[]
 
 #### Defined in
 
@@ -765,23 +905,23 @@ packages/matter.js/dist/cjs/protocol/interaction/AttributeDataDecoder.d.ts:35
 
 ___
 
-### normalizeAndDecodeReadAttributeReport
+### normalizeAndDecodeReadEventReport
 
-▸ **normalizeAndDecodeReadAttributeReport**(`data`): [`DecodedAttributeReportValue`](../interfaces/exports_interaction.DecodedAttributeReportValue.md)[]
+▸ **normalizeAndDecodeReadEventReport**(`data`): [`DecodedEventReportValue`](exports_interaction.md#decodedeventreportvalue)<`any`\>[]
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `data` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `attributeData`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `data`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `dataVersion`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](../classes/exports_datatype.NodeId.md)\>  }\>\>  }\>\> ; `attributeStatus`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](../classes/exports_datatype.NodeId.md)\>  }\>\> ; `status`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `clusterStatus`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`StatusCode`](../enums/exports_interaction.StatusCode.md)\> ; `status`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`StatusCode`](../enums/exports_interaction.StatusCode.md)\>  }\>\>  }\>\>  }\>[] |
+| `data` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `eventData`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `data`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `deltaEpochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\> ; `deltaSystemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\> ; `epochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\> ; `eventNumber`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number` \| `bigint`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`ClusterId`](exports_datatype.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EventId`](exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\> ; `priority`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`EventPriority`](../enums/exports_cluster.EventPriority.md)\> ; `systemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\>  }\>\> ; `eventStatus`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`ClusterId`](exports_datatype.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EventId`](exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\> ; `status`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `clusterStatus`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`StatusCode`](../enums/exports_interaction.StatusCode.md)\> ; `status`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`StatusCode`](../enums/exports_interaction.StatusCode.md)\>  }\>\>  }\>\>  }\>[] |
 
 #### Returns
 
-[`DecodedAttributeReportValue`](../interfaces/exports_interaction.DecodedAttributeReportValue.md)[]
+[`DecodedEventReportValue`](exports_interaction.md#decodedeventreportvalue)<`any`\>[]
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/AttributeDataDecoder.d.ts:33
+packages/matter.js/dist/cjs/protocol/interaction/EventDataDecoder.d.ts:32
 
 ___
 
@@ -793,7 +933,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `data` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `data`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `dataVersion`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](../classes/exports_datatype.NodeId.md)\>  }\>\>  }\>[] |
+| `data` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `data`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `dataVersion`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`AttributeId`](exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`ClusterId`](exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\>  }\>[] |
 | `acceptWildcardPaths?` | `boolean` |
 
 #### Returns
@@ -802,19 +942,39 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/AttributeDataDecoder.d.ts:34
+packages/matter.js/dist/cjs/protocol/interaction/AttributeDataDecoder.d.ts:36
 
 ___
 
-### structureReadDataToClusterObject
+### normalizeEventData
 
-▸ **structureReadDataToClusterObject**(`data`): `Object`
+▸ **normalizeEventData**(`data`): [`TypeFromSchema`](exports_tlv.md#typefromschema)<typeof [`TlvEventData`](exports_interaction.md#tlveventdata)\>[][]
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `data` | [`DecodedAttributeReportValue`](../interfaces/exports_interaction.DecodedAttributeReportValue.md)[] |
+| `data` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `data`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `deltaEpochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\> ; `deltaSystemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\> ; `epochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\> ; `eventNumber`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number` \| `bigint`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`ClusterId`](exports_datatype.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EventId`](exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\> ; `priority`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`EventPriority`](../enums/exports_cluster.EventPriority.md)\> ; `systemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\>  }\>[] |
+
+#### Returns
+
+[`TypeFromSchema`](exports_tlv.md#typefromschema)<typeof [`TlvEventData`](exports_interaction.md#tlveventdata)\>[][]
+
+#### Defined in
+
+packages/matter.js/dist/cjs/protocol/interaction/EventDataDecoder.d.ts:33
+
+___
+
+### structureReadAttributeDataToClusterObject
+
+▸ **structureReadAttributeDataToClusterObject**(`data`): `Object`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `data` | [`DecodedAttributeReportValue`](../interfaces/exports_interaction.DecodedAttributeReportValue.md)<`any`\>[] |
 
 #### Returns
 
@@ -822,4 +982,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/AttributeDataDecoder.d.ts:39
+packages/matter.js/dist/cjs/protocol/interaction/AttributeDataDecoder.d.ts:41

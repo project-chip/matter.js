@@ -16,28 +16,28 @@
 
 ### clusterId
 
-• **clusterId**: `number`
+• **clusterId**: [`ClusterId`](../modules/exports_datatype.md#clusterid)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:23
+packages/matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:26
 
 ___
 
 ### commandId
 
-• **commandId**: `number`
+• **commandId**: [`CommandId`](../modules/exports_datatype.md#commandid)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:24
+packages/matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:27
 
 ___
 
 ### endpointId
 
-• **endpointId**: `number`
+• **endpointId**: [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:22
+packages/matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:25

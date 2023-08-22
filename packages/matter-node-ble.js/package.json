@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter-node-ble.js",
-    "version": "0.4.0",
+    "version": "0.5.0",
     "description": "Matter BLE support for node.js",
     "keywords": [
         "iot",
@@ -30,18 +30,18 @@
         "test": "TZ=utc jest"
     },
     "devDependencies": {
-        "@typescript-eslint/eslint-plugin": "^5.59.6",
-        "@typescript-eslint/parser": "^5.59.6",
-        "jest": "^29.5.0",
-        "eslint": "^8.40.0",
-        "eslint-import-resolver-typescript": "^3.5.5",
-        "eslint-plugin-import": "^2.27.5",
-        "ts-jest": "^29.1.0",
+        "@typescript-eslint/eslint-plugin": "^5.62.0",
+        "@typescript-eslint/parser": "^5.62.0",
+        "jest": "^29.6.3",
+        "eslint": "^8.47.0",
+        "eslint-import-resolver-typescript": "^3.6.0",
+        "eslint-plugin-import": "^2.28.1",
+        "ts-jest": "^29.1.1",
         "ts-node": "^10.9.1",
         "typescript": "^4.9.5"
     },
     "dependencies": {
-        "@project-chip/matter.js": "^0.4.0",
+        "@project-chip/matter.js": "^0.5.0",
         "@abandonware/bleno": "^0.6.1",
         "@abandonware/noble": "^1.9.2-23"
     },
@@ -53,6 +53,8 @@
         "LICENSE",
         "README.md"
     ],
+    "main": "dist/ble/export.js",
+    "types": "dist/ble/export.d.ts",
     "exports": {
         "./package.json": "./package.json",
         "./*": {
@@ -62,6 +64,9 @@
     },
     "typesVersions": {
         "*": {
+            ".": [
+                "/dist/ble/export.d.ts"
+            ],
             "*": [
                 "/dist/*/export.d.ts"
             ]

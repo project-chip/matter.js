@@ -1,18 +1,19 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/cluster](../modules/exports_cluster.md) / OptionalAttribute
 
-# Interface: OptionalAttribute<T\>
+# Interface: OptionalAttribute<T, F\>
 
 [exports/cluster](../modules/exports_cluster.md).OptionalAttribute
 
 ## Type parameters
 
-| Name |
-| :------ |
-| `T` |
+| Name | Type |
+| :------ | :------ |
+| `T` | `T` |
+| `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
 
 ## Hierarchy
 
-- [`Attribute`](../modules/exports_cluster.md#attribute)<`T`\>
+- [`Attribute`](../modules/exports_cluster.md#attribute)<`T`, `F`\>
 
   ↳ **`OptionalAttribute`**
 
@@ -21,13 +22,19 @@
 ### Properties
 
 - [default](exports_cluster.OptionalAttribute.md#default)
+- [fabricScoped](exports_cluster.OptionalAttribute.md#fabricscoped)
+- [fixed](exports_cluster.OptionalAttribute.md#fixed)
 - [id](exports_cluster.OptionalAttribute.md#id)
+- [isConditional](exports_cluster.OptionalAttribute.md#isconditional)
+- [mandatoryIf](exports_cluster.OptionalAttribute.md#mandatoryif)
 - [omitChanges](exports_cluster.OptionalAttribute.md#omitchanges)
 - [optional](exports_cluster.OptionalAttribute.md#optional)
+- [optionalIf](exports_cluster.OptionalAttribute.md#optionalif)
 - [persistent](exports_cluster.OptionalAttribute.md#persistent)
 - [readAcl](exports_cluster.OptionalAttribute.md#readacl)
 - [scene](exports_cluster.OptionalAttribute.md#scene)
 - [schema](exports_cluster.OptionalAttribute.md#schema)
+- [unknown](exports_cluster.OptionalAttribute.md#unknown)
 - [writable](exports_cluster.OptionalAttribute.md#writable)
 - [writeAcl](exports_cluster.OptionalAttribute.md#writeacl)
 
@@ -43,13 +50,41 @@ Attribute.default
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:28
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:37
+
+___
+
+### fabricScoped
+
+• **fabricScoped**: `boolean`
+
+#### Inherited from
+
+Attribute.fabricScoped
+
+#### Defined in
+
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:34
+
+___
+
+### fixed
+
+• **fixed**: `boolean`
+
+#### Inherited from
+
+Attribute.fixed
+
+#### Defined in
+
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:33
 
 ___
 
 ### id
 
-• **id**: `number`
+• **id**: [`AttributeId`](../modules/exports_datatype.md#attributeid)
 
 #### Inherited from
 
@@ -57,7 +92,35 @@ Attribute.id
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:19
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:26
+
+___
+
+### isConditional
+
+• **isConditional**: `boolean`
+
+#### Inherited from
+
+Attribute.isConditional
+
+#### Defined in
+
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:38
+
+___
+
+### mandatoryIf
+
+• **mandatoryIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)<`F`\>
+
+#### Inherited from
+
+Attribute.mandatoryIf
+
+#### Defined in
+
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:40
 
 ___
 
@@ -71,7 +134,7 @@ Attribute.omitChanges
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:26
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:35
 
 ___
 
@@ -85,7 +148,21 @@ Attribute.optional
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:31
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:44
+
+___
+
+### optionalIf
+
+• **optionalIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)<`F`\>
+
+#### Inherited from
+
+Attribute.optionalIf
+
+#### Defined in
+
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:39
 
 ___
 
@@ -99,7 +176,7 @@ Attribute.persistent
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:25
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:32
 
 ___
 
@@ -113,7 +190,7 @@ Attribute.readAcl
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:22
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:29
 
 ___
 
@@ -127,7 +204,7 @@ Attribute.scene
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:24
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:31
 
 ___
 
@@ -141,7 +218,21 @@ Attribute.schema
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:20
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:27
+
+___
+
+### unknown
+
+• **unknown**: `boolean`
+
+#### Inherited from
+
+Attribute.unknown
+
+#### Defined in
+
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:41
 
 ___
 
@@ -155,7 +246,7 @@ Attribute.writable
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:23
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:30
 
 ___
 
@@ -169,4 +260,4 @@ Attribute.writeAcl
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:27
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:36

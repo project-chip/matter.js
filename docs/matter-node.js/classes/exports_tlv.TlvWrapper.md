@@ -40,6 +40,8 @@
 - [encodeInternal](exports_tlv.TlvWrapper.md#encodeinternal)
 - [encodeTlv](exports_tlv.TlvWrapper.md#encodetlv)
 - [encodeTlvInternal](exports_tlv.TlvWrapper.md#encodetlvinternal)
+- [injectField](exports_tlv.TlvWrapper.md#injectfield)
+- [removeField](exports_tlv.TlvWrapper.md#removefield)
 - [validate](exports_tlv.TlvWrapper.md#validate)
 
 ## Constructors
@@ -329,6 +331,59 @@ TlvSchema.encodeTlvInternal
 #### Defined in
 
 packages/matter.js/dist/cjs/tlv/TlvWrapper.d.ts:14
+
+___
+
+### injectField
+
+▸ **injectField**(`value`, `_fieldId`, `_fieldValue`, `_injectChecker`): `O`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | `O` |
+| `_fieldId` | `number` |
+| `_fieldValue` | `any` |
+| `_injectChecker` | (`fieldValue`: `any`) => `boolean` |
+
+#### Returns
+
+`O`
+
+#### Inherited from
+
+TlvSchema.injectField
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:20
+
+___
+
+### removeField
+
+▸ **removeField**(`value`, `_fieldId`, `_removeChecker`): `O`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | `O` |
+| `_fieldId` | `number` |
+| `_removeChecker` | (`fieldValue`: `any`) => `boolean` |
+
+#### Returns
+
+`O`
+
+#### Inherited from
+
+TlvSchema.removeField
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:21
 
 ___
 

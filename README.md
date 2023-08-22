@@ -32,11 +32,11 @@ matter.js/matter-node.js as Controller was successfully tested with the followin
 
 This repository contains multiple packages (and because of this it is a monorepo). The packages are contained in the `packages` directory and are all published separately to NPM.
 
-* matter.js: the core Matter implementation in typescript which is JavaScript only and has no native dependencies.
-* matter-node.js: a node.js implementation of a Matter DeviceNode and ControllerNode which also re-exports all matter.js exports and so can be used as only dependency
-* matter-node.js-examples: Reference implementations of Matter devices and controller as CLI scripts using matter-node.js
-* matter-node-ble.js: a node.js based implementation of BLE features for matter-node.js to allow commissioning via BLE (Device and Controller)
-* matter-node-shell.js: a node.js based Matter Shell script to allow to interact with Matter devices as controllers via a CLI interface
+* **matter.js**: the core Matter implementation in typescript which is JavaScript only and has no native dependencies.
+* **matter-node.js**: a node.js implementation of a Matter DeviceNode and ControllerNode which also re-exports all matter.js exports and so can be used as only dependency
+* **matter-node-ble.js**: a node.js based implementation of BLE features for matter-node.js to allow commissioning via BLE (Device and Controller)
+* **matter-node-shell.js**: a node.js based Matter Shell script to allow to interact with Matter devices as controllers via a CLI interface
+* **matter-node.js-examples**: Reference implementations of Matter devices and controller as CLI scripts using matter-node.js and matter-node-ble.js
 
 For each package the [API Documentation](./docs/README.md) is updated on each release, but can be built locally using `npm run build-doc`.
 
@@ -44,7 +44,7 @@ This repository uses the workspaces feature on npm to manage the dependencies be
 
 Additionally, it uses typescript project references to allow IDE support for the dependencies. These dependencies need to be added to the tsconfig.json files if needed.
 
-You can build and test the packages separately or all by using `npm run build` or `npm run test` on root package level.
+You can build and test the packages separately or all by using `npm run build` or `npm run test` on root package level. With `npm run build-clean` you can build all packages from scratch.
 
 ## Community communication
 
@@ -201,7 +201,7 @@ Also for Google you need to have a Hub device (Android or Google Nest smart spea
 Pairing is currently only possible using the Google Home Android App on Android 8.1 or higher. The iOS App is not supporting Matter yet.
 
 Before you can pair node-matter to Google Home you need to allow uncertified devices for your Google Account. For this open the [Google
-Developer Console to add an Integration](https://console.home.google.com/projects/matter-test-0db58/matter) and [setup](https://developers.home.google.com/matter/get-started?hl=en&%3Bauthuser=0&authuser=0) the device there. Please use 0xFFF1 as Vendor ID
+Developer Console to add an Integration](https://console.home.google.com/projects/) and [setup](https://developers.home.google.com/matter/get-started?hl=en&%3Bauthuser=0&authuser=0) the device there. Please use 0xFFF1 as Vendor ID
 because node-matter uses this by the current scripts.
 If you do this that pairing will not be possible!
 If you have issues with pairing please refer to the [Troubleshootling pages](https://developers.home.google.com/matter/build/troubleshooting?hl=en#verify_your_google_play_services_gps_matter_modules) from Google.

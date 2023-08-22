@@ -37,7 +37,7 @@
 | :------ | :------ |
 | `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
 | `endpointId` | `number` |
-| `groupId` | [`GroupId`](exports_datatype.GroupId.md) |
+| `groupId` | [`GroupId`](../modules/exports_datatype.md#groupid) |
 
 #### Returns
 
@@ -45,13 +45,13 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/GroupsServer.d.ts:13
+packages/matter.js/dist/cjs/cluster/server/GroupsServer.d.ts:12
 
 ___
 
 ### getGroups
 
-▸ `Static` **getGroups**(`fabric`, `endpointId`): `Map`<`number`, `string`\>
+▸ `Static` **getGroups**(`fabric`, `endpointId`): `Map`<[`GroupId`](../modules/exports_datatype.md#groupid), `string`\>
 
 #### Parameters
 
@@ -62,11 +62,11 @@ ___
 
 #### Returns
 
-`Map`<`number`, `string`\>
+`Map`<[`GroupId`](../modules/exports_datatype.md#groupid), `string`\>
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/GroupsServer.d.ts:15
+packages/matter.js/dist/cjs/cluster/server/GroupsServer.d.ts:14
 
 ___
 
@@ -80,7 +80,7 @@ ___
 | :------ | :------ |
 | `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
 | `endpointId` | `number` |
-| `groupId` | [`GroupId`](exports_datatype.GroupId.md) |
+| `groupId` | [`GroupId`](../modules/exports_datatype.md#groupid) |
 
 #### Returns
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/GroupsServer.d.ts:14
+packages/matter.js/dist/cjs/cluster/server/GroupsServer.d.ts:13
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/GroupsServer.d.ts:17
+packages/matter.js/dist/cjs/cluster/server/GroupsServer.d.ts:16
 
 ___
 
@@ -123,7 +123,7 @@ ___
 | :------ | :------ |
 | `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
 | `endpointId` | `number` |
-| `groupId` | [`GroupId`](exports_datatype.GroupId.md) |
+| `groupId` | [`GroupId`](../modules/exports_datatype.md#groupid) |
 
 #### Returns
 
@@ -131,7 +131,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/GroupsServer.d.ts:16
+packages/matter.js/dist/cjs/cluster/server/GroupsServer.d.ts:15
 
 ___
 
@@ -145,7 +145,7 @@ ___
 | :------ | :------ |
 | `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
 | `endpointId` | `number` |
-| `groupId` | [`GroupId`](exports_datatype.GroupId.md) |
+| `groupId` | [`GroupId`](../modules/exports_datatype.md#groupid) |
 | `groupName` | `string` |
 
 #### Returns
@@ -154,4 +154,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/GroupsServer.d.ts:12
+packages/matter.js/dist/cjs/cluster/server/GroupsServer.d.ts:11

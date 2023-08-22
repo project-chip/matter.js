@@ -43,6 +43,7 @@ For more details please refer to the [API Documentation](../../docs/matter-node.
 | `@project-chip/matter-node.js/log`           | Re-Exports Logging functionality (based on "console")                            |
 | `@project-chip/matter-node.js/math`          | Re-Exports Math functionality used by Matter                                     |
 | `@project-chip/matter-node.js/mdns`          | Re-Exports Basic MDNS functionality (uses Network implementation)                |
+| `@project-chip/matter-node.js/model`         | Re-Exports a JavaScript version of the Matter data model                         |
 | `@project-chip/matter-node.js/protocol`      | Re-Exports Basic Matter protocol functionality                                   |
 | `@project-chip/matter-node.js/schema`        | Re-Exports Schema definitions and functionality                                  |
 | `@project-chip/matter-node.js/securechannel` | Re-Exports Secure Channel functionality                                          |

@@ -24,6 +24,7 @@ Root endpoint of a device. This is used internally and not needed to be instance
 - [deviceTypes](exports_device.RootEndpoint.md#devicetypes)
 - [id](exports_device.RootEndpoint.md#id)
 - [name](exports_device.RootEndpoint.md#name)
+- [uniqueStorageKey](exports_device.RootEndpoint.md#uniquestoragekey)
 
 ### Methods
 
@@ -32,8 +33,8 @@ Root endpoint of a device. This is used internally and not needed to be instance
 - [addClusterServer](exports_device.RootEndpoint.md#addclusterserver)
 - [addFixedLabel](exports_device.RootEndpoint.md#addfixedlabel)
 - [addUserLabel](exports_device.RootEndpoint.md#adduserlabel)
-- [ensureEndpointIds](exports_device.RootEndpoint.md#ensureendpointids)
-- [findHighestEndpointId](exports_device.RootEndpoint.md#findhighestendpointid)
+- [clearStructureChangedCallback](exports_device.RootEndpoint.md#clearstructurechangedcallback)
+- [determineUniqueID](exports_device.RootEndpoint.md#determineuniqueid)
 - [getAllClusterClients](exports_device.RootEndpoint.md#getallclusterclients)
 - [getAllClusterServers](exports_device.RootEndpoint.md#getallclusterservers)
 - [getChildEndpoint](exports_device.RootEndpoint.md#getchildendpoint)
@@ -44,10 +45,12 @@ Root endpoint of a device. This is used internally and not needed to be instance
 - [getClusterServerById](exports_device.RootEndpoint.md#getclusterserverbyid)
 - [getDeviceTypes](exports_device.RootEndpoint.md#getdevicetypes)
 - [getId](exports_device.RootEndpoint.md#getid)
-- [getStructure](exports_device.RootEndpoint.md#getstructure)
 - [hasClusterClient](exports_device.RootEndpoint.md#hasclusterclient)
 - [hasClusterServer](exports_device.RootEndpoint.md#hasclusterserver)
+- [removeChildEndpoint](exports_device.RootEndpoint.md#removechildendpoint)
 - [setDeviceTypes](exports_device.RootEndpoint.md#setdevicetypes)
+- [setStructureChangedCallback](exports_device.RootEndpoint.md#setstructurechangedcallback)
+- [updatePartsList](exports_device.RootEndpoint.md#updatepartslist)
 - [verifyRequiredClusters](exports_device.RootEndpoint.md#verifyrequiredclusters)
 
 ## Constructors
@@ -64,23 +67,23 @@ Create a new RootEndpoint instance. This is automatically instanced by the Commi
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Device.d.ts:45
+packages/matter.js/dist/cjs/device/Device.d.ts:57
 
 ## Properties
 
 ### deviceType
 
-• `Readonly` **deviceType**: `number`
+• `Readonly` **deviceType**: [`DeviceTypeId`](../modules/exports_datatype.md#devicetypeid)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Device.d.ts:41
+packages/matter.js/dist/cjs/device/Device.d.ts:53
 
 ___
 
 ### deviceTypes
 
-• `Protected` **deviceTypes**: [`AtLeastOne`](../modules/index._internal_.md#atleastone)<[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition)\>
+• `Protected` **deviceTypes**: [[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]]
 
 #### Inherited from
 
@@ -88,13 +91,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:17
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:19
 
 ___
 
 ### id
 
-• **id**: `undefined` \| `number`
+• **id**: `undefined` \| [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)
 
 #### Inherited from
 
@@ -102,7 +105,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:21
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:23
 
 ___
 
@@ -116,7 +119,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:22
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:25
+
+___
+
+### uniqueStorageKey
+
+• **uniqueStorageKey**: `undefined` \| `string`
+
+#### Inherited from
+
+[Endpoint](exports_device.Endpoint.md).[uniqueStorageKey](exports_device.Endpoint.md#uniquestoragekey)
+
+#### Defined in
+
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:24
 
 ## Methods
 
@@ -140,26 +157,28 @@ packages/matter.js/dist/cjs/device/Endpoint.d.ts:22
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:38
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:50
 
 ___
 
 ### addClusterClient
 
-▸ **addClusterClient**<`A`, `C`\>(`cluster`): `void`
+▸ **addClusterClient**<`F`, `A`, `C`, `E`\>(`cluster`): `void`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
+| `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
 | `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
+| `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`A`, `C`\> |
+| `cluster` | [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`F`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -171,26 +190,26 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:29
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:41
 
 ___
 
 ### addClusterServer
 
-▸ **addClusterServer**<`A`, `C`\>(`cluster`): `void`
+▸ **addClusterServer**<`A`, `E`\>(`cluster`): `void`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
-| `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
+| `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<`A`, `C`\> |
+| `cluster` | [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<`A`, `E`\> |
 
 #### Returns
 
@@ -202,7 +221,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:28
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:40
 
 ___
 
@@ -227,7 +246,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:26
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:38
 
 ___
 
@@ -252,59 +271,53 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:27
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:39
 
 ___
 
-### ensureEndpointIds
+### clearStructureChangedCallback
 
-▸ **ensureEndpointIds**(`nextEndpointId`): `number`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `nextEndpointId` | `number` |
+▸ **clearStructureChangedCallback**(): `void`
 
 #### Returns
 
-`number`
+`void`
 
 #### Inherited from
 
-[Endpoint](exports_device.Endpoint.md).[ensureEndpointIds](exports_device.Endpoint.md#ensureendpointids)
+[Endpoint](exports_device.Endpoint.md).[clearStructureChangedCallback](exports_device.Endpoint.md#clearstructurechangedcallback)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:42
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:36
 
 ___
 
-### findHighestEndpointId
+### determineUniqueID
 
-▸ **findHighestEndpointId**(): `number`
+▸ **determineUniqueID**(): `undefined` \| `string`
 
 #### Returns
 
-`number`
+`undefined` \| `string`
 
 #### Inherited from
 
-[Endpoint](exports_device.Endpoint.md).[findHighestEndpointId](exports_device.Endpoint.md#findhighestendpointid)
+[Endpoint](exports_device.Endpoint.md).[determineUniqueID](exports_device.Endpoint.md#determineuniqueid)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:41
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:54
 
 ___
 
 ### getAllClusterClients
 
-▸ **getAllClusterClients**(): [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md)\>[]
+▸ **getAllClusterClients**(): [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`any`, [`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md), [`Events`](../interfaces/exports_cluster.Events.md)\>[]
 
 #### Returns
 
-[`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md)\>[]
+[`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`any`, [`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md), [`Events`](../interfaces/exports_cluster.Events.md)\>[]
 
 #### Inherited from
 
@@ -312,17 +325,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:45
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:57
 
 ___
 
 ### getAllClusterServers
 
-▸ **getAllClusterServers**(): [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md)\>[]
+▸ **getAllClusterServers**(): [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Events`](../interfaces/exports_cluster.Events.md)\>[]
 
 #### Returns
 
-[`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md)\>[]
+[`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Events`](../interfaces/exports_cluster.Events.md)\>[]
 
 #### Inherited from
 
@@ -330,7 +343,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:44
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:56
 
 ___
 
@@ -342,7 +355,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `id` | `number` |
+| `id` | [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber) |
 
 #### Returns
 
@@ -354,7 +367,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:39
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:51
 
 ___
 
@@ -372,20 +385,20 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:40
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:52
 
 ___
 
 ### getClusterClient
 
-▸ **getClusterClient**<`F`, `SF`, `A`, `C`, `E`\>(`cluster`, `interactionClient?`): `undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`A`, `C`\>
+▸ **getClusterClient**<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`F`, `A`, `C`, `E`\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
-| `SF` | extends [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
 | `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
@@ -395,11 +408,10 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> |
-| `interactionClient?` | [`InteractionClient`](exports_interaction.InteractionClient.md) |
 
 #### Returns
 
-`undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`A`, `C`\>
+`undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`F`, `A`, `C`, `E`\>
 
 #### Inherited from
 
@@ -407,23 +419,23 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:31
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:43
 
 ___
 
 ### getClusterClientById
 
-▸ **getClusterClientById**(`clusterId`): `undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md)\>
+▸ **getClusterClientById**(`clusterId`): `undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`any`, [`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md), [`Events`](../interfaces/exports_cluster.Events.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `clusterId` | `number` |
+| `clusterId` | [`ClusterId`](../modules/exports_datatype.md#clusterid) |
 
 #### Returns
 
-`undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md)\>
+`undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`any`, [`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md), [`Events`](../interfaces/exports_cluster.Events.md)\>
 
 #### Inherited from
 
@@ -431,20 +443,20 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:33
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:45
 
 ___
 
 ### getClusterServer
 
-▸ **getClusterServer**<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<`A`, `C`\>
+▸ **getClusterServer**<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<`A`, `E`\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
-| `SF` | extends [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
 | `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
@@ -457,7 +469,7 @@ ___
 
 #### Returns
 
-`undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<`A`, `C`\>
+`undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<`A`, `E`\>
 
 #### Inherited from
 
@@ -465,23 +477,23 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:30
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:42
 
 ___
 
 ### getClusterServerById
 
-▸ **getClusterServerById**(`clusterId`): `undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md)\>
+▸ **getClusterServerById**(`clusterId`): `undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Events`](../interfaces/exports_cluster.Events.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `clusterId` | `number` |
+| `clusterId` | [`ClusterId`](../modules/exports_datatype.md#clusterid) |
 
 #### Returns
 
-`undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md)\>
+`undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Events`](../interfaces/exports_cluster.Events.md)\>
 
 #### Inherited from
 
@@ -489,17 +501,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:32
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:44
 
 ___
 
 ### getDeviceTypes
 
-▸ **getDeviceTypes**(): [`AtLeastOne`](../modules/index._internal_.md#atleastone)<[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition)\>
+▸ **getDeviceTypes**(): [[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]]
 
 #### Returns
 
-[`AtLeastOne`](../modules/index._internal_.md#atleastone)<[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition)\>
+[[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]]
 
 #### Inherited from
 
@@ -507,17 +519,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:36
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:48
 
 ___
 
 ### getId
 
-▸ **getId**(): `number`
+▸ **getId**(): [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)
 
 #### Returns
 
-`number`
+[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)
 
 #### Inherited from
 
@@ -525,34 +537,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:25
-
-___
-
-### getStructure
-
-▸ **getStructure**(): `Object`
-
-#### Returns
-
-`Object`
-
-| Name | Type |
-| :------ | :------ |
-| `attributePaths` | [`AttributePath`](../interfaces/exports_interaction.AttributePath.md)[] |
-| `attributes` | `Map`<`string`, [`AttributeServer`](exports_cluster.AttributeServer.md)<`any`\>\> |
-| `commandPaths` | [`CommandPath`](../interfaces/exports_interaction.CommandPath.md)[] |
-| `commands` | `Map`<`string`, [`CommandServer`](exports_cluster.CommandServer.md)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md)\>\> |
-| `endpoints` | `Map`<`number`, [`Endpoint`](exports_device.Endpoint.md)\> |
-| `partsList` | `any` |
-
-#### Inherited from
-
-[Endpoint](exports_device.Endpoint.md).[getStructure](exports_device.Endpoint.md#getstructure)
-
-#### Defined in
-
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:46
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:37
 
 ___
 
@@ -565,7 +550,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
-| `SF` | extends [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
 | `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
@@ -586,7 +571,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:35
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:47
 
 ___
 
@@ -599,7 +584,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
-| `SF` | extends [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
 | `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
@@ -620,7 +605,31 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:34
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:46
+
+___
+
+### removeChildEndpoint
+
+▸ `Protected` **removeChildEndpoint**(`endpoint`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `endpoint` | [`Endpoint`](exports_device.Endpoint.md) |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[Endpoint](exports_device.Endpoint.md).[removeChildEndpoint](exports_device.Endpoint.md#removechildendpoint)
+
+#### Defined in
+
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:53
 
 ___
 
@@ -632,7 +641,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `deviceTypes` | [`AtLeastOne`](../modules/index._internal_.md#atleastone)<[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition)\> |
+| `deviceTypes` | [[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]] |
 
 #### Returns
 
@@ -644,13 +653,55 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:37
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:49
+
+___
+
+### setStructureChangedCallback
+
+▸ **setStructureChangedCallback**(`callback`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `callback` | () => `void` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[Endpoint](exports_device.Endpoint.md).[setStructureChangedCallback](exports_device.Endpoint.md#setstructurechangedcallback)
+
+#### Defined in
+
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:35
+
+___
+
+### updatePartsList
+
+▸ **updatePartsList**(): [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)[]
+
+#### Returns
+
+[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)[]
+
+#### Inherited from
+
+[Endpoint](exports_device.Endpoint.md).[updatePartsList](exports_device.Endpoint.md#updatepartslist)
+
+#### Defined in
+
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:58
 
 ___
 
 ### verifyRequiredClusters
 
-▸ `Protected` **verifyRequiredClusters**(): `void`
+▸ **verifyRequiredClusters**(): `void`
 
 #### Returns
 
@@ -662,4 +713,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:43
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:55

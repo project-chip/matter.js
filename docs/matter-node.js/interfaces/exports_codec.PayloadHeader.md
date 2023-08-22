@@ -23,7 +23,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:23
+packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:26
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:18
+packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:21
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:21
+packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:24
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:20
+packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:23
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:19
+packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:22
 
 ___
 
@@ -73,4 +73,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:22
+packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:25

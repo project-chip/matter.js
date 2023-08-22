@@ -49,6 +49,8 @@ MatterCoreSpecificationV1_0 § A.11.1
 - [encodeInternal](exports_tlv.TlvNumericSchema.md#encodeinternal)
 - [encodeTlv](exports_tlv.TlvNumericSchema.md#encodetlv)
 - [encodeTlvInternal](exports_tlv.TlvNumericSchema.md#encodetlvinternal)
+- [injectField](exports_tlv.TlvNumericSchema.md#injectfield)
+- [removeField](exports_tlv.TlvNumericSchema.md#removefield)
 - [validate](exports_tlv.TlvNumericSchema.md#validate)
 - [validateBoundaries](exports_tlv.TlvNumericSchema.md#validateboundaries)
 
@@ -79,7 +81,7 @@ TlvSchema&lt;T\&gt;.constructor
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:20
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:15
 
 ## Properties
 
@@ -103,7 +105,7 @@ packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:20
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:17
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:12
 
 ___
 
@@ -113,7 +115,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:19
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:14
 
 ___
 
@@ -123,7 +125,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:18
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:13
 
 ___
 
@@ -133,7 +135,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:16
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:11
 
 ## Methods
 
@@ -155,7 +157,7 @@ Restrict value range.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:26
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:21
 
 ___
 
@@ -284,7 +286,7 @@ TlvSchema.decodeTlvInternalValue
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:22
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:17
 
 ___
 
@@ -384,7 +386,60 @@ TlvSchema.encodeTlvInternal
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:21
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:16
+
+___
+
+### injectField
+
+▸ **injectField**(`value`, `_fieldId`, `_fieldValue`, `_injectChecker`): `T`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | `T` |
+| `_fieldId` | `number` |
+| `_fieldValue` | `any` |
+| `_injectChecker` | (`fieldValue`: `any`) => `boolean` |
+
+#### Returns
+
+`T`
+
+#### Inherited from
+
+TlvSchema.injectField
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:20
+
+___
+
+### removeField
+
+▸ **removeField**(`value`, `_fieldId`, `_removeChecker`): `T`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | `T` |
+| `_fieldId` | `number` |
+| `_removeChecker` | (`fieldValue`: `any`) => `boolean` |
+
+#### Returns
+
+`T`
+
+#### Inherited from
+
+TlvSchema.removeField
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:21
 
 ___
 
@@ -408,7 +463,7 @@ TlvSchema.validate
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:23
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:18
 
 ___
 
@@ -428,4 +483,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:24
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:19

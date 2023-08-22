@@ -6,4 +6,4 @@
 
 ## Indexable
 
-▪ [key: `string`]: [`Command`](../modules/exports_cluster.md#command)<`any`, `any`\>
+▪ [key: `string`]: [`Command`](../modules/exports_cluster.md#command)<`any`, `any`, `any`\>
