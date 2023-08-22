@@ -58,7 +58,7 @@ export function ClusterServer<
     attributesInitialValues: AttributeInitialValues<A>,
     handlers: H,
     supportedEvents: SupportedEventsList<E> = <SupportedEventsList<E>>{},
-): ClusterServerObj<A, C, E> {
+): ClusterServerObj<A, E> {
     const {
         id: clusterId,
         name,
@@ -468,5 +468,5 @@ export function ClusterServer<
     }
     (attributes as any).eventList.setLocal(eventList.sort((a, b) => a - b));
 
-    return result as ClusterServerObj<A, C, E>;
+    return result as ClusterServerObj<A, E>;
 }

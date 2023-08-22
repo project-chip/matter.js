@@ -10,6 +10,7 @@ import {
     FabricScopedAttributeServer,
     FixedAttributeServer,
 } from "../../cluster/server/AttributeServer.js";
+import { asClusterServerInternal } from "../../cluster/server/ClusterServerTypes.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
 import { Message } from "../../codec/MessageCodec.js";
@@ -147,8 +148,9 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         for (const endpoint of this.endpointStructure.endpoints.values()) {
             for (const cluster of endpoint.getAllClusterServers()) {
-                cluster._setStorage(this.storage.createContext(`Cluster-${endpoint.id}-${cluster.id}`));
-                cluster._registerEventHandler(this.eventHandler);
+                const clusterServer = asClusterServerInternal(cluster);
+                clusterServer._setStorage(this.storage.createContext(`Cluster-${endpoint.id}-${cluster.id}`));
+                clusterServer._registerEventHandler(this.eventHandler);
             }
         }
 

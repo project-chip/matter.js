@@ -7,7 +7,7 @@
 import { Ble } from "./ble/Ble.js";
 import { AttestationCertificateManager } from "./certificate/AttestationCertificateManager.js";
 import { CertificationDeclarationManager } from "./certificate/CertificationDeclarationManager.js";
-import { Attributes, Commands, Events } from "./cluster/Cluster.js";
+import { Attributes, Events } from "./cluster/Cluster.js";
 import { AccessControlCluster } from "./cluster/definitions/AccessControlCluster.js";
 import {
     AdministratorCommissioning,
@@ -405,9 +405,7 @@ export class CommissioningServer extends MatterNode {
      *
      * @param cluster
      */
-    override addRootClusterServer<A extends Attributes, C extends Commands, E extends Events>(
-        cluster: ClusterServerObj<A, C, E>,
-    ) {
+    override addRootClusterServer<A extends Attributes, E extends Events>(cluster: ClusterServerObj<A, E>) {
         if (cluster.id === BasicInformationCluster.id) {
             throw new ImplementationError(
                 "BasicInformationCluster can not be modified, provide all details in constructor options!",

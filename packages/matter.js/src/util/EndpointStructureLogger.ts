@@ -14,7 +14,7 @@ import {
     FabricScopeError,
     FixedAttributeServer,
 } from "../cluster/server/AttributeServer.js";
-import { ClusterServerObj } from "../cluster/server/ClusterServerTypes.js";
+import { asClusterServerInternal, ClusterServerObj } from "../cluster/server/ClusterServerTypes.js";
 import { Endpoint } from "../device/Endpoint.js";
 import { Logger } from "../log/Logger.js";
 import { toHexString } from "./Number.js";
@@ -38,7 +38,7 @@ type EndpointLoggingOptions = {
     logAttributePrimitiveValues?: boolean;
     logAttributeObjectValues?: boolean;
 
-    clusterServerFilter?: (endpoint: Endpoint, cluster: ClusterServerObj<any, any, any>) => boolean;
+    clusterServerFilter?: (endpoint: Endpoint, cluster: ClusterServerObj<any, any>) => boolean;
     clusterClientFilter?: (endpoint: Endpoint, cluster: ClusterClientObj<any, any, any, any>) => boolean;
     endpointFilter?: (endpoint: Endpoint) => boolean;
 };
@@ -78,7 +78,7 @@ function getAttributeServerValue(
 
 function logClusterServer(
     endpoint: Endpoint,
-    clusterServer: ClusterServerObj<any, any, any>,
+    clusterServer: ClusterServerObj<any, any>,
     options: EndpointLoggingOptions = {},
 ) {
     if (options.clusterServerFilter !== undefined && !options.clusterServerFilter(endpoint, clusterServer)) return;
@@ -131,8 +131,9 @@ function logClusterServer(
         Logger.nest(() => {
             logger.info("Commands:");
             Logger.nest(() => {
-                for (const commandName in clusterServer._commands) {
-                    const command = clusterServer._commands[commandName];
+                const commands = asClusterServerInternal(clusterServer)._commands;
+                for (const commandName in commands) {
+                    const command = commands[commandName];
                     if (command === undefined) continue;
                     logger.info(`"${command.name}" (${toHexString(command.invokeId)}/${command.responseId})`);
                 }
@@ -143,8 +144,9 @@ function logClusterServer(
         Logger.nest(() => {
             logger.info("Events:");
             Logger.nest(() => {
-                for (const eventName in clusterServer._events) {
-                    const event = clusterServer._events[eventName];
+                const events = asClusterServerInternal(clusterServer)._events;
+                for (const eventName in events) {
+                    const event = events[eventName];
                     if (event === undefined) continue;
                     logger.info(`"${event.name}" (${toHexString(event.id)})`);
                 }
@@ -164,7 +166,7 @@ function logClusterClient(
     const globalAttributes = GlobalAttributes<any>(features);
     const supportedFeatures = new Array<string>();
     for (const featureName in features) {
-        if ((features as any)[featureName] === true) supportedFeatures.push(featureName);
+        if (features[featureName] === true) supportedFeatures.push(featureName);
     }
 
     logger.info(

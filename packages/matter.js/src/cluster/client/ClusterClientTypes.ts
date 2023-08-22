@@ -3,10 +3,14 @@
  * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
+import { EndpointNumber } from "../../datatype/EndpointNumber.js";
+import { EventId } from "../../datatype/EventId.js";
 import { DecodedEventData } from "../../protocol/interaction/EventDataDecoder.js";
-import { InteractionClient } from "../../protocol/interaction/InteractionClient.js";
+import { TlvEventFilter } from "../../protocol/interaction/InteractionProtocol.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Merge } from "../../util/Type.js";
 import {
     Attribute,
@@ -52,9 +56,15 @@ export type SignatureFromCommandSpec<C extends Command<any, any, any>> = (
 type GetterTypeFromSpec<A extends Attribute<any, any>> = A extends OptionalAttribute<infer T, any>
     ? T | undefined
     : AttributeJsType<A>;
-type ClientAttributeGetters<A extends Attributes> = {
-    [P in keyof A as `get${Capitalize<string & P>}Attribute`]: () => Promise<GetterTypeFromSpec<A[P]>>;
-};
+type ClientAttributeGetters<A extends Attributes> = Omit<
+    {
+        [P in keyof A as `get${Capitalize<string & P>}Attribute`]: (
+            alwaysRequestFromRemote?: boolean,
+            isFabricFiltered?: boolean,
+        ) => Promise<GetterTypeFromSpec<A[P]>>;
+    },
+    keyof GlobalAttributes<any>
+>;
 type ClientGlobalAttributeGetters<F extends BitSchema> = {
     [P in GlobalAttributeNames<F> as `get${Capitalize<string & P>}Attribute`]: () => Promise<
         GetterTypeFromSpec<GlobalAttributes<F>[P]>
@@ -77,6 +87,11 @@ type ClientAttributeSubscribers<A extends Attributes> = {
         isFabricFiltered?: boolean,
     ) => Promise<void>;
 };
+type ClientAttributeListeners<A extends Attributes> = {
+    [P in keyof A as `add${Capitalize<string & P>}AttributeListener`]: (
+        listener: (value: AttributeJsType<A[P]>) => void,
+    ) => void;
+};
 
 type CommandServers<C extends Commands> = { [P in keyof C]: SignatureFromCommandSpec<C[P]> };
 
@@ -96,6 +111,11 @@ type ClientEventSubscribers<E extends Events> = {
         isFabricFiltered?: boolean,
     ) => Promise<void>;
 };
+type ClientEventListeners<E extends Events> = {
+    [P in keyof E as `add${Capitalize<string & P>}EventListener`]: (
+        listener: (value: DecodedEventData<EventType<E[P]>>) => void,
+    ) => void;
+};
 
 export type ClusterClientObjForCluster<C extends Cluster<any, any, any, any, any>> = ClusterClientObj<
     C["features"],
@@ -106,33 +126,135 @@ export type ClusterClientObjForCluster<C extends Cluster<any, any, any, any, any
 
 /** Strongly typed interface of a cluster client */
 export type ClusterClientObj<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events> = {
+    /**
+     * Cluster ID
+     * @readonly
+     */
     id: ClusterId;
+
+    /**
+     * Cluster type
+     * @private
+     * @readonly
+     */
     _type: "ClusterClient";
-    revision: number;
-    name: string;
-    isUnknown: boolean;
-    endpointId: number;
-    supportedFeatures: TypeFromPartialBitSchema<F>;
-    attributes: AttributeClients<F, A>;
-    events: EventClients<E>;
-    commands: CommandServers<C>;
-    subscribeAllAttributes: (
-        minIntervalFloorSeconds: number,
-        maxIntervalCeilingSeconds: number,
-        keepSubscriptions?: boolean,
-        isFabricFiltered?: boolean,
-    ) => Promise<void>;
-    _clone: (newInteractionClient?: InteractionClient) => ClusterClientObj<F, A, C, E>;
+
+    /**
+     * Cluster revision
+     * @readonly
+     */
+    readonly revision: number;
+
+    /**
+     * Cluster name
+     * @readonly
+     */
+    readonly name: string;
+
+    /**
+     * Whether the cluster is unknown, means that we do not have types and schema information for it. Most likely no
+     * official cluster.
+     * @readonly
+     */
+    readonly isUnknown: boolean;
+
+    /**
+     * Endpoint ID the cluster is on.
+     * @readonly
+     */
+    readonly endpointId: number;
+
+    /**
+     * Supported Features of the cluster
+     * @readonly
+     */
+    readonly supportedFeatures: TypeFromPartialBitSchema<F>;
+
+    /**
+     * Attributes of the cluster as object with named keys. This can be used to discover the attributes of the cluster
+     * programmatically.
+     * @readonly
+     */
+    readonly attributes: AttributeClients<F, A>;
+
+    /**
+     * Events of the cluster as object with named keys. This can be used to discover the events of the cluster
+     * programmatically.
+     * @readonly
+     */
+    readonly events: EventClients<E>;
+
+    /**
+     * Commands of the cluster as object with named keys. This can be used to discover the commands of the cluster
+     * programmatically.
+     * @readonly
+     */
+    readonly commands: CommandServers<C>;
+
+    /**
+     * Subscribe to all attributes of the cluster. This will subscribe to all attributes of the cluster. Add listeners
+     * to the relevant attributes you want to get updates for.
+     */
+    readonly subscribeAllAttributes: (options: {
+        minIntervalFloorSeconds: number;
+        maxIntervalCeilingSeconds: number;
+        keepSubscriptions?: boolean;
+        isFabricFiltered?: boolean;
+        eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
+        dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
+    }) => Promise<void>;
 } & ClientAttributeGetters<A> &
     ClientGlobalAttributeGetters<F> &
     ClientAttributeSetters<A> &
     ClientAttributeSubscribers<A> &
+    ClientAttributeListeners<A> &
     CommandServers<C> &
     ClientEventGetters<E> &
-    ClientEventSubscribers<E>;
+    ClientEventSubscribers<E> &
+    ClientEventListeners<E>;
+
+export type ClusterClientObjInternal<
+    F extends BitSchema,
+    A extends Attributes,
+    C extends Commands,
+    E extends Events,
+> = ClusterClientObj<F, A, C, E> & {
+    /**
+     * Trigger an attribute update. This is mainly used internally and not needed to be called by the user.
+     * @private
+     */
+    readonly _triggerAttributeUpdate: (attributeId: AttributeId, value: any) => void;
+
+    /**
+     * Trigger an event update. This is mainly used internally and not needed to be called by the user.
+     * @private
+     */
+    readonly _triggerEventUpdate: (eventId: EventId, events: DecodedEventData<any>[]) => void;
+};
 
 export function isClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
-    obj: ClusterClientObj<F, A, C, E> | ClusterServerObj<A, C, E>,
+    obj: ClusterClientObj<F, A, C, E> | ClusterServerObj<A, E>,
 ): obj is ClusterClientObj<F, A, C, E> {
     return obj._type === "ClusterClient";
+}
+
+export function isClusterClientInternal<
+    F extends BitSchema,
+    A extends Attributes,
+    C extends Commands,
+    E extends Events,
+>(obj: ClusterClientObj<F, A, C, E> | ClusterServerObj<A, E>): obj is ClusterClientObjInternal<F, A, C, E> {
+    return obj._type === "ClusterClient";
+}
+
+export function asClusterClientInternal<
+    F extends BitSchema,
+    A extends Attributes,
+    C extends Commands,
+    E extends Events,
+>(obj: ClusterClientObj<F, A, C, E>): ClusterClientObjInternal<F, A, C, E> {
+    if (!isClusterClientInternal(obj)) {
+        throw new Error("Object is not a ClusterClientObj instance.");
+    }
+    return obj;
 }

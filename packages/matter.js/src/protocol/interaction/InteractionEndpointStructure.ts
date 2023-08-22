@@ -9,7 +9,7 @@ import {
     FabricScopedAttributeServer,
     FixedAttributeServer,
 } from "../../cluster/server/AttributeServer.js";
-import { ClusterServerObj } from "../../cluster/server/ClusterServerTypes.js";
+import { asClusterServerInternal, ClusterServerObj } from "../../cluster/server/ClusterServerTypes.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
 import { ImplementationError, InternalError } from "../../common/MatterError.js";
@@ -82,7 +82,7 @@ export class InteractionEndpointStructure {
                 attributes: clusterAttributes,
                 _events: clusterEvents,
                 _commands: clusterCommands,
-            } = cluster;
+            } = asClusterServerInternal(cluster);
             // Add attributes
             for (const name in clusterAttributes) {
                 const attribute = clusterAttributes[name];
@@ -179,7 +179,7 @@ export class InteractionEndpointStructure {
         return this.endpoints.has(endpointId);
     }
 
-    getClusterServer(endpointId: EndpointNumber, clusterId: ClusterId): ClusterServerObj<any, any, any> | undefined {
+    getClusterServer(endpointId: EndpointNumber, clusterId: ClusterId): ClusterServerObj<any, any> | undefined {
         return this.endpoints.get(endpointId)?.getClusterServerById(clusterId);
     }
 

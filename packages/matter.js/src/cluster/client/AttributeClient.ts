@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "../../common/MatterError.js";
 import { tryCatch } from "../../common/TryCatchHandler.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
@@ -24,16 +23,16 @@ export function createAttributeClient<T>(
     name: string,
     endpointId: EndpointNumber,
     clusterId: ClusterId,
-    getInteractionClientCallback: () => Promise<InteractionClient>,
+    interactionClient: InteractionClient,
     present = false,
 ): AttributeClient<T> {
     if (attribute.unknown) {
-        return new UnknownPresentAttributeClient(attribute, name, endpointId, clusterId, getInteractionClientCallback);
+        return new UnknownPresentAttributeClient(attribute, name, endpointId, clusterId, interactionClient);
     }
     if (present) {
-        return new PresentAttributeClient(attribute, name, endpointId, clusterId, getInteractionClientCallback);
+        return new PresentAttributeClient(attribute, name, endpointId, clusterId, interactionClient);
     }
-    return new AttributeClient(attribute, name, endpointId, clusterId, getInteractionClientCallback);
+    return new AttributeClient(attribute, name, endpointId, clusterId, interactionClient);
 }
 
 /**
@@ -51,7 +50,7 @@ export class AttributeClient<T> {
         readonly name: string,
         readonly endpointId: EndpointNumber,
         readonly clusterId: ClusterId,
-        private getInteractionClientCallback: () => Promise<InteractionClient>,
+        private readonly interactionClient: InteractionClient,
     ) {
         const { schema, writable, fabricScoped, id } = attribute;
         this.schema = schema;
@@ -60,15 +59,14 @@ export class AttributeClient<T> {
         this.id = id;
     }
 
-    async set(value: T) {
+    /**
+     * Set the value of the attribute. When dataVersion parameter is provided the value is only set when the
+     * cluster dataVersion of the server matches. If it does not match it is rejected with an Error.
+     */
+    async set(value: T, dataVersion?: number) {
         if (!this.isWritable) throw new AttributeError(`Attribute ${this.name} is not writable`);
 
         this.schema.validate(value);
-
-        const interactionClient = await this.getInteractionClientCallback();
-        if (interactionClient === undefined) {
-            throw new InternalError("No InteractionClient available");
-        }
 
         if (this.isFabricScoped) {
             // Remove fabric index from structures if the OMIT_FABRIC instance was used (Should be used for all outgoing writes)
@@ -79,7 +77,7 @@ export class AttributeClient<T> {
             );
             value = tryCatch(
                 () => {
-                    const sessionFabric = interactionClient.session.getAssociatedFabric();
+                    const sessionFabric = this.interactionClient.session.getAssociatedFabric();
                     // also remove fabric index if it is the same as the session fabric
                     return this.schema.removeField(
                         value,
@@ -92,51 +90,57 @@ export class AttributeClient<T> {
             );
         }
 
-        return await interactionClient.setAttribute<T>({
+        return await this.interactionClient.setAttribute<T>({
             endpointId: this.endpointId,
             clusterId: this.clusterId,
             attribute: this.attribute,
             value,
+            dataVersion,
         });
     }
 
-    async get(alwaysRequestFromRemote = false) {
-        const interactionClient = await this.getInteractionClientCallback();
-        if (interactionClient === undefined) {
-            throw new InternalError("No InteractionClient available");
+    /** Get the value of the attribute. Fabric scoped reads are always done with the remote. */
+    async get(alwaysRequestFromRemote?: boolean, isFabricFiltered = true) {
+        if (alwaysRequestFromRemote === undefined) {
+            alwaysRequestFromRemote = this.isFabricScoped;
+        } else if (!alwaysRequestFromRemote && this.isFabricScoped) {
+            alwaysRequestFromRemote = true;
         }
-        return await interactionClient.getAttribute({
+        return await this.interactionClient.getAttribute({
             endpointId: this.endpointId,
             clusterId: this.clusterId,
             attribute: this.attribute,
+            isFabricFiltered,
             alwaysRequestFromRemote,
         });
     }
 
-    async getWithVersion(alwaysRequestFromRemote = false) {
-        const interactionClient = await this.getInteractionClientCallback();
-        if (interactionClient === undefined) {
-            throw new InternalError("No InteractionClient available");
+    /**
+     * Get the value with version of the attribute. Fabric scoped reads are always done with the remote.
+     * */
+    async getWithVersion(alwaysRequestFromRemote?: boolean, isFabricFiltered = true) {
+        if (alwaysRequestFromRemote === undefined) {
+            alwaysRequestFromRemote = this.isFabricScoped;
+        } else if (!alwaysRequestFromRemote && this.isFabricScoped) {
+            alwaysRequestFromRemote = true;
         }
-        return await interactionClient.getAttributeWithVersion({
+        return await this.interactionClient.getAttributeWithVersion({
             endpointId: this.endpointId,
             clusterId: this.clusterId,
             attribute: this.attribute,
+            isFabricFiltered,
             alwaysRequestFromRemote,
         });
     }
 
+    /** Subscribe to the attribute. */
     async subscribe(
         minIntervalFloorSeconds: number,
         maxIntervalCeilingSeconds: number,
         knownDataVersion?: number,
         isFabricFiltered = true,
     ) {
-        const interactionClient = await this.getInteractionClientCallback();
-        if (interactionClient === undefined) {
-            throw new InternalError("No InteractionClient available");
-        }
-        return await interactionClient.subscribeAttribute({
+        return await this.interactionClient.subscribeAttribute({
             endpointId: this.endpointId,
             clusterId: this.clusterId,
             attribute: this.attribute,
@@ -148,18 +152,20 @@ export class AttributeClient<T> {
         });
     }
 
+    /**
+     * Update the value of the attribute. Just internally used!
+     * @private
+     */
     update(value: T) {
         this.listeners.forEach(listener => listener(value));
     }
 
-    setInteractionClientRequestorCallback(callback: () => Promise<InteractionClient>) {
-        this.getInteractionClientCallback = callback;
-    }
-
+    /** Add a listener to the attribute. */
     addListener(listener: (newValue: T) => void) {
         this.listeners.push(listener);
     }
 
+    /** Remove a listener from the attribute. */
     removeListener(listener: (newValue: T) => void) {
         const entryIndex = this.listeners.indexOf(listener);
         if (entryIndex !== -1) {

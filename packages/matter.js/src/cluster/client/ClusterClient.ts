@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "../../common/MatterError.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
@@ -41,7 +40,7 @@ import { createEventClient } from "./EventClient.js";
 const logger = Logger.get("ClusterClient");
 
 export function ClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
-    clusterDef: Cluster<F, any, A, C, E>,
+    clusterDef: Cluster<F, TypeFromPartialBitSchema<F>, A, C, E>,
     endpointId: EndpointNumber,
     interactionClient: InteractionClient,
     globalAttributeValues: Partial<AttributeServerValues<GlobalAttributes<F>>> = {},
@@ -52,15 +51,18 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
             attributeName,
             endpointId,
             clusterId,
-            async () => interactionClient,
+            interactionClient,
             globalAttributeValues?.attributeList ? globalAttributeValues?.attributeList.includes(attribute.id) : false,
         );
         attributeToId[attribute.id] = attributeName;
         const capitalizedAttributeName = capitalize(attributeName);
-        result[`get${capitalizedAttributeName}Attribute`] = async (alwaysRequestFromRemote = false) => {
+        result[`get${capitalizedAttributeName}Attribute`] = async (
+            alwaysRequestFromRemote?: boolean,
+            isFabricFiltered = true,
+        ) => {
             return await tryCatchAsync(
                 async () => {
-                    return await (attributes as any)[attributeName].get(alwaysRequestFromRemote);
+                    return await (attributes as any)[attributeName].get(isFabricFiltered, alwaysRequestFromRemote);
                 },
                 StatusResponseError,
                 e => {
@@ -72,8 +74,8 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
                 },
             );
         };
-        result[`set${capitalizedAttributeName}Attribute`] = async <T>(value: T) =>
-            (attributes as any)[attributeName].set(value);
+        result[`set${capitalizedAttributeName}Attribute`] = async <T>(value: T, dataVersion?: number) =>
+            (attributes as any)[attributeName].set(value, dataVersion);
         result[`subscribe${capitalizedAttributeName}Attribute`] = async <T>(
             listener: (value: T) => void,
             minIntervalS: number,
@@ -89,6 +91,9 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
                 isFabricFiltered,
             );
         };
+        result[`add${capitalizedAttributeName}AttributeListener`] = <T>(listener: (value: T) => void) => {
+            (attributes as any)[attributeName].addListener(listener);
+        };
     }
 
     function addEventToResult(event: Event<any, any>, eventName: string) {
@@ -97,7 +102,7 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
             eventName,
             endpointId,
             clusterId,
-            async () => interactionClient,
+            interactionClient,
             globalAttributeValues?.eventList ? globalAttributeValues?.eventList.includes(event.id) : false,
         );
         eventToId[event.id] = eventName;
@@ -136,6 +141,9 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
                 minimumEventNumber,
                 isFabricFiltered,
             );
+        };
+        result[`add${capitalizedEventName}EventListener`] = <T>(listener: (value: DecodedEventData<T>) => void) => {
+            (events as any)[eventName].addListener(listener);
         };
     }
 
@@ -181,10 +189,6 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
             eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
             dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
         }) => {
-            if (interactionClient === undefined) {
-                throw new InternalError("InteractionClient not set.");
-            }
-
             const {
                 minIntervalFloorSeconds,
                 maxIntervalCeilingSeconds,
@@ -222,25 +226,6 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
                     newEvents.forEach(event => (events as any)[eventName].update(event));
                 },
             });
-        },
-
-        /**
-         * Clones the cluster client, optionally with a new interaction client.
-         * When the clusterClient is the same then also AttributeClients will be reused.
-         *
-         * @param newInteractionClient Optionally a new interactionClient to bind to
-         */
-        _clone(newInteractionClient?: InteractionClient) {
-            const clonedClusterClient = ClusterClient(
-                clusterDef,
-                endpointId,
-                newInteractionClient ?? interactionClient,
-            );
-            if (newInteractionClient === undefined) {
-                // When we keep the InteractionClient we also reuse the AttributeServers bound to it
-                clonedClusterClient.attributes = attributes;
-            }
-            return clonedClusterClient;
         },
     };
 
@@ -288,9 +273,6 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
 
         commandToId[requestId] = commandName;
         commands[commandName] = async <RequestT, ResponseT>(request: RequestT) => {
-            if (interactionClient === undefined) {
-                throw new InternalError("InteractionClient not set.");
-            }
             return interactionClient.invoke<Command<RequestT, ResponseT, any>>(
                 endpointId,
                 clusterId,
