@@ -183,6 +183,7 @@ class ControllerNode {
             passcode: setupPin,
             delayedPairing: true,
             commissioningOptions,
+            subscribeAllAttributes: true,
         });
         matterServer.addCommissioningController(commissioningController);
 
@@ -257,7 +258,12 @@ class ControllerNode {
                 const onOff = devices[0].getClusterClient(OnOffCluster);
                 if (onOff !== undefined) {
                     let onOffStatus = await onOff.getOnOffAttribute();
-                    console.log("onOffStatus", onOffStatus);
+                    console.log("initial onOffStatus", onOffStatus);
+
+                    onOff.addOnOffAttributeListener(value => {
+                        console.log("subscription onOffStatus", value);
+                        onOffStatus = value;
+                    });
                     // read data every minute to keep up the connection to show the subscription is working
                     setInterval(() => {
                         onOff
@@ -272,7 +278,7 @@ class ControllerNode {
             }
         } finally {
             //await matterServer.close(); // Comment out when subscribes are used, else the connection will be closed
-            setTimeout(() => process.exit(0), 100000);
+            setTimeout(() => process.exit(0), 1000000);
         }
     }
 }
