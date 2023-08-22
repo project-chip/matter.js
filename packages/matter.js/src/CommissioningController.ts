@@ -5,7 +5,7 @@
  */
 import { Ble } from "./ble/Ble.js";
 import { ClusterClient } from "./cluster/client/ClusterClient.js";
-import { ClusterClientObj, isClusterClient } from "./cluster/client/ClusterClientTypes.js";
+import { asClusterClientInternal, ClusterClientObj, isClusterClient } from "./cluster/client/ClusterClientTypes.js";
 import { Attributes, Commands, Events } from "./cluster/Cluster.js";
 import { getClusterById } from "./cluster/ClusterHelper.js";
 import { DescriptorCluster } from "./cluster/definitions/DescriptorCluster.js";
@@ -38,10 +38,14 @@ import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { UdpInterface } from "./net/UdpInterface.js";
 import { CommissioningOptions } from "./protocol/ControllerCommissioner.js";
-import { structureReadAttributeDataToClusterObject } from "./protocol/interaction/AttributeDataDecoder.js";
+import {
+    DecodedAttributeReportValue,
+    structureReadAttributeDataToClusterObject,
+} from "./protocol/interaction/AttributeDataDecoder.js";
 import { InteractionClient } from "./protocol/interaction/InteractionClient.js";
 import { StorageContext } from "./storage/StorageContext.js";
 import { AtLeastOne } from "./util/Array.js";
+import { toHexString } from "./util/Number.js";
 
 const logger = new Logger("CommissioningController");
 
@@ -176,7 +180,63 @@ export class CommissioningController extends MatterNode {
     }
 
     async initializeAfterConnect() {
-        await this.initializeEndpointStructure();
+        this.interactionClient = await this.createInteractionClient();
+
+        if (this.options.subscribeAllAttributes) {
+            let ignoreInitialTriggers = true; // Ignore Triggers from Subscribing during initialization
+            // If we subscribe anything we use these data to create the endpoint structure, so we do not need to fetch again
+            const initialSubscriptionData = await this.interactionClient.subscribeAllAttributesAndEvents({
+                minIntervalFloorSeconds: this.options.subscribeMinIntervalFloorSeconds ?? 0,
+                maxIntervalCeilingSeconds: this.options.subscribeMaxIntervalCeilingSeconds ?? 120,
+                attributeListener: ({ path: { endpointId, clusterId, attributeId }, value }) => {
+                    if (ignoreInitialTriggers) return;
+                    const device = this.endpoints.get(endpointId);
+                    if (device === undefined) {
+                        logger.info(`Ignoring received attribute update for unknown endpoint ${endpointId}!`);
+                        return;
+                    }
+                    const cluster = device.getClusterClientById(clusterId);
+                    if (cluster === undefined) {
+                        logger.info(
+                            `Ignoring received attribute update for unknown cluster ${toHexString(
+                                clusterId,
+                            )} on endpoint ${endpointId}!`,
+                        );
+                        return;
+                    }
+                    logger.debug(`Trigger attribute update for ${cluster.name}.${attributeId} to ${value}`);
+                    asClusterClientInternal(cluster)._triggerAttributeUpdate(attributeId, value);
+                },
+                eventListener: ({ path: { endpointId, clusterId, eventId }, events }) => {
+                    if (ignoreInitialTriggers) return;
+                    const device = this.endpoints.get(endpointId);
+                    if (device === undefined) {
+                        logger.info(`Ignoring received event for unknown endpoint ${endpointId}!`);
+                        return;
+                    }
+                    const cluster = device.getClusterClientById(clusterId);
+                    if (cluster === undefined) {
+                        logger.info(
+                            `Ignoring received event for unknown cluster ${toHexString(
+                                clusterId,
+                            )} on endpoint ${endpointId}!`,
+                        );
+                        return;
+                    }
+                    asClusterClientInternal(cluster)._triggerEventUpdate(eventId, events);
+                },
+            });
+
+            ignoreInitialTriggers = false;
+
+            if (initialSubscriptionData.attributeReports === undefined) {
+                throw new InternalError("No attribute reports received when subscribing to all values!");
+            }
+            await this.initializeEndpointStructure(initialSubscriptionData.attributeReports ?? []);
+        } else {
+            const allClusterAttributes = await this.interactionClient.getAllAttributes();
+            await this.initializeEndpointStructure(allClusterAttributes);
+        }
     }
 
     /**
@@ -237,10 +297,7 @@ export class CommissioningController extends MatterNode {
      *
      * @private
      */
-    private async initializeEndpointStructure() {
-        this.interactionClient = await this.createInteractionClient();
-
-        const allClusterAttributes = await this.interactionClient.getAllAttributes();
+    private async initializeEndpointStructure(allClusterAttributes: DecodedAttributeReportValue<any>[]) {
         const allData = structureReadAttributeDataToClusterObject(allClusterAttributes);
 
         const partLists = new Map<EndpointNumber, EndpointNumber[]>();
