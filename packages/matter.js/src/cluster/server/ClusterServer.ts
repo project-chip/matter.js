@@ -74,12 +74,11 @@ export function ClusterServer<
     const commands = <CommandServers<C>>{};
     const events = <EventServers<E>>{};
 
-    let clusterDataVersion = Crypto.getRandomUInt32();
-
     const result: any = {
         id: clusterId,
         name,
         _type: "ClusterServer",
+        clusterDataVersion: Crypto.getRandomUInt32(),
         attributes,
         _commands: commands,
         _events: events,
@@ -96,13 +95,13 @@ export function ClusterServer<
         _setStorage: (storageContext: StorageContext) => {
             clusterStorage = storageContext;
 
-            clusterDataVersion = storageContext.get<number>("_clusterDataVersion", clusterDataVersion);
+            result.clusterDataVersion = storageContext.get<number>("_clusterDataVersion", result.clusterDataVersion);
             logger.debug(
-                `${
-                    storageContext.has("_clusterDataVersion") ? "Restore" : "Set"
-                } cluster data version ${clusterDataVersion} in cluster ${name} (${clusterId})`,
+                `${storageContext.has("_clusterDataVersion") ? "Restore" : "Set"} cluster data version ${
+                    result.clusterDataVersion
+                } in cluster ${name} (${clusterId})`,
             );
-            storageContext.set("_clusterDataVersion", clusterDataVersion);
+            storageContext.set("_clusterDataVersion", result.clusterDataVersion);
 
             for (const attributeName in attributes) {
                 const attribute = (attributes as any)[attributeName];
@@ -256,13 +255,13 @@ export function ClusterServer<
                 attributeDef[attributeName],
                 attributeName,
                 (attributesInitialValues as any)[attributeName],
-                () => clusterDataVersion,
+                () => result.clusterDataVersion,
                 () => {
-                    if (clusterDataVersion === 0xffffffff) {
-                        clusterDataVersion = -1;
+                    if (result.clusterDataVersion === 0xffffffff) {
+                        result.clusterDataVersion = -1;
                     }
-                    clusterStorage?.set("_clusterDataVersion", ++clusterDataVersion);
-                    return clusterDataVersion;
+                    clusterStorage?.set("_clusterDataVersion", ++result.clusterDataVersion);
+                    return result.clusterDataVersion;
                 },
                 getter
                     ? (session, endpoint, isFabricFiltered) =>
