@@ -28,7 +28,8 @@
         "build": "tsc -b tsconfig.dist.json",
         "build-clean": "npm run clean && npm run build",
         "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --gitRemote upstream --tsconfig tsconfig.dist.json",
-        "test": "TZ=utc jest"
+        "test": "jest",
+        "test-chip": "jest --config=jest.chip.config.ts --runInBand"
     },
     "devDependencies": {
         "@types/bn.js": "^5.1.1",

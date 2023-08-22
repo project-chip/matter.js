@@ -100,8 +100,8 @@ class InteractionMessenger<ContextT> {
         return message;
     }
 
-    close() {
-        this.exchange.close();
+    async close() {
+        await this.exchange.close();
     }
 
     protected throwIfErrorStatusMessage(message: Message) {
@@ -177,7 +177,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                 await this.sendStatus(StatusCode.Failure);
             }
         } finally {
-            this.exchange.close();
+            await this.exchange.close();
         }
     }
 
@@ -320,7 +320,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
             // When retransmission failed (most likely due to a lost connection or invalid session),
             // try to reconnect if possible and resend the message once
             if (error instanceof RetransmissionLimitReachedError) {
-                this.exchange.close();
+                await this.exchange.close();
                 if (await this.exchangeProvider.reconnectChannel()) {
                     this.exchange = this.exchangeProvider.initiateExchange();
                     return await this.exchange.send(messageType, payload);

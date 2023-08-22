@@ -25,7 +25,8 @@
     "ignorePatterns": [
         "*/links/**",
         "packages/*/dist/**/*",
-        "**/jest.config.ts"
+        "**/jest.config.ts",
+        "**/jest.chip.config.ts"
     ],
     "rules": {
         "@typescript-eslint/no-explicit-any": "off",

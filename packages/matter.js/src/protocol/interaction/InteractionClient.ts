@@ -722,7 +722,7 @@ export class InteractionClient {
         try {
             return await invoke(messenger);
         } finally {
-            messenger.close();
+            await messenger.close();
         }
     }
 

@@ -83,7 +83,7 @@ export class MdnsBroadcaster {
     }
 
     /** Set the Broadcaster data to announce a device ready for commissioning in a special mode */
-    setCommissionMode(
+    async setCommissionMode(
         announcedNetPort: number,
         mode: number,
         {
@@ -113,7 +113,7 @@ export class MdnsBroadcaster {
 
         this.validatePairingInstructions(pairingHint, pairingInstructions); // Throws error if invalid!
 
-        this.mdnsServer.setRecordsGenerator(announcedNetPort, netInterface => {
+        await this.mdnsServer.setRecordsGenerator(announcedNetPort, netInterface => {
             const ipMac = this.network.getIpMac(netInterface);
             if (ipMac === undefined) return [];
             const { mac, ips } = ipMac;
@@ -168,7 +168,7 @@ export class MdnsBroadcaster {
     }
 
     /** Set the Broadcaster Data to announce a device for operative discovery (aka "already paired") */
-    setFabrics(
+    async setFabrics(
         announcedNetPort: number,
         fabrics: Fabric[],
         {
@@ -176,7 +176,7 @@ export class MdnsBroadcaster {
             sleepActiveInterval = DEFAULT_SLEEP_ACTIVE_INTERVAL,
         }: OperationalInstanceData = {},
     ) {
-        this.mdnsServer.setRecordsGenerator(announcedNetPort, netInterface => {
+        await this.mdnsServer.setRecordsGenerator(announcedNetPort, netInterface => {
             const ipMac = this.network.getIpMac(netInterface);
             if (ipMac === undefined) return [];
             const { mac, ips } = ipMac;
@@ -223,7 +223,7 @@ export class MdnsBroadcaster {
     }
 
     /** Set the Broadcaster data to announce a Commissioner (aka Commissioner discovery) */
-    setCommissionerInfo(
+    async setCommissionerInfo(
         announcedNetPort: number,
         {
             deviceName,
@@ -247,7 +247,7 @@ export class MdnsBroadcaster {
         const vendorQname = `_V${vendorId}._sub.${MATTER_COMMISSIONER_SERVICE_QNAME}`;
         const deviceQname = `${instanceId}.${MATTER_COMMISSIONER_SERVICE_QNAME}`;
 
-        this.mdnsServer.setRecordsGenerator(announcedNetPort, netInterface => {
+        await this.mdnsServer.setRecordsGenerator(announcedNetPort, netInterface => {
             const ipMac = this.network.getIpMac(netInterface);
             if (ipMac === undefined) return [];
             const { mac, ips } = ipMac;
@@ -287,6 +287,6 @@ export class MdnsBroadcaster {
     }
 
     async close() {
-        this.mdnsServer.close();
+        await this.mdnsServer.close();
     }
 }

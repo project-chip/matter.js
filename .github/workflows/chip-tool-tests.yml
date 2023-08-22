@@ -1,0 +1,141 @@
+name: Chip Tool tests
+
+on:
+  schedule:
+    - cron: 0 2 * * * # Every day at 02:00
+  workflow_dispatch: # Manually on demand
+  push:
+    branches:
+      - "*"
+
+# Cancel previous PR/branch runs when a new commit is pushed
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CONNECTEDHOMEIP_TAG: "master" # "v1.1-branch" is not containing our current status, so we use master till 1.2 comes out
+
+jobs:
+  chip-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v3
+
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            src:
+              - "packages/matter-node.js/test-chip/**"
+              - "packages/matter.js/src/cluster/**"
+              - "packages/matter.js/src/tlv/**"
+              - ".github/workflows/chip-tool-tests.yml"
+
+      - if: ${{ github.event_name == 'schedule' || (github.event_name == 'push' && steps.changes.outputs.src == 'true') || github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[execute-chiptests]') == true }}
+        name: Install Debian deps
+        id: install-deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install git gcc g++ pkg-config libssl-dev libdbus-1-dev libglib2.0-dev libavahi-client-dev ninja-build python3-venv python3-dev python3-pip unzip libgirepository1.0-dev libcairo2-dev libreadline-dev
+
+      - if: ${{ github.event_name == 'schedule' || (github.event_name == 'push' && steps.changes.outputs.src == 'true') || github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[execute-chiptests]') == true || contains(github.event.head_commit.message, '[rebuild-chip]') == true }}
+        name: Prepare Bin Directory
+        id: prepare_bin
+        run: |
+          mkdir bin
+
+      # Cache Bin files
+      - if: ${{ github.event_name == 'schedule' || (github.event_name == 'push' && steps.changes.outputs.src == 'true') || github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[execute-chiptests]') == true || contains(github.event.head_commit.message, '[rebuild-chip]') == true }}
+        name: Cache Bin files
+        id: cache-bin
+        uses: actions/cache@v3
+        env:
+          cache-name: chip-bin
+        with:
+          path: ./bin
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ env.CONNECTEDHOMEIP_TAG }}
+
+      # Only build if cache is not hit or if the commit message contains '[rebuild-chip]'
+      - if: ${{ (github.event_name == 'schedule' || (github.event_name == 'push' && steps.changes.outputs.src == 'true') || github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[execute-chiptests]') == true || contains(github.event.head_commit.message, '[rebuild-chip]') == true) && (steps.cache-bin.outputs.cache-hit != 'true' || contains(github.event.head_commit.message, '[rebuild-chip]') == true) }}
+        name: Build executables
+        id: build-executables
+        run: |
+          git clone https://github.com/project-chip/connectedhomeip.git --depth=1 --branch=$CONNECTEDHOMEIP_TAG
+          cd connectedhomeip
+          scripts/checkout_submodules.py --shallow --platform linux
+          source scripts/activate.sh
+          ./scripts/build/build_examples.py --target linux-x64-light build
+          cp out/linux-x64-light/chip-lighting-app ../bin/
+          rm -rf out/linux-x64-light
+          ./scripts/build/build_examples.py --target linux-x64-chip-tool build
+          cp out/linux-x64-chip-tool/chip-tool ../bin/
+          rm -rf out/linux-x64-chip-tool
+          rm -rf connectedhomeip
+        #          More options for later, but takes long to build
+        #          ./scripts/build/build_examples.py --target linux-x64-all-clusters build
+        #          cp out/linux-x64-all-clusters/chip-all-clusters-app ../bin/
+        #          rm -rf out/linux-x64-all-clusters
+        #          ./scripts/build/build_examples.py --target linux-x64-chip-cert build
+        #          cp out/linux-x64-chip-cert/chip-cert ../bin/
+        #          rm -rf out/linux-x64-chip-cert
+        #          ./scripts/build/build_examples.py --target linux-x64-all-clusters-minimal build
+        #          cp out/linux-x64-all-clusters-minimal/chip-all-clusters-minimal-app ../bin/
+        #          rm -rf out/linux-x64-all-clusters-minimal
+        #          ./scripts/build/build_examples.py --target linux-x64-thermostat build
+        #          cp out/linux-x64-thermostat/thermostat-app ../bin/
+        #          rm -rf out/linux-x64-thermostat
+        #          ./scripts/build/build_examples.py --target linux-x64-lock build
+        #          cp out/linux-x64-lock/chip-lock-app ../bin/
+        #          rm -rf out/linux-x64-lock
+        #          ./scripts/build/build_examples.py --target linux-x64-shell build
+        #          cp out/linux-x64-shell/chip-shell ../bin/
+        #          rm -rf out/linux-x64-shell
+        #          ./scripts/build/build_examples.py --target linux-x64-ota-provider build
+        #          cp out/linux-x64-ota-provider/chip-ota-provider-app ../bin/
+        #          rm -rf out/linux-x64-ota-provider
+        #          ./scripts/build/build_examples.py --target linux-x64-ota-requestor build
+        #          cp out/linux-x64-ota-requestor/chip-ota-requestor-app ../bin/
+        #          rm -rf out/linux-x64-ota-requestor
+        #          ./scripts/build/build_examples.py --target linux-x64-tv-app build
+        #          cp out/linux-x64-tv-app/chip-tv-app ../bin/
+        #          rm -rf out/linux-x64-tv-app
+        #          ./scripts/build/build_examples.py --target linux-x64-tv-casting-app build
+        #          cp out/linux-x64-tv-casting-app/chip-tv-casting-app ../bin/
+        #          rm -rf out/linux-x64-tv-casting-app
+        #          ./scripts/build/build_examples.py --target linux-x64-bridge build
+        #          cp out/linux-x64-bridge/chip-bridge-app ../bin/
+        #          rm -rf out/linux-x64-bridge
+        #          ./scripts/build/build_examples.py --target linux-x64-contact-sensor build
+        #          cp out/linux-x64-contact-sensor/contact-sensor-app ../bin/
+        #          rm -rf out/linux-x64-contact-sensor
+        #          ./scripts/build/build_examples.py --target linux-x64-dishwasher build
+        #          cp out/linux-x64-dishwasher/chip-dishwasher-app ../bin/
+        #          rm -rf out/linux-x64-dishwasher
+        #          ./scripts/build/build_examples.py --target linux-x64-simulated-app1 build
+        #          cp out/linux-x64-simulated-app1/chip-app1 ../bin/
+        #          rm -rf out/linux-x64-simulated-app1
+        #          ./scripts/build/build_examples.py --target linux-x64-simulated-app2 build
+        #          cp out/linux-x64-simulated-app2/chip-app2 ../bin/
+        #          rm -rf out/linux-x64-simulated-app2
+
+      - if: ${{ github.event_name == 'schedule' || (github.event_name == 'push' && steps.changes.outputs.src == 'true') || github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[execute-chiptests]') == true || contains(github.event.head_commit.message, '[rebuild-chip]') == true }}
+        name: Display used binaries
+        run: |
+          echo "Connected IP Branch: $CONNECTEDHOMEIP_TAG"
+          ls -la bin
+
+      - if: ${{ github.event_name == 'schedule' || (github.event_name == 'push' && steps.changes.outputs.src == 'true') || github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[execute-chiptests]') == true || contains(github.event.head_commit.message, '[rebuild-chip]') == true }}
+        name: Install and build matter.js
+        run: |
+          npm ci
+          npm run build
+
+      # Execute tests
+      - if: ${{ github.event_name == 'schedule' || (github.event_name == 'push' && steps.changes.outputs.src == 'true') || github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[execute-chiptests]') == true || contains(github.event.head_commit.message, '[rebuild-chip]') == true }}
+        name: test execution
+        id: test-execution
+        run: |
+          cd packages/matter-node.js
+          npm run test-chip -- --forceExit

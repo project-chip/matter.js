@@ -99,6 +99,7 @@ export class MessageExchange<ContextT> {
     private sentMessageAckSuccess: ((...args: any[]) => void) | undefined;
     private sentMessageAckFailure: ((error?: Error) => void) | undefined;
     private retransmissionTimer: Timer | undefined;
+    private closeTimer: Timer | undefined;
 
     constructor(
         readonly session: Session<ContextT>,
@@ -312,19 +313,33 @@ export class MessageExchange<ContextT> {
             .catch(error => logger.error("An error happened when retransmitting a message", error));
     }
 
-    close() {
+    async destroy() {
         if (this.receivedMessageToAck !== undefined) {
-            this.send(MessageType.StandaloneAck, new ByteArray(0)).catch(error =>
-                logger.error("An error happened when closing the exchange", error),
-            );
+            try {
+                await this.send(MessageType.StandaloneAck, new ByteArray(0));
+            } catch (error) {
+                logger.error("An error happened when closing the exchange", error);
+            }
+        }
+        this.closeInternal();
+    }
+
+    async close() {
+        if (this.receivedMessageToAck !== undefined) {
+            try {
+                await this.send(MessageType.StandaloneAck, new ByteArray(0));
+            } catch (error) {
+                logger.error("An error happened when closing the exchange", error);
+            }
         }
 
         // Wait until all potential Resubmissions are done, also for Standalone-Acks
-        Time.getTimer(MAXIMUM_TRANSMISSION_TIME_MS, () => this.closeInternal()).start();
+        this.closeTimer = Time.getTimer(MAXIMUM_TRANSMISSION_TIME_MS, () => this.closeInternal()).start();
     }
 
     private closeInternal() {
         this.retransmissionTimer?.stop();
+        this.closeTimer?.stop();
         this.messagesQueue.close();
         this.closeCallback();
     }

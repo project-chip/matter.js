@@ -66,7 +66,7 @@ export async function createTestSessionWithFabric() {
         ZERO,
         false,
         false,
-        () => {
+        async () => {
             /* */
         },
         1,

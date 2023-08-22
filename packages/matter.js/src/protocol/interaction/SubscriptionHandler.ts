@@ -150,7 +150,6 @@ export class SubscriptionHandler {
                 Math.max(subscriptionMinIntervalMs, SUBSCRIPTION_MIN_INTERVAL_S * 1000),
                 Math.max(this.minIntervalFloorMs, Math.min(subscriptionMaxIntervalMs, this.maxIntervalCeilingMs)),
             ) + Math.floor(subscriptionRandomizationWindowMs * Math.random());
-        console.log("maxInterval", maxInterval);
         let sendInterval = Math.floor(maxInterval / 2); // Ideally we send at half the max interval
         if (sendInterval < 60_000) {
             // But if we have no chance of at least one full resubmission process we do like chip-tool.
@@ -165,7 +164,6 @@ export class SubscriptionHandler {
             );
             sendInterval = Math.max(subscriptionMinIntervalMs, SUBSCRIPTION_MIN_INTERVAL_S * 1000);
         }
-        console.log("sendInterval", sendInterval);
         return { maxInterval, sendInterval };
     }
 
@@ -544,6 +542,9 @@ export class SubscriptionHandler {
 
     async flush() {
         this.sendDelayTimer.stop();
+        logger.debug(
+            `Flushing subscription ${this.subscriptionId} with ${this.outstandingAttributeUpdates.size} attributes and ${this.outstandingEventUpdates.size} events`,
+        );
         if (this.outstandingAttributeUpdates.size > 0 || this.outstandingEventUpdates.size > 0) {
             void this.sendUpdate();
         }
@@ -625,7 +626,7 @@ export class SubscriptionHandler {
                 },
             );
         } finally {
-            messenger.close();
+            await messenger.close();
         }
     }
 }

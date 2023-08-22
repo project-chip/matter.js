@@ -6,3 +6,4 @@
 
 export * from "@project-chip/matter.js/storage";
 export * from "./StorageBackendDisk";
+export * from "./StorageBackendJsonFile";

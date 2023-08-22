@@ -68,8 +68,8 @@ export class SecureChannelMessenger<ContextT> {
         return this.exchange.channel.channel.name;
     }
 
-    close() {
-        this.exchange.close();
+    async close() {
+        await this.exchange.close();
     }
 
     private async sendStatusReport(generalStatus: GeneralStatusCode, protocolStatus: ProtocolStatusCode) {

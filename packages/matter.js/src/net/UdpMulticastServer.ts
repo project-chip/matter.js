@@ -42,6 +42,7 @@ export class UdpMulticastServer {
     private readonly broadcastChannels = new Cache<Promise<UdpChannel>>(
         (netInterface, iPv4) => this.createBroadcastChannel(netInterface, iPv4),
         5 * 60 * 1000 /* 5mn */,
+        async (_netInterface, channel) => (await channel).close(),
     );
 
     private constructor(
@@ -97,9 +98,9 @@ export class UdpMulticastServer {
         });
     }
 
-    close() {
+    async close() {
         this.serverIpv4.close();
         this.serverIpv6.close();
-        this.broadcastChannels.close();
+        await this.broadcastChannels.close();
     }
 }

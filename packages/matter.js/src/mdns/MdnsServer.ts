@@ -110,14 +110,14 @@ export class MdnsServer {
         );
     }
 
-    setRecordsGenerator(hostPort: number, generator: (netInterface: string) => DnsRecord<any>[]) {
-        this.records.clear();
+    async setRecordsGenerator(hostPort: number, generator: (netInterface: string) => DnsRecord<any>[]) {
+        await this.records.clear();
         this.recordsGenerator.set(hostPort, generator);
     }
 
-    close() {
-        this.records.close();
-        this.multicastServer.close();
+    async close() {
+        await this.records.close();
+        await this.multicastServer.close();
     }
 
     private getMulticastInterfacesForAnnounce() {

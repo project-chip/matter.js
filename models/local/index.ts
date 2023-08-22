@@ -14,6 +14,7 @@
 
 import "./AdministratorCommissioningOverrides.js";
 import "./BasicInformationOverrides.js";
+import "./BridgedDeviceBasicInformationOverrides.js";
 import "./ColorControlOverrides.js";
 import "./DoorLockOverrides.js";
 import "./GroupKeyManagementOverrides.js";
@@ -23,4 +24,5 @@ import "./ModeSelectOverrides.js";
 import "./OperationalCredentialsOverrides.js";
 import "./PumpConfigurationAndControlOverrides.js";
 import "./ScenesOverrides.js";
+import "./UserLabelOverrides.js";
 import "./WindowCoveringOverrides.js";

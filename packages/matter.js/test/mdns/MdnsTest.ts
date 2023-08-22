@@ -76,7 +76,7 @@ describe("MDNS Scanner and Broadcaster", () => {
 
     afterEach(async () => {
         await broadcaster.close();
-        scanner.close();
+        await scanner.close();
         scannerChannel.close();
     });
 
@@ -85,7 +85,7 @@ describe("MDNS Scanner and Broadcaster", () => {
             const { promise, resolver } = await getPromiseResolver<ByteArray>();
             scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => resolver(data));
 
-            broadcaster.setFabrics(PORT, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric], {
+            await broadcaster.setFabrics(PORT, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric], {
                 sleepIdleInterval: 100,
                 sleepActiveInterval: 200,
             });
@@ -159,7 +159,7 @@ describe("MDNS Scanner and Broadcaster", () => {
             const { promise, resolver } = await getPromiseResolver<ByteArray>();
             scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => resolver(data));
 
-            broadcaster.setCommissionMode(PORT, 1, {
+            await broadcaster.setCommissionMode(PORT, 1, {
                 deviceName: "Test Device",
                 deviceType: 1,
                 vendorId: VendorId(1),
@@ -303,7 +303,7 @@ describe("MDNS Scanner and Broadcaster", () => {
             const { promise, resolver } = await getPromiseResolver<ByteArray>();
             scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => resolver(data));
 
-            broadcaster.setCommissionerInfo(PORT, {
+            await broadcaster.setCommissionerInfo(PORT, {
                 deviceName: "Test Commissioner",
                 deviceType: 1,
                 vendorId: VendorId(1),
@@ -390,15 +390,15 @@ describe("MDNS Scanner and Broadcaster", () => {
                 if (dataArr.length === 3) resolver();
             });
 
-            broadcaster.setFabrics(PORT, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
-            broadcaster.setCommissionMode(PORT2, 1, {
+            await broadcaster.setFabrics(PORT, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
+            await broadcaster.setCommissionMode(PORT2, 1, {
                 deviceName: "Test Device",
                 deviceType: 1,
                 vendorId: VendorId(1),
                 productId: 0x8000,
                 discriminator: 1234,
             });
-            broadcaster.setCommissionerInfo(PORT3, {
+            await broadcaster.setCommissionerInfo(PORT3, {
                 deviceName: "Test Commissioner",
                 deviceType: 1,
                 vendorId: VendorId(1),
@@ -684,7 +684,7 @@ describe("MDNS Scanner and Broadcaster", () => {
                     queryReceived = true;
                 }
             });
-            broadcaster.setFabrics(PORT, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
+            await broadcaster.setFabrics(PORT, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
             await broadcaster.announce(PORT);
 
             await fakeTime.yield(); // Make sure data were broadcasted async
@@ -705,7 +705,7 @@ describe("MDNS Scanner and Broadcaster", () => {
             const sentData = new Array<ByteArray>();
             scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => sentData.push(data));
 
-            broadcaster.setFabrics(PORT, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
+            await broadcaster.setFabrics(PORT, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
 
             const findPromise = scanner.findOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID);
 
@@ -739,14 +739,14 @@ describe("MDNS Scanner and Broadcaster", () => {
                 netData.push(data);
             });
 
-            broadcaster.setCommissionMode(PORT, 1, {
+            await broadcaster.setCommissionMode(PORT, 1, {
                 deviceName: "Test Device",
                 deviceType: 1,
                 vendorId: VendorId(1),
                 productId: 0x8000,
                 discriminator: 1234,
             });
-            broadcaster.setFabrics(PORT2, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
+            await broadcaster.setFabrics(PORT2, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
 
             const findPromise = scanner.findOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID);
 
@@ -910,14 +910,14 @@ describe("MDNS Scanner and Broadcaster", () => {
                 }
             });
 
-            broadcaster.setCommissionMode(PORT, 1, {
+            await broadcaster.setCommissionMode(PORT, 1, {
                 deviceName: "Test Device",
                 deviceType: 1,
                 vendorId: VendorId(1),
                 productId: 0x8000,
                 discriminator: 1234,
             });
-            broadcaster.setFabrics(PORT2, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
+            await broadcaster.setFabrics(PORT2, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
 
             await broadcaster.announce(PORT);
             await broadcaster.announce(PORT2);

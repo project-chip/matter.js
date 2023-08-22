@@ -63,7 +63,7 @@ describe("SecureSession", () => {
         DECRYPT_KEY,
         ENCRYPT_KEY,
         Buffer.alloc(0),
-        () => {
+        async () => {
             /* do nothing */
         },
     );
