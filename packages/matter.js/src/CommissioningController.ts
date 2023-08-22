@@ -59,12 +59,15 @@ const logger = new Logger("CommissioningController");
  */
 export interface CommissioningControllerOptions {
     serverAddress?: ServerAddressIp;
-    localPort?: number;
-    disableIpv4?: boolean;
-    listeningAddressIpv4?: string;
-    listeningAddressIpv6?: string;
+    readonly localPort?: number;
+    readonly disableIpv4?: boolean;
+    readonly listeningAddressIpv4?: string;
+    readonly listeningAddressIpv6?: string;
 
-    delayedPairing?: boolean;
+    readonly delayedPairing?: boolean;
+    readonly subscribeAllAttributes?: boolean;
+    readonly subscribeMinIntervalFloorSeconds?: number;
+    readonly subscribeMaxIntervalCeilingSeconds?: number;
 
     passcode: number; // TODO: Move into commissioningOptions
     longDiscriminator?: number; // TODO: Move into commissioningOptions
