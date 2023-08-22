@@ -28,6 +28,7 @@ This library exports the Matter protocol functionality as well as some helper fu
 | `@project-chip/matter.js/log`           | Exports Logging functionality (based on "console")                                              |
 | `@project-chip/matter.js/math`          | Exports Math functionality used by Matter                                                       |
 | `@project-chip/matter.js/mdns`          | Exports Basic MDNS functionality (uses Network implementation)                                  |
+| `@project-chip/matter.js/model`         | Exports a JavaScript version of the Matter data model                                           |
 | `@project-chip/matter.js/net`           | Exports Basic Network abstract functionality that needs to be implemented platform specific!    |
 | `@project-chip/matter.js/protocol`      | Exports Basic Matter protocol functionality                                                     |
 | `@project-chip/matter.js/schema`        | Exports Schema definitions and functionality                                                    |

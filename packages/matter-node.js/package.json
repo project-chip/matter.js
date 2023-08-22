@@ -117,6 +117,10 @@
             "types": "./dist/exports/mdns.d.ts",
             "default": "./dist/exports/mdns.js"
         },
+        "./model": {
+            "types": "./dist/exports/model.d.ts",
+            "default": "./dist/exports/model.js"
+        },
         "./protocol": {
             "types": "./dist/exports/protocol.d.ts",
             "default": "./dist/exports/protocol.js"
@@ -183,6 +187,9 @@
             ],
             "mdns": [
                 "/dist/exports/mdns.d.ts"
+            ],
+            "model": [
+                "/dist/exports/model.d.ts"
             ],
             "protocol": [
                 "/dist/exports/protocol.d.ts"

@@ -81,6 +81,16 @@
         "default": "./dist/cjs/protocol/interaction/export.js"
       }
     },
+    "./model": {
+      "import": {
+        "types": "./dist/es/model/index.d.ts",
+        "default": "./dist/es/model/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/model/index.d.ts",
+        "default": "./dist/cjs/model/index.js"
+      }
+    },
     "./securechannel": {
       "import": {
         "types": "./dist/es/protocol/securechannel/export.d.ts",
@@ -107,6 +117,9 @@
     "*": {
       "interaction": [
         "/dist/cjs/protocol/interaction/export.d.ts"
+      ],
+      "model": [
+        "/dist/cjs/model/index.d.ts"
       ],
       "securechannel": [
         "/dist/cjs/protocol/securechannel/export.d.ts"

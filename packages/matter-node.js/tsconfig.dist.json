@@ -23,6 +23,7 @@
       "src/exports/log.ts",
       "src/exports/math.ts",
       "src/exports/mdns.ts",
+      "src/exports/model.ts",
       "src/net/export.ts",
       "src/exports/protocol.ts",
       "src/exports/interaction.ts",
