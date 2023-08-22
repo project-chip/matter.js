@@ -10,27 +10,38 @@
 
 - [Administer](exports_cluster.AccessLevel.md#administer)
 - [Manage](exports_cluster.AccessLevel.md#manage)
+- [Operate](exports_cluster.AccessLevel.md#operate)
 - [View](exports_cluster.AccessLevel.md#view)
 
 ## Enumeration Members
 
 ### Administer
 
-• **Administer** = ``2``
+• **Administer** = ``3``
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:16
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:22
 
 ___
 
 ### Manage
 
-• **Manage** = ``1``
+• **Manage** = ``2``
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:15
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:21
+
+___
+
+### Operate
+
+• **Operate** = ``1``
+
+#### Defined in
+
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:20
 
 ___
 
@@ -40,4 +51,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:14
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:19

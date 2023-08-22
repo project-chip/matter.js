@@ -43,6 +43,8 @@ MatterCoreSpecificationV1_0 § A.11.6
 - [encodeInternal](exports_tlv.NullableSchema.md#encodeinternal)
 - [encodeTlv](exports_tlv.NullableSchema.md#encodetlv)
 - [encodeTlvInternal](exports_tlv.NullableSchema.md#encodetlvinternal)
+- [injectField](exports_tlv.NullableSchema.md#injectfield)
+- [removeField](exports_tlv.NullableSchema.md#removefield)
 - [validate](exports_tlv.NullableSchema.md#validate)
 
 ## Constructors
@@ -309,6 +311,59 @@ TlvSchema.encodeTlvInternal
 #### Defined in
 
 packages/matter.js/dist/cjs/tlv/TlvNullable.d.ts:16
+
+___
+
+### injectField
+
+▸ **injectField**(`value`, `fieldId`, `fieldValue`, `injectChecker`): `T`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | `T` |
+| `fieldId` | `number` |
+| `fieldValue` | `any` |
+| `injectChecker` | (`fieldValue`: `any`) => `boolean` |
+
+#### Returns
+
+`T`
+
+#### Overrides
+
+TlvSchema.injectField
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvNullable.d.ts:19
+
+___
+
+### removeField
+
+▸ **removeField**(`value`, `fieldId`, `removeChecker`): `T`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | `T` |
+| `fieldId` | `number` |
+| `removeChecker` | (`fieldValue`: `any`) => `boolean` |
+
+#### Returns
+
+`T`
+
+#### Overrides
+
+TlvSchema.removeField
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvNullable.d.ts:20
 
 ___
 

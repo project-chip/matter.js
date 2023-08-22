@@ -31,7 +31,7 @@
 
 ### getAllScenes
 
-▸ `Static` **getAllScenes**(`fabric`, `endpointId`, `groupId`): [`scenesTableEntry`](../interfaces/index._internal_.scenesTableEntry.md)[]
+▸ `Static` **getAllScenes**(`fabric`, `endpointId`, `groupId`): [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)[]
 
 #### Parameters
 
@@ -39,21 +39,21 @@
 | :------ | :------ |
 | `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
 | `endpointId` | `number` |
-| `groupId` | [`GroupId`](exports_datatype.GroupId.md) |
+| `groupId` | [`GroupId`](../modules/exports_datatype.md#groupid) |
 
 #### Returns
 
-[`scenesTableEntry`](../interfaces/index._internal_.scenesTableEntry.md)[]
+[`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)[]
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ScenesServer.d.ts:36
+packages/matter.js/dist/cjs/cluster/server/ScenesServer.d.ts:34
 
 ___
 
 ### getEndpointScenes
 
-▸ `Static` **getEndpointScenes**(`fabric`, `endpointId`): `undefined` \| `Map`<`number`, `Map`<`number`, [`scenesTableEntry`](../interfaces/index._internal_.scenesTableEntry.md)\>\>
+▸ `Static` **getEndpointScenes**(`fabric`, `endpointId`): `undefined` \| `Map`<`number`, `Map`<`number`, [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)\>\>
 
 #### Parameters
 
@@ -64,17 +64,17 @@ ___
 
 #### Returns
 
-`undefined` \| `Map`<`number`, `Map`<`number`, [`scenesTableEntry`](../interfaces/index._internal_.scenesTableEntry.md)\>\>
+`undefined` \| `Map`<`number`, `Map`<`number`, [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)\>\>
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ScenesServer.d.ts:32
+packages/matter.js/dist/cjs/cluster/server/ScenesServer.d.ts:30
 
 ___
 
 ### getSceneEntry
 
-▸ `Static` **getSceneEntry**(`fabric`, `endpointId`, `groupId`, `sceneId`): `undefined` \| [`scenesTableEntry`](../interfaces/index._internal_.scenesTableEntry.md)
+▸ `Static` **getSceneEntry**(`fabric`, `endpointId`, `groupId`, `sceneId`): `undefined` \| [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)
 
 #### Parameters
 
@@ -82,16 +82,16 @@ ___
 | :------ | :------ |
 | `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
 | `endpointId` | `number` |
-| `groupId` | [`GroupId`](exports_datatype.GroupId.md) |
+| `groupId` | [`GroupId`](../modules/exports_datatype.md#groupid) |
 | `sceneId` | `number` |
 
 #### Returns
 
-`undefined` \| [`scenesTableEntry`](../interfaces/index._internal_.scenesTableEntry.md)
+`undefined` \| [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ScenesServer.d.ts:35
+packages/matter.js/dist/cjs/cluster/server/ScenesServer.d.ts:33
 
 ___
 
@@ -112,7 +112,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ScenesServer.d.ts:39
+packages/matter.js/dist/cjs/cluster/server/ScenesServer.d.ts:37
 
 ___
 
@@ -134,7 +134,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ScenesServer.d.ts:38
+packages/matter.js/dist/cjs/cluster/server/ScenesServer.d.ts:36
 
 ___
 
@@ -148,7 +148,7 @@ ___
 | :------ | :------ |
 | `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
 | `endpointId` | `number` |
-| `groupId` | [`GroupId`](exports_datatype.GroupId.md) |
+| `groupId` | [`GroupId`](../modules/exports_datatype.md#groupid) |
 | `sceneId` | `number` |
 
 #### Returns
@@ -157,7 +157,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ScenesServer.d.ts:37
+packages/matter.js/dist/cjs/cluster/server/ScenesServer.d.ts:35
 
 ___
 
@@ -171,7 +171,7 @@ ___
 | :------ | :------ |
 | `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
 | `endpointId` | `number` |
-| `endpointScenes` | `Map`<`number`, `Map`<`number`, [`scenesTableEntry`](../interfaces/index._internal_.scenesTableEntry.md)\>\> |
+| `endpointScenes` | `Map`<`number`, `Map`<`number`, [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)\>\> |
 
 #### Returns
 
@@ -179,7 +179,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ScenesServer.d.ts:33
+packages/matter.js/dist/cjs/cluster/server/ScenesServer.d.ts:31
 
 ___
 
@@ -193,7 +193,7 @@ ___
 | :------ | :------ |
 | `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
 | `endpointId` | `number` |
-| `sceneEntries` | [`scenesTableEntry`](../interfaces/index._internal_.scenesTableEntry.md)[] |
+| `sceneEntries` | [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)[] |
 
 #### Returns
 
@@ -201,4 +201,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ScenesServer.d.ts:34
+packages/matter.js/dist/cjs/cluster/server/ScenesServer.d.ts:32

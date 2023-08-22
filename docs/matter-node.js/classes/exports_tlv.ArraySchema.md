@@ -37,14 +37,18 @@ MatterCoreSpecificationV1_0 § A.11.2 and A.11.4
 ### Methods
 
 - [decode](exports_tlv.ArraySchema.md#decode)
+- [decodeFromChunkedArray](exports_tlv.ArraySchema.md#decodefromchunkedarray)
 - [decodeInternal](exports_tlv.ArraySchema.md#decodeinternal)
 - [decodeTlv](exports_tlv.ArraySchema.md#decodetlv)
 - [decodeTlvInternal](exports_tlv.ArraySchema.md#decodetlvinternal)
 - [decodeTlvInternalValue](exports_tlv.ArraySchema.md#decodetlvinternalvalue)
 - [encode](exports_tlv.ArraySchema.md#encode)
+- [encodeAsChunkedArray](exports_tlv.ArraySchema.md#encodeaschunkedarray)
 - [encodeInternal](exports_tlv.ArraySchema.md#encodeinternal)
 - [encodeTlv](exports_tlv.ArraySchema.md#encodetlv)
 - [encodeTlvInternal](exports_tlv.ArraySchema.md#encodetlvinternal)
+- [injectField](exports_tlv.ArraySchema.md#injectfield)
+- [removeField](exports_tlv.ArraySchema.md#removefield)
 - [validate](exports_tlv.ArraySchema.md#validate)
 
 ## Constructors
@@ -73,7 +77,7 @@ TlvSchema&lt;T[]\&gt;.constructor
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:22
+packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:27
 
 ## Properties
 
@@ -83,7 +87,7 @@ packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:22
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:19
+packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:24
 
 ___
 
@@ -93,7 +97,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:21
+packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:26
 
 ___
 
@@ -103,7 +107,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:20
+packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:25
 
 ## Methods
 
@@ -131,6 +135,27 @@ TlvSchema.decode
 #### Defined in
 
 packages/matter.js/dist/cjs/schema/Schema.d.ts:11
+
+___
+
+### decodeFromChunkedArray
+
+▸ **decodeFromChunkedArray**(`chunks`, `currentValue?`): `T`[]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `chunks` | [`ArrayAsChunked`](../modules/exports_tlv.md#arrayaschunked) |
+| `currentValue?` | `T`[] |
+
+#### Returns
+
+`T`[]
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:33
 
 ___
 
@@ -232,7 +257,7 @@ TlvSchema.decodeTlvInternalValue
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:24
+packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:29
 
 ___
 
@@ -259,6 +284,26 @@ TlvSchema.encode
 #### Defined in
 
 packages/matter.js/dist/cjs/schema/Schema.d.ts:9
+
+___
+
+### encodeAsChunkedArray
+
+▸ **encodeAsChunkedArray**(`value`): [`ArrayAsChunked`](../modules/exports_tlv.md#arrayaschunked)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | `T`[] |
+
+#### Returns
+
+[`ArrayAsChunked`](../modules/exports_tlv.md#arrayaschunked)
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:34
 
 ___
 
@@ -332,7 +377,60 @@ TlvSchema.encodeTlvInternal
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:23
+packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:28
+
+___
+
+### injectField
+
+▸ **injectField**(`value`, `fieldId`, `fieldValue`, `injectChecker`): `T`[]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | `T`[] |
+| `fieldId` | `number` |
+| `fieldValue` | `any` |
+| `injectChecker` | (`fieldValue`: `any`) => `boolean` |
+
+#### Returns
+
+`T`[]
+
+#### Overrides
+
+TlvSchema.injectField
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:30
+
+___
+
+### removeField
+
+▸ **removeField**(`value`, `fieldId`, `removeChecker`): `T`[]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | `T`[] |
+| `fieldId` | `number` |
+| `removeChecker` | (`fieldValue`: `any`) => `boolean` |
+
+#### Returns
+
+`T`[]
+
+#### Overrides
+
+TlvSchema.removeField
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:31
 
 ___
 
@@ -356,4 +454,4 @@ TlvSchema.validate
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:25
+packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:32

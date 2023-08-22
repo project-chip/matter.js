@@ -9,7 +9,7 @@
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
-| `SF` | extends [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<`F`\> |
 | `A` | extends [`Attributes`](exports_cluster.Attributes.md) |
 | `C` | extends [`Commands`](exports_cluster.Commands.md) |
 | `E` | extends [`Events`](exports_cluster.Events.md) |
@@ -26,6 +26,7 @@
 - [name](exports_cluster.Cluster.md#name)
 - [revision](exports_cluster.Cluster.md#revision)
 - [supportedFeatures](exports_cluster.Cluster.md#supportedfeatures)
+- [unknown](exports_cluster.Cluster.md#unknown)
 
 ## Properties
 
@@ -35,7 +36,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:119
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:216
 
 ___
 
@@ -45,7 +46,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:120
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:217
 
 ___
 
@@ -55,7 +56,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:121
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:218
 
 ___
 
@@ -65,17 +66,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:117
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:214
 
 ___
 
 ### id
 
-• **id**: `number`
+• **id**: [`ClusterId`](../modules/exports_datatype.md#clusterid)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:114
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:211
 
 ___
 
@@ -85,7 +86,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:115
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:212
 
 ___
 
@@ -95,7 +96,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:116
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:213
 
 ___
 
@@ -105,4 +106,14 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:118
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:215
+
+___
+
+### unknown
+
+• **unknown**: `boolean`
+
+#### Defined in
+
+packages/matter.js/dist/cjs/cluster/Cluster.d.ts:219

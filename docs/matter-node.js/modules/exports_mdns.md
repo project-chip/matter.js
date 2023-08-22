@@ -12,6 +12,7 @@
 
 ### Variables
 
+- [MATTER\_COMMISSIONER\_SERVICE\_QNAME](exports_mdns.md#matter_commissioner_service_qname)
 - [MATTER\_COMMISSION\_SERVICE\_QNAME](exports_mdns.md#matter_commission_service_qname)
 - [MATTER\_SERVICE\_QNAME](exports_mdns.md#matter_service_qname)
 - [MDNS\_BROADCAST\_IPV4](exports_mdns.md#mdns_broadcast_ipv4)
@@ -21,10 +22,26 @@
 
 ### Functions
 
+- [getCommissioningModeQname](exports_mdns.md#getcommissioningmodeqname)
+- [getDeviceInstanceQname](exports_mdns.md#getdeviceinstanceqname)
 - [getDeviceMatterQname](exports_mdns.md#getdevicematterqname)
+- [getDeviceTypeQname](exports_mdns.md#getdevicetypeqname)
 - [getFabricQname](exports_mdns.md#getfabricqname)
+- [getLongDiscriminatorQname](exports_mdns.md#getlongdiscriminatorqname)
+- [getShortDiscriminatorQname](exports_mdns.md#getshortdiscriminatorqname)
+- [getVendorQname](exports_mdns.md#getvendorqname)
 
 ## Variables
+
+### MATTER\_COMMISSIONER\_SERVICE\_QNAME
+
+• `Const` **MATTER\_COMMISSIONER\_SERVICE\_QNAME**: ``"_matterd._udp.local"``
+
+#### Defined in
+
+packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:9
+
+___
 
 ### MATTER\_COMMISSION\_SERVICE\_QNAME
 
@@ -32,7 +49,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:7
+packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:8
 
 ___
 
@@ -42,7 +59,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:8
+packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:10
 
 ___
 
@@ -80,16 +97,45 @@ ___
 
 • `Const` **SERVICE\_DISCOVERY\_QNAME**: ``"_services._dns-sd._udp.local"``
 
-**`License`**
+#### Defined in
 
-Copyright 2022-2023 Project CHIP Authors
-SPDX-License-Identifier: Apache-2.0
+packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:7
+
+## Functions
+
+### getCommissioningModeQname
+
+▸ **getCommissioningModeQname**(): `string`
+
+#### Returns
+
+`string`
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:6
+packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:17
 
-## Functions
+___
+
+### getDeviceInstanceQname
+
+▸ **getDeviceInstanceQname**(`instanceId`): `string`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `instanceId` | `string` |
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:18
+
+___
 
 ### getDeviceMatterQname
 
@@ -108,7 +154,27 @@ packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:6
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:10
+packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:12
+
+___
+
+### getDeviceTypeQname
+
+▸ **getDeviceTypeQname**(`deviceType`): `string`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `deviceType` | `number` |
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:14
 
 ___
 
@@ -128,4 +194,64 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:9
+packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:11
+
+___
+
+### getLongDiscriminatorQname
+
+▸ **getLongDiscriminatorQname**(`longDiscriminator`): `string`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `longDiscriminator` | `number` |
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:16
+
+___
+
+### getShortDiscriminatorQname
+
+▸ **getShortDiscriminatorQname**(`shortDiscriminator`): `string`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `shortDiscriminator` | `number` |
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:15
+
+___
+
+### getVendorQname
+
+▸ **getVendorQname**(`vendorId`): `string`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `vendorId` | [`VendorId`](exports_datatype.md#vendorid) |
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:13

@@ -12,7 +12,7 @@ and PowerSourceCluster) to the device!
 
 ## Hierarchy
 
-- [`ComposedDevice`](exports_device.ComposedDevice.md)
+- [`Endpoint`](exports_device.Endpoint.md)
 
   ↳ **`Aggregator`**
 
@@ -27,6 +27,7 @@ and PowerSourceCluster) to the device!
 - [deviceTypes](exports_device.Aggregator.md#devicetypes)
 - [id](exports_device.Aggregator.md#id)
 - [name](exports_device.Aggregator.md#name)
+- [uniqueStorageKey](exports_device.Aggregator.md#uniquestoragekey)
 
 ### Methods
 
@@ -35,11 +36,10 @@ and PowerSourceCluster) to the device!
 - [addChildEndpoint](exports_device.Aggregator.md#addchildendpoint)
 - [addClusterClient](exports_device.Aggregator.md#addclusterclient)
 - [addClusterServer](exports_device.Aggregator.md#addclusterserver)
-- [addDevice](exports_device.Aggregator.md#adddevice)
 - [addFixedLabel](exports_device.Aggregator.md#addfixedlabel)
 - [addUserLabel](exports_device.Aggregator.md#adduserlabel)
-- [ensureEndpointIds](exports_device.Aggregator.md#ensureendpointids)
-- [findHighestEndpointId](exports_device.Aggregator.md#findhighestendpointid)
+- [clearStructureChangedCallback](exports_device.Aggregator.md#clearstructurechangedcallback)
+- [determineUniqueID](exports_device.Aggregator.md#determineuniqueid)
 - [getAllClusterClients](exports_device.Aggregator.md#getallclusterclients)
 - [getAllClusterServers](exports_device.Aggregator.md#getallclusterservers)
 - [getBridgedDevices](exports_device.Aggregator.md#getbridgeddevices)
@@ -50,19 +50,21 @@ and PowerSourceCluster) to the device!
 - [getClusterServer](exports_device.Aggregator.md#getclusterserver)
 - [getClusterServerById](exports_device.Aggregator.md#getclusterserverbyid)
 - [getDeviceTypes](exports_device.Aggregator.md#getdevicetypes)
-- [getDevices](exports_device.Aggregator.md#getdevices)
 - [getId](exports_device.Aggregator.md#getid)
-- [getStructure](exports_device.Aggregator.md#getstructure)
 - [hasClusterClient](exports_device.Aggregator.md#hasclusterclient)
 - [hasClusterServer](exports_device.Aggregator.md#hasclusterserver)
+- [removeBridgedDevice](exports_device.Aggregator.md#removebridgeddevice)
+- [removeChildEndpoint](exports_device.Aggregator.md#removechildendpoint)
 - [setDeviceTypes](exports_device.Aggregator.md#setdevicetypes)
+- [setStructureChangedCallback](exports_device.Aggregator.md#setstructurechangedcallback)
+- [updatePartsList](exports_device.Aggregator.md#updatepartslist)
 - [verifyRequiredClusters](exports_device.Aggregator.md#verifyrequiredclusters)
 
 ## Constructors
 
 ### constructor
 
-• **new Aggregator**(`devices?`, `endpointId?`)
+• **new Aggregator**(`devices?`, `options?`)
 
 Create a new Aggregator instance and optionally directly add devices to it. If this is used the devices must
 already have the BridgedDeviceBasicInformationCluster added!
@@ -72,43 +74,43 @@ already have the BridgedDeviceBasicInformationCluster added!
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `devices?` | [`Device`](exports_device.Device.md)[] | Array of devices to add |
-| `endpointId?` | `number` | Optional endpoint ID to use. If not provided will automatically be assigned |
+| `options?` | [`EndpointOptions`](../interfaces/exports_device.EndpointOptions.md) | Optional Endpoint options |
 
 #### Overrides
 
-[ComposedDevice](exports_device.ComposedDevice.md).[constructor](exports_device.ComposedDevice.md#constructor)
+[Endpoint](exports_device.Endpoint.md).[constructor](exports_device.Endpoint.md#constructor)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Aggregator.d.ts:24
+packages/matter.js/dist/cjs/device/Aggregator.d.ts:25
 
 ## Properties
 
 ### deviceTypes
 
-• `Protected` **deviceTypes**: [`AtLeastOne`](../modules/index._internal_.md#atleastone)<[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition)\>
+• `Protected` **deviceTypes**: [[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]]
 
 #### Inherited from
 
-[ComposedDevice](exports_device.ComposedDevice.md).[deviceTypes](exports_device.ComposedDevice.md#devicetypes)
+[Endpoint](exports_device.Endpoint.md).[deviceTypes](exports_device.Endpoint.md#devicetypes)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:17
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:19
 
 ___
 
 ### id
 
-• **id**: `undefined` \| `number`
+• **id**: `undefined` \| [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)
 
 #### Inherited from
 
-[ComposedDevice](exports_device.ComposedDevice.md).[id](exports_device.ComposedDevice.md#id)
+[Endpoint](exports_device.Endpoint.md).[id](exports_device.Endpoint.md#id)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:21
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:23
 
 ___
 
@@ -118,11 +120,25 @@ ___
 
 #### Inherited from
 
-[ComposedDevice](exports_device.ComposedDevice.md).[name](exports_device.ComposedDevice.md#name)
+[Endpoint](exports_device.Endpoint.md).[name](exports_device.Endpoint.md#name)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:22
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:25
+
+___
+
+### uniqueStorageKey
+
+• **uniqueStorageKey**: `undefined` \| `string`
+
+#### Inherited from
+
+[Endpoint](exports_device.Endpoint.md).[uniqueStorageKey](exports_device.Endpoint.md#uniquestoragekey)
+
+#### Defined in
+
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:24
 
 ## Methods
 
@@ -131,15 +147,16 @@ packages/matter.js/dist/cjs/device/Endpoint.d.ts:22
 ▸ **addBridgedDevice**(`device`, `bridgedBasicInformation?`): `void`
 
 Add a bridged device to the Aggregator. If provided the bridgedBasicInformation is used to automatically add the
-BridgedDeviceBasicInformationCluster to the device. If not provided the BridgedDeviceBasicInformationCluster must
-be already existing on the device!
+BridgedDeviceBasicInformationCluster to the device and also handles Reachability event triggering when
+reachability event changes. If not provided the BridgedDeviceBasicInformationCluster must be already existing
+on the device!
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `device` | [`Device`](exports_device.Device.md) | Device instance to add |
-| `bridgedBasicInformation?` | [`AttributeInitialValues`](../modules/exports_cluster.md#attributeinitialvalues)<[`Merge`](../modules/util.md#merge)<{ `hardwareVersion`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<`number`\> ; `hardwareVersionString`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<`string`\> ; `manufacturingDate`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<`string`\> ; `nodeLabel`: [`OptionalWritableAttribute`](../modules/exports_cluster.md#optionalwritableattribute)<`string`\> ; `partNumber`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<`string`\> ; `productLabel`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<`string`\> ; `productName`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<`string`\> ; `productURL`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<`string`\> ; `reachable`: [`Attribute`](../modules/exports_cluster.md#attribute)<`boolean`\> ; `serialNumber`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<`string`\> ; `softwareVersion`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<`number`\> ; `softwareVersionString`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<`string`\> ; `uniqueId`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<`string`\> ; `vendorId`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<[`VendorId`](exports_datatype.VendorId.md)\> ; `vendorName`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<`string`\>  }, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes-1)<[`BitSchema`](../modules/exports_schema.md#bitschema)\>\>\> | Optional BridgedDeviceBasicInformationCluster attribute values to |
+| `device` | [`Device`](exports_device.Device.md) \| [`ComposedDevice`](exports_device.ComposedDevice.md) | Device instance to add |
+| `bridgedBasicInformation?` | [`AttributeInitialValues`](../modules/exports_cluster.md#attributeinitialvalues)<[`Merge`](../modules/util_export.md#merge)<{ `hardwareVersion`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`number`, `any`\> ; `hardwareVersionString`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `nodeLabel`: [`OptionalWritableAttribute`](../modules/exports_cluster.md#optionalwritableattribute)<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productAppearance`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `finish`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`ProductFinish`](../enums/exports_cluster.BridgedDeviceBasicInformation.ProductFinish.md)\> ; `primaryColor`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<``null`` \| [`Color`](../enums/exports_cluster.BridgedDeviceBasicInformation.Color.md)\>  }\>, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productName`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `reachable`: [`Attribute`](../modules/exports_cluster.md#attribute)<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `softwareVersion`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`number`, `any`\> ; `softwareVersionString`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `vendorId`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<[`VendorId`](../modules/exports_datatype.md#vendorid), `any`\> ; `vendorName`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\>  }, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes-1)<[`BitSchema`](../modules/exports_schema.md#bitschema)\>\>\> | Optional BridgedDeviceBasicInformationCluster attribute values to |
 
 #### Returns
 
@@ -147,7 +164,7 @@ be already existing on the device!
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Aggregator.d.ts:37
+packages/matter.js/dist/cjs/device/Aggregator.d.ts:35
 
 ___
 
@@ -164,8 +181,8 @@ The required clusters PowerSourceConfigurationCluster and PowerSourceCluster nee
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `device` | [`Device`](exports_device.Device.md) | Device instance to add |
-| `bridgedBasicInformation?` | [`AttributeInitialValues`](../modules/exports_cluster.md#attributeinitialvalues)<[`Merge`](../modules/util.md#merge)<{ `hardwareVersion`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<`number`\> ; `hardwareVersionString`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<`string`\> ; `manufacturingDate`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<`string`\> ; `nodeLabel`: [`OptionalWritableAttribute`](../modules/exports_cluster.md#optionalwritableattribute)<`string`\> ; `partNumber`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<`string`\> ; `productLabel`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<`string`\> ; `productName`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<`string`\> ; `productURL`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<`string`\> ; `reachable`: [`Attribute`](../modules/exports_cluster.md#attribute)<`boolean`\> ; `serialNumber`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<`string`\> ; `softwareVersion`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<`number`\> ; `softwareVersionString`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<`string`\> ; `uniqueId`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<`string`\> ; `vendorId`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<[`VendorId`](exports_datatype.VendorId.md)\> ; `vendorName`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<`string`\>  }, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes-1)<[`BitSchema`](../modules/exports_schema.md#bitschema)\>\>\> | Optional BridgedDeviceBasicInformationCluster attribute values to |
+| `device` | [`Device`](exports_device.Device.md) \| [`ComposedDevice`](exports_device.ComposedDevice.md) | Device instance to add |
+| `bridgedBasicInformation?` | [`AttributeInitialValues`](../modules/exports_cluster.md#attributeinitialvalues)<[`Merge`](../modules/util_export.md#merge)<{ `hardwareVersion`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`number`, `any`\> ; `hardwareVersionString`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `nodeLabel`: [`OptionalWritableAttribute`](../modules/exports_cluster.md#optionalwritableattribute)<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productAppearance`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `finish`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`ProductFinish`](../enums/exports_cluster.BridgedDeviceBasicInformation.ProductFinish.md)\> ; `primaryColor`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<``null`` \| [`Color`](../enums/exports_cluster.BridgedDeviceBasicInformation.Color.md)\>  }\>, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productName`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `reachable`: [`Attribute`](../modules/exports_cluster.md#attribute)<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `softwareVersion`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`number`, `any`\> ; `softwareVersionString`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `vendorId`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<[`VendorId`](../modules/exports_datatype.md#vendorid), `any`\> ; `vendorName`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\>  }, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes-1)<[`BitSchema`](../modules/exports_schema.md#bitschema)\>\>\> | Optional BridgedDeviceBasicInformationCluster attribute values to |
 
 #### Returns
 
@@ -173,7 +190,7 @@ The required clusters PowerSourceConfigurationCluster and PowerSourceCluster nee
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Aggregator.d.ts:47
+packages/matter.js/dist/cjs/device/Aggregator.d.ts:45
 
 ___
 
@@ -193,30 +210,32 @@ ___
 
 #### Inherited from
 
-[ComposedDevice](exports_device.ComposedDevice.md).[addChildEndpoint](exports_device.ComposedDevice.md#addchildendpoint)
+[Endpoint](exports_device.Endpoint.md).[addChildEndpoint](exports_device.Endpoint.md#addchildendpoint)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:38
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:50
 
 ___
 
 ### addClusterClient
 
-▸ **addClusterClient**<`A`, `C`\>(`cluster`): `void`
+▸ **addClusterClient**<`F`, `A`, `C`, `E`\>(`cluster`): `void`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
+| `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
 | `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
+| `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`A`, `C`\> |
+| `cluster` | [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`F`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -224,30 +243,30 @@ ___
 
 #### Inherited from
 
-[ComposedDevice](exports_device.ComposedDevice.md).[addClusterClient](exports_device.ComposedDevice.md#addclusterclient)
+[Endpoint](exports_device.Endpoint.md).[addClusterClient](exports_device.Endpoint.md#addclusterclient)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:29
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:41
 
 ___
 
 ### addClusterServer
 
-▸ **addClusterServer**<`A`, `C`\>(`cluster`): `void`
+▸ **addClusterServer**<`A`, `E`\>(`cluster`): `void`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
-| `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
+| `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<`A`, `C`\> |
+| `cluster` | [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<`A`, `E`\> |
 
 #### Returns
 
@@ -255,33 +274,11 @@ ___
 
 #### Inherited from
 
-[ComposedDevice](exports_device.ComposedDevice.md).[addClusterServer](exports_device.ComposedDevice.md#addclusterserver)
+[Endpoint](exports_device.Endpoint.md).[addClusterServer](exports_device.Endpoint.md#addclusterserver)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:28
-
-___
-
-### addDevice
-
-▸ **addDevice**(): `void`
-
-**`Deprecated`**
-
-Use addBridgedDevice or addBridgedDeviceWithPowerSourceInfo instead
-
-#### Returns
-
-`void`
-
-#### Overrides
-
-[ComposedDevice](exports_device.ComposedDevice.md).[addDevice](exports_device.ComposedDevice.md#adddevice)
-
-#### Defined in
-
-packages/matter.js/dist/cjs/device/Aggregator.d.ts:28
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:40
 
 ___
 
@@ -302,11 +299,11 @@ ___
 
 #### Inherited from
 
-[ComposedDevice](exports_device.ComposedDevice.md).[addFixedLabel](exports_device.ComposedDevice.md#addfixedlabel)
+[Endpoint](exports_device.Endpoint.md).[addFixedLabel](exports_device.Endpoint.md#addfixedlabel)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:26
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:38
 
 ___
 
@@ -327,89 +324,83 @@ ___
 
 #### Inherited from
 
-[ComposedDevice](exports_device.ComposedDevice.md).[addUserLabel](exports_device.ComposedDevice.md#adduserlabel)
+[Endpoint](exports_device.Endpoint.md).[addUserLabel](exports_device.Endpoint.md#adduserlabel)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:27
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:39
 
 ___
 
-### ensureEndpointIds
+### clearStructureChangedCallback
 
-▸ **ensureEndpointIds**(`nextEndpointId`): `number`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `nextEndpointId` | `number` |
+▸ **clearStructureChangedCallback**(): `void`
 
 #### Returns
 
-`number`
+`void`
 
 #### Inherited from
 
-[ComposedDevice](exports_device.ComposedDevice.md).[ensureEndpointIds](exports_device.ComposedDevice.md#ensureendpointids)
+[Endpoint](exports_device.Endpoint.md).[clearStructureChangedCallback](exports_device.Endpoint.md#clearstructurechangedcallback)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:42
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:36
 
 ___
 
-### findHighestEndpointId
+### determineUniqueID
 
-▸ **findHighestEndpointId**(): `number`
+▸ **determineUniqueID**(): `undefined` \| `string`
 
 #### Returns
 
-`number`
+`undefined` \| `string`
 
 #### Inherited from
 
-[ComposedDevice](exports_device.ComposedDevice.md).[findHighestEndpointId](exports_device.ComposedDevice.md#findhighestendpointid)
+[Endpoint](exports_device.Endpoint.md).[determineUniqueID](exports_device.Endpoint.md#determineuniqueid)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:41
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:54
 
 ___
 
 ### getAllClusterClients
 
-▸ **getAllClusterClients**(): [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md)\>[]
+▸ **getAllClusterClients**(): [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`any`, [`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md), [`Events`](../interfaces/exports_cluster.Events.md)\>[]
 
 #### Returns
 
-[`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md)\>[]
+[`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`any`, [`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md), [`Events`](../interfaces/exports_cluster.Events.md)\>[]
 
 #### Inherited from
 
-[ComposedDevice](exports_device.ComposedDevice.md).[getAllClusterClients](exports_device.ComposedDevice.md#getallclusterclients)
+[Endpoint](exports_device.Endpoint.md).[getAllClusterClients](exports_device.Endpoint.md#getallclusterclients)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:45
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:57
 
 ___
 
 ### getAllClusterServers
 
-▸ **getAllClusterServers**(): [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md)\>[]
+▸ **getAllClusterServers**(): [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Events`](../interfaces/exports_cluster.Events.md)\>[]
 
 #### Returns
 
-[`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md)\>[]
+[`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Events`](../interfaces/exports_cluster.Events.md)\>[]
 
 #### Inherited from
 
-[ComposedDevice](exports_device.ComposedDevice.md).[getAllClusterServers](exports_device.ComposedDevice.md#getallclusterservers)
+[Endpoint](exports_device.Endpoint.md).[getAllClusterServers](exports_device.Endpoint.md#getallclusterservers)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:44
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:56
 
 ___
 
@@ -427,7 +418,7 @@ Array of bridged devices
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Aggregator.d.ts:53
+packages/matter.js/dist/cjs/device/Aggregator.d.ts:51
 
 ___
 
@@ -439,7 +430,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `id` | `number` |
+| `id` | [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber) |
 
 #### Returns
 
@@ -447,11 +438,11 @@ ___
 
 #### Inherited from
 
-[ComposedDevice](exports_device.ComposedDevice.md).[getChildEndpoint](exports_device.ComposedDevice.md#getchildendpoint)
+[Endpoint](exports_device.Endpoint.md).[getChildEndpoint](exports_device.Endpoint.md#getchildendpoint)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:39
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:51
 
 ___
 
@@ -465,24 +456,24 @@ ___
 
 #### Inherited from
 
-[ComposedDevice](exports_device.ComposedDevice.md).[getChildEndpoints](exports_device.ComposedDevice.md#getchildendpoints)
+[Endpoint](exports_device.Endpoint.md).[getChildEndpoints](exports_device.Endpoint.md#getchildendpoints)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:40
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:52
 
 ___
 
 ### getClusterClient
 
-▸ **getClusterClient**<`F`, `SF`, `A`, `C`, `E`\>(`cluster`, `interactionClient?`): `undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`A`, `C`\>
+▸ **getClusterClient**<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`F`, `A`, `C`, `E`\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
-| `SF` | extends [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
 | `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
@@ -492,56 +483,55 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> |
-| `interactionClient?` | [`InteractionClient`](exports_interaction.InteractionClient.md) |
 
 #### Returns
 
-`undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`A`, `C`\>
+`undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`F`, `A`, `C`, `E`\>
 
 #### Inherited from
 
-[ComposedDevice](exports_device.ComposedDevice.md).[getClusterClient](exports_device.ComposedDevice.md#getclusterclient)
+[Endpoint](exports_device.Endpoint.md).[getClusterClient](exports_device.Endpoint.md#getclusterclient)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:31
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:43
 
 ___
 
 ### getClusterClientById
 
-▸ **getClusterClientById**(`clusterId`): `undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md)\>
+▸ **getClusterClientById**(`clusterId`): `undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`any`, [`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md), [`Events`](../interfaces/exports_cluster.Events.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `clusterId` | `number` |
+| `clusterId` | [`ClusterId`](../modules/exports_datatype.md#clusterid) |
 
 #### Returns
 
-`undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md)\>
+`undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`any`, [`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md), [`Events`](../interfaces/exports_cluster.Events.md)\>
 
 #### Inherited from
 
-[ComposedDevice](exports_device.ComposedDevice.md).[getClusterClientById](exports_device.ComposedDevice.md#getclusterclientbyid)
+[Endpoint](exports_device.Endpoint.md).[getClusterClientById](exports_device.Endpoint.md#getclusterclientbyid)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:33
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:45
 
 ___
 
 ### getClusterServer
 
-▸ **getClusterServer**<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<`A`, `C`\>
+▸ **getClusterServer**<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<`A`, `E`\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
-| `SF` | extends [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
 | `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
@@ -554,124 +544,75 @@ ___
 
 #### Returns
 
-`undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<`A`, `C`\>
+`undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<`A`, `E`\>
 
 #### Inherited from
 
-[ComposedDevice](exports_device.ComposedDevice.md).[getClusterServer](exports_device.ComposedDevice.md#getclusterserver)
+[Endpoint](exports_device.Endpoint.md).[getClusterServer](exports_device.Endpoint.md#getclusterserver)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:30
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:42
 
 ___
 
 ### getClusterServerById
 
-▸ **getClusterServerById**(`clusterId`): `undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md)\>
+▸ **getClusterServerById**(`clusterId`): `undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Events`](../interfaces/exports_cluster.Events.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `clusterId` | `number` |
+| `clusterId` | [`ClusterId`](../modules/exports_datatype.md#clusterid) |
 
 #### Returns
 
-`undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md)\>
+`undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Events`](../interfaces/exports_cluster.Events.md)\>
 
 #### Inherited from
 
-[ComposedDevice](exports_device.ComposedDevice.md).[getClusterServerById](exports_device.ComposedDevice.md#getclusterserverbyid)
+[Endpoint](exports_device.Endpoint.md).[getClusterServerById](exports_device.Endpoint.md#getclusterserverbyid)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:32
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:44
 
 ___
 
 ### getDeviceTypes
 
-▸ **getDeviceTypes**(): [`AtLeastOne`](../modules/index._internal_.md#atleastone)<[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition)\>
+▸ **getDeviceTypes**(): [[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]]
 
 #### Returns
 
-[`AtLeastOne`](../modules/index._internal_.md#atleastone)<[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition)\>
+[[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]]
 
 #### Inherited from
 
-[ComposedDevice](exports_device.ComposedDevice.md).[getDeviceTypes](exports_device.ComposedDevice.md#getdevicetypes)
+[Endpoint](exports_device.Endpoint.md).[getDeviceTypes](exports_device.Endpoint.md#getdevicetypes)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:36
-
-___
-
-### getDevices
-
-▸ **getDevices**(): [`Endpoint`](exports_device.Endpoint.md)[]
-
-Get all sub-devices of the composed device.
-
-#### Returns
-
-[`Endpoint`](exports_device.Endpoint.md)[]
-
-Array with all sub-devices
-
-#### Inherited from
-
-[ComposedDevice](exports_device.ComposedDevice.md).[getDevices](exports_device.ComposedDevice.md#getdevices)
-
-#### Defined in
-
-packages/matter.js/dist/cjs/device/ComposedDevice.d.ts:33
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:48
 
 ___
 
 ### getId
 
-▸ **getId**(): `number`
+▸ **getId**(): [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)
 
 #### Returns
 
-`number`
+[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)
 
 #### Inherited from
 
-[ComposedDevice](exports_device.ComposedDevice.md).[getId](exports_device.ComposedDevice.md#getid)
+[Endpoint](exports_device.Endpoint.md).[getId](exports_device.Endpoint.md#getid)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:25
-
-___
-
-### getStructure
-
-▸ **getStructure**(): `Object`
-
-#### Returns
-
-`Object`
-
-| Name | Type |
-| :------ | :------ |
-| `attributePaths` | [`AttributePath`](../interfaces/exports_interaction.AttributePath.md)[] |
-| `attributes` | `Map`<`string`, [`AttributeServer`](exports_cluster.AttributeServer.md)<`any`\>\> |
-| `commandPaths` | [`CommandPath`](../interfaces/exports_interaction.CommandPath.md)[] |
-| `commands` | `Map`<`string`, [`CommandServer`](exports_cluster.CommandServer.md)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md)\>\> |
-| `endpoints` | `Map`<`number`, [`Endpoint`](exports_device.Endpoint.md)\> |
-| `partsList` | `any` |
-
-#### Inherited from
-
-[ComposedDevice](exports_device.ComposedDevice.md).[getStructure](exports_device.ComposedDevice.md#getstructure)
-
-#### Defined in
-
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:46
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:37
 
 ___
 
@@ -684,7 +625,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
-| `SF` | extends [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
 | `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
@@ -701,11 +642,11 @@ ___
 
 #### Inherited from
 
-[ComposedDevice](exports_device.ComposedDevice.md).[hasClusterClient](exports_device.ComposedDevice.md#hasclusterclient)
+[Endpoint](exports_device.Endpoint.md).[hasClusterClient](exports_device.Endpoint.md#hasclusterclient)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:35
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:47
 
 ___
 
@@ -718,7 +659,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
-| `SF` | extends [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
 | `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
@@ -735,11 +676,55 @@ ___
 
 #### Inherited from
 
-[ComposedDevice](exports_device.ComposedDevice.md).[hasClusterServer](exports_device.ComposedDevice.md#hasclusterserver)
+[Endpoint](exports_device.Endpoint.md).[hasClusterServer](exports_device.Endpoint.md#hasclusterserver)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:34
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:46
+
+___
+
+### removeBridgedDevice
+
+▸ **removeBridgedDevice**(`device`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `device` | [`Device`](exports_device.Device.md) \| [`ComposedDevice`](exports_device.ComposedDevice.md) |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/cjs/device/Aggregator.d.ts:52
+
+___
+
+### removeChildEndpoint
+
+▸ `Protected` **removeChildEndpoint**(`endpoint`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `endpoint` | [`Endpoint`](exports_device.Endpoint.md) |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[Endpoint](exports_device.Endpoint.md).[removeChildEndpoint](exports_device.Endpoint.md#removechildendpoint)
+
+#### Defined in
+
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:53
 
 ___
 
@@ -751,7 +736,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `deviceTypes` | [`AtLeastOne`](../modules/index._internal_.md#atleastone)<[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition)\> |
+| `deviceTypes` | [[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]] |
 
 #### Returns
 
@@ -759,19 +744,59 @@ ___
 
 #### Inherited from
 
-[ComposedDevice](exports_device.ComposedDevice.md).[setDeviceTypes](exports_device.ComposedDevice.md#setdevicetypes)
+[Endpoint](exports_device.Endpoint.md).[setDeviceTypes](exports_device.Endpoint.md#setdevicetypes)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:37
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:49
+
+___
+
+### setStructureChangedCallback
+
+▸ **setStructureChangedCallback**(`callback`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `callback` | () => `void` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[Endpoint](exports_device.Endpoint.md).[setStructureChangedCallback](exports_device.Endpoint.md#setstructurechangedcallback)
+
+#### Defined in
+
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:35
+
+___
+
+### updatePartsList
+
+▸ **updatePartsList**(): [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)[]
+
+#### Returns
+
+[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)[]
+
+#### Inherited from
+
+[Endpoint](exports_device.Endpoint.md).[updatePartsList](exports_device.Endpoint.md#updatepartslist)
+
+#### Defined in
+
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:58
 
 ___
 
 ### verifyRequiredClusters
 
-▸ `Protected` **verifyRequiredClusters**(): `void`
-
-Verify that the required clusters exists on the device.
+▸ **verifyRequiredClusters**(): `void`
 
 #### Returns
 
@@ -779,8 +804,8 @@ Verify that the required clusters exists on the device.
 
 #### Inherited from
 
-[ComposedDevice](exports_device.ComposedDevice.md).[verifyRequiredClusters](exports_device.ComposedDevice.md#verifyrequiredclusters)
+[Endpoint](exports_device.Endpoint.md).[verifyRequiredClusters](exports_device.Endpoint.md#verifyrequiredclusters)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/ComposedDevice.d.ts:37
+packages/matter.js/dist/cjs/device/Endpoint.d.ts:55

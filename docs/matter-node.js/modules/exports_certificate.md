@@ -7,6 +7,7 @@
 ### Classes
 
 - [AttestationCertificateManager](../classes/exports_certificate.AttestationCertificateManager.md)
+- [CertificateError](../classes/exports_certificate.CertificateError.md)
 - [CertificateManager](../classes/exports_certificate.CertificateManager.md)
 - [CertificationDeclarationManager](../classes/exports_certificate.CertificationDeclarationManager.md)
 - [RootCertificateManager](../classes/exports_certificate.RootCertificateManager.md)
@@ -55,7 +56,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:185
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:189
 
 ___
 
@@ -65,7 +66,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:184
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:188
 
 ## Variables
 
@@ -151,31 +152,31 @@ ___
 
 ### TlvCertificationDeclaration
 
-• `Const` **TlvCertificationDeclaration**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvCertificationDeclaration**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:170
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:174
 
 ___
 
 ### TlvOperationalCertificate
 
-• `Const` **TlvOperationalCertificate**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvOperationalCertificate**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:52
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:56
 
 ___
 
 ### TlvRootCertificate
 
-• `Const` **TlvRootCertificate**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](index._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvRootCertificate**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:25
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:29
 
 ## Functions
 
@@ -197,7 +198,7 @@ commonName = ASN.1 OID 2.5.4.3
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:14
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:18
 
 ___
 
@@ -211,7 +212,7 @@ matter-fabric-id = ASN.1 OID 1.3.6.1.4.1.37244.1.5
 
 | Name | Type |
 | :------ | :------ |
-| `id` | `number` \| `bigint` |
+| `id` | [`FabricId`](exports_datatype.md#fabricid) |
 
 #### Returns
 
@@ -219,7 +220,7 @@ matter-fabric-id = ASN.1 OID 1.3.6.1.4.1.37244.1.5
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:20
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:24
 
 ___
 
@@ -233,7 +234,7 @@ matter-node-id = ASN.1 OID 1.3.6.1.4.1.37244.1.1
 
 | Name | Type |
 | :------ | :------ |
-| `nodeId` | [`NodeId`](../classes/exports_datatype.NodeId.md) |
+| `nodeId` | [`NodeId`](exports_datatype.md#nodeid) |
 
 #### Returns
 
@@ -241,7 +242,7 @@ matter-node-id = ASN.1 OID 1.3.6.1.4.1.37244.1.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:16
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:20
 
 ___
 
@@ -263,7 +264,7 @@ matter-oid-pid = ASN.1 OID 1.3.6.1.4.1.3724 4.2.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:24
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:28
 
 ___
 
@@ -285,7 +286,7 @@ matter-rcac-id = ASN.1 OID 1.3.6.1.4.1.37244.1.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:18
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:22
 
 ___
 
@@ -299,7 +300,7 @@ matter-oid-vid = ASN.1 OID 1.3.6.1.4.1.37244.2.1
 
 | Name | Type |
 | :------ | :------ |
-| `vendorId` | [`VendorId`](../classes/exports_datatype.VendorId.md) |
+| `vendorId` | [`VendorId`](exports_datatype.md#vendorid) |
 
 #### Returns
 
@@ -307,7 +308,7 @@ matter-oid-vid = ASN.1 OID 1.3.6.1.4.1.37244.2.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:22
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:26
 
 ___
 
@@ -328,7 +329,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:12
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:16
 
 ___
 
@@ -348,4 +349,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:11
+packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:15

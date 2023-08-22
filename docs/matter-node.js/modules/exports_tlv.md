@@ -38,6 +38,7 @@
 
 ### Type Aliases
 
+- [ArrayAsChunked](exports_tlv.md#arrayaschunked)
 - [NumericConstraints](exports_tlv.md#numericconstraints)
 - [TlvElement](exports_tlv.md#tlvelement)
 - [TlvFields](exports_tlv.md#tlvfields)
@@ -54,18 +55,27 @@
 - [TlvBoolean](exports_tlv.md#tlvboolean)
 - [TlvByteString](exports_tlv.md#tlvbytestring)
 - [TlvDouble](exports_tlv.md#tlvdouble)
+- [TlvEpochS](exports_tlv.md#tlvepochs)
+- [TlvEpochUs](exports_tlv.md#tlvepochus)
 - [TlvFloat](exports_tlv.md#tlvfloat)
+- [TlvHardwareAddress](exports_tlv.md#tlvhardwareaddress)
 - [TlvInt16](exports_tlv.md#tlvint16)
 - [TlvInt32](exports_tlv.md#tlvint32)
 - [TlvInt64](exports_tlv.md#tlvint64)
 - [TlvInt8](exports_tlv.md#tlvint8)
 - [TlvLongNumberSchema](exports_tlv.md#tlvlongnumberschema)
 - [TlvNoArguments](exports_tlv.md#tlvnoarguments)
+- [TlvPercent](exports_tlv.md#tlvpercent)
+- [TlvPercent100ths](exports_tlv.md#tlvpercent100ths)
+- [TlvPosixMs](exports_tlv.md#tlvposixms)
 - [TlvString](exports_tlv.md#tlvstring)
 - [TlvString256max](exports_tlv.md#tlvstring256max)
 - [TlvString32max](exports_tlv.md#tlvstring32max)
 - [TlvString64max](exports_tlv.md#tlvstring64max)
+- [TlvSysTimeMS](exports_tlv.md#tlvsystimems)
+- [TlvSysTimeUs](exports_tlv.md#tlvsystimeus)
 - [TlvUInt16](exports_tlv.md#tlvuint16)
+- [TlvUInt24](exports_tlv.md#tlvuint24)
 - [TlvUInt32](exports_tlv.md#tlvuint32)
 - [TlvUInt64](exports_tlv.md#tlvuint64)
 - [TlvUInt8](exports_tlv.md#tlvuint8)
@@ -83,6 +93,16 @@
 - [TlvOptionalField](exports_tlv.md#tlvoptionalfield)
 
 ## Type Aliases
+
+### ArrayAsChunked
+
+Ƭ **ArrayAsChunked**: [`ArrayChunkData`](export._internal_.md#arraychunkdata)[]
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:17
+
+___
 
 ### NumericConstraints
 
@@ -103,7 +123,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:28
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:23
 
 ___
 
@@ -127,7 +147,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:22
+packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:24
 
 ___
 
@@ -151,7 +171,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:21
+packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:23
 
 ___
 
@@ -187,7 +207,7 @@ Converts [TlvType](../enums/exports_tlv.TlvType.md) to the js primitive type.
 | `0` | `bigint` \| `number` |
 | `10` | `number` |
 | `12` | `string` |
-| `16` | [`ByteArray`](util.md#bytearray-1) |
+| `16` | [`ByteArray`](util_export.md#bytearray-1) |
 | `20` | ``null`` |
 | `21` | `never` |
 | `22` | `never` |
@@ -216,7 +236,7 @@ ___
 
 ### TypeFromFields
 
-Ƭ **TypeFromFields**<`F`\>: [`Merge`](util.md#merge)<[`TypeForMandatoryFields`](index._internal_.md#typeformandatoryfields)<`F`, [`MandatoryFieldNames`](index._internal_.md#mandatoryfieldnames)<`F`\>\>, [`TypeForOptionalFields`](index._internal_.md#typeforoptionalfields)<`F`, [`OptionalFieldNames`](index._internal_.md#optionalfieldnames)<`F`\>\>\>
+Ƭ **TypeFromFields**<`F`\>: [`Merge`](util_export.md#merge)<[`TypeForMandatoryFields`](export._internal_.md#typeformandatoryfields)<`F`, [`MandatoryFieldNames`](export._internal_.md#mandatoryfieldnames)<`F`\>\>, [`TypeForOptionalFields`](export._internal_.md#typeforoptionalfields)<`F`, [`OptionalFieldNames`](export._internal_.md#optionalfieldnames)<`F`\>\>\>
 
 #### Type parameters
 
@@ -244,7 +264,7 @@ Type defined by the TLV schema.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:41
+packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:43
 
 ## Variables
 
@@ -254,7 +274,7 @@ packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:41
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvAny.d.ts:14
+packages/matter.js/dist/cjs/tlv/TlvAny.d.ts:20
 
 ___
 
@@ -288,7 +308,27 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:43
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:38
+
+___
+
+### TlvEpochS
+
+• `Const` **TlvEpochS**: [`TlvNumberSchema`](../classes/exports_tlv.TlvNumberSchema.md)
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:53
+
+___
+
+### TlvEpochUs
+
+• `Const` **TlvEpochUs**: [`TlvNumericSchema`](../classes/exports_tlv.TlvNumericSchema.md)<`number` \| `bigint`\>
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:52
 
 ___
 
@@ -300,7 +340,17 @@ Unsigned integer TLV schema.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:42
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:37
+
+___
+
+### TlvHardwareAddress
+
+• `Const` **TlvHardwareAddress**: [`StringSchema`](../classes/exports_tlv.StringSchema.md)<[`ByteString`](../enums/exports_tlv.TlvType.md#bytestring)\>
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvString.d.ts:38
 
 ___
 
@@ -310,7 +360,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:45
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:40
 
 ___
 
@@ -320,7 +370,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:46
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:41
 
 ___
 
@@ -330,7 +380,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:47
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:42
 
 ___
 
@@ -340,7 +390,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:44
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:39
 
 ___
 
@@ -367,7 +417,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:38
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:33
 
 ___
 
@@ -380,6 +430,36 @@ Void TLV schema.
 #### Defined in
 
 packages/matter.js/dist/cjs/tlv/TlvNoArguments.d.ts:16
+
+___
+
+### TlvPercent
+
+• `Const` **TlvPercent**: [`TlvNumericSchema`](../classes/exports_tlv.TlvNumericSchema.md)<`number`\>
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:50
+
+___
+
+### TlvPercent100ths
+
+• `Const` **TlvPercent100ths**: [`TlvNumericSchema`](../classes/exports_tlv.TlvNumericSchema.md)<`number`\>
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:51
+
+___
+
+### TlvPosixMs
+
+• `Const` **TlvPosixMs**: [`TlvNumericSchema`](../classes/exports_tlv.TlvNumericSchema.md)<`number` \| `bigint`\>
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:54
 
 ___
 
@@ -431,13 +511,43 @@ packages/matter.js/dist/cjs/tlv/TlvString.d.ts:35
 
 ___
 
+### TlvSysTimeMS
+
+• `Const` **TlvSysTimeMS**: [`TlvNumericSchema`](../classes/exports_tlv.TlvNumericSchema.md)<`number` \| `bigint`\>
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:56
+
+___
+
+### TlvSysTimeUs
+
+• `Const` **TlvSysTimeUs**: [`TlvNumericSchema`](../classes/exports_tlv.TlvNumericSchema.md)<`number` \| `bigint`\>
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:55
+
+___
+
 ### TlvUInt16
 
 • `Const` **TlvUInt16**: [`TlvNumberSchema`](../classes/exports_tlv.TlvNumberSchema.md)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:49
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:44
+
+___
+
+### TlvUInt24
+
+• `Const` **TlvUInt24**: [`TlvNumberSchema`](../classes/exports_tlv.TlvNumberSchema.md)
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:45
 
 ___
 
@@ -447,7 +557,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:50
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:46
 
 ___
 
@@ -457,7 +567,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:51
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:47
 
 ___
 
@@ -467,7 +577,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:48
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:43
 
 ___
 
@@ -500,7 +610,7 @@ Array TLV schema.
 | Name | Type |
 | :------ | :------ |
 | `elementSchema` | [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)<`T`\> |
-| `«destructured»` | [`LengthConstraints`](index._internal_.md#lengthconstraints) |
+| `«destructured»` | [`LengthConstraints`](export._internal_.md#lengthconstraints) |
 
 #### Returns
 
@@ -508,13 +618,13 @@ Array TLV schema.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:28
+packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:37
 
 ___
 
 ### TlvBitmap
 
-▸ **TlvBitmap**<`T`\>(`underlyingSchema`, `bitSchema`): [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)<[`TypeFromBitSchema`](exports_schema.md#typefrombitschema)<`T`\>, `number`\>
+▸ **TlvBitmap**<`T`\>(`underlyingSchema`, `bitSchema`): [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<`T`\>, `number`\>
 
 #### Type parameters
 
@@ -531,11 +641,11 @@ ___
 
 #### Returns
 
-[`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)<[`TypeFromBitSchema`](exports_schema.md#typefrombitschema)<`T`\>, `number`\>
+[`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<`T`\>, `number`\>
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:53
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:49
 
 ___
 
@@ -555,7 +665,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:52
+packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:48
 
 ___
 
@@ -587,7 +697,7 @@ to the value being empty.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvObject.d.ts:58
+packages/matter.js/dist/cjs/tlv/TlvObject.d.ts:60
 
 ___
 
@@ -615,7 +725,7 @@ List TLV schema.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvObject.d.ts:52
+packages/matter.js/dist/cjs/tlv/TlvObject.d.ts:54
 
 ___
 
@@ -643,7 +753,7 @@ Nullable TLV schema.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNullable.d.ts:21
+packages/matter.js/dist/cjs/tlv/TlvNullable.d.ts:23
 
 ___
 
@@ -671,7 +781,7 @@ Object TLV schema.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvObject.d.ts:50
+packages/matter.js/dist/cjs/tlv/TlvObject.d.ts:52
 
 ___
 
@@ -700,4 +810,4 @@ Object TLV optional field.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvObject.d.ts:60
+packages/matter.js/dist/cjs/tlv/TlvObject.d.ts:62

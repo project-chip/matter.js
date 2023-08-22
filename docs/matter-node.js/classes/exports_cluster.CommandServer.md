@@ -47,22 +47,22 @@
 
 | Name | Type |
 | :------ | :------ |
-| `invokeId` | `number` |
-| `responseId` | `number` |
+| `invokeId` | [`CommandId`](../modules/exports_datatype.md#commandid) |
+| `responseId` | [`CommandId`](../modules/exports_datatype.md#commandid) |
 | `name` | `string` |
 | `requestSchema` | [`TlvSchema`](exports_tlv.TlvSchema.md)<`RequestT`\> |
 | `responseSchema` | [`TlvSchema`](exports_tlv.TlvSchema.md)<`ResponseT`\> |
-| `handler` | (`request`: `RequestT`, `session`: [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](index.MatterDevice.md)\>, `message`: [`Message`](../interfaces/exports_codec.Message.md), `endpoint`: [`Endpoint`](exports_device.Endpoint.md)) => `ResponseT` \| `Promise`<`ResponseT`\> |
+| `handler` | (`request`: `RequestT`, `session`: [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/exports_codec.Message.md), `endpoint`: [`Endpoint`](exports_device.Endpoint.md)) => `ResponseT` \| `Promise`<`ResponseT`\> |
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/CommandServer.d.ts:19
+packages/matter.js/dist/cjs/cluster/server/CommandServer.d.ts:20
 
 ## Properties
 
 ### handler
 
-• `Protected` `Readonly` **handler**: (`request`: `RequestT`, `session`: [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](index.MatterDevice.md)\>, `message`: [`Message`](../interfaces/exports_codec.Message.md), `endpoint`: [`Endpoint`](exports_device.Endpoint.md)) => `ResponseT` \| `Promise`<`ResponseT`\>
+• `Protected` `Readonly` **handler**: (`request`: `RequestT`, `session`: [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/exports_codec.Message.md), `endpoint`: [`Endpoint`](exports_device.Endpoint.md)) => `ResponseT` \| `Promise`<`ResponseT`\>
 
 #### Type declaration
 
@@ -73,7 +73,7 @@ packages/matter.js/dist/cjs/cluster/server/CommandServer.d.ts:19
 | Name | Type |
 | :------ | :------ |
 | `request` | `RequestT` |
-| `session` | [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](index.MatterDevice.md)\> |
+| `session` | [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
 | `message` | [`Message`](../interfaces/exports_codec.Message.md) |
 | `endpoint` | [`Endpoint`](exports_device.Endpoint.md) |
 
@@ -83,17 +83,17 @@ packages/matter.js/dist/cjs/cluster/server/CommandServer.d.ts:19
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/CommandServer.d.ts:18
+packages/matter.js/dist/cjs/cluster/server/CommandServer.d.ts:19
 
 ___
 
 ### invokeId
 
-• `Readonly` **invokeId**: `number`
+• `Readonly` **invokeId**: [`CommandId`](../modules/exports_datatype.md#commandid)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/CommandServer.d.ts:13
+packages/matter.js/dist/cjs/cluster/server/CommandServer.d.ts:14
 
 ___
 
@@ -103,7 +103,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/CommandServer.d.ts:15
+packages/matter.js/dist/cjs/cluster/server/CommandServer.d.ts:16
 
 ___
 
@@ -113,17 +113,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/CommandServer.d.ts:16
+packages/matter.js/dist/cjs/cluster/server/CommandServer.d.ts:17
 
 ___
 
 ### responseId
 
-• `Readonly` **responseId**: `number`
+• `Readonly` **responseId**: [`CommandId`](../modules/exports_datatype.md#commandid)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/CommandServer.d.ts:14
+packages/matter.js/dist/cjs/cluster/server/CommandServer.d.ts:15
 
 ___
 
@@ -133,27 +133,27 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/CommandServer.d.ts:17
+packages/matter.js/dist/cjs/cluster/server/CommandServer.d.ts:18
 
 ## Methods
 
 ### invoke
 
-▸ **invoke**(`session`, `args`, `message`, `endpoint`): `Promise`<{ `code`: [`StatusCode`](../enums/exports_interaction.StatusCode.md) ; `response`: [`TlvStream`](../modules/exports_tlv.md#tlvstream) ; `responseId`: `number`  }\>
+▸ **invoke**(`session`, `args`, `message`, `endpoint`): `Promise`<{ `code`: [`StatusCode`](../enums/exports_interaction.StatusCode.md) ; `response`: [`TlvStream`](../modules/exports_tlv.md#tlvstream) ; `responseId`: [`CommandId`](../modules/exports_datatype.md#commandid)  }\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](index.MatterDevice.md)\> |
+| `session` | [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
 | `args` | [`TlvStream`](../modules/exports_tlv.md#tlvstream) |
 | `message` | [`Message`](../interfaces/exports_codec.Message.md) |
 | `endpoint` | [`Endpoint`](exports_device.Endpoint.md) |
 
 #### Returns
 
-`Promise`<{ `code`: [`StatusCode`](../enums/exports_interaction.StatusCode.md) ; `response`: [`TlvStream`](../modules/exports_tlv.md#tlvstream) ; `responseId`: `number`  }\>
+`Promise`<{ `code`: [`StatusCode`](../enums/exports_interaction.StatusCode.md) ; `response`: [`TlvStream`](../modules/exports_tlv.md#tlvstream) ; `responseId`: [`CommandId`](../modules/exports_datatype.md#commandid)  }\>
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/CommandServer.d.ts:20
+packages/matter.js/dist/cjs/cluster/server/CommandServer.d.ts:21

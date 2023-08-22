@@ -17,16 +17,17 @@
 - [requiredServerClusters](exports_device.DeviceTypeDefinition.md#requiredserverclusters)
 - [revision](exports_device.DeviceTypeDefinition.md#revision)
 - [superSet](exports_device.DeviceTypeDefinition.md#superset)
+- [unknown](exports_device.DeviceTypeDefinition.md#unknown)
 
 ## Properties
 
 ### code
 
-• **code**: `number`
+• **code**: [`DeviceTypeId`](../modules/exports_datatype.md#devicetypeid)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/DeviceTypes.d.ts:50
+packages/matter.js/dist/cjs/device/DeviceTypes.d.ts:52
 
 ___
 
@@ -36,7 +37,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/DeviceTypes.d.ts:51
+packages/matter.js/dist/cjs/device/DeviceTypes.d.ts:53
 
 ___
 
@@ -46,13 +47,23 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/DeviceTypes.d.ts:49
+packages/matter.js/dist/cjs/device/DeviceTypes.d.ts:51
 
 ___
 
 ### optionalClientClusters
 
-• **optionalClientClusters**: `number`[]
+• **optionalClientClusters**: [`ClusterId`](../modules/exports_datatype.md#clusterid)[]
+
+#### Defined in
+
+packages/matter.js/dist/cjs/device/DeviceTypes.d.ts:59
+
+___
+
+### optionalServerClusters
+
+• **optionalServerClusters**: [`ClusterId`](../modules/exports_datatype.md#clusterid)[]
 
 #### Defined in
 
@@ -60,33 +71,23 @@ packages/matter.js/dist/cjs/device/DeviceTypes.d.ts:57
 
 ___
 
-### optionalServerClusters
-
-• **optionalServerClusters**: `number`[]
-
-#### Defined in
-
-packages/matter.js/dist/cjs/device/DeviceTypes.d.ts:55
-
-___
-
 ### requiredClientClusters
 
-• **requiredClientClusters**: `number`[]
+• **requiredClientClusters**: [`ClusterId`](../modules/exports_datatype.md#clusterid)[]
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/DeviceTypes.d.ts:56
+packages/matter.js/dist/cjs/device/DeviceTypes.d.ts:58
 
 ___
 
 ### requiredServerClusters
 
-• **requiredServerClusters**: `number`[]
+• **requiredServerClusters**: [`ClusterId`](../modules/exports_datatype.md#clusterid)[]
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/DeviceTypes.d.ts:54
+packages/matter.js/dist/cjs/device/DeviceTypes.d.ts:56
 
 ___
 
@@ -96,7 +97,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/DeviceTypes.d.ts:53
+packages/matter.js/dist/cjs/device/DeviceTypes.d.ts:55
 
 ___
 
@@ -106,4 +107,14 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/DeviceTypes.d.ts:52
+packages/matter.js/dist/cjs/device/DeviceTypes.d.ts:54
+
+___
+
+### unknown
+
+• **unknown**: `boolean`
+
+#### Defined in
+
+packages/matter.js/dist/cjs/device/DeviceTypes.d.ts:60

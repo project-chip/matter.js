@@ -19,6 +19,10 @@
 ### Methods
 
 - [decode](exports_tlv.AnySchema.md#decode)
+- [decodeAnyTlvStream](exports_tlv.AnySchema.md#decodeanytlvstream)
+- [decodeGenericArrayOrList](exports_tlv.AnySchema.md#decodegenericarrayorlist)
+- [decodeGenericElement](exports_tlv.AnySchema.md#decodegenericelement)
+- [decodeGenericStructure](exports_tlv.AnySchema.md#decodegenericstructure)
 - [decodeInternal](exports_tlv.AnySchema.md#decodeinternal)
 - [decodeTlv](exports_tlv.AnySchema.md#decodetlv)
 - [decodeTlvInternal](exports_tlv.AnySchema.md#decodetlvinternal)
@@ -28,6 +32,8 @@
 - [encodeInternal](exports_tlv.AnySchema.md#encodeinternal)
 - [encodeTlv](exports_tlv.AnySchema.md#encodetlv)
 - [encodeTlvInternal](exports_tlv.AnySchema.md#encodetlvinternal)
+- [injectField](exports_tlv.AnySchema.md#injectfield)
+- [removeField](exports_tlv.AnySchema.md#removefield)
 - [validate](exports_tlv.AnySchema.md#validate)
 
 ## Constructors
@@ -66,6 +72,88 @@ TlvSchema.decode
 #### Defined in
 
 packages/matter.js/dist/cjs/schema/Schema.d.ts:11
+
+___
+
+### decodeAnyTlvStream
+
+▸ **decodeAnyTlvStream**(`encoded`): `any`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `encoded` | [`TlvStream`](../modules/exports_tlv.md#tlvstream) |
+
+#### Returns
+
+`any`
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvAny.d.ts:13
+
+___
+
+### decodeGenericArrayOrList
+
+▸ **decodeGenericArrayOrList**(`reader`): `any`[]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `reader` | [`TlvArrayReader`](exports_tlv.TlvArrayReader.md) |
+
+#### Returns
+
+`any`[]
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvAny.d.ts:15
+
+___
+
+### decodeGenericElement
+
+▸ **decodeGenericElement**(`reader`, `preReadElement?`, `allowTag?`): `any`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `reader` | [`TlvArrayReader`](exports_tlv.TlvArrayReader.md) |
+| `preReadElement?` | [`TlvElement`](../modules/exports_tlv.md#tlvelement)<`any`\> |
+| `allowTag?` | `boolean` |
+
+#### Returns
+
+`any`
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvAny.d.ts:14
+
+___
+
+### decodeGenericStructure
+
+▸ **decodeGenericStructure**(`reader`): `Object`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `reader` | [`TlvArrayReader`](exports_tlv.TlvArrayReader.md) |
+
+#### Returns
+
+`Object`
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvAny.d.ts:16
 
 ___
 
@@ -291,6 +379,59 @@ TlvSchema.encodeTlvInternal
 #### Defined in
 
 packages/matter.js/dist/cjs/tlv/TlvAny.d.ts:9
+
+___
+
+### injectField
+
+▸ **injectField**(`value`, `_fieldId`, `_fieldValue`, `_injectChecker`): [`TlvStream`](../modules/exports_tlv.md#tlvstream)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | [`TlvStream`](../modules/exports_tlv.md#tlvstream) |
+| `_fieldId` | `number` |
+| `_fieldValue` | `any` |
+| `_injectChecker` | (`fieldValue`: `any`) => `boolean` |
+
+#### Returns
+
+[`TlvStream`](../modules/exports_tlv.md#tlvstream)
+
+#### Inherited from
+
+TlvSchema.injectField
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:20
+
+___
+
+### removeField
+
+▸ **removeField**(`value`, `_fieldId`, `_removeChecker`): [`TlvStream`](../modules/exports_tlv.md#tlvstream)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | [`TlvStream`](../modules/exports_tlv.md#tlvstream) |
+| `_fieldId` | `number` |
+| `_removeChecker` | (`fieldValue`: `any`) => `boolean` |
+
+#### Returns
+
+[`TlvStream`](../modules/exports_tlv.md#tlvstream)
+
+#### Inherited from
+
+TlvSchema.removeField
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:21
 
 ___
 

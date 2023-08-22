@@ -22,6 +22,7 @@
 - [channel](exports_protocol.MessageExchange.md#channel)
 - [closeCallback](exports_protocol.MessageExchange.md#closecallback)
 - [closeInternal](exports_protocol.MessageExchange.md#closeinternal)
+- [closeTimer](exports_protocol.MessageExchange.md#closetimer)
 - [exchangeId](exports_protocol.MessageExchange.md#exchangeid)
 - [getResubmissionBackOffTime](exports_protocol.MessageExchange.md#getresubmissionbackofftime)
 - [idleRetransmissionTimeoutMs](exports_protocol.MessageExchange.md#idleretransmissiontimeoutms)
@@ -44,6 +45,7 @@
 ### Methods
 
 - [close](exports_protocol.MessageExchange.md#close)
+- [destroy](exports_protocol.MessageExchange.md#destroy)
 - [nextMessage](exports_protocol.MessageExchange.md#nextmessage)
 - [onMessageReceived](exports_protocol.MessageExchange.md#onmessagereceived)
 - [send](exports_protocol.MessageExchange.md#send)
@@ -72,15 +74,15 @@
 | `messageCounter` | [`MessageCounter`](exports_protocol.MessageCounter.md) |
 | `isInitiator` | `boolean` |
 | `peerSessionId` | `number` |
-| `nodeId` | `undefined` \| [`NodeId`](exports_datatype.NodeId.md) |
-| `peerNodeId` | `undefined` \| [`NodeId`](exports_datatype.NodeId.md) |
+| `nodeId` | `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) |
+| `peerNodeId` | `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) |
 | `exchangeId` | `number` |
 | `protocolId` | `number` |
 | `closeCallback` | () => `void` |
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:40
+packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:41
 
 ## Properties
 
@@ -120,7 +122,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:49
+packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:51
+
+___
+
+### closeTimer
+
+• `Private` **closeTimer**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:40
 
 ___
 
@@ -144,7 +156,7 @@ MatterCoreSpecificationV1_0, section 4.11.2.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:46
+packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:47
 
 ___
 
@@ -264,7 +276,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:47
+packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:48
 
 ___
 
@@ -310,15 +322,29 @@ packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:19
 
 ### close
 
-▸ **close**(): `void`
+▸ **close**(): `Promise`<`void`\>
 
 #### Returns
 
-`void`
+`Promise`<`void`\>
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:48
+packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:50
+
+___
+
+### destroy
+
+▸ **destroy**(): `Promise`<`void`\>
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:49
 
 ___
 
@@ -332,7 +358,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:43
+packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:44
 
 ___
 
@@ -352,7 +378,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:41
+packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:42
 
 ___
 
@@ -374,7 +400,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:42
+packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:43
 
 ___
 
@@ -394,7 +420,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:44
+packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:45
 
 ___
 

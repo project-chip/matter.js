@@ -6,7 +6,7 @@
 
 ## Implements
 
-- [`ProtocolHandler`](../interfaces/exports_protocol.ProtocolHandler.md)<[`MatterDevice`](index.MatterDevice.md)\>
+- [`ProtocolHandler`](../interfaces/exports_protocol.ProtocolHandler.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\>
 
 ## Table of contents
 
@@ -40,7 +40,7 @@
 | :------ | :------ |
 | `w0` | `BN` |
 | `L` | `Uint8Array` |
-| `pbkdfParameters?` | [`PbkdfParameters`](../interfaces/crypto.PbkdfParameters.md) |
+| `pbkdfParameters?` | [`PbkdfParameters`](../interfaces/crypto_export.PbkdfParameters.md) |
 
 #### Defined in
 
@@ -114,7 +114,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)<[`MatterDevice`](index.MatterDevice.md)\> |
+| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
 
 #### Returns
 
@@ -139,7 +139,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `setupPinCode` | `number` |
-| `pbkdfParameters` | [`PbkdfParameters`](../interfaces/crypto.PbkdfParameters.md) |
+| `pbkdfParameters` | [`PbkdfParameters`](../interfaces/crypto_export.PbkdfParameters.md) |
 
 #### Returns
 
@@ -160,7 +160,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `verificationValue` | `Uint8Array` |
-| `pbkdfParameters?` | [`PbkdfParameters`](../interfaces/crypto.PbkdfParameters.md) |
+| `pbkdfParameters?` | [`PbkdfParameters`](../interfaces/crypto_export.PbkdfParameters.md) |
 
 #### Returns
 

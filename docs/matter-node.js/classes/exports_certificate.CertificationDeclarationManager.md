@@ -30,7 +30,7 @@
 
 | Name | Type |
 | :------ | :------ |
-| `vendorId` | [`VendorId`](exports_datatype.VendorId.md) |
+| `vendorId` | [`VendorId`](../modules/exports_datatype.md#vendorid) |
 | `productId` | `number` |
 
 #### Returns

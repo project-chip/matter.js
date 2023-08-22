@@ -12,9 +12,41 @@ Error base class for all errors thrown by this library.
 
   ↳ **`MatterError`**
 
+  ↳↳ [`BleError`](exports_ble.BleError.md)
+
+  ↳↳ [`BtpMatterError`](exports_ble.BtpMatterError.md)
+
+  ↳↳ [`CertificateError`](exports_certificate.CertificateError.md)
+
+  ↳↳ [`AttributeError`](exports_cluster.AttributeError.md)
+
+  ↳↳ [`EventError`](exports_cluster.EventError.md)
+
+  ↳↳ [`IllegalClusterError`](exports_cluster.IllegalClusterError.md)
+
+  ↳↳ [`FabricScopeError`](exports_cluster.FabricScopeError.md)
+
+  ↳↳ [`NoProviderError`](exports_common.NoProviderError.md)
+
+  ↳↳ [`ValidationError`](exports_common.ValidationError.md)
+
+  ↳↳ [`InternalError`](exports_common.InternalError.md)
+
+  ↳↳ [`MatterFlowError`](exports_common.MatterFlowError.md)
+
+  ↳↳ [`UnexpectedDataError`](exports_common.UnexpectedDataError.md)
+
+  ↳↳ [`ImplementationError`](exports_common.ImplementationError.md)
+
+  ↳↳ [`CryptoError`](crypto_export.CryptoError.md)
+
   ↳↳ [`FabricNotFoundError`](exports_fabric.FabricNotFoundError.md)
 
+  ↳↳ [`NetworkError`](net_export.NetworkError.md)
+
   ↳↳ [`NoChannelError`](exports_protocol.NoChannelError.md)
+
+  ↳↳ [`CommissioningError`](exports_protocol.CommissioningError.md)
 
   ↳↳ [`RetransmissionLimitReachedError`](exports_protocol.RetransmissionLimitReachedError.md)
 
@@ -24,7 +56,9 @@ Error base class for all errors thrown by this library.
 
   ↳↳ [`ChannelStatusResponseError`](exports_securechannel.ChannelStatusResponseError.md)
 
-  ↳↳ [`EndOfStreamError`](util.EndOfStreamError.md)
+  ↳↳ [`StorageError`](storage_export.StorageError.md)
+
+  ↳↳ [`EndOfStreamError`](util_export.EndOfStreamError.md)
 
 ## Table of contents
 

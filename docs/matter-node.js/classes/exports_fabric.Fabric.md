@@ -37,6 +37,7 @@
 - [deleteScopedClusterData](exports_fabric.Fabric.md#deletescopedclusterdata)
 - [deleteScopedClusterDataValue](exports_fabric.Fabric.md#deletescopedclusterdatavalue)
 - [getDestinationId](exports_fabric.Fabric.md#getdestinationid)
+- [getExternalInformation](exports_fabric.Fabric.md#getexternalinformation)
 - [getPublicKey](exports_fabric.Fabric.md#getpublickey)
 - [getScopedClusterDataKeys](exports_fabric.Fabric.md#getscopedclusterdatakeys)
 - [getScopedClusterDataValue](exports_fabric.Fabric.md#getscopedclusterdatavalue)
@@ -63,21 +64,21 @@
 
 | Name | Type |
 | :------ | :------ |
-| `fabricIndex` | [`FabricIndex`](exports_datatype.FabricIndex.md) |
-| `fabricId` | [`FabricId`](exports_datatype.FabricId.md) |
-| `nodeId` | [`NodeId`](exports_datatype.NodeId.md) |
-| `rootNodeId` | [`NodeId`](exports_datatype.NodeId.md) |
+| `fabricIndex` | [`FabricIndex`](../modules/exports_datatype.md#fabricindex) |
+| `fabricId` | [`FabricId`](../modules/exports_datatype.md#fabricid) |
+| `nodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
+| `rootNodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 | `operationalId` | `Uint8Array` |
 | `rootPublicKey` | `Uint8Array` |
-| `keyPair` | [`KeyPair`](../modules/crypto.md#keypair) |
-| `rootVendorId` | [`VendorId`](exports_datatype.VendorId.md) |
+| `keyPair` | [`Key`](../modules/crypto_export.md#key) |
+| `rootVendorId` | [`VendorId`](../modules/exports_datatype.md#vendorid) |
 | `rootCert` | `Uint8Array` |
 | `identityProtectionKey` | `Uint8Array` |
 | `operationalIdentityProtectionKey` | `Uint8Array` |
 | `intermediateCACert` | `undefined` \| `Uint8Array` |
 | `operationalCert` | `Uint8Array` |
 | `label` | `string` |
-| `scopedClusterData?` | `Map`<`number`, `Map`<`string`, [`SupportedStorageTypes`](../modules/storage.md#supportedstoragetypes)\>\> |
+| `scopedClusterData?` | `Map`<`number`, `Map`<`string`, [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes)\>\> |
 
 #### Defined in
 
@@ -87,7 +88,7 @@ packages/matter.js/dist/cjs/fabric/Fabric.d.ts:51
 
 ### fabricId
 
-• `Readonly` **fabricId**: [`FabricId`](exports_datatype.FabricId.md)
+• `Readonly` **fabricId**: [`FabricId`](../modules/exports_datatype.md#fabricid)
 
 #### Defined in
 
@@ -97,7 +98,7 @@ ___
 
 ### fabricIndex
 
-• `Readonly` **fabricIndex**: [`FabricIndex`](exports_datatype.FabricIndex.md)
+• `Readonly` **fabricIndex**: [`FabricIndex`](../modules/exports_datatype.md#fabricindex)
 
 #### Defined in
 
@@ -147,7 +148,7 @@ ___
 
 ### nodeId
 
-• `Readonly` **nodeId**: [`NodeId`](exports_datatype.NodeId.md)
+• `Readonly` **nodeId**: [`NodeId`](../modules/exports_datatype.md#nodeid)
 
 #### Defined in
 
@@ -207,7 +208,7 @@ ___
 
 ### rootCert
 
-• `Private` `Readonly` **rootCert**: `any`
+• `Readonly` **rootCert**: `Uint8Array`
 
 #### Defined in
 
@@ -217,7 +218,7 @@ ___
 
 ### rootNodeId
 
-• `Readonly` **rootNodeId**: [`NodeId`](exports_datatype.NodeId.md)
+• `Readonly` **rootNodeId**: [`NodeId`](../modules/exports_datatype.md#nodeid)
 
 #### Defined in
 
@@ -237,7 +238,7 @@ ___
 
 ### rootVendorId
 
-• `Readonly` **rootVendorId**: [`VendorId`](exports_datatype.VendorId.md)
+• `Readonly` **rootVendorId**: [`VendorId`](../modules/exports_datatype.md#vendorid)
 
 #### Defined in
 
@@ -334,7 +335,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `nodeId` | [`NodeId`](exports_datatype.NodeId.md) |
+| `nodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 | `random` | `Uint8Array` |
 
 #### Returns
@@ -344,6 +345,28 @@ ___
 #### Defined in
 
 packages/matter.js/dist/cjs/fabric/Fabric.d.ts:58
+
+___
+
+### getExternalInformation
+
+▸ **getExternalInformation**(): `Object`
+
+#### Returns
+
+`Object`
+
+| Name | Type |
+| :------ | :------ |
+| `fabricId` | [`FabricId`](../modules/exports_datatype.md#fabricid) |
+| `label` | `string` |
+| `nodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
+| `rootNodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
+| `rootVendorId` | [`VendorId`](../modules/exports_datatype.md#vendorid) |
+
+#### Defined in
+
+packages/matter.js/dist/cjs/fabric/Fabric.d.ts:71
 
 ___
 
@@ -445,11 +468,11 @@ ___
 
 ### remove
 
-▸ **remove**(): `void`
+▸ **remove**(): `Promise`<`void`\>
 
 #### Returns
 
-`void`
+`Promise`<`void`\>
 
 #### Defined in
 

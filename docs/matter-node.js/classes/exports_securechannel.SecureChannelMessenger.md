@@ -14,13 +14,13 @@
 
 - **`SecureChannelMessenger`**
 
-  ↳ [`PaseServerMessenger`](exports_session.PaseServerMessenger.md)
-
-  ↳ [`PaseClientMessenger`](exports_session.PaseClientMessenger.md)
-
   ↳ [`CaseServerMessenger`](exports_session.CaseServerMessenger.md)
 
   ↳ [`CaseClientMessenger`](exports_session.CaseClientMessenger.md)
+
+  ↳ [`PaseServerMessenger`](exports_session.PaseServerMessenger.md)
+
+  ↳ [`PaseClientMessenger`](exports_session.PaseClientMessenger.md)
 
 ## Table of contents
 
@@ -91,11 +91,11 @@ packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:2
 
 ### close
 
-▸ **close**(): `void`
+▸ **close**(): `Promise`<`void`\>
 
 #### Returns
 
-`void`
+`Promise`<`void`\>
 
 #### Defined in
 

@@ -39,6 +39,11 @@
 - [subscriptions](exports_session.SecureSession.md#subscriptions)
 - [timestamp](exports_session.SecureSession.md#timestamp)
 
+### Accessors
+
+- [name](exports_session.SecureSession.md#name)
+- [numberOfActiveSubscriptions](exports_session.SecureSession.md#numberofactivesubscriptions)
+
 ### Methods
 
 - [addSubscription](exports_session.SecureSession.md#addsubscription)
@@ -46,18 +51,20 @@
 - [decode](exports_session.SecureSession.md#decode)
 - [destroy](exports_session.SecureSession.md#destroy)
 - [encode](exports_session.SecureSession.md#encode)
+- [end](exports_session.SecureSession.md#end)
+- [getAssociatedFabric](exports_session.SecureSession.md#getassociatedfabric)
 - [getAttestationChallengeKey](exports_session.SecureSession.md#getattestationchallengekey)
 - [getContext](exports_session.SecureSession.md#getcontext)
 - [getFabric](exports_session.SecureSession.md#getfabric)
 - [getId](exports_session.SecureSession.md#getid)
 - [getMrpParameters](exports_session.SecureSession.md#getmrpparameters)
-- [getName](exports_session.SecureSession.md#getname)
 - [getNodeId](exports_session.SecureSession.md#getnodeid)
 - [getPeerNodeId](exports_session.SecureSession.md#getpeernodeid)
 - [getPeerSessionId](exports_session.SecureSession.md#getpeersessionid)
 - [isPeerActive](exports_session.SecureSession.md#ispeeractive)
 - [isSecure](exports_session.SecureSession.md#issecure)
 - [notifyActivity](exports_session.SecureSession.md#notifyactivity)
+- [removeSubscription](exports_session.SecureSession.md#removesubscription)
 - [create](exports_session.SecureSession.md#create)
 
 ## Constructors
@@ -79,20 +86,20 @@
 | `context` | `T` |
 | `id` | `number` |
 | `fabric` | `undefined` \| [`Fabric`](exports_fabric.Fabric.md) |
-| `peerNodeId` | [`NodeId`](exports_datatype.NodeId.md) |
+| `peerNodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 | `peerSessionId` | `number` |
 | `_sharedSecret` | `Uint8Array` |
 | `decryptKey` | `Uint8Array` |
 | `encryptKey` | `Uint8Array` |
 | `attestationKey` | `Uint8Array` |
-| `closeCallback` | () => `void` |
+| `closeCallback` | () => `Promise`<`void`\> |
 | `idleRetransmissionTimeoutMs?` | `number` |
 | `activeRetransmissionTimeoutMs?` | `number` |
 | `retransmissionRetries?` | `number` |
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:29
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:31
 
 ## Properties
 
@@ -102,17 +109,17 @@ packages/matter.js/dist/cjs/session/SecureSession.d.ts:29
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:23
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:25
 
 ___
 
 ### activeTimestamp
 
-• `Private` **activeTimestamp**: `any`
+• **activeTimestamp**: `number`
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:27
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:29
 
 ___
 
@@ -122,7 +129,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:20
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:22
 
 ___
 
@@ -132,7 +139,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:21
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:23
 
 ___
 
@@ -142,7 +149,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:13
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:15
 
 ___
 
@@ -152,7 +159,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:18
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:20
 
 ___
 
@@ -162,7 +169,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:19
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:21
 
 ___
 
@@ -172,7 +179,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:15
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:17
 
 ___
 
@@ -182,7 +189,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:51
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:59
 
 ___
 
@@ -192,7 +199,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:14
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:16
 
 ___
 
@@ -202,7 +209,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:22
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:24
 
 ___
 
@@ -212,7 +219,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:16
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:18
 
 ___
 
@@ -222,7 +229,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:17
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:19
 
 ___
 
@@ -232,7 +239,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:24
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:26
 
 ___
 
@@ -242,17 +249,49 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:25
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:27
 
 ___
 
 ### timestamp
 
-• `Private` **timestamp**: `any`
+• **timestamp**: `number`
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:26
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:28
+
+## Accessors
+
+### name
+
+• `get` **name**(): `string`
+
+#### Returns
+
+`string`
+
+#### Implementation of
+
+[Session](../interfaces/exports_session.Session.md).[name](../interfaces/exports_session.Session.md#name)
+
+#### Defined in
+
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:40
+
+___
+
+### numberOfActiveSubscriptions
+
+• `get` **numberOfActiveSubscriptions**(): `number`
+
+#### Returns
+
+`number`
+
+#### Defined in
+
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:52
 
 ## Methods
 
@@ -272,21 +311,27 @@ packages/matter.js/dist/cjs/session/SecureSession.d.ts:26
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:48
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:51
 
 ___
 
 ### clearSubscriptions
 
-▸ **clearSubscriptions**(): `void`
+▸ **clearSubscriptions**(`flushSubscriptions?`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `flushSubscriptions?` | `boolean` |
 
 #### Returns
 
-`void`
+`Promise`<`void`\>
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:49
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:54
 
 ___
 
@@ -310,17 +355,19 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:33
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:35
 
 ___
 
 ### destroy
 
-▸ **destroy**(): `void`
+▸ **destroy**(): `Promise`<`void`\>
+
+Destroys a session. Outstanding subscription data will be discarded.
 
 #### Returns
 
-`void`
+`Promise`<`void`\>
 
 #### Implementation of
 
@@ -328,7 +375,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:50
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:58
 
 ___
 
@@ -352,7 +399,45 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:34
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:36
+
+___
+
+### end
+
+▸ **end**(): `Promise`<`void`\>
+
+Ends a session. Outstanding subscription data will be flushed before the session is destroyed.
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Implementation of
+
+[Session](../interfaces/exports_session.Session.md).[end](../interfaces/exports_session.Session.md#end)
+
+#### Defined in
+
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:56
+
+___
+
+### getAssociatedFabric
+
+▸ **getAssociatedFabric**(): [`Fabric`](exports_fabric.Fabric.md)
+
+#### Returns
+
+[`Fabric`](exports_fabric.Fabric.md)
+
+#### Implementation of
+
+[Session](../interfaces/exports_session.Session.md).[getAssociatedFabric](../interfaces/exports_session.Session.md#getassociatedfabric)
+
+#### Defined in
+
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:39
 
 ___
 
@@ -366,7 +451,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:35
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:37
 
 ___
 
@@ -384,7 +469,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:43
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:46
 
 ___
 
@@ -398,7 +483,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:36
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:38
 
 ___
 
@@ -416,7 +501,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:44
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:47
 
 ___
 
@@ -440,35 +525,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:38
-
-___
-
-### getName
-
-▸ **getName**(): `string`
-
-#### Returns
-
-`string`
-
-#### Implementation of
-
-[Session](../interfaces/exports_session.Session.md).[getName](../interfaces/exports_session.Session.md#getname)
-
-#### Defined in
-
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:37
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:41
 
 ___
 
 ### getNodeId
 
-▸ **getNodeId**(): [`NodeId`](exports_datatype.NodeId.md)
+▸ **getNodeId**(): [`NodeId`](../modules/exports_datatype.md#nodeid)
 
 #### Returns
 
-[`NodeId`](exports_datatype.NodeId.md)
+[`NodeId`](../modules/exports_datatype.md#nodeid)
 
 #### Implementation of
 
@@ -476,17 +543,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:46
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:49
 
 ___
 
 ### getPeerNodeId
 
-▸ **getPeerNodeId**(): [`NodeId`](exports_datatype.NodeId.md)
+▸ **getPeerNodeId**(): [`NodeId`](../modules/exports_datatype.md#nodeid)
 
 #### Returns
 
-[`NodeId`](exports_datatype.NodeId.md)
+[`NodeId`](../modules/exports_datatype.md#nodeid)
 
 #### Implementation of
 
@@ -494,7 +561,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:47
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:50
 
 ___
 
@@ -512,7 +579,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:45
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:48
 
 ___
 
@@ -530,7 +597,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:32
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:34
 
 ___
 
@@ -548,7 +615,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:30
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:32
 
 ___
 
@@ -572,7 +639,27 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:31
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:33
+
+___
+
+### removeSubscription
+
+▸ **removeSubscription**(`subscriptionId`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `subscriptionId` | `number` |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:53
 
 ___
 
@@ -593,13 +680,13 @@ ___
 | `context` | `T` |
 | `id` | `number` |
 | `fabric` | `undefined` \| [`Fabric`](exports_fabric.Fabric.md) |
-| `peerNodeId` | [`NodeId`](exports_datatype.NodeId.md) |
+| `peerNodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 | `peerSessionId` | `number` |
 | `sharedSecret` | `Uint8Array` |
 | `salt` | `Uint8Array` |
 | `isInitiator` | `boolean` |
 | `isResumption` | `boolean` |
-| `closeCallback` | () => `void` |
+| `closeCallback` | () => `Promise`<`void`\> |
 | `idleRetransTimeoutMs?` | `number` |
 | `activeRetransTimeoutMs?` | `number` |
 
@@ -609,4 +696,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:28
+packages/matter.js/dist/cjs/session/SecureSession.d.ts:30

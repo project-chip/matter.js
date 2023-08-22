@@ -33,6 +33,8 @@ MatterCoreSpecificationV1_0 § A.11.3
 - [encodeInternal](exports_tlv.BooleanSchema.md#encodeinternal)
 - [encodeTlv](exports_tlv.BooleanSchema.md#encodetlv)
 - [encodeTlvInternal](exports_tlv.BooleanSchema.md#encodetlvinternal)
+- [injectField](exports_tlv.BooleanSchema.md#injectfield)
+- [removeField](exports_tlv.BooleanSchema.md#removefield)
 - [validate](exports_tlv.BooleanSchema.md#validate)
 
 ## Constructors
@@ -273,6 +275,59 @@ TlvSchema.encodeTlvInternal
 #### Defined in
 
 packages/matter.js/dist/cjs/tlv/TlvBoolean.d.ts:14
+
+___
+
+### injectField
+
+▸ **injectField**(`value`, `_fieldId`, `_fieldValue`, `_injectChecker`): `boolean`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | `boolean` |
+| `_fieldId` | `number` |
+| `_fieldValue` | `any` |
+| `_injectChecker` | (`fieldValue`: `any`) => `boolean` |
+
+#### Returns
+
+`boolean`
+
+#### Inherited from
+
+TlvSchema.injectField
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:20
+
+___
+
+### removeField
+
+▸ **removeField**(`value`, `_fieldId`, `_removeChecker`): `boolean`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | `boolean` |
+| `_fieldId` | `number` |
+| `_removeChecker` | (`fieldValue`: `any`) => `boolean` |
+
+#### Returns
+
+`boolean`
+
+#### Inherited from
+
+TlvSchema.removeField
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:21
 
 ___
 

@@ -21,17 +21,17 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SessionManager.d.ts:18
+packages/matter.js/dist/cjs/session/SessionManager.d.ts:19
 
 ___
 
 ### peerNodeId
 
-• **peerNodeId**: [`NodeId`](../classes/exports_datatype.NodeId.md)
+• **peerNodeId**: [`NodeId`](../modules/exports_datatype.md#nodeid)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SessionManager.d.ts:19
+packages/matter.js/dist/cjs/session/SessionManager.d.ts:20
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SessionManager.d.ts:17
+packages/matter.js/dist/cjs/session/SessionManager.d.ts:18
 
 ___
 
@@ -51,4 +51,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SessionManager.d.ts:16
+packages/matter.js/dist/cjs/session/SessionManager.d.ts:17

@@ -22,15 +22,15 @@
 - [exchangeCounter](exports_protocol.ExchangeManager.md#exchangecounter)
 - [exchanges](exports_protocol.ExchangeManager.md#exchanges)
 - [messageCounter](exports_protocol.ExchangeManager.md#messagecounter)
-- [netListeners](exports_protocol.ExchangeManager.md#netlisteners)
 - [onMessage](exports_protocol.ExchangeManager.md#onmessage)
 - [protocols](exports_protocol.ExchangeManager.md#protocols)
 - [sessionManager](exports_protocol.ExchangeManager.md#sessionmanager)
+- [transportListeners](exports_protocol.ExchangeManager.md#transportlisteners)
 
 ### Methods
 
-- [addNetInterface](exports_protocol.ExchangeManager.md#addnetinterface)
 - [addProtocolHandler](exports_protocol.ExchangeManager.md#addprotocolhandler)
+- [addTransportInterface](exports_protocol.ExchangeManager.md#addtransportinterface)
 - [close](exports_protocol.ExchangeManager.md#close)
 - [initiateExchange](exports_protocol.ExchangeManager.md#initiateexchange)
 - [initiateExchangeWithChannel](exports_protocol.ExchangeManager.md#initiateexchangewithchannel)
@@ -56,7 +56,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:33
+packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:34
 
 ## Properties
 
@@ -66,7 +66,7 @@ packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:33
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:27
+packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:28
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:28
+packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:29
 
 ___
 
@@ -86,7 +86,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:30
+packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:31
 
 ___
 
@@ -96,17 +96,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:29
-
-___
-
-### netListeners
-
-• `Private` `Readonly` **netListeners**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:32
+packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:30
 
 ___
 
@@ -116,7 +106,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:39
+packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:40
 
 ___
 
@@ -126,7 +116,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:31
+packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:32
 
 ___
 
@@ -136,29 +126,19 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:26
+packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:27
 
-## Methods
+___
 
-### addNetInterface
+### transportListeners
 
-▸ **addNetInterface**(`netInterface`): `void`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `netInterface` | [`NetInterface`](../interfaces/net.NetInterface.md) |
-
-#### Returns
-
-`void`
+• `Private` `Readonly` **transportListeners**: `any`
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:34
+packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:33
 
-___
+## Methods
 
 ### addProtocolHandler
 
@@ -176,13 +156,19 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:35
+packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:36
 
 ___
 
-### close
+### addTransportInterface
 
-▸ **close**(): `void`
+▸ **addTransportInterface**(`netInterface`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `netInterface` | [`TransportInterface`](../interfaces/exports_common.TransportInterface.md) |
 
 #### Returns
 
@@ -190,7 +176,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:38
+packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:35
+
+___
+
+### close
+
+▸ **close**(): `Promise`<`void`\>
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:39
 
 ___
 
@@ -203,7 +203,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
-| `nodeId` | [`NodeId`](exports_datatype.NodeId.md) |
+| `nodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 | `protocolId` | `number` |
 
 #### Returns
@@ -212,7 +212,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:36
+packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:37
 
 ___
 
@@ -233,4 +233,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:37
+packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:38

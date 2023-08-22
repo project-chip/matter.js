@@ -45,6 +45,8 @@ MatterCoreSpecificationV1_0 § A.5.1 and § A.11.4
 - [encodeInternal](exports_tlv.ObjectSchema.md#encodeinternal)
 - [encodeTlv](exports_tlv.ObjectSchema.md#encodetlv)
 - [encodeTlvInternal](exports_tlv.ObjectSchema.md#encodetlvinternal)
+- [injectField](exports_tlv.ObjectSchema.md#injectfield)
+- [removeField](exports_tlv.ObjectSchema.md#removefield)
 - [validate](exports_tlv.ObjectSchema.md#validate)
 
 ## Constructors
@@ -332,6 +334,59 @@ TlvSchema.encodeTlvInternal
 #### Defined in
 
 packages/matter.js/dist/cjs/tlv/TlvObject.d.ts:45
+
+___
+
+### injectField
+
+▸ **injectField**(`value`, `fieldId`, `fieldValue`, `injectChecker`): [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<`F`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<`F`\> |
+| `fieldId` | `number` |
+| `fieldValue` | `any` |
+| `injectChecker` | (`fieldValue`: `any`) => `boolean` |
+
+#### Returns
+
+[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<`F`\>
+
+#### Overrides
+
+TlvSchema.injectField
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvObject.d.ts:48
+
+___
+
+### removeField
+
+▸ **removeField**(`value`, `fieldId`, `removeChecker`): [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<`F`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<`F`\> |
+| `fieldId` | `number` |
+| `removeChecker` | (`fieldValue`: `any`) => `boolean` |
+
+#### Returns
+
+[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<`F`\>
+
+#### Overrides
+
+TlvSchema.removeField
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvObject.d.ts:49
 
 ___
 

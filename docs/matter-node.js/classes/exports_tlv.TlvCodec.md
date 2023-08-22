@@ -118,7 +118,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `reader` | [`DataReader`](util.DataReader.md)<[`Little`](../enums/util.Endian.md#little)\> |
+| `reader` | [`DataReader`](util_export.DataReader.md)<[`Little`](../enums/util_export.Endian.md#little)\> |
 | `typeLength` | `T` |
 
 #### Returns
@@ -135,15 +135,11 @@ ___
 
 ▸ `Static` **readTagType**(`reader`): `Object`
 
-**`See`**
-
-MatterCoreSpecificationV1_0 § A.7
-
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `reader` | [`DataReader`](util.DataReader.md)<[`Little`](../enums/util.Endian.md#little)\> |
+| `reader` | [`DataReader`](util_export.DataReader.md)<[`Little`](../enums/util_export.Endian.md#little)\> |
 
 #### Returns
 
@@ -153,6 +149,10 @@ MatterCoreSpecificationV1_0 § A.7
 | :------ | :------ |
 | `tag?` | [`TlvTag`](../modules/exports_tlv.md#tlvtag) |
 | `typeLength` | [`TlvTypeLength`](../modules/exports_tlv.md#tlvtypelength) |
+
+**`See`**
+
+MatterCoreSpecificationV1_0 § A.7
 
 #### Defined in
 
@@ -174,7 +174,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `writer` | [`DataWriter`](util.DataWriter.md)<[`Little`](../enums/util.Endian.md#little)\> |
+| `writer` | [`DataWriter`](util_export.DataWriter.md)<[`Little`](../enums/util_export.Endian.md#little)\> |
 | `typeLength` | `T` |
 | `value` | [`TlvToPrimitive`](../modules/exports_tlv.md#tlvtoprimitive)[`T`[``"type"``]] |
 
@@ -192,21 +192,21 @@ ___
 
 ▸ `Static` **writeTag**(`writer`, `typeLengthValue`, `tag?`): `void`
 
-**`See`**
-
-MatterCoreSpecificationV1_0 § A.7 & A.8
-
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `writer` | [`DataWriter`](util.DataWriter.md)<[`Little`](../enums/util.Endian.md#little)\> |
+| `writer` | [`DataWriter`](util_export.DataWriter.md)<[`Little`](../enums/util_export.Endian.md#little)\> |
 | `typeLengthValue` | [`TlvTypeLength`](../modules/exports_tlv.md#tlvtypelength) |
 | `tag?` | [`TlvTag`](../modules/exports_tlv.md#tlvtag) |
 
 #### Returns
 
 `void`
+
+**`See`**
+
+MatterCoreSpecificationV1_0 § A.7 & A.8
 
 #### Defined in
 

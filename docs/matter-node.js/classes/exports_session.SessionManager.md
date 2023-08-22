@@ -27,9 +27,11 @@
 
 ### Methods
 
+- [close](exports_session.SessionManager.md#close)
 - [createSecureSession](exports_session.SessionManager.md#createsecuresession)
 - [findResumptionRecordById](exports_session.SessionManager.md#findresumptionrecordbyid)
 - [findResumptionRecordByNodeId](exports_session.SessionManager.md#findresumptionrecordbynodeid)
+- [getActiveSessionInformation](exports_session.SessionManager.md#getactivesessioninformation)
 - [getNextAvailableSessionId](exports_session.SessionManager.md#getnextavailablesessionid)
 - [getSession](exports_session.SessionManager.md#getsession)
 - [getSessionForNode](exports_session.SessionManager.md#getsessionfornode)
@@ -43,7 +45,7 @@
 
 ### constructor
 
-• **new SessionManager**<`ContextT`\>(`context`, `storageManager`)
+• **new SessionManager**<`ContextT`\>(`context`, `storage`)
 
 #### Type parameters
 
@@ -56,11 +58,11 @@
 | Name | Type |
 | :------ | :------ |
 | `context` | `ContextT` |
-| `storageManager` | [`StorageManager`](storage.StorageManager.md) |
+| `storage` | [`StorageContext`](storage_export.StorageContext.md) |
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SessionManager.d.ts:28
+packages/matter.js/dist/cjs/session/SessionManager.d.ts:29
 
 ## Properties
 
@@ -70,7 +72,7 @@ packages/matter.js/dist/cjs/session/SessionManager.d.ts:28
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SessionManager.d.ts:22
+packages/matter.js/dist/cjs/session/SessionManager.d.ts:23
 
 ___
 
@@ -80,7 +82,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SessionManager.d.ts:25
+packages/matter.js/dist/cjs/session/SessionManager.d.ts:26
 
 ___
 
@@ -90,7 +92,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SessionManager.d.ts:26
+packages/matter.js/dist/cjs/session/SessionManager.d.ts:27
 
 ___
 
@@ -100,7 +102,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SessionManager.d.ts:27
+packages/matter.js/dist/cjs/session/SessionManager.d.ts:28
 
 ___
 
@@ -110,7 +112,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SessionManager.d.ts:24
+packages/matter.js/dist/cjs/session/SessionManager.d.ts:25
 
 ___
 
@@ -120,13 +122,27 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SessionManager.d.ts:23
+packages/matter.js/dist/cjs/session/SessionManager.d.ts:24
 
 ## Methods
 
+### close
+
+▸ **close**(): `Promise`<`void`\>
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+packages/matter.js/dist/cjs/session/SessionManager.d.ts:58
+
+___
+
 ### createSecureSession
 
-▸ **createSecureSession**(`sessionId`, `fabric`, `peerNodeId`, `peerSessionId`, `sharedSecret`, `salt`, `isInitiator`, `isResumption`, `idleRetransTimeoutMs?`, `activeRetransTimeoutMs?`): `Promise`<[`SecureSession`](exports_session.SecureSession.md)<`ContextT`\>\>
+▸ **createSecureSession**(`sessionId`, `fabric`, `peerNodeId`, `peerSessionId`, `sharedSecret`, `salt`, `isInitiator`, `isResumption`, `idleRetransTimeoutMs?`, `activeRetransTimeoutMs?`, `closeCallback?`): `Promise`<[`SecureSession`](exports_session.SecureSession.md)<`ContextT`\>\>
 
 #### Parameters
 
@@ -134,7 +150,7 @@ packages/matter.js/dist/cjs/session/SessionManager.d.ts:23
 | :------ | :------ |
 | `sessionId` | `number` |
 | `fabric` | `undefined` \| [`Fabric`](exports_fabric.Fabric.md) |
-| `peerNodeId` | [`NodeId`](exports_datatype.NodeId.md) |
+| `peerNodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 | `peerSessionId` | `number` |
 | `sharedSecret` | `Uint8Array` |
 | `salt` | `Uint8Array` |
@@ -142,6 +158,7 @@ packages/matter.js/dist/cjs/session/SessionManager.d.ts:23
 | `isResumption` | `boolean` |
 | `idleRetransTimeoutMs?` | `number` |
 | `activeRetransTimeoutMs?` | `number` |
+| `closeCallback?` | () => `Promise`<`void`\> |
 
 #### Returns
 
@@ -149,7 +166,7 @@ packages/matter.js/dist/cjs/session/SessionManager.d.ts:23
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SessionManager.d.ts:29
+packages/matter.js/dist/cjs/session/SessionManager.d.ts:30
 
 ___
 
@@ -169,7 +186,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SessionManager.d.ts:35
+packages/matter.js/dist/cjs/session/SessionManager.d.ts:36
 
 ___
 
@@ -181,7 +198,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `nodeId` | [`NodeId`](exports_datatype.NodeId.md) |
+| `nodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 
 #### Returns
 
@@ -189,7 +206,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SessionManager.d.ts:36
+packages/matter.js/dist/cjs/session/SessionManager.d.ts:37
+
+___
+
+### getActiveSessionInformation
+
+▸ **getActiveSessionInformation**(): { `fabric`: `undefined` \| { `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
+
+#### Returns
+
+{ `fabric`: `undefined` \| { `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
+
+#### Defined in
+
+packages/matter.js/dist/cjs/session/SessionManager.d.ts:41
 
 ___
 
@@ -203,7 +234,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SessionManager.d.ts:31
+packages/matter.js/dist/cjs/session/SessionManager.d.ts:32
 
 ___
 
@@ -223,7 +254,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SessionManager.d.ts:32
+packages/matter.js/dist/cjs/session/SessionManager.d.ts:33
 
 ___
 
@@ -236,7 +267,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
-| `nodeId` | [`NodeId`](exports_datatype.NodeId.md) |
+| `nodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 
 #### Returns
 
@@ -244,7 +275,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SessionManager.d.ts:33
+packages/matter.js/dist/cjs/session/SessionManager.d.ts:34
 
 ___
 
@@ -258,7 +289,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SessionManager.d.ts:34
+packages/matter.js/dist/cjs/session/SessionManager.d.ts:35
 
 ___
 
@@ -278,7 +309,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SessionManager.d.ts:39
+packages/matter.js/dist/cjs/session/SessionManager.d.ts:40
 
 ___
 
@@ -291,7 +322,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `sessionId` | `number` |
-| `peerNodeId` | [`NodeId`](exports_datatype.NodeId.md) |
+| `peerNodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 
 #### Returns
 
@@ -299,7 +330,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SessionManager.d.ts:30
+packages/matter.js/dist/cjs/session/SessionManager.d.ts:31
 
 ___
 
@@ -319,7 +350,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SessionManager.d.ts:37
+packages/matter.js/dist/cjs/session/SessionManager.d.ts:38
 
 ___
 
@@ -333,4 +364,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SessionManager.d.ts:38
+packages/matter.js/dist/cjs/session/SessionManager.d.ts:39

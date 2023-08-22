@@ -31,6 +31,8 @@ Schema to encode void.
 - [encodeInternal](exports_tlv.VoidSchema.md#encodeinternal)
 - [encodeTlv](exports_tlv.VoidSchema.md#encodetlv)
 - [encodeTlvInternal](exports_tlv.VoidSchema.md#encodetlvinternal)
+- [injectField](exports_tlv.VoidSchema.md#injectfield)
+- [removeField](exports_tlv.VoidSchema.md#removefield)
 - [validate](exports_tlv.VoidSchema.md#validate)
 
 ## Constructors
@@ -271,6 +273,59 @@ TlvSchema.encodeTlvInternal
 #### Defined in
 
 packages/matter.js/dist/cjs/tlv/TlvVoid.d.ts:12
+
+___
+
+### injectField
+
+▸ **injectField**(`value`, `_fieldId`, `_fieldValue`, `_injectChecker`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | `void` |
+| `_fieldId` | `number` |
+| `_fieldValue` | `any` |
+| `_injectChecker` | (`fieldValue`: `any`) => `boolean` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+TlvSchema.injectField
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:20
+
+___
+
+### removeField
+
+▸ **removeField**(`value`, `_fieldId`, `_removeChecker`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | `void` |
+| `_fieldId` | `number` |
+| `_removeChecker` | (`fieldValue`: `any`) => `boolean` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+TlvSchema.removeField
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:21
 
 ___
 

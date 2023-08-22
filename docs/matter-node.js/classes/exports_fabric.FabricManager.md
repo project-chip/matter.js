@@ -33,13 +33,13 @@
 
 ### constructor
 
-• **new FabricManager**(`storageManager`)
+• **new FabricManager**(`storage`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `storageManager` | [`StorageManager`](storage.StorageManager.md) |
+| `storage` | [`StorageContext`](storage_export.StorageContext.md) |
 
 #### Defined in
 
@@ -206,7 +206,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `fabricIndex` | [`FabricIndex`](exports_datatype.FabricIndex.md) |
+| `fabricIndex` | [`FabricIndex`](../modules/exports_datatype.md#fabricindex) |
 
 #### Returns
 

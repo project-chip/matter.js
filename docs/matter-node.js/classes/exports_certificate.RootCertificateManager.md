@@ -28,17 +28,17 @@
 
 ### constructor
 
-• **new RootCertificateManager**(`storageManager`)
+• **new RootCertificateManager**(`storageContext`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `storageManager` | [`StorageManager`](storage.StorageManager.md) |
+| `storageContext` | [`StorageContext`](storage_export.StorageContext.md) |
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:15
+packages/matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:16
 
 ## Properties
 
@@ -48,7 +48,7 @@ packages/matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:15
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:17
+packages/matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:18
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:14
+packages/matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:15
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:13
+packages/matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:14
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:10
+packages/matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:11
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:12
+packages/matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:13
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:11
+packages/matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:12
 
 ## Methods
 
@@ -111,8 +111,8 @@ packages/matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:11
 | Name | Type |
 | :------ | :------ |
 | `publicKey` | `Uint8Array` |
-| `fabricId` | `bigint` |
-| `nodeId` | [`NodeId`](exports_datatype.NodeId.md) |
+| `fabricId` | [`FabricId`](../modules/exports_datatype.md#fabricid) |
+| `nodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 
 #### Returns
 
@@ -120,7 +120,7 @@ packages/matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:11
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:18
+packages/matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:19
 
 ___
 
@@ -134,4 +134,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:16
+packages/matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:17

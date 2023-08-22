@@ -16,6 +16,10 @@
 - [exchangeManager](exports_protocol.ExchangeProvider.md#exchangemanager)
 - [reconnectChannelFunc](exports_protocol.ExchangeProvider.md#reconnectchannelfunc)
 
+### Accessors
+
+- [session](exports_protocol.ExchangeProvider.md#session)
+
 ### Methods
 
 - [addProtocolHandler](exports_protocol.ExchangeProvider.md#addprotocolhandler)
@@ -32,13 +36,13 @@
 
 | Name | Type |
 | :------ | :------ |
-| `exchangeManager` | [`ExchangeManager`](exports_protocol.ExchangeManager.md)<[`MatterController`](index.MatterController.md)\> |
-| `channel` | [`MessageChannel`](exports_protocol.MessageChannel.md)<[`MatterController`](index.MatterController.md)\> |
-| `reconnectChannelFunc?` | () => `Promise`<[`MessageChannel`](exports_protocol.MessageChannel.md)<[`MatterController`](index.MatterController.md)\>\> |
+| `exchangeManager` | [`ExchangeManager`](exports_protocol.ExchangeManager.md)<[`MatterController`](export._internal_.MatterController.md)\> |
+| `channel` | [`MessageChannel`](exports_protocol.MessageChannel.md)<[`MatterController`](export._internal_.MatterController.md)\> |
+| `reconnectChannelFunc?` | () => `Promise`<[`MessageChannel`](exports_protocol.MessageChannel.md)<[`MatterController`](export._internal_.MatterController.md)\>\> |
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:53
+packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:54
 
 ## Properties
 
@@ -48,7 +52,7 @@ packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:53
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:51
+packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:52
 
 ___
 
@@ -58,7 +62,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:50
+packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:51
 
 ___
 
@@ -68,7 +72,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:52
+packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:53
+
+## Accessors
+
+### session
+
+• `get` **session**(): [`Session`](../interfaces/exports_session.Session.md)<[`MatterController`](export._internal_.MatterController.md)\>
+
+#### Returns
+
+[`Session`](../interfaces/exports_session.Session.md)<[`MatterController`](export._internal_.MatterController.md)\>
+
+#### Defined in
+
+packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:58
 
 ## Methods
 
@@ -80,7 +98,7 @@ packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:52
 
 | Name | Type |
 | :------ | :------ |
-| `handler` | [`ProtocolHandler`](../interfaces/exports_protocol.ProtocolHandler.md)<[`MatterController`](index.MatterController.md)\> |
+| `handler` | [`ProtocolHandler`](../interfaces/exports_protocol.ProtocolHandler.md)<[`MatterController`](export._internal_.MatterController.md)\> |
 
 #### Returns
 
@@ -88,21 +106,21 @@ packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:52
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:54
+packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:55
 
 ___
 
 ### initiateExchange
 
-▸ **initiateExchange**(): [`MessageExchange`](exports_protocol.MessageExchange.md)<[`MatterController`](index.MatterController.md)\>
+▸ **initiateExchange**(): [`MessageExchange`](exports_protocol.MessageExchange.md)<[`MatterController`](export._internal_.MatterController.md)\>
 
 #### Returns
 
-[`MessageExchange`](exports_protocol.MessageExchange.md)<[`MatterController`](index.MatterController.md)\>
+[`MessageExchange`](exports_protocol.MessageExchange.md)<[`MatterController`](export._internal_.MatterController.md)\>
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:55
+packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:56
 
 ___
 
@@ -116,4 +134,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:56
+packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:57

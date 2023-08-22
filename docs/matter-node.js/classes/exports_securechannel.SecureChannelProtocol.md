@@ -6,7 +6,7 @@
 
 ## Implements
 
-- [`ProtocolHandler`](../interfaces/exports_protocol.ProtocolHandler.md)<[`MatterDevice`](index.MatterDevice.md)\>
+- [`ProtocolHandler`](../interfaces/exports_protocol.ProtocolHandler.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\>
 
 ## Table of contents
 
@@ -91,7 +91,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)<[`MatterDevice`](index.MatterDevice.md)\> |
+| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
 | `message` | [`Message`](../interfaces/exports_codec.Message.md) |
 
 #### Returns

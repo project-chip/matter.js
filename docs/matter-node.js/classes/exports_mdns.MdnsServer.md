@@ -38,7 +38,7 @@
 
 | Name | Type |
 | :------ | :------ |
-| `multicastServer` | [`UdpMulticastServer`](net.UdpMulticastServer.md) |
+| `multicastServer` | [`UdpMulticastServer`](net_export.UdpMulticastServer.md) |
 | `netInterface` | `undefined` \| `string` |
 
 #### Defined in
@@ -129,7 +129,13 @@ packages/matter.js/dist/cjs/mdns/MdnsServer.d.ts:16
 
 ### announce
 
-▸ **announce**(): `Promise`<`void`\>
+▸ **announce**(`announcedNetPort?`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `announcedNetPort?` | `number` |
 
 #### Returns
 
@@ -143,11 +149,11 @@ ___
 
 ### close
 
-▸ **close**(): `void`
+▸ **close**(): `Promise`<`void`\>
 
 #### Returns
 
-`void`
+`Promise`<`void`\>
 
 #### Defined in
 
@@ -157,17 +163,18 @@ ___
 
 ### setRecordsGenerator
 
-▸ **setRecordsGenerator**(`generator`): `void`
+▸ **setRecordsGenerator**(`hostPort`, `generator`): `Promise`<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `generator` | (`netInterface`: `string`) => [`Record`](../interfaces/exports_codec.Record.md)<`any`\>[] |
+| `hostPort` | `number` |
+| `generator` | (`netInterface`: `string`) => [`DnsRecord`](../interfaces/exports_codec.DnsRecord.md)<`any`\>[] |
 
 #### Returns
 
-`void`
+`Promise`<`void`\>
 
 #### Defined in
 

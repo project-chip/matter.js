@@ -43,7 +43,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:49
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:55
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:48
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:54
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:46
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:52
 
 ___
 
@@ -73,7 +73,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:40
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:46
 
 ___
 
@@ -83,7 +83,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:39
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:45
 
 ___
 
@@ -93,7 +93,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:38
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:44
 
 ___
 
@@ -103,7 +103,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:45
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:51
 
 ___
 
@@ -113,7 +113,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:42
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:48
 
 ___
 
@@ -123,7 +123,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:41
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:47
 
 ___
 
@@ -133,7 +133,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:43
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:49
 
 ___
 
@@ -143,7 +143,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:44
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:50
 
 ## Methods
 
@@ -163,7 +163,7 @@ packages/matter.js/dist/cjs/codec/DerCodec.d.ts:44
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:47
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:53
 
 ___
 
@@ -183,4 +183,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:37
+packages/matter.js/dist/cjs/codec/DerCodec.d.ts:43

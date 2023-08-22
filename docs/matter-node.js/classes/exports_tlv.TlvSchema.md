@@ -12,7 +12,7 @@
 
 ## Hierarchy
 
-- [`Schema`](exports_schema.Schema.md)<`T`, [`ByteArray`](../modules/util.md#bytearray-1)\>
+- [`Schema`](exports_schema.Schema.md)<`T`, [`ByteArray`](../modules/util_export.md#bytearray-1)\>
 
   ↳ **`TlvSchema`**
 
@@ -59,6 +59,8 @@
 - [encodeInternal](exports_tlv.TlvSchema.md#encodeinternal)
 - [encodeTlv](exports_tlv.TlvSchema.md#encodetlv)
 - [encodeTlvInternal](exports_tlv.TlvSchema.md#encodetlvinternal)
+- [injectField](exports_tlv.TlvSchema.md#injectfield)
+- [removeField](exports_tlv.TlvSchema.md#removefield)
 - [validate](exports_tlv.TlvSchema.md#validate)
 
 ## Constructors
@@ -321,6 +323,59 @@ TlvSchema.encodeTlvInternal
 #### Defined in
 
 packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:19
+
+___
+
+### injectField
+
+▸ **injectField**(`value`, `_fieldId`, `_fieldValue`, `_injectChecker`): `T`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | `T` |
+| `_fieldId` | `number` |
+| `_fieldValue` | `any` |
+| `_injectChecker` | (`fieldValue`: `any`) => `boolean` |
+
+#### Returns
+
+`T`
+
+#### Implementation of
+
+TlvSchema.injectField
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:20
+
+___
+
+### removeField
+
+▸ **removeField**(`value`, `_fieldId`, `_removeChecker`): `T`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | `T` |
+| `_fieldId` | `number` |
+| `_removeChecker` | (`fieldValue`: `any`) => `boolean` |
+
+#### Returns
+
+`T`
+
+#### Implementation of
+
+TlvSchema.removeField
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:21
 
 ___
 

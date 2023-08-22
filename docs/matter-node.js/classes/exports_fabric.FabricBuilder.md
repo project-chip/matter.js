@@ -46,11 +46,11 @@
 
 | Name | Type |
 | :------ | :------ |
-| `fabricIndex` | [`FabricIndex`](exports_datatype.FabricIndex.md) |
+| `fabricIndex` | [`FabricIndex`](../modules/exports_datatype.md#fabricindex) |
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:84
+packages/matter.js/dist/cjs/fabric/Fabric.d.ts:91
 
 ## Properties
 
@@ -60,7 +60,7 @@ packages/matter.js/dist/cjs/fabric/Fabric.d.ts:84
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:79
+packages/matter.js/dist/cjs/fabric/Fabric.d.ts:86
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:73
+packages/matter.js/dist/cjs/fabric/Fabric.d.ts:80
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:83
+packages/matter.js/dist/cjs/fabric/Fabric.d.ts:90
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:77
+packages/matter.js/dist/cjs/fabric/Fabric.d.ts:84
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:74
+packages/matter.js/dist/cjs/fabric/Fabric.d.ts:81
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:80
+packages/matter.js/dist/cjs/fabric/Fabric.d.ts:87
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:78
+packages/matter.js/dist/cjs/fabric/Fabric.d.ts:85
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:76
+packages/matter.js/dist/cjs/fabric/Fabric.d.ts:83
 
 ___
 
@@ -140,7 +140,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:81
+packages/matter.js/dist/cjs/fabric/Fabric.d.ts:88
 
 ___
 
@@ -150,7 +150,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:82
+packages/matter.js/dist/cjs/fabric/Fabric.d.ts:89
 
 ___
 
@@ -160,7 +160,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:75
+packages/matter.js/dist/cjs/fabric/Fabric.d.ts:82
 
 ## Methods
 
@@ -174,7 +174,7 @@ packages/matter.js/dist/cjs/fabric/Fabric.d.ts:75
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:93
+packages/matter.js/dist/cjs/fabric/Fabric.d.ts:100
 
 ___
 
@@ -188,7 +188,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:86
+packages/matter.js/dist/cjs/fabric/Fabric.d.ts:93
 
 ___
 
@@ -202,7 +202,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:85
+packages/matter.js/dist/cjs/fabric/Fabric.d.ts:92
 
 ___
 
@@ -222,7 +222,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:92
+packages/matter.js/dist/cjs/fabric/Fabric.d.ts:99
 
 ___
 
@@ -242,7 +242,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:89
+packages/matter.js/dist/cjs/fabric/Fabric.d.ts:96
 
 ___
 
@@ -262,7 +262,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:88
+packages/matter.js/dist/cjs/fabric/Fabric.d.ts:95
 
 ___
 
@@ -282,7 +282,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:87
+packages/matter.js/dist/cjs/fabric/Fabric.d.ts:94
 
 ___
 
@@ -294,7 +294,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `rootNodeId` | [`NodeId`](exports_datatype.NodeId.md) |
+| `rootNodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 
 #### Returns
 
@@ -302,7 +302,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:91
+packages/matter.js/dist/cjs/fabric/Fabric.d.ts:98
 
 ___
 
@@ -314,7 +314,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `rootVendorId` | [`VendorId`](exports_datatype.VendorId.md) |
+| `rootVendorId` | [`VendorId`](../modules/exports_datatype.md#vendorid) |
 
 #### Returns
 
@@ -322,4 +322,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:90
+packages/matter.js/dist/cjs/fabric/Fabric.d.ts:97

@@ -46,6 +46,8 @@ MatterCoreSpecificationV1_0 § A.11.2
 - [encodeInternal](exports_tlv.StringSchema.md#encodeinternal)
 - [encodeTlv](exports_tlv.StringSchema.md#encodetlv)
 - [encodeTlvInternal](exports_tlv.StringSchema.md#encodetlvinternal)
+- [injectField](exports_tlv.StringSchema.md#injectfield)
+- [removeField](exports_tlv.StringSchema.md#removefield)
 - [validate](exports_tlv.StringSchema.md#validate)
 
 ## Constructors
@@ -116,7 +118,7 @@ packages/matter.js/dist/cjs/tlv/TlvString.d.ts:19
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`LengthConstraints`](../modules/index._internal_.md#lengthconstraints-1) |
+| `«destructured»` | [`LengthConstraints`](../modules/export._internal_.md#lengthconstraints-1) |
 
 #### Returns
 
@@ -354,6 +356,59 @@ TlvSchema.encodeTlvInternal
 #### Defined in
 
 packages/matter.js/dist/cjs/tlv/TlvString.d.ts:23
+
+___
+
+### injectField
+
+▸ **injectField**(`value`, `_fieldId`, `_fieldValue`, `_injectChecker`): [`TlvToPrimitive`](../modules/exports_tlv.md#tlvtoprimitive)[`T`]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | [`TlvToPrimitive`](../modules/exports_tlv.md#tlvtoprimitive)[`T`] |
+| `_fieldId` | `number` |
+| `_fieldValue` | `any` |
+| `_injectChecker` | (`fieldValue`: `any`) => `boolean` |
+
+#### Returns
+
+[`TlvToPrimitive`](../modules/exports_tlv.md#tlvtoprimitive)[`T`]
+
+#### Inherited from
+
+TlvSchema.injectField
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:20
+
+___
+
+### removeField
+
+▸ **removeField**(`value`, `_fieldId`, `_removeChecker`): [`TlvToPrimitive`](../modules/exports_tlv.md#tlvtoprimitive)[`T`]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | [`TlvToPrimitive`](../modules/exports_tlv.md#tlvtoprimitive)[`T`] |
+| `_fieldId` | `number` |
+| `_removeChecker` | (`fieldValue`: `any`) => `boolean` |
+
+#### Returns
+
+[`TlvToPrimitive`](../modules/exports_tlv.md#tlvtoprimitive)[`T`]
+
+#### Inherited from
+
+TlvSchema.removeField
+
+#### Defined in
+
+packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:21
 
 ___
 

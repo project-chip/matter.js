@@ -1,8 +1,14 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/interaction](../modules/exports_interaction.md) / DecodedAttributeReportValue
 
-# Interface: DecodedAttributeReportValue
+# Interface: DecodedAttributeReportValue<T\>
 
 [exports/interaction](../modules/exports_interaction.md).DecodedAttributeReportValue
+
+## Type parameters
+
+| Name |
+| :------ |
+| `T` |
 
 ## Table of contents
 
@@ -22,25 +28,25 @@
 
 | Name | Type |
 | :------ | :------ |
-| `attributeId` | `number` |
+| `attributeId` | [`AttributeId`](../modules/exports_datatype.md#attributeid) |
 | `attributeName` | `string` |
-| `clusterId` | `number` |
-| `endpointId` | `number` |
-| `nodeId?` | [`NodeId`](../classes/exports_datatype.NodeId.md) |
+| `clusterId` | [`ClusterId`](../modules/exports_datatype.md#clusterid) |
+| `endpointId` | [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber) |
+| `nodeId?` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/AttributeDataDecoder.d.ts:12
+packages/matter.js/dist/cjs/protocol/interaction/AttributeDataDecoder.d.ts:14
 
 ___
 
 ### value
 
-• **value**: `any`
+• **value**: `T`
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/AttributeDataDecoder.d.ts:20
+packages/matter.js/dist/cjs/protocol/interaction/AttributeDataDecoder.d.ts:22
 
 ___
 
@@ -50,4 +56,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/AttributeDataDecoder.d.ts:19
+packages/matter.js/dist/cjs/protocol/interaction/AttributeDataDecoder.d.ts:21

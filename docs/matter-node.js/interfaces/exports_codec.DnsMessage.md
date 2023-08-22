@@ -19,7 +19,7 @@
 
 ### additionalRecords
 
-• **additionalRecords**: [`Record`](exports_codec.Record.md)<`any`\>[]
+• **additionalRecords**: [`DnsRecord`](exports_codec.DnsRecord.md)<`any`\>[]
 
 #### Defined in
 
@@ -29,7 +29,7 @@ ___
 
 ### answers
 
-• **answers**: [`Record`](exports_codec.Record.md)<`any`\>[]
+• **answers**: [`DnsRecord`](exports_codec.DnsRecord.md)<`any`\>[]
 
 #### Defined in
 
@@ -39,7 +39,7 @@ ___
 
 ### authorities
 
-• **authorities**: [`Record`](exports_codec.Record.md)<`any`\>[]
+• **authorities**: [`DnsRecord`](exports_codec.DnsRecord.md)<`any`\>[]
 
 #### Defined in
 
@@ -49,7 +49,7 @@ ___
 
 ### messageType
 
-• **messageType**: [`MessageType`](../enums/exports_codec.MessageType.md)
+• **messageType**: [`DnsMessageType`](../enums/exports_codec.DnsMessageType.md)
 
 #### Defined in
 
@@ -59,7 +59,7 @@ ___
 
 ### queries
 
-• **queries**: [`Query`](exports_codec.Query.md)[]
+• **queries**: [`DnsQuery`](exports_codec.DnsQuery.md)[]
 
 #### Defined in
 

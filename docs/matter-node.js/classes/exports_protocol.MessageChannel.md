@@ -17,7 +17,7 @@ SPDX-License-Identifier: Apache-2.0
 
 ## Implements
 
-- [`Channel`](../interfaces/net.Channel.md)<[`Message`](../interfaces/exports_codec.Message.md)\>
+- [`Channel`](../interfaces/exports_common.Channel.md)<[`Message`](../interfaces/exports_codec.Message.md)\>
 
 ## Table of contents
 
@@ -30,9 +30,13 @@ SPDX-License-Identifier: Apache-2.0
 - [channel](exports_protocol.MessageChannel.md#channel)
 - [session](exports_protocol.MessageChannel.md#session)
 
+### Accessors
+
+- [name](exports_protocol.MessageChannel.md#name)
+
 ### Methods
 
-- [getName](exports_protocol.MessageChannel.md#getname)
+- [close](exports_protocol.MessageChannel.md#close)
 - [send](exports_protocol.MessageChannel.md#send)
 
 ## Constructors
@@ -51,7 +55,7 @@ SPDX-License-Identifier: Apache-2.0
 
 | Name | Type |
 | :------ | :------ |
-| `channel` | [`Channel`](../interfaces/net.Channel.md)<`Uint8Array`\> |
+| `channel` | [`Channel`](../interfaces/exports_common.Channel.md)<`Uint8Array`\> |
 | `session` | [`Session`](../interfaces/exports_session.Session.md)<`ContextT`\> |
 
 #### Defined in
@@ -62,7 +66,7 @@ packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:21
 
 ### channel
 
-• `Readonly` **channel**: [`Channel`](../interfaces/net.Channel.md)<`Uint8Array`\>
+• `Readonly` **channel**: [`Channel`](../interfaces/exports_common.Channel.md)<`Uint8Array`\>
 
 #### Defined in
 
@@ -78,11 +82,11 @@ ___
 
 packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:20
 
-## Methods
+## Accessors
 
-### getName
+### name
 
-▸ **getName**(): `string`
+• `get` **name**(): `string`
 
 #### Returns
 
@@ -90,11 +94,29 @@ packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:20
 
 #### Implementation of
 
-[Channel](../interfaces/net.Channel.md).[getName](../interfaces/net.Channel.md#getname)
+[Channel](../interfaces/exports_common.Channel.md).[name](../interfaces/exports_common.Channel.md#name)
 
 #### Defined in
 
 packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:23
+
+## Methods
+
+### close
+
+▸ **close**(): `Promise`<`void`\>
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Implementation of
+
+[Channel](../interfaces/exports_common.Channel.md).[close](../interfaces/exports_common.Channel.md#close)
+
+#### Defined in
+
+packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:24
 
 ___
 
@@ -114,7 +136,7 @@ ___
 
 #### Implementation of
 
-[Channel](../interfaces/net.Channel.md).[send](../interfaces/net.Channel.md#send)
+[Channel](../interfaces/exports_common.Channel.md).[send](../interfaces/exports_common.Channel.md#send)
 
 #### Defined in
 

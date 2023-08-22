@@ -61,7 +61,7 @@ Define a schema to encode / decode convert type T to type E.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:39
+packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:43
 
 ## Properties
 
@@ -71,7 +71,7 @@ packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:39
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:37
+packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:41
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:38
+packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:42
 
 ## Methods
 
@@ -132,7 +132,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:41
+packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:50
 
 ___
 
@@ -140,25 +140,26 @@ ___
 
 ▸ **encode**(`value`): `number`
 
-Encodes the value using the schema.
+Allow to use a fully defined Bitmap schema as input, but also allow one where only the entries of bits set are
+provided, rest is unset.
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)<`T`\> |
+| `value` | [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)<`T`\> \| [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<`T`\> |
 
 #### Returns
 
 `number`
 
-#### Inherited from
+#### Overrides
 
 [Schema](exports_schema.Schema.md).[encode](exports_schema.Schema.md#encode)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/Schema.d.ts:9
+packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:48
 
 ___
 
@@ -182,7 +183,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:40
+packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:49
 
 ___
 
