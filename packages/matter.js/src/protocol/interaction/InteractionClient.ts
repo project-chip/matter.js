@@ -37,7 +37,7 @@ import {
     StatusResponseError,
 } from "./InteractionMessenger.js";
 import { StatusCode, TlvAttributeReport, TlvEventFilter, TlvEventReport } from "./InteractionProtocol.js";
-import { attributePathToId, INTERACTION_PROTOCOL_ID } from "./InteractionServer.js";
+import { attributePathToId, clusterPathToId, INTERACTION_PROTOCOL_ID } from "./InteractionServer.js";
 
 const logger = Logger.get("InteractionClient");
 
@@ -81,7 +81,8 @@ export class SubscriptionClient implements ProtocolHandler<MatterController> {
 
 export class InteractionClient {
     private readonly subscriptionListeners = new Map<number, (dataReport: DataReport) => void>();
-    private readonly subscribedLocalValues = new Map<string, { value: any; version?: number }>();
+    private readonly subscribedLocalValues = new Map<string, any>();
+    private readonly subscribedClusterDataVersions = new Map<string, number>();
 
     constructor(private readonly exchangeProvider: ExchangeProvider) {
         // TODO: Right now we potentially add multiple handlers for the same protocol, We need to fix this
@@ -231,11 +232,10 @@ export class InteractionClient {
         const { endpointId, clusterId, attribute, alwaysRequestFromRemote = false, isFabricFiltered } = options;
         const { id: attributeId } = attribute;
         if (!alwaysRequestFromRemote) {
-            const localValue = this.subscribedLocalValues.get(
-                attributePathToId({ endpointId, clusterId, attributeId }),
-            );
-            if (localValue !== undefined) {
-                return localValue as { value: AttributeJsType<A>; version: number };
+            const value = this.subscribedLocalValues.get(attributePathToId({ endpointId, clusterId, attributeId }));
+            const version = this.subscribedClusterDataVersions.get(clusterPathToId({ endpointId, clusterId }));
+            if (value !== undefined && version !== undefined) {
+                return { value, version } as { value: AttributeJsType<A>; version: number };
             }
         }
 
@@ -458,10 +458,8 @@ export class InteractionClient {
                 if (value === undefined)
                     throw new MatterFlowError("Subscription result reporting undefined value not specified.");
 
-                this.subscribedLocalValues.set(attributePathToId({ endpointId, clusterId, attributeId }), {
-                    value,
-                    version,
-                });
+                this.subscribedLocalValues.set(attributePathToId({ endpointId, clusterId, attributeId }), value);
+                this.subscribedClusterDataVersions.set(clusterPathToId({ endpointId, clusterId }), version);
                 listener?.(value, version);
             };
             this.subscriptionListeners.set(subscriptionId, subscriptionListener);
@@ -640,10 +638,11 @@ export class InteractionClient {
                             version,
                         } = data;
                         if (value === undefined) throw new MatterFlowError("Received empty subscription result value.");
-                        this.subscribedLocalValues.set(attributePathToId({ endpointId, clusterId, attributeId }), {
+                        this.subscribedLocalValues.set(
+                            attributePathToId({ endpointId, clusterId, attributeId }),
                             value,
-                            version,
-                        });
+                        );
+                        this.subscribedClusterDataVersions.set(clusterPathToId({ endpointId, clusterId }), version);
                         attributeListener?.(data);
                     });
                 }
