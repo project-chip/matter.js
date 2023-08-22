@@ -21,6 +21,8 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Breaking: Change from object style to Branded types for special Datatype objects (e.g. "new VendorId(0xFFF1)" -> "VendorId(0xFFF1)")
   * Breaking: ClusterClient and ClusterServer classes were moved from "interaction" export to "cluster" export
   * Breaking: Refactor the (low level) ClusterClient API to be more convenient to use with many optional fields for read/write/subscribe
+  * Breaking: Cluster*Obj and the internal representation for more correct typings
+  * Breaking: The InteractionClient is no longer exchangeable in ClusterClient cases (because makes no sense and was never working)
   * Feature: Enhance CommissioningServer options to also specify GeneralCommissioningServer details and settings
   * Feature: Adjust RegulatoryConfig Handling in Device and Controller to match with specifications
   * Feature: Endpoint Structures use custom-unique-id (from EndpointOptions)/uniqueStorageKey (from BasicInformationCluster)/serialNumber (from BasicInformationCluster)/ Index (in this order) to store and restore the endpoint ID in structures
@@ -67,6 +69,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Feature: Allow to also remove devices from Aggregators
   * Feature: Optionally allow to define discovery capabilities when generating Pairing code
   * Feature: Add methods to CommissioningServer/Controller class to get information on active sessions and commissioned fabrics
+  * Feature: Enhance CommissioningController to allow subscribing to all attributes and events directly on startup
 * Reference implementation/Examples:
   * Breaking: The storage key structure got changed to allow multi node operations within one process. This requires to change the storage key structure and to migrate or reset the storage.
     * Migration: prepend any storage key except Device.* and Controller.* with "0." in the filename
