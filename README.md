@@ -44,7 +44,7 @@ This repository uses the workspaces feature on npm to manage the dependencies be
 
 Additionally, it uses typescript project references to allow IDE support for the dependencies. These dependencies need to be added to the tsconfig.json files if needed.
 
-You can build and test the packages separately or all by using `npm run build` or `npm run test` on root package level.
+You can build and test the packages separately or all by using `npm run build` or `npm run test` on root package level. With `npm run build-clean` you can build all packages from scratch.
 
 ## Community communication
 
