@@ -544,7 +544,10 @@ export class InteractionClient {
         isFabricFiltered?: boolean;
         eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
         dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
-    }): Promise<void> {
+    }): Promise<{
+        attributeReports?: DecodedAttributeReportValue<any>[];
+        eventReports?: DecodedEventReportValue<any>[];
+    }> {
         const {
             minIntervalFloorSeconds,
             maxIntervalCeilingSeconds,
@@ -581,7 +584,10 @@ export class InteractionClient {
         eventListener?: (data: DecodedEventReportValue<any>) => void;
         eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
         dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
-    }): Promise<void> {
+    }): Promise<{
+        attributeReports?: DecodedAttributeReportValue<any>[];
+        eventReports?: DecodedEventReportValue<any>[];
+    }> {
         const {
             attributes: attributeRequests,
             events: eventRequests,
@@ -594,7 +600,10 @@ export class InteractionClient {
             eventFilters,
             dataVersionFilters,
         } = options;
-        return this.withMessenger<void>(async messenger => {
+        return this.withMessenger<{
+            attributeReports?: DecodedAttributeReportValue<any>[];
+            eventReports?: DecodedEventReportValue<any>[];
+        }>(async messenger => {
             logger.debug(
                 `Sending subscribe request: attributes: ${attributeRequests
                     .map(path => resolveAttributeName(path))
@@ -602,7 +611,7 @@ export class InteractionClient {
             );
             const {
                 report,
-                subscribeResponse: { subscriptionId },
+                subscribeResponse: { subscriptionId, maxInterval },
             } = await messenger.sendSubscribeRequest({
                 interactionModelRevision: 1,
                 attributeRequests,
@@ -617,8 +626,14 @@ export class InteractionClient {
                     dataVersion,
                 })),
             });
+            logger.info(
+                `Subscription successfully initialized with ID ${subscriptionId} and maxInterval ${maxInterval}s.`,
+            );
 
-            const subscriptionListener = (dataReport: DataReport) => {
+            const subscriptionListener = (dataReport: {
+                attributeReports?: DecodedAttributeReportValue<any>[];
+                eventReports?: DecodedEventReportValue<any>[];
+            }) => {
                 if (
                     (!Array.isArray(dataReport.attributeReports) || !dataReport.attributeReports.length) &&
                     (!Array.isArray(dataReport.eventReports) || !dataReport.eventReports.length)
@@ -629,14 +644,19 @@ export class InteractionClient {
                 const { attributeReports, eventReports } = dataReport;
 
                 if (attributeReports !== undefined) {
-                    const attributeValues = normalizeAndDecodeReadAttributeReport(attributeReports);
-
-                    attributeValues.forEach(data => {
+                    attributeReports.forEach(data => {
                         const {
                             path: { endpointId, clusterId, attributeId },
                             value,
                             version,
                         } = data;
+                        logger.debug(
+                            `Received attribute update: ${resolveAttributeName({
+                                endpointId,
+                                clusterId,
+                                attributeId,
+                            })} = ${Logger.toJSON(value)} (version=${version})`,
+                        );
                         if (value === undefined) throw new MatterFlowError("Received empty subscription result value.");
                         this.subscribedLocalValues.set(
                             attributePathToId({ endpointId, clusterId, attributeId }),
@@ -648,12 +668,39 @@ export class InteractionClient {
                 }
 
                 if (eventReports !== undefined) {
-                    const eventValues = normalizeAndDecodeReadEventReport(eventReports);
-                    eventValues.forEach(data => eventListener?.(data));
+                    eventReports.forEach(data => {
+                        logger.debug(
+                            `Received event update: ${resolveEventName(data.path)}: ${Logger.toJSON(data.events)}`,
+                        );
+                        eventListener?.(data);
+                    });
                 }
             };
-            this.subscriptionListeners.set(subscriptionId, subscriptionListener);
-            subscriptionListener(report);
+            this.subscriptionListeners.set(subscriptionId, dataReport => {
+                subscriptionListener({
+                    attributeReports:
+                        dataReport.attributeReports !== undefined
+                            ? normalizeAndDecodeReadAttributeReport(dataReport.attributeReports)
+                            : undefined,
+                    eventReports:
+                        dataReport.eventReports !== undefined
+                            ? normalizeAndDecodeReadEventReport(dataReport.eventReports)
+                            : undefined,
+                });
+            });
+
+            const seedReport = {
+                attributeReports:
+                    report.attributeReports !== undefined
+                        ? normalizeAndDecodeReadAttributeReport(report.attributeReports)
+                        : undefined,
+                eventReports:
+                    report.eventReports !== undefined
+                        ? normalizeAndDecodeReadEventReport(report.eventReports)
+                        : undefined,
+            };
+            subscriptionListener(seedReport);
+            return seedReport;
         });
     }
 
