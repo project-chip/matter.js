@@ -14,8 +14,8 @@
         "prepare": "npm run build-clean",
         "build": "npm run build --workspaces",
         "build-clean": "npm run build-clean --workspaces",
-        "build-doc": "npm run build-doc --workspaces",
-        "test": "npm run test --workspaces",
+        "build-doc": "npm run build-doc --workspaces --if-present",
+        "test": "npm run test --workspaces --if-present",
         "lint": "eslint 'tools/**/*.ts' 'models/local/**/*.ts' 'packages/**/*.ts'",
         "lint-fix": "eslint --fix 'tools/**/*.ts' 'models/local/**/*.ts' 'packages/**/*.ts'",
         "format": "prettier --write 'packages/**/*.ts' 'tools/**/*.ts' 'models/**/*.ts'",
@@ -28,16 +28,16 @@
         "shell": "ts-node --project packages/matter-node-shell.js/tsconfig.dist.json packages/matter-node-shell.js/src/app.ts"
     },
     "devDependencies": {
-        "@typescript-eslint/eslint-plugin": "^5.59.6",
-        "@typescript-eslint/parser": "^5.59.6",
-        "eslint": "^8.40.0",
-        "eslint-import-resolver-typescript": "^3.5.5",
-        "eslint-plugin-import": "^2.27.5",
-        "prettier": "^3.0.1",
+        "@typescript-eslint/eslint-plugin": "^5.62.0",
+        "@typescript-eslint/parser": "^5.62.0",
+        "eslint": "^8.47.0",
+        "eslint-import-resolver-typescript": "^3.6.0",
+        "eslint-plugin-import": "^2.28.1",
+        "prettier": "^3.0.2",
         "prettier-plugin-organize-imports": "^3.2.3",
-        "typedoc": "^0.24.7",
-        "typedoc-plugin-markdown": "^3.15.3",
-        "typedoc-plugin-missing-exports": "^2.0.0",
+        "typedoc": "^0.24.8",
+        "typedoc-plugin-markdown": "^3.15.4",
+        "typedoc-plugin-missing-exports": "^2.0.1",
         "typescript": "^4.9.5"
     }
 }

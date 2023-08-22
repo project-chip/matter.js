@@ -2,4 +2,3 @@
 /node_modules
 /out
 *.tsbuildinfo
-testdata-storage

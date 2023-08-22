@@ -7,8 +7,7 @@
   "scripts": {
     "clean": "true",
     "build": "true",
-    "build-clean": "true",
-    "test": "true"
+    "build-clean": "true"
   },
   "repository": {
     "type": "git",

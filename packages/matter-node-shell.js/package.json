@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter-node-shell.js",
-    "version": "0.1.0",
+    "version": "0.5.0",
     "description": "Shell app for Matter controller",
     "keywords": [
         "iot",
@@ -12,7 +12,6 @@
     "author": "Project CHIP Authors",
     "contributors": [
         "Martin Turon <mturon@google.com>",
-        "Marco Fucci di Napoli <mfucci@gmail.com>",
         "Ingo Fischer <github@fischer-ka.de>"
     ],
     "bugs": {
@@ -27,27 +26,26 @@
         "clean": "rm -rf dist && rm -f *.tsbuildinfo",
         "build": "tsc -b tsconfig.dist.json",
         "build-clean": "npm run clean && npm run build",
-        "start": "ts-node --project tsconfig.dist.json src/app.ts",
-        "test": "true"
+        "start": "ts-node --project tsconfig.dist.json src/app.ts"
     },
     "bin": {
         "shell": "./dist/app.js"
     },
     "devDependencies": {
-        "@typescript-eslint/eslint-plugin": "^5.59.6",
-        "@typescript-eslint/parser": "^5.59.6",
-        "eslint": "^8.40.0",
-        "eslint-import-resolver-typescript": "^3.5.5",
-        "eslint-plugin-import": "^2.27.5",
+        "@typescript-eslint/eslint-plugin": "^5.62.0",
+        "@typescript-eslint/parser": "^5.62.0",
+        "eslint": "^8.47.0",
+        "eslint-import-resolver-typescript": "^3.6.0",
+        "eslint-plugin-import": "^2.28.1",
         "ts-node": "^10.9.1",
         "typescript": "^4.9.5"
     },
     "dependencies": {
-        "@project-chip/matter-node.js": "^0.4.0",
-        "@project-chip/matter-node-ble.js": "^0.4.0",
+        "@project-chip/matter-node.js": "^0.5.0",
+        "@project-chip/matter-node-ble.js": "^0.5.0",
         "child_process": "^1.0.2",
         "readline": "^1.3.0",
-        "yargs": "^17.2.1"
+        "yargs": "^17.7.2"
     },
     "engines": {
         "_comment": "For Crypto.hkdf support",
