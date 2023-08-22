@@ -22,6 +22,7 @@ import {
     Attribute,
     Command,
     TlvNoResponse,
+    AccessLevel,
     OptionalCommand,
     Cluster as CreateCluster
 } from "../../cluster/Cluster.js";
@@ -232,7 +233,7 @@ export namespace Identify {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.1
              */
-            identify: Command(0x0, TlvIdentifyRequest, 0x0, TlvNoResponse),
+            identify: Command(0x0, TlvIdentifyRequest, 0x0, TlvNoResponse, { invokeAcl: AccessLevel.Manage }),
 
             /**
              * This command allows the support of feedback to the user, such as a certain light effect. It is used to
@@ -243,7 +244,13 @@ export namespace Identify {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.3
              */
-            triggerEffect: OptionalCommand(0x40, TlvTriggerEffectRequest, 0x40, TlvNoResponse)
+            triggerEffect: OptionalCommand(
+                0x40,
+                TlvTriggerEffectRequest,
+                0x40,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Manage }
+            )
         }
     });
 
@@ -260,7 +267,13 @@ export namespace Identify {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.2
              */
-            identifyQuery: Command(0x1, TlvNoArguments, 0x0, TlvIdentifyQueryResponse)
+            identifyQuery: Command(
+                0x1,
+                TlvNoArguments,
+                0x0,
+                TlvIdentifyQueryResponse,
+                { invokeAcl: AccessLevel.Manage }
+            )
         }
     });
 

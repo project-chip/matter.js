@@ -384,7 +384,7 @@ export namespace TimeSync {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.16.9.1
              */
-            setUtcTime: Command(0x0, TlvSetUtcTimeRequest, 0x0, TlvNoResponse)
+            setUtcTime: Command(0x0, TlvSetUtcTimeRequest, 0x0, TlvNoResponse, { invokeAcl: AccessLevel.Administer })
         }
     });
 

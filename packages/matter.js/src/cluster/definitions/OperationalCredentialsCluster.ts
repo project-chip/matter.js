@@ -627,7 +627,13 @@ export namespace OperationalCredentials {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.1
              */
-            attestationRequest: Command(0x0, TlvAttestationRequestRequest, 0x1, TlvAttestationResponse),
+            attestationRequest: Command(
+                0x0,
+                TlvAttestationRequestRequest,
+                0x1,
+                TlvAttestationResponse,
+                { invokeAcl: AccessLevel.Administer }
+            ),
 
             /**
              * If the CertificateType is not a valid value per CertificateChainTypeEnum then the command shall fail
@@ -635,7 +641,13 @@ export namespace OperationalCredentials {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.3
              */
-            certificateChainRequest: Command(0x2, TlvCertificateChainRequestRequest, 0x3, TlvCertificateChainResponse),
+            certificateChainRequest: Command(
+                0x2,
+                TlvCertificateChainRequestRequest,
+                0x3,
+                TlvCertificateChainResponse,
+                { invokeAcl: AccessLevel.Administer }
+            ),
 
             /**
              * This command shall be generated to execute the Node Operational CSR Procedure and subsequently return
@@ -666,7 +678,7 @@ export namespace OperationalCredentials {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.5
              */
-            csrRequest: Command(0x4, TlvCsrRequestRequest, 0x5, TlvCsrResponse),
+            csrRequest: Command(0x4, TlvCsrRequestRequest, 0x5, TlvCsrResponse, { invokeAcl: AccessLevel.Administer }),
 
             /**
              * This command shall add a new NOC chain to the device and commission a new Fabric association upon
@@ -681,7 +693,7 @@ export namespace OperationalCredentials {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.8
              */
-            addNoc: Command(0x6, TlvAddNocRequest, 0x8, TlvNocResponse),
+            addNoc: Command(0x6, TlvAddNocRequest, 0x8, TlvNocResponse, { invokeAcl: AccessLevel.Administer }),
 
             /**
              * This command shall replace the NOC and optional associated ICAC (if present) scoped under the accessing
@@ -740,7 +752,7 @@ export namespace OperationalCredentials {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.9
              */
-            updateNoc: Command(0x7, TlvUpdateNocRequest, 0x8, TlvNocResponse),
+            updateNoc: Command(0x7, TlvUpdateNocRequest, 0x8, TlvNocResponse, { invokeAcl: AccessLevel.Administer }),
 
             /**
              * This command shall be used by an Administrator to set the user-visible Label field for a given Fabric,
@@ -768,7 +780,13 @@ export namespace OperationalCredentials {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.11
              */
-            updateFabricLabel: Command(0x9, TlvUpdateFabricLabelRequest, 0x8, TlvNocResponse),
+            updateFabricLabel: Command(
+                0x9,
+                TlvUpdateFabricLabelRequest,
+                0x8,
+                TlvNocResponse,
+                { invokeAcl: AccessLevel.Administer }
+            ),
 
             /**
              * This command is used by Administrators to remove a given Fabric and delete all associated fabric-scoped
@@ -828,7 +846,13 @@ export namespace OperationalCredentials {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.12
              */
-            removeFabric: Command(0xa, TlvRemoveFabricRequest, 0x8, TlvNocResponse),
+            removeFabric: Command(
+                0xa,
+                TlvRemoveFabricRequest,
+                0x8,
+                TlvNocResponse,
+                { invokeAcl: AccessLevel.Administer }
+            ),
 
             /**
              * This command shall add a Trusted Root CA Certificate, provided as its Matter Certificate Encoding
@@ -857,7 +881,13 @@ export namespace OperationalCredentials {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.13
              */
-            addTrustedRootCertificate: Command(0xb, TlvAddTrustedRootCertificateRequest, 0xb, TlvNoResponse)
+            addTrustedRootCertificate: Command(
+                0xb,
+                TlvAddTrustedRootCertificateRequest,
+                0xb,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer }
+            )
         }
     });
 }

@@ -14,7 +14,13 @@ import {
     ClusterForBaseCluster
 } from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { FixedAttribute, Command, TlvNoResponse, Cluster as CreateCluster } from "../../cluster/Cluster.js";
+import {
+    FixedAttribute,
+    Command,
+    AccessLevel,
+    TlvNoResponse,
+    Cluster as CreateCluster
+} from "../../cluster/Cluster.js";
 import { TlvUInt8, TlvBitmap, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvGroupId } from "../../datatype/GroupId.js";
@@ -192,7 +198,7 @@ export namespace Groups {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.3.7.1
              */
-            addGroup: Command(0x0, TlvAddGroupRequest, 0x0, TlvAddGroupResponse),
+            addGroup: Command(0x0, TlvAddGroupRequest, 0x0, TlvAddGroupResponse, { invokeAcl: AccessLevel.Manage }),
 
             /**
              * The ViewGroup command allows a client to request that the server responds with a ViewGroupResponse
@@ -216,7 +222,13 @@ export namespace Groups {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.3.7.4
              */
-            removeGroup: Command(0x3, TlvRemoveGroupRequest, 0x3, TlvRemoveGroupResponse),
+            removeGroup: Command(
+                0x3,
+                TlvRemoveGroupRequest,
+                0x3,
+                TlvRemoveGroupResponse,
+                { invokeAcl: AccessLevel.Manage }
+            ),
 
             /**
              * The RemoveAllGroups command allows a client to direct the server to remove all group associations for
@@ -226,7 +238,7 @@ export namespace Groups {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.3.7.5
              */
-            removeAllGroups: Command(0x4, TlvNoArguments, 0x4, TlvNoResponse),
+            removeAllGroups: Command(0x4, TlvNoArguments, 0x4, TlvNoResponse, { invokeAcl: AccessLevel.Manage }),
 
             /**
              * The AddGroupIfIdentifying command allows a client to add group membership in a particular group for the
@@ -237,7 +249,13 @@ export namespace Groups {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.3.7.6
              */
-            addGroupIfIdentifying: Command(0x5, TlvAddGroupIfIdentifyingRequest, 0x5, TlvNoResponse)
+            addGroupIfIdentifying: Command(
+                0x5,
+                TlvAddGroupIfIdentifyingRequest,
+                0x5,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Manage }
+            )
         }
     });
 

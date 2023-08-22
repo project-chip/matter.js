@@ -273,7 +273,13 @@ export namespace OtaSoftwareUpdateRequestor {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.6.1
              */
-            announceOtaProvider: OptionalCommand(0x0, TlvAnnounceOtaProviderRequest, 0x0, TlvNoResponse)
+            announceOtaProvider: OptionalCommand(
+                0x0,
+                TlvAnnounceOtaProviderRequest,
+                0x0,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer }
+            )
         },
 
         events: {

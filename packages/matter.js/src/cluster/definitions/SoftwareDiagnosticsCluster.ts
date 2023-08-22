@@ -24,6 +24,7 @@ import {
     Attribute,
     Command,
     TlvNoResponse,
+    AccessLevel,
     Cluster as CreateCluster
 } from "../../cluster/Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
@@ -207,7 +208,7 @@ export namespace SoftwareDiagnostics {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.12.7.1
              */
-            resetWatermarks: Command(0x0, TlvNoArguments, 0x0, TlvNoResponse)
+            resetWatermarks: Command(0x0, TlvNoArguments, 0x0, TlvNoResponse, { invokeAcl: AccessLevel.Manage })
         }
     });
 

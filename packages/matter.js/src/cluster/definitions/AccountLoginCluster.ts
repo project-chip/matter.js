@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Cluster as CreateCluster, Command, TlvNoResponse } from "../../cluster/Cluster.js";
+import { Cluster as CreateCluster, Command, AccessLevel, TlvNoResponse } from "../../cluster/Cluster.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvString } from "../../tlv/TlvString.js";
@@ -129,7 +129,13 @@ export namespace AccountLogin {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2.4.1
              */
-            getSetupPin: Command(0x0, TlvGetSetupPinRequest, 0x1, TlvGetSetupPinResponse),
+            getSetupPin: Command(
+                0x0,
+                TlvGetSetupPinRequest,
+                0x1,
+                TlvGetSetupPinResponse,
+                { invokeAcl: AccessLevel.Administer, timed: true }
+            ),
 
             /**
              * The purpose of this command is to allow the Content App to assume the user account of a given
@@ -171,7 +177,13 @@ export namespace AccountLogin {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2.4.3
              */
-            login: Command(0x2, TlvLoginRequest, 0x2, TlvNoResponse),
+            login: Command(
+                0x2,
+                TlvLoginRequest,
+                0x2,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer, timed: true }
+            ),
 
             /**
              * The purpose of this command is to instruct the Content App to clear the current user account. This
@@ -179,7 +191,7 @@ export namespace AccountLogin {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2.4.4
              */
-            logout: Command(0x3, TlvNoArguments, 0x3, TlvNoResponse)
+            logout: Command(0x3, TlvNoArguments, 0x3, TlvNoResponse, { timed: true })
         }
     });
 }

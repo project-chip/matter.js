@@ -39,6 +39,7 @@ export interface Attribute<T, F extends BitSchema> {
     writable: boolean;
     scene: boolean;
     persistent: boolean;
+    timed: boolean;
     fixed: boolean;
     fabricScoped: boolean;
     omitChanges: boolean;
@@ -109,6 +110,7 @@ interface AttributeOptions<T> {
     scene?: boolean;
     persistent?: boolean;
     omitChanges?: boolean;
+    timed?: boolean;
     default?: T;
     readAcl?: AccessLevel;
     writeAcl?: AccessLevel;
@@ -128,6 +130,7 @@ export const Attribute = <T, V extends T, F extends BitSchema>(
         omitChanges = false,
         default: conformanceValue,
         readAcl = AccessLevel.View,
+        timed = false,
     }: AttributeOptions<V> = {},
 ): Attribute<T, F> => ({
     id: AttributeId(id),
@@ -137,6 +140,7 @@ export const Attribute = <T, V extends T, F extends BitSchema>(
     fixed: false,
     scene,
     persistent,
+    timed,
     fabricScoped: false,
     omitChanges,
     default: conformanceValue,
@@ -156,6 +160,7 @@ export const OptionalAttribute = <T, V extends T, F extends BitSchema>(
         omitChanges = false,
         default: conformanceValue,
         readAcl = AccessLevel.View,
+        timed = false,
     }: AttributeOptions<V> = {},
 ): OptionalAttribute<T, F> => ({
     id: AttributeId(id),
@@ -169,6 +174,7 @@ export const OptionalAttribute = <T, V extends T, F extends BitSchema>(
     omitChanges,
     default: conformanceValue,
     readAcl,
+    timed,
     isConditional: false,
     optionalIf: [],
     mandatoryIf: [],
@@ -186,6 +192,7 @@ export const ConditionalAttribute = <T, V extends T, F extends BitSchema>(
         readAcl = AccessLevel.View,
         optionalIf = [],
         mandatoryIf = [],
+        timed = false,
     }: ConditionalAttributeOptions<V, F>,
 ): ConditionalAttribute<T, F> => ({
     id: AttributeId(id),
@@ -199,6 +206,7 @@ export const ConditionalAttribute = <T, V extends T, F extends BitSchema>(
     omitChanges,
     default: conformanceValue,
     readAcl,
+    timed,
     isConditional: true,
     optionalIf,
     mandatoryIf,
@@ -215,6 +223,7 @@ export const WritableAttribute = <T, V extends T, F extends BitSchema>(
         default: conformanceValue,
         readAcl = AccessLevel.View,
         writeAcl = AccessLevel.View,
+        timed = false,
     }: AttributeOptions<V> = {},
 ): WritableAttribute<T, F> => ({
     id: AttributeId(id),
@@ -228,6 +237,7 @@ export const WritableAttribute = <T, V extends T, F extends BitSchema>(
     omitChanges,
     default: conformanceValue,
     readAcl,
+    timed,
     writeAcl,
     isConditional: false,
     optionalIf: [],
@@ -245,6 +255,7 @@ export const OptionalWritableAttribute = <T, V extends T, F extends BitSchema>(
         default: conformanceValue,
         readAcl = AccessLevel.View,
         writeAcl = AccessLevel.View,
+        timed = false,
     }: AttributeOptions<V> = {},
 ): OptionalWritableAttribute<T, F> => ({
     id: AttributeId(id),
@@ -258,6 +269,7 @@ export const OptionalWritableAttribute = <T, V extends T, F extends BitSchema>(
     omitChanges,
     default: conformanceValue,
     readAcl,
+    timed,
     writeAcl,
     isConditional: false,
     optionalIf: [],
@@ -277,6 +289,7 @@ export const ConditionalWritableAttribute = <T, V extends T, F extends BitSchema
         writeAcl = AccessLevel.View,
         optionalIf = [],
         mandatoryIf = [],
+        timed = false,
     }: ConditionalAttributeOptions<V, F>,
 ): ConditionalWritableAttribute<T, F> => ({
     id: AttributeId(id),
@@ -290,6 +303,7 @@ export const ConditionalWritableAttribute = <T, V extends T, F extends BitSchema
     omitChanges,
     default: conformanceValue,
     readAcl,
+    timed,
     writeAcl,
     isConditional: true,
     optionalIf,
@@ -306,6 +320,7 @@ export const FabricScopedAttribute = <T, V extends T, F extends BitSchema>(
         omitChanges = false,
         default: conformanceValue,
         readAcl = AccessLevel.View,
+        timed = false,
     }: AttributeOptions<V> = {},
 ): FabricScopedAttribute<T, F> => ({
     id: AttributeId(id),
@@ -319,6 +334,7 @@ export const FabricScopedAttribute = <T, V extends T, F extends BitSchema>(
     omitChanges,
     default: conformanceValue,
     readAcl,
+    timed,
     isConditional: false,
     optionalIf: [],
     mandatoryIf: [],
@@ -335,6 +351,7 @@ export const WritableFabricScopedAttribute = <T, V extends T, F extends BitSchem
         default: conformanceValue,
         readAcl = AccessLevel.View,
         writeAcl = AccessLevel.View,
+        timed = false,
     }: AttributeOptions<V> = {},
 ): WritableFabricScopedAttribute<T, F> => ({
     id: AttributeId(id),
@@ -348,6 +365,7 @@ export const WritableFabricScopedAttribute = <T, V extends T, F extends BitSchem
     omitChanges,
     default: conformanceValue,
     readAcl,
+    timed,
     writeAcl,
     isConditional: false,
     optionalIf: [],
@@ -365,6 +383,7 @@ export const OptionalWritableFabricScopedAttribute = <T, V extends T, F extends 
         default: conformanceValue,
         readAcl = AccessLevel.View,
         writeAcl = AccessLevel.View,
+        timed = false,
     }: AttributeOptions<V> = {},
 ): OptionalWritableFabricScopedAttribute<T, F> => ({
     id: AttributeId(id),
@@ -378,6 +397,7 @@ export const OptionalWritableFabricScopedAttribute = <T, V extends T, F extends 
     omitChanges,
     default: conformanceValue,
     readAcl,
+    timed,
     writeAcl,
     isConditional: false,
     optionalIf: [],
@@ -397,6 +417,7 @@ export const ConditionalWritableFabricScopedAttribute = <T, V extends T, F exten
         writeAcl = AccessLevel.View,
         optionalIf = [],
         mandatoryIf = [],
+        timed = false,
     }: ConditionalAttributeOptions<V, F> = {},
 ): ConditionalWritableFabricScopedAttribute<T, F> => ({
     id: AttributeId(id),
@@ -410,6 +431,7 @@ export const ConditionalWritableFabricScopedAttribute = <T, V extends T, F exten
     omitChanges,
     default: conformanceValue,
     readAcl,
+    timed,
     writeAcl,
     isConditional: true,
     optionalIf,
@@ -426,6 +448,7 @@ export const FixedAttribute = <T, V extends T, F extends BitSchema>(
         omitChanges = false,
         default: conformanceValue,
         readAcl = AccessLevel.View,
+        timed = false,
     }: AttributeOptions<V> = {},
 ): FixedAttribute<T, F> => ({
     id: AttributeId(id),
@@ -439,6 +462,7 @@ export const FixedAttribute = <T, V extends T, F extends BitSchema>(
     omitChanges,
     default: conformanceValue,
     readAcl,
+    timed,
     isConditional: false,
     optionalIf: [],
     mandatoryIf: [],
@@ -454,6 +478,7 @@ export const WritableFixedAttribute = <T, V extends T, F extends BitSchema>(
         omitChanges = false,
         default: conformanceValue,
         readAcl = AccessLevel.View,
+        timed = false,
     }: AttributeOptions<V> = {},
 ): FixedAttribute<T, F> => ({
     id: AttributeId(id),
@@ -467,6 +492,7 @@ export const WritableFixedAttribute = <T, V extends T, F extends BitSchema>(
     omitChanges,
     default: conformanceValue,
     readAcl,
+    timed,
     isConditional: false,
     optionalIf: [],
     mandatoryIf: [],
@@ -482,6 +508,7 @@ export const OptionalFixedAttribute = <T, V extends T, F extends BitSchema>(
         omitChanges = false,
         default: conformanceValue,
         readAcl = AccessLevel.View,
+        timed = false,
     }: AttributeOptions<V> = {},
 ): OptionalFixedAttribute<T, F> => ({
     id: AttributeId(id),
@@ -495,6 +522,7 @@ export const OptionalFixedAttribute = <T, V extends T, F extends BitSchema>(
     omitChanges,
     default: conformanceValue,
     readAcl,
+    timed,
     isConditional: false,
     optionalIf: [],
     mandatoryIf: [],
@@ -510,6 +538,7 @@ export const ConditionalFixedAttribute = <T, V extends T, F extends BitSchema>(
         omitChanges = false,
         default: conformanceValue,
         readAcl = AccessLevel.View,
+        timed = false,
         optionalIf = [],
         mandatoryIf = [],
     }: ConditionalAttributeOptions<V, F>,
@@ -525,6 +554,7 @@ export const ConditionalFixedAttribute = <T, V extends T, F extends BitSchema>(
     omitChanges,
     default: conformanceValue,
     readAcl,
+    timed,
     isConditional: true,
     optionalIf,
     mandatoryIf,
@@ -546,6 +576,7 @@ export const UnknownAttribute = <F extends BitSchema>(id: number): UnknownAttrib
     omitChanges: false,
     default: undefined,
     readAcl: AccessLevel.View,
+    timed: false,
     isConditional: true,
     optionalIf: [],
     mandatoryIf: [],
@@ -569,6 +600,8 @@ export interface Command<RequestT, ResponseT, F extends BitSchema> {
     requestSchema: TlvSchema<RequestT>;
     responseId: CommandId;
     responseSchema: TlvSchema<ResponseT>;
+    invokeAcl: AccessLevel;
+    timed: boolean;
     isConditional: boolean;
     mandatoryIf: ConditionalFeatureList<F>;
     optionalIf: ConditionalFeatureList<F>;
@@ -594,7 +627,12 @@ export type RequestType<T extends Command<any, any, any>> = T extends OptionalCo
     ? RequestT
     : never;
 
-interface ConditionalCommandOptions<F extends BitSchema> {
+interface CommandOptions {
+    invokeAcl?: AccessLevel;
+    timed?: boolean;
+}
+
+interface ConditionalCommandOptions<F extends BitSchema> extends CommandOptions {
     optionalIf?: ConditionalFeatureList<F>;
     mandatoryIf?: ConditionalFeatureList<F>;
 }
@@ -604,12 +642,15 @@ export const Command = <RequestT, ResponseT, F extends BitSchema>(
     requestSchema: TlvSchema<RequestT>,
     responseId: number,
     responseSchema: TlvSchema<ResponseT>,
+    { invokeAcl = AccessLevel.Operate, timed = false }: CommandOptions = {},
 ): Command<RequestT, ResponseT, F> => ({
     optional: false,
     requestId: CommandId(requestId),
     requestSchema,
     responseId: CommandId(responseId),
     responseSchema,
+    invokeAcl,
+    timed,
     isConditional: false,
     optionalIf: [],
     mandatoryIf: [],
@@ -620,12 +661,15 @@ export const OptionalCommand = <RequestT, ResponseT, F extends BitSchema>(
     requestSchema: TlvSchema<RequestT>,
     responseId: number,
     responseSchema: TlvSchema<ResponseT>,
+    { invokeAcl = AccessLevel.Operate, timed = false }: CommandOptions = {},
 ): OptionalCommand<RequestT, ResponseT, F> => ({
     optional: true,
     requestId: CommandId(requestId),
     requestSchema,
     responseId: CommandId(responseId),
     responseSchema,
+    invokeAcl,
+    timed,
     isConditional: false,
     optionalIf: [],
     mandatoryIf: [],
@@ -636,13 +680,20 @@ export const ConditionalCommand = <RequestT, ResponseT, F extends BitSchema>(
     requestSchema: TlvSchema<RequestT>,
     responseId: number,
     responseSchema: TlvSchema<ResponseT>,
-    { optionalIf = [], mandatoryIf = [] }: ConditionalCommandOptions<F>,
+    {
+        invokeAcl = AccessLevel.Operate,
+        timed = false,
+        optionalIf = [],
+        mandatoryIf = [],
+    }: ConditionalCommandOptions<F> = {},
 ): ConditionalCommand<RequestT, ResponseT, F> => ({
     optional: true,
     requestId: CommandId(requestId),
     requestSchema,
     responseId: CommandId(responseId),
     responseSchema,
+    invokeAcl,
+    timed,
     isConditional: true,
     optionalIf,
     mandatoryIf,
@@ -660,6 +711,7 @@ export interface Event<T, F extends BitSchema> {
     schema: TlvSchema<T>;
     priority: EventPriority;
     optional: boolean;
+    readAcl: AccessLevel;
     isConditional: boolean;
     optionalIf: ConditionalFeatureList<F>;
     mandatoryIf: ConditionalFeatureList<F>;
@@ -670,7 +722,11 @@ export interface UnknownEvent<F extends BitSchema> extends Event<any, F> {
     unknown: true;
 }
 
-interface ConditionalEventOptions<F extends BitSchema> {
+interface EventOptions {
+    readAcl?: AccessLevel;
+}
+
+interface ConditionalEventOptions<F extends BitSchema> extends EventOptions {
     optionalIf?: ConditionalFeatureList<F>;
     mandatoryIf?: ConditionalFeatureList<F>;
 }
@@ -687,12 +743,14 @@ export const Event = <T, F extends BitSchema>(
     id: number,
     priority: EventPriority,
     schema: TlvSchema<T>,
+    { readAcl = AccessLevel.View }: EventOptions = {},
 ): Event<T, F> => ({
     id: EventId(id),
     schema,
     priority,
     optional: false,
     isConditional: false,
+    readAcl,
     optionalIf: [],
     mandatoryIf: [],
     unknown: false,
@@ -702,11 +760,13 @@ export const OptionalEvent = <T, F extends BitSchema>(
     id: number,
     priority: EventPriority,
     schema: TlvSchema<T>,
+    { readAcl = AccessLevel.View }: EventOptions = {},
 ): OptionalEvent<T, F> => ({
     id: EventId(id),
     schema,
     priority,
     optional: true,
+    readAcl,
     isConditional: false,
     optionalIf: [],
     mandatoryIf: [],
@@ -717,12 +777,13 @@ export const ConditionalEvent = <T, F extends BitSchema>(
     id: EventId,
     priority: EventPriority,
     schema: TlvSchema<T>,
-    { optionalIf = [], mandatoryIf = [] }: ConditionalEventOptions<F>,
+    { readAcl = AccessLevel.View, optionalIf = [], mandatoryIf = [] }: ConditionalEventOptions<F>,
 ): ConditionalEvent<T, F> => ({
     id: EventId(id),
     schema,
     priority,
     optional: true,
+    readAcl,
     isConditional: true,
     optionalIf,
     mandatoryIf,
@@ -734,6 +795,7 @@ export const UnknownEvent = <F extends BitSchema>(id: number): Event<unknown, F>
     schema: TlvVoid,
     priority: EventPriority.Debug,
     optional: false,
+    readAcl: AccessLevel.View,
     isConditional: false,
     optionalIf: [],
     mandatoryIf: [],

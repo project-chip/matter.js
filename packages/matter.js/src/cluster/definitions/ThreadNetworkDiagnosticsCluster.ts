@@ -24,6 +24,7 @@ import {
     EventPriority,
     Command,
     TlvNoResponse,
+    AccessLevel,
     Cluster as CreateCluster
 } from "../../cluster/Cluster.js";
 import { TlvUInt16, TlvEnum, TlvUInt64, TlvUInt32, TlvUInt8, TlvInt8 } from "../../tlv/TlvNumber.js";
@@ -742,7 +743,7 @@ export namespace ThreadNetworkDiagnostics {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.13.7.1
              */
-            resetCounts: Command(0x0, TlvNoArguments, 0x0, TlvNoResponse)
+            resetCounts: Command(0x0, TlvNoArguments, 0x0, TlvNoResponse, { invokeAcl: AccessLevel.Manage })
         }
     });
 

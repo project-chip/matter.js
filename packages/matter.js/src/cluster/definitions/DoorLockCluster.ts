@@ -1596,17 +1596,17 @@ export namespace DoorLock {
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            lockDoor: Command(0x0, TlvLockDoorRequest, 0x0, TlvNoResponse),
+            lockDoor: Command(0x0, TlvLockDoorRequest, 0x0, TlvNoResponse, { timed: true }),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            unlockDoor: Command(0x1, TlvUnlockDoorRequest, 0x1, TlvNoResponse),
+            unlockDoor: Command(0x1, TlvUnlockDoorRequest, 0x1, TlvNoResponse, { timed: true }),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            unlockWithTimeout: OptionalCommand(0x3, TlvUnlockWithTimeoutRequest, 0x3, TlvNoResponse)
+            unlockWithTimeout: OptionalCommand(0x3, TlvUnlockWithTimeoutRequest, 0x3, TlvNoResponse, { timed: true })
         },
 
         events: {
@@ -1710,7 +1710,7 @@ export namespace DoorLock {
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            getLogRecord: Command(0x4, TlvNoArguments, 0x4, TlvNoArguments)
+            getLogRecord: Command(0x4, TlvNoArguments, 0x4, TlvNoArguments, { invokeAcl: AccessLevel.Manage })
         }
     });
 
@@ -1770,32 +1770,62 @@ export namespace DoorLock {
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            setUser: Command(0x1a, TlvSetUserRequest, 0x1a, TlvNoResponse),
+            setUser: Command(
+                0x1a,
+                TlvSetUserRequest,
+                0x1a,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer, timed: true }
+            ),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            getUser: Command(0x1b, TlvGetUserRequest, 0x1c, TlvGetUserResponse),
+            getUser: Command(0x1b, TlvGetUserRequest, 0x1c, TlvGetUserResponse, { invokeAcl: AccessLevel.Administer }),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            clearUser: Command(0x1d, TlvClearUserRequest, 0x1d, TlvNoResponse),
+            clearUser: Command(
+                0x1d,
+                TlvClearUserRequest,
+                0x1d,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer, timed: true }
+            ),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            setCredential: Command(0x22, TlvSetCredentialRequest, 0x23, TlvSetCredentialResponse),
+            setCredential: Command(
+                0x22,
+                TlvSetCredentialRequest,
+                0x23,
+                TlvSetCredentialResponse,
+                { invokeAcl: AccessLevel.Administer, timed: true }
+            ),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            getCredentialStatus: Command(0x24, TlvGetCredentialStatusRequest, 0x25, TlvGetCredentialStatusResponse),
+            getCredentialStatus: Command(
+                0x24,
+                TlvGetCredentialStatusRequest,
+                0x25,
+                TlvGetCredentialStatusResponse,
+                { invokeAcl: AccessLevel.Administer }
+            ),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            clearCredential: Command(0x26, TlvClearCredentialRequest, 0x26, TlvNoResponse)
+            clearCredential: Command(
+                0x26,
+                TlvClearCredentialRequest,
+                0x26,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer, timed: true }
+            )
         },
 
         events: {
@@ -1906,17 +1936,35 @@ export namespace DoorLock {
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            setWeekDaySchedule: Command(0xb, TlvSetWeekDayScheduleRequest, 0xb, TlvNoResponse),
+            setWeekDaySchedule: Command(
+                0xb,
+                TlvSetWeekDayScheduleRequest,
+                0xb,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer }
+            ),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            getWeekDaySchedule: Command(0xc, TlvGetWeekDayScheduleRequest, 0xc, TlvGetWeekDayScheduleResponse),
+            getWeekDaySchedule: Command(
+                0xc,
+                TlvGetWeekDayScheduleRequest,
+                0xc,
+                TlvGetWeekDayScheduleResponse,
+                { invokeAcl: AccessLevel.Administer }
+            ),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            clearWeekDaySchedule: Command(0xd, TlvClearWeekDayScheduleRequest, 0xd, TlvNoResponse)
+            clearWeekDaySchedule: Command(
+                0xd,
+                TlvClearWeekDayScheduleRequest,
+                0xd,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer }
+            )
         }
     });
 
@@ -1937,17 +1985,35 @@ export namespace DoorLock {
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            setYearDaySchedule: Command(0xe, TlvSetYearDayScheduleRequest, 0xe, TlvNoResponse),
+            setYearDaySchedule: Command(
+                0xe,
+                TlvSetYearDayScheduleRequest,
+                0xe,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer }
+            ),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            getYearDaySchedule: Command(0xf, TlvGetYearDayScheduleRequest, 0xf, TlvGetYearDayScheduleResponse),
+            getYearDaySchedule: Command(
+                0xf,
+                TlvGetYearDayScheduleRequest,
+                0xf,
+                TlvGetYearDayScheduleResponse,
+                { invokeAcl: AccessLevel.Administer }
+            ),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            clearYearDaySchedule: Command(0x10, TlvClearYearDayScheduleRequest, 0x10, TlvNoResponse)
+            clearYearDaySchedule: Command(
+                0x10,
+                TlvClearYearDayScheduleRequest,
+                0x10,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer }
+            )
         }
     });
 
@@ -1968,17 +2034,35 @@ export namespace DoorLock {
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            setHolidaySchedule: Command(0x11, TlvSetHolidayScheduleRequest, 0x11, TlvNoResponse),
+            setHolidaySchedule: Command(
+                0x11,
+                TlvSetHolidayScheduleRequest,
+                0x11,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer }
+            ),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            getHolidaySchedule: Command(0x12, TlvGetHolidayScheduleRequest, 0x12, TlvGetHolidayScheduleResponse),
+            getHolidaySchedule: Command(
+                0x12,
+                TlvGetHolidayScheduleRequest,
+                0x12,
+                TlvGetHolidayScheduleResponse,
+                { invokeAcl: AccessLevel.Administer }
+            ),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            clearHolidaySchedule: Command(0x13, TlvClearHolidayScheduleRequest, 0x13, TlvNoResponse)
+            clearHolidaySchedule: Command(
+                0x13,
+                TlvClearHolidayScheduleRequest,
+                0x13,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer }
+            )
         }
     });
 
@@ -2194,22 +2278,40 @@ export namespace DoorLock {
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            setPinCode: Command(0x5, TlvNoArguments, 0x5, TlvNoResponse),
+            setPinCode: Command(
+                0x5,
+                TlvNoArguments,
+                0x5,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer, timed: true }
+            ),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            getPinCode: Command(0x6, TlvNoArguments, 0x6, TlvNoArguments),
+            getPinCode: Command(0x6, TlvNoArguments, 0x6, TlvNoArguments, { invokeAcl: AccessLevel.Administer }),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            clearPinCode: Command(0x7, TlvNoArguments, 0x7, TlvNoResponse),
+            clearPinCode: Command(
+                0x7,
+                TlvNoArguments,
+                0x7,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer, timed: true }
+            ),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            clearAllPinCodes: Command(0x8, TlvNoArguments, 0x8, TlvNoResponse)
+            clearAllPinCodes: Command(
+                0x8,
+                TlvNoArguments,
+                0x8,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer, timed: true }
+            )
         }
     });
 
@@ -2222,22 +2324,46 @@ export namespace DoorLock {
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            setUserStatus: OptionalCommand(0x9, TlvNoArguments, 0x9, TlvNoResponse),
+            setUserStatus: OptionalCommand(
+                0x9,
+                TlvNoArguments,
+                0x9,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer }
+            ),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            getUserStatus: OptionalCommand(0xa, TlvNoArguments, 0xa, TlvNoArguments),
+            getUserStatus: OptionalCommand(
+                0xa,
+                TlvNoArguments,
+                0xa,
+                TlvNoArguments,
+                { invokeAcl: AccessLevel.Administer }
+            ),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            setUserType: OptionalCommand(0x14, TlvNoArguments, 0x14, TlvNoResponse),
+            setUserType: OptionalCommand(
+                0x14,
+                TlvNoArguments,
+                0x14,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer }
+            ),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            getUserType: OptionalCommand(0x15, TlvNoArguments, 0x15, TlvNoArguments)
+            getUserType: OptionalCommand(
+                0x15,
+                TlvNoArguments,
+                0x15,
+                TlvNoArguments,
+                { invokeAcl: AccessLevel.Administer }
+            )
         }
     });
 
@@ -2255,22 +2381,40 @@ export namespace DoorLock {
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            setRfidCode: Command(0x16, TlvNoArguments, 0x16, TlvNoResponse),
+            setRfidCode: Command(
+                0x16,
+                TlvNoArguments,
+                0x16,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer, timed: true }
+            ),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            getRfidCode: Command(0x17, TlvNoArguments, 0x17, TlvNoArguments),
+            getRfidCode: Command(0x17, TlvNoArguments, 0x17, TlvNoArguments, { invokeAcl: AccessLevel.Administer }),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            clearRfidCode: Command(0x18, TlvNoArguments, 0x18, TlvNoResponse),
+            clearRfidCode: Command(
+                0x18,
+                TlvNoArguments,
+                0x18,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer, timed: true }
+            ),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
              */
-            clearAllRfidCodes: Command(0x19, TlvNoArguments, 0x19, TlvNoResponse)
+            clearAllRfidCodes: Command(
+                0x19,
+                TlvNoArguments,
+                0x19,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer, timed: true }
+            )
         }
     });
 

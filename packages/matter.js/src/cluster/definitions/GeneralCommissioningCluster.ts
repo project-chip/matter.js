@@ -385,7 +385,13 @@ export namespace GeneralCommissioning {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.2
              */
-            armFailSafe: Command(0x0, TlvArmFailSafeRequest, 0x1, TlvArmFailSafeResponse),
+            armFailSafe: Command(
+                0x0,
+                TlvArmFailSafeRequest,
+                0x1,
+                TlvArmFailSafeResponse,
+                { invokeAcl: AccessLevel.Administer }
+            ),
 
             /**
              * This shall add or update the regulatory configuration in the RegulatoryConfig Attribute to the value
@@ -422,7 +428,13 @@ export namespace GeneralCommissioning {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.4
              */
-            setRegulatoryConfig: Command(0x2, TlvSetRegulatoryConfigRequest, 0x3, TlvSetRegulatoryConfigResponse),
+            setRegulatoryConfig: Command(
+                0x2,
+                TlvSetRegulatoryConfigRequest,
+                0x3,
+                TlvSetRegulatoryConfigResponse,
+                { invokeAcl: AccessLevel.Administer }
+            ),
 
             /**
              * This command has no data.
@@ -480,7 +492,13 @@ export namespace GeneralCommissioning {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.6
              */
-            commissioningComplete: Command(0x4, TlvNoArguments, 0x5, TlvCommissioningCompleteResponse)
+            commissioningComplete: Command(
+                0x4,
+                TlvNoArguments,
+                0x5,
+                TlvCommissioningCompleteResponse,
+                { invokeAcl: AccessLevel.Administer }
+            )
         }
     });
 }

@@ -6,7 +6,14 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Cluster as CreateCluster, Attribute, Command, TlvNoResponse, OptionalCommand } from "../../cluster/Cluster.js";
+import {
+    Cluster as CreateCluster,
+    Attribute,
+    Command,
+    TlvNoResponse,
+    AccessLevel,
+    OptionalCommand
+} from "../../cluster/Cluster.js";
 import { TlvUInt32, TlvUInt16, TlvUInt64 } from "../../tlv/TlvNumber.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
@@ -53,9 +60,29 @@ export namespace ClientMonitoring {
         },
 
         commands: {
-            registerClientMonitoring: Command(0x0, TlvRegisterClientMonitoringRequest, 0x0, TlvNoResponse),
-            unregisterClientMonitoring: Command(0x1, TlvUnregisterClientMonitoringRequest, 0x1, TlvNoResponse),
-            stayAwakeRequest: OptionalCommand(0x2, TlvNoArguments, 0x2, TlvNoResponse)
+            registerClientMonitoring: Command(
+                0x0,
+                TlvRegisterClientMonitoringRequest,
+                0x0,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Manage }
+            ),
+
+            unregisterClientMonitoring: Command(
+                0x1,
+                TlvUnregisterClientMonitoringRequest,
+                0x1,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Manage }
+            ),
+
+            stayAwakeRequest: OptionalCommand(
+                0x2,
+                TlvNoArguments,
+                0x2,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Manage }
+            )
         }
     });
 }
