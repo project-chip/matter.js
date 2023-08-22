@@ -209,23 +209,33 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
                 dataVersionFilters,
                 attributeListener: attributeData => {
                     const { path, value } = attributeData;
-                    const attributeName = attributeToId[path.attributeId];
-                    if (attributeName === undefined) {
-                        logger.warn("Unknown attribute id", path.attributeId);
-                        return;
-                    }
-                    (attributes as any)[attributeName].update(value);
+                    result._triggerAttributeUpdate(path.attributeId, value);
                 },
                 eventListener: eventData => {
                     const { path, events: newEvents } = eventData;
-                    const eventName = eventToId[path.eventId];
-                    if (eventName === undefined) {
-                        logger.warn("Unknown event id", path.eventId);
-                        return;
-                    }
-                    newEvents.forEach(event => (events as any)[eventName].update(event));
+                    result._triggerEventUpdate(path.eventId, newEvents);
                 },
             });
+        },
+
+        /** Trigger a value change for an Attributed, used by subscriptions. */
+        _triggerAttributeUpdate(attributeId: AttributeId, value: any) {
+            const attributeName = attributeToId[attributeId];
+            if (attributeName === undefined) {
+                logger.warn("Unknown attribute id", attributeId);
+                return;
+            }
+            (attributes as any)[attributeName].update(value);
+        },
+
+        /** Trigger a value change for an Event, used by subscriptions. */
+        _triggerEventUpdate(eventId: EventId, events: DecodedEventData<any>[]) {
+            const eventName = eventToId[eventId];
+            if (eventName === undefined) {
+                logger.warn("Unknown event id", eventId);
+                return;
+            }
+            events.forEach(event => (events as any)[eventName].update(event));
         },
     };
 

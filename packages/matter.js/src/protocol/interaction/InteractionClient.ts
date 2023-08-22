@@ -37,7 +37,7 @@ import {
     StatusResponseError,
 } from "./InteractionMessenger.js";
 import { StatusCode, TlvAttributeReport, TlvEventFilter, TlvEventReport } from "./InteractionProtocol.js";
-import { attributePathToId, INTERACTION_PROTOCOL_ID } from "./InteractionServer.js";
+import { attributePathToId, clusterPathToId, INTERACTION_PROTOCOL_ID } from "./InteractionServer.js";
 
 const logger = Logger.get("InteractionClient");
 
@@ -81,7 +81,8 @@ export class SubscriptionClient implements ProtocolHandler<MatterController> {
 
 export class InteractionClient {
     private readonly subscriptionListeners = new Map<number, (dataReport: DataReport) => void>();
-    private readonly subscribedLocalValues = new Map<string, { value: any; version?: number }>();
+    private readonly subscribedLocalValues = new Map<string, any>();
+    private readonly subscribedClusterDataVersions = new Map<string, number>();
 
     constructor(private readonly exchangeProvider: ExchangeProvider) {
         // TODO: Right now we potentially add multiple handlers for the same protocol, We need to fix this
@@ -231,11 +232,10 @@ export class InteractionClient {
         const { endpointId, clusterId, attribute, alwaysRequestFromRemote = false, isFabricFiltered } = options;
         const { id: attributeId } = attribute;
         if (!alwaysRequestFromRemote) {
-            const localValue = this.subscribedLocalValues.get(
-                attributePathToId({ endpointId, clusterId, attributeId }),
-            );
-            if (localValue !== undefined) {
-                return localValue as { value: AttributeJsType<A>; version: number };
+            const value = this.subscribedLocalValues.get(attributePathToId({ endpointId, clusterId, attributeId }));
+            const version = this.subscribedClusterDataVersions.get(clusterPathToId({ endpointId, clusterId }));
+            if (value !== undefined && version !== undefined) {
+                return { value, version } as { value: AttributeJsType<A>; version: number };
             }
         }
 
@@ -458,10 +458,8 @@ export class InteractionClient {
                 if (value === undefined)
                     throw new MatterFlowError("Subscription result reporting undefined value not specified.");
 
-                this.subscribedLocalValues.set(attributePathToId({ endpointId, clusterId, attributeId }), {
-                    value,
-                    version,
-                });
+                this.subscribedLocalValues.set(attributePathToId({ endpointId, clusterId, attributeId }), value);
+                this.subscribedClusterDataVersions.set(clusterPathToId({ endpointId, clusterId }), version);
                 listener?.(value, version);
             };
             this.subscriptionListeners.set(subscriptionId, subscriptionListener);
@@ -546,7 +544,10 @@ export class InteractionClient {
         isFabricFiltered?: boolean;
         eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
         dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
-    }): Promise<void> {
+    }): Promise<{
+        attributeReports?: DecodedAttributeReportValue<any>[];
+        eventReports?: DecodedEventReportValue<any>[];
+    }> {
         const {
             minIntervalFloorSeconds,
             maxIntervalCeilingSeconds,
@@ -583,7 +584,10 @@ export class InteractionClient {
         eventListener?: (data: DecodedEventReportValue<any>) => void;
         eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
         dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
-    }): Promise<void> {
+    }): Promise<{
+        attributeReports?: DecodedAttributeReportValue<any>[];
+        eventReports?: DecodedEventReportValue<any>[];
+    }> {
         const {
             attributes: attributeRequests,
             events: eventRequests,
@@ -596,7 +600,10 @@ export class InteractionClient {
             eventFilters,
             dataVersionFilters,
         } = options;
-        return this.withMessenger<void>(async messenger => {
+        return this.withMessenger<{
+            attributeReports?: DecodedAttributeReportValue<any>[];
+            eventReports?: DecodedEventReportValue<any>[];
+        }>(async messenger => {
             logger.debug(
                 `Sending subscribe request: attributes: ${attributeRequests
                     .map(path => resolveAttributeName(path))
@@ -604,7 +611,7 @@ export class InteractionClient {
             );
             const {
                 report,
-                subscribeResponse: { subscriptionId },
+                subscribeResponse: { subscriptionId, maxInterval },
             } = await messenger.sendSubscribeRequest({
                 interactionModelRevision: 1,
                 attributeRequests,
@@ -619,8 +626,14 @@ export class InteractionClient {
                     dataVersion,
                 })),
             });
+            logger.info(
+                `Subscription successfully initialized with ID ${subscriptionId} and maxInterval ${maxInterval}s.`,
+            );
 
-            const subscriptionListener = (dataReport: DataReport) => {
+            const subscriptionListener = (dataReport: {
+                attributeReports?: DecodedAttributeReportValue<any>[];
+                eventReports?: DecodedEventReportValue<any>[];
+            }) => {
                 if (
                     (!Array.isArray(dataReport.attributeReports) || !dataReport.attributeReports.length) &&
                     (!Array.isArray(dataReport.eventReports) || !dataReport.eventReports.length)
@@ -631,30 +644,63 @@ export class InteractionClient {
                 const { attributeReports, eventReports } = dataReport;
 
                 if (attributeReports !== undefined) {
-                    const attributeValues = normalizeAndDecodeReadAttributeReport(attributeReports);
-
-                    attributeValues.forEach(data => {
+                    attributeReports.forEach(data => {
                         const {
                             path: { endpointId, clusterId, attributeId },
                             value,
                             version,
                         } = data;
+                        logger.debug(
+                            `Received attribute update: ${resolveAttributeName({
+                                endpointId,
+                                clusterId,
+                                attributeId,
+                            })} = ${Logger.toJSON(value)} (version=${version})`,
+                        );
                         if (value === undefined) throw new MatterFlowError("Received empty subscription result value.");
-                        this.subscribedLocalValues.set(attributePathToId({ endpointId, clusterId, attributeId }), {
+                        this.subscribedLocalValues.set(
+                            attributePathToId({ endpointId, clusterId, attributeId }),
                             value,
-                            version,
-                        });
+                        );
+                        this.subscribedClusterDataVersions.set(clusterPathToId({ endpointId, clusterId }), version);
                         attributeListener?.(data);
                     });
                 }
 
                 if (eventReports !== undefined) {
-                    const eventValues = normalizeAndDecodeReadEventReport(eventReports);
-                    eventValues.forEach(data => eventListener?.(data));
+                    eventReports.forEach(data => {
+                        logger.debug(
+                            `Received event update: ${resolveEventName(data.path)}: ${Logger.toJSON(data.events)}`,
+                        );
+                        eventListener?.(data);
+                    });
                 }
             };
-            this.subscriptionListeners.set(subscriptionId, subscriptionListener);
-            subscriptionListener(report);
+            this.subscriptionListeners.set(subscriptionId, dataReport => {
+                subscriptionListener({
+                    attributeReports:
+                        dataReport.attributeReports !== undefined
+                            ? normalizeAndDecodeReadAttributeReport(dataReport.attributeReports)
+                            : undefined,
+                    eventReports:
+                        dataReport.eventReports !== undefined
+                            ? normalizeAndDecodeReadEventReport(dataReport.eventReports)
+                            : undefined,
+                });
+            });
+
+            const seedReport = {
+                attributeReports:
+                    report.attributeReports !== undefined
+                        ? normalizeAndDecodeReadAttributeReport(report.attributeReports)
+                        : undefined,
+                eventReports:
+                    report.eventReports !== undefined
+                        ? normalizeAndDecodeReadEventReport(report.eventReports)
+                        : undefined,
+            };
+            subscriptionListener(seedReport);
+            return seedReport;
         });
     }
 

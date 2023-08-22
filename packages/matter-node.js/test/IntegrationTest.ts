@@ -99,6 +99,7 @@ describe("Integration Test", () => {
                 regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Indoor,
                 regulatoryCountryCode: "DE",
             },
+            subscribeAllAttributes: true,
         });
         matterClient.addCommissioningController(commissioningController);
 
@@ -482,6 +483,21 @@ describe("Integration Test", () => {
 
             await basicInfoCluster.attributes.nodeLabel.set("testLabel");
 
+            // Local value because not yet updated from subscription
+            assert.equal(await basicInfoCluster.attributes.nodeLabel.get(), "345678");
+            // Request remotely
+            assert.equal(await basicInfoCluster.attributes.nodeLabel.get(true), "testLabel");
+
+            // Await initial Data
+            const { promise, resolver } = await getPromiseResolver<string>();
+            const callback = (value: string) => resolver(value);
+
+            basicInfoCluster.attributes.nodeLabel.addListener(callback);
+
+            await fakeTime.advanceTime(60);
+            await promise;
+
+            // Local value because not yet updated from subscription
             assert.equal(await basicInfoCluster.attributes.nodeLabel.get(), "testLabel");
         });
 
@@ -517,8 +533,8 @@ describe("Integration Test", () => {
 
             const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInfoCluster);
-            assert.equal(await basicInfoCluster.attributes.nodeLabel.get(), "testLabel2");
-            assert.equal(await basicInfoCluster.getLocationAttribute(), "GB");
+            assert.equal(await basicInfoCluster.attributes.nodeLabel.get(true), "testLabel2");
+            assert.equal(await basicInfoCluster.getLocationAttribute(true), "GB");
         });
 
         it("write multiple attributes with partial errors", async () => {
@@ -544,8 +560,8 @@ describe("Integration Test", () => {
             const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInfoCluster);
 
-            assert.equal(await basicInfoCluster.attributes.nodeLabel.get(), "testLabel3");
-            assert.equal(await basicInfoCluster.attributes.location.get(), "GB");
+            assert.equal(await basicInfoCluster.attributes.nodeLabel.get(true), "testLabel3");
+            assert.equal(await basicInfoCluster.attributes.location.get(true), "GB");
         });
     });
 
@@ -560,12 +576,7 @@ describe("Integration Test", () => {
     });
 
     describe("subscriptions", () => {
-        it("subscription of one attribute sends updates when the value changes", async () => {
-            const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
-            assert.ok(onoffEndpoint);
-            const onOffClient = onoffEndpoint.getClusterClient(OnOffCluster);
-            assert.ok(onOffClient);
-
+        it("additional subscription of one attribute sends updates when the value changes", async () => {
             assert.ok(onOffLightDeviceServer);
             const startTime = Time.nowMs();
 
@@ -576,9 +587,14 @@ describe("Integration Test", () => {
             }>();
             let callback = (value: boolean) => firstResolver({ value, time: Time.nowMs() });
 
-            //onOffClient.attributes.onOff.addValueSetListener(value => callback(value));
-            //await onOffClient.attributes.onOff.subscribe(0, 5);
-            await onOffClient.subscribeOnOffAttribute(value => callback(value), 0, 5);
+            await commissioningController.getInteractionClient().subscribeAttribute({
+                endpointId: EndpointNumber(1),
+                clusterId: OnOffCluster.id,
+                attribute: OnOffCluster.attributes.onOff,
+                minIntervalFloorSeconds: 0,
+                maxIntervalCeilingSeconds: 5,
+                listener: value => callback(value),
+            });
 
             await fakeTime.yield();
             const firstReport = await firstPromise;
@@ -617,7 +633,7 @@ describe("Integration Test", () => {
             assert.deepEqual(lastReport, { value: false, time: startTime + (60 * 60 + 4) * 1000 + 200 });
         });
 
-        it("subscription of one attribute with known data version only sends updates when the value changes", async () => {
+        it("another additional subscription of one attribute with known data version only sends updates when the value changes", async () => {
             const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
             assert.ok(onoffEndpoint);
             const onOffClient = onoffEndpoint.getClusterClient(OnOffCluster);
@@ -655,7 +671,7 @@ describe("Integration Test", () => {
             assert.deepEqual(pushedUpdates, [{ value: true, time: startTime + 2 * 1000 + 100 }]);
         });
 
-        it("subscribe an attribute with getter that needs endpoint", async () => {
+        it("one more subscribe an attribute with getter that needs endpoint", async () => {
             const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
             assert.ok(onoffEndpoint);
             const scenesClient = onoffEndpoint.getClusterClient(Scenes.Cluster);
