@@ -83,8 +83,12 @@ export class UnsecureSession<T> implements Session<T> {
         return undefined;
     }
 
-    destroy() {
+    async destroy() {
         throw new InternalError("The unsecure session should never be destroyed.");
+    }
+
+    async end() {
+        throw new InternalError("The unsecure session should never be closed.");
     }
 
     getAssociatedFabric(): Fabric {

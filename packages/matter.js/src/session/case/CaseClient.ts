@@ -173,7 +173,7 @@ export class CaseClient {
             resumptionRecord = { fabric, peerNodeId, sharedSecret, resumptionId: peerResumptionId };
         }
 
-        messenger.close();
+        await messenger.close();
         client.saveResumptionRecord(resumptionRecord);
 
         return secureSession;

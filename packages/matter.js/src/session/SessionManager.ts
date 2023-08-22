@@ -63,7 +63,7 @@ export class SessionManager<ContextT> {
         isResumption: boolean,
         idleRetransTimeoutMs?: number,
         activeRetransTimeoutMs?: number,
-        closeCallback?: () => void,
+        closeCallback?: () => Promise<void>,
     ) {
         const session = await SecureSession.create(
             this.context,
@@ -75,9 +75,9 @@ export class SessionManager<ContextT> {
             salt,
             isInitiator,
             isResumption,
-            () => {
-                this.removeSession(sessionId, peerNodeId);
-                closeCallback?.();
+            async () => {
+                this.sessions.delete(sessionId);
+                await closeCallback?.();
             },
             idleRetransTimeoutMs,
             activeRetransTimeoutMs,
@@ -169,16 +169,28 @@ export class SessionManager<ContextT> {
     }
 
     getActiveSessionInformation() {
-        return [...this.sessions.values()].map(session => ({
-            name: session.name,
-            nodeId: session.getNodeId(),
-            peerNodeId: session.getPeerNodeId(),
-            fabric: session instanceof SecureSession ? session.getFabric()?.getExternalInformation() : undefined,
-            isPeerActive: session.isPeerActive(),
-            secure: session.isSecure(),
-            lastInteractionTimestamp: session instanceof SecureSession ? session.timestamp : undefined,
-            lastActiveTimestamp: session instanceof SecureSession ? session.activeTimestamp : undefined,
-            numberOfActiveSubscriptions: session instanceof SecureSession ? session.numberOfActiveSubscriptions : 0,
-        }));
+        return [...this.sessions.values()]
+            .filter(session => session.name !== "unsecure")
+            .map(session => ({
+                name: session.name,
+                nodeId: session.getNodeId(),
+                peerNodeId: session.getPeerNodeId(),
+                fabric: session instanceof SecureSession ? session.getFabric()?.getExternalInformation() : undefined,
+                isPeerActive: session.isPeerActive(),
+                secure: session.isSecure(),
+                lastInteractionTimestamp: session instanceof SecureSession ? session.timestamp : undefined,
+                lastActiveTimestamp: session instanceof SecureSession ? session.activeTimestamp : undefined,
+                numberOfActiveSubscriptions: session instanceof SecureSession ? session.numberOfActiveSubscriptions : 0,
+            }));
+    }
+
+    async close() {
+        this.storeResumptionRecords();
+        for (const sessionId of this.sessions.keys()) {
+            if (sessionId === UNICAST_UNSECURE_SESSION_ID) continue;
+            const session = this.sessions.get(sessionId);
+            await session?.end();
+            this.sessions.delete(sessionId);
+        }
     }
 }

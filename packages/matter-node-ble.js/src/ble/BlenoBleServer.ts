@@ -19,6 +19,7 @@ import { Channel, InternalError } from "@project-chip/matter.js/common";
 import { Logger } from "@project-chip/matter.js/log";
 import { Time } from "@project-chip/matter.js/time";
 import { ByteArray, getPromiseResolver } from "@project-chip/matter.js/util";
+import { BleOptions } from "./BleNode";
 
 const logger = Logger.get("BlenoBleServer");
 
@@ -129,8 +130,11 @@ export class BlenoBleServer implements Channel<ByteArray> {
 
     private readonly matterBleService = new BtpService(this);
 
-    constructor() {
+    constructor(options?: BleOptions) {
         // Bleno gets automatically initialized on import already!
+        if (options?.hciId !== undefined) {
+            process.env.BLENO_HCI_DEVICE_ID = options?.hciId.toString();
+        }
 
         // Write Bleno into this class
         Bleno.on("stateChange", state => {

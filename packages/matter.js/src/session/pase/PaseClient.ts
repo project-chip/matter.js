@@ -61,7 +61,7 @@ export class PaseClient {
             true,
             false,
         );
-        messenger.close();
+        await messenger.close();
         logger.info(`Pase client: Paired successfully with ${messenger.getChannelName()}`);
 
         return secureSession;

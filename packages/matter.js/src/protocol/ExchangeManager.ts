@@ -89,7 +89,9 @@ export class ExchangeManager<ContextT> {
             await netListener.close();
         }
         this.transportListeners.length = 0;
-        [...this.exchanges.values()].forEach(exchange => exchange.close());
+        for (const exchange of this.exchanges.values()) {
+            await exchange.destroy();
+        }
         this.exchanges.clear();
     }
 

@@ -61,7 +61,7 @@ import { SubscriptionHandler } from "./SubscriptionHandler.js";
 
 export const INTERACTION_PROTOCOL_ID = 0x0001;
 
-const logger = Logger.get("InteractionProtocol");
+const logger = Logger.get("InteractionServer");
 
 export interface CommandPath {
     endpointId: EndpointNumber;
@@ -543,8 +543,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         }
 
         if (!keepSubscriptions) {
-            logger.debug(`Clear subscriptions for Session ${session.name}`);
-            await session.clearSubscriptions();
+            logger.debug(`Clear subscriptions for Session ${session.name} because keepSubscriptions=false`);
+            await session.clearSubscriptions(true);
         }
 
         const maxInterval = subscriptionHandler.getMaxInterval();

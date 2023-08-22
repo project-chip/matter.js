@@ -96,7 +96,7 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
             mrpParameters?.activeRetransTimeoutMs,
         );
         await messenger.sendSuccess();
-        messenger.close();
+        await messenger.close();
         logger.info(`Pase server: session ${sessionId} created with ${messenger.getChannelName()}`);
     }
 }

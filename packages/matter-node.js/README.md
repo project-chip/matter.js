@@ -70,4 +70,10 @@ To have Typescript and your IDE know all the relevant exported functionality you
 
 ## Testing
 
-* `npm run test`: Run all tests
+* `npm run test`: Run all code-side tests
+
+## Chip-Tool Certification Testing
+To make sure that matter.js is compliant to the Matter specifications we implemented automated testing options by using the test suites included in chip-tool. These tests are not part of the standard test run describe above because they need prerequisites and also a lot of resources.
+
+Please refer to the  [test-chip](./test-chip/README.md) folder for prerequisites and details.
+

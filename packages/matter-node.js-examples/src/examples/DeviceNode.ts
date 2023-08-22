@@ -68,7 +68,12 @@ switch (getParameter("logformat")) {
 
 if (hasParameter("ble")) {
     // Initialize Ble
-    Ble.get = singleton(() => new BleNode());
+    Ble.get = singleton(
+        () =>
+            new BleNode({
+                hciId: getIntParameter("ble-hci-id"),
+            }),
+    );
 }
 
 const storageLocation = getParameter("store") ?? ".device-node";

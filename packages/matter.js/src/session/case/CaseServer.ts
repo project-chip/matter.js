@@ -119,7 +119,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             // Wait for success on the peer side
             await messenger.waitForSuccess();
 
-            messenger.close();
+            await messenger.close();
             server.saveResumptionRecord(resumptionRecord);
         } else {
             // Generate sigma 2
@@ -204,7 +204,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
 
             resumptionRecord = { peerNodeId, fabric, sharedSecret, resumptionId };
 
-            messenger.close();
+            await messenger.close();
             server.saveResumptionRecord(resumptionRecord);
         }
     }

@@ -117,6 +117,8 @@ export class MatterServer {
             await node.close();
         }
         await this.mdnsBroadcaster?.close();
-        this.mdnsScanner?.close();
+        this.mdnsBroadcaster = undefined;
+        await this.mdnsScanner?.close();
+        this.mdnsScanner = undefined;
     }
 }

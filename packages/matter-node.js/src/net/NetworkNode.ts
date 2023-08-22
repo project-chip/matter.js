@@ -37,6 +37,10 @@ export class NetworkNode extends Network {
         5 * 60 * 1000 /* 5mn */,
     );
 
+    override async close() {
+        await NetworkNode.netInterfaces.close();
+    }
+
     private static getNetInterfaceForIpInternal(ip: string) {
         if (ip.includes("%")) {
             // IPv6 address with scope

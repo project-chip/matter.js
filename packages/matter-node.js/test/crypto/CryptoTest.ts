@@ -61,13 +61,7 @@ describe("Crypto", () => {
             cryptoNode.verify(PublicKey(PUBLIC_KEY), ENCRYPTED_DATA, result);
         });
 
-        it("signs data with generated private key", () => {
-            const ecdh = crypto.createECDH("prime256v1");
-            ecdh.generateKeys();
-            const result = cryptoNode.sign(PrivateKey(ecdh.getPrivateKey()), ENCRYPTED_DATA);
-
-            cryptoNode.verify(PublicKey(ecdh.getPublicKey()), ENCRYPTED_DATA, result);
-        });
+        // See createKeyPair test for further tests with private key
     });
 
     describe("sign & verify with SEC1 private and SPKI public keys", () => {
@@ -91,5 +85,18 @@ describe("Crypto", () => {
 
             cryptoNode.verify(key, ENCRYPTED_DATA, cryptoNode.sign(key, ENCRYPTED_DATA));
         });
+
+        // Too slow to leave enabled by default but useful for confirming key variance doesn't cause failure
+        // it("creates a large volume of private keys", () => {
+        //     for (let i = 0; i < 100000; i++) {
+        //         if (!(i % 100)) {
+        //             console.log(`Key iteration ${i}`);
+        //         }
+        //         const key = cryptoNode.createKeyPair();
+
+        //         const signature = cryptoNode.sign(key, ENCRYPTED_DATA);
+        //         cryptoNode.verify(key, ENCRYPTED_DATA, signature);
+        //     }
+        // });
     });
 });

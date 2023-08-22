@@ -50,4 +50,11 @@ export class ChannelManager {
         }
         return result;
     }
+
+    async close() {
+        for (const channel of this.channels.values()) {
+            await channel.close();
+        }
+        this.channels.clear();
+    }
 }

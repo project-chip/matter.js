@@ -706,7 +706,7 @@ describe("InteractionProtocol", () => {
                 ByteArray.fromHex("00"),
                 false,
                 false,
-                () => {
+                async () => {
                     /* nothing */
                 },
                 1000,
@@ -822,7 +822,7 @@ describe("InteractionProtocol", () => {
                 ByteArray.fromHex("00"),
                 false,
                 false,
-                () => {
+                async () => {
                     /* nothing */
                 },
                 1000,

@@ -17,4 +17,8 @@ export abstract class Network {
     abstract getNetInterfaces(): string[];
     abstract getIpMac(netInterface: string): { mac: string; ips: string[] } | undefined;
     abstract createUdpChannel(options: UdpChannelOptions): Promise<UdpChannel>;
+
+    async close() {
+        // Nothing to do
+    }
 }
