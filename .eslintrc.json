@@ -25,6 +25,7 @@
     "ignorePatterns": [
         "*/links/**",
         "packages/*/dist/**/*",
+        "packages/*/build/**/*",
         "**/jest.config.ts",
         "**/jest.chip.config.ts"
     ],

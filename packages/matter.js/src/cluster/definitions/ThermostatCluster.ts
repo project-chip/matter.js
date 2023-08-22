@@ -1349,7 +1349,13 @@ export namespace Thermostat {
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.8
              */
-            setWeeklySchedule: Command(0x1, TlvSetWeeklyScheduleRequest, 0x1, TlvNoResponse),
+            setWeeklySchedule: Command(
+                0x1,
+                TlvSetWeeklyScheduleRequest,
+                0x1,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Manage }
+            ),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.8
@@ -1359,7 +1365,7 @@ export namespace Thermostat {
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.8
              */
-            clearWeeklySchedule: Command(0x3, TlvNoArguments, 0x3, TlvNoResponse)
+            clearWeeklySchedule: Command(0x3, TlvNoArguments, 0x3, TlvNoResponse, { invokeAcl: AccessLevel.Manage })
         }
     });
 

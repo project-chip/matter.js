@@ -12,6 +12,7 @@ import {
     OptionalAttribute,
     Command,
     TlvNoResponse,
+    AccessLevel,
     OptionalEvent,
     EventPriority,
     Event
@@ -547,7 +548,13 @@ export namespace GeneralDiagnostics {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.11.7.1
              */
-            testEventTrigger: Command(0x0, TlvTestEventTriggerRequest, 0x0, TlvNoResponse)
+            testEventTrigger: Command(
+                0x0,
+                TlvTestEventTriggerRequest,
+                0x0,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Manage }
+            )
         },
 
         events: {

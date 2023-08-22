@@ -413,7 +413,12 @@ export namespace AccessControl {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 9.10.7.1
              */
-            accessControlEntryChanged: Event(0x0, EventPriority.Info, TlvAccessControlEntryChangedEvent),
+            accessControlEntryChanged: Event(
+                0x0,
+                EventPriority.Info,
+                TlvAccessControlEntryChangedEvent,
+                { readAcl: AccessLevel.Administer }
+            ),
 
             /**
              * The cluster shall send AccessControlExtensionChanged events whenever its extension attribute data is
@@ -445,7 +450,12 @@ export namespace AccessControl {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 9.10.7.2
              */
-            accessControlExtensionChanged: Event(0x1, EventPriority.Info, TlvAccessControlExtensionChangedEvent)
+            accessControlExtensionChanged: Event(
+                0x1,
+                EventPriority.Info,
+                TlvAccessControlExtensionChangedEvent,
+                { readAcl: AccessLevel.Administer }
+            )
         }
     });
 }

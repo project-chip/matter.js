@@ -17,7 +17,7 @@ import {
     AsConditional
 } from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { Attribute, Command, TlvNoResponse, Cluster as CreateCluster } from "../../cluster/Cluster.js";
+import { Attribute, Command, TlvNoResponse, AccessLevel, Cluster as CreateCluster } from "../../cluster/Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvUInt8, TlvEnum } from "../../tlv/TlvNumber.js";
@@ -191,7 +191,7 @@ export namespace MediaInput {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.4.4
              */
-            renameInput: Command(0x3, TlvRenameInputRequest, 0x3, TlvNoResponse)
+            renameInput: Command(0x3, TlvRenameInputRequest, 0x3, TlvNoResponse, { invokeAcl: AccessLevel.Manage })
         }
     });
 

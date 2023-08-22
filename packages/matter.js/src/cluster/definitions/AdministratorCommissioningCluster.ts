@@ -17,7 +17,7 @@ import {
     AsConditional
 } from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { Attribute, Command, TlvNoResponse, Cluster as CreateCluster } from "../../cluster/Cluster.js";
+import { Attribute, Command, TlvNoResponse, AccessLevel, Cluster as CreateCluster } from "../../cluster/Cluster.js";
 import { TlvEnum, TlvUInt16, TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
@@ -228,7 +228,13 @@ export namespace AdministratorCommissioning {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.18.8.1
              */
-            openCommissioningWindow: Command(0x0, TlvOpenCommissioningWindowRequest, 0x0, TlvNoResponse),
+            openCommissioningWindow: Command(
+                0x0,
+                TlvOpenCommissioningWindowRequest,
+                0x0,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer, timed: true }
+            ),
 
             /**
              * This command is used by a current Administrator to instruct a Node to revoke any active Open
@@ -242,7 +248,13 @@ export namespace AdministratorCommissioning {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.18.8.3
              */
-            revokeCommissioning: Command(0x2, TlvNoArguments, 0x2, TlvNoResponse)
+            revokeCommissioning: Command(
+                0x2,
+                TlvNoArguments,
+                0x2,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer, timed: true }
+            )
         }
     });
 
@@ -283,7 +295,13 @@ export namespace AdministratorCommissioning {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.18.8.2
              */
-            openBasicCommissioningWindow: Command(0x1, TlvOpenBasicCommissioningWindowRequest, 0x1, TlvNoResponse)
+            openBasicCommissioningWindow: Command(
+                0x1,
+                TlvOpenBasicCommissioningWindowRequest,
+                0x1,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer, timed: true }
+            )
         }
     });
 

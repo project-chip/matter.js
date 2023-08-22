@@ -375,7 +375,7 @@ export namespace GroupKeyManagement {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.2.8.1
              */
-            keySetWrite: Command(0x0, TlvKeySetWriteRequest, 0x0, TlvNoResponse),
+            keySetWrite: Command(0x0, TlvKeySetWriteRequest, 0x0, TlvNoResponse, { invokeAcl: AccessLevel.Administer }),
 
             /**
              * This command is used by Administrators to read the state of a given Group Key Set.
@@ -391,7 +391,13 @@ export namespace GroupKeyManagement {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.2.8.2
              */
-            keySetRead: Command(0x1, TlvKeySetReadRequest, 0x2, TlvKeySetReadResponse),
+            keySetRead: Command(
+                0x1,
+                TlvKeySetReadRequest,
+                0x2,
+                TlvKeySetReadResponse,
+                { invokeAcl: AccessLevel.Administer }
+            ),
 
             /**
              * This command is used by Administrators to remove all state of a given Group Key Set.
@@ -415,7 +421,13 @@ export namespace GroupKeyManagement {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.2.8.4
              */
-            keySetRemove: Command(0x3, TlvKeySetRemoveRequest, 0x3, TlvNoResponse),
+            keySetRemove: Command(
+                0x3,
+                TlvKeySetRemoveRequest,
+                0x3,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer }
+            ),
 
             /**
              * This command is used by Administrators to query a list of all Group Key Sets associated with the
@@ -429,7 +441,13 @@ export namespace GroupKeyManagement {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.2.8.5
              */
-            keySetReadAllIndices: Command(0x4, TlvNoArguments, 0x5, TlvKeySetReadAllIndicesResponse)
+            keySetReadAllIndices: Command(
+                0x4,
+                TlvNoArguments,
+                0x5,
+                TlvKeySetReadAllIndicesResponse,
+                { invokeAcl: AccessLevel.Administer }
+            )
         }
     });
 

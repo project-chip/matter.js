@@ -22,6 +22,7 @@ import {
     Attribute,
     Command,
     TlvNoResponse,
+    AccessLevel,
     Cluster as CreateCluster
 } from "../../cluster/Cluster.js";
 import { TlvEnum, TlvUInt64 } from "../../tlv/TlvNumber.js";
@@ -246,7 +247,7 @@ export namespace EthernetNetworkDiagnostics {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.15.7.1
              */
-            resetCounts: Command(0x0, TlvNoArguments, 0x0, TlvNoResponse)
+            resetCounts: Command(0x0, TlvNoArguments, 0x0, TlvNoResponse, { invokeAcl: AccessLevel.Manage })
         }
     });
 

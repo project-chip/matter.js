@@ -6,7 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Cluster as CreateCluster, Command, TlvNoResponse } from "../../cluster/Cluster.js";
+import { Cluster as CreateCluster, Command, TlvNoResponse, AccessLevel } from "../../cluster/Cluster.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvEnum, TlvUInt32, TlvUInt8 } from "../../tlv/TlvNumber.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
@@ -50,9 +50,17 @@ export namespace FaultInjection {
         id: 0xfff1fc06,
         name: "FaultInjection",
         revision: 1,
+
         commands: {
-            failAtFault: Command(0x0, TlvFailAtFaultRequest, 0x0, TlvNoResponse),
-            failRandomlyAtFault: Command(0x1, TlvFailRandomlyAtFaultRequest, 0x1, TlvNoResponse)
+            failAtFault: Command(0x0, TlvFailAtFaultRequest, 0x0, TlvNoResponse, { invokeAcl: AccessLevel.Manage }),
+
+            failRandomlyAtFault: Command(
+                0x1,
+                TlvFailRandomlyAtFaultRequest,
+                0x1,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Manage }
+            )
         }
     });
 }

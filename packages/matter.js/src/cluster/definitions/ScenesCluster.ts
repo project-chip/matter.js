@@ -18,6 +18,7 @@ import {
     Attribute,
     OptionalAttribute,
     Command,
+    AccessLevel,
     TlvNoResponse,
     OptionalCommand,
     Cluster as CreateCluster
@@ -419,7 +420,7 @@ export namespace Scenes {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.2
              */
-            addScene: Command(0x0, TlvAddSceneRequest, 0x0, TlvAddSceneResponse),
+            addScene: Command(0x0, TlvAddSceneRequest, 0x0, TlvAddSceneResponse, { invokeAcl: AccessLevel.Manage }),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.3
@@ -429,17 +430,35 @@ export namespace Scenes {
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.4
              */
-            removeScene: Command(0x2, TlvRemoveSceneRequest, 0x2, TlvRemoveSceneResponse),
+            removeScene: Command(
+                0x2,
+                TlvRemoveSceneRequest,
+                0x2,
+                TlvRemoveSceneResponse,
+                { invokeAcl: AccessLevel.Manage }
+            ),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.5
              */
-            removeAllScenes: Command(0x3, TlvRemoveAllScenesRequest, 0x3, TlvRemoveAllScenesResponse),
+            removeAllScenes: Command(
+                0x3,
+                TlvRemoveAllScenesRequest,
+                0x3,
+                TlvRemoveAllScenesResponse,
+                { invokeAcl: AccessLevel.Manage }
+            ),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.6
              */
-            storeScene: Command(0x4, TlvStoreSceneRequest, 0x4, TlvStoreSceneResponse),
+            storeScene: Command(
+                0x4,
+                TlvStoreSceneRequest,
+                0x4,
+                TlvStoreSceneResponse,
+                { invokeAcl: AccessLevel.Manage }
+            ),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.7
@@ -465,7 +484,13 @@ export namespace Scenes {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.9
              */
-            enhancedAddScene: OptionalCommand(0x40, TlvAddSceneRequest, 0x40, TlvAddSceneResponse),
+            enhancedAddScene: OptionalCommand(
+                0x40,
+                TlvAddSceneRequest,
+                0x40,
+                TlvAddSceneResponse,
+                { invokeAcl: AccessLevel.Manage }
+            ),
 
             /**
              * The EnhancedViewScene command allows a scene to be retrieved using a finer scene transition time than
@@ -483,7 +508,13 @@ export namespace Scenes {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.11
              */
-            copyScene: OptionalCommand(0x42, TlvCopySceneRequest, 0x42, TlvCopySceneResponse)
+            copyScene: OptionalCommand(
+                0x42,
+                TlvCopySceneRequest,
+                0x42,
+                TlvCopySceneResponse,
+                { invokeAcl: AccessLevel.Manage }
+            )
         }
     });
 

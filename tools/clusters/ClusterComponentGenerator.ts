@@ -111,6 +111,10 @@ export class ClusterComponentGenerator {
                 options.atom("writeAcl", this.mapPrivilege(access.writePriv));
             }
 
+            if (access.timed) {
+                options.atom("timed", true);
+            }
+
             if (!options.length) {
                 options.remove();
             }
@@ -149,6 +153,20 @@ export class ClusterComponentGenerator {
                 block.atom(hex(model.id));
                 block.atom("TlvNoResponse");
             }
+
+            const options = block.expressions("{", "}");
+            const access = model.effectiveAccess;
+            if (access.writePriv && access.writePriv !== Access.Privilege.Operate) {
+                options.atom("invokeAcl", this.mapPrivilege(access.writePriv));
+            }
+
+            if (access.timed) {
+                options.atom("timed", true);
+            }
+
+            if (!options.length) {
+                options.remove();
+            }
         });
 
         this.defineTypedElements(EventModel, elements, block, (model, add) => {
@@ -167,6 +185,16 @@ export class ClusterComponentGenerator {
             block.atom(hex(model.id));
             block.atom(`EventPriority.${priority}`);
             block.atom(this.tlv.reference(model));
+
+            const options = block.expressions("{", "}");
+            const access = model.effectiveAccess;
+            if (access.readPriv && access.readPriv !== Access.Privilege.View) {
+                options.atom("readAcl", this.mapPrivilege(access.readPriv));
+            }
+
+            if (!options.length) {
+                options.remove();
+            }
         });
 
         return block;
