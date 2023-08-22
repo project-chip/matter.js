@@ -236,6 +236,16 @@ const WRITE_REQUEST: WriteRequest = {
             data: TlvString.encodeTlv("test"),
             dataVersion: 0,
         },
+        {
+            path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(6) },
+            data: TlvString.encodeTlv("AB"),
+            dataVersion: 10,
+        },
+        {
+            path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(3) },
+            data: TlvString.encodeTlv("test"),
+            dataVersion: 0,
+        },
     ],
     moreChunkedMessages: false,
 };
@@ -258,6 +268,14 @@ const WRITE_RESPONSE: WriteResponse = {
         {
             path: { attributeId: AttributeId(5), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
             status: { status: 0 },
+        },
+        {
+            path: { attributeId: AttributeId(6), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
+            status: { status: 146 },
+        },
+        {
+            path: { attributeId: AttributeId(3), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
+            status: { status: 136 },
         },
     ],
 };

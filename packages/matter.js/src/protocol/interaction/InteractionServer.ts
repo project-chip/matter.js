@@ -354,7 +354,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                         logger.debug(
                             `Write from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(
                                 path,
-                            )}: unsupported path: Status=${statusCode}`,
+                            )} not allowed: Status=${statusCode}`,
                         );
                         return [{ path, statusCode }];
                     }
