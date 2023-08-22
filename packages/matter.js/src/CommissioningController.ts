@@ -78,7 +78,7 @@ export class CommissioningController extends MatterNode {
     private mdnsScanner?: MdnsScanner;
 
     private controllerInstance?: MatterController;
-    private defaultInteractionClient?: InteractionClient;
+    private interactionClient?: InteractionClient;
 
     private nodeId?: NodeId;
     private endpoints = new Map<EndpointNumber, Endpoint>();
@@ -238,9 +238,9 @@ export class CommissioningController extends MatterNode {
      * @private
      */
     private async initializeEndpointStructure() {
-        this.defaultInteractionClient = await this.createInteractionClient();
+        this.interactionClient = await this.createInteractionClient();
 
-        const allClusterAttributes = await this.defaultInteractionClient.getAllAttributes();
+        const allClusterAttributes = await this.interactionClient.getAllAttributes();
         const allData = structureReadAttributeDataToClusterObject(allClusterAttributes);
 
         const partLists = new Map<EndpointNumber, EndpointNumber[]>();
@@ -326,9 +326,6 @@ export class CommissioningController extends MatterNode {
      * @private
      */
     private createDevice(endpointId: EndpointNumber, data: { [key: ClusterId]: { [key: string]: any } }) {
-        if (this.defaultInteractionClient === undefined) {
-            throw new ImplementationError("Device do not connected!");
-        }
         const descriptorData = data[DescriptorCluster.id] as AttributeServerValues<typeof DescriptorCluster.attributes>;
 
         const deviceTypes = descriptorData.deviceTypeList.flatMap(({ deviceType, revision }) => {
@@ -356,7 +353,7 @@ export class CommissioningController extends MatterNode {
         // Add ClusterClients for all server clusters of the device
         for (const clusterId of descriptorData.serverList) {
             const cluster = getClusterById(clusterId);
-            const clusterClient = ClusterClient(cluster, endpointId, this.defaultInteractionClient, data[clusterId]);
+            const clusterClient = ClusterClient(cluster, endpointId, this.getInteractionClient(), data[clusterId]);
             endpointClusters.push(clusterClient);
         }
 
@@ -444,7 +441,7 @@ export class CommissioningController extends MatterNode {
     async close() {
         await this.controllerInstance?.close();
         this.controllerInstance = undefined;
-        this.defaultInteractionClient = undefined;
+        this.interactionClient = undefined;
     }
 
     getPort() {
@@ -461,10 +458,10 @@ export class CommissioningController extends MatterNode {
         return this.controllerInstance?.getActiveSessionInformation() ?? [];
     }
 
-    get interactionClient() {
-        if (this.defaultInteractionClient === undefined) {
-            throw new ImplementationError("Device do not connected!");
+    getInteractionClient() {
+        if (this.interactionClient === undefined) {
+            throw new ImplementationError("Device it not yet connected!");
         }
-        return this.defaultInteractionClient;
+        return this.interactionClient;
     }
 }

@@ -291,14 +291,14 @@ describe("Integration Test", () => {
         });
 
         it("read all attributes and events", async () => {
-            const response = await commissioningController.interactionClient.getAllAttributesAndEvents();
+            const response = await commissioningController.getInteractionClient().getAllAttributesAndEvents();
             assert.ok(response);
             assert.ok(response.attributeReports.length);
             assert.ok(response.eventReports.length);
         });
 
         it("read multiple attributes", async () => {
-            const response = await commissioningController.interactionClient.getMultipleAttributes({
+            const response = await commissioningController.getInteractionClient().getMultipleAttributes({
                 attributes: [
                     { clusterId: Descriptor.Cluster.id }, // * /DescriptorCluster/ *
                     { endpointId: EndpointNumber(0), clusterId: BasicInformation.Cluster.id }, // 0/BasicInformationCluster/ *
@@ -415,7 +415,7 @@ describe("Integration Test", () => {
         });
 
         it("read events", async () => {
-            const response = await commissioningController.interactionClient.getMultipleEvents({
+            const response = await commissioningController.getInteractionClient().getMultipleEvents({
                 events: [
                     { clusterId: BasicInformation.Cluster.id }, // * /BasicInformationCluster/ *
                     {
@@ -495,7 +495,7 @@ describe("Integration Test", () => {
         });
 
         it("write multiple attributes", async () => {
-            const client = commissioningController.interactionClient; // We can also use a new Interaction clint
+            const client = commissioningController.getInteractionClient(); // We can also use a new Interaction clint
 
             const response = await client.setMultipleAttributes([
                 {
@@ -522,7 +522,7 @@ describe("Integration Test", () => {
         });
 
         it("write multiple attributes with partial errors", async () => {
-            const response = await commissioningController.interactionClient.setMultipleAttributes([
+            const response = await commissioningController.getInteractionClient().setMultipleAttributes([
                 {
                     endpointId: EndpointNumber(0),
                     clusterId: BasicInformation.Cluster.id,

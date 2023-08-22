@@ -284,7 +284,10 @@ export type ClusterServerObj<A extends Attributes, E extends Events> = {
     ServerEventTriggers<E>;
 
 /** Strongly typed interface of a cluster server */
-export type ClusterServerObjInternal<A extends Attributes, C extends Commands, E extends Events> = ClusterServerObj<A, E> & {
+export type ClusterServerObjInternal<A extends Attributes, C extends Commands, E extends Events> = ClusterServerObj<
+    A,
+    E
+> & {
     /**
      * Cluster commands as array
      * @private
