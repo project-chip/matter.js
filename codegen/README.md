@@ -1,4 +1,4 @@
-# Matter.js Tooling
+# Matter.js Code Generation
 
 This collection of scripts supports code generation and analysis for the
 matter.js codebase.

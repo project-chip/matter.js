@@ -2,13 +2,14 @@
     "name": "matter.js-monorepo",
     "private": true,
     "workspaces": [
+        "tools",
         "packages/matter.js",
         "packages/matter-node.js",
         "packages/matter-node-ble.js",
         "packages/matter-node-shell.js",
         "packages/matter-node.js-examples",
-        "codegen",
-        "models"
+        "models",
+        "codegen"
     ],
     "scripts": {
         "prepare": "npm run build-clean",

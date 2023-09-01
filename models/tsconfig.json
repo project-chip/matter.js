@@ -1,15 +1,15 @@
 {
-  "extends": "../packages/matter.js/tsconfig.base.json",
-
   "compilerOptions": {
+    "target": "es2015",
+    "module": "node16",
     "outDir": "dist",
-    "rootDir": "src",
     "composite": true,
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
     "moduleResolution": "node16",
-    "tsBuildInfoFile": "dist/.tsbuildinfo"
+    "tsBuildInfoFile": "dist/.tsbuildinfo",
+    "types": []
   },
 
   "include": [ "src/**/*.ts" ]

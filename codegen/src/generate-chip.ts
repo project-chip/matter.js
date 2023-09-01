@@ -11,5 +11,7 @@ import { loadChip } from "./mom/chip/load-chip.js";
 import { generateIntermediateModel } from "./mom/common/generate-intermediate.js";
 import "./util/setup.js";
 
-const elements = await loadChip();
-generateIntermediateModel("chip", elements);
+export async function main() {
+    const elements = await loadChip();
+    generateIntermediateModel("chip", elements);
+}

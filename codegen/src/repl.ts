@@ -12,15 +12,17 @@ import repl from "repl";
 
 import * as model from "@project-chip/matter.js/model";
 
-(global as any).model = model;
-(global as any).matter = new model.MatterModel();
+export async function main() {
+    (global as any).model = model;
+    (global as any).matter = new model.MatterModel();
 
-const server = repl.start({ prompt: "matter.js > " });
+    const server = repl.start({ prompt: "matter.js > " });
 
-const historyPath = process.env.MATTER_REPL_HISTORY || join(homedir(), ".matter-repl-history");
-server.setupHistory(historyPath, error => {
-    if (error) {
-        console.error(error);
-        process.exit(1);
-    }
-});
+    const historyPath = process.env.MATTER_REPL_HISTORY || join(homedir(), ".matter-repl-history");
+    server.setupHistory(historyPath, error => {
+        if (error) {
+            console.error(error);
+            process.exit(1);
+        }
+    });
+}

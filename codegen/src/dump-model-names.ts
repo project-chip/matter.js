@@ -9,16 +9,18 @@
 
 import { Matter, MatterModel } from "@project-chip/matter.js/model";
 
-const names = {} as { [name: string]: number };
+export async function main() {
+    const names = {} as { [name: string]: number };
 
-new MatterModel(Matter).visit(model => {
-    if (names[model.name]) {
-        names[model.name]++;
-    } else {
-        names[model.name] = 1;
-    }
-});
+    new MatterModel(Matter).visit(model => {
+        if (names[model.name]) {
+            names[model.name]++;
+        } else {
+            names[model.name] = 1;
+        }
+    });
 
-Object.entries(names)
-    .sort((a, b) => a[0].toLocaleLowerCase().localeCompare(b[0].toLocaleLowerCase()))
-    .forEach(([name, count]) => console.log(name, count));
+    Object.entries(names)
+        .sort((a, b) => a[0].toLocaleLowerCase().localeCompare(b[0].toLocaleLowerCase()))
+        .forEach(([name, count]) => console.log(name, count));
+}

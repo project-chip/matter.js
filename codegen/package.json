@@ -5,16 +5,16 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "clean": "rm -rf .cache dist",
-    "build": "tsc",
-    "build-clean": "npm run clean && npm run build",
-    "console": "node --loader ts-node/esm src/repl.ts",
-    "generate-spec": "node --loader ts-node/esm src/generate-spec.ts",
-    "generate-chip": "node --loader ts-node/esm src/generate-chip.ts",
-    "generate-model": "node --loader ts-node/esm src/generate-model.ts",
-    "generate-clusters": "node --loader ts-node/esm src/generate-clusters.ts",
-    "dump-model-names": "node --loader ts-node/esm src/dump-model-names.ts",
-    "generate": "npm run src/generate-model && npm run src/generate-clusters"
+    "clean": "build clean",
+    "build": "build",
+    "build-clean": "build --clean",
+    "console": "build esm && node dist/esm/repl.ts",
+    "generate-spec": "build esm && node bin/generate-spec.js",
+    "generate-chip": "build esm && node bin/generate-chip.js",
+    "generate-model": "build --prefix=../models && build esm && node bin/generate-model.js",
+    "generate-clusters": "build --prefix=../packages/matter.js && build esm && node bin/generate-clusters.js",
+    "dump-model-names": "build --prefix=../models && build esm && node bin/dump-model-names.ts",
+    "generate": "npm run generate-model && npm run generate-clusters"
   },
   "repository": {
     "type": "git",
@@ -26,13 +26,16 @@
     "url": "https://github.com/project-chip/matter.js/issues"
   },
   "homepage": "https://github.com/project-chip/matter.js#readme",
-  "devDependencies": {
+  "dependencies": {
     "@project-chip/matter.js": "0.5.0",
-    "@project-chip/matter.js-intermediate-models": "0.1.0",
+    "@project-chip/matter.js-intermediate-models": "0.1.0"
+  },
+  "devDependencies": {
+    "@project-chip/matter.js-tools": "^0.1.0",
     "@types/jsdom": "^21.1.1",
+    "glob": "^10.3.4",
     "jsdom": "^22.1.0",
-    "ts-node": "^10.9.1",
-    "word-list": "^3.1.0",
-    "typescript": "^4.9.5"
+    "typescript": "^4.9.5",
+    "word-list": "^3.1.0"
   }
 }

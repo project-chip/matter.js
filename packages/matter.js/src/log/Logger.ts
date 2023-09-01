@@ -152,7 +152,10 @@ function htmlLogFormatter(now: Date, level: Level, facility: string, values: any
     );
 }
 
-function consoleLogger(level: Level, formattedLog: string) {
+/**
+ * Log messages to the console.  This is the default logging mechanism.
+ */
+export function consoleLogger(level: Level, formattedLog: string) {
     const console = (<any>consoleLogger).console;
     switch (level) {
         case Level.DEBUG:
@@ -305,7 +308,7 @@ export class Logger {
     }
 
     /**
-     * Async version of above.
+     * Async version of nest().
      */
     static async nestAsync(context: () => Promise<any>) {
         this.nestingLevel++;
@@ -328,4 +331,16 @@ export class Logger {
         if (level < (Logger.logLevels[this.name] ?? Logger.defaultLogLevel)) return;
         Logger.log(level, Logger.logFormatter(Time.now(), level, this.name, values));
     }
+}
+
+declare global {
+    /**
+     * This global hook allows test suites to hook logging independent of the
+     * module mechanism.
+     */
+    let MatterLoggerHook: ((TheLogger: typeof Logger) => void) | undefined;
+}
+
+if (MatterLoggerHook) {
+    MatterLoggerHook(Logger);
 }

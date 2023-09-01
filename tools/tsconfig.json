@@ -10,12 +10,8 @@
     "module": "es2022",
     "esModuleInterop": true,
     "strictNullChecks": true,
-    "tsBuildInfoFile": "dist/.tsbuildinfo",
-    "types": [],
-
-    "paths": {
-      "#util/*": [ "./tools/util/*" ]
-    }
+    "tsBuildInfoFile": "build/tsbuildinfo",
+    "types": ["node"]
   },
 
   "include": [

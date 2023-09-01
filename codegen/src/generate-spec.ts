@@ -33,42 +33,44 @@ import { ClusterReference, HtmlReference } from "./mom/spec/spec-types.js";
 import { translateCluster } from "./mom/spec/translate-cluster.js";
 import { translateDevice } from "./mom/spec/translate-device.js";
 
-const elements = Array<MatterElement.Child>();
-const logger = Logger.get("generate-spec");
+export async function main() {
+    const elements = Array<MatterElement.Child>();
+    const logger = Logger.get("generate-spec");
 
-function scanCluster(clusterRef: HtmlReference) {
-    logger.info(`cluster ${clusterRef.name} (${clusterRef.xref.document} § ${clusterRef.xref.section})`);
+    function scanCluster(clusterRef: HtmlReference) {
+        logger.info(`cluster ${clusterRef.name} (${clusterRef.xref.document} § ${clusterRef.xref.section})`);
 
-    Logger.nest(() => {
-        logger.info("ingest");
-        let definition: ClusterReference;
-        Logger.nest(() => (definition = loadCluster(clusterRef)));
+        Logger.nest(() => {
+            logger.info("ingest");
+            let definition: ClusterReference;
+            Logger.nest(() => (definition = loadCluster(clusterRef)));
 
-        logger.info("translate");
-        Logger.nest(() => elements.push(...translateCluster(definition)));
-    });
-}
-
-function scanDevices(devices: HtmlReference) {
-    for (const deviceRef of loadDevices(devices)) {
-        logger.info(`translate ${deviceRef.name} (${deviceRef.xref.document} § ${deviceRef.xref.section})`);
-        Logger.nest(() => elements.push(...translateDevice(deviceRef)));
+            logger.info("translate");
+            Logger.nest(() => elements.push(...translateCluster(definition)));
+        });
     }
-}
 
-paths.forEach(path => {
-    logger.info(`load from spec ${path}`);
-    Logger.nest(() => {
-        const index = scanIndex(path);
-        if (LOAD_CLUSTERS) {
-            index.clusters.forEach(scanCluster);
+    function scanDevices(devices: HtmlReference) {
+        for (const deviceRef of loadDevices(devices)) {
+            logger.info(`translate ${deviceRef.name} (${deviceRef.xref.document} § ${deviceRef.xref.section})`);
+            Logger.nest(() => elements.push(...translateDevice(deviceRef)));
         }
-        if (LOAD_DEVICES) {
-            if (index.device) {
-                scanDevices(index.device);
+    }
+
+    paths.forEach(path => {
+        logger.info(`load from spec ${path}`);
+        Logger.nest(() => {
+            const index = scanIndex(path);
+            if (LOAD_CLUSTERS) {
+                index.clusters.forEach(scanCluster);
             }
-        }
+            if (LOAD_DEVICES) {
+                if (index.device) {
+                    scanDevices(index.device);
+                }
+            }
+        });
     });
-});
 
-generateIntermediateModel("spec", elements);
+    generateIntermediateModel("spec", elements);
+}

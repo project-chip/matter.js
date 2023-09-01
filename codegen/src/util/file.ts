@@ -8,13 +8,14 @@ import { mkdirSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from 
 import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 import { describeList } from "./string.js";
+import { Package } from "@project-chip/matter.js-tools";
 
 // Paths we read/write must be defined here
 const DIR_MAPPING = {
-    "#cache": "../../.cache",
-    "#intermediate": "../../../models/src",
-    "#elements": "../../../packages/matter.js/src/model/standard/elements",
-    "#clusters": "../../../packages/matter.js/src/cluster/definitions",
+    "#cache": Package.workspace.resolve("codegen/.cache"),
+    "#intermediate": Package.workspace.resolve("models/src"),
+    "#elements": Package.workspace.resolve("packages/matter.js/src/model/standard/elements"),
+    "#clusters": Package.workspace.resolve("packages/matter.js/src/cluster/definitions"),
 } as { [dirname: string]: string | undefined };
 
 function resolveFromPackage(path: string) {
