@@ -7,7 +7,7 @@
         "packages/matter-node-ble.js",
         "packages/matter-node-shell.js",
         "packages/matter-node.js-examples",
-        "tools",
+        "codegen",
         "models"
     ],
     "scripts": {

@@ -1,6 +1,4 @@
 {
-  "extends": "../packages/matter.js/tsconfig.base.json",
-
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src",
@@ -9,8 +7,18 @@
     "declaration": true,
     "declarationMap": true,
     "moduleResolution": "node16",
+    "target": "es2018",
+    "module": "es2022",
+    "esModuleInterop": true,
+    "strictNullChecks": true,
     "tsBuildInfoFile": "dist/.tsbuildinfo"
   },
 
-  "include": [ "src/**/*.ts" ]
+  "ts-node": {
+    "experimentalResolver": true
+  },
+
+  "include": [
+    "src/**/*.ts"
+  ]
 }

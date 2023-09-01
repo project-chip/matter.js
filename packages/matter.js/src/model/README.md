@@ -70,29 +70,29 @@ for (const attribute of OnOffCluster.attributes) {
 The base model includes [global datatypes](elements/Globals.ts) defined by the
 Matter specification.  We generate other elements of the
 [standard model](standard/Matter.ts) by merging models in the
-[top-level models folder](../../../../models).
+[top-level models package](../../../../models).
 
 To recreate the standard model files:
 
 ```sh
-cd matter.js/tools
+cd matter.js/codegen
 npm run generate-model
 ```
 
 ### Spec data model
 
-Input model _[spec.ts](../../../../models/spec.ts)_ is the data model
+Input model _[spec.ts](../../../../models/src/spec.ts)_ is the data model
 defined by the Matter specification.
 
-We generate [spec.ts](../../../../models/spec.ts) from the Matter specification
+We generate [spec.ts](../../../../models/src/spec.ts) from the Matter specification
 documents.  This ensures our definitions align with the specification and gives
 us detailed information unavailable elsewhere.
 
-The spec generator is [generate-spec.ts](../../../../tools/generate-spec.ts).
+The spec generator is [generate-spec.ts](../../../../codegen/generate-spec.ts).
 To run:
 
 ```sh
-cd matter.js/tools
+cd matter.js/codegen
 npm run generate-spec
 ```
 
@@ -103,26 +103,26 @@ conformance, constraints, etc.
 
 ### CHIP data model
 
-Input model [chip.ts](../../../../models/chip.ts) is the CHIP data
+Input model [chip.ts](../../../../models/src/chip.ts) is the CHIP data
 model.  _CHIP_ is [Project CHIP's connectedhomeip repository](https://github.com/project-chip/connectedhomeip/).
 At the time of this writing this is the most robust open-source programmatic
 definition of Matter elements and serves as a defacto standard for Matter
 definitions.
 
-We generate [chip.ts](../../../../models/chip.ts) from
+We generate [chip.ts](../../../../models/src/chip.ts) from
 [CHIP definitions](https://github.com/project-chip/connectedhomeip/tree/master/src/app/zap-templates/zcl/data-model).
 This ensures our definitions align with CHIP's.
 
-The CHIP generator is [generate-chip](../../../../tools/generate-chip.ts).  To run:
+The CHIP generator is [generate-chip](../../../../codegen/generate-chip.ts).  To run:
 
 ```sh
-cd matter.js/tools
+cd matter.js/codegen
 npm run generate-chip
 ```
 
 ### Local data model
 
-Input model _[local.ts](../../../../models/local.ts)_ defines elements
+Input model _[local.ts](../../../../models/src/local.ts)_ defines elements
 that are unavailable (or incorrect) in the other models.  This partial model is
 the result of editorial decisions by matter.js contributors.
 
@@ -132,13 +132,13 @@ Unlike above data models, the _standard data model_ in
 [src/model/standard](./standard) is part of the matter.js public API.  This
 represents our best attempt at a complete Matter data model.
 
-[generate-model.ts](../../../../tools/generate-model.ts) creates this model by
+[generate-model.ts](../../../../codegen/generate-model.ts) creates this model by
 analyzing and combining elements from the models above.
 
 To update the standard model:
 
 ```sh
-cd matter.js/tools
+cd matter.js/codegen
 npm run generate-model
 ```
 
@@ -147,11 +147,11 @@ npm run generate-model
 One of the ways we use the Matter Object Model is to generate cluster
 implementations.
 
-The cluster generator is [generate-cluster.ts](../../../../tools/generate-clusters.ts).
+The cluster generator is [generate-cluster.ts](../../../../codegen/generate-clusters.ts).
 To run:
 
 ```sh
-cd matter.js/tools
+cd matter.js/codegen
 npm run generate
 ```
 
@@ -159,7 +159,7 @@ Note that this will rebuild the model (above) and the clusters.  If you know
 the model is unchanged you can also just generate the clusters:
 
 ```sh
-cd matter.js/tools
+cd matter.js/codegen
 npm run generate-clusters
 ```
 
