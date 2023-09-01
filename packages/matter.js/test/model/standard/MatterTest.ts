@@ -19,7 +19,6 @@ function instantiate() {
 function validate() {
     if (!validationResult) {
         validationResult = ValidateModel(instantiate());
-        validationResult.report();
     }
     return validationResult;
 }
@@ -28,20 +27,21 @@ describe("Matter", () => {
     it("instantiates model", () => {
         expect(() => {
             instantiate();
-        }).not.toThrow();
+        }).not.throw();
     });
 
     it("validates", () => {
         expect(() => {
             validate();
-        }).not.toThrow();
+        }).not.throw();
     });
 
     it("has not increased in errors", () => {
-        expect(validate().errors.length).toBeLessThanOrEqual(16);
+        validate().report();
+        expect(validationResult?.errors.length).most(16);
     });
 
     it("has not decreased in scope", () => {
-        expect(validate().elementCount).toBeGreaterThanOrEqual(3582);
+        expect(validate().elementCount).least(3582);
     });
 });

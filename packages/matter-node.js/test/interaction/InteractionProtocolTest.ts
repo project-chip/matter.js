@@ -781,7 +781,7 @@ describe("InteractionProtocol", () => {
                     },
                 } as InteractionServerMessenger,
             );
-            expect(statusSent).toBe(128);
+            assert.equal(statusSent, 128);
         });
     });
 

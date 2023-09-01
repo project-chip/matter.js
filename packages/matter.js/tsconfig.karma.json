@@ -3,16 +3,16 @@
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "module": "commonjs", // Required for Karma web test
-    "esModuleInterop": true
+    "esModuleInterop": true,
+
+    "types": [
+      "mocha"
+    ]
   },
   "include": ["src/**/*.ts", "test/**/*.ts"],
   
   "typeRoots": [
     "./node_modules/@types",
     "./test/support"
-  ],
-
-  "types": [
-    "globals"
   ]
 }

@@ -12,24 +12,24 @@ describe("Quality", () => {
             const field = Quality.Flag[flag];
 
             it("loads from structured definition", () => {
-                expect(new Quality({ [field]: true })[field]).toBe(true);
+                expect(new Quality({ [field]: true })[field]).equal(true);
             });
 
             it("loads from text definition", () => {
-                expect(new Quality(`${flag}`)[field]).toBe(true);
+                expect(new Quality(`${flag}`)[field]).equal(true);
             });
 
             it("disallows from text definition", () => {
                 const quality = new Quality(`!${flag}`);
-                expect(quality[field]).toBe(undefined);
-                expect(quality.disallowed?.[field]).toBe(true);
+                expect(quality[field]).equal(undefined);
+                expect(quality.disallowed?.[field]).equal(true);
             });
         });
     });
 
     describe("illegal flag", () => {
         it("throws", () => {
-            expect(new Quality("Z").errors).toEqual([
+            expect(new Quality("Z").errors).deep.equal([
                 {
                     code: "UNKNOWN_QUALITY_FLAG",
                     message: 'Unknown flag "Z"',
@@ -43,30 +43,30 @@ describe("Quality", () => {
         const quality = new Quality(Quality.FlagNames.join("I N F S P C X"));
 
         it("load from text definition", () => {
-            expect(quality.nullable).toBe(true);
-            expect(quality.nonvolatile).toBe(true);
-            expect(quality.fixed).toBe(true);
-            expect(quality.scene).toBe(true);
-            expect(quality.reportable).toBe(true);
-            expect(quality.changesOmitted).toBe(true);
-            expect(quality.singleton).toBe(true);
+            expect(quality.nullable).equal(true);
+            expect(quality.nonvolatile).equal(true);
+            expect(quality.fixed).equal(true);
+            expect(quality.scene).equal(true);
+            expect(quality.reportable).equal(true);
+            expect(quality.changesOmitted).equal(true);
+            expect(quality.singleton).equal(true);
         });
 
         it("serialize", () => {
-            expect(`${quality}`).toBe("X N F S P C I");
+            expect(`${quality}`).equal("X N F S P C I");
         });
     });
 
     describe("mixed flags", () => {
         it("parse correctly", () => {
             const quality = new Quality("X !N F !S P");
-            expect(quality.nullable).toBe(true);
-            expect(quality.nonvolatile).toBe(undefined);
-            expect(quality.fixed).toBe(true);
-            expect(quality.scene).toBe(undefined);
-            expect(quality.reportable).toBe(true);
-            expect(quality.changesOmitted).toBe(undefined);
-            expect(quality.singleton).toBe(undefined);
+            expect(quality.nullable).equal(true);
+            expect(quality.nonvolatile).equal(undefined);
+            expect(quality.fixed).equal(true);
+            expect(quality.scene).equal(undefined);
+            expect(quality.reportable).equal(true);
+            expect(quality.changesOmitted).equal(undefined);
+            expect(quality.singleton).equal(undefined);
         });
     });
 });

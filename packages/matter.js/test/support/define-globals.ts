@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-//import ExpectDefault from "expect";
-
-import { captureLog, captureLogs } from "./logging.js";
+import Chai from "chai";
+import { captureLog, captureLogs, disableLogBuffering } from "./logging.js";
 
 Object.assign(globalThis, {
-    //expect: ExpectDefault.expect
+    expect: Chai.expect,
     captureLog,
     captureLogs,
+    disableLogBuffering,
 });

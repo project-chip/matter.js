@@ -15,7 +15,7 @@ describe("ReedSolomon", () => {
                 10,
             );
 
-            expect(result.toHex()).toBe("bc2a90136bafeffd4be0");
+            expect(result.toHex()).equal("bc2a90136bafeffd4be0");
         });
     });
 });

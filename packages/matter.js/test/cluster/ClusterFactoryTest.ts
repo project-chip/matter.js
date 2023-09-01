@@ -90,28 +90,28 @@ const ELEMENTS2 = ClusterComponent({
 });
 
 function expectMetadata(component: BaseClusterComponent<any, any, any, any>) {
-    expect(component.id).toBe(METADATA.id);
-    expect(component.name).toBe(METADATA.name);
-    expect(component.revision).toBe(METADATA.revision);
-    expect(component.features).toBe(METADATA.features);
+    expect(component.id).equal(METADATA.id);
+    expect(component.name).equal(METADATA.name);
+    expect(component.revision).equal(METADATA.revision);
+    expect(component.features).equal(METADATA.features);
 }
 
 function expectElements(component: ClusterComponent<any, any, any>) {
-    expect(component.attributes.attr1).toBeDefined();
-    expect(component.attributes.attr1.id).toBe(1);
-    expect(component.commands.cmd1).toBeDefined();
-    expect(component.commands.cmd1.requestId).toBe(2);
-    expect(component.events.ev1).toBeDefined();
-    expect(component.events.ev1.id).toBe(3);
+    expect(component.attributes.attr1).exist;
+    expect(component.attributes.attr1.id).equal(1);
+    expect(component.commands.cmd1).exist;
+    expect(component.commands.cmd1.requestId).equal(2);
+    expect(component.events.ev1).exist;
+    expect(component.events.ev1.id).equal(3);
 }
 
 function expectElements2(component: ClusterComponent<any, any, any>) {
-    expect(component.attributes.attr2).toBeDefined();
-    expect(component.attributes.attr2.id).toBe(4);
-    expect(component.commands.cmd2).toBeDefined();
-    expect(component.commands.cmd2.requestId).toBe(5);
-    expect(component.events.ev2).toBeDefined();
-    expect(component.events.ev2.id).toBe(6);
+    expect(component.attributes.attr2).exist;
+    expect(component.attributes.attr2.id).equal(4);
+    expect(component.commands.cmd2).exist;
+    expect(component.commands.cmd2.requestId).equal(5);
+    expect(component.events.ev2).exist;
+    expect(component.events.ev2.id).equal(6);
 }
 
 function createCluster(supportedFeatures: TypeFromPartialBitSchema<typeof FEATURES>) {
@@ -141,9 +141,9 @@ function createExtendedCluster(supportedFeatures: TypeFromPartialBitSchema<typeo
 }
 
 function expectElementCounts(cluster: Cluster<any, any, any, any, any>, count: number) {
-    expect(Object.keys(cluster.attributes).length).toBe(count + 6);
-    expect(Object.keys(cluster.commands).length).toBe(count);
-    expect(Object.keys(cluster.events).length).toBe(count);
+    expect(Object.keys(cluster.attributes).length).equal(count + 6);
+    expect(Object.keys(cluster.commands).length).equal(count);
+    expect(Object.keys(cluster.events).length).equal(count);
 }
 
 export const TestBase = BaseClusterComponent({
@@ -219,13 +219,13 @@ describe("ClusterFactory", () => {
         it("accepts a supported feature", () => {
             expect(() => {
                 validateFeatureSelection(["AbsolutelyFabulous"], Feature);
-            }).not.toThrow(IllegalClusterError);
+            }).not.throw(IllegalClusterError);
         });
 
         it("rejects an unsupported feature", () => {
             expect(() => {
                 validateFeatureSelection(["SomewhatFabulous"], Feature);
-            }).toThrow(new IllegalClusterError('"SomewhatFabulous" is not a valid feature identifier'));
+            }).throw(IllegalClusterError, '"SomewhatFabulous" is not a valid feature identifier');
         });
     });
 
@@ -236,7 +236,7 @@ describe("ClusterFactory", () => {
                     absolutelyFabulous: true,
                     bitterDisappointment: true,
                 });
-            }).not.toThrow();
+            }).not.throw();
         });
 
         it("rejects illegal features", () => {
@@ -245,10 +245,9 @@ describe("ClusterFactory", () => {
                     absolutelyFabulous: true,
                     bitterDisappointment: true,
                 });
-            }).toThrow(
-                new IllegalClusterError(
-                    "Feature combination { absolutelyFabulous: true, bitterDisappointment: true } is disallowed by the Matter specification",
-                ),
+            }).throw(
+                IllegalClusterError,
+                "Feature combination { absolutelyFabulous: true, bitterDisappointment: true } is disallowed by the Matter specification",
             );
         });
     });
@@ -262,7 +261,7 @@ describe("ClusterFactory", () => {
 
         it("creates with a feature", () => {
             const cluster = TestExtensibleCluster.with("Extended");
-            expect(cluster.supportedFeatures).toEqual({
+            expect(cluster.supportedFeatures).deep.equal({
                 extended: true,
                 fancy: false,
                 absolutelyFabulous: false,
@@ -276,20 +275,18 @@ describe("ClusterFactory", () => {
         it("rejects unsupported features", () => {
             expect(() => {
                 TestExtensibleCluster.with("AbsolutelyFabulous", "BitterDisappointment");
-            }).toThrow(
-                new IllegalClusterError(
-                    "Feature combination { absolutelyFabulous: true, bitterDisappointment: true } is disallowed by the Matter specification",
-                ),
+            }).throw(
+                IllegalClusterError,
+                "Feature combination { absolutelyFabulous: true, bitterDisappointment: true } is disallowed by the Matter specification",
             );
         });
 
         it("rejects unsupported features with supported features", () => {
             expect(() => {
                 TestExtensibleCluster.with("Extended", "AbsolutelyFabulous", "BitterDisappointment");
-            }).toThrow(
-                new IllegalClusterError(
-                    "Feature combination { absolutelyFabulous: true, bitterDisappointment: true } is disallowed by the Matter specification",
-                ),
+            }).throw(
+                IllegalClusterError,
+                "Feature combination { absolutelyFabulous: true, bitterDisappointment: true } is disallowed by the Matter specification",
             );
         });
     });

@@ -36,7 +36,7 @@ describe("BitmapSchema", () => {
                 numberTest: 1,
             });
 
-            expect(result).toBe(0xc4);
+            expect(result).equal(0xc4);
         });
 
         it("encodes a bitmap using the schema with not provided unset bits", () => {
@@ -46,7 +46,7 @@ describe("BitmapSchema", () => {
                 numberTest: 1,
             });
 
-            expect(result).toBe(0xc4);
+            expect(result).equal(0xc4);
         });
 
         it("encodes a bitmap using the schema with not provided unset bits #2", () => {
@@ -54,13 +54,13 @@ describe("BitmapSchema", () => {
                 flag1: true,
             });
 
-            expect(result).toBe(0x4);
+            expect(result).equal(0x4);
         });
 
         it("encodes a bitmap using the schema with all unset bits", () => {
             const result = TestBitmapSchema.encode({});
 
-            expect(result).toBe(0);
+            expect(result).equal(0);
         });
     });
 
@@ -68,7 +68,7 @@ describe("BitmapSchema", () => {
         it("decodes a bitmap using the schema with all bit set", () => {
             const result = TestBitmapSchema.decode(0xb4);
 
-            expect(result).toEqual({
+            expect(result).deep.equal({
                 flag1: true,
                 flag2: true,
                 enumTest: EnumTest.VALUE_1,
@@ -79,7 +79,7 @@ describe("BitmapSchema", () => {
         it("decodes a bitmap using the schema with some set", () => {
             const result = TestBitmapSchema.decode(0xc4);
 
-            expect(result).toEqual({
+            expect(result).deep.equal({
                 flag1: true,
                 flag2: false,
                 enumTest: EnumTest.VALUE_2,
@@ -90,7 +90,7 @@ describe("BitmapSchema", () => {
         it("decodes a bitmap using the schema with none set", () => {
             const result = TestBitmapSchema.decode(0x0);
 
-            expect(result).toEqual({
+            expect(result).deep.equal({
                 flag1: false,
                 flag2: false,
                 enumTest: 0,
@@ -120,7 +120,7 @@ describe("ByteArrayBitmapSchema", () => {
                 number: 0x2000,
             });
 
-            expect(result.toHex()).toBe("01c0");
+            expect(result.toHex()).equal("01c0");
         });
     });
 
@@ -128,7 +128,7 @@ describe("ByteArrayBitmapSchema", () => {
         it("decodes a bitmap using the schema", () => {
             const result = TestByteArrayBitmapSchema.decode(ByteArray.fromHex("01c0"));
 
-            expect(result).toEqual({
+            expect(result).deep.equal({
                 flag1: true,
                 flag2: true,
                 number: 0x2000,

@@ -28,7 +28,7 @@ describe("QrCodeSchema", () => {
         it("encodes a string", () => {
             const result = QrCode.encode("MT:6FCJ142C00KA0648G00");
 
-            expect(result).toBe(QR_CODE);
+            expect(result).equal(QR_CODE);
         });
     });
 });

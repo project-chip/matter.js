@@ -40,18 +40,18 @@ describe("Access", () => {
     FLAG_PERMUTATIONS.forEach(([text, ast]) => {
         describe(text, () => {
             it("parses", () => {
-                expect({ ...new Access(text) }).toEqual({ ...ast, definition: text });
+                expect({ ...new Access(text) }).deep.equal({ ...ast, definition: text });
             });
 
             it("serializes", () => {
-                expect(new Access(ast).toString()).toBe(text);
+                expect(new Access(ast).toString()).equal(text);
             });
         });
     });
 
     describe("illegal flag", () => {
         it("records error", () => {
-            expect(new Access("Z").errors).toEqual([
+            expect(new Access("Z").errors).deep.equal([
                 {
                     code: "UNKNOWN_ACCESS_FLAG",
                     message: 'Unknown flag "Z"',

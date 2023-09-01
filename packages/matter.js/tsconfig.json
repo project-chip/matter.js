@@ -16,17 +16,13 @@
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "strict": true,
+
+    "types": [
+      "mocha",
+      "node"
+    ]
   },
   /* During dev, src are included, so they are also modified during refactorings. */
   "include": ["src/**/*.ts", "test/**/*.ts"],
   "exclude": [],
-
-  "typeRoots": [
-    "./node_modules/@types",
-    "./test/support"
-  ],
-
-  "types": [
-    "globals"
-  ]
 }

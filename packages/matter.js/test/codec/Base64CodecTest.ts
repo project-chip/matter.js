@@ -57,7 +57,7 @@ const tests = {
 tests.all.textUrl = tests.all.text.replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
 
 describe("Base64", () => {
-    const expectEncodeAs = (bytes: number[], text: string) => expect(Base64.encode(new ByteArray(bytes))).toEqual(text);
+    const expectEncodeAs = (bytes: number[], text: string) => expect(Base64.encode(new ByteArray(bytes))).deep.equal(text);
 
     describe("encode", () => {
         Object.entries(tests).forEach(([name, test]) => {
@@ -67,12 +67,12 @@ describe("Base64", () => {
         });
 
         it("encodes base64url", () => {
-            expect(Base64.encode(tests.all.bytes, true)).toEqual(tests.all.textUrl);
+            expect(Base64.encode(tests.all.bytes, true)).deep.equal(tests.all.textUrl);
         });
     });
 
     const expectDecodesAs = (text: string, bytes: number[]) =>
-        expect(Base64.decode(text)).toEqual(new ByteArray(bytes));
+        expect(Base64.decode(text)).deep.equal(new ByteArray(bytes));
 
     describe("decode", () => {
         Object.entries(tests).forEach(([name, test]) => {
@@ -95,11 +95,11 @@ describe("Base64", () => {
         });
 
         it("rejects truncated input", () => {
-            expect(() => Base64.decode("A")).toThrowError("Invalid base-64 encoding");
+            expect(() => Base64.decode("A")).throw("Invalid base-64 encoding");
         });
 
         it("rejects invalid characters", () => {
-            expect(() => Base64.decode("?")).toThrowError("Invalid base-64 encoding");
+            expect(() => Base64.decode("?")).throw("Invalid base-64 encoding");
         });
     });
 });

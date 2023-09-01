@@ -13,8 +13,8 @@ describe("ModelVariantTraversal", () => {
             [{ tag: "attribute", name: "asdf", id: 1 }],
         );
 
-        expect(result.length).toBe(1);
-        expect(result[0].name).toBe("attr");
+        expect(result.length).equal(1);
+        expect(result[0].name).equal("attr");
     });
 
     it("associates commands by ID", () => {
@@ -28,9 +28,9 @@ describe("ModelVariantTraversal", () => {
                 { tag: "command", name: "command2", id: 1, direction: "request" },
             ],
         );
-        expect(result.length).toBe(2);
-        expect(result[0].name).toBe("command1");
-        expect(result[1].name).toBe("command1response");
+        expect(result.length).equal(2);
+        expect(result[0].name).equal("command1");
+        expect(result[1].name).equal("command1response");
     });
 
     it("doesn't associate request and response commands", () => {
@@ -38,9 +38,9 @@ describe("ModelVariantTraversal", () => {
             [{ tag: "command", name: "command1", id: 1, direction: "request" }],
             [{ tag: "command", name: "command1response", id: 1, direction: "response" }],
         );
-        expect(result.length).toBe(2);
-        expect(result[0].name).toBe("command1");
-        expect(result[1].name).toBe("command1response");
+        expect(result.length).equal(2);
+        expect(result[0].name).equal("command1");
+        expect(result[1].name).equal("command1response");
     });
 
     it("prefers shorter names", () => {
@@ -48,8 +48,8 @@ describe("ModelVariantTraversal", () => {
             [{ tag: "attribute", name: "ReallyLongName", id: 1 }],
             [{ tag: "attribute", name: "ShortName", id: 1 }],
         );
-        expect(result.length).toBe(1);
-        expect(result[0].name).toBe("ShortName");
+        expect(result.length).equal(1);
+        expect(result[0].name).equal("ShortName");
     });
 
     it("prefers more capitalization", () => {
@@ -57,8 +57,8 @@ describe("ModelVariantTraversal", () => {
             [{ tag: "attribute", name: "myattribute", id: 1 }],
             [{ tag: "attribute", name: "MyAttribute", id: 1 }],
         );
-        expect(result.length).toBe(1);
-        expect(result[0].name).toBe("MyAttribute");
+        expect(result.length).equal(1);
+        expect(result[0].name).equal("MyAttribute");
     });
 
     it("associates datatypes based on reference", () => {
@@ -72,8 +72,8 @@ describe("ModelVariantTraversal", () => {
                 { tag: "datatype", name: "datatype2" },
             ],
         );
-        expect(result.length).toBe(2);
-        expect(result[1].name).toBe("datatype1");
+        expect(result.length).equal(2);
+        expect(result[1].name).equal("datatype1");
     });
 });
 

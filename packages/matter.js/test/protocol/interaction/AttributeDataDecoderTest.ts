@@ -89,15 +89,15 @@ describe("AttributeDataDecoder", () => {
             ];
             const normalizedData = normalizeAndDecodeReadAttributeReport(data);
 
-            expect(normalizedData.length).toBe(1);
-            expect(normalizedData[0].path).toEqual({
+            expect(normalizedData.length).equal(1);
+            expect(normalizedData[0].path).deep.equal({
                 attributeId: AttributeId(0),
                 attributeName: "acl",
                 clusterId: ClusterId(0x1f),
                 endpointId: EndpointNumber(0),
                 nodeId: undefined,
             });
-            expect(normalizedData[0].value).toEqual([
+            expect(normalizedData[0].value).deep.equal([
                 {
                     privilege: 1,
                     authMode: 2,
@@ -163,15 +163,15 @@ describe("AttributeDataDecoder", () => {
             ];
             const normalizedData = normalizeAndDecodeReadAttributeReport(data);
 
-            expect(normalizedData.length).toBe(1);
-            expect(normalizedData[0].path).toEqual({
+            expect(normalizedData.length).equal(1);
+            expect(normalizedData[0].path).deep.equal({
                 attributeId: AttributeId(0),
                 attributeName: "acl",
                 clusterId: ClusterId(0x1f),
                 endpointId: EndpointNumber(0),
                 nodeId: undefined,
             });
-            expect(normalizedData[0].value).toEqual([
+            expect(normalizedData[0].value).deep.equal([
                 {
                     privilege: 1,
                     authMode: 2,
@@ -266,15 +266,15 @@ describe("AttributeDataDecoder", () => {
             ];
             const normalizedData = normalizeAndDecodeReadAttributeReport(data);
 
-            expect(normalizedData.length).toBe(1);
-            expect(normalizedData[0].path).toEqual({
+            expect(normalizedData.length).equal(1);
+            expect(normalizedData[0].path).deep.equal({
                 attributeId: AttributeId(0),
                 attributeName: "acl",
                 clusterId: ClusterId(0x1f),
                 endpointId: EndpointNumber(0),
                 nodeId: undefined,
             });
-            expect(normalizedData[0].value).toEqual([
+            expect(normalizedData[0].value).deep.equal([
                 {
                     privilege: 1,
                     authMode: 2,
@@ -374,15 +374,15 @@ describe("AttributeDataDecoder", () => {
             ];
             const normalizedData = normalizeAndDecodeReadAttributeReport(data);
 
-            expect(normalizedData.length).toBe(1);
-            expect(normalizedData[0].path).toEqual({
+            expect(normalizedData.length).equal(1);
+            expect(normalizedData[0].path).deep.equal({
                 attributeId: AttributeId(0),
                 attributeName: "acl",
                 clusterId: ClusterId(0x1f),
                 endpointId: EndpointNumber(0),
                 nodeId: undefined,
             });
-            expect(normalizedData[0].value).toEqual([
+            expect(normalizedData[0].value).deep.equal([
                 {
                     privilege: 1,
                     authMode: 2,
@@ -413,21 +413,21 @@ describe("AttributeDataDecoder", () => {
             );
             const decodedData = TlvDataReport.decode(tlvData);
 
-            expect(decodedData).toBeTruthy();
-            expect(Array.isArray(decodedData.attributeReports)).toBeTruthy();
+            expect(decodedData).ok;
+            expect(Array.isArray(decodedData.attributeReports)).ok;
             if (!decodedData.attributeReports) return;
 
             const normalizedData = normalizeAndDecodeReadAttributeReport(decodedData.attributeReports);
 
-            expect(normalizedData.length).toBe(1);
-            expect(normalizedData[0].path).toEqual({
+            expect(normalizedData.length).equal(1);
+            expect(normalizedData[0].path).deep.equal({
                 attributeId: AttributeId(1),
                 attributeName: "serverList",
                 clusterId: ClusterId(29),
                 endpointId: EndpointNumber(0),
                 nodeId: undefined,
             });
-            expect(normalizedData[0].value).toEqual([
+            expect(normalizedData[0].value).deep.equal([
                 ClusterId(4),
                 ClusterId(29),
                 ClusterId(31),
@@ -459,21 +459,21 @@ describe("AttributeDataDecoder", () => {
             );
             const decodedData = TlvDataReport.decode(tlvData);
 
-            expect(decodedData).toBeTruthy();
-            expect(Array.isArray(decodedData.attributeReports)).toBeTruthy();
+            expect(decodedData).ok;
+            expect(Array.isArray(decodedData.attributeReports)).ok;
             if (!decodedData.attributeReports) return;
 
             const normalizedData = normalizeAndDecodeReadAttributeReport(decodedData.attributeReports);
 
-            expect(normalizedData.length).toBe(1);
-            expect(normalizedData[0].path).toEqual({
+            expect(normalizedData.length).equal(1);
+            expect(normalizedData[0].path).deep.equal({
                 attributeId: AttributeId(9),
                 attributeName: "softwareVersion",
                 clusterId: ClusterId(40),
                 endpointId: EndpointNumber(0),
                 nodeId: undefined,
             });
-            expect(normalizedData[0].value).toEqual(1);
+            expect(normalizedData[0].value).deep.equal(1);
         });
 
         it("decode whole cluster response", () => {
@@ -483,13 +483,13 @@ describe("AttributeDataDecoder", () => {
             );
             const decodedData = TlvDataReport.decode(tlvData);
 
-            expect(decodedData).toBeTruthy();
-            expect(Array.isArray(decodedData.attributeReports)).toBeTruthy();
+            expect(decodedData).ok;
+            expect(Array.isArray(decodedData.attributeReports)).ok;
             if (!decodedData.attributeReports) return;
 
             const normalizedData = normalizeAndDecodeReadAttributeReport(decodedData.attributeReports);
 
-            expect(normalizedData).toEqual([
+            expect(normalizedData).deep.equal([
                 {
                     path: {
                         endpointId: 0,
@@ -791,8 +791,8 @@ describe("AttributeDataDecoder", () => {
             );
             const decodedData = TlvDataReport.decode(tlvData);
 
-            expect(decodedData).toBeTruthy();
-            expect(Array.isArray(decodedData.attributeReports)).toBeTruthy();
+            expect(decodedData).ok;
+            expect(Array.isArray(decodedData.attributeReports)).ok;
             if (!decodedData.attributeReports) return;
 
             const dataValues = decodedData.attributeReports.flatMap(({ attributeData }) =>
@@ -802,7 +802,7 @@ describe("AttributeDataDecoder", () => {
 
             const decodedAnyData = decodeUnknownAttributeValue(normalizedData[0]);
 
-            expect(decodedAnyData).toEqual(1);
+            expect(decodedAnyData).deep.equal(1);
         });
 
         it("decode object attribute as unknown", () => {
@@ -826,7 +826,7 @@ describe("AttributeDataDecoder", () => {
 
             const decodedAnyData = decodeUnknownAttributeValue(data);
 
-            expect(decodedAnyData).toEqual({ "1": 1, "2": 2, "3": null, "4": null });
+            expect(decodedAnyData).deep.equal({ "1": 1, "2": 2, "3": null, "4": null });
         });
 
         it("decode object array attribute as unknown", () => {
@@ -858,7 +858,7 @@ describe("AttributeDataDecoder", () => {
 
             const decodedAnyData = decodeUnknownAttributeValue(data);
 
-            expect(decodedAnyData).toEqual([
+            expect(decodedAnyData).deep.equal([
                 { "1": 1, "2": 2, "3": null, "4": null },
                 { "1": 3, "2": 4, "3": 5, "4": 6 },
             ]);
@@ -905,7 +905,7 @@ describe("AttributeDataDecoder", () => {
 
             const decodedAnyData = decodeUnknownAttributeValue(data);
 
-            expect(decodedAnyData).toEqual([
+            expect(decodedAnyData).deep.equal([
                 { "1": 1, "2": 2, "3": null, "4": null },
                 { "1": 2, "2": 2, "3": null, "4": 6 },
             ]);
@@ -954,7 +954,7 @@ describe("AttributeDataDecoder", () => {
 
             const normalized = normalizeAttributeData(data);
 
-            expect(normalized).toEqual([data]);
+            expect(normalized).deep.equal([data]);
         });
 
         it("normalize data with all paths given for two endpoints", () => {
@@ -1005,7 +1005,7 @@ describe("AttributeDataDecoder", () => {
 
             const normalized = normalizeAttributeData([...data1, ...data2]);
 
-            expect(normalized).toEqual([data1, data2]);
+            expect(normalized).deep.equal([data1, data2]);
         });
 
         it("normalize data with all paths given for two endpoints with enabledtagCompression", () => {
@@ -1069,7 +1069,7 @@ describe("AttributeDataDecoder", () => {
 
             const normalized = normalizeAttributeData([...data1, ...data2]);
 
-            expect(normalized).toEqual([resultData1, resultData2]);
+            expect(normalized).deep.equal([resultData1, resultData2]);
         });
     });
 
@@ -1082,8 +1082,8 @@ describe("AttributeDataDecoder", () => {
             );
             const decodedData = TlvDataReport.decode(tlvData);
 
-            expect(decodedData).toBeTruthy();
-            expect(Array.isArray(decodedData.attributeReports)).toBeTruthy();
+            expect(decodedData).ok;
+            expect(Array.isArray(decodedData.attributeReports)).ok;
             if (!decodedData.attributeReports) return;
 
             // Store and Clear AllClustersMap to make sure anything is unknown
@@ -1093,7 +1093,7 @@ describe("AttributeDataDecoder", () => {
             }
             const normalizedData = normalizeAndDecodeReadAttributeReport(decodedData.attributeReports);
 
-            expect(normalizedData).toEqual([
+            expect(normalizedData).deep.equal([
                 {
                     path: {
                         endpointId: 0,

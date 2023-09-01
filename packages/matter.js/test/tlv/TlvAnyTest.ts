@@ -37,7 +37,7 @@ describe("TlvAny", () => {
         for (const valueDescription in testVector) {
             const { encoded, decoded } = testVector[valueDescription];
             it(`encodes ${valueDescription}`, () => {
-                expect(TlvAny.encode(decoded).toHex()).toBe(encoded);
+                expect(TlvAny.encode(decoded).toHex()).equal(encoded);
             });
         }
     });
@@ -46,28 +46,28 @@ describe("TlvAny", () => {
         for (const valueDescription in testVector) {
             const { encoded, decoded } = testVector[valueDescription];
             it(`decodes ${valueDescription}`, () => {
-                expect(TlvAny.decode(ByteArray.fromHex(encoded))).toEqual(decoded);
+                expect(TlvAny.decode(ByteArray.fromHex(encoded))).deep.equal(decoded);
             });
         }
     });
 
     describe("validation", () => {
         it("throws an error if the value is not a boolean", () => {
-            expect(() => TlvAny.validate("a" as any)).toThrow(new ValidationError("Expected TlvStream, got string."));
+            expect(() => TlvAny.validate("a" as any)).throw(ValidationError, "Expected TlvStream, got string.");
         });
 
         it("does not throw an error if the value is a boolean", () => {
-            expect(TlvAny.validate([{ typeLength: { type: TlvType.Null } }])).toBe(undefined);
+            expect(TlvAny.validate([{ typeLength: { type: TlvType.Null } }])).equal(undefined);
         });
     });
 
     describe("generic decoding", () => {
         it("decodes a boolean", () => {
-            expect(TlvAny.decodeAnyTlvStream([{ typeLength: { type: TlvType.Boolean }, value: true }])).toBe(true);
+            expect(TlvAny.decodeAnyTlvStream([{ typeLength: { type: TlvType.Boolean }, value: true }])).equal(true);
         });
 
         it("decodes a null", () => {
-            expect(TlvAny.decodeAnyTlvStream([{ typeLength: { type: TlvType.Null }, value: null }])).toBe(null);
+            expect(TlvAny.decodeAnyTlvStream([{ typeLength: { type: TlvType.Null }, value: null }])).equal(null);
         });
 
         it("decodes an array of integers", () => {
@@ -78,7 +78,7 @@ describe("TlvAny", () => {
                     { typeLength: { type: TlvType.UnsignedInt }, value: 2 },
                     { typeLength: { type: TlvType.EndOfContainer } },
                 ]),
-            ).toEqual([1, 2]);
+            ).deep.equal([1, 2]);
         });
 
         it("decodes a list of strings", () => {
@@ -89,7 +89,7 @@ describe("TlvAny", () => {
                     { typeLength: { type: TlvType.Utf8String }, value: "b" },
                     { typeLength: { type: TlvType.EndOfContainer } },
                 ]),
-            ).toEqual(["a", "b"]);
+            ).deep.equal(["a", "b"]);
         });
 
         it("decodes a structure", () => {
@@ -100,7 +100,7 @@ describe("TlvAny", () => {
                     { tag: { id: 2 }, typeLength: { type: TlvType.Utf8String }, value: "b" },
                     { typeLength: { type: TlvType.EndOfContainer } },
                 ]),
-            ).toEqual({ "1": "a", "2": "b" });
+            ).deep.equal({ "1": "a", "2": "b" });
         });
 
         it("decodes and array of structures", () => {
@@ -117,7 +117,7 @@ describe("TlvAny", () => {
                     { typeLength: { type: TlvType.EndOfContainer } },
                     { typeLength: { type: TlvType.EndOfContainer } },
                 ]),
-            ).toEqual([
+            ).deep.equal([
                 { "1": "a", "2": "b" },
                 { "3": "c", "4": "d" },
             ]);

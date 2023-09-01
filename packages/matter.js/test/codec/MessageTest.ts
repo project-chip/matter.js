@@ -71,13 +71,13 @@ describe("MessageCodec", () => {
         it("decodes a message", () => {
             const result = MessageCodec.decodePayload(MessageCodec.decodePacket(ENCODED));
 
-            expect(result).toEqual(DECODED);
+            expect(result).deep.equal(DECODED);
         });
 
         it("decodes a message 2", () => {
             const result = MessageCodec.decodePayload(MessageCodec.decodePacket(ENCODED_2));
 
-            expect(result).toEqual(DECODED_2);
+            expect(result).deep.equal(DECODED_2);
         });
     });
 
@@ -85,13 +85,13 @@ describe("MessageCodec", () => {
         it("encodes a message", () => {
             const result = MessageCodec.encodePacket(MessageCodec.encodePayload(DECODED));
 
-            expect(result).toEqual(ENCODED);
+            expect(result).deep.equal(ENCODED);
         });
 
         it("encodes a message 2", () => {
             const result = MessageCodec.encodePacket(MessageCodec.encodePayload(DECODED_2));
 
-            expect(result).toEqual(ENCODED_2);
+            expect(result).deep.equal(ENCODED_2);
         });
     });
 });

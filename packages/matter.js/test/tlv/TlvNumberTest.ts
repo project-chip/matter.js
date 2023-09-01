@@ -38,7 +38,7 @@ describe("TlvNumber", () => {
         for (const valueDescription in codecVector) {
             const { schema, encoded, decoded } = codecVector[valueDescription];
             it(`encodes ${valueDescription}`, () => {
-                expect(schema.encode(decoded).toHex()).toBe(encoded);
+                expect(schema.encode(decoded).toHex()).equal(encoded);
             });
         }
     });
@@ -47,14 +47,14 @@ describe("TlvNumber", () => {
         for (const valueDescription in codecVector) {
             const { schema, encoded, decoded } = codecVector[valueDescription];
             it(`decodes ${valueDescription}`, () => {
-                expect(schema.decode(ByteArray.fromHex(encoded))).toBe(decoded);
+                expect(schema.decode(ByteArray.fromHex(encoded))).equal(decoded);
             });
         }
     });
 
     describe("decode", () => {
         it("decodes a 8 bytes small value as a number", () => {
-            expect(TlvUInt32.decode(ByteArray.fromHex("070100000000000000"))).toBe(1);
+            expect(TlvUInt32.decode(ByteArray.fromHex("070100000000000000"))).equal(1);
         });
     });
 
@@ -66,9 +66,9 @@ describe("TlvNumber", () => {
             it(testName, () => {
                 const test = () => BoundedUint.validate(input);
                 if (throwException) {
-                    expect(test).toThrow();
+                    expect(test).throw();
                 } else {
-                    expect(test).not.toThrow();
+                    expect(test).not.throw();
                 }
             });
         }
@@ -76,25 +76,25 @@ describe("TlvNumber", () => {
 
     describe("validate", () => {
         it("throws an error if the value is not a number", () => {
-            expect(() => TlvUInt32.validate("a" as any)).toThrow(new ValidationError("Expected number, got string."));
+            expect(() => TlvUInt32.validate("a" as any)).throw(ValidationError, "Expected number, got string.");
         });
 
         it("throws an error if the value is not a bigint", () => {
-            expect(() => TlvUInt64.validate("a" as any)).toThrow(new ValidationError("Expected number, got string."));
+            expect(() => TlvUInt64.validate("a" as any)).throw(ValidationError, "Expected number, got string.");
         });
 
         it("throws an error if the value is not a bigint", () => {
-            expect(() => TlvUInt32.validate(BigInt(12345678790) as any)).toThrow(
-                new ValidationError("Expected number, got bigint."),
+            expect(() => TlvUInt32.validate(BigInt(12345678790) as any)).throw(
+                ValidationError, "Expected number, got bigint.",
             );
         });
 
         it("does not throw an error if the value is a number", () => {
-            expect(TlvUInt64.validate(12345)).not.toBeDefined();
+            expect(TlvUInt64.validate(12345)).undefined;
         });
 
         it("does not throw an error if the value is a bigint", () => {
-            expect(TlvUInt64.validate(BigInt(12345678790))).not.toBeDefined();
+            expect(TlvUInt64.validate(BigInt(12345678790))).undefined;
         });
     });
 });

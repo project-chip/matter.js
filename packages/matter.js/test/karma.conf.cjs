@@ -1,7 +1,7 @@
 module.exports = function(config) {
     config.set({
         basePath: "..",
-        frameworks: ["jasmine", "karma-typescript"],
+        frameworks: ["mocha", "chai", "karma-typescript"],
         client: {
             jasmine: {
                 random: false

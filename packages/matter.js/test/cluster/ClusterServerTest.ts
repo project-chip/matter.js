@@ -63,38 +63,38 @@ describe("ClusterServer structure", () => {
 
             // TS ignore to allow a check, remove to test typing)
 
-            expect(basic.attributes.softwareVersion.getLocal()).toBe(1);
-            expect(basic.attributes.softwareVersion.isFixed).toBeTruthy();
-            expect(basic.getSoftwareVersionAttribute()).toBe(1);
+            expect(basic.attributes.softwareVersion.getLocal()).equal(1);
+            expect(basic.attributes.softwareVersion.isFixed).ok;
+            expect(basic.getSoftwareVersionAttribute()).equal(1);
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            expect(basic.attributes.softwareVersion.setLocal).not.toBeDefined();
+            expect(basic.attributes.softwareVersion.setLocal).undefined;
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            expect(basic.setSoftwareVersionAttribute).not.toBeDefined();
+            expect(basic.setSoftwareVersionAttribute).undefined;
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            expect(basic.subscribeSoftwareVersionAttribute).not.toBeDefined();
+            expect(basic.subscribeSoftwareVersionAttribute).undefined;
 
             // Now we set this Cluster into Endpoint and retrieve it again and verify it is the same
             const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: EndpointNumber(1) });
             endpoint.addClusterServer(basic);
 
             const basic2 = endpoint.getClusterServer(BasicInformationCluster);
-            expect(basic2).toBeTruthy();
+            expect(basic2).ok;
 
-            expect(basic2?.attributes.softwareVersion.getLocal()).toBe(1);
-            expect(basic2?.attributes.softwareVersion.isFixed).toBeTruthy();
-            expect(basic2?.getSoftwareVersionAttribute()).toBe(1);
+            expect(basic2?.attributes.softwareVersion.getLocal()).equal(1);
+            expect(basic2?.attributes.softwareVersion.isFixed).ok;
+            expect(basic2?.getSoftwareVersionAttribute()).equal(1);
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            expect(basic2.attributes.softwareVersion.setLocal).not.toBeDefined();
+            expect(basic2.attributes.softwareVersion.setLocal).undefined;
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            expect(basic2.setSoftwareVersionAttribute).not.toBeDefined();
+            expect(basic2.setSoftwareVersionAttribute).undefined;
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            expect(basic2.subscribeSoftwareVersionAttribute).not.toBeDefined();
+            expect(basic2.subscribeSoftwareVersionAttribute).undefined;
         });
 
         it("Normal Attribute has set and get", async () => {
@@ -123,28 +123,28 @@ describe("ClusterServer structure", () => {
                 },
             );
 
-            expect(basic.attributes.nodeLabel.getLocal()).toBe("");
-            expect(basic.attributes.nodeLabel.isFixed).not.toBeTruthy();
-            expect(basic.getNodeLabelAttribute()).toBe("");
+            expect(basic.attributes.nodeLabel.getLocal()).equal("");
+            expect(basic.attributes.nodeLabel.isFixed).not.ok;
+            expect(basic.getNodeLabelAttribute()).equal("");
             basic.attributes.nodeLabel.setLocal("new");
             basic.setNodeLabelAttribute("new 2");
-            expect(typeof basic.subscribeNodeLabelAttribute === "function").toBeTruthy();
-            expect(basic.getNodeLabelAttribute()).toBe("new 2");
+            expect(typeof basic.subscribeNodeLabelAttribute === "function").ok;
+            expect(basic.getNodeLabelAttribute()).equal("new 2");
 
             // Now we set this Cluster into Endpoint and retrieve it again and verify it is the same
             const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: EndpointNumber(1) });
             endpoint.addClusterServer(basic);
 
             const basic2 = endpoint.getClusterServer(BasicInformationCluster);
-            expect(basic2).toBeTruthy();
+            expect(basic2).ok;
 
-            expect(basic2?.attributes.nodeLabel.getLocal()).toBe("new 2");
-            expect(basic2?.attributes.nodeLabel instanceof AttributeServer).toBeTruthy();
-            expect(basic2?.getNodeLabelAttribute()).toBe("new 2");
+            expect(basic2?.attributes.nodeLabel.getLocal()).equal("new 2");
+            expect(basic2?.attributes.nodeLabel instanceof AttributeServer).ok;
+            expect(basic2?.getNodeLabelAttribute()).equal("new 2");
             basic2?.attributes.nodeLabel.setLocal("new");
             basic2?.setNodeLabelAttribute("new");
-            expect(typeof basic2?.subscribeNodeLabelAttribute === "function").toBeTruthy();
-            expect(basic2?.getNodeLabelAttribute()).toBe("new");
+            expect(typeof basic2?.subscribeNodeLabelAttribute === "function").ok;
+            expect(basic2?.getNodeLabelAttribute()).equal("new");
         });
 
         it("Optional existing fixed attribute, hast also get and no set, but potentially undefined", async () => {
@@ -177,47 +177,47 @@ describe("ClusterServer structure", () => {
             // TS ignore to allow a check, remove to test typing)
 
             // guard needed because as per types optional are potentially undefined
-            expect(basic.attributes.manufacturingDate?.getLocal()).toBe("12345678");
+            expect(basic.attributes.manufacturingDate?.getLocal()).equal("12345678");
             expect(
                 basic.attributes.manufacturingDate instanceof FixedAttributeServer &&
                     basic.attributes.manufacturingDate.isFixed,
-            ).toBeTruthy();
+            ).ok;
             // guard needed because as per types optional are potentially undefined
-            expect(basic.getManufacturingDateAttribute?.()).toBe("12345678");
+            expect(basic.getManufacturingDateAttribute?.()).equal("12345678");
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            expect(basic.attributes.manufacturingDate.setLocal).not.toBeDefined();
+            expect(basic.attributes.manufacturingDate.setLocal).undefined;
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            expect(basic.setManufacturingDateAttribute).not.toBeDefined();
+            expect(basic.setManufacturingDateAttribute).undefined;
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            expect(basic.subscribeManufacturingDateAttribute).not.toBeDefined();
+            expect(basic.subscribeManufacturingDateAttribute).undefined;
 
             // Now we set this Cluster into Endpoint and retrieve it again and verify it is the same
             const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: EndpointNumber(1) });
             endpoint.addClusterServer(basic);
 
             const basic2 = endpoint.getClusterServer(BasicInformationCluster);
-            expect(basic2).toBeTruthy();
+            expect(basic2).ok;
 
             // guard needed because as per types optional are potentially undefined
-            expect(basic2?.attributes.manufacturingDate?.getLocal()).toBe("12345678");
+            expect(basic2?.attributes.manufacturingDate?.getLocal()).equal("12345678");
             expect(
                 basic2?.attributes.manufacturingDate instanceof FixedAttributeServer &&
                     basic2.attributes.manufacturingDate.isFixed,
-            ).toBeTruthy();
+            ).ok;
             // guard needed because as per types optional are potentially undefined
-            expect(basic2?.getManufacturingDateAttribute?.()).toBe("12345678");
+            expect(basic2?.getManufacturingDateAttribute?.()).equal("12345678");
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            expect(basic2.attributes.manufacturingDate.setLocal).not.toBeDefined();
+            expect(basic2.attributes.manufacturingDate.setLocal).undefined;
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            expect(basic2.setManufacturingDateAttribute).not.toBeDefined();
+            expect(basic2.setManufacturingDateAttribute).undefined;
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            expect(basic2.subscribeManufacturingDateAttribute).not.toBeDefined();
+            expect(basic2.subscribeManufacturingDateAttribute).undefined;
         });
 
         it("Existing optional attribute has get and set, but potentially undefined", async () => {
@@ -248,12 +248,12 @@ describe("ClusterServer structure", () => {
             );
 
             // guard needed because as per types optional are potentially undefined
-            expect(basic.attributes.reachable?.getLocal()).toBe(true);
-            expect(basic.attributes.reachable instanceof AttributeServer).toBeTruthy();
+            expect(basic.attributes.reachable?.getLocal()).equal(true);
+            expect(basic.attributes.reachable instanceof AttributeServer).ok;
             // guard needed because as per types optional are potentially undefined
-            expect(basic.getReachableAttribute?.()).toBe(true);
+            expect(basic.getReachableAttribute?.()).equal(true);
             basic.attributes.reachable?.setLocal(false);
-            expect(typeof basic.subscribeReachableAttribute === "function").toBeTruthy();
+            expect(typeof basic.subscribeReachableAttribute === "function").ok;
             basic.setReachableAttribute(true);
 
             // Now we set this Cluster into Endpoint and retrieve it again and verify it is the same
@@ -261,15 +261,15 @@ describe("ClusterServer structure", () => {
             endpoint.addClusterServer(basic);
 
             const basic2 = endpoint.getClusterServer(BasicInformationCluster);
-            expect(basic2).toBeTruthy();
+            expect(basic2).ok;
 
             // guard needed because as per types optional are potentially undefined
-            expect(basic2?.attributes.reachable?.getLocal()).toBe(true);
-            expect(basic2?.attributes.reachable instanceof AttributeServer).toBeTruthy();
+            expect(basic2?.attributes.reachable?.getLocal()).equal(true);
+            expect(basic2?.attributes.reachable instanceof AttributeServer).ok;
             // guard needed because as per types optional are potentially undefined
-            expect(basic2?.getReachableAttribute?.()).toBe(true);
+            expect(basic2?.getReachableAttribute?.()).equal(true);
             basic2?.attributes.reachable?.setLocal(false);
-            expect(typeof basic2?.subscribeReachableAttribute === "function").toBeTruthy();
+            expect(typeof basic2?.subscribeReachableAttribute === "function").ok;
             basic2?.setReachableAttribute(true);
         });
 
@@ -300,33 +300,33 @@ describe("ClusterServer structure", () => {
             );
 
             // guard needed because as per types optional are potentially undefined
-            expect(basic.attributes.serialNumber).not.toBeDefined();
+            expect(basic.attributes.serialNumber).undefined;
             // guard needed because as per types optional are potentially undefined
-            expect(basic.getSerialNumberAttribute?.()).not.toBeDefined();
+            expect(basic.getSerialNumberAttribute?.()).undefined;
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            expect(basic.setSerialNumberAttribute).not.toBeDefined();
+            expect(basic.setSerialNumberAttribute).undefined;
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            expect(basic.subscribeSerialNumberAttribute).not.toBeDefined();
+            expect(basic.subscribeSerialNumberAttribute).undefined;
 
             // Now we set this Cluster into Endpoint and retrieve it again and verify it is the same
             const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: EndpointNumber(1) });
             endpoint.addClusterServer(basic);
 
             const basic2 = endpoint.getClusterServer(BasicInformationCluster);
-            expect(basic2).toBeTruthy();
+            expect(basic2).ok;
 
             // guard needed because as per types optional are potentially undefined
-            expect(basic2?.attributes.serialNumber).not.toBeDefined();
+            expect(basic2?.attributes.serialNumber).undefined;
             // guard needed because as per types optional are potentially undefined
-            expect(basic2?.getSerialNumberAttribute?.()).not.toBeDefined();
+            expect(basic2?.getSerialNumberAttribute?.()).undefined;
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            expect(basic2.setSerialNumberAttribute).not.toBeDefined();
+            expect(basic2.setSerialNumberAttribute).undefined;
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            expect(basic2.subscribeSerialNumberAttribute).not.toBeDefined();
+            expect(basic2.subscribeSerialNumberAttribute).undefined;
         });
 
         it("Optional non-existing attribute returns undefined but do not exist in named object", async () => {
@@ -355,22 +355,20 @@ describe("ClusterServer structure", () => {
                 },
             );
 
-            expect(basic.attributes.localConfigDisabled).not.toBeDefined();
+            expect(basic.attributes.localConfigDisabled).undefined;
             // guard needed because as per types optional are potentially undefined
-            expect(basic.getLocalConfigDisabledAttribute?.()).not.toBeDefined();
-            expect(() => basic.setLocalConfigDisabledAttribute(true)).toThrow(
-                new ImplementationError(
-                    "Attribute localConfigDisabled is optional and not initialized. To use it please initialize it first.",
-                ),
+            expect(basic.getLocalConfigDisabledAttribute?.()).undefined;
+            expect(() => basic.setLocalConfigDisabledAttribute(true)).throw(
+                ImplementationError,
+                "Attribute localConfigDisabled is optional and not initialized. To use it please initialize it first.",
             );
             expect(() =>
                 basic.subscribeLocalConfigDisabledAttribute(() => {
                     /* ignore */
                 }),
-            ).toThrow(
-                new ImplementationError(
-                    "Attribute localConfigDisabled is optional and not initialized. To use it please initialize it first.",
-                ),
+            ).throw(
+                ImplementationError,
+                "Attribute localConfigDisabled is optional and not initialized. To use it please initialize it first.",
             );
 
             // Now we set this Cluster into Endpoint and retrieve it again and verify it is the same
@@ -378,25 +376,23 @@ describe("ClusterServer structure", () => {
             endpoint.addClusterServer(basic);
 
             const basic2 = endpoint.getClusterServer(BasicInformationCluster);
-            expect(basic2).toBeTruthy();
+            expect(basic2).ok;
 
-            expect(basic2?.attributes.localConfigDisabled).not.toBeDefined();
+            expect(basic2?.attributes.localConfigDisabled).undefined;
             // guard needed because as per types optional are potentially undefined
-            expect(basic2?.getLocalConfigDisabledAttribute?.()).not.toBeDefined();
-            expect(() => basic2?.setLocalConfigDisabledAttribute(true)).toThrow(
-                new ImplementationError(
-                    "Attribute localConfigDisabled is optional and not initialized. To use it please initialize it first.",
-                ),
+            expect(basic2?.getLocalConfigDisabledAttribute?.()).undefined;
+            expect(() => basic2?.setLocalConfigDisabledAttribute(true)).throw(
+                ImplementationError,
+                "Attribute localConfigDisabled is optional and not initialized. To use it please initialize it first.",
             );
             expect(
                 () =>
                     basic2?.subscribeLocalConfigDisabledAttribute(() => {
                         /* ignore */
                     }),
-            ).toThrow(
-                new ImplementationError(
-                    "Attribute localConfigDisabled is optional and not initialized. To use it please initialize it first.",
-                ),
+            ).throw(
+                ImplementationError,
+                "Attribute localConfigDisabled is optional and not initialized. To use it please initialize it first.",
             );
         });
 
@@ -415,8 +411,8 @@ describe("ClusterServer structure", () => {
             const fabric = {
                 getScopedClusterDataValue: (cluster: Cluster<any, any, any, any, any>, name: string) => {
                     getScopedClusterDataValueCalledCounter++;
-                    expect(cluster.id).toBe(BindingCluster.id);
-                    expect(name).toBe("binding");
+                    expect(cluster.id).equal(BindingCluster.id);
+                    expect(name).equal("binding");
                     return [];
                 },
                 setScopedClusterDataValue<T>(
@@ -425,19 +421,19 @@ describe("ClusterServer structure", () => {
                     value: T,
                 ) {
                     setScopedClusterDataValueCalledCounter++;
-                    expect(cluster.id).toBe(BindingCluster.id);
-                    expect(clusterDataKey).toBe("binding");
-                    expect(value).toEqual({ value: [{ fabricIndex: FabricIndex(1) }] });
+                    expect(cluster.id).equal(BindingCluster.id);
+                    expect(clusterDataKey).equal("binding");
+                    expect(value).deep.equal({ value: [{ fabricIndex: FabricIndex(1) }] });
                 },
             } as Fabric;
 
-            expect(binding.attributes.binding.getLocalForFabric(fabric)).toEqual([]);
+            expect(binding.attributes.binding.getLocalForFabric(fabric)).deep.equal([]);
             binding.attributes.binding.setLocalForFabric([{ fabricIndex: FabricIndex(1) }], fabric);
-            expect(binding.getBindingAttribute(fabric)).toEqual([]);
+            expect(binding.getBindingAttribute(fabric)).deep.equal([]);
             binding.setBindingAttribute([{ fabricIndex: FabricIndex(1) }], fabric);
 
-            expect(getScopedClusterDataValueCalledCounter).toBe(4);
-            expect(setScopedClusterDataValueCalledCounter).toBe(2);
+            expect(getScopedClusterDataValueCalledCounter).equal(4);
+            expect(setScopedClusterDataValueCalledCounter).equal(2);
         });
     });
 
@@ -459,10 +455,10 @@ describe("ClusterServer structure", () => {
                     },
                 },
             );
-            expect(server).toBeDefined();
+            expect(server).exist;
             // as any is trick because these attributes are not officially exposed by typings
-            expect((server.attributes as any).featureMap.get()).toEqual({});
-            expect((server.attributes as any).attributeList.get()).toEqual([
+            expect((server.attributes as any).featureMap.get()).deep.equal({});
+            expect((server.attributes as any).attributeList.get()).deep.equal([
                 AttributeId(0),
                 AttributeId(1),
                 AttributeId(2),
@@ -473,9 +469,9 @@ describe("ClusterServer structure", () => {
                 AttributeId(65532),
                 AttributeId(65533),
             ]);
-            expect((server.attributes as any).acceptedCommandList.get()).toEqual([CommandId(0), CommandId(2)]);
-            expect((server.attributes as any).generatedCommandList.get()).toEqual([]);
-            expect((server.attributes as any).eventList.get()).toEqual([]);
+            expect((server.attributes as any).acceptedCommandList.get()).deep.equal([CommandId(0), CommandId(2)]);
+            expect((server.attributes as any).generatedCommandList.get()).deep.equal([]);
+            expect((server.attributes as any).eventList.get()).deep.equal([]);
         });
 
         it("IdentifyCluster including optional commands", () => {
@@ -494,10 +490,10 @@ describe("ClusterServer structure", () => {
                     },
                 },
             );
-            expect(server).toBeTruthy();
+            expect(server).ok;
             // as any is trick because these attributes are not officially exposed by typings
-            expect((server.attributes as any).featureMap.get()).toEqual({});
-            expect((server.attributes as any).attributeList.get()).toEqual([
+            expect((server.attributes as any).featureMap.get()).deep.equal({});
+            expect((server.attributes as any).attributeList.get()).deep.equal([
                 AttributeId(0),
                 AttributeId(1),
                 AttributeId(65528),
@@ -507,9 +503,9 @@ describe("ClusterServer structure", () => {
                 AttributeId(65532),
                 AttributeId(65533),
             ]);
-            expect((server.attributes as any).acceptedCommandList.get()).toEqual([CommandId(0), CommandId(0x40)]);
-            expect((server.attributes as any).generatedCommandList.get()).toEqual([]);
-            expect((server.attributes as any).eventList.get()).toEqual([]);
+            expect((server.attributes as any).acceptedCommandList.get()).deep.equal([CommandId(0), CommandId(0x40)]);
+            expect((server.attributes as any).generatedCommandList.get()).deep.equal([]);
+            expect((server.attributes as any).eventList.get()).deep.equal([]);
         });
 
         it("IdentifyCluster including optional commands", () => {
@@ -528,10 +524,10 @@ describe("ClusterServer structure", () => {
                     },
                 },
             );
-            expect(server).toBeTruthy();
+            expect(server).ok;
             // as any is trick because these attributes are not officially exposed by typings
-            expect((server.attributes as any).featureMap.get()).toEqual({});
-            expect((server.attributes as any).attributeList.get()).toEqual([
+            expect((server.attributes as any).featureMap.get()).deep.equal({});
+            expect((server.attributes as any).attributeList.get()).deep.equal([
                 AttributeId(0),
                 AttributeId(1),
                 AttributeId(65528),
@@ -541,9 +537,9 @@ describe("ClusterServer structure", () => {
                 AttributeId(65532),
                 AttributeId(65533),
             ]);
-            expect((server.attributes as any).acceptedCommandList.get()).toEqual([CommandId(0), CommandId(0x40)]);
-            expect((server.attributes as any).generatedCommandList.get()).toEqual([]);
-            expect((server.attributes as any).eventList.get()).toEqual([]);
+            expect((server.attributes as any).acceptedCommandList.get()).deep.equal([CommandId(0), CommandId(0x40)]);
+            expect((server.attributes as any).generatedCommandList.get()).deep.equal([]);
+            expect((server.attributes as any).eventList.get()).deep.equal([]);
         });
 
         it("IdentifyCluster without optional commands", () => {
@@ -559,10 +555,10 @@ describe("ClusterServer structure", () => {
                     },
                 },
             );
-            expect(server).toBeTruthy();
+            expect(server).ok;
             // as any is trick because these attributes are not officially exposed by typings
-            expect((server.attributes as any).featureMap.get()).toEqual({});
-            expect((server.attributes as any).attributeList.get()).toEqual([
+            expect((server.attributes as any).featureMap.get()).deep.equal({});
+            expect((server.attributes as any).attributeList.get()).deep.equal([
                 AttributeId(0),
                 AttributeId(1),
                 AttributeId(65528),
@@ -572,8 +568,8 @@ describe("ClusterServer structure", () => {
                 AttributeId(65532),
                 AttributeId(65533),
             ]);
-            expect((server.attributes as any).acceptedCommandList.get()).toEqual([CommandId(0)]);
-            expect((server.attributes as any).generatedCommandList.get()).toEqual([]);
+            expect((server.attributes as any).acceptedCommandList.get()).deep.equal([CommandId(0)]);
+            expect((server.attributes as any).generatedCommandList.get()).deep.equal([]);
         });
 
         it("GroupsCluster", () => {
@@ -603,10 +599,10 @@ describe("ClusterServer structure", () => {
                     },
                 },
             );
-            expect(server).toBeTruthy();
+            expect(server).ok;
             // as any is trick because these attributes are not officially exposed by typings
-            expect((server.attributes as any).featureMap.get()).toEqual({ groupNames: true });
-            expect((server.attributes as any).attributeList.get()).toEqual([
+            expect((server.attributes as any).featureMap.get()).deep.equal({ groupNames: true });
+            expect((server.attributes as any).attributeList.get()).deep.equal([
                 AttributeId(0),
                 AttributeId(65528),
                 AttributeId(65529),
@@ -615,7 +611,7 @@ describe("ClusterServer structure", () => {
                 AttributeId(65532),
                 AttributeId(65533),
             ]);
-            expect((server.attributes as any).acceptedCommandList.get()).toEqual([
+            expect((server.attributes as any).acceptedCommandList.get()).deep.equal([
                 CommandId(0),
                 CommandId(1),
                 CommandId(2),
@@ -623,13 +619,13 @@ describe("ClusterServer structure", () => {
                 CommandId(4),
                 CommandId(5),
             ]);
-            expect((server.attributes as any).generatedCommandList.get()).toEqual([
+            expect((server.attributes as any).generatedCommandList.get()).deep.equal([
                 CommandId(0),
                 CommandId(1),
                 CommandId(2),
                 CommandId(3),
             ]);
-            expect((server.attributes as any).eventList.get()).toEqual([]);
+            expect((server.attributes as any).eventList.get()).deep.equal([]);
         });
 
         it("Missing Conditionals Log warnings", () => {
@@ -685,7 +681,7 @@ describe("ClusterServer structure", () => {
                 );
             });
 
-            expect(messages).toEqual([
+            expect(messages).deep.equal([
                 {
                     level: Level.DEBUG,
                     message:

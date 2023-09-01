@@ -27,13 +27,13 @@ describe("TlvString", () => {
         it("encodes a string", () => {
             const result = TlvString.encode("test");
 
-            expect(result.toHex()).toBe("0c0474657374");
+            expect(result.toHex()).equal("0c0474657374");
         });
 
         it("encodes a string that gets utf8 encoded", () => {
             const result = TlvString.encode("testè");
 
-            expect(result.toHex()).toBe("0c0674657374c3a8");
+            expect(result.toHex()).equal("0c0674657374c3a8");
         });
     });
 
@@ -41,13 +41,13 @@ describe("TlvString", () => {
         it("decodes a string", () => {
             const result = TlvString.decode(ByteArray.fromHex("0c0474657374"));
 
-            expect(result).toBe("test");
+            expect(result).equal("test");
         });
 
         it("decodes a string that was utf8", () => {
             const result = TlvString.decode(ByteArray.fromHex("0c0674657374c3a8"));
 
-            expect(result).toBe("testè");
+            expect(result).equal("testè");
         });
     });
 
@@ -59,9 +59,9 @@ describe("TlvString", () => {
             it(testName, () => {
                 const test = () => BoundedInt.validate(input);
                 if (throwException) {
-                    expect(test).toThrow();
+                    expect(test).throw();
                 } else {
-                    expect(test).not.toThrow();
+                    expect(test).not.throw();
                 }
             });
         }
@@ -73,7 +73,7 @@ describe("TlvByteString", () => {
         it("encodes a byte string", () => {
             const result = TlvByteString.encode(ByteArray.fromHex("0001"));
 
-            expect(result.toHex()).toBe("10020001");
+            expect(result.toHex()).equal("10020001");
         });
     });
 
@@ -81,7 +81,7 @@ describe("TlvByteString", () => {
         it("decodes a byte string", () => {
             const result = TlvByteString.decode(ByteArray.fromHex("10020001"));
 
-            expect(result.toHex()).toBe("0001");
+            expect(result.toHex()).equal("0001");
         });
     });
 
@@ -93,9 +93,9 @@ describe("TlvByteString", () => {
             it(testName, () => {
                 const test = () => BoundedInt.validate(ByteArray.fromHex(input));
                 if (throwException) {
-                    expect(test).toThrow();
+                    expect(test).throw();
                 } else {
-                    expect(test).not.toThrow();
+                    expect(test).not.throw();
                 }
             });
         }
@@ -103,13 +103,17 @@ describe("TlvByteString", () => {
 
     describe("validation", () => {
         it("throws an error if the value is not a ByteString", () => {
-            expect(() => TlvByteString.validate(5 as any)).toThrow(
-                new ValidationError("Expected ByteArray, got number."),
+            expect(() => TlvByteString.validate(5 as any)).throw(
+                ValidationError,
+                "Expected ByteArray, got number.",
             );
         });
 
         it("throws an error if the value is not a String", () => {
-            expect(() => TlvString.validate(true as any)).toThrow(new ValidationError("Expected string, got boolean."));
+            expect(() => TlvString.validate(true as any)).throw(
+                ValidationError,
+                "Expected string, got boolean."
+            );
         });
     });
 });

@@ -34,7 +34,7 @@ describe("EventDataDecoder", () => {
 
             const normalized = normalizeEventData(data);
 
-            expect(normalized).toEqual([
+            expect(normalized).deep.equal([
                 [
                     {
                         path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0) },
@@ -83,7 +83,7 @@ describe("EventDataDecoder", () => {
 
             const normalized = normalizeEventData(data);
 
-            expect(normalized).toEqual([
+            expect(normalized).deep.equal([
                 [
                     {
                         path: data[0].path,
@@ -140,7 +140,7 @@ describe("EventDataDecoder", () => {
 
             const normalized = normalizeAndDecodeEventData(data);
 
-            expect(normalized).toEqual([
+            expect(normalized).deep.equal([
                 {
                     path: {
                         endpointId: EndpointNumber(0),
@@ -222,7 +222,7 @@ describe("EventDataDecoder", () => {
 
             const normalized = normalizeAndDecodeEventData(data);
 
-            expect(normalized).toEqual([
+            expect(normalized).deep.equal([
                 {
                     path: {
                         endpointId: EndpointNumber(0),
@@ -306,7 +306,7 @@ describe("EventDataDecoder", () => {
 
             const normalized = normalizeAndDecodeEventData(data);
 
-            expect(normalized).toEqual([
+            expect(normalized).deep.equal([
                 {
                     path: {
                         endpointId: EndpointNumber(0),

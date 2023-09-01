@@ -35,12 +35,12 @@ const TEST_DEFINITIONS2 = {
 function testOne(definition: string, expected = definition) {
     describe(definition, () => {
         it("parses", () => {
-            expect(() => new Conformance(definition)).not.toThrow();
+            expect(() => new Conformance(definition)).not.throw();
         });
 
         it("serializes", () => {
             const conformance = new Conformance(definition);
-            expect(`${conformance}`).toBe(expected);
+            expect(`${conformance}`).equal(expected);
         });
     });
 }
@@ -52,8 +52,8 @@ describe("Conformance", () => {
     describe("invalid conformance", () => {
         it("fails gracefully", () => {
             const conformance = new Conformance("%");
-            expect(conformance.errors?.length).toBe(1);
-            expect(conformance.toString()).toBe("");
+            expect(conformance.errors?.length).equal(1);
+            expect(conformance.toString()).equal("");
         });
     });
 });

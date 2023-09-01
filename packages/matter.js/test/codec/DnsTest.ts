@@ -89,8 +89,8 @@ describe("DnsCodec", () => {
         it("decodes a message", () => {
             const result = DnsCodec.decode(ENCODED);
 
-            expect(result).toBeTruthy();
-            expect(result).toEqual(DNS_DECODED);
+            expect(result).ok;
+            expect(result).deep.equal(DNS_DECODED);
 
             // Checking the encoding of this decoded message will not work because message uses compressed QNames
             // that we do not support right now on encoding side
@@ -101,11 +101,11 @@ describe("DnsCodec", () => {
         it("encodes a message and verify with decoding again", () => {
             const result = DnsCodec.encode(DNS_RESPONSE);
 
-            expect(result.toHex()).toBe(RESULT.toHex());
+            expect(result.toHex()).equal(RESULT.toHex());
 
             const decoded = DnsCodec.decode(result);
 
-            expect(decoded).toEqual(DNS_RESPONSE);
+            expect(decoded).deep.equal(DNS_RESPONSE);
         });
 
         it("encodes second message and verify with decoding again", () => {
@@ -113,7 +113,7 @@ describe("DnsCodec", () => {
 
             const decoded = DnsCodec.decode(result);
 
-            expect(decoded).toEqual(DNS_DECODED);
+            expect(decoded).deep.equal(DNS_DECODED);
         });
     });
 });

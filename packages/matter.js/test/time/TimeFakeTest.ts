@@ -18,7 +18,7 @@ describe("TimeFake", () => {
         it("returns the fake date", () => {
             const result = timeFake.now();
 
-            expect(result.getTime()).toBe(FAKE_TIME);
+            expect(result.getTime()).equal(FAKE_TIME);
         });
     });
 
@@ -26,7 +26,7 @@ describe("TimeFake", () => {
         it("returns the fake time", () => {
             const result = timeFake.nowMs();
 
-            expect(result).toBe(FAKE_TIME);
+            expect(result).equal(FAKE_TIME);
         });
     });
 
@@ -34,7 +34,7 @@ describe("TimeFake", () => {
         it("advances the time by the duration specified", async () => {
             await timeFake.advanceTime(45);
 
-            expect(timeFake.nowMs()).toBe(FAKE_TIME + 45);
+            expect(timeFake.nowMs()).equal(FAKE_TIME + 45);
         });
     });
 
@@ -43,25 +43,25 @@ describe("TimeFake", () => {
             let firedTime;
 
             const result = timeFake.getPeriodicTimer(30, () => (firedTime = timeFake.nowMs()));
-            expect(result.isRunning).toBe(false);
+            expect(result.isRunning).equal(false);
 
             result.start();
 
-            expect(result.isRunning).toBe(true);
-            expect(firedTime).toBe(undefined);
+            expect(result.isRunning).equal(true);
+            expect(firedTime).equal(undefined);
 
             await timeFake.advanceTime(45);
 
-            expect(firedTime).toBe(FAKE_TIME + 30);
+            expect(firedTime).equal(FAKE_TIME + 30);
 
             await timeFake.advanceTime(20);
 
-            expect(firedTime).toBe(FAKE_TIME + 60);
+            expect(firedTime).equal(FAKE_TIME + 60);
 
-            expect(result.isRunning).toBe(true);
+            expect(result.isRunning).equal(true);
 
             result.stop();
-            expect(result.isRunning).toBe(false);
+            expect(result.isRunning).equal(false);
         });
 
         it("returns a periodic timer that can be stopped", async () => {
@@ -71,12 +71,12 @@ describe("TimeFake", () => {
             result.start();
             result.stop();
 
-            expect(firedTime).toBe(undefined);
+            expect(firedTime).equal(undefined);
 
             await timeFake.advanceTime(45);
 
-            expect(firedTime).toBe(undefined);
-            expect(result.isRunning).toBe(false);
+            expect(firedTime).equal(undefined);
+            expect(result.isRunning).equal(false);
         });
     });
 
@@ -85,34 +85,34 @@ describe("TimeFake", () => {
             let firedTime;
 
             const result = timeFake.getTimer(30, () => (firedTime = timeFake.nowMs()));
-            expect(result.isRunning).toBe(false);
+            expect(result.isRunning).equal(false);
             result.start();
-            expect(result.isRunning).toBe(true);
+            expect(result.isRunning).equal(true);
 
-            expect(firedTime).toBe(undefined);
+            expect(firedTime).equal(undefined);
 
             await timeFake.advanceTime(45);
 
-            expect(firedTime).toBe(FAKE_TIME + 30);
-            expect(result.isRunning).toBe(false);
+            expect(firedTime).equal(FAKE_TIME + 30);
+            expect(result.isRunning).equal(false);
         });
 
         it("returns a timer that can be stopped", async () => {
             let firedTime;
 
             const result = timeFake.getTimer(30, () => (firedTime = timeFake.nowMs()));
-            expect(result.isRunning).toBe(false);
+            expect(result.isRunning).equal(false);
             result.start();
-            expect(result.isRunning).toBe(true);
+            expect(result.isRunning).equal(true);
             result.stop();
-            expect(result.isRunning).toBe(false);
+            expect(result.isRunning).equal(false);
 
-            expect(firedTime).toBe(undefined);
+            expect(firedTime).equal(undefined);
 
             await timeFake.advanceTime(45);
 
-            expect(firedTime).toBe(undefined);
-            expect(result.isRunning).toBe(false);
+            expect(firedTime).equal(undefined);
+            expect(result.isRunning).equal(false);
         });
     });
 });

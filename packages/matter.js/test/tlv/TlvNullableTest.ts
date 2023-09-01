@@ -22,7 +22,7 @@ describe("TlvNullable", () => {
         for (const valueDescription in codecVector) {
             const { encoded, decoded } = codecVector[valueDescription];
             it(`encodes ${valueDescription}`, () => {
-                expect(schema.encode(decoded).toHex()).toBe(encoded);
+                expect(schema.encode(decoded).toHex()).equal(encoded);
             });
         }
     });
@@ -31,7 +31,7 @@ describe("TlvNullable", () => {
         for (const valueDescription in codecVector) {
             const { encoded, decoded } = codecVector[valueDescription];
             it(`decodes ${valueDescription}`, () => {
-                expect(schema.decode(ByteArray.fromHex(encoded))).toBe(decoded);
+                expect(schema.decode(ByteArray.fromHex(encoded))).equal(decoded);
             });
         }
     });

@@ -4,11 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ec as EC } from "elliptic";
+import elliptic from "elliptic";
 import { Base64 } from "../codec/Base64Codec.js";
 import { DerCodec, DerNode, DerType } from "../codec/DerCodec.js";
 import { MatterError, NotImplementedError } from "../common/MatterError.js";
 import { ByteArray } from "../util/ByteArray.js";
+
+const { ec: EC } = elliptic;
 
 class KeyError extends MatterError {}
 

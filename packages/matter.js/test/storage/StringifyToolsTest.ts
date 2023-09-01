@@ -33,13 +33,13 @@ describe("JsonConverter", () => {
 
             const json = toJson(obj);
 
-            expect(json).toBe(
+            expect(json).equal(
                 `{"aNumber":1,"aNumberString":"2","aString":"hello","aBoolean":true,"aNull":null,"anObject":{"a":1,"b":2,"c":3},"anNumberArray":[1,2,3],"anStringArray":["a","b","c"],"anObjectArray":[{"a":1},{"b":2},{"c":3}]}`,
             );
 
             const decodedObj = fromJson(json);
 
-            expect(decodedObj).toEqual(obj);
+            expect(decodedObj).deep.equal(obj);
         });
 
         it("encode/decode BigInt", () => {
@@ -47,12 +47,12 @@ describe("JsonConverter", () => {
 
             const json = toJson(obj);
 
-            expect(json).toBe(`"{\\"__object__\\":\\"BigInt\\",\\"__value__\\":\\"12345678901234567890\\"}"`);
+            expect(json).equal(`"{\\"__object__\\":\\"BigInt\\",\\"__value__\\":\\"12345678901234567890\\"}"`);
 
             const decodedObj = fromJson(json);
 
-            expect(decodedObj).toEqual(obj);
-            expect(typeof decodedObj).toBe("bigint");
+            expect(decodedObj).deep.equal(obj);
+            expect(typeof decodedObj).equal("bigint");
         });
 
         it("encode/decode Uint8Array", () => {
@@ -60,12 +60,12 @@ describe("JsonConverter", () => {
 
             const json = toJson(obj);
 
-            expect(json).toBe(`"{\\"__object__\\":\\"Uint8Array\\",\\"__value__\\":\\"010203\\"}"`);
+            expect(json).equal(`"{\\"__object__\\":\\"Uint8Array\\",\\"__value__\\":\\"010203\\"}"`);
 
             const decodedObj = fromJson(json);
 
-            expect(decodedObj).toEqual(obj);
-            expect(decodedObj instanceof Uint8Array).toBeTruthy();
+            expect(decodedObj).deep.equal(obj);
+            expect(decodedObj instanceof Uint8Array).ok;
         });
 
         it("encode/decode Node.js Buffer", () => {
@@ -77,11 +77,11 @@ describe("JsonConverter", () => {
 
             const json = toJson(obj);
 
-            expect(json).toBe(`"{\\"__object__\\":\\"Uint8Array\\",\\"__value__\\":\\"010203\\"}"`);
+            expect(json).equal(`"{\\"__object__\\":\\"Uint8Array\\",\\"__value__\\":\\"010203\\"}"`);
 
             const decodedObj = fromJson(json);
 
-            expect(decodedObj instanceof Uint8Array).toBeTruthy();
+            expect(decodedObj instanceof Uint8Array).ok;
         });
 
         it("encode/decode Map", () => {
@@ -93,15 +93,15 @@ describe("JsonConverter", () => {
 
             const json = toJson(obj);
 
-            expect(json).toBe(
+            expect(json).equal(
                 `"{\\"__object__\\":\\"Map\\",\\"__value__\\":\\"[[\\\\\\"a\\\\\\",1],[\\\\\\"b\\\\\\",2],[\\\\\\"c\\\\\\",3]]\\"}"`,
             );
 
             const decodedObj = fromJson(json);
 
-            expect(decodedObj).toEqual(obj);
-            expect(decodedObj instanceof Map).toBeTruthy();
-            expect((decodedObj as Map<any, any>).get("a")).toBe(1);
+            expect(decodedObj).deep.equal(obj);
+            expect(decodedObj instanceof Map).ok;
+            expect((decodedObj as Map<any, any>).get("a")).equal(1);
         });
 
         it("encode/decide Map of Maps", () => {
@@ -112,25 +112,25 @@ describe("JsonConverter", () => {
 
             const json = toJson(obj);
 
-            expect(json).toBe(
+            expect(json).equal(
                 `"{\\"__object__\\":\\"Map\\",\\"__value__\\":\\"[[1,\\\\\\"{\\\\\\\\\\\\\\"__object__\\\\\\\\\\\\\\":\\\\\\\\\\\\\\"Map\\\\\\\\\\\\\\",\\\\\\\\\\\\\\"__value__\\\\\\\\\\\\\\":\\\\\\\\\\\\\\"[[\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"a\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",1]]\\\\\\\\\\\\\\"}\\\\\\"],[2,\\\\\\"{\\\\\\\\\\\\\\"__object__\\\\\\\\\\\\\\":\\\\\\\\\\\\\\"Map\\\\\\\\\\\\\\",\\\\\\\\\\\\\\"__value__\\\\\\\\\\\\\\":\\\\\\\\\\\\\\"[[\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"b\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\",2]]\\\\\\\\\\\\\\"}\\\\\\"]]\\"}"`,
             );
 
             const decodedObj = fromJson(json);
 
-            expect(decodedObj).toEqual(obj);
+            expect(decodedObj).deep.equal(obj);
 
-            expect(decodedObj).toBeInstanceOf(Map);
+            expect(decodedObj).instanceof(Map);
             if (!(decodedObj instanceof Map)) return;
 
             const map1 = decodedObj?.get(1);
             const map2 = decodedObj?.get(2);
-            expect(map1).toBeInstanceOf(Map);
-            expect(map2).toBeInstanceOf(Map);
+            expect(map1).instanceof(Map);
+            expect(map2).instanceof(Map);
             if (!(map1 instanceof Map) || !(map2 instanceof Map)) return;
 
-            expect(map1.get("a")).toBe(1);
-            expect(map2.get("b")).toBe(2);
+            expect(map1.get("a")).equal(1);
+            expect(map2.get("b")).equal(2);
         });
 
         it("encode/decode object with matter.js datatypes", () => {
@@ -149,13 +149,13 @@ describe("JsonConverter", () => {
 
             const json = toJson(obj);
 
-            expect(json).toBe(
+            expect(json).equal(
                 `{"attribute":1,"cluster":2,"command":3,"endpoint":4,"event":5,"fabric":"{\\"__object__\\":\\"BigInt\\",\\"__value__\\":\\"6\\"}","fabricIndex":7,"group":8,"node":"{\\"__object__\\":\\"BigInt\\",\\"__value__\\":\\"9\\"}","vendor":11}`,
             );
 
             const decodedObj = fromJson(json);
 
-            expect(decodedObj).toEqual(obj);
+            expect(decodedObj).deep.equal(obj);
         });
     });
 });
