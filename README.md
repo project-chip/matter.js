@@ -14,6 +14,7 @@ Devices created with matter.js/matter-node.js are compatible with:
 - **Amazon Alexa (Amazon Echo smart speakers/displays)** : fully working
 - **Tuya Smart (SmartLife) app**: fully working
 - **Samsung SmartThings (Station or Hub v2 and later)**: pairing works, but for controlling seems like Smartthings implementation itself has issues
+- **LG ThinQ**: fully working
 - **Home Assistant - Matter integration**: fully working
 
 We also collected a [list of known device types supported by which ecosystem](#Device-types-supported-by-Ecosystems).This is a compilation of published information and own community tests.
@@ -132,42 +133,42 @@ Table Legend:
 * "-" means not supported from current knowledge
 * "?" means unknown
 
-| Device type                       | Apple | Google        | Amazon | SmartThings | Tuya |
-|-----------------------------------|-------|---------------|--------|-------------|------|
-| **Bridge Support**                | X     | X             | X      | -           | -    |
-| **Light devices**                 |       |               |        |             |      |
-| * On/Off Light                    | X     | X             | X      | X           | X    |
-| * Dimmable Light                  | X     | X             | X      | X           | X    |
-| * Color Temperature Light         | X     | X             | X      | X           | X    |
-| * Extended Color Light            | X     | X             | X      | ?           | ?    |
-| **Smart Plugs/Outlets/Actuators** |       |               |        |             |      |
-| * On/Off Plug-in Unit             | X     | X             | X      | X           | X    |
-| * Dimmable Plug-in Unit           | ?     | ?             | ?      | ?           | ?    |
-| * Pump                            | -     | -             | -      | -           | -    |
-| **Sensors**                       |       |               |        |             |      |
-| * Contact Sensor                  | X     | X             | X      | X           | ?    |
-| * Light Sensor                    | X     | X             | -      | X           | ?    |
-| * Occupancy Sensor                | X     | X             | -      | ?           | ?    |
-| * Temperature Sensor              | X     | X             | -      | X           | ?    |
-| * Pressure Sensor                 | -     | X             | -      | ?           | ?    |
-| * Flow Sensor                     | -     | X             | -      | X           | ?    |
-| * Humidity Sensor                 | X     | X             | -      | X           | ?    |
-| * On/Off Sensor                   | ?     | ?             | ?      | ?           | ?    |
-| **Closure Devices**               |       |               |        |             |      |
-| * Door Lock                       | -     | X             | X      | ?           | ?    |
-| * Window Covering                 | X     | X (Lift only) | -      | ?           | ?    |
-| **HVAC Devices**                  |       |               |        |             |      |
-| * Heating/Cooling-Unit            | -     | -             | -      | -           | ?    |
-| * Thermostat                      | X     | X             | X      | ?           | ?    |
-| * Fan                             | -     | -             | -      | -           | ?    |
-| **Media Devices**                 |       |               |        |             |      |
-| * Video Player Architecture       | -     | -             | -      | -           | -    |
-| * Basic Video Player              | -     | -             | -      | -           | -    |
-| * Casting Video Player            | -     | -             | -      | -           | -    |
-| * Speaker                         |       | X             | -      | -           | -    |
-| * Content App                     | -     | -             | -      | -           | -    |
-| **Generic Devices**               |       |               |        |             |      |
-| * Mode Select                     | -     | -             | X      | -           | -    |
+| Device type                       | Apple | Google        | Amazon | SmartThings | LG ThinQ | Tuya |
+|-----------------------------------|-------|---------------|--------|-------------|----------|------|
+| **Bridge Support**                | X     | X             | X      | -           | -        | -    |
+| **Light devices**                 |       |               |        |             |          |      |
+| * On/Off Light                    | X     | X             | X      | X           | X        | X    |
+| * Dimmable Light                  | X     | X             | X      | X           | X        | X    |
+| * Color Temperature Light         | X     | X             | X      | X           | ?        | X    |
+| * Extended Color Light            | X     | X             | X      | ?           | ?        | ?    |
+| **Smart Plugs/Outlets/Actuators** |       |               |        |             |          |      |
+| * On/Off Plug-in Unit             | X     | X             | X      | X           | X        | X    |
+| * Dimmable Plug-in Unit           | ?     | ?             | ?      | ?           | X        | ?    |
+| * Pump                            | -     | -             | -      | -           |          | -    |
+| **Sensors**                       |       |               |        |             |          |      |
+| * Contact Sensor                  | X     | X             | X      | X           | ?        | ?    |
+| * Light Sensor                    | X     | X             | -      | X           | ?        | ?    |
+| * Occupancy Sensor                | X     | X             | -      | ?           | ?        | ?    |
+| * Temperature Sensor              | X     | X             | -      | X           | ?        | ?    |
+| * Pressure Sensor                 | -     | X             | -      | ?           | ?        | ?    |
+| * Flow Sensor                     | -     | X             | -      | X           | ?        | ?    |
+| * Humidity Sensor                 | X     | X             | -      | X           | ?        | ?    |
+| * On/Off Sensor                   | ?     | ?             | ?      | ?           | ?        | ?    |
+| **Closure Devices**               |       |               |        |             |          |      |
+| * Door Lock                       | -     | X             | X      | ?           | ?        | ?    |
+| * Window Covering                 | X     | X (Lift only) | -      | ?           | ?        | ?    |
+| **HVAC Devices**                  |       |               |        |             |          |      |
+| * Heating/Cooling-Unit            | -     | -             | -      | -           | ?        | ?    |
+| * Thermostat                      | X     | X             | X      | ?           | ?        | ?    |
+| * Fan                             | -     | -             | -      | -           | ?        | ?    |
+| **Media Devices**                 |       |               |        |             |          |      |
+| * Video Player Architecture       | -     | -             | -      | -           | ?        | -    |
+| * Basic Video Player              | -     | -             | -      | -           | ?        | -    |
+| * Casting Video Player            | -     | -             | -      | -           | ?        | -    |
+| * Speaker                         |       | X             | -      | -           | ?        | -    |
+| * Content App                     | -     | -             | -      | -           | ?        | -    |
+| **Generic Devices**               |       |               |        |             |          |      |
+| * Mode Select                     | -     | -             | X      | -           | ?        | -    |
 
 ## Pairing and Usage Information
 
