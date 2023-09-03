@@ -10,6 +10,7 @@ import { ClusterId } from "../datatype/ClusterId.js";
 import { CommandId, TlvCommandId } from "../datatype/CommandId.js";
 import { EventId, TlvEventId } from "../datatype/EventId.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
+import { MatterCoreSpecificationV1_1 } from "../spec/Specifications.js";
 import { TlvAny } from "../tlv/TlvAny.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvBitmap, TlvUInt16, TlvUInt32 } from "../tlv/TlvNumber.js";
@@ -699,11 +700,14 @@ export const ConditionalCommand = <RequestT, ResponseT, F extends BitSchema>(
     mandatoryIf,
 });
 
-/* Interfaces and helper methods to define a cluster event */
+/**
+ * Interfaces and helper methods to define a cluster event
+ * @see {@link MatterCoreSpecificationV1_1} § 7.18.2.25
+ */
 export const enum EventPriority {
-    Critical,
-    Info,
     Debug,
+    Info,
+    Critical,
 }
 
 export interface Event<T, F extends BitSchema> {
@@ -828,7 +832,7 @@ export interface Events {
 }
 
 // TODO Adjust typing to be derived from the schema below
-/** @see {@link MatterCoreSpecificationV1_0} § 7.13 */
+/** @see {@link MatterCoreSpecificationV1_1} § 7.13 */
 export type GlobalAttributes<F extends BitSchema> = {
     /** Indicates the revision of the server cluster specification supported by the cluster instance. */
     clusterRevision: Attribute<number, never>;
