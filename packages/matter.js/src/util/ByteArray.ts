@@ -31,7 +31,9 @@ declare global {
 }
 
 Uint8Array.prototype.toHex = function () {
-    return this.reduce((result, byte) => result + byte.toString(16).padStart(2, "0"), "");
+    return Array.from(this)
+        .map(byte => byte.toString(16).padStart(2, "0"))
+        .join("");
 };
 
 Uint8Array.prototype.getDataView = function () {
