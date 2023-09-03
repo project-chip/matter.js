@@ -65,6 +65,7 @@ export class FabricManager {
     }
 
     armFailSafe() {
+        // TODO Fix here because armFailsafe could be called several times!
         this.fabricBuilder = new FabricBuilder(FabricIndex(this.nextFabricIndex++));
     }
 

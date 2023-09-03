@@ -68,6 +68,8 @@ npm run matter-device -- -type socket -on "echo 255 > /sys/class/leds/led1/brigh
 ```
 (Please note the "--" to separate commandline parameters between the npm run and the executed script.
 
+**If you want to start multiple parallel processes please make sure to use different storage locations, different network port and ideally also different passcodes for each process!**
+
 The following parameters are available:
 * -passcode: the passcode to use for pairing (default: 20202021)
 * -discriminator: the discriminator to use for pairing (default: 3840, value between 0 and 4095)
@@ -93,7 +95,9 @@ Additionally, there are some Testing parameters:
 
 A Bridge is used to expose multiple devices at once.
 
-The usage and parameter are comparable to above. but the bridge adds support for multiple types and on/off commands:
+The usage and parameter are comparable to above, but the bridge adds support for multiple types and on/off commands:
+
+**If you want to start multiple parallel processes please make sure to use different storage locations, different network port and ideally also different passcodes for each process!**
 
 The usage is as above but with modified parameters:
 * -num X: number of devices to expose (default 2)
@@ -157,6 +161,8 @@ npm run matter-multidevice -- -type socket -num 2 -on1 "echo 255 > /sys/class/le
 (Please note the "--" to separate commandline parameters between the npm run and the executed script.
 
 The above command exposes two single light devices (one socket and on light) and executes the respective commands when the devices are turned on or off.
+
+**If you want to start multiple parallel processes please make sure to use different storage locations, different network port and ideally also different passcodes for each process!**
 
 ### Start a Matter Controller
 

@@ -17,10 +17,13 @@ import { FabricId } from "../datatype/FabricId.js";
 import { FabricIndex } from "../datatype/FabricIndex.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { VendorId } from "../datatype/VendorId.js";
+import { Logger } from "../log/Logger.js";
 import { SecureSession } from "../session/SecureSession.js";
 import { SupportedStorageTypes } from "../storage/StringifyTools.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataWriter } from "../util/DataWriter.js";
+
+const logger = Logger.get("Fabric");
 
 const COMPRESSED_FABRIC_ID_INFO = ByteArray.fromString("CompressedFabric");
 const GROUP_SECURITY_INFO = ByteArray.fromString("GroupKey v1.0");
@@ -251,6 +254,7 @@ export class FabricBuilder {
         const {
             subject: { nodeId, fabricId },
         } = TlvOperationalCertificate.decode(operationalCert);
+        logger.debug(`FabricBuilder setOperationalCert: nodeId=${nodeId}, fabricId=${fabricId}`);
         this.fabricId = FabricId(fabricId);
         this.nodeId = nodeId;
         return this;
