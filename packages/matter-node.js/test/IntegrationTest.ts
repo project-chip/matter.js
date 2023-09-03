@@ -608,7 +608,7 @@ describe("Integration Test", () => {
             callback = (value: boolean) => updateResolver({ value, time: Time.nowMs() });
 
             await fakeTime.advanceTime(2 * 1000);
-            await onOffLightDeviceServer.setOnOff(true);
+            onOffLightDeviceServer.setOnOff(true);
             await fakeTime.advanceTime(100);
             const updateReport = await updatePromise;
 
@@ -626,7 +626,7 @@ describe("Integration Test", () => {
 
             // ... but on next change immediately (means immediately + 50ms, so wait 100ms) then
             await fakeTime.advanceTime(2 * 1000);
-            await onOffLightDeviceServer.setOnOff(false);
+            onOffLightDeviceServer.setOnOff(false);
             await fakeTime.advanceTime(100);
             const lastReport = await lastPromise;
 
@@ -662,7 +662,7 @@ describe("Integration Test", () => {
             assert.deepEqual(pushedUpdates, []);
 
             await fakeTime.advanceTime(2 * 1000);
-            await onOffLightDeviceServer.setOnOff(true);
+            onOffLightDeviceServer.setOnOff(true);
             await fakeTime.advanceTime(100);
             await fakeTime.yield();
 
