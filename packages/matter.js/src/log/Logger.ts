@@ -184,31 +184,18 @@ const defaultValueFormatter = (value: string) => value;
  * log output.  See Logger.dict() for maximal convenience.
  */
 export class DiagnosticDictionary {
-    private entries = new Map<string, any>();
-
     /**
      * Create a new dictionary with optional entry values.
      *
      * @param entries the entries as [ "KEY", value ] tuples
      */
-    constructor(entries: { [KEY: string]: any } = {}) {
-        // Use getOwnPropertyNames because it follows insertion order as of
-        // ES6
+    constructor(private readonly entries: { [KEY: string]: any } = {}) {
+        // Use getOwnPropertyNames because it follows insertion order as of ES6
         for (const KEY of Object.getOwnPropertyNames(entries)) {
-            if (entries[KEY] !== undefined) {
-                this.set(KEY, entries[KEY]);
+            if (entries[KEY] === undefined) {
+                delete entries[KEY];
             }
         }
-    }
-
-    /**
-     * Add a value to the dictionary.
-     *
-     * @param KEY the value's KEY
-     * @param value the value to add
-     */
-    public set(KEY: string, value: any) {
-        this.entries.set(KEY, value);
     }
 
     /**
@@ -219,11 +206,9 @@ export class DiagnosticDictionary {
      * @returns the formatted value
      */
     public serialize(keyFormatter = defaultKeyFormatter, valueFormatter = defaultValueFormatter): string {
-        const entries: string[] = [];
-        this.entries.forEach((v, k) =>
-            entries.push(`${keyFormatter(k)}${formatValue(v, keyFormatter, valueFormatter)}`),
-        );
-        return entries.join(" ");
+        return Object.getOwnPropertyNames(this.entries)
+            .map(k => `${keyFormatter(k)}${formatValue(this.entries[k], keyFormatter, valueFormatter)}`)
+            .join(" ");
     }
 
     public toString() {
