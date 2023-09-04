@@ -13,7 +13,7 @@ import {
 import { asClusterServerInternal } from "../../cluster/server/ClusterServerTypes.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
-import { Message } from "../../codec/MessageCodec.js";
+import { Message, SessionType } from "../../codec/MessageCodec.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { Crypto } from "../../crypto/Crypto.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
@@ -27,7 +27,7 @@ import { MatterDevice } from "../../MatterDevice.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
-import { assertSecureSession } from "../../session/SecureSession.js";
+import { assertSecureSession, SecureSession } from "../../session/SecureSession.js";
 import { StorageContext } from "../../storage/StorageContext.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
@@ -166,7 +166,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         if (this.isClosing) return; // We are closing, ignore anything newly incoming
         await new InteractionServerMessenger(exchange).handleRequest(
             readRequest => this.handleReadRequest(exchange, readRequest),
-            writeRequest => this.handleWriteRequest(exchange, writeRequest),
+            (writeRequest, message) => this.handleWriteRequest(exchange, writeRequest, message),
             (subscribeRequest, messenger) => this.handleSubscribeRequest(exchange, subscribeRequest, messenger),
             (invokeRequest, message) => this.handleInvokeRequest(exchange, invokeRequest, message),
             timedRequest => this.handleTimedRequest(exchange, timedRequest),
@@ -323,7 +323,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
     handleWriteRequest(
         exchange: MessageExchange<MatterDevice>,
-        { suppressResponse, writeRequests }: WriteRequest,
+        { suppressResponse, timedRequest, writeRequests, interactionModelRevision }: WriteRequest,
+        { packetHeader: { sessionType } }: Message,
     ): WriteResponse {
         logger.debug(
             `Received write request from ${exchange.channel.name}: ${writeRequests
@@ -331,7 +332,43 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                 .join(", ")}, suppressResponse=${suppressResponse}`,
         );
 
-        // TODO consider TimedRequest constraints
+        if (interactionModelRevision > INTERACTION_MODEL_REVISION) {
+            throw new StatusResponseError(
+                `Interaction model revision ${interactionModelRevision} not supported`,
+                StatusCode.InvalidAction,
+            );
+        }
+
+        const receivedWithinTimedInteraction = exchange.hasActiveTimedInteraction();
+        if (exchange.hasExpiredTimedInteraction()) {
+            exchange.clearTimedInteraction(); // ??
+            throw new StatusResponseError(`Timed request window expired. Decline write request.`, StatusCode.Timeout);
+        }
+
+        if (timedRequest !== exchange.hasTimedInteraction()) {
+            throw new StatusResponseError(
+                `timedRequest flag of write interaction (${timedRequest}) mismatch with expected timed interaction (${receivedWithinTimedInteraction}).`,
+                StatusCode.TimedRequestMismatch,
+            );
+        }
+
+        if (receivedWithinTimedInteraction) {
+            logger.debug(`Write request from ${exchange.channel.name} received while timed interaction is running.`);
+            exchange.clearTimedInteraction();
+            if (sessionType !== SessionType.Unicast) {
+                throw new StatusResponseError(
+                    "Write requests are only allowed on unicast sessions when a timed interaction is running.",
+                    StatusCode.InvalidAction,
+                ); // ???
+            }
+        }
+
+        if (sessionType === SessionType.Group && !suppressResponse) {
+            throw new StatusResponseError(
+                "Write requests are only allowed as group casts when suppressResponse=true.",
+                StatusCode.InvalidAction,
+            ); // ???
+        }
 
         const writeData = normalizeAttributeData(writeRequests, true);
 
@@ -380,18 +417,36 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                     clusterId !== undefined &&
                     attributeId !== undefined
                 ) {
+                    const { attribute } = attributes[0];
                     // Concrete path
+
+                    // TODO Check ACL here
+
+                    if (attribute.requiresTimedInteraction && !receivedWithinTimedInteraction) {
+                        logger.debug(`This write requires a timed interaction which is not initialized.`);
+                        return [{ path, statusCode: StatusCode.NeedsTimedInteraction }];
+                    }
+
+                    if (
+                        attribute instanceof FabricScopedAttributeServer &&
+                        (!exchange.session.isSecure() || !(exchange.session as SecureSession<MatterDevice>).getFabric())
+                    ) {
+                        logger.debug(`This write requires a secure session with a fabric assigned which is missing.`);
+                        return [{ path, statusCode: StatusCode.UnsupportedAccess }];
+                    }
+
                     if (dataVersion !== undefined) {
                         const cluster = this.endpointStructure.getClusterServer(endpointId, clusterId);
                         if (cluster !== undefined && dataVersion !== cluster.clusterDataVersion) {
+                            logger.debug(
+                                `This write requires a specific data version (${dataVersion}) which do not match the current cluster data version (${cluster.clusterDataVersion}).`,
+                            );
                             return [{ path, statusCode: StatusCode.DataVersionMismatch }];
                         }
                     }
                 }
 
                 return attributes.map(({ path, attribute }) => {
-                    // TODO add checks for timed writes, fabric scoped writes
-                    // TODO add ACL checks
                     const { schema, defaultValue } = attribute;
 
                     try {
@@ -403,6 +458,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                                 value,
                             )} (Version=${dataVersion})`,
                         );
+
                         if (
                             !(attribute instanceof AttributeServer) &&
                             !(attribute instanceof FabricScopedAttributeServer)
@@ -412,6 +468,17 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                                 StatusCode.UnsupportedWrite,
                             );
                         }
+
+                        // TODO: ACL check here
+
+                        if (attribute.requiresTimedInteraction && !receivedWithinTimedInteraction) {
+                            logger.debug(`This write requires a timed interaction which is not initialized.`);
+                            throw new StatusResponseError(
+                                "This write requires a timed interaction which is not initialized.",
+                                StatusCode.NeedsTimedInteraction,
+                            );
+                        }
+
                         attribute.set(value, exchange.session);
                     } catch (error: any) {
                         if (attributes.length === 1) {
@@ -439,7 +506,6 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             },
         );
 
-        // TODO respect suppressResponse, potentially also needs adjustment in InteractionMessenger class!
         const errorResults = writeResults.filter(({ statusCode }) => statusCode !== StatusCode.Success);
         logger.debug(
             `Write request from ${exchange.channel.name} done ${
@@ -612,7 +678,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
     async handleInvokeRequest(
         exchange: MessageExchange<MatterDevice>,
-        { invokeRequests }: InvokeRequest,
+        { invokeRequests, timedRequest, suppressResponse, interactionModelRevision }: InvokeRequest,
         message: Message,
     ): Promise<InvokeResponse> {
         logger.debug(
@@ -620,8 +686,42 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                 .map(({ commandPath: { endpointId, clusterId, commandId } }) =>
                     this.endpointStructure.resolveCommandName({ endpointId, clusterId, commandId }),
                 )
-                .join(", ")}`,
+                .join(", ")}, suppressResponse=${suppressResponse}`,
         );
+
+        if (interactionModelRevision > INTERACTION_MODEL_REVISION) {
+            throw new StatusResponseError(
+                `Interaction model revision ${interactionModelRevision} not supported`,
+                StatusCode.InvalidAction,
+            );
+        }
+
+        const {
+            packetHeader: { sessionType },
+        } = message;
+        const receivedWithinTimedInteraction = exchange.hasActiveTimedInteraction();
+        if (exchange.hasExpiredTimedInteraction()) {
+            exchange.clearTimedInteraction(); // ??
+            throw new StatusResponseError(`Timed request window expired. Decline invoke request.`, StatusCode.Timeout);
+        }
+
+        if (timedRequest !== exchange.hasTimedInteraction()) {
+            throw new StatusResponseError(
+                `timedRequest flag of invoke interaction (${timedRequest}) mismatch with expected timed interaction (${receivedWithinTimedInteraction}).`,
+                StatusCode.TimedRequestMismatch,
+            );
+        }
+
+        if (receivedWithinTimedInteraction) {
+            logger.debug(`Invoke request from ${exchange.channel.name} received while timed interaction is running.`);
+            exchange.clearTimedInteraction();
+            if (sessionType !== SessionType.Unicast) {
+                throw new StatusResponseError(
+                    "Invoke requests are only allowed on unicast sessions when a timed interaction is running.",
+                    StatusCode.InvalidAction,
+                ); // ???
+            }
+        }
 
         const invokeResponses: TypeFromSchema<typeof TlvInvokeResponseData>[] = [];
 
@@ -686,6 +786,14 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                         });
                         continue;
                     }
+                    if (command.requiresTimedInteraction && !receivedWithinTimedInteraction) {
+                        logger.debug(`This invoke requires a timed interaction which is not initialized.`);
+                        invokeResponses.push({
+                            status: { commandPath: path, status: { status: StatusCode.NeedsTimedInteraction } },
+                        });
+                        continue;
+                    }
+
                     const result = await tryCatchAsync(
                         async () =>
                             await command.invoke(
@@ -716,6 +824,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             }),
         );
 
+        // TODO support suppressResponse for responses
         return {
             suppressResponse: false,
             interactionModelRevision: INTERACTION_MODEL_REVISION,
