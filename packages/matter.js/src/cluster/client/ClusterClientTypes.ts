@@ -52,6 +52,7 @@ export type EventClients<E extends Events> = Merge<
 
 export type SignatureFromCommandSpec<C extends Command<any, any, any>> = (
     request: RequestType<C>,
+    options?: { asTimedRequest?: boolean; timedRequestTimeoutMs?: number },
 ) => Promise<ResponseType<C>>;
 type GetterTypeFromSpec<A extends Attribute<any, any>> = A extends OptionalAttribute<infer T, any>
     ? T | undefined

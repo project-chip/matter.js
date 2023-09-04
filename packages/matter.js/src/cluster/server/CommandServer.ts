@@ -22,6 +22,7 @@ export class CommandServer<RequestT, ResponseT> {
         readonly name: string,
         readonly requestSchema: TlvSchema<RequestT>,
         readonly responseSchema: TlvSchema<ResponseT>,
+        readonly requiresTimedInteraction: boolean,
         protected readonly handler: (
             request: RequestT,
             session: Session<MatterDevice>,

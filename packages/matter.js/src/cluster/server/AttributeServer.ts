@@ -47,7 +47,7 @@ export function createAttributeServer<
     setter?: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => boolean,
     validator?: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => void,
 ) {
-    const { id, schema, writable, fabricScoped, fixed, omitChanges } = attributeDef;
+    const { id, schema, writable, fabricScoped, fixed, omitChanges, timed } = attributeDef;
 
     if (fixed) {
         return new FixedAttributeServer(
@@ -56,6 +56,7 @@ export function createAttributeServer<
             schema,
             writable,
             false,
+            timed,
             defaultValue,
             getClusterDataVersion,
             getter,
@@ -69,6 +70,7 @@ export function createAttributeServer<
             schema,
             writable,
             !omitChanges,
+            timed,
             defaultValue,
             clusterDef,
             getClusterDataVersion,
@@ -85,6 +87,7 @@ export function createAttributeServer<
         schema,
         writable,
         !omitChanges,
+        timed,
         defaultValue,
         getClusterDataVersion,
         increaseClusterDataVersion,
@@ -110,6 +113,7 @@ export abstract class BaseAttributeServer<T> {
         readonly schema: TlvSchema<T>,
         readonly isWritable: boolean,
         readonly isSubscribable: boolean,
+        readonly requiresTimedInteraction: boolean,
         readonly defaultValue: T,
     ) {
         this.validateWithSchema(defaultValue);
@@ -152,6 +156,7 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
         schema: TlvSchema<T>,
         isWritable: boolean,
         isSubscribable: boolean,
+        requiresTimedInteraction: boolean,
         defaultValue: T,
         protected readonly getClusterDataVersion: () => number,
 
@@ -164,7 +169,7 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
          */
         getter?: (session?: Session<MatterDevice>, endpoint?: Endpoint, isFabricFiltered?: boolean) => T,
     ) {
-        super(id, name, schema, isWritable, isSubscribable, defaultValue); // Fixed attributes do not change, so are not subscribable
+        super(id, name, schema, isWritable, isSubscribable, requiresTimedInteraction, defaultValue); // Fixed attributes do not change, so are not subscribable
 
         if (getter === undefined) {
             this.getter = () => {
@@ -277,6 +282,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
         schema: TlvSchema<T>,
         isWritable: boolean,
         isSubscribable: boolean,
+        requiresTimedInteraction: boolean,
         defaultValue: T,
         getClusterDataVersion: () => number,
         protected readonly increaseClusterDataVersion: () => number,
@@ -316,7 +322,17 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
             );
         }
 
-        super(id, name, schema, isWritable, isSubscribable, defaultValue, getClusterDataVersion, getter);
+        super(
+            id,
+            name,
+            schema,
+            isWritable,
+            isSubscribable,
+            requiresTimedInteraction,
+            defaultValue,
+            getClusterDataVersion,
+            getter,
+        );
 
         if (setter === undefined) {
             this.setter = value => {
@@ -485,6 +501,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
         schema: TlvSchema<T>,
         isWritable: boolean,
         isSubscribable: boolean,
+        requiresTimedInteraction: boolean,
         defaultValue: T,
         readonly cluster: Cluster<any, any, any, any, any>,
         getClusterDataVersion: () => number,
@@ -558,6 +575,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
             schema,
             isWritable,
             isSubscribable,
+            requiresTimedInteraction,
             defaultValue,
             getClusterDataVersion,
             increaseClusterDataVersion,
