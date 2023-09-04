@@ -17,7 +17,6 @@ import { resolveAttributeName, resolveCommandName, resolveEventName } from "../.
 import { ImplementationError, MatterError, MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
-import { CommandId } from "../../datatype/CommandId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { EventId } from "../../datatype/EventId.js";
 import { NodeId } from "../../datatype/NodeId.js";
@@ -25,7 +24,7 @@ import { Logger } from "../../log/Logger.js";
 import { MatterController } from "../../MatterController.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
-import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { ExchangeProvider } from "../ExchangeManager.js";
 import { DecodedAttributeReportValue, normalizeAndDecodeReadAttributeReport } from "./AttributeDataDecoder.js";
 import { DecodedEventData, DecodedEventReportValue, normalizeAndDecodeReadEventReport } from "./EventDataDecoder.js";
@@ -47,6 +46,7 @@ import {
 const logger = Logger.get("InteractionClient");
 
 const REQUEST_ALL = [{}];
+const DEFAULT_TIMED_REQUEST_TIMEOUT_MS = 10000;
 
 export interface AttributeStatus {
     path: {
@@ -319,15 +319,26 @@ export class InteractionClient {
         return normalizedResult;
     }
 
-    async setAttribute<T>(attributeData: {
-        endpointId: EndpointNumber;
-        clusterId: ClusterId;
-        attribute: Attribute<T, any>;
-        value: T;
-        dataVersion?: number;
+    async setAttribute<T>(options: {
+        attributeData: {
+            endpointId: EndpointNumber;
+            clusterId: ClusterId;
+            attribute: Attribute<T, any>;
+            value: T;
+            dataVersion?: number;
+        };
+        asTimedRequest?: boolean;
+        timedRequestTimeoutMs?: number;
+        suppressResponse?: boolean;
     }): Promise<void> {
+        const { attributeData, asTimedRequest, timedRequestTimeoutMs, suppressResponse } = options;
         const { endpointId, clusterId, attribute, value, dataVersion } = attributeData;
-        const response = await this.setMultipleAttributes([{ endpointId, clusterId, attribute, value, dataVersion }]);
+        const response = await this.setMultipleAttributes({
+            attributes: [{ endpointId, clusterId, attribute, value, dataVersion }],
+            asTimedRequest,
+            timedRequestTimeoutMs,
+            suppressResponse,
+        });
 
         // Response contains Status error if there was an error on write
         if (response.length) {
@@ -344,15 +355,24 @@ export class InteractionClient {
         }
     }
 
-    async setMultipleAttributes(
+    async setMultipleAttributes(options: {
         attributes: {
             endpointId: EndpointNumber;
             clusterId: ClusterId;
             attribute: Attribute<any, any>;
             value: any;
             dataVersion?: number;
-        }[],
-    ): Promise<AttributeStatus[]> {
+        }[];
+        asTimedRequest?: boolean;
+        timedRequestTimeoutMs?: number;
+        suppressResponse?: boolean;
+    }): Promise<AttributeStatus[]> {
+        const {
+            attributes,
+            asTimedRequest,
+            timedRequestTimeoutMs = DEFAULT_TIMED_REQUEST_TIMEOUT_MS,
+            suppressResponse = false,
+        } = options;
         return this.withMessenger<AttributeStatus[]>(async messenger => {
             logger.debug(
                 `Sending write request: ${attributes
@@ -371,15 +391,25 @@ export class InteractionClient {
                     dataVersion,
                 }),
             );
+            const timedRequest =
+                attributes.some(({ attribute: { timed } }) => timed) ||
+                asTimedRequest === true ||
+                options.timedRequestTimeoutMs !== undefined;
+            if (timedRequest) {
+                await messenger.sendTimedRequest(timedRequestTimeoutMs);
+            }
             const response = await messenger.sendWriteCommand({
-                suppressResponse: false,
-                timedRequest: false,
+                suppressResponse,
+                timedRequest,
                 writeRequests,
                 moreChunkedMessages: false,
-                interactionModelRevision: 1,
+                interactionModelRevision: INTERACTION_MODEL_REVISION,
             });
             if (response === undefined) {
-                throw new MatterFlowError(`No response received.`);
+                if (!suppressResponse) {
+                    throw new MatterFlowError(`No response received from write interaction but expected.`);
+                }
+                return [];
             }
             return response.writeResponses
                 .flatMap(
@@ -709,33 +739,51 @@ export class InteractionClient {
         });
     }
 
-    async invoke<C extends Command<any, any, any>>(
-        endpointId: EndpointNumber,
-        clusterId: ClusterId,
-        request: RequestType<C>,
-        id: CommandId,
-        requestSchema: TlvSchema<RequestType<C>>,
-        _responseId: CommandId,
-        responseSchema: TlvSchema<ResponseType<C>>,
-        optional: boolean,
-    ): Promise<ResponseType<C>> {
+    async invoke<C extends Command<any, any, any>>(options: {
+        endpointId: EndpointNumber;
+        clusterId: ClusterId;
+        request: RequestType<C>;
+        command: C;
+        asTimedRequest?: boolean;
+        timedRequestTimeoutMs?: number;
+    }): Promise<ResponseType<C>> {
+        const {
+            endpointId,
+            clusterId,
+            request,
+            command: { requestId, requestSchema, responseId, responseSchema, optional, timed },
+            asTimedRequest,
+            timedRequestTimeoutMs = DEFAULT_TIMED_REQUEST_TIMEOUT_MS,
+        } = options;
+        const timedRequest = timed || asTimedRequest === true || options.timedRequestTimeoutMs !== undefined;
+
         return this.withMessenger<ResponseType<C>>(async messenger => {
             logger.debug(
-                `Invoking command: ${resolveCommandName({ endpointId, clusterId, commandId: id })} with ${Logger.toJSON(
-                    request,
-                )}`,
+                `Invoking command: ${resolveCommandName({
+                    endpointId,
+                    clusterId,
+                    commandId: requestId,
+                })} with ${Logger.toJSON(request)}`,
             );
             const commandFields = requestSchema.encodeTlv(request);
 
+            if (timedRequest) {
+                await messenger.sendTimedRequest(timedRequestTimeoutMs);
+            }
+
             const invokeResponse = await messenger.sendInvokeCommand({
-                invokeRequests: [{ commandPath: { endpointId, clusterId, commandId: id }, commandFields }],
-                timedRequest: false,
+                invokeRequests: [{ commandPath: { endpointId, clusterId, commandId: requestId }, commandFields }],
+                timedRequest,
                 suppressResponse: false,
                 interactionModelRevision: INTERACTION_MODEL_REVISION,
             });
-            if (invokeResponse === undefined) throw new MatterFlowError("No response received.");
+            if (invokeResponse === undefined) {
+                throw new MatterFlowError("No response received from invoke interaction but expected.");
+            }
             const { invokeResponses } = invokeResponse;
-            if (invokeResponses.length === 0) throw new MatterFlowError("No response received.");
+            if (invokeResponses.length === 0) {
+                throw new MatterFlowError("Received invoke response with no invoke results.");
+            }
             const { command, status } = invokeResponses[0];
             if (status !== undefined) {
                 const resultCode = status.status.status;
@@ -746,17 +794,26 @@ export class InteractionClient {
                 return undefined as unknown as ResponseType<C>; // ResponseType is void, force casting the empty result
             }
             if (command !== undefined) {
-                if (command.commandFields === undefined) {
+                const {
+                    commandPath: { commandId },
+                    commandFields,
+                } = command;
+                if (commandId !== responseId) {
+                    throw new MatterFlowError(
+                        `Received invoke response with unexpected command ID ${commandId}, expected ${responseId}.`,
+                    );
+                }
+                if (commandFields === undefined) {
                     if ((responseSchema as any) !== TlvNoResponse)
-                        throw new MatterFlowError("A response was expected for this command.");
+                        throw new MatterFlowError(`A response was expected for command ${requestId}.`);
                     return undefined as unknown as ResponseType<C>; // ResponseType is void, force casting the empty result
                 }
-                const response = responseSchema.decodeTlv(command.commandFields);
+                const response = responseSchema.decodeTlv(commandFields);
                 logger.debug(
                     `Received invoke response: ${resolveCommandName({
                         endpointId,
                         clusterId,
-                        commandId: id,
+                        commandId: requestId,
                     })} with ${Logger.toJSON(response)})}`,
                 );
                 return response;
@@ -765,6 +822,61 @@ export class InteractionClient {
                 return undefined as ResponseType<C>; // ResponseType allows undefined for optional commands
             }
             throw new MatterFlowError("Received invoke response with no result nor response.");
+        });
+    }
+
+    // TODO Add to ClusterClient when needed/when Group communication is implemented
+    async invokeWithSuppressedResponse<C extends Command<any, any, any>>(options: {
+        endpointId: EndpointNumber;
+        clusterId: ClusterId;
+        request: RequestType<C>;
+        command: C;
+        asTimedRequest?: boolean;
+        timedRequestTimeoutMs?: number;
+    }): Promise<void> {
+        const {
+            endpointId,
+            clusterId,
+            request,
+            command: { requestId, requestSchema, timed },
+            asTimedRequest,
+            timedRequestTimeoutMs = DEFAULT_TIMED_REQUEST_TIMEOUT_MS,
+        } = options;
+        const timedRequest = timed || asTimedRequest === true || options.timedRequestTimeoutMs !== undefined;
+
+        return this.withMessenger<void>(async messenger => {
+            logger.debug(
+                `Invoking command with suppressedResponse: ${resolveCommandName({
+                    endpointId,
+                    clusterId,
+                    commandId: requestId,
+                })} with ${Logger.toJSON(request)}`,
+            );
+            const commandFields = requestSchema.encodeTlv(request);
+
+            if (timedRequest) {
+                await messenger.sendTimedRequest(timedRequestTimeoutMs);
+            }
+
+            const invokeResponse = await messenger.sendInvokeCommand({
+                invokeRequests: [{ commandPath: { endpointId, clusterId, commandId: requestId }, commandFields }],
+                timedRequest,
+                suppressResponse: true,
+                interactionModelRevision: INTERACTION_MODEL_REVISION,
+            });
+            if (invokeResponse !== undefined) {
+                throw new MatterFlowError(
+                    "Response received from invoke interaction but none expected because response is suppressed.",
+                );
+            }
+
+            logger.debug(
+                `Invoke successful: ${resolveCommandName({
+                    endpointId,
+                    clusterId,
+                    commandId: requestId,
+                })}`,
+            );
         });
     }
 

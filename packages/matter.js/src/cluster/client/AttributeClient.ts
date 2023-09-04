@@ -91,11 +91,13 @@ export class AttributeClient<T> {
         }
 
         return await this.interactionClient.setAttribute<T>({
-            endpointId: this.endpointId,
-            clusterId: this.clusterId,
-            attribute: this.attribute,
-            value,
-            dataVersion,
+            attributeData: {
+                endpointId: this.endpointId,
+                clusterId: this.clusterId,
+                attribute: this.attribute,
+                value,
+                dataVersion,
+            },
         });
     }
 
