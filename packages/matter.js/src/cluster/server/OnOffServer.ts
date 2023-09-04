@@ -65,6 +65,7 @@ export const OnOffClusterDefaultHandler: () => ClusterServerHandlers<typeof OnOf
         },
         onWithRecallGlobalScene: async () => {
             throw new NotImplementedError("Not implemented");
+            console.log("testcommit");
         },
         onWithTimedOff: async ({
             request: { onOffControl, onTime: reqOnTime, offWaitTime: reqOffWaitTime },
