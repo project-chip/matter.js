@@ -768,23 +768,6 @@ describe("Scenes Server test", () => {
             assert.deepEqual(result.response.sceneId, 1);
         });
 
-        it("error on Groupcast message", async () => {
-            await assert.rejects(
-                async () =>
-                    await callCommandOnClusterServer(
-                        scenesServer!,
-                        "viewScene",
-                        { groupId: GroupId(1), sceneId: 1 },
-                        endpoint!,
-                        testSession,
-                        { packetHeader: { sessionType: SessionType.Group } } as Message,
-                    ),
-                {
-                    message: "Groupcast not supported",
-                },
-            );
-        });
-
         it("recallScene on not existing group id", async () => {
             await assert.rejects(
                 async () =>

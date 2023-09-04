@@ -563,6 +563,34 @@ describe("Integration Test", () => {
             assert.equal(await basicInfoCluster.attributes.nodeLabel.get(true), "testLabel3");
             assert.equal(await basicInfoCluster.attributes.location.get(true), "GB");
         });
+
+        it("write multiple attributes with partial errors and suppressed response", async () => {
+            const response = await commissioningController.getInteractionClient().setMultipleAttributes({
+                attributes: [
+                    {
+                        endpointId: EndpointNumber(0),
+                        clusterId: BasicInformation.Cluster.id,
+                        attribute: BasicInformation.Cluster.attributes.nodeLabel,
+                        value: "testLabel4",
+                    },
+                    {
+                        endpointId: EndpointNumber(0),
+                        clusterId: BasicInformation.Cluster.id,
+                        attribute: BasicInformation.Cluster.attributes.location,
+                        value: "XXX",
+                    },
+                ],
+                suppressResponse: true,
+            });
+
+            assert.equal(response.length, 0);
+
+            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformation.Cluster);
+            assert.ok(basicInfoCluster);
+
+            assert.equal(await basicInfoCluster.attributes.nodeLabel.get(true), "testLabel4");
+            assert.equal(await basicInfoCluster.attributes.location.get(true), "GB");
+        });
     });
 
     describe("Groups server fabric scoped storage", () => {

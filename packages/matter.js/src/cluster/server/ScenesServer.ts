@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { SessionType } from "../../codec/MessageCodec.js";
-import { NotImplementedError } from "../../common/MatterError.js";
+import { InternalError } from "../../common/MatterError.js";
 import { GroupId } from "../../datatype/GroupId.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { StatusResponseError } from "../../protocol/interaction/InteractionMessenger.js";
@@ -175,16 +174,8 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             request: { groupId, sceneId, transitionTime, sceneName, extensionFieldSets },
             attributes: { sceneCount },
             session,
-            message: {
-                packetHeader: { sessionType },
-            },
             endpoint,
         }) => {
-            if (sessionType !== SessionType.Unicast) {
-                throw new NotImplementedError("Groupcast not supported");
-                // TODO: When Unicast we generate a response, else not
-            }
-
             assertSecureSession(session);
             const result = addSceneLogic(
                 endpoint.getId(),
@@ -202,19 +193,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             return result;
         },
 
-        viewScene: async ({
-            request: { groupId, sceneId },
-            session,
-            message: {
-                packetHeader: { sessionType },
-            },
-            endpoint,
-        }) => {
-            if (sessionType !== SessionType.Unicast) {
-                throw new NotImplementedError("Groupcast not supported");
-                // TODO: When Unicast we generate a response, else not
-            }
-
+        viewScene: async ({ request: { groupId, sceneId }, session, endpoint }) => {
             assertSecureSession(session);
             const fabric = session.getAssociatedFabric();
 
@@ -238,20 +217,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             };
         },
 
-        removeScene: async ({
-            request: { groupId, sceneId },
-            attributes: { sceneCount },
-            session,
-            message: {
-                packetHeader: { sessionType },
-            },
-            endpoint,
-        }) => {
-            if (sessionType !== SessionType.Unicast) {
-                throw new NotImplementedError("Groupcast not supported");
-                // TODO: When Unicast we generate a response, else not
-            }
-
+        removeScene: async ({ request: { groupId, sceneId }, attributes: { sceneCount }, session, endpoint }) => {
             assertSecureSession(session);
             const fabric = session.getAssociatedFabric();
 
@@ -266,19 +232,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             return { status: StatusCode.NotFound, groupId, sceneId };
         },
 
-        removeAllScenes: async ({
-            request: { groupId },
-            session,
-            message: {
-                packetHeader: { sessionType },
-            },
-            endpoint,
-        }) => {
-            if (sessionType !== SessionType.Unicast) {
-                throw new NotImplementedError("Groupcast not supported");
-                // TODO: When Unicast we generate a response, else not
-            }
-
+        removeAllScenes: async ({ request: { groupId }, session, endpoint }) => {
             assertSecureSession(session);
             const fabric = session.getAssociatedFabric();
 
@@ -295,16 +249,8 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             request: { groupId, sceneId },
             session,
             attributes: { currentScene, currentGroup, sceneValid },
-            message: {
-                packetHeader: { sessionType },
-            },
             endpoint,
         }) => {
-            if (sessionType !== SessionType.Unicast) {
-                throw new NotImplementedError("Groupcast not supported");
-                // TODO: When Unicast we generate a response, else not
-            }
-
             assertSecureSession(session);
             const fabric = session.getAssociatedFabric();
 
@@ -386,19 +332,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             sceneValid.updated(session);
         },
 
-        getSceneMembership: async ({
-            request: { groupId },
-            session,
-            message: {
-                packetHeader: { sessionType },
-            },
-            endpoint,
-        }) => {
-            if (sessionType !== SessionType.Unicast) {
-                throw new NotImplementedError("Groupcast not supported");
-                // TODO: When Unicast we generate a response, else not
-            }
-
+        getSceneMembership: async ({ request: { groupId }, session, endpoint }) => {
             assertSecureSession(session);
             const fabric = session.getAssociatedFabric();
 
@@ -417,16 +351,8 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             request: { groupId, sceneId, transitionTime, sceneName, extensionFieldSets },
             attributes: { sceneCount },
             session,
-            message: {
-                packetHeader: { sessionType },
-            },
             endpoint,
         }) => {
-            if (sessionType !== SessionType.Unicast) {
-                throw new NotImplementedError("Groupcast not supported");
-                // TODO: When Unicast we generate a response, else not
-            }
-
             assertSecureSession(session);
             const result = addSceneLogic(
                 endpoint.getId(),
@@ -444,19 +370,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             return result;
         },
 
-        enhancedViewScene: async ({
-            request: { groupId, sceneId },
-            session,
-            message: {
-                packetHeader: { sessionType },
-            },
-            endpoint,
-        }) => {
-            if (sessionType !== SessionType.Unicast) {
-                throw new NotImplementedError("Groupcast not supported");
-                // TODO: When Unicast we generate a response, else not
-            }
-
+        enhancedViewScene: async ({ request: { groupId, sceneId }, session, endpoint }) => {
             assertSecureSession(session);
             const fabric = session.getAssociatedFabric();
 
@@ -483,16 +397,8 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             request: { mode, groupIdentifierFrom, sceneIdentifierFrom, groupIdentifierTo, sceneIdentifierTo },
             attributes: { sceneCount },
             session,
-            message: {
-                packetHeader: { sessionType },
-            },
             endpoint,
         }) => {
-            if (sessionType !== SessionType.Unicast) {
-                throw new NotImplementedError("Groupcast not supported");
-                // TODO: When Unicast we generate a response, else not
-            }
-
             assertSecureSession(session);
             const fabric = session.getAssociatedFabric();
 
@@ -576,7 +482,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
 
         sceneCountAttributeGetter: ({ session, endpoint }) => {
             if (session === undefined || endpoint === undefined) {
-                throw new NotImplementedError("getSceneCount: session or endpoint undefined");
+                throw new InternalError("getSceneCount: session or endpoint undefined");
             }
 
             assertSecureSession(session);

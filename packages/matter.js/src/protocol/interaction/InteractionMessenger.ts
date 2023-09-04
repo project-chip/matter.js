@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Message } from "../../codec/MessageCodec.js";
+import { Message, SessionType } from "../../codec/MessageCodec.js";
 import { MatterError, MatterFlowError, NotImplementedError, UnexpectedDataError } from "../../common/MatterError.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { Logger } from "../../log/Logger.js";
@@ -123,15 +123,16 @@ class InteractionMessenger<ContextT> {
 export class InteractionServerMessenger extends InteractionMessenger<MatterDevice> {
     async handleRequest(
         handleReadRequest: (request: ReadRequest) => DataReport,
-        handleWriteRequest: (request: WriteRequest) => WriteResponse,
+        handleWriteRequest: (request: WriteRequest, message: Message) => WriteResponse,
         handleSubscribeRequest: (request: SubscribeRequest, messenger: InteractionServerMessenger) => Promise<void>,
         handleInvokeRequest: (request: InvokeRequest, message: Message) => Promise<InvokeResponse>,
         handleTimedRequest: (request: TimedRequest) => void,
     ) {
-        let continueExchange = true;
+        let continueExchange = true; // are more messages expected in this "transaction"?
         try {
             while (continueExchange) {
                 const message = await this.exchange.nextMessage();
+                const isGroupSession = message.packetHeader.sessionType === SessionType.Group;
                 continueExchange = false;
                 switch (message.payloadHeader.messageType) {
                     case MessageType.ReadRequest: {
@@ -141,8 +142,11 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                     }
                     case MessageType.WriteRequest: {
                         const writeRequest = TlvWriteRequest.decode(message.payload);
-                        const writeResponse = handleWriteRequest(writeRequest);
-                        await this.send(MessageType.WriteResponse, TlvWriteResponse.encode(writeResponse));
+                        const { suppressResponse } = writeRequest;
+                        const writeResponse = handleWriteRequest(writeRequest, message);
+                        if (!suppressResponse && !isGroupSession) {
+                            await this.send(MessageType.WriteResponse, TlvWriteResponse.encode(writeResponse));
+                        }
                         break;
                     }
                     case MessageType.SubscribeRequest: {
@@ -153,8 +157,15 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                     }
                     case MessageType.InvokeCommandRequest: {
                         const invokeRequest = TlvInvokeRequest.decode(message.payload);
+                        const { suppressResponse } = invokeRequest;
                         const invokeResponse = await handleInvokeRequest(invokeRequest, message);
-                        await this.send(MessageType.InvokeCommandResponse, TlvInvokeResponse.encode(invokeResponse));
+                        if (!suppressResponse && !isGroupSession) {
+                            await this.send(
+                                MessageType.InvokeCommandResponse,
+                                TlvInvokeResponse.encode(invokeResponse),
+                            );
+                        }
+                        // TODO Also invoke could need continueExchange depending on requirements
                         break;
                     }
                     case MessageType.TimedRequest: {
