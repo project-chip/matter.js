@@ -37,7 +37,12 @@ import {
     StatusResponseError,
 } from "./InteractionMessenger.js";
 import { StatusCode, TlvAttributeReport, TlvEventFilter, TlvEventReport } from "./InteractionProtocol.js";
-import { attributePathToId, clusterPathToId, INTERACTION_PROTOCOL_ID } from "./InteractionServer.js";
+import {
+    attributePathToId,
+    clusterPathToId,
+    INTERACTION_MODEL_REVISION,
+    INTERACTION_PROTOCOL_ID,
+} from "./InteractionServer.js";
 
 const logger = Logger.get("InteractionClient");
 
@@ -199,7 +204,7 @@ export class InteractionClient {
                 eventRequests,
                 eventFilters,
                 isFabricFiltered,
-                interactionModelRevision: 1,
+                interactionModelRevision: INTERACTION_MODEL_REVISION,
             });
         });
     }
@@ -424,7 +429,7 @@ export class InteractionClient {
                 report,
                 subscribeResponse: { subscriptionId },
             } = await messenger.sendSubscribeRequest({
-                interactionModelRevision: 1,
+                interactionModelRevision: INTERACTION_MODEL_REVISION,
                 attributeRequests: [{ endpointId, clusterId, attributeId }],
                 dataVersionFilters:
                     knownDataVersion !== undefined
@@ -499,7 +504,7 @@ export class InteractionClient {
                 report,
                 subscribeResponse: { subscriptionId },
             } = await messenger.sendSubscribeRequest({
-                interactionModelRevision: 1,
+                interactionModelRevision: INTERACTION_MODEL_REVISION,
                 eventRequests: [{ endpointId, clusterId, eventId, isUrgent }],
                 eventFilters: minimumEventNumber !== undefined ? [{ eventMin: minimumEventNumber }] : undefined,
                 keepSubscriptions: true,
@@ -613,7 +618,7 @@ export class InteractionClient {
                 report,
                 subscribeResponse: { subscriptionId, maxInterval },
             } = await messenger.sendSubscribeRequest({
-                interactionModelRevision: 1,
+                interactionModelRevision: INTERACTION_MODEL_REVISION,
                 attributeRequests,
                 eventRequests,
                 keepSubscriptions,
@@ -726,7 +731,7 @@ export class InteractionClient {
                 invokeRequests: [{ commandPath: { endpointId, clusterId, commandId: id }, commandFields }],
                 timedRequest: false,
                 suppressResponse: false,
-                interactionModelRevision: 1,
+                interactionModelRevision: INTERACTION_MODEL_REVISION,
             });
             if (invokeResponse === undefined) throw new MatterFlowError("No response received.");
             const { invokeResponses } = invokeResponse;

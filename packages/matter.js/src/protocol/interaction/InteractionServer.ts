@@ -60,6 +60,7 @@ import {
 import { SubscriptionHandler } from "./SubscriptionHandler.js";
 
 export const INTERACTION_PROTOCOL_ID = 0x0001;
+export const INTERACTION_MODEL_REVISION = 10;
 
 const logger = Logger.get("InteractionServer");
 
@@ -174,14 +175,15 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
     handleReadRequest(
         exchange: MessageExchange<MatterDevice>,
-        { attributeRequests, dataVersionFilters, eventRequests, eventFilters, isFabricFiltered }: ReadRequest,
+        {
+            attributeRequests,
+            dataVersionFilters,
+            eventRequests,
+            eventFilters,
+            isFabricFiltered,
+            interactionModelRevision,
+        }: ReadRequest,
     ): DataReport {
-        if (attributeRequests === undefined && eventRequests === undefined) {
-            throw new StatusResponseError(
-                "Only Read requests with attributeRequests or eventRequests are supported right now",
-                StatusCode.UnsupportedRead,
-            );
-        }
         logger.debug(
             `Received read request from ${exchange.channel.name}: attributes:${
                 attributeRequests?.map(path => this.endpointStructure.resolveAttributeName(path)).join(", ") ?? "none"
@@ -189,6 +191,19 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                 eventRequests?.map(path => this.endpointStructure.resolveEventName(path)).join(", ") ?? "none"
             } isFabricFiltered=${isFabricFiltered}`,
         );
+
+        if (interactionModelRevision > INTERACTION_MODEL_REVISION) {
+            throw new StatusResponseError(
+                `Interaction model revision ${interactionModelRevision} not supported`,
+                StatusCode.InvalidAction,
+            );
+        }
+        if (attributeRequests === undefined && eventRequests === undefined) {
+            throw new StatusResponseError(
+                "Only Read requests with attributeRequests or eventRequests are supported right now",
+                StatusCode.UnsupportedRead,
+            );
+        }
 
         // TODO UnsupportedNode
 
@@ -297,8 +312,9 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             },
         );
 
+        // TODO support suppressResponse for responses
         return {
-            interactionModelRevision: 1,
+            interactionModelRevision: INTERACTION_MODEL_REVISION,
             suppressResponse: false,
             attributeReports,
             eventReports,
@@ -439,7 +455,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         );
 
         return {
-            interactionModelRevision: 1,
+            interactionModelRevision: INTERACTION_MODEL_REVISION,
             writeResponses: writeResults.map(({ path, statusCode }) => ({ path, status: { status: statusCode } })),
         };
     }
@@ -455,12 +471,20 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             eventFilters,
             keepSubscriptions,
             isFabricFiltered,
+            interactionModelRevision,
         }: SubscribeRequest,
         messenger: InteractionServerMessenger,
     ): Promise<void> {
         logger.debug(
             `Received subscribe request from ${exchange.channel.name} (keepSubscriptions=${keepSubscriptions}, isFabricFiltered=${isFabricFiltered})`,
         );
+
+        if (interactionModelRevision > INTERACTION_MODEL_REVISION) {
+            throw new StatusResponseError(
+                `Interaction model revision ${interactionModelRevision} not supported`,
+                StatusCode.InvalidAction,
+            );
+        }
 
         // TODO dataversionFilters
 
@@ -574,7 +598,11 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         // Then send the subscription response
         await messenger.send(
             MessageType.SubscribeResponse,
-            TlvSubscribeResponse.encode({ subscriptionId, maxInterval, interactionModelRevision: 1 }),
+            TlvSubscribeResponse.encode({
+                subscriptionId,
+                maxInterval,
+                interactionModelRevision: INTERACTION_MODEL_REVISION,
+            }),
         );
 
         this.subscriptionMap.set(subscriptionId, subscriptionHandler);
@@ -690,14 +718,22 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         return {
             suppressResponse: false,
-            interactionModelRevision: 1,
+            interactionModelRevision: INTERACTION_MODEL_REVISION,
             invokeResponses,
         };
     }
 
-    handleTimedRequest(exchange: MessageExchange<MatterDevice>, { timeout }: TimedRequest) {
-        logger.debug(`Received timed request (${timeout}) from ${exchange.channel.name}`);
-        // TODO: implement this
+    handleTimedRequest(exchange: MessageExchange<MatterDevice>, { timeout, interactionModelRevision }: TimedRequest) {
+        logger.debug(`Received timed request (${timeout}ms) from ${exchange.channel.name}`);
+
+        if (interactionModelRevision > INTERACTION_MODEL_REVISION) {
+            throw new StatusResponseError(
+                `Interaction model revision ${interactionModelRevision} not supported`,
+                StatusCode.InvalidAction,
+            );
+        }
+
+        exchange.startTimedInteraction(timeout);
     }
 
     async close() {

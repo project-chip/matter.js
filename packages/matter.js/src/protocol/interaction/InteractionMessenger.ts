@@ -32,6 +32,7 @@ import {
     TlvWriteRequest,
     TlvWriteResponse,
 } from "./InteractionProtocol.js";
+import { INTERACTION_MODEL_REVISION } from "./InteractionServer.js";
 
 export const enum MessageType {
     StatusResponse = 0x01,
@@ -80,7 +81,10 @@ class InteractionMessenger<ContextT> {
     }
 
     sendStatus(status: StatusCode) {
-        return this.send(MessageType.StatusResponse, TlvStatusResponse.encode({ status, interactionModelRevision: 1 }));
+        return this.send(
+            MessageType.StatusResponse,
+            TlvStatusResponse.encode({ status, interactionModelRevision: INTERACTION_MODEL_REVISION }),
+        );
     }
 
     async waitForSuccess() {
@@ -409,7 +413,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
     sendTimedRequest(timeoutSeconds: number) {
         return this.request(MessageType.TimedRequest, TlvTimedRequest, MessageType.StatusResponse, TlvStatusResponse, {
             timeout: timeoutSeconds,
-            interactionModelRevision: 1,
+            interactionModelRevision: INTERACTION_MODEL_REVISION,
         });
     }
 

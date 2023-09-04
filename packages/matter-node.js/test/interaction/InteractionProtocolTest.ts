@@ -79,7 +79,7 @@ const DummyTestDevice = DeviceTypeDefinition({
 });
 
 const READ_REQUEST: ReadRequest = {
-    interactionModelRevision: 1,
+    interactionModelRevision: 10,
     isFabricFiltered: true,
     attributeRequests: [
         { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(2) },
@@ -93,7 +93,7 @@ const READ_REQUEST: ReadRequest = {
 };
 
 const READ_REQUEST_WITH_UNUSED_FILTER: ReadRequest = {
-    interactionModelRevision: 1,
+    interactionModelRevision: 10,
     isFabricFiltered: true,
     attributeRequests: [
         { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(2) },
@@ -108,7 +108,7 @@ const READ_REQUEST_WITH_UNUSED_FILTER: ReadRequest = {
 };
 
 const READ_REQUEST_WITH_FILTER: ReadRequest = {
-    interactionModelRevision: 1,
+    interactionModelRevision: 10,
     isFabricFiltered: true,
     attributeRequests: [
         { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(2) },
@@ -123,7 +123,7 @@ const READ_REQUEST_WITH_FILTER: ReadRequest = {
 };
 
 const READ_RESPONSE: DataReport = {
-    interactionModelRevision: 1,
+    interactionModelRevision: 10,
     suppressResponse: false,
     eventReports: undefined,
     attributeReports: [
@@ -170,7 +170,7 @@ const READ_RESPONSE: DataReport = {
 };
 
 const READ_RESPONSE_WITH_FILTER: DataReport = {
-    interactionModelRevision: 1,
+    interactionModelRevision: 10,
     suppressResponse: false,
     eventReports: undefined,
     attributeReports: [
@@ -196,7 +196,7 @@ const READ_RESPONSE_WITH_FILTER: DataReport = {
 };
 
 const INVALID_SUBSCRIBE_REQUEST: SubscribeRequest = {
-    interactionModelRevision: 1,
+    interactionModelRevision: 10,
     isFabricFiltered: true,
     attributeRequests: [
         { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), attributeId: AttributeId(2) },
@@ -212,7 +212,7 @@ const INVALID_SUBSCRIBE_REQUEST: SubscribeRequest = {
 };
 
 const WRITE_REQUEST: WriteRequest = {
-    interactionModelRevision: 1,
+    interactionModelRevision: 10,
     suppressResponse: false,
     timedRequest: false,
     writeRequests: [
@@ -249,7 +249,7 @@ const WRITE_REQUEST: WriteRequest = {
 };
 
 const WRITE_RESPONSE: WriteResponse = {
-    interactionModelRevision: 1,
+    interactionModelRevision: 10,
     writeResponses: [
         {
             path: { attributeId: AttributeId(100), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
@@ -279,7 +279,7 @@ const WRITE_RESPONSE: WriteResponse = {
 };
 
 const MASS_WRITE_REQUEST: WriteRequest = {
-    interactionModelRevision: 1,
+    interactionModelRevision: 10,
     suppressResponse: false,
     timedRequest: false,
     writeRequests: [
@@ -303,7 +303,7 @@ const MASS_WRITE_REQUEST: WriteRequest = {
 };
 
 const MASS_WRITE_RESPONSE: WriteResponse = {
-    interactionModelRevision: 1,
+    interactionModelRevision: 10,
     writeResponses: [
         {
             path: { attributeId: AttributeId(5), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
@@ -329,7 +329,7 @@ const TlvAclTestSchema = TlvObject({
 });
 
 const CHUNKED_ARRAY_WRITE_REQUEST: WriteRequest = {
-    interactionModelRevision: 1,
+    interactionModelRevision: 10,
     suppressResponse: false,
     timedRequest: false,
     writeRequests: [
@@ -390,7 +390,7 @@ const CHUNKED_ARRAY_WRITE_REQUEST: WriteRequest = {
 };
 
 const CHUNKED_ARRAY_WRITE_RESPONSE: WriteResponse = {
-    interactionModelRevision: 1,
+    interactionModelRevision: 10,
     writeResponses: [
         {
             path: { attributeId: AttributeId(0), clusterId: ClusterId(31), endpointId: EndpointNumber(0) },
@@ -400,7 +400,7 @@ const CHUNKED_ARRAY_WRITE_RESPONSE: WriteResponse = {
 };
 
 const INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS: InvokeRequest = {
-    interactionModelRevision: 1,
+    interactionModelRevision: 10,
     suppressResponse: false,
     timedRequest: false,
     invokeRequests: [
@@ -416,7 +416,7 @@ const INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS: InvokeRequest = {
 };
 
 const INVOKE_COMMAND_REQUEST_WITH_NO_ARGS: InvokeRequest = {
-    interactionModelRevision: 1,
+    interactionModelRevision: 10,
     suppressResponse: false,
     timedRequest: false,
     invokeRequests: [
@@ -427,7 +427,7 @@ const INVOKE_COMMAND_REQUEST_WITH_NO_ARGS: InvokeRequest = {
 };
 
 const INVOKE_COMMAND_REQUEST_MULTI: InvokeRequest = {
-    interactionModelRevision: 1,
+    interactionModelRevision: 10,
     suppressResponse: false,
     timedRequest: false,
     invokeRequests: [
@@ -453,7 +453,7 @@ const INVOKE_COMMAND_REQUEST_MULTI: InvokeRequest = {
 };
 
 const INVOKE_COMMAND_REQUEST_INVALID: InvokeRequest = {
-    interactionModelRevision: 1,
+    interactionModelRevision: 10,
     suppressResponse: false,
     timedRequest: false,
     invokeRequests: [
@@ -464,7 +464,7 @@ const INVOKE_COMMAND_REQUEST_INVALID: InvokeRequest = {
 };
 
 const INVOKE_COMMAND_RESPONSE: InvokeResponse = {
-    interactionModelRevision: 1,
+    interactionModelRevision: 10,
     suppressResponse: false,
     invokeResponses: [
         {
@@ -477,7 +477,7 @@ const INVOKE_COMMAND_RESPONSE: InvokeResponse = {
 };
 
 const INVOKE_COMMAND_RESPONSE_INVALID: InvokeResponse = {
-    interactionModelRevision: 1,
+    interactionModelRevision: 10,
     suppressResponse: false,
     invokeResponses: [
         {
@@ -490,7 +490,7 @@ const INVOKE_COMMAND_RESPONSE_INVALID: InvokeResponse = {
 };
 
 const INVOKE_COMMAND_RESPONSE_MULTI: InvokeResponse = {
-    interactionModelRevision: 1,
+    interactionModelRevision: 10,
     suppressResponse: false,
     invokeResponses: [
         {
