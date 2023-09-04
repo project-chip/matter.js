@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { StorageBackendMemory, StorageManager } from "@project-chip/matter.js/storage";
-
 import { Crypto } from "@project-chip/matter.js/crypto";
 import { CryptoNode } from "../../src/crypto/CryptoNode";
 
@@ -28,9 +26,10 @@ import {
     AccessControlCluster,
     BasicInformationCluster,
     ClusterServer,
+    ClusterServerObjForCluster,
     OnOffCluster,
 } from "@project-chip/matter.js/cluster";
-import { Message } from "@project-chip/matter.js/codec";
+import { Message, SessionType } from "@project-chip/matter.js/codec";
 import {
     AttributeId,
     ClusterId,
@@ -58,6 +57,7 @@ import {
 } from "@project-chip/matter.js/interaction";
 import { MessageExchange } from "@project-chip/matter.js/protocol";
 import { SecureSession } from "@project-chip/matter.js/session";
+import { StorageBackendMemory, StorageContext, StorageManager } from "@project-chip/matter.js/storage";
 import {
     TlvArray,
     TlvField,
@@ -526,88 +526,109 @@ const INVOKE_COMMAND_RESPONSE_MULTI: InvokeResponse = {
     ],
 };
 
+const testFabric = new Fabric(
+    FabricIndex(1),
+    FabricId(1),
+    NodeId(BigInt(1)),
+    NodeId(1),
+    ByteArray.fromHex("00"),
+    ByteArray.fromHex("00"),
+    KEY,
+    VendorId(1),
+    ByteArray.fromHex("00"),
+    ByteArray.fromHex("00"),
+    ByteArray.fromHex("00"),
+    ByteArray.fromHex("00"),
+    ByteArray.fromHex("00"),
+    "",
+);
+
+async function getDummyMessageExchange(
+    hasTimedInteraction = false,
+    timedInteractionExpired = false,
+    clearTimedInteractionCallback?: () => void,
+) {
+    const session = await SecureSession.create(
+        { getFabrics: () => [] } as any,
+        1,
+        testFabric,
+        NodeId(1),
+        1,
+        ByteArray.fromHex("00"),
+        ByteArray.fromHex("00"),
+        false,
+        false,
+        async () => {
+            /* nothing */
+        },
+        1000,
+        1000,
+    );
+    return {
+        channel: { name: "test" },
+        clearTimedInteraction: () => clearTimedInteractionCallback?.(),
+        hasTimedInteraction: () => hasTimedInteraction,
+        hasActiveTimedInteraction: () => hasTimedInteraction && !timedInteractionExpired,
+        hasExpiredTimedInteraction: () => hasTimedInteraction && timedInteractionExpired,
+        session,
+    } as unknown as MessageExchange<any>;
+}
+
 describe("InteractionProtocol", () => {
     describe("handleReadRequest", () => {
-        it("replies with attribute values", async () => {
-            const storageManager = new StorageManager(new StorageBackendMemory());
+        let storageManager: StorageManager;
+        let storageContext: StorageContext;
+        let endpoint: Endpoint;
+        let interactionProtocol: InteractionServer;
+        const basicInfoClusterServer = ClusterServer(
+            BasicInformationCluster,
+            {
+                dataModelRevision: 1,
+                vendorName: "vendor",
+                vendorId: VendorId(1),
+                productName: "product",
+                productId: 2,
+                nodeLabel: "",
+                hardwareVersion: 0,
+                hardwareVersionString: "0",
+                location: "US",
+                localConfigDisabled: false,
+                softwareVersion: 1,
+                softwareVersionString: "v1",
+                capabilityMinima: {
+                    caseSessionsPerFabric: 100,
+                    subscriptionsPerFabric: 100,
+                },
+            },
+            {},
+            {
+                startUp: true,
+            },
+        );
+
+        beforeEach(async () => {
+            storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
-            const storageContext = storageManager.createContext("test");
-            const endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
-            endpoint.addClusterServer(
-                ClusterServer(
-                    BasicInformationCluster,
-                    {
-                        dataModelRevision: 1,
-                        vendorName: "vendor",
-                        vendorId: VendorId(1),
-                        productName: "product",
-                        productId: 2,
-                        nodeLabel: "",
-                        hardwareVersion: 0,
-                        hardwareVersionString: "0",
-                        location: "US",
-                        localConfigDisabled: false,
-                        softwareVersion: 1,
-                        softwareVersionString: "v1",
-                        capabilityMinima: {
-                            caseSessionsPerFabric: 100,
-                            subscriptionsPerFabric: 100,
-                        },
-                    },
-                    {},
-                    {
-                        startUp: true,
-                    },
-                ),
-            );
-            const interactionProtocol = new InteractionServer(storageContext);
+            storageContext = storageManager.createContext("test");
+            endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
+            interactionProtocol = new InteractionServer(storageContext);
+        });
+
+        it("replies with attribute values", async () => {
+            endpoint.addClusterServer(basicInfoClusterServer);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = interactionProtocol.handleReadRequest(
-                { channel: { name: "test" } } as MessageExchange<any>,
-                READ_REQUEST,
-            );
+            const result = interactionProtocol.handleReadRequest(await getDummyMessageExchange(), READ_REQUEST);
 
             assert.deepEqual(result, READ_RESPONSE);
         });
 
         it("replies with attribute values using (unused) version filter", async () => {
-            const storageManager = new StorageManager(new StorageBackendMemory());
-            await storageManager.initialize();
-            const storageContext = storageManager.createContext("test");
-            const endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
-            endpoint.addClusterServer(
-                ClusterServer(
-                    BasicInformationCluster,
-                    {
-                        dataModelRevision: 1,
-                        vendorName: "vendor",
-                        vendorId: VendorId(1),
-                        productName: "product",
-                        productId: 2,
-                        nodeLabel: "",
-                        hardwareVersion: 0,
-                        hardwareVersionString: "0",
-                        location: "US",
-                        localConfigDisabled: false,
-                        softwareVersion: 1,
-                        softwareVersionString: "v1",
-                        capabilityMinima: {
-                            caseSessionsPerFabric: 100,
-                            subscriptionsPerFabric: 100,
-                        },
-                    },
-                    {},
-                    {
-                        startUp: true,
-                    },
-                ),
-            );
-            const interactionProtocol = new InteractionServer(storageContext);
+            endpoint.addClusterServer(basicInfoClusterServer);
             interactionProtocol.setRootEndpoint(endpoint);
 
             const result = interactionProtocol.handleReadRequest(
-                { channel: { name: "test" } } as MessageExchange<any>,
+                await getDummyMessageExchange(),
                 READ_REQUEST_WITH_UNUSED_FILTER,
             );
 
@@ -615,42 +636,11 @@ describe("InteractionProtocol", () => {
         });
 
         it("replies with attribute values with active version filter", async () => {
-            const storageManager = new StorageManager(new StorageBackendMemory());
-            await storageManager.initialize();
-            const storageContext = storageManager.createContext("test");
-            const endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
-            endpoint.addClusterServer(
-                ClusterServer(
-                    BasicInformationCluster,
-                    {
-                        dataModelRevision: 1,
-                        vendorName: "vendor",
-                        vendorId: VendorId(1),
-                        productName: "product",
-                        productId: 2,
-                        nodeLabel: "",
-                        hardwareVersion: 0,
-                        hardwareVersionString: "0",
-                        location: "US",
-                        localConfigDisabled: false,
-                        softwareVersion: 1,
-                        softwareVersionString: "v1",
-                        capabilityMinima: {
-                            caseSessionsPerFabric: 100,
-                            subscriptionsPerFabric: 100,
-                        },
-                    },
-                    {},
-                    {
-                        startUp: true,
-                    },
-                ),
-            );
-            const interactionProtocol = new InteractionServer(storageContext);
+            endpoint.addClusterServer(basicInfoClusterServer);
             interactionProtocol.setRootEndpoint(endpoint);
 
             const result = interactionProtocol.handleReadRequest(
-                { channel: { name: "test" } } as MessageExchange<any>,
+                await getDummyMessageExchange(),
                 READ_REQUEST_WITH_FILTER,
             );
 
@@ -659,78 +649,52 @@ describe("InteractionProtocol", () => {
     });
 
     describe("handleSubscribeRequest", () => {
-        // Success case is tested in Integration test
+        let storageManager: StorageManager;
+        let storageContext: StorageContext;
+        let endpoint: Endpoint;
+        let interactionProtocol: InteractionServer;
+        const basicInfoClusterServer = ClusterServer(
+            BasicInformationCluster,
+            {
+                dataModelRevision: 1,
+                vendorName: "vendor",
+                vendorId: VendorId(1),
+                productName: "product",
+                productId: 2,
+                nodeLabel: "",
+                hardwareVersion: 0,
+                hardwareVersionString: "0",
+                location: "US",
+                localConfigDisabled: false,
+                softwareVersion: 1,
+                softwareVersionString: "v1",
+                capabilityMinima: {
+                    caseSessionsPerFabric: 100,
+                    subscriptionsPerFabric: 100,
+                },
+            },
+            {},
+            {
+                startUp: true,
+            },
+        );
 
-        it("errors when no path match the requested path's", async () => {
-            const storageManager = new StorageManager(new StorageBackendMemory());
+        beforeEach(async () => {
+            storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
-            const storageContext = storageManager.createContext("test");
-            const endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
-            endpoint.addClusterServer(
-                ClusterServer(
-                    BasicInformationCluster,
-                    {
-                        dataModelRevision: 1,
-                        vendorName: "vendor",
-                        vendorId: VendorId(1),
-                        productName: "product",
-                        productId: 2,
-                        nodeLabel: "",
-                        hardwareVersion: 0,
-                        hardwareVersionString: "0",
-                        location: "US",
-                        localConfigDisabled: false,
-                        softwareVersion: 1,
-                        softwareVersionString: "v1",
-                        capabilityMinima: {
-                            caseSessionsPerFabric: 100,
-                            subscriptionsPerFabric: 100,
-                        },
-                    },
-                    {},
-                    {
-                        startUp: true,
-                    },
-                ),
-            );
-            const interactionProtocol = new InteractionServer(storageContext);
+            storageContext = storageManager.createContext("test");
+            endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
+            interactionProtocol = new InteractionServer(storageContext);
+        });
+
+        // Success case is tested in Integration test
+        it("errors when no path match the requested path's", async () => {
+            endpoint.addClusterServer(basicInfoClusterServer);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const testFabric = new Fabric(
-                FabricIndex(1),
-                FabricId(1),
-                NodeId(BigInt(1)),
-                NodeId(1),
-                ByteArray.fromHex("00"),
-                ByteArray.fromHex("00"),
-                KEY,
-                VendorId(1),
-                ByteArray.fromHex("00"),
-                ByteArray.fromHex("00"),
-                ByteArray.fromHex("00"),
-                ByteArray.fromHex("00"),
-                ByteArray.fromHex("00"),
-                "",
-            );
-            const testSession = await SecureSession.create(
-                { getFabrics: () => [] } as any,
-                1,
-                testFabric,
-                NodeId(1),
-                1,
-                ByteArray.fromHex("00"),
-                ByteArray.fromHex("00"),
-                false,
-                false,
-                async () => {
-                    /* nothing */
-                },
-                1000,
-                1000,
-            );
             let statusSent = -1;
             await interactionProtocol.handleSubscribeRequest(
-                { channel: { name: "test" }, session: testSession } as unknown as MessageExchange<any>,
+                await getDummyMessageExchange(),
                 INVALID_SUBSCRIBE_REQUEST,
                 {
                     sendStatus: code => {
@@ -743,8 +707,19 @@ describe("InteractionProtocol", () => {
     });
 
     describe("handleWriteRequest", () => {
-        it("write values and return errors on invalid values", async () => {
-            const basicCluster = ClusterServer(
+        let storageManager: StorageManager;
+        let storageContext: StorageContext;
+        let endpoint: Endpoint;
+        let interactionProtocol: InteractionServer;
+        let basicInfoClusterServer: ClusterServerObjForCluster<BasicInformationCluster>;
+
+        beforeEach(async () => {
+            storageManager = new StorageManager(new StorageBackendMemory());
+            await storageManager.initialize();
+            storageContext = storageManager.createContext("test");
+            endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
+            interactionProtocol = new InteractionServer(storageContext);
+            basicInfoClusterServer = ClusterServer(
                 BasicInformationCluster,
                 {
                     dataModelRevision: 1,
@@ -769,22 +744,18 @@ describe("InteractionProtocol", () => {
                     startUp: true,
                 },
             );
+        });
 
-            const storageManager = new StorageManager(new StorageBackendMemory());
-            await storageManager.initialize();
-            const storageContext = storageManager.createContext("test");
-            const endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
-            endpoint.addClusterServer(basicCluster);
-            const interactionProtocol = new InteractionServer(storageContext);
+        it("write values and return errors on invalid values", async () => {
+            endpoint.addClusterServer(basicInfoClusterServer);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = interactionProtocol.handleWriteRequest(
-                { channel: { name: "test" } } as MessageExchange<any>,
-                WRITE_REQUEST,
-            );
+            const result = interactionProtocol.handleWriteRequest(await getDummyMessageExchange(), WRITE_REQUEST, {
+                packetHeader: { sessionType: SessionType.Unicast },
+            } as Message);
 
             assert.deepEqual(result, WRITE_RESPONSE);
-            assert.equal(basicCluster.attributes.nodeLabel.getLocal(), "test");
+            assert.equal(basicInfoClusterServer.attributes.nodeLabel.getLocal(), "test");
         });
 
         it("write chunked array values with Fabric Index handling", async () => {
@@ -804,49 +775,13 @@ describe("InteractionProtocol", () => {
                 },
             );
 
-            const storageManager = new StorageManager(new StorageBackendMemory());
-            await storageManager.initialize();
-            const storageContext = storageManager.createContext("test");
-            const endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
             endpoint.addClusterServer(accessControlCluster);
-            const interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const testFabric = new Fabric(
-                FabricIndex(1),
-                FabricId(1),
-                NodeId(BigInt(1)),
-                NodeId(1),
-                ByteArray.fromHex("00"),
-                ByteArray.fromHex("00"),
-                KEY,
-                VendorId(1),
-                ByteArray.fromHex("00"),
-                ByteArray.fromHex("00"),
-                ByteArray.fromHex("00"),
-                ByteArray.fromHex("00"),
-                ByteArray.fromHex("00"),
-                "",
-            );
-            const testSession = await SecureSession.create(
-                { getFabrics: () => [] } as any,
-                1,
-                testFabric,
-                NodeId(1),
-                1,
-                ByteArray.fromHex("00"),
-                ByteArray.fromHex("00"),
-                false,
-                false,
-                async () => {
-                    /* nothing */
-                },
-                1000,
-                1000,
-            );
             const result = interactionProtocol.handleWriteRequest(
-                { channel: { name: "test" }, session: testSession } as unknown as MessageExchange<any>,
+                await getDummyMessageExchange(),
                 CHUNKED_ARRAY_WRITE_REQUEST,
+                { packetHeader: { sessionType: SessionType.Unicast } } as Message,
             );
 
             assert.deepEqual(result, CHUNKED_ARRAY_WRITE_RESPONSE);
@@ -876,57 +811,33 @@ describe("InteractionProtocol", () => {
         });
 
         it("mass write values and only set the one allowed", async () => {
-            const basicCluster = ClusterServer(
-                BasicInformationCluster,
-                {
-                    dataModelRevision: 1,
-                    vendorName: "vendor",
-                    vendorId: VendorId(1),
-                    productName: "product",
-                    productId: 2,
-                    nodeLabel: "",
-                    hardwareVersion: 0,
-                    hardwareVersionString: "0",
-                    location: "US",
-                    localConfigDisabled: false,
-                    softwareVersion: 1,
-                    softwareVersionString: "v1",
-                    capabilityMinima: {
-                        caseSessionsPerFabric: 100,
-                        subscriptionsPerFabric: 100,
-                    },
-                },
-                {},
-                {
-                    startUp: true,
-                },
-            );
-
-            const storageManager = new StorageManager(new StorageBackendMemory());
-            await storageManager.initialize();
-            const storageContext = storageManager.createContext("test");
-            const endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
-            endpoint.addClusterServer(basicCluster);
-            const interactionProtocol = new InteractionServer(storageContext);
+            endpoint.addClusterServer(basicInfoClusterServer);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = interactionProtocol.handleWriteRequest(
-                { channel: { name: "test" } } as MessageExchange<any>,
-                MASS_WRITE_REQUEST,
-            );
+            const result = interactionProtocol.handleWriteRequest(await getDummyMessageExchange(), MASS_WRITE_REQUEST, {
+                packetHeader: { sessionType: SessionType.Unicast },
+            } as Message);
 
             assert.deepEqual(result, MASS_WRITE_RESPONSE);
-            assert.equal(basicCluster.attributes.vendorName.getLocal(), "vendor");
-            assert.equal(basicCluster.attributes.productName.getLocal(), "product");
-            assert.equal(basicCluster.attributes.location.getLocal(), "US");
-            assert.equal(basicCluster.attributes.nodeLabel.getLocal(), "test");
+            assert.equal(basicInfoClusterServer.attributes.vendorName.getLocal(), "vendor");
+            assert.equal(basicInfoClusterServer.attributes.productName.getLocal(), "product");
+            assert.equal(basicInfoClusterServer.attributes.location.getLocal(), "US");
+            assert.equal(basicInfoClusterServer.attributes.nodeLabel.getLocal(), "test");
         });
     });
 
     describe("handleInvokeRequest", () => {
-        it("invoke command with empty args", async () => {
-            let onOffState = false;
-            const onOffCluster = ClusterServer(
+        let onOffState: boolean;
+        let onOffCluster;
+        let storageManager: StorageManager;
+        let storageContext: StorageContext;
+        let endpoint: Endpoint;
+        let interactionProtocol: InteractionServer;
+        let adminCommissioningCluster;
+
+        beforeEach(async () => {
+            onOffState = false;
+            onOffCluster = ClusterServer(
                 OnOffCluster,
                 {
                     onOff: onOffState,
@@ -943,19 +854,34 @@ describe("InteractionProtocol", () => {
                     },
                 },
             );
+            adminCommissioningCluster = ClusterServer(
+                AdministratorCommissioning.Cluster,
+                { windowStatus: 0, adminFabricIndex: FabricIndex(0), adminVendorId: VendorId(0) },
+                {
+                    openCommissioningWindow: async () => {
+                        return;
+                    },
+                    revokeCommissioning: async () => {
+                        return;
+                    },
+                },
+            );
 
-            const storageManager = new StorageManager(new StorageBackendMemory());
+            storageManager = new StorageManager(new StorageBackendMemory());
             await storageManager.initialize();
-            const storageContext = storageManager.createContext("test");
-            const endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
+            storageContext = storageManager.createContext("test");
+            endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
             endpoint.addClusterServer(onOffCluster);
-            const interactionProtocol = new InteractionServer(storageContext);
+            endpoint.addClusterServer(adminCommissioningCluster);
+            interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
+        });
 
+        it("invoke command with empty args", async () => {
             const result = await interactionProtocol.handleInvokeRequest(
-                { channel: { name: "test" } } as MessageExchange<any>,
+                await getDummyMessageExchange(),
                 INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS,
-                {} as Message,
+                { packetHeader: { sessionType: SessionType.Unicast } } as Message,
             );
 
             assert.deepEqual(result, INVOKE_COMMAND_RESPONSE);
@@ -963,37 +889,10 @@ describe("InteractionProtocol", () => {
         });
 
         it("invoke command with no args", async () => {
-            let onOffState = false;
-            const onOffCluster = ClusterServer(
-                OnOffCluster,
-                {
-                    onOff: onOffState,
-                },
-                {
-                    on: async () => {
-                        onOffState = true;
-                    },
-                    off: async () => {
-                        onOffState = false;
-                    },
-                    toggle: async () => {
-                        onOffState = !onOffState;
-                    },
-                },
-            );
-
-            const storageManager = new StorageManager(new StorageBackendMemory());
-            await storageManager.initialize();
-            const storageContext = storageManager.createContext("test");
-            const endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
-            endpoint.addClusterServer(onOffCluster);
-            const interactionProtocol = new InteractionServer(storageContext);
-            interactionProtocol.setRootEndpoint(endpoint);
-
             const result = await interactionProtocol.handleInvokeRequest(
-                { channel: { name: "test" } } as MessageExchange<any>,
+                await getDummyMessageExchange(),
                 INVOKE_COMMAND_REQUEST_WITH_NO_ARGS,
-                {} as Message,
+                { packetHeader: { sessionType: SessionType.Unicast } } as Message,
             );
 
             assert.deepEqual(result, INVOKE_COMMAND_RESPONSE);
@@ -1001,37 +900,10 @@ describe("InteractionProtocol", () => {
         });
 
         it("invalid invoke command", async () => {
-            let onOffState = false;
-            const onOffCluster = ClusterServer(
-                OnOffCluster,
-                {
-                    onOff: onOffState,
-                },
-                {
-                    on: async () => {
-                        onOffState = true;
-                    },
-                    off: async () => {
-                        onOffState = false;
-                    },
-                    toggle: async () => {
-                        onOffState = !onOffState;
-                    },
-                },
-            );
-
-            const storageManager = new StorageManager(new StorageBackendMemory());
-            await storageManager.initialize();
-            const storageContext = storageManager.createContext("test");
-            const endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
-            endpoint.addClusterServer(onOffCluster);
-            const interactionProtocol = new InteractionServer(storageContext);
-            interactionProtocol.setRootEndpoint(endpoint);
-
             const result = await interactionProtocol.handleInvokeRequest(
-                { channel: { name: "test" } } as MessageExchange<any>,
+                await getDummyMessageExchange(),
                 INVOKE_COMMAND_REQUEST_INVALID,
-                {} as Message,
+                { packetHeader: { sessionType: SessionType.Unicast } } as Message,
             );
 
             assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_INVALID);
@@ -1039,10 +911,10 @@ describe("InteractionProtocol", () => {
         });
 
         it("multi invoke commands", async () => {
-            let onOffState = false;
+            onOffState = false;
             let triggeredOn = false;
             let triggeredOff = false;
-            const onOffCluster = ClusterServer(
+            onOffCluster = ClusterServer(
                 OnOffCluster,
                 {
                     onOff: onOffState,
@@ -1062,18 +934,15 @@ describe("InteractionProtocol", () => {
                 },
             );
 
-            const storageManager = new StorageManager(new StorageBackendMemory());
-            await storageManager.initialize();
-            const storageContext = storageManager.createContext("test");
-            const endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
+            endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
             endpoint.addClusterServer(onOffCluster);
-            const interactionProtocol = new InteractionServer(storageContext);
+            interactionProtocol = new InteractionServer(storageContext);
             interactionProtocol.setRootEndpoint(endpoint);
 
             const result = await interactionProtocol.handleInvokeRequest(
-                { channel: { name: "test" } } as MessageExchange<any>,
+                await getDummyMessageExchange(),
                 INVOKE_COMMAND_REQUEST_MULTI,
-                {} as Message,
+                { packetHeader: { sessionType: SessionType.Unicast } } as Message,
             );
 
             assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_MULTI);
