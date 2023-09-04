@@ -590,20 +590,22 @@ describe("Integration Test", () => {
         it("write multiple attributes", async () => {
             const client = commissioningController.getInteractionClient(); // We can also use a new Interaction clint
 
-            const response = await client.setMultipleAttributes([
-                {
-                    endpointId: EndpointNumber(0),
-                    clusterId: BasicInformation.Cluster.id,
-                    attribute: BasicInformation.Cluster.attributes.nodeLabel,
-                    value: "testLabel2",
-                },
-                {
-                    endpointId: EndpointNumber(0),
-                    clusterId: BasicInformation.Cluster.id,
-                    attribute: BasicInformation.Cluster.attributes.location,
-                    value: "GB",
-                },
-            ]);
+            const response = await client.setMultipleAttributes({
+                attributes: [
+                    {
+                        endpointId: EndpointNumber(0),
+                        clusterId: BasicInformation.Cluster.id,
+                        attribute: BasicInformation.Cluster.attributes.nodeLabel,
+                        value: "testLabel2",
+                    },
+                    {
+                        endpointId: EndpointNumber(0),
+                        clusterId: BasicInformation.Cluster.id,
+                        attribute: BasicInformation.Cluster.attributes.location,
+                        value: "GB",
+                    },
+                ],
+            });
 
             assert.equal(Array.isArray(response), true);
             assert.equal(response.length, 0);
@@ -615,20 +617,22 @@ describe("Integration Test", () => {
         });
 
         it("write multiple attributes with partial errors", async () => {
-            const response = await commissioningController.getInteractionClient().setMultipleAttributes([
-                {
-                    endpointId: EndpointNumber(0),
-                    clusterId: BasicInformation.Cluster.id,
-                    attribute: BasicInformation.Cluster.attributes.nodeLabel,
-                    value: "testLabel3",
-                },
-                {
-                    endpointId: EndpointNumber(0),
-                    clusterId: BasicInformation.Cluster.id,
-                    attribute: BasicInformation.Cluster.attributes.location,
-                    value: "XXX",
-                },
-            ]);
+            const response = await commissioningController.getInteractionClient().setMultipleAttributes({
+                attributes: [
+                    {
+                        endpointId: EndpointNumber(0),
+                        clusterId: BasicInformation.Cluster.id,
+                        attribute: BasicInformation.Cluster.attributes.nodeLabel,
+                        value: "testLabel3",
+                    },
+                    {
+                        endpointId: EndpointNumber(0),
+                        clusterId: BasicInformation.Cluster.id,
+                        attribute: BasicInformation.Cluster.attributes.location,
+                        value: "XXX",
+                    },
+                ],
+            });
 
             assert.equal(response.length, 1);
             assert.equal(response[0].path.attributeId, BasicInformation.Cluster.attributes.location.id);
