@@ -24,10 +24,13 @@ Time.get = () => new TimeFake(0);
 
 import {
     AccessControlCluster,
+    AccessLevel,
+    AdministratorCommissioning,
     BasicInformationCluster,
     ClusterServer,
     ClusterServerObjForCluster,
     OnOffCluster,
+    WritableAttribute,
 } from "@project-chip/matter.js/cluster";
 import { Message, SessionType } from "@project-chip/matter.js/codec";
 import {
@@ -278,6 +281,40 @@ const WRITE_RESPONSE: WriteResponse = {
     ],
 };
 
+const WRITE_REQUEST_TIMED_REQUIRED: WriteRequest = {
+    interactionModelRevision: 10,
+    suppressResponse: false,
+    timedRequest: false,
+    writeRequests: [
+        {
+            path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(5) },
+            data: TlvString.encodeTlv("test"),
+            dataVersion: 0,
+        },
+    ],
+    moreChunkedMessages: false,
+};
+
+const WRITE_RESPONSE_TIMED_REQUIRED: WriteResponse = {
+    interactionModelRevision: 10,
+    writeResponses: [
+        {
+            path: { attributeId: AttributeId(5), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
+            status: { status: 0 },
+        },
+    ],
+};
+
+const WRITE_RESPONSE_TIMED_ERROR: WriteResponse = {
+    interactionModelRevision: 10,
+    writeResponses: [
+        {
+            path: { attributeId: AttributeId(5), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
+            status: { status: 198 },
+        },
+    ],
+};
+
 const MASS_WRITE_REQUEST: WriteRequest = {
     interactionModelRevision: 10,
     suppressResponse: false,
@@ -411,6 +448,48 @@ const INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS: InvokeRequest = {
                 commandId: CommandId(1),
             },
             commandFields: TlvNoArguments.encodeTlv(undefined),
+        },
+    ],
+};
+
+const INVOKE_COMMAND_REQUEST_TIMED_REQUIRED: InvokeRequest = {
+    interactionModelRevision: 10,
+    suppressResponse: false,
+    timedRequest: false,
+    invokeRequests: [
+        {
+            commandPath: {
+                endpointId: EndpointNumber(0),
+                clusterId: ClusterId(0x3c),
+                commandId: CommandId(2),
+            },
+            commandFields: TlvNoArguments.encodeTlv(undefined),
+        },
+    ],
+};
+
+const INVOKE_COMMAND_RESPONSE_TIMED_REQUIRED: InvokeResponse = {
+    interactionModelRevision: 10,
+    suppressResponse: false,
+    invokeResponses: [
+        {
+            status: {
+                commandPath: { clusterId: ClusterId(0x3c), commandId: CommandId(2), endpointId: EndpointNumber(0) },
+                status: { status: 198 },
+            },
+        },
+    ],
+};
+
+const INVOKE_COMMAND_RESPONSE_TIMED_REQUIRED_SUCCESS: InvokeResponse = {
+    interactionModelRevision: 10,
+    suppressResponse: false,
+    invokeResponses: [
+        {
+            status: {
+                commandPath: { clusterId: ClusterId(0x3c), commandId: CommandId(2), endpointId: EndpointNumber(0) },
+                status: { status: 0 },
+            },
         },
     ],
 };
@@ -824,6 +903,213 @@ describe("InteractionProtocol", () => {
             assert.equal(basicInfoClusterServer.attributes.location.getLocal(), "US");
             assert.equal(basicInfoClusterServer.attributes.nodeLabel.getLocal(), "test");
         });
+
+        it("write values and return errors on invalid values timed interaction mismatch request", async () => {
+            let timedInteractionCleared = false;
+            endpoint.addClusterServer(basicInfoClusterServer);
+            interactionProtocol.setRootEndpoint(endpoint);
+            const messageExchange = await getDummyMessageExchange(false, false, () => {
+                timedInteractionCleared = true;
+            });
+            assert.throws(
+                () =>
+                    interactionProtocol.handleWriteRequest(messageExchange, { ...WRITE_REQUEST, timedRequest: true }, {
+                        packetHeader: { sessionType: SessionType.Unicast },
+                    } as Message),
+                {
+                    message:
+                        "(201) timedRequest flag of write interaction (true) mismatch with expected timed interaction (false).",
+                },
+            );
+
+            assert.equal(timedInteractionCleared, false);
+            assert.equal(basicInfoClusterServer.attributes.nodeLabel.getLocal(), "");
+        });
+
+        it("write values and return errors on invalid values timed interaction mismatch timed expected", async () => {
+            let timedInteractionCleared = false;
+            endpoint.addClusterServer(basicInfoClusterServer);
+            interactionProtocol.setRootEndpoint(endpoint);
+            const messageExchange = await getDummyMessageExchange(true, false, () => {
+                timedInteractionCleared = true;
+            });
+            assert.throws(
+                () =>
+                    interactionProtocol.handleWriteRequest(messageExchange, WRITE_REQUEST, {
+                        packetHeader: { sessionType: SessionType.Unicast },
+                    } as Message),
+                {
+                    message:
+                        "(201) timedRequest flag of write interaction (false) mismatch with expected timed interaction (true).",
+                },
+            );
+
+            assert.equal(timedInteractionCleared, false);
+            assert.equal(basicInfoClusterServer.attributes.nodeLabel.getLocal(), "");
+        });
+
+        it("write values and return errors on invalid values timed interaction required by attribute", async () => {
+            let timedInteractionCleared = false;
+            const BasicInformationClusterWithTimedInteraction = BasicInformationCluster;
+            BasicInformationClusterWithTimedInteraction.attributes.nodeLabel = WritableAttribute(
+                0x5,
+                TlvString.bound({ maxLength: 32 }),
+                { persistent: true, default: "", writeAcl: AccessLevel.Manage, timed: true },
+            );
+            const basicCluster = ClusterServer(
+                BasicInformationClusterWithTimedInteraction,
+                {
+                    dataModelRevision: 1,
+                    vendorName: "vendor",
+                    vendorId: VendorId(1),
+                    productName: "product",
+                    productId: 2,
+                    nodeLabel: "",
+                    hardwareVersion: 0,
+                    hardwareVersionString: "0",
+                    location: "US",
+                    localConfigDisabled: false,
+                    softwareVersion: 1,
+                    softwareVersionString: "v1",
+                    capabilityMinima: {
+                        caseSessionsPerFabric: 100,
+                        subscriptionsPerFabric: 100,
+                    },
+                },
+                {},
+                {
+                    startUp: true,
+                },
+            );
+
+            endpoint.addClusterServer(basicCluster);
+            interactionProtocol.setRootEndpoint(endpoint);
+            const messageExchange = await getDummyMessageExchange(false, false, () => {
+                timedInteractionCleared = true;
+            });
+            const result = interactionProtocol.handleWriteRequest(messageExchange, WRITE_REQUEST_TIMED_REQUIRED, {
+                packetHeader: { sessionType: SessionType.Unicast },
+            } as Message);
+
+            assert.deepEqual(result, WRITE_RESPONSE_TIMED_ERROR);
+            assert.equal(timedInteractionCleared, false);
+            assert.equal(basicCluster.attributes.nodeLabel.getLocal(), "");
+        });
+
+        it("write values and return errors on invalid values timed interaction required by attribute success", async () => {
+            let timedInteractionCleared = false;
+            const BasicInformationClusterWithTimedInteraction = BasicInformationCluster;
+            BasicInformationClusterWithTimedInteraction.attributes.nodeLabel = WritableAttribute(
+                0x5,
+                TlvString.bound({ maxLength: 32 }),
+                { persistent: true, default: "", writeAcl: AccessLevel.Manage, timed: true },
+            );
+            const basicCluster = ClusterServer(
+                BasicInformationClusterWithTimedInteraction,
+                {
+                    dataModelRevision: 1,
+                    vendorName: "vendor",
+                    vendorId: VendorId(1),
+                    productName: "product",
+                    productId: 2,
+                    nodeLabel: "",
+                    hardwareVersion: 0,
+                    hardwareVersionString: "0",
+                    location: "US",
+                    localConfigDisabled: false,
+                    softwareVersion: 1,
+                    softwareVersionString: "v1",
+                    capabilityMinima: {
+                        caseSessionsPerFabric: 100,
+                        subscriptionsPerFabric: 100,
+                    },
+                },
+                {},
+                {
+                    startUp: true,
+                },
+            );
+
+            endpoint.addClusterServer(basicCluster);
+            interactionProtocol.setRootEndpoint(endpoint);
+            const messageExchange = await getDummyMessageExchange(true, false, () => {
+                timedInteractionCleared = true;
+            });
+            const result = interactionProtocol.handleWriteRequest(
+                messageExchange,
+                { ...WRITE_REQUEST_TIMED_REQUIRED, timedRequest: true },
+                {
+                    packetHeader: { sessionType: SessionType.Unicast },
+                } as Message,
+            );
+
+            assert.deepEqual(result, WRITE_RESPONSE_TIMED_REQUIRED);
+            assert.equal(timedInteractionCleared, true);
+            assert.equal(basicCluster.attributes.nodeLabel.getLocal(), "test");
+        });
+
+        it("write values and return errors on invalid values timed interaction expired", async () => {
+            let timedInteractionCleared = false;
+            endpoint.addClusterServer(basicInfoClusterServer);
+            interactionProtocol.setRootEndpoint(endpoint);
+            const messageExchange = await getDummyMessageExchange(true, true, () => {
+                timedInteractionCleared = true;
+            });
+            assert.throws(
+                () =>
+                    interactionProtocol.handleWriteRequest(messageExchange, { ...WRITE_REQUEST, timedRequest: true }, {
+                        packetHeader: { sessionType: SessionType.Unicast },
+                    } as Message),
+                {
+                    message: "(148) Timed request window expired. Decline write request.",
+                },
+            );
+
+            assert.equal(timedInteractionCleared, true);
+            assert.equal(basicInfoClusterServer.attributes.nodeLabel.getLocal(), "");
+        });
+
+        it("write values and return errors on invalid values timed interaction in group message", async () => {
+            let timedInteractionCleared = false;
+            endpoint.addClusterServer(basicInfoClusterServer);
+            interactionProtocol.setRootEndpoint(endpoint);
+            const messageExchange = await getDummyMessageExchange(true, false, () => {
+                timedInteractionCleared = true;
+            });
+            assert.throws(
+                () =>
+                    interactionProtocol.handleWriteRequest(messageExchange, { ...WRITE_REQUEST, timedRequest: true }, {
+                        packetHeader: { sessionType: SessionType.Group },
+                    } as Message),
+                {
+                    message:
+                        "(128) Write requests are only allowed on unicast sessions when a timed interaction is running.",
+                },
+            );
+
+            assert.equal(timedInteractionCleared, true);
+            assert.equal(basicInfoClusterServer.attributes.nodeLabel.getLocal(), "");
+        });
+
+        it("write values and return errors on invalid values in timed interaction", async () => {
+            let timedInteractionCleared = false;
+            endpoint.addClusterServer(basicInfoClusterServer);
+            interactionProtocol.setRootEndpoint(endpoint);
+            const messageExchange = await getDummyMessageExchange(true, false, () => {
+                timedInteractionCleared = true;
+            });
+            const result = interactionProtocol.handleWriteRequest(
+                messageExchange,
+                { ...WRITE_REQUEST, timedRequest: true },
+                {
+                    packetHeader: { sessionType: SessionType.Unicast },
+                } as Message,
+            );
+
+            assert.equal(timedInteractionCleared, true);
+            assert.deepEqual(result, WRITE_RESPONSE);
+            assert.equal(basicInfoClusterServer.attributes.nodeLabel.getLocal(), "test");
+        });
     });
 
     describe("handleInvokeRequest", () => {
@@ -949,6 +1235,132 @@ describe("InteractionProtocol", () => {
             assert.equal(triggeredOn, true);
             assert.equal(triggeredOff, true);
             assert.equal(onOffState, false);
+        });
+
+        it("invoke command with timed interaction mismatch request", async () => {
+            let timedInteractionCleared = false;
+            await assert.rejects(
+                async () =>
+                    await interactionProtocol.handleInvokeRequest(
+                        await getDummyMessageExchange(false, false, () => {
+                            timedInteractionCleared = true;
+                        }),
+                        { ...INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS, timedRequest: true },
+                        { packetHeader: { sessionType: SessionType.Unicast } } as Message,
+                    ),
+                {
+                    message:
+                        "(201) timedRequest flag of invoke interaction (true) mismatch with expected timed interaction (false).",
+                },
+            );
+
+            assert.equal(timedInteractionCleared, false);
+            assert.equal(onOffState, false);
+        });
+
+        it("invoke command with timed interaction mismatch timed expected", async () => {
+            let timedInteractionCleared = false;
+            await assert.rejects(
+                async () =>
+                    await interactionProtocol.handleInvokeRequest(
+                        await getDummyMessageExchange(true, false, () => {
+                            timedInteractionCleared = true;
+                        }),
+                        INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS,
+                        { packetHeader: { sessionType: SessionType.Unicast } } as Message,
+                    ),
+                {
+                    message:
+                        "(201) timedRequest flag of invoke interaction (false) mismatch with expected timed interaction (true).",
+                },
+            );
+
+            assert.equal(timedInteractionCleared, false);
+            assert.equal(onOffState, false);
+        });
+
+        it("invoke command with timed interaction expired", async () => {
+            let timedInteractionCleared = false;
+            await assert.rejects(
+                async () =>
+                    await interactionProtocol.handleInvokeRequest(
+                        await getDummyMessageExchange(true, true, () => {
+                            timedInteractionCleared = true;
+                        }),
+                        { ...INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS, timedRequest: true },
+                        { packetHeader: { sessionType: SessionType.Unicast } } as Message,
+                    ),
+                {
+                    message: "(148) Timed request window expired. Decline invoke request.",
+                },
+            );
+
+            assert.equal(timedInteractionCleared, true);
+            assert.equal(onOffState, false);
+        });
+
+        it("invoke command with timed interaction as group message", async () => {
+            let timedInteractionCleared = false;
+            await assert.rejects(
+                async () =>
+                    await interactionProtocol.handleInvokeRequest(
+                        await getDummyMessageExchange(true, false, () => {
+                            timedInteractionCleared = true;
+                        }),
+                        { ...INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS, timedRequest: true },
+                        { packetHeader: { sessionType: SessionType.Group } } as Message,
+                    ),
+                {
+                    message:
+                        "(128) Invoke requests are only allowed on unicast sessions when a timed interaction is running.",
+                },
+            );
+
+            assert.equal(timedInteractionCleared, true);
+            assert.equal(onOffState, false);
+        });
+
+        it("invoke command with with timed interaction success", async () => {
+            let timedInteractionCleared = false;
+            const result = await interactionProtocol.handleInvokeRequest(
+                await getDummyMessageExchange(true, false, () => {
+                    timedInteractionCleared = true;
+                }),
+                { ...INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS, timedRequest: true },
+                { packetHeader: { sessionType: SessionType.Unicast } } as Message,
+            );
+
+            assert.deepEqual(result, INVOKE_COMMAND_RESPONSE);
+            assert.equal(onOffState, true);
+            assert.equal(timedInteractionCleared, true);
+        });
+
+        it("invoke command with with timed interaction required by command errors when not send as timed request", async () => {
+            let timedInteractionCleared = false;
+            const result = await interactionProtocol.handleInvokeRequest(
+                await getDummyMessageExchange(false, false, () => {
+                    timedInteractionCleared = true;
+                }),
+                INVOKE_COMMAND_REQUEST_TIMED_REQUIRED,
+                { packetHeader: { sessionType: SessionType.Unicast } } as Message,
+            );
+
+            assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_TIMED_REQUIRED);
+            assert.equal(timedInteractionCleared, false);
+        });
+
+        it("invoke command with with timed interaction required by command success", async () => {
+            let timedInteractionCleared = false;
+            const result = await interactionProtocol.handleInvokeRequest(
+                await getDummyMessageExchange(true, false, () => {
+                    timedInteractionCleared = true;
+                }),
+                { ...INVOKE_COMMAND_REQUEST_TIMED_REQUIRED, timedRequest: true },
+                { packetHeader: { sessionType: SessionType.Unicast } } as Message,
+            );
+
+            assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_TIMED_REQUIRED_SUCCESS);
+            assert.equal(timedInteractionCleared, true);
         });
     });
 });
