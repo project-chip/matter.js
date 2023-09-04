@@ -3,6 +3,13 @@
 This page tries to get an detailed overview of the changes between versions without the need to look into code, especially to see relevant changes while interfaces and features are still in flux.
 All Changes without a GitHub Username in brackets are from the core team: @Apollon77, @mfucci and @turon
 
+## WIP
+* Matter-Core functionality:
+  * Fix: Adjusted Event Priority definition to match to specs
+  * Enhance: Memory footprint optimizations
+* matter.js API:
+  * Breaking: Streamline Device API and rename onOff/isOnOff -> get/setOnOff
+
 ## 0.5.0 (2023-08-22)
 * Matter-Core functionality:
   * Breaking: Added support to allow to clearly model some more attribute types with internally different behaviour:

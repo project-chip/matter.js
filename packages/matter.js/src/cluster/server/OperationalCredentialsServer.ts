@@ -112,7 +112,7 @@ export const OperationalCredentialsClusterHandler: (
         trustedRootCertificates.updated(session);
 
         // TODO: create ACL with caseAdminNode
-        logger.info("addOperationalCert success");
+        logger.info(`addOperationalCert success, adminVendorId ${adminVendorId}, caseAdminSubject ${caseAdminSubject}`);
 
         return { statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok, fabricIndex: fabric.fabricIndex };
     },
