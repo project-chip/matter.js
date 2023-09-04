@@ -56,7 +56,7 @@ class DimmableBaseDevice extends extendPublicHandlerMethods<typeof OnOffBaseDevi
     }
 
     getCurrentLevel() {
-        return this.getClusterServer(LevelControl.Cluster)?.getCurrentLevelAttribute();
+        return this.getClusterServer(LevelControl.Cluster)?.getCurrentLevelAttribute() ?? 0;
     }
 
     setCurrentLevel(level: number | null) {

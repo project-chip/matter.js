@@ -109,21 +109,21 @@ export class OnOffBaseDevice extends extendPublicHandlerMethods<typeof Device, O
      *
      * @param onOff true to turn on, false to turn off
      */
-    async onOff(onOff: boolean) {
+    setOnOff(onOff: boolean) {
         this.getClusterServer(OnOff.Cluster)?.setOnOffAttribute(onOff);
+    }
+
+    getOnOff() {
+        return this.getClusterServer(OnOff.Cluster)?.getOnOffAttribute() ?? false;
     }
 
     /**
      * Toggles the device on or off
      * This is an example f a convenient device class API to control the device without need to access clusters
      */
-    async toggle() {
+    toggle() {
         const cluster = this.getClusterServer(OnOff.Cluster);
         cluster?.setOnOffAttribute(!cluster?.getOnOffAttribute());
-    }
-
-    async isOn() {
-        return this.getClusterServer(OnOff.Cluster)?.getOnOffAttribute();
     }
 
     // Add Listeners convenient for chosen attributes
