@@ -138,13 +138,13 @@ Table Legend:
 | **Bridge Support**                | X     | X             | X      | -           | -        | -    |
 | **Light devices**                 |       |               |        |             |          |      |
 | * On/Off Light                    | X     | X             | X      | X           | X        | X    |
-| * Dimmable Light                  | X     | X             | X      | X           | X        | X    |
-| * Color Temperature Light         | X     | X             | X      | X           | ?        | X    |
-| * Extended Color Light            | X     | X             | X      | ?           | ?        | ?    |
+| * Dimmable Light                  | X     | X             | X      | X           | -        | X    |
+| * Color Temperature Light         | X     | X             | X      | X           | -        | X    |
+| * Extended Color Light            | X     | X             | X      | ?           | -        | ?    |
 | **Smart Plugs/Outlets/Actuators** |       |               |        |             |          |      |
 | * On/Off Plug-in Unit             | X     | X             | X      | X           | X        | X    |
-| * Dimmable Plug-in Unit           | ?     | ?             | ?      | ?           | X        | ?    |
-| * Pump                            | -     | -             | -      | -           |          | -    |
+| * Dimmable Plug-in Unit           | ?     | ?             | ?      | ?           | -        | ?    |
+| * Pump                            | -     | -             | -      | -           | -        | -    |
 | **Sensors**                       |       |               |        |             |          |      |
 | * Contact Sensor                  | X     | X             | X      | X           | ?        | ?    |
 | * Light Sensor                    | X     | X             | -      | X           | ?        | ?    |
