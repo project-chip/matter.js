@@ -66,7 +66,10 @@ export const OnOffClusterDefaultHandler: () => ClusterServerHandlers<typeof OnOf
         onWithRecallGlobalScene: async () => {
             throw new NotImplementedError("Not implemented");
         },
-        onWithTimedOff: async ({ request: { onOffControl, onTime: reqOnTime, offWaitTime: reqOffWaitTime }, attributes: { onOff, onTime, offWaitTime } }) => {
+        onWithTimedOff: async ({
+            request: { onOffControl, onTime: reqOnTime, offWaitTime: reqOffWaitTime },
+            attributes: { onOff, onTime, offWaitTime },
+        }) => {
             if (onTime === undefined || offWaitTime === undefined) return; // Should never happen that this method is called without these attributes
 
             const timedOnTimer = getTimedOnTimer(onTime, onOff);
