@@ -4,8 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DiagnosticDictionary, Format, Level, Logger } from "../../src/log/Logger.js";
+import { DiagnosticDictionary, Format, Level, Logger, consoleLogger } from "../../src/log/Logger.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
+import { captureLog } from "../support/logging.js";
 
 const LOGGER_NAME = "UnitTest";
 
@@ -306,9 +307,9 @@ describe("Logger", () => {
 
     function itUsesCorrectConsoleMethod(sourceName: string, sinkName: string = sourceName) {
         it(`maps logger.${sourceName} to console.${sinkName}`, () => {
-            disableLogBuffering();
+            const actualLogger = Logger.log;
+            const actualConsole = consoleLogger.console;
 
-            const actualConsole = (<any>Logger.log).console;
             let result: string | undefined = undefined;
             let calls = 0;
             const mock = (message: string) => {
@@ -317,12 +318,14 @@ describe("Logger", () => {
             };
 
             try {
-                (<any>Logger.log).console = {
+                Logger.log = consoleLogger;
+                consoleLogger.console = {
                     [sinkName]: mock,
-                };
+                } as any;
                 (<any>logger)[sourceName].call(logger, "test");
             } finally {
-                (<any>Logger.log).console = actualConsole;
+                Logger.log = actualLogger;
+                consoleLogger.console = actualConsole;
             }
 
             expect(calls).equal(1);

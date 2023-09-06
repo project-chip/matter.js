@@ -176,8 +176,13 @@ export function consoleLogger(level: Level, formattedLog: string) {
     }
 }
 
-// Store console where it can be replaced for e.g. tests
-(<any>consoleLogger).console = console;
+const globalConsole = console;
+export namespace consoleLogger {
+    /**
+     * The target for consoleLogger.
+     */
+    export let console = globalConsole;
+}
 
 const defaultKeyFormatter = (key: string) => `${key}: `;
 const defaultValueFormatter = (value: string) => value;

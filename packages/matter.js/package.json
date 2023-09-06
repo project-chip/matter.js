@@ -28,9 +28,7 @@
     "build": "build",
     "build-clean": "build --clean",
     "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --gitRemote upstream --tsconfig tsconfig.dist-cjs.json",
-    "test-node": "mocha",
-    "test-web": "karma start test/karma.conf.cjs",
-    "test": "npm run test-node && npm run test-web"
+    "test": "matter-test -w"
   },
   "dependencies": {
     "bn.js": "^5.2.1",

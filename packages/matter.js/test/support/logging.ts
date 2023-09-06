@@ -6,56 +6,6 @@
 
 import { Level, Format, Logger } from "../../src/log/Logger.js";
 
-let messageBuffer: [ Level, string ][] | undefined;
-
-let defaultLog: typeof Logger.log | undefined;
-
-function bufferedLog(...args: [ Level, string ]) {
-    if (!messageBuffer) {
-        messageBuffer = [];
-    }
-    messageBuffer.push(args);
-}
-
-/**
- * Buffer log messages so we can only emit messages for failed tests.
- */
-beforeEach(function() {
-    messageBuffer = undefined;
-    if (Logger) {
-        defaultLog = Logger.log;
-        Logger.log = bufferedLog;
-    }
-});
-
-/**
- * Stop buffering log messages and emit buffered messages if test failed.
- */
-afterEach(function() {
-    disableLogBuffering();
-    if (!Logger) {
-        return;
-    }
-    if (messageBuffer) {
-        if (this.currentTest?.isFailed()) {
-            for (const args of messageBuffer) {
-                Logger.log(...args);
-            }
-        }
-        messageBuffer = undefined;
-    }
-});
-
-/**
- * Disable default log buffering.
- */
-export function disableLogBuffering() {
-    if (Logger && defaultLog) {
-        Logger.log = defaultLog;
-        defaultLog = undefined;
-    }
-}
-
 /**
  * Invoke logic and return any log messages produced.
  */

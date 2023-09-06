@@ -11,7 +11,8 @@
     "console": "node --loader ts-node/esm repl.ts"
   },
   "bin": {
-    "build": "./bin/build.js"
+    "build": "./bin/build.js",
+    "matter-test": "./bin/test.js"
   },
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",

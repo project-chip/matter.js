@@ -32,6 +32,7 @@ import { DeviceTypes } from "../../src/device/DeviceTypes.js";
 import { Endpoint } from "../../src/device/Endpoint.js";
 import { Fabric } from "../../src/fabric/Fabric.js";
 import { Level } from "../../src/log/Logger.js";
+import { captureLogs } from "../support/logging.js";
 
 describe("ClusterServer structure", () => {
     describe("correct attribute servers are used and exposed", () => {
