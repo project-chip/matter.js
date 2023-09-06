@@ -1,16 +1,9 @@
 {
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "outDir": "dist",
-    "composite": true,
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
-    "moduleResolution": "node16",
     "target": "es2018",
     "module": "es2022",
-    "esModuleInterop": true,
-    "strictNullChecks": true,
-    "tsBuildInfoFile": "build/tsbuildinfo",
     "types": ["node"]
   },
 

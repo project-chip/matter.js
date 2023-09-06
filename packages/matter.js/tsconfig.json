@@ -1,28 +1,13 @@
-/* Dev configuration */
 {
-  "extends": "./tsconfig.base.json",
+  "extends": "../../tools/tsconfig.base.json",
+
   "compilerOptions": {
-    "esModuleInterop": true, // Required to remove warnings on jest test
-    "composite": true,  // For linking this package from other packages
-    "incremental": true, // Speed up subsequent builds
-    "moduleResolution": "node16", // Required to correctly resolve Babel imports and to make sure all imports are js
-    "module": "node16", // Required to make sure all imports are js
-    "sourceMap": true, // Enable debugging breakpoints
-
-    // Local dev compilation checks
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitAny": true,
-    "noImplicitOverride": true,
-    "noUnusedParameters": true,
-    "noUnusedLocals": true,
-    "strict": true,
-
     "types": [
+      "@project-chip/matter.js-tools",
       "mocha",
       "node"
     ]
   },
-  /* During dev, src are included, so they are also modified during refactorings. */
-  "include": ["src/**/*.ts", "test/**/*.ts"],
-  "exclude": [],
+
+  "include": ["src/**/*.ts", "test/**/*.ts"]
 }

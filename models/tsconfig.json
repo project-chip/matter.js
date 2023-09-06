@@ -1,16 +1,7 @@
 {
-  "compilerOptions": {
-    "target": "es2015",
-    "module": "node16",
-    "outDir": "dist",
-    "composite": true,
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
-    "moduleResolution": "node16",
-    "tsBuildInfoFile": "dist/.tsbuildinfo",
-    "types": []
-  },
+  "extends": "../tools/tsconfig.base.json",
 
-  "include": [ "src/**/*.ts" ]
+  "include": [
+    "src/**/*.ts"
+  ]
 }
