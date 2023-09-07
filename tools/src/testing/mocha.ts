@@ -7,6 +7,7 @@
 // Can't import Mocha in the browser so just import type here
 import type MochaType from "mocha";
 import { ConsoleProxyReporter, FailureDetail, Reporter } from "./reporter.js";
+import { TestOptions } from "./options.js";
 
 export function adaptReporter(Mocha: typeof MochaType, title: string, reporter: Reporter) {
     const RUNNER = Mocha.Runner.constants;
@@ -51,8 +52,7 @@ export function adaptReporter(Mocha: typeof MochaType, title: string, reporter: 
             return {
                 total: this.runner.total,
                 complete: this.stats.tests,
-                failures: this.stats.failures,
-                duration: this.stats.duration
+                failures: this.stats.failures
             }
         }
     }
@@ -99,6 +99,18 @@ export function adaptReporter(Mocha: typeof MochaType, title: string, reporter: 
     return MochaReporter;
 }
 
+export function applyOptions(mocha: Mocha, options: TestOptions) {
+    if (options.grep) {
+        mocha.grep(options.grep);
+    }
+    if (options.fgrep) {
+        mocha.fgrep(options.fgrep);
+    }
+    if (options.invert) {
+        mocha.invert();
+    }
+}
+
 export function browserSetup(mocha: BrowserMocha) {
     mocha.setup("bdd");
 
@@ -114,7 +126,8 @@ export function browserSetup(mocha: BrowserMocha) {
 
         // Start Mocha, proxying reporting through console to Playwright and
         // completing once Mocha has finished
-        auto: async function() {
+        auto: async function(options: TestOptions) {
+            applyOptions(mocha, options);
             mocha.reporter(adaptReporter(Mocha, "Web", new ConsoleProxyReporter()));
             return new Promise<void>((accept) => {
                 const runner = this.start();

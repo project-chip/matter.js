@@ -14,6 +14,7 @@ import { build } from "esbuild";
 import { stat } from "fs/promises";
 import { Package } from "../util/package.js";
 import { ignoreError } from "../util/errors.js";
+import { TestOptions } from "./options.js";
 
 const libraries = [
     "chai",
@@ -23,7 +24,7 @@ const libraries = [
     "ansi-colors"
 ];
 
-export async function testWeb(manual: boolean, files: string[], reporter: Reporter) {
+export async function testWeb(manual: boolean, files: string[], reporter: Reporter, options: TestOptions = {}) {
     await buildLibraries();
 
     const server = await new Promise<http.Server>((resolve, reject) => {
@@ -48,7 +49,7 @@ export async function testWeb(manual: boolean, files: string[], reporter: Report
         if (manual) {
             console.log(`Run tests manually at ${url}`);
         } else {
-            testInBrowser(url, reporter).then(() => {
+            testInBrowser(url, reporter, options).then(() => {
                 server.close(() => {
                     // Hmm the close event above doesn't fire
                     resolve();
@@ -60,13 +61,13 @@ export async function testWeb(manual: boolean, files: string[], reporter: Report
     return true;
 }
 
-async function testInBrowser(url: string, reporter: Reporter) {
+async function testInBrowser(url: string, reporter: Reporter, options: TestOptions) {
     const browser = await chromium.launch();
     const page = await browser.newPage();
     page.on("console", consoleHandler(reporter));
     page.on("pageerror", error => { throw error });
     await page.goto(url);
-    await page.evaluate(() => (globalThis as any).MatterTest.auto())
+    await page.evaluate((options) => (globalThis as any).MatterTest.auto(options), options);
     await browser.close();
 }
 

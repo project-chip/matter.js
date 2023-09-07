@@ -11,7 +11,6 @@ export type Stats = {
     total: number;
     complete: number;
     failures: number;
-    duration?: number;
 }
 
 export interface Reporter {
@@ -51,7 +50,7 @@ export class ProgressReporter implements Reporter {
     }
 
     beginTest(_name: string, stats: Stats): void {
-        this.progress.update(this.summarize(stats, this.suite));
+        this.progress.update(this.summarize(stats), this.suite);
     }
 
     failTest(name: string, detail: FailureDetail) {
@@ -71,13 +70,12 @@ export class ProgressReporter implements Reporter {
         }
     }
 
-    private summarize(stats: Stats, name?: string) {
+    private summarize(stats: Stats) {
         const complete = colors.dim(`${stats.complete}/${stats.total}`);
         const failures = stats.failures
             ? colors.redBright(` ${stats.failures.toString()} failed`)
             : "";
-        const extra = name ? ` ${name}`: "";
-        return `${colors.bold(this.run)}${extra} ${complete}${failures}`;
+        return `${colors.bold(this.run)} ${complete}${failures}`;
     }
 
     private dumpFailures() {

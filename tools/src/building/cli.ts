@@ -20,7 +20,6 @@ export async function main(argv = process.argv) {
     const targets = new Set<Target>;
 
     const args = await yargs(hideBin(argv))
-        .scriptName("build")
         .usage("Builds packages adhering to matter.js standards.")
         .option("prefix", { alias: "p", default: ".", type: "string", describe: "specify build directory" })
         .option("clean", { alias: "c", default: false, type: "boolean", describe: "clean before build" })
@@ -29,6 +28,7 @@ export async function main(argv = process.argv) {
         .command("types", "build type definitions", () => targets.add(Target.types))
         .command("esm", "build JS (ES6 modules)", () => targets.add(Target.esm))
         .command("cjs", "build JS (CommonJS modules)", () => targets.add(Target.cjs))
+        .wrap(Math.min(process.stdout.columns, 80))
         .strict()
         .argv;
 

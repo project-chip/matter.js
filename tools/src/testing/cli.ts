@@ -26,10 +26,13 @@ export async function main(argv = process.argv) {
     let manual = false;
 
     const args = await yargs(hideBin(argv))
-        .scriptName("matter-test")
         .usage("Runs tests in packages adhering to matter.js standards.")
         .option("prefix", { alias: "p", default: ".", type: "string", describe: "specify directory of package to test" })
         .option("web", { alias: "w", default: false, type: "boolean", describe: "enable web tests in default test mode" })
+        .option("fgrep", { alias: "f", type: "string", describe: "Only run tests matching this string" })
+        .option("grep", { alias: "g", type: "string", describe: "Only run tests matching this regexp" })
+        .option("invert", { alias: "i", type: "boolean", describe: "Inverts --grep and --fgrep matches" })
+        .option("profile", { type: "boolean", describe: "Write profiling data to build/profiles (node only)" })
         .command("*", "run all supported test types")
         .command("esm", "run tests on node (ES6 modules)", () => testTypes.add(TestType.esm))
         .command("cjs", "run tests on node (CommonJS modules)", () => testTypes.add(TestType.cjs))
@@ -68,18 +71,18 @@ export async function main(argv = process.argv) {
 
     if (testTypes.has(TestType.esm)) {
         buildEsm();
-        await runTests(() => testNode("esm", loadFiles("esm"), reporter));
+        await runTests(() => testNode("esm", loadFiles("esm"), reporter, args));
     }
 
     if (testTypes.has(TestType.cjs)) {
         await project.buildSource("cjs");
         await project.buildTests("cjs");
-        await runTests(() => testNode("cjs", loadFiles("cjs"), reporter));
+        await runTests(() => testNode("cjs", loadFiles("cjs"), reporter, args));
     }
 
     if (testTypes.has(TestType.web)) {
         buildEsm();
-        await runTests(() => testWeb(manual, loadFiles("esm"), reporter));
+        await runTests(() => testWeb(manual, loadFiles("esm"), reporter, args));
     }
 }
 
