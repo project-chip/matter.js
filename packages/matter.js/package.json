@@ -28,7 +28,8 @@
     "build": "build",
     "build-clean": "build --clean",
     "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --gitRemote upstream --tsconfig tsconfig.dist-cjs.json",
-    "test": "matter-test -w"
+    "test": "matter-test -w",
+    "coverage": "c8 matter-test esm"
   },
   "dependencies": {
     "bn.js": "^5.2.1",
