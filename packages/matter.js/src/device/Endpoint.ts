@@ -141,7 +141,7 @@ export class Endpoint {
         if (cluster.id === DescriptorCluster.id) {
             this.descriptorCluster = cluster as unknown as ClusterServerObjForCluster<typeof DescriptorCluster>;
         }
-        this.clusterServers.set(cluster.id, cluster);
+        this.clusterServers.set(cluster.id, cluster as any);
         this.descriptorCluster.attributes.serverList.init(Array.from(this.clusterServers.keys()).sort((a, b) => a - b));
         this.structureChangedCallback(); // Inform parent about structure change
     }
@@ -165,7 +165,7 @@ export class Endpoint {
     >(cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, E> | undefined {
         const clusterServer = this.clusterServers.get(cluster.id);
         if (clusterServer !== undefined) {
-            return clusterServer as ClusterServerObj<A, E>;
+            return clusterServer as unknown as ClusterServerObj<A, E>;
         }
     }
 
