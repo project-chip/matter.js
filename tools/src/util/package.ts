@@ -63,6 +63,12 @@ export class Package {
         return progress;
     }
 
+    static node(name: string) {
+        return new Package({
+            path: this.workspace.resolve(`node_modules/${name}`)
+        });
+    }
+
     static get project() {
         if (!project) {
             project = new Package();

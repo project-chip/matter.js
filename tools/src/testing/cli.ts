@@ -11,6 +11,8 @@ import { hideBin } from "yargs/helpers";
 import { Project } from "../building/build.js";
 import { ProgressReporter } from "./reporter.js";
 import colors from "ansi-colors";
+import { Package } from "../util/package.js";
+import { glob } from "glob";
 
 enum TestType {
     esm = "esm",
@@ -66,18 +68,18 @@ export async function main(argv = process.argv) {
 
     if (testTypes.has(TestType.esm)) {
         buildEsm();
-        await runTests(() => testNode("esm", reporter));
+        await runTests(() => testNode("esm", loadFiles("esm"), reporter));
     }
 
     if (testTypes.has(TestType.cjs)) {
         await project.buildSource("cjs");
         await project.buildTests("cjs");
-        await runTests(() => testNode("cjs", reporter));
+        await runTests(() => testNode("cjs", loadFiles("cjs"), reporter));
     }
 
     if (testTypes.has(TestType.web)) {
         buildEsm();
-        await runTests(() => testWeb(manual, reporter));
+        await runTests(() => testWeb(manual, loadFiles("esm"), reporter));
     }
 }
 
@@ -86,4 +88,11 @@ async function runTests(runner: () => Promise<boolean>) {
         process.stdout.write(colors.bgRedBright(colors.whiteBright(`Tests failed, aborting\n`)));
         process.exit(1);
     }
+}
+
+function loadFiles(format: "esm" | "cjs") {
+    const files = Array<string>();
+    files.push(Package.tools.resolve(`dist/esm/testing/global-definitions.js`));
+    files.push(...glob.sync(Package.project.resolve(`build/${format}/test/**/*Test.js`)));
+    return files;
 }

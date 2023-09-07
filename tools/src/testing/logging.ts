@@ -13,8 +13,6 @@ declare global {
     let MatterLoggerSink: ((level: number, message: string) => void) | undefined;
 }
 
-(globalThis as any).MatterLoggerSink = undefined;
-
 (globalThis as any).MatterLoggerHook = (Logger: LoggerLike) => {
     // Currently everywhere we run tests supports ANSI escape codes for
     // colorization.  This includes:

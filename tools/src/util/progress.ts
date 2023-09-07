@@ -15,6 +15,8 @@ function write(text: string) {
 }
 
 export class Progress {
+    constructor(public writer = write) {}
+
     startup(what: string, pkg: Package) {
         write(`${what} ${colors.bold(pkg.json.name)} v${pkg.json.version}\n`);
     }

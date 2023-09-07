@@ -19,14 +19,20 @@ export interface Reporter {
     beginSuite(name: string, stats: Stats): void;
     beginTest(name: string, stats: Stats): void;
     endRun(stats: Stats): void;
-    failTest(name: string, error?: string, logs?: string): void;
+    failTest(name: string, detail: FailureDetail): void;
+}
+
+export type FailureDetail = {
+    message: string;
+    diff?: string;
+    stack?: string;
+    logs?: string;
 }
 
 export type Failure = {
     suite: string;
     test: string;
-    error?: string;
-    logs?: string;
+    detail: FailureDetail;
 }
 
 export class ProgressReporter implements Reporter {
@@ -48,12 +54,11 @@ export class ProgressReporter implements Reporter {
         this.progress.update(this.summarize(stats, this.suite));
     }
 
-    failTest(name: string, error?: string, logs?: string) {
+    failTest(name: string, detail: FailureDetail) {
         this.failures.push({
             suite: this.suite,
             test: name,
-            error,
-            logs
+            detail
         })
     }
 
@@ -81,13 +86,50 @@ export class ProgressReporter implements Reporter {
             const index = colors.redBright(`Failure ${colors.bold((i + 1).toString())} of ${this.failures.length}`);
             process.stdout.write(`\n${index} ${failure.suite} ${colors.bold(failure.test)}\n\n`);
 
-            if (failure.error) {
-                process.stdout.write(`  ${failure.error}\n\n`);
+            process.stdout.write(`  ${failure.detail.message}\n\n`);
+
+            if (failure.detail.diff) {
+                process.stdout.write(`      ${failure.detail.diff.replace(/\n/mg, "\n      ")}\n\n`);
             }
 
-            if (failure.logs) {
-                process.stdout.write(`  Logs:\n\n    ${failure.logs.replace("\n", "\n    ")}\n\n`);
+            if (failure.detail.stack) {
+                process.stdout.write(`  ${colors.dim(failure.detail.stack.replace(/\n/mg, "\n  "))}\n\n`);
+            }
+
+            if (failure.detail.logs) {
+                process.stdout.write(`  ${failure.detail.logs.replace(/\n/mg, "\n  ")}\n\n`);
             }
         }
+    }
+}
+
+const actualConsole = console;
+const actualLog = actualConsole.log;
+
+function proxy(...args: any[]) {
+    actualLog.call(actualConsole, `${ConsoleProxyReporter.FLAG}${JSON.stringify(args)}`)
+}
+
+export class ConsoleProxyReporter implements Reporter {
+    static FLAG = "<<REPORT>> ";
+
+    beginRun(name: string, stats: Stats) {
+        proxy("beginRun", name, stats);
+    }
+
+    beginSuite(name: string, stats: Stats) {
+        proxy("beginSuite", name, stats);
+    }
+
+    beginTest(name: string, stats: Stats) {
+        proxy("beginTest", name, stats);
+    }
+
+    endRun(stats: Stats) {
+        proxy("endRun", stats);
+    }
+
+    failTest(name: string, detail: FailureDetail) {
+        proxy("failTest", name, detail);
     }
 }

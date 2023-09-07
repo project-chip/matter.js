@@ -32,9 +32,7 @@
   },
   "dependencies": {
     "bn.js": "^5.2.1",
-    "elliptic": "^6.5.4",
-    "karma-chai": "^0.1.0",
-    "karma-mocha": "^2.0.1"
+    "elliptic": "^6.5.4"
   },
   "devDependencies": {
     "@project-chip/matter.js-tools": "0.1.0",
@@ -43,11 +41,6 @@
     "@types/elliptic": "^6.4.14",
     "@types/mocha": "^10.0.1",
     "chai": "^4.3.8",
-    "karma": "^6.4.2",
-    "karma-chrome-launcher": "^3.2.0",
-    "karma-coverage": "^2.2.1",
-    "karma-jasmine": "^5.1.0",
-    "karma-typescript": "^5.5.4",
     "mocha": "^10.2.0",
     "typescript": "^4.9.5"
   },

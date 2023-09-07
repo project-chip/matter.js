@@ -12,7 +12,7 @@ Crypto.get = () =>
         },
     }) as Crypto;
 
-import { BN } from "bn.js";
+import BN from "bn.js";
 import { AccessControlCluster } from "../../src/cluster/definitions/AccessControlCluster.js";
 import { AdministratorCommissioning } from "../../src/cluster/definitions/AdministratorCommissioningCluster.js";
 import { BasicInformationCluster } from "../../src/cluster/definitions/BasicInformationCluster.js";

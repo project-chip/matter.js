@@ -6,7 +6,15 @@
 
 import Chai from "chai";
 import ChaiAsPromised from "chai-as-promised";
+import { browserSetup } from "./mocha.js";
 
 Chai.use(ChaiAsPromised);
 
-(globalThis as any).expect = Chai.expect;
+Object.assign(globalThis as any, {
+    expect: Chai.expect,
+    MatterLoggerSink: undefined
+});
+
+if (typeof window === "object" && globalThis === window) {
+    browserSetup(mocha);
+}
