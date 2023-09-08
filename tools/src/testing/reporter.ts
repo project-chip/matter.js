@@ -11,7 +11,7 @@ export type Stats = {
     total: number;
     complete: number;
     failures: number;
-}
+};
 
 export interface Reporter {
     beginRun(name: string, stats: Stats): void;
@@ -26,13 +26,13 @@ export type FailureDetail = {
     diff?: string;
     stack?: string;
     logs?: string;
-}
+};
 
 export type Failure = {
     suite: string;
     test: string;
     detail: FailureDetail;
-}
+};
 
 export class ProgressReporter implements Reporter {
     private run = "";
@@ -57,8 +57,8 @@ export class ProgressReporter implements Reporter {
         this.failures.push({
             suite: this.suite,
             test: name,
-            detail
-        })
+            detail,
+        });
     }
 
     endRun(stats: Stats): void {
@@ -72,9 +72,7 @@ export class ProgressReporter implements Reporter {
 
     private summarize(stats: Stats) {
         const complete = colors.dim(`${stats.complete}/${stats.total}`);
-        const failures = stats.failures
-            ? colors.redBright(` ${stats.failures.toString()} failed`)
-            : "";
+        const failures = stats.failures ? colors.redBright(` ${stats.failures.toString()} failed`) : "";
         return `${colors.bold(this.run)} ${complete}${failures}`;
     }
 
@@ -87,25 +85,26 @@ export class ProgressReporter implements Reporter {
             process.stdout.write(`  ${failure.detail.message}\n\n`);
 
             if (failure.detail.diff) {
-                process.stdout.write(`      ${failure.detail.diff.replace(/\n/mg, "\n      ")}\n\n`);
+                process.stdout.write(`      ${failure.detail.diff.replace(/\n/gm, "\n      ")}\n\n`);
             }
 
             if (failure.detail.stack) {
-                process.stdout.write(`  ${colors.dim(failure.detail.stack.replace(/\n/mg, "\n  "))}\n\n`);
+                process.stdout.write(`  ${colors.dim(failure.detail.stack.replace(/\n/gm, "\n  "))}\n\n`);
             }
 
             if (failure.detail.logs) {
-                process.stdout.write(`  ${failure.detail.logs.replace(/\n/mg, "\n  ")}\n\n`);
+                process.stdout.write(`  ${failure.detail.logs.replace(/\n/gm, "\n  ")}\n\n`);
             }
         }
     }
 }
 
 const actualConsole = console;
+// eslint-disable-next-line @typescript-eslint/unbound-method
 const actualLog = actualConsole.log;
 
 function proxy(...args: any[]) {
-    actualLog.call(actualConsole, `${ConsoleProxyReporter.FLAG}${JSON.stringify(args)}`)
+    actualLog.call(actualConsole, `${ConsoleProxyReporter.FLAG}${JSON.stringify(args)}`);
 }
 
 export class ConsoleProxyReporter implements Reporter {

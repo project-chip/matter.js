@@ -4,20 +4,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import colors from "ansi-colors";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { Project } from "./build.js";
-import colors from "ansi-colors";
 
 enum Target {
     clean = "clean",
     types = "types",
     esm = "esm",
-    cjs = "cjs"
+    cjs = "cjs",
 }
 
 export async function main(argv = process.argv) {
-    const targets = new Set<Target>;
+    const targets = new Set<Target>();
 
     const args = await yargs(hideBin(argv))
         .usage("Builds packages adhering to matter.js standards.")
@@ -29,14 +29,16 @@ export async function main(argv = process.argv) {
         .command("esm", "build JS (ES6 modules)", () => targets.add(Target.esm))
         .command("cjs", "build JS (CommonJS modules)", () => targets.add(Target.cjs))
         .wrap(Math.min(process.stdout.columns, 80))
-        .strict()
-        .argv;
+        .strict().argv;
 
     const project = new Project(args.prefix);
 
     if (!targets.size) {
         targets.add(Target.types);
-        targets.add(Target.esm);
+
+        if (project.pkg.esm) {
+            targets.add(Target.esm);
+        }
 
         if (project.pkg.cjs) {
             targets.add(Target.cjs);
@@ -44,7 +46,7 @@ export async function main(argv = process.argv) {
     }
 
     const progress = project.pkg.start("Building");
-    
+
     if (targets.has(Target.clean) || args.clean) {
         await notify("Clean", () => project.clean());
     }
@@ -53,11 +55,11 @@ export async function main(argv = process.argv) {
         await notify(`Generate ${colors.bold("type declarations")}`, () => project.buildDeclarations());
         await notify(`Install ${colors.bold("type declarations")}`, () => project.installDeclarations());
     }
-    
+
     if (targets.has(Target.esm)) {
         await transpile(project, Target.esm);
     }
-    
+
     if (targets.has(Target.cjs)) {
         await transpile(project, Target.cjs);
     }

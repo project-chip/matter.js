@@ -6,8 +6,8 @@
 
 // Can't import Mocha in the browser so just import type here
 import type MochaType from "mocha";
-import { ConsoleProxyReporter, FailureDetail, Reporter } from "./reporter.js";
 import { TestOptions } from "./options.js";
+import { ConsoleProxyReporter, FailureDetail, Reporter } from "./reporter.js";
 
 export function adaptReporter(Mocha: typeof MochaType, title: string, reporter: Reporter) {
     const RUNNER = Mocha.Runner.constants;
@@ -21,39 +21,36 @@ export function adaptReporter(Mocha: typeof MochaType, title: string, reporter: 
             runner.once(RUNNER.EVENT_RUN_BEGIN, () => {
                 MatterLoggerSink = (_, message) => {
                     logs.push(message);
-                }
+                };
                 reporter.beginRun(title, this.translatedStats);
-            })
+            });
 
-            runner.on(RUNNER.EVENT_SUITE_BEGIN, (suite) => {
+            runner.on(RUNNER.EVENT_SUITE_BEGIN, suite => {
                 reporter.beginSuite(suite.titlePath().join("/"), this.translatedStats);
-            })
+            });
 
-            runner.on(RUNNER.EVENT_TEST_BEGIN, (test) => {
+            runner.on(RUNNER.EVENT_TEST_BEGIN, test => {
                 logs = (test as any).logs = [];
                 reporter.beginTest(test.title, this.translatedStats);
-            })
+            });
 
             runner.on(RUNNER.EVENT_TEST_FAIL, (test, error) => {
                 const logs = (test as any).logs as string[];
-                reporter.failTest(
-                    test.title,
-                    translateError(error, logs)
-                );
-            })
+                reporter.failTest(test.title, translateError(error, logs));
+            });
 
             runner.once(RUNNER.EVENT_RUN_END, () => {
                 MatterLoggerSink = undefined;
                 reporter.endRun(this.translatedStats);
-            })
+            });
         }
 
         get translatedStats() {
             return {
                 total: this.runner.total,
                 complete: this.stats.tests,
-                failures: this.stats.failures
-            }
+                failures: this.stats.failures,
+            };
         }
     }
 
@@ -61,14 +58,17 @@ export function adaptReporter(Mocha: typeof MochaType, title: string, reporter: 
         let message: string;
         let stack: string | undefined;
         let diff: string | undefined;
-    
+
         if (error === undefined || error === null) {
             message = `(error is ${error})`;
         } else if (error.stack) {
             const index = error.stack.indexOf("\n");
             if (index !== -1) {
                 message = error.stack.slice(0, index);
-                stack = error.stack.slice(index + 1).trim().replace(/\n\s+/mg, "\n");
+                stack = error.stack
+                    .slice(index + 1)
+                    .trim()
+                    .replace(/\n\s+/gm, "\n");
             } else {
                 message = error.stack;
             }
@@ -77,12 +77,12 @@ export function adaptReporter(Mocha: typeof MochaType, title: string, reporter: 
         } else {
             message = error.toString();
         }
-    
+
         if (error.expected && error.actual) {
             diff = Mocha.reporters.Base.generateDiff(error.actual.toString(), error.expected.toString());
-            diff = diff.trim().replace(/\n[ \t]+/mg, "\n");
+            diff = diff.trim().replace(/\n[ \t]+/gm, "\n");
         }
-    
+
         const result = { message } as FailureDetail;
         if (diff) {
             result.diff = diff;
@@ -95,7 +95,7 @@ export function adaptReporter(Mocha: typeof MochaType, title: string, reporter: 
         }
         return result;
     }
-    
+
     return MochaReporter;
 }
 
@@ -121,18 +121,18 @@ export function browserSetup(mocha: BrowserMocha) {
             if (root) {
                 root.innerHTML = "";
             }
-            return mocha.run()
+            return mocha.run();
         },
 
         // Start Mocha, proxying reporting through console to Playwright and
         // completing once Mocha has finished
-        auto: async function(options: TestOptions) {
+        auto: async function (options: TestOptions) {
             applyOptions(mocha, options);
             mocha.reporter(adaptReporter(Mocha, "Web", new ConsoleProxyReporter()));
-            return new Promise<void>((accept) => {
+            return new Promise<void>(accept => {
                 const runner = this.start();
                 runner.on("end", accept);
             });
-        }
-    }
+        },
+    };
 }

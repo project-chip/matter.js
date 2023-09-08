@@ -4,20 +4,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { mkdir, writeFile } from "fs/promises";
 import Mocha from "mocha";
 import { relative } from "path";
-import { Reporter } from "./reporter.js";
+import v8Profiler from "v8-profiler-next";
+import { Package } from "../util/package.js";
 import "./logging.js";
 import { adaptReporter, applyOptions } from "./mocha.js";
 import { TestOptions } from "./options.js";
-import v8Profiler from "v8-profiler-next";
-import { mkdir, writeFile } from "fs/promises";
-import { Package } from "../util/package.js";
+import { Reporter } from "./reporter.js";
 
 export async function testNode(format: "cjs" | "esm", files: string[], reporter: Reporter, options: TestOptions = {}) {
     const mocha = new Mocha({
         inlineDiffs: true,
-        reporter: adaptReporter(Mocha, format.toUpperCase(), reporter)
+        reporter: adaptReporter(Mocha, format.toUpperCase(), reporter),
     });
 
     applyOptions(mocha, options);
@@ -36,7 +36,7 @@ export async function testNode(format: "cjs" | "esm", files: string[], reporter:
         startProfiling();
     }
 
-    const runner = await new Promise<Mocha.Runner>((resolve) => {
+    const runner = await new Promise<Mocha.Runner>(resolve => {
         const runner = mocha.run(() => resolve(runner));
     });
 
@@ -60,11 +60,11 @@ async function stopProfiling() {
             if (error) {
                 reject(error);
             } else if (!result) {
-                reject(new Error("No profile error or result"))
+                reject(new Error("No profile error or result"));
             } else {
                 accept(result);
             }
-        })
+        }),
     );
 
     await mkdir(Package.project.resolve("build/profiles"), { recursive: true });

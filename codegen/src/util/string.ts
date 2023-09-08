@@ -23,12 +23,12 @@ export function wordWrap(text: string, width = 120) {
  * Returns a string formatted to function as an object key.  This means
  * escaping as a string if it can't be a bare identifier.
  */
-export function asObjectKey(label: {}) {
-    label = label.toString();
-    if (!(label as string).match(/^[$_a-z][$_a-z0-9]*$/i)) {
-        label = JSON.stringify(label);
+export function asObjectKey(label: any) {
+    let str = `${label}`;
+    if (!str.match(/^[$_a-z][$_a-z0-9]*$/i)) {
+        str = JSON.stringify(label);
     }
-    return label;
+    return str;
 }
 
 enum ListType {

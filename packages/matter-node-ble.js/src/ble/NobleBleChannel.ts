@@ -6,18 +6,18 @@
 
 import type { Characteristic, Peripheral } from "@abandonware/noble";
 import {
-    Ble,
-    BleError,
     BLE_MATTER_C1_CHARACTERISTIC_UUID,
     BLE_MATTER_C2_CHARACTERISTIC_UUID,
     BLE_MATTER_C3_CHARACTERISTIC_UUID,
     BLE_MATTER_SERVICE_UUID,
     BLE_MAXIMUM_BTP_MTU,
-    BtpFlowError,
-    BtpSessionHandler,
     BTP_CONN_RSP_TIMEOUT_MS,
     BTP_MAXIMUM_WINDOW_SIZE,
     BTP_SUPPORTED_VERSIONS,
+    Ble,
+    BleError,
+    BtpFlowError,
+    BtpSessionHandler,
 } from "@project-chip/matter.js/ble";
 import { BtpCodec } from "@project-chip/matter.js/codec";
 import { Channel, InternalError, Listener, ServerAddress } from "@project-chip/matter.js/common";

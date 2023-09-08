@@ -4,25 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import express from "express";
-import http from "http";
-import { chromium, ConsoleMessage } from "playwright";
-import { AddressInfo } from "net";
-import { ConsoleProxyReporter, Reporter } from "./reporter.js";
-import { relative } from "path";
 import { build } from "esbuild";
+import express from "express";
 import { stat } from "fs/promises";
-import { Package } from "../util/package.js";
+import http from "http";
+import { AddressInfo } from "net";
+import { relative } from "path";
+import { chromium, ConsoleMessage } from "playwright";
 import { ignoreError } from "../util/errors.js";
+import { Package } from "../util/package.js";
 import { TestOptions } from "./options.js";
+import { ConsoleProxyReporter, Reporter } from "./reporter.js";
 
-const libraries = [
-    "chai",
-    "chai-as-promised",
-    "elliptic",
-    "bn.js",
-    "ansi-colors"
-];
+const libraries = ["chai", "chai-as-promised", "elliptic", "bn.js", "ansi-colors"];
 
 export async function testWeb(manual: boolean, files: string[], reporter: Reporter, options: TestOptions = {}) {
     await buildLibraries();
@@ -49,12 +43,16 @@ export async function testWeb(manual: boolean, files: string[], reporter: Report
         if (manual) {
             console.log(`Run tests manually at ${url}`);
         } else {
-            testInBrowser(url, reporter, options).then(() => {
-                server.close(() => {
-                    // Hmm the close event above doesn't fire
-                    resolve();
+            testInBrowser(url, reporter, options)
+                .then(() => {
+                    server.close(() => {
+                        // Hmm the close event above doesn't fire
+                        resolve();
+                    });
+                })
+                .catch(error => {
+                    reject(error);
                 });
-            });
         }
     });
 
@@ -65,9 +63,11 @@ async function testInBrowser(url: string, reporter: Reporter, options: TestOptio
     const browser = await chromium.launch();
     const page = await browser.newPage();
     page.on("console", consoleHandler(reporter));
-    page.on("pageerror", error => { throw error });
+    page.on("pageerror", error => {
+        throw error;
+    });
     await page.goto(url);
-    await page.evaluate((options) => (globalThis as any).MatterTest.auto(options), options);
+    await page.evaluate(options => (globalThis as any).MatterTest.auto(options), options);
     await browser.close();
 }
 
@@ -102,7 +102,7 @@ function consoleHandler(reporter: Reporter) {
             throw new Error(`Invalid encoded reporter update method ${args[0]}`);
         }
         method.call(reporter, ...args.slice(1));
-    }
+    };
 }
 
 function buildIndex(files: string[]) {
@@ -113,18 +113,13 @@ function buildIndex(files: string[]) {
                 if (!path.endsWith(".js")) {
                     path = `${path}.js`;
                 }
-                return [ name, path ];
-            })
-        )
+                return [name, path];
+            }),
+        ),
     });
 
-    files = [
-        "/tools/dist/esm/testing/logging.js",
-        ...files.map(file => `/${relative(Package.workspace.path, file)}`)
-    ]
-    const imports = files.map(
-        file => `import ${JSON.stringify(file)}`
-    ).join("\n    ");
+    files = ["/tools/dist/esm/testing/logging.js", ...files.map(file => `/${relative(Package.workspace.path, file)}`)];
+    const imports = files.map(file => `import ${JSON.stringify(file)}`).join("\n    ");
 
     return `<!DOCTYPE html>
 <html>
@@ -142,7 +137,7 @@ function buildIndex(files: string[]) {
     ${imports}
     </script>
 </body>
-</html>`
+</html>`;
 }
 
 async function buildLibraries() {
@@ -158,10 +153,10 @@ async function buildLibraries() {
         }
 
         await build({
-            entryPoints: [ Package.workspace.resolve(`node_modules/${name}`) ],
+            entryPoints: [Package.workspace.resolve(`node_modules/${name}`)],
             bundle: true,
             format: "esm",
-            outfile
+            outfile,
         });
     }
 }

@@ -6,7 +6,6 @@
 
 export async function ignoreError<T>(code: string, fn: () => Promise<T>): Promise<T | undefined> {
     try {
-        
         return await fn();
     } catch (e) {
         if ((e as any).code !== code) {

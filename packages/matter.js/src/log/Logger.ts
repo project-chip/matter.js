@@ -180,6 +180,7 @@ export namespace consoleLogger {
     /**
      * The target for consoleLogger.
      */
+    // eslint-disable-next-line prefer-const
     export let console = globalConsole;
 }
 

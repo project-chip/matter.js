@@ -103,17 +103,11 @@ describe("TlvByteString", () => {
 
     describe("validation", () => {
         it("throws an error if the value is not a ByteString", () => {
-            expect(() => TlvByteString.validate(5 as any)).throw(
-                ValidationError,
-                "Expected ByteArray, got number.",
-            );
+            expect(() => TlvByteString.validate(5 as any)).throw(ValidationError, "Expected ByteArray, got number.");
         });
 
         it("throws an error if the value is not a String", () => {
-            expect(() => TlvString.validate(true as any)).throw(
-                ValidationError,
-                "Expected string, got boolean."
-            );
+            expect(() => TlvString.validate(true as any)).throw(ValidationError, "Expected string, got boolean.");
         });
     });
 });

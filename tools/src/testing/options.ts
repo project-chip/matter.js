@@ -5,8 +5,8 @@
  */
 
 export type TestOptions = {
-    profile?: boolean,
-    grep?: string,
-    fgrep?: string,
-    invert?: boolean
-}
+    profile?: boolean;
+    grep?: string;
+    fgrep?: string;
+    invert?: boolean;
+};

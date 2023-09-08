@@ -18,8 +18,8 @@ import {
     DEFAULT_ACTIVE_RETRANSMISSION_TIMEOUT_MS,
     DEFAULT_IDLE_RETRANSMISSION_TIMEOUT_MS,
     DEFAULT_RETRANSMISSION_RETRIES,
-    Session,
     SLEEPY_ACTIVE_THRESHOLD_MS,
+    Session,
 } from "./Session.js";
 import { UNDEFINED_NODE_ID } from "./SessionManager.js";
 

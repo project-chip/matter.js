@@ -932,8 +932,6 @@ type ClusterExtend<
     events?: E;
 };
 
-// TODO Find out why eslint markts that as unused
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const ClusterExtend = <
     F extends BitSchema,
     SF_BASE extends TypeFromPartialBitSchema<F>,

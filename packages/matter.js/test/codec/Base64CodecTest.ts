@@ -57,7 +57,8 @@ const tests = {
 tests.all.textUrl = tests.all.text.replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
 
 describe("Base64", () => {
-    const expectEncodeAs = (bytes: number[], text: string) => expect(Base64.encode(new ByteArray(bytes))).deep.equal(text);
+    const expectEncodeAs = (bytes: number[], text: string) =>
+        expect(Base64.encode(new ByteArray(bytes))).deep.equal(text);
 
     describe("encode", () => {
         Object.entries(tests).forEach(([name, test]) => {

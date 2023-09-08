@@ -75,6 +75,7 @@ export namespace Conformance {
         | Ast.Name
         | Ast.Value
         | Ast.Option
+        // eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents
         | Ast.UnaryOperand
         | Ast.BinaryOperands
         | Ast.Group
@@ -223,9 +224,10 @@ export namespace Conformance {
     export type ReferenceResolver<T> = (name: string) => T;
 
     /**
-     * Supported ways of expressing conformance.
+     * Supported ways of expressing conformance (conceptually union should
+     * include Flag but that is covered by string).
      */
-    export type Definition = Flag | Name | (Flag | Name)[] | { ast: Conformance.Ast } | string | undefined;
+    export type Definition = string | string[] | { ast: Conformance.Ast } | undefined;
 
     // Serialize with parenthesis if necessary to make the expression atomic
     function serializeAtomic(ast: Ast, otherOperator?: Operator) {

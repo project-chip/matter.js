@@ -5,13 +5,10 @@
  */
 
 import BN from "bn.js";
-import elliptic from "elliptic";
 import { InternalError } from "../common/MatterError.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataWriter } from "../util/DataWriter.js";
-import { Crypto } from "./Crypto.js";
-
-const { ec } = elliptic;
+import { Crypto, ec } from "./Crypto.js";
 
 const P256_CURVE = new ec("p256").curve;
 

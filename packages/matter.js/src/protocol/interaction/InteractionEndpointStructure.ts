@@ -9,7 +9,7 @@ import {
     FabricScopedAttributeServer,
     FixedAttributeServer,
 } from "../../cluster/server/AttributeServer.js";
-import { asClusterServerInternal, ClusterServerObj } from "../../cluster/server/ClusterServerTypes.js";
+import { ClusterServerObj, asClusterServerInternal } from "../../cluster/server/ClusterServerTypes.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
 import { ImplementationError, InternalError } from "../../common/MatterError.js";
@@ -24,14 +24,14 @@ import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvAttributePath, TlvCommandPath, TlvEventPath } from "./InteractionProtocol.js";
 import {
     AttributePath,
-    attributePathToId,
     AttributeWithPath,
     CommandPath,
-    commandPathToId,
     CommandWithPath,
     EventPath,
-    eventPathToId,
     EventWithPath,
+    attributePathToId,
+    commandPathToId,
+    eventPathToId,
     genericElementPathToId,
 } from "./InteractionServer.js";
 

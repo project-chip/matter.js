@@ -4,25 +4,24 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { readFileSync } from "fs";
-import { resolve, dirname } from "path";
-import { statSync } from "fs";
+import { readFileSync, statSync } from "fs";
+import { dirname, resolve } from "path";
 import { ignoreErrorSync } from "./errors.js";
-import { fileURLToPath } from "url";
 import { Progress } from "./progress.js";
 
 export class Package {
     path: string;
     json: PackageJson;
+    esm: boolean;
     cjs: boolean;
     tests: boolean;
 
     constructor({
         path = ".",
-        name
+        name,
     }: {
-        path?: string,
-        name?: string,
+        path?: string;
+        name?: string;
     } = {}) {
         let json: PackageJson | undefined;
         path = resolve(path);
@@ -44,13 +43,14 @@ export class Package {
         if (!ignoreErrorSync("ENOENT", () => statSync("src").isDirectory())) {
             throw new Error(`Found package ${json.name} but no src directory is present`);
         }
+        const { esm, cjs } = selectFormats(json);
 
         this.path = path;
         this.json = json;
-        this.cjs = json.type !== "module" || (json.main !== undefined && json.module !== undefined);
-        this.tests = ignoreErrorSync("ENOENT", () =>
-            (statSync("test")).isDirectory()
-        ) ?? false;
+        this.esm = esm;
+        this.cjs = cjs;
+
+        this.tests = ignoreErrorSync("ENOENT", () => statSync("test").isDirectory()) ?? false;
     }
 
     resolve(path: string) {
@@ -65,7 +65,7 @@ export class Package {
 
     static node(name: string) {
         return new Package({
-            path: this.workspace.resolve(`node_modules/${name}`)
+            path: this.workspace.resolve(`node_modules/${name}`),
         });
     }
 
@@ -82,14 +82,14 @@ export class Package {
 
     static get workspace() {
         if (!workspace) {
-            workspace = find((pkg) => Array.isArray(pkg.json.workspaces));
+            workspace = find(pkg => Array.isArray(pkg.json.workspaces));
         }
         return workspace;
     }
 
     static get tools() {
         if (!tools) {
-            tools = new Package({ path: dirname(fileURLToPath(import.meta.url)) });
+            tools = new Package({ path: this.workspace.resolve("tools") });
         }
         return tools;
     }
@@ -98,7 +98,7 @@ export class Package {
 export type PackageJson = {
     name: string;
     version: string;
-    [key: string]: any
+    [key: string]: any;
 };
 
 let project: Package | undefined;
@@ -111,4 +111,20 @@ function find(selector: (pkg: Package) => boolean): Package {
         pkg = new Package({ path: dirname(pkg.path) });
     }
     return pkg;
+}
+
+function selectFormats(json: any) {
+    let esm: boolean, cjs: boolean;
+
+    if (json.type === "module") {
+        esm = true;
+        cjs =
+            (json.main !== undefined && json.module !== undefined) ||
+            !!Object.values(json.exports ?? {}).find((exp: any) => exp.require);
+    } else {
+        cjs = true;
+        esm = !!json.module || !!Object.values(json.exports ?? {}).find((exp: any) => exp.import);
+    }
+
+    return { esm, cjs };
 }

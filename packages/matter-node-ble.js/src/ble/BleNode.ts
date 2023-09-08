@@ -9,9 +9,9 @@ import { InstanceBroadcaster, Scanner, TransportInterface } from "@project-chip/
 import { NetInterface } from "@project-chip/matter.js/net";
 import { ByteArray } from "@project-chip/matter.js/util";
 import { BleBroadcaster } from "./BleBroadcaster";
-import { BlenoBleServer } from "./BlenoBleServer";
 import { BlePeripheralInterface } from "./BlePeripheralInterface";
 import { BleScanner } from "./BleScanner";
+import { BlenoBleServer } from "./BlenoBleServer";
 import { NobleBleCentralInterface } from "./NobleBleChannel";
 import { NobleBleClient } from "./NobleBleClient";
 

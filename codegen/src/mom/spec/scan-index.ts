@@ -88,7 +88,7 @@ export function scanIndex(path: string) {
         };
 
         // Proxy discovery heading got a little bit lost so fake it up
-        if (spec === "core" && heading.section === "9.15.12" && heading.name === "Clusters") {
+        if (spec === Specification.Core && heading.section === "9.15.12" && heading.name === "Clusters") {
             result.clusters.push({
                 name: "Proxy Discovery",
                 path: a.href,
@@ -122,7 +122,7 @@ export function scanIndex(path: string) {
 
         // Cluster spec convention is one cluster per sub-section except the
         // first sub-section which summarizes the section
-        if (spec === "cluster") {
+        if (spec === Specification.Cluster) {
             const sectionPath = heading.section.split(".");
             if (sectionPath.length === 2 && sectionPath[1] !== "1") {
                 const cluster = {
@@ -137,7 +137,7 @@ export function scanIndex(path: string) {
 
         // Having learned our lesson with clusters, don't bother with the index
         // for devices.  Just scan the entire document
-        if (spec === "device") {
+        if (spec === Specification.Device) {
             result.device = {
                 name: heading.name,
                 path,

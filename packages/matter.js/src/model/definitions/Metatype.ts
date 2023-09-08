@@ -115,7 +115,7 @@ export namespace Metatype {
                 const id = Number(value);
                 if (Number.isNaN(id)) {
                     // Key name
-                    return value.toString();
+                    return `${value}`;
                 }
                 // Value
                 return id;

@@ -4,13 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import elliptic from "elliptic";
 import { Base64 } from "../codec/Base64Codec.js";
 import { DerCodec, DerNode, DerType } from "../codec/DerCodec.js";
 import { MatterError, NotImplementedError } from "../common/MatterError.js";
 import { ByteArray } from "../util/ByteArray.js";
-
-const { ec: EC } = elliptic;
+import { ec } from "./Crypto.js";
 
 class KeyError extends MatterError {}
 
@@ -114,14 +112,14 @@ export interface Key extends JsonWebKey {
     e?: string;
     ext?: boolean;
     k?: string;
-    key_ops?: (KeyUsage | string)[];
+    key_ops?: string[]; // Ideally KeyUsage but any value is legal
     kty?: KeyType;
     n?: string;
     oth?: RsaOtherPrimesInfo[];
     p?: string;
     q?: string;
     qi?: string;
-    use?: "sig" | "enc" | string;
+    use?: string; // "sig" | "enc" are official values but any value is legal
     x?: string;
     y?: string;
 
@@ -529,8 +527,8 @@ export function Key(properties: Partial<Key>) {
         }
 
         // Compute
-        const ec = new EC(crv.toLowerCase().replace(/-/g, ""));
-        const ecKey = ec.keyFromPrivate(that.privateKey).getPublic();
+        const elliptic = new ec(crv.toLowerCase().replace(/-/g, ""));
+        const ecKey = elliptic.keyFromPrivate(that.privateKey).getPublic();
 
         // Install
         that.xBits = new ByteArray(ecKey.getX().toArray());

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { UnexpectedDataError, ValidationError } from "../common/MatterError.js";
-import { BitmapSchema, BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
+import { BitSchema, BitmapSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import {
     FLOAT32_MAX,
@@ -17,13 +17,13 @@ import {
     INT64_MIN,
     INT8_MAX,
     INT8_MIN,
-    maxValue,
-    minValue,
     UINT16_MAX,
     UINT24_MAX,
     UINT32_MAX,
     UINT64_MAX,
     UINT8_MAX,
+    maxValue,
+    minValue,
 } from "../util/Number.js";
 import { TlvCodec, TlvLength, TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";

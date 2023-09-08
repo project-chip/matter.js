@@ -5,10 +5,15 @@
  */
 
 import { Logger } from "@project-chip/matter.js/log";
-import { ClusterModel, ClusterVariance, CommandModel, ValueModel } from "@project-chip/matter.js/model";
-import { translateBitmap } from "@project-chip/matter.js/model";
-import { IllegalFeatureCombinations } from "@project-chip/matter.js/model";
-import { conditionToBitmaps } from "@project-chip/matter.js/model";
+import {
+    ClusterModel,
+    ClusterVariance,
+    CommandModel,
+    ValueModel,
+    translateBitmap,
+    IllegalFeatureCombinations,
+    conditionToBitmaps
+} from "@project-chip/matter.js/model";
 import { camelize, serialize } from "../util/string.js";
 import { Block } from "../util/TsFile.js";
 import { ClusterComponentGenerator } from "./ClusterComponentGenerator.js";

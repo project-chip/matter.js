@@ -85,7 +85,8 @@ describe("TlvNumber", () => {
 
         it("throws an error if the value is not a bigint", () => {
             expect(() => TlvUInt32.validate(BigInt(12345678790) as any)).throw(
-                ValidationError, "Expected number, got bigint.",
+                ValidationError,
+                "Expected number, got bigint.",
             );
         });
 

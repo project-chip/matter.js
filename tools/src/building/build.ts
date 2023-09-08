@@ -4,11 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { build as esbuild, Format } from "esbuild";
-import { mkdir, cp, writeFile } from "fs/promises";
-import { stat, rm, symlink } from "fs/promises";
-import { ignoreError } from "../util/errors.js";
 import { spawn } from "child_process";
+import { build as esbuild, Format } from "esbuild";
+import { cp, mkdir, rm, stat, symlink, writeFile } from "fs/promises";
+import { ignoreError } from "../util/errors.js";
 import { Package } from "../util/package.js";
 
 export class Project {
@@ -20,7 +19,7 @@ export class Project {
 
     async buildSource(format: Format) {
         await this.build(format, "src", `dist/${format}`);
-        this.specifyFormat("dist", format);
+        await this.specifyFormat("dist", format);
     }
 
     async buildTests(format: Format) {
@@ -29,15 +28,13 @@ export class Project {
                 await this.build(format, "test", `build/${format}/test`);
             }
         });
-        await ignoreError("EEXIST", async() =>
-            await symlink(`../../dist/${format}`, `build/${format}/src`)
-        );
+        await ignoreError("EEXIST", async () => await symlink(`../../dist/${format}`, `build/${format}/src`));
         await this.specifyFormat("build", format);
     }
 
     async clean() {
-        for (const dir of [ "build", "dist" ]) {
-            rm(dir, { recursive: true, force: true });
+        for (const dir of ["build", "dist"]) {
+            await rm(dir, { recursive: true, force: true });
         }
     }
 
@@ -62,21 +59,21 @@ export class Project {
                     "--incremental",
                 ],
                 {
-                    stdio: "inherit"
-                }
+                    stdio: "inherit",
+                },
             );
             proc.on("error", reject);
-            proc.on("close", (code) => {
+            proc.on("close", code => {
                 if (code !== 0) {
                     process.exit(code ?? -1);
                 }
                 resolve();
-            })
+            });
         });
     }
 
     async installDeclarations() {
-        await mkdir("dist", { recursive: true })
+        await mkdir("dist", { recursive: true });
         await cp(`build/types/src`, `dist/esm`, { recursive: true, force: true });
         if (this.pkg.cjs) {
             await cp(`build/types/src`, `dist/cjs`, { recursive: true, force: true });
@@ -85,9 +82,9 @@ export class Project {
 
     private async build(format: Format, inputDir: string, outputDir: string) {
         await esbuild({
-            entryPoints: [ `${inputDir}/**/*.ts` ],
+            entryPoints: [`${inputDir}/**/*.ts`],
             outdir: outputDir,
-            format: format as Format,
+            format: format,
             sourcemap: true,
             absWorkingDir: this.pkg.path,
         });

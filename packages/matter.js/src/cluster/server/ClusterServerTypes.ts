@@ -173,9 +173,9 @@ type UseOptionalAttributes<
     MakeAttributesMandatory<C["attributes"], A>,
     C["commands"],
     C["events"]
->; /** Forces the presence of the specified optional attributes, so they can be used in the command handlers */
+>;
+
 /** Forces the presence of the specified optional attributes, so they can be used in the command handlers */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 export const UseOptionalAttributes = <
     C extends Cluster<any, any, any, any, any>,
     A extends OptionalAttributeConf<C["attributes"]>,

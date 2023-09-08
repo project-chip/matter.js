@@ -12,7 +12,7 @@ Chai.use(ChaiAsPromised);
 
 Object.assign(globalThis as any, {
     expect: Chai.expect,
-    MatterLoggerSink: undefined
+    MatterLoggerSink: undefined,
 });
 
 if (typeof window === "object" && globalThis === window) {

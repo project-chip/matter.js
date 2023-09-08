@@ -40,16 +40,11 @@ export abstract class TlvSchema<T> extends Schema<T, ByteArray> implements TlvSc
 
     abstract encodeTlvInternal(writer: TlvWriter, value: T, tag?: TlvTag): void;
 
-    injectField(
-        value: T,
-        _fieldId: number,
-        _fieldValue: any,
-        _injectChecker: (fieldValue: any | undefined) => boolean,
-    ): T {
+    injectField(value: T, _fieldId: number, _fieldValue: any, _injectChecker: (fieldValue: any) => boolean): T {
         return value;
     }
 
-    removeField(value: T, _fieldId: number, _removeChecker: (fieldValue: any | undefined) => boolean): T {
+    removeField(value: T, _fieldId: number, _removeChecker: (fieldValue: any) => boolean): T {
         return value;
     }
 }

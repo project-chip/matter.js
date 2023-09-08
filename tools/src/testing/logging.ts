@@ -25,10 +25,10 @@ declare global {
     // Should this become a PITA we can add an option to disable
     Logger.format = "ansi";
 
-    let messageBuffer: [ number, string ][] | undefined;
+    let messageBuffer: [number, string][] | undefined;
     let defaultLog: LoggerLike["log"] | undefined;
-    
-    function bufferedLog(...args: [ number, string ]) {
+
+    function bufferedLog(...args: [number, string]) {
         if (MatterLoggerSink) {
             MatterLoggerSink(...args);
         } else {
@@ -40,16 +40,17 @@ declare global {
     }
 
     // Divert log messages for test duration
-    beforeEach(function() {
+    beforeEach(function () {
         messageBuffer = undefined;
         if (Logger) {
+            // eslint-disable-next-line @typescript-eslint/unbound-method
             defaultLog = Logger.log;
             Logger.log = bufferedLog;
         }
     });
 
     // Emit log messages only if the test fails
-    afterEach(function() {
+    afterEach(function () {
         if (!defaultLog) {
             return;
         }
@@ -66,4 +67,4 @@ declare global {
             messageBuffer = undefined;
         }
     });
-}
+};

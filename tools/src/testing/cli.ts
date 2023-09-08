@@ -4,15 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { testNode } from "./node.js";
-import { testWeb } from "./web.js";
+import colors from "ansi-colors";
+import { glob } from "glob";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { Project } from "../building/build.js";
-import { ProgressReporter } from "./reporter.js";
-import colors from "ansi-colors";
 import { Package } from "../util/package.js";
-import { glob } from "glob";
+import { testNode } from "./node.js";
+import { ProgressReporter } from "./reporter.js";
+import { testWeb } from "./web.js";
 
 enum TestType {
     esm = "esm",
@@ -27,8 +27,18 @@ export async function main(argv = process.argv) {
 
     const args = await yargs(hideBin(argv))
         .usage("Runs tests in packages adhering to matter.js standards.")
-        .option("prefix", { alias: "p", default: ".", type: "string", describe: "specify directory of package to test" })
-        .option("web", { alias: "w", default: false, type: "boolean", describe: "enable web tests in default test mode" })
+        .option("prefix", {
+            alias: "p",
+            default: ".",
+            type: "string",
+            describe: "specify directory of package to test",
+        })
+        .option("web", {
+            alias: "w",
+            default: false,
+            type: "boolean",
+            describe: "enable web tests in default test mode",
+        })
         .option("fgrep", { alias: "f", type: "string", describe: "Only run tests matching this string" })
         .option("grep", { alias: "g", type: "string", describe: "Only run tests matching this regexp" })
         .option("invert", { alias: "i", type: "boolean", describe: "Inverts --grep and --fgrep matches" })
@@ -41,8 +51,7 @@ export async function main(argv = process.argv) {
             testTypes.add(TestType.web);
             manual = true;
         })
-        .strict()
-        .argv;
+        .strict().argv;
 
     const project = new Project(args.prefix);
 
@@ -70,7 +79,7 @@ export async function main(argv = process.argv) {
     const reporter = new ProgressReporter(project.pkg.start("Testing"));
 
     if (testTypes.has(TestType.esm)) {
-        buildEsm();
+        await buildEsm();
         await runTests(() => testNode("esm", loadFiles("esm"), reporter, args));
     }
 
@@ -81,14 +90,14 @@ export async function main(argv = process.argv) {
     }
 
     if (testTypes.has(TestType.web)) {
-        buildEsm();
+        await buildEsm();
         await runTests(() => testWeb(manual, loadFiles("esm"), reporter, args));
     }
 }
 
 async function runTests(runner: () => Promise<boolean>) {
-    if (!await runner()) {
-        process.stdout.write(colors.bgRedBright(colors.whiteBright(`Tests failed, aborting\n`)));
+    if (!(await runner())) {
+        process.stdout.write(colors.bgRedBright.whiteBright(`Tests failed, aborting\n`));
         process.exit(1);
     }
 }

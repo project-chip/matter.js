@@ -26,9 +26,9 @@ import {
     BaseClusterComponent,
     ClusterComponent,
     ClusterForBaseCluster,
-    extendCluster,
     ExtensibleCluster,
     IllegalClusterError,
+    extendCluster,
     preventCluster,
     validateFeatureSelection,
 } from "../../src/cluster/ClusterFactory.js";

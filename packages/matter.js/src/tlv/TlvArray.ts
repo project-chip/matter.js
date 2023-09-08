@@ -58,7 +58,7 @@ export class ArraySchema<T> extends TlvSchema<T[]> {
         value: T[],
         fieldId: number,
         fieldValue: any,
-        injectChecker: (fieldValue: any | undefined) => boolean,
+        injectChecker: (fieldValue: any) => boolean,
     ): T[] {
         if (Array.isArray(value)) {
             value.forEach(

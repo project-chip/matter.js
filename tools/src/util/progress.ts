@@ -4,10 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Package } from "./package.js";
-import { stdout } from "process";
 import colors from "ansi-colors";
+import { stdout } from "process";
+import { Package } from "./package.js";
 
+// eslint-disable-next-line @typescript-eslint/unbound-method
 const actualWrite = process.stdout.write;
 
 function write(text: string) {

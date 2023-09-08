@@ -128,9 +128,9 @@ export abstract class Entry {
 class Raw extends Entry {
     text: string;
 
-    constructor(parentBlock: Block, text: {}) {
+    constructor(parentBlock: Block, text: any) {
         super(parentBlock);
-        this.text = text.toString();
+        this.text = `${text}`;
     }
 
     serialize(linePrefix: string) {
@@ -145,9 +145,9 @@ class Raw extends Entry {
 }
 
 class Atom extends Raw {
-    constructor(parentBlock: Block, labelOrText: {}, text?: any) {
+    constructor(parentBlock: Block, labelOrText: any, text?: any) {
         if (text === undefined) {
-            text = labelOrText.toString();
+            text = `${labelOrText}`;
         } else {
             text = `${asObjectKey(labelOrText)}: ${text}`;
         }
@@ -288,8 +288,8 @@ export class Block extends Entry {
     }
 
     /** Add raw text */
-    raw(text: {}) {
-        return this.add(new Raw(this, text));
+    raw(text: any) {
+        return this.add(new Raw(this, `${text}`));
     }
 
     /** Add a blank line */
@@ -319,7 +319,7 @@ export class Block extends Entry {
     }
 
     /** Add a statement or expression that will be automatically delimited */
-    atom(labelOrText: {}, text?: any) {
+    atom(labelOrText: any, text?: any) {
         const atom = new Atom(this, labelOrText, text);
         this.add(atom);
         return atom;

@@ -188,9 +188,15 @@ describe("AttributeServerTest", () => {
                     return true;
                 },
             );
-            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({ value: 4, version: 0 });
+            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+                value: 4,
+                version: 0,
+            });
             server.setLocal(5);
-            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({ value: 4, version: 1 });
+            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+                value: 4,
+                version: 1,
+            });
             expect(valueSet).equal(5);
             expect(version).equal(1);
         });
@@ -214,9 +220,15 @@ describe("AttributeServerTest", () => {
                     return false;
                 },
             );
-            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({ value: 4, version: 0 });
+            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+                value: 4,
+                version: 0,
+            });
             server.setLocal(5);
-            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({ value: 4, version: 0 });
+            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+                value: 4,
+                version: 0,
+            });
             expect(valueSet).equal(5);
             expect(version).equal(0);
         });
@@ -240,9 +252,15 @@ describe("AttributeServerTest", () => {
                     return false;
                 },
             );
-            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({ value: 4, version: 0 });
+            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+                value: 4,
+                version: 0,
+            });
             server.updated({} as SecureSession<MatterDevice>);
-            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({ value: 4, version: 1 });
+            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+                value: 4,
+                version: 1,
+            });
             expect(valueSet).undefined;
             expect(version).equal(1);
         });
@@ -278,9 +296,15 @@ describe("AttributeServerTest", () => {
                 valueTriggered2 = newValue;
                 oldValueTriggered2 = oldValue;
             });
-            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({ value: 4, version: 0 });
+            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+                value: 4,
+                version: 0,
+            });
             server.setLocal(5);
-            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({ value: 4, version: 1 });
+            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+                value: 4,
+                version: 1,
+            });
             expect(valueSet).equal(5);
             expect(valueTriggered).equal(5);
             expect(versionTriggered).equal(0);
@@ -317,9 +341,15 @@ describe("AttributeServerTest", () => {
                 valueTriggered2 = newValue;
                 oldValueTriggered2 = oldValue;
             });
-            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({ value: 4, version: 0 });
+            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+                value: 4,
+                version: 0,
+            });
             server.setLocal(5);
-            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({ value: 4, version: 0 });
+            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+                value: 4,
+                version: 0,
+            });
             expect(valueSet).equal(5);
             expect(valueTriggered2).equal(5);
             expect(oldValueTriggered2).equal(4);
@@ -345,9 +375,15 @@ describe("AttributeServerTest", () => {
                     return false;
                 },
             );
-            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({ value: 4, version: 0 });
+            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+                value: 4,
+                version: 0,
+            });
             server.updated({} as SecureSession<MatterDevice>);
-            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({ value: 4, version: 1 });
+            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+                value: 4,
+                version: 1,
+            });
             expect(valueSet).undefined;
             expect(version).equal(1);
         });
@@ -437,9 +473,7 @@ describe("AttributeServerTest", () => {
                         () => 1,
                         () => 2,
                     ),
-            ).throw(
-                'Validation error for attribute "test": Invalid value: 3 is above the maximum, 2.',
-            );
+            ).throw('Validation error for attribute "test": Invalid value: 3 is above the maximum, 2.');
         });
 
         it("should throw an error if set value is invalid according to schema validator", () => {
@@ -703,9 +737,7 @@ describe("AttributeServerTest", () => {
                         () => 2,
                         () => 7,
                     ),
-            ).throw(
-                'Getter and setter must be implemented together writeable fabric scoped attribute "test".',
-            );
+            ).throw('Getter and setter must be implemented together writeable fabric scoped attribute "test".');
         });
 
         it("should throw an error when trying to get getter method value locally", () => {
