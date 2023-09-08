@@ -4,22 +4,24 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-// This file configures mocha for "buildless" dev execution.  It does not load
-// any tests if there are command line arguments; this allows you to select one
-// or more tests manually using the normal mocha command.  No arguments will
-// result in all tests running
+// This file configures mocha for "buildless" dev execution.  May be useful for
+// running tests in IDE with Mocha support.
 
-module.exports = {
-    loader: "ts-node/esm",
-    extensions: [ "ts" ],
-    inlineDiffs: true,
-    file: [
-        "test/support/declare-globals.ts",
-        "test/support/define-globals.ts",
-        "test/support/logging.ts"
-    ]
+// Ideally we'd import build code but it's asynchronous so instead use
+// spawnSync
+
+const spawnSync = require("child_process").spawnSync;
+const result = spawnSync("../../tools/bin/build.js", [ "cjs" ], { stdio: "inherit" });
+if (result.error) {
+    console.error(result.error);
+    process.exit(-1);
 }
 
-if (typeof process !== "undefined" && process?.argv?.length === 2) {
-    module.exports.spec = [ "test/**/*Test.ts" ];
+module.exports = {
+    inlineDiffs: true,
+    file: [
+        "../../tools/dist/cjs/testing/logging.js",
+        "../../tools/dist/cjs/testing/global-definitions.js"
+    ],
+    spec: [ "build/cjs/test/**/*Test.js" ]
 }
