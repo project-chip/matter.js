@@ -383,13 +383,14 @@ export function ClusterServer<
         }
 
         if (handler === undefined) continue;
-        const { requestId, requestSchema, responseId, responseSchema } = commandDef[name];
+        const { requestId, requestSchema, responseId, responseSchema, timed } = commandDef[name];
         (commands as any)[name] = new CommandServer(
             requestId,
             responseId,
             name,
             requestSchema,
             responseSchema,
+            timed,
             (request, session, message, endpoint) =>
                 handler({
                     request,

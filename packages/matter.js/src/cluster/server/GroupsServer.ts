@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { SessionType } from "../../codec/MessageCodec.js";
-import { NotImplementedError } from "../../common/MatterError.js";
 import { GroupId } from "../../datatype/GroupId.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
@@ -79,19 +77,7 @@ export class GroupsManager {
 }
 
 export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsCluster> = () => {
-    const addGroupLogic = (
-        groupId: GroupId,
-        groupName: string,
-        sessionType: SessionType,
-        fabric: Fabric,
-        endpointId: number,
-    ) => {
-        // TODO If the AddGroup command was received as a unicast, the server SHALL generate an AddGroupResponse
-        //      command with the Status field set to the evaluated status. If the AddGroup command was received
-        //      as a groupcast, the server SHALL NOT generate an AddGroupResponse command.
-        if (sessionType !== SessionType.Unicast) {
-            throw new NotImplementedError("Groupcast not supported");
-        }
+    const addGroupLogic = (groupId: GroupId, groupName: string, fabric: Fabric, endpointId: number) => {
         if (groupId < 1) {
             return { status: StatusCode.ConstraintError, groupId };
         }
@@ -105,32 +91,12 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
     };
 
     return {
-        addGroup: async ({
-            request: { groupId, groupName },
-            session,
-            message: {
-                packetHeader: { sessionType },
-            },
-            endpoint,
-        }) => {
+        addGroup: async ({ request: { groupId, groupName }, session, endpoint }) => {
             assertSecureSession(session);
-            return addGroupLogic(groupId, groupName, sessionType, session.getAssociatedFabric(), endpoint.getId());
+            return addGroupLogic(groupId, groupName, session.getAssociatedFabric(), endpoint.getId());
         },
 
-        viewGroup: async ({
-            request: { groupId },
-            session,
-            message: {
-                packetHeader: { sessionType },
-            },
-            endpoint,
-        }) => {
-            // TODO If the ViewGroup command was received as a unicast, the server SHALL generate an ViewGroupResponse
-            //      command with the Status field set to the evaluated status. If the ViewGroup command was received
-            //      as a groupcast, the server SHALL NOT generate an ViewGroupResponse command.
-            if (sessionType !== SessionType.Unicast) {
-                throw new NotImplementedError("Groupcast not supported");
-            }
+        viewGroup: async ({ request: { groupId }, session, endpoint }) => {
             if (groupId < 1) {
                 return { status: StatusCode.ConstraintError, groupId, groupName: "" };
             }
@@ -143,22 +109,10 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             return { status: StatusCode.NotFound, groupId, groupName: "" };
         },
 
-        getGroupMembership: async ({
-            request: { groupList },
-            session,
-            message: {
-                packetHeader: { sessionType },
-            },
-            endpoint,
-        }) => {
+        getGroupMembership: async ({ request: { groupList }, session, endpoint }) => {
             // TODO Later:
             //  Zigbee: If the total number of groups will cause the maximum payload length of a frame to be exceeded,
             //  then the GroupList field SHALL contain only as many groups as will fit.
-
-            // TODO the server SHALL only respond in this case if the command is unicast.
-            if (sessionType !== SessionType.Unicast) {
-                throw new NotImplementedError("Groupcast not supported");
-            }
 
             assertSecureSession(session);
             const endpointGroups = GroupsManager.getGroups(session.getAssociatedFabric(), endpoint.getId());
@@ -169,25 +123,12 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             }
             const filteredGroupsList = groupList.filter(groupId => endpointGroups.get(groupId));
             if (filteredGroupsList.length === 0) {
-                // respond only when unicast!
                 return { capacity, groupList: [] };
             }
             return { capacity, groupList: filteredGroupsList };
         },
 
-        removeGroup: async ({
-            request: { groupId },
-            session,
-            message: {
-                packetHeader: { sessionType },
-            },
-            endpoint,
-        }) => {
-            if (sessionType !== SessionType.Unicast) {
-                throw new NotImplementedError("Groupcast not supported");
-                // TODO: When Unicast we generate a response, else not
-            }
-
+        removeGroup: async ({ request: { groupId }, session, endpoint }) => {
             if (groupId < 1) {
                 return { status: StatusCode.ConstraintError, groupId };
             }
@@ -201,18 +142,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             return { status: StatusCode.NotFound, groupId };
         },
 
-        removeAllGroups: async ({
-            session,
-            message: {
-                packetHeader: { sessionType },
-            },
-            endpoint,
-        }) => {
-            if (sessionType !== SessionType.Unicast) {
-                throw new NotImplementedError("Groupcast not supported");
-                // TODO: When Unicast we generate a response, else not
-            }
-
+        removeAllGroups: async ({ session, endpoint }) => {
             assertSecureSession(session);
             const fabric = session.getAssociatedFabric();
             GroupsManager.removeAllGroups(fabric, endpoint.getId());
@@ -221,25 +151,13 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             return;
         },
 
-        addGroupIfIdentifying: async ({
-            request: { groupId, groupName },
-            session,
-            message: {
-                packetHeader: { sessionType },
-            },
-            endpoint,
-        }) => {
-            if (sessionType !== SessionType.Unicast) {
-                throw new NotImplementedError("Groupcast not supported");
-                // TODO: When Unicast we generate a response, else not
-            }
-
+        addGroupIfIdentifying: async ({ request: { groupId, groupName }, session, endpoint }) => {
             const identifyCluster = endpoint.getClusterServer(IdentifyCluster);
             if (identifyCluster) {
                 if (identifyCluster.attributes.identifyTime.getLocal() > 0) {
                     // We identify ourselves currently
                     assertSecureSession(session);
-                    addGroupLogic(groupId, groupName, sessionType, session.getAssociatedFabric(), endpoint.getId());
+                    addGroupLogic(groupId, groupName, session.getAssociatedFabric(), endpoint.getId());
                 }
             }
 

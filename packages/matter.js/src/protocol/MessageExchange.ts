@@ -15,6 +15,8 @@ import { ByteArray } from "../util/ByteArray.js";
 import { getPromiseResolver } from "../util/Promises.js";
 import { Queue } from "../util/Queue.js";
 import { MessageChannel, MessageCounter } from "./ExchangeManager.js";
+import { StatusResponseError } from "./interaction/InteractionMessenger.js";
+import { StatusCode } from "./interaction/InteractionProtocol.js";
 import { MessageType, SECURE_CHANNEL_PROTOCOL_ID } from "./securechannel/SecureChannelMessages.js";
 import { SecureChannelProtocol } from "./securechannel/SecureChannelProtocol.js";
 
@@ -100,6 +102,7 @@ export class MessageExchange<ContextT> {
     private sentMessageAckFailure: ((error?: Error) => void) | undefined;
     private retransmissionTimer: Timer | undefined;
     private closeTimer: Timer | undefined;
+    private timedInteractionTimer: Timer | undefined;
 
     constructor(
         readonly session: Session<ContextT>,
@@ -324,6 +327,44 @@ export class MessageExchange<ContextT> {
         this.closeInternal();
     }
 
+    startTimedInteraction(timeoutMs: number) {
+        if (this.timedInteractionTimer !== undefined && this.timedInteractionTimer.isRunning) {
+            this.timedInteractionTimer.stop();
+            throw new StatusResponseError(
+                "Timed interaction already running for this exchange",
+                StatusCode.InvalidAction,
+            );
+        }
+        logger.debug(
+            `Starting timed interaction with Transaction ID ${this.exchangeId} for ${timeoutMs}ms from ${this.channel.name}`,
+        );
+        this.timedInteractionTimer = Time.getTimer(timeoutMs, () => {
+            logger.debug(
+                `Timed interaction with Transaction ID ${this.exchangeId} from ${this.channel.name} timed out`,
+            );
+        }).start();
+    }
+
+    clearTimedInteraction() {
+        if (this.timedInteractionTimer !== undefined) {
+            logger.debug(`Clearing timed interaction with Transaction ID ${this.exchangeId} from ${this.channel.name}`);
+            this.timedInteractionTimer.stop();
+            this.timedInteractionTimer = undefined;
+        }
+    }
+
+    hasTimedInteraction() {
+        return this.timedInteractionTimer !== undefined;
+    }
+
+    hasActiveTimedInteraction() {
+        return this.timedInteractionTimer !== undefined && this.timedInteractionTimer.isRunning;
+    }
+
+    hasExpiredTimedInteraction() {
+        return this.timedInteractionTimer !== undefined && !this.timedInteractionTimer.isRunning;
+    }
+
     async close() {
         if (this.receivedMessageToAck !== undefined) {
             try {
@@ -341,6 +382,7 @@ export class MessageExchange<ContextT> {
         this.retransmissionTimer?.stop();
         this.closeTimer?.stop();
         this.messagesQueue.close();
+        this.timedInteractionTimer?.stop();
         this.closeCallback();
     }
 }

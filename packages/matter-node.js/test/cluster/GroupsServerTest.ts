@@ -368,23 +368,6 @@ describe("Groups Server test", () => {
             assert.equal(result.response.status, StatusCode.ConstraintError);
             assert.deepEqual(result.response.groupId, GroupId(1));
         });
-
-        it("error on Groupcast message", async () => {
-            await assert.rejects(
-                async () =>
-                    await callCommandOnClusterServer(
-                        groupsServer!,
-                        "viewGroup",
-                        { groupId: GroupId(1) },
-                        endpoint!,
-                        testSession,
-                        { packetHeader: { sessionType: SessionType.Group } } as Message,
-                    ),
-                {
-                    message: "Groupcast not supported",
-                },
-            );
-        });
     });
 
     describe("Add group while identifying success test", () => {

@@ -39,6 +39,7 @@ import {
     clusterPathToId,
     eventPathToId,
     EventWithPath,
+    INTERACTION_MODEL_REVISION,
     INTERACTION_PROTOCOL_ID,
 } from "./InteractionServer.js";
 
@@ -503,7 +504,7 @@ export class SubscriptionHandler {
         await messenger.sendDataReport({
             suppressResponse: false,
             subscriptionId: this.subscriptionId,
-            interactionModelRevision: 1,
+            interactionModelRevision: INTERACTION_MODEL_REVISION,
             attributeReports,
             eventReports,
         });
@@ -589,13 +590,13 @@ export class SubscriptionHandler {
                         await messenger.sendDataReport({
                             suppressResponse: true, // suppressResponse ok for empty DataReports
                             subscriptionId: this.subscriptionId,
-                            interactionModelRevision: 1,
+                            interactionModelRevision: INTERACTION_MODEL_REVISION,
                         });
                     } else {
                         await messenger.sendDataReport({
                             suppressResponse: false,
                             subscriptionId: this.subscriptionId,
-                            interactionModelRevision: 1,
+                            interactionModelRevision: INTERACTION_MODEL_REVISION,
                             attributeReports: attributes.map(({ path, schema, value, version }) => ({
                                 attributeData: {
                                     path,

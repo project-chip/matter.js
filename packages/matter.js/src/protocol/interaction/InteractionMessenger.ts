@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Message } from "../../codec/MessageCodec.js";
+import { Message, SessionType } from "../../codec/MessageCodec.js";
 import { MatterError, MatterFlowError, NotImplementedError, UnexpectedDataError } from "../../common/MatterError.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { Logger } from "../../log/Logger.js";
@@ -32,6 +32,7 @@ import {
     TlvWriteRequest,
     TlvWriteResponse,
 } from "./InteractionProtocol.js";
+import { INTERACTION_MODEL_REVISION } from "./InteractionServer.js";
 
 export const enum MessageType {
     StatusResponse = 0x01,
@@ -80,7 +81,10 @@ class InteractionMessenger<ContextT> {
     }
 
     sendStatus(status: StatusCode) {
-        return this.send(MessageType.StatusResponse, TlvStatusResponse.encode({ status, interactionModelRevision: 1 }));
+        return this.send(
+            MessageType.StatusResponse,
+            TlvStatusResponse.encode({ status, interactionModelRevision: INTERACTION_MODEL_REVISION }),
+        );
     }
 
     async waitForSuccess() {
@@ -123,15 +127,16 @@ class InteractionMessenger<ContextT> {
 export class InteractionServerMessenger extends InteractionMessenger<MatterDevice> {
     async handleRequest(
         handleReadRequest: (request: ReadRequest) => DataReport,
-        handleWriteRequest: (request: WriteRequest) => WriteResponse,
+        handleWriteRequest: (request: WriteRequest, message: Message) => WriteResponse,
         handleSubscribeRequest: (request: SubscribeRequest, messenger: InteractionServerMessenger) => Promise<void>,
         handleInvokeRequest: (request: InvokeRequest, message: Message) => Promise<InvokeResponse>,
         handleTimedRequest: (request: TimedRequest) => void,
     ) {
-        let continueExchange = true;
+        let continueExchange = true; // are more messages expected in this "transaction"?
         try {
             while (continueExchange) {
                 const message = await this.exchange.nextMessage();
+                const isGroupSession = message.packetHeader.sessionType === SessionType.Group;
                 continueExchange = false;
                 switch (message.payloadHeader.messageType) {
                     case MessageType.ReadRequest: {
@@ -141,8 +146,11 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                     }
                     case MessageType.WriteRequest: {
                         const writeRequest = TlvWriteRequest.decode(message.payload);
-                        const writeResponse = handleWriteRequest(writeRequest);
-                        await this.send(MessageType.WriteResponse, TlvWriteResponse.encode(writeResponse));
+                        const { suppressResponse } = writeRequest;
+                        const writeResponse = handleWriteRequest(writeRequest, message);
+                        if (!suppressResponse && !isGroupSession) {
+                            await this.send(MessageType.WriteResponse, TlvWriteResponse.encode(writeResponse));
+                        }
                         break;
                     }
                     case MessageType.SubscribeRequest: {
@@ -153,8 +161,15 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                     }
                     case MessageType.InvokeCommandRequest: {
                         const invokeRequest = TlvInvokeRequest.decode(message.payload);
+                        const { suppressResponse } = invokeRequest;
                         const invokeResponse = await handleInvokeRequest(invokeRequest, message);
-                        await this.send(MessageType.InvokeCommandResponse, TlvInvokeResponse.encode(invokeResponse));
+                        if (!suppressResponse && !isGroupSession) {
+                            await this.send(
+                                MessageType.InvokeCommandResponse,
+                                TlvInvokeResponse.encode(invokeResponse),
+                            );
+                        }
+                        // TODO Also invoke could need continueExchange depending on requirements
                         break;
                     }
                     case MessageType.TimedRequest: {
@@ -398,7 +413,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
     sendTimedRequest(timeoutSeconds: number) {
         return this.request(MessageType.TimedRequest, TlvTimedRequest, MessageType.StatusResponse, TlvStatusResponse, {
             timeout: timeoutSeconds,
-            interactionModelRevision: 1,
+            interactionModelRevision: INTERACTION_MODEL_REVISION,
         });
     }
 

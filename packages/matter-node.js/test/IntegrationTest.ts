@@ -14,6 +14,7 @@ Crypto.get = () => new CryptoNode();
 
 import {
     AccessControl,
+    AdministratorCommissioning,
     BasicInformation,
     ClusterServer,
     Descriptor,
@@ -77,6 +78,7 @@ describe("Integration Test", () => {
     let commissioningController: CommissioningController;
     let commissioningServer: CommissioningServer;
     let onOffLightDeviceServer: OnOffLightDevice;
+    const startupTimestamp = fakeTime.nowMs();
 
     beforeAll(async () => {
         Logger.defaultLogLevel = Level.DEBUG;
@@ -255,6 +257,81 @@ describe("Integration Test", () => {
 
             const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformation.Cluster);
             assert.equal(await basicInfoCluster?.getLocationAttribute(), "DE");
+        });
+    });
+
+    describe("Check Timed transactions", () => {
+        describe("Timed Invokes", () => {
+            it("Timed interaction expired", async () => {
+                const adminCommissioningCluster = commissioningController.getRootClusterClient(
+                    AdministratorCommissioning.Cluster,
+                );
+                assert.ok(adminCommissioningCluster);
+                const promise = adminCommissioningCluster.openCommissioningWindow(
+                    {
+                        salt: new ByteArray(32),
+                        commissioningTimeout: 10,
+                        discriminator: 0,
+                        iterations: 1000,
+                        pakePasscodeVerifier: new ByteArray(97),
+                    },
+                    { timedRequestTimeoutMs: 1 },
+                );
+                await fakeTime.yield();
+                await fakeTime.yield();
+                await fakeTime.yield();
+                await fakeTime.advanceTime(10);
+                await assert.rejects(async () => await promise, {
+                    message: "(148) Received error status: 148", // Timeout expired
+                });
+            });
+
+            it("Custom Timed interaction with short timeout expired", async () => {
+                const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
+                assert.ok(onoffEndpoint);
+                const onoffCluster = onoffEndpoint.getClusterClient(OnOffCluster);
+                assert.ok(onoffCluster);
+
+                const promise = onoffCluster.toggle(undefined, { timedRequestTimeoutMs: 1 });
+                await fakeTime.yield();
+                await fakeTime.yield();
+                await fakeTime.yield();
+                await fakeTime.advanceTime(10);
+                await assert.rejects(async () => await promise, {
+                    message: "(148) Received error status: 148", // Timeout expired
+                });
+            });
+
+            it("Custom Timed interaction with default timeout works", async () => {
+                const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
+                assert.ok(onoffEndpoint);
+                const onoffCluster = onoffEndpoint.getClusterClient(OnOffCluster);
+                assert.ok(onoffCluster);
+
+                const promise = onoffCluster.off(undefined, { asTimedRequest: true });
+                await fakeTime.yield();
+                await fakeTime.yield();
+                await fakeTime.yield();
+                await fakeTime.advanceTime(5000);
+                await promise;
+            }, 6000);
+
+            it("Timed invoke ok", async () => {
+                const adminCommissioningCluster = commissioningController.getRootClusterClient(
+                    AdministratorCommissioning.Cluster,
+                );
+                assert.ok(adminCommissioningCluster);
+                await adminCommissioningCluster.openCommissioningWindow(
+                    {
+                        salt: new ByteArray(32),
+                        commissioningTimeout: 10,
+                        discriminator: 0,
+                        iterations: 1000,
+                        pakePasscodeVerifier: new ByteArray(97),
+                    },
+                    { timedRequestTimeoutMs: 5000 },
+                );
+            });
         });
     });
 
@@ -447,7 +524,7 @@ describe("Integration Test", () => {
             assert.deepEqual(startUpEventData?.events, [
                 {
                     eventNumber: 1,
-                    epochTimestamp: fakeTime.nowMs(),
+                    epochTimestamp: startupTimestamp,
                     priority: BasicInformation.Cluster.events.startUp.priority,
                     data: {
                         softwareVersion: 1,
@@ -465,7 +542,7 @@ describe("Integration Test", () => {
             assert.deepEqual(bootReasonEventData?.events, [
                 {
                     eventNumber: 2,
-                    epochTimestamp: fakeTime.nowMs(),
+                    epochTimestamp: startupTimestamp,
                     priority: BasicInformation.Cluster.events.startUp.priority,
                     data: {
                         bootReason: GeneralDiagnostics.BootReason.Unspecified,
@@ -513,20 +590,22 @@ describe("Integration Test", () => {
         it("write multiple attributes", async () => {
             const client = commissioningController.getInteractionClient(); // We can also use a new Interaction clint
 
-            const response = await client.setMultipleAttributes([
-                {
-                    endpointId: EndpointNumber(0),
-                    clusterId: BasicInformation.Cluster.id,
-                    attribute: BasicInformation.Cluster.attributes.nodeLabel,
-                    value: "testLabel2",
-                },
-                {
-                    endpointId: EndpointNumber(0),
-                    clusterId: BasicInformation.Cluster.id,
-                    attribute: BasicInformation.Cluster.attributes.location,
-                    value: "GB",
-                },
-            ]);
+            const response = await client.setMultipleAttributes({
+                attributes: [
+                    {
+                        endpointId: EndpointNumber(0),
+                        clusterId: BasicInformation.Cluster.id,
+                        attribute: BasicInformation.Cluster.attributes.nodeLabel,
+                        value: "testLabel2",
+                    },
+                    {
+                        endpointId: EndpointNumber(0),
+                        clusterId: BasicInformation.Cluster.id,
+                        attribute: BasicInformation.Cluster.attributes.location,
+                        value: "GB",
+                    },
+                ],
+            });
 
             assert.equal(Array.isArray(response), true);
             assert.equal(response.length, 0);
@@ -538,20 +617,22 @@ describe("Integration Test", () => {
         });
 
         it("write multiple attributes with partial errors", async () => {
-            const response = await commissioningController.getInteractionClient().setMultipleAttributes([
-                {
-                    endpointId: EndpointNumber(0),
-                    clusterId: BasicInformation.Cluster.id,
-                    attribute: BasicInformation.Cluster.attributes.nodeLabel,
-                    value: "testLabel3",
-                },
-                {
-                    endpointId: EndpointNumber(0),
-                    clusterId: BasicInformation.Cluster.id,
-                    attribute: BasicInformation.Cluster.attributes.location,
-                    value: "XXX",
-                },
-            ]);
+            const response = await commissioningController.getInteractionClient().setMultipleAttributes({
+                attributes: [
+                    {
+                        endpointId: EndpointNumber(0),
+                        clusterId: BasicInformation.Cluster.id,
+                        attribute: BasicInformation.Cluster.attributes.nodeLabel,
+                        value: "testLabel3",
+                    },
+                    {
+                        endpointId: EndpointNumber(0),
+                        clusterId: BasicInformation.Cluster.id,
+                        attribute: BasicInformation.Cluster.attributes.location,
+                        value: "XXX",
+                    },
+                ],
+            });
 
             assert.equal(response.length, 1);
             assert.equal(response[0].path.attributeId, BasicInformation.Cluster.attributes.location.id);
@@ -561,6 +642,34 @@ describe("Integration Test", () => {
             assert.ok(basicInfoCluster);
 
             assert.equal(await basicInfoCluster.attributes.nodeLabel.get(true), "testLabel3");
+            assert.equal(await basicInfoCluster.attributes.location.get(true), "GB");
+        });
+
+        it("write multiple attributes with partial errors and suppressed response", async () => {
+            const response = await commissioningController.getInteractionClient().setMultipleAttributes({
+                attributes: [
+                    {
+                        endpointId: EndpointNumber(0),
+                        clusterId: BasicInformation.Cluster.id,
+                        attribute: BasicInformation.Cluster.attributes.nodeLabel,
+                        value: "testLabel4",
+                    },
+                    {
+                        endpointId: EndpointNumber(0),
+                        clusterId: BasicInformation.Cluster.id,
+                        attribute: BasicInformation.Cluster.attributes.location,
+                        value: "XXX",
+                    },
+                ],
+                suppressResponse: true,
+            });
+
+            assert.equal(response.length, 0);
+
+            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformation.Cluster);
+            assert.ok(basicInfoCluster);
+
+            assert.equal(await basicInfoCluster.attributes.nodeLabel.get(true), "testLabel4");
             assert.equal(await basicInfoCluster.attributes.location.get(true), "GB");
         });
     });

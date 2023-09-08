@@ -279,20 +279,22 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
 
     // Add command calls
     for (const commandName in commandDef) {
-        const { requestId, requestSchema, responseId, responseSchema, optional } = commandDef[commandName];
+        const { requestId } = commandDef[commandName];
 
         commandToId[requestId] = commandName;
-        commands[commandName] = async <RequestT, ResponseT>(request: RequestT) => {
-            return interactionClient.invoke<Command<RequestT, ResponseT, any>>(
+        commands[commandName] = async <RequestT, ResponseT>(
+            request: RequestT,
+            options: { asTimedRequest?: boolean; timedRequestTimeoutMs?: number } = {},
+        ) => {
+            const { asTimedRequest, timedRequestTimeoutMs } = options;
+            return interactionClient.invoke<Command<RequestT, ResponseT, any>>({
                 endpointId,
                 clusterId,
+                command: commandDef[commandName],
                 request,
-                requestId,
-                requestSchema,
-                responseId,
-                responseSchema,
-                optional,
-            );
+                asTimedRequest,
+                timedRequestTimeoutMs,
+            });
         };
         result[commandName] = result.commands[commandName];
     }
