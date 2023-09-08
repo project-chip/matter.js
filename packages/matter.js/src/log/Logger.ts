@@ -189,14 +189,7 @@ export class DiagnosticDictionary {
      *
      * @param entries the entries as [ "KEY", value ] tuples
      */
-    constructor(private readonly entries: { [KEY: string]: any } = {}) {
-        // Use getOwnPropertyNames because it follows insertion order as of ES6
-        for (const KEY of Object.getOwnPropertyNames(entries)) {
-            if (entries[KEY] === undefined) {
-                delete entries[KEY];
-            }
-        }
-    }
+    constructor(private readonly entries: { [KEY: string]: any } = {}) {}
 
     /**
      * Format the dictionary for human consumption.
@@ -207,7 +200,12 @@ export class DiagnosticDictionary {
      */
     public serialize(keyFormatter = defaultKeyFormatter, valueFormatter = defaultValueFormatter): string {
         return Object.getOwnPropertyNames(this.entries)
-            .map(k => `${keyFormatter(k)}${formatValue(this.entries[k], keyFormatter, valueFormatter)}`)
+            .map(k =>
+                this.entries[k] === undefined
+                    ? undefined
+                    : `${keyFormatter(k)}${formatValue(this.entries[k], keyFormatter, valueFormatter)}`,
+            )
+            .filter(v => v !== undefined)
             .join(" ");
     }
 
