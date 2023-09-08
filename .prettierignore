@@ -1,5 +1,6 @@
 **/node_modules/**/*
 **/dist/**/*
+**/build/**/*
 tools/links/**
 models/links/**
 models/spec.ts

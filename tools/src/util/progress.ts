@@ -11,17 +11,17 @@ import { Package } from "./package.js";
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const actualWrite = process.stdout.write;
 
-function write(text: string) {
-    actualWrite.call(process.stdout, text);
-}
+const FRONT = "\x1b[G";
+const CLEAR = "\x1b[K";
 
 export class Progress {
     private start?: number;
+    private lastLine?: string;
 
-    constructor(public writer = write) {}
+    constructor() {}
 
     startup(what: string, pkg: Package) {
-        write(`${what} ${colors.bold(pkg.json.name)}@${pkg.json.version}\n`);
+        this.write(`${what} ${colors.bold(pkg.json.name)}@${pkg.json.version}\n`);
     }
 
     update(text: string, extra?: string) {
@@ -33,21 +33,25 @@ export class Progress {
             duration = this.duration;
         }
         extra = extra === undefined ? "" : ` ${extra}`;
-        stdout.clearLine(0);
-        write(`  ${colors.yellow("⧗")} ${text} ${duration}${extra}`);
-        stdout.cursorTo(0);
+        this.write(`${CLEAR}  ${colors.yellow("⧗")} ${text} ${duration}${extra}${FRONT}`);
+        stdout.write("\r");
     }
 
     success(text: string) {
-        stdout.clearLine(0);
-        write(`  ${colors.green("✔")} ${text} ${this.duration}\n`);
+        this.write(`${CLEAR}  ${colors.green("✔")} ${text} ${this.duration}\n`);
         delete this.start;
     }
 
     failure(text: string) {
-        stdout.clearLine(0);
-        write(`  ${colors.redBright("✗")} ${text} ${this.duration}\n`);
+        this.write(`${CLEAR}  ${colors.redBright("✗")} ${text} ${this.duration}\n`);
         delete this.start;
+    }
+
+    protected write(text: string) {
+        if (this.lastLine === text) {
+            return;
+        }
+        actualWrite.call(process.stdout, (this.lastLine = text));
     }
 
     private get duration() {

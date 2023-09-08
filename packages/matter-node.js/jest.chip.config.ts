@@ -17,7 +17,6 @@ const config: Config = {
     moduleNameMapper: {
         "^(\\.{1,2}/.*)\\.[jt]s$": "$1",
     },
-    setupFilesAfterEnv: ["<rootDir>/../matter.js/test/support/define-globals.ts"],
     maxWorkers: "25%", // to make sure jest is not using all available resources
 };
 

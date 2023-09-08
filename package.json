@@ -40,8 +40,5 @@
         "typedoc-plugin-markdown": "^3.15.4",
         "typedoc-plugin-missing-exports": "^2.1.0",
         "typescript": "^5.2.2"
-    },
-    "dependencies": {
-        "v8-profiler-next": "^1.9.0"
     }
 }

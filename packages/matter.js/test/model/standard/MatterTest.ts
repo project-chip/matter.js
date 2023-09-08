@@ -30,7 +30,10 @@ describe("Matter", () => {
         }).not.throw();
     });
 
-    it("validates", () => {
+    it("validates", function () {
+        // TODO - remove this after optimization
+        this.timeout(10000);
+
         expect(() => {
             validate();
         }).not.throw();

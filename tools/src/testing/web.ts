@@ -34,7 +34,11 @@ export async function testWeb(manual: boolean, files: string[], reporter: Report
     });
 
     const addr = server.address() as AddressInfo;
-    const url = `http://${addr.address}:${addr.port}/`;
+    let ip = addr.address;
+    if (ip.indexOf(":") !== -1) {
+        ip = `[${ip}]`;
+    }
+    const url = `http://${ip}:${addr.port}/`;
 
     await new Promise<void>((resolve, reject) => {
         server.on("error", reject);

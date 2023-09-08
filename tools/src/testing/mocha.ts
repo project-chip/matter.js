@@ -26,7 +26,7 @@ export function adaptReporter(Mocha: typeof MochaType, title: string, reporter: 
             });
 
             runner.on(RUNNER.EVENT_SUITE_BEGIN, suite => {
-                reporter.beginSuite(suite.titlePath().join("/"), this.translatedStats);
+                reporter.beginSuite(suite.titlePath(), this.translatedStats);
             });
 
             runner.on(RUNNER.EVENT_TEST_BEGIN, test => {
