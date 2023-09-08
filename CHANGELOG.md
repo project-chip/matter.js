@@ -8,6 +8,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Fix: Adjusted Event Priority definition to match to specs
   * Feature: Implemented TimedInteractions for Write/Invoke request s as required by specs
   * Feature: Added support for generic Response suppression if requested or needed for group communication
+  * Feature (orlenkoo) Implemented first OnOff Cluster Lighting feature command handlers (WIP) 
   * Enhance: Memory footprint optimizations
 * matter.js API:
   * Breaking: Streamline Device API and rename onOff/isOnOff -> get/setOnOff
