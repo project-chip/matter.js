@@ -44,7 +44,15 @@ function formatValue(
             stack = "(details unavailable)";
         } else {
             stack = value.stack;
-            if (stack.startsWith("Error: ")) return stack.slice(7);
+
+            // Strip extra node garbage off stack.  Doesn't really hurt
+            // anything but it's messy.  Node doesn't usually stick it there
+            // but we've seen it once
+            stack = stack.replace(/^.*?\n\nError: /gs, "Error: ");
+
+            if (stack.startsWith("Error: ")) {
+                return stack.slice(7);
+            }
         }
         return valueFormatter(stack);
     }
