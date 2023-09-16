@@ -123,7 +123,7 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
         value: TypeFromFields<F>,
         fieldId: number,
         fieldValue: any,
-        injectChecker: (fieldValue: any | undefined) => boolean,
+        injectChecker: (fieldValue: any) => boolean,
     ): TypeFromFields<F> {
         for (const k in this.fieldDefinitions) {
             const field = this.fieldDefinitions[k] as FieldType<any>;

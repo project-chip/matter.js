@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as console from "console";
 import { NotImplementedError } from "../common/MatterError.js";
 import { Time } from "../time/Time.js";
 import { ByteArray } from "../util/ByteArray.js";
@@ -45,7 +44,15 @@ function formatValue(
             stack = "(details unavailable)";
         } else {
             stack = value.stack;
-            if (stack.startsWith("Error: ")) return stack.slice(7);
+
+            // Strip extra node garbage off stack.  Doesn't really hurt
+            // anything but it's messy.  Node doesn't usually stick it there
+            // but we've seen it once
+            stack = stack.replace(/^.*?\n\nError: /gs, "Error: ");
+
+            if (stack.startsWith("Error: ")) {
+                return stack.slice(7);
+            }
         }
         return valueFormatter(stack);
     }
@@ -152,7 +159,10 @@ function htmlLogFormatter(now: Date, level: Level, facility: string, values: any
     );
 }
 
-function consoleLogger(level: Level, formattedLog: string) {
+/**
+ * Log messages to the console.  This is the default logging mechanism.
+ */
+export function consoleLogger(level: Level, formattedLog: string) {
     const console = (<any>consoleLogger).console;
     switch (level) {
         case Level.DEBUG:
@@ -173,8 +183,14 @@ function consoleLogger(level: Level, formattedLog: string) {
     }
 }
 
-// Store console where it can be replaced for e.g. tests
-(<any>consoleLogger).console = console;
+const globalConsole = console;
+export namespace consoleLogger {
+    /**
+     * The target for consoleLogger.
+     */
+    // eslint-disable-next-line prefer-const
+    export let console = globalConsole;
+}
 
 const defaultKeyFormatter = (key: string) => `${key}: `;
 const defaultValueFormatter = (value: string) => value;
@@ -305,7 +321,7 @@ export class Logger {
     }
 
     /**
-     * Async version of above.
+     * Async version of nest().
      */
     static async nestAsync(context: () => Promise<any>) {
         this.nestingLevel++;
@@ -328,4 +344,16 @@ export class Logger {
         if (level < (Logger.logLevels[this.name] ?? Logger.defaultLogLevel)) return;
         Logger.log(level, Logger.logFormatter(Time.now(), level, this.name, values));
     }
+}
+
+declare global {
+    /**
+     * This global hook allows test suites to hook logging independent of the
+     * module mechanism.
+     */
+    let MatterLoggerHook: ((TheLogger: typeof Logger) => void) | undefined;
+}
+
+if (typeof MatterLoggerHook !== "undefined") {
+    MatterLoggerHook(Logger);
 }

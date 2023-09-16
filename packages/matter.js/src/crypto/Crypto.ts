@@ -112,3 +112,14 @@ export abstract class Crypto {
     abstract createKeyPair(): PrivateKey;
     static readonly createKeyPair = (): PrivateKey => Crypto.get().createKeyPair();
 }
+
+// Elliptic requires some contortions to import.  TSC and esbuild are smart
+// enough to find the exports and transpile accordingly.  But node (as of 18)
+// is not.  Everybody is happy if we use a default export (which Node
+// recommends in their error message).  Except eslint, so I've disabled those
+// rules.
+//
+// Placing this here and exporting so we can keep these incantations in one
+// place.
+import elliptic from "elliptic";
+export const { ec } = elliptic;

@@ -646,7 +646,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             );
             await subscriptionHandler.cancel(); // Cleanup
             if (error instanceof StatusResponseError) {
-                logger.info(`Sending status response ${error.code} for interaction error: ${error}`);
+                logger.info(`Sending status response ${error.code} for interaction error: ${error.message}`);
                 await messenger.sendStatus(error.code);
             }
             return; // Make sure to not bubble up the exception

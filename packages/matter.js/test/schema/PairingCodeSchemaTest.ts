@@ -65,7 +65,7 @@ describe("QrPairingCodeCodec", () => {
         it("encodes the data", () => {
             const result = QrPairingCodeCodec.encode(QR_CODE_DATA);
 
-            expect(result).toBe(QR_CODE);
+            expect(result).equal(QR_CODE);
         });
     });
 
@@ -73,7 +73,7 @@ describe("QrPairingCodeCodec", () => {
         it("decodes the data", () => {
             const result = QrPairingCodeCodec.decode(QR_CODE);
 
-            expect(result).toEqual(QR_CODE_DATA);
+            expect(result).deep.equal(QR_CODE_DATA);
         });
     });
 });
@@ -84,7 +84,7 @@ describe("ManualPairingCodeCodec", () => {
             for (const pairingCode of MANUAL_PAIRING_DATA_CODES) {
                 const result = ManualPairingCodeCodec.encode(pairingCode.data);
 
-                expect(result).toBe(pairingCode.code);
+                expect(result).equal(pairingCode.code);
             }
         });
 
@@ -92,8 +92,8 @@ describe("ManualPairingCodeCodec", () => {
             for (const dataCode of MANUAL_PAIRING_DATA_CODES) {
                 const result = ManualPairingCodeCodec.decode(dataCode.code);
 
-                expect(result.shortDiscriminator).toBe(dataCode.data.shortDiscriminator);
-                expect(result.passcode).toBe(dataCode.data.passcode);
+                expect(result.shortDiscriminator).equal(dataCode.data.shortDiscriminator);
+                expect(result.passcode).equal(dataCode.data.passcode);
             }
         });
     });

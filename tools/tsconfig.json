@@ -1,22 +1,14 @@
 {
-  "extends": "../packages/matter.js/tsconfig.json",
-  
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
+    "outDir": "dist",
     "target": "es2018",
-    "composite": false,
-
-    "paths": {
-      "#util/*": [ "./tools/util/*" ],
-      "#models/*": [ "./links/models/*" ],
-      "#matter.js/*": [ "./links/matter.js/src/*" ]
-    }
-  },
-
-  "ts-node": {
-    "experimentalResolver": true
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "types": ["node"]
   },
 
   "include": [
-    "**/*.ts"
+    "src/**/*.ts"
   ]
 }

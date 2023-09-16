@@ -21,6 +21,10 @@ import { Network } from "../net/Network.js";
 import { TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { isIPv4 } from "../util/Ip.js";
 import {
+    MATTER_COMMISSIONER_SERVICE_QNAME,
+    MATTER_COMMISSION_SERVICE_QNAME,
+    MATTER_SERVICE_QNAME,
+    SERVICE_DISCOVERY_QNAME,
     getCommissioningModeQname,
     getDeviceInstanceQname,
     getDeviceMatterQname,
@@ -29,10 +33,6 @@ import {
     getLongDiscriminatorQname,
     getShortDiscriminatorQname,
     getVendorQname,
-    MATTER_COMMISSIONER_SERVICE_QNAME,
-    MATTER_COMMISSION_SERVICE_QNAME,
-    MATTER_SERVICE_QNAME,
-    SERVICE_DISCOVERY_QNAME,
 } from "./MdnsConsts.js";
 import { MdnsServer } from "./MdnsServer.js";
 

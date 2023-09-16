@@ -6,7 +6,7 @@
 
 import { NoProviderError } from "../common/MatterError.js";
 
-export type TimerCallback = () => Promise<any> | any;
+export type TimerCallback = () => any;
 
 export abstract class Time {
     static get: () => Time = () => DefaultTime;

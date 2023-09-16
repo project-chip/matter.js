@@ -4,9 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Level, Logger } from "../../src/log/Logger.js";
+import { Format, Level, Logger } from "../../src/log/Logger.js";
 
+/**
+ * Invoke logic and return any log messages produced.
+ */
 export function captureLogs(fn: () => void) {
+    if (!Logger) {
+        throw new Error("No logger loaded, cannot capture logs");
+    }
     const actualLogSettings = {
         logFormatter: Logger.logFormatter,
         log: Logger.log,
@@ -15,6 +21,7 @@ export function captureLogs(fn: () => void) {
     };
 
     try {
+        Logger.format = Format.PLAIN;
         const captured = new Array<{ level: Level; message: string }>();
         Logger.log = (level, message) =>
             captured.push({
@@ -28,6 +35,9 @@ export function captureLogs(fn: () => void) {
     }
 }
 
+/**
+ * Run logic and return a singled produced log message.
+ */
 export function captureLog(fn: () => void) {
     return captureLogs(fn).pop();
 }

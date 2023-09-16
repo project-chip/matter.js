@@ -6,14 +6,14 @@
 
 import Bleno from "@abandonware/bleno";
 import {
-    BleError,
     BLE_MATTER_C1_CHARACTERISTIC_UUID,
     BLE_MATTER_C2_CHARACTERISTIC_UUID,
     BLE_MATTER_C3_CHARACTERISTIC_UUID,
     BLE_MATTER_SERVICE_UUID,
+    BTP_CONN_RSP_TIMEOUT_MS,
+    BleError,
     BtpFlowError,
     BtpSessionHandler,
-    BTP_CONN_RSP_TIMEOUT_MS,
 } from "@project-chip/matter.js/ble";
 import { Channel, InternalError } from "@project-chip/matter.js/common";
 import { Logger } from "@project-chip/matter.js/log";

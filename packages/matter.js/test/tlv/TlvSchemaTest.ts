@@ -149,7 +149,7 @@ function testTlvSchemaEncode(testEntry: TestEntry<any>) {
     it(testName, () => {
         const tlvByteArray = schema.encode(jsObj);
         const tlvHex = tlvByteArray.toHex();
-        expect(tlvHex).toBe(tlv);
+        expect(tlvHex).equal(tlv);
     });
 }
 
@@ -160,7 +160,7 @@ function testTlvSchemaDecode(testEntry: TestEntry<any>) {
     it(testName, () => {
         const tlvBuffer = ByteArray.fromHex(tlv);
         const decoded = schema.decode(tlvBuffer);
-        expect(decoded).toEqual(jsObj);
+        expect(decoded).deep.equal(jsObj);
     });
 }
 

@@ -13,7 +13,7 @@ import { assertSecureSession } from "../../session/SecureSession.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Scenes, ScenesCluster } from "../definitions/ScenesCluster.js";
 import { ClusterServer } from "./ClusterServer.js";
-import { asClusterServerInternal, ClusterServerHandlers } from "./ClusterServerTypes.js";
+import { ClusterServerHandlers, asClusterServerInternal } from "./ClusterServerTypes.js";
 import { GroupsManager } from "./GroupsServer.js";
 
 interface scenesTableEntry {

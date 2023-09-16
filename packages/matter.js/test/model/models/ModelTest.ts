@@ -18,15 +18,15 @@ describe("Model", () => {
         it("can be added", () => {
             const parent = new ClusterModel({ name: "Foo" });
             parent.add({ tag: "datatype", name: "Bar" });
-            expect(parent.children.length).toBe(1);
-            expect(parent.children[0]).toBeInstanceOf(DatatypeModel);
+            expect(parent.children.length).equal(1);
+            expect(parent.children[0]).instanceof(DatatypeModel);
         });
 
         it("can be added as model", () => {
             const parent = new ClusterModel({ name: "Foo" });
             parent.add(new DatatypeModel({ name: "Bar" }));
-            expect(parent.children.length).toBe(1);
-            expect(parent.children[0]).toBeInstanceOf(DatatypeModel);
+            expect(parent.children.length).equal(1);
+            expect(parent.children[0]).instanceof(DatatypeModel);
         });
 
         it("can be removed", () => {
@@ -34,8 +34,8 @@ describe("Model", () => {
             parent.add({ tag: "datatype", name: "Bar" });
             const child = parent.children[0];
             child.parent = undefined;
-            expect(child.parent).toBe(undefined);
-            expect(parent.children.length).toBe(0);
+            expect(child.parent).equal(undefined);
+            expect(parent.children.length).equal(0);
         });
 
         it("can be moved", () => {
@@ -43,9 +43,9 @@ describe("Model", () => {
             parent.add({ tag: "datatype", name: "Bar" });
             const child = parent.children[0];
             const parent2 = new ClusterModel({ name: "Foo2", children: [child] });
-            expect(parent.children.length).toBe(0);
-            expect(parent2.children.length).toBe(1);
-            expect(child.parent).toBe(parent2);
+            expect(parent.children.length).equal(0);
+            expect(parent2.children.length).equal(1);
+            expect(child.parent).equal(parent2);
         });
 
         it("can be bulk added", () => {
@@ -54,17 +54,17 @@ describe("Model", () => {
                 { tag: "datatype", name: "Bar1" },
                 { tag: "datatype", name: "Bar2" },
             ];
-            expect(parent.children.length).toBe(2);
-            expect(parent.children[0].name).toBe("Bar1");
-            expect(parent.children[1].name).toBe("Bar2");
+            expect(parent.children.length).equal(2);
+            expect(parent.children[0].name).equal("Bar1");
+            expect(parent.children[1].name).equal("Bar2");
         });
 
         it("can be bulk added with model", () => {
             const parent = new ClusterModel({ name: "Foo" });
             parent.children = [new DatatypeModel({ name: "Bar1" }), { tag: "datatype", name: "Bar2" }];
-            expect(parent.children.length).toBe(2);
-            expect(parent.children[0].name).toBe("Bar1");
-            expect(parent.children[1].name).toBe("Bar2");
+            expect(parent.children.length).equal(2);
+            expect(parent.children[0].name).equal("Bar1");
+            expect(parent.children[1].name).equal("Bar2");
         });
 
         it("can be bulk moved", () => {
@@ -74,98 +74,98 @@ describe("Model", () => {
                 { tag: "datatype", name: "Bar2" },
             ];
             const parent2 = new ClusterModel({ name: "Foo2", children: parent.children });
-            expect(parent.children.length).toBe(0);
-            expect(parent2.children.length).toBe(2);
-            expect(parent2.children[0].name).toBe("Bar1");
-            expect(parent2.children[1].name).toBe("Bar2");
+            expect(parent.children.length).equal(0);
+            expect(parent2.children.length).equal(2);
+            expect(parent2.children[0].name).equal("Bar1");
+            expect(parent2.children[1].name).equal("Bar2");
         });
     });
 
     describe("all", () => {
         it("finds all models by type", () => {
-            expect(Fixtures.matter.all(ClusterModel).length).toBe(3);
+            expect(Fixtures.matter.all(ClusterModel).length).equal(3);
 
             // 68 standard datatypes + 3 defined in our fake model
-            expect(Fixtures.matter.all(DatatypeModel).length).toBe(70);
+            expect(Fixtures.matter.all(DatatypeModel).length).equal(70);
         });
     });
 
     describe("get", () => {
         it("finds by ID", () => {
-            expect(Fixtures.matter.get(ClusterModel, 1)).toBe(Fixtures.cluster1);
-            expect(Fixtures.matter.get(AttributeModel, 1)).toBe(Fixtures.globalAttr);
+            expect(Fixtures.matter.get(ClusterModel, 1)).equal(Fixtures.cluster1);
+            expect(Fixtures.matter.get(AttributeModel, 1)).equal(Fixtures.globalAttr);
         });
 
         it("finds by name", () => {
-            expect(Fixtures.matter.get(ClusterModel, "Cluster1")).toBe(Fixtures.cluster1);
+            expect(Fixtures.matter.get(ClusterModel, "Cluster1")).equal(Fixtures.cluster1);
         });
     });
 
     describe("base", () => {
         it("finds global base type", () => {
-            expect(Fixtures.cluster1StructType.base).toBe(Fixtures.globalStruct);
+            expect(Fixtures.cluster1StructType.base).equal(Fixtures.globalStruct);
         });
 
         it("finds local base type", () => {
-            expect(Fixtures.cluster1StructField1.base).toBe(Fixtures.cluster1StructType);
+            expect(Fixtures.cluster1StructField1.base).equal(Fixtures.cluster1StructType);
         });
 
         it("finds inherited base type", () => {
-            expect(Fixtures.cluster2StructField.base).toBe(Fixtures.cluster1StructType);
+            expect(Fixtures.cluster2StructField.base).equal(Fixtures.cluster1StructType);
         });
 
         it("is inferred from inherited base", () => {
-            expect(Fixtures.feature.base?.name).toBe(Globals.uint32.name);
+            expect(Fixtures.feature.base?.name).equal(Globals.uint32.name);
         });
 
         it("finds attribute struct", () => {
-            expect(Fixtures.cluster1StructAttr.base).toBe(Fixtures.cluster1StructType);
+            expect(Fixtures.cluster1StructAttr.base).equal(Fixtures.cluster1StructType);
         });
 
         it("is inferred from struct attribute override", () => {
-            expect(Fixtures.cluster2Attr2.base).toBe(Fixtures.cluster1StructType);
+            expect(Fixtures.cluster2Attr2.base).equal(Fixtures.cluster1StructType);
         });
     });
 
     describe("effectiveMetatype", () => {
         it("represents global base type", () => {
-            expect(Fixtures.cluster1StructType.effectiveMetatype).toBe(Metatype.object);
+            expect(Fixtures.cluster1StructType.effectiveMetatype).equal(Metatype.object);
         });
 
         it("represents local base type", () => {
-            expect(Fixtures.cluster1StructField1.effectiveMetatype).toBe(Metatype.object);
+            expect(Fixtures.cluster1StructField1.effectiveMetatype).equal(Metatype.object);
         });
 
         it("represents inherited base type", () => {
-            expect(Fixtures.cluster2StructField.effectiveMetatype).toBe(Metatype.object);
+            expect(Fixtures.cluster2StructField.effectiveMetatype).equal(Metatype.object);
         });
 
         it("is inferred from inherited base type", () => {
-            expect(Fixtures.enumValue2.effectiveMetatype).toBe(Metatype.integer);
+            expect(Fixtures.enumValue2.effectiveMetatype).equal(Metatype.integer);
         });
     });
 
     describe("enum values", () => {
         it("infers ID", () => {
-            expect(Fixtures.enumValue2.effectiveId).toBe(1);
+            expect(Fixtures.enumValue2.effectiveId).equal(1);
         });
 
         it("infers type", () => {
-            expect(Fixtures.enumValue2.effectiveType).toBe(Globals.uint16.name);
+            expect(Fixtures.enumValue2.effectiveType).equal(Globals.uint16.name);
         });
     });
 
     describe("effectiveType", () => {
         it("is inherited on datatype override", () => {
-            expect(Fixtures.cluster1StructFieldOverride.effectiveType).toBe(Globals.string.name);
+            expect(Fixtures.cluster1StructFieldOverride.effectiveType).equal(Globals.string.name);
         });
 
         it("is inherited on secondary datatype override", () => {
-            expect(Fixtures.cluster2StructFieldOverride.effectiveType).toBe(Globals.string.name);
+            expect(Fixtures.cluster2StructFieldOverride.effectiveType).equal(Globals.string.name);
         });
 
         it("is inherited on attribute override", () => {
-            expect(Fixtures.cluster2Attr1.effectiveType).toBe(Globals.uint8.name);
+            expect(Fixtures.cluster2Attr1.effectiveType).equal(Globals.uint8.name);
         });
     });
 });

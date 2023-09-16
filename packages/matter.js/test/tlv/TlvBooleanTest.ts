@@ -20,7 +20,7 @@ describe("TlvBoolean", () => {
         for (const valueDescription in testVector) {
             const { encoded, decoded } = testVector[valueDescription];
             it(`encodes ${valueDescription}`, () => {
-                expect(TlvBoolean.encode(decoded).toHex()).toBe(encoded);
+                expect(TlvBoolean.encode(decoded).toHex()).equal(encoded);
             });
         }
     });
@@ -29,18 +29,18 @@ describe("TlvBoolean", () => {
         for (const valueDescription in testVector) {
             const { encoded, decoded } = testVector[valueDescription];
             it(`decodes ${valueDescription}`, () => {
-                expect(TlvBoolean.decode(ByteArray.fromHex(encoded))).toBe(decoded);
+                expect(TlvBoolean.decode(ByteArray.fromHex(encoded))).equal(decoded);
             });
         }
     });
 
     describe("validation", () => {
         it("throws an error if the value is not a boolean", () => {
-            expect(() => TlvBoolean.validate("a" as any)).toThrow(new ValidationError("Expected boolean, got string."));
+            expect(() => TlvBoolean.validate("a" as any)).throw(ValidationError, "Expected boolean, got string.");
         });
 
         it("does not throw an error if the value is a boolean", () => {
-            expect(TlvBoolean.validate(true)).not.toBeDefined();
+            expect(TlvBoolean.validate(true)).undefined;
         });
     });
 });

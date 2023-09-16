@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Matter.js Web Testing</title>
+    <link rel="stylesheet" href="mocha/mocha.css">
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <script src="mocha/mocha.js"></script>
+    <script src="tests.js"></script>
+    <script>
+      mocha.setup("bdd");
+      mocha.run();
+    </script>
+  </body>
+</html>

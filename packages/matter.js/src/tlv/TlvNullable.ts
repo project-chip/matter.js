@@ -35,12 +35,7 @@ export class NullableSchema<T> extends TlvSchema<T | null> {
         if (value !== null) this.schema.validate(value);
     }
 
-    override injectField(
-        value: T,
-        fieldId: number,
-        fieldValue: any,
-        injectChecker: (fieldValue: any | undefined) => boolean,
-    ): T {
+    override injectField(value: T, fieldId: number, fieldValue: any, injectChecker: (fieldValue: any) => boolean): T {
         if (value !== null) {
             return this.schema.injectField(value, fieldId, fieldValue, injectChecker);
         }

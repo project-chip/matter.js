@@ -10,51 +10,51 @@ import { isDeepEqual } from "../../src/util/DeepEqual.js";
 
 describe("DeepEqual", () => {
     it("Equality of primitives", () => {
-        expect(isDeepEqual(1, 1)).toBeTruthy();
-        expect(!isDeepEqual(1, 2)).toBeTruthy();
-        expect(!isDeepEqual(1, true)).toBeTruthy();
-        expect(!isDeepEqual(0, false)).toBeTruthy();
-        expect(!isDeepEqual(1, "1")).toBeTruthy();
-        expect(!isDeepEqual(true, "true")).toBeTruthy();
-        expect(isDeepEqual(null, null)).toBeTruthy();
-        expect(!isDeepEqual(0, null)).toBeTruthy();
-        expect(!isDeepEqual(null, 0)).toBeTruthy();
-        expect(!isDeepEqual(null, undefined)).toBeTruthy();
-        expect(!isDeepEqual(undefined, null)).toBeTruthy();
-        expect(!isDeepEqual(undefined, 0)).toBeTruthy();
-        expect(!isDeepEqual(undefined, "")).toBeTruthy();
+        expect(isDeepEqual(1, 1)).ok;
+        expect(!isDeepEqual(1, 2)).ok;
+        expect(!isDeepEqual(1, true)).ok;
+        expect(!isDeepEqual(0, false)).ok;
+        expect(!isDeepEqual(1, "1")).ok;
+        expect(!isDeepEqual(true, "true")).ok;
+        expect(isDeepEqual(null, null)).ok;
+        expect(!isDeepEqual(0, null)).ok;
+        expect(!isDeepEqual(null, 0)).ok;
+        expect(!isDeepEqual(null, undefined)).ok;
+        expect(!isDeepEqual(undefined, null)).ok;
+        expect(!isDeepEqual(undefined, 0)).ok;
+        expect(!isDeepEqual(undefined, "")).ok;
     });
 
     it("Equality of arrays", () => {
-        expect(isDeepEqual([1], [1])).toBeTruthy();
-        expect(!isDeepEqual([1], [2])).toBeTruthy();
-        expect(!isDeepEqual([1], [1, 2])).toBeTruthy();
-        expect(isDeepEqual([1, 2], [1, 2])).toBeTruthy();
-        expect(!isDeepEqual(["", ""], [0, 0])).toBeTruthy();
-        expect(!isDeepEqual(["", ""], [0, ""])).toBeTruthy();
-        expect(!isDeepEqual(["", true], ["", false])).toBeTruthy();
-        expect(isDeepEqual(["", ""], ["", ""])).toBeTruthy();
+        expect(isDeepEqual([1], [1])).ok;
+        expect(!isDeepEqual([1], [2])).ok;
+        expect(!isDeepEqual([1], [1, 2])).ok;
+        expect(isDeepEqual([1, 2], [1, 2])).ok;
+        expect(!isDeepEqual(["", ""], [0, 0])).ok;
+        expect(!isDeepEqual(["", ""], [0, ""])).ok;
+        expect(!isDeepEqual(["", true], ["", false])).ok;
+        expect(isDeepEqual(["", ""], ["", ""])).ok;
     });
 
     it("Equality of objects", () => {
-        expect(isDeepEqual({ a: 1 }, { a: 1 })).toBeTruthy();
-        expect(!isDeepEqual({ a: 1 }, { a: 2 })).toBeTruthy();
-        expect(!isDeepEqual({ a: 1 }, { a: 1, b: 1 })).toBeTruthy();
-        expect(!isDeepEqual({ a: 1 }, { b: 1 })).toBeTruthy();
-        expect(!isDeepEqual({ a: 1 }, {})).toBeTruthy();
-        expect(!isDeepEqual({}, { a: 1 })).toBeTruthy();
-        expect(!isDeepEqual({ a: 1 }, { a: 1, b: 1 })).toBeTruthy();
-        expect(isDeepEqual({}, {})).toBeTruthy();
-        expect(isDeepEqual({ a: {}, b: {} }, { a: {}, b: {} })).toBeTruthy();
-        expect(!isDeepEqual({ a: {}, b: {} }, { a: {}, b: { c: 1 } })).toBeTruthy();
-        expect(!isDeepEqual({ a: {}, b: { c: 1 } }, { a: {}, b: {} })).toBeTruthy();
+        expect(isDeepEqual({ a: 1 }, { a: 1 })).ok;
+        expect(!isDeepEqual({ a: 1 }, { a: 2 })).ok;
+        expect(!isDeepEqual({ a: 1 }, { a: 1, b: 1 })).ok;
+        expect(!isDeepEqual({ a: 1 }, { b: 1 })).ok;
+        expect(!isDeepEqual({ a: 1 }, {})).ok;
+        expect(!isDeepEqual({}, { a: 1 })).ok;
+        expect(!isDeepEqual({ a: 1 }, { a: 1, b: 1 })).ok;
+        expect(isDeepEqual({}, {})).ok;
+        expect(isDeepEqual({ a: {}, b: {} }, { a: {}, b: {} })).ok;
+        expect(!isDeepEqual({ a: {}, b: {} }, { a: {}, b: { c: 1 } })).ok;
+        expect(!isDeepEqual({ a: {}, b: { c: 1 } }, { a: {}, b: {} })).ok;
     });
 
     it("Equality of special Matter objects", () => {
-        expect(isDeepEqual(VendorId(0), VendorId(0))).toBeTruthy();
-        expect(!isDeepEqual(VendorId(0), VendorId(1))).toBeTruthy();
+        expect(isDeepEqual(VendorId(0), VendorId(0))).ok;
+        expect(!isDeepEqual(VendorId(0), VendorId(1))).ok;
 
-        expect(isDeepEqual(ByteArray.fromHex("00"), ByteArray.fromHex("00"))).toBeTruthy();
-        expect(!isDeepEqual(ByteArray.fromHex("00"), ByteArray.fromHex("01"))).toBeTruthy();
+        expect(isDeepEqual(ByteArray.fromHex("00"), ByteArray.fromHex("00"))).ok;
+        expect(!isDeepEqual(ByteArray.fromHex("00"), ByteArray.fromHex("01"))).ok;
     });
 });

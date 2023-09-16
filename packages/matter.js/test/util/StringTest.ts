@@ -20,19 +20,19 @@ const CAMELIZE_TESTS = {
 describe("String", () => {
     describe("capitalize", () => {
         it("capitalizes", () => {
-            expect(capitalize("foo")).toBe("Foo");
+            expect(capitalize("foo")).equal("Foo");
         });
     });
 
     describe("camelize", () => {
         for (const [k, v] of Object.entries(CAMELIZE_TESTS)) {
             it(`camelizes "${k}"`, () => {
-                expect(camelize(k)).toBe(v);
+                expect(camelize(k)).equal(v);
             });
         }
 
         it(`camelizes lowercase`, () => {
-            expect(camelize("Foo", false)).toBe("foo");
+            expect(camelize("Foo", false)).equal("foo");
         });
     });
 });

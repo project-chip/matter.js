@@ -39,7 +39,7 @@ describe("TlvObject", () => {
         for (const valueDescription in codecVector) {
             const { encoded, decoded } = codecVector[valueDescription];
             it(`encodes ${valueDescription}`, () => {
-                expect(schema.encode(decoded).toHex()).toBe(encoded);
+                expect(schema.encode(decoded).toHex()).equal(encoded);
             });
         }
     });
@@ -48,14 +48,14 @@ describe("TlvObject", () => {
         for (const valueDescription in codecVector) {
             const { encoded, decoded } = codecVector[valueDescription];
             it(`decodes ${valueDescription}`, () => {
-                expect(schema.decode(ByteArray.fromHex(encoded))).toEqual(decoded);
+                expect(schema.decode(ByteArray.fromHex(encoded))).deep.equal(decoded);
             });
         }
 
         it("ignores unknown fields", () => {
             const result = schemaUnknownField1.decode(schema.encode({ mandatoryField: 1, optionalField: "test" }));
 
-            expect(result).toEqual({ optionalField: "test" });
+            expect(result).deep.equal({ optionalField: "test" });
         });
     });
 
@@ -65,7 +65,7 @@ describe("TlvObject", () => {
             it(`encode/decodes ${valueDescription}`, () => {
                 const tlvEncoded = schema.encodeTlv(decoded);
                 const tlvDecoded = schema.decodeTlv(tlvEncoded);
-                expect(tlvDecoded).toEqual(decoded);
+                expect(tlvDecoded).deep.equal(decoded);
             });
         }
     });
@@ -73,27 +73,27 @@ describe("TlvObject", () => {
     describe("inject Field value", () => {
         it("injects field value on missing value", () => {
             const result = schema.injectField({ mandatoryField: 1 }, 2, "test", () => true);
-            expect(result).toEqual({ mandatoryField: 1, optionalField: "test" });
+            expect(result).deep.equal({ mandatoryField: 1, optionalField: "test" });
         });
 
         it("injects field value on existing", () => {
             const result = schema.injectField({ mandatoryField: 1, optionalField: "original" }, 2, "test", () => true);
-            expect(result).toEqual({ mandatoryField: 1, optionalField: "test" });
+            expect(result).deep.equal({ mandatoryField: 1, optionalField: "test" });
         });
 
         it("do not inject field value when not wanted", () => {
             const result = schema.injectField({ mandatoryField: 1 }, 2, "test", () => false);
-            expect(result).toEqual({ mandatoryField: 1 });
+            expect(result).deep.equal({ mandatoryField: 1 });
         });
 
         it("do not inject field value when existing", () => {
             const result = schema.injectField({ mandatoryField: 1, optionalField: "original" }, 2, "test", () => false);
-            expect(result).toEqual({ mandatoryField: 1, optionalField: "original" });
+            expect(result).deep.equal({ mandatoryField: 1, optionalField: "original" });
         });
 
         it("throw error on invalid field value", () => {
-            expect(() => schema.injectField({ mandatoryField: 1 }, 2, 2, () => true)).toThrow(
-                new Error("Expected string, got number."),
+            expect(() => schema.injectField({ mandatoryField: 1 }, 2, 2, () => true)).throw(
+                "Expected string, got number.",
             );
         });
 
@@ -111,7 +111,7 @@ describe("TlvObject", () => {
             );
 
             const result = schema.injectField([{ mandatoryField: 1 }, { mandatoryField: 2 }], 2, "test", () => true);
-            expect(result).toEqual([
+            expect(result).deep.equal([
                 { mandatoryField: 1, optionalField: "test" },
                 { mandatoryField: 2, optionalField: "test" },
             ]);
@@ -121,17 +121,17 @@ describe("TlvObject", () => {
     describe("remove Field value", () => {
         it("remove field value on missing value", () => {
             const result = schema.removeField({ mandatoryField: 1, optionalField: "test" }, 2, () => true);
-            expect(result).toEqual({ mandatoryField: 1 });
+            expect(result).deep.equal({ mandatoryField: 1 });
         });
 
         it("do not change field value when missing", () => {
             const result = schema.removeField({ mandatoryField: 1 }, 2, () => true);
-            expect(result).toEqual({ mandatoryField: 1 });
+            expect(result).deep.equal({ mandatoryField: 1 });
         });
 
         it("do not remove field value when existing but unwanted", () => {
             const result = schema.removeField({ mandatoryField: 1, optionalField: "original" }, 2, () => false);
-            expect(result).toEqual({ mandatoryField: 1, optionalField: "original" });
+            expect(result).deep.equal({ mandatoryField: 1, optionalField: "original" });
         });
 
         it("removes field value also on nullable array schema", () => {
@@ -155,7 +155,7 @@ describe("TlvObject", () => {
                 2,
                 () => true,
             );
-            expect(result).toEqual([{ mandatoryField: 1 }, { mandatoryField: 2 }]);
+            expect(result).deep.equal([{ mandatoryField: 1 }, { mandatoryField: 2 }]);
         });
     });
 });

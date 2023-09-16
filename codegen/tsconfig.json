@@ -1,0 +1,12 @@
+{
+  "extends": "../tools/tsconfig.base.json",
+  "compilerOptions": {
+    "target": "es2018",
+    "module": "nodenext",
+    "moduleResolution": "nodenext"
+  },
+
+  "include": [
+    "src/**/*.ts"
+  ]
+}

@@ -15,7 +15,7 @@ describe("Base38Schema", () => {
         it("encodes a string", () => {
             const result = Base38.encode(DECODED);
 
-            expect(result).toBe(ENCODED);
+            expect(result).equal(ENCODED);
         });
     });
 
@@ -23,7 +23,7 @@ describe("Base38Schema", () => {
         it("encodes a string", () => {
             const result = Base38.decode(ENCODED);
 
-            expect(result.toHex()).toBe(DECODED.toHex());
+            expect(result.toHex()).equal(DECODED.toHex());
         });
     });
 });

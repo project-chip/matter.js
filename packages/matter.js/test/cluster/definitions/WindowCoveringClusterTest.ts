@@ -35,7 +35,7 @@ describe("WindowCoveringCluster", () => {
                     ],
                 ),
             ),
-        ).toEqual({
+        ).deep.equal({
             // TODO - make strict after updating web tester
             acceptedCommandList: NONE,
             attributeList: NONE,
@@ -62,7 +62,7 @@ describe("WindowCoveringCluster", () => {
                     [optional, false, false, false],
                 ]),
             ),
-        ).toEqual({
+        ).deep.equal({
             // TODO - make strict after updating web tester
             downOrClose: NONE,
             goToLiftPercentage: NONE,
@@ -112,7 +112,7 @@ describe("WindowCoveringCluster", () => {
 
         const attrValues = Object.fromEntries(Object.entries(server.attributes).map(([k, v]) => [k, v.getLocal()]));
 
-        expect(attrValues).toEqual({
+        expect(attrValues).deep.equal({
             // TODO - make strict after updating web tester
             acceptedCommandList: [0, 1, 2],
             attributeList: [0, 7, 10, 11, 13, 14, 23, 26, 65528, 65529, 65530, 65531, 65532, 65533],

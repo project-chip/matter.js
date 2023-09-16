@@ -21,7 +21,7 @@ describe("StorageManager", () => {
         storageContext.set("key", "value");
 
         const valueFromStorage = storageContext.get("key");
-        expect(valueFromStorage).toBe("value");
+        expect(valueFromStorage).equal("value");
     });
 
     it("creating StorageManager without initialize throws error when creating StorageContext", async () => {
@@ -31,7 +31,7 @@ describe("StorageManager", () => {
 
         expect(() => {
             storageManager.createContext("context");
-        }).toThrow(new StorageError("The storage needs to be initialized first!"));
+        }).throw(StorageError, "The storage needs to be initialized first!");
     });
 
     it("creating StorageContext with  dot in name fails", async () => {
@@ -42,7 +42,7 @@ describe("StorageManager", () => {
 
         expect(() => {
             storageManager.createContext("my.context");
-        }).toThrow(new StorageError("Context must not contain dots!"));
+        }).throw(StorageError, "Context must not contain dots!");
     });
 
     it("getting same StorageContext context access same data", async () => {
@@ -58,7 +58,7 @@ describe("StorageManager", () => {
         storageContext1.set("key", "value");
 
         const valueFromStorage2 = storageContext2.get("key");
-        expect(valueFromStorage2).toBe("value");
+        expect(valueFromStorage2).equal("value");
     });
 
     it("getting same StorageContext context access same data with subcontext", async () => {
@@ -76,6 +76,6 @@ describe("StorageManager", () => {
         storageSubContext1.set("key", "value");
 
         const valueFromStorage2 = storageSubContext2.get("key");
-        expect(valueFromStorage2).toBe("value");
+        expect(valueFromStorage2).equal("value");
     });
 });

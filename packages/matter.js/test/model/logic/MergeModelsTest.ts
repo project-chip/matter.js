@@ -22,23 +22,23 @@ function merge({ spec, chip }: { spec: MatterElement.Child; chip: MatterElement.
 
 describe("MergeModels", () => {
     it("merges children by ID", () => {
-        expect(merge(Fixtures.OccupancySensing).children.length).toBe(1);
+        expect(merge(Fixtures.OccupancySensing).children.length).equal(1);
     });
 
     it("prefers spec name", () => {
-        expect(merge(Fixtures.OccupancySensing).name).toBe("OccupancySensing");
+        expect(merge(Fixtures.OccupancySensing).name).equal("OccupancySensing");
     });
 
     it("adds mismatched children", () => {
-        expect(merge(Fixtures.OccupancySensing).children[0].children.length).toBe(1);
+        expect(merge(Fixtures.OccupancySensing).children[0].children.length).equal(1);
     });
 
     it("merges with missing datatype", () => {
-        expect(merge(Fixtures.ModeSelect).children.length).toBe(2);
+        expect(merge(Fixtures.ModeSelect).children.length).equal(2);
     });
 
     it("merges datatypes", () => {
-        expect(merge(Fixtures.BasicInformation).children.length).toBe(2);
+        expect(merge(Fixtures.BasicInformation).children.length).equal(2);
     });
 
     it("merges datatypes with different names", () => {
@@ -49,15 +49,15 @@ describe("MergeModels", () => {
         variants.chip.datatypes[0].name = "CapabilityMaximaStruct";
         variants.chip.attributes[0].type = "CapabilityMaximaStruct";
         const merged = merge(variants) as ClusterModel;
-        expect(merged.children.length).toBe(2);
-        expect(merged.datatypes[0].name).toBe("CapabilityMinimaStruct");
+        expect(merged.children.length).equal(2);
+        expect(merged.datatypes[0].name).equal("CapabilityMinimaStruct");
     });
 
     it("merges referenced bitmap into direct bitmap", () => {
         const merged = merge(Fixtures.WindowCovering);
-        expect(merged.children.length).toBe(1);
-        expect(merged.children[0].type).toBe("map8");
-        expect(merged.children[0].children.length).toBe(4);
+        expect(merged.children.length).equal(1);
+        expect(merged.children[0].type).equal("map8");
+        expect(merged.children[0].children.length).equal(4);
     });
 });
 

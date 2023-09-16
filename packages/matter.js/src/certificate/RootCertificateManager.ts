@@ -13,9 +13,9 @@ import { Time } from "../time/Time.js";
 import { ByteArray } from "../util/ByteArray.js";
 import {
     CertificateManager,
-    jsToMatterDate,
     TlvOperationalCertificate,
     TlvRootCertificate,
+    jsToMatterDate,
 } from "./CertificateManager.js";
 
 export class RootCertificateManager {

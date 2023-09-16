@@ -42,11 +42,11 @@ describe("Constraint", () => {
     TEST_CONSTRAINTS.forEach(([text, ast, expectedText]) => {
         describe(text, () => {
             it("parses", () => {
-                expect(new Constraint(text)).toEqual(new Constraint({ ...ast, definition: text }));
+                expect(new Constraint(text)).deep.equal(new Constraint({ ...ast, definition: text }));
             });
 
             it("serializes", () => {
-                expect(new Constraint(ast).toString()).toEqual(expectedText ?? text);
+                expect(new Constraint(ast).toString()).deep.equal(expectedText ?? text);
             });
         });
     });

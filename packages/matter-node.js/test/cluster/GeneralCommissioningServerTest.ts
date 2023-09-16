@@ -28,8 +28,6 @@ import { SecureSession } from "@project-chip/matter.js/session";
 import * as assert from "assert";
 import { callCommandOnClusterServer, createTestSessionWithFabric } from "./ClusterServerTestingUtil";
 
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-
 describe("GeneralCommissioning Server test", () => {
     let generalCommissioningServer: ClusterServerObjForCluster<typeof GeneralCommissioningCluster> | undefined;
     let basicInformationServer: ClusterServerObjForCluster<typeof BasicInformationCluster> | undefined;

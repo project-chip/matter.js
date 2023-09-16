@@ -5,6 +5,7 @@
         "sourceType": "module", // Allows for the use of imports
         "project": [
             "tools/tsconfig.json",
+            "codegen/tsconfig.json",
             "models/tsconfig.json",
             "packages/*/tsconfig.json"
         ]
@@ -23,7 +24,8 @@
         "node": true
     },
     "ignorePatterns": [
-        "*/links/**",
+        "*/dist/**/*",
+        "*/build/**/*",
         "packages/*/dist/**/*",
         "packages/*/build/**/*",
         "**/jest.config.ts",
@@ -54,15 +56,15 @@
 
         "@typescript-eslint/require-await": "off",
 
-        // We can turn this on from time to time but in general these rules
+        // We can turn these on from time to time but in general they rules
         // make our lives harder instead of easier
         "@typescript-eslint/no-unsafe-argument": "off",
         "@typescript-eslint/no-unsafe-assignment": "off",
         "@typescript-eslint/no-unsafe-member-access": "off",
         "@typescript-eslint/no-unsafe-return": "off",
         "@typescript-eslint/no-unsafe-call": "off",
-
         "@typescript-eslint/restrict-template-expressions": "off",
+        "@typescript-eslint/no-base-to-string": "off",
 
         "no-constant-condition": [
             "error",
@@ -106,7 +108,26 @@
 
         // I mean, I understand why this rule exists, but sometimes you need to
         // assign "this" to a variable (see e.g. cd method in github.ts)
-        "@typescript-eslint/no-this-alias": "off"
+        "@typescript-eslint/no-this-alias": "off",
+
+        // This prevents us from transpiling to ESM that works in both node and
+        // the browser for some CommonJS dependencies (elliptic and
+        // ansi-colors are two examples)
+        "import/default": "off",
+
+        // Related to import/default, this generates warnings when we use
+        // properties of the default export when eslint thinks we should be
+        // using the named export.  In some cases it isn't even possible to do
+        // it the way eslint wants us to (e.g. you can't do "import { static }
+        // from express because "static" is a reserved word.).  In other cases
+        // the code is valid but the transpiled ESM isn't compatible with Node
+        // because it's not smart enough to find the "named exports" in
+        // CommonJS files
+        "import/no-named-as-default-member": "off",
+        
+        // This makes it impossible to compare non-enums to enums, like one
+        // might do with a value off the wire
+        "@typescript-eslint/no-unsafe-enum-comparison": "off"
     },
     "settings": {
         "import/extensions": [".ts"],

@@ -11,7 +11,7 @@ describe("Verhoeff", () => {
         it("encodes a string", () => {
             const result = new Verhoeff().computeChecksum("236");
 
-            expect(result).toBe(3);
+            expect(result).equal(3);
         });
     });
 });

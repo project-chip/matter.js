@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as assert from "assert";
 import { BasicInformationCluster } from "../../src/cluster/definitions/BasicInformationCluster.js";
 import {
     AttributeServer,
@@ -32,7 +31,7 @@ describe("AttributeServerTest", () => {
     describe("FixedAttributeServer", () => {
         it("should return the value set in the constructor", () => {
             const server = new FixedAttributeServer(AttributeId(1), "test", TlvUInt8, false, false, false, 3, () => 1);
-            assert.strictEqual(server.getLocal(), 3);
+            expect(server.getLocal()).equal(3);
         });
 
         it("should return the value from getter", () => {
@@ -47,13 +46,13 @@ describe("AttributeServerTest", () => {
                 () => 1,
                 () => 4,
             );
-            assert.strictEqual(server.getLocal(), 4);
+            expect(server.getLocal()).equal(4);
         });
 
         it("should successfully initialize with a value", () => {
             const server = new FixedAttributeServer(AttributeId(1), "test", TlvUInt8, false, false, false, 3, () => 1);
             server.init(5);
-            assert.strictEqual(server.getLocal(), 5);
+            expect(server.getLocal()).equal(5);
         });
     });
 
@@ -70,7 +69,7 @@ describe("AttributeServerTest", () => {
                 () => 1,
                 () => 2,
             );
-            assert.strictEqual(server.getLocal(), 3);
+            expect(server.getLocal()).equal(3);
         });
 
         it("should set the value locally and trigger listeners on change", () => {
@@ -98,13 +97,13 @@ describe("AttributeServerTest", () => {
                 oldValueTriggered2 = oldValue;
             });
 
-            assert.strictEqual(server.getLocal(), 3);
+            expect(server.getLocal()).equal(3);
             server.setLocal(4);
-            assert.strictEqual(server.getLocal(), 4);
-            assert.strictEqual(valueTriggered, 4);
-            assert.strictEqual(versionTriggered, 2);
-            assert.strictEqual(valueTriggered2, 4);
-            assert.strictEqual(oldValueTriggered2, 3);
+            expect(server.getLocal()).equal(4);
+            expect(valueTriggered).equal(4);
+            expect(versionTriggered).equal(2);
+            expect(valueTriggered2).equal(4);
+            expect(oldValueTriggered2).equal(3);
         });
 
         it("should set the value locally and trigger listeners on non change", () => {
@@ -129,11 +128,11 @@ describe("AttributeServerTest", () => {
                 oldValueTriggered2 = oldValue;
             });
 
-            assert.strictEqual(server.getLocal(), 3);
+            expect(server.getLocal()).equal(3);
             server.setLocal(3);
-            assert.strictEqual(server.getLocal(), 3);
-            assert.strictEqual(valueTriggered2, 3);
-            assert.strictEqual(oldValueTriggered2, 3);
+            expect(server.getLocal()).equal(3);
+            expect(valueTriggered2).equal(3);
+            expect(oldValueTriggered2).equal(3);
         });
 
         it("should throw an error if the value is set non locally and not writable", () => {
@@ -148,10 +147,10 @@ describe("AttributeServerTest", () => {
                 () => 1,
                 () => 2,
             );
-            assert.strictEqual(server.getLocal(), 3);
-            assert.throws(() => server.set(4, {} as SecureSession<MatterDevice>), {
-                message: '(136) Attribute "test" is not writable.',
-            });
+            expect(server.getLocal()).equal(3);
+            expect(() => server.set(4, {} as SecureSession<MatterDevice>)).throws(
+                '(136) Attribute "test" is not writable.',
+            );
         });
 
         it("should return the value from getter", () => {
@@ -167,7 +166,7 @@ describe("AttributeServerTest", () => {
                 () => 2,
                 () => 4,
             );
-            assert.strictEqual(server.getLocal(), 4);
+            expect(server.getLocal()).equal(4);
         });
 
         it("should return the value from getter also with setter but increased version on change", () => {
@@ -189,11 +188,17 @@ describe("AttributeServerTest", () => {
                     return true;
                 },
             );
-            assert.deepEqual(server.getWithVersion({} as SecureSession<MatterDevice>, false), { value: 4, version: 0 });
+            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+                value: 4,
+                version: 0,
+            });
             server.setLocal(5);
-            assert.deepEqual(server.getWithVersion({} as SecureSession<MatterDevice>, false), { value: 4, version: 1 });
-            assert.strictEqual(valueSet, 5);
-            assert.strictEqual(version, 1);
+            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+                value: 4,
+                version: 1,
+            });
+            expect(valueSet).equal(5);
+            expect(version).equal(1);
         });
 
         it("should return the value from getter also with setter but not increased version when no change", () => {
@@ -215,11 +220,17 @@ describe("AttributeServerTest", () => {
                     return false;
                 },
             );
-            assert.deepEqual(server.getWithVersion({} as SecureSession<MatterDevice>, false), { value: 4, version: 0 });
+            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+                value: 4,
+                version: 0,
+            });
             server.setLocal(5);
-            assert.deepEqual(server.getWithVersion({} as SecureSession<MatterDevice>, false), { value: 4, version: 0 });
-            assert.strictEqual(valueSet, 5);
-            assert.strictEqual(version, 0);
+            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+                value: 4,
+                version: 0,
+            });
+            expect(valueSet).equal(5);
+            expect(version).equal(0);
         });
 
         it("should return the value from getter and increased version after update", () => {
@@ -241,11 +252,17 @@ describe("AttributeServerTest", () => {
                     return false;
                 },
             );
-            assert.deepEqual(server.getWithVersion({} as SecureSession<MatterDevice>, false), { value: 4, version: 0 });
+            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+                value: 4,
+                version: 0,
+            });
             server.updated({} as SecureSession<MatterDevice>);
-            assert.deepEqual(server.getWithVersion({} as SecureSession<MatterDevice>, false), { value: 4, version: 1 });
-            assert.strictEqual(valueSet, undefined);
-            assert.strictEqual(version, 1);
+            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+                value: 4,
+                version: 1,
+            });
+            expect(valueSet).undefined;
+            expect(version).equal(1);
         });
 
         it("should trigger listeners with getter also with setter but increased version on change", () => {
@@ -279,15 +296,21 @@ describe("AttributeServerTest", () => {
                 valueTriggered2 = newValue;
                 oldValueTriggered2 = oldValue;
             });
-            assert.deepEqual(server.getWithVersion({} as SecureSession<MatterDevice>, false), { value: 4, version: 0 });
+            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+                value: 4,
+                version: 0,
+            });
             server.setLocal(5);
-            assert.deepEqual(server.getWithVersion({} as SecureSession<MatterDevice>, false), { value: 4, version: 1 });
-            assert.strictEqual(valueSet, 5);
-            assert.strictEqual(valueTriggered, 5);
-            assert.strictEqual(versionTriggered, 0);
-            assert.strictEqual(valueTriggered2, 5);
-            assert.strictEqual(oldValueTriggered2, 4);
-            assert.strictEqual(version, 1);
+            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+                value: 4,
+                version: 1,
+            });
+            expect(valueSet).equal(5);
+            expect(valueTriggered).equal(5);
+            expect(versionTriggered).equal(0);
+            expect(valueTriggered2).equal(5);
+            expect(oldValueTriggered2).equal(4);
+            expect(version).equal(1);
         });
 
         it("should return the value from getter also with setter but not increased version when no change", () => {
@@ -318,13 +341,19 @@ describe("AttributeServerTest", () => {
                 valueTriggered2 = newValue;
                 oldValueTriggered2 = oldValue;
             });
-            assert.deepEqual(server.getWithVersion({} as SecureSession<MatterDevice>, false), { value: 4, version: 0 });
+            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+                value: 4,
+                version: 0,
+            });
             server.setLocal(5);
-            assert.deepEqual(server.getWithVersion({} as SecureSession<MatterDevice>, false), { value: 4, version: 0 });
-            assert.strictEqual(valueSet, 5);
-            assert.strictEqual(valueTriggered2, 5);
-            assert.strictEqual(oldValueTriggered2, 4);
-            assert.strictEqual(version, 0);
+            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+                value: 4,
+                version: 0,
+            });
+            expect(valueSet).equal(5);
+            expect(valueTriggered2).equal(5);
+            expect(oldValueTriggered2).equal(4);
+            expect(version).equal(0);
         });
 
         it("should return the value from getter and increased version after update", () => {
@@ -346,11 +375,17 @@ describe("AttributeServerTest", () => {
                     return false;
                 },
             );
-            assert.deepEqual(server.getWithVersion({} as SecureSession<MatterDevice>, false), { value: 4, version: 0 });
+            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+                value: 4,
+                version: 0,
+            });
             server.updated({} as SecureSession<MatterDevice>);
-            assert.deepEqual(server.getWithVersion({} as SecureSession<MatterDevice>, false), { value: 4, version: 1 });
-            assert.strictEqual(valueSet, undefined);
-            assert.strictEqual(version, 1);
+            expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
+                value: 4,
+                version: 1,
+            });
+            expect(valueSet).undefined;
+            expect(version).equal(1);
         });
 
         it("should successfully initialize with a value", () => {
@@ -366,7 +401,7 @@ describe("AttributeServerTest", () => {
                 () => 2,
             );
             server.init(5);
-            assert.strictEqual(server.getLocal(), 5);
+            expect(server.getLocal()).equal(5);
         });
 
         it("if initialized with undefined value the default value uis used", () => {
@@ -382,7 +417,7 @@ describe("AttributeServerTest", () => {
                 () => 2,
             );
             server.init(undefined);
-            assert.strictEqual(server.getLocal(), 3);
+            expect(server.getLocal()).equal(3);
         });
 
         it("use getter value if initialized with undefined", () => {
@@ -399,7 +434,7 @@ describe("AttributeServerTest", () => {
                 () => 4,
             );
             server.init(1);
-            assert.strictEqual(server.getLocal(), 4);
+            expect(server.getLocal()).equal(4);
         });
 
         it("setter is not called when initialized", () => {
@@ -421,11 +456,11 @@ describe("AttributeServerTest", () => {
                 },
             );
             server.init(1);
-            assert.strictEqual(setterCalled, false);
+            expect(setterCalled).equal(false);
         });
 
         it("should throw an error if default value is invalid", () => {
-            assert.throws(
+            expect(
                 () =>
                     new AttributeServer(
                         AttributeId(1),
@@ -438,8 +473,7 @@ describe("AttributeServerTest", () => {
                         () => 1,
                         () => 2,
                     ),
-                { message: 'Validation error for attribute "test": Invalid value: 3 is above the maximum, 2.' },
-            );
+            ).throw('Validation error for attribute "test": Invalid value: 3 is above the maximum, 2.');
         });
 
         it("should throw an error if set value is invalid according to schema validator", () => {
@@ -456,9 +490,9 @@ describe("AttributeServerTest", () => {
                 undefined,
                 () => true,
             );
-            assert.throws(() => server.setLocal(11), {
-                message: 'Validation error for attribute "test": Invalid value: 11 is above the maximum, 3.',
-            });
+            expect(() => server.setLocal(11)).throw(
+                'Validation error for attribute "test": Invalid value: 11 is above the maximum, 3.',
+            );
         });
 
         it("should throw an error if set value is invalid according to custom validator only on set", () => {
@@ -478,7 +512,7 @@ describe("AttributeServerTest", () => {
                     throw new Error("Validator error");
                 },
             );
-            assert.throws(() => server.setLocal(11), { message: "Validator error" });
+            expect(() => server.setLocal(11)).throw("Validator error");
         });
     });
 
@@ -513,7 +547,7 @@ describe("AttributeServerTest", () => {
                 () => 1,
                 () => 2,
             );
-            assert.strictEqual(server.getLocalForFabric(testFabric), 3);
+            expect(server.getLocalForFabric(testFabric)).equal(3);
         });
 
         it("should return the value from fabric context if set", () => {
@@ -547,7 +581,7 @@ describe("AttributeServerTest", () => {
                 () => 1,
                 () => 2,
             );
-            assert.strictEqual(server.getLocalForFabric(testFabric), 5);
+            expect(server.getLocalForFabric(testFabric)).equal(5);
         });
 
         it("should return the value from fabric scoped storage when changed", () => {
@@ -581,7 +615,7 @@ describe("AttributeServerTest", () => {
                 () => 2,
             );
             testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
-            assert.strictEqual(server.getLocalForFabric(testFabric), 5);
+            expect(server.getLocalForFabric(testFabric)).equal(5);
         });
 
         it("should update the value from fabric scoped storage when set and trigger listeners", () => {
@@ -630,13 +664,13 @@ describe("AttributeServerTest", () => {
             });
 
             server.setLocalForFabric(7, testFabric);
-            assert.strictEqual(server.getLocalForFabric(testFabric), 7);
-            assert.deepEqual(testFabric.getScopedClusterDataValue(BasicInformationCluster, "test"), { value: 7 });
-            assert.strictEqual(valueTriggered, 7);
-            assert.strictEqual(versionTriggered, 0);
-            assert.strictEqual(valueTriggered2, 7);
-            assert.strictEqual(oldValueTriggered2, 5);
-            assert.strictEqual(counter, 1);
+            expect(server.getLocalForFabric(testFabric)).equal(7);
+            expect(testFabric.getScopedClusterDataValue(BasicInformationCluster, "test")).deep.equal({ value: 7 });
+            expect(valueTriggered).equal(7);
+            expect(versionTriggered).equal(0);
+            expect(valueTriggered2).equal(7);
+            expect(oldValueTriggered2).equal(5);
+            expect(counter).equal(1);
         });
 
         it("should handle the value from fabric scoped storage when set and trigger ony external listeners", () => {
@@ -681,14 +715,14 @@ describe("AttributeServerTest", () => {
             });
 
             server.setLocalForFabric(5, testFabric);
-            assert.strictEqual(server.getLocalForFabric(testFabric), 5);
-            assert.deepEqual(testFabric.getScopedClusterDataValue(BasicInformationCluster, "test"), { value: 5 });
-            assert.strictEqual(valueTriggered2, 5);
-            assert.strictEqual(oldValueTriggered2, 5);
+            expect(server.getLocalForFabric(testFabric)).equal(5);
+            expect(testFabric.getScopedClusterDataValue(BasicInformationCluster, "test")).deep.equal({ value: 5 });
+            expect(valueTriggered2).equal(5);
+            expect(oldValueTriggered2).equal(5);
         });
 
         it("should throw an error if only getter is implemented but writable", () => {
-            assert.throws(
+            expect(
                 () =>
                     new FabricScopedAttributeServer(
                         AttributeId(1),
@@ -703,8 +737,7 @@ describe("AttributeServerTest", () => {
                         () => 2,
                         () => 7,
                     ),
-                { message: 'Getter and setter must be implemented together writeable fabric scoped attribute "test".' },
-            );
+            ).throw('Getter and setter must be implemented together writeable fabric scoped attribute "test".');
         });
 
         it("should throw an error when trying to get getter method value locally", () => {
@@ -739,9 +772,9 @@ describe("AttributeServerTest", () => {
                 () => 2,
                 () => 7,
             );
-            assert.throws(() => server.getLocalForFabric(testFabric), {
-                message: 'Fabric scoped attribute "test" can not be read locally when a custom getter is defined.',
-            });
+            expect(() => server.getLocalForFabric(testFabric)).throw(
+                'Fabric scoped attribute "test" can not be read locally when a custom getter is defined.',
+            );
         });
 
         it("should return value from getter when used non-locally", () => {
@@ -777,7 +810,7 @@ describe("AttributeServerTest", () => {
                 () => 2,
                 () => 7,
             );
-            assert.strictEqual(server.get(testSession, true), 7);
+            expect(server.get(testSession, true)).equal(7);
         });
 
         it("should use getter and setter and trigger listeners", () => {
@@ -829,12 +862,12 @@ describe("AttributeServerTest", () => {
             });
 
             server.set(9, testSession);
-            assert.strictEqual(server.get(testSession, false), 7);
-            assert.strictEqual(valueTriggered, 9);
-            assert.strictEqual(versionTriggered, 3);
-            assert.strictEqual(valueTriggered2, 9);
-            assert.strictEqual(oldValueTriggered2, 7);
-            assert.strictEqual(counter, 4);
+            expect(server.get(testSession, false)).equal(7);
+            expect(valueTriggered).equal(9);
+            expect(versionTriggered).equal(3);
+            expect(valueTriggered2).equal(9);
+            expect(oldValueTriggered2).equal(7);
+            expect(counter).equal(4);
         });
     });
 });

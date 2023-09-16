@@ -72,7 +72,7 @@ function castValue(model: ValueModel) {
             return FieldValue.objectValue(modelDefault);
 
         case Metatype.string:
-            return modelDefault.toString();
+            return `${modelDefault}`;
 
         case Metatype.bytes:
             if (ArrayBuffer.isView(modelDefault)) {

@@ -13,7 +13,7 @@ import { DefinitionError } from "../definitions/DefinitionError.js";
  * behavior.  Aspects are mostly "qualities" in the Matter specification except
  * for "constraint" which is not formally described as a quality.
  */
-export class Aspect<D> {
+export abstract class Aspect<D> {
     definition: D;
     errors?: DefinitionError[];
 
@@ -47,6 +47,9 @@ export class Aspect<D> {
     valueOf() {
         return this.toString();
     }
+
+    // Ensure derivatives implement toString()
+    abstract toString(): string;
 
     error(code: string, message: string) {
         if (!this.errors) {

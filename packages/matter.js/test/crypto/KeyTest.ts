@@ -13,7 +13,7 @@ describe("Key", () => {
             const key = Key({
                 sec1: Fixture.sec1,
             });
-            expect(key).toEqual({
+            expect(key).deep.equal({
                 kty: KeyType.EC,
                 crv: CurveType.p256,
                 d: "rvNIQRbpSB7Fe-BHLfQb9JkGTlAkrYaeyl6ImALUgHU",
@@ -28,7 +28,7 @@ describe("Key", () => {
             const key = Key({
                 pkcs8: Fixture.pkcs8,
             });
-            expect(key).toEqual({
+            expect(key).deep.equal({
                 kty: KeyType.EC,
                 crv: CurveType.p256,
                 d: "cn8QBcukfteCKp2TCUNiFhfP07edmvUouAHs-fGZIgQ",
@@ -43,7 +43,7 @@ describe("Key", () => {
             const key = Key({
                 spki: Fixture.spki,
             });
-            expect(key).toEqual({
+            expect(key).deep.equal({
                 kty: KeyType.EC,
                 crv: CurveType.p256,
                 x: "YuK24br_jXSm_YIWxMtnozY6MeaRSSeS5hruYQJhSBM",
@@ -57,7 +57,7 @@ describe("Key", () => {
             const key = Key({
                 publicKey: Fixture.publicKey,
             });
-            expect(key).toEqual({
+            expect(key).deep.equal({
                 kty: KeyType.EC,
                 crv: CurveType.p256,
                 x: "EO8CqBqHtoEh-6jTGXj4B6MX5QqoqChEaCiRS5M96O0",

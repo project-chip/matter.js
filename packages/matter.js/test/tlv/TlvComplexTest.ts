@@ -142,7 +142,7 @@ describe("TlvObject", () => {
         for (const valueDescription in codecVector) {
             const { encoded, decoded } = codecVector[valueDescription];
             it(`encodes ${valueDescription}`, () => {
-                expect(schema.encode(decoded).toHex()).toBe(encoded);
+                expect(schema.encode(decoded).toHex()).equal(encoded);
             });
         }
     });
@@ -151,7 +151,7 @@ describe("TlvObject", () => {
         for (const valueDescription in codecVector) {
             const { encoded, decoded } = codecVector[valueDescription];
             it(`decodes ${valueDescription}`, () => {
-                expect(schema.decode(ByteArray.fromHex(encoded))).toEqual(decoded);
+                expect(schema.decode(ByteArray.fromHex(encoded))).deep.equal(decoded);
             });
         }
     });
@@ -162,7 +162,7 @@ describe("TlvObject", () => {
             it(`encodes/decodes ${valueDescription}`, () => {
                 const tlvEncoded = schema.encodeTlv(decoded);
                 const tlvDecoded = schema.decodeTlv(tlvEncoded);
-                expect(tlvDecoded).toEqual(decoded);
+                expect(tlvDecoded).deep.equal(decoded);
             });
         }
     });
@@ -174,8 +174,8 @@ describe("TlvObject", () => {
                 try {
                     schema.validate(structure);
                 } catch (error) {
-                    expect(error instanceof Error).toBe(true);
-                    expect((error as Error).message).toBe(expectedError || "");
+                    expect(error instanceof Error).equal(true);
+                    expect((error as Error).message).equal(expectedError || "");
                 }
             });
 
@@ -183,8 +183,8 @@ describe("TlvObject", () => {
                 try {
                     schema.encode(structure);
                 } catch (error) {
-                    expect(error instanceof Error).toBe(true);
-                    expect((error as Error).message).toBe(expectedError || "");
+                    expect(error instanceof Error).equal(true);
+                    expect((error as Error).message).equal(expectedError || "");
                 }
             });
         }

@@ -26,6 +26,8 @@ import { ByteArray } from "../util/ByteArray.js";
 import { isIPv6 } from "../util/Ip.js";
 import { getPromiseResolver } from "../util/Promises.js";
 import {
+    MATTER_COMMISSION_SERVICE_QNAME,
+    MATTER_SERVICE_QNAME,
     getCommissioningModeQname,
     getDeviceInstanceQname,
     getDeviceMatterQname,
@@ -33,8 +35,6 @@ import {
     getLongDiscriminatorQname,
     getShortDiscriminatorQname,
     getVendorQname,
-    MATTER_COMMISSION_SERVICE_QNAME,
-    MATTER_SERVICE_QNAME,
 } from "./MdnsConsts.js";
 import { MDNS_BROADCAST_IPV4, MDNS_BROADCAST_IPV6, MDNS_BROADCAST_PORT } from "./MdnsServer.js";
 
@@ -374,7 +374,7 @@ export class MdnsScanner implements Scanner {
         } else if (Object.keys(identifier).length === 0) {
             return getCommissioningModeQname();
         }
-        throw new ImplementationError(`Invalid commissionable device identifier : ${identifier}`); // Should neven happen
+        throw new ImplementationError(`Invalid commissionable device identifier : ${JSON.stringify(identifier)}`); // Should neven happen
     }
 
     extractInstanceId(instanceName: string) {

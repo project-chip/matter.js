@@ -141,7 +141,20 @@ export class Endpoint {
         if (cluster.id === DescriptorCluster.id) {
             this.descriptorCluster = cluster as unknown as ClusterServerObjForCluster<typeof DescriptorCluster>;
         }
-        this.clusterServers.set(cluster.id, cluster);
+
+        // In ts4 the cast to "any" here was unnecessary.  In TS5 the fact that
+        // the string index signature in Attributes and Events doesn't allow
+        // for undefined results in the error:
+        //
+        //   Type 'undefined' is not assignable to type '() => any'
+        //
+        // I'm not sure if I'd classify the old or new behavior as more correct
+        // but the solution would be to add "| undefined" to the string index
+        // signature in Attributes and Events, which will force additional
+        // assertions everywhere those interfaces are used.  I'm treating that
+        // as low priority for now
+        this.clusterServers.set(cluster.id, cluster as any);
+
         this.descriptorCluster.attributes.serverList.init(Array.from(this.clusterServers.keys()).sort((a, b) => a - b));
         this.structureChangedCallback(); // Inform parent about structure change
     }
@@ -165,7 +178,9 @@ export class Endpoint {
     >(cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, E> | undefined {
         const clusterServer = this.clusterServers.get(cluster.id);
         if (clusterServer !== undefined) {
-            return clusterServer as ClusterServerObj<A, E>;
+            // See comment in addClusterServer, this is the inverse of that
+            // issue
+            return clusterServer as unknown as ClusterServerObj<A, E>;
         }
     }
 

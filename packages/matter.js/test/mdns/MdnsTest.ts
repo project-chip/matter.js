@@ -93,7 +93,7 @@ describe("MDNS Scanner and Broadcaster", () => {
 
             const result = DnsCodec.decode(await promise);
 
-            expect(result).toEqual({
+            expect(result).deep.equal({
                 transactionId: 0,
                 messageType: 33792,
                 queries: [],
@@ -170,7 +170,7 @@ describe("MDNS Scanner and Broadcaster", () => {
 
             const result = DnsCodec.decode(await promise);
 
-            expect(result).toEqual({
+            expect(result).deep.equal({
                 additionalRecords: [
                     {
                         name: "0000000000000000._matterc._udp.local",
@@ -313,7 +313,7 @@ describe("MDNS Scanner and Broadcaster", () => {
 
             const result = DnsCodec.decode(await promise);
 
-            expect(result).toEqual({
+            expect(result).deep.equal({
                 additionalRecords: [
                     {
                         name: "0000000000000000._matterd._udp.local",
@@ -411,7 +411,7 @@ describe("MDNS Scanner and Broadcaster", () => {
             await promise;
 
             const result1 = DnsCodec.decode(dataArr[0]);
-            expect(result1).toEqual({
+            expect(result1).deep.equal({
                 transactionId: 0,
                 messageType: 33792,
                 queries: [],
@@ -473,7 +473,7 @@ describe("MDNS Scanner and Broadcaster", () => {
             });
 
             const result2 = DnsCodec.decode(dataArr[1]);
-            expect(result2).toEqual({
+            expect(result2).deep.equal({
                 additionalRecords: [
                     {
                         name: "0000000000000000._matterc._udp.local",
@@ -602,7 +602,7 @@ describe("MDNS Scanner and Broadcaster", () => {
             });
 
             const result3 = DnsCodec.decode(dataArr[2]);
-            expect(result3).toEqual({
+            expect(result3).deep.equal({
                 additionalRecords: [
                     {
                         name: "0000000000000000._matterd._udp.local",
@@ -692,9 +692,9 @@ describe("MDNS Scanner and Broadcaster", () => {
 
             const result = await scanner.findOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID, 1);
 
-            expect(dataWereSent).toBe(true);
-            expect(queryReceived).toBe(false);
-            expect(result).toEqual([
+            expect(dataWereSent).equal(true);
+            expect(queryReceived).equal(false);
+            expect(result).deep.equal([
                 { ip: `${SERVER_IPv6}%fakeInterface`, port: PORT, type: "udp" },
                 { ip: SERVER_IPv4, port: PORT, type: "udp" },
             ]);
@@ -713,7 +713,7 @@ describe("MDNS Scanner and Broadcaster", () => {
             await fakeTime.advanceTime(1); // Trigger timer to send query (0ms timer)
             await fakeTime.yield(); // make sure responding promise is created
 
-            expect(DnsCodec.decode(sentData[0])).toEqual({
+            expect(DnsCodec.decode(sentData[0])).deep.equal({
                 additionalRecords: [],
                 answers: [],
                 authorities: [],
@@ -726,7 +726,7 @@ describe("MDNS Scanner and Broadcaster", () => {
 
             const result = await findPromise;
 
-            expect(result).toEqual([
+            expect(result).deep.equal([
                 { ip: `${SERVER_IPv6}%fakeInterface`, port: PORT, type: "udp" },
                 { ip: SERVER_IPv4, port: PORT, type: "udp" },
             ]);
@@ -754,10 +754,10 @@ describe("MDNS Scanner and Broadcaster", () => {
             await fakeTime.advanceTime(1); // Trigger timer to send query (0ms timer)
             await fakeTime.yield(); // Make sure data were queried async
 
-            expect(netData.length).toBe(3);
+            expect(netData.length).equal(3);
 
             const query = DnsCodec.decode(netData[0]);
-            expect(query).toEqual({
+            expect(query).deep.equal({
                 additionalRecords: [],
                 answers: [],
                 authorities: [],
@@ -768,7 +768,7 @@ describe("MDNS Scanner and Broadcaster", () => {
                 transactionId: 0,
             });
             const response2 = DnsCodec.decode(netData[1]);
-            expect(response2).toEqual({
+            expect(response2).deep.equal({
                 additionalRecords: [
                     {
                         name: "_services._dns-sd._udp.local",
@@ -830,7 +830,7 @@ describe("MDNS Scanner and Broadcaster", () => {
             });
 
             const response = DnsCodec.decode(netData[2]);
-            expect(response).toEqual({
+            expect(response).deep.equal({
                 additionalRecords: [
                     {
                         name: "_services._dns-sd._udp.local",
@@ -892,7 +892,7 @@ describe("MDNS Scanner and Broadcaster", () => {
             });
             const result = await findPromise;
 
-            expect(result).toEqual([
+            expect(result).deep.equal([
                 { ip: `${SERVER_IPv6}%fakeInterface`, port: PORT2, type: "udp" },
                 { ip: SERVER_IPv4, port: PORT2, type: "udp" },
             ]);
@@ -927,9 +927,9 @@ describe("MDNS Scanner and Broadcaster", () => {
 
             const result = await scanner.findOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID);
 
-            expect(dataWereSent).toBe(true);
-            expect(queryReceived).toBe(false);
-            expect(result).toEqual([
+            expect(dataWereSent).equal(true);
+            expect(queryReceived).equal(false);
+            expect(result).deep.equal([
                 { ip: `${SERVER_IPv6}%fakeInterface`, port: PORT2, type: "udp" },
                 { ip: SERVER_IPv4, port: PORT2, type: "udp" },
             ]);

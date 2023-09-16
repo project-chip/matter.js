@@ -5,15 +5,15 @@
  */
 
 import {
-    Crypto,
-    CryptoDsaEncoding,
-    CryptoError,
     CRYPTO_AUTH_TAG_LENGTH,
     CRYPTO_EC_CURVE,
     CRYPTO_EC_KEY_BYTES,
     CRYPTO_ENCRYPT_ALGORITHM,
     CRYPTO_HASH_ALGORITHM,
     CRYPTO_SYMMETRIC_KEY_LENGTH,
+    Crypto,
+    CryptoDsaEncoding,
+    CryptoError,
     PrivateKey,
 } from "@project-chip/matter.js/crypto";
 import { ByteArray } from "@project-chip/matter.js/util";

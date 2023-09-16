@@ -8,7 +8,7 @@ import { Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
 import { MatterError, MatterFlowError } from "../common/MatterError.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Logger } from "../log/Logger.js";
-import { Session, SLEEPY_ACTIVE_INTERVAL_MS, SLEEPY_IDLE_INTERVAL_MS } from "../session/Session.js";
+import { SLEEPY_ACTIVE_INTERVAL_MS, SLEEPY_IDLE_INTERVAL_MS, Session } from "../session/Session.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { Time, Timer } from "../time/Time.js";
 import { ByteArray } from "../util/ByteArray.js";

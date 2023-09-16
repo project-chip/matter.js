@@ -42,7 +42,7 @@ describe("DerCodec", () => {
         it("encodes a message", () => {
             const result = DerCodec.encode(DECODED);
 
-            expect(result.toHex()).toBe(ENCODED.toHex());
+            expect(result.toHex()).equal(ENCODED.toHex());
         });
     });
 });

@@ -24,45 +24,41 @@
     "url": "https://github.com/project-chip/matter.js.git"
   },
   "scripts": {
-    "clean": "rm -rf dist && rm -rf out && rm -f *.tsbuildinfo",
-    "build-cjs": "tsc -b tsconfig.dist-cjs.json && cp package-cjs.json dist/cjs/package.json",
-    "build-es": "tsc -b tsconfig.dist-es.json",
-    "build": "npm run build-cjs && npm run build-es",
-    "build-clean": "npm run clean && npm run build",
+    "clean": "build clean",
+    "build": "build",
+    "build-clean": "build --clean",
     "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --gitRemote upstream --tsconfig tsconfig.dist-cjs.json",
-    "test-node": "NODE_OPTIONS=--experimental-vm-modules jest",
-    "test-web": "karma start test/karma.conf.cjs",
-    "test": "npm run test-node && npm run test-web"
+    "test": "matter-test -w",
+    "coverage": "c8 matter-test esm"
   },
   "dependencies": {
     "bn.js": "^5.2.1",
     "elliptic": "^6.5.4"
   },
   "devDependencies": {
+    "@project-chip/matter.js-tools": "0.1.0",
     "@types/bn.js": "^5.1.1",
+    "@types/chai": "^4.3.5",
     "@types/elliptic": "^6.4.14",
-    "jest": "^29.6.3",
-    "karma": "^6.4.2",
-    "karma-chrome-launcher": "^3.2.0",
-    "karma-coverage": "^2.2.1",
-    "karma-jasmine": "^5.1.0",
-    "karma-typescript": "^5.5.4",
-    "ts-jest": "^29.1.1",
-    "typescript": "^4.9.5"
+    "@types/mocha": "^10.0.1",
+    "chai": "^4.3.8",
+    "mocha": "^10.2.0",
+    "typescript": "^5.2.2"
   },
   "files": [
     "dist/**/*",
+    "src/**/*",
     "LICENSE",
     "README.md"
   ],
   "type": "module",
   "main": "dist/cjs/export.js",
-  "module": "dist/es/export.js",
+  "module": "dist/esm/export.js",
   "exports": {
     ".": {
       "import": {
-        "types": "./dist/es/export.d.ts",
-        "default": "./dist/es/export.js"
+        "types": "./dist/esm/export.d.ts",
+        "default": "./dist/esm/export.js"
       },
       "require": {
         "types": "./dist/cjs/export.d.ts",
@@ -72,8 +68,8 @@
     "./package.json": "./package.json",
     "./interaction": {
       "import": {
-        "types": "./dist/es/protocol/interaction/export.d.ts",
-        "default": "./dist/es/protocol/interaction/export.js"
+        "types": "./dist/esm/protocol/interaction/export.d.ts",
+        "default": "./dist/esm/protocol/interaction/export.js"
       },
       "require": {
         "types": "./dist/cjs/protocol/interaction/export.d.ts",
@@ -82,8 +78,8 @@
     },
     "./model": {
       "import": {
-        "types": "./dist/es/model/index.d.ts",
-        "default": "./dist/es/model/index.js"
+        "types": "./dist/esm/model/index.d.ts",
+        "default": "./dist/esm/model/index.js"
       },
       "require": {
         "types": "./dist/cjs/model/index.d.ts",
@@ -92,8 +88,8 @@
     },
     "./securechannel": {
       "import": {
-        "types": "./dist/es/protocol/securechannel/export.d.ts",
-        "default": "./dist/es/protocol/securechannel/export.js"
+        "types": "./dist/esm/protocol/securechannel/export.d.ts",
+        "default": "./dist/esm/protocol/securechannel/export.js"
       },
       "require": {
         "types": "./dist/cjs/protocol/securechannel/export.d.ts",
@@ -102,8 +98,8 @@
     },
     "./*": {
       "import": {
-        "types": "./dist/es/*/export.d.ts",
-        "default": "./dist/es/*/export.js"
+        "types": "./dist/esm/*/export.d.ts",
+        "default": "./dist/esm/*/export.js"
       },
       "require": {
         "types": "./dist/cjs/*/export.d.ts",
@@ -111,7 +107,7 @@
       }
     }
   },
-  "types": "dist/es/export.d.ts",
+  "types": "dist/esm/export.d.ts",
   "typesVersions": {
     "*": {
       "interaction": [
