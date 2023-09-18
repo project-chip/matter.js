@@ -4,15 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Crypto } from "@project-chip/matter.js/crypto";
-import { CryptoNode } from "../../src/crypto/CryptoNode";
-
-Crypto.get = () => new CryptoNode();
-
-import { Time, TimeFake } from "@project-chip/matter.js/time";
-
-Time.get = () => new TimeFake(0);
-
 import {
     BasicInformationCluster,
     ClusterServer,
@@ -91,7 +82,7 @@ describe("GeneralCommissioning Server test", () => {
     }
 
     describe("setRegulatoryConfig: Allow changing commissionable info and country", () => {
-        beforeAll(async () => {
+        before(async () => {
             await initializeTestEnv(
                 "US",
                 GeneralCommissioning.RegulatoryLocationType.IndoorOutdoor,
@@ -183,7 +174,7 @@ describe("GeneralCommissioning Server test", () => {
     });
 
     describe("setRegulatoryConfig: Allow changing regulatory location info but not country", () => {
-        beforeAll(async () => {
+        before(async () => {
             await initializeTestEnv(
                 "DE",
                 GeneralCommissioning.RegulatoryLocationType.IndoorOutdoor,
@@ -247,7 +238,7 @@ describe("GeneralCommissioning Server test", () => {
     });
 
     describe("setRegulatoryConfig: Allow changing nothing", () => {
-        beforeAll(async () => {
+        before(async () => {
             await initializeTestEnv(
                 "XX",
                 GeneralCommissioning.RegulatoryLocationType.Indoor,
@@ -345,7 +336,7 @@ describe("GeneralCommissioning Server test", () => {
     });
 
     describe("setRegulatoryConfig: Allow changing country on whitelist", () => {
-        beforeAll(async () => {
+        before(async () => {
             await initializeTestEnv(
                 "XX",
                 GeneralCommissioning.RegulatoryLocationType.Indoor,

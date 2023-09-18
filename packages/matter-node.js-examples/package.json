@@ -24,22 +24,22 @@
         "url": "https://github.com/project-chip/matter.js.git"
     },
     "scripts": {
-        "clean": "rm -rf dist && rm -f *.tsbuildinfo",
-        "build": "tsc -b tsconfig.dist.json",
-        "build-clean": "npm run clean && npm run build",
-        "matter-device": "ts-node --project tsconfig.dist.json src/examples/DeviceNode.ts",
-        "matter-bridge": "ts-node --project tsconfig.dist.json src/examples/BridgedDevicesNode.ts",
-        "matter-composeddevice": "ts-node --project tsconfig.dist.json src/examples/ComposedDeviceNode.ts",
-        "matter-multidevice": "ts-node --project tsconfig.dist.json src/examples/MultiDeviceNode.ts",
-        "matter-controller": "ts-node --project tsconfig.dist.json src/examples/ControllerNode.ts",
+        "clean": "build clean",
+        "build": "build",
+        "build-clean": "build --clean",
+        "matter-device": "run examples/DeviceNode.ts",
+        "matter-bridge": "run examples/BridgedDevicesNode.ts",
+        "matter-composeddevice": "run examples/ComposedDeviceNode.ts",
+        "matter-multidevice": "run examples/MultiDeviceNode.ts",
+        "matter-controller": "run examples/ControllerNode.ts",
         "test": "true"
     },
     "bin": {
-        "matter-device": "./dist/examples/DeviceNode.js",
-        "matter-bridge": "./dist/examples/BridgedDevicesNode.js",
-        "matter-composeddevice": "./dist/examples/ComposedDeviceNode.js",
-        "matter-multidevice": "./dist/examples/MultiDeviceNode.js",
-        "matter-controller": "./dist/examples/ControllerNode.js"
+        "matter-device": "./dist/cjs/examples/DeviceNode.js",
+        "matter-bridge": "./dist/cjs/examples/BridgedDevicesNode.js",
+        "matter-composeddevice": "./dist/cjs/examples/ComposedDeviceNode.js",
+        "matter-multidevice": "./dist/cjs/examples/MultiDeviceNode.js",
+        "matter-controller": "./dist/cjs/examples/ControllerNode.js"
     },
     "devDependencies": {
         "@typescript-eslint/eslint-plugin": "^5.62.0",
@@ -47,7 +47,6 @@
         "eslint": "^8.47.0",
         "eslint-import-resolver-typescript": "^3.6.0",
         "eslint-plugin-import": "^2.28.1",
-        "ts-node": "^10.9.1",
         "typescript": "^5.2.2"
     },
     "dependencies": {

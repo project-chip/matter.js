@@ -9,13 +9,13 @@ import {
     ClusterModel,
     ClusterVariance,
     CommandModel,
-    ValueModel,
-    translateBitmap,
     IllegalFeatureCombinations,
-    conditionToBitmaps
+    ValueModel,
+    conditionToBitmaps,
+    translateBitmap,
 } from "@project-chip/matter.js/model";
-import { camelize, serialize } from "../util/string.js";
 import { Block } from "../util/TsFile.js";
+import { camelize, serialize } from "../util/string.js";
 import { ClusterComponentGenerator } from "./ClusterComponentGenerator.js";
 import { ClusterFile } from "./ClusterFile.js";
 import { ConditionalElements } from "./ConditionalElements.js";

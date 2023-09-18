@@ -20,8 +20,8 @@ import {
     Globals,
     ValueElement,
 } from "@project-chip/matter.js/model";
-import { camelize } from "../../util/string.js";
 import { NumericRanges } from "../../clusters/NumberConstants.js";
+import { camelize } from "../../util/string.js";
 import { TypeMap } from "./type-map.js";
 
 const logger = Logger.get("translate-chip");

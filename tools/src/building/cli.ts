@@ -64,6 +64,8 @@ export async function main(argv = process.argv) {
         await transpile(project, Target.cjs);
     }
 
+    progress.shutdown();
+
     async function notify(what: string, fn: () => Promise<void>) {
         progress.update(what);
         await fn();

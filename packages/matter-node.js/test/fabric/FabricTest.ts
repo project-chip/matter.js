@@ -4,15 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Time, TimeFake } from "@project-chip/matter.js/time";
-import { ByteArray } from "@project-chip/matter.js/util";
-
-Time.get = () => new TimeFake(0);
-
 import { Crypto } from "@project-chip/matter.js/crypto";
-import { CryptoNode } from "../../src/crypto/CryptoNode";
-
-Crypto.get = () => new CryptoNode();
+import { ByteArray } from "@project-chip/matter.js/util";
 
 import { FabricId, FabricIndex, NodeId, VendorId } from "@project-chip/matter.js/datatype";
 import { Fabric, FabricBuilder } from "@project-chip/matter.js/fabric";
@@ -51,23 +44,26 @@ const TEST_IDENTITY_PROTECTION_KEY_3 = ByteArray.fromHex("0c677d9b5ac585827b5774
 const TEST_RANDOM_3 = ByteArray.fromHex("0b2a71876d3d090d37cb5286168ab9be0d2e7e0ccbedc1f55331b8a8051ee02f");
 const EXPECTED_DESTINATION_ID_3 = ByteArray.fromHex("f7f7009606c61927af62502067581b4b0d27f2f22108e2c82c9f0ddd99ab3557");
 
+function buildFabric() {
+    const builder = new FabricBuilder(TEST_FABRIC_INDEX);
+    builder.setRootVendorId(VendorId(0));
+    builder.setRootNodeId(TEST_ROOT_NODE);
+    builder.setRootCert(ROOT_CERT);
+    builder.setOperationalCert(NEW_OP_CERT);
+    builder.setIdentityProtectionKey(IPK_KEY);
+    return builder.build();
+}
+
 describe("FabricBuilder", () => {
     describe("build", () => {
-        const builder = new FabricBuilder(TEST_FABRIC_INDEX);
-        builder.setRootVendorId(VendorId(0));
-        builder.setRootNodeId(TEST_ROOT_NODE);
-        builder.setRootCert(ROOT_CERT);
-        builder.setOperationalCert(NEW_OP_CERT);
-        builder.setIdentityProtectionKey(IPK_KEY);
-
         it("generates the correct compressed Fabric ID", async () => {
-            const result = (await builder.build()).operationalId;
+            const result = (await buildFabric()).operationalId;
 
             assert.equal(result.toHex(), OPERATIONAL_ID.toHex());
         });
 
         it("generates the expected operationalIdentityProtectionKey", async () => {
-            const result = (await builder.build()).operationalIdentityProtectionKey;
+            const result = (await buildFabric()).operationalIdentityProtectionKey;
 
             assert.equal(result.toHex(), TEST_IDENTITY_PROTECTION_KEY_3.toHex());
         });

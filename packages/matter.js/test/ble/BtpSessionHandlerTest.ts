@@ -6,13 +6,8 @@
 
 import { BtpFlowError, BtpProtocolError, BtpSessionHandler } from "../../src/ble/BtpSessionHandler.js";
 import { BtpCodec } from "../../src/codec/BtpCodec.js";
-import { Time } from "../../src/time/Time.js";
-import { TimeFake } from "../../src/time/TimeFake.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 import { getPromiseResolver } from "../../src/util/Promises.js";
-import { singleton } from "../../src/util/Singleton.js";
-
-Time.get = singleton(() => new TimeFake(0));
 
 describe("BtpSessionHandler", () => {
     describe("Test Handshake", () => {
@@ -345,7 +340,6 @@ describe("BtpSessionHandler", () => {
         });
 
         it("triggers timeout as did not send ack within 5 sec", async () => {
-            const fakeTime = Time.get() as TimeFake;
             const { promise: writeBlePromise, resolver: writeBleResolver } = await getPromiseResolver<ByteArray>();
             const { promise: handleMatterMessagePromise, resolver: handleMatterMessageResolver } =
                 await getPromiseResolver<ByteArray>();
@@ -370,7 +364,7 @@ describe("BtpSessionHandler", () => {
 
             onHandleMatterMessageCallback = async (matterMessage: ByteArray) => {
                 handleMatterMessageResolver(matterMessage);
-                fakeTime.getTimer(
+                MockTime.getTimer(
                     5000,
                     () => btpSessionHandler?.sendMatterMessage(ByteArray.fromHex("090807060504030201")),
                 );
@@ -381,7 +375,7 @@ describe("BtpSessionHandler", () => {
             };
 
             await btpSessionHandler?.handleIncomingBleData(matterMessage);
-            await fakeTime.advanceTime(5000);
+            await MockTime.advance(5000);
 
             const result = await writeBlePromise;
             const matterHandlerResult = await handleMatterMessagePromise;
@@ -391,7 +385,6 @@ describe("BtpSessionHandler", () => {
         });
 
         it("triggers timeout as did not receive ack within 15 sec", async () => {
-            const fakeTime = Time.get() as TimeFake;
             const { promise: disconnectBlePromise, resolver: disconnectBleResolver } = await getPromiseResolver<void>();
             const { promise: handleMatterMessagePromise, resolver: handleMatterMessageResolver } =
                 await getPromiseResolver<ByteArray>();
@@ -426,7 +419,7 @@ describe("BtpSessionHandler", () => {
             await btpSessionHandler?.handleIncomingBleData(matterMessage); // BLE data coming in
 
             await handleMatterMessagePromise; // Getting parsed and sent to Matter layer
-            await fakeTime.advanceTime(15000); // now nothing happens in 15s
+            await MockTime.advance(15000); // now nothing happens in 15s
             await disconnectBlePromise; // disconnected because of error
         });
 

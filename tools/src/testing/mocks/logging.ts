@@ -9,11 +9,7 @@ interface LoggerLike {
     log(level: number, message: string): void;
 }
 
-declare global {
-    let MatterLoggerSink: ((level: number, message: string) => void) | undefined;
-}
-
-(globalThis as any).MatterLoggerHook = (Logger: LoggerLike) => {
+export function loggerSetup(Logger: LoggerLike) {
     // Currently everywhere we run tests supports ANSI escape codes for
     // colorization.  This includes:
     //
@@ -26,45 +22,43 @@ declare global {
     Logger.format = "ansi";
 
     let messageBuffer: [number, string][] | undefined;
-    let defaultLog: LoggerLike["log"] | undefined;
 
-    function bufferedLog(...args: [number, string]) {
-        if (MatterLoggerSink) {
-            MatterLoggerSink(...args);
-        } else {
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    const defaultLog = Logger.log;
+
+    function passMessage(args: [number, string]) {
+        defaultLog.apply(Logger, args);
+    }
+
+    function interceptingLogger(...args: [number, string]) {
+        if (MatterHooks?.loggerSink) {
+            MatterHooks.loggerSink(...args);
+        } else if (messageBuffer) {
             if (!messageBuffer) {
                 messageBuffer = [];
             }
             messageBuffer.push(args);
+        } else {
+            passMessage(args);
         }
     }
 
+    Logger.log = interceptingLogger;
+
     // Divert log messages for test duration
     beforeEach(function () {
-        messageBuffer = undefined;
-        if (Logger) {
-            // eslint-disable-next-line @typescript-eslint/unbound-method
-            defaultLog = Logger.log;
-            Logger.log = bufferedLog;
-        }
+        messageBuffer = [];
     });
 
     // Emit log messages only if the test fails
     afterEach(function () {
-        if (!defaultLog) {
-            return;
-        }
-
-        Logger.log = defaultLog;
-        defaultLog = undefined;
-
-        if (messageBuffer) {
+        if (messageBuffer?.length) {
             if (this.currentTest?.isFailed()) {
                 for (const args of messageBuffer) {
-                    Logger.log(...args);
+                    passMessage(args);
                 }
             }
             messageBuffer = undefined;
         }
     });
-};
+}

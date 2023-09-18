@@ -20,7 +20,7 @@ import { cmd_config } from "./cmd_config";
 import { cmd_onoff } from "./cmd_onoff";
 import { cmd_pair } from "./cmd_pair";
 
-interface CommandEntry {
+export interface CommandEntry {
     command: string;
     help: string;
     handler: (args: string[]) => number | Promise<number>;

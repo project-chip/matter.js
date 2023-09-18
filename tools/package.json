@@ -6,15 +6,16 @@
   "type": "module",
   "scripts": {
     "clean": "rm -rf .cache build dist",
-    "build": "esbuild src/building/*.ts src/util/*.ts --outdir=dist/esm --format=esm --log-level=warning && node bin/build.js",
+    "build": "esbuild src/building/*.ts src/running/* src/util/*.ts --outdir=dist/esm --format=esm --log-level=warning && node bin/build.js",
     "build-clean": "npm run build -- --clean",
-    "console": "node --loader ts-node/esm repl.ts"
+    "test": "./bin/test.js"
   },
   "bin": {
     "build": "./bin/build.js",
-    "matter-test": "./bin/test.js"
+    "matter-test": "./bin/test.js",
+    "run": "./bin/run.js"
   },
-  "main": "dist/esm/index.js",
+  "main": "dist/esm/index.ts",
   "types": "dist/esm/index.d.ts",
   "repository": {
     "type": "git",

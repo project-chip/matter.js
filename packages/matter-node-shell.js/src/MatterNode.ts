@@ -23,12 +23,15 @@ export class MatterNode {
     private storageLocation?: string;
     private storage?: StorageBackendDisk;
     private storageManager?: StorageManager;
-    private storageContext: StorageContext;
+    private storageContext?: StorageContext;
 
     private commissioningController?: CommissioningController;
     private matterDevice?: MatterServer;
 
     get Store() {
+        if (!this.storageContext) {
+            throw new Error("Storage uninitialized");
+        }
         return this.storageContext;
     }
 

@@ -72,6 +72,8 @@ export class ProgressReporter implements Reporter {
         if (this.failures.length) {
             this.progress.failure(this.summarize(stats));
             this.dumpFailures();
+        } else if (!stats.complete) {
+            this.progress.failure("No tests found");
         } else {
             this.progress.success(this.summarize(stats));
         }

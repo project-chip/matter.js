@@ -4,10 +4,11 @@
         "ecmaVersion": 2018, // Allows for the parsing of modern ECMAScript features
         "sourceType": "module", // Allows for the use of imports
         "project": [
+            "packages/*/tsconfig.json",
             "tools/tsconfig.json",
             "codegen/tsconfig.json",
             "models/tsconfig.json",
-            "packages/*/tsconfig.json"
+            "chip-testing/tsconfig.json"
         ]
     },
     "extends": [
@@ -27,9 +28,7 @@
         "*/dist/**/*",
         "*/build/**/*",
         "packages/*/dist/**/*",
-        "packages/*/build/**/*",
-        "**/jest.config.ts",
-        "**/jest.chip.config.ts"
+        "packages/*/build/**/*"
     ],
     "rules": {
         "@typescript-eslint/no-explicit-any": "off",

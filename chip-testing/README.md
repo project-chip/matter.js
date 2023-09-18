@@ -12,7 +12,7 @@ The user that executes the tests need also be allowed to add new files and direc
 Currently the tests are designed to work with a chip-tool compiled from the "master" of the connectedhomeip repository. Other branches might have different requirements and tests may fail! As soon as v1.2 is released we will switch to this branch.
 
 ## Execution
-To execute the tests you need to run `npm run test-chip` in the packages/matter-node.js folder.
+To execute the tests you need to run `npm run test-chip` in the chip-testing folder.
 
 ### Limiting tests to one suite
 Set the environment variable LIMIT_TO_ONE_TEST to the name of the Testclass you want to run.
@@ -23,7 +23,7 @@ e.g. `LIMIT_TO_ONE_TEST=Test_TC_BINFO_1_1Test npm run test-chip`
 These tests are executed against the main branch of matter.js at the following conditions:
 * every night by schedule
 * can also be triggered on the main branch by using the "Chip Tool tests" workflow on GitHub.
-* When files are changed in some relevant folders (clusters, tlv) or in the test-chip directory itself
+* When files are changed in some relevant folders (clusters, tlv) or in the chip-testing directory itself
 
 Additionally, the tests can be triggered when the commit contains special keywords in the commit message. The following keywords are supported:
 * `[execute-chiptests]` to execute the tests on the current branch

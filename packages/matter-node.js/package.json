@@ -24,12 +24,11 @@
         "url": "https://github.com/project-chip/matter.js.git"
     },
     "scripts": {
-        "clean": "rm -rf dist && rm -f *.tsbuildinfo",
-        "build": "tsc -b tsconfig.dist.json",
-        "build-clean": "npm run clean && npm run build",
-        "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --gitRemote upstream --tsconfig tsconfig.dist.json",
-        "test": "jest",
-        "test-chip": "jest --config=jest.chip.config.ts --runInBand"
+        "clean": "build clean",
+        "build": "build",
+        "build-clean": "build --clean",
+        "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --gitRemote upstream --tsconfig tsconfig.json",
+        "test": "matter-test"
     },
     "devDependencies": {
         "@types/bn.js": "^5.1.1",
@@ -66,155 +65,155 @@
     "types": "dist/export.d.ts",
     "exports": {
         ".": {
-            "types": "./dist/export.d.ts",
-            "default": "./dist/export.js"
+            "types": "./dist/cjs/export.d.ts",
+            "default": "./dist/cjs/export.js"
         },
         "./package.json": "./package.json",
         "./ble": {
-            "types": "./dist/exports/ble.d.ts",
-            "default": "./dist/exports/ble.js"
+            "types": "./dist/cjs/exports/ble.d.ts",
+            "default": "./dist/cjs/exports/ble.js"
         },
         "./certificate": {
-            "types": "./dist/exports/certificate.d.ts",
-            "default": "./dist/exports/certificate.js"
+            "types": "./dist/cjs/exports/certificate.d.ts",
+            "default": "./dist/cjs/exports/certificate.js"
         },
         "./cluster": {
-            "types": "./dist/exports/cluster.d.ts",
-            "default": "./dist/exports/cluster.js"
+            "types": "./dist/cjs/exports/cluster.d.ts",
+            "default": "./dist/cjs/exports/cluster.js"
         },
         "./codec": {
-            "types": "./dist/exports/codec.d.ts",
-            "default": "./dist/exports/codec.js"
+            "types": "./dist/cjs/exports/codec.d.ts",
+            "default": "./dist/cjs/exports/codec.js"
         },
         "./common": {
-            "types": "./dist/exports/common.d.ts",
-            "default": "./dist/exports/common.js"
+            "types": "./dist/cjs/exports/common.d.ts",
+            "default": "./dist/cjs/exports/common.js"
         },
         "./datatype": {
-            "types": "./dist/exports/datatype.d.ts",
-            "default": "./dist/exports/datatype.js"
+            "types": "./dist/cjs/exports/datatype.d.ts",
+            "default": "./dist/cjs/exports/datatype.js"
         },
         "./device": {
-            "types": "./dist/exports/device.d.ts",
-            "default": "./dist/exports/device.js"
+            "types": "./dist/cjs/exports/device.d.ts",
+            "default": "./dist/cjs/exports/device.js"
         },
         "./fabric": {
-            "types": "./dist/exports/fabric.d.ts",
-            "default": "./dist/exports/fabric.js"
+            "types": "./dist/cjs/exports/fabric.d.ts",
+            "default": "./dist/cjs/exports/fabric.js"
         },
         "./interaction": {
-            "types": "./dist/exports/interaction.d.ts",
-            "default": "./dist/exports/interaction.js"
+            "types": "./dist/cjs/exports/interaction.d.ts",
+            "default": "./dist/cjs/exports/interaction.js"
         },
         "./log": {
-            "types": "./dist/exports/log.d.ts",
-            "default": "./dist/exports/log.js"
+            "types": "./dist/cjs/exports/log.d.ts",
+            "default": "./dist/cjs/exports/log.js"
         },
         "./math": {
-            "types": "./dist/exports/math.d.ts",
-            "default": "./dist/exports/math.js"
+            "types": "./dist/cjs/exports/math.d.ts",
+            "default": "./dist/cjs/exports/math.js"
         },
         "./mdns": {
-            "types": "./dist/exports/mdns.d.ts",
-            "default": "./dist/exports/mdns.js"
+            "types": "./dist/cjs/exports/mdns.d.ts",
+            "default": "./dist/cjs/exports/mdns.js"
         },
         "./model": {
-            "types": "./dist/exports/model.d.ts",
-            "default": "./dist/exports/model.js"
+            "types": "./dist/cjs/exports/model.d.ts",
+            "default": "./dist/cjs/exports/model.js"
         },
         "./protocol": {
-            "types": "./dist/exports/protocol.d.ts",
-            "default": "./dist/exports/protocol.js"
+            "types": "./dist/cjs/exports/protocol.d.ts",
+            "default": "./dist/cjs/exports/protocol.js"
         },
         "./schema": {
-            "types": "./dist/exports/schema.d.ts",
-            "default": "./dist/exports/schema.js"
+            "types": "./dist/cjs/exports/schema.d.ts",
+            "default": "./dist/cjs/exports/schema.js"
         },
         "./securechannel": {
-            "types": "./dist/exports/securechannel.d.ts",
-            "default": "./dist/exports/securechannel.js"
+            "types": "./dist/cjs/exports/securechannel.d.ts",
+            "default": "./dist/cjs/exports/securechannel.js"
         },
         "./session": {
-            "types": "./dist/exports/session.d.ts",
-            "default": "./dist/exports/session.js"
+            "types": "./dist/cjs/exports/session.d.ts",
+            "default": "./dist/cjs/exports/session.js"
         },
         "./spec": {
-            "types": "./dist/exports/spec.d.ts",
-            "default": "./dist/exports/spec.js"
+            "types": "./dist/cjs/exports/spec.d.ts",
+            "default": "./dist/cjs/exports/spec.js"
         },
         "./tlv": {
-            "types": "./dist/exports/tlv.d.ts",
-            "default": "./dist/exports/tlv.js"
+            "types": "./dist/cjs/exports/tlv.d.ts",
+            "default": "./dist/cjs/exports/tlv.js"
         },
         "./*": {
-            "types": "./dist/*/export.d.ts",
-            "default": "./dist/*/export.js"
+            "types": "./dist/cjs/*/export.d.ts",
+            "default": "./dist/cjs/*/export.js"
         }
     },
     "typesVersions": {
         "*": {
             "ble": [
-                "/dist/exports/ble.d.ts"
+                "/dist/cjs/exports/ble.d.ts"
             ],
             "certificate": [
-                "/dist/exports/certificate.d.ts"
+                "/dist/cjs/exports/certificate.d.ts"
             ],
             "cluster": [
-                "/dist/exports/cluster.d.ts"
+                "/dist/cjs/exports/cluster.d.ts"
             ],
             "codec": [
-                "/dist/exports/codec.d.ts"
+                "/dist/cjs/exports/codec.d.ts"
             ],
             "common": [
-                "/dist/exports/common.d.ts"
+                "/dist/cjs/exports/common.d.ts"
             ],
             "datatype": [
-                "/dist/exports/datatype.d.ts"
+                "/dist/cjs/exports/datatype.d.ts"
             ],
             "device": [
-                "/dist/exports/device.d.ts"
+                "/dist/cjs/exports/device.d.ts"
             ],
             "fabric": [
-                "/dist/exports/fabric.d.ts"
+                "/dist/cjs/exports/fabric.d.ts"
             ],
             "interaction": [
-                "/dist/exports/interaction.d.ts"
+                "/dist/cjs/exports/interaction.d.ts"
             ],
             "log": [
-                "/dist/exports/log.d.ts"
+                "/dist/cjs/exports/log.d.ts"
             ],
             "math": [
-                "/dist/exports/math.d.ts"
+                "/dist/cjs/exports/math.d.ts"
             ],
             "mdns": [
-                "/dist/exports/mdns.d.ts"
+                "/dist/cjs/exports/mdns.d.ts"
             ],
             "model": [
-                "/dist/exports/model.d.ts"
+                "/dist/cjs/exports/model.d.ts"
             ],
             "protocol": [
-                "/dist/exports/protocol.d.ts"
+                "/dist/cjs/exports/protocol.d.ts"
             ],
             "schema": [
-                "/dist/exports/schema.d.ts"
+                "/dist/cjs/exports/schema.d.ts"
             ],
             "securechannel": [
-                "/dist/exports/securechannel.d.ts"
+                "/dist/cjs/exports/securechannel.d.ts"
             ],
             "session": [
-                "/dist/exports/session.d.ts"
+                "/dist/cjs/exports/session.d.ts"
             ],
             "spec": [
-                "/dist/exports/spec.d.ts"
+                "/dist/cjs/exports/spec.d.ts"
             ],
             "tlv": [
-                "/dist/exports/tlv.d.ts"
+                "/dist/cjs/exports/tlv.d.ts"
             ],
             ".": [
-                "/dist/export.d.ts"
+                "/dist/cjs/export.d.ts"
             ],
             "*": [
-                "/dist/*/export.d.ts"
+                "/dist/cjs/*/export.d.ts"
             ]
         }
     },

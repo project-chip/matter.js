@@ -4,6 +4,5 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "./node.js";
-export * from "./web.js";
-import "./global-declarations.js";
+const mocharc = require("../../tools/src/testing/mocharc.cjs");
+module.exports = mocharc();

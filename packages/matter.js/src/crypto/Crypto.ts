@@ -123,3 +123,7 @@ export abstract class Crypto {
 // place.
 import elliptic from "elliptic";
 export const { ec } = elliptic;
+
+if (typeof MatterHooks !== "undefined") {
+    MatterHooks.cryptoSetup?.(Crypto);
+}

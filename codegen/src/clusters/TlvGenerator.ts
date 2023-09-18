@@ -17,8 +17,8 @@ import {
     Model,
     ValueModel,
 } from "@project-chip/matter.js/model";
-import { asObjectKey, camelize, serialize } from "../util/string.js";
 import { Entry } from "../util/TsFile.js";
+import { asObjectKey, camelize, serialize } from "../util/string.js";
 import { ClusterFile } from "./ClusterFile.js";
 import { NumericRanges, SpecializedNumbers, WrappedConstantKeys } from "./NumberConstants.js";
 

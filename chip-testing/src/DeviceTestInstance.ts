@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-restricted-imports
-import { CommissioningServer, MatterServer } from "../src/export";
+import { CommissioningServer, MatterServer } from "@project-chip/matter-node.js";
 
 import { StorageManager } from "@project-chip/matter.js/storage";
 

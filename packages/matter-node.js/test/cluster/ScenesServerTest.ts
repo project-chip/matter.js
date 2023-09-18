@@ -4,15 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Crypto } from "@project-chip/matter.js/crypto";
-import { CryptoNode } from "../../src/crypto/CryptoNode";
-
-Crypto.get = () => new CryptoNode();
-
-import { Time, TimeFake } from "@project-chip/matter.js/time";
-
-Time.get = () => new TimeFake(0);
-
 import {
     ClusterServer,
     ClusterServerObjForCluster,
@@ -68,7 +59,7 @@ describe("Scenes Server test", () => {
     }
 
     describe("Basic scenes logic", () => {
-        beforeAll(async () => {
+        before(async () => {
             await initializeTestEnv();
         });
 
@@ -678,7 +669,7 @@ describe("Scenes Server test", () => {
     });
 
     describe("General error cases", () => {
-        beforeAll(async () => {
+        before(async () => {
             await initializeTestEnv();
         });
 
@@ -810,7 +801,7 @@ describe("Scenes Server test", () => {
     });
 
     describe("Scene Logic tests", () => {
-        beforeAll(async () => {
+        before(async () => {
             await initializeTestEnv();
         });
 

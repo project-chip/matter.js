@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Package } from "@project-chip/matter.js-tools";
 import { mkdirSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from "fs";
 import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 import { describeList } from "./string.js";
-import { Package } from "@project-chip/matter.js-tools";
 
 // Paths we read/write must be defined here
 const DIR_MAPPING = {

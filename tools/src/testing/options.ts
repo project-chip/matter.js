@@ -9,4 +9,5 @@ export type TestOptions = {
     grep?: string;
     fgrep?: string;
     invert?: boolean;
+    allLogs?: boolean;
 };

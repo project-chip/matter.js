@@ -23,11 +23,11 @@
         "url": "https://github.com/project-chip/matter.js.git"
     },
     "scripts": {
-        "clean": "rm -rf dist && rm -f *.tsbuildinfo",
-        "build": "tsc -b tsconfig.dist.json",
-        "build-clean": "npm run clean && npm run build",
+        "clean": "build clean",
+        "build": "build",
+        "build-clean": "build --clean",
         "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --gitRemote upstream --tsconfig tsconfig.dist.json",
-        "test": "TZ=utc jest"
+        "test": "matter-test"
     },
     "devDependencies": {
         "@typescript-eslint/eslint-plugin": "^5.62.0",
@@ -54,22 +54,22 @@
         "LICENSE",
         "README.md"
     ],
-    "main": "dist/ble/export.js",
-    "types": "dist/ble/export.d.ts",
+    "main": "dist/cjs/ble/export.js",
+    "types": "dist/cjs/ble/export.d.ts",
     "exports": {
         "./package.json": "./package.json",
         "./*": {
-            "types": "./dist/*/export.d.ts",
-            "default": "./dist/*/export.js"
+            "types": "./dist/cjs/*/export.d.ts",
+            "default": "./dist/cjs/*/export.js"
         }
     },
     "typesVersions": {
         "*": {
             ".": [
-                "/dist/ble/export.d.ts"
+                "/dist/cjs/ble/export.d.ts"
             ],
             "*": [
-                "/dist/*/export.d.ts"
+                "/dist/cjs/*/export.d.ts"
             ]
         }
     },

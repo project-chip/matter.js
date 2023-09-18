@@ -6,15 +6,28 @@
 
 import Chai from "chai";
 import ChaiAsPromised from "chai-as-promised";
-import { browserSetup } from "./mocha.js";
+import { browserSetup, generalSetup } from "./mocha.js";
+import { cryptoSetup } from "./mocks/crypto.js";
+import { loggerSetup } from "./mocks/logging.js";
+import { TheMockTime, timeSetup } from "./mocks/time.js";
 
 Chai.use(ChaiAsPromised);
 
 Object.assign(globalThis as any, {
     expect: Chai.expect,
-    MatterLoggerSink: undefined,
+});
+
+Object.assign(globalThis, {
+    MatterHooks: {
+        loggerSetup: loggerSetup,
+        timeSetup: timeSetup,
+        cryptoSetup: cryptoSetup,
+    },
+
+    MockTime: TheMockTime,
 });
 
 if (typeof window === "object" && globalThis === window) {
+    generalSetup(Mocha);
     browserSetup(mocha);
 }

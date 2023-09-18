@@ -5,10 +5,15 @@
     "target": "es2018",
     "module": "nodenext",
     "moduleResolution": "nodenext",
-    "types": ["node"]
+    "types": [
+      "node",
+      "mocha"
+    ]
   },
 
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "test/**/*.ts",
+    "src/testing/mocharc.cjs"
   ]
 }

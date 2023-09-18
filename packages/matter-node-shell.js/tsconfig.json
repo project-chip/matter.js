@@ -1,17 +1,13 @@
-/* Dev configuration */
 {
-    "extends": "./tsconfig.base.json",
+    "extends": "../../tools/tsconfig.base.json",
+  
     "compilerOptions": {
-        "module": "node16",
-        "moduleResolution": "node16", // Required to support exports on package.json
-        "composite": true,  // For linking this package from matter-node.js
-        // Local dev compilation checks
-        "forceConsistentCasingInFileNames": true,
-        "noImplicitAny": true,
-        "noImplicitOverride": true,
-        "noUnusedParameters": true,
-        "noUnusedLocals": true,
-        "strict": true,
+      "types": [
+        "@project-chip/matter.js-tools",
+        "@project-chip/matter-node.js",
+        "node"
+      ]
     },
-    "include": ["src/**/*.ts"],
+  
+    "include": ["src/**/*.ts"]
 }

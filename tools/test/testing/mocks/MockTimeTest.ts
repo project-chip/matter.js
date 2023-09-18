@@ -3,20 +3,15 @@
  * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { TimeFake } from "../../src/time/TimeFake.js";
 
 const FAKE_TIME = 36000000;
 
-describe("TimeFake", () => {
-    let timeFake: TimeFake;
-
-    beforeEach(() => {
-        timeFake = new TimeFake(FAKE_TIME);
-    });
+describe("MockTime", () => {
+    beforeEach(() => MockTime.reset(FAKE_TIME));
 
     describe("now", () => {
         it("returns the fake date", () => {
-            const result = timeFake.now();
+            const result = MockTime.now();
 
             expect(result.getTime()).equal(FAKE_TIME);
         });
@@ -24,7 +19,7 @@ describe("TimeFake", () => {
 
     describe("nowMs", () => {
         it("returns the fake time", () => {
-            const result = timeFake.nowMs();
+            const result = MockTime.nowMs();
 
             expect(result).equal(FAKE_TIME);
         });
@@ -32,9 +27,9 @@ describe("TimeFake", () => {
 
     describe("advanceTime", () => {
         it("advances the time by the duration specified", async () => {
-            await timeFake.advanceTime(45);
+            await MockTime.advance(45);
 
-            expect(timeFake.nowMs()).equal(FAKE_TIME + 45);
+            expect(MockTime.nowMs()).equal(FAKE_TIME + 45);
         });
     });
 
@@ -42,7 +37,7 @@ describe("TimeFake", () => {
         it("returns a periodic timer that will call a callback periodically", async () => {
             let firedTime;
 
-            const result = timeFake.getPeriodicTimer(30, () => (firedTime = timeFake.nowMs()));
+            const result = MockTime.getPeriodicTimer(30, () => (firedTime = MockTime.nowMs()));
             expect(result.isRunning).equal(false);
 
             result.start();
@@ -50,11 +45,11 @@ describe("TimeFake", () => {
             expect(result.isRunning).equal(true);
             expect(firedTime).equal(undefined);
 
-            await timeFake.advanceTime(45);
+            await MockTime.advance(45);
 
             expect(firedTime).equal(FAKE_TIME + 30);
 
-            await timeFake.advanceTime(20);
+            await MockTime.advance(20);
 
             expect(firedTime).equal(FAKE_TIME + 60);
 
@@ -67,13 +62,13 @@ describe("TimeFake", () => {
         it("returns a periodic timer that can be stopped", async () => {
             let firedTime;
 
-            const result = timeFake.getPeriodicTimer(30, () => (firedTime = timeFake.nowMs()));
+            const result = MockTime.getPeriodicTimer(30, () => (firedTime = MockTime.nowMs()));
             result.start();
             result.stop();
 
             expect(firedTime).equal(undefined);
 
-            await timeFake.advanceTime(45);
+            await MockTime.advance(45);
 
             expect(firedTime).equal(undefined);
             expect(result.isRunning).equal(false);
@@ -84,14 +79,14 @@ describe("TimeFake", () => {
         it("returns a timer that will call a callback in the future", async () => {
             let firedTime;
 
-            const result = timeFake.getTimer(30, () => (firedTime = timeFake.nowMs()));
+            const result = MockTime.getTimer(30, () => (firedTime = MockTime.nowMs()));
             expect(result.isRunning).equal(false);
             result.start();
             expect(result.isRunning).equal(true);
 
             expect(firedTime).equal(undefined);
 
-            await timeFake.advanceTime(45);
+            await MockTime.advance(45);
 
             expect(firedTime).equal(FAKE_TIME + 30);
             expect(result.isRunning).equal(false);
@@ -100,7 +95,7 @@ describe("TimeFake", () => {
         it("returns a timer that can be stopped", async () => {
             let firedTime;
 
-            const result = timeFake.getTimer(30, () => (firedTime = timeFake.nowMs()));
+            const result = MockTime.getTimer(30, () => (firedTime = MockTime.nowMs()));
             expect(result.isRunning).equal(false);
             result.start();
             expect(result.isRunning).equal(true);
@@ -109,7 +104,7 @@ describe("TimeFake", () => {
 
             expect(firedTime).equal(undefined);
 
-            await timeFake.advanceTime(45);
+            await MockTime.advance(45);
 
             expect(firedTime).equal(undefined);
             expect(result.isRunning).equal(false);

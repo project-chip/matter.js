@@ -9,6 +9,66 @@ import type MochaType from "mocha";
 import { TestOptions } from "./options.js";
 import { ConsoleProxyReporter, FailureDetail, Reporter } from "./reporter.js";
 
+let emitLogsOnFailure = true;
+
+export function generalSetup(Mocha: typeof MochaType) {
+    // White text, 16-bit and 256-bit green background
+    Mocha.reporters.Base.colors["diff added inline"] = "97;42;48;5;22" as any;
+
+    // White text, 16-bit and 256-bit red background
+    Mocha.reporters.Base.colors["diff removed inline"] = "97;41;48;5;52" as any;
+
+    // Some of our test suites have setup/teardown logic that logs profusely.
+    // Hide these logs unless something goes wrong
+    async function onlyLogFailure(fn: () => any) {
+        if (!MatterHooks) {
+            throw new Error("Matter hooks not loaded");
+        }
+
+        const logs = Array<string>();
+        const existingSink = MatterHooks.loggerSink;
+        try {
+            if (emitLogsOnFailure) {
+                MatterHooks.loggerSink = (_, message) => {
+                    logs.push(message);
+                };
+            }
+            return await fn();
+        } catch (e) {
+            process.stdout.write(logs.join("\n"));
+            throw e;
+        } finally {
+            if (emitLogsOnFailure) {
+                MatterHooks.loggerSink = existingSink;
+            }
+        }
+    }
+
+    function filterLogs(hook: "beforeAll" | "afterAll" | "beforeEach" | "afterEach") {
+        const actual = Mocha.Suite.prototype[hook] as (this: any, fn: Mocha.Func) => any;
+        Mocha.Suite.prototype[hook] = function (this: any, fn: Mocha.Func) {
+            return actual.call(this, async function (this: any, ...args: any) {
+                return await onlyLogFailure(() => fn.apply(this, args));
+            });
+        } as any;
+    }
+
+    filterLogs("beforeAll");
+    filterLogs("afterAll");
+    filterLogs("beforeEach");
+    filterLogs("afterEach");
+
+    // Reset mocks before each suite.  Suites could conceivably have callbacks
+    // that occur across tests.  If individual tests need a reset the suite
+    // needs to handle itself.
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    const actualBeforeAll = Mocha.Suite.prototype.beforeAll;
+    Mocha.Suite.prototype.beforeAll = function (this: Mocha.Context, ...args: any) {
+        MockTime.reset();
+        return actualBeforeAll.apply(this, args);
+    };
+}
+
 export function adaptReporter(Mocha: typeof MochaType, title: string, reporter: Reporter) {
     const RUNNER = Mocha.Runner.constants;
 
@@ -19,7 +79,10 @@ export function adaptReporter(Mocha: typeof MochaType, title: string, reporter: 
             super(runner);
 
             runner.once(RUNNER.EVENT_RUN_BEGIN, () => {
-                MatterLoggerSink = (_, message) => {
+                if (!MatterHooks) {
+                    throw new Error("Matter hooks not loaded");
+                }
+                MatterHooks.loggerSink = (_, message) => {
                     logs.push(message);
                 };
                 reporter.beginRun(title, this.translatedStats);
@@ -40,7 +103,10 @@ export function adaptReporter(Mocha: typeof MochaType, title: string, reporter: 
             });
 
             runner.once(RUNNER.EVENT_RUN_END, () => {
-                MatterLoggerSink = undefined;
+                if (!MatterHooks) {
+                    throw new Error("Matter hooks not loaded");
+                }
+                MatterHooks.loggerSink = undefined;
                 reporter.endRun(this.translatedStats);
             });
         }
@@ -67,6 +133,12 @@ export function adaptReporter(Mocha: typeof MochaType, title: string, reporter: 
                 message = error.stack.slice(0, index);
                 stack = error.stack
                     .slice(index + 1)
+
+                    // Node's assert helpfully puts entire objects in the
+                    // message and thus in the stack.  We do diffs ourselves,
+                    // we just want the stack.  This does a rough cleanup
+                    .replace(/.*?\n {4}at/s, "    at")
+
                     .trim()
                     .replace(/\n\s+/gm, "\n");
             } else {
@@ -76,6 +148,10 @@ export function adaptReporter(Mocha: typeof MochaType, title: string, reporter: 
             message = error.message;
         } else {
             message = error.toString();
+        }
+
+        if (message.endsWith(":")) {
+            message = message.slice(0, message.length - 1);
         }
 
         if (error.expected && error.actual) {
@@ -109,6 +185,7 @@ export function applyOptions(mocha: Mocha, options: TestOptions) {
     if (options.invert) {
         mocha.invert();
     }
+    emitLogsOnFailure = !options.allLogs;
 }
 
 export function browserSetup(mocha: BrowserMocha) {

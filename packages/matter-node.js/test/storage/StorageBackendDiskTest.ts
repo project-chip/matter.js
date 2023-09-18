@@ -112,7 +112,7 @@ describe("Storage node-localstorage", () => {
         );
     });
 
-    afterAll(() => {
+    after(() => {
         const localStorage = new LocalStorage(TEST_STORAGE_LOCATION);
         localStorage.clear();
     });

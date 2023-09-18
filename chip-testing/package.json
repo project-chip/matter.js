@@ -1,0 +1,27 @@
+{
+    "name": "@project-chip/matter.js-chip-testing",
+    "version": "0.1.0",
+    "description": "Testing of matter.js with CHIP tool",
+    "private": true,
+    "license": "Apache-2.0",
+    "author": "Project CHIP Authors",
+    "bugs": {
+        "url": "https://github.com/project-chip/matter.js/issues"
+    },
+    "homepage": "https://github.com/project-chip/matter.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/project-chip/matter.js.git"
+    },
+    "scripts": {
+        "clean": "build clean",
+        "build": "build",
+        "build-clean": "build --clean",
+        "test": "true",
+        "test-chip": "matter-test --force-exit"
+    },
+    "dependencies": {
+        "@project-chip/matter.js": "^0.5.0",
+        "@project-chip/matter-node.js": "^0.5.0"
+    }
+}

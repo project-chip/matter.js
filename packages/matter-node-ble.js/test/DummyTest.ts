@@ -8,6 +8,6 @@
 
 describe("DummyTest", () => {
     it("should pass", () => {
-        expect(true).toBe(true);
+        expect(true).equal(true);
     });
 });
