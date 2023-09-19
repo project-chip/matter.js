@@ -165,7 +165,7 @@ describe("Chip-Tool-Tests", () => {
 
             after(async () => {
                 await testInstance.stop();
-                await new Promise(resolve => setTimeout(resolve, 2000)); //Add a short delay
+                //await new Promise(resolve => setTimeout(resolve, 2000)); //Add a short delay
             });
         });
     }
