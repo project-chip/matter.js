@@ -100,7 +100,7 @@ async function executeChipToolTest(
     );
     await executeProcess(
         "./chip-tool",
-        ["tests", testName, "--PICS", `${__dirname}/config/${picsFilename}`],
+        ["tests", testName, "--PICS", `${__dirname}/../../../config/${picsFilename}`],
         CHIP_BIN_PATH,
         undefined,
         commandCallback,
