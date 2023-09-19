@@ -132,7 +132,7 @@ describe("Chip-Tool-Tests", () => {
     before(async () => {
         await fs.mkdir(`${CHIP_BIN_PATH}/src/app/tests/suites/commands/system/scripts`, { recursive: true });
         await executeProcess("cp", [
-            `${__dirname}/../src/scripts/*`,
+            `${__dirname}/../../../src/scripts/*`,
             `${CHIP_BIN_PATH}/src/app/tests/suites/commands/system/scripts/`,
         ]);
         await executeProcess("chmod", ["+x", `${CHIP_BIN_PATH}/src/app/tests/suites/commands/system/scripts/*`]);
