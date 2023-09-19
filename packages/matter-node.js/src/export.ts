@@ -4,8 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import "./crypto/register.js";
-import "./net/register.js";
 import "./time/register.js";
+
+import "./net/register.js";
+
+import "./crypto/register.js";
 
 export * from "@project-chip/matter.js";
