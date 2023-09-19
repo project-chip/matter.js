@@ -13,4 +13,3 @@ import { Crypto, CryptoNode } from "@project-chip/matter-node.js/crypto";
 
 const TheCrypto = new CryptoNode();
 Crypto.get = () => TheCrypto;
-
