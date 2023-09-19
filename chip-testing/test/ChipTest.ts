@@ -5,7 +5,7 @@ import { promises as fs } from "fs";
 import { DeviceTestInstance } from "../src/DeviceTestInstance";
 import * as Tests from "../src/suites/index.js";
 
-const CHIP_BIN_PATH = process.env.CHIP_BIN_PATH ?? `${__dirname}/../../bin`;
+const CHIP_BIN_PATH = process.env.CHIP_BIN_PATH ?? `${__dirname}/../../../../bin`;
 
 /**
  * Execute an external process and return a promise that resolves when the process exits.
