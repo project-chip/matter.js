@@ -18,9 +18,19 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Get installed Playwright version
+      id: playwright-version
+      run: echo "PLAYWRIGHT_VERSION=$(node -e "console.log(require('./package-lock.json').dependencies['@playwright/test'].version)")" >> $GITHUB_ENV
+    - name: Cache playwright binaries
+      uses: actions/cache@v3
+      id: playwright-cache
+      with:
+        path: |
+          ~/.cache/ms-playwright
+        key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
     - run: npm ci
     - run: npm run format-verify
     - run: npm run lint
-    - run: |
-        npx playwright install
-        npm run test
+    - run: npx playwright install --with-deps
+      if: steps.playwright-cache.outputs.cache-hit != 'true'
+    - run: npm run test
