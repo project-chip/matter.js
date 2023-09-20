@@ -6,12 +6,6 @@
 
 import * as assert from "assert";
 
-import { Crypto } from "@project-chip/matter.js/crypto";
-import { Time, TimeFake } from "@project-chip/matter.js/time";
-import { CryptoNode } from "../src/crypto/CryptoNode";
-
-Crypto.get = () => new CryptoNode();
-
 import {
     AccessControl,
     AdministratorCommissioning,
@@ -40,10 +34,10 @@ import { CommissioningController, CommissioningServer, MatterServer } from "@pro
 import { OnOffLightDevice } from "@project-chip/matter.js/device";
 import { FabricJsonObject } from "@project-chip/matter.js/fabric";
 import { DecodedEventData } from "@project-chip/matter.js/interaction";
-import { Level, Logger } from "@project-chip/matter.js/log";
 import { MdnsBroadcaster, MdnsScanner } from "@project-chip/matter.js/mdns";
 import { Network, NetworkFake } from "@project-chip/matter.js/net";
 import { StorageBackendMemory, StorageManager } from "@project-chip/matter.js/storage";
+import { Time } from "@project-chip/matter.js/time";
 import { ByteArray, getPromiseResolver } from "@project-chip/matter.js/util";
 
 const SERVER_IPv6 = "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:cafe";
@@ -67,7 +61,6 @@ const setupPin = 20202021;
 const matterPort = 5540;
 
 const TIME_START = 1666663000000;
-const fakeTime = new TimeFake(TIME_START);
 
 const fakeControllerStorage = new StorageBackendMemory();
 const fakeServerStorage = new StorageBackendMemory();
@@ -78,11 +71,12 @@ describe("Integration Test", () => {
     let commissioningController: CommissioningController;
     let commissioningServer: CommissioningServer;
     let onOffLightDeviceServer: OnOffLightDevice;
-    const startupTimestamp = fakeTime.nowMs();
 
-    beforeAll(async () => {
-        Logger.defaultLogLevel = Level.DEBUG;
-        Time.get = () => fakeTime;
+    beforeEach(() => MockTime.reset(TIME_START));
+
+    before(async () => {
+        MockTime.reset(TIME_START);
+
         Network.get = () => clientNetwork;
 
         const controllerStorageManager = new StorageManager(fakeControllerStorage);
@@ -230,21 +224,17 @@ describe("Integration Test", () => {
     });
 
     describe("commission", () => {
-        it(
-            "the client commissions a new device",
-            async () => {
-                // override the mdns scanner to avoid the client to try to resolve the server's address
-                commissioningController.setMdnsScanner(await MdnsScanner.create(CLIENT_IPv6));
-                await commissioningController.connect();
+        it("the client commissions a new device", async () => {
+            // override the mdns scanner to avoid the client to try to resolve the server's address
+            commissioningController.setMdnsScanner(await MdnsScanner.create(CLIENT_IPv6));
+            await commissioningController.connect();
 
-                Network.get = () => {
-                    throw new Error("Network should not be requested post starting");
-                };
+            Network.get = () => {
+                throw new Error("Network should not be requested post starting");
+            };
 
-                assert.ok(commissioningController.getFabric().nodeId);
-            },
-            60 * 1000 /* 1mn timeout */,
-        );
+            assert.ok(commissioningController.getFabric().nodeId);
+        });
 
         it("Verify that commissioning changed the Regulatory Config/Location values", async () => {
             const generalCommissioningCluster = commissioningController.getRootClusterClient(
@@ -277,44 +267,44 @@ describe("Integration Test", () => {
                     },
                     { timedRequestTimeoutMs: 1 },
                 );
-                await fakeTime.yield();
-                await fakeTime.yield();
-                await fakeTime.yield();
-                await fakeTime.advanceTime(10);
+                await MockTime.yield3();
+                await MockTime.yield3();
+                await MockTime.yield3();
+                await MockTime.advance(10);
                 await assert.rejects(async () => await promise, {
                     message: "(148) Received error status: 148", // Timeout expired
                 });
             });
 
-            it("Custom Timed interaction with short timeout expired", async () => {
+            it("Custom timed interaction with short timeout expired", async () => {
                 const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
                 assert.ok(onoffEndpoint);
                 const onoffCluster = onoffEndpoint.getClusterClient(OnOffCluster);
                 assert.ok(onoffCluster);
 
                 const promise = onoffCluster.toggle(undefined, { timedRequestTimeoutMs: 1 });
-                await fakeTime.yield();
-                await fakeTime.yield();
-                await fakeTime.yield();
-                await fakeTime.advanceTime(10);
+                await MockTime.yield3();
+                await MockTime.yield3();
+                await MockTime.yield3();
+                await MockTime.advance(10);
                 await assert.rejects(async () => await promise, {
                     message: "(148) Received error status: 148", // Timeout expired
                 });
             });
 
-            it("Custom Timed interaction with default timeout works", async () => {
+            it("Custom timed interaction with default timeout works", async () => {
                 const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
                 assert.ok(onoffEndpoint);
                 const onoffCluster = onoffEndpoint.getClusterClient(OnOffCluster);
                 assert.ok(onoffCluster);
 
                 const promise = onoffCluster.off(undefined, { asTimedRequest: true });
-                await fakeTime.yield();
-                await fakeTime.yield();
-                await fakeTime.yield();
-                await fakeTime.advanceTime(5000);
+                await MockTime.yield3();
+                await MockTime.yield3();
+                await MockTime.yield3();
+                await MockTime.advance(5000);
                 await promise;
-            }, 6000);
+            });
 
             it("Timed invoke ok", async () => {
                 const adminCommissioningCluster = commissioningController.getRootClusterClient(
@@ -524,7 +514,7 @@ describe("Integration Test", () => {
             assert.deepEqual(startUpEventData?.events, [
                 {
                     eventNumber: 1,
-                    epochTimestamp: startupTimestamp,
+                    epochTimestamp: TIME_START,
                     priority: BasicInformation.Cluster.events.startUp.priority,
                     data: {
                         softwareVersion: 1,
@@ -542,7 +532,7 @@ describe("Integration Test", () => {
             assert.deepEqual(bootReasonEventData?.events, [
                 {
                     eventNumber: 2,
-                    epochTimestamp: startupTimestamp,
+                    epochTimestamp: TIME_START,
                     priority: BasicInformation.Cluster.events.startUp.priority,
                     data: {
                         bootReason: GeneralDiagnostics.BootReason.Unspecified,
@@ -571,7 +561,7 @@ describe("Integration Test", () => {
 
             basicInfoCluster.attributes.nodeLabel.addListener(callback);
 
-            await fakeTime.advanceTime(60);
+            await MockTime.advance(60);
             await promise;
 
             // Local value because not yet updated from subscription
@@ -705,7 +695,7 @@ describe("Integration Test", () => {
                 listener: value => callback(value),
             });
 
-            await fakeTime.yield();
+            await MockTime.yield3();
             const firstReport = await firstPromise;
             assert.deepEqual(firstReport, { value: false, time: startTime });
 
@@ -716,9 +706,9 @@ describe("Integration Test", () => {
             }>();
             callback = (value: boolean) => updateResolver({ value, time: Time.nowMs() });
 
-            await fakeTime.advanceTime(2 * 1000);
+            await MockTime.advance(2 * 1000);
             onOffLightDeviceServer.setOnOff(true);
-            await fakeTime.advanceTime(100);
+            await MockTime.advance(100);
             const updateReport = await updatePromise;
 
             assert.deepEqual(updateReport, { value: true, time: startTime + 2 * 1000 + 100 });
@@ -731,12 +721,12 @@ describe("Integration Test", () => {
             callback = (value: boolean) => lastResolver({ value, time: Time.nowMs() });
 
             // Verify that no update comes in after max cycle time 1h
-            await fakeTime.advanceTime(60 * 60 * 1000);
+            await MockTime.advance(60 * 60 * 1000);
 
             // ... but on next change immediately (means immediately + 50ms, so wait 100ms) then
-            await fakeTime.advanceTime(2 * 1000);
+            await MockTime.advance(2 * 1000);
             onOffLightDeviceServer.setOnOff(false);
-            await fakeTime.advanceTime(100);
+            await MockTime.advance(100);
             const lastReport = await lastPromise;
 
             assert.deepEqual(lastReport, { value: false, time: startTime + (60 * 60 + 4) * 1000 + 200 });
@@ -770,10 +760,10 @@ describe("Integration Test", () => {
 
             assert.deepEqual(pushedUpdates, []);
 
-            await fakeTime.advanceTime(2 * 1000);
+            await MockTime.advance(2 * 1000);
             onOffLightDeviceServer.setOnOff(true);
-            await fakeTime.advanceTime(100);
-            await fakeTime.yield();
+            await MockTime.advance(100);
+            await MockTime.yield3();
 
             await updatePromise;
 
@@ -802,7 +792,7 @@ describe("Integration Test", () => {
             //await onOffClient.attributes.onOff.subscribe(0, 5);
             await scenesClient.subscribeSceneCountAttribute(value => callback(value), 0, 5);
 
-            await fakeTime.yield();
+            await MockTime.yield3();
             const firstReport = await firstPromise;
             assert.deepEqual(firstReport, { value: 0, time: startTime });
 
@@ -813,7 +803,7 @@ describe("Integration Test", () => {
             }>();
             callback = (value: number) => updateResolver({ value, time: Time.nowMs() });
 
-            await fakeTime.advanceTime(2 * 1000);
+            await MockTime.advance(2 * 1000);
             await scenesClient.addScene({
                 groupId: GroupId(1),
                 sceneId: 1,
@@ -821,7 +811,7 @@ describe("Integration Test", () => {
                 sceneName: "Test",
                 extensionFieldSets: [],
             });
-            await fakeTime.advanceTime(100);
+            await MockTime.advance(100);
             const updateReport = await updatePromise;
 
             assert.deepEqual(updateReport, { value: 1, time: startTime + 2 * 1000 + 100 });
@@ -846,7 +836,7 @@ describe("Integration Test", () => {
 
             await basicInformationClient.subscribeReachableChangedEvent(event => callback(event), 0, 5, true);
 
-            await fakeTime.advanceTime(0);
+            await MockTime.advance(0);
             const firstReport = await firstPromise;
             assert.deepEqual(firstReport, {
                 value: {
@@ -868,9 +858,9 @@ describe("Integration Test", () => {
             }>();
             callback = (value: DecodedEventData<any>) => updateResolver({ value, time: Time.nowMs() });
 
-            await fakeTime.advanceTime(2 * 1000);
+            await MockTime.advance(2 * 1000);
             basicInformationServer.setReachableAttribute(true);
-            await fakeTime.advanceTime(100);
+            await MockTime.advance(100);
             const updateReport = await updatePromise;
 
             assert.deepEqual(updateReport, {
@@ -998,7 +988,7 @@ describe("Integration Test", () => {
         });
     });
 
-    afterAll(async () => {
+    after(async () => {
         await matterServer.close();
         await matterClient.close();
         await fakeControllerStorage.close();

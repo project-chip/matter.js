@@ -7,7 +7,7 @@
 import colors from "ansi-colors";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import { Project } from "./build.js";
+import { Project } from "./project.js";
 
 enum Target {
     clean = "clean",
@@ -63,6 +63,8 @@ export async function main(argv = process.argv) {
     if (targets.has(Target.cjs)) {
         await transpile(project, Target.cjs);
     }
+
+    progress.shutdown();
 
     async function notify(what: string, fn: () => Promise<void>) {
         progress.update(what);

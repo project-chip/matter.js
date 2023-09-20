@@ -21,8 +21,8 @@ import { ClusterReference, HtmlReference } from "./spec-types.js";
 import {
     Alias,
     Children,
-    chooseIdentityAliases,
     Optional,
+    chooseIdentityAliases,
     translateRecordsToMatter,
     translateTable,
 } from "./translate-table.js";

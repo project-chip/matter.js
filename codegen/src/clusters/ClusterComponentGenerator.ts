@@ -12,13 +12,13 @@ import {
     ElementTag,
     EventElement,
     EventModel,
-    Model,
-    ValueModel,
     InferredComponent,
-    NamedComponent
+    Model,
+    NamedComponent,
+    ValueModel,
 } from "@project-chip/matter.js/model";
-import { camelize } from "../util/string.js";
 import { Block } from "../util/TsFile.js";
+import { camelize } from "../util/string.js";
 import { ClusterFile } from "./ClusterFile.js";
 import { DefaultValueGenerator } from "./DefaultValueGenerator.js";
 import { TlvGenerator } from "./TlvGenerator.js";

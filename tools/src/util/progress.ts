@@ -15,16 +15,19 @@ const FRONT = "\x1b[G";
 const CLEAR = "\x1b[K";
 
 export class Progress {
+    status = Progress.Status.Startup;
     private start?: number;
     private lastLine?: string;
 
     constructor() {}
 
     startup(what: string, pkg: Package) {
+        this.status = Progress.Status.Startup;
         this.write(`${what} ${colors.bold(pkg.json.name)}@${pkg.json.version}\n`);
     }
 
     update(text: string, extra?: string) {
+        this.status = Progress.Status.Ongoing;
         let duration;
         if (this.start === undefined) {
             this.start = new Date().getTime();
@@ -38,13 +41,19 @@ export class Progress {
     }
 
     success(text: string) {
+        this.status = Progress.Status.Success;
         this.write(`${CLEAR}  ${colors.green("✔")} ${text} ${this.duration}\n`);
         delete this.start;
     }
 
     failure(text: string) {
+        this.status = Progress.Status.Failure;
         this.write(`${CLEAR}  ${colors.redBright("✗")} ${text} ${this.duration}\n`);
         delete this.start;
+    }
+
+    shutdown() {
+        stdout.write("\n");
     }
 
     protected write(text: string) {
@@ -64,5 +73,14 @@ export class Progress {
             ms = Math.trunc(ms / 1000);
         }
         return colors.dim.yellow(`(${ms}s)`);
+    }
+}
+
+export namespace Progress {
+    export enum Status {
+        Startup = "startup",
+        Ongoing = "ongoing",
+        Success = "success",
+        Failure = "failure",
     }
 }

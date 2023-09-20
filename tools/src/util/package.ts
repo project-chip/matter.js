@@ -5,16 +5,35 @@
  */
 
 import { readFileSync, statSync } from "fs";
-import { dirname, resolve } from "path";
+import { dirname, relative, resolve } from "path";
 import { ignoreErrorSync } from "./errors.js";
 import { Progress } from "./progress.js";
+
+function findJson(filename: string, path: string = ".", title?: string) {
+    path = resolve(path);
+    while (true) {
+        const json = ignoreErrorSync("ENOENT", () => JSON.parse(readFileSync(resolve(path, filename)).toString()));
+        if (json) {
+            if (title === undefined || json.name === title) {
+                return { root: path, json };
+            }
+        }
+        const parent = dirname(path);
+        if (parent === path) {
+            throw new Error(`Could not locate ${title ?? filename}`);
+        }
+        path = parent;
+    }
+}
 
 export class Package {
     path: string;
     json: PackageJson;
     esm: boolean;
     cjs: boolean;
+    src: boolean;
     tests: boolean;
+    #tsconfig?: Record<string, any>;
 
     constructor({
         path = ".",
@@ -23,44 +42,37 @@ export class Package {
         path?: string;
         name?: string;
     } = {}) {
-        let json: PackageJson | undefined;
-        path = resolve(path);
-        while (!json) {
-            json = ignoreErrorSync("ENOENT", () => JSON.parse(readFileSync(resolve(path, "package.json")).toString()));
-            if (json) {
-                if (name === undefined || json.name === name) {
-                    break;
-                }
-                json = undefined;
-            }
-            const parent = dirname(path);
-            if (parent === path) {
-                throw new Error(`Could not locate ${name ? `package ${name}` : "package.json"}`);
-            }
-            path = parent;
-        }
-
-        if (!ignoreErrorSync("ENOENT", () => statSync("src").isDirectory())) {
-            throw new Error(`Found package ${json.name} but no src directory is present`);
-        }
-        const { esm, cjs } = selectFormats(json);
-
-        this.path = path;
+        const { root, json } = findJson("package.json", path, name);
+        this.path = root;
         this.json = json;
+
+        const { esm, cjs } = selectFormats(this.json);
         this.esm = esm;
         this.cjs = cjs;
 
-        this.tests = ignoreErrorSync("ENOENT", () => statSync("test").isDirectory()) ?? false;
+        this.src = !!ignoreErrorSync("ENOENT", () => statSync(this.resolve("src")).isDirectory());
+        this.tests = !!ignoreErrorSync("ENOENT", () => statSync(this.resolve("test")).isDirectory());
     }
 
     resolve(path: string) {
         return resolve(this.path, path);
     }
 
+    relative(path: string) {
+        return relative(this.path, path);
+    }
+
     start(what: string) {
         const progress = new Progress();
         progress.startup(what, this);
         return progress;
+    }
+
+    get tsconfig() {
+        if (this.#tsconfig) {
+            return this.#tsconfig;
+        }
+        return (this.#tsconfig = findJson("tsconfig.json", this.path));
     }
 
     static node(name: string) {

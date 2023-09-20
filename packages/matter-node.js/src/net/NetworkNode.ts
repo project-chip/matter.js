@@ -8,7 +8,7 @@ import { Network, NetworkError, UdpChannel, UdpChannelOptions } from "@project-c
 import { Cache, isIPv6, onSameNetwork } from "@project-chip/matter.js/util";
 
 import { NetworkInterfaceInfo, networkInterfaces } from "os";
-import { UdpChannelNode } from "./UdpChannelNode";
+import { UdpChannelNode } from "./UdpChannelNode.js";
 
 export class NetworkNode extends Network {
     static getMulticastInterface(netInterface: string, ipv4: boolean) {

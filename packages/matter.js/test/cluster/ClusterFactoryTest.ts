@@ -4,15 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Crypto } from "../../src/crypto/Crypto.js";
-Crypto.get = () =>
-    ({
-        // make Random data deterministic
-        getRandomData: (length: number) => {
-            return new Uint8Array(length);
-        },
-    }) as Crypto;
-
 import {
     Attribute,
     Cluster,

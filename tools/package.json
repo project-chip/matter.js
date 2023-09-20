@@ -5,16 +5,30 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "clean": "rm -rf .cache build dist",
-    "build": "esbuild src/building/*.ts src/util/*.ts --outdir=dist/esm --format=esm --log-level=warning && node bin/build.js",
+    "clean": "npm run build clean",
+    "build": "esbuild src/building/*.ts src/running/* src/util/*.ts --outdir=dist/esm --format=esm --log-level=warning && node bin/build.js",
     "build-clean": "npm run build -- --clean",
-    "console": "node --loader ts-node/esm repl.ts"
+    "test": "./bin/test.js"
   },
   "bin": {
     "build": "./bin/build.js",
-    "matter-test": "./bin/test.js"
+    "matter-test": "./bin/test.js",
+    "run": "./bin/run.js"
   },
-  "main": "dist/esm/index.js",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
+    }
+  },
+  "main": "dist/cjs/index.ts",
+  "module": "dist/esm/index.ts",
   "types": "dist/esm/index.d.ts",
   "repository": {
     "type": "git",
@@ -32,18 +46,18 @@
     "c8": "^8.0.1",
     "chai": "^4.3.8",
     "chai-as-promised": "^7.1.1",
-    "esbuild": "^0.19.2",
+    "esbuild": "^0.19.3",
     "express": "^4.18.2",
     "glob": "^10.3.4",
     "mocha": "^10.2.0",
-    "playwright": "^1.37.1",
+    "playwright": "^1.38.0",
     "typescript": "^5.2.2",
     "v8-profiler-next": "^1.9.0",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "@types/chai": "^4.3.5",
-    "@types/chai-as-promised": "^7.1.5",
+    "@types/chai": "^4.3.6",
+    "@types/chai-as-promised": "^7.1.6",
     "@types/glob": "^8.1.0",
     "@types/mocha": "^10.0.1",
     "@types/yargs": "^17.0.24"

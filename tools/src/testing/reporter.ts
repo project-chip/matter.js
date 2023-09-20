@@ -17,8 +17,9 @@ export interface Reporter {
     beginRun(name: string, stats: Stats): void;
     beginSuite(name: string[], stats: Stats): void;
     beginTest(name: string, stats: Stats): void;
-    endRun(stats: Stats): void;
     failTest(name: string, detail: FailureDetail): void;
+    endRun(stats: Stats): void;
+    failRun(message: string, stack?: string): void;
 }
 
 export type FailureDetail = {
@@ -34,7 +35,7 @@ export type Failure = {
     detail: FailureDetail;
 };
 
-export class ProgressReporter implements Reporter {
+export abstract class ProgressReporter implements Reporter {
     private run = "";
     private suite = Array<string>();
     private failures = Array<Failure>();
@@ -68,10 +69,14 @@ export class ProgressReporter implements Reporter {
         });
     }
 
+    abstract failRun(message: string, stack?: string): void;
+
     endRun(stats: Stats): void {
         if (this.failures.length) {
             this.progress.failure(this.summarize(stats));
             this.dumpFailures();
+        } else if (!stats.complete) {
+            this.progress.failure("No tests found");
         } else {
             this.progress.success(this.summarize(stats));
         }
@@ -135,5 +140,9 @@ export class ConsoleProxyReporter implements Reporter {
 
     failTest(name: string, detail: FailureDetail) {
         proxy("failTest", name, detail);
+    }
+
+    failRun(message: string, stack?: string) {
+        proxy("failRun", message, stack);
     }
 }

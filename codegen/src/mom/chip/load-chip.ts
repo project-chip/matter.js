@@ -12,12 +12,12 @@ import {
     Metatype,
     ValueElement,
 } from "@project-chip/matter.js/model";
-import { readFileWithCache } from "../../util/file.js";
-import { Directory, Repo } from "../../util/github.js";
 import { readFileSync } from "fs";
 import { JSDOM } from "jsdom";
 import { homedir } from "os";
 import { resolve } from "path";
+import { readFileWithCache } from "../../util/file.js";
+import { Directory, Repo } from "../../util/github.js";
 import { translateChip } from "./translate-chip.js";
 
 const AUTH_FILE = resolve(homedir(), ".gh-auth");

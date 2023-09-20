@@ -4,15 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Crypto } from "@project-chip/matter.js/crypto";
-import { CryptoNode } from "../../src/crypto/CryptoNode";
-
-Crypto.get = () => new CryptoNode();
-
-import { Time, TimeFake } from "@project-chip/matter.js/time";
-
-Time.get = () => new TimeFake(0);
-
 import {
     ClusterServer,
     ClusterServerObjForCluster,
@@ -28,7 +19,7 @@ import { StatusCode } from "@project-chip/matter.js/interaction";
 import { SecureSession } from "@project-chip/matter.js/session";
 import { getPromiseResolver } from "@project-chip/matter.js/util";
 import * as assert from "assert";
-import { callCommandOnClusterServer, createTestSessionWithFabric } from "./ClusterServerTestingUtil";
+import { callCommandOnClusterServer, createTestSessionWithFabric } from "./ClusterServerTestingUtil.js";
 
 describe("Groups Server test", () => {
     let groupsServer: ClusterServerObjForCluster<typeof GroupsCluster> | undefined;
@@ -64,7 +55,7 @@ describe("Groups Server test", () => {
     }
 
     describe("Basic groups actions", () => {
-        beforeAll(async () => {
+        before(async () => {
             await initializeTestEnv();
         });
 
@@ -315,7 +306,7 @@ describe("Groups Server test", () => {
     });
 
     describe("General error cases", () => {
-        beforeAll(async () => {
+        before(async () => {
             await initializeTestEnv();
         });
 
@@ -369,7 +360,7 @@ describe("Groups Server test", () => {
     });
 
     describe("Add group while identifying success test", () => {
-        beforeAll(async () => {
+        before(async () => {
             await initializeTestEnv();
         });
 
@@ -398,7 +389,7 @@ describe("Groups Server test", () => {
     });
 
     describe("Add group while identifying without identifying test", () => {
-        beforeAll(async () => {
+        before(async () => {
             await initializeTestEnv();
             const identifyCluster = endpoint?.getClusterServer(Identify.Cluster);
             assert.ok(identifyCluster);

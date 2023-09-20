@@ -3,13 +3,15 @@
 This page tries to get an detailed overview of the changes between versions without the need to look into code, especially to see relevant changes while interfaces and features are still in flux.
 All Changes without a GitHub Username in brackets are from the core team: @Apollon77, @mfucci and @turon
 
-## WIP
+## 0.6.0 WIP
 * Matter-Core functionality:
   * Fix: Adjusted Event Priority definition to match to specs
   * Feature: Implemented TimedInteractions for Write/Invoke request s as required by specs
   * Feature: Added support for generic Response suppression if requested or needed for group communication
-  * Feature (orlenkoo) Implemented first OnOff Cluster Lighting feature command handlers (WIP) 
+  * Feature (orlenkoo) Implemented first OnOff Cluster Lighting feature command handlers (WIP)
+  * Feature: Also publishes matter-node.js packages as ESM in parallel to CJS
   * Enhance: Memory footprint optimizations
+  * Enhance: Adjusted building, test executions and such to not use ts-node anymore and many more optimizations to test and build processes
 * matter.js API:
   * Breaking: Streamline Device API and rename onOff/isOnOff -> get/setOnOff
 

@@ -4,15 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Crypto } from "../../src/crypto/Crypto.js";
-Crypto.get = () =>
-    ({
-        // make Random data deterministic
-        getRandomData: (length: number) => {
-            return new Uint8Array(length);
-        },
-    }) as Crypto;
-
 import { Cluster, ClusterExtend } from "../../src/cluster/Cluster.js";
 import { AdministratorCommissioningCluster } from "../../src/cluster/definitions/AdministratorCommissioningCluster.js";
 import { BasicInformationCluster } from "../../src/cluster/definitions/BasicInformationCluster.js";

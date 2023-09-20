@@ -14,14 +14,16 @@ import {
 import { Time } from "@project-chip/matter.js/time";
 import { readFile, writeFile } from "fs/promises";
 
-/** We store changes 1s after a value was set to the storage, but not more often than every 1s. */
-const COMMIT_DELAY = 1000; /* 1s */
-
 export class StorageBackendJsonFile extends StorageBackendMemory {
-    private readonly commitTimer = Time.getTimer(COMMIT_DELAY, () => this.commit());
+    /** We store changes after a value was set to the storage, but not more often than this setting (in ms). */
+    static commitDelay = 1000;
+    committed = Promise.resolve();
+
+    private readonly commitTimer = Time.getTimer(StorageBackendJsonFile.commitDelay, () => this.commit());
     private waitForCommit = false; // TODO: replace by commitTimer.isRunning() method (needs to be added)
     private closed = false;
     private initialized = false;
+    private resolveCommitted?: () => void;
 
     constructor(private readonly path: string) {
         super();
@@ -43,6 +45,9 @@ export class StorageBackendJsonFile extends StorageBackendMemory {
     override set<T extends SupportedStorageTypes>(contexts: string[], key: string, value: T): void {
         super.set(contexts, key, value);
         if (!this.waitForCommit) {
+            this.committed = new Promise(resolve => {
+                this.resolveCommitted = resolve;
+            });
             this.waitForCommit = true;
             this.commitTimer.start();
         }
@@ -59,7 +64,13 @@ export class StorageBackendJsonFile extends StorageBackendMemory {
     private async commit() {
         if (!this.initialized || this.closed) return;
         this.waitForCommit = false;
-        await writeFile(this.path, this.toJson(this.store), "utf-8");
+        try {
+            await writeFile(this.path, this.toJson(this.store), "utf-8");
+        } finally {
+            if (!this.waitForCommit) {
+                this.resolveCommitted?.();
+            }
+        }
     }
 
     override async close() {

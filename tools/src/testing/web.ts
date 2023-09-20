@@ -10,7 +10,7 @@ import { stat } from "fs/promises";
 import http from "http";
 import { AddressInfo } from "net";
 import { relative } from "path";
-import { chromium, ConsoleMessage } from "playwright";
+import { Browser, chromium, ConsoleMessage, Page } from "playwright";
 import { ignoreError } from "../util/errors.js";
 import { Package } from "../util/package.js";
 import { TestOptions } from "./options.js";
@@ -59,20 +59,32 @@ export async function testWeb(manual: boolean, files: string[], reporter: Report
                 });
         }
     });
-
-    return true;
 }
 
 async function testInBrowser(url: string, reporter: Reporter, options: TestOptions) {
-    const browser = await chromium.launch();
-    const page = await browser.newPage();
-    page.on("console", consoleHandler(reporter));
-    page.on("pageerror", error => {
-        throw error;
+    async function setup() {
+        const browser = await chromium.launch();
+        const page = await browser.newPage();
+        return { browser, page };
+    }
+
+    async function run({ browser, page }: { browser: Browser; page: Page }) {
+        await page.goto(url);
+        await page.evaluate(options => (globalThis as any).MatterTest.auto(options), options);
+        await browser.close();
+    }
+
+    await new Promise<void>((resolve, reject) => {
+        setup()
+            .then(cx => {
+                cx.page.on("console", consoleHandler(reporter));
+                cx.page.on("pageerror", error => reject(error));
+                return cx;
+            })
+            .then(run)
+            .then(resolve)
+            .catch(reject);
     });
-    await page.goto(url);
-    await page.evaluate(options => (globalThis as any).MatterTest.auto(options), options);
-    await browser.close();
 }
 
 function consoleHandler(reporter: Reporter) {
@@ -122,7 +134,7 @@ function buildIndex(files: string[]) {
         ),
     });
 
-    files = ["/tools/dist/esm/testing/logging.js", ...files.map(file => `/${relative(Package.workspace.path, file)}`)];
+    files = files.map(file => `/${relative(Package.workspace.path, file)}`);
     const imports = files.map(file => `import ${JSON.stringify(file)}`).join("\n    ");
 
     return `<!DOCTYPE html>

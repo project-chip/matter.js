@@ -5,8 +5,8 @@
  */
 
 import { AnyElement } from "@project-chip/matter.js/model";
-import { serialize, wordWrap } from "../../util/string.js";
 import { Block } from "../../util/TsFile.js";
+import { serialize, wordWrap } from "../../util/string.js";
 
 export function generateElement(target: Block, element: AnyElement, prefix = "", suffix = "") {
     const block = target.expressions(`${prefix}{`, `}${suffix}`);

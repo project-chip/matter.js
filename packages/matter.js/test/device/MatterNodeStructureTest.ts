@@ -4,14 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Crypto } from "../../src/crypto/Crypto.js";
-Crypto.get = () =>
-    ({
-        getRandomData: (length: number) => {
-            return new Uint8Array(length);
-        },
-    }) as Crypto;
-
 import BN from "bn.js";
 import { CommissioningServer } from "../../src/CommissioningServer.js";
 import { MatterNode } from "../../src/MatterNode.js";

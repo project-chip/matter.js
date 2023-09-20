@@ -8,9 +8,9 @@ export const INTERMEDIATE_PATH = "models";
 
 import { Logger } from "@project-chip/matter.js/log";
 import { MatterElement, MatterModel } from "@project-chip/matter.js/model";
-import { camelize } from "../../util/string.js";
-import { finalizeModel } from "../../util/finalize-model.js";
 import { TsFile } from "../../util/TsFile.js";
+import { finalizeModel } from "../../util/finalize-model.js";
+import { camelize } from "../../util/string.js";
 import { generateElement } from "./generate-element.js";
 
 const logger = Logger.get("generate-model");

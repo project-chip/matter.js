@@ -36,9 +36,9 @@
     "elliptic": "^6.5.4"
   },
   "devDependencies": {
-    "@project-chip/matter.js-tools": "0.1.0",
-    "@types/bn.js": "^5.1.1",
-    "@types/chai": "^4.3.5",
+    "@project-chip/matter.js-tools": "^0.1.0",
+    "@types/bn.js": "^5.1.2",
+    "@types/chai": "^4.3.6",
     "@types/elliptic": "^6.4.14",
     "@types/mocha": "^10.0.1",
     "chai": "^4.3.8",

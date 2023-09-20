@@ -6,14 +6,14 @@
 
 // Generates the runtime Matter model
 
+import { ChipMatter, LocalMatter, SpecMatter } from "@project-chip/matter.js-intermediate-models";
 import { Logger } from "@project-chip/matter.js/log";
 import { AnyElement, ElementTag, MatterElement, MatterModel, MergeModels } from "@project-chip/matter.js/model";
-import { ChipMatter, LocalMatter, SpecMatter } from "@project-chip/matter.js-intermediate-models";
 import { generateElement } from "./mom/common/generate-element.js";
+import { TsFile } from "./util/TsFile.js";
 import { clean } from "./util/file.js";
 import { finalizeModel } from "./util/finalize-model.js";
 import "./util/setup.js";
-import { TsFile } from "./util/TsFile.js";
 export const CLUSTER_SUFFIX = "Element";
 
 export async function main() {

@@ -15,8 +15,8 @@
  */
 
 import { Logger } from "@project-chip/matter-node.js/log";
-import { theNode } from "./MatterNode";
-import { Shell } from "./shell/Shell";
+import { theNode } from "./MatterNode.js";
+import { Shell } from "./shell/Shell.js";
 import { theCommandList } from "./shell/cli";
 
 const PROMPT = "matter-node> ";

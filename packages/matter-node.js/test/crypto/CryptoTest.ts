@@ -8,7 +8,7 @@ import { Key, PrivateKey, PublicKey } from "@project-chip/matter.js/crypto";
 import { ByteArray } from "@project-chip/matter.js/util";
 import * as assert from "assert";
 import * as crypto from "crypto";
-import { CryptoNode } from "../../src/crypto/CryptoNode";
+import { CryptoNode } from "../../src/crypto/CryptoNode.js";
 
 const KEY = ByteArray.fromHex("abf227feffea8c38e688ddcbffc459f1");
 const ENCRYPTED_DATA = ByteArray.fromHex("c4527bd6965518e8382edbbd28f27f42492d0766124f9961a772");

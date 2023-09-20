@@ -1,0 +1,20 @@
+{
+  "extends": "../tools/tsconfig.base.json",
+  "compilerOptions": {
+    "target": "es2018",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "types": [
+      "node",
+      "mocha",
+      "@project-chip/matter-node.js",
+      "@project-chip/matter.js-tools"
+    ]
+  },
+
+  "include": [
+    "src/**/*.ts",
+    "test/ChipTest.ts",
+    "test/test.config.ts"
+  ]
+}

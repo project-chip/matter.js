@@ -31,7 +31,7 @@ jobs:
         with:
           filters: |
             src:
-              - "packages/matter-node.js/test-chip/**"
+              - "chip-testing/**"
               - "packages/matter.js/src/cluster/**"
               - "packages/matter.js/src/tlv/**"
               - ".github/workflows/chip-tool-tests.yml"
@@ -140,5 +140,5 @@ jobs:
         name: test execution
         id: test-execution
         run: |
-          cd packages/matter-node.js
-          npm run test-chip -- --forceExit
+          cd chip-testing
+          npm run test-chip

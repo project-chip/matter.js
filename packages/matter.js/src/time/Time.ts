@@ -59,3 +59,8 @@ export interface Timer {
     /** Stops this timer, chainable. */
     stop(): Timer;
 }
+
+// Hook for testing frameworks
+if (typeof MatterHooks !== "undefined") {
+    MatterHooks.timeSetup?.(Time);
+}

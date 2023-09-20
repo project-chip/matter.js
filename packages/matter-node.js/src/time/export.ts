@@ -5,4 +5,4 @@
  */
 
 export * from "@project-chip/matter.js/time";
-export * from "./TimeNode";
+export * from "./TimeNode.js";

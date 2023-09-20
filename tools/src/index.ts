@@ -4,6 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "./building/index.js";
-export * from "./testing/index.js";
-export * from "./util/index.js";
+import "./testing/global-declarations.js";
+export * from "./testing/mocharc.cjs";
+export * from "./util/package.js";

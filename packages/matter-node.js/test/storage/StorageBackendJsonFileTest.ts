@@ -4,16 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Time, TimeFake } from "@project-chip/matter.js/time";
-
-const fakeTime = new TimeFake(0);
-Time.get = () => fakeTime;
-
 import * as assert from "assert";
 import { readFile, unlink } from "fs/promises";
-import { StorageBackendJsonFile } from "../../src/storage/StorageBackendJsonFile";
+import { tmpdir } from "os";
+import { resolve } from "path";
+import { StorageBackendJsonFile } from "../../src/storage/StorageBackendJsonFile.js";
 
-const TEST_STORAGE_LOCATION = __dirname + "/testdata-storage.json";
+const TEST_STORAGE_LOCATION = resolve(tmpdir(), "matterjs-test-storage.json");
 
 describe("Storage in JSON File", () => {
     beforeEach(async () => {
@@ -33,9 +30,9 @@ describe("Storage in JSON File", () => {
         const value = storage.get(["context"], "key");
         assert.equal(value, "value");
 
-        await fakeTime.advanceTime(2 * 1000);
+        await MockTime.advance(2 * 1000);
 
-        await new Promise(resolve => setTimeout(resolve, 1000)); // give FS time to write
+        await storage.committed;
 
         const storageRead = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
         await storageRead.initialize();
@@ -69,9 +66,9 @@ describe("Storage in JSON File", () => {
         storage.delete(["context"], "key");
         assert.equal(storage.get(["context"], "key"), undefined);
 
-        await fakeTime.advanceTime(2 * 1000);
+        await MockTime.advance(2 * 1000);
 
-        await new Promise(resolve => setTimeout(resolve, 1000)); // give FS time to write
+        await storage.committed;
 
         const storageRead = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
         await storageRead.initialize();
@@ -139,7 +136,7 @@ describe("Storage in JSON File", () => {
         );
     });
 
-    afterAll(async () => {
+    after(async () => {
         try {
             await unlink(TEST_STORAGE_LOCATION);
         } catch {

@@ -7,8 +7,8 @@
 import { MatterModel } from "@project-chip/matter.js/model";
 import { ClusterFile } from "./clusters/ClusterFile.js";
 import { generateCluster } from "./clusters/generate-cluster.js";
-import "./util/setup.js";
 import { TsFile } from "./util/TsFile.js";
+import "./util/setup.js";
 
 export async function main() {
     const mom = new MatterModel();

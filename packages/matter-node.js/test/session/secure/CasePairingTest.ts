@@ -8,7 +8,7 @@ import { PublicKey } from "@project-chip/matter.js/crypto";
 import { TlvEncryptedDataSigma2, TlvEncryptedDataSigma3, TlvSignedData } from "@project-chip/matter.js/session";
 import { ByteArray } from "@project-chip/matter.js/util";
 import * as assert from "assert";
-import { CryptoNode } from "../../../src/crypto/CryptoNode";
+import { CryptoNode } from "../../../src/crypto/CryptoNode.js";
 
 const cryptoNode = new CryptoNode();
 
