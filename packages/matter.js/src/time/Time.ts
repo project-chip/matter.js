@@ -60,6 +60,7 @@ export interface Timer {
     stop(): Timer;
 }
 
+// Hook for testing frameworks
 if (typeof MatterHooks !== "undefined") {
     MatterHooks.timeSetup?.(Time);
 }

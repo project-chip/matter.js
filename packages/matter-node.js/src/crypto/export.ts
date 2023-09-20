@@ -5,4 +5,4 @@
  */
 
 export * from "@project-chip/matter.js/crypto";
-export * from "./CryptoNode";
+export * from "./CryptoNode.js";

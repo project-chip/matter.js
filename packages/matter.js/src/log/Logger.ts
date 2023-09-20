@@ -346,6 +346,7 @@ export class Logger {
     }
 }
 
+// Hook for testing frameworks
 if (typeof MatterHooks !== "undefined") {
     MatterHooks.loggerSetup?.(Logger);
 }

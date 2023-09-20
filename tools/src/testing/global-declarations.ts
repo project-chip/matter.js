@@ -6,6 +6,7 @@
 
 import type Chai from "chai";
 import "chai-as-promised";
+import type { MockLogger } from "./mocks/logging.js";
 import type { MockTime } from "./mocks/time.js";
 
 declare global {
@@ -14,6 +15,9 @@ declare global {
 
     // Expose API for controlling time
     let MockTime: MockTime;
+
+    // Expose API for controlling logging
+    let MockLogger: MockLogger;
 
     /**
      * If present, the following hooks are engaged by matter.js packages to

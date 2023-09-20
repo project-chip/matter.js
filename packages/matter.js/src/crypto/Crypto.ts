@@ -124,6 +124,7 @@ export abstract class Crypto {
 import elliptic from "elliptic";
 export const { ec } = elliptic;
 
+// Hook for testing frameworks
 if (typeof MatterHooks !== "undefined") {
     MatterHooks.cryptoSetup?.(Crypto);
 }

@@ -53,160 +53,218 @@
         "LICENSE",
         "README.md"
     ],
-    "main": "dist/export.js",
-    "types": "dist/export.d.ts",
+    "type": "module",
     "exports": {
         ".": {
-            "types": "./dist/cjs/export.d.ts",
-            "default": "./dist/cjs/export.js"
+            "require": {
+                "types": "./dist/cjs/export.d.ts",
+                "default": "./dist/cjs/export.js"
+            },
+            "import": {
+                "types": "./dist/esm/export.d.ts",
+                "default": "./dist/esm/export.js"
+            }
         },
         "./package.json": "./package.json",
         "./ble": {
-            "types": "./dist/cjs/exports/ble.d.ts",
-            "default": "./dist/cjs/exports/ble.js"
+            "require": {
+                "types": "./dist/cjs/exports/ble.d.ts",
+                "default": "./dist/cjs/exports/ble.js"
+            },
+            "import": {
+                "types": "./dist/esm/exports/ble.d.ts",
+                "default": "./dist/esm/exports/ble.js"
+            }
         },
         "./certificate": {
-            "types": "./dist/cjs/exports/certificate.d.ts",
-            "default": "./dist/cjs/exports/certificate.js"
+            "require": {
+                "types": "./dist/cjs/exports/certificate.d.ts",
+                "default": "./dist/cjs/exports/certificate.js"
+            },
+            "import": {
+                "types": "./dist/esm/exports/certificate.d.ts",
+                "default": "./dist/esm/exports/certificate.js"
+            }
         },
         "./cluster": {
-            "types": "./dist/cjs/exports/cluster.d.ts",
-            "default": "./dist/cjs/exports/cluster.js"
+            "require": {
+                "types": "./dist/cjs/exports/cluster.d.ts",
+                "default": "./dist/cjs/exports/cluster.js"
+            },
+            "import": {
+                "types": "./dist/esm/exports/cluster.d.ts",
+                "default": "./dist/esm/exports/cluster.js"
+            }
         },
         "./codec": {
-            "types": "./dist/cjs/exports/codec.d.ts",
-            "default": "./dist/cjs/exports/codec.js"
+            "require": {
+                "types": "./dist/cjs/exports/codec.d.ts",
+                "default": "./dist/cjs/exports/codec.js"
+            },
+            "import": {
+                "types": "./dist/esm/exports/codec.d.ts",
+                "default": "./dist/esm/exports/codec.js"
+            }
         },
         "./common": {
-            "types": "./dist/cjs/exports/common.d.ts",
-            "default": "./dist/cjs/exports/common.js"
+            "require": {
+                "types": "./dist/cjs/exports/common.d.ts",
+                "default": "./dist/cjs/exports/common.js"
+            },
+            "import": {
+                "types": "./dist/esm/exports/common.d.ts",
+                "default": "./dist/esm/exports/common.js"
+            }
         },
         "./datatype": {
-            "types": "./dist/cjs/exports/datatype.d.ts",
-            "default": "./dist/cjs/exports/datatype.js"
+            "require": {
+                "types": "./dist/cjs/exports/datatype.d.ts",
+                "default": "./dist/cjs/exports/datatype.js"
+            },
+            "import": {
+                "types": "./dist/esm/exports/datatype.d.ts",
+                "default": "./dist/esm/exports/datatype.js"
+            }
         },
         "./device": {
-            "types": "./dist/cjs/exports/device.d.ts",
-            "default": "./dist/cjs/exports/device.js"
+            "require": {
+                "types": "./dist/cjs/exports/device.d.ts",
+                "default": "./dist/cjs/exports/device.js"
+            },
+            "import": {
+                "types": "./dist/esm/exports/device.d.ts",
+                "default": "./dist/esm/exports/device.js"
+            }
         },
         "./fabric": {
-            "types": "./dist/cjs/exports/fabric.d.ts",
-            "default": "./dist/cjs/exports/fabric.js"
+            "require": {
+                "types": "./dist/cjs/exports/fabric.d.ts",
+                "default": "./dist/cjs/exports/fabric.js"
+            },
+            "import": {
+                "types": "./dist/esm/exports/fabric.d.ts",
+                "default": "./dist/esm/exports/fabric.js"
+            }
         },
         "./interaction": {
-            "types": "./dist/cjs/exports/interaction.d.ts",
-            "default": "./dist/cjs/exports/interaction.js"
+            "require": {
+                "types": "./dist/cjs/exports/interaction.d.ts",
+                "default": "./dist/cjs/exports/interaction.js"
+            },
+            "import": {
+                "types": "./dist/esm/exports/interaction.d.ts",
+                "default": "./dist/esm/exports/interaction.js"
+            }
         },
         "./log": {
-            "types": "./dist/cjs/exports/log.d.ts",
-            "default": "./dist/cjs/exports/log.js"
+            "require": {
+                "types": "./dist/cjs/exports/log.d.ts",
+                "default": "./dist/cjs/exports/log.js"
+            },
+            "import": {
+                "types": "./dist/esm/exports/log.d.ts",
+                "default": "./dist/esm/exports/log.js"
+            }
         },
         "./math": {
-            "types": "./dist/cjs/exports/math.d.ts",
-            "default": "./dist/cjs/exports/math.js"
+            "require": {
+                "types": "./dist/cjs/exports/math.d.ts",
+                "default": "./dist/cjs/exports/math.js"
+            },
+            "import": {
+                "types": "./dist/esm/exports/math.d.ts",
+                "default": "./dist/esm/exports/math.js"
+            }
         },
         "./mdns": {
-            "types": "./dist/cjs/exports/mdns.d.ts",
-            "default": "./dist/cjs/exports/mdns.js"
+            "require": {
+                "types": "./dist/cjs/exports/mdns.d.ts",
+                "default": "./dist/cjs/exports/mdns.js"
+            },
+            "import": {
+                "types": "./dist/esm/exports/mdns.d.ts",
+                "default": "./dist/esm/exports/mdns.js"
+            }
         },
         "./model": {
-            "types": "./dist/cjs/exports/model.d.ts",
-            "default": "./dist/cjs/exports/model.js"
+            "require": {
+                "types": "./dist/cjs/exports/model.d.ts",
+                "default": "./dist/cjs/exports/model.js"
+            },
+            "import": {
+                "types": "./dist/esm/exports/model.d.ts",
+                "default": "./dist/esm/exports/model.js"
+            }
         },
         "./protocol": {
-            "types": "./dist/cjs/exports/protocol.d.ts",
-            "default": "./dist/cjs/exports/protocol.js"
+            "require": {
+                "types": "./dist/cjs/exports/protocol.d.ts",
+                "default": "./dist/cjs/exports/protocol.js"
+            },
+            "import": {
+                "types": "./dist/esm/exports/protocol.d.ts",
+                "default": "./dist/esm/exports/protocol.js"
+            }
         },
         "./schema": {
-            "types": "./dist/cjs/exports/schema.d.ts",
-            "default": "./dist/cjs/exports/schema.js"
+            "require": {
+                "types": "./dist/cjs/exports/schema.d.ts",
+                "default": "./dist/cjs/exports/schema.js"
+            },
+            "import": {
+                "types": "./dist/esm/exports/schema.d.ts",
+                "default": "./dist/esm/exports/schema.js"
+            }
         },
         "./securechannel": {
-            "types": "./dist/cjs/exports/securechannel.d.ts",
-            "default": "./dist/cjs/exports/securechannel.js"
+            "require": {
+                "types": "./dist/cjs/exports/securechannel.d.ts",
+                "default": "./dist/cjs/exports/securechannel.js"
+            },
+            "import": {
+                "types": "./dist/esm/exports/securechannel.d.ts",
+                "default": "./dist/esm/exports/securechannel.js"
+            }
         },
         "./session": {
-            "types": "./dist/cjs/exports/session.d.ts",
-            "default": "./dist/cjs/exports/session.js"
+            "require": {
+                "types": "./dist/cjs/exports/session.d.ts",
+                "default": "./dist/cjs/exports/session.js"
+            },
+            "import": {
+                "types": "./dist/esm/exports/session.d.ts",
+                "default": "./dist/esm/exports/session.js"
+            }
         },
         "./spec": {
-            "types": "./dist/cjs/exports/spec.d.ts",
-            "default": "./dist/cjs/exports/spec.js"
+            "require": {
+                "types": "./dist/cjs/exports/spec.d.ts",
+                "default": "./dist/cjs/exports/spec.js"
+            },
+            "import": {
+                "types": "./dist/esm/exports/spec.d.ts",
+                "default": "./dist/esm/exports/spec.js"
+            }
         },
         "./tlv": {
-            "types": "./dist/cjs/exports/tlv.d.ts",
-            "default": "./dist/cjs/exports/tlv.js"
+            "require": {
+                "types": "./dist/cjs/exports/tlv.d.ts",
+                "default": "./dist/cjs/exports/tlv.js"
+            },
+            "import": {
+                "types": "./dist/esm/exports/tlv.d.ts",
+                "default": "./dist/esm/exports/tlv.js"
+            }
         },
         "./*": {
-            "types": "./dist/cjs/*/export.d.ts",
-            "default": "./dist/cjs/*/export.js"
-        }
-    },
-    "typesVersions": {
-        "*": {
-            "ble": [
-                "/dist/cjs/exports/ble.d.ts"
-            ],
-            "certificate": [
-                "/dist/cjs/exports/certificate.d.ts"
-            ],
-            "cluster": [
-                "/dist/cjs/exports/cluster.d.ts"
-            ],
-            "codec": [
-                "/dist/cjs/exports/codec.d.ts"
-            ],
-            "common": [
-                "/dist/cjs/exports/common.d.ts"
-            ],
-            "datatype": [
-                "/dist/cjs/exports/datatype.d.ts"
-            ],
-            "device": [
-                "/dist/cjs/exports/device.d.ts"
-            ],
-            "fabric": [
-                "/dist/cjs/exports/fabric.d.ts"
-            ],
-            "interaction": [
-                "/dist/cjs/exports/interaction.d.ts"
-            ],
-            "log": [
-                "/dist/cjs/exports/log.d.ts"
-            ],
-            "math": [
-                "/dist/cjs/exports/math.d.ts"
-            ],
-            "mdns": [
-                "/dist/cjs/exports/mdns.d.ts"
-            ],
-            "model": [
-                "/dist/cjs/exports/model.d.ts"
-            ],
-            "protocol": [
-                "/dist/cjs/exports/protocol.d.ts"
-            ],
-            "schema": [
-                "/dist/cjs/exports/schema.d.ts"
-            ],
-            "securechannel": [
-                "/dist/cjs/exports/securechannel.d.ts"
-            ],
-            "session": [
-                "/dist/cjs/exports/session.d.ts"
-            ],
-            "spec": [
-                "/dist/cjs/exports/spec.d.ts"
-            ],
-            "tlv": [
-                "/dist/cjs/exports/tlv.d.ts"
-            ],
-            ".": [
-                "/dist/cjs/export.d.ts"
-            ],
-            "*": [
-                "/dist/cjs/*/export.d.ts"
-            ]
+            "require": {
+                "types": "./dist/cjs/*/export.d.ts",
+                "default": "./dist/cjs/*/export.js"
+            },
+            "import": {
+                "types": "./dist/esm/*/export.d.ts",
+                "default": "./dist/esm/*/export.js"
+            }
         }
     },
     "publishConfig": {

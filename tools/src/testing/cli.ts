@@ -5,14 +5,14 @@
  */
 
 import colors from "ansi-colors";
-import { existsSync } from "fs";
 import { glob } from "glob";
 import { relative } from "path";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import { Project } from "../building/build.js";
+import { Project } from "../building/project.js";
 import { Package } from "../util/package.js";
 import { Progress } from "../util/progress.js";
+import { listSupportFiles } from "./files.js";
 import { testNode } from "./node.js";
 import { ProgressReporter } from "./reporter.js";
 import { testWeb } from "./web.js";
@@ -92,7 +92,15 @@ export async function main(argv = process.argv) {
     }
 
     const progress = project.pkg.start("Testing");
-    const reporter = new ProgressReporter(progress);
+    const reporter = new (class extends ProgressReporter {
+        constructor() {
+            super(progress);
+        }
+
+        override failRun(message: string, stack?: string) {
+            fatal(message, stack);
+        }
+    })();
 
     const spec = Array.isArray(args.spec) ? args.spec : [args.spec];
 
@@ -119,8 +127,12 @@ export async function main(argv = process.argv) {
     }
 }
 
-function fatal(message: string) {
-    process.stderr.write(colors.bgRedBright.whiteBright(`${message}\n`));
+function fatal(message: string, stack?: string) {
+    process.stderr.write(colors.bgRed.whiteBright(`\n\n${message}\n\n`));
+    if (stack) {
+        stack = stack.replace(/^ {4}/gms, "");
+        process.stderr.write(`${stack}\n\n`);
+    }
     process.exit(1);
 }
 
@@ -132,26 +144,19 @@ async function runTests(progress: Progress, runner: () => Promise<void>) {
 }
 
 function loadFiles(format: "esm" | "cjs", specs: string[]) {
-    const files = Array<string>();
-    files.push(Package.tools.resolve(`dist/esm/testing/global-definitions.js`));
-
-    const config = Package.project.resolve(`build/${format}/test/test.config.js`);
-    if (existsSync(config)) {
-        files.push(config);
-    }
-
+    const tests = [];
     for (let spec of specs) {
         spec = spec.replace(/\.ts$/, ".js");
         spec = relative(Package.project.path, spec);
         if (!spec.startsWith(".") && !spec.startsWith("build/") && !spec.startsWith("dist/")) {
             spec = `build/${format}/${spec}`;
         }
-        files.push(...glob.sync(Package.project.resolve(spec)));
+        tests.push(...glob.sync(Package.project.resolve(spec)));
     }
 
-    if (!files.length) {
+    if (!tests.length) {
         fatal(`No files match ${specs.join(", ")}`);
     }
 
-    return files;
+    return [...listSupportFiles(format), ...tests];
 }

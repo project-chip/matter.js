@@ -4,11 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+// Note - we don't import mocha here because in the browser we load their
+// standard browser bundle which is different from the Node version
+
 import Chai from "chai";
 import ChaiAsPromised from "chai-as-promised";
 import { browserSetup, generalSetup } from "./mocha.js";
 import { cryptoSetup } from "./mocks/crypto.js";
-import { loggerSetup } from "./mocks/logging.js";
+import { TheMockLogger, loggerSetup } from "./mocks/logging.js";
 import { TheMockTime, timeSetup } from "./mocks/time.js";
 
 Chai.use(ChaiAsPromised);
@@ -25,6 +28,7 @@ Object.assign(globalThis, {
     },
 
     MockTime: TheMockTime,
+    MockLogger: TheMockLogger,
 });
 
 if (typeof window === "object" && globalThis === window) {

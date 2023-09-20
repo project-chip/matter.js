@@ -6,27 +6,10 @@
 
 import { WindowCovering, WindowCoveringCluster } from "../../../src/cluster/definitions/WindowCoveringCluster.js";
 import { ClusterServer } from "../../../src/cluster/server/ClusterServer.js";
-import { Crypto } from "../../../src/crypto/Crypto.js";
 import { BitFlags } from "../../../src/schema/BitmapSchema.js";
 
 describe("WindowCoveringCluster", () => {
     const WindowCovering_LF_PALF = WindowCoveringCluster.with("Lift", "PositionAwareLift");
-    let actualCrypto = Crypto.get;
-
-    before(() => {
-        actualCrypto = Crypto.get;
-        Crypto.get = () =>
-            ({
-                // make Random data deterministic
-                getRandomData: (length: number) => {
-                    return new Uint8Array(length);
-                },
-            }) as Crypto;
-    });
-
-    after(() => {
-        Crypto.get = actualCrypto;
-    });
 
     it("correctly initializes elements for LF & PA_LF", () => {
         const NONE = [false, false, false, false];

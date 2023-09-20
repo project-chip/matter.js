@@ -234,7 +234,7 @@ describe("Integration Test", () => {
             };
 
             assert.ok(commissioningController.getFabric().nodeId);
-        }).timeout(60 * 1000);
+        });
 
         it("Verify that commissioning changed the Regulatory Config/Location values", async () => {
             const generalCommissioningCluster = commissioningController.getRootClusterClient(
@@ -276,7 +276,7 @@ describe("Integration Test", () => {
                 });
             });
 
-            it("Custom Timed interaction with short timeout expired", async () => {
+            it("Custom timed interaction with short timeout expired", async () => {
                 const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
                 assert.ok(onoffEndpoint);
                 const onoffCluster = onoffEndpoint.getClusterClient(OnOffCluster);
@@ -292,7 +292,7 @@ describe("Integration Test", () => {
                 });
             });
 
-            it("Custom Timed interaction with default timeout works", async () => {
+            it("Custom timed interaction with default timeout works", async () => {
                 const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
                 assert.ok(onoffEndpoint);
                 const onoffCluster = onoffEndpoint.getClusterClient(OnOffCluster);
@@ -304,7 +304,7 @@ describe("Integration Test", () => {
                 await MockTime.yield3();
                 await MockTime.advance(5000);
                 await promise;
-            }).timeout(6000);
+            });
 
             it("Timed invoke ok", async () => {
                 const adminCommissioningCluster = commissioningController.getRootClusterClient(

@@ -9,7 +9,7 @@ import { UdpChannel, UdpChannelOptions } from "@project-chip/matter.js/net";
 import { ByteArray } from "@project-chip/matter.js/util";
 
 import * as dgram from "dgram";
-import { NetworkNode } from "./NetworkNode";
+import { NetworkNode } from "./NetworkNode.js";
 
 const logger = Logger.get("UdpChannelNode");
 

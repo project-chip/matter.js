@@ -31,6 +31,7 @@ export class Package {
     json: PackageJson;
     esm: boolean;
     cjs: boolean;
+    src: boolean;
     tests: boolean;
     #tsconfig?: Record<string, any>;
 
@@ -45,14 +46,12 @@ export class Package {
         this.path = root;
         this.json = json;
 
-        if (!ignoreErrorSync("ENOENT", () => statSync("src").isDirectory())) {
-            throw new Error(`Found package ${this.json.name} but no src directory is present`);
-        }
         const { esm, cjs } = selectFormats(this.json);
         this.esm = esm;
         this.cjs = cjs;
 
-        this.tests = ignoreErrorSync("ENOENT", () => statSync("test").isDirectory()) ?? false;
+        this.src = !!ignoreErrorSync("ENOENT", () => statSync(this.resolve("src")).isDirectory());
+        this.tests = !!ignoreErrorSync("ENOENT", () => statSync(this.resolve("test")).isDirectory());
     }
 
     resolve(path: string) {

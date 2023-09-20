@@ -5,5 +5,5 @@
  */
 
 export * from "@project-chip/matter.js/net";
-export * from "./NetworkNode";
-export * from "./UdpChannelNode";
+export * from "./NetworkNode.js";
+export * from "./UdpChannelNode.js";

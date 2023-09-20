@@ -16,6 +16,10 @@ export class Project {
 
     constructor(path = ".") {
         Package.project = this.pkg = new Package({ path });
+
+        if (!this.pkg.src) {
+            throw new Error(`Found package ${this.pkg.json.name} but no src directory is present`);
+        }
     }
 
     async buildSource(format: Format) {
@@ -88,7 +92,10 @@ export class Project {
             // Find key text
             let pos = map.indexOf('"sources":["../');
             if (pos === -1) {
-                throw new Error("Could not find sources position in declaration map, format may have changed");
+                console.log(map.toString());
+                throw new Error(
+                    `Could not find sources position in declaration map ${source}, format may have changed`,
+                );
             }
 
             // move to ../
@@ -120,27 +127,37 @@ export class Project {
 
         await config?.before?.(this, format);
 
-        const files = await glob([`${indir}/**/*.ts`, `${indir}/**/*.js`]);
-        const entryPoints = files.map(file => ({
-            in: file,
-            out: `${file.slice(indir.length + 1).replace(/\.[jt]s$/, "")}`,
-        }));
+        const entryPoints = await targets(indir, outdir, "ts", "js");
+        for (const entry of entryPoints) {
+            entry.out = entry.out.replace(/\.[jt]s$/, "");
+        }
         await esbuild({
             entryPoints,
-            outdir,
+            outdir: this.pkg.path,
             format,
             sourcemap: true,
             absWorkingDir: this.pkg.path,
         });
+
+        for (const entry of await targets(indir, outdir, "cjs", "mjs", "d.cts", "d.mts")) {
+            await cp(entry.in, entry.out);
+        }
 
         await config?.after?.(this, format);
     }
 
     private async specifyFormat(dir: string, format: Format) {
         if (format === "cjs") {
-            await writeFile(`${dir}/${format}/package.json`, '{ "type": "commonjs" }');
+            await writeFile(this.pkg.resolve(`${dir}/${format}/package.json`), '{ "type": "commonjs" }');
         }
     }
+}
+
+async function targets(indir: string, outdir: string, ...extensions: string[]) {
+    return (await glob(extensions.map(ext => `${indir}/**/*.${ext}`))).map(file => ({
+        in: file,
+        out: `${outdir}/${file.slice(indir.length + 1)}`,
+    }));
 }
 
 export namespace Project {

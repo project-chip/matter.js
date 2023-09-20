@@ -7,7 +7,7 @@
 import { NoProviderError } from "@project-chip/matter.js/common";
 import { Crypto } from "@project-chip/matter.js/crypto";
 import { singleton } from "@project-chip/matter.js/util";
-import { CryptoNode } from "./CryptoNode";
+import { CryptoNode } from "./CryptoNode.js";
 
 // Check if Crypto singleton is already registered and auto register if not
 try {

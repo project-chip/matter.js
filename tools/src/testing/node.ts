@@ -9,10 +9,12 @@ import Mocha from "mocha";
 import { relative } from "path";
 import v8Profiler from "v8-profiler-next";
 import { Package } from "../util/package.js";
-import { adaptReporter, applyOptions, generalSetup } from "./mocha.js";
-import "./mocks/index.js";
+import { adaptReporter, generalSetup } from "./mocha.js";
 import { TestOptions } from "./options.js";
 import { Reporter } from "./reporter.js";
+
+// Load globals so settings get applied
+import "./global-definitions.js";
 
 export async function testNode(format: "cjs" | "esm", files: string[], reporter: Reporter, options: TestOptions = {}) {
     generalSetup(Mocha);
@@ -22,7 +24,7 @@ export async function testNode(format: "cjs" | "esm", files: string[], reporter:
         reporter: adaptReporter(Mocha, format.toUpperCase(), reporter),
     });
 
-    applyOptions(mocha, options);
+    TestOptions.apply(mocha, options);
 
     files.forEach(path => {
         path = relative(process.cwd(), path);

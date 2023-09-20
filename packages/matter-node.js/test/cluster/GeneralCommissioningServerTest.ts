@@ -17,7 +17,7 @@ import { EndpointNumber, VendorId } from "@project-chip/matter.js/datatype";
 import { DeviceTypes, Endpoint } from "@project-chip/matter.js/device";
 import { SecureSession } from "@project-chip/matter.js/session";
 import * as assert from "assert";
-import { callCommandOnClusterServer, createTestSessionWithFabric } from "./ClusterServerTestingUtil";
+import { callCommandOnClusterServer, createTestSessionWithFabric } from "./ClusterServerTestingUtil.js";
 
 describe("GeneralCommissioning Server test", () => {
     let generalCommissioningServer: ClusterServerObjForCluster<typeof GeneralCommissioningCluster> | undefined;

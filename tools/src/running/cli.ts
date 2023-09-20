@@ -6,7 +6,7 @@
 
 import { dirname, resolve } from "path";
 import { exit } from "process";
-import { Project } from "../building/build.js";
+import { Project } from "../building/project.js";
 import { executeNode } from "./execute.js";
 
 /**
@@ -36,10 +36,12 @@ export async function main(argv = process.argv) {
 
     await project.buildSource(format);
 
-    script = project.pkg
-        .relative(script)
-        .replace(/\.ts$/, ".js")
-        .replace(/^src\//, `dist/${format}/`);
+    script = project.pkg.resolve(
+        project.pkg
+            .relative(script)
+            .replace(/\.ts$/, ".js")
+            .replace(/^src\//, `dist/${format}/`),
+    );
 
     await executeNode(script, argv);
 }

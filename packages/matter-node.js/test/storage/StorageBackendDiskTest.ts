@@ -7,9 +7,11 @@
 import * as assert from "assert";
 import { readFile, stat } from "fs/promises";
 import { LocalStorage } from "node-localstorage";
-import { StorageBackendDisk } from "../../src/storage/StorageBackendDisk";
+import { tmpdir } from "os";
+import { resolve } from "path";
+import { StorageBackendDisk } from "../../src/storage/StorageBackendDisk.js";
 
-const TEST_STORAGE_LOCATION = __dirname + "/testdata-storage";
+const TEST_STORAGE_LOCATION = resolve(tmpdir(), "matterjs-test-storage");
 
 describe("Storage node-localstorage", () => {
     beforeEach(() => {

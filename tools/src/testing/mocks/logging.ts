@@ -9,6 +9,14 @@ interface LoggerLike {
     log(level: number, message: string): void;
 }
 
+export interface MockLogger {
+    emitAll: boolean;
+}
+
+export const TheMockLogger: MockLogger = {
+    emitAll: false,
+};
+
 export function loggerSetup(Logger: LoggerLike) {
     // Currently everywhere we run tests supports ANSI escape codes for
     // colorization.  This includes:
@@ -31,14 +39,18 @@ export function loggerSetup(Logger: LoggerLike) {
     }
 
     function interceptingLogger(...args: [number, string]) {
+        let emitAll = TheMockLogger.emitAll;
         if (MatterHooks?.loggerSink) {
             MatterHooks.loggerSink(...args);
-        } else if (messageBuffer) {
-            if (!messageBuffer) {
-                messageBuffer = [];
+        } else if (!emitAll) {
+            if (messageBuffer) {
+                messageBuffer.push(args);
+            } else {
+                emitAll = true;
             }
-            messageBuffer.push(args);
-        } else {
+        }
+
+        if (emitAll) {
             passMessage(args);
         }
     }
@@ -47,7 +59,9 @@ export function loggerSetup(Logger: LoggerLike) {
 
     // Divert log messages for test duration
     beforeEach(function () {
-        messageBuffer = [];
+        if (!TheMockLogger.emitAll) {
+            messageBuffer = [];
+        }
     });
 
     // Emit log messages only if the test fails

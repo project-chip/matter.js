@@ -7,7 +7,7 @@
 import colors from "ansi-colors";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import { Project } from "./build.js";
+import { Project } from "./project.js";
 
 enum Target {
     clean = "clean",

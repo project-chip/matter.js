@@ -7,7 +7,7 @@
 import { NoProviderError } from "@project-chip/matter.js/common";
 import { Network } from "@project-chip/matter.js/net";
 import { singleton } from "@project-chip/matter.js/util";
-import { NetworkNode } from "./NetworkNode";
+import { NetworkNode } from "./NetworkNode.js";
 
 // Check if Network singleton is already registered and auto register if not
 try {

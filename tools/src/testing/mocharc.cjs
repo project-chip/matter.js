@@ -10,10 +10,11 @@
 
 const { resolve } = require("path");
 const cli = require("mocha/lib/cli/cli");
+const listSupportFiles = require("./files.js").listSupportFiles;
 
-const TOOLS = resolve(__dirname, "../..");
+const TOOLS = resolve(__dirname, "../../..");
 
-module.exports = (format = "cjs") => {
+function mocharc(format = "cjs") {
     const testJs = `build/${format}/test`;
     const defaultSpec = `${testJs}/**/*Test.js`;
 
@@ -54,10 +55,9 @@ module.exports = (format = "cjs") => {
 
     return {
         inlineDiffs: true,
-        file: [
-            `${TOOLS}/dist/${format}/testing/mocks/index.js`,
-            `${TOOLS}/dist/${format}/testing/global-definitions.js`
-        ],
+        file: listSupportFiles(format),
         spec: [ defaultSpec ]
     }
 }
+
+module.exports.mocharc = mocharc;

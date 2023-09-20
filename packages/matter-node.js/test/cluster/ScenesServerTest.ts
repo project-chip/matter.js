@@ -23,7 +23,7 @@ import { SecureSession } from "@project-chip/matter.js/session";
 import { TlvBoolean } from "@project-chip/matter.js/tlv";
 import { getPromiseResolver } from "@project-chip/matter.js/util";
 import * as assert from "assert";
-import { callCommandOnClusterServer, createTestSessionWithFabric } from "./ClusterServerTestingUtil";
+import { callCommandOnClusterServer, createTestSessionWithFabric } from "./ClusterServerTestingUtil.js";
 
 describe("Scenes Server test", () => {
     let groupsServer: ClusterServerObjForCluster<typeof GroupsCluster> | undefined;

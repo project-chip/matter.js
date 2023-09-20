@@ -5,7 +5,7 @@
  */
 
 import { Crypto } from "@project-chip/matter.js/crypto";
-import { CryptoNode } from "../src/crypto/CryptoNode";
+import { CryptoNode } from "../src/crypto/CryptoNode.js";
 
 const TheCrypto = new CryptoNode();
 Crypto.get = () => TheCrypto;

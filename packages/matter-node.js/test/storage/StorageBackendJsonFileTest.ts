@@ -8,7 +8,7 @@ import * as assert from "assert";
 import { readFile, unlink } from "fs/promises";
 import { tmpdir } from "os";
 import { resolve } from "path";
-import { StorageBackendJsonFile } from "../../src/storage/StorageBackendJsonFile";
+import { StorageBackendJsonFile } from "../../src/storage/StorageBackendJsonFile.js";
 
 const TEST_STORAGE_LOCATION = resolve(tmpdir(), "matterjs-test-storage.json");
 

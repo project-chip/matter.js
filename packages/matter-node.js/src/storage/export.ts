@@ -5,5 +5,5 @@
  */
 
 export * from "@project-chip/matter.js/storage";
-export * from "./StorageBackendDisk";
-export * from "./StorageBackendJsonFile";
+export * from "./StorageBackendDisk.js";
+export * from "./StorageBackendJsonFile.js";
