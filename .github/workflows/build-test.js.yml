@@ -18,6 +18,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - run: npm ci
+    - run: npm run format-verify
+    - run: npm run lint
     - name: Get installed Playwright version
       id: playwright-version
       run: echo "PLAYWRIGHT_VERSION=$(npx playwright --version)" >> $GITHUB_ENV
@@ -28,9 +31,6 @@ jobs:
         path: |
           ~/.cache/ms-playwright
         key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
-    - run: npm ci
-    - run: npm run format-verify
-    - run: npm run lint
     - run: npx playwright install --with-deps
       if: steps.playwright-cache.outputs.cache-hit != 'true'
     - run: npx playwright install-deps
