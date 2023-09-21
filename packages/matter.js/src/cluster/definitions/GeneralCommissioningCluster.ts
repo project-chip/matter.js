@@ -6,15 +6,9 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import {
-    Cluster as CreateCluster,
-    WritableAttribute,
-    AccessLevel,
-    FixedAttribute,
-    Attribute,
-    Command
-} from "../../cluster/Cluster.js";
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { WritableAttribute, AccessLevel, FixedAttribute, Attribute, Command } from "../../cluster/Cluster.js";
 import { TlvUInt64, TlvUInt16, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
@@ -187,7 +181,7 @@ export namespace GeneralCommissioning {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.9
      */
-    export const Cluster = CreateCluster({
+    export const Cluster = ClusterFactory.Definition({
         id: 0x30,
         name: "GeneralCommissioning",
         revision: 1,

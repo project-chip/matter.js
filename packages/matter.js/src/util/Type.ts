@@ -56,5 +56,13 @@ export type MakeMandatory<T> = Exclude<T, undefined>;
 
 /** Create a branded type */
 declare const __brand: unique symbol;
-type Brand<B> = { [__brand]: B };
+// Don't think it should be necessary to export Brand<B> but it will cause
+// the following error under some circumstances:
+//
+//   Exported variable 'XXX' has or is using name '__brand' from external
+//   module "../src/util/Type" but cannot be named.ts(4023)
+//
+// Specifically this occurs with the reference to Cluster.id in the "complete"
+// cluster definitions
+export type Brand<B> = { [__brand]: B };
 export type Branded<T, B> = T & Brand<B>;

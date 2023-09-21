@@ -6,16 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import {
-    BaseClusterComponent,
-    ClusterComponent,
-    ExtensibleCluster,
-    validateFeatureSelection,
-    extendCluster,
-    ClusterForBaseCluster,
-    AsConditional
-} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import {
     WritableAttribute,
@@ -23,8 +15,7 @@ import {
     Command,
     TlvNoResponse,
     AccessLevel,
-    OptionalCommand,
-    Cluster as CreateCluster
+    OptionalCommand
 } from "../../cluster/Cluster.js";
 import { TlvUInt16, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
@@ -185,7 +176,7 @@ export namespace Identify {
     /**
      * These elements and properties are present in all Identify clusters.
      */
-    export const Base = BaseClusterComponent({
+    export const Base = ClusterFactory.Definition({
         id: 0x3,
         name: "Identify",
         revision: 4,
@@ -257,7 +248,7 @@ export namespace Identify {
     /**
      * A IdentifyCluster supports these elements if it supports feature Query.
      */
-    export const QueryComponent = ClusterComponent({
+    export const QueryComponent = ClusterFactory.Component({
         commands: {
             /**
              * This command allows the sending device to request the target or targets to respond if they are currently
@@ -296,8 +287,8 @@ export namespace Identify {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2
      */
-    export const Cluster = ExtensibleCluster({
-        ...Base,
+    export const Cluster = ClusterFactory.Extensible(
+        Base,
 
         /**
          * Use this factory method to create an Identify cluster with support for optional features. Include each
@@ -307,16 +298,19 @@ export namespace Identify {
          * @returns an Identify cluster with specified features enabled
          * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
          */
-        factory: <T extends `${Feature}`[]>(...features: [...T]) => {
-            validateFeatureSelection(features, Feature);
-            const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
-            extendCluster(cluster, QueryComponent, { query: true });
+        <T extends `${Feature}`[]>(...features: [...T]) => {
+            ClusterFactory.validateFeatureSelection(features, Feature);
+            const cluster = ClusterFactory.Definition({
+                ...Base,
+                supportedFeatures: BitFlags(Base.features, ...features)
+            });
+            ClusterFactory.extend(cluster, QueryComponent, { query: true });
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }
-    });
+    );
 
     export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        ClusterForBaseCluster<typeof Base, SF>
+        Omit<typeof Base, "supportedFeatures">
         & { supportedFeatures: SF }
         & (SF extends { query: true } ? typeof QueryComponent : {});
     const QRY = { query: true };
@@ -327,7 +321,7 @@ export namespace Identify {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = CreateCluster({
+    export const Complete = ClusterFactory.Definition({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -335,7 +329,7 @@ export namespace Identify {
         attributes: Cluster.attributes,
         commands: {
             ...Cluster.commands,
-            identifyQuery: AsConditional(QueryComponent.commands.identifyQuery, { mandatoryIf: [QRY] })
+            identifyQuery: ClusterFactory.AsConditional(QueryComponent.commands.identifyQuery, { mandatoryIf: [QRY] })
         }
     });
 }

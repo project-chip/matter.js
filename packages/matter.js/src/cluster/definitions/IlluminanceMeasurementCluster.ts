@@ -6,8 +6,9 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Cluster as CreateCluster, Attribute, OptionalAttribute } from "../../cluster/Cluster.js";
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
+import { Attribute, OptionalAttribute } from "../../cluster/Cluster.js";
 import { TlvUInt16, TlvUInt8 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 
@@ -19,7 +20,7 @@ export namespace IlluminanceMeasurement {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.2
      */
-    export const Cluster = CreateCluster({
+    export const Cluster = ClusterFactory.Definition({
         id: 0x400,
         name: "IlluminanceMeasurement",
         revision: 3,

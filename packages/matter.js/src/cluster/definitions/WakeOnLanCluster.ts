@@ -6,8 +6,9 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Cluster as CreateCluster, OptionalFixedAttribute } from "../../cluster/Cluster.js";
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
+import { OptionalFixedAttribute } from "../../cluster/Cluster.js";
 import { TlvByteString } from "../../tlv/TlvString.js";
 
 export namespace WakeOnLan {
@@ -19,7 +20,7 @@ export namespace WakeOnLan {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.10
      */
-    export const Cluster = CreateCluster({
+    export const Cluster = ClusterFactory.Definition({
         id: 0x503,
         name: "WakeOnLan",
         revision: 1,

@@ -6,17 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import {
-    BaseClusterComponent,
-    ClusterComponent,
-    ExtensibleCluster,
-    validateFeatureSelection,
-    extendCluster,
-    preventCluster,
-    ClusterForBaseCluster,
-    AsConditional
-} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitsFromPartial, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import {
     Attribute,
@@ -29,8 +20,7 @@ import {
     TlvNoResponse,
     OptionalCommand,
     Event,
-    EventPriority,
-    Cluster as CreateCluster
+    EventPriority
 } from "../../cluster/Cluster.js";
 import { TlvEnum, TlvUInt8, TlvUInt32, TlvUInt16, TlvBitmap, TlvEpochS } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
@@ -1286,7 +1276,7 @@ export namespace DoorLock {
     /**
      * These elements and properties are present in all DoorLock clusters.
      */
-    export const Base = BaseClusterComponent({
+    export const Base = ClusterFactory.Definition({
         id: 0x101,
         name: "DoorLock",
         revision: 6,
@@ -1639,7 +1629,7 @@ export namespace DoorLock {
     /**
      * A DoorLockCluster supports these elements if it supports feature DoorPositionSensor.
      */
-    export const DoorPositionSensorComponent = ClusterComponent({
+    export const DoorPositionSensorComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The current door state as defined in DoorStateEnum.
@@ -1686,7 +1676,7 @@ export namespace DoorLock {
     /**
      * A DoorLockCluster supports these elements if it supports feature Logging.
      */
-    export const LoggingComponent = ClusterComponent({
+    export const LoggingComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The number of available log records.
@@ -1717,7 +1707,7 @@ export namespace DoorLock {
     /**
      * A DoorLockCluster supports these elements if it supports feature User.
      */
-    export const UserComponent = ClusterComponent({
+    export const UserComponent = ClusterFactory.Component({
         attributes: {
             /**
              * Number of total users supported by the lock.
@@ -1842,7 +1832,7 @@ export namespace DoorLock {
     /**
      * A DoorLockCluster supports these elements if it supports feature PinCredential.
      */
-    export const PinCredentialComponent = ClusterComponent({
+    export const PinCredentialComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The number of PIN users supported.
@@ -1890,7 +1880,7 @@ export namespace DoorLock {
     /**
      * A DoorLockCluster supports these elements if it supports feature RfidCredential.
      */
-    export const RfidCredentialComponent = ClusterComponent({
+    export const RfidCredentialComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The number of RFID users supported.
@@ -1922,7 +1912,7 @@ export namespace DoorLock {
     /**
      * A DoorLockCluster supports these elements if it supports feature WeekDayAccessSchedules.
      */
-    export const WeekDayAccessSchedulesComponent = ClusterComponent({
+    export const WeekDayAccessSchedulesComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The number of configurable week day schedule supported per user.
@@ -1971,7 +1961,7 @@ export namespace DoorLock {
     /**
      * A DoorLockCluster supports these elements if it supports feature YearDayAccessSchedules.
      */
-    export const YearDayAccessSchedulesComponent = ClusterComponent({
+    export const YearDayAccessSchedulesComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The number of configurable year day schedule supported per user.
@@ -2020,7 +2010,7 @@ export namespace DoorLock {
     /**
      * A DoorLockCluster supports these elements if it supports feature HolidaySchedules.
      */
-    export const HolidaySchedulesComponent = ClusterComponent({
+    export const HolidaySchedulesComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The number of holiday schedules supported for the entire door lock device.
@@ -2069,7 +2059,7 @@ export namespace DoorLock {
     /**
      * A DoorLockCluster supports these elements if it supports features PinCredential or RfidCredential.
      */
-    export const PinCredentialOrRfidCredentialComponent = ClusterComponent({
+    export const PinCredentialOrRfidCredentialComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The number of incorrect Pin codes or RFID presentment attempts a user is allowed to enter before the
@@ -2110,7 +2100,7 @@ export namespace DoorLock {
     /**
      * A DoorLockCluster supports these elements if it supports features CredentialOverTheAirAccess and PinCredential.
      */
-    export const CredentialOverTheAirAccessAndPinCredentialComponent = ClusterComponent({
+    export const CredentialOverTheAirAccessAndPinCredentialComponent = ClusterFactory.Component({
         attributes: {
             /**
              * Boolean set to True if the door lock server requires that an optional PINs be included in the payload of
@@ -2129,7 +2119,7 @@ export namespace DoorLock {
     /**
      * A DoorLockCluster supports these elements if it supports features Notification and PinCredential.
      */
-    export const NotificationAndPinCredentialComponent = ClusterComponent({
+    export const NotificationAndPinCredentialComponent = ClusterFactory.Component({
         attributes: {
             /**
              * Event mask used to turn on and off the transmission of keypad operation events. This mask DOES NOT apply
@@ -2171,7 +2161,7 @@ export namespace DoorLock {
     /**
      * A DoorLockCluster supports these elements if it supports feature Notification.
      */
-    export const NotificationComponent = ClusterComponent({
+    export const NotificationComponent = ClusterFactory.Component({
         attributes: {
             /**
              * Event mask used to turn on and off the transmission of remote operation events. This mask DOES NOT apply
@@ -2231,7 +2221,7 @@ export namespace DoorLock {
     /**
      * A DoorLockCluster supports these elements if it supports features Notification and RfidCredential.
      */
-    export const NotificationAndRfidCredentialComponent = ClusterComponent({
+    export const NotificationAndRfidCredentialComponent = ClusterFactory.Component({
         attributes: {
             /**
              * Event mask used to turn on and off RFID operation events. This mask DOES NOT apply to the storing of
@@ -2273,7 +2263,7 @@ export namespace DoorLock {
      * A DoorLockCluster supports these elements if it supports feature PinCredential and it doesn't support feature
      * USR.
      */
-    export const PinCredentialNotUserComponent = ClusterComponent({
+    export const PinCredentialNotUserComponent = ClusterFactory.Component({
         commands: {
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
@@ -2319,7 +2309,7 @@ export namespace DoorLock {
      * A DoorLockCluster supports these elements if it supports features PinCredential, RfidCredential and
      * FingerCredentials and it doesn't support feature USR.
      */
-    export const PinCredentialAndRfidCredentialAndFingerCredentialsNotUserComponent = ClusterComponent({
+    export const PinCredentialAndRfidCredentialAndFingerCredentialsNotUserComponent = ClusterFactory.Component({
         commands: {
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
@@ -2370,13 +2360,13 @@ export namespace DoorLock {
     /**
      * A DoorLockCluster supports these elements if doesn't support feature USR.
      */
-    export const NotUserComponent = ClusterComponent({});
+    export const NotUserComponent = ClusterFactory.Component({});
 
     /**
      * A DoorLockCluster supports these elements if it supports feature RfidCredential and it doesn't support feature
      * USR.
      */
-    export const RfidCredentialNotUserComponent = ClusterComponent({
+    export const RfidCredentialNotUserComponent = ClusterFactory.Component({
         commands: {
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
@@ -2427,8 +2417,8 @@ export namespace DoorLock {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2
      */
-    export const Cluster = ExtensibleCluster({
-        ...Base,
+    export const Cluster = ClusterFactory.Extensible(
+        Base,
 
         /**
          * Use this factory method to create a DoorLock cluster with support for optional features. Include each
@@ -2438,47 +2428,54 @@ export namespace DoorLock {
          * @returns a DoorLock cluster with specified features enabled
          * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
          */
-        factory: <T extends `${Feature}`[]>(...features: [...T]) => {
-            validateFeatureSelection(features, Feature);
-            const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
-            extendCluster(cluster, DoorPositionSensorComponent, { doorPositionSensor: true });
-            extendCluster(cluster, LoggingComponent, { logging: true });
-            extendCluster(cluster, UserComponent, { user: true });
-            extendCluster(cluster, PinCredentialComponent, { pinCredential: true });
-            extendCluster(cluster, RfidCredentialComponent, { rfidCredential: true });
-            extendCluster(cluster, WeekDayAccessSchedulesComponent, { weekDayAccessSchedules: true });
-            extendCluster(cluster, YearDayAccessSchedulesComponent, { yearDayAccessSchedules: true });
-            extendCluster(cluster, HolidaySchedulesComponent, { holidaySchedules: true });
+        <T extends `${Feature}`[]>(...features: [...T]) => {
+            ClusterFactory.validateFeatureSelection(features, Feature);
+            const cluster = ClusterFactory.Definition({
+                ...Base,
+                supportedFeatures: BitFlags(Base.features, ...features)
+            });
+            ClusterFactory.extend(cluster, DoorPositionSensorComponent, { doorPositionSensor: true });
+            ClusterFactory.extend(cluster, LoggingComponent, { logging: true });
+            ClusterFactory.extend(cluster, UserComponent, { user: true });
+            ClusterFactory.extend(cluster, PinCredentialComponent, { pinCredential: true });
+            ClusterFactory.extend(cluster, RfidCredentialComponent, { rfidCredential: true });
+            ClusterFactory.extend(cluster, WeekDayAccessSchedulesComponent, { weekDayAccessSchedules: true });
+            ClusterFactory.extend(cluster, YearDayAccessSchedulesComponent, { yearDayAccessSchedules: true });
+            ClusterFactory.extend(cluster, HolidaySchedulesComponent, { holidaySchedules: true });
 
-            extendCluster(
+            ClusterFactory.extend(
                 cluster,
                 PinCredentialOrRfidCredentialComponent,
                 { pinCredential: true },
                 { rfidCredential: true }
             );
 
-            extendCluster(
+            ClusterFactory.extend(
                 cluster,
                 CredentialOverTheAirAccessAndPinCredentialComponent,
                 { credentialOverTheAirAccess: true, pinCredential: true }
             );
-            extendCluster(cluster, NotificationAndPinCredentialComponent, { notification: true, pinCredential: true });
-            extendCluster(cluster, NotificationComponent, { notification: true });
-            extendCluster(
+            ClusterFactory.extend(
+                cluster,
+                NotificationAndPinCredentialComponent,
+                { notification: true, pinCredential: true }
+            );
+            ClusterFactory.extend(cluster, NotificationComponent, { notification: true });
+            ClusterFactory.extend(
                 cluster,
                 NotificationAndRfidCredentialComponent,
                 { notification: true, rfidCredential: true }
             );
-            extendCluster(cluster, PinCredentialNotUserComponent, { pinCredential: true, user: false });
-            extendCluster(
+            ClusterFactory.extend(cluster, PinCredentialNotUserComponent, { pinCredential: true, user: false });
+            ClusterFactory.extend(
                 cluster,
                 PinCredentialAndRfidCredentialAndFingerCredentialsNotUserComponent,
                 { pinCredential: true, rfidCredential: true, fingerCredentials: true, user: false }
             );
-            extendCluster(cluster, NotUserComponent, { user: false });
-            extendCluster(cluster, RfidCredentialNotUserComponent, { rfidCredential: true, user: false });
+            ClusterFactory.extend(cluster, NotUserComponent, { user: false });
+            ClusterFactory.extend(cluster, RfidCredentialNotUserComponent, { rfidCredential: true, user: false });
 
-            preventCluster(
+            ClusterFactory.prevent(
                 cluster,
 
                 {
@@ -2492,10 +2489,10 @@ export namespace DoorLock {
 
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }
-    });
+    );
 
     export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        ClusterForBaseCluster<typeof Base, SF>
+        Omit<typeof Base, "supportedFeatures">
         & { supportedFeatures: SF }
         & (SF extends { doorPositionSensor: true } ? typeof DoorPositionSensorComponent : {})
         & (SF extends { logging: true } ? typeof LoggingComponent : {})
@@ -2538,7 +2535,7 @@ export namespace DoorLock {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = CreateCluster({
+    export const Complete = ClusterFactory.Definition({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -2546,102 +2543,123 @@ export namespace DoorLock {
 
         attributes: {
             ...Cluster.attributes,
-            doorState: AsConditional(DoorPositionSensorComponent.attributes.doorState, { mandatoryIf: [DPS] }),
-            doorOpenEvents: AsConditional(DoorPositionSensorComponent.attributes.doorOpenEvents, { optionalIf: [DPS] }),
-            doorClosedEvents: AsConditional(
+            doorState: ClusterFactory.AsConditional(
+                DoorPositionSensorComponent.attributes.doorState,
+                { mandatoryIf: [DPS] }
+            ),
+            doorOpenEvents: ClusterFactory.AsConditional(
+                DoorPositionSensorComponent.attributes.doorOpenEvents,
+                { optionalIf: [DPS] }
+            ),
+            doorClosedEvents: ClusterFactory.AsConditional(
                 DoorPositionSensorComponent.attributes.doorClosedEvents,
                 { optionalIf: [DPS] }
             ),
-            openPeriod: AsConditional(DoorPositionSensorComponent.attributes.openPeriod, { optionalIf: [DPS] }),
-            numberOfLogRecordsSupported: AsConditional(
+            openPeriod: ClusterFactory.AsConditional(
+                DoorPositionSensorComponent.attributes.openPeriod,
+                { optionalIf: [DPS] }
+            ),
+            numberOfLogRecordsSupported: ClusterFactory.AsConditional(
                 LoggingComponent.attributes.numberOfLogRecordsSupported,
                 { mandatoryIf: [LOG] }
             ),
-            numberOfTotalUsersSupported: AsConditional(
+            numberOfTotalUsersSupported: ClusterFactory.AsConditional(
                 UserComponent.attributes.numberOfTotalUsersSupported,
                 { mandatoryIf: [USR] }
             ),
-            numberOfPinUsersSupported: AsConditional(
+            numberOfPinUsersSupported: ClusterFactory.AsConditional(
                 PinCredentialComponent.attributes.numberOfPinUsersSupported,
                 { mandatoryIf: [PIN] }
             ),
-            numberOfRfidUsersSupported: AsConditional(
+            numberOfRfidUsersSupported: ClusterFactory.AsConditional(
                 RfidCredentialComponent.attributes.numberOfRfidUsersSupported,
                 { mandatoryIf: [RID] }
             ),
-            numberOfWeekDaySchedulesSupportedPerUser: AsConditional(
+            numberOfWeekDaySchedulesSupportedPerUser: ClusterFactory.AsConditional(
                 WeekDayAccessSchedulesComponent.attributes.numberOfWeekDaySchedulesSupportedPerUser,
                 { mandatoryIf: [WDSCH] }
             ),
-            numberOfYearDaySchedulesSupportedPerUser: AsConditional(
+            numberOfYearDaySchedulesSupportedPerUser: ClusterFactory.AsConditional(
                 YearDayAccessSchedulesComponent.attributes.numberOfYearDaySchedulesSupportedPerUser,
                 { mandatoryIf: [YDSCH] }
             ),
-            numberOfHolidaySchedulesSupported: AsConditional(
+            numberOfHolidaySchedulesSupported: ClusterFactory.AsConditional(
                 HolidaySchedulesComponent.attributes.numberOfHolidaySchedulesSupported,
                 { mandatoryIf: [HDSCH] }
             ),
-            maxPinCodeLength: AsConditional(PinCredentialComponent.attributes.maxPinCodeLength, { mandatoryIf: [PIN] }),
-            minPinCodeLength: AsConditional(PinCredentialComponent.attributes.minPinCodeLength, { mandatoryIf: [PIN] }),
-            maxRfidCodeLength: AsConditional(
+            maxPinCodeLength: ClusterFactory.AsConditional(
+                PinCredentialComponent.attributes.maxPinCodeLength,
+                { mandatoryIf: [PIN] }
+            ),
+            minPinCodeLength: ClusterFactory.AsConditional(
+                PinCredentialComponent.attributes.minPinCodeLength,
+                { mandatoryIf: [PIN] }
+            ),
+            maxRfidCodeLength: ClusterFactory.AsConditional(
                 RfidCredentialComponent.attributes.maxRfidCodeLength,
                 { mandatoryIf: [RID] }
             ),
-            minRfidCodeLength: AsConditional(
+            minRfidCodeLength: ClusterFactory.AsConditional(
                 RfidCredentialComponent.attributes.minRfidCodeLength,
                 { mandatoryIf: [RID] }
             ),
-            credentialRulesSupport: AsConditional(
+            credentialRulesSupport: ClusterFactory.AsConditional(
                 UserComponent.attributes.credentialRulesSupport,
                 { mandatoryIf: [USR] }
             ),
-            numberOfCredentialsSupportedPerUser: AsConditional(
+            numberOfCredentialsSupportedPerUser: ClusterFactory.AsConditional(
                 UserComponent.attributes.numberOfCredentialsSupportedPerUser,
                 { mandatoryIf: [USR] }
             ),
-            enableLogging: AsConditional(LoggingComponent.attributes.enableLogging, { mandatoryIf: [LOG] }),
-            wrongCodeEntryLimit: AsConditional(
+            enableLogging: ClusterFactory.AsConditional(
+                LoggingComponent.attributes.enableLogging,
+                { mandatoryIf: [LOG] }
+            ),
+            wrongCodeEntryLimit: ClusterFactory.AsConditional(
                 PinCredentialOrRfidCredentialComponent.attributes.wrongCodeEntryLimit,
                 { mandatoryIf: [PIN, RID] }
             ),
-            userCodeTemporaryDisableTime: AsConditional(
+            userCodeTemporaryDisableTime: ClusterFactory.AsConditional(
                 PinCredentialOrRfidCredentialComponent.attributes.userCodeTemporaryDisableTime,
                 { mandatoryIf: [PIN, RID] }
             ),
-            sendPinOverTheAir: AsConditional(
+            sendPinOverTheAir: ClusterFactory.AsConditional(
                 PinCredentialComponent.attributes.sendPinOverTheAir,
                 { optionalIf: [PIN] }
             ),
-            requirePinForRemoteOperation: AsConditional(
+            requirePinForRemoteOperation: ClusterFactory.AsConditional(
                 CredentialOverTheAirAccessAndPinCredentialComponent.attributes.requirePinForRemoteOperation,
                 { mandatoryIf: [COTA_PIN] }
             ),
-            expiringUserTimeout: AsConditional(UserComponent.attributes.expiringUserTimeout, { optionalIf: [USR] }),
-            keypadOperationEventMask: AsConditional(
+            expiringUserTimeout: ClusterFactory.AsConditional(
+                UserComponent.attributes.expiringUserTimeout,
+                { optionalIf: [USR] }
+            ),
+            keypadOperationEventMask: ClusterFactory.AsConditional(
                 NotificationAndPinCredentialComponent.attributes.keypadOperationEventMask,
                 { optionalIf: [NOT_PIN] }
             ),
-            remoteOperationEventMask: AsConditional(
+            remoteOperationEventMask: ClusterFactory.AsConditional(
                 NotificationComponent.attributes.remoteOperationEventMask,
                 { optionalIf: [NOT] }
             ),
-            manualOperationEventMask: AsConditional(
+            manualOperationEventMask: ClusterFactory.AsConditional(
                 NotificationComponent.attributes.manualOperationEventMask,
                 { optionalIf: [NOT] }
             ),
-            rfidOperationEventMask: AsConditional(
+            rfidOperationEventMask: ClusterFactory.AsConditional(
                 NotificationAndRfidCredentialComponent.attributes.rfidOperationEventMask,
                 { optionalIf: [NOT_RID] }
             ),
-            keypadProgrammingEventMask: AsConditional(
+            keypadProgrammingEventMask: ClusterFactory.AsConditional(
                 NotificationAndPinCredentialComponent.attributes.keypadProgrammingEventMask,
                 { optionalIf: [NOT_PIN] }
             ),
-            remoteProgrammingEventMask: AsConditional(
+            remoteProgrammingEventMask: ClusterFactory.AsConditional(
                 NotificationComponent.attributes.remoteProgrammingEventMask,
                 { optionalIf: [NOT] }
             ),
-            rfidProgrammingEventMask: AsConditional(
+            rfidProgrammingEventMask: ClusterFactory.AsConditional(
                 NotificationAndRfidCredentialComponent.attributes.rfidProgrammingEventMask,
                 { optionalIf: [NOT_RID] }
             )
@@ -2649,103 +2667,112 @@ export namespace DoorLock {
 
         commands: {
             ...Cluster.commands,
-            getLogRecord: AsConditional(LoggingComponent.commands.getLogRecord, { mandatoryIf: [LOG] }),
-            setPinCode: AsConditional(
+            getLogRecord: ClusterFactory.AsConditional(LoggingComponent.commands.getLogRecord, { mandatoryIf: [LOG] }),
+            setPinCode: ClusterFactory.AsConditional(
                 PinCredentialNotUserComponent.commands.setPinCode,
                 { mandatoryIf: [PIN_NOT_USR] }
             ),
-            getPinCode: AsConditional(
+            getPinCode: ClusterFactory.AsConditional(
                 PinCredentialNotUserComponent.commands.getPinCode,
                 { mandatoryIf: [PIN_NOT_USR] }
             ),
-            clearPinCode: AsConditional(
+            clearPinCode: ClusterFactory.AsConditional(
                 PinCredentialNotUserComponent.commands.clearPinCode,
                 { mandatoryIf: [PIN_NOT_USR] }
             ),
-            clearAllPinCodes: AsConditional(
+            clearAllPinCodes: ClusterFactory.AsConditional(
                 PinCredentialNotUserComponent.commands.clearAllPinCodes,
                 { mandatoryIf: [PIN_NOT_USR] }
             ),
-            setUserStatus: AsConditional(
+            setUserStatus: ClusterFactory.AsConditional(
                 PinCredentialAndRfidCredentialAndFingerCredentialsNotUserComponent.commands.setUserStatus,
                 { optionalIf: [PIN_RID_FGP_NOT_USR] }
             ),
-            getUserStatus: AsConditional(
+            getUserStatus: ClusterFactory.AsConditional(
                 PinCredentialAndRfidCredentialAndFingerCredentialsNotUserComponent.commands.getUserStatus,
                 { optionalIf: [PIN_RID_FGP_NOT_USR] }
             ),
-            setWeekDaySchedule: AsConditional(
+            setWeekDaySchedule: ClusterFactory.AsConditional(
                 WeekDayAccessSchedulesComponent.commands.setWeekDaySchedule,
                 { mandatoryIf: [WDSCH] }
             ),
-            getWeekDaySchedule: AsConditional(
+            getWeekDaySchedule: ClusterFactory.AsConditional(
                 WeekDayAccessSchedulesComponent.commands.getWeekDaySchedule,
                 { mandatoryIf: [WDSCH] }
             ),
-            clearWeekDaySchedule: AsConditional(
+            clearWeekDaySchedule: ClusterFactory.AsConditional(
                 WeekDayAccessSchedulesComponent.commands.clearWeekDaySchedule,
                 { mandatoryIf: [WDSCH] }
             ),
-            setYearDaySchedule: AsConditional(
+            setYearDaySchedule: ClusterFactory.AsConditional(
                 YearDayAccessSchedulesComponent.commands.setYearDaySchedule,
                 { mandatoryIf: [YDSCH] }
             ),
-            getYearDaySchedule: AsConditional(
+            getYearDaySchedule: ClusterFactory.AsConditional(
                 YearDayAccessSchedulesComponent.commands.getYearDaySchedule,
                 { mandatoryIf: [YDSCH] }
             ),
-            clearYearDaySchedule: AsConditional(
+            clearYearDaySchedule: ClusterFactory.AsConditional(
                 YearDayAccessSchedulesComponent.commands.clearYearDaySchedule,
                 { mandatoryIf: [YDSCH] }
             ),
-            setHolidaySchedule: AsConditional(
+            setHolidaySchedule: ClusterFactory.AsConditional(
                 HolidaySchedulesComponent.commands.setHolidaySchedule,
                 { mandatoryIf: [HDSCH] }
             ),
-            getHolidaySchedule: AsConditional(
+            getHolidaySchedule: ClusterFactory.AsConditional(
                 HolidaySchedulesComponent.commands.getHolidaySchedule,
                 { mandatoryIf: [HDSCH] }
             ),
-            clearHolidaySchedule: AsConditional(
+            clearHolidaySchedule: ClusterFactory.AsConditional(
                 HolidaySchedulesComponent.commands.clearHolidaySchedule,
                 { mandatoryIf: [HDSCH] }
             ),
-            setUserType: AsConditional(
+            setUserType: ClusterFactory.AsConditional(
                 PinCredentialAndRfidCredentialAndFingerCredentialsNotUserComponent.commands.setUserType,
                 { optionalIf: [PIN_RID_FGP_NOT_USR] }
             ),
-            getUserType: AsConditional(
+            getUserType: ClusterFactory.AsConditional(
                 PinCredentialAndRfidCredentialAndFingerCredentialsNotUserComponent.commands.getUserType,
                 { optionalIf: [PIN_RID_FGP_NOT_USR] }
             ),
-            setRfidCode: AsConditional(
+            setRfidCode: ClusterFactory.AsConditional(
                 RfidCredentialNotUserComponent.commands.setRfidCode,
                 { mandatoryIf: [RID_NOT_USR] }
             ),
-            getRfidCode: AsConditional(
+            getRfidCode: ClusterFactory.AsConditional(
                 RfidCredentialNotUserComponent.commands.getRfidCode,
                 { mandatoryIf: [RID_NOT_USR] }
             ),
-            clearRfidCode: AsConditional(
+            clearRfidCode: ClusterFactory.AsConditional(
                 RfidCredentialNotUserComponent.commands.clearRfidCode,
                 { mandatoryIf: [RID_NOT_USR] }
             ),
-            clearAllRfidCodes: AsConditional(
+            clearAllRfidCodes: ClusterFactory.AsConditional(
                 RfidCredentialNotUserComponent.commands.clearAllRfidCodes,
                 { mandatoryIf: [RID_NOT_USR] }
             ),
-            setUser: AsConditional(UserComponent.commands.setUser, { mandatoryIf: [USR] }),
-            getUser: AsConditional(UserComponent.commands.getUser, { mandatoryIf: [USR] }),
-            clearUser: AsConditional(UserComponent.commands.clearUser, { mandatoryIf: [USR] }),
-            setCredential: AsConditional(UserComponent.commands.setCredential, { mandatoryIf: [USR] }),
-            getCredentialStatus: AsConditional(UserComponent.commands.getCredentialStatus, { mandatoryIf: [USR] }),
-            clearCredential: AsConditional(UserComponent.commands.clearCredential, { mandatoryIf: [USR] })
+            setUser: ClusterFactory.AsConditional(UserComponent.commands.setUser, { mandatoryIf: [USR] }),
+            getUser: ClusterFactory.AsConditional(UserComponent.commands.getUser, { mandatoryIf: [USR] }),
+            clearUser: ClusterFactory.AsConditional(UserComponent.commands.clearUser, { mandatoryIf: [USR] }),
+            setCredential: ClusterFactory.AsConditional(UserComponent.commands.setCredential, { mandatoryIf: [USR] }),
+            getCredentialStatus: ClusterFactory.AsConditional(
+                UserComponent.commands.getCredentialStatus,
+                { mandatoryIf: [USR] }
+            ),
+            clearCredential: ClusterFactory.AsConditional(
+                UserComponent.commands.clearCredential,
+                { mandatoryIf: [USR] }
+            )
         },
 
         events: {
             ...Cluster.events,
-            doorStateChange: AsConditional(DoorPositionSensorComponent.events.doorStateChange, { mandatoryIf: [DPS] }),
-            lockUserChange: AsConditional(UserComponent.events.lockUserChange, { mandatoryIf: [USR] })
+            doorStateChange: ClusterFactory.AsConditional(
+                DoorPositionSensorComponent.events.doorStateChange,
+                { mandatoryIf: [DPS] }
+            ),
+            lockUserChange: ClusterFactory.AsConditional(UserComponent.events.lockUserChange, { mandatoryIf: [USR] })
         }
     });
 }

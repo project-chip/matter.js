@@ -6,17 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import {
-    BaseClusterComponent,
-    ClusterComponent,
-    ExtensibleCluster,
-    validateFeatureSelection,
-    extendCluster,
-    preventCluster,
-    ClusterForBaseCluster,
-    AsConditional
-} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import {
     FixedAttribute,
@@ -27,8 +18,7 @@ import {
     WritableAttribute,
     OptionalEvent,
     EventPriority,
-    OptionalFixedAttribute,
-    Cluster as CreateCluster
+    OptionalFixedAttribute
 } from "../../cluster/Cluster.js";
 import { TlvInt16, TlvUInt16, TlvBitmap, TlvEnum, TlvUInt24, TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
@@ -278,7 +268,7 @@ export namespace PumpConfigurationAndControl {
     /**
      * These elements and properties are present in all PumpConfigurationAndControl clusters.
      */
-    export const Base = BaseClusterComponent({
+    export const Base = ClusterFactory.Definition({
         id: 0x200,
         name: "PumpConfigurationAndControl",
         revision: 4,
@@ -644,7 +634,7 @@ export namespace PumpConfigurationAndControl {
     /**
      * A PumpConfigurationAndControlCluster supports these elements if it supports feature ConstantPressure.
      */
-    export const ConstantPressureComponent = ClusterComponent({
+    export const ConstantPressureComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This attribute specifies the minimum pressure the pump can achieve when it is working with the
@@ -673,7 +663,7 @@ export namespace PumpConfigurationAndControl {
     /**
      * A PumpConfigurationAndControlCluster supports these elements if it supports feature Automatic.
      */
-    export const AutomaticComponent = ClusterComponent({
+    export const AutomaticComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This attribute specifies the minimum pressure the pump can achieve when it is working with the
@@ -791,7 +781,7 @@ export namespace PumpConfigurationAndControl {
     /**
      * A PumpConfigurationAndControlCluster supports these elements if it supports feature CompensatedPressure.
      */
-    export const CompensatedPressureComponent = ClusterComponent({
+    export const CompensatedPressureComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This attribute specifies the minimum compensated pressure the pump can achieve when it is working with
@@ -820,7 +810,7 @@ export namespace PumpConfigurationAndControl {
     /**
      * A PumpConfigurationAndControlCluster supports these elements if it supports feature ConstantSpeed.
      */
-    export const ConstantSpeedComponent = ClusterComponent({
+    export const ConstantSpeedComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This attribute specifies the minimum speed the pump can achieve when it is working with the ControlMode
@@ -847,7 +837,7 @@ export namespace PumpConfigurationAndControl {
     /**
      * A PumpConfigurationAndControlCluster supports these elements if it supports feature ConstantFlow.
      */
-    export const ConstantFlowComponent = ClusterComponent({
+    export const ConstantFlowComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This attribute specifies the minimum flow the pump can achieve when it is working with the Con
@@ -877,7 +867,7 @@ export namespace PumpConfigurationAndControl {
     /**
      * A PumpConfigurationAndControlCluster supports these elements if it supports feature ConstantTemperature.
      */
-    export const ConstantTemperatureComponent = ClusterComponent({
+    export const ConstantTemperatureComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This attribute specifies the minimum temperature the pump can maintain in the system when it is working
@@ -917,8 +907,8 @@ export namespace PumpConfigurationAndControl {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2
      */
-    export const Cluster = ExtensibleCluster({
-        ...Base,
+    export const Cluster = ClusterFactory.Extensible(
+        Base,
 
         /**
          * Use this factory method to create a PumpConfigurationAndControl cluster with support for optional features.
@@ -928,17 +918,20 @@ export namespace PumpConfigurationAndControl {
          * @returns a PumpConfigurationAndControl cluster with specified features enabled
          * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
          */
-        factory: <T extends `${Feature}`[]>(...features: [...T]) => {
-            validateFeatureSelection(features, Feature);
-            const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
-            extendCluster(cluster, ConstantPressureComponent, { constantPressure: true });
-            extendCluster(cluster, AutomaticComponent, { automatic: true });
-            extendCluster(cluster, CompensatedPressureComponent, { compensatedPressure: true });
-            extendCluster(cluster, ConstantSpeedComponent, { constantSpeed: true });
-            extendCluster(cluster, ConstantFlowComponent, { constantFlow: true });
-            extendCluster(cluster, ConstantTemperatureComponent, { constantTemperature: true });
+        <T extends `${Feature}`[]>(...features: [...T]) => {
+            ClusterFactory.validateFeatureSelection(features, Feature);
+            const cluster = ClusterFactory.Definition({
+                ...Base,
+                supportedFeatures: BitFlags(Base.features, ...features)
+            });
+            ClusterFactory.extend(cluster, ConstantPressureComponent, { constantPressure: true });
+            ClusterFactory.extend(cluster, AutomaticComponent, { automatic: true });
+            ClusterFactory.extend(cluster, CompensatedPressureComponent, { compensatedPressure: true });
+            ClusterFactory.extend(cluster, ConstantSpeedComponent, { constantSpeed: true });
+            ClusterFactory.extend(cluster, ConstantFlowComponent, { constantFlow: true });
+            ClusterFactory.extend(cluster, ConstantTemperatureComponent, { constantTemperature: true });
 
-            preventCluster(
+            ClusterFactory.prevent(
                 cluster,
 
                 {
@@ -952,10 +945,10 @@ export namespace PumpConfigurationAndControl {
 
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }
-    });
+    );
 
     export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        ClusterForBaseCluster<typeof Base, SF>
+        Omit<typeof Base, "supportedFeatures">
         & { supportedFeatures: SF }
         & (SF extends { constantPressure: true } ? typeof ConstantPressureComponent : {})
         & (SF extends { automatic: true } ? typeof AutomaticComponent : {})
@@ -978,7 +971,7 @@ export namespace PumpConfigurationAndControl {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = CreateCluster({
+    export const Complete = ClusterFactory.Definition({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -986,43 +979,43 @@ export namespace PumpConfigurationAndControl {
 
         attributes: {
             ...Cluster.attributes,
-            minConstPressure: AsConditional(
+            minConstPressure: ClusterFactory.AsConditional(
                 ConstantPressureComponent.attributes.minConstPressure,
                 { mandatoryIf: [PRSCONST], optionalIf: [AUTO] }
             ),
-            maxConstPressure: AsConditional(
+            maxConstPressure: ClusterFactory.AsConditional(
                 ConstantPressureComponent.attributes.maxConstPressure,
                 { mandatoryIf: [PRSCONST], optionalIf: [AUTO] }
             ),
-            minCompPressure: AsConditional(
+            minCompPressure: ClusterFactory.AsConditional(
                 AutomaticComponent.attributes.minCompPressure,
                 { optionalIf: [AUTO], mandatoryIf: [PRSCOMP] }
             ),
-            maxCompPressure: AsConditional(
+            maxCompPressure: ClusterFactory.AsConditional(
                 AutomaticComponent.attributes.maxCompPressure,
                 { optionalIf: [AUTO], mandatoryIf: [PRSCOMP] }
             ),
-            minConstSpeed: AsConditional(
+            minConstSpeed: ClusterFactory.AsConditional(
                 AutomaticComponent.attributes.minConstSpeed,
                 { optionalIf: [AUTO], mandatoryIf: [SPD] }
             ),
-            maxConstSpeed: AsConditional(
+            maxConstSpeed: ClusterFactory.AsConditional(
                 AutomaticComponent.attributes.maxConstSpeed,
                 { optionalIf: [AUTO], mandatoryIf: [SPD] }
             ),
-            minConstFlow: AsConditional(
+            minConstFlow: ClusterFactory.AsConditional(
                 AutomaticComponent.attributes.minConstFlow,
                 { optionalIf: [AUTO], mandatoryIf: [FLW] }
             ),
-            maxConstFlow: AsConditional(
+            maxConstFlow: ClusterFactory.AsConditional(
                 AutomaticComponent.attributes.maxConstFlow,
                 { optionalIf: [AUTO], mandatoryIf: [FLW] }
             ),
-            minConstTemp: AsConditional(
+            minConstTemp: ClusterFactory.AsConditional(
                 AutomaticComponent.attributes.minConstTemp,
                 { optionalIf: [AUTO], mandatoryIf: [TEMP] }
             ),
-            maxConstTemp: AsConditional(
+            maxConstTemp: ClusterFactory.AsConditional(
                 AutomaticComponent.attributes.maxConstTemp,
                 { optionalIf: [AUTO], mandatoryIf: [TEMP] }
             )

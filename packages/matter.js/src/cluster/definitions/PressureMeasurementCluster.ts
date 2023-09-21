@@ -6,18 +6,10 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import {
-    BaseClusterComponent,
-    ClusterComponent,
-    ExtensibleCluster,
-    validateFeatureSelection,
-    extendCluster,
-    ClusterForBaseCluster,
-    AsConditional
-} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { Attribute, OptionalAttribute, Cluster as CreateCluster } from "../../cluster/Cluster.js";
+import { Attribute, OptionalAttribute } from "../../cluster/Cluster.js";
 import { TlvInt16, TlvUInt16, TlvInt8 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 
@@ -39,7 +31,7 @@ export namespace PressureMeasurement {
     /**
      * These elements and properties are present in all PressureMeasurement clusters.
      */
-    export const Base = BaseClusterComponent({
+    export const Base = ClusterFactory.Definition({
         id: 0x403,
         name: "PressureMeasurement",
         revision: 3,
@@ -99,7 +91,7 @@ export namespace PressureMeasurement {
     /**
      * A PressureMeasurementCluster supports these elements if it supports feature Extended.
      */
-    export const ExtendedComponent = ClusterComponent({
+    export const ExtendedComponent = ClusterFactory.Component({
         attributes: {
             /**
              * ScaledValue represents the pressure in Pascals as follows:
@@ -160,8 +152,8 @@ export namespace PressureMeasurement {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.4
      */
-    export const Cluster = ExtensibleCluster({
-        ...Base,
+    export const Cluster = ClusterFactory.Extensible(
+        Base,
 
         /**
          * Use this factory method to create a PressureMeasurement cluster with support for optional features. Include
@@ -171,16 +163,19 @@ export namespace PressureMeasurement {
          * @returns a PressureMeasurement cluster with specified features enabled
          * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
          */
-        factory: <T extends `${Feature}`[]>(...features: [...T]) => {
-            validateFeatureSelection(features, Feature);
-            const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
-            extendCluster(cluster, ExtendedComponent, { extended: true });
+        <T extends `${Feature}`[]>(...features: [...T]) => {
+            ClusterFactory.validateFeatureSelection(features, Feature);
+            const cluster = ClusterFactory.Definition({
+                ...Base,
+                supportedFeatures: BitFlags(Base.features, ...features)
+            });
+            ClusterFactory.extend(cluster, ExtendedComponent, { extended: true });
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }
-    });
+    );
 
     export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        ClusterForBaseCluster<typeof Base, SF>
+        Omit<typeof Base, "supportedFeatures">
         & { supportedFeatures: SF }
         & (SF extends { extended: true } ? typeof ExtendedComponent : {});
 
@@ -192,7 +187,7 @@ export namespace PressureMeasurement {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = CreateCluster({
+    export const Complete = ClusterFactory.Definition({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -200,11 +195,20 @@ export namespace PressureMeasurement {
 
         attributes: {
             ...Cluster.attributes,
-            scaledValue: AsConditional(ExtendedComponent.attributes.scaledValue, { mandatoryIf: [EXT] }),
-            minScaledValue: AsConditional(ExtendedComponent.attributes.minScaledValue, { mandatoryIf: [EXT] }),
-            maxScaledValue: AsConditional(ExtendedComponent.attributes.maxScaledValue, { mandatoryIf: [EXT] }),
-            scaledTolerance: AsConditional(ExtendedComponent.attributes.scaledTolerance, { optionalIf: [EXT] }),
-            scale: AsConditional(ExtendedComponent.attributes.scale, { mandatoryIf: [EXT] })
+            scaledValue: ClusterFactory.AsConditional(ExtendedComponent.attributes.scaledValue, { mandatoryIf: [EXT] }),
+            minScaledValue: ClusterFactory.AsConditional(
+                ExtendedComponent.attributes.minScaledValue,
+                { mandatoryIf: [EXT] }
+            ),
+            maxScaledValue: ClusterFactory.AsConditional(
+                ExtendedComponent.attributes.maxScaledValue,
+                { mandatoryIf: [EXT] }
+            ),
+            scaledTolerance: ClusterFactory.AsConditional(
+                ExtendedComponent.attributes.scaledTolerance,
+                { optionalIf: [EXT] }
+            ),
+            scale: ClusterFactory.AsConditional(ExtendedComponent.attributes.scale, { mandatoryIf: [EXT] })
         }
     });
 }

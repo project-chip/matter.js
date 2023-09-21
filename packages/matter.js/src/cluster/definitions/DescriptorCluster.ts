@@ -6,8 +6,9 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Cluster as CreateCluster, FixedAttribute, Attribute } from "../../cluster/Cluster.js";
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { FixedAttribute, Attribute } from "../../cluster/Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvDeviceTypeId } from "../../datatype/DeviceTypeId.js";
@@ -57,7 +58,7 @@ export namespace Descriptor {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 9.5
      */
-    export const Cluster = CreateCluster({
+    export const Cluster = ClusterFactory.Definition({
         id: 0x1d,
         name: "Descriptor",
         revision: 1,

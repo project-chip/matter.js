@@ -6,16 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
-import {
-    BaseClusterComponent,
-    ClusterComponent,
-    ExtensibleCluster,
-    validateFeatureSelection,
-    extendCluster,
-    ClusterForBaseCluster,
-    AsConditional
-} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import {
     Attribute,
@@ -26,8 +18,7 @@ import {
     TlvNoResponse,
     FixedAttribute,
     Event,
-    EventPriority,
-    Cluster as CreateCluster
+    EventPriority
 } from "../../cluster/Cluster.js";
 import { TlvEpochUs, TlvEnum, TlvInt32, TlvUInt16 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
@@ -288,7 +279,7 @@ export namespace TimeSync {
     /**
      * These elements and properties are present in all TimeSync clusters.
      */
-    export const Base = BaseClusterComponent({
+    export const Base = ClusterFactory.Definition({
         id: 0x38,
         name: "TimeSync",
         revision: 1,
@@ -391,7 +382,7 @@ export namespace TimeSync {
     /**
      * A TimeSyncCluster supports these elements if it supports feature NtpClient.
      */
-    export const NtpClientComponent = ClusterComponent({
+    export const NtpClientComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The default NTP server the server’s Node may use if other time sources are unavailable. This attribute
@@ -413,7 +404,7 @@ export namespace TimeSync {
     /**
      * A TimeSyncCluster supports these elements if it supports feature TimeZone.
      */
-    export const TimeZoneComponent = ClusterComponent({
+    export const TimeZoneComponent = ClusterFactory.Component({
         attributes: {
             /**
              * A list of time zone offsets from UTC and when they shall take effect. This attribute uses a list of time
@@ -541,7 +532,7 @@ export namespace TimeSync {
     /**
      * A TimeSyncCluster supports these elements if it supports feature NtpServer.
      */
-    export const NtpServerComponent = ClusterComponent({
+    export const NtpServerComponent = ClusterFactory.Component({
         attributes: {
             /**
              * If the server is running an NTP server, this value shall be the port number for the service. If the
@@ -573,8 +564,8 @@ export namespace TimeSync {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.16
      */
-    export const Cluster = ExtensibleCluster({
-        ...Base,
+    export const Cluster = ClusterFactory.Extensible(
+        Base,
 
         /**
          * Use this factory method to create a TimeSync cluster with support for optional features. Include each
@@ -584,18 +575,21 @@ export namespace TimeSync {
          * @returns a TimeSync cluster with specified features enabled
          * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
          */
-        factory: <T extends `${Feature}`[]>(...features: [...T]) => {
-            validateFeatureSelection(features, Feature);
-            const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
-            extendCluster(cluster, NtpClientComponent, { ntpClient: true });
-            extendCluster(cluster, TimeZoneComponent, { timeZone: true });
-            extendCluster(cluster, NtpServerComponent, { ntpServer: true });
+        <T extends `${Feature}`[]>(...features: [...T]) => {
+            ClusterFactory.validateFeatureSelection(features, Feature);
+            const cluster = ClusterFactory.Definition({
+                ...Base,
+                supportedFeatures: BitFlags(Base.features, ...features)
+            });
+            ClusterFactory.extend(cluster, NtpClientComponent, { ntpClient: true });
+            ClusterFactory.extend(cluster, TimeZoneComponent, { timeZone: true });
+            ClusterFactory.extend(cluster, NtpServerComponent, { ntpServer: true });
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }
-    });
+    );
 
     export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        ClusterForBaseCluster<typeof Base, SF>
+        Omit<typeof Base, "supportedFeatures">
         & { supportedFeatures: SF }
         & (SF extends { ntpClient: true } ? typeof NtpClientComponent : {})
         & (SF extends { timeZone: true } ? typeof TimeZoneComponent : {})
@@ -611,7 +605,7 @@ export namespace TimeSync {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = CreateCluster({
+    export const Complete = ClusterFactory.Definition({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -619,19 +613,29 @@ export namespace TimeSync {
 
         attributes: {
             ...Cluster.attributes,
-            defaultNtp: AsConditional(NtpClientComponent.attributes.defaultNtp, { mandatoryIf: [NTPC] }),
-            timeZone: AsConditional(TimeZoneComponent.attributes.timeZone, { mandatoryIf: [TZ] }),
-            dstOffset: AsConditional(TimeZoneComponent.attributes.dstOffset, { mandatoryIf: [TZ] }),
-            localTime: AsConditional(TimeZoneComponent.attributes.localTime, { mandatoryIf: [TZ] }),
-            timeZoneDatabase: AsConditional(TimeZoneComponent.attributes.timeZoneDatabase, { mandatoryIf: [TZ] }),
-            ntpServerPort: AsConditional(NtpServerComponent.attributes.ntpServerPort, { mandatoryIf: [NTPS] })
+            defaultNtp: ClusterFactory.AsConditional(NtpClientComponent.attributes.defaultNtp, { mandatoryIf: [NTPC] }),
+            timeZone: ClusterFactory.AsConditional(TimeZoneComponent.attributes.timeZone, { mandatoryIf: [TZ] }),
+            dstOffset: ClusterFactory.AsConditional(TimeZoneComponent.attributes.dstOffset, { mandatoryIf: [TZ] }),
+            localTime: ClusterFactory.AsConditional(TimeZoneComponent.attributes.localTime, { mandatoryIf: [TZ] }),
+            timeZoneDatabase: ClusterFactory.AsConditional(
+                TimeZoneComponent.attributes.timeZoneDatabase,
+                { mandatoryIf: [TZ] }
+            ),
+            ntpServerPort: ClusterFactory.AsConditional(
+                NtpServerComponent.attributes.ntpServerPort,
+                { mandatoryIf: [NTPS] }
+            )
         },
 
         commands: Cluster.commands,
+
         events: {
-            dstTableEmpty: AsConditional(TimeZoneComponent.events.dstTableEmpty, { mandatoryIf: [TZ] }),
-            dstStatus: AsConditional(TimeZoneComponent.events.dstStatus, { mandatoryIf: [TZ] }),
-            timeZoneStatus: AsConditional(TimeZoneComponent.events.timeZoneStatus, { mandatoryIf: [TZ] })
+            dstTableEmpty: ClusterFactory.AsConditional(TimeZoneComponent.events.dstTableEmpty, { mandatoryIf: [TZ] }),
+            dstStatus: ClusterFactory.AsConditional(TimeZoneComponent.events.dstStatus, { mandatoryIf: [TZ] }),
+            timeZoneStatus: ClusterFactory.AsConditional(
+                TimeZoneComponent.events.timeZoneStatus,
+                { mandatoryIf: [TZ] }
+            )
         }
     });
 }

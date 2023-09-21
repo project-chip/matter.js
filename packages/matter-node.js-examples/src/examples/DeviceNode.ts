@@ -19,7 +19,7 @@ import { CommissioningServer, MatterServer } from "@project-chip/matter-node.js"
 import { BleNode } from "@project-chip/matter-node-ble.js/ble";
 import { Ble } from "@project-chip/matter-node.js/ble";
 import { ClusterServer, GeneralCommissioningCluster, NetworkCommissioning } from "@project-chip/matter-node.js/cluster";
-import { OnOffLightDevice, OnOffPluginUnitDevice } from "@project-chip/matter-node.js/device";
+import { OnOffLightDevice, OnOffPluginUnitDevice, logEndpoint } from "@project-chip/matter-node.js/device";
 import { Format, Level, Logger } from "@project-chip/matter-node.js/log";
 import { StorageBackendDisk, StorageManager } from "@project-chip/matter-node.js/storage";
 import { Time } from "@project-chip/matter-node.js/time";
@@ -29,7 +29,6 @@ import {
     getIntParameter,
     getParameter,
     hasParameter,
-    logEndpoint,
     requireMinNodeVersion,
     singleton,
 } from "@project-chip/matter-node.js/util";
@@ -249,11 +248,11 @@ class Device {
                                 wiFiScanResults: [
                                     {
                                         security: {
-                                            Unencrypted: false,
-                                            Wep: false,
-                                            "WPA-PERSONAL": false,
-                                            "WPA2-PERSONAL": true,
-                                            "WPA3-PERSONAL": true,
+                                            unencrypted: false,
+                                            wep: false,
+                                            wpaPersonal: false,
+                                            wpa2Personal: true,
+                                            wpa3Personal: true,
                                         },
                                         ssid:
                                             ssid ||

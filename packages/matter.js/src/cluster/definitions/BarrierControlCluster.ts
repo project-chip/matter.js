@@ -6,13 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import {
-    Cluster as CreateCluster,
-    Attribute,
-    OptionalWritableAttribute,
-    Command,
-    TlvNoResponse
-} from "../../cluster/Cluster.js";
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
+import { Attribute, OptionalWritableAttribute, Command, TlvNoResponse } from "../../cluster/Cluster.js";
 import { TlvUInt8, TlvUInt16 } from "../../tlv/TlvNumber.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
@@ -28,7 +23,7 @@ export namespace BarrierControl {
      *
      * This cluster provides control of a barrier (garage door).
      */
-    export const Cluster = CreateCluster({
+    export const Cluster = ClusterFactory.Definition({
         id: 0x103,
         name: "BarrierControl",
         revision: 1,

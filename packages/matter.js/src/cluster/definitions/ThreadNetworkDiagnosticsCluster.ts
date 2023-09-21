@@ -6,16 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
-import {
-    BaseClusterComponent,
-    ClusterComponent,
-    ExtensibleCluster,
-    validateFeatureSelection,
-    extendCluster,
-    ClusterForBaseCluster,
-    AsConditional
-} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import {
     Attribute,
@@ -24,8 +16,7 @@ import {
     EventPriority,
     Command,
     TlvNoResponse,
-    AccessLevel,
-    Cluster as CreateCluster
+    AccessLevel
 } from "../../cluster/Cluster.js";
 import { TlvUInt16, TlvEnum, TlvUInt64, TlvUInt32, TlvUInt8, TlvInt8 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
@@ -486,7 +477,7 @@ export namespace ThreadNetworkDiagnostics {
     /**
      * These elements and properties are present in all ThreadNetworkDiagnostics clusters.
      */
-    export const Base = BaseClusterComponent({
+    export const Base = ClusterFactory.Definition({
         id: 0x35,
         name: "ThreadNetworkDiagnostics",
         revision: 1,
@@ -720,7 +711,7 @@ export namespace ThreadNetworkDiagnostics {
     /**
      * A ThreadNetworkDiagnosticsCluster supports these elements if it supports feature ErrorCounts.
      */
-    export const ErrorCountsComponent = ClusterComponent({
+    export const ErrorCountsComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The OverrunCount attribute shall indicate the number of packets dropped either at ingress or egress, due
@@ -750,7 +741,7 @@ export namespace ThreadNetworkDiagnostics {
     /**
      * A ThreadNetworkDiagnosticsCluster supports these elements if it supports feature MleCounts.
      */
-    export const MleCountsComponent = ClusterComponent({
+    export const MleCountsComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The DetachedRoleCount attribute shall indicate the number of times the Node entered the
@@ -827,7 +818,7 @@ export namespace ThreadNetworkDiagnostics {
     /**
      * A ThreadNetworkDiagnosticsCluster supports these elements if it supports feature MacCounts.
      */
-    export const MacCountsComponent = ClusterComponent({
+    export const MacCountsComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The TxTotalCount attribute shall indicate the total number of unique MAC frame transmission requests.
@@ -1156,8 +1147,8 @@ export namespace ThreadNetworkDiagnostics {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.13
      */
-    export const Cluster = ExtensibleCluster({
-        ...Base,
+    export const Cluster = ClusterFactory.Extensible(
+        Base,
 
         /**
          * Use this factory method to create a ThreadNetworkDiagnostics cluster with support for optional features.
@@ -1167,18 +1158,21 @@ export namespace ThreadNetworkDiagnostics {
          * @returns a ThreadNetworkDiagnostics cluster with specified features enabled
          * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
          */
-        factory: <T extends `${Feature}`[]>(...features: [...T]) => {
-            validateFeatureSelection(features, Feature);
-            const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
-            extendCluster(cluster, ErrorCountsComponent, { errorCounts: true });
-            extendCluster(cluster, MleCountsComponent, { mleCounts: true });
-            extendCluster(cluster, MacCountsComponent, { macCounts: true });
+        <T extends `${Feature}`[]>(...features: [...T]) => {
+            ClusterFactory.validateFeatureSelection(features, Feature);
+            const cluster = ClusterFactory.Definition({
+                ...Base,
+                supportedFeatures: BitFlags(Base.features, ...features)
+            });
+            ClusterFactory.extend(cluster, ErrorCountsComponent, { errorCounts: true });
+            ClusterFactory.extend(cluster, MleCountsComponent, { mleCounts: true });
+            ClusterFactory.extend(cluster, MacCountsComponent, { macCounts: true });
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }
-    });
+    );
 
     export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        ClusterForBaseCluster<typeof Base, SF>
+        Omit<typeof Base, "supportedFeatures">
         & { supportedFeatures: SF }
         & (SF extends { errorCounts: true } ? typeof ErrorCountsComponent : {})
         & (SF extends { mleCounts: true } ? typeof MleCountsComponent : {})
@@ -1194,7 +1188,7 @@ export namespace ThreadNetworkDiagnostics {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = CreateCluster({
+    export const Complete = ClusterFactory.Definition({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -1202,94 +1196,187 @@ export namespace ThreadNetworkDiagnostics {
 
         attributes: {
             ...Cluster.attributes,
-            overrunCount: AsConditional(ErrorCountsComponent.attributes.overrunCount, { mandatoryIf: [ERRCNT] }),
-            detachedRoleCount: AsConditional(MleCountsComponent.attributes.detachedRoleCount, { optionalIf: [MLECNT] }),
-            childRoleCount: AsConditional(MleCountsComponent.attributes.childRoleCount, { optionalIf: [MLECNT] }),
-            routerRoleCount: AsConditional(MleCountsComponent.attributes.routerRoleCount, { optionalIf: [MLECNT] }),
-            leaderRoleCount: AsConditional(MleCountsComponent.attributes.leaderRoleCount, { optionalIf: [MLECNT] }),
-            attachAttemptCount: AsConditional(
+            overrunCount: ClusterFactory.AsConditional(
+                ErrorCountsComponent.attributes.overrunCount,
+                { mandatoryIf: [ERRCNT] }
+            ),
+            detachedRoleCount: ClusterFactory.AsConditional(
+                MleCountsComponent.attributes.detachedRoleCount,
+                { optionalIf: [MLECNT] }
+            ),
+            childRoleCount: ClusterFactory.AsConditional(
+                MleCountsComponent.attributes.childRoleCount,
+                { optionalIf: [MLECNT] }
+            ),
+            routerRoleCount: ClusterFactory.AsConditional(
+                MleCountsComponent.attributes.routerRoleCount,
+                { optionalIf: [MLECNT] }
+            ),
+            leaderRoleCount: ClusterFactory.AsConditional(
+                MleCountsComponent.attributes.leaderRoleCount,
+                { optionalIf: [MLECNT] }
+            ),
+            attachAttemptCount: ClusterFactory.AsConditional(
                 MleCountsComponent.attributes.attachAttemptCount,
                 { optionalIf: [MLECNT] }
             ),
-            partitionIdChangeCount: AsConditional(
+            partitionIdChangeCount: ClusterFactory.AsConditional(
                 MleCountsComponent.attributes.partitionIdChangeCount,
                 { optionalIf: [MLECNT] }
             ),
-            betterPartitionAttachAttemptCount: AsConditional(
+            betterPartitionAttachAttemptCount: ClusterFactory.AsConditional(
                 MleCountsComponent.attributes.betterPartitionAttachAttemptCount,
                 { optionalIf: [MLECNT] }
             ),
-            parentChangeCount: AsConditional(MleCountsComponent.attributes.parentChangeCount, { optionalIf: [MLECNT] }),
-            txTotalCount: AsConditional(MacCountsComponent.attributes.txTotalCount, { optionalIf: [MACCNT] }),
-            txUnicastCount: AsConditional(MacCountsComponent.attributes.txUnicastCount, { optionalIf: [MACCNT] }),
-            txBroadcastCount: AsConditional(MacCountsComponent.attributes.txBroadcastCount, { optionalIf: [MACCNT] }),
-            txAckRequestedCount: AsConditional(
+            parentChangeCount: ClusterFactory.AsConditional(
+                MleCountsComponent.attributes.parentChangeCount,
+                { optionalIf: [MLECNT] }
+            ),
+            txTotalCount: ClusterFactory.AsConditional(
+                MacCountsComponent.attributes.txTotalCount,
+                { optionalIf: [MACCNT] }
+            ),
+            txUnicastCount: ClusterFactory.AsConditional(
+                MacCountsComponent.attributes.txUnicastCount,
+                { optionalIf: [MACCNT] }
+            ),
+            txBroadcastCount: ClusterFactory.AsConditional(
+                MacCountsComponent.attributes.txBroadcastCount,
+                { optionalIf: [MACCNT] }
+            ),
+            txAckRequestedCount: ClusterFactory.AsConditional(
                 MacCountsComponent.attributes.txAckRequestedCount,
                 { optionalIf: [MACCNT] }
             ),
-            txAckedCount: AsConditional(MacCountsComponent.attributes.txAckedCount, { optionalIf: [MACCNT] }),
-            txNoAckRequestedCount: AsConditional(
+            txAckedCount: ClusterFactory.AsConditional(
+                MacCountsComponent.attributes.txAckedCount,
+                { optionalIf: [MACCNT] }
+            ),
+            txNoAckRequestedCount: ClusterFactory.AsConditional(
                 MacCountsComponent.attributes.txNoAckRequestedCount,
                 { optionalIf: [MACCNT] }
             ),
-            txDataCount: AsConditional(MacCountsComponent.attributes.txDataCount, { optionalIf: [MACCNT] }),
-            txDataPollCount: AsConditional(MacCountsComponent.attributes.txDataPollCount, { optionalIf: [MACCNT] }),
-            txBeaconCount: AsConditional(MacCountsComponent.attributes.txBeaconCount, { optionalIf: [MACCNT] }),
-            txBeaconRequestCount: AsConditional(
+            txDataCount: ClusterFactory.AsConditional(
+                MacCountsComponent.attributes.txDataCount,
+                { optionalIf: [MACCNT] }
+            ),
+            txDataPollCount: ClusterFactory.AsConditional(
+                MacCountsComponent.attributes.txDataPollCount,
+                { optionalIf: [MACCNT] }
+            ),
+            txBeaconCount: ClusterFactory.AsConditional(
+                MacCountsComponent.attributes.txBeaconCount,
+                { optionalIf: [MACCNT] }
+            ),
+            txBeaconRequestCount: ClusterFactory.AsConditional(
                 MacCountsComponent.attributes.txBeaconRequestCount,
                 { optionalIf: [MACCNT] }
             ),
-            txOtherCount: AsConditional(MacCountsComponent.attributes.txOtherCount, { optionalIf: [MACCNT] }),
-            txRetryCount: AsConditional(MacCountsComponent.attributes.txRetryCount, { optionalIf: [MACCNT] }),
-            txDirectMaxRetryExpiryCount: AsConditional(
+            txOtherCount: ClusterFactory.AsConditional(
+                MacCountsComponent.attributes.txOtherCount,
+                { optionalIf: [MACCNT] }
+            ),
+            txRetryCount: ClusterFactory.AsConditional(
+                MacCountsComponent.attributes.txRetryCount,
+                { optionalIf: [MACCNT] }
+            ),
+            txDirectMaxRetryExpiryCount: ClusterFactory.AsConditional(
                 MacCountsComponent.attributes.txDirectMaxRetryExpiryCount,
                 { optionalIf: [MACCNT] }
             ),
-            txIndirectMaxRetryExpiryCount: AsConditional(
+            txIndirectMaxRetryExpiryCount: ClusterFactory.AsConditional(
                 MacCountsComponent.attributes.txIndirectMaxRetryExpiryCount,
                 { optionalIf: [MACCNT] }
             ),
-            txErrCcaCount: AsConditional(MacCountsComponent.attributes.txErrCcaCount, { optionalIf: [MACCNT] }),
-            txErrAbortCount: AsConditional(MacCountsComponent.attributes.txErrAbortCount, { optionalIf: [MACCNT] }),
-            txErrBusyChannelCount: AsConditional(
+            txErrCcaCount: ClusterFactory.AsConditional(
+                MacCountsComponent.attributes.txErrCcaCount,
+                { optionalIf: [MACCNT] }
+            ),
+            txErrAbortCount: ClusterFactory.AsConditional(
+                MacCountsComponent.attributes.txErrAbortCount,
+                { optionalIf: [MACCNT] }
+            ),
+            txErrBusyChannelCount: ClusterFactory.AsConditional(
                 MacCountsComponent.attributes.txErrBusyChannelCount,
                 { optionalIf: [MACCNT] }
             ),
-            rxTotalCount: AsConditional(MacCountsComponent.attributes.rxTotalCount, { optionalIf: [MACCNT] }),
-            rxUnicastCount: AsConditional(MacCountsComponent.attributes.rxUnicastCount, { optionalIf: [MACCNT] }),
-            rxBroadcastCount: AsConditional(MacCountsComponent.attributes.rxBroadcastCount, { optionalIf: [MACCNT] }),
-            rxDataCount: AsConditional(MacCountsComponent.attributes.rxDataCount, { optionalIf: [MACCNT] }),
-            rxDataPollCount: AsConditional(MacCountsComponent.attributes.rxDataPollCount, { optionalIf: [MACCNT] }),
-            rxBeaconCount: AsConditional(MacCountsComponent.attributes.rxBeaconCount, { optionalIf: [MACCNT] }),
-            rxBeaconRequestCount: AsConditional(
+            rxTotalCount: ClusterFactory.AsConditional(
+                MacCountsComponent.attributes.rxTotalCount,
+                { optionalIf: [MACCNT] }
+            ),
+            rxUnicastCount: ClusterFactory.AsConditional(
+                MacCountsComponent.attributes.rxUnicastCount,
+                { optionalIf: [MACCNT] }
+            ),
+            rxBroadcastCount: ClusterFactory.AsConditional(
+                MacCountsComponent.attributes.rxBroadcastCount,
+                { optionalIf: [MACCNT] }
+            ),
+            rxDataCount: ClusterFactory.AsConditional(
+                MacCountsComponent.attributes.rxDataCount,
+                { optionalIf: [MACCNT] }
+            ),
+            rxDataPollCount: ClusterFactory.AsConditional(
+                MacCountsComponent.attributes.rxDataPollCount,
+                { optionalIf: [MACCNT] }
+            ),
+            rxBeaconCount: ClusterFactory.AsConditional(
+                MacCountsComponent.attributes.rxBeaconCount,
+                { optionalIf: [MACCNT] }
+            ),
+            rxBeaconRequestCount: ClusterFactory.AsConditional(
                 MacCountsComponent.attributes.rxBeaconRequestCount,
                 { optionalIf: [MACCNT] }
             ),
-            rxOtherCount: AsConditional(MacCountsComponent.attributes.rxOtherCount, { optionalIf: [MACCNT] }),
-            rxAddressFilteredCount: AsConditional(
+            rxOtherCount: ClusterFactory.AsConditional(
+                MacCountsComponent.attributes.rxOtherCount,
+                { optionalIf: [MACCNT] }
+            ),
+            rxAddressFilteredCount: ClusterFactory.AsConditional(
                 MacCountsComponent.attributes.rxAddressFilteredCount,
                 { optionalIf: [MACCNT] }
             ),
-            rxDestAddrFilteredCount: AsConditional(
+            rxDestAddrFilteredCount: ClusterFactory.AsConditional(
                 MacCountsComponent.attributes.rxDestAddrFilteredCount,
                 { optionalIf: [MACCNT] }
             ),
-            rxDuplicatedCount: AsConditional(MacCountsComponent.attributes.rxDuplicatedCount, { optionalIf: [MACCNT] }),
-            rxErrNoFrameCount: AsConditional(MacCountsComponent.attributes.rxErrNoFrameCount, { optionalIf: [MACCNT] }),
-            rxErrUnknownNeighborCount: AsConditional(
+            rxDuplicatedCount: ClusterFactory.AsConditional(
+                MacCountsComponent.attributes.rxDuplicatedCount,
+                { optionalIf: [MACCNT] }
+            ),
+            rxErrNoFrameCount: ClusterFactory.AsConditional(
+                MacCountsComponent.attributes.rxErrNoFrameCount,
+                { optionalIf: [MACCNT] }
+            ),
+            rxErrUnknownNeighborCount: ClusterFactory.AsConditional(
                 MacCountsComponent.attributes.rxErrUnknownNeighborCount,
                 { optionalIf: [MACCNT] }
             ),
-            rxErrInvalidScrAddrCount: AsConditional(
+            rxErrInvalidScrAddrCount: ClusterFactory.AsConditional(
                 MacCountsComponent.attributes.rxErrInvalidScrAddrCount,
                 { optionalIf: [MACCNT] }
             ),
-            rxErrSecCount: AsConditional(MacCountsComponent.attributes.rxErrSecCount, { optionalIf: [MACCNT] }),
-            rxErrFcsCount: AsConditional(MacCountsComponent.attributes.rxErrFcsCount, { optionalIf: [MACCNT] }),
-            rxErrOtherCount: AsConditional(MacCountsComponent.attributes.rxErrOtherCount, { optionalIf: [MACCNT] })
+            rxErrSecCount: ClusterFactory.AsConditional(
+                MacCountsComponent.attributes.rxErrSecCount,
+                { optionalIf: [MACCNT] }
+            ),
+            rxErrFcsCount: ClusterFactory.AsConditional(
+                MacCountsComponent.attributes.rxErrFcsCount,
+                { optionalIf: [MACCNT] }
+            ),
+            rxErrOtherCount: ClusterFactory.AsConditional(
+                MacCountsComponent.attributes.rxErrOtherCount,
+                { optionalIf: [MACCNT] }
+            )
         },
 
-        commands: { resetCounts: AsConditional(ErrorCountsComponent.commands.resetCounts, { mandatoryIf: [ERRCNT] }) },
+        commands: {
+            resetCounts: ClusterFactory.AsConditional(
+                ErrorCountsComponent.commands.resetCounts,
+                { mandatoryIf: [ERRCNT] }
+            )
+        },
+
         events: Cluster.events
     });
 }

@@ -6,13 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import {
-    Cluster as CreateCluster,
-    OptionalWritableAttribute,
-    WritableAttribute,
-    OptionalAttribute,
-    Attribute
-} from "../../cluster/Cluster.js";
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
+import { OptionalWritableAttribute, WritableAttribute, OptionalAttribute, Attribute } from "../../cluster/Cluster.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvUInt8, TlvUInt32 } from "../../tlv/TlvNumber.js";
@@ -24,7 +19,7 @@ export namespace BinaryInputBasic {
      * An interface for reading the value of a binary measurement and accessing various characteristics of that
      * measurement.
      */
-    export const Cluster = CreateCluster({
+    export const Cluster = ClusterFactory.Definition({
         id: 0xf,
         name: "BinaryInputBasic",
         revision: 1,

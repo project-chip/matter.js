@@ -6,18 +6,10 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import {
-    BaseClusterComponent,
-    ClusterComponent,
-    ExtensibleCluster,
-    validateFeatureSelection,
-    extendCluster,
-    ClusterForBaseCluster,
-    AsConditional
-} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { OptionalAttribute, Command, Attribute, Cluster as CreateCluster } from "../../cluster/Cluster.js";
+import { OptionalAttribute, Command, Attribute } from "../../cluster/Cluster.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvUInt16, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvString, TlvByteString } from "../../tlv/TlvString.js";
@@ -176,7 +168,7 @@ export namespace ApplicationLauncher {
     /**
      * These elements and properties are present in all ApplicationLauncher clusters.
      */
-    export const Base = BaseClusterComponent({
+    export const Base = ClusterFactory.Definition({
         id: 0x50c,
         name: "ApplicationLauncher",
         revision: 1,
@@ -266,7 +258,7 @@ export namespace ApplicationLauncher {
     /**
      * A ApplicationLauncherCluster supports these elements if it supports feature ApplicationPlatform.
      */
-    export const ApplicationPlatformComponent = ClusterComponent({
+    export const ApplicationPlatformComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This attribute shall specify the list of supported application catalogs, where each entry in the list is
@@ -291,8 +283,8 @@ export namespace ApplicationLauncher {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.4
      */
-    export const Cluster = ExtensibleCluster({
-        ...Base,
+    export const Cluster = ClusterFactory.Extensible(
+        Base,
 
         /**
          * Use this factory method to create an ApplicationLauncher cluster with support for optional features. Include
@@ -302,16 +294,19 @@ export namespace ApplicationLauncher {
          * @returns an ApplicationLauncher cluster with specified features enabled
          * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
          */
-        factory: <T extends `${Feature}`[]>(...features: [...T]) => {
-            validateFeatureSelection(features, Feature);
-            const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
-            extendCluster(cluster, ApplicationPlatformComponent, { applicationPlatform: true });
+        <T extends `${Feature}`[]>(...features: [...T]) => {
+            ClusterFactory.validateFeatureSelection(features, Feature);
+            const cluster = ClusterFactory.Definition({
+                ...Base,
+                supportedFeatures: BitFlags(Base.features, ...features)
+            });
+            ClusterFactory.extend(cluster, ApplicationPlatformComponent, { applicationPlatform: true });
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }
-    });
+    );
 
     export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        ClusterForBaseCluster<typeof Base, SF>
+        Omit<typeof Base, "supportedFeatures">
         & { supportedFeatures: SF }
         & (SF extends { applicationPlatform: true } ? typeof ApplicationPlatformComponent : {});
     const AP = { applicationPlatform: true };
@@ -322,15 +317,20 @@ export namespace ApplicationLauncher {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = CreateCluster({
+    export const Complete = ClusterFactory.Definition({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
         features: Cluster.features,
+
         attributes: {
             ...Cluster.attributes,
-            catalogList: AsConditional(ApplicationPlatformComponent.attributes.catalogList, { mandatoryIf: [AP] })
+            catalogList: ClusterFactory.AsConditional(
+                ApplicationPlatformComponent.attributes.catalogList,
+                { mandatoryIf: [AP] }
+            )
         },
+
         commands: Cluster.commands
     });
 }

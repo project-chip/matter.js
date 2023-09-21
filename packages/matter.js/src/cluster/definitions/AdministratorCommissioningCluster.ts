@@ -6,18 +6,10 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
-import {
-    BaseClusterComponent,
-    ClusterComponent,
-    ExtensibleCluster,
-    validateFeatureSelection,
-    extendCluster,
-    ClusterForBaseCluster,
-    AsConditional
-} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { Attribute, Command, TlvNoResponse, AccessLevel, Cluster as CreateCluster } from "../../cluster/Cluster.js";
+import { Attribute, Command, TlvNoResponse, AccessLevel } from "../../cluster/Cluster.js";
 import { TlvEnum, TlvUInt16, TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
@@ -139,7 +131,7 @@ export namespace AdministratorCommissioning {
     /**
      * These elements and properties are present in all AdministratorCommissioning clusters.
      */
-    export const Base = BaseClusterComponent({
+    export const Base = ClusterFactory.Definition({
         id: 0x3c,
         name: "AdministratorCommissioning",
         revision: 1,
@@ -261,7 +253,7 @@ export namespace AdministratorCommissioning {
     /**
      * A AdministratorCommissioningCluster supports these elements if it supports feature Basic.
      */
-    export const BasicComponent = ClusterComponent({
+    export const BasicComponent = ClusterFactory.Component({
         commands: {
             /**
              * This command may be used by a current Administrator to instruct a Node to go into commissioning mode, if
@@ -319,8 +311,8 @@ export namespace AdministratorCommissioning {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.18
      */
-    export const Cluster = ExtensibleCluster({
-        ...Base,
+    export const Cluster = ClusterFactory.Extensible(
+        Base,
 
         /**
          * Use this factory method to create an AdministratorCommissioning cluster with support for optional features.
@@ -330,16 +322,19 @@ export namespace AdministratorCommissioning {
          * @returns an AdministratorCommissioning cluster with specified features enabled
          * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
          */
-        factory: <T extends `${Feature}`[]>(...features: [...T]) => {
-            validateFeatureSelection(features, Feature);
-            const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
-            extendCluster(cluster, BasicComponent, { basic: true });
+        <T extends `${Feature}`[]>(...features: [...T]) => {
+            ClusterFactory.validateFeatureSelection(features, Feature);
+            const cluster = ClusterFactory.Definition({
+                ...Base,
+                supportedFeatures: BitFlags(Base.features, ...features)
+            });
+            ClusterFactory.extend(cluster, BasicComponent, { basic: true });
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }
-    });
+    );
 
     export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        ClusterForBaseCluster<typeof Base, SF>
+        Omit<typeof Base, "supportedFeatures">
         & { supportedFeatures: SF }
         & (SF extends { basic: true } ? typeof BasicComponent : {});
     const BC = { basic: true };
@@ -350,7 +345,7 @@ export namespace AdministratorCommissioning {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = CreateCluster({
+    export const Complete = ClusterFactory.Definition({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -359,7 +354,7 @@ export namespace AdministratorCommissioning {
 
         commands: {
             ...Cluster.commands,
-            openBasicCommissioningWindow: AsConditional(
+            openBasicCommissioningWindow: ClusterFactory.AsConditional(
                 BasicComponent.commands.openBasicCommissioningWindow,
                 { mandatoryIf: [BC] }
             )

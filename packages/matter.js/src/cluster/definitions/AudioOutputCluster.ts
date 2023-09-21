@@ -6,18 +6,10 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import {
-    BaseClusterComponent,
-    ClusterComponent,
-    ExtensibleCluster,
-    validateFeatureSelection,
-    extendCluster,
-    ClusterForBaseCluster,
-    AsConditional
-} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { Attribute, Command, TlvNoResponse, AccessLevel, Cluster as CreateCluster } from "../../cluster/Cluster.js";
+import { Attribute, Command, TlvNoResponse, AccessLevel } from "../../cluster/Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvUInt8, TlvEnum } from "../../tlv/TlvNumber.js";
@@ -102,7 +94,7 @@ export namespace AudioOutput {
     /**
      * These elements and properties are present in all AudioOutput clusters.
      */
-    export const Base = BaseClusterComponent({
+    export const Base = ClusterFactory.Definition({
         id: 0x50b,
         name: "AudioOutput",
         revision: 1,
@@ -143,7 +135,7 @@ export namespace AudioOutput {
     /**
      * A AudioOutputCluster supports these elements if it supports feature NameUpdates.
      */
-    export const NameUpdatesComponent = ClusterComponent({
+    export const NameUpdatesComponent = ClusterFactory.Component({
         commands: {
             /**
              * Upon receipt, this shall rename the output at a specific index in the Output List.
@@ -167,8 +159,8 @@ export namespace AudioOutput {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.5
      */
-    export const Cluster = ExtensibleCluster({
-        ...Base,
+    export const Cluster = ClusterFactory.Extensible(
+        Base,
 
         /**
          * Use this factory method to create an AudioOutput cluster with support for optional features. Include each
@@ -178,16 +170,19 @@ export namespace AudioOutput {
          * @returns an AudioOutput cluster with specified features enabled
          * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
          */
-        factory: <T extends `${Feature}`[]>(...features: [...T]) => {
-            validateFeatureSelection(features, Feature);
-            const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
-            extendCluster(cluster, NameUpdatesComponent, { nameUpdates: true });
+        <T extends `${Feature}`[]>(...features: [...T]) => {
+            ClusterFactory.validateFeatureSelection(features, Feature);
+            const cluster = ClusterFactory.Definition({
+                ...Base,
+                supportedFeatures: BitFlags(Base.features, ...features)
+            });
+            ClusterFactory.extend(cluster, NameUpdatesComponent, { nameUpdates: true });
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }
-    });
+    );
 
     export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        ClusterForBaseCluster<typeof Base, SF>
+        Omit<typeof Base, "supportedFeatures">
         & { supportedFeatures: SF }
         & (SF extends { nameUpdates: true } ? typeof NameUpdatesComponent : {});
     const NU = { nameUpdates: true };
@@ -198,15 +193,19 @@ export namespace AudioOutput {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = CreateCluster({
+    export const Complete = ClusterFactory.Definition({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
         features: Cluster.features,
         attributes: Cluster.attributes,
+
         commands: {
             ...Cluster.commands,
-            renameOutput: AsConditional(NameUpdatesComponent.commands.renameOutput, { mandatoryIf: [NU] })
+            renameOutput: ClusterFactory.AsConditional(
+                NameUpdatesComponent.commands.renameOutput,
+                { mandatoryIf: [NU] }
+            )
         }
     });
 }

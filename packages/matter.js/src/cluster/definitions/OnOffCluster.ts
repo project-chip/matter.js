@@ -6,25 +6,10 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import {
-    BaseClusterComponent,
-    ClusterComponent,
-    ExtensibleCluster,
-    validateFeatureSelection,
-    extendCluster,
-    ClusterForBaseCluster,
-    AsConditional
-} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitField, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import {
-    Attribute,
-    Command,
-    TlvNoResponse,
-    WritableAttribute,
-    AccessLevel,
-    Cluster as CreateCluster
-} from "../../cluster/Cluster.js";
+import { Attribute, Command, TlvNoResponse, WritableAttribute, AccessLevel } from "../../cluster/Cluster.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TlvUInt16, TlvEnum, TlvUInt8, TlvBitmap } from "../../tlv/TlvNumber.js";
@@ -142,7 +127,7 @@ export namespace OnOff {
     /**
      * These elements and properties are present in all OnOff clusters.
      */
-    export const Base = BaseClusterComponent({
+    export const Base = ClusterFactory.Definition({
         id: 0x6,
         name: "OnOff",
         revision: 4,
@@ -193,7 +178,7 @@ export namespace OnOff {
     /**
      * A OnOffCluster supports these elements if it supports feature LevelControlForLighting.
      */
-    export const LevelControlForLightingComponent = ClusterComponent({
+    export const LevelControlForLightingComponent = ClusterFactory.Component({
         attributes: {
             /**
              * In order to support the use case where the user gets back the last setting of a set of devices (e.g.
@@ -295,8 +280,8 @@ export namespace OnOff {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5
      */
-    export const Cluster = ExtensibleCluster({
-        ...Base,
+    export const Cluster = ClusterFactory.Extensible(
+        Base,
 
         /**
          * Use this factory method to create an OnOff cluster with support for optional features. Include each
@@ -306,16 +291,19 @@ export namespace OnOff {
          * @returns an OnOff cluster with specified features enabled
          * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
          */
-        factory: <T extends `${Feature}`[]>(...features: [...T]) => {
-            validateFeatureSelection(features, Feature);
-            const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
-            extendCluster(cluster, LevelControlForLightingComponent, { levelControlForLighting: true });
+        <T extends `${Feature}`[]>(...features: [...T]) => {
+            ClusterFactory.validateFeatureSelection(features, Feature);
+            const cluster = ClusterFactory.Definition({
+                ...Base,
+                supportedFeatures: BitFlags(Base.features, ...features)
+            });
+            ClusterFactory.extend(cluster, LevelControlForLightingComponent, { levelControlForLighting: true });
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }
-    });
+    );
 
     export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        ClusterForBaseCluster<typeof Base, SF>
+        Omit<typeof Base, "supportedFeatures">
         & { supportedFeatures: SF }
         & (SF extends { levelControlForLighting: true } ? typeof LevelControlForLightingComponent : {});
     const LT = { levelControlForLighting: true };
@@ -326,7 +314,7 @@ export namespace OnOff {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = CreateCluster({
+    export const Complete = ClusterFactory.Definition({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -334,13 +322,19 @@ export namespace OnOff {
 
         attributes: {
             ...Cluster.attributes,
-            globalSceneControl: AsConditional(
+            globalSceneControl: ClusterFactory.AsConditional(
                 LevelControlForLightingComponent.attributes.globalSceneControl,
                 { mandatoryIf: [LT] }
             ),
-            onTime: AsConditional(LevelControlForLightingComponent.attributes.onTime, { mandatoryIf: [LT] }),
-            offWaitTime: AsConditional(LevelControlForLightingComponent.attributes.offWaitTime, { mandatoryIf: [LT] }),
-            startUpOnOff: AsConditional(
+            onTime: ClusterFactory.AsConditional(
+                LevelControlForLightingComponent.attributes.onTime,
+                { mandatoryIf: [LT] }
+            ),
+            offWaitTime: ClusterFactory.AsConditional(
+                LevelControlForLightingComponent.attributes.offWaitTime,
+                { mandatoryIf: [LT] }
+            ),
+            startUpOnOff: ClusterFactory.AsConditional(
                 LevelControlForLightingComponent.attributes.startUpOnOff,
                 { mandatoryIf: [LT] }
             )
@@ -348,15 +342,15 @@ export namespace OnOff {
 
         commands: {
             ...Cluster.commands,
-            offWithEffect: AsConditional(
+            offWithEffect: ClusterFactory.AsConditional(
                 LevelControlForLightingComponent.commands.offWithEffect,
                 { mandatoryIf: [LT] }
             ),
-            onWithRecallGlobalScene: AsConditional(
+            onWithRecallGlobalScene: ClusterFactory.AsConditional(
                 LevelControlForLightingComponent.commands.onWithRecallGlobalScene,
                 { mandatoryIf: [LT] }
             ),
-            onWithTimedOff: AsConditional(
+            onWithTimedOff: ClusterFactory.AsConditional(
                 LevelControlForLightingComponent.commands.onWithTimedOff,
                 { mandatoryIf: [LT] }
             )

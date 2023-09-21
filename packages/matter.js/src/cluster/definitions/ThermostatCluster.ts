@@ -6,17 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import {
-    BaseClusterComponent,
-    ClusterComponent,
-    ExtensibleCluster,
-    validateFeatureSelection,
-    extendCluster,
-    preventCluster,
-    ClusterForBaseCluster,
-    AsConditional
-} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitsFromPartial, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import {
     Attribute,
@@ -28,8 +19,7 @@ import {
     TlvNoResponse,
     OptionalCommand,
     OptionalFixedAttribute,
-    FixedAttribute,
-    Cluster as CreateCluster
+    FixedAttribute
 } from "../../cluster/Cluster.js";
 import { TlvInt16, TlvUInt8, TlvBitmap, TlvEnum, TlvUInt16, TlvUInt32, TlvInt8 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
@@ -586,7 +576,7 @@ export namespace Thermostat {
     /**
      * These elements and properties are present in all Thermostat clusters.
      */
-    export const Base = BaseClusterComponent({
+    export const Base = ClusterFactory.Definition({
         id: 0x201,
         name: "Thermostat",
         revision: 6,
@@ -1006,7 +996,7 @@ export namespace Thermostat {
     /**
      * A ThermostatCluster supports these elements if it supports feature Occupancy.
      */
-    export const OccupancyComponent = ClusterComponent({
+    export const OccupancyComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This attribute specifies whether the heated/cooled space is occupied or not, as measured locally or
@@ -1026,7 +1016,7 @@ export namespace Thermostat {
     /**
      * A ThermostatCluster supports these elements if it supports feature Heating.
      */
-    export const HeatingComponent = ClusterComponent({
+    export const HeatingComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This attribute specifies the absolute minimum level that the heating setpoint may be set to. This is a
@@ -1118,7 +1108,7 @@ export namespace Thermostat {
     /**
      * A ThermostatCluster supports these elements if it supports feature Cooling.
      */
-    export const CoolingComponent = ClusterComponent({
+    export const CoolingComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This attribute specifies the absolute minimum level that the cooling setpoint may be set to. This is a
@@ -1208,7 +1198,7 @@ export namespace Thermostat {
     /**
      * A ThermostatCluster supports these elements if doesn't support feature LTNE.
      */
-    export const NotLocalTemperatureNotExposedComponent = ClusterComponent({
+    export const NotLocalTemperatureNotExposedComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This attribute specifies the offset the Thermostat server shall make to the measured temperature
@@ -1235,7 +1225,7 @@ export namespace Thermostat {
     /**
      * A ThermostatCluster supports these elements if it supports features Cooling and Occupancy.
      */
-    export const CoolingAndOccupancyComponent = ClusterComponent({
+    export const CoolingAndOccupancyComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This attribute specifies the cooling mode setpoint when the room is unoccupied.
@@ -1258,7 +1248,7 @@ export namespace Thermostat {
     /**
      * A ThermostatCluster supports these elements if it supports features Heating and Occupancy.
      */
-    export const HeatingAndOccupancyComponent = ClusterComponent({
+    export const HeatingAndOccupancyComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This attribute specifies the heating mode setpoint when the room is unoccupied.
@@ -1281,7 +1271,7 @@ export namespace Thermostat {
     /**
      * A ThermostatCluster supports these elements if it supports feature AutoMode.
      */
-    export const AutoModeComponent = ClusterComponent({
+    export const AutoModeComponent = ClusterFactory.Component({
         attributes: {
             /**
              * On devices which support the AUTO feature, this attribute specifies the minimum difference between the
@@ -1315,7 +1305,7 @@ export namespace Thermostat {
     /**
      * A ThermostatCluster supports these elements if it supports feature ScheduleConfiguration.
      */
-    export const ScheduleConfigurationComponent = ClusterComponent({
+    export const ScheduleConfigurationComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This attribute represents the day of the week that this thermostat considers to be the start of week for
@@ -1372,7 +1362,7 @@ export namespace Thermostat {
     /**
      * A ThermostatCluster supports these elements if it supports feature Setback.
      */
-    export const SetbackComponent = ClusterComponent({
+    export const SetbackComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This attribute specifies the amount that the Thermostat server will allow the LocalTemperature Value to
@@ -1433,7 +1423,7 @@ export namespace Thermostat {
     /**
      * A ThermostatCluster supports these elements if it supports features Setback and Occupancy.
      */
-    export const SetbackAndOccupancyComponent = ClusterComponent({
+    export const SetbackAndOccupancyComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This attribute specifies the amount that the Thermostat server will allow the LocalTemperature Value to
@@ -1501,8 +1491,8 @@ export namespace Thermostat {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3
      */
-    export const Cluster = ExtensibleCluster({
-        ...Base,
+    export const Cluster = ClusterFactory.Extensible(
+        Base,
 
         /**
          * Use this factory method to create a Thermostat cluster with support for optional features. Include each
@@ -1512,21 +1502,28 @@ export namespace Thermostat {
          * @returns a Thermostat cluster with specified features enabled
          * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
          */
-        factory: <T extends `${Feature}`[]>(...features: [...T]) => {
-            validateFeatureSelection(features, Feature);
-            const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
-            extendCluster(cluster, OccupancyComponent, { occupancy: true });
-            extendCluster(cluster, HeatingComponent, { heating: true });
-            extendCluster(cluster, CoolingComponent, { cooling: true });
-            extendCluster(cluster, NotLocalTemperatureNotExposedComponent, { localTemperatureNotExposed: false });
-            extendCluster(cluster, CoolingAndOccupancyComponent, { cooling: true, occupancy: true });
-            extendCluster(cluster, HeatingAndOccupancyComponent, { heating: true, occupancy: true });
-            extendCluster(cluster, AutoModeComponent, { autoMode: true });
-            extendCluster(cluster, ScheduleConfigurationComponent, { scheduleConfiguration: true });
-            extendCluster(cluster, SetbackComponent, { setback: true });
-            extendCluster(cluster, SetbackAndOccupancyComponent, { setback: true, occupancy: true });
+        <T extends `${Feature}`[]>(...features: [...T]) => {
+            ClusterFactory.validateFeatureSelection(features, Feature);
+            const cluster = ClusterFactory.Definition({
+                ...Base,
+                supportedFeatures: BitFlags(Base.features, ...features)
+            });
+            ClusterFactory.extend(cluster, OccupancyComponent, { occupancy: true });
+            ClusterFactory.extend(cluster, HeatingComponent, { heating: true });
+            ClusterFactory.extend(cluster, CoolingComponent, { cooling: true });
+            ClusterFactory.extend(
+                cluster,
+                NotLocalTemperatureNotExposedComponent,
+                { localTemperatureNotExposed: false }
+            );
+            ClusterFactory.extend(cluster, CoolingAndOccupancyComponent, { cooling: true, occupancy: true });
+            ClusterFactory.extend(cluster, HeatingAndOccupancyComponent, { heating: true, occupancy: true });
+            ClusterFactory.extend(cluster, AutoModeComponent, { autoMode: true });
+            ClusterFactory.extend(cluster, ScheduleConfigurationComponent, { scheduleConfiguration: true });
+            ClusterFactory.extend(cluster, SetbackComponent, { setback: true });
+            ClusterFactory.extend(cluster, SetbackAndOccupancyComponent, { setback: true, occupancy: true });
 
-            preventCluster(
+            ClusterFactory.prevent(
                 cluster,
                 { autoMode: true, heating: false },
                 { autoMode: true, cooling: false },
@@ -1535,10 +1532,10 @@ export namespace Thermostat {
 
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }
-    });
+    );
 
     export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        ClusterForBaseCluster<typeof Base, SF>
+        Omit<typeof Base, "supportedFeatures">
         & { supportedFeatures: SF }
         & (SF extends { occupancy: true } ? typeof OccupancyComponent : {})
         & (SF extends { heating: true } ? typeof HeatingComponent : {})
@@ -1570,7 +1567,7 @@ export namespace Thermostat {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = CreateCluster({
+    export const Complete = ClusterFactory.Definition({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -1578,90 +1575,108 @@ export namespace Thermostat {
 
         attributes: {
             ...Cluster.attributes,
-            occupancy: AsConditional(OccupancyComponent.attributes.occupancy, { mandatoryIf: [OCC] }),
-            absMinHeatSetpointLimit: AsConditional(
+            occupancy: ClusterFactory.AsConditional(OccupancyComponent.attributes.occupancy, { mandatoryIf: [OCC] }),
+            absMinHeatSetpointLimit: ClusterFactory.AsConditional(
                 HeatingComponent.attributes.absMinHeatSetpointLimit,
                 { optionalIf: [HEAT] }
             ),
-            absMaxHeatSetpointLimit: AsConditional(
+            absMaxHeatSetpointLimit: ClusterFactory.AsConditional(
                 HeatingComponent.attributes.absMaxHeatSetpointLimit,
                 { optionalIf: [HEAT] }
             ),
-            absMinCoolSetpointLimit: AsConditional(
+            absMinCoolSetpointLimit: ClusterFactory.AsConditional(
                 CoolingComponent.attributes.absMinCoolSetpointLimit,
                 { optionalIf: [COOL] }
             ),
-            absMaxCoolSetpointLimit: AsConditional(
+            absMaxCoolSetpointLimit: ClusterFactory.AsConditional(
                 CoolingComponent.attributes.absMaxCoolSetpointLimit,
                 { optionalIf: [COOL] }
             ),
-            piCoolingDemand: AsConditional(CoolingComponent.attributes.piCoolingDemand, { optionalIf: [COOL] }),
-            piHeatingDemand: AsConditional(HeatingComponent.attributes.piHeatingDemand, { optionalIf: [HEAT] }),
-            localTemperatureCalibration: AsConditional(
+            piCoolingDemand: ClusterFactory.AsConditional(
+                CoolingComponent.attributes.piCoolingDemand,
+                { optionalIf: [COOL] }
+            ),
+            piHeatingDemand: ClusterFactory.AsConditional(
+                HeatingComponent.attributes.piHeatingDemand,
+                { optionalIf: [HEAT] }
+            ),
+            localTemperatureCalibration: ClusterFactory.AsConditional(
                 NotLocalTemperatureNotExposedComponent.attributes.localTemperatureCalibration,
                 { optionalIf: [] }
             ),
-            occupiedCoolingSetpoint: AsConditional(
+            occupiedCoolingSetpoint: ClusterFactory.AsConditional(
                 CoolingComponent.attributes.occupiedCoolingSetpoint,
                 { mandatoryIf: [COOL] }
             ),
-            occupiedHeatingSetpoint: AsConditional(
+            occupiedHeatingSetpoint: ClusterFactory.AsConditional(
                 HeatingComponent.attributes.occupiedHeatingSetpoint,
                 { mandatoryIf: [HEAT] }
             ),
-            unoccupiedCoolingSetpoint: AsConditional(
+            unoccupiedCoolingSetpoint: ClusterFactory.AsConditional(
                 CoolingAndOccupancyComponent.attributes.unoccupiedCoolingSetpoint,
                 { mandatoryIf: [COOL_OCC] }
             ),
-            unoccupiedHeatingSetpoint: AsConditional(
+            unoccupiedHeatingSetpoint: ClusterFactory.AsConditional(
                 HeatingAndOccupancyComponent.attributes.unoccupiedHeatingSetpoint,
                 { mandatoryIf: [HEAT_OCC] }
             ),
-            minHeatSetpointLimit: AsConditional(
+            minHeatSetpointLimit: ClusterFactory.AsConditional(
                 HeatingComponent.attributes.minHeatSetpointLimit,
                 { optionalIf: [HEAT] }
             ),
-            maxHeatSetpointLimit: AsConditional(
+            maxHeatSetpointLimit: ClusterFactory.AsConditional(
                 HeatingComponent.attributes.maxHeatSetpointLimit,
                 { optionalIf: [HEAT] }
             ),
-            minCoolSetpointLimit: AsConditional(
+            minCoolSetpointLimit: ClusterFactory.AsConditional(
                 CoolingComponent.attributes.minCoolSetpointLimit,
                 { optionalIf: [COOL] }
             ),
-            maxCoolSetpointLimit: AsConditional(
+            maxCoolSetpointLimit: ClusterFactory.AsConditional(
                 CoolingComponent.attributes.maxCoolSetpointLimit,
                 { optionalIf: [COOL] }
             ),
-            minSetpointDeadBand: AsConditional(
+            minSetpointDeadBand: ClusterFactory.AsConditional(
                 AutoModeComponent.attributes.minSetpointDeadBand,
                 { mandatoryIf: [AUTO] }
             ),
-            thermostatRunningMode: AsConditional(
+            thermostatRunningMode: ClusterFactory.AsConditional(
                 AutoModeComponent.attributes.thermostatRunningMode,
                 { optionalIf: [AUTO] }
             ),
-            startOfWeek: AsConditional(ScheduleConfigurationComponent.attributes.startOfWeek, { mandatoryIf: [SCH] }),
-            numberOfWeeklyTransitions: AsConditional(
+            startOfWeek: ClusterFactory.AsConditional(
+                ScheduleConfigurationComponent.attributes.startOfWeek,
+                { mandatoryIf: [SCH] }
+            ),
+            numberOfWeeklyTransitions: ClusterFactory.AsConditional(
                 ScheduleConfigurationComponent.attributes.numberOfWeeklyTransitions,
                 { mandatoryIf: [SCH] }
             ),
-            numberOfDailyTransitions: AsConditional(
+            numberOfDailyTransitions: ClusterFactory.AsConditional(
                 ScheduleConfigurationComponent.attributes.numberOfDailyTransitions,
                 { mandatoryIf: [SCH] }
             ),
-            occupiedSetback: AsConditional(SetbackComponent.attributes.occupiedSetback, { mandatoryIf: [SB] }),
-            occupiedSetbackMin: AsConditional(SetbackComponent.attributes.occupiedSetbackMin, { mandatoryIf: [SB] }),
-            occupiedSetbackMax: AsConditional(SetbackComponent.attributes.occupiedSetbackMax, { mandatoryIf: [SB] }),
-            unoccupiedSetback: AsConditional(
+            occupiedSetback: ClusterFactory.AsConditional(
+                SetbackComponent.attributes.occupiedSetback,
+                { mandatoryIf: [SB] }
+            ),
+            occupiedSetbackMin: ClusterFactory.AsConditional(
+                SetbackComponent.attributes.occupiedSetbackMin,
+                { mandatoryIf: [SB] }
+            ),
+            occupiedSetbackMax: ClusterFactory.AsConditional(
+                SetbackComponent.attributes.occupiedSetbackMax,
+                { mandatoryIf: [SB] }
+            ),
+            unoccupiedSetback: ClusterFactory.AsConditional(
                 SetbackAndOccupancyComponent.attributes.unoccupiedSetback,
                 { mandatoryIf: [SB_OCC] }
             ),
-            unoccupiedSetbackMin: AsConditional(
+            unoccupiedSetbackMin: ClusterFactory.AsConditional(
                 SetbackAndOccupancyComponent.attributes.unoccupiedSetbackMin,
                 { mandatoryIf: [SB_OCC] }
             ),
-            unoccupiedSetbackMax: AsConditional(
+            unoccupiedSetbackMax: ClusterFactory.AsConditional(
                 SetbackAndOccupancyComponent.attributes.unoccupiedSetbackMax,
                 { mandatoryIf: [SB_OCC] }
             )
@@ -1669,15 +1684,15 @@ export namespace Thermostat {
 
         commands: {
             ...Cluster.commands,
-            setWeeklySchedule: AsConditional(
+            setWeeklySchedule: ClusterFactory.AsConditional(
                 ScheduleConfigurationComponent.commands.setWeeklySchedule,
                 { mandatoryIf: [SCH] }
             ),
-            getWeeklySchedule: AsConditional(
+            getWeeklySchedule: ClusterFactory.AsConditional(
                 ScheduleConfigurationComponent.commands.getWeeklySchedule,
                 { mandatoryIf: [SCH] }
             ),
-            clearWeeklySchedule: AsConditional(
+            clearWeeklySchedule: ClusterFactory.AsConditional(
                 ScheduleConfigurationComponent.commands.clearWeeklySchedule,
                 { mandatoryIf: [SCH] }
             )

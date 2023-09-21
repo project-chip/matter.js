@@ -6,21 +6,10 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import {
-    BaseClusterComponent,
-    ExtensibleCluster,
-    validateFeatureSelection,
-    ClusterForBaseCluster
-} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import {
-    FixedAttribute,
-    Command,
-    AccessLevel,
-    TlvNoResponse,
-    Cluster as CreateCluster
-} from "../../cluster/Cluster.js";
+import { FixedAttribute, Command, AccessLevel, TlvNoResponse } from "../../cluster/Cluster.js";
 import { TlvUInt8, TlvBitmap, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvGroupId } from "../../datatype/GroupId.js";
@@ -166,7 +155,7 @@ export namespace Groups {
     /**
      * These elements and properties are present in all Groups clusters.
      */
-    export const Base = BaseClusterComponent({
+    export const Base = ClusterFactory.Definition({
         id: 0x4,
         name: "Groups",
         revision: 4,
@@ -283,9 +272,8 @@ export namespace Groups {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.3
      */
-    export const Cluster = ExtensibleCluster({
-        ...Base,
-        supportedFeatures: { groupNames: true },
+    export const Cluster = ClusterFactory.Extensible(
+        { ...Base, supportedFeatures: { groupNames: true } },
 
         /**
          * Use this factory method to create a Groups cluster with support for optional features. Include each
@@ -295,15 +283,18 @@ export namespace Groups {
          * @returns a Groups cluster with specified features enabled
          * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
          */
-        factory: <T extends `${Feature}`[]>(...features: [...T]) => {
-            validateFeatureSelection(features, Feature);
-            const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
+        <T extends `${Feature}`[]>(...features: [...T]) => {
+            ClusterFactory.validateFeatureSelection(features, Feature);
+            const cluster = ClusterFactory.Definition({
+                ...Base,
+                supportedFeatures: BitFlags(Base.features, ...features)
+            });
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }
-    });
+    );
 
     export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        ClusterForBaseCluster<typeof Base, SF>
+        Omit<typeof Base, "supportedFeatures">
         & { supportedFeatures: SF };
 }
 

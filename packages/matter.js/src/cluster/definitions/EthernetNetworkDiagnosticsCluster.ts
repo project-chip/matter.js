@@ -6,25 +6,10 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
-import {
-    BaseClusterComponent,
-    ClusterComponent,
-    ExtensibleCluster,
-    validateFeatureSelection,
-    extendCluster,
-    ClusterForBaseCluster,
-    AsConditional
-} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import {
-    OptionalAttribute,
-    Attribute,
-    Command,
-    TlvNoResponse,
-    AccessLevel,
-    Cluster as CreateCluster
-} from "../../cluster/Cluster.js";
+import { OptionalAttribute, Attribute, Command, TlvNoResponse, AccessLevel } from "../../cluster/Cluster.js";
 import { TlvEnum, TlvUInt64 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
@@ -111,7 +96,7 @@ export namespace EthernetNetworkDiagnostics {
     /**
      * These elements and properties are present in all EthernetNetworkDiagnostics clusters.
      */
-    export const Base = BaseClusterComponent({
+    export const Base = ClusterFactory.Definition({
         id: 0x37,
         name: "EthernetNetworkDiagnostics",
         revision: 1,
@@ -171,7 +156,7 @@ export namespace EthernetNetworkDiagnostics {
     /**
      * A EthernetNetworkDiagnosticsCluster supports these elements if it supports feature PacketCounts.
      */
-    export const PacketCountsComponent = ClusterComponent({
+    export const PacketCountsComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The PacketRxCount attribute shall indicate the number of packets that have been received on the ethernet
@@ -195,7 +180,7 @@ export namespace EthernetNetworkDiagnostics {
     /**
      * A EthernetNetworkDiagnosticsCluster supports these elements if it supports feature ErrorCounts.
      */
-    export const ErrorCountsComponent = ClusterComponent({
+    export const ErrorCountsComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The TxErrCount attribute shall indicate the number of failed packet transmissions that have occurred on
@@ -228,7 +213,7 @@ export namespace EthernetNetworkDiagnostics {
     /**
      * A EthernetNetworkDiagnosticsCluster supports these elements if it supports features PacketCounts or ErrorCounts.
      */
-    export const PacketCountsOrErrorCountsComponent = ClusterComponent({
+    export const PacketCountsOrErrorCountsComponent = ClusterFactory.Component({
         commands: {
             /**
              * Reception of this command shall reset the following attributes to 0:
@@ -264,8 +249,8 @@ export namespace EthernetNetworkDiagnostics {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.15
      */
-    export const Cluster = ExtensibleCluster({
-        ...Base,
+    export const Cluster = ClusterFactory.Extensible(
+        Base,
 
         /**
          * Use this factory method to create an EthernetNetworkDiagnostics cluster with support for optional features.
@@ -275,18 +260,28 @@ export namespace EthernetNetworkDiagnostics {
          * @returns an EthernetNetworkDiagnostics cluster with specified features enabled
          * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
          */
-        factory: <T extends `${Feature}`[]>(...features: [...T]) => {
-            validateFeatureSelection(features, Feature);
-            const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
-            extendCluster(cluster, PacketCountsComponent, { packetCounts: true });
-            extendCluster(cluster, ErrorCountsComponent, { errorCounts: true });
-            extendCluster(cluster, PacketCountsOrErrorCountsComponent, { packetCounts: true }, { errorCounts: true });
+        <T extends `${Feature}`[]>(...features: [...T]) => {
+            ClusterFactory.validateFeatureSelection(features, Feature);
+            const cluster = ClusterFactory.Definition({
+                ...Base,
+                supportedFeatures: BitFlags(Base.features, ...features)
+            });
+            ClusterFactory.extend(cluster, PacketCountsComponent, { packetCounts: true });
+            ClusterFactory.extend(cluster, ErrorCountsComponent, { errorCounts: true });
+
+            ClusterFactory.extend(
+                cluster,
+                PacketCountsOrErrorCountsComponent,
+                { packetCounts: true },
+                { errorCounts: true }
+            );
+
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }
-    });
+    );
 
     export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        ClusterForBaseCluster<typeof Base, SF>
+        Omit<typeof Base, "supportedFeatures">
         & { supportedFeatures: SF }
         & (SF extends { packetCounts: true } ? typeof PacketCountsComponent : {})
         & (SF extends { errorCounts: true } ? typeof ErrorCountsComponent : {})
@@ -301,7 +296,7 @@ export namespace EthernetNetworkDiagnostics {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = CreateCluster({
+    export const Complete = ClusterFactory.Definition({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -309,15 +304,30 @@ export namespace EthernetNetworkDiagnostics {
 
         attributes: {
             ...Cluster.attributes,
-            packetRxCount: AsConditional(PacketCountsComponent.attributes.packetRxCount, { mandatoryIf: [PKTCNT] }),
-            packetTxCount: AsConditional(PacketCountsComponent.attributes.packetTxCount, { mandatoryIf: [PKTCNT] }),
-            txErrCount: AsConditional(ErrorCountsComponent.attributes.txErrCount, { mandatoryIf: [ERRCNT] }),
-            collisionCount: AsConditional(ErrorCountsComponent.attributes.collisionCount, { mandatoryIf: [ERRCNT] }),
-            overrunCount: AsConditional(ErrorCountsComponent.attributes.overrunCount, { mandatoryIf: [ERRCNT] })
+            packetRxCount: ClusterFactory.AsConditional(
+                PacketCountsComponent.attributes.packetRxCount,
+                { mandatoryIf: [PKTCNT] }
+            ),
+            packetTxCount: ClusterFactory.AsConditional(
+                PacketCountsComponent.attributes.packetTxCount,
+                { mandatoryIf: [PKTCNT] }
+            ),
+            txErrCount: ClusterFactory.AsConditional(
+                ErrorCountsComponent.attributes.txErrCount,
+                { mandatoryIf: [ERRCNT] }
+            ),
+            collisionCount: ClusterFactory.AsConditional(
+                ErrorCountsComponent.attributes.collisionCount,
+                { mandatoryIf: [ERRCNT] }
+            ),
+            overrunCount: ClusterFactory.AsConditional(
+                ErrorCountsComponent.attributes.overrunCount,
+                { mandatoryIf: [ERRCNT] }
+            )
         },
 
         commands: {
-            resetCounts: AsConditional(
+            resetCounts: ClusterFactory.AsConditional(
                 PacketCountsOrErrorCountsComponent.commands.resetCounts,
                 { mandatoryIf: [PKTCNT, ERRCNT] }
             )

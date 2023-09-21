@@ -6,24 +6,10 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import {
-    BaseClusterComponent,
-    ClusterComponent,
-    ExtensibleCluster,
-    validateFeatureSelection,
-    extendCluster,
-    ClusterForBaseCluster,
-    AsConditional
-} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import {
-    OptionalAttribute,
-    Command,
-    TlvNoResponse,
-    Attribute,
-    Cluster as CreateCluster
-} from "../../cluster/Cluster.js";
+import { OptionalAttribute, Command, TlvNoResponse, Attribute } from "../../cluster/Cluster.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvUInt16, TlvInt16, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvString, TlvByteString } from "../../tlv/TlvString.js";
@@ -231,7 +217,7 @@ export namespace Channel {
     /**
      * These elements and properties are present in all Channel clusters.
      */
-    export const Base = BaseClusterComponent({
+    export const Base = ClusterFactory.Definition({
         id: 0x504,
         name: "Channel",
         revision: 1,
@@ -288,7 +274,7 @@ export namespace Channel {
     /**
      * A ChannelCluster supports these elements if it supports feature ChannelList.
      */
-    export const ChannelListComponent = ClusterComponent({
+    export const ChannelListComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This optional list provides the channels supported.
@@ -302,7 +288,7 @@ export namespace Channel {
     /**
      * A ChannelCluster supports these elements if it supports feature LineupInfo.
      */
-    export const LineupInfoComponent = ClusterComponent({
+    export const LineupInfoComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This optional field identifies the channel lineup using external data sources.
@@ -316,7 +302,7 @@ export namespace Channel {
     /**
      * A ChannelCluster supports these elements if it supports features ChannelList or LineupInfo.
      */
-    export const ChannelListOrLineupInfoComponent = ClusterComponent({
+    export const ChannelListOrLineupInfoComponent = ClusterFactory.Component({
         commands: {
             /**
              * Change the channel to the channel case-insensitive exact matching the value passed as an argument.
@@ -343,8 +329,8 @@ export namespace Channel {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6
      */
-    export const Cluster = ExtensibleCluster({
-        ...Base,
+    export const Cluster = ClusterFactory.Extensible(
+        Base,
 
         /**
          * Use this factory method to create a Channel cluster with support for optional features. Include each
@@ -354,18 +340,28 @@ export namespace Channel {
          * @returns a Channel cluster with specified features enabled
          * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
          */
-        factory: <T extends `${Feature}`[]>(...features: [...T]) => {
-            validateFeatureSelection(features, Feature);
-            const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
-            extendCluster(cluster, ChannelListComponent, { channelList: true });
-            extendCluster(cluster, LineupInfoComponent, { lineupInfo: true });
-            extendCluster(cluster, ChannelListOrLineupInfoComponent, { channelList: true }, { lineupInfo: true });
+        <T extends `${Feature}`[]>(...features: [...T]) => {
+            ClusterFactory.validateFeatureSelection(features, Feature);
+            const cluster = ClusterFactory.Definition({
+                ...Base,
+                supportedFeatures: BitFlags(Base.features, ...features)
+            });
+            ClusterFactory.extend(cluster, ChannelListComponent, { channelList: true });
+            ClusterFactory.extend(cluster, LineupInfoComponent, { lineupInfo: true });
+
+            ClusterFactory.extend(
+                cluster,
+                ChannelListOrLineupInfoComponent,
+                { channelList: true },
+                { lineupInfo: true }
+            );
+
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }
-    });
+    );
 
     export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        ClusterForBaseCluster<typeof Base, SF>
+        Omit<typeof Base, "supportedFeatures">
         & { supportedFeatures: SF }
         & (SF extends { channelList: true } ? typeof ChannelListComponent : {})
         & (SF extends { lineupInfo: true } ? typeof LineupInfoComponent : {})
@@ -380,20 +376,24 @@ export namespace Channel {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = CreateCluster({
+    export const Complete = ClusterFactory.Definition({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
         features: Cluster.features,
+
         attributes: {
             ...Cluster.attributes,
-            channelList: AsConditional(ChannelListComponent.attributes.channelList, { mandatoryIf: [CL] }),
-            lineup: AsConditional(LineupInfoComponent.attributes.lineup, { mandatoryIf: [LI] })
+            channelList: ClusterFactory.AsConditional(
+                ChannelListComponent.attributes.channelList,
+                { mandatoryIf: [CL] }
+            ),
+            lineup: ClusterFactory.AsConditional(LineupInfoComponent.attributes.lineup, { mandatoryIf: [LI] })
         },
 
         commands: {
             ...Cluster.commands,
-            changeChannel: AsConditional(
+            changeChannel: ClusterFactory.AsConditional(
                 ChannelListOrLineupInfoComponent.commands.changeChannel,
                 { mandatoryIf: [CL, LI] }
             )

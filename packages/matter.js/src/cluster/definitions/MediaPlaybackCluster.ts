@@ -6,18 +6,10 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import {
-    BaseClusterComponent,
-    ClusterComponent,
-    ExtensibleCluster,
-    validateFeatureSelection,
-    extendCluster,
-    ClusterForBaseCluster,
-    AsConditional
-} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { Attribute, Command, OptionalCommand, Cluster as CreateCluster } from "../../cluster/Cluster.js";
+import { Attribute, Command, OptionalCommand } from "../../cluster/Cluster.js";
 import { TlvEnum, TlvUInt64, TlvEpochUs, TlvFloat } from "../../tlv/TlvNumber.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
@@ -218,7 +210,7 @@ export namespace MediaPlayback {
     /**
      * These elements and properties are present in all MediaPlayback clusters.
      */
-    export const Base = BaseClusterComponent({
+    export const Base = ClusterFactory.Definition({
         id: 0x506,
         name: "MediaPlayback",
         revision: 1,
@@ -317,7 +309,7 @@ export namespace MediaPlayback {
     /**
      * A MediaPlaybackCluster supports these elements if it supports feature AdvancedSeek.
      */
-    export const AdvancedSeekComponent = ClusterComponent({
+    export const AdvancedSeekComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This shall indicate the start time of the media, in case the media has a fixed start time (for example,
@@ -432,7 +424,7 @@ export namespace MediaPlayback {
     /**
      * A MediaPlaybackCluster supports these elements if it supports feature VariableSpeed.
      */
-    export const VariableSpeedComponent = ClusterComponent({
+    export const VariableSpeedComponent = ClusterFactory.Component({
         commands: {
             /**
              * Upon receipt, this shall start playback of the media backward in case the media is currently playing in
@@ -483,8 +475,8 @@ export namespace MediaPlayback {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10
      */
-    export const Cluster = ExtensibleCluster({
-        ...Base,
+    export const Cluster = ClusterFactory.Extensible(
+        Base,
 
         /**
          * Use this factory method to create a MediaPlayback cluster with support for optional features. Include each
@@ -494,17 +486,20 @@ export namespace MediaPlayback {
          * @returns a MediaPlayback cluster with specified features enabled
          * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
          */
-        factory: <T extends `${Feature}`[]>(...features: [...T]) => {
-            validateFeatureSelection(features, Feature);
-            const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
-            extendCluster(cluster, AdvancedSeekComponent, { advancedSeek: true });
-            extendCluster(cluster, VariableSpeedComponent, { variableSpeed: true });
+        <T extends `${Feature}`[]>(...features: [...T]) => {
+            ClusterFactory.validateFeatureSelection(features, Feature);
+            const cluster = ClusterFactory.Definition({
+                ...Base,
+                supportedFeatures: BitFlags(Base.features, ...features)
+            });
+            ClusterFactory.extend(cluster, AdvancedSeekComponent, { advancedSeek: true });
+            ClusterFactory.extend(cluster, VariableSpeedComponent, { variableSpeed: true });
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }
-    });
+    );
 
     export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        ClusterForBaseCluster<typeof Base, SF>
+        Omit<typeof Base, "supportedFeatures">
         & { supportedFeatures: SF }
         & (SF extends { advancedSeek: true } ? typeof AdvancedSeekComponent : {})
         & (SF extends { variableSpeed: true } ? typeof VariableSpeedComponent : {});
@@ -517,7 +512,7 @@ export namespace MediaPlayback {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = CreateCluster({
+    export const Complete = ClusterFactory.Definition({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -525,19 +520,34 @@ export namespace MediaPlayback {
 
         attributes: {
             ...Cluster.attributes,
-            startTime: AsConditional(AdvancedSeekComponent.attributes.startTime, { mandatoryIf: [AS] }),
-            duration: AsConditional(AdvancedSeekComponent.attributes.duration, { mandatoryIf: [AS] }),
-            sampledPosition: AsConditional(AdvancedSeekComponent.attributes.sampledPosition, { mandatoryIf: [AS] }),
-            playbackSpeed: AsConditional(AdvancedSeekComponent.attributes.playbackSpeed, { mandatoryIf: [AS] }),
-            seekRangeEnd: AsConditional(AdvancedSeekComponent.attributes.seekRangeEnd, { mandatoryIf: [AS] }),
-            seekRangeStart: AsConditional(AdvancedSeekComponent.attributes.seekRangeStart, { mandatoryIf: [AS] })
+            startTime: ClusterFactory.AsConditional(AdvancedSeekComponent.attributes.startTime, { mandatoryIf: [AS] }),
+            duration: ClusterFactory.AsConditional(AdvancedSeekComponent.attributes.duration, { mandatoryIf: [AS] }),
+            sampledPosition: ClusterFactory.AsConditional(
+                AdvancedSeekComponent.attributes.sampledPosition,
+                { mandatoryIf: [AS] }
+            ),
+            playbackSpeed: ClusterFactory.AsConditional(
+                AdvancedSeekComponent.attributes.playbackSpeed,
+                { mandatoryIf: [AS] }
+            ),
+            seekRangeEnd: ClusterFactory.AsConditional(
+                AdvancedSeekComponent.attributes.seekRangeEnd,
+                { mandatoryIf: [AS] }
+            ),
+            seekRangeStart: ClusterFactory.AsConditional(
+                AdvancedSeekComponent.attributes.seekRangeStart,
+                { mandatoryIf: [AS] }
+            )
         },
 
         commands: {
             ...Cluster.commands,
-            rewind: AsConditional(VariableSpeedComponent.commands.rewind, { mandatoryIf: [VS] }),
-            fastForward: AsConditional(VariableSpeedComponent.commands.fastForward, { mandatoryIf: [VS] }),
-            seek: AsConditional(AdvancedSeekComponent.commands.seek, { mandatoryIf: [AS] })
+            rewind: ClusterFactory.AsConditional(VariableSpeedComponent.commands.rewind, { mandatoryIf: [VS] }),
+            fastForward: ClusterFactory.AsConditional(
+                VariableSpeedComponent.commands.fastForward,
+                { mandatoryIf: [VS] }
+            ),
+            seek: ClusterFactory.AsConditional(AdvancedSeekComponent.commands.seek, { mandatoryIf: [AS] })
         }
     });
 }

@@ -6,17 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import {
-    BaseClusterComponent,
-    ClusterComponent,
-    ExtensibleCluster,
-    validateFeatureSelection,
-    extendCluster,
-    preventCluster,
-    ClusterForBaseCluster,
-    AsConditional
-} from "../../cluster/ClusterFactory.js";
 import {
     BitFlag,
     BitsFromPartial,
@@ -33,8 +24,7 @@ import {
     Command,
     TlvNoResponse,
     OptionalFixedAttribute,
-    OptionalCommand,
-    Cluster as CreateCluster
+    OptionalCommand
 } from "../../cluster/Cluster.js";
 import { TlvEnum, TlvUInt8, TlvBitmap, TlvUInt16, TlvPercent, TlvPercent100ths } from "../../tlv/TlvNumber.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
@@ -372,7 +362,7 @@ export namespace WindowCovering {
     /**
      * These elements and properties are present in all WindowCovering clusters.
      */
-    export const Base = BaseClusterComponent({
+    export const Base = ClusterFactory.Definition({
         id: 0x102,
         name: "WindowCovering",
         revision: 5,
@@ -569,7 +559,7 @@ export namespace WindowCovering {
      * A WindowCoveringCluster supports these elements if it supports features Lift, PositionAwareLift and
      * AbsolutePosition.
      */
-    export const LiftAndPositionAwareLiftAndAbsolutePositionComponent = ClusterComponent({
+    export const LiftAndPositionAwareLiftAndAbsolutePositionComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The PhysicalClosedLimitLift attribute identifies the maximum possible encoder position possible (in
@@ -617,7 +607,7 @@ export namespace WindowCovering {
      * A WindowCoveringCluster supports these elements if it supports features Tilt, PositionAwareTilt and
      * AbsolutePosition.
      */
-    export const TiltAndPositionAwareTiltAndAbsolutePositionComponent = ClusterComponent({
+    export const TiltAndPositionAwareTiltAndAbsolutePositionComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The PhysicalClosedLimitTilt attribute identifies the maximum possible encoder position possible (tenth
@@ -664,7 +654,7 @@ export namespace WindowCovering {
     /**
      * A WindowCoveringCluster supports these elements if it supports feature Lift.
      */
-    export const LiftComponent = ClusterComponent({
+    export const LiftComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The NumberOfActuationsLift attribute identifies the total number of lift/slide actuations applied to the
@@ -702,7 +692,7 @@ export namespace WindowCovering {
     /**
      * A WindowCoveringCluster supports these elements if it supports feature Tilt.
      */
-    export const TiltComponent = ClusterComponent({
+    export const TiltComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The NumberOfActuationsTilt attribute identifies the total number of tilt actuations applied to the
@@ -741,7 +731,7 @@ export namespace WindowCovering {
     /**
      * A WindowCoveringCluster supports these elements if it supports features Lift and PositionAwareLift.
      */
-    export const LiftAndPositionAwareLiftComponent = ClusterComponent({
+    export const LiftAndPositionAwareLiftComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The CurrentPositionLiftPercentage attribute identifies the actual position as a percentage from 0% to
@@ -808,7 +798,7 @@ export namespace WindowCovering {
     /**
      * A WindowCoveringCluster supports these elements if it supports features Tilt and PositionAwareTilt.
      */
-    export const TiltAndPositionAwareTiltComponent = ClusterComponent({
+    export const TiltAndPositionAwareTiltComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The CurrentPositionTiltPercentage attribute identifies the actual position as a percentage from 0% to
@@ -876,7 +866,7 @@ export namespace WindowCovering {
     /**
      * A WindowCoveringCluster supports these elements if it supports features Lift and AbsolutePosition.
      */
-    export const LiftAndAbsolutePositionComponent = ClusterComponent({
+    export const LiftAndAbsolutePositionComponent = ClusterFactory.Component({
         commands: {
             /**
              * Upon receipt of this command, the Window Covering will adjust the window so the physical lift/slide is
@@ -894,7 +884,7 @@ export namespace WindowCovering {
     /**
      * A WindowCoveringCluster supports these elements if it supports features Tilt and AbsolutePosition.
      */
-    export const TiltAndAbsolutePositionComponent = ClusterComponent({
+    export const TiltAndAbsolutePositionComponent = ClusterFactory.Component({
         commands: {
             /**
              * Upon receipt of this command, the Window Covering will adjust the window so the physical tilt is at the
@@ -920,8 +910,8 @@ export namespace WindowCovering {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3
      */
-    export const Cluster = ExtensibleCluster({
-        ...Base,
+    export const Cluster = ClusterFactory.Extensible(
+        Base,
 
         /**
          * Use this factory method to create a WindowCovering cluster with support for optional features. Include each
@@ -931,27 +921,30 @@ export namespace WindowCovering {
          * @returns a WindowCovering cluster with specified features enabled
          * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
          */
-        factory: <T extends `${Feature}`[]>(...features: [...T]) => {
-            validateFeatureSelection(features, Feature);
-            const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
-            extendCluster(
+        <T extends `${Feature}`[]>(...features: [...T]) => {
+            ClusterFactory.validateFeatureSelection(features, Feature);
+            const cluster = ClusterFactory.Definition({
+                ...Base,
+                supportedFeatures: BitFlags(Base.features, ...features)
+            });
+            ClusterFactory.extend(
                 cluster,
                 LiftAndPositionAwareLiftAndAbsolutePositionComponent,
                 { lift: true, positionAwareLift: true, absolutePosition: true }
             );
-            extendCluster(
+            ClusterFactory.extend(
                 cluster,
                 TiltAndPositionAwareTiltAndAbsolutePositionComponent,
                 { tilt: true, positionAwareTilt: true, absolutePosition: true }
             );
-            extendCluster(cluster, LiftComponent, { lift: true });
-            extendCluster(cluster, TiltComponent, { tilt: true });
-            extendCluster(cluster, LiftAndPositionAwareLiftComponent, { lift: true, positionAwareLift: true });
-            extendCluster(cluster, TiltAndPositionAwareTiltComponent, { tilt: true, positionAwareTilt: true });
-            extendCluster(cluster, LiftAndAbsolutePositionComponent, { lift: true, absolutePosition: true });
-            extendCluster(cluster, TiltAndAbsolutePositionComponent, { tilt: true, absolutePosition: true });
+            ClusterFactory.extend(cluster, LiftComponent, { lift: true });
+            ClusterFactory.extend(cluster, TiltComponent, { tilt: true });
+            ClusterFactory.extend(cluster, LiftAndPositionAwareLiftComponent, { lift: true, positionAwareLift: true });
+            ClusterFactory.extend(cluster, TiltAndPositionAwareTiltComponent, { tilt: true, positionAwareTilt: true });
+            ClusterFactory.extend(cluster, LiftAndAbsolutePositionComponent, { lift: true, absolutePosition: true });
+            ClusterFactory.extend(cluster, TiltAndAbsolutePositionComponent, { tilt: true, absolutePosition: true });
 
-            preventCluster(
+            ClusterFactory.prevent(
                 cluster,
                 { positionAwareLift: true, lift: false },
                 { positionAwareTilt: true, tilt: false },
@@ -960,10 +953,10 @@ export namespace WindowCovering {
 
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }
-    });
+    );
 
     export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        ClusterForBaseCluster<typeof Base, SF>
+        Omit<typeof Base, "supportedFeatures">
         & { supportedFeatures: SF }
         & (SF extends { lift: true, positionAwareLift: true, absolutePosition: true } ? typeof LiftAndPositionAwareLiftAndAbsolutePositionComponent : {})
         & (SF extends { tilt: true, positionAwareTilt: true, absolutePosition: true } ? typeof TiltAndPositionAwareTiltAndAbsolutePositionComponent : {})
@@ -992,7 +985,7 @@ export namespace WindowCovering {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = CreateCluster({
+    export const Complete = ClusterFactory.Definition({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -1000,67 +993,67 @@ export namespace WindowCovering {
 
         attributes: {
             ...Cluster.attributes,
-            physicalClosedLimitLift: AsConditional(
+            physicalClosedLimitLift: ClusterFactory.AsConditional(
                 LiftAndPositionAwareLiftAndAbsolutePositionComponent.attributes.physicalClosedLimitLift,
                 { optionalIf: [LF_PA_LF_ABS] }
             ),
-            physicalClosedLimitTilt: AsConditional(
+            physicalClosedLimitTilt: ClusterFactory.AsConditional(
                 TiltAndPositionAwareTiltAndAbsolutePositionComponent.attributes.physicalClosedLimitTilt,
                 { optionalIf: [TL_PA_TL_ABS] }
             ),
-            currentPositionLift: AsConditional(
+            currentPositionLift: ClusterFactory.AsConditional(
                 LiftAndPositionAwareLiftAndAbsolutePositionComponent.attributes.currentPositionLift,
                 { optionalIf: [LF_PA_LF_ABS] }
             ),
-            currentPositionTilt: AsConditional(
+            currentPositionTilt: ClusterFactory.AsConditional(
                 TiltAndPositionAwareTiltAndAbsolutePositionComponent.attributes.currentPositionTilt,
                 { optionalIf: [TL_PA_TL_ABS] }
             ),
-            numberOfActuationsLift: AsConditional(
+            numberOfActuationsLift: ClusterFactory.AsConditional(
                 LiftComponent.attributes.numberOfActuationsLift,
                 { optionalIf: [LF] }
             ),
-            numberOfActuationsTilt: AsConditional(
+            numberOfActuationsTilt: ClusterFactory.AsConditional(
                 TiltComponent.attributes.numberOfActuationsTilt,
                 { optionalIf: [TL] }
             ),
-            currentPositionLiftPercentage: AsConditional(
+            currentPositionLiftPercentage: ClusterFactory.AsConditional(
                 LiftAndPositionAwareLiftComponent.attributes.currentPositionLiftPercentage,
                 { optionalIf: [LF_PA_LF] }
             ),
-            currentPositionTiltPercentage: AsConditional(
+            currentPositionTiltPercentage: ClusterFactory.AsConditional(
                 TiltAndPositionAwareTiltComponent.attributes.currentPositionTiltPercentage,
                 { optionalIf: [TL_PA_TL] }
             ),
-            targetPositionLiftPercent100ths: AsConditional(
+            targetPositionLiftPercent100ths: ClusterFactory.AsConditional(
                 LiftAndPositionAwareLiftComponent.attributes.targetPositionLiftPercent100ths,
                 { mandatoryIf: [LF_PA_LF] }
             ),
-            targetPositionTiltPercent100ths: AsConditional(
+            targetPositionTiltPercent100ths: ClusterFactory.AsConditional(
                 TiltAndPositionAwareTiltComponent.attributes.targetPositionTiltPercent100ths,
                 { mandatoryIf: [TL_PA_TL] }
             ),
-            currentPositionLiftPercent100ths: AsConditional(
+            currentPositionLiftPercent100ths: ClusterFactory.AsConditional(
                 LiftAndPositionAwareLiftComponent.attributes.currentPositionLiftPercent100ths,
                 { mandatoryIf: [LF_PA_LF] }
             ),
-            currentPositionTiltPercent100ths: AsConditional(
+            currentPositionTiltPercent100ths: ClusterFactory.AsConditional(
                 TiltAndPositionAwareTiltComponent.attributes.currentPositionTiltPercent100ths,
                 { mandatoryIf: [TL_PA_TL] }
             ),
-            installedOpenLimitLift: AsConditional(
+            installedOpenLimitLift: ClusterFactory.AsConditional(
                 LiftAndPositionAwareLiftAndAbsolutePositionComponent.attributes.installedOpenLimitLift,
                 { mandatoryIf: [LF_PA_LF_ABS] }
             ),
-            installedClosedLimitLift: AsConditional(
+            installedClosedLimitLift: ClusterFactory.AsConditional(
                 LiftAndPositionAwareLiftAndAbsolutePositionComponent.attributes.installedClosedLimitLift,
                 { mandatoryIf: [LF_PA_LF_ABS] }
             ),
-            installedOpenLimitTilt: AsConditional(
+            installedOpenLimitTilt: ClusterFactory.AsConditional(
                 TiltAndPositionAwareTiltAndAbsolutePositionComponent.attributes.installedOpenLimitTilt,
                 { mandatoryIf: [TL_PA_TL_ABS] }
             ),
-            installedClosedLimitTilt: AsConditional(
+            installedClosedLimitTilt: ClusterFactory.AsConditional(
                 TiltAndPositionAwareTiltAndAbsolutePositionComponent.attributes.installedClosedLimitTilt,
                 { mandatoryIf: [TL_PA_TL_ABS] }
             )
@@ -1068,19 +1061,19 @@ export namespace WindowCovering {
 
         commands: {
             ...Cluster.commands,
-            goToLiftValue: AsConditional(
+            goToLiftValue: ClusterFactory.AsConditional(
                 LiftAndAbsolutePositionComponent.commands.goToLiftValue,
                 { optionalIf: [LF_ABS] }
             ),
-            goToLiftPercentage: AsConditional(
+            goToLiftPercentage: ClusterFactory.AsConditional(
                 LiftComponent.commands.goToLiftPercentage,
                 { optionalIf: [LF], mandatoryIf: [LF_PA_LF] }
             ),
-            goToTiltValue: AsConditional(
+            goToTiltValue: ClusterFactory.AsConditional(
                 TiltAndAbsolutePositionComponent.commands.goToTiltValue,
                 { optionalIf: [TL_ABS] }
             ),
-            goToTiltPercentage: AsConditional(
+            goToTiltPercentage: ClusterFactory.AsConditional(
                 TiltComponent.commands.goToTiltPercentage,
                 { optionalIf: [TL], mandatoryIf: [TL_PA_TL] }
             )

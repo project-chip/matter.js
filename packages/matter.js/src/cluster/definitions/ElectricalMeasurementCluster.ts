@@ -6,13 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import {
-    Cluster as CreateCluster,
-    OptionalAttribute,
-    OptionalWritableAttribute,
-    OptionalCommand,
-    TlvNoResponse
-} from "../../cluster/Cluster.js";
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
+import { OptionalAttribute, OptionalWritableAttribute, OptionalCommand, TlvNoResponse } from "../../cluster/Cluster.js";
 import { TlvUInt32, TlvInt16, TlvUInt16, TlvInt32, TlvInt8, TlvUInt8 } from "../../tlv/TlvNumber.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
@@ -34,7 +29,7 @@ export namespace ElectricalMeasurement {
      * devices that need to provide instantaneous data as opposed to metrology data which should be retrieved from the
      * metering cluster..
      */
-    export const Cluster = CreateCluster({
+    export const Cluster = ClusterFactory.Definition({
         id: 0xb04,
         name: "ElectricalMeasurement",
         revision: 1,

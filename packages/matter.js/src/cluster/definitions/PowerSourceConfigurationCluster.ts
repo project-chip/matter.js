@@ -6,8 +6,9 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Cluster as CreateCluster, Attribute } from "../../cluster/Cluster.js";
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { Attribute } from "../../cluster/Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
 
@@ -20,7 +21,7 @@ export namespace PowerSourceConfiguration {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.6
      */
-    export const Cluster = CreateCluster({
+    export const Cluster = ClusterFactory.Definition({
         id: 0x2e,
         name: "PowerSourceConfiguration",
         revision: 1,

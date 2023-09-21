@@ -6,14 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import {
-    Cluster as CreateCluster,
-    Attribute,
-    Command,
-    TlvNoResponse,
-    AccessLevel,
-    OptionalCommand
-} from "../../cluster/Cluster.js";
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
+import { Attribute, Command, TlvNoResponse, AccessLevel, OptionalCommand } from "../../cluster/Cluster.js";
 import { TlvUInt32, TlvUInt16, TlvUInt64 } from "../../tlv/TlvNumber.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
@@ -47,7 +41,7 @@ export namespace ClientMonitoring {
      *
      * Client Monitoring allows for ensuring that listed clients meet the required monitoring conditions on the server.
      */
-    export const Cluster = CreateCluster({
+    export const Cluster = ClusterFactory.Definition({
         id: 0x1046,
         name: "ClientMonitoring",
         revision: 1,

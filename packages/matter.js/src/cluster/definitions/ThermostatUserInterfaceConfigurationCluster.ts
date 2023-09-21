@@ -6,13 +6,9 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import {
-    Cluster as CreateCluster,
-    WritableAttribute,
-    AccessLevel,
-    OptionalWritableAttribute
-} from "../../cluster/Cluster.js";
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
+import { WritableAttribute, AccessLevel, OptionalWritableAttribute } from "../../cluster/Cluster.js";
 import { TlvEnum } from "../../tlv/TlvNumber.js";
 
 export namespace ThermostatUserInterfaceConfiguration {
@@ -95,7 +91,7 @@ export namespace ThermostatUserInterfaceConfiguration {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.5
      */
-    export const Cluster = CreateCluster({
+    export const Cluster = ClusterFactory.Definition({
         id: 0x204,
         name: "ThermostatUserInterfaceConfiguration",
         revision: 2,
