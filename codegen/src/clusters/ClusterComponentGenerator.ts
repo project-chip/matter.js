@@ -43,10 +43,9 @@ export class ClusterComponentGenerator {
     }
 
     defineComponent(component: NamedComponent) {
-        this.file.addImport("cluster/ClusterFactory", "ClusterComponent");
         const name = `${component.name}Component`;
         const block = this.target
-            .expressions(`export const ${name} = ClusterComponent({`, `})`)
+            .expressions(`export const ${name} = ClusterFactory.Component({`, `})`)
             .document(component.documentation);
         return this.populateComponent(component, block);
     }
