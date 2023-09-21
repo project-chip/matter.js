@@ -92,7 +92,6 @@ export class Project {
             // Find key text
             let pos = map.indexOf('"sources":["../');
             if (pos === -1) {
-                console.log(map.toString());
                 throw new Error(
                     `Could not find sources position in declaration map ${source}, format may have changed`,
                 );
