@@ -17,7 +17,7 @@ import {
 import { asClusterServerInternal, ClusterServerObj } from "../cluster/server/ClusterServerTypes.js";
 import { Endpoint } from "../device/Endpoint.js";
 import { Logger } from "../log/Logger.js";
-import { toHexString } from "./Number.js";
+import { toHexString } from "../util/Number.js";
 
 const logger = Logger.get("EndpointStructureLogger");
 

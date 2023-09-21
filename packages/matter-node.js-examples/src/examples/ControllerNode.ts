@@ -26,6 +26,7 @@ import {
     GeneralCommissioning,
     OnOffCluster,
 } from "@project-chip/matter-node.js/cluster";
+import { logEndpoint } from "@project-chip/matter-node.js/device";
 import { Format, Level, Logger } from "@project-chip/matter-node.js/log";
 import { CommissioningOptions } from "@project-chip/matter-node.js/protocol";
 import { ManualPairingCodeCodec } from "@project-chip/matter-node.js/schema";
@@ -34,7 +35,6 @@ import {
     getIntParameter,
     getParameter,
     hasParameter,
-    logEndpoint,
     requireMinNodeVersion,
     singleton,
 } from "@project-chip/matter-node.js/util";
