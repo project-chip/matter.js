@@ -35,7 +35,9 @@
         "typescript": "^5.2.2"
     },
     "dependencies": {
-        "@project-chip/matter.js": "^0.5.0",
+        "@project-chip/matter.js": "^0.5.0"
+    },
+    "optionalDependencies": {
         "@abandonware/bleno": "^0.6.1",
         "@abandonware/noble": "^1.9.2-23"
     },
