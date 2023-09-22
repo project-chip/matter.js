@@ -14,8 +14,8 @@
     ],
     "scripts": {
         "prepare": "npm run build-clean",
-        "build": "npm -s run build --workspaces",
-        "build-clean": "npm -s run build-clean --workspaces",
+        "build": "npm run build --workspaces",
+        "build-clean": "npm run build-clean --workspaces",
         "build-doc": "npm run build-doc --workspaces --if-present",
         "test": "npm run -s test --workspaces --if-present",
         "lint": "eslint --cache --cache-strategy content 'packages/**/*.ts' 'tools/**/*.ts' 'codegen/**/*.ts' 'models/src/local/**/*.ts' 'chip-testing/**/*.ts'",

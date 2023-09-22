@@ -12,27 +12,56 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
-
+  check-and-lint:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - run: npm ci
     - run: npm run format-verify
     - run: npm run lint
-    - name: Get installed Playwright version
-      id: playwright-version
-      run: echo "PLAYWRIGHT_VERSION=$(npx playwright --version)" >> $GITHUB_ENV
-    - name: Cache playwright binaries
-      uses: actions/cache@v3
-      id: playwright-cache
-      with:
-        path: |
-          ~/.cache/ms-playwright
-        key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
-    - run: npx playwright install --with-deps
-      if: steps.playwright-cache.outputs.cache-hit != 'true'
-    - run: npx playwright install-deps
-      if: steps.playwright-cache.outputs.cache-hit == 'true'
-    - run: npm run test
+
+  build-non-linux:
+    needs: [ check-and-lint ]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+      # add Node.js 20 when https://github.com/hyj1991/v8-profiler-next/issues/65 is solved
+      # add "windows-latest" when https://github.com/project-chip/matter.js/issues/325 is solved
+        node-version: [ 16.x, 18.x ]
+        os: [ macos-latest ]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+
+  test:
+    needs: [ check-and-lint ]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 16.x, 18.x, 20.x ]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - name: Get installed Playwright version
+        id: playwright-version
+        run: echo "PLAYWRIGHT_VERSION=$(npx playwright --version)" >> $GITHUB_ENV
+      - name: Cache playwright binaries
+        uses: actions/cache@v3
+        id: playwright-cache
+        with:
+          path: |
+            ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
+      - run: npx playwright install --with-deps
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+      - run: npx playwright install-deps
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+      - run: npm run test
