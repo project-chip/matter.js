@@ -17,7 +17,7 @@ import {
 import { Channel, InternalError } from "@project-chip/matter.js/common";
 import { Logger } from "@project-chip/matter.js/log";
 import { Time } from "@project-chip/matter.js/time";
-import { ByteArray, getPromiseResolver } from "@project-chip/matter.js/util";
+import { ByteArray, createPromise } from "@project-chip/matter.js/util";
 import { BleOptions } from "./BleNode";
 
 const logger = Logger.get("BlenoBleServer");
@@ -267,7 +267,7 @@ export class BlenoBleServer implements Channel<ByteArray> {
             // callback to write data to characteristic C2
             async (data: ByteArray) => {
                 updateValueCallback(Buffer.from(data.buffer));
-                const { promise, resolver } = await getPromiseResolver<void>();
+                const { promise, resolver } = createPromise<void>();
                 this.writeConformationResolver = resolver;
 
                 return promise;

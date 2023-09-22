@@ -7,7 +7,6 @@
 import { mkdir, writeFile } from "fs/promises";
 import Mocha from "mocha";
 import { relative } from "path";
-import v8Profiler from "v8-profiler-next";
 import { Package } from "../util/package.js";
 import { adaptReporter, generalSetup } from "./mocha.js";
 import { TestOptions } from "./options.js";
@@ -36,8 +35,9 @@ export async function testNode(format: "cjs" | "esm", files: string[], reporter:
 
     await mocha.loadFilesAsync();
 
+    const profiler = new Profiler();
     if (options.profile) {
-        startProfiling();
+        await profiler.start();
     }
 
     await new Promise<Mocha.Runner>(resolve => {
@@ -45,30 +45,44 @@ export async function testNode(format: "cjs" | "esm", files: string[], reporter:
     });
 
     if (options.profile) {
-        await stopProfiling();
+        await profiler.stop();
     }
 }
 
-function startProfiling() {
-    v8Profiler.setGenerateType(1);
-    v8Profiler.startProfiling();
-}
+// v8-profiler-next doesn't manage switching node versions well.  Load
+// dynamically so it doesn't interfere if it's not built and we're not
+// profiling
+class Profiler {
+    #profiler?: typeof import("v8-profiler-next");
 
-async function stopProfiling() {
-    const profile = v8Profiler.stopProfiling();
+    async start() {
+        this.#profiler = await import("v8-profiler-next");
+        this.#profiler.setGenerateType(1);
+        this.#profiler.startProfiling();
+    }
 
-    const result = await new Promise<string>((accept, reject) =>
-        profile.export((error, result) => {
-            if (error) {
-                reject(error);
-            } else if (!result) {
-                reject(new Error("No profile error or result"));
-            } else {
-                accept(result);
-            }
-        }),
-    );
+    async stop() {
+        if (!this.#profiler) {
+            return;
+        }
 
-    await mkdir(Package.project.resolve("build/profiles"), { recursive: true });
-    await writeFile(`build/profiles/test-${new Date().toISOString().slice(0, 19)}.cpuprofile`, result);
+        const profile = this.#profiler.stopProfiling();
+
+        const result = await new Promise<string>((accept, reject) =>
+            profile.export((error, result) => {
+                if (error) {
+                    reject(error);
+                } else if (!result) {
+                    reject(new Error("No profile error or result"));
+                } else {
+                    accept(result);
+                }
+            }),
+        );
+
+        await mkdir(Package.project.resolve("build/profiles"), { recursive: true });
+        await writeFile(`build/profiles/test-${new Date().toISOString().slice(0, 19)}.cpuprofile`, result);
+
+        this.#profiler = undefined;
+    }
 }

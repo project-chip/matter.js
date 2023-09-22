@@ -16,7 +16,7 @@ import { UdpChannelFake } from "../../src/net/fake/UdpChannelFake.js";
 import { Network } from "../../src/net/Network.js";
 import { UdpChannel } from "../../src/net/UdpChannel.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
-import { getPromiseResolver } from "../../src/util/Promises.js";
+import { createPromise } from "../../src/util/Promises.js";
 
 const SERVER_IPv4 = "192.168.200.1";
 const SERVER_IPv6 = "fe80::e777:4f5e:c61e:7314";
@@ -69,7 +69,7 @@ describe("MDNS Scanner and Broadcaster", () => {
 
     describe("broadcaster", () => {
         it("it broadcasts the device fabric on one port", async () => {
-            const { promise, resolver } = await getPromiseResolver<ByteArray>();
+            const { promise, resolver } = createPromise<ByteArray>();
             scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => resolver(data));
 
             await broadcaster.setFabrics(PORT, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric], {
@@ -143,7 +143,7 @@ describe("MDNS Scanner and Broadcaster", () => {
         });
 
         it("it broadcasts the device commissionable info on one port", async () => {
-            const { promise, resolver } = await getPromiseResolver<ByteArray>();
+            const { promise, resolver } = createPromise<ByteArray>();
             scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => resolver(data));
 
             await broadcaster.setCommissionMode(PORT, 1, {
@@ -287,7 +287,7 @@ describe("MDNS Scanner and Broadcaster", () => {
         });
 
         it("it broadcasts the controller commissioner on one port", async () => {
-            const { promise, resolver } = await getPromiseResolver<ByteArray>();
+            const { promise, resolver } = createPromise<ByteArray>();
             scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => resolver(data));
 
             await broadcaster.setCommissionerInfo(PORT, {
@@ -370,7 +370,7 @@ describe("MDNS Scanner and Broadcaster", () => {
         });
 
         it("it allows announcements of multiple devices on different ports", async () => {
-            const { promise, resolver } = await getPromiseResolver<void>();
+            const { promise, resolver } = createPromise<void>();
             const dataArr: ByteArray[] = [];
             scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => {
                 dataArr.push(data);

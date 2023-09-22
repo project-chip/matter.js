@@ -12,7 +12,7 @@ import { SLEEPY_ACTIVE_INTERVAL_MS, SLEEPY_IDLE_INTERVAL_MS, Session } from "../
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { Time, Timer } from "../time/Time.js";
 import { ByteArray } from "../util/ByteArray.js";
-import { getPromiseResolver } from "../util/Promises.js";
+import { createPromise } from "../util/Promises.js";
 import { Queue } from "../util/Queue.js";
 import { MessageChannel, MessageCounter } from "./ExchangeManager.js";
 import { StatusResponseError } from "./interaction/InteractionMessenger.js";
@@ -229,7 +229,7 @@ export class MessageExchange<ContextT> {
             this.retransmissionTimer = Time.getTimer(this.getResubmissionBackOffTime(0), () =>
                 this.retransmitMessage(message, 0),
             );
-            const { promise, resolver, rejecter } = await getPromiseResolver<Message>();
+            const { promise, resolver, rejecter } = createPromise<Message>();
             ackPromise = promise;
             this.sentMessageAckSuccess = resolver;
             this.sentMessageAckFailure = rejecter;

@@ -49,6 +49,14 @@ class MockInterval extends MockTimer {
     }
 }
 
+type InterceptResult<T> = T extends Promise<T>
+    ? { resolve: Awaited<T>; reject?: undefined } | { resolve?: undefined; reject: {} }
+    : { resolve: T; reject?: undefined } | { resolve?: void; reject: {} };
+
+function isAsync(fn: (...args: any) => any): fn is (...args: any) => Promise<any> {
+    return fn.constructor.name === "AsyncFunction";
+}
+
 // Must match matter.js Time interface
 export class MockTime {
     private callbacks = new Array<{ atMs: number; callback: TimerCallback }>();
@@ -118,6 +126,64 @@ export class MockTime {
         await Promise.resolve();
         await Promise.resolve();
         await Promise.resolve();
+    }
+
+    /**
+     * Hook a method and invoke a callback just before the method completes.
+     * Unhooks after completion.
+     *
+     * Handles both synchronous and asynchronous methods.  The interceptor
+     * should match the asyncnous of the intercepted method.
+     *
+     * The interceptor can optionally access and/or replace the resolve/reject
+     * value.
+     */
+    interceptOnce<NameT extends string, ReturnT, ObjT extends { [N in NameT]: (...args: any) => ReturnT }>(
+        obj: ObjT,
+        method: NameT,
+        interceptor: (
+            result: InterceptResult<ReturnT>,
+        ) => void | InterceptResult<ReturnT> | Promise<void> | Promise<InterceptResult<ReturnT>>,
+    ) {
+        const original = obj[method];
+        if (!original) {
+            throw new Error(`Interception method ${method} is not present`);
+        }
+        let result: InterceptResult<ReturnT>;
+        if (isAsync(interceptor)) {
+            obj[method] = async function (this: any, ...args: any): Promise<any> {
+                try {
+                    // eslint-disable-next-line @typescript-eslint/await-thenable
+                    const resolve = await original.apply(this, args);
+                    result = { resolve } as any;
+                } catch (reject) {
+                    result = { reject } as any;
+                } finally {
+                    obj[method] = original;
+                }
+                result = (await interceptor(result)) ?? result;
+                if (result.reject) {
+                    throw result.reject;
+                }
+                return result.resolve;
+            } as any;
+        } else {
+            obj[method] = function (this: any, ...args: any): any {
+                try {
+                    const resolve = original.apply(this, args);
+                    result = { resolve } as any;
+                } catch (reject) {
+                    result = { reject } as any;
+                } finally {
+                    obj[method] = original;
+                }
+                result = (interceptor(result) as any) ?? result;
+                if (result.reject) {
+                    throw result.reject;
+                }
+                return result.resolve;
+            } as any;
+        }
     }
 
     callbackAtTime(atMs: number, callback: TimerCallback) {
