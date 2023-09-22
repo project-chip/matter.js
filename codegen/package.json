@@ -8,12 +8,12 @@
     "clean": "build clean",
     "build": "build",
     "build-clean": "build --clean",
-    "console": "build esm && node dist/esm/repl.ts",
-    "generate-spec": "build esm && node bin/generate-spec.js",
-    "generate-chip": "build esm && node bin/generate-chip.js",
-    "generate-model": "build --prefix=../models && build esm && node bin/generate-model.js",
-    "generate-clusters": "build --prefix=../packages/matter.js && build esm && node bin/generate-clusters.js",
-    "dump-model-names": "build --prefix=../models && build esm && node bin/dump-model-names.ts",
+    "console": "run dist/esm/repl.ts",
+    "generate-spec": "run bin/generate-spec.js",
+    "generate-chip": "run bin/generate-chip.js",
+    "generate-model": "build --prefix=../models && run bin/generate-model.js",
+    "generate-clusters": "build --prefix=../packages/matter.js && run bin/generate-clusters.js",
+    "dump-model-names": "build --prefix=../models && run bin/dump-model-names.ts",
     "generate": "npm run generate-model && npm run generate-clusters"
   },
   "repository": {

@@ -22,7 +22,19 @@ export async function main(argv = process.argv) {
     }
 
     script = resolve(script);
-    const project = new Project(dirname(script));
+    let dir;
+    if (script.match(/[\\/]node_modules[\\/].bin[\\/]/)) {
+        // When executing a script linked under node_modules, search for the
+        // project from cwd.  This occurs when running tooling such as
+        // "matter-test"
+        dir = process.cwd();
+    } else {
+        // When executing outside of node modules we want to build the project
+        // containing the script
+        dir = dirname(script);
+    }
+
+    const project = new Project(dir);
 
     let format: "esm" | "cjs";
     if (project.pkg.esm) {
