@@ -25,7 +25,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [ 16.x, 18.x, 20.x ]
+      # add Node.js 20 when https://github.com/hyj1991/v8-profiler-next/issues/65 is solved
+        node-version: [ 16.x, 18.x ]
         os: [ windows-latest, macos-latest ]
     steps:
       - uses: actions/checkout@v4
