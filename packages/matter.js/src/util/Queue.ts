@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { getPromiseResolver } from "./Promises.js";
+import { createPromise } from "./Promises.js";
 import { EndOfStreamError, Stream } from "./Stream.js";
 
 export class Queue<T> implements Stream<T> {
@@ -15,7 +15,7 @@ export class Queue<T> implements Stream<T> {
     private closed = false;
 
     async read(): Promise<T> {
-        const { promise, resolver, rejecter } = await getPromiseResolver<T>();
+        const { promise, resolver, rejecter } = createPromise<T>();
         if (this.closed) throw new EndOfStreamError();
         const data = this.queue.shift();
         if (data !== undefined) {

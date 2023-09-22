@@ -24,7 +24,7 @@ import { UdpMulticastServer } from "../net/UdpMulticastServer.js";
 import { Time, Timer } from "../time/Time.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { isIPv6 } from "../util/Ip.js";
-import { getPromiseResolver } from "../util/Promises.js";
+import { createPromise } from "../util/Promises.js";
 import {
     MATTER_COMMISSION_SERVICE_QNAME,
     MATTER_SERVICE_QNAME,
@@ -254,7 +254,7 @@ export class MdnsScanner implements Scanner {
      * The promise will be resolved when the timer runs out latest.
      */
     private async registerWaiterPromise(queryId: string, timeoutSeconds: number) {
-        const { promise, resolver } = await getPromiseResolver<void>();
+        const { promise, resolver } = createPromise<void>();
         const timer = Time.getTimer(timeoutSeconds * 1000, () => this.finishWaiter(queryId, true)).start();
         this.recordWaiters.set(queryId, { resolver, timer });
         logger.debug(`Registered waiter for query ${queryId} with timeout ${timeoutSeconds} seconds`);

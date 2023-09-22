@@ -6,14 +6,31 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/** Dark magic to have access to the promise resolver outside the promise context. */
-export async function getPromiseResolver<T>(): Promise<{
+import { InternalError } from "../common/MatterError.js";
+
+/**
+ * Obtain a promise with functions to resolve and reject.
+ */
+export function createPromise<T>(): {
     promise: Promise<T>;
     resolver: (value: T) => void;
     rejecter: (reason?: any) => void;
-}> {
-    let promise: Promise<T>;
-    return new Promise<{ resolver: (value: T) => void; rejecter: (reason?: any) => void }>(resolve => {
-        promise = new Promise<T>((resolver, rejecter) => resolve({ resolver, rejecter }));
-    }).then(({ resolver, rejecter }) => ({ promise, resolver, rejecter }));
+} {
+    let resolver, rejecter;
+    const promise = new Promise<T>((resolve, reject) => {
+        resolver = resolve;
+        rejecter = reject;
+    });
+
+    if (!resolver || !rejecter) {
+        // This doesn't happen but asserts that resolver and rejecter are
+        // defined.
+        throw new InternalError("Failed to extract resolve/reject from Promise context");
+    }
+
+    return {
+        promise,
+        resolver,
+        rejecter,
+    };
 }

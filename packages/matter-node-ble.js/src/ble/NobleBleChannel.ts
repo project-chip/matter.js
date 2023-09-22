@@ -24,7 +24,7 @@ import { Channel, InternalError, Listener, ServerAddress } from "@project-chip/m
 import { Logger } from "@project-chip/matter.js/log";
 import { NetInterface } from "@project-chip/matter.js/net";
 import { Time } from "@project-chip/matter.js/time";
-import { ByteArray, getPromiseResolver } from "@project-chip/matter.js/util";
+import { ByteArray, createPromise } from "@project-chip/matter.js/util";
 import { BleScanner } from "./BleScanner";
 
 const logger = Logger.get("BleChannel");
@@ -181,7 +181,7 @@ export class NobleBleChannel implements Channel<ByteArray> {
         logger.debug("subscribing to C2 characteristic");
         await characteristicC2ForSubscribe.subscribeAsync();
 
-        const { promise: handshakeResponseReceivedPromise, resolver } = await getPromiseResolver<Buffer>();
+        const { promise: handshakeResponseReceivedPromise, resolver } = createPromise<Buffer>();
 
         characteristicC2ForSubscribe.once("data", (data, isNotification) => {
             logger.debug(`received first data on C2: ${data.toString("hex")} (isNotification: ${isNotification})`);

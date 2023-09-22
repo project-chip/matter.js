@@ -33,12 +33,12 @@ import {
 import { CommissioningController, CommissioningServer, MatterServer } from "@project-chip/matter.js";
 import { OnOffLightDevice } from "@project-chip/matter.js/device";
 import { FabricJsonObject } from "@project-chip/matter.js/fabric";
-import { DecodedEventData } from "@project-chip/matter.js/interaction";
+import { DecodedEventData, InteractionClientMessenger } from "@project-chip/matter.js/interaction";
 import { MdnsBroadcaster, MdnsScanner } from "@project-chip/matter.js/mdns";
 import { Network, NetworkFake } from "@project-chip/matter.js/net";
 import { StorageBackendMemory, StorageManager } from "@project-chip/matter.js/storage";
 import { Time } from "@project-chip/matter.js/time";
-import { ByteArray, getPromiseResolver } from "@project-chip/matter.js/util";
+import { ByteArray, createPromise } from "@project-chip/matter.js/util";
 
 const SERVER_IPv6 = "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:cafe";
 const SERVER_IPv4 = "192.168.200.1";
@@ -65,14 +65,15 @@ const TIME_START = 1666663000000;
 const fakeControllerStorage = new StorageBackendMemory();
 const fakeServerStorage = new StorageBackendMemory();
 
+// NOTE - this suite is designed to run sequentially start-to-finish; you can't
+// run individual steps
+
 describe("Integration Test", () => {
     let matterServer: MatterServer;
     let matterClient: MatterServer;
     let commissioningController: CommissioningController;
     let commissioningServer: CommissioningServer;
     let onOffLightDeviceServer: OnOffLightDevice;
-
-    beforeEach(() => MockTime.reset(TIME_START));
 
     before(async () => {
         MockTime.reset(TIME_START);
@@ -257,6 +258,9 @@ describe("Integration Test", () => {
                     AdministratorCommissioning.Cluster,
                 );
                 assert.ok(adminCommissioningCluster);
+                MockTime.interceptOnce(InteractionClientMessenger.prototype, "sendTimedRequest", async () =>
+                    MockTime.advance(10),
+                );
                 const promise = adminCommissioningCluster.openCommissioningWindow(
                     {
                         salt: new ByteArray(32),
@@ -267,10 +271,6 @@ describe("Integration Test", () => {
                     },
                     { timedRequestTimeoutMs: 1 },
                 );
-                await MockTime.yield3();
-                await MockTime.yield3();
-                await MockTime.yield3();
-                await MockTime.advance(10);
                 await assert.rejects(async () => await promise, {
                     message: "(148) Received error status: 148", // Timeout expired
                 });
@@ -282,11 +282,10 @@ describe("Integration Test", () => {
                 const onoffCluster = onoffEndpoint.getClusterClient(OnOffCluster);
                 assert.ok(onoffCluster);
 
+                MockTime.interceptOnce(InteractionClientMessenger.prototype, "sendTimedRequest", async () =>
+                    MockTime.advance(10),
+                );
                 const promise = onoffCluster.toggle(undefined, { timedRequestTimeoutMs: 1 });
-                await MockTime.yield3();
-                await MockTime.yield3();
-                await MockTime.yield3();
-                await MockTime.advance(10);
                 await assert.rejects(async () => await promise, {
                     message: "(148) Received error status: 148", // Timeout expired
                 });
@@ -298,12 +297,10 @@ describe("Integration Test", () => {
                 const onoffCluster = onoffEndpoint.getClusterClient(OnOffCluster);
                 assert.ok(onoffCluster);
 
-                const promise = onoffCluster.off(undefined, { asTimedRequest: true });
-                await MockTime.yield3();
-                await MockTime.yield3();
-                await MockTime.yield3();
-                await MockTime.advance(5000);
-                await promise;
+                MockTime.interceptOnce(InteractionClientMessenger.prototype, "sendTimedRequest", async () =>
+                    MockTime.advance(5000),
+                );
+                await onoffCluster.off(undefined, { asTimedRequest: true });
             });
 
             it("Timed invoke ok", async () => {
@@ -556,7 +553,7 @@ describe("Integration Test", () => {
             assert.equal(await basicInfoCluster.attributes.nodeLabel.get(true), "testLabel");
 
             // Await initial Data
-            const { promise, resolver } = await getPromiseResolver<string>();
+            const { promise, resolver } = createPromise<string>();
             const callback = (value: string) => resolver(value);
 
             basicInfoCluster.attributes.nodeLabel.addListener(callback);
@@ -680,7 +677,7 @@ describe("Integration Test", () => {
             const startTime = Time.nowMs();
 
             // Await initial Data
-            const { promise: firstPromise, resolver: firstResolver } = await getPromiseResolver<{
+            const { promise: firstPromise, resolver: firstResolver } = createPromise<{
                 value: boolean;
                 time: number;
             }>();
@@ -695,12 +692,11 @@ describe("Integration Test", () => {
                 listener: value => callback(value),
             });
 
-            await MockTime.yield3();
             const firstReport = await firstPromise;
             assert.deepEqual(firstReport, { value: false, time: startTime });
 
             // Await update Report on value change
-            const { promise: updatePromise, resolver: updateResolver } = await getPromiseResolver<{
+            const { promise: updatePromise, resolver: updateResolver } = createPromise<{
                 value: boolean;
                 time: number;
             }>();
@@ -714,7 +710,7 @@ describe("Integration Test", () => {
             assert.deepEqual(updateReport, { value: true, time: startTime + 2 * 1000 + 100 });
 
             // Await update Report on value change without in between update
-            const { promise: lastPromise, resolver: lastResolver } = await getPromiseResolver<{
+            const { promise: lastPromise, resolver: lastResolver } = createPromise<{
                 value: boolean;
                 time: number;
             }>();
@@ -746,7 +742,7 @@ describe("Integration Test", () => {
                 time: number;
             }>();
 
-            const { promise: updatePromise, resolver: updateResolver } = await getPromiseResolver<void>();
+            const { promise: updatePromise, resolver: updateResolver } = createPromise<void>();
 
             await onOffClient.subscribeOnOffAttribute(
                 value => {
@@ -763,7 +759,6 @@ describe("Integration Test", () => {
             await MockTime.advance(2 * 1000);
             onOffLightDeviceServer.setOnOff(true);
             await MockTime.advance(100);
-            await MockTime.yield3();
 
             await updatePromise;
 
@@ -782,7 +777,7 @@ describe("Integration Test", () => {
             const startTime = Time.nowMs();
 
             // Await initial Data
-            const { promise: firstPromise, resolver: firstResolver } = await getPromiseResolver<{
+            const { promise: firstPromise, resolver: firstResolver } = createPromise<{
                 value: number;
                 time: number;
             }>();
@@ -792,12 +787,11 @@ describe("Integration Test", () => {
             //await onOffClient.attributes.onOff.subscribe(0, 5);
             await scenesClient.subscribeSceneCountAttribute(value => callback(value), 0, 5);
 
-            await MockTime.yield3();
             const firstReport = await firstPromise;
             assert.deepEqual(firstReport, { value: 0, time: startTime });
 
             // Await update Report on value change
-            const { promise: updatePromise, resolver: updateResolver } = await getPromiseResolver<{
+            const { promise: updatePromise, resolver: updateResolver } = createPromise<{
                 value: number;
                 time: number;
             }>();
@@ -828,7 +822,7 @@ describe("Integration Test", () => {
             const startTime = Time.nowMs();
 
             // Await initial Data
-            const { promise: firstPromise, resolver: firstResolver } = await getPromiseResolver<{
+            const { promise: firstPromise, resolver: firstResolver } = createPromise<{
                 value: DecodedEventData<any>;
                 time: number;
             }>();
@@ -852,7 +846,7 @@ describe("Integration Test", () => {
             });
 
             // Await update Report on value change
-            const { promise: updatePromise, resolver: updateResolver } = await getPromiseResolver<{
+            const { promise: updatePromise, resolver: updateResolver } = createPromise<{
                 value: DecodedEventData<any>;
                 time: number;
             }>();
@@ -902,7 +896,7 @@ describe("Integration Test", () => {
             const identifyClient = onoffEndpoint.getClusterClient(Identify.Cluster);
             assert.ok(identifyClient);
 
-            const { promise: firstPromise, resolver: firstResolver } = await getPromiseResolver<number>();
+            const { promise: firstPromise, resolver: firstResolver } = createPromise<number>();
             onOffLightDeviceServer.addCommandHandler("identify", async ({ request: { identifyTime } }) =>
                 firstResolver(identifyTime),
             );
