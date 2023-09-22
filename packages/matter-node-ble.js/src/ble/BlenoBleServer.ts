@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import Bleno from "@abandonware/bleno";
 import {
     BLE_MATTER_C1_CHARACTERISTIC_UUID,
     BLE_MATTER_C2_CHARACTERISTIC_UUID,
@@ -22,89 +21,96 @@ import { ByteArray, getPromiseResolver } from "@project-chip/matter.js/util";
 import { BleOptions } from "./BleNode";
 
 const logger = Logger.get("BlenoBleServer");
+let Bleno: typeof import("@abandonware/bleno");
 
-class BtpWriteCharacteristicC1 extends Bleno.Characteristic {
-    constructor(private readonly bleServer: BlenoBleServer) {
-        super({
-            uuid: BLE_MATTER_C1_CHARACTERISTIC_UUID,
-            properties: ["write"],
-        });
-    }
+function initializeBleno(server: BlenoBleServer) {
+    Bleno = require("@abandonware/bleno");
 
-    override onWriteRequest(
-        data: Buffer,
-        offset: number,
-        withoutResponse: boolean,
-        callback: (result: number) => void,
-    ) {
-        logger.debug(`C1 write request: ${data.toString("hex")} ${offset} ${withoutResponse}`);
+    class BtpWriteCharacteristicC1 extends Bleno.Characteristic {
+        constructor() {
+            super({
+                uuid: BLE_MATTER_C1_CHARACTERISTIC_UUID,
+                properties: ["write"],
+            });
+        }
 
-        try {
-            this.bleServer.handleC1WriteRequest(data, offset, withoutResponse);
-            callback(this.RESULT_SUCCESS);
-        } catch (e) {
-            logger.error(`C1 write request failed: ${e}`);
-            callback(this.RESULT_UNLIKELY_ERROR);
+        override onWriteRequest(
+            data: Buffer,
+            offset: number,
+            withoutResponse: boolean,
+            callback: (result: number) => void,
+        ) {
+            logger.debug(`C1 write request: ${data.toString("hex")} ${offset} ${withoutResponse}`);
+
+            try {
+                server.handleC1WriteRequest(data, offset, withoutResponse);
+                callback(this.RESULT_SUCCESS);
+            } catch (e) {
+                logger.error(`C1 write request failed: ${e}`);
+                callback(this.RESULT_UNLIKELY_ERROR);
+            }
         }
     }
-}
 
-class BtpIndicateCharacteristicC2 extends Bleno.Characteristic {
-    constructor(private readonly bleServer: BlenoBleServer) {
-        super({
-            uuid: BLE_MATTER_C2_CHARACTERISTIC_UUID,
-            properties: ["indicate"],
-        });
-    }
+    class BtpIndicateCharacteristicC2 extends Bleno.Characteristic {
+        constructor() {
+            super({
+                uuid: BLE_MATTER_C2_CHARACTERISTIC_UUID,
+                properties: ["indicate"],
+            });
+        }
 
-    override async onSubscribe(maxValueSize: number, updateValueCallback: (data: Buffer) => void) {
-        logger.debug(`C2 subscribe ${maxValueSize}`);
+        override async onSubscribe(maxValueSize: number, updateValueCallback: (data: Buffer) => void) {
+            logger.debug(`C2 subscribe ${maxValueSize}`);
 
-        await this.bleServer.handleC2SubscribeRequest(maxValueSize, updateValueCallback);
-    }
+            await server.handleC2SubscribeRequest(maxValueSize, updateValueCallback);
+        }
 
-    override async onUnsubscribe() {
-        logger.debug("C2 unsubscribe");
-        await this.bleServer.close();
-    }
+        override async onUnsubscribe() {
+            logger.debug("C2 unsubscribe");
+            await server.close();
+        }
 
-    override onIndicate() {
-        logger.debug("C2 indicate");
-        this.bleServer.handleC2Indicate();
-    }
-}
-
-class BtpReadCharacteristicC3 extends Bleno.Characteristic {
-    constructor(private readonly bleServer: BlenoBleServer) {
-        super({
-            uuid: BLE_MATTER_C3_CHARACTERISTIC_UUID,
-            properties: ["read"],
-        });
-    }
-
-    override onReadRequest(offset: number, callback: (result: number, data?: Buffer) => void) {
-        try {
-            const data = this.bleServer.handleC3ReadRequest(offset);
-            logger.debug(`C3 read request: ${data.toString("hex")} ${offset}`);
-            callback(this.RESULT_SUCCESS, data);
-        } catch (e) {
-            logger.debug(`C3 read request failed : ${e} ${offset}`);
-            callback(this.RESULT_INVALID_OFFSET);
+        override onIndicate() {
+            logger.debug("C2 indicate");
+            server.handleC2Indicate();
         }
     }
-}
 
-class BtpService extends Bleno.PrimaryService {
-    constructor(bleServer: BlenoBleServer) {
-        super({
-            uuid: BLE_MATTER_SERVICE_UUID,
-            characteristics: [
-                new BtpWriteCharacteristicC1(bleServer),
-                new BtpIndicateCharacteristicC2(bleServer),
-                new BtpReadCharacteristicC3(bleServer),
-            ],
-        });
+    class BtpReadCharacteristicC3 extends Bleno.Characteristic {
+        constructor() {
+            super({
+                uuid: BLE_MATTER_C3_CHARACTERISTIC_UUID,
+                properties: ["read"],
+            });
+        }
+
+        override onReadRequest(offset: number, callback: (result: number, data?: Buffer) => void) {
+            try {
+                const data = server.handleC3ReadRequest(offset);
+                logger.debug(`C3 read request: ${data.toString("hex")} ${offset}`);
+                callback(this.RESULT_SUCCESS, data);
+            } catch (e) {
+                logger.debug(`C3 read request failed : ${e} ${offset}`);
+                callback(this.RESULT_INVALID_OFFSET);
+            }
+        }
     }
+
+    class BtpService extends Bleno.PrimaryService {
+        constructor() {
+            super({
+                uuid: BLE_MATTER_SERVICE_UUID,
+                characteristics: [
+                    new BtpWriteCharacteristicC1(),
+                    new BtpIndicateCharacteristicC2(),
+                    new BtpReadCharacteristicC3(),
+                ],
+            });
+        }
+    }
+
+    return new BtpService();
 }
 
 /**
@@ -128,9 +134,11 @@ export class BlenoBleServer implements Channel<ByteArray> {
     private clientAddress: string | undefined;
     private btpHandshakeTimeout = Time.getTimer(BTP_CONN_RSP_TIMEOUT_MS, () => this.btpHandshakeTimeoutTriggered());
 
-    private readonly matterBleService = new BtpService(this);
+    private readonly matterBleService;
 
     constructor(options?: BleOptions) {
+        this.matterBleService = initializeBleno(this);
+
         // Bleno gets automatically initialized on import already!
         if (options?.hciId !== undefined) {
             process.env.BLENO_HCI_DEVICE_ID = options?.hciId.toString();
