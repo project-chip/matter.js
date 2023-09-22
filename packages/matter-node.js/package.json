@@ -270,67 +270,67 @@
     "typesVersions": {
         "*": {
             "ble": [
-                "/dist/exports/ble.d.ts"
+                "/dist/cjs/exports/ble.d.ts"
             ],
             "certificate": [
-                "/dist/exports/certificate.d.ts"
+                "/dist/cjs/exports/certificate.d.ts"
             ],
             "cluster": [
-                "/dist/exports/cluster.d.ts"
+                "/dist/cjs/exports/cluster.d.ts"
             ],
             "codec": [
-                "/dist/exports/codec.d.ts"
+                "/dist/cjs/exports/codec.d.ts"
             ],
             "common": [
-                "/dist/exports/common.d.ts"
+                "/dist/cjs/exports/common.d.ts"
             ],
             "datatype": [
-                "/dist/exports/datatype.d.ts"
+                "/dist/cjs/exports/datatype.d.ts"
             ],
             "device": [
-                "/dist/exports/device.d.ts"
+                "/dist/cjs/exports/device.d.ts"
             ],
             "fabric": [
-                "/dist/exports/fabric.d.ts"
+                "/dist/cjs/exports/fabric.d.ts"
             ],
             "interaction": [
-                "/dist/exports/interaction.d.ts"
+                "/dist/cjs/exports/interaction.d.ts"
             ],
             "log": [
-                "/dist/exports/log.d.ts"
+                "/dist/cjs/exports/log.d.ts"
             ],
             "math": [
-                "/dist/exports/math.d.ts"
+                "/dist/cjs/exports/math.d.ts"
             ],
             "mdns": [
-                "/dist/exports/mdns.d.ts"
+                "/dist/cjs/exports/mdns.d.ts"
             ],
             "model": [
-                "/dist/exports/model.d.ts"
+                "/dist/cjs/exports/model.d.ts"
             ],
             "protocol": [
-                "/dist/exports/protocol.d.ts"
+                "/dist/cjs/exports/protocol.d.ts"
             ],
             "schema": [
-                "/dist/exports/schema.d.ts"
+                "/dist/cjs/exports/schema.d.ts"
             ],
             "securechannel": [
-                "/dist/exports/securechannel.d.ts"
+                "/dist/cjs/exports/securechannel.d.ts"
             ],
             "session": [
-                "/dist/exports/session.d.ts"
+                "/dist/cjs/exports/session.d.ts"
             ],
             "spec": [
-                "/dist/exports/spec.d.ts"
+                "/dist/cjs/exports/spec.d.ts"
             ],
             "tlv": [
-                "/dist/exports/tlv.d.ts"
+                "/dist/cjs/exports/tlv.d.ts"
             ],
             ".": [
-                "/dist/export.d.ts"
+                "/dist/cjs/export.d.ts"
             ],
             "*": [
-                "/dist/*/export.d.ts"
+                "/dist/cjs/*/export.d.ts"
             ]
         }
     },
