@@ -6,8 +6,9 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import {
-    Cluster as CreateCluster,
     OptionalFixedAttribute,
     OptionalWritableAttribute,
     AccessLevel,
@@ -17,7 +18,6 @@ import {
     EventPriority,
     Event
 } from "../../cluster/Cluster.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TlvVendorId } from "../../datatype/VendorId.js";
 import { TlvUInt16, TlvUInt32, TlvEnum } from "../../tlv/TlvNumber.js";
@@ -107,7 +107,7 @@ export namespace BridgedDeviceBasicInformation {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 9.13
      */
-    export const Cluster = CreateCluster({
+    export const Cluster = ClusterFactory.Definition({
         id: 0x39,
         name: "BridgedDeviceBasicInformation",
         revision: 2,

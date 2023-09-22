@@ -6,8 +6,9 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Cluster as CreateCluster, Command, TlvNoResponse } from "../../cluster/Cluster.js";
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { Command, TlvNoResponse } from "../../cluster/Cluster.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 
 export namespace ProxyDiscovery {
@@ -20,7 +21,7 @@ export namespace ProxyDiscovery {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 9.15.13
      */
-    export const Cluster = CreateCluster({
+    export const Cluster = ClusterFactory.Definition({
         id: 0x43,
         name: "ProxyDiscovery",
         revision: 1,

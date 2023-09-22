@@ -6,18 +6,10 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import {
-    BaseClusterComponent,
-    ClusterComponent,
-    ExtensibleCluster,
-    validateFeatureSelection,
-    extendCluster,
-    ClusterForBaseCluster,
-    AsConditional
-} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { Attribute, Command, Cluster as CreateCluster } from "../../cluster/Cluster.js";
+import { Attribute, Command } from "../../cluster/Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvString, TlvByteString } from "../../tlv/TlvString.js";
 import { TlvUInt32, TlvBitmap, TlvDouble, TlvEnum } from "../../tlv/TlvNumber.js";
@@ -461,7 +453,7 @@ export namespace ContentLauncher {
     /**
      * These elements and properties are present in all ContentLauncher clusters.
      */
-    export const Base = BaseClusterComponent({
+    export const Base = ClusterFactory.Definition({
         id: 0x50a,
         name: "ContentLauncher",
         revision: 1,
@@ -486,7 +478,7 @@ export namespace ContentLauncher {
     /**
      * A ContentLauncherCluster supports these elements if it supports feature UrlPlayback.
      */
-    export const UrlPlaybackComponent = ClusterComponent({
+    export const UrlPlaybackComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This list provides list of content types supported by the Video Player or Content App in the form of
@@ -524,7 +516,7 @@ export namespace ContentLauncher {
     /**
      * A ContentLauncherCluster supports these elements if it supports feature ContentSearch.
      */
-    export const ContentSearchComponent = ClusterComponent({
+    export const ContentSearchComponent = ClusterFactory.Component({
         commands: {
             /**
              * Upon receipt, this shall launch the specified content with optional search criteria. This command
@@ -539,7 +531,7 @@ export namespace ContentLauncher {
     /**
      * A ContentLauncherCluster supports these elements if it supports features ContentSearch or UrlPlayback.
      */
-    export const ContentSearchOrUrlPlaybackComponent = ClusterComponent({});
+    export const ContentSearchOrUrlPlaybackComponent = ClusterFactory.Component({});
 
     /**
      * Content Launcher
@@ -552,8 +544,8 @@ export namespace ContentLauncher {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.7
      */
-    export const Cluster = ExtensibleCluster({
-        ...Base,
+    export const Cluster = ClusterFactory.Extensible(
+        Base,
 
         /**
          * Use this factory method to create a ContentLauncher cluster with support for optional features. Include each
@@ -563,18 +555,28 @@ export namespace ContentLauncher {
          * @returns a ContentLauncher cluster with specified features enabled
          * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
          */
-        factory: <T extends `${Feature}`[]>(...features: [...T]) => {
-            validateFeatureSelection(features, Feature);
-            const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
-            extendCluster(cluster, UrlPlaybackComponent, { urlPlayback: true });
-            extendCluster(cluster, ContentSearchComponent, { contentSearch: true });
-            extendCluster(cluster, ContentSearchOrUrlPlaybackComponent, { contentSearch: true }, { urlPlayback: true });
+        <T extends `${Feature}`[]>(...features: [...T]) => {
+            ClusterFactory.validateFeatureSelection(features, Feature);
+            const cluster = ClusterFactory.Definition({
+                ...Base,
+                supportedFeatures: BitFlags(Base.features, ...features)
+            });
+            ClusterFactory.extend(cluster, UrlPlaybackComponent, { urlPlayback: true });
+            ClusterFactory.extend(cluster, ContentSearchComponent, { contentSearch: true });
+
+            ClusterFactory.extend(
+                cluster,
+                ContentSearchOrUrlPlaybackComponent,
+                { contentSearch: true },
+                { urlPlayback: true }
+            );
+
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }
-    });
+    );
 
     export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        ClusterForBaseCluster<typeof Base, SF>
+        Omit<typeof Base, "supportedFeatures">
         & { supportedFeatures: SF }
         & (SF extends { urlPlayback: true } ? typeof UrlPlaybackComponent : {})
         & (SF extends { contentSearch: true } ? typeof ContentSearchComponent : {})
@@ -589,23 +591,29 @@ export namespace ContentLauncher {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = CreateCluster({
+    export const Complete = ClusterFactory.Definition({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
         features: Cluster.features,
 
         attributes: {
-            acceptHeader: AsConditional(UrlPlaybackComponent.attributes.acceptHeader, { mandatoryIf: [UP] }),
-            supportedStreamingProtocols: AsConditional(
+            acceptHeader: ClusterFactory.AsConditional(
+                UrlPlaybackComponent.attributes.acceptHeader,
+                { mandatoryIf: [UP] }
+            ),
+            supportedStreamingProtocols: ClusterFactory.AsConditional(
                 UrlPlaybackComponent.attributes.supportedStreamingProtocols,
                 { mandatoryIf: [UP] }
             )
         },
 
         commands: {
-            launchContent: AsConditional(ContentSearchComponent.commands.launchContent, { mandatoryIf: [CS] }),
-            launchUrl: AsConditional(UrlPlaybackComponent.commands.launchUrl, { mandatoryIf: [UP] })
+            launchContent: ClusterFactory.AsConditional(
+                ContentSearchComponent.commands.launchContent,
+                { mandatoryIf: [CS] }
+            ),
+            launchUrl: ClusterFactory.AsConditional(UrlPlaybackComponent.commands.launchUrl, { mandatoryIf: [UP] })
         }
     });
 }

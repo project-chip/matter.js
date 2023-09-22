@@ -6,8 +6,9 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import {
-    Cluster as CreateCluster,
     WritableFabricScopedAttribute,
     AccessLevel,
     OptionalWritableFabricScopedAttribute,
@@ -15,7 +16,6 @@ import {
     Event,
     EventPriority
 } from "../../cluster/Cluster.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvEnum, TlvUInt16 } from "../../tlv/TlvNumber.js";
@@ -321,7 +321,7 @@ export namespace AccessControl {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 9.10
      */
-    export const Cluster = CreateCluster({
+    export const Cluster = ClusterFactory.Definition({
         id: 0x1f,
         name: "AccessControl",
         revision: 1,

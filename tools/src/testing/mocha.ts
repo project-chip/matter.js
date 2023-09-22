@@ -156,23 +156,13 @@ function parseError(error: Error) {
     }
 
     if (error.stack) {
-        const index = error.stack.indexOf("\n");
-        if (index !== -1) {
-            if (!message) {
-                message = error.stack.slice(0, index);
-            }
-            stack = error.stack
-                .slice(index + 1)
-
-                // Node's assert helpfully puts entire objects in the
-                // message and thus in the stack.  We do diffs ourselves,
-                // we just want the stack.  This does a rough cleanup
-                .replace(/.*?\n {4}at/s, "    at")
-
-                .trim()
-                .replace(/\n\s+/gm, "\n");
-        } else {
-            stack = error.stack;
+        let lines = error.stack.trim().split("\n");
+        if (!message) {
+            message = lines[0];
+        }
+        lines = lines.filter(line => line.match(/:\d+:\d+\)?/));
+        if (lines.length) {
+            stack = lines.map(line => line.trim()).join("\n");
         }
     } else if (error.message) {
         message = error.message;

@@ -6,16 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
-import {
-    BaseClusterComponent,
-    ClusterComponent,
-    ExtensibleCluster,
-    validateFeatureSelection,
-    extendCluster,
-    ClusterForBaseCluster,
-    AsConditional
-} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import {
     Attribute,
@@ -23,8 +15,7 @@ import {
     OptionalAttribute,
     OptionalFixedAttribute,
     OptionalEvent,
-    EventPriority,
-    Cluster as CreateCluster
+    EventPriority
 } from "../../cluster/Cluster.js";
 import { TlvEnum, TlvUInt8, TlvUInt32, TlvUInt16 } from "../../tlv/TlvNumber.js";
 import { TlvString } from "../../tlv/TlvString.js";
@@ -905,7 +896,7 @@ export namespace PowerSource {
     /**
      * These elements and properties are present in all PowerSource clusters.
      */
-    export const Base = BaseClusterComponent({
+    export const Base = ClusterFactory.Definition({
         id: 0x2f,
         name: "PowerSource",
         revision: 1,
@@ -974,7 +965,7 @@ export namespace PowerSource {
     /**
      * A PowerSourceCluster supports these elements if it supports feature Wired.
      */
-    export const WiredComponent = ClusterComponent({
+    export const WiredComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This attribute shall indicate the assessed RMS or DC voltage currently provided by the hard-wired
@@ -1067,7 +1058,7 @@ export namespace PowerSource {
     /**
      * A PowerSourceCluster supports these elements if it supports feature Battery.
      */
-    export const BatteryComponent = ClusterComponent({
+    export const BatteryComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This attribute shall indicate the currently measured output voltage of the battery in mV (millivolts). A
@@ -1168,7 +1159,7 @@ export namespace PowerSource {
     /**
      * A PowerSourceCluster supports these elements if it supports feature Replaceable.
      */
-    export const ReplaceableComponent = ClusterComponent({
+    export const ReplaceableComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This attribute shall provide a user-facing description of this battery, which SHOULD contain information
@@ -1231,7 +1222,7 @@ export namespace PowerSource {
     /**
      * A PowerSourceCluster supports these elements if it supports feature Rechargeable.
      */
-    export const RechargeableComponent = ClusterComponent({
+    export const RechargeableComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This attribute shall indicate the current state of the battery source with respect to charging as
@@ -1313,8 +1304,8 @@ export namespace PowerSource {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.7
      */
-    export const Cluster = ExtensibleCluster({
-        ...Base,
+    export const Cluster = ClusterFactory.Extensible(
+        Base,
 
         /**
          * Use this factory method to create a PowerSource cluster with support for optional features. Include each
@@ -1324,19 +1315,22 @@ export namespace PowerSource {
          * @returns a PowerSource cluster with specified features enabled
          * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
          */
-        factory: <T extends `${Feature}`[]>(...features: [...T]) => {
-            validateFeatureSelection(features, Feature);
-            const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
-            extendCluster(cluster, WiredComponent, { wired: true });
-            extendCluster(cluster, BatteryComponent, { battery: true });
-            extendCluster(cluster, ReplaceableComponent, { replaceable: true });
-            extendCluster(cluster, RechargeableComponent, { rechargeable: true });
+        <T extends `${Feature}`[]>(...features: [...T]) => {
+            ClusterFactory.validateFeatureSelection(features, Feature);
+            const cluster = ClusterFactory.Definition({
+                ...Base,
+                supportedFeatures: BitFlags(Base.features, ...features)
+            });
+            ClusterFactory.extend(cluster, WiredComponent, { wired: true });
+            ClusterFactory.extend(cluster, BatteryComponent, { battery: true });
+            ClusterFactory.extend(cluster, ReplaceableComponent, { replaceable: true });
+            ClusterFactory.extend(cluster, RechargeableComponent, { rechargeable: true });
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }
-    });
+    );
 
     export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        ClusterForBaseCluster<typeof Base, SF>
+        Omit<typeof Base, "supportedFeatures">
         & { supportedFeatures: SF }
         & (SF extends { wired: true } ? typeof WiredComponent : {})
         & (SF extends { battery: true } ? typeof BatteryComponent : {})
@@ -1354,7 +1348,7 @@ export namespace PowerSource {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = CreateCluster({
+    export const Complete = ClusterFactory.Definition({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -1362,79 +1356,118 @@ export namespace PowerSource {
 
         attributes: {
             ...Cluster.attributes,
-            wiredAssessedInputVoltage: AsConditional(
+            wiredAssessedInputVoltage: ClusterFactory.AsConditional(
                 WiredComponent.attributes.wiredAssessedInputVoltage,
                 { optionalIf: [WIRED] }
             ),
-            wiredAssessedInputFrequency: AsConditional(
+            wiredAssessedInputFrequency: ClusterFactory.AsConditional(
                 WiredComponent.attributes.wiredAssessedInputFrequency,
                 { optionalIf: [WIRED] }
             ),
-            wiredCurrentType: AsConditional(WiredComponent.attributes.wiredCurrentType, { mandatoryIf: [WIRED] }),
-            wiredAssessedCurrent: AsConditional(
+            wiredCurrentType: ClusterFactory.AsConditional(
+                WiredComponent.attributes.wiredCurrentType,
+                { mandatoryIf: [WIRED] }
+            ),
+            wiredAssessedCurrent: ClusterFactory.AsConditional(
                 WiredComponent.attributes.wiredAssessedCurrent,
                 { optionalIf: [WIRED] }
             ),
-            wiredNominalVoltage: AsConditional(WiredComponent.attributes.wiredNominalVoltage, { optionalIf: [WIRED] }),
-            wiredMaximumCurrent: AsConditional(WiredComponent.attributes.wiredMaximumCurrent, { optionalIf: [WIRED] }),
-            wiredPresent: AsConditional(WiredComponent.attributes.wiredPresent, { optionalIf: [WIRED] }),
-            activeWiredFaults: AsConditional(WiredComponent.attributes.activeWiredFaults, { optionalIf: [WIRED] }),
-            batVoltage: AsConditional(BatteryComponent.attributes.batVoltage, { optionalIf: [BAT] }),
-            batPercentRemaining: AsConditional(BatteryComponent.attributes.batPercentRemaining, { optionalIf: [BAT] }),
-            batTimeRemaining: AsConditional(BatteryComponent.attributes.batTimeRemaining, { optionalIf: [BAT] }),
-            batChargeLevel: AsConditional(BatteryComponent.attributes.batChargeLevel, { mandatoryIf: [BAT] }),
-            batReplacementNeeded: AsConditional(
+            wiredNominalVoltage: ClusterFactory.AsConditional(
+                WiredComponent.attributes.wiredNominalVoltage,
+                { optionalIf: [WIRED] }
+            ),
+            wiredMaximumCurrent: ClusterFactory.AsConditional(
+                WiredComponent.attributes.wiredMaximumCurrent,
+                { optionalIf: [WIRED] }
+            ),
+            wiredPresent: ClusterFactory.AsConditional(WiredComponent.attributes.wiredPresent, { optionalIf: [WIRED] }),
+            activeWiredFaults: ClusterFactory.AsConditional(
+                WiredComponent.attributes.activeWiredFaults,
+                { optionalIf: [WIRED] }
+            ),
+            batVoltage: ClusterFactory.AsConditional(BatteryComponent.attributes.batVoltage, { optionalIf: [BAT] }),
+            batPercentRemaining: ClusterFactory.AsConditional(
+                BatteryComponent.attributes.batPercentRemaining,
+                { optionalIf: [BAT] }
+            ),
+            batTimeRemaining: ClusterFactory.AsConditional(
+                BatteryComponent.attributes.batTimeRemaining,
+                { optionalIf: [BAT] }
+            ),
+            batChargeLevel: ClusterFactory.AsConditional(
+                BatteryComponent.attributes.batChargeLevel,
+                { mandatoryIf: [BAT] }
+            ),
+            batReplacementNeeded: ClusterFactory.AsConditional(
                 BatteryComponent.attributes.batReplacementNeeded,
                 { mandatoryIf: [BAT] }
             ),
-            batReplaceability: AsConditional(BatteryComponent.attributes.batReplaceability, { mandatoryIf: [BAT] }),
-            batPresent: AsConditional(BatteryComponent.attributes.batPresent, { optionalIf: [BAT] }),
-            activeBatFaults: AsConditional(BatteryComponent.attributes.activeBatFaults, { optionalIf: [BAT] }),
-            batReplacementDescription: AsConditional(
+            batReplaceability: ClusterFactory.AsConditional(
+                BatteryComponent.attributes.batReplaceability,
+                { mandatoryIf: [BAT] }
+            ),
+            batPresent: ClusterFactory.AsConditional(BatteryComponent.attributes.batPresent, { optionalIf: [BAT] }),
+            activeBatFaults: ClusterFactory.AsConditional(
+                BatteryComponent.attributes.activeBatFaults,
+                { optionalIf: [BAT] }
+            ),
+            batReplacementDescription: ClusterFactory.AsConditional(
                 ReplaceableComponent.attributes.batReplacementDescription,
                 { mandatoryIf: [REPLC] }
             ),
-            batCommonDesignation: AsConditional(
+            batCommonDesignation: ClusterFactory.AsConditional(
                 ReplaceableComponent.attributes.batCommonDesignation,
                 { optionalIf: [REPLC] }
             ),
-            batAnsiDesignation: AsConditional(
+            batAnsiDesignation: ClusterFactory.AsConditional(
                 ReplaceableComponent.attributes.batAnsiDesignation,
                 { optionalIf: [REPLC] }
             ),
-            batIecDesignation: AsConditional(
+            batIecDesignation: ClusterFactory.AsConditional(
                 ReplaceableComponent.attributes.batIecDesignation,
                 { optionalIf: [REPLC] }
             ),
-            batApprovedChemistry: AsConditional(
+            batApprovedChemistry: ClusterFactory.AsConditional(
                 ReplaceableComponent.attributes.batApprovedChemistry,
                 { optionalIf: [REPLC] }
             ),
-            batCapacity: AsConditional(ReplaceableComponent.attributes.batCapacity, { optionalIf: [REPLC] }),
-            batQuantity: AsConditional(ReplaceableComponent.attributes.batQuantity, { mandatoryIf: [REPLC] }),
-            batChargeState: AsConditional(RechargeableComponent.attributes.batChargeState, { mandatoryIf: [RECHG] }),
-            batTimeToFullCharge: AsConditional(
+            batCapacity: ClusterFactory.AsConditional(
+                ReplaceableComponent.attributes.batCapacity,
+                { optionalIf: [REPLC] }
+            ),
+            batQuantity: ClusterFactory.AsConditional(
+                ReplaceableComponent.attributes.batQuantity,
+                { mandatoryIf: [REPLC] }
+            ),
+            batChargeState: ClusterFactory.AsConditional(
+                RechargeableComponent.attributes.batChargeState,
+                { mandatoryIf: [RECHG] }
+            ),
+            batTimeToFullCharge: ClusterFactory.AsConditional(
                 RechargeableComponent.attributes.batTimeToFullCharge,
                 { optionalIf: [RECHG] }
             ),
-            batFunctionalWhileCharging: AsConditional(
+            batFunctionalWhileCharging: ClusterFactory.AsConditional(
                 RechargeableComponent.attributes.batFunctionalWhileCharging,
                 { mandatoryIf: [RECHG] }
             ),
-            batChargingCurrent: AsConditional(
+            batChargingCurrent: ClusterFactory.AsConditional(
                 RechargeableComponent.attributes.batChargingCurrent,
                 { optionalIf: [RECHG] }
             ),
-            activeBatChargeFaults: AsConditional(
+            activeBatChargeFaults: ClusterFactory.AsConditional(
                 RechargeableComponent.attributes.activeBatChargeFaults,
                 { optionalIf: [RECHG] }
             )
         },
 
         events: {
-            wiredFaultChange: AsConditional(WiredComponent.events.wiredFaultChange, { optionalIf: [WIRED] }),
-            batFaultChange: AsConditional(BatteryComponent.events.batFaultChange, { optionalIf: [BAT] }),
-            batChargeFaultChange: AsConditional(
+            wiredFaultChange: ClusterFactory.AsConditional(
+                WiredComponent.events.wiredFaultChange,
+                { optionalIf: [WIRED] }
+            ),
+            batFaultChange: ClusterFactory.AsConditional(BatteryComponent.events.batFaultChange, { optionalIf: [BAT] }),
+            batChargeFaultChange: ClusterFactory.AsConditional(
                 RechargeableComponent.events.batChargeFaultChange,
                 { optionalIf: [RECHG] }
             )

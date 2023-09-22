@@ -25,6 +25,7 @@ const logger = Logger.get("generate-cluster");
 export function generateCluster(file: ClusterFile) {
     const cluster = file.cluster;
     logger.info(`${cluster.name} → ${file.name}.ts`);
+    file.addImport("cluster/ClusterFactory", "ClusterFactory");
 
     // Analyze variance
     const variance = ClusterVariance(cluster);
@@ -37,16 +38,14 @@ export function generateCluster(file: ClusterFile) {
     let base;
     if (cluster.id === undefined) {
         // Base cluster
-        file.addImport("cluster/ClusterFactory", "ClusterComponent");
         base = file.ns
-            .expressions(`export const Base = ClusterComponent({`, "})")
+            .expressions(`export const Base = ClusterFactory.Component({`, "})")
             .document(
                 `${cluster.name} is a derived cluster, not to be used directly.  These elements are present in all clusters derived from ${cluster.name}.`,
             );
     } else if (!features.length) {
         // Non-extensible cluster
-        file.addImport("cluster/Cluster", "Cluster as CreateCluster");
-        base = file.ns.expressions(`export const Cluster = CreateCluster({`, "})").document(cluster);
+        base = file.ns.expressions(`export const Cluster = ClusterFactory.Definition({`, "})").document(cluster);
         generateMetadata(base, cluster);
     } else {
         base = generateExtensibleClusterBase(file);
@@ -71,9 +70,8 @@ export function generateCluster(file: ClusterFile) {
     // Create the default cluster instance
     if (variance.requiresFeatures) {
         // The cluster requires some features to be present
-        file.addImport("cluster/ClusterFactory", "ExtensionRequiredCluster");
         const instance = file
-            .expressions(`export const Cluster = ExtensionRequiredCluster({`, "})")
+            .expressions(`export const Cluster = ClusterFactory.ExtensibleOnly(`, ")")
             .document(
                 cluster,
                 `Per the Matter specification you cannot use {@link ${file.clusterName}} without enabling certain feature combinations.  ` +
@@ -82,19 +80,18 @@ export function generateCluster(file: ClusterFile) {
         generateFactory(instance, variance, illegal);
     } else {
         // The cluster has optional features but functions without them
-        file.addImport("cluster/ClusterFactory", "ExtensibleCluster");
         const instance = file.ns
-            .expressions(`export const Cluster = ExtensibleCluster({`, "})")
+            .expressions(`export const Cluster = ClusterFactory.Extensible(`, ")")
             .document(
                 cluster,
                 `${file.clusterName} supports optional features that you can enable with the ${file.clusterName}.with() factory method.`,
             );
-        instance.atom(`...Base`);
 
-        // Default supported features
         const supportedFeatures = cluster.featureMap.effectiveDefault;
         if (typeof supportedFeatures === "number" && supportedFeatures) {
-            const supportedFeatureBlock = instance.expressions("supportedFeatures: {", "}");
+            // Override supportedFeatures in base as there are default
+            // supported features
+            const supportedFeatureBlock = instance.expressions(`{ ...Base, supportedFeatures: {`, "} }");
             features.forEach(feature => {
                 if (typeof feature.constraint.value === "number") {
                     if (supportedFeatures & (1 << feature.constraint.value)) {
@@ -103,6 +100,9 @@ export function generateCluster(file: ClusterFile) {
                     }
                 }
             });
+        } else {
+            // Just extend base directly
+            instance.atom("Base");
         }
 
         generateFactory(instance, variance, illegal);
@@ -151,9 +151,8 @@ function generateExtensibleClusterBase(file: ClusterFile) {
     }
 
     // Base component
-    file.addImport("cluster/ClusterFactory", "BaseClusterComponent");
     const base = file.ns
-        .expressions(`export const Base = BaseClusterComponent({`, "})")
+        .expressions(`export const Base = ClusterFactory.Definition({`, "})")
         .document(`These elements and properties are present in all ${file.cluster.name} clusters.`);
     generateMetadata(base, file.cluster);
 
@@ -174,7 +173,7 @@ function generateExtensibleClusterBase(file: ClusterFile) {
 function generateFactory(base: Block, variance: ClusterVariance, illegal: IllegalFeatureCombinations) {
     const file = base.file as ClusterFile;
     const factoryFunction = base
-        .statements(`factory: <T extends \`\${Feature}\`[]>(...features: [...T]) => {`, "}")
+        .statements(`<T extends \`\${Feature}\`[]>(...features: [...T]) => {`, "}")
         .document(
             [
                 `Use this factory method to create ${withArticle(
@@ -186,19 +185,16 @@ function generateFactory(base: Block, variance: ClusterVariance, illegal: Illega
             ].join("\n"),
         );
 
-    file.addImport("cluster/ClusterFactory", "validateFeatureSelection");
-    factoryFunction.atom(`validateFeatureSelection(features, Feature)`);
+    factoryFunction.atom(`ClusterFactory.validateFeatureSelection(features, Feature)`);
 
-    file.addImport("cluster/Cluster", "Cluster as CreateCluster");
-    const cluster = factoryFunction.expressions(`const cluster = CreateCluster({`, "})");
+    const cluster = factoryFunction.expressions(`const cluster = ClusterFactory.Definition({`, "})");
     cluster.atom(`...Base`);
 
     file.addImport("schema/BitmapSchema", "BitFlags");
     cluster.atom(`supportedFeatures: BitFlags(Base.features, ...features)`);
 
     for (const component of variance.components) {
-        file.addImport("cluster/ClusterFactory", "extendCluster");
-        const extension = factoryFunction.expressions(`extendCluster(`, ")");
+        const extension = factoryFunction.expressions(`ClusterFactory.extend(`, ")");
         extension.atom("cluster");
         extension.atom(`${component.name}Component`);
         if (component.condition) {
@@ -210,9 +206,7 @@ function generateFactory(base: Block, variance: ClusterVariance, illegal: Illega
     }
 
     if (illegal.length) {
-        file.addImport("cluster/ClusterFactory", "preventCluster");
-
-        const prevent = factoryFunction.expressions("preventCluster(", ")");
+        const prevent = factoryFunction.expressions("ClusterFactory.prevent(", ")");
         prevent.atom("cluster");
         illegal.forEach(bitmap => prevent.value(bitmap));
     }
@@ -221,12 +215,11 @@ function generateFactory(base: Block, variance: ClusterVariance, illegal: Illega
 }
 
 function generateExtensionType(file: ClusterFile, variance: ClusterVariance, illegal: IllegalFeatureCombinations) {
-    file.addImport("cluster/ClusterFactory", "ClusterForBaseCluster");
     file.addImport("schema/BitmapSchema", "TypeFromPartialBitSchema");
 
     const factoryType = Array<string>(
         `export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =`,
-        `    ClusterForBaseCluster<typeof Base, SF>`,
+        `    Omit<typeof Base, "supportedFeatures">`,
         `    & { supportedFeatures: SF }`,
     );
 
@@ -264,9 +257,8 @@ function generateExhaustive(file: ClusterFile, variance: ClusterVariance) {
     }
 
     const baseName = "Cluster";
-    file.addImport("cluster/Cluster", "Cluster as CreateCluster");
     const complete = file.ns
-        .expressions(`export const Complete = CreateCluster({`, "})")
+        .expressions(`export const Complete = ClusterFactory.Definition({`, "})")
         .document(
             `This cluster supports all ${file.cluster.name} features.  It may support illegal feature combinations.\n` +
                 "If you use this cluster you must manually specify which features are active and ensure the set of active features is legal per the Matter specification.",
@@ -325,8 +317,10 @@ function generateExhaustive(file: ClusterFile, variance: ClusterVariance) {
 
         // Add the elements
         for (const model of ordered) {
-            file.addImport("cluster/ClusterFactory", "AsConditional");
-            const elementBlock = block.expressions(`${camelize(model.name, false)}: AsConditional(`, ")");
+            const elementBlock = block.expressions(
+                `${camelize(model.name, false)}: ClusterFactory.AsConditional(`,
+                ")",
+            );
             elementBlock.atom(`${elements.get(model)}`);
             elementBlock.value(conditions.forModel(model));
         }

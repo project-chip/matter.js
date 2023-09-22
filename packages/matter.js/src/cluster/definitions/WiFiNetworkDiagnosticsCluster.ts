@@ -6,16 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
-import {
-    BaseClusterComponent,
-    ClusterComponent,
-    ExtensibleCluster,
-    validateFeatureSelection,
-    extendCluster,
-    ClusterForBaseCluster,
-    AsConditional
-} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import {
     Attribute,
@@ -23,8 +15,7 @@ import {
     OptionalEvent,
     EventPriority,
     Command,
-    TlvNoResponse,
-    Cluster as CreateCluster
+    TlvNoResponse
 } from "../../cluster/Cluster.js";
 import { TlvByteString } from "../../tlv/TlvString.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
@@ -221,7 +212,7 @@ export namespace WiFiNetworkDiagnostics {
     /**
      * These elements and properties are present in all WiFiNetworkDiagnostics clusters.
      */
-    export const Base = BaseClusterComponent({
+    export const Base = ClusterFactory.Definition({
         id: 0x36,
         name: "WiFiNetworkDiagnostics",
         revision: 1,
@@ -327,7 +318,7 @@ export namespace WiFiNetworkDiagnostics {
     /**
      * A WiFiNetworkDiagnosticsCluster supports these elements if it supports feature ErrorCounts.
      */
-    export const ErrorCountsComponent = ClusterComponent({
+    export const ErrorCountsComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The BeaconLostCount attribute shall indicate the count of the number of missed beacons the Node has
@@ -375,7 +366,7 @@ export namespace WiFiNetworkDiagnostics {
     /**
      * A WiFiNetworkDiagnosticsCluster supports these elements if it supports feature PacketCounts.
      */
-    export const PacketCountsComponent = ClusterComponent({
+    export const PacketCountsComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The BeaconRxCount attribute shall indicate the count of the number of received beacons. The total number
@@ -432,8 +423,8 @@ export namespace WiFiNetworkDiagnostics {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.14
      */
-    export const Cluster = ExtensibleCluster({
-        ...Base,
+    export const Cluster = ClusterFactory.Extensible(
+        Base,
 
         /**
          * Use this factory method to create a WiFiNetworkDiagnostics cluster with support for optional features.
@@ -443,17 +434,20 @@ export namespace WiFiNetworkDiagnostics {
          * @returns a WiFiNetworkDiagnostics cluster with specified features enabled
          * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
          */
-        factory: <T extends `${Feature}`[]>(...features: [...T]) => {
-            validateFeatureSelection(features, Feature);
-            const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
-            extendCluster(cluster, ErrorCountsComponent, { errorCounts: true });
-            extendCluster(cluster, PacketCountsComponent, { packetCounts: true });
+        <T extends `${Feature}`[]>(...features: [...T]) => {
+            ClusterFactory.validateFeatureSelection(features, Feature);
+            const cluster = ClusterFactory.Definition({
+                ...Base,
+                supportedFeatures: BitFlags(Base.features, ...features)
+            });
+            ClusterFactory.extend(cluster, ErrorCountsComponent, { errorCounts: true });
+            ClusterFactory.extend(cluster, PacketCountsComponent, { packetCounts: true });
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }
-    });
+    );
 
     export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        ClusterForBaseCluster<typeof Base, SF>
+        Omit<typeof Base, "supportedFeatures">
         & { supportedFeatures: SF }
         & (SF extends { errorCounts: true } ? typeof ErrorCountsComponent : {})
         & (SF extends { packetCounts: true } ? typeof PacketCountsComponent : {});
@@ -466,7 +460,7 @@ export namespace WiFiNetworkDiagnostics {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = CreateCluster({
+    export const Complete = ClusterFactory.Definition({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -474,28 +468,43 @@ export namespace WiFiNetworkDiagnostics {
 
         attributes: {
             ...Cluster.attributes,
-            beaconLostCount: AsConditional(ErrorCountsComponent.attributes.beaconLostCount, { mandatoryIf: [ERRCNT] }),
-            beaconRxCount: AsConditional(PacketCountsComponent.attributes.beaconRxCount, { mandatoryIf: [PKTCNT] }),
-            packetMulticastRxCount: AsConditional(
+            beaconLostCount: ClusterFactory.AsConditional(
+                ErrorCountsComponent.attributes.beaconLostCount,
+                { mandatoryIf: [ERRCNT] }
+            ),
+            beaconRxCount: ClusterFactory.AsConditional(
+                PacketCountsComponent.attributes.beaconRxCount,
+                { mandatoryIf: [PKTCNT] }
+            ),
+            packetMulticastRxCount: ClusterFactory.AsConditional(
                 PacketCountsComponent.attributes.packetMulticastRxCount,
                 { mandatoryIf: [PKTCNT] }
             ),
-            packetMulticastTxCount: AsConditional(
+            packetMulticastTxCount: ClusterFactory.AsConditional(
                 PacketCountsComponent.attributes.packetMulticastTxCount,
                 { mandatoryIf: [PKTCNT] }
             ),
-            packetUnicastRxCount: AsConditional(
+            packetUnicastRxCount: ClusterFactory.AsConditional(
                 PacketCountsComponent.attributes.packetUnicastRxCount,
                 { mandatoryIf: [PKTCNT] }
             ),
-            packetUnicastTxCount: AsConditional(
+            packetUnicastTxCount: ClusterFactory.AsConditional(
                 PacketCountsComponent.attributes.packetUnicastTxCount,
                 { mandatoryIf: [PKTCNT] }
             ),
-            overrunCount: AsConditional(ErrorCountsComponent.attributes.overrunCount, { mandatoryIf: [ERRCNT] })
+            overrunCount: ClusterFactory.AsConditional(
+                ErrorCountsComponent.attributes.overrunCount,
+                { mandatoryIf: [ERRCNT] }
+            )
         },
 
-        commands: { resetCounts: AsConditional(ErrorCountsComponent.commands.resetCounts, { mandatoryIf: [ERRCNT] }) },
+        commands: {
+            resetCounts: ClusterFactory.AsConditional(
+                ErrorCountsComponent.commands.resetCounts,
+                { mandatoryIf: [ERRCNT] }
+            )
+        },
+
         events: Cluster.events
     });
 }

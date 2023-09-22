@@ -6,16 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import {
-    BaseClusterComponent,
-    ClusterComponent,
-    ExtensibleCluster,
-    validateFeatureSelection,
-    extendCluster,
-    ClusterForBaseCluster,
-    AsConditional
-} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitField, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import {
     OptionalAttribute,
@@ -26,8 +18,7 @@ import {
     OptionalWritableAttribute,
     AccessLevel,
     Command,
-    TlvNoResponse,
-    Cluster as CreateCluster
+    TlvNoResponse
 } from "../../cluster/Cluster.js";
 import { TlvUInt16, TlvEnum, TlvUInt8, TlvBitmap, TlvUInt32, TlvInt16 } from "../../tlv/TlvNumber.js";
 import { TlvString } from "../../tlv/TlvString.js";
@@ -814,7 +805,7 @@ export namespace ColorControl {
     /**
      * These elements and properties are present in all ColorControl clusters.
      */
-    export const Base = BaseClusterComponent({
+    export const Base = ClusterFactory.Definition({
         id: 0x300,
         name: "ColorControl",
         revision: 5,
@@ -1205,7 +1196,7 @@ export namespace ColorControl {
     /**
      * A ColorControlCluster supports these elements if it supports feature HueSaturation.
      */
-    export const HueSaturationComponent = ClusterComponent({
+    export const HueSaturationComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The CurrentHue attribute contains the current hue value of the light. It is updated as fast as practical
@@ -1280,7 +1271,7 @@ export namespace ColorControl {
     /**
      * A ColorControlCluster supports these elements if it supports feature Xy.
      */
-    export const XyComponent = ClusterComponent({
+    export const XyComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The CurrentX attribute contains the current value of the normalized chromaticity value x, as defined in
@@ -1334,7 +1325,7 @@ export namespace ColorControl {
     /**
      * A ColorControlCluster supports these elements if it supports feature ColorTemperature.
      */
-    export const ColorTemperatureComponent = ClusterComponent({
+    export const ColorTemperatureComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The ColorTemperatureMireds attribute contains a scaled inverse of the current value of the color
@@ -1439,7 +1430,7 @@ export namespace ColorControl {
     /**
      * A ColorControlCluster supports these elements if it supports feature EnhancedHue.
      */
-    export const EnhancedHueComponent = ClusterComponent({
+    export const EnhancedHueComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The EnhancedCurrentHue attribute represents non-equidistant steps along the CIE 1931 color triangle, and
@@ -1500,7 +1491,7 @@ export namespace ColorControl {
     /**
      * A ColorControlCluster supports these elements if it supports feature ColorLoop.
      */
-    export const ColorLoopComponent = ClusterComponent({
+    export const ColorLoopComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The ColorLoopActive attribute specifies the current active status of the color loop. If this attribute
@@ -1561,7 +1552,7 @@ export namespace ColorControl {
     /**
      * A ColorControlCluster supports these elements if it supports features HueSaturation, Xy or ColorTemperature.
      */
-    export const HueSaturationOrXyOrColorTemperatureComponent = ClusterComponent({
+    export const HueSaturationOrXyOrColorTemperatureComponent = ClusterFactory.Component({
         commands: {
             /**
              * The StopMoveStep command is provided to allow MoveTo and Step commands to be stopped. (Note this
@@ -1585,8 +1576,8 @@ export namespace ColorControl {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2
      */
-    export const Cluster = ExtensibleCluster({
-        ...Base,
+    export const Cluster = ClusterFactory.Extensible(
+        Base,
 
         /**
          * Use this factory method to create a ColorControl cluster with support for optional features. Include each
@@ -1596,16 +1587,19 @@ export namespace ColorControl {
          * @returns a ColorControl cluster with specified features enabled
          * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
          */
-        factory: <T extends `${Feature}`[]>(...features: [...T]) => {
-            validateFeatureSelection(features, Feature);
-            const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
-            extendCluster(cluster, HueSaturationComponent, { hueSaturation: true });
-            extendCluster(cluster, XyComponent, { xy: true });
-            extendCluster(cluster, ColorTemperatureComponent, { colorTemperature: true });
-            extendCluster(cluster, EnhancedHueComponent, { enhancedHue: true });
-            extendCluster(cluster, ColorLoopComponent, { colorLoop: true });
+        <T extends `${Feature}`[]>(...features: [...T]) => {
+            ClusterFactory.validateFeatureSelection(features, Feature);
+            const cluster = ClusterFactory.Definition({
+                ...Base,
+                supportedFeatures: BitFlags(Base.features, ...features)
+            });
+            ClusterFactory.extend(cluster, HueSaturationComponent, { hueSaturation: true });
+            ClusterFactory.extend(cluster, XyComponent, { xy: true });
+            ClusterFactory.extend(cluster, ColorTemperatureComponent, { colorTemperature: true });
+            ClusterFactory.extend(cluster, EnhancedHueComponent, { enhancedHue: true });
+            ClusterFactory.extend(cluster, ColorLoopComponent, { colorLoop: true });
 
-            extendCluster(
+            ClusterFactory.extend(
                 cluster,
                 HueSaturationOrXyOrColorTemperatureComponent,
                 { hueSaturation: true },
@@ -1615,10 +1609,10 @@ export namespace ColorControl {
 
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }
-    });
+    );
 
     export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        ClusterForBaseCluster<typeof Base, SF>
+        Omit<typeof Base, "supportedFeatures">
         & { supportedFeatures: SF }
         & (SF extends { hueSaturation: true } ? typeof HueSaturationComponent : {})
         & (SF extends { xy: true } ? typeof XyComponent : {})
@@ -1639,7 +1633,7 @@ export namespace ColorControl {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = CreateCluster({
+    export const Complete = ClusterFactory.Definition({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -1647,85 +1641,115 @@ export namespace ColorControl {
 
         attributes: {
             ...Cluster.attributes,
-            currentHue: AsConditional(HueSaturationComponent.attributes.currentHue, { mandatoryIf: [HS] }),
-            currentSaturation: AsConditional(
+            currentHue: ClusterFactory.AsConditional(
+                HueSaturationComponent.attributes.currentHue,
+                { mandatoryIf: [HS] }
+            ),
+            currentSaturation: ClusterFactory.AsConditional(
                 HueSaturationComponent.attributes.currentSaturation,
                 { mandatoryIf: [HS] }
             ),
-            currentX: AsConditional(XyComponent.attributes.currentX, { mandatoryIf: [XY] }),
-            currentY: AsConditional(XyComponent.attributes.currentY, { mandatoryIf: [XY] }),
-            colorTemperatureMireds: AsConditional(
+            currentX: ClusterFactory.AsConditional(XyComponent.attributes.currentX, { mandatoryIf: [XY] }),
+            currentY: ClusterFactory.AsConditional(XyComponent.attributes.currentY, { mandatoryIf: [XY] }),
+            colorTemperatureMireds: ClusterFactory.AsConditional(
                 ColorTemperatureComponent.attributes.colorTemperatureMireds,
                 { mandatoryIf: [CT] }
             ),
-            enhancedCurrentHue: AsConditional(
+            enhancedCurrentHue: ClusterFactory.AsConditional(
                 EnhancedHueComponent.attributes.enhancedCurrentHue,
                 { mandatoryIf: [EHUE] }
             ),
-            colorLoopActive: AsConditional(ColorLoopComponent.attributes.colorLoopActive, { mandatoryIf: [CL] }),
-            colorLoopDirection: AsConditional(ColorLoopComponent.attributes.colorLoopDirection, { mandatoryIf: [CL] }),
-            colorLoopTime: AsConditional(ColorLoopComponent.attributes.colorLoopTime, { mandatoryIf: [CL] }),
-            colorLoopStartEnhancedHue: AsConditional(
+            colorLoopActive: ClusterFactory.AsConditional(
+                ColorLoopComponent.attributes.colorLoopActive,
+                { mandatoryIf: [CL] }
+            ),
+            colorLoopDirection: ClusterFactory.AsConditional(
+                ColorLoopComponent.attributes.colorLoopDirection,
+                { mandatoryIf: [CL] }
+            ),
+            colorLoopTime: ClusterFactory.AsConditional(
+                ColorLoopComponent.attributes.colorLoopTime,
+                { mandatoryIf: [CL] }
+            ),
+            colorLoopStartEnhancedHue: ClusterFactory.AsConditional(
                 ColorLoopComponent.attributes.colorLoopStartEnhancedHue,
                 { mandatoryIf: [CL] }
             ),
-            colorLoopStoredEnhancedHue: AsConditional(
+            colorLoopStoredEnhancedHue: ClusterFactory.AsConditional(
                 ColorLoopComponent.attributes.colorLoopStoredEnhancedHue,
                 { mandatoryIf: [CL] }
             ),
-            colorTempPhysicalMinMireds: AsConditional(
+            colorTempPhysicalMinMireds: ClusterFactory.AsConditional(
                 ColorTemperatureComponent.attributes.colorTempPhysicalMinMireds,
                 { mandatoryIf: [CT] }
             ),
-            colorTempPhysicalMaxMireds: AsConditional(
+            colorTempPhysicalMaxMireds: ClusterFactory.AsConditional(
                 ColorTemperatureComponent.attributes.colorTempPhysicalMaxMireds,
                 { mandatoryIf: [CT] }
             ),
-            coupleColorTempToLevelMinMireds: AsConditional(
+            coupleColorTempToLevelMinMireds: ClusterFactory.AsConditional(
                 ColorTemperatureComponent.attributes.coupleColorTempToLevelMinMireds,
                 { optionalIf: [CT] }
             ),
-            startUpColorTemperatureMireds: AsConditional(
+            startUpColorTemperatureMireds: ClusterFactory.AsConditional(
                 ColorTemperatureComponent.attributes.startUpColorTemperatureMireds,
                 { optionalIf: [CT] }
             )
         },
 
         commands: {
-            moveToHue: AsConditional(HueSaturationComponent.commands.moveToHue, { mandatoryIf: [HS] }),
-            moveHue: AsConditional(HueSaturationComponent.commands.moveHue, { mandatoryIf: [HS] }),
-            stepHue: AsConditional(HueSaturationComponent.commands.stepHue, { mandatoryIf: [HS] }),
-            moveToSaturation: AsConditional(HueSaturationComponent.commands.moveToSaturation, { mandatoryIf: [HS] }),
-            moveSaturation: AsConditional(HueSaturationComponent.commands.moveSaturation, { mandatoryIf: [HS] }),
-            stepSaturation: AsConditional(HueSaturationComponent.commands.stepSaturation, { mandatoryIf: [HS] }),
-            moveToHueAndSaturation: AsConditional(
+            moveToHue: ClusterFactory.AsConditional(HueSaturationComponent.commands.moveToHue, { mandatoryIf: [HS] }),
+            moveHue: ClusterFactory.AsConditional(HueSaturationComponent.commands.moveHue, { mandatoryIf: [HS] }),
+            stepHue: ClusterFactory.AsConditional(HueSaturationComponent.commands.stepHue, { mandatoryIf: [HS] }),
+            moveToSaturation: ClusterFactory.AsConditional(
+                HueSaturationComponent.commands.moveToSaturation,
+                { mandatoryIf: [HS] }
+            ),
+            moveSaturation: ClusterFactory.AsConditional(
+                HueSaturationComponent.commands.moveSaturation,
+                { mandatoryIf: [HS] }
+            ),
+            stepSaturation: ClusterFactory.AsConditional(
+                HueSaturationComponent.commands.stepSaturation,
+                { mandatoryIf: [HS] }
+            ),
+            moveToHueAndSaturation: ClusterFactory.AsConditional(
                 HueSaturationComponent.commands.moveToHueAndSaturation,
                 { mandatoryIf: [HS] }
             ),
-            moveToColor: AsConditional(XyComponent.commands.moveToColor, { mandatoryIf: [XY] }),
-            moveColor: AsConditional(XyComponent.commands.moveColor, { mandatoryIf: [XY] }),
-            stepColor: AsConditional(XyComponent.commands.stepColor, { mandatoryIf: [XY] }),
-            moveToColorTemperature: AsConditional(
+            moveToColor: ClusterFactory.AsConditional(XyComponent.commands.moveToColor, { mandatoryIf: [XY] }),
+            moveColor: ClusterFactory.AsConditional(XyComponent.commands.moveColor, { mandatoryIf: [XY] }),
+            stepColor: ClusterFactory.AsConditional(XyComponent.commands.stepColor, { mandatoryIf: [XY] }),
+            moveToColorTemperature: ClusterFactory.AsConditional(
                 ColorTemperatureComponent.commands.moveToColorTemperature,
                 { mandatoryIf: [CT] }
             ),
-            enhancedMoveToHue: AsConditional(EnhancedHueComponent.commands.enhancedMoveToHue, { mandatoryIf: [EHUE] }),
-            enhancedMoveHue: AsConditional(EnhancedHueComponent.commands.enhancedMoveHue, { mandatoryIf: [EHUE] }),
-            enhancedStepHue: AsConditional(EnhancedHueComponent.commands.enhancedStepHue, { mandatoryIf: [EHUE] }),
-            enhancedMoveToHueAndSaturation: AsConditional(
+            enhancedMoveToHue: ClusterFactory.AsConditional(
+                EnhancedHueComponent.commands.enhancedMoveToHue,
+                { mandatoryIf: [EHUE] }
+            ),
+            enhancedMoveHue: ClusterFactory.AsConditional(
+                EnhancedHueComponent.commands.enhancedMoveHue,
+                { mandatoryIf: [EHUE] }
+            ),
+            enhancedStepHue: ClusterFactory.AsConditional(
+                EnhancedHueComponent.commands.enhancedStepHue,
+                { mandatoryIf: [EHUE] }
+            ),
+            enhancedMoveToHueAndSaturation: ClusterFactory.AsConditional(
                 EnhancedHueComponent.commands.enhancedMoveToHueAndSaturation,
                 { mandatoryIf: [EHUE] }
             ),
-            colorLoopSet: AsConditional(ColorLoopComponent.commands.colorLoopSet, { mandatoryIf: [CL] }),
-            stopMoveStep: AsConditional(
+            colorLoopSet: ClusterFactory.AsConditional(ColorLoopComponent.commands.colorLoopSet, { mandatoryIf: [CL] }),
+            stopMoveStep: ClusterFactory.AsConditional(
                 HueSaturationOrXyOrColorTemperatureComponent.commands.stopMoveStep,
                 { mandatoryIf: [HS, XY, CT] }
             ),
-            moveColorTemperature: AsConditional(
+            moveColorTemperature: ClusterFactory.AsConditional(
                 ColorTemperatureComponent.commands.moveColorTemperature,
                 { mandatoryIf: [CT] }
             ),
-            stepColorTemperature: AsConditional(
+            stepColorTemperature: ClusterFactory.AsConditional(
                 ColorTemperatureComponent.commands.stepColorTemperature,
                 { mandatoryIf: [CT] }
             )

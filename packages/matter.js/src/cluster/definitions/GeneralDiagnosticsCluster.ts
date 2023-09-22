@@ -6,8 +6,9 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import {
-    Cluster as CreateCluster,
     Attribute,
     OptionalAttribute,
     Command,
@@ -17,7 +18,6 @@ import {
     EventPriority,
     Event
 } from "../../cluster/Cluster.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvString, TlvByteString } from "../../tlv/TlvString.js";
@@ -416,7 +416,7 @@ export namespace GeneralDiagnostics {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.11
      */
-    export const Cluster = CreateCluster({
+    export const Cluster = ClusterFactory.Definition({
         id: 0x33,
         name: "GeneralDiagnostics",
         revision: 1,

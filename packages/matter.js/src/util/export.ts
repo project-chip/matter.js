@@ -9,7 +9,6 @@ export * from "./Cache.js";
 export * from "./DataReader.js";
 export * from "./DataWriter.js";
 export * from "./DeepEqual.js";
-export * from "./EndpointStructureLogger.js";
 export * from "./Ip.js";
 export * from "./Number.js";
 export * from "./Promises.js";

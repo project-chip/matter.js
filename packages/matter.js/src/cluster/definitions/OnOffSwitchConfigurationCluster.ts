@@ -6,7 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Cluster as CreateCluster, Attribute, WritableAttribute } from "../../cluster/Cluster.js";
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
+import { Attribute, WritableAttribute } from "../../cluster/Cluster.js";
 import { TlvEnum } from "../../tlv/TlvNumber.js";
 
 export namespace OnOffSwitchConfiguration {
@@ -33,7 +34,7 @@ export namespace OnOffSwitchConfiguration {
      *
      * Attributes and commands for configuring On/Off switching devices.
      */
-    export const Cluster = CreateCluster({
+    export const Cluster = ClusterFactory.Definition({
         id: 0x7,
         name: "OnOffSwitchConfiguration",
         revision: 1,

@@ -6,8 +6,9 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Cluster as CreateCluster, Command, TlvNoResponse } from "../../cluster/Cluster.js";
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
+import { Command, TlvNoResponse } from "../../cluster/Cluster.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 
 export namespace LowPower {
@@ -18,7 +19,7 @@ export namespace LowPower {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.9
      */
-    export const Cluster = CreateCluster({
+    export const Cluster = ClusterFactory.Definition({
         id: 0x508,
         name: "LowPower",
         revision: 1,

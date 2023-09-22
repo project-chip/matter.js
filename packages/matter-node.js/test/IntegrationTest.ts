@@ -162,6 +162,8 @@ describe("Integration Test", () => {
                             connected: true,
                         },
                     ],
+                    scanMaxTimeSeconds: 30,
+                    connectMaxTimeSeconds: 60,
                 },
                 {
                     scanNetworks: async function () {

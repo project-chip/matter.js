@@ -6,8 +6,9 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import {
-    Cluster as CreateCluster,
     WritableFabricScopedAttribute,
     AccessLevel,
     Attribute,
@@ -16,7 +17,6 @@ import {
     Event,
     EventPriority
 } from "../../cluster/Cluster.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvNodeId } from "../../datatype/NodeId.js";
@@ -199,7 +199,7 @@ export namespace OtaSoftwareUpdateRequestor {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.19.7
      */
-    export const Cluster = CreateCluster({
+    export const Cluster = ClusterFactory.Definition({
         id: 0x2a,
         name: "OtaSoftwareUpdateRequestor",
         revision: 1,

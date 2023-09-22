@@ -6,16 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import {
-    BaseClusterComponent,
-    ClusterComponent,
-    ExtensibleCluster,
-    validateFeatureSelection,
-    extendCluster,
-    ClusterForBaseCluster,
-    AsConditional
-} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import {
     Attribute,
@@ -24,8 +16,7 @@ import {
     OptionalWritableAttribute,
     Command,
     TlvNoResponse,
-    AccessLevel,
-    Cluster as CreateCluster
+    AccessLevel
 } from "../../cluster/Cluster.js";
 import { TlvUInt8, TlvBitmap, TlvUInt16, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
@@ -153,7 +144,7 @@ export namespace PulseWidthModulation {
     /**
      * These elements and properties are present in all PulseWidthModulation clusters.
      */
-    export const Base = BaseClusterComponent({
+    export const Base = ClusterFactory.Definition({
         id: 0x1c,
         name: "PulseWidthModulation",
         revision: 5,
@@ -332,7 +323,7 @@ export namespace PulseWidthModulation {
     /**
      * A PulseWidthModulationCluster supports these elements if it supports feature Lighting.
      */
-    export const LightingComponent = ClusterComponent({
+    export const LightingComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The RemainingTime attribute represents the time remaining until the current command is complete - it is
@@ -365,7 +356,7 @@ export namespace PulseWidthModulation {
     /**
      * A PulseWidthModulationCluster supports these elements if it supports feature Frequency.
      */
-    export const FrequencyComponent = ClusterComponent({
+    export const FrequencyComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The CurrentFrequency attribute represents the frequency at which the device is at CurrentLevel. A
@@ -411,9 +402,8 @@ export namespace PulseWidthModulation {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6
      */
-    export const Cluster = ExtensibleCluster({
-        ...Base,
-        supportedFeatures: { onOff: true },
+    export const Cluster = ClusterFactory.Extensible(
+        { ...Base, supportedFeatures: { onOff: true } },
 
         /**
          * Use this factory method to create a PulseWidthModulation cluster with support for optional features. Include
@@ -423,17 +413,20 @@ export namespace PulseWidthModulation {
          * @returns a PulseWidthModulation cluster with specified features enabled
          * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
          */
-        factory: <T extends `${Feature}`[]>(...features: [...T]) => {
-            validateFeatureSelection(features, Feature);
-            const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
-            extendCluster(cluster, LightingComponent, { lighting: true });
-            extendCluster(cluster, FrequencyComponent, { frequency: true });
+        <T extends `${Feature}`[]>(...features: [...T]) => {
+            ClusterFactory.validateFeatureSelection(features, Feature);
+            const cluster = ClusterFactory.Definition({
+                ...Base,
+                supportedFeatures: BitFlags(Base.features, ...features)
+            });
+            ClusterFactory.extend(cluster, LightingComponent, { lighting: true });
+            ClusterFactory.extend(cluster, FrequencyComponent, { frequency: true });
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }
-    });
+    );
 
     export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        ClusterForBaseCluster<typeof Base, SF>
+        Omit<typeof Base, "supportedFeatures">
         & { supportedFeatures: SF }
         & (SF extends { lighting: true } ? typeof LightingComponent : {})
         & (SF extends { frequency: true } ? typeof FrequencyComponent : {});
@@ -446,7 +439,7 @@ export namespace PulseWidthModulation {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = CreateCluster({
+    export const Complete = ClusterFactory.Definition({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -454,16 +447,31 @@ export namespace PulseWidthModulation {
 
         attributes: {
             ...Cluster.attributes,
-            remainingTime: AsConditional(LightingComponent.attributes.remainingTime, { mandatoryIf: [LT] }),
-            currentFrequency: AsConditional(FrequencyComponent.attributes.currentFrequency, { mandatoryIf: [FQ] }),
-            minFrequency: AsConditional(FrequencyComponent.attributes.minFrequency, { mandatoryIf: [FQ] }),
-            maxFrequency: AsConditional(FrequencyComponent.attributes.maxFrequency, { mandatoryIf: [FQ] }),
-            startUpCurrentLevel: AsConditional(LightingComponent.attributes.startUpCurrentLevel, { mandatoryIf: [LT] })
+            remainingTime: ClusterFactory.AsConditional(
+                LightingComponent.attributes.remainingTime,
+                { mandatoryIf: [LT] }
+            ),
+            currentFrequency: ClusterFactory.AsConditional(
+                FrequencyComponent.attributes.currentFrequency,
+                { mandatoryIf: [FQ] }
+            ),
+            minFrequency: ClusterFactory.AsConditional(
+                FrequencyComponent.attributes.minFrequency,
+                { mandatoryIf: [FQ] }
+            ),
+            maxFrequency: ClusterFactory.AsConditional(
+                FrequencyComponent.attributes.maxFrequency,
+                { mandatoryIf: [FQ] }
+            ),
+            startUpCurrentLevel: ClusterFactory.AsConditional(
+                LightingComponent.attributes.startUpCurrentLevel,
+                { mandatoryIf: [LT] }
+            )
         },
 
         commands: {
             ...Cluster.commands,
-            moveToClosestFrequency: AsConditional(
+            moveToClosestFrequency: ClusterFactory.AsConditional(
                 FrequencyComponent.commands.moveToClosestFrequency,
                 { mandatoryIf: [FQ] }
             )

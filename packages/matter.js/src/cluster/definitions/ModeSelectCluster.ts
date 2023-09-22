@@ -6,16 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import {
-    BaseClusterComponent,
-    ClusterComponent,
-    ExtensibleCluster,
-    validateFeatureSelection,
-    extendCluster,
-    ClusterForBaseCluster,
-    AsConditional
-} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import {
     FixedAttribute,
@@ -23,8 +15,7 @@ import {
     OptionalWritableAttribute,
     Command,
     TlvNoResponse,
-    WritableAttribute,
-    Cluster as CreateCluster
+    WritableAttribute
 } from "../../cluster/Cluster.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TlvUInt16, TlvUInt8 } from "../../tlv/TlvNumber.js";
@@ -126,7 +117,7 @@ export namespace ModeSelect {
     /**
      * These elements and properties are present in all ModeSelect clusters.
      */
-    export const Base = BaseClusterComponent({
+    export const Base = ClusterFactory.Definition({
         id: 0x50,
         name: "ModeSelect",
         revision: 1,
@@ -221,7 +212,7 @@ export namespace ModeSelect {
     /**
      * A ModeSelectCluster supports these elements if it supports feature OnOff.
      */
-    export const OnOffComponent = ClusterComponent({
+    export const OnOffComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This attribute shall indicate the value of CurrentMode that depends on the state of the On/Off cluster
@@ -262,8 +253,8 @@ export namespace ModeSelect {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.8
      */
-    export const Cluster = ExtensibleCluster({
-        ...Base,
+    export const Cluster = ClusterFactory.Extensible(
+        Base,
 
         /**
          * Use this factory method to create a ModeSelect cluster with support for optional features. Include each
@@ -273,16 +264,19 @@ export namespace ModeSelect {
          * @returns a ModeSelect cluster with specified features enabled
          * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
          */
-        factory: <T extends `${Feature}`[]>(...features: [...T]) => {
-            validateFeatureSelection(features, Feature);
-            const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
-            extendCluster(cluster, OnOffComponent, { onOff: true });
+        <T extends `${Feature}`[]>(...features: [...T]) => {
+            ClusterFactory.validateFeatureSelection(features, Feature);
+            const cluster = ClusterFactory.Definition({
+                ...Base,
+                supportedFeatures: BitFlags(Base.features, ...features)
+            });
+            ClusterFactory.extend(cluster, OnOffComponent, { onOff: true });
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }
-    });
+    );
 
     export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        ClusterForBaseCluster<typeof Base, SF>
+        Omit<typeof Base, "supportedFeatures">
         & { supportedFeatures: SF }
         & (SF extends { onOff: true } ? typeof OnOffComponent : {});
     const DEPONOFF = { onOff: true };
@@ -293,14 +287,14 @@ export namespace ModeSelect {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = CreateCluster({
+    export const Complete = ClusterFactory.Definition({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
         features: Cluster.features,
         attributes: {
             ...Cluster.attributes,
-            onMode: AsConditional(OnOffComponent.attributes.onMode, { mandatoryIf: [DEPONOFF] })
+            onMode: ClusterFactory.AsConditional(OnOffComponent.attributes.onMode, { mandatoryIf: [DEPONOFF] })
         },
         commands: Cluster.commands
     });

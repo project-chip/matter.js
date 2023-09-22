@@ -6,8 +6,9 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import {
-    Cluster as CreateCluster,
     FixedAttribute,
     WritableAttribute,
     AccessLevel,
@@ -18,7 +19,6 @@ import {
     EventPriority,
     OptionalEvent
 } from "../../cluster/Cluster.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvUInt16, TlvUInt32, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TlvVendorId } from "../../datatype/VendorId.js";
@@ -148,7 +148,7 @@ export namespace BasicInformation {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.1
      */
-    export const Cluster = CreateCluster({
+    export const Cluster = ClusterFactory.Definition({
         id: 0x28,
         name: "BasicInformation",
         revision: 2,

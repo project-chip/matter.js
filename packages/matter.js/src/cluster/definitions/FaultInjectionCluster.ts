@@ -6,7 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Cluster as CreateCluster, Command, TlvNoResponse, AccessLevel } from "../../cluster/Cluster.js";
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
+import { Command, TlvNoResponse, AccessLevel } from "../../cluster/Cluster.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvEnum, TlvUInt32, TlvUInt8 } from "../../tlv/TlvNumber.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
@@ -46,7 +47,7 @@ export namespace FaultInjection {
      * The Fault Injection Cluster provide a means for a test harness to configure faults(for example triggering a
      * fault in the system).
      */
-    export const Cluster = CreateCluster({
+    export const Cluster = ClusterFactory.Definition({
         id: 0xfff1fc06,
         name: "FaultInjection",
         revision: 1,

@@ -6,8 +6,9 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Cluster as CreateCluster, Attribute } from "../../cluster/Cluster.js";
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { Attribute } from "../../cluster/Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { Label } from "../../cluster/definitions/LabelCluster.js";
 
@@ -27,7 +28,7 @@ export namespace FixedLabel {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 9.8
      */
-    export const Cluster = CreateCluster({
+    export const Cluster = ClusterFactory.Definition({
         id: 0x40,
         name: "FixedLabel",
         revision: 1,

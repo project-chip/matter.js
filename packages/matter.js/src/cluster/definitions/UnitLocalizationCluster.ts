@@ -6,18 +6,10 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
-import {
-    BaseClusterComponent,
-    ClusterComponent,
-    ExtensibleCluster,
-    validateFeatureSelection,
-    extendCluster,
-    ClusterForBaseCluster,
-    AsConditional
-} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { WritableAttribute, AccessLevel, Cluster as CreateCluster } from "../../cluster/Cluster.js";
+import { WritableAttribute, AccessLevel } from "../../cluster/Cluster.js";
 import { TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 
@@ -59,7 +51,7 @@ export namespace UnitLocalization {
     /**
      * These elements and properties are present in all UnitLocalization clusters.
      */
-    export const Base = BaseClusterComponent({
+    export const Base = ClusterFactory.Definition({
         id: 0x2d,
         name: "UnitLocalization",
         revision: 1,
@@ -77,7 +69,7 @@ export namespace UnitLocalization {
     /**
      * A UnitLocalizationCluster supports these elements if it supports feature TemperatureUnit.
      */
-    export const TemperatureUnitComponent = ClusterComponent({
+    export const TemperatureUnitComponent = ClusterFactory.Component({
         attributes: {
             /**
              * The TemperatureUnit attribute shall indicate the unit for the Node to use only when conveying
@@ -110,8 +102,8 @@ export namespace UnitLocalization {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.5
      */
-    export const Cluster = ExtensibleCluster({
-        ...Base,
+    export const Cluster = ClusterFactory.Extensible(
+        Base,
 
         /**
          * Use this factory method to create an UnitLocalization cluster with support for optional features. Include
@@ -121,16 +113,19 @@ export namespace UnitLocalization {
          * @returns an UnitLocalization cluster with specified features enabled
          * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
          */
-        factory: <T extends `${Feature}`[]>(...features: [...T]) => {
-            validateFeatureSelection(features, Feature);
-            const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
-            extendCluster(cluster, TemperatureUnitComponent, { temperatureUnit: true });
+        <T extends `${Feature}`[]>(...features: [...T]) => {
+            ClusterFactory.validateFeatureSelection(features, Feature);
+            const cluster = ClusterFactory.Definition({
+                ...Base,
+                supportedFeatures: BitFlags(Base.features, ...features)
+            });
+            ClusterFactory.extend(cluster, TemperatureUnitComponent, { temperatureUnit: true });
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }
-    });
+    );
 
     export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        ClusterForBaseCluster<typeof Base, SF>
+        Omit<typeof Base, "supportedFeatures">
         & { supportedFeatures: SF }
         & (SF extends { temperatureUnit: true } ? typeof TemperatureUnitComponent : {});
     const TEMP = { temperatureUnit: true };
@@ -141,14 +136,14 @@ export namespace UnitLocalization {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = CreateCluster({
+    export const Complete = ClusterFactory.Definition({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
         features: Cluster.features,
 
         attributes: {
-            temperatureUnit: AsConditional(
+            temperatureUnit: ClusterFactory.AsConditional(
                 TemperatureUnitComponent.attributes.temperatureUnit,
                 { mandatoryIf: [TEMP] }
             )

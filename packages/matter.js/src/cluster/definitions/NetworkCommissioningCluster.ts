@@ -6,26 +6,10 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
-import {
-    BaseClusterComponent,
-    ClusterComponent,
-    ExtensibleCluster,
-    validateFeatureSelection,
-    extendCluster,
-    preventCluster,
-    ClusterForBaseCluster,
-    AsConditional
-} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import {
-    FixedAttribute,
-    AccessLevel,
-    Attribute,
-    WritableAttribute,
-    Command,
-    Cluster as CreateCluster
-} from "../../cluster/Cluster.js";
+import { FixedAttribute, AccessLevel, Attribute, WritableAttribute, Command } from "../../cluster/Cluster.js";
 import { TlvUInt8, TlvEnum, TlvInt32, TlvUInt64, TlvBitmap, TlvUInt16, TlvInt8 } from "../../tlv/TlvNumber.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
@@ -606,7 +590,7 @@ export namespace NetworkCommissioning {
     /**
      * These elements and properties are present in all NetworkCommissioning clusters.
      */
-    export const Base = BaseClusterComponent({
+    export const Base = ClusterFactory.Definition({
         id: 0x31,
         name: "NetworkCommissioning",
         revision: 1,
@@ -763,7 +747,7 @@ export namespace NetworkCommissioning {
      * A NetworkCommissioningCluster supports these elements if it supports features WiFiNetworkInterface or
      * ThreadNetworkInterface.
      */
-    export const WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent = ClusterComponent({
+    export const WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This attribute shall indicate the maximum duration taken, in seconds, by the network interface on this
@@ -1010,7 +994,7 @@ export namespace NetworkCommissioning {
     /**
      * A NetworkCommissioningCluster supports these elements if it supports feature WiFiNetworkInterface.
      */
-    export const WiFiNetworkInterfaceComponent = ClusterComponent({
+    export const WiFiNetworkInterfaceComponent = ClusterFactory.Component({
         commands: {
             /**
              * This command shall be used to add or modify Wi-Fi network configurations.
@@ -1042,7 +1026,7 @@ export namespace NetworkCommissioning {
     /**
      * A NetworkCommissioningCluster supports these elements if it supports feature ThreadNetworkInterface.
      */
-    export const ThreadNetworkInterfaceComponent = ClusterComponent({
+    export const ThreadNetworkInterfaceComponent = ClusterFactory.Component({
         commands: {
             /**
              * This command shall be used to add or modify Thread network configurations.
@@ -1094,8 +1078,8 @@ export namespace NetworkCommissioning {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.8
      */
-    export const Cluster = ExtensibleCluster({
-        ...Base,
+    export const Cluster = ClusterFactory.Extensible(
+        Base,
 
         /**
          * Use this factory method to create a NetworkCommissioning cluster with support for optional features. Include
@@ -1105,21 +1089,24 @@ export namespace NetworkCommissioning {
          * @returns a NetworkCommissioning cluster with specified features enabled
          * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
          */
-        factory: <T extends `${Feature}`[]>(...features: [...T]) => {
-            validateFeatureSelection(features, Feature);
-            const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
+        <T extends `${Feature}`[]>(...features: [...T]) => {
+            ClusterFactory.validateFeatureSelection(features, Feature);
+            const cluster = ClusterFactory.Definition({
+                ...Base,
+                supportedFeatures: BitFlags(Base.features, ...features)
+            });
 
-            extendCluster(
+            ClusterFactory.extend(
                 cluster,
                 WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent,
                 { wiFiNetworkInterface: true },
                 { threadNetworkInterface: true }
             );
 
-            extendCluster(cluster, WiFiNetworkInterfaceComponent, { wiFiNetworkInterface: true });
-            extendCluster(cluster, ThreadNetworkInterfaceComponent, { threadNetworkInterface: true });
+            ClusterFactory.extend(cluster, WiFiNetworkInterfaceComponent, { wiFiNetworkInterface: true });
+            ClusterFactory.extend(cluster, ThreadNetworkInterfaceComponent, { threadNetworkInterface: true });
 
-            preventCluster(
+            ClusterFactory.prevent(
                 cluster,
                 { wiFiNetworkInterface: true, threadNetworkInterface: true },
                 { wiFiNetworkInterface: true, ethernetNetworkInterface: true },
@@ -1129,10 +1116,10 @@ export namespace NetworkCommissioning {
 
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }
-    });
+    );
 
     export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        ClusterForBaseCluster<typeof Base, SF>
+        Omit<typeof Base, "supportedFeatures">
         & { supportedFeatures: SF }
         & (SF extends { wiFiNetworkInterface: true } | { threadNetworkInterface: true } ? typeof WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent : {})
         & (SF extends { wiFiNetworkInterface: true } ? typeof WiFiNetworkInterfaceComponent : {})
@@ -1151,7 +1138,7 @@ export namespace NetworkCommissioning {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = CreateCluster({
+    export const Complete = ClusterFactory.Definition({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -1159,38 +1146,38 @@ export namespace NetworkCommissioning {
 
         attributes: {
             ...Cluster.attributes,
-            scanMaxTimeSeconds: AsConditional(
+            scanMaxTimeSeconds: ClusterFactory.AsConditional(
                 WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.attributes.scanMaxTimeSeconds,
                 { mandatoryIf: [WI, TH] }
             ),
-            connectMaxTimeSeconds: AsConditional(
+            connectMaxTimeSeconds: ClusterFactory.AsConditional(
                 WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.attributes.connectMaxTimeSeconds,
                 { mandatoryIf: [WI, TH] }
             )
         },
 
         commands: {
-            scanNetworks: AsConditional(
+            scanNetworks: ClusterFactory.AsConditional(
                 WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands.scanNetworks,
                 { mandatoryIf: [WI, TH] }
             ),
-            addOrUpdateWiFiNetwork: AsConditional(
+            addOrUpdateWiFiNetwork: ClusterFactory.AsConditional(
                 WiFiNetworkInterfaceComponent.commands.addOrUpdateWiFiNetwork,
                 { mandatoryIf: [WI] }
             ),
-            addOrUpdateThreadNetwork: AsConditional(
+            addOrUpdateThreadNetwork: ClusterFactory.AsConditional(
                 ThreadNetworkInterfaceComponent.commands.addOrUpdateThreadNetwork,
                 { mandatoryIf: [TH] }
             ),
-            removeNetwork: AsConditional(
+            removeNetwork: ClusterFactory.AsConditional(
                 WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands.removeNetwork,
                 { mandatoryIf: [WI, TH] }
             ),
-            connectNetwork: AsConditional(
+            connectNetwork: ClusterFactory.AsConditional(
                 WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands.connectNetwork,
                 { mandatoryIf: [WI, TH] }
             ),
-            reorderNetwork: AsConditional(
+            reorderNetwork: ClusterFactory.AsConditional(
                 WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands.reorderNetwork,
                 { mandatoryIf: [WI, TH] }
             )

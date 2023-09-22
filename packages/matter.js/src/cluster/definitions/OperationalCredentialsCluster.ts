@@ -6,8 +6,9 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import {
-    Cluster as CreateCluster,
     FabricScopedAttribute,
     AccessLevel,
     FixedAttribute,
@@ -15,7 +16,6 @@ import {
     Command,
     TlvNoResponse
 } from "../../cluster/Cluster.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvByteString, TlvString } from "../../tlv/TlvString.js";
@@ -512,7 +512,7 @@ export namespace OperationalCredentials {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.17
      */
-    export const Cluster = CreateCluster({
+    export const Cluster = ClusterFactory.Definition({
         id: 0x3e,
         name: "OperationalCredentials",
         revision: 1,

@@ -6,18 +6,10 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import {
-    BaseClusterComponent,
-    ClusterComponent,
-    ExtensibleCluster,
-    validateFeatureSelection,
-    extendCluster,
-    ClusterForBaseCluster,
-    AsConditional
-} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { WritableAttribute, Attribute, FixedAttribute, Cluster as CreateCluster } from "../../cluster/Cluster.js";
+import { WritableAttribute, Attribute, FixedAttribute } from "../../cluster/Cluster.js";
 import { TlvEnum, TlvUInt8, TlvBitmap } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 
@@ -174,7 +166,7 @@ export namespace FanControl {
     /**
      * These elements and properties are present in all FanControl clusters.
      */
-    export const Base = BaseClusterComponent({
+    export const Base = ClusterFactory.Definition({
         id: 0x202,
         name: "FanControl",
         revision: 2,
@@ -252,7 +244,7 @@ export namespace FanControl {
     /**
      * A FanControlCluster supports these elements if it supports feature MultiSpeed.
      */
-    export const MultiSpeedComponent = ClusterComponent({
+    export const MultiSpeedComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This attribute shall indicate that the fan has one speed (value of 1) or the maximum speed, if the fan
@@ -285,7 +277,7 @@ export namespace FanControl {
     /**
      * A FanControlCluster supports these elements if it supports feature Rocking.
      */
-    export const RockingComponent = ClusterComponent({
+    export const RockingComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This attribute is a bitmap that indicates what rocking motions the server supports. The bitmap is shown
@@ -318,7 +310,7 @@ export namespace FanControl {
     /**
      * A FanControlCluster supports these elements if it supports feature Wind.
      */
-    export const WindComponent = ClusterComponent({
+    export const WindComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This attribute is a bitmap that indicates what wind modes the server supports. At least one wind mode
@@ -358,8 +350,8 @@ export namespace FanControl {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.4
      */
-    export const Cluster = ExtensibleCluster({
-        ...Base,
+    export const Cluster = ClusterFactory.Extensible(
+        Base,
 
         /**
          * Use this factory method to create a FanControl cluster with support for optional features. Include each
@@ -369,18 +361,21 @@ export namespace FanControl {
          * @returns a FanControl cluster with specified features enabled
          * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
          */
-        factory: <T extends `${Feature}`[]>(...features: [...T]) => {
-            validateFeatureSelection(features, Feature);
-            const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
-            extendCluster(cluster, MultiSpeedComponent, { multiSpeed: true });
-            extendCluster(cluster, RockingComponent, { rocking: true });
-            extendCluster(cluster, WindComponent, { wind: true });
+        <T extends `${Feature}`[]>(...features: [...T]) => {
+            ClusterFactory.validateFeatureSelection(features, Feature);
+            const cluster = ClusterFactory.Definition({
+                ...Base,
+                supportedFeatures: BitFlags(Base.features, ...features)
+            });
+            ClusterFactory.extend(cluster, MultiSpeedComponent, { multiSpeed: true });
+            ClusterFactory.extend(cluster, RockingComponent, { rocking: true });
+            ClusterFactory.extend(cluster, WindComponent, { wind: true });
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }
-    });
+    );
 
     export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        ClusterForBaseCluster<typeof Base, SF>
+        Omit<typeof Base, "supportedFeatures">
         & { supportedFeatures: SF }
         & (SF extends { multiSpeed: true } ? typeof MultiSpeedComponent : {})
         & (SF extends { rocking: true } ? typeof RockingComponent : {})
@@ -396,7 +391,7 @@ export namespace FanControl {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = CreateCluster({
+    export const Complete = ClusterFactory.Definition({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -404,13 +399,19 @@ export namespace FanControl {
 
         attributes: {
             ...Cluster.attributes,
-            speedMax: AsConditional(MultiSpeedComponent.attributes.speedMax, { mandatoryIf: [SPD] }),
-            speedSetting: AsConditional(MultiSpeedComponent.attributes.speedSetting, { mandatoryIf: [SPD] }),
-            speedCurrent: AsConditional(MultiSpeedComponent.attributes.speedCurrent, { mandatoryIf: [SPD] }),
-            rockSupport: AsConditional(RockingComponent.attributes.rockSupport, { mandatoryIf: [RCK] }),
-            rockSetting: AsConditional(RockingComponent.attributes.rockSetting, { mandatoryIf: [RCK] }),
-            windSupport: AsConditional(WindComponent.attributes.windSupport, { mandatoryIf: [WND] }),
-            windSetting: AsConditional(WindComponent.attributes.windSetting, { mandatoryIf: [WND] })
+            speedMax: ClusterFactory.AsConditional(MultiSpeedComponent.attributes.speedMax, { mandatoryIf: [SPD] }),
+            speedSetting: ClusterFactory.AsConditional(
+                MultiSpeedComponent.attributes.speedSetting,
+                { mandatoryIf: [SPD] }
+            ),
+            speedCurrent: ClusterFactory.AsConditional(
+                MultiSpeedComponent.attributes.speedCurrent,
+                { mandatoryIf: [SPD] }
+            ),
+            rockSupport: ClusterFactory.AsConditional(RockingComponent.attributes.rockSupport, { mandatoryIf: [RCK] }),
+            rockSetting: ClusterFactory.AsConditional(RockingComponent.attributes.rockSetting, { mandatoryIf: [RCK] }),
+            windSupport: ClusterFactory.AsConditional(WindComponent.attributes.windSupport, { mandatoryIf: [WND] }),
+            windSetting: ClusterFactory.AsConditional(WindComponent.attributes.windSetting, { mandatoryIf: [WND] })
         }
     });
 }

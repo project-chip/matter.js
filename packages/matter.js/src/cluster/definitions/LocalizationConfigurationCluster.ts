@@ -6,8 +6,9 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { Cluster as CreateCluster, WritableAttribute, AccessLevel, FixedAttribute } from "../../cluster/Cluster.js";
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { WritableAttribute, AccessLevel, FixedAttribute } from "../../cluster/Cluster.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 
@@ -25,7 +26,7 @@ export namespace LocalizationConfiguration {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.3
      */
-    export const Cluster = CreateCluster({
+    export const Cluster = ClusterFactory.Definition({
         id: 0x2b,
         name: "LocalizationConfiguration",
         revision: 1,

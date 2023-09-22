@@ -590,6 +590,19 @@ const INVOKE_COMMAND_RESPONSE_MULTI: InvokeResponse = {
     ],
 };
 
+const BasicInformationClusterWithTimedInteraction = {
+    ...BasicInformationCluster,
+    attributes: {
+        ...BasicInformationCluster.attributes,
+        nodeLabel: WritableAttribute(0x5, TlvString.bound({ maxLength: 32 }), {
+            persistent: true,
+            default: "",
+            writeAcl: AccessLevel.Manage,
+            timed: true,
+        }),
+    },
+};
+
 const testFabric = new Fabric(
     FabricIndex(1),
     FabricId(1),
@@ -952,12 +965,6 @@ describe("InteractionProtocol", () => {
 
         it("write values and return errors on invalid values timed interaction required by attribute", async () => {
             let timedInteractionCleared = false;
-            const BasicInformationClusterWithTimedInteraction = BasicInformationCluster;
-            BasicInformationClusterWithTimedInteraction.attributes.nodeLabel = WritableAttribute(
-                0x5,
-                TlvString.bound({ maxLength: 32 }),
-                { persistent: true, default: "", writeAcl: AccessLevel.Manage, timed: true },
-            );
             const basicCluster = ClusterServer(
                 BasicInformationClusterWithTimedInteraction,
                 {
@@ -1000,12 +1007,6 @@ describe("InteractionProtocol", () => {
 
         it("write values and return errors on invalid values timed interaction required by attribute success", async () => {
             let timedInteractionCleared = false;
-            const BasicInformationClusterWithTimedInteraction = BasicInformationCluster;
-            BasicInformationClusterWithTimedInteraction.attributes.nodeLabel = WritableAttribute(
-                0x5,
-                TlvString.bound({ maxLength: 32 }),
-                { persistent: true, default: "", writeAcl: AccessLevel.Manage, timed: true },
-            );
             const basicCluster = ClusterServer(
                 BasicInformationClusterWithTimedInteraction,
                 {

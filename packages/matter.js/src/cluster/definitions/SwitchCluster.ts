@@ -6,19 +6,10 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import {
-    BaseClusterComponent,
-    ClusterComponent,
-    ExtensibleCluster,
-    validateFeatureSelection,
-    extendCluster,
-    preventCluster,
-    ClusterForBaseCluster,
-    AsConditional
-} from "../../cluster/ClusterFactory.js";
 import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { FixedAttribute, Attribute, Event, EventPriority, Cluster as CreateCluster } from "../../cluster/Cluster.js";
+import { FixedAttribute, Attribute, Event, EventPriority } from "../../cluster/Cluster.js";
 import { TlvUInt8 } from "../../tlv/TlvNumber.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 
@@ -113,7 +104,7 @@ export namespace Switch {
     /**
      * These elements and properties are present in all Switch clusters.
      */
-    export const Base = BaseClusterComponent({
+    export const Base = ClusterFactory.Definition({
         id: 0x3b,
         name: "Switch",
         revision: 1,
@@ -169,7 +160,7 @@ export namespace Switch {
     /**
      * A SwitchCluster supports these elements if it supports feature MomentarySwitchMultiPress.
      */
-    export const MomentarySwitchMultiPressComponent = ClusterComponent({
+    export const MomentarySwitchMultiPressComponent = ClusterFactory.Component({
         attributes: {
             /**
              * This attribute shall indicate how many consecutive presses can be detected and reported by a momentary
@@ -233,7 +224,7 @@ export namespace Switch {
     /**
      * A SwitchCluster supports these elements if it supports feature LatchingSwitch.
      */
-    export const LatchingSwitchComponent = ClusterComponent({
+    export const LatchingSwitchComponent = ClusterFactory.Component({
         events: {
             /**
              * This event shall be generated, when the latching switch is moved to a new position. It may have been
@@ -250,7 +241,7 @@ export namespace Switch {
     /**
      * A SwitchCluster supports these elements if it supports feature MomentarySwitch.
      */
-    export const MomentarySwitchComponent = ClusterComponent({
+    export const MomentarySwitchComponent = ClusterFactory.Component({
         events: {
             /**
              * This event shall be generated, when the momentary switch starts to be pressed (after debouncing).
@@ -266,7 +257,7 @@ export namespace Switch {
     /**
      * A SwitchCluster supports these elements if it supports feature MomentarySwitchLongPress.
      */
-    export const MomentarySwitchLongPressComponent = ClusterComponent({
+    export const MomentarySwitchLongPressComponent = ClusterFactory.Component({
         events: {
             /**
              * This event shall be generated, when the momentary switch has been pressed for a "long" time (this time
@@ -296,7 +287,7 @@ export namespace Switch {
     /**
      * A SwitchCluster supports these elements if it supports feature MomentarySwitchRelease.
      */
-    export const MomentarySwitchReleaseComponent = ClusterComponent({
+    export const MomentarySwitchReleaseComponent = ClusterFactory.Component({
         events: {
             /**
              * This event shall be generated, when the momentary switch has been released (after debouncing).
@@ -339,8 +330,8 @@ export namespace Switch {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.11
      */
-    export const Cluster = ExtensibleCluster({
-        ...Base,
+    export const Cluster = ClusterFactory.Extensible(
+        Base,
 
         /**
          * Use this factory method to create a Switch cluster with support for optional features. Include each
@@ -350,16 +341,19 @@ export namespace Switch {
          * @returns a Switch cluster with specified features enabled
          * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
          */
-        factory: <T extends `${Feature}`[]>(...features: [...T]) => {
-            validateFeatureSelection(features, Feature);
-            const cluster = CreateCluster({ ...Base, supportedFeatures: BitFlags(Base.features, ...features) });
-            extendCluster(cluster, MomentarySwitchMultiPressComponent, { momentarySwitchMultiPress: true });
-            extendCluster(cluster, LatchingSwitchComponent, { latchingSwitch: true });
-            extendCluster(cluster, MomentarySwitchComponent, { momentarySwitch: true });
-            extendCluster(cluster, MomentarySwitchLongPressComponent, { momentarySwitchLongPress: true });
-            extendCluster(cluster, MomentarySwitchReleaseComponent, { momentarySwitchRelease: true });
+        <T extends `${Feature}`[]>(...features: [...T]) => {
+            ClusterFactory.validateFeatureSelection(features, Feature);
+            const cluster = ClusterFactory.Definition({
+                ...Base,
+                supportedFeatures: BitFlags(Base.features, ...features)
+            });
+            ClusterFactory.extend(cluster, MomentarySwitchMultiPressComponent, { momentarySwitchMultiPress: true });
+            ClusterFactory.extend(cluster, LatchingSwitchComponent, { latchingSwitch: true });
+            ClusterFactory.extend(cluster, MomentarySwitchComponent, { momentarySwitch: true });
+            ClusterFactory.extend(cluster, MomentarySwitchLongPressComponent, { momentarySwitchLongPress: true });
+            ClusterFactory.extend(cluster, MomentarySwitchReleaseComponent, { momentarySwitchRelease: true });
 
-            preventCluster(
+            ClusterFactory.prevent(
                 cluster,
                 { momentarySwitchRelease: true, momentarySwitch: false },
                 { momentarySwitchLongPress: true, momentarySwitch: false },
@@ -372,10 +366,10 @@ export namespace Switch {
 
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
         }
-    });
+    );
 
     export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        ClusterForBaseCluster<typeof Base, SF>
+        Omit<typeof Base, "supportedFeatures">
         & { supportedFeatures: SF }
         & (SF extends { momentarySwitchMultiPress: true } ? typeof MomentarySwitchMultiPressComponent : {})
         & (SF extends { latchingSwitch: true } ? typeof LatchingSwitchComponent : {})
@@ -402,7 +396,7 @@ export namespace Switch {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = CreateCluster({
+    export const Complete = ClusterFactory.Definition({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -410,23 +404,38 @@ export namespace Switch {
 
         attributes: {
             ...Cluster.attributes,
-            multiPressMax: AsConditional(
+            multiPressMax: ClusterFactory.AsConditional(
                 MomentarySwitchMultiPressComponent.attributes.multiPressMax,
                 { mandatoryIf: [MSM] }
             )
         },
 
         events: {
-            switchLatched: AsConditional(LatchingSwitchComponent.events.switchLatched, { mandatoryIf: [LS] }),
-            initialPress: AsConditional(MomentarySwitchComponent.events.initialPress, { mandatoryIf: [MS] }),
-            longPress: AsConditional(MomentarySwitchLongPressComponent.events.longPress, { mandatoryIf: [MSL] }),
-            shortRelease: AsConditional(MomentarySwitchReleaseComponent.events.shortRelease, { mandatoryIf: [MSR] }),
-            longRelease: AsConditional(MomentarySwitchLongPressComponent.events.longRelease, { mandatoryIf: [MSL] }),
-            multiPressOngoing: AsConditional(
+            switchLatched: ClusterFactory.AsConditional(
+                LatchingSwitchComponent.events.switchLatched,
+                { mandatoryIf: [LS] }
+            ),
+            initialPress: ClusterFactory.AsConditional(
+                MomentarySwitchComponent.events.initialPress,
+                { mandatoryIf: [MS] }
+            ),
+            longPress: ClusterFactory.AsConditional(
+                MomentarySwitchLongPressComponent.events.longPress,
+                { mandatoryIf: [MSL] }
+            ),
+            shortRelease: ClusterFactory.AsConditional(
+                MomentarySwitchReleaseComponent.events.shortRelease,
+                { mandatoryIf: [MSR] }
+            ),
+            longRelease: ClusterFactory.AsConditional(
+                MomentarySwitchLongPressComponent.events.longRelease,
+                { mandatoryIf: [MSL] }
+            ),
+            multiPressOngoing: ClusterFactory.AsConditional(
                 MomentarySwitchMultiPressComponent.events.multiPressOngoing,
                 { mandatoryIf: [MSM] }
             ),
-            multiPressComplete: AsConditional(
+            multiPressComplete: ClusterFactory.AsConditional(
                 MomentarySwitchMultiPressComponent.events.multiPressComplete,
                 { mandatoryIf: [MSM] }
             )

@@ -6,14 +6,9 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import {
-    Cluster as CreateCluster,
-    OptionalFixedAttribute,
-    FixedAttribute,
-    Attribute,
-    AccessLevel
-} from "../../cluster/Cluster.js";
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
+import { OptionalFixedAttribute, FixedAttribute, Attribute, AccessLevel } from "../../cluster/Cluster.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TlvVendorId, VendorId } from "../../datatype/VendorId.js";
 import { TlvUInt16, TlvEnum } from "../../tlv/TlvNumber.js";
@@ -83,7 +78,7 @@ export namespace ApplicationBasic {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.3
      */
-    export const Cluster = CreateCluster({
+    export const Cluster = ClusterFactory.Definition({
         id: 0x50d,
         name: "ApplicationBasic",
         revision: 1,
