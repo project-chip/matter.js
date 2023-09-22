@@ -6,6 +6,8 @@
 
 import { spawn } from "child_process";
 
+import colors from "ansi-colors";
+
 export async function execute(bin: string, argv: string[]) {
     return new Promise<void>((resolve, reject) => {
         const proc = spawn(bin, argv, {
@@ -22,5 +24,10 @@ export async function execute(bin: string, argv: string[]) {
 }
 
 export async function executeNode(script: string, argv: string[]) {
-    return execute("node", ["--enable-source-maps", script, ...argv]);
+    argv = ["--enable-source-maps", script, ...argv];
+    if (process.env.MATTER_RUN_ECHO) {
+        const command = colors.whiteBright(`node ${argv.join(" ")}`);
+        process.stdout.write(`${colors.greenBright("Matter execute:")} ${command}\n`);
+    }
+    return execute("node", argv);
 }
