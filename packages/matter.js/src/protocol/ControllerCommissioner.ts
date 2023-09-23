@@ -108,6 +108,7 @@ type CollectedCommissioningData = {
     vendorId?: VendorId;
     productId?: number;
     supportsConcurrentConnection?: boolean;
+    successfullyConnectedToNetwork?: boolean;
 };
 
 /** Error that throws when Commissioning fails and process can not be continued. */
@@ -116,7 +117,7 @@ export class CommissioningError extends MatterError {}
 /** Error that throws when Commissioning fails but process can be continued. */
 class RecoverableCommissioningError extends CommissioningError {}
 
-const DEFAULT_FAILSAFE_TIME_MS = 60000;
+const DEFAULT_FAILSAFE_TIME_MS = 60_000; // 60 seconds
 
 // TODO Do not hard code them!
 const FABRIC_ID = FabricId(1); // TODO Random?
@@ -316,6 +317,22 @@ export class ControllerCommissioner {
                     logger.error(
                         `Commissioning step ${step.stepNumber}.${step.subStepNumber}: ${step.name} failed with error: ${error.message} ... Aborting commissioning`,
                     );
+                    // TODO In concurrent connection commissioning flow, the failure of any of the steps 2 through 10
+                    //  SHALL result in the Commissioner and Commissionee returning to step 2 (device discovery and
+                    //  commissioning channel establishment) and repeating each step. The failure of any of the steps
+                    //  11 through 15 in concurrent connection commissioning flow SHALL result in the Commissioner and
+                    //  Commissionee returning to step 11 (configuration of operational network information). In the
+                    //  case of failure of any of the steps 11 through 15 in concurrent connection commissioning flow,
+                    //  the Commissioner and Commissionee SHALL reuse the existing PASE-derived encryption keys over
+                    //  the commissioning channel and all steps up to and including step 10 are considered to have
+                    //  been successfully completed.
+
+                    // Commissioners that need to restart from step 2 MAY immediately expire the fail-safe by invoking
+                    // the ArmFailSafe command with an ExpiryLengthSeconds field set to 0. Otherwise, Commissioners
+                    // will need to wait until the current fail-safe timer has expired for the Commissionee to begin
+                    // accepting PASE again.
+                    await this.resetFailsafeTimer();
+
                     throw error;
                 } else {
                     throw error;
@@ -447,6 +464,18 @@ export class ControllerCommissioner {
             code: CommissioningStepResultCode.Success,
             breadcrumb: this.lastBreadcrumb,
         };
+    }
+
+    private async resetFailsafeTimer() {
+        try {
+            const client = this.getClusterClient(GeneralCommissioning.Cluster);
+            await client.armFailSafe({
+                breadcrumb: this.lastBreadcrumb,
+                expiryLengthSeconds: 0,
+            });
+        } catch (error) {
+            logger.error(`Error while resetting failsafe timer`, error);
+        }
     }
 
     /**
@@ -711,6 +740,7 @@ export class ControllerCommissioner {
                 rootNetworkStatus[0].connected !== false
             ) {
                 logger.debug("Commissionee is already connected to the WiFi network");
+                this.collectedCommissioningData.successfullyConnectedToNetwork = true;
                 return {
                     code: CommissioningStepResultCode.Skipped,
                     breadcrumb: this.lastBreadcrumb,
@@ -765,6 +795,7 @@ export class ControllerCommissioner {
         }
         const { networkId, connected } = updatedNetworks[networkIndex];
         if (connected === true) {
+            this.collectedCommissioningData.successfullyConnectedToNetwork = true;
             logger.debug(
                 `Commissionee is already connected to WiFi network ${
                     this.commissioningOptions.wifiNetwork.wifiSsid
@@ -784,6 +815,7 @@ export class ControllerCommissioner {
         if (connectResult.networkingStatus !== NetworkCommissioning.NetworkCommissioningStatus.Success) {
             throw new CommissioningError(`Commissionee failed to connect to WiFi network: ${connectResult.debugText}`);
         }
+        this.collectedCommissioningData.successfullyConnectedToNetwork = true;
         logger.debug(
             `Commissionee successfully connected to WiFi network ${
                 this.commissioningOptions.wifiNetwork.wifiSsid
@@ -797,6 +829,13 @@ export class ControllerCommissioner {
     }
 
     private async configureNetworkThread() {
+        if (this.collectedCommissioningData.successfullyConnectedToNetwork) {
+            logger.debug("Node is already connected to a network. Skipping Thread configuration.");
+            return {
+                code: CommissioningStepResultCode.Skipped,
+                breadcrumb: this.lastBreadcrumb,
+            };
+        }
         if (this.commissioningOptions.threadNetwork === undefined) {
             logger.debug("Thread network is not configured");
             return {
