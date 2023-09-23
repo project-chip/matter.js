@@ -83,10 +83,9 @@ describe("Integration Test", () => {
         const controllerStorageManager = new StorageManager(fakeControllerStorage);
         await controllerStorageManager.initialize();
 
-        matterClient = new MatterServer(controllerStorageManager);
+        matterClient = new MatterServer(controllerStorageManager, { disableIpv4: true });
         commissioningController = new CommissioningController({
             serverAddress: { ip: SERVER_IPv6, port: matterPort, type: "udp" },
-            disableIpv4: true,
             longDiscriminator,
             passcode: setupPin,
             listeningAddressIpv4: "1.2.3.4",
@@ -118,7 +117,6 @@ describe("Integration Test", () => {
 
         commissioningServer = new CommissioningServer({
             port: matterPort,
-            disableIpv4: true,
             listeningAddressIpv6: SERVER_IPv6,
             listeningAddressIpv4: SERVER_IPv4,
             deviceName,
@@ -192,8 +190,10 @@ describe("Integration Test", () => {
         matterServer.addCommissioningServer(commissioningServer);
 
         // override the mdns scanner to avoid the client to try to resolve the server's address
-        commissioningServer.setMdnsScanner(await MdnsScanner.create(SERVER_IPv6));
-        commissioningServer.setMdnsBroadcaster(await MdnsBroadcaster.create(SERVER_IPv6));
+        commissioningServer.setMdnsScanner(await MdnsScanner.create({ enableIpv4: false, netInterface: SERVER_IPv6 }));
+        commissioningServer.setMdnsBroadcaster(
+            await MdnsBroadcaster.create({ enableIpv4: false, multicastInterface: SERVER_IPv6 }),
+        );
         await commissioningServer.advertise();
 
         assert.ok(onOffLightDeviceServer.getClusterServer(OnOffCluster));
@@ -229,7 +229,9 @@ describe("Integration Test", () => {
     describe("commission", () => {
         it("the client commissions a new device", async () => {
             // override the mdns scanner to avoid the client to try to resolve the server's address
-            commissioningController.setMdnsScanner(await MdnsScanner.create(CLIENT_IPv6));
+            commissioningController.setMdnsScanner(
+                await MdnsScanner.create({ enableIpv4: false, netInterface: CLIENT_IPv6 }),
+            );
             await commissioningController.connect();
 
             Network.get = () => {

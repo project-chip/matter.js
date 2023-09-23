@@ -19,6 +19,7 @@ import { BitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
  */
 export abstract class MatterNode {
     protected readonly rootEndpoint = new RootEndpoint();
+    ipv4Disabled: boolean = false;
 
     /**
      * Add a cluster to the root endpoint. This is mainly used internally and not needed to be called by the user.

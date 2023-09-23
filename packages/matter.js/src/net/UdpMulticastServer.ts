@@ -15,7 +15,7 @@ const logger = Logger.get("UdpMulticastServer");
 
 export interface UdpMulticastServerOptions {
     listeningPort: number;
-    broadcastAddressIpv4: string;
+    broadcastAddressIpv4?: string;
     broadcastAddressIpv6: string;
     netInterface?: string;
 }
@@ -33,7 +33,9 @@ export class UdpMulticastServer {
             broadcastAddressIpv4,
             broadcastAddressIpv6,
             listeningPort,
-            await network.createUdpChannel({ type: "udp4", netInterface, listeningPort }),
+            broadcastAddressIpv4 === undefined
+                ? undefined
+                : await network.createUdpChannel({ type: "udp4", netInterface, listeningPort }),
             await network.createUdpChannel({ type: "udp6", netInterface, listeningPort }),
             netInterface,
         );
@@ -47,16 +49,16 @@ export class UdpMulticastServer {
 
     private constructor(
         private readonly network: Network,
-        private readonly broadcastAddressIpv4: string,
+        private readonly broadcastAddressIpv4: string | undefined,
         private readonly broadcastAddressIpv6: string,
         private readonly broadcastPort: number,
-        private readonly serverIpv4: UdpChannel,
+        private readonly serverIpv4: UdpChannel | undefined,
         private readonly serverIpv6: UdpChannel,
         private readonly netInterface: string | undefined,
     ) {}
 
     onMessage(listener: (message: ByteArray, peerAddress: string, netInterface: string) => void) {
-        this.serverIpv4.onData((netInterface, peerAddress, _port, message) =>
+        this.serverIpv4?.onData((netInterface, peerAddress, _port, message) =>
             listener(message, peerAddress, netInterface),
         );
         this.serverIpv6.onData((netInterface, peerAddress, _port, message) =>
@@ -73,14 +75,15 @@ export class UdpMulticastServer {
                 await Promise.all(
                     ips.map(async ip => {
                         const iPv4 = isIPv4(ip);
+                        const broadcastTarget = iPv4 ? this.broadcastAddressIpv4 : this.broadcastAddressIpv6;
+                        if (broadcastTarget == undefined) {
+                            // IPv4 but disabled, so just resolve
+                            return Promise.resolve();
+                        }
                         try {
                             await (
                                 await this.broadcastChannels.get(netInterface, iPv4)
-                            ).send(
-                                iPv4 ? this.broadcastAddressIpv4 : this.broadcastAddressIpv6,
-                                this.broadcastPort,
-                                message,
-                            );
+                            ).send(broadcastTarget, this.broadcastPort, message);
                         } catch (error) {
                             logger.info(`${netInterface}: ${(error as Error).message}`);
                         }
@@ -99,7 +102,7 @@ export class UdpMulticastServer {
     }
 
     async close() {
-        this.serverIpv4.close();
+        this.serverIpv4?.close();
         this.serverIpv6.close();
         await this.broadcastChannels.close();
     }

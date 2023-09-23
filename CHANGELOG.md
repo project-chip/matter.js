@@ -6,14 +6,19 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
 ## 0.6.0 WIP
 * Matter-Core functionality:
   * Fix: Adjusted Event Priority definition to match to specs
+  * Fix: Prevented crashes when Bleno could not be initialized (e.g. on Windows)
+  * Fix: Adjusted Bleno and Noble to be optional Dependencies to allow building the Monorepo also when these are failing (e.g. on Windows)
   * Feature: Implemented TimedInteractions for Write/Invoke request s as required by specs
   * Feature: Added support for generic Response suppression if requested or needed for group communication
   * Feature (orlenkoo) Implemented first OnOff Cluster Lighting feature command handlers (WIP)
   * Feature: Also publishes matter-node.js packages as ESM in parallel to CJS
   * Enhance: Memory footprint optimizations
-  * Enhance: Adjusted building, test executions and such to not use ts-node anymore and many more optimizations to test and build processes
+  * Enhance: Introduced building and building, running and test executions scripts to not use ts-node anymore and many more optimizations to test and build processes
+  * Enhance: ClusterFactory internally uses a simplified method of CLuster types that are compatible to the current ones but soon might replace them
 * matter.js API:
+  * Breaking: Remove "disableIpv4" from CommissioningController/Server options to MatterServer to also consider it for MDNS scanning and broadcasting
   * Breaking: Streamline Device API and rename onOff/isOnOff -> get/setOnOff
+  * Breaking: EndpointStructureLogger (method logEndpointStructure) was moved from util to device export!
 
 ## 0.5.0 (2023-08-22)
 * Matter-Core functionality:

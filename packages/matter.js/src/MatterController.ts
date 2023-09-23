@@ -298,7 +298,7 @@ export class MatterController {
             const isIpv6Address = isIPv6(ip);
             const paseInterface = isIpv6Address ? this.netInterfaceIpv6 : this.netInterfaceIpv4;
             if (paseInterface === undefined) {
-                // mainly IPv4 address when IPv4 is disabled
+                // mainly IPv6 address when IPv4 is disabled
                 throw new PairRetransmissionLimitReachedError(
                     `IPv${isIpv6Address ? "6" : "4"} interface not initialized. Cannot use ${ip} for commissioning.`,
                 );
