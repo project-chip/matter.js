@@ -43,6 +43,15 @@ export class NobleBleClient {
 
     constructor(options?: BleOptions) {
         loadNoble(options?.hciId);
+        try {
+            noble.reset();
+        } catch (error: any) {
+            logger.debug(
+                `Error resetting BLE device via noble (can be ignored, we just tried): ${
+                    (error as unknown as Error).message
+                }`,
+            );
+        }
         noble.on("stateChange", state => {
             this.nobleState = state;
             logger.debug(`Noble state changed to ${state}`);

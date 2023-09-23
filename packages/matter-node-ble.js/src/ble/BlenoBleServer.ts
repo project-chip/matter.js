@@ -23,8 +23,17 @@ import { BleOptions } from "./BleNode";
 const logger = Logger.get("BlenoBleServer");
 let Bleno: typeof import("@abandonware/bleno");
 
-function initializeBleno(server: BlenoBleServer) {
-    Bleno = require("@abandonware/bleno");
+function initializeBleno(server: BlenoBleServer, hciId?: number) {
+    // load Bleno driver with the correct device selected
+    if (hciId !== undefined) {
+        process.env.BLENO_HCI_DEVICE_ID = hciId.toString();
+    }
+    try {
+        Bleno = require("@abandonware/bleno");
+    } catch (error: any) {
+        logger.error(`Error loading Bleno: ${error.message}`);
+        throw error;
+    }
 
     class BtpWriteCharacteristicC1 extends Bleno.Characteristic {
         constructor() {
@@ -137,12 +146,7 @@ export class BlenoBleServer implements Channel<ByteArray> {
     private readonly matterBleService;
 
     constructor(options?: BleOptions) {
-        this.matterBleService = initializeBleno(this);
-
-        // Bleno gets automatically initialized on import already!
-        if (options?.hciId !== undefined) {
-            process.env.BLENO_HCI_DEVICE_ID = options?.hciId.toString();
-        }
+        this.matterBleService = initializeBleno(this, options?.hciId);
 
         // Write Bleno into this class
         Bleno.on("stateChange", state => {
