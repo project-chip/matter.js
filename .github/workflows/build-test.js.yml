@@ -27,8 +27,8 @@ jobs:
       matrix:
       # add Node.js 20 when https://github.com/hyj1991/v8-profiler-next/issues/65 is solved
       # add "windows-latest" when https://github.com/project-chip/matter.js/issues/325 is solved
-        node-version: [ 16.x, 18.x ]
-        os: [ macos-latest ]
+        node-version: [ 16.x, 18.x, 20.x ]
+        os: [ macos-latest, windows-2019 ]
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}

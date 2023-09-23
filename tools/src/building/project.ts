@@ -7,6 +7,7 @@
 import { build as esbuild, Format } from "esbuild";
 import { cp, mkdir, readFile, rm, stat, symlink, writeFile } from "fs/promises";
 import { glob } from "glob";
+import { platform } from "os";
 import { execute } from "../running/execute.js";
 import { ignoreError } from "../util/errors.js";
 import { Package } from "../util/package.js";
@@ -33,13 +34,30 @@ export class Project {
                 await this.build(format, "test", `build/${format}/test`);
             }
         });
-        await ignoreError("EEXIST", async () => await symlink(`../../dist/${format}`, `build/${format}/src`));
+
+        const src = `dist/${format}`;
+        const dest = `build/${format}/src`;
+
+        try {
+            await ignoreError("EEXIST", async () => await symlink(`../../${src}`, this.pkg.resolve(dest)));
+        } catch (e) {
+            if ((e as any).code === "EPERM" && platform() === "win32") {
+                // If developer mode is not enabled, we can't create a symlink
+                // on Windows.  Copy instead
+                await cp(this.pkg.resolve(src), this.pkg.resolve(dest), {
+                    recursive: true,
+                    force: true,
+                });
+            } else {
+                throw e;
+            }
+        }
         await this.specifyFormat("build", format);
     }
 
     async clean() {
         for (const dir of ["build", "dist"]) {
-            await rm(dir, { recursive: true, force: true });
+            await rm(this.pkg.resolve(dir), { recursive: true, force: true });
         }
     }
 
@@ -121,15 +139,16 @@ export class Project {
     private async build(format: Format, indir: string, outdir: string) {
         const config = (await ignoreError(
             "ERR_MODULE_NOT_FOUND",
-            () => import(`${this.pkg.path}/build.config.js`),
+            () => import(`file://${this.pkg.path}/build.config.js`),
         )) as Project.Config;
 
         await config?.before?.(this, format);
 
-        const entryPoints = await targets(indir, outdir, "ts", "js");
+        const entryPoints = await this.targets(indir, outdir, "ts", "js");
         for (const entry of entryPoints) {
             entry.out = entry.out.replace(/\.[jt]s$/, "");
         }
+
         await esbuild({
             entryPoints,
             outdir: this.pkg.path,
@@ -138,7 +157,7 @@ export class Project {
             absWorkingDir: this.pkg.path,
         });
 
-        for (const entry of await targets(indir, outdir, "cjs", "mjs", "d.cts", "d.mts")) {
+        for (const entry of await this.targets(indir, outdir, "cjs", "mjs", "d.cts", "d.mts")) {
             await cp(entry.in, entry.out);
         }
 
@@ -150,13 +169,16 @@ export class Project {
             await writeFile(this.pkg.resolve(`${dir}/${format}/package.json`), '{ "type": "commonjs" }');
         }
     }
-}
 
-async function targets(indir: string, outdir: string, ...extensions: string[]) {
-    return (await glob(extensions.map(ext => `${indir}/**/*.${ext}`))).map(file => ({
-        in: file,
-        out: `${outdir}/${file.slice(indir.length + 1)}`,
-    }));
+    private async targets(indir: string, outdir: string, ...extensions: string[]) {
+        indir = this.pkg.resolve(indir).replace(/\\/g, "/");
+        outdir = this.pkg.resolve(outdir).replace(/\\/g, "/");
+
+        return (await glob(extensions.map(ext => `${indir}/**/*.${ext}`))).map(file => ({
+            in: file,
+            out: `${outdir}/${file.slice(indir.length + 1)}`,
+        }));
+    }
 }
 
 export namespace Project {

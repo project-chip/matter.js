@@ -4,21 +4,40 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { spawn } from "child_process";
+import { spawn, SpawnOptions } from "child_process";
+import { platform } from "os";
 
 import colors from "ansi-colors";
 
 export async function execute(bin: string, argv: string[]) {
     return new Promise<void>((resolve, reject) => {
-        const proc = spawn(bin, argv, {
+        let finished = false;
+
+        const options: SpawnOptions = {
             stdio: "inherit",
+        };
+        if (platform() === "win32") {
+            options.shell = true;
+        }
+
+        const proc = spawn(bin, argv, options);
+
+        proc.on("error", e => {
+            finished = true;
+            reject(e);
         });
-        proc.on("error", reject);
+
         proc.on("close", code => {
-            if (code !== 0) {
-                process.exit(code ?? -1);
+            if (finished) {
+                return;
             }
-            resolve();
+            finished = true;
+
+            if (code === 0) {
+                resolve();
+            } else {
+                reject(`Process ${bin} exited with code ${code}`);
+            }
         });
     });
 }

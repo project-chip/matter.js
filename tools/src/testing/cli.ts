@@ -151,7 +151,12 @@ function loadFiles(format: "esm" | "cjs", specs: string[]) {
         if (!spec.startsWith(".") && !spec.startsWith("build/") && !spec.startsWith("dist/")) {
             spec = `build/${format}/${spec}`;
         }
-        tests.push(...glob.sync(Package.project.resolve(spec)));
+        spec = Package.project.resolve(spec);
+
+        // Glob only understands forward-slash as separator because reasons
+        spec = spec.replace(/\\/g, "/");
+
+        tests.push(...glob.sync(spec));
     }
 
     if (!tests.length) {
