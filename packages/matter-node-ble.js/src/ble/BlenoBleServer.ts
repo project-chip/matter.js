@@ -28,12 +28,7 @@ function initializeBleno(server: BlenoBleServer, hciId?: number) {
     if (hciId !== undefined) {
         process.env.BLENO_HCI_DEVICE_ID = hciId.toString();
     }
-    try {
-        Bleno = require("@abandonware/bleno");
-    } catch (error: any) {
-        logger.error(`Error loading Bleno: ${error.message}`);
-        throw error;
-    }
+    Bleno = require("@abandonware/bleno");
 
     class BtpWriteCharacteristicC1 extends Bleno.Characteristic {
         constructor() {

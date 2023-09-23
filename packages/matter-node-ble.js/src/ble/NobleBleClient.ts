@@ -18,16 +18,11 @@ function loadNoble(hciId?: number) {
     if (hciId !== undefined) {
         process.env.NOBLE_HCI_DEVICE_ID = hciId.toString();
     }
-    try {
-        noble = require("@abandonware/noble");
-        if (typeof noble.on !== "function") {
-            // The following commit broke the default exported instance of noble:
-            // https://github.com/abandonware/noble/commit/b67eea246f719947fc45b1b52b856e61637a8a8e
-            noble = (noble as any)({ extended: false });
-        }
-    } catch (error: any) {
-        logger.error(`Error loading noble: ${error.message}`);
-        throw error;
+    noble = require("@abandonware/noble");
+    if (typeof noble.on !== "function") {
+        // The following commit broke the default exported instance of noble:
+        // https://github.com/abandonware/noble/commit/b67eea246f719947fc45b1b52b856e61637a8a8e
+        noble = (noble as any)({ extended: false });
     }
 }
 
