@@ -78,7 +78,7 @@ export class UdpMulticastServer {
                         const broadcastTarget = iPv4 ? this.broadcastAddressIpv4 : this.broadcastAddressIpv6;
                         if (broadcastTarget == undefined) {
                             // IPv4 but disabled, so just resolve
-                            return Promise.resolve();
+                            return;
                         }
                         try {
                             await (
