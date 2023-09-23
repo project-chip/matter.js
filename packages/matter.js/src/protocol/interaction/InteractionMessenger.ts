@@ -12,6 +12,7 @@ import { MatterController } from "../../MatterController.js";
 import { MatterDevice } from "../../MatterDevice.js";
 import { ExchangeProvider } from "../../protocol/ExchangeManager.js";
 import {
+    ExchangeSendOptions,
     MessageExchange,
     RetransmissionLimitReachedError,
     UnexpectedMessageError,
@@ -76,8 +77,8 @@ const logger = Logger.get("InteractionMessenger");
 class InteractionMessenger<ContextT> {
     constructor(protected exchange: MessageExchange<ContextT>) {}
 
-    async send(messageType: number, payload: ByteArray) {
-        return this.exchange.send(messageType, payload);
+    async send(messageType: number, payload: ByteArray, options?: ExchangeSendOptions) {
+        return this.exchange.send(messageType, payload, options);
     }
 
     sendStatus(status: StatusCode) {
@@ -328,9 +329,9 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
     }
 
     /** Implements a send method with an automatic reconnection mechanism */
-    override async send(messageType: number, payload: ByteArray, expectAckOnly = false) {
+    override async send(messageType: number, payload: ByteArray, options?: ExchangeSendOptions) {
         try {
-            return await this.exchange.send(messageType, payload, expectAckOnly);
+            return await this.exchange.send(messageType, payload, options);
         } catch (error) {
             // When retransmission failed (most likely due to a lost connection or invalid session),
             // try to reconnect if possible and resend the message once
@@ -382,9 +383,14 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         };
     }
 
-    async sendInvokeCommand(invokeRequest: InvokeRequest) {
+    async sendInvokeCommand(invokeRequest: InvokeRequest, minimumResponseTimeoutMs?: number) {
         if (invokeRequest.suppressResponse) {
-            await this.requestWithSuppressedResponse(MessageType.InvokeCommandRequest, TlvInvokeRequest, invokeRequest);
+            await this.requestWithSuppressedResponse(
+                MessageType.InvokeCommandRequest,
+                TlvInvokeRequest,
+                invokeRequest,
+                minimumResponseTimeoutMs,
+            );
         } else {
             return await this.request(
                 MessageType.InvokeCommandRequest,
@@ -392,6 +398,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
                 MessageType.InvokeCommandResponse,
                 TlvInvokeResponse,
                 invokeRequest,
+                minimumResponseTimeoutMs,
             );
         }
     }
@@ -421,8 +428,12 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         requestMessageType: number,
         requestSchema: TlvSchema<RequestT>,
         request: RequestT,
+        minimumResponseTimeoutMs?: number,
     ): Promise<void> {
-        await this.send(requestMessageType, requestSchema.encode(request), true);
+        await this.send(requestMessageType, requestSchema.encode(request), {
+            expectAckOnly: true,
+            minimumResponseTimeoutMs,
+        });
     }
 
     private async request<RequestT, ResponseT>(
@@ -431,8 +442,12 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
         responseMessageType: number,
         responseSchema: TlvSchema<ResponseT>,
         request: RequestT,
+        minimumResponseTimeoutMs?: number,
     ): Promise<ResponseT> {
-        await this.send(requestMessageType, requestSchema.encode(request));
+        await this.send(requestMessageType, requestSchema.encode(request), {
+            expectAckOnly: false,
+            minimumResponseTimeoutMs,
+        });
         const responseMessage = await this.nextMessage(responseMessageType);
         return responseSchema.decode(responseMessage.payload);
     }

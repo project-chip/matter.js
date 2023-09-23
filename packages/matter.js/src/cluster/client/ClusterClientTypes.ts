@@ -52,7 +52,19 @@ export type EventClients<E extends Events> = Merge<
 
 export type SignatureFromCommandSpec<C extends Command<any, any, any>> = (
     request: RequestType<C>,
-    options?: { asTimedRequest?: boolean; timedRequestTimeoutMs?: number },
+    options?: {
+        /** Send this command as a timed request also when not required. Default timeout are 10 seconds. */
+        asTimedRequest?: boolean;
+
+        /** Override the request timeout when the command is sent as times request. Default are 10s. */
+        timedRequestTimeoutMs?: number;
+
+        /**
+         * Use the extended fail-safe message response timeout of 30 seconds. Use this for all commands
+         * executed during an activated FailSafe context!
+         */
+        useExtendedFailSafeMessageResponseTimeout?: boolean;
+    },
 ) => Promise<ResponseType<C>>;
 type GetterTypeFromSpec<A extends Attribute<any, any>> = A extends OptionalAttribute<infer T, any>
     ? T | undefined

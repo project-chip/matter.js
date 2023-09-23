@@ -284,9 +284,13 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
         commandToId[requestId] = commandName;
         commands[commandName] = async <RequestT, ResponseT>(
             request: RequestT,
-            options: { asTimedRequest?: boolean; timedRequestTimeoutMs?: number } = {},
+            options: {
+                asTimedRequest?: boolean;
+                timedRequestTimeoutMs?: number;
+                useExtendedFailSafeMessageResponseTimeout?: boolean;
+            } = {},
         ) => {
-            const { asTimedRequest, timedRequestTimeoutMs } = options;
+            const { asTimedRequest, timedRequestTimeoutMs, useExtendedFailSafeMessageResponseTimeout } = options;
             return interactionClient.invoke<Command<RequestT, ResponseT, any>>({
                 endpointId,
                 clusterId,
@@ -294,6 +298,7 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
                 request,
                 asTimedRequest,
                 timedRequestTimeoutMs,
+                useExtendedFailSafeMessageResponseTimeout,
             });
         };
         result[commandName] = result.commands[commandName];

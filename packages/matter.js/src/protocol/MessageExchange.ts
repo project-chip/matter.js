@@ -33,6 +33,24 @@ export class UnexpectedMessageError extends MatterError {
     }
 }
 
+export type ExchangeSendOptions = {
+    /**
+     * The response to this send should be an ack only and no StatusResponse or such. If a StatusResponse is returned
+     * then this is handled as error.
+     */
+    expectAckOnly?: boolean;
+
+    /**
+     * Define a minimum Response Timeout. This setting only increases the response timeout! The minimum four
+     * resubmissions are always done regardless of what is specified here. The logic will check if the timeout is
+     * reached after each resubmission, so it is not checked exact at the given timeout.
+     */
+    minimumResponseTimeoutMs?: number;
+
+    /** Allows to specify if the send message requires to be acknowledged by the receiver or not. */
+    requiresAck?: boolean;
+};
+
 /** The base number for the exponential backoff equation. */
 const MRP_BACKOFF_BASE = 1.6;
 
@@ -193,7 +211,8 @@ export class MessageExchange<ContextT> {
         await this.messagesQueue.write(message);
     }
 
-    async send(messageType: number, payload: ByteArray, expectAckOnly = false) {
+    async send(messageType: number, payload: ByteArray, options?: ExchangeSendOptions) {
+        const { expectAckOnly = false, minimumResponseTimeoutMs, requiresAck } = options ?? {};
         if (this.sentMessageToAck !== undefined)
             throw new MatterFlowError("The previous message has not been acked yet, cannot send a new message.");
 
@@ -215,7 +234,7 @@ export class MessageExchange<ContextT> {
                 protocolId: messageType === MessageType.StandaloneAck ? SECURE_CHANNEL_PROTOCOL_ID : this.protocolId,
                 messageType,
                 isInitiatorMessage: this.isInitiator,
-                requiresAck: messageType !== MessageType.StandaloneAck,
+                requiresAck: requiresAck ?? messageType !== MessageType.StandaloneAck,
                 ackedMessageId: this.receivedMessageToAck?.packetHeader.messageId,
             },
             payload,
@@ -227,7 +246,11 @@ export class MessageExchange<ContextT> {
         if (message.payloadHeader.requiresAck) {
             this.sentMessageToAck = message;
             this.retransmissionTimer = Time.getTimer(this.getResubmissionBackOffTime(0), () =>
-                this.retransmitMessage(message, 0),
+                this.retransmitMessage(
+                    message,
+                    0,
+                    minimumResponseTimeoutMs !== undefined ? Time.nowMs() + minimumResponseTimeoutMs : undefined,
+                ),
             );
             const { promise, resolver, rejecter } = createPromise<Message>();
             ackPromise = promise;
@@ -284,9 +307,12 @@ export class MessageExchange<ContextT> {
         );
     }
 
-    private retransmitMessage(message: Message, retransmissionCount: number) {
+    private retransmitMessage(message: Message, retransmissionCount: number, notTimeoutBeforeTimeMs?: number) {
         retransmissionCount++;
-        if (retransmissionCount === this.retransmissionRetries) {
+        if (
+            retransmissionCount >= this.retransmissionRetries &&
+            (notTimeoutBeforeTimeMs === undefined || Time.nowMs() > notTimeoutBeforeTimeMs)
+        ) {
             if (this.sentMessageToAck !== undefined && this.sentMessageAckFailure !== undefined) {
                 this.receivedMessageToAck = undefined;
                 this.sentMessageAckFailure(new RetransmissionLimitReachedError());
@@ -303,14 +329,14 @@ export class MessageExchange<ContextT> {
         }
         const resubmissionBackoffTime = this.getResubmissionBackOffTime(retransmissionCount);
         logger.debug(
-            `Resubmit message ${message.packetHeader.messageId} (attempt ${retransmissionCount}, next backoff time ${resubmissionBackoffTime}ms))`,
+            `Resubmit message ${message.packetHeader.messageId} (retransmission attempt ${retransmissionCount}, next backoff time ${resubmissionBackoffTime}ms))`,
         );
 
         this.channel
             .send(message)
             .then(() => {
                 this.retransmissionTimer = Time.getTimer(resubmissionBackoffTime, () =>
-                    this.retransmitMessage(message, retransmissionCount),
+                    this.retransmitMessage(message, retransmissionCount, notTimeoutBeforeTimeMs),
                 ).start();
             })
             .catch(error => logger.error("An error happened when retransmitting a message", error));
