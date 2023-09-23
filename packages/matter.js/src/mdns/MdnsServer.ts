@@ -16,11 +16,12 @@ export const MDNS_BROADCAST_IPV6 = "ff02::fb";
 export const MDNS_BROADCAST_PORT = 5353;
 
 export class MdnsServer {
-    static async create(netInterface?: string) {
+    static async create(options?: { enableIpv4?: boolean; netInterface?: string }) {
+        const { enableIpv4 = true, netInterface } = options ?? {};
         return new MdnsServer(
             await UdpMulticastServer.create({
                 netInterface: netInterface,
-                broadcastAddressIpv4: MDNS_BROADCAST_IPV4,
+                broadcastAddressIpv4: enableIpv4 ? MDNS_BROADCAST_IPV4 : undefined,
                 broadcastAddressIpv6: MDNS_BROADCAST_IPV6,
                 listeningPort: MDNS_BROADCAST_PORT,
             }),

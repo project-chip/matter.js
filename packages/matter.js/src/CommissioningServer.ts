@@ -91,9 +91,6 @@ export interface CommissioningServerOptions {
     /** Port of the server, normally automatically managed. */
     port: number;
 
-    /** If set to true no IPv4 socket listener is sed and only IPv6 is supported. */
-    disableIpv4?: boolean;
-
     /** IPv4 listener address, defaults to all interfaces.*/
     listeningAddressIpv4?: string;
 
@@ -497,7 +494,7 @@ export class CommissioningServer extends MatterNode {
             .addScanner(this.mdnsScanner)
             .addProtocolHandler(secureChannelProtocol)
             .addProtocolHandler(this.interactionServer);
-        if (this.options.disableIpv4 !== true) {
+        if (!this.ipv4Disabled) {
             this.deviceInstance.addTransportInterface(
                 await UdpInterface.create("udp4", this.port, this.options.listeningAddressIpv4),
             );

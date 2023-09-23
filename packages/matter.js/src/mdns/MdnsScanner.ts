@@ -67,14 +67,16 @@ const MAX_MDNS_MESSAGE_SIZE = 1500;
  * It sends out queries to discover various types of Matter device types and listens for announcements.
  */
 export class MdnsScanner implements Scanner {
-    static async create(netInterface?: string) {
+    static async create(options?: { enableIpv4?: boolean; netInterface?: string }) {
+        const { enableIpv4, netInterface } = options ?? {};
         return new MdnsScanner(
             await UdpMulticastServer.create({
                 netInterface: netInterface,
-                broadcastAddressIpv4: MDNS_BROADCAST_IPV4,
+                broadcastAddressIpv4: enableIpv4 ? MDNS_BROADCAST_IPV4 : undefined,
                 broadcastAddressIpv6: MDNS_BROADCAST_IPV6,
                 listeningPort: MDNS_BROADCAST_PORT,
             }),
+            enableIpv4,
         );
     }
 
@@ -87,7 +89,10 @@ export class MdnsScanner implements Scanner {
     private readonly recordWaiters = new Map<string, { resolver: () => void; timer: Timer }>();
     private readonly periodicTimer: Timer;
 
-    constructor(private readonly multicastServer: UdpMulticastServer) {
+    constructor(
+        private readonly multicastServer: UdpMulticastServer,
+        private readonly enableIpv4?: boolean,
+    ) {
         multicastServer.onMessage((message, remoteIp, netInterface) =>
             this.handleDnsMessage(message, remoteIp, netInterface),
         );
@@ -545,7 +550,8 @@ export class MdnsScanner implements Scanner {
     private handleIpRecords(answers: DnsRecord<any>[], target: string, netInterface: string) {
         const ipRecords = answers.filter(
             ({ name, recordType }) =>
-                (recordType === DnsRecordType.A || recordType === DnsRecordType.AAAA) && name === target,
+                ((recordType === DnsRecordType.A && this.enableIpv4) || recordType === DnsRecordType.AAAA) &&
+                name === target,
         );
         return (ipRecords as DnsRecord<string>[]).map(({ value }) =>
             value.startsWith("fe80::") ? `${value}%${netInterface}` : value,
@@ -575,14 +581,11 @@ export class MdnsScanner implements Scanner {
 
         const ips = this.handleIpRecords([...answers, ...formerAnswers], target, netInterface);
         if (ips.length === 0 && !this.operationalDeviceRecords.has(matterName)) {
-            this.setQueryRecords(
-                matterName,
-                [
-                    { name: target, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.A },
-                    { name: target, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.AAAA },
-                ],
-                answers,
-            );
+            const queries = [{ name: target, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.AAAA }];
+            if (this.enableIpv4) {
+                queries.push({ name: target, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.A });
+            }
+            this.setQueryRecords(matterName, queries, answers);
         }
         const storedRecords =
             this.operationalDeviceRecords.get(matterName) ?? new Map<string, MatterServerRecordWithExpire>();
@@ -654,14 +657,11 @@ export class MdnsScanner implements Scanner {
             if (ips.length === 0) {
                 const queryId = this.findCommissionableQueryIdentifier("", storedRecord);
                 if (queryId === undefined) continue;
-                this.setQueryRecords(
-                    queryId,
-                    [
-                        { name: target, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.A },
-                        { name: target, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.AAAA },
-                    ],
-                    answers,
-                );
+                const queries = [{ name: target, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.AAAA }];
+                if (this.enableIpv4) {
+                    queries.push({ name: target, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.A });
+                }
+                this.setQueryRecords(queryId, queries, answers);
             } else {
                 for (const ip of ips) {
                     const matterServer = storedRecord.addresses.get(ip) ?? { ip, port, type: "udp", expires: 0 };

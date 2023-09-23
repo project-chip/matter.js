@@ -130,7 +130,7 @@ class BridgedDevice {
          * are called.
          */
 
-        this.matterServer = new MatterServer(storageManager, netAnnounceInterface);
+        this.matterServer = new MatterServer(storageManager, { mdnsAnnounceInterface: netAnnounceInterface });
 
         const commissioningServer = new CommissioningServer({
             port,

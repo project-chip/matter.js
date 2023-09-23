@@ -60,7 +60,6 @@ const logger = new Logger("CommissioningController");
 export interface CommissioningControllerOptions {
     serverAddress?: ServerAddressIp;
     readonly localPort?: number;
-    readonly disableIpv4?: boolean;
     readonly listeningAddressIpv4?: string;
     readonly listeningAddressIpv6?: string;
 
@@ -115,9 +114,7 @@ export class CommissioningController extends MatterNode {
         const { localPort, passcode, longDiscriminator, shortDiscriminator } = this.options;
         this.controllerInstance = await MatterController.create(
             this.mdnsScanner,
-            this.options.disableIpv4 !== true
-                ? undefined
-                : await UdpInterface.create("udp4", localPort, this.listeningAddressIpv4),
+            this.ipv4Disabled ? undefined : await UdpInterface.create("udp4", localPort, this.listeningAddressIpv4),
             await UdpInterface.create("udp6", localPort, this.listeningAddressIpv6),
             this.storage,
             this.serverAddress,

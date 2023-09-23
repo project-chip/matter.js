@@ -50,13 +50,20 @@ const DEFAULT_PAIRING_HINT = {
  * This class is handing MDNS Announcements for multiple instances/devices
  */
 export class MdnsBroadcaster {
-    static async create(multicastInterface?: string) {
-        return new MdnsBroadcaster(await MdnsServer.create(multicastInterface));
+    static async create(options?: { enableIpv4?: boolean; multicastInterface?: string }) {
+        const { enableIpv4, multicastInterface } = options ?? {};
+        return new MdnsBroadcaster(
+            await MdnsServer.create({ enableIpv4, netInterface: multicastInterface }),
+            enableIpv4,
+        );
     }
 
     private readonly network = Network.get();
 
-    constructor(private readonly mdnsServer: MdnsServer) {}
+    constructor(
+        private readonly mdnsServer: MdnsServer,
+        private readonly enableIpv4?: boolean,
+    ) {}
 
     validatePairingInstructions(
         pairingHint: TypeFromPartialBitSchema<typeof PairingHintBitmap>,
@@ -157,7 +164,7 @@ export class MdnsBroadcaster {
                 ]),
             ];
             ips.forEach(ip => {
-                if (isIPv4(ip)) {
+                if (isIPv4(ip) && this.enableIpv4) {
                     records.push(ARecord(hostname, ip));
                 } else {
                     records.push(AAAARecord(hostname, ip));
@@ -212,7 +219,7 @@ export class MdnsBroadcaster {
                 records.push(...fabricRecords);
             });
             ips.forEach(ip => {
-                if (isIPv4(ip)) {
+                if (isIPv4(ip) && this.enableIpv4) {
                     records.push(ARecord(hostname, ip));
                 } else {
                     records.push(AAAARecord(hostname, ip));
@@ -272,7 +279,7 @@ export class MdnsBroadcaster {
             }
 
             ips.forEach(ip => {
-                if (isIPv4(ip)) {
+                if (isIPv4(ip) && this.enableIpv4) {
                     records.push(ARecord(hostname, ip));
                 } else {
                     records.push(AAAARecord(hostname, ip));

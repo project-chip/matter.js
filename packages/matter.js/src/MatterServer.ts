@@ -22,6 +22,16 @@ export type NodeOptions = {
     uniqueNodeId?: string;
 };
 
+export type MatterServerOptions = {
+    /** If set to true no IPv4 socket listener is sed and only IPv6 is supported. */
+    disableIpv4?: boolean;
+
+    /**
+     * Interface to use for MDNS announcements. If not provided announcements will be sent from all network interfaces
+     */
+    mdnsAnnounceInterface?: string;
+};
+
 /**
  * Main Matter server class that represents the process on the host allowing to commission and pair multiple devices
  * by reusing MDNS scanner and broadcaster
@@ -36,13 +46,16 @@ export class MatterServer {
      * Create a new Matter server instance
      *
      * @param storageManager Storage manager instance to use for all nodes
-     * @param mdnsAnnounceInterface Optional interface to use for MDNS announcements. If not provided announcements will
-     *                              be sent from all network interfaces
+     * @param options Optional MatterServer options
      */
     constructor(
-        private storageManager: StorageManager,
-        private mdnsAnnounceInterface?: string,
+        private readonly storageManager: StorageManager,
+        private readonly options?: MatterServerOptions,
     ) {}
+
+    get ipv4Disabled() {
+        return !!this.options?.disableIpv4;
+    }
 
     /**
      * Add a CommissioningServer node to the server
@@ -88,10 +101,13 @@ export class MatterServer {
      */
     async start() {
         if (this.mdnsBroadcaster === undefined) {
-            this.mdnsBroadcaster = await MdnsBroadcaster.create(this.mdnsAnnounceInterface);
+            this.mdnsBroadcaster = await MdnsBroadcaster.create({
+                enableIpv4: !this.options?.disableIpv4,
+                multicastInterface: this.options?.mdnsAnnounceInterface,
+            });
         }
         if (this.mdnsScanner === undefined) {
-            this.mdnsScanner = await MdnsScanner.create();
+            this.mdnsScanner = await MdnsScanner.create({ enableIpv4: !this.options?.disableIpv4 });
         }
         // TODO the mdns classes will later be in this class and assigned differently!!
         for (const node of this.nodes) {
@@ -107,6 +123,7 @@ export class MatterServer {
         }
         node.setMdnsBroadcaster(this.mdnsBroadcaster);
         node.setMdnsScanner(this.mdnsScanner);
+        node.ipv4Disabled = this.ipv4Disabled;
     }
 
     /**
