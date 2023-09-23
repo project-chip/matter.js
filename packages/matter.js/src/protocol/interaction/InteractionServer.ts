@@ -31,6 +31,7 @@ import { assertSecureSession, SecureSession } from "../../session/SecureSession.
 import { StorageContext } from "../../storage/StorageContext.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { toHexString } from "../../util/Number.js";
 import { decodeAttributeValueWithSchema, normalizeAttributeData } from "./AttributeDataDecoder.js";
 import { InteractionEndpointStructure } from "./InteractionEndpointStructure.js";
 import {
