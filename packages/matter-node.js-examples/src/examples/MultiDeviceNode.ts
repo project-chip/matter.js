@@ -112,7 +112,7 @@ class Device {
          * are called.
          */
 
-        this.matterServer = new MatterServer(storageManager, netAnnounceInterface);
+        this.matterServer = new MatterServer(storageManager, { mdnsAnnounceInterface: netAnnounceInterface });
 
         /**
          * Create Device instance and add needed Listener

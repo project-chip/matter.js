@@ -16,7 +16,8 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Enhance: Introduced building and building, running and test executions scripts to not use ts-node anymore and many more optimizations to test and build processes
   * Enhance: ClusterFactory internally uses a simplified method of CLuster types that are compatible to the current ones but soon might replace them
 * matter.js API:
-  * Breaking: Remove "disableIpv4" from CommissioningController/Server options to MatterServer to also consider it for MDNS scanning and broadcasting
+  * Breaking: Move "disableIpv4" from CommissioningController/Server options to MatterServer to also consider it for MDNS scanning and broadcasting
+  * Breaking: Change MatterServer constructor second parameter to be an options object
   * Breaking: Streamline Device API and rename onOff/isOnOff -> get/setOnOff
   * Breaking: EndpointStructureLogger (method logEndpointStructure) was moved from util to device export!
 
