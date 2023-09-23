@@ -42,7 +42,7 @@ jobs:
           npm install --global node-gyp@latest
           npm prefix -g | % {npm config set node_gyp "$_\node_modules\node-gyp\bin\node-gyp.js"}
       - name: Install dependencies and build project
-        run: npm ci
+        run: npm ci --foreground-scripts
 
   test:
     needs: [ check-and-lint ]
