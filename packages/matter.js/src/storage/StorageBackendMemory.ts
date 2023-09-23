@@ -25,6 +25,10 @@ export class StorageBackendMemory implements Storage {
         // nothing to do
     }
 
+    clear(): void {
+        this.store = {};
+    }
+
     get<T extends SupportedStorageTypes>(contexts: string[], key: string): T | undefined {
         if (!contexts.length || !key.length) throw new StorageError("Context and key must not be empty!");
         return this.store[this.createContextKey(contexts)]?.[key];

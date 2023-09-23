@@ -20,7 +20,6 @@ export class StorageBackendJsonFile extends StorageBackendMemory {
     committed = Promise.resolve();
 
     private readonly commitTimer = Time.getTimer(StorageBackendJsonFile.commitDelay, () => this.commit());
-    private waitForCommit = false; // TODO: replace by commitTimer.isRunning() method (needs to be added)
     private closed = false;
     private initialized = false;
     private resolveCommitted?: () => void;
@@ -42,32 +41,39 @@ export class StorageBackendJsonFile extends StorageBackendMemory {
         this.initialized = true;
     }
 
-    override set<T extends SupportedStorageTypes>(contexts: string[], key: string, value: T): void {
-        super.set(contexts, key, value);
-        if (!this.waitForCommit) {
+    private triggerCommit() {
+        if (!this.commitTimer.isRunning) {
             this.committed = new Promise(resolve => {
                 this.resolveCommitted = resolve;
             });
-            this.waitForCommit = true;
             this.commitTimer.start();
         }
+    }
+
+    override set<T extends SupportedStorageTypes>(contexts: string[], key: string, value: T): void {
+        super.set(contexts, key, value);
+        this.triggerCommit();
     }
 
     override delete(contexts: string[], key: string): void {
         super.delete(contexts, key);
-        if (!this.waitForCommit) {
-            this.waitForCommit = true;
-            this.commitTimer.start();
-        }
+        this.triggerCommit();
+    }
+
+    override clear(): void {
+        super.clear();
+        this.triggerCommit();
     }
 
     private async commit() {
         if (!this.initialized || this.closed) return;
-        this.waitForCommit = false;
+        if (this.commitTimer.isRunning) {
+            this.commitTimer.stop();
+        }
         try {
             await writeFile(this.path, this.toJson(this.store), "utf-8");
         } finally {
-            if (!this.waitForCommit) {
+            if (this.resolveCommitted !== undefined) {
                 this.resolveCommitted?.();
             }
         }
