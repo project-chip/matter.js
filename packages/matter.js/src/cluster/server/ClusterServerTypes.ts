@@ -131,7 +131,17 @@ type AttributeHandlers<A extends Attributes> = Merge<
 >;
 export type ClusterServerHandlers<C extends Cluster<any, any, any, any, any>> = Merge<
     CommandHandlers<C["commands"], AttributeServers<C["attributes"]>, EventServers<C["events"]>>,
-    AttributeHandlers<C["attributes"]>
+    Merge<
+        AttributeHandlers<C["attributes"]>,
+        {
+            initializeClusterServer?: (args: {
+                attributes: AttributeServers<C["attributes"]>;
+                events: EventServers<C["events"]>;
+                endpoint: Endpoint;
+            }) => void;
+            destroyClusterServer?: () => void;
+        }
+    >
 >;
 
 export type CommandServers<C extends Commands> = Merge<
@@ -303,7 +313,7 @@ export type ClusterServerObjInternal<A extends Attributes, C extends Commands, E
     readonly _events: EventServers<E>;
 
     /**
-     * Assign this cluster to a specific endpoint
+     * Assign this cluster to a specific endpoint. This method also initializes the internal Cluster logics
      * @private
      *
      * @param endpoint Endpoint to assign to
@@ -344,6 +354,12 @@ export type ClusterServerObjInternal<A extends Attributes, C extends Commands, E
      * @private
      */
     readonly _verifySceneExtensionFieldSets: (values: TypeFromSchema<typeof Scenes.TlvAttributeValuePair>[]) => boolean;
+
+    /**
+     * Destroy internal cluster logics, timers and such
+     * @private
+     */
+    readonly _destroy: () => void;
 };
 
 export function isClusterServer<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(

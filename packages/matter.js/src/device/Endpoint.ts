@@ -82,11 +82,18 @@ export class Endpoint {
         this.childEndpoints.forEach(endpoint => endpoint.setStructureChangedCallback(callback));
     }
 
-    clearStructureChangedCallback() {
+    removeFromStructure() {
+        this.destroy();
         this.structureChangedCallback = () => {
             /** noop **/
         };
-        this.childEndpoints.forEach(endpoint => endpoint.clearStructureChangedCallback());
+        this.childEndpoints.forEach(endpoint => endpoint.removeFromStructure());
+    }
+
+    destroy() {
+        for (const clusterServer of this.clusterServers.values()) {
+            asClusterServerInternal(clusterServer)._destroy();
+        }
     }
 
     getId() {
@@ -137,6 +144,10 @@ export class Endpoint {
     }
 
     addClusterServer<A extends Attributes, E extends Events>(cluster: ClusterServerObj<A, E>) {
+        const currentCluster = this.clusterServers.get(cluster.id);
+        if (currentCluster !== undefined) {
+            asClusterServerInternal(currentCluster)._destroy();
+        }
         asClusterServerInternal(cluster)._assignToEndpoint(this);
         if (cluster.id === DescriptorCluster.id) {
             this.descriptorCluster = cluster as unknown as ClusterServerObjForCluster<typeof DescriptorCluster>;
@@ -262,7 +273,7 @@ export class Endpoint {
             throw new ImplementationError(`Provided endpoint for deletion does not exist as child endpoint.`);
         }
         this.childEndpoints.splice(index, 1);
-        endpoint.clearStructureChangedCallback(); // remove
+        endpoint.removeFromStructure();
         this.structureChangedCallback(); // Inform parent about structure change
     }
 

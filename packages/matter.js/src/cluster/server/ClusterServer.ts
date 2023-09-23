@@ -90,6 +90,19 @@ export function ClusterServer<
             for (const name in events) {
                 (events as any)[name].assignToEndpoint(endpoint);
             }
+            if (typeof handlers.initializeClusterServer === "function") {
+                handlers.initializeClusterServer({
+                    attributes,
+                    events,
+                    endpoint,
+                });
+            }
+        },
+
+        _destroy: () => {
+            if (typeof handlers.destroyClusterServer === "function") {
+                handlers.destroyClusterServer();
+            }
         },
 
         _setStorage: (storageContext: StorageContext) => {

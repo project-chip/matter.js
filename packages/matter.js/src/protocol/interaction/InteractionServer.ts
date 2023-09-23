@@ -847,6 +847,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
     async close() {
         this.isClosing = true;
+        this.endpointStructure.destroy();
         for (const subscription of this.subscriptionMap.values()) {
             await subscription.cancel(true);
         }
