@@ -193,9 +193,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         );
 
         if (interactionModelRevision > INTERACTION_MODEL_REVISION) {
-            throw new StatusResponseError(
-                `Interaction model revision ${interactionModelRevision} not supported`,
-                StatusCode.InvalidAction,
+            logger.debug(
+                `Interaction model revision of sender ${interactionModelRevision} is higher than supported ${INTERACTION_MODEL_REVISION}.`,
             );
         }
         if (attributeRequests === undefined && eventRequests === undefined) {
@@ -333,9 +332,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         );
 
         if (interactionModelRevision > INTERACTION_MODEL_REVISION) {
-            throw new StatusResponseError(
-                `Interaction model revision ${interactionModelRevision} not supported`,
-                StatusCode.InvalidAction,
+            logger.debug(
+                `Interaction model revision of sender ${interactionModelRevision} is higher than supported ${INTERACTION_MODEL_REVISION}.`,
             );
         }
 
@@ -546,9 +544,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         );
 
         if (interactionModelRevision > INTERACTION_MODEL_REVISION) {
-            throw new StatusResponseError(
-                `Interaction model revision ${interactionModelRevision} not supported`,
-                StatusCode.InvalidAction,
+            logger.debug(
+                `Interaction model revision of sender ${interactionModelRevision} is higher than supported ${INTERACTION_MODEL_REVISION}.`,
             );
         }
 
@@ -690,9 +687,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         );
 
         if (interactionModelRevision > INTERACTION_MODEL_REVISION) {
-            throw new StatusResponseError(
-                `Interaction model revision ${interactionModelRevision} not supported`,
-                StatusCode.InvalidAction,
+            logger.debug(
+                `Interaction model revision of sender ${interactionModelRevision} is higher than supported ${INTERACTION_MODEL_REVISION}.`,
             );
         }
 
@@ -836,9 +832,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         logger.debug(`Received timed request (${timeout}ms) from ${exchange.channel.name}`);
 
         if (interactionModelRevision > INTERACTION_MODEL_REVISION) {
-            throw new StatusResponseError(
-                `Interaction model revision ${interactionModelRevision} not supported`,
-                StatusCode.InvalidAction,
+            logger.debug(
+                `Interaction model revision of sender ${interactionModelRevision} is higher than supported ${INTERACTION_MODEL_REVISION}.`,
             );
         }
 
