@@ -8,12 +8,7 @@ import { PresentAttributeClient, UnknownPresentAttributeClient } from "../cluste
 import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
 import { PresentEventClient, UnknownPresentEventClient } from "../cluster/client/EventClient.js";
 import { GlobalAttributes } from "../cluster/Cluster.js";
-import {
-    AttributeServer,
-    FabricScopedAttributeServer,
-    FabricScopeError,
-    FixedAttributeServer,
-} from "../cluster/server/AttributeServer.js";
+import { AnyAttributeServer, FabricScopeError } from "../cluster/server/AttributeServer.js";
 import { asClusterServerInternal, ClusterServerObj } from "../cluster/server/ClusterServerTypes.js";
 import { Endpoint } from "../device/Endpoint.js";
 import { Logger } from "../log/Logger.js";
@@ -44,7 +39,7 @@ type EndpointLoggingOptions = {
 };
 
 function getAttributeServerValue(
-    attribute: AttributeServer<any> | FixedAttributeServer<any> | FabricScopedAttributeServer<any>,
+    attribute: AnyAttributeServer<any>,
     options: EndpointLoggingOptions = {
         logNotPresentClusterAttributes: false,
         logNotPresentClusterEvents: false,

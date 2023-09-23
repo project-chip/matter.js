@@ -4,11 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-    AttributeServer,
-    FabricScopedAttributeServer,
-    FixedAttributeServer,
-} from "../../cluster/server/AttributeServer.js";
+import { AnyAttributeServer, FabricScopedAttributeServer } from "../../cluster/server/AttributeServer.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { NodeId } from "../../datatype/NodeId.js";
@@ -77,7 +73,7 @@ export class SubscriptionHandler {
     private readonly attributeListeners = new Map<
         string,
         {
-            attribute: FixedAttributeServer<any> | AttributeServer<any> | FabricScopedAttributeServer<any>;
+            attribute: AnyAttributeServer<any>;
             listener?: (value: any, version: number) => void;
         }
     >();

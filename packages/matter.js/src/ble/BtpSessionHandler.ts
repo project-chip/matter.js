@@ -182,7 +182,7 @@ export class BtpSessionHandler {
                     );
                 } else {
                     logger.warn(
-                        `Received data ${data.length} bytes exceeds fragment size of ${this.fragmentSize} bytes`,
+                        `Received data ${data.length} bytes exceeds fragment size of ${this.fragmentSize} bytes, still accepting`,
                     );
                 }
             }

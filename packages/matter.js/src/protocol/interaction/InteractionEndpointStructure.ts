@@ -4,11 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-    AttributeServer,
-    FabricScopedAttributeServer,
-    FixedAttributeServer,
-} from "../../cluster/server/AttributeServer.js";
+import { AnyAttributeServer } from "../../cluster/server/AttributeServer.js";
 import { ClusterServerObj, asClusterServerInternal } from "../../cluster/server/ClusterServerTypes.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
@@ -37,7 +33,7 @@ import {
 
 export class InteractionEndpointStructure {
     endpoints = new Map<EndpointNumber, Endpoint>();
-    attributes = new Map<string, AttributeServer<any> | FabricScopedAttributeServer<any> | FixedAttributeServer<any>>();
+    attributes = new Map<string, AnyAttributeServer<any>>();
     attributePaths = new Array<AttributePath>();
     events = new Map<string, EventServer<any>>();
     eventPaths = new Array<EventPath>();
@@ -191,7 +187,7 @@ export class InteractionEndpointStructure {
         endpointId: EndpointNumber,
         clusterId: ClusterId,
         attributeId: AttributeId,
-    ): AttributeServer<any> | FabricScopedAttributeServer<any> | FixedAttributeServer<any> | undefined {
+    ): AnyAttributeServer<any> | undefined {
         return this.attributes.get(attributePathToId({ endpointId, clusterId, attributeId }));
     }
 

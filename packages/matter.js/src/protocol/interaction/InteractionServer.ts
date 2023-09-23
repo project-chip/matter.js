@@ -6,9 +6,9 @@
 
 import { TlvNoResponse } from "../../cluster/Cluster.js";
 import {
+    AnyAttributeServer,
     AttributeServer,
     FabricScopedAttributeServer,
-    FixedAttributeServer,
 } from "../../cluster/server/AttributeServer.js";
 import { asClusterServerInternal } from "../../cluster/server/ClusterServerTypes.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
@@ -84,7 +84,7 @@ export interface EventPath {
 
 export interface AttributeWithPath {
     path: TypeFromSchema<typeof TlvAttributePath>;
-    attribute: AttributeServer<any> | FabricScopedAttributeServer<any> | FixedAttributeServer<any>;
+    attribute: AnyAttributeServer<any>;
 }
 
 export interface EventWithPath {

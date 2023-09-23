@@ -31,8 +31,7 @@
         "matter-bridge": "run src/examples/BridgedDevicesNode.ts",
         "matter-composeddevice": "run src/examples/ComposedDeviceNode.ts",
         "matter-multidevice": "run src/examples/MultiDeviceNode.ts",
-        "matter-controller": "run src/examples/ControllerNode.ts",
-        "test": "true"
+        "matter-controller": "run src/examples/ControllerNode.ts"
     },
     "bin": {
         "matter-device": "./dist/cjs/examples/DeviceNode.js",
