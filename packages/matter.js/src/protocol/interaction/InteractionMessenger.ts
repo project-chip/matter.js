@@ -62,6 +62,7 @@ export class StatusResponseError extends MatterError {
     public constructor(
         message: string,
         public readonly code: StatusCode,
+        public readonly clusterCode?: number,
     ) {
         super();
 

@@ -14,7 +14,7 @@ import {
     TlvNoResponse,
 } from "../../cluster/Cluster.js";
 import { resolveAttributeName, resolveCommandName, resolveEventName } from "../../cluster/ClusterHelper.js";
-import { ImplementationError, MatterError, MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
+import { ImplementationError, MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
@@ -788,7 +788,11 @@ export class InteractionClient {
             if (status !== undefined) {
                 const resultCode = status.status.status;
                 if (resultCode !== StatusCode.Success)
-                    throw new MatterError(`Received non-success result: ${resultCode}`);
+                    throw new StatusResponseError(
+                        `Received non-success result: ${resultCode}`,
+                        resultCode ?? StatusCode.Failure,
+                        status.status.clusterStatus,
+                    );
                 if ((responseSchema as any) !== TlvNoResponse)
                     throw new MatterFlowError("A response was expected for this command.");
                 return undefined as unknown as ResponseType<C>; // ResponseType is void, force casting the empty result

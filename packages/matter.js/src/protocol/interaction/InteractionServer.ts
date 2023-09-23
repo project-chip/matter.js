@@ -373,7 +373,13 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         const writeData = normalizeAttributeData(writeRequests, true);
 
         const writeResults = writeData.flatMap(
-            (values): { path: TypeFromSchema<typeof TlvAttributePath>; statusCode: StatusCode }[] => {
+            (
+                values,
+            ): {
+                path: TypeFromSchema<typeof TlvAttributePath>;
+                statusCode: StatusCode;
+                clusterStatusCode?: number;
+            }[] => {
                 const { path, dataVersion } = values[0];
                 const attributes = this.endpointStructure.getAttributes([path], true);
                 const { endpointId, clusterId, attributeId } = path;
@@ -489,7 +495,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                                 } to ${this.endpointStructure.resolveAttributeName(path)}: ${error.message}`,
                             );
                             if (error instanceof StatusResponseError) {
-                                return { path, statusCode: error.code };
+                                return { path, statusCode: error.code, clusterStatusCode: error.clusterCode };
                             }
                             return { path, statusCode: StatusCode.ConstraintError };
                         } else {
@@ -522,7 +528,10 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         return {
             interactionModelRevision: INTERACTION_MODEL_REVISION,
-            writeResponses: writeResults.map(({ path, statusCode }) => ({ path, status: { status: statusCode } })),
+            writeResponses: writeResults.map(({ path, statusCode, clusterStatusCode }) => ({
+                path,
+                status: { status: statusCode, clusterStatus: clusterStatusCode },
+            })),
         };
     }
 
@@ -803,15 +812,25 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                                 endpoint,
                             ),
                         StatusResponseError,
-                        async error => ({
-                            code: error.code,
-                            responseId: command.responseId,
-                            response: TlvNoResponse.encodeTlv(),
-                        }),
+                        async error => {
+                            logger.info(
+                                `Error ${toHexString(error.code)}${
+                                    error.clusterCode !== undefined ? `/${toHexString(error.clusterCode)}` : ""
+                                } while invoking command: ${error.message}`,
+                            );
+                            return {
+                                code: error.code,
+                                clusterCode: error.clusterCode,
+                                responseId: command.responseId,
+                                response: TlvNoResponse.encodeTlv(),
+                            };
+                        },
                     );
-                    const { code, responseId, response } = result;
+                    const { code, clusterCode, responseId, response } = result;
                     if (response.length === 0) {
-                        invokeResponses.push({ status: { commandPath: path, status: { status: code } } });
+                        invokeResponses.push({
+                            status: { commandPath: path, status: { status: code, clusterStatus: clusterCode } },
+                        });
                     } else {
                         invokeResponses.push({
                             command: {
