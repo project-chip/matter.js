@@ -75,6 +75,9 @@ export const CommonName_X520 = (name: string) => [DerObject("550403", { value: n
 /** matter-node-id = ASN.1 OID 1.3.6.1.4.1.37244.1.1 */
 export const NodeId_Matter = (nodeId: NodeId) => [DerObject("2b0601040182a27c0101", { value: intTo16Chars(nodeId) })];
 
+/** matter-icac-id = ASN.1 OID 1.3.6.1.4.1.37244.1.3 */
+export const IcacId_Matter = (id: bigint | number) => [DerObject("2b0601040182a27c0103", { value: intTo16Chars(id) })];
+
 /** matter-rcac-id = ASN.1 OID 1.3.6.1.4.1.37244.1.4 */
 export const RcacId_Matter = (id: bigint | number) => [DerObject("2b0601040182a27c0104", { value: intTo16Chars(id) })];
 
@@ -165,6 +168,45 @@ export const TlvOperationalCertificate = TlvObject({
             subjectKeyIdentifier: TlvField(4, TlvByteString.bound({ length: 20 })),
             authorityKeyIdentifier: TlvField(5, TlvByteString.bound({ length: 20 })),
             futureExtension: TlvOptionalField(6, TlvByteString),
+        }),
+    ),
+    signature: TlvField(11, TlvByteString),
+});
+
+// TODO: Add also ASN1 encoder and validator for intermediate certificate
+export const TlvIntermediateCertificate = TlvObject({
+    serialNumber: TlvField(1, TlvByteString.bound({ maxLength: 20 })),
+    signatureAlgorithm: TlvField(2, TlvUInt8),
+    issuer: TlvField(
+        3,
+        TlvList({
+            issuerRcacId: TlvOptionalField(20, TlvUInt64),
+        }),
+    ),
+    notBefore: TlvField(4, TlvUInt32),
+    notAfter: TlvField(5, TlvUInt32),
+    subject: TlvField(
+        6,
+        TlvList({
+            fabricId: TlvOptionalField(21, TlvFabricId),
+            icacId: TlvField(19, TlvUInt64),
+        }),
+    ),
+    publicKeyAlgorithm: TlvField(7, TlvUInt8),
+    ellipticCurveIdentifier: TlvField(8, TlvUInt8),
+    ellipticCurvePublicKey: TlvField(9, TlvByteString),
+    extensions: TlvField(
+        10,
+        TlvList({
+            basicConstraints: TlvField(
+                1,
+                TlvObject({
+                    isCa: TlvField(1, TlvBoolean),
+                }),
+            ),
+            keyUsage: TlvField(2, TlvUInt16),
+            subjectKeyIdentifier: TlvField(4, TlvByteString.bound({ length: 20 })),
+            authorityKeyIdentifier: TlvField(5, TlvByteString.bound({ length: 20 })),
         }),
     ),
     signature: TlvField(11, TlvByteString),
@@ -282,6 +324,7 @@ export const TlvCertificationDeclaration = TlvObject({
 });
 
 export type RootCertificate = TypeFromSchema<typeof TlvRootCertificate>;
+export type IntermediateCertificate = TypeFromSchema<typeof TlvIntermediateCertificate>;
 export type OperationalCertificate = TypeFromSchema<typeof TlvOperationalCertificate>;
 type Unsigned<Type> = { [Property in keyof Type as Exclude<Property, "signature">]: Type[Property] };
 
