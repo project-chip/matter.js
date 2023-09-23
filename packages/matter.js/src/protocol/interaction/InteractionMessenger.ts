@@ -276,7 +276,10 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
         if (dataReport.suppressResponse) {
             // We do not expect a response other than a Standalone Ack, so if we receive anything else, we throw an error
             await tryCatchAsync(
-                async () => await this.exchange.send(MessageType.ReportData, TlvDataReport.encode(dataReport), true),
+                async () =>
+                    await this.exchange.send(MessageType.ReportData, TlvDataReport.encode(dataReport), {
+                        expectAckOnly: true,
+                    }),
                 UnexpectedMessageError,
                 async error => {
                     const { receivedMessage } = error;
