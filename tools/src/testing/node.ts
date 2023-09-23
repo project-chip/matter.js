@@ -49,14 +49,27 @@ export async function testNode(format: "cjs" | "esm", files: string[], reporter:
     }
 }
 
+// We use string concatenation to prevent TS from trying to find profiler
+// library types.  It doesn't build on all platforms we support and doesn't
+// provide type declarations when it doesn't build
+//
+// This interface acts as a replacement for proper types
+export interface Profilerish {
+    setGenerateType(value: number): void;
+    startProfiling(): void;
+    stopProfiling(): {
+        export(callback: (error: any, result: string) => any): void;
+    };
+}
+
 // v8-profiler-next doesn't manage switching node versions well.  Load
 // dynamically so it doesn't interfere if it's not built and we're not
 // profiling
 class Profiler {
-    #profiler?: typeof import("v8-profiler-next");
+    #profiler?: Profilerish;
 
     async start() {
-        this.#profiler = await import("v8-profiler-next");
+        this.#profiler = (await import("" + "v8-profiler-next")) as Profilerish;
         this.#profiler.setGenerateType(1);
         this.#profiler.startProfiling();
     }

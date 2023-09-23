@@ -23,6 +23,7 @@ export async function main(argv = process.argv) {
 
     script = resolve(script);
     let dir;
+
     if (script.match(/[\\/]node_modules[\\/].bin[\\/]/)) {
         // When executing a script linked under node_modules, search for the
         // project from cwd.  This occurs when running tooling such as

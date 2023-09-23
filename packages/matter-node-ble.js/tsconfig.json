@@ -3,6 +3,7 @@
 
   "compilerOptions": {
     "types": [
+      "node",
       "@project-chip/matter.js-tools",
       "mocha"
     ]
