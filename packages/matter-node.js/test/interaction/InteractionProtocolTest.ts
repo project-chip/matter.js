@@ -241,27 +241,27 @@ const WRITE_RESPONSE: WriteResponse = {
     writeResponses: [
         {
             path: { attributeId: AttributeId(100), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
-            status: { status: 134 },
+            status: { clusterStatus: undefined, status: 134 },
         },
         {
             path: { attributeId: AttributeId(4), clusterId: ClusterId(0x99), endpointId: EndpointNumber(0) },
-            status: { status: 195 },
+            status: { clusterStatus: undefined, status: 195 },
         },
         {
             path: { attributeId: AttributeId(4), clusterId: ClusterId(40), endpointId: EndpointNumber(1) },
-            status: { status: 127 },
+            status: { clusterStatus: undefined, status: 127 },
         },
         {
             path: { attributeId: AttributeId(5), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
-            status: { status: 0 },
+            status: { clusterStatus: undefined, status: 0 },
         },
         {
             path: { attributeId: AttributeId(6), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
-            status: { status: 146 },
+            status: { clusterStatus: undefined, status: 146 },
         },
         {
             path: { attributeId: AttributeId(3), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
-            status: { status: 136 },
+            status: { clusterStatus: undefined, status: 136 },
         },
     ],
 };
@@ -285,7 +285,7 @@ const WRITE_RESPONSE_TIMED_REQUIRED: WriteResponse = {
     writeResponses: [
         {
             path: { attributeId: AttributeId(5), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
-            status: { status: 0 },
+            status: { clusterStatus: undefined, status: 0 },
         },
     ],
 };
@@ -295,7 +295,7 @@ const WRITE_RESPONSE_TIMED_ERROR: WriteResponse = {
     writeResponses: [
         {
             path: { attributeId: AttributeId(5), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
-            status: { status: 198 },
+            status: { clusterStatus: undefined, status: 198 },
         },
     ],
 };
@@ -329,15 +329,15 @@ const MASS_WRITE_RESPONSE: WriteResponse = {
     writeResponses: [
         {
             path: { attributeId: AttributeId(5), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
-            status: { status: 0 },
+            status: { clusterStatus: undefined, status: 0 },
         },
         {
             path: { attributeId: AttributeId(6), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
-            status: { status: 0 },
+            status: { clusterStatus: undefined, status: 0 },
         },
         {
             path: { attributeId: AttributeId(16), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
-            status: { status: 0 },
+            status: { clusterStatus: undefined, status: 0 },
         },
     ],
 };
@@ -416,7 +416,7 @@ const CHUNKED_ARRAY_WRITE_RESPONSE: WriteResponse = {
     writeResponses: [
         {
             path: { attributeId: AttributeId(0), clusterId: ClusterId(31), endpointId: EndpointNumber(0) },
-            status: { status: 0 },
+            status: { clusterStatus: undefined, status: 0 },
         },
     ],
 };
@@ -473,7 +473,7 @@ const INVOKE_COMMAND_RESPONSE_TIMED_REQUIRED_SUCCESS: InvokeResponse = {
         {
             status: {
                 commandPath: { clusterId: ClusterId(0x3c), commandId: CommandId(2), endpointId: EndpointNumber(0) },
-                status: { status: 0 },
+                status: { clusterStatus: undefined, status: 0 },
             },
         },
     ],
@@ -534,7 +534,7 @@ const INVOKE_COMMAND_RESPONSE: InvokeResponse = {
         {
             status: {
                 commandPath: { clusterId: ClusterId(6), commandId: CommandId(1), endpointId: EndpointNumber(0) },
-                status: { status: 0 },
+                status: { clusterStatus: undefined, status: 0 },
             },
         },
     ],
@@ -578,13 +578,13 @@ const INVOKE_COMMAND_RESPONSE_MULTI: InvokeResponse = {
         {
             status: {
                 commandPath: { clusterId: ClusterId(6), commandId: CommandId(1), endpointId: EndpointNumber(0) },
-                status: { status: 0 },
+                status: { clusterStatus: undefined, status: 0 },
             },
         },
         {
             status: {
                 commandPath: { clusterId: ClusterId(6), commandId: CommandId(0), endpointId: EndpointNumber(0) },
-                status: { status: 0 },
+                status: { clusterStatus: undefined, status: 0 },
             },
         },
     ],
