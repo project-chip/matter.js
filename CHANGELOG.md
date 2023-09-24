@@ -6,15 +6,22 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
 ## 0.6.0 WIP
 * Matter-Core functionality:
   * Fix: Adjusted Event Priority definition to match to specs
-  * Fix: Prevented crashes when Bleno could not be initialized (e.g. on Windows)
   * Fix: Adjusted Bleno and Noble to be optional Dependencies to allow building the Monorepo also when these are failing (e.g. on Windows)
   * Feature: Implemented TimedInteractions for Write/Invoke request s as required by specs
   * Feature: Added support for generic Response suppression if requested or needed for group communication
   * Feature (orlenkoo) Implemented first OnOff Cluster Lighting feature command handlers (WIP)
   * Feature: Also publishes matter-node.js packages as ESM in parallel to CJS
+  * Feature: Add clear method to the storage classes to allow factory reset of the storage
+  * Feature: Add ICAC (Intermediate CA Certificate) decoding
   * Enhance: Memory footprint optimizations
   * Enhance: Introduced building and building, running and test executions scripts to not use ts-node anymore and many more optimizations to test and build processes
   * Enhance: ClusterFactory internally uses a simplified method of CLuster types that are compatible to the current ones but soon might replace them
+  * Enhance: Using longer response timeouts when Failsafe timer is active during commissioning (Controller)
+  * Enhance: Optimize Commissioning logic of Controller implementation regarding failsafe timers and network commissioning
+  * Enhance: Add timeout handing to the Message queue to prevent reading DataReports get stuck if device do not send anymore
+  * Enhance: Add support in StatusResponseError to also handle a cluster specific status code (for write and invoke)
+  * Enhance: Add init and destroy methods to the Cluster-handlers to allow to build proper cluster logics and also to free resources (e.g. stop timers on cluster destroy)
+  * Enhance: Re-Announce the device when a subscription was cancelled by a peer in order to have a fast reconnect of the peer 
 * matter.js API:
   * Breaking: Move "disableIpv4" from CommissioningController/Server options to MatterServer to also consider it for MDNS scanning and broadcasting
   * Breaking: Change MatterServer constructor second parameter to be an options object
