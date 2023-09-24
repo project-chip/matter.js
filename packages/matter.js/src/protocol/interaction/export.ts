@@ -7,6 +7,7 @@
 // Export Protocol types
 // Export Interaction Classes
 export * from "./AttributeDataDecoder.js";
+export * from "./AttributeDataEncoder.js";
 export * from "./EventDataDecoder.js";
 export * from "./InteractionClient.js";
 export * from "./InteractionEndpointStructure.js";
