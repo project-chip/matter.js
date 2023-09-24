@@ -77,9 +77,12 @@ export class SubscriptionClient implements ProtocolHandler<MatterController> {
         const listener = this.subscriptionListeners.get(subscriptionId);
         if (listener === undefined) {
             await messenger.sendStatus(StatusCode.InvalidSubscription);
-            throw new UnexpectedDataError(`Unknown subscription ID ${subscriptionId}`);
+            logger.info(`Received data for unknown subscription ID ${subscriptionId}. Cancel this subscription.`);
+            await messenger.close();
+            return;
         }
         await messenger.sendStatus(StatusCode.Success);
+        await messenger.close();
 
         listener(dataReport);
     }
@@ -190,6 +193,13 @@ export class InteractionClient {
         } = options;
         if (attributeRequests === undefined && eventRequests === undefined) {
             throw new ImplementationError("When reading attributes and events, at least one must be specified.");
+        }
+
+        const readPathsCount = (attributeRequests?.length ?? 0) + (eventRequests?.length ?? 0);
+        if (readPathsCount > 9) {
+            logger.debug(
+                "Read interactions with more then 9 paths might be not allowed by the device. Consider splitting then into several read requests.",
+            );
         }
 
         return this.withMessenger<{
@@ -636,6 +646,12 @@ export class InteractionClient {
             eventFilters,
             dataVersionFilters,
         } = options;
+
+        const subscriptionPathsCount = (attributeRequests?.length ?? 0) + (eventRequests?.length ?? 0);
+        if (subscriptionPathsCount > 3) {
+            logger.debug("Subscribe interactions with more then 3 paths might be not allowed by the device.");
+        }
+
         return this.withMessenger<{
             attributeReports?: DecodedAttributeReportValue<any>[];
             eventReports?: DecodedEventReportValue<any>[];
