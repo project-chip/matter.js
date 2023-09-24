@@ -215,6 +215,16 @@ export const TlvDataReport = TlvObject({
     interactionModelRevision: TlvField(0xff, TlvUInt8),
 });
 
+/** Special version of the DataReport Message with pre-encoded report entries used by Send logic */
+export const TlvDataReportForSend = TlvObject({
+    subscriptionId: TlvOptionalField(0, TlvUInt32),
+    attributeReports: TlvOptionalField(1, TlvArray(TlvAny)),
+    eventReports: TlvOptionalField(2, TlvArray(TlvAny)),
+    moreChunkedMessages: TlvOptionalField(3, TlvBoolean),
+    suppressResponse: TlvOptionalField(4, TlvBoolean),
+    interactionModelRevision: TlvField(0xff, TlvUInt8),
+});
+
 /** @see {@link MatterCoreSpecificationV1_0}, section 10.6.4 */
 export const TlvSubscribeRequest = TlvObject({
     keepSubscriptions: TlvField(0, TlvBoolean),
