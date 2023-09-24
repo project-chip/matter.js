@@ -186,6 +186,7 @@ export class CommissioningController extends MatterNode {
             let ignoreInitialTriggers = true; // Ignore Triggers from Subscribing during initialization
             // If we subscribe anything we use these data to create the endpoint structure, so we do not need to fetch again
             const initialSubscriptionData = await this.interactionClient.subscribeAllAttributesAndEvents({
+                isUrgent: true,
                 minIntervalFloorSeconds: this.options.subscribeMinIntervalFloorSeconds ?? 0,
                 maxIntervalCeilingSeconds: this.options.subscribeMaxIntervalCeilingSeconds ?? 120,
                 attributeListener: ({ path: { endpointId, clusterId, attributeId }, value }) => {
