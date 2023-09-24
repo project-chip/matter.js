@@ -27,13 +27,15 @@ import {
     FabricId,
     FabricIndex,
     NodeId,
+    TlvClusterId,
     TlvFabricIndex,
+    TlvVendorId,
     VendorId,
 } from "@project-chip/matter.js/datatype";
 import { DeviceClasses, DeviceTypeDefinition, Endpoint } from "@project-chip/matter.js/device";
 import { Fabric } from "@project-chip/matter.js/fabric";
 import {
-    DataReport,
+    DataReportPayload,
     InteractionServer,
     InteractionServerMessenger,
     InvokeRequest,
@@ -54,6 +56,7 @@ import {
     TlvObject,
     TlvOptionalField,
     TlvString,
+    TlvUInt16,
     TlvUInt8,
 } from "@project-chip/matter.js/tlv";
 import { ByteArray } from "@project-chip/matter.js/util";
@@ -77,6 +80,7 @@ const READ_REQUEST: ReadRequest = {
         { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), attributeId: AttributeId(1) }, // unsupported endpoint
         { endpointId: undefined, clusterId: ClusterId(0x28), attributeId: AttributeId(3) },
         { endpointId: undefined, clusterId: ClusterId(0x99), attributeId: AttributeId(3) }, // ignore
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1d), attributeId: AttributeId(1) },
     ],
 };
 
@@ -91,6 +95,7 @@ const READ_REQUEST_WITH_UNUSED_FILTER: ReadRequest = {
         { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), attributeId: AttributeId(1) }, // unsupported endpoint
         { endpointId: undefined, clusterId: ClusterId(0x28), attributeId: AttributeId(3) },
         { endpointId: undefined, clusterId: ClusterId(0x99), attributeId: AttributeId(3) }, // ignore
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1d), attributeId: AttributeId(1) },
     ],
     dataVersionFilters: [{ path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28) }, dataVersion: 1 }],
 };
@@ -106,26 +111,29 @@ const READ_REQUEST_WITH_FILTER: ReadRequest = {
         { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), attributeId: AttributeId(1) }, // unsupported endpoint
         { endpointId: undefined, clusterId: ClusterId(0x28), attributeId: AttributeId(3) },
         { endpointId: undefined, clusterId: ClusterId(0x99), attributeId: AttributeId(3) }, // ignore
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1d), attributeId: AttributeId(1) },
     ],
     dataVersionFilters: [{ path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28) }, dataVersion: 0 }],
 };
 
-const READ_RESPONSE: DataReport = {
+const READ_RESPONSE: DataReportPayload = {
     interactionModelRevision: 10,
     suppressResponse: false,
-    eventReports: undefined,
-    attributeReports: [
+    eventReportsPayload: undefined,
+    attributeReportsPayload: [
         {
             attributeData: {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(2) },
-                data: TlvUInt8.encodeTlv(1),
+                schema: TlvVendorId,
+                payload: 1,
                 dataVersion: 0,
             },
         },
         {
             attributeData: {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(4) },
-                data: TlvUInt8.encodeTlv(2),
+                schema: TlvUInt16,
+                payload: 2,
                 dataVersion: 0,
             },
         },
@@ -150,18 +158,31 @@ const READ_RESPONSE: DataReport = {
         {
             attributeData: {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(3) },
-                data: TlvString.encodeTlv("product"),
+                schema: TlvString.bound({ maxLength: 32 }),
+                payload: "product",
+                dataVersion: 0,
+            },
+        },
+        {
+            attributeData: {
+                path: {
+                    endpointId: EndpointNumber(0),
+                    clusterId: ClusterId(0x1d),
+                    attributeId: AttributeId(1),
+                },
+                schema: TlvArray(TlvClusterId),
+                payload: [ClusterId(29), ClusterId(40)],
                 dataVersion: 0,
             },
         },
     ],
 };
 
-const READ_RESPONSE_WITH_FILTER: DataReport = {
+const READ_RESPONSE_WITH_FILTER: DataReportPayload = {
     interactionModelRevision: 10,
     suppressResponse: false,
-    eventReports: undefined,
-    attributeReports: [
+    eventReportsPayload: undefined,
+    attributeReportsPayload: [
         {
             attributeStatus: {
                 path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(400) },
@@ -178,6 +199,18 @@ const READ_RESPONSE_WITH_FILTER: DataReport = {
             attributeStatus: {
                 path: { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), attributeId: AttributeId(1) },
                 status: { status: 127 },
+            },
+        },
+        {
+            attributeData: {
+                path: {
+                    endpointId: EndpointNumber(0),
+                    clusterId: ClusterId(0x1d),
+                    attributeId: AttributeId(1),
+                },
+                schema: TlvArray(TlvClusterId),
+                payload: [ClusterId(29), ClusterId(40)],
+                dataVersion: 0,
             },
         },
     ],
