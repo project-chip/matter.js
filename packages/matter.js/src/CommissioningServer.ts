@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterDevice } from "./MatterDevice.js";
+import { MatterNode } from "./MatterNode.js";
 import { Ble } from "./ble/Ble.js";
 import { AttestationCertificateManager } from "./certificate/AttestationCertificateManager.js";
 import { CertificationDeclarationManager } from "./certificate/CertificationDeclarationManager.js";
@@ -48,8 +50,6 @@ import { Aggregator } from "./device/Aggregator.js";
 import { Device } from "./device/Device.js";
 import { Endpoint } from "./device/Endpoint.js";
 import { Logger } from "./log/Logger.js";
-import { MatterDevice } from "./MatterDevice.js";
-import { MatterNode } from "./MatterNode.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { MdnsInstanceBroadcaster } from "./mdns/MdnsInstanceBroadcaster.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
@@ -65,6 +65,8 @@ import {
     QrPairingCodeCodec,
 } from "./schema/PairingCodeSchema.js";
 import { QrCode } from "./schema/QrCodeSchema.js";
+import { CaseServer } from "./session/case/CaseServer.js";
+import { PaseServer } from "./session/pase/PaseServer.js";
 import { MatterCoreSpecificationV1_1 } from "./spec/Specifications.js";
 import { StorageContext } from "./storage/StorageContext.js";
 import { ByteArray } from "./util/ByteArray.js";
