@@ -59,9 +59,15 @@ export function normalizeAttributeData(
     data: TypeFromSchema<typeof TlvAttributeData>[],
     acceptWildcardPaths = false,
 ): TypeFromSchema<typeof TlvAttributeData>[][] {
-    // Fill in missing path elements when tag compression is used
+    // Fill in missing path elements and restore dataVersion when tag compression is used
     let lastPath:
-        | { nodeId?: NodeId; endpointId: EndpointNumber; clusterId: ClusterId; attributeId: AttributeId }
+        | {
+              nodeId?: NodeId;
+              endpointId: EndpointNumber;
+              clusterId: ClusterId;
+              attributeId: AttributeId;
+              dataVersion?: number;
+          }
         | undefined;
     data.forEach(value => {
         if (value === undefined) return;
@@ -72,12 +78,15 @@ export function normalizeAttributeData(
             if (path.endpointId === undefined) path.endpointId = lastPath.endpointId;
             if (path.clusterId === undefined) path.clusterId = lastPath.clusterId;
             if (path.attributeId === undefined) path.attributeId = lastPath.attributeId;
+            if (value.dataVersion === undefined && lastPath.dataVersion !== undefined)
+                value.dataVersion = lastPath.dataVersion;
         } else if (path.endpointId !== undefined && path.clusterId !== undefined && path.attributeId !== undefined) {
             lastPath = {
                 nodeId: path.nodeId,
                 endpointId: path.endpointId,
                 clusterId: path.clusterId,
                 attributeId: path.attributeId,
+                dataVersion: value.dataVersion,
             };
         } else if (!acceptWildcardPaths) {
             throw new UnexpectedDataError("Tag compression disabled, but path is incomplete: " + Logger.toJSON(path));
