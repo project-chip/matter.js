@@ -647,15 +647,15 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             await subscriptionHandler.sendInitialReport(messenger);
         } catch (error: any) {
             logger.error(
-                `Subscription ${subscriptionId} for Session ${session.getId()}: Error while sending initial data reports: ${
-                    error.message
-                }`,
+                `Subscription ${subscriptionId} for Session ${session.getId()}: Error while sending initial data reports`,
+                error,
             );
             await subscriptionHandler.cancel(); // Cleanup
             if (error instanceof StatusResponseError) {
                 logger.info(`Sending status response ${error.code} for interaction error: ${error.message}`);
                 await messenger.sendStatus(error.code);
             }
+            await messenger.close();
             return; // Make sure to not bubble up the exception
         }
 

@@ -280,8 +280,8 @@ export class MessageExchange<ContextT> {
         return this.messagesQueue.read();
     }
 
-    async waitFor(messageType: number) {
-        const message = await this.messagesQueue.read();
+    async waitFor(messageType: number, timeoutMs = 60_000) {
+        const message = await this.messagesQueue.read(timeoutMs);
         const {
             payloadHeader: { messageType: receivedMessageType },
         } = message;
