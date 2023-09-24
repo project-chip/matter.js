@@ -65,13 +65,24 @@ import {
     QrPairingCodeCodec,
 } from "./schema/PairingCodeSchema.js";
 import { QrCode } from "./schema/QrCodeSchema.js";
-import { CaseServer } from "./session/case/CaseServer.js";
-import { PaseServer } from "./session/pase/PaseServer.js";
+import { MatterCoreSpecificationV1_1 } from "./spec/Specifications.js";
 import { StorageContext } from "./storage/StorageContext.js";
 import { ByteArray } from "./util/ByteArray.js";
 import { NamedHandler } from "./util/NamedHandler.js";
 
 const logger = Logger.get("CommissioningServer");
+
+const FORBIDDEN_PASSCODES = [
+    0, 11111111, 22222222, 33333333, 44444444, 55555555, 66666666, 77777777, 88888888, 99999999, 12345678, 87654321,
+];
+
+/**
+ * Data model revision used by this implementation
+ * Value of 16 means "Matter 1.0/1.1"
+ *
+ * @see {@link MatterCoreSpecificationV1_1} § 7.1.1
+ */
+const MATTER_DATAMODEL_VERSION = 16;
 
 /**
  * Represents device pairing information.
@@ -213,6 +224,9 @@ export class CommissioningServer extends MatterNode {
     constructor(private readonly options: CommissioningServerOptions) {
         super();
         this.port = options.port;
+        if (FORBIDDEN_PASSCODES.includes(options.passcode)) {
+            throw new ImplementationError(`Passcode ${options.passcode} is not allowed.`);
+        }
         this.passcode = options.passcode;
         this.discriminator = options.discriminator;
         this.flowType = options.flowType ?? CommissionningFlowType.Standard;
@@ -225,7 +239,7 @@ export class CommissioningServer extends MatterNode {
         // TODO Get the defaults from the cluster meta details
         const basicInformationAttributes = Object.assign(
             {
-                dataModelRevision: 1,
+                dataModelRevision: MATTER_DATAMODEL_VERSION,
                 nodeLabel: "",
                 hardwareVersion: 0,
                 hardwareVersionString: "0",
@@ -286,7 +300,7 @@ export class CommissioningServer extends MatterNode {
                 {
                     nocs: [],
                     fabrics: [],
-                    supportedFabrics: 254,
+                    supportedFabrics: 254, // maximum number of fabrics. Also FabricBuilder uses 254 as max!
                     commissionedFabrics: 0,
                     trustedRootCertificates: [],
                     currentFabricIndex: FabricIndex.NO_FABRIC,
