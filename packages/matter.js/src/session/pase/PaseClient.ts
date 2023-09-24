@@ -34,7 +34,7 @@ export class PaseClient {
             response: { pbkdfParameters, sessionId: peerSessionId },
         } = await messenger.readPbkdfParamResponse();
         if (pbkdfParameters === undefined)
-            throw new UnexpectedDataError("Missing requested PbkdfParameters in the response");
+            throw new UnexpectedDataError("Missing requested PbkdfParameters in the response.");
 
         // Compute pake1 and read pake2
         const { w0, w1 } = await Spake2p.computeW0W1(pbkdfParameters, setupPin);
@@ -46,7 +46,7 @@ export class PaseClient {
         const { y: Y, verifier } = await messenger.readPasePake2();
         const { Ke, hAY, hBX } = await spake2p.computeSecretAndVerifiersFromY(w1, X, Y);
         if (!verifier.equals(hBX))
-            throw new UnexpectedDataError("Received incorrect key confirmation from the receiver");
+            throw new UnexpectedDataError("Received incorrect key confirmation from the receiver.");
         await messenger.sendPasePake3({ verifier: hAY });
 
         // All good! Creating the secure session
@@ -62,7 +62,7 @@ export class PaseClient {
             false,
         );
         await messenger.close();
-        logger.info(`Pase client: Paired successfully with ${messenger.getChannelName()}`);
+        logger.info(`Pase client: Paired successfully with ${messenger.getChannelName()}.`);
 
         return secureSession;
     }

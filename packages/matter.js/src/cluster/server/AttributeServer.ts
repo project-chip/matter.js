@@ -26,6 +26,8 @@ import { Attribute, Attributes, Cluster, Commands, Events } from "../Cluster.js"
  */
 export class FabricScopeError extends MatterError {}
 
+export type AnyAttributeServer<T> = AttributeServer<T> | FabricScopedAttributeServer<T> | FixedAttributeServer<T>;
+
 /**
  * Factory function to create an attribute server.
  */
