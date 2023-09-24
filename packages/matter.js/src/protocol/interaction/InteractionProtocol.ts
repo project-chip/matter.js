@@ -132,7 +132,7 @@ export const TlvAttributeData = TlvObject({
 
 export const TlvAttributeReportData = TlvObject({
     // AttributeDataIB version for Reports
-    dataVersion: TlvField(0, TlvUInt32),
+    dataVersion: TlvOptionalField(0, TlvUInt32),
     path: TlvField(1, TlvAttributePath),
     data: TlvField(2, TlvAny),
 });
