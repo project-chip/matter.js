@@ -18,7 +18,7 @@ import { GeneralCommissioning } from "../../src/cluster/definitions/GeneralCommi
 import { GeneralDiagnostics } from "../../src/cluster/definitions/GeneralDiagnosticsCluster.js";
 import { GroupKeyManagementCluster } from "../../src/cluster/definitions/GroupKeyManagementCluster.js";
 import { GroupsCluster } from "../../src/cluster/definitions/GroupsCluster.js";
-import { IdentifyCluster } from "../../src/cluster/definitions/IdentifyCluster.js";
+import { Identify, IdentifyCluster } from "../../src/cluster/definitions/IdentifyCluster.js";
 import { NetworkCommissioning } from "../../src/cluster/definitions/NetworkCommissioningCluster.js";
 import { OnOffCluster } from "../../src/cluster/definitions/OnOffCluster.js";
 import { OperationalCredentialsCluster } from "../../src/cluster/definitions/OperationalCredentialsCluster.js";
@@ -1855,6 +1855,208 @@ describe("Endpoint Structures", () => {
 
             expect(endpoints3.size).equal(11);
             expect(endpoints3.get(EndpointNumber(3))?.getAllClusterServers().length).equal(7);
+        });
+    });
+
+    describe("CLusterServer initialization and destroy", () => {
+        it("Init and destroy is called when cluster server are overwritten", async () => {
+            const testStorage = new StorageBackendMemory();
+            const testStorageManager = new StorageManager(testStorage);
+            await testStorageManager.initialize();
+            const testStorageContext = testStorageManager.createContext("TestContext");
+
+            const node = new CommissioningServer({
+                port: 5540,
+                deviceName: "Test Device",
+                deviceType: DeviceTypeId(0x16),
+                passcode: 123,
+                discriminator: 1234,
+                basicInformation: {
+                    dataModelRevision: 1,
+                    vendorName: "vendor",
+                    vendorId: VendorId(1),
+                    productName: "product",
+                    productId: 2,
+                    nodeLabel: "",
+                    hardwareVersion: 0,
+                    hardwareVersionString: "0",
+                    location: "US",
+                    localConfigDisabled: false,
+                    softwareVersion: 1,
+                    softwareVersionString: "v1",
+                    capabilityMinima: {
+                        caseSessionsPerFabric: 3,
+                        subscriptionsPerFabric: 3,
+                    },
+                    serialNumber: `node-matter-0000`,
+                },
+                certificates: {
+                    devicePrivateKey: ByteArray.fromHex("00"),
+                    deviceCertificate: ByteArray.fromHex("00"),
+                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
+                    certificationDeclaration: ByteArray.fromHex("00"),
+                },
+            });
+            node.setStorage(testStorageContext);
+            addRequiredRootClusters(node);
+
+            const onoffLightDevice = new OnOffLightDevice();
+
+            let initCalled = false;
+            let destroyCalled = false;
+            // Overwrite Identify Cluster with init and destroy methods
+            onoffLightDevice.addClusterServer(
+                ClusterServer(
+                    IdentifyCluster,
+                    {
+                        identifyTime: 0,
+                        identifyType: Identify.IdentifyType.None,
+                    },
+                    {
+                        identify: async () => {
+                            /* dummy */
+                        },
+                        initializeClusterServer: async () => {
+                            initCalled = true;
+                        },
+                        destroyClusterServer: async () => {
+                            destroyCalled = true;
+                        },
+                    },
+                ),
+            );
+            expect(initCalled).true;
+            expect(destroyCalled).false;
+
+            node.addDevice(onoffLightDevice);
+
+            node.assignEndpointIds();
+            expect(node.getNextEndpointId(false)).equal(2);
+
+            const rootEndpoint = node.getRootEndpoint();
+            rootEndpoint.updatePartsList();
+            const endpointStructure = new InteractionEndpointStructure();
+            endpointStructure.initializeFromEndpoint(rootEndpoint);
+
+            // Overwrite cluster server - old gets destroyed, new initialized
+            let init2Called = false;
+            let destroy2Called = false;
+            onoffLightDevice.addClusterServer(
+                ClusterServer(
+                    IdentifyCluster,
+                    {
+                        identifyTime: 0,
+                        identifyType: Identify.IdentifyType.None,
+                    },
+                    {
+                        identify: async () => {
+                            /* dummy */
+                        },
+                        initializeClusterServer: async () => {
+                            init2Called = true;
+                        },
+                        destroyClusterServer: async () => {
+                            destroy2Called = true;
+                        },
+                    },
+                ),
+            );
+            expect(destroyCalled).true;
+            expect(init2Called).true;
+            expect(destroy2Called).false;
+
+            endpointStructure.destroy();
+
+            expect(destroy2Called).true;
+        });
+
+        it("Destroy is called when device is removed", async () => {
+            const testStorage = new StorageBackendMemory();
+            const testStorageManager = new StorageManager(testStorage);
+            await testStorageManager.initialize();
+            const testStorageContext = testStorageManager.createContext("TestContext");
+
+            const node = new CommissioningServer({
+                port: 5540,
+                deviceName: "Test Device",
+                deviceType: DeviceTypeId(0x16),
+                passcode: 123,
+                discriminator: 1234,
+                basicInformation: {
+                    dataModelRevision: 1,
+                    vendorName: "vendor",
+                    vendorId: VendorId(1),
+                    productName: "product",
+                    productId: 2,
+                    nodeLabel: "",
+                    hardwareVersion: 0,
+                    hardwareVersionString: "0",
+                    location: "US",
+                    localConfigDisabled: false,
+                    softwareVersion: 1,
+                    softwareVersionString: "v1",
+                    capabilityMinima: {
+                        caseSessionsPerFabric: 3,
+                        subscriptionsPerFabric: 3,
+                    },
+                    serialNumber: `node-matter-0000`,
+                },
+                certificates: {
+                    devicePrivateKey: ByteArray.fromHex("00"),
+                    deviceCertificate: ByteArray.fromHex("00"),
+                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
+                    certificationDeclaration: ByteArray.fromHex("00"),
+                },
+            });
+            node.setStorage(testStorageContext);
+            addRequiredRootClusters(node);
+
+            const aggregator = new Aggregator();
+            const onoffLightDevice = new OnOffLightDevice();
+
+            let initCalled = false;
+            let destroyCalled = false;
+            // Overwrite Identify Cluster with init and destroy methods
+            onoffLightDevice.addClusterServer(
+                ClusterServer(
+                    IdentifyCluster,
+                    {
+                        identifyTime: 0,
+                        identifyType: Identify.IdentifyType.None,
+                    },
+                    {
+                        identify: async () => {
+                            /* dummy */
+                        },
+                        initializeClusterServer: async () => {
+                            initCalled = true;
+                        },
+                        destroyClusterServer: async () => {
+                            destroyCalled = true;
+                        },
+                    },
+                ),
+            );
+            expect(initCalled).true;
+            expect(destroyCalled).false;
+
+            aggregator.addBridgedDevice(onoffLightDevice, {
+                nodeLabel: "Socket 1-1",
+                reachable: true,
+            });
+            node.addDevice(aggregator);
+
+            node.assignEndpointIds();
+            expect(node.getNextEndpointId(false)).equal(3);
+
+            const rootEndpoint = node.getRootEndpoint();
+            rootEndpoint.updatePartsList();
+            const endpointStructure = new InteractionEndpointStructure();
+            endpointStructure.initializeFromEndpoint(rootEndpoint);
+
+            aggregator.removeBridgedDevice(onoffLightDevice);
+
+            expect(destroyCalled).true;
         });
     });
 });

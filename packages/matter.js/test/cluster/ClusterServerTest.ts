@@ -13,6 +13,7 @@ import { Identify, IdentifyCluster } from "../../src/cluster/definitions/Identif
 import { WindowCovering } from "../../src/cluster/definitions/WindowCoveringCluster.js";
 import { AttributeServer, FixedAttributeServer } from "../../src/cluster/server/AttributeServer.js";
 import { ClusterServer } from "../../src/cluster/server/ClusterServer.js";
+import { asClusterServerInternal } from "../../src/cluster/server/ClusterServerTypes.js";
 import { ImplementationError } from "../../src/common/MatterError.js";
 import { AttributeId } from "../../src/datatype/AttributeId.js";
 import { CommandId } from "../../src/datatype/CommandId.js";
@@ -562,6 +563,54 @@ describe("ClusterServer structure", () => {
             ]);
             expect((server.attributes as any).acceptedCommandList.get()).deep.equal([CommandId(0)]);
             expect((server.attributes as any).generatedCommandList.get()).deep.equal([]);
+        });
+
+        it("Verify init/destroy is called on CLusterServe when definedr", () => {
+            let initCalled = false;
+            let destroyCalled = false;
+            const server = ClusterServer(
+                IdentifyCluster,
+                {
+                    identifyTime: 100,
+                    identifyType: Identify.IdentifyType.None,
+                },
+                {
+                    identify: async () => {
+                        /* dummy */
+                    },
+                    initializeClusterServer: async () => {
+                        initCalled = true;
+                    },
+                    destroyClusterServer: async () => {
+                        destroyCalled = true;
+                    },
+                },
+            );
+            expect(server).ok;
+
+            asClusterServerInternal(server)._assignToEndpoint({} as any);
+            expect(initCalled).true;
+            asClusterServerInternal(server)._destroy();
+            expect(destroyCalled).true;
+        });
+
+        it("Verify not used init/destroy are not making issues", () => {
+            const server = ClusterServer(
+                IdentifyCluster,
+                {
+                    identifyTime: 100,
+                    identifyType: Identify.IdentifyType.None,
+                },
+                {
+                    identify: async () => {
+                        /* dummy */
+                    },
+                },
+            );
+            expect(server).ok;
+
+            asClusterServerInternal(server)._assignToEndpoint({} as any);
+            asClusterServerInternal(server)._destroy();
         });
 
         it("GroupsCluster", () => {

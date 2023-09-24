@@ -50,6 +50,12 @@ export class InteractionEndpointStructure {
         this.commandPaths.length = 0;
     }
 
+    public destroy() {
+        for (const endpoint of this.endpoints.values()) {
+            endpoint.destroy();
+        }
+    }
+
     public initializeFromEndpoint(endpoint: Endpoint) {
         this.clear();
 
