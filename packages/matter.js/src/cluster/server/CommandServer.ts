@@ -36,7 +36,19 @@ export class CommandServer<RequestT, ResponseT> {
         args: TlvStream,
         message: Message,
         endpoint: Endpoint,
-    ): Promise<{ code: StatusCode; responseId: CommandId; response: TlvStream }> {
+    ): Promise<{
+        /** Primary StatusCode of the invoke request  as defined by Interaction proptocol. */
+        code: StatusCode;
+
+        /** Cluster specific StatusCode of the invoke request if required */
+        clusterCode?: number;
+
+        /** ID of the response */
+        responseId: CommandId;
+
+        /** Response data */
+        response: TlvStream;
+    }> {
         const request = this.requestSchema.decodeTlv(args);
         logger.debug(`Invoke ${this.name} with data ${Logger.toJSON(request)}`);
         const response = await this.handler(request, session, message, endpoint);
