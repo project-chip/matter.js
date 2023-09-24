@@ -406,6 +406,15 @@ export namespace GeneralDiagnostics {
         bootReason: TlvField(0, TlvEnum<BootReason>())
     });
 
+    export const enum StatusCode {
+        /**
+         * Provided EnableKey does not match the previously configured value.
+         *
+         * @see {@link MatterCoreSpecificationV1_1} § 11.11.5
+         */
+        EnableKeyMismatch = 2
+    }
+
     /**
      * General Diagnostics
      *

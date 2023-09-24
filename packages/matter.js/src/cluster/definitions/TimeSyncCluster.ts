@@ -185,6 +185,15 @@ export namespace TimeSync {
         timeSource: TlvOptionalField(2, TlvEnum<TimeSource>())
     });
 
+    export const enum StatusCode {
+        /**
+         * Server rejected the attempt to set the UTC time
+         *
+         * @see {@link MatterCoreSpecificationV1_1} § 11.16.7
+         */
+        TimeNotAccepted = 2
+    }
+
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.3
      */

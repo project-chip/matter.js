@@ -29,7 +29,7 @@ function hex(n: number) {
 
 /** Generates cluster attributes, commands and events */
 export class ClusterComponentGenerator {
-    private tlv: TlvGenerator;
+    tlv: TlvGenerator;
     private defaults: DefaultValueGenerator;
     private file: ClusterFile;
 
