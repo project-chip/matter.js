@@ -223,6 +223,10 @@ For Alexa no special setup is needed to pair with matter.js as development devic
 The [list of supported device types](https://developer.amazon.com/en-US/docs/alexa/smarthome/matter-support.html#device-categories-and-clusters)
 is basic currently, but will get enhanced in the future.
 
+The current specialities of Alexa is:
+* Matter devices need to use port 5540 only (!!), else they will not be discovered by Alexa at all
+* The device needs to have an Endpoint 1 beside the root endpoint. This needs to either be the main device endpoint (composed devices not yet supported) or an aggregator.
+
 ### Tuya Smart (SmartLife) Ecosystem
 
 Should work but no more detatailed information here as of yet.
