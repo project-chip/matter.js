@@ -6,6 +6,7 @@
 
 import { FabricId, TlvFabricId } from "../../src/datatype/FabricId.js";
 import { FabricIndex, TlvFabricIndex } from "../../src/datatype/FabricIndex.js";
+import { TlvAny } from "../../src/tlv/TlvAny.js";
 import { TlvArray } from "../../src/tlv/TlvArray.js";
 import { TlvBoolean } from "../../src/tlv/TlvBoolean.js";
 import { TlvNullable } from "../../src/tlv/TlvNullable.js";
@@ -152,6 +153,16 @@ describe("TlvObject", () => {
             const { encoded, decoded } = codecVector[valueDescription];
             it(`decodes ${valueDescription}`, () => {
                 expect(schema.decode(ByteArray.fromHex(encoded))).deep.equal(decoded);
+            });
+        }
+    });
+
+    describe("calculate byte length", () => {
+        for (const valueDescription in codecVector) {
+            const { encoded, decoded } = codecVector[valueDescription];
+            it(`calculate byte length ${valueDescription}`, () => {
+                const tlvEncoded = schema.encodeTlv(decoded);
+                expect(TlvAny.getEncodedByteLength(tlvEncoded)).equal(encoded.length / 2);
             });
         }
     });

@@ -28,6 +28,11 @@ describe("TlvArray", () => {
             expect(result.toHex()).equal("160c01610c01620c016318");
         });
 
+        it(`calculate array byte length`, () => {
+            const tlvEncoded = schema.encodeTlv(["a", "b", "c"]);
+            expect(TlvAny.getEncodedByteLength(tlvEncoded)).equal(11);
+        });
+
         it("encodes an array to chunks", () => {
             const result = schema.encodeAsChunkedArray(["a", "b", "c"]);
 

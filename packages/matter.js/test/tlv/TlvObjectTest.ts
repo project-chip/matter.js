@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { TlvAny } from "../../src/tlv/TlvAny.js";
 import { TlvArray } from "../../src/tlv/TlvArray.js";
 import { TlvNullable } from "../../src/tlv/TlvNullable.js";
 import { TlvUInt8 } from "../../src/tlv/TlvNumber.js";
@@ -57,6 +58,16 @@ describe("TlvObject", () => {
 
             expect(result).deep.equal({ optionalField: "test" });
         });
+    });
+
+    describe("calculate byte length", () => {
+        for (const valueDescription in codecVector) {
+            const { encoded, decoded } = codecVector[valueDescription];
+            it(`calculate byte length ${valueDescription}`, () => {
+                const tlvEncoded = schema.encodeTlv(decoded);
+                expect(TlvAny.getEncodedByteLength(tlvEncoded)).equal(encoded.length / 2);
+            });
+        }
     });
 
     describe("encodeTlv with decodeTlv", () => {

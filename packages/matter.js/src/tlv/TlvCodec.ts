@@ -339,6 +339,34 @@ export class TlvCodec {
         }
     }
 
+    public static getTagByteLength(tag?: TlvTag) {
+        const { profile, id } = tag ?? {};
+
+        if (profile === undefined && id === undefined) {
+            return 1;
+        } else if (profile === undefined) {
+            if (id === undefined)
+                throw new UnexpectedDataError("Invalid TLV tag: id should be defined for a context specific tag.");
+            return 2;
+        } else if (profile === MATTER_COMMON_PROFILE) {
+            if (id === undefined)
+                throw new UnexpectedDataError("Invalid TLV tag: id should be defined for a datatype profile.");
+            if ((id & 0xffff0000) === 0) {
+                return 3;
+            } else {
+                return 5;
+            }
+        } else {
+            if (id === undefined)
+                throw new UnexpectedDataError("Invalid TLV tag: id should be defined for a custom profile.");
+            if ((id & 0xffff0000) === 0) {
+                return 7;
+            } else {
+                return 9;
+            }
+        }
+    }
+
     public static writePrimitive<T extends TlvTypeLength>(
         writer: DataWriter<Endian.Little>,
         typeLength: T,
@@ -391,6 +419,28 @@ export class TlvCodec {
         }
     }
 
+    public static getPrimitiveByteLength<T extends TlvTypeLength>(typeLength: T, value: TlvToPrimitive[T["type"]]) {
+        switch (typeLength.type) {
+            case TlvType.SignedInt:
+            case TlvType.UnsignedInt:
+            case TlvType.Float:
+                return this.getUIntByteLength(typeLength.length);
+            case TlvType.Utf8String: {
+                const string = value as TlvToPrimitive[typeof typeLength.type];
+                const stringData = ByteArray.fromString(string);
+                return this.getUIntByteLength(typeLength.length) + stringData.length;
+            }
+            case TlvType.ByteString: {
+                const byteArray = value as TlvToPrimitive[typeof typeLength.type];
+                return this.getUIntByteLength(typeLength.length) + byteArray.length;
+            }
+            case TlvType.Boolean:
+                return 0;
+            default:
+                throw new UnexpectedDataError(`Unexpected TLV type ${typeLength.type}`);
+        }
+    }
+
     private static writeUInt(writer: DataWriter<Endian.Little>, length: TlvLength, value: number | bigint) {
         switch (length) {
             case TlvLength.OneByte:
@@ -401,6 +451,19 @@ export class TlvCodec {
                 return writer.writeInt32(value);
             case TlvLength.EightBytes:
                 return writer.writeInt64(value);
+        }
+    }
+
+    private static getUIntByteLength(length: TlvLength) {
+        switch (length) {
+            case TlvLength.OneByte:
+                return 1;
+            case TlvLength.TwoBytes:
+                return 2;
+            case TlvLength.FourBytes:
+                return 4;
+            case TlvLength.EightBytes:
+                return 8;
         }
     }
 }

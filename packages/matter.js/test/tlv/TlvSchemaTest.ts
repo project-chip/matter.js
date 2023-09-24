@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { TlvAny } from "../../src/tlv/TlvAny.js";
 import { TlvArray } from "../../src/tlv/TlvArray.js";
 import { TlvBoolean } from "../../src/tlv/TlvBoolean.js";
 import {
@@ -153,6 +154,16 @@ function testTlvSchemaEncode(testEntry: TestEntry<any>) {
     });
 }
 
+function testTlvSchemaCalculateByteLength(testEntry: TestEntry<any>) {
+    const { name, schema, tlv, jsObj } = testEntry;
+    const testName = "TlvSchema.calculateByteLength " + name;
+
+    it(testName, () => {
+        const tlvEncoded = schema.encodeTlv(jsObj);
+        expect(TlvAny.getEncodedByteLength(tlvEncoded)).equal(tlv.length / 2);
+    });
+}
+
 function testTlvSchemaDecode(testEntry: TestEntry<any>) {
     const { name, schema, tlv, jsObj } = testEntry;
     const testName = "TlvSchema.decode " + name;
@@ -167,6 +178,7 @@ function testTlvSchemaDecode(testEntry: TestEntry<any>) {
 describe("Test TlvSchema", () => {
     theTestTlvVector.forEach(testEntry => {
         testTlvSchemaEncode(testEntry);
+        testTlvSchemaCalculateByteLength(testEntry);
         testTlvSchemaDecode(testEntry);
     });
 });

@@ -5,6 +5,7 @@
  */
 
 import { ValidationError } from "../../src/common/MatterError.js";
+import { TlvAny } from "../../src/tlv/TlvAny.js";
 import { TlvBoolean } from "../../src/tlv/TlvBoolean.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 
@@ -30,6 +31,16 @@ describe("TlvBoolean", () => {
             const { encoded, decoded } = testVector[valueDescription];
             it(`decodes ${valueDescription}`, () => {
                 expect(TlvBoolean.decode(ByteArray.fromHex(encoded))).equal(decoded);
+            });
+        }
+    });
+
+    describe("calculate byte length", () => {
+        for (const valueDescription in testVector) {
+            const { encoded, decoded } = testVector[valueDescription];
+            it(`calculate byte length ${valueDescription}`, () => {
+                const tlvEncoded = TlvBoolean.encodeTlv(decoded);
+                expect(TlvAny.getEncodedByteLength(tlvEncoded)).equal(encoded.length / 2);
             });
         }
     });

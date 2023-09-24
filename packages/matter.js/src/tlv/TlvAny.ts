@@ -6,10 +6,35 @@
 
 import { UnexpectedDataError, ValidationError } from "../common/MatterError.js";
 import { Logger } from "../log/Logger.js";
-import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
+import { TlvCodec, TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvArrayReader, TlvElement, TlvReader, TlvSchema, TlvStream, TlvWriter } from "./TlvSchema.js";
 
 export class AnySchema extends TlvSchema<TlvStream> {
+    getEncodedByteLength(tlvStream: TlvStream): number {
+        let byteLength = 0;
+        tlvStream.forEach(({ tag, typeLength, value }) => {
+            switch (typeLength.type) {
+                case TlvType.Null:
+                case TlvType.Boolean:
+                case TlvType.Array:
+                case TlvType.Structure:
+                case TlvType.List:
+                case TlvType.EndOfContainer:
+                    byteLength += TlvCodec.getTagByteLength(tag);
+                    break;
+                case TlvType.UnsignedInt:
+                case TlvType.SignedInt:
+                case TlvType.Float:
+                case TlvType.Utf8String:
+                case TlvType.ByteString:
+                    byteLength += TlvCodec.getTagByteLength(tag);
+                    byteLength += TlvCodec.getPrimitiveByteLength(typeLength, value);
+                    break;
+            }
+        });
+        return byteLength;
+    }
+
     override encodeTlvInternal(writer: TlvWriter, tlvStream: TlvStream, tagAssigned?: TlvTag | undefined): void {
         tlvStream.forEach(({ tag, typeLength, value }) => {
             if (tagAssigned !== undefined) {
