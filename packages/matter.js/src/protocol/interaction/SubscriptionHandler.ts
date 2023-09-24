@@ -15,18 +15,17 @@ import { SecureSession } from "../../session/SecureSession.js";
 import { Time, Timer } from "../../time/Time.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { RetransmissionLimitReachedError } from "../MessageExchange.js";
+import { AttributeReportPayload, EventReportPayload } from "./AttributeDataEncoder.js";
 import { EventHandler, EventStorageData } from "./EventHandler.js";
 import { InteractionEndpointStructure } from "./InteractionEndpointStructure.js";
 import { InteractionServerMessenger, StatusResponseError } from "./InteractionMessenger.js";
 import {
     StatusCode,
     TlvAttributePath,
-    TlvAttributeReport,
     TlvAttributeStatus,
     TlvDataVersionFilter,
     TlvEventFilter,
     TlvEventPath,
-    TlvEventReport,
     TlvEventStatus,
 } from "./InteractionProtocol.js";
 import {
@@ -449,36 +448,40 @@ export class SubscriptionHandler {
 
             return [{ path, value, version, schema: attribute.schema }];
         });
-        const attributeReports: TypeFromSchema<typeof TlvAttributeReport>[] = attributes.map(
+        const attributeReportsPayload: AttributeReportPayload[] = attributes.map(
             ({ path, schema, value, version }) => ({
                 attributeData: {
                     path,
                     dataVersion: version,
-                    data: schema.encodeTlv(value),
+                    payload: value,
+                    schema,
                 },
             }),
         );
-        attributeErrors.forEach(attributeStatus => attributeReports.push({ attributeStatus }));
+        attributeErrors.forEach(attributeStatus => attributeReportsPayload.push({ attributeStatus }));
 
         const { newEvents, eventErrors } = this.registerNewEvents();
 
-        const eventReports = newEvents
-            .flatMap(({ path, event }): TypeFromSchema<typeof TlvEventReport>[] => {
+        const eventReportsPayload = newEvents
+            .flatMap(({ path, event: { schema } }): EventReportPayload[] => {
                 const matchingEvents = this.eventHandler.getEvents(path, this.eventFilters);
-                return matchingEvents.map(eventData => ({
+                return matchingEvents.map(({ eventNumber, priority, epochTimestamp, data }) => ({
                     eventData: {
                         path,
-                        eventNumber: eventData.eventNumber,
-                        priority: eventData.priority,
-                        epochTimestamp: eventData.epochTimestamp,
-                        data: event.schema.encodeTlv(eventData.data),
+                        eventNumber,
+                        priority,
+                        epochTimestamp,
+                        payload: data,
+                        schema,
                     },
                 }));
             })
             .sort((a, b) => {
-                if (a > b) {
+                const eventNumberA = a.eventData?.eventNumber ?? 0;
+                const eventNumberB = b.eventData?.eventNumber ?? 0;
+                if (eventNumberA > eventNumberB) {
                     return 1;
-                } else if (a < b) {
+                } else if (eventNumberA < eventNumberB) {
                     return -1;
                 } else {
                     return 0;
@@ -492,17 +495,19 @@ export class SubscriptionHandler {
             );
         }
 
-        eventErrors.forEach(eventStatus => eventReports.push({ eventStatus }));
+        eventErrors.forEach(eventStatus => eventReportsPayload.push({ eventStatus }));
 
-        logger.debug(`Initialize Subscription with ${attributes.length} attributes and ${eventReports.length} events`);
+        logger.debug(
+            `Initialize Subscription with ${attributes.length} attributes and ${eventReportsPayload.length} events.`,
+        );
         this.lastUpdateTimeMs = Time.nowMs();
 
         await messenger.sendDataReport({
             suppressResponse: false,
             subscriptionId: this.subscriptionId,
             interactionModelRevision: INTERACTION_MODEL_REVISION,
-            attributeReports,
-            eventReports,
+            attributeReportsPayload, // TODO Return compressed response once https://github.com/project-chip/connectedhomeip/issues/29359 is solved
+            eventReportsPayload,
         });
     }
 
@@ -593,22 +598,27 @@ export class SubscriptionHandler {
                             suppressResponse: false,
                             subscriptionId: this.subscriptionId,
                             interactionModelRevision: INTERACTION_MODEL_REVISION,
-                            attributeReports: attributes.map(({ path, schema, value, version }) => ({
+                            // TODO Return compressed response once https://github.com/project-chip/connectedhomeip/issues/29359 is solved
+                            attributeReportsPayload: attributes.map(({ path, schema, value, version }) => ({
                                 attributeData: {
                                     path,
                                     dataVersion: version,
-                                    data: schema.encodeTlv(value),
+                                    schema,
+                                    payload: value,
                                 },
                             })),
-                            eventReports: events.map(({ path, schema, event }) => ({
-                                eventData: {
-                                    path,
-                                    eventNumber: event.eventNumber,
-                                    priority: event.priority,
-                                    epochTimestamp: event.epochTimestamp,
-                                    data: schema.encodeTlv(event.data),
-                                },
-                            })),
+                            eventReportsPayload: events.map(
+                                ({ path, schema, event: { eventNumber, priority, epochTimestamp, data } }) => ({
+                                    eventData: {
+                                        path,
+                                        eventNumber,
+                                        priority,
+                                        epochTimestamp,
+                                        schema,
+                                        payload: data,
+                                    },
+                                }),
+                            ),
                         });
                     }
                 },
