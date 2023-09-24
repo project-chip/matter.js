@@ -4,7 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CertificateManager, TlvOperationalCertificate, TlvRootCertificate } from "@project-chip/matter.js/certificate";
+import {
+    CertificateManager,
+    TlvIntermediateCertificate,
+    TlvOperationalCertificate,
+    TlvRootCertificate,
+} from "@project-chip/matter.js/certificate";
 import { BYTES_KEY, DerCodec, DerNode, ELEMENTS_KEY, EcdsaWithSHA256_X962 } from "@project-chip/matter.js/codec";
 import { Crypto, PrivateKey, PublicKey } from "@project-chip/matter.js/crypto";
 import { ByteArray } from "@project-chip/matter.js/util";
@@ -26,6 +31,12 @@ const NOC_CERT_TLV = TlvOperationalCertificate.decode(
 );
 const NOC_CERT_ASN1 = ByteArray.fromHex(
     "3082017fa003020102020101300a06082a8648ce3d04030230223120301e060a2b0601040182a27c01040c1030303030303030303030303030303030301e170d3231303631303030303030305a170d3331303630383030303030305a30443120301e060a2b0601040182a27c01050c10303030303030303030303030303030313120301e060a2b0601040182a27c01010c10303030303030303030303030303044413059301306072a8648ce3d020106082a8648ce3d03010703420004e0bf14a052dd7ab08d485e20570c6e6ac6fbb99513d3aacd66808c722941ae0538e9323ec89f39228bd228270f1716539cecc64e62b26c58c3355d68935d87b2a38183308180300c0603551d130101ff04023000300e0603551d0f0101ff04040302078030200603551d250101ff0416301406082b0601050507030206082b06010505070301301d0603551d0e04160414c524e05cad04a826ecda84501766732b5f181354301f0603551d23041830168014e766069362d7e35b79687161644d222bdde93a68",
+);
+
+const ICAC_CERT_TLV_SPECS = TlvIntermediateCertificate.decode(
+    ByteArray.fromHex(
+        "153001082db444855641aedf2402013703271401000000cacacaca182604ef171b2726056eb5b94c3706271303000000cacacaca1824070124080130094104c5d0861bb8f90c405c12314e4c5ebeea939f72774bcc33239e2f59f6f46af8dc7d4682a0e3ccc646e6df29ea86bf562ae720a898337d383f32c0a09e416019ea370a35012901182402603004145352d7059e9c15a508906862864801a29f1f41d330051413af81ab37374b2ed2a9649b12b7a3a4287e151d18300b40841a06d43b5e9fecd24e87b1244eb51c6a2cf20d9b5e6ba07f11e6002f7e0ca34e32a602c3609d0092d348bdbd198a114646bd41cf103783641ae25e3f23fd2618",
+    ),
 );
 
 const PRIVATE_KEY = ByteArray.fromHex("727F1005CBA47ED7822A9D930943621617CFD3B79D9AF528B801ECF9F1992204");
@@ -62,6 +73,41 @@ describe("CertificateManager", () => {
     describe("validateNocCertificate", () => {
         it("validates a correct NOC cert", () => {
             CertificateManager.validateNocCertificate(ROOT_CERT_TLV, NOC_CERT_TLV);
+        });
+    });
+
+    describe("decodeIcacCertificate", () => {
+        it("decodes a correct ICAC cert", () => {
+            assert.deepEqual(ICAC_CERT_TLV_SPECS, {
+                serialNumber: new ByteArray([45, 180, 68, 133, 86, 65, 174, 223]),
+                signatureAlgorithm: 1,
+                issuer: { issuerRcacId: BigInt("14612714909889200129") },
+                notBefore: 656087023,
+                notAfter: 1287239022,
+                subject: { icacId: BigInt("14612714909889200131") },
+                publicKeyAlgorithm: 1,
+                ellipticCurveIdentifier: 1,
+                ellipticCurvePublicKey: new ByteArray([
+                    4, 197, 208, 134, 27, 184, 249, 12, 64, 92, 18, 49, 78, 76, 94, 190, 234, 147, 159, 114, 119, 75,
+                    204, 51, 35, 158, 47, 89, 246, 244, 106, 248, 220, 125, 70, 130, 160, 227, 204, 198, 70, 230, 223,
+                    41, 234, 134, 191, 86, 42, 231, 32, 168, 152, 51, 125, 56, 63, 50, 192, 160, 158, 65, 96, 25, 234,
+                ]),
+                extensions: {
+                    basicConstraints: { isCa: true },
+                    keyUsage: 96,
+                    subjectKeyIdentifier: new ByteArray([
+                        83, 82, 215, 5, 158, 156, 21, 165, 8, 144, 104, 98, 134, 72, 1, 162, 159, 31, 65, 211,
+                    ]),
+                    authorityKeyIdentifier: new ByteArray([
+                        19, 175, 129, 171, 55, 55, 75, 46, 210, 169, 100, 155, 18, 183, 163, 164, 40, 126, 21, 29,
+                    ]),
+                },
+                signature: new ByteArray([
+                    132, 26, 6, 212, 59, 94, 159, 236, 210, 78, 135, 177, 36, 78, 181, 28, 106, 44, 242, 13, 155, 94,
+                    107, 160, 127, 17, 230, 0, 47, 126, 12, 163, 78, 50, 166, 2, 195, 96, 157, 0, 146, 211, 72, 189,
+                    189, 25, 138, 17, 70, 70, 189, 65, 207, 16, 55, 131, 100, 26, 226, 94, 63, 35, 253, 38,
+                ]),
+            });
         });
     });
 
