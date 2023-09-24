@@ -9,6 +9,7 @@ import {
     ClusterModel,
     ClusterVariance,
     CommandModel,
+    DatatypeModel,
     IllegalFeatureCombinations,
     ValueModel,
     conditionToBitmaps,
@@ -52,6 +53,12 @@ export function generateCluster(file: ClusterFile) {
     }
     const gen = new ClusterComponentGenerator(file.ns, cluster);
     gen.populateComponent(variance.base, base);
+
+    // Generate status codes even if they aren't referenced directly
+    const status = cluster.get(DatatypeModel, "StatusCode");
+    if (status) {
+        gen.tlv.reference(status);
+    }
 
     // Generate other components
     for (const component of variance.components) {

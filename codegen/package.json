@@ -11,9 +11,9 @@
     "console": "run dist/esm/repl.ts",
     "generate-spec": "run bin/generate-spec.js",
     "generate-chip": "run bin/generate-chip.js",
-    "generate-model": "build --prefix=../models && run bin/generate-model.js",
-    "generate-clusters": "build --prefix=../packages/matter.js && run bin/generate-clusters.js",
-    "dump-model-names": "build --prefix=../models && run bin/dump-model-names.ts",
+    "generate-model": "build esm --prefix=../models && run bin/generate-model.js",
+    "generate-clusters": "build esm --prefix=../packages/matter.js && run bin/generate-clusters.js",
+    "dump-model-names": "build esm --prefix=../models && run bin/dump-model-names.ts",
     "generate": "npm run generate-model && npm run generate-clusters"
   },
   "repository": {

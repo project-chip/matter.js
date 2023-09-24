@@ -8,13 +8,13 @@
 // running tests in IDE with Mocha support.  Utilize by importing into
 // .mocharc.cjs as a sibling of package.json in the package to test
 
-const { resolve } = require("path");
-const cli = require("mocha/lib/cli/cli");
-const listSupportFiles = require("./files.js").listSupportFiles;
-
-const TOOLS = resolve(__dirname, "../../..");
-
 function mocharc(format = "cjs") {
+    const { resolve } = require("path");
+    const cli = require("mocha/lib/cli/cli");
+    const listSupportFiles = require("./files.js").listSupportFiles;
+
+    const TOOLS = resolve(__dirname, "../../..");
+    
     const testJs = `build/${format}/test`;
     const defaultSpec = `${testJs}/**/*Test.js`;
 
