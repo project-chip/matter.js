@@ -112,11 +112,8 @@ You can use `npm run build-doc` on the root level to generate the API documentat
 
 ## Current status
 
-This is work in progress.
-
-Completed implementations:
-- [X] TLV codec (coder/decoder) and schema mapping and validation engine
-- [X] 12 cluster definitions (including TLV structures for all messages)
+We are about to conplete the basic certifiable feature set. Right now in the low level APIs all clusters are supported and all kind of devices can be build, but not with pre-defined cluster logic.
+See the [Roadmap](https://github.com/orgs/project-chip/projects/11/views/1) for status and next planned steps.
 
 ## matter.js usage
 
@@ -185,13 +182,15 @@ Apple [support to set up HomePod, HomePod mini, Apple TV, or iPad](https://suppo
 with the new Home Architecture starting iOS 16.3!) as a Matter Hub. The pairing itself can also be done using an iPhone, but the later
 controlling can only be done by one of the Hub options listed above!
 
-When pairing with node-matter the Home app will ask you to allow to pair an "uncertified device"which you need to allow. After that the device
+When pairing with matter.js the Home app will ask you to allow to pair an "uncertified device" which you need to allow. After that the device
 will be added to the Home app, and you can control it from there.
 
 We currently have no information which device types are supported by the Home app. But Lights and Sockets are support in any case.
 
 Apple is using "two fabric IDs" on the paired devices (all others only use one). This needs to be considered when planning to pair devices with
 multiple controllers. How many fabrics are available depends on the device manufacturer (minimum are 3).
+
+When removing a device paired with Apple Home only the main operational fabric from the two created ones is also removed. Additional pairings with e.g. Google Home or such should stay in tact. When no other pairing is active then the "System Commissioning fabric" (the second one created initially) needs to be removed manually via iOS: Settings - General - Matter-Devices!
 
 ### Google Home Ecosystem
 
@@ -201,9 +200,9 @@ Also for Google you need to have a Hub device (Android or Google Nest smart spea
 
 Pairing is currently only possible using the Google Home Android App on Android 8.1 or higher. The iOS App is not supporting Matter yet.
 
-Before you can pair node-matter to Google Home you need to allow uncertified devices for your Google Account. For this open the [Google
+Before you can pair matter.js to Google Home you need to allow uncertified devices for your Google Account. For this open the [Google
 Developer Console to add an Integration](https://console.home.google.com/projects/) and [setup](https://developers.home.google.com/matter/get-started?hl=en&%3Bauthuser=0&authuser=0) the device there. Please use 0xFFF1 as Vendor ID
-because node-matter uses this by the current scripts.
+because matter.js uses this by the current scripts.
 If you do this that pairing will not be possible!
 If you have issues with pairing please refer to the [Troubleshootling pages](https://developers.home.google.com/matter/build/troubleshooting?hl=en#verify_your_google_play_services_gps_matter_modules) from Google.
 
@@ -219,7 +218,7 @@ For Amazon Alexa Usage you also need one [Alexa device as Matter hub](https://ww
 
 Pairing is currently only possible using the Alexa Android App on Android 8.1 or higher. The iOS App is not supporting Matter yet.
 
-For Alexa no special setup is needed to pair node-matter as development device.
+For Alexa no special setup is needed to pair with matter.js as development device.
 
 The [list of supported device types](https://developer.amazon.com/en-US/docs/alexa/smarthome/matter-support.html#device-categories-and-clusters)
 is basic currently, but will get enhanced in the future.
@@ -280,13 +279,13 @@ chip-tool storage clear-all
 You can also control it with Matter test app: https://github.com/project-chip/connectedhomeip/tree/master/src/android/CHIPTest
 You can find a compiled apk in /matter-test-apk in this repository.
 
-**Provisioning the device**: click "provision with WiFi" > "Input DeviceNode address" > type IP address of the machine running node-matter
+**Provisioning the device**: click "provision with WiFi" > "Input DeviceNode address" > type IP address of the machine running matter.js
 
 **Controlling the device**: click "Light on/of" and you can control the light
 
 ## FAQ
 
-### Why using node-matter instead of the official codebase?
+### Why using matter.js instead of the official codebase?
 
 Well, the original codebase is platform dependent, has finicky tool version requirements and is over 8GB with all dependencies.
 This tool is less than 500kB and works on anything supporting node. Sure, it supports only the barebone Matter protocol for now.
