@@ -13,7 +13,7 @@ export class StorageBackendDisk implements Storage {
 
     constructor(path: string, clear = false) {
         this.localStorage = new LocalStorage(path);
-        if (clear) this.localStorage.clear();
+        if (clear) this.clear();
     }
 
     async initialize() {
@@ -22,6 +22,10 @@ export class StorageBackendDisk implements Storage {
 
     async close() {
         // nothing to do
+    }
+
+    clear() {
+        this.localStorage.clear();
     }
 
     buildStorageKey(contexts: string[], key: string): string {

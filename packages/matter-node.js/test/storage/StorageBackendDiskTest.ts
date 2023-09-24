@@ -38,6 +38,16 @@ describe("Storage node-localstorage", () => {
         assert.equal(value, undefined);
     });
 
+    it("write and clear success", async () => {
+        const storage = new StorageBackendDisk(TEST_STORAGE_LOCATION);
+
+        storage.set(["context"], "key", "value");
+        storage.clear();
+
+        const value = storage.get(["context"], "key");
+        assert.equal(value, undefined);
+    });
+
     it("write and read success with multiple context levels", async () => {
         const storage = new StorageBackendDisk(TEST_STORAGE_LOCATION);
 
