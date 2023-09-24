@@ -46,7 +46,8 @@ import {
 const logger = Logger.get("InteractionClient");
 
 const REQUEST_ALL = [{}];
-const DEFAULT_TIMED_REQUEST_TIMEOUT_MS = 10000;
+const DEFAULT_TIMED_REQUEST_TIMEOUT_MS = 10_000; // 10 seconds
+const DEFAULT_MINIMUM_RESPONSE_TIMEOUT_WITH_FAILSAFE_MS = 30_000; // 30 seconds
 
 export interface AttributeStatus {
     path: {
@@ -746,6 +747,7 @@ export class InteractionClient {
         command: C;
         asTimedRequest?: boolean;
         timedRequestTimeoutMs?: number;
+        useExtendedFailSafeMessageResponseTimeout?: boolean;
     }): Promise<ResponseType<C>> {
         const {
             endpointId,
@@ -754,6 +756,7 @@ export class InteractionClient {
             command: { requestId, requestSchema, responseId, responseSchema, optional, timed },
             asTimedRequest,
             timedRequestTimeoutMs = DEFAULT_TIMED_REQUEST_TIMEOUT_MS,
+            useExtendedFailSafeMessageResponseTimeout = false,
         } = options;
         const timedRequest = timed || asTimedRequest === true || options.timedRequestTimeoutMs !== undefined;
 
@@ -771,12 +774,17 @@ export class InteractionClient {
                 await messenger.sendTimedRequest(timedRequestTimeoutMs);
             }
 
-            const invokeResponse = await messenger.sendInvokeCommand({
-                invokeRequests: [{ commandPath: { endpointId, clusterId, commandId: requestId }, commandFields }],
-                timedRequest,
-                suppressResponse: false,
-                interactionModelRevision: INTERACTION_MODEL_REVISION,
-            });
+            const invokeResponse = await messenger.sendInvokeCommand(
+                {
+                    invokeRequests: [{ commandPath: { endpointId, clusterId, commandId: requestId }, commandFields }],
+                    timedRequest,
+                    suppressResponse: false,
+                    interactionModelRevision: INTERACTION_MODEL_REVISION,
+                },
+                useExtendedFailSafeMessageResponseTimeout
+                    ? DEFAULT_MINIMUM_RESPONSE_TIMEOUT_WITH_FAILSAFE_MS
+                    : undefined,
+            );
             if (invokeResponse === undefined) {
                 throw new MatterFlowError("No response received from invoke interaction but expected.");
             }

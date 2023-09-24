@@ -480,11 +480,14 @@ export class ControllerCommissioner {
                 );
             }
             let countryCode = this.commissioningOptions.regulatoryCountryCode;
-            const regulatoryResult = await client.setRegulatoryConfig({
-                breadcrumb: this.lastBreadcrumb++,
-                newRegulatoryConfig: locationCapability,
-                countryCode,
-            });
+            const regulatoryResult = await client.setRegulatoryConfig(
+                {
+                    breadcrumb: this.lastBreadcrumb++,
+                    newRegulatoryConfig: locationCapability,
+                    countryCode,
+                },
+                { useExtendedFailSafeMessageResponseTimeout: true },
+            );
             if (
                 regulatoryResult.errorCode === GeneralCommissioning.CommissioningError.ValueOutsideRange &&
                 countryCode !== "XX"
@@ -495,11 +498,14 @@ export class ControllerCommissioner {
                 countryCode = "XX";
                 this.ensureGeneralCommissioningSuccess(
                     "setRegulatoryConfig",
-                    await client.setRegulatoryConfig({
-                        breadcrumb: this.lastBreadcrumb,
-                        newRegulatoryConfig: locationCapability,
-                        countryCode,
-                    }),
+                    await client.setRegulatoryConfig(
+                        {
+                            breadcrumb: this.lastBreadcrumb,
+                            newRegulatoryConfig: locationCapability,
+                            countryCode,
+                        },
+                        { useExtendedFailSafeMessageResponseTimeout: true },
+                    ),
                 );
             } else {
                 this.ensureGeneralCommissioningSuccess("setRegulatoryConfig", regulatoryResult);
@@ -544,18 +550,27 @@ export class ControllerCommissioner {
      */
     private async deviceAttestation() {
         const operationalCredentialsClusterClient = this.getClusterClient(OperationalCredentials.Cluster);
-        const { certificate: deviceAttestation } = await operationalCredentialsClusterClient.certificateChainRequest({
-            certificateType: OperationalCredentials.CertificateChainType.DacCertificate,
-        });
+        const { certificate: deviceAttestation } = await operationalCredentialsClusterClient.certificateChainRequest(
+            {
+                certificateType: OperationalCredentials.CertificateChainType.DacCertificate,
+            },
+            { useExtendedFailSafeMessageResponseTimeout: true },
+        );
         // TODO: extract device public key from deviceAttestation
-        const { certificate: productAttestation } = await operationalCredentialsClusterClient.certificateChainRequest({
-            certificateType: OperationalCredentials.CertificateChainType.PaiCertificate,
-        });
+        const { certificate: productAttestation } = await operationalCredentialsClusterClient.certificateChainRequest(
+            {
+                certificateType: OperationalCredentials.CertificateChainType.PaiCertificate,
+            },
+            { useExtendedFailSafeMessageResponseTimeout: true },
+        );
         // TODO: validate deviceAttestation and productAttestation
         const { attestationElements, attestationSignature } =
-            await operationalCredentialsClusterClient.attestationRequest({
-                attestationNonce: Crypto.getRandomData(32),
-            });
+            await operationalCredentialsClusterClient.attestationRequest(
+                {
+                    attestationNonce: Crypto.getRandomData(32),
+                },
+                { useExtendedFailSafeMessageResponseTimeout: true },
+            );
         // TODO: validate attestationSignature using device public key
         if (
             deviceAttestation.length === 0 ||
@@ -589,7 +604,10 @@ export class ControllerCommissioner {
     private async certificates() {
         const operationalCredentialsClusterClient = this.getClusterClient(OperationalCredentials.Cluster);
         const { nocsrElements, attestationSignature: csrSignature } =
-            await operationalCredentialsClusterClient.csrRequest({ csrNonce: Crypto.getRandomData(32) });
+            await operationalCredentialsClusterClient.csrRequest(
+                { csrNonce: Crypto.getRandomData(32) },
+                { useExtendedFailSafeMessageResponseTimeout: true },
+            );
         if (nocsrElements.length === 0 || csrSignature.length === 0) {
             // TODO: validate the data really
             throw new UnexpectedDataError("Invalid response from device");
@@ -598,18 +616,24 @@ export class ControllerCommissioner {
         const { certSigningRequest } = TlvCertSigningRequest.decode(nocsrElements);
         const operationalPublicKey = CertificateManager.getPublicKeyFromCsr(certSigningRequest);
 
-        await operationalCredentialsClusterClient.addTrustedRootCertificate({
-            rootCaCertificate: this.certificateManager.getRootCert(),
-        });
+        await operationalCredentialsClusterClient.addTrustedRootCertificate(
+            {
+                rootCaCertificate: this.certificateManager.getRootCert(),
+            },
+            { useExtendedFailSafeMessageResponseTimeout: true },
+        );
         const peerNodeId = this.fabric.rootNodeId;
         const peerOperationalCert = this.certificateManager.generateNoc(operationalPublicKey, FABRIC_ID, peerNodeId);
-        await operationalCredentialsClusterClient.addNoc({
-            nocValue: peerOperationalCert,
-            icacValue: new ByteArray(0),
-            ipkValue: this.fabric.identityProtectionKey,
-            adminVendorId: VendorId(this.commissioningOptions.adminVendorId ?? DEFAULT_ADMIN_VENDOR_ID),
-            caseAdminSubject: peerNodeId,
-        });
+        await operationalCredentialsClusterClient.addNoc(
+            {
+                nocValue: peerOperationalCert,
+                icacValue: new ByteArray(0),
+                ipkValue: this.fabric.identityProtectionKey,
+                adminVendorId: VendorId(this.commissioningOptions.adminVendorId ?? DEFAULT_ADMIN_VENDOR_ID),
+                caseAdminSubject: peerNodeId,
+            },
+            { useExtendedFailSafeMessageResponseTimeout: true },
+        );
 
         return {
             code: CommissioningStepResultCode.Success,
@@ -727,10 +751,13 @@ export class ControllerCommissioner {
         const ssid = ByteArray.fromString(this.commissioningOptions.wifiNetwork.wifiSsid);
         const credentials = ByteArray.fromString(this.commissioningOptions.wifiNetwork.wifiCredentials);
 
-        const { networkingStatus, wiFiScanResults, debugText } = await networkCommissioningClusterClient.scanNetworks({
-            ssid,
-            breadcrumb: this.lastBreadcrumb++,
-        });
+        const { networkingStatus, wiFiScanResults, debugText } = await networkCommissioningClusterClient.scanNetworks(
+            {
+                ssid,
+                breadcrumb: this.lastBreadcrumb++,
+            },
+            { useExtendedFailSafeMessageResponseTimeout: true },
+        );
         if (networkingStatus !== NetworkCommissioning.NetworkCommissioningStatus.Success) {
             throw new CommissioningError(`Commissionee failed to scan for WiFi networks: ${debugText}`);
         }
@@ -744,11 +771,14 @@ export class ControllerCommissioner {
             networkingStatus: addNetworkingStatus,
             debugText: addDebugText,
             networkIndex,
-        } = await networkCommissioningClusterClient.addOrUpdateWiFiNetwork({
-            ssid,
-            credentials,
-            breadcrumb: this.lastBreadcrumb++,
-        });
+        } = await networkCommissioningClusterClient.addOrUpdateWiFiNetwork(
+            {
+                ssid,
+                credentials,
+                breadcrumb: this.lastBreadcrumb++,
+            },
+            { useExtendedFailSafeMessageResponseTimeout: true },
+        );
         if (addNetworkingStatus !== NetworkCommissioning.NetworkCommissioningStatus.Success) {
             throw new CommissioningError(`Commissionee failed to add WiFi network: ${addDebugText}`);
         }
@@ -776,10 +806,13 @@ export class ControllerCommissioner {
             };
         }
 
-        const connectResult = await networkCommissioningClusterClient.connectNetwork({
-            networkId: networkId,
-            breadcrumb: this.lastBreadcrumb++,
-        });
+        const connectResult = await networkCommissioningClusterClient.connectNetwork(
+            {
+                networkId: networkId,
+                breadcrumb: this.lastBreadcrumb++,
+            },
+            { useExtendedFailSafeMessageResponseTimeout: true },
+        );
 
         if (connectResult.networkingStatus !== NetworkCommissioning.NetworkCommissioningStatus.Success) {
             throw new CommissioningError(`Commissionee failed to connect to WiFi network: ${connectResult.debugText}`);
@@ -848,6 +881,7 @@ export class ControllerCommissioner {
 
         const { networkingStatus, threadScanResults, debugText } = await networkCommissioningClusterClient.scanNetworks(
             { breadcrumb: this.lastBreadcrumb++ },
+            { useExtendedFailSafeMessageResponseTimeout: true },
         );
         if (networkingStatus !== NetworkCommissioning.NetworkCommissioningStatus.Success) {
             throw new CommissioningError(`Commissionee failed to scan for Thread networks: ${debugText}`);
@@ -877,10 +911,13 @@ export class ControllerCommissioner {
             networkingStatus: addNetworkingStatus,
             debugText: addDebugText,
             networkIndex,
-        } = await networkCommissioningClusterClient.addOrUpdateThreadNetwork({
-            operationalDataset: ByteArray.fromHex(this.commissioningOptions.threadNetwork.operationalDataset),
-            breadcrumb: this.lastBreadcrumb++,
-        });
+        } = await networkCommissioningClusterClient.addOrUpdateThreadNetwork(
+            {
+                operationalDataset: ByteArray.fromHex(this.commissioningOptions.threadNetwork.operationalDataset),
+                breadcrumb: this.lastBreadcrumb++,
+            },
+            { useExtendedFailSafeMessageResponseTimeout: true },
+        );
         if (addNetworkingStatus !== NetworkCommissioning.NetworkCommissioningStatus.Success) {
             throw new CommissioningError(`Commissionee failed to add Thread network: ${addDebugText}`);
         }
@@ -908,10 +945,13 @@ export class ControllerCommissioner {
             };
         }
 
-        const connectResult = await networkCommissioningClusterClient.connectNetwork({
-            networkId: networkId,
-            breadcrumb: this.lastBreadcrumb++,
-        });
+        const connectResult = await networkCommissioningClusterClient.connectNetwork(
+            {
+                networkId: networkId,
+                breadcrumb: this.lastBreadcrumb++,
+            },
+            { useExtendedFailSafeMessageResponseTimeout: true },
+        );
 
         if (connectResult.networkingStatus !== NetworkCommissioning.NetworkCommissioningStatus.Success) {
             throw new CommissioningError(
@@ -962,7 +1002,9 @@ export class ControllerCommissioner {
         const generalCommissioningClusterClient = this.getClusterClient(GeneralCommissioning.Cluster);
         this.ensureGeneralCommissioningSuccess(
             "commissioningComplete",
-            await generalCommissioningClusterClient.commissioningComplete(),
+            await generalCommissioningClusterClient.commissioningComplete(undefined, {
+                useExtendedFailSafeMessageResponseTimeout: true,
+            }),
         );
 
         return {
