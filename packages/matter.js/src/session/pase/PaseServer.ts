@@ -6,20 +6,30 @@
 
 import BN from "bn.js";
 import { MatterDevice } from "../../MatterDevice.js";
-import { UnexpectedDataError } from "../../common/MatterError.js";
+import { MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
 import { Crypto } from "../../crypto/Crypto.js";
 import { PbkdfParameters, Spake2p } from "../../crypto/Spake2p.js";
 import { Logger } from "../../log/Logger.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
-import { SECURE_CHANNEL_PROTOCOL_ID } from "../../protocol/securechannel/SecureChannelMessages.js";
+import { ProtocolStatusCode, SECURE_CHANNEL_PROTOCOL_ID } from "../../protocol/securechannel/SecureChannelMessages.js";
+import { ChannelStatusResponseError } from "../../protocol/securechannel/SecureChannelMessenger.js";
+import { Time, Timer } from "../../time/Time.js";
 import { ByteArray } from "../../util/ByteArray.js";
 import { UNDEFINED_NODE_ID } from "../SessionManager.js";
 import { DEFAULT_PASSCODE_ID, PaseServerMessenger, SPAKE_CONTEXT } from "./PaseMessenger.js";
 
 const logger = Logger.get("PaseServer");
 
+const PASE_PAIRING_TIMEOUT_MS = 60_000;
+const PASE_COMMISSIONING_MAX_ERRORS = 20;
+
+export class MaximumPasePairingErrorsReachedError extends MatterFlowError {}
+
 export class PaseServer implements ProtocolHandler<MatterDevice> {
+    private pairingTimer: Timer | undefined;
+    private pairingErrors = 0;
+
     static async fromPin(setupPinCode: number, pbkdfParameters: PbkdfParameters) {
         const { w0, L } = await Spake2p.computeW0L(pbkdfParameters, setupPinCode);
         return new PaseServer(w0, L, pbkdfParameters);
@@ -46,13 +56,42 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
         try {
             await this.handlePairingRequest(exchange.session.getContext(), messenger);
         } catch (error) {
-            logger.error("An error occured during the commissioning", error);
-            await messenger.sendError();
+            this.pairingErrors++;
+            logger.error("An error occurred during the PASE commissioning.", error);
+
+            // if we got a ChannelStatusResponseError in we do not need to send the same our
+            const sendError = !(error instanceof ChannelStatusResponseError);
+            await this.cancelPairing(messenger, sendError);
+
+            if (this.pairingErrors >= PASE_COMMISSIONING_MAX_ERRORS) {
+                throw new MaximumPasePairingErrorsReachedError(
+                    `Pase server: Too many errors during PASE commissioning, aborting commissioning window`,
+                );
+            }
         }
     }
 
     private async handlePairingRequest(server: MatterDevice, messenger: PaseServerMessenger) {
-        logger.info(`Pase server: Received pairing request from ${messenger.getChannelName()}`);
+        // When a Commissioner is either in the process of establishing a PASE session with the Commissionee or has
+        // successfully established a session, the Commissionee SHALL NOT accept any more requests for new PASE
+        // sessions until session establishment fails or the successfully established PASE session is terminated on
+        // the commissioning channel.
+        if (server.existsOpenPaseSession()) {
+            throw new MatterFlowError(
+                "Pase server: Pairing already in progress (PASE session exists), ignoring new exchange.",
+            );
+        }
+
+        if (this.pairingTimer !== undefined && this.pairingTimer.isRunning) {
+            throw new MatterFlowError(
+                "Pase server: Pairing already in progress (PASE establishment Timer running), ignoring new exchange.",
+            );
+        }
+
+        logger.info(`Received pairing request from ${messenger.getChannelName()}.`);
+
+        this.pairingTimer = Time.getTimer(PASE_PAIRING_TIMEOUT_MS, () => this.cancelPairing(messenger)).start();
+
         const sessionId = server.getNextAvailableSessionId();
         const random = Crypto.getRandom();
 
@@ -61,7 +100,9 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
             requestPayload,
             request: { random: peerRandom, mrpParameters, passcodeId, hasPbkdfParameters, sessionId: peerSessionId },
         } = await messenger.readPbkdfParamRequest();
-        if (passcodeId !== DEFAULT_PASSCODE_ID) throw new UnexpectedDataError(`Unsupported passcode ID ${passcodeId}`);
+        if (passcodeId !== DEFAULT_PASSCODE_ID) {
+            throw new UnexpectedDataError(`Unsupported passcode ID ${passcodeId}.`);
+        }
         const responsePayload = await messenger.sendPbkdfParamResponse({
             peerRandom,
             random,
@@ -79,10 +120,11 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
 
         // Read and process pake3
         const { verifier } = await messenger.readPasePake3();
-        if (!verifier.equals(hAY))
-            throw new UnexpectedDataError("Received incorrect key confirmation from the initiator");
+        if (!verifier.equals(hAY)) {
+            throw new UnexpectedDataError("Received incorrect key confirmation from the initiator.");
+        }
 
-        // All good! Creating the secure session
+        // All good! Creating the secure PASE session
         await server.createSecureSession(
             sessionId,
             undefined /* fabric */,
@@ -95,8 +137,22 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
             mrpParameters?.idleRetransTimeoutMs,
             mrpParameters?.activeRetransTimeoutMs,
         );
+        logger.info(`Session ${sessionId} created with ${messenger.getChannelName()}.`);
+
         await messenger.sendSuccess();
         await messenger.close();
-        logger.info(`Pase server: session ${sessionId} created with ${messenger.getChannelName()}`);
+
+        this.pairingTimer?.stop();
+        this.pairingTimer = undefined;
+    }
+
+    async cancelPairing(messenger: PaseServerMessenger, sendError = true) {
+        this.pairingTimer?.stop();
+        this.pairingTimer = undefined;
+
+        if (sendError) {
+            await messenger.sendError(ProtocolStatusCode.InvalidParam);
+        }
+        await messenger.close();
     }
 }
