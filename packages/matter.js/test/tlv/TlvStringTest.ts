@@ -5,6 +5,7 @@
  */
 
 import { ValidationError } from "../../src/common/MatterError.js";
+import { TlvAny } from "../../src/tlv/TlvAny.js";
 import { TlvByteString, TlvString } from "../../src/tlv/TlvString.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 
@@ -48,6 +49,18 @@ describe("TlvString", () => {
             const result = TlvString.decode(ByteArray.fromHex("0c0674657374c3a8"));
 
             expect(result).equal("testè");
+        });
+    });
+
+    describe("calculate byte size", () => {
+        it("calculate byte size a string", () => {
+            const tlvEncoded = TlvString.encodeTlv("test");
+            expect(TlvAny.getEncodedByteLength(tlvEncoded)).equal(6);
+        });
+
+        it("calculate byte size a string that was utf8", () => {
+            const tlvEncoded = TlvString.encodeTlv("testè");
+            expect(TlvAny.getEncodedByteLength(tlvEncoded)).equal(8);
         });
     });
 

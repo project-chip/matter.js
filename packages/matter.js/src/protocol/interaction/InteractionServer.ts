@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterDevice } from "../../MatterDevice.js";
 import { TlvNoResponse } from "../../cluster/Cluster.js";
 import {
     AnyAttributeServer,
@@ -23,19 +24,18 @@ import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { EventId } from "../../datatype/EventId.js";
 import { Endpoint } from "../../device/Endpoint.js";
 import { Logger } from "../../log/Logger.js";
-import { MatterDevice } from "../../MatterDevice.js";
-import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
-import { assertSecureSession, SecureSession } from "../../session/SecureSession.js";
+import { EventHandler } from "../../protocol/interaction/EventHandler.js";
+import { SecureSession, assertSecureSession } from "../../session/SecureSession.js";
 import { StorageContext } from "../../storage/StorageContext.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { toHexString } from "../../util/Number.js";
 import { decodeAttributeValueWithSchema, normalizeAttributeData } from "./AttributeDataDecoder.js";
+import { AttributeReportPayload, DataReportPayload, EventReportPayload } from "./AttributeDataEncoder.js";
 import { InteractionEndpointStructure } from "./InteractionEndpointStructure.js";
 import {
-    DataReport,
     InteractionServerMessenger,
     InvokeRequest,
     InvokeResponse,
@@ -50,11 +50,9 @@ import {
 import {
     StatusCode,
     TlvAttributePath,
-    TlvAttributeReport,
     TlvClusterPath,
     TlvCommandPath,
     TlvEventPath,
-    TlvEventReport,
     TlvInvokeResponseData,
     TlvSubscribeResponse,
 } from "./InteractionProtocol.js";
@@ -184,7 +182,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             isFabricFiltered,
             interactionModelRevision,
         }: ReadRequest,
-    ): DataReport {
+    ): DataReportPayload {
         logger.debug(
             `Received read request from ${exchange.channel.name}: attributes:${
                 attributeRequests?.map(path => this.endpointStructure.resolveAttributeName(path)).join(", ") ?? "none"
@@ -218,8 +216,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             );
         }
 
-        const attributeReports = attributeRequests?.flatMap(
-            (path: TypeFromSchema<typeof TlvAttributePath>): TypeFromSchema<typeof TlvAttributeReport>[] => {
+        const attributeReportsPayload = attributeRequests?.flatMap(
+            (path: TypeFromSchema<typeof TlvAttributePath>): AttributeReportPayload[] => {
                 const attributes = this.endpointStructure.getAttributes([path]);
                 if (attributes.length === 0) {
                     const { endpointId, clusterId, attributeId } = path;
@@ -273,13 +271,15 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                             path,
                         )}=${Logger.toJSON(value)} (version=${version})`,
                     );
-                    return [{ attributeData: { path, data: attribute.schema.encodeTlv(value), dataVersion: version } }];
+
+                    const { schema } = attribute;
+                    return [{ attributeData: { path, dataVersion: version, payload: value, schema } }];
                 });
             },
         );
 
-        const eventReports = eventRequests?.flatMap(
-            (path: TypeFromSchema<typeof TlvEventPath>): TypeFromSchema<typeof TlvEventReport>[] => {
+        const eventReportsPayload = eventRequests?.flatMap(
+            (path: TypeFromSchema<typeof TlvEventPath>): EventReportPayload[] => {
                 const events = this.endpointStructure.getEvents([path]);
                 if (events.length === 0) {
                     logger.debug(
@@ -298,13 +298,15 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                                 path,
                             )}=${Logger.toJSON(matchingEvents)}`,
                         );
-                        return matchingEvents.map(eventData => ({
+                        const { schema } = event;
+                        return matchingEvents.map(({ eventNumber, priority, epochTimestamp, data }) => ({
                             eventData: {
                                 path,
-                                eventNumber: eventData.eventNumber,
-                                priority: eventData.priority,
-                                epochTimestamp: eventData.epochTimestamp,
-                                data: event.schema.encodeTlv(eventData.data),
+                                eventNumber,
+                                priority,
+                                epochTimestamp,
+                                payload: data,
+                                schema,
                             },
                         }));
                     })
@@ -316,8 +318,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         return {
             interactionModelRevision: INTERACTION_MODEL_REVISION,
             suppressResponse: false,
-            attributeReports,
-            eventReports,
+            attributeReportsPayload, // TODO Return compressed response once https://github.com/project-chip/connectedhomeip/issues/29359 is solved
+            eventReportsPayload,
         };
     }
 

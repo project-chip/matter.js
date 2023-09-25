@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterController } from "../../MatterController.js";
+import { MatterDevice } from "../../MatterDevice.js";
 import { Message, SessionType } from "../../codec/MessageCodec.js";
 import { MatterError, MatterFlowError, NotImplementedError, UnexpectedDataError } from "../../common/MatterError.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { Logger } from "../../log/Logger.js";
-import { MatterController } from "../../MatterController.js";
-import { MatterDevice } from "../../MatterDevice.js";
 import { ExchangeProvider } from "../../protocol/ExchangeManager.js";
 import {
     ExchangeSendOptions,
@@ -17,12 +17,21 @@ import {
     RetransmissionLimitReachedError,
     UnexpectedMessageError,
 } from "../../protocol/MessageExchange.js";
+import { TlvAny } from "../../tlv/TlvAny.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { ByteArray } from "../../util/ByteArray.js";
+import {
+    DataReportPayload,
+    canAttributePayloadBeChunked,
+    chunkAttributePayload,
+    encodeAttributePayload,
+    encodeEventPayload,
+} from "./AttributeDataEncoder.js";
 import {
     StatusCode,
     TlvAttributeReport,
     TlvDataReport,
+    TlvDataReportForSend,
     TlvInvokeRequest,
     TlvInvokeResponse,
     TlvReadRequest,
@@ -198,46 +207,66 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
         }
     }
 
-    async sendDataReport(dataReport: DataReport) {
-        const messageBytes = TlvDataReport.encode(dataReport);
-        if (
-            (dataReport.attributeReports !== undefined || dataReport.eventReports !== undefined) &&
-            messageBytes.length > MAX_SPDU_LENGTH
-        ) {
-            // DataReport is too long, it needs to be sent in chunks
-            const attributeReportsToSend = [...(dataReport.attributeReports ?? [])];
-            const eventReportsToSend = [...(dataReport.eventReports ?? [])];
-            dataReport.attributeReports = undefined;
-            dataReport.eventReports = undefined;
-            dataReport.moreChunkedMessages = true;
+    /**
+     * Handle DataReportPayload with the content of a DataReport to send, split them into multiple DataReport
+     * messages and send them out based on the size.
+     */
+    async sendDataReport(dataReportPayload: DataReportPayload) {
+        const {
+            subscriptionId,
+            attributeReportsPayload,
+            eventReportsPayload,
+            suppressResponse,
+            interactionModelRevision,
+        } = dataReportPayload;
+        const dataReport: TypeFromSchema<typeof TlvDataReportForSend> = {
+            subscriptionId,
+            suppressResponse,
+            interactionModelRevision,
+            attributeReports: undefined,
+            eventReports: undefined,
+        };
 
-            const emptyDataReportBytes = TlvDataReport.encode(dataReport);
+        if (attributeReportsPayload !== undefined || eventReportsPayload !== undefined) {
+            const attributeReportsToSend = [...(attributeReportsPayload ?? [])];
+            const eventReportsToSend = [...(eventReportsPayload ?? [])];
 
-            // TODO reduce code duplication in below blocks
+            dataReport.moreChunkedMessages = true; // Assume we have multiple chunks, also for size calculation
+            const emptyDataReportBytes = TlvDataReportForSend.encode(dataReport);
+
+            let firstAttributeAddedToReportMessage = false;
+            let firstEventAddedToReportMessage = false;
+            const sendAndResetReport = async () => {
+                await this.sendDataReportMessage(dataReport);
+                dataReport.attributeReports = undefined;
+                dataReport.eventReports = undefined;
+                messageSize = emptyDataReportBytes.length;
+                firstAttributeAddedToReportMessage = false;
+                firstEventAddedToReportMessage = false;
+            };
+
             let messageSize = emptyDataReportBytes.length;
             while (true) {
                 if (attributeReportsToSend.length > 0) {
                     const attributeReport = attributeReportsToSend.shift();
                     if (attributeReport !== undefined) {
-                        const attributeReportBytes = TlvAttributeReport.encode(attributeReport).length;
+                        if (!firstAttributeAddedToReportMessage) {
+                            firstAttributeAddedToReportMessage = true;
+                            messageSize += 3; // Array element is added now which needs 3 bytes
+                        }
+                        const encodedAttribute = encodeAttributePayload(attributeReport);
+                        const attributeReportBytes = TlvAny.getEncodedByteLength(encodedAttribute);
                         if (messageSize + attributeReportBytes > MAX_SPDU_LENGTH) {
-                            if (messageSize === emptyDataReportBytes.length) {
-                                throw new NotImplementedError(
-                                    `Attribute report is too long to fit in a single chunk, Array chunking not yet supported.`,
-                                );
+                            if (canAttributePayloadBeChunked(attributeReport)) {
+                                // Attribute is a non-empty array: chunk it and add the chunks to the beginning of the queue
+                                attributeReportsToSend.unshift(...chunkAttributePayload(attributeReport));
+                                continue;
                             }
-                            // Report doesn't fit, sending this chunk
-                            logger.debug(
-                                `Sending DataReport chunk with ${dataReport.attributeReports?.length} attributes: ${messageSize} bytes`,
-                            );
-                            await this.send(MessageType.ReportData, TlvDataReport.encode(dataReport));
-                            await this.waitForSuccess();
-                            dataReport.attributeReports = undefined;
-                            messageSize = emptyDataReportBytes.length;
+                            await sendAndResetReport();
                         }
                         messageSize += attributeReportBytes;
                         if (dataReport.attributeReports === undefined) dataReport.attributeReports = [];
-                        dataReport.attributeReports.push(attributeReport);
+                        dataReport.attributeReports.push(encodedAttribute);
                     }
                 } else if (eventReportsToSend.length > 0) {
                     const eventReport = eventReportsToSend.shift();
@@ -246,26 +275,18 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                         dataReport.moreChunkedMessages = undefined;
                         break;
                     }
-                    const eventReportBytes = TlvAttributeReport.encode(eventReport).length;
+                    if (!firstEventAddedToReportMessage) {
+                        firstEventAddedToReportMessage = true;
+                        messageSize += 3; // Array element is added now which needs 3 bytes
+                    }
+                    const encodedEvent = encodeEventPayload(eventReport);
+                    const eventReportBytes = TlvAny.getEncodedByteLength(encodedEvent);
                     if (messageSize + eventReportBytes > MAX_SPDU_LENGTH) {
-                        if (messageSize === emptyDataReportBytes.length) {
-                            throw new NotImplementedError(
-                                `Event report is too long to fit in a single chunk, Array chunking not yet supported.`,
-                            );
-                        }
-                        // Report doesn't fit, sending this chunk
-                        logger.debug(
-                            `Sending DataReport chunk with ${dataReport.attributeReports?.length} attributes and ${dataReport.eventReports?.length} events: ${messageSize} bytes`,
-                        );
-                        await this.send(MessageType.ReportData, TlvDataReport.encode(dataReport));
-                        await this.waitForSuccess();
-                        dataReport.attributeReports = undefined;
-                        dataReport.eventReports = undefined;
-                        messageSize = emptyDataReportBytes.length;
+                        await sendAndResetReport();
                     }
                     messageSize += eventReportBytes;
                     if (dataReport.eventReports === undefined) dataReport.eventReports = [];
-                    dataReport.eventReports.push(eventReport);
+                    dataReport.eventReports.push(encodedEvent);
                 } else {
                     // No more chunks to send
                     dataReport.moreChunkedMessages = undefined;
@@ -274,11 +295,32 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
             }
         }
 
+        await this.sendDataReportMessage(dataReport);
+    }
+
+    async sendDataReportMessage(dataReport: TypeFromSchema<typeof TlvDataReportForSend>) {
+        const encodedMessage = TlvDataReportForSend.encode(dataReport);
+        if (encodedMessage.length > MAX_SPDU_LENGTH) {
+            throw new MatterFlowError(
+                `DataReport is too long to fit in a single chunk, This should not happen! Data: ${Logger.toJSON(
+                    dataReport,
+                )}`,
+            );
+        }
+        logger.debug(
+            `Sending DataReport chunk with ${dataReport.attributeReports?.length ?? 0} attributes and ${
+                dataReport.eventReports?.length ?? 0
+            } events: ${encodedMessage.length} bytes`,
+        );
+
+        const checkDecode = TlvDataReport.decode(encodedMessage);
+        logger.debug("checkDecode", Logger.toJSON(checkDecode));
+
         if (dataReport.suppressResponse) {
             // We do not expect a response other than a Standalone Ack, so if we receive anything else, we throw an error
             await tryCatchAsync(
                 async () =>
-                    await this.exchange.send(MessageType.ReportData, TlvDataReport.encode(dataReport), {
+                    await this.exchange.send(MessageType.ReportData, encodedMessage, {
                         expectAckOnly: true,
                     }),
                 UnexpectedMessageError,
@@ -288,10 +330,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                 },
             );
         } else {
-            logger.debug(
-                `Sending (final) data report with ${dataReport.attributeReports?.length} attributes and ${dataReport.eventReports?.length} events`,
-            );
-            await this.exchange.send(MessageType.ReportData, TlvDataReport.encode(dataReport));
+            await this.exchange.send(MessageType.ReportData, encodedMessage);
             await this.waitForSuccess();
         }
     }

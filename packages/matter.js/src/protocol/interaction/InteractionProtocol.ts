@@ -132,7 +132,7 @@ export const TlvAttributeData = TlvObject({
 
 export const TlvAttributeReportData = TlvObject({
     // AttributeDataIB version for Reports
-    dataVersion: TlvField(0, TlvUInt32),
+    dataVersion: TlvOptionalField(0, TlvUInt32),
     path: TlvField(1, TlvAttributePath),
     data: TlvField(2, TlvAny),
 });
@@ -210,6 +210,16 @@ export const TlvDataReport = TlvObject({
     subscriptionId: TlvOptionalField(0, TlvUInt32),
     attributeReports: TlvOptionalField(1, TlvArray(TlvAttributeReport)),
     eventReports: TlvOptionalField(2, TlvArray(TlvEventReport)),
+    moreChunkedMessages: TlvOptionalField(3, TlvBoolean),
+    suppressResponse: TlvOptionalField(4, TlvBoolean),
+    interactionModelRevision: TlvField(0xff, TlvUInt8),
+});
+
+/** Special version of the DataReport Message with pre-encoded report entries used by Send logic */
+export const TlvDataReportForSend = TlvObject({
+    subscriptionId: TlvOptionalField(0, TlvUInt32),
+    attributeReports: TlvOptionalField(1, TlvArray(TlvAny)),
+    eventReports: TlvOptionalField(2, TlvArray(TlvAny)),
     moreChunkedMessages: TlvOptionalField(3, TlvBoolean),
     suppressResponse: TlvOptionalField(4, TlvBoolean),
     interactionModelRevision: TlvField(0xff, TlvUInt8),

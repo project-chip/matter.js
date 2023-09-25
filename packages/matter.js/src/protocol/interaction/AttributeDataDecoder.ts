@@ -20,7 +20,8 @@ import { TlvAttributeData, TlvAttributeReport } from "./InteractionProtocol.js";
 
 const logger = Logger.get("AttributeDataDecoder");
 
-export interface DecodedAttributeReportValue<T> {
+/** Represents a fully qualified and decoded attribute value from a received DataReport */
+export type DecodedAttributeReportValue<T> = {
     path: {
         nodeId?: NodeId;
         endpointId: EndpointNumber;
@@ -30,20 +31,17 @@ export interface DecodedAttributeReportValue<T> {
     };
     version: number;
     value: T;
-}
+};
 
-export interface DecodedAttributeValue<T> {
-    path: {
-        nodeId?: NodeId;
-        endpointId: EndpointNumber;
-        clusterId: ClusterId;
-        attributeId: AttributeId;
-        attributeName: string;
-    };
+/** Represents a decoded attribute value from a received DataReport where data version could be optional. */
+export type DecodedAttributeValue<T> = Omit<DecodedAttributeReportValue<T>, "version"> & {
     version?: number;
-    value: T;
-}
+};
 
+/**
+ * Parses, normalizes (e.g. un-chunk arrays and resolve Tag compression if used) and decodes the attribute data from
+ * a received DataReport.
+ */
 export function normalizeAndDecodeReadAttributeReport(
     data: TypeFromSchema<typeof TlvAttributeReport>[],
 ): DecodedAttributeReportValue<any>[] {
@@ -53,13 +51,23 @@ export function normalizeAndDecodeReadAttributeReport(
     return normalizeAndDecodeAttributeData(dataValues) as DecodedAttributeReportValue<any>[]; // dataVersion existing in incoming data, so must also in outgoing data
 }
 
+/**
+ * Normalizes (e.g. prepare data for array un-chinking and resolve Tag compression if used) the attribute details from
+ * a received DataReport.
+ */
 export function normalizeAttributeData(
     data: TypeFromSchema<typeof TlvAttributeData>[],
     acceptWildcardPaths = false,
 ): TypeFromSchema<typeof TlvAttributeData>[][] {
-    // Fill in missing path elements when tag compression is used
+    // Fill in missing path elements and restore dataVersion when tag compression is used
     let lastPath:
-        | { nodeId?: NodeId; endpointId: EndpointNumber; clusterId: ClusterId; attributeId: AttributeId }
+        | {
+              nodeId?: NodeId;
+              endpointId: EndpointNumber;
+              clusterId: ClusterId;
+              attributeId: AttributeId;
+              dataVersion?: number;
+          }
         | undefined;
     data.forEach(value => {
         if (value === undefined) return;
@@ -70,12 +78,15 @@ export function normalizeAttributeData(
             if (path.endpointId === undefined) path.endpointId = lastPath.endpointId;
             if (path.clusterId === undefined) path.clusterId = lastPath.clusterId;
             if (path.attributeId === undefined) path.attributeId = lastPath.attributeId;
+            if (value.dataVersion === undefined && lastPath.dataVersion !== undefined)
+                value.dataVersion = lastPath.dataVersion;
         } else if (path.endpointId !== undefined && path.clusterId !== undefined && path.attributeId !== undefined) {
             lastPath = {
                 nodeId: path.nodeId,
                 endpointId: path.endpointId,
                 clusterId: path.clusterId,
                 attributeId: path.attributeId,
+                dataVersion: value.dataVersion,
             };
         } else if (!acceptWildcardPaths) {
             throw new UnexpectedDataError("Tag compression disabled, but path is incomplete: " + Logger.toJSON(path));
@@ -98,6 +109,10 @@ export function normalizeAttributeData(
     return Array.from(responseList.values());
 }
 
+/**
+ * Normalizes (e.g. un-chunk arrays and resolve Tag compression if used) and decodes the attribute data from a received
+ * DataReport.
+ */
 export function normalizeAndDecodeAttributeData(
     data: TypeFromSchema<typeof TlvAttributeData>[],
 ): DecodedAttributeValue<any>[] {
@@ -148,7 +163,8 @@ export function normalizeAndDecodeAttributeData(
     return result;
 }
 
-export function decodeValueForAttribute<A extends Attribute<any, any>>(
+/** Decodes the data for one known attribute identified by its Attribute definition including array un-chunking. */
+function decodeValueForAttribute<A extends Attribute<any, any>>(
     attribute: A,
     values: TypeFromSchema<typeof TlvAttributeData>[],
 ): AttributeJsType<A> | undefined {
@@ -164,6 +180,7 @@ export function decodeValueForAttribute<A extends Attribute<any, any>>(
     return decodeAttributeValueWithSchema(schema, values);
 }
 
+/** Decodes the data for one attribute via a schema including array un-chunking. */
 export function decodeAttributeValueWithSchema<T>(
     schema: TlvSchema<T>,
     values: TypeFromSchema<typeof TlvAttributeData>[],
@@ -188,6 +205,7 @@ export function decodeAttributeValueWithSchema<T>(
     ) as T;
 }
 
+/** Decodes the data for one unknown attribute via the AnySchema including array un-chunking. */
 export function decodeUnknownAttributeValue(values: TypeFromSchema<typeof TlvAttributeData>[]): any {
     const schema = TlvAny;
     // No values, so use default value if available
@@ -208,6 +226,7 @@ export function decodeUnknownAttributeValue(values: TypeFromSchema<typeof TlvAtt
     }
 }
 
+/** Structure the data of a received DataReport into an endpointId/clusterId/attributeName object structure. */
 export function structureReadAttributeDataToClusterObject(data: DecodedAttributeReportValue<any>[]) {
     const structure: { [key: number]: { [key: number]: { [key: string]: any } } } = {};
     for (const {

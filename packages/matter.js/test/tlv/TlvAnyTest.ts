@@ -11,6 +11,7 @@ import { ByteArray } from "../../src/util/ByteArray.js";
 
 type CodecVector<I, E> = { [valueDescription: string]: { encoded: I; decoded: E } };
 
+// TODO Add some more test cases
 const testVector: CodecVector<string, any> = {
     null: { encoded: "14", decoded: [{ tag: undefined, typeLength: { type: TlvType.Null }, value: null }] },
     array: {
@@ -38,6 +39,15 @@ describe("TlvAny", () => {
             const { encoded, decoded } = testVector[valueDescription];
             it(`encodes ${valueDescription}`, () => {
                 expect(TlvAny.encode(decoded).toHex()).equal(encoded);
+            });
+        }
+    });
+
+    describe("calculates size ", () => {
+        for (const valueDescription in testVector) {
+            const { encoded, decoded } = testVector[valueDescription];
+            it(`calculates size  ${valueDescription}`, () => {
+                expect(TlvAny.getEncodedByteLength(decoded)).equal(encoded.length / 2);
             });
         }
     });

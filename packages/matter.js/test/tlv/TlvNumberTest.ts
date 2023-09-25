@@ -5,18 +5,27 @@
  */
 
 import { ValidationError } from "../../src/common/MatterError.js";
-import { Schema } from "../../src/schema/Schema.js";
-import { TlvDouble, TlvFloat, TlvInt64, TlvUInt32, TlvUInt64 } from "../../src/tlv/TlvNumber.js";
+import { TlvAny } from "../../src/tlv/TlvAny.js";
+import {
+    TlvDouble,
+    TlvFloat,
+    TlvInt64,
+    TlvNumberSchema,
+    TlvNumericSchema,
+    TlvUInt32,
+    TlvUInt64,
+} from "../../src/tlv/TlvNumber.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 
-type CodecVector<I, E> = {
-    [valueDescription: string]: { schema: Schema<number | bigint, ByteArray>; encoded: I; decoded: E };
+type CodecVectorNumber<I, E> = {
+    [valueDescription: string]: { schema: TlvNumberSchema; encoded: I; decoded: E };
+};
+type CodecVectorNumeric<I, E> = {
+    [valueDescription: string]: { schema: TlvNumericSchema<number | bigint>; encoded: I; decoded: E };
 };
 type TestVector<I, E> = { [testName: string]: { input: I; out: E } };
 
-const codecVector: CodecVector<string, number | bigint> = {
-    "a float": { schema: TlvFloat, decoded: 6546.25390625, encoded: "0a0892cc45" },
-    "a double": { schema: TlvDouble, decoded: 6546.254, encoded: "0b2fdd24064192b940" },
+const codecVectorNumeric: CodecVectorNumeric<string, number | bigint> = {
     "an 1 byte signed int": { schema: TlvInt64, decoded: -1, encoded: "00ff" },
     "a 2 bytes signed int": { schema: TlvInt64, decoded: 0x0100, encoded: "010001" },
     "a 4 bytes signed int": { schema: TlvInt64, decoded: 0x01000000, encoded: "0200000001" },
@@ -27,6 +36,11 @@ const codecVector: CodecVector<string, number | bigint> = {
     "a 8 bytes unsigned int": { schema: TlvUInt64, decoded: BigInt(0x01000000000000), encoded: "070000000000000100" },
 };
 
+const codecVectorNumber: CodecVectorNumber<string, number> = {
+    "a float": { schema: TlvFloat, decoded: 6546.25390625, encoded: "0a0892cc45" },
+    "a double": { schema: TlvDouble, decoded: 6546.254, encoded: "0b2fdd24064192b940" },
+};
+
 const validateTestVector: TestVector<number, boolean> = {
     "validates a value between min and max": { input: 6, out: false },
     "throws an error if the value is too low": { input: 1, out: true },
@@ -35,17 +49,46 @@ const validateTestVector: TestVector<number, boolean> = {
 
 describe("TlvNumber", () => {
     describe("encode", () => {
-        for (const valueDescription in codecVector) {
-            const { schema, encoded, decoded } = codecVector[valueDescription];
+        for (const valueDescription in codecVectorNumber) {
+            const { schema, encoded, decoded } = codecVectorNumber[valueDescription];
+            it(`encodes ${valueDescription}`, () => {
+                expect(schema.encode(decoded).toHex()).equal(encoded);
+            });
+        }
+        for (const valueDescription in codecVectorNumeric) {
+            const { schema, encoded, decoded } = codecVectorNumeric[valueDescription];
             it(`encodes ${valueDescription}`, () => {
                 expect(schema.encode(decoded).toHex()).equal(encoded);
             });
         }
     });
 
+    describe("calculate byte length", () => {
+        for (const valueDescription in codecVectorNumber) {
+            const { schema, encoded, decoded } = codecVectorNumber[valueDescription];
+            it(`calculate byte length ${valueDescription}`, () => {
+                const tlvEncoded = schema.encodeTlv(decoded);
+                expect(TlvAny.getEncodedByteLength(tlvEncoded)).equal(encoded.length / 2);
+            });
+        }
+        for (const valueDescription in codecVectorNumeric) {
+            const { schema, encoded, decoded } = codecVectorNumeric[valueDescription];
+            it(`calculate byte length ${valueDescription}`, () => {
+                const tlvEncoded = schema.encodeTlv(decoded);
+                expect(TlvAny.getEncodedByteLength(tlvEncoded)).equal(encoded.length / 2);
+            });
+        }
+    });
+
     describe("decode", () => {
-        for (const valueDescription in codecVector) {
-            const { schema, encoded, decoded } = codecVector[valueDescription];
+        for (const valueDescription in codecVectorNumber) {
+            const { schema, encoded, decoded } = codecVectorNumber[valueDescription];
+            it(`decodes ${valueDescription}`, () => {
+                expect(schema.decode(ByteArray.fromHex(encoded))).equal(decoded);
+            });
+        }
+        for (const valueDescription in codecVectorNumeric) {
+            const { schema, encoded, decoded } = codecVectorNumeric[valueDescription];
             it(`decodes ${valueDescription}`, () => {
                 expect(schema.decode(ByteArray.fromHex(encoded))).equal(decoded);
             });
