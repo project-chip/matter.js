@@ -12,7 +12,7 @@ import { Logger } from "../../log/Logger.js";
 import { MatterDevice } from "../../MatterDevice.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
-import { SECURE_CHANNEL_PROTOCOL_ID } from "../../protocol/securechannel/SecureChannelMessages.js";
+import { ProtocolStatusCode, SECURE_CHANNEL_PROTOCOL_ID } from "../../protocol/securechannel/SecureChannelMessages.js";
 import { ByteArray } from "../../util/ByteArray.js";
 import {
     KDFSR1_KEY_INFO,
@@ -38,7 +38,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             await this.handleSigma1(exchange.session.getContext(), messenger);
         } catch (error) {
             logger.error("An error occurred during the commissioning", error);
-            await messenger.sendError();
+            await messenger.sendError(ProtocolStatusCode.InvalidParam);
         }
     }
 
