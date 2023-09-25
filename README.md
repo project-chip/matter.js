@@ -198,8 +198,6 @@ Minimum Version Required for the "Google Home" app：2.62.1.15 or later.
 
 Also for Google you need to have a Hub device (Android or Google Nest smart speakers/display) out of the [list of supported devices](https://support.google.com/googlenest/answer/12391458?hl=en) to control your Matter devices.
 
-Pairing is currently only possible using the Google Home Android App on Android 8.1 or higher. The iOS App is not supporting Matter yet.
-
 Before you can pair matter.js to Google Home you need to allow uncertified devices for your Google Account. For this open the [Google
 Developer Console to add an Integration](https://console.home.google.com/projects/) and [setup](https://developers.home.google.com/matter/get-started?hl=en&%3Bauthuser=0&authuser=0) the device there. Please use 0xFFF1 as Vendor ID
 because matter.js uses this by the current scripts.
@@ -212,20 +210,16 @@ Google supports several [Matter device types](https://developers.home.google.com
 
 Minimum Version Required for the "Amazon Alexa" app：2.2.491118.0 or later.
 
-**Please note that because Alexa’s temporarily limited setting, Alexa ecosystem (Amazon Echo smart speakers/displays) needs to be paired with Matter-certified device as the first ecosystem. If you are unsure, please factory default your device before setup.**
-
 For Amazon Alexa Usage you also need one [Alexa device as Matter hub](https://www.amazon.com/b?ie=UTF8&node=37490568011) in your local network.
-
-Pairing is currently only possible using the Alexa Android App on Android 8.1 or higher. The iOS App is not supporting Matter yet.
 
 For Alexa no special setup is needed to pair with matter.js as development device.
 
-The [list of supported device types](https://developer.amazon.com/en-US/docs/alexa/smarthome/matter-support.html#device-categories-and-clusters)
-is basic currently, but will get enhanced in the future.
+The [list of supported device types](https://developer.amazon.com/en-US/docs/alexa/smarthome/matter-support.html#device-categories-and-clusters) is basic currently, but will get enhanced in the future.
 
 Alexa currently has a few non-standard requirements:
-* Matter devices need to use port 5540 only (!!), else they will not be discovered by Alexa at all
-* The device needs to have an Endpoint 1 beside the root endpoint. This needs to either be the main device endpoint (composed devices not yet supported) or an aggregator.
+* Matter devices need to use port 5540 only (!), else they will not be discovered by Alexa at all
+* The device needs to have an Endpoint 1 beside the root endpoint. This needs to either be the main device endpoint 
+* (composed devices not yet supported) or an aggregator.
 
 ### Tuya Smart (SmartLife) Ecosystem
 
