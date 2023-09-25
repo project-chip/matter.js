@@ -3,10 +3,12 @@
  * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+import { MatterFlowError } from "../../common/MatterError.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { NodeId } from "../../datatype/NodeId.js";
+import { Logger } from "../../log/Logger.js";
 import { ArraySchema } from "../../tlv/TlvArray.js";
 import { TlvSchema, TlvStream, TypeFromSchema } from "../../tlv/TlvSchema.js";
 import {
@@ -115,13 +117,17 @@ export function canAttributePayloadBeChunked(attributePayload: AttributeReportPa
 export function chunkAttributePayload(attributePayload: AttributeReportPayload): AttributeReportPayload[] {
     const { attributeData } = attributePayload;
     if (attributeData === undefined) {
-        // Should never happen, but we can make sure it do not break
-        return [attributePayload];
+        throw new MatterFlowError(
+            `Can not chunk an AttributePayload with just a attributeStatus: ${Logger.toJSON(attributePayload)}`,
+        );
     }
     const { schema, path, dataVersion, payload } = attributeData;
     if (!(schema instanceof ArraySchema) || !Array.isArray(payload)) {
-        // Should never happen, but we can make sure it do not break
-        return [attributePayload];
+        throw new MatterFlowError(
+            `Can not chunk an AttributePayload with attributeData that is not an array: ${Logger.toJSON(
+                attributePayload,
+            )}`,
+        );
     }
     const chunks = new Array<AttributeReportPayload>();
     chunks.push({ attributeData: { schema, path: { ...path, listIndex: undefined }, payload: [], dataVersion } });

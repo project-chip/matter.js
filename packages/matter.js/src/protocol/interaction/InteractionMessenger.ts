@@ -252,7 +252,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                     if (attributeReport !== undefined) {
                         if (!firstAttributeAddedToReportMessage) {
                             firstAttributeAddedToReportMessage = true;
-                            messageSize += 3; // Array element with is added now with length needs 3 bytes
+                            messageSize += 3; // Array element is added now which needs 3 bytes
                         }
                         const encodedAttribute = encodeAttributePayload(attributeReport);
                         const attributeReportBytes = TlvAny.getEncodedByteLength(encodedAttribute);
@@ -277,7 +277,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                     }
                     if (!firstEventAddedToReportMessage) {
                         firstEventAddedToReportMessage = true;
-                        messageSize += 3; // Array element with is added now with length needs 3 bytes
+                        messageSize += 3; // Array element is added now which needs 3 bytes
                     }
                     const encodedEvent = encodeEventPayload(eventReport);
                     const eventReportBytes = TlvAny.getEncodedByteLength(encodedEvent);
