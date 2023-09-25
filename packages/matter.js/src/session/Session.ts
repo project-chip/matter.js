@@ -31,6 +31,7 @@ export interface Session<T> {
     name: string;
 
     isSecure(): boolean;
+    isPase(): boolean;
     decode(packet: Packet): Message;
     encode(message: Message): Packet;
     getMrpParameters(): MrpParameters;
@@ -39,8 +40,8 @@ export interface Session<T> {
     getPeerSessionId(): number;
     getNodeId(): NodeId | undefined;
     getPeerNodeId(): NodeId | undefined;
-    end(): Promise<void>;
-    destroy(): Promise<void>;
+    end(sendClose: boolean): Promise<void>;
+    destroy(sendClose: boolean): Promise<void>;
     notifyActivity(messageReceived: boolean): void;
     isPeerActive(): boolean;
     getAssociatedFabric(): Fabric;

@@ -45,7 +45,7 @@ export class SecureSession<T> implements Session<T> {
         salt: ByteArray,
         isInitiator: boolean,
         isResumption: boolean,
-        closeCallback: () => Promise<void>,
+        closeCallback: (sendClose: boolean) => Promise<void>,
         idleRetransTimeoutMs?: number,
         activeRetransTimeoutMs?: number,
     ) {
@@ -77,23 +77,36 @@ export class SecureSession<T> implements Session<T> {
     constructor(
         private readonly context: T,
         private readonly id: number,
-        private readonly fabric: Fabric | undefined,
+        private fabric: Fabric | undefined,
         private readonly peerNodeId: NodeId,
         private readonly peerSessionId: number,
         _sharedSecret: ByteArray,
         private readonly decryptKey: ByteArray,
         private readonly encryptKey: ByteArray,
         private readonly attestationKey: ByteArray,
-        private readonly closeCallback: () => Promise<void>,
+        private readonly closeCallback: (sendClose: boolean) => Promise<void>,
         private readonly idleRetransmissionTimeoutMs: number = DEFAULT_IDLE_RETRANSMISSION_TIMEOUT_MS,
         private readonly activeRetransmissionTimeoutMs: number = DEFAULT_ACTIVE_RETRANSMISSION_TIMEOUT_MS,
         private readonly retransmissionRetries: number = DEFAULT_RETRANSMISSION_RETRIES,
     ) {
         fabric?.addSession(this);
+
+        logger.debug(
+            `Created secure ${this.isPase() ? "PASE" : "CASE"} session for fabric index ${fabric?.fabricIndex}`,
+            this.name,
+        );
     }
 
     isSecure(): boolean {
         return true;
+    }
+
+    isPase(): boolean {
+        return this.peerNodeId === UNDEFINED_NODE_ID;
+    }
+
+    async close() {
+        await this.end(true);
     }
 
     notifyActivity(messageReceived: boolean) {
@@ -123,7 +136,8 @@ export class SecureSession<T> implements Session<T> {
         const { header, bytes } = MessageCodec.encodePayload(message);
         const headerBytes = MessageCodec.encodePacketHeader(message.packetHeader);
         const securityFlags = headerBytes[3];
-        const nonce = this.generateNonce(securityFlags, header.messageId, this.fabric?.nodeId ?? UNDEFINED_NODE_ID);
+        const sessionNodeId = this.isPase() ? UNDEFINED_NODE_ID : this.fabric?.nodeId ?? UNDEFINED_NODE_ID;
+        const nonce = this.generateNonce(securityFlags, header.messageId, sessionNodeId);
         return { header, bytes: Crypto.encrypt(this.encryptKey, bytes, nonce, headerBytes) };
     }
 
@@ -135,8 +149,17 @@ export class SecureSession<T> implements Session<T> {
         return this.fabric;
     }
 
+    addAssociatedFabric(fabric: Fabric) {
+        if (this.fabric !== undefined) {
+            throw new MatterFlowError("Session already has an associated Fabric. Can not change this.");
+        }
+        this.fabric = fabric;
+    }
+
     getAssociatedFabric(): Fabric {
-        if (this.fabric === undefined) throw new NoAssociatedFabricError("Session needs to have an associated Fabric");
+        if (this.fabric === undefined) {
+            throw new NoAssociatedFabricError("Session needs to have an associated Fabric.");
+        }
         return this.fabric;
     }
 
@@ -194,16 +217,16 @@ export class SecureSession<T> implements Session<T> {
     }
 
     /** Ends a session. Outstanding subscription data will be flushed before the session is destroyed. */
-    async end() {
+    async end(sendClose: boolean) {
         await this.clearSubscriptions(true);
-        await this.destroy();
+        await this.destroy(sendClose);
     }
 
     /** Destroys a session. Outstanding subscription data will be discarded. */
-    async destroy() {
+    async destroy(sendClose: boolean) {
         await this.clearSubscriptions(false);
         this.fabric?.removeSession(this);
-        await this.closeCallback();
+        await this.closeCallback(sendClose);
     }
 
     private generateNonce(securityFlags: number, messageId: number, nodeId: NodeId) {

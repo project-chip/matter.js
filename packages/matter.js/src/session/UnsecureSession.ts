@@ -27,6 +27,10 @@ export class UnsecureSession<T> implements Session<T> {
         return false;
     }
 
+    isPase(): boolean {
+        return false;
+    }
+
     notifyActivity(_messageReceived: boolean) {
         // Do nothing
     }
@@ -83,11 +87,11 @@ export class UnsecureSession<T> implements Session<T> {
         return undefined;
     }
 
-    async destroy() {
+    async destroy(_sendClose: boolean) {
         throw new InternalError("The unsecure session should never be destroyed.");
     }
 
-    async end() {
+    async end(_sendClose: boolean) {
         throw new InternalError("The unsecure session should never be closed.");
     }
 
