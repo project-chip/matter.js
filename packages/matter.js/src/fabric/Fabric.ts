@@ -167,8 +167,8 @@ export class Fabric {
     }
 
     async remove() {
-        for (const session of this.sessions) {
-            await session.end();
+        for (const session of [...this.sessions]) {
+            await session.close();
         }
         this.removeCallbacks.forEach(callback => callback());
     }
