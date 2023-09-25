@@ -51,7 +51,7 @@ export class Fabric {
 
     private readonly scopedClusterData: Map<number, any>;
 
-    private removeCallback: (() => void) | undefined;
+    private removeCallbacks = new Array<() => void>();
     private persistCallback: (() => void) | undefined;
 
     constructor(
@@ -151,8 +151,15 @@ export class Fabric {
         }
     }
 
-    setRemoveCallback(callback: () => void) {
-        this.removeCallback = callback;
+    addRemoveCallback(callback: () => void) {
+        this.removeCallbacks.push(callback);
+    }
+
+    deleteRemoveCallback(callback: () => void) {
+        const index = this.removeCallbacks.indexOf(callback);
+        if (index >= 0) {
+            this.removeCallbacks.splice(index, 1);
+        }
     }
 
     setPersistCallback(callback: () => void) {
@@ -163,7 +170,7 @@ export class Fabric {
         for (const session of this.sessions) {
             await session.end();
         }
-        this.removeCallback?.();
+        this.removeCallbacks.forEach(callback => callback());
     }
 
     persist() {
