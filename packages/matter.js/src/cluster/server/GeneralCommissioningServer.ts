@@ -7,6 +7,7 @@
 import { ImplementationError, MatterFlowError } from "../../common/MatterError.js";
 import { Logger } from "../../log/Logger.js";
 import { assertSecureSession } from "../../session/SecureSession.js";
+import { AdministratorCommissioning } from "../definitions/AdministratorCommissioningCluster.js";
 import { BasicInformationCluster } from "../definitions/BasicInformationCluster.js";
 import { GeneralCommissioning, GeneralCommissioningCluster } from "../definitions/GeneralCommissioningCluster.js";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
@@ -20,10 +21,51 @@ export const GeneralCommissioningClusterHandler: (options?: {
     /** If set, only these country codes are allowed to be set when changing country is allowed. */
     countryCodeWhitelist?: string[];
 }) => ClusterServerHandlers<typeof GeneralCommissioningCluster> = options => ({
-    armFailSafe: async ({ request: { breadcrumb: breadcrumbStep }, attributes: { breadcrumb }, session }) => {
-        // TODO Add handling for ExpiryLengthSeconds field and Error handling, see 11.9.7.2
+    initializeClusterServer: ({ attributes: { breadcrumb } }) => {
+        breadcrumb.setLocal(BigInt(0));
+    },
 
-        session.getContext().armFailSafe();
+    armFailSafe: async ({
+        request: { breadcrumb: breadcrumbStep, expiryLengthSeconds },
+        attributes: { breadcrumb, basicCommissioningInfo },
+        session,
+        endpoint,
+    }) => {
+        assertSecureSession(session, "armFailSafe can only be called on a secure session");
+        const device = session.getContext();
+
+        try {
+            // If the fail-safe timer is not currently armed, the commissioning window is open, and the command was
+            // received over a CASE session, the command SHALL leave the current fail-safe state unchanged and immediately
+            // respond with an ArmFailSafeResponse containing an ErrorCode value of BusyWithOtherAdmin. This is done to
+            // allow commissioners, which use PASE connections, the opportunity to use the failsafe during the
+            // relatively short commissioning window.
+            if (
+                !device.isFailsafeArmed() &&
+                endpoint.getClusterServer(AdministratorCommissioning.Cluster)?.getWindowStatusAttribute() !==
+                    AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen &&
+                !session.isPase()
+            ) {
+                throw new MatterFlowError("Failed to arm failsafe using CASE while commissioning window is opened.");
+            }
+
+            await device.armFailSafe(
+                expiryLengthSeconds,
+                basicCommissioningInfo.getLocal().maxCumulativeFailsafeSeconds,
+                session.getFabric(),
+                endpoint,
+            );
+        } catch (error) {
+            if (error instanceof MatterFlowError) {
+                logger.debug(`Error while arming failSafe timer`, error);
+                return {
+                    errorCode: GeneralCommissioning.CommissioningError.BusyWithOtherAdmin,
+                    debugText: error.message,
+                };
+            } else {
+                throw error;
+            }
+        }
         breadcrumb.setLocal(breadcrumbStep);
         return SuccessResponse;
     },
@@ -101,16 +143,44 @@ export const GeneralCommissioningClusterHandler: (options?: {
     },
 
     commissioningComplete: async ({ session, attributes: { breadcrumb } }) => {
-        // TODO Add error handling as defined in 11.9.7.6
+        const device = session.getContext();
+        if (!device.isFailsafeArmed()) {
+            return { errorCode: GeneralCommissioning.CommissioningError.NoFailSafe, debugText: "FailSafe not armed." };
+        }
 
         assertSecureSession(session, "commissioningComplete can only be called on a secure session");
         const fabric = session.getFabric();
-        if (fabric === undefined)
-            throw new MatterFlowError("commissioningComplete is called but the fabric has not been defined yet");
-        breadcrumb.setLocal(BigInt(0));
-        logger.info(`Commissioning completed on fabric #${fabric.fabricId} as node #${fabric.nodeId}.`);
+        if (fabric === undefined) {
+            return {
+                errorCode: GeneralCommissioning.CommissioningError.InvalidAuthentication,
+                debugText: "No Fabric associated with the session.",
+            };
+        }
+        const failSafeContext = device.getFailSafeContext();
+        if (fabric.fabricIndex !== failSafeContext.associatedFabric?.fabricIndex) {
+            return {
+                errorCode: GeneralCommissioning.CommissioningError.BusyWithOtherAdmin,
+                debugText: `Associated fabric ${fabric.fabricIndex} does not match the one from the failsafe context ${failSafeContext.associatedFabric?.fabricIndex}.`,
+            };
+        }
+        if (failSafeContext.fabricIndex === undefined) {
+            return {
+                errorCode: GeneralCommissioning.CommissioningError.InvalidAuthentication, // ??
+                debugText: "Fabric from the currently open failsafe context is not completed.",
+            };
+        }
 
-        session.getContext().completeCommission();
+        // On successful execution of the CommissioningComplete command the following actions SHALL be undertaken on the Server:
+        // 1. The Fail-Safe timer associated with the current Fail-Safe context SHALL be disarmed.
+        // 2. The commissioning window at the Server SHALL be closed.
+        // 3. Any temporary administrative privileges automatically granted to any open PASE session SHALL be revoked (see Section 6.6.2.8, “Bootstrapping of the Access Control Cluster”).
+        // 4. The Secure Session Context of any PASE session still established at the Server SHALL be cleared.
+        await device.completeCommission();
+
+        // 5. The Breadcrumb attribute SHALL be reset to zero.
+        breadcrumb.setLocal(BigInt(0));
+
+        logger.info(`Commissioning completed on fabric #${fabric.fabricId} as node #${fabric.nodeId}.`);
 
         return SuccessResponse;
     },
