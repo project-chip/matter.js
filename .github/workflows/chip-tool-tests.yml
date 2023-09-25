@@ -18,7 +18,6 @@ concurrency:
 
 env:
   CONNECTEDHOMEIP_TAG: "master" # "v1.1-branch" is not containing our current status, so we use master till 1.2 comes out
-  DOW: ${{ date +%u }} # Day of week
 
 jobs:
   chip-tests:
@@ -142,6 +141,11 @@ jobs:
         run: |
           npm ci
           npm run build
+
+
+      - name: Get day of the week
+        run: |
+          echo "DOW=$(date +%u)" >> $GITHUB_ENV
 
       - if: ${{( env.DOW == 6 && github.event_name == 'schedule') || steps.changes-long-tests.outputs.src == 'true' }} # Only run long tests on Saturday or when changed
         name: Enable Long tests
