@@ -12,6 +12,7 @@ import { Fabric, FabricJsonObject } from "./Fabric.js";
 
 /** Specific Error for when a fabric is not found. */
 export class FabricNotFoundError extends MatterError {}
+export class FabricTableFullError extends MatterError {}
 
 export class FabricManager {
     private nextFabricIndex = 1;
@@ -23,6 +24,20 @@ export class FabricManager {
         const fabrics = this.fabricStorage.get<FabricJsonObject[]>("fabrics", []);
         fabrics.forEach(fabric => this.addFabric(Fabric.createFromStorageObject(fabric)));
         this.nextFabricIndex = this.fabricStorage.get("nextFabricIndex", this.nextFabricIndex);
+    }
+
+    getNextFabricIndex() {
+        const startingIndex = this.nextFabricIndex;
+        while (true) {
+            const fabricIndex = this.nextFabricIndex++;
+            if (this.nextFabricIndex > 254) this.nextFabricIndex = 1;
+            if (!this.fabrics.has(FabricIndex(fabricIndex))) {
+                return FabricIndex(fabricIndex);
+            }
+            if (fabricIndex === startingIndex) {
+                throw new FabricTableFullError("No free fabric index available.");
+            }
+        }
     }
 
     persistFabrics() {
