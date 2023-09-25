@@ -552,7 +552,7 @@ export class SubscriptionHandler {
         }
     }
 
-    async cancel(flush = false) {
+    async cancel(flush = false, cancelledByPeer = false) {
         this.sendUpdatesActivated = false;
         this.updateTimer.stop();
         this.sendDelayTimer.stop();
@@ -563,6 +563,9 @@ export class SubscriptionHandler {
         }
         this.session.removeSubscription(this.subscriptionId);
         this.cancelCallback();
+        if (cancelledByPeer) {
+            await this.session.getContext().startAnnouncement();
+        }
     }
 
     private async sendUpdateMessage(
@@ -626,7 +629,7 @@ export class SubscriptionHandler {
                 async error => {
                     if (error.code === StatusCode.InvalidSubscription || error.code === StatusCode.Failure) {
                         logger.info(`Subscription ${this.subscriptionId} cancelled by peer.`);
-                        await this.cancel();
+                        await this.cancel(false, true);
                     } else {
                         throw error;
                     }

@@ -107,6 +107,29 @@ export namespace AdministratorCommissioning {
         salt: TlvField(4, TlvByteString.bound({ minLength: 16, maxLength: 32 }))
     });
 
+    export const enum StatusCode {
+        /**
+         * Could not be completed because another commissioning is in progress
+         *
+         * @see {@link MatterCoreSpecificationV1_1} § 11.18.6
+         */
+        Busy = 2,
+
+        /**
+         * Provided PAKE parameters were incorrectly formatted or otherwise invalid
+         *
+         * @see {@link MatterCoreSpecificationV1_1} § 11.18.6
+         */
+        PakeParameterError = 3,
+
+        /**
+         * No commissioning window was currently open
+         *
+         * @see {@link MatterCoreSpecificationV1_1} § 11.18.6
+         */
+        WindowNotOpen = 4
+    }
+
     /**
      * Input to the AdministratorCommissioning openBasicCommissioningWindow command
      *
