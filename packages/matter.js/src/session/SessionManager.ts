@@ -193,7 +193,7 @@ export class SessionManager<ContextT> {
                 sharedSecret,
                 resumptionId,
                 fabric,
-                peerNodeId: peerNodeId,
+                peerNodeId,
             });
         });
     }
