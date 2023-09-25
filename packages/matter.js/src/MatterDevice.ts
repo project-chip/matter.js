@@ -205,7 +205,7 @@ export class MatterDevice {
         return this.sessionManager.getNextAvailableSessionId();
     }
 
-    createSecureSession(
+    async createSecureSession(
         sessionId: number,
         fabric: Fabric | undefined,
         peerNodeId: NodeId,
@@ -217,7 +217,7 @@ export class MatterDevice {
         idleRetransTimeoutMs?: number,
         activeRetransTimeoutMs?: number,
     ) {
-        return this.sessionManager.createSecureSession(
+        return await this.sessionManager.createSecureSession(
             sessionId,
             fabric,
             peerNodeId,
@@ -228,7 +228,9 @@ export class MatterDevice {
             isResumption,
             idleRetransTimeoutMs,
             activeRetransTimeoutMs,
-            async () => await this.startAnnouncement(),
+            async () => {
+                await this.startAnnouncement();
+            },
         );
     }
 
