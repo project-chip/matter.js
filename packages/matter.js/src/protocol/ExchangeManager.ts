@@ -27,6 +27,7 @@ export class MessageChannel<ContextT> implements Channel<Message> {
     constructor(
         readonly channel: Channel<ByteArray>,
         readonly session: Session<ContextT>,
+        private readonly closeCallback?: () => void,
     ) {}
 
     send(message: Message): Promise<void> {
@@ -42,6 +43,7 @@ export class MessageChannel<ContextT> implements Channel<Message> {
 
     async close() {
         await this.channel.close();
+        this.closeCallback?.();
     }
 }
 
