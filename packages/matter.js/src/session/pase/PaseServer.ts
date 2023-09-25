@@ -59,7 +59,7 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
             this.pairingErrors++;
             logger.error("An error occurred during the PASE commissioning.", error);
 
-            // if we got a ChannelStatusResponseError in we do not need to send the same our
+            // if we received a ChannelStatusResponseError we do not need to send one back, so just cancel pairing
             const sendError = !(error instanceof ChannelStatusResponseError);
             await this.cancelPairing(messenger, sendError);
 

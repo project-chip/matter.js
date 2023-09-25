@@ -140,8 +140,6 @@ jobs:
         name: Install and build matter.js
         run: |
           npm ci
-          npm run build
-
 
       - name: Get day of the week
         run: |

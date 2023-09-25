@@ -27,19 +27,14 @@ export class FabricManager {
     }
 
     getNextFabricIndex() {
-        const startingIndex = this.nextFabricIndex;
-        let iteration = 0;
-        while (true) {
+        for (let i = 0; i < 254; i++) {
             const fabricIndex = this.nextFabricIndex++;
             if (this.nextFabricIndex > 254) this.nextFabricIndex = 1;
             if (!this.fabrics.has(FabricIndex(fabricIndex))) {
                 return FabricIndex(fabricIndex);
             }
-            if (iteration > 0 && fabricIndex === startingIndex) {
-                throw new FabricTableFullError("No free fabric index available.");
-            }
-            iteration++;
         }
+        throw new FabricTableFullError("No free fabric index available.");
     }
 
     persistFabrics() {

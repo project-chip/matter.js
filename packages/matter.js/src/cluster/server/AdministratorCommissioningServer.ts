@@ -48,7 +48,11 @@ class AdministratorCommissioningManager {
 
     validateCommissioningWindowRequirements(commissioningTimeout: number, device: MatterDevice) {
         if (this.commissioningWindowTimeout !== undefined) {
-            throw new StatusResponseError("A commissioning window is already opened.", StatusCode.Failure, 0x02); // TODO Busy: use Enum when generated
+            throw new StatusResponseError(
+                "A commissioning window is already opened.",
+                StatusCode.Failure,
+                AdministratorCommissioning.StatusCode.Busy,
+            );
         }
 
         if (commissioningTimeout > MAXIMUM_COMMISSIONING_TIMEOUT_S) {
@@ -68,8 +72,8 @@ class AdministratorCommissioningManager {
             throw new StatusResponseError(
                 "Failsafe timer armed, assume commissioning in progress.",
                 StatusCode.Failure,
-                0x02,
-            ); // TODO Busy: use Enum when generated
+                AdministratorCommissioning.StatusCode.Busy,
+            );
         }
     }
 
@@ -132,8 +136,8 @@ class AdministratorCommissioningManager {
             throw new StatusResponseError(
                 "No commissioning window is opened that could be revoked.",
                 StatusCode.Failure,
-                0x04,
-            ); // TODO WindowNotOpen: use Enum when generated
+                AdministratorCommissioning.StatusCode.WindowNotOpen,
+            );
         }
         this.closeCommissioningWindow(session);
     }
