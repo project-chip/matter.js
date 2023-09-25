@@ -69,11 +69,50 @@ export class SecureChannelProtocol implements ProtocolHandler<MatterDevice> {
             case MessageType.Sigma1:
                 await this.caseCommissioner.onNewExchange(exchange);
                 break;
+            case MessageType.StatusReport:
+                await this.handleInitialStatusReport(exchange, message);
+                break;
             default:
                 throw new MatterFlowError(
                     `Unexpected initial message on secure channel protocol: ${messageType.toString(16)}`,
                 );
         }
+    }
+
+    async handleInitialStatusReport(exchange: MessageExchange<MatterDevice>, message: Message) {
+        const {
+            payloadHeader: { messageType },
+            payload,
+        } = message;
+        if (messageType !== MessageType.StatusReport) {
+            throw new MatterFlowError(
+                `Unexpected message type on secure channel protocol, expected StatusReport: ${messageType.toString(
+                    16,
+                )}`,
+            );
+        }
+
+        const { generalStatus, protocolId, protocolStatus } = TlvSecureChannelStatusMessage.decode(payload);
+        if (generalStatus !== GeneralStatusCode.Success) {
+            throw new ChannelStatusResponseError(
+                `Received general error status (${protocolId})`,
+                generalStatus,
+                protocolStatus,
+            );
+        }
+        if (protocolStatus !== ProtocolStatusCode.CloseSession) {
+            throw new ChannelStatusResponseError(
+                `Received general success status, but protocol status is not CloseSession`,
+                generalStatus,
+                protocolStatus,
+            );
+        }
+
+        const { session } = exchange;
+        assertSecureSession(session);
+        logger.debug(`Peer requested to close session ${session.name}. Remove session now.`);
+        // TODO: and do more - see Core Specs 5.5
+        await session.destroy(true);
     }
 
     static isStandaloneAck(protocolId: number, messageType: number) {
