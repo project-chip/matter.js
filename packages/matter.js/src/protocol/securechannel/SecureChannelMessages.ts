@@ -33,7 +33,7 @@ export const enum GeneralStatusCode {
     Success = 0,
 
     /** Generic failure, additional details may be included in the protocol specific status. */
-    Error = 1,
+    Failure = 1,
 
     /** Operation was rejected by the system because the system is in an invalid state. */
     BadPrecondition = 2,

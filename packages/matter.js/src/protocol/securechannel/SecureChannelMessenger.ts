@@ -56,8 +56,8 @@ export class SecureChannelMessenger<ContextT> {
         return payload;
     }
 
-    sendError() {
-        return this.sendStatusReport(GeneralStatusCode.Error, ProtocolStatusCode.InvalidParam);
+    sendError(code: ProtocolStatusCode) {
+        return this.sendStatusReport(GeneralStatusCode.Failure, code);
     }
 
     sendSuccess() {
@@ -93,7 +93,7 @@ export class SecureChannelMessenger<ContextT> {
         const { generalStatus, protocolId, protocolStatus } = TlvSecureChannelStatusMessage.decode(payload);
         if (generalStatus !== GeneralStatusCode.Success) {
             throw new ChannelStatusResponseError(
-                `Received general error status (${protocolId})`,
+                `Received general error status for protocol ${protocolId}`,
                 generalStatus,
                 protocolStatus,
             );
