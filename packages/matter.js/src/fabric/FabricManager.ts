@@ -8,15 +8,14 @@ import { InternalError, MatterError, MatterFlowError } from "../common/MatterErr
 import { FabricIndex } from "../datatype/FabricIndex.js";
 import { StorageContext } from "../storage/StorageContext.js";
 import { ByteArray } from "../util/ByteArray.js";
-import { Fabric, FabricBuilder, FabricJsonObject } from "./Fabric.js";
+import { Fabric, FabricJsonObject } from "./Fabric.js";
 
 /** Specific Error for when a fabric is not found. */
 export class FabricNotFoundError extends MatterError {}
 
 export class FabricManager {
     private nextFabricIndex = 1;
-    private readonly fabrics = new Array<Fabric>();
-    private fabricBuilder?: FabricBuilder;
+    private readonly fabrics = new Map<FabricIndex, Fabric>();
     private readonly fabricStorage: StorageContext;
 
     constructor(storage: StorageContext) {
@@ -29,33 +28,36 @@ export class FabricManager {
     persistFabrics() {
         this.fabricStorage.set(
             "fabrics",
-            this.fabrics.map(fabric => fabric.toStorageObject()),
+            Array.from(this.fabrics.values()).map(fabric => fabric.toStorageObject()),
         );
         this.fabricStorage.set("nextFabricIndex", this.nextFabricIndex);
     }
 
     addFabric(fabric: Fabric) {
-        this.fabrics.push(fabric);
-        fabric.setRemoveCallback(() => this.removeFabric(fabric.fabricIndex));
+        const { fabricIndex } = fabric;
+        if (this.fabrics.has(fabricIndex)) {
+            throw new MatterFlowError(`Fabric with index ${fabricIndex} already exists.`);
+        }
+        this.fabrics.set(fabricIndex, fabric);
+        fabric.addRemoveCallback(() => this.removeFabric(fabricIndex));
         fabric.setPersistCallback(() => this.persistFabrics());
     }
 
     removeFabric(fabricIndex: FabricIndex) {
-        const index = this.fabrics.findIndex(fabric => fabric.fabricIndex === fabricIndex);
-        if (index === -1)
+        if (!this.fabrics.has(fabricIndex))
             throw new FabricNotFoundError(
                 `Fabric with index ${fabricIndex} cannot be removed because it does not exist.`,
             );
-        this.fabrics.splice(index, 1);
+        this.fabrics.delete(fabricIndex);
         this.persistFabrics();
     }
 
     getFabrics() {
-        return this.fabrics;
+        return Array.from(this.fabrics.values());
     }
 
     findFabricFromDestinationId(destinationId: ByteArray, initiatorRandom: ByteArray) {
-        for (const fabric of this.fabrics) {
+        for (const fabric of this.fabrics.values()) {
             const candidateDestinationId = fabric.getDestinationId(fabric.nodeId, initiatorRandom);
             if (!candidateDestinationId.equals(destinationId)) continue;
             return fabric;
