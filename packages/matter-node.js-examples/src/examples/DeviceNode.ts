@@ -33,6 +33,7 @@ import {
     singleton,
 } from "@project-chip/matter-node.js/util";
 import { DeviceTypeId, VendorId } from "@project-chip/matter.js/datatype";
+import { StatusCode, StatusResponseError } from "@project-chip/matter.js/interaction";
 
 const logger = Logger.get("Device");
 
@@ -269,12 +270,18 @@ class Device {
                             request: { ssid, credentials, breadcrumb },
                             attributes: { lastNetworkingStatus, lastNetworkId },
                             endpoint,
+                            session,
                         }) => {
                             console.log(
                                 `---> addOrUpdateWiFiNetwork called on NetworkCommissioning cluster: ${ssid.toHex()} ${credentials.toHex()} ${breadcrumb}`,
                             );
 
-                            // TODO Check if failsafe is armed
+                            if (!session.getContext().isFailsafeArmed()) {
+                                throw new StatusResponseError(
+                                    "Failsafe timer needs to be armed to add or update networks.",
+                                    StatusCode.FailsafeRequired,
+                                );
+                            }
 
                             // Simulate successful add or update
                             if (breadcrumb !== undefined) {
@@ -296,12 +303,18 @@ class Device {
                             request: { networkId, breadcrumb },
                             attributes: { lastNetworkingStatus, lastNetworkId },
                             endpoint,
+                            session,
                         }) => {
                             console.log(
                                 `---> removeNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${breadcrumb}`,
                             );
 
-                            // TODO Check if failsafe is armed
+                            if (!session.getContext().isFailsafeArmed()) {
+                                throw new StatusResponseError(
+                                    "Failsafe timer needs to be armed to add or update networks.",
+                                    StatusCode.FailsafeRequired,
+                                );
+                            }
 
                             // Simulate successful add or update
                             if (breadcrumb !== undefined) {
@@ -329,7 +342,12 @@ class Device {
                                 `---> connectNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${breadcrumb}`,
                             );
 
-                            // TODO Check if failsafe is armed
+                            if (!session.getContext().isFailsafeArmed()) {
+                                throw new StatusResponseError(
+                                    "Failsafe timer needs to be armed to add or update networks.",
+                                    StatusCode.FailsafeRequired,
+                                );
+                            }
 
                             // Simulate successful connection
                             if (breadcrumb !== undefined) {
