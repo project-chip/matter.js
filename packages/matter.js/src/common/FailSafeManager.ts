@@ -44,6 +44,9 @@ export class FailSafeManager {
 
     /** Store required CLuster data when opening the FailSafe context to allow to restore them on expiry. */
     private storeEndpointState(endpoint: Endpoint = this.rootEndpoint) {
+        // TODO: When implementing Network clusters we somehow need to make sure that a "temporary" network
+        //  configuration is not persisted to disk. The NetworkClusterHandlers need to make sure it is only persisted
+        //  when the commissioning is completed.
         const networkCluster = endpoint.getClusterServer(NetworkCommissioning.Cluster);
         if (networkCluster !== undefined) {
             this.storedNetworkClusterState.set(endpoint.getId(), networkCluster.getNetworksAttribute());
