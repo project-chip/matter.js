@@ -4,9 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import BN from "bn.js";
-import { CommissioningServer } from "../../src/CommissioningServer.js";
-import { MatterNode } from "../../src/MatterNode.js";
 import { AccessControlCluster } from "../../src/cluster/definitions/AccessControlCluster.js";
 import { AdministratorCommissioning } from "../../src/cluster/definitions/AdministratorCommissioningCluster.js";
 import { BasicInformationCluster } from "../../src/cluster/definitions/BasicInformationCluster.js";
@@ -29,6 +26,7 @@ import { ClusterServer } from "../../src/cluster/server/ClusterServer.js";
 import { GeneralCommissioningClusterHandler } from "../../src/cluster/server/GeneralCommissioningServer.js";
 import { GroupKeyManagementClusterHandler } from "../../src/cluster/server/GroupKeyManagementServer.js";
 import { OperationalCredentialsClusterHandler } from "../../src/cluster/server/OperationalCredentialsServer.js";
+import { CommissioningServer } from "../../src/CommissioningServer.js";
 import { ImplementationError } from "../../src/common/MatterError.js";
 import { DeviceTypeId } from "../../src/datatype/DeviceTypeId.js";
 import { EndpointNumber } from "../../src/datatype/EndpointNumber.js";
@@ -39,11 +37,9 @@ import { ComposedDevice } from "../../src/device/ComposedDevice.js";
 import { DeviceTypes } from "../../src/device/DeviceTypes.js";
 import { Endpoint } from "../../src/device/Endpoint.js";
 import { OnOffLightDevice, OnOffPluginUnitDevice } from "../../src/device/OnOffDevices.js";
+import { MatterNode } from "../../src/MatterNode.js";
 import { InteractionEndpointStructure } from "../../src/protocol/interaction/InteractionEndpointStructure.js";
 import { attributePathToId } from "../../src/protocol/interaction/InteractionServer.js";
-import { SecureChannelProtocol } from "../../src/protocol/securechannel/SecureChannelProtocol.js";
-import { CaseServer } from "../../src/session/case/CaseServer.js";
-import { PaseServer } from "../../src/session/pase/PaseServer.js";
 import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
 import { StorageManager } from "../../src/storage/StorageManager.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
@@ -231,9 +227,7 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
                     adminFabricIndex: null,
                     adminVendorId: null,
                 },
-                AdministratorCommissioningHandler(
-                    new SecureChannelProtocol(new PaseServer(new BN(0), ByteArray.fromHex("00")), new CaseServer()),
-                ),
+                AdministratorCommissioningHandler(),
             ),
         );
     }
