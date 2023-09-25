@@ -36,6 +36,13 @@ jobs:
               - "packages/matter.js/src/tlv/**"
               - ".github/workflows/chip-tool-tests.yml"
 
+      - uses: dorny/paths-filter@v2
+        id: changes-long-tests
+        with:
+          filters: |
+            src:
+              - "chip-testing/src/suites-long/**"
+
       - if: ${{ github.event_name == 'schedule' || ((github.event_name == 'push' || github.event_name == 'pull_request') && steps.changes.outputs.src == 'true') || github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[execute-chiptests]') == true }}
         name: Install Debian deps
         id: install-deps
@@ -134,6 +141,11 @@ jobs:
         run: |
           npm ci
           npm run build
+
+      - if: ${{( $(date +%u) == 6 && github.event_name == 'schedule') || steps.changes-long-tests.outputs.src == 'true' }} # Only run long tests on Saturday or when changed
+        name: Enable Long tests
+        run: |
+          echo "INCLUDE_LONG_TESTS=1" >> $GITHUB_ENV
 
       # Execute tests
       - if: ${{ github.event_name == 'schedule' || ((github.event_name == 'push' || github.event_name == 'pull_request') && steps.changes.outputs.src == 'true') || github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[execute-chiptests]') == true || contains(github.event.head_commit.message, '[rebuild-chip]') == true }}

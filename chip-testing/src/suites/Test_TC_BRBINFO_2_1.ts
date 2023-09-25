@@ -3,15 +3,17 @@
  * Copyright 2022 The node-matter Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Test_TC_BRBINFO_1_1Test } from "./Test_TC_BRBINFO_1_1";
+import { Test_TC_BRBINFO_1_1 } from "./Test_TC_BRBINFO_1_1";
+
+import { StorageBackendMemory } from "@project-chip/matter.js/storage";
 
 /**
  * Test case "TC_BRBINFO_2.1"
  * 11.2.1. [TC-BRBINFO-2.1] Attributes [DUT-Server]
  */
-export class Test_TC_BRBINFO_2_1Test extends Test_TC_BRBINFO_1_1Test {
-    constructor(storageManager: any) {
-        super(storageManager, "Test_TC_BRBINFO_2_1");
+export class Test_TC_BRBINFO_2_1 extends Test_TC_BRBINFO_1_1 {
+    constructor(storage: StorageBackendMemory) {
+        super(storage, "Test_TC_BRBINFO_2_1");
     }
 
     override async handleUserprompt(userPrompt: string, testDescription: string) {

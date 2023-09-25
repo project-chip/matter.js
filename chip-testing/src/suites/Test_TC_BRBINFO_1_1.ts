@@ -8,20 +8,20 @@ import { CommissioningServer } from "@project-chip/matter-node.js";
 import { BridgedDeviceBasicInformation } from "@project-chip/matter.js/cluster";
 import { DeviceTypeId, EndpointNumber, VendorId } from "@project-chip/matter.js/datatype";
 import { Aggregator, OnOffPluginUnitDevice } from "@project-chip/matter.js/device";
-import { StorageManager } from "@project-chip/matter.js/storage";
+import { StorageBackendMemory } from "@project-chip/matter.js/storage";
 import { DeviceTestInstance } from "../DeviceTestInstance";
 
 /**
  * Test case "TC-BRBINFO-1.1"
  * 130.1.1. [TC-BRBINFO-1.1] Global Attributes for Bridged Device Basic Information Cluster [DUT-Server]
  */
-export class Test_TC_BRBINFO_1_1Test extends DeviceTestInstance {
+export class Test_TC_BRBINFO_1_1 extends DeviceTestInstance {
     onOffDevice = new OnOffPluginUnitDevice(undefined, { endpointId: EndpointNumber(3) });
     aggregator = new Aggregator();
     commissioningServer?: CommissioningServer;
 
-    constructor(storageManager: StorageManager, overrideTestName?: string) {
-        super(overrideTestName ?? "Test_TC_BRBINFO_1_1", "GeneralTestPicsFile.txt", storageManager);
+    constructor(storage: StorageBackendMemory, overrideTestName?: string) {
+        super(overrideTestName ?? "Test_TC_BRBINFO_1_1", "GeneralTestPicsFile.txt", storage);
     }
 
     async setupCommissioningServer() {
@@ -37,7 +37,7 @@ export class Test_TC_BRBINFO_1_1Test extends DeviceTestInstance {
                 nodeLabel: "",
                 productName: "Productname",
                 productLabel: "Productlabel",
-                productId: 0x8000,
+                productId: 0x8001,
                 serialNumber: `node-matter`,
             },
             delayedAnnouncement: false,

@@ -5,29 +5,26 @@
  */
 
 import { CommissioningServer } from "@project-chip/matter-node.js";
+
 import { BasicInformation } from "@project-chip/matter.js/cluster";
 import { DeviceTypeId, VendorId } from "@project-chip/matter.js/datatype";
 import { OnOffPluginUnitDevice } from "@project-chip/matter.js/device";
 import { StorageBackendMemory } from "@project-chip/matter.js/storage";
 import { DeviceTestInstance } from "../DeviceTestInstance";
 
-/**
- * Test case "TC_BINFO_1.1"
- * 12.1.1. [TC-BINFO-1.1] Global Attributes for Basic Information Cluster [DUT-Server]
- */
-export class Test_TC_BINFO_1_1 extends DeviceTestInstance {
-    onOffDevice = new OnOffPluginUnitDevice();
-    commissioningServer?: CommissioningServer;
-
-    constructor(storage: StorageBackendMemory, overrideTestName?: string) {
-        super(overrideTestName ?? "Test_TC_BINFO_1_1", "GeneralTestPicsFile.txt", storage);
+/** Test case "TestBasicInformation" */
+export class TestBasicInformation extends DeviceTestInstance {
+    constructor(storage: StorageBackendMemory) {
+        super("TestBasicInformation", "GeneralTestPicsFile.txt", storage);
     }
 
     async setupCommissioningServer() {
-        this.commissioningServer = new CommissioningServer({
+        const onOffDevice = new OnOffPluginUnitDevice();
+
+        const commissioningServer = new CommissioningServer({
             port: 5540,
             deviceName: "Testdevice",
-            deviceType: DeviceTypeId(this.onOffDevice.deviceType),
+            deviceType: DeviceTypeId(onOffDevice.deviceType),
             passcode: 20202021,
             discriminator: 3840,
             basicInformation: {
@@ -41,7 +38,6 @@ export class Test_TC_BINFO_1_1 extends DeviceTestInstance {
                 manufacturingDate: "20210101",
                 partNumber: "123456",
                 productUrl: "https://test.com",
-                reachable: true,
                 uniqueId: `node-matter-unique`,
                 productAppearance: {
                     finish: BasicInformation.ProductFinish.Satin,
@@ -51,15 +47,8 @@ export class Test_TC_BINFO_1_1 extends DeviceTestInstance {
             delayedAnnouncement: false,
         });
 
-        this.commissioningServer.addDevice(this.onOffDevice);
+        commissioningServer.addDevice(onOffDevice);
 
-        return this.commissioningServer;
-    }
-
-    override async handleUserprompt(userPrompt: string, testDescription: string) {
-        if (testDescription.includes("TH reads")) {
-            return "y\n"; // We acknowledge the TH reads as checked
-        }
-        return super.handleUserprompt(userPrompt, testDescription);
+        return commissioningServer;
     }
 }

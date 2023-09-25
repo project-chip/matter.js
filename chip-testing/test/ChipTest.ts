@@ -1,9 +1,10 @@
 import { Network } from "@project-chip/matter.js/net";
-import { StorageBackendMemory, StorageManager } from "@project-chip/matter.js/storage";
+import { StorageBackendMemory } from "@project-chip/matter.js/storage";
 import { spawn } from "child_process";
 import { promises as fs } from "fs";
 import { DeviceTestInstance } from "../src/DeviceTestInstance";
-import * as Tests from "../src/suites/index.js";
+import * as LongRunningTests from "../src/suites-long/index.js";
+import * as NormalTests from "../src/suites/index.js";
 
 const CHIP_BIN_PATH = process.env.CHIP_BIN_PATH ?? `${__dirname}/../../../../bin`;
 
@@ -106,16 +107,33 @@ async function executeChipToolTest(
         commandCallback,
         userPromptCallback,
     );
+
+    /*
+    await executeProcess(
+        "bash",
+        [
+            "-c",
+            `"source .environment/activate.sh && ./scripts/tests/yaml/chiptool.py tests ${testName} chiptool --PICS ${__dirname}/config/${picsFilename}"`,
+        ],
+        "/Users/ingof/Dev/matter/connectedhomeip",
+        undefined,
+        commandCallback,
+        userPromptCallback,
+    );*/
 }
 
-/** Wrapper method to initially clean up and pair the test device with chip-tool to prepare testing. */
-async function pairWithChipTool(startedCallback?: () => Promise<void>) {
+async function clearChipToolStorage() {
     process.stdout.write(`====> Chip test Runner: Cleanup /tmp/chip* for a new Test\n`);
     try {
         await executeProcess("rm", ["/tmp/chip_*"]);
     } catch {
         // ignore for now, nothing to cleanup
     }
+}
+
+/** Wrapper method to initially clean up and pair the test device with chip-tool to prepare testing. */
+async function pairWithChipTool(startedCallback?: () => Promise<void>) {
+    await clearChipToolStorage();
 
     process.stdout.write(`====> Chip test Runner: Pairing with Chip-Tool\n`);
 
@@ -138,17 +156,24 @@ describe("Chip-Tool-Tests", () => {
         await executeProcess("chmod", ["+x", `${CHIP_BIN_PATH}/src/app/tests/suites/commands/system/scripts/*`]);
     });
 
+    let Tests = {} as any;
+    if (process.env.LONG_TESTS_ONLY !== undefined) {
+        Tests = LongRunningTests;
+    } else if (process.env.INCLUDE_LONG_TESTS !== undefined) {
+        Tests = { ...NormalTests, ...LongRunningTests };
+    } else {
+        Tests = NormalTests;
+    }
+
     /** Collect and execute all tests that are exported from the suites folder. */
     for (const suiteName in Tests) {
         if (process.env.LIMIT_TO_ONE_TEST !== undefined && suiteName !== process.env.LIMIT_TO_ONE_TEST) {
             continue;
         }
         describe(suiteName, () => {
-            const suite = (Tests as any)[suiteName];
+            const suite = Tests[suiteName];
             const storage = new StorageBackendMemory();
-            const storageManager = new StorageManager(storage);
-            void storageManager.initialize(); // hacky but works
-            const testInstance = new suite(storageManager) as DeviceTestInstance;
+            const testInstance = new suite(storage) as DeviceTestInstance;
 
             it(`"${suiteName}": Setup test instance`, async () => await testInstance.setup());
 
@@ -161,7 +186,7 @@ describe("Chip-Tool-Tests", () => {
                     testInstance.PICSConfig,
                     (command, params) => testInstance.handleCommand(command, params),
                     async (testDescription, userPrompt) => testInstance.handleUserprompt(testDescription, userPrompt),
-                )).timeout(120000);
+                )).timeout(suiteName in LongRunningTests ? 1200000 : 120000);
 
             after(async () => {
                 await testInstance.stop();
