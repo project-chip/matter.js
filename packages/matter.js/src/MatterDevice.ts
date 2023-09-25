@@ -149,12 +149,16 @@ export class MatterDevice {
             const fabricsToAnnounce: Fabric[] = [];
             for (const fabric of fabrics) {
                 const session = this.sessionManager.getSessionForNode(fabric, fabric.rootNodeId);
-                if (session) {
+                if (
+                    session !== undefined &&
+                    session.isSecure() &&
+                    (session as SecureSession<this>).numberOfActiveSubscriptions > 0
+                ) {
                     // We have a session, no need to re-announce
                     logger.debug(
                         "Skipping announce for fabric",
                         fabric.fabricId,
-                        "because we have a session",
+                        "because we have a session with active subscriptions",
                         session.getId(),
                     );
                     continue;
