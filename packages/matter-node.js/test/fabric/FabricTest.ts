@@ -9,6 +9,7 @@ import { ByteArray } from "@project-chip/matter.js/util";
 
 import { FabricId, FabricIndex, NodeId, VendorId } from "@project-chip/matter.js/datatype";
 import { Fabric } from "@project-chip/matter.js/fabric";
+import { SecureSession, UNDEFINED_NODE_ID } from "@project-chip/matter.js/session";
 import * as assert from "assert";
 import { buildFabric } from "./FabricTestingUtil.js";
 
@@ -108,6 +109,103 @@ describe("Fabric", () => {
             const result = fabric.getDestinationId(TEST_NODE_ID_3, TEST_RANDOM_3);
 
             assert.equal(result.toHex(), EXPECTED_DESTINATION_ID_3.toHex());
+        });
+    });
+
+    describe("remove from session", () => {
+        it("removes all sessions when removing fabric", async () => {
+            const DECRYPT_KEY = ByteArray.fromHex("bacb178b2588443d5d5b1e4559e7accc");
+            const ENCRYPT_KEY = ByteArray.fromHex("66951379d0a6d151cf5472cccf13f360");
+
+            const fabric = await buildFabric();
+
+            let session1Destroyed = false;
+            let session2Destroyed = false;
+            const secureSession1 = new SecureSession(
+                {} as any,
+                1,
+                undefined,
+                UNDEFINED_NODE_ID,
+                0x8d4b,
+                Buffer.alloc(0),
+                DECRYPT_KEY,
+                ENCRYPT_KEY,
+                Buffer.alloc(0),
+                async () => {
+                    session1Destroyed = true;
+                },
+            );
+            fabric.addSession(secureSession1);
+            const secureSession2 = new SecureSession(
+                {} as any,
+                1,
+                undefined,
+                UNDEFINED_NODE_ID,
+                0x8d4b,
+                Buffer.alloc(0),
+                DECRYPT_KEY,
+                ENCRYPT_KEY,
+                Buffer.alloc(0),
+                async () => {
+                    session2Destroyed = true;
+                },
+            );
+            fabric.addSession(secureSession2);
+
+            let removeCallbackCalled = false;
+            fabric.addRemoveCallback(() => {
+                removeCallbackCalled = true;
+            });
+
+            await fabric.remove();
+
+            assert.equal(session1Destroyed, true);
+            assert.equal(session2Destroyed, true);
+            assert.equal(removeCallbackCalled, true);
+        });
+
+        it("removes one sessions without doing anything", async () => {
+            const DECRYPT_KEY = ByteArray.fromHex("bacb178b2588443d5d5b1e4559e7accc");
+            const ENCRYPT_KEY = ByteArray.fromHex("66951379d0a6d151cf5472cccf13f360");
+
+            const fabric = await buildFabric();
+
+            let session1Destroyed = false;
+            let session2Destroyed = false;
+            const secureSession1 = new SecureSession(
+                {} as any,
+                1,
+                undefined,
+                UNDEFINED_NODE_ID,
+                0x8d4b,
+                Buffer.alloc(0),
+                DECRYPT_KEY,
+                ENCRYPT_KEY,
+                Buffer.alloc(0),
+                async () => {
+                    session1Destroyed = true;
+                },
+            );
+            fabric.addSession(secureSession1);
+            const secureSession2 = new SecureSession(
+                {} as any,
+                1,
+                undefined,
+                UNDEFINED_NODE_ID,
+                0x8d4b,
+                Buffer.alloc(0),
+                DECRYPT_KEY,
+                ENCRYPT_KEY,
+                Buffer.alloc(0),
+                async () => {
+                    session2Destroyed = true;
+                },
+            );
+            fabric.addSession(secureSession2);
+            fabric.removeSession(secureSession1);
+
+            assert.equal(session1Destroyed, false);
+            assert.equal(session2Destroyed, false);
         });
     });
 });
