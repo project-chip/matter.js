@@ -64,6 +64,10 @@ export class SecureChannelMessenger<ContextT> {
         return this.sendStatusReport(GeneralStatusCode.Success, ProtocolStatusCode.Success);
     }
 
+    sendCloseSession() {
+        return this.sendStatusReport(GeneralStatusCode.Success, ProtocolStatusCode.CloseSession, false);
+    }
+
     getChannelName() {
         return this.exchange.channel.channel.name;
     }
@@ -72,7 +76,11 @@ export class SecureChannelMessenger<ContextT> {
         await this.exchange.close();
     }
 
-    private async sendStatusReport(generalStatus: GeneralStatusCode, protocolStatus: ProtocolStatusCode) {
+    private async sendStatusReport(
+        generalStatus: GeneralStatusCode,
+        protocolStatus: ProtocolStatusCode,
+        requiresAck?: boolean,
+    ) {
         await this.exchange.send(
             MessageType.StatusReport,
             TlvSecureChannelStatusMessage.encode({
@@ -80,6 +88,7 @@ export class SecureChannelMessenger<ContextT> {
                 protocolId: SECURE_CHANNEL_PROTOCOL_ID,
                 protocolStatus,
             }),
+            { requiresAck },
         );
     }
 
