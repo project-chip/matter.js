@@ -35,6 +35,8 @@ import { isNetworkInterface, NetInterface } from "./net/NetInterface.js";
 import { NetworkError } from "./net/Network.js";
 import { ChannelManager } from "./protocol/ChannelManager.js";
 import { ExchangeManager } from "./protocol/ExchangeManager.js";
+import { StatusResponseError } from "./protocol/interaction/InteractionMessenger.js";
+import { StatusCode } from "./protocol/interaction/InteractionProtocol.js";
 import { ProtocolHandler } from "./protocol/ProtocolHandler.js";
 import { SECURE_CHANNEL_PROTOCOL_ID } from "./protocol/securechannel/SecureChannelMessages.js";
 import { SecureChannelMessenger } from "./protocol/securechannel/SecureChannelMessenger.js";
@@ -319,6 +321,14 @@ export class MatterDevice {
         }
         await session.destroy(false);
         await this.sessionManager.removeSession(session.getId(), session.getPeerNodeId());
+    }
+
+    assertFailSafeArmed(message?: string) {
+        if (this.isFailsafeArmed()) return;
+        throw new StatusResponseError(
+            message ?? "Failsafe timer needs to be armed to execute this action.",
+            StatusCode.FailsafeRequired,
+        );
     }
 
     private async failSafeExpired() {

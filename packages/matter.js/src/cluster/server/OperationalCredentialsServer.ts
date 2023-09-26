@@ -82,12 +82,7 @@ export const OperationalCredentialsClusterHandler: (
             );
         }
         const device = session.getContext();
-        if (!device.isFailsafeArmed()) {
-            throw new StatusResponseError(
-                "csrRequest received while failsafe is not armed.",
-                StatusCode.FailsafeRequired,
-            );
-        }
+        device.assertFailSafeArmed("csrRequest received while failsafe is not armed.");
 
         const failSafeContext = device.getFailSafeContext();
         if (failSafeContext.fabricIndex !== undefined) {
@@ -137,10 +132,7 @@ export const OperationalCredentialsClusterHandler: (
         //        outside the Operational Node ID range and InvalidNOC for all other failures.
 
         const device = session.getContext();
-
-        if (!device.isFailsafeArmed()) {
-            throw new StatusResponseError("addNoc received while failsafe is not armed.", StatusCode.FailsafeRequired);
-        }
+        device.assertFailSafeArmed("addNoc received while failsafe is not armed.");
 
         const failSafeContext = device.getFailSafeContext();
 
@@ -279,9 +271,7 @@ export const OperationalCredentialsClusterHandler: (
 
         const device = session.getContext();
 
-        if (!device.isFailsafeArmed()) {
-            throw new StatusResponseError("addNoc received while failsafe is not armed.", StatusCode.FailsafeRequired);
-        }
+        device.assertFailSafeArmed("updateNoc received while failsafe is not armed.");
 
         const failSafeContext = device.getFailSafeContext();
 
@@ -399,9 +389,7 @@ export const OperationalCredentialsClusterHandler: (
     addTrustedRootCertificate: async ({ request: { rootCaCertificate }, session }) => {
         const device = session.getContext();
 
-        if (!device.isFailsafeArmed()) {
-            throw new StatusResponseError("addNoc received while failsafe is not armed.", StatusCode.FailsafeRequired);
-        }
+        device.assertFailSafeArmed("addTrustedRootCertificate received while failsafe is not armed.");
 
         const failSafeContext = device.getFailSafeContext();
         if (failSafeContext.fabricBuilder.hasRootCert()) {

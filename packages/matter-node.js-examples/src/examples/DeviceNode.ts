@@ -33,7 +33,6 @@ import {
     singleton,
 } from "@project-chip/matter-node.js/util";
 import { DeviceTypeId, VendorId } from "@project-chip/matter.js/datatype";
-import { StatusCode, StatusResponseError } from "@project-chip/matter.js/interaction";
 
 const logger = Logger.get("Device");
 
@@ -276,12 +275,9 @@ class Device {
                                 `---> addOrUpdateWiFiNetwork called on NetworkCommissioning cluster: ${ssid.toHex()} ${credentials.toHex()} ${breadcrumb}`,
                             );
 
-                            if (!session.getContext().isFailsafeArmed()) {
-                                throw new StatusResponseError(
-                                    "Failsafe timer needs to be armed to add or update networks.",
-                                    StatusCode.FailsafeRequired,
-                                );
-                            }
+                            session
+                                .getContext()
+                                .assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
 
                             // Simulate successful add or update
                             if (breadcrumb !== undefined) {
@@ -309,12 +305,9 @@ class Device {
                                 `---> removeNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${breadcrumb}`,
                             );
 
-                            if (!session.getContext().isFailsafeArmed()) {
-                                throw new StatusResponseError(
-                                    "Failsafe timer needs to be armed to add or update networks.",
-                                    StatusCode.FailsafeRequired,
-                                );
-                            }
+                            session
+                                .getContext()
+                                .assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
 
                             // Simulate successful add or update
                             if (breadcrumb !== undefined) {
@@ -342,12 +335,9 @@ class Device {
                                 `---> connectNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${breadcrumb}`,
                             );
 
-                            if (!session.getContext().isFailsafeArmed()) {
-                                throw new StatusResponseError(
-                                    "Failsafe timer needs to be armed to add or update networks.",
-                                    StatusCode.FailsafeRequired,
-                                );
-                            }
+                            session
+                                .getContext()
+                                .assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
 
                             // Simulate successful connection
                             if (breadcrumb !== undefined) {
