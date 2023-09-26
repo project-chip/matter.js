@@ -24,6 +24,7 @@ export const MINIMUM_COMMISSIONING_TIMEOUT_S = 3 * 60; // 180 seconds/3 minutes
 // TODO If any format or validity errors related to the PAKEPasscodeVerifier, Iterations or Salt arguments arise, this command SHALL fail with a cluster specific status code of PAKEParameterError.
 // TODO In case of any other parameter error, this command SHALL fail with a status code of COMMAND_INVALID.
 
+/** Class which executed the cluster commands for the AdministratorCommissioning cluster. */
 class AdministratorCommissioningManager {
     private commissioningWindowTimeout?: Timer;
     private fabricRemoveHandler = () => this.adminFabricIndexAttribute.setLocal(null);
@@ -36,6 +37,10 @@ class AdministratorCommissioningManager {
         windowStatusAttribute.setLocal(AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen);
     }
 
+    /**
+     * Called whenever a Commissioning/Announcement Window is opened by this cluster. This method starts the timer and
+     * adjusts the needed attributes.
+     */
     initializeCommissioningWindow(commissioningTimeout: number, session: Session<MatterDevice>) {
         this.commissioningWindowTimeout = Time.getTimer(commissioningTimeout * 1000, () =>
             this.closeCommissioningWindow(session),
@@ -46,7 +51,10 @@ class AdministratorCommissioningManager {
         session.getAssociatedFabric().addRemoveCallback(this.fabricRemoveHandler);
     }
 
-    validateCommissioningWindowRequirements(commissioningTimeout: number, device: MatterDevice) {
+    /**
+     * This method validates if a commissioning window can be opened and throws various exceptions in case of failures.
+     */
+    assertCommissioningWindowRequirements(commissioningTimeout: number, device: MatterDevice) {
         if (this.commissioningWindowTimeout !== undefined) {
             throw new StatusResponseError(
                 "A commissioning window is already opened.",
@@ -77,6 +85,9 @@ class AdministratorCommissioningManager {
         }
     }
 
+    /**
+     * This method opens an Enhanced Commissioning Window (A dynamic passcode is used which was provided by the caller).
+     */
     async openEnhancedCommissioningWindow(
         pakeVerifier: ByteArray,
         discriminator: number,
@@ -87,7 +98,7 @@ class AdministratorCommissioningManager {
     ) {
         const device = session.getContext();
 
-        this.validateCommissioningWindowRequirements(commissioningTimeout, device);
+        this.assertCommissioningWindowRequirements(commissioningTimeout, device);
 
         await device.allowEnhancedCommissioning(
             discriminator,
@@ -102,10 +113,11 @@ class AdministratorCommissioningManager {
         this.initializeCommissioningWindow(commissioningTimeout, session);
     }
 
+    /** This method opens a Basic Commissioning Window. The default passcode is used. */
     async openBasicCommissioningWindow(commissioningTimeout: number, session: Session<MatterDevice>) {
         const device = session.getContext();
 
-        this.validateCommissioningWindowRequirements(commissioningTimeout, device);
+        this.assertCommissioningWindowRequirements(commissioningTimeout, device);
 
         await device.allowBasicCommissioning(() => {
             session.getAssociatedFabric().deleteRemoveCallback(this.fabricRemoveHandler);
@@ -116,6 +128,9 @@ class AdministratorCommissioningManager {
         this.initializeCommissioningWindow(commissioningTimeout, session);
     }
 
+    /**
+     * This method is used internally when the commissioning window timer expires or the commissioning was completed.
+     */
     private endCommissioning() {
         if (this.commissioningWindowTimeout !== undefined) {
             this.commissioningWindowTimeout.stop();
@@ -126,11 +141,13 @@ class AdministratorCommissioningManager {
         this.adminVendorIdAttribute.setLocal(null);
     }
 
+    /** This method is used to close a commissioning window. */
     closeCommissioningWindow(session: Session<MatterDevice>) {
         session.getContext().endCommissioning();
         this.endCommissioning();
     }
 
+    /** This method is used to revoke a commissioning window. */
     async revokeCommissioning(session: Session<MatterDevice>) {
         if (this.commissioningWindowTimeout === undefined) {
             throw new StatusResponseError(
@@ -142,6 +159,7 @@ class AdministratorCommissioningManager {
         this.closeCommissioningWindow(session);
     }
 
+    /** Cleanup resources and stop the timer when the CLusterServer is destroyed. */
     destroy() {
         if (this.commissioningWindowTimeout !== undefined) {
             this.commissioningWindowTimeout.stop();
