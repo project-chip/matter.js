@@ -226,6 +226,6 @@ export const BasicAdminCommissioningHandler: () => ClusterServerHandlers<
 
         revokeCommissioning: async ({ session }) => manager.revokeCommissioning(session),
 
-        destroyClusterServer: () => manager.destroy(),
+        destroyClusterServer: () => manager?.destroy(),
     };
 };
