@@ -9,6 +9,7 @@ export { TestBasicInformation } from "./TestBasicInformation";
 export { TestCASERecovery } from "./TestCASERecovery.js";
 export { TestCommissioningWindow } from "./TestCommissioningWindow.js";
 export { TestFabricRemovalWhileSubscribed } from "./TestFabricRemovalWhileSubscribed.js";
+export { TestGeneralCommissioning } from "./TestGeneralCommissioning.js";
 export { TestOperationalCredentialsCluster } from "./TestOperationalCredentialsCluster.js";
 export { TestSelfFabricRemoval } from "./TestSelfFabricRemoval.js";
 export { TestSubscribe_AdministratorCommissioning } from "./TestSubscribe_AdministratorCommissioning.js";

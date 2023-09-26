@@ -17,11 +17,15 @@ export abstract class DeviceTestInstance {
 
     /** Set up the test instance MatterServer. */
     async setup() {
-        await this.storageManager.initialize(); // hacky but works
-        this.matterServer = new MatterServer(this.storageManager);
+        try {
+            await this.storageManager.initialize(); // hacky but works
+            this.matterServer = new MatterServer(this.storageManager);
 
-        this.matterServer.addCommissioningServer(await this.setupCommissioningServer());
-
+            this.matterServer.addCommissioningServer(await this.setupCommissioningServer());
+        } catch (error) {
+            // Catch and log error, else the test framework hides issues here
+            console.log(error);
+        }
         process.stdout.write(`====> Chip test Runner "${this.testName}": Setup done\n`);
     }
 
@@ -31,7 +35,12 @@ export abstract class DeviceTestInstance {
     /** Start the test instance MatterServer with the included device. */
     async start() {
         if (!this.matterServer) throw new Error("matterServer not initialized");
-        await this.matterServer.start();
+        try {
+            await this.matterServer.start();
+        } catch (error) {
+            // Catch and log error, else the test framework hides issues here
+            console.log(error);
+        }
         process.stdout.write(`====> Chip test Runner "${this.testName}": Start instance\n`);
     }
 

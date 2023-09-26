@@ -193,7 +193,7 @@ export const AdministratorCommissioningHandler: () => ClusterServerHandlers<
 
         revokeCommissioning: async ({ session }) => manager.revokeCommissioning(session),
 
-        destroyClusterServer: () => manager.destroy(),
+        destroyClusterServer: () => manager?.destroy(),
     };
 };
 

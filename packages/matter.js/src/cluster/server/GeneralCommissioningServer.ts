@@ -6,6 +6,8 @@
 
 import { ImplementationError, MatterFlowError } from "../../common/MatterError.js";
 import { Logger } from "../../log/Logger.js";
+import { StatusResponseError } from "../../protocol/interaction/InteractionMessenger.js";
+import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
 import { assertSecureSession } from "../../session/SecureSession.js";
 import { AdministratorCommissioning } from "../definitions/AdministratorCommissioningCluster.js";
 import { BasicInformationCluster } from "../definitions/BasicInformationCluster.js";
@@ -55,6 +57,11 @@ export const GeneralCommissioningClusterHandler: (options?: {
                 session.getFabric(),
                 endpoint,
             );
+
+            if (device.isFailsafeArmed()) {
+                // If failsafe is armed after the command, set breadcrumb (not when expired)
+                breadcrumb.setLocal(breadcrumbStep);
+            }
         } catch (error) {
             if (error instanceof MatterFlowError) {
                 logger.debug(`Error while arming failSafe timer`, error);
@@ -66,7 +73,6 @@ export const GeneralCommissioningClusterHandler: (options?: {
                 throw error;
             }
         }
-        breadcrumb.setLocal(breadcrumbStep);
         return SuccessResponse;
     },
 
@@ -75,6 +81,13 @@ export const GeneralCommissioningClusterHandler: (options?: {
         attributes: { breadcrumb, regulatoryConfig, locationCapability },
         endpoint,
     }) => {
+        if (countryCode.length !== 2) {
+            throw new StatusResponseError(
+                "The country code need to have a fixed length of 2 characters.",
+                StatusCode.ConstraintError,
+            );
+        }
+
         const locationCapabilityValue = locationCapability.getLocal();
 
         // Check and handle country code
@@ -159,14 +172,8 @@ export const GeneralCommissioningClusterHandler: (options?: {
         const failSafeContext = device.getFailSafeContext();
         if (fabric.fabricIndex !== failSafeContext.associatedFabric?.fabricIndex) {
             return {
-                errorCode: GeneralCommissioning.CommissioningError.BusyWithOtherAdmin,
+                errorCode: GeneralCommissioning.CommissioningError.InvalidAuthentication,
                 debugText: `Associated fabric ${fabric.fabricIndex} does not match the one from the failsafe context ${failSafeContext.associatedFabric?.fabricIndex}.`,
-            };
-        }
-        if (failSafeContext.fabricIndex === undefined) {
-            return {
-                errorCode: GeneralCommissioning.CommissioningError.InvalidAuthentication, // ??
-                debugText: "Fabric from the currently open failsafe context is not completed.",
             };
         }
 

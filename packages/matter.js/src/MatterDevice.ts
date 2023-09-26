@@ -435,7 +435,9 @@ export class MatterDevice {
             logger.debug(`Arm failSafe timer for ${expiryLengthSeconds}s.`);
         } else {
             await this.failSafeContext.reArm(associatedFabric, expiryLengthSeconds);
-            logger.debug(`Extend failSafe timer for ${expiryLengthSeconds}s.`);
+            if (expiryLengthSeconds > 0) {
+                logger.debug(`Extend failSafe timer for ${expiryLengthSeconds}s.`);
+            }
         }
     }
 
@@ -459,7 +461,9 @@ export class MatterDevice {
         }
         this.failSafeContext.complete();
 
-        this.fabricManager.persistFabrics();
+        if (this.failSafeContext.fabricIndex !== undefined) {
+            this.fabricManager.persistFabrics();
+        }
 
         // 2. The commissioning window at the Server SHALL be closed.
         this.endCommissioning();
