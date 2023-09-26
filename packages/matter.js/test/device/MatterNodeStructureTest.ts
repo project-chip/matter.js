@@ -39,7 +39,7 @@ import { Endpoint } from "../../src/device/Endpoint.js";
 import { OnOffLightDevice, OnOffPluginUnitDevice } from "../../src/device/OnOffDevices.js";
 import { MatterNode } from "../../src/MatterNode.js";
 import { InteractionEndpointStructure } from "../../src/protocol/interaction/InteractionEndpointStructure.js";
-import { attributePathToId } from "../../src/protocol/interaction/InteractionServer.js";
+import { attributePathToId, InteractionServer } from "../../src/protocol/interaction/InteractionServer.js";
 import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
 import { StorageManager } from "../../src/storage/StorageManager.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
@@ -1919,7 +1919,7 @@ describe("Endpoint Structures", () => {
                     },
                 ),
             );
-            expect(initCalled).true;
+            expect(initCalled).false;
             expect(destroyCalled).false;
 
             node.addDevice(onoffLightDevice);
@@ -1931,6 +1931,13 @@ describe("Endpoint Structures", () => {
             rootEndpoint.updatePartsList();
             const endpointStructure = new InteractionEndpointStructure();
             endpointStructure.initializeFromEndpoint(rootEndpoint);
+
+            const interactionServer = new InteractionServer(testStorageManager.createContext("test"));
+            rootEndpoint.setStructureChangedCallback(() => interactionServer.setRootEndpoint(rootEndpoint)); // Make sure we get structure changes
+            interactionServer.setRootEndpoint(rootEndpoint);
+
+            expect(initCalled).true;
+            expect(destroyCalled).false;
 
             // Overwrite cluster server - old gets destroyed, new initialized
             let init2Called = false;
@@ -2031,7 +2038,7 @@ describe("Endpoint Structures", () => {
                     },
                 ),
             );
-            expect(initCalled).true;
+            expect(initCalled).false;
             expect(destroyCalled).false;
 
             aggregator.addBridgedDevice(onoffLightDevice, {
@@ -2047,6 +2054,13 @@ describe("Endpoint Structures", () => {
             rootEndpoint.updatePartsList();
             const endpointStructure = new InteractionEndpointStructure();
             endpointStructure.initializeFromEndpoint(rootEndpoint);
+
+            const interactionServer = new InteractionServer(testStorageManager.createContext("test"));
+            rootEndpoint.setStructureChangedCallback(() => interactionServer.setRootEndpoint(rootEndpoint)); // Make sure we get structure changes
+            interactionServer.setRootEndpoint(rootEndpoint);
+
+            expect(initCalled).true;
+            expect(destroyCalled).false;
 
             aggregator.removeBridgedDevice(onoffLightDevice);
 
