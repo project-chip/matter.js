@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError } from "../../common/MatterError.js";
+import { ImplementationError, InternalError } from "../../common/MatterError.js";
 import { Crypto } from "../../crypto/Crypto.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { CommandId } from "../../datatype/CommandId.js";
@@ -73,6 +73,7 @@ export function ClusterServer<
     const attributes = <AttributeServers<A>>{};
     const commands = <CommandServers<C>>{};
     const events = <EventServers<E>>{};
+    let assignedEndpoint: Endpoint | undefined = undefined;
 
     const result: any = {
         id: clusterId,
@@ -90,13 +91,7 @@ export function ClusterServer<
             for (const name in events) {
                 (events as any)[name].assignToEndpoint(endpoint);
             }
-            if (typeof handlers.initializeClusterServer === "function") {
-                handlers.initializeClusterServer({
-                    attributes,
-                    events,
-                    endpoint,
-                });
-            }
+            assignedEndpoint = endpoint;
         },
 
         _destroy: () => {
@@ -133,6 +128,19 @@ export function ClusterServer<
                     );
                     storageContext.delete(attribute.name); // Storage broken so we should delete it
                 }
+            }
+
+            if (assignedEndpoint === undefined) {
+                throw new InternalError(
+                    "The Endpoint always needs to be existing before storage is initialized for an Endpoint.",
+                );
+            }
+            if (typeof handlers.initializeClusterServer === "function") {
+                handlers.initializeClusterServer({
+                    attributes,
+                    events,
+                    endpoint: assignedEndpoint,
+                });
             }
         },
 
