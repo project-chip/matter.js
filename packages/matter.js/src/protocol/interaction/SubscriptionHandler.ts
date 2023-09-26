@@ -409,7 +409,7 @@ export class SubscriptionHandler {
                 this.sendNextUpdateImmediately = false;
                 if (error instanceof RetransmissionLimitReachedError) {
                     // We could not send at all, consider session as dead
-                    await this.session.destroy();
+                    await this.session.destroy(false);
                 } else {
                     await this.cancel();
                 }

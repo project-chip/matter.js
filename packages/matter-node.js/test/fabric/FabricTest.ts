@@ -8,16 +8,11 @@ import { Crypto } from "@project-chip/matter.js/crypto";
 import { ByteArray } from "@project-chip/matter.js/util";
 
 import { FabricId, FabricIndex, NodeId, VendorId } from "@project-chip/matter.js/datatype";
-import { Fabric, FabricBuilder } from "@project-chip/matter.js/fabric";
+import { Fabric } from "@project-chip/matter.js/fabric";
+import { SecureSession, UNDEFINED_NODE_ID } from "@project-chip/matter.js/session";
 import * as assert from "assert";
+import { buildFabric } from "./FabricTestingUtil.js";
 
-const ROOT_CERT = ByteArray.fromHex(
-    "153001010024020137032414001826048012542826058015203b37062414001824070124080130094104d89eb7e3f3226d0918f4b85832457bb9981bca7aaef58c18fb5ec07525e472b2bd1617fb75ee41bd388f94ae6a6070efc896777516a5c54aff74ec0804cdde9d370a3501290118240260300414e766069362d7e35b79687161644d222bdde93a68300514e766069362d7e35b79687161644d222bdde93a6818300b404e8fb06526f0332b3e928166864a6d29cade53fb5b8918a6d134d0994bf1ae6dce6762dcba99e80e96249d2f1ccedb336b26990f935dba5a0b9e5b4c9e5d1d8f1818181824ff0118",
-);
-const NEW_OP_CERT = ByteArray.fromHex(
-    "153001010124020137032414001826048012542826058015203b370624150124110918240701240801300941049ac1dc9995e6897f2bf1420a6efdba30781ac3dcdb7bb15e993050ff0ce92c52727b029c30f11f163b177d3bfa37f015db156994801f0e0f9b64c72bf8a15153370a35012801182402013603040204011830041402cce0d7bfa29e98e454be38e27bfe6c0f162302300514e766069362d7e35b79687161644d222bdde93a6818300b4050e8183c290f438a57516faea006282d6d2b5178d5d15dfcc3ec8a9232db942894ff2d2ce941d3b42dd8a2cd51eea4f3f50b66757959368868c3a0a1b5fe665f18",
-);
-const IPK_KEY = ByteArray.fromHex("74656d706f726172792069706b203031");
 const OPERATIONAL_ID = ByteArray.fromHex("d559af361549a9a2");
 const TEST_ROOT_NODE = NodeId(BigInt(1));
 
@@ -43,16 +38,6 @@ const TEST_ROOT_PUBLIC_KEY_3 = ByteArray.fromHex(
 const TEST_IDENTITY_PROTECTION_KEY_3 = ByteArray.fromHex("0c677d9b5ac585827b577470bd9bd516");
 const TEST_RANDOM_3 = ByteArray.fromHex("0b2a71876d3d090d37cb5286168ab9be0d2e7e0ccbedc1f55331b8a8051ee02f");
 const EXPECTED_DESTINATION_ID_3 = ByteArray.fromHex("f7f7009606c61927af62502067581b4b0d27f2f22108e2c82c9f0ddd99ab3557");
-
-function buildFabric() {
-    const builder = new FabricBuilder(TEST_FABRIC_INDEX);
-    builder.setRootVendorId(VendorId(0));
-    builder.setRootNodeId(TEST_ROOT_NODE);
-    builder.setRootCert(ROOT_CERT);
-    builder.setOperationalCert(NEW_OP_CERT);
-    builder.setIdentityProtectionKey(IPK_KEY);
-    return builder.build();
-}
 
 describe("FabricBuilder", () => {
     describe("build", () => {
@@ -96,13 +81,7 @@ describe("Fabric", () => {
         });
 
         it("generates the correct destination ID 2", async () => {
-            const builder = new FabricBuilder(TEST_FABRIC_INDEX);
-            builder.setRootVendorId(VendorId(0));
-            builder.setRootCert(ROOT_CERT);
-            builder.setRootNodeId(TEST_ROOT_NODE);
-            builder.setOperationalCert(NEW_OP_CERT);
-            builder.setIdentityProtectionKey(IPK_KEY);
-            const fabric = await builder.build();
+            const fabric = await buildFabric();
 
             const result = fabric.getDestinationId(TEST_NODE_ID_2, TEST_RANDOM_2);
 
@@ -130,6 +109,103 @@ describe("Fabric", () => {
             const result = fabric.getDestinationId(TEST_NODE_ID_3, TEST_RANDOM_3);
 
             assert.equal(result.toHex(), EXPECTED_DESTINATION_ID_3.toHex());
+        });
+    });
+
+    describe("remove from session", () => {
+        it("removes all sessions when removing fabric", async () => {
+            const DECRYPT_KEY = ByteArray.fromHex("bacb178b2588443d5d5b1e4559e7accc");
+            const ENCRYPT_KEY = ByteArray.fromHex("66951379d0a6d151cf5472cccf13f360");
+
+            const fabric = await buildFabric();
+
+            let session1Destroyed = false;
+            let session2Destroyed = false;
+            const secureSession1 = new SecureSession(
+                {} as any,
+                1,
+                undefined,
+                UNDEFINED_NODE_ID,
+                0x8d4b,
+                Buffer.alloc(0),
+                DECRYPT_KEY,
+                ENCRYPT_KEY,
+                Buffer.alloc(0),
+                async () => {
+                    session1Destroyed = true;
+                },
+            );
+            fabric.addSession(secureSession1);
+            const secureSession2 = new SecureSession(
+                {} as any,
+                1,
+                undefined,
+                UNDEFINED_NODE_ID,
+                0x8d4b,
+                Buffer.alloc(0),
+                DECRYPT_KEY,
+                ENCRYPT_KEY,
+                Buffer.alloc(0),
+                async () => {
+                    session2Destroyed = true;
+                },
+            );
+            fabric.addSession(secureSession2);
+
+            let removeCallbackCalled = false;
+            fabric.addRemoveCallback(() => {
+                removeCallbackCalled = true;
+            });
+
+            await fabric.remove();
+
+            assert.equal(session1Destroyed, true);
+            assert.equal(session2Destroyed, true);
+            assert.equal(removeCallbackCalled, true);
+        });
+
+        it("removes one sessions without doing anything", async () => {
+            const DECRYPT_KEY = ByteArray.fromHex("bacb178b2588443d5d5b1e4559e7accc");
+            const ENCRYPT_KEY = ByteArray.fromHex("66951379d0a6d151cf5472cccf13f360");
+
+            const fabric = await buildFabric();
+
+            let session1Destroyed = false;
+            let session2Destroyed = false;
+            const secureSession1 = new SecureSession(
+                {} as any,
+                1,
+                undefined,
+                UNDEFINED_NODE_ID,
+                0x8d4b,
+                Buffer.alloc(0),
+                DECRYPT_KEY,
+                ENCRYPT_KEY,
+                Buffer.alloc(0),
+                async () => {
+                    session1Destroyed = true;
+                },
+            );
+            fabric.addSession(secureSession1);
+            const secureSession2 = new SecureSession(
+                {} as any,
+                1,
+                undefined,
+                UNDEFINED_NODE_ID,
+                0x8d4b,
+                Buffer.alloc(0),
+                DECRYPT_KEY,
+                ENCRYPT_KEY,
+                Buffer.alloc(0),
+                async () => {
+                    session2Destroyed = true;
+                },
+            );
+            fabric.addSession(secureSession2);
+            fabric.removeSession(secureSession1);
+
+            assert.equal(session1Destroyed, false);
+            assert.equal(session2Destroyed, false);
         });
     });
 });

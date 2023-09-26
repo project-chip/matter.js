@@ -56,12 +56,16 @@ export class SecureChannelMessenger<ContextT> {
         return payload;
     }
 
-    sendError() {
-        return this.sendStatusReport(GeneralStatusCode.Error, ProtocolStatusCode.InvalidParam);
+    sendError(code: ProtocolStatusCode) {
+        return this.sendStatusReport(GeneralStatusCode.Failure, code);
     }
 
     sendSuccess() {
         return this.sendStatusReport(GeneralStatusCode.Success, ProtocolStatusCode.Success);
+    }
+
+    sendCloseSession() {
+        return this.sendStatusReport(GeneralStatusCode.Success, ProtocolStatusCode.CloseSession, false);
     }
 
     getChannelName() {
@@ -72,7 +76,11 @@ export class SecureChannelMessenger<ContextT> {
         await this.exchange.close();
     }
 
-    private async sendStatusReport(generalStatus: GeneralStatusCode, protocolStatus: ProtocolStatusCode) {
+    private async sendStatusReport(
+        generalStatus: GeneralStatusCode,
+        protocolStatus: ProtocolStatusCode,
+        requiresAck?: boolean,
+    ) {
         await this.exchange.send(
             MessageType.StatusReport,
             TlvSecureChannelStatusMessage.encode({
@@ -80,6 +88,7 @@ export class SecureChannelMessenger<ContextT> {
                 protocolId: SECURE_CHANNEL_PROTOCOL_ID,
                 protocolStatus,
             }),
+            { requiresAck },
         );
     }
 
@@ -93,7 +102,7 @@ export class SecureChannelMessenger<ContextT> {
         const { generalStatus, protocolId, protocolStatus } = TlvSecureChannelStatusMessage.decode(payload);
         if (generalStatus !== GeneralStatusCode.Success) {
             throw new ChannelStatusResponseError(
-                `Received general error status (${protocolId})`,
+                `Received general error status for protocol ${protocolId}`,
                 generalStatus,
                 protocolStatus,
             );

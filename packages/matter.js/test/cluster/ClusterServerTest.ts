@@ -24,6 +24,8 @@ import { DeviceTypes } from "../../src/device/DeviceTypes.js";
 import { Endpoint } from "../../src/device/Endpoint.js";
 import { Fabric } from "../../src/fabric/Fabric.js";
 import { Level } from "../../src/log/Logger.js";
+import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
+import { StorageManager } from "../../src/storage/StorageManager.js";
 import { captureLogs } from "../support/logging.js";
 
 describe("ClusterServer structure", () => {
@@ -565,7 +567,7 @@ describe("ClusterServer structure", () => {
             expect((server.attributes as any).generatedCommandList.get()).deep.equal([]);
         });
 
-        it("Verify init/destroy is called on CLusterServe when definedr", () => {
+        it("Verify init/destroy is called on CLusterServe when definedr", async () => {
             let initCalled = false;
             let destroyCalled = false;
             const server = ClusterServer(
@@ -589,7 +591,15 @@ describe("ClusterServer structure", () => {
             expect(server).ok;
 
             asClusterServerInternal(server)._assignToEndpoint({} as any);
+            expect(initCalled).false;
+
+            const testStorage = new StorageBackendMemory();
+            const testStorageManager = new StorageManager(testStorage);
+            await testStorageManager.initialize();
+            const testStorageContext = testStorageManager.createContext("TestContext");
+            asClusterServerInternal(server)._setStorage(testStorageContext);
             expect(initCalled).true;
+
             asClusterServerInternal(server)._destroy();
             expect(destroyCalled).true;
         });

@@ -820,6 +820,7 @@ describe("InteractionProtocol", () => {
             interactionProtocol.setRootEndpoint(endpoint);
 
             let statusSent = -1;
+            let closed = false;
             await interactionProtocol.handleSubscribeRequest(
                 await getDummyMessageExchange(),
                 INVALID_SUBSCRIBE_REQUEST,
@@ -827,9 +828,14 @@ describe("InteractionProtocol", () => {
                     sendStatus: code => {
                         statusSent = code;
                     },
+
+                    close: async () => {
+                        closed = true;
+                    },
                 } as InteractionServerMessenger,
             );
             assert.equal(statusSent, 128);
+            assert.equal(closed, true);
         });
     });
 

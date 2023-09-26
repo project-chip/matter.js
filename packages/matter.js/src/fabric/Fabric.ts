@@ -51,7 +51,7 @@ export class Fabric {
 
     private readonly scopedClusterData: Map<number, any>;
 
-    private removeCallback: (() => void) | undefined;
+    private removeCallbacks = new Array<() => void>();
     private persistCallback: (() => void) | undefined;
 
     constructor(
@@ -151,8 +151,15 @@ export class Fabric {
         }
     }
 
-    setRemoveCallback(callback: () => void) {
-        this.removeCallback = callback;
+    addRemoveCallback(callback: () => void) {
+        this.removeCallbacks.push(callback);
+    }
+
+    deleteRemoveCallback(callback: () => void) {
+        const index = this.removeCallbacks.indexOf(callback);
+        if (index >= 0) {
+            this.removeCallbacks.splice(index, 1);
+        }
     }
 
     setPersistCallback(callback: () => void) {
@@ -160,10 +167,10 @@ export class Fabric {
     }
 
     async remove() {
-        for (const session of this.sessions) {
-            await session.end();
+        for (const session of [...this.sessions]) {
+            await session.close();
         }
-        this.removeCallback?.();
+        this.removeCallbacks.forEach(callback => callback());
     }
 
     persist() {
@@ -232,11 +239,15 @@ export class FabricBuilder {
     private rootNodeId?: NodeId;
     private rootPublicKey?: ByteArray;
     private identityProtectionKey?: ByteArray;
-
-    constructor(private readonly fabricIndex: FabricIndex) {}
+    private fabricIndex?: FabricIndex;
+    private label = "";
 
     getPublicKey() {
         return this.keyPair.publicKey;
+    }
+
+    getFabricIndex() {
+        return this.fabricIndex;
     }
 
     createCertificateSigningRequest() {
@@ -247,6 +258,10 @@ export class FabricBuilder {
         this.rootCert = rootCert;
         this.rootPublicKey = TlvRootCertificate.decode(rootCert).ellipticCurvePublicKey;
         return this;
+    }
+
+    hasRootCert() {
+        return this.rootCert !== undefined;
     }
 
     setOperationalCert(operationalCert: ByteArray) {
@@ -280,7 +295,25 @@ export class FabricBuilder {
         return this;
     }
 
-    async build() {
+    initializeFromFabricForUpdate(fabric: Fabric) {
+        this.rootVendorId = fabric.rootVendorId;
+        this.rootNodeId = fabric.rootNodeId;
+        this.identityProtectionKey = fabric.identityProtectionKey;
+        this.rootCert = fabric.rootCert;
+        this.rootPublicKey = fabric.rootPublicKey;
+        this.label = fabric.label;
+    }
+
+    getNodeId() {
+        return this.nodeId;
+    }
+
+    getFabricId() {
+        return this.fabricId;
+    }
+
+    async build(fabricIndex: FabricIndex) {
+        if (this.fabricIndex !== undefined) throw new InternalError("FabricBuilder can only be built once");
         if (this.rootNodeId === undefined) throw new InternalError("rootNodeId needs to be set");
         if (this.rootVendorId === undefined) throw new InternalError("vendorId needs to be set");
         if (this.rootCert === undefined || this.rootPublicKey === undefined)
@@ -289,6 +322,7 @@ export class FabricBuilder {
         if (this.operationalCert === undefined || this.fabricId === undefined || this.nodeId === undefined)
             throw new InternalError("operationalCert needs to be set");
 
+        this.fabricIndex = fabricIndex;
         const saltWriter = new DataWriter(Endian.Big);
         saltWriter.writeUInt64(this.fabricId);
         const operationalId = await Crypto.hkdf(
@@ -312,7 +346,7 @@ export class FabricBuilder {
             await Crypto.hkdf(this.identityProtectionKey, operationalId, GROUP_SECURITY_INFO, 16),
             this.intermediateCACert,
             this.operationalCert,
-            "",
+            this.label,
         );
     }
 }

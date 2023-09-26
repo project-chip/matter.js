@@ -315,7 +315,7 @@ describe("Integration Test", () => {
                 await adminCommissioningCluster.openCommissioningWindow(
                     {
                         salt: new ByteArray(32),
-                        commissioningTimeout: 10,
+                        commissioningTimeout: 180,
                         discriminator: 0,
                         iterations: 1000,
                         pakePasscodeVerifier: new ByteArray(97),
@@ -562,6 +562,7 @@ describe("Integration Test", () => {
 
             basicInfoCluster.attributes.nodeLabel.addListener(callback);
 
+            await MockTime.advance(60);
             await MockTime.advance(60);
             await promise;
 
@@ -982,7 +983,6 @@ describe("Integration Test", () => {
             const result = await operationalCredentialsCluster.commands.removeFabric({ fabricIndex });
             assert.equal(result.statusCode, OperationalCredentials.NodeOperationalCertStatus.Ok);
             assert.deepEqual(result.fabricIndex, fabricIndex);
-            assert.equal(result.debugText, "Fabric removed");
         });
     });
 

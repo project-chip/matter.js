@@ -435,12 +435,24 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
      * ACL checks needs to be performed before calling this method.
      */
     updated(session: SecureSession<MatterDevice>) {
-        const oldValue = this.value;
+        const oldValue = this.value ?? this.defaultValue;
         this.value = tryCatch(
-            () => this.get(session, true),
+            () => this.get(session, false),
             NoAssociatedFabricError, // Handle potential error cases where the session does not have a fabric assigned.
             this.value ?? this.defaultValue,
         );
+        this.handleVersionAndTriggerListeners(this.value, oldValue, true);
+    }
+
+    /**
+     * When the value is handled by getter or setter methods and is changed by other processes and no session from the
+     * originating process is known this method can be used to notify the attribute server that the value has changed.
+     * This will increase the version number and trigger the listeners.
+     * ACL checks needs to be performed before calling this method.
+     */
+    updatedLocal() {
+        const oldValue = this.value ?? this.defaultValue;
+        this.value = this.getLocal();
         this.handleVersionAndTriggerListeners(this.value, oldValue, true);
     }
 
@@ -645,6 +657,22 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
             fabric.setScopedClusterDataValue(this.cluster, this.name, { value });
         }
         this.handleVersionAndTriggerListeners(value, oldValue, valueChanged); // TODO Make callbacks sense without fabric, but then they would have other signature?
+    }
+
+    /**
+     * When the value is handled by getter or setter methods and is changed by other processes and no session from the
+     * originating process is known this method can be used to notify the attribute server that the value has changed.
+     * This will increase the version number and trigger the listeners.
+     * ACL checks needs to be performed before calling this method.
+     */
+    updatedLocalForFabric(fabric: Fabric) {
+        const oldValue = this.value ?? this.defaultValue;
+        this.value = tryCatch(
+            () => this.getLocalForFabric(fabric),
+            FabricScopeError, // Handle potential error cases where a custom getter is used.
+            this.value ?? this.defaultValue,
+        );
+        this.handleVersionAndTriggerListeners(this.value, oldValue, true);
     }
 
     /**

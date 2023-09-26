@@ -13,6 +13,9 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Feature: Also publishes matter-node.js packages as ESM in parallel to CJS
   * Feature: Add clear method to the storage classes to allow factory reset of the storage
   * Feature: Add ICAC (Intermediate CA Certificate) decoding
+  * Feature: Implemented Array chunking for DataReport messages to allow also bigger array structures to be sent
+  * Feature: Implemented Tag compression for DataReport messages (but disabled it because standard do not support it officially yet)
+  * Feature: Refactor complete commissioning logic (AdministratorCommissioning, GeneralCommissioning, OperationalCredentials clusters) to match to specs and implement main logics as defined
   * Enhance: Memory footprint optimizations
   * Enhance: Introduced building and building, running and test executions scripts to not use ts-node anymore and many more optimizations to test and build processes
   * Enhance: ClusterFactory internally uses a simplified method of CLuster types that are compatible to the current ones but soon might replace them

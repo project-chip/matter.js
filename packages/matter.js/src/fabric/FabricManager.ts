@@ -8,15 +8,15 @@ import { InternalError, MatterError, MatterFlowError } from "../common/MatterErr
 import { FabricIndex } from "../datatype/FabricIndex.js";
 import { StorageContext } from "../storage/StorageContext.js";
 import { ByteArray } from "../util/ByteArray.js";
-import { Fabric, FabricBuilder, FabricJsonObject } from "./Fabric.js";
+import { Fabric, FabricJsonObject } from "./Fabric.js";
 
 /** Specific Error for when a fabric is not found. */
 export class FabricNotFoundError extends MatterError {}
+export class FabricTableFullError extends MatterError {}
 
 export class FabricManager {
     private nextFabricIndex = 1;
-    private readonly fabrics = new Array<Fabric>();
-    private fabricBuilder?: FabricBuilder;
+    private readonly fabrics = new Map<FabricIndex, Fabric>();
     private readonly fabricStorage: StorageContext;
 
     constructor(storage: StorageContext) {
@@ -26,36 +26,50 @@ export class FabricManager {
         this.nextFabricIndex = this.fabricStorage.get("nextFabricIndex", this.nextFabricIndex);
     }
 
+    getNextFabricIndex() {
+        for (let i = 0; i < 254; i++) {
+            const fabricIndex = this.nextFabricIndex++;
+            if (this.nextFabricIndex > 254) this.nextFabricIndex = 1;
+            if (!this.fabrics.has(FabricIndex(fabricIndex))) {
+                return FabricIndex(fabricIndex);
+            }
+        }
+        throw new FabricTableFullError("No free fabric index available.");
+    }
+
     persistFabrics() {
         this.fabricStorage.set(
             "fabrics",
-            this.fabrics.map(fabric => fabric.toStorageObject()),
+            Array.from(this.fabrics.values()).map(fabric => fabric.toStorageObject()),
         );
         this.fabricStorage.set("nextFabricIndex", this.nextFabricIndex);
     }
 
     addFabric(fabric: Fabric) {
-        this.fabrics.push(fabric);
-        fabric.setRemoveCallback(() => this.removeFabric(fabric.fabricIndex));
+        const { fabricIndex } = fabric;
+        if (this.fabrics.has(fabricIndex)) {
+            throw new MatterFlowError(`Fabric with index ${fabricIndex} already exists.`);
+        }
+        this.fabrics.set(fabricIndex, fabric);
+        fabric.addRemoveCallback(() => this.removeFabric(fabricIndex));
         fabric.setPersistCallback(() => this.persistFabrics());
     }
 
     removeFabric(fabricIndex: FabricIndex) {
-        const index = this.fabrics.findIndex(fabric => fabric.fabricIndex === fabricIndex);
-        if (index === -1)
+        if (!this.fabrics.has(fabricIndex))
             throw new FabricNotFoundError(
                 `Fabric with index ${fabricIndex} cannot be removed because it does not exist.`,
             );
-        this.fabrics.splice(index, 1);
+        this.fabrics.delete(fabricIndex);
         this.persistFabrics();
     }
 
     getFabrics() {
-        return this.fabrics;
+        return Array.from(this.fabrics.values());
     }
 
     findFabricFromDestinationId(destinationId: ByteArray, initiatorRandom: ByteArray) {
-        for (const fabric of this.fabrics) {
+        for (const fabric of this.fabrics.values()) {
             const candidateDestinationId = fabric.getDestinationId(fabric.nodeId, initiatorRandom);
             if (!candidateDestinationId.equals(destinationId)) continue;
             return fabric;
@@ -64,26 +78,25 @@ export class FabricManager {
         throw new InternalError("Fabric cannot be found from destinationId");
     }
 
-    armFailSafe() {
-        // TODO Fix here because armFailsafe could be called several times!
-        this.fabricBuilder = new FabricBuilder(FabricIndex(this.nextFabricIndex++));
+    updateFabric(fabric: Fabric) {
+        const { fabricIndex } = fabric;
+        if (!this.fabrics.has(fabricIndex)) {
+            throw new FabricNotFoundError(
+                `Fabric with index ${fabricIndex} cannot be updated because it does not exist.`,
+            );
+        }
+        this.fabrics.set(fabricIndex, fabric);
     }
 
-    getFabricBuilder() {
-        const result = this.fabricBuilder;
-        if (result === undefined) throw new MatterFlowError("armFailSafe should be called first!");
-        return result;
-    }
-
-    async tentativelyAddFabric() {
-        if (this.fabricBuilder === undefined) throw new MatterFlowError("armFailSafe should be called first!");
-        this.fabrics.push(await this.fabricBuilder.build());
-        this.fabricBuilder = undefined;
-    }
-
-    completeCommission() {
-        this.persistFabrics();
-        // TODO: disable failSafe timer
-        // TODO: delete CASE sessions
+    async revokeFabric(fabricIndex: FabricIndex) {
+        const fabric = this.fabrics.get(fabricIndex);
+        if (fabric === undefined) {
+            throw new MatterFlowError(`Fabric with index ${fabricIndex} does not exist to revoke.`);
+        }
+        await fabric.remove();
+        if (fabricIndex === this.nextFabricIndex) {
+            this.nextFabricIndex--;
+            if (this.nextFabricIndex < 1) this.nextFabricIndex = 254;
+        }
     }
 }

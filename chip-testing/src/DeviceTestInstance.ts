@@ -1,23 +1,31 @@
 import { CommissioningServer, MatterServer } from "@project-chip/matter-node.js";
 
-import { StorageManager } from "@project-chip/matter.js/storage";
+import { StorageBackendMemory, StorageManager } from "@project-chip/matter.js/storage";
 
 /** Base class for all chip tool test instances */
 export abstract class DeviceTestInstance {
     matterServer: MatterServer | undefined;
+    storageManager: StorageManager;
 
     constructor(
         public testName: string,
         public PICSConfig: string,
-        public storageManager: StorageManager,
-    ) {}
+        public storage: StorageBackendMemory,
+    ) {
+        this.storageManager = new StorageManager(storage);
+    }
 
     /** Set up the test instance MatterServer. */
     async setup() {
-        this.matterServer = new MatterServer(this.storageManager);
+        try {
+            await this.storageManager.initialize(); // hacky but works
+            this.matterServer = new MatterServer(this.storageManager);
 
-        this.matterServer.addCommissioningServer(await this.setupCommissioningServer());
-
+            this.matterServer.addCommissioningServer(await this.setupCommissioningServer());
+        } catch (error) {
+            // Catch and log error, else the test framework hides issues here
+            console.log(error);
+        }
         process.stdout.write(`====> Chip test Runner "${this.testName}": Setup done\n`);
     }
 
@@ -27,7 +35,12 @@ export abstract class DeviceTestInstance {
     /** Start the test instance MatterServer with the included device. */
     async start() {
         if (!this.matterServer) throw new Error("matterServer not initialized");
-        await this.matterServer.start();
+        try {
+            await this.matterServer.start();
+        } catch (error) {
+            // Catch and log error, else the test framework hides issues here
+            console.log(error);
+        }
         process.stdout.write(`====> Chip test Runner "${this.testName}": Start instance\n`);
     }
 
@@ -58,6 +71,23 @@ export abstract class DeviceTestInstance {
                 await this.start();
                 process.stdout.write(`====> Chip test Runner "${this.testName}": Restart done\n`);
                 break;
+            case "FactoryReset":
+                await new Promise(resolve => setTimeout(resolve, 500));
+                await this.stop();
+                this.matterServer = undefined;
+                process.stdout.write(
+                    `====> Chip test Runner "${this.testName}": Instance stopped for Factory Reset ...\n`,
+                );
+                // Test Test_TC_CADMIN_1_4 requires a device factory reset but in the end still expect being paired
+                //this.storage.clear();
+                process.stdout.write(`====> Chip test Runner "${this.testName}": Factory Reset done ...\n`);
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                process.stdout.write(`====> Chip test Runner "${this.testName}": Restart instance now ...\n`);
+                await this.setup();
+                await this.start();
+                process.stdout.write(`====> Chip test Runner "${this.testName}": Restart done\n`);
+                break;
+
             default:
                 throw new Error(`Test instance ${this.testName} do not know how to handle command "${command}"`);
         }

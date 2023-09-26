@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterFlowError } from "../common/MatterError.js";
 import { Crypto } from "../crypto/Crypto.js";
 import { FabricId } from "../datatype/FabricId.js";
 import { NodeId } from "../datatype/NodeId.js";
@@ -42,6 +43,7 @@ export class SessionManager<ContextT> {
     private nextSessionId = Crypto.getRandomUInt16();
     private resumptionRecords = new Map<NodeId, ResumptionRecord>();
     private readonly sessionStorage: StorageContext;
+    private readonly sessionsToClose = new Array<SecureSession<any>>();
 
     constructor(
         private readonly context: ContextT,
@@ -63,7 +65,7 @@ export class SessionManager<ContextT> {
         isResumption: boolean,
         idleRetransTimeoutMs?: number,
         activeRetransTimeoutMs?: number,
-        closeCallback?: () => Promise<void>,
+        closeCallback?: (sendClose: boolean) => Promise<void>,
     ) {
         const session = await SecureSession.create(
             this.context,
@@ -75,20 +77,33 @@ export class SessionManager<ContextT> {
             salt,
             isInitiator,
             isResumption,
-            async () => {
-                this.sessions.delete(sessionId);
-                await closeCallback?.();
+            async (sendClose: boolean) => {
+                if (sendClose) {
+                    logger.info(`Register Session ${session.name} to send a close when interaction is finished.`);
+                    this.sessionsToClose.push(session);
+                } else {
+                    logger.info(`Remove Session ${session.name} from session manager.`);
+                    this.sessions.delete(sessionId);
+                    await closeCallback?.(sendClose);
+                }
             },
             idleRetransTimeoutMs,
             activeRetransTimeoutMs,
         );
         this.sessions.set(sessionId, session);
 
-        // TODO: close previous secure channel for
+        // TODO: close previous secure channel for ??
         return session;
     }
 
-    removeSession(sessionId: number, peerNodeId: NodeId) {
+    getSessionsToClose() {
+        if (this.sessionsToClose.length === 0) return [];
+        const sessions = [...this.sessionsToClose];
+        this.sessionsToClose.length = 0;
+        return sessions;
+    }
+
+    async removeSession(sessionId: number, peerNodeId: NodeId) {
         this.sessions.delete(sessionId);
         this.resumptionRecords.delete(peerNodeId);
         this.storeResumptionRecords();
@@ -108,6 +123,12 @@ export class SessionManager<ContextT> {
 
     getSession(sessionId: number) {
         return this.sessions.get(sessionId);
+    }
+
+    getPaseSession() {
+        return [...this.sessions.values()].find(
+            session => session.isSecure() && session.isPase(),
+        ) as SecureSession<ContextT>;
     }
 
     getSessionForNode(fabric: Fabric, nodeId: NodeId) {
@@ -133,6 +154,15 @@ export class SessionManager<ContextT> {
 
     saveResumptionRecord(resumptionRecord: ResumptionRecord) {
         this.resumptionRecords.set(resumptionRecord.peerNodeId, resumptionRecord);
+        this.storeResumptionRecords();
+    }
+
+    updateFabricForResumptionRecords(fabric: Fabric) {
+        const record = this.resumptionRecords.get(fabric.rootNodeId);
+        if (record === undefined) {
+            throw new MatterFlowError("Resumption record not found. Should never happen.");
+        }
+        this.resumptionRecords.set(fabric.rootNodeId, { ...record, fabric });
         this.storeResumptionRecords();
     }
 
@@ -163,14 +193,14 @@ export class SessionManager<ContextT> {
                 sharedSecret,
                 resumptionId,
                 fabric,
-                peerNodeId: peerNodeId,
+                peerNodeId,
             });
         });
     }
 
     getActiveSessionInformation() {
         return [...this.sessions.values()]
-            .filter(session => session.name !== "unsecure")
+            .filter(session => session.isSecure() && !session.isPase())
             .map(session => ({
                 name: session.name,
                 nodeId: session.getNodeId(),
@@ -189,7 +219,7 @@ export class SessionManager<ContextT> {
         for (const sessionId of this.sessions.keys()) {
             if (sessionId === UNICAST_UNSECURE_SESSION_ID) continue;
             const session = this.sessions.get(sessionId);
-            await session?.end();
+            await session?.end(false);
             this.sessions.delete(sessionId);
         }
     }

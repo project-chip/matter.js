@@ -55,7 +55,6 @@ import { MdnsInstanceBroadcaster } from "./mdns/MdnsInstanceBroadcaster.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { UdpInterface } from "./net/UdpInterface.js";
 import { InteractionServer } from "./protocol/interaction/InteractionServer.js";
-import { SecureChannelProtocol } from "./protocol/securechannel/SecureChannelProtocol.js";
 import { TypeFromBitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import {
     CommissionningFlowType,
@@ -65,8 +64,6 @@ import {
     QrPairingCodeCodec,
 } from "./schema/PairingCodeSchema.js";
 import { QrCode } from "./schema/QrCodeSchema.js";
-import { CaseServer } from "./session/case/CaseServer.js";
-import { PaseServer } from "./session/pase/PaseServer.js";
 import { MatterCoreSpecificationV1_1 } from "./spec/Specifications.js";
 import { StorageContext } from "./storage/StorageContext.js";
 import { ByteArray } from "./util/ByteArray.js";
@@ -409,6 +406,18 @@ export class CommissioningServer extends MatterNode {
                 },
             ),
         );
+
+        this.rootEndpoint.addClusterServer(
+            ClusterServer(
+                AdministratorCommissioningCluster,
+                {
+                    windowStatus: AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen,
+                    adminFabricIndex: null,
+                    adminVendorId: null,
+                },
+                AdministratorCommissioningHandler(),
+            ),
+        );
     }
 
     /**
@@ -448,26 +457,6 @@ export class CommissioningServer extends MatterNode {
             throw new ImplementationError("Add the node to the Matter instance before!");
         }
 
-        const secureChannelProtocol = new SecureChannelProtocol(
-            await PaseServer.fromPin(this.passcode, {
-                iterations: 1000,
-                salt: Crypto.get().getRandomData(32),
-            }),
-            new CaseServer(),
-        );
-
-        this.addRootClusterServer(
-            ClusterServer(
-                AdministratorCommissioningCluster,
-                {
-                    windowStatus: AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen,
-                    adminFabricIndex: null,
-                    adminVendorId: null,
-                },
-                AdministratorCommissioningHandler(secureChannelProtocol),
-            ),
-        );
-
         const basicInformation = this.getRootClusterServer(BasicInformationCluster);
         if (basicInformation == undefined) {
             throw new ImplementationError("BasicInformationCluster needs to be set!");
@@ -495,6 +484,7 @@ export class CommissioningServer extends MatterNode {
             vendorId,
             productId,
             this.discriminator,
+            this.passcode,
             this.storage,
             () => {
                 // When first Fabric is added (aka initial commissioning) and we did not advertised on MDNS before, add broadcaster now
@@ -508,7 +498,6 @@ export class CommissioningServer extends MatterNode {
         )
             .addTransportInterface(await UdpInterface.create("udp6", this.port, this.options.listeningAddressIpv6))
             .addScanner(this.mdnsScanner)
-            .addProtocolHandler(secureChannelProtocol)
             .addProtocolHandler(this.interactionServer);
         if (!this.ipv4Disabled) {
             this.deviceInstance.addTransportInterface(

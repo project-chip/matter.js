@@ -82,7 +82,7 @@ export class MatterController {
         const certificateManager = new RootCertificateManager(storage);
 
         const ipkValue = Crypto.getRandomData(16);
-        const fabricBuilder = new FabricBuilder(FABRIC_INDEX)
+        const fabricBuilder = new FabricBuilder()
             .setRootCert(certificateManager.getRootCert())
             .setRootNodeId(CONTROLLER_NODE_ID)
             .setIdentityProtectionKey(ipkValue)
@@ -112,7 +112,7 @@ export class MatterController {
                 netInterfaceIpv4,
                 netInterfaceIpv6,
                 certificateManager,
-                await fabricBuilder.build(),
+                await fabricBuilder.build(FABRIC_INDEX),
                 storage,
                 operationalServerAddress,
                 commissioningOptions,
@@ -336,7 +336,6 @@ export class MatterController {
     /**
      * Method to commission a device with a PASE secure channel. It returns the NodeId of the commissioned device on
      * success.
-     * TODO: Split this out into an own CommissioningHandler class
      */
     private async commissionDevice(paseSecureMessageChannel: MessageChannel<MatterController>): Promise<NodeId> {
         // TODO: Create the fabric only when needed before commissioning (to do when refactoring MatterController away)
