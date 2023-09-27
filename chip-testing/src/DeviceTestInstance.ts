@@ -17,6 +17,7 @@ export abstract class DeviceTestInstance {
 
     /** Set up the test instance MatterServer. */
     async setup() {
+        await new Promise(resolve => setTimeout(resolve, 2000)); //Add a short delay
         try {
             await this.storageManager.initialize(); // hacky but works
             this.matterServer = new MatterServer(this.storageManager);
@@ -86,6 +87,17 @@ export abstract class DeviceTestInstance {
                 await this.setup();
                 await this.start();
                 process.stdout.write(`====> Chip test Runner "${this.testName}": Restart done\n`);
+                break;
+            case "Stop":
+                await new Promise(resolve => setTimeout(resolve, 500));
+                await this.stop();
+                this.matterServer = undefined;
+                process.stdout.write(`====> Chip test Runner "${this.testName}": Instance stopped ...\n`);
+                break;
+            case "Start":
+                await this.setup();
+                await this.start();
+                process.stdout.write(`====> Chip test Runner "${this.testName}": Instance started\n`);
                 break;
 
             default:

@@ -15,9 +15,15 @@ Currently the tests are designed to work with a chip-tool compiled from the "mas
 To execute the tests you need to run `npm run test-chip` in the chip-testing folder.
 
 ### Limiting tests to one suite
-Set the environment variable LIMIT_TO_ONE_TEST to the name of the Testclass you want to run.
+Set the environment variable LIMIT_TESTS to the name of the Testclass you want to run.
 
-e.g. `LIMIT_TO_ONE_TEST=Test_TC_BINFO_1_1Test npm run test-chip`
+e.g. `LIMIT_TESTS=Test_TC_BINFO_1_1 npm run test-chip`
+
+### Limiting tests with wildcard
+Set the environment variable LIMIT_TESTS to a wildcard expression (only supported right now is a "*" at the end of the value) 
+that matches the Testclasses you want to run.
+
+e.g. `LIMIT_TESTS=Test_TC_BINFO* npm run test-chip` to run all BINFO tests
 
 ## Executing via CI
 These tests are executed against the main branch of matter.js at the following conditions:

@@ -21,9 +21,6 @@ export class Test_TC_BINFO_2_1 extends Test_TC_BINFO_1_1 {
         if (testDescription.includes("TH Saves the CountryCode Information")) {
             return "y\n";
         }
-        if (testDescription.includes("Verify that VendorID matches the value assigned to this manufacturer")) {
-            return "y\n";
-        }
         if (testDescription.includes("Verify that the Location is same as CountryCode value saved from")) {
             const basicInfo = this.commissioningServer?.getRootClusterServer(BasicInformation.Cluster);
             console.log(basicInfo?.getLocationAttribute());
@@ -32,16 +29,7 @@ export class Test_TC_BINFO_2_1 extends Test_TC_BINFO_1_1 {
             }
             return "n\n";
         }
-        if (testDescription.includes("Verify that the SoftwareVersion is not displayed to the end-user")) {
-            return "y\n";
-        }
-        if (testDescription.includes("Verify if the first 8 characters specify date according to ISO 8601")) {
-            return "y\n";
-        }
-        if (testDescription.includes("Verify that it specifies a link to a specific web page")) {
-            return "y\n";
-        }
-        if (testDescription.includes("Verify that it does not include the name of the vendor")) {
+        if (testDescription.includes("Verify ")) {
             return "y\n";
         }
         return super.handleUserprompt(userPrompt, testDescription);
