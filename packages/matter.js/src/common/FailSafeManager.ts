@@ -173,11 +173,7 @@ export class FailSafeManager {
         this.fabricBuilder.setOperationalCert(nocValue);
         const fabricAlreadyExisting = this.device
             .getFabrics()
-            .find(
-                fabric =>
-                    fabric.fabricId === this.fabricBuilder.getFabricId() &&
-                    fabric.nodeId === this.fabricBuilder.getNodeId(),
-            );
+            .find(fabric => this.fabricBuilder.matchesToFabric(fabric));
         if (fabricAlreadyExisting) {
             throw new MatterFabricConflictError(
                 `Fabric with Id ${this.fabricBuilder.getFabricId()} and Node Id ${this.fabricBuilder.getNodeId()} already exists.`,
