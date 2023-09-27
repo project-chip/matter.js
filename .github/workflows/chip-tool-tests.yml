@@ -56,7 +56,7 @@ jobs:
           echo "DOW=$(date +%u)" >> $GITHUB_ENV
 
       - name: Prepare and execute chip tests
-        if: ${{ CHIP_TESTS_REQUIRED == 1 }}
+        if: ${{ env.CHIP_TESTS_REQUIRED == 1 }}
         uses: ./.github/actions/chip-testing
         with:
           rebuildchiptool: ${{ env.REBUILD_CHIP }}
