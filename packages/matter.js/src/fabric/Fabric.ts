@@ -132,9 +132,6 @@ export class Fabric {
     }
 
     matchesFabricIdAndRootPublicKey(fabricId: FabricId, rootPublicKey: ByteArray) {
-        logger.info(
-            `Checking ${this.fabricId} === ${fabricId} // ${this.rootPublicKey.toHex()} === ${rootPublicKey.toHex()}`,
-        );
         return this.fabricId === fabricId && this.rootPublicKey?.equals(rootPublicKey);
     }
 
