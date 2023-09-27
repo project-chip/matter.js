@@ -112,14 +112,35 @@ You can use `npm run build-doc` on the root level to generate the API documentat
 
 ## Current status
 
-We are about to conplete the basic certifiable feature set. Right now in the low level APIs all clusters are supported and all kind of devices can be build, but not with pre-defined cluster logic.
+We are about to complete the basic certifiable feature set. Right now in the low level APIs all clusters are supported and all kind of devices can be build, but not with pre-defined cluster logic.
 See the [Roadmap](https://github.com/orgs/project-chip/projects/11/views/1) for status and next planned steps.
 
-## matter.js usage
+## How to use matter.js in own projects
+
+matter.js itself can not be used directly in a project because some platform specific functionalities needs to be added. These are:
+
+* **BigInt/UInt8Array**: Right now matter.js relies on certain ES6 JavaScript language features like BigInt and UInt8Array. If your platform does not support this you need to add a polyfill for this.
+* **Network**: The Network implementation needs to provide UDP server and client functionality. This is a core requirement. The [Network Interface](packages/matter.js/src/net/Network.ts) needs to be implemented which includes methods to query network interfaces of the system and to use UDP sockets.
+* **Crypto**: Until we have a pure JavaScript implementation of the required crypto functions, a native implementation is needed. The [Crypto Interface](packages/matter.js/src/crypto/Crypto.ts) needs to be implemented which includes methods to generate random numbers, generate keys and to encrypt/decrypt data with various algorithms.
+* **Storage**: The Storage implementation needs to provide a way to store and retrieve data, easiest in a key-value form. The [Storage Interface](packages/matter.js/src/storage/Storage.ts) needs to be implemented which includes methods to store and retrieve data.
+* **Time**: The Time implementation needs to provide a way to get the current time in milliseconds, but mainly need to offer Timer functionalities (Interval and Singe timers). The [Time Interface](packages/matter.js/src/time/Time.ts) needs to be implemented which includes methods to get the current time in milliseconds. 
+* **BLE**: If your implementation is not Ethernet based or Pre-Connected to an IP network you need to provide a BLE implementation. The [BLE Interface](packages/matter.js/src/ble/Ble.ts) needs to be implemented which includes methods to start and stop BLE advertising and to connect to a BLE device. Depending on if you implement a Controller or Device you need to implement the Peripheral and Broadcaster (Device) or Central and Scanner (Controller) BLE interfaces. **For a device the platform you implement needs to allow to send custom "Manufacturer data" in the BLE advertising packet!**
+* **Wi-Fi/Thread Commissioning**: If you want to implement a Device which is not Ethernet based you need to provide a Wifi or Thread Commissioning implementation. This needs to include methods to scan for networks, configure the device for a network and to connect to a network. The implementation in this case needs to provide the functionality as command handlers for a WifiNetworkCommissioning- or a ThreadNetworkCommissioning-Cluster.
+
+The following reference implementation and code references are available as basis for own platform implementations:
+* For Network, Crypto, Storage and Time functionality you can use the Node.js implementations provided by [matter-node.js](packages/matter-node.js/README.md) as reference. 
+* For BLE functionality you can use the Node.js implementations provided by [matter-node-ble.js](packages/matter-node-ble.js/README.md) as reference. 
+* For Wi-Fi/Thread Commissioning functionality you can use the [Node.js DeviceNode example script](packages/matter-node.js-examples/src/examples/cluster/DummyWifiNetworkCommissioningClusterServer.ts) which contains a static "testing only" (but API complete for Wifi) reference.
+
+If you implement a specific platform we would be happy about aa PR with the code, so that also other community members can benefit from it.
+
+## Node.js usage
+If you use a platform where Node.js 16.x+ is available then you can easily and directly use the following project that base on matter.js
 
 matter.js is used at the core of those two projects currently:
 * [matternode](https://github.com/project-chip/matternode): a light-weight node.js implementation of a Matter Node
 * [matter-node.js](packages/matter-node.js/README.md): a Matter client / server running on node.js compatible with HA (Android / iOs support in progress)
+* [matter-node-shell.js](packages/matter-node-shell.js/README.md): a Matter Shell script to allow to interact with Matter devices as controllers via a CLI interface
 
 ## Device types supported by Ecosystems
 
