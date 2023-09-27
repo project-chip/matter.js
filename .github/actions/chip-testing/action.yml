@@ -1,0 +1,138 @@
+name: 'Chip Tool Tests'
+description: 'prepares and executes Chip Tool and Certification tests'
+author: 'Apollon77'
+inputs:
+  connectedhomeiptag:
+    description: 'Tag of the connectedhomeip repo to use'
+    required: true
+    default: 'master' "v1.1-branch" is not containing our current status, so we use master till 1.2 comes out
+  rebuildchiptool:
+    description: 'Rebuild the chip-tool'
+    required: true
+    default: "0"
+  runlongtests:
+    description: 'Should also the log tests be executed?'
+    required: true
+    default: "0"
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Install Debian deps
+      id: install-deps
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install git gcc g++ pkg-config libssl-dev libdbus-1-dev libglib2.0-dev libavahi-client-dev ninja-build python3-venv python3-dev python3-pip unzip libgirepository1.0-dev libcairo2-dev libreadline-dev
+
+    - if: ${{ inputs.rebuildchiptool == 1 }}
+      name: Prepare Bin Directory
+      id: prepare_bin
+      shell: bash
+      run: |
+        mkdir bin
+
+    # Cache Bin files
+    - if: ${{ inputs.rebuildchiptool == 1 }}
+      name: Cache Bin files
+      id: cache-bin
+      uses: actions/cache@v3
+      env:
+        cache-name: chip-bin
+      with:
+        path: ./bin
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ inputs.connectedhomeiptag }}
+
+    # Only build if cache is not hit or if the commit message contains '[rebuild-chip]'
+    - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' || inputs.rebuildchiptool == 1 }}
+      name: Build executables
+      id: build-executables
+      shell: bash
+      run: |
+        git clone https://github.com/project-chip/connectedhomeip.git --depth=1 --branch=${{ inputs.connectedhomeiptag }}
+        cd connectedhomeip
+        scripts/checkout_submodules.py --shallow --platform linux
+        source scripts/activate.sh
+        ./scripts/build/build_examples.py --target linux-x64-light build
+        cp out/linux-x64-light/chip-lighting-app ../bin/
+        rm -rf out/linux-x64-light
+        ./scripts/build/build_examples.py --target linux-x64-chip-tool build
+        cp out/linux-x64-chip-tool/chip-tool ../bin/
+        rm -rf out/linux-x64-chip-tool
+        rm -rf connectedhomeip
+      #          More options for later, but takes long to build
+      #          ./scripts/build/build_examples.py --target linux-x64-all-clusters build
+      #          cp out/linux-x64-all-clusters/chip-all-clusters-app ../bin/
+      #          rm -rf out/linux-x64-all-clusters
+      #          ./scripts/build/build_examples.py --target linux-x64-chip-cert build
+      #          cp out/linux-x64-chip-cert/chip-cert ../bin/
+      #          rm -rf out/linux-x64-chip-cert
+      #          ./scripts/build/build_examples.py --target linux-x64-all-clusters-minimal build
+      #          cp out/linux-x64-all-clusters-minimal/chip-all-clusters-minimal-app ../bin/
+      #          rm -rf out/linux-x64-all-clusters-minimal
+      #          ./scripts/build/build_examples.py --target linux-x64-thermostat build
+      #          cp out/linux-x64-thermostat/thermostat-app ../bin/
+      #          rm -rf out/linux-x64-thermostat
+      #          ./scripts/build/build_examples.py --target linux-x64-lock build
+      #          cp out/linux-x64-lock/chip-lock-app ../bin/
+      #          rm -rf out/linux-x64-lock
+      #          ./scripts/build/build_examples.py --target linux-x64-shell build
+      #          cp out/linux-x64-shell/chip-shell ../bin/
+      #          rm -rf out/linux-x64-shell
+      #          ./scripts/build/build_examples.py --target linux-x64-ota-provider build
+      #          cp out/linux-x64-ota-provider/chip-ota-provider-app ../bin/
+      #          rm -rf out/linux-x64-ota-provider
+      #          ./scripts/build/build_examples.py --target linux-x64-ota-requestor build
+      #          cp out/linux-x64-ota-requestor/chip-ota-requestor-app ../bin/
+      #          rm -rf out/linux-x64-ota-requestor
+      #          ./scripts/build/build_examples.py --target linux-x64-tv-app build
+      #          cp out/linux-x64-tv-app/chip-tv-app ../bin/
+      #          rm -rf out/linux-x64-tv-app
+      #          ./scripts/build/build_examples.py --target linux-x64-tv-casting-app build
+      #          cp out/linux-x64-tv-casting-app/chip-tv-casting-app ../bin/
+      #          rm -rf out/linux-x64-tv-casting-app
+      #          ./scripts/build/build_examples.py --target linux-x64-bridge build
+      #          cp out/linux-x64-bridge/chip-bridge-app ../bin/
+      #          rm -rf out/linux-x64-bridge
+      #          ./scripts/build/build_examples.py --target linux-x64-contact-sensor build
+      #          cp out/linux-x64-contact-sensor/contact-sensor-app ../bin/
+      #          rm -rf out/linux-x64-contact-sensor
+      #          ./scripts/build/build_examples.py --target linux-x64-dishwasher build
+      #          cp out/linux-x64-dishwasher/chip-dishwasher-app ../bin/
+      #          rm -rf out/linux-x64-dishwasher
+      #          ./scripts/build/build_examples.py --target linux-x64-simulated-app1 build
+      #          cp out/linux-x64-simulated-app1/chip-app1 ../bin/
+      #          rm -rf out/linux-x64-simulated-app1
+      #          ./scripts/build/build_examples.py --target linux-x64-simulated-app2 build
+      #          cp out/linux-x64-simulated-app2/chip-app2 ../bin/
+      #          rm -rf out/linux-x64-simulated-app2
+
+    - name: Display used binaries
+      shell: bash
+      run: |
+        echo "Connected IP Branch: ${{ inputs.connectedhomeiptag }}"
+        ls -la bin
+
+    - name: Install and build matter.js
+      shell: bash
+      run: |
+        npm ci
+
+    # Execute normal tests
+    - name: test execution
+      id: test-execution
+      shell: bash
+      run: |
+        cd chip-testing
+        npm run test-chip
+
+    # Execute long tests
+    - if: ${{ inputs.runlongtests }}
+      name: Enable Long tests if needed
+      id: test-execution-long
+      shell: bash
+      run: |
+        cd chip-testing
+        LONG_TESTS_ONLY=1 npm run test-chip
+        
+

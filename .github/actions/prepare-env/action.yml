@@ -1,0 +1,37 @@
+name: 'Install Dependencies'
+description: 'Installs all dependencies needed for testing'
+author: 'Apollon77'
+inputs:
+  node-version:
+    description: 'Node.js version'
+    required: true
+    default: '18.x'
+  os:
+    description: 'Operating system'
+    required: true
+    default: 'ubuntu-latest'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Use Node.js ${{ inputs.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: patch node gyp on windows to support Visual Studio 2019
+      if: ${{ inputs.os == 'windows-latest' || inputs.os == 'windows-2019' }}
+      shell: powershell
+      run: |
+        npm install --global node-gyp@latest
+        npm prefix -g | % {npm config set node_gyp "$_\node_modules\node-gyp\bin\node-gyp.js"}
+
+    - name: Install dependencies (Non-Windows)
+      if: ${{ inputs.os != 'windows-latest' && inputs.os != 'windows-2019' }}
+      shell: bash
+      run: npm ci
+
+    - name: Install dependencies (Windows)
+      if: ${{ inputs.os == 'windows-latest' || inputs.os == 'windows-2019' }}
+      shell: powershell
+      run: npm ci --foreground-scripts
