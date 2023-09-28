@@ -46,5 +46,5 @@ export { Test_TC_ULABEL_2_4 } from "./Test_TC_ULABEL_2_4.js";
 //export { Test_TC_OPCREDS_3_7 } from "./Test_TC_OPCREDS_3_7.js";
 //export { TestCommandsById } from "./TestCommandsById.js"; -> Still to be verified, but should work
 
-// Test broken because of https://github.com/project-chip/connectedhomeip/issues/29457
-// export { TestDiscovery } from "./TestDiscovery.js";
+// Fails for me locally on macOS because somehow old mdns records are still found but we do not announce them anymore
+//export { TestDiscovery } from "./TestDiscovery.js";
