@@ -52,7 +52,5 @@ jobs:
           os: ${{ matrix.os }}
       - name: Prepare Webbrowser testing environment
         uses: ./.github/actions/prepare-webtests
-        with:
-          os: ${{ matrix.os }}
       - name: Execute tests
         run: npm run test
