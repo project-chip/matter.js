@@ -43,7 +43,7 @@ runs:
         cache-name: chip-bin
       with:
         path: ./bin
-        key: ${{ inputs.os }}-build-${{ env.cache-name }}-${{ inputs.connectedhomeiptag }}
+        key: ${{ inputs.runneros }}-build-${{ env.cache-name }}-${{ inputs.connectedhomeiptag }}
 
     # Only build if cache is not hit or if the commit message contains '[rebuild-chip]'
     - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' || inputs.rebuildchiptool == 1 }}
