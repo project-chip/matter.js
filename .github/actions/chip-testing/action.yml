@@ -14,10 +14,10 @@ inputs:
     description: 'Should also the log tests be executed?'
     required: true
     default: "0"
-  os:
-    description: 'Operating system'
+  runneros:
+    description: 'Runner Operating system'
     required: true
-    default: 'ubuntu-latest'
+    default: 'Linux'
 
 runs:
   using: 'composite'

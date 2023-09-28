@@ -49,7 +49,6 @@ jobs:
         uses: ./.github/actions/prepare-env
         with:
           node-version: ${{ matrix.node-version }}
-          os: ${{ matrix.os }}
       - name: Prepare Webbrowser testing environment
         uses: ./.github/actions/prepare-webtests
       - name: Execute tests
