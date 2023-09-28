@@ -54,6 +54,7 @@ runs:
         scripts/checkout_submodules.py --shallow --platform linux
         source scripts/activate.sh
         ./scripts/build/build_examples.py --target linux-x64-light build
+        pwd
         cp out/linux-x64-light/chip-lighting-app ../bin/
         rm -rf out/linux-x64-light
         ./scripts/build/build_examples.py --target linux-x64-chip-tool build
