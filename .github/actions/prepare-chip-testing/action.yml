@@ -2,19 +2,15 @@ name: 'Chip Tool Tests'
 description: 'prepares and executes Chip Tool and Certification tests'
 author: 'Apollon77'
 inputs:
-  connectedhomeiptag:
+  connectedhomeip-tag:
     description: 'Tag of the connectedhomeip repo to use'
     required: true
     default: 'master' # "v1.1-branch" is not containing our current status, so we use master till 1.2 comes out
-  rebuildchiptool:
+  rebuild-chip-tool:
     description: 'Rebuild the chip-tool'
     required: true
     default: "0"
-  runlongtests:
-    description: 'Should also the log tests be executed?'
-    required: true
-    default: "0"
-  runneros:
+  runner-os:
     description: 'Runner Operating system'
     required: true
     default: 'Linux'
@@ -43,15 +39,15 @@ runs:
         cache-name: chip-bin
       with:
         path: ./bin
-        key: ${{ inputs.runneros }}-build-${{ env.cache-name }}-${{ inputs.connectedhomeiptag }}
+        key: ${{ inputs.runner-os }}-build-${{ env.cache-name }}-${{ inputs.connectedhomeip-tag }}
 
     # Only build if cache is not hit or if the commit message contains '[rebuild-chip]'
-    - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' || inputs.rebuildchiptool == 1 }}
+    - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' || inputs.rebuild-chip-tool == 1 }}
       name: Build executables
       id: build-executables
       shell: bash
       run: |
-        git clone https://github.com/project-chip/connectedhomeip.git --depth=1 --branch=${{ inputs.connectedhomeiptag }}
+        git clone https://github.com/project-chip/connectedhomeip.git --depth=1 --branch=${{ inputs.connectedhomeip-tag }}
         cd connectedhomeip
         scripts/checkout_submodules.py --shallow --platform linux
         source scripts/activate.sh
@@ -112,29 +108,11 @@ runs:
     - name: Display used binaries
       shell: bash
       run: |
-        echo "Connected IP Branch: ${{ inputs.connectedhomeiptag }}"
+        echo "Connected IP Branch: ${{ inputs.connectedhomeip-tag }}"
         ls -la bin
 
     - name: Install and build matter.js
       shell: bash
       run: |
         npm ci
-
-    # Execute normal tests
-    - name: test execution
-      id: test-execution
-      shell: bash
-      run: |
-        cd chip-testing
-        npm run test-chip
-
-    # Execute long tests
-    - if: ${{ inputs.runlongtests }}
-      name: Enable Long tests if needed
-      id: test-execution-long
-      shell: bash
-      run: |
-        cd chip-testing
-        LONG_TESTS_ONLY=1 npm run test-chip
-        
 

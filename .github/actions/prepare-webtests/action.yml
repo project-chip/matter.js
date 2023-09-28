@@ -2,7 +2,7 @@ name: 'Prepare Web-Browser Tests'
 description: 'Installs all dependencies needed for web browser testing'
 author: 'Apollon77'
 inputs:
-  runneros:
+  runner-os:
     description: 'Runner Operating system'
     required: true
     default: 'Linux'
@@ -20,7 +20,7 @@ runs:
       with:
         path: |
           ~/.cache/ms-playwright
-        key: ${{ inputs.runneros }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
+        key: ${{ inputs.runner-os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
     - name: Install Playwright with dependencies
       if: steps.playwright-cache.outputs.cache-hit != 'true'
       shell: bash

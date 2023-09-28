@@ -57,7 +57,23 @@ jobs:
 
       - name: Prepare and execute chip tests
         if: ${{ env.CHIP_TESTS_REQUIRED == 1 }}
-        uses: ./.github/actions/chip-testing
+        uses: ./.github/actions/prepare-chip-testing
         with:
-          rebuildchiptool: ${{ env.REBUILD_CHIP }}
-          runlongtests: ${{ (env.DOW == 6 && github.event_name == 'schedule') || steps.changes-long-tests.outputs.src == 'true' }}
+          rebuild-chip-tool: ${{ env.REBUILD_CHIP }}
+
+      # Execute normal tests
+      - name: test execution
+        id: test-execution
+        shell: bash
+        run: |
+          cd chip-testing
+          npm run test-chip
+
+      # Execute long tests
+      - if: ${{ (env.DOW == 6 && github.event_name == 'schedule') || steps.changes-long-tests.outputs.src == 'true' }}
+        name: Enable Long tests if needed
+        id: test-execution-long
+        shell: bash
+        run: |
+          cd chip-testing
+          LONG_TESTS_ONLY=1 npm run test-chip
