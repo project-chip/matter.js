@@ -102,12 +102,12 @@ export class MatterServer {
     async start() {
         if (this.mdnsBroadcaster === undefined) {
             this.mdnsBroadcaster = await MdnsBroadcaster.create({
-                enableIpv4: !this.options?.disableIpv4,
+                enableIpv4: !this.ipv4Disabled,
                 multicastInterface: this.options?.mdnsAnnounceInterface,
             });
         }
         if (this.mdnsScanner === undefined) {
-            this.mdnsScanner = await MdnsScanner.create({ enableIpv4: !this.options?.disableIpv4 });
+            this.mdnsScanner = await MdnsScanner.create({ enableIpv4: !this.ipv4Disabled });
         }
         // TODO the mdns classes will later be in this class and assigned differently!!
         for (const node of this.nodes) {
@@ -117,13 +117,13 @@ export class MatterServer {
     }
 
     private prepareNode(node: MatterNode) {
+        node.ipv4Disabled = this.ipv4Disabled;
         if (this.mdnsBroadcaster === undefined || this.mdnsScanner === undefined) {
             logger.debug("Mdns instances not yet created, delaying node preparation");
             return;
         }
         node.setMdnsBroadcaster(this.mdnsBroadcaster);
         node.setMdnsScanner(this.mdnsScanner);
-        node.ipv4Disabled = this.ipv4Disabled;
     }
 
     /**
