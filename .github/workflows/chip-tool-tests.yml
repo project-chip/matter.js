@@ -74,6 +74,9 @@ jobs:
     if: ${{ needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true' }}
     runs-on: ubuntu-latest
     steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v3
+
       - name: Prepare chip tests and rebuild chip-tool if needed
         uses: ./.github/actions/prepare-chip-testing
         with:
@@ -84,6 +87,9 @@ jobs:
     if: ${{ needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true' }}
     runs-on: ubuntu-latest
     steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v3
+
       - name: Initialize chip tests
         uses: ./.github/actions/prepare-chip-testing
         with:
@@ -102,6 +108,9 @@ jobs:
     if: ${{ needs.chip-tests-needed.outputs.chip-long-tests-required == 'true' }}
     runs-on: ubuntu-latest
     steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v3
+
       - name: Initialize chip tests
         uses: ./.github/actions/prepare-chip-testing
         with:
