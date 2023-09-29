@@ -53,7 +53,7 @@ export async function main(argv = process.argv) {
         project.pkg
             .relative(script)
             .replace(/\.ts$/, ".js")
-            .replace(/^src\//, `dist/${format}/`),
+            .replace(/^src[\\/]/, `dist/${format}/`),
     );
 
     await executeNode(script, argv);
