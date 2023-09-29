@@ -87,6 +87,18 @@ export class BleBroadcaster implements InstanceBroadcaster {
         await this.blenoServer.advertise(advertisementData, this.additionalAdvertisementData);
     }
 
+    async expireCommissioningAnnouncement() {
+        await this.blenoServer.stopAdvertising();
+    }
+
+    async expireFabricAnnouncement() {
+        // nothing to do
+    }
+
+    async expireAllAnnouncements() {
+        await this.blenoServer.stopAdvertising();
+    }
+
     async close() {
         await this.blenoServer.stopAdvertising();
     }

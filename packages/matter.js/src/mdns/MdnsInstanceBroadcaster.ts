@@ -26,7 +26,10 @@ export class MdnsInstanceBroadcaster implements InstanceBroadcaster {
     }
 
     /** Set the Broadcaster Data to announce a device for operative discovery (aka "already paired") */
-    async setFabrics(fabrics: Fabric[]) {
+    async setFabrics(fabrics: Fabric[], expireCommissioningAnnouncements = false) {
+        if (expireCommissioningAnnouncements) {
+            await this.mdnsBroadcaster.expireCommissioningAnnouncement(this.instancePort);
+        }
         await this.mdnsBroadcaster.setFabrics(this.instancePort, fabrics);
     }
 
@@ -37,5 +40,17 @@ export class MdnsInstanceBroadcaster implements InstanceBroadcaster {
 
     async announce() {
         await this.mdnsBroadcaster.announce(this.instancePort);
+    }
+
+    async expireFabricAnnouncement() {
+        await this.mdnsBroadcaster.expireFabricAnnouncement(this.instancePort);
+    }
+
+    async expireCommissioningAnnouncement() {
+        await this.mdnsBroadcaster.expireCommissioningAnnouncement(this.instancePort);
+    }
+
+    async expireAllAnnouncements() {
+        await this.mdnsBroadcaster.expireAllAnnouncements(this.instancePort);
     }
 }

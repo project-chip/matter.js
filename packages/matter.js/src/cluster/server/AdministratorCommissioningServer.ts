@@ -142,8 +142,8 @@ class AdministratorCommissioningManager {
     }
 
     /** This method is used to close a commissioning window. */
-    closeCommissioningWindow(session: Session<MatterDevice>) {
-        session.getContext().endCommissioning();
+    async closeCommissioningWindow(session: Session<MatterDevice>) {
+        await session.getContext().endCommissioning();
         this.endCommissioning();
     }
 
@@ -156,7 +156,7 @@ class AdministratorCommissioningManager {
                 AdministratorCommissioning.StatusCode.WindowNotOpen,
             );
         }
-        this.closeCommissioningWindow(session);
+        await this.closeCommissioningWindow(session);
     }
 
     /** Cleanup resources and stop the timer when the CLusterServer is destroyed. */
@@ -191,7 +191,7 @@ export const AdministratorCommissioningHandler: () => ClusterServerHandlers<
                 session,
             ),
 
-        revokeCommissioning: async ({ session }) => manager.revokeCommissioning(session),
+        revokeCommissioning: async ({ session }) => await manager.revokeCommissioning(session),
 
         destroyClusterServer: () => manager?.destroy(),
     };
@@ -224,7 +224,7 @@ export const BasicAdminCommissioningHandler: () => ClusterServerHandlers<
         openBasicCommissioningWindow: async ({ request: { commissioningTimeout }, session }) =>
             manager.openBasicCommissioningWindow(commissioningTimeout, session),
 
-        revokeCommissioning: async ({ session }) => manager.revokeCommissioning(session),
+        revokeCommissioning: async ({ session }) => await manager.revokeCommissioning(session),
 
         destroyClusterServer: () => manager?.destroy(),
     };
