@@ -1,0 +1,31 @@
+name: 'Prepare Web-Browser Tests'
+description: 'Installs all dependencies needed for web browser testing'
+author: 'Apollon77'
+inputs:
+  runner-os:
+    description: 'Runner Operating system'
+    required: true
+    default: 'Linux'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Get installed Playwright version
+      id: playwright-version
+      shell: bash
+      run: echo "PLAYWRIGHT_VERSION=$(npx playwright --version)" >> $GITHUB_ENV
+    - name: Cache playwright binaries
+      uses: actions/cache@v3
+      id: playwright-cache
+      with:
+        path: |
+          ~/.cache/ms-playwright
+        key: ${{ inputs.runner-os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
+    - name: Install Playwright with dependencies
+      if: steps.playwright-cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: npx playwright install --with-deps
+    - name: Install Playwright dependencies
+      if: steps.playwright-cache.outputs.cache-hit == 'true'
+      shell: bash
+      run: npx playwright install-deps
