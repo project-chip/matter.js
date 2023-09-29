@@ -55,18 +55,15 @@ jobs:
         run: |
           echo "DOW=$(date +%u)" >> $GITHUB_ENV
 
-      - name: Prepare testing environment
-        if: ${{ env.CHIP_TESTS_REQUIRED == 1 }}
-        uses: ./.github/actions/prepare-env
-
-      - name: Prepare and execute chip tests
-        if: ${{ env.CHIP_TESTS_REQUIRED == 1 }}
+      - if: ${{ env.CHIP_TESTS_REQUIRED == 1 }}
+        name: Prepare and execute chip tests
         uses: ./.github/actions/prepare-chip-testing
         with:
           rebuild-chip-tool: ${{ env.REBUILD_CHIP }}
 
       # Execute normal tests
-      - name: test execution
+      - if: ${{ env.CHIP_TESTS_REQUIRED == 1 }}
+        name: test execution
         id: test-execution
         shell: bash
         run: |
@@ -74,7 +71,7 @@ jobs:
           npm run test-chip
 
       # Execute long tests
-      - if: ${{ (env.DOW == 6 && github.event_name == 'schedule') || steps.changes-long-tests.outputs.src == 'true' }}
+      - if: ${{ env.CHIP_TESTS_REQUIRED == 1 && (env.DOW == 6 && github.event_name == 'schedule') || steps.changes-long-tests.outputs.src == 'true' }}
         name: Enable Long tests if needed
         id: test-execution-long
         shell: bash
