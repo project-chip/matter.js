@@ -179,56 +179,63 @@ export class CommissioningController extends MatterNode {
         await this.initializeAfterConnect();
     }
 
+    async subscribeAllAttributesAndEvents(ignoreInitialTriggers: boolean) {
+        if (this.interactionClient === undefined) {
+            throw new ImplementationError("Device it not yet connected!");
+        }
+
+        // If we subscribe anything we use these data to create the endpoint structure, so we do not need to fetch again
+        const initialSubscriptionData = await this.interactionClient.subscribeAllAttributesAndEvents({
+            isUrgent: true,
+            minIntervalFloorSeconds: this.options.subscribeMinIntervalFloorSeconds ?? 0,
+            maxIntervalCeilingSeconds: this.options.subscribeMaxIntervalCeilingSeconds ?? 120,
+            attributeListener: ({ path: { endpointId, clusterId, attributeId }, value }) => {
+                if (ignoreInitialTriggers) return;
+                const device = this.endpoints.get(endpointId);
+                if (device === undefined) {
+                    logger.info(`Ignoring received attribute update for unknown endpoint ${endpointId}!`);
+                    return;
+                }
+                const cluster = device.getClusterClientById(clusterId);
+                if (cluster === undefined) {
+                    logger.info(
+                        `Ignoring received attribute update for unknown cluster ${toHexString(
+                            clusterId,
+                        )} on endpoint ${endpointId}!`,
+                    );
+                    return;
+                }
+                logger.debug(`Trigger attribute update for ${cluster.name}.${attributeId} to ${value}`);
+                asClusterClientInternal(cluster)._triggerAttributeUpdate(attributeId, value);
+            },
+            eventListener: ({ path: { endpointId, clusterId, eventId }, events }) => {
+                if (ignoreInitialTriggers) return;
+                const device = this.endpoints.get(endpointId);
+                if (device === undefined) {
+                    logger.info(`Ignoring received event for unknown endpoint ${endpointId}!`);
+                    return;
+                }
+                const cluster = device.getClusterClientById(clusterId);
+                if (cluster === undefined) {
+                    logger.info(
+                        `Ignoring received event for unknown cluster ${toHexString(
+                            clusterId,
+                        )} on endpoint ${endpointId}!`,
+                    );
+                    return;
+                }
+                asClusterClientInternal(cluster)._triggerEventUpdate(eventId, events);
+            },
+        });
+        ignoreInitialTriggers = false;
+        return initialSubscriptionData;
+    }
+
     async initializeAfterConnect() {
         this.interactionClient = await this.createInteractionClient();
 
         if (this.options.subscribeAllAttributes) {
-            let ignoreInitialTriggers = true; // Ignore Triggers from Subscribing during initialization
-            // If we subscribe anything we use these data to create the endpoint structure, so we do not need to fetch again
-            const initialSubscriptionData = await this.interactionClient.subscribeAllAttributesAndEvents({
-                isUrgent: true,
-                minIntervalFloorSeconds: this.options.subscribeMinIntervalFloorSeconds ?? 0,
-                maxIntervalCeilingSeconds: this.options.subscribeMaxIntervalCeilingSeconds ?? 120,
-                attributeListener: ({ path: { endpointId, clusterId, attributeId }, value }) => {
-                    if (ignoreInitialTriggers) return;
-                    const device = this.endpoints.get(endpointId);
-                    if (device === undefined) {
-                        logger.info(`Ignoring received attribute update for unknown endpoint ${endpointId}!`);
-                        return;
-                    }
-                    const cluster = device.getClusterClientById(clusterId);
-                    if (cluster === undefined) {
-                        logger.info(
-                            `Ignoring received attribute update for unknown cluster ${toHexString(
-                                clusterId,
-                            )} on endpoint ${endpointId}!`,
-                        );
-                        return;
-                    }
-                    logger.debug(`Trigger attribute update for ${cluster.name}.${attributeId} to ${value}`);
-                    asClusterClientInternal(cluster)._triggerAttributeUpdate(attributeId, value);
-                },
-                eventListener: ({ path: { endpointId, clusterId, eventId }, events }) => {
-                    if (ignoreInitialTriggers) return;
-                    const device = this.endpoints.get(endpointId);
-                    if (device === undefined) {
-                        logger.info(`Ignoring received event for unknown endpoint ${endpointId}!`);
-                        return;
-                    }
-                    const cluster = device.getClusterClientById(clusterId);
-                    if (cluster === undefined) {
-                        logger.info(
-                            `Ignoring received event for unknown cluster ${toHexString(
-                                clusterId,
-                            )} on endpoint ${endpointId}!`,
-                        );
-                        return;
-                    }
-                    asClusterClientInternal(cluster)._triggerEventUpdate(eventId, events);
-                },
-            });
-
-            ignoreInitialTriggers = false;
+            const initialSubscriptionData = await this.subscribeAllAttributesAndEvents(true); // Ignore Triggers from Subscribing during initialization
 
             if (initialSubscriptionData.attributeReports === undefined) {
                 throw new InternalError("No attribute reports received when subscribing to all values!");

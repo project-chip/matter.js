@@ -38,7 +38,8 @@ import { MdnsBroadcaster, MdnsScanner } from "@project-chip/matter.js/mdns";
 import { Network, NetworkFake } from "@project-chip/matter.js/net";
 import { StorageBackendMemory, StorageManager } from "@project-chip/matter.js/storage";
 import { Time } from "@project-chip/matter.js/time";
-import { ByteArray, createPromise } from "@project-chip/matter.js/util";
+import { ByteArray, createPromise, singleton } from "@project-chip/matter.js/util";
+import { TimeNode } from "../src/time/TimeNode.js";
 
 const SERVER_IPv6 = "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:cafe";
 const SERVER_IPv4 = "192.168.200.1";
@@ -95,7 +96,7 @@ describe("Integration Test", () => {
                 regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Indoor,
                 regulatoryCountryCode: "DE",
             },
-            subscribeAllAttributes: true,
+            subscribeAllAttributes: false,
         });
         matterClient.addCommissioningController(commissioningController);
 
@@ -232,13 +233,28 @@ describe("Integration Test", () => {
             commissioningController.setMdnsScanner(
                 await MdnsScanner.create({ enableIpv4: false, netInterface: CLIENT_IPv6 }),
             );
+
+            // During commissioning too much magic happens, MockTime do not work in this case
+            // So use normal Time implementation and Reset for the following tests
+            const mockTimeInstance = Time.get();
+            Time.get = singleton(() => new TimeNode());
+
             await commissioningController.connect();
+
+            Time.get = () => mockTimeInstance;
 
             Network.get = () => {
                 throw new Error("Network should not be requested post starting");
             };
 
             assert.ok(commissioningController.getFabric().nodeId);
+        });
+
+        it("Subscribe to all Attributes and bind updates to them", async () => {
+            const data = await commissioningController.subscribeAllAttributesAndEvents(true);
+
+            assert.equal(Array.isArray(data.attributeReports), true);
+            assert.equal(Array.isArray(data.eventReports), true);
         });
 
         it("Verify that commissioning changed the Regulatory Config/Location values", async () => {
