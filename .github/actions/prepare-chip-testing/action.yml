@@ -9,7 +9,7 @@ inputs:
   rebuild-chip-tool:
     description: 'Rebuild the chip-tool'
     required: true
-    default: "0"
+    default: "false"
   runner-os:
     description: 'Runner Operating system'
     required: true
@@ -42,7 +42,7 @@ runs:
         key: ${{ inputs.runner-os }}-build-${{ env.cache-name }}-${{ inputs.connectedhomeip-tag }}
 
     # Only build if cache is not hit or if the commit message contains '[rebuild-chip]'
-    - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' || inputs.rebuild-chip-tool == 1 }}
+    - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' || inputs.rebuild-chip-tool == 'true' }}
       name: Build executables
       id: build-executables
       shell: bash
