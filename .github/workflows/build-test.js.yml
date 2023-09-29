@@ -1,3 +1,4 @@
+# This workflow builds the project and executes all tests on the main branch or PRs.
 name: Build and test
 
 on:
@@ -16,7 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - run: npm ci
+    - name: Prepare testing environment
+      uses: ./.github/actions/prepare-env
     - run: npm run format-verify
     - run: npm run lint
 
@@ -25,24 +27,15 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-      # add Node.js 20 when https://github.com/hyj1991/v8-profiler-next/issues/65 is solved
-      # add "windows-latest" when https://github.com/project-chip/matter.js/issues/325 is solved
         node-version: [ 16.x, 18.x, 20.x ]
         os: [ macos-latest, windows-2019 ]
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      - name: Build on ${{ matrix.os }}
+        uses: ./.github/actions/prepare-env
         with:
           node-version: ${{ matrix.node-version }}
-      - name: patch node gyp on windows to support Visual Studio 2019
-        if: ${{ matrix.os == 'windows-latest' || matrix.os == 'windows-2019' }}
-        shell: powershell
-        run: |
-          npm install --global node-gyp@latest
-          npm prefix -g | % {npm config set node_gyp "$_\node_modules\node-gyp\bin\node-gyp.js"}
-      - name: Install dependencies and build project
-        run: npm ci --foreground-scripts
+          os: ${{ matrix.os }}
 
   test:
     needs: [ check-and-lint ]
@@ -52,27 +45,11 @@ jobs:
         node-version: [ 16.x, 18.x, 20.x ]
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      - name: Prepare testing environment
+        uses: ./.github/actions/prepare-env
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Install dependencies and build project
-        run: npm ci
-      - name: Get installed Playwright version
-        id: playwright-version
-        run: echo "PLAYWRIGHT_VERSION=$(npx playwright --version)" >> $GITHUB_ENV
-      - name: Cache playwright binaries
-        uses: actions/cache@v3
-        id: playwright-cache
-        with:
-          path: |
-            ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
-      - name: Install Playwright with dependencies
-        run: npx playwright install --with-deps
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-      - name: Install Playwright dependencies
-        run: npx playwright install-deps
-        if: steps.playwright-cache.outputs.cache-hit == 'true'
+      - name: Prepare Webbrowser testing environment
+        uses: ./.github/actions/prepare-webtests
       - name: Execute tests
         run: npm run test
