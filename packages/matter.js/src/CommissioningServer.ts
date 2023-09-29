@@ -230,6 +230,7 @@ export class CommissioningServer extends MatterNode {
         this.discriminator = options.discriminator;
         this.flowType = options.flowType ?? CommissionningFlowType.Standard;
         this.nextEndpointId = EndpointNumber(options.nextEndpointId ?? 1);
+        this.delayedAnnouncement = options.delayedAnnouncement;
 
         const vendorId = VendorId(options.basicInformation.vendorId);
         const productId = options.basicInformation.productId;
