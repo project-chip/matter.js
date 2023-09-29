@@ -125,7 +125,7 @@ async function executeChipToolTest(
 async function clearChipToolStorage() {
     process.stdout.write(`====> Chip test Runner: Cleanup /tmp/chip* for a new Test\n`);
     try {
-        await executeProcess("rm", ["/tmp/chip_*"]);
+        await executeProcess("rm", ["/tmp/chip*"]);
     } catch {
         // ignore for now, nothing to cleanup
     }
