@@ -59,6 +59,12 @@ function formatValue(
     if (value instanceof DiagnosticDictionary) {
         return value.serialize(keyFormatter, valueFormatter);
     }
+    if (value === undefined) {
+        return "undefined";
+    }
+    if (value === null) {
+        return "null";
+    }
     return valueFormatter(value.toString());
 }
 

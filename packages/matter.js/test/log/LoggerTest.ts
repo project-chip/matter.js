@@ -188,6 +188,14 @@ describe("Logger", () => {
             expect(result?.message).equal("xxxx-xx-xx xx:xx:xx.xxx DEBUG UnitTest 00deadbeef");
         });
 
+        it("handles undefined and null correctly", () => {
+            const result = captureLog(() => {
+                logger.debug(undefined, null);
+            });
+
+            expect(result?.message).equal("xxxx-xx-xx xx:xx:xx.xxx DEBUG UnitTest undefined null");
+        });
+
         it("accepts custom formatters", () => {
             const result = captureLog(() => {
                 Logger.logFormatter = (_now, _level, _logger, values) => values[0].toString();
