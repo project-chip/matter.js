@@ -42,14 +42,14 @@ import { ByteArray, createPromise, singleton } from "@project-chip/matter.js/uti
 import { TimeNode } from "../src/time/TimeNode.js";
 
 const SERVER_IPv6 = "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:cafe";
-const SERVER_IPv4 = "192.168.200.1";
+//const SERVER_IPv4 = "192.168.200.1";
 const SERVER_MAC = "00:B0:D0:63:C2:26";
 const CLIENT_IPv6 = "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:beef";
-const CLIENT_IPv4 = "192.168.200.2";
+//const CLIENT_IPv4 = "192.168.200.2";
 const CLIENT_MAC = "CA:FE:00:00:BE:EF";
 
-const serverNetwork = new NetworkFake(SERVER_MAC, [SERVER_IPv6, SERVER_IPv4]);
-const clientNetwork = new NetworkFake(CLIENT_MAC, [CLIENT_IPv6, CLIENT_IPv4]);
+const serverNetwork = new NetworkFake(SERVER_MAC, [SERVER_IPv6]);
+const clientNetwork = new NetworkFake(CLIENT_MAC, [CLIENT_IPv6]);
 
 const deviceName = "Matter end-to-end device";
 const deviceType = DeviceTypeId(257); /* Dimmable bulb */
@@ -89,7 +89,6 @@ describe("Integration Test", () => {
             serverAddress: { ip: SERVER_IPv6, port: matterPort, type: "udp" },
             longDiscriminator,
             passcode: setupPin,
-            listeningAddressIpv4: "1.2.3.4",
             listeningAddressIpv6: CLIENT_IPv6,
             delayedPairing: true,
             commissioningOptions: {
@@ -114,12 +113,11 @@ describe("Integration Test", () => {
         const cluster040Context = nodeContext.createContext("Cluster-0-40");
         cluster040Context.set("_clusterDataVersion", 0); // Make sure the serverList attribute has deterministic start version for tests
 
-        matterServer = new MatterServer(serverStorageManager);
+        matterServer = new MatterServer(serverStorageManager, { disableIpv4: true });
 
         commissioningServer = new CommissioningServer({
             port: matterPort,
             listeningAddressIpv6: SERVER_IPv6,
-            listeningAddressIpv4: SERVER_IPv4,
             deviceName,
             deviceType,
             passcode: setupPin,
