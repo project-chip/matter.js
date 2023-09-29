@@ -14,4 +14,11 @@ export class Test_TC_DESC_1_1 extends MinimalOnOffDeviceTestInstance {
     constructor(storage: StorageBackendMemory) {
         super("Test_TC_DESC_1_1", "GeneralTestPicsFile.txt", storage);
     }
+
+    override async handleUserprompt(userPrompt: string, testDescription: string) {
+        if (testDescription.includes("Read the global attribute")) {
+            return "y\n";
+        }
+        return super.handleUserprompt(userPrompt, testDescription);
+    }
 }

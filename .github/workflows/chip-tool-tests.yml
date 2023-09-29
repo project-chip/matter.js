@@ -81,6 +81,7 @@ jobs:
         uses: ./.github/actions/prepare-chip-testing
         with:
           rebuild-chip-tool: ${{ needs.chip-tests-needed.outputs.chip-tool-rebuild }}
+          build-matter-js: "false"
 
   execute-chip-tests:
     needs: [prepare-chip-build]
@@ -93,10 +94,10 @@ jobs:
       - name: Initialize chip tests
         uses: ./.github/actions/prepare-chip-testing
         with:
-          rebuild-chip-tool: 'false'
+          rebuild-chip-tool: "false"
 
       # Execute normal tests
-      - name: test execution
+      - name: Test execution
         id: test-execution
         shell: bash
         run: |
@@ -117,7 +118,7 @@ jobs:
           rebuild-chip-tool: 'false'
 
       # Execute long tests
-      - name: Enable Long tests if needed
+      - name: Long Test execution
         id: test-execution-long
         shell: bash
         run: |

@@ -14,6 +14,10 @@ inputs:
     description: 'Runner Operating system'
     required: true
     default: 'Linux'
+  build-matter-js:
+    description: 'Also Build matter-js?'
+    required: true
+    default: "true"
 
 runs:
   using: 'composite'
@@ -111,7 +115,8 @@ runs:
         echo "Connected IP Branch: ${{ inputs.connectedhomeip-tag }}"
         ls -la bin
 
-    - name: Install and build matter.js
+    - if: ${{ inputs.build-matter-js == 'true' }}
+      name: Install and build matter.js
       shell: bash
       run: |
         npm ci
