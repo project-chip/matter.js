@@ -128,6 +128,7 @@ export class MatterDevice {
     }
 
     async announce(announceOnce = false) {
+        logger.info("Announce", announceOnce, this.activeCommissioningMode);
         if (!announceOnce) {
             // Stop announcement if duration is reached
             if (
@@ -200,6 +201,15 @@ export class MatterDevice {
             }
             this.activeCommissioningEndCallback = activeCommissioningEndCallback;
         }
+        this.sendCommissionableAnnouncement(mode, discriminator).catch(error =>
+            logger.warn("Error sending announcement", error),
+        );
+    }
+
+    async sendCommissionableAnnouncement(
+        mode: AdministratorCommissioning.CommissioningWindowStatus,
+        discriminator?: number,
+    ) {
         for (const broadcaster of this.broadcasters) {
             await broadcaster.setCommissionMode(
                 mode === AdministratorCommissioning.CommissioningWindowStatus.EnhancedWindowOpen ? 2 : 1,
@@ -497,6 +507,12 @@ export class MatterDevice {
         paseServer: PaseServer,
         commissioningEndCallback: () => void,
     ) {
+        if (this.activeCommissioningMode === AdministratorCommissioning.CommissioningWindowStatus.BasicWindowOpen) {
+            throw new MatterFlowError(
+                "Basic commissioning window is already open! Can not set Enhanced commissioning mode.",
+            );
+        }
+
         this.secureChannelProtocol.setPaseCommissioner(paseServer);
         await this.announceAsCommissionable(
             AdministratorCommissioning.CommissioningWindowStatus.EnhancedWindowOpen,
@@ -506,6 +522,12 @@ export class MatterDevice {
     }
 
     async allowBasicCommissioning(commissioningEndCallback?: () => void) {
+        if (this.activeCommissioningMode === AdministratorCommissioning.CommissioningWindowStatus.EnhancedWindowOpen) {
+            throw new MatterFlowError(
+                "Enhanced commissioning window is already open! Can not set Basic commissioning mode.",
+            );
+        }
+
         this.secureChannelProtocol.setPaseCommissioner(
             await PaseServer.fromPin(this.initialPasscode, {
                 iterations: 1000,
@@ -532,8 +554,9 @@ export class MatterDevice {
         this.announceInterval.stop();
         this.announcementStartedTime = null;
         if (this.activeCommissioningEndCallback !== undefined) {
-            this.activeCommissioningEndCallback();
+            const activeCommissioningEndCallback = this.activeCommissioningEndCallback;
             this.activeCommissioningEndCallback = undefined;
+            activeCommissioningEndCallback();
         }
         for (const broadcaster of this.broadcasters) {
             await broadcaster.expireCommissioningAnnouncement();

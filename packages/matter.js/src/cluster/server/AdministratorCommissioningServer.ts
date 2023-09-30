@@ -45,6 +45,10 @@ class AdministratorCommissioningManager {
      * adjusts the needed attributes.
      */
     initializeCommissioningWindow(commissioningTimeout: number, session: Session<MatterDevice>) {
+        if (this.commissioningWindowTimeout !== undefined) {
+            throw new Error("Commissioning window already initialized.");
+        }
+        logger.info(`Commissioning window opened for ${commissioningTimeout} seconds for ${session.name}.`);
         this.commissioningWindowTimeout = Time.getTimer(commissioningTimeout * 1000, () =>
             this.closeCommissioningWindow(session),
         ).start();
@@ -108,6 +112,7 @@ class AdministratorCommissioningManager {
             PaseServer.fromVerificationValue(pakeVerifier, { iterations, salt }),
             () => {
                 session.getAssociatedFabric().deleteRemoveCallback(this.fabricRemoveHandler);
+                logger.info("Ending from Enhanced Commissioning callback.");
                 this.endCommissioning();
             },
         );
@@ -124,6 +129,7 @@ class AdministratorCommissioningManager {
 
         await device.allowBasicCommissioning(() => {
             session.getAssociatedFabric().deleteRemoveCallback(this.fabricRemoveHandler);
+            logger.info("Ending from Basic Commissioning callback.");
             this.endCommissioning();
         });
         this.windowStatusAttribute.setLocal(AdministratorCommissioning.CommissioningWindowStatus.BasicWindowOpen);
@@ -147,8 +153,10 @@ class AdministratorCommissioningManager {
 
     /** This method is used to close a commissioning window. */
     async closeCommissioningWindow(session: Session<MatterDevice>) {
-        await session.getContext().endCommissioning();
+        console.trace();
+        logger.info(`Ending from Close Commissioning for ${session.name}.`);
         this.endCommissioning();
+        await session.getContext().endCommissioning();
     }
 
     /** This method is used to revoke a commissioning window. */
@@ -160,10 +168,11 @@ class AdministratorCommissioningManager {
                 AdministratorCommissioning.StatusCode.WindowNotOpen,
             );
         }
+        logger.info("Revoking commissioning window.");
         await this.closeCommissioningWindow(session);
     }
 
-    /** Cleanup resources and stop the timer when the CLusterServer is destroyed. */
+    /** Cleanup resources and stop the timer when the ClusterServer is destroyed. */
     destroy() {
         if (this.commissioningWindowTimeout !== undefined) {
             this.commissioningWindowTimeout.stop();
