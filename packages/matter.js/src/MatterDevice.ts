@@ -187,11 +187,19 @@ export class MatterDevice {
         activeCommissioningEndCallback?: () => void,
         discriminator?: number,
     ) {
-        if (this.activeCommissioningEndCallback !== undefined) {
-            this.activeCommissioningEndCallback();
+        if (
+            this.activeCommissioningMode !== mode &&
+            this.activeCommissioningMode !== AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen
+        ) {
+            throw new MatterFlowError("Commissioning window already open with different mode!");
         }
-        this.activeCommissioningEndCallback = activeCommissioningEndCallback;
         this.activeCommissioningMode = mode;
+        if (activeCommissioningEndCallback !== undefined) {
+            if (this.activeCommissioningEndCallback !== undefined) {
+                this.activeCommissioningEndCallback();
+            }
+            this.activeCommissioningEndCallback = activeCommissioningEndCallback;
+        }
         for (const broadcaster of this.broadcasters) {
             await broadcaster.setCommissionMode(
                 mode === AdministratorCommissioning.CommissioningWindowStatus.EnhancedWindowOpen ? 2 : 1,
