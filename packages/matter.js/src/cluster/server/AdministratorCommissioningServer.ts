@@ -4,18 +4,21 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterDevice } from "../../MatterDevice.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
 import { VendorId } from "../../datatype/VendorId.js";
-import { MatterDevice } from "../../MatterDevice.js";
+import { Logger } from "../../log/Logger.js";
 import { StatusResponseError } from "../../protocol/interaction/InteractionMessenger.js";
 import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
-import { PaseServer } from "../../session/pase/PaseServer.js";
 import { Session } from "../../session/Session.js";
+import { PaseServer } from "../../session/pase/PaseServer.js";
 import { Time, Timer } from "../../time/Time.js";
 import { ByteArray } from "../../util/ByteArray.js";
 import { AdministratorCommissioning } from "../definitions/AdministratorCommissioningCluster.js";
 import { AttributeServer } from "./AttributeServer.js";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
+
+const logger = Logger.get("AdministratorCommissioningServer");
 
 export const MAXIMUM_COMMISSIONING_TIMEOUT_S = 15 * 60; // 900 seconds/15 minutes
 export const MINIMUM_COMMISSIONING_TIMEOUT_S = 3 * 60; // 180 seconds/3 minutes
@@ -132,6 +135,7 @@ class AdministratorCommissioningManager {
      * This method is used internally when the commissioning window timer expires or the commissioning was completed.
      */
     private endCommissioning() {
+        logger.debug("Ending commissioning window.");
         if (this.commissioningWindowTimeout !== undefined) {
             this.commissioningWindowTimeout.stop();
             this.commissioningWindowTimeout = undefined;

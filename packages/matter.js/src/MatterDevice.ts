@@ -512,6 +512,7 @@ export class MatterDevice {
     }
 
     async endCommissioning() {
+        logger.debug("End commissioning");
         // Remove PASE responder when we close enhanced commissioning window or node is commissioned
         if (
             this.activeCommissioningMode === AdministratorCommissioning.CommissioningWindowStatus.EnhancedWindowOpen ||
