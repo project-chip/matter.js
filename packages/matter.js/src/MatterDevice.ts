@@ -19,7 +19,7 @@ import { MAXIMUM_COMMISSIONING_TIMEOUT_S } from "./cluster/server/AdministratorC
 import { Channel } from "./common/Channel.js";
 import { FailSafeManager } from "./common/FailSafeManager.js";
 import { InstanceBroadcaster } from "./common/InstanceBroadcaster.js";
-import { MatterFlowError } from "./common/MatterError.js";
+import { InternalError, MatterFlowError } from "./common/MatterError.js";
 import { Scanner } from "./common/Scanner.js";
 import { TransportInterface } from "./common/TransportInterface.js";
 import { Crypto } from "./crypto/Crypto.js";
@@ -128,7 +128,6 @@ export class MatterDevice {
     }
 
     async announce(announceOnce = false) {
-        logger.info("Announce", announceOnce, this.activeCommissioningMode);
         if (!announceOnce) {
             // Stop announcement if duration is reached
             if (
@@ -188,19 +187,17 @@ export class MatterDevice {
         activeCommissioningEndCallback?: () => void,
         discriminator?: number,
     ) {
-        if (
-            this.activeCommissioningMode !== mode &&
-            this.activeCommissioningMode !== AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen
-        ) {
-            throw new MatterFlowError("Commissioning window already open with different mode!");
+        if (this.activeCommissioningMode !== AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen) {
+            throw new InternalError("Commissioning window already open with different mode!");
+        }
+        if (this.activeCommissioningEndCallback !== undefined) {
+            throw new InternalError("Commissioning window already open with different callback!");
         }
         this.activeCommissioningMode = mode;
         if (activeCommissioningEndCallback !== undefined) {
-            if (this.activeCommissioningEndCallback !== undefined) {
-                this.activeCommissioningEndCallback();
-            }
             this.activeCommissioningEndCallback = activeCommissioningEndCallback;
         }
+        // MDNS is sent in parallel
         this.sendCommissionableAnnouncement(mode, discriminator).catch(error =>
             logger.warn("Error sending announcement", error),
         );
@@ -542,7 +539,7 @@ export class MatterDevice {
     }
 
     async endCommissioning() {
-        logger.debug("End commissioning");
+        logger.debug("Commissioning mode ended, stop announcements.");
         // Remove PASE responder when we close enhanced commissioning window or node is commissioned
         if (
             this.activeCommissioningMode === AdministratorCommissioning.CommissioningWindowStatus.EnhancedWindowOpen ||

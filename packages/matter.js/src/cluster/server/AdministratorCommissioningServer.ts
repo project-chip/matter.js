@@ -5,6 +5,7 @@
  */
 
 import { MatterDevice } from "../../MatterDevice.js";
+import { InternalError } from "../../common/MatterError.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
 import { VendorId } from "../../datatype/VendorId.js";
 import { Logger } from "../../log/Logger.js";
@@ -46,9 +47,10 @@ class AdministratorCommissioningManager {
      */
     initializeCommissioningWindow(commissioningTimeout: number, session: Session<MatterDevice>) {
         if (this.commissioningWindowTimeout !== undefined) {
-            throw new Error("Commissioning window already initialized.");
+            // Should never happen, but let's make sure
+            throw new InternalError("Commissioning window already initialized.");
         }
-        logger.info(`Commissioning window opened for ${commissioningTimeout} seconds for ${session.name}.`);
+        logger.debug(`Commissioning window timer started for ${commissioningTimeout} seconds for ${session.name}.`);
         this.commissioningWindowTimeout = Time.getTimer(commissioningTimeout * 1000, () =>
             this.closeCommissioningWindow(session),
         ).start();
@@ -107,18 +109,17 @@ class AdministratorCommissioningManager {
 
         this.assertCommissioningWindowRequirements(commissioningTimeout, device);
 
+        this.windowStatusAttribute.setLocal(AdministratorCommissioning.CommissioningWindowStatus.EnhancedWindowOpen);
+        this.initializeCommissioningWindow(commissioningTimeout, session);
+
         await device.allowEnhancedCommissioning(
             discriminator,
             PaseServer.fromVerificationValue(pakeVerifier, { iterations, salt }),
             () => {
                 session.getAssociatedFabric().deleteRemoveCallback(this.fabricRemoveHandler);
-                logger.info("Ending from Enhanced Commissioning callback.");
                 this.endCommissioning();
             },
         );
-        this.windowStatusAttribute.setLocal(AdministratorCommissioning.CommissioningWindowStatus.EnhancedWindowOpen);
-
-        this.initializeCommissioningWindow(commissioningTimeout, session);
     }
 
     /** This method opens a Basic Commissioning Window. The default passcode is used. */
@@ -127,21 +128,20 @@ class AdministratorCommissioningManager {
 
         this.assertCommissioningWindowRequirements(commissioningTimeout, device);
 
+        this.windowStatusAttribute.setLocal(AdministratorCommissioning.CommissioningWindowStatus.BasicWindowOpen);
+        this.initializeCommissioningWindow(commissioningTimeout, session);
+
         await device.allowBasicCommissioning(() => {
             session.getAssociatedFabric().deleteRemoveCallback(this.fabricRemoveHandler);
-            logger.info("Ending from Basic Commissioning callback.");
             this.endCommissioning();
         });
-        this.windowStatusAttribute.setLocal(AdministratorCommissioning.CommissioningWindowStatus.BasicWindowOpen);
-
-        this.initializeCommissioningWindow(commissioningTimeout, session);
     }
 
     /**
      * This method is used internally when the commissioning window timer expires or the commissioning was completed.
      */
     private endCommissioning() {
-        logger.debug("Ending commissioning window.");
+        logger.debug("End commissioning window.");
         if (this.commissioningWindowTimeout !== undefined) {
             this.commissioningWindowTimeout.stop();
             this.commissioningWindowTimeout = undefined;
@@ -153,8 +153,6 @@ class AdministratorCommissioningManager {
 
     /** This method is used to close a commissioning window. */
     async closeCommissioningWindow(session: Session<MatterDevice>) {
-        console.trace();
-        logger.info(`Ending from Close Commissioning for ${session.name}.`);
         this.endCommissioning();
         await session.getContext().endCommissioning();
     }
@@ -168,7 +166,7 @@ class AdministratorCommissioningManager {
                 AdministratorCommissioning.StatusCode.WindowNotOpen,
             );
         }
-        logger.info("Revoking commissioning window.");
+        logger.debug("Revoking commissioning window.");
         await this.closeCommissioningWindow(session);
     }
 
