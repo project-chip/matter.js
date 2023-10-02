@@ -387,8 +387,10 @@ export class MatterDevice {
         //    ICAC for that Fabric to the state prior to the Fail-Safe timer being armed, for the Fabric Index that was
         //    the subject of the UpdateNOC command.
         if (failSafeContext.associatedFabric !== undefined) {
-            // update FabricManager and Resumption records but leave current session intact
-            this.updateFabric(failSafeContext.associatedFabric);
+            if (failSafeContext.forUpdateNoc) {
+                // update FabricManager and Resumption records but leave current session intact
+                this.updateFabric(failSafeContext.associatedFabric);
+            }
 
             const operationalCredentialsCluster = failSafeContext.rootEndpoint.getClusterServer(
                 OperationalCredentials.Cluster,
