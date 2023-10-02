@@ -10,71 +10,94 @@ import { DataReader } from "../util/DataReader.js";
 import { DataWriter } from "../util/DataWriter.js";
 import { isIPv4, isIPv6 } from "../util/Ip.js";
 
-export const PtrRecord = (name: string, ptr: string, ttl = 120): DnsRecord<string> => ({
+/**
+ * The maximum MDNS message size to usually fit into one UDP network MTU packet. Data are split into multiple messages
+ * when needed.
+ */
+export const MAX_MDNS_MESSAGE_SIZE = 1232; // 1280bytes (IPv6 packet size) - 8bytes (UDP header) - 40bytes (IPv6 IP header, IPv4 is only 20bytes)
+
+export const PtrRecord = (name: string, ptr: string, ttl = 120, flushCache = false): DnsRecord<string> => ({
     name,
     value: ptr,
     ttl,
     recordType: DnsRecordType.PTR,
     recordClass: DnsRecordClass.IN,
+    flushCache,
 });
-export const ARecord = (name: string, ip: string, ttl = 120): DnsRecord<string> => ({
+export const ARecord = (name: string, ip: string, ttl = 120, flushCache = false): DnsRecord<string> => ({
     name,
     value: ip,
     ttl,
     recordType: DnsRecordType.A,
     recordClass: DnsRecordClass.IN,
+    flushCache,
 });
-export const AAAARecord = (name: string, ip: string, ttl = 120): DnsRecord<string> => ({
+export const AAAARecord = (name: string, ip: string, ttl = 120, flushCache = false): DnsRecord<string> => ({
     name,
     value: ip,
     ttl,
     recordType: DnsRecordType.AAAA,
     recordClass: DnsRecordClass.IN,
+    flushCache,
 });
-export const TxtRecord = (name: string, entries: string[], ttl = 120): DnsRecord<string[]> => ({
+export const TxtRecord = (name: string, entries: string[], ttl = 120, flushCache = false): DnsRecord<string[]> => ({
     name,
     value: entries,
     ttl,
     recordType: DnsRecordType.TXT,
     recordClass: DnsRecordClass.IN,
+    flushCache,
 });
-export const SrvRecord = (name: string, srv: SrvRecordValue, ttl = 120): DnsRecord<SrvRecordValue> => ({
+export const SrvRecord = (
+    name: string,
+    srv: SrvRecordValue,
+    ttl = 120,
+    flushCache = false,
+): DnsRecord<SrvRecordValue> => ({
     name,
     value: srv,
     ttl,
     recordType: DnsRecordType.SRV,
     recordClass: DnsRecordClass.IN,
+    flushCache,
 });
 
-export interface SrvRecordValue {
+export type SrvRecordValue = {
     priority: number;
     weight: number;
     port: number;
     target: string;
-}
+};
 
-export interface DnsQuery {
+export type DnsQuery = {
     name: string;
     recordType: DnsRecordType;
     recordClass: DnsRecordClass;
-}
+    uniCastResponse?: boolean;
+};
 
-export interface DnsRecord<T> {
+export type DnsRecord<T> = {
     name: string;
     recordType: DnsRecordType;
     recordClass: DnsRecordClass;
+    flushCache?: boolean;
     ttl: number;
     value: T;
-}
+};
 
-export interface DnsMessage {
+export type DnsMessage = {
     transactionId: number;
     messageType: DnsMessageType;
     queries: DnsQuery[];
     answers: DnsRecord<any>[];
     authorities: DnsRecord<any>[];
     additionalRecords: DnsRecord<any>[];
-}
+};
+
+export type DnsMessagePartiallyPreEncoded = Omit<DnsMessage, "answers" | "additionalRecords"> & {
+    answers: (DnsRecord<any> | ByteArray)[];
+    additionalRecords: (DnsRecord<any> | ByteArray)[];
+};
 
 export const enum DnsMessageType {
     Query = 0x0000,
@@ -130,25 +153,30 @@ export class DnsCodec {
         }
     }
 
-    private static decodeQuery(reader: DataReader<Endian.Big>, message: ByteArray) {
+    private static decodeQuery(reader: DataReader<Endian.Big>, message: ByteArray): DnsQuery {
         const name = this.decodeQName(reader, message);
         const recordType = reader.readUInt16();
-        const recordClass = reader.readUInt16();
-        return { name, recordType, recordClass };
+        const classInt = reader.readUInt16();
+        const uniCastResponse = (classInt & 0x8000) !== 0;
+        const recordClass = classInt & 0x7fff;
+        return { name, recordType, recordClass, uniCastResponse };
     }
 
-    private static decodeRecord(reader: DataReader<Endian.Big>, message: ByteArray) {
+    private static decodeRecord(reader: DataReader<Endian.Big>, message: ByteArray): DnsRecord<any> {
         const name = this.decodeQName(reader, message);
         const recordType = reader.readUInt16();
-        const recordClass = reader.readUInt16();
+        const classInt = reader.readUInt16();
+        const flushCache = (classInt & 0x8000) !== 0;
+        const recordClass = classInt & 0x7fff;
         const ttl = reader.readUInt32();
         const valueLength = reader.readUInt16();
         const valueBytes = reader.readByteArray(valueLength);
         const value = this.decodeRecordValue(valueBytes, recordType, message);
-        return { name, recordType, recordClass, ttl, value };
+        return { name, recordType, recordClass, ttl, value, flushCache };
     }
 
     private static decodeQName(reader: DataReader<Endian.Big>, message: ByteArray) {
+        const messageReader = new DataReader(message, Endian.Big);
         const qNameItems = new Array<string>();
         while (true) {
             const itemLength = reader.readUInt8();
@@ -156,7 +184,8 @@ export class DnsCodec {
             if ((itemLength & 0xc0) !== 0) {
                 // Compressed Qname
                 const indexInMessage = reader.readUInt8() | ((itemLength & 0x3f) << 8);
-                qNameItems.push(this.decodeQName(new DataReader(message.slice(indexInMessage), Endian.Big), message));
+                messageReader.setOffset(indexInMessage);
+                qNameItems.push(this.decodeQName(messageReader, message));
                 break;
             }
             qNameItems.push(reader.readUtf8String(itemLength));
@@ -245,7 +274,7 @@ export class DnsCodec {
         answers = [],
         authorities = [],
         additionalRecords = [],
-    }: Partial<DnsMessage>): ByteArray {
+    }: Partial<DnsMessagePartiallyPreEncoded>): ByteArray {
         if (messageType === undefined) throw new InternalError("Message type must be specified!");
         if (queries.length > 0 && messageType !== DnsMessageType.Query && messageType !== DnsMessageType.TruncatedQuery)
             throw new InternalError("Queries can only be included in query messages!");
@@ -258,24 +287,28 @@ export class DnsCodec {
         writer.writeUInt16(answers.length);
         writer.writeUInt16(authorities.length);
         writer.writeUInt16(additionalRecords.length);
-        queries.forEach(({ name, recordClass, recordType }) => {
+        queries.forEach(({ name, recordClass, recordType, uniCastResponse = false }) => {
             writer.writeByteArray(this.encodeQName(name));
             writer.writeUInt16(recordType);
-            writer.writeUInt16(recordClass);
+            writer.writeUInt16(recordClass | (uniCastResponse ? 0x8000 : 0));
         });
-        [...answers, ...authorities, ...additionalRecords].forEach(record =>
-            writer.writeByteArray(this.encodeRecord(record)),
-        );
+        [...answers, ...authorities, ...additionalRecords].forEach(record => {
+            if (record instanceof ByteArray) {
+                writer.writeByteArray(record);
+            } else {
+                writer.writeByteArray(this.encodeRecord(record));
+            }
+        });
         return writer.toByteArray();
     }
 
     static encodeRecord(record: DnsRecord<any>): ByteArray {
-        const { name, recordType, recordClass, ttl, value } = record;
+        const { name, recordType, recordClass, ttl, value, flushCache = false } = record;
 
         const writer = new DataWriter(Endian.Big);
         writer.writeByteArray(this.encodeQName(name));
         writer.writeUInt16(recordType);
-        writer.writeUInt16(recordClass);
+        writer.writeUInt16(recordClass | (flushCache ? 0x8000 : 0));
         writer.writeUInt32(ttl);
         const encodedValue = this.encodeRecordValue(value, recordType);
         writer.writeUInt16(encodedValue.length);

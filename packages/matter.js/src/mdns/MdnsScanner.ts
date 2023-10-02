@@ -11,6 +11,7 @@ import {
     DnsRecord,
     DnsRecordClass,
     DnsRecordType,
+    MAX_MDNS_MESSAGE_SIZE,
     SrvRecordValue,
 } from "../codec/DnsCodec.js";
 import { ImplementationError } from "../common/MatterError.js";
@@ -55,12 +56,6 @@ type CommissionableDeviceRecordWithExpire = Omit<CommissionableDevice, "addresse
 
 /** The initial number of seconds between two announcements. MDNS specs require 1-2 seconds, so lets use the middle. */
 const START_ANNOUNCE_INTERVAL_SECONDS = 1.5;
-
-/**
- * The maximum MDNS message size to usually fit into one UDP network MTU packet. Data are split into multiple messages
- * when needed.
- */
-const MAX_MDNS_MESSAGE_SIZE = 1500;
 
 /**
  * This class implements the Scanner interface for a MDNS scanner via UDP messages in a IP based network.
