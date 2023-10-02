@@ -737,16 +737,15 @@ describe("Integration Test", () => {
             }>();
             callback = (value: boolean) => lastResolver({ value, time: Time.nowMs() });
 
-            // Verify that no update comes in after max cycle time 1h
-            await MockTime.advance(60 * 60 * 1000);
+            // Verify that no update comes in after doubled max interval requested
+            await MockTime.advance(10 * 1000);
 
             // ... but on next change immediately (means immediately + 50ms, so wait 100ms) then
-            await MockTime.advance(2 * 1000);
             onOffLightDeviceServer.setOnOff(false);
             await MockTime.advance(100);
             const lastReport = await lastPromise;
 
-            assert.deepEqual(lastReport, { value: false, time: startTime + (60 * 60 + 4) * 1000 + 200 });
+            assert.deepEqual(lastReport, { value: false, time: startTime + (10 + 2) * 1000 + 200 });
         });
 
         it("another additional subscription of one attribute with known data version only sends updates when the value changes", async () => {
@@ -1004,13 +1003,6 @@ describe("Integration Test", () => {
 
     after(async () => {
         const promise = mdnsBroadcaster.expireAllAnnouncements(matterPort);
-
-        await MockTime.yield();
-        await MockTime.yield();
-        await MockTime.yield();
-        await MockTime.advance(150);
-        await MockTime.advance(150);
-        await MockTime.yield();
 
         await MockTime.yield();
         await MockTime.yield();
