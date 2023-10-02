@@ -75,6 +75,8 @@ describe("Integration Test", () => {
     let commissioningController: CommissioningController;
     let commissioningServer: CommissioningServer;
     let onOffLightDeviceServer: OnOffLightDevice;
+    let mdnsScanner: MdnsScanner;
+    let mdnsBroadcaster: MdnsBroadcaster;
 
     before(async () => {
         MockTime.reset(TIME_START);
@@ -189,10 +191,10 @@ describe("Integration Test", () => {
         matterServer.addCommissioningServer(commissioningServer);
 
         // override the mdns scanner to avoid the client to try to resolve the server's address
-        commissioningServer.setMdnsScanner(await MdnsScanner.create({ enableIpv4: false, netInterface: SERVER_IPv6 }));
-        commissioningServer.setMdnsBroadcaster(
-            await MdnsBroadcaster.create({ enableIpv4: false, multicastInterface: SERVER_IPv6 }),
-        );
+        mdnsScanner = await MdnsScanner.create({ enableIpv4: false, netInterface: SERVER_IPv6 });
+        commissioningServer.setMdnsScanner(mdnsScanner);
+        mdnsBroadcaster = await MdnsBroadcaster.create({ enableIpv4: false, multicastInterface: SERVER_IPv6 });
+        commissioningServer.setMdnsBroadcaster(mdnsBroadcaster);
         await commissioningServer.advertise();
 
         assert.ok(onOffLightDeviceServer.getClusterServer(OnOffCluster));
@@ -1001,6 +1003,16 @@ describe("Integration Test", () => {
     });
 
     after(async () => {
+        const promise = mdnsBroadcaster.expireAllAnnouncements(matterPort);
+
+        await MockTime.yield();
+        await MockTime.yield();
+        await MockTime.yield();
+        await MockTime.advance(150);
+        await MockTime.advance(150);
+        await MockTime.yield();
+        await promise;
+
         await matterServer.close();
         await matterClient.close();
         await fakeControllerStorage.close();
