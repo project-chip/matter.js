@@ -12,9 +12,9 @@ import { UdpChannelNode } from "./UdpChannelNode.js";
 
 export class NetworkNode extends Network {
     static getMulticastInterface(netInterface: string, ipv4: boolean) {
+        const netInterfaceInfo = networkInterfaces()[netInterface];
+        if (netInterfaceInfo === undefined) throw new NetworkError(`Unknown interface: ${netInterface}`);
         if (ipv4) {
-            const netInterfaceInfo = networkInterfaces()[netInterface];
-            if (netInterfaceInfo === undefined) throw new NetworkError(`Unknown interface: ${netInterface}`);
             for (const { address, family } of netInterfaceInfo) {
                 if (family === "IPv4") {
                     return address;
@@ -22,7 +22,15 @@ export class NetworkNode extends Network {
             }
             throw new NetworkError(`No IPv4 addresses on interface: ${netInterface}`);
         } else {
-            return `::%${netInterface}`;
+            if (process.platform !== "win32") {
+                return `::%${netInterface}`;
+            }
+            for (const { address, family, scopeid } of netInterfaceInfo) {
+                if (family === "IPv6" && address.startsWith("fe80::")) {
+                    return `::%${scopeid}`;
+                }
+            }
+            throw new NetworkError(`No IPv6 addresses on interface: ${netInterface}`);
         }
     }
 
