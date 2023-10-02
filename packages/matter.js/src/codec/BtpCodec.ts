@@ -270,8 +270,8 @@ export class BtpCodec {
         }
 
         const header =
-            (isHandshakeRequest ? BtpHeaderBits.HandshakeBit : 0) |
-            (hasManagementOpcode ? BtpHeaderBits.ManagementMsg : 0) |
+            // (isHandshakeRequest ? BtpHeaderBits.HandshakeBit : 0) | ... but always false here
+            // (hasManagementOpcode ? BtpHeaderBits.ManagementMsg : 0) | ... but alw<ys false here
             (hasAckNumber ? BtpHeaderBits.AckMsg : 0) |
             (isEndingSegment ? BtpHeaderBits.EndSegment : 0) |
             (isContinuingSegment ? BtpHeaderBits.ContinuingSegment : 0) |

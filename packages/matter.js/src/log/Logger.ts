@@ -144,7 +144,7 @@ function htmlSpan(type: string, value: string) {
 }
 
 function htmlEscape(value: string) {
-    return value.toString().replace(/\n/g, "<br/>").replace(/</g, "&amp").replace(/</g, "&lt;").replace(/>/, "&gt;");
+    return value.toString().replace(/\n/g, "<br/>").replace(/</g, "&amp").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
 function htmlLogFormatter(now: Date, level: Level, facility: string, values: any[]) {

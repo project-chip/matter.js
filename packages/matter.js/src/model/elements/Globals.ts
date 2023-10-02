@@ -7,13 +7,13 @@
 import { Conformance, Constraint } from "../aspects/index.js";
 import { Metatype, StatusCode } from "../definitions/index.js";
 import { AttributeElement } from "./AttributeElement.js";
-import { ValueElement } from "./ValueElement.js";
 import { DatatypeElement } from "./DatatypeElement.js";
 import { EventElement } from "./EventElement.js";
+import { ValueElement } from "./ValueElement.js";
 
 // Constants for all type names used more than once
 export const OCTSTR = "octstr";
-export const STRUCT = "struct"
+export const STRUCT = "struct";
 export const ENUM8 = "enum8";
 export const UINT8 = "uint8";
 export const UINT16 = "uint16";
@@ -21,28 +21,22 @@ export const UINT32 = "uint32";
 export const UINT64 = "uint64";
 
 // Base type factories (types with metatypes)
-const bool = (name: string, description: string) =>
-    DatatypeElement({ name, description, metatype: Metatype.boolean });
+const bool = (name: string, description: string) => DatatypeElement({ name, description, metatype: Metatype.boolean });
 const map = (name: string, description: string, byteSize: ValueElement.BitmapSize) =>
     DatatypeElement({ name, description, byteSize, metatype: Metatype.bitmap });
 const int = (name: string, description: string, byteSize: ValueElement.Size) =>
     DatatypeElement({ name, description, byteSize, metatype: Metatype.integer });
 const float = (name: string, description: string, byteSize: ValueElement.Size) =>
     DatatypeElement({ name, description, byteSize, metatype: Metatype.float });
-const octet = (name: string, description: string) =>
-    DatatypeElement({ name, description, metatype: Metatype.bytes });
-const string = (name: string, description: string) =>
-    DatatypeElement({ name, description, metatype: Metatype.string });
-const list = (name: string, description: string) =>
-    DatatypeElement({ name, description, metatype: Metatype.array });
-const struct = (name: string, description: string) =>
-    DatatypeElement({ name, description, metatype: Metatype.object });
+const octet = (name: string, description: string) => DatatypeElement({ name, description, metatype: Metatype.bytes });
+const string = (name: string, description: string) => DatatypeElement({ name, description, metatype: Metatype.string });
+const list = (name: string, description: string) => DatatypeElement({ name, description, metatype: Metatype.array });
+const struct = (name: string, description: string) => DatatypeElement({ name, description, metatype: Metatype.object });
 const enumt = (name: string, description: string, type: string) =>
     DatatypeElement({ name, description, metatype: Metatype.enum, type });
 
 // Derivative type factories (types that inherit metatypes)
-const extInt = (name: string, description: string, type: string) =>
-    DatatypeElement({ name, description, type });
+const extInt = (name: string, description: string, type: string) => DatatypeElement({ name, description, type });
 const depInt = (name: string, description: string, type: string) =>
     DatatypeElement({ name, description, type, conformance: Conformance.Flag.Deprecated });
 const extOctet = (name: string, description: string, constraint?: Constraint.Definition) =>
@@ -56,21 +50,21 @@ const TodFields = [
     DatatypeElement({ type: "uint8", name: "hours" }),
     DatatypeElement({ type: "uint8", name: "minutes" }),
     DatatypeElement({ type: "uint8", name: "seconds" }),
-    DatatypeElement({ type: "uint8", name: "hundredths" })
+    DatatypeElement({ type: "uint8", name: "hundredths" }),
 ];
 
 const DateFields = [
     DatatypeElement({ type: "uint8", name: "year" }),
     DatatypeElement({ type: "uint8", name: "month" }),
     DatatypeElement({ type: "uint8", name: "day" }),
-    DatatypeElement({ type: "uint8", name: "dow" })
+    DatatypeElement({ type: "uint8", name: "dow" }),
 ];
 
 /**
  * These are all of the global elements defined in the Matter Specification.
  * This includes types from the "data types" section and other elements from
  * the "global elements" section.
- * 
+ *
  * According to the specification, any type that is used by more than one
  * cluster should be defined here.  Various cluster-specific elements reference
  * these types or derive new types.
@@ -170,32 +164,62 @@ export const Globals = {
 
     // Global elements
     ClusterRevision: AttributeElement({
-        id: 0xfffd, name: "ClusterRevision", type: "uint16",
-        constraint: { min: 1 }, quality: "F", access: "R V", conformance: "M"
+        id: 0xfffd,
+        name: "ClusterRevision",
+        type: "uint16",
+        constraint: { min: 1 },
+        quality: "F",
+        access: "R V",
+        conformance: "M",
     }),
     FeatureMap: AttributeElement({
-        id: 0xfffc, name: "FeatureMap", type: "map32",
-        quality: "F", access: "R V", default: 0, conformance: "M"
+        id: 0xfffc,
+        name: "FeatureMap",
+        type: "map32",
+        quality: "F",
+        access: "R V",
+        default: 0,
+        conformance: "M",
     }),
     AttributeList: AttributeElement({
-        id: 0xfffb, name: "AttributeList", type: "list[attrib-id]",
-        quality: "F", access: "R V", conformance: "M"
+        id: 0xfffb,
+        name: "AttributeList",
+        type: "list[attrib-id]",
+        quality: "F",
+        access: "R V",
+        conformance: "M",
     }),
     EventList: AttributeElement({
-        id: 0xfffa, name: "EventList", type: "list[event-id]",
-        quality: "F", access: "R V", conformance: "P, M"
+        id: 0xfffa,
+        name: "EventList",
+        type: "list[event-id]",
+        quality: "F",
+        access: "R V",
+        conformance: "P, M",
     }),
     AcceptedCommandListList: AttributeElement({
-        id: 0xfff9, name: "AcceptedCommandList", type: "list[command-id]",
-        quality: "F", access: "R V", conformance: "M"
+        id: 0xfff9,
+        name: "AcceptedCommandList",
+        type: "list[command-id]",
+        quality: "F",
+        access: "R V",
+        conformance: "M",
     }),
     GeneratedCommandList: AttributeElement({
-        id: 0xfff8, name: "GeneratedCommandList", type: "list[command-id]",
-        quality: "F", access: "R V", conformance: "M"
+        id: 0xfff8,
+        name: "GeneratedCommandList",
+        type: "list[command-id]",
+        quality: "F",
+        access: "R V",
+        conformance: "M",
     }),
     FabricIndex: DatatypeElement({
-        id: 0xfe, name: "FabricIndex", type: "fabric-idx",
-        constraint: "1 to 254", access: "R V F", conformance: "M"
+        id: 0xfe,
+        name: "FabricIndex",
+        type: "fabric-idx",
+        constraint: "1 to 254",
+        access: "R V F",
+        conformance: "M",
     }),
 
     // Not defined as global in the specification but used across multiple
@@ -203,7 +227,7 @@ export const Globals = {
     SubjectId: DatatypeElement({ name: "SubjectID", type: "uint64" }),
 
     // Not formal part of specification, indicates field's type may vary
-    any: DatatypeElement({ name: "any", description: "Any value", metatype: "any" })
-}
+    any: DatatypeElement({ name: "any", description: "Any value", metatype: "any" }),
+};
 
-Object.values(Globals).forEach(g => g.global = true);
+Object.values(Globals).forEach(g => (g.global = true));
