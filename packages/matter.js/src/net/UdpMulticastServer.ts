@@ -66,31 +66,43 @@ export class UdpMulticastServer {
         );
     }
 
-    async send(message: ByteArray, netInterface?: string) {
+    async send(message: ByteArray, netInterface?: string, uniCastTarget?: string) {
         netInterface = netInterface ?? this.netInterface;
-        const netInterfaces = netInterface !== undefined ? [netInterface] : this.network.getNetInterfaces();
-        await Promise.all(
-            netInterfaces.map(async netInterface => {
-                const { ips } = this.network.getIpMac(netInterface) ?? { ips: [] };
-                await Promise.all(
-                    ips.map(async ip => {
-                        const iPv4 = isIPv4(ip);
-                        const broadcastTarget = iPv4 ? this.broadcastAddressIpv4 : this.broadcastAddressIpv6;
-                        if (broadcastTarget == undefined) {
-                            // IPv4 but disabled, so just resolve
-                            return;
-                        }
-                        try {
-                            await (
-                                await this.broadcastChannels.get(netInterface, iPv4)
-                            ).send(broadcastTarget, this.broadcastPort, message);
-                        } catch (error) {
-                            logger.info(`${netInterface}: ${(error as Error).message}`);
-                        }
-                    }),
-                );
-            }),
-        );
+
+        // When we know the network interface and the unicast target, we can send unicast
+        if (uniCastTarget !== undefined && netInterface !== undefined) {
+            try {
+                await (
+                    await this.broadcastChannels.get(netInterface, isIPv4(uniCastTarget))
+                ).send(uniCastTarget, this.broadcastPort, message);
+            } catch (error) {
+                logger.info(`${netInterface} ${uniCastTarget}: ${(error as Error).message}`);
+            }
+        } else {
+            const netInterfaces = netInterface !== undefined ? [netInterface] : this.network.getNetInterfaces();
+            await Promise.all(
+                netInterfaces.map(async netInterface => {
+                    const { ips } = this.network.getIpMac(netInterface) ?? { ips: [] };
+                    await Promise.all(
+                        ips.map(async ip => {
+                            const iPv4 = isIPv4(ip);
+                            const broadcastTarget = iPv4 ? this.broadcastAddressIpv4 : this.broadcastAddressIpv6;
+                            if (broadcastTarget == undefined) {
+                                // IPv4 but disabled, so just resolve
+                                return;
+                            }
+                            try {
+                                await (
+                                    await this.broadcastChannels.get(netInterface, iPv4)
+                                ).send(broadcastTarget, this.broadcastPort, message);
+                            } catch (error) {
+                                logger.info(`${netInterface}: ${(error as Error).message}`);
+                            }
+                        }),
+                    );
+                }),
+            );
+        }
     }
 
     private async createBroadcastChannel(netInterface: string, iPv4: string): Promise<UdpChannel> {
