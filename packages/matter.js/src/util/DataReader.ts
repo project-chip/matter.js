@@ -82,6 +82,13 @@ export class DataReader<E extends Endian> {
         return this.dataView.byteLength;
     }
 
+    setOffset(offset: number) {
+        if (offset > this.dataView.byteLength) {
+            throw new Error(`Offset ${offset} is out of bounds.`);
+        }
+        this.offset = offset;
+    }
+
     private getOffsetAndAdvance(size: number) {
         const result = this.offset;
         this.offset += size;
