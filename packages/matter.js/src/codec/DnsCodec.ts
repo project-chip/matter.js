@@ -10,38 +10,38 @@ import { DataReader } from "../util/DataReader.js";
 import { DataWriter } from "../util/DataWriter.js";
 import { isIPv4, isIPv6 } from "../util/Ip.js";
 
-export const PtrRecord = (name: string, ptr: string): DnsRecord<string> => ({
+export const PtrRecord = (name: string, ptr: string, ttl = 120): DnsRecord<string> => ({
     name,
     value: ptr,
-    ttl: 120,
+    ttl,
     recordType: DnsRecordType.PTR,
     recordClass: DnsRecordClass.IN,
 });
-export const ARecord = (name: string, ip: string): DnsRecord<string> => ({
+export const ARecord = (name: string, ip: string, ttl = 120): DnsRecord<string> => ({
     name,
     value: ip,
-    ttl: 120,
+    ttl,
     recordType: DnsRecordType.A,
     recordClass: DnsRecordClass.IN,
 });
-export const AAAARecord = (name: string, ip: string): DnsRecord<string> => ({
+export const AAAARecord = (name: string, ip: string, ttl = 120): DnsRecord<string> => ({
     name,
     value: ip,
-    ttl: 120,
+    ttl,
     recordType: DnsRecordType.AAAA,
     recordClass: DnsRecordClass.IN,
 });
-export const TxtRecord = (name: string, entries: string[]): DnsRecord<string[]> => ({
+export const TxtRecord = (name: string, entries: string[], ttl = 120): DnsRecord<string[]> => ({
     name,
     value: entries,
-    ttl: 120,
+    ttl,
     recordType: DnsRecordType.TXT,
     recordClass: DnsRecordClass.IN,
 });
-export const SrvRecord = (name: string, srv: SrvRecordValue): DnsRecord<SrvRecordValue> => ({
+export const SrvRecord = (name: string, srv: SrvRecordValue, ttl = 120): DnsRecord<SrvRecordValue> => ({
     name,
     value: srv,
-    ttl: 120,
+    ttl,
     recordType: DnsRecordType.SRV,
     recordClass: DnsRecordClass.IN,
 });

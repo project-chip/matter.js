@@ -192,12 +192,24 @@ export interface InstanceBroadcaster {
     /** Set a commissionable mode and details to announce a commissionable device. */
     setCommissionMode(mode: number, deviceData: CommissioningModeInstanceData): Promise<void>;
 
-    /** Set operational details to Announce an operational device which is already commissioned. */
-    setFabrics(fabrics: Fabric[]): Promise<void>;
+    /**
+     * Set operational details to Announce an operational device which is already commissioned.
+     * Use expireCommissioningAnnouncements = true when Fabrics are changed after a n commissioning process.
+     */
+    setFabrics(fabrics: Fabric[], expireCommissioningAnnouncements?: boolean): Promise<void>;
 
     /** Set commissioner details to announce a commissioner service for User directed commissioning (UDC). */
     setCommissionerInfo(commissionerData: CommissionerInstanceData): Promise<void>;
 
     /** Send out announcements for this instance. */
     announce(): Promise<void>;
+
+    /** Expire the announcement for this operative instance. */
+    expireFabricAnnouncement(): Promise<void>;
+
+    /** Expire the announcement for this commissioning instance. */
+    expireCommissioningAnnouncement(): Promise<void>;
+
+    /** Expire all announcements. */
+    expireAllAnnouncements(): Promise<void>;
 }

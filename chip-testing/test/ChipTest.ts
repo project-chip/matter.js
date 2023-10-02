@@ -125,7 +125,7 @@ async function executeChipToolTest(
 async function clearChipToolStorage() {
     process.stdout.write(`====> Chip test Runner: Cleanup /tmp/chip* for a new Test\n`);
     try {
-        await executeProcess("rm", ["/tmp/chip_*"]);
+        await executeProcess("rm", ["/tmp/chip*"]);
     } catch {
         // ignore for now, nothing to cleanup
     }
@@ -167,15 +167,22 @@ describe("Chip-Tool-Tests", () => {
 
     /** Collect and execute all tests that are exported from the suites folder. */
     for (const suiteName in Tests) {
-        if (process.env.LIMIT_TO_ONE_TEST !== undefined && suiteName !== process.env.LIMIT_TO_ONE_TEST) {
-            continue;
+        if (process.env.LIMIT_TESTS !== undefined) {
+            const limitTests = process.env.LIMIT_TESTS;
+            const isWildcard = limitTests.endsWith("*");
+            if (
+                (isWildcard && !suiteName.startsWith(limitTests.substring(0, limitTests.length - 2))) ||
+                (!isWildcard && suiteName !== limitTests)
+            ) {
+                continue;
+            }
         }
         describe(suiteName, () => {
             const suite = Tests[suiteName];
             const storage = new StorageBackendMemory();
             const testInstance = new suite(storage) as DeviceTestInstance;
 
-            it(`"${suiteName}": Setup test instance`, async () => await testInstance.setup());
+            it(`"${suiteName}": Setup test instance`, async () => await testInstance.setup()).timeout(5000);
 
             it(`"${suiteName}": Start chip-tool and test instance for initial pairing`, async () =>
                 await pairWithChipTool(async () => await testInstance.start())).timeout(30000);

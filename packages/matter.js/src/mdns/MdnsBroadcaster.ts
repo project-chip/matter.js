@@ -14,6 +14,7 @@ import {
 } from "../common/InstanceBroadcaster.js";
 import { ImplementationError } from "../common/MatterError.js";
 import { Crypto } from "../crypto/Crypto.js";
+import { FabricIndex } from "../datatype/FabricIndex.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { Logger } from "../log/Logger.js";
@@ -34,7 +35,7 @@ import {
     getShortDiscriminatorQname,
     getVendorQname,
 } from "./MdnsConsts.js";
-import { MdnsServer } from "./MdnsServer.js";
+import { AnnouncementType, MdnsServer } from "./MdnsServer.js";
 
 const logger = Logger.get("MdnsBroadcaster");
 
@@ -59,6 +60,8 @@ export class MdnsBroadcaster {
     }
 
     private readonly network = Network.get();
+    private readonly activeCommissioningAnnouncements = new Set<number>();
+    private readonly activeOperationalAnnouncements = new Map<number, FabricIndex[]>();
 
     constructor(
         private readonly mdnsServer: MdnsServer,
@@ -105,9 +108,13 @@ export class MdnsBroadcaster {
             pairingInstructions = "",
         }: CommissioningModeInstanceData,
     ) {
+        // When doing a commission announcement, we need to expire any previous commissioning announcements
+        await this.expireCommissioningAnnouncement(announcedNetPort);
+
         logger.debug(
-            `announce commissioning mode ${mode} ${deviceName} ${deviceType} ${vendorId} ${productId} ${discriminator}`,
+            `Announce commissioning mode ${mode} ${deviceName} ${deviceType} ${vendorId} ${productId} ${discriminator} ${announcedNetPort}`,
         );
+        this.activeCommissioningAnnouncements.add(announcedNetPort);
 
         const shortDiscriminator = (discriminator >> 8) & 0x0f;
         const instanceId = Crypto.getRandomData(8).toHex().toUpperCase();
@@ -120,14 +127,14 @@ export class MdnsBroadcaster {
 
         this.validatePairingInstructions(pairingHint, pairingInstructions); // Throws error if invalid!
 
-        await this.mdnsServer.setRecordsGenerator(announcedNetPort, netInterface => {
+        await this.mdnsServer.setRecordsGenerator(announcedNetPort, AnnouncementType.Commissionable, netInterface => {
             const ipMac = this.network.getIpMac(netInterface);
             if (ipMac === undefined) return [];
             const { mac, ips } = ipMac;
             const hostname = mac.replace(/:/g, "").toUpperCase() + "0000.local";
 
             logger.debug(
-                "Announcement: Commission mode ",
+                "Announcement Generator: Commission mode ",
                 Logger.dict({
                     mode,
                     qname: deviceQname,
@@ -183,7 +190,22 @@ export class MdnsBroadcaster {
             sleepActiveInterval = DEFAULT_SLEEP_ACTIVE_INTERVAL,
         }: OperationalInstanceData = {},
     ) {
-        await this.mdnsServer.setRecordsGenerator(announcedNetPort, netInterface => {
+        const currentOperationalFabrics = this.activeOperationalAnnouncements.get(announcedNetPort);
+        if (currentOperationalFabrics !== undefined) {
+            const fabricIndexesSet = new Set(fabrics.map(f => f.fabricIndex));
+
+            // Expire Fabric announcements if any entry got removed
+            if (!currentOperationalFabrics.every(fabricIndex => fabricIndexesSet.has(fabricIndex))) {
+                await this.expireFabricAnnouncement(announcedNetPort);
+            }
+        }
+
+        this.activeOperationalAnnouncements.set(
+            announcedNetPort,
+            fabrics.map(f => f.fabricIndex),
+        );
+
+        await this.mdnsServer.setRecordsGenerator(announcedNetPort, AnnouncementType.Operative, netInterface => {
             const ipMac = this.network.getIpMac(netInterface);
             if (ipMac === undefined) return [];
             const { mac, ips } = ipMac;
@@ -197,7 +219,7 @@ export class MdnsBroadcaster {
                 const deviceMatterQname = getDeviceMatterQname(operationalIdString, NodeId.toHexString(nodeId));
 
                 logger.debug(
-                    "Announcement: Fabric",
+                    "Announcement Generator: Fabric",
                     Logger.dict({
                         id: `${operationalId.toHex()}/${nodeId}`,
                         qname: deviceMatterQname,
@@ -254,7 +276,9 @@ export class MdnsBroadcaster {
         const vendorQname = `_V${vendorId}._sub.${MATTER_COMMISSIONER_SERVICE_QNAME}`;
         const deviceQname = `${instanceId}.${MATTER_COMMISSIONER_SERVICE_QNAME}`;
 
-        await this.mdnsServer.setRecordsGenerator(announcedNetPort, netInterface => {
+        this.activeCommissioningAnnouncements.add(announcedNetPort);
+
+        await this.mdnsServer.setRecordsGenerator(announcedNetPort, AnnouncementType.Commissionable, netInterface => {
             const ipMac = this.network.getIpMac(netInterface);
             if (ipMac === undefined) return [];
             const { mac, ips } = ipMac;
@@ -293,7 +317,35 @@ export class MdnsBroadcaster {
         this.mdnsServer.announce(announcementPort).catch(error => logger.error(error));
     }
 
+    async expireFabricAnnouncement(announcementPort: number) {
+        if (this.activeOperationalAnnouncements.has(announcementPort)) {
+            await this.mdnsServer.expireAnnouncements(announcementPort, AnnouncementType.Operative);
+            this.activeOperationalAnnouncements.delete(announcementPort);
+        }
+    }
+
+    async expireCommissioningAnnouncement(announcementPort: number) {
+        if (this.activeCommissioningAnnouncements.has(announcementPort)) {
+            await this.mdnsServer.expireAnnouncements(announcementPort, AnnouncementType.Commissionable);
+            this.activeCommissioningAnnouncements.delete(announcementPort);
+        }
+    }
+
+    async expireAllAnnouncements(announcementPort: number) {
+        if (
+            !this.activeCommissioningAnnouncements.has(announcementPort) &&
+            !this.activeOperationalAnnouncements.has(announcementPort)
+        )
+            return;
+        await this.mdnsServer.expireAnnouncements(announcementPort);
+        this.activeCommissioningAnnouncements.delete(announcementPort);
+        this.activeOperationalAnnouncements.delete(announcementPort);
+    }
+
     async close() {
+        await this.mdnsServer.expireAnnouncements();
+        this.activeCommissioningAnnouncements.clear();
+        this.activeOperationalAnnouncements.clear();
         await this.mdnsServer.close();
     }
 }

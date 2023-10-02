@@ -318,9 +318,6 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
             } events: ${encodedMessage.length} bytes`,
         );
 
-        const checkDecode = TlvDataReport.decode(encodedMessage);
-        logger.debug("checkDecode", Logger.toJSON(checkDecode));
-
         if (dataReport.suppressResponse) {
             // We do not expect a response other than a Standalone Ack, so if we receive anything else, we throw an error
             await tryCatchAsync(

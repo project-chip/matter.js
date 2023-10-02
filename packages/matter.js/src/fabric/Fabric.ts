@@ -10,7 +10,7 @@ import {
     TlvRootCertificate,
 } from "../certificate/CertificateManager.js";
 import { Cluster } from "../cluster/Cluster.js";
-import { InternalError } from "../common/MatterError.js";
+import { InternalError, MatterFlowError } from "../common/MatterError.js";
 import { Crypto } from "../crypto/Crypto.js";
 import { BinaryKeyPair, Key, PrivateKey } from "../crypto/Key.js";
 import { FabricId } from "../datatype/FabricId.js";
@@ -129,6 +129,10 @@ export class Fabric {
     verifyCredentials(_operationalCert: ByteArray, _intermediateCACert: ByteArray | undefined) {
         // TODO: implement verification
         return;
+    }
+
+    matchesFabricIdAndRootPublicKey(fabricId: FabricId, rootPublicKey: ByteArray) {
+        return this.fabricId === fabricId && this.rootPublicKey?.equals(rootPublicKey);
     }
 
     getDestinationId(nodeId: NodeId, random: ByteArray) {
@@ -302,6 +306,13 @@ export class FabricBuilder {
         this.rootCert = fabric.rootCert;
         this.rootPublicKey = fabric.rootPublicKey;
         this.label = fabric.label;
+    }
+
+    matchesToFabric(fabric: Fabric) {
+        if (this.fabricId === undefined || this.rootPublicKey === undefined) {
+            throw new MatterFlowError("Node Operational Data needs to be set first.");
+        }
+        return fabric.matchesFabricIdAndRootPublicKey(this.fabricId, this.rootPublicKey);
     }
 
     getNodeId() {

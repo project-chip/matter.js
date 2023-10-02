@@ -17,13 +17,15 @@ import { OnOffPluginUnitDevice } from "@project-chip/matter.js/device";
 import { DeviceTestInstance } from "./DeviceTestInstance";
 
 export class MinimalOnOffDeviceTestInstance extends DeviceTestInstance {
+    onOffDevice: OnOffPluginUnitDevice | undefined;
+
     async setupCommissioningServer() {
-        const onOffDevice = new OnOffPluginUnitDevice();
+        this.onOffDevice = new OnOffPluginUnitDevice();
 
         const commissioningServer = new CommissioningServer({
             port: 5540,
             deviceName: "Testdevice",
-            deviceType: DeviceTypeId(onOffDevice.deviceType),
+            deviceType: DeviceTypeId(this.onOffDevice.deviceType),
             passcode: 20202021,
             discriminator: 3840,
             basicInformation: {
@@ -52,7 +54,7 @@ export class MinimalOnOffDeviceTestInstance extends DeviceTestInstance {
             ),
         );
 
-        commissioningServer.addDevice(onOffDevice);
+        commissioningServer.addDevice(this.onOffDevice);
 
         return commissioningServer;
     }

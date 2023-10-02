@@ -19,7 +19,7 @@ import { MAXIMUM_COMMISSIONING_TIMEOUT_S } from "./cluster/server/AdministratorC
 import { Channel } from "./common/Channel.js";
 import { FailSafeManager } from "./common/FailSafeManager.js";
 import { InstanceBroadcaster } from "./common/InstanceBroadcaster.js";
-import { MatterFlowError } from "./common/MatterError.js";
+import { InternalError, MatterFlowError } from "./common/MatterError.js";
 import { Scanner } from "./common/Scanner.js";
 import { TransportInterface } from "./common/TransportInterface.js";
 import { Crypto } from "./crypto/Crypto.js";
@@ -134,7 +134,7 @@ export class MatterDevice {
                 this.announcementStartedTime !== null &&
                 Time.nowMs() - this.announcementStartedTime > DEVICE_ANNOUNCEMENT_DURATION_MS
             ) {
-                this.endCommissioning();
+                await this.endCommissioning();
                 logger.debug("Announcement duration reached, stop announcing");
                 return;
             }
@@ -174,6 +174,10 @@ export class MatterDevice {
             }
         } else {
             // No fabric paired yet, so announce as "ready for commissioning"
+            // And expire operational Fabric announcements (if fabric got just deleted)
+            for (const broadcaster of this.broadcasters) {
+                await broadcaster.expireFabricAnnouncement(); // make sure no Fabric is announced anymore
+            }
             await this.allowBasicCommissioning();
         }
     }
@@ -183,11 +187,26 @@ export class MatterDevice {
         activeCommissioningEndCallback?: () => void,
         discriminator?: number,
     ) {
-        if (this.activeCommissioningEndCallback !== undefined) {
-            this.activeCommissioningEndCallback();
+        if (this.activeCommissioningMode !== AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen) {
+            throw new InternalError("Commissioning window already open with different mode!");
         }
-        this.activeCommissioningEndCallback = activeCommissioningEndCallback;
+        if (this.activeCommissioningEndCallback !== undefined) {
+            throw new InternalError("Commissioning window already open with different callback!");
+        }
         this.activeCommissioningMode = mode;
+        if (activeCommissioningEndCallback !== undefined) {
+            this.activeCommissioningEndCallback = activeCommissioningEndCallback;
+        }
+        // MDNS is sent in parallel
+        this.sendCommissionableAnnouncement(mode, discriminator).catch(error =>
+            logger.warn("Error sending announcement", error),
+        );
+    }
+
+    async sendCommissionableAnnouncement(
+        mode: AdministratorCommissioning.CommissioningWindowStatus,
+        discriminator?: number,
+    ) {
         for (const broadcaster of this.broadcasters) {
             await broadcaster.setCommissionMode(
                 mode === AdministratorCommissioning.CommissioningWindowStatus.EnhancedWindowOpen ? 2 : 1,
@@ -255,7 +274,7 @@ export class MatterDevice {
             this.failSafeContext.associatedFabric = fabric;
         }
         if (this.activeCommissioningMode !== AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen) {
-            this.endCommissioning();
+            await this.endCommissioning();
         }
         if (this.fabricManager.getFabrics().length === 1) {
             // Inform upper layer to add MDNS Broadcaster delayed if we limited announcements to BLE till now
@@ -263,7 +282,7 @@ export class MatterDevice {
             this.initialCommissioningCallback();
         }
         for (const broadcaster of this.broadcasters) {
-            await broadcaster.setFabrics([fabric]);
+            await broadcaster.setFabrics([fabric], true);
             await broadcaster.announce();
         }
         return fabric.fabricIndex;
@@ -465,12 +484,12 @@ export class MatterDevice {
             this.fabricManager.persistFabrics();
         }
 
+        this.failSafeContext = undefined;
+
         // 2. The commissioning window at the Server SHALL be closed.
-        this.endCommissioning();
+        await this.endCommissioning();
 
         // TODO 3. Any temporary administrative privileges automatically granted to any open PASE session SHALL be revoked (see Section 6.6.2.8, “Bootstrapping of the Access Control Cluster”).
-
-        this.failSafeContext = undefined;
 
         // 4. The Secure Session Context of any PASE session still established at the Server SHALL be cleared.
         await this.removePaseSession();
@@ -485,6 +504,12 @@ export class MatterDevice {
         paseServer: PaseServer,
         commissioningEndCallback: () => void,
     ) {
+        if (this.activeCommissioningMode === AdministratorCommissioning.CommissioningWindowStatus.BasicWindowOpen) {
+            throw new MatterFlowError(
+                "Basic commissioning window is already open! Can not set Enhanced commissioning mode.",
+            );
+        }
+
         this.secureChannelProtocol.setPaseCommissioner(paseServer);
         await this.announceAsCommissionable(
             AdministratorCommissioning.CommissioningWindowStatus.EnhancedWindowOpen,
@@ -494,6 +519,12 @@ export class MatterDevice {
     }
 
     async allowBasicCommissioning(commissioningEndCallback?: () => void) {
+        if (this.activeCommissioningMode === AdministratorCommissioning.CommissioningWindowStatus.EnhancedWindowOpen) {
+            throw new MatterFlowError(
+                "Enhanced commissioning window is already open! Can not set Basic commissioning mode.",
+            );
+        }
+
         this.secureChannelProtocol.setPaseCommissioner(
             await PaseServer.fromPin(this.initialPasscode, {
                 iterations: 1000,
@@ -507,7 +538,8 @@ export class MatterDevice {
         );
     }
 
-    endCommissioning() {
+    async endCommissioning() {
+        logger.debug("Commissioning mode ended, stop announcements.");
         // Remove PASE responder when we close enhanced commissioning window or node is commissioned
         if (
             this.activeCommissioningMode === AdministratorCommissioning.CommissioningWindowStatus.EnhancedWindowOpen ||
@@ -519,8 +551,12 @@ export class MatterDevice {
         this.announceInterval.stop();
         this.announcementStartedTime = null;
         if (this.activeCommissioningEndCallback !== undefined) {
-            this.activeCommissioningEndCallback();
+            const activeCommissioningEndCallback = this.activeCommissioningEndCallback;
             this.activeCommissioningEndCallback = undefined;
+            activeCommissioningEndCallback();
+        }
+        for (const broadcaster of this.broadcasters) {
+            await broadcaster.expireCommissioningAnnouncement();
         }
     }
 
@@ -548,7 +584,10 @@ export class MatterDevice {
 
     async stop() {
         this.isClosing = true;
-        this.endCommissioning();
+        await this.endCommissioning();
+        for (const broadcaster of this.broadcasters) {
+            await broadcaster.expireAllAnnouncements();
+        }
         if (this.failSafeContext) {
             await this.failSafeContext.expire();
             this.failSafeContext = undefined;

@@ -18,8 +18,14 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  chip-tests:
+  # Find out what is needed to be done by this test workflow
+  chip-tests-needed:
     runs-on: ubuntu-latest
+    outputs:
+      chip-changes: ${{ steps.changes.outputs.src }}
+      chip-tests-required: ${{ steps.check-trigger.outputs.chip-tests-required || steps.check-rebuild.outputs.chip-tests-required || steps.check-long-tests.outputs.chip-tests-required  }}
+      chip-tool-rebuild: ${{ steps.check-rebuild.outputs.chip-tool-rebuild }}
+      chip-long-tests-required: ${{ steps.check-long-tests.outputs.chip-long-tests-required }}
     steps:
       - name: Check out matter.js
         uses: actions/checkout@v3
@@ -43,36 +49,78 @@ jobs:
 
       - if: ${{ github.event_name == 'schedule' || ((github.event_name == 'push' || github.event_name == 'pull_request') && steps.changes.outputs.src == 'true') || github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[execute-chiptests]') == true }}
         name: Chip Tool tests required to run?
-        run: echo "CHIP_TESTS_REQUIRED=1" >> $GITHUB_ENV
+        id: check-trigger
+        run: echo "chip-tests-required=true" >> $GITHUB_OUTPUT
 
       - if: ${{ contains(github.event.head_commit.message, '[rebuild-chip]') == true }}
         name: Chip Tool rebuild required?
+        id: check-rebuild
         run: |
-          echo "CHIP_TESTS_REQUIRED=1" >> $GITHUB_ENV
-          echo "REBUILD_CHIP=1" >> $GITHUB_ENV
+          echo "chip-tests-required=true" >> $GITHUB_OUTPUT
+          echo "chip-tool-rebuild=true" >> $GITHUB_OUTPUT
 
-      - name: Get day of the week (to consider if long tests should run)
+      - name: Get Day of the week
         run: |
           echo "DOW=$(date +%u)" >> $GITHUB_ENV
 
-      - name: Prepare and execute chip tests
-        if: ${{ env.CHIP_TESTS_REQUIRED == 1 }}
+      - if: ${{ (env.DOW == 6 && github.event_name == 'schedule') || steps.changes-long-tests.outputs.src == 'true' }}
+        name: Enable Long tests if needed
+        id: check-long-tests
+        run: |
+          echo "chip-tests-required=true" >> $GITHUB_OUTPUT
+          echo "chip-long-tests-required=true" >> $GITHUB_OUTPUT
+
+  # If we need to do anything make sure that chip binaries are build and environment can be set up
+  prepare-chip-build:
+    needs: [chip-tests-needed]
+    if: ${{ needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v3
+
+      - name: Prepare chip tests and rebuild chip-tool if needed
         uses: ./.github/actions/prepare-chip-testing
         with:
-          rebuild-chip-tool: ${{ env.REBUILD_CHIP }}
+          rebuild-chip-tool: ${{ needs.chip-tests-needed.outputs.chip-tool-rebuild }}
+          build-matter-js: "false"
 
-      # Execute normal tests
-      - if: ${{ env.CHIP_TESTS_REQUIRED == 1 }}
-        name: test execution
+  # Execute the normal tests
+  execute-chip-tests:
+    needs: [prepare-chip-build]
+    if: ${{ needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v3
+
+      - name: Initialize chip tests
+        uses: ./.github/actions/prepare-chip-testing
+        with:
+          rebuild-chip-tool: "false"
+
+      - name: Test execution
         id: test-execution
         shell: bash
         run: |
           cd chip-testing
           npm run test-chip
 
-      # Execute long tests
-      - if: ${{ env.CHIP_TESTS_REQUIRED == 1 && (env.DOW == 6 && github.event_name == 'schedule') || steps.changes-long-tests.outputs.src == 'true' }}
-        name: Enable Long tests if needed
+  # Execute the long running tests (if needed)
+  execute-long-chip-tests:
+    needs: [prepare-chip-build]
+    if: ${{ needs.chip-tests-needed.outputs.chip-long-tests-required == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v3
+
+      - name: Initialize chip tests
+        uses: ./.github/actions/prepare-chip-testing
+        with:
+          rebuild-chip-tool: 'false'
+
+      - name: Long Test execution
         id: test-execution-long
         shell: bash
         run: |

@@ -32,6 +32,10 @@ export class Cache<T> {
         return value;
     }
 
+    keys() {
+        return Array.from(this.values.keys());
+    }
+
     private async deleteEntry(key: string) {
         const value = this.values.get(key);
         if (this.expireCallback !== undefined && value !== undefined) {

@@ -7,6 +7,8 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
 * Matter-Core functionality:
   * Fix: Adjusted Event Priority definition to match to specs
   * Fix: Adjusted Bleno and Noble to be optional Dependencies to allow building the Monorepo also when these are failing (e.g. on Windows)
+  * Fix: Added missing MDNS announcement expiry and allowed to announce fabrics and an open commissioning window in parallel
+  * Fix: prevented crash when logging undefined/null values
   * Feature: Implemented TimedInteractions for Write/Invoke request s as required by specs
   * Feature: Added support for generic Response suppression if requested or needed for group communication
   * Feature (orlenkoo) Implemented first OnOff Cluster Lighting feature command handlers (WIP)
@@ -24,7 +26,9 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
   * Enhance: Add timeout handing to the Message queue to prevent reading DataReports get stuck if device do not send anymore
   * Enhance: Add support in StatusResponseError to also handle a cluster specific status code (for write and invoke)
   * Enhance: Add init and destroy methods to the Cluster-handlers to allow to build proper cluster logics and also to free resources (e.g. stop timers on cluster destroy)
-  * Enhance: Re-Announce the device when a subscription was cancelled by a peer in order to have a fast reconnect of the peer 
+  * Enhance: Re-Announce the device when a subscription was cancelled by a peer in order to have a fast reconnect of the peer
+* matter-node.js:
+  * Fix: (vilic) Enhancements for windows networking and tooling
 * matter.js API:
   * Breaking: Move "disableIpv4" from CommissioningController/Server options to MatterServer to also consider it for MDNS scanning and broadcasting
   * Breaking: Change MatterServer constructor second parameter to be an options object

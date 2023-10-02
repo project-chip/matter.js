@@ -38,17 +38,18 @@ import { MdnsBroadcaster, MdnsScanner } from "@project-chip/matter.js/mdns";
 import { Network, NetworkFake } from "@project-chip/matter.js/net";
 import { StorageBackendMemory, StorageManager } from "@project-chip/matter.js/storage";
 import { Time } from "@project-chip/matter.js/time";
-import { ByteArray, createPromise } from "@project-chip/matter.js/util";
+import { ByteArray, createPromise, singleton } from "@project-chip/matter.js/util";
+import { TimeNode } from "../src/time/TimeNode.js";
 
 const SERVER_IPv6 = "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:cafe";
-const SERVER_IPv4 = "192.168.200.1";
+//const SERVER_IPv4 = "192.168.200.1";
 const SERVER_MAC = "00:B0:D0:63:C2:26";
 const CLIENT_IPv6 = "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:beef";
-const CLIENT_IPv4 = "192.168.200.2";
+//const CLIENT_IPv4 = "192.168.200.2";
 const CLIENT_MAC = "CA:FE:00:00:BE:EF";
 
-const serverNetwork = new NetworkFake(SERVER_MAC, [SERVER_IPv6, SERVER_IPv4]);
-const clientNetwork = new NetworkFake(CLIENT_MAC, [CLIENT_IPv6, CLIENT_IPv4]);
+const serverNetwork = new NetworkFake(SERVER_MAC, [SERVER_IPv6]);
+const clientNetwork = new NetworkFake(CLIENT_MAC, [CLIENT_IPv6]);
 
 const deviceName = "Matter end-to-end device";
 const deviceType = DeviceTypeId(257); /* Dimmable bulb */
@@ -74,6 +75,8 @@ describe("Integration Test", () => {
     let commissioningController: CommissioningController;
     let commissioningServer: CommissioningServer;
     let onOffLightDeviceServer: OnOffLightDevice;
+    let mdnsScanner: MdnsScanner;
+    let mdnsBroadcaster: MdnsBroadcaster;
 
     before(async () => {
         MockTime.reset(TIME_START);
@@ -88,14 +91,13 @@ describe("Integration Test", () => {
             serverAddress: { ip: SERVER_IPv6, port: matterPort, type: "udp" },
             longDiscriminator,
             passcode: setupPin,
-            listeningAddressIpv4: "1.2.3.4",
             listeningAddressIpv6: CLIENT_IPv6,
             delayedPairing: true,
             commissioningOptions: {
                 regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Indoor,
                 regulatoryCountryCode: "DE",
             },
-            subscribeAllAttributes: true,
+            subscribeAllAttributes: false,
         });
         matterClient.addCommissioningController(commissioningController);
 
@@ -113,12 +115,11 @@ describe("Integration Test", () => {
         const cluster040Context = nodeContext.createContext("Cluster-0-40");
         cluster040Context.set("_clusterDataVersion", 0); // Make sure the serverList attribute has deterministic start version for tests
 
-        matterServer = new MatterServer(serverStorageManager);
+        matterServer = new MatterServer(serverStorageManager, { disableIpv4: true });
 
         commissioningServer = new CommissioningServer({
             port: matterPort,
             listeningAddressIpv6: SERVER_IPv6,
-            listeningAddressIpv4: SERVER_IPv4,
             deviceName,
             deviceType,
             passcode: setupPin,
@@ -190,10 +191,10 @@ describe("Integration Test", () => {
         matterServer.addCommissioningServer(commissioningServer);
 
         // override the mdns scanner to avoid the client to try to resolve the server's address
-        commissioningServer.setMdnsScanner(await MdnsScanner.create({ enableIpv4: false, netInterface: SERVER_IPv6 }));
-        commissioningServer.setMdnsBroadcaster(
-            await MdnsBroadcaster.create({ enableIpv4: false, multicastInterface: SERVER_IPv6 }),
-        );
+        mdnsScanner = await MdnsScanner.create({ enableIpv4: false, netInterface: SERVER_IPv6 });
+        commissioningServer.setMdnsScanner(mdnsScanner);
+        mdnsBroadcaster = await MdnsBroadcaster.create({ enableIpv4: false, multicastInterface: SERVER_IPv6 });
+        commissioningServer.setMdnsBroadcaster(mdnsBroadcaster);
         await commissioningServer.advertise();
 
         assert.ok(onOffLightDeviceServer.getClusterServer(OnOffCluster));
@@ -232,13 +233,28 @@ describe("Integration Test", () => {
             commissioningController.setMdnsScanner(
                 await MdnsScanner.create({ enableIpv4: false, netInterface: CLIENT_IPv6 }),
             );
+
+            // During commissioning too much magic happens, MockTime do not work in this case
+            // So use normal Time implementation and Reset for the following tests
+            const mockTimeInstance = Time.get();
+            Time.get = singleton(() => new TimeNode());
+
             await commissioningController.connect();
+
+            Time.get = () => mockTimeInstance;
 
             Network.get = () => {
                 throw new Error("Network should not be requested post starting");
             };
 
             assert.ok(commissioningController.getFabric().nodeId);
+        });
+
+        it("Subscribe to all Attributes and bind updates to them", async () => {
+            const data = await commissioningController.subscribeAllAttributesAndEvents(true);
+
+            assert.equal(Array.isArray(data.attributeReports), true);
+            assert.equal(Array.isArray(data.eventReports), true);
         });
 
         it("Verify that commissioning changed the Regulatory Config/Location values", async () => {
@@ -721,16 +737,15 @@ describe("Integration Test", () => {
             }>();
             callback = (value: boolean) => lastResolver({ value, time: Time.nowMs() });
 
-            // Verify that no update comes in after max cycle time 1h
-            await MockTime.advance(60 * 60 * 1000);
+            // Verify that no update comes in after doubled max interval requested
+            await MockTime.advance(10 * 1000);
 
             // ... but on next change immediately (means immediately + 50ms, so wait 100ms) then
-            await MockTime.advance(2 * 1000);
             onOffLightDeviceServer.setOnOff(false);
             await MockTime.advance(100);
             const lastReport = await lastPromise;
 
-            assert.deepEqual(lastReport, { value: false, time: startTime + (60 * 60 + 4) * 1000 + 200 });
+            assert.deepEqual(lastReport, { value: false, time: startTime + (10 + 2) * 1000 + 200 });
         });
 
         it("another additional subscription of one attribute with known data version only sends updates when the value changes", async () => {
@@ -987,6 +1002,24 @@ describe("Integration Test", () => {
     });
 
     after(async () => {
+        const promise = mdnsBroadcaster.expireAllAnnouncements(matterPort);
+
+        await MockTime.yield();
+        await MockTime.yield();
+        await MockTime.yield();
+        await MockTime.advance(150);
+        await MockTime.advance(150);
+        await MockTime.yield();
+
+        await MockTime.yield();
+        await MockTime.yield();
+        await MockTime.yield();
+        await MockTime.advance(150);
+        await MockTime.advance(150);
+        await MockTime.yield();
+
+        await promise;
+
         await matterServer.close();
         await matterClient.close();
         await fakeControllerStorage.close();

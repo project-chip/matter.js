@@ -100,10 +100,24 @@ const NODE_ID = NodeId(BigInt(1));
             scannerChannel.close();
         });
 
+        const processRecordExpiry = async (port: number) => {
+            const promise = broadcaster.expireAllAnnouncements(port);
+
+            await MockTime.yield();
+            await MockTime.yield();
+            await MockTime.yield();
+            await MockTime.advance(150);
+            await MockTime.advance(150);
+            await MockTime.yield();
+            await promise;
+        };
+
         describe("broadcaster", () => {
-            it("it broadcasts the device fabric on one port", async () => {
+            it("it broadcasts the device fabric on one port and expires", async () => {
                 const { promise, resolver } = createPromise<ByteArray>();
-                scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => resolver(data));
+                const listener = scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) =>
+                    resolver(data),
+                );
 
                 await broadcaster.setFabrics(PORT, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric], {
                     sleepIdleInterval: 100,
@@ -166,11 +180,80 @@ const NODE_ID = NodeId(BigInt(1));
                         ...IPDnsRecords,
                     ],
                 });
+                await listener.close();
+
+                const { promise: expiryPromise, resolver: expiryResolver } = createPromise<ByteArray>();
+                const expiryListener = scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) =>
+                    expiryResolver(data),
+                );
+
+                // And expire the announcement
+                await processRecordExpiry(PORT);
+
+                const expiryResult = DnsCodec.decode(await expiryPromise);
+
+                // Expiry is the same as the announcement result but with ttl = 0
+                expect(expiryResult).deep.equal({
+                    transactionId: 0,
+                    messageType: 33792,
+                    queries: [],
+                    answers: [
+                        {
+                            name: "_services._dns-sd._udp.local",
+                            recordType: 12,
+                            recordClass: 1,
+                            ttl: 0,
+                            value: "_matter._tcp.local",
+                        },
+                        {
+                            name: "_services._dns-sd._udp.local",
+                            recordType: 12,
+                            recordClass: 1,
+                            ttl: 0,
+                            value: "_I0000000000000018._sub._matter._tcp.local",
+                        },
+                        {
+                            name: "_matter._tcp.local",
+                            recordType: 12,
+                            recordClass: 1,
+                            ttl: 0,
+                            value: "0000000000000018-0000000000000001._matter._tcp.local",
+                        },
+                        {
+                            name: "_I0000000000000018._sub._matter._tcp.local",
+                            recordType: 12,
+                            recordClass: 1,
+                            ttl: 0,
+                            value: "0000000000000018-0000000000000001._matter._tcp.local",
+                        },
+                    ],
+                    authorities: [],
+                    additionalRecords: [
+                        {
+                            name: "0000000000000018-0000000000000001._matter._tcp.local",
+                            recordType: 33,
+                            recordClass: 1,
+                            ttl: 0,
+                            value: { priority: 0, weight: 0, port: PORT, target: "00B0D063C2260000.local" },
+                        },
+                        {
+                            name: "0000000000000018-0000000000000001._matter._tcp.local",
+                            recordType: 16,
+                            recordClass: 1,
+                            ttl: 0,
+                            value: ["SII=100", "SAI=200", "T=0"],
+                        },
+                        ...IPDnsRecords.map(record => ({ ...record, ttl: 0 })),
+                    ],
+                });
+                await expiryListener.close();
             });
 
             it("it broadcasts the device commissionable info on one port", async () => {
                 const { promise, resolver } = createPromise<ByteArray>();
-                scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => resolver(data));
+                const listener = scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) =>
+                    resolver(data),
+                );
 
                 await broadcaster.setCommissionMode(PORT, 1, {
                     deviceName: "Test Device",
@@ -303,11 +386,18 @@ const NODE_ID = NodeId(BigInt(1));
                     queries: [],
                     transactionId: 0,
                 });
+
+                await listener.close();
+
+                // And expire the announcement
+                await processRecordExpiry(PORT);
             });
 
             it("it broadcasts the controller commissioner on one port", async () => {
                 const { promise, resolver } = createPromise<ByteArray>();
-                scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => resolver(data));
+                const listener = scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) =>
+                    resolver(data),
+                );
 
                 await broadcaster.setCommissionerInfo(PORT, {
                     deviceName: "Test Commissioner",
@@ -379,12 +469,17 @@ const NODE_ID = NodeId(BigInt(1));
                     queries: [],
                     transactionId: 0,
                 });
+
+                await listener.close();
+
+                // And expire the announcement
+                await processRecordExpiry(PORT);
             });
 
             it("it allows announcements of multiple devices on different ports", async () => {
                 const { promise, resolver } = createPromise<void>();
                 const dataArr: ByteArray[] = [];
-                scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => {
+                const listener = scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => {
                     dataArr.push(data);
                     if (dataArr.length === 3) resolver();
                 });
@@ -647,6 +742,12 @@ const NODE_ID = NodeId(BigInt(1));
                     queries: [],
                     transactionId: 0,
                 });
+                await listener.close();
+
+                // And expire the announcement for all via close
+                await processRecordExpiry(PORT);
+                await processRecordExpiry(PORT2);
+                await processRecordExpiry(PORT3);
             });
         });
 
@@ -654,7 +755,7 @@ const NODE_ID = NodeId(BigInt(1));
             it("the client directly returns server record if it has been announced before", async () => {
                 let queryReceived = false;
                 let dataWereSent = false;
-                scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => {
+                const listener = scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => {
                     dataWereSent = true;
                     const dataDecoded = DnsCodec.decode(data);
                     if (dataDecoded?.messageType === DnsMessageType.Query) {
@@ -676,11 +777,17 @@ const NODE_ID = NodeId(BigInt(1));
                 expect(dataWereSent).equal(true);
                 expect(queryReceived).equal(false);
                 expect(result).deep.equal(IPIntegrationResultsPort1);
+                await listener.close();
+
+                // And expire the announcement
+                await processRecordExpiry(PORT);
             });
 
             it("the client queries the server record if it has not been announced before", async () => {
                 const sentData = new Array<ByteArray>();
-                scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => sentData.push(data));
+                const listener = scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) =>
+                    sentData.push(data),
+                );
 
                 await broadcaster.setFabrics(PORT, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
 
@@ -708,11 +815,15 @@ const NODE_ID = NodeId(BigInt(1));
                 const result = await findPromise;
 
                 expect(result).deep.equal(IPIntegrationResultsPort1);
+                await listener.close();
+
+                // And expire the announcement
+                await processRecordExpiry(PORT);
             });
 
             it("the client queries the server record and get correct response also with multiple announced instances", async () => {
                 const netData = new Array<ByteArray>();
-                broadcasterChannel.onData((_netInterface, _peerAddress, _peerPort, data) => {
+                const listener = broadcasterChannel.onData((_netInterface, _peerAddress, _peerPort, data) => {
                     netData.push(data);
                 });
 
@@ -862,12 +973,18 @@ const NODE_ID = NodeId(BigInt(1));
                 const result = await findPromise;
 
                 expect(result).deep.equal(IPIntegrationResultsPort2);
+
+                await listener.close();
+
+                // And expire the announcement
+                await processRecordExpiry(PORT);
+                await processRecordExpiry(PORT2);
             });
 
             it("the client queries the server record and get correct response when announced before", async () => {
                 let dataWereSent = false;
                 let queryReceived = false;
-                scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => {
+                const listener = scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => {
                     dataWereSent = true;
                     const dataDecoded = DnsCodec.decode(data);
                     if (dataDecoded?.messageType === DnsMessageType.Query) {
@@ -898,6 +1015,12 @@ const NODE_ID = NodeId(BigInt(1));
                 expect(dataWereSent).equal(true);
                 expect(queryReceived).equal(false);
                 expect(result).deep.equal(IPIntegrationResultsPort2);
+
+                await listener.close();
+
+                // And expire the announcement
+                await processRecordExpiry(PORT);
+                await processRecordExpiry(PORT2);
             });
         });
     });
