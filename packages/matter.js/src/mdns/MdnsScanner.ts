@@ -6,6 +6,7 @@
 
 import {
     DnsCodec,
+    DnsMessagePartiallyPreEncoded,
     DnsMessageType,
     DnsQuery,
     DnsRecord,
@@ -116,58 +117,56 @@ export class MdnsScanner implements Scanner {
         const nextAnnounceInterval = this.nextAnnounceIntervalSeconds * 2;
         this.nextAnnounceIntervalSeconds = Math.min(nextAnnounceInterval, 60 * 60 /* 1 hour */);
 
-        let queryMessage = DnsCodec.encode({
-            messageType: DnsMessageType.Query,
-            queries,
-            answers,
-        });
+        const answersToSend = [...answers];
 
-        if (queryMessage.length > MAX_MDNS_MESSAGE_SIZE) {
-            // We need to split the message into multiple packets
-            queryMessage = DnsCodec.encode({
-                messageType: DnsMessageType.TruncatedQuery,
-                queries,
-            });
-            let queryMessageSize = queryMessage.length;
-            const includedAnswers = new Array<DnsRecord<any>>();
-            while (true) {
-                const nextAnswer = answers.shift();
+        const dnsMessageDataToSend = {
+            messageType: DnsMessageType.TruncatedQuery,
+            transactionId: 0,
+            queries,
+            authorities: [],
+            answers: [],
+            additionalRecords: [],
+        } as DnsMessagePartiallyPreEncoded;
+
+        const emptyDnsMessage = DnsCodec.encode(dnsMessageDataToSend);
+        let dnsMessageSize = emptyDnsMessage.length;
+
+        while (true) {
+            if (answersToSend.length > 0) {
+                const nextAnswer = answersToSend.shift();
                 if (nextAnswer === undefined) {
-                    // We have included all messages, set the queryMessage correctly
-                    queryMessage = DnsCodec.encode({
-                        messageType: DnsMessageType.Query,
-                        queries,
-                        answers: includedAnswers,
-                    });
                     break;
                 }
 
-                const nextAnswerLength = DnsCodec.encodeRecord(nextAnswer).length;
-                queryMessageSize += nextAnswerLength; // Add answers as long as size is ok
+                const nextAnswerEncoded = DnsCodec.encodeRecord(nextAnswer);
+                dnsMessageSize += nextAnswerEncoded.length; // Add additional record as long as size is ok
 
-                if (queryMessageSize > MAX_MDNS_MESSAGE_SIZE) {
+                if (dnsMessageSize > MAX_MDNS_MESSAGE_SIZE) {
+                    if (dnsMessageDataToSend.answers.length === 0) {
+                        // The first answer is already too big, log at least a warning
+                        logger.warn(
+                            `MDNS Query with ${JSON.stringify(
+                                queries,
+                            )} is too big to fit into a single MDNS message. Send anyway, but please report!`,
+                        );
+                    }
                     // New answer do not fit anymore, send out the message
-                    queryMessage = DnsCodec.encode({
-                        messageType: DnsMessageType.TruncatedQuery,
-                        queries,
-                        answers: includedAnswers,
-                    });
-                    await this.multicastServer.send(queryMessage);
+                    await this.multicastServer.send(DnsCodec.encode(dnsMessageDataToSend));
 
                     // Reset the message, length counter and included answers to count for next message
-                    queries.length = 0;
-                    includedAnswers.length = 0;
-                    const encodedMessage = DnsCodec.encode({
-                        messageType: DnsMessageType.TruncatedQuery,
-                        answers: [],
-                    });
-                    queryMessageSize = encodedMessage.length + nextAnswerLength;
+                    dnsMessageDataToSend.queries.length = 0;
+                    dnsMessageDataToSend.answers.length = 0;
+                    dnsMessageSize = emptyDnsMessage.length + nextAnswerEncoded.length;
                 }
-                includedAnswers.push(nextAnswer);
+                dnsMessageDataToSend.answers.push(nextAnswerEncoded);
+            } else {
+                break;
             }
         }
 
-        await this.multicastServer.send(queryMessage);
+        await this.multicastServer.send(
+            DnsCodec.encode({ ...dnsMessageDataToSend, messageType: DnsMessageType.Query }),
+        );
     }
 
     /**
