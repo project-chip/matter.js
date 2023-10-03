@@ -87,7 +87,9 @@ export class FailSafeManager {
         }
 
         if (this.associatedFabric?.fabricIndex !== associatedFabric?.fabricIndex) {
-            throw new MatterFlowError("FailSafe already armed with different fabric.");
+            throw new MatterFlowError(
+                `FailSafe already armed (index=${this.associatedFabric?.fabricIndex}) with different fabric (index=${associatedFabric?.fabricIndex}).`,
+            );
         }
 
         this.failSafeTimer.stop();
