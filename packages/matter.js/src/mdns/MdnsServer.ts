@@ -156,8 +156,8 @@ export class MdnsServer {
                 },
                 netInterface,
                 uniCastResponse ? remoteIp : undefined,
-            ).catch(() => {
-                // ignore because already caught in UdpMulticastServer
+            ).catch(error => {
+                logger.warn(`Failed to send mDNS response to ${remoteIp}`, error);
             });
             await Time.sleep(20 + Math.floor(Math.random() * 100)); // as per DNS-SD spec wait 20-120ms before sending more packets
         }
