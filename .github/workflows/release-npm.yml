@@ -1,0 +1,122 @@
+# This workflow reacts on a PR that is labeled with "automated pr", will automatically merge it and
+# create a new release on npm.
+name: Automatic Labeled Release
+
+on:
+  pull_request:
+    types: [labeled]
+
+# Cancel previous PR/branch runs when a new commit is pushed
+concurrency:
+  group: ${{ github.ref }}-auto-npm-release
+  cancel-in-progress: true
+
+jobs:
+  check-and-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare testing environment
+        uses: ./.github/actions/prepare-env
+      - run: npm run format-verify
+      - run: npm run lint
+
+  build-non-linux:
+    needs: [ check-and-lint ]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node-version: [ 16.x, 18.x, 20.x ]
+        os: [ macos-latest, windows-2019 ]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build on ${{ matrix.os }}
+        uses: ./.github/actions/prepare-env
+        with:
+          node-version: ${{ matrix.node-version }}
+          os: ${{ matrix.os }}
+
+  test:
+    needs: [ check-and-lint ]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 16.x, 18.x, 20.x ]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare testing environment
+        uses: ./.github/actions/prepare-env
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Prepare Webbrowser testing environment
+        uses: ./.github/actions/prepare-webtests
+      - name: Execute tests
+        run: npm run test
+
+  auto-merge:
+    if: |
+      always() &&
+      github.event_name == 'pull_request'
+    needs: [ test, build-non-linux, check-and-lint ]
+    runs-on: ubuntu-latest
+    steps:
+      - id: automerge
+        name: automerge
+        uses: "pascalgn/automerge-action@v0.15.6"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          MERGE_LABELS: "automated pr"
+          MERGE_FILTER_AUTHOR: "Automator77"
+          MERGE_FORKS: "false"
+          MERGE_DELETE_BRANCH: "false"
+          UPDATE_LABELS: "automated pr"
+          MERGE_METHOD: "squash"
+
+      - name: Checkout repository
+        if: steps.automerge.outputs.mergeResult == 'merged'
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 18.x
+        if: steps.automerge.outputs.mergeResult == 'merged'
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Determine version
+        if: steps.automerge.outputs.mergeResult == 'merged'
+        id: version
+        uses: actions/github-script@v6
+        with:
+          result-encoding: string
+          script: |
+            return require(`${process.env.GITHUB_WORKSPACE}/lerna.json`).version;
+
+      - name: Install dependencies and build
+        if: steps.automerge.outputs.mergeResult == 'merged'
+        run: npm ci
+
+      - name: Publish npm
+        if: steps.automerge.outputs.mergeResult == 'merged'
+        env:
+          PRERELEASE: ${{ contains(steps.version.outputs.result, '-') }}
+        run: |
+          npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
+          npm whoami
+          
+          if [[ "$PRERELEASE" == "true" ]]; then
+            npx lerna publish from-package --yes --dist-tag dev
+          else
+            npx lerna publish from-package --yes
+          fi
+
+      - name: Create Github Release
+        if: steps.automerge.outputs.mergeResult == 'merged'
+        uses: ncipollo/release-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag: v${{ steps.version.outputs.result }}
+          name: Release v${{ steps.version.outputs.result }}
+          draft: false
+          prerelease: ${{ contains(steps.version.outputs.result, '-') }}
+          body: "${{ contains(steps.version.outputs.result, '-') && 'Nightly release' || 'Official release, check CHANGELOG.md for details' }}"
