@@ -1,0 +1,120 @@
+# This workflow generates a PR for an official, manually triggered, release
+name: Official release
+
+on:
+  workflow_dispatch: # Manually on demand
+    inputs:
+      versionBump:
+        description: 'Type of version bump'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  publish-config:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch the history, or this action won't work
+
+      - name: Prepare testing environment
+        uses: ./.github/actions/prepare-env
+      - name: Prepare Webbrowser testing environment
+        uses: ./.github/actions/prepare-webtests
+      - name: Execute tests
+        run: npm run test
+      - name: Prepare and execute chip tests
+        uses: ./.github/actions/prepare-chip-testing
+      - name: chip-tool-test execution
+        id: test-execution
+        shell: bash
+        run: |
+          cd chip-testing
+          npm run test-chip
+
+      - name: Build Docs
+        run: npm run build-doc
+
+      - name: Determine the version bump
+        id: version
+        uses: actions/github-script@v6
+        env:
+          VERSION_BUMP: ${{ inputs.versionBump }}
+        with:
+          result-encoding: string
+          script: |
+            const semver = require('semver');
+
+            const prevVersion = require(`${process.env.GITHUB_WORKSPACE}/lerna.json`).version;
+
+            const parsed = semver.parse(prevVersion);
+
+            // Figure out the next version
+            return `${semver.inc(parsed, process.env.VERSION_BUMP)}`;
+
+      - name: Prepare changelog
+        env:
+          VERSION: ${{ steps.version.outputs.result }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs-extra');
+            
+            const WIP_MARKER = '__WORK IN PROGRESS__';
+            
+            const TEMP_PLACEHOLDER = '**TEMP_PLACEHOLDER_GH_ACTION**';
+            const changelog = fs
+            .readFileSync(`${process.env.GITHUB_WORKSPACE}/CHANGELOG.md`, { encoding: 'utf-8' })
+            .replace(WIP_MARKER, TEMP_PLACEHOLDER);
+            
+            if (!changelog.includes(WIP_MARKER)) {
+              throw new Error(`${WIP_MARKER} is missing in changelog`);
+            }
+            
+            const dateStr = new Date().toISOString().split('T')[0];
+            
+            const versionDateStr = `${process.env.VERSION} (${dateStr})`;
+            
+            fs.writeFileSync(
+              `${process.env.GITHUB_WORKSPACE}/CHANGELOG.md`,
+              changelog.replace(WIP_MARKER, versionDateStr).replace(TEMP_PLACEHOLDER, WIP_MARKER),
+              {
+                encoding: 'utf-8'
+              }
+            );
+
+      - name: Bump version locally
+        env:
+          VERSION: ${{ steps.version.outputs.result }}
+        run: |
+          git config --global user.email "github-automation@fischer-ka.de"
+          git config --global user.name "Github Action"
+          
+          git add .
+          git commit -m "v${VERSION}" && npx lerna version ${VERSION} --no-push --exact --ignore-scripts --no-commit-hooks --yes --amend --force-publish || npx lerna version ${VERSION} --exact --no-push --ignore-scripts --no-commit-hooks --yes --force-publish
+
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.PR_TOKEN }}
+          commit-message: "[OFFICIAL RELEASE] ${{ steps.version.outputs.result }}"
+          committer: Automator77 <github-automation@fischer-ka.de>
+          author: Automator77 <github-automation@fischer-ka.de>
+          signoff: false
+          branch: official-release
+          delete-branch: true
+          title: "[OFFICIAL RELEASE] ${{ steps.version.outputs.result }}"
+          body: |
+            Update version by release action
+          labels: |
+            automated pr
+          assignees: Automator77
+          draft: false
