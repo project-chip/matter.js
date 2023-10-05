@@ -39,6 +39,8 @@ jobs:
               - "packages/matter.js/src/**"
               - "packages/matter-node.js/src/**"
               - ".github/workflows/chip-tool-tests.yml"
+              - "package.json"
+              - "packages/**/package.json"
 
       - uses: dorny/paths-filter@v2
         id: changes-long-tests
