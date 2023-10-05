@@ -47,6 +47,12 @@ Additionally, it uses typescript project references to allow IDE support for the
 
 You can build and test the packages separately or all by using `npm run build` or `npm run test` on root package level. With `npm run build-clean` you can build all packages from scratch.
 
+## Releases
+
+To allow a simple use of the matter.js Monorepo based project in other projects, we publish all packages separately to NPM. There are two available releases on NPM:
+* **latest**: This is the default NPM tag and contains official released versions of the packages. This is the recommended tag to use in your projects. Whenever we build a new official release also the docs are updated and available in the repository.
+* **dev**: This tag contains a nightly build of the project and is updated every night if there were changes in the repository. This is only for testing and development purposes and should not be used for real production use cases. Use e.g. `npm install @project-chip/matter-node.js@dev` to install the latest nightly build of matter-node.js.
+
 ## Community communication
 
 If you have issues please use the GitHub "Issues" feature of this repository. For questions or idea discussions please use the "Discussions" feature in GitHub.
