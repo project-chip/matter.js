@@ -1,40 +1,40 @@
 {
-  "name": "@project-chip/matter.js-codegen",
-  "version": "0.1.0",
-  "description": "Matter.js tooling",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "clean": "build clean",
-    "build": "build",
-    "build-clean": "build --clean",
-    "console": "run dist/esm/repl.ts",
-    "generate-spec": "run bin/generate-spec.js",
-    "generate-chip": "run bin/generate-chip.js",
-    "generate-model": "build esm --prefix=../models && run bin/generate-model.js",
-    "generate-clusters": "build esm --prefix=../packages/matter.js && run bin/generate-clusters.js",
-    "dump-model-names": "build esm --prefix=../models && run bin/dump-model-names.ts",
-    "generate": "npm run generate-model && npm run generate-clusters"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/project-chip/matter.js.git"
-  },
-  "author": "Project CHIP Authors",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/project-chip/matter.js/issues"
-  },
-  "homepage": "https://github.com/project-chip/matter.js#readme",
-  "dependencies": {
-    "@project-chip/matter.js": "0.5.0",
-    "@project-chip/matter.js-intermediate-models": "0.1.0"
-  },
-  "devDependencies": {
-    "@project-chip/matter.js-tools": "^0.1.0",
-    "@types/jsdom": "^21.1.3",
-    "jsdom": "^22.1.0",
-    "typescript": "^5.2.2",
-    "word-list": "^3.1.0"
-  }
+    "name": "@project-chip/matter.js-codegen",
+    "version": "0.5.1-alpha.0-20231005-d8f807e",
+    "description": "Matter.js tooling",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "clean": "build clean",
+        "build": "build",
+        "build-clean": "build --clean",
+        "console": "run dist/esm/repl.ts",
+        "generate-spec": "run bin/generate-spec.js",
+        "generate-chip": "run bin/generate-chip.js",
+        "generate-model": "build esm --prefix=../models && run bin/generate-model.js",
+        "generate-clusters": "build esm --prefix=../packages/matter.js && run bin/generate-clusters.js",
+        "dump-model-names": "build esm --prefix=../models && run bin/dump-model-names.ts",
+        "generate": "npm run generate-model && npm run generate-clusters"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/project-chip/matter.js.git"
+    },
+    "author": "Project CHIP Authors",
+    "license": "Apache-2.0",
+    "bugs": {
+        "url": "https://github.com/project-chip/matter.js/issues"
+    },
+    "homepage": "https://github.com/project-chip/matter.js#readme",
+    "dependencies": {
+        "@project-chip/matter.js": "0.5.1-alpha.0-20231005-d8f807e",
+        "@project-chip/matter.js-intermediate-models": "0.5.1-alpha.0-20231005-d8f807e"
+    },
+    "devDependencies": {
+        "@project-chip/matter.js-tools": "0.5.1-alpha.0-20231005-d8f807e",
+        "@types/jsdom": "^21.1.3",
+        "jsdom": "^22.1.0",
+        "typescript": "^5.2.2",
+        "word-list": "^3.1.0"
+    }
 }
