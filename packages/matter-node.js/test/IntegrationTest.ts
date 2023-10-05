@@ -1007,10 +1007,12 @@ describe("Integration Test", () => {
         await MockTime.yield();
         await MockTime.yield();
         await MockTime.yield();
+        await MockTime.yield();
         await MockTime.advance(150);
         await MockTime.advance(150);
         await MockTime.yield();
 
+        await MockTime.yield();
         await MockTime.yield();
         await MockTime.yield();
         await MockTime.yield();

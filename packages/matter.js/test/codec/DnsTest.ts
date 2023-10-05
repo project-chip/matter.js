@@ -52,9 +52,9 @@ const DNS_DECODED = {
     transactionId: 0,
     messageType: 0,
     queries: [
-        { name: "lb._dns-sd._udp.local", recordType: 12, recordClass: 1 },
-        { name: "_companion-link._tcp.local", recordType: 12, recordClass: 1 },
-        { name: "_homekit._tcp.local", recordType: 12, recordClass: 1 },
+        { name: "lb._dns-sd._udp.local", recordType: 12, recordClass: 1, uniCastResponse: false },
+        { name: "_companion-link._tcp.local", recordType: 12, recordClass: 1, uniCastResponse: false },
+        { name: "_homekit._tcp.local", recordType: 12, recordClass: 1, uniCastResponse: false },
     ],
     answers: [
         {
@@ -63,6 +63,7 @@ const DNS_DECODED = {
             recordClass: 1,
             ttl: 4500,
             value: "Kitchen._companion-link._tcp.local",
+            flushCache: false,
         },
         {
             name: "_homekit._tcp.local",
@@ -70,6 +71,7 @@ const DNS_DECODED = {
             recordClass: 1,
             ttl: 4500,
             value: "AB6EC7A1-387B-5253-A854-9DA52635567F._homekit._tcp.local",
+            flushCache: false,
         },
     ],
     authorities: [],
@@ -80,6 +82,7 @@ const DNS_DECODED = {
             recordClass: 1440,
             ttl: 4500,
             value: ByteArray.fromHex("0004000e0099929387b033db4275a6a31b2d"),
+            flushCache: false,
         },
     ],
 };

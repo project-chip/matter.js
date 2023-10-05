@@ -39,6 +39,7 @@ const NODE_ID = NodeId(BigInt(1));
 
     const IPDnsRecords = [
         {
+            flushCache: false,
             name: "00B0D063C2260000.local",
             recordType: 28,
             recordClass: 1,
@@ -48,6 +49,7 @@ const NODE_ID = NodeId(BigInt(1));
     ];
     if (testIpv4Enabled) {
         IPDnsRecords.unshift({
+            flushCache: false,
             name: "00B0D063C2260000.local",
             recordType: 1,
             recordClass: 1,
@@ -106,6 +108,7 @@ const NODE_ID = NodeId(BigInt(1));
             await MockTime.yield();
             await MockTime.yield();
             await MockTime.yield();
+            await MockTime.yield();
             await MockTime.advance(150);
             await MockTime.advance(150);
             await MockTime.yield();
@@ -133,6 +136,7 @@ const NODE_ID = NodeId(BigInt(1));
                     queries: [],
                     answers: [
                         {
+                            flushCache: false,
                             name: "_services._dns-sd._udp.local",
                             recordType: 12,
                             recordClass: 1,
@@ -140,6 +144,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "_matter._tcp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_services._dns-sd._udp.local",
                             recordType: 12,
                             recordClass: 1,
@@ -147,6 +152,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "_I0000000000000018._sub._matter._tcp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_matter._tcp.local",
                             recordType: 12,
                             recordClass: 1,
@@ -154,6 +160,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "0000000000000018-0000000000000001._matter._tcp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_I0000000000000018._sub._matter._tcp.local",
                             recordType: 12,
                             recordClass: 1,
@@ -164,6 +171,7 @@ const NODE_ID = NodeId(BigInt(1));
                     authorities: [],
                     additionalRecords: [
                         {
+                            flushCache: false,
                             name: "0000000000000018-0000000000000001._matter._tcp.local",
                             recordType: 33,
                             recordClass: 1,
@@ -171,6 +179,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: { priority: 0, weight: 0, port: PORT, target: "00B0D063C2260000.local" },
                         },
                         {
+                            flushCache: false,
                             name: "0000000000000018-0000000000000001._matter._tcp.local",
                             recordType: 16,
                             recordClass: 1,
@@ -199,6 +208,7 @@ const NODE_ID = NodeId(BigInt(1));
                     queries: [],
                     answers: [
                         {
+                            flushCache: false,
                             name: "_services._dns-sd._udp.local",
                             recordType: 12,
                             recordClass: 1,
@@ -206,6 +216,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "_matter._tcp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_services._dns-sd._udp.local",
                             recordType: 12,
                             recordClass: 1,
@@ -213,6 +224,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "_I0000000000000018._sub._matter._tcp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_matter._tcp.local",
                             recordType: 12,
                             recordClass: 1,
@@ -220,6 +232,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "0000000000000018-0000000000000001._matter._tcp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_I0000000000000018._sub._matter._tcp.local",
                             recordType: 12,
                             recordClass: 1,
@@ -230,6 +243,7 @@ const NODE_ID = NodeId(BigInt(1));
                     authorities: [],
                     additionalRecords: [
                         {
+                            flushCache: false,
                             name: "0000000000000018-0000000000000001._matter._tcp.local",
                             recordType: 33,
                             recordClass: 1,
@@ -237,6 +251,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: { priority: 0, weight: 0, port: PORT, target: "00B0D063C2260000.local" },
                         },
                         {
+                            flushCache: false,
                             name: "0000000000000018-0000000000000001._matter._tcp.local",
                             recordType: 16,
                             recordClass: 1,
@@ -269,6 +284,7 @@ const NODE_ID = NodeId(BigInt(1));
                 expect(result).deep.equal({
                     additionalRecords: [
                         {
+                            flushCache: false,
                             name: "0000000000000000._matterc._udp.local",
                             recordClass: 1,
                             recordType: 33,
@@ -276,6 +292,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: { port: PORT, priority: 0, target: "00B0D063C2260000.local", weight: 0 },
                         },
                         {
+                            flushCache: false,
                             name: "0000000000000000._matterc._udp.local",
                             recordClass: 1,
                             recordType: 16,
@@ -297,6 +314,7 @@ const NODE_ID = NodeId(BigInt(1));
                     ],
                     answers: [
                         {
+                            flushCache: false,
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -304,6 +322,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "_matterc._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -311,6 +330,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "_V1._sub._matterc._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -318,6 +338,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "_T1._sub._matterc._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -325,6 +346,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "_S4._sub._matterc._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -332,6 +354,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "_L1234._sub._matterc._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -339,6 +362,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "_CM._sub._matterc._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_matterc._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -346,6 +370,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "0000000000000000._matterc._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_V1._sub._matterc._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -353,6 +378,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "0000000000000000._matterc._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_T1._sub._matterc._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -360,6 +386,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "0000000000000000._matterc._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_S4._sub._matterc._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -367,6 +394,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "0000000000000000._matterc._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_L1234._sub._matterc._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -374,6 +402,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "0000000000000000._matterc._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_CM._sub._matterc._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -412,6 +441,7 @@ const NODE_ID = NodeId(BigInt(1));
                 expect(result).deep.equal({
                     additionalRecords: [
                         {
+                            flushCache: false,
                             name: "0000000000000000._matterd._udp.local",
                             recordClass: 1,
                             recordType: 33,
@@ -419,6 +449,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: { port: PORT, priority: 0, target: "00B0D063C2260000.local", weight: 0 },
                         },
                         {
+                            flushCache: false,
                             name: "0000000000000000._matterd._udp.local",
                             recordClass: 1,
                             recordType: 16,
@@ -429,6 +460,7 @@ const NODE_ID = NodeId(BigInt(1));
                     ],
                     answers: [
                         {
+                            flushCache: false,
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -436,6 +468,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "_matterd._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_matterd._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -443,6 +476,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "_V1._sub._matterd._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_V1._sub._matterd._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -450,6 +484,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "0000000000000000._matterd._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -457,6 +492,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "_T1._sub._matterd._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_T1._sub._matterd._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -511,6 +547,7 @@ const NODE_ID = NodeId(BigInt(1));
                     queries: [],
                     answers: [
                         {
+                            flushCache: false,
                             name: "_services._dns-sd._udp.local",
                             recordType: 12,
                             recordClass: 1,
@@ -518,6 +555,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "_matter._tcp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_services._dns-sd._udp.local",
                             recordType: 12,
                             recordClass: 1,
@@ -525,6 +563,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "_I0000000000000018._sub._matter._tcp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_matter._tcp.local",
                             recordType: 12,
                             recordClass: 1,
@@ -532,6 +571,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "0000000000000018-0000000000000001._matter._tcp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_I0000000000000018._sub._matter._tcp.local",
                             recordType: 12,
                             recordClass: 1,
@@ -542,6 +582,7 @@ const NODE_ID = NodeId(BigInt(1));
                     authorities: [],
                     additionalRecords: [
                         {
+                            flushCache: false,
                             name: "0000000000000018-0000000000000001._matter._tcp.local",
                             recordType: 33,
                             recordClass: 1,
@@ -549,6 +590,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: { priority: 0, weight: 0, port: PORT, target: "00B0D063C2260000.local" },
                         },
                         {
+                            flushCache: false,
                             name: "0000000000000018-0000000000000001._matter._tcp.local",
                             recordType: 16,
                             recordClass: 1,
@@ -563,6 +605,7 @@ const NODE_ID = NodeId(BigInt(1));
                 expect(result2).deep.equal({
                     additionalRecords: [
                         {
+                            flushCache: false,
                             name: "0000000000000000._matterc._udp.local",
                             recordClass: 1,
                             recordType: 33,
@@ -570,6 +613,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: { port: PORT2, priority: 0, target: "00B0D063C2260000.local", weight: 0 },
                         },
                         {
+                            flushCache: false,
                             name: "0000000000000000._matterc._udp.local",
                             recordClass: 1,
                             recordType: 16,
@@ -591,6 +635,7 @@ const NODE_ID = NodeId(BigInt(1));
                     ],
                     answers: [
                         {
+                            flushCache: false,
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -598,6 +643,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "_matterc._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -605,6 +651,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "_V1._sub._matterc._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -612,6 +659,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "_T1._sub._matterc._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -619,6 +667,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "_S4._sub._matterc._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -626,6 +675,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "_L1234._sub._matterc._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -633,6 +683,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "_CM._sub._matterc._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_matterc._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -640,6 +691,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "0000000000000000._matterc._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_V1._sub._matterc._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -647,6 +699,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "0000000000000000._matterc._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_T1._sub._matterc._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -654,6 +707,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "0000000000000000._matterc._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_S4._sub._matterc._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -661,6 +715,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "0000000000000000._matterc._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_L1234._sub._matterc._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -668,6 +723,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "0000000000000000._matterc._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_CM._sub._matterc._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -685,6 +741,7 @@ const NODE_ID = NodeId(BigInt(1));
                 expect(result3).deep.equal({
                     additionalRecords: [
                         {
+                            flushCache: false,
                             name: "0000000000000000._matterd._udp.local",
                             recordClass: 1,
                             recordType: 33,
@@ -692,6 +749,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: { port: PORT3, priority: 0, target: "00B0D063C2260000.local", weight: 0 },
                         },
                         {
+                            flushCache: false,
                             name: "0000000000000000._matterd._udp.local",
                             recordClass: 1,
                             recordType: 16,
@@ -702,6 +760,7 @@ const NODE_ID = NodeId(BigInt(1));
                     ],
                     answers: [
                         {
+                            flushCache: false,
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -709,6 +768,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "_matterd._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_matterd._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -716,6 +776,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "_V1._sub._matterd._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_V1._sub._matterd._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -723,6 +784,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "0000000000000000._matterd._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_services._dns-sd._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -730,6 +792,7 @@ const NODE_ID = NodeId(BigInt(1));
                             value: "_T1._sub._matterd._udp.local",
                         },
                         {
+                            flushCache: false,
                             name: "_T1._sub._matterd._udp.local",
                             recordClass: 1,
                             recordType: 12,
@@ -807,6 +870,7 @@ const NODE_ID = NodeId(BigInt(1));
                             name: "0000000000000018-0000000000000001._matter._tcp.local",
                             recordClass: 1,
                             recordType: 33,
+                            uniCastResponse: false,
                         },
                     ],
                     transactionId: 0,
@@ -842,7 +906,7 @@ const NODE_ID = NodeId(BigInt(1));
                 await MockTime.advance(1); // Trigger timer to send query (0ms timer)
                 await MockTime.yield3(); // Make sure data were queried async
 
-                expect(netData.length).equal(testIpv4Enabled ? 3 : 2);
+                expect(netData.length).equal(2);
 
                 const query = DnsCodec.decode(netData[0]);
                 expect(query).deep.equal({
@@ -855,6 +919,7 @@ const NODE_ID = NodeId(BigInt(1));
                             name: "0000000000000018-0000000000000001._matter._tcp.local",
                             recordClass: 1,
                             recordType: 33,
+                            uniCastResponse: false,
                         },
                     ],
                     transactionId: 0,
@@ -863,34 +928,7 @@ const NODE_ID = NodeId(BigInt(1));
                 expect(response2).deep.equal({
                     additionalRecords: [
                         {
-                            name: "_services._dns-sd._udp.local",
-                            recordClass: 1,
-                            recordType: 12,
-                            ttl: 120,
-                            value: "_matter._tcp.local",
-                        },
-                        {
-                            name: "_services._dns-sd._udp.local",
-                            recordClass: 1,
-                            recordType: 12,
-                            ttl: 120,
-                            value: "_I0000000000000018._sub._matter._tcp.local",
-                        },
-                        {
-                            name: "_matter._tcp.local",
-                            recordClass: 1,
-                            recordType: 12,
-                            ttl: 120,
-                            value: "0000000000000018-0000000000000001._matter._tcp.local",
-                        },
-                        {
-                            name: "_I0000000000000018._sub._matter._tcp.local",
-                            recordClass: 1,
-                            recordType: 12,
-                            ttl: 120,
-                            value: "0000000000000018-0000000000000001._matter._tcp.local",
-                        },
-                        {
+                            flushCache: false,
                             name: "0000000000000018-0000000000000001._matter._tcp.local",
                             recordClass: 1,
                             recordType: 16,
@@ -901,6 +939,7 @@ const NODE_ID = NodeId(BigInt(1));
                     ],
                     answers: [
                         {
+                            flushCache: false,
                             name: "0000000000000018-0000000000000001._matter._tcp.local",
                             recordClass: 1,
                             recordType: 33,
@@ -914,62 +953,6 @@ const NODE_ID = NodeId(BigInt(1));
                     transactionId: 0,
                 });
 
-                if (testIpv4Enabled) {
-                    const response = DnsCodec.decode(netData[2]);
-                    expect(response).deep.equal({
-                        additionalRecords: [
-                            {
-                                name: "_services._dns-sd._udp.local",
-                                recordClass: 1,
-                                recordType: 12,
-                                ttl: 120,
-                                value: "_matter._tcp.local",
-                            },
-                            {
-                                name: "_services._dns-sd._udp.local",
-                                recordClass: 1,
-                                recordType: 12,
-                                ttl: 120,
-                                value: "_I0000000000000018._sub._matter._tcp.local",
-                            },
-                            {
-                                name: "_matter._tcp.local",
-                                recordClass: 1,
-                                recordType: 12,
-                                ttl: 120,
-                                value: "0000000000000018-0000000000000001._matter._tcp.local",
-                            },
-                            {
-                                name: "_I0000000000000018._sub._matter._tcp.local",
-                                recordClass: 1,
-                                recordType: 12,
-                                ttl: 120,
-                                value: "0000000000000018-0000000000000001._matter._tcp.local",
-                            },
-                            {
-                                name: "0000000000000018-0000000000000001._matter._tcp.local",
-                                recordClass: 1,
-                                recordType: 16,
-                                ttl: 120,
-                                value: ["SII=5000", "SAI=300", "T=0"],
-                            },
-                            ...IPDnsRecords,
-                        ],
-                        answers: [
-                            {
-                                name: "0000000000000018-0000000000000001._matter._tcp.local",
-                                recordClass: 1,
-                                recordType: 33,
-                                ttl: 120,
-                                value: { port: PORT2, priority: 0, target: "00B0D063C2260000.local", weight: 0 },
-                            },
-                        ],
-                        authorities: [],
-                        messageType: 33792,
-                        queries: [],
-                        transactionId: 0,
-                    });
-                }
                 const result = await findPromise;
 
                 expect(result).deep.equal(IPIntegrationResultsPort2);

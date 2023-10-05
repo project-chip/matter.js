@@ -281,11 +281,17 @@ export class MatterDevice {
             // TODO Change when refactoring MatterDevice away
             this.initialCommissioningCallback();
         }
+        this.sendFabricAnnouncements([fabric], true).catch(error =>
+            logger.warn(`Error sending Fabric announcement for Index ${fabric.fabricIndex}`, error),
+        );
+        return fabric.fabricIndex;
+    }
+
+    async sendFabricAnnouncements(fabrics: Fabric[], expireCommissioningAnnouncement = false) {
         for (const broadcaster of this.broadcasters) {
-            await broadcaster.setFabrics([fabric], true);
+            await broadcaster.setFabrics(fabrics, expireCommissioningAnnouncement);
             await broadcaster.announce();
         }
-        return fabric.fabricIndex;
     }
 
     getFabricByIndex(fabricIndex: FabricIndex) {
