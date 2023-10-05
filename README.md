@@ -23,11 +23,7 @@ Each ecosystem have their own specialities, see [Pairing and Usage Information](
 
 A list ok known issues with some ecosystems can be found in [KNOWN_ISSUES.md](KNOWN_ISSUES.md).
 
-matter.js/matter-node.js as Controller was successfully tested with the following devices:
-* Eve Energy (paired as secondary Controller via Apple Hub and also into own Thread network directly)
-* TP-Link P-125M (US) Smart Plug (paired as secondary Controller via Apple Hub and also into own Wi-Fi network directly)
-* Meross MSS115 (US) Smart Plug (paired as secondary Controller via Apple Hub and also into own Wi-Fi network directly)
-* Chip-Tool
+matter.js/matter-node.js as Controller was successfully tested with Chip example apps and several official production devices (see https://github.com/project-chip/matter.js/discussions/316).
 
 ## Monorepo Overview
 
