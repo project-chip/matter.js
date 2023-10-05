@@ -36,8 +36,8 @@ jobs:
           filters: |
             src:
               - "chip-testing/**"
-              - "packages/matter.js/src/cluster/**"
-              - "packages/matter.js/src/tlv/**"
+              - "packages/matter.js/src/**"
+              - "packages/matter-node.js/src/**"
               - ".github/workflows/chip-tool-tests.yml"
 
       - uses: dorny/paths-filter@v2
@@ -86,7 +86,7 @@ jobs:
           build-matter-js: "false"
 
   # Execute the normal tests
-  execute-chip-tests:
+  chip-tests:
     needs: [prepare-chip-build]
     if: ${{ needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true' }}
     runs-on: ubuntu-latest
@@ -107,7 +107,7 @@ jobs:
           npm run test-chip
 
   # Execute the long running tests (if needed)
-  execute-long-chip-tests:
+  chip-tests-long:
     needs: [prepare-chip-build]
     if: ${{ needs.chip-tests-needed.outputs.chip-long-tests-required == 'true' }}
     runs-on: ubuntu-latest
